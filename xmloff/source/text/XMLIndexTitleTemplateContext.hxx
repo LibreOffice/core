@@ -49,12 +49,9 @@ class XMLIndexTitleTemplateContext : public SvXMLImportContext
 
 public:
 
-
      XMLIndexTitleTemplateContext(
         SvXMLImport& rImport,
-        css::uno::Reference<css::beans::XPropertySet> & rPropSet,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName);
+        css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     virtual ~XMLIndexTitleTemplateContext() override;
 

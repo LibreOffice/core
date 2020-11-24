@@ -38,10 +38,8 @@ using ::xmloff::token::XML_STYLE_NAME;
 
 XMLIndexTitleTemplateContext::XMLIndexTitleTemplateContext(
     SvXMLImport& rImport,
-    Reference<XPropertySet> & rPropSet,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName)
-:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+    Reference<XPropertySet> & rPropSet)
+:   SvXMLImportContext(rImport)
 ,   bStyleNameOK(false)
 ,   rTOCPropertySet(rPropSet)
 {

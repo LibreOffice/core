@@ -43,9 +43,8 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 
 XMLIndexTOCStylesContext::XMLIndexTOCStylesContext(
-    SvXMLImport& rImport, Reference<XPropertySet> & rPropSet,
-    sal_uInt16 nPrfx, const OUString& rLocalName)
-    : SvXMLImportContext(rImport, nPrfx, rLocalName)
+    SvXMLImport& rImport, Reference<XPropertySet> & rPropSet)
+    : SvXMLImportContext(rImport)
     , rTOCPropertySet(rPropSet)
     , nOutlineLevel(0)
 {

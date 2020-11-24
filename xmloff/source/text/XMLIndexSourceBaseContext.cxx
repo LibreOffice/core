@@ -212,33 +212,26 @@ void XMLIndexSourceBaseContext::endFastElement(sal_Int32 )
     rIndexPropertySet->setPropertyValue("CreateFromChapter", css::uno::Any(bChapterIndex));
 }
 
-SvXMLImportContextRef XMLIndexSourceBaseContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & /*xAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexSourceBaseContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& )
 {
     SvXMLImportContextRef xContext;
 
-    if (XML_NAMESPACE_TEXT == nPrefix)
+    if (nElement == XML_ELEMENT(TEXT, XML_INDEX_TITLE_TEMPLATE) )
     {
-        if ( IsXMLToken( rLocalName, XML_INDEX_TITLE_TEMPLATE ) )
-        {
-            xContext = new XMLIndexTitleTemplateContext(GetImport(),
-                                                        rIndexPropertySet,
-                                                        nPrefix, rLocalName);
-        }
-        else if ( bUseLevelFormats &&
-                  IsXMLToken( rLocalName, XML_INDEX_SOURCE_STYLES ) )
-        {
-            xContext = new XMLIndexTOCStylesContext(GetImport(),
-                                                    rIndexPropertySet,
-                                                    nPrefix, rLocalName);
-        }
-        // else: unknown element in text namespace -> ignore
+        xContext = new XMLIndexTitleTemplateContext(GetImport(),
+                                                    rIndexPropertySet);
+    }
+    else if ( bUseLevelFormats &&
+              nElement == XML_ELEMENT(TEXT, XML_INDEX_SOURCE_STYLES) )
+    {
+        xContext = new XMLIndexTOCStylesContext(GetImport(),
+                                                rIndexPropertySet);
     }
     // else: unknown namespace -> ignore
 
-    return xContext;
+    return xContext.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

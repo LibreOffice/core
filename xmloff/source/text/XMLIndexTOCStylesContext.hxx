@@ -52,13 +52,9 @@ class XMLIndexTOCStylesContext : public SvXMLImportContext
     sal_Int32 nOutlineLevel;
 
 public:
-
-
     XMLIndexTOCStylesContext(
         SvXMLImport& rImport,
-        css::uno::Reference<css::beans::XPropertySet> & rPropSet,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName );
+        css::uno::Reference<css::beans::XPropertySet> & rPropSet );
 
     virtual ~XMLIndexTOCStylesContext() override;
 

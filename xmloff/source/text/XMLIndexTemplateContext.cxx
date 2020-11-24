@@ -53,14 +53,12 @@ using ::com::sun::star::container::XIndexReplace;
 XMLIndexTemplateContext::XMLIndexTemplateContext(
     SvXMLImport& rImport,
     Reference<XPropertySet> & rPropSet,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     const SvXMLEnumMapEntry<sal_uInt16>* pLevelNameMap,
     enum XMLTokenEnum eLevelAttrName,
     const char** pLevelStylePropMap,
     const bool* pAllowedTokenTypes,
     bool bT )
-:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+:   SvXMLImportContext(rImport)
 ,   pOutlineLevelNameMap(pLevelNameMap)
 ,   eOutlineLevelAttrName(eLevelAttrName)
 ,   pOutlineLevelStylePropMap(pLevelStylePropMap)
