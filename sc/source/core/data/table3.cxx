@@ -2978,6 +2978,29 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
 
 namespace {
 
+bool CanOptimizeQueryStringToNumber( SvNumberFormatter* pFormatter, sal_uInt32 nFormatIndex )
+{
+    // tdf#105629: ScQueryEntry::ByValue queries are faster than ScQueryEntry::ByString.
+    // The problem with this optimization is that the autofilter dialog apparently converts
+    // the value to text and then converts that back to a number for filtering.
+    // If that leads to any change of value (such as when time is rounded to seconds),
+    // even matching values will be filtered out. Therefore query by value only for formats
+    // where no such change should occur.
+    if(const SvNumberformat* pEntry = pFormatter->GetEntry(nFormatIndex))
+    {
+        switch(pEntry->GetType())
+        {
+        case SvNumFormatType::NUMBER:
+        case SvNumFormatType::FRACTION:
+        case SvNumFormatType::SCIENTIFIC:
+            return true;
+        default:
+            break;
+        }
+    }
+    return false;
+}
+
 class PrepareQueryItem
 {
     const ScDocument& mrDoc;
@@ -2986,14 +3009,25 @@ public:
 
     void operator() (ScQueryEntry::Item& rItem)
     {
-        // Double-check if the query by date is really appropriate.
-
-        if (rItem.meType != ScQueryEntry::ByDate)
+        if (rItem.meType != ScQueryEntry::ByString && rItem.meType != ScQueryEntry::ByDate)
             return;
 
         sal_uInt32 nIndex = 0;
         bool bNumber = mrDoc.GetFormatTable()->
             IsNumberFormat(rItem.maString.getString(), nIndex, rItem.mfVal);
+
+        // Advanced Filter creates only ByString queries that need to be
+        // converted to ByValue if appropriate. rItem.mfVal now holds the value
+        // if bNumber==true.
+
+        if (rItem.meType == ScQueryEntry::ByString)
+        {
+            if (bNumber && CanOptimizeQueryStringToNumber( mrDoc.GetFormatTable(), nIndex ))
+                rItem.meType = ScQueryEntry::ByValue;
+            return;
+        }
+
+        // Double-check if the query by date is really appropriate.
 
         if (bNumber && ((nIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0))
         {
@@ -3360,19 +3394,17 @@ bool ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
 
     SvNumberFormatter* pFormatter = rDocument.GetFormatTable();
     nCount = rQueryParam.GetEntryCount();
-
     if (bValid)
     {
-        //  bQueryByString must be set
+        //  query type must be set
         for (i=0; i < nCount; i++)
         {
             ScQueryEntry::Item& rItem = rQueryParam.GetEntry(i).GetQueryItem();
-
             sal_uInt32 nIndex = 0;
             bool bNumber = pFormatter->IsNumberFormat(
                 rItem.maString.getString(), nIndex, rItem.mfVal);
-
-            rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+            rItem.meType = bNumber && CanOptimizeQueryStringToNumber( pFormatter, nIndex )
+                ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
         }
     }
     else
