@@ -351,7 +351,6 @@ static Size getPageSize( vcl::PrinterController const & i_rController, sal_Int32
 
 bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
                                    const OUString& i_rJobName,
-                                   const OUString& /*i_rAppName*/,
                                    ImplJobSetup* i_pSetupData,
                                    vcl::PrinterController& i_rController
                                    )
@@ -574,11 +573,11 @@ AquaSalPrinter::~AquaSalPrinter()
 
 bool AquaSalPrinter::StartJob( const OUString* i_pFileName,
                                const OUString& i_rJobName,
-                               const OUString& i_rAppName,
+                               const OUString&,
                                ImplJobSetup* i_pSetupData,
                                vcl::PrinterController& i_rController )
 {
-    return mpInfoPrinter->StartJob( i_pFileName, i_rJobName, i_rAppName, i_pSetupData, i_rController );
+    return mpInfoPrinter->StartJob( i_pFileName, i_rJobName, i_pSetupData, i_rController );
 }
 
 bool AquaSalPrinter::StartJob( const OUString* /*i_pFileName*/,

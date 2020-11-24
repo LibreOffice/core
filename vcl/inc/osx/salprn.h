@@ -92,7 +92,6 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     // implement pull model print system
     bool                        StartJob( const OUString* i_pFileName,
                                           const OUString& rJobName,
-                                          const OUString& i_rAppName,
                                           ImplJobSetup* i_pSetupData,
                                           vcl::PrinterController& i_rController );
     bool                        EndJob();
