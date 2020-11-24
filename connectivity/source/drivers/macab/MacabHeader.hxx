@@ -20,6 +20,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABHEADER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABHEADER_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "MacabRecord.hxx"
 
 namespace connectivity::macab
@@ -34,7 +38,7 @@ namespace connectivity::macab
                 void operator+= (const MacabHeader *r);
                 OUString getString(const sal_Int32 i) const;
                 void sortRecord();
-                sal_Int32 getColumnNumber(const OUString& s) const;
+                sal_Int32 getColumnNumber(std::u16string_view s) const;
 
                 static sal_Int32 compareFields(const macabfield *_field1, const macabfield *_field2);
 

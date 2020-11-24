@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <string_view>
 #include <vector>
 
 #include "MacabRecord.hxx"
@@ -96,8 +97,8 @@ namespace connectivity::macab
                 void swap(const sal_Int32 _id1, const sal_Int32 _id2);
 
                 macabfield *getField(const sal_Int32 _recordNumber, const sal_Int32 _columnNumber) const;
-                macabfield *getField(const sal_Int32 _recordNumber, const OUString& _columnName) const;
-                sal_Int32 getFieldNumber(const OUString& _columnName) const;
+                macabfield *getField(const sal_Int32 _recordNumber, std::u16string_view _columnName) const;
+                sal_Int32 getFieldNumber(std::u16string_view _columnName) const;
 
                 sal_Int32 size() const;
 

@@ -130,7 +130,7 @@ MacabRecords *MacabAddressBook::getMacabRecords()
 /* Get the MacabRecords for a given name: either a group name or the
  * default table name.
  */
-MacabRecords *MacabAddressBook::getMacabRecords(const OUString& _tableName)
+MacabRecords *MacabAddressBook::getMacabRecords(std::u16string_view _tableName)
 {
     if(_tableName == getDefaultTableName())
     {
@@ -192,7 +192,7 @@ std::vector<MacabGroup *> MacabAddressBook::getMacabGroups()
 }
 
 
-MacabGroup *MacabAddressBook::getMacabGroup(OUString const & _groupName)
+MacabGroup *MacabAddressBook::getMacabGroup(std::u16string_view _groupName)
 {
     // initialize groups if not already initialized
     if(!m_bRetrievedGroups)

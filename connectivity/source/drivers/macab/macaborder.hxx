@@ -25,6 +25,7 @@
 #include "MacabRecord.hxx"
 
 #include <memory>
+#include <string_view>
 #include <vector>
 
 namespace connectivity::macab
@@ -43,7 +44,7 @@ namespace connectivity::macab
             bool m_bAscending;
 
         public:
-            MacabSimpleOrder(MacabHeader const *header, OUString const &sColumnName, bool bAscending);
+            MacabSimpleOrder(MacabHeader const *header, std::u16string_view sColumnName, bool bAscending);
 
             virtual sal_Int32 compare(const MacabRecord *record1, const MacabRecord *record2) const override;
         };

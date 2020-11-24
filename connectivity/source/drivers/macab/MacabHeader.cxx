@@ -263,7 +263,7 @@ sal_Int32 MacabHeader::compareFields(const macabfield *_field1, const macabfield
 }
 
 
-sal_Int32 MacabHeader::getColumnNumber(const OUString& s) const
+sal_Int32 MacabHeader::getColumnNumber(std::u16string_view s) const
 {
     sal_Int32 i;
     for(i = 0; i < size; i++)
