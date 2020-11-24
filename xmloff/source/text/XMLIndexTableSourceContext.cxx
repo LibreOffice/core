@@ -44,9 +44,8 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
 
 XMLIndexTableSourceContext::XMLIndexTableSourceContext(
-    SvXMLImport& rImport, sal_uInt16 nPrfx,
-    const OUString& rLocalName, Reference<XPropertySet> & rPropSet)
-    : XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
+    SvXMLImport& rImport, Reference<XPropertySet> & rPropSet)
+    : XMLIndexSourceBaseContext(rImport,
                                   rPropSet, false)
     , nDisplayFormat(0)
     , bSequenceOK(false)

@@ -46,8 +46,6 @@ public:
 
     XMLIndexObjectSourceContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
         css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     virtual ~XMLIndexObjectSourceContext() override;

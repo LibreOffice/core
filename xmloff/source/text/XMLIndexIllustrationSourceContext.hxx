@@ -40,11 +40,8 @@ class XMLIndexIllustrationSourceContext : public XMLIndexTableSourceContext
 {
 public:
 
-
     XMLIndexIllustrationSourceContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
         css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     virtual ~XMLIndexIllustrationSourceContext() override;

@@ -37,10 +37,8 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 XMLIndexBibliographySourceContext::XMLIndexBibliographySourceContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet) :
-        XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
+        XMLIndexSourceBaseContext(rImport,
                                   rPropSet, false)
 {
 }

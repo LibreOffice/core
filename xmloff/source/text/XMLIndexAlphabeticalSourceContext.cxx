@@ -45,10 +45,8 @@ using ::xmloff::token::XML_OUTLINE_LEVEL;
 
 XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet)
-:   XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName, rPropSet, false)
+:   XMLIndexSourceBaseContext(rImport, rPropSet, false)
 ,   bMainEntryStyleNameOK(false)
 ,   bSeparators(false)
 ,   bCombineEntries(true)
