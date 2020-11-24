@@ -132,16 +132,13 @@ void XMLIndexTOCSourceContext::endFastElement(sal_Int32 nElement)
     XMLIndexSourceBaseContext::endFastElement(nElement);
 }
 
-SvXMLImportContextRef XMLIndexTOCSourceContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexTOCSourceContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-         IsXMLToken(rLocalName, XML_TABLE_OF_CONTENT_ENTRY_TEMPLATE) )
+    if ( nElement == XML_ELEMENT(TEXT, XML_TABLE_OF_CONTENT_ENTRY_TEMPLATE) )
     {
         return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
-                                           nPrefix, rLocalName,
                                            aSvLevelNameTOCMap,
                                            XML_OUTLINE_LEVEL,
                                            aLevelStylePropNameTOCMap,
@@ -149,8 +146,7 @@ SvXMLImportContextRef XMLIndexTOCSourceContext::CreateChildContext(
     }
     else
     {
-        return XMLIndexSourceBaseContext::CreateChildContext(nPrefix,
-                                                             rLocalName,
+        return XMLIndexSourceBaseContext::createFastChildContext(nElement,
                                                              xAttrList);
     }
 }

@@ -87,21 +87,17 @@ public:
     XMLIndexTemplateContext(
         SvXMLImport& rImport,
         css::uno::Reference<css::beans::XPropertySet> & rPropSet,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
         const SvXMLEnumMapEntry<EnumT>* aLevelNameMap,
         enum ::xmloff::token::XMLTokenEnum eLevelAttrName,
         const char** aLevelStylePropNameMap,
         const bool* aAllowedTokenTypes,
         bool bTOC_=false)
-        : XMLIndexTemplateContext(rImport,rPropSet,nPrfx,rLocalName,
+        : XMLIndexTemplateContext(rImport,rPropSet,
                 reinterpret_cast<const SvXMLEnumMapEntry<sal_uInt16>*>(aLevelNameMap),
                 eLevelAttrName, aLevelStylePropNameMap, aAllowedTokenTypes, bTOC_) {}
     XMLIndexTemplateContext(
         SvXMLImport& rImport,
         css::uno::Reference<css::beans::XPropertySet> & rPropSet,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
         const SvXMLEnumMapEntry<sal_uInt16>* aLevelNameMap,
         enum ::xmloff::token::XMLTokenEnum eLevelAttrName,
         const char** aLevelStylePropNameMap,

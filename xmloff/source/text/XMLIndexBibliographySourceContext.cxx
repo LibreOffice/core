@@ -61,16 +61,13 @@ void XMLIndexBibliographySourceContext::endFastElement(sal_Int32 )
     // No attributes, no properties.
 }
 
-SvXMLImportContextRef XMLIndexBibliographySourceContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexBibliographySourceContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    if ( ( XML_NAMESPACE_TEXT == nPrefix ) &&
-         ( IsXMLToken( rLocalName, XML_BIBLIOGRAPHY_ENTRY_TEMPLATE ) ) )
+    if ( nElement == XML_ELEMENT(TEXT, XML_BIBLIOGRAPHY_ENTRY_TEMPLATE) )
     {
         return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
-                                           nPrefix, rLocalName,
                                            aLevelNameBibliographyMap,
                                            XML_BIBLIOGRAPHY_TYPE,
                                            aLevelStylePropNameBibliographyMap,
@@ -78,8 +75,7 @@ SvXMLImportContextRef XMLIndexBibliographySourceContext::CreateChildContext(
     }
     else
     {
-        return XMLIndexSourceBaseContext::CreateChildContext(nPrefix,
-                                                             rLocalName,
+        return XMLIndexSourceBaseContext::createFastChildContext(nElement,
                                                              xAttrList);
     }
 
