@@ -81,6 +81,31 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XFormsInstanceContext:
 
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > XFormsInstanceContext::createUnknownChildContext(
+    const OUString & rNamespace, const OUString &rName, const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*Attribs*/)
+{
+    SvXMLImportContext* pContext = nullptr;
+
+    // only the first element child of an xforms:instance element
+    // is used as an instance. The other children remainder must be
+    // ignored.
+    if( mxInstance.is() )
+    {
+        GetImport().SetError( XMLERROR_XFORMS_ONLY_ONE_INSTANCE_ELEMENT, rName );
+    }
+    else
+    {
+        // create new DomBuilderContext. Save reference to tree in Model.
+        DomBuilderContext* pInstance = new DomBuilderContext( GetImport(), rNamespace, rName );
+        mxInstance = pInstance->getTree();
+        pContext = pInstance;
+    }
+
+    SAL_WARN_IF( pContext == nullptr, "xmloff", "no context!" );
+    return pContext;
+
+}
+
 void XFormsInstanceContext::endFastElement(sal_Int32 )
 {
     Sequence<PropertyValue> aSequence( 3 );
@@ -95,21 +120,35 @@ void XFormsInstanceContext::endFastElement(sal_Int32 )
     mxModel->getInstances()->insert( makeAny( aSequence ) );
 }
 
+void XFormsInstanceContext::endUnknownElement(const OUString & /*Namespace*/, const OUString & /*Name*/)
+{
+    Sequence<PropertyValue> aSequence( 3 );
+    PropertyValue* pSequence = aSequence.getArray();
+    pSequence[0].Name = "Instance";
+    pSequence[0].Value <<= mxInstance;
+    pSequence[1].Name = "ID";
+    pSequence[1].Value <<= msId;
+    pSequence[2].Name = "URL";
+    pSequence[2].Value <<= msURL;
+
+    mxModel->getInstances()->insert( makeAny( aSequence ) );
+}
 
 void XFormsInstanceContext::HandleAttribute(
     sal_Int32 nAttributeToken,
     const OUString& rValue )
 {
-    switch( nAttributeToken )
+    switch( nAttributeToken & TOKEN_MASK )
     {
-    case XML_ELEMENT(NONE, XML_SRC):
+    case XML_SRC:
         msURL = rValue;
         break;
-    case XML_ELEMENT(NONE, XML_ID):
+    case XML_ID:
         msId = rValue;
         break;
     default:
-        OSL_FAIL( "should not happen" );
+        XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttributeToken, rValue);
+        assert( false && "this should not happen" );
         break;
     }
 }
@@ -118,7 +157,7 @@ SvXMLImportContext* XFormsInstanceContext::HandleChild(
     sal_Int32,
     const Reference<css::xml::sax::XFastAttributeList>& )
 {
-    OSL_FAIL( "to be handled by CreateChildContext" );
+    assert( false && "to be handled by CreateChildContext" );
     return nullptr;
 }
 

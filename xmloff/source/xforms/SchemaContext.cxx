@@ -26,6 +26,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlimp.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
 
@@ -55,6 +56,8 @@ SvXMLImportContext* SchemaContext::HandleChild(
 {
     if ( nElementToken == XML_ELEMENT(XSD, XML_SIMPLETYPE) )
         return new SchemaSimpleTypeContext( GetImport(), mxRepository );
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElementToken);
     return nullptr;
 }
 

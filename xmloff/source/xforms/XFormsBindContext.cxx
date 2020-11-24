@@ -92,7 +92,7 @@ void XFormsBindContext::HandleAttribute( sal_Int32 nAttributeToken,
                                        rValue ) ) );
         break;
     default:
-        OSL_FAIL( "should not happen" );
+        assert( false && "should not happen" );
         break;
     }
 }
@@ -119,7 +119,7 @@ SvXMLImportContext* XFormsBindContext::HandleChild(
     sal_Int32,
     const Reference<XFastAttributeList>& )
 {
-    OSL_FAIL( "no children supported" );
+    assert( false && "no children supported" );
     return nullptr;
 }
 

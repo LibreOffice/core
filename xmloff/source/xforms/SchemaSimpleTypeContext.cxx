@@ -28,6 +28,7 @@
 #include <xmloff/xmlimp.hxx>
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 using com::sun::star::uno::Reference;
 using com::sun::star::xml::sax::XFastAttributeList;
@@ -47,9 +48,11 @@ void SchemaSimpleTypeContext::HandleAttribute(
     sal_Int32 nAttributeToken,
     const OUString& rValue )
 {
-    if( nAttributeToken == XML_ELEMENT(NONE, XML_NAME) )
+    switch (nAttributeToken & TOKEN_MASK)
     {
-        msTypeName = rValue;
+        case XML_NAME:
+            msTypeName = rValue;
+            break;
     }
 }
 
@@ -63,6 +66,8 @@ SvXMLImportContext* SchemaSimpleTypeContext::HandleChild(
         return new SchemaRestrictionContext( GetImport(),
                                                  mxRepository, msTypeName );
         break;
+    default:
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElementToken);
     }
 
     return nullptr;

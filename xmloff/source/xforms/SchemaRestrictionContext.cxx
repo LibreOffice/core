@@ -94,9 +94,11 @@ void SchemaRestrictionContext::HandleAttribute(
     sal_Int32 nAttributeToken,
     const OUString& rValue )
 {
-    if( nAttributeToken == XML_ELEMENT(NONE, XML_BASE) )
+    switch (nAttributeToken & TOKEN_MASK)
     {
-        msBaseName = rValue;
+        case XML_BASE:
+            msBaseName = rValue;
+            break;
     }
 }
 
@@ -244,7 +246,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
             // converter is only type dependent.
 
             // first, attribute-dependent prefix
-            switch( nElementToken )
+            switch( nElementToken & TOKEN_MASK )
             {
             case XML_MININCLUSIVE:
                 sPropertyName = "MinInclusive";

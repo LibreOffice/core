@@ -61,6 +61,13 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > TokenContext::createFa
     return pContext;
 }
 
+ css::uno::Reference< css::xml::sax::XFastContextHandler > TokenContext::createUnknownChildContext(
+     const OUString& Namespace, const OUString& Name, const css::uno::Reference< css::xml::sax::XFastAttributeList >& )
+{
+    GetImport().SetError( XMLERROR_UNKNOWN_ELEMENT, Namespace + " " + Name );
+    return nullptr;
+}
+
 static bool lcl_IsWhiteSpace( sal_Unicode c )
 {
     return c == ' '
