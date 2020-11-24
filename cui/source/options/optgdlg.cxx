@@ -551,11 +551,6 @@ CanvasSettings::CanvasSettings() :
 
 bool CanvasSettings::IsHardwareAccelerationAvailable() const
 {
-    if (SkiaHelper::isVCLSkiaEnabled() && Application::GetToolkitName() != "gtk3")
-    {
-        mbHWAccelAvailable = false;
-        return false;
-    }
 #if HAVE_FEATURE_OPENGL
     if (OpenGLWrapper::isVCLOpenGLEnabled() && Application::GetToolkitName() != "gtk3")
     {
@@ -716,8 +711,6 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
 
     m_xMoreIcons->set_from_icon_name("cmd/sc_additionsdialog.png");
     m_xMoreIcons->connect_clicked(LINK(this, OfaViewTabPage, OnMoreIconsClick));
-
-    UpdateSkiaStatus();
 }
 
 OfaViewTabPage::~OfaViewTabPage()
@@ -779,6 +772,10 @@ void OfaViewTabPage::UpdateSkiaStatus()
     // FIXME: should really add code to show a 'lock' icon here.
     m_xUseSkia->set_sensitive(!officecfg::Office::Common::VCL::UseSkia::isReadOnly());
     m_xForceSkiaRaster->set_sensitive(m_xUseSkia->get_active() && !officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly());
+
+    // Technically the 'use hardware acceleration' option could be used to mean !forceSkiaRaster, but the implementation
+    // of the option is so tied to the implementation of the canvas module that it's simpler to ignore it.
+    UpdateHardwareAccelStatus();
 #else
     HideSkiaWidgets();
 #endif
@@ -1058,20 +1055,8 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_xContextMenuShortcutsLB->set_active(bContextMenuShortcutsNonDefault ? eContextMenuShortcuts + 1 : 0);
     m_xContextMenuShortcutsLB->save_value();
 
-    { // #i95644# HW accel (unified to disable mechanism)
-        if(pCanvasSettings->IsHardwareAccelerationAvailable())
-        {
-            m_xUseHardwareAccell->set_active(pCanvasSettings->IsHardwareAccelerationEnabled());
-            m_xUseHardwareAccell->set_sensitive(!pCanvasSettings->IsHardwareAccelerationRO());
-        }
-        else
-        {
-            m_xUseHardwareAccell->set_active(false);
-            m_xUseHardwareAccell->set_sensitive(false);
-        }
-
-        m_xUseHardwareAccell->save_state();
-    }
+    UpdateHardwareAccelStatus();
+    m_xUseHardwareAccell->save_state();
 
     { // #i95644# AntiAliasing
         if(mpDrawinglayerOpt->IsAAPossibleOnThisSystem())
@@ -1086,6 +1071,7 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
 
         m_xUseAntiAliase->save_state();
     }
+
     m_xUseSkia->set_active(mpSkiaConfig->useSkia());
     m_xForceSkiaRaster->set_active(mpSkiaConfig->forceSkiaRaster());
 
@@ -1097,6 +1083,25 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_xForceSkiaRaster->save_state();
 
     OnAntialiasingToggled(*m_xFontAntiAliasing);
+    UpdateSkiaStatus();
+}
+
+void OfaViewTabPage::UpdateHardwareAccelStatus()
+{
+    // #i95644# HW accel (unified to disable mechanism)
+    if(pCanvasSettings->IsHardwareAccelerationAvailable())
+    {
+        m_xUseHardwareAccell->set_active(pCanvasSettings->IsHardwareAccelerationEnabled());
+        m_xUseHardwareAccell->set_sensitive(!pCanvasSettings->IsHardwareAccelerationRO());
+    }
+    else
+    {
+        m_xUseHardwareAccell->set_active(false);
+        m_xUseHardwareAccell->set_sensitive(false);
+    }
+#if HAVE_FEATURE_SKIA
+    m_xUseHardwareAccell->set_sensitive(!m_xUseSkia->get_active());
+#endif
 }
 
 struct LanguageConfig_Impl
