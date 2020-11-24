@@ -92,6 +92,7 @@
                 <property name="receives-default">True</property>
                 <property name="tooltip-text" translatable="yes" context="tabbar|menubutton|tool_tip">Sidebar Settings</property>
                 <property name="halign">center</property>
+                <property name="valign">center</property>
                 <property name="margin-bottom">3</property>
                 <property name="image">image6</property>
                 <property name="relief">none</property>
