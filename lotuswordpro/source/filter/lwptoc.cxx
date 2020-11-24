@@ -222,7 +222,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
                     pTemplate->AddEntry(enumXFIndexTemplatePage, "TOC Page Number Text Style");
                 }
 
-                xToc->AddTemplate(OUString::number(static_cast<sal_Int32>(i)),  m_pFoundry->FindActuralStyleName(pLevel->GetSearchStyle()), pTemplate);
+                xToc->AddTemplate(OUString::number(static_cast<sal_Int32>(i)),  m_pFoundry->FindActualStyleName(pLevel->GetSearchStyle()), pTemplate);
                 bInserted = true;
             }
 
@@ -320,7 +320,7 @@ void LwpTocSuperLayout::AddSourceStyle(XFIndex* pToc, LwpTocLevelData * pLevel, 
     LwpDocument * pDoc = pFoundry->GetDocument();
     if (pDoc && pDoc->IsChildDoc())
     {
-        OUString sSodcStyleName = pFoundry->FindActuralStyleName(sLwpStyleName);
+        OUString sSodcStyleName = pFoundry->FindActualStyleName(sLwpStyleName);
         pToc->AddTocSource(pLevel->GetLevel(), sSodcStyleName);
     }
     else
