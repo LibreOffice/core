@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b98e4018_5d39e5f0",
+        "filename": "framework/source/uielement/toolbarmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1545,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-24T08:15:15Z",
+      "side": 1,
+      "message": "Haven\u0027t checked whether this becomes true somewhere else but why not use the isLocked() bool here?",
+      "range": {
+        "startLine": 1545,
+        "startChar": 70,
+        "endLine": 1545,
+        "endChar": 75
+      },
+      "revId": "f06dd3cd0a431cfffc8be4b527bc37f7920569bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
