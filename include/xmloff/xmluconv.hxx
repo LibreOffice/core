@@ -111,7 +111,7 @@ public:
     /** convert string to measure with meCoreMeasureUnit,
         using optional min and max values*/
     bool convertMeasureToCore( sal_Int32& rValue,
-                         const OUString& rString,
+                         std::u16string_view rString,
                          sal_Int32 nMin = SAL_MIN_INT32,
                          sal_Int32 nMax = SAL_MAX_INT32) const;
 
@@ -173,7 +173,7 @@ public:
         double fNumber) const;
 
     /** convert string to double number (using ::rtl::math) and DO convert. */
-    bool convertDouble(double& rValue, const OUString& rString) const;
+    bool convertDouble(double& rValue, std::u16string_view rString) const;
 
     /** get the Null Date of the XModel and set it to the UnitConverter */
     bool setNullDate (
@@ -186,7 +186,7 @@ public:
 
     /** convert ISO Date Time String to double */
     bool convertDateTime(double& fDateTime,
-                         const OUString& rString);
+                         std::u16string_view rString);
 
     /// these 2 functions use tools Date, so they're not yet moved to sax
 
@@ -197,7 +197,7 @@ public:
                                 bool bAddTimeIf0AM = false);
     /** convert ISO Date Time String to double */
     static bool convertDateTime( double& fDateTime,
-                                const OUString& rString,
+                                std::u16string_view rString,
                                 const css::util::Date& aNullDate);
 
 

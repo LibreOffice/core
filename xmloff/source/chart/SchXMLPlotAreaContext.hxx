@@ -60,7 +60,7 @@ public:
     explicit SchXMLPositionAttributesHelper( SvXMLImport& rImporter );
     ~SchXMLPositionAttributesHelper();
 
-    void readPositioningAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
+    void readPositioningAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, std::u16string_view rValue );
     void readAutomaticPositioningProperties( XMLPropStyleContext const * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt );
 
     bool hasPosSize() const;
