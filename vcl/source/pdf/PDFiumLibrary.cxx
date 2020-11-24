@@ -196,6 +196,47 @@ PDFiumSignature::PDFiumSignature(FPDF_SIGNATURE pSignature)
 {
 }
 
+std::vector<int> PDFiumSignature::getByteRange()
+{
+    int nByteRangeLen = FPDFSignatureObj_GetByteRange(mpSignature, nullptr, 0);
+    std::vector<int> aByteRange(nByteRangeLen);
+    if (nByteRangeLen <= 0)
+    {
+        return aByteRange;
+    }
+
+    FPDFSignatureObj_GetByteRange(mpSignature, aByteRange.data(), aByteRange.size());
+    return aByteRange;
+}
+
+int PDFiumSignature::getDocMDPPermission()
+{
+    return FPDFSignatureObj_GetDocMDPPermission(mpSignature);
+}
+
+std::vector<unsigned char> PDFiumSignature::getContents()
+{
+    int nContentsLen = FPDFSignatureObj_GetContents(mpSignature, nullptr, 0);
+    std::vector<unsigned char> aContents(nContentsLen);
+    if (aContents.empty())
+    {
+        return aContents;
+    }
+
+    FPDFSignatureObj_GetContents(mpSignature, aContents.data(), aContents.size());
+    return aContents;
+}
+
+OString PDFiumSignature::getSubFilter()
+{
+    int nSubFilterLen = FPDFSignatureObj_GetSubFilter(mpSignature, nullptr, 0);
+    std::vector<char> aSubFilterBuf(nSubFilterLen);
+    FPDFSignatureObj_GetSubFilter(mpSignature, aSubFilterBuf.data(), aSubFilterBuf.size());
+    // Buffer is NUL-terminated.
+    OString aSubFilter(aSubFilterBuf.data(), aSubFilterBuf.size() - 1);
+    return aSubFilter;
+}
+
 PDFiumDocument::PDFiumDocument(FPDF_DOCUMENT pPdfDocument)
     : mpPdfDocument(pPdfDocument)
 {
