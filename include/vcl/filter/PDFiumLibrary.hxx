@@ -242,6 +242,10 @@ public:
     PDFiumSignature(FPDF_SIGNATURE pSignature);
 
     FPDF_SIGNATURE getPointer() { return mpSignature; }
+    std::vector<int> getByteRange();
+    int getDocMDPPermission();
+    std::vector<unsigned char> getContents();
+    OString getSubFilter();
 };
 
 class VCL_DLLPUBLIC PDFiumDocument final

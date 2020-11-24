@@ -132,15 +132,12 @@ struct Signature
 void GetByteRangesFromPDF(std::unique_ptr<vcl::pdf::PDFiumSignature>& pSignature,
                           std::vector<std::pair<size_t, size_t>>& rByteRanges)
 {
-    int nByteRangeLen = FPDFSignatureObj_GetByteRange(pSignature->getPointer(), nullptr, 0);
-    if (nByteRangeLen <= 0)
+    std::vector<int> aByteRange = pSignature->getByteRange();
+    if (aByteRange.empty())
     {
         SAL_WARN("xmlsecurity.helper", "GetByteRangesFromPDF: no byte ranges");
         return;
     }
-
-    std::vector<int> aByteRange(nByteRangeLen);
-    FPDFSignatureObj_GetByteRange(pSignature->getPointer(), aByteRange.data(), aByteRange.size());
 
     size_t nByteRangeOffset = 0;
     for (size_t i = 0; i < aByteRange.size(); ++i)
@@ -183,7 +180,7 @@ int GetMDPPerm(const std::vector<Signature>& rSignatures)
 
     for (const auto& rSignature : rSignatures)
     {
-        int nPerm = FPDFSignatureObj_GetDocMDPPermission(rSignature.m_pSignature->getPointer());
+        int nPerm = rSignature.m_pSignature->getDocMDPPermission();
         if (nPerm != 0)
         {
             return nPerm;
@@ -346,24 +343,14 @@ bool ValidateSignature(SvStream& rStream, const Signature& rSignature,
                        const std::set<unsigned int>& rSignatureEOFs,
                        const std::vector<unsigned int>& rTrailerEnds)
 {
-    int nContentsLen
-        = FPDFSignatureObj_GetContents(rSignature.m_pSignature->getPointer(), nullptr, 0);
-    if (nContentsLen <= 0)
+    std::vector<unsigned char> aContents = rSignature.m_pSignature->getContents();
+    if (aContents.empty())
     {
         SAL_WARN("xmlsecurity.helper", "ValidateSignature: no contents");
         return false;
     }
-    std::vector<unsigned char> aContents(nContentsLen);
-    FPDFSignatureObj_GetContents(rSignature.m_pSignature->getPointer(), aContents.data(),
-                                 aContents.size());
 
-    int nSubFilterLen
-        = FPDFSignatureObj_GetSubFilter(rSignature.m_pSignature->getPointer(), nullptr, 0);
-    std::vector<char> aSubFilterBuf(nSubFilterLen);
-    FPDFSignatureObj_GetSubFilter(rSignature.m_pSignature->getPointer(), aSubFilterBuf.data(),
-                                  aSubFilterBuf.size());
-    // Buffer is NUL-terminated.
-    OString aSubFilter(aSubFilterBuf.data(), aSubFilterBuf.size() - 1);
+    OString aSubFilter = rSignature.m_pSignature->getSubFilter();
 
     const bool bNonDetached = aSubFilter == "adbe.pkcs7.sha1";
     if (aSubFilter.isEmpty()
