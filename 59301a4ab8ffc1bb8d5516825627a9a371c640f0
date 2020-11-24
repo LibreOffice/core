@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "70fe3eaf_af5bb45e",
+        "filename": "sw/inc/AccessibilityCheckStrings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-11-24T13:10:47Z",
+      "side": 1,
+      "message": "“Meaningless” doesn’t seem to be the right word. What about using “unimportant” instead?",
+      "revId": "59301a4ab8ffc1bb8d5516825627a9a371c640f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
