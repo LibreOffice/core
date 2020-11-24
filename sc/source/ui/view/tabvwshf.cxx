@@ -464,7 +464,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 bool   bDoIt = false;
                 sal_uInt16 nDoc = 0;
                 SCTAB nTab = rViewData.GetTabNo();
-                bool   bCpy = false;
+                bool bCpy = false, bUseCurrentDocument = false;
                 OUString aDocName;
                 OUString aTabName;
 
@@ -473,8 +473,15 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     SCTAB nTableCount = rDoc.GetTableCount();
                     const SfxPoolItem* pItem;
 
-                    if( pReqArgs->HasItem( FID_TAB_MOVE, &pItem ) )
+                    // if UseCurrentDocument(FN_PARAM_3) is true ignore the document name provided and use current document
+                    if( pReqArgs->HasItem( FN_PARAM_3, &pItem ) )
+                        bUseCurrentDocument = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+
+                    if (bUseCurrentDocument)
+                        aDocName = GetViewData().GetDocShell()->GetTitle();
+                    else if(pReqArgs->HasItem( FID_TAB_MOVE, &pItem ))
                         aDocName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+
                     if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
                     {
                         //  table is 1-based
