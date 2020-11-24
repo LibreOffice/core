@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ceec26cc_44f15fa3",
+        "filename": "sc/source/ui/drawfunc/graphsh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-24T06:17:56Z",
+      "side": 1,
+      "message": "Also possible to write as one operator:\n\n    if (auto pGrafObj \u003d dynamic_cast\u003cSdrGrafObj*\u003e(pObj); pGrafObj \u0026\u0026 pGrafObj-\u003eGetGraphicType() \u003d\u003d GraphicType::Bitmap)\n        ...\n\nso that it keeps correct indentation :-)",
+      "range": {
+        "startLine": 93,
+        "startChar": 8,
+        "endLine": 94,
+        "endChar": 70
+      },
+      "revId": "5ca88c4a1a97b95c829f6c7c570c4e5219e80e2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
