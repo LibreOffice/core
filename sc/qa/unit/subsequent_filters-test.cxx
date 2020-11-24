@@ -290,6 +290,7 @@ public:
     void testDeleteCircles();
     void testDrawCircleInMergeCells();
     void testDeleteCirclesInRowAndCol();
+    void testDeleteCircleAtFormula();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -467,6 +468,7 @@ public:
     CPPUNIT_TEST(testDeleteCircles);
     CPPUNIT_TEST(testDrawCircleInMergeCells);
     CPPUNIT_TEST(testDeleteCirclesInRowAndCol);
+    CPPUNIT_TEST(testDeleteCircleAtFormula);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5187,6 +5189,41 @@ void ScFiltersTest::testDeleteCirclesInRowAndCol()
 
     // Delete first col (1048575 = MAXROWS)
     pDrawLayer->DeleteObjectsInArea(0,0,0,0,1048575,true);
+
+    // There should not be a circle object!
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testDeleteCircleAtFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("deleteCircleAtFormula.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load deleteCircleAtFormula.ods", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
+
+    // There should be a circle object!
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
+
+    ScRefCellValue aFormulaCell;
+    ScAddress aPosC1(2, 0, 0);
+    aFormulaCell.assign(rDoc, aPosC1);
+
+    // The value of A1 change to 2.
+    rDoc.SetValue(0, 0, 0, 2);
+    bool bDirty = aFormulaCell.mpFormula->GetDirty();
+    CPPUNIT_ASSERT_EQUAL(true, bDirty);
+
+    const ScValidationData* pData = rDoc.GetValidationEntry(1);
+    bool bValidA1 = pData->IsDataValid(aFormulaCell, aPosC1);
+    // if valid, delete circle.
+    if (bValidA1)
+        ScDetectiveFunc(rDoc, 0).DeleteCirclesAt(aPosC1.Col(), aPosC1.Row());
 
     // There should not be a circle object!
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
