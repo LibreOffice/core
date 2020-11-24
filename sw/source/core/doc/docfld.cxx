@@ -24,6 +24,9 @@
 #include <comphelper/string.hxx>
 #include <osl/diagnose.h>
 #include <unotools/charclass.hxx>
+#ifndef UNX
+#include <unotools/transliterationwrapper.hxx>
+#endif
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
