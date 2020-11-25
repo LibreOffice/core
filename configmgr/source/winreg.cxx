@@ -226,7 +226,7 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                         if(nCommandSeparator != -1)
                         {
                             OUString aNodeOp = aNextPathPart.copy(nCommandSeparator + 1);
-                            writeAttributeValue(aFileHandle, aNextPathPart.copy(0, nCommandSeparator - 1));
+                            writeAttributeValue(aFileHandle, aNextPathPart.subView(0, nCommandSeparator - 1));
                             aFileHandle.writeString("\" oor:op=\"");
                             writeAttributeValue(aFileHandle, aNodeOp);
                         }

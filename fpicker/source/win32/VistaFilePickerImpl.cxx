@@ -996,7 +996,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
                         {
                             const sal_Int32 idx = sFilter.indexOf('.');
                             if (idx >= 0)
-                                aFileURL += sFilter.copy(idx);
+                                aFileURL += sFilter.subView(idx);
                         }
                     }
                 }

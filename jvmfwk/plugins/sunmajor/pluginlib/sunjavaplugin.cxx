@@ -482,7 +482,7 @@ static void load_msvcr(OUString const & jvm_dll, std::u16string_view msvcr)
     }
 
     if (LoadLibraryW(
-            o3tl::toW(OUString(jvm_dll.copy(0, slash+1) + msvcr).getStr())))
+            o3tl::toW(OUString(OUString::Concat(jvm_dll.subView(0, slash+1)) + msvcr).getStr())))
         return;
 
     // Then check if msvcr71.dll is in the parent folder of where
@@ -494,7 +494,7 @@ static void load_msvcr(OUString const & jvm_dll, std::u16string_view msvcr)
         return;
 
     (void)LoadLibraryW(
-        o3tl::toW(OUString(jvm_dll.copy(0, slash+1) + msvcr).getStr()));
+        o3tl::toW(OUString(OUString::Concat(jvm_dll.subView(0, slash+1)) + msvcr).getStr()));
 }
 
 // Check if the jvm DLL imports msvcr71.dll, and in that case try

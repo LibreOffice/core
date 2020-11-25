@@ -3520,7 +3520,8 @@ void ScExportTest::testSupBookVirtualPathXLS()
 
     OUString aFormula = toString(rDoc, aPos, *pCode, rDoc.GetGrammar());
 #ifdef _WIN32
-    aFormula = aFormula.copy(0, 9) + aFormula.copy(12); // strip drive letter, e.g. 'C:/'
+    aFormula = OUString::Concat(aFormula.subView(0, 9)) + aFormula.subView(12);
+        // strip drive letter, e.g. 'C:/'
 #endif
     OUString aExpectedFormula = "'file:///home/timar/Documents/external.xls'#$Sheet1.A1";
     if (aFormula != aExpectedFormula)

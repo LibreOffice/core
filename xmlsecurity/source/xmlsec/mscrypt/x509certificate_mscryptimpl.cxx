@@ -164,7 +164,8 @@ static OUString replaceTagSWithTagST(OUString const & oldDN)
 
     if (pairIndex.first != -1)
     {
-        return oldDN.copy(0, pairIndex.first)+"ST"+oldDN.copy(pairIndex.second);
+        return OUString::Concat(oldDN.subView(0, pairIndex.first))+"ST"
+            +oldDN.subView(pairIndex.second);
     }
     return oldDN;
 }
