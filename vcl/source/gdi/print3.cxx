@@ -493,8 +493,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
             }
             else if( aDlg->isSingleJobs() )
             {
-                xController->setValue( "PrintCollateAsSingleJobs",
-                                       css::uno::makeAny( true ) );
+                xController->getPrinter()->SetSinglePrintJobs(true);
             }
         }
         catch (const std::bad_alloc&)
@@ -569,12 +568,7 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
     if (!mpPrinter)
         return false;
 
-    bool bSinglePrintJobs = false;
-    css::beans::PropertyValue* pSingleValue = i_xController->getValue(OUString("PrintCollateAsSingleJobs"));
-    if( pSingleValue )
-    {
-        pSingleValue->Value >>= bSinglePrintJobs;
-    }
+    bool bSinglePrintJobs = i_xController->getPrinter()->IsSinglePrintJobs();
 
     css::beans::PropertyValue* pFileValue = i_xController->getValue(OUString("LocalFileName"));
     if( pFileValue )
@@ -1713,6 +1707,12 @@ void PrinterController::pushPropertiesToPrinter()
     if( pVal )
         pVal->Value >>= bCollate;
     mpImplData->mxPrinter->SetCopyCount( static_cast<sal_uInt16>(nCopyCount), bCollate );
+
+    pVal = getValue("SinglePrintJobs");
+    bool bSinglePrintJobs = false;
+    if (pVal)
+        pVal->Value >>= bSinglePrintJobs;
+    mpImplData->mxPrinter->SetSinglePrintJobs(bSinglePrintJobs);
 
     // duplex mode
     pVal = getValue( OUString( "DuplexMode" ) );
