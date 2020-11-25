@@ -454,6 +454,10 @@ private:
         {
             return false;
         }
+        if (decl->getBody() == nullptr) // unparsed template
+        {
+            return false;
+        }
         if (auto const d = dyn_cast<CXXMethodDecl>(decl))
         {
             if (d->isVirtual())
