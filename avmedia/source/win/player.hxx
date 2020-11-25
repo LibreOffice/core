@@ -60,7 +60,7 @@ public:
     bool                create( const OUString& rURL );
 
     void                setNotifyWnd( HWND nNotifyWnd );
-    long                processEvent();
+    void                processEvent();
 
     const IVideoWindow* getVideoWindow() const;
 

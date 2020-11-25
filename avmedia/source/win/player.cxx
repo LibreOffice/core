@@ -191,7 +191,7 @@ void Player::setNotifyWnd( HWND nNotifyWnd )
 }
 
 
-long Player::processEvent()
+void Player::processEvent()
 {
     long nCode;
     LONG_PTR nParam1, nParam2;
@@ -214,8 +214,6 @@ long Player::processEvent()
 
         mpME->FreeEventParams( nCode, nParam1, nParam2 );
     }
-
-    return 0;
 }
 
 
