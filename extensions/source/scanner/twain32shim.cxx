@@ -35,9 +35,9 @@
 
 namespace
 {
-long FixToLong(const TW_FIX32& rFix)
+TW_INT32 FixToInt32(const TW_FIX32& rFix)
 {
-    return static_cast<long>(floor(rFix.Whole + rFix.Frac / 65536. + 0.5));
+    return static_cast<TW_INT32>(floor(rFix.Whole + rFix.Frac / 65536. + 0.5));
 }
 
 const wchar_t sTwainWndClass[] = L"TwainClass";
@@ -387,14 +387,14 @@ void ImpTwain::ImplXfer()
     {
         TW_IMAGEINFO aInfo;
         HANDLE hDIB = nullptr;
-        long nWidth, nHeight, nXRes, nYRes;
+        TW_INT32 nWidth, nHeight, nXRes, nYRes;
 
         if (m_pDSM(&m_aAppId, &m_aSrcId, DG_IMAGE, DAT_IMAGEINFO, MSG_GET, &aInfo) == TWRC_SUCCESS)
         {
             nWidth = aInfo.ImageWidth;
             nHeight = aInfo.ImageLength;
-            nXRes = FixToLong(aInfo.XResolution);
-            nYRes = FixToLong(aInfo.YResolution);
+            nXRes = FixToInt32(aInfo.XResolution);
+            nYRes = FixToInt32(aInfo.YResolution);
         }
         else
             nWidth = nHeight = nXRes = nYRes = -1;
