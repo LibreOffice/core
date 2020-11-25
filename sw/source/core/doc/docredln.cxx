@@ -710,14 +710,13 @@ SwRedlineTable::size_type SwRedlineTable::FindPrevSeqNo( sal_uInt16 nSeqNo, size
 
 const SwRangeRedline* SwRedlineTable::FindAtPosition( const SwPosition& rSttPos,
                                         size_type& rPos,
-                                        bool bNext, bool bGetVisible ) const
+                                        bool bNext ) const
 {
     const SwRangeRedline* pFnd = nullptr;
     for( ; rPos < maVector.size() ; ++rPos )
     {
         const SwRangeRedline* pTmp = (*this)[ rPos ];
-        bool bIsVisible(pTmp->IsVisible());
-        if( (pTmp->HasMark()) && bIsVisible && bGetVisible )
+        if( pTmp->HasMark() && pTmp->IsVisible() )
         {
             const SwPosition* pRStt = pTmp->Start(),
                       * pREnd = pRStt == pTmp->GetPoint() ? pTmp->GetMark()
@@ -732,11 +731,6 @@ const SwRangeRedline* SwRedlineTable::FindAtPosition( const SwPosition& rSttPos,
             }
             else
                 break;
-        }
-        else if ( !bIsVisible && !bGetVisible && *pTmp->Start() == rSttPos )
-        {
-            pFnd = pTmp;
-            break;
         }
     }
     return pFnd;

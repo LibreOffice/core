@@ -3988,30 +3988,9 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
         m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
             RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
 
-        SwViewShell *pSh = m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
-        bool bShowChangesInMargin = pSh && pSh->GetViewOptions()->IsShowChangesInMargin();
-        const SwRedlineTable& rTable = m_rDoc.getIDocumentRedlineAccess().GetRedlineTable();
         for (SwRangeRedline * pRedline : redlines)
         {
             assert(pRedline->HasValidRange());
-
-            // deletions shown in margin
-            if (bShowChangesInMargin &&
-                    // within a paragraph TODO: fix also for paragraph join
-                    pRedline->GetPoint()->nNode == pRedline->GetMark()->nNode)
-            {
-                // show hidden previous deletion for joining
-                SwRedlineTable::size_type index = 0;
-                const SwRangeRedline* pPrevRedline = rTable.FindAtPosition(
-                                *pRedline->End(), index, /*bNext=*/false, /*bGetVisible=*/false );
-                if ( pPrevRedline && RedlineType::Delete == pPrevRedline->GetType() )
-                {
-                    SwRangeRedline* pPrevRed = rTable[ index ];
-                    pPrevRed->Show(1, index, /*bForced=*/true);
-                }
-                pRedline->Show(0, rTable.GetPos(pRedline), /*bForced=*/false);
-                pRedline->Show(1, rTable.GetPos(pRedline), /*bForced=*/false);
-            }
             undos.emplace_back(std::make_unique<SwUndoRedlineDelete>(
                         *pRedline, SwUndoId::DELETE));
         }
