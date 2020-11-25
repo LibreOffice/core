@@ -121,7 +121,7 @@ void TestHash::testSHA512_NoSaltNoSpin()
 void TestHash::testSHA512_saltspin()
 {
     const OUString aHash = comphelper::DocPasswordHelper::GetOoxHashAsBase64( "pwd", "876MLoKTq42+/DLp415iZQ==", 100000,
-            comphelper::Hash::IterCount::APPEND, "SHA-512");
+            comphelper::Hash::IterCount::APPEND, u"SHA-512");
     CPPUNIT_ASSERT_EQUAL(OUString("5l3mgNHXpWiFaBPv5Yso1Xd/UifWvQWmlDnl/hsCYbFT2sJCzorjRmBCQ/3qeDu6Q/4+GIE8a1DsdaTwYh1q2g=="), aHash);
 }
 

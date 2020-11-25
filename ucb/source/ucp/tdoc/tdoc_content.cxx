@@ -81,7 +81,7 @@ using namespace com::sun::star;
 using namespace tdoc_ucp;
 
 
-static ContentType lcl_getContentType( const OUString & rType )
+static ContentType lcl_getContentType( std::u16string_view rType )
 {
     if ( rType == TDOC_ROOT_CONTENT_TYPE )
         return ROOT;

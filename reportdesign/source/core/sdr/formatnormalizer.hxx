@@ -69,8 +69,8 @@ namespace rptui
     private:
         bool    impl_lateInit();
 
-        void    impl_onDefinitionPropertyChange( const OUString& _rChangedPropName );
-        void    impl_onFormattedProperttyChange( const css::uno::Reference< css::report::XFormattedField >& _rxFormatted, const OUString& _rChangedPropName );
+        void    impl_onDefinitionPropertyChange( std::u16string_view _rChangedPropName );
+        void    impl_onFormattedProperttyChange( const css::uno::Reference< css::report::XFormattedField >& _rxFormatted, std::u16string_view _rChangedPropName );
 
         bool    impl_ensureUpToDateFieldList_nothrow();
 

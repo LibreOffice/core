@@ -48,8 +48,8 @@ using namespace hierarchy_ucp;
 // describe path of cfg entry
 #define CFGPROPERTY_NODEPATH    "nodepath"
 
-#define READ_SERVICE_NAME      "com.sun.star.ucb.HierarchyDataReadAccess"
-#define READWRITE_SERVICE_NAME "com.sun.star.ucb.HierarchyDataReadWriteAccess"
+#define READ_SERVICE_NAME      u"com.sun.star.ucb.HierarchyDataReadAccess"
+#define READWRITE_SERVICE_NAME u"com.sun.star.ucb.HierarchyDataReadWriteAccess"
 
 #define CONFIG_DATA_ROOT_KEY          \
                         "/org.openoffice.ucb.Hierarchy/Root"
@@ -304,7 +304,7 @@ HierarchyDataSource::getAvailableServiceNames()
 
 uno::Reference< uno::XInterface >
 HierarchyDataSource::createInstanceWithArguments(
-                                const OUString & ServiceSpecifier,
+                                std::u16string_view ServiceSpecifier,
                                 const uno::Sequence< uno::Any > & Arguments,
                                 bool bCheckArgs )
 {

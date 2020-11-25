@@ -95,7 +95,7 @@ class FunctionPopup_Impl
     VclBuilder        m_aBuilder;
     VclPtr<PopupMenu> m_xMenu;
     sal_uInt32        m_nSelected;
-    static sal_uInt16 id_to_function(const OString& rIdent);
+    static sal_uInt16 id_to_function(std::string_view rIdent);
     sal_uInt16 function_to_id(sal_uInt16 nFunc) const;
 public:
     explicit FunctionPopup_Impl( sal_uInt32 nCheckEncoded );
@@ -105,7 +105,7 @@ public:
 
 }
 
-sal_uInt16 FunctionPopup_Impl::id_to_function(const OString& rIdent)
+sal_uInt16 FunctionPopup_Impl::id_to_function(std::string_view rIdent)
 {
     if (rIdent == "avg")
         return PSZ_FUNC_AVG;

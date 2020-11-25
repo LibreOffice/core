@@ -67,10 +67,10 @@ using namespace css::uno;
 using namespace css::linguistic2;
 using namespace css::beans;
 
-const char cSpell[]   = SN_SPELLCHECKER;
-const char cGrammar[] = SN_GRAMMARCHECKER;
-const char cHyph[]    = SN_HYPHENATOR;
-const char cThes[]    = SN_THESAURUS;
+constexpr OUStringLiteral cSpell(SN_SPELLCHECKER);
+constexpr OUStringLiteral cGrammar(SN_GRAMMARCHECKER);
+constexpr OUStringLiteral cHyph(SN_HYPHENATOR);
+constexpr OUStringLiteral cThes(SN_THESAURUS);
 
 // static ----------------------------------------------------------------
 

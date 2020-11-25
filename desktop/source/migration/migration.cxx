@@ -73,47 +73,47 @@ const char ITEM_DESCRIPTOR_COMMANDURL[] = "CommandURL";
 const char ITEM_DESCRIPTOR_CONTAINER[] = "ItemDescriptorContainer";
 const char ITEM_DESCRIPTOR_LABEL[] = "Label";
 
-static OUString mapModuleShortNameToIdentifier(const OUString& sShortName)
+static OUString mapModuleShortNameToIdentifier(std::u16string_view sShortName)
 {
     OUString sIdentifier;
 
-    if ( sShortName == "StartModule" )
+    if ( sShortName == u"StartModule" )
         sIdentifier = "com.sun.star.frame.StartModule";
 
-    else if ( sShortName == "swriter" )
+    else if ( sShortName == u"swriter" )
         sIdentifier = "com.sun.star.text.TextDocument";
 
-    else if ( sShortName == "scalc" )
+    else if ( sShortName == u"scalc" )
         sIdentifier = "com.sun.star.sheet.SpreadsheetDocument";
 
-    else if ( sShortName == "sdraw" )
+    else if ( sShortName == u"sdraw" )
         sIdentifier = "com.sun.star.drawing.DrawingDocument";
 
-    else if ( sShortName == "simpress" )
+    else if ( sShortName == u"simpress" )
         sIdentifier = "com.sun.star.presentation.PresentationDocument";
 
-    else if ( sShortName == "smath" )
+    else if ( sShortName == u"smath" )
         sIdentifier = "com.sun.star.formula.FormulaProperties";
 
-    else if ( sShortName == "schart" )
+    else if ( sShortName == u"schart" )
         sIdentifier = "com.sun.star.chart2.ChartDocument";
 
-    else if ( sShortName == "BasicIDE" )
+    else if ( sShortName == u"BasicIDE" )
         sIdentifier = "com.sun.star.script.BasicIDE";
 
-    else if ( sShortName == "dbapp" )
+    else if ( sShortName == u"dbapp" )
         sIdentifier = "com.sun.star.sdb.OfficeDatabaseDocument";
 
-    else if ( sShortName == "sglobal" )
+    else if ( sShortName == u"sglobal" )
         sIdentifier = "com.sun.star.text.GlobalDocument";
 
-    else if ( sShortName == "sweb" )
+    else if ( sShortName == u"sweb" )
         sIdentifier = "com.sun.star.text.WebDocument";
 
-    else if ( sShortName == "swxform" )
+    else if ( sShortName == u"swxform" )
         sIdentifier = "com.sun.star.xforms.XMLFormDocument";
 
-    else if ( sShortName == "sbibliography" )
+    else if ( sShortName == u"sbibliography" )
         sIdentifier = "com.sun.star.frame.Bibliography";
 
     return sIdentifier;

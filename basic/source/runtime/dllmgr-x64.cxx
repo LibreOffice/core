@@ -764,7 +764,7 @@ Dll * SbiDllMgr::Impl::getDll(OUString const & name) {
 }
 
 ErrCode SbiDllMgr::Call(
-    OUString const & function, OUString const & library,
+    std::u16string_view function, std::u16string_view library,
     SbxArray * arguments, SbxVariable & result, bool cdeclConvention)
 {
     if (cdeclConvention) {

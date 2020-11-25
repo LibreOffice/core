@@ -3299,131 +3299,131 @@ enum XMLTokenEnum XMLTextFieldExport::MapDocInfoFieldName(
     return eElement;
 }
 
-enum XMLTokenEnum XMLTextFieldExport::MapBibliographyFieldName(const OUString& sName)
+enum XMLTokenEnum XMLTextFieldExport::MapBibliographyFieldName(std::u16string_view sName)
 {
     enum XMLTokenEnum eName = XML_TOKEN_INVALID;
 
-    if( sName == "Identifier" )
+    if( sName == u"Identifier" )
     {
         eName = XML_IDENTIFIER;
     }
-    else if( sName == "BibiliographicType" )
+    else if( sName == u"BibiliographicType" )
     {
         eName = XML_BIBLIOGRAPHY_TYPE;
     }
-    else if( sName == "Address" )
+    else if( sName == u"Address" )
     {
         eName = XML_ADDRESS;
     }
-    else if( sName == "Annote" )
+    else if( sName == u"Annote" )
     {
         eName = XML_ANNOTE;
     }
-    else if( sName == "Author" )
+    else if( sName == u"Author" )
     {
         eName = XML_AUTHOR;
     }
-    else if( sName == "Booktitle" )
+    else if( sName == u"Booktitle" )
     {
         eName = XML_BOOKTITLE;
     }
-    else if( sName == "Chapter" )
+    else if( sName == u"Chapter" )
     {
         eName = XML_CHAPTER;
     }
-    else if( sName == "Edition" )
+    else if( sName == u"Edition" )
     {
         eName = XML_EDITION;
     }
-    else if( sName == "Editor" )
+    else if( sName == u"Editor" )
     {
         eName = XML_EDITOR;
     }
-    else if( sName == "Howpublished" )
+    else if( sName == u"Howpublished" )
     {
         eName = XML_HOWPUBLISHED;
     }
-    else if( sName == "Institution" )
+    else if( sName == u"Institution" )
     {
         eName = XML_INSTITUTION;
     }
-    else if( sName == "Journal" )
+    else if( sName == u"Journal" )
     {
         eName = XML_JOURNAL;
     }
-    else if( sName =="Month" )
+    else if( sName == u"Month" )
     {
         eName = XML_MONTH;
     }
-    else if( sName == "Note" )
+    else if( sName == u"Note" )
     {
         eName = XML_NOTE;
     }
-    else if( sName == "Number" )
+    else if( sName == u"Number" )
     {
         eName = XML_NUMBER;
     }
-    else if( sName == "Organizations" )
+    else if( sName == u"Organizations" )
     {
         eName = XML_ORGANIZATIONS;
     }
-    else if( sName == "Pages" )
+    else if( sName == u"Pages" )
     {
         eName = XML_PAGES;
     }
-    else if( sName == "Publisher" )
+    else if( sName == u"Publisher" )
     {
         eName = XML_PUBLISHER;
     }
-    else if( sName == "School" )
+    else if( sName == u"School" )
     {
         eName = XML_SCHOOL;
     }
-    else if( sName == "Series" )
+    else if( sName == u"Series" )
     {
         eName = XML_SERIES;
     }
-    else if( sName == "Title" )
+    else if( sName == u"Title" )
     {
         eName = XML_TITLE;
     }
-    else if( sName == "Report_Type" )
+    else if( sName == u"Report_Type" )
     {
         eName = XML_REPORT_TYPE;
     }
-    else if( sName == "Volume" )
+    else if( sName == u"Volume" )
     {
         eName = XML_VOLUME;
     }
-    else if( sName == "Year" )
+    else if( sName == u"Year" )
     {
         eName = XML_YEAR;
     }
-    else if( sName == "URL" )
+    else if( sName == u"URL" )
     {
         eName = XML_URL;
     }
-    else if( sName == "Custom1" )
+    else if( sName == u"Custom1" )
     {
         eName = XML_CUSTOM1;
     }
-    else if( sName == "Custom2" )
+    else if( sName == u"Custom2" )
     {
         eName = XML_CUSTOM2;
     }
-    else if( sName == "Custom3" )
+    else if( sName == u"Custom3" )
     {
         eName = XML_CUSTOM3;
     }
-    else if( sName == "Custom4" )
+    else if( sName == u"Custom4" )
     {
         eName = XML_CUSTOM4;
     }
-    else if( sName == "Custom5" )
+    else if( sName == u"Custom5" )
     {
         eName = XML_CUSTOM5;
     }
-    else if( sName == "ISBN" )
+    else if( sName == u"ISBN" )
     {
         eName = XML_ISBN;
     }

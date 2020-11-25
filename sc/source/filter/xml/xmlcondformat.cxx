@@ -835,26 +835,26 @@ ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport,
 
 namespace {
 
-void setColorEntryType(const OUString& rType, ScColorScaleEntry* pEntry, const OUString& rFormula,
+void setColorEntryType(std::u16string_view rType, ScColorScaleEntry* pEntry, const OUString& rFormula,
         ScXMLImport& rImport)
 {
-    if(rType == "minimum")
+    if(rType == u"minimum")
         pEntry->SetType(COLORSCALE_MIN);
-    else if(rType == "maximum")
+    else if(rType == u"maximum")
         pEntry->SetType(COLORSCALE_MAX);
-    else if(rType == "percentile")
+    else if(rType == u"percentile")
         pEntry->SetType(COLORSCALE_PERCENTILE);
-    else if(rType == "percent")
+    else if(rType == u"percent")
         pEntry->SetType(COLORSCALE_PERCENT);
-    else if(rType == "formula")
+    else if(rType == u"formula")
     {
         pEntry->SetType(COLORSCALE_FORMULA);
         //position does not matter, only table is important
         pEntry->SetFormula(rFormula, *rImport.GetDocument(), ScAddress(0,0,rImport.GetTables().GetCurrentSheet()), formula::FormulaGrammar::GRAM_ODFF);
     }
-    else if(rType == "auto-minimum")
+    else if(rType == u"auto-minimum")
         pEntry->SetType(COLORSCALE_AUTO);
-    else if(rType == "auto-maximum")
+    else if(rType == u"auto-maximum")
         pEntry->SetType(COLORSCALE_AUTO);
 }
 

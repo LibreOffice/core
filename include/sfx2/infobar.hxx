@@ -128,7 +128,7 @@ public:
     VclPtr<SfxInfoBarWindow> getInfoBar(std::u16string_view sId);
     bool hasInfoBarWithID(std::u16string_view sId);
     void removeInfoBar(VclPtr<SfxInfoBarWindow> const& pInfoBar);
-    static bool isInfobarEnabled(const OUString& sId);
+    static bool isInfobarEnabled(std::u16string_view sId);
 
     void TriggerUpdateLayout();
 

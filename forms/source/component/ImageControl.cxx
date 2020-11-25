@@ -486,9 +486,9 @@ bool OImageControlModel::commitControlValueToDbColumn( bool _bPostReset )
 
 namespace
 {
-    bool lcl_isValidDocumentURL( const OUString& _rDocURL )
+    bool lcl_isValidDocumentURL( std::u16string_view _rDocURL )
     {
-        return ( !_rDocURL.isEmpty() && _rDocURL != "private:object" );
+        return ( !_rDocURL.empty() && _rDocURL != u"private:object" );
     }
 }
 

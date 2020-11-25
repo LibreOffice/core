@@ -55,7 +55,7 @@ public:
 
     bool operator () (const ThumbnailViewItem *pItem);
 
-    static bool isFilteredExtension(FILTER_APPLICATION filter, const OUString &rExt);
+    static bool isFilteredExtension(FILTER_APPLICATION filter, std::u16string_view rExt);
     bool isValid (const OUString& rPath) const;
 
 private:
@@ -90,7 +90,7 @@ public:
 
     void createContextMenu(const bool bIsDefault );
 
-    void ContextMenuSelectHdl(const OString& rIdent);
+    void ContextMenuSelectHdl(std::string_view  rIdent);
 
     TemplateContainerItem* getRegion(std::u16string_view sStr);
 

@@ -34,31 +34,31 @@ ScVbaLineFormat::ScVbaLineFormat( const uno::Reference< ov::XHelperInterface >& 
 }
 
 sal_Int32
-ScVbaLineFormat::convertLineStartEndNameToArrowheadStyle( const OUString& sLineName )
+ScVbaLineFormat::convertLineStartEndNameToArrowheadStyle( std::u16string_view sLineName )
 {
     sal_Int32 nLineType = office::MsoArrowheadStyle::msoArrowheadNone;
-    if ( sLineName == "Small Arrow" || sLineName == "Arrow" || sLineName == "msArrowEnd" || sLineName == "Double Arrow")
+    if ( sLineName == u"Small Arrow" || sLineName == u"Arrow" || sLineName == u"msArrowEnd" || sLineName == u"Double Arrow")
     {
         // msoArrowheadTriangle
         nLineType = office::MsoArrowheadStyle::msoArrowheadTriangle;
     }
-    else if ( sLineName == "Square 45" || sLineName == "Square" || sLineName == "msArrowDiamondEnd")
+    else if ( sLineName == u"Square 45" || sLineName == u"Square" || sLineName == u"msArrowDiamondEnd")
     {
         // msoArrowheadDiamond
         nLineType = office::MsoArrowheadStyle::msoArrowheadDiamond;
     }
-    else if (sLineName == "Circle" || sLineName == "msArrowOvalEnd" || sLineName == "Dimension Lines" )
+    else if (sLineName == u"Circle" || sLineName == u"msArrowOvalEnd" || sLineName == u"Dimension Lines" )
     {
         // msoArrowheadOval
         nLineType = office::MsoArrowheadStyle::msoArrowheadOval;
     }
-    else if ( sLineName == "Arrow concave" || sLineName == "msArrowStealthEnd" )
+    else if ( sLineName == u"Arrow concave" || sLineName == u"msArrowStealthEnd" )
     {
         // msoArrowheadStealth
         nLineType = office::MsoArrowheadStyle::msoArrowheadStealth;
     }
-    else if ( sLineName == "Rounded short Arrow" || sLineName == "Rounded large Arrow" || sLineName == "Symmetric Arrow"
-           || sLineName == "msArrowOpenEnd" || sLineName == "Line Arrow" )
+    else if ( sLineName == u"Rounded short Arrow" || sLineName == u"Rounded large Arrow" || sLineName == u"Symmetric Arrow"
+           || sLineName == u"msArrowOpenEnd" || sLineName == u"Line Arrow" )
     {
         // msoArrowheadOpen
         nLineType = office::MsoArrowheadStyle::msoArrowheadOpen;

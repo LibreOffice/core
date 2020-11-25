@@ -46,27 +46,27 @@ using namespace ::com::sun::star::uno;
 // xmlsec05 deprecated
 #define DEFAULT_STAROFFICEBASIC         eALWAYS_EXECUTE
 
-#define PROPERTYNAME_SECUREURL                  "SecureURL"
-#define PROPERTYNAME_DOCWARN_SAVEORSEND         "WarnSaveOrSendDoc"
-#define PROPERTYNAME_DOCWARN_SIGNING            "WarnSignDoc"
-#define PROPERTYNAME_DOCWARN_PRINT              "WarnPrintDoc"
-#define PROPERTYNAME_DOCWARN_CREATEPDF          "WarnCreatePDF"
-#define PROPERTYNAME_DOCWARN_REMOVEPERSONALINFO "RemovePersonalInfoOnSaving"
-#define PROPERTYNAME_DOCWARN_RECOMMENDPASSWORD  "RecommendPasswordProtection"
-#define PROPERTYNAME_CTRLCLICK_HYPERLINK        "HyperlinksWithCtrlClick"
-#define PROPERTYNAME_BLOCKUNTRUSTEDREFERERLINKS "BlockUntrustedRefererLinks"
-#define PROPERTYNAME_MACRO_SECLEVEL             "MacroSecurityLevel"
-#define PROPERTYNAME_MACRO_TRUSTEDAUTHORS       "TrustedAuthors"
-#define PROPERTYNAME_MACRO_DISABLE              "DisableMacrosExecution"
-#define PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME  "SubjectName"
-#define PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER "SerialNumber"
-#define PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA      "RawData"
+#define PROPERTYNAME_SECUREURL                  u"SecureURL"
+#define PROPERTYNAME_DOCWARN_SAVEORSEND         u"WarnSaveOrSendDoc"
+#define PROPERTYNAME_DOCWARN_SIGNING            u"WarnSignDoc"
+#define PROPERTYNAME_DOCWARN_PRINT              u"WarnPrintDoc"
+#define PROPERTYNAME_DOCWARN_CREATEPDF          u"WarnCreatePDF"
+#define PROPERTYNAME_DOCWARN_REMOVEPERSONALINFO u"RemovePersonalInfoOnSaving"
+#define PROPERTYNAME_DOCWARN_RECOMMENDPASSWORD  u"RecommendPasswordProtection"
+#define PROPERTYNAME_CTRLCLICK_HYPERLINK        u"HyperlinksWithCtrlClick"
+#define PROPERTYNAME_BLOCKUNTRUSTEDREFERERLINKS u"BlockUntrustedRefererLinks"
+#define PROPERTYNAME_MACRO_SECLEVEL             u"MacroSecurityLevel"
+#define PROPERTYNAME_MACRO_TRUSTEDAUTHORS       u"TrustedAuthors"
+#define PROPERTYNAME_MACRO_DISABLE              u"DisableMacrosExecution"
+#define PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME  u"SubjectName"
+#define PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER u"SerialNumber"
+#define PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA      u"RawData"
 
 // xmlsec05 deprecated
-#define PROPERTYNAME_STAROFFICEBASIC    "OfficeBasic"
-#define PROPERTYNAME_EXECUTEPLUGINS     "ExecutePlugins"
-#define PROPERTYNAME_WARNINGENABLED     "Warning"
-#define PROPERTYNAME_CONFIRMATIONENABLED "Confirmation"
+#define PROPERTYNAME_STAROFFICEBASIC    u"OfficeBasic"
+#define PROPERTYNAME_EXECUTEPLUGINS     u"ExecutePlugins"
+#define PROPERTYNAME_WARNINGENABLED     u"Warning"
+#define PROPERTYNAME_CONFIRMATIONENABLED u"Confirmation"
 // xmlsec05 deprecated
 
 #define PROPERTYHANDLE_SECUREURL                    0
@@ -147,7 +147,7 @@ class SvtSecurityOptions_Impl : public ConfigItem
 
         void                    SetProperty( sal_Int32 nHandle, const Any& rValue, bool bReadOnly );
         void                    LoadAuthors();
-        static sal_Int32        GetHandle( const OUString& rPropertyName );
+        static sal_Int32        GetHandle( std::u16string_view rPropertyName );
         bool                    GetOption( SvtSecurityOptions::EOption eOption, bool*& rpValue, bool*& rpRO );
 
         /*-****************************************************************************************************
@@ -457,7 +457,7 @@ void SvtSecurityOptions_Impl::LoadAuthors()
     m_seqTrustedAuthors = comphelper::containerToSequence(v);
 }
 
-sal_Int32 SvtSecurityOptions_Impl::GetHandle( const OUString& rName )
+sal_Int32 SvtSecurityOptions_Impl::GetHandle( std::u16string_view rName )
 {
     sal_Int32   nHandle;
 

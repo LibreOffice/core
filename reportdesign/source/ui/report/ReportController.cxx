@@ -2267,7 +2267,7 @@ static sal_uInt16 lcl_getNonVisibleGroupsBefore( const uno::Reference< report::X
     return nNonVisibleGroups;
 }
 
-void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGroup,const OUString& _sPropName,sal_Int32 _nGroupPos,bool _bShow)
+void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGroup,std::u16string_view _sPropName,sal_Int32 _nGroupPos,bool _bShow)
 {
     ::std::function<bool(OGroupHelper *)> pMemFun = ::std::mem_fn(&OGroupHelper::getHeaderOn);
     ::std::function<uno::Reference<report::XSection>(OGroupHelper *)> pMemFunSection = ::std::mem_fn(&OGroupHelper::getHeader);

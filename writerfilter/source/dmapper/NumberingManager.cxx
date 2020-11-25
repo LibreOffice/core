@@ -160,15 +160,15 @@ uno::Sequence<beans::PropertyValue> ListLevel::GetProperties(bool bDefaults)
     return aLevelProps;
 }
 
-static bool IgnoreForCharStyle(const OUString& aStr, const bool bIsSymbol)
+static bool IgnoreForCharStyle(std::u16string_view aStr, const bool bIsSymbol)
 {
     //Names found in PropertyIds.cxx, Lines 56-396
-    return (aStr=="Adjust" || aStr=="IndentAt" || aStr=="FirstLineIndent"
-            || aStr=="FirstLineOffset" || aStr=="LeftMargin"
-            || aStr=="CharInteropGrabBag" || aStr=="ParaInteropGrabBag" ||
+    return (aStr==u"Adjust" || aStr==u"IndentAt" || aStr==u"FirstLineIndent"
+            || aStr==u"FirstLineOffset" || aStr==u"LeftMargin"
+            || aStr==u"CharInteropGrabBag" || aStr==u"ParaInteropGrabBag" ||
             // We need font names when they are different for the bullet and for the text.
             // But leave symbols alone, we only want to keep the font style for letters and numbers.
-            (bIsSymbol && aStr=="CharFontName")
+            (bIsSymbol && aStr==u"CharFontName")
         );
 }
 uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )

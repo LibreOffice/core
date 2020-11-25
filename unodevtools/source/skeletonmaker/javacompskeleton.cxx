@@ -40,7 +40,7 @@ static void generatePackage(std::ostream & o, const OString & implname)
 }
 
 static void generateImports(std::ostream & o, ProgramOptions const & options,
-         const OUString & propertyhelper,
+         std::u16string_view propertyhelper,
          bool serviceobject, bool supportxcomponent)
 {
     if (options.componenttype == 3)
@@ -52,14 +52,14 @@ static void generateImports(std::ostream & o, ProgramOptions const & options,
         o << "import com.sun.star.registry.XRegistryKey;\n";
     }
 
-    if  (propertyhelper != "_") {
+    if  (propertyhelper != u"_") {
         if (supportxcomponent)
             o << "import com.sun.star.lib.uno.helper.ComponentBase;\n";
         else
             o << "import com.sun.star.lib.uno.helper.WeakBase;\n";
     }
-    if (!propertyhelper.isEmpty()) {
-        if (propertyhelper == "_") {
+    if (!propertyhelper.empty()) {
+        if (propertyhelper == u"_") {
             o << "import com.sun.star.lib.uno.helper.PropertySet;\n";
             o << "import com.sun.star.beans.PropertyAttribute;\n";
         } else {

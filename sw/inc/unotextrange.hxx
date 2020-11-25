@@ -70,7 +70,7 @@ namespace sw {
         CreateParentXText(SwDoc & rDoc, const SwPosition& rPos);
 
     bool GetDefaultTextContentValue(css::uno::Any& rAny,
-        const OUString& rPropertyName, sal_uInt16 nWID = 0);
+        std::u16string_view rPropertyName, sal_uInt16 nWID = 0);
 
 } // namespace sw
 
