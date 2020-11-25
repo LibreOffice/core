@@ -49,6 +49,7 @@ private:
 
     SvxCharView m_aRecentCharView[16];
     SvxCharView m_aFavCharView[16];
+    std::unique_ptr<weld::Label> m_xRecentLabel;
     std::unique_ptr<weld::Button> m_xDlgBtn;
     std::unique_ptr<weld::CustomWeld> m_xRecentCharView[16];
     std::unique_ptr<weld::CustomWeld> m_xFavCharView[16];

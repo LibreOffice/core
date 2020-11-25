@@ -343,6 +343,9 @@
 #define STR_CLICKHYPERLINK                      NC_("STR_CLICKHYPERLINK", "Click to open hyperlink: %{link}")
 
 #define STR_STYLEUSEDBY                         NC_("STR_STYLEUSEDBY", "(used by: %STYLELIST)")
+
+#define STR_RECENT     NC_("STR_RECENT", "Recently used")
+#define STR_NORECENT   NC_("STR_NORECENT", "No recent characters")
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
