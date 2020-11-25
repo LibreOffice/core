@@ -27,6 +27,8 @@
 
 #include <bitmapwriteaccess.hxx>
 
+using namespace com::sun::star;
+
 static_assert(static_cast<int>(vcl::pdf::PDFPageObjectType::Unknown) == FPDF_PAGEOBJ_UNKNOWN,
               "PDFPageObjectType::Unknown value mismatch");
 static_assert(static_cast<int>(vcl::pdf::PDFPageObjectType::Text) == FPDF_PAGEOBJ_TEXT,
@@ -235,6 +237,45 @@ OString PDFiumSignature::getSubFilter()
     // Buffer is NUL-terminated.
     OString aSubFilter(aSubFilterBuf.data(), aSubFilterBuf.size() - 1);
     return aSubFilter;
+}
+
+OUString PDFiumSignature::getReason()
+{
+    int nReasonLen = FPDFSignatureObj_GetReason(mpSignature, nullptr, 0);
+    OUString aRet;
+    if (nReasonLen > 0)
+    {
+        std::vector<char16_t> aReasonBuf(nReasonLen);
+        FPDFSignatureObj_GetReason(mpSignature, aReasonBuf.data(), aReasonBuf.size());
+        aRet = OUString(aReasonBuf.data(), aReasonBuf.size() - 1);
+    }
+
+    return aRet;
+}
+
+util::DateTime PDFiumSignature::getTime()
+{
+    util::DateTime aRet;
+    int nTimeLen = FPDFSignatureObj_GetTime(mpSignature, nullptr, 0);
+    if (nTimeLen <= 0)
+    {
+        return aRet;
+    }
+
+    // Example: "D:20161027100104".
+    std::vector<char> aTimeBuf(nTimeLen);
+    FPDFSignatureObj_GetTime(mpSignature, aTimeBuf.data(), aTimeBuf.size());
+    OString aM(aTimeBuf.data(), aTimeBuf.size() - 1);
+    if (aM.startsWith("D:") && aM.getLength() >= 16)
+    {
+        aRet.Year = aM.copy(2, 4).toInt32();
+        aRet.Month = aM.copy(6, 2).toInt32();
+        aRet.Day = aM.copy(8, 2).toInt32();
+        aRet.Hours = aM.copy(10, 2).toInt32();
+        aRet.Minutes = aM.copy(12, 2).toInt32();
+        aRet.Seconds = aM.copy(14, 2).toInt32();
+    }
+    return aRet;
 }
 
 PDFiumDocument::PDFiumDocument(FPDF_DOCUMENT pPdfDocument)

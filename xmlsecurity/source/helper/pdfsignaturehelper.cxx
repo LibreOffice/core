@@ -366,35 +366,11 @@ bool ValidateSignature(SvStream& rStream, const Signature& rSignature,
     }
 
     // Reason / comment / description is optional.
-    int nReasonLen = FPDFSignatureObj_GetReason(rSignature.m_pSignature->getPointer(), nullptr, 0);
-    if (nReasonLen > 0)
-    {
-        std::vector<char16_t> aReasonBuf(nReasonLen);
-        FPDFSignatureObj_GetReason(rSignature.m_pSignature->getPointer(), aReasonBuf.data(),
-                                   aReasonBuf.size());
-        rInformation.ouDescription = OUString(aReasonBuf.data(), aReasonBuf.size() - 1);
-    }
+    rInformation.ouDescription = rSignature.m_pSignature->getReason();
 
     // Date: used only when the time of signing is not available in the
     // signature.
-    int nTimeLen = FPDFSignatureObj_GetTime(rSignature.m_pSignature->getPointer(), nullptr, 0);
-    if (nTimeLen > 0)
-    {
-        // Example: "D:20161027100104".
-        std::vector<char> aTimeBuf(nTimeLen);
-        FPDFSignatureObj_GetTime(rSignature.m_pSignature->getPointer(), aTimeBuf.data(),
-                                 aTimeBuf.size());
-        OString aM(aTimeBuf.data(), aTimeBuf.size() - 1);
-        if (aM.startsWith("D:") && aM.getLength() >= 16)
-        {
-            rInformation.stDateTime.Year = aM.copy(2, 4).toInt32();
-            rInformation.stDateTime.Month = aM.copy(6, 2).toInt32();
-            rInformation.stDateTime.Day = aM.copy(8, 2).toInt32();
-            rInformation.stDateTime.Hours = aM.copy(10, 2).toInt32();
-            rInformation.stDateTime.Minutes = aM.copy(12, 2).toInt32();
-            rInformation.stDateTime.Seconds = aM.copy(14, 2).toInt32();
-        }
-    }
+    rInformation.stDateTime = rSignature.m_pSignature->getTime();
 
     // Detect if the byte ranges don't cover everything, but the signature itself.
     if (rSignature.m_aByteRanges.size() < 2)
