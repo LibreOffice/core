@@ -30,6 +30,7 @@
 #include <winver.h>
 
 #include <comphelper/windowserrorstring.hxx>
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 
 namespace
@@ -190,7 +191,9 @@ bool D2DWriteTextOutRenderer::Ready() const
 
 HRESULT D2DWriteTextOutRenderer::BindDC(HDC hDC, tools::Rectangle const & rRect)
 {
-    RECT const rc = { rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() };
+    RECT const rc = {
+        o3tl::narrowing<LONG>(rRect.Left()), o3tl::narrowing<LONG>(rRect.Top()),
+        o3tl::narrowing<LONG>(rRect.Right()), o3tl::narrowing<LONG>(rRect.Bottom()) };
     return CHECKHR(mpRT->BindDC(hDC, &rc));
 }
 

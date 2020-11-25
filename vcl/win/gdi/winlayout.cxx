@@ -21,6 +21,8 @@
 #include <config_features.h>
 
 #include <memory>
+
+#include <o3tl/safeint.hxx>
 #include <osl/module.h>
 #include <osl/file.h>
 #include <sal/log.hxx>
@@ -594,8 +596,9 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
         // we are making changes to the DC, make sure we got a new one
         assert(aDC->getCompatibleHDC() != hDC);
 
-        RECT aWinRect = { aRect.Left(), aRect.Top(), aRect.Left() + aRect.GetWidth(),
-                          aRect.Top() + aRect.GetHeight() };
+        RECT aWinRect = { o3tl::narrowing<LONG>(aRect.Left()), o3tl::narrowing<LONG>(aRect.Top()),
+                          o3tl::narrowing<LONG>(aRect.Left() + aRect.GetWidth()),
+                          o3tl::narrowing<LONG>(aRect.Top() + aRect.GetHeight()) };
         ::FillRect(aDC->getCompatibleHDC(), &aWinRect,
                    static_cast<HBRUSH>(::GetStockObject(WHITE_BRUSH)));
 

@@ -234,6 +234,11 @@ make_unsigned(T value)
     return value;
 }
 
+// An implicit conversion from T2 to T1, useful in places where an explicit conversion from T2 to
+// T1 is needed (e.g., in list initialization, if the implicit conversion would be narrowing) but
+// tools like -fsanitize=implict-conversion should still be able to detect truncation:
+template<typename T1, typename T2> constexpr T1 narrowing(T2 value) { return value; }
+
 }
 
 #endif
