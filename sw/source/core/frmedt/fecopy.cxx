@@ -399,6 +399,11 @@ bool SwFEShell::CopyDrawSel( SwFEShell& rDestShell, const Point& rSttPt,
                         if (SwDrawFrameFormat *pDrawFormat = dynamic_cast<SwDrawFrameFormat*>(pFormat))
                             pDrawFormat->PosAttrSet();
                     }
+                    if (SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT))
+                    {
+                        SwTextBoxHelper::syncFlyFrameAttr(*pFormat, pFormat->GetAttrSet());
+                    }
+
                     if( bSelectInsert )
                         pDestDrwView->MarkObj( pNew, pDestPgView );
                 }
