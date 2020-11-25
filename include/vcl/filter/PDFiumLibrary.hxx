@@ -12,6 +12,8 @@
 
 #include <config_features.h>
 
+#include <com/sun/star/util/DateTime.hpp>
+
 #if HAVE_FEATURE_PDFIUM
 
 #include <vcl/dllapi.h>
@@ -241,11 +243,12 @@ private:
 public:
     PDFiumSignature(FPDF_SIGNATURE pSignature);
 
-    FPDF_SIGNATURE getPointer() { return mpSignature; }
     std::vector<int> getByteRange();
     int getDocMDPPermission();
     std::vector<unsigned char> getContents();
     OString getSubFilter();
+    OUString getReason();
+    css::util::DateTime getTime();
 };
 
 class VCL_DLLPUBLIC PDFiumDocument final
