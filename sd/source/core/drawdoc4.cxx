@@ -91,6 +91,7 @@
 #include <editeng/outlobj.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <svx/sdasitm.hxx>
 
 #include <sdresid.hxx>
 #include <drawdoc.hxx>
@@ -222,6 +223,9 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put( makeSdrTextRightDistItem( 250 ) );
     rISet.Put( makeSdrTextUpperDistItem( 125 ) );
     rISet.Put( makeSdrTextLowerDistItem( 125 ) );
+
+    // Set Word-wrap to true by default
+    rISet.Put( makeSdrTextWordWrapItem(true) );
 
     rISet.Put( SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL ) );
 
