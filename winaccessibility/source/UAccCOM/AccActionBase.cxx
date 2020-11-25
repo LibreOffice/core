@@ -166,7 +166,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::get_keyBinding(
     if( !binding.is() )
         return E_FAIL;
 
-    long nCount = binding->getAccessibleKeyBindingCount();
+    sal_Int32 nCount = binding->getAccessibleKeyBindingCount();
 
     *keyBinding = static_cast<BSTR*>(::CoTaskMemAlloc(nCount*sizeof(BSTR)));
 
@@ -174,7 +174,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::get_keyBinding(
     if(*keyBinding == nullptr)
         return E_FAIL;
 
-    for( int index = 0;index < nCount;index++ )
+    for( sal_Int32 index = 0;index < nCount;index++ )
     {
         auto const wString = comphelper::GetkeyBindingStrByXkeyBinding(
             binding->getAccessibleKeyBinding(index));
