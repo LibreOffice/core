@@ -22,6 +22,30 @@
       "revId": "e7dcec30c3527623d6b80f78823d52a7dd83a267",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "60a95202_8fdebfeb",
+        "filename": "external/firebird/firebird-macosx.patch.1",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-11-25T12:50:25Z",
+      "side": 1,
+      "message": "No. Thanks for catching that.",
+      "parentUuid": "218d8817_8969856d",
+      "range": {
+        "startLine": 80,
+        "startChar": 3,
+        "endLine": 80,
+        "endChar": 7
+      },
+      "revId": "e7dcec30c3527623d6b80f78823d52a7dd83a267",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
