@@ -646,7 +646,16 @@ bool SbxValue::ImpIsNumeric( bool bOnlyIntntl ) const
     {
         if( aData.pOUString )
         {
-            OUString s( *aData.pOUString );
+            OUString s;
+            if ((*aData.pOUString)[0] == '+')
+            {
+                sal_Int32 beginIndex = 1;
+                s = (*aData.pOUString).copy(  beginIndex  );
+            }
+            else
+            {
+                s = *aData.pOUString;
+            }
             double n;
             SbxDataType t2;
             sal_uInt16 nLen = 0;
