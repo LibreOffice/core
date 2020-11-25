@@ -820,8 +820,8 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 return;
             }
 
-            // if no arguments are given, retrieve them from a dialog
-            if ( !bIsAPI )
+            // Open Printer Setup dialog
+            if ( nId == SID_SETUPPRINTER )
             {
                 // PrinterDialog needs a temporary printer
                 VclPtr<SfxPrinter> pDlgPrinter = pPrinter->Clone();
