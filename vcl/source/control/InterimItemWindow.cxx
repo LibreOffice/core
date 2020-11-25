@@ -85,6 +85,21 @@ Size InterimItemWindow::GetOptimalSize() const
     return VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
 }
 
+void InterimItemWindow::InvalidateChildSizeCache()
+{
+    // find the bottom vcl::Window of the hierarchy and queue_resize on that
+    // one will invalidate all the size caches upwards
+    vcl::Window* pChild = GetWindow(GetWindowType::FirstChild);
+    while (true)
+    {
+        vcl::Window* pSubChild = pChild->GetWindow(GetWindowType::FirstChild);
+        if (!pSubChild)
+            break;
+        pChild = pSubChild;
+    }
+    pChild->queue_resize();
+}
+
 bool InterimItemWindow::ControlHasFocus() const
 {
     if (!m_pWidget)
