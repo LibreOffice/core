@@ -134,11 +134,12 @@ public:
             sal_Unicode const magic(m_eFieldmarkMode == sw::FieldmarkMode::ShowResult
                     ? CH_TXT_ATR_FIELDSTART
                     : CH_TXT_ATR_FIELDSEP);
-            sal_Int32 const nPos(m_pEndPos->nNode.GetNode().GetTextNode()->GetText().indexOf(
-                    magic, m_pEndPos->nContent.GetIndex()));
+            SwTextNode* pTextNode = m_pEndPos->nNode.GetNode().GetTextNode();
+            sal_Int32 const nPos = pTextNode ? pTextNode->GetText().indexOf(
+                    magic, m_pEndPos->nContent.GetIndex()) : -1;
             if (nPos != -1)
             {
-                m_oNextFieldmarkHide.emplace(*m_pEndPos->nNode.GetNode().GetTextNode(), nPos);
+                m_oNextFieldmarkHide.emplace(*pTextNode, nPos);
                 sw::mark::IFieldmark const*const pFieldmark(
                         m_eFieldmarkMode == sw::FieldmarkMode::ShowResult
                             ? m_rIDMA.getFieldmarkAt(*m_oNextFieldmarkHide)
