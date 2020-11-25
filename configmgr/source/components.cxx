@@ -202,8 +202,8 @@ Components & Components::getSingleton(
     return singleton;
 }
 
-bool Components::allLocales(OUString const & locale) {
-    return locale == "*";
+bool Components::allLocales(std::u16string_view locale) {
+    return locale == u"*";
 }
 
 rtl::Reference< Node > Components::resolvePathRepresentation(

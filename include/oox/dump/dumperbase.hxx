@@ -330,8 +330,8 @@ public:
     static OUString trimTrailingNul( const OUString& rStr );
 
     static OString convertToUtf8( const OUString& rStr );
-    static DataType     convertToDataType( const OUString& rStr );
-    static FormatType   convertToFormatType( const OUString& rStr );
+    static DataType     convertToDataType( std::u16string_view rStr );
+    static FormatType   convertToFormatType( std::u16string_view rStr );
 
     static bool         convertFromDec( sal_Int64& ornData, const OUString& rData );
     static bool         convertFromHex( sal_Int64& ornData, const OUString& rData );

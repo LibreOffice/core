@@ -48,7 +48,7 @@ public:
      * It is not clear where this information belongs to. The sizes were hard-coded before they moved here.
      * Maybe there is a way to determine the sizes from the icon theme packages.
      */
-    static Size SizeByThemeName(const OUString&);
+    static Size SizeByThemeName(std::u16string_view);
 
     /** Check whether an IconThemeInfo can be constructed from a URL */
     static bool UrlCanBeParsed(const OUString& url);

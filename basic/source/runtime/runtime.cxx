@@ -1271,8 +1271,8 @@ SbiForStack* SbiRuntime::FindForStackItemForCollection( class BasicCollection co
 //  DLL-calls
 
 void SbiRuntime::DllCall
-    ( const OUString& aFuncName,
-      const OUString& aDLLName,
+    ( std::u16string_view aFuncName,
+      std::u16string_view aDLLName,
       SbxArray* pArgs,          // parameter (from index 1, can be NULL)
       SbxDataType eResType,     // return value
       bool bCDecl )         // true: according to C-conventions

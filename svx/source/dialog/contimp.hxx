@@ -100,8 +100,8 @@ class SvxSuperContourDlg
     DECL_LINK( WorkplaceClickHdl, ContourWindow&, void );
     DECL_LINK( CancelHdl, weld::Button&, void );
 
-    void SetActiveTool(const OString& rId);
-    void SetActivePoly(const OString& rId);
+    void SetActiveTool(std::string_view rId);
+    void SetActivePoly(std::string_view rId);
 
     SfxBindings& GetBindings() { return *mpBindings; }
 

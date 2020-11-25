@@ -125,14 +125,14 @@ SvXMLEnumMapEntry<drawing::EscapeDirection> const aXML_GlueEscapeDirection_EnumM
     { XML_TOKEN_INVALID, drawing::EscapeDirection(0) }
 };
 
-static bool ImpIsEmptyURL( const OUString& rURL )
+static bool ImpIsEmptyURL( std::u16string_view rURL )
 {
-    if( rURL.isEmpty() )
+    if( rURL.empty() )
         return true;
 
     // #i13140# Also compare against 'toplevel' URLs. which also
     // result in empty filename strings.
-    if( rURL == "#./" )
+    if( rURL == u"#./" )
         return true;
 
     return false;

@@ -205,7 +205,7 @@ public:
     void exportAxis( enum XMLTokenEnum eDimension, enum XMLTokenEnum eAxisName,
                     const Reference< beans::XPropertySet >& rAxisProps, const Reference< chart2::XAxis >& rChart2Axis,
                     const OUString& rCategoriesRanges,
-                    bool bHasTitle, bool bHasMajorGrid, bool bHasMinorGrid, bool bExportContent, OUString sChartType );
+                    bool bHasTitle, bool bHasMajorGrid, bool bHasMinorGrid, bool bExportContent, std::u16string_view sChartType );
     void exportGrid( const Reference< beans::XPropertySet >& rGridProperties, bool bMajor, bool bExportContent );
     void exportDateScale( const Reference< beans::XPropertySet >& rAxisProps );
     void exportAxisTitle( const Reference< beans::XPropertySet >& rTitleProps, bool bExportContent );
@@ -2290,7 +2290,7 @@ void SchXMLExportHelper_Impl::exportAxis(
     const Reference< chart2::XAxis >& rChart2Axis,
     const OUString& rCategoriesRange,
     bool bHasTitle, bool bHasMajorGrid, bool bHasMinorGrid,
-    bool bExportContent, OUString sChartType )
+    bool bExportContent, std::u16string_view sChartType )
 {
     std::vector< XMLPropertyState > aPropertyStates;
     std::unique_ptr<SvXMLElementExport> pAxis;
@@ -2304,7 +2304,7 @@ void SchXMLExportHelper_Impl::exportAxis(
         {
             chart2::ScaleData aScaleData(rChart2Axis->getScaleData());
             bool bShiftedCatPos = aScaleData.ShiftedCategoryPosition;
-            if (sChartType == "com.sun.star.chart.BarDiagram" || sChartType == "com.sun.star.chart.StockDiagram")
+            if (sChartType == u"com.sun.star.chart.BarDiagram" || sChartType == u"com.sun.star.chart.StockDiagram")
             {
                 if (!bShiftedCatPos)
                     rAxisProps->setPropertyValue("MajorOrigin", uno::makeAny(0.0));

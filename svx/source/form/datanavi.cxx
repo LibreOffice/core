@@ -372,7 +372,7 @@ namespace svxform
         }
     }
 
-    bool XFormsPage::DoToolBoxAction(const OString& rToolBoxID)
+    bool XFormsPage::DoToolBoxAction(std::string_view rToolBoxID)
     {
         bool bHandled = false;
         bool bIsDocModified = false;
@@ -1154,7 +1154,7 @@ namespace svxform
         return sRet;
     }
 
-    bool XFormsPage::DoMenuAction(const OString& rMenuID)
+    bool XFormsPage::DoMenuAction(std::string_view rMenuID)
     {
         return DoToolBoxAction(rMenuID);
     }

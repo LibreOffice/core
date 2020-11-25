@@ -49,9 +49,9 @@ XMLTableShapeImportHelper::~XMLTableShapeImportHelper()
 {
 }
 
-void XMLTableShapeImportHelper::SetLayer(const uno::Reference<drawing::XShape>& rShape, SdrLayerID nLayerID, const OUString& sType)
+void XMLTableShapeImportHelper::SetLayer(const uno::Reference<drawing::XShape>& rShape, SdrLayerID nLayerID, std::u16string_view sType)
 {
-    if ( sType == "com.sun.star.drawing.ControlShape" )
+    if ( sType == u"com.sun.star.drawing.ControlShape" )
         nLayerID = SC_LAYER_CONTROLS;
     if (nLayerID != SDRLAYER_NOTFOUND)
     {

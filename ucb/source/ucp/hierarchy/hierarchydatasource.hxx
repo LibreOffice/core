@@ -69,7 +69,7 @@ public:
 
 private:
     /// @throws css::uno::Exception
-    css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( const OUString & ServiceSpecifier,
+    css::uno::Reference< css::uno::XInterface > createInstanceWithArguments( std::u16string_view ServiceSpecifier,
                                  const css::uno::Sequence<
                                     css::uno::Any > & Arguments,
                                  bool bCheckArgs );

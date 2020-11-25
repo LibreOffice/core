@@ -227,7 +227,7 @@ public:
     DECL_LINK(EditedEntryHdl, const IterString&, bool);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
-    void            ExecuteContextMenuAction(const OString& rSelectedPopentry);
+    void            ExecuteContextMenuAction(std::string_view rSelectedPopentry);
 };
 
 }
@@ -576,7 +576,7 @@ IMPL_LINK(ViewTabListBox_Impl, CommandHdl, const CommandEvent&, rCEvt, bool)
     return true;
 }
 
-void ViewTabListBox_Impl::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
+void ViewTabListBox_Impl::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry)
 {
     if (rSelectedPopupEntry == "delete")
         DeleteEntries();

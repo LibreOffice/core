@@ -237,7 +237,7 @@ void checkType(rtl::Reference< TypeManager > const & manager,
 void checkDefaultInterfaces(
     std::set< OUString >& interfaces,
     const std::set< OUString >& services,
-    const OUString & propertyhelper)
+    std::u16string_view propertyhelper)
 {
     if ( services.empty() ) {
         interfaces.erase("com.sun.star.lang.XServiceInfo");
@@ -245,7 +245,7 @@ void checkDefaultInterfaces(
         interfaces.insert("com.sun.star.lang.XServiceInfo");
     }
 
-    if ( propertyhelper == "_" ) {
+    if ( propertyhelper == u"_" ) {
         interfaces.erase("com.sun.star.beans.XPropertySet");
         interfaces.erase("com.sun.star.beans.XFastPropertySet");
         interfaces.erase("com.sun.star.beans.XPropertyAccess");

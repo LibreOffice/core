@@ -99,11 +99,11 @@
 #define TYPE_FSYS_FOLDER        "application/vnd.sun.staroffice.fsys-folder"
 #define TYPE_FSYS_FILE          "application/vnd.sun.staroffice.fsys-file"
 
-#define PROPERTY_DIRLIST        "DirectoryList"
+#define PROPERTY_DIRLIST        u"DirectoryList"
 #define PROPERTY_NEEDSUPDATE    "NeedsUpdate"
 #define PROPERTY_TYPE           "TypeDescription"
 
-#define TARGET_DIR_URL          "TargetDirURL"
+#define TARGET_DIR_URL          u"TargetDirURL"
 #define COMMAND_DELETE          "delete"
 
 #define STANDARD_FOLDER         "standard"
@@ -2667,7 +2667,7 @@ DocTemplates_EntryData_Impl::DocTemplates_EntryData_Impl( const OUString& rTitle
 
 // static
 bool SfxURLRelocator_Impl::propertyCanContainOfficeDir(
-                                        const OUString & rPropName )
+                                        std::u16string_view rPropName )
 {
     // Note: TargetURL is handled by UCB itself (because it is a property
     //       with a predefined semantic). Additional Core properties introduced

@@ -62,7 +62,7 @@ namespace oox::ppt {
         void setOoxTransitionType( ::sal_Int32 OoxType,
                                                              ::sal_Int32 param1, ::sal_Int32 param2 );
 
-        void setPresetTransition(OUString const & sPresetTransition);
+        void setPresetTransition(std::u16string_view sPresetTransition);
 
     private:
         ::sal_Int16 mnTransitionType;

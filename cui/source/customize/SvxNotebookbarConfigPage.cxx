@@ -49,12 +49,12 @@ namespace container = com::sun::star::container;
 namespace beans = com::sun::star::beans;
 namespace graphic = com::sun::star::graphic;
 
-static bool isCategoryAvailable(const OUString& sClassId, std::u16string_view sUIItemId,
+static bool isCategoryAvailable(std::u16string_view sClassId, std::u16string_view sUIItemId,
                                 std::u16string_view sActiveCategory, bool& isCategory)
 {
     if (sUIItemId == sActiveCategory)
         return true;
-    else if ((sClassId == "GtkMenu" || sClassId == "GtkGrid") && sUIItemId != sActiveCategory)
+    else if ((sClassId == u"GtkMenu" || sClassId == u"GtkGrid") && sUIItemId != sActiveCategory)
     {
         isCategory = false;
         return false;
@@ -67,29 +67,29 @@ static OUString charToString(const char* cString)
     return OUString(cString, strlen(cString), RTL_TEXTENCODING_UTF8);
 }
 
-static OUString getFileName(const OUString& aFileName)
+static OUString getFileName(std::u16string_view aFileName)
 {
-    if (aFileName == "notebookbar.ui")
+    if (aFileName == u"notebookbar.ui")
         return "Tabbed";
-    else if (aFileName == "notebookbar_compact.ui")
+    else if (aFileName == u"notebookbar_compact.ui")
         return "TabbedCompact";
-    else if (aFileName == "notebookbar_groupedbar_full.ui")
+    else if (aFileName == u"notebookbar_groupedbar_full.ui")
         return "Groupedbar";
-    else if (aFileName == "notebookbar_groupedbar_compact.ui")
+    else if (aFileName == u"notebookbar_groupedbar_compact.ui")
         return "GroupedbarCompact";
     else
         return "None";
 }
 
-static OUString getModuleId(const OUString& sModuleName)
+static OUString getModuleId(std::u16string_view sModuleName)
 {
-    if (sModuleName == "Writer")
+    if (sModuleName == u"Writer")
         return "com.sun.star.text.TextDocument";
-    else if (sModuleName == "Draw")
+    else if (sModuleName == u"Draw")
         return "com.sun.star.drawing.DrawingDocument";
-    else if (sModuleName == "Impress")
+    else if (sModuleName == u"Impress")
         return "com.sun.star.presentation.PresentationDocument";
-    else if (sModuleName == "Calc")
+    else if (sModuleName == u"Calc")
         return "com.sun.star.sheet.SpreadsheetDocument";
     else
         return "None";
@@ -195,7 +195,7 @@ short SvxNotebookbarConfigPage::QueryReset()
     return nValue;
 }
 
-void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(const OUString& sClassId,
+void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(std::u16string_view sClassId,
                                                     const OUString& sUIItemId,
                                                     const OUString& sUIItemCommand,
                                                     weld::TreeView& rTreeView,
@@ -227,7 +227,7 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(const OUString& sClassId,
 
     OUString aName = SvxConfigPageHelper::stripHotKey(aLabel);
 
-    if (sClassId == "GtkSeparatorMenuItem" || sClassId == "GtkSeparator")
+    if (sClassId == u"GtkSeparatorMenuItem" || sClassId == u"GtkSeparator")
     {
         rTreeView.set_text(rIter, "--------------------------------------------", 0);
     }

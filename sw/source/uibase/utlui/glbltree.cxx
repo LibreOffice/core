@@ -292,7 +292,7 @@ IMPL_LINK(SwGlobalTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     return bPop;
 }
 
-void SwGlobalTree::TbxMenuHdl(const OString& rCommand, weld::Menu& rMenu)
+void SwGlobalTree::TbxMenuHdl(std::string_view rCommand, weld::Menu& rMenu)
 {
     const MenuEnableFlags nEnableFlags = GetEnableFlags();
     if (rCommand == "insert")
@@ -560,7 +560,7 @@ void SwGlobalTree::EditContent(const SwGlblDocContent* pCont )
     }
 }
 
-void SwGlobalTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
+void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry)
 {
     bool bUpdateHard = false;
 
@@ -808,7 +808,7 @@ void SwGlobalTree::HideTree()
     m_xTreeView->hide();
 }
 
-void SwGlobalTree::ExecCommand(const OString &rCmd)
+void SwGlobalTree::ExecCommand(std::string_view rCmd)
 {
     int nEntry = m_xTreeView->get_selected_index();
     if (nEntry == -1)

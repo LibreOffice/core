@@ -1982,19 +1982,19 @@ std::string XGradient::GradientStyleToString(css::awt::GradientStyle eStyle)
 
 namespace
 {
-    css::awt::GradientStyle lcl_getStyleFromString(const OUString& rStyle)
+    css::awt::GradientStyle lcl_getStyleFromString(std::u16string_view rStyle)
     {
-        if (rStyle == "LINEAR")
+        if (rStyle == u"LINEAR")
             return css::awt::GradientStyle_LINEAR;
-        else if (rStyle == "AXIAL")
+        else if (rStyle == u"AXIAL")
             return css::awt::GradientStyle_AXIAL;
-        else if (rStyle == "RADIAL")
+        else if (rStyle == u"RADIAL")
             return css::awt::GradientStyle_RADIAL;
-        else if (rStyle == "ELLIPTICAL")
+        else if (rStyle == u"ELLIPTICAL")
             return css::awt::GradientStyle_ELLIPTICAL;
-        else if (rStyle == "SQUARE")
+        else if (rStyle == u"SQUARE")
             return css::awt::GradientStyle_SQUARE;
-        else if (rStyle == "RECT")
+        else if (rStyle == u"RECT")
             return css::awt::GradientStyle_RECT;
 
         return css::awt::GradientStyle_LINEAR;

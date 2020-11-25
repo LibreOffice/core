@@ -622,46 +622,46 @@ OString StringHelper::convertToUtf8( const OUString& rStr )
     return OUStringToOString( rStr, RTL_TEXTENCODING_UTF8 );
 }
 
-DataType StringHelper::convertToDataType( const OUString& rStr )
+DataType StringHelper::convertToDataType( std::u16string_view rStr )
 {
     DataType eType = DATATYPE_VOID;
-    if ( rStr == "int8" )
+    if ( rStr == u"int8" )
         eType = DATATYPE_INT8;
-    else if ( rStr == "uint8" )
+    else if ( rStr == u"uint8" )
         eType = DATATYPE_UINT8;
-    else if ( rStr == "int16" )
+    else if ( rStr == u"int16" )
         eType = DATATYPE_INT16;
-    else if ( rStr == "uint16" )
+    else if ( rStr == u"uint16" )
         eType = DATATYPE_UINT16;
-    else if ( rStr == "int32" )
+    else if ( rStr == u"int32" )
         eType = DATATYPE_INT32;
-    else if ( rStr == "uint32" )
+    else if ( rStr == u"uint32" )
         eType = DATATYPE_UINT32;
-    else if ( rStr == "int64" )
+    else if ( rStr == u"int64" )
         eType = DATATYPE_INT64;
-    else if ( rStr == "uint64" )
+    else if ( rStr == u"uint64" )
         eType = DATATYPE_UINT64;
-    else if ( rStr == "float" )
+    else if ( rStr == u"float" )
         eType = DATATYPE_FLOAT;
-    else if ( rStr == "double" )
+    else if ( rStr == u"double" )
         eType = DATATYPE_DOUBLE;
     return eType;
 }
 
-FormatType StringHelper::convertToFormatType( const OUString& rStr )
+FormatType StringHelper::convertToFormatType( std::u16string_view rStr )
 {
     FormatType eType = FORMATTYPE_NONE;
-    if ( rStr == "dec" )
+    if ( rStr == u"dec" )
         eType = FORMATTYPE_DEC;
-    else if ( rStr == "hex" )
+    else if ( rStr == u"hex" )
         eType = FORMATTYPE_HEX;
-    else if ( rStr == "shorthex" )
+    else if ( rStr == u"shorthex" )
         eType = FORMATTYPE_SHORTHEX;
-    else if ( rStr == "bin" )
+    else if ( rStr == u"bin" )
         eType = FORMATTYPE_BIN;
-    else if ( rStr == "fix" )
+    else if ( rStr == u"fix" )
         eType = FORMATTYPE_FIX;
-    else if ( rStr == "bool" )
+    else if ( rStr == u"bool" )
         eType = FORMATTYPE_BOOL;
     return eType;
 }

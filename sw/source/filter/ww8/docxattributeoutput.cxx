@@ -297,9 +297,9 @@ void DocxAttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 /*nScript*/ )
 }
 
 /// Are multiple paragraphs disallowed inside this type of SDT?
-static bool lcl_isOnelinerSdt(const OUString& rName)
+static bool lcl_isOnelinerSdt(std::u16string_view rName)
 {
-    return rName == "Title" || rName == "Subtitle" || rName == "Company";
+    return rName == u"Title" || rName == u"Subtitle" || rName == u"Company";
 }
 
 // write a floating table directly to docx without the surrounding frame

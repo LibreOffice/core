@@ -456,7 +456,7 @@ protected:
                                           weld::TreeView& rTreeView, weld::TreeIter& rIter,
                                           bool bMenu = false);
 
-    void InsertEntryIntoNotebookbarTabUI(const OUString& sClassId, const OUString& sUIItemId,
+    void InsertEntryIntoNotebookbarTabUI(std::u16string_view sClassId, const OUString& sUIItemId,
                                          const OUString& sUIItemCommand,
                                          weld::TreeView& rTreeView, const weld::TreeIter& rIter);
 
@@ -469,7 +469,7 @@ public:
 
     virtual ~SvxConfigPage() override;
 
-    static bool     CanConfig( const OUString& rModuleId );
+    static bool     CanConfig( std::u16string_view rModuleId );
 
     SaveInData*     GetSaveInData() { return pCurrentSaveInData; }
     const OUString& GetAppName() const { return m_sAppName; }

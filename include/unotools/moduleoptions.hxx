@@ -99,7 +99,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtModuleOptions final : public utl::de
         OUString GetFactoryDefaultFilter   (       EFactory         eFactory   ) const;
         bool        IsDefaultFilterReadonly   (       EFactory         eFactory   ) const;
         sal_Int32       GetFactoryIcon            (       EFactory         eFactory   ) const;
-        static bool ClassifyFactoryByName     ( const OUString& sName      ,
+        static bool ClassifyFactoryByName     ( std::u16string_view sName      ,
                                                           EFactory&        eFactory   );
         void            SetFactoryStandardTemplate(       EFactory         eFactory   ,
                                                     const OUString& sTemplate  );
@@ -109,7 +109,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtModuleOptions final : public utl::de
         /** @short  return the corresponding application ID for the given
                     document service name.
          */
-        static EFactory ClassifyFactoryByServiceName(const OUString& sName);
+        static EFactory ClassifyFactoryByServiceName(std::u16string_view sName);
 
         /** @short  return the corresponding application ID for the given
                     short name.

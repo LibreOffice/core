@@ -137,7 +137,7 @@ public:
     void setStartingAngle( sal_Int32 nStartingAngle );
     sal_Int32 getStartingAngle() const;
 
-    void setRoleOfSequenceForDataLabelNumberFormatDetection( const OUString& rRole );
+    void setRoleOfSequenceForDataLabelNumberFormatDetection( std::u16string_view rRole );
 
     //this is only temporarily here for area chart:
     css::drawing::PolyPolygonShape3D       m_aPolyPolygonShape3D;

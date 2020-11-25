@@ -29,7 +29,7 @@ class ScVbaWorkbooks : public ScVbaWorkbooks_BASE
 {
 private:
     OUString   getFileFilterType( const OUString& rString );
-    static bool       isTextFile( const OUString& rString );
+    static bool       isTextFile( std::u16string_view rString );
     static bool       isSpreadSheetFile( const OUString& rString );
     static sal_Int16& getCurrentDelim(){ static sal_Int16 nDelim = 44; return nDelim; }
 public:

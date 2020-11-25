@@ -190,7 +190,7 @@ namespace rptui
             @param  _bShow  when <TRUE/> the header and footer will be shown otherwise not
         */
         void groupChange( const css::uno::Reference< css::report::XGroup>& _xGroup
-                         ,const OUString& _sPropName
+                         ,std::u16string_view _sPropName
                          ,sal_Int32 _nGroupPos
                          ,bool _bShow);
 

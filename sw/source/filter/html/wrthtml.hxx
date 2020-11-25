@@ -698,7 +698,7 @@ Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt );
 OString GetCSS1_Color(const Color& rColor);
 
 /// Determines if rProperty with a given rValue has to be suppressed due to ReqIF mode.
-bool IgnorePropertyForReqIF(bool bReqIF, const OString& rProperty, const OString& rValue);
+bool IgnorePropertyForReqIF(bool bReqIF, const OString& rProperty, std::string_view rValue);
 
 #endif // INCLUDED_SW_SOURCE_FILTER_HTML_WRTHTML_HXX
 

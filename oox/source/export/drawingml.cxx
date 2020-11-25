@@ -3821,7 +3821,7 @@ void DrawingML::WriteShapeStyle( const Reference< XPropertySet >& xPropSet )
     mpFS->singleElementNS(XML_a, XML_fontRef, XML_idx, "minor");
 }
 
-void DrawingML::WriteShapeEffect( const OUString& sName, const Sequence< PropertyValue >& aEffectProps )
+void DrawingML::WriteShapeEffect( std::u16string_view sName, const Sequence< PropertyValue >& aEffectProps )
 {
     if( !aEffectProps.hasElements() )
         return;
@@ -3829,26 +3829,26 @@ void DrawingML::WriteShapeEffect( const OUString& sName, const Sequence< Propert
     // assign the proper tag and enable bContainsColor if necessary
     sal_Int32 nEffectToken = 0;
     bool bContainsColor = false;
-    if( sName == "outerShdw" )
+    if( sName == u"outerShdw" )
     {
         nEffectToken = FSNS( XML_a, XML_outerShdw );
         bContainsColor = true;
     }
-    else if( sName == "innerShdw" )
+    else if( sName == u"innerShdw" )
     {
         nEffectToken = FSNS( XML_a, XML_innerShdw );
         bContainsColor = true;
     }
-    else if( sName == "glow" )
+    else if( sName == u"glow" )
     {
         nEffectToken = FSNS( XML_a, XML_glow );
         bContainsColor = true;
     }
-    else if( sName == "softEdge" )
+    else if( sName == u"softEdge" )
         nEffectToken = FSNS( XML_a, XML_softEdge );
-    else if( sName == "reflection" )
+    else if( sName == u"reflection" )
         nEffectToken = FSNS( XML_a, XML_reflection );
-    else if( sName == "blur" )
+    else if( sName == u"blur" )
         nEffectToken = FSNS( XML_a, XML_blur );
 
     OUString sSchemeClr;
@@ -4080,7 +4080,7 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
                 aShadowGrabBag[2].Name = "RgbClrTransparency";
                 aShadowGrabBag[2].Value = rXPropSet->getPropertyValue( "ShadowTransparence" );
 
-                WriteShapeEffect( "outerShdw", aShadowGrabBag );
+                WriteShapeEffect( u"outerShdw", aShadowGrabBag );
             }
             WriteSoftEdgeEffect(rXPropSet);
             mpFS->endElementNS(XML_a, XML_effectLst);
@@ -4181,7 +4181,7 @@ void DrawingML::WriteGlowEffect(const Reference< XPropertySet >& rXPropSet)
     aGlowProps[2].Value = rXPropSet->getPropertyValue("GlowEffectTransparency");
     // TODO other stuff like saturation or luminance
 
-    WriteShapeEffect("glow", aGlowProps);
+    WriteShapeEffect(u"glow", aGlowProps);
 }
 
 void DrawingML::WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet)
@@ -4198,7 +4198,7 @@ void DrawingML::WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPrope
     aProps[0].Name = "Attribs";
     aProps[0].Value <<= aAttribs;
 
-    WriteShapeEffect("softEdge", aProps);
+    WriteShapeEffect(u"softEdge", aProps);
 }
 
 bool DrawingML::HasEnhancedCustomShapeSegmentCommand(

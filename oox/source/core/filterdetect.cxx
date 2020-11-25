@@ -174,11 +174,11 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
     }
 }
 
-OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& rContentType, const OUString& rFileName )
+OUString FilterDetectDocHandler::getFilterNameFromContentType( std::u16string_view rContentType, const OUString& rFileName )
 {
     bool bDocm = rFileName.endsWithIgnoreAsciiCase(".docm");
 
-    if( rContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" && !bDocm )
+    if( rContentType == u"application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" && !bDocm )
     {
         switch (maOOXMLVariant)
         {
@@ -190,11 +190,11 @@ OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& r
         }
     }
 
-    if( rContentType == "application/vnd.ms-word.document.macroEnabled.main+xml" || bDocm )
+    if( rContentType == u"application/vnd.ms-word.document.macroEnabled.main+xml" || bDocm )
         return "writer_MS_Word_2007_VBA";
 
-    if( rContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml" ||
-        rContentType == "application/vnd.ms-word.template.macroEnabledTemplate.main+xml" )
+    if( rContentType == u"application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml" ||
+        rContentType == u"application/vnd.ms-word.template.macroEnabledTemplate.main+xml" )
     {
         switch (maOOXMLVariant)
         {
@@ -206,31 +206,31 @@ OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& r
         }
     }
 
-    if( rContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml")
+    if( rContentType == u"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml")
         return "MS Excel 2007 XML";
 
-    if (rContentType == "application/vnd.ms-excel.sheet.macroEnabled.main+xml")
+    if (rContentType == u"application/vnd.ms-excel.sheet.macroEnabled.main+xml")
         return "MS Excel 2007 VBA XML";
 
-    if( rContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml" ||
-        rContentType == "application/vnd.ms-excel.template.macroEnabled.main+xml" )
+    if( rContentType == u"application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml" ||
+        rContentType == u"application/vnd.ms-excel.template.macroEnabled.main+xml" )
         return "MS Excel 2007 XML Template";
 
-    if ( rContentType == "application/vnd.ms-excel.sheet.binary.macroEnabled.main" )
+    if ( rContentType == u"application/vnd.ms-excel.sheet.binary.macroEnabled.main" )
         return "MS Excel 2007 Binary";
 
-    if (rContentType == "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml")
+    if (rContentType == u"application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml")
         return "MS PowerPoint 2007 XML";
 
-    if (rContentType == "application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml")
+    if (rContentType == u"application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml")
         return "MS PowerPoint 2007 XML VBA";
 
-    if( rContentType == "application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml" ||
-        rContentType == "application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml" )
+    if( rContentType == u"application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml" ||
+        rContentType == u"application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml" )
         return "MS PowerPoint 2007 XML AutoPlay";
 
-    if( rContentType == "application/vnd.openxmlformats-officedocument.presentationml.template.main+xml" ||
-        rContentType == "application/vnd.ms-powerpoint.template.macroEnabled.main+xml" )
+    if( rContentType == u"application/vnd.openxmlformats-officedocument.presentationml.template.main+xml" ||
+        rContentType == u"application/vnd.ms-powerpoint.template.macroEnabled.main+xml" )
         return "MS PowerPoint 2007 XML Template";
 
     return OUString();

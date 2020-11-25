@@ -171,7 +171,7 @@ static void setGroupName( std::u16string_view rModule, const OUString& rGroupNam
     }
 }
 
-static OUString getGroupName( const OUString& rModule, bool bForced )
+static OUString getGroupName( std::u16string_view rModule, bool bForced )
 {
     OUString sGroupName;
     for (const ModuleToGroupNameMap_Impl& rEntry : ModuleMap)
@@ -185,19 +185,19 @@ static OUString getGroupName( const OUString& rModule, bool bForced )
 
     if ( sGroupName.isEmpty() && bForced )
     {
-        if ( rModule == "Writer" )
+        if ( rModule == u"Writer" )
             sGroupName = CuiResId(SID_SW_EDITOPTIONS_RES[0].first);
-        else if ( rModule == "WriterWeb" )
+        else if ( rModule == u"WriterWeb" )
             sGroupName = CuiResId(SID_SW_ONLINEOPTIONS_RES[0].first);
-        else if ( rModule == "Calc" )
+        else if ( rModule == u"Calc" )
             sGroupName = CuiResId(SID_SC_EDITOPTIONS_RES[0].first);
-        else if ( rModule == "Impress" )
+        else if ( rModule == u"Impress" )
             sGroupName = CuiResId(SID_SD_EDITOPTIONS_RES[0].first);
-        else if ( rModule == "Draw" )
+        else if ( rModule == u"Draw" )
             sGroupName = CuiResId(SID_SD_GRAPHIC_OPTIONS_RES[0].first);
-        else if ( rModule == "Math" )
+        else if ( rModule == u"Math" )
             sGroupName = CuiResId(SID_SM_EDITOPTIONS_RES[0].first);
-        else if ( rModule == "Base" )
+        else if ( rModule == u"Base" )
             sGroupName = CuiResId(SID_SB_STARBASEOPTIONS_RES[0].first);
     }
     return sGroupName;

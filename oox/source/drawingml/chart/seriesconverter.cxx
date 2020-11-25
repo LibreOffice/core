@@ -239,19 +239,19 @@ void importFillProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHe
 
 }
 
-DataPointCustomLabelFieldType lcl_ConvertFieldNameToFieldEnum( const OUString& rField )
+DataPointCustomLabelFieldType lcl_ConvertFieldNameToFieldEnum( std::u16string_view rField )
 {
-    if (rField == "VALUE")
+    if (rField == u"VALUE")
         return DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_VALUE;
-    else if (rField == "SERIESNAME")
+    else if (rField == u"SERIESNAME")
         return DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_SERIESNAME;
-    else if (rField == "CATEGORYNAME")
+    else if (rField == u"CATEGORYNAME")
         return DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CATEGORYNAME;
-    else if (rField == "CELLREF")
+    else if (rField == u"CELLREF")
         return DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLREF;
-    else if (rField == "CELLRANGE")
+    else if (rField == u"CELLRANGE")
         return DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLRANGE;
-    else if (rField == "PERCENTAGE")
+    else if (rField == u"PERCENTAGE")
         return DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_PERCENTAGE;
     else
         return DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT;

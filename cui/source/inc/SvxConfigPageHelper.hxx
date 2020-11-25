@@ -49,7 +49,7 @@ public:
     */
     static OUString generateCustomURL(SvxEntries* entries);
 
-    static OUString GetModuleName(const OUString& aModuleId);
+    static OUString GetModuleName(std::u16string_view aModuleId);
     static OUString
     GetUIModuleName(const OUString& aModuleId,
                     const css::uno::Reference<css::frame::XModuleManager2>& rModuleManager);

@@ -1226,21 +1226,21 @@ bool DocInsertStringSplitCR(
 }
 
 void makeRedline( SwPaM const & rPaM,
-    const OUString& rRedlineType,
+    std::u16string_view rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
 {
     IDocumentRedlineAccess& rRedlineAccess = rPaM.GetDoc().getIDocumentRedlineAccess();
 
     RedlineType eType;
-    if      ( rRedlineType == "Insert" )
+    if      ( rRedlineType == u"Insert" )
         eType = RedlineType::Insert;
-    else if ( rRedlineType == "Delete" )
+    else if ( rRedlineType == u"Delete" )
         eType = RedlineType::Delete;
-    else if ( rRedlineType == "Format" )
+    else if ( rRedlineType == u"Format" )
         eType = RedlineType::Format;
-    else if ( rRedlineType == "TextTable" )
+    else if ( rRedlineType == u"TextTable" )
         eType = RedlineType::Table;
-    else if ( rRedlineType == "ParagraphFormat" )
+    else if ( rRedlineType == u"ParagraphFormat" )
         eType = RedlineType::ParagraphFormat;
     else
         throw lang::IllegalArgumentException();
@@ -1385,17 +1385,17 @@ void makeRedline( SwPaM const & rPaM,
 }
 
 void makeTableRowRedline( SwTableLine& rTableLine,
-    const OUString& rRedlineType,
+    std::u16string_view rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
 {
     IDocumentRedlineAccess* pRedlineAccess = &rTableLine.GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess();
 
     RedlineType eType;
-    if ( rRedlineType == "TableRowInsert" )
+    if ( rRedlineType == u"TableRowInsert" )
     {
         eType = RedlineType::TableRowInsert;
     }
-    else if ( rRedlineType == "TableRowDelete" )
+    else if ( rRedlineType == u"TableRowDelete" )
     {
         eType = RedlineType::TableRowDelete;
     }
@@ -1434,17 +1434,17 @@ void makeTableRowRedline( SwTableLine& rTableLine,
 }
 
 void makeTableCellRedline( SwTableBox& rTableBox,
-    const OUString& rRedlineType,
+    std::u16string_view rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
 {
     IDocumentRedlineAccess* pRedlineAccess = &rTableBox.GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess();
 
     RedlineType eType;
-    if ( rRedlineType == "TableCellInsert" )
+    if ( rRedlineType == u"TableCellInsert" )
     {
         eType = RedlineType::TableCellInsert;
     }
-    else if ( rRedlineType == "TableCellDelete" )
+    else if ( rRedlineType == u"TableCellDelete" )
     {
         eType = RedlineType::TableCellDelete;
     }

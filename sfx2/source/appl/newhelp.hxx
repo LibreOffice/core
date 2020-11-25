@@ -199,7 +199,7 @@ private:
     DECL_LINK(CommandHdl, const CommandEvent&, bool);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
-    void DoAction(const OString& rAction);
+    void DoAction(std::string_view rAction);
 
 public:
     BookmarksTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* pIdxWin);
@@ -241,7 +241,7 @@ private:
 
     void                Initialize();
     void                SetActiveFactory();
-    HelpTabPage_Impl*   GetPage(const OString&);
+    HelpTabPage_Impl*   GetPage(std::string_view );
 
     inline ContentTabPage_Impl*     GetContentPage();
     inline IndexTabPage_Impl*       GetIndexPage();
@@ -468,7 +468,7 @@ public:
 
     void                SetFactory( const OUString& rFactory );
     void                SetHelpURL( const OUString& rURL );
-    void                DoAction(const OString& rAction);
+    void                DoAction(std::string_view rAction);
     void                CloseWindow();
 
     weld::Container*    GetContainer() { return m_xHelpTextWindow.get(); }
