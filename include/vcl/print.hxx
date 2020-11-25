@@ -198,6 +198,7 @@ private:
     bool                        mbPrintFile;
     bool                        mbInPrintPage;
     bool                        mbNewJobSetup;
+    bool                        mbSinglePrintJobs;
 
     VCL_DLLPRIVATE void         ImplInitData();
     VCL_DLLPRIVATE void         ImplInit( SalPrinterQueueInfo* pInfo );
@@ -335,6 +336,8 @@ public:
     void                        SetCopyCount( sal_uInt16 nCopy, bool bCollate );
     sal_uInt16                  GetCopyCount() const { return mnCopyCount; }
     bool                        IsCollateCopy() const { return mbCollateCopy; }
+    void                        SetSinglePrintJobs(bool bSinglePrintJobs) { mbSinglePrintJobs = bSinglePrintJobs; }
+    bool                        IsSinglePrintJobs() const { return mbSinglePrintJobs; }
 
     bool                        IsPrinting() const { return mbPrinting; }
 
