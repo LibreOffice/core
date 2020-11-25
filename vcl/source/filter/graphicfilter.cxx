@@ -1939,12 +1939,33 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
             }
             else if ( aFilterName.equalsIgnoreAsciiCase( EXP_WMF ) )
             {
-                // #i119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
-                if ( !ConvertGDIMetaFileToWMF( aGraphic.GetGDIMetaFile(), rOStm, &aConfigItem ) )
-                    nStatus = GRFILTER_FORMATERROR;
+                bool bDone = false;
 
-                if( rOStm.GetError() )
-                    nStatus = GRFILTER_IOERROR;
+                const GfxLink& rLink = aGraphic.GetLink();
+                if (rLink.GetDataSize() && rLink.GetType() == GfxLinkType::NativeWmf)
+                {
+                    // The source is already in WMF, no need to convert anything.
+                    rOStm.WriteBytes(rLink.GetData(), rLink.GetDataSize());
+
+                    if (rOStm.GetError())
+                    {
+                        nStatus = GRFILTER_IOERROR;
+                    }
+                    else
+                    {
+                        bDone = true;
+                    }
+                }
+
+                if (!bDone)
+                {
+                    // #i119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
+                    if ( !ConvertGDIMetaFileToWMF( aGraphic.GetGDIMetaFile(), rOStm, &aConfigItem ) )
+                        nStatus = GRFILTER_FORMATERROR;
+
+                    if( rOStm.GetError() )
+                        nStatus = GRFILTER_IOERROR;
+                }
             }
             else if ( aFilterName.equalsIgnoreAsciiCase( EXP_EMF ) )
             {
