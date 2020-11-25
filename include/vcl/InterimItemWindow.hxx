@@ -22,6 +22,9 @@ public:
 
     virtual void Resize() override;
     virtual Size GetOptimalSize() const override;
+    // throw away cached size request of child so GetOptimalSize will
+    // fetch it anew
+    void InvalidateChildSizeCache();
     virtual void StateChanged(StateChangedType nStateChange) override;
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
     virtual void GetFocus() override;
