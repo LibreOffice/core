@@ -138,7 +138,8 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
             ( fLength > 0.0 ) && ( fMediaTime >= 0.0 ) && ( fMediaTime <= fLength ) )
         {
             AM_MEDIA_TYPE   aMediaType;
-            long            nWidth = 0, nHeight = 0, nSize = 0;
+            LONG            nWidth = 0, nHeight = 0;
+            long            nSize = 0;
 
             if( SUCCEEDED( pDet->get_StreamMediaType( &aMediaType ) ) )
             {
