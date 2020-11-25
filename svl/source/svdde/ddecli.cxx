@@ -52,7 +52,7 @@ void ImpDeinitInstData()
 struct DdeImp
 {
     HCONV   hConv;
-    long    nStatus;
+    UINT    nStatus;
 };
 
 HDDEDATA CALLBACK DdeInternal::CliCallback( UINT nCode, UINT nCbType,
