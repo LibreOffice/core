@@ -380,12 +380,7 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
         bShowProgressPanel = false;
 
     // possibly create one job for collated output
-    bool bSinglePrintJobs = false;
-    beans::PropertyValue* pSingleValue = i_rController.getValue( OUString( "PrintCollateAsSingleJobs" ) );
-    if( pSingleValue )
-    {
-        pSingleValue->Value >>= bSinglePrintJobs;
-    }
+    bool bSinglePrintJobs = i_rController.getPrinter()->IsSinglePrintJobs();
 
     // FIXME: jobStarted() should be done after the print dialog has ended (if there is one)
     // how do I know when that might be ?
