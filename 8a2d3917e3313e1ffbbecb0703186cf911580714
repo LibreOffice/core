@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d75d5e19_06c0332c",
+        "filename": "basic/source/sbx/sbxscan.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-25T20:56:39Z",
+      "side": 1,
+      "message": "Have you forgot an \"else\" here? your current code would accept \"-+2\"",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 116,
+        "endChar": 6
+      },
+      "revId": "8a2d3917e3313e1ffbbecb0703186cf911580714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8e33b7f_922cb67d",
+        "filename": "basic/source/sbx/sbxscan.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-25T20:56:39Z",
+      "side": 1,
+      "message": "I would suggest to literally copy this code (the plus above the minus, and without parentheses) for uniformity. What do you think about consistency?",
+      "range": {
+        "startLine": 167,
+        "startChar": 16,
+        "endLine": 168,
+        "endChar": 24
+      },
+      "revId": "8a2d3917e3313e1ffbbecb0703186cf911580714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
