@@ -34,6 +34,7 @@
 #include <ViewShellBase.hxx>
 #include <ToolBarManager.hxx>
 #include <svx/gallery.hxx>
+#include <svx/sdooitm.hxx>
 #include <svl/itempool.hxx>
 #include <svl/stritem.hxx>
 
@@ -183,6 +184,8 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
                                         EE_ITEMS_START, EE_ITEMS_END>{});
                                 aDest.Set( rSource );
                                 pObj->SetMergedItemSet( aDest );
+                                // Enables Word-wrap by default (tdf#134369)
+                                pObj->SetMergedItem( SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, true ) );
                                 Degree100 nAngle = pSourceObj->GetRotateAngle();
                                 if ( nAngle )
                                     pObj->NbcRotate( pObj->GetSnapRect().Center(), nAngle );
