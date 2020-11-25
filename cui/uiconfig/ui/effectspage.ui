@@ -261,7 +261,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="hiddencb">
-                    <property name="label" translatable="yes" context="effectspage|hiddencb">Hidden</property>
+                    <property name="label" translatable="yes" context="effectspage|hiddencb">Hi_dden</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
