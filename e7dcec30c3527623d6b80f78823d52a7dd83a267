@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "218d8817_8969856d",
+        "filename": "external/firebird/firebird-macosx.patch.1",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-25T11:08:50Z",
+      "side": 1,
+      "message": "Any reason you had broken this from \"if(envpath !\u003d nullptr)\" to \"else\"?  Fixed again in patch set 16.",
+      "range": {
+        "startLine": 80,
+        "startChar": 3,
+        "endLine": 80,
+        "endChar": 7
+      },
+      "revId": "e7dcec30c3527623d6b80f78823d52a7dd83a267",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
