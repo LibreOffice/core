@@ -1095,7 +1095,7 @@ static void GetBookmarkEntry_Impl
     }
 }
 
-void BookmarksTabPage_Impl::DoAction(const OString& rAction)
+void BookmarksTabPage_Impl::DoAction(std::string_view rAction)
 {
     if (rAction == "display")
         aDoubleClickHdl.Call(nullptr);
@@ -1379,7 +1379,7 @@ void SfxHelpIndexWindow_Impl::SetActiveFactory()
     }
 }
 
-HelpTabPage_Impl* SfxHelpIndexWindow_Impl::GetPage(const OString& rName)
+HelpTabPage_Impl* SfxHelpIndexWindow_Impl::GetPage(std::string_view  rName)
 {
     HelpTabPage_Impl* pPage = nullptr;
 
@@ -2542,7 +2542,7 @@ void SfxHelpWindow_Impl::SetHelpURL( const OUString& rURL )
         SetFactory( aObj.GetHost() );
 }
 
-void SfxHelpWindow_Impl::DoAction(const OString& rActionId)
+void SfxHelpWindow_Impl::DoAction(std::string_view  rActionId)
 {
     if (rActionId == "index")
     {

@@ -42,7 +42,7 @@ public:
     void MakeItemVisible(sal_uInt16 nId) { ThumbnailView::MakeItemVisible(nId); }
 
 private:
-    void ContextMenuSelectHdl(const OString& rIdent);
+    void ContextMenuSelectHdl(std::string_view rIdent);
 
     void insertFilteredItems();
 

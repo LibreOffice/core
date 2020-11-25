@@ -166,13 +166,13 @@ struct Memory64 {
     }
 };
 
-bool isSimpleType(OUString const & type) {
-    return type == "void" || type == "boolean" || type == "byte"
-        || type == "short" || type == "unsigned short" || type == "long"
-        || type == "unsigned long" || type == "hyper"
-        || type == "unsigned hyper" || type == "float" || type == "double"
-        || type == "char" || type == "string" || type == "type"
-        || type == "any";
+bool isSimpleType(std::u16string_view type) {
+    return type == u"void" || type == u"boolean" || type == u"byte"
+        || type == u"short" || type == u"unsigned short" || type == u"long"
+        || type == u"unsigned long" || type == u"hyper"
+        || type == u"unsigned hyper" || type == u"float" || type == u"double"
+        || type == u"char" || type == u"string" || type == u"type"
+        || type == u"any";
 }
 
 // For backwards compatibility, does not strictly check segments to match

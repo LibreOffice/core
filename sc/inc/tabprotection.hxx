@@ -67,7 +67,7 @@ namespace ScPassHashHelper
 
     OUString getHashURI(ScPasswordHash eHash);
 
-    ScPasswordHash getHashTypeFromURI(const OUString& rURI);
+    ScPasswordHash getHashTypeFromURI(std::u16string_view rURI);
 }
 
 class SAL_NO_VTABLE ScPassHashProtectable

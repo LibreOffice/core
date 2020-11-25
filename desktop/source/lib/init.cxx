@@ -2147,9 +2147,9 @@ void setLanguageAndLocale(OUString const & aLangISO)
     aLocalOptions.Commit();
 }
 
-void setFormatSpecificFilterData(OUString const & sFormat, comphelper::SequenceAsHashMap & rFilterDataMap)
+void setFormatSpecificFilterData(std::u16string_view sFormat, comphelper::SequenceAsHashMap & rFilterDataMap)
 {
-    if (sFormat == "pdf")
+    if (sFormat == u"pdf")
     {
         // always export bookmarks, which is needed for annotations
         rFilterDataMap["ExportBookmarks"] <<= true;

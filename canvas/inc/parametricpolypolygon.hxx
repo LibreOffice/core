@@ -87,7 +87,7 @@ namespace canvas
         static css::uno::Sequence< OUString > getAvailableServiceNames();
         static ParametricPolyPolygon* create(
             const css::uno::Reference< css::rendering::XGraphicDevice >& rDevice,
-            const OUString& rServiceName,
+            std::u16string_view rServiceName,
             const css::uno::Sequence< css::uno::Any >& rArgs );
 
         /// Dispose all internal references

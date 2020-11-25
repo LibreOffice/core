@@ -37,37 +37,37 @@ using utl::MediaDescriptor;
 
 namespace {
 
-OUString getInternalFromMediaType(const OUString& aMediaType)
+OUString getInternalFromMediaType(std::u16string_view aMediaType)
 {
     // OpenDocument types
-    if (      aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII )                  return "writer8";
-    else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE_ASCII )         return "writer8_template";
-    else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII )              return "writerweb8_writer_template";
-    else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII )           return "writerglobal8";
-    else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_TEMPLATE_ASCII )  return "writerglobal8_template";
-    else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII )               return "draw8";
-    else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE_ASCII )      return "draw8_template";
-    else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII )          return "impress8";
-    else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII ) return "impress8_template";
-    else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII )           return "calc8";
-    else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_TEMPLATE_ASCII )  return "calc8_template";
-    else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII )                 return "chart8";
-    else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII )               return "math8";
-    else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_REPORT_CHART_ASCII )          return "StarBaseReportChart";
+    if (      aMediaType == u"" MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII )                  return "writer8";
+    else if ( aMediaType == u"" MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE_ASCII )         return "writer8_template";
+    else if ( aMediaType == u"" MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII )              return "writerweb8_writer_template";
+    else if ( aMediaType == u"" MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII )           return "writerglobal8";
+    else if ( aMediaType == u"" MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_TEMPLATE_ASCII )  return "writerglobal8_template";
+    else if ( aMediaType == u"" MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII )               return "draw8";
+    else if ( aMediaType == u"" MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE_ASCII )      return "draw8_template";
+    else if ( aMediaType == u"" MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII )          return "impress8";
+    else if ( aMediaType == u"" MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII ) return "impress8_template";
+    else if ( aMediaType == u"" MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII )           return "calc8";
+    else if ( aMediaType == u"" MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_TEMPLATE_ASCII )  return "calc8_template";
+    else if ( aMediaType == u"" MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII )                 return "chart8";
+    else if ( aMediaType == u"" MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII )               return "math8";
+    else if ( aMediaType == u"" MIMETYPE_OASIS_OPENDOCUMENT_REPORT_CHART_ASCII )          return "StarBaseReportChart";
 
     // OOo legacy types
-    else if ( aMediaType == MIMETYPE_VND_SUN_XML_WRITER_ASCII )           return "writer_StarOffice_XML_Writer";
-    else if ( aMediaType == MIMETYPE_VND_SUN_XML_WRITER_TEMPLATE_ASCII )  return "writer_StarOffice_XML_Writer_Template";
-    else if ( aMediaType == MIMETYPE_VND_SUN_XML_WRITER_WEB_ASCII )       return "writer_web_StarOffice_XML_Writer_Web_Template";
-    else if ( aMediaType == MIMETYPE_VND_SUN_XML_WRITER_GLOBAL_ASCII )    return "writer_globaldocument_StarOffice_XML_Writer_GlobalDocument";
-    else if ( aMediaType == MIMETYPE_VND_SUN_XML_DRAW_ASCII )             return "draw_StarOffice_XML_Draw";
-    else if ( aMediaType == MIMETYPE_VND_SUN_XML_DRAW_TEMPLATE_ASCII )    return "draw_StarOffice_XML_Draw_Template";
-    else if ( aMediaType == MIMETYPE_VND_SUN_XML_IMPRESS_ASCII )          return "impress_StarOffice_XML_Impress";
-    else if ( aMediaType == MIMETYPE_VND_SUN_XML_IMPRESS_TEMPLATE_ASCII ) return "impress_StarOffice_XML_Impress_Template";
-    else if ( aMediaType == MIMETYPE_VND_SUN_XML_CALC_ASCII )             return "calc_StarOffice_XML_Calc";
-    else if ( aMediaType == MIMETYPE_VND_SUN_XML_CALC_TEMPLATE_ASCII )    return "calc_StarOffice_XML_Calc_Template";
-    else if ( aMediaType == MIMETYPE_VND_SUN_XML_CHART_ASCII )            return "chart_StarOffice_XML_Chart";
-    else if ( aMediaType == MIMETYPE_VND_SUN_XML_MATH_ASCII )             return "math_StarOffice_XML_Math";
+    else if ( aMediaType == u"" MIMETYPE_VND_SUN_XML_WRITER_ASCII )           return "writer_StarOffice_XML_Writer";
+    else if ( aMediaType == u"" MIMETYPE_VND_SUN_XML_WRITER_TEMPLATE_ASCII )  return "writer_StarOffice_XML_Writer_Template";
+    else if ( aMediaType == u"" MIMETYPE_VND_SUN_XML_WRITER_WEB_ASCII )       return "writer_web_StarOffice_XML_Writer_Web_Template";
+    else if ( aMediaType == u"" MIMETYPE_VND_SUN_XML_WRITER_GLOBAL_ASCII )    return "writer_globaldocument_StarOffice_XML_Writer_GlobalDocument";
+    else if ( aMediaType == u"" MIMETYPE_VND_SUN_XML_DRAW_ASCII )             return "draw_StarOffice_XML_Draw";
+    else if ( aMediaType == u"" MIMETYPE_VND_SUN_XML_DRAW_TEMPLATE_ASCII )    return "draw_StarOffice_XML_Draw_Template";
+    else if ( aMediaType == u"" MIMETYPE_VND_SUN_XML_IMPRESS_ASCII )          return "impress_StarOffice_XML_Impress";
+    else if ( aMediaType == u"" MIMETYPE_VND_SUN_XML_IMPRESS_TEMPLATE_ASCII ) return "impress_StarOffice_XML_Impress_Template";
+    else if ( aMediaType == u"" MIMETYPE_VND_SUN_XML_CALC_ASCII )             return "calc_StarOffice_XML_Calc";
+    else if ( aMediaType == u"" MIMETYPE_VND_SUN_XML_CALC_TEMPLATE_ASCII )    return "calc_StarOffice_XML_Calc_Template";
+    else if ( aMediaType == u"" MIMETYPE_VND_SUN_XML_CHART_ASCII )            return "chart_StarOffice_XML_Chart";
+    else if ( aMediaType == u"" MIMETYPE_VND_SUN_XML_MATH_ASCII )             return "math_StarOffice_XML_Math";
 
     // Unknown type
     return OUString();

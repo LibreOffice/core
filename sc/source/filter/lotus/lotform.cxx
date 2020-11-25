@@ -32,7 +32,7 @@
 
 static const char*      GetAddInName( const sal_uInt8 nIndex );
 
-static DefTokenId           lcl_KnownAddIn(const OString& rTest);
+static DefTokenId           lcl_KnownAddIn(std::string_view rTest);
 
 void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const char* pExtString )
 {
@@ -1988,7 +1988,7 @@ const char* GetAddInName( const sal_uInt8 n )
     return pNames[ n ];
 }
 
-static DefTokenId lcl_KnownAddIn( const OString& rTest )
+static DefTokenId lcl_KnownAddIn( std::string_view rTest )
 {
     DefTokenId  eId = ocNoName;
 

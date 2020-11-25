@@ -124,10 +124,10 @@ public:
     sal_Int32 XMLNS_DIALOGS_UID, XMLNS_SCRIPT_UID;
 
     bool isEventElement(
-        sal_Int32 nUid, OUString const & rLocalName ) const
+        sal_Int32 nUid, std::u16string_view rLocalName ) const
     {
-        return ((XMLNS_SCRIPT_UID == nUid && (rLocalName == "event" || rLocalName == "listener-event" )) ||
-                (XMLNS_DIALOGS_UID == nUid && rLocalName == "event" ));
+        return ((XMLNS_SCRIPT_UID == nUid && (rLocalName == u"event" || rLocalName == u"listener-event" )) ||
+                (XMLNS_DIALOGS_UID == nUid && rLocalName == u"event" ));
     }
 
     void addStyle(

@@ -1139,7 +1139,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
             case  FN_UNO_TEXT_WRAP:
             case  FN_UNO_ANCHOR_TYPE:
                 ::sw::GetDefaultTextContentValue(
-                        pRet[nProperty], OUString(), pEntry->nWID);
+                        pRet[nProperty], u"", pEntry->nWID);
             break;
             case FN_UNO_REDLINE_NODE_START:
             case FN_UNO_REDLINE_NODE_END:
@@ -1633,7 +1633,7 @@ SwXTextSection::getPropertyDefault(const OUString& rPropertyName)
         case  FN_UNO_ANCHOR_TYPES:
         case  FN_UNO_TEXT_WRAP:
         case  FN_UNO_ANCHOR_TYPE:
-            ::sw::GetDefaultTextContentValue(aRet, OUString(), pEntry->nWID);
+            ::sw::GetDefaultTextContentValue(aRet, u"", pEntry->nWID);
         break;
         default:
         if(pFormat && SfxItemPool::IsWhich(pEntry->nWID))

@@ -63,7 +63,7 @@ protected:
     void UpdateVolumeSlider( MediaItem const & aMediaItem );
     void UpdateTimeSlider( MediaItem const & aMediaItem );
     void UpdateTimeField( MediaItem const & aMediaItem, double fTime );
-    void SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem const & aItem, const OString& rId);
+    void SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem const & aItem, std::string_view rId);
     void disposeWidgets();
 };
 

@@ -38,7 +38,7 @@ public:
     explicit XMLTableShapeImportHelper( ScXMLImport& rImp );
     virtual ~XMLTableShapeImportHelper() override;
 
-    static void SetLayer(const css::uno::Reference<css::drawing::XShape>& rShape, SdrLayerID nLayerID, const OUString& sType);
+    static void SetLayer(const css::uno::Reference<css::drawing::XShape>& rShape, SdrLayerID nLayerID, std::u16string_view sType);
     virtual void finishShape(css::uno::Reference< css::drawing::XShape >& rShape,
             const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
             css::uno::Reference< css::drawing::XShapes >& rShapes) override;

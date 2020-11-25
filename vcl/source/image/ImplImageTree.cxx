@@ -307,15 +307,15 @@ std::shared_ptr<SvMemoryStream> ImplImageTree::getImageStream(OUString const & r
     return std::shared_ptr<SvMemoryStream>();
 }
 
-OUString ImplImageTree::fallbackStyle(const OUString& rsStyle)
+OUString ImplImageTree::fallbackStyle(std::u16string_view rsStyle)
 {
     OUString sResult;
 
-    if (rsStyle == "colibre" || rsStyle == "helpimg")
+    if (rsStyle == u"colibre" || rsStyle == u"helpimg")
         sResult = "";
-    else if (rsStyle == "sifr" || rsStyle == "breeze_dark")
+    else if (rsStyle == u"sifr" || rsStyle == u"breeze_dark")
         sResult = "breeze";
-    else if (rsStyle == "sifr_dark" )
+    else if (rsStyle == u"sifr_dark" )
         sResult = "breeze_dark";
     else
         sResult = "colibre";

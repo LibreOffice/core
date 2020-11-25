@@ -214,9 +214,9 @@ bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
 // the reversed caption order in autocaption, solved by #i61007#)
 static void lcl_formatReferenceLanguage( OUString& rRefText,
                                          bool bClosingParenthesis, LanguageType eLang,
-                                         const OUString& rReferenceLanguage)
+                                         std::u16string_view rReferenceLanguage)
 {
-    if (eLang != LANGUAGE_HUNGARIAN || (rReferenceLanguage != "hu" && rReferenceLanguage != "Hu"))
+    if (eLang != LANGUAGE_HUNGARIAN || (rReferenceLanguage != u"hu" && rReferenceLanguage != u"Hu"))
         return;
 
     // Add Hungarian definitive article (a/az) before references,
@@ -334,7 +334,7 @@ static void lcl_formatReferenceLanguage( OUString& rRefText,
     // lowercase, if rReferenceLanguage == "hu", not "Hu"
     OUString sArticle;
 
-    if ( rReferenceLanguage == "hu" )
+    if ( rReferenceLanguage == u"hu" )
         sArticle = "a";
     else
         sArticle = "A";
@@ -431,7 +431,7 @@ OUString SwGetRefField::GetFieldName() const
 
 
 static void FilterText(OUString & rText, LanguageType const eLang,
-        OUString const& rSetReferenceLanguage)
+        std::u16string_view rSetReferenceLanguage)
 {
     // remove all special characters (replace them with blanks)
     if (rText.isEmpty())
@@ -452,7 +452,7 @@ static void FilterText(OUString & rText, LanguageType const eLang,
         }
     }
     rText = aBuf.makeStringAndClear();
-    if (!rSetReferenceLanguage.isEmpty())
+    if (!rSetReferenceLanguage.empty())
     {
         lcl_formatReferenceLanguage(rText, false, eLang, rSetReferenceLanguage);
     }

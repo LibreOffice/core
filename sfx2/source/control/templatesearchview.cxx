@@ -155,7 +155,7 @@ void TemplateSearchView::createContextMenu(const bool bIsDefault)
         ContextMenuSelectHdl(mxContextMenu->popup_at_rect(mxTreeView.get(), tools::Rectangle(maPosition, Size(1,1))));
 }
 
-void TemplateSearchView::ContextMenuSelectHdl(const OString& rIdent)
+void TemplateSearchView::ContextMenuSelectHdl(std::string_view rIdent)
 {
     if (rIdent == MNI_OPEN)
         maOpenTemplateHdl.Call(maSelectedItem);

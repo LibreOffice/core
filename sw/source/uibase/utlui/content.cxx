@@ -2769,7 +2769,7 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
     }
 }
 
-void SwContentTree::ExecCommand(const OString& rCmd, bool bOutlineWithChildren)
+void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren)
 {
     const bool bUp = rCmd == "chapterup";
     const bool bUpDown = bUp || rCmd == "chapterdown";

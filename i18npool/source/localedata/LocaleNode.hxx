@@ -49,7 +49,7 @@ public:
     void  writeFunction3(const char *func, const char *style, const char* levels, const char* attr, const char *array) const;
     void  writeRefFunction3(const char *func, const OUString& useLocale) const;
     void  writeIntParameter(const char* pAsciiStr, const sal_Int16 count, sal_Int16 val) const;
-    bool  writeDefaultParameter(const char* pAsciiStr, const OUString& str, sal_Int16 count) const;
+    bool  writeDefaultParameter(const char* pAsciiStr, std::u16string_view str, sal_Int16 count) const;
     void  writeParameter(const char* pAsciiStr, const OUString& aChars) const;
     void  writeParameter(const char* pAsciiStr, const OUString& aChars, sal_Int16 count) const;
     void  writeParameter(const char* pAsciiStr, const OUString& aChars, sal_Int16 count0, sal_Int16 count1) const;

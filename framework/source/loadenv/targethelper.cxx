@@ -22,7 +22,7 @@
 
 namespace framework{
 
-bool TargetHelper::matchSpecialTarget(const OUString& sCheckTarget  ,
+bool TargetHelper::matchSpecialTarget(std::u16string_view sCheckTarget  ,
                                                 ESpecialTarget   eSpecialTarget)
 {
     switch(eSpecialTarget)

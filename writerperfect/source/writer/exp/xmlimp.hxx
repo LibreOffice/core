@@ -102,7 +102,7 @@ public:
               const std::vector<FixedLayoutPage>& rPageMetafiles);
 
     rtl::Reference<XMLImportContext>
-    CreateContext(const OUString& rName,
+    CreateContext(std::u16string_view rName,
                   const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs);
 
     librevenge::RVNGTextInterface& GetGenerator() const;

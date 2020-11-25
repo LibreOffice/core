@@ -41,7 +41,7 @@ class SelectionTypePopup
 {
     VclBuilder        m_aBuilder;
     VclPtr<PopupMenu> m_xMenu;
-    static sal_uInt16 id_to_state(const OString& rIdent);
+    static sal_uInt16 id_to_state(std::string_view rIdent);
     sal_uInt16 state_to_id(sal_uInt16 nState) const;
 public:
     explicit SelectionTypePopup(sal_uInt16 nCurrent);
@@ -53,7 +53,7 @@ public:
 
 }
 
-sal_uInt16 SelectionTypePopup::id_to_state(const OString& rIdent)
+sal_uInt16 SelectionTypePopup::id_to_state(std::string_view rIdent)
 {
     if (rIdent == "block")
         return 3;

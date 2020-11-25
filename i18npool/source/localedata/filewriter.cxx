@@ -126,9 +126,9 @@ void OFileWriter::writeIntParameter(const char* pAsciiStr, const sal_Int16 count
     fprintf(m_f, "static const sal_Unicode %s%d[] = {%d};\n", pAsciiStr, count, val);
 }
 
-bool OFileWriter::writeDefaultParameter(const char* pAsciiStr, const OUString& str, sal_Int16 count) const
+bool OFileWriter::writeDefaultParameter(const char* pAsciiStr, std::u16string_view str, sal_Int16 count) const
 {
-    bool bBool = str == "true";
+    bool bBool = str == u"true";
     fprintf(m_f,"static const sal_Unicode default%s%d[] = {%d};\n", pAsciiStr, count, bBool);
     return bBool;
 }

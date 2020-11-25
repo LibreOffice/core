@@ -103,7 +103,7 @@ void checkType(rtl::Reference< TypeManager > const & manager,
 void checkDefaultInterfaces(
     std::set< OUString >& interfaces,
     const std::set< OUString >& services,
-    const OUString & propertyhelper);
+    std::u16string_view propertyhelper);
 
 OUString checkPropertyHelper(
     ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,

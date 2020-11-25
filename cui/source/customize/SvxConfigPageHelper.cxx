@@ -201,32 +201,32 @@ OUString SvxConfigPageHelper::generateCustomURL(SvxEntries* entries)
     return url;
 }
 
-OUString SvxConfigPageHelper::GetModuleName(const OUString& aModuleId)
+OUString SvxConfigPageHelper::GetModuleName(std::u16string_view aModuleId)
 {
-    if (aModuleId == "com.sun.star.text.TextDocument"
-        || aModuleId == "com.sun.star.text.GlobalDocument")
+    if (aModuleId == u"com.sun.star.text.TextDocument"
+        || aModuleId == u"com.sun.star.text.GlobalDocument")
         return "Writer";
-    else if (aModuleId == "com.sun.star.text.WebDocument")
+    else if (aModuleId == u"com.sun.star.text.WebDocument")
         return "Writer/Web";
-    else if (aModuleId == "com.sun.star.drawing.DrawingDocument")
+    else if (aModuleId == u"com.sun.star.drawing.DrawingDocument")
         return "Draw";
-    else if (aModuleId == "com.sun.star.presentation.PresentationDocument")
+    else if (aModuleId == u"com.sun.star.presentation.PresentationDocument")
         return "Impress";
-    else if (aModuleId == "com.sun.star.sheet.SpreadsheetDocument")
+    else if (aModuleId == u"com.sun.star.sheet.SpreadsheetDocument")
         return "Calc";
-    else if (aModuleId == "com.sun.star.script.BasicIDE")
+    else if (aModuleId == u"com.sun.star.script.BasicIDE")
         return "Basic";
-    else if (aModuleId == "com.sun.star.formula.FormulaProperties")
+    else if (aModuleId == u"com.sun.star.formula.FormulaProperties")
         return "Math";
-    else if (aModuleId == "com.sun.star.sdb.RelationDesign")
+    else if (aModuleId == u"com.sun.star.sdb.RelationDesign")
         return "Relation Design";
-    else if (aModuleId == "com.sun.star.sdb.QueryDesign")
+    else if (aModuleId == u"com.sun.star.sdb.QueryDesign")
         return "Query Design";
-    else if (aModuleId == "com.sun.star.sdb.TableDesign")
+    else if (aModuleId == u"com.sun.star.sdb.TableDesign")
         return "Table Design";
-    else if (aModuleId == "com.sun.star.sdb.DataSourceBrowser")
+    else if (aModuleId == u"com.sun.star.sdb.DataSourceBrowser")
         return "Data Source Browser";
-    else if (aModuleId == "com.sun.star.sdb.DatabaseDocument")
+    else if (aModuleId == u"com.sun.star.sdb.DatabaseDocument")
         return "Database";
 
     return OUString();

@@ -60,7 +60,7 @@ public:
     bool IsHeader() const { return m_bIsHeader; };
     bool IsEmptyHeaderFooter( ) const;
 
-    void ExecuteCommand(const OString &rIdent);
+    void ExecuteCommand(std::string_view rIdent);
 
     void SetReadonly( bool bReadonly ) override;
 

@@ -48,7 +48,7 @@ namespace connectivity::mork
             virtual ~OConnection() override;
 
             const rtl::Reference<MorkDriver>& getDriver() const {return m_xDriver;};
-            MorkParser* getMorkParser(const OString& t) {return t == "CollectedAddressBook" ? m_pHistory.get() : m_pBook.get();};
+            MorkParser* getMorkParser(std::string_view t) {return t == "CollectedAddressBook" ? m_pHistory.get() : m_pBook.get();};
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;

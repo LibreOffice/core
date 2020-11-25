@@ -472,7 +472,7 @@ bool SvxIMapDlg::DoSave()
     return bRet;
 }
 
-void SvxIMapDlg::SetActiveTool(const OString& rId)
+void SvxIMapDlg::SetActiveTool(std::string_view rId)
 {
     m_xTbxIMapDlg1->set_item_active("TBI_SELECT", rId == "TBI_SELECT");
     m_xTbxIMapDlg1->set_item_active("TBI_RECT", rId == "TBI_RECT");

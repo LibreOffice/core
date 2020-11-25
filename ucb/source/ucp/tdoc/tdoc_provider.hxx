@@ -42,13 +42,13 @@ namespace tdoc_ucp {
 
 
 #define TDOC_ROOT_CONTENT_TYPE \
-                "application/" TDOC_URL_SCHEME "-root"
+                u"application/" TDOC_URL_SCHEME "-root"
 #define TDOC_DOCUMENT_CONTENT_TYPE \
-                "application/" TDOC_URL_SCHEME "-document"
+                u"application/" TDOC_URL_SCHEME "-document"
 #define TDOC_FOLDER_CONTENT_TYPE \
-                "application/" TDOC_URL_SCHEME "-folder"
+                u"application/" TDOC_URL_SCHEME "-folder"
 #define TDOC_STREAM_CONTENT_TYPE \
-                "application/" TDOC_URL_SCHEME "-stream"
+                u"application/" TDOC_URL_SCHEME "-stream"
 
 
 class StorageElementFactory;

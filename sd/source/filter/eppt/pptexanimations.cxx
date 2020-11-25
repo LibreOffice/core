@@ -1354,13 +1354,13 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
     }
 }
 
-Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUString& rAttributeName )
+Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, std::u16string_view rAttributeName )
 {
     OUString aDest;
-    if ( rAttributeName == "X"
-            || rAttributeName == "Y"
-            || rAttributeName == "Width"
-            || rAttributeName == "Height"
+    if ( rAttributeName == u"X"
+            || rAttributeName == u"Y"
+            || rAttributeName == u"Width"
+            || rAttributeName == u"Height"
         )
     {
         OUString aStr;
@@ -1370,20 +1370,20 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
             aDest += aStr;
         }
     }
-    else if ( rAttributeName == "Rotate"         // "r" or "style.rotation" ?
-            || rAttributeName == "Opacity"
-            || rAttributeName == "CharHeight"
-            || rAttributeName == "SkewX"
+    else if ( rAttributeName == u"Rotate"         // "r" or "style.rotation" ?
+            || rAttributeName == u"Opacity"
+            || rAttributeName == u"CharHeight"
+            || rAttributeName == u"SkewX"
         )
     {
         double fNumber = 0.0;
         if ( rSourceValue >>= fNumber )
             aDest += OUString::number( fNumber );
     }
-    else if ( rAttributeName == "Color"
-            || rAttributeName == "FillColor"     // "Fillcolor" or "FillColor" ?
-            || rAttributeName == "LineColor"
-            || rAttributeName == "CharColor"
+    else if ( rAttributeName == u"Color"
+            || rAttributeName == u"FillColor"     // "Fillcolor" or "FillColor" ?
+            || rAttributeName == u"LineColor"
+            || rAttributeName == u"CharColor"
         )
     {
         sal_Int32 nColor = 0;
@@ -1410,7 +1410,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
                   +  ")";
         }
     }
-    else if ( rAttributeName == "FillStyle" )
+    else if ( rAttributeName == u"FillStyle" )
     {
         css::drawing::FillStyle eFillStyle;
         if ( rSourceValue >>= eFillStyle )
@@ -1421,7 +1421,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
                 aDest += "solid";
         }
     }
-    else if (rAttributeName == "FillOn")
+    else if (rAttributeName == u"FillOn")
     {
         bool bFillOn;
         if ( rSourceValue >>= bFillOn )
@@ -1432,7 +1432,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
                 aDest += "false";
         }
     }
-    else if ( rAttributeName == "LineStyle" )
+    else if ( rAttributeName == u"LineStyle" )
     {
         css::drawing::LineStyle eLineStyle;
         if ( rSourceValue >>= eLineStyle )
@@ -1443,7 +1443,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
                 aDest += "true";
         }
     }
-    else if ( rAttributeName == "CharWeight" )
+    else if ( rAttributeName == u"CharWeight" )
     {
         float fFontWeight = 0.0;
         if ( rSourceValue >>= fFontWeight )
@@ -1454,7 +1454,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
                 aDest += "normal";
         }
     }
-    else if ( rAttributeName == "CharUnderline" )
+    else if ( rAttributeName == u"CharUnderline" )
     {
         sal_Int16 nFontUnderline = 0;
         if ( rSourceValue >>= nFontUnderline )
@@ -1465,7 +1465,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
                 aDest += "true";
         }
     }
-    else if ( rAttributeName == "CharPosture" )
+    else if ( rAttributeName == u"CharPosture" )
     {
         css::awt::FontSlant eFontSlant;
         if ( rSourceValue >>= eFontSlant )
@@ -1476,7 +1476,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
                 aDest += "normal";  // ?
         }
     }
-    else if ( rAttributeName == "Visibility" )
+    else if ( rAttributeName == u"Visibility" )
     {
         bool bVisible = true;
         if ( rSourceValue >>= bVisible )

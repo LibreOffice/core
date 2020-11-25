@@ -602,11 +602,11 @@ void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::vector< DataRowPointStyl
 }
 
 bool lcl_SpecialHandlingForDonutChartNeeded(
-    const OUString & rServiceName,
+    std::u16string_view rServiceName,
     const SvXMLImport & rImport )
 {
     bool bResult = false;
-    if( rServiceName == "com.sun.star.chart2.DonutChartType" )
+    if( rServiceName == u"com.sun.star.chart2.DonutChartType" )
     {
         bResult = SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( rImport.GetModel() );
     }

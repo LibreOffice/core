@@ -109,18 +109,18 @@ namespace rptui
     }
 
 
-    void FormatNormalizer::impl_onDefinitionPropertyChange( const OUString& _rChangedPropName )
+    void FormatNormalizer::impl_onDefinitionPropertyChange( std::u16string_view _rChangedPropName )
     {
-        if  ( _rChangedPropName != "Command" && _rChangedPropName != "CommandType" && _rChangedPropName != "EscapeProcessing" )
+        if  ( _rChangedPropName != u"Command" && _rChangedPropName != u"CommandType" && _rChangedPropName != u"EscapeProcessing" )
             // nothing we're interested in
             return;
         m_bFieldListDirty = true;
     }
 
 
-    void FormatNormalizer::impl_onFormattedProperttyChange( const Reference< XFormattedField >& _rxFormatted, const OUString& _rChangedPropName )
+    void FormatNormalizer::impl_onFormattedProperttyChange( const Reference< XFormattedField >& _rxFormatted, std::u16string_view _rChangedPropName )
     {
-        if  ( _rChangedPropName != "DataField" )
+        if  ( _rChangedPropName != u"DataField" )
             // nothing we're interested in
             return;
 

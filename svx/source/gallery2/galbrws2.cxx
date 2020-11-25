@@ -1093,7 +1093,7 @@ void GalleryBrowser2::DispatchAdd(
         pInfo.release();
 }
 
-void GalleryBrowser2::Execute(const OString &rIdent)
+void GalleryBrowser2::Execute(std::string_view rIdent)
 {
     Point       aSelPos;
     const sal_uInt32 nItemId = ImplGetSelectedItemId( nullptr, aSelPos );

@@ -211,14 +211,14 @@ public:
     virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& /* xLocator */ ) override {}
 };
 
-OUString getNamespaceValue( const OUString& rNamespacePrefix )
+OUString getNamespaceValue( std::u16string_view rNamespacePrefix )
 {
     OUString aNamespaceURI;
-    if (rNamespacePrefix == "office")
+    if (rNamespacePrefix == u"office")
         aNamespaceURI = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
-    else if (rNamespacePrefix == "text")
+    else if (rNamespacePrefix == u"text")
         aNamespaceURI = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
-    else if (rNamespacePrefix == "note")
+    else if (rNamespacePrefix == u"note")
         aNamespaceURI = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
     return aNamespaceURI;
 }
@@ -230,7 +230,7 @@ OUString resolveNamespace( const OUString& aName )
     {
         if ( aName.getLength() > index + 1 )
         {
-            OUString aAttributeName = getNamespaceValue( aName.copy( 0, index ) ) +
+            OUString aAttributeName = getNamespaceValue( aName.subView( 0, index ) ) +
                 ":" + aName.subView( index + 1 );
             return aAttributeName;
         }

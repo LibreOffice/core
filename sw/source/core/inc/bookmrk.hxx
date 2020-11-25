@@ -293,7 +293,7 @@ namespace sw::mark {
             // This method should be called only by the portion so we can now the portion's painting area
             void SetPortionPaintArea(const SwRect& rPortionPaintArea);
 
-            void SendLOKMessage(const OString& sAction);
+            void SendLOKMessage(std::string_view sAction);
 
         private:
             SwRect m_aPortionPaintArea;

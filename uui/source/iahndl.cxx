@@ -280,7 +280,7 @@ UUIInteractionHelper::tryOtherInteractionHandler(
 namespace
 {
 
-    bool lcl_matchesRequest( const Any& i_rRequest, const OUString& i_rTypeName, const OUString& i_rPropagation )
+    bool lcl_matchesRequest( const Any& i_rRequest, const OUString& i_rTypeName, std::u16string_view i_rPropagation )
     {
         const css::uno::TypeDescription aTypeDesc( i_rTypeName );
         const typelib_TypeDescription* pTypeDesc = aTypeDesc.get();
@@ -291,7 +291,7 @@ namespace
         }
         const css::uno::Type aType( pTypeDesc->pWeakRef );
 
-        const bool bExactMatch = i_rPropagation == "named-only";
+        const bool bExactMatch = i_rPropagation == u"named-only";
         if ( bExactMatch )
             return i_rRequest.getValueType().equals( aType );
 

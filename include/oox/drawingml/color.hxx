@@ -104,7 +104,7 @@ public:
     /** Translates between color transformation tokens and their names */
     static OUString     getColorTransformationName( sal_Int32 nElement );
     /** Translates between color transformation token names and the corresponding token */
-    static sal_Int32    getColorTransformationToken( const OUString& sName );
+    static sal_Int32    getColorTransformationToken( std::u16string_view sName );
 
     /// Compares this color with rOther.
     bool equals(const Color& rOther, const GraphicHelper& rGraphicHelper, ::Color nPhClr) const;

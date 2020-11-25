@@ -54,9 +54,9 @@ public:
     };
     void resolve(RTFShape& rShape, bool bClose, ShapeOrPict shapeOrPict);
     void close();
-    void append(const OUString& aKey, const OUString& aValue);
+    void append(std::u16string_view aKey, const OUString& aValue);
     /// Append property on the current parent.
-    void appendGroupProperty(const OUString& aKey, const OUString& aValue);
+    void appendGroupProperty(std::u16string_view aKey, const OUString& aValue);
     void resolveDhgt(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet,
                      sal_Int32 nZOrder, bool bOldStyle);
     /// Set line color and line width on the shape, using the relevant API depending on if the shape is a text frame or not.
@@ -83,7 +83,7 @@ private:
     void createShape(const OUString& rService, css::uno::Reference<css::drawing::XShape>& xShape,
                      css::uno::Reference<css::beans::XPropertySet>& xPropertySet);
     void applyProperty(css::uno::Reference<css::drawing::XShape> const& xShape,
-                       const OUString& aKey, const OUString& aValue) const;
+                       std::u16string_view aKey, const OUString& aValue) const;
     int initShape(css::uno::Reference<css::drawing::XShape>& o_xShape,
                   css::uno::Reference<css::beans::XPropertySet>& o_xPropSet, bool& o_rIsCustomShape,
                   RTFShape const& rShape, bool bClose, ShapeOrPict shapeOrPict);
