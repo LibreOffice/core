@@ -22,6 +22,8 @@
 #include <charmapcontrol.hxx>
 #include <sfx2/charmappopup.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/strings.hrc>
+#include <sfx2/sfxresid.hxx>
 
 using namespace css;
 
@@ -61,6 +63,7 @@ SfxCharmapCtrl::SfxCharmapCtrl(CharmapPopup* pControl, weld::Widget* pParent)
                      SvxCharView(m_xVirDev),
                      SvxCharView(m_xVirDev),
                      SvxCharView(m_xVirDev)}
+    , m_xRecentLabel(m_xBuilder->weld_label("label2"))
     , m_xDlgBtn(m_xBuilder->weld_button("specialchardlg"))
     , m_xRecentCharView{std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar1", m_aRecentCharView[0]),
                         std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar2", m_aRecentCharView[1]),
@@ -175,6 +178,9 @@ void SfxCharmapCtrl::updateRecentCharControl()
         m_aRecentCharView[i].SetText(OUString());
         m_aRecentCharView[i].Hide();
     }
+
+    //checking if the characters are recently used or no
+    m_xRecentLabel->set_label(m_aRecentCharList.size() > 0 ? SfxResId(STR_RECENT) : SfxResId(STR_NORECENT));
 }
 
 IMPL_LINK(SfxCharmapCtrl, CharClickHdl, SvxCharView*, pView, void)
