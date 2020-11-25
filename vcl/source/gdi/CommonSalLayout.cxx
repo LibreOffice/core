@@ -213,6 +213,18 @@ void GenericSalLayout::SetNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos
     sal_Int32 nGraphemeEndPos =
         mxBreak->nextCharacters(rArgs.mrStr, nCharPos, aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+
+    // tdf#138481: Don't break on ZWJ
+    while (nGraphemeEndPos < rArgs.mrStr.getLength() && rArgs.mrStr[nGraphemeEndPos] == 0x200D)
+    {
+        while (nGraphemeEndPos < rArgs.mrStr.getLength() && rArgs.mrStr[nGraphemeEndPos] == 0x200D)
+            nGraphemeEndPos++;
+        if (nGraphemeEndPos < rArgs.mrStr.getLength())
+            nGraphemeEndPos =
+                mxBreak->nextCharacters(rArgs.mrStr, nGraphemeEndPos, aLocale,
+                    i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+    }
+
     // Safely advance nCharPos in case it is a non-BMP character.
     rArgs.mrStr.iterateCodePoints(&nCharPos);
     sal_Int32 nGraphemeStartPos =
