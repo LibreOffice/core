@@ -55,4 +55,14 @@ bool f7(const OUString& p1, OUString p2) { return p1 == p2; }
 // expected-error@+1 {{replace function parameter of type 'const rtl::OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
 bool f8(const OUString& p1, std::u16string_view p2) { return p1 == p2; }
 
+struct Converter
+{
+    // expected-error@+1 {{replace function parameter of type 'const rtl::OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
+    static bool convertBool(bool& rBool, const OUString& rString)
+    {
+        rBool = rString == "true";
+        return rBool || (rString == "false");
+    }
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

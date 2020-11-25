@@ -181,7 +181,7 @@ void ChartLineStyleWrapper::updateData()
     mpControl->statusChanged(aEvent);
 }
 
-bool ChartLineStyleWrapper::operator()(const OUString& rCommand, const css::uno::Any& rValue)
+bool ChartLineStyleWrapper::operator()(std::u16string_view rCommand, const css::uno::Any& rValue)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
 
@@ -191,12 +191,12 @@ bool ChartLineStyleWrapper::operator()(const OUString& rCommand, const css::uno:
         return false;
     }
 
-    if (rCommand == ".uno:XLineStyle")
+    if (rCommand == u".uno:XLineStyle")
     {
         xPropSet->setPropertyValue("LineStyle", rValue);
         return true;
     }
-    else if (rCommand == ".uno:LineDash")
+    else if (rCommand == u".uno:LineDash")
     {
         XLineDashItem aDashItem;
         aDashItem.PutValue(rValue, 0);

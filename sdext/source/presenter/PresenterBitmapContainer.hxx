@@ -133,7 +133,7 @@ private:
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor>& rpDefault);
     static BitmapDescriptor::TexturingMode
-        StringToTexturingMode (const OUString& rsTexturingMode);
+        StringToTexturingMode (std::u16string_view rsTexturingMode);
 };
 
 typedef PresenterBitmapContainer::BitmapDescriptor PresenterBitmapDescriptor;

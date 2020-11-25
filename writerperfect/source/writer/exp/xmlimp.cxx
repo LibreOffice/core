@@ -451,10 +451,10 @@ const uno::Reference<uno::XComponentContext>& XMLImport::GetComponentContext() c
 }
 
 rtl::Reference<XMLImportContext>
-XMLImport::CreateContext(const OUString& rName,
+XMLImport::CreateContext(std::u16string_view rName,
                          const uno::Reference<xml::sax::XAttributeList>& /*xAttribs*/)
 {
-    if (rName == "office:document")
+    if (rName == u"office:document")
         return new XMLOfficeDocContext(*this);
     return nullptr;
 }

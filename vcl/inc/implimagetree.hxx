@@ -150,7 +150,7 @@ private:
 
         Must not be cyclic :-)  The last theme in the chain returns an empty string.
     */
-    static OUString fallbackStyle(const OUString &rStyle);
+    static OUString fallbackStyle(std::u16string_view rStyle);
 };
 
 #endif

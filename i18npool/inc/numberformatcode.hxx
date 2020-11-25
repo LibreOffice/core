@@ -62,9 +62,9 @@ private:
 
     const css::uno::Sequence< css::i18n::FormatElement >& getFormats( const css::lang::Locale& rLocale );
     static OUString mapElementTypeShortToString(sal_Int16 formatType);
-    static sal_Int16 mapElementTypeStringToShort(const OUString& formatType);
+    static sal_Int16 mapElementTypeStringToShort(std::u16string_view formatType);
     static OUString mapElementUsageShortToString(sal_Int16 formatUsage);
-    static sal_Int16 mapElementUsageStringToShort(const OUString& formatUsage);
+    static sal_Int16 mapElementUsageStringToShort(std::u16string_view formatUsage);
 };
 
 

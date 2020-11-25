@@ -91,32 +91,32 @@ Reference< XRegressionCurve > RegressionCurveHelper::createMeanValueLine()
 }
 
 Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServiceName(
-    const OUString& aServiceName )
+    std::u16string_view aServiceName )
 {
     Reference< XRegressionCurve > xResult;
 
     // todo: use factory methods with service name
-    if( aServiceName == "com.sun.star.chart2.LinearRegressionCurve" )
+    if( aServiceName == u"com.sun.star.chart2.LinearRegressionCurve" )
     {
         xResult.set( new LinearRegressionCurve );
     }
-    else if( aServiceName == "com.sun.star.chart2.LogarithmicRegressionCurve" )
+    else if( aServiceName == u"com.sun.star.chart2.LogarithmicRegressionCurve" )
     {
         xResult.set( new LogarithmicRegressionCurve );
     }
-    else if( aServiceName == "com.sun.star.chart2.ExponentialRegressionCurve" )
+    else if( aServiceName == u"com.sun.star.chart2.ExponentialRegressionCurve" )
     {
         xResult.set( new ExponentialRegressionCurve );
     }
-    else if( aServiceName == "com.sun.star.chart2.PotentialRegressionCurve" )
+    else if( aServiceName == u"com.sun.star.chart2.PotentialRegressionCurve" )
     {
         xResult.set( new PotentialRegressionCurve );
     }
-    else if( aServiceName == "com.sun.star.chart2.PolynomialRegressionCurve" )
+    else if( aServiceName == u"com.sun.star.chart2.PolynomialRegressionCurve" )
     {
         xResult.set( new PolynomialRegressionCurve );
     }
-    else if( aServiceName == "com.sun.star.chart2.MovingAverageRegressionCurve" )
+    else if( aServiceName == u"com.sun.star.chart2.MovingAverageRegressionCurve" )
     {
         xResult.set( new MovingAverageRegressionCurve );
     }
@@ -125,36 +125,36 @@ Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServ
 }
 
 Reference< XRegressionCurveCalculator > RegressionCurveHelper::createRegressionCurveCalculatorByServiceName(
-    const OUString& aServiceName )
+    std::u16string_view aServiceName )
 {
     Reference< XRegressionCurveCalculator > xResult;
 
     // todo: use factory methods with service name
-    if( aServiceName == "com.sun.star.chart2.MeanValueRegressionCurve" )
+    if( aServiceName == u"com.sun.star.chart2.MeanValueRegressionCurve" )
     {
         xResult.set( new MeanValueRegressionCurveCalculator() );
     }
-    if( aServiceName == "com.sun.star.chart2.LinearRegressionCurve" )
+    if( aServiceName == u"com.sun.star.chart2.LinearRegressionCurve" )
     {
         xResult.set( new LinearRegressionCurveCalculator() );
     }
-    else if( aServiceName == "com.sun.star.chart2.LogarithmicRegressionCurve" )
+    else if( aServiceName == u"com.sun.star.chart2.LogarithmicRegressionCurve" )
     {
         xResult.set( new LogarithmicRegressionCurveCalculator() );
     }
-    else if( aServiceName == "com.sun.star.chart2.ExponentialRegressionCurve" )
+    else if( aServiceName == u"com.sun.star.chart2.ExponentialRegressionCurve" )
     {
         xResult.set( new ExponentialRegressionCurveCalculator() );
     }
-    else if( aServiceName == "com.sun.star.chart2.PotentialRegressionCurve" )
+    else if( aServiceName == u"com.sun.star.chart2.PotentialRegressionCurve" )
     {
         xResult.set( new PotentialRegressionCurveCalculator() );
     }
-    else if( aServiceName == "com.sun.star.chart2.PolynomialRegressionCurve" )
+    else if( aServiceName == u"com.sun.star.chart2.PolynomialRegressionCurve" )
     {
         xResult.set( new PolynomialRegressionCurveCalculator() );
     }
-    else if( aServiceName == "com.sun.star.chart2.MovingAverageRegressionCurve" )
+    else if( aServiceName == u"com.sun.star.chart2.MovingAverageRegressionCurve" )
     {
         xResult.set( new MovingAverageRegressionCurveCalculator() );
     }

@@ -402,63 +402,63 @@ OUString Color::getColorTransformationName( sal_Int32 nElement )
     return OUString();
 }
 
-sal_Int32 Color::getColorTransformationToken( const OUString& sName )
+sal_Int32 Color::getColorTransformationToken( std::u16string_view sName )
 {
-    if( sName == "red" )
+    if( sName == u"red" )
         return XML_red;
-    else if( sName == "redMod" )
+    else if( sName == u"redMod" )
         return XML_redMod;
-    else if( sName == "redOff" )
+    else if( sName == u"redOff" )
         return XML_redOff;
-    else if( sName == "green" )
+    else if( sName == u"green" )
         return XML_green;
-    else if( sName == "greenMod" )
+    else if( sName == u"greenMod" )
         return XML_greenMod;
-    else if( sName == "greenOff" )
+    else if( sName == u"greenOff" )
         return XML_greenOff;
-    else if( sName == "blue" )
+    else if( sName == u"blue" )
         return XML_blue;
-    else if( sName == "blueMod" )
+    else if( sName == u"blueMod" )
         return XML_blueMod;
-    else if( sName == "blueOff" )
+    else if( sName == u"blueOff" )
         return XML_blueOff;
-    else if( sName == "alpha" )
+    else if( sName == u"alpha" )
         return XML_alpha;
-    else if( sName == "alphaMod" )
+    else if( sName == u"alphaMod" )
         return XML_alphaMod;
-    else if( sName == "alphaOff" )
+    else if( sName == u"alphaOff" )
         return XML_alphaOff;
-    else if( sName == "hue" )
+    else if( sName == u"hue" )
         return XML_hue;
-    else if( sName == "hueMod" )
+    else if( sName == u"hueMod" )
         return XML_hueMod;
-    else if( sName == "hueOff" )
+    else if( sName == u"hueOff" )
         return XML_hueOff;
-    else if( sName == "sat" )
+    else if( sName == u"sat" )
         return XML_sat;
-    else if( sName == "satMod" )
+    else if( sName == u"satMod" )
         return XML_satMod;
-    else if( sName == "satOff" )
+    else if( sName == u"satOff" )
         return XML_satOff;
-    else if( sName == "lum" )
+    else if( sName == u"lum" )
         return XML_lum;
-    else if( sName == "lumMod" )
+    else if( sName == u"lumMod" )
         return XML_lumMod;
-    else if( sName == "lumOff" )
+    else if( sName == u"lumOff" )
         return XML_lumOff;
-    else if( sName == "shade" )
+    else if( sName == u"shade" )
         return XML_shade;
-    else if( sName == "tint" )
+    else if( sName == u"tint" )
         return XML_tint;
-    else if( sName == "gray" )
+    else if( sName == u"gray" )
         return XML_gray;
-    else if( sName == "comp" )
+    else if( sName == u"comp" )
         return XML_comp;
-    else if( sName == "inv" )
+    else if( sName == u"inv" )
         return XML_inv;
-    else if( sName == "gamma" )
+    else if( sName == u"gamma" )
         return XML_gamma;
-    else if( sName == "invGamma" )
+    else if( sName == u"invGamma" )
         return XML_invGamma;
 
     SAL_WARN( "oox.drawingml", "Color::getColorTransformationToken - unexpected transformation type" );

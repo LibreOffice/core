@@ -118,7 +118,7 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialogController
     void                URLModify();
     void                DoOpen();
     bool                DoSave();
-    void                SetActiveTool(const OString& rId);
+    void                SetActiveTool(std::string_view rId);
 
 public:
 

@@ -52,7 +52,7 @@ public:
     static Components & getSingleton(
         css::uno::Reference< css::uno::XComponentContext > const & context);
 
-    static bool allLocales(OUString const & locale);
+    static bool allLocales(std::u16string_view locale);
 
     rtl::Reference< Node > resolvePathRepresentation(
         OUString const & pathRepresentation,

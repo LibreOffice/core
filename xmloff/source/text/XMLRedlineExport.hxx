@@ -151,7 +151,7 @@ private:
         const css::uno::Sequence<css::beans::PropertyValue> & rValues);
 
     /// convert the change type from API to XML names
-    OUString const & ConvertTypeName(const OUString& sApiName);
+    OUString const & ConvertTypeName(std::u16string_view sApiName);
 
     /// Get ID string!
     static OUString GetRedlineID(

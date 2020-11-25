@@ -380,8 +380,8 @@ static const SfxItemPropertyMap* lcl_GetFooterStyleMap()
 
 #define SC_STYLE_FAMILY_COUNT 2
 
-#define SC_FAMILYNAME_CELL  "CellStyles"
-#define SC_FAMILYNAME_PAGE  "PageStyles"
+#define SC_FAMILYNAME_CELL  u"CellStyles"
+#define SC_FAMILYNAME_PAGE  u"PageStyles"
 
 const SfxStyleFamily aStyleFamilyTypes[SC_STYLE_FAMILY_COUNT] = { SfxStyleFamily::Para, SfxStyleFamily::Page };
 
@@ -453,7 +453,7 @@ ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByIndex_Impl(sal_uInt32 nIndex) c
     return nullptr;    // invalid index
 }
 
-ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByName_Impl(const OUString& aName) const
+ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByName_Impl(std::u16string_view aName) const
 {
     if ( pDocShell )
     {

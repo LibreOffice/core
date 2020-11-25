@@ -50,7 +50,7 @@ namespace writerfilter::dmapper::ConversionHelper{
     sal_Int16 convertTableJustification( sal_Int32 nIntValue );
     css::text::RubyAdjust convertRubyAlign( sal_Int32 nIntValue );
     sal_Int16 ConvertNumberingType(sal_Int32 nFmt);
-    sal_Int16 ConvertCustomNumberFormat(const OUString& rFormat);
+    sal_Int16 ConvertCustomNumberFormat(std::u16string_view rFormat);
 
     css::util::DateTime ConvertDateStringToDateTime(const OUString& rDateTime);
 } // namespace writerfilter::dmapper::ConversionHelper

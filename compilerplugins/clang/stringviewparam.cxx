@@ -174,10 +174,21 @@ DeclRefExpr const* relevantCXXOperatorCallExpr(CXXOperatorCallExpr const* expr)
     }
     else if (compat::isComparisonOp(expr))
     {
+        auto arg0 = compat::IgnoreImplicit(expr->getArg(0));
+        if (isa<clang::StringLiteral>(arg0))
+        {
+            return relevantDeclRefExpr(expr->getArg(1));
+        }
+        auto arg1 = compat::IgnoreImplicit(expr->getArg(1));
+        if (isa<clang::StringLiteral>(arg1))
+        {
+            return relevantDeclRefExpr(expr->getArg(0));
+        }
+
         // TODO Can't currently convert rtl::OString because we end up with ambiguous operator==
         // (one in string_view header and one in rtl/string.hxx header)
-        auto st1 = relevantStringType(compat::IgnoreImplicit(expr->getArg(0))->getType());
-        auto st2 = relevantStringType(compat::IgnoreImplicit(expr->getArg(1))->getType());
+        auto st1 = relevantStringType(arg0->getType());
+        auto st2 = relevantStringType(arg1->getType());
         if (st1 == StringType::RtlOustring && st2 == StringType::RtlOustring)
         {
             auto e1 = relevantDeclRefExpr(expr->getArg(0));

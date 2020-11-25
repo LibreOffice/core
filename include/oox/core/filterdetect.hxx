@@ -84,7 +84,7 @@ public:
 private:
     void                parseRelationship( const AttributeList& rAttribs );
 
-    OUString            getFilterNameFromContentType( const OUString& rContentType, const OUString& rFileName );
+    OUString            getFilterNameFromContentType( std::u16string_view rContentType, const OUString& rFileName );
     void                parseContentTypesDefault( const AttributeList& rAttribs );
     void                parseContentTypesOverride( const AttributeList& rAttribs );
 

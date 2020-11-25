@@ -97,13 +97,13 @@ public:
     double getImportedShapesCount() const{ return mnAscendingPrio; }
 private:
     bool isSkip( css::uno::Reference<css::beans::XPropertySet> const& xPropSet,
-                 OUString const& shapeType,
+                 std::u16string_view shapeType,
                  css::uno::Reference<css::drawing::XLayer> const& xLayer);
 
     ShapeSharedPtr createShape(
         css::uno::Reference<css::drawing::XShape> const& xCurrShape,
         css::uno::Reference<css::beans::XPropertySet> const& xPropSet,
-        OUString const& shapeType ) const;
+        std::u16string_view shapeType ) const;
 
     void importPolygons(css::uno::Reference< css::beans::XPropertySet > const& xPropSet) ;
 

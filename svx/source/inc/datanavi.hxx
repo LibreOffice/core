@@ -209,7 +209,7 @@ namespace svxform
 
         void                        AddChildren(const weld::TreeIter* _pParent,
                                                 const css::uno::Reference< css::xml::dom::XNode >& _xNode);
-        bool                        DoToolBoxAction(const OString& rToolBoxID);
+        bool                        DoToolBoxAction(std::string_view rToolBoxID);
         void                        AddEntry(std::unique_ptr<ItemNode> _pNewNode, bool _bIsElement, weld::TreeIter* pRet = nullptr);
         void                        AddEntry(const css::uno::Reference< css::beans::XPropertySet >& _rPropSet, weld::TreeIter* pRet = nullptr);
         void                        EditEntry( const css::uno::Reference< css::beans::XPropertySet >& _rPropSet );
@@ -228,7 +228,7 @@ namespace svxform
         void                 ClearModel();
         OUString             LoadInstance(const css::uno::Sequence< css::beans::PropertyValue >& _xPropSeq);
 
-        bool                 DoMenuAction(const OString& rMenuID);
+        bool                 DoMenuAction(std::string_view rMenuID);
         void                 EnableMenuItems(weld::Menu* pMenu);
 
         const OUString&      GetInstanceName() const { return m_sInstanceName; }

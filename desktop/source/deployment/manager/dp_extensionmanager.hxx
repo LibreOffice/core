@@ -204,7 +204,7 @@ private:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
     css::uno::Reference<css::deployment::XPackageManager>
-    getPackageManager(OUString const & repository);
+    getPackageManager(std::u16string_view repository);
 
     /// @throws css::deployment::DeploymentException
     /// @throws css::ucb::CommandFailedException

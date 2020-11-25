@@ -35,7 +35,7 @@ class SfxURLRelocator_Impl
     css::uno::Reference< css::util::XMacroExpander >                 mxMacroExpander;
 
 public:
-    static bool                 propertyCanContainOfficeDir( const OUString & rPropName );
+    static bool                 propertyCanContainOfficeDir( std::u16string_view rPropName );
     void                        initOfficeInstDirs();
     void                        makeRelocatableURL( OUString & rURL );
     void                        makeAbsoluteURL( OUString & rURL );

@@ -120,10 +120,10 @@ class AcceleratorConfigurationReader final : public ::cppu::WeakImplHelper< css:
     private:
 
         /** TODO document me */
-        static EXMLElement implst_classifyElement(const OUString& sElement);
+        static EXMLElement implst_classifyElement(std::u16string_view sElement);
 
         /** TODO document me */
-        static EXMLAttribute implst_classifyAttribute(const OUString& sAttribute);
+        static EXMLAttribute implst_classifyAttribute(std::u16string_view sAttribute);
 
         /** TODO document me */
         OUString implts_getErrorLineString();

@@ -145,22 +145,22 @@ const ScUnoAddInHelpId pDateFuncHelpIds[] =
     { "getWeeksInYear"              , HID_DAI_FUNC_WEEKSINYEAR      }
 };
 
-ScUnoAddInHelpIdGenerator::ScUnoAddInHelpIdGenerator( const OUString& rServiceName )
+ScUnoAddInHelpIdGenerator::ScUnoAddInHelpIdGenerator( std::u16string_view rServiceName )
 {
     SetServiceName( rServiceName );
 }
 
-void ScUnoAddInHelpIdGenerator::SetServiceName( const OUString& rServiceName )
+void ScUnoAddInHelpIdGenerator::SetServiceName( std::u16string_view rServiceName )
 {
     pCurrHelpIds = nullptr;
     sal_uInt32 nSize = 0;
 
-    if ( rServiceName == "com.sun.star.sheet.addin.Analysis" )
+    if ( rServiceName == u"com.sun.star.sheet.addin.Analysis" )
     {
         pCurrHelpIds = pAnalysisHelpIds;
         nSize = sizeof( pAnalysisHelpIds );
     }
-    else if ( rServiceName == "com.sun.star.sheet.addin.DateFunctions" )
+    else if ( rServiceName == u"com.sun.star.sheet.addin.DateFunctions" )
     {
         pCurrHelpIds = pDateFuncHelpIds;
         nSize = sizeof( pDateFuncHelpIds );

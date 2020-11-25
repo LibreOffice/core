@@ -705,7 +705,7 @@ namespace sw::mark
         }
     }
 
-    void DropDownFieldmark::SendLOKMessage(const OString& sAction)
+    void DropDownFieldmark::SendLOKMessage(std::string_view sAction)
     {
         const SfxViewShell* pViewShell = SfxViewShell::Current();
         if (!pViewShell || pViewShell->isLOKMobilePhone())

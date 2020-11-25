@@ -617,7 +617,7 @@ void LngSvcMgr::UpdateAll()
     SvtLinguConfig aCfg;
 
     const int nNumServices = 4;
-    const char * const apServices[nNumServices]       =  { SN_SPELLCHECKER, SN_GRAMMARCHECKER, SN_HYPHENATOR, SN_THESAURUS };
+    const sal_Unicode * const apServices[nNumServices]       =  { SN_SPELLCHECKER, SN_GRAMMARCHECKER, SN_HYPHENATOR, SN_THESAURUS };
     const char * const apCurLists[nNumServices]       =  { "ServiceManager/SpellCheckerList",       "ServiceManager/GrammarCheckerList",       "ServiceManager/HyphenatorList",       "ServiceManager/ThesaurusList" };
     const char * const apLastFoundLists[nNumServices] =  { "ServiceManager/LastFoundSpellCheckers", "ServiceManager/LastFoundGrammarCheckers", "ServiceManager/LastFoundHyphenators", "ServiceManager/LastFoundThesauri" };
 
@@ -627,7 +627,7 @@ void LngSvcMgr::UpdateAll()
 
     for (int k = 0;  k < nNumServices;  ++k)
     {
-        OUString aService( OUString::createFromAscii( apServices[k] ) );
+        OUString aService( apServices[k] );
         OUString aActiveList( OUString::createFromAscii( apCurLists[k] ) );
         OUString aLastFoundList( OUString::createFromAscii( apLastFoundLists[k] ) );
 
@@ -1550,7 +1550,7 @@ void SAL_CALL
 }
 
 
-bool LngSvcMgr::SaveCfgSvcs( const OUString &rServiceName )
+bool LngSvcMgr::SaveCfgSvcs( std::u16string_view rServiceName )
 {
     SAL_INFO( "linguistic", "linguistic: LngSvcMgr::SaveCfgSvcs" );
 

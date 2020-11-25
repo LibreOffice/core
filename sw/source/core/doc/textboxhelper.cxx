@@ -427,7 +427,7 @@ tools::Rectangle SwTextBoxHelper::getTextRectangle(SwFrameFormat* pShape, bool b
     return aRet;
 }
 
-void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, const OUString& rPropertyName,
+void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rPropertyName,
                                    const css::uno::Any& rValue)
 {
     // Textframes does not have valid horizontal adjust property, so map it to paragraph adjust property
@@ -469,7 +469,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, const OUString& rPrope
         return;
     }
 
-    if (rPropertyName == "CustomShapeGeometry")
+    if (rPropertyName == u"CustomShapeGeometry")
     {
         // CustomShapeGeometry changes the textbox position offset and size, so adjust both.
         syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::Any());

@@ -214,18 +214,18 @@ Reference<task::XAbortChannel> ExtensionManager::createAbortChannel()
 }
 
 css::uno::Reference<css::deployment::XPackageManager>
-ExtensionManager::getPackageManager(OUString const & repository)
+ExtensionManager::getPackageManager(std::u16string_view repository)
 {
     Reference<css::deployment::XPackageManager> xPackageManager;
-    if (repository == "user")
+    if (repository == u"user")
         xPackageManager = getUserRepository();
-    else if (repository == "shared")
+    else if (repository == u"shared")
         xPackageManager = getSharedRepository();
-    else if (repository == "bundled")
+    else if (repository == u"bundled")
         xPackageManager = getBundledRepository();
-    else if (repository == "tmp")
+    else if (repository == u"tmp")
         xPackageManager = getTmpRepository();
-    else if (repository == "bak")
+    else if (repository == u"bak")
         xPackageManager = getBakRepository();
     else
         throw lang::IllegalArgumentException(

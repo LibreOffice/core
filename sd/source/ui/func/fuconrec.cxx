@@ -511,15 +511,15 @@ void FuConstructRectangle::Deactivate()
 namespace {
 /// Returns the color based on the color names listed in core/include/tools/color.hxx
 /// Feel free to extend with more color names from color.hxx
-Color strToColor(const OUString& sColor)
+Color strToColor(std::u16string_view sColor)
 {
     Color aColor = COL_AUTO;
 
-    if (sColor == "COL_GRAY")
+    if (sColor == u"COL_GRAY")
         aColor = COL_GRAY;
-    else if (sColor == "COL_GRAY3")
+    else if (sColor == u"COL_GRAY3")
         aColor = COL_GRAY3;
-    else if (sColor == "COL_GRAY7")
+    else if (sColor == u"COL_GRAY7")
         aColor = COL_GRAY7;
 
     return aColor;

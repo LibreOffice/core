@@ -334,63 +334,63 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
     }
 }
 
-static sal_Int32 getPropertyType( const OUString& rProperty )
+static sal_Int32 getPropertyType( std::u16string_view rProperty )
 {
-    if ( rProperty == "Direction" )
+    if ( rProperty == u"Direction" )
         return nPropertyTypeDirection;
 
-    if ( rProperty == "Spokes" )
+    if ( rProperty == u"Spokes" )
         return nPropertyTypeSpokes;
 
-    if ( rProperty == "Zoom" )
+    if ( rProperty == u"Zoom" )
         return nPropertyTypeZoom;
 
-    if ( rProperty == "Accelerate" )
+    if ( rProperty == u"Accelerate" )
         return nPropertyTypeAccelerate;
 
-    if ( rProperty == "Decelerate" )
+    if ( rProperty == u"Decelerate" )
         return nPropertyTypeDecelerate;
 
-    if ( rProperty == "Color1" )
+    if ( rProperty == u"Color1" )
         return nPropertyTypeFirstColor;
 
-    if ( rProperty == "Color2" )
+    if ( rProperty == u"Color2" )
         return nPropertyTypeSecondColor;
 
-    if ( rProperty == "FillColor" )
+    if ( rProperty == u"FillColor" )
         return nPropertyTypeFillColor;
 
-    if ( rProperty == "ColorStyle" )
+    if ( rProperty == u"ColorStyle" )
         return nPropertyTypeColorStyle;
 
-    if ( rProperty == "AutoReverse" )
+    if ( rProperty == u"AutoReverse" )
         return nPropertyTypeAutoReverse;
 
-    if ( rProperty == "FontStyle" )
+    if ( rProperty == u"FontStyle" )
         return nPropertyTypeFont;
 
-    if ( rProperty == "CharColor" )
+    if ( rProperty == u"CharColor" )
         return nPropertyTypeCharColor;
 
-    if ( rProperty == "CharHeight" )
+    if ( rProperty == u"CharHeight" )
         return nPropertyTypeCharHeight;
 
-    if ( rProperty == "CharDecoration" )
+    if ( rProperty == u"CharDecoration" )
         return nPropertyTypeCharDecoration;
 
-    if ( rProperty == "LineColor" )
+    if ( rProperty == u"LineColor" )
         return nPropertyTypeLineColor;
 
-    if ( rProperty == "Rotate" )
+    if ( rProperty == u"Rotate" )
         return nPropertyTypeRotate;
 
-    if ( rProperty == "Transparency" )
+    if ( rProperty == u"Transparency" )
         return nPropertyTypeTransparency;
 
-    if ( rProperty == "Color" )
+    if ( rProperty == u"Color" )
         return nPropertyTypeColor;
 
-    if ( rProperty == "Scale" )
+    if ( rProperty == u"Scale" )
         return nPropertyTypeScale;
 
     return nPropertyTypeNone;

@@ -101,7 +101,7 @@ void SvxPresetListBox::FillPresetListBox(XPatternList& pList, sal_uInt32 nStartI
     FillPresetListBoxImpl<XPatternList, XBitmapEntry>(pList, nStartIndex);
 }
 
-void SvxPresetListBox::OnMenuItemSelected(const OString& rIdent)
+void SvxPresetListBox::OnMenuItemSelected(std::string_view rIdent)
 {
     if (rIdent == "rename")
         maRenameHdl.Call(this);

@@ -125,14 +125,14 @@ SvXMLEnumMapEntry<lcl_MarkType> const lcl_aMarkTypeMap[] =
 };
 
 
-static const char *lcl_getFormFieldmarkName(OUString const &name)
+static const sal_Unicode *lcl_getFormFieldmarkName(std::u16string_view name)
 {
     if (name == ODF_FORMCHECKBOX ||
-        name == "msoffice.field.FORMCHECKBOX" ||
-        name == "ecma.office-open-xml.field.FORMCHECKBOX")
+        name == u"msoffice.field.FORMCHECKBOX" ||
+        name == u"ecma.office-open-xml.field.FORMCHECKBOX")
         return ODF_FORMCHECKBOX;
     else if (name == ODF_FORMDROPDOWN ||
-             name == "ecma.office-open-xml.field.FORMDROPDOWN")
+             name == u"ecma.office-open-xml.field.FORMDROPDOWN")
         return ODF_FORMDROPDOWN;
     else
         return nullptr;
@@ -279,7 +279,7 @@ void XMLTextMarkImportContext::endFastElement(sal_Int32 )
             [[fallthrough]];
         case TypeFieldmark:
             {
-                const char *formFieldmarkName=lcl_getFormFieldmarkName(m_sFieldName);
+                const sal_Unicode *formFieldmarkName=lcl_getFormFieldmarkName(m_sFieldName);
                 bool bImportAsField = (nTmp==TypeFieldmark && formFieldmarkName!=nullptr); //@TODO handle abbreviation cases...
                 // export point bookmark
                 const Reference<XInterface> xContent(
@@ -292,7 +292,7 @@ void XMLTextMarkImportContext::endFastElement(sal_Int32 )
                     if (xContent.is() && bImportAsField) {
                         // setup fieldmark...
                         Reference< css::text::XFormField> xFormField(xContent, UNO_QUERY);
-                        xFormField->setFieldType(OUString::createFromAscii(formFieldmarkName));
+                        xFormField->setFieldType(OUString(formFieldmarkName));
                         if (xFormField.is() && m_rHelper.hasCurrentFieldCtx()) {
                             m_rHelper.setCurrentFieldParamsTo(xFormField);
                         }

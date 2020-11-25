@@ -201,7 +201,7 @@ public:
     static enum ::xmloff::token::XMLTokenEnum MapReferenceSource(sal_Int16 nType);
     static enum ::xmloff::token::XMLTokenEnum MapReferenceType(sal_Int16 nType);
     static enum ::xmloff::token::XMLTokenEnum MapCountFieldName(FieldIdEnum nToken);
-    static enum ::xmloff::token::XMLTokenEnum MapBibliographyFieldName(const OUString& sName);
+    static enum ::xmloff::token::XMLTokenEnum MapBibliographyFieldName(std::u16string_view sName);
     static enum ::xmloff::token::XMLTokenEnum MapMeasureKind(sal_Int16 nKind);
     static enum ::xmloff::token::XMLTokenEnum MapPageNumberName(const css::uno::Reference< css::beans::XPropertySet> & xPropSet,
                       sal_Int32& nOffset);  /// also adjust page offset

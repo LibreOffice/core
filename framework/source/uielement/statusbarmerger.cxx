@@ -209,11 +209,11 @@ bool StatusbarMerger::ProcessMergeFallback(
     StatusBar* pStatusbar,
     sal_uInt16& rItemId,
     const OUString& rMergeCommand,
-    const OUString& rMergeFallback,
+    std::u16string_view rMergeFallback,
     const AddonStatusbarItemContainer& rItems )
 {
     // fallback IGNORE or REPLACE/REMOVE item not found
-    if (( rMergeFallback == "Ignore" ) ||
+    if (( rMergeFallback == u"Ignore" ) ||
             ( rMergeCommand == MERGECOMMAND_REPLACE ) ||
             ( rMergeCommand == MERGECOMMAND_REMOVE  ) )
     {
@@ -222,9 +222,9 @@ bool StatusbarMerger::ProcessMergeFallback(
     else if (( rMergeCommand == MERGECOMMAND_ADDBEFORE ) ||
              ( rMergeCommand == MERGECOMMAND_ADDAFTER ) )
     {
-        if ( rMergeFallback == "AddFirst" )
+        if ( rMergeFallback == u"AddFirst" )
             return lcl_MergeItems( pStatusbar, 0, 0, rItemId, rItems );
-        else if ( rMergeFallback == "AddLast" )
+        else if ( rMergeFallback == u"AddLast" )
             return lcl_MergeItems( pStatusbar, STATUSBAR_APPEND, 0, rItemId, rItems );
     }
 

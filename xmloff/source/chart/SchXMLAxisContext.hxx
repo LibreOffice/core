@@ -49,8 +49,8 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     static void CorrectAxisPositions( const css::uno::Reference< css::chart2::XChartDocument >& xNewDoc,
-                          const OUString& rChartTypeServiceName,
-                          const OUString& rODFVersionOfFile,
+                          std::u16string_view rChartTypeServiceName,
+                          std::u16string_view rODFVersionOfFile,
                           bool bAxisPositionAttributeImported );
 
 private:

@@ -110,16 +110,16 @@ namespace sfx2
 
 namespace
 {
-    bool lclSupportsOOXMLEncryption(const OUString& aFilterName)
+    bool lclSupportsOOXMLEncryption(std::u16string_view aFilterName)
     {
-        return  aFilterName == "Calc MS Excel 2007 XML"
-                ||  aFilterName == "MS Word 2007 XML"
-                ||  aFilterName == "Impress MS PowerPoint 2007 XML"
-                ||  aFilterName == "Impress MS PowerPoint 2007 XML AutoPlay"
-                ||  aFilterName == "Calc Office Open XML"
-                ||  aFilterName == "Impress Office Open XML"
-                ||  aFilterName == "Impress Office Open XML AutoPlay"
-                ||  aFilterName == "Office Open XML Text";
+        return  aFilterName == u"Calc MS Excel 2007 XML"
+                ||  aFilterName == u"MS Word 2007 XML"
+                ||  aFilterName == u"Impress MS PowerPoint 2007 XML"
+                ||  aFilterName == u"Impress MS PowerPoint 2007 XML AutoPlay"
+                ||  aFilterName == u"Calc Office Open XML"
+                ||  aFilterName == u"Impress Office Open XML"
+                ||  aFilterName == u"Impress Office Open XML AutoPlay"
+                ||  aFilterName == u"Office Open XML Text";
     }
 }
 
