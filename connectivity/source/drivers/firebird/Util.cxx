@@ -94,17 +94,17 @@ static sal_Int32 lcl_getNumberType( short aType, NumberSubType aSubType )
             }
     }
 }
-static sal_Int32 lcl_getCharColumnType( short aType, const OUString& sCharset )
+static sal_Int32 lcl_getCharColumnType( short aType, std::u16string_view sCharset )
 {
     switch(aType)
     {
         case SQL_TEXT:
-            if( sCharset == "OCTETS")
+            if( sCharset == u"OCTETS")
                 return DataType::BINARY;
             else
                 return DataType::CHAR;
         case SQL_VARYING:
-            if( sCharset == "OCTETS")
+            if( sCharset == u"OCTETS")
                 return DataType::VARBINARY;
             else
                 return DataType::VARCHAR;

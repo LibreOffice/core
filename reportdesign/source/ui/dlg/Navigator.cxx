@@ -242,7 +242,7 @@ NavigatorTree::~NavigatorTree()
 
 namespace
 {
-    sal_uInt16 mapIdent(const OString& rIdent)
+    sal_uInt16 mapIdent(std::string_view rIdent)
     {
         if (rIdent == "sorting")
             return SID_SORTINGANDGROUPING;

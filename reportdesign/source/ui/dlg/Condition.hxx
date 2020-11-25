@@ -141,7 +141,7 @@ namespace rptui
 
         ::rptui::OReportController& getController() const { return m_rController; }
 
-        static sal_uInt16 mapToolbarItemToSlotId(const OString& rItemId);
+        static sal_uInt16 mapToolbarItemToSlotId(std::string_view rItemId);
 
         css::uno::Reference<css::awt::XWindow> GetXWindow() const { return m_pDialog->GetXWindow(); }
 

@@ -427,19 +427,19 @@ void SfxInfoBarContainerWindow::removeInfoBar(VclPtr<SfxInfoBarWindow> const& pI
     m_pChildWin->Update();
 }
 
-bool SfxInfoBarContainerWindow::isInfobarEnabled(const OUString& sId)
+bool SfxInfoBarContainerWindow::isInfobarEnabled(std::u16string_view sId)
 {
-    if (sId == "readonly")
+    if (sId == u"readonly")
         return officecfg::Office::UI::Infobar::Enabled::Readonly::get();
-    if (sId == "signature")
+    if (sId == u"signature")
         return officecfg::Office::UI::Infobar::Enabled::Signature::get();
-    if (sId == "donate")
+    if (sId == u"donate")
         return officecfg::Office::UI::Infobar::Enabled::Donate::get();
-    if (sId == "getinvolved")
+    if (sId == u"getinvolved")
         return officecfg::Office::UI::Infobar::Enabled::GetInvolved::get();
-    if (sId == "hyphenationmissing")
+    if (sId == u"hyphenationmissing")
         return officecfg::Office::UI::Infobar::Enabled::HyphenationMissing::get();
-    if (sId == "whatsnew")
+    if (sId == u"whatsnew")
         return officecfg::Office::UI::Infobar::Enabled::WhatsNew::get();
 
     return true;

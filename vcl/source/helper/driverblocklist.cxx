@@ -23,7 +23,7 @@
 
 namespace DriverBlocklist
 {
-static OperatingSystem getOperatingSystem(const OString& rString)
+static OperatingSystem getOperatingSystem(std::string_view rString)
 {
     if (rString == "all")
         return DRIVER_OS_ALL;
@@ -54,7 +54,7 @@ static OperatingSystem getOperatingSystem(const OString& rString)
     return DRIVER_OS_UNKNOWN;
 }
 
-static VersionComparisonOp getComparison(const OString& rString)
+static VersionComparisonOp getComparison(std::string_view rString)
 {
     if (rString == "less")
     {

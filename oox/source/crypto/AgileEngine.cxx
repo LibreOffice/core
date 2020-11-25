@@ -195,15 +195,15 @@ const std::vector<sal_uInt8> constBlockHmac2 { 0xa0, 0x67, 0x7f, 0x02, 0xb2, 0x2
 
 bool hashCalc(std::vector<sal_uInt8>& output,
               std::vector<sal_uInt8>& input,
-              const OUString& sAlgorithm )
+              std::u16string_view sAlgorithm )
 {
-    if (sAlgorithm == "SHA1")
+    if (sAlgorithm == u"SHA1")
     {
         std::vector<unsigned char> out = comphelper::Hash::calculateHash(input.data(), input.size(), comphelper::HashType::SHA1);
         output = out;
         return true;
     }
-    else if (sAlgorithm == "SHA512")
+    else if (sAlgorithm == u"SHA512")
     {
         std::vector<unsigned char> out = comphelper::Hash::calculateHash(input.data(), input.size(), comphelper::HashType::SHA512);
         output = out;
@@ -212,9 +212,9 @@ bool hashCalc(std::vector<sal_uInt8>& output,
     return false;
 }
 
-CryptoHashType cryptoHashTypeFromString(OUString const & sAlgorithm)
+CryptoHashType cryptoHashTypeFromString(std::u16string_view sAlgorithm)
 {
-    if (sAlgorithm == "SHA512")
+    if (sAlgorithm == u"SHA512")
         return CryptoHashType::SHA512;
     return CryptoHashType::SHA1;
 }

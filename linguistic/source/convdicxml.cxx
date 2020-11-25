@@ -44,8 +44,8 @@ using namespace linguistic;
 
 
 #define XML_NAMESPACE_TCD_STRING        "http://openoffice.org/2003/text-conversion-dictionary"
-#define CONV_TYPE_HANGUL_HANJA          "Hangul / Hanja"
-#define CONV_TYPE_SCHINESE_TCHINESE     "Chinese simplified / Chinese traditional"
+#define CONV_TYPE_HANGUL_HANJA          u"Hangul / Hanja"
+#define CONV_TYPE_SCHINESE_TCHINESE     u"Chinese simplified / Chinese traditional"
 
 
 static OUString ConversionTypeToText( sal_Int16 nConversionType )
@@ -58,7 +58,7 @@ static OUString ConversionTypeToText( sal_Int16 nConversionType )
     return aRes;
 }
 
-static sal_Int16 GetConversionTypeFromText( const OUString &rText )
+static sal_Int16 GetConversionTypeFromText( std::u16string_view rText )
 {
     sal_Int16 nRes = -1;
     if (rText == CONV_TYPE_HANGUL_HANJA)

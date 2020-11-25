@@ -95,9 +95,9 @@ int getSettingValueInteger(OString const& rValue, int nDefault)
     return rValue.toInt32();
 }
 
-bool getSettingValueBool(OString const& rValue, bool bDefault)
+bool getSettingValueBool(std::string_view rValue, bool bDefault)
 {
-    if (rValue.isEmpty())
+    if (rValue.empty())
         return bDefault;
     if (rValue == "true" || rValue == "false")
         return rValue == "true";

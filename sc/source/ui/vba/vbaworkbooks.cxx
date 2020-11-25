@@ -151,14 +151,14 @@ ScVbaWorkbooks::Close()
 }
 
 bool
-ScVbaWorkbooks::isTextFile( const OUString& sType )
+ScVbaWorkbooks::isTextFile( std::u16string_view sType )
 {
     // will return true if the file is
     // a) a variant of a text file
     // b) a csv file
     // c) unknown
     // returning true basically means treat this like a csv file
-    return sType == "generic_Text" || sType.isEmpty();
+    return sType == u"generic_Text" || sType.empty();
 }
 
 bool

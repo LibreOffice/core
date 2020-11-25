@@ -1238,9 +1238,9 @@ bool CustomAnimationEffect::setProperty( sal_Int32 nNodeType, std::u16string_vie
     return bChanged;
 }
 
-static bool implIsColorAttribute( const OUString& rAttributeName )
+static bool implIsColorAttribute( std::u16string_view rAttributeName )
 {
-    return rAttributeName == "FillColor" || rAttributeName == "LineColor" || rAttributeName == "CharColor";
+    return rAttributeName == u"FillColor" || rAttributeName == u"LineColor" || rAttributeName == u"CharColor";
 }
 
 Any CustomAnimationEffect::getColor( sal_Int32 nIndex )

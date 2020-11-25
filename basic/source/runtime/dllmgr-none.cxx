@@ -73,14 +73,14 @@ ErrCode returnInt64InOutArg(SbxArray *pArgs, SbxVariable &rRetVal,
     return ERRCODE_BASIC_BAD_ARGUMENT;
 }
 
-ErrCode builtin_kernel32(const OUString &aFuncName, SbxArray *pArgs,
+ErrCode builtin_kernel32(std::u16string_view aFuncName, SbxArray *pArgs,
                          SbxVariable &rRetVal)
 {
     sal_Int64 nNanoSecsPerSec = 1000.0*1000*1000;
-    if (aFuncName == "QueryPerformanceFrequency")
+    if (aFuncName == u"QueryPerformanceFrequency")
         return returnInt64InOutArg(pArgs, rRetVal, nNanoSecsPerSec);
 
-    else if (aFuncName == "QueryPerformanceCounter")
+    else if (aFuncName == u"QueryPerformanceCounter")
     {
         TimeValue aNow;
         osl_getSystemTime( &aNow );
@@ -93,11 +93,11 @@ ErrCode builtin_kernel32(const OUString &aFuncName, SbxArray *pArgs,
 };
 
 ErrCode SbiDllMgr::Call(
-    const OUString &aFuncName, const OUString &aDllName,
+    std::u16string_view aFuncName, std::u16string_view aDllName,
     SbxArray *pArgs, SbxVariable &rRetVal,
     SAL_UNUSED_PARAMETER bool /* bCDecl */)
 {
-    if (aDllName == "kernel32")
+    if (aDllName == u"kernel32")
         return builtin_kernel32(aFuncName, pArgs, rRetVal);
     else
         return ERRCODE_BASIC_NOT_IMPLEMENTED;

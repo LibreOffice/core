@@ -67,26 +67,26 @@
 
 using namespace ::com::sun::star;
 
-static sal_Int16 GetFilterFormat(const OUString& rExt)
+static sal_Int16 GetFilterFormat(std::u16string_view rExt)
 {
     sal_Int16 nFormat = FORMAT_UNKNOWN;
-    if ( rExt == "JPG" )
+    if ( rExt == u"JPG" )
         nFormat = FORMAT_JPG;
-    else if ( rExt == "PNG" )
+    else if ( rExt == u"PNG" )
         nFormat = FORMAT_PNG;
-    else if ( rExt == "BMP" )
+    else if ( rExt == u"BMP" )
         nFormat = FORMAT_BMP;
-    else if ( rExt == "GIF" )
+    else if ( rExt == u"GIF" )
         nFormat = FORMAT_GIF;
-    else if ( rExt == "TIF" )
+    else if ( rExt == u"TIF" )
         nFormat = FORMAT_TIF;
-    else if ( rExt == "WMF" )
+    else if ( rExt == u"WMF" )
         nFormat = FORMAT_WMF;
-    else if ( rExt == "EMF" )
+    else if ( rExt == u"EMF" )
         nFormat = FORMAT_EMF;
-    else if ( rExt == "EPS" )
+    else if ( rExt == u"EPS" )
         nFormat = FORMAT_EPS;
-    else if ( rExt == "SVG" )
+    else if ( rExt == u"SVG" )
         nFormat = FORMAT_SVG;
     return nFormat;
 }

@@ -119,7 +119,7 @@ public:
     void doexport( const css::uno::Reference< css::drawing::XDrawPage >& xPage, SvStream& rStrm );
 
         // helper methods also used in ooxml export
-    static css::uno::Any convertAnimateValue( const css::uno::Any& rSource, const OUString& rAttributeName );
+    static css::uno::Any convertAnimateValue( const css::uno::Any& rSource, std::u16string_view rAttributeName );
         static bool GetNodeType( const css::uno::Reference< css::animations::XAnimationNode >& xNode, sal_Int16& nType );
         static sal_Int16 GetFillMode( const css::uno::Reference< css::animations::XAnimationNode >& xNode, const sal_Int16 nFillDefault );
         static void GetUserData( const css::uno::Sequence< css::beans::NamedValue >& rUserData, const css::uno::Any ** pAny, std::size_t nLen );

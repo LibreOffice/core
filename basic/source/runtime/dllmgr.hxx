@@ -36,7 +36,7 @@ public:
     ~SbiDllMgr();
 
     ErrCode Call(
-        OUString const & function, OUString const &  library,
+        std::u16string_view function, std::u16string_view library,
         SbxArray * arguments, SbxVariable & result, bool cdeclConvention);
 
     void FreeDll(OUString const & library);

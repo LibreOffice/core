@@ -435,38 +435,38 @@ static ::std::vector< double > lcl_getAllValuesFromSequence( const Reference< ch
     return aResult;
 }
 
-static sal_Int32 lcl_getChartType( const OUString& sChartType )
+static sal_Int32 lcl_getChartType( std::u16string_view sChartType )
 {
     chart::TypeId eChartTypeId = chart::TYPEID_UNKNOWN;
-    if( sChartType == "com.sun.star.chart.BarDiagram"
-        || sChartType == "com.sun.star.chart2.ColumnChartType" )
+    if( sChartType == u"com.sun.star.chart.BarDiagram"
+        || sChartType == u"com.sun.star.chart2.ColumnChartType" )
         eChartTypeId = chart::TYPEID_BAR;
-    else if( sChartType == "com.sun.star.chart.AreaDiagram"
-             || sChartType == "com.sun.star.chart2.AreaChartType" )
+    else if( sChartType == u"com.sun.star.chart.AreaDiagram"
+             || sChartType == u"com.sun.star.chart2.AreaChartType" )
         eChartTypeId = chart::TYPEID_AREA;
-    else if( sChartType == "com.sun.star.chart.LineDiagram"
-             || sChartType == "com.sun.star.chart2.LineChartType" )
+    else if( sChartType == u"com.sun.star.chart.LineDiagram"
+             || sChartType == u"com.sun.star.chart2.LineChartType" )
         eChartTypeId = chart::TYPEID_LINE;
-    else if( sChartType == "com.sun.star.chart.PieDiagram"
-             || sChartType == "com.sun.star.chart2.PieChartType" )
+    else if( sChartType == u"com.sun.star.chart.PieDiagram"
+             || sChartType == u"com.sun.star.chart2.PieChartType" )
         eChartTypeId = chart::TYPEID_PIE;
-    else if( sChartType == "com.sun.star.chart.DonutDiagram"
-             || sChartType == "com.sun.star.chart2.DonutChartType" )
+    else if( sChartType == u"com.sun.star.chart.DonutDiagram"
+             || sChartType == u"com.sun.star.chart2.DonutChartType" )
         eChartTypeId = chart::TYPEID_DOUGHNUT;
-    else if( sChartType == "com.sun.star.chart.XYDiagram"
-             || sChartType == "com.sun.star.chart2.ScatterChartType" )
+    else if( sChartType == u"com.sun.star.chart.XYDiagram"
+             || sChartType == u"com.sun.star.chart2.ScatterChartType" )
         eChartTypeId = chart::TYPEID_SCATTER;
-    else if( sChartType == "com.sun.star.chart.NetDiagram"
-             || sChartType == "com.sun.star.chart2.NetChartType" )
+    else if( sChartType == u"com.sun.star.chart.NetDiagram"
+             || sChartType == u"com.sun.star.chart2.NetChartType" )
         eChartTypeId = chart::TYPEID_RADARLINE;
-    else if( sChartType == "com.sun.star.chart.FilledNetDiagram"
-             || sChartType == "com.sun.star.chart2.FilledNetChartType" )
+    else if( sChartType == u"com.sun.star.chart.FilledNetDiagram"
+             || sChartType == u"com.sun.star.chart2.FilledNetChartType" )
         eChartTypeId = chart::TYPEID_RADARAREA;
-    else if( sChartType == "com.sun.star.chart.StockDiagram"
-             || sChartType == "com.sun.star.chart2.CandleStickChartType" )
+    else if( sChartType == u"com.sun.star.chart.StockDiagram"
+             || sChartType == u"com.sun.star.chart2.CandleStickChartType" )
         eChartTypeId = chart::TYPEID_STOCK;
-    else if( sChartType == "com.sun.star.chart.BubbleDiagram"
-             || sChartType == "com.sun.star.chart2.BubbleChartType" )
+    else if( sChartType == u"com.sun.star.chart.BubbleDiagram"
+             || sChartType == u"com.sun.star.chart2.BubbleChartType" )
         eChartTypeId = chart::TYPEID_BUBBLE;
 
     return eChartTypeId;

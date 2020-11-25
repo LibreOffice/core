@@ -97,49 +97,49 @@ bool lcl_isNullable(const OUString& sColumnDef) { return sColumnDef.indexOf("NOT
 
 bool lcl_isPrimaryKey(const OUString& sColumnDef) { return sColumnDef.indexOf("PRIMARY KEY") >= 0; }
 
-sal_Int32 lcl_getDataTypeFromHsql(const OUString& sTypeName)
+sal_Int32 lcl_getDataTypeFromHsql(std::u16string_view sTypeName)
 {
-    if (sTypeName == "CHAR")
+    if (sTypeName == u"CHAR")
         return DataType::CHAR;
-    else if (sTypeName == "VARCHAR" || sTypeName == "VARCHAR_IGNORECASE")
+    else if (sTypeName == u"VARCHAR" || sTypeName == u"VARCHAR_IGNORECASE")
         return DataType::VARCHAR;
-    else if (sTypeName == "TINYINT")
+    else if (sTypeName == u"TINYINT")
         return DataType::TINYINT;
-    else if (sTypeName == "SMALLINT")
+    else if (sTypeName == u"SMALLINT")
         return DataType::SMALLINT;
-    else if (sTypeName == "INTEGER")
+    else if (sTypeName == u"INTEGER")
         return DataType::INTEGER;
-    else if (sTypeName == "BIGINT")
+    else if (sTypeName == u"BIGINT")
         return DataType::BIGINT;
-    else if (sTypeName == "NUMERIC")
+    else if (sTypeName == u"NUMERIC")
         return DataType::NUMERIC;
-    else if (sTypeName == "DECIMAL")
+    else if (sTypeName == u"DECIMAL")
         return DataType::DECIMAL;
-    else if (sTypeName == "BOOLEAN")
+    else if (sTypeName == u"BOOLEAN")
         return DataType::BOOLEAN;
-    else if (sTypeName == "LONGVARCHAR")
+    else if (sTypeName == u"LONGVARCHAR")
         return DataType::LONGVARCHAR;
-    else if (sTypeName == "LONGVARBINARY")
+    else if (sTypeName == u"LONGVARBINARY")
         return DataType::LONGVARBINARY;
-    else if (sTypeName == "CLOB")
+    else if (sTypeName == u"CLOB")
         return DataType::CLOB;
-    else if (sTypeName == "BLOB")
+    else if (sTypeName == u"BLOB")
         return DataType::BLOB;
-    else if (sTypeName == "BINARY")
+    else if (sTypeName == u"BINARY")
         return DataType::BINARY;
-    else if (sTypeName == "VARBINARY")
+    else if (sTypeName == u"VARBINARY")
         return DataType::VARBINARY;
-    else if (sTypeName == "DATE")
+    else if (sTypeName == u"DATE")
         return DataType::DATE;
-    else if (sTypeName == "TIME")
+    else if (sTypeName == u"TIME")
         return DataType::TIME;
-    else if (sTypeName == "TIMESTAMP")
+    else if (sTypeName == u"TIMESTAMP")
         return DataType::TIMESTAMP;
-    else if (sTypeName == "DOUBLE")
+    else if (sTypeName == u"DOUBLE")
         return DataType::DOUBLE;
-    else if (sTypeName == "REAL")
+    else if (sTypeName == u"REAL")
         return DataType::REAL;
-    else if (sTypeName == "FLOAT")
+    else if (sTypeName == u"FLOAT")
         return DataType::FLOAT;
 
     assert(false);

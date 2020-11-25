@@ -128,7 +128,7 @@ Condition::Condition(weld::Container* pParent, weld::Window* pDialog, ICondition
     ConditionalExpressionFactory::getKnownConditionalExpressions( m_aConditionalExpressions );
 }
 
-sal_uInt16 Condition::mapToolbarItemToSlotId(const OString& rItemId)
+sal_uInt16 Condition::mapToolbarItemToSlotId(std::string_view rItemId)
 {
     if (rItemId == "bold")
         return SID_ATTR_CHAR_WEIGHT;

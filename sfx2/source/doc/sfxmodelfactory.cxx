@@ -57,9 +57,9 @@ namespace sfx2
     {
         struct IsSpecialArgument
         {
-            static bool isSpecialArgumentName( const OUString& _rValueName )
+            static bool isSpecialArgumentName( std::u16string_view _rValueName )
             {
-                return  _rValueName == "EmbeddedObject" || _rValueName == "EmbeddedScriptSupport" || _rValueName == "DocumentRecoverySupport";
+                return  _rValueName == u"EmbeddedObject" || _rValueName == u"EmbeddedScriptSupport" || _rValueName == u"DocumentRecoverySupport";
             }
 
             bool operator()( const Any& _rArgument ) const

@@ -449,9 +449,9 @@ namespace oox::ppt {
         }
     }
 
-    void SlideTransition::setPresetTransition(OUString const & sPresetTransition)
+    void SlideTransition::setPresetTransition(std::u16string_view sPresetTransition)
     {
-        if (sPresetTransition == "fallOver")
+        if (sPresetTransition == u"fallOver")
         {
             mnTransitionType = TransitionType::MISCSHAPEWIPE;
             mnTransitionSubType = TransitionSubType::LEFTTORIGHT;

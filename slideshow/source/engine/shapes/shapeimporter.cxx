@@ -198,16 +198,16 @@ bool ShapeOfGroup::isBackgroundDetached() const
 ShapeSharedPtr ShapeImporter::createShape(
     uno::Reference<drawing::XShape> const& xCurrShape,
     uno::Reference<beans::XPropertySet> const& xPropSet,
-    OUString const& shapeType ) const
+    std::u16string_view shapeType ) const
 {
-    if( shapeType == "com.sun.star.drawing.MediaShape" || shapeType == "com.sun.star.presentation.MediaShape" )
+    if( shapeType == u"com.sun.star.drawing.MediaShape" || shapeType == u"com.sun.star.presentation.MediaShape" )
     {
         // Media shape (video etc.). This is a special object
         return createMediaShape(xCurrShape,
                                 mnAscendingPrio,
                                 mrContext);
     }
-    else if( shapeType == "com.sun.star.drawing.AppletShape" )
+    else if( shapeType == u"com.sun.star.drawing.AppletShape" )
     {
         // PropertyValues to copy from XShape to applet
         static const char* aPropertyValues[] =
@@ -227,7 +227,7 @@ ShapeSharedPtr ShapeImporter::createShape(
                                   SAL_N_ELEMENTS(aPropertyValues),
                                   mrContext );
     }
-    else if( shapeType == "com.sun.star.drawing.OLE2Shape" || shapeType == "com.sun.star.presentation.OLE2Shape" )
+    else if( shapeType == u"com.sun.star.drawing.OLE2Shape" || shapeType == u"com.sun.star.presentation.OLE2Shape" )
     {
         // #i46224# Mark OLE shapes as foreign content - scan them for
         // unsupported actions, and fallback to bitmap, if necessary
@@ -237,7 +237,7 @@ ShapeSharedPtr ShapeImporter::createShape(
                                   true,
                                   mrContext );
     }
-    else if( shapeType == "com.sun.star.drawing.GraphicObjectShape" || shapeType == "com.sun.star.presentation.GraphicObjectShape" )
+    else if( shapeType == u"com.sun.star.drawing.GraphicObjectShape" || shapeType == u"com.sun.star.presentation.GraphicObjectShape" )
     {
         // to get hold of GIF animations, inspect Graphic
         // objects more thoroughly (the plain-jane shape
@@ -335,7 +335,7 @@ ShapeSharedPtr ShapeImporter::createShape(
 
 bool ShapeImporter::isSkip(
     uno::Reference<beans::XPropertySet> const& xPropSet,
-    OUString const& shapeType,
+    std::u16string_view shapeType,
     uno::Reference< drawing::XLayer> const& xLayer )
 {
     // skip empty presentation objects:
@@ -370,7 +370,7 @@ bool ShapeImporter::isSkip(
     // they can be non empty when user edits the default texts
     if(mbConvertingMasterPage)
     {
-        if( shapeType == "com.sun.star.presentation.TitleTextShape" || shapeType == "com.sun.star.presentation.OutlinerShape" )
+        if( shapeType == u"com.sun.star.presentation.TitleTextShape" || shapeType == u"com.sun.star.presentation.OutlinerShape" )
         {
             return true;
         }

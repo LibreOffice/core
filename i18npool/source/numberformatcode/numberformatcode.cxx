@@ -175,13 +175,13 @@ NumberFormatCodeMapper::mapElementTypeShortToString(sal_Int16 formatType)
 }
 
 sal_Int16
-NumberFormatCodeMapper::mapElementTypeStringToShort(const OUString& formatType)
+NumberFormatCodeMapper::mapElementTypeStringToShort(std::u16string_view formatType)
 {
-    if ( formatType == "short" )
+    if ( formatType == u"short" )
         return css::i18n::KNumberFormatType::SHORT;
-    if ( formatType == "medium" )
+    if ( formatType == u"medium" )
         return css::i18n::KNumberFormatType::MEDIUM;
-    if ( formatType == "long" )
+    if ( formatType == u"long" )
         return css::i18n::KNumberFormatType::LONG;
 
     return css::i18n::KNumberFormatType::SHORT;
@@ -214,23 +214,23 @@ NumberFormatCodeMapper::mapElementUsageShortToString(sal_Int16 formatUsage)
 
 
 sal_Int16
-NumberFormatCodeMapper::mapElementUsageStringToShort(const OUString& formatUsage)
+NumberFormatCodeMapper::mapElementUsageStringToShort(std::u16string_view formatUsage)
 {
-    if ( formatUsage == "DATE" )
+    if ( formatUsage == u"DATE" )
         return css::i18n::KNumberFormatUsage::DATE;
-    if ( formatUsage == "TIME" )
+    if ( formatUsage == u"TIME" )
         return css::i18n::KNumberFormatUsage::TIME;
-    if ( formatUsage == "DATE_TIME" )
+    if ( formatUsage == u"DATE_TIME" )
         return css::i18n::KNumberFormatUsage::DATE_TIME;
-    if ( formatUsage == "FIXED_NUMBER" )
+    if ( formatUsage == u"FIXED_NUMBER" )
         return css::i18n::KNumberFormatUsage::FIXED_NUMBER;
-    if ( formatUsage == "FRACTION_NUMBER" )
+    if ( formatUsage == u"FRACTION_NUMBER" )
         return css::i18n::KNumberFormatUsage::FRACTION_NUMBER;
-    if ( formatUsage == "PERCENT_NUMBER" )
+    if ( formatUsage == u"PERCENT_NUMBER" )
         return  css::i18n::KNumberFormatUsage::PERCENT_NUMBER;
-    if ( formatUsage == "CURRENCY" )
+    if ( formatUsage == u"CURRENCY" )
         return css::i18n::KNumberFormatUsage::CURRENCY;
-    if ( formatUsage == "SCIENTIFIC_NUMBER" )
+    if ( formatUsage == u"SCIENTIFIC_NUMBER" )
         return css::i18n::KNumberFormatUsage::SCIENTIFIC_NUMBER;
 
     return 0;

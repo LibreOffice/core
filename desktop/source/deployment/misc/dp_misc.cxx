@@ -195,16 +195,16 @@ bool compareExtensionFolderWithLastSynchronizedFile(
     return bNeedsSync;
 }
 
-bool needToSyncRepository(OUString const & name)
+bool needToSyncRepository(std::u16string_view name)
 {
     OUString folder;
     OUString file;
-    if ( name == "bundled" )
+    if ( name == u"bundled" )
     {
         folder = "$BUNDLED_EXTENSIONS";
         file = "$BUNDLED_EXTENSIONS_USER/lastsynchronized";
     }
-    else if ( name == "shared" )
+    else if ( name == u"shared" )
     {
         folder = "$UNO_SHARED_PACKAGES_CACHE/uno_packages";
         file = "$SHARED_EXTENSIONS_USER/lastsynchronized";
@@ -502,7 +502,7 @@ void syncRepositories(
     //synchronize shared before bundled otherwise there are
     //more revoke and registration calls.
     bool bModified = false;
-    if (force || needToSyncRepository("shared") || needToSyncRepository("bundled"))
+    if (force || needToSyncRepository(u"shared") || needToSyncRepository(u"bundled"))
     {
         xExtensionManager =
             deployment::ExtensionManager::get(

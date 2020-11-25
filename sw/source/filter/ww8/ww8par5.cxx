@@ -2233,18 +2233,18 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
 //helper function
 //For MS MacroButton field, the symbol in plain text is always "(" (0x28),
 //which should be mapped according to the macro type
-static bool ConvertMacroSymbol( const OUString& rName, OUString& rReference )
+static bool ConvertMacroSymbol( std::u16string_view rName, OUString& rReference )
 {
     bool bConverted = false;
     if( rReference == "(" )
     {
         bConverted = true;
         sal_Unicode cSymbol = sal_Unicode(); // silence false warning
-        if (rName == "CheckIt")
+        if (rName == u"CheckIt")
             cSymbol = 0xF06F;
-        else if (rName == "UncheckIt")
+        else if (rName == u"UncheckIt")
             cSymbol = 0xF0FE;
-        else if (rName == "ShowExample")
+        else if (rName == u"ShowExample")
             cSymbol = 0xF02A;
         //else if... : todo
         else

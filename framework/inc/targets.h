@@ -24,13 +24,13 @@ namespace framework{
 
 //  Values for special frame search ... sTargetFrameName of findFrame() or queryDispatch() or loadComponentFromURL()
 
-#define SPECIALTARGET_SELF            "_self"                             // The frame himself is searched.
-#define SPECIALTARGET_PARENT          "_parent"                           // The direct parent frame is searched.
-#define SPECIALTARGET_TOP             "_top"                              // Search at our parents for the first task (if any exist) or a frame without a parent.
-#define SPECIALTARGET_BLANK           "_blank"                            // Create a new task.
-#define SPECIALTARGET_DEFAULT         "_default"                          // Create a new task or recycle an existing one
+#define SPECIALTARGET_SELF            u"_self"                             // The frame himself is searched.
+#define SPECIALTARGET_PARENT          u"_parent"                           // The direct parent frame is searched.
+#define SPECIALTARGET_TOP             u"_top"                              // Search at our parents for the first task (if any exist) or a frame without a parent.
+#define SPECIALTARGET_BLANK           u"_blank"                            // Create a new task.
+#define SPECIALTARGET_DEFAULT         u"_default"                          // Create a new task or recycle an existing one
 #define SPECIALTARGET_BEAMER          u"_beamer"                           // special frame in hierarchy
-#define SPECIALTARGET_HELPTASK        "OFFICE_HELP_TASK"                  // special name for our help task
+#define SPECIALTARGET_HELPTASK        u"OFFICE_HELP_TASK"                  // special name for our help task
 
 }       //  namespace framework
 

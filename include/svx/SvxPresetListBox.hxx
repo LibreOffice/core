@@ -32,7 +32,7 @@ private:
     Link<SvxPresetListBox*,void> maRenameHdl;
     Link<SvxPresetListBox*,void> maDeleteHdl;
 
-    void OnMenuItemSelected(const OString& rIdent);
+    void OnMenuItemSelected(std::string_view rIdent);
 
     template< typename ListType, typename EntryType >
     void FillPresetListBoxImpl(ListType& pList, sal_uInt32 nStartIndex);

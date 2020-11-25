@@ -69,17 +69,17 @@
 
 #define PROPERTYCOUNT                       6
 
-#define FACTORYNAME_WRITER                  "com.sun.star.text.TextDocument"
-#define FACTORYNAME_WRITERWEB               "com.sun.star.text.WebDocument"
-#define FACTORYNAME_WRITERGLOBAL            "com.sun.star.text.GlobalDocument"
-#define FACTORYNAME_CALC                    "com.sun.star.sheet.SpreadsheetDocument"
-#define FACTORYNAME_DRAW                    "com.sun.star.drawing.DrawingDocument"
-#define FACTORYNAME_IMPRESS                 "com.sun.star.presentation.PresentationDocument"
-#define FACTORYNAME_MATH                    "com.sun.star.formula.FormulaProperties"
-#define FACTORYNAME_CHART                   "com.sun.star.chart2.ChartDocument"
-#define FACTORYNAME_DATABASE                "com.sun.star.sdb.OfficeDatabaseDocument"
-#define FACTORYNAME_STARTMODULE             "com.sun.star.frame.StartModule"
-#define FACTORYNAME_BASIC                   "com.sun.star.script.BasicIDE"
+#define FACTORYNAME_WRITER                  u"com.sun.star.text.TextDocument"
+#define FACTORYNAME_WRITERWEB               u"com.sun.star.text.WebDocument"
+#define FACTORYNAME_WRITERGLOBAL            u"com.sun.star.text.GlobalDocument"
+#define FACTORYNAME_CALC                    u"com.sun.star.sheet.SpreadsheetDocument"
+#define FACTORYNAME_DRAW                    u"com.sun.star.drawing.DrawingDocument"
+#define FACTORYNAME_IMPRESS                 u"com.sun.star.presentation.PresentationDocument"
+#define FACTORYNAME_MATH                    u"com.sun.star.formula.FormulaProperties"
+#define FACTORYNAME_CHART                   u"com.sun.star.chart2.ChartDocument"
+#define FACTORYNAME_DATABASE                u"com.sun.star.sdb.OfficeDatabaseDocument"
+#define FACTORYNAME_STARTMODULE             u"com.sun.star.frame.StartModule"
+#define FACTORYNAME_BASIC                   u"com.sun.star.script.BasicIDE"
 
 #define FACTORYCOUNT                        11
 
@@ -255,7 +255,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
         OUString const & GetFactoryDefaultFilter  (       SvtModuleOptions::EFactory    eFactory   ) const;
         bool            IsDefaultFilterReadonly(          SvtModuleOptions::EFactory eFactory      ) const;
         sal_Int32       GetFactoryIcon            (       SvtModuleOptions::EFactory    eFactory   ) const;
-        static bool     ClassifyFactoryByName     ( const OUString&              sName      ,
+        static bool     ClassifyFactoryByName     ( std::u16string_view sName      ,
                                                           SvtModuleOptions::EFactory&   eFactory   );
         void            SetFactoryStandardTemplate(       SvtModuleOptions::EFactory    eFactory   ,
                                                     const OUString&              sTemplate  );
@@ -590,7 +590,7 @@ css::uno::Sequence< OUString > SvtModuleOptions_Impl::impl_ExpandSetNames( const
     @onerror    We return false.
     @threadsafe no
 *//*-*************************************************************************************************************/
-bool SvtModuleOptions_Impl::ClassifyFactoryByName( const OUString& sName, SvtModuleOptions::EFactory& eFactory )
+bool SvtModuleOptions_Impl::ClassifyFactoryByName( std::u16string_view sName, SvtModuleOptions::EFactory& eFactory )
 {
     bool bState;
 
@@ -838,7 +838,7 @@ sal_Int32 SvtModuleOptions::GetFactoryIcon( EFactory eFactory ) const
     return m_pImpl->GetFactoryIcon( eFactory );
 }
 
-bool SvtModuleOptions::ClassifyFactoryByName( const OUString& sName    ,
+bool SvtModuleOptions::ClassifyFactoryByName( std::u16string_view sName    ,
                                                         EFactory&        eFactory )
 {
     // We don't need any mutex here ... because we don't use any member here!
@@ -966,7 +966,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByShortName(const OU
     return EFactory::UNKNOWN_FACTORY;
 }
 
-SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByServiceName(const OUString& sName)
+SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByServiceName(std::u16string_view sName)
 {
     if (sName == FACTORYNAME_WRITERGLOBAL)
         return EFactory::WRITERGLOBAL;

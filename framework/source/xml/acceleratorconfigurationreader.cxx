@@ -203,13 +203,13 @@ void SAL_CALL AcceleratorConfigurationReader::setDocumentLocator(const css::uno:
     m_xLocator = xLocator;
 }
 
-AcceleratorConfigurationReader::EXMLElement AcceleratorConfigurationReader::implst_classifyElement(const OUString& sElement)
+AcceleratorConfigurationReader::EXMLElement AcceleratorConfigurationReader::implst_classifyElement(std::u16string_view sElement)
 {
     AcceleratorConfigurationReader::EXMLElement eElement;
 
-    if (sElement == "http://openoffice.org/2001/accel^acceleratorlist")
+    if (sElement == u"http://openoffice.org/2001/accel^acceleratorlist")
         eElement = E_ELEMENT_ACCELERATORLIST;
-    else if (sElement == "http://openoffice.org/2001/accel^item")
+    else if (sElement == u"http://openoffice.org/2001/accel^item")
         eElement = E_ELEMENT_ITEM;
     else
         throw css::uno::RuntimeException(
@@ -219,21 +219,21 @@ AcceleratorConfigurationReader::EXMLElement AcceleratorConfigurationReader::impl
     return eElement;
 }
 
-AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::implst_classifyAttribute(const OUString& sAttribute)
+AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::implst_classifyAttribute(std::u16string_view sAttribute)
 {
     AcceleratorConfigurationReader::EXMLAttribute eAttribute;
 
-    if (sAttribute == "http://openoffice.org/2001/accel^code")
+    if (sAttribute == u"http://openoffice.org/2001/accel^code")
         eAttribute = E_ATTRIBUTE_KEYCODE;
-    else if (sAttribute == "http://openoffice.org/2001/accel^shift")
+    else if (sAttribute == u"http://openoffice.org/2001/accel^shift")
         eAttribute = E_ATTRIBUTE_MOD_SHIFT;
-    else if (sAttribute == "http://openoffice.org/2001/accel^mod1")
+    else if (sAttribute == u"http://openoffice.org/2001/accel^mod1")
         eAttribute = E_ATTRIBUTE_MOD_MOD1;
-    else if (sAttribute == "http://openoffice.org/2001/accel^mod2")
+    else if (sAttribute == u"http://openoffice.org/2001/accel^mod2")
         eAttribute = E_ATTRIBUTE_MOD_MOD2;
-    else if (sAttribute == "http://openoffice.org/2001/accel^mod3")
+    else if (sAttribute == u"http://openoffice.org/2001/accel^mod3")
         eAttribute = E_ATTRIBUTE_MOD_MOD3;
-    else if (sAttribute == "http://www.w3.org/1999/xlink^href")
+    else if (sAttribute == u"http://www.w3.org/1999/xlink^href")
         eAttribute = E_ATTRIBUTE_URL;
     else
         throw css::uno::RuntimeException(

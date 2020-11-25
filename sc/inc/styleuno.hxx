@@ -58,7 +58,7 @@ private:
 
     ScStyleFamilyObj*       GetObjectByType_Impl(SfxStyleFamily nType) const;
     ScStyleFamilyObj*       GetObjectByIndex_Impl(sal_uInt32 nIndex) const;
-    ScStyleFamilyObj*       GetObjectByName_Impl(const OUString& aName) const;
+    ScStyleFamilyObj*       GetObjectByName_Impl(std::u16string_view aName) const;
 
 public:
                             ScStyleFamiliesObj(ScDocShell* pDocSh);

@@ -97,7 +97,7 @@ struct PluginMutex: public ::rtl::Static<osl::Mutex, PluginMutex> {};
 
 #if defined(UNX) && !defined(ANDROID)
 OString getPluginJarPath(
-    const OUString & sVendor,
+    std::u16string_view sVendor,
     const OUString& sLocation,
     const OUString& sVersion)
 {
@@ -105,7 +105,7 @@ OString getPluginJarPath(
     OUString sName1("javaplugin.jar");
     OUString sName2("plugin.jar");
     OUString sPath;
-    if ( sVendor == "Sun Microsystems Inc." )
+    if ( sVendor == u"Sun Microsystems Inc." )
     {
         SunVersion ver142("1.4.2-ea");
         SunVersion ver150("1.5.0-ea");
