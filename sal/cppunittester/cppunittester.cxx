@@ -370,7 +370,7 @@ void reportResourceUsage(const OUString& rPath)
     resource_file << "KernelSpace = " << nKernelSpace << std::endl;
 }
 #else
-void reportResourceUsage(const OUString& /*rPath*/)
+void reportResourceUsage([[maybe_unused]] const OUString& /*rPath*/)
 {
 }
 #endif
