@@ -24,6 +24,7 @@
 #include <comphelper/DirectoryHelper.hxx>
 #include <comphelper/hash.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/tempfile.hxx>
 
 #include <impgraph.hxx>
 
@@ -48,6 +49,7 @@ private:
     void testUnloadedGraphicSizeUnit();
     void testSwapping();
     void testSwappingVectorGraphic();
+    void testWMFRoundtrip();
 
     CPPUNIT_TEST_SUITE(GraphicTest);
     CPPUNIT_TEST(testUnloadedGraphic);
@@ -57,6 +59,7 @@ private:
     CPPUNIT_TEST(testUnloadedGraphicSizeUnit);
     CPPUNIT_TEST(testSwapping);
     CPPUNIT_TEST(testSwappingVectorGraphic);
+    CPPUNIT_TEST(testWMFRoundtrip);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -424,6 +427,33 @@ void GraphicTest::testSwappingVectorGraphic()
 
     // File shouldn't be available anymore
     CPPUNIT_ASSERT_EQUAL(false, comphelper::DirectoryHelper::fileExists(rSwapFileURL));
+}
+
+void GraphicTest::testWMFRoundtrip()
+{
+    // Load a WMF file.
+    test::Directories aDirectories;
+    OUString aURL = aDirectories.getURLFromSrc("vcl/qa/cppunit/data/roundtrip.wmf");
+    SvFileStream aStream(aURL, StreamMode::READ);
+    sal_uInt64 nExpectedSize = aStream.TellEnd();
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+
+    // Save as WMF.
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    sal_uInt16 nFormat = rGraphicFilter.GetExportFormatNumberForShortName(u"WMF");
+    SvStream& rOutStream = *aTempFile.GetStream(StreamMode::READWRITE);
+    rGraphicFilter.ExportGraphic(aGraphic, OUString(), rOutStream, nFormat);
+
+    // Check if we preserved the WMF data perfectly.
+    sal_uInt64 nActualSize = rOutStream.TellEnd();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 6475
+    // - Actual  : 2826
+    // i.e. we lost some of the WMF data on roundtrip.
+    CPPUNIT_ASSERT_EQUAL(nExpectedSize, nActualSize);
 }
 
 } // namespace
