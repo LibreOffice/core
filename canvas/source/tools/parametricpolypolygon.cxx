@@ -41,7 +41,7 @@ namespace canvas
 
     ParametricPolyPolygon* ParametricPolyPolygon::create(
         const uno::Reference< rendering::XGraphicDevice >& rDevice,
-        const OUString& rServiceName,
+        std::u16string_view rServiceName,
         const uno::Sequence< uno::Any >& rArgs )
     {
         uno::Sequence< uno::Sequence< double > > colorSequence(2);
@@ -78,31 +78,31 @@ namespace canvas
             }
         }
 
-        if ( rServiceName == "LinearGradient" )
+        if ( rServiceName == u"LinearGradient" )
         {
             return createLinearHorizontalGradient(rDevice, colorSequence, colorStops);
         }
-        else if ( rServiceName == "EllipticalGradient" )
+        else if ( rServiceName == u"EllipticalGradient" )
         {
             return createEllipticalGradient(rDevice, colorSequence, colorStops, fAspectRatio);
         }
-        else if ( rServiceName == "RectangularGradient" )
+        else if ( rServiceName == u"RectangularGradient" )
         {
             return createRectangularGradient(rDevice, colorSequence, colorStops, fAspectRatio);
         }
-        else if ( rServiceName == "VerticalLineHatch" )
+        else if ( rServiceName == u"VerticalLineHatch" )
         {
             // TODO: NYI
         }
-        else if ( rServiceName == "OrthogonalLinesHatch" )
+        else if ( rServiceName == u"OrthogonalLinesHatch" )
         {
             // TODO: NYI
         }
-        else if ( rServiceName == "ThreeCrossingLinesHatch" )
+        else if ( rServiceName == u"ThreeCrossingLinesHatch" )
         {
             // TODO: NYI
         }
-        else if ( rServiceName == "FourCrossingLinesHatch" )
+        else if ( rServiceName == u"FourCrossingLinesHatch" )
         {
             // TODO: NYI
         }

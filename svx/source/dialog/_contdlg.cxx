@@ -456,7 +456,7 @@ IMPL_LINK(SvxSuperContourDlg, Tbx1ClickHdl, const OString&, rId, void)
     m_xContourWnd->QueueIdleUpdate();
 }
 
-void SvxSuperContourDlg::SetActiveTool(const OString& rId)
+void SvxSuperContourDlg::SetActiveTool(std::string_view rId)
 {
     m_xTbx1->set_item_active("TBI_SELECT", rId == "TBI_SELECT");
     m_xTbx1->set_item_active("TBI_RECT", rId == "TBI_RECT");
@@ -464,7 +464,7 @@ void SvxSuperContourDlg::SetActiveTool(const OString& rId)
     m_xTbx1->set_item_active("TBI_POLY", rId == "TBI_POLY");
 }
 
-void SvxSuperContourDlg::SetActivePoly(const OString& rId)
+void SvxSuperContourDlg::SetActivePoly(std::string_view rId)
 {
     m_xTbx1->set_item_active("TBI_POLYMOVE", rId == "TBI_POLYMOVE");
     m_xTbx1->set_item_active("TBI_POLYINSERT", rId == "TBI_POLYINSERT");

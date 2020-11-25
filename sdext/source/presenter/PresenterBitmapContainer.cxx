@@ -265,13 +265,13 @@ std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapConta
 }
 
 PresenterBitmapContainer::BitmapDescriptor::TexturingMode
-    PresenterBitmapContainer::StringToTexturingMode (const OUString& rsTexturingMode)
+    PresenterBitmapContainer::StringToTexturingMode (std::u16string_view rsTexturingMode)
 {
-    if (rsTexturingMode == "Once")
+    if (rsTexturingMode == u"Once")
         return PresenterBitmapContainer::BitmapDescriptor::Once;
-    else if (rsTexturingMode == "Repeat")
+    else if (rsTexturingMode == u"Repeat")
         return PresenterBitmapContainer::BitmapDescriptor::Repeat;
-    else if (rsTexturingMode == "Stretch")
+    else if (rsTexturingMode == u"Stretch")
         return PresenterBitmapContainer::BitmapDescriptor::Stretch;
     else
         return PresenterBitmapContainer::BitmapDescriptor::Once;

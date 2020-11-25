@@ -61,7 +61,7 @@ class TargetHelper
             @return It returns <TRUE/> if <var>sCheckTarget</var> represent
                     the expected <var>eSpecialTarget</var> value; <FALSE/> otherwise.
          */
-        static bool matchSpecialTarget(const OUString& sCheckTarget  ,
+        static bool matchSpecialTarget(std::u16string_view sCheckTarget  ,
                                                  ESpecialTarget   eSpecialTarget);
 
         /** @short  it checks, if the given name can be used

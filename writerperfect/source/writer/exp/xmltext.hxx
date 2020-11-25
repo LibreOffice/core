@@ -27,8 +27,8 @@ public:
 };
 
 /// Context factory for body text, section, table cell, etc.
-rtl::Reference<XMLImportContext> CreateTextChildContext(XMLImport& rImport, const OUString& rName,
-                                                        bool bTopLevel = false);
+rtl::Reference<XMLImportContext>
+CreateTextChildContext(XMLImport& rImport, std::u16string_view rName, bool bTopLevel = false);
 
 } // namespace writerperfect::exp
 

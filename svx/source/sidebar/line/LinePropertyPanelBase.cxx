@@ -47,9 +47,9 @@ public:
     {
     }
 
-    bool operator()(const OUString& rCommand, const css::uno::Any& rValue)
+    bool operator()(std::u16string_view rCommand, const css::uno::Any& rValue)
     {
-        if (rCommand == ".uno:XLineStyle")
+        if (rCommand == u".uno:XLineStyle")
         {
             css::drawing::LineStyle eLineStyle(css::drawing::LineStyle_NONE);
             rValue >>= eLineStyle;

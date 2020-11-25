@@ -1037,7 +1037,7 @@ IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
 
 namespace
 {
-    sal_uInt16 IdentToSID(const OString& rIdent)
+    sal_uInt16 IdentToSID(std::string_view rIdent)
     {
         if (rIdent == "reply")
             return SID_REPLYTO_POSTIT;

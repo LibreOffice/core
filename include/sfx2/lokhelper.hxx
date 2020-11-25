@@ -73,7 +73,7 @@ public:
     /// Get the device form factor that should be used for a new view.
     static LOKDeviceFormFactor getDeviceFormFactor();
     /// Set the device form factor that should be used for a new view.
-    static void setDeviceFormFactor(const OUString& rDeviceFormFactor);
+    static void setDeviceFormFactor(std::u16string_view rDeviceFormFactor);
 
     /// Iterate over any view shell, except pThisViewShell, passing it to the f function.
     template<typename ViewShellType, typename FunctionType>

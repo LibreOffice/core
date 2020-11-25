@@ -62,8 +62,8 @@ sal_Unicode lclGetXChar( const sal_Unicode*& rpcStr, const sal_Unicode* pcEnd )
 
 } // namespace
 
-#define STRING_TO_TOKEN(color) if (sColorName == #color) return XML_##color
-sal_Int32 getHighlightColorTokenFromString(const OUString& sColorName)
+#define STRING_TO_TOKEN(color) if (sColorName == u"" #color) return XML_##color
+sal_Int32 getHighlightColorTokenFromString(std::u16string_view sColorName)
 {
     STRING_TO_TOKEN(black);
     STRING_TO_TOKEN(blue);

@@ -289,18 +289,18 @@ static sal_uInt16 lcl_GetPropMapIdForFieldType( SwFieldIds nWhich )
     return nId;
 }
 
-static sal_Int32 lcl_PropName2TokenPos(const OUString& rPropertyName)
+static sal_Int32 lcl_PropName2TokenPos(std::u16string_view rPropertyName)
 {
-    if (rPropertyName == UNO_NAME_DDE_COMMAND_TYPE)
+    if (rPropertyName == u"" UNO_NAME_DDE_COMMAND_TYPE)
         return 0;
 
-    if (rPropertyName == UNO_NAME_DDE_COMMAND_FILE)
+    if (rPropertyName == u"" UNO_NAME_DDE_COMMAND_FILE)
         return 1;
 
-    if (rPropertyName == UNO_NAME_DDE_COMMAND_ELEMENT)
+    if (rPropertyName == u"" UNO_NAME_DDE_COMMAND_ELEMENT)
         return 2;
 
-    if (rPropertyName == UNO_NAME_IS_AUTOMATIC_UPDATE)
+    if (rPropertyName == u"" UNO_NAME_IS_AUTOMATIC_UPDATE)
         return 3;
 
     return SAL_MAX_INT32;

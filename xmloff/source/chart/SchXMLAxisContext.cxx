@@ -671,12 +671,12 @@ Reference< chart2::XAxis > lcl_getAxis( const Reference< chart2::XCoordinateSyst
 } // anonymous namespace
 
 void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDocument >& xNewDoc,
-                          const OUString& rChartTypeServiceName,
-                          const OUString& rODFVersionOfFile,
+                          std::u16string_view rChartTypeServiceName,
+                          std::u16string_view rODFVersionOfFile,
                           bool bAxisPositionAttributeImported )
 {
-    if( !(rODFVersionOfFile.isEmpty() || rODFVersionOfFile == "1.0" || rODFVersionOfFile == "1.1"
-        || ( rODFVersionOfFile == "1.2" && !bAxisPositionAttributeImported )) )
+    if( !(rODFVersionOfFile.empty() || rODFVersionOfFile == u"1.0" || rODFVersionOfFile == u"1.1"
+        || ( rODFVersionOfFile == u"1.2" && !bAxisPositionAttributeImported )) )
         return;
 
     try
@@ -702,7 +702,7 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
                 if( xMainXAxisProp.is() && xMainYAxisProp.is() )
                 {
                     chart2::ScaleData aMainXScale = xMainXAxis->getScaleData();
-                    if( rChartTypeServiceName == "com.sun.star.chart2.ScatterChartType" )
+                    if( rChartTypeServiceName == u"com.sun.star.chart2.ScatterChartType" )
                     {
                         xMainYAxisProp->setPropertyValue("CrossoverPosition"
                                 , uno::makeAny( css::chart::ChartAxisPosition_VALUE) );

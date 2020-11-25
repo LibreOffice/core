@@ -29,28 +29,28 @@
 
 using namespace ::com::sun::star;
 
-bool ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION filter, const OUString &rExt)
+bool ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION filter, std::u16string_view rExt)
 {
-    bool bRet = rExt == "ott" || rExt == "stw" || rExt == "oth" || rExt == "dot" || rExt == "dotx" || rExt == "otm"
-          || rExt == "ots" || rExt == "stc" || rExt == "xlt" || rExt == "xltm" || rExt == "xltx"
-          || rExt == "otp" || rExt == "sti" || rExt == "pot" || rExt == "potm" || rExt == "potx"
-          || rExt == "otg" || rExt == "std";
+    bool bRet = rExt == u"ott" || rExt == u"stw" || rExt == u"oth" || rExt == u"dot" || rExt == u"dotx" || rExt == u"otm"
+          || rExt == u"ots" || rExt == u"stc" || rExt == u"xlt" || rExt == u"xltm" || rExt == u"xltx"
+          || rExt == u"otp" || rExt == u"sti" || rExt == u"pot" || rExt == u"potm" || rExt == u"potx"
+          || rExt == u"otg" || rExt == u"std";
 
     if (filter == FILTER_APPLICATION::WRITER)
     {
-        bRet = rExt == "ott" || rExt == "stw" || rExt == "oth" || rExt == "dot" || rExt == "dotx" || rExt == "otm";
+        bRet = rExt == u"ott" || rExt == u"stw" || rExt == u"oth" || rExt == u"dot" || rExt == u"dotx" || rExt == u"otm";
     }
     else if (filter == FILTER_APPLICATION::CALC)
     {
-        bRet = rExt == "ots" || rExt == "stc" || rExt == "xlt" || rExt == "xltm" || rExt == "xltx";
+        bRet = rExt == u"ots" || rExt == u"stc" || rExt == u"xlt" || rExt == u"xltm" || rExt == u"xltx";
     }
     else if (filter == FILTER_APPLICATION::IMPRESS)
     {
-        bRet = rExt == "otp" || rExt == "sti" || rExt == "pot" || rExt == "potm" || rExt == "potx";
+        bRet = rExt == u"otp" || rExt == u"sti" || rExt == u"pot" || rExt == u"potm" || rExt == u"potx";
     }
     else if (filter == FILTER_APPLICATION::DRAW)
     {
-        bRet = rExt == "otg" || rExt == "std";
+        bRet = rExt == u"otg" || rExt == u"std";
     }
 
     return bRet;
@@ -220,7 +220,7 @@ void TemplateLocalView::createContextMenu(const bool bIsDefault)
     Invalidate();
 }
 
-void TemplateLocalView::ContextMenuSelectHdl(const OString& rIdent)
+void TemplateLocalView::ContextMenuSelectHdl(std::string_view  rIdent)
 {
     if (rIdent == "open")
         maOpenTemplateHdl.Call(maSelectedItem);

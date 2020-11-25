@@ -71,27 +71,27 @@ namespace
     const sal_Int32 gnWidthCloseThreshold (70);
     const sal_Int32 gnWidthOpenThreshold (40);
 
-    std::string UnoNameFromDeckId(const OUString& rsDeckId, bool isImpress = false)
+    std::string UnoNameFromDeckId(std::u16string_view rsDeckId, bool isImpress = false)
     {
-        if (rsDeckId == "SdCustomAnimationDeck")
+        if (rsDeckId == u"SdCustomAnimationDeck")
             return ".uno:CustomAnimation";
 
-        if (rsDeckId == "PropertyDeck")
+        if (rsDeckId == u"PropertyDeck")
             return isImpress ? ".uno:ModifyPage" : ".uno:Sidebar";
 
-        if (rsDeckId == "SdLayoutsDeck")
+        if (rsDeckId == u"SdLayoutsDeck")
             return ".uno:ModifyPage";
 
-        if (rsDeckId == "SdSlideTransitionDeck")
+        if (rsDeckId == u"SdSlideTransitionDeck")
             return ".uno:SlideChangeWindow";
 
-        if (rsDeckId == "SdAllMasterPagesDeck")
+        if (rsDeckId == u"SdAllMasterPagesDeck")
             return ".uno:MasterSlidesPanel";
 
-        if (rsDeckId == "SdMasterPagesDeck")
+        if (rsDeckId == u"SdMasterPagesDeck")
             return ".uno:MasterSlidesPanel";
 
-        if (rsDeckId == "GalleryDeck")
+        if (rsDeckId == u"GalleryDeck")
             return ".uno:Gallery";
 
         return "";

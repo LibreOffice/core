@@ -1367,17 +1367,17 @@ void Window::queue_resize(StateChangedType eReason)
 
 namespace
 {
-    VclAlign toAlign(const OUString &rValue)
+    VclAlign toAlign(std::u16string_view rValue)
     {
         VclAlign eRet = VclAlign::Fill;
 
-        if (rValue == "fill")
+        if (rValue == u"fill")
             eRet = VclAlign::Fill;
-        else if (rValue == "start")
+        else if (rValue == u"start")
             eRet = VclAlign::Start;
-        else if (rValue == "end")
+        else if (rValue == u"end")
             eRet = VclAlign::End;
-        else if (rValue == "center")
+        else if (rValue == u"center")
             eRet = VclAlign::Center;
         return eRet;
     }

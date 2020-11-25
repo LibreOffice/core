@@ -1093,11 +1093,11 @@ void SdXMLStylesContext::ImpSetCellStyles() const
 //master page shapes from resizing themselves due to autoheight becoming
 //enabled before having autoheight turned off again and getting stuck on that
 //autosized height
-static bool canSkipReset(const OUString &rName, const XMLPropStyleContext* pPropStyle,
+static bool canSkipReset(std::u16string_view rName, const XMLPropStyleContext* pPropStyle,
     const uno::Reference< beans::XPropertySet > &rPropSet, const rtl::Reference < XMLPropertySetMapper >& rPrMap)
 {
     bool bCanSkipReset = false;
-    if (pPropStyle && rName == "TextAutoGrowHeight")
+    if (pPropStyle && rName == u"TextAutoGrowHeight")
     {
         bool bOldStyleTextAutoGrowHeight(false);
         rPropSet->getPropertyValue("TextAutoGrowHeight") >>= bOldStyleTextAutoGrowHeight;

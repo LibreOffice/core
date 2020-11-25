@@ -214,7 +214,7 @@ public:
     void            SetOutlineLevel(sal_uInt8 nSet);
 
     /** Execute commands of the Navigator */
-    void            ExecCommand(const OString& rCmd, bool bModifier);
+    void            ExecCommand(std::string_view rCmd, bool bModifier);
 
     void            ShowTree();
     void            HideTree();
@@ -363,7 +363,7 @@ public:
 
     void MoveSelectionTo(const weld::TreeIter* pDropTarget);
 
-    void                TbxMenuHdl(const OString& rCommand, weld::Menu& rMenu);
+    void                TbxMenuHdl(std::string_view rCommand, weld::Menu& rMenu);
     void                InsertRegion( const SwGlblDocContent* pCont,
                                         const OUString* pFileName = nullptr );
     void                EditContent(const SwGlblDocContent* pCont );
@@ -371,13 +371,13 @@ public:
     void                ShowTree();
     void                HideTree();
 
-    void                ExecCommand(const OString& rCmd);
+    void                ExecCommand(std::string_view rCmd);
 
     void                Display(bool bOnlyUpdateUserData = false);
 
     bool                Update(bool bHard);
 
-    void                ExecuteContextMenuAction(const OString& rSelectedPopupEntry);
+    void                ExecuteContextMenuAction(std::string_view rSelectedPopupEntry);
 
     const SwWrtShell*   GetActiveWrtShell() const {return m_pActiveShell;}
 };

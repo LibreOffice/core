@@ -114,7 +114,7 @@ class LngSvcMgr :
     void    SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp );
     void    SetCfgServiceLists( ThesaurusDispatcher &rThesDsp );
 
-    bool    SaveCfgSvcs( const OUString &rServiceName );
+    bool    SaveCfgSvcs( std::u16string_view rServiceName );
 
     // utl::ConfigItem (to allow for listening of changes of relevant properties)
     virtual void    Notify( const css::uno::Sequence< OUString > &rPropertyNames ) override;

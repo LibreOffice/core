@@ -237,7 +237,7 @@ void GalleryBrowser1::EndThemePropertiesDlgHdl(sal_Int32 nResult)
     ImplEndGalleryThemeProperties(false, nResult);
 }
 
-void GalleryBrowser1::ImplExecute(const OString &rIdent)
+void GalleryBrowser1::ImplExecute(std::string_view rIdent)
 {
     if (rIdent == "update")
     {

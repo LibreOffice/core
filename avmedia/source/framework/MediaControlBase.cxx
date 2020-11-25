@@ -210,7 +210,7 @@ void MediaControlBase::UpdateToolBoxes(const MediaItem& rMediaItem)
     }
 }
 
-void MediaControlBase::SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem const & aItem, const OString& rId)
+void MediaControlBase::SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem const & aItem, std::string_view rId)
 {
     if (rId == "apply")
     {

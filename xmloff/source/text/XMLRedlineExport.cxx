@@ -395,17 +395,17 @@ void XMLRedlineExport::ExportChangedRegion(
 
 
 OUString const & XMLRedlineExport::ConvertTypeName(
-    const OUString& sApiName)
+    std::u16string_view sApiName)
 {
-    if (sApiName == "Delete")
+    if (sApiName == u"Delete")
     {
         return sDeletion;
     }
-    else if (sApiName == "Insert")
+    else if (sApiName == u"Insert")
     {
         return sInsertion;
     }
-    else if (sApiName == "Format")
+    else if (sApiName == u"Format")
     {
         return sFormatChange;
     }

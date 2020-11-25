@@ -158,7 +158,7 @@ class ViewStyle
 public:
     ViewStyle();
 
-    SharedBitmapDescriptor GetBitmap (const OUString& sBitmapName) const;
+    SharedBitmapDescriptor GetBitmap (std::u16string_view sBitmapName) const;
 
     PresenterTheme::SharedFontDescriptor GetFont() const;
 
@@ -1003,9 +1003,9 @@ ViewStyle::ViewStyle()
 {
 }
 
-SharedBitmapDescriptor ViewStyle::GetBitmap (const OUString& rsBitmapName) const
+SharedBitmapDescriptor ViewStyle::GetBitmap (std::u16string_view rsBitmapName) const
 {
-    if (rsBitmapName == "Background")
+    if (rsBitmapName == u"Background")
         return mpBackground;
     else
         return SharedBitmapDescriptor();

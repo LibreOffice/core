@@ -188,7 +188,7 @@ OString lclConvToHex(sal_uInt16 nHex)
 }
 }
 
-bool IgnorePropertyForReqIF(bool bReqIF, const OString& rProperty, const OString& rValue)
+bool IgnorePropertyForReqIF(bool bReqIF, const OString& rProperty, std::string_view rValue)
 {
     if (!bReqIF)
         return false;
@@ -245,10 +245,10 @@ public:
 }
 
 void SwHTMLWriter::OutCSS1_Property( const char *pProp,
-                                     const char *pVal,
+                                     std::string_view sVal,
                                      const OUString *pSVal )
 {
-    if (IgnorePropertyForReqIF(mbReqIF, pProp, pVal))
+    if (IgnorePropertyForReqIF(mbReqIF, pProp, sVal))
         return;
 
     OStringBuffer sOut;
@@ -347,8 +347,8 @@ void SwHTMLWriter::OutCSS1_Property( const char *pProp,
     {
         // for STYLE-Option encode string
         Strm().WriteOString( sOut.makeStringAndClear() );
-        if( pVal )
-            HTMLOutFuncs::Out_String( Strm(), OUString::createFromAscii(pVal),
+        if( !sVal.empty() )
+            HTMLOutFuncs::Out_String( Strm(), OUString::createFromAscii(sVal),
                                       m_eDestEnc, &m_aNonConvertableCharacters );
         else if( pSVal )
             HTMLOutFuncs::Out_String( Strm(), *pSVal, m_eDestEnc, &m_aNonConvertableCharacters );
@@ -356,8 +356,8 @@ void SwHTMLWriter::OutCSS1_Property( const char *pProp,
     else
     {
         // for STYLE-Tag print string directly
-        if( pVal )
-            sOut.append(pVal);
+        if( !sVal.empty() )
+            sOut.append(sVal);
         else if( pSVal )
             sOut.append(OUStringToOString(*pSVal, m_eDestEnc));
     }

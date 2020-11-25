@@ -284,7 +284,7 @@ class SbiRuntime
     void SetParameters( SbxArray* );
 
     // HAS TO BE IMPLEMENTED SOME TIME
-    void DllCall( const OUString&, const OUString&, SbxArray*, SbxDataType, bool );
+    void DllCall( std::u16string_view, std::u16string_view, SbxArray*, SbxDataType, bool );
 
     // #56204 swap out DIM-functionality into help method (step0.cxx)
     void DimImpl(const SbxVariableRef& refVar);

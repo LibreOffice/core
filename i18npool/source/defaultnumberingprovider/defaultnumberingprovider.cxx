@@ -546,10 +546,10 @@ void lcl_formatCharsGR(const sal_Unicode table[], int n, OUString& s )
 }
 
 static
-bool should_ignore( const OUString& s )
+bool should_ignore( std::u16string_view s )
 {
         // return true if blank or null
-        return s == " " || (!s.isEmpty() && s[0]==0);
+        return s == u" " || (!s.empty() && s[0]==0);
 }
 
 /**

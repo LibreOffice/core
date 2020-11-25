@@ -619,19 +619,19 @@ sal_Int16 ConvertNumberingType(sal_Int32 nFmt)
     return nRet;
 }
 
-sal_Int16 ConvertCustomNumberFormat(const OUString& rFormat)
+sal_Int16 ConvertCustomNumberFormat(std::u16string_view rFormat)
 {
     sal_Int16 nRet = -1;
 
-    if (rFormat == "001, 002, 003, ...")
+    if (rFormat == u"001, 002, 003, ...")
     {
         nRet = style::NumberingType::ARABIC_ZERO3;
     }
-    else if (rFormat == "0001, 0002, 0003, ...")
+    else if (rFormat == u"0001, 0002, 0003, ...")
     {
         nRet = style::NumberingType::ARABIC_ZERO4;
     }
-    else if (rFormat == "00001, 00002, 00003, ...")
+    else if (rFormat == u"00001, 00002, 00003, ...")
     {
         nRet = style::NumberingType::ARABIC_ZERO5;
     }

@@ -116,17 +116,17 @@ namespace SwUnoCursorHelper
                     const bool bForceExpandHints );
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    void    makeRedline( SwPaM const & rPaM, const OUString& RedlineType,
+    void    makeRedline( SwPaM const & rPaM, std::u16string_view RedlineType,
             const css::uno::Sequence< css::beans::PropertyValue >& RedlineProperties );
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    void    makeTableRowRedline( SwTableLine& rTableLine, const OUString& RedlineType,
+    void    makeTableRowRedline( SwTableLine& rTableLine, std::u16string_view RedlineType,
             const css::uno::Sequence< css::beans::PropertyValue >& RedlineProperties );
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    SW_DLLPUBLIC void    makeTableCellRedline( SwTableBox& rTableBox, const OUString& RedlineType,
+    SW_DLLPUBLIC void    makeTableCellRedline( SwTableBox& rTableBox, std::u16string_view RedlineType,
             const css::uno::Sequence< css::beans::PropertyValue >& RedlineProperties );
 
     /// @param bTableMode: attributes should be applied to a table selection

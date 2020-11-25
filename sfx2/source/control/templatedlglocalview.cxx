@@ -92,7 +92,7 @@ void TemplateDlgLocalView::createContextMenu(const bool bIsDefault)
             mxTreeView.get(), tools::Rectangle(maPosition, Size(1, 1))));
 }
 
-void TemplateDlgLocalView::ContextMenuSelectHdl(const OString& rIdent)
+void TemplateDlgLocalView::ContextMenuSelectHdl(std::string_view rIdent)
 {
     if (rIdent == "open")
         maOpenTemplateHdl.Call(maSelectedItem);

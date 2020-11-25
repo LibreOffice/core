@@ -189,7 +189,7 @@ static OString lcl_makeHTMLColorTriplet(const Color& rColor)
 
 ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocument* pDocP,
                             const ScRange& rRangeP, bool bAllP,
-                            const OUString& rStreamPathP, const OUString& rFilterOptions ) :
+                            const OUString& rStreamPathP, std::u16string_view rFilterOptions ) :
     ScExportBase( rStrmP, pDocP, rRangeP ),
     aBaseURL( rBaseURL ),
     aStreamPath( rStreamPathP ),
@@ -212,11 +212,11 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocume
     eDestEnc = (pDoc->IsClipOrUndo() ? RTL_TEXTENCODING_UTF8 : rHtmlOptions.GetTextEncoding());
     bCopyLocalFileToINet = rHtmlOptions.IsSaveGraphicsLocal();
 
-    if (rFilterOptions == "SkipImages")
+    if (rFilterOptions == u"SkipImages")
     {
         mbSkipImages = true;
     }
-    else if (rFilterOptions == "SkipHeaderFooter")
+    else if (rFilterOptions == u"SkipHeaderFooter")
     {
         mbSkipHeaderFooter = true;
     }

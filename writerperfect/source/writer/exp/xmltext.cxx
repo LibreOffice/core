@@ -36,16 +36,16 @@ rtl::Reference<XMLImportContext> XMLBodyContentContext::CreateChildContext(
     return CreateTextChildContext(GetImport(), rName, true);
 }
 
-rtl::Reference<XMLImportContext> CreateTextChildContext(XMLImport& rImport, const OUString& rName,
-                                                        bool bTopLevel)
+rtl::Reference<XMLImportContext> CreateTextChildContext(XMLImport& rImport,
+                                                        std::u16string_view rName, bool bTopLevel)
 {
-    if (rName == "text:p" || rName == "text:h")
+    if (rName == u"text:p" || rName == u"text:h")
         return new XMLParaContext(rImport, bTopLevel);
-    if (rName == "text:section")
+    if (rName == u"text:section")
         return new XMLSectionContext(rImport);
-    if (rName == "table:table")
+    if (rName == u"table:table")
         return new XMLTableContext(rImport, bTopLevel);
-    if (rName == "text:list")
+    if (rName == u"text:list")
         return new XMLTextListContext(rImport);
     return nullptr;
 }
