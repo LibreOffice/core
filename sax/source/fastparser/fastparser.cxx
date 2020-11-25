@@ -119,6 +119,10 @@ struct SaxContext
     }
 };
 
+struct XmlEntityDeleter
+{
+    void operator()(xmlEntity* p) { xmlFree(p); }
+};
 
 struct ParserData
 {
@@ -237,6 +241,7 @@ public:
     void callbackEndElement();
     void callbackCharacters( const xmlChar* s, int nLen );
     void callbackProcessingInstruction( const xmlChar *target, const xmlChar *data );
+    xmlEntityPtr callbackGetEntity( const xmlChar *name );
 
     void pushEntity(const ParserData&, xml::sax::InputSource const&);
     void popEntity();
@@ -245,6 +250,7 @@ public:
     void produce( bool bForceFlush = false );
     bool m_bIgnoreMissingNSDecl;
     bool m_bDisableThreadedParser;
+    std::unique_ptr<xmlEntity, XmlEntityDeleter> mxMath1;
 
 private:
     bool consume(EventList&);
@@ -323,6 +329,12 @@ static void call_callbackProcessingInstruction( void *userData, const xmlChar *t
 {
     FastSaxParserImpl* pFastParser = static_cast<FastSaxParserImpl*>( userData );
     pFastParser->callbackProcessingInstruction( target, data );
+}
+
+static xmlEntityPtr call_callbackGetEntity( void *userData, const xmlChar *name)
+{
+    FastSaxParserImpl* pFastParser = static_cast<FastSaxParserImpl*>( userData );
+    return pFastParser->callbackGetEntity( name );
 }
 
 }
@@ -1036,6 +1048,7 @@ void FastSaxParserImpl::parse()
     callbacks.endElementNs = call_callbackEndElement;
     callbacks.characters = call_callbackCharacters;
     callbacks.processingInstruction = call_callbackProcessingInstruction;
+    callbacks.getEntity = call_callbackGetEntity;
     callbacks.initialized = XML_SAX2_MAGIC;
     int nRead = 0;
     do
@@ -1342,6 +1355,20 @@ void FastSaxParserImpl::callbackProcessingInstruction( const xmlChar *target, co
         produce();
     else
         rEntity.processingInstruction( rEvent.msNamespace, rEvent.msElementName );
+}
+
+xmlEntityPtr FastSaxParserImpl::callbackGetEntity( const xmlChar *name )
+{
+    if (strcmp(reinterpret_cast<const char*>(name), "charname") == 0)
+    {
+        if (!mxMath1)
+            mxMath1.reset(xmlNewEntity(nullptr,
+                BAD_CAST("charname"),
+                XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
+                BAD_CAST("xxx")));
+        return mxMath1.get();
+    }
+    return xmlGetPredefinedEntity(name);
 }
 
 FastSaxParser::FastSaxParser() : mpImpl(new FastSaxParserImpl) {}
