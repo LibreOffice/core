@@ -337,6 +337,19 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::nextCharacters( const OUString& Text,
             nStartPos = pBI->following(nStartPos);
             if (nStartPos == icu::BreakIterator::DONE)
                 return Text.getLength();
+
+            // tdf#138481: Handle grapheme clusters that consist of
+            // characters joined by ZWJ (emoji).
+            while (nStartPos < Text.getLength() && Text[nStartPos] == 0x200D)
+            {
+                while (nStartPos < Text.getLength() && Text[nStartPos] == 0x200D)
+                    nStartPos++;
+                if (nStartPos == Text.getLength())
+                    return Text.getLength();
+                nStartPos = pBI->following(nStartPos);
+                if (nStartPos == icu::BreakIterator::DONE)
+                    return Text.getLength();
+            }
         }
     } else { // for CHARACTER mode
         for (nDone = 0; nDone < nCount && nStartPos < Text.getLength(); nDone++)
@@ -356,6 +369,19 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::previousCharacters( const OUString& Te
             nStartPos = pBI->preceding(nStartPos);
             if (nStartPos == icu::BreakIterator::DONE)
                 return 0;
+
+            // tdf#138481: Handle grapheme clusters that consist of
+            // characters joined by ZWJ (emoji).
+            while (nStartPos > 0 && Text[nStartPos] == 0x200D)
+            {
+                while (nStartPos > 0 && Text[nStartPos] == 0x200D)
+                    nStartPos--;
+                if (nStartPos == 0)
+                    return 0;
+                nStartPos = pBI->preceding(nStartPos);
+                if (nStartPos == icu::BreakIterator::DONE)
+                    return 0;
+            }
         }
     } else { // for BS to delete one char and CHARACTER mode.
         for (nDone = 0; nDone < nCount && nStartPos > 0; nDone++)
