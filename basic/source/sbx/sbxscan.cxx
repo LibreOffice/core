@@ -108,7 +108,9 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
     SbxDataType eScanType = SbxSINGLE;
     while( *p == ' ' || *p == '\t' )
         p++;
-    if( *p == '-' )
+    if (*p == '+')
+        p++;
+    else if( *p == '-' )
     {
         p++;
         bMinus = true;
