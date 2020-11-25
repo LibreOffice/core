@@ -166,17 +166,27 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
 {
     bool bUseJSBuilder = false;
 
-    if (bMobile)
+    if (comphelper::LibreOfficeKit::isActive())
     {
-        if (rUIFile == "modules/swriter/ui/wordcount-mobile.ui" ||
-            rUIFile == "svx/ui/findreplacedialog-mobile.ui" ||
-            rUIFile == "modules/swriter/ui/watermarkdialog.ui" ||
-            rUIFile == "modules/scalc/ui/validationdialog.ui" ||
-            rUIFile == "modules/scalc/ui/validationcriteriapage.ui" ||
-            rUIFile == "modules/scalc/ui/validationhelptabpage-mobile.ui" ||
-            rUIFile == "modules/scalc/ui/erroralerttabpage-mobile.ui" ||
-            rUIFile == "modules/scalc/ui/validationdialog.ui")
+        if (bMobile)
+        {
+            if (rUIFile == "modules/swriter/ui/wordcount-mobile.ui" ||
+                rUIFile == "svx/ui/findreplacedialog-mobile.ui" ||
+                rUIFile == "modules/swriter/ui/watermarkdialog.ui" ||
+                rUIFile == "modules/scalc/ui/validationdialog.ui" ||
+                rUIFile == "modules/scalc/ui/validationcriteriapage.ui" ||
+                rUIFile == "modules/scalc/ui/validationhelptabpage-mobile.ui" ||
+                rUIFile == "modules/scalc/ui/erroralerttabpage-mobile.ui" ||
+                rUIFile == "modules/scalc/ui/validationdialog.ui")
+            {
+                bUseJSBuilder = true;
+            }
+        }
+
+        if (rUIFile == "modules/scalc/ui/pivottablelayoutdialog.ui")
+        {
             bUseJSBuilder = true;
+        }
     }
 
     if (bUseJSBuilder)
