@@ -24,6 +24,7 @@
 #include <sfx2/charwin.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <deque>
+#include <sfx2/strings.hrc>
 
 class CharmapPopup;
 
@@ -49,15 +50,13 @@ private:
 
     SvxCharView m_aRecentCharView[16];
     SvxCharView m_aFavCharView[16];
+    std::unique_ptr<weld::Label> m_xRecentLabel;
     std::unique_ptr<weld::Button> m_xDlgBtn;
     std::unique_ptr<weld::CustomWeld> m_xRecentCharView[16];
     std::unique_ptr<weld::CustomWeld> m_xFavCharView[16];
 
     DECL_LINK(CharClickHdl, SvxCharView*, void);
     DECL_LINK(OpenDlgHdl, weld::Button&, void);
-
-    void            getFavCharacterList();
-    void            updateFavCharControl();
 
     void            getRecentCharacterList(); //gets both recent char and recent char font list
     void            updateRecentCharControl();
