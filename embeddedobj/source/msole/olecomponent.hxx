@@ -112,7 +112,7 @@ public:
     css::uno::Sequence< css::embed::VerbDescriptor > GetVerbList();
 
     void ExecuteVerb( sal_Int32 nVerbID );
-    void SetHostName( const OUString& aContName, const OUString& aEmbDocName );
+    void SetHostName( const OUString& aEmbDocName );
     void SetExtent( const css::awt::Size& aVisAreaSize, sal_Int64 nAspect );
 
     css::awt::Size GetExtent( sal_Int64 nAspect );

@@ -1079,8 +1079,7 @@ void OleComponent::ExecuteVerb( sal_Int32 nVerbID )
 }
 
 
-void OleComponent::SetHostName( const OUString&,
-                                const OUString& aEmbDocName )
+void OleComponent::SetHostName( const OUString& aEmbDocName )
 {
     if ( !m_pNativeImpl->m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state

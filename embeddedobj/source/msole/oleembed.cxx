@@ -875,7 +875,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
 
             m_pOleComponent->ExecuteVerb( nVerbID );
-            m_pOleComponent->SetHostName( OUString(), m_aContainerName );
+            m_pOleComponent->SetHostName( m_aContainerName );
 
             // ==== the STAMPIT related solution =============================
             bool bModifiedOnExecution = m_aVerbExecutionController.EndControlExecution_WasModified();
