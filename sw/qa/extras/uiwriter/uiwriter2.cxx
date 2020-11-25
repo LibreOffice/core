@@ -1924,6 +1924,39 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137684)
     CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137503)
+{
+    load(DATA_DIRECTORY, "tdf132160.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // switch on "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+
+    SwWrtShell* const pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+
+    // select and delete the first two paragraphs
+    pWrtShell->EndPara(/*bSelect=*/true);
+    pWrtShell->EndPara(/*bSelect=*/true);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("The"));
+
+    // this would crash due to bad redline range
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Encryption "));
+
+    // this would crash due to bad redline range
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("The"));
+
+    // switch off "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138135)
 {
     load(DATA_DIRECTORY, "tdf132160.odt");
