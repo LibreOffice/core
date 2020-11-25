@@ -236,7 +236,7 @@ void SvxShowCharSet::createContextMenu()
     Invalidate();
 }
 
-void SvxShowCharSet::ContextMenuSelect(const OString& rIdent)
+void SvxShowCharSet::ContextMenuSelect(std::string_view rIdent)
 {
     sal_UCS4 cChar = GetSelectCharacter();
     OUString aOUStr(&cChar, 1);

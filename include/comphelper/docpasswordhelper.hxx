@@ -223,7 +223,7 @@ public:
             const OUString& rSaltValue,
             sal_uInt32 nSpinCount,
             comphelper::Hash::IterCount eIterCount,
-            const OUString& rAlgorithmName);
+             std::u16string_view rAlgorithmName);
 
 
     /** Convenience function to calculate a salted hash with iterations as
@@ -269,7 +269,7 @@ public:
             const OUString& rSaltValue,
             sal_uInt32 nSpinCount,
             comphelper::Hash::IterCount eIterCount,
-            const OUString& rAlgorithmName);
+            std::u16string_view rAlgorithmName);
 
 
     /** Convenience function to calculate a salted hash with iterations as
@@ -313,7 +313,7 @@ public:
             const std::vector<unsigned char>& rSaltValue,
             sal_uInt32 nSpinCount,
             comphelper::Hash::IterCount eIterCount,
-            const OUString& rAlgorithmName);
+            std::u16string_view rAlgorithmName);
 
 
     /** This helper function generates a random sequence of bytes of

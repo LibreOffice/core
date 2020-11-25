@@ -39,7 +39,7 @@ namespace chart::RegressionCurveHelper
 
     /// returns a model regression curve
     css::uno::Reference<css::chart2::XRegressionCurve>
-        createRegressionCurveByServiceName( const OUString& aServiceName );
+        createRegressionCurveByServiceName( std::u16string_view aServiceName );
 
     OOO_DLLPUBLIC_CHARTTOOLS bool hasMeanValueLine(
         const css::uno::Reference<css::chart2::XRegressionCurveContainer> & xRegCnt );
@@ -114,7 +114,7 @@ namespace chart::RegressionCurveHelper
 
     /// returns a calculator object for regression curves (used by the view)
     OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::chart2::XRegressionCurveCalculator>
-        createRegressionCurveCalculatorByServiceName( const OUString& aServiceName );
+        createRegressionCurveCalculatorByServiceName( std::u16string_view aServiceName );
 
     /** recalculates the regression parameters according to the data given in
         the data source.

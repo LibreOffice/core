@@ -29,10 +29,10 @@
 
 #define DEBUG_TAB_PROTECTION 0
 
-#define URI_SHA1 "http://www.w3.org/2000/09/xmldsig#sha1"
-#define URI_SHA256_ODF12 "http://www.w3.org/2000/09/xmldsig#sha256"
-#define URI_SHA256_W3C "http://www.w3.org/2001/04/xmlenc#sha256"
-#define URI_XLS_LEGACY "http://docs.oasis-open.org/office/ns/table/legacy-hash-excel"
+#define URI_SHA1 u"http://www.w3.org/2000/09/xmldsig#sha1"
+#define URI_SHA256_ODF12 u"http://www.w3.org/2000/09/xmldsig#sha256"
+#define URI_SHA256_W3C u"http://www.w3.org/2001/04/xmlenc#sha256"
+#define URI_XLS_LEGACY u"http://docs.oasis-open.org/office/ns/table/legacy-hash-excel"
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -79,7 +79,7 @@ OUString ScPassHashHelper::getHashURI(ScPasswordHash eHash)
     return OUString();
 }
 
-ScPasswordHash ScPassHashHelper::getHashTypeFromURI(const OUString& rURI)
+ScPasswordHash ScPassHashHelper::getHashTypeFromURI(std::u16string_view rURI)
 {
     if (rURI == URI_SHA256_ODF12 || rURI == URI_SHA256_W3C)
         return PASSHASH_SHA256;

@@ -61,7 +61,7 @@ public:
     static void syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
                              const css::uno::Any& rValue);
     /// Does the same, but works on properties which lack an sw-specific WID / MemberID.
-    static void syncProperty(SwFrameFormat* pShape, const OUString& rPropertyName,
+    static void syncProperty(SwFrameFormat* pShape, std::u16string_view rPropertyName,
                              const css::uno::Any& rValue);
     /// Get a property of the underlying TextFrame.
     static void getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,

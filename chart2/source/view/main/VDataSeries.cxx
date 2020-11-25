@@ -570,21 +570,21 @@ sal_Int32 VDataSeries::getExplicitNumberFormat( sal_Int32 nPointIndex, bool bFor
         xPointProp->getPropertyValue(aPropName) >>= nNumberFormat;
     return nNumberFormat;
 }
-void VDataSeries::setRoleOfSequenceForDataLabelNumberFormatDetection( const OUString& rRole )
+void VDataSeries::setRoleOfSequenceForDataLabelNumberFormatDetection( std::u16string_view rRole )
 {
-    if (rRole == "values-y")
+    if (rRole == u"values-y")
         m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Y;
-    else if (rRole == "values-size")
+    else if (rRole == u"values-size")
         m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Bubble_Size;
-    else if (rRole == "values-min")
+    else if (rRole == u"values-min")
         m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Y_Min;
-    else if (rRole == "values-max")
+    else if (rRole == u"values-max")
         m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Y_Max;
-    else if (rRole == "values-first")
+    else if (rRole == u"values-first")
         m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Y_First;
-    else if (rRole == "values-last")
+    else if (rRole == u"values-last")
         m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Y_Last;
-    else if (rRole == "values-x")
+    else if (rRole == u"values-x")
         m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_X;
 }
 sal_Int32 VDataSeries::detectNumberFormatKey( sal_Int32 index ) const
@@ -771,7 +771,7 @@ double VDataSeries::getXMeanValue() const
 {
     if( std::isnan( m_fXMeanValue ) )
     {
-        uno::Reference< XRegressionCurveCalculator > xCalculator( RegressionCurveHelper::createRegressionCurveCalculatorByServiceName( "com.sun.star.chart2.MeanValueRegressionCurve" ) );
+        uno::Reference< XRegressionCurveCalculator > xCalculator( RegressionCurveHelper::createRegressionCurveCalculatorByServiceName( u"com.sun.star.chart2.MeanValueRegressionCurve" ) );
         uno::Sequence< double > aXValuesDummy;
         xCalculator->recalculateRegression( aXValuesDummy, getAllX() );
         m_fXMeanValue = xCalculator->getCurveValue( 1.0 );
@@ -784,7 +784,7 @@ double VDataSeries::getYMeanValue() const
     if( std::isnan( m_fYMeanValue ) )
     {
         uno::Reference< XRegressionCurveCalculator > xCalculator(
-            RegressionCurveHelper::createRegressionCurveCalculatorByServiceName("com.sun.star.chart2.MeanValueRegressionCurve"));
+            RegressionCurveHelper::createRegressionCurveCalculatorByServiceName(u"com.sun.star.chart2.MeanValueRegressionCurve"));
         uno::Sequence< double > aXValuesDummy;
         xCalculator->recalculateRegression( aXValuesDummy, getAllY() );
         m_fYMeanValue = xCalculator->getCurveValue( 1.0 );

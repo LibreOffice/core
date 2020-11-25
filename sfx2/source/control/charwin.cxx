@@ -120,7 +120,7 @@ void SvxCharView::createContextMenu()
     Invalidate();
 }
 
-void SvxCharView::ContextMenuSelect(const OString& rMenuId)
+void SvxCharView::ContextMenuSelect(std::string_view rMenuId)
 {
     if (rMenuId == "clearchar")
         maClearClickHdl.Call(this);

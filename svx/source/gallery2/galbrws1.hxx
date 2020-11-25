@@ -60,7 +60,7 @@ private:
     void                    ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
     static void             ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData );
     void                    ImplGetExecuteVector(std::vector<OString>& o_aExec);
-    void                    ImplExecute(const OString &rIdent);
+    void                    ImplExecute(std::string_view rIdent);
     void                    ImplGalleryThemeProperties( std::u16string_view rThemeName, bool bCreateNew );
     void                    EndNewThemePropertiesDlgHdl(sal_Int32 nResult);
     void                    EndThemePropertiesDlgHdl(sal_Int32 nResult);

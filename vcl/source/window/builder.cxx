@@ -84,57 +84,57 @@ static bool toBool(std::string_view rValue)
 
 namespace
 {
-    OUString mapStockToImageResource(const OUString& sType)
+    OUString mapStockToImageResource(std::u16string_view sType)
     {
-        if (sType == "gtk-index")
+        if (sType == u"gtk-index")
             return SV_RESID_BITMAP_INDEX;
-        else if (sType == "gtk-refresh")
+        else if (sType == u"gtk-refresh")
             return SV_RESID_BITMAP_REFRESH;
-        else if (sType == "gtk-apply")
+        else if (sType == u"gtk-apply")
             return IMG_APPLY;
-        else if (sType == "gtk-dialog-error")
+        else if (sType == u"gtk-dialog-error")
             return IMG_ERROR;
-        else if (sType == "gtk-add")
+        else if (sType == u"gtk-add")
             return IMG_ADD;
-        else if (sType == "gtk-remove")
+        else if (sType == u"gtk-remove")
             return IMG_REMOVE;
-        else if (sType == "gtk-copy")
+        else if (sType == u"gtk-copy")
             return IMG_COPY;
-        else if (sType == "gtk-paste")
+        else if (sType == u"gtk-paste")
             return IMG_PASTE;
         return OUString();
     }
 
-    SymbolType mapStockToSymbol(const OUString& sType)
+    SymbolType mapStockToSymbol(std::u16string_view sType)
     {
         SymbolType eRet = SymbolType::DONTKNOW;
-        if (sType == "gtk-media-next")
+        if (sType == u"gtk-media-next")
             eRet = SymbolType::NEXT;
-        else if (sType == "gtk-media-previous")
+        else if (sType == u"gtk-media-previous")
             eRet = SymbolType::PREV;
-        else if (sType == "gtk-media-play")
+        else if (sType == u"gtk-media-play")
             eRet = SymbolType::PLAY;
-        else if (sType == "gtk-media-stop")
+        else if (sType == u"gtk-media-stop")
             eRet = SymbolType::STOP;
-        else if (sType == "gtk-goto-first")
+        else if (sType == u"gtk-goto-first")
             eRet = SymbolType::FIRST;
-        else if (sType == "gtk-goto-last")
+        else if (sType == u"gtk-goto-last")
             eRet = SymbolType::LAST;
-        else if (sType == "gtk-go-back")
+        else if (sType == u"gtk-go-back")
             eRet = SymbolType::ARROW_LEFT;
-        else if (sType == "gtk-go-forward")
+        else if (sType == u"gtk-go-forward")
             eRet = SymbolType::ARROW_RIGHT;
-        else if (sType == "gtk-go-up")
+        else if (sType == u"gtk-go-up")
             eRet = SymbolType::ARROW_UP;
-        else if (sType == "gtk-go-down")
+        else if (sType == u"gtk-go-down")
             eRet = SymbolType::ARROW_DOWN;
-        else if (sType == "gtk-missing-image")
+        else if (sType == u"gtk-missing-image")
             eRet = SymbolType::IMAGE;
-        else if (sType == "gtk-help")
+        else if (sType == u"gtk-help")
             eRet = SymbolType::HELP;
-        else if (sType == "gtk-close")
+        else if (sType == u"gtk-close")
             eRet = SymbolType::CLOSE;
-        else if (sType == "gtk-new")
+        else if (sType == u"gtk-new")
             eRet = SymbolType::PLUS;
         else if (!mapStockToImageResource(sType).isEmpty())
             eRet = SymbolType::IMAGE;
@@ -3108,7 +3108,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID)
     m_pParserState->m_aModels[rID].m_aEntries.push_back(aRow);
 }
 
-void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rID, const OString &rClass)
+void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rID, std::string_view rClass)
 {
     int nLevel = 1;
 

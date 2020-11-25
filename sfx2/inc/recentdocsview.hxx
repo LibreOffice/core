@@ -63,7 +63,7 @@ public:
 
     void insertItem(const OUString &rURL, const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId);
 
-    static bool typeMatchesExtension(ApplicationType type, const OUString &rExt);
+    static bool typeMatchesExtension(ApplicationType type, std::u16string_view rExt);
     static BitmapEx getDefaultThumbnail(const OUString &rURL);
 
     ApplicationType mnFileTypes;

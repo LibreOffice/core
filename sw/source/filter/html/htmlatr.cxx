@@ -2687,7 +2687,7 @@ static Writer& OutHTML_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
     if( rHTMLWrt.m_bOutOpts )
         return rWrt;
 
-    if (IgnorePropertyForReqIF(rHTMLWrt.mbReqIF, "font-family", OString()))
+    if (IgnorePropertyForReqIF(rHTMLWrt.mbReqIF, "font-family", ""))
     {
         return rWrt;
     }
@@ -2733,7 +2733,7 @@ static Writer& OutHTML_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
     if( rHTMLWrt.m_bOutOpts )
         return rWrt;
 
-    if (IgnorePropertyForReqIF(rHTMLWrt.mbReqIF, "font-size", OString()))
+    if (IgnorePropertyForReqIF(rHTMLWrt.mbReqIF, "font-size", ""))
     {
         return rWrt;
     }

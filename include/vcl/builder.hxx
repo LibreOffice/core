@@ -372,7 +372,7 @@ private:
     void        handleMenuChild(Menu *pParent, xmlreader::XmlReader &reader);
     void        handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader);
 
-    void        handleListStore(xmlreader::XmlReader &reader, const OString &rID, const OString &rClass);
+    void        handleListStore(xmlreader::XmlReader &reader, const OString &rID, std::string_view rClass);
     void        handleRow(xmlreader::XmlReader &reader, const OString &rID);
     void        handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
     VclPtr<Menu> handleMenu(xmlreader::XmlReader &reader, const OString &rID, bool bMenuBar);

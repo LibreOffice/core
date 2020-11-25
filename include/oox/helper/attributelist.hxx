@@ -41,7 +41,7 @@ namespace sax_fastparser {
 namespace oox {
 
     /* Get the color tokens from their string representatives. */
-    sal_Int32 getHighlightColorTokenFromString(const OUString& sColorName);
+    sal_Int32 getHighlightColorTokenFromString(std::u16string_view sColorName);
 
 /** Static helpers for conversion of strings to attribute values of various
     different data types.

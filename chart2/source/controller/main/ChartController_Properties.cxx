@@ -324,7 +324,7 @@ wrapper::ItemConverter* createItemConverter(
     return pItemConverter;
 }
 
-OUString lcl_getTitleCIDForCommand( const OString& rDispatchCommand, const uno::Reference< frame::XModel > & xChartModel )
+OUString lcl_getTitleCIDForCommand( std::string_view rDispatchCommand, const uno::Reference< frame::XModel > & xChartModel )
 {
     if( rDispatchCommand == "AllTitles")
         return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_TITLE, "ALLELEMENTS" );
@@ -347,7 +347,7 @@ OUString lcl_getTitleCIDForCommand( const OString& rDispatchCommand, const uno::
     return ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, xChartModel );
 }
 
-OUString lcl_getAxisCIDForCommand( const OString& rDispatchCommand, const uno::Reference< frame::XModel >& xChartModel )
+OUString lcl_getAxisCIDForCommand( std::string_view rDispatchCommand, const uno::Reference< frame::XModel >& xChartModel )
 {
     if( rDispatchCommand == "DiagramAxisAll")
         return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_AXIS, "ALLELEMENTS" );
@@ -380,7 +380,7 @@ OUString lcl_getAxisCIDForCommand( const OString& rDispatchCommand, const uno::R
     return ObjectIdentifier::createClassifiedIdentifierForObject( xAxis, xChartModel );
 }
 
-OUString lcl_getGridCIDForCommand( const OString& rDispatchCommand, const uno::Reference< frame::XModel >& xChartModel )
+OUString lcl_getGridCIDForCommand( std::string_view rDispatchCommand, const uno::Reference< frame::XModel >& xChartModel )
 {
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
 
@@ -432,7 +432,7 @@ OUString lcl_getErrorCIDForCommand( const ObjectType eDispatchType, const Object
     return ObjectIdentifier::createClassifiedIdentifierWithParent( eDispatchType, OUString(), rSelectedCID );
 }
 
-OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno::Reference< XChartDocument > & xChartDocument, const OUString& rSelectedCID )
+OUString lcl_getObjectCIDForCommand( std::string_view rDispatchCommand, const uno::Reference< XChartDocument > & xChartDocument, const OUString& rSelectedCID )
 {
     ObjectType eObjectType = OBJECTTYPE_UNKNOWN;
 

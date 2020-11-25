@@ -23,12 +23,12 @@
 #define ODF_FORMTEXT "vnd.oasis.opendocument.field.FORMTEXT"
 #define ODF_FORMFIELD_DEFAULT_LENGTH 5
 
-#define ODF_FORMCHECKBOX "vnd.oasis.opendocument.field.FORMCHECKBOX"
+#define ODF_FORMCHECKBOX u"vnd.oasis.opendocument.field.FORMCHECKBOX"
 #define ODF_FORMCHECKBOX_HELPTEXT "Checkbox_HelpText"
 #define ODF_FORMCHECKBOX_NAME "Checkbox_Name"
 #define ODF_FORMCHECKBOX_RESULT "Checkbox_Checked"
 
-#define ODF_FORMDROPDOWN "vnd.oasis.opendocument.field.FORMDROPDOWN"
+#define ODF_FORMDROPDOWN u"vnd.oasis.opendocument.field.FORMDROPDOWN"
 #define ODF_FORMDROPDOWN_LISTENTRY "Dropdown_ListEntry"
 #define ODF_FORMDROPDOWN_RESULT "Dropdown_Selected"
 #define ODF_FORMDROPDOWN_ENTRY_COUNT_LIMIT 25

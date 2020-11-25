@@ -406,7 +406,7 @@ bool SwHeaderFooterWin::IsEmptyHeaderFooter( ) const
     return bResult;
 }
 
-void SwHeaderFooterWin::ExecuteCommand(const OString& rIdent)
+void SwHeaderFooterWin::ExecuteCommand(std::string_view rIdent)
 {
     SwView& rView = GetEditWin()->GetView();
     SwWrtShell& rSh = rView.GetWrtShell();

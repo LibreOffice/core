@@ -34,10 +34,10 @@ private:
 
 public:
                                 ScUnoAddInHelpIdGenerator() = delete;
-                                ScUnoAddInHelpIdGenerator( const OUString& rServiceName );
+                                ScUnoAddInHelpIdGenerator( std::u16string_view rServiceName );
 
     /** Sets service name of the AddIn. Has to be done before requesting help IDs. */
-    void                        SetServiceName( const OUString& rServiceName );
+    void                        SetServiceName( std::u16string_view rServiceName );
 
     /** @return  The help ID of the function with given built-in name or 0 if not found. */
     OString                GetHelpId( const OUString& rFuncName ) const;

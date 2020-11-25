@@ -97,7 +97,7 @@ bool fileExists(OUString const & sFilename)
     return osl::FileBase::E_None == eRC;
 }
 
-bool stringToClassificationType(OString const & rsType, svx::ClassificationType & reType)
+bool stringToClassificationType(std::string_view rsType, svx::ClassificationType & reType)
 {
     if (rsType == "CATEGORY")
         reType = svx::ClassificationType::CATEGORY;

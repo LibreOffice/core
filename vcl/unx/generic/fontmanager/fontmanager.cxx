@@ -441,10 +441,10 @@ OUString PrintFontManager::convertSfntName( void* pRecord )
 //and erase the "Times New Roman" name
 namespace
 {
-    bool isBadTNR(const OUString &rName, ::std::set< OUString >& rSet)
+    bool isBadTNR(std::u16string_view rName, ::std::set< OUString >& rSet)
     {
         bool bRet = false;
-        if ( rName == "Berling Antiqua" )
+        if ( rName == u"Berling Antiqua" )
         {
             ::std::set< OUString >::iterator aEnd = rSet.end();
             ::std::set< OUString >::iterator aI = rSet.find("Times New Roman");

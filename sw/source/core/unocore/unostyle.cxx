@@ -608,14 +608,14 @@ uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions()
 }
 
 static bool lcl_GetHeaderFooterItem(
-        SfxItemSet const& rSet, OUString const& rPropName, bool const bFooter,
+        SfxItemSet const& rSet, std::u16string_view rPropName, bool const bFooter,
         SvxSetItem const*& o_rpItem)
 {
     SfxItemState eState = rSet.GetItemState(
         bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
         false, reinterpret_cast<const SfxPoolItem**>(&o_rpItem));
     if (SfxItemState::SET != eState &&
-        rPropName == UNO_NAME_FIRST_IS_SHARED)
+        rPropName == u"" UNO_NAME_FIRST_IS_SHARED)
     {   // fdo#79269 header may not exist, check footer then
         eState = rSet.GetItemState(
             (!bFooter) ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,

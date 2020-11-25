@@ -22,21 +22,21 @@
 
 namespace {
 
-OUString MapFamilyToCommand( const OUString& rFamily )
+OUString MapFamilyToCommand( std::u16string_view rFamily )
 {
-    if ( rFamily == "ParagraphStyles" ||
-         rFamily == "CellStyles" ||         // In sc
-         rFamily == "graphics" )            // In sd
+    if ( rFamily == u"ParagraphStyles" ||
+         rFamily == u"CellStyles" ||         // In sc
+         rFamily == u"graphics" )            // In sd
         return ".uno:ParaStyle";
-    else if ( rFamily == "CharacterStyles" )
+    else if ( rFamily == u"CharacterStyles" )
         return ".uno:CharStyle";
-    else if ( rFamily == "PageStyles" )
+    else if ( rFamily == u"PageStyles" )
         return ".uno:PageStyle";
-    else if ( rFamily == "FrameStyles" )
+    else if ( rFamily == u"FrameStyles" )
         return ".uno:FrameStyle";
-    else if ( rFamily == "NumberingStyles" )
+    else if ( rFamily == u"NumberingStyles" )
         return ".uno:ListStyle";
-    else if ( rFamily == "TableStyles" )
+    else if ( rFamily == u"TableStyles" )
         return ".uno:TableStyle";
 
     return OUString();

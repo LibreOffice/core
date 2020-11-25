@@ -37,52 +37,52 @@ namespace
         return sMimeType;
     }
 
-    sal_uInt32 getQualityIndex(const OUString& rMimeType)
+    sal_uInt32 getQualityIndex(std::u16string_view rMimeType)
     {
         // pixel formats first
-        if (rMimeType == "image/bmp")
+        if (rMimeType == u"image/bmp")
         {
             return 10;
         }
-        if (rMimeType == "image/gif")
+        if (rMimeType == u"image/gif")
         {
             return 20;
         }
-        if (rMimeType == "image/jpeg")
+        if (rMimeType == u"image/jpeg")
         {
             return 30;
         }
-        if (rMimeType == "image/png")
+        if (rMimeType == u"image/png")
         {
             return 40;
         }
 
         // vector formats, prefer always
-        if (rMimeType == "image/x-vclgraphic") // MIMETYPE_VCLGRAPHIC
+        if (rMimeType == u"image/x-vclgraphic") // MIMETYPE_VCLGRAPHIC
         {
             return 990;
         }
-        if (rMimeType == "image/x-svm")
+        if (rMimeType == u"image/x-svm")
         {
             return 1000;
         }
-        if (rMimeType == "image/x-wmf")
+        if (rMimeType == u"image/x-wmf")
         {
             return 1010;
         }
-        if (rMimeType == "image/x-emf")
+        if (rMimeType == u"image/x-emf")
         {
             return 1020;
         }
-        if (rMimeType == "image/x-eps")
+        if (rMimeType == u"image/x-eps")
         {
             return 1025;
         }
-        if (rMimeType == "application/pdf")
+        if (rMimeType == u"application/pdf")
         {
             return 1030;
         }
-        if (rMimeType == "image/svg+xml")
+        if (rMimeType == u"image/svg+xml")
         {
             return 1040;
         }

@@ -3040,24 +3040,24 @@ void PresentationSettingsEx::SetArguments( const Sequence< PropertyValue >& rArg
     }
 }
 
-void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const Any& rValue )
+void PresentationSettingsEx::SetPropertyValue( std::u16string_view rProperty, const Any& rValue )
 {
-    if ( rProperty == "RehearseTimings" )
+    if ( rProperty == u"RehearseTimings" )
     {
         if( rValue >>= mbRehearseTimings )
             return;
     }
-    else if ( rProperty == "Preview" )
+    else if ( rProperty == u"Preview" )
     {
         if( rValue >>= mbPreview )
             return;
     }
-    else if ( rProperty == "AnimationNode" )
+    else if ( rProperty == u"AnimationNode" )
     {
         if( rValue >>= mxAnimationNode )
             return;
     }
-    else if ( rProperty == "ParentWindow" )
+    else if ( rProperty == u"ParentWindow" )
     {
         Reference< XWindow > xWindow;
         if( rValue >>= xWindow )
@@ -3067,12 +3067,12 @@ void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const 
             return;
         }
     }
-    else if ( rProperty == "AllowAnimations" )
+    else if ( rProperty == u"AllowAnimations" )
     {
         if( rValue >>= mbAnimationAllowed )
             return;
     }
-    else if ( rProperty == "FirstPage" )
+    else if ( rProperty == u"FirstPage" )
     {
         OUString aPresPage;
         if( rValue >>= aPresPage )
@@ -3088,32 +3088,32 @@ void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const 
                 return;
         }
     }
-    else if ( rProperty == "IsAlwaysOnTop" )
+    else if ( rProperty == u"IsAlwaysOnTop" )
     {
         if( rValue >>= mbAlwaysOnTop )
             return;
     }
-    else if ( rProperty == "IsAutomatic" )
+    else if ( rProperty == u"IsAutomatic" )
     {
         if( rValue >>= mbManual )
             return;
     }
-    else if ( rProperty == "IsEndless" )
+    else if ( rProperty == u"IsEndless" )
     {
         if( rValue >>= mbEndless )
             return;
     }
-    else if ( rProperty == "IsFullScreen" )
+    else if ( rProperty == u"IsFullScreen" )
     {
         if( rValue >>= mbFullScreen )
             return;
     }
-    else if ( rProperty == "IsMouseVisible" )
+    else if ( rProperty == u"IsMouseVisible" )
     {
         if( rValue >>= mbMouseVisible )
             return;
     }
-    else if ( rProperty == "Pause" )
+    else if ( rProperty == u"Pause" )
     {
         sal_Int32 nPause = -1;
         if( (rValue >>= nPause) && (nPause >= 0) )
@@ -3122,7 +3122,7 @@ void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const 
             return;
         }
     }
-    else if ( rProperty == "UsePen" )
+    else if ( rProperty == u"UsePen" )
     {
         if( rValue >>= mbMouseAsPen )
             return;

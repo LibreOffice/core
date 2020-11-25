@@ -155,33 +155,33 @@ RecentDocsView::~RecentDocsView()
     }
 }
 
-bool RecentDocsView::typeMatchesExtension(ApplicationType type, const OUString &rExt)
+bool RecentDocsView::typeMatchesExtension(ApplicationType type, std::u16string_view rExt)
 {
     bool bRet = false;
 
-    if (rExt == "odt" || rExt == "fodt" || rExt == "doc" || rExt == "docx" ||
-        rExt == "rtf" || rExt == "txt" || rExt == "odm" || rExt == "otm")
+    if (rExt == u"odt" || rExt == u"fodt" || rExt == u"doc" || rExt == u"docx" ||
+        rExt == u"rtf" || rExt == u"txt" || rExt == u"odm" || rExt == u"otm")
     {
         bRet = static_cast<bool>(type & ApplicationType::TYPE_WRITER);
     }
-    else if (rExt == "ods" || rExt == "fods" || rExt == "xls" || rExt == "xlsx")
+    else if (rExt == u"ods" || rExt == u"fods" || rExt == u"xls" || rExt == u"xlsx")
     {
         bRet = static_cast<bool>(type & ApplicationType::TYPE_CALC);
     }
-    else if (rExt == "odp" || rExt == "fodp" || rExt == "pps" || rExt == "ppt" ||
-            rExt == "pptx")
+    else if (rExt == u"odp" || rExt == u"fodp" || rExt == u"pps" || rExt == u"ppt" ||
+            rExt == u"pptx")
     {
         bRet = static_cast<bool>(type & ApplicationType::TYPE_IMPRESS);
     }
-    else if (rExt == "odg" || rExt == "fodg")
+    else if (rExt == u"odg" || rExt == u"fodg")
     {
         bRet = static_cast<bool>(type & ApplicationType::TYPE_DRAW);
     }
-    else if (rExt == "odb")
+    else if (rExt == u"odb")
     {
         bRet = static_cast<bool>(type & ApplicationType::TYPE_DATABASE);
     }
-    else if (rExt == "odf")
+    else if (rExt == u"odf")
     {
         bRet = static_cast<bool>(type & ApplicationType::TYPE_MATH);
     }

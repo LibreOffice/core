@@ -44,7 +44,7 @@ namespace webdav_ucp
 class DateTimeHelper
 {
 private:
-    static sal_Int32 convertMonthToInt (const OUString& );
+    static sal_Int32 convertMonthToInt (std::u16string_view );
 
     static bool ISO8601_To_DateTime (const OUString&,
         css::util::DateTime& );

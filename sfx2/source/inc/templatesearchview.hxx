@@ -27,7 +27,7 @@ public:
 
     void setOpenTemplateHdl (const Link<ThumbnailViewItem*, void> &rLink);
 
-    void ContextMenuSelectHdl(const OString& rIdent);
+    void ContextMenuSelectHdl(std::string_view rIdent);
 
     void setCreateContextMenuHdl(const Link<ThumbnailViewItem*,void> &rLink);
 

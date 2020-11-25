@@ -486,7 +486,7 @@ void InternalDataProvider::decreaseMapReferences(
 Reference< chart2::data::XDataSequence > InternalDataProvider::createDataSequenceAndAddToMap(
     const OUString & rRangeRepresentation )
 {
-    Reference<chart2::data::XDataSequence> xSeq = createDataSequenceFromArray(rRangeRepresentation, OUString());
+    Reference<chart2::data::XDataSequence> xSeq = createDataSequenceFromArray(rRangeRepresentation, u"");
     if (xSeq.is())
         return xSeq;
 
@@ -496,7 +496,7 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::createDataSequenc
 }
 
 uno::Reference<chart2::data::XDataSequence>
-InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, const OUString& rRole )
+InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, std::u16string_view rRole )
 {
     if (rArrayStr.indexOf('{') != 0 || rArrayStr[rArrayStr.getLength()-1] != '}')
     {
@@ -562,8 +562,8 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
         aRawElems.push_back(aElem);
     }
 
-    if (rRole == "values-y" || rRole == "values-first" || rRole == "values-last" ||
-        rRole == "values-min" || rRole == "values-max" || rRole == "values-size")
+    if (rRole == u"values-y" || rRole == u"values-first" || rRole == u"values-last" ||
+        rRole == u"values-min" || rRole == u"values-max" || rRole == u"values-size")
     {
         // Column values.  Append a new data column and populate it.
 
@@ -584,7 +584,7 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
         xSeq.set(new UncachedDataSequence(this, aRangeRep));
         addDataSequenceToMap(aRangeRep, xSeq);
     }
-    else if (rRole == "values-x")
+    else if (rRole == u"values-x")
     {
         std::vector<double> aValues;
         aValues.reserve(aRawElems.size());
@@ -611,7 +611,7 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
         xSeq.set(new UncachedDataSequence(this, aRangeRep));
         addDataSequenceToMap(aRangeRep, xSeq);
     }
-    else if (rRole == "categories")
+    else if (rRole == u"categories")
     {
         // Category labels.
 
@@ -624,7 +624,7 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
         xSeq.set(new UncachedDataSequence(this, lcl_aCategoriesRangeName));
         addDataSequenceToMap(lcl_aCategoriesRangeName, xSeq);
     }
-    else if (rRole == "label")
+    else if (rRole == u"label")
     {
         // Data series label.  There should be only one element.  This always
         // goes to the last data column.
