@@ -36,6 +36,7 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #include <memory>
+#include <string_view>
 #include <utility>
 #include <vector>
 #include <tools/time.hxx>
@@ -56,7 +57,7 @@ using ::com::sun::star::util::DateTime ;
     If the type name is not found then pair.first and pair.second are -1.
 */
 static std::pair< sal_Int32, sal_Int32 >
-findTypeInDN(const OUString& rRawString, const OUString& sTypeName)
+findTypeInDN(const OUString& rRawString, std::u16string_view sTypeName)
 {
     std::pair< sal_Int32, sal_Int32 > retVal;
     bool bInEscape = false;
@@ -160,7 +161,7 @@ findTypeInDN(const OUString& rRawString, const OUString& sTypeName)
 
 static OUString replaceTagSWithTagST(OUString const & oldDN)
 {
-    std::pair<sal_Int32, sal_Int32 > pairIndex = findTypeInDN(oldDN, "S");
+    std::pair<sal_Int32, sal_Int32 > pairIndex = findTypeInDN(oldDN, u"S");
 
     if (pairIndex.first != -1)
     {
