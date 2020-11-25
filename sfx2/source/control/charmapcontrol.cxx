@@ -22,6 +22,7 @@
 #include <charmapcontrol.hxx>
 #include <sfx2/charmappopup.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/strings.hrc>
 
 using namespace css;
 
@@ -62,6 +63,7 @@ SfxCharmapCtrl::SfxCharmapCtrl(CharmapPopup* pControl, weld::Widget* pParent)
                      SvxCharView(m_xVirDev),
                      SvxCharView(m_xVirDev)}
     , m_xDlgBtn(m_xBuilder->weld_button("specialchardlg"))
+    , m_xRecentLabel(m_xBuilder->weld_label("label2"))
     , m_xRecentCharView{std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar1", m_aRecentCharView[0]),
                         std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar2", m_aRecentCharView[1]),
                         std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar3", m_aRecentCharView[2]),
@@ -147,6 +149,9 @@ void SfxCharmapCtrl::updateFavCharControl()
 
 void SfxCharmapCtrl::getRecentCharacterList()
 {
+    //checking if the characters are recently used or no
+    m_xRecentLabel->set_label(m_aRecentCharList.size() > 0 ? SfxResId(STR_RECENT) : SfxResId(STR_NORECENT));
+
     //retrieve recent character list
     css::uno::Sequence< OUString > rRecentCharList( officecfg::Office::Common::RecentCharacters::RecentCharacterList::get() );
     m_aRecentCharList.insert( m_aRecentCharList.end(), rRecentCharList.begin(), rRecentCharList.end() );
