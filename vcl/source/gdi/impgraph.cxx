@@ -20,6 +20,8 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <vcl/SwapFile.hxx>
+
 #include <comphelper/fileformat.h>
 #include <o3tl/make_shared.hxx>
 #include <tools/fract.hxx>
@@ -67,51 +69,19 @@ constexpr sal_uInt32 constPdfMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') <<
 
 using namespace com::sun::star;
 
-class ImpSwapFile
+class ImpSwapFile : public vcl::SwapFile
 {
 private:
-    INetURLObject maSwapURL;
     OUString maOriginURL;
 
 public:
     ImpSwapFile(INetURLObject const & rSwapURL, OUString const & rOriginURL)
-        : maSwapURL(rSwapURL)
+        : SwapFile(rSwapURL)
         , maOriginURL(rOriginURL)
     {
     }
 
-    ~ImpSwapFile() COVERITY_NOEXCEPT_FALSE
-    {
-        utl::UCBContentHelper::Kill(maSwapURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
-    }
-
-    INetURLObject getSwapURL() const
-    {
-        return maSwapURL;
-    }
-
-    OUString getSwapURLString() const
-    {
-        return maSwapURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-    }
-
     OUString const & getOriginURL() const { return maOriginURL; }
-
-    std::unique_ptr<SvStream> openOutputStream()
-    {
-        OUString sSwapURL = getSwapURLString();
-        if (!sSwapURL.isEmpty())
-        {
-            try
-            {
-                return utl::UcbStreamHelper::CreateStream(sSwapURL, StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE);
-            }
-            catch (const css::uno::Exception&)
-            {
-            }
-        }
-        return std::unique_ptr<SvStream>();
-    }
 };
 
 OUString ImpGraphic::getSwapFileURL() const
