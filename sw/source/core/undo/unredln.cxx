@@ -93,28 +93,46 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
 
     // fix PaM for deletions shown in margin
     bool bIsDeletion = dynamic_cast<SwUndoRedlineDelete*>(this);
+    sal_uInt32 nMaxId = SAL_MAX_UINT32;
     if ( bIsDeletion )
     {
-        SwRedlineTable::size_type nCurRedlinePos = 0;
-        const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
-        SwRangeRedline * pRedline(rTable[nCurRedlinePos]);
-        // search last redline by its biggest id
-        // TODO handle multiple nodes
-        for( SwRedlineTable::size_type n = 1; n < rTable.size(); ++n )
+        // Nodes of the deletion range are in the newest invisible redlines.
+        // Set all redlines visible and recover the original deletion range.
+        for (sal_uInt32 nNodes = 0; nNodes <  m_nEndNode - m_nSttNode + 1; ++ nNodes)
         {
-            SwRangeRedline *pRed(rTable[n]);
-            if ( pRedline->GetId() < pRed->GetId() )
-            {
-                nCurRedlinePos = n;
-                pRedline = pRed;
-            }
-        }
+            SwRedlineTable::size_type nCurRedlinePos = 0;
+            const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
+            SwRangeRedline * pRedline(rTable[nCurRedlinePos]);
 
-        if ( !pRedline->IsVisible() )
-        {
-            pRedline->Show(0, rTable.GetPos(pRedline), /*bForced=*/true);
-            pRedline->Show(1, rTable.GetPos(pRedline), /*bForced=*/true);
-            rPam = *pRedline;
+            // search last but nNodes redline by its nth biggest id
+            for( SwRedlineTable::size_type n = 1; n < rTable.size(); ++n )
+            {
+                SwRangeRedline *pRed(rTable[n]);
+                if ( pRedline->GetId() < pRed->GetId() && pRed->GetId() < nMaxId )
+                {
+                    nCurRedlinePos = n;
+                    pRedline = pRed;
+                }
+            }
+
+            nMaxId = pRedline->GetId();
+
+            if ( !pRedline->IsVisible() )
+            {
+                // set it visible
+                pRedline->Show(0, rTable.GetPos(pRedline), /*bForced=*/true);
+                pRedline->Show(1, rTable.GetPos(pRedline), /*bForced=*/true);
+
+                // extend the range
+                if ( nNodes==0 )
+                    rPam = *pRedline;
+                else
+                {
+                    std::unique_ptr<SwPaM> pNewPam;
+                    pNewPam.reset(new SwPaM(*pRedline->GetMark(), *rPam.GetPoint()));
+                    rPam = *pNewPam;
+                }
+            }
         }
     }
 
