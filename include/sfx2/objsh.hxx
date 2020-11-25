@@ -532,7 +532,7 @@ public:
 
 #if defined(_WIN32)
     // DDE-Interface
-    long                        DdeExecute( const OUString& rCmd );
+    bool                        DdeExecute( const OUString& rCmd );
     virtual bool                DdeGetData( const OUString& rItem,
                                             const OUString& rMimeType,
                                             css::uno::Any & rValue );

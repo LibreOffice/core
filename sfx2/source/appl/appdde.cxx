@@ -297,7 +297,7 @@ bool SfxAppEvent_Impl( const OUString& rCmd, const OUString& rEvent,
     relevant SfxApplication subclass in BASIC syntax. Return values can
     not be transferred, unfortunately.
 */
-long SfxApplication::DdeExecute( const OUString&   rCmd )  // Expressed in our BASIC-Syntax
+bool SfxApplication::DdeExecute( const OUString&   rCmd )  // Expressed in our BASIC-Syntax
 {
     // Print or Open-Event?
     if ( !( SfxAppEvent_Impl( rCmd, "Print", ApplicationEvent::Type::Print ) ||
@@ -310,10 +310,10 @@ long SfxApplication::DdeExecute( const OUString&   rCmd )  // Expressed in our B
         if( !pRet )
         {
             SbxBase::ResetError();
-            return 0;
+            return false;
         }
     }
-    return 1;
+    return true;
 }
 
 /*  [Description]
@@ -323,7 +323,7 @@ long SfxApplication::DdeExecute( const OUString&   rCmd )  // Expressed in our B
 
     The base implementation does nothing and returns 0.
 */
-long SfxObjectShell::DdeExecute( const OUString&   rCmd )  // Expressed in our BASIC-Syntax
+bool SfxObjectShell::DdeExecute( const OUString&   rCmd )  // Expressed in our BASIC-Syntax
 {
 #if !HAVE_FEATURE_SCRIPTING
     (void) rCmd;
@@ -334,10 +334,10 @@ long SfxObjectShell::DdeExecute( const OUString&   rCmd )  // Expressed in our B
     if( !pRet )
     {
         SbxBase::ResetError();
-        return 0;
+        return false;
     }
 #endif
-    return 1;
+    return true;
 }
 
 /*  [Description]
@@ -537,8 +537,7 @@ bool SfxDdeDocTopic_Impl::Put( const DdeData* pData )
 
 bool SfxDdeDocTopic_Impl::Execute( const OUString* pStr )
 {
-    long nRet = pStr ? pSh->DdeExecute( *pStr ) : 0;
-    return 0 != nRet;
+    return pStr && pSh->DdeExecute( *pStr );
 }
 
 bool SfxDdeDocTopic_Impl::MakeItem( const OUString& rItem )
