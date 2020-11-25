@@ -3238,7 +3238,7 @@ SfxStringItem Printer SID_PRINTER_NAME
 
 
 SfxVoidItem PrinterSetup SID_SETUPPRINTER
-()
+(SfxStringItem PrinterName SID_PRINTER_NAME)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
