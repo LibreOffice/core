@@ -975,15 +975,9 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     m_aJobData.m_nPDFDevice = 1;
 
     // possibly create one job for collated output
-    bool bSinglePrintJobs = false;
-    beans::PropertyValue* pSingleValue = i_rController.getValue( "PrintCollateAsSingleJobs" );
-    if( pSingleValue )
-    {
-        pSingleValue->Value >>= bSinglePrintJobs;
-    }
-
     int nCopies = i_rController.getPrinter()->GetCopyCount();
     bool bCollate = i_rController.getPrinter()->IsCollateCopy();
+    bool bSinglePrintJobs = i_rController.getPrinter()->IsSinglePrintJobs();
 
     // notify start of real print job
     i_rController.jobStarted();
