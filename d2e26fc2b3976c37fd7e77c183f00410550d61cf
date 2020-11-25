@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d47fa074_d32ec5b3",
+        "filename": "svx/source/dialog/crashreportdlg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-25T13:59:33Z",
+      "side": 1,
+      "message": "\u003cstrings.hrc\u003e is not working for me but \u003csvx/strings.hrc\u003e - you have to move the new strings into this file",
+      "range": {
+        "startLine": 11,
+        "startChar": 10,
+        "endLine": 11,
+        "endChar": 17
+      },
+      "revId": "d2e26fc2b3976c37fd7e77c183f00410550d61cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "651f72ce_da68325a",
+        "filename": "svx/source/dialog/crashreportdlg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-25T13:59:33Z",
+      "side": 1,
+      "message": "There is no such thing as weld_link_view, it\u0027s a weld_link_button",
+      "range": {
+        "startLine": 27,
+        "startChar": 38,
+        "endLine": 27,
+        "endChar": 52
+      },
+      "revId": "d2e26fc2b3976c37fd7e77c183f00410550d61cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee241fbb_e575fa36",
+        "filename": "svx/source/dialog/crashreportdlg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-25T13:59:33Z",
+      "side": 1,
+      "message": "#include \u003csvx/dialmgr.hxx\u003e\n...\nSvxResId()",
+      "range": {
+        "startLine": 69,
+        "startChar": 29,
+        "endLine": 69,
+        "endChar": 37
+      },
+      "revId": "d2e26fc2b3976c37fd7e77c183f00410550d61cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b471b9c9_651c328f",
+        "filename": "svx/source/dialog/crashreportdlg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-25T13:59:33Z",
+      "side": 1,
+      "message": "set_label() or set_uri()",
+      "range": {
+        "startLine": 76,
+        "startChar": 33,
+        "endLine": 76,
+        "endChar": 41
+      },
+      "revId": "d2e26fc2b3976c37fd7e77c183f00410550d61cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
