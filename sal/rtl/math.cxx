@@ -976,7 +976,26 @@ double stringToDouble(CharT const * pBegin, CharT const * pEnd,
             errno = 0;
             fVal = strtod_nolocale(buf, &pCharParseEnd);
             if (errno == ERANGE)
-                eStatus = rtl_math_ConversionStatus_OutOfRange;
+            {
+                // Check for the dreaded rounded to 15 digits max value
+                // 1.79769313486232e+308 for 1.7976931348623157e+308 we wrote
+                // everywhere, accept with or without plus sign in exponent.
+                const char* b = buf;
+                if (b[0] == '-')
+                    ++b;
+                if (((pCharParseEnd - b == 21) || (pCharParseEnd - b == 20))
+                        && !strncmp( b, "1.79769313486232", 16)
+                        && (b[16] == 'e' || b[16] == 'E')
+                        && (((pCharParseEnd - b == 21) && !strncmp( b+17, "+308", 4))
+                         || ((pCharParseEnd - b == 20) && !strncmp( b+17, "308", 3))))
+                {
+                    fVal = (buf < b) ? -DBL_MAX : DBL_MAX;
+                }
+                else
+                {
+                    eStatus = rtl_math_ConversionStatus_OutOfRange;
+                }
+            }
             p = bufmap[pCharParseEnd - buf];
             bSign = false;
         }
