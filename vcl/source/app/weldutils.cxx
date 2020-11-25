@@ -14,6 +14,7 @@
 #include <svl/zformat.hxx>
 #include <vcl/builderpage.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>
@@ -545,6 +546,45 @@ void WidgetStatusListener::dispose()
     }
     mxFrame.clear();
     mWidget = nullptr;
+}
+
+ButtonPressRepeater::ButtonPressRepeater(weld::Button& rButton, const Link<Button&, void>& rLink)
+    : m_rButton(rButton)
+    , m_aLink(rLink)
+    , m_bModKey(false)
+{
+    // instead of connect_clicked because we want a button held down to
+    // repeat the next/prev
+    m_rButton.connect_mouse_press(LINK(this, ButtonPressRepeater, MousePressHdl));
+    m_rButton.connect_mouse_release(LINK(this, ButtonPressRepeater, MouseReleaseHdl));
+
+    m_aRepeat.SetInvokeHandler(LINK(this, ButtonPressRepeater, RepeatTimerHdl));
+}
+
+IMPL_LINK(ButtonPressRepeater, MousePressHdl, const MouseEvent&, rMouseEvent, bool)
+{
+    m_bModKey = rMouseEvent.IsMod1();
+    if (!m_rButton.get_sensitive())
+        return false;
+    RepeatTimerHdl(nullptr);
+    if (!m_rButton.get_sensitive())
+        return false;
+    m_aRepeat.SetTimeout(MouseSettings::GetButtonStartRepeat());
+    m_aRepeat.Start();
+    return false;
+}
+
+IMPL_LINK_NOARG(ButtonPressRepeater, MouseReleaseHdl, const MouseEvent&, bool)
+{
+    m_bModKey = false;
+    m_aRepeat.Stop();
+    return false;
+}
+
+IMPL_LINK_NOARG(ButtonPressRepeater, RepeatTimerHdl, Timer*, void)
+{
+    m_aRepeat.SetTimeout(Application::GetSettings().GetMouseSettings().GetButtonRepeat());
+    m_aLink.Call(m_rButton);
 }
 }
 

@@ -190,8 +190,8 @@ class NavigationBar final : public InterimItemWindow
     std::unique_ptr<weld::Button> m_xLastBtn;         // Button for 'go to the last record'
     std::unique_ptr<weld::Button> m_xNewBtn;          // Button for 'go to a new record'
 
-    AutoTimer m_aNextRepeat;
-    AutoTimer m_aPrevRepeat;
+    weld::ButtonPressRepeater m_aPrevRepeater;
+    weld::ButtonPressRepeater m_aNextRepeater;
 
     sal_Int32            m_nCurrentPos;
 
@@ -212,13 +212,6 @@ public:
 private:
 
     DECL_LINK(OnClick, weld::Button&, void);
-
-    DECL_LINK(PrevMousePressHdl, const MouseEvent&, bool);
-    DECL_LINK(PrevMouseReleaseHdl, const MouseEvent&, bool);
-    DECL_LINK(NextMousePressHdl, const MouseEvent&, bool);
-    DECL_LINK(NextMouseReleaseHdl, const MouseEvent&, bool);
-    DECL_LINK(PrevRepeatTimerHdl, Timer*, void);
-    DECL_LINK(NextRepeatTimerHdl, Timer*, void);
 
     void PositionDataSource(sal_Int32 nRecord);
 };

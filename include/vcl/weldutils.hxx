@@ -20,6 +20,7 @@
 #include <tools/time.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/formatter.hxx>
+#include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 
 class CalendarWrapper;
@@ -388,6 +389,24 @@ private:
     DECL_DLLPRIVATE_LINK(FocusInHdl, weld::Widget&, void);
     DECL_DLLPRIVATE_LINK(FocusOutHdl, weld::Widget&, void);
     DECL_DLLPRIVATE_LINK(KeyInputHdl, const KeyEvent&, bool);
+};
+
+class VCL_DLLPUBLIC ButtonPressRepeater final
+{
+private:
+    weld::Button& m_rButton;
+    AutoTimer m_aRepeat;
+    const Link<Button&, void> m_aLink;
+    bool m_bModKey;
+
+    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
+    DECL_LINK(MouseReleaseHdl, const MouseEvent&, bool);
+    DECL_LINK(RepeatTimerHdl, Timer*, void);
+
+public:
+    ButtonPressRepeater(weld::Button& rButton, const Link<Button&, void>& rLink);
+    void Stop() { m_aRepeat.Stop(); }
+    bool IsModKeyPressed() const { return m_bModKey; }
 };
 
 // get the row the iterator is on
