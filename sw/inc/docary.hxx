@@ -259,11 +259,8 @@ public:
      @param tableIndex position in SwRedlineTable to start searching at, will be updated with the index of the returned
                        redline (or the next redline after the given position if not found)
      @param next true: redline starts at position and ends after, false: redline starts before position and ends at or after
-     @param visible    true: redline must be visible false: redline must be not visible
     */
-    const SwRangeRedline* FindAtPosition( const SwPosition& startPosition,
-                                          size_type& tableIndex,
-                                          bool next = true, bool visible = true ) const;
+    const SwRangeRedline* FindAtPosition( const SwPosition& startPosition, size_type& tableIndex, bool next = true ) const;
 
     bool                        empty() const { return maVector.empty(); }
     size_type                   size() const { return maVector.size(); }
