@@ -22,6 +22,7 @@
 #include <charmapcontrol.hxx>
 #include <sfx2/charmappopup.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/strings.hrc>
 
 using namespace css;
 
@@ -29,6 +30,8 @@ SfxCharmapCtrl::SfxCharmapCtrl(CharmapPopup* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "sfx/ui/charmapcontrol.ui", "charmapctrl")
     , m_xControl(pControl)
     , m_xVirDev(VclPtr<VirtualDevice>::Create())
+    , m_aRecentCharList{SfxResId(STR_RECENT),
+                        SfxResId(STR_NORECENT)}
     , m_aRecentCharView{SvxCharView(m_xVirDev),
                         SvxCharView(m_xVirDev),
                         SvxCharView(m_xVirDev),
@@ -62,6 +65,7 @@ SfxCharmapCtrl::SfxCharmapCtrl(CharmapPopup* pControl, weld::Widget* pParent)
                      SvxCharView(m_xVirDev),
                      SvxCharView(m_xVirDev)}
     , m_xDlgBtn(m_xBuilder->weld_button("specialchardlg"))
+    , m_xRecentLabel(m_xBuilder->weld_label("label2"))
     , m_xRecentCharView{std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar1", m_aRecentCharView[0]),
                         std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar2", m_aRecentCharView[1]),
                         std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar3", m_aRecentCharView[2]),
@@ -143,6 +147,18 @@ void SfxCharmapCtrl::updateFavCharControl()
         m_aFavCharView[i].SetText(OUString());
         m_aFavCharView[i].Hide();
     }
+}
+
+void SfxCharmapCtrl::getRecent()
+{
+    if(m_aRecentCharList.size() > 0)
+       m_xRecentLabel->set_label(SfxResId(STR_RECENT));
+}
+
+void SfxCharmapCtrl::getNoRecent()
+{
+    if(m_aRecentCharList.size() < 0)
+       m_xRecentLabel->set_label(SfxResId(STR_NORECENT));
 }
 
 void SfxCharmapCtrl::getRecentCharacterList()
