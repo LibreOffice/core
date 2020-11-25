@@ -348,6 +348,9 @@
 #define STR_SPREADSHEET                         NC_("STR_SPREADSHEET", "Spreadsheet")
 #define STR_PRESENTATION                        NC_("STR_PRESENTATION", "Presentation")
 #define STR_DRAWING                             NC_("STR_DRAWING", "Drawing")
+#define STR_RECENT                              NC_("STR_RECENT", "Recently used")
+#define STR_NORECENT                            NC_("STR_NORECENT", "No recent characters")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
