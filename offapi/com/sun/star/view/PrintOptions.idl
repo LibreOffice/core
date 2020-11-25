@@ -76,6 +76,10 @@ published service PrintOptions
     /** if set, specifies name of the printer to use.
      */
     [optional, property] string PrinterName;
+
+    /** advises the printer to create a single print job for each copy.
+     */
+    [optional, property] boolean SinglePrintJobs;
 };
 
 
