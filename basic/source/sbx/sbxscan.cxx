@@ -113,6 +113,10 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
         p++;
         bMinus = true;
     }
+    if (*p == '+')
+    {
+        p++;
+    }
     if( rtl::isAsciiDigit( *p ) || ((*p == cNonIntntlDecSep || *p == cIntntlDecSep ||
                     (cIntntlDecSep && *p == cIntntlGrpSep) || (cIntntlDecSepAlt && *p == cIntntlDecSepAlt)) &&
                 rtl::isAsciiDigit( *(p+1) )))
