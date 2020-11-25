@@ -317,6 +317,8 @@ NavigationBar::NavigationBar(vcl::Window* pParent)
     , m_xNextBtn(m_xBuilder->weld_button("next"))
     , m_xLastBtn(m_xBuilder->weld_button("last"))
     , m_xNewBtn(m_xBuilder->weld_button("new"))
+    , m_aPrevRepeater(*m_xPrevBtn, LINK(this,NavigationBar,OnClick))
+    , m_aNextRepeater(*m_xNextBtn, LINK(this,NavigationBar,OnClick))
     , m_nCurrentPos(-1)
     , m_bPositioning(false)
 {
@@ -339,19 +341,6 @@ NavigationBar::NavigationBar(vcl::Window* pParent)
     m_xFirstBtn->connect_clicked(LINK(this,NavigationBar,OnClick));
     m_xLastBtn->connect_clicked(LINK(this,NavigationBar,OnClick));
     m_xNewBtn->connect_clicked(LINK(this,NavigationBar,OnClick));
-
-    // instead of connect_clicked because we want a button held down to
-    // repeat the next/prev
-    m_xPrevBtn->connect_mouse_press(LINK(this, NavigationBar, PrevMousePressHdl));
-    m_xNextBtn->connect_mouse_press(LINK(this, NavigationBar, NextMousePressHdl));
-    m_xPrevBtn->connect_mouse_release(LINK(this, NavigationBar, PrevMouseReleaseHdl));
-    m_xNextBtn->connect_mouse_release(LINK(this, NavigationBar, NextMouseReleaseHdl));
-
-    auto nRepeatTime = Application::GetSettings().GetMouseSettings().GetButtonRepeat();
-    m_aNextRepeat.SetTimeout(nRepeatTime);
-    m_aNextRepeat.SetInvokeHandler(LINK(this, NavigationBar, NextRepeatTimerHdl));
-    m_aPrevRepeat.SetTimeout(nRepeatTime);
-    m_aPrevRepeat.SetInvokeHandler(LINK(this, NavigationBar, PrevRepeatTimerHdl));
 
     m_xRecordText->set_label(SvxResId(RID_STR_REC_TEXT));
     m_xRecordOf->set_label(SvxResId(RID_STR_REC_FROM_TEXT));
@@ -384,49 +373,6 @@ void NavigationBar::dispose()
 sal_uInt16 NavigationBar::ArrangeControls()
 {
     return m_xContainer->get_preferred_size().Width();
-}
-
-IMPL_LINK_NOARG(NavigationBar, PrevRepeatTimerHdl, Timer*, void)
-{
-    OnClick(*m_xPrevBtn);
-}
-
-IMPL_LINK_NOARG(NavigationBar, NextRepeatTimerHdl, Timer*, void)
-{
-    OnClick(*m_xNextBtn);
-}
-
-IMPL_LINK_NOARG(NavigationBar, PrevMousePressHdl, const MouseEvent&, bool)
-{
-    if (!m_xPrevBtn->get_sensitive())
-        return false;
-    PrevRepeatTimerHdl(nullptr);
-    if (!m_xPrevBtn->get_sensitive())
-        return false;
-    m_aPrevRepeat.Start();
-    return false;
-}
-
-IMPL_LINK_NOARG(NavigationBar, PrevMouseReleaseHdl, const MouseEvent&, bool)
-{
-    m_aPrevRepeat.Stop();
-    return false;
-}
-
-IMPL_LINK_NOARG(NavigationBar, NextMousePressHdl, const MouseEvent&, bool)
-{
-    if (m_xNextBtn->get_sensitive())
-    {
-        NextRepeatTimerHdl(nullptr);
-        m_aNextRepeat.Start();
-    }
-    return false;
-}
-
-IMPL_LINK_NOARG(NavigationBar, NextMouseReleaseHdl, const MouseEvent&, bool)
-{
-    m_aNextRepeat.Stop();
-    return false;
 }
 
 IMPL_LINK(NavigationBar, OnClick, weld::Button&, rButton, void)
@@ -631,9 +577,9 @@ void NavigationBar::SetState(DbGridControlNavigationBarState nWhich)
     if (!bAvailable)
     {
         if (pWnd == m_xNextBtn.get())
-            m_aNextRepeat.Stop();
+            m_aNextRepeater.Stop();
         else if (pWnd == m_xPrevBtn.get())
-            m_aPrevRepeat.Stop();
+            m_aPrevRepeater.Stop();
     }
 }
 
