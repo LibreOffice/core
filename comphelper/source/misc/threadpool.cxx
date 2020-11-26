@@ -167,7 +167,14 @@ void ThreadPool::shutdownLocked(std::unique_lock<std::mutex>& aGuard)
     else
     {
         while( !maTasks.empty() )
+        {
             maTasksChanged.wait( aGuard );
+            // In the (unlikely but possible?) case pushTask() gets called meanwhile,
+            // its notify_one() call is meant to wake a up a thread and process the task.
+            // But if this code gets woken up instead, it could lead to a deadlock.
+            // Pass on the notification.
+            maTasksChanged.notify_one();
+        }
     }
     assert( maTasks.empty() );
 
