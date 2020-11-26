@@ -549,28 +549,4 @@ bool ZipFile::HasContent(const std::string &ContentName) const
     return std::any_of(dir->begin(), dir->end(), internal::stricmp(ContentName));
 }
 
-
-/** Returns the length of the longest file name
-        in the current zip file
-*/
-long ZipFile::GetFileLongestFileNameLength() const
-{
-    long lmax = 0;
-    if (!findCentralDirectoryEnd(m_pStream))
-        return lmax;
-    CentralDirectoryEnd end;
-    if (!readCentralDirectoryEnd(m_pStream, end))
-        return lmax;
-    m_pStream->sseek(end.cdir_offset, SEEK_SET);
-    CentralDirectoryEntry entry;
-    while (m_pStream->stell() != -1 && o3tl::make_unsigned(m_pStream->stell()) < end.cdir_offset + end.cdir_size)
-    {
-        if (!readCentralDirectoryEntry(m_pStream, entry))
-            return lmax;
-        if (entry.filename_size > lmax)
-            lmax = entry.filename_size;
-    }
-    return lmax;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
