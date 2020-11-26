@@ -469,12 +469,8 @@ bool SalGraphics::DrawPolyPolygon(
         const basegfx::B2DHomMatrix& rMirror(getMirror(i_pOutDev));
         if(!rMirror.isIdentity())
         {
-            basegfx::B2DRange aBoundingBox(i_rPolyPolygon.getB2DRange());
-            aBoundingBox *= rObjectToDevice;
-            auto aTranslateToMirroredBounds = createTranslateToMirroredBounds(aBoundingBox, rMirror);
-
             return drawPolyPolygon(
-                aTranslateToMirroredBounds * rObjectToDevice,
+                rMirror * rObjectToDevice,
                 i_rPolyPolygon,
                 i_fTransparency);
         }
@@ -558,12 +554,8 @@ bool SalGraphics::DrawPolyLine(
         const basegfx::B2DHomMatrix& rMirror(getMirror(i_pOutDev));
         if(!rMirror.isIdentity())
         {
-            basegfx::B2DRange aBoundingBox(i_rPolygon.getB2DRange());
-            aBoundingBox *= rObjectToDevice;
-            auto aTranslateToMirroredBounds = createTranslateToMirroredBounds(aBoundingBox, rMirror);
-
             return drawPolyLine(
-                aTranslateToMirroredBounds * rObjectToDevice,
+                rMirror * rObjectToDevice,
                 i_rPolygon,
                 i_fTransparency,
                 i_rLineWidth,
