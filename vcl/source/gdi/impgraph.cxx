@@ -1349,6 +1349,13 @@ bool ImpGraphic::ImplSwapOut()
 {
     bool bRet = false;
 
+    // Hack / Workaround - ignore swap out PDF files
+    if (maVectorGraphicData &&
+        maVectorGraphicData->getVectorGraphicDataType() == VectorGraphicDataType::Pdf)
+    {
+        return false;
+    }
+
     if( !ImplIsSwapOut() )
     {
         ::utl::TempFile     aTempFile;
