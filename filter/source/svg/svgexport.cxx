@@ -2057,8 +2057,7 @@ bool SVGFilter::implCreateObjects()
                 {
                     drawing::FillStyle aFillStyle;
                     bool assigned = ( xBackground->getPropertyValue( "FillStyle" ) >>= aFillStyle );
-                    if( assigned && aFillStyle != drawing::FillStyle_NONE
-                                 && aFillStyle != drawing::FillStyle_BITMAP )
+                    if( assigned && aFillStyle != drawing::FillStyle_NONE )
                     {
                         implCreateObjectsFromBackground( xDrawPage );
                     }
