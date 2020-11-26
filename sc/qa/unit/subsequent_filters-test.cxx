@@ -248,6 +248,7 @@ public:
     void testTdf132278();
     void testTdf130959();
     void testTdf129410();
+    void testTdf138507();
     void testTdf131380();
     void testTdf129681();
     void testTdf111974XLSM();
@@ -427,6 +428,7 @@ public:
     CPPUNIT_TEST(testTdf132278);
     CPPUNIT_TEST(testTdf130959);
     CPPUNIT_TEST(testTdf129410);
+    CPPUNIT_TEST(testTdf138507);
     CPPUNIT_TEST(testTdf131380);
     CPPUNIT_TEST(testTdf129681);
     CPPUNIT_TEST(testTdf111974XLSM);
@@ -3729,6 +3731,18 @@ void ScFiltersTest::testTdf129410()
 {
     // Would crash without the fix on loading
     ScDocShellRef xDocSh = loadDoc("tdf129410.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll(); // perform hard re-calculation.
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf138507()
+{
+    // Would fail to load without the fix
+    ScDocShellRef xDocSh = loadDoc("tdf138507.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
