@@ -437,16 +437,16 @@ css::uno::Sequence< sal_Int8 > OLEVariant::getByteSequence() const
         if(pArray)
         {
             HRESULT hresult1,hresult2;
-            long lBound,uBound;
+            LONG lBound,uBound;
             // Verify that the SafeArray is the proper shape.
             hresult1 = ::SafeArrayGetLBound(pArray, 1, &lBound);
             hresult2 = ::SafeArrayGetUBound(pArray, 1, &uBound);
             if ( SUCCEEDED(hresult1) && SUCCEEDED(hresult2) )
             {
-                long nCount = uBound-lBound+1;
+                LONG nCount = uBound-lBound+1;
                 aRet.realloc(nCount);
                 sal_Int8* pData = aRet.getArray();
-                for(long i=0; SUCCEEDED(hresult1) && lBound <= uBound ;++i,++lBound)
+                for(; SUCCEEDED(hresult1) && lBound <= uBound ;++lBound)
                 {
                     sal_Int32 nData = 0;
                     hresult1 = ::SafeArrayGetElement(pArray,&lBound,&nData);

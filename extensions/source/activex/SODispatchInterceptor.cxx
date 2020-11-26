@@ -121,7 +121,7 @@ STDMETHODIMP SODispatchInterceptor::queryDispatches( SAFEARRAY FAR* aDescripts, 
     if ( !aDescripts || !retVal || SafeArrayGetDim( aDescripts ) != 1 )
         return E_FAIL;
 
-    long nLB, nUB;
+    LONG nLB, nUB;
 
     HRESULT hr = SafeArrayGetLBound( aDescripts, 1, &nLB );
     if( !SUCCEEDED( hr ) ) return hr;
@@ -132,7 +132,7 @@ STDMETHODIMP SODispatchInterceptor::queryDispatches( SAFEARRAY FAR* aDescripts, 
 
     *retVal = SafeArrayCreateVector( VT_DISPATCH, 0, nUB - nLB );
 
-    for ( long ind = nLB; ind <= nUB; ind ++ )
+    for ( LONG ind = nLB; ind <= nUB; ind ++ )
     {
         CComPtr<IDispatch> pElem;
         SafeArrayGetElement( aDescripts, &ind, pElem );
@@ -168,7 +168,7 @@ STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR
 
     if (!wcsncmp(pValue.bstrVal, L".uno:OpenHyperlink", 18))
     {
-        long nLB = 0, nUB = 0;
+        LONG nLB = 0, nUB = 0;
         // long nDim = SafeArrayGetDim( aArgs );
 
         hr = SafeArrayGetLBound( aArgs, 1, &nLB );
@@ -178,7 +178,7 @@ STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR
         if( !SUCCEEDED( hr ) ) return hr;
         if( nUB < nLB ) return E_FAIL;
 
-        for ( long ind = nLB; ind <= nUB; ind ++ )
+        for ( LONG ind = nLB; ind <= nUB; ind ++ )
         {
             CComVariant pVarElem;
             SafeArrayGetElement( aArgs, &ind, &pVarElem );
@@ -230,7 +230,7 @@ STDMETHODIMP SODispatchInterceptor::getInterceptedURLs( SAFEARRAY FAR* FAR* pVal
     if( !*pVal )
         return E_FAIL;
 
-    long ix = 0;
+    LONG ix = 0;
     CComBSTR aPattern( OLESTR( "ftp://*" ) );
     SafeArrayPutElement( *pVal, &ix, aPattern );
 

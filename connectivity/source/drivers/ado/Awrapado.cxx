@@ -1981,7 +1981,7 @@ ADORecordset* WpADOConnection::getTables( const css::uno::Any& catalog,
     SAFEARRAY *psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     // Set the values for each element of the array
-    for( long i = 0 ; i < nCrit && SUCCEEDED( hr );i++)
+    for( LONG i = 0 ; i < nCrit && SUCCEEDED( hr );i++)
     {
         hr  = SafeArrayPutElement(psa, &i,&varCriteria[i]);
     }

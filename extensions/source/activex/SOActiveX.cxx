@@ -224,7 +224,7 @@ HRESULT CSOActiveX::Cleanup()
         if ( SUCCEEDED( hr ) && pDispDocumentCloser )
         {
             SAFEARRAY FAR* pInitFrame = SafeArrayCreateVector( VT_VARIANT, 0, 1 );
-            long nInitInd = 0;
+            LONG nInitInd = 0;
             CComVariant pFrameVariant( mpDispFrame );
             SafeArrayPutElement( pInitFrame, &nInitInd, &pFrameVariant );
             CComVariant aVarInitFrame;
@@ -593,7 +593,7 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
         SAFEARRAY FAR* pInitVals = SafeArrayCreateVector( VT_VARIANT, 0, 3 );
 
         // the first sequence element
-        long nInitInd = 0;
+        LONG nInitInd = 0;
         CComVariant pFrameVariant( mpDispFrame );
         SafeArrayPutElement( pInitVals, &nInitInd, &pFrameVariant );
 
@@ -632,7 +632,7 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
 HRESULT CSOActiveX::CallLoadComponentFromURL1PBool( OLECHAR const * sUrl, OLECHAR const * sArgName, BOOL sArgVal )
 {
     SAFEARRAY FAR* pPropVals = SafeArrayCreateVector( VT_DISPATCH, 0, 1 );
-    long ix = 0;
+    LONG ix = 0;
     CComPtr<IDispatch> pdispPropVal;
     HRESULT hr = GetUnoStruct( L"com.sun.star.beans.PropertyValue", pdispPropVal );
     if( !SUCCEEDED( hr ) ) return hr;
@@ -682,7 +682,7 @@ HRESULT CSOActiveX::CallDispatchMethod( OLECHAR const * sUrl,
     if( !SUCCEEDED( hr ) ) return hr;
 
     SAFEARRAY FAR* pPropVals = SafeArrayCreateVector( VT_DISPATCH, 0, count );
-    for( long ix = 0; ix < static_cast<long>(count); ix ++ )
+    for( LONG ix = 0; ix < static_cast<LONG>(count); ix ++ )
     {
         CComPtr<IDispatch> pdispPropVal;
         hr = GetUnoStruct( L"com.sun.star.beans.PropertyValue", pdispPropVal );
@@ -880,7 +880,7 @@ SOVersion CSOActiveX::GetVersionConnected()
 
             if( pInitParams )
             {
-                long ix = 0;
+                LONG ix = 0;
                 CComVariant aConfPath( L"org.openoffice.Setup" );
                 SafeArrayPutElement( pInitParams, &ix, &aConfPath );
 

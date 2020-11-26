@@ -151,14 +151,14 @@ Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinar
         //Copy the data only up to the Actual Size of Field.
         sal_Int32 nSize = aField.GetActualSize();
         Sequence<sal_Int8> aData(nSize);
-        long index = 0;
+        sal_Int32 index = 0;
         while(index < nSize)
         {
             m_aValue = aField.GetChunk(BLOCK_SIZE);
             if(m_aValue.isNull())
                 break;
             UCHAR chData;
-            for(long index2 = 0;index2 < BLOCK_SIZE;++index2)
+            for(LONG index2 = 0;index2 < BLOCK_SIZE;++index2)
             {
                 HRESULT hr = ::SafeArrayGetElement(m_aValue.parray,&index2,&chData);
                 if(SUCCEEDED(hr))

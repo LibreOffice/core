@@ -95,7 +95,7 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SODOCUMENTEVENTLISTENER)
             if( !*pVal )
                 return E_FAIL;
 
-            long ix = 0;
+            LONG ix = 0;
             CComBSTR aInterface( OLESTR( "com.sun.star.embed.XActionsApproval" ) );
             SafeArrayPutElement( *pVal, &ix, aInterface );
 
