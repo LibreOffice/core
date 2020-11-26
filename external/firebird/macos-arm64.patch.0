@@ -1,7 +1,7 @@
 -*- Mode: diff -*-
 --- configure
 +++ configure
-@@ -2901,6 +2901,21 @@
+@@ -2901,6 +2901,22 @@
      RAW_DEVICES_FLG=N
      ;;
  
@@ -18,6 +18,7 @@
 +    SHRLIB_EXT=dylib
 +    CPU_TYPE=arm64
 +    EXPORT_SYMBOLS_STYLE=darwin
++    RAW_DEVICES_FLG=N
 +    ;;
 +
    i*86-*-darwin*)
@@ -33,11 +34,13 @@
      char a;
 --- src/common/common.h
 +++ src/common/common.h
-@@ -234,6 +234,10 @@
+@@ -234,6 +234,12 @@
  #define DARWINPPC64
  #define FB_CPU CpuPowerPc64
  #endif
-+#ifdef ARM64
++#ifdef __aarch64__
++// This means x86_64, but does it matter? There is no arch_arm64, arch_aarch64, arch_darwin_arm64,
++// or arch_darwin_aarch64 in the P_ARCH enum in src/remote/protocol.h.
 +#define DARWIN64
 +#define FB_CPU CpuArm64
 +#endif
@@ -50,7 +53,7 @@
  #if defined(ARM)
  #define FB_PLATFORM     "UA"
  #endif
-+#if defined(ARM64)
++#if defined(__aarch64__)
 +#define FB_PLATFORM     "UB"
 +#endif
  #endif
@@ -58,7 +61,7 @@
  #ifdef DEV_BUILD
 --- /dev/null
 +++ builds/posix/prefix.darwin_arm64
-@@ -0,0 +0,43 @@
+@@ -0,0 +0,42 @@
 +# The contents of this file are subject to the Interbase Public
 +# License Version 1.0 (the "License"); you may not use this file
 +# except in compliance with the License. You may obtain a copy
@@ -78,7 +81,6 @@
 +# Start of file prefix.darwin:	$(VERSION)	@PLATFORM@
 +# 2 Oct 2002, Nickolay Samofatov - Major Cleanup
 +#
-+# Default build from 10.7 using Clang
 +
 +
 +#DYLD_PRINT_ENV=1
@@ -90,15 +92,15 @@
 +MACOSX_DEPLOYMENT_TARGET=11.0
 +export MACOSX_DEPLOYMENT_TARGET
 +
-+PROD_FLAGS=-O1 -DDARWIN -DARM64 -pipe -MMD -fPIC -fno-common
-+DEV_FLAGS=-ggdb -DDARWIN -DARM64 -pipe -MMD -fPIC -fno-omit-frame-pointer -fno-common -Wall -fno-optimize-sibling-calls -Wno-non-virtual-dtor
-+CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden 
++PROD_FLAGS=-DDARWIN -pipe -O2 -MMD -fPIC -fno-common
++DEV_FLAGS=-ggdb -DDARWIN -pipe -MMD -fPIC -fno-omit-frame-pointer -fno-common -Wall -fno-optimize-sibling-calls -Wno-non-virtual-dtor
++CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden
 +
 +EXE_LINK_OPTIONS:= 
 +UNDEF_PLATFORM=
 +
 +LINK_LIBS+=-liconv
-+MATHLIB=-ltommath
++#MATHLIB=$(ROOT)/extern/libtommath/.libs/libtommath.a
 +SO_LINK_LIBS+=-liconv
 +
 +include $(ROOT)/gen/darwin.defaults
