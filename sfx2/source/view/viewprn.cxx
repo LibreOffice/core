@@ -757,8 +757,31 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             break;
         }
 
-        case SID_SETUPPRINTER : // display the printer settings dialogue : File > Printer Settings...
-        case SID_PRINTER_NAME : // only for recorded macros
+        case SID_PRINTER_NAME: // for recorded macros
+        {
+            // get printer and printer settings from the document
+            SfxPrinter* pDocPrinter = GetPrinter(true);
+            const SfxStringItem* pPrinterItem = rReq.GetArg<SfxStringItem>(SID_PRINTER_NAME);
+            if (!pPrinterItem)
+            {
+                rReq.Ignore();
+                break;
+            }
+            // use PrinterName parameter to create a printer
+            pPrinter = VclPtr<SfxPrinter>::Create(pDocPrinter->GetOptions().Clone(),
+                                                  pPrinterItem->GetValue());
+
+            if (!pPrinter->IsKnown())
+            {
+                pPrinter.disposeAndClear();
+                rReq.Ignore();
+                break;
+            }
+            SetPrinter(pPrinter, SfxPrinterChangeFlags::PRINTER);
+            rReq.Done();
+            break;
+        }
+        case SID_SETUPPRINTER : // display the printer settings dialog : File > Printer Settings...
         {
             // get printer and printer settings from the document
             SfxPrinter *pDocPrinter = GetPrinter(true);
@@ -773,14 +796,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 // if printer is unknown, it can't be used - now printer from document will be used
                 if ( !pPrinter->IsKnown() )
                     pPrinter.disposeAndClear();
-            }
-
-            if ( SID_PRINTER_NAME == nId )
-            {
-                // just set a recorded printer name
-                if ( pPrinter )
-                    SetPrinter( pPrinter, SfxPrinterChangeFlags::PRINTER  );
-                return;
             }
 
             // no PrinterName parameter in ItemSet or the PrinterName points to an unknown printer
@@ -820,68 +835,63 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 return;
             }
 
-            // Open Printer Setup dialog
-            if ( nId == SID_SETUPPRINTER )
+            // Open Printer Setup dialog (needs a temporary printer)
+            VclPtr<SfxPrinter> pDlgPrinter = pPrinter->Clone();
+            PrinterSetupDialog aPrintSetupDlg(GetFrameWeld());
+            std::unique_ptr<SfxDialogExecutor_Impl> pExecutor;
+
+            if (pImpl->m_bHasPrintOptions && HasPrintOptionsPage())
             {
-                // PrinterDialog needs a temporary printer
-                VclPtr<SfxPrinter> pDlgPrinter = pPrinter->Clone();
+                // additional controls for dialog
+                pExecutor.reset(new SfxDialogExecutor_Impl(this, aPrintSetupDlg));
+                if (bPrintOnHelp)
+                    pExecutor->DisableHelp();
+                aPrintSetupDlg.SetOptionsHdl(pExecutor->GetLink());
+            }
 
-                // execute PrinterSetupDialog
-                PrinterSetupDialog aPrintSetupDlg(GetFrameWeld());
-                std::unique_ptr<SfxDialogExecutor_Impl> pExecutor;
+            aPrintSetupDlg.SetPrinter(pDlgPrinter);
+            nDialogRet = aPrintSetupDlg.run();
 
-                if (pImpl->m_bHasPrintOptions && HasPrintOptionsPage())
-                {
-                    // additional controls for dialog
-                    pExecutor.reset( new SfxDialogExecutor_Impl( this, aPrintSetupDlg ) );
-                    if ( bPrintOnHelp )
-                        pExecutor->DisableHelp();
-                    aPrintSetupDlg.SetOptionsHdl( pExecutor->GetLink() );
-                }
-
-                aPrintSetupDlg.SetPrinter( pDlgPrinter );
-                nDialogRet = aPrintSetupDlg.run();
-
-                if ( pExecutor && pExecutor->GetOptions() )
-                {
-                    if ( nDialogRet == RET_OK )
-                        // remark: have to be recorded if possible!
-                        pDlgPrinter->SetOptions( *pExecutor->GetOptions() );
-                    else
-                    {
-                        pPrinter->SetOptions( *pExecutor->GetOptions() );
-                        SetPrinter( pPrinter, SfxPrinterChangeFlags::OPTIONS );
-                    }
-                }
-
-                // no recording of PrinterSetup except printer name (is printer dependent)
-                rReq.Ignore();
-
-                if ( nDialogRet == RET_OK )
-                {
-                    if ( pPrinter->GetName() != pDlgPrinter->GetName() )
-                    {
-                        // user has changed the printer -> macro recording
-                        SfxRequest aReq( GetViewFrame(), SID_PRINTER_NAME );
-                        aReq.AppendItem( SfxStringItem( SID_PRINTER_NAME, pDlgPrinter->GetName() ) );
-                        aReq.Done();
-                    }
-
-                    // take the changes made in the dialog
-                    SetPrinter_Impl( pDlgPrinter );
-
-                    // forget new printer, it was taken over (as pPrinter) or deleted
-                    pDlgPrinter = nullptr;
-                    mbPrinterSettingsModified = true;
-                }
+            if (pExecutor && pExecutor->GetOptions())
+            {
+                if (nDialogRet == RET_OK)
+                    // remark: have to be recorded if possible!
+                    pDlgPrinter->SetOptions(*pExecutor->GetOptions());
                 else
                 {
-                    // PrinterDialog is used to transfer information on printing,
-                    // so it will only be deleted here if dialog was cancelled
-                    pDlgPrinter.disposeAndClear();
-                    rReq.Ignore();
+                    pPrinter->SetOptions(*pExecutor->GetOptions());
+                    SetPrinter(pPrinter, SfxPrinterChangeFlags::OPTIONS);
                 }
             }
+
+            // no recording of PrinterSetup except printer name (is printer dependent)
+            rReq.Ignore();
+
+            if (nDialogRet == RET_OK)
+            {
+                if (pPrinter->GetName() != pDlgPrinter->GetName())
+                {
+                    // user has changed the printer -> macro recording
+                    SfxRequest aReq(GetViewFrame(), SID_PRINTER_NAME);
+                    aReq.AppendItem(SfxStringItem(SID_PRINTER_NAME, pDlgPrinter->GetName()));
+                    aReq.Done();
+                }
+
+                // take the changes made in the dialog
+                SetPrinter_Impl(pDlgPrinter);
+
+                // forget new printer, it was taken over (as pPrinter) or deleted
+                pDlgPrinter = nullptr;
+                mbPrinterSettingsModified = true;
+            }
+            else
+            {
+                // PrinterDialog is used to transfer information on printing,
+                // so it will only be deleted here if dialog was cancelled
+                pDlgPrinter.disposeAndClear();
+                rReq.Ignore();
+            }
+            break;
         }
     }
 }
