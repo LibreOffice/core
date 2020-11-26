@@ -129,14 +129,6 @@ public:
     bool HasContent(const std::string& ContentName) const;
 
 private:
-    /** Returns the length of the longest file name
-        in the current zip file
-
-        @throws ZipException if a zip error occurs
-    */
-    long GetFileLongestFileNameLength() const;
-
-private:
     StreamInterface* m_pStream;
     bool m_bShouldFree;
 };
