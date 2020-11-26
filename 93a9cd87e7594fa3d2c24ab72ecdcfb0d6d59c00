@@ -22,6 +22,30 @@
       "revId": "93a9cd87e7594fa3d2c24ab72ecdcfb0d6d59c00",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ab84498_44a83e84",
+        "filename": "svx/source/dialog/docrecovery.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1002824
+      },
+      "writtenOn": "2020-11-26T13:23:06Z",
+      "side": 1,
+      "message": "I don\u0027t fully understand what needs to change...\nAn additional column was added (line 693) and thus the dailog size was increased (line 686), Should the dialog be smaller?\n\n*The column after the recovery column is very small and should only display a document type icon",
+      "parentUuid": "d05f18fb_e6b822f8",
+      "range": {
+        "startLine": 692,
+        "startChar": 21,
+        "endLine": 692,
+        "endChar": 28
+      },
+      "revId": "93a9cd87e7594fa3d2c24ab72ecdcfb0d6d59c00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
