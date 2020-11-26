@@ -48,6 +48,12 @@ class OOO_DLLPUBLIC_TEST BootstrapFixture : public BootstrapFixtureBase
 protected:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
 
+    // A convenience function to be used to conditionally exclude tests not behaving properly
+    // on UI scaling other than 1:1. Using this should be considered a temporary workaround,
+    // until a proper fix is implemented that either considers the DPI properly in the test, or
+    // makes the invariants that test uses independent of DPI.
+    static bool IsDefaultDPI();
+
 public:
     DECL_STATIC_LINK(BootstrapFixture, ImplInitFilterHdl, ConvertData&, bool);
 

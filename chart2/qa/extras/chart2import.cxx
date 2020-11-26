@@ -2563,6 +2563,11 @@ void Chart2ImportTest::testStockChartShiftedCategoryPosition()
 
 void Chart2ImportTest::testTdf133376()
 {
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (!IsDefaultDPI())
+        return;
+
     load("/chart2/qa/extras/data/xlsx/", "tdf133376.xlsx");
     Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
         UNO_QUERY_THROW);

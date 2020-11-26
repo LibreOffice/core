@@ -18,6 +18,7 @@
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 
+#include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/link.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -235,6 +236,12 @@ IMPL_STATIC_LINK(
         test::BootstrapFixture, ImplInitFilterHdl, ConvertData&, rData, bool)
 {
     return GraphicFilter::GetGraphicFilter().GetFilterCallback().Call( rData );
+}
+
+bool test::BootstrapFixture::IsDefaultDPI()
+{
+    return (Application::GetDefaultDevice()->GetDPIX() == 96
+            && Application::GetDefaultDevice()->GetDPIY() == 96);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
