@@ -24,9 +24,9 @@
 
 class ImpErrorQuad
 {
-    sal_uInt32 nRed;
-    sal_uInt32 nGreen;
-    sal_uInt32 nBlue;
+    sal_Int16 nRed;
+    sal_Int16 nGreen;
+    sal_Int16 nBlue;
 
 public:
     ImpErrorQuad()
@@ -100,9 +100,9 @@ inline void ImpErrorQuad::ImplAddColorError7(const ImpErrorQuad& rErrQuad)
 
 inline BitmapColor ImpErrorQuad::ImplGetColor()
 {
-    return BitmapColor(std::clamp<sal_uInt16>(nRed, 0, 8160) >> 5,
-                       std::clamp<sal_uInt16>(nGreen, 0, 8160) >> 5,
-                       std::clamp<sal_uInt16>(nBlue, 0, 8160) >> 5);
+    return BitmapColor(std::clamp(nRed, sal_Int16(0), sal_Int16(8160)) >> 5,
+                       std::clamp(nGreen, sal_Int16(0), sal_Int16(8160)) >> 5,
+                       std::clamp(nBlue, sal_Int16(0), sal_Int16(8160)) >> 5);
 }
 
 #endif // INCLUDED_VCL_INC_IMPOCTREE_HXX
