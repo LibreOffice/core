@@ -2953,6 +2953,10 @@ void GtkSalFrame::damaged(sal_Int32 nExtentsX, sal_Int32 nExtentsY,
     }
 #endif
 
+    // quite a bit of noise in RTL mode with negative widths
+    if (nExtentsWidth <= 0 || nExtentsHeight <= 0)
+        return;
+
     gtk_widget_queue_draw_area(GTK_WIDGET(m_pFixedContainer),
                                nExtentsX, nExtentsY,
                                nExtentsWidth, nExtentsHeight);
