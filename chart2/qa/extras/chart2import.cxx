@@ -165,6 +165,12 @@ public:
     void testTdf91250();
     void testTdf134111();
     void testTdf137505();
+<<<<<<< HEAD   (0c0b53 tdf#138307 Chart import: fix lost custom shape text)
+=======
+    void testTdf137734();
+    void testTdf137874();
+    void testTdfCustomShapePos();
+>>>>>>> CHANGE (48ad65 tdf#138561 OOXML Chart import: fix custom shape position)
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -278,6 +284,12 @@ public:
     CPPUNIT_TEST(testTdf91250);
     CPPUNIT_TEST(testTdf134111);
     CPPUNIT_TEST(testTdf137505);
+<<<<<<< HEAD   (0c0b53 tdf#138307 Chart import: fix lost custom shape text)
+=======
+    CPPUNIT_TEST(testTdf137734);
+    CPPUNIT_TEST(testTdf137874);
+    CPPUNIT_TEST(testTdfCustomShapePos);
+>>>>>>> CHANGE (48ad65 tdf#138561 OOXML Chart import: fix custom shape position)
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2637,6 +2649,67 @@ void Chart2ImportTest::testTdf137505()
     CPPUNIT_ASSERT_EQUAL(float(12), nFontSize);
 }
 
+<<<<<<< HEAD   (0c0b53 tdf#138307 Chart import: fix lost custom shape text)
+=======
+void Chart2ImportTest::testTdf137734()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf137734.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY_THROW);
+    uno::Any aAny = xPropSet->getPropertyValue("VaryColorsByPoint");
+    bool bVaryColor = true;
+    CPPUNIT_ASSERT(aAny >>= bVaryColor);
+    CPPUNIT_ASSERT(!bVaryColor);
+
+    // tdf#126133 Test primary X axis Rotation value
+    Reference<chart2::XAxis> xXAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xXAxis.is());
+    Reference<chart2::XTitled> xTitled(xXAxis, uno::UNO_QUERY_THROW);
+    Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
+    CPPUNIT_ASSERT(xTitle.is());
+    Reference<beans::XPropertySet> xTitlePropSet(xTitle, uno::UNO_QUERY_THROW);
+    uno::Any aAny2 = xTitlePropSet->getPropertyValue("TextRotation");
+    double nRotation = -1;
+    CPPUNIT_ASSERT(aAny2 >>= nRotation);
+    CPPUNIT_ASSERT_EQUAL(0.0, nRotation);
+}
+
+void Chart2ImportTest::testTdf137874()
+{
+    load("/chart2/qa/extras/data/xlsx/", "piechart_legend.xlsx");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+                                               UNO_QUERY_THROW);
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+    Reference<drawing::XShape> xLegendEntry;
+    xLegendEntry
+        = getShapeByName(xShapes, "CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=0:LegendEntry=0");
+    CPPUNIT_ASSERT(xLegendEntry.is());
+}
+
+void Chart2ImportTest::testTdfCustomShapePos()
+{
+    load("/chart2/qa/extras/data/docx/", "testcustomshapepos.docx");
+    Reference< chart2::XChartDocument > xChartDoc(getChartDocFromWriter(0), UNO_QUERY_THROW);
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShape> xCustomShape(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+
+    // test position and size of a custom shape within a chart
+    awt::Point aPosition = xCustomShape->getPosition();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(8845, aPosition.X, 300);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(855, aPosition.Y, 300);
+    awt::Size aSize = xCustomShape->getSize();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4831, aSize.Width, 300);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1550, aSize.Height, 300);
+}
+
+>>>>>>> CHANGE (48ad65 tdf#138561 OOXML Chart import: fix custom shape position)
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
