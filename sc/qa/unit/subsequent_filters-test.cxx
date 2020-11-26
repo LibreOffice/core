@@ -2882,8 +2882,7 @@ void ScFiltersTest::testMiscRowHeights()
 {
     // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
     // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
-    if (Application::GetDefaultDevice()->GetDPIX() != 96
-        || Application::GetDefaultDevice()->GetDPIY() != 96)
+    if (!IsDefaultDPI())
         return;
 
     static const TestParam::RowData DfltRowData[] =
@@ -2926,8 +2925,7 @@ void ScFiltersTest::testOptimalHeightReset()
 {
     // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
     // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
-    if (Application::GetDefaultDevice()->GetDPIX() != 96
-        || Application::GetDefaultDevice()->GetDPIY() != 96)
+    if (!IsDefaultDPI())
         return;
 
     ScDocShellRef xDocSh = loadDoc("multilineoptimal.", FORMAT_ODS, true);

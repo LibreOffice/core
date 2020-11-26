@@ -14,8 +14,6 @@
 
 #include <test/xmldiff.hxx>
 #include <test/xmltesttools.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/svapp.hxx>
 
 #include <fstream>
 
@@ -117,8 +115,7 @@ void Chart2XShapeTest::testPieChartLabels1()
 {
     // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
     // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
-    if (Application::GetDefaultDevice()->GetDPIX() != 96
-        || Application::GetDefaultDevice()->GetDPIY() != 96)
+    if (!IsDefaultDPI())
         return;
 
     // inside placement for the best fit case
@@ -130,8 +127,7 @@ void Chart2XShapeTest::testPieChartLabels2()
 {
     // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
     // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
-    if (Application::GetDefaultDevice()->GetDPIX() != 96
-        || Application::GetDefaultDevice()->GetDPIY() != 96)
+    if (!IsDefaultDPI())
         return;
 
     // text wrap: wrap all text labels except one
@@ -143,8 +139,7 @@ void Chart2XShapeTest::testPieChartLabels3()
 {
     // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
     // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
-    if (Application::GetDefaultDevice()->GetDPIX() != 96
-        || Application::GetDefaultDevice()->GetDPIY() != 96)
+    if (!IsDefaultDPI())
         return;
 
     // text wrap: wrap no text label except one
@@ -156,8 +151,7 @@ void Chart2XShapeTest::testPieChartLabels4()
 {
     // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
     // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
-    if (Application::GetDefaultDevice()->GetDPIX() != 96
-        || Application::GetDefaultDevice()->GetDPIY() != 96)
+    if (!IsDefaultDPI())
         return;
 
     // data value and percent value are centered horizontally
