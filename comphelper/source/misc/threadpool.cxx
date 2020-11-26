@@ -250,7 +250,7 @@ void ThreadPool::decBusyWorker()
     --mnBusyWorkers;
 }
 
-void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag, bool bJoinAll)
+void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag, bool bJoin)
 {
 #if defined DBG_UTIL && (defined LINUX || defined _WIN32)
     assert(!gbIsWorkerThread && "cannot wait for tasks from inside a task");
@@ -272,14 +272,14 @@ void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag, bool 
 
     rTag->waitUntilDone();
 
-    if (bJoinAll)
-        joinAll();
+    if (bJoin)
+        joinThreadsIfIdle();
 }
 
-void ThreadPool::joinAll()
+void ThreadPool::joinThreadsIfIdle()
 {
     std::unique_lock< std::mutex > aGuard( maMutex );
-    if (maTasks.empty()) // check if there are still tasks from another tag
+    if (isIdle()) // check if there are still tasks from another tag
     {
         shutdownLocked(aGuard);
     }
