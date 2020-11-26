@@ -1370,6 +1370,13 @@ bool ImpGraphic::swapOutContent(SvStream& rOStm)
 
 bool ImpGraphic::swapOut()
 {
+    // Hack / Workaround - ignore swap out PDF files
+    if (maVectorGraphicData &&
+        maVectorGraphicData->getVectorGraphicDataType() == VectorGraphicDataType::Pdf)
+    {
+        return false;
+    }
+
     if (isSwappedOut())
         return false;
 

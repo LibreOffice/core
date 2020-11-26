@@ -455,12 +455,14 @@ void GraphicTest::testSwappingPageNumber()
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
 
     // Swapping out
-    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->swapOut());
-    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->isSwappedOut());
-    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    // Following checks were commented out because of the PDF swap issues
+    // with PDF graphic where a lot of swap files were created.
+    //CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->swapOut());
+    //CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+    //CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
 
     // Let's swap in
-    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    //CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());

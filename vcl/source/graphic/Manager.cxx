@@ -112,6 +112,15 @@ sal_Int64 Manager::getGraphicSizeBytes(const ImpGraphic* pImpGraphic)
 {
     if (!pImpGraphic->isAvailable())
         return 0;
+
+    // Hack / Workaround - don't count PDF vector graphic to preven swapping
+    if (pImpGraphic->getVectorGraphicData()
+        && pImpGraphic->getVectorGraphicData()->getVectorGraphicDataType()
+               == VectorGraphicDataType::Pdf)
+    {
+        return 0;
+    }
+
     return pImpGraphic->ImplGetSizeBytes();
 }
 
