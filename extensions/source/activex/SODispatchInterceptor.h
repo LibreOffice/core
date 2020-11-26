@@ -153,7 +153,7 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SODISPATCHINTERCEPTOR)
             if( !*pVal )
                 return E_FAIL;
 
-            long ix = 0;
+            LONG ix = 0;
             CComBSTR aInterface( OLESTR( "com.sun.star.frame.XDispatchProviderInterceptor" ) );
             SafeArrayPutElement( *pVal, &ix, aInterface );
 

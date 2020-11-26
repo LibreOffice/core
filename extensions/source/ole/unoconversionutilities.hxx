@@ -154,7 +154,7 @@ public:
     bool convertValueObject( const VARIANTARG *var, Any& any);
     void dispatchExObject2Sequence( const VARIANTARG* pvar, Any& anySeq, const Type& type);
 
-    Sequence<Any> createOleArrayWrapperOfDim(SAFEARRAY* pArray, unsigned int dimCount, unsigned int actDim, long* index,
+    Sequence<Any> createOleArrayWrapperOfDim(SAFEARRAY* pArray, unsigned int dimCount, unsigned int actDim, LONG* index,
                                              VARTYPE type, const Type& unotype);
     Sequence<Any> createOleArrayWrapper(SAFEARRAY* pArray, VARTYPE type, const Type& unotype= Type());
 
@@ -1299,7 +1299,7 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq)
     rgsabound[0].lLbound = 0;
     rgsabound[0].cElements = n;
     VARIANT oleElement;
-    long safeI[1];
+    LONG safeI[1];
 
     pArray = SafeArrayCreate(VT_VARIANT, 1, rgsabound);
 
@@ -2066,12 +2066,12 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
 */
 template<class T>
 Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapperOfDim(SAFEARRAY* pArray,
-              unsigned int dimCount, unsigned int actDim, long* index, VARTYPE type, const Type& unotype)
+              unsigned int dimCount, unsigned int actDim, LONG* index, VARTYPE type, const Type& unotype)
 {
     HRESULT hr= S_OK;
-    long lBound;
-    long uBound;
-    long nCountElements;
+    LONG lBound;
+    LONG uBound;
+    LONG nCountElements;
 
     SafeArrayGetLBound(pArray, actDim, &lBound);
     SafeArrayGetUBound(pArray, actDim, &uBound);
@@ -2187,8 +2187,8 @@ Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapper(SAFEARRAY* pArray
 
     if (dim > 0)
     {
-        std::unique_ptr<long[]> sarIndex(new long[dim]);
-        long * index =  sarIndex.get();
+        std::unique_ptr<LONG[]> sarIndex(new LONG[dim]);
+        LONG * index =  sarIndex.get();
 
         for (unsigned int i = 0; i < dim; i++)
         {
