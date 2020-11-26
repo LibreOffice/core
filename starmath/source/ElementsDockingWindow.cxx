@@ -262,7 +262,7 @@ const SmElementDescr SmElementsControl::m_aExamplesList[] =
     {" %DELTA t' = { %DELTA T } over sqrt{ 1 - v^2 over c^2 } ", RID_EXAMPLE_SPECIAL_RELATIVITY_HELP },
     { "d over dt left( {partial L}over{partial dot q} = {partial L}over{partial q} right)", RID_EXAMPLE_EULER_LAGRANGE_HELP },
     {"int from a to b f'(x) dx = f(a) - f(b)", RID_EXAMPLE_FTC_HELP},
-    { "abs{ %delta Z(t) } approx e^{%lambda t} abs{ %delta Z(0) }", RID_EXAMPLE_CAOS_HELP},
+    { "abs{ %delta Z(t) } approx e^{%lambda t} abs{ %delta Z(0) }", RID_EXAMPLE_CHAOS_HELP},
     {"f ( x ) = sum from { { n = 0 } } to { infinity } { {f^{(n)}(x_0)} over {n!} (x-x_0)^n}", RID_EXAMPLE_A_TAYLOR_SERIES_HELP},
     {"f ( x ) = {1} over {%sigma sqrt{2%pi} }func e^-{{(x-%mu)^2} over {2%sigma^2}}", RID_EXAMPLE_GAUSS_DISTRIBUTION_HELP},
 };
