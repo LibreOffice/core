@@ -1672,6 +1672,12 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton, void )
                                  makeAny( bChecked ) );
         preparePreview( true, true );
     }
+    else if( pButton == maOptionsPage.mpCollateSingleJobsBox )
+    {
+        bool bChecked = maOptionsPage.mpCollateSingleJobsBox->IsChecked();
+        maPController->setValue( "SinglePrintJobs",
+                                 makeAny( bChecked ) );
+    }
     else if( pButton == maNUpPage.mpBrochureBtn )
     {
         PropertyValue* pVal = getValueForWindow( pButton );
