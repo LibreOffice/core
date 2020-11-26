@@ -2383,7 +2383,7 @@ void IUnknownWrapper::buildComTlbIndex()
                 TypeAttr typeAttr(pType);
                 if( SUCCEEDED( pType->GetTypeAttr( &typeAttr)))
                 {
-                    for( long i= 0; i < typeAttr->cFuncs; i++)
+                    for( WORD i= 0; i < typeAttr->cFuncs; i++)
                     {
                         FuncDesc funcDesc(pType);
                         if( SUCCEEDED( pType->GetFuncDesc( i, &funcDesc)))
@@ -2408,7 +2408,7 @@ void IUnknownWrapper::buildComTlbIndex()
 
                     //If we create an Object in JScript and a property then it
                     //has VARDESC instead of FUNCDESC
-                    for (long i = 0; i < typeAttr->cVars; i++)
+                    for (WORD i = 0; i < typeAttr->cVars; i++)
                     {
                         VarDesc varDesc(pType);
                         if (SUCCEEDED(pType->GetVarDesc(i, & varDesc)))
