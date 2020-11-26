@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2289c79_eca0b8b6",
+        "filename": "svx/source/unodraw/unoshtxt.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-11-26T16:55:54Z",
+      "side": 1,
+      "message": "I think, extending the API is unnecessary using this:\n\nif( !mpOutliner-\u003eGetEditEngine().GetTextLen() || pOutlinerParaObject-\u003eCount() \u003e 1 ||\n( pOutlinerParaObject-\u003eCount() \u003d\u003d 1 \u0026\u0026 !pOutlinerParaObject-\u003eGetTextObject().GetText(0).isEmpty() ) )",
+      "range": {
+        "startLine": 549,
+        "startChar": 0,
+        "endLine": 549,
+        "endChar": 112
+      },
+      "revId": "a01ccdfa5fd5a0260b7aedf955e1e5aa0df072c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
