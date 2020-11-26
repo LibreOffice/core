@@ -275,9 +275,13 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
             drawing page instead, it is not possible to embed OLE objects. */
         bool bOleSupport = rxExternalPage.is();
 
+        awt::Size aChartSize = getChartSize();
+        if( aChartSize.Width <= 0 || aChartSize.Height <= 0 )
+            aChartSize = getDefaultPageSize();
+
         // now, xShapes is not null anymore
         getFilter().importFragment( new ChartDrawingFragment(
-            getFilter(), mrModel.maDrawingPath, xShapes, getChartSize(), aShapesOffset, bOleSupport ) );
+            getFilter(), mrModel.maDrawingPath, xShapes, aChartSize, aShapesOffset, bOleSupport ) );
     }
     catch( Exception& )
     {
