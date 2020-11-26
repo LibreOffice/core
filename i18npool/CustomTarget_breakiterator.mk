@@ -47,7 +47,7 @@ endif
 
 i18npool_BRKTXTS := \
     $(if $(i18npool_breakiterator_want_in),char_in.brk) \
-    char.brk \
+    $(if $(SYSTEM_ICU),char.brk) \
     count_word.brk \
     $(call gb_Helper_optional_locale,he,dict_word_he.brk) \
     $(call gb_Helper_optional_locale,hu,dict_word_hu.brk) \
