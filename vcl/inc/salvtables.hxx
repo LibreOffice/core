@@ -1672,4 +1672,29 @@ public:
     virtual ~SalInstanceTreeView() override;
 };
 
+class SalInstanceExpander : public SalInstanceContainer, public virtual weld::Expander
+{
+private:
+    VclPtr<VclExpander> m_xExpander;
+
+    DECL_LINK(ExpandedHdl, VclExpander&, void);
+
+public:
+    SalInstanceExpander(VclExpander* pExpander, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual void set_label(const OUString& rText) override;
+
+    virtual OUString get_label() const override;
+
+    virtual bool get_expanded() const override;
+
+    virtual void set_expanded(bool bExpand) override;
+
+    virtual bool has_focus() const override;
+
+    virtual void grab_focus() override;
+
+    virtual ~SalInstanceExpander() override;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

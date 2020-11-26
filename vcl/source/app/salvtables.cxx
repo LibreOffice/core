@@ -5683,43 +5683,32 @@ IMPL_LINK(SalInstanceTextView, CursorListener, VclWindowEvent&, rEvent, void)
         signal_cursor_position();
 }
 
-namespace
+SalInstanceExpander::SalInstanceExpander(VclExpander* pExpander, SalInstanceBuilder* pBuilder,
+                                         bool bTakeOwnership)
+    : SalInstanceContainer(pExpander, pBuilder, bTakeOwnership)
+    , m_xExpander(pExpander)
 {
-class SalInstanceExpander : public SalInstanceContainer, public virtual weld::Expander
+    m_xExpander->SetExpandedHdl(LINK(this, SalInstanceExpander, ExpandedHdl));
+}
+
+void SalInstanceExpander::set_label(const OUString& rText) { m_xExpander->set_label(rText); }
+
+OUString SalInstanceExpander::get_label() const { return m_xExpander->get_label(); }
+
+bool SalInstanceExpander::get_expanded() const { return m_xExpander->get_expanded(); }
+
+void SalInstanceExpander::set_expanded(bool bExpand) { m_xExpander->set_expanded(bExpand); }
+
+bool SalInstanceExpander::has_focus() const
 {
-private:
-    VclPtr<VclExpander> m_xExpander;
+    return m_xExpander->get_label_widget()->HasFocus() || SalInstanceContainer::has_focus();
+}
 
-    DECL_LINK(ExpandedHdl, VclExpander&, void);
+void SalInstanceExpander::grab_focus() { return m_xExpander->get_label_widget()->GrabFocus(); }
 
-public:
-    SalInstanceExpander(VclExpander* pExpander, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceContainer(pExpander, pBuilder, bTakeOwnership)
-        , m_xExpander(pExpander)
-    {
-        m_xExpander->SetExpandedHdl(LINK(this, SalInstanceExpander, ExpandedHdl));
-    }
-
-    virtual void set_label(const OUString& rText) override { m_xExpander->set_label(rText); }
-
-    virtual OUString get_label() const override { return m_xExpander->get_label(); }
-
-    virtual bool get_expanded() const override { return m_xExpander->get_expanded(); }
-
-    virtual void set_expanded(bool bExpand) override { m_xExpander->set_expanded(bExpand); }
-
-    virtual bool has_focus() const override
-    {
-        return m_xExpander->get_label_widget()->HasFocus() || SalInstanceContainer::has_focus();
-    }
-
-    virtual void grab_focus() override { return m_xExpander->get_label_widget()->GrabFocus(); }
-
-    virtual ~SalInstanceExpander() override
-    {
-        m_xExpander->SetExpandedHdl(Link<VclExpander&, void>());
-    }
-};
+SalInstanceExpander::~SalInstanceExpander()
+{
+    m_xExpander->SetExpandedHdl(Link<VclExpander&, void>());
 }
 
 IMPL_LINK_NOARG(SalInstanceExpander, ExpandedHdl, VclExpander&, void) { signal_expanded(); }
