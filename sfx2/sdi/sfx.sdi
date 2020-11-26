@@ -3218,7 +3218,7 @@ SfxVoidItem PrintDefault SID_PRINTDOCDIRECT
 
 
 SfxStringItem Printer SID_PRINTER_NAME
-
+(SfxStringItem PrinterName SID_PRINTER_NAME)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
