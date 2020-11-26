@@ -35,7 +35,7 @@
 
 namespace {
 
-OUString PromptNew(long hWnd)
+OUString PromptNew(sal_IntPtr hWnd)
 {
     HRESULT hr;
     IDataSourceLocator* dlPrompt = nullptr;
@@ -95,7 +95,7 @@ OUString PromptNew(long hWnd)
     return OUString(o3tl::toU(_result));
 }
 
-OUString PromptEdit(long hWnd, OUString const & connstr)
+OUString PromptEdit(sal_IntPtr hWnd, OUString const & connstr)
 {
     HRESULT hr;
     IDataSourceLocator* dlPrompt = nullptr;
@@ -189,7 +189,7 @@ OUString PromptEdit(long hWnd, OUString const & connstr)
 
 }
 
-OUString getAdoDatalink(long hWnd,OUString const & oldLink)
+OUString getAdoDatalink(sal_IntPtr hWnd,OUString const & oldLink)
 {
     OUString dataLink;
     if (!oldLink.isEmpty())

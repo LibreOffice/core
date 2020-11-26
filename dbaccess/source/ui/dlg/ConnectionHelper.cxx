@@ -272,7 +272,7 @@ namespace dbaui
                     hWnd = reinterpret_cast<HWND>(tmp);
                 }
 
-                sNewDataSource = getAdoDatalink(reinterpret_cast<LONG_PTR>(hWnd),sOldDataSource);
+                sNewDataSource = getAdoDatalink(reinterpret_cast<sal_IntPtr>(hWnd),sOldDataSource);
                 if ( !sNewDataSource.isEmpty() )
                 {
                     setURLNoPrefix(sNewDataSource);

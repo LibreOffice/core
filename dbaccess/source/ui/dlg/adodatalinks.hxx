@@ -20,6 +20,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <sal/types.h>
 
-OUString getAdoDatalink(long hWnd, OUString const& oldLink);
+OUString getAdoDatalink(sal_IntPtr hWnd, OUString const& oldLink);
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
