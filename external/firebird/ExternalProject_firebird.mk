@@ -68,7 +68,6 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 		&& MAKE=$(MAKE) ./configure \
 			--without-editline \
 			--with-wire-compress=no \
-			$(if $(ENABLE_DEBUG),--enable-developer) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(DISABLE_DYNLOADING), \
 				--enable-static --disable-shared \
@@ -81,7 +80,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 							'<' 101200)), \
 					ac_cv_func_clock_gettime=no)) \
 		&& LC_ALL=C $(MAKE) \
-			SHELL='$(SHELL)' $(if $(filter LINUX,$(OS)),CXXFLAGS="$$CXXFLAGS -std=gnu++11") \
+			$(if $(ENABLE_DEBUG),Debug) SHELL='$(SHELL)' $(if $(filter LINUX,$(OS)),CXXFLAGS="$$CXXFLAGS -std=gnu++11") \
 			MATHLIB="$(if $(SYSTEM_LIBTOMMATH),$(LIBTOMMATH_LIBS),-L$(call gb_UnpackedTarball_get_dir,libtommath) -ltommath)" \
 			LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(subst $$,$$$$,$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,icu)/source/lib)))' \
 		$(if $(filter MACOSX,$(OS)), \
