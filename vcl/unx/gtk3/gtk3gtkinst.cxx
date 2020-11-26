@@ -8577,10 +8577,21 @@ public:
 
     virtual void set_item_ident(int nIndex, const OString& rIdent) override
     {
-        m_aMap.erase(m_aMap.find(get_item_ident(nIndex)));
+        OString sOldIdent(get_item_ident(nIndex));
+        m_aMap.erase(m_aMap.find(sOldIdent));
 
         GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
         gtk_buildable_set_name(GTK_BUILDABLE(pItem), rIdent.getStr());
+
+        // to keep the ids unique, if the new id is already in use by an item,
+        // change the id of that item to the now unused old ident of this item
+        auto aFind = m_aMap.find(rIdent);
+        if (aFind != m_aMap.end())
+        {
+            GtkToolItem* pDupIdItem = aFind->second;
+            gtk_buildable_set_name(GTK_BUILDABLE(pDupIdItem), sOldIdent.getStr());
+            m_aMap[sOldIdent] = pDupIdItem;
+        }
 
         m_aMap[rIdent] = pItem;
     }
