@@ -24,10 +24,16 @@ class ThreadPoolTest : public CppUnit::TestFixture
 public:
     void testPreferredConcurrency();
     void testWorkerUsage();
+    void testTasksInThreads();
+    void testNoThreads();
+    void testDedicatedPool();
 
     CPPUNIT_TEST_SUITE(ThreadPoolTest);
     CPPUNIT_TEST(testPreferredConcurrency);
     CPPUNIT_TEST(testWorkerUsage);
+    CPPUNIT_TEST(testTasksInThreads);
+    CPPUNIT_TEST(testNoThreads);
+    CPPUNIT_TEST(testDedicatedPool);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -96,6 +102,62 @@ void ThreadPoolTest::testWorkerUsage()
     }
     UsageTask::mutex.unlock();
     rSharedPool.waitUntilDone(pTag);
+}
+
+namespace
+{
+class CheckThreadTask : public comphelper::ThreadTask
+{
+    oslThreadIdentifier mThreadId;
+    bool mCheckEqual;
+
+public:
+    CheckThreadTask(oslThreadIdentifier threadId, bool checkEqual,
+                    const std::shared_ptr<comphelper::ThreadTaskTag>& pTag)
+        : ThreadTask(pTag)
+        , mThreadId(threadId)
+        , mCheckEqual(checkEqual)
+    {
+    }
+    virtual void doWork()
+    {
+        assert(mCheckEqual ? osl::Thread::getCurrentIdentifier() == mThreadId
+                           : osl::Thread::getCurrentIdentifier() != mThreadId);
+    }
+};
+} // namespace
+
+void ThreadPoolTest::testTasksInThreads()
+{
+    // Check that all tasks are run in worker threads, not this thread.
+    comphelper::ThreadPool& pool = comphelper::ThreadPool::getSharedOptimalPool();
+    std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
+    for (int i = 0; i < 8; ++i)
+        pool.pushTask(
+            std::make_unique<CheckThreadTask>(osl::Thread::getCurrentIdentifier(), false, pTag));
+    pool.waitUntilDone(pTag);
+}
+
+void ThreadPoolTest::testNoThreads()
+{
+    // No worker threads, tasks will be run in this thread.
+    comphelper::ThreadPool pool(0);
+    std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
+    for (int i = 0; i < 8; ++i)
+        pool.pushTask(
+            std::make_unique<CheckThreadTask>(osl::Thread::getCurrentIdentifier(), true, pTag));
+    pool.waitUntilDone(pTag);
+}
+
+void ThreadPoolTest::testDedicatedPool()
+{
+    // Test that a separate thread pool works. The tasks themselves do not matter.
+    comphelper::ThreadPool pool(4);
+    std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
+    for (int i = 0; i < 8; ++i)
+        pool.pushTask(
+            std::make_unique<CheckThreadTask>(osl::Thread::getCurrentIdentifier(), false, pTag));
+    pool.waitUntilDone(pTag);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ThreadPoolTest);

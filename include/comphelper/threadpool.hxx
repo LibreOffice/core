@@ -64,12 +64,15 @@ public:
     void        pushTask( std::unique_ptr<ThreadTask> pTask);
 
     /** Wait until all queued tasks associated with the tag are completed
-        @param  bJoinAll - if set it joins all threads at the end if no other tasks from other tags.
+        @param  bJoin - if set call joinThreadsIfIdle() at the end
     */
-    void        waitUntilDone(const std::shared_ptr<ThreadTaskTag>&, bool bJoinAll = true);
+    void        waitUntilDone(const std::shared_ptr<ThreadTaskTag>&, bool bJoin = true);
 
     /// join all threads if there are no tasks presently.
-    void        joinAll();
+    void        joinThreadsIfIdle();
+
+    /// return true if there are no queued or worked-on tasks
+    bool        isIdle() const { return maTasks.empty() && mnBusyWorkers == 0; };
 
     /// return the number of live worker threads
     sal_Int32   getWorkerCount() const { return mnMaxWorkers; }
