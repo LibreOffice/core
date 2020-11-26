@@ -53,7 +53,7 @@ void ParallelSortTest::setUp()
 void ParallelSortTest::tearDown()
 {
     if (pThreadPool)
-        pThreadPool->joinAll();
+        pThreadPool->joinThreadsIfIdle();
 }
 
 void ParallelSortTest::fillRandomUptoN(std::vector<size_t>& rVector, size_t N)

@@ -326,7 +326,7 @@ ScDocument::~ScDocument()
     OSL_PRECOND( !bInLinkUpdate, "bInLinkUpdate in dtor" );
 
     // Join any pending(recalc) threads in global threadpool
-    comphelper::ThreadPool::getSharedOptimalPool().joinAll();
+    comphelper::ThreadPool::getSharedOptimalPool().joinThreadsIfIdle();
 
     bInDtorClear = true;
 
