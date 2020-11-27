@@ -408,22 +408,28 @@ void ScDocument::SetFormulaResults( const ScAddress& rTopPos, const double* pRes
     pTab->SetFormulaResults(rTopPos.Col(), rTopPos.Row(), pResults, nLen);
 }
 
-const ScDocumentThreadSpecific& ScDocument::CalculateInColumnInThread( ScInterpreterContext& rContext, const ScRange& rCalcRange, unsigned nThisThread, unsigned nThreadsTotal)
+void ScDocument::CalculateInColumnInThread( ScInterpreterContext& rContext, const ScRange& rCalcRange, unsigned nThisThread, unsigned nThreadsTotal)
 {
     ScTable* pTab = FetchTable(rCalcRange.aStart.Tab());
     if (!pTab)
-        return maNonThreaded;
+        return;
 
     assert(IsThreadedGroupCalcInProgress());
 
     maThreadSpecific.pContext = &rContext;
-    ScDocumentThreadSpecific::SetupFromNonThreadedData(maNonThreaded);
     pTab->CalculateInColumnInThread(rContext, rCalcRange.aStart.Col(), rCalcRange.aEnd.Col(), rCalcRange.aStart.Row(), rCalcRange.aEnd.Row(), nThisThread, nThreadsTotal);
 
     assert(IsThreadedGroupCalcInProgress());
     maThreadSpecific.pContext = nullptr;
+<<<<<<< HEAD   (48ad65 tdf#138561 OOXML Chart import: fix custom shape position)
 
     return maThreadSpecific;
+=======
+    // If any of the thread_local data would cause problems if they stay around for too long
+    // (and e.g. outlive the ScDocument), clean them up here, they cannot be cleaned up
+    // later from the main thread.
+    maThreadSpecific.xRecursionHelper->Clear();
+>>>>>>> CHANGE (f98af9 clean up ScDocumentThreadSpecific)
 }
 
 void ScDocument::HandleStuffAfterParallelCalculation( SCCOL nColStart, SCCOL nColEnd, SCROW nRow, size_t nLen, SCTAB nTab, ScInterpreter* pInterpreter )

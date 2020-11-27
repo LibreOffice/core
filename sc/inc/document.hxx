@@ -297,16 +297,7 @@ const sal_uInt8 SC_DDE_IGNOREMODE    = 255;       /// For usage in FindDdeLink()
 struct ScDocumentThreadSpecific
 {
     std::unique_ptr<ScRecursionHelper> xRecursionHelper; // information for recursive and iterative cell formulas
-    ScInterpreterContext* pContext;  // references the context passed around for easier access
-
-    ScDocumentThreadSpecific();
-    ~ScDocumentThreadSpecific();
-
-    // To be called in the thread at start
-    static void SetupFromNonThreadedData(const ScDocumentThreadSpecific& rNonThreadedData);
-
-    // To be called in the main thread after the thread has finished
-    static void MergeBackIntoNonThreadedData(ScDocumentThreadSpecific& rNonThreadedData);
+    ScInterpreterContext* pContext = nullptr;  // references the context passed around for easier access
 };
 
 /// Enumeration to determine which pieces of the code should not be mutated when set.
@@ -619,8 +610,8 @@ public:
     {
         return IsThreadedGroupCalcInProgress() ? *maThreadSpecific.pContext : GetNonThreadedContext();
     }
-    static void SetupFromNonThreadedContext( ScInterpreterContext& threadedContext, int threadNumber );
-    void MergeBackIntoNonThreadedContext( ScInterpreterContext& threadedContext, int threadNumber );
+    void SetupContextFromNonThreadedContext( ScInterpreterContext& threadedContext, int threadNumber );
+    void MergeContextBackIntoNonThreadedContext( ScInterpreterContext& threadedContext, int threadNumber );
     void SetThreadedGroupCalcInProgress( bool set ) { (void)this; ScGlobal::bThreadedGroupCalcInProgress = set; }
     bool IsThreadedGroupCalcInProgress() const { (void)this; return ScGlobal::bThreadedGroupCalcInProgress; }
 
@@ -2192,7 +2183,7 @@ public:
      */
     void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const double* pResults, size_t nLen );
 
-    const ScDocumentThreadSpecific& CalculateInColumnInThread( ScInterpreterContext& rContext, const ScRange& rCalcRange, unsigned nThisThread, unsigned nThreadsTotal);
+    void CalculateInColumnInThread( ScInterpreterContext& rContext, const ScRange& rCalcRange, unsigned nThisThread, unsigned nThreadsTotal);
     void HandleStuffAfterParallelCalculation( SCCOL nColStart, SCCOL nColEnd, SCROW nRow, size_t nLen, SCTAB nTab, ScInterpreter* pInterpreter );
 
     /**
