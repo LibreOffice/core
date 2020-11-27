@@ -37,11 +37,7 @@ class XMLFootnoteBodyImportContext : public SvXMLImportContext
 
 public:
 
-
-    XMLFootnoteBodyImportContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName );
+    XMLFootnoteBodyImportContext( SvXMLImport& rImport );
 
 protected:
 
