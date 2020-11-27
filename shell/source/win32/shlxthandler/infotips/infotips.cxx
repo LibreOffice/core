@@ -39,7 +39,7 @@
 const std::wstring WSPACE(SPACE);
 
 
-CInfoTip::CInfoTip(long RefCnt) :
+CInfoTip::CInfoTip(LONG RefCnt) :
     m_RefCnt(RefCnt)
 {
     ZeroMemory(m_szFileName, sizeof(m_szFileName));
@@ -89,7 +89,7 @@ ULONG STDMETHODCALLTYPE CInfoTip::AddRef()
 
 ULONG STDMETHODCALLTYPE CInfoTip::Release()
 {
-    long refcnt = InterlockedDecrement(&m_RefCnt);
+    LONG refcnt = InterlockedDecrement(&m_RefCnt);
 
     if (0 == m_RefCnt)
         delete this;

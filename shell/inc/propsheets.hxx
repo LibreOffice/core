@@ -30,7 +30,7 @@
 class CPropertySheet : public IShellExtInit, public IShellPropSheetExt
 {
 public:
-    CPropertySheet(long RefCnt = 1);
+    CPropertySheet(LONG RefCnt = 1);
 
     virtual ~CPropertySheet();
 
@@ -74,7 +74,7 @@ private:
     void InitPropPageStatistics(HWND hwnd, LPPROPSHEETPAGE lppsp);
 
 private:
-    long m_RefCnt;
+    LONG m_RefCnt;
     Filepath_char_t m_szFileName[MAX_PATH];
 };
 

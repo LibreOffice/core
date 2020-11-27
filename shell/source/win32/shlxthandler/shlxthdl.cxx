@@ -32,7 +32,7 @@
 
 // Module global
 
-long g_DllRefCnt = 0;
+LONG g_DllRefCnt = 0;
 HINSTANCE g_hModule = nullptr;
 
 namespace /* private */

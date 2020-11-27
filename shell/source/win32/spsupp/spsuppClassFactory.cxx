@@ -10,8 +10,8 @@
 #include <spsuppClassFactory.hpp>
 #include <COMOpenDocuments.hpp>
 
-long ClassFactory::m_nObjCount = 0;
-long ClassFactory::m_nLockCount = 0;
+LONG ClassFactory::m_nObjCount = 0;
+LONG ClassFactory::m_nLockCount = 0;
 
 ClassFactory::ClassFactory()
 {

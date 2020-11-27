@@ -84,7 +84,7 @@ HRESULT ImplViewDocument(IDispatch* /*pdisp*/, BSTR bstrDocumentLocation, int Op
 }
 } // namespace
 
-long COMOpenDocuments::m_nObjCount = 0;
+LONG COMOpenDocuments::m_nObjCount = 0;
 ITypeInfo* COMOpenDocuments::m_pTypeInfo = nullptr;
 
 COMOpenDocuments::COMOpenDocuments()
@@ -419,6 +419,6 @@ HRESULT STDMETHODCALLTYPE COMOpenDocuments::SetInterfaceSafetyOptions(
 
 // Non-COM methods
 
-long COMOpenDocuments::GetObjectCount() { return m_nObjCount; }
+LONG COMOpenDocuments::GetObjectCount() { return m_nObjCount; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

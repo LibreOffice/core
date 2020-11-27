@@ -32,7 +32,7 @@ class CContentReader;
 class CMetaInfoReader;
 class CFullPropSpec;
 
-long g_lInstances = 0;                        // Global count of COooFilter and COooFilterCF instances
+LONG g_lInstances = 0;                        // Global count of COooFilter and COooFilterCF instances
 GUID const guidStorage = PSGUID_STORAGE;      // GUID for storage property set
 
 //C-------------------------------------------------------------------------
@@ -134,7 +134,7 @@ private:
     COooFilter();
     virtual ~COooFilter();
 
-    long                      m_lRefs;                  // Reference count
+    LONG                      m_lRefs;                  // Reference count
     CContentReader *          m_pContentReader;         // A content reader that retrieves document content.
     CMetaInfoReader *         m_pMetaInfoReader;        // A metainfo reader that retrieves document metainfo.
     FilterState               m_eState;                 // State of filtering
@@ -187,7 +187,7 @@ private:
     COooFilterCF();
     virtual  ~COooFilterCF();
 
-    long m_lRefs;           // Reference count
+    LONG m_lRefs;           // Reference count
 };
 
 #endif // INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_OOOFILT_OOOFILT_HXX

@@ -65,7 +65,7 @@ class DragSource:
         const Reference<XDragSourceListener >& listener);
 
 public:
-    long m_RunningDndOperationCount;
+    LONG m_RunningDndOperationCount;
 
 public:
     // only valid for one dnd operation

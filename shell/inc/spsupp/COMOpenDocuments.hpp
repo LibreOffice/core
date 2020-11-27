@@ -172,10 +172,10 @@ public:
 
     // Non-COM methods
 
-    static long GetObjectCount();
+    static LONG GetObjectCount();
 
 private:
-    static long m_nObjCount;
+    static LONG m_nObjCount;
     static ITypeInfo* m_pTypeInfo;
     static constexpr DWORD iSupportedOptionsMask = INTERFACESAFE_FOR_UNTRUSTED_CALLER | INTERFACESAFE_FOR_UNTRUSTED_DATA;
     DWORD m_iEnabledOptions = 0;

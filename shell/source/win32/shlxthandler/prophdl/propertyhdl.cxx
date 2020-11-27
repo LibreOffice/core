@@ -36,7 +36,7 @@
 
 // Module global
 
-long g_DllRefCnt = 0;
+LONG g_DllRefCnt = 0;
 static HINSTANCE g_hModule = nullptr;
 
 const PROPERTYKEY g_rgPROPERTIES[] =
@@ -51,7 +51,7 @@ const PROPERTYKEY g_rgPROPERTIES[] =
 size_t const gPropertyTableSize = SAL_N_ELEMENTS(g_rgPROPERTIES);
 
 
-CPropertyHdl::CPropertyHdl( long nRefCnt ) :
+CPropertyHdl::CPropertyHdl( LONG nRefCnt ) :
     m_RefCnt( nRefCnt ),
     m_pCache( nullptr )
 {
@@ -115,7 +115,7 @@ ULONG STDMETHODCALLTYPE CPropertyHdl::AddRef()
 
 ULONG STDMETHODCALLTYPE CPropertyHdl::Release()
 {
-    long refcnt = InterlockedDecrement( &m_RefCnt );
+    LONG refcnt = InterlockedDecrement( &m_RefCnt );
 
     if ( 0 == m_RefCnt )
         delete this;
@@ -297,7 +297,7 @@ void CPropertyHdl::LoadProperties( CMetaInfoReader *pMetaInfoReader )
 //                              CClassFactory
 
 
-long CClassFactory::s_ServerLocks = 0;
+LONG CClassFactory::s_ServerLocks = 0;
 
 
 CClassFactory::CClassFactory( const CLSID& clsid ) :
@@ -340,7 +340,7 @@ ULONG STDMETHODCALLTYPE CClassFactory::AddRef()
 
 ULONG STDMETHODCALLTYPE CClassFactory::Release()
 {
-    long refcnt = InterlockedDecrement( &m_RefCnt );
+    LONG refcnt = InterlockedDecrement( &m_RefCnt );
 
     if (0 == refcnt)
         delete this;

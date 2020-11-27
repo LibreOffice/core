@@ -36,12 +36,12 @@ public:
 
     // Non-COM methods
 
-    static long GetObjectCount() { return m_nObjCount; }
-    static long GetLockCount() { return m_nLockCount; }
+    static LONG GetObjectCount() { return m_nObjCount; }
+    static LONG GetLockCount() { return m_nLockCount; }
 
 private:
-    static long m_nObjCount;
-    static long m_nLockCount;
+    static LONG m_nObjCount;
+    static LONG m_nLockCount;
 };
 
 #endif

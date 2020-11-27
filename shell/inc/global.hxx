@@ -25,7 +25,7 @@
 #endif
 #include <windows.h>
 
-extern long g_DllRefCnt;
+extern LONG g_DllRefCnt;
 
 #endif
 

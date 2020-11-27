@@ -55,7 +55,7 @@ bool IsOOFileExtension(wchar_t const * Extension)
 }
 
 
-CColumnInfo::CColumnInfo(long RefCnt) :
+CColumnInfo::CColumnInfo(LONG RefCnt) :
     m_RefCnt(RefCnt)
 {
     InterlockedIncrement(&g_DllRefCnt);
@@ -95,7 +95,7 @@ COM_DECLSPEC_NOTHROW ULONG STDMETHODCALLTYPE CColumnInfo::AddRef()
 
 COM_DECLSPEC_NOTHROW ULONG STDMETHODCALLTYPE CColumnInfo::Release()
 {
-    long refcnt = InterlockedDecrement(&m_RefCnt);
+    LONG refcnt = InterlockedDecrement(&m_RefCnt);
 
     if (0 == m_RefCnt)
         delete this;

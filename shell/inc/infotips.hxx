@@ -28,7 +28,7 @@
 class CInfoTip : public IQueryInfo, public IPersistFile
 {
 public:
-    CInfoTip(long RefCnt = 1);
+    CInfoTip(LONG RefCnt = 1);
     virtual ~CInfoTip();
 
 
@@ -78,7 +78,7 @@ public:
             /* [out] */ LPOLESTR __RPC_FAR *ppszFileName) override;
 
 private:
-    long            m_RefCnt;
+    LONG            m_RefCnt;
     Filepath_char_t m_szFileName[MAX_PATH];
     std::wstring    m_FileNameOnly;
 };
