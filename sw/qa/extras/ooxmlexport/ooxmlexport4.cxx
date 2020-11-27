@@ -165,7 +165,7 @@ DECLARE_OOXMLEXPORT_TEST(testTextBoxPictureFill, "textbox_picturefill.docx")
     CPPUNIT_ASSERT(xGraphic.is());
     Graphic aGraphic(xGraphic);
     CPPUNIT_ASSERT(!aGraphic.IsNone());
-    CPPUNIT_ASSERT(aGraphic.GetSizeBytes() > 0L);
+    CPPUNIT_ASSERT(aGraphic.GetSizeBytes() > 0);
     CPPUNIT_ASSERT_EQUAL(tools::Long(447), aGraphic.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(528), aGraphic.GetSizePixel().Height());
 }
