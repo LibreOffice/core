@@ -1307,7 +1307,11 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterStylesConte
     sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    if( nElement == XML_ELEMENT(STYLE, XML_MASTER_PAGE) )
+    if( nElement == XML_ELEMENT(DRAW, XML_LAYER_SET) )
+    {
+        return new SdXMLLayerSetContext( GetImport() );
+    }
+    else if( nElement == XML_ELEMENT(STYLE, XML_MASTER_PAGE) )
     {
         // style:masterpage inside office:styles context
         uno::Reference< drawing::XDrawPage > xNewMasterPage;
@@ -1357,22 +1361,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterStylesConte
             }
         }
     }
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
-}
-
-SvXMLImportContextRef SdXMLMasterStylesContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/)
-{
-    SvXMLImportContextRef xContext;
-
-    if( (nPrefix == XML_NAMESPACE_DRAW) && IsXMLToken( rLocalName, XML_LAYER_SET ) )
-    {
-        xContext = new SdXMLLayerSetContext( GetImport() );
-    }
-
-    return xContext;
 }
 
 SdXMLHeaderFooterDeclContext::SdXMLHeaderFooterDeclContext(SvXMLImport& rImport,
