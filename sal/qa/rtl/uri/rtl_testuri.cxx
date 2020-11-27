@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_locales.h>
-
 #include <rtl/strbuf.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -391,7 +389,6 @@ void Test::test_Uri() {
             rtl::Uri::decode(
                 aText2, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ISO_8859_5));
     }
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
     {
         sal_Unicode const aText1U[] = { ' ', '!', 0x028A, 0xD849, 0xDD13, 0 };
         aText1 = OUString(aText1U);
@@ -408,7 +405,7 @@ void Test::test_Uri() {
             rtl::Uri::decode(
                 aText2, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_GB_18030));
     }
-#endif
+
     // Check strict mode:
 
     {
@@ -431,7 +428,6 @@ void Test::test_Uri() {
             rtl::Uri::decode(
                 aText1, rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8));
     }
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
     {
         aText1 = "%81 ";
         aText2 = OUString();
@@ -470,7 +466,7 @@ void Test::test_Uri() {
             rtl::Uri::decode(
                 aText1, rtl_UriDecodeStrict, RTL_TEXTENCODING_GB_18030));
     }
-#endif
+
     // Check rtl_UriEncodeStrictKeepEscapes mode:
 
     {

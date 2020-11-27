@@ -2432,29 +2432,6 @@ AC_ARG_WITH(lang,
          For all languages, use --with-lang=ALL.]),
 ,)
 
-AC_ARG_WITH(locales,
-    AS_HELP_STRING([--with-locales="en es pt fr zh kr ja"],
-        [Use this option to limit the locale information built in.
-         Separate multiple locales with space.
-         Very experimental and might well break stuff.
-         Just a desperate measure to shrink code and data size.
-         By default all the locales available is included.
-         This option is completely unrelated to --with-lang.])
-    [
-                          Affects also our character encoding conversion
-                          tables for encodings mainly targeted for a
-                          particular locale, like EUC-CN and EUC-TW for
-                          zh, ISO-2022-JP for ja.
-
-                          Affects also our add-on break iterator data for
-                          some languages.
-
-                          For the default, all locales, don't use this switch at all.
-                          Specifying just the language part of a locale means all matching
-                          locales will be included.
-    ],
-,)
-
 # Kerberos and GSSAPI used only by PostgreSQL as of LibO 3.5
 libo_FUZZ_ARG_WITH(krb5,
     AS_HELP_STRING([--with-krb5],
@@ -13373,31 +13350,6 @@ if test -d "$SRC_ROOT/translations/source"; then
 fi
 AC_SUBST(WITH_POOR_HELP_LOCALIZATIONS)
 
-if test -n "$with_locales"; then
-    WITH_LOCALES="$with_locales"
-
-    just_langs="`echo $WITH_LOCALES | sed -e 's/_[A-Z]*//g'`"
-    # Only languages and scripts for which we actually have ifdefs need to be handled. Also see
-    # config_host/config_locales.h.in
-    for locale in $WITH_LOCALES; do
-        lang=${locale%_*}
-
-        AC_DEFINE_UNQUOTED(WITH_LOCALE_$lang, 1)
-
-        case $lang in
-        hi|mr*ne)
-            AC_DEFINE(WITH_LOCALE_FOR_SCRIPT_Deva)
-            ;;
-        bg|ru)
-            AC_DEFINE(WITH_LOCALE_FOR_SCRIPT_Cyrl)
-            ;;
-        esac
-    done
-else
-    AC_DEFINE(WITH_LOCALE_ALL)
-fi
-AC_SUBST(WITH_LOCALES)
-
 dnl git submodule update --reference
 dnl ===================================================================
 if test -n "${GIT_REFERENCE_SRC}"; then
@@ -14075,7 +14027,6 @@ AC_CONFIG_HEADERS([config_host/config_langs.h])
 AC_CONFIG_HEADERS([config_host/config_lgpl.h])
 AC_CONFIG_HEADERS([config_host/config_libcxx.h])
 AC_CONFIG_HEADERS([config_host/config_liblangtag.h])
-AC_CONFIG_HEADERS([config_host/config_locales.h])
 AC_CONFIG_HEADERS([config_host/config_mpl.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
 AC_CONFIG_HEADERS([config_host/config_options.h])

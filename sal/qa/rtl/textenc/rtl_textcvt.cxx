@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_locales.h>
-
 #include <sal/config.h>
 
 #include <cstddef>
@@ -1303,7 +1301,6 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
             { RTL_TEXTENCODING_EUC_CN,
               RTL_CONSTASCII_STRINGPARAM("\x01\"3De$~\xA1\xB9\xF0\xC5"),
               { 0x0001,0x0022,0x0033,0x0044,0x0065,0x0024,0x007E,
@@ -1383,8 +1380,6 @@ void Test::testComplex() {
               false,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
             { RTL_TEXTENCODING_ISO_2022_JP,
               RTL_CONSTASCII_STRINGPARAM("\x01\"3De$\\~"),
               { 0x0001,0x0022,0x0033,0x0044,0x0065,0x0024,0x005C,0x007E },
@@ -1421,8 +1416,6 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ko
             { RTL_TEXTENCODING_ISO_2022_KR,
               RTL_CONSTASCII_STRINGPARAM("\x1B$)C\x01\"3De$\\~"),
               { 0x0001,0x0022,0x0033,0x0044,0x0065,0x0024,0x005C,0x007E },
@@ -1442,8 +1435,6 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
             { RTL_TEXTENCODING_ISO_2022_CN,
               RTL_CONSTASCII_STRINGPARAM(
                   "\x01\"3De$\\~\x1B$)G\x0E\x45\x70\x1B$*H\x1BN\x22\x22"
@@ -1468,7 +1459,7 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#endif
+
             // The following does not work as long as Big5-HKSCS maps to
             // Unicode PUA instead of Plane 2.  Use the next two tests
             // instead:
@@ -1483,7 +1474,6 @@ void Test::testComplex() {
 //            true,
 //            false,
 //            RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
             { RTL_TEXTENCODING_BIG5_HKSCS,
               RTL_CONSTASCII_STRINGPARAM(
                   "\x01\"3De$~\x88\x56\xF9\xFE\xFA\x5E\xA1\x40\xF9\xD5"),
@@ -1603,7 +1593,6 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#endif
             { RTL_TEXTENCODING_MS_950,
               RTL_CONSTASCII_STRINGPARAM(
                   "\xC6\xA1\xC6\xFE\xC7\x40\xC7\x7E\xC7\xA1\xC7\xFE\xC8\x40"
@@ -1648,7 +1637,6 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
             { RTL_TEXTENCODING_GB_18030,
               RTL_CONSTASCII_STRINGPARAM("\x95\x39\xC5\x37"),
               { 0xD849,0xDD13 },
@@ -1679,7 +1667,6 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#endif
             { RTL_TEXTENCODING_MS_936,
               RTL_CONSTASCII_STRINGPARAM("\xFD\x7C\xC1\xFA\xFD\x9B"),
               { 0x9F76,0x9F99,0x9FA5 },
@@ -1689,7 +1676,6 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
             { RTL_TEXTENCODING_GBK,
               RTL_CONSTASCII_STRINGPARAM(
                   "\xFE\x50\xFE\x54\xFE\x55\xFE\x56"
@@ -1719,8 +1705,6 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
             { RTL_TEXTENCODING_EUC_JP,
               RTL_CONSTASCII_STRINGPARAM("?"),
               { 0xFF0D },
@@ -1730,7 +1714,6 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK },
-#endif
             // Test of "JIS X 0208 row 13" (taken from CP932; added to
             // ISO-2022-JP and EUC-JP; 74 of the 83 characters introduce
             // mappings to new Unicode characters):
@@ -1764,7 +1747,6 @@ void Test::testComplex() {
               false,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
             { RTL_TEXTENCODING_SHIFT_JIS,
               RTL_CONSTASCII_STRINGPARAM("\x00\xFA\x6F\xFA\x71"),
               {0x0000, 0x4F92, 0x4F9A},
@@ -1931,7 +1913,7 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#endif
+
             // Test ISO-8859-x/MS-125x range 0x80--9F:
 
             { RTL_TEXTENCODING_ISO_8859_1,
@@ -2247,7 +2229,6 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#if WITH_LOCALE_ALL || WITH_LOCALE_ko
             { RTL_TEXTENCODING_EUC_KR,
               RTL_CONSTASCII_STRINGPARAM(
                   "\xB0\xA1\xB0\xA2"              "\xB0\xA3"
@@ -2292,7 +2273,7 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#endif
+
             // Test UTF-8:
 
             { RTL_TEXTENCODING_UTF8,
@@ -2373,7 +2354,6 @@ void Test::testComplex() {
               true,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
 
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
             // Bug #112949#:
             { RTL_TEXTENCODING_SHIFT_JIS,
               RTL_CONSTASCII_STRINGPARAM("\x81\x63"),
@@ -2402,7 +2382,6 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE },
-#endif
             { RTL_TEXTENCODING_MS_932,
               RTL_CONSTASCII_STRINGPARAM("\x81\x63"),
               { 0x2026 },
@@ -2487,7 +2466,6 @@ void Test::testComplex() {
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
 
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
             // Bug #i62310#:
             { RTL_TEXTENCODING_SHIFT_JIS,
               RTL_CONSTASCII_STRINGPARAM(
@@ -2499,7 +2477,7 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#endif
+
             // Bug #i73103#:
             { RTL_TEXTENCODING_MS_1258,
               RTL_CONSTASCII_STRINGPARAM(
@@ -2522,7 +2500,6 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#if WITH_LOCALE_ALL || WITH_LOCALE_FOR_SCRIPT_Deva
             { RTL_TEXTENCODING_ISCII_DEVANAGARI,
               RTL_CONSTASCII_STRINGPARAM(
                   "\xD7\xE6\x20\xD4\xCF\xE8\xD6\x20"
@@ -2560,7 +2537,6 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR }
-#endif
         };
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         doComplexCharSetTest(data[i]);
@@ -2568,10 +2544,8 @@ void Test::testComplex() {
 }
 
 void Test::testComplexCut() {
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja || WITH_LOCALE_zh
     static ComplexCharSetTest const data[]
         = {
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
             { RTL_TEXTENCODING_EUC_JP,
               RTL_CONSTASCII_STRINGPARAM("\xA1"),
               { 0 },
@@ -2608,8 +2582,6 @@ void Test::testComplexCut() {
               false,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
             { RTL_TEXTENCODING_EUC_CN,
               RTL_CONSTASCII_STRINGPARAM("\xA1"),
               { 0 },
@@ -2619,7 +2591,6 @@ void Test::testComplexCut() {
               false,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-#endif
 /* ,
             { RTL_TEXTENCODING_EUC_TW,
               RTL_CONSTASCII_STRINGPARAM("\xA1"),
@@ -2660,7 +2631,6 @@ void Test::testComplexCut() {
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         doComplexCharSetCutTest(data[i]);
     }
-#endif
 }
 
 void Test::testInvalidUtf7() {
@@ -3246,20 +3216,15 @@ void Test::testInfo() {
         bool value;
     };
     static Data const data[] = {
-#if WITH_LOCALE_ALL || WITH_LOCALE_ja
         { RTL_TEXTENCODING_APPLE_JAPANESE, RTL_TEXTENCODING_INFO_ASCII, false },
         { RTL_TEXTENCODING_EUC_JP, RTL_TEXTENCODING_INFO_ASCII, true },
         { RTL_TEXTENCODING_ISO_2022_JP, RTL_TEXTENCODING_INFO_CONTEXT, true },
         { RTL_TEXTENCODING_ISO_2022_JP, RTL_TEXTENCODING_INFO_ASCII, false },
         { RTL_TEXTENCODING_SHIFT_JIS, RTL_TEXTENCODING_INFO_ASCII, false },
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_ko
         { RTL_TEXTENCODING_APPLE_KOREAN, RTL_TEXTENCODING_INFO_ASCII, false },
         { RTL_TEXTENCODING_EUC_KR, RTL_TEXTENCODING_INFO_ASCII, true },
         { RTL_TEXTENCODING_ISO_2022_KR, RTL_TEXTENCODING_INFO_CONTEXT, true },
         { RTL_TEXTENCODING_ISO_2022_KR, RTL_TEXTENCODING_INFO_ASCII, false },
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_zh
         { RTL_TEXTENCODING_APPLE_CHINTRAD, RTL_TEXTENCODING_INFO_ASCII, false },
         { RTL_TEXTENCODING_BIG5, RTL_TEXTENCODING_INFO_ASCII, false },
         { RTL_TEXTENCODING_BIG5_HKSCS, RTL_TEXTENCODING_INFO_ASCII, false },
@@ -3270,11 +3235,8 @@ void Test::testInfo() {
         { RTL_TEXTENCODING_GB_18030, RTL_TEXTENCODING_INFO_UNICODE, true },
         { RTL_TEXTENCODING_ISO_2022_CN, RTL_TEXTENCODING_INFO_CONTEXT, true },
         { RTL_TEXTENCODING_ISO_2022_CN, RTL_TEXTENCODING_INFO_ASCII, false },
-#endif
-#if WITH_LOCALE_ALL || WITH_LOCALE_FOR_SCRIPT_Deva
         { RTL_TEXTENCODING_ISCII_DEVANAGARI, RTL_TEXTENCODING_INFO_ASCII, true },
         { RTL_TEXTENCODING_ISCII_DEVANAGARI, RTL_TEXTENCODING_INFO_MIME, false },
-#endif
         { RTL_TEXTENCODING_MS_1361, RTL_TEXTENCODING_INFO_ASCII, false },
         { RTL_TEXTENCODING_MS_874, RTL_TEXTENCODING_INFO_ASCII, true },
         { RTL_TEXTENCODING_MS_932, RTL_TEXTENCODING_INFO_ASCII, false },
