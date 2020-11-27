@@ -8907,7 +8907,7 @@ oox/source/drawingml/drawingmltypes.cxx
 oox/source/drawingml/effectproperties.cxx
 oox/source/drawingml/effectproperties.hxx
 oox/source/drawingml/effectpropertiescontext.cxx
-oox/source/drawingml/effectpropertiescontext.hxx
+oox/inc/drawingml/effectpropertiescontext.hxx
 oox/source/drawingml/embeddedwavaudiofile.cxx
 oox/source/drawingml/fillproperties.cxx
 oox/source/drawingml/graphicshapecontext.cxx
