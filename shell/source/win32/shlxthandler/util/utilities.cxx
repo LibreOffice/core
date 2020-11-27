@@ -121,7 +121,7 @@ bool HasOnlySpaces(const std::wstring& String)
 std::wstring getShortPathName( const std::wstring& aLongName )
 {
     std::wstring shortName = aLongName;
-    long         length    = GetShortPathNameW( aLongName.c_str(), nullptr, 0 );
+    DWORD        length    = GetShortPathNameW( aLongName.c_str(), nullptr, 0 );
 
     if ( length != 0 )
     {
