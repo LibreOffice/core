@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "186d3aa7_f98ef7bd",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-11-27T07:21:17Z",
+      "side": 1,
+      "message": "It seems like you can get rid of the second part of the condition and Put the pagenum even if it is zero, right?",
+      "revId": "1dc5f7056f4bece46e6fd3eea0a376acf06ee6d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
