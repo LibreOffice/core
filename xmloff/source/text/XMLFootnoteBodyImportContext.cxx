@@ -28,11 +28,8 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 
 
-XMLFootnoteBodyImportContext::XMLFootnoteBodyImportContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName ) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName)
+XMLFootnoteBodyImportContext::XMLFootnoteBodyImportContext( SvXMLImport& rImport ) :
+        SvXMLImportContext(rImport)
 {
 }
 
