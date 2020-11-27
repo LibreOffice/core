@@ -27,24 +27,22 @@ class XMLPersMixedContentTContext : public XMLPersElemContentTContext
 public:
     // mixed content persistence only
     XMLPersMixedContentTContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName );
+                           sal_Int32 rQName );
 
     // mixed content persistence + attribute processing
     XMLPersMixedContentTContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
+                           sal_Int32 rQName,
                               sal_uInt16 nActionMap );
 
     // mixed content persistence + renaming
     XMLPersMixedContentTContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
-                              sal_uInt16 nPrefix,
-                              ::xmloff::token::XMLTokenEnum eToken );
+                              sal_Int32 rQName,
+                              sal_Int32 rQName2 );
 
     // mixed content persistence + renaming + attribute processing
     XMLPersMixedContentTContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
-                              sal_uInt16 nPrefix,
-                              ::xmloff::token::XMLTokenEnum eToken,
+                              sal_Int32 rQName,
+                              sal_Int32 rQName2,
                               sal_uInt16 nActionMap );
 
     virtual void Characters( const OUString& rChars ) override;

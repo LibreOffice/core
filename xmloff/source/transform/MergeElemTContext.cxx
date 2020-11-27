@@ -24,6 +24,7 @@
 #include "ElemTransformerAction.hxx"
 #include "IgnoreTContext.hxx"
 #include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmlimp.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star::uno;
@@ -36,33 +37,30 @@ class XMLParagraphTransformerContext : public XMLTransformerContext
 {
 public:
     XMLParagraphTransformerContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName );
+                           sal_Int32 rQName );
 
     // Create a children element context. By default, the import's
     // CreateContext method is called to create a new default context.
-    virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const OUString& rQName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual rtl::Reference<XMLTransformerContext> createFastChildContext(
+                                   sal_Int32 nElement,
+                                   const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 }
 
 XMLParagraphTransformerContext::XMLParagraphTransformerContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName ) :
+        sal_Int32 rQName ) :
     XMLTransformerContext( rImp, rQName )
 {
 }
 
-rtl::Reference<XMLTransformerContext> XMLParagraphTransformerContext::CreateChildContext(
-        sal_uInt16 /*nPrefix*/,
-        const OUString& /*rLocalName*/,
-        const OUString& rQName,
-        const Reference< XAttributeList >& )
+rtl::Reference<XMLTransformerContext> XMLParagraphTransformerContext::createFastChildContext(
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList >& )
 {
     return new XMLIgnoreTransformerContext( GetTransformer(),
-                                                rQName, true );
+                                                nElement, true );
 }
 
 namespace {
@@ -72,9 +70,8 @@ class XMLPersTextContentRNGTransformTContext : public XMLPersTextContentTContext
 public:
     XMLPersTextContentRNGTransformTContext(
         XMLTransformerBase& rTransformer,
-        const OUString& rQName,
-        sal_uInt16 nPrefix,
-        ::xmloff::token::XMLTokenEnum eToken );
+        sal_Int32 rQName,
+        sal_Int32 rQName2 );
 
     virtual void Characters( const OUString& rChars ) override;
 };
@@ -83,11 +80,10 @@ public:
 
 XMLPersTextContentRNGTransformTContext::XMLPersTextContentRNGTransformTContext(
     XMLTransformerBase& rTransformer,
-    const OUString& rQName,
-    sal_uInt16 nPrefix,
-    ::xmloff::token::XMLTokenEnum eToken ) :
+    sal_Int32 rQName,
+    sal_Int32 rQName2 ) :
         XMLPersTextContentTContext(
-            rTransformer, rQName, nPrefix, eToken )
+            rTransformer, rQName, rQName2 )
 {}
 
 void XMLPersTextContentRNGTransformTContext::Characters( const OUString& rChars )
@@ -98,7 +94,7 @@ void XMLPersTextContentRNGTransformTContext::Characters( const OUString& rChars 
 }
 
 
-void XMLMergeElemTransformerContext::ExportStartElement()
+void XMLMergeElemTransformerContext::ExportStartElement(sal_Int32 nElement)
 {
     for( const auto& rChildContext : m_aChildContexts )
     {
@@ -107,14 +103,14 @@ void XMLMergeElemTransformerContext::ExportStartElement()
             ->AddAttribute( pContext->GetExportQName(),
                             pContext->GetTextContent() );
     }
-    XMLTransformerContext::StartElement( m_xAttrList );
+    XMLTransformerContext::startFastElement( nElement, m_xAttrList );
 
     m_bStartElementExported = true;
 }
 
 XMLMergeElemTransformerContext::XMLMergeElemTransformerContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName,
+        sal_Int32 rQName,
        sal_uInt16 nActionMap ) :
     XMLTransformerContext( rImp, rQName ),
     m_nActionMap( nActionMap ),
@@ -122,8 +118,8 @@ XMLMergeElemTransformerContext::XMLMergeElemTransformerContext(
 {
 }
 
-void XMLMergeElemTransformerContext::StartElement(
-    const Reference< XAttributeList >& rAttrList )
+void XMLMergeElemTransformerContext::startFastElement(sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
     XMLMutableAttributeList *pMutableAttrList =
         new XMLMutableAttributeList( rAttrList, true );
@@ -132,21 +128,14 @@ void XMLMergeElemTransformerContext::StartElement(
     sal_Int16 nAttrCount = m_xAttrList.is() ? m_xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = m_xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                &aLocalName );
+        sal_Int32 rAttrName = m_xAttrList->getTokenByIndex( i );
         bool bRemove = true;
-        if( XML_NAMESPACE_OFFICE == nPrefix)
+        switch (rAttrName)
         {
-            if (IsXMLToken( aLocalName, XML_DISPLAY ) )
-                bRemove = false;
-            else if (IsXMLToken( aLocalName, XML_AUTHOR ) )
-                bRemove = false;
-            else if (IsXMLToken( aLocalName, XML_CREATE_DATE ) )
-                bRemove = false;
-            else if (IsXMLToken( aLocalName, XML_CREATE_DATE_STRING ) )
+            case XML_ELEMENT(OFFICE, XML_DISPLAY):
+            case XML_ELEMENT(OFFICE, XML_AUTHOR):
+            case XML_ELEMENT(OFFICE, XML_CREATE_DATE):
+            case XML_ELEMENT(OFFICE, XML_CREATE_DATE_STRING):
                 bRemove = false;
         }
         if (bRemove)
@@ -158,11 +147,9 @@ void XMLMergeElemTransformerContext::StartElement(
     }
 }
 
-rtl::Reference<XMLTransformerContext> XMLMergeElemTransformerContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const OUString& rQName,
-        const Reference< XAttributeList >& rAttrList )
+rtl::Reference<XMLTransformerContext> XMLMergeElemTransformerContext::createFastChildContext(
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList >& rAttrList )
 {
     rtl::Reference<XMLTransformerContext> pContext;
 
@@ -173,7 +160,7 @@ rtl::Reference<XMLTransformerContext> XMLMergeElemTransformerContext::CreateChil
         OSL_ENSURE( pActions, "go no actions" );
         if( pActions )
         {
-            XMLTransformerActions::key_type aKey( nPrefix, rLocalName );
+            XMLTransformerActions::key_type aKey( nElement );
             XMLTransformerActions::const_iterator aIter =
                 pActions->find( aKey );
 
@@ -185,9 +172,8 @@ rtl::Reference<XMLTransformerContext> XMLMergeElemTransformerContext::CreateChil
                     {
                         rtl::Reference<XMLPersTextContentTContext> pTC(
                             new XMLPersTextContentRNGTransformTContext(
-                                    GetTransformer(), rQName,
-                                    (*aIter).second.GetQNamePrefixFromParam1(),
-                                    (*aIter).second.GetQNameTokenFromParam1() ));
+                                    GetTransformer(), nElement,
+                                    (*aIter).second.GetTokenFromParam1() ));
                         m_aChildContexts.push_back(pTC);
                         pContext.set(pTC.get());
                     }
@@ -196,9 +182,8 @@ rtl::Reference<XMLTransformerContext> XMLMergeElemTransformerContext::CreateChil
                     {
                         rtl::Reference<XMLPersTextContentTContext> pTC(
                             new XMLPersTextContentTContext(
-                                    GetTransformer(), rQName,
-                                    (*aIter).second.GetQNamePrefixFromParam1(),
-                                    (*aIter).second.GetQNameTokenFromParam1() ));
+                                    GetTransformer(), nElement,
+                                    (*aIter).second.GetTokenFromParam1() ));
                         m_aChildContexts.push_back(pTC);
                         pContext.set(pTC.get());
                     }
@@ -206,10 +191,10 @@ rtl::Reference<XMLTransformerContext> XMLMergeElemTransformerContext::CreateChil
                 case XML_ETACTION_EXTRACT_CHARACTERS:
                     {
                         if( !m_bStartElementExported )
-                            ExportStartElement();
+                            ExportStartElement(nElement);
                         pContext.set(
                             new XMLParagraphTransformerContext( GetTransformer(),
-                            rQName));
+                            nElement));
                     }
                     break;
                 default:
@@ -226,7 +211,7 @@ rtl::Reference<XMLTransformerContext> XMLMergeElemTransformerContext::CreateChil
         OSL_ENSURE( pActions, "go no actions" );
         if( pActions )
         {
-            XMLTransformerActions::key_type aKey( nPrefix, rLocalName );
+            XMLTransformerActions::key_type aKey( nElement );
             XMLTransformerActions::const_iterator aIter =
                 pActions->find( aKey );
 
@@ -237,10 +222,10 @@ rtl::Reference<XMLTransformerContext> XMLMergeElemTransformerContext::CreateChil
                 case XML_ETACTION_EXTRACT_CHARACTERS:
                     {
                         if( !m_bStartElementExported )
-                            ExportStartElement();
+                            ExportStartElement(nElement);
                         pContext.set(
                             new XMLParagraphTransformerContext( GetTransformer(),
-                            rQName));
+                            nElement));
                     }
                     break;
                 default:
@@ -255,21 +240,19 @@ rtl::Reference<XMLTransformerContext> XMLMergeElemTransformerContext::CreateChil
     if( !pContext.is() )
     {
         if( !m_bStartElementExported )
-            ExportStartElement();
-        pContext = XMLTransformerContext::CreateChildContext( nPrefix,
-                                                              rLocalName,
-                                                              rQName,
+            ExportStartElement(nElement);
+        pContext = XMLTransformerContext::createFastChildContext( nElement,
                                                               rAttrList );
     }
 
     return pContext;
 }
 
-void XMLMergeElemTransformerContext::EndElement()
+void XMLMergeElemTransformerContext::endFastElement(sal_Int32 nElement)
 {
     if( !m_bStartElementExported )
-        ExportStartElement();
-    XMLTransformerContext::EndElement();
+        ExportStartElement(nElement);
+    XMLTransformerContext::endFastElement(nElement);
 }
 
 void XMLMergeElemTransformerContext::Characters( const OUString& )

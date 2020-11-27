@@ -21,6 +21,7 @@
 #include "MutableAttrList.hxx"
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>
+#include <xmloff/xmlimp.hxx>
 #include "ActionMapTypesOOo.hxx"
 #include "AttrTransformerAction.hxx"
 #include "ElemTransformerAction.hxx"
@@ -34,22 +35,21 @@ using namespace ::xmloff::token;
 
 XMLFrameOOoTransformerContext::XMLFrameOOoTransformerContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName ) :
+        sal_Int32 rQName ) :
     XMLPersElemContentTContext( rImp, rQName ),
-    m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW,
-                            ::xmloff::token::GetXMLToken( XML_FRAME ) ) )
+    m_aElemQName( XML_ELEMENT(DRAW, XML_FRAME ) )
 {
 }
 
-void XMLFrameOOoTransformerContext::StartElement(
-    const Reference< XAttributeList >& rAttrList )
+void XMLFrameOOoTransformerContext::startFastElement(sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
 
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( OOO_FRAME_ATTR_ACTIONS );
     OSL_ENSURE( pActions, "go no actions" );
 
-    Reference< XAttributeList > xAttrList( rAttrList );
+    Reference< XFastAttributeList > xAttrList( rAttrList );
     XMLMutableAttributeList *pMutableAttrList =
         GetTransformer().ProcessAttrList( xAttrList, OOO_SHAPE_ACTIONS,
                                           true );
@@ -59,17 +59,13 @@ void XMLFrameOOoTransformerContext::StartElement(
 
     XMLMutableAttributeList *pFrameMutableAttrList =
         new XMLMutableAttributeList;
-    Reference< XAttributeList > xFrameAttrList( pFrameMutableAttrList );
+    Reference< XFastAttributeList > xFrameAttrList( pFrameMutableAttrList );
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                 &aLocalName );
-        XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
+        sal_Int32 rAttrName = xAttrList->getTokenByIndex( i );
+        XMLTransformerActions::key_type aKey( rAttrName );
         XMLTransformerActions::const_iterator aIter =
             pActions->find( aKey );
         if( aIter != pActions->end() )
@@ -90,23 +86,21 @@ void XMLFrameOOoTransformerContext::StartElement(
         }
     }
 
-    GetTransformer().GetDocHandler()->startElement( m_aElemQName,
+    GetTransformer().GetDocHandler()->startFastElement( m_aElemQName,
                                                     xFrameAttrList );
-    XMLTransformerContext::StartElement( xAttrList );
+    XMLTransformerContext::startFastElement( nElement, xAttrList );
 }
 
-rtl::Reference<XMLTransformerContext> XMLFrameOOoTransformerContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const OUString& rQName,
-        const Reference< XAttributeList >& rAttrList )
+rtl::Reference<XMLTransformerContext> XMLFrameOOoTransformerContext::createFastChildContext(
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList >& rAttrList )
 {
     rtl::Reference<XMLTransformerContext> pContext;
 
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( OOO_FRAME_ELEM_ACTIONS );
     OSL_ENSURE( pActions, "go no actions" );
-    XMLTransformerActions::key_type aKey( nPrefix, rLocalName );
+    XMLTransformerActions::key_type aKey( nElement );
     XMLTransformerActions::const_iterator aIter = pActions->find( aKey );
 
     if( aIter != pActions->end() )
@@ -118,8 +112,8 @@ rtl::Reference<XMLTransformerContext> XMLFrameOOoTransformerContext::CreateChild
         case XML_ETACTION_RENAME_ELEM:
             // the ones in the list have to be persistent
 
-            pContext = XMLPersElemContentTContext::CreateChildContext(
-                           nPrefix, rLocalName, rQName, rAttrList );
+            pContext = XMLPersElemContentTContext::createFastChildContext(
+                           nElement, rAttrList );
             break;
         default:
             OSL_ENSURE( false, "unknown action" );
@@ -129,17 +123,17 @@ rtl::Reference<XMLTransformerContext> XMLFrameOOoTransformerContext::CreateChild
 
     // default is copying
     if( !pContext.is() )
-        pContext = XMLTransformerContext::CreateChildContext(
-                    nPrefix, rLocalName, rQName, rAttrList );
+        pContext = XMLTransformerContext::createFastChildContext(
+                    nElement, rAttrList );
 
     return pContext;
 }
 
-void XMLFrameOOoTransformerContext::EndElement()
+void XMLFrameOOoTransformerContext::endFastElement(sal_Int32 nElement)
 {
-    XMLTransformerContext::EndElement();
+    XMLTransformerContext::endFastElement(nElement);
     ExportContent();
-    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
+    GetTransformer().GetDocHandler()->endFastElement( m_aElemQName );
 }
 
 void XMLFrameOOoTransformerContext::Characters( const OUString& rChars )

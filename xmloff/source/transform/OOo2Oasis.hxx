@@ -41,7 +41,7 @@ protected:
 
     virtual XMLTransformerContext *CreateUserDefinedContext(
                                       const TransformerAction_Impl& rAction,
-                                      const OUString& rQName,
+                                      sal_Int32 rQName,
                                          bool bPersistent=false ) override;
 
     virtual XMLTransformerActions *GetUserDefinedActions( sal_uInt16 n ) override;

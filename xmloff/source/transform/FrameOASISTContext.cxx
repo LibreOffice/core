@@ -21,6 +21,7 @@
 #include "IgnoreTContext.hxx"
 #include "MutableAttrList.hxx"
 #include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmlimp.hxx>
 #include "ActionMapTypesOASIS.hxx"
 #include "ElemTransformerAction.hxx"
 #include "TransformerActions.hxx"
@@ -33,23 +34,18 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 bool XMLFrameOASISTransformerContext::IsLinkedEmbeddedObject(
-            const OUString& rLocalName,
-            const Reference< XAttributeList >& rAttrList )
+            sal_Int32 rLocalName,
+            const Reference< XFastAttributeList >& rAttrList )
 {
-    if( !(IsXMLToken( rLocalName, XML_OBJECT ) ||
-          IsXMLToken( rLocalName, XML_OBJECT_OLE)  ) )
+    rLocalName &= TOKEN_MASK;
+    if( rLocalName != XML_OBJECT && rLocalName != XML_OBJECT_OLE )
         return false;
 
     sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        OUString aAttrName( rAttrList->getNameByIndex( i ) );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
-                                                                 &aLocalName );
-        if( XML_NAMESPACE_XLINK == nPrefix &&
-            IsXMLToken( aLocalName, XML_HREF ) )
+        sal_Int32 aAttrName = rAttrList->getTokenByIndex( i );
+        if( aAttrName == XML_ELEMENT(XLINK, XML_HREF) )
         {
             OUString sHRef( rAttrList->getValueByIndex( i ) );
             if (sHRef.isEmpty())
@@ -69,7 +65,7 @@ bool XMLFrameOASISTransformerContext::IsLinkedEmbeddedObject(
 
 XMLFrameOASISTransformerContext::XMLFrameOASISTransformerContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName ) :
+        sal_Int32 rQName ) :
     XMLTransformerContext( rImp, rQName ),
     m_bIgnoreElement( false )
 {
@@ -79,22 +75,19 @@ XMLFrameOASISTransformerContext::~XMLFrameOASISTransformerContext()
 {
 }
 
-void XMLFrameOASISTransformerContext::StartElement(
-    const Reference< XAttributeList >& rAttrList )
+void XMLFrameOASISTransformerContext::startFastElement(sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
     m_xAttrList = new XMLMutableAttributeList( rAttrList, true );
 
     sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = rAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
+        sal_Int32 rAttrName = rAttrList->getTokenByIndex( i );
 
-        if( (nPrefix == XML_NAMESPACE_PRESENTATION) && IsXMLToken( aLocalName, XML_CLASS ) )
+        if( rAttrName == XML_ELEMENT(PRESENTATION, XML_CLASS) )
         {
-            const OUString& rAttrValue = rAttrList->getValueByIndex( i );
+            OUString rAttrValue = rAttrList->getValueByIndex( i );
             if( IsXMLToken( rAttrValue, XML_HEADER ) || IsXMLToken( rAttrValue, XML_FOOTER ) ||
                 IsXMLToken( rAttrValue, XML_PAGE_NUMBER ) || IsXMLToken( rAttrValue, XML_DATE_TIME ) )
             {
@@ -105,11 +98,9 @@ void XMLFrameOASISTransformerContext::StartElement(
     }
 }
 
-rtl::Reference<XMLTransformerContext> XMLFrameOASISTransformerContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const OUString& rQName,
-        const Reference< XAttributeList >& rAttrList )
+rtl::Reference<XMLTransformerContext> XMLFrameOASISTransformerContext::createFastChildContext(
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList >& rAttrList )
 {
     rtl::Reference<XMLTransformerContext> pContext;
 
@@ -117,7 +108,7 @@ rtl::Reference<XMLTransformerContext> XMLFrameOASISTransformerContext::CreateChi
     {
         // do not export the frame element and all of its children
         pContext.set(new XMLIgnoreTransformerContext( GetTransformer(),
-                                                                rQName,
+                                                                nElement,
                                                                 true, true ));
     }
     else
@@ -125,7 +116,7 @@ rtl::Reference<XMLTransformerContext> XMLFrameOASISTransformerContext::CreateChi
         XMLTransformerActions *pActions =
             GetTransformer().GetUserDefinedActions( OASIS_FRAME_ELEM_ACTIONS );
         OSL_ENSURE( pActions, "go no actions" );
-        XMLTransformerActions::key_type aKey( nPrefix, rLocalName );
+        XMLTransformerActions::key_type aKey( nElement );
         XMLTransformerActions::const_iterator aIter = pActions->find( aKey );
 
         if( aIter != pActions->end() )
@@ -133,24 +124,24 @@ rtl::Reference<XMLTransformerContext> XMLFrameOASISTransformerContext::CreateChi
             switch( (*aIter).second.m_nActionType )
             {
             case XML_ETACTION_COPY:
-                if( m_aElemQName.isEmpty() &&
-                    !IsLinkedEmbeddedObject( rLocalName, rAttrList ) )
+                if( !m_xElemQName &&
+                    !IsLinkedEmbeddedObject( nElement, rAttrList ) )
                 {
                     pContext.set(new XMLIgnoreTransformerContext( GetTransformer(),
-                                                                rQName,
+                                                                nElement,
                                                                 false, false ));
-                    m_aElemQName = rQName;
+                    m_xElemQName = nElement;
                     static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
                         ->AppendAttributeList( rAttrList );
                     GetTransformer().ProcessAttrList( m_xAttrList,
                                                       OASIS_SHAPE_ACTIONS,
                                                       false );
-                    GetTransformer().GetDocHandler()->startElement( m_aElemQName, m_xAttrList );
+                    GetTransformer().GetDocHandler()->startFastElement( *m_xElemQName, m_xAttrList );
                 }
                 else
                 {
                     pContext.set(new XMLIgnoreTransformerContext( GetTransformer(),
-                                                                rQName,
+                                                                nElement,
                                                                 true, true ));
                 }
                 break;
@@ -163,24 +154,22 @@ rtl::Reference<XMLTransformerContext> XMLFrameOASISTransformerContext::CreateChi
 
     // default is copying
     if( !pContext.is() )
-        pContext = XMLTransformerContext::CreateChildContext( nPrefix,
-                                                              rLocalName,
-                                                              rQName,
+        pContext = XMLTransformerContext::createFastChildContext( nElement,
                                                               rAttrList );
 
     return pContext;
 }
 
-void XMLFrameOASISTransformerContext::EndElement()
+void XMLFrameOASISTransformerContext::endFastElement(sal_Int32 )
 {
     if( !m_bIgnoreElement )
-        GetTransformer().GetDocHandler()->endElement( m_aElemQName );
+        GetTransformer().GetDocHandler()->endFastElement( *m_xElemQName );
 }
 
 void XMLFrameOASISTransformerContext::Characters( const OUString& rChars )
 {
     // ignore
-    if( !m_aElemQName.isEmpty() && !m_bIgnoreElement )
+    if( m_xElemQName && !m_bIgnoreElement )
         XMLTransformerContext::Characters( rChars );
 }
 

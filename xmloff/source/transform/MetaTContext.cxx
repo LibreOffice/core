@@ -19,10 +19,11 @@
 
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmlimp.hxx>
 
 #include "TransformerBase.hxx"
 #include "MutableAttrList.hxx"
@@ -57,7 +58,7 @@ XMLTokenEnum const aMetaTokens[] =
 };
 
 XMLMetaTransformerContext::XMLMetaTransformerContext( XMLTransformerBase& rImp,
-                                                const OUString& rQName ) :
+                                                sal_Int32 rQName ) :
     XMLTransformerContext( rImp, rQName )
 {
 }
@@ -66,47 +67,39 @@ XMLMetaTransformerContext::~XMLMetaTransformerContext()
 {
 }
 
-rtl::Reference<XMLTransformerContext> XMLMetaTransformerContext::CreateChildContext(
-            sal_uInt16 /*nPrefix*/,
-            const OUString& rLocalName,
-            const OUString& rQName,
-            const Reference< XAttributeList >& )
+rtl::Reference<XMLTransformerContext> XMLMetaTransformerContext::createFastChildContext(
+            sal_Int32 nElement,
+            const Reference< XFastAttributeList >& )
 {
     rtl::Reference<XMLPersTextContentTContext> pContext(
-        new XMLPersTextContentTContext( GetTransformer(), rQName ));
-    XMLMetaContexts_Impl::value_type aVal( rLocalName, pContext );
+        new XMLPersTextContentTContext( GetTransformer(), nElement ));
+    XMLMetaContexts_Impl::value_type aVal( static_cast<XMLTokenEnum>(nElement & TOKEN_MASK), pContext );
     m_aContexts.insert( aVal );
 
     return pContext.get();
 }
 
-void XMLMetaTransformerContext::EndElement()
+void XMLMetaTransformerContext::endFastElement(sal_Int32 )
 {
     // export everything in the correct order
-    OUString aKeywordsQName;
     XMLTokenEnum const *pToken = aMetaTokens;
     while( *pToken != XML_TOKEN_END )
     {
-        const OUString& rToken = GetXMLToken( *pToken );
         XMLMetaContexts_Impl::const_iterator aIter =
-            m_aContexts.find( rToken );
+            m_aContexts.find( *pToken );
         if( aIter != m_aContexts.end() )
         {
             if( XML_KEYWORD == *pToken )
             {
-                aKeywordsQName =
-                    GetTransformer().GetNamespaceMap().GetQNameByKey(
-                            XML_NAMESPACE_META, GetXMLToken(XML_KEYWORDS ) );
-
-                Reference< XAttributeList > xAttrList =
+                Reference< XFastAttributeList > xAttrList =
                     new XMLMutableAttributeList;
-                GetTransformer().GetDocHandler()->startElement( aKeywordsQName,
+                GetTransformer().GetDocHandler()->startFastElement( XML_ELEMENT(META, XML_KEYWORDS),
                                                             xAttrList );
             }
 
             // All elements may occur multiple times
             XMLMetaContexts_Impl::const_iterator aEndIter =
-                m_aContexts.upper_bound( rToken );
+                m_aContexts.upper_bound( *pToken );
             while( aIter != aEndIter )
             {
                 (*aIter).second->Export();
@@ -114,12 +107,12 @@ void XMLMetaTransformerContext::EndElement()
             }
 
             if( XML_KEYWORD == *pToken )
-                GetTransformer().GetDocHandler()->endElement( aKeywordsQName );
+                GetTransformer().GetDocHandler()->endFastElement( XML_ELEMENT(META, XML_KEYWORDS) );
         }
         pToken++;
     }
 
-    GetTransformer().GetDocHandler()->endElement( GetQName() );
+    GetTransformer().GetDocHandler()->endFastElement( GetQName() );
 }
 
 void XMLMetaTransformerContext::Characters( const OUString& )

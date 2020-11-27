@@ -19,11 +19,12 @@
 
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <osl/diagnose.h>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmlimp.hxx>
 
 #include "TransformerBase.hxx"
 #include "TransformerActions.hxx"
@@ -41,7 +42,7 @@ using namespace ::com::sun::star::xml::sax;
 
 XMLNotesTransformerContext::XMLNotesTransformerContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName,
+        sal_Int32 rQName,
         XMLTokenEnum eToken, bool bPersistent ) :
     XMLPersElemContentTContext( rImp, rQName ),
     m_bEndNote( false ),
@@ -54,29 +55,25 @@ XMLNotesTransformerContext::~XMLNotesTransformerContext()
 {
 }
 
-void XMLNotesTransformerContext::StartElement(
-        const Reference< XAttributeList >& rAttrList )
+void XMLNotesTransformerContext::startFastElement(sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( OASIS_NOTES_ACTIONS );
     OSL_ENSURE( pActions, "go no actions" );
 
-    Reference< XAttributeList > xAttrList( rAttrList );
+    Reference< XFastAttributeList > xAttrList( rAttrList );
     XMLMutableAttributeList *pMutableAttrList = nullptr;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                 &aLocalName );
-        XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
+        sal_Int32 rAttrName = xAttrList->getTokenByIndex( i );
+        XMLTransformerActions::key_type aKey( rAttrName );
         XMLTransformerActions::const_iterator aIter =
             pActions->find( aKey );
         if( aIter != pActions->end() )
         {
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            OUString rAttrValue = xAttrList->getValueByIndex( i );
 
             if( !pMutableAttrList )
             {
@@ -130,46 +127,42 @@ void XMLNotesTransformerContext::StartElement(
         break;
     }
 
-    SetExportQName( GetTransformer().GetNamespaceMap().GetQNameByKey(
-                            XML_NAMESPACE_TEXT,
-                            ::xmloff::token::GetXMLToken( eToken ) ) );
+    SetExportQName( XML_ELEMENT(TEXT, eToken) );
     if( m_bPersistent )
-        XMLPersElemContentTContext::StartElement( xAttrList );
+        XMLPersElemContentTContext::startFastElement( nElement, xAttrList );
     else
-        GetTransformer().GetDocHandler()->startElement( GetExportQName(),
+        GetTransformer().GetDocHandler()->startFastElement( GetExportQName(),
                                                         xAttrList );
 }
 
-void XMLNotesTransformerContext::EndElement()
+void XMLNotesTransformerContext::endFastElement(sal_Int32 nElement)
 {
     if( m_bPersistent )
     {
-        XMLPersElemContentTContext::EndElement();
+        XMLPersElemContentTContext::endFastElement(nElement);
     }
     else
     {
-        GetTransformer().GetDocHandler()->endElement( GetExportQName() );
+        GetTransformer().GetDocHandler()->endFastElement( GetExportQName() );
     }
 }
 
-rtl::Reference<XMLTransformerContext> XMLNotesTransformerContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const OUString& rQName,
-        const Reference< XAttributeList >& rAttrList )
+rtl::Reference<XMLTransformerContext> XMLNotesTransformerContext::createFastChildContext(
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList >& rAttrList )
 {
     rtl::Reference<XMLTransformerContext> pContext;
     if( XML_NOTE == m_eTypeToken )
     {
-        if( XML_NAMESPACE_TEXT == nPrefix )
+        if( IsTokenInNamespace(nElement, XML_NAMESPACE_TEXT) )
         {
             XMLTokenEnum eToken ( XML_TOKEN_INVALID );
-            if( IsXMLToken( rLocalName, XML_NOTE_CITATION ) )
+            if( (nElement & TOKEN_MASK) == XML_NOTE_CITATION )
             {
                 eToken = m_bEndNote ? XML_ENDNOTE_CITATION
                                   : XML_FOOTNOTE_CITATION;
             }
-            else if( IsXMLToken( rLocalName, XML_NOTE_BODY ) )
+            else if( (nElement & TOKEN_MASK) == XML_NOTE_BODY )
             {
                 eToken = m_bEndNote ? XML_ENDNOTE_BODY
                                   : XML_FOOTNOTE_BODY;
@@ -180,18 +173,16 @@ rtl::Reference<XMLTransformerContext> XMLNotesTransformerContext::CreateChildCon
                 if( m_bPersistent  )
                 {
                     pContext.set(new XMLPersTextContentTContext(
-                                    GetTransformer(), rQName,
-                                    XML_NAMESPACE_TEXT,
-                                    eToken ));
+                                    GetTransformer(), nElement,
+                                    XML_ELEMENT(TEXT, eToken) ));
                     AddContent( pContext );
 
                 }
                 else
                 {
                     pContext.set(new XMLRenameElemTransformerContext(
-                                    GetTransformer(), rQName,
-                                    XML_NAMESPACE_TEXT,
-                                    eToken ));
+                                    GetTransformer(), nElement,
+                                    XML_ELEMENT(TEXT, eToken) ));
                 }
             }
         }
@@ -200,10 +191,10 @@ rtl::Reference<XMLTransformerContext> XMLNotesTransformerContext::CreateChildCon
     if( !pContext.is() )
     {
         pContext = m_bPersistent
-                        ? XMLPersElemContentTContext::CreateChildContext(
-                                nPrefix, rLocalName, rQName, rAttrList )
-                        : XMLTransformerContext::CreateChildContext(
-                                nPrefix, rLocalName, rQName, rAttrList );
+                        ? XMLPersElemContentTContext::createFastChildContext(
+                                nElement, rAttrList )
+                        : XMLTransformerContext::createFastChildContext(
+                                nElement, rAttrList );
     }
 
     return pContext;

@@ -19,8 +19,9 @@
 
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <osl/diagnose.h>
+#include <xmloff/xmlimp.hxx>
 
 #include "TransformerBase.hxx"
 
@@ -30,43 +31,39 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-bool XMLTransformerContext::HasQName( sal_uInt16 nPrefix,
-                       ::xmloff::token::XMLTokenEnum eToken ) const
+bool XMLTransformerContext::HasQName( sal_Int32 rQName ) const
 {
-    OUString aLocalName;
-    return GetTransformer().GetNamespaceMap().GetKeyByAttrName( m_aQName,
-                                              &aLocalName ) == nPrefix &&
-           ::xmloff::token::IsXMLToken( aLocalName, eToken );
+    return m_aQName == rQName;
 }
 
 bool XMLTransformerContext::HasNamespace( sal_uInt16 nPrefix ) const
 {
-    return GetTransformer().GetNamespaceMap().GetKeyByAttrName( m_aQName ) == nPrefix;
+    return IsTokenInNamespace(m_aQName, nPrefix);
 }
 
 XMLTransformerContext::XMLTransformerContext( XMLTransformerBase& rImp,
-                                                const OUString& rQName )
+                                                sal_Int32 rQName )
     : m_rTransformer(rImp)
     , m_aQName(rQName)
 {
 }
 
-rtl::Reference<XMLTransformerContext> XMLTransformerContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLocalName,
-                                            const OUString& rQName,
-                                            const Reference< XAttributeList >& )
+rtl::Reference<XMLTransformerContext> XMLTransformerContext::createFastChildContext(
+                                            sal_Int32 nElement,
+                                            const Reference< XFastAttributeList >& )
 {
-    return m_rTransformer.CreateContext( nPrefix, rLocalName, rQName );
+    return m_rTransformer.CreateContext( nElement );
 }
 
-void XMLTransformerContext::StartElement( const Reference< XAttributeList >& rAttrList )
+void XMLTransformerContext::startFastElement(sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
-    m_rTransformer.GetDocHandler()->startElement( m_aQName, rAttrList );
+    m_rTransformer.GetDocHandler()->startFastElement( m_aQName, rAttrList );
 }
 
-void XMLTransformerContext::EndElement()
+void XMLTransformerContext::endFastElement(sal_Int32 /*nElement*/)
 {
-    GetTransformer().GetDocHandler()->endElement( m_aQName );
+    GetTransformer().GetDocHandler()->endFastElement( m_aQName );
 }
 
 void XMLTransformerContext::Characters( const OUString& rChars )

@@ -103,7 +103,6 @@ public:
     bool getAsChar( sal_Int32 nToken, const char*& rPos ) const;
     sal_Int32 getAsIntegerByIndex( sal_Int32 nTokenIndex ) const;
     const char* getAsCharByIndex( sal_Int32 nTokenIndex ) const;
-    OUString getValueByIndex( sal_Int32 nTokenIndex ) const;
 
     // XFastAttributeList
     virtual sal_Bool SAL_CALL hasAttribute( ::sal_Int32 Token ) override;
@@ -113,6 +112,9 @@ public:
     virtual OUString SAL_CALL getOptionalValue( ::sal_Int32 Token ) override;
     virtual css::uno::Sequence< css::xml::Attribute > SAL_CALL getUnknownAttributes(  ) override;
     virtual css::uno::Sequence< css::xml::FastAttribute > SAL_CALL getFastAttributes() override;
+    virtual OUString SAL_CALL getValueByIndex( sal_Int16 i ) override;
+    virtual sal_Int16 SAL_CALL getLength() override { return size(); }
+    virtual sal_Int32 SAL_CALL getTokenByIndex( sal_Int16 i ) override { return maAttributeTokens[i]; }
 
     // XCloneable
     virtual ::css::uno::Reference< ::css::util::XCloneable > SAL_CALL createClone() override;

@@ -36,17 +36,17 @@ using namespace ::xmloff::token;
 
 XMLCreateElemTransformerContext::XMLCreateElemTransformerContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName,
+        sal_Int32 rQName,
        sal_uInt16 nActionMap ) :
     XMLTransformerContext( rImp, rQName ),
     m_nActionMap( nActionMap )
 {
 }
 
-void XMLCreateElemTransformerContext::StartElement(
-        const Reference< XAttributeList >& rAttrList )
+void XMLCreateElemTransformerContext::startFastElement(sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
-    Reference< XAttributeList > xAttrList( rAttrList );
+    Reference< XFastAttributeList > xAttrList( rAttrList );
 
     std::vector<rtl::Reference<XMLTransformerContext>> aChildContexts;
 
@@ -59,14 +59,9 @@ void XMLCreateElemTransformerContext::StartElement(
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for( sal_Int16 i=0; i < nAttrCount; ++i )
         {
-            const OUString& rAttrName = xAttrList->getNameByIndex( i );
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-            OUString aLocalName;
-            sal_uInt16 nPrefix =
-                GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                           &aLocalName );
-
-            XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
+            sal_Int32 rAttrToken = xAttrList->getTokenByIndex( i );
+            OUString rAttrValue = xAttrList->getValueByIndex( i );
+            XMLTransformerActions::key_type aKey( rAttrToken );
             XMLTransformerActions::const_iterator aIter =
                     pActions->find( aKey );
             if( aIter != pActions->end() )
@@ -81,11 +76,7 @@ void XMLCreateElemTransformerContext::StartElement(
                 {
                 case XML_ATACTION_MOVE_TO_ELEM:
                     {
-                        OUString aElemQName(
-                            GetTransformer().GetNamespaceMap().GetQNameByKey(
-                                (*aIter).second.GetQNamePrefixFromParam1(),
-                                ::xmloff::token::GetXMLToken(
-                                (*aIter).second.GetQNameTokenFromParam1()) ) );
+                        sal_Int32 aElemQName = (*aIter).second.GetTokenFromParam1();
                         rtl::Reference<XMLTransformerContext> pContext(
                             new XMLPersTextContentTContext( GetTransformer(),
                                                        aElemQName ));
@@ -103,7 +94,7 @@ void XMLCreateElemTransformerContext::StartElement(
             }
         }
     }
-    XMLTransformerContext::StartElement( xAttrList );
+    XMLTransformerContext::startFastElement( nElement, xAttrList );
 
     for (auto const & i: aChildContexts)
     {

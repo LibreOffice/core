@@ -150,6 +150,24 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
         are translated to tokens.
     */
     sequence< ::com::sun::star::xml::FastAttribute > getFastAttributes();
+
+    /** @returns
+                    the number of attributes in this list.
+        @since LibreOffice 7.2
+     */
+    short getLength();
+
+    /**
+        @since LibreOffice 7.2
+     */
+    long getTokenByIndex( [in] short i )
+        raises( SAXException );
+
+    /** @returns
+                    the value of an attribute in the list (by position).
+        @since LibreOffice 7.2
+     */
+    string getValueByIndex( [in] short i );
 };
 
 
