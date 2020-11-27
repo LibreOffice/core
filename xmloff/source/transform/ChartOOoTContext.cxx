@@ -25,6 +25,7 @@
 #include "TransformerActions.hxx"
 #include "TransformerBase.hxx"
 #include <osl/diagnose.h>
+#include <xmloff/xmlimp.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -32,7 +33,7 @@ using namespace ::xmloff::token;
 
 XMLChartOOoTransformerContext::XMLChartOOoTransformerContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName ) :
+        sal_Int32 rQName ) :
     XMLTransformerContext( rImp, rQName )
 {
 }
@@ -41,8 +42,8 @@ XMLChartOOoTransformerContext::~XMLChartOOoTransformerContext()
 {
 }
 
-void XMLChartOOoTransformerContext::StartElement(
-    const Reference< XAttributeList >& rAttrList )
+void XMLChartOOoTransformerContext::startFastElement(sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( OOO_CHART_ACTIONS );
@@ -50,17 +51,12 @@ void XMLChartOOoTransformerContext::StartElement(
 
     sal_Int16 nClassName = -1;
     OUString aAddInName;
-    Reference< XAttributeList > xAttrList( rAttrList );
+    Reference< XFastAttributeList > xAttrList( rAttrList );
     XMLMutableAttributeList *pMutableAttrList = nullptr;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                 &aLocalName );
-        XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
+        XMLTransformerActions::key_type aKey( xAttrList->getTokenByIndex(i) );
         XMLTransformerActions::const_iterator aIter =
             pActions->find( aKey );
         if( aIter != pActions->end() )
@@ -71,7 +67,7 @@ void XMLChartOOoTransformerContext::StartElement(
                         new XMLMutableAttributeList( xAttrList );
                 xAttrList = pMutableAttrList;
             }
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            OUString rAttrValue = xAttrList->getValueByIndex(i);
             switch( (*aIter).second.m_nActionType )
             {
             case XML_ATACTION_INCH2IN:
@@ -90,7 +86,7 @@ void XMLChartOOoTransformerContext::StartElement(
                 }
                 break;
             case XML_ATACTION_ADD_NAMESPACE_PREFIX:
-                OSL_ENSURE( ::xmloff::token::IsXMLToken( aLocalName, XML_CLASS ),
+                OSL_ENSURE( (xAttrList->getTokenByIndex(i) & TOKEN_MASK) == XML_CLASS,
                                "unexpected class token" );
                 if( ::xmloff::token::IsXMLToken( rAttrValue, XML_ADD_IN ) )
                 {
@@ -107,7 +103,7 @@ void XMLChartOOoTransformerContext::StartElement(
                 }
                 break;
             case XML_ATACTION_REMOVE:
-                OSL_ENSURE( ::xmloff::token::IsXMLToken( aLocalName, XML_ADD_IN_NAME ),
+                OSL_ENSURE( (xAttrList->getTokenByIndex(i) & TOKEN_MASK) == XML_ADD_IN_NAME,
                                "unexpected class token" );
                 aAddInName = rAttrValue;
                 pMutableAttrList->RemoveAttributeByIndex( i );
@@ -127,7 +123,7 @@ void XMLChartOOoTransformerContext::StartElement(
         pMutableAttrList->SetValueByIndex( nClassName, aAddInName );
     }
 
-    XMLTransformerContext::StartElement( xAttrList );
+    XMLTransformerContext::startFastElement( nElement, xAttrList );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

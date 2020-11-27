@@ -24,17 +24,18 @@
 
 class XMLControlOASISTransformerContext : public XMLTransformerContext
 {
-    OUString const m_aElemQName;
+    sal_Int32 m_aElemQName;
     bool const m_bCreateControl;
 
 public:
     XMLControlOASISTransformerContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
+                              sal_Int32 rQName,
                               bool bCreateControl );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void startFastElement(sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
 
-    virtual void EndElement() override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_CONTROLOASISTCONTEXT_HXX

@@ -24,30 +24,29 @@
 
 class XMLFrameOASISTransformerContext : public XMLTransformerContext
 {
-    css::uno::Reference< css::xml::sax::XAttributeList > m_xAttrList;
+    css::uno::Reference< css::xml::sax::XFastAttributeList > m_xAttrList;
 
-    OUString m_aElemQName;
+    std::optional<sal_Int32> m_xElemQName;
 
     bool m_bIgnoreElement;
 
     bool IsLinkedEmbeddedObject(
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& rAttrList );
+        sal_Int32 rLocalName,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& rAttrList );
 
 public:
     XMLFrameOASISTransformerContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName );
+                           sal_Int32 rQName );
 
     virtual ~XMLFrameOASISTransformerContext() override;
 
-    virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const OUString& rQName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual rtl::Reference<XMLTransformerContext> createFastChildContext( sal_Int32 nElement,
+                                   const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void startFastElement(sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
 
-    virtual void EndElement() override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
     virtual void Characters( const OUString& rChars ) override;
 };

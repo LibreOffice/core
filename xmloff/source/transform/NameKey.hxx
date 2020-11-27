@@ -17,22 +17,40 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_DLGOASISTCONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_DLGOASISTCONTEXT_HXX
+#pragma once
 
-#include "TransformerContext.hxx"
+#include <boost/functional/hash.hpp>
 
-class XMLDlgOASISTransformerContext : public XMLTransformerContext
+struct NameKey_Impl
 {
-public:
-    XMLDlgOASISTransformerContext( XMLTransformerBase& rTransformer,
-                           sal_Int32 rQName );
-    virtual ~XMLDlgOASISTransformerContext() override;
+    sal_uInt16 m_nPrefix = XML_NAMESPACE_UNKNOWN;
+    OUString m_aLocalName;
 
-    virtual void startFastElement(sal_Int32 nElement,
-                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
+    NameKey_Impl(sal_uInt16 nPrfx, const OUString& rLclNm)
+        : m_nPrefix(nPrfx)
+        , m_aLocalName(rLclNm)
+    {
+    }
+
+    NameKey_Impl()
+        : m_nPrefix(XML_NAMESPACE_UNKNOWN)
+    {
+    }
 };
 
-#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_DLGOASISTCONTEXT_HXX
+struct NameHash_Impl
+{
+    size_t operator()(const NameKey_Impl& r) const
+    {
+        std::size_t seed = 0;
+        boost::hash_combine(seed, r.m_nPrefix);
+        boost::hash_combine(seed, r.m_aLocalName.hashCode());
+        return seed;
+    }
+    bool operator()(const NameKey_Impl& r1, const NameKey_Impl& r2) const
+    {
+        return r1.m_nPrefix == r2.m_nPrefix && r1.m_aLocalName == r2.m_aLocalName;
+    }
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

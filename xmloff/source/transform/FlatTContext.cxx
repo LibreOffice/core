@@ -26,17 +26,16 @@ using namespace ::com::sun::star::xml::sax;
 
 XMLPersTextContentTContext::XMLPersTextContentTContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName ) :
+        sal_Int32 rQName ) :
     XMLPersAttrListTContext( rImp, rQName )
 {
 }
 
 XMLPersTextContentTContext::XMLPersTextContentTContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName,
-        sal_uInt16 nPrefix,
-        ::xmloff::token::XMLTokenEnum eToken ) :
-    XMLPersAttrListTContext( rImp, rQName, nPrefix, eToken )
+        sal_Int32 rQName,
+        sal_Int32 rQName2 ) :
+    XMLPersAttrListTContext( rImp, rQName, rQName2 )
 {
 }
 

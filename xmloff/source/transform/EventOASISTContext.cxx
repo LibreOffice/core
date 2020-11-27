@@ -25,8 +25,10 @@
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"
 #include "TransformerBase.hxx"
+#include "NameKey.hxx"
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <xmloff/xmlimp.hxx>
 
 // Used to parse Scripting Framework URLs
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
@@ -38,6 +40,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
+
 
 class XMLTransformerOASISEventMap_Impl:
     public std::unordered_map< NameKey_Impl, OUString,
@@ -72,9 +75,9 @@ XMLTransformerOASISEventMap_Impl::XMLTransformerOASISEventMap_Impl( XMLTransform
 
 XMLEventOASISTransformerContext::XMLEventOASISTransformerContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName ) :
+        sal_Int32 rQName ) :
     XMLRenameElemTransformerContext( rImp, rQName,
-         rImp.GetNamespaceMap().GetKeyByAttrName( rQName ), XML_EVENT )
+         (rQName & NMSP_MASK) | XML_EVENT )
 {
 }
 
@@ -163,26 +166,22 @@ static bool ParseURL(
     return false;
 }
 
-void XMLEventOASISTransformerContext::StartElement(
-    const Reference< XAttributeList >& rAttrList )
+void XMLEventOASISTransformerContext::startFastElement(sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
-    SAL_INFO("xmloff.transform", "XMLEventOASISTransformerContext::StartElement");
+    SAL_INFO("xmloff.transform", "XMLEventOASISTransformerContext::startFastElement");
 
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( OASIS_EVENT_ACTIONS );
     SAL_WARN_IF( pActions == nullptr, "xmloff.transform", "got no actions" );
 
-    Reference< XAttributeList > xAttrList( rAttrList );
+    Reference< XFastAttributeList > xAttrList( rAttrList );
     XMLMutableAttributeList *pMutableAttrList = nullptr;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                 &aLocalName );
-        XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
+        sal_Int32 rAttrName = xAttrList->getTokenByIndex( i );
+        XMLTransformerActions::key_type aKey( rAttrName );
         XMLTransformerActions::const_iterator aIter =
             pActions->find( aKey );
         if( aIter != pActions->end() )
@@ -206,28 +205,9 @@ void XMLEventOASISTransformerContext::StartElement(
                     if ( bNeedsTransform )
                     {
                         pMutableAttrList->RemoveAttributeByIndex( i );
-
-                        OUString aAttrQName(
-                            GetTransformer().GetNamespaceMap().GetQNameByKey(
-                                XML_NAMESPACE_SCRIPT,
-                            ::xmloff::token::GetXMLToken( XML_MACRO_NAME ) ) );
-
-                        pMutableAttrList->AddAttribute( aAttrQName, aName );
-
-                        sal_Int16 idx = pMutableAttrList->GetIndexByName(
-                            GetTransformer().GetNamespaceMap().GetQNameByKey(
-                                XML_NAMESPACE_SCRIPT,
-                            GetXMLToken( XML_LANGUAGE ) ) );
-
-                        pMutableAttrList->SetValueByIndex( idx,
-                            "StarBasic" );
-
-                        OUString aLocQName(
-                            GetTransformer().GetNamespaceMap().GetQNameByKey(
-                                XML_NAMESPACE_SCRIPT,
-                                GetXMLToken( XML_LOCATION ) ) );
-
-                        pMutableAttrList->AddAttribute( aLocQName, aLocation );
+                        pMutableAttrList->AddAttribute( XML_ELEMENT(SCRIPT, XML_MACRO_NAME), aName );
+                        pMutableAttrList->SetValueByToken( XML_ELEMENT(SCRIPT, XML_LANGUAGE), "StarBasic" );
+                        pMutableAttrList->AddAttribute( XML_ELEMENT(SCRIPT, XML_LOCATION), aLocation );
                     }
                 }
                 break;
@@ -265,21 +245,8 @@ void XMLEventOASISTransformerContext::StartElement(
                 if ( bNeedsTransform )
                 {
                     pMutableAttrList->SetValueByIndex( i, aName );
-
-                    sal_Int16 idx = pMutableAttrList->GetIndexByName(
-                    GetTransformer().GetNamespaceMap().GetQNameByKey(
-                    XML_NAMESPACE_SCRIPT,
-                    GetXMLToken( XML_LANGUAGE ) ) );
-
-                    pMutableAttrList->SetValueByIndex( idx,
-                    "StarBasic" );
-
-                    OUString aLocQName(
-                    GetTransformer().GetNamespaceMap().GetQNameByKey(
-                    XML_NAMESPACE_SCRIPT,
-                    GetXMLToken( XML_LOCATION ) ) );
-
-                    pMutableAttrList->AddAttribute( aLocQName, aLocation );
+                    pMutableAttrList->SetValueByToken( XML_ELEMENT(SCRIPT, XML_LANGUAGE),  "StarBasic" );
+                    pMutableAttrList->AddAttribute( XML_ELEMENT(SCRIPT, XML_LOCATION), aLocation );
                 }
                 else
                 {
@@ -307,15 +274,9 @@ void XMLEventOASISTransformerContext::StartElement(
                     aAttrValue );
                     if( !aLocation.isEmpty() )
                     {
-                        OUString aAttrQName( GetTransformer().GetNamespaceMap().
-                        GetQNameByKey( XML_NAMESPACE_SCRIPT,
-                        ::xmloff::token::GetXMLToken( XML_LOCATION ) ) );
-                        pMutableAttrList->AddAttribute( aAttrQName, aLocation );
+                        pMutableAttrList->AddAttribute( XML_ELEMENT(SCRIPT, XML_LOCATION), aLocation );
                         // draw bug
-                        aAttrQName = GetTransformer().GetNamespaceMap().
-                        GetQNameByKey( XML_NAMESPACE_SCRIPT,
-                        ::xmloff::token::GetXMLToken( XML_LIBRARY ) );
-                        pMutableAttrList->AddAttribute( aAttrQName, aLocation );
+                        pMutableAttrList->AddAttribute( XML_ELEMENT(SCRIPT, XML_LIBRARY), aLocation );
                     }
                 }
             }
@@ -329,7 +290,7 @@ void XMLEventOASISTransformerContext::StartElement(
         }
     }
 
-    XMLRenameElemTransformerContext::StartElement( xAttrList );
+    XMLRenameElemTransformerContext::startFastElement( nElement, xAttrList );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

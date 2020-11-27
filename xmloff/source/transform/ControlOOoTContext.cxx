@@ -30,57 +30,55 @@ using namespace ::xmloff::token;
 
 XMLControlOOoTransformerContext::XMLControlOOoTransformerContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName ) :
+        sal_Int32 rQName ) :
     XMLTransformerContext( rImp, rQName )
 {
 }
 
-void XMLControlOOoTransformerContext::StartElement(
-    const Reference< XAttributeList >& rAttrList )
+void XMLControlOOoTransformerContext::startFastElement(sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
     m_xAttrList = new XMLMutableAttributeList( rAttrList, true );
 }
 
-rtl::Reference<XMLTransformerContext> XMLControlOOoTransformerContext::CreateChildContext(
-        sal_uInt16 /*nPrefix*/,
-        const OUString& /*rLocalName*/,
-        const OUString& rQName,
-        const Reference< XAttributeList >& rAttrList )
+rtl::Reference<XMLTransformerContext> XMLControlOOoTransformerContext::createFastChildContext(
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList >& rAttrList )
 {
     rtl::Reference<XMLTransformerContext> pContext;
 
-    if( m_aElemQName.isEmpty() )
+    if( !m_xElemQName )
     {
         pContext.set(new XMLIgnoreTransformerContext( GetTransformer(),
-                                                    rQName,
+                                                    nElement,
                                                     false, false ));
-        m_aElemQName = rQName;
+        m_xElemQName = nElement;
         static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
                 ->AppendAttributeList( rAttrList );
         GetTransformer().ProcessAttrList( m_xAttrList,
                                           OOO_FORM_CONTROL_ACTIONS,
                                           false );
-        GetTransformer().GetDocHandler()->startElement( m_aElemQName,
+        GetTransformer().GetDocHandler()->startFastElement( *m_xElemQName,
                                                         m_xAttrList );
     }
     else
     {
         pContext.set(new XMLIgnoreTransformerContext( GetTransformer(),
-                                                    rQName,
+                                                    nElement,
                                                     true, true ));
     }
     return pContext;
 }
 
-void XMLControlOOoTransformerContext::EndElement()
+void XMLControlOOoTransformerContext::endFastElement(sal_Int32 )
 {
-    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
+    GetTransformer().GetDocHandler()->endFastElement( *m_xElemQName );
 }
 
 void XMLControlOOoTransformerContext::Characters( const OUString& rChars )
 {
     // ignore
-    if( !m_aElemQName.isEmpty() )
+    if( m_xElemQName )
         XMLTransformerContext::Characters( rChars );
 }
 

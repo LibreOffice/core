@@ -25,7 +25,7 @@
 #include <vector>
 #include <memory>
 
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -54,12 +54,12 @@ class XMLTransformerBase : public XMLTransformer
 {
     friend class XMLTransformerContext;
 
-    css::uno::Reference< css::xml::sax::XDocumentHandler >            m_xHandler;     // the handlers
+    css::uno::Reference< css::xml::sax::XFastDocumentHandler >        m_xHandler;     // the handlers
     css::uno::Reference< css::beans::XPropertySet >                   m_xPropSet;
     css::uno::Reference< css::i18n::XCharacterClassification >        xCharClass;
 
     OUString m_aExtPathPrefix;
-    OUString m_aClass;
+    std::optional<::xmloff::token::XMLTokenEnum> m_xClass;
 
     std::unique_ptr<SvXMLNamespaceMap> m_pNamespaceMap;
     SvXMLNamespaceMap           m_vReplaceNamespaceMap;
@@ -72,39 +72,40 @@ protected:
 
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
-    XMLTransformerContext *CreateContext( sal_uInt16 nPrefix,
-                                      const OUString& rLocalName,
-                                      const OUString& rQName );
+    XMLTransformerContext *CreateContext( sal_Int32 nElement );
 
 public:
     XMLTransformerBase( XMLTransformerActionInit const *pInit,
                            ::xmloff::token::XMLTokenEnum const *pTKMapInit ) throw();
     virtual ~XMLTransformerBase() throw() override;
 
-    // css::xml::sax::XDocumentHandler
+    // css::xml::sax::XFastDocumentHandler
     virtual void SAL_CALL startDocument() override;
     virtual void SAL_CALL endDocument() override;
-    virtual void SAL_CALL startElement(const OUString& aName,
-                              const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) override;
-    virtual void SAL_CALL endElement(const OUString& aName) override;
+    virtual void SAL_CALL startFastElement(sal_Int32 nElement,
+                              const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
     virtual void SAL_CALL characters(const OUString& aChars) override;
-    virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) override;
     virtual void SAL_CALL processingInstruction(const OUString& aTarget,
                                        const OUString& aData) override;
     virtual void SAL_CALL setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
+    virtual void SAL_CALL startUnknownElement( const OUString& Namespace, const OUString& Name,
+                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+    virtual void SAL_CALL endUnknownElement( const OUString& Namespace, const OUString& Name ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+                            sal_Int32 Element,
+                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext(
+                            const OUString& Namespace,
+                            const OUString& Name,
+                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
 
-    // css::xml::sax::XExtendedDocumentHandler
-    virtual void SAL_CALL startCDATA() override;
-    virtual void SAL_CALL endCDATA() override;
-    virtual void SAL_CALL comment(const OUString& sComment) override;
-    virtual void SAL_CALL allowLineBreak() override;
-    virtual void SAL_CALL unknown(const OUString& sString) override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // C++
-    const css::uno::Reference< css::xml::sax::XDocumentHandler > & GetDocHandler() const { return m_xHandler; }
+    const css::uno::Reference< css::xml::sax::XFastDocumentHandler > & GetDocHandler() const { return m_xHandler; }
 
     const css::uno::Reference< css::beans::XPropertySet > & GetPropertySet() const { return m_xPropSet; }
 
@@ -117,13 +118,13 @@ public:
     virtual XMLTransformerActions *GetUserDefinedActions( sal_uInt16 n );
     virtual XMLTransformerContext *CreateUserDefinedContext(
                                       const TransformerAction_Impl& rAction,
-                                      const OUString& rQName,
+                                      sal_Int32 rQName,
                                          bool bPersistent=false ) = 0;
     virtual OUString GetEventName( const OUString& rName,
                                              bool bForm = false ) = 0;
 
 
-    XMLMutableAttributeList *ProcessAttrList( css::uno::Reference< css::xml::sax::XAttributeList >& rAttrList,
+    XMLMutableAttributeList *ProcessAttrList( css::uno::Reference< css::xml::sax::XFastAttributeList >& rAttrList,
                          sal_uInt16 nActionMap, bool bClone );
 
     static bool ReplaceSingleInchWithIn( OUString& rValue );
@@ -170,8 +171,8 @@ public:
     const XMLTransformerContext *GetAncestorContext( sal_uInt32 i ) const;
 
     // C++
-    void SetClass( const OUString& r ) { m_aClass = r; }
-    const OUString& GetClass() const { return m_aClass; }
+    void SetClass( std::optional<::xmloff::token::XMLTokenEnum> r ) { m_xClass = r; }
+    const std::optional<::xmloff::token::XMLTokenEnum> & GetClass() const { return m_xClass; }
 
     bool isWriter() const;
 

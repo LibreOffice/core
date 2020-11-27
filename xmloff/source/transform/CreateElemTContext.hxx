@@ -28,10 +28,11 @@ class XMLCreateElemTransformerContext : public XMLTransformerContext
 
 public:
     XMLCreateElemTransformerContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
+                           sal_Int32 rQName,
                               sal_uInt16 nActionMap );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void startFastElement(sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
 };
 
 #endif  //  _XMLOFF_CREATEELEMCONTEXT_HXX

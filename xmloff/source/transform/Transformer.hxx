@@ -20,14 +20,14 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMER_HXX
 #define INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMER_HXX
 
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 
 class XMLTransformer : public ::cppu::WeakImplHelper<
-             css::xml::sax::XExtendedDocumentHandler,
+             css::xml::sax::XFastDocumentHandler,
              css::lang::XServiceInfo,
              css::lang::XInitialization,
              css::lang::XUnoTunnel>

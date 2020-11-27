@@ -30,7 +30,7 @@ class XMLEventOOoTransformerContext : public XMLPersElemContentTContext
 
 public:
     XMLEventOOoTransformerContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
+                           sal_Int32 rQName,
                               bool bPersistent  );
     virtual ~XMLEventOOoTransformerContext() override;
 
@@ -40,12 +40,11 @@ public:
                                     OUString& rNewName,
                                        XMLTransformerOOoEventMap_Impl& rMap );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void EndElement() override;
-    virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const OUString& rQName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void startFastElement(sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
+    virtual rtl::Reference<XMLTransformerContext> createFastChildContext( sal_Int32 nElement,
+                                   const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual bool IsPersistent() const override;
 };

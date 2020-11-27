@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERCONTEXT_HXX
 #define INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERCONTEXT_HXX
 
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
@@ -37,7 +37,7 @@ class XMLTransformerContext : public ::salhelper::SimpleReferenceObject
 
     XMLTransformerBase& m_rTransformer;
 
-    OUString m_aQName;
+    sal_Int32 m_aQName;
 
     std::unique_ptr<SvXMLNamespaceMap>   m_xRewindMap;
 
@@ -49,37 +49,34 @@ protected:
     XMLTransformerBase& GetTransformer() { return m_rTransformer; }
     const XMLTransformerBase& GetTransformer() const { return m_rTransformer; }
 
-    void SetQName( const OUString& rQName ) { m_aQName = rQName; }
+    void SetQName( sal_Int32 rQName ) { m_aQName = rQName; }
 
 public:
-    const OUString& GetQName() const { return m_aQName; }
-    bool HasQName( sal_uInt16 nPrefix,
-                       ::xmloff::token::XMLTokenEnum eToken ) const;
+    sal_Int32 GetQName() const { return m_aQName; }
+    bool HasQName( sal_Int32 rQName ) const;
     bool HasNamespace( sal_uInt16 nPrefix ) const;
 
     // A contexts constructor does anything that is required if an element
     // starts. Namespace processing has been done already.
     // Note that virtual methods cannot be used inside constructors. Use
-    // StartElement instead if this is required.
+    // startFastElement instead if this is required.
     XMLTransformerContext( XMLTransformerBase& rTransformer,
-                        const OUString& rQName );
+                           sal_Int32 rQName );
 
     // Create a children element context. By default, the import's
     // CreateContext method is called to create a new default context.
-    virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const OUString& rQName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
+    virtual rtl::Reference<XMLTransformerContext> createFastChildContext( sal_Int32 nElement,
+                                   const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
-    // StartElement is called after a context has been constructed and
+    // startFastElement is called after a context has been constructed and
     // before an elements context is parsed. It may be used for actions that
     // require virtual methods. The default is to do nothing.
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
+    virtual void startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     // EndElement is called before a context will be destructed, but
     // after an elements context has been parsed. It may be used for actions
     // that require virtual methods. The default is to do nothing.
-    virtual void EndElement();
+    virtual void endFastElement(sal_Int32 Element);
 
     // This method is called for all characters that are contained in the
     // current element. The default is to ignore them.

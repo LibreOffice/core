@@ -28,7 +28,7 @@ using namespace ::xmloff::token;
 
 XMLProcAttrTransformerContext::XMLProcAttrTransformerContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName,
+        sal_Int32 rQName,
        sal_uInt16 nActionMap ) :
     XMLTransformerContext( rImp, rQName ),
     m_aElemQName( rQName ),
@@ -38,28 +38,26 @@ XMLProcAttrTransformerContext::XMLProcAttrTransformerContext(
 
 XMLProcAttrTransformerContext::XMLProcAttrTransformerContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName,
-        sal_uInt16 nPrefix,
-        ::xmloff::token::XMLTokenEnum eToken,
+        sal_Int32 rQName,
+        sal_Int32 rQName2,
        sal_uInt16 nActionMap ) :
     XMLTransformerContext( rImp, rQName ),
-    m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( nPrefix,
-                            ::xmloff::token::GetXMLToken( eToken ) ) ),
+    m_aElemQName( rQName2 ),
     m_nActionMap( nActionMap )
 {
 }
 
-void XMLProcAttrTransformerContext::StartElement(
-        const Reference< XAttributeList >& rAttrList )
+void XMLProcAttrTransformerContext::startFastElement(sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
-    Reference< XAttributeList > xAttrList( rAttrList );
+    Reference< XFastAttributeList > xAttrList( rAttrList );
     GetTransformer().ProcessAttrList( xAttrList, m_nActionMap, false );
-    GetTransformer().GetDocHandler()->startElement( m_aElemQName, xAttrList );
+    GetTransformer().GetDocHandler()->startFastElement( m_aElemQName, xAttrList );
 }
 
-void XMLProcAttrTransformerContext::EndElement()
+void XMLProcAttrTransformerContext::endFastElement(sal_Int32 )
 {
-    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
+    GetTransformer().GetDocHandler()->endFastElement( m_aElemQName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

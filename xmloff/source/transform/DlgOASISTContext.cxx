@@ -31,7 +31,7 @@ using namespace ::xmloff::token;
 
 XMLDlgOASISTransformerContext::XMLDlgOASISTransformerContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName ) :
+        sal_Int32 rQName ) :
     XMLTransformerContext( rImp, rQName )
 {
 }
@@ -40,26 +40,21 @@ XMLDlgOASISTransformerContext::~XMLDlgOASISTransformerContext()
 {
 }
 
-void XMLDlgOASISTransformerContext::StartElement(
-    const Reference< XAttributeList >& rAttrList )
+void XMLDlgOASISTransformerContext::startFastElement(sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( OASIS_DLG_ACTIONS );
     OSL_ENSURE( pActions, "go no actions" );
 
-    Reference< XAttributeList > xAttrList( rAttrList );
+    Reference< XFastAttributeList > xAttrList( rAttrList );
     XMLMutableAttributeList *pMutableAttrList = nullptr;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
 
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                 &aLocalName );
-
-        XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
+        sal_Int32 rAttrName = xAttrList->getTokenByIndex( i );
+        XMLTransformerActions::key_type aKey( rAttrName );
         XMLTransformerActions::const_iterator aIter =
             pActions->find( aKey );
 
@@ -92,7 +87,7 @@ void XMLDlgOASISTransformerContext::StartElement(
         }
     }
 
-    XMLTransformerContext::StartElement( xAttrList );
+    XMLTransformerContext::startFastElement( nElement, xAttrList );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

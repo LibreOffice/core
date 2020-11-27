@@ -25,31 +25,26 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::xmloff::token;
 
 XMLRenameElemTransformerContext::XMLRenameElemTransformerContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName,
-        sal_uInt16 nPrefix,
-        ::xmloff::token::XMLTokenEnum eToken ) :
+        sal_Int32 rQName,
+        sal_Int32 rQName2 ) :
     XMLTransformerContext( rImp, rQName ),
-    m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( nPrefix,
-                            ::xmloff::token::GetXMLToken( eToken ) ) )
+    m_aElemQName( rQName2 )
 {
 }
 
 XMLRenameElemTransformerContext::XMLRenameElemTransformerContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName,
-        sal_uInt16 nPrefix,
-        ::xmloff::token::XMLTokenEnum eToken,
-        sal_uInt16 nAPrefix,
-        ::xmloff::token::XMLTokenEnum eAToken,
+        sal_Int32 rQName,
+        sal_Int32 rQName2,
+        sal_Int32 rQName3,
         ::xmloff::token::XMLTokenEnum eVToken ) :
     XMLTransformerContext( rImp, rQName ),
-    m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( nPrefix,
-                            ::xmloff::token::GetXMLToken( eToken ) ) ),
-    m_aAttrQName( rImp.GetNamespaceMap().GetQNameByKey( nAPrefix,
-                                    ::xmloff::token::GetXMLToken( eAToken ) ) ),
+    m_aElemQName( rQName2 ),
+    m_aAttrQName( rQName3 ),
     m_aAttrValue( ::xmloff::token::GetXMLToken( eVToken ) )
 {
 }
@@ -58,23 +53,23 @@ XMLRenameElemTransformerContext::~XMLRenameElemTransformerContext()
 {
 }
 
-void XMLRenameElemTransformerContext::StartElement(
-        const Reference< XAttributeList >& rAttrList )
+void XMLRenameElemTransformerContext::startFastElement(sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
-    Reference< XAttributeList > xAttrList( rAttrList );
-    if( !m_aAttrQName.isEmpty() )
+    Reference< XFastAttributeList > xAttrList( rAttrList );
+    if( m_aAttrQName != XML_NONE )
     {
         XMLMutableAttributeList *pMutableAttrList =
             new XMLMutableAttributeList( xAttrList );
         xAttrList = pMutableAttrList;
         pMutableAttrList->AddAttribute( m_aAttrQName, m_aAttrValue );
     }
-    GetTransformer().GetDocHandler()->startElement( m_aElemQName, xAttrList );
+    GetTransformer().GetDocHandler()->startFastElement( m_aElemQName, xAttrList );
 }
 
-void XMLRenameElemTransformerContext::EndElement()
+void XMLRenameElemTransformerContext::endFastElement(sal_Int32 )
 {
-    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
+    GetTransformer().GetDocHandler()->endFastElement( m_aElemQName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

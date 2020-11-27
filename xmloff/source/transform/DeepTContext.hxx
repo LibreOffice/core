@@ -32,32 +32,28 @@ class XMLPersElemContentTContext : public XMLPersAttrListTContext
 public:
     // element content persistence only
     XMLPersElemContentTContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName );
+                           sal_Int32 nElement );
 
     // element content persistence + attribute processing
     XMLPersElemContentTContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
+                           sal_Int32 nElement,
                               sal_uInt16 nActionMap );
 
     // element content persistence + renaming
     XMLPersElemContentTContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
-                              sal_uInt16 nPrefix,
-                              ::xmloff::token::XMLTokenEnum eToken );
+                           sal_Int32 rQName,
+                           sal_Int32 rQName2 );
 
     // element content persistence + renaming + attribute processing
     XMLPersElemContentTContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
-                              sal_uInt16 nPrefix,
-                              ::xmloff::token::XMLTokenEnum eToken,
+                           sal_Int32 rQName,
+                           sal_Int32 rQName2,
                               sal_uInt16 nActionMap );
 
     virtual ~XMLPersElemContentTContext() override;
 
-    virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const OUString& rQName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual rtl::Reference<XMLTransformerContext> createFastChildContext( sal_Int32 nElement,
+                                   const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     void AddContent( rtl::Reference<XMLTransformerContext> const & pContent );
 

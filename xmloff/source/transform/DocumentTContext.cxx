@@ -18,11 +18,12 @@
  */
 
 #include <com/sun/star/xml/sax/SAXException.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmlimp.hxx>
 
 #include "TransformerBase.hxx"
 #include "MutableAttrList.hxx"
@@ -36,34 +37,26 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
 
 XMLDocumentTransformerContext::XMLDocumentTransformerContext( XMLTransformerBase& rImp,
-                                                const OUString& rQName ) :
+                                                sal_Int32 rQName ) :
     XMLTransformerContext( rImp, rQName )
 {
 }
 
-void XMLDocumentTransformerContext::StartElement( const Reference< XAttributeList >& rAttrList )
+void XMLDocumentTransformerContext::startFastElement(sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
-    Reference< XAttributeList > xAttrList( rAttrList );
+    Reference< XFastAttributeList > xAttrList( rAttrList );
 
     bool bMimeFound = false;
     OUString aClass;
-    OUString aClassQName(
-                    GetTransformer().GetNamespaceMap().GetQNameByKey(
-                                XML_NAMESPACE_OFFICE, GetXMLToken(XML_CLASS ) ) );
-
     XMLMutableAttributeList *pMutableAttrList = nullptr;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                 &aLocalName );
-        if( XML_NAMESPACE_OFFICE == nPrefix &&
-            IsXMLToken( aLocalName, XML_MIMETYPE ) )
+        sal_Int32 rAttrName = xAttrList->getTokenByIndex( i );
+        if( rAttrName == XML_ELEMENT(OFFICE, XML_MIMETYPE) )
         {
-            const OUString& rValue = xAttrList->getValueByIndex( i );
+            OUString rValue = xAttrList->getValueByIndex( i );
             static const char * aTmp[] =
             {
                 "application/vnd.oasis.openoffice.",
@@ -88,7 +81,7 @@ void XMLDocumentTransformerContext::StartElement( const Reference< XAttributeLis
                 xAttrList = pMutableAttrList;
             }
             pMutableAttrList->SetValueByIndex( i, aClass );
-            pMutableAttrList->RenameAttributeByIndex(i, aClassQName );
+            pMutableAttrList->RenameAttributeByIndex(i, XML_ELEMENT(OFFICE, XML_CLASS) );
             bMimeFound = true;
             break;
         }
@@ -119,10 +112,10 @@ void XMLDocumentTransformerContext::StartElement( const Reference< XAttributeLis
                 xAttrList = pMutableAttrList;
             }
 
-            pMutableAttrList->AddAttribute( aClassQName, aClass );
+            pMutableAttrList->AddAttribute( XML_ELEMENT(OFFICE, XML_CLASS), aClass );
         }
     }
-    XMLTransformerContext::StartElement( xAttrList );
+    XMLTransformerContext::startFastElement( nElement, xAttrList );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

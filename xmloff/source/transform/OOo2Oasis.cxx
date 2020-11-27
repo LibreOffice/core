@@ -26,6 +26,7 @@
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlimp.hxx>
 #include "MutableAttrList.hxx"
 #include "DeepTContext.hxx"
 #include "StyleOOoTContext.hxx"
@@ -73,20 +74,20 @@ enum XMLUserDefinedTransformerAction
 }
 
 #define ENTRY3( n, l, a, p1, p2, p3 ) \
-    { XML_NAMESPACE_##n, XML_##l, a, p1, p2, p3 }
+    { XML_ELEMENT(n, XML_##l), a, p1, p2, p3 }
 #define ENTRY3QQN( n, l, a, n1, l1, n2, l2, p3 ) \
-    ENTRY3( n, l, a, XMLTransformerActionInit::QNameParam( n1, l1 ), \
-            XMLTransformerActionInit::QNameParam( n2, l2 ), p3 )
+    ENTRY3( n, l, a, NAMESPACE_TOKEN( n1 ) | l1, \
+            NAMESPACE_TOKEN(n2) | l2, p3 )
 
 #define ENTRY2( n, l, a, p1, p2 ) \
     ENTRY3( n, l, a, p1, p2, 0 )
 #define ENTRY2QN( n, l, a, n1, l1, p2 ) \
-    ENTRY2( n, l, a, XMLTransformerActionInit::QNameParam( n1, l1 ), p2 )
+    ENTRY2( n, l, a, NAMESPACE_TOKEN( n1 ) | l1, p2 )
 
 #define ENTRY1( n, l, a, p1 ) \
     ENTRY3( n, l, a, p1, 0, 0 )
 #define ENTRY1Q( n, l, a, n1, l1 ) \
-    ENTRY1( n, l, a, XMLTransformerActionInit::QNameParam( n1, l1 ) )
+    ENTRY1( n, l, a, NAMESPACE_TOKEN( n1 ) | l1 )
 
 #define ENTRY0( n, l, a ) \
     ENTRY3( n, l, a, 0, 0, 0 )
@@ -1094,47 +1095,45 @@ namespace {
 
 class XMLDocumentTransformerContext_Impl : public XMLTransformerContext
 {
-    OUString const m_aElemQName;
-    OUString m_aOldClass;
+    sal_Int32 m_aElemQName;
+    std::optional<::xmloff::token::XMLTokenEnum> m_xOldClass;
 
 public:
     XMLDocumentTransformerContext_Impl( XMLTransformerBase& rTransformer,
-                           const OUString& rQName );
+                           sal_Int32 rQName );
     XMLDocumentTransformerContext_Impl( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
-                              sal_uInt16 nPrefix,
-                              ::xmloff::token::XMLTokenEnum eToken  );
+                           sal_Int32 rQName,
+                           sal_Int32 rQName2  );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual void startFastElement(sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 }
 
 XMLDocumentTransformerContext_Impl::XMLDocumentTransformerContext_Impl(
         XMLTransformerBase& rImp,
-        const OUString& rQName ) :
+        sal_Int32 rQName ) :
     XMLTransformerContext( rImp, rQName ),
     m_aElemQName( rQName )
 {
 }
 XMLDocumentTransformerContext_Impl::XMLDocumentTransformerContext_Impl(
         XMLTransformerBase& rImp,
-        const OUString& rQName ,
-        sal_uInt16 nPrefix,
-        ::xmloff::token::XMLTokenEnum eToken) :
+        sal_Int32 rQName ,
+        sal_Int32 rQName2) :
     XMLTransformerContext( rImp, rQName ),
-    m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( nPrefix,
-                            ::xmloff::token::GetXMLToken( eToken ) ) )
+    m_aElemQName( rQName2 )
 {
 }
 
-void XMLDocumentTransformerContext_Impl::StartElement(
-        const Reference< XAttributeList >& rAttrList )
+void XMLDocumentTransformerContext_Impl::startFastElement(sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
-    Reference< XAttributeList > xAttrList( rAttrList );
+    Reference< XFastAttributeList > xAttrList( rAttrList );
 
-    m_aOldClass = GetTransformer().GetClass();
+    m_xOldClass = GetTransformer().GetClass();
 
     XMLMutableAttributeList *pMutableAttrList = nullptr;
     bool bOOo = false, bOOoW = false, bOOoC = false,
@@ -1142,28 +1141,22 @@ void XMLDocumentTransformerContext_Impl::StartElement(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                 &aLocalName );
-        if( XML_NAMESPACE_OFFICE == nPrefix &&
-            IsXMLToken( aLocalName, XML_CLASS ) )
+        sal_Int32 rAttrName = xAttrList->getTokenByIndex( i );
+        if( rAttrName == XML_ELEMENT(OFFICE, XML_CLASS) )
         {
             const OUString& rValue = xAttrList->getValueByIndex( i );
-            GetTransformer().SetClass( rValue );
+            GetTransformer().SetClass( static_cast<xmloff::token::XMLTokenEnum>(SvXMLImport::getTokenFromName(rValue)) );
 
             pMutableAttrList = new XMLMutableAttributeList( xAttrList );
             xAttrList = pMutableAttrList;
             OUString sMime = "application/vnd.oasis.opendocument." + rValue;
             pMutableAttrList->SetValueByIndex( i, sMime );
-            OUString aNewAttrQName( GetTransformer().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, ::xmloff::token::GetXMLToken( XML_MIMETYPE ) ) );
-            pMutableAttrList->RenameAttributeByIndex(i, aNewAttrQName );
+            pMutableAttrList->RenameAttributeByIndex(i, XML_ELEMENT(OFFICE, XML_MIMETYPE) );
             break;
         }
-        else if( XML_NAMESPACE_XMLNS == nPrefix )
+        else if( IsTokenInNamespace(rAttrName, XML_NAMESPACE_XMLNS) )
         {
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            OUString rAttrValue = xAttrList->getValueByIndex( i );
             if( IsXMLToken( rAttrValue, XML_N_OOO ) )
                 bOOo = true;
             else if( IsXMLToken( rAttrValue, XML_N_OOOW ) )
@@ -1187,108 +1180,92 @@ void XMLDocumentTransformerContext_Impl::StartElement(
         }
         if( !bOOo )
             pMutableAttrList->AddAttribute(
-                    GetTransformer().GetNamespaceMap().GetAttrNameByKey(
-                        XML_NAMESPACE_OOO ),
-                    GetTransformer().GetNamespaceMap().GetNameByKey(
-                        XML_NAMESPACE_OOO ) );
+                XML_ELEMENT(XMLNS, XML_NP_OOO),
+                SvXMLImport::getNamespaceURIFromToken( XML_ELEMENT(OOO, XML_NONE)));
         if( !bOOoW )
             pMutableAttrList->AddAttribute(
-                    GetTransformer().GetNamespaceMap().GetAttrNameByKey(
-                        XML_NAMESPACE_OOOW ),
-                    GetTransformer().GetNamespaceMap().GetNameByKey(
-                        XML_NAMESPACE_OOOW ) );
+                XML_ELEMENT(XMLNS, XML_NP_OOOW),
+                SvXMLImport::getNamespaceURIFromToken( XML_ELEMENT(OOOW, XML_NONE)));
         if( !bOOoC )
             pMutableAttrList->AddAttribute(
-                    GetTransformer().GetNamespaceMap().GetAttrNameByKey(
-                        XML_NAMESPACE_OOOC ),
-                    GetTransformer().GetNamespaceMap().GetNameByKey(
-                        XML_NAMESPACE_OOOC ) );
+                XML_ELEMENT(XMLNS, XML_NP_OOOC),
+                SvXMLImport::getNamespaceURIFromToken( XML_ELEMENT(OOOC, XML_NONE)));
         if( !bDOM )
             pMutableAttrList->AddAttribute(
-                    GetTransformer().GetNamespaceMap().GetAttrNameByKey(
-                        XML_NAMESPACE_DOM ),
-                    GetTransformer().GetNamespaceMap().GetNameByKey(
-                        XML_NAMESPACE_DOM ) );
+                XML_ELEMENT(XMLNS, XML_NP_DOM),
+                SvXMLImport::getNamespaceURIFromToken( XML_ELEMENT(DOM, XML_NONE)));
         if( !bDC )
             pMutableAttrList->AddAttribute(
-                    GetTransformer().GetNamespaceMap().GetAttrNameByKey(
-                        XML_NAMESPACE_DC ),
-                    GetTransformer().GetNamespaceMap().GetNameByKey(
-                        XML_NAMESPACE_DC ) );
+                XML_ELEMENT(XMLNS, XML_NP_DC),
+                SvXMLImport::getNamespaceURIFromToken( XML_ELEMENT(DC, XML_NONE)));
         if( !bSVG )
             pMutableAttrList->AddAttribute(
-                    GetTransformer().GetNamespaceMap().GetAttrNameByKey(
-                        XML_NAMESPACE_SVG ),
-                    GetTransformer().GetNamespaceMap().GetNameByKey(
-                        XML_NAMESPACE_SVG ) );
+                XML_ELEMENT(XMLNS, XML_NP_SVG),
+                SvXMLImport::getNamespaceURIFromToken( XML_ELEMENT(SVG, XML_NONE)));
     }
 
-    GetTransformer().GetDocHandler()->startElement( m_aElemQName, xAttrList );
+    GetTransformer().GetDocHandler()->startFastElement( m_aElemQName, xAttrList );
 }
 
-void XMLDocumentTransformerContext_Impl::EndElement()
+void XMLDocumentTransformerContext_Impl::endFastElement(sal_Int32 )
 {
-    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
+    GetTransformer().GetDocHandler()->endFastElement( m_aElemQName );
 
-    GetTransformer().SetClass( m_aOldClass );
+    GetTransformer().SetClass( m_xOldClass );
 }
 
 namespace {
 
 class XMLBodyTransformerContext_Impl : public XMLTransformerContext
 {
-    OUString m_aClassQName;
+    sal_Int32 m_aClassQName;
 
 public:
     XMLBodyTransformerContext_Impl( XMLTransformerBase& rTransformer,
-                           const OUString& rQName );
+                           sal_Int32 rQName );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual void startFastElement(sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 }
 
 XMLBodyTransformerContext_Impl::XMLBodyTransformerContext_Impl(
         XMLTransformerBase& rImp,
-        const OUString& rQName ) :
+        sal_Int32 rQName ) :
     XMLTransformerContext( rImp, rQName )
 {
 }
 
-void XMLBodyTransformerContext_Impl::StartElement(
-        const Reference< XAttributeList >& rAttrList )
+void XMLBodyTransformerContext_Impl::startFastElement(sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
-    XMLTransformerContext::StartElement( rAttrList );
+    XMLTransformerContext::startFastElement( nElement, rAttrList );
 
     XMLMutableAttributeList *pMutableAttrList =
         new XMLMutableAttributeList( rAttrList );
-    Reference< XAttributeList > xAttrList = pMutableAttrList;
-    OUString aClass( GetTransformer().GetClass() );
-    if( aClass.isEmpty() )
+    Reference< XFastAttributeList > xAttrList = pMutableAttrList;
+    std::optional<::xmloff::token::XMLTokenEnum> xClass( GetTransformer().GetClass() );
+    if( !xClass )
     {
-        aClass = GetXMLToken( XML_TEXT );
+        xClass = XML_TEXT;
     }
-    else if( IsXMLToken( aClass, XML_TEXT_GLOBAL ) )
+    else if( *xClass == XML_TEXT_GLOBAL )
     {
-        OUString aGlobalQName(
-                GetTransformer().GetNamespaceMap().GetQNameByKey(
-                            XML_NAMESPACE_TEXT, GetXMLToken(XML_GLOBAL ) ) );
-        pMutableAttrList->AddAttribute( aGlobalQName, GetXMLToken(XML_TRUE) );
-
-        aClass = GetXMLToken( XML_TEXT );
+        pMutableAttrList->AddAttribute( XML_ELEMENT(TEXT, XML_GLOBAL), GetXMLToken(XML_TRUE) );
+        xClass = XML_TEXT;
     }
 
-    m_aClassQName = GetTransformer().GetNamespaceMap().GetQNameByKey(
-                        XML_NAMESPACE_OFFICE, aClass );
-    GetTransformer().GetDocHandler()->startElement( m_aClassQName,
+    m_aClassQName = XML_ELEMENT(OFFICE, *xClass);
+    GetTransformer().GetDocHandler()->startFastElement( m_aClassQName,
                                                     xAttrList );
 }
 
-void XMLBodyTransformerContext_Impl::EndElement()
+void XMLBodyTransformerContext_Impl::endFastElement(sal_Int32 nElement)
 {
-    GetTransformer().GetDocHandler()->endElement( m_aClassQName );
-    XMLTransformerContext::EndElement();
+    GetTransformer().GetDocHandler()->endFastElement( m_aClassQName );
+    XMLTransformerContext::endFastElement(nElement);
 }
 
 namespace {
@@ -1297,38 +1274,35 @@ class XMLTabStopOOoTContext_Impl : public XMLPersElemContentTContext
 {
 public:
     XMLTabStopOOoTContext_Impl( XMLTransformerBase& rTransformer,
-                           const OUString& rQName );
+                           sal_Int32 rQName );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void startFastElement(sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
 };
 
 }
 
 XMLTabStopOOoTContext_Impl::XMLTabStopOOoTContext_Impl(
         XMLTransformerBase& rImp,
-        const OUString& rQName ) :
+        sal_Int32 rQName ) :
     XMLPersElemContentTContext( rImp, rQName )
 {
 }
 
-void XMLTabStopOOoTContext_Impl::StartElement(
-        const Reference< XAttributeList >& rAttrList )
+void XMLTabStopOOoTContext_Impl::startFastElement(sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( OOO_TAB_STOP_ACTIONS  );
     OSL_ENSURE( pActions, "go no actions" );
 
-    Reference< XAttributeList > xAttrList( rAttrList );
+    Reference< XFastAttributeList > xAttrList( rAttrList );
     XMLMutableAttributeList *pMutableAttrList = nullptr;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                 &aLocalName );
-        XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
+        sal_Int32 rAttrName = xAttrList->getTokenByIndex( i );
+        XMLTransformerActions::key_type aKey( rAttrName );
         XMLTransformerActions::const_iterator aIter =
             pActions->find( aKey );
         if( aIter != pActions->end() )
@@ -1344,23 +1318,14 @@ void XMLTabStopOOoTContext_Impl::StartElement(
             {
             case XML_ATACTION_RENAME:
                 {
-                    OUString aNewAttrQName(
-                        GetTransformer().GetNamespaceMap().GetQNameByKey(
-                            (*aIter).second.GetQNamePrefixFromParam1(),
-                            ::xmloff::token::GetXMLToken(
-                            (*aIter).second.GetQNameTokenFromParam1()) ) );
                     pMutableAttrList->RenameAttributeByIndex( i,
-                                                              aNewAttrQName );
+                                                              (*aIter).second.GetTokenFromParam1() );
                 }
-                if( IsXMLToken( aLocalName, XML_LEADER_CHAR ) &&
+                if( (rAttrName & TOKEN_MASK) == XML_LEADER_CHAR &&
                      !rAttrValue.isEmpty() &&
                     rAttrValue[0] != ' ' )
                 {
-                    OUString aNewAttrQName(
-                        GetTransformer().GetNamespaceMap().GetQNameByKey(
-                            XML_NAMESPACE_STYLE,
-                            ::xmloff::token::GetXMLToken(XML_LEADER_STYLE) ) );
-                    pMutableAttrList->AddAttribute( aNewAttrQName,
+                    pMutableAttrList->AddAttribute( XML_ELEMENT(STYLE, XML_LEADER_STYLE),
                                                  GetXMLToken( XML_SOLID ) );
                 }
                 break;
@@ -1379,50 +1344,43 @@ void XMLTabStopOOoTContext_Impl::StartElement(
         }
     }
 
-    XMLPersElemContentTContext::StartElement( xAttrList );
+    XMLPersElemContentTContext::startFastElement( nElement,xAttrList );
 }
 
 namespace {
 
 class XMLTrackedChangesOOoTContext_Impl : public XMLTransformerContext
 {
-    sal_uInt16 const m_nPrefix;
-    XMLTokenEnum const m_eToken;
+    sal_Int32 m_nQName2;
 
 public:
     XMLTrackedChangesOOoTContext_Impl( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
-                               sal_uInt16 nPrefix,
-                            XMLTokenEnum eToken );
+                           sal_Int32 rQName,
+                           sal_Int32 rQName2 );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void startFastElement(sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
 };
 
 }
 
 XMLTrackedChangesOOoTContext_Impl::XMLTrackedChangesOOoTContext_Impl(
         XMLTransformerBase& rImp,
-        const OUString& rQName,
-        sal_uInt16 nPrefix,
-        XMLTokenEnum eToken ) :
+        sal_Int32 rQName,
+        sal_Int32 rQName2 ) :
     XMLTransformerContext( rImp, rQName ),
-    m_nPrefix( nPrefix ),
-    m_eToken( eToken )
+    m_nQName2( rQName2 )
 {
 }
 
-void XMLTrackedChangesOOoTContext_Impl::StartElement(
-        const Reference< XAttributeList >& rAttrList )
+void XMLTrackedChangesOOoTContext_Impl::startFastElement(sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
     sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = rAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                 &aLocalName );
-        if( m_nPrefix == nPrefix && IsXMLToken( aLocalName, m_eToken ) )
+        sal_Int32 rAttrName = rAttrList->getTokenByIndex( i );
+        if( m_nQName2 == rAttrName )
         {
             const Reference< XPropertySet > rPropSet =
                 GetTransformer().GetPropertySet();
@@ -1448,54 +1406,50 @@ void XMLTrackedChangesOOoTContext_Impl::StartElement(
             break;
         }
     }
-    XMLTransformerContext::StartElement( rAttrList );
+    XMLTransformerContext::startFastElement( nElement, rAttrList );
 }
 
 namespace {
 
 class XMLTableOOoTransformerContext_Impl : public XMLTransformerContext
 {
-    OUString const m_aElemQName;
+    sal_Int32 m_aElemQName;
 
 public:
     XMLTableOOoTransformerContext_Impl( XMLTransformerBase& rTransformer,
-                           const OUString& rQName );
+                           sal_Int32 rQName );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual void startFastElement(sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 }
 
 XMLTableOOoTransformerContext_Impl::XMLTableOOoTransformerContext_Impl(
         XMLTransformerBase& rImp,
-        const OUString& rQName ) :
+        sal_Int32 rQName ) :
     XMLTransformerContext( rImp, rQName ),
     m_aElemQName( rQName )
 {
 }
 
-void XMLTableOOoTransformerContext_Impl::StartElement(
-        const Reference< XAttributeList >& rAttrList )
+void XMLTableOOoTransformerContext_Impl::startFastElement(sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
     // Perform OOO_STYLE_REF_ACTIONS for all applications (#i50521#)
-    Reference< XAttributeList > xAttrList( rAttrList );
+    Reference< XFastAttributeList > xAttrList( rAttrList );
     XMLMutableAttributeList* pMutableAttrList =
         GetTransformer().ProcessAttrList( xAttrList, OOO_STYLE_REF_ACTIONS, false );
-    if( rAttrList->getLength() && IsXMLToken( GetTransformer().GetClass(), XML_SPREADSHEET  ) )
+    if( rAttrList->getLength() && GetTransformer().GetClass() == XML_SPREADSHEET )
     {
         bool bPrintRanges(false);
 
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for( sal_Int16 i=0; i < nAttrCount; i++ )
         {
-            const OUString& rAttrName = xAttrList->getNameByIndex( i );
-            OUString aLocalName;
-            sal_uInt16 nPrefix =
-                GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                    &aLocalName );
-            if( XML_NAMESPACE_TABLE == nPrefix &&
-                IsXMLToken( aLocalName, XML_PRINT_RANGES ) )
+            sal_Int32 rAttrName = xAttrList->getTokenByIndex( i );
+            if( rAttrName == XML_ELEMENT(TABLE, XML_PRINT_RANGES) )
             {
                 bPrintRanges = true;
             }
@@ -1503,23 +1457,22 @@ void XMLTableOOoTransformerContext_Impl::StartElement(
         if (!bPrintRanges && pMutableAttrList)
         {
             xAttrList = pMutableAttrList;
-            pMutableAttrList->AddAttribute(GetTransformer().GetNamespaceMap().GetQNameByKey(
-                                XML_NAMESPACE_TABLE,
-                                GetXMLToken( XML_PRINT ) ), GetXMLToken ( XML_FALSE ));
+            pMutableAttrList->AddAttribute(
+                                XML_ELEMENT(TABLE, XML_PRINT), GetXMLToken ( XML_FALSE ));
         }
     }
 
-    GetTransformer().GetDocHandler()->startElement( m_aElemQName, xAttrList );
+    GetTransformer().GetDocHandler()->startFastElement( m_aElemQName, xAttrList );
 }
 
-void XMLTableOOoTransformerContext_Impl::EndElement()
+void XMLTableOOoTransformerContext_Impl::endFastElement(sal_Int32 )
 {
-    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
+    GetTransformer().GetDocHandler()->endFastElement( m_aElemQName );
 }
 
 XMLTransformerContext *OOo2OasisTransformer::CreateUserDefinedContext(
                               const TransformerAction_Impl& rAction,
-                              const OUString& rQName,
+                              sal_Int32 rQName,
                                  bool bPersistent   )
 {
     switch( rAction.m_nActionType )
@@ -1528,8 +1481,7 @@ XMLTransformerContext *OOo2OasisTransformer::CreateUserDefinedContext(
         return new XMLDocumentTransformerContext_Impl( *this, rQName );
     case XML_ETACTION_DOCUMENT_RENAME:
         return new XMLDocumentTransformerContext_Impl( *this, rQName,
-                            rAction.GetQNamePrefixFromParam1(),
-                            rAction.GetQNameTokenFromParam1() );
+                            rAction.GetTokenFromParam1() );
     case XML_ETACTION_BODY:
         return new XMLBodyTransformerContext_Impl( *this, rQName );
     case XML_ETACTION_STYLE:
@@ -1539,8 +1491,7 @@ XMLTransformerContext *OOo2OasisTransformer::CreateUserDefinedContext(
     case XML_ETACTION_STYLE_RENAME:
         return new XMLStyleOOoTContext( *this, rQName,
                     static_cast< XMLFamilyType >( rAction.m_nParam2 ),
-                    rAction.GetQNamePrefixFromParam1(),
-                    rAction.GetQNameTokenFromParam1(),
+                    rAction.GetTokenFromParam1(),
                     bPersistent );
     case XML_ETACTION_FRAME:
         return new XMLFrameOOoTransformerContext( *this, rQName );
@@ -1556,8 +1507,7 @@ XMLTransformerContext *OOo2OasisTransformer::CreateUserDefinedContext(
         return new XMLChartOOoTransformerContext( *this, rQName );
     case XML_ETACTION_TRACKED_CHANGES:
         return new XMLTrackedChangesOOoTContext_Impl( *this, rQName,
-                               rAction.GetQNamePrefixFromParam1(),
-                            rAction.GetQNameTokenFromParam1() );
+                            rAction.GetTokenFromParam1() );
     case XML_ETACTION_CHART_PLOT_AREA:
         return new XMLChartPlotAreaOOoTContext( *this, rQName );
     case XML_ETACTION_TABLE:

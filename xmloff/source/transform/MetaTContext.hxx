@@ -25,7 +25,7 @@
 
 #include "FlatTContext.hxx"
 
-typedef ::std::multimap< OUString,
+typedef ::std::multimap< ::xmloff::token::XMLTokenEnum,
                     ::rtl::Reference< XMLPersTextContentTContext > > XMLMetaContexts_Impl;
 
 
@@ -37,9 +37,9 @@ public:
     // A contexts constructor does anything that is required if an element
     // starts. Namespace processing has been done already.
     // Note that virtual methods cannot be used inside constructors. Use
-    // StartElement instead if this is required.
+    // startFastElement instead if this is required.
     XMLMetaTransformerContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName );
+                           sal_Int32 rQName );
 
     // A contexts destructor does anything that is required if an element
     // ends. By default, nothing is done.
@@ -49,15 +49,13 @@ public:
 
     // Create a children element context. By default, the import's
     // CreateContext method is called to create a new default context.
-    virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const OUString& rQName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual rtl::Reference<XMLTransformerContext> createFastChildContext( sal_Int32 nElement,
+                                   const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // EndElement is called before a context will be destructed, but
     // after an elements context has been parsed. It may be used for actions
     // that require virtual methods. The default is to do nothing.
-    virtual void EndElement() override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 
     // This method is called for all characters that are contained in the
     // current element. The default is to ignore them.

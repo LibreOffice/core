@@ -26,7 +26,7 @@ using namespace ::com::sun::star::xml::sax;
 
 XMLIgnoreTransformerContext::XMLIgnoreTransformerContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName,
+        sal_Int32 rQName,
         bool bIgnoreChars,
         bool bIgnoreElems ) :
     XMLTransformerContext( rImp, rQName ),
@@ -39,7 +39,7 @@ XMLIgnoreTransformerContext::XMLIgnoreTransformerContext(
 
 XMLIgnoreTransformerContext::XMLIgnoreTransformerContext(
         XMLTransformerBase& rTransformer,
-        const OUString& rQName,
+        sal_Int32 rQName,
         bool bAllowCharactersRecursive ) :
     XMLTransformerContext( rTransformer, rQName ),
     m_bIgnoreCharacters( false ),
@@ -49,33 +49,32 @@ XMLIgnoreTransformerContext::XMLIgnoreTransformerContext(
 {
 }
 
-rtl::Reference<XMLTransformerContext> XMLIgnoreTransformerContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const OUString& rQName,
-        const Reference< XAttributeList >& xAttrList )
+rtl::Reference<XMLTransformerContext> XMLIgnoreTransformerContext::createFastChildContext(
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList >& xAttrList )
 {
     rtl::Reference<XMLTransformerContext> pContext;
     if( m_bIgnoreElements )
         pContext.set(new XMLIgnoreTransformerContext( GetTransformer(),
-                                                    rQName, true,
+                                                    nElement, true,
                                                     true ));
     else if (m_bRecursiveUse)
         pContext.set(new XMLIgnoreTransformerContext( GetTransformer(),
-                                                    rQName, m_bAllowCharactersRecursive ));
+                                                    nElement, m_bAllowCharactersRecursive ));
     else
-        pContext = XMLTransformerContext::CreateChildContext(
-                        nPrefix, rLocalName, rQName, xAttrList );
+        pContext = XMLTransformerContext::createFastChildContext(
+                        nElement, xAttrList );
 
     return pContext;
 }
 
-void XMLIgnoreTransformerContext::StartElement( const Reference< XAttributeList >& )
+void XMLIgnoreTransformerContext::startFastElement(sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*rAttrList*/)
 {
     // ignore
 }
 
-void XMLIgnoreTransformerContext::EndElement()
+void XMLIgnoreTransformerContext::endFastElement(sal_Int32 )
 {
     // ignore
 }
