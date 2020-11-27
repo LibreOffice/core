@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "927022ae_bf56af2c",
+        "filename": "sc/source/ui/app/scdll.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-11-27T10:08:03Z",
+      "side": 1,
+      "message": "Just remove this.",
+      "revId": "88da49f08f986c26ecf057c415cbc8d0b6435e8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9596d617_d67df481",
+        "filename": "sc/source/ui/inc/dataprovider.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-11-27T10:08:03Z",
+      "side": 1,
+      "message": "Just remove this.",
+      "revId": "88da49f08f986c26ecf057c415cbc8d0b6435e8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
