@@ -437,10 +437,10 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
 {
     if ( rc.top == 0 && bHorizontal )
     {
-        const long GRADIENT_HEIGHT = 32;
+        const int GRADIENT_HEIGHT = 32;
 
-        long gradient_break = rc.top;
-        long gradient_bottom = rc.bottom - 1;
+        LONG gradient_break = rc.top;
+        LONG gradient_bottom = rc.bottom - 1;
         GRADIENT_RECT g_rect[1] = { { 0, 1 } };
 
         // very slow gradient at the top (if we have space for that)
@@ -478,7 +478,7 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
         // when done for the vertical ones too
         if ( bHorizontal )
         {
-            long from_x, from_y, to_x, to_y;
+            LONG from_x, from_y, to_x, to_y;
 
             from_x = rc.left;
             to_x = rc.right;
