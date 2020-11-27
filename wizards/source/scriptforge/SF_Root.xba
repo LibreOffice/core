@@ -777,7 +777,7 @@ Try:
 						, MsgId := &quot;An SQL statement could not be interpreted or executed by the database system.\n&quot; _
 									&amp; &quot;Check its syntax, table and/or field names, ...\n\n&quot; _
 									&amp; &quot;SQL Statement : « %1 »&quot; _
-						, Comment :=	&quot;SF_Database can't interpret SQL statement\n&quot; _
+						, Comment :=	&quot;SF_Database can&apos;t interpret SQL statement\n&quot; _
 									&amp;	&quot;%1: The statement&quot; _
 					)
 		End With
