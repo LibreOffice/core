@@ -142,7 +142,20 @@ void ToolsLong::run()
 
     StringRef fn(handler.getMainFileName());
     // sberg says this is fine
-    if (loplugin::isSamePathname(fn, SRCDIR "/pyuno/source/module/pyuno.cxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/avmedia/source/win/framegrabber.cxx")
+        || loplugin::isSamePathname(fn, SRCDIR "/avmedia/source/win/manager.cxx")
+        || loplugin::isSamePathname(fn, SRCDIR "/avmedia/source/win/player.cxx")
+        || loplugin::isSamePathname(fn, SRCDIR "/avmedia/source/win/window.cxx")
+        || loplugin::isSamePathname(fn, SRCDIR "/connectivity/source/drivers/ado/AStatement.cxx")
+        || loplugin::isSamePathname(fn, SRCDIR "/connectivity/source/drivers/ado/Awrapado.cxx")
+        || loplugin::isSamePathname(fn, SRCDIR "/desktop/win32/source/loader.cxx")
+        || loplugin::isSamePathname(fn, SRCDIR "/extensions/source/activex/SOActiveX.cxx")
+        || loplugin::isSamePathname(fn, SRCDIR "/pyuno/source/module/pyuno.cxx")
+        || loplugin::isSamePathname(fn, SRCDIR
+                                    "/setup_native/source/win32/customactions/sellang/sellang.cxx")
+        || loplugin::isSamePathname(fn, SRCDIR
+                                    "/shell/source/win32/shlxthandler/ooofilt/stream_helper.cxx")
+        || loplugin::isSamePathname(fn, SRCDIR "/shell/source/win32/zipfile/zipfile.cxx")
         || loplugin::isSamePathname(fn, SRCDIR "/ucb/source/ucp/webdav-neon/NeonSession.cxx"))
         return;
     // these are places where the external API is actually "long"
