@@ -1105,78 +1105,37 @@ void ImpGraphic::ImplSetContext( const std::shared_ptr<GraphicReader>& pReader )
 
 bool ImpGraphic::swapInContent(SvStream& rStream)
 {
+    bool bRet = false;
+
     ensureAvailable();
 
-    MapMode         aMapMode;
-    Size            aSize;
-    sal_uInt32      nId;
-    sal_Int32       nType;
-    sal_Int32       nPageIndex = -1;
+    MapMode aMapMode;
+    Size aSize;
+    sal_uInt32 nId;
+    sal_Int32 nType;
+    sal_Int32  nPageIndex = -1;
     const SvStreamEndian nOldFormat = rStream.GetEndian();
-    bool            bRet = false;
 
     rStream.SetEndian( SvStreamEndian::LITTLE );
     rStream.ReadUInt32( nId );
 
     // check version
-    if( GRAPHIC_FORMAT_50 == nId )
+    if (GRAPHIC_FORMAT_50 != nId)
+        return false;
+
+    // read new style header
+    VersionCompat aCompat(rStream, StreamMode::READ);
+
+    rStream.ReadInt32(nType);
+    sal_Int32 nLen;
+    rStream.ReadInt32(nLen);
+    TypeSerializer aSerializer(rStream);
+    aSerializer.readSize(aSize);
+    ReadMapMode(rStream, aMapMode);
+
+    if (aCompat.GetVersion() >= 2)
     {
-        // read new style header
-        VersionCompat aCompat( rStream, StreamMode::READ );
-
-        rStream.ReadInt32( nType );
-        sal_Int32 nLen;
-        rStream.ReadInt32( nLen );
-        TypeSerializer aSerializer(rStream);
-        aSerializer.readSize(aSize);
-        ReadMapMode( rStream, aMapMode );
-
-        if (aCompat.GetVersion() >= 2)
-        {
-            rStream.ReadInt32(nPageIndex);
-        }
-    }
-    else
-    {
-        // read old style header
-        sal_Int32 nWidth, nHeight;
-        sal_Int32 nMapMode, nScaleNumX, nScaleDenomX;
-        sal_Int32 nScaleNumY, nScaleDenomY, nOffsX, nOffsY;
-
-        rStream.SeekRel(-4);
-
-        sal_Int32 nLen;
-        rStream.ReadInt32(nType);
-        rStream.ReadInt32(nLen);
-        rStream.ReadInt32(nWidth);
-        rStream.ReadInt32(nHeight);
-        rStream.ReadInt32(nMapMode);
-        rStream.ReadInt32(nScaleNumX);
-        rStream.ReadInt32(nScaleDenomX);
-        rStream.ReadInt32(nScaleNumY);
-        rStream.ReadInt32(nScaleDenomY);
-        rStream.ReadInt32(nOffsX);
-        rStream.ReadInt32(nOffsY);
-
-        // swapped
-        if( nType > 100 )
-        {
-            nType = OSL_SWAPDWORD( nType );
-            nWidth = OSL_SWAPDWORD( nWidth );
-            nHeight = OSL_SWAPDWORD( nHeight );
-            nMapMode = OSL_SWAPDWORD( nMapMode );
-            nScaleNumX = OSL_SWAPDWORD( nScaleNumX );
-            nScaleDenomX = OSL_SWAPDWORD( nScaleDenomX );
-            nScaleNumY = OSL_SWAPDWORD( nScaleNumY );
-            nScaleDenomY = OSL_SWAPDWORD( nScaleDenomY );
-            nOffsX = OSL_SWAPDWORD( nOffsX );
-            nOffsY = OSL_SWAPDWORD( nOffsY );
-        }
-
-        aSize = Size( nWidth, nHeight );
-        aMapMode = MapMode( static_cast<MapUnit>(nMapMode), Point( nOffsX, nOffsY ),
-                            Fraction( nScaleNumX, nScaleDenomX ),
-                            Fraction( nScaleNumY, nScaleDenomY ) );
+        rStream.ReadInt32(nPageIndex);
     }
 
     meType = static_cast<GraphicType>(nType);
@@ -1237,7 +1196,7 @@ bool ImpGraphic::swapInContent(SvStream& rStream)
                 meType = GraphicType::Default;
         }
 
-        if( bRet )
+        if (bRet)
         {
             ImplSetPrefMapMode( aMapMode );
             ImplSetPrefSize( aSize );
@@ -1248,7 +1207,7 @@ bool ImpGraphic::swapInContent(SvStream& rStream)
     else
         bRet = true;
 
-    rStream.SetEndian( nOldFormat );
+    rStream.SetEndian(nOldFormat);
 
     return bRet;
 }
@@ -1257,65 +1216,47 @@ bool ImpGraphic::swapOutContent(SvStream& rOStm)
 {
     ensureAvailable();
 
-    if( ( meType == GraphicType::NONE ) || ( meType == GraphicType::Default ) || isSwappedOut() )
+    if (meType == GraphicType::NONE || meType == GraphicType::Default || isSwappedOut())
         return false;
 
-    const MapMode   aMapMode( ImplGetPrefMapMode() );
-    const Size      aSize( ImplGetPrefSize() );
     const SvStreamEndian nOldFormat = rOStm.GetEndian();
-    sal_uLong           nDataFieldPos;
 
-    rOStm.SetEndian( SvStreamEndian::LITTLE );
+    const MapMode aMapMode = ImplGetPrefMapMode();
+    const Size aSize = ImplGetPrefSize();
+    sal_uLong nDataFieldPos;
 
-    // write correct version ( old style/new style header )
-    if( rOStm.GetVersion() >= SOFFICE_FILEFORMAT_50 )
+    rOStm.SetEndian(SvStreamEndian::LITTLE);
+
+    // write ID for new format (5.0)
+    rOStm.WriteUInt32(GRAPHIC_FORMAT_50);
+
+    // write new style header
     {
-        // write ID for new format (5.0)
-        rOStm.WriteUInt32( GRAPHIC_FORMAT_50 );
-
-        // write new style header
         VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
 
-        rOStm.WriteInt32( static_cast<sal_Int32>(meType) );
+        rOStm.WriteInt32(static_cast<sal_Int32>(meType));
 
         // data size is updated later
         nDataFieldPos = rOStm.Tell();
-        rOStm.WriteInt32( 0 );
+        rOStm.WriteInt32(0);
 
         TypeSerializer aSerializer(rOStm);
         aSerializer.writeSize(aSize);
 
-        WriteMapMode( rOStm, aMapMode );
+        WriteMapMode(rOStm, aMapMode);
 
         // Version 2
         rOStm.WriteInt32(getPageNumber());
     }
-    else
-    {
-        // write old style (<=4.0) header
-        rOStm.WriteInt32( static_cast<sal_Int32>(meType) );
-
-        // data size is updated later
-        nDataFieldPos = rOStm.Tell();
-        rOStm.WriteInt32( 0 );
-        rOStm.WriteInt32( aSize.Width() );
-        rOStm.WriteInt32( aSize.Height() );
-        rOStm.WriteInt32( static_cast<sal_uInt16>(aMapMode.GetMapUnit()) );
-        rOStm.WriteInt32( aMapMode.GetScaleX().GetNumerator() );
-        rOStm.WriteInt32( aMapMode.GetScaleX().GetDenominator() );
-        rOStm.WriteInt32( aMapMode.GetScaleY().GetNumerator() );
-        rOStm.WriteInt32( aMapMode.GetScaleY().GetDenominator() );
-        rOStm.WriteInt32( aMapMode.GetOrigin().X() );
-        rOStm.WriteInt32( aMapMode.GetOrigin().Y() );
-    }
 
     bool bRet = false;
+
     // write data block
-    if( !rOStm.GetError() )
+    if (!rOStm.GetError())
     {
         const sal_uLong nDataStart = rOStm.Tell();
 
-        if( ImplIsSupportedGraphic() )
+        if (ImplIsSupportedGraphic())
             WriteImpGraphic( rOStm, *this );
 
         if( !rOStm.GetError() )
@@ -1328,7 +1269,7 @@ bool ImpGraphic::swapOutContent(SvStream& rOStm)
         }
     }
 
-    rOStm.SetEndian( nOldFormat );
+    rOStm.SetEndian(nOldFormat);
 
     return bRet;
 }
