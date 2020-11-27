@@ -87,6 +87,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		./configure \
 		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		$(if $(ENABLE_VALGRIND),--with-valgrind) \
+		$(if $(ENABLE_DBGUTIL),--with-pydebug) \
 		--prefix=/python-inst \
 		--with-system-expat \
 		$(if $(filter AIX,$(OS)), \
