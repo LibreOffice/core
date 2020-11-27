@@ -41,8 +41,8 @@ public:
     SystemEnvData           maSysData;              // system data
     SalFrameState           maState = {};           // frame state
     int                     mnShowState;            // show state
-    long                    mnWidth;                // client width in pixeln
-    long                    mnHeight;               // client height in pixeln
+    LONG                    mnWidth;                // client width in pixeln
+    LONG                    mnHeight;               // client height in pixeln
     int                     mnMinWidth;             // min. client width in pixeln
     int                     mnMinHeight;            // min. client height in pixeln
     int                     mnMaxWidth;             // max. client width in pixeln
