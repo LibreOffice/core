@@ -420,6 +420,12 @@ bool ToolsLong::VisitCStyleCastExpr(CStyleCastExpr* expr)
     SourceLocation loc{ compat::getBeginLoc(expr) };
     while (compiler.getSourceManager().isMacroArgExpansion(loc))
         loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
+    if (compiler.getSourceManager().isMacroBodyExpansion(loc)
+        && compiler.getSourceManager().isInSystemHeader(
+               compiler.getSourceManager().getSpellingLoc(loc)))
+    {
+        return true;
+    }
     report(DiagnosticsEngine::Warning, "CStyleCastExpr, suspicious cast from %0 to %1",
            compat::getBeginLoc(expr))
         << expr->getSubExpr()->IgnoreParenImpCasts()->getType() << expr->getType()
