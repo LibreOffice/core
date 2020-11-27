@@ -3200,7 +3200,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 else
 $(call gb_LinkTarget_add_libs,$(1),\
 	-L$(call gb_UnpackedTarball_get_dir,python3) \
-	-lpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
+	-lpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)$(if $(ENABLE_DBGUTIL),d) \
 )
 endif
 
