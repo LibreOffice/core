@@ -662,17 +662,29 @@ void TestBreakIterator::testGraphemeIteration()
     aLocale.Country = "IN";
 
     {
-        const sal_Unicode KA_VIRAMA_SSA[] = { 0x0B95, 0x0BCD, 0x0BB7 };
-        OUString aTest(KA_VIRAMA_SSA, SAL_N_ELEMENTS(KA_VIRAMA_SSA));
+        const sal_Unicode CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI [] = { 0x0B9A, 0x0BBF, 0x0BA4, 0x0BCD, 0x0BA4, 0x0BBF, 0x0BB0, 0x0BC8 };
+
+        OUString aTest(CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI, SAL_N_ELEMENTS(CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI));
 
         sal_Int32 nDone=0;
         sal_Int32 nPos = 0;
 
-        nPos = m_xBreak->nextCharacters(aTest, 0, aLocale,
+        nPos = m_xBreak->nextCharacters(aTest, 0, aLocale, i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(2), nPos);
+        nPos = m_xBreak->nextCharacters(aTest, nPos, aLocale, i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(4), nPos);
+        nPos = m_xBreak->nextCharacters(aTest, nPos, aLocale, i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(6), nPos);
+        nPos = m_xBreak->nextCharacters(aTest, nPos, aLocale, i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(SAL_N_ELEMENTS(CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI)), nPos);
+        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI), aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(SAL_N_ELEMENTS(KA_VIRAMA_SSA)), nPos);
-        nPos = m_xBreak->previousCharacters(aTest, SAL_N_ELEMENTS(KA_VIRAMA_SSA), aLocale,
-            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(6), nPos);
+        nPos = m_xBreak->previousCharacters(aTest, nPos, aLocale, i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(4), nPos);
+        nPos = m_xBreak->previousCharacters(aTest, nPos, aLocale, i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(2), nPos);
+        nPos = m_xBreak->previousCharacters(aTest, nPos, aLocale, i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full grapheme", static_cast<sal_Int32>(0), nPos);
     }
 

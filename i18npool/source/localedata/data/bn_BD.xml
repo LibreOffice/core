@@ -168,13 +168,6 @@
   </LC_CURRENCY>
   <LC_TRANSLITERATION ref="en_US"/>
   <LC_MISC>
-    <BreakIteratorRules>
-      <EditMode/>
-      <DictionaryMode/>
-      <WordCountMode/>
-      <CharacterMode>char_in</CharacterMode>
-      <LineMode/>
-    </BreakIteratorRules>
     <ReservedWords>
       <trueWord>সত্য</trueWord>
       <falseWord>মিথ্যা</falseWord>
