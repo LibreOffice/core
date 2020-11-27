@@ -16,7 +16,7 @@ namespace {
     HRESULT RegRead(HKEY hRootKey, const wchar_t* subKey, const wchar_t* valName, wchar_t* valData, size_t cchData)
     {
         HKEY hKey;
-        long iRetVal = RegCreateKeyExW(
+        LSTATUS iRetVal = RegCreateKeyExW(
             hRootKey,
             subKey,
             0,
@@ -43,7 +43,7 @@ namespace {
     HRESULT RegWrite(HKEY hRootKey, const wchar_t* subKey, const wchar_t* valName, const wchar_t* valData, HKEY *hKeyResult = nullptr)
     {
         HKEY hKey;
-        long iRetVal = RegCreateKeyExW(
+        LSTATUS iRetVal = RegCreateKeyExW(
             hRootKey,
             subKey,
             0,
@@ -72,7 +72,7 @@ namespace {
 
     HRESULT RegDel(HKEY hRootKey, const wchar_t* subKey)
     {
-        long iRetVal = RegDeleteKeyW(hRootKey, subKey);
+        LSTATUS iRetVal = RegDeleteKeyW(hRootKey, subKey);
         return HRESULT_FROM_WIN32(iRetVal);
     }
 
