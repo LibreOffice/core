@@ -103,7 +103,7 @@ void DirectoryStreamTest::testDetection()
 void lcl_testDataOperations(RVNGInputStream& rStream)
 {
     CPPUNIT_ASSERT(rStream.isEnd());
-    CPPUNIT_ASSERT_EQUAL(0L, rStream.tell());
+    CPPUNIT_ASSERT_EQUAL(0, rStream.tell());
     CPPUNIT_ASSERT_EQUAL(-1, rStream.seek(0, librevenge::RVNG_SEEK_CUR));
 
     unsigned long numBytesRead = 0;

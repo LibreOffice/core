@@ -67,7 +67,7 @@ UpdateDialog(HWND hDlg)
 {
     int pos = int(sProgress + 0.5f);
     HWND hWndPro = GetDlgItem(hDlg, IDC_PROGRESS);
-    SendMessage(hWndPro, PBM_SETPOS, pos, 0L);
+    SendMessage(hWndPro, PBM_SETPOS, pos, 0);
 }
 
 // The code in this function is from MSDN:
