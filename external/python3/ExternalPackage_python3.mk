@@ -43,8 +43,8 @@ $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-cor
 ))
 else
 $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python.bin,python))
-$(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/libpython$(PYTHON_VERSION_MAJOR).so,libpython$(PYTHON_VERSION_MAJOR).so))
-$(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so.1.0,libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so))
+$(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)$(if $(ENABLE_DBGUTIL),d).so,libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)$(if $(ENABLE_DBGUTIL),d).so))
+$(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)$(if $(ENABLE_DBGUTIL),d).so.1.0,libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)$(if $(ENABLE_DBGUTIL),d).so))
 $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python.bin-gdb.py,Tools/gdb/libpython.py))
 
 # Unfortunately the python build system does not allow to explicitly enable or
@@ -55,69 +55,72 @@ $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python.bin-
 # that may not be available on baseline systems.
 
 ifneq ($(OS),AIX)
+EXTENSION_MODULE_SUFFIX=cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)$(if $(ENABLE_DBGUTIL),d)
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/lib-dynload,\
-	LO_lib/array.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_asyncio.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/audioop.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/binascii.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_bisect.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_blake2.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/cmath.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_codecs_cn.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_codecs_hk.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_codecs_iso2022.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_codecs_jp.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_codecs_kr.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_codecs_tw.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_contextvars.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_crypt.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_csv.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_ctypes.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_datetime.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_decimal.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_elementtree.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/fcntl.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/grp.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/array.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_asyncio.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/audioop.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/binascii.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_bisect.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_blake2.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/cmath.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_codecs_cn.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_codecs_hk.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_codecs_iso2022.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_codecs_jp.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_codecs_kr.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_codecs_tw.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_contextvars.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_crypt.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_csv.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_ctypes.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_datetime.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_decimal.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_elementtree.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/fcntl.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/grp.$(EXTENSION_MODULE_SUFFIX).so \
 	$(if $(DISABLE_OPENSSL),, \
-		LO_lib/_hashlib.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+		LO_lib/_hashlib.$(EXTENSION_MODULE_SUFFIX).so \
 	) \
-	LO_lib/_heapq.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_json.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_lsprof.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/math.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_md5.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/mmap.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_multibytecodec.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_multiprocessing.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_opcode.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/ossaudiodev.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/parser.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_pickle.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_posixshmem.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_posixsubprocess.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/pyexpat.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_queue.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_random.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/resource.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/select.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_sha1.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_sha256.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_sha3.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_sha512.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_socket.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/spwd.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_heapq.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_json.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_lsprof.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/math.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_md5.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/mmap.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_multibytecodec.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_multiprocessing.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_opcode.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/ossaudiodev.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/parser.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_pickle.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_posixshmem.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_posixsubprocess.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/pyexpat.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_queue.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_random.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/resource.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/select.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_sha1.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_sha256.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_sha3.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_sha512.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_socket.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/spwd.$(EXTENSION_MODULE_SUFFIX).so \
 	$(if $(DISABLE_OPENSSL),, \
-		LO_lib/_ssl.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+		LO_lib/_ssl.$(EXTENSION_MODULE_SUFFIX).so \
 	) \
-	LO_lib/_statistics.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_struct.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/syslog.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/termios.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/unicodedata.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/xxlimited.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_xxsubinterpreters.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/_xxtestfuzz.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
-	LO_lib/zlib.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR).so \
+	LO_lib/_statistics.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_struct.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/syslog.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/termios.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/unicodedata.$(EXTENSION_MODULE_SUFFIX).so \
+	$(if $(ENABLE_DBGUTIL),, \
+		LO_lib/xxlimited.$(EXTENSION_MODULE_SUFFIX).so \
+	)\
+	LO_lib/_xxsubinterpreters.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_xxtestfuzz.$(EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/zlib.$(EXTENSION_MODULE_SUFFIX).so \
 ))
 endif
 endif
@@ -138,7 +141,7 @@ endif
 # put -pc in its linux platform triplets, so filter that...
 ifneq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
-	LO_lib/_sysconfigdata__$(python3_MACHDEP)_$(subst i686,i386,$(subst -pc,,$(HOST_PLATFORM))).py \
+	LO_lib/_sysconfigdata_$(if $(ENABLE_DBGUTIL),d)_$(python3_MACHDEP)_$(subst i686,i386,$(subst -pc,,$(HOST_PLATFORM))).py \
 ))
 endif
 
