@@ -183,10 +183,10 @@
                     "dest-filename": "external/tarballs/cppunit-1.15.1.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/Firebird-3.0.0.32483-0.tar.bz2",
-                    "sha256": "6994be3555e23226630c587444be19d309b25b0fcf1f87df3b4e3f88943e5860",
+                    "url": "https://dev-www.libreoffice.org/src/Firebird-3.0.7.33374-0.tar.bz2",
+                    "sha256": "acb85cedafa10ce106b1823fb236b1b3e5d942a5741e8f8435cc8ccfec0afe76",
                     "type": "file",
-                    "dest-filename": "external/tarballs/Firebird-3.0.0.32483-0.tar.bz2"
+                    "dest-filename": "external/tarballs/Firebird-3.0.7.33374-0.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/glm-0.9.9.7.zip",
