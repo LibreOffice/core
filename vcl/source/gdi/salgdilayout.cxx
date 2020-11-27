@@ -58,6 +58,8 @@ SalGraphics::SalGraphics()
 :   m_nLayout( SalLayoutFlags::NONE ),
     m_aLastMirror(),
     m_aLastMirrorW(0),
+    m_nLastMirrorDeviceLTRButBiDiRtlTranslate(0),
+    m_bLastMirrorDeviceLTRButBiDiRtlSet(false),
     m_bAntiAlias(false)
 {
     // read global RTL settings
@@ -316,14 +318,33 @@ const basegfx::B2DHomMatrix& SalGraphics::getMirror( const OutputDevice* i_pOutD
     const tools::Long w = GetDeviceWidth(i_pOutDev);
     SAL_WARN_IF( !w, "vcl", "missing graphics width" );
 
-    if(w != m_aLastMirrorW)
+    const bool bMirrorDeviceLTRButBiDiRtlSet = i_pOutDev && !i_pOutDev->IsRTLEnabled();
+    tools::Long nMirrorDeviceLTRButBiDiRtlTranslate(0);
+    if (bMirrorDeviceLTRButBiDiRtlSet)
+        nMirrorDeviceLTRButBiDiRtlTranslate = w - i_pOutDev->GetOutputWidthPixel() - (2 * i_pOutDev->GetOutOffXPixel());
+
+    // if the device width, or mirror state of the device changed, then m_aLastMirror is invalid
+    bool bLastMirrorValid = w == m_aLastMirrorW && bMirrorDeviceLTRButBiDiRtlSet == m_bLastMirrorDeviceLTRButBiDiRtlSet;
+    if (bLastMirrorValid && bMirrorDeviceLTRButBiDiRtlSet)
+    {
+        // if the device is in in the unusual mode of a LTR device, but layout flags of SalLayoutFlags::BiDiRtl are
+        // in use, then the m_aLastMirror is invalid if the distance it should translate has changed
+        bLastMirrorValid = nMirrorDeviceLTRButBiDiRtlTranslate == m_nLastMirrorDeviceLTRButBiDiRtlTranslate;
+    }
+
+    if (!bLastMirrorValid)
     {
         const_cast<SalGraphics*>(this)->m_aLastMirrorW = w;
+        const_cast<SalGraphics*>(this)->m_bLastMirrorDeviceLTRButBiDiRtlSet = bMirrorDeviceLTRButBiDiRtlSet;
+        const_cast<SalGraphics*>(this)->m_nLastMirrorDeviceLTRButBiDiRtlTranslate = nMirrorDeviceLTRButBiDiRtlTranslate;
 
         if(w)
         {
-            if(nullptr != i_pOutDev && !i_pOutDev->IsRTLEnabled())
+            if (bMirrorDeviceLTRButBiDiRtlSet)
             {
+                /* This path gets exercised in calc's RTL UI (e.g. SAL_RTL_ENABLED=1)
+                   with its LTR horizontal scrollbar */
+
                 // Original code was (removed here already pOutDevRef->i_pOutDev):
                 //      // mirror this window back
                 //      double devX = w-i_pOutDev->GetOutputWidthPixel()-i_pOutDev->GetOutOffXPixel();   // re-mirrored mnOutOffX
@@ -332,8 +353,7 @@ const basegfx::B2DHomMatrix& SalGraphics::getMirror( const OutputDevice* i_pOutD
                 // that this works as before, but I have reduced this (by re-placing and re-formatting) to
                 // a simple translation:
                 const_cast<SalGraphics*>(this)->m_aLastMirror = basegfx::utils::createTranslateB2DHomMatrix(
-                    w - i_pOutDev->GetOutputWidthPixel() - (2 * i_pOutDev->GetOutOffXPixel()),
-                    0.0);
+                    nMirrorDeviceLTRButBiDiRtlTranslate, 0.0);
             }
             else
             {

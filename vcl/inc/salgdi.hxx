@@ -596,7 +596,9 @@ private:
 
     // for buffering the Mirror-Matrix, see ::getMirror
     basegfx::B2DHomMatrix       m_aLastMirror;
-    tools::Long                        m_aLastMirrorW;
+    tools::Long                 m_aLastMirrorW;
+    tools::Long                 m_nLastMirrorDeviceLTRButBiDiRtlTranslate;
+    bool                        m_bLastMirrorDeviceLTRButBiDiRtlSet;
 
 protected:
     /// flags which hold the SetAntialiasing() value from OutputDevice
