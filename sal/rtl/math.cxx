@@ -338,7 +338,7 @@ void doubleToString(typename T::String ** pResult,
             {
                 const sal_Int32 nDec = nDecPlaces - nDig2;
                 nDecPlaces -= nDec;
-                // nDec-1 is also offset into slot, rounded(-1=0) or not(-2=1)
+                // nDec-1 is also offset into slot, rounded(1-1=0) or not(2-1=1)
                 const size_t nSlot = ((fValue < fB3) ? 4 : ((fValue < fB2) ? 3
                             : ((fValue < fB1) ? 2 : ((fValue < DBL_MAX) ? 1 : 0))));
 
