@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_TXTFLY_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_TXTFLY_HXX
+
+#pragma once
 
 #include <editeng/txtrange.hxx>
 #include <tools/solar.h>
@@ -372,7 +372,5 @@ inline void SwTextFly::SetIgnoreObjsInHeaderFooter( const bool bNew )
 {
     mbIgnoreObjsInHeaderFooter = bNew;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

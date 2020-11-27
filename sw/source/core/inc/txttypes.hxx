@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_TXTTYPES_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_TXTTYPES_HXX
+
+#pragma once
 
 /// @see PORGRP_* masks in porlin.hxx for meaning of bits!
 enum class PortionType
@@ -87,7 +87,5 @@ enum class PortionType
 
     TabLeft     = 0x0740,
 };
-
-#endif // INCLUDED_SW_SOURCE_CORE_INC_TXTTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
