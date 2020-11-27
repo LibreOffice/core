@@ -1957,7 +1957,7 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
         if( FAILED( VariantChangeType( &result, &result, 0, VT_I4)))
             throw BridgeRuntimeError("[automation bridge] UnoConversionUtilities<T>::dispatchExObject2Sequence \n"
                                      "Conversion of dispatch object to Sequence failed!");
-        long length= result.lVal;
+        LONG length= result.lVal;
 
         result.Clear();
 
