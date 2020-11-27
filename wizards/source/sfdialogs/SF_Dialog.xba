@@ -835,6 +835,16 @@ Const cstSubArgs = &quot;Value&quot;
 		Case UCase(&quot;Height&quot;)
 			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Height&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
 			If oSession.HasUNOProperty(_DialogModel, &quot;Height&quot;) Then _DialogModel.Height = pvValue
+		Case UCase(&quot;OnFocusGained&quot;), UCase(&quot;OnFocusLost&quot;), UCase(&quot;OnKeyPressed&quot;), UCase(&quot;OnKeyReleased&quot;) _
+				, UCase(&quot;OnMouseDragged&quot;), UCase(&quot;OnMouseEntered&quot;), UCase(&quot;OnMouseExited&quot;), UCase(&quot;OnMouseMoved&quot;) _
+				, UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;)
+			If Not ScriptForge.SF_Utils._Validate(pvValue, psProperty, V_STRING) Then GoTo Finally
+			SFDialogs.SF_Register._SetEventScript( _
+						_DialogModel _
+						, _GetEventName(psProperty) _
+						, _GetListener(psProperty) _
+						, pvValue _
+						)
 		Case UCase(&quot;Page&quot;)
 			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Page&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
 			If oSession.HasUNOProperty(_DialogModel, &quot;Step&quot;) Then _DialogModel.Step = CLng(pvValue)
