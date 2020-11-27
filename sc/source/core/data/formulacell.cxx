@@ -4864,7 +4864,6 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
                 ScRange aCalcRange(mnStartCol, mrTopPos.Row() + mnStartOffset, mrTopPos.Tab(),
                                    mnEndCol, mrTopPos.Row() + mnEndOffset, mrTopPos.Tab());
                 mpDocument->CalculateInColumnInThread(*mpContext, aCalcRange, mnThisThread, mnThreadsTotal);
-                ScDocumentThreadSpecific::MergeBackIntoNonThreadedData(mpDocument->maNonThreaded);
             }
 
         };
@@ -4927,7 +4926,7 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
                 assert(!context->pInterpreter);
                 aInterpreters[i].reset(new ScInterpreter(this, rDocument, *context, mxGroup->mpTopCell->aPos, *pCode, true));
                 context->pInterpreter = aInterpreters[i].get();
-                ScDocument::SetupFromNonThreadedContext(*context, i);
+                rDocument.SetupContextFromNonThreadedContext(*context, i);
                 rThreadPool.pushTask(std::make_unique<Executor>(aTag, i, nThreadCount, &rDocument, context, mxGroup->mpTopCell->aPos,
                                                                 nColStart, nColEnd, nStartOffset, nEndOffset));
             }
@@ -4943,7 +4942,7 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
             {
                 context = aContextGetterGuard.GetInterpreterContextForThreadIdx(i);
                 // This is intentionally done in this main thread in order to avoid locking.
-                rDocument.MergeBackIntoNonThreadedContext(*context, i);
+                rDocument.MergeContextBackIntoNonThreadedContext(*context, i);
                 context->pInterpreter = nullptr;
             }
 
