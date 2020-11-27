@@ -274,6 +274,84 @@ void doubleToString(typename T::String ** pResult,
         return;
     }
 
+    // Unfortunately the old rounding below writes 1.79769313486232e+308 for
+    // DBL_MAX and 4 subsequent nextafter(...,0).
+    static const double fB1 = std::nextafter( DBL_MAX, 0);
+    static const double fB2 = std::nextafter( fB1, 0);
+    static const double fB3 = std::nextafter( fB2, 0);
+    static const double fB4 = std::nextafter( fB3, 0);
+    if ((fValue >= fB4) && eFormat != rtl_math_StringFormat_F)
+    {
+        // 1.7976931348623157e+308 instead of rounded 1.79769313486232e+308
+        // that can't be converted back as out of range. For rounded values if
+        // they exceed range they should not be written to exchange strings or
+        // file formats.
+
+        // Writing pDig up to decimals(-1,-2) then appending one digit from
+        // pRou xor one or two digits from pSlot[].
+        constexpr char pDig[] = "7976931348623157";
+        constexpr char pRou[] = "8087931459623267";     // the only up-carry is 80
+        static_assert(SAL_N_ELEMENTS(pDig) == SAL_N_ELEMENTS(pRou), "digit count mismatch");
+        constexpr sal_Int32 nDig2 = SAL_N_ELEMENTS(pRou) - 2;
+        sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH(pRou) + 8;  // + "-1.E+308"
+        const char pSlot[5][2][3] =
+        { // rounded, not
+            "67", "57",     // DBL_MAX
+            "65", "55",
+            "53", "53",
+            "51", "51",
+            "59", "49",
+        };
+
+        if (!pResultCapacity)
+        {
+            pResultCapacity = &nCapacity;
+            T::createBuffer(pResult, pResultCapacity);
+            nResultOffset = 0;
+        }
+
+        if (bSign)
+            T::appendAscii(pResult, pResultCapacity, &nResultOffset,
+                           RTL_CONSTASCII_STRINGPARAM("-"));
+
+        nDecPlaces = std::clamp<sal_Int32>( nDecPlaces, 0, SAL_N_ELEMENTS(pRou));
+        if (nDecPlaces == 0)
+        {
+            T::appendAscii(pResult, pResultCapacity, &nResultOffset,
+                           RTL_CONSTASCII_STRINGPARAM("2"));
+        }
+        else
+        {
+            T::appendAscii(pResult, pResultCapacity, &nResultOffset,
+                           RTL_CONSTASCII_STRINGPARAM("1"));
+            T::appendChars(pResult, pResultCapacity, &nResultOffset, &cDecSeparator, 1);
+            if (nDecPlaces <= 2)
+            {
+                T::appendAscii(pResult, pResultCapacity, &nResultOffset, pRou, nDecPlaces);
+            }
+            else if (nDecPlaces <= nDig2)
+            {
+                T::appendAscii(pResult, pResultCapacity, &nResultOffset, pDig, nDecPlaces - 1);
+                T::appendAscii(pResult, pResultCapacity, &nResultOffset, pRou + nDecPlaces - 1, 1);
+            }
+            else
+            {
+                const sal_Int32 nDec = nDecPlaces - nDig2;
+                nDecPlaces -= nDec;
+                // nDec-1 is also offset into slot, rounded(-1=0) or not(-2=1)
+                const size_t nSlot = ((fValue < fB3) ? 4 : ((fValue < fB2) ? 3
+                            : ((fValue < fB1) ? 2 : ((fValue < DBL_MAX) ? 1 : 0))));
+
+                T::appendAscii(pResult, pResultCapacity, &nResultOffset, pDig, nDecPlaces - 1);
+                T::appendAscii(pResult, pResultCapacity, &nResultOffset, pSlot[nSlot][nDec-1], nDec);
+            }
+        }
+        T::appendAscii(pResult, pResultCapacity, &nResultOffset,
+                       RTL_CONSTASCII_STRINGPARAM("E+308"));
+
+        return;
+    }
+
     // Use integer representation for integer values that fit into the
     // mantissa (1.((2^53)-1)) with a precision of 1 for highest accuracy.
     const sal_Int64 kMaxInt = (static_cast< sal_Int64 >(1) << 53) - 1;
