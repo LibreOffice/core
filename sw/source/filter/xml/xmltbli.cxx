@@ -714,8 +714,8 @@ class SwXMLTableColContext_Impl : public SvXMLImportContext
 public:
 
     SwXMLTableColContext_Impl(
-            SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-            const Reference< xml::sax::XAttributeList > & xAttrList,
+            SwXMLImport& rImport,
+            const Reference< xml::sax::XFastAttributeList > & xAttrList,
             SwXMLTableContext *pTable );
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
@@ -724,45 +724,43 @@ public:
 }
 
 SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
-        SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
+        SwXMLImport& rImport,
+        const Reference< xml::sax::XFastAttributeList > & xAttrList,
         SwXMLTableContext *pTable ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    SvXMLImportContext( rImport ),
     xMyTable( pTable )
 {
     sal_uInt32 nColRep = 1;
     OUString aStyleName, aDfltCellStyleName;
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-
-        OUString aLocalName;
-        const sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-        if( XML_NAMESPACE_TABLE == nPrefix )
+        OUString sValue = aIter.toString();
+        switch (aIter.getToken())
         {
-            if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
-                aStyleName = rValue;
-            else if( IsXMLToken( aLocalName, XML_NUMBER_COLUMNS_REPEATED ) )
+            case XML_ELEMENT(TABLE, XML_STYLE_NAME):
+                aStyleName = sValue;
+                break;
+            case XML_ELEMENT(TABLE, XML_NUMBER_COLUMNS_REPEATED):
             {
-                nColRep = static_cast<sal_uInt32>(std::max<sal_Int32>(1, rValue.toInt32()));
+                nColRep = static_cast<sal_uInt32>(std::max<sal_Int32>(1, sValue.toInt32()));
                 if (nColRep > 256)
                 {
                     SAL_INFO("sw.xml", "ignoring huge table:number-columns-repeated " << nColRep);
                     nColRep = 1;
                 }
+                break;
             }
-            else if( IsXMLToken( aLocalName, XML_DEFAULT_CELL_STYLE_NAME ) )
-                aDfltCellStyleName = rValue;
-        }
-        else if ( (XML_NAMESPACE_XML == nPrefix) &&
-                 IsXMLToken( aLocalName, XML_ID ) )
-        {
-        //FIXME where to put this??? columns do not actually exist in writer...
+            case XML_ELEMENT(TABLE, XML_DEFAULT_CELL_STYLE_NAME):
+                aDfltCellStyleName = sValue;
+                break;
+            case XML_ELEMENT(XML, XML_ID):
+            {
+            //FIXME where to put this??? columns do not actually exist in writer...
+                break;
+            }
+            default:
+                XMLOFF_WARN_UNKNOWN("sw", aIter);
         }
     }
 
@@ -803,13 +801,11 @@ class SwXMLTableColsContext_Impl : public SvXMLImportContext
 public:
 
     SwXMLTableColsContext_Impl(
-            SwXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
+            SwXMLImport& rImport,
             SwXMLTableContext *pTable );
 
-    virtual SvXMLImportContextRef CreateChildContext(
-            sal_uInt16 nPrefix, const OUString& rLocalName,
-            const Reference< xml::sax::XAttributeList > & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 };
@@ -817,26 +813,23 @@ public:
 }
 
 SwXMLTableColsContext_Impl::SwXMLTableColsContext_Impl(
-        SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
+        SwXMLImport& rImport,
         SwXMLTableContext *pTable ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    SvXMLImportContext( rImport ),
     xMyTable( pTable )
 {
 }
 
-SvXMLImportContextRef SwXMLTableColsContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLTableColsContext_Impl::createFastChildContext(
+    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    if( XML_NAMESPACE_TABLE == nPrefix &&
-        IsXMLToken( rLocalName, XML_TABLE_COLUMN ) &&
+    if( nElement == XML_ELEMENT(TABLE, XML_TABLE_COLUMN) &&
         GetTable()->IsInsertColPossible() )
-        pContext = new SwXMLTableColContext_Impl( GetSwImport(), nPrefix,
-                                                  rLocalName, xAttrList,
-                                                  GetTable() );
+        pContext = new SwXMLTableColContext_Impl( GetSwImport(), xAttrList, GetTable() );
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("sw", nElement);
 
     return pContext;
 }
@@ -1005,8 +998,7 @@ class SwXMLDDETableContext_Impl : public SvXMLImportContext
 public:
 
 
-    SwXMLDDETableContext_Impl(
-        SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName);
+    SwXMLDDETableContext_Impl(SwXMLImport& rImport);
 
     virtual void SAL_CALL startFastElement(
         sal_Int32 nElement,
@@ -1020,9 +1012,8 @@ public:
 };
 
 
-SwXMLDDETableContext_Impl::SwXMLDDETableContext_Impl(
-    SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName) :
-        SvXMLImportContext(rImport, nPrfx, rLName),
+SwXMLDDETableContext_Impl::SwXMLDDETableContext_Impl(SwXMLImport& rImport) :
+        SvXMLImportContext(rImport),
         sConnectionName(),
         sDDEApplication(),
         sDDEItem(),
@@ -1384,44 +1375,33 @@ css::uno::Reference<css::xml::sax::XFastContextHandler> SwXMLTableContext::creat
     case XML_ELEMENT(TABLE, XML_TABLE_ROWS):
         return new SwXMLTableRowsContext_Impl( GetSwImport(), this, bHeader );
         break;
-    }
-    return nullptr;
-}
-
-SvXMLImportContextRef SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
-{
-    SvXMLImportContext *pContext = nullptr;
-
-    const SvXMLTokenMap& rTokenMap = GetSwImport().GetTableElemTokenMap();
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
-    {
-    case XML_TOK_TABLE_HEADER_COLS:
-    case XML_TOK_TABLE_COLS:
+    case XML_ELEMENT(TABLE, XML_TABLE_HEADER_COLUMNS):
+    case XML_ELEMENT(TABLE, XML_TABLE_COLUMNS):
+    // There are slight differences between <table:table-columns> and
+    // <table:table-columns-groups>. However, none of these are
+    // supported in Writer (they are Calc-only features), so we
+    // support column groups by simply using the <table:table-columns>
+    // token for column groups, too.
+    case XML_ELEMENT(TABLE, XML_TABLE_COLUMN_GROUP):
         if( IsValid() )
-            pContext = new SwXMLTableColsContext_Impl( GetSwImport(), nPrefix,
-                                                       rLocalName,
-                                                       this );
+            return new SwXMLTableColsContext_Impl( GetSwImport(), this );
         break;
-    case XML_TOK_TABLE_COL:
+    case XML_ELEMENT(TABLE, XML_TABLE_COLUMN):
+    case XML_ELEMENT(LO_EXT, XML_TABLE_COLUMN):
         if( IsValid() && IsInsertColPossible() )
-            pContext = new SwXMLTableColContext_Impl( GetSwImport(), nPrefix,
-                                                      rLocalName, xAttrList,
+            return new SwXMLTableColContext_Impl( GetSwImport(), xAttrList,
                                                       this );
         break;
-    case XML_TOK_OFFICE_DDE_SOURCE:
+    case  XML_ELEMENT(OFFICE, XML_DDE_SOURCE):
         // save context for later processing (discard old context, if approp.)
         if( IsValid() )
         {
-            m_xDDESource.set(new SwXMLDDETableContext_Impl( GetSwImport(), nPrefix,
-                                                        rLocalName ));
-            pContext = m_xDDESource.get();
+            m_xDDESource.set(new SwXMLDDETableContext_Impl( GetSwImport() ));
+            return m_xDDESource.get();
         }
         break;
     }
-
-    return pContext;
+    return nullptr;
 }
 
 void SwXMLTableContext::InsertColumn( sal_Int32 nWidth2, bool bRelWidth2,
