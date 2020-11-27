@@ -2580,7 +2580,7 @@ static void ImplSalUpdateStyleFontW( HDC hDC, const LOGFONTW& rLogFont, vcl::Fon
 
 static tools::Long ImplW2I( const wchar_t* pStr )
 {
-    long    n = 0;
+    tools::Long n = 0;
     int     nSign = 1;
 
     if ( *pStr == '-' )
