@@ -4025,8 +4025,8 @@ static void ImplHandleSizeMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
         {
             UpdateFrameGeometry( hWnd, pFrame );
 
-            pFrame->mnWidth  = static_cast<int>(LOWORD(lParam));
-            pFrame->mnHeight = static_cast<int>(HIWORD(lParam));
+            pFrame->mnWidth  = static_cast<LONG>(LOWORD(lParam));
+            pFrame->mnHeight = static_cast<LONG>(HIWORD(lParam));
             // save state
             ImplSaveFrameState( pFrame );
             // Call Hdl
