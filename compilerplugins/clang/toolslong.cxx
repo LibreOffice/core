@@ -479,13 +479,18 @@ bool ToolsLong::VisitParmVarDecl(ParmVarDecl const* decl)
         auto canonicalF = f->getCanonicalDecl();
         if (canonicalF->isDeletedAsWritten() && isa<CXXConversionDecl>(canonicalF))
             return true;
+        if (auto const d = dyn_cast<CXXMethodDecl>(canonicalF))
+        {
+            if (d->isVirtual())
+            {
+                return true;
+            }
+        }
         // Only rewrite declarations in include files if a definition is
         // also seen, to avoid compilation of a definition (in a main file
         // only processed later) to fail with a "mismatch" error before the
-        // rewriter had a chance to act upon the definition (but use the
-        // heuristic of assuming pure virtual functions do not have
-        // definitions):
-        bool ok = canonicalF->isDefined() || canonicalF->isPure()
+        // rewriter had a chance to act upon the definition:
+        bool ok = canonicalF->isDefined()
                   || compiler.getSourceManager().isInMainFile(
                          compiler.getSourceManager().getSpellingLoc(f->getNameInfo().getLoc()));
         if (!ok)
@@ -544,7 +549,14 @@ bool ToolsLong::VisitFunctionDecl(FunctionDecl const* decl)
         return true;
     if (decl->isDeletedAsWritten() && isa<CXXConversionDecl>(decl))
         return true;
-    if (decl->isPure() || decl->isDefined()
+    if (auto const d = dyn_cast<CXXMethodDecl>(decl))
+    {
+        if (d->isVirtual())
+        {
+            return true;
+        }
+    }
+    if (decl->isDefined()
         || compiler.getSourceManager().isInMainFile(
                compiler.getSourceManager().getSpellingLoc(decl->getNameInfo().getLoc())))
     {
