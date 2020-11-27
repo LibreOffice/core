@@ -24,6 +24,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::xmloff::token;
 
 namespace {
 
@@ -35,12 +36,12 @@ public:
     XMLPersTextTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rChars );
 
-    virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const OUString& rQName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual rtl::Reference<XMLTransformerContext> createFastChildContext(
+                                   sal_Int32 nElement,
+                                   const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual void startFastElement(sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
     virtual void Characters( const OUString& rChars ) override;
 
     virtual bool IsPersistent() const override;
@@ -52,28 +53,26 @@ public:
 XMLPersTextTContext_Impl::XMLPersTextTContext_Impl(
         XMLTransformerBase& rImp,
         const OUString& rChars ) :
-    XMLTransformerContext( rImp, OUString() ),
+    XMLTransformerContext( rImp, XML_NONE ),
     m_aCharacters( rChars )
 {
 }
 
-rtl::Reference<XMLTransformerContext> XMLPersTextTContext_Impl::CreateChildContext(
-        sal_uInt16,
-        const OUString&,
-        const OUString&,
-        const Reference< XAttributeList >& )
+rtl::Reference<XMLTransformerContext> XMLPersTextTContext_Impl::createFastChildContext(
+        sal_Int32,
+        const Reference< XFastAttributeList >& )
 {
-    OSL_ENSURE( false, "illegal call to CreateChildContext" );
+    OSL_ENSURE( false, "illegal call to createFastChildContext" );
     return {};
 }
 
-void XMLPersTextTContext_Impl::StartElement(
-    const Reference< XAttributeList >& )
+void XMLPersTextTContext_Impl::startFastElement(sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*rAttrList*/)
 {
-    OSL_ENSURE( false, "illegal call to StartElement" );
+    OSL_ENSURE( false, "illegal call to startFastElement" );
 }
 
-void XMLPersTextTContext_Impl::EndElement()
+void XMLPersTextTContext_Impl::endFastElement(sal_Int32 )
 {
     OSL_ENSURE( false, "illegal call to EndElement" );
 }
@@ -95,14 +94,14 @@ void XMLPersTextTContext_Impl::Export()
 
 XMLPersMixedContentTContext::XMLPersMixedContentTContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName ) :
+        sal_Int32 rQName ) :
     XMLPersElemContentTContext( rImp, rQName )
 {
 }
 
 XMLPersMixedContentTContext::XMLPersMixedContentTContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName,
+        sal_Int32 rQName,
        sal_uInt16 nActionMap ) :
     XMLPersElemContentTContext( rImp, rQName, nActionMap )
 {
@@ -110,20 +109,18 @@ XMLPersMixedContentTContext::XMLPersMixedContentTContext(
 
 XMLPersMixedContentTContext::XMLPersMixedContentTContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName,
-        sal_uInt16 nPrefix,
-        ::xmloff::token::XMLTokenEnum eToken ) :
-    XMLPersElemContentTContext( rImp, rQName, nPrefix, eToken )
+        sal_Int32 rQName,
+        sal_Int32 rQName2 ) :
+    XMLPersElemContentTContext( rImp, rQName, rQName2 )
 {
 }
 
 XMLPersMixedContentTContext::XMLPersMixedContentTContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName,
-        sal_uInt16 nPrefix,
-        ::xmloff::token::XMLTokenEnum eToken,
+        sal_Int32 rQName,
+        sal_Int32 rQName2,
        sal_uInt16 nActionMap ) :
-    XMLPersElemContentTContext( rImp, rQName, nPrefix, eToken, nActionMap )
+    XMLPersElemContentTContext( rImp, rQName, rQName2, nActionMap )
 {
 }
 

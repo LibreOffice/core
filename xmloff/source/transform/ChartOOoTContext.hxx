@@ -26,10 +26,11 @@ class XMLChartOOoTransformerContext : public XMLTransformerContext
 {
 public:
     XMLChartOOoTransformerContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName    );
+                           sal_Int32 rQName    );
     virtual ~XMLChartOOoTransformerContext() override;
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void startFastElement(sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_CHARTOOOTCONTEXT_HXX

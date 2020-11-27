@@ -21,28 +21,28 @@
 #define INCLUDED_XMLOFF_SOURCE_TRANSFORM_MUTABLEATTRLIST_HXX
 
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
-class SvXMLAttributeList;
-
 class XMLMutableAttributeList : public ::cppu::WeakImplHelper<
-        css::xml::sax::XAttributeList,
+        css::xml::sax::XFastAttributeList,
         css::util::XCloneable,
         css::lang::XUnoTunnel>
 {
-    css::uno::Reference< css::xml::sax::XAttributeList> m_xAttrList;
+    struct MyMutableAttributeList;
 
-    SvXMLAttributeList *m_pMutableAttrList;
+    css::uno::Reference< css::xml::sax::XFastAttributeList> m_xAttrList;
 
-    SvXMLAttributeList *GetMutableAttrList();
+    MyMutableAttributeList *m_pMutableAttrList;
+
+    MyMutableAttributeList *GetMutableAttrList();
 
 public:
     XMLMutableAttributeList();
     XMLMutableAttributeList( const css::uno::Reference<
-        css::xml::sax::XAttributeList> & rAttrList,
+        css::xml::sax::XFastAttributeList> & rAttrList,
            bool bClone=false );
     virtual ~XMLMutableAttributeList() override;
 
@@ -50,26 +50,30 @@ public:
     static const css::uno::Sequence<sal_Int8>& getUnoTunnelId() throw();
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
-    // css::xml::sax::XAttributeList
+    // css::xml::sax::XFastAttributeList
+    virtual sal_Bool SAL_CALL hasAttribute( sal_Int32 Token ) override;
+    virtual sal_Int32 SAL_CALL getValueToken( sal_Int32 Token ) override;
+    virtual sal_Int32 SAL_CALL getOptionalValueToken( sal_Int32 Token, sal_Int32 Default ) override;
+    virtual OUString SAL_CALL getValue( sal_Int32 Token ) override;
+    virtual OUString SAL_CALL getOptionalValue( sal_Int32 Token ) override;
+    virtual css::uno::Sequence< ::css::xml::Attribute > SAL_CALL getUnknownAttributes() override;
+    virtual css::uno::Sequence< ::css::xml::FastAttribute > SAL_CALL getFastAttributes() override;
     virtual sal_Int16 SAL_CALL getLength() override;
-    virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) override;
-    virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) override;
-    virtual OUString SAL_CALL getTypeByName(const OUString& aName) override;
-    virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) override;
-    virtual OUString SAL_CALL getValueByName(const OUString& aName) override;
+    virtual sal_Int32 SAL_CALL getTokenByIndex( sal_Int16 i ) override;
+    virtual OUString SAL_CALL getValueByIndex( sal_Int16 i ) override;
 
     // css::util::XCloneable
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
 
     // methods that are not contained in any interface
+    void SetValueByToken( sal_Int32 nAttributeToken, const OUString& rValue );
     void SetValueByIndex( sal_Int16 i, const OUString& rValue );
-    void AddAttribute( const OUString &sName , const OUString &sValue );
+    void AddAttribute( sal_Int32 nAttributeToken , const OUString &sValue );
 //  void Clear();
     void RemoveAttributeByIndex( sal_Int16 i );
-    void RenameAttributeByIndex( sal_Int16 i, const OUString& rNewName );
-    void AppendAttributeList( const css::uno::Reference< css::xml::sax::XAttributeList > & );
-
-    sal_Int16 GetIndexByName( const OUString& rName ) const;
+    void RenameAttributeByIndex( sal_Int16 i, sal_Int32 nNewAttributeToken );
+    void AppendAttributeList( const css::uno::Reference< css::xml::sax::XFastAttributeList > & );
+    sal_Int16 GetIndexByToken( sal_Int32 nAttributeToken ) const;
 };
 
 
