@@ -46,34 +46,6 @@ ScXMLContentContext::~ScXMLContentContext()
 {
 }
 
-SvXMLImportContextRef ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
-{
-    if ((nPrefix == XML_NAMESPACE_TEXT) && IsXMLToken(rLName, XML_S))
-    {
-        sal_Int32 nRepeat(0);
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        for( sal_Int16 i=0; i < nAttrCount; ++i )
-        {
-            const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-            const OUString& sAttrValue(xAttrList->getValueByIndex( i ));
-            OUString aLocalName;
-            sal_uInt16 nPrfx = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                                sAttrName, &aLocalName );
-            if ((nPrfx == XML_NAMESPACE_TEXT) && IsXMLToken(aLocalName, XML_C))
-                nRepeat = sAttrValue.toInt32();
-        }
-        if (nRepeat)
-            for (sal_Int32 j = 0; j < nRepeat; ++j)
-                sValue.append(' ');
-        else
-            sValue.append(' ');
-    }
-
-    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
-}
-
 css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLContentContext::createFastChildContext(
             sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
