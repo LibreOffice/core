@@ -25,27 +25,27 @@
 
 class XMLProcAttrTransformerContext : public XMLTransformerContext
 {
-    OUString const m_aElemQName;
+    sal_Int32 m_aElemQName;
     sal_uInt16 const m_nActionMap;
 
 protected:
 
-    const OUString& GetElemQName() const { return m_aElemQName; }
+    sal_Int32 GetElemQName() const { return m_aElemQName; }
     sal_uInt16 GetActionMap() const { return m_nActionMap; }
 
 public:
     XMLProcAttrTransformerContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
+                           sal_Int32 rQName,
                               sal_uInt16 nActionMap );
 
     XMLProcAttrTransformerContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
-                              sal_uInt16 nPrefix,
-                              ::xmloff::token::XMLTokenEnum eToken,
+                           sal_Int32 rQName,
+                           sal_Int32 rQName2,
                               sal_uInt16 nActionMap );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual void startFastElement(sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
+    virtual void endFastElement(sal_Int32 Element) override;
 };
 
 #endif  //  _XMLOFF_PROCATTRCONTEXT_HXX

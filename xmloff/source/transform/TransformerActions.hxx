@@ -24,52 +24,7 @@
 #include <xmloff/namespacemap.hxx>
 #include "TransformerActionInit.hxx"
 #include "TransformerAction.hxx"
-#include <boost/functional/hash.hpp>
 #include <unordered_map>
-
-struct NameKey_Impl
-{
-    sal_uInt16 m_nPrefix;
-    OUString m_aLocalName;
-
-    NameKey_Impl( sal_uInt16 nPrfx, const OUString& rLclNm ) :
-        m_nPrefix( nPrfx ),
-        m_aLocalName( rLclNm )
-    {
-    }
-
-    NameKey_Impl() :
-        m_nPrefix( XML_NAMESPACE_UNKNOWN )
-    {
-    }
-
-    void SetLocalName( ::xmloff::token::XMLTokenEnum eLclNm )
-    {
-        m_aLocalName = ::xmloff::token::GetXMLToken( eLclNm );
-    }
-};
-
-struct NameHash_Impl
-{
-    inline size_t operator()( const NameKey_Impl& r ) const;
-    inline bool operator()( const NameKey_Impl& r1,
-                               const NameKey_Impl& r2 ) const;
-};
-
-inline size_t NameHash_Impl::operator()( const NameKey_Impl& r ) const
-{
-    std::size_t seed = 0;
-    boost::hash_combine(seed, r.m_nPrefix);
-    boost::hash_combine(seed, r.m_aLocalName.hashCode());
-    return seed;
-}
-
-inline bool NameHash_Impl::operator()(
-        const NameKey_Impl& r1,
-        const NameKey_Impl& r2 ) const
-{
-    return r1.m_nPrefix == r2.m_nPrefix && r1.m_aLocalName == r2.m_aLocalName;
-}
 
 struct TransformerAction_Impl
 {
@@ -86,41 +41,40 @@ struct TransformerAction_Impl
     {
     }
 
-    sal_uInt16 GetQNamePrefixFromParam1() const
+    sal_Int32 GetTokenFromParam1() const
     {
-        return static_cast< sal_uInt16 >( m_nParam1 >> 16 );
+        return static_cast< sal_Int32 >( m_nParam1 );
     }
 
-    sal_uInt16 GetQNamePrefixFromParam2() const
+    sal_Int32 GetTokenFromParam2() const
     {
-        return static_cast< sal_uInt16 >( m_nParam2 >> 16 );
+        return static_cast< sal_Int32 >( m_nParam2 );
     }
 
-    sal_uInt16 GetQNamePrefixFromParam3() const
+    sal_Int32 GetTokenFromParam3() const
     {
-        return static_cast< sal_uInt16 >( m_nParam3 >> 16 );
+        return static_cast< sal_Int32 >( m_nParam3 );
     }
 
-    ::xmloff::token::XMLTokenEnum GetQNameTokenFromParam1() const
-    {
-        return static_cast< ::xmloff::token::XMLTokenEnum>( m_nParam1 & 0xffff );
-    }
+    // ::xmloff::token::XMLTokenEnum GetQNameTokenFromParam1() const
+    // {
+    //     return static_cast< ::xmloff::token::XMLTokenEnum>( m_nParam1 & 0xffff );
+    // }
 
-    ::xmloff::token::XMLTokenEnum GetQNameTokenFromParam2() const
-    {
-        return static_cast< ::xmloff::token::XMLTokenEnum>( m_nParam2 & 0xffff );
-    }
+    // ::xmloff::token::XMLTokenEnum GetQNameTokenFromParam2() const
+    // {
+    //     return static_cast< ::xmloff::token::XMLTokenEnum>( m_nParam2 & 0xffff );
+    // }
 
-    ::xmloff::token::XMLTokenEnum GetQNameTokenFromParam3() const
-    {
-        return static_cast< ::xmloff::token::XMLTokenEnum>( m_nParam3 & 0xffff );
-    }
+    // ::xmloff::token::XMLTokenEnum GetQNameTokenFromParam3() const
+    // {
+    //     return static_cast< ::xmloff::token::XMLTokenEnum>( m_nParam3 & 0xffff );
+    // }
 
 };
 
 class XMLTransformerActions :
-    public std::unordered_map< NameKey_Impl, TransformerAction_Impl,
-                            NameHash_Impl, NameHash_Impl >
+    public std::unordered_map< sal_Int32, TransformerAction_Impl >
 {
 public:
     explicit XMLTransformerActions( XMLTransformerActionInit const *pInit );

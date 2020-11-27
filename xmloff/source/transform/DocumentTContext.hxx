@@ -28,14 +28,15 @@ public:
     // A contexts constructor does anything that is required if an element
     // starts. Namespace processing has been done already.
     // Note that virtual methods cannot be used inside constructors. Use
-    // StartElement instead if this is required.
-    XMLDocumentTransformerContext(XMLTransformerBase& rTransformer, const OUString& rQName);
+    // startFastElement instead if this is required.
+    XMLDocumentTransformerContext(XMLTransformerBase& rTransformer, sal_Int32 rQName);
 
-    // StartElement is called after a context has been constructed and
+    // startFastElement is called after a context has been constructed and
     // before an elements context is parsed. It may be used for actions that
     // require virtual methods. The default is to do nothing.
-    virtual void
-    StartElement(const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
+    virtual void startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttribs) override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_DOCUMENTTCONTEXT_HXX

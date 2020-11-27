@@ -20,6 +20,7 @@
 #include "MutableAttrList.hxx"
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>
+#include <xmloff/xmlimp.hxx>
 #include "ActionMapTypesOASIS.hxx"
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"
@@ -83,10 +84,9 @@ XMLTokenEnum XMLFormPropOASISTransformerContext::GetValueType(
 
 XMLFormPropOASISTransformerContext::XMLFormPropOASISTransformerContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName,
+        sal_Int32 rQName,
         XMLTokenEnum eLocalName ) :
-    XMLRenameElemTransformerContext( rImp, rQName, XML_NAMESPACE_FORM,
-                                       XML_PROPERTY ),
+    XMLRenameElemTransformerContext( rImp, rQName, XML_ELEMENT(FORM,XML_PROPERTY) ),
     m_bIsList( XML_LIST_PROPERTY == eLocalName),
     m_bIsListValue( XML_LIST_VALUE == eLocalName)
 {
@@ -96,8 +96,8 @@ XMLFormPropOASISTransformerContext::~XMLFormPropOASISTransformerContext()
 {
 }
 
-void XMLFormPropOASISTransformerContext::StartElement(
-    const Reference< XAttributeList >& rAttrList )
+void XMLFormPropOASISTransformerContext::startFastElement(sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
 
     XMLTransformerActions *pActions =
@@ -106,7 +106,7 @@ void XMLFormPropOASISTransformerContext::StartElement(
 
     XMLMutableAttributeList *pMutableAttrList =
         new XMLMutableAttributeList( rAttrList );
-    Reference< XAttributeList > xAttrList( pMutableAttrList );
+    Reference< XFastAttributeList > xAttrList( pMutableAttrList );
 
     sal_Int16 nValueTypeAttr = -1;
     OUString aValue;
@@ -114,21 +114,17 @@ void XMLFormPropOASISTransformerContext::StartElement(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                 &aLocalName );
-        XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
+        sal_Int32 rAttrName = xAttrList->getTokenByIndex( i );
+        XMLTransformerActions::key_type aKey( rAttrName );
         XMLTransformerActions::const_iterator aIter =
             pActions->find( aKey );
         if( aIter != pActions->end() )
         {
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            OUString rAttrValue = xAttrList->getValueByIndex( i );
             switch( (*aIter).second.m_nActionType )
             {
             case XML_ATACTION_RENAME:
-                if( IsXMLToken( aLocalName, XML_VALUE_TYPE ) )
+                if( (rAttrName & TOKEN_MASK) == XML_VALUE_TYPE )
                 {
                     if( IsXMLToken( rAttrValue, XML_FLOAT ) )
                     {
@@ -142,16 +138,11 @@ void XMLFormPropOASISTransformerContext::StartElement(
                     }
                 }
                 {
-                    OUString aNewAttrQName(
-                        GetTransformer().GetNamespaceMap().GetQNameByKey(
-                                (*aIter).second.GetQNamePrefixFromParam1(),
-                                ::xmloff::token::GetXMLToken(
-                                    (*aIter).second.GetQNameTokenFromParam1()) ) );
-                    pMutableAttrList->RenameAttributeByIndex( i, aNewAttrQName );
+                    pMutableAttrList->RenameAttributeByIndex( i, (*aIter).second.GetTokenFromParam1() );
                 }
                 break;
             case XML_ATACTION_REMOVE:
-                if( !IsXMLToken( aLocalName, XML_CURRENCY ) )
+                if( (rAttrName & TOKEN_MASK) != XML_CURRENCY )
                     aValue = rAttrValue;
                 pMutableAttrList->RemoveAttributeByIndex( i );
                 --i;
@@ -165,11 +156,7 @@ void XMLFormPropOASISTransformerContext::StartElement(
     }
     if( m_bIsList )
     {
-        OUString aNewAttrQName(
-                GetTransformer().GetNamespaceMap().GetQNameByKey(
-                    XML_NAMESPACE_FORM,
-                    GetXMLToken( XML_PROPERTY_IS_LIST ) ) );
-        pMutableAttrList->AddAttribute( aNewAttrQName,
+        pMutableAttrList->AddAttribute( XML_ELEMENT(FORM, XML_PROPERTY_IS_LIST),
                                         GetXMLToken( XML_TRUE ) );
     }
 
@@ -178,7 +165,7 @@ void XMLFormPropOASISTransformerContext::StartElement(
                                 GetXMLToken( GetValueType( aValue ) ) );
 
     if( !m_bIsListValue )
-        XMLRenameElemTransformerContext::StartElement( xAttrList );
+        XMLRenameElemTransformerContext::startFastElement( nElement, xAttrList );
     if( m_bIsList )
         return;
 
@@ -186,26 +173,20 @@ void XMLFormPropOASISTransformerContext::StartElement(
     xAttrList = pMutableAttrList;
     if( bIsVoid )
     {
-        OUString aNewAttrQName(
-            GetTransformer().GetNamespaceMap().GetQNameByKey(
-                XML_NAMESPACE_FORM, GetXMLToken( XML_PROPERTY_IS_VOID ) ) );
-        pMutableAttrList->AddAttribute( aNewAttrQName,
+        pMutableAttrList->AddAttribute( XML_ELEMENT(FORM, XML_PROPERTY_IS_VOID) ,
                                     GetXMLToken( XML_TRUE ) );
     }
 
-    OUString aValueElemQName(
-        GetTransformer().GetNamespaceMap().GetQNameByKey(
-                XML_NAMESPACE_FORM, GetXMLToken( XML_PROPERTY_VALUE ) ) );
-    GetTransformer().GetDocHandler()->startElement( aValueElemQName,
+    GetTransformer().GetDocHandler()->startFastElement( XML_ELEMENT(FORM, XML_PROPERTY_VALUE),
                                                     xAttrList );
     GetTransformer().GetDocHandler()->characters( aValue );
-    GetTransformer().GetDocHandler()->endElement( aValueElemQName );
+    GetTransformer().GetDocHandler()->endFastElement( XML_ELEMENT(FORM, XML_PROPERTY_VALUE) );
 }
 
-void XMLFormPropOASISTransformerContext::EndElement()
+void XMLFormPropOASISTransformerContext::endFastElement(sal_Int32 nElement)
 {
     if( !m_bIsListValue )
-        XMLRenameElemTransformerContext::EndElement();
+        XMLRenameElemTransformerContext::endFastElement(nElement);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

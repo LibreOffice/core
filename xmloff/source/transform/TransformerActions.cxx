@@ -35,8 +35,7 @@ XMLTransformerActions::XMLTransformerActions( XMLTransformerActionInit const *pI
     XMLTransformerActions::mapped_type aData;
     while( pInit->m_nActionType != XML_TACTION_EOT )
     {
-        aKey.m_nPrefix = pInit->m_nPrefix;
-        aKey.SetLocalName( pInit->m_eLocalName );
+        aKey = pInit->m_nElement;
 
         OSL_ENSURE( find( aKey ) == end(), "duplicate action map entry" );
 
@@ -64,8 +63,7 @@ void XMLTransformerActions::Add( XMLTransformerActionInit const *pInit )
     XMLTransformerActions::mapped_type aData;
     while( pInit->m_nActionType != XML_TACTION_EOT )
     {
-        aKey.m_nPrefix = pInit->m_nPrefix;
-        aKey.SetLocalName( pInit->m_eLocalName );
+        aKey = pInit->m_nElement;
         XMLTransformerActions::iterator aIter = find( aKey );
         if( aIter == end() )
         {

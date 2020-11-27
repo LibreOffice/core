@@ -36,13 +36,11 @@ class XMLChartPlotAreaOOoTContext  : public XMLProcAttrTransformerContext
 {
 public:
     explicit XMLChartPlotAreaOOoTContext(
-        XMLTransformerBase & rTransformer, const OUString & rQName );
+        XMLTransformerBase & rTransformer, sal_Int32 rQName );
 
-    virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const OUString& rQName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual rtl::Reference<XMLTransformerContext> createFastChildContext( sal_Int32 nElement,
+                                   const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
     virtual void ExportContent() override;
 
 private:
