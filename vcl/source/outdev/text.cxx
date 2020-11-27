@@ -138,7 +138,7 @@ void OutputDevice::ImplDrawTextRect( tools::Long nBaseX, tools::Long nBaseY,
 
     nX += nBaseX;
     nY += nBaseY;
-    mpGraphics->DrawRect( nX, nY, nWidth, nHeight, this ); // original code
+    mpGraphics->DrawRect( nX, nY, nWidth, nHeight, *this ); // original code
 
 }
 

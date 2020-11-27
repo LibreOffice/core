@@ -470,7 +470,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                     // rectangle, too.
                                                     aPixelRect.getWidth(), aPixelRect.getHeight(),
                                                     sal::static_int_cast<sal_uInt8>(nTransparencePercent),
-                                                    this );
+                                                    *this );
             }
             else
             {

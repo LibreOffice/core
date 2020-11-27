@@ -404,7 +404,7 @@ void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPol
 void OutputDevice::DrawHatchLine_DrawLine(const Point& rStartPoint, const Point& rEndPoint)
 {
     Point aPt1{ImplLogicToDevicePixel(rStartPoint)}, aPt2{ImplLogicToDevicePixel(rEndPoint)};
-    mpGraphics->DrawLine(aPt1.X(), aPt1.Y(), aPt2.X(), aPt2.Y(), this);
+    mpGraphics->DrawLine(aPt1.X(), aPt1.Y(), aPt2.X(), aPt2.Y(), *this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -51,7 +51,7 @@ void OutputDevice::ImplDrawWavePixel( tools::Long nOriginX, tools::Long nOriginY
                                       tools::Long nCurX, tools::Long nCurY,
                                       Degree10 nOrientation,
                                       SalGraphics* pGraphics,
-                                      OutputDevice const * pOutDev,
+                                      const OutputDevice& rOutDev,
                                       bool bDrawPixAsRect,
                                       tools::Long nPixWidth, tools::Long nPixHeight )
 {
@@ -64,11 +64,11 @@ void OutputDevice::ImplDrawWavePixel( tools::Long nOriginX, tools::Long nOriginY
     if ( bDrawPixAsRect )
     {
 
-        pGraphics->DrawRect( nCurX, nCurY, nPixWidth, nPixHeight, pOutDev );
+        pGraphics->DrawRect( nCurX, nCurY, nPixWidth, nPixHeight, rOutDev );
     }
     else
     {
-        pGraphics->DrawPixel( nCurX, nCurY, pOutDev );
+        pGraphics->DrawPixel( nCurX, nCurY, rOutDev );
     }
 }
 
@@ -98,7 +98,7 @@ void OutputDevice::ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY,
             aOriginPt.RotateAround( nStartX, nStartY, nOrientation );
             aOriginPt.RotateAround( nEndX, nEndY, nOrientation );
         }
-        mpGraphics->DrawLine( nStartX, nStartY, nEndX, nEndY, this );
+        mpGraphics->DrawLine( nStartX, nStartY, nEndX, nEndY, *this );
     }
     else
     {
@@ -139,7 +139,7 @@ void OutputDevice::ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY,
             while ( nWidth )
             {
                 ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
-                                   mpGraphics, this,
+                                   mpGraphics, *this,
                                    bDrawPixAsRect, nPixWidth, nPixHeight );
                 nCurX++;
                 nWidth--;
@@ -154,7 +154,7 @@ void OutputDevice::ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY,
                 for( tools::Long i = nDiffY; i; --i )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
-                                       mpGraphics, this,
+                                       mpGraphics, *this,
                                        bDrawPixAsRect, nPixWidth, nPixHeight );
                     nCurX++;
                     nCurY += nOffY;
@@ -162,7 +162,7 @@ void OutputDevice::ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY,
                 for( tools::Long i = nDiffX; i; --i )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
-                                       mpGraphics, this,
+                                       mpGraphics, *this,
                                        bDrawPixAsRect, nPixWidth, nPixHeight );
                     nCurX++;
                 }
@@ -174,7 +174,7 @@ void OutputDevice::ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY,
                 for( tools::Long i = nDiffY; i && nFreq; --i, --nFreq )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
-                                       mpGraphics, this,
+                                       mpGraphics, *this,
                                        bDrawPixAsRect, nPixWidth, nPixHeight );
                     nCurX++;
                     nCurY += nOffY;
@@ -183,7 +183,7 @@ void OutputDevice::ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY,
                 for( tools::Long i = nDiffX; i && nFreq; --i, --nFreq )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
-                                       mpGraphics, this,
+                                       mpGraphics, *this,
                                        bDrawPixAsRect, nPixWidth, nPixHeight );
                     nCurX++;
                 }

@@ -565,11 +565,11 @@ protected:
 
     virtual tools::Rectangle    GetBackgroundComponentBounds() const;
 
-    virtual const OutputDevice* DrawOutDevDirectCheck(const OutputDevice* pSrcDev) const;
+    virtual const OutputDevice* DrawOutDevDirectCheck(const OutputDevice& rSrcDev) const;
 
-    virtual void                DrawOutDevDirectProcess( const OutputDevice* pSrcDev, SalTwoRect& rPosAry, SalGraphics* pSrcGraphics );
+    virtual void                DrawOutDevDirectProcess(const OutputDevice& rSrcDev, SalTwoRect& rPosAry, SalGraphics* pSrcGraphics);
 
-    SAL_DLLPRIVATE void         drawOutDevDirect ( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
+    SAL_DLLPRIVATE void         drawOutDevDirect(const OutputDevice& rSrcDev, SalTwoRect& rPosAry);
 
     SAL_DLLPRIVATE bool         is_double_buffered_window() const;
 
@@ -1206,7 +1206,7 @@ private:
     SAL_DLLPRIVATE void         ImplDrawSpecialText( SalLayout& );
     SAL_DLLPRIVATE void         ImplDrawTextRect( tools::Long nBaseX, tools::Long nBaseY, tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight );
 
-    SAL_DLLPRIVATE static void  ImplDrawWavePixel( tools::Long nOriginX, tools::Long nOriginY, tools::Long nCurX, tools::Long nCurY, Degree10 nOrientation, SalGraphics* pGraphics, OutputDevice const * pOutDev,
+    SAL_DLLPRIVATE static void  ImplDrawWavePixel( tools::Long nOriginX, tools::Long nOriginY, tools::Long nCurX, tools::Long nCurY, Degree10 nOrientation, SalGraphics* pGraphics, const OutputDevice& rOutDev,
                                                    bool bDrawPixAsRect, tools::Long nPixWidth, tools::Long nPixHeight );
     SAL_DLLPRIVATE void         ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY, tools::Long nStartX, tools::Long nStartY, tools::Long nWidth, tools::Long nHeight, tools::Long nLineWidth, Degree10 nOrientation, const Color& rColor );
     SAL_DLLPRIVATE void         ImplDrawWaveTextLine( tools::Long nBaseX, tools::Long nBaseY, tools::Long nX, tools::Long nY, tools::Long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );

@@ -388,7 +388,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
         AdjustTwoRect( aPosAry, aSrcOutRect );
 
         if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
-            mpGraphics->CopyBits( aPosAry, nullptr, this, nullptr );
+            mpGraphics->CopyBits( aPosAry, nullptr, *this, nullptr );
     }
 
     if( mpAlphaVDev )
@@ -450,7 +450,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                            ImplLogicWidthToDevicePixel(rDestSize.Width()),
                            ImplLogicHeightToDevicePixel(rDestSize.Height()));
 
-        drawOutDevDirect(&rOutDev, aPosAry);
+        drawOutDevDirect(rOutDev, aPosAry);
 
         // #i32109#: make destination rectangle opaque - source has no alpha
         if (mpAlphaVDev)
@@ -512,15 +512,14 @@ void OutputDevice::CopyDeviceArea( SalTwoRect& aPosAry, bool /*bWindowInvalidate
 
     aPosAry.mnDestWidth  = aPosAry.mnSrcWidth;
     aPosAry.mnDestHeight = aPosAry.mnSrcHeight;
-    mpGraphics->CopyBits(aPosAry, nullptr, this, nullptr);
+    mpGraphics->CopyBits(aPosAry, nullptr, *this, nullptr);
 }
 
 // Direct OutputDevice drawing private function
-
-void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rPosAry )
+void OutputDevice::drawOutDevDirect(const OutputDevice& rSrcDev, SalTwoRect& rPosAry)
 {
     SalGraphics* pSrcGraphics;
-    if (const OutputDevice* pCheckedSrc = DrawOutDevDirectCheck(pSrcDev))
+    if (const OutputDevice* pCheckedSrc = DrawOutDevDirectCheck(rSrcDev))
     {
         if (!pCheckedSrc->mpGraphics && !pCheckedSrc->AcquireGraphics())
             return;
@@ -533,36 +532,36 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
         return;
 
     // #102532# Offset only has to be pseudo window offset
-    const tools::Rectangle aSrcOutRect( Point( pSrcDev->mnOutOffX, pSrcDev->mnOutOffY ),
-                                 Size( pSrcDev->mnOutWidth, pSrcDev->mnOutHeight ) );
+    const tools::Rectangle aSrcOutRect(Point(rSrcDev.mnOutOffX, rSrcDev.mnOutOffY),
+                                       Size(rSrcDev.mnOutWidth, rSrcDev.mnOutHeight));
 
     AdjustTwoRect( rPosAry, aSrcOutRect );
 
     if ( rPosAry.mnSrcWidth && rPosAry.mnSrcHeight && rPosAry.mnDestWidth && rPosAry.mnDestHeight )
     {
-        // if this is no window, but pSrcDev is a window
+        // if this is no window, but rSrcDev is a window
         // mirroring may be required
         // because only windows have a SalGraphicsLayout
         // mirroring is performed here
-        DrawOutDevDirectProcess( pSrcDev, rPosAry, pSrcGraphics);
+        DrawOutDevDirectProcess(rSrcDev, rPosAry, pSrcGraphics);
     }
 }
 
-const OutputDevice* OutputDevice::DrawOutDevDirectCheck(const OutputDevice* pSrcDev) const
+const OutputDevice* OutputDevice::DrawOutDevDirectCheck(const OutputDevice& rSrcDev) const
 {
-    return this == pSrcDev ? nullptr : pSrcDev;
+    return this == &rSrcDev ? nullptr : &rSrcDev;
 }
 
-void OutputDevice::DrawOutDevDirectProcess( const OutputDevice* pSrcDev, SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
+void OutputDevice::DrawOutDevDirectProcess(const OutputDevice& rSrcDev, SalTwoRect& rPosAry, SalGraphics* pSrcGraphics)
 {
     if( pSrcGraphics && (pSrcGraphics->GetLayout() & SalLayoutFlags::BiDiRtl) )
     {
         SalTwoRect aPosAry2 = rPosAry;
-        pSrcGraphics->mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth, pSrcDev );
-        mpGraphics->CopyBits( aPosAry2, pSrcGraphics, this, pSrcDev );
+        pSrcGraphics->mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth, &rSrcDev );
+        mpGraphics->CopyBits( aPosAry2, pSrcGraphics, *this, &rSrcDev );
     }
     else
-        mpGraphics->CopyBits( rPosAry, pSrcGraphics, this, pSrcDev );
+        mpGraphics->CopyBits( rPosAry, pSrcGraphics, *this, &rSrcDev );
 }
 
 tools::Rectangle OutputDevice::GetBackgroundComponentBounds() const
@@ -679,7 +678,7 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
 
             aRect.Justify();
             bDrawn = mpGraphics->DrawEPS( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
-                         const_cast<sal_uInt8*>(rGfxLink.GetData()), rGfxLink.GetDataSize(), this );
+                         const_cast<sal_uInt8*>(rGfxLink.GetData()), rGfxLink.GetDataSize(), *this );
         }
 
         // else draw the substitution graphics

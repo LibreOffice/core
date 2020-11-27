@@ -88,16 +88,16 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
         if( aPoly.HasFlags() )
         {
             const PolyFlags* pFlgAry = aPoly.GetConstFlagAry();
-            if( !mpGraphics->DrawPolyLineBezier( nPoints, pPtAry, pFlgAry, this ) )
+            if( !mpGraphics->DrawPolyLineBezier( nPoints, pPtAry, pFlgAry, *this ) )
             {
                 aPoly = tools::Polygon::SubdivideBezier(aPoly);
                 pPtAry = aPoly.GetPointAry();
-                mpGraphics->DrawPolyLine( aPoly.GetSize(), pPtAry, this );
+                mpGraphics->DrawPolyLine( aPoly.GetSize(), pPtAry, *this );
             }
         }
         else
         {
-            mpGraphics->DrawPolyLine( nPoints, pPtAry, this );
+            mpGraphics->DrawPolyLine( nPoints, pPtAry, *this );
         }
     }
 
@@ -280,7 +280,7 @@ void OutputDevice::drawPolyLine(const tools::Polygon& rPoly, const LineInfo& rLi
             nPoints = aPoly.GetSize();
         }
 
-        mpGraphics->DrawPolyLine(nPoints, aPoly.GetPointAry(), this);
+        mpGraphics->DrawPolyLine(nPoints, aPoly.GetPointAry(), *this);
     }
 
     if( mpAlphaVDev )

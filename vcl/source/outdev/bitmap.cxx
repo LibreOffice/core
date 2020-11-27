@@ -442,7 +442,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
                                               (aRect.Left() < mnOutOffX) ? (mnOutOffX - aRect.Left()) : 0L,
                                               (aRect.Top() < mnOutOffY) ? (mnOutOffY - aRect.Top()) : 0L,
                                               nWidth, nHeight);
-                            aVDev->mpGraphics->CopyBits( aPosAry, mpGraphics, this, this );
+                            aVDev->mpGraphics->CopyBits( aPosAry, mpGraphics, *this, this );
                         }
                         else
                         {
@@ -460,7 +460,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 
             if ( !bClipped )
             {
-                std::shared_ptr<SalBitmap> pSalBmp = mpGraphics->GetBitmap( nX, nY, nWidth, nHeight, this );
+                std::shared_ptr<SalBitmap> pSalBmp = mpGraphics->GetBitmap( nX, nY, nWidth, nHeight, *this );
 
                 if( pSalBmp )
                 {
@@ -523,7 +523,7 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
             {
                 bool bTryDirectPaint(pSalSrcBmp);
 
-                if (bTryDirectPaint && mpGraphics->DrawAlphaBitmap(aPosAry, *pSalSrcBmp, *xMaskBmp, this))
+                if (bTryDirectPaint && mpGraphics->DrawAlphaBitmap(aPosAry, *pSalSrcBmp, *xMaskBmp, *this))
                 {
                     // tried to paint as alpha directly. If this worked, we are done (except
                     // alpha, see below)
@@ -682,7 +682,7 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
             Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmap( aRelPt, aOutSz ) );
             if (SalBitmap* pSalAlphaBmp2 = aAlphaBitmap.ImplGetSalBitmap().get())
             {
-                if (mpGraphics->BlendAlphaBitmap(aTR, *pSalSrcBmp, *pSalAlphaBmp, *pSalAlphaBmp2, this))
+                if (mpGraphics->BlendAlphaBitmap(aTR, *pSalSrcBmp, *pSalAlphaBmp, *pSalAlphaBmp2, *this))
                 {
                     mpAlphaVDev->BlendBitmap(aTR, rAlpha);
                     return;
@@ -691,7 +691,7 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
         }
         else
         {
-            if (mpGraphics->DrawAlphaBitmap(aTR, *pSalSrcBmp, *pSalAlphaBmp, this))
+            if (mpGraphics->DrawAlphaBitmap(aTR, *pSalSrcBmp, *pSalAlphaBmp, *this))
                 return;
         }
 
@@ -1097,7 +1097,7 @@ bool OutputDevice::DrawTransformBitmapExDirect(
         aTopY,
         *pSalSrcBmp,
         pSalAlphaBmp,
-        this);
+        *this);
 
     if (mpAlphaVDev)
     {
@@ -1553,7 +1553,7 @@ void OutputDevice::BlendBitmap(
             const SalTwoRect&   rPosAry,
             const Bitmap&       rBmp )
 {
-    mpGraphics->BlendBitmap( rPosAry, *rBmp.ImplGetSalBitmap(), this );
+    mpGraphics->BlendBitmap( rPosAry, *rBmp.ImplGetSalBitmap(), *this );
 }
 
 Bitmap OutputDevice::BlendBitmapWithAlpha(

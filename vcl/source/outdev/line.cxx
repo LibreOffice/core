@@ -78,7 +78,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
     }
     else
     {
-        mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), this );
+        mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), *this );
     }
 
     if( mpAlphaVDev )
@@ -141,7 +141,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     {
         const Point aStartPt(ImplLogicToDevicePixel(rStartPt));
         const Point aEndPt(ImplLogicToDevicePixel(rEndPt));
-        mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), this );
+        mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), *this );
     }
 
     if( mpAlphaVDev )
@@ -253,7 +253,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
                 mpGraphics->DrawPolyLine(
                     aPolygon.GetSize(),
                     aPolygon.GetPointAry(),
-                    this);
+                    *this);
             }
         }
     }
@@ -287,7 +287,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 
                 // need to subdivide, mpGraphics->DrawPolygon ignores curves
                 aPolygon.AdaptiveSubdivide(aPolygon);
-                mpGraphics->DrawPolygon(aPolygon.GetSize(), aPolygon.GetConstPointAry(), this);
+                mpGraphics->DrawPolygon(aPolygon.GetSize(), aPolygon.GetConstPointAry(), *this);
             }
         }
 

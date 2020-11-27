@@ -1240,7 +1240,7 @@ void Window::CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate )
         mpGraphics->CopyArea(aPosAry.mnDestX, aPosAry.mnDestY,
                 aPosAry.mnSrcX, aPosAry.mnSrcY,
                 aPosAry.mnSrcWidth, aPosAry.mnSrcHeight,
-                this);
+                *this);
 
         return;
     }
@@ -1248,24 +1248,24 @@ void Window::CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate )
     OutputDevice::CopyDeviceArea(aPosAry, bWindowInvalidate);
 }
 
-const OutputDevice* Window::DrawOutDevDirectCheck(const OutputDevice* pSrcDev) const
+const OutputDevice* Window::DrawOutDevDirectCheck(const OutputDevice& rSrcDev) const
 {
     const OutputDevice* pSrcDevChecked;
-    if ( this == pSrcDev )
+    if ( this == &rSrcDev )
         pSrcDevChecked = nullptr;
-    else if (GetOutDevType() != pSrcDev->GetOutDevType())
-        pSrcDevChecked = pSrcDev;
-    else if (this->mpWindowImpl->mpFrameWindow == static_cast<const vcl::Window*>(pSrcDev)->mpWindowImpl->mpFrameWindow)
+    else if (GetOutDevType() != rSrcDev.GetOutDevType())
+        pSrcDevChecked = &rSrcDev;
+    else if (this->mpWindowImpl->mpFrameWindow == static_cast<const vcl::Window&>(rSrcDev).mpWindowImpl->mpFrameWindow)
         pSrcDevChecked = nullptr;
     else
-        pSrcDevChecked = pSrcDev;
+        pSrcDevChecked = &rSrcDev;
 
     return pSrcDevChecked;
 }
 
-void Window::DrawOutDevDirectProcess( const OutputDevice* pSrcDev, SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
+void Window::DrawOutDevDirectProcess( const OutputDevice& rSrcDev, SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
 {
-    mpGraphics->CopyBits( rPosAry, pSrcGraphics, this, pSrcDev );
+    mpGraphics->CopyBits( rPosAry, pSrcGraphics, *this, &rSrcDev );
 }
 
 SalGraphics* Window::ImplGetFrameGraphics() const
@@ -1505,7 +1505,7 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
         OutputDevice *pOutDev = GetOutDev();
         if( pOutDev->HasMirroredGraphics() )
         {
-            aPtDev.setX( mpGraphics->mirror2( aPtDev.X(), this ) );
+            aPtDev.setX( mpGraphics->mirror2( aPtDev.X(), *this ) );
 
             // #106948# always mirror our pos if our parent is not mirroring, even
             // if we are also not mirroring
@@ -1671,7 +1671,7 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
                                 pGraphics->CopyArea( mnOutOffX, mnOutOffY,
                                                      nOldOutOffX, nOldOutOffY,
                                                      nOldOutWidth, nOldOutHeight,
-                                                     this );
+                                                     *this );
                             }
                             else
                                 bInvalidate = true;

@@ -1759,7 +1759,7 @@ void Window::ImplScroll( const tools::Rectangle& rRect,
             pGraphics->CopyArea( rRect.Left()+nHorzScroll, rRect.Top()+nVertScroll,
                                  rRect.Left(), rRect.Top(),
                                  rRect.GetWidth(), rRect.GetHeight(),
-                                 this );
+                                 *this );
         }
 #endif
         if ( mpWindowImpl->mpWinData )
