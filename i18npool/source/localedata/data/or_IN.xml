@@ -360,13 +360,6 @@
     <Transliteration unoid="IGNORE_CASE"/>
   </LC_TRANSLITERATION>
   <LC_MISC>
-    <BreakIteratorRules>
-      <EditMode/>
-      <DictionaryMode/>
-      <WordCountMode/>
-      <CharacterMode>char_in</CharacterMode>
-      <LineMode/>
-    </BreakIteratorRules>
     <ReservedWords>
       <trueWord>ସତ</trueWord>
       <falseWord>ମିଛ</falseWord>
