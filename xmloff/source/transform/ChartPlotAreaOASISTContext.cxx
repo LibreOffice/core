@@ -22,6 +22,7 @@
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlimp.hxx>
 #include "DeepTContext.hxx"
 #include "ActionMapTypesOASIS.hxx"
 #include "MutableAttrList.hxx"
@@ -38,17 +39,15 @@ class XMLAxisOASISContext : public XMLPersElemContentTContext
 {
 public:
     XMLAxisOASISContext( XMLTransformerBase& rTransformer,
-                         const OUString& rQName,
+                         sal_Int32 nElement,
                          ::rtl::Reference< XMLPersAttrListTContext > & rOutCategoriesContext );
 
-    virtual rtl::Reference<XMLTransformerContext> CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const OUString& rQName,
-        const Reference< xml::sax::XAttributeList >& xAttrList ) override;
+    virtual rtl::Reference<XMLTransformerContext> createFastChildContext( sal_Int32 nElement,
+                                   const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void StartElement( const Reference< xml::sax::XAttributeList >& rAttrList ) override;
-    virtual void EndElement() override;
+    virtual void startFastElement(sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
+    virtual void endFastElement(sal_Int32 Element) override;
 
 private:
     ::rtl::Reference< XMLPersAttrListTContext > &   m_rCategoriesContext;
@@ -59,53 +58,44 @@ private:
 
 XMLAxisOASISContext::XMLAxisOASISContext(
     XMLTransformerBase& rTransformer,
-    const OUString& rQName,
+    sal_Int32 nElement,
     ::rtl::Reference< XMLPersAttrListTContext > & rOutCategoriesContext ) :
-        XMLPersElemContentTContext( rTransformer, rQName ),
+        XMLPersElemContentTContext( rTransformer, nElement ),
         m_rCategoriesContext( rOutCategoriesContext ),
         m_bHasCategories( false )
 {}
 
-rtl::Reference<XMLTransformerContext> XMLAxisOASISContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const OUString& rQName,
-    const Reference< xml::sax::XAttributeList >& xAttrList )
+rtl::Reference<XMLTransformerContext> XMLAxisOASISContext::createFastChildContext(
+    sal_Int32 nElement,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     rtl::Reference<XMLTransformerContext> pContext;
 
-    if( XML_NAMESPACE_CHART == nPrefix &&
-        IsXMLToken( rLocalName, XML_CATEGORIES ) )
+    if( nElement == XML_ELEMENT(CHART, XML_CATEGORIES) )
     {
         // store categories element at parent
-        m_rCategoriesContext.set( new XMLPersAttrListTContext( GetTransformer(), rQName ));
+        m_rCategoriesContext.set( new XMLPersAttrListTContext( GetTransformer(), nElement ));
         m_bHasCategories = true;
         pContext = m_rCategoriesContext.get();
     }
     else
     {
-        pContext =  XMLPersElemContentTContext::CreateChildContext(
-            nPrefix, rLocalName, rQName, xAttrList );
+        pContext =  XMLPersElemContentTContext::createFastChildContext(
+            nElement, xAttrList );
     }
 
     return pContext;
 }
 
-void XMLAxisOASISContext::StartElement(
-    const Reference< xml::sax::XAttributeList >& rAttrList )
+void XMLAxisOASISContext::startFastElement(sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
-    Reference< xml::sax::XAttributeList > xAttrList( rAttrList );
+    Reference< xml::sax::XFastAttributeList > xAttrList( rAttrList );
     XMLMutableAttributeList *pMutableAttrList = nullptr;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
-
-        if( nPrefix == XML_NAMESPACE_CHART &&
-            IsXMLToken( aLocalName, XML_DIMENSION ) )
+        if( xAttrList->getTokenByIndex(i) == XML_ELEMENT(CHART, XML_DIMENSION) )
         {
             if( !pMutableAttrList )
             {
@@ -113,7 +103,7 @@ void XMLAxisOASISContext::StartElement(
                 xAttrList = pMutableAttrList;
             }
 
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            OUString rAttrValue = xAttrList->getValueByIndex(i);
             XMLTokenEnum eToken = XML_TOKEN_INVALID;
             if( IsXMLToken( rAttrValue, XML_X ))
             {
@@ -137,20 +127,16 @@ void XMLAxisOASISContext::StartElement(
 
             if( eToken != XML_TOKEN_INVALID )
             {
-                OUString aNewAttrQName(
-                    GetTransformer().GetNamespaceMap().GetQNameByKey(
-                        XML_NAMESPACE_CHART, GetXMLToken( XML_CLASS )));
-                pMutableAttrList->RenameAttributeByIndex( i, aNewAttrQName );
-
+                pMutableAttrList->RenameAttributeByIndex( i, XML_ELEMENT(CHART, XML_CLASS)  );
                 pMutableAttrList->SetValueByIndex( i, GetXMLToken( eToken ));
             }
         }
     }
 
-    XMLPersElemContentTContext::StartElement( xAttrList );
+    XMLPersElemContentTContext::startFastElement( nElement, xAttrList );
 }
 
-void XMLAxisOASISContext::EndElement()
+void XMLAxisOASISContext::endFastElement(sal_Int32)
 {
     // if we have categories, change the "class" attribute
     if( m_bHasCategories &&
@@ -159,23 +145,21 @@ void XMLAxisOASISContext::EndElement()
         OSL_ENSURE( GetAttrList().is(), "Invalid attribute list" );
         XMLMutableAttributeList * pMutableAttrList =
             new XMLMutableAttributeList( GetAttrList());
-        OUString aAttrQName( GetTransformer().GetNamespaceMap().GetQNameByKey(
-                                 XML_NAMESPACE_CHART, GetXMLToken( XML_CLASS )));
-        sal_Int16 nIndex = pMutableAttrList->GetIndexByName( aAttrQName );
-        if( nIndex != -1 )
+        if( pMutableAttrList->hasAttribute(XML_ELEMENT(CHART, XML_CLASS)) )
         {
-            OSL_ENSURE( IsXMLToken( pMutableAttrList->getValueByIndex( nIndex ),
+            OUString sValue = pMutableAttrList->getValue(XML_ELEMENT(CHART, XML_CLASS));
+            OSL_ENSURE( IsXMLToken( sValue,
                                     XML_DOMAIN ), "Axis Dimension: invalid former value" );
-            pMutableAttrList->SetValueByIndex( nIndex, GetXMLToken( XML_CATEGORY ));
-            OSL_ENSURE( IsXMLToken( pMutableAttrList->getValueByIndex( nIndex ),
+            pMutableAttrList->SetValueByToken( XML_ELEMENT(CHART, XML_CLASS), GetXMLToken( XML_CATEGORY ) );
+            OSL_ENSURE( IsXMLToken( pMutableAttrList->getValue( XML_ELEMENT(CHART, XML_CLASS) ),
                                     XML_CATEGORY ), "Axis Dimension: invalid new value" );
         }
 
-        GetTransformer().GetDocHandler()->startElement(
+        GetTransformer().GetDocHandler()->startFastElement(
             GetExportQName(),
-            Reference< xml::sax::XAttributeList >( pMutableAttrList ));
+            Reference< xml::sax::XFastAttributeList >( pMutableAttrList ));
         ExportContent();
-        GetTransformer().GetDocHandler()->endElement( GetExportQName());
+        GetTransformer().GetDocHandler()->endFastElement( GetExportQName());
     }
     else
         Export();
@@ -183,7 +167,7 @@ void XMLAxisOASISContext::EndElement()
 
 
 XMLChartPlotAreaOASISTContext::XMLChartPlotAreaOASISTContext(
-    XMLTransformerBase & rTransformer, const OUString & rQName ) :
+    XMLTransformerBase & rTransformer, sal_Int32 rQName ) :
         XMLProcAttrTransformerContext( rTransformer, rQName, OASIS_SHAPE_ACTIONS )
 {
 }
@@ -191,35 +175,32 @@ XMLChartPlotAreaOASISTContext::XMLChartPlotAreaOASISTContext(
 XMLChartPlotAreaOASISTContext::~XMLChartPlotAreaOASISTContext()
 {}
 
-rtl::Reference<XMLTransformerContext> XMLChartPlotAreaOASISTContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const OUString& rQName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+rtl::Reference<XMLTransformerContext> XMLChartPlotAreaOASISTContext::createFastChildContext(
+    sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     rtl::Reference<XMLTransformerContext> pContext;
 
-    if( XML_NAMESPACE_CHART == nPrefix &&
-        IsXMLToken( rLocalName, XML_AXIS ) )
+    if( nElement == XML_ELEMENT(CHART, XML_AXIS) )
     {
-        pContext.set(new XMLAxisOASISContext( GetTransformer(), rQName, m_rCategoriesContext ));
+        pContext.set(new XMLAxisOASISContext( GetTransformer(), nElement, m_rCategoriesContext ));
     }
     else
     {
         // export (and forget) categories if found in an axis-element
         // otherwise export regularly
         ExportCategories();
-        pContext =  XMLProcAttrTransformerContext::CreateChildContext(
-                nPrefix, rLocalName, rQName, xAttrList );
+        pContext =  XMLProcAttrTransformerContext::createFastChildContext(
+                nElement, xAttrList );
     }
 
     return pContext;
 }
 
-void XMLChartPlotAreaOASISTContext::EndElement()
+void XMLChartPlotAreaOASISTContext::endFastElement(sal_Int32 nElement)
 {
     ExportCategories();
-    XMLProcAttrTransformerContext::EndElement();
+    XMLProcAttrTransformerContext::endFastElement(nElement);
 }
 
 void XMLChartPlotAreaOASISTContext::ExportCategories()

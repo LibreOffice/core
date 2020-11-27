@@ -71,10 +71,9 @@ bool lcl_ConvertAttr( OUString & rOutAttribute, sal_Int32 nParam )
 }
 } // anonymous namespace
 
-XMLTransformerContext *XMLTransformerBase::CreateContext( sal_uInt16 nPrefix,
-    const OUString& rLocalName, const OUString& rQName )
+XMLTransformerContext *XMLTransformerBase::CreateContext( sal_Int32 nElement )
 {
-    XMLTransformerActions::key_type aKey( nPrefix, rLocalName );
+    XMLTransformerActions::key_type aKey( nElement );
     XMLTransformerActions::const_iterator aIter =
         GetElemActions().find( aKey );
 
@@ -85,7 +84,7 @@ XMLTransformerContext *XMLTransformerBase::CreateContext( sal_uInt16 nPrefix,
         {
             XMLTransformerContext *pContext =
                 CreateUserDefinedContext( (*aIter).second,
-                                    rQName );
+                                    nElement );
             OSL_ENSURE( pContext && !pContext->IsPersistent(),
                         "unknown or not persistent action" );
             return pContext;
@@ -94,68 +93,58 @@ XMLTransformerContext *XMLTransformerBase::CreateContext( sal_uInt16 nPrefix,
         switch( nActionType )
         {
         case XML_ETACTION_COPY_CONTENT:
-            return new XMLIgnoreTransformerContext( *this, rQName, false,
+            return new XMLIgnoreTransformerContext( *this, nElement, false,
                                                 false );
         case XML_ETACTION_COPY:
-            return new XMLTransformerContext( *this, rQName );
+            return new XMLTransformerContext( *this, nElement );
         case XML_ETACTION_RENAME_ELEM:
-            return new XMLRenameElemTransformerContext( *this, rQName,
-                    (*aIter).second.GetQNamePrefixFromParam1(),
-                    (*aIter).second.GetQNameTokenFromParam1() );
+            return new XMLRenameElemTransformerContext( *this, nElement,
+                    (*aIter).second.GetTokenFromParam1() );
         case XML_ETACTION_RENAME_ELEM_ADD_ATTR:
-            return new XMLRenameElemTransformerContext( *this, rQName,
-                    (*aIter).second.GetQNamePrefixFromParam1(),
-                    (*aIter).second.GetQNameTokenFromParam1(),
-                    (*aIter).second.GetQNamePrefixFromParam2(),
-                    (*aIter).second.GetQNameTokenFromParam2(),
+            return new XMLRenameElemTransformerContext( *this, nElement,
+                    (*aIter).second.GetTokenFromParam1(),
+                    (*aIter).second.GetTokenFromParam2(),
                        static_cast< XMLTokenEnum >( (*aIter).second.m_nParam3 ) );
         case XML_ETACTION_RENAME_ELEM_PROC_ATTRS:
-            return new XMLProcAttrTransformerContext( *this, rQName,
-                    (*aIter).second.GetQNamePrefixFromParam1(),
-                    (*aIter).second.GetQNameTokenFromParam1(),
+            return new XMLProcAttrTransformerContext( *this, nElement,
+                    (*aIter).second.GetTokenFromParam1(),
                        static_cast< sal_uInt16 >( (*aIter).second.m_nParam2 ) );
         case XML_ETACTION_RENAME_ELEM_ADD_PROC_ATTR:
-            return new XMLProcAddAttrTransformerContext( *this, rQName,
-                    (*aIter).second.GetQNamePrefixFromParam1(),
-                    (*aIter).second.GetQNameTokenFromParam1(),
+            return new XMLProcAddAttrTransformerContext( *this, nElement,
+                    (*aIter).second.GetTokenFromParam1(),
                        static_cast< sal_uInt16 >(
                         (*aIter).second.m_nParam3  >> 16 ),
-                    (*aIter).second.GetQNamePrefixFromParam2(),
-                    (*aIter).second.GetQNameTokenFromParam2(),
+                    (*aIter).second.GetTokenFromParam2(),
                        static_cast< XMLTokenEnum >(
                         (*aIter).second.m_nParam3 & 0xffff ) );
         case XML_ETACTION_RENAME_ELEM_PROC_ATTRS_COND:
             {
                 const XMLTransformerContext *pCurrent = GetCurrentContext();
-                if( pCurrent->HasQName(
-                            (*aIter).second.GetQNamePrefixFromParam3(),
-                            (*aIter).second.GetQNameTokenFromParam3() ) )
-                    return new XMLProcAttrTransformerContext( *this, rQName,
-                            (*aIter).second.GetQNamePrefixFromParam1(),
-                            (*aIter).second.GetQNameTokenFromParam1(),
+                if( pCurrent->HasQName( (*aIter).second.GetTokenFromParam3() ) )
+                    return new XMLProcAttrTransformerContext( *this, nElement,
+                            (*aIter).second.GetTokenFromParam1(),
                             static_cast< sal_uInt16 >( (*aIter).second.m_nParam2 ) );
                 else
-                    return new XMLProcAttrTransformerContext( *this, rQName,
+                    return new XMLProcAttrTransformerContext( *this, nElement,
                             static_cast< sal_uInt16 >( (*aIter).second.m_nParam2 ) );
             }
         case XML_ETACTION_PROC_ATTRS:
-            return new XMLProcAttrTransformerContext( *this, rQName,
+            return new XMLProcAttrTransformerContext( *this, nElement,
                        static_cast< sal_uInt16 >( (*aIter).second.m_nParam1 ) );
         case XML_ETACTION_PROC_ATTRS_COND:
             {
                 const XMLTransformerContext *pCurrent = GetCurrentContext();
                 if( pCurrent->HasQName(
-                            (*aIter).second.GetQNamePrefixFromParam1(),
-                            (*aIter).second.GetQNameTokenFromParam1() ) )
-                    return new XMLProcAttrTransformerContext( *this, rQName,
+                            (*aIter).second.GetTokenFromParam1() ) )
+                    return new XMLProcAttrTransformerContext( *this, nElement,
                             static_cast< sal_uInt16 >( (*aIter).second.m_nParam2 ) );
             }
             break;
         case XML_ETACTION_MOVE_ATTRS_TO_ELEMS:
-            return new XMLCreateElemTransformerContext( *this, rQName,
+            return new XMLCreateElemTransformerContext( *this, nElement,
                        static_cast< sal_uInt16 >( (*aIter).second.m_nParam1 ) );
         case XML_ETACTION_MOVE_ELEMS_TO_ATTRS:
-            return new XMLMergeElemTransformerContext( *this, rQName,
+            return new XMLMergeElemTransformerContext( *this, nElement,
                        static_cast< sal_uInt16 >( (*aIter).second.m_nParam1 ) );
         default:
             OSL_ENSURE( false, "unknown action" );
@@ -164,7 +153,7 @@ XMLTransformerContext *XMLTransformerBase::CreateContext( sal_uInt16 nPrefix,
     }
 
     // default is copying
-    return new XMLTransformerContext( *this, rQName );
+    return new XMLTransformerContext( *this, nElement );
 }
 
 XMLTransformerActions *XMLTransformerBase::GetUserDefinedActions( sal_uInt16 )
@@ -202,82 +191,80 @@ void SAL_CALL XMLTransformerBase::endDocument()
     m_xHandler->endDocument();
 }
 
-void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
-                                         const Reference< XAttributeList >& rAttrList )
+void SAL_CALL XMLTransformerBase::startFastElement( sal_Int32 rName,
+                                         const Reference< XFastAttributeList >& rAttrList )
 {
     std::unique_ptr<SvXMLNamespaceMap> pRewindMap;
 
     // Process namespace attributes. This must happen before creating the
     // context, because namespace declaration apply to the element name itself.
-    XMLMutableAttributeList *pMutableAttrList = nullptr;
-    Reference< XAttributeList > xAttrList( rAttrList );
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
-    {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        if( ( rAttrName.getLength() >= 5 ) &&
-            ( rAttrName.startsWith( GetXMLToken(XML_XMLNS) ) ) &&
-            ( rAttrName.getLength() == 5 || ':' == rAttrName[5] ) )
-        {
-            if( !pRewindMap )
-            {
-                pRewindMap = std::move(m_pNamespaceMap);
-                m_pNamespaceMap.reset( new SvXMLNamespaceMap( *pRewindMap ) );
-            }
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+    // XMLMutableAttributeList *pMutableAttrList = nullptr;
+    Reference< XFastAttributeList > xAttrList( rAttrList );
+    // sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    // for( sal_Int16 i=0; i < nAttrCount; i++ )
+    // {
+    //     sal_Int32 rAttrName = xAttrList->getTokenByIndex( i );
+    //     if( ( rAttrName.getLength() >= 5 ) &&
+    //         ( rAttrName.startsWith( GetXMLToken(XML_XMLNS) ) ) &&
+    //         ( rAttrName.getLength() == 5 || ':' == rAttrName[5] ) )
+    //     {
+    //         if( !pRewindMap )
+    //         {
+    //             pRewindMap = std::move(m_pNamespaceMap);
+    //             m_pNamespaceMap.reset( new SvXMLNamespaceMap( *pRewindMap ) );
+    //         }
+    //         const OUString& rAttrValue = xAttrList->getValueByIndex( i );
 
-            OUString aPrefix( ( rAttrName.getLength() == 5 )
-                                 ? OUString()
-                                 : rAttrName.copy( 6 ) );
-            // Add namespace, but only if it is known.
-            sal_uInt16 nKey = m_pNamespaceMap->AddIfKnown( aPrefix, rAttrValue );
-            // If namespace is unknown, try to match a name with similar
-            // TC Id and version
-            if( XML_NAMESPACE_UNKNOWN == nKey  )
-            {
-                OUString aTestName( rAttrValue );
-                if( SvXMLNamespaceMap::NormalizeOasisURN( aTestName ) )
-                    nKey = m_pNamespaceMap->AddIfKnown( aPrefix, aTestName );
-            }
-            // If that namespace is not known, too, add it as unknown
-            if( XML_NAMESPACE_UNKNOWN == nKey  )
-                nKey = m_pNamespaceMap->Add( aPrefix, rAttrValue );
+    //         OUString aPrefix( ( rAttrName.getLength() == 5 )
+    //                              ? OUString()
+    //                              : rAttrName.copy( 6 ) );
+    //         // Add namespace, but only if it is known.
+    //         sal_uInt16 nKey = m_pNamespaceMap->AddIfKnown( aPrefix, rAttrValue );
+    //         // If namespace is unknown, try to match a name with similar
+    //         // TC Id and version
+    //         if( XML_NAMESPACE_UNKNOWN == nKey  )
+    //         {
+    //             OUString aTestName( rAttrValue );
+    //             if( SvXMLNamespaceMap::NormalizeOasisURN( aTestName ) )
+    //                 nKey = m_pNamespaceMap->AddIfKnown( aPrefix, aTestName );
+    //         }
+    //         // If that namespace is not known, too, add it as unknown
+    //         if( XML_NAMESPACE_UNKNOWN == nKey  )
+    //             nKey = m_pNamespaceMap->Add( aPrefix, rAttrValue );
 
-            const OUString& rRepName = m_vReplaceNamespaceMap.GetNameByKey( nKey );
-            if( !rRepName.isEmpty() )
-            {
-                if( !pMutableAttrList )
-                {
-                    pMutableAttrList = new XMLMutableAttributeList( xAttrList );
-                    xAttrList = pMutableAttrList;
-                }
+    //         const OUString& rRepName = m_vReplaceNamespaceMap.GetNameByKey( nKey );
+    //         if( !rRepName.isEmpty() )
+    //         {
+    //             if( !pMutableAttrList )
+    //             {
+    //                 pMutableAttrList = new XMLMutableAttributeList( xAttrList );
+    //                 xAttrList = pMutableAttrList;
+    //             }
 
-                pMutableAttrList->SetValueByIndex( i, rRepName );
-            }
-        }
-    }
+    //             pMutableAttrList->SetValueByIndex( i, rRepName );
+    //         }
+    //     }
+    // }
 
     // Get element's namespace and local name.
-    OUString aLocalName;
-    sal_uInt16 nPrefix =
-        m_pNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
+    // OUString aLocalName;
+    // sal_uInt16 nPrefix =
+    //     m_pNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
 
-    // If there are contexts already, call a CreateChildContext at the topmost
+    // If there are contexts already, call a createFastChildContext at the topmost
     // context. Otherwise, create a default context.
     ::rtl::Reference < XMLTransformerContext > xContext;
     if( !m_vContexts.empty() )
     {
-        xContext = m_vContexts.back()->CreateChildContext( nPrefix,
-                                                          aLocalName,
-                                                          rName,
+        xContext = m_vContexts.back()->createFastChildContext( rName,
                                                           xAttrList );
     }
     else
     {
-        xContext = CreateContext( nPrefix, aLocalName, rName );
+        xContext = CreateContext( rName );
     }
 
-    OSL_ENSURE( xContext.is(), "XMLTransformerBase::startElement: missing context" );
+    OSL_ENSURE( xContext.is(), "XMLTransformerBase::startFastElement: missing context" );
     if( !xContext.is() )
         xContext = new XMLTransformerContext( *this, rName );
 
@@ -288,15 +275,11 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
     // Push context on stack.
     m_vContexts.push_back( xContext );
 
-    // Call a startElement at the new context.
-    xContext->StartElement( xAttrList );
+    // Call a startFastElement at the new context.
+    xContext->startFastElement( rName, xAttrList );
 }
 
-void SAL_CALL XMLTransformerBase::endElement( const OUString&
-#if OSL_DEBUG_LEVEL > 0
-rName
-#endif
-)
+void SAL_CALL XMLTransformerBase::endFastElement( sal_Int32 rName )
 {
     if( m_vContexts.empty() )
         return;
@@ -306,11 +289,11 @@ rName
 
 #if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE( xContext->GetQName() == rName,
-            "XMLTransformerBase::endElement: popped context has wrong lname" );
+            "XMLTransformerBase::endFastElement: popped context has wrong lname" );
 #endif
 
     // Call a EndElement at the current context.
-    xContext->EndElement();
+    xContext->endFastElement(rName);
 
     // and remove it from the stack.
     m_vContexts.pop_back();
@@ -328,17 +311,38 @@ rName
     }
 }
 
+void SAL_CALL XMLTransformerBase::startUnknownElement( const OUString & rNamespace, const OUString & rName,
+                                         const Reference< XFastAttributeList >& xAttrList )
+{
+    if( !m_vContexts.empty() )
+        m_vContexts.back()->GetTransformer().GetDocHandler()->startUnknownElement( rNamespace, rName, xAttrList );
+}
+
+void SAL_CALL XMLTransformerBase::endUnknownElement( const OUString & rNamespace, const OUString & rName )
+{
+    if( !m_vContexts.empty() )
+        m_vContexts.back()->GetTransformer().GetDocHandler()->endUnknownElement( rNamespace, rName );
+}
+
+css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL XMLTransformerBase::createFastChildContext( sal_Int32 /*nElement*/,
+                                         const Reference< XFastAttributeList >& /*rAttrList*/ )
+{
+    return this;
+}
+
+css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL XMLTransformerBase::createUnknownChildContext(
+    const OUString & /*Namespace*/, const OUString & /*Name*/,
+    const Reference< XFastAttributeList >& /*rAttrList*/ )
+{
+    return this;
+}
+
 void SAL_CALL XMLTransformerBase::characters( const OUString& rChars )
 {
     if( !m_vContexts.empty() )
     {
         m_vContexts.back()->Characters( rChars );
     }
-}
-
-void SAL_CALL XMLTransformerBase::ignorableWhitespace( const OUString& rWhitespaces )
-{
-    m_xHandler->ignorableWhitespace( rWhitespaces );
 }
 
 void SAL_CALL XMLTransformerBase::processingInstruction( const OUString& rTarget,
@@ -348,27 +352,6 @@ void SAL_CALL XMLTransformerBase::processingInstruction( const OUString& rTarget
 }
 
 void SAL_CALL XMLTransformerBase::setDocumentLocator( const Reference< XLocator >& )
-{
-}
-
-// XExtendedDocumentHandler
-void SAL_CALL XMLTransformerBase::startCDATA()
-{
-}
-
-void SAL_CALL XMLTransformerBase::endCDATA()
-{
-}
-
-void SAL_CALL XMLTransformerBase::comment( const OUString& /*rComment*/ )
-{
-}
-
-void SAL_CALL XMLTransformerBase::allowLineBreak()
-{
-}
-
-void SAL_CALL XMLTransformerBase::unknown( const OUString& /*rString*/ )
 {
 }
 
@@ -388,11 +371,12 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
         {
             SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport*>( xFastHandler.get() );
             assert(pFastHandler);
-            m_xHandler.set( new SvXMLLegacyToFastDocHandler( pFastHandler ) );
+            m_xHandler.set( xFastHandler );
         }
         // document handler
         else if( cppu::UnoType<XDocumentHandler>::get().isAssignableFrom( rArgument.getValueType() ) )
         {
+            assert(false && "TODO NOEL");
             m_xHandler.set( rArgument, UNO_QUERY );
         }
         // property set to transport data across
@@ -465,7 +449,7 @@ static sal_Int16 lcl_getUnit( const OUString& rValue )
 }
 
 XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
-        Reference< XAttributeList >& rAttrList, sal_uInt16 nActionMap,
+        Reference< XFastAttributeList >& rAttrList, sal_uInt16 nActionMap,
            bool bClone  )
 {
     XMLMutableAttributeList *pMutableAttrList = nullptr;
@@ -476,13 +460,9 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
         sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
         for( sal_Int16 i=0; i < nAttrCount; ++i )
         {
-            const OUString& rAttrName = rAttrList->getNameByIndex( i );
-            const OUString& rAttrValue = rAttrList->getValueByIndex( i );
-            OUString aLocalName;
-            sal_uInt16 nPrefix = GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                           &aLocalName );
-
-            XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
+            sal_Int32 rAttrName = rAttrList->getTokenByIndex( i );
+            OUString rAttrValue = rAttrList->getValueByIndex( i );
+            XMLTransformerActions::key_type aKey( rAttrName );
             XMLTransformerActions::const_iterator aIter =
                     pActions->find( aKey );
             if( aIter != pActions->end() )
@@ -591,11 +571,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         if( EncodeStyleName(aAttrValue) )
                         {
                             pMutableAttrList->SetValueByIndex( i, aAttrValue );
-                            OUString aNewAttrQName(
-                                GetNamespaceMap().GetQNameByKey(
-                                    nPrefix,
-                                ::xmloff::token::GetXMLToken(
-                                XML_DISPLAY_NAME ) ) );
+                            sal_Int32 aNewAttrQName = (rAttrName & NMSP_MASK) | XML_DISPLAY_NAME;
                             pMutableAttrList->AddAttribute( aNewAttrQName,
                                                             rAttrValue );
                         }
@@ -640,9 +616,9 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         OUString aAttrValue( rAttrValue );
                         sal_uInt16 nValPrefix =
                             static_cast<sal_uInt16>((*aIter).second.m_nParam1);
-                        if( IsXMLToken( GetClass(), XML_SPREADSHEET  ) )
+                        if( GetClass() == XML_SPREADSHEET )
                             nValPrefix = XML_NAMESPACE_OOOC;
-                        else if( IsXMLToken( GetClass(), XML_TEXT  ) )
+                        else if( GetClass() == XML_TEXT )
                             nValPrefix = XML_NAMESPACE_OOOW;
                         AddNamespacePrefix( aAttrValue, nValPrefix );
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
@@ -820,13 +796,9 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     {
                         // determine, if it's the transparency of a document style
                         XMLTransformerContext* pFirstContext = m_vContexts[0].get();
-                        OUString aFirstContextLocalName;
-                        /* sal_uInt16 nFirstContextPrefix = */
-                        GetNamespaceMap().GetKeyByAttrName( pFirstContext->GetQName(),
-                                                                &aFirstContextLocalName );
                         bool bIsDocumentStyle(
-                            ::xmloff::token::IsXMLToken( aFirstContextLocalName,
-                                                         XML_DOCUMENT_STYLES ) );
+                            (pFirstContext->GetQName() & TOKEN_MASK) ==
+                                                         XML_DOCUMENT_STYLES );
                         // no conversion of transparency value for document
                         // styles, because former OpenOffice.org version writes
                         // writes always a transparency value of 100% and doesn't
@@ -854,11 +826,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
 
                 if( bRename )
                 {
-                    OUString aNewAttrQName(
-                        GetNamespaceMap().GetQNameByKey(
-                            (*aIter).second.GetQNamePrefixFromParam1(),
-                            ::xmloff::token::GetXMLToken(
-                                (*aIter).second.GetQNameTokenFromParam1()) ) );
+                    sal_Int32 aNewAttrQName = (*aIter).second.GetTokenFromParam1();
                     pMutableAttrList->RenameAttributeByIndex( i,
                                                               aNewAttrQName );
                 }

@@ -28,7 +28,7 @@ class XMLEventOASISTransformerContext : public XMLRenameElemTransformerContext
 {
 public:
     XMLEventOASISTransformerContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName );
+                           sal_Int32 rQName );
     virtual ~XMLEventOASISTransformerContext() override;
 
     static XMLTransformerOASISEventMap_Impl *CreateFormEventMap();
@@ -39,7 +39,8 @@ public:
                              XMLTransformerOASISEventMap_Impl& rMap,
                              XMLTransformerOASISEventMap_Impl* pMap2    );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void startFastElement(sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_EVENTOASISTCONTEXT_HXX

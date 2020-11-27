@@ -250,7 +250,7 @@ OUString FastAttributeList::getValue( ::sal_Int32 Token )
     throw SAXException("FastAttributeList::getValue: unknown token " + OUString::number(Token), nullptr, Any());
 }
 
-OUString FastAttributeList::getValueByIndex( ::sal_Int32 nTokenIndex ) const
+OUString FastAttributeList::getValueByIndex( sal_Int16 nTokenIndex )
 {
     return OUString( getFastAttributeValue(nTokenIndex), AttributeValueLength(nTokenIndex), RTL_TEXTENCODING_UTF8 );
 }

@@ -24,7 +24,9 @@
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"
 #include "TransformerBase.hxx"
+#include "NameKey.hxx"
 #include <osl/diagnose.h>
+#include <xmloff/xmlimp.hxx>
 
 #include <unordered_map>
 
@@ -79,11 +81,10 @@ XMLTransformerOOoEventMap_Impl::XMLTransformerOOoEventMap_Impl(
 
 XMLEventOOoTransformerContext::XMLEventOOoTransformerContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName,
+        sal_Int32 rQName,
         bool bPersistent ) :
     XMLPersElemContentTContext( rImp, rQName,
-        rImp.GetNamespaceMap().GetKeyByAttrValueQName(rQName, nullptr),
-        XML_EVENT_LISTENER),
+        (rQName & NMSP_MASK) | XML_EVENT_LISTENER),
     m_bPersistent( bPersistent )
 {
 }
@@ -124,8 +125,8 @@ sal_uInt16 XMLEventOOoTransformerContext::GetEventName(
     }
 }
 
-void XMLEventOOoTransformerContext::StartElement(
-    const Reference< XAttributeList >& rAttrList )
+void XMLEventOOoTransformerContext::startFastElement(sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( OOO_EVENT_ACTIONS );
@@ -133,17 +134,13 @@ void XMLEventOOoTransformerContext::StartElement(
 
     OUString aLocation, aMacroName;
     sal_Int16 nMacroName = -1;
-    Reference< XAttributeList > xAttrList( rAttrList );
+    Reference< XFastAttributeList > xAttrList( rAttrList );
     XMLMutableAttributeList *pMutableAttrList = nullptr;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                 &aLocalName );
-        XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
+        sal_Int32 rAttrName = xAttrList->getTokenByIndex( i );
+        XMLTransformerActions::key_type aKey( rAttrName );
         XMLTransformerActions::const_iterator aIter =
             pActions->find( aKey );
         if( aIter != pActions->end() )
@@ -154,7 +151,7 @@ void XMLEventOOoTransformerContext::StartElement(
                         new XMLMutableAttributeList( xAttrList );
                 xAttrList = pMutableAttrList;
             }
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            OUString rAttrValue = xAttrList->getValueByIndex( i );
             switch( (*aIter).second.m_nActionType )
             {
             case XML_ATACTION_HREF:
@@ -202,29 +199,27 @@ void XMLEventOOoTransformerContext::StartElement(
     }
 
     if( m_bPersistent )
-        XMLPersElemContentTContext::StartElement( xAttrList );
+        XMLPersElemContentTContext::startFastElement( nElement, xAttrList );
     else
-        GetTransformer().GetDocHandler()->startElement( GetExportQName(), xAttrList );
+        GetTransformer().GetDocHandler()->startFastElement( GetExportQName(), xAttrList );
 }
 
-void XMLEventOOoTransformerContext::EndElement()
+void XMLEventOOoTransformerContext::endFastElement(sal_Int32 nElement)
 {
     if( m_bPersistent )
-        XMLPersElemContentTContext::EndElement();
+        XMLPersElemContentTContext::endFastElement(nElement);
     else
-        GetTransformer().GetDocHandler()->endElement( GetExportQName() );
+        GetTransformer().GetDocHandler()->endFastElement( GetExportQName() );
 }
 
-rtl::Reference<XMLTransformerContext> XMLEventOOoTransformerContext::CreateChildContext(
-                            sal_uInt16 nPrefix,
-                            const OUString& rLocalName,
-                            const OUString& rQName,
-                            const Reference< XAttributeList >& xAttrList )
+rtl::Reference<XMLTransformerContext> XMLEventOOoTransformerContext::createFastChildContext(
+                            sal_Int32 nElement,
+                            const Reference< XFastAttributeList >& xAttrList )
 {
     if( m_bPersistent )
-        return XMLPersElemContentTContext::CreateChildContext(nPrefix, rLocalName, rQName, xAttrList);
+        return XMLPersElemContentTContext::createFastChildContext(nElement, xAttrList);
     else
-        return XMLTransformerContext::CreateChildContext(nPrefix, rLocalName, rQName, xAttrList);
+        return XMLTransformerContext::createFastChildContext(nElement, xAttrList);
 }
 
 bool XMLEventOOoTransformerContext::IsPersistent() const

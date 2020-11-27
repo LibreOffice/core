@@ -31,15 +31,14 @@ public:
     // A contexts constructor does anything that is required if an element
     // starts. Namespace processing has been done already.
     // Note that virtual methods cannot be used inside constructors. Use
-    // StartElement instead if this is required.
+    // startFastElement instead if this is required.
     XMLPersTextContentTContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName );
+                           sal_Int32 rQName );
 
     // attr list/text content persistence + renaming
     XMLPersTextContentTContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
-                              sal_uInt16 nPrefix,
-                              ::xmloff::token::XMLTokenEnum eToken );
+                           sal_Int32 rQName,
+                           sal_Int32 rQName2 );
 
     // A contexts destructor does anything that is required if an element
     // ends. By default, nothing is done.

@@ -24,22 +24,21 @@
 
 class XMLProcAddAttrTransformerContext : public XMLProcAttrTransformerContext
 {
-    OUString const m_aAttrQName;
-    OUString const m_aAttrValue;
+    sal_Int32 m_aAttrQName;
+    OUString m_aAttrValue;
 
 public:
     XMLProcAddAttrTransformerContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
-                              sal_uInt16 nPrefix,
-                              ::xmloff::token::XMLTokenEnum eToken,
+                           sal_Int32 rQName,
+                           sal_Int32 rQName2,
                               sal_uInt16 nActionMap,
-                              sal_uInt16 nAPrefix,
-                              ::xmloff::token::XMLTokenEnum eAToken,
+                           sal_Int32 rQName3,
                               ::xmloff::token::XMLTokenEnum eVToken );
 
     virtual ~XMLProcAddAttrTransformerContext() override;
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void startFastElement(sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
 };
 
 #endif  //  _XMLOFF_PROCADDATTRCONTEXT_HXX

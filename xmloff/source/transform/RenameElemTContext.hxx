@@ -26,27 +26,24 @@
 
 class XMLRenameElemTransformerContext : public XMLTransformerContext
 {
-    OUString const m_aElemQName;
-    OUString const m_aAttrQName;
+    sal_Int32 m_aElemQName;
+    sal_Int32 m_aAttrQName;
     OUString const m_aAttrValue;
 
 public:
     // The following constructor renames the element names "rQName"
     // to bPrefix/eToken
     XMLRenameElemTransformerContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
-                              sal_uInt16 nPrefix,
-                              ::xmloff::token::XMLTokenEnum eToken  );
+                            sal_Int32 rQName,
+                            sal_Int32 rQName2  );
 
     // The following constructor renames the element names "rQName"
     // to bPrefix/eToken and adds an attribute nAPrefix/eAToken that has
     // the value eVToken.
     XMLRenameElemTransformerContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
-                              sal_uInt16 nPrefix,
-                              ::xmloff::token::XMLTokenEnum eToken,
-                              sal_uInt16 nAPrefix,
-                              ::xmloff::token::XMLTokenEnum eAToken,
+                           sal_Int32 rQName,
+                           sal_Int32 rQName2,
+                           sal_Int32 rQName3,
                               ::xmloff::token::XMLTokenEnum eVToken );
 
     // A contexts destructor does anything that is required if an element
@@ -55,8 +52,9 @@ public:
     // EndElement instead if this is required.
     virtual ~XMLRenameElemTransformerContext() override;
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual void startFastElement(sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
+    virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 #endif  //  _XMLOFF_RENAMEELEMCONTEXT_HXX

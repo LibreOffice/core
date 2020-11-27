@@ -30,23 +30,17 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::xml::sax;
 
 void XMLPersAttrListTContext::AddAttribute(
-        sal_uInt16 nAPrefix,
-           ::xmloff::token::XMLTokenEnum eAToken,
+        sal_Int32 nAttributeToken,
            ::xmloff::token::XMLTokenEnum eVToken )
 {
     const OUString& aAttrValue( ::xmloff::token::GetXMLToken( eVToken ) );
-    AddAttribute( nAPrefix, eAToken, aAttrValue );
+    AddAttribute( nAttributeToken, aAttrValue );
 }
 
 void XMLPersAttrListTContext::AddAttribute(
-    sal_uInt16 nAPrefix,
-    ::xmloff::token::XMLTokenEnum eAToken,
+    sal_Int32 nAttributeToken,
     const OUString & rValue )
 {
-    OUString aAttrQName( GetTransformer().GetNamespaceMap().GetQNameByKey(
-                nAPrefix, ::xmloff::token::GetXMLToken( eAToken ) ) );
-    const OUString& aAttrValue( rValue );
-
     XMLMutableAttributeList *pMutableAttrList;
     if( m_xAttrList.is() )
     {
@@ -59,12 +53,12 @@ void XMLPersAttrListTContext::AddAttribute(
         m_xAttrList = pMutableAttrList;
     }
 
-    pMutableAttrList->AddAttribute( aAttrQName, aAttrValue );
+    pMutableAttrList->AddAttribute( nAttributeToken, rValue );
 }
 
 XMLPersAttrListTContext::XMLPersAttrListTContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName ) :
+        sal_Int32 rQName ) :
     XMLTransformerContext( rImp, rQName ),
     m_aElemQName( rQName ),
     m_nActionMap( INVALID_ACTIONS )
@@ -73,7 +67,7 @@ XMLPersAttrListTContext::XMLPersAttrListTContext(
 
 XMLPersAttrListTContext::XMLPersAttrListTContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName,
+        sal_Int32 rQName,
        sal_uInt16 nActionMap ) :
     XMLTransformerContext( rImp, rQName ),
     m_aElemQName( rQName ),
@@ -83,46 +77,40 @@ XMLPersAttrListTContext::XMLPersAttrListTContext(
 
 XMLPersAttrListTContext::XMLPersAttrListTContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName,
-        sal_uInt16 nPrefix,
-        ::xmloff::token::XMLTokenEnum eToken ) :
+        sal_Int32 rQName,
+        sal_Int32 rQName2 ) :
     XMLTransformerContext( rImp, rQName ),
-    m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( nPrefix,
-                            ::xmloff::token::GetXMLToken( eToken ) ) ),
+    m_aElemQName( rQName2 ),
     m_nActionMap( INVALID_ACTIONS )
 {
 }
 
 XMLPersAttrListTContext::XMLPersAttrListTContext(
         XMLTransformerBase& rImp,
-        const OUString& rQName,
-        sal_uInt16 nPrefix,
-        ::xmloff::token::XMLTokenEnum eToken,
+        sal_Int32 rQName,
+        sal_Int32 rQName2,
        sal_uInt16 nActionMap ) :
     XMLTransformerContext( rImp, rQName ),
-    m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( nPrefix,
-                            ::xmloff::token::GetXMLToken( eToken ) ) ),
+    m_aElemQName( rQName2 ),
     m_nActionMap( nActionMap )
 {
 }
 
-rtl::Reference<XMLTransformerContext> XMLPersAttrListTContext::CreateChildContext(
-        sal_uInt16 /*nPrefix*/,
-        const OUString& /*rLocalName*/,
-        const OUString& rQName,
-        const Reference< XAttributeList >& )
+rtl::Reference<XMLTransformerContext> XMLPersAttrListTContext::createFastChildContext(
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList >& )
 {
     // ignore all child elements
     return  new XMLIgnoreTransformerContext( GetTransformer(),
-                                             rQName, true, true );
+                                             nElement, true, true );
 }
 
-void XMLPersAttrListTContext::StartElement(
-    const Reference< XAttributeList >& rAttrList )
+void XMLPersAttrListTContext::startFastElement(sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
     XMLMutableAttributeList *pMutableAttrList = nullptr;
 
-    Reference< XAttributeList > xAttrList( rAttrList );
+    Reference< XFastAttributeList > xAttrList( rAttrList );
     if( m_nActionMap != INVALID_ACTIONS )
     {
         pMutableAttrList =
@@ -145,7 +133,7 @@ void XMLPersAttrListTContext::StartElement(
     }
 }
 
-void XMLPersAttrListTContext::EndElement()
+void XMLPersAttrListTContext::endFastElement(sal_Int32 )
 {
     // ignore for now
 }
@@ -161,9 +149,9 @@ bool XMLPersAttrListTContext::IsPersistent() const
 
 void XMLPersAttrListTContext::Export()
 {
-    GetTransformer().GetDocHandler()->startElement( m_aElemQName, m_xAttrList );
+    GetTransformer().GetDocHandler()->startFastElement( m_aElemQName, m_xAttrList );
     ExportContent();
-    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
+    GetTransformer().GetDocHandler()->endFastElement( m_aElemQName );
 }
 
 void XMLPersAttrListTContext::ExportContent()

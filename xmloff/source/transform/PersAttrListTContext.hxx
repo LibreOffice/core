@@ -27,56 +27,53 @@
 class XMLPersAttrListTContext : public XMLTransformerContext
 {
 
-    css::uno::Reference< css::xml::sax::XAttributeList > m_xAttrList;
-    OUString m_aElemQName;
+    css::uno::Reference< css::xml::sax::XFastAttributeList > m_xAttrList;
+    sal_Int32 m_aElemQName;
     sal_uInt16 const m_nActionMap;
 
 protected:
 
-    void SetExportQName( const OUString& r ) { m_aElemQName = r; }
+    void SetExportQName( sal_Int32 r ) { m_aElemQName = r; }
 
 public:
     // A contexts constructor does anything that is required if an element
     // starts. Namespace processing has been done already.
     // Note that virtual methods cannot be used inside constructors. Use
-    // StartElement instead if this is required.
+    // startFastElement instead if this is required.
     XMLPersAttrListTContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName );
+                            sal_Int32 nElement );
 
     // attr list persistence + attribute processing
     XMLPersAttrListTContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
-                              sal_uInt16 nActionMap );
+                            sal_Int32 nElement,
+                            sal_uInt16 nActionMap );
 
     // attr list persistence + renaming
     XMLPersAttrListTContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
-                              sal_uInt16 nPrefix,
-                              ::xmloff::token::XMLTokenEnum eToken );
+                           sal_Int32 rQName,
+                           sal_Int32 rQName2 );
 
     // attr list persistence + renaming + attribute processing
     XMLPersAttrListTContext( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
-                              sal_uInt16 nPrefix,
-                              ::xmloff::token::XMLTokenEnum eToken,
+                           sal_Int32 rQName,
+                           sal_Int32 rQName2,
                               sal_uInt16 nActionMap );
 
     // Create a children element context. By default, the import's
     // CreateContext method is called to create a new default context.
-    virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const OUString& rQName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual rtl::Reference<XMLTransformerContext> createFastChildContext( sal_Int32 nElement,
+                                   const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    // StartElement is called after a context has been constructed and
+    // startFastElement is called after a context has been constructed and
     // before an elements context is parsed. It may be used for actions that
     // require virtual methods. The default is to do nothing.
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void startFastElement(sal_Int32 nElement,
+                    const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
 
     // EndElement is called before a context will be destructed, but
     // after an elements context has been parsed. It may be used for actions
     // that require virtual methods. The default is to do nothing.
-    virtual void EndElement() override;
+    virtual void endFastElement(sal_Int32 Element) override;
 
     // This method is called for all characters that are contained in the
     // current element.
@@ -86,17 +83,15 @@ public:
     virtual void Export() override;
     virtual void ExportContent() override;
 
-    const OUString& GetExportQName() const { return m_aElemQName; }
+    sal_Int32 GetExportQName() const { return m_aElemQName; }
 
-    void AddAttribute( sal_uInt16 nAPrefix,
-        ::xmloff::token::XMLTokenEnum eAToken,
+    void AddAttribute( sal_Int32 nAttributeToken,
            ::xmloff::token::XMLTokenEnum eVToken );
 
-    void AddAttribute( sal_uInt16 nAPrefix,
-        ::xmloff::token::XMLTokenEnum eAToken,
+    void AddAttribute( sal_Int32 nAttributeToken,
         const OUString & rValue );
 
-    const css::uno::Reference< css::xml::sax::XAttributeList >&
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&
         GetAttrList() const { return m_xAttrList; }
 
 };
