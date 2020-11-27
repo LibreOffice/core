@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d07cc113_0a980efe",
+        "filename": "compilerplugins/clang/stringviewparam.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-27T09:01:32Z",
+      "side": 1,
+      "message": "declaration of arg1 can be moved past the first `if`",
+      "revId": "3ae12162243f4a6a49ab7705de72e82df38f840e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
