@@ -388,7 +388,7 @@ ScDocument::~ScDocument()
 
     pScriptTypeData.reset();
     maNonThreaded.xRecursionHelper.reset();
-    maThreadSpecific.xRecursionHelper.reset();
+    assert(!maThreadSpecific.xRecursionHelper);
 
     pPreviewFont.reset();
     SAL_WARN_IF( pAutoNameCache, "sc.core", "AutoNameCache still set in dtor" );
