@@ -34,12 +34,12 @@ using ::xmloff::token::XML_CHANGE_INFO;
 
 XMLChangeElementImportContext::XMLChangeElementImportContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     bool bAccContent,
-    XMLChangedRegionImportContext& rParent) :
-        SvXMLImportContext(rImport, nPrefix, rLocalName),
+    XMLChangedRegionImportContext& rParent,
+    OUString const & rType) :
+        SvXMLImportContext(rImport),
         bAcceptContent(bAccContent),
+        maType(rType),
         rChangedRegion(rParent)
 {
 }
@@ -55,7 +55,7 @@ SvXMLImportContextRef XMLChangeElementImportContext::CreateChildContext(
          IsXMLToken( rLocalName, XML_CHANGE_INFO) )
     {
         xContext = new XMLChangeInfoContext(GetImport(), nPrefix, rLocalName,
-                                            rChangedRegion, GetLocalName());
+                                            rChangedRegion, maType);
     }
     else
     {

@@ -23,6 +23,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 
+#include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/xmlimp.hxx>
@@ -89,30 +90,27 @@ void XMLChangedRegionImportContext::StartElement(
     }
 }
 
-SvXMLImportContextRef XMLChangedRegionImportContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & /*xAttrList*/)
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChangedRegionImportContext::createFastChildContext(
+    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     SvXMLImportContextRef xContext;
 
-    if (XML_NAMESPACE_TEXT == nPrefix)
+    // from the ODF 1.2 standard :
+    // The <text:changed-region> element has the following child elements:
+    // <text:deletion>, <text:format-change> and <text:insertion>.
+    if (nElement == XML_ELEMENT(TEXT, XML_INSERTION) ||
+        nElement == XML_ELEMENT(TEXT, XML_DELETION) ||
+        nElement == XML_ELEMENT(TEXT, XML_FORMAT_CHANGE) )
     {
-        // from the ODF 1.2 standard :
-        // The <text:changed-region> element has the following child elements:
-        // <text:deletion>, <text:format-change> and <text:insertion>.
-        if ( IsXMLToken( rLocalName, XML_INSERTION ) ||
-             IsXMLToken( rLocalName, XML_DELETION ) ||
-             IsXMLToken( rLocalName, XML_FORMAT_CHANGE ) )
-        {
-            // create XMLChangeElementImportContext for all kinds of changes
-            xContext = new XMLChangeElementImportContext(
-               GetImport(), nPrefix, rLocalName,
-               IsXMLToken( rLocalName, XML_DELETION ),
-               *this);
-        }
-        // else: it may be a text element, see below
+        // create XMLChangeElementImportContext for all kinds of changes
+        xContext = new XMLChangeElementImportContext(
+            GetImport(),
+            nElement == XML_ELEMENT(TEXT, XML_DELETION),
+            *this,
+            SvXMLImport::getNameFromToken(nElement));
     }
+    else
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
     if (!xContext)
     {
@@ -121,7 +119,7 @@ SvXMLImportContextRef XMLChangedRegionImportContext::CreateChildContext(
         // or default if text fail
     }
 
-    return xContext;
+    return xContext.get();
 }
 
 void XMLChangedRegionImportContext::endFastElement(sal_Int32 )

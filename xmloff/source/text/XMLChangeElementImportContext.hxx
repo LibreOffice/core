@@ -53,6 +53,8 @@ class XMLChangeElementImportContext : public SvXMLImportContext
      */
     bool bAcceptContent;
 
+    OUString maType;
+
     /// context of enclosing <text:changed-region> element
     XMLChangedRegionImportContext& rChangedRegion;
 
@@ -61,12 +63,11 @@ public:
 
     XMLChangeElementImportContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
         /// accept text content (paragraphs) in element as redline content?
         bool bAcceptContent,
         /// context of enclosing <text:changed-region> element
-        XMLChangedRegionImportContext& rParent);
+        XMLChangedRegionImportContext& rParent,
+        OUString const & rType);
 
     virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
