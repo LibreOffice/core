@@ -7185,6 +7185,7 @@ oox/inc/drawingml/clrschemecontext.hxx
 oox/inc/drawingml/colorchoicecontext.hxx
 oox/inc/drawingml/customshapegeometry.hxx
 oox/inc/drawingml/customshapeproperties.hxx
+oox/inc/drawingml/effectpropertiescontext.hxx
 oox/inc/drawingml/embeddedwavaudiofile.hxx
 oox/inc/drawingml/fillproperties.hxx
 oox/inc/drawingml/graphicproperties.hxx
@@ -7303,7 +7304,6 @@ oox/source/drawingml/drawingmltypes.cxx
 oox/source/drawingml/effectproperties.cxx
 oox/source/drawingml/effectproperties.hxx
 oox/source/drawingml/effectpropertiescontext.cxx
-oox/source/drawingml/effectpropertiescontext.hxx
 oox/source/drawingml/fillproperties.cxx
 oox/source/drawingml/graphicshapecontext.cxx
 oox/source/drawingml/guidcontext.cxx
