@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_CORE_TEXT_TXTCACHE_HXX
-#define INCLUDED_SW_SOURCE_CORE_TEXT_TXTCACHE_HXX
+
+#pragma once
 
 #include <swcache.hxx>
 #include "porlay.hxx"
@@ -58,7 +58,5 @@ public:
 
     bool IsAvailable() const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
