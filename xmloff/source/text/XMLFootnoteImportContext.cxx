@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
+#include <sal/log.hxx>
 
 
 using namespace ::com::sun::star::uno;
@@ -164,49 +165,38 @@ void XMLFootnoteImportContext::endFastElement(sal_Int32 )
     }
 }
 
-SvXMLImportContextRef XMLFootnoteImportContext::CreateChildContext(
-    sal_uInt16 p_nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFootnoteImportContext::createFastChildContext(
+    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContextRef xContext;
 
-    static const SvXMLTokenMap aTokenMap(aFootnoteChildTokenMap);
-
-    switch(aTokenMap.Get(p_nPrefix, rLocalName))
+    switch(nElement)
     {
-        case XML_TOK_FTN_NOTE_CITATION:
+        case XML_ELEMENT(TEXT, XML_NOTE_CITATION):
         {
             // little hack: we only care for one attribute of the citation
             //              element. We handle that here, and then return a
             //              default context.
-            sal_Int16 nLength = xAttrList->getLength();
-            for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+            for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
             {
-                OUString sLocalName;
-                sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                    GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                                      &sLocalName );
-
-                if ( (nPrefix == XML_NAMESPACE_TEXT) &&
-                     IsXMLToken( sLocalName, XML_LABEL ) )
-                {
-                    xFootnote->setLabel(xAttrList->getValueByIndex(nAttr));
-                }
+                if ( aIter.getToken() == XML_ELEMENT(TEXT, XML_LABEL) )
+                    xFootnote->setLabel(aIter.toString());
             }
 
             // ignore content: return default context
             break;
         }
 
-        case XML_TOK_FTN_NOTE_BODY:
+        case XML_ELEMENT(TEXT, XML_NOTE_BODY):
             // return footnote body
-            xContext = new XMLFootnoteBodyImportContext(GetImport(),
-                                                        p_nPrefix, rLocalName);
+            xContext = new XMLFootnoteBodyImportContext(GetImport());
             break;
+
+        default:
+            XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     }
 
-    return xContext;
+    return xContext.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
