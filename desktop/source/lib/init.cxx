@@ -3808,7 +3808,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     {
         // Check if saving a PDF file
         OUString aMimeType = lcl_getCurrentDocumentMimeType(pDocument);
-        if (aMimeType == "application/pdf")
+        if (pDocSh->IsModified() && aMimeType == "application/pdf")
         {
             // If we have a PDF file (for saving annotations for example), we need
             // to run save-as to the same file as the opened document. Plain save
