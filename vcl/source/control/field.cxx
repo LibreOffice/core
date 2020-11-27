@@ -327,7 +327,7 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
             bRound = true;
         string::truncateToLength(aStr2, nDecDigits);
     }
-    if (aStr2.getLength() < nDecDigits)
+    if (aStr2.getLength() < nDecDigits && nDecPos != -1)
         string::padToLength(aStr2, nDecDigits, '0');
 
     aStr  = aStr1.makeStringAndClear() + aStr2.makeStringAndClear();
@@ -357,6 +357,14 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     rValue = nValue;
 
     return true;
+}
+
+bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
+                                 sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,
+                                 VclPtr<MetricBox> box, bool bCurrency = false )
+{
+    ImplNumericGetValue(rStr, rValue, nDecDigits, rLocaleDataWrapper, bCurrency);
+    box->MarkToBeReformatted(true);
 }
 
 void ImplUpdateSeparatorString( OUString& io_rText,
