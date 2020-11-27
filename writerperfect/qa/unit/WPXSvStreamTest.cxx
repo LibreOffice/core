@@ -189,20 +189,20 @@ void WPXSvStreamTest::testSeekSet()
     CPPUNIT_ASSERT(!pInput->isEnd());
 
     // valid seeks
-    CPPUNIT_ASSERT_EQUAL(0, pInput->seek(0, RVNG_SEEK_SET));
+    CPPUNIT_ASSERT_EQUAL(0L, pInput->seek(0, RVNG_SEEK_SET));
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
     CPPUNIT_ASSERT(!pInput->isEnd());
 
-    CPPUNIT_ASSERT_EQUAL(0, pInput->seek(1, RVNG_SEEK_SET));
+    CPPUNIT_ASSERT_EQUAL(0L, pInput->seek(1, RVNG_SEEK_SET));
     CPPUNIT_ASSERT_EQUAL(1L, pInput->tell());
     CPPUNIT_ASSERT(!pInput->isEnd());
 
-    CPPUNIT_ASSERT_EQUAL(0, pInput->seek(nLen, RVNG_SEEK_SET));
+    CPPUNIT_ASSERT_EQUAL(0L, pInput->seek(nLen, RVNG_SEEK_SET));
     CPPUNIT_ASSERT_EQUAL(nLen, pInput->tell());
     CPPUNIT_ASSERT(pInput->isEnd());
 
     // go back to the beginning
-    CPPUNIT_ASSERT_EQUAL(0, pInput->seek(0, RVNG_SEEK_SET));
+    CPPUNIT_ASSERT_EQUAL(0L, pInput->seek(0, RVNG_SEEK_SET));
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
 
     // invalid seeks
@@ -228,20 +228,20 @@ void WPXSvStreamTest::testSeekCur()
 
     // valid seeks
 
-    CPPUNIT_ASSERT_EQUAL(0, pInput->seek(0, RVNG_SEEK_CUR));
+    CPPUNIT_ASSERT_EQUAL(0L, pInput->seek(0, RVNG_SEEK_CUR));
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
     CPPUNIT_ASSERT(!pInput->isEnd());
 
-    CPPUNIT_ASSERT_EQUAL(0, pInput->seek(1, RVNG_SEEK_CUR));
+    CPPUNIT_ASSERT_EQUAL(0L, pInput->seek(1, RVNG_SEEK_CUR));
     CPPUNIT_ASSERT_EQUAL(1L, pInput->tell());
     CPPUNIT_ASSERT(!pInput->isEnd());
 
-    CPPUNIT_ASSERT_EQUAL(0, pInput->seek(-1, RVNG_SEEK_CUR));
+    CPPUNIT_ASSERT_EQUAL(0L, pInput->seek(-1, RVNG_SEEK_CUR));
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
     CPPUNIT_ASSERT(!pInput->isEnd());
 
     // go back to the beginning
-    CPPUNIT_ASSERT_EQUAL(0, pInput->seek(0, RVNG_SEEK_SET));
+    CPPUNIT_ASSERT_EQUAL(0L, pInput->seek(0, RVNG_SEEK_SET));
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
 
     // invalid seeks
@@ -264,20 +264,20 @@ void WPXSvStreamTest::testSeekEnd()
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
 
     // valid seeks
-    CPPUNIT_ASSERT_EQUAL(0, pInput->seek(0, RVNG_SEEK_END));
+    CPPUNIT_ASSERT_EQUAL(0L, pInput->seek(0, RVNG_SEEK_END));
     CPPUNIT_ASSERT_EQUAL(nLen, pInput->tell());
     CPPUNIT_ASSERT(pInput->isEnd());
 
-    CPPUNIT_ASSERT_EQUAL(0, pInput->seek(-1, RVNG_SEEK_END));
+    CPPUNIT_ASSERT_EQUAL(0L, pInput->seek(-1, RVNG_SEEK_END));
     CPPUNIT_ASSERT_EQUAL(nLen - 1, pInput->tell());
     CPPUNIT_ASSERT(!pInput->isEnd());
 
-    CPPUNIT_ASSERT_EQUAL(0, pInput->seek(-nLen, RVNG_SEEK_END));
+    CPPUNIT_ASSERT_EQUAL(0L, pInput->seek(-nLen, RVNG_SEEK_END));
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
     CPPUNIT_ASSERT(!pInput->isEnd());
 
     // go back to the beginning
-    CPPUNIT_ASSERT_EQUAL(0, pInput->seek(0, RVNG_SEEK_SET));
+    CPPUNIT_ASSERT_EQUAL(0L, pInput->seek(0, RVNG_SEEK_SET));
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
 
     // invalid seeks
