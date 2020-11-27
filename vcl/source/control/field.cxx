@@ -327,7 +327,7 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
             bRound = true;
         string::truncateToLength(aStr2, nDecDigits);
     }
-    if (aStr2.getLength() < nDecDigits)
+    if (aStr2.getLength() < nDecDigits && nDecPos != -1)
         string::padToLength(aStr2, nDecDigits, '0');
 
     aStr  = aStr1.makeStringAndClear() + aStr2.makeStringAndClear();
