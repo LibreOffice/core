@@ -147,10 +147,6 @@ public:
         sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                const OUString& rLocalName,
-                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
-
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 
     void InsertColumn( sal_Int32 nWidth, bool bRelWidth,
