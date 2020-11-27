@@ -209,35 +209,6 @@ ScXMLTableContext::~ScXMLTableContext()
 {
 }
 
-SvXMLImportContextRef ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttrList*/ )
-{
-    const SvXMLTokenMap& rTokenMap(GetScImport().GetTableElemTokenMap());
-    sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLName);
-    if (pExternalRefInfo)
-    {
-        return new SvXMLImportContext(GetImport(), nPrefix, rLName);
-    }
-
-    SvXMLImportContext *pContext(nullptr);
-
-    switch (nToken)
-    {
-    case XML_TOK_TABLE_FORMS:
-        {
-            GetScImport().GetFormImport()->startPage(GetScImport().GetTables().GetCurrentXDrawPage());
-            bStartFormPage = true;
-            pContext = xmloff::OFormLayerXMLImport::createOfficeFormsContext( GetScImport() );
-        }
-        break;
-    default:
-        ;
-    }
-
-    return pContext;
-}
-
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         ScXMLTableContext::createFastChildContext( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
@@ -274,12 +245,12 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     switch ( nElement )
     {
     case XML_ELEMENT( TABLE, XML_NAMED_EXPRESSIONS ):
-    {
-        SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
-        pContext = new ScXMLNamedExpressionsContext(
-            GetScImport(),
-            std::make_shared<ScXMLNamedExpressionsContext::SheetLocalInserter>(GetScImport(), nTab));
-    }
+        {
+            SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
+            pContext = new ScXMLNamedExpressionsContext(
+                GetScImport(),
+                std::make_shared<ScXMLNamedExpressionsContext::SheetLocalInserter>(GetScImport(), nTab));
+        }
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_COLUMN_GROUP ):
         pContext = new ScXMLTableColsContext( GetScImport(), pAttribList,
@@ -336,6 +307,15 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
             pContext = new XMLEventsImportContext( GetImport(), xSupplier );
         }
         break;
+    case XML_ELEMENT(OFFICE, XML_FORMS):
+        {
+            GetScImport().GetFormImport()->startPage(GetScImport().GetTables().GetCurrentXDrawPage());
+            bStartFormPage = true;
+            pContext = xmloff::OFormLayerXMLImport::createOfficeFormsContext( GetScImport() );
+        }
+        break;
+    default:
+        XMLOFF_WARN_UNKNOWN_ELEMENT("sc", nElement);
     }
 
     return pContext;
