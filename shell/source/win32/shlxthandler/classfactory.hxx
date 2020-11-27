@@ -54,10 +54,10 @@ public:
     static bool IsLocked();
 
 private:
-    long  m_RefCnt;
+    LONG  m_RefCnt;
     CLSID m_Clsid;
 
-    static long  s_ServerLocks;
+    static LONG  s_ServerLocks;
 };
 
 #endif

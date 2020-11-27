@@ -26,7 +26,7 @@
 #include <shlxthdl.hxx>
 
 
-long CClassFactory::s_ServerLocks = 0;
+LONG CClassFactory::s_ServerLocks = 0;
 
 
 CClassFactory::CClassFactory(const CLSID& clsid) :
@@ -70,7 +70,7 @@ ULONG STDMETHODCALLTYPE CClassFactory::AddRef()
 
 ULONG STDMETHODCALLTYPE CClassFactory::Release()
 {
-    long refcnt = InterlockedDecrement(&m_RefCnt);
+    LONG refcnt = InterlockedDecrement(&m_RefCnt);
 
     if (0 == refcnt)
         delete this;

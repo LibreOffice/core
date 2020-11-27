@@ -142,7 +142,7 @@ ULONG STDMETHODCALLTYPE StreamOnZipBuffer::AddRef()
 
 ULONG STDMETHODCALLTYPE StreamOnZipBuffer::Release()
 {
-    long refcnt = InterlockedDecrement(&ref_count_);
+    LONG refcnt = InterlockedDecrement(&ref_count_);
 
     if (0 == ref_count_)
         delete this;
@@ -268,7 +268,7 @@ HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Clone(IStream **)
 {  return E_NOTIMPL; }
 
 
-CThumbviewer::CThumbviewer(long RefCnt) :
+CThumbviewer::CThumbviewer(LONG RefCnt) :
     ref_count_(RefCnt)
 {
     InterlockedIncrement(&g_DllRefCnt);
@@ -324,7 +324,7 @@ ULONG STDMETHODCALLTYPE CThumbviewer::AddRef()
 
 ULONG STDMETHODCALLTYPE CThumbviewer::Release()
 {
-    long refcnt = InterlockedDecrement(&ref_count_);
+    LONG refcnt = InterlockedDecrement(&ref_count_);
 
     if (0 == ref_count_)
         delete this;

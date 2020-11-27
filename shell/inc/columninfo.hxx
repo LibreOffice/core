@@ -26,7 +26,7 @@
 class CColumnInfo : public IColumnProvider
 {
 public:
-    CColumnInfo(long RefCnt = 1);
+    CColumnInfo(LONG RefCnt = 1);
     virtual ~CColumnInfo();
 
 
@@ -53,7 +53,7 @@ public:
         LPCSHCOLUMNID pscid, LPCSHCOLUMNDATA pscd, VARIANT *pvarData) override;
 
 private:
-    long    m_RefCnt;
+    LONG    m_RefCnt;
 };
 
 #endif

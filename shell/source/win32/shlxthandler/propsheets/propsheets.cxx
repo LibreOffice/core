@@ -47,17 +47,17 @@
 ----------------------------------------------*/
 
 
-CPropertySheet::CPropertySheet(long RefCnt) :
+CPropertySheet::CPropertySheet(LONG RefCnt) :
     m_RefCnt(RefCnt)
 {
-    OutputDebugStringFormatW(L"CPropertySheet::CTor [%d], [%d]", m_RefCnt, g_DllRefCnt );
+    OutputDebugStringFormatW(L"CPropertySheet::CTor [%d], [%ld]", m_RefCnt, g_DllRefCnt );
     InterlockedIncrement(&g_DllRefCnt);
 }
 
 
 CPropertySheet::~CPropertySheet()
 {
-    OutputDebugStringFormatW(L"CPropertySheet::DTor [%d], [%d]", m_RefCnt, g_DllRefCnt );
+    OutputDebugStringFormatW(L"CPropertySheet::DTor [%d], [%ld]", m_RefCnt, g_DllRefCnt );
     InterlockedDecrement(&g_DllRefCnt);
 }
 
@@ -100,7 +100,7 @@ ULONG STDMETHODCALLTYPE CPropertySheet::AddRef()
 ULONG STDMETHODCALLTYPE CPropertySheet::Release()
 {
     OutputDebugStringFormatW(L"CPropertySheet::Release [%d]", m_RefCnt );
-    long refcnt = InterlockedDecrement(&m_RefCnt);
+    LONG refcnt = InterlockedDecrement(&m_RefCnt);
 
     if (0 == refcnt)
         delete this;

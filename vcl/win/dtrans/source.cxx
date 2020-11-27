@@ -160,7 +160,7 @@ void SAL_CALL DragSource::startDrag(
     // Allow only one running dnd operation at a time,
     // see XDragSource documentation
 
-    long cnt = InterlockedIncrement(&m_RunningDndOperationCount);
+    LONG cnt = InterlockedIncrement(&m_RunningDndOperationCount);
 
     if (1 == cnt)
     {

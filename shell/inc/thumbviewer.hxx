@@ -30,7 +30,7 @@
 class CThumbviewer : public IPersistFile, public IExtractImage
 {
 public:
-    CThumbviewer(long RefCnt = 1);
+    CThumbviewer(LONG RefCnt = 1);
     virtual ~CThumbviewer();
 
 
@@ -86,7 +86,7 @@ public:
             /* [out] */ LPOLESTR __RPC_FAR *ppszFileName) override;
 
 private:
-    long         ref_count_;
+    LONG         ref_count_;
     std::wstring filename_;
     SIZE         thumbnail_size_;
     DWORD        color_depth_;
