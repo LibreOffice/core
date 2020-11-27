@@ -193,7 +193,7 @@ bool OutputDevice::HitTestNativeScrollbar(
     screenRegion.Move( aWinOffs.X(), aWinOffs.Y());
 
     return mpGraphics->HitTestNativeScrollbar( nPart, screenRegion, Point( aPos.X() + mnOutOffX, aPos.Y() + mnOutOffY ),
-        rIsInside, this );
+        rIsInside, *this );
 }
 
 static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplControlValue& rVal, const OutputDevice& rDev )
@@ -316,7 +316,7 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
     std::shared_ptr< ImplControlValue > aScreenCtrlValue( TransformControlValue( aValue, *this ) );
     tools::Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
-    bool bRet = mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, this, rBackgroundColor );
+    bool bRet = mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, *this, rBackgroundColor);
 
     return bRet;
 }
@@ -342,7 +342,7 @@ bool OutputDevice::GetNativeControlRegion(  ControlType nType,
 
     bool bRet = mpGraphics->GetNativeControlRegion(nType, nPart, screenRegion, nState, *aScreenCtrlValue,
                                 rNativeBoundingRegion,
-                                rNativeContentRegion, this );
+                                rNativeContentRegion, *this );
     if( bRet )
     {
         // transform back native regions

@@ -202,39 +202,38 @@ public:
     SalLayoutFlags              GetLayout() const { return m_nLayout; }
     void                        SetLayout( SalLayoutFlags aLayout ) { m_nLayout = aLayout;}
 
-    void                        mirror( tools::Long& nX, const OutputDevice *pOutDev ) const;
+    void                        mirror( tools::Long& nX, const OutputDevice& rOutDev ) const;
     // only called mirror2 to avoid ambiguity
-    [[nodiscard]]
-    tools::Long                        mirror2( tools::Long nX, const OutputDevice *pOutDev ) const;
+    [[nodiscard]] tools::Long   mirror2( tools::Long nX, const OutputDevice& rOutDev ) const;
     void                        mirror( tools::Long& nX, tools::Long nWidth, const OutputDevice *pOutDev, bool bBack = false ) const;
-    bool                        mirror( sal_uInt32 nPoints, const Point *pPtAry, Point *pPtAry2, const OutputDevice *pOutDev ) const;
-    void                        mirror( tools::Rectangle& rRect, const OutputDevice*, bool bBack = false ) const;
-    void                        mirror( vcl::Region& rRgn, const OutputDevice *pOutDev ) const;
-    void                        mirror( ImplControlValue&, const OutputDevice* ) const;
-    basegfx::B2DPolyPolygon     mirror( const basegfx::B2DPolyPolygon& i_rPoly, const OutputDevice *pOutDev ) const;
+    bool                        mirror( sal_uInt32 nPoints, const Point *pPtAry, Point *pPtAry2, const OutputDevice& rOutDev ) const;
+    void                        mirror( tools::Rectangle& rRect, const OutputDevice&, bool bBack = false ) const;
+    void                        mirror( vcl::Region& rRgn, const OutputDevice& rOutDev ) const;
+    void                        mirror( ImplControlValue&, const OutputDevice& ) const;
+    basegfx::B2DPolyPolygon     mirror( const basegfx::B2DPolyPolygon& i_rPoly, const OutputDevice& rOutDev ) const;
     const basegfx::B2DHomMatrix& getMirror( const OutputDevice *pOutDev ) const;
 
     // non virtual methods; these do possible coordinate mirroring and
     // then delegate to protected virtual methods
-    bool                        SetClipRegion( const vcl::Region&, const OutputDevice *pOutDev );
+    bool                        SetClipRegion( const vcl::Region&, const OutputDevice& rOutDev );
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
-    void                        DrawPixel( tools::Long nX, tools::Long nY, const OutputDevice *pOutDev );
-    void                        DrawPixel( tools::Long nX, tools::Long nY, Color nColor, const OutputDevice *pOutDev );
+    void                        DrawPixel( tools::Long nX, tools::Long nY, const OutputDevice& rOutDev );
+    void                        DrawPixel( tools::Long nX, tools::Long nY, Color nColor, const OutputDevice& rOutDev );
 
-    void                        DrawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2, const OutputDevice *pOutDev );
+    void                        DrawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2, const OutputDevice& rOutDev );
 
-    void                        DrawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, const OutputDevice *pOutDev );
+    void                        DrawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, const OutputDevice& rOutDev );
 
-    void                        DrawPolyLine( sal_uInt32 nPoints, Point const * pPtAry, const OutputDevice *pOutDev );
+    void                        DrawPolyLine( sal_uInt32 nPoints, Point const * pPtAry, const OutputDevice& rOutDev );
 
-    void                        DrawPolygon( sal_uInt32 nPoints, const Point* pPtAry, const OutputDevice *pOutDev );
+    void                        DrawPolygon( sal_uInt32 nPoints, const Point* pPtAry, const OutputDevice& rOutDev );
 
     void                        DrawPolyPolygon(
                                     sal_uInt32 nPoly,
                                     const sal_uInt32* pPoints,
                                     const Point** pPtAry,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice& rOutDev );
 
     bool                        DrawPolyPolygon(
                                     const basegfx::B2DHomMatrix& rObjectToDevice,
@@ -258,20 +257,20 @@ public:
                                     sal_uInt32 nPoints,
                                     const Point* pPtAry,
                                     const PolyFlags* pFlgAry,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice& rOutDev );
 
     bool                        DrawPolygonBezier(
                                     sal_uInt32 nPoints,
                                     const Point* pPtAry,
                                     const PolyFlags* pFlgAry,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice& rOutDev );
 
     bool                        DrawPolyPolygonBezier(
                                     sal_uInt32 nPoly,
                                     const sal_uInt32* pPoints,
                                     const Point* const* pPtAry,
                                     const PolyFlags* const* pFlgAry,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice& rOutDev );
 
     bool                        DrawGradient(
                                     const tools::PolyPolygon& rPolyPoly,
@@ -285,61 +284,61 @@ public:
                                     tools::Long nDestX, tools::Long nDestY,
                                     tools::Long nSrcX, tools::Long nSrcY,
                                     tools::Long nSrcWidth, tools::Long nSrcHeight,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice& rOutDev );
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
-    // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
+    // CopyBits() --> pSrcGraphics == nullptr, then CopyBits on same Graphics
     void                        CopyBits(
                                     const SalTwoRect& rPosAry,
                                     SalGraphics* pSrcGraphics,
-                                    const OutputDevice *pOutDev,
+                                    const OutputDevice& rOutDev,
                                     const OutputDevice *pSrcOutDev );
 
     void                        DrawBitmap(
                                     const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice* pOutDev );
 
     void                        DrawBitmap(
                                     const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap,
                                     const SalBitmap& rTransparentBitmap,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice* pOutDev );
 
     void                        DrawMask(
                                     const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap,
                                     Color nMaskColor,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice& rOutDev );
 
     std::shared_ptr<SalBitmap>  GetBitmap(
                                     tools::Long nX, tools::Long nY,
                                     tools::Long nWidth, tools::Long nHeight,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice& rOutDev );
 
     Color                       GetPixel(
                                     tools::Long nX, tools::Long nY,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice& rOutDev );
 
     // invert --> ClipRegion (only Windows)
     void                        Invert(
                                     tools::Long nX, tools::Long nY,
                                     tools::Long nWidth, tools::Long nHeight,
                                     SalInvert nFlags,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice& rOutDev );
 
     void                        Invert(
                                     sal_uInt32 nPoints,
                                     const Point* pPtAry,
                                     SalInvert nFlags,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice& rOutDev );
 
     bool                        DrawEPS(
                                     tools::Long nX, tools::Long nY,
                                     tools::Long nWidth, tools::Long nHeight,
                                     void* pPtr,
                                     sal_uInt32 nSize,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice& rOutDev );
 
     //  native widget rendering functions
 
@@ -356,7 +355,7 @@ public:
                                     const tools::Rectangle& rControlRegion,
                                     const Point& aPos,
                                     bool& rIsInside,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice& rOutDev);
 
     /**
      * @see WidgetDrawInterface::drawNativeControl
@@ -368,7 +367,7 @@ public:
                                     ControlState nState,
                                     const ImplControlValue& aValue,
                                     const OUString& aCaption,
-                                    const OutputDevice *pOutDev,
+                                    const OutputDevice& rOutDev,
                                     const Color& rBackgroundColor = COL_AUTO );
 
     /**
@@ -382,7 +381,7 @@ public:
                                     const ImplControlValue& aValue,
                                     tools::Rectangle &rNativeBoundingRegion,
                                     tools::Rectangle &rNativeContentRegion,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice& rOutDev );
 
     /**
      * @see WidgetDrawInterface::updateSettings
@@ -392,20 +391,20 @@ public:
     bool                        BlendBitmap(
                                     const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice& rOutDev );
 
     bool                        BlendAlphaBitmap(
                                     const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalSrcBitmap,
                                     const SalBitmap& rSalMaskBitmap,
                                     const SalBitmap& rSalAlphaBitmap,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice& rOutDev );
 
     bool                        DrawAlphaBitmap(
                                     const SalTwoRect&,
                                     const SalBitmap& rSourceBitmap,
                                     const SalBitmap& rAlphaBitmap,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice& rOutDev );
 
     bool                        DrawTransformedBitmap(
                                     const basegfx::B2DPoint& rNull,
@@ -413,13 +412,13 @@ public:
                                     const basegfx::B2DPoint& rY,
                                     const SalBitmap& rSourceBitmap,
                                     const SalBitmap* pAlphaBitmap,
-                                    const OutputDevice* pOutDev );
+                                    const OutputDevice& rOutDev );
 
     bool                        DrawAlphaRect(
                                     tools::Long nX, tools::Long nY,
                                     tools::Long nWidth, tools::Long nHeight,
                                     sal_uInt8 nTransparency,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice& rOutDev );
 
     virtual OUString getRenderBackendName() const;
 

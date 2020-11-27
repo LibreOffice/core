@@ -80,7 +80,7 @@ void OutputDevice::DrawRect( const tools::Rectangle& rRect )
     if ( mbInitFillColor )
         InitFillColor();
 
-    mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), this );
+    mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), *this );
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawRect( rRect );
@@ -123,7 +123,7 @@ void OutputDevice::DrawRect( const tools::Rectangle& rRect,
 
     if ( !nHorzRound && !nVertRound )
     {
-        mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), this );
+        mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), *this );
     }
     else
     {
@@ -134,9 +134,9 @@ void OutputDevice::DrawRect( const tools::Rectangle& rRect,
             Point* pPtAry = aRoundRectPoly.GetPointAry();
 
             if ( !mbFillColor )
-                mpGraphics->DrawPolyLine( aRoundRectPoly.GetSize(), pPtAry, this );
+                mpGraphics->DrawPolyLine( aRoundRectPoly.GetSize(), pPtAry, *this );
             else
-                mpGraphics->DrawPolygon( aRoundRectPoly.GetSize(), pPtAry, this );
+                mpGraphics->DrawPolygon( aRoundRectPoly.GetSize(), pPtAry, *this );
         }
     }
 
@@ -171,7 +171,7 @@ void OutputDevice::Invert( const tools::Rectangle& rRect, InvertFlags nFlags )
         nSalFlags |= SalInvert::N50;
     if ( nFlags & InvertFlags::TrackFrame )
         nSalFlags |= SalInvert::TrackFrame;
-    mpGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), nSalFlags, this );
+    mpGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), nSalFlags, *this );
 }
 
 void OutputDevice::Invert( const tools::Polygon& rPoly, InvertFlags nFlags )
@@ -203,7 +203,7 @@ void OutputDevice::Invert( const tools::Polygon& rPoly, InvertFlags nFlags )
     if ( nFlags & InvertFlags::TrackFrame )
         nSalFlags |= SalInvert::TrackFrame;
     const Point* pPtAry = aPoly.GetConstPointAry();
-    mpGraphics->Invert( nPoints, pPtAry, nSalFlags, this );
+    mpGraphics->Invert( nPoints, pPtAry, nSalFlags, *this );
 }
 
 void OutputDevice::DrawCheckered(const Point& rPos, const Size& rSize, sal_uInt32 nLen, Color aStart, Color aEnd)
@@ -302,7 +302,7 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
         {
             for( tools::Long j = 0, Y = aVertBuf[ i ]; j < nHorzCount; j++ )
             {
-                mpGraphics->DrawPixel( aHorzBuf[ j ], Y, this );
+                mpGraphics->DrawPixel( aHorzBuf[ j ], Y, *this );
             }
         }
     }
@@ -313,7 +313,7 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
             for( tools::Long i = 0; i < nVertCount; i++ )
             {
                 nY = aVertBuf[ i ];
-                mpGraphics->DrawLine( nStartX, nY, nEndX, nY, this );
+                mpGraphics->DrawLine( nStartX, nY, nEndX, nY, *this );
             }
         }
 
@@ -322,7 +322,7 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
             for( tools::Long i = 0; i < nHorzCount; i++ )
             {
                 nX = aHorzBuf[ i ];
-                mpGraphics->DrawLine( nX, nStartY, nX, nEndY, this );
+                mpGraphics->DrawLine( nX, nStartY, nX, nEndY, *this );
             }
         }
     }

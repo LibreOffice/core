@@ -311,7 +311,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
                 else
                     nHeight = nNewHeight;
                 SalTwoRect aPosAry(0, 0, nWidth, nHeight, 0, 0, nWidth, nHeight);
-                pGraphics->CopyBits( aPosAry, mpGraphics, this, this );
+                pGraphics->CopyBits( aPosAry, mpGraphics, *this, this );
                 pNewVirDev->ReleaseGraphics( pGraphics );
                 ReleaseGraphics();
                 mpVirDev = std::move(pNewVirDev);

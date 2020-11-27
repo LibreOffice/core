@@ -529,7 +529,7 @@ void Window::SetPointerPosPixel( const Point& rPos )
             pOutDev->ReMirror( aPos );
         }
         // mirroring is required here, SetPointerPos bypasses SalGraphics
-        aPos.setX( mpGraphics->mirror2( aPos.X(), this ) );
+        aPos.setX( mpGraphics->mirror2( aPos.X(), *this ) );
     }
     else if( ImplIsAntiparallel() )
     {

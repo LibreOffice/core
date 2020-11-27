@@ -125,10 +125,10 @@ void OutputDevice::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
                 Bitmap aTmp( rMask );
                 aTmp.Mirror( nMirrFlags );
                 mpGraphics->DrawMask( aPosAry, *aTmp.ImplGetSalBitmap(),
-                                      rMaskColor, this);
+                                      rMaskColor, *this);
             }
             else
-                mpGraphics->DrawMask( aPosAry, *xImpBmp, rMaskColor, this );
+                mpGraphics->DrawMask( aPosAry, *xImpBmp, rMaskColor, *this );
 
         }
     }

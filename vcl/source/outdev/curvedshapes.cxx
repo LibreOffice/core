@@ -57,12 +57,12 @@ void OutputDevice::DrawEllipse( const tools::Rectangle& rRect )
     {
         Point* pPtAry = aRectPoly.GetPointAry();
         if ( !mbFillColor )
-            mpGraphics->DrawPolyLine( aRectPoly.GetSize(), pPtAry, this );
+            mpGraphics->DrawPolyLine( aRectPoly.GetSize(), pPtAry, *this );
         else
         {
             if ( mbInitFillColor )
                 InitFillColor();
-            mpGraphics->DrawPolygon( aRectPoly.GetSize(), pPtAry, this );
+            mpGraphics->DrawPolygon( aRectPoly.GetSize(), pPtAry, *this );
         }
     }
 
@@ -104,7 +104,7 @@ void OutputDevice::DrawArc( const tools::Rectangle& rRect,
     if ( aArcPoly.GetSize() >= 2 )
     {
         Point* pPtAry = aArcPoly.GetPointAry();
-        mpGraphics->DrawPolyLine( aArcPoly.GetSize(), pPtAry, this );
+        mpGraphics->DrawPolyLine( aArcPoly.GetSize(), pPtAry, *this );
     }
 
     if( mpAlphaVDev )
@@ -146,12 +146,12 @@ void OutputDevice::DrawPie( const tools::Rectangle& rRect,
     {
         Point* pPtAry = aPiePoly.GetPointAry();
         if ( !mbFillColor )
-            mpGraphics->DrawPolyLine( aPiePoly.GetSize(), pPtAry, this );
+            mpGraphics->DrawPolyLine( aPiePoly.GetSize(), pPtAry, *this );
         else
         {
             if ( mbInitFillColor )
                 InitFillColor();
-            mpGraphics->DrawPolygon( aPiePoly.GetSize(), pPtAry, this );
+            mpGraphics->DrawPolygon( aPiePoly.GetSize(), pPtAry, *this );
         }
     }
 
@@ -194,12 +194,12 @@ void OutputDevice::DrawChord( const tools::Rectangle& rRect,
     {
         Point* pPtAry = aChordPoly.GetPointAry();
         if ( !mbFillColor )
-            mpGraphics->DrawPolyLine( aChordPoly.GetSize(), pPtAry, this );
+            mpGraphics->DrawPolyLine( aChordPoly.GetSize(), pPtAry, *this );
         else
         {
             if ( mbInitFillColor )
                 InitFillColor();
-            mpGraphics->DrawPolygon( aChordPoly.GetSize(), pPtAry, this );
+            mpGraphics->DrawPolygon( aChordPoly.GetSize(), pPtAry, *this );
         }
     }
 
