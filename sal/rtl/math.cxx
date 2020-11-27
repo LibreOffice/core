@@ -292,7 +292,7 @@ void doubleToString(typename T::String ** pResult,
         constexpr char pDig[] = "7976931348623157";
         constexpr char pRou[] = "8087931459623267";     // the only up-carry is 80
         static_assert(SAL_N_ELEMENTS(pDig) == SAL_N_ELEMENTS(pRou), "digit count mismatch");
-        constexpr sal_Int32 nDig2 = SAL_N_ELEMENTS(pRou) - 2;
+        constexpr sal_Int32 nDig2 = RTL_CONSTASCII_LENGTH(pRou) - 2;
         sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH(pRou) + 8;  // + "-1.E+308"
         const char pSlot[5][2][3] =
         { // rounded, not
@@ -314,7 +314,7 @@ void doubleToString(typename T::String ** pResult,
             T::appendAscii(pResult, pResultCapacity, &nResultOffset,
                            RTL_CONSTASCII_STRINGPARAM("-"));
 
-        nDecPlaces = std::clamp<sal_Int32>( nDecPlaces, 0, SAL_N_ELEMENTS(pRou));
+        nDecPlaces = std::clamp<sal_Int32>( nDecPlaces, 0, RTL_CONSTASCII_LENGTH(pRou));
         if (nDecPlaces == 0)
         {
             T::appendAscii(pResult, pResultCapacity, &nResultOffset,
@@ -338,11 +338,11 @@ void doubleToString(typename T::String ** pResult,
             {
                 const sal_Int32 nDec = nDecPlaces - nDig2;
                 nDecPlaces -= nDec;
-                // nDec-1 is also offset into slot, rounded(-1=0) or not(-2=1)
+                // nDec-1 is also offset into slot, rounded(1-1=0) or not(2-1=1)
                 const size_t nSlot = ((fValue < fB3) ? 4 : ((fValue < fB2) ? 3
                             : ((fValue < fB1) ? 2 : ((fValue < DBL_MAX) ? 1 : 0))));
 
-                T::appendAscii(pResult, pResultCapacity, &nResultOffset, pDig, nDecPlaces - 1);
+                T::appendAscii(pResult, pResultCapacity, &nResultOffset, pDig, nDecPlaces);
                 T::appendAscii(pResult, pResultCapacity, &nResultOffset, pSlot[nSlot][nDec-1], nDec);
             }
         }
