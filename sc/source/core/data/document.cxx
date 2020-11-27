@@ -6812,29 +6812,13 @@ ScRecursionHelper& ScDocument::GetRecursionHelper()
     }
 }
 
-void ScDocumentThreadSpecific::SetupFromNonThreadedData(const ScDocumentThreadSpecific& /*rNonThreadedData*/)
+void ScDocument::SetupContextFromNonThreadedContext(ScInterpreterContext& /*threadedContext*/, int /*threadNumber*/)
 {
-    // What about the recursion helper?
-    // Copy the lookup cache?
-}
-
-void ScDocumentThreadSpecific::MergeBackIntoNonThreadedData(ScDocumentThreadSpecific& /*rNonThreadedData*/)
-{
-    // What about recursion helper and lookup cache?
-}
-
-ScDocumentThreadSpecific::ScDocumentThreadSpecific()
-    : pContext(nullptr)
-{}
-
-ScDocumentThreadSpecific::~ScDocumentThreadSpecific() {}
-
-void ScDocument::SetupFromNonThreadedContext(ScInterpreterContext& /*threadedContext*/, int /*threadNumber*/)
-{
+    (void)this;
     // lookup cache is now only in pooled ScInterpreterContext's
 }
 
-void ScDocument::MergeBackIntoNonThreadedContext(ScInterpreterContext& threadedContext, int /*threadNumber*/)
+void ScDocument::MergeContextBackIntoNonThreadedContext(ScInterpreterContext& threadedContext, int /*threadNumber*/)
 {
     // Move data from a context used by a calculation thread to the main thread's context.
     // Called from the main thread after the calculation thread has already finished.
