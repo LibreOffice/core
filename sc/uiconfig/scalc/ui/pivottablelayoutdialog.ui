@@ -43,6 +43,7 @@
     </columns>
   </object>
   <object class="GtkDialog" id="PivotTableLayout">
+    <property name="resizable">False</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="pivottablelayoutdialog|PivotTableLayout">Pivot Table Layout</property>
