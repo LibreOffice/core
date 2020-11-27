@@ -1008,7 +1008,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( vsAPI.GetThemeBackgroundContentRect( hTheme, hDC, PP_BAR, iState, &rc, &aProgressRect) != S_OK )
             return false;
 
-        long nProgressWidth = aValue.getNumericVal();
+        tools::Long nProgressWidth = aValue.getNumericVal();
         nProgressWidth *= (aProgressRect.right - aProgressRect.left);
         nProgressWidth /= (rc.right - rc.left);
         if( AllSettings::GetLayoutRTL() )
@@ -1028,13 +1028,13 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         RECT aTRect = rc;
         if( nPart == ControlPart::TrackHorzArea )
         {
-            long nH = aTrackRect.GetHeight();
+            tools::Long nH = aTrackRect.GetHeight();
             aTRect.top += (rc.bottom - rc.top - nH)/2;
             aTRect.bottom = aTRect.top + nH;
         }
         else
         {
-            long nW = aTrackRect.GetWidth();
+            tools::Long nW = aTrackRect.GetWidth();
             aTRect.left += (rc.right - rc.left - nW)/2;
             aTRect.right = aTRect.left + nW;
         }
@@ -1138,7 +1138,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 tools::Rectangle aRect( ImplGetThemeRect( hTheme, hDC,
                     MENU_POPUPSEPARATOR, 0, tools::Rectangle( rc.left, rc.top, rc.right, rc.bottom ) ) );
                 // center the separator inside the passed rectangle
-                long nDY = ((rc.bottom - rc.top + 1) - aRect.GetHeight()) / 2;
+                auto const nDY = ((rc.bottom - rc.top + 1) - aRect.GetHeight()) / 2;
                 rc.top += nDY;
                 rc.bottom = rc.top+aRect.GetHeight()-1;
                 return ImplDrawTheme( hTheme, hDC, MENU_POPUPSEPARATOR, 0, rc, aCaption );
@@ -1478,7 +1478,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             tools::Rectangle aThumbRect = ImplGetThemeRect( hTheme, hDC, iPart, iState, tools::Rectangle() );
             if( nPart == ControlPart::ThumbHorz )
             {
-                long nW = aThumbRect.GetWidth();
+                tools::Long nW = aThumbRect.GetWidth();
                 tools::Rectangle aRect( rControlRegion );
                 aRect.SetRight( aRect.Left() + nW - 1 );
                 rNativeContentRegion = aRect;
@@ -1486,7 +1486,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             }
             else
             {
-                long nH = aThumbRect.GetHeight();
+                tools::Long nH = aThumbRect.GetHeight();
                 tools::Rectangle aRect( rControlRegion );
                 aRect.SetBottom( aRect.Top() + nH - 1 );
                 rNativeContentRegion = aRect;
