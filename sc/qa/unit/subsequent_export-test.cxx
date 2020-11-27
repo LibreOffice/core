@@ -215,6 +215,7 @@ public:
     void testHeaderImageODS();
 
     void testTdf88657ODS();
+    void testTdf136272();
     void testTdf41722();
     void testTdf113621();
     void testEscapeCharInNumberFormatXLSX();
@@ -386,6 +387,7 @@ public:
     CPPUNIT_TEST(testHeaderImageODS);
 
     CPPUNIT_TEST(testTdf88657ODS);
+    CPPUNIT_TEST(testTdf136272);
     CPPUNIT_TEST(testTdf41722);
     CPPUNIT_TEST(testTdf113621);
     CPPUNIT_TEST(testEscapeCharInNumberFormatXLSX);
@@ -4361,6 +4363,20 @@ void ScExportTest::testTdf88657ODS()
 
     xDocSh->DoClose();
 }
+
+void ScExportTest::testTdf136272()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf136272.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "styles.xml", FORMAT_ODS);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "//number:text-style[5]/style:map", "condition", "value()<=1.7976931348623157E+308");
+
+    xDocSh->DoClose();
+}
+
 
 void ScExportTest::testConditionalFormatRangeListXLSX()
 {
