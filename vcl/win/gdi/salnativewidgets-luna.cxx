@@ -1425,7 +1425,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
             if ( SystemParametersInfoW( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
             {
-                long nFontHeight = aNonClientMetrics.lfMessageFont.lfHeight;
+                LONG nFontHeight = aNonClientMetrics.lfMessageFont.lfHeight;
                 if( nFontHeight < 0 )
                     nFontHeight = -nFontHeight;
 
