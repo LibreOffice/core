@@ -281,7 +281,7 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter const * pPrinter,
         BYTE const * pDriverData = reinterpret_cast<BYTE const *>(pSalDriverData) + pSalDriverData->mnDriverOffset;
         pDevModeW = reinterpret_cast<DEVMODEW const *>(pDriverData);
 
-        long nSysJobSize = -1;
+        LONG nSysJobSize = -1;
         if( pPrinter && pDevModeW )
         {
             // just too many driver crashes in that area -> check the dmSpecVersion and dmDriverVersion fields always !!!
