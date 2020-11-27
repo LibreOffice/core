@@ -78,25 +78,6 @@ SchXMLDocContext::~SchXMLDocContext()
 {}
 
 
-SvXMLImportContextRef SchXMLDocContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
-{
-    SvXMLImportContextRef xContext;
-    const SvXMLTokenMap& rTokenMap = mrImportHelper.GetDocElemTokenMap();
-
-    switch( rTokenMap.Get( nPrefix, rLocalName ))
-    {
-        case XML_TOK_DOC_META:
-            // we come here in the flat ODF file format,
-            // if XDocumentPropertiesSupplier is not supported at the model
-            break;
-    }
-
-    return xContext;
-}
-
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SchXMLDocContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
@@ -118,6 +99,10 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SchXMLDocContext::creat
                 // instantiated by the chart import class SchXMLImport (header is not exported)
                 return
                     static_cast< SchXMLImport& >( GetImport() ).CreateStylesContext();
+            break;
+        case XML_ELEMENT(OFFICE, XML_META):
+            // we come here in the flat ODF file format,
+            // if XDocumentPropertiesSupplier is not supported at the model
             break;
     }
     return nullptr;
