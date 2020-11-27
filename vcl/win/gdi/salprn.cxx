@@ -1509,7 +1509,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
 
     if ( nRet <= 0 )
     {
-        long nError = GetLastError();
+        DWORD nError = GetLastError();
         if ( (nRet == SP_USERABORT) || (nRet == SP_APPABORT) || (nError == ERROR_PRINT_CANCELLED) || (nError == ERROR_CANCELLED) )
             mnError = SalPrinterError::Abort;
         else
