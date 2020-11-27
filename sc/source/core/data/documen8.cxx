@@ -80,6 +80,7 @@
 #include <stringutil.hxx>
 #include <documentlinkmgr.hxx>
 #include <tokenarray.hxx>
+#include <recursionhelper.hxx>
 
 #include <memory>
 #include <utility>
@@ -420,6 +421,10 @@ const ScDocumentThreadSpecific& ScDocument::CalculateInColumnInThread( ScInterpr
 
     assert(IsThreadedGroupCalcInProgress());
     maThreadSpecific.pContext = nullptr;
+    // If any of the thread_local data would cause problems if they stay around for too long
+    // (and e.g. outlive the ScDocument), clean them up here, they cannot be cleaned up
+    // later from the main thread.
+    maThreadSpecific.xRecursionHelper->Clear();
 
     return maThreadSpecific;
 }
