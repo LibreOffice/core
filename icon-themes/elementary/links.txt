@@ -1178,25 +1178,19 @@ cmd/sc_modifypage.png cmd/sc_pagedialog.png
 cmd/sc_pageformatdialog.png cmd/sc_pagedialog.png
 
 # Outline
-cmd/32/decrementlevel.png cmd/32/nextrecord.png
-cmd/32/incrementlevel.png cmd/32/prevrecord.png
 cmd/32/outlinedown.png cmd/32/movedown.png
-cmd/32/outlineleft.png cmd/32/prevrecord.png
-cmd/32/outlineright.png cmd/32/nextrecord.png
+cmd/32/outlineleft.png cmd/32/incrementlevel.png
+cmd/32/outlineright.png cmd/32/decrementlevel.png
 cmd/32/outlineup.png cmd/32/moveup.png
 
-cmd/lc_decrementlevel.png cmd/lc_nextrecord.png
-cmd/lc_incrementlevel.png cmd/lc_prevrecord.png
 cmd/lc_outlinedown.png cmd/lc_movedown.png
-cmd/lc_outlineleft.png cmd/lc_prevrecord.png
-cmd/lc_outlineright.png cmd/lc_nextrecord.png
+cmd/lc_outlineleft.png cmd/lc_incrementlevel.png
+cmd/lc_outlineright.png cmd/lc_decrementlevel.png
 cmd/lc_outlineup.png cmd/lc_moveup.png
 
-cmd/sc_decrementlevel.png cmd/sc_nextrecord.png
-cmd/sc_incrementlevel.png cmd/sc_prevrecord.png
 cmd/sc_outlinedown.png cmd/sc_movedown.png
-cmd/sc_outlineleft.png cmd/sc_prevrecord.png
-cmd/sc_outlineright.png cmd/sc_nextrecord.png
+cmd/sc_outlineleft.png cmd/sc_incrementlevel.png
+cmd/sc_outlineright.png cmd/sc_decrementlevel.png
 cmd/sc_outlineup.png cmd/sc_moveup.png
 
 # Line
@@ -1238,61 +1232,48 @@ cmd/sc_arrowstoolbox.png cmd/sc_linearrowend.png
 # <
 cmd/32/browsebackward.png cmd/32/prevrecord.png
 cmd/32/navigateback.png cmd/32/prevrecord.png
-cmd/32/pageup.png cmd/32/prevrecord.png
-cmd/32/previouspage.png cmd/32/prevrecord.png
+cmd/32/pageup.png cmd/32/previouspage.png
 
 cmd/lc_browsebackward.png cmd/lc_prevrecord.png
 cmd/lc_navigateback.png cmd/lc_prevrecord.png
-cmd/lc_pageup.png cmd/lc_prevrecord.png
-cmd/lc_previouspage.png cmd/lc_prevrecord.png
+cmd/lc_pageup.png cmd/lc_previouspage.png
 
 cmd/sc_browsebackward.png cmd/sc_prevrecord.png
 cmd/sc_navigateback.png cmd/sc_prevrecord.png
-cmd/sc_pageup.png cmd/sc_prevrecord.png
-cmd/sc_previouspage.png cmd/sc_prevrecord.png
+cmd/sc_pageup.png cmd/sc_previouspage.png
 
 # >
-cmd/32/pagedown.png cmd/32/nextrecord.png
 cmd/32/navigateforward.png cmd/32/nextrecord.png
-cmd/32/nextpage.png cmd/32/nextrecord.png
+cmd/32/pagedown.png cmd/32/nextpage.png
 
-cmd/lc_pagedown.png cmd/lc_nextrecord.png
 cmd/lc_navigateforward.png cmd/lc_nextrecord.png
-cmd/lc_nextpage.png cmd/lc_nextrecord.png
+cmd/lc_pagedown.png cmd/lc_nextpage.png
 
-cmd/sc_pagedown.png cmd/sc_nextrecord.png
 cmd/sc_navigateforward.png cmd/sc_nextrecord.png
-cmd/sc_nextpage.png cmd/sc_nextrecord.png
+cmd/sc_pagedown.png cmd/sc_nextpage.png
 
 # >|
 cmd/32/gotoend.png cmd/32/lastrecord.png
-cmd/32/gotoendofdoc.png cmd/32/lastrecord.png
-cmd/32/lastpage.png cmd/32/lastrecord.png
+cmd/32/gotoendofdoc.png cmd/32/lastpage.png
 
 cmd/lc_gotoend.png cmd/lc_lastrecord.png
-cmd/lc_gotoendofdoc.png cmd/lc_lastrecord.png
-cmd/lc_lastpage.png cmd/lc_lastrecord.png
+cmd/lc_gotoendofdoc.png cmd/lc_lastpage.png
 
 cmd/sc_gotoend.png cmd/sc_lastrecord.png
-cmd/sc_gotoendofdoc.png cmd/sc_lastrecord.png
-cmd/sc_lastpage.png cmd/sc_lastrecord.png
+cmd/sc_gotoendofdoc.png cmd/sc_lastpage.png
 
 # |<
-cmd/32/gotostartofdoc.png cmd/32/firstrecord.png
+cmd/32/gotostartofdoc.png cmd/32/firstpage.png
 cmd/32/gotostartoftable.png cmd/32/firstrecord.png
-cmd/32/firstpage.png cmd/32/firstrecord.png
 
-cmd/lc_gotostartofdoc.png cmd/lc_firstrecord.png
+cmd/lc_gotostartofdoc.png cmd/lc_firstpage.png
 cmd/lc_gotostartoftable.png cmd/lc_firstrecord.png
-cmd/lc_firstpage.png cmd/lc_firstrecord.png
 
-cmd/sc_gotostartofdoc.png cmd/sc_firstrecord.png
+cmd/sc_gotostartofdoc.png cmd/sc_firstpage.png
 cmd/sc_gotostartoftable.png cmd/sc_firstrecord.png
-cmd/sc_firstpage.png cmd/sc_firstrecord.png
 
 # Hyperlink
 cmd/32/hyperlinkdialog.png cmd/32/inserthyperlink.png
-
 cmd/lc_hyperlinkdialog.png cmd/lc_inserthyperlink.png
 cmd/sc_hyperlinkdialog.png cmd/sc_inserthyperlink.png
 
@@ -1526,16 +1507,6 @@ cmd/lc_yes.png cmd/lc_ok.png
 
 cmd/sc_apply.png cmd/sc_ok.png
 cmd/sc_yes.png cmd/sc_ok.png
-
-# up and down
-cmd/32/movepagedown.png cmd/32/downsearch.png
-cmd/32/movepageup.png cmd/32/upsearch.png
-
-cmd/lc_movepagedown.png cmd/lc_downsearch.png
-cmd/lc_movepageup.png cmd/lc_upsearch.png
-
-cmd/sc_movepagedown.png cmd/sc_downsearch.png
-cmd/sc_movepageup.png cmd/sc_upsearch.png
 
 # Find Toolbar
 cmd/32/findbar.png cmd/32/recsearch.png
@@ -1877,13 +1848,21 @@ cmd/32/savesimple.png cmd/32/save.png
 cmd/lc_savesimple.png cmd/lc_save.png
 cmd/sc_savesimple.png cmd/sc_save.png
 
+# Page command aliases
+cmd/32/movepagedown.png cmd/32/movedown.png
+cmd/32/movepageup.png cmd/32/moveup.png
+cmd/lc_movepagedown.png cmd/lc_movedown.png
+cmd/lc_movepageup.png cmd/lc_moveup.png
+cmd/sc_movepagedown.png cmd/sc_movedown.png
+cmd/sc_movepageup.png cmd/sc_moveup.png
+
 # Slide command aliases
 cmd/32/firstslide.png cmd/32/firstrecord.png
 cmd/32/lastslide.png cmd/32/lastrecord.png
 cmd/32/moveslidefirst.png cmd/32/movepagefirst.png
 cmd/32/moveslidelast.png cmd/32/movepagelast.png
-cmd/32/moveslideup.png cmd/32/upsearch.png
-cmd/32/moveslidedown.png cmd/32/downsearch.png
+cmd/32/moveslideup.png cmd/32/moveup.png
+cmd/32/moveslidedown.png cmd/32/movedown.png
 cmd/32/nextslide.png cmd/32/nextrecord.png
 cmd/32/previousslide.png cmd/32/prevrecord.png
 cmd/32/slidesetup.png cmd/32/pagesetup.png
@@ -1892,8 +1871,8 @@ cmd/lc_firstslide.png cmd/lc_firstrecord.png
 cmd/lc_lastslide.png cmd/lc_lastrecord.png
 cmd/lc_moveslidefirst.png cmd/lc_movepagefirst.png
 cmd/lc_moveslidelast.png cmd/lc_movepagelast.png
-cmd/lc_moveslideup.png cmd/lc_upsearch.png
-cmd/lc_moveslidedown.png cmd/lc_downsearch.png
+cmd/lc_moveslideup.png cmd/lc_moveup.png
+cmd/lc_moveslidedown.png cmd/lc_movedown.png
 cmd/lc_nextslide.png cmd/lc_nextrecord.png
 cmd/lc_previousslide.png cmd/lc_prevrecord.png
 cmd/lc_slidesetup.png cmd/lc_pagesetup.png
@@ -1902,8 +1881,8 @@ cmd/sc_firstslide.png cmd/sc_firstrecord.png
 cmd/sc_lastslide.png cmd/sc_lastrecord.png
 cmd/sc_moveslidefirst.png cmd/sc_movepagefirst.png
 cmd/sc_moveslidelast.png cmd/sc_movepagelast.png
-cmd/sc_moveslideup.png cmd/sc_upsearch.png
-cmd/sc_moveslidedown.png cmd/sc_downsearch.png
+cmd/sc_moveslideup.png cmd/sc_moveup.png
+cmd/sc_moveslidedown.png cmd/sc_movedown.png
 cmd/sc_nextslide.png cmd/sc_nextrecord.png
 cmd/sc_previousslide.png cmd/sc_prevrecord.png
 cmd/sc_slidesetup.png cmd/sc_pagesetup.png
@@ -2280,7 +2259,7 @@ svtools/res/back_small.png cmd/sc_prevrecord.png
 svtools/res/back_large.png cmd/lc_prevrecord.png
 svtools/res/ed06.png dbaccess/res/pkey.png
 svtools/res/folder.png formula/res/fapclose.png
-svtools/res/folderop.png cmd/sc_open.pngf
+svtools/res/folderop.png cmd/sc_open.png
 
 # svx
 # ==============================================
