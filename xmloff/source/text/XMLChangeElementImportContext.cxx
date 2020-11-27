@@ -34,11 +34,9 @@ using ::xmloff::token::XML_CHANGE_INFO;
 
 XMLChangeElementImportContext::XMLChangeElementImportContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     bool bAccContent,
     XMLChangedRegionImportContext& rParent) :
-        SvXMLImportContext(rImport, nPrefix, rLocalName),
+        SvXMLImportContext(rImport),
         bAcceptContent(bAccContent),
         rChangedRegion(rParent)
 {

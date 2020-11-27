@@ -61,8 +61,6 @@ public:
 
     XMLChangeElementImportContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
         /// accept text content (paragraphs) in element as redline content?
         bool bAcceptContent,
         /// context of enclosing <text:changed-region> element
