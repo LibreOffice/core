@@ -328,7 +328,7 @@ bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
             }
             break;
 
-            default:
+            case GraphicType::Default:
             break;
         }
     }
@@ -769,15 +769,11 @@ Size ImpGraphic::ImplGetPrefSize() const
     }
     else
     {
-        switch( meType )
+        switch (meType)
         {
-            case GraphicType::NONE:
-            case GraphicType::Default:
-            break;
-
             case GraphicType::Bitmap:
             {
-                if(maVectorGraphicData && maBitmapEx.IsEmpty())
+                if (maVectorGraphicData && maBitmapEx.IsEmpty())
                 {
                     if (!maExPrefSize.getWidth() || !maExPrefSize.getHeight())
                     {
@@ -803,57 +799,61 @@ Size ImpGraphic::ImplGetPrefSize() const
             }
             break;
 
-            default:
+            case GraphicType::GdiMetafile:
             {
-                if( ImplIsSupportedGraphic() )
+                if (ImplIsSupportedGraphic())
                   aSize = maMetaFile.GetPrefSize();
             }
             break;
+
+            case GraphicType::NONE:
+            case GraphicType::Default:
+                break;
         }
     }
 
     return aSize;
 }
 
-void ImpGraphic::ImplSetPrefSize( const Size& rPrefSize )
+void ImpGraphic::ImplSetPrefSize(const Size& rPrefSize)
 {
     ensureAvailable();
 
-    switch( meType )
+    switch (meType)
     {
-        case GraphicType::NONE:
-        case GraphicType::Default:
-        break;
-
         case GraphicType::Bitmap:
         {
             // used when importing a writer FlyFrame with SVG as graphic, added conversion
             // to allow setting the PrefSize at the BitmapEx to hold it
-            if(maVectorGraphicData && maBitmapEx.IsEmpty())
+            if (maVectorGraphicData && maBitmapEx.IsEmpty())
             {
                 maExPrefSize = rPrefSize;
             }
 
             // #108077# Push through pref size to animation object,
             // will be lost on copy otherwise
-            if( ImplIsAnimated() )
+            if (ImplIsAnimated())
             {
-                const_cast< BitmapEx& >(mpAnimation->GetBitmapEx()).SetPrefSize( rPrefSize );
+                const_cast< BitmapEx& >(mpAnimation->GetBitmapEx()).SetPrefSize(rPrefSize);
             }
 
             if (!maExPrefSize.getWidth() || !maExPrefSize.getHeight())
             {
-                maBitmapEx.SetPrefSize( rPrefSize );
+                maBitmapEx.SetPrefSize(rPrefSize);
             }
         }
         break;
 
-        default:
+        case GraphicType::GdiMetafile:
         {
-            if( ImplIsSupportedGraphic() )
-                maMetaFile.SetPrefSize( rPrefSize );
+            if (ImplIsSupportedGraphic())
+                maMetaFile.SetPrefSize(rPrefSize);
         }
         break;
+
+        case GraphicType::NONE:
+        case GraphicType::Default:
+            break;
     }
 }
 
@@ -867,54 +867,49 @@ MapMode ImpGraphic::ImplGetPrefMapMode() const
     }
     else
     {
-        switch( meType )
+        switch (meType)
         {
-            case GraphicType::NONE:
-            case GraphicType::Default:
-            break;
-
             case GraphicType::Bitmap:
             {
-                if(maVectorGraphicData && maBitmapEx.IsEmpty())
+                if (maVectorGraphicData && maBitmapEx.IsEmpty())
                 {
                     // svg not yet buffered in maBitmapEx, return default PrefMapMode
                     aMapMode = MapMode(MapUnit::Map100thMM);
                 }
                 else
                 {
-                    const Size aSize( maBitmapEx.GetPrefSize() );
+                    const Size aSize(maBitmapEx.GetPrefSize());
 
-                    if ( aSize.Width() && aSize.Height() )
+                    if (aSize.Width() && aSize.Height())
                         aMapMode = maBitmapEx.GetPrefMapMode();
                 }
             }
             break;
 
-            default:
+            case GraphicType::GdiMetafile:
             {
-                if( ImplIsSupportedGraphic() )
-                    return maMetaFile.GetPrefMapMode();
+                return maMetaFile.GetPrefMapMode();
             }
             break;
+
+            case GraphicType::NONE:
+            case GraphicType::Default:
+                break;
         }
     }
 
     return aMapMode;
 }
 
-void ImpGraphic::ImplSetPrefMapMode( const MapMode& rPrefMapMode )
+void ImpGraphic::ImplSetPrefMapMode(const MapMode& rPrefMapMode)
 {
     ensureAvailable();
 
-    switch( meType )
+    switch (meType)
     {
-        case GraphicType::NONE:
-        case GraphicType::Default:
-        break;
-
         case GraphicType::Bitmap:
         {
-            if(maVectorGraphicData)
+            if (maVectorGraphicData)
             {
                 // ignore for Vector Graphic Data. If this is really used (except the grfcache)
                 // it can be extended by using maBitmapEx as buffer for getVectorGraphicReplacement()
@@ -923,131 +918,150 @@ void ImpGraphic::ImplSetPrefMapMode( const MapMode& rPrefMapMode )
             {
                 // #108077# Push through pref mapmode to animation object,
                 // will be lost on copy otherwise
-                if( ImplIsAnimated() )
+                if (ImplIsAnimated())
                 {
-                    const_cast< BitmapEx& >(mpAnimation->GetBitmapEx()).SetPrefMapMode( rPrefMapMode );
+                    const_cast<BitmapEx&>(mpAnimation->GetBitmapEx()).SetPrefMapMode(rPrefMapMode);
                 }
 
-                maBitmapEx.SetPrefMapMode( rPrefMapMode );
+                maBitmapEx.SetPrefMapMode(rPrefMapMode);
             }
         }
         break;
 
-        default:
+        case GraphicType::GdiMetafile:
         {
-            if( ImplIsSupportedGraphic() )
-                maMetaFile.SetPrefMapMode( rPrefMapMode );
+            maMetaFile.SetPrefMapMode(rPrefMapMode);
         }
         break;
+
+        case GraphicType::NONE:
+        case GraphicType::Default:
+            break;
     }
 }
 
 sal_uLong ImpGraphic::ImplGetSizeBytes() const
 {
-    if( mnSizeBytes )
+    if (mnSizeBytes > 0)
         return mnSizeBytes;
 
     if (mbPrepared)
         ensureAvailable();
 
-    if( meType == GraphicType::Bitmap )
+    switch (meType)
     {
-        if(maVectorGraphicData)
+        case GraphicType::Bitmap:
         {
-            std::pair<VectorGraphicData::State, size_t> tmp(maVectorGraphicData->getSizeBytes());
-            if (VectorGraphicData::State::UNPARSED == tmp.first)
+            if (maVectorGraphicData)
             {
-                return tmp.second; // don't cache it until Vector Graphic Data is parsed
+                std::pair<VectorGraphicData::State, size_t> aPair(maVectorGraphicData->getSizeBytes());
+                if (VectorGraphicData::State::UNPARSED == aPair.first)
+                {
+                    return aPair.second; // don't cache it until Vector Graphic Data is parsed
+                }
+                mnSizeBytes = aPair.second;
             }
-            mnSizeBytes = tmp.second;
+            else
+            {
+                mnSizeBytes = mpAnimation ? mpAnimation->GetSizeBytes() : maBitmapEx.GetSizeBytes();
+            }
         }
-        else
+        break;
+
+        case GraphicType::GdiMetafile:
         {
-            mnSizeBytes = mpAnimation ? mpAnimation->GetSizeBytes() : maBitmapEx.GetSizeBytes();
+            mnSizeBytes = maMetaFile.GetSizeBytes();
         }
-    }
-    else if( meType == GraphicType::GdiMetafile )
-    {
-        mnSizeBytes = maMetaFile.GetSizeBytes();
+        break;
+
+        case GraphicType::NONE:
+        case GraphicType::Default:
+            break;
     }
 
     return mnSizeBytes;
 }
 
-void ImpGraphic::ImplDraw( OutputDevice* pOutDev, const Point& rDestPt ) const
+void ImpGraphic::ImplDraw(OutputDevice* pOutDev, const Point& rDestPt) const
 {
     ensureAvailable();
-    if( !ImplIsSupportedGraphic() || isSwappedOut() )
+
+    if (isSwappedOut())
         return;
 
-    switch( meType )
+    switch (meType)
     {
-        case GraphicType::Default:
-        break;
-
         case GraphicType::Bitmap:
         {
-            if(maVectorGraphicData && !maBitmapEx)
+            if (maVectorGraphicData && !maBitmapEx)
             {
-                // use maEx as local buffer for rendered svg
-                const_cast< ImpGraphic* >(this)->maBitmapEx = getVectorGraphicReplacement();
+                // use maBitmapEx as local buffer for rendered svg
+                const_cast<ImpGraphic*>(this)->maBitmapEx = getVectorGraphicReplacement();
             }
 
-            if ( mpAnimation )
+            if (mpAnimation)
             {
-                mpAnimation->Draw( pOutDev, rDestPt );
+                mpAnimation->Draw(pOutDev, rDestPt);
             }
             else
             {
-                maBitmapEx.Draw( pOutDev, rDestPt );
+                maBitmapEx.Draw(pOutDev, rDestPt);
             }
         }
         break;
 
-        default:
-            ImplDraw( pOutDev, rDestPt, maMetaFile.GetPrefSize() );
+        case GraphicType::GdiMetafile:
+        {
+            ImplDraw(pOutDev, rDestPt, maMetaFile.GetPrefSize());
+        }
         break;
+
+        case GraphicType::Default:
+        case GraphicType::NONE:
+            break;
     }
 }
 
-void ImpGraphic::ImplDraw( OutputDevice* pOutDev,
-                           const Point& rDestPt, const Size& rDestSize ) const
+void ImpGraphic::ImplDraw(OutputDevice* pOutDev,
+                          const Point& rDestPt, const Size& rDestSize) const
 {
     ensureAvailable();
-    if( !ImplIsSupportedGraphic() || isSwappedOut() )
+
+    if (isSwappedOut())
         return;
 
-    switch( meType )
+    switch (meType)
     {
-        case GraphicType::Default:
-        break;
-
         case GraphicType::Bitmap:
         {
-            if(maVectorGraphicData && maBitmapEx.IsEmpty())
+            if (maVectorGraphicData && maBitmapEx.IsEmpty())
             {
-                // use maEx as local buffer for rendered svg
-                const_cast< ImpGraphic* >(this)->maBitmapEx = getVectorGraphicReplacement();
+                // use maBitmapEx as local buffer for rendered svg
+                const_cast<ImpGraphic*>(this)->maBitmapEx = getVectorGraphicReplacement();
             }
 
-            if( mpAnimation )
+            if (mpAnimation)
             {
-                mpAnimation->Draw( pOutDev, rDestPt, rDestSize );
+                mpAnimation->Draw(pOutDev, rDestPt, rDestSize);
             }
             else
             {
-                maBitmapEx.Draw( pOutDev, rDestPt, rDestSize );
+                maBitmapEx.Draw(pOutDev, rDestPt, rDestSize);
             }
         }
         break;
 
-        default:
+        case GraphicType::GdiMetafile:
         {
             const_cast<ImpGraphic*>(this)->maMetaFile.WindStart();
-            const_cast<ImpGraphic*>(this)->maMetaFile.Play( pOutDev, rDestPt, rDestSize );
+            const_cast<ImpGraphic*>(this)->maMetaFile.Play(pOutDev, rDestPt, rDestSize);
             const_cast<ImpGraphic*>(this)->maMetaFile.WindStart();
         }
         break;
+
+        case GraphicType::Default:
+        case GraphicType::NONE:
+            break;
     }
 }
 
