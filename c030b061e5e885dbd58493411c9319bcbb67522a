@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c99d6b0a_fc394dae",
+        "filename": "offapi/com/sun/star/xml/sax/XFastParser.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-11-28T13:46:22Z",
+      "side": 1,
+      "message": "I didn\u0027t try but shouldn\u0027t it be:\n\"com::sun::star::xml::dom::XEntity\" ?",
+      "range": {
+        "startLine": 166,
+        "startChar": 45,
+        "endLine": 166,
+        "endChar": 62
+      },
+      "revId": "c030b061e5e885dbd58493411c9319bcbb67522a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
