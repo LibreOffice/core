@@ -335,6 +335,8 @@ public:
     virtual void SAL_CALL setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) override;
     virtual void SAL_CALL setLocale( const css::lang::Locale& rLocale ) override;
     virtual void SAL_CALL setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) override;
+    virtual void SAL_CALL setCustomEntityNames( const ::css::uno::Sequence< ::rtl::OUString >& names,
+                                                const ::css::uno::Sequence< ::rtl::OUString >& replacements )  override;
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
