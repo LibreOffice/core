@@ -38,6 +38,13 @@
  * methods and the SvXMLElementExport constructor.
  */
 
+namespace xmloff{
+    struct xmlentity{
+        const char* m_name;
+        const char* m_replace;
+    };
+}
+
 namespace xmloff::token {
 
     // IMPORTANT! XMLTokenEnum order MUST be in synch with aTokenList in

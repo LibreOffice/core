@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include <sax/fastsaxdllapi.h>
+#include <xmloff/xmltoken.hxx>
 #include <memory>
 
 namespace com::sun::star::xml::sax {
@@ -64,6 +65,7 @@ public:
     virtual void SAL_CALL setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) override;
     virtual void SAL_CALL setLocale( const css::lang::Locale& rLocale ) override;
     virtual void SAL_CALL setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) override;
+    virtual void SAL_CALL setCustomEntityNames( const std::vector<xmloff::xmlentity> entityList ); //override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
