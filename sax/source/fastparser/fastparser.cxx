@@ -119,6 +119,10 @@ struct SaxContext
     }
 };
 
+struct XmlEntityDeleter
+{
+    void operator()(xmlEntity* p) { xmlFree(p); }
+};
 
 struct ParserData
 {
@@ -211,6 +215,10 @@ public:
     explicit FastSaxParserImpl();
     ~FastSaxParserImpl();
 
+private:
+    std::vector<xmloff::xmlentity> mEntityList;
+
+public:
     // XFastParser
     /// @throws css::xml::sax::SAXException
     /// @throws css::io::IOException
@@ -230,6 +238,8 @@ public:
     void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler );
     /// @throws css::uno::RuntimeException
     void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler);
+    // Fake DTD file
+    void setCustomEntityNames( const std::vector<xmloff::xmlentity> entityList );
 
     // called by the C callbacks of the expat parser
     void callbackStartElement( const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
@@ -237,6 +247,7 @@ public:
     void callbackEndElement();
     void callbackCharacters( const xmlChar* s, int nLen );
     void callbackProcessingInstruction( const xmlChar *target, const xmlChar *data );
+    xmlEntityPtr callbackGetEntity( const xmlChar *name );
 
     void pushEntity(const ParserData&, xml::sax::InputSource const&);
     void popEntity();
@@ -245,6 +256,7 @@ public:
     void produce( bool bForceFlush = false );
     bool m_bIgnoreMissingNSDecl;
     bool m_bDisableThreadedParser;
+    std::unique_ptr<xmlEntity, XmlEntityDeleter> mxMath1;
 
 private:
     bool consume(EventList&);
@@ -323,6 +335,12 @@ static void call_callbackProcessingInstruction( void *userData, const xmlChar *t
 {
     FastSaxParserImpl* pFastParser = static_cast<FastSaxParserImpl*>( userData );
     pFastParser->callbackProcessingInstruction( target, data );
+}
+
+static xmlEntityPtr call_callbackGetEntity( void *userData, const xmlChar *name)
+{
+    FastSaxParserImpl* pFastParser = static_cast<FastSaxParserImpl*>( userData );
+    return pFastParser->callbackGetEntity( name );
 }
 
 }
@@ -921,6 +939,11 @@ void FastSaxParserImpl::setNamespaceHandler( const Reference< XFastNamespaceHand
     maData.mxNamespaceHandler = Handler;
 }
 
+void FastSaxParserImpl::setCustomEntityNames( const std::vector<xmloff::xmlentity> entityList )
+{
+    mEntityList = entityList;
+}
+
 void FastSaxParserImpl::deleteUsedEvents()
 {
     Entity& rEntity = getEntity();
@@ -1036,6 +1059,7 @@ void FastSaxParserImpl::parse()
     callbacks.endElementNs = call_callbackEndElement;
     callbacks.characters = call_callbackCharacters;
     callbacks.processingInstruction = call_callbackProcessingInstruction;
+    callbacks.getEntity = call_callbackGetEntity;
     callbacks.initialized = XML_SAX2_MAGIC;
     int nRead = 0;
     do
@@ -1344,6 +1368,23 @@ void FastSaxParserImpl::callbackProcessingInstruction( const xmlChar *target, co
         rEntity.processingInstruction( rEvent.msNamespace, rEvent.msElementName );
 }
 
+xmlEntityPtr FastSaxParserImpl::callbackGetEntity( const xmlChar *name )
+{
+    for( size_t i = 0; i < mEntityList.size(); ++i )
+    {
+        if( strcmp(XML_CAST(name), mEntityList[i].name ) == 0 )
+        {
+            if (!mxMath1)
+            mxMath1.reset(xmlNewEntity( nullptr,
+                BAD_CAST(mEntityList[i].m_name),
+                XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
+                BAD_CAST(mEntityList[i].m_replace)));
+            return mxMath1.get();
+        }
+    }
+    return xmlGetPredefinedEntity(name);
+}
+
 FastSaxParser::FastSaxParser() : mpImpl(new FastSaxParserImpl) {}
 
 FastSaxParser::~FastSaxParser()
@@ -1419,6 +1460,11 @@ void FastSaxParser::setNamespaceHandler( const uno::Reference< css::xml::sax::XF
 OUString FastSaxParser::getImplementationName()
 {
     return "com.sun.star.comp.extensions.xml.sax.FastParser";
+}
+
+void FastSaxParser::setCustomEntityNames( const std::vector<xmloff::xmlentity> entityList )
+{
+    mpImpl->setCustomEntityNames(entityList);
 }
 
 sal_Bool FastSaxParser::supportsService( const OUString& ServiceName )
