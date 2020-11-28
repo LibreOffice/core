@@ -1098,6 +1098,7 @@ Dim vSelection As Variant					&apos;	Alias of Model.SelectedItems
 Dim vList As Variant						&apos;	Alias of Model.StringItemList
 Dim lIndex As Long							&apos;	Index in StringItemList
 Dim sItem As String							&apos;	A single item
+Dim vCtlTypes As Variant					&apos;	Array of allowed control types
 Dim i As Long
 Dim cstThisSub As String
 Const cstSubArgs = &quot;Value&quot;
@@ -1185,6 +1186,32 @@ Const cstSubArgs = &quot;Value&quot;
 					End If
 				Case Else	:	GoTo CatchType
 			End Select
+		Case UCase(&quot;OnActionPerformed&quot;), UCase(&quot;OnAdjustmentValueChanged&quot;), UCase(&quot;OnFocusGained&quot;), UCase(&quot;OnFocusLost&quot;) _
+				, UCase(&quot;OnItemStateChanged&quot;), UCase(&quot;OnKeyPressed&quot;), UCase(&quot;OnKeyReleased&quot;) _
+				, UCase(&quot;OnMouseDragged&quot;), UCase(&quot;OnMouseEntered&quot;), UCase(&quot;OnMouseExited&quot;), UCase(&quot;OnMouseMoved&quot;) _
+				, UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;), UCase(&quot;OnTextChanged&quot;)
+			If Not ScriptForge.SF_Utils._Validate(pvValue, psProperty, V_STRING) Then GoTo Finally
+			&apos;	Most properties are common to all control types, but there are exceptions
+			Select Case UCase(psProperty)
+				Case UCase(&quot;OnActionPerformed&quot;), UCase(&quot;OnItemStateChanged&quot;)
+					vCtlTypes = Array(CTLBUTTON, CTLCHECKBOX, CTLCOMBOBOX, CTLLISTBOX, CTLRADIOBUTTON)
+				Case UCase(&quot;OnAdjustmentValueChanged&quot;)
+					vCtlTypes = Array(CTLSCROLLBAR)
+				Case UCase(&quot;OnTextChanged&quot;)
+					vCtlTypes = Array(CTLCOMBOBOX, CTLCURRENCYFIELD, CTLDATEFIELD, CTLFILECONTROL, CTLFORMATTEDFIELD _
+									, CTLNUMERICFIELD, CTLPATTERNFIELD, CTLTEXTFIELD, CTLTIMEFIELD)
+				Case Else
+					vCtlTypes = Array()
+			End Select
+			If UBound(vCtlTypes) &gt;= 0 Then
+				If Not ScriptForge.SF_Array.Contains(vCtlTypes, _ControlType) Then GoTo CatchType
+			End If
+			SFDialogs.SF_Register._SetEventScript( _
+						_ControlModel _
+						, _GetEventName(psProperty) _
+						, _GetListener(psProperty) _
+						, pvValue _
+						)
 		Case UCase(&quot;Page&quot;)
 			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Page&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
 			If oSession.HasUnoProperty(_ControlModel, &quot;Step&quot;) Then _ControlModel.Step = CLng(pvValue)
