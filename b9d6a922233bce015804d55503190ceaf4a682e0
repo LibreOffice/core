@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "611050b5_196ca32a",
+        "filename": "offapi/com/sun/star/xml/sax/XFastParser.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-28T17:40:58Z",
+      "side": 1,
+      "message": "if you are not comfortable making a new UNO struct, just make this take two params:\n\n   ( [in] sequence\u003cstring\u003e names, [in] sequence\u003cstring\u003e replacements)",
+      "revId": "b9d6a922233bce015804d55503190ceaf4a682e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "221bcf2c_997be41e",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-28T17:40:58Z",
+      "side": 1,
+      "message": "you\u0027re going to need an array of these, one for each replacement",
+      "revId": "b9d6a922233bce015804d55503190ceaf4a682e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
