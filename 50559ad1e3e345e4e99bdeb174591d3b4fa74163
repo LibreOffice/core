@@ -22,6 +22,30 @@
       "revId": "50559ad1e3e345e4e99bdeb174591d3b4fa74163",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "544503cb_1af7b43d",
+        "filename": "sw/source/core/text/txtpaint.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-11-28T13:03:55Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "e4850b18_fcf78b5c",
+      "range": {
+        "startLine": 123,
+        "startChar": 1,
+        "endLine": 123,
+        "endChar": 6
+      },
+      "revId": "50559ad1e3e345e4e99bdeb174591d3b4fa74163",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
