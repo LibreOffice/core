@@ -620,21 +620,33 @@ void SalGraphics::CopyArea( tools::Long nDestX, tools::Long nDestY,
     copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, true/*bWindowInvalidate*/ );
 }
 
-void SalGraphics::CopyBits( const SalTwoRect& rPosAry,
-                            SalGraphics* pSrcGraphics, const OutputDevice& rOutDev, const OutputDevice *pSrcOutDev )
+void SalGraphics::CopyBits(const SalTwoRect& rPosAry, const OutputDevice& rOutDev)
 {
-    if( ( (m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled() ) ||
-        (pSrcGraphics && ( (pSrcGraphics->GetLayout() & SalLayoutFlags::BiDiRtl)  || (pSrcOutDev && pSrcOutDev->IsRTLEnabled()) ) ) )
+    if( (m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled() )
     {
         SalTwoRect aPosAry2 = rPosAry;
-        if( (pSrcGraphics && (pSrcGraphics->GetLayout() & SalLayoutFlags::BiDiRtl)) || (pSrcOutDev && pSrcOutDev->IsRTLEnabled()) )
-            mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth, pSrcOutDev );
-        if( (m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled() )
-            mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth, &rOutDev );
-        copyBits( aPosAry2, pSrcGraphics );
+        mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth, &rOutDev );
+        copyBits( aPosAry2, nullptr );
     }
     else
-        copyBits( rPosAry, pSrcGraphics );
+        copyBits( rPosAry, nullptr );
+}
+
+void SalGraphics::CopyBits(const SalTwoRect& rPosAry, SalGraphics& rSrcGraphics,
+                           const OutputDevice& rOutDev, const OutputDevice& rSrcOutDev)
+{
+    if( ( (m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled() ) ||
+        ( (rSrcGraphics.GetLayout() & SalLayoutFlags::BiDiRtl)  || rSrcOutDev.IsRTLEnabled()) )
+    {
+        SalTwoRect aPosAry2 = rPosAry;
+        if( (rSrcGraphics.GetLayout() & SalLayoutFlags::BiDiRtl) || rSrcOutDev.IsRTLEnabled() )
+            mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth, &rSrcOutDev );
+        if( (m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled() )
+            mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth, &rOutDev );
+        copyBits( aPosAry2, &rSrcGraphics );
+    }
+    else
+        copyBits( rPosAry, &rSrcGraphics );
 }
 
 void SalGraphics::DrawBitmap( const SalTwoRect& rPosAry,

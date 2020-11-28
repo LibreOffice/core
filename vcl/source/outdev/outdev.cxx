@@ -388,7 +388,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
         AdjustTwoRect( aPosAry, aSrcOutRect );
 
         if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
-            mpGraphics->CopyBits( aPosAry, nullptr, *this, nullptr );
+            mpGraphics->CopyBits(aPosAry, *this);
     }
 
     if( mpAlphaVDev )
@@ -512,7 +512,7 @@ void OutputDevice::CopyDeviceArea( SalTwoRect& aPosAry, bool /*bWindowInvalidate
 
     aPosAry.mnDestWidth  = aPosAry.mnSrcWidth;
     aPosAry.mnDestHeight = aPosAry.mnSrcHeight;
-    mpGraphics->CopyBits(aPosAry, nullptr, *this, nullptr);
+    mpGraphics->CopyBits(aPosAry, *this);
 }
 
 // Direct OutputDevice drawing private function
@@ -558,10 +558,13 @@ void OutputDevice::DrawOutDevDirectProcess(const OutputDevice& rSrcDev, SalTwoRe
     {
         SalTwoRect aPosAry2 = rPosAry;
         pSrcGraphics->mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth, &rSrcDev );
-        mpGraphics->CopyBits( aPosAry2, pSrcGraphics, *this, &rSrcDev );
+        mpGraphics->CopyBits( aPosAry2, *pSrcGraphics, *this, rSrcDev );
+        return;
     }
+    if (pSrcGraphics)
+        mpGraphics->CopyBits( rPosAry, *pSrcGraphics, *this, rSrcDev );
     else
-        mpGraphics->CopyBits( rPosAry, pSrcGraphics, *this, &rSrcDev );
+        mpGraphics->CopyBits( rPosAry, *this );
 }
 
 tools::Rectangle OutputDevice::GetBackgroundComponentBounds() const

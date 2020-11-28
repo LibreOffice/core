@@ -390,6 +390,8 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 
     if ( mpGraphics || AcquireGraphics() )
     {
+        assert(mpGraphics);
+
         if ( nWidth > 0 && nHeight  > 0 && nX <= (mnOutWidth + mnOutOffX) && nY <= (mnOutHeight + mnOutOffY))
         {
             tools::Rectangle   aRect( Point( nX, nY ), Size( nWidth, nHeight ) );
@@ -442,7 +444,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
                                               (aRect.Left() < mnOutOffX) ? (mnOutOffX - aRect.Left()) : 0L,
                                               (aRect.Top() < mnOutOffY) ? (mnOutOffY - aRect.Top()) : 0L,
                                               nWidth, nHeight);
-                            aVDev->mpGraphics->CopyBits( aPosAry, mpGraphics, *this, this );
+                            aVDev->mpGraphics->CopyBits(aPosAry, *mpGraphics, *this, *this);
                         }
                         else
                         {
