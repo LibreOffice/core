@@ -286,13 +286,20 @@ public:
                                     tools::Long nSrcWidth, tools::Long nSrcHeight,
                                     const OutputDevice& rOutDev );
 
-    // CopyBits and DrawBitmap --> RasterOp and ClipRegion
-    // CopyBits() --> pSrcGraphics == nullptr, then CopyBits on same Graphics
+    // CopyBits --> RasterOp and ClipRegion
+    // CopyBits() CopyBits on same Graphics
     void                        CopyBits(
                                     const SalTwoRect& rPosAry,
-                                    SalGraphics* pSrcGraphics,
+                                    const OutputDevice& rOutDev);
+
+    // CopyBits --> RasterOp and ClipRegion
+    // CopyBits() CopyBits on different Graphics
+    void                        CopyBits(
+                                    const SalTwoRect& rPosAry,
+                                    SalGraphics& rSrcGraphics,
                                     const OutputDevice& rOutDev,
-                                    const OutputDevice *pSrcOutDev );
+                                    const OutputDevice& rSrcOutDev );
+
 
     void                        DrawBitmap(
                                     const SalTwoRect& rPosAry,
