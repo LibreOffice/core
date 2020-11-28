@@ -226,6 +226,174 @@ Property Get Name() As String
 End Property	&apos;	SFDialogs.SF_DialogControl.Name
 
 REM -----------------------------------------------------------------------------
+Property Get OnActionPerformed() As Variant
+&apos;&apos;&apos;	Get the script associated with the OnActionPerformed event
+	OnActionPerformed = _PropertyGet(&quot;OnActionPerformed&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnActionPerformed (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnActionPerformed(Optional ByVal pvOnActionPerformed As Variant)
+&apos;&apos;&apos;	Set the updatable property OnActionPerformed
+	_PropertySet(&quot;OnActionPerformed&quot;, pvOnActionPerformed)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnActionPerformed (let)
+
+REM -----------------------------------------------------------------------------
+Property Get OnAdjustmentValueChanged() As Variant
+&apos;&apos;&apos;	Get the script associated with the OnAdjustmentValueChanged event
+	OnAdjustmentValueChanged = _PropertyGet(&quot;OnAdjustmentValueChanged&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnAdjustmentValueChanged (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnAdjustmentValueChanged(Optional ByVal pvOnAdjustmentValueChanged As Variant)
+&apos;&apos;&apos;	Set the updatable property OnAdjustmentValueChanged
+	_PropertySet(&quot;OnAdjustmentValueChanged&quot;, pvOnAdjustmentValueChanged)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnAdjustmentValueChanged (let)
+
+REM -----------------------------------------------------------------------------
+Property Get OnFocusGained() As Variant
+&apos;&apos;&apos;	Get the script associated with the OnFocusGained event
+	OnFocusGained = _PropertyGet(&quot;OnFocusGained&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnFocusGained (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnFocusGained(Optional ByVal pvOnFocusGained As Variant)
+&apos;&apos;&apos;	Set the updatable property OnFocusGained
+	_PropertySet(&quot;OnFocusGained&quot;, pvOnFocusGained)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnFocusGained (let)
+
+REM -----------------------------------------------------------------------------
+Property Get OnFocusLost() As Variant
+&apos;&apos;&apos;	Get the script associated with the OnFocusLost event
+	OnFocusLost = _PropertyGet(&quot;OnFocusLost&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnFocusLost (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnFocusLost(Optional ByVal pvOnFocusLost As Variant)
+&apos;&apos;&apos;	Set the updatable property OnFocusLost
+	_PropertySet(&quot;OnFocusLost&quot;, pvOnFocusLost)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnFocusLost (let)
+
+REM -----------------------------------------------------------------------------
+Property Get OnItemStateChanged() As Variant
+&apos;&apos;&apos;	Get the script associated with the OnItemStateChanged event
+	OnItemStateChanged = _PropertyGet(&quot;OnItemStateChanged&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnItemStateChanged (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnItemStateChanged(Optional ByVal pvOnItemStateChanged As Variant)
+&apos;&apos;&apos;	Set the updatable property OnItemStateChanged
+	_PropertySet(&quot;OnItemStateChanged&quot;, pvOnItemStateChanged)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnItemStateChanged (let)
+
+REM -----------------------------------------------------------------------------
+Property Get OnKeyPressed() As Variant
+&apos;&apos;&apos;	Get the script associated with the OnKeyPressed event
+	OnKeyPressed = _PropertyGet(&quot;OnKeyPressed&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnKeyPressed (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnKeyPressed(Optional ByVal pvOnKeyPressed As Variant)
+&apos;&apos;&apos;	Set the updatable property OnKeyPressed
+	_PropertySet(&quot;OnKeyPressed&quot;, pvOnKeyPressed)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnKeyPressed (let)
+
+REM -----------------------------------------------------------------------------
+Property Get OnKeyReleased() As Variant
+&apos;&apos;&apos;	Get the script associated with the OnKeyReleased event
+	OnKeyReleased = _PropertyGet(&quot;OnKeyReleased&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnKeyReleased (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnKeyReleased(Optional ByVal pvOnKeyReleased As Variant)
+&apos;&apos;&apos;	Set the updatable property OnKeyReleased
+	_PropertySet(&quot;OnKeyReleased&quot;, pvOnKeyReleased)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnKeyReleased (let)
+
+REM -----------------------------------------------------------------------------
+Property Get OnMouseDragged() As Variant
+&apos;&apos;&apos;	Get the script associated with the OnMouseDragged event
+	OnMouseDragged = _PropertyGet(&quot;OnMouseDragged&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseDragged (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnMouseDragged(Optional ByVal pvOnMouseDragged As Variant)
+&apos;&apos;&apos;	Set the updatable property OnMouseDragged
+	_PropertySet(&quot;OnMouseDragged&quot;, pvOnMouseDragged)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseDragged (let)
+
+REM -----------------------------------------------------------------------------
+Property Get OnMouseEntered() As Variant
+&apos;&apos;&apos;	Get the script associated with the OnMouseEntered event
+	OnMouseEntered = _PropertyGet(&quot;OnMouseEntered&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseEntered (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnMouseEntered(Optional ByVal pvOnMouseEntered As Variant)
+&apos;&apos;&apos;	Set the updatable property OnMouseEntered
+	_PropertySet(&quot;OnMouseEntered&quot;, pvOnMouseEntered)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseEntered (let)
+
+REM -----------------------------------------------------------------------------
+Property Get OnMouseExited() As Variant
+&apos;&apos;&apos;	Get the script associated with the OnMouseExited event
+	OnMouseExited = _PropertyGet(&quot;OnMouseExited&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseExited (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnMouseExited(Optional ByVal pvOnMouseExited As Variant)
+&apos;&apos;&apos;	Set the updatable property OnMouseExited
+	_PropertySet(&quot;OnMouseExited&quot;, pvOnMouseExited)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseExited (let)
+
+REM -----------------------------------------------------------------------------
+Property Get OnMouseMoved() As Variant
+&apos;&apos;&apos;	Get the script associated with the OnMouseMoved event
+	OnMouseMoved = _PropertyGet(&quot;OnMouseMoved&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseMoved (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnMouseMoved(Optional ByVal pvOnMouseMoved As Variant)
+&apos;&apos;&apos;	Set the updatable property OnMouseMoved
+	_PropertySet(&quot;OnMouseMoved&quot;, pvOnMouseMoved)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseMoved (let)
+
+REM -----------------------------------------------------------------------------
+Property Get OnMousePressed() As Variant
+&apos;&apos;&apos;	Get the script associated with the OnMousePressed event
+	OnMousePressed = _PropertyGet(&quot;OnMousePressed&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnMousePressed (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnMousePressed(Optional ByVal pvOnMousePressed As Variant)
+&apos;&apos;&apos;	Set the updatable property OnMousePressed
+	_PropertySet(&quot;OnMousePressed&quot;, pvOnMousePressed)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnMousePressed (let)
+
+REM -----------------------------------------------------------------------------
+Property Get OnMouseReleased() As Variant
+&apos;&apos;&apos;	Get the script associated with the OnMouseReleased event
+	OnMouseReleased = _PropertyGet(&quot;OnMouseReleased&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseReleased (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnMouseReleased(Optional ByVal pvOnMouseReleased As Variant)
+&apos;&apos;&apos;	Set the updatable property OnMouseReleased
+	_PropertySet(&quot;OnMouseReleased&quot;, pvOnMouseReleased)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseReleased (let)
+
+REM -----------------------------------------------------------------------------
+Property Get OnTextChanged() As Variant
+&apos;&apos;&apos;	Get the script associated with the OnTextChanged event
+	OnTextChanged = _PropertyGet(&quot;OnTextChanged&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnTextChanged (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnTextChanged(Optional ByVal pvOnTextChanged As Variant)
+&apos;&apos;&apos;	Set the updatable property OnTextChanged
+	_PropertySet(&quot;OnTextChanged&quot;, pvOnTextChanged)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnTextChanged (let)
+
+REM -----------------------------------------------------------------------------
 Property Get Page() As Variant
 &apos;&apos;&apos;	A dialog may have several pages that can be traversed by the user step by step. The Page property of the Dialog object defines which page of the dialog is active.
 &apos;&apos;&apos;	The Page property of a control defines the page of the dialog on which the control is visible.
@@ -402,6 +570,20 @@ Public Function Properties() As Variant
 					, &quot;Locked&quot; _
 					, &quot;MultiSelect&quot; _
 					, &quot;Name&quot; _
+					, &quot;OnActionPerformed&quot; _
+					, &quot;OnAdjustmentValueChanged&quot; _
+					, &quot;OnFocusGained&quot; _
+					, &quot;OnFocusLost&quot; _
+					, &quot;OnItemStateChanged&quot; _
+					, &quot;OnKeyPressed&quot; _
+					, &quot;OnKeyReleased&quot; _
+					, &quot;OnMouseDragged&quot; _
+					, &quot;OnMouseEntered&quot; _
+					, &quot;OnMouseExited&quot; _
+					, &quot;OnMouseMoved&quot; _
+					, &quot;OnMousePressed&quot; _
+					, &quot;OnMouseReleased&quot; _
+					, &quot;OnTextChanged&quot; _
 					, &quot;Page&quot; _
 					, &quot;Parent&quot; _
 					, &quot;Picture&quot; _
@@ -593,6 +775,50 @@ Dim vFormats() As Variant		&apos;	Return value
 End Function	&apos;	SFDialogs.SF_DialogControl._FormatsList
 
 REM -----------------------------------------------------------------------------
+Public Function _GetEventName(ByVal psProperty As String) As String
+&apos;&apos;&apos;	Return the LO internal event name derived from the SF property name
+&apos;&apos;&apos;	The SF property name is not case sensitive, while the LO name is case-sensitive
+&apos;	Corrects the typo on ErrorOccur(r?)ed, if necessary
+
+Dim vProperties As Variant			&apos;	Array of class properties
+Dim sProperty As String				&apos;	Correctly cased property name
+
+	vProperties = Properties()
+	sProperty = vProperties(ScriptForge.SF_Array.IndexOf(vProperties, psProperty, SortOrder := &quot;ASC&quot;))
+
+	_GetEventName = LCase(Mid(sProperty, 3, 1)) &amp; Right(sProperty, Len(sProperty) - 3)
+	
+End Function	&apos;	SFDialogs.SF_DialogControl._GetEventName
+
+REM -----------------------------------------------------------------------------
+Private Function _GetListener(ByVal psEventName As String) As String
+&apos;&apos;&apos;	Getting/Setting macros triggered by events requires a Listener-EventName pair
+&apos;&apos;&apos;	Return the X...Listener corresponding with the event name in argument
+
+	Select Case UCase(psEventName)
+		Case UCase(&quot;OnActionPerformed&quot;)
+			_GetListener = &quot;XActionListener&quot;
+		Case UCase(&quot;OnAdjustmentValueChanged&quot;)
+			_GetListener = &quot;XAdjustmentListener&quot;
+		Case UCase(&quot;OnFocusGained&quot;), UCase(&quot;OnFocusLost&quot;)
+			_GetListener = &quot;XFocusListener&quot;
+		Case UCase(&quot;OnItemStateChanged&quot;)
+			_GetListener = &quot;XItemListener&quot;
+		Case UCase(&quot;OnKeyPressed&quot;), UCase(&quot;OnKeyReleased&quot;)
+			_GetListener = &quot;XKeyListener&quot;
+		Case UCase(&quot;OnMouseDragged&quot;), UCase(&quot;OnMouseMoved&quot;)
+			_GetListener = &quot;XMouseMotionListener&quot;
+		Case UCase(&quot;OnMouseEntered&quot;), UCase(&quot;OnMouseExited&quot;), UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;)
+			_GetListener = &quot;XMouseListener&quot;
+		Case UCase(&quot;OnTextChanged&quot;)
+			_GetListener = &quot;XTextListener&quot;
+		Case Else
+			_GetListener = &quot;&quot;
+	End Select
+	
+End Function	&apos;	SFDialogs.SF_DialogControl._GetListener
+
+REM -----------------------------------------------------------------------------
 Public Sub _Initialize()
 &apos;&apos;&apos;	Complete the object creation process:
 &apos;&apos;&apos;		- Initialization of private members
@@ -636,6 +862,8 @@ Dim lIndex As Long							&apos;	Index in StringItemList
 Dim sItem As String							&apos;	A single item
 Dim vDate As Variant						&apos;	com.sun.star.util.Date or com.sun.star.util.Time
 Dim vValues As Variant						&apos;	Array of listbox values
+Dim oControlEvents As Object				&apos;	com.sun.star.container.XNameContainer
+Dim sEventName As String					&apos;	Internal event name
 Dim i As Long
 Dim cstThisSub As String
 Const cstSubArgs = &quot;&quot;
@@ -650,30 +878,30 @@ Const cstSubArgs = &quot;&quot;
 	_PropertyGet = pvDefault
 
 	If IsNull(oSession) Then Set oSession = ScriptForge.SF_Services.CreateScriptService(&quot;Session&quot;)
-	Select Case psProperty
-		Case &quot;Cancel&quot;
+	Select Case UCase(psProperty)
+		Case UCase(&quot;Cancel&quot;)
 			Select Case _ControlType
 				Case CTLBUTTON
 					If oSession.HasUNOProperty(_ControlModel, &quot;PushButtonType&quot;) Then _PropertyGet = ( _ControlModel.PushButtonType = com.sun.star.awt.PushButtonType.CANCEL )
 				Case Else	:	GoTo CatchType
 			End Select
-		Case &quot;Caption&quot;
+		Case UCase(&quot;Caption&quot;)
 			Select Case _ControlType
 				Case CTLBUTTON, CTLCHECKBOX, CTLFIXEDLINE, CTLFIXEDTEXT, CTLGROUPBOX, CTLRADIOBUTTON
 					If oSession.HasUNOProperty(_ControlModel, &quot;Label&quot;) Then _PropertyGet = _ControlModel.Label
 				Case Else	:	GoTo CatchType
 			End Select
-		Case &quot;ControlType&quot;
+		Case UCase(&quot;ControlType&quot;)
 			_PropertyGet = _ControlType
-		Case &quot;Default&quot;
+		Case UCase(&quot;Default&quot;)
 			Select Case _ControlType
 				Case CTLBUTTON
 					If oSession.HasUNOProperty(_ControlModel, &quot;DefaultButton&quot;) Then _PropertyGet = _ControlModel.DefaultButton
 				Case Else	:	GoTo CatchType
 			End Select
-		Case &quot;Enabled&quot;
+		Case UCase(&quot;Enabled&quot;)
 			If oSession.HasUnoProperty(_ControlModel, &quot;Enabled&quot;) Then _PropertyGet = _ControlModel.Enabled
-		Case &quot;Format&quot;
+		Case UCase(&quot;Format&quot;)
 			Select Case _ControlType
 				Case CTLDATEFIELD
 					If oSession.HasUNOProperty(_ControlModel, &quot;DateFormat&quot;) Then _PropertyGet = _FormatsList()(_ControlModel.DateFormat)
@@ -685,13 +913,13 @@ Const cstSubArgs = &quot;&quot;
 					End If
 				Case Else	:	GoTo CatchType
 			End Select
-		Case &quot;ListCount&quot;
+		Case UCase(&quot;ListCount&quot;)
 			Select Case _ControlType
 				Case CTLCOMBOBOX, CTLLISTBOX
 					If oSession.HasUNOProperty(_ControlModel, &quot;StringItemList&quot;) Then _PropertyGet = UBound(_ControlModel.StringItemList) + 1
 				Case Else	:	GoTo CatchType
 			End Select
-		Case &quot;ListIndex&quot;
+		Case UCase(&quot;ListIndex&quot;)
 			Select Case _ControlType
 				Case CTLCOMBOBOX
 					_PropertyGet = -1	&apos;	Not found, multiselection
@@ -706,14 +934,14 @@ Const cstSubArgs = &quot;&quot;
 					End If
 				Case Else	:	GoTo CatchType
 			End Select
-		Case &quot;Locked&quot;
+		Case UCase(&quot;Locked&quot;)
 			Select Case _ControlType
 				Case CTLCOMBOBOX, CTLCURRENCYFIELD, CTLDATEFIELD, CTLFILECONTROL, CTLFORMATTEDFIELD, CTLLISTBOX _
 						, CTLNUMERICFIELD, CTLPATTERNFIELD, CTLTEXTFIELD, CTLTIMEFIELD
 					If oSession.HasUnoProperty(_ControlModel, &quot;ReadOnly&quot;) Then _PropertyGet = _ControlModel.ReadOnly
 				Case Else	:	GoTo CatchType
 			End Select
-		Case &quot;MultiSelect&quot;
+		Case UCase(&quot;MultiSelect&quot;)
 			Select Case _ControlType
 				Case CTLLISTBOX
 					If oSession.HasUnoProperty(_ControlModel, &quot;MultiSelection&quot;) Then
@@ -723,19 +951,30 @@ Const cstSubArgs = &quot;&quot;
 					End If
 				Case Else	:	GoTo CatchType
 			End Select
-		Case &quot;Name&quot;
+		Case UCase(&quot;Name&quot;)
 			_PropertyGet = _Name
-		Case &quot;Page&quot;
+		Case UCase(&quot;OnActionPerformed&quot;), UCase(&quot;OnAdjustmentValueChanged&quot;), UCase(&quot;OnFocusGained&quot;), UCase(&quot;OnFocusLost&quot;) _
+				, UCase(&quot;OnItemStateChanged&quot;), UCase(&quot;OnKeyPressed&quot;), UCase(&quot;OnKeyReleased&quot;) _
+				, UCase(&quot;OnMouseDragged&quot;), UCase(&quot;OnMouseEntered&quot;), UCase(&quot;OnMouseExited&quot;), UCase(&quot;OnMouseMoved&quot;) _
+				, UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;), UCase(&quot;OnTextChanged&quot;)
+			Set oControlEvents = _ControlModel.getEvents()
+			sEventName = &quot;com.sun.star.awt.&quot; &amp; _GetListener(psProperty) &amp; &quot;::&quot; &amp; _GetEventName(psProperty)
+			If oControlEvents.hasByName(sEventName) Then
+				_PropertyGet = oControlEvents.getByName(sEventName).ScriptCode
+			Else
+				_PropertyGet = &quot;&quot;
+			End If
+		Case UCase(&quot;Page&quot;)
 			If oSession.HasUnoProperty(_ControlModel, &quot;Step&quot;) Then _PropertyGet = _ControlModel.Step
-		Case &quot;Parent&quot;
+		Case UCase(&quot;Parent&quot;)
 			Set _PropertyGet = [_Parent]
-		Case &quot;Picture&quot;
+		Case UCase(&quot;Picture&quot;)
 			Select Case _ControlType
 				Case CTLBUTTON, CTLIMAGECONTROL
 					If oSession.HasUnoProperty(_ControlModel, &quot;ImageURL&quot;) Then _PropertyGet = ScriptForge.SF_FileSystem._ConvertFromUrl(_ControlModel.ImageURL)
 				Case Else	:	GoTo CatchType
 			End Select
-		Case &quot;RowSource&quot;
+		Case UCase(&quot;RowSource&quot;)
 			Select Case _ControlType
 				Case CTLCOMBOBOX, CTLLISTBOX
 					If oSession.HasUnoProperty(_ControlModel, &quot;StringItemList&quot;) Then
@@ -743,21 +982,21 @@ Const cstSubArgs = &quot;&quot;
 					End If
 				Case Else	:	GoTo CatchType
 			End Select
-		Case &quot;Text&quot;
+		Case UCase(&quot;Text&quot;)
 			Select Case _ControlType
 				Case CTLCOMBOBOX, CTLFILECONTROL, CTLFORMATTEDFIELD, CTLPATTERNFIELD, CTLTEXTFIELD
 					If oSession.HasUnoProperty(_ControlModel, &quot;Text&quot;) Then _PropertyGet = _ControlModel.Text
 				Case Else	:	GoTo CatchType
 			End Select
-		Case &quot;TipText&quot;
+		Case UCase(&quot;TipText&quot;)
 			If oSession.HasUnoProperty(_ControlModel, &quot;HelpText&quot;) Then _PropertyGet = _ControlModel.HelpText
-		Case &quot;TripleState&quot;
+		Case UCase(&quot;TripleState&quot;)
 			Select Case _ControlType
 				Case CTLCHECKBOX
 					If oSession.HasUnoProperty(_ControlModel, &quot;TriState&quot;) Then _PropertyGet = _ControlModel.TriState
 				Case Else	:	GoTo CatchType
 			End Select
-		Case &quot;Value&quot;	&apos;	Default values are set here by control type, not in the 2nd argument
+		Case UCase(&quot;Value&quot;)	&apos;	Default values are set here by control type, not in the 2nd argument
 			vGet = pvDefault
 			Select Case _ControlType
 				Case CTLBUTTON		&apos;Boolean, toggle buttons only
@@ -822,11 +1061,11 @@ Const cstSubArgs = &quot;&quot;
 				Case Else	:	GoTo CatchType
 			End Select
 			_PropertyGet = vGet
-		Case &quot;Visible&quot;
+		Case UCase(&quot;Visible&quot;)
 			If oSession.HasUnoMethod(_ControlView, &quot;isVisible&quot;) Then _PropertyGet = CBool(_ControlView.isVisible())
-		Case &quot;XControlModel&quot;
+		Case UCase(&quot;XControlModel&quot;)
 			Set _PropertyGet = _ControlModel
-		Case &quot;XControlView&quot;
+		Case UCase(&quot;XControlView&quot;)
 			Set _PropertyGet = _ControlView
 		Case Else
 			_PropertyGet = Null
