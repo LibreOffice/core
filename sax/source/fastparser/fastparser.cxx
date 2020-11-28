@@ -215,6 +215,10 @@ public:
     explicit FastSaxParserImpl();
     ~FastSaxParserImpl();
 
+private:
+    std::vector<xmloff::xmlentity> mEntityList;
+
+public:
     // XFastParser
     /// @throws css::xml::sax::SAXException
     /// @throws css::io::IOException
@@ -234,6 +238,8 @@ public:
     void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler );
     /// @throws css::uno::RuntimeException
     void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler);
+    // Fake DTD file
+    void setCustomEntityNames( const std::vector<xmloff::xmlentity> entityList );
 
     // called by the C callbacks of the expat parser
     void callbackStartElement( const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
@@ -933,6 +939,11 @@ void FastSaxParserImpl::setNamespaceHandler( const Reference< XFastNamespaceHand
     maData.mxNamespaceHandler = Handler;
 }
 
+void FastSaxParserImpl::setCustomEntityNames( const std::vector<xmloff::xmlentity> entityList )
+{
+    mEntityList = entityList;
+}
+
 void FastSaxParserImpl::deleteUsedEvents()
 {
     Entity& rEntity = getEntity();
@@ -1359,14 +1370,17 @@ void FastSaxParserImpl::callbackProcessingInstruction( const xmlChar *target, co
 
 xmlEntityPtr FastSaxParserImpl::callbackGetEntity( const xmlChar *name )
 {
-    if (strcmp(XML_CAST(name), "charname") == 0)
+    for( size_t i = 0; i < mEntityList.size(); ++i )
     {
-        if (!mxMath1)
-            mxMath1.reset(xmlNewEntity(nullptr,
-                BAD_CAST("charname"),
+        if( strcmp(XML_CAST(name), mEntityList[i].name ) == 0 )
+        {
+            if (!mxMath1)
+            mxMath1.reset(xmlNewEntity( nullptr,
+                BAD_CAST(mEntityList[i].m_name),
                 XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
-                BAD_CAST("xxx")));
-        return mxMath1.get();
+                BAD_CAST(mEntityList[i].m_replace)));
+            return mxMath1.get();
+        }
     }
     return xmlGetPredefinedEntity(name);
 }
@@ -1441,6 +1455,11 @@ void FastSaxParser::setLocale( const lang::Locale& )
 void FastSaxParser::setNamespaceHandler( const uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler)
 {
     mpImpl->setNamespaceHandler(Handler);
+}
+
+void FastSaxParser::setCustomEntityNames( const std::vector<xmloff::xmlentity> entityList )
+{
+    mpImpl->setCustomEntityNames(entityList);
 }
 
 OUString FastSaxParser::getImplementationName()

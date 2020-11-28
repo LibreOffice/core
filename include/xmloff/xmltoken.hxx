@@ -38,6 +38,15 @@
  * methods and the SvXMLElementExport constructor.
  */
 
+namespace xmloff{
+
+    struct xmlentity{
+        const char* m_name;
+        const char* m_replace;
+    };
+
+}
+
 namespace xmloff::token {
 
     // IMPORTANT! XMLTokenEnum order MUST be in synch with aTokenList in
@@ -3400,7 +3409,6 @@ namespace xmloff::token {
         XML_TOKEN_END
     };
 
-
     /// return the OUString representation for eToken
     XMLOFF_DLLPUBLIC const OUString& GetXMLToken(
         enum XMLTokenEnum eToken );
@@ -3413,6 +3421,7 @@ namespace xmloff::token {
     XMLOFF_DLLPUBLIC bool IsXMLToken(
         const sax_fastparser::FastAttributeList::FastAttributeIter& aIter,
         enum XMLTokenEnum eToken );
+
 }
 
 #endif
