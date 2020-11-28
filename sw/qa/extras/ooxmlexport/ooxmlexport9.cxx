@@ -1622,6 +1622,20 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAlignmentRelativeFromTopMarginVML, "tdf1
                        "center");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testVmlShapeWithTextbox, "tdf41466_testVmlShapeWithTextbox.docx")
+{
+    // Import as VML.
+    // tdf#41466: check whether VML DOCX shape with text is imported as shape with textbox.
+    // Before this patch these kind of shapes were imported as TextFrame.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // the wrong value was "rect" instead of "wedgeRectCallout"
+    assertXPath(pXmlDoc,
+        "/w:document/w:body/w:p/w:r/"
+        "mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+        "prst", "wedgeRectCallout");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
