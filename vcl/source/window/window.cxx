@@ -1265,7 +1265,10 @@ const OutputDevice* Window::DrawOutDevDirectCheck(const OutputDevice& rSrcDev) c
 
 void Window::DrawOutDevDirectProcess( const OutputDevice& rSrcDev, SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
 {
-    mpGraphics->CopyBits( rPosAry, pSrcGraphics, *this, &rSrcDev );
+    if (pSrcGraphics)
+        mpGraphics->CopyBits(rPosAry, *pSrcGraphics, *this, rSrcDev);
+    else
+        mpGraphics->CopyBits(rPosAry, *this);
 }
 
 SalGraphics* Window::ImplGetFrameGraphics() const
