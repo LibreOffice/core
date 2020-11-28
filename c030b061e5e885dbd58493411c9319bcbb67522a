@@ -22,6 +22,30 @@
       "revId": "c030b061e5e885dbd58493411c9319bcbb67522a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83ce5786_c4554f20",
+        "filename": "offapi/com/sun/star/xml/sax/XFastParser.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-28T14:27:09Z",
+      "side": 1,
+      "message": "That entity seems to correspond to xmlEntity from libxml2.\nBut since had problems trying to include libxml/parse.h somewhere else than fastparser.cxx.\nused a simplified version insteasd and convert enternally.\nI defined it in xmloff/xmltoken.hxx.\nBut have not figured yet how to make reference from the idl file.\nAlso need it to include xmloff/xmltoken.hxx, but don\u0027t know yet.\nThis IDL file is supposed to generate the XFastParser.hpp.",
+      "parentUuid": "c99d6b0a_fc394dae",
+      "range": {
+        "startLine": 166,
+        "startChar": 45,
+        "endLine": 166,
+        "endChar": 62
+      },
+      "revId": "c030b061e5e885dbd58493411c9319bcbb67522a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
