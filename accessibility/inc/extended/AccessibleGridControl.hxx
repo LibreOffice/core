@@ -151,6 +151,9 @@ private:
 
     /** The table cell child. */
     rtl::Reference<AccessibleGridControlTableCell>            m_xCell;
+
+    /** @return  The count of visible children. */
+    inline sal_Int32 implGetAccessibleChildCount();
 };
 
 

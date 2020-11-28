@@ -77,14 +77,19 @@ void SAL_CALL AccessibleGridControl::disposing()
     AccessibleGridControlBase::disposing();
 }
 
+sal_Int32 AccessibleGridControl::implGetAccessibleChildCount()
+{
+    return m_aTable.GetAccessibleControlCount();
+}
 
 // css::accessibility::XAccessibleContext ---------------------------------------------------------
+
 
 sal_Int32 SAL_CALL AccessibleGridControl::getAccessibleChildCount()
 {
     SolarMutexGuard aSolarGuard;
     ensureIsAlive();
-    return m_aTable.GetAccessibleControlCount();
+    return implGetAccessibleChildCount();
 }
 
 
@@ -93,7 +98,7 @@ AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
 
-    if (nChildIndex<0 || nChildIndex>=getAccessibleChildCount())
+    if (nChildIndex<0 || nChildIndex>=implGetAccessibleChildCount())
         throw IndexOutOfBoundsException();
 
     css::uno::Reference< css::accessibility::XAccessible > xChild;
@@ -264,7 +269,7 @@ AccessibleGridControlTable* AccessibleGridControl::createAccessibleTable()
 
 void AccessibleGridControl::commitCellEvent(sal_Int16 _nEventId,const Any& _rNewValue,const Any& _rOldValue)
 {
-    sal_Int32 nChildCount = getAccessibleChildCount();
+    sal_Int32 nChildCount = implGetAccessibleChildCount();
     if(nChildCount != 0)
     {
         for(sal_Int32 i=0;i<nChildCount;i++)
