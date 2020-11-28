@@ -868,8 +868,9 @@ void ScXMLExport::ExportColumns(const sal_Int32 nTable, const ScRange& aColumnHe
             nColsRepeated = 1;
         }
     }
-    assert(nPrevIndex >= 0 && "coverity#1438402");
-    WriteColumn(nPrevColumn, nColsRepeated, nPrevIndex, bPrevIsVisible);
+    // tdf#138466
+    if (nPrevIndex != -1)
+        WriteColumn(nPrevColumn, nColsRepeated, nPrevIndex, bPrevIsVisible);
     if (!bIsClosed)
         CloseHeaderColumn();
     if (pGroupColumns->IsGroupEnd(nColumn - 1))
