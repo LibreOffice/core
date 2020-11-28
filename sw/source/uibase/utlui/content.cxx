@@ -3183,7 +3183,8 @@ void SwContentTree::UpdateTracking()
 
     // drawing
     if ((m_pActiveShell->GetSelectionType() & (SelectionType::DrawObject |
-                                          SelectionType::DrawObjectEditMode)) &&
+                                               SelectionType::DrawObjectEditMode |
+                                               SelectionType::DbForm)) &&
             !(m_bIsRoot && m_nRootType != ContentTypeId::DRAWOBJECT))
     {
         SdrView* pSdrView = m_pActiveShell->GetDrawView();
