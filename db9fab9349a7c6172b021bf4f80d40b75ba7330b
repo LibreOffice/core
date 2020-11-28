@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0db4731f_9e104647",
+        "filename": "offapi/com/sun/star/xml/sax/XFastParser.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-28T13:34:08Z",
+      "side": 1,
+      "message": "I don\u0027t think I need it.\nMaybe will remove it.",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 43
+      },
+      "revId": "db9fab9349a7c6172b021bf4f80d40b75ba7330b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc133c80_8b390ad7",
+        "filename": "offapi/com/sun/star/xml/sax/XFastParser.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-28T13:34:08Z",
+      "side": 1,
+      "message": "This doesn\u0027t build, but I\u0027m not sure yet about how to implement it.",
+      "range": {
+        "startLine": 166,
+        "startChar": 9,
+        "endLine": 166,
+        "endChar": 29
+      },
+      "revId": "db9fab9349a7c6172b021bf4f80d40b75ba7330b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
