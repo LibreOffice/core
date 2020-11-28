@@ -170,9 +170,11 @@ private:
 private:
     // swapping methods
     bool swapInFromStream(SvStream& rStream);
+    void swapInGraphic(SvStream& rStream);
 
     bool swapInContent(SvStream& rStream);
     bool swapOutContent(SvStream& rStream);
+    bool swapOutGraphic(SvStream& rStream);
     // end swapping
 
     std::shared_ptr<GraphicReader>& ImplGetContext() { return mpContext;}
