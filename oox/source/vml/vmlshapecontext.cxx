@@ -502,8 +502,11 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
 
             if (getParentElement() != VML_TOKEN( group ))
             {
-                // Custom shape in Writer with a textbox are transformed into a frame
-                dynamic_cast<SimpleShape&>( mrShape ).setService(
+                OUString sStyle = rAttribs.getString( XML_style, OUString() );
+                // only if v:textbox has got a non-empty style attribute
+                if ( !sStyle.isEmpty() )
+                    // Custom shape in Writer with a textbox are transformed into a frame
+                    dynamic_cast<SimpleShape&>( mrShape ).setService(
                         "com.sun.star.text.TextFrame");
             }
             else if (getCurrentElement() == VML_TOKEN(rect) || nShapeType == ESCHER_ShpInst_TextBox)
