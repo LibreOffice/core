@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_WRAP_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_WRAP_HXX
+
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -91,7 +91,5 @@ public:
     void     SetFormatUsed(bool bFormat, bool bDrawMode) { m_bFormat = bFormat; m_bDrawMode = bDrawMode; }
     void     SetShell(SwWrtShell* pSh) { m_pWrtSh = pSh; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
