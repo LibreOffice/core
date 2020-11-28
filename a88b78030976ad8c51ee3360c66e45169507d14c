@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5595c91b_d1f6826c",
+        "filename": "sfx2/inc/charmapcontrol.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-28T08:24:08Z",
+      "side": 1,
+      "message": "Not needed here",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 27
+      },
+      "revId": "a88b78030976ad8c51ee3360c66e45169507d14c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d33b93a_4f1f917f",
+        "filename": "sfx2/source/control/charmapcontrol.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-28T08:24:08Z",
+      "side": 1,
+      "message": "Edit this file and add your new strings like the others are done.",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 1
+      },
+      "revId": "a88b78030976ad8c51ee3360c66e45169507d14c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

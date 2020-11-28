@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e858dc73_7c8569eb",
+        "filename": "sfx2/inc/charmapcontrol.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-28T08:24:08Z",
+      "side": 0,
+      "message": "Aren\u0027t these two functions used in the previous code? Jenkins complains about missing FavCharList()...",
+      "revId": "def8789c7def970c976a0b0c129b1dfd5afa933f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
