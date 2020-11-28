@@ -1144,16 +1144,44 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
     if (bSign)
         fValue = -fValue;
 
+    // Rounding to decimals between integer distance precision (gaps) does not
+    // make sense, do not even try to multiply/divide and introduce inaccuracy.
+    if (nDecPlaces >= 0 && fValue >= (static_cast<sal_Int64>(1) << 52))
+        return bSign ? -fValue : fValue;
+
     double fFac = 0;
     if (nDecPlaces != 0)
     {
+        if (nDecPlaces > 1 && fValue > 4294967296.0)
+        {
+            // 4294967296 is 2^32 with room for at least 20 decimals, checking
+            // smaller values is not necessary. Lower the limit if more than 20
+            // decimals were to be allowed.
+
+            // Determine how many decimals are representable in the precision.
+            // Anything greater 2^52 and 0.0 was already ruled out above.
+            // Theoretically 0.5, 0.25, 0.125, 0.0625, 0.03125, ...
+            const double fDec = 52 - log2(fValue) + 1;
+            if (fDec < nDecPlaces)
+                nDecPlaces = static_cast<sal_Int32>(fDec);
+        }
+
+        /* TODO: this was without the inverse factor and determining max
+         * possible decimals, it could now be adjusted to be more lenient. */
         // max 20 decimals, we don't have unlimited precision
         // #38810# and no overflow on fValue*=fFac
         if (nDecPlaces < -20 || 20 < nDecPlaces || fValue > (DBL_MAX / 1e20))
             return bSign ? -fValue : fValue;
 
-        fFac = getN10Exp(nDecPlaces);
-        fValue *= fFac;
+        // Avoid 1e-5 (1.0000000000000001e-05) and such inaccurate fractional
+        // factors that later when dividing back spoil things. For negative
+        // decimals divide first with the inverse, then multiply the rounded
+        // value back.
+        fFac = getN10Exp(abs(nDecPlaces));
+        if (nDecPlaces < 0)
+            fValue /= fFac;
+        else
+            fValue *= fFac;
     }
 
     switch ( eMode )
@@ -1245,7 +1273,12 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
     }
 
     if (nDecPlaces != 0)
-        fValue /= fFac;
+    {
+        if (nDecPlaces < 0)
+            fValue *= fFac;
+        else
+            fValue /= fFac;
+    }
 
     return bSign ? -fValue : fValue;
 }
