@@ -3869,7 +3869,6 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             // passed as an argument
             if( pPar )
                 pElem = pDimArray->Get( pPar );
-        }
         else
         {
             SbxArray* pArray = dynamic_cast<SbxArray*>( pElemObj );
