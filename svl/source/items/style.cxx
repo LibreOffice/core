@@ -35,8 +35,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <string.h>
-
 #ifdef DBG_UTIL
 namespace {
 

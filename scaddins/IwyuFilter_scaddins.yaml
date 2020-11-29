@@ -8,6 +8,10 @@ excludelist:
     - com/sun/star/sheet/addin/XAnalysis.hpp
     - com/sun/star/sheet/XAddIn.hpp
     - com/sun/star/sheet/XCompatibilityNames.hpp
+    scaddins/source/analysis/analysisdefs.hxx:
+    # Needed for macros
+    - com/sun/star/lang/IllegalArgumentException.hpp
+    - cmath
     scaddins/source/datefunc/datefunc.hxx:
     # Base class needs complete type
     - com/sun/star/lang/XServiceInfo.hpp
@@ -23,3 +27,12 @@ excludelist:
     - com/sun/star/sheet/addin/XPricingFunctions.hpp
     - com/sun/star/sheet/XAddIn.hpp
     - com/sun/star/sheet/XCompatibilityNames.hpp
+    scaddins/source/pricing/black_scholes.cxx:
+    # Needed for rtl::math::erfc
+    - rtl/math.hxx
+    scaddins/source/analysis/bessel.cxx:
+    # Needed for rtl::math::sin / cos
+    - rtl/math.hxx
+    scaddins/source/pricing/pricing.cxx:
+    # Needed for std::isfinite
+    - cmath

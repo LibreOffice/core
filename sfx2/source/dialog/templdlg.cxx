@@ -25,8 +25,6 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
-#include <vcl/help.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>
@@ -35,8 +33,6 @@
 #include <svl/style.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <unotools/intlwrapper.hxx>
-#include <unotools/collatorwrapper.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
@@ -63,7 +59,6 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/module.hxx>
 #include <helpids.h>
-#include <bitmaps.hlst>
 #include <sfx2/viewfrm.hxx>
 
 #include <comphelper/string.hxx>

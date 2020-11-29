@@ -38,7 +38,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -71,7 +70,6 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <unotools/historyoptions.hxx>
-#include <svtools/menuoptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/imagemgr.hxx>
@@ -80,7 +78,6 @@
 #include <vcl/event.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/taskpanelist.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>

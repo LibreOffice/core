@@ -21,7 +21,6 @@
 #include "wizardshell.hxx"
 
 #include <com/sun/star/container/NoSuchElementException.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>

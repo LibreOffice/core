@@ -24,7 +24,6 @@
 #include <svx/zoomctrl.hxx>
 #include <svx/zoomsliderctrl.hxx>
 #include <sfx2/docfac.hxx>
-#include <svx/lboxctrl.hxx>
 #include <sfx2/app.hxx>
 
 #include <smdll.hxx>

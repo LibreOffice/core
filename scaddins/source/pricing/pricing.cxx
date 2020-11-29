@@ -30,10 +30,8 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <iostream>
 #include <algorithm>
-#include <rtl/math.hxx>
+#include <cmath>
 #include <unotools/resmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
 

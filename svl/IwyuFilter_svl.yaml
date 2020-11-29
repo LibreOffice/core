@@ -23,6 +23,15 @@ excludelist:
     - com/sun/star/task/XPasswordContainer2.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/lang/XEventListener.hpp
+    svl/qa/unit/items/stylepool.cxx:
+    # Needed for system-cppunit
+    - unotest/bootstrapfixturebase.hxx
+    svl/qa/unit/lockfiles/test_lockfiles.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
+    svl/qa/unit/test_lngmisc.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
     svl/source/crypto/cryptosign.cxx:
     # Needed on WIN32
     - o3tl/char16_t2wchar_t.hxx

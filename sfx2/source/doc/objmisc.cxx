@@ -85,7 +85,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
 #include <sfx2/objsh.hxx>
 #include <objshimp.hxx>
 #include <sfx2/event.hxx>

@@ -22,7 +22,6 @@
 #include <sal/log.hxx>
 #include <svl/itempool.hxx>
 
-#include <algorithm>
 #include <memory>
 
 /// clear array of PoolItem variants

@@ -22,6 +22,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/mediadescriptor.hxx>
 
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 
@@ -32,7 +33,6 @@
 #include <tools/diagnose_ex.h>
 
 #include "BrowseNodeFactoryImpl.hxx"
-#include "MasterScriptProvider.hxx"
 #include <util/MiscUtils.hxx>
 
 #include <vector>

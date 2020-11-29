@@ -23,7 +23,7 @@
 #include "svgtools.hxx"
 #include "svgtoken.hxx"
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <memory>
 #include <vector>
 #include <optional>

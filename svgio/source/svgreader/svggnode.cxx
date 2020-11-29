@@ -18,6 +18,7 @@
  */
 
 #include <svggnode.hxx>
+#include <osl/diagnose.h>
 
 namespace svgio::svgreader
 {

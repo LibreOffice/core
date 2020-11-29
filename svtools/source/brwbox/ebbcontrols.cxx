@@ -18,7 +18,6 @@
 
 #include <svtools/editbrowsebox.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/virdev.hxx>
 
 namespace svt
 {

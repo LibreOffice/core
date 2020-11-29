@@ -28,11 +28,8 @@
 #include <com/sun/star/awt/grid/XGridDataModel.hpp>
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
-#include <com/sun/star/awt/grid/XSortableGridData.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <cppuhelper/weakref.hxx>
-
-#include <memory>
 
 
 namespace svt::table

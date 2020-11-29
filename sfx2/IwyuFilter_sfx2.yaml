@@ -52,15 +52,6 @@ excludelist:
     - sfx2/docfile.hxx
     - ucbhelper/content.hxx
     - comphelper/processfactory.hxx
-    sfx2/source/appl/appquit.cxx:
-    # Needed for DELETEZ to avoid -Wdelete-incomplete warnings
-    - childwinimpl.hxx
-    - ctrlfactoryimpl.hxx
-    - sfx2/doctempl.hxx
-    - sfx2/fcontnr.hxx
-    - sfx2/msgpool.hxx
-    - sfx2/viewsh.hxx
-    - shellimpl.hxx
     sfx2/source/appl/appmisc.cxx:
     # Needed for TypedWhichId macro
     - svl/stritem.hxx
@@ -85,9 +76,24 @@ excludelist:
     sfx2/source/bastyp/fltfnc.cxx:
     # Needed for UnoType to work
     - com/sun/star/task/XInteractionHandler.hpp
+    sfx2/source/control/dispatch.cxx:
+    # Needed for DENTERREGISTRATIONS DLEAVEREGISTRATIONS macros from sfx2/bindings.hxx in DBG_UTIL mode
+    - rtl/strbuf.hxx
+    sfx2/source/control/listview.cxx:
+    # Needed for MOREBUTTON in sfx2/inc/bitmaps.hlst to not fail, until a bit of cleanup there.
+    - tools/wintypes.hxx
     sfx2/source/control/sfxstatuslistener.cxx:
     # Actually used
     - com/sun/star/frame/XDispatchProvider.hpp
+    sfx2/source/control/statcach.cxx:
+    # Needed for template
+    - com/sun/star/frame/XFrame.hpp
+    sfx2/source/dialog/documentfontsdialog.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
+    sfx2/source/dialog/versdlg.cxx:
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp
     sfx2/source/doc/docinf.cxx:
     # Actually used
     - com/sun/star/document/XDocumentProperties.hpp
@@ -100,6 +106,9 @@ excludelist:
     sfx2/source/doc/guisaveas.cxx:
     # Needed on WIN32
     - o3tl/char16_t2wchar_t.hxx
+    sfx2/source/doc/iframe.cxx:
+    # Needed for template
+    - com/sun/star/awt/XWindowPeer.hpp
     sfx2/source/doc/objstor.cxx:
     # Actually used
     - com/sun/star/frame/XModel.hpp
@@ -115,6 +124,9 @@ excludelist:
     sfx2/source/doc/sfxbasemodel.cxx:
     # Don't propose hxx -> h change in URE libs
     - cppuhelper/interfacecontainer.hxx
+    sfx2/source/doc/signaturestate.cxx:
+    # Actually used
+    - com/sun/star/security/DocumentSignatureInformation.hpp
     sfx2/source/inc/asyncfunc.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XUnoTunnel.hpp
@@ -126,6 +138,9 @@ excludelist:
     sfx2/source/sidebar/Panel.cxx:
     # Actually used
     - com/sun/star/ui/XUIElement.hpp
+    sfx2/source/sidebar/ResourceManager.cxx:
+    # Needed for template
+    - com/sun/star/ui/XSidebarPanel.hpp
     sfx2/source/sidebar/SidebarToolBox.cxx:
     # Actually used
     - com/sun/star/frame/XFrame.hpp
@@ -135,6 +150,18 @@ excludelist:
     - com/sun/star/awt/XWindowPeer.hpp
     - com/sun/star/frame/XDispatch.hpp
     - com/sun/star/ui/ContextChangeEventObject.hpp
+    sfx2/source/sidebar/SidebarDockingWindow.cxx:
+    # Needed for json_parser_error
+    - boost/property_tree/json_parser.hpp
+    sfx2/source/sidebar/SidebarPanelBase.cxx:
+    # Needed for template
+    - com/sun/star/awt/XWindowPeer.hpp
+    sfx2/source/view/ipclient.cxx:
+    # Needed for template
+    - com/sun/star/awt/XWindowPeer.hpp
+    sfx2/source/view/sfxbasecontroller.cxx:
+    # Needed for template
+    - com/sun/star/awt/XWindowPeer.hpp
     sfx2/source/view/viewfrm2.cxx:
     # Needed for direct member access
     - com/sun/star/embed/VerbDescriptor.hpp
@@ -146,6 +173,8 @@ excludelist:
     # Actually used
     - com/sun/star/awt/XKeyHandler.hpp
     - com/sun/star/awt/XMouseClickHandler.hpp
+    # Needed for template
+    - com/sun/star/awt/XWindowPeer.hpp
     sfx2/source/view/viewsh.cxx:
     # Needed for TypedWhichId define
     - svl/eitem.hxx

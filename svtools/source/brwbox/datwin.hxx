@@ -20,14 +20,10 @@
 #pragma once
 
 #include <svtools/brwbox.hxx>
-#include <svtools/brwhead.hxx>
 #include <tools/long.hxx>
 #include <vcl/scrbar.hxx>
-#include <vcl/timer.hxx>
-#include <vcl/transfer.hxx>
 
 #include <limits>
-#include <vector>
 
 #define MIN_COLUMNWIDTH  2
 

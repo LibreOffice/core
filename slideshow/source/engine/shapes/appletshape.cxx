@@ -23,6 +23,8 @@
 #include "viewappletshape.hxx"
 #include <tools.hxx>
 
+#include <osl/diagnose.h>
+
 #include <algorithm>
 
 

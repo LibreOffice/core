@@ -42,10 +42,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 
-#include <svtools/framestatuslistener.hxx>
 #include <comphelper/processfactory.hxx>
-#include <vcl/taskpanelist.hxx>
-#include <vcl/event.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <vcl/InterimItemWindow.hxx>

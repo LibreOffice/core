@@ -21,8 +21,6 @@
 #include "wizardpagecontroller.hxx"
 #include "wizardshell.hxx"
 
-#include <com/sun/star/awt/XControl.hpp>
-
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 

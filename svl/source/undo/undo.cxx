@@ -19,8 +19,6 @@
 
 #include <svl/undo.hxx>
 
-#include <com/sun/star/uno/Exception.hpp>
-
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
 #include <comphelper/flagguard.hxx>

@@ -19,6 +19,7 @@
 
 
 #include <com/sun/star/drawing/XShape.hpp>
+#include <osl/diagnose.h>
 
 #include "mediashape.hxx"
 #include "viewmediashape.hxx"

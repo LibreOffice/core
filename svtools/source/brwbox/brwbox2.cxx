@@ -22,7 +22,7 @@
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <svtools/brwbox.hxx>
-#include <svtools/recorditemwindow.hxx>
+#include <svtools/brwhead.hxx>
 #include "datwin.hxx"
 #include <svtools/colorcfg.hxx>
 #include <vcl/commandevent.hxx>

@@ -33,9 +33,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
-#include <svtools/colorcfg.hxx>
 #include <vcl/event.hxx>
-#include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <vcl/uitest/logger.hxx>

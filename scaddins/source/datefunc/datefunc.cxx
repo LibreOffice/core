@@ -24,7 +24,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/resmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>

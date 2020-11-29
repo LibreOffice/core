@@ -21,8 +21,7 @@
 #include <ucbhelper/content.hxx>
 
 #include <vcl/canvastools.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/graphicfilter.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/graphic/Primitive2DTools.hpp>

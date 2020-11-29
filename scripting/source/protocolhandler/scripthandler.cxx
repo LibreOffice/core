@@ -37,11 +37,8 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxdlg.hxx>
-#include <vcl/abstdlg.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <comphelper/processfactory.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <framework/documentundoguard.hxx>

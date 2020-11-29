@@ -23,6 +23,7 @@
 #include <table/defaultinputhandler.hxx>
 #include <table/gridtablerenderer.hxx>
 
+#include <com/sun/star/awt/grid/XSortableGridData.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>

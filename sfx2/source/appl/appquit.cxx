@@ -20,12 +20,10 @@
 #include <config_features.h>
 
 #include <basic/sbstar.hxx>
-#include <tools/solar.h>
 #include <tools/debug.hxx>
 
 #include <sfx2/app.hxx>
 #include <appdata.hxx>
-#include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/fcontnr.hxx>

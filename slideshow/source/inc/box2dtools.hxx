@@ -12,7 +12,6 @@
 #include "shape.hxx"
 #include "shapeattributelayer.hxx"
 #include "attributemap.hxx"
-#include <map>
 #include <unordered_map>
 #include <queue>
 

@@ -18,7 +18,6 @@
  */
 
 #include <config_features.h>
-#include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/drawing/ModuleDispatcher.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
@@ -28,8 +27,6 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
-#include <com/sun/star/system/SystemShellExecute.hpp>
-#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/text/ModuleDispatcher.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -54,7 +51,6 @@
 #include <svl/visitem.hxx>
 
 #include <unotools/configmgr.hxx>
-#include <tools/svlibrary.h>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -105,7 +101,6 @@
 #include <comphelper/types.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <unotools/confignode.hxx>
-#include <officecfg/Setup.hxx>
 #include <memory>
 
 #include <openuriexternally.hxx>
@@ -118,10 +113,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::script;
-using namespace ::com::sun::star::system;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::ui;
 
 namespace

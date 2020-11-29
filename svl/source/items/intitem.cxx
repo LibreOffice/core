@@ -24,7 +24,7 @@
 #include <tools/bigint.hxx>
 #include <svl/metitem.hxx>
 #include <libxml/xmlwriter.h>
-#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 
 

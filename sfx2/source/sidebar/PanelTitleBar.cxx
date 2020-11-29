@@ -23,13 +23,7 @@
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sidebar/ControllerFactory.hxx>
-#include <sidebar/Tools.hxx>
 #include <vcl/event.hxx>
-#include <vcl/image.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
-
-#include <com/sun/star/frame/XDispatch.hpp>
 
 using namespace css;
 using namespace css::uno;

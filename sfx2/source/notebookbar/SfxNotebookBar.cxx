@@ -18,8 +18,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/lok.hxx>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
-#include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
-#include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <officecfg/Office/UI/ToolbarMode.hxx>
 #include <com/sun/star/frame/XModuleManager.hpp>

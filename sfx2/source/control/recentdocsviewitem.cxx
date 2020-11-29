@@ -17,7 +17,6 @@
 #include <sfx2/templatelocalview.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/historyoptions.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
 

@@ -19,7 +19,6 @@
 
 #include <sax/fshelper.hxx>
 #include "fastserializer.hxx"
-#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

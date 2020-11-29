@@ -7,22 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vcl/headbar.hxx>
 #include <sfx2/listview.hxx>
 
-#include <sfx2/doctempl.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/svapp.hxx>
-
-#include <vcl/commandevent.hxx>
-#include <vcl/event.hxx>
 
 #include <sfx2/strings.hrc>
 #include <osl/file.hxx>
 #include <osl/time.h>
 #include <comphelper/fileurl.hxx>
-#include <string>
 
 #include <svtools/svtresid.hxx>
 #include <svtools/strings.hrc>
@@ -30,6 +23,7 @@
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/intlwrapper.hxx>
+#include <tools/wintypes.hxx>
 
 #include <bitmaps.hlst>
 #include <rtl/math.hxx>

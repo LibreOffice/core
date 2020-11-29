@@ -14,6 +14,9 @@ excludelist:
     - com/sun/star/java/XJavaThreadRegister_11.hpp
     - com/sun/star/java/XJavaVM.hpp
     - com/sun/star/lang/XServiceInfo.hpp
+    stoc/source/implementationregistration/mergekeys.cxx:
+    # Actually used
+    - com/sun/star/registry/XRegistryKey.hpp
     stoc/source/corereflection/crefl.cxx:
     # Safer to keep for use in cppu::UnoType template
     - com/sun/star/reflection/XTypeDescription.hpp
@@ -25,6 +28,8 @@ excludelist:
     stoc/source/invocation_adapterfactory/iafactory.cxx:
     # Safer to keep for use in cppu::UnoType template
     - com/sun/star/script/XInvocation.hpp
+    # Complete type needed for uno_Interface
+    - uno/dispatcher.h
     stoc/source/loader/dllcomponentloader.cxx:
     # Needed for direct member access
     - com/sun/star/lang/XMultiServiceFactory.hpp
@@ -34,6 +39,8 @@ excludelist:
     # Needed for __DIAGNOSE mode
     - vector
     - rtl/string.hxx
+    # Actually used
+    - com/sun/star/uno/Sequence.hxx
     stoc/source/security/access_controller.cxx:
     # Needed for __DIAGNOSE mode
     - rtl/ustrbuf.hxx

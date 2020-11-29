@@ -32,7 +32,6 @@
 #include <svl/stritem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/AccessibleTextHelper.hxx>
-#include <svtools/colorcfg.hxx>
 #include <osl/diagnose.h>
 
 #include <edit.hxx>

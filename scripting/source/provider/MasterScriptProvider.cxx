@@ -21,9 +21,7 @@
 #include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/documentinfo.hxx>
 
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
@@ -43,7 +41,6 @@
 #include <sal/log.hxx>
 
 #include "MasterScriptProvider.hxx"
-#include "URIHelper.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

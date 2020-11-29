@@ -22,13 +22,9 @@
 #include <osl/diagnose.h>
 
 #include <vcl/taskpanelist.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/commandevent.hxx>
-#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 
 #include <svtools/framestatuslistener.hxx>
-#include <svtools/valueset.hxx>
 #include <svtools/toolbarmenu.hxx>
 
 using namespace ::com::sun::star::uno;

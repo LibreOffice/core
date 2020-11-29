@@ -30,7 +30,6 @@
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XTruncate.hpp>

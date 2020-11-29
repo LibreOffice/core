@@ -19,15 +19,16 @@
 
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
-#include <svtools/recorditemwindow.hxx>
 #include <o3tl/numeric.hxx>
 #include <o3tl/safeint.hxx>
 #include "datwin.hxx"
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <sal/log.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <algorithm>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>

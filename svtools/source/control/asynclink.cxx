@@ -23,7 +23,6 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
 
 

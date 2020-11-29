@@ -35,8 +35,6 @@
 #include <vcl/evntpost.hxx>
 #include <sal/log.hxx>
 #include <vcl/lok.hxx>
-#include <vcl/window.hxx>
-#include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
 namespace svt

@@ -23,6 +23,7 @@
 #include <svgtrefnode.hxx>
 #include <svgtextpathnode.hxx>
 #include <svgtspannode.hxx>
+#include <osl/diagnose.h>
 
 namespace svgio::svgreader
 {

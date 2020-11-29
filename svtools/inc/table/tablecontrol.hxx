@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <svtools/svtdllapi.h>
 #include <table/tablemodel.hxx>
 #include <vcl/accessibletable.hxx>
 

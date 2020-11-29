@@ -19,7 +19,6 @@
 
 #include "animationphysicsnode.hxx"
 #include <animationfactory.hxx>
-#include <o3tl/any.hxx>
 
 constexpr double fDefaultStartVelocityX(0.0);
 constexpr double fDefaultStartVelocityY(0.0);

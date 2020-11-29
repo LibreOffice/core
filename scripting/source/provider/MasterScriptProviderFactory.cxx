@@ -19,7 +19,6 @@
 
 #include <cppuhelper/supportsservice.hxx>
 
-#include "MasterScriptProvider.hxx"
 #include "MasterScriptProviderFactory.hxx"
 
 using namespace ::com::sun::star;

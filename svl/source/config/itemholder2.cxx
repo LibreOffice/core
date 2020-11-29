@@ -21,7 +21,6 @@
 #include "itemholder2.hxx"
 
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>

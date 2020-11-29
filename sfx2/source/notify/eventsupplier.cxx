@@ -19,15 +19,11 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <com/sun/star/document/XEmbeddedScripts.hpp>
-#include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
 #include <svl/macitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/evntconf.hxx>

@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 #include <libxml/xmlwriter.h>
 #include <typeinfo>
-#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 // list of classes derived from SfxPoolItem

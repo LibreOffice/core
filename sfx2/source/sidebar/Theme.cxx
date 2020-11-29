@@ -25,8 +25,6 @@
 #include <vcl/settings.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <com/sun/star/awt/Rectangle.hpp>
-
 using namespace css;
 using namespace css::uno;
 
