@@ -528,6 +528,15 @@ End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Ko
+        Dir = FILELIST_DIR;
+        Name = "Dictionary/dict-ko.filelist";
+        Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
+        TXT_FILE_BODY;
+End
+#endif
+
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Lo
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-lo.filelist";
