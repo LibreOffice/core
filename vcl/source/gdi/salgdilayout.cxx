@@ -324,7 +324,7 @@ const basegfx::B2DHomMatrix& SalGraphics::getMirror( const OutputDevice* i_pOutD
     bool bLastMirrorValid = w == m_aLastMirrorW && bMirrorDeviceLTRButBiDiRtlSet == m_bLastMirrorDeviceLTRButBiDiRtlSet;
     if (bLastMirrorValid && bMirrorDeviceLTRButBiDiRtlSet)
     {
-        // if the device is in in the unusual mode of a LTR device, but layout flags of SalLayoutFlags::BiDiRtl are
+        // if the device is in the unusual mode of a LTR device, but layout flags of SalLayoutFlags::BiDiRtl are
         // in use, then the m_aLastMirror is invalid if the distance it should translate has changed
         bLastMirrorValid = nMirrorDeviceLTRButBiDiRtlTranslate == m_nLastMirrorDeviceLTRButBiDiRtlTranslate;
     }
