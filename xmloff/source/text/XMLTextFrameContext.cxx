@@ -154,44 +154,36 @@ namespace {
 class XMLTextFrameParam_Impl : public SvXMLImportContext
 {
 public:
-
-
-    XMLTextFrameParam_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+    XMLTextFrameParam_Impl( SvXMLImport& rImport,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             ParamMap &rParamMap);
 };
 
 }
 
 XMLTextFrameParam_Impl::XMLTextFrameParam_Impl(
-        SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+        SvXMLImport& rImport,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
         ParamMap &rParamMap):
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport )
 {
     OUString sName, sValue;
     bool bFoundValue = false; // to allow empty values
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
-        if ( XML_NAMESPACE_DRAW == nPrefix )
+        switch (aIter.getToken())
         {
-            if( IsXMLToken(aLocalName, XML_VALUE) )
+            case XML_ELEMENT(DRAW, XML_VALUE):
             {
-                sValue = rValue;
-                bFoundValue=true;
+                sValue = aIter.toString();
+                bFoundValue = true;
+                break;
             }
-            else if( IsXMLToken(aLocalName, XML_NAME) )
-            {
-                sName = rValue;
-            }
+            case XML_ELEMENT(DRAW, XML_NAME):
+                sName = aIter.toString();
+                break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
     if (!sName.isEmpty() && bFoundValue )
@@ -408,6 +400,9 @@ public:
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual void SAL_CALL characters( const OUString& rChars ) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
@@ -1169,60 +1164,44 @@ void XMLTextFrameContext_Impl::endFastElement(sal_Int32 )
         GetImport().GetTextImport()->endAppletOrPlugin( xPropSet, aParamMap);
 }
 
-SvXMLImportContextRef XMLTextFrameContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext_Impl::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    if( XML_NAMESPACE_DRAW == nPrefix )
+    if( nElement == XML_ELEMENT(DRAW, XML_PARAM) )
     {
-        if ( (nType == XML_TEXT_FRAME_APPLET || nType == XML_TEXT_FRAME_PLUGIN) &&
-              IsXMLToken( rLocalName, XML_PARAM ) )
-        {
-            pContext = new XMLTextFrameParam_Impl( GetImport(),
-                                              nPrefix, rLocalName,
+        if ( nType == XML_TEXT_FRAME_APPLET || nType == XML_TEXT_FRAME_PLUGIN )
+            return new XMLTextFrameParam_Impl( GetImport(),
                                                xAttrList, aParamMap );
-        }
     }
-    else if( XML_NAMESPACE_OFFICE == nPrefix )
+    else if( nElement == XML_ELEMENT(OFFICE, XML_BINARY_DATA) )
     {
-        if( IsXMLToken( rLocalName, XML_BINARY_DATA ) )
+        if( !xPropSet.is() && !xBase64Stream.is() && !bCreateFailed )
         {
-            if( !xPropSet.is() && !xBase64Stream.is() && !bCreateFailed )
+            switch( nType )
             {
-                switch( nType )
-                {
-                case XML_TEXT_FRAME_GRAPHIC:
-                    xBase64Stream =
-                        GetImport().GetStreamForGraphicObjectURLFromBase64();
-                    break;
-                case XML_TEXT_FRAME_OBJECT_OLE:
-                    xBase64Stream =
-                        GetImport().GetStreamForEmbeddedObjectURLFromBase64();
-                    break;
-                }
-                if( xBase64Stream.is() )
-                    pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
-                                                    rLocalName, xAttrList,
-                                                    xBase64Stream );
+            case XML_TEXT_FRAME_GRAPHIC:
+                xBase64Stream =
+                    GetImport().GetStreamForGraphicObjectURLFromBase64();
+                break;
+            case XML_TEXT_FRAME_OBJECT_OLE:
+                xBase64Stream =
+                    GetImport().GetStreamForEmbeddedObjectURLFromBase64();
+                break;
             }
+            if( xBase64Stream.is() )
+                return new XMLBase64ImportContext( GetImport(), xBase64Stream );
         }
     }
     // Correction of condition which also avoids warnings. (#i100480#)
-    if( !pContext &&
-        ( XML_TEXT_FRAME_OBJECT == nType &&
-          ( ( XML_NAMESPACE_OFFICE == nPrefix &&
-              IsXMLToken( rLocalName, XML_DOCUMENT ) ) ||
-            ( XML_NAMESPACE_MATH == nPrefix &&
-              IsXMLToken( rLocalName, XML_MATH ) ) ) ) )
+    if( XML_TEXT_FRAME_OBJECT == nType &&
+        ( nElement == XML_ELEMENT(OFFICE, XML_DOCUMENT) ||
+          nElement == XML_ELEMENT(MATH, XML_MATH) ) )
     {
         if( !xPropSet.is() && !bCreateFailed )
         {
             XMLEmbeddedObjectImportContext *pEContext =
-                new XMLEmbeddedObjectImportContext( GetImport(), nPrefix,
-                                                    rLocalName, xAttrList );
+                new XMLEmbeddedObjectImportContext( GetImport(), nElement, xAttrList );
             sFilterService = pEContext->GetFilterServiceName();
             if( !sFilterService.isEmpty() )
             {
@@ -1237,10 +1216,20 @@ SvXMLImportContextRef XMLTextFrameContext_Impl::CreateChildContext(
                     pEContext->SetComponent( aXComponent );
                 }
             }
-            pContext = pEContext;
+            return pEContext;
         }
     }
-    if( !pContext && xOldTextCursor.is() )  // text-box
+    return nullptr;
+}
+
+SvXMLImportContextRef XMLTextFrameContext_Impl::CreateChildContext(
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const Reference< XAttributeList > & xAttrList )
+{
+    SvXMLImportContext *pContext = nullptr;
+
+    if( xOldTextCursor.is() )  // text-box
         pContext = GetImport().GetTextImport()->CreateTextChildContext(
                             GetImport(), nPrefix, rLocalName, xAttrList,
                             XMLTextType::TextBox );
