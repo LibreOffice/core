@@ -188,7 +188,7 @@ static ::basegfx::B2DPolygon ImpGetExpandedPolygon(
         double fDestPos(0.0);
         double fSrcPos(0.0);
         sal_uInt32 nSrcPos(0);
-        sal_uInt32 nSrcPosNext((nSrcPos + 1 == rCandidate.count()) ? 0L : nSrcPos + 1);
+        sal_uInt32 nSrcPosNext((nSrcPos + 1 == rCandidate.count()) ? 0 : nSrcPos + 1);
         double fNextSrcLen(::basegfx::B2DVector(rCandidate.getB2DPoint(nSrcPos) - rCandidate.getB2DPoint(nSrcPosNext)).getLength());
 
         for(sal_uInt32 b(0); b < nNum; b++)
@@ -198,7 +198,7 @@ static ::basegfx::B2DPolygon ImpGetExpandedPolygon(
             {
                 fSrcPos += fNextSrcLen;
                 nSrcPos++;
-                nSrcPosNext = (nSrcPos + 1 == rCandidate.count()) ? 0L : nSrcPos + 1;
+                nSrcPosNext = (nSrcPos + 1 == rCandidate.count()) ? 0 : nSrcPos + 1;
                 fNextSrcLen = ::basegfx::B2DVector(rCandidate.getB2DPoint(nSrcPos) - rCandidate.getB2DPoint(nSrcPosNext)).getLength();
             }
 

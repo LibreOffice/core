@@ -312,7 +312,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByQName(const OUString& rQName,
         else
         {
             // normal case: ':' found -> get prefix/suffix
-            sEntryPrefix = rQName.copy( 0L, nColonPos );
+            sEntryPrefix = rQName.copy( 0, nColonPos );
             sEntryName = rQName.copy( nColonPos + 1 );
         }
 

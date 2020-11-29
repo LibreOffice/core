@@ -402,7 +402,7 @@ DdeService::DdeService( const OUString& rService )
                             DdeInternal::SvrCallback,
                             APPCLASS_STANDARD |
                             CBF_SKIP_REGISTRATIONS |
-                            CBF_SKIP_UNREGISTRATIONS, 0L ) );
+                            CBF_SKIP_UNREGISTRATIONS, 0 ) );
         pInst->pServicesSvr = new DdeServices;
     }
     else
