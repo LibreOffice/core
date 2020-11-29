@@ -3865,10 +3865,10 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
         pPar = pElem->GetParameters();
         if( pDimArray )
         {
-            // parameters may be missing, if an array is
-            // passed as an argument
-            if( pPar )
-                pElem = pDimArray->Get( pPar );
+            if( pPar ) {
+                // tdf#136755 - if an array of objects is passed as an argument, consider only the holding object itself
+                pElem = (pElem->GetType() & SbxOBJECT) ? pPar->Get32(0) : pDimArray->Get(pPar);
+            }
         }
         else
         {
