@@ -3865,10 +3865,10 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
         pPar = pElem->GetParameters();
         if( pDimArray )
         {
-            // parameters may be missing, if an array is
-            // passed as an argument
-            if( pPar )
-                pElem = pDimArray->Get( pPar );
+            if( pPar ) {
+                // tdf#136755 - pass first element of the array as parameter
+                pElem = pPar->Get32(0);
+            }
         }
         else
         {
