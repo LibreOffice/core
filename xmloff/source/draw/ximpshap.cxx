@@ -2739,26 +2739,21 @@ void SdXMLObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStri
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-SvXMLImportContextRef SdXMLObjectShapeContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLObjectShapeContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xContext;
-
-    if((XML_NAMESPACE_OFFICE == nPrefix) && IsXMLToken(rLocalName, XML_BINARY_DATA))
+    if(nElement == XML_ELEMENT(OFFICE, XML_BINARY_DATA))
     {
         mxBase64Stream = GetImport().GetStreamForEmbeddedObjectURLFromBase64();
         if( mxBase64Stream.is() )
-            xContext = new XMLBase64ImportContext( GetImport(), nPrefix,
-                                                rLocalName, xAttrList,
-                                                mxBase64Stream );
+            return new XMLBase64ImportContext( GetImport(), mxBase64Stream );
     }
-    else if( ((XML_NAMESPACE_OFFICE == nPrefix) && IsXMLToken(rLocalName, XML_DOCUMENT)) ||
-                ((XML_NAMESPACE_MATH == nPrefix) && IsXMLToken(rLocalName, XML_MATH)) )
+    else if( nElement == XML_ELEMENT(OFFICE, XML_DOCUMENT) ||
+             nElement == XML_ELEMENT(MATH, XML_MATH) )
     {
         rtl::Reference<XMLEmbeddedObjectImportContext> xEContext(
-            new XMLEmbeddedObjectImportContext(GetImport(), nPrefix,
-                                               rLocalName, xAttrList));
+            new XMLEmbeddedObjectImportContext(GetImport(), nElement, xAttrList));
         maCLSID = xEContext->GetFilterCLSID();
         if( !maCLSID.isEmpty() )
         {
@@ -2773,8 +2768,16 @@ SvXMLImportContextRef SdXMLObjectShapeContext::CreateChildContext(
                 xEContext->SetComponent(xComp);
             }
         }
-        xContext = xEContext.get();
+        return xEContext.get();
     }
+    return nullptr;
+}
+
+SvXMLImportContextRef SdXMLObjectShapeContext::CreateChildContext(
+    sal_uInt16 nPrefix, const OUString& rLocalName,
+    const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+{
+    SvXMLImportContextRef xContext;
 
     // delegate to parent class if no context could be created
     if (!xContext)

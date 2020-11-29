@@ -38,9 +38,8 @@ public:
     const OUString& GetFilterServiceName() const { return sFilterService; }
     const OUString& GetFilterCLSID() const { return sCLSID; }
 
-    XMLEmbeddedObjectImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                    const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
+    XMLEmbeddedObjectImportContext( SvXMLImport& rImport, sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual ~XMLEmbeddedObjectImportContext() override;
 
