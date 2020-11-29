@@ -649,12 +649,12 @@ IMPL_LINK(SdScalePropertyBox, implMenuSelectHdl, const OString&, rIdent, void)
 
     if (rIdent == "hori")
         nDirection = 1;
-    else if (rIdent == "veri")
+    else if (rIdent == "vert")
         nDirection = 2;
     else if (rIdent == "both")
         nDirection = 3;
     else
-        nValue = rIdent.toInt32();
+        nValue = rIdent.toInt32(); // Getting here indicates a UI bug and should be handled better
 
     bool bModified = false;
 
@@ -691,27 +691,43 @@ void SdScalePropertyBox::setValue(const Any& rValue, const OUString&)
     aValues.First >>= fValue1;
     aValues.Second >>= fValue2;
 
-    if( fValue2 == 0.0 )
+    // 'Size' drop down menu set by mnDirectioin when loading Grow and Shrink Animation
+    // Shouldn't compare a float directly to zero...should be fixed with delta epsilon compare
+    // Might be better to just have a flag in the content.xml for this
+    if( (fValue1 == 0.0) && (fValue2 == 0.0) )  
+        mnDirection = 3; // assume 'Both' scaling option when both are zero
+    else if( (fValue1 != 0.0) && (fValue2 == 0.0) ) 
         mnDirection = 1;
-    else if( fValue1 == 0.0 )
+    else if( (fValue1 == 0.0) && (fValue2 != 0.0) )
         mnDirection = 2;
     else
         mnDirection = 3;
+  
+    // Grow and Shrink Animation is a relative change with value stored in content.xml under tag 
+    // smil:by=*,*
+    // An offset of 1 must be added to properly translate from content.xml to UI value displayed 
+    // e.g. if in content.xml smil:by=0.5,0.5 then 1 + (0.5,0.5) = (1.5,1.5) => grow by 150% of the 
+    // size horizontal and vertical
+    // e.g. if in content.xml smil:by=-0.5,-0.5 then 1 + (-0.5,-0.5) = (0.5,0.5) => shrink by 50% 
+    // of the size horizontal and vertical  
+    fValue1 += 1;
+    fValue2 += 1;
 
-    // Shrink animation is represented by negative value
-    // Shrink factor is calculated as (1 + $fValue)
-    // e.g 1 + (-0.75) = 0.25 => shrink to 25% of the size
-    // 0.25 = -0.75 + 1
-    if ( fValue1 < 0.0 )
-        fValue1 += 1;
-    if ( fValue2 < 0.0 )
-        fValue2 += 1;
-
+    // Determine value from file for UI 'Size' field based on determined mnDirection
     ::tools::Long nValue;
-    if( fValue1 )
+    if( mnDirection == 1 )
         nValue = static_cast<::tools::Long>(fValue1 * 100.0);
-    else
+    else if( mnDirection == 2 )
         nValue = static_cast<::tools::Long>(fValue2 * 100.0);
+    else if( mnDirection == 3 ){
+        if (fValue1 >= fValue2)
+            nValue = static_cast<::tools::Long>(fValue1 * 100.0);
+        else
+            nValue = static_cast<::tools::Long>(fValue2 * 100.0);
+    }
+    else
+        nValue = static_cast<::tools::Long>(100.0); // default to 100% in UI if something goes wrong
+  
     mxMetric->set_value(nValue, FieldUnit::PERCENT);
     updateMenu();
 }
@@ -720,15 +736,18 @@ Any SdScalePropertyBox::getValue()
 {
     double fValue1 = static_cast<double>(mxMetric->get_value(FieldUnit::PERCENT)) / 100.0;
 
-    // Shrink animation is represented by value < 1 (< 100%)
-    // Shrink factor is calculated as (1 + $fValue)
-    // e.g shrink to 25% of the size: 0.25 = 1 + $fValue =>
-    // $fValue = -0.75; -0.75 = 0.25 -1
-    if ( fValue1 < 1.0 )
-        fValue1 -= 1;
+    // Grow and Shrink Animation is a relative change with value stored in content.xml under tag 
+    // smil:by=*,*
+    // An offset of 1 must be subtracted to properly translate UI value displayed and save to 
+    // content.xml  
+    // e.g. if UI value is 150% then  1.5 - 1 = 0.5 and is set to smil:by=0.5,0.5 in content.xml 
+    // e.g. if UI value is 50% then  0.5 - 1 = -0.5 and is set to smil:by=-0.5,-0.5 in content.xml 
+    fValue1 -= 1;
 
     double fValue2 = fValue1;
-
+    
+    // mnDirectioin set by 'Size' drop down menu and used to zero out either horizontal or vertical 
+    // scaling depending on what option is selected
     if( mnDirection == 1 )
         fValue2 = 0.0;
     else if( mnDirection == 2 )
