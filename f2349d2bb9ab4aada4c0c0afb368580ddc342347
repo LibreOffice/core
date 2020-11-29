@@ -16,6 +16,24 @@
       "revId": "f2349d2bb9ab4aada4c0c0afb368580ddc342347",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7858056e_674f790c",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-11-29T10:23:34Z",
+      "side": 1,
+      "message": "xmlGetPredefinedEntity and xmlNewEntity both return a xmlEntityPtr.\nIt should be freed after using it, but I don\u0027t know where it is.\nI mean, after replacing the entity by it\u0027s content.\nMaybe we should register them with xmlAddDocEntity or xmlAddDtdEntity instead.\n\nxmlNewEntity\nCreate a new entity, this differs from xmlAddDocEntity() that if the document is NULL or has no internal subset defined, then an unlinked entity structure will be returned, it is then the responsability of the caller to link it to the document later or free it when not needed anymore.\nBut I don\u0027t know what should be in xmlDocPtr doc, right now it is a nullptr. But if it is linked to the document, it should only work with a given document. I have no idea about what to feed it.\n\nxmlGetPredefinedEntity\nCheck whether this name is an predefined entity.\nBut documentation does not specifies if we should free it ourselves afterwards.\n\nThe idea I propose:\nCreate a vector of them with the provided data.\nThen return elements of the vector instead of creating them each time.\nThe vector should be freed in class destruction.\nI do not know what will be the changes (this class is quite obscure about how it works behind the scenes), I will find out working on mathml.\nDoes this work for you?",
+      "parentUuid": "d47c8442_047721fe",
+      "revId": "f2349d2bb9ab4aada4c0c0afb368580ddc342347",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
