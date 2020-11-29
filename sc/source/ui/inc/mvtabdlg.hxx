@@ -63,6 +63,7 @@ private:
 
     std::unique_ptr<weld::RadioButton> m_xBtnMove;
     std::unique_ptr<weld::RadioButton> m_xBtnCopy;
+    std::unique_ptr<weld::Label> m_xFtDoc;
     std::unique_ptr<weld::ComboBox> m_xLbDoc;
     std::unique_ptr<weld::TreeView> m_xLbTable;
     std::unique_ptr<weld::Entry> m_xEdTabName;

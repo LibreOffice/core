@@ -24,6 +24,7 @@
 #include <docsh.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
+#include <comphelper/lok.hxx>
 
 ScMoveTableDlg::ScMoveTableDlg(weld::Window* pParent, const OUString& rDefault)
     : GenericDialogController(pParent, "modules/scalc/ui/movecopysheet.ui", "MoveCopySheetDialog")
@@ -36,6 +37,7 @@ ScMoveTableDlg::ScMoveTableDlg(weld::Window* pParent, const OUString& rDefault)
     , mbEverEdited(false)
     , m_xBtnMove(m_xBuilder->weld_radio_button("move"))
     , m_xBtnCopy(m_xBuilder->weld_radio_button("copy"))
+    , m_xFtDoc(m_xBuilder->weld_label("toDocumentLabel"))
     , m_xLbDoc(m_xBuilder->weld_combo_box("toDocument"))
     , m_xLbTable(m_xBuilder->weld_tree_view("insertBefore"))
     , m_xEdTabName(m_xBuilder->weld_entry("newName"))
@@ -190,6 +192,11 @@ void ScMoveTableDlg::Init()
     m_xFtWarn->hide();
     InitDocListBox();
     SelHdl(*m_xLbDoc);
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        m_xFtDoc->hide();
+        m_xLbDoc->hide();
+    }
 }
 
 void ScMoveTableDlg::InitDocListBox()
