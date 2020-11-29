@@ -16,6 +16,24 @@
       "revId": "def8789c7def970c976a0b0c129b1dfd5afa933f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab1d7966_fb95d5a8",
+        "filename": "sfx2/inc/charmapcontrol.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1002882
+      },
+      "writtenOn": "2020-11-29T13:33:43Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "e858dc73_7c8569eb",
+      "revId": "def8789c7def970c976a0b0c129b1dfd5afa933f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

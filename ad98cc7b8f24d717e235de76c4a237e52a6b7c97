@@ -22,6 +22,30 @@
       "revId": "ad98cc7b8f24d717e235de76c4a237e52a6b7c97",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0264a7aa_d0215b85",
+        "filename": "sfx2/source/control/charmapcontrol.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1002882
+      },
+      "writtenOn": "2020-11-29T13:33:43Z",
+      "side": 1,
+      "message": "I added the strings in the strings.hrc file.\nSince, weld_label is dynamically assigning the string should I remove it from charmapcontrol.hxx file? Because while checking for the recent characters list it will assign  it automatically according to the size",
+      "parentUuid": "1a64a907_3f3d4be2",
+      "range": {
+        "startLine": 65,
+        "startChar": 6,
+        "endLine": 65,
+        "endChar": 20
+      },
+      "revId": "ad98cc7b8f24d717e235de76c4a237e52a6b7c97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
