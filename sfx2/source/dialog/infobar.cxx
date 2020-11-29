@@ -9,7 +9,6 @@
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <comphelper/dispatchcommand.hxx>
-#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
@@ -22,7 +21,6 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/decoview.hxx>
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

@@ -19,6 +19,7 @@
 
 #include "datwin.hxx"
 #include <o3tl/numeric.hxx>
+#include <svtools/brwhead.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>

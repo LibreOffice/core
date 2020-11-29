@@ -12,7 +12,6 @@
 
 #include <svgrectnode.hxx>
 #include <svgsvgnode.hxx>
-#include <svggnode.hxx>
 #include <svgpathnode.hxx>
 #include <svggradientnode.hxx>
 

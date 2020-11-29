@@ -22,7 +22,6 @@
 #include <string.h>
 #include <libxml/xmlwriter.h>
 
-#include <tools/solar.h>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <svl/SfxBroadcaster.hxx>
@@ -30,7 +29,6 @@
 #include <svl/itemset.hxx>
 #include <poolio.hxx>
 
-#include <algorithm>
 #include <cassert>
 #include <vector>
 

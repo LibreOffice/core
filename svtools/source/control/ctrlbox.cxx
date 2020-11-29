@@ -33,9 +33,7 @@
 #include <rtl/math.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <unotools/charclass.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 
@@ -53,8 +51,6 @@
 #include <editeng/borderline.hxx>
 
 #include <rtl/bootstrap.hxx>
-
-#include <boost/property_tree/ptree.hpp>
 
 #include <borderline.hrc>
 

@@ -21,8 +21,6 @@
 
 #include <sfx2/bindings.hxx>
 
-#include <com/sun/star/lang/XComponent.hpp>
-
 using namespace css;
 using namespace css::uno;
 

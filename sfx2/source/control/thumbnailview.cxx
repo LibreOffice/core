@@ -29,7 +29,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/pngread.hxx>
 

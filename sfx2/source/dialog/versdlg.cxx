@@ -33,7 +33,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <tools/datetime.hxx>
-#include <svtools/miscopt.hxx>
 
 #include <versdlg.hxx>
 #include <sfx2/strings.hrc>

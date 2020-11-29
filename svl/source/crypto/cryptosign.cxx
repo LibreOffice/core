@@ -23,7 +23,6 @@
 #include <comphelper/random.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <filter/msfilter/mscodec.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #if HAVE_FEATURE_NSS && !defined(_WIN32)
@@ -50,7 +49,6 @@
 
 #if HAVE_FEATURE_NSS
 
-#include <com/sun/star/xml/crypto/XDigestContext.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/NSSInitializer.hpp>
 #include <mutex>

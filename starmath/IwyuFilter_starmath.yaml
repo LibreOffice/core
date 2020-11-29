@@ -4,6 +4,12 @@ excludelist:
     starmath/inc/smmod.hxx:
     # Needed for define
     - sfx2/app.hxx
+    starmath/qa/extras/mmlexport-test.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
+    starmath/qa/cppunit/test_node.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
     starmath/source/accessibility.hxx:
     # Base class needs complete type
     - com/sun/star/accessibility/XAccessible.hpp
@@ -19,6 +25,12 @@ excludelist:
     starmath/source/accessibility.cxx:
     # Needed for implicit dtor
     - editeng/editobj.hxx
+    starmath/source/node.cxx:
+    # Actually used
+    - vector
+    starmath/source/mathmlexport.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
     starmath/source/smdll.cxx:
     # Needed to inherit linker visibility
     - smdll.hxx
@@ -32,3 +44,5 @@ excludelist:
     starmath/source/unodoc.cxx:
     # Avoid loplugin:unreffun error
     - register.hxx
+    # Needed for template
+    - com/sun/star/frame/XModel.hpp

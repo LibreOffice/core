@@ -24,7 +24,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/frame.hxx>
 #include <basic/sberrors.hxx>
-#include <tools/svlibrary.h>
 
 #include <svl/svdde.hxx>
 #include <unotools/configmgr.hxx>
@@ -50,7 +49,6 @@
 #include <sfx2/stbitem.hxx>
 #include <sfx2/dockwin.hxx>
 #include <shellimpl.hxx>
-#include <comphelper/lok.hxx>
 
 #include <svtools/helpopt.hxx>
 #include <unotools/viewoptions.hxx>

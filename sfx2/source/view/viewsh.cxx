@@ -54,7 +54,6 @@
 
 #include <framework/actiontriggerhelper.hxx>
 #include <comphelper/lok.hxx>
-#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -62,7 +61,6 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
-#include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/flatpak.hxx>

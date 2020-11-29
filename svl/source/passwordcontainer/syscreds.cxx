@@ -20,7 +20,6 @@
 #include "syscreds.hxx"
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
-#include <iterator>
 
 using namespace com::sun::star;
 

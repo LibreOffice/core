@@ -27,7 +27,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/resource/MissingResourceException.hpp>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>

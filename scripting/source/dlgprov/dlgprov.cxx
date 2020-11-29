@@ -18,7 +18,6 @@
  */
 
 
-#include "DialogModelProvider.hxx"
 #include "dlgprov.hxx"
 #include "dlgevtatt.hxx"
 #include <com/sun/star/awt/UnoControlDialog.hpp>
@@ -41,7 +40,6 @@
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sfx2/app.hxx>

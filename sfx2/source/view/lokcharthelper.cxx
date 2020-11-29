@@ -15,7 +15,6 @@
 #include <sfx2/lokhelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/fract.hxx>
-#include <tools/mapunit.hxx>
 #include <tools/UnitConversion.hxx>
 #include <vcl/virdev.hxx>
 

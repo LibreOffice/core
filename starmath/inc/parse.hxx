@@ -33,6 +33,7 @@
 #include "error.hxx"
 
 class SmBlankNode;
+class SmBinVerNode;
 class SmBracebodyNode;
 class SmExpressionNode;
 class SmGlyphSpecialNode;

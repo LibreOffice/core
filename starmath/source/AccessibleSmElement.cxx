@@ -25,12 +25,9 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star;

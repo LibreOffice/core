@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
 #include <objshimp.hxx>

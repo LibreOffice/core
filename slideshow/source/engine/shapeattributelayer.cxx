@@ -26,8 +26,6 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
 
-#include <rtl/math.hxx>
-
 
 using namespace ::com::sun::star;
 

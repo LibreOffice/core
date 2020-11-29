@@ -16,11 +16,10 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
-#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 
 #include <svx/svdobj.hxx>
 #include <svx/svdoashp.hxx>
-#include <svx/svdogrp.hxx>
+#include <svx/svdpage.hxx>
 
 #include <svx/unoapi.hxx>
 

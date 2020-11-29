@@ -23,7 +23,6 @@
 #include "newhelp.hxx"
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
-#include <limits.h>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;

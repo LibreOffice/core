@@ -19,10 +19,6 @@
 
 #pragma once
 
-#include <toolkit/awt/vclxwindow.hxx>
-#include <toolkit/awt/vclxwindows.hxx>
-#include <toolkit/helper/listenermultiplexer.hxx>
-
 namespace com::sun::star::util
 {
 class XNumberFormatsSupplier;

@@ -15,7 +15,6 @@
 #include "tmpdevice.hxx"
 #include <cursor.hxx>
 #include <cassert>
-#include "mathtype.hxx"
 #include <starmathdatabase.hxx>
 
 // SmDefaultingVisitor

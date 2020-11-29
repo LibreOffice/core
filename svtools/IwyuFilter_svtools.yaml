@@ -14,3 +14,9 @@ excludelist:
     svtools/qa/unit/testHtmlReader.cxx:
     # Needed for the CPPUNIT_TEST_FIXTURE() macro.
     - unotest/bootstrapfixturebase.hxx
+    svtools/qa/unit/testHtmlWriter.cxx:
+    # Needed for --with-system-cppunit
+    - unotest/bootstrapfixturebase.hxx
+    svtools/source/uno/statusbarcontroller.cxx:
+    # Needed for template
+    - com/sun/star/ui/XStatusbarItem.hpp

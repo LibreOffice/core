@@ -20,12 +20,9 @@
 #include "analysisdefs.hxx"
 #include "analysis.hxx"
 #include "bessel.hxx"
-#include <cppuhelper/factory.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <o3tl/any.hxx>
 #include <rtl/math.hxx>
 #include <sal/macros.h>
