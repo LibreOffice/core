@@ -697,15 +697,15 @@ void SdScalePropertyBox::setValue(const Any& rValue, const OUString&)
         mnDirection = 2;
     else
         mnDirection = 3;
-
-    // Shrink animation is represented by negative value
-    // Shrink factor is calculated as (1 + $fValue)
-    // e.g 1 + (-0.75) = 0.25 => shrink to 25% of the size
-    // 0.25 = -0.75 + 1
-    if ( fValue1 < 0.0 )
-        fValue1 += 1;
-    if ( fValue2 < 0.0 )
-        fValue2 += 1;
+  
+    // Grow and Shrink Animation is a relative change with value stored in content.xml under tag smil:by=*,*
+    // An offset of 1 must be added to properly translate from content.xml to UI value displayed 
+    // e.g. if in content.xml smil:by=0.5,0.5 then 1 + (0.5,0.5) = (1.5,1.5) => grow by 150% of the 
+    // size horizontal and vertical
+    // e.g. if in content.xml smil:by=-0.5,-0.5 then 1 + (-0.5,-0.5) = (0.5,0.5) => shrink by 50% 
+    // of the size horizontal and vertical  
+    fValue1 += 1;
+    fValue2 += 1;
 
     ::tools::Long nValue;
     if( fValue1 )
@@ -720,15 +720,15 @@ Any SdScalePropertyBox::getValue()
 {
     double fValue1 = static_cast<double>(mxMetric->get_value(FieldUnit::PERCENT)) / 100.0;
 
-    // Shrink animation is represented by value < 1 (< 100%)
-    // Shrink factor is calculated as (1 + $fValue)
-    // e.g shrink to 25% of the size: 0.25 = 1 + $fValue =>
-    // $fValue = -0.75; -0.75 = 0.25 -1
-    if ( fValue1 < 1.0 )
-        fValue1 -= 1;
+    // Grow and Shrink Animation is a relative change with value stored in content.xml under tag smil:by=*,*
+    // An offset of 1 must be subtracted to properly translate UI value displayed and save to content.xml  
+    // e.g. if UI value is 150% then  1.5 - 1 = 0.5 and is set to smil:by=0.5,0.5 in content.xml 
+    // e.g. if UI value is 50% then  0.5 - 1 = -0.5 and is set to smil:by=-0.5,-0.5 in content.xml 
+    fValue1 -= 1;
 
     double fValue2 = fValue1;
-
+    
+    // mnDirectioin set by size drop down menu
     if( mnDirection == 1 )
         fValue2 = 0.0;
     else if( mnDirection == 2 )
