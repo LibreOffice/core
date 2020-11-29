@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d47c8442_047721fe",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-29T09:57:55Z",
+      "side": 1,
+      "message": "I think this will kea, although I could be wrong - I think it is our responsibility to free them when the parser is done",
+      "revId": "f2349d2bb9ab4aada4c0c0afb368580ddc342347",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
