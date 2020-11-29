@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a64a907_3f3d4be2",
+        "filename": "sfx2/source/control/charmapcontrol.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-11-29T09:46:14Z",
+      "side": 1,
+      "message": "The weld_label is still m_xRecentLabel, you assign a string dynamically with set_label()\n\nJust open sfx2/strings.hrc and enter these two lines before the #endif\n#define STR_RECENT     NC_(\"STR_RECENT\", \"Recently used\")\n#define STR_NORECENT   NC_(\"STR_NORECENT\", \"No recent characters\")\n\n(you probably find better terms, it\u0027s just an example)\n\nPlease test if getRecentCharacterList() is really called when the dialog shows up, when a character is added, and when it is deleted.",
+      "range": {
+        "startLine": 65,
+        "startChar": 6,
+        "endLine": 65,
+        "endChar": 20
+      },
+      "revId": "ad98cc7b8f24d717e235de76c4a237e52a6b7c97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
