@@ -1793,7 +1793,7 @@ static bool SdrPowerPointOLEDecompress( SvStream& rOutput, SvStream& rInput, sal
     aZCodec.BeginCompression();
     SvMemoryStream aSource( pBuf.get(), nInputSize, StreamMode::READ );
     aZCodec.Decompress( aSource, rOutput );
-    const bool bSuccess(0L != aZCodec.EndCompression());
+    const bool bSuccess(0 != aZCodec.EndCompression());
     rInput.Seek( nOldPos );
     return bSuccess;
 }
