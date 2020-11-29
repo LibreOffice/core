@@ -3828,8 +3828,11 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
         {
             // parameters may be missing, if an array is
             // passed as an argument
-            if( pPar )
+            if( pPar ) {
                 pElem = pDimArray->Get( pPar );
+                // tdf#136755 - re-add parameters to the variable
+                pElem->SetParameters(pPar);
+            }
         }
         else
         {
