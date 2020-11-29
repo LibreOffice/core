@@ -214,6 +214,12 @@ en-US = "Kurdish, Northern, Latin script"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_KMR_LATN]
 en-US = "Kurdish, Northern, Latin script spelling dictionary"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_KO]
+en-US = "Korean"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_KO]
+en-US = "Korean spelling dictionary"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_LO]
 en-US = "Lao"
 
