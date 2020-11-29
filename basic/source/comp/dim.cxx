@@ -431,9 +431,14 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
                 }
                 else
                 {
-                    pDef->SetDims( pDim->GetDims() );
-                    SbiExpression aExpr( this, *pDef, std::move(pDim) );
+                    // tdf#136755 - delete the variable beforehand REDIM
+                    SbiExpression aExpr(this, *pDef, nullptr);
                     aExpr.Gen();
+                    aGen.Gen(bVBASupportOn ? SbiOpcode::ERASE_CLEAR_ : SbiOpcode::ERASE_);
+
+                    pDef->SetDims( pDim->GetDims() );
+                    SbiExpression aExpr2( this, *pDef, std::move(pDim) );
+                    aExpr2.Gen();
                     aGen.Gen( SbiOpcode::DCREATE_, pDef->GetId(), pDef->GetTypeId() );
                 }
             }
