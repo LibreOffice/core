@@ -80,7 +80,11 @@ private:
 
 protected:
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override
-        { m_pDefinedIn->FormatDropNotify(*this); };
+    {
+        if (!m_pDefinedIn)
+            return;
+        m_pDefinedIn->FormatDropNotify(*this);
+    }
 
 public:
 
