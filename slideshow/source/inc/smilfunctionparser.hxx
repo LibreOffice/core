@@ -23,6 +23,7 @@
 #include "expressionnode.hxx"
 
 #include <basegfx/range/b2drectangle.hxx>
+#include <rtl/ustring.hxx>
 
 #include <memory>
 

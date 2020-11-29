@@ -46,7 +46,6 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/dom/DOMException.hpp>

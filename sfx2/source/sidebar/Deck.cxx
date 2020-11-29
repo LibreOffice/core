@@ -25,7 +25,7 @@
 #include <sidebar/PanelTitleBar.hxx>
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/Theme.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <vcl/event.hxx>
 #include <comphelper/lok.hxx>

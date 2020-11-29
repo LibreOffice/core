@@ -27,7 +27,6 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>

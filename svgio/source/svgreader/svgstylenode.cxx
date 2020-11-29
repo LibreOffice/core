@@ -19,6 +19,7 @@
 
 #include <svgstylenode.hxx>
 #include <svgdocument.hxx>
+#include <osl/diagnose.h>
 
 namespace svgio::svgreader
 {

@@ -6,3 +6,6 @@ excludelist:
     - com/sun/star/sheet/XSolver.hpp
     - com/sun/star/sheet/XSolverDescription.hpp
     - com/sun/star/lang/XServiceInfo.hpp
+    sccomp/source/solver/SolverComponent.cxx:
+    # Actually used
+    - com/sun/star/sheet/XSpreadsheetDocument.hpp

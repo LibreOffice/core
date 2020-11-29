@@ -22,21 +22,16 @@
 #include <ElementsDockingWindow.hxx>
 #include <smmod.hxx>
 
-#include <comphelper/accessiblewrapper.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/types.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <o3tl/safeint.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/vclevent.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

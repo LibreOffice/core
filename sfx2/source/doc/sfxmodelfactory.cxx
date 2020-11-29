@@ -19,16 +19,10 @@
 
 #include <sfx2/sfxmodelfactory.hxx>
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <cppuhelper/supportsservice.hxx>
 
 #include <osl/diagnose.h>
 
@@ -43,10 +37,7 @@ namespace sfx2
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::Any;
-    using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::lang::XSingleServiceFactory;
-    using ::com::sun::star::lang::XServiceInfo;
     using ::com::sun::star::beans::NamedValue;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::lang::XInitialization;

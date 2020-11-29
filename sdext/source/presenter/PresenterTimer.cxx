@@ -27,7 +27,6 @@
 #include <osl/conditn.hxx>
 
 #include <algorithm>
-#include <iterator>
 #include <memory>
 #include <set>
 

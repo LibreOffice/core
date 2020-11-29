@@ -20,9 +20,6 @@
 #include <rtl/ustring.hxx>
 #include <svl/aeitem.hxx>
 
-#include <climits>
-#include <cstddef>
-
 SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which):
     SfxPoolItem(which)
 {

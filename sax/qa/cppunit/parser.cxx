@@ -12,9 +12,7 @@
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
-#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 
-#include <cppuhelper/implbase.hxx>
 #include <sax/fastparser.hxx>
 #include <sax/fastattribs.hxx>
 #include <test/bootstrapfixture.hxx>

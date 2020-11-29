@@ -29,11 +29,9 @@
 #include <sidebar/Tools.hxx>
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <sfx2/sidebar/Context.hxx>
+#include <sfx2/viewsh.hxx>
 
 
-#include <sfx2/lokhelper.hxx>
-#include <sfx2/sfxresid.hxx>
-#include <sfx2/strings.hrc>
 #include <framework/ContextChangeEventMultiplexerTunnel.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fixed.hxx>

@@ -19,7 +19,6 @@
 #pragma once
 
 #include "animationbasenode.hxx"
-#include <com/sun/star/animations/XAnimateMotion.hpp>
 #include <com/sun/star/animations/XAnimatePhysics.hpp>
 
 namespace slideshow

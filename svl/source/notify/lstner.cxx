@@ -27,7 +27,6 @@
 #include <cassert>
 #include <vector>
 #include <memory>
-#include <map>
 
 // copy ctor of class SfxListener
 

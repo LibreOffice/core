@@ -23,16 +23,12 @@
 #include <sidebar/Tools.hxx>
 #include <sfx2/sidebar/FocusManager.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
-#include <sfx2/strings.hrc>
-
-#include <sfx2/sfxresid.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/svborder.hxx>
 #include <svtools/acceleratorexecute.hxx>
 
 using namespace css;

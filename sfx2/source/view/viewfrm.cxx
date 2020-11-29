@@ -32,7 +32,6 @@
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

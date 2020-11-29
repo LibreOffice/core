@@ -32,7 +32,6 @@
 #include <com/sun/star/java/JavaVMCreationFailureException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -50,9 +49,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/SetFlagContextHelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <jvmaccess/classpath.hxx>
 #include <jvmaccess/unovirtualmachine.hxx>
@@ -60,7 +56,6 @@
 #include <rtl/process.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <uno/current_context.hxx>
 #include <jvmfwk/framework.hxx>

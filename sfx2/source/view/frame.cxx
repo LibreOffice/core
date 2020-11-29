@@ -23,7 +23,6 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 

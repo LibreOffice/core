@@ -44,8 +44,6 @@
 #include <tools/debug.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
-#include <vcl/event.hxx>
-#include <vcl/svapp.hxx>
 #include <unotools/historyoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <ucbhelper/commandenvironment.hxx>

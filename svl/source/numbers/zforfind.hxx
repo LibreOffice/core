@@ -22,6 +22,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
+#include <svl/zforlist.hxx>
 #include <memory>
 
 class Date;

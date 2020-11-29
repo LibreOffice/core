@@ -43,7 +43,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <unordered_map>
-#include <unordered_set>
 #include <vector>
 
 using namespace ::std;

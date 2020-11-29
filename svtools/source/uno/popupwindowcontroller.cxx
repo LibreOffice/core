@@ -22,9 +22,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/weldutils.hxx>
 
-#include <svtools/framestatuslistener.hxx>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>
 

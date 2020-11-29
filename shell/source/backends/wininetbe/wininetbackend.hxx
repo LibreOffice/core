@@ -24,7 +24,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <rtl/string.hxx>
 
 namespace uno = css::uno ;
 namespace lang = css::lang ;

@@ -30,7 +30,6 @@
 #include <smmod.hxx>
 
 #include <cassert>
-#include <cstdlib>
 
 namespace {
 

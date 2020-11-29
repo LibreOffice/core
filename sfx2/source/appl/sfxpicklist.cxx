@@ -25,7 +25,6 @@
 #include <tools/datetime.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/inethist.hxx>
-#include <vcl/gdimtf.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/svapp.hxx>
 #include <officecfg/Office/Common.hxx>

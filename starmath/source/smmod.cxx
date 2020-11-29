@@ -29,7 +29,6 @@
 #include <smmod.hxx>
 #include "cfgitem.hxx"
 #include <dialog.hxx>
-#include <edit.hxx>
 #include <view.hxx>
 #include <smmod.hrc>
 #include <starmath.hrc>

@@ -21,7 +21,6 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
-#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -29,7 +28,6 @@
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <sal/types.h>
-#include <vcl/vclptr.hxx>
 
 class SmElementsControl;
 

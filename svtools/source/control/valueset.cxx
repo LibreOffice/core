@@ -21,16 +21,11 @@
 
 #include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
-#include <tools/stream.hxx>
 #include <comphelper/base64.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/cvtgrf.hxx>
-#include <vcl/help.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/commandevent.hxx>
 #include <vcl/virdev.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -40,7 +35,6 @@
 #include "valueimp.hxx"
 
 #include <svtools/valueset.hxx>
-#include <boost/property_tree/ptree.hpp>
 
 #include <uiobject.hxx>
 #include <vcl/uitest/logger.hxx>

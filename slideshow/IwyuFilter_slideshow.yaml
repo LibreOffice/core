@@ -14,6 +14,9 @@ excludelist:
     - config_lgpl.h
     # Wrapper for external lib
     - glm/gtc/type_ptr.hpp
+    slideshow/source/engine/box2dtools.cxx:
+    # Macro BOX2D_HEADER is resolved to this
+    - Box2D/Box2D.h
     slideshow/source/engine/opengl/Operation.cxx:
     # Wrapper for external lib
     - glm/gtc/matrix_transform.hpp
@@ -22,6 +25,9 @@ excludelist:
     # Wrapper for external lib
     - glm/gtc/matrix_transform.hpp
     - glm/gtc/type_ptr.hpp
+    slideshow/source/engine/rehearsetimingsactivity.cxx:
+    # Needed for template
+    - com/sun/star/rendering/XCanvas.hpp
     slideshow/source/engine/smilfunctionparser.cxx:
     # Boost wrapper is needed
     - boost/spirit/include/classic_core.hpp

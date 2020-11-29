@@ -23,7 +23,6 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/charwin.hxx>
 #include <comphelper/dispatchcommand.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 

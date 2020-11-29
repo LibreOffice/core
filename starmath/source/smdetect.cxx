@@ -24,7 +24,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <sfx2/docfile.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <sal/log.hxx>
 #include <sot/storage.hxx>
 #include <tools/diagnose_ex.h>
 
