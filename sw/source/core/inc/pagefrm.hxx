@@ -63,7 +63,7 @@ class SAL_DLLPUBLIC_RTTI SwPageFrame: public SwFootnoteBossFrame
     bool m_bInvalidWordCount    :1;
     bool m_bHasGrid             :1; // Grid for Asian layout
 
-    static const sal_Int8 mnShadowPxWidth;
+    static const sal_Int8 snShadowPxWidth;
 
     void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );

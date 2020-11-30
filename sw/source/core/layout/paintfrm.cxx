@@ -189,13 +189,14 @@ namespace {
 class SwLineRects
 {
 public:
-    std::vector< SwLineRect > aLineRects;
+    std::vector<SwLineRect> m_aLineRects;
     typedef std::vector< SwLineRect >::const_iterator const_iterator;
     typedef std::vector< SwLineRect >::iterator iterator;
     typedef std::vector< SwLineRect >::reverse_iterator reverse_iterator;
     typedef std::vector< SwLineRect >::size_type size_type;
-    size_t nLastCount;  //avoid unnecessary cycles in PaintLines
-    SwLineRects() : nLastCount( 0 )
+    size_t m_nLastCount; //avoid unnecessary cycles in PaintLines
+    SwLineRects()
+        : m_nLastCount(0)
     {
 #ifdef IOS
         // Work around what is either a compiler bug in Xcode 5.1.1,
@@ -213,7 +214,7 @@ public:
     void LockLines( bool bLock );
 
     //Limit lines to 100
-    bool isFull() const { return aLineRects.size()>100; }
+    bool isFull() const { return m_aLineRects.size() > 100; }
 };
 
 class SwSubsRects : public SwLineRects
@@ -568,8 +569,7 @@ void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const Svx
 {
     // Loop backwards because lines which can be combined, can usually be painted
     // in the same context
-    for (reverse_iterator it = aLineRects.rbegin(); it != aLineRects.rend();
-         ++it)
+    for (reverse_iterator it = m_aLineRects.rbegin(); it != m_aLineRects.rend(); ++it)
     {
         SwLineRect &rLRect = *it;
         // Test for the orientation, color, table
@@ -582,7 +582,7 @@ void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const Svx
                 return;
         }
     }
-    aLineRects.emplace_back( rRect, pCol, nStyle, pTab, nSCol );
+    m_aLineRects.emplace_back(rRect, pCol, nStyle, pTab, nSCol);
 }
 
 void SwLineRects::ConnectEdges( OutputDevice const *pOut, SwPaintProperties const & properties )
@@ -598,9 +598,9 @@ void SwLineRects::ConnectEdges( OutputDevice const *pOut, SwPaintProperties cons
 
     std::vector<SwLineRect*> aCheck;
 
-    for (size_t i = 0; i < aLineRects.size(); ++i)
+    for (size_t i = 0; i < m_aLineRects.size(); ++i)
     {
-        SwLineRect &rL1 = aLineRects[i];
+        SwLineRect& rL1 = m_aLineRects[i];
         if ( !rL1.GetTab() || rL1.IsPainted() || rL1.IsLocked() )
             continue;
 
@@ -621,7 +621,7 @@ void SwLineRects::ConnectEdges( OutputDevice const *pOut, SwPaintProperties cons
         }
 
         // Collect all lines to possibly link with i1
-        for (iterator it2 = aLineRects.begin(); it2 != aLineRects.end(); ++it2)
+        for (iterator it2 = m_aLineRects.begin(); it2 != m_aLineRects.end(); ++it2)
         {
             SwLineRect &rL2 = *it2;
             if ( rL2.GetTab() != rL1.GetTab() ||
@@ -687,9 +687,9 @@ void SwLineRects::ConnectEdges( OutputDevice const *pOut, SwPaintProperties cons
                             aIns.Bottom( pLA->Bottom() );
                             if ( !rL1.IsInside( aIns ) )
                                 continue;
-                            aLineRects.emplace_back( aIns, &rL1.GetColor(),
-                                        SvxBorderLineStyle::SOLID,
-                                        rL1.GetTab(), SubColFlags::Tab );
+                            m_aLineRects.emplace_back(aIns, &rL1.GetColor(),
+                                                      SvxBorderLineStyle::SOLID, rL1.GetTab(),
+                                                      SubColFlags::Tab);
                             if ( isFull() )
                             {
                                 --i;
@@ -728,9 +728,9 @@ void SwLineRects::ConnectEdges( OutputDevice const *pOut, SwPaintProperties cons
                             aIns.Right( pLA->Right() );
                             if ( !rL1.IsInside( aIns ) )
                                 continue;
-                            aLineRects.emplace_back( aIns, &rL1.GetColor(),
-                                        SvxBorderLineStyle::SOLID,
-                                        rL1.GetTab(), SubColFlags::Tab );
+                            m_aLineRects.emplace_back(aIns, &rL1.GetColor(),
+                                                      SvxBorderLineStyle::SOLID, rL1.GetTab(),
+                                                      SubColFlags::Tab);
                             if ( isFull() )
                             {
                                 --i;
@@ -748,7 +748,7 @@ void SwLineRects::ConnectEdges( OutputDevice const *pOut, SwPaintProperties cons
         }
         if ( bRemove )
         {
-            aLineRects.erase(aLineRects.begin() + i);
+            m_aLineRects.erase(m_aLineRects.begin() + i);
             --i;
         }
     }
@@ -757,11 +757,11 @@ void SwLineRects::ConnectEdges( OutputDevice const *pOut, SwPaintProperties cons
 void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects, SwPaintProperties const & properties )
 {
     // All help lines that are covered by any border will be removed or split
-    for (size_t i = 0; i < aLineRects.size(); ++i)
+    for (size_t i = 0; i < m_aLineRects.size(); ++i)
     {
         // get a copy instead of a reference, because an <insert> may destroy
         // the object due to a necessary array resize.
-        const SwLineRect aSubsLineRect(aLineRects[i]);
+        const SwLineRect aSubsLineRect(m_aLineRects[i]);
 
         // add condition <aSubsLineRect.IsLocked()> in order to consider only
         // border lines, which are *not* locked.
@@ -781,7 +781,8 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects, S
             aSubsRect.AddTop   ( - (properties.nSPixelSzH+properties.nSHalfPixelSzH) );
             aSubsRect.AddBottom( properties.nSPixelSzH+properties.nSHalfPixelSzH );
         }
-        for (const_iterator itK = rRects.aLineRects.begin(); itK != rRects.aLineRects.end(); ++itK)
+        for (const_iterator itK = rRects.m_aLineRects.begin(); itK != rRects.m_aLineRects.end();
+             ++itK)
         {
             const SwLineRect &rLine = *itK;
 
@@ -805,18 +806,20 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects, S
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Bottom( nTmp );
-                            aLineRects.emplace_back( aNewSubsRect, nullptr, aSubsLineRect.GetStyle(), nullptr,
-                                                aSubsLineRect.GetSubColor() );
+                            m_aLineRects.emplace_back(aNewSubsRect, nullptr,
+                                                      aSubsLineRect.GetStyle(), nullptr,
+                                                      aSubsLineRect.GetSubColor());
                         }
                         nTmp = rLine.Bottom()+properties.nSPixelSzH+1;
                         if ( aSubsLineRect.Bottom() > nTmp )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Top( nTmp );
-                            aLineRects.emplace_back( aNewSubsRect, nullptr, aSubsLineRect.GetStyle(), nullptr,
-                                                aSubsLineRect.GetSubColor() );
+                            m_aLineRects.emplace_back(aNewSubsRect, nullptr,
+                                                      aSubsLineRect.GetStyle(), nullptr,
+                                                      aSubsLineRect.GetSubColor());
                         }
-                        aLineRects.erase(aLineRects.begin() + i);
+                        m_aLineRects.erase(m_aLineRects.begin() + i);
                         --i;
                         break;
                     }
@@ -831,18 +834,20 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects, S
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Right( nTmp );
-                            aLineRects.emplace_back( aNewSubsRect, nullptr, aSubsLineRect.GetStyle(), nullptr,
-                                                aSubsLineRect.GetSubColor() );
+                            m_aLineRects.emplace_back(aNewSubsRect, nullptr,
+                                                      aSubsLineRect.GetStyle(), nullptr,
+                                                      aSubsLineRect.GetSubColor());
                         }
                         nTmp = rLine.Right()+properties.nSPixelSzW+1;
                         if ( aSubsLineRect.Right() > nTmp )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Left( nTmp );
-                            aLineRects.emplace_back( aNewSubsRect, nullptr, aSubsLineRect.GetStyle(), nullptr,
-                                                aSubsLineRect.GetSubColor() );
+                            m_aLineRects.emplace_back(aNewSubsRect, nullptr,
+                                                      aSubsLineRect.GetStyle(), nullptr,
+                                                      aSubsLineRect.GetSubColor());
                         }
-                        aLineRects.erase(aLineRects.begin() + i);
+                        m_aLineRects.erase(m_aLineRects.begin() + i);
                         --i;
                         break;
                     }
@@ -854,8 +859,8 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects, S
 
 void SwLineRects::LockLines( bool bLock )
 {
-    for (SwLineRect& rLRect : aLineRects)
-       rLRect.Lock( bLock );
+    for (SwLineRect& rLRect : m_aLineRects)
+        rLRect.Lock(bLock);
 }
 
 static void lcl_DrawDashedRect( OutputDevice * pOut, SwLineRect const & rLRect )
@@ -888,7 +893,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut, SwPaintProperties const &prope
 {
     // Paint the borders. Sadly two passes are needed.
     // Once for the inside and once for the outside edges of tables
-    if ( aLineRects.size() == nLastCount )
+    if (m_aLineRects.size() == m_nLastCount)
         return;
 
     // #i16816# tagged pdf support
@@ -901,11 +906,11 @@ void SwLineRects::PaintLines( OutputDevice *pOut, SwPaintProperties const &prope
     const Color *pLast = nullptr;
 
     bool bPaint2nd = false;
-    size_t nMinCount = aLineRects.size();
+    size_t nMinCount = m_aLineRects.size();
 
-    for ( size_t i = 0; i < aLineRects.size(); ++i )
+    for (size_t i = 0; i < m_aLineRects.size(); ++i)
     {
-        SwLineRect &rLRect = aLineRects[i];
+        SwLineRect& rLRect = m_aLineRects[i];
 
         if ( rLRect.IsPainted() )
             continue;
@@ -968,9 +973,9 @@ void SwLineRects::PaintLines( OutputDevice *pOut, SwPaintProperties const &prope
     }
     if ( bPaint2nd )
     {
-        for ( size_t i = 0; i < aLineRects.size(); ++i )
+        for (size_t i = 0; i < m_aLineRects.size(); ++i)
         {
-            SwLineRect &rLRect = aLineRects[i];
+            SwLineRect& rLRect = m_aLineRects[i];
             if ( rLRect.IsPainted() )
                 continue;
 
@@ -999,7 +1004,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut, SwPaintProperties const &prope
             rLRect.SetPainted();
         }
     }
-    nLastCount = nMinCount;
+    m_nLastCount = nMinCount;
     pOut->Pop();
 
 }
@@ -1008,21 +1013,21 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                                    const SwLineRects *pRects,
                                    SwPaintProperties const & properties )
 {
-    if ( aLineRects.empty() )
+    if (m_aLineRects.empty())
         return;
 
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pOut );
 
     // Remove all help line that are almost covered (tables)
-    for (size_type i = 0; i != aLineRects.size(); ++i)
+    for (size_type i = 0; i != m_aLineRects.size(); ++i)
     {
-        SwLineRect &rLi = aLineRects[i];
+        SwLineRect& rLi = m_aLineRects[i];
         const bool bVerticalSubs = rLi.Height() > rLi.Width();
 
-        for (size_type k = i + 1; k != aLineRects.size(); ++k)
+        for (size_type k = i + 1; k != m_aLineRects.size(); ++k)
         {
-            SwLineRect &rLk = aLineRects[k];
+            SwLineRect& rLk = m_aLineRects[k];
             if ( rLi.SSize() == rLk.SSize() )
             {
                 if ( bVerticalSubs == ( rLk.Height() > rLk.Width() ) )
@@ -1035,7 +1040,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                              ((nLi < rLk.Left() && nLi+21 > rLk.Left()) ||
                               (nLk < rLi.Left() && nLk+21 > rLi.Left())))
                         {
-                            aLineRects.erase(aLineRects.begin() + i);
+                            m_aLineRects.erase(m_aLineRects.begin() + i);
                             // don't continue with inner loop any more:
                             // the array may shrink!
                             --i;
@@ -1050,7 +1055,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                              ((nLi < rLk.Top() && nLi+21 > rLk.Top()) ||
                               (nLk < rLi.Top() && nLk+21 > rLi.Top())))
                         {
-                            aLineRects.erase(aLineRects.begin() + i);
+                            m_aLineRects.erase(m_aLineRects.begin() + i);
                             // don't continue with inner loop any more:
                             // the array may shrink!
                             --i;
@@ -1062,10 +1067,10 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
         }
     }
 
-    if ( pRects && (!pRects->aLineRects.empty()) )
+    if (pRects && (!pRects->m_aLineRects.empty()))
         RemoveSuperfluousSubsidiaryLines( *pRects, properties );
 
-    if ( aLineRects.empty() )
+    if (m_aLineRects.empty())
         return;
 
     pOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
@@ -1081,7 +1086,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
         pOut->SetDrawMode( DrawModeFlags::Default );
     }
 
-    for (SwLineRect& rLRect : aLineRects)
+    for (SwLineRect& rLRect : m_aLineRects)
     {
         // Add condition <!rLRect.IsLocked()> to prevent paint of locked subsidiary lines.
         if ( !rLRect.IsPainted() &&
@@ -3314,12 +3319,12 @@ namespace {
 
 class SwShortCut
 {
-    SwRectDist fnCheck;
-    tools::Long nLimit;
+    SwRectDist m_fnCheck;
+    tools::Long m_nLimit;
+
 public:
     SwShortCut( const SwFrame& rFrame, const SwRect& rRect );
-    bool Stop( const SwRect& rRect ) const
-        { return (rRect.*fnCheck)( nLimit ) > 0; }
+    bool Stop(const SwRect& rRect) const { return (rRect.*m_fnCheck)(m_nLimit) > 0; }
 };
 
 }
@@ -3332,31 +3337,31 @@ SwShortCut::SwShortCut( const SwFrame& rFrame, const SwRect& rRect )
     {
         if( bVert )
         {
-            fnCheck = &SwRect::GetBottomDistance;
-            nLimit = rRect.Top();
+            m_fnCheck = &SwRect::GetBottomDistance;
+            m_nLimit = rRect.Top();
         }
         else
         {
-            fnCheck = &SwRect::GetLeftDistance;
-            nLimit = rRect.Left() + rRect.Width();
+            m_fnCheck = &SwRect::GetLeftDistance;
+            m_nLimit = rRect.Left() + rRect.Width();
         }
     }
     else if( bVert == rFrame.IsNeighbourFrame() )
     {
-        fnCheck = &SwRect::GetTopDistance;
-        nLimit = rRect.Top() + rRect.Height();
+        m_fnCheck = &SwRect::GetTopDistance;
+        m_nLimit = rRect.Top() + rRect.Height();
     }
     else
     {
         if ( rFrame.IsVertLR() )
         {
-               fnCheck = &SwRect::GetLeftDistance;
-               nLimit = rRect.Right();
+            m_fnCheck = &SwRect::GetLeftDistance;
+            m_nLimit = rRect.Right();
         }
         else
         {
-            fnCheck = &SwRect::GetRightDistance;
-            nLimit = rRect.Left();
+            m_fnCheck = &SwRect::GetRightDistance;
+            m_nLimit = rRect.Left();
         }
     }
 }
@@ -5677,7 +5682,7 @@ void SwPageFrame::PaintMarginArea( const SwRect& _rOutputRect,
     }
 }
 
-const sal_Int8 SwPageFrame::mnShadowPxWidth = 9;
+const sal_Int8 SwPageFrame::snShadowPxWidth = 9;
 
 bool SwPageFrame::IsRightShadowNeeded() const
 {
@@ -5721,12 +5726,12 @@ bool SwPageFrame::IsLeftShadowNeeded() const
     ::SwAlignRect( aAlignedPageRect, _pViewShell, pRenderContext );
     SwRect aPagePxRect = pRenderContext->LogicToPixel( aAlignedPageRect.SVRect() );
 
-    tools::Long lShadowAdjustment = mnShadowPxWidth - 1; // TODO: extract this
+    tools::Long lShadowAdjustment = snShadowPxWidth - 1; // TODO: extract this
 
     _orHorizontalShadowRect.Chg(
                     Point( aPagePxRect.Left() + (bPaintLeftShadow ? lShadowAdjustment : 0), 0 ),
                     Size( aPagePxRect.Width() - ( (bPaintLeftShadow ? lShadowAdjustment : 0) + (bPaintRightShadow ? lShadowAdjustment : 0) ),
-                        mnShadowPxWidth ) );
+                        snShadowPxWidth ) );
 
     if(pMgr && pMgr->ShowNotes() && pMgr->HasNotes())
     {
@@ -5890,20 +5895,20 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     // Right shadow & corners
     if ( bPaintRightShadow )
     {
-        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Right(), aPagePxRect.Bottom() + 1 - (aPageBottomRightShadow.GetSizePixel().Height() - mnShadowPxWidth) ) ),
+        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Right(), aPagePxRect.Bottom() + 1 - (aPageBottomRightShadow.GetSizePixel().Height() - snShadowPxWidth) ) ),
             aPageBottomRightShadow );
-        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Right(), aPagePxRect.Top() - mnShadowPxWidth ) ),
+        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Right(), aPagePxRect.Top() - snShadowPxWidth ) ),
             aPageTopRightShadow );
 
-        if (aPagePxRect.Height() > 2 * mnShadowPxWidth)
+        if (aPagePxRect.Height() > 2 * snShadowPxWidth)
         {
             const tools::Long nWidth = aPageRightShadow.GetSizePixel().Width();
-            const tools::Long nHeight = aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1);
+            const tools::Long nHeight = aPagePxRect.Height() - 2 * (snShadowPxWidth - 1);
             if (aPageRightShadow.GetSizePixel().Height() < BORDER_TILE_SIZE)
                 aPageRightShadow.Scale(Size(nWidth, BORDER_TILE_SIZE), BmpScaleFlag::Fast);
 
             lcl_paintBitmapExToRect(pOut,
-                    Point(aPaintRect.Right() + mnShadowPxWidth, aPagePxRect.Top() + mnShadowPxWidth - 1),
+                    Point(aPaintRect.Right() + snShadowPxWidth, aPagePxRect.Top() + snShadowPxWidth - 1),
                     Size(nWidth, nHeight),
                     aPageRightShadow, RIGHT);
         }
@@ -5914,17 +5919,17 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     {
         const tools::Long lLeft = aPaintRect.Left() - aPageBottomLeftShadow.GetSizePixel().Width();
         pOut->DrawBitmapEx( pOut->PixelToLogic( Point( lLeft,
-            aPagePxRect.Bottom() + 1 + mnShadowPxWidth - aPageBottomLeftShadow.GetSizePixel().Height() ) ), aPageBottomLeftShadow );
-        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( lLeft, aPagePxRect.Top() - mnShadowPxWidth ) ), aPageTopLeftShadow );
-        if (aPagePxRect.Height() > 2 * mnShadowPxWidth)
+            aPagePxRect.Bottom() + 1 + snShadowPxWidth - aPageBottomLeftShadow.GetSizePixel().Height() ) ), aPageBottomLeftShadow );
+        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( lLeft, aPagePxRect.Top() - snShadowPxWidth ) ), aPageTopLeftShadow );
+        if (aPagePxRect.Height() > 2 * snShadowPxWidth)
         {
             const tools::Long nWidth = aPageLeftShadow.GetSizePixel().Width();
-            const tools::Long nHeight = aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1);
+            const tools::Long nHeight = aPagePxRect.Height() - 2 * (snShadowPxWidth - 1);
             if (aPageLeftShadow.GetSizePixel().Height() < BORDER_TILE_SIZE)
                 aPageLeftShadow.Scale(Size(nWidth, BORDER_TILE_SIZE), BmpScaleFlag::Fast);
 
             lcl_paintBitmapExToRect(pOut,
-                    Point(lLeft, aPagePxRect.Top() + mnShadowPxWidth - 1),
+                    Point(lLeft, aPagePxRect.Top() + snShadowPxWidth - 1),
                     Size(nWidth, nHeight),
                     aPageLeftShadow, LEFT);
         }
@@ -5946,7 +5951,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
         aPageTopShadow.Scale(Size(BORDER_TILE_SIZE, nTopHeight), BmpScaleFlag::Fast);
 
     lcl_paintBitmapExToRect(pOut,
-            Point(aPaintRect.Left(), aPagePxRect.Top() - mnShadowPxWidth),
+            Point(aPaintRect.Left(), aPagePxRect.Top() - snShadowPxWidth),
             Size(aPaintRect.Width(), nTopHeight),
             aPageTopShadow, TOP);
 }
@@ -6087,8 +6092,8 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     SwRect aAlignedPageRect( _rPageRect );
     ::SwAlignRect( aAlignedPageRect, _pViewShell, pRenderContext );
     SwRect aPagePxRect = pRenderContext->LogicToPixel( aAlignedPageRect.SVRect() );
-    aPagePxRect.AddBottom( mnShadowPxWidth + 1 );
-    aPagePxRect.AddTop( - mnShadowPxWidth - 1 );
+    aPagePxRect.AddBottom( snShadowPxWidth + 1 );
+    aPagePxRect.AddTop( - snShadowPxWidth - 1 );
 
     SwRect aTmpRect;
 
@@ -6096,8 +6101,8 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     // including at least the page frame
     SwPageFrame::GetHorizontalShadowRect( _rPageRect, _pViewShell, pRenderContext, aTmpRect, false, false, bRightSidebar );
 
-    if(bLeftShadow) aPagePxRect.Left( aTmpRect.Left() - mnShadowPxWidth - 1);
-    if(bRightShadow) aPagePxRect.Right( aTmpRect.Right() + mnShadowPxWidth + 1);
+    if(bLeftShadow) aPagePxRect.Left( aTmpRect.Left() - snShadowPxWidth - 1);
+    if(bRightShadow) aPagePxRect.Right( aTmpRect.Right() + snShadowPxWidth + 1);
 
     _orBorderAndShadowBoundRect = pRenderContext->PixelToLogic( aPagePxRect.SVRect() );
 }
