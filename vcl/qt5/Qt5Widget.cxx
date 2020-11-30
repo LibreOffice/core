@@ -129,7 +129,7 @@ void Qt5Widget::handleMouseButtonEvent(const Qt5Frame& rFrame, const QMouseEvent
         case Qt::LeftButton:
             aEvent.mnButton = MOUSE_LEFT;
             break;
-        case Qt::MidButton:
+        case Qt::MiddleButton:
             aEvent.mnButton = MOUSE_MIDDLE;
             break;
         case Qt::RightButton:

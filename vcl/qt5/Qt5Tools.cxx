@@ -49,7 +49,7 @@ sal_uInt16 GetMouseModCode(Qt::MouseButtons eButtons)
     sal_uInt16 nCode = 0;
     if (eButtons & Qt::LeftButton)
         nCode |= MOUSE_LEFT;
-    if (eButtons & Qt::MidButton)
+    if (eButtons & Qt::MiddleButton)
         nCode |= MOUSE_MIDDLE;
     if (eButtons & Qt::RightButton)
         nCode |= MOUSE_RIGHT;
