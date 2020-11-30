@@ -341,7 +341,6 @@ SvXMLImportContextRef XMLSectionImportContext::CreateChildContext(
          IsXMLToken(rLocalName, XML_SECTION_SOURCE) )
     {
         pContext = new XMLSectionSourceImportContext(GetImport(),
-                                                     nPrefix, rLocalName,
                                                      xSectionPropertySet);
     }
     else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
