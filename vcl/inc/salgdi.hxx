@@ -57,6 +57,7 @@ namespace basegfx {
 namespace vcl
 {
 class AbstractTrueTypeFont;
+class FileDefinitionWidgetDraw;
 typedef struct TTGlobalFontInfo_ TTGlobalFontInfo;
 }
 
@@ -446,6 +447,9 @@ public:
 #endif // ENABLE_CAIRO_CANVAS
 
 protected:
+
+    friend class vcl::FileDefinitionWidgetDraw;
+
     virtual bool                setClipRegion( const vcl::Region& ) = 0;
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion

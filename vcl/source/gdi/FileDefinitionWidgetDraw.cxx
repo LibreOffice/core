@@ -211,7 +211,7 @@ void FileDefinitionWidgetDraw::drawPolyPolygon(SalGraphics& rGraphics,
                                                const basegfx::B2DPolyPolygon& i_rPolyPolygon,
                                                double i_fTransparency)
 {
-    rGraphics.DrawPolyPolygon(rObjectToDevice, i_rPolyPolygon, i_fTransparency, nullptr);
+    rGraphics.drawPolyPolygon(rObjectToDevice, i_rPolyPolygon, i_fTransparency);
 }
 
 void FileDefinitionWidgetDraw::drawPolyLine(
@@ -220,22 +220,21 @@ void FileDefinitionWidgetDraw::drawPolyLine(
     const std::vector<double>* i_pStroke, basegfx::B2DLineJoin i_eLineJoin,
     css::drawing::LineCap i_eLineCap, double i_fMiterMinimumAngle, bool bPixelSnapHairline)
 {
-    rGraphics.DrawPolyLine(rObjectToDevice, i_rPolygon, i_fTransparency, i_fLineWidth, i_pStroke,
-                           i_eLineJoin, i_eLineCap, i_fMiterMinimumAngle, bPixelSnapHairline,
-                           nullptr);
+    rGraphics.drawPolyLine(rObjectToDevice, i_rPolygon, i_fTransparency, i_fLineWidth, i_pStroke,
+                           i_eLineJoin, i_eLineCap, i_fMiterMinimumAngle, bPixelSnapHairline);
 }
 
 void FileDefinitionWidgetDraw::drawBitmap(SalGraphics& rGraphics, const SalTwoRect& rPosAry,
                                           const SalBitmap& rSalBitmap)
 {
-    rGraphics.DrawBitmap(rPosAry, rSalBitmap, nullptr);
+    rGraphics.drawBitmap(rPosAry, rSalBitmap);
 }
 
 void FileDefinitionWidgetDraw::drawBitmap(SalGraphics& rGraphics, const SalTwoRect& rPosAry,
                                           const SalBitmap& rSalBitmap,
                                           const SalBitmap& rTransparentBitmap)
 {
-    rGraphics.DrawBitmap(rPosAry, rSalBitmap, rTransparentBitmap, nullptr);
+    rGraphics.drawBitmap(rPosAry, rSalBitmap, rTransparentBitmap);
 }
 
 namespace
