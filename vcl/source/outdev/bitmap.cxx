@@ -166,7 +166,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                 if ( nAction == MetaActionType::BMPSCALE )
                     ScaleBitmap (aBmp, aPosAry);
 
-                mpGraphics->DrawBitmap( aPosAry, *aBmp.ImplGetSalBitmap(), this );
+                mpGraphics->DrawBitmap( aPosAry, *aBmp.ImplGetSalBitmap(), *this );
             }
         }
     }
@@ -588,7 +588,7 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                         }
                     }
 
-                    mpGraphics->DrawBitmap(aPosAry, *pSalSrcBmp, *xMaskBmp, this);
+                    mpGraphics->DrawBitmap(aPosAry, *pSalSrcBmp, *xMaskBmp, *this);
                 }
 
                 // #110958# Paint mask to alpha channel. Luckily, the
@@ -608,7 +608,7 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
             }
             else
             {
-                mpGraphics->DrawBitmap(aPosAry, *pSalSrcBmp, this);
+                mpGraphics->DrawBitmap(aPosAry, *pSalSrcBmp, *this);
 
                 if (mpAlphaVDev)
                 {

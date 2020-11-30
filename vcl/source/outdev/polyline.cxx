@@ -77,7 +77,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
         css::drawing::LineCap_BUTT,
         basegfx::deg2rad(15.0) /*default fMiterMinimumAngle, not used*/,
         bPixelSnapHairline,
-        this);
+        *this);
 
     if(!bDrawn)
     {
@@ -371,7 +371,7 @@ bool OutputDevice::DrawPolyLineDirectInternal(
             eLineCap,
             fMiterMinimumAngle,
             bPixelSnapHairline,
-            this);
+            *this);
 
         if( bDrawSuccess )
         {

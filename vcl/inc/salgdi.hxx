@@ -206,13 +206,13 @@ public:
     void                        mirror( tools::Long& nX, const OutputDevice& rOutDev ) const;
     // only called mirror2 to avoid ambiguity
     [[nodiscard]] tools::Long   mirror2( tools::Long nX, const OutputDevice& rOutDev ) const;
-    void                        mirror( tools::Long& nX, tools::Long nWidth, const OutputDevice *pOutDev, bool bBack = false ) const;
+    void                        mirror( tools::Long& nX, tools::Long nWidth, const OutputDevice& rOutDev, bool bBack = false ) const;
     bool                        mirror( sal_uInt32 nPoints, const Point *pPtAry, Point *pPtAry2, const OutputDevice& rOutDev ) const;
     void                        mirror( tools::Rectangle& rRect, const OutputDevice&, bool bBack = false ) const;
     void                        mirror( vcl::Region& rRgn, const OutputDevice& rOutDev ) const;
     void                        mirror( ImplControlValue&, const OutputDevice& ) const;
     basegfx::B2DPolyPolygon     mirror( const basegfx::B2DPolyPolygon& i_rPoly, const OutputDevice& rOutDev ) const;
-    const basegfx::B2DHomMatrix& getMirror( const OutputDevice *pOutDev ) const;
+    const basegfx::B2DHomMatrix& getMirror( const OutputDevice& rOutDev ) const;
 
     // non virtual methods; these do possible coordinate mirroring and
     // then delegate to protected virtual methods
@@ -240,7 +240,7 @@ public:
                                     const basegfx::B2DHomMatrix& rObjectToDevice,
                                     const basegfx::B2DPolyPolygon &i_rPolyPolygon,
                                     double i_fTransparency,
-                                    const OutputDevice *i_pOutDev);
+                                    const OutputDevice& i_rOutDev);
 
     bool                        DrawPolyLine(
                                     const basegfx::B2DHomMatrix& rObjectToDevice,
@@ -252,7 +252,7 @@ public:
                                     css::drawing::LineCap i_eLineCap,
                                     double i_fMiterMinimumAngle,
                                     bool bPixelSnapHairline,
-                                    const OutputDevice* i_pOutDev);
+                                    const OutputDevice& i_rOutDev);
 
     bool                        DrawPolyLineBezier(
                                     sal_uInt32 nPoints,
@@ -305,13 +305,13 @@ public:
     void                        DrawBitmap(
                                     const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap,
-                                    const OutputDevice* pOutDev );
+                                    const OutputDevice& rOutDev );
 
     void                        DrawBitmap(
                                     const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap,
                                     const SalBitmap& rTransparentBitmap,
-                                    const OutputDevice* pOutDev );
+                                    const OutputDevice& rOutDev );
 
     void                        DrawMask(
                                     const SalTwoRect& rPosAry,
@@ -614,7 +614,7 @@ protected:
     /// flags which hold the SetAntialiasing() value from OutputDevice
     bool                        m_bAntiAlias : 1;
 
-    inline tools::Long GetDeviceWidth(const OutputDevice* pOutDev) const;
+    inline tools::Long GetDeviceWidth(const OutputDevice& rOutDev) const;
 
     /**
      * Handle damage done by drawing with a widget draw override

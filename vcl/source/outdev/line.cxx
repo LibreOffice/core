@@ -135,7 +135,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
             css::drawing::LineCap_BUTT,
             basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
             bPixelSnapHairline,
-            this);
+            *this);
     }
     if(!bDrawn)
     {
@@ -244,7 +244,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
                     css::drawing::LineCap_BUTT,
                     basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
                     bPixelSnapHairline,
-                    this);
+                    *this);
             }
 
             if(!bDone)
@@ -276,7 +276,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
                 basegfx::B2DHomMatrix(),
                 aFillPolyPolygon,
                 0.0,
-                this);
+                *this);
         }
 
         if(!bDone)
