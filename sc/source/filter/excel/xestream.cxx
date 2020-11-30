@@ -67,6 +67,8 @@
 #include <memory>
 #include <comphelper/storagehelper.hxx>
 
+#include <externalrefmgr.hxx>
+
 #define DEBUG_XL_ENCRYPTION 0
 
 using ::com::sun::star::uno::XInterface;
@@ -1103,7 +1105,13 @@ bool XclExpXmlStream::exportDocument()
         aDocRoot.ReadDoc();
         if (xStatusIndicator.is())
             xStatusIndicator->setValue(40);
+
+        // Unused external references are not saved, only kept in memory
+        // saveds must be indexed from 1, so indexes must be reordered
+        ScExternalRefManager* pRefMgr = rDoc.GetExternalRefManager();
+        pRefMgr->setSkipUnusedFileIds(true);
         aDocRoot.WriteXml( *this );
+        pRefMgr->setSkipUnusedFileIds(false);
     }
 
     PopStream();

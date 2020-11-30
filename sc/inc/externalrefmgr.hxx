@@ -597,6 +597,12 @@ public:
      */
     const OUString* getExternalFileName(sal_uInt16 nFileId, bool bForceOriginal = false);
 
+     /**
+      * Reindex external file references to skip unused files, if skipping is enabled.
+      */
+    sal_uInt16 convertFileIdToUsedFileId(sal_uInt16 nFileId);
+    void setSkipUnusedFileIds(bool bTurnOn);
+
     /**
      * Get all cached external file names as an array. Array indices of the
      * returned name array correspond with external file ID's.
@@ -844,6 +850,9 @@ private:
      * user interaction when calling from the API.
      */
     bool mbUserInteractionEnabled:1;
+
+    bool mbSkipUnusedFileIds = false;
+    std::vector<sal_uInt16> maConvertFileIdToUsedFileId;
 
     bool mbDocTimerEnabled:1;
 
