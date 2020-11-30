@@ -157,23 +157,13 @@ void SvxHyperlinkNewDocTp::FillDocumentList()
 {
     weld::WaitObject aWaitObj(mpDialog->getDialog());
 
-    uno::Sequence< uno::Sequence< beans::PropertyValue > >
-        aDynamicMenuEntries( SvtDynamicMenuOptions().GetMenu( EDynamicMenuType::NewMenu ) );
+    std::vector<SvtDynMenuEntry> aDynamicMenuEntries( SvtDynamicMenuOptions().GetMenu( EDynamicMenuType::NewMenu ) );
 
-    sal_uInt32 i, nCount = aDynamicMenuEntries.getLength();
-    for ( i = 0; i < nCount; i++ )
+    for ( const SvtDynMenuEntry & rDynamicMenuEntry : aDynamicMenuEntries )
     {
-        const uno::Sequence< beans::PropertyValue >& rDynamicMenuEntry = aDynamicMenuEntries[ i ];
+        OUString aDocumentUrl = rDynamicMenuEntry.sURL;
+        OUString aTitle = rDynamicMenuEntry.sTitle;
 
-        OUString aDocumentUrl, aTitle;
-
-        for ( const beans::PropertyValue& e : rDynamicMenuEntry )
-        {
-            if ( e.Name == DYNAMICMENU_PROPERTYNAME_URL )
-                e.Value >>= aDocumentUrl;
-            else if ( e.Name == DYNAMICMENU_PROPERTYNAME_TITLE )
-                e.Value >>= aTitle;
-        }
         //#i96822# business cards, labels and database should not be inserted here
         if( aDocumentUrl == "private:factory/swriter?slot=21051" ||
             aDocumentUrl == "private:factory/swriter?slot=21052" ||
