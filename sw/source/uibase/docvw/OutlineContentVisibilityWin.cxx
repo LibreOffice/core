@@ -15,24 +15,43 @@
 #include <IDocumentOutlineNodes.hxx>
 #include <txtfrm.hxx>
 #include <ndtxt.hxx>
-#include <vcl/button.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
 #include <strings.hrc>
 #include <svx/svdview.hxx>
 
-#define BUTTON_WIDTH 18
-#define BUTTON_HEIGHT 20
-
 SwOutlineContentVisibilityWin::SwOutlineContentVisibilityWin(SwEditWin* pEditWin,
                                                              const SwFrame* pFrame)
-    : PushButton(pEditWin, 0)
+    : InterimItemWindow(pEditWin, "modules/swriter/ui/outlinebutton.ui", "OutlineButton")
+    , m_xRightBtn(m_xBuilder->weld_button("right"))
+    , m_xDownBtn(m_xBuilder->weld_button("down"))
     , m_pEditWin(pEditWin)
     , m_pFrame(pFrame)
     , m_nDelayAppearing(0)
     , m_bDestroyed(false)
     , m_nOutlinePos(SwOutlineNodes::npos)
 {
-    SetSizePixel(Size(BUTTON_WIDTH, BUTTON_HEIGHT));
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    SetPaintTransparent(false);
+    SetBackground(rStyleSettings.GetFaceColor());
+
+    Size aBtnsSize(m_xRightBtn->get_preferred_size());
+    auto nDim = std::max(aBtnsSize.Width(), aBtnsSize.Height());
+    m_xRightBtn->set_size_request(nDim, nDim);
+    m_xDownBtn->set_size_request(nDim, nDim);
+
+    SetSizePixel(get_preferred_size());
+    SetSymbol(SymbolType::DONTKNOW);
+
+    m_xRightBtn->connect_mouse_press(LINK(this, SwOutlineContentVisibilityWin, MousePressHdl));
+    m_xDownBtn->connect_mouse_press(LINK(this, SwOutlineContentVisibilityWin, MousePressHdl));
+
+    m_xRightBtn->connect_mouse_move(LINK(this, SwOutlineContentVisibilityWin, MouseMoveHdl));
+    m_xDownBtn->connect_mouse_move(LINK(this, SwOutlineContentVisibilityWin, MouseMoveHdl));
+
+    m_xRightBtn->connect_key_press(LINK(this, SwOutlineContentVisibilityWin, KeyInputHdl));
+    m_xDownBtn->connect_key_press(LINK(this, SwOutlineContentVisibilityWin, KeyInputHdl));
 
     m_aDelayTimer.SetTimeout(50);
     m_aDelayTimer.SetInvokeHandler(LINK(this, SwOutlineContentVisibilityWin, DelayHandler));
@@ -46,7 +65,42 @@ void SwOutlineContentVisibilityWin::dispose()
     m_pEditWin.clear();
     m_pFrame = nullptr;
 
-    PushButton::dispose();
+    m_xDownBtn.reset();
+    m_xRightBtn.reset();
+
+    InterimItemWindow::dispose();
+}
+
+SymbolType SwOutlineContentVisibilityWin::GetSymbol() const
+{
+    if (m_xRightBtn->get_visible())
+        return SymbolType::ARROW_RIGHT;
+    if (m_xDownBtn->get_visible())
+        return SymbolType::ARROW_DOWN;
+    return SymbolType::DONTKNOW;
+}
+
+void SwOutlineContentVisibilityWin::SetSymbol(SymbolType eStyle)
+{
+    if (GetSymbol() == eStyle)
+        return;
+
+    bool bRight = eStyle == SymbolType::ARROW_RIGHT;
+    bool bDown = eStyle == SymbolType::ARROW_DOWN;
+
+    bool bControlHasFocus = ControlHasFocus();
+
+    m_xRightBtn->set_visible(bRight);
+    m_xDownBtn->set_visible(bDown);
+
+    weld::Widget* pWidget = nullptr;
+    if (bRight)
+        pWidget = m_xRightBtn.get();
+    else if (bDown)
+        pWidget = m_xDownBtn.get();
+    InitControlBase(pWidget);
+    if (bControlHasFocus && pWidget)
+        pWidget->grab_focus();
 }
 
 void SwOutlineContentVisibilityWin::Set()
@@ -176,27 +230,38 @@ void SwOutlineContentVisibilityWin::ToggleOutlineContentVisibility(const bool bS
     }
     else
         rSh.ToggleOutlineContentVisibility(m_nOutlinePos);
-    SetSymbol(rSh.IsOutlineContentFolded(m_nOutlinePos) ? SymbolType::ARROW_RIGHT
-                                                        : SymbolType::ARROW_DOWN);
+
+    if (!m_bDestroyed)
+    {
+        SetSymbol(rSh.IsOutlineContentFolded(m_nOutlinePos) ? SymbolType::ARROW_RIGHT
+                                                            : SymbolType::ARROW_DOWN);
+    }
+
     rSh.LockView(false);
 }
 
-void SwOutlineContentVisibilityWin::KeyInput(const KeyEvent& rKEvt)
+IMPL_LINK(SwOutlineContentVisibilityWin, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
+    bool bConsumed = false;
+
     vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
     if (!aKeyCode.GetModifier()
         && (aKeyCode.GetCode() == KEY_RETURN || aKeyCode.GetCode() == KEY_SPACE))
     {
         ToggleOutlineContentVisibility(aKeyCode.GetCode() == KEY_RETURN);
+        bConsumed = true;
     }
     else if (aKeyCode.GetCode() == KEY_ESCAPE)
     {
         Hide();
         GrabFocusToDocument();
+        bConsumed = true;
     }
+
+    return bConsumed;
 }
 
-void SwOutlineContentVisibilityWin::MouseMove(const MouseEvent& rMEvt)
+IMPL_LINK(SwOutlineContentVisibilityWin, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
 {
     if (rMEvt.IsLeaveWindow())
     {
@@ -215,11 +280,13 @@ void SwOutlineContentVisibilityWin::MouseMove(const MouseEvent& rMEvt)
         GrabFocus();
     }
     GetEditWin()->SetSavedOutlineFrame(const_cast<SwFrame*>(GetFrame()));
+    return false;
 }
 
-void SwOutlineContentVisibilityWin::MouseButtonDown(const MouseEvent& rMEvt)
+IMPL_LINK(SwOutlineContentVisibilityWin, MousePressHdl, const MouseEvent&, rMEvt, bool)
 {
     ToggleOutlineContentVisibility(rMEvt.IsRight());
+    return false;
 }
 
 IMPL_LINK_NOARG(SwOutlineContentVisibilityWin, DelayHandler, Timer*, void)

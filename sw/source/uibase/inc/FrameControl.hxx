@@ -29,6 +29,9 @@ public:
     /// Returns true if the point is inside the control.
     virtual bool Contains( const Point &rDocPt ) const = 0;
 
+    /// Returns true if the control has focus
+    virtual bool IsFocused() const = 0;
+
     virtual const SwFrame* GetFrame() = 0;
     virtual SwEditWin*   GetEditWin() = 0;
 };
@@ -46,6 +49,7 @@ public:
     void SetReadonly( bool bReadonly ) { mpIFace->SetReadonly( bReadonly ); }
     void ShowAll( bool bShow )         { mpIFace->ShowAll( bShow ); }
     bool Contains( const Point &rDocPt ) const { return mpIFace->Contains( rDocPt ); }
+    bool HasFocus() const { return mpIFace->IsFocused(); }
 };
 
 /** Class sharing some MenuButton code
@@ -64,6 +68,7 @@ public:
 
     virtual const SwFrame* GetFrame()   override { return m_pFrame; }
     virtual SwEditWin*   GetEditWin() override { return m_pEditWin; }
+    virtual bool IsFocused() const override { return HasFocus(); }
     const SwPageFrame*     GetPageFrame() const;
 };
 
