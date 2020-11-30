@@ -16,6 +16,24 @@
       "revId": "0072788c79c11e89fdf2fe3ca1ea09bae7684303",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8a6650b_fc82f02f",
+        "filename": "sw/source/filter/html/css1atr.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-11-30T10:20:59Z",
+      "side": 1,
+      "message": "This was a side-effect change, necessitated because some places pass in nullptr, which, when captured by string_view on macOS, causes an exception",
+      "parentUuid": "93405644_13a64f24",
+      "revId": "0072788c79c11e89fdf2fe3ca1ea09bae7684303",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
