@@ -727,6 +727,18 @@ bool SdrOnOffItem::GetPresentation(SfxItemPresentation ePres,
     return true;
 }
 
+void SdrOnOffItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SdrOnOffItem"));
+    if (Which() == SDRATTR_SHADOW)
+    {
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOW"));
+    }
+
+    SfxBoolItem::dumpAsXml(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
+}
 
 SdrYesNoItem* SdrYesNoItem::Clone(SfxItemPool* /*pPool*/) const
 {
@@ -768,6 +780,20 @@ bool SdrPercentItem::GetPresentation(
     }
 
     return true;
+}
+
+void SdrPercentItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SdrPercentItem"));
+    if (Which() == SDRATTR_SHADOWTRANSPARENCE)
+    {
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"),
+                                    BAD_CAST("SDRATTR_SHADOWTRANSPARENCE"));
+    }
+
+    SfxUInt16Item::dumpAsXml(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 SdrAngleItem* SdrAngleItem::Clone(SfxItemPool* /*pPool*/) const
@@ -869,6 +895,34 @@ bool SdrMetricItem::GetPresentation(SfxItemPresentation ePres,
     return true;
 }
 
+void SdrMetricItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SdrMetricItem"));
+    if (Which() == SDRATTR_SHADOWXDIST)
+    {
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWXDIST"));
+    }
+    else if (Which() == SDRATTR_SHADOWYDIST)
+    {
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWYDIST"));
+    }
+    else if (Which() == SDRATTR_SHADOWSIZEX)
+    {
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWSIZEX"));
+    }
+    else if (Which() == SDRATTR_SHADOWSIZEY)
+    {
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWSIZEY"));
+    }
+    else if (Which() == SDRATTR_SHADOWBLUR)
+    {
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWBLUR"));
+    }
+
+    SfxInt32Item::dumpAsXml(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
+}
 
 // items of the legend object
 
