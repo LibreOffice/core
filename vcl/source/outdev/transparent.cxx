@@ -258,7 +258,7 @@ void OutputDevice::DrawTransparent(
                 aFullTransform,
                 aB2DPolyPolygon,
                 fAdjustedTransparency,
-                this);
+                *this);
         }
 
         if( bDrawnOk && IsLineColor() )
@@ -277,7 +277,7 @@ void OutputDevice::DrawTransparent(
                     css::drawing::LineCap_BUTT,
                     basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
                     bPixelSnapHairline,
-                    this );
+                    *this );
             }
         }
 
@@ -379,7 +379,7 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
                 aTransform,
                 aB2DPolyPolygon,
                 fTransparency,
-                this);
+                *this);
         }
 
         if( mbLineColor )
@@ -402,7 +402,7 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
                     css::drawing::LineCap_BUTT,
                     basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
                     bPixelSnapHairline,
-                    this );
+                    *this );
             }
 
             // prepare to restore the fill color
