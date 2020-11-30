@@ -74,7 +74,9 @@ private:
 public:
     SchXMLDomain2Context( SvXMLImport& rImport,
                           ::std::vector< OUString > & rAddresses );
-    virtual void StartElement( const Reference< xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 SchXMLDomain2Context::SchXMLDomain2Context(
@@ -85,21 +87,16 @@ SchXMLDomain2Context::SchXMLDomain2Context(
 {
 }
 
-void SchXMLDomain2Context::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLDomain2Context::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        if( nPrefix == XML_NAMESPACE_TABLE &&
-            IsXMLToken( aLocalName, XML_CELL_RANGE_ADDRESS ) )
-        {
-            mrAddresses.push_back( xAttrList->getValueByIndex( i ));
-        }
+        if (aIter.getToken() == XML_ELEMENT(TABLE, XML_CELL_RANGE_ADDRESS) )
+            mrAddresses.push_back( aIter.toString() );
+        else
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }
 }
 
