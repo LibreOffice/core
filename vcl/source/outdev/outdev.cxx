@@ -557,7 +557,7 @@ void OutputDevice::DrawOutDevDirectProcess(const OutputDevice& rSrcDev, SalTwoRe
     if( pSrcGraphics && (pSrcGraphics->GetLayout() & SalLayoutFlags::BiDiRtl) )
     {
         SalTwoRect aPosAry2 = rPosAry;
-        pSrcGraphics->mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth, &rSrcDev );
+        pSrcGraphics->mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth, rSrcDev );
         mpGraphics->CopyBits( aPosAry2, *pSrcGraphics, *this, rSrcDev );
         return;
     }

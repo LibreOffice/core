@@ -1017,7 +1017,7 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
             css::drawing::LineCap_BUTT,
             basegfx::deg2rad(15.0),
             bPixelSnapHairline,
-            this);
+            *this);
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos, nLineWidth );
