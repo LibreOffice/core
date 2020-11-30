@@ -54,9 +54,9 @@ OUString fromQStringToOUString(QString const& s)
 }
 }
 
-css::beans::Optional<css::uno::Any> getValue(OUString const& id)
+css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
 {
-    if (id == "ExternalMailer")
+    if (id == u"ExternalMailer")
     {
         KEMailSettings aEmailSettings;
         QString aClientProgram;
@@ -70,27 +70,27 @@ css::beans::Optional<css::uno::Any> getValue(OUString const& id)
         sClientProgram = fromQStringToOUString(aClientProgram);
         return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sClientProgram));
     }
-    else if (id == "SourceViewFontHeight")
+    else if (id == u"SourceViewFontHeight")
     {
         const QFont aFixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
         const short nFontHeight = aFixedFont.pointSize();
         return css::beans::Optional<css::uno::Any>(true, uno::makeAny(nFontHeight));
     }
-    else if (id == "SourceViewFontName")
+    else if (id == u"SourceViewFontName")
     {
         const QFont aFixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
         const QString aFontName = aFixedFont.family();
         const OUString sFontName = fromQStringToOUString(aFontName);
         return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sFontName));
     }
-    else if (id == "EnableATToolSupport")
+    else if (id == u"EnableATToolSupport")
     {
         /* does not make much sense without an accessibility bridge */
         bool ATToolSupport = false;
         return css::beans::Optional<css::uno::Any>(true,
                                                    uno::makeAny(OUString::boolean(ATToolSupport)));
     }
-    else if (id == "WorkPathVariable")
+    else if (id == u"WorkPathVariable")
     {
         QString aDocumentsDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
         if (aDocumentsDir.isEmpty())
@@ -103,7 +103,7 @@ css::beans::Optional<css::uno::Any> getValue(OUString const& id)
         osl_getFileURLFromSystemPath(sDocumentsDir.pData, &sDocumentsURL.pData);
         return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sDocumentsURL));
     }
-    else if (id == "ooInetFTPProxyName")
+    else if (id == u"ooInetFTPProxyName")
     {
         QString aFTPProxy;
         switch (KProtocolManager::proxyType())
@@ -130,7 +130,7 @@ css::beans::Optional<css::uno::Any> getValue(OUString const& id)
             return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sProxy));
         }
     }
-    else if (id == "ooInetFTPProxyPort")
+    else if (id == u"ooInetFTPProxyPort")
     {
         QString aFTPProxy;
         switch (KProtocolManager::proxyType())
@@ -157,7 +157,7 @@ css::beans::Optional<css::uno::Any> getValue(OUString const& id)
             return css::beans::Optional<css::uno::Any>(true, uno::makeAny(nPort));
         }
     }
-    else if (id == "ooInetHTTPProxyName")
+    else if (id == u"ooInetHTTPProxyName")
     {
         QString aHTTPProxy;
         switch (KProtocolManager::proxyType())
@@ -184,7 +184,7 @@ css::beans::Optional<css::uno::Any> getValue(OUString const& id)
             return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sProxy));
         }
     }
-    else if (id == "ooInetHTTPProxyPort")
+    else if (id == u"ooInetHTTPProxyPort")
     {
         QString aHTTPProxy;
         switch (KProtocolManager::proxyType())
@@ -211,7 +211,7 @@ css::beans::Optional<css::uno::Any> getValue(OUString const& id)
             return css::beans::Optional<css::uno::Any>(true, uno::makeAny(nPort));
         }
     }
-    else if (id == "ooInetHTTPSProxyName")
+    else if (id == u"ooInetHTTPSProxyName")
     {
         QString aHTTPSProxy;
         switch (KProtocolManager::proxyType())
@@ -238,7 +238,7 @@ css::beans::Optional<css::uno::Any> getValue(OUString const& id)
             return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sProxy));
         }
     }
-    else if (id == "ooInetHTTPSProxyPort")
+    else if (id == u"ooInetHTTPSProxyPort")
     {
         QString aHTTPSProxy;
         switch (KProtocolManager::proxyType())
@@ -265,7 +265,7 @@ css::beans::Optional<css::uno::Any> getValue(OUString const& id)
             return css::beans::Optional<css::uno::Any>(true, uno::makeAny(nPort));
         }
     }
-    else if (id == "ooInetNoProxy")
+    else if (id == u"ooInetNoProxy")
     {
         QString aNoProxyFor;
         switch (KProtocolManager::proxyType())
@@ -288,7 +288,7 @@ css::beans::Optional<css::uno::Any> getValue(OUString const& id)
             return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sNoProxyFor));
         }
     }
-    else if (id == "ooInetProxyType")
+    else if (id == u"ooInetProxyType")
     {
         sal_Int32 nProxyType;
         switch (KProtocolManager::proxyType())
