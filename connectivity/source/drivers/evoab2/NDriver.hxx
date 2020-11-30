@@ -20,6 +20,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NDRIVER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NDRIVER_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/compbase.hxx>
@@ -63,7 +67,7 @@ namespace connectivity::evoab
             css::uno::Reference< css::uno::XComponentContext > getComponentContext( ) const { return m_xContext; }
 
             // static methods
-            static bool acceptsURL_Stat( const OUString& url );
+            static bool acceptsURL_Stat( std::u16string_view url );
         };
 }
 
