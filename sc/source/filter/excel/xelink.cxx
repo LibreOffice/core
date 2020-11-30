@@ -2077,6 +2077,19 @@ void XclExpSupbookBuffer::Save( XclExpStream& rStrm )
 
 void XclExpSupbookBuffer::SaveXml( XclExpXmlStream& rStrm )
 {
+    // Unused external references are not saved, only kept in memory
+    // saveds must be indexed from 1, so indexes must be reordered
+    ScExternalRefManager* pRefMgr = GetDoc().GetExternalRefManager();
+    vector<sal_uInt16> aExternFileIds;
+    for (size_t nPos = 0, nSize = maSupbookList.GetSize(); nPos < nSize; ++nPos)
+    {
+        XclExpSupbookRef xRef(maSupbookList.GetRecord(nPos));
+        if (xRef->GetType() == XclSupbookType::Extern)
+            aExternFileIds.push_back(xRef->GetFileId() - 1);
+    }
+    if (aExternFileIds.size() > 0)
+        pRefMgr->setSkipUnusedFileIds(aExternFileIds);
+
     ::std::map< sal_uInt16, OUString > aMap;
     for (size_t nPos = 0, nSize = maSupbookList.GetSize(); nPos < nSize; ++nPos)
     {
@@ -2085,6 +2098,7 @@ void XclExpSupbookBuffer::SaveXml( XclExpXmlStream& rStrm )
             continue;   // handle only external reference (for now?)
 
         sal_uInt16 nId = xRef->GetFileId();
+        sal_uInt16 nUsedId = pRefMgr->convertFileIdToUsedFileId(nId - 1) + 1;
         const OUString& rUrl = xRef->GetUrl();
         ::std::pair< ::std::map< sal_uInt16, OUString >::iterator, bool > aInsert(
                 aMap.insert( ::std::make_pair( nId, rUrl)));
@@ -2095,11 +2109,10 @@ void XclExpSupbookBuffer::SaveXml( XclExpXmlStream& rStrm )
                     (rUrl == (*aInsert.first).second ? " multiple Supbook not supported" : ""));
             continue;
         }
-
         OUString sId;
         sax_fastparser::FSHelperPtr pExternalLink = rStrm.CreateOutputStream(
-                XclXmlUtils::GetStreamName( "xl/", "externalLinks/externalLink", nId),
-                XclXmlUtils::GetStreamName( nullptr, "externalLinks/externalLink", nId),
+                XclXmlUtils::GetStreamName( "xl/", "externalLinks/externalLink", nUsedId),
+                XclXmlUtils::GetStreamName( nullptr, "externalLinks/externalLink", nUsedId),
                 rStrm.GetCurrentStream()->getOutputStream(),
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.externalLink+xml",
                 CREATE_OFFICEDOC_RELATION_TYPE("externalLink"),
