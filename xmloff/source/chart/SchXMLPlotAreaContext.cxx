@@ -633,38 +633,36 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLDataLabelContext
     return nullptr;
 }
 
-void SchXMLDataLabelContext::StartElement(const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+void SchXMLDataLabelContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
-    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for (sal_Int16 i = 0; i < nAttrCount; i++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex(i);
-        OUString aLocalName;
-        sal_uInt16 nPrefix = rMap.GetKeyByAttrName(rAttrName, &aLocalName);
-        const OUString sValue(xAttrList->getValueByIndex(i));
-
-        if (nPrefix == XML_NAMESPACE_SVG)
+        OUString sValue = aIter.toString();
+        switch(aIter.getToken())
         {
-            if (IsXMLToken(aLocalName, XML_X))
+            case XML_ELEMENT(SVG, XML_X):
+            case XML_ELEMENT(SVG_COMPAT, XML_X):
             {
                 sal_Int32 nResultValue;
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(nResultValue, sValue);
                 mrDataLabelStyle.mo_nLabelAbsolutePosX = nResultValue;
+                break;
             }
-            else if (IsXMLToken(aLocalName, XML_Y))
+            case XML_ELEMENT(SVG, XML_Y):
+            case XML_ELEMENT(SVG_COMPAT, XML_Y):
             {
                 sal_Int32 nResultValue;
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(nResultValue, sValue);
                 mrDataLabelStyle.mo_nLabelAbsolutePosY = nResultValue;
+                break;
             }
-        }
-        else if (nPrefix == XML_NAMESPACE_CHART)
-        {
-            if (IsXMLToken(aLocalName, XML_STYLE_NAME))
-            {
+            case XML_ELEMENT(CHART, XML_STYLE_NAME):
                 mrDataLabelStyle.msStyleName = sValue;
-            }
+                break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 }
