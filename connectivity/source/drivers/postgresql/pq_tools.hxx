@@ -134,7 +134,7 @@ OUString querySingleValue(
     const OUString &query );
 
 void extractNameValuePairsFromInsert( String2StringMap & map, const OString & lastQuery );
-sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype );
+sal_Int32 typeNameToDataType( const OUString &typeName, std::u16string_view typtype );
 
 // copied from connectivity/source/dbtools, can't use the function directly
 bool implSetObject( const css::uno::Reference< css::sdbc::XParameters >& _rxParameters,

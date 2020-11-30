@@ -1285,14 +1285,14 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTableTypes(  )
 
 /** returns the constant from sdbc.DataType
  */
-sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype )
+sal_Int32 typeNameToDataType( const OUString &typeName, std::u16string_view typtype )
 {
 //     sal_Int32 ret = css::sdbc::DataType::DISTINCT;
     // map all unknown types to memo (longvarchar). This allows to show them in
     // string representation. Additionally, the edit-table-type-selection-box
     // is not so unusable anymore.
     sal_Int32 ret = css::sdbc::DataType::LONGVARCHAR;
-    if( typtype == "b" )
+    if( typtype == u"b" )
     {
         // as long as the OOo framework does not support arrays,
         // the user is better of with interpreting arrays as strings !
@@ -1310,11 +1310,11 @@ sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype 
             ret = ii->second;
         }
     }
-    else if( typtype == "c" )
+    else if( typtype == u"c" )
     {
         ret = css::sdbc::DataType::STRUCT;
     }
-    else if( typtype == "d" )
+    else if( typtype == u"d" )
     {
         ret = css::sdbc::DataType::LONGVARCHAR;
     }
