@@ -57,7 +57,7 @@ public:
  *
  * All elements are handled by the same class due to their similarities.
  */
-class XMLTextMarkImportContext : public SvXMLImportContext
+class XMLTextMarkImportContext final : public SvXMLImportContext
 {
 private:
     XMLTextImportHelper & m_rHelper;
@@ -83,10 +83,8 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName );
 
-protected:
-
-    virtual void StartElement(
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
@@ -102,8 +100,7 @@ public:
         const OUString& i_rXmlId = OUString());
 
     bool FindName(
-        SvXMLImport& rImport,
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList);
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList);
 };
 
 #endif
