@@ -28,6 +28,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/prstylei.hxx>
+#include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -41,6 +42,7 @@
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
+using ::com::sun::star::xml::sax::XFastAttributeList;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::container::XNamed;
 
@@ -85,11 +87,8 @@ const SvXMLTokenMapEntry aSectionTokenMap[] =
 // insert a section within another section, you can't move the cursor
 // between the ends of the inner and the enclosing section. To avoid
 // these problems, additional markers are first inserted and later deleted.
-XMLSectionImportContext::XMLSectionImportContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName )
-:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+XMLSectionImportContext::XMLSectionImportContext( SvXMLImport& rImport )
+:   SvXMLImportContext(rImport)
 ,   bProtect(false)
 ,   bCondOK(false)
 ,   bIsVisible(true)
@@ -105,14 +104,14 @@ XMLSectionImportContext::~XMLSectionImportContext()
 {
 }
 
-void XMLSectionImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLSectionImportContext::startFastElement( sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // process attributes
     ProcessAttributes(xAttrList);
 
     // process index headers:
-    bool bIsIndexHeader = IsXMLToken( GetLocalName(), XML_INDEX_TITLE );
+    bool bIsIndexHeader = (nElement & TOKEN_MASK) == XML_INDEX_TITLE;
     if (bIsIndexHeader)
     {
         bValid = true;
@@ -178,7 +177,7 @@ void XMLSectionImportContext::StartElement(
 
     // password (only for regular sections)
     if ( bSequenceOK &&
-         IsXMLToken(GetLocalName(), XML_SECTION) )
+         (nElement & TOKEN_MASK) == XML_SECTION )
     {
         xPropSet->setPropertyValue("ProtectionKey", Any(aSequence));
     }
@@ -226,32 +225,25 @@ void XMLSectionImportContext::StartElement(
 }
 
 void XMLSectionImportContext::ProcessAttributes(
-    const Reference<XAttributeList> & xAttrList )
+    const Reference<XFastAttributeList> & xAttrList )
 {
-    static const SvXMLTokenMap aTokenMap(aSectionTokenMap);
-
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nNamePrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        OUString sAttr = xAttrList->getValueByIndex(nAttr);
+        OUString sAttr = aIter.toString();
 
-        switch (aTokenMap.Get(nNamePrefix, sLocalName))
+        switch (aIter.getToken())
         {
-            case XML_TOK_SECTION_XMLID:
+            case XML_ELEMENT(XML, XML_ID):
                 sXmlId = sAttr;
                 break;
-            case XML_TOK_SECTION_STYLE_NAME:
+            case XML_ELEMENT(TEXT, XML_STYLE_NAME):
                 sStyleName = sAttr;
                 break;
-            case XML_TOK_SECTION_NAME:
+            case XML_ELEMENT(TEXT, XML_NAME):
                 sName = sAttr;
                 bValid = true;
                 break;
-            case XML_TOK_SECTION_CONDITION:
+            case XML_ELEMENT(TEXT, XML_CONDITION):
                 {
                     OUString sTmp;
                     sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
@@ -265,7 +257,7 @@ void XMLSectionImportContext::ProcessAttributes(
                         sCond = sAttr;
                 }
                 break;
-            case XML_TOK_SECTION_DISPLAY:
+            case XML_ELEMENT(TEXT, XML_DISPLAY):
                 if (IsXMLToken(sAttr, XML_TRUE))
                 {
                     bIsVisible = true;
@@ -277,7 +269,7 @@ void XMLSectionImportContext::ProcessAttributes(
                 }
                 // else: ignore
                 break;
-            case XML_TOK_SECTION_IS_HIDDEN:
+            case XML_ELEMENT(TEXT, XML_IS_HIDDEN):
                 {
                     bool bTmp(false);
                     if (::sax::Converter::convertBool(bTmp, sAttr))
@@ -287,11 +279,13 @@ void XMLSectionImportContext::ProcessAttributes(
                     }
                 }
                 break;
-            case XML_TOK_SECTION_PROTECTION_KEY:
+            case XML_ELEMENT(TEXT, XML_PROTECTION_KEY):
                 ::comphelper::Base64::decode(aSequence, sAttr);
                 bSequenceOK = true;
                 break;
-            case XML_TOK_SECTION_PROTECT:
+            case XML_ELEMENT(TEXT, XML_PROTECTED):
+            // compatibility with SRC629 (or earlier) versions
+            case XML_ELEMENT(TEXT, XML_PROTECT):
             {
                 bool bTmp(false);
                 if (::sax::Converter::convertBool(bTmp, sAttr))
@@ -301,7 +295,8 @@ void XMLSectionImportContext::ProcessAttributes(
                 break;
             }
             default:
-                ; // ignore
+                // ignore
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
                 break;
         }
     }
