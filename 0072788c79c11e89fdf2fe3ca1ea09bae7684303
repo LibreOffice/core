@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93405644_13a64f24",
+        "filename": "sw/source/filter/html/css1atr.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-30T09:32:25Z",
+      "side": 1,
+      "message": "In such a big, mostly mechanical change, I would not mix in changes that are apparently not a direct response to a new loplugin:stringviewparam finding.",
+      "revId": "0072788c79c11e89fdf2fe3ca1ea09bae7684303",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
