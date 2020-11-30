@@ -164,13 +164,14 @@ public:
 
 class AbstractScDataPilotDatabaseDlg_Impl  :public AbstractScDataPilotDatabaseDlg
 {
-    std::unique_ptr<ScDataPilotDatabaseDlg> m_xDlg;
+    std::shared_ptr<ScDataPilotDatabaseDlg> m_xDlg;
 public:
-    explicit AbstractScDataPilotDatabaseDlg_Impl(std::unique_ptr<ScDataPilotDatabaseDlg> p)
+    explicit AbstractScDataPilotDatabaseDlg_Impl(std::shared_ptr<ScDataPilotDatabaseDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &) override;
     virtual void GetValues( ScImportSourceDesc& rDesc ) override;
 
     // screenshotting
@@ -201,13 +202,14 @@ public:
 
 class AbstractScDataPilotServiceDlg_Impl : public AbstractScDataPilotServiceDlg
 {
-    std::unique_ptr<ScDataPilotServiceDlg> m_xDlg;
+    std::shared_ptr<ScDataPilotServiceDlg> m_xDlg;
 public:
-    explicit AbstractScDataPilotServiceDlg_Impl(std::unique_ptr<ScDataPilotServiceDlg> p)
+    explicit AbstractScDataPilotServiceDlg_Impl(std::shared_ptr<ScDataPilotServiceDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short     Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &) override;
     virtual OUString  GetServiceName() const override;
     virtual OUString  GetParSource() const override;
     virtual OUString  GetParName() const override;
