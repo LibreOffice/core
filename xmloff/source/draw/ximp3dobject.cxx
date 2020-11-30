@@ -70,7 +70,9 @@ SdXML3DObjectContext::~SdXML3DObjectContext()
 {
 }
 
-void SdXML3DObjectContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXML3DObjectContext::startFastElement(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
     if(xPropSet.is())
@@ -82,7 +84,7 @@ void SdXML3DObjectContext::StartElement(const uno::Reference< xml::sax::XAttribu
         }
 
         // call parent
-        SdXMLShapeContext::StartElement(xAttrList);
+        SdXMLShapeContext::startFastElement(nElement, xAttrList);
     }
 }
 
@@ -131,7 +133,9 @@ SdXML3DCubeObjectShapeContext::~SdXML3DCubeObjectShapeContext()
 {
 }
 
-void SdXML3DCubeObjectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXML3DCubeObjectShapeContext::startFastElement(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // create shape
     AddShape( "com.sun.star.drawing.Shape3DCubeObject" );
@@ -140,7 +144,7 @@ void SdXML3DCubeObjectShapeContext::StartElement(const uno::Reference< xml::sax:
 
     // add, set style and properties from base shape
     SetStyle();
-    SdXML3DObjectContext::StartElement(xAttrList);
+    SdXML3DObjectContext::startFastElement(nElement, xAttrList);
 
     // set local parameters on shape
     uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
@@ -211,7 +215,9 @@ SdXML3DSphereObjectShapeContext::~SdXML3DSphereObjectShapeContext()
 {
 }
 
-void SdXML3DSphereObjectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXML3DSphereObjectShapeContext::startFastElement(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // create shape
     AddShape( "com.sun.star.drawing.Shape3DSphereObject" );
@@ -220,7 +226,7 @@ void SdXML3DSphereObjectShapeContext::StartElement(const uno::Reference< xml::sa
 
     // add, set style and properties from base shape
     SetStyle();
-    SdXML3DObjectContext::StartElement(xAttrList);
+    SdXML3DObjectContext::startFastElement(nElement, xAttrList);
 
     // set local parameters on shape
     uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
@@ -278,7 +284,9 @@ SdXML3DPolygonBasedShapeContext::~SdXML3DPolygonBasedShapeContext()
 {
 }
 
-void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXML3DPolygonBasedShapeContext::startFastElement(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
 
@@ -314,7 +322,7 @@ void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sa
     }
 
     // call parent
-    SdXML3DObjectContext::StartElement(xAttrList);
+    SdXML3DObjectContext::startFastElement(nElement, xAttrList);
 }
 
 
@@ -330,7 +338,9 @@ SdXML3DLatheObjectShapeContext::~SdXML3DLatheObjectShapeContext()
 {
 }
 
-void SdXML3DLatheObjectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXML3DLatheObjectShapeContext::startFastElement(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // create shape
     AddShape( "com.sun.star.drawing.Shape3DLatheObject" );
@@ -338,7 +348,7 @@ void SdXML3DLatheObjectShapeContext::StartElement(const uno::Reference< xml::sax
     {
         // add, set style and properties from base shape
         SetStyle();
-        SdXML3DPolygonBasedShapeContext::StartElement(xAttrList);
+        SdXML3DPolygonBasedShapeContext::startFastElement(nElement, xAttrList);
     }
 }
 
@@ -354,14 +364,16 @@ SdXML3DExtrudeObjectShapeContext::~SdXML3DExtrudeObjectShapeContext()
 {
 }
 
-void SdXML3DExtrudeObjectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXML3DExtrudeObjectShapeContext::startFastElement(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     AddShape( "com.sun.star.drawing.Shape3DExtrudeObject" );
     if(mxShape.is())
     {
         // add, set style and properties from base shape
         SetStyle();
-        SdXML3DPolygonBasedShapeContext::StartElement(xAttrList);
+        SdXML3DPolygonBasedShapeContext::startFastElement(nElement, xAttrList);
     }
 }
 

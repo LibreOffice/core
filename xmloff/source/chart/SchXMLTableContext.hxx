@@ -39,7 +39,6 @@ namespace com::sun::star {
 class SchXMLTableContext : public SvXMLImportContext
 {
 private:
-    SchXMLImportHelper& mrImportHelper;
     SchXMLTable& mrTable;
 
     bool mbHasRowPermutation;
@@ -48,15 +47,16 @@ private:
     css::uno::Sequence< sal_Int32 > maColumnPermutation;
 
 public:
-    SchXMLTableContext( SchXMLImportHelper& rImpHelper,
-                        SvXMLImport& rImport,
+    SchXMLTableContext( SvXMLImport& rImport,
                         SchXMLTable& aTable );
     virtual ~SchXMLTableContext() override;
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     void setRowPermutation( const css::uno::Sequence< sal_Int32 > & rPermutation );
@@ -109,7 +109,9 @@ public:
     SchXMLTableColumnContext( SvXMLImport& rImport,
                               SchXMLTable& aTable );
     virtual ~SchXMLTableColumnContext() override;
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 // classes for rows
@@ -117,12 +119,10 @@ public:
 class SchXMLTableRowsContext : public SvXMLImportContext
 {
 private:
-    SchXMLImportHelper& mrImportHelper;
     SchXMLTable& mrTable;
 
 public:
-    SchXMLTableRowsContext( SchXMLImportHelper& rImpHelper,
-                            SvXMLImport& rImport,
+    SchXMLTableRowsContext( SvXMLImport& rImport,
                             SchXMLTable& aTable );
     virtual ~SchXMLTableRowsContext() override;
 
@@ -134,12 +134,10 @@ public:
 class SchXMLTableRowContext : public SvXMLImportContext
 {
 private:
-    SchXMLImportHelper& mrImportHelper;
     SchXMLTable& mrTable;
 
 public:
-    SchXMLTableRowContext( SchXMLImportHelper& rImpHelper,
-                           SvXMLImport& rImport,
+    SchXMLTableRowContext( SvXMLImport& rImport,
                            SchXMLTable& aTable );
     virtual ~SchXMLTableRowContext() override;
 
@@ -153,22 +151,22 @@ public:
 class SchXMLTableCellContext : public SvXMLImportContext
 {
 private:
-    SchXMLImportHelper& mrImportHelper;
     SchXMLTable& mrTable;
     OUString maCellContent;
     OUString maRangeId;
     bool mbReadText;
 
 public:
-    SchXMLTableCellContext( SchXMLImportHelper& rImpHelper,
-                            SvXMLImport& rImport,
+    SchXMLTableCellContext( SvXMLImport& rImport,
                             SchXMLTable& aTable );
     virtual ~SchXMLTableCellContext() override;
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 

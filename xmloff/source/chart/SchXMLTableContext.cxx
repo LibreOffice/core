@@ -195,11 +195,9 @@ bool lcl_tableOfRangeMatches(
 } // anonymous namespace
 
 // class SchXMLTableContext
-SchXMLTableContext::SchXMLTableContext( SchXMLImportHelper& rImpHelper,
-                                        SvXMLImport& rImport,
+SchXMLTableContext::SchXMLTableContext( SvXMLImport& rImport,
                                         SchXMLTable& aTable ) :
         SvXMLImportContext( rImport ),
-        mrImportHelper( rImpHelper ),
         mrTable( aTable ),
         mbHasRowPermutation( false ),
         mbHasColumnPermutation( false )
@@ -237,11 +235,11 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableContext::cr
             mrTable.bHasHeaderRow = true;
             [[fallthrough]];
         case XML_ELEMENT(TABLE, XML_TABLE_ROWS):
-            pContext = new SchXMLTableRowsContext( mrImportHelper, GetImport(), mrTable );
+            pContext = new SchXMLTableRowsContext( GetImport(), mrTable );
             break;
 
         case XML_ELEMENT(TABLE, XML_TABLE_ROW):
-            pContext = new SchXMLTableRowContext( mrImportHelper, GetImport(), mrTable );
+            pContext = new SchXMLTableRowContext( GetImport(), mrTable );
             break;
         default:
             XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
@@ -250,29 +248,26 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableContext::cr
     return pContext;
 }
 
-void SchXMLTableContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLTableContext::startFastElement (sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // get table-name
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
 
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        if ( nPrefix == XML_NAMESPACE_TABLE )
+        switch(aIter.getToken())
         {
-            if ( IsXMLToken( aLocalName, XML_NAME ) )
-            {
-                mrTable.aTableNameOfFile = xAttrList->getValueByIndex( i );
-            }
-            else if ( IsXMLToken( aLocalName, XML_PROTECTED ) )
-            {
-                if ( IsXMLToken( xAttrList->getValueByIndex( i ), XML_TRUE ) )
+            case XML_ELEMENT(TABLE, XML_NAME):
+                mrTable.aTableNameOfFile = aIter.toString();
+                break;
+            case XML_ELEMENT(TABLE, XML_PROTECTED):
+                if ( IsXMLToken( aIter.toString(), XML_TRUE ) )
                 {
                     mrTable.bProtected = true;
                 }
-            }
+                break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 }
@@ -419,31 +414,32 @@ SchXMLTableColumnContext::SchXMLTableColumnContext(
 {
 }
 
-void SchXMLTableColumnContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLTableColumnContext::startFastElement (sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // get number-columns-repeated attribute
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     sal_Int32 nRepeated = 1;
     bool bHidden = false;
 
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        if( nPrefix == XML_NAMESPACE_TABLE &&
-            IsXMLToken( aLocalName, XML_NUMBER_COLUMNS_REPEATED ) )
+        switch(aIter.getToken())
         {
-            OUString aValue = xAttrList->getValueByIndex( i );
-            if( !aValue.isEmpty())
-                nRepeated = aValue.toInt32();
-        }
-        else if( nPrefix == XML_NAMESPACE_TABLE &&
-            IsXMLToken( aLocalName, XML_VISIBILITY ) )
-        {
-            OUString aVisibility = xAttrList->getValueByIndex( i );
-            bHidden = aVisibility == GetXMLToken( XML_COLLAPSE );
+            case XML_ELEMENT(TABLE, XML_NUMBER_COLUMNS_REPEATED):
+            {
+                OUString aValue = aIter.toString();
+                if( !aValue.isEmpty())
+                    nRepeated = aValue.toInt32();
+                break;
+            }
+            case XML_ELEMENT(TABLE, XML_VISIBILITY):
+            {
+                OUString aVisibility = aIter.toString();
+                bHidden = aVisibility == GetXMLToken( XML_COLLAPSE );
+                break;
+            }
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
@@ -471,11 +467,9 @@ SchXMLTableColumnContext::~SchXMLTableColumnContext()
 // classes for rows
 // class SchXMLTableRowsContext
 SchXMLTableRowsContext::SchXMLTableRowsContext(
-    SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
     SchXMLTable& aTable ) :
         SvXMLImportContext( rImport ),
-        mrImportHelper( rImpHelper ),
         mrTable( aTable )
 {
 }
@@ -491,7 +485,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableRowsContext
     SvXMLImportContext* pContext = nullptr;
 
     if( nElement == XML_ELEMENT(TABLE, XML_TABLE_ROW) )
-        pContext = new SchXMLTableRowContext( mrImportHelper, GetImport(), mrTable );
+        pContext = new SchXMLTableRowContext( GetImport(), mrTable );
     else
         XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
@@ -500,11 +494,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableRowsContext
 
 // class SchXMLTableRowContext
 SchXMLTableRowContext::SchXMLTableRowContext(
-    SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
     SchXMLTable& aTable ) :
         SvXMLImportContext( rImport ),
-        mrImportHelper( rImpHelper ),
         mrTable( aTable )
 {
     mrTable.nColumnIndex = -1;
@@ -529,7 +521,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableRowContext:
     // <table:table-cell> element
     if( nElement == XML_ELEMENT(TABLE, XML_TABLE_CELL) )
     {
-        pContext = new SchXMLTableCellContext( mrImportHelper, GetImport(), mrTable );
+        pContext = new SchXMLTableCellContext( GetImport(), mrTable );
     }
     else
     {
@@ -568,10 +560,9 @@ public:
 // classes for cells and their content
 // class SchXMLTableCellContext
 SchXMLTableCellContext::SchXMLTableCellContext(
-    SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,
+    SvXMLImport& rImport,
     SchXMLTable& aTable)
     : SvXMLImportContext(rImport)
-    , mrImportHelper(rImpHelper)
     , mrTable(aTable)
     , mbReadText(false)
 {
@@ -581,33 +572,31 @@ SchXMLTableCellContext::~SchXMLTableCellContext()
 {
 }
 
-void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLTableCellContext::startFastElement (sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     OUString aValue;
-    OUString aLocalName;
     OUString aCellContent;
     SchXMLCellType eValueType  = SCH_CELL_TYPE_UNKNOWN;
-    const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetCellAttrTokenMap();
 
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
+        switch(aIter.getToken())
         {
-            case XML_TOK_CELL_VAL_TYPE:
-                aValue = xAttrList->getValueByIndex( i );
+            case XML_ELEMENT(OFFICE, XML_VALUE_TYPE):
+                aValue = aIter.toString();
                 if( IsXMLToken( aValue, XML_FLOAT ) )
                     eValueType = SCH_CELL_TYPE_FLOAT;
                 else if( IsXMLToken( aValue, XML_STRING ) )
                     eValueType = SCH_CELL_TYPE_STRING;
                 break;
 
-            case XML_TOK_CELL_VALUE:
-                aCellContent = xAttrList->getValueByIndex( i );
+            case XML_ELEMENT(OFFICE, XML_VALUE):
+                aCellContent = aIter.toString();
                 break;
+
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 

@@ -206,37 +206,32 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
 SchXMLPlotAreaContext::~SchXMLPlotAreaContext()
 {}
 
-void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // parse attributes
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetPlotAreaAttrTokenMap();
     uno::Reference< chart2::XChartDocument > xNewDoc( GetImport().GetModel(), uno::UNO_QUERY );
 
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        OUString aValue = xAttrList->getValueByIndex( i );
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
+        OUString aValue = aIter.toString();
+        switch( aIter.getToken() )
         {
-            case XML_TOK_PA_X:
-            case XML_TOK_PA_Y:
-            case XML_TOK_PA_WIDTH:
-            case XML_TOK_PA_HEIGHT:
-                m_aOuterPositioning.readPositioningAttribute( nPrefix, aLocalName, aValue );
+            case XML_ELEMENT(SVG, XML_X):
+            case XML_ELEMENT(SVG, XML_Y):
+            case XML_ELEMENT(SVG, XML_WIDTH):
+            case XML_ELEMENT(SVG, XML_HEIGHT):
+                m_aOuterPositioning.readPositioningAttribute( aIter.getToken(), aValue );
                 break;
-            case XML_TOK_PA_STYLE_NAME:
+            case XML_ELEMENT(CHART, XML_STYLE_NAME):
                 msAutoStyleName = aValue;
                 break;
-            case XML_TOK_PA_CHART_ADDRESS:
+            case XML_ELEMENT(TABLE, XML_CELL_RANGE_ADDRESS):
                 mrChartAddress = lcl_ConvertRange( aValue, xNewDoc );
                 // indicator for getting data from the outside
                 m_rbHasRangeAtPlotArea = true;
                 break;
-            case XML_TOK_PA_DS_HAS_LABELS:
+            case XML_ELEMENT(CHART, XML_DATA_SOURCE_HAS_LABELS):
                 {
                     if( aValue == ::xmloff::token::GetXMLToken( ::xmloff::token::XML_BOTH ))
                         mrColHasLabels = mrRowHasLabels = true;
@@ -246,19 +241,21 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                         mrColHasLabels = true;
                 }
                 break;
-            case XML_TOK_PA_TRANSFORM:
-            case XML_TOK_PA_VRP:
-            case XML_TOK_PA_VPN:
-            case XML_TOK_PA_VUP:
-            case XML_TOK_PA_PROJECTION:
-            case XML_TOK_PA_DISTANCE:
-            case XML_TOK_PA_FOCAL_LENGTH:
-            case XML_TOK_PA_SHADOW_SLANT:
-            case XML_TOK_PA_SHADE_MODE:
-            case XML_TOK_PA_AMBIENT_COLOR:
-            case XML_TOK_PA_LIGHTING_MODE:
-                maSceneImportHelper.processSceneAttribute( nPrefix, aLocalName, aValue );
+            case XML_ELEMENT(DR3D, XML_TRANSFORM):
+            case XML_ELEMENT(DR3D, XML_VRP):
+            case XML_ELEMENT(DR3D, XML_VPN):
+            case XML_ELEMENT(DR3D, XML_VUP):
+            case XML_ELEMENT(DR3D, XML_PROJECTION):
+            case XML_ELEMENT(DR3D, XML_DISTANCE):
+            case XML_ELEMENT(DR3D, XML_FOCAL_LENGTH):
+            case XML_ELEMENT(DR3D, XML_SHADOW_SLANT):
+            case XML_ELEMENT(DR3D, XML_SHADE_MODE):
+            case XML_ELEMENT(DR3D, XML_AMBIENT_COLOR):
+            case XML_ELEMENT(DR3D, XML_LIGHTING_MODE):
+                maSceneImportHelper.processSceneAttribute( aIter.getToken(), aValue );
                 break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
@@ -709,46 +706,43 @@ SchXMLDataPointContext::~SchXMLDataPointContext()
 {
 }
 
-void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLDataPointContext::startFastElement (sal_Int32 /*Element*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     OUString sAutoStyleName;
     sal_Int32 nRepeat = 1;
     OUString sCustomLabelField;
 
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        if( nPrefix == XML_NAMESPACE_CHART )
+        switch (aIter.getToken())
         {
-            if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
+            case XML_ELEMENT(CHART, XML_STYLE_NAME):
             {
-                sAutoStyleName = xAttrList->getValueByIndex( i );
+                sAutoStyleName = aIter.toString();
                 mDataPoint.msStyleName = sAutoStyleName;
                 mDataLabel.msStyleNameOfParent = sAutoStyleName;
+                break;
             }
-            else if( IsXMLToken( aLocalName, XML_REPEATED ) )
+            case XML_ELEMENT(CHART, XML_REPEATED):
             {
-                nRepeat = xAttrList->getValueByIndex( i ).toInt32();
+                nRepeat = aIter.toInt32();
                 mDataPoint.m_nPointRepeat = nRepeat;
                 mDataLabel.m_nPointRepeat = nRepeat;
+                break;
             }
-        }
-        else if( nPrefix == XML_NAMESPACE_LO_EXT)
-        {
             // Deprecated. New documents use the chart:data-label element
             // instead in order to store custom label text.
-            if( IsXMLToken( aLocalName, XML_CUSTOM_LABEL_FIELD) && !mbHasLabelParagraph)
+            case XML_ELEMENT(LO_EXT, XML_CUSTOM_LABEL_FIELD):
+             if (!mbHasLabelParagraph)
+                {
+                    sCustomLabelField = aIter.toString();
+                    mDataPoint.mCustomLabels.push_back(sCustomLabelField);
+                }
+                break;
+            case XML_ELEMENT(LO_EXT, XML_HIDE_LEGEND):
             {
-                sCustomLabelField = xAttrList->getValueByIndex( i );
-                mDataPoint.mCustomLabels.push_back(sCustomLabelField);
-            }
-            else if (IsXMLToken(aLocalName, XML_HIDE_LEGEND))
-            {
-                bool bHideLegend = xAttrList->getValueByIndex(i).toBoolean();
+                bool bHideLegend = aIter.toString().toBoolean();
                 if (bHideLegend)
                 {
                     uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
@@ -762,15 +756,20 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
                     deletedLegendEntries.push_back(mDataPoint.m_nPointIndex);
                     xSeriesProp->setPropertyValue("DeletedLegendEntries", uno::makeAny(::oox::ContainerHelper::vectorToSequence(deletedLegendEntries)));
                 }
+                break;
             }
-            else if( IsXMLToken(aLocalName, XML_CUSTOM_LABEL_POS_X ) )
+            case XML_ELEMENT(LO_EXT, XML_CUSTOM_LABEL_POS_X):
             {
-                mDataPoint.mCustomLabelPos[0] = xAttrList->getValueByIndex(i).toDouble();
+                mDataPoint.mCustomLabelPos[0] = aIter.toDouble();
+                break;
             }
-            else if( IsXMLToken(aLocalName, XML_CUSTOM_LABEL_POS_Y) )
+            case XML_ELEMENT(LO_EXT, XML_CUSTOM_LABEL_POS_Y):
             {
-                mDataPoint.mCustomLabelPos[1] = xAttrList->getValueByIndex(i).toDouble();
+                mDataPoint.mCustomLabelPos[1] = aIter.toDouble();
+                break;
             }
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
@@ -817,34 +816,43 @@ bool SchXMLPositionAttributesHelper::isAutomatic() const
     return m_bAutoSize || m_bAutoPosition;
 }
 
-void SchXMLPositionAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, std::u16string_view rValue )
+void SchXMLPositionAttributesHelper::readPositioningAttribute( sal_Int32 nAttributeToken, std::u16string_view rValue )
 {
-    if( XML_NAMESPACE_SVG != nPrefix )
+    if( !IsTokenInNamespace(nAttributeToken, XML_NAMESPACE_SVG) && !IsTokenInNamespace(nAttributeToken, XML_NAMESPACE_SVG_COMPAT) )
         return;
 
-    if( IsXMLToken( rLocalName, XML_X ) )
+    switch (nAttributeToken & TOKEN_MASK)
     {
-        m_rImport.GetMM100UnitConverter().convertMeasureToCore(
-                m_aPosition.X, rValue );
-        m_bHasPositionX = true;
-    }
-    else if( IsXMLToken( rLocalName, XML_Y ) )
-    {
-        m_rImport.GetMM100UnitConverter().convertMeasureToCore(
-                m_aPosition.Y, rValue );
-        m_bHasPositionY = true;
-    }
-    else if( IsXMLToken( rLocalName, XML_WIDTH ) )
-    {
-        m_rImport.GetMM100UnitConverter().convertMeasureToCore(
-                m_aSize.Width, rValue );
-        m_bHasSizeWidth = true;
-    }
-    else if( IsXMLToken( rLocalName, XML_HEIGHT ) )
-    {
-        m_rImport.GetMM100UnitConverter().convertMeasureToCore(
-                m_aSize.Height, rValue );
-        m_bHasSizeHeight = true;
+        case XML_X:
+        {
+            m_rImport.GetMM100UnitConverter().convertMeasureToCore(
+                    m_aPosition.X, rValue );
+            m_bHasPositionX = true;
+            break;
+        }
+        case XML_Y:
+        {
+            m_rImport.GetMM100UnitConverter().convertMeasureToCore(
+                    m_aPosition.Y, rValue );
+            m_bHasPositionY = true;
+            break;
+        }
+        case XML_WIDTH:
+        {
+            m_rImport.GetMM100UnitConverter().convertMeasureToCore(
+                    m_aSize.Width, rValue );
+            m_bHasSizeWidth = true;
+            break;
+        }
+        case XML_HEIGHT:
+        {
+            m_rImport.GetMM100UnitConverter().convertMeasureToCore(
+                    m_aSize.Height, rValue );
+            m_bHasSizeHeight = true;
+            break;
+        }
+        default:
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttributeToken, OUString(rValue));
     }
 }
 
@@ -872,19 +880,12 @@ SchXMLCoordinateRegionContext::~SchXMLCoordinateRegionContext()
 {
 }
 
-void SchXMLCoordinateRegionContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLCoordinateRegionContext::startFastElement (sal_Int32 /*Element*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // parse attributes
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
-    {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        OUString aValue = xAttrList->getValueByIndex( i );
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        m_rPositioning.readPositioningAttribute( nPrefix, aLocalName, aValue );
-    }
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
+        m_rPositioning.readPositioningAttribute( aIter.getToken(), aIter.toString() );
 }
 
 SchXMLWallFloorContext::SchXMLWallFloorContext(
@@ -903,25 +904,20 @@ SchXMLWallFloorContext::~SchXMLWallFloorContext()
 {
 }
 
-void SchXMLWallFloorContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLWallFloorContext::startFastElement (sal_Int32 /*Element*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     if( !mxWallFloorSupplier.is())
         return;
 
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     OUString sAutoStyleName;
 
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        if( nPrefix == XML_NAMESPACE_CHART &&
-            IsXMLToken( aLocalName, XML_STYLE_NAME ) )
-        {
-            sAutoStyleName = xAttrList->getValueByIndex( i );
-        }
+        if( aIter.getToken() == XML_ELEMENT(CHART, XML_STYLE_NAME) )
+            sAutoStyleName = aIter.toString();
+        else
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }
 
     // set properties
@@ -949,25 +945,20 @@ SchXMLStockContext::~SchXMLStockContext()
 {
 }
 
-void SchXMLStockContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLStockContext::startFastElement (sal_Int32 /*Element*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     if( !mxStockPropProvider.is())
         return;
 
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     OUString sAutoStyleName;
 
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        if( nPrefix == XML_NAMESPACE_CHART &&
-            IsXMLToken( aLocalName, XML_STYLE_NAME ) )
-        {
-            sAutoStyleName = xAttrList->getValueByIndex( i );
-        }
+        if( aIter.getToken() == XML_ELEMENT(CHART, XML_STYLE_NAME) )
+            sAutoStyleName = aIter.toString();
+        else
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }
 
     if( sAutoStyleName.isEmpty())
@@ -1199,31 +1190,30 @@ void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, const uno::
 
 }
 
-void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLStatisticsObjectContext::startFastElement (sal_Int32 /*Element*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     OUString sAutoStyleName;
     OUString aPosRange;
     OUString aNegRange;
     bool bYError = true;    /// Default errorbar, to be backward compatible with older files!
 
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        if( nPrefix == XML_NAMESPACE_CHART )
+        switch (aIter.getToken())
         {
-            if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
-                sAutoStyleName = xAttrList->getValueByIndex( i );
-            else if( IsXMLToken( aLocalName, XML_DIMENSION ) )
-                bYError = xAttrList->getValueByIndex(i) == "y";
-            else if( IsXMLToken( aLocalName, XML_ERROR_UPPER_RANGE) )
-                aPosRange = xAttrList->getValueByIndex(i);
-            else if( IsXMLToken( aLocalName, XML_ERROR_LOWER_RANGE) )
-                aNegRange = xAttrList->getValueByIndex(i);
+            case XML_ELEMENT(CHART, XML_STYLE_NAME):
+                sAutoStyleName = aIter.toString();
+                break;
+            case XML_ELEMENT(CHART, XML_DIMENSION):
+                bYError = aIter.toString() == "y";
+                break;
+            case XML_ELEMENT(CHART, XML_ERROR_UPPER_RANGE):
+                aPosRange = aIter.toString();
+                break;
+            case XML_ELEMENT(CHART, XML_ERROR_LOWER_RANGE):
+                aNegRange = aIter.toString();
+                break;
         }
     }
 

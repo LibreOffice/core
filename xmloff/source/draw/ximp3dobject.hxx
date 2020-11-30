@@ -40,7 +40,9 @@ public:
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DObjectContext() override;
 
-    virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 // dr3d:3dcube context
@@ -57,7 +59,9 @@ public:
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DCubeObjectShapeContext() override;
 
-    virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 // dr3d:3dsphere context
@@ -74,7 +78,9 @@ public:
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DSphereObjectShapeContext() override;
 
-    virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 // polygonbased context
@@ -91,7 +97,9 @@ public:
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DPolygonBasedShapeContext() override;
 
-    virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 // dr3d:3dlathe context
@@ -105,7 +113,9 @@ public:
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DLatheObjectShapeContext() override;
 
-    virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 // dr3d:3dextrude context
@@ -119,7 +129,9 @@ public:
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DExtrudeObjectShapeContext() override;
 
-    virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMP3DOBJECT_HXX
