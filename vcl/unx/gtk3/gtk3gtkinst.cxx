@@ -8574,8 +8574,6 @@ private:
         bRet = !bRet;
         m_Setter(m_pTreeModel, &iter, nCol, bRet, -1);
 
-        gint depth;
-
         set(iter, m_aToggleTriStateMap[nCol], false);
 
         signal_toggled(iter_col(GtkInstanceTreeIter(iter), to_external_model(nCol)));
