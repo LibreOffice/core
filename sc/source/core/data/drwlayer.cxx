@@ -35,6 +35,7 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdocapt.hxx>
+#include <svx/svdomeas.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdundo.hxx>
@@ -932,14 +933,13 @@ void ScDrawLayer::InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rDat
         else if (pObj->GetObjIdentifier() == OBJ_MEASURE)
         {
             // Measure lines might have got wrong start and end anchor from XML import. Recreate
-            // them from start and end point.
-            const Point aPoint0(pObj->GetPoint(0));
-            const Point aPoint1(pObj->GetPoint(1));
-            const Point aPointLT(std::min(aPoint0.X(), aPoint1.X()),
-                                 std::min(aPoint0.Y(), aPoint1.Y()));
-            const Point aPointRB(std::max(aPoint0.X(), aPoint1.X()),
-                                 std::max(aPoint0.Y(), aPoint1.Y()));
-            const tools::Rectangle aObjRect(aPointLT, aPointRB);
+            // anchor from start and end point.
+            SdrMeasureObj* pMeasureObj = dynamic_cast<SdrMeasureObj*>(pObj);
+            // tdf#137576. The logic rectangle has likely no current values here, but only the
+            // 1cm x 1cm default size. The call of TakeUnrotatedSnapRect is currently (LO 7.2)
+            // the only way to force a recalc of the logic rectangle.
+            tools::Rectangle aObjRect;
+            pMeasureObj->TakeUnrotatedSnapRect(aObjRect);
             GetCellAnchorFromPosition(aObjRect, rNoRotatedAnchor, *pDoc, rData.maStart.Tab(),
                                       false /*bHiddenAsZero*/);
         }
@@ -2226,6 +2226,12 @@ void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument
         rObj.NbcMirror(aLeft, aRight);
         aObjRect2 = rObj.GetLogicRect();
         rObj.NbcMirror(aLeft, aRight);
+    }
+    else if (rObj.GetObjIdentifier() == OBJ_MEASURE)
+    {
+        // tdf#137576. A SdrMeasureObj might have a wrong logic rect here. TakeUnrotatedSnapRect
+        // calculates the current unrotated snap rectangle, sets logic rectangle and returns it.
+        static_cast<SdrObjCustomShape*>(&rObj)->TakeUnrotatedSnapRect(aObjRect2);
     }
     else
         aObjRect2 = rObj.GetLogicRect();
