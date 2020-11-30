@@ -105,7 +105,9 @@ SdXML3DSceneShapeContext::~SdXML3DSceneShapeContext()
 {
 }
 
-void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXML3DSceneShapeContext::startFastElement(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // create new 3DScene shape and add it to rShapes, use it
     // as base for the new 3DScene import
@@ -125,21 +127,14 @@ void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     }
 
     // read attributes for the 3DScene
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
-    {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        processSceneAttribute( nPrefix, aLocalName, sValue );
-    }
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
+        processSceneAttribute( aIter.getToken(), aIter.toString() );
 
     // #91047# call parent function is missing here, added it
     if(mxShape.is())
     {
         // call parent
-        SdXMLShapeContext::StartElement(xAttrList);
+        SdXMLShapeContext::startFastElement(nElement, xAttrList);
     }
 }
 
@@ -243,100 +238,105 @@ SvXMLImportContext * SdXML3DSceneAttributesHelper::create3DLightContext( const c
 }
 
 /** this should be called for each scene attribute */
-void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
+void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_Int32 nAttributeToken, const OUString& rValue )
 {
-    if( XML_NAMESPACE_DR3D != nPrefix )
+    if( !IsTokenInNamespace(nAttributeToken, XML_NAMESPACE_DR3D) )
         return;
 
-    if( IsXMLToken( rLocalName, XML_TRANSFORM ) )
+    switch(nAttributeToken & TOKEN_MASK)
     {
-        SdXMLImExTransform3D aTransform(rValue, mrImport.GetMM100UnitConverter());
-        if(aTransform.NeedsAction())
-            mbSetTransform = aTransform.GetFullHomogenTransform(mxHomMat);
-        return;
-    }
-    else if( IsXMLToken( rLocalName, XML_VRP ) )
-    {
-        ::basegfx::B3DVector aNewVec;
-        SvXMLUnitConverter::convertB3DVector(aNewVec, rValue);
-
-        if(aNewVec != maVRP)
+        case XML_TRANSFORM:
         {
-            maVRP = aNewVec;
-            mbVRPUsed = true;
+            SdXMLImExTransform3D aTransform(rValue, mrImport.GetMM100UnitConverter());
+            if(aTransform.NeedsAction())
+                mbSetTransform = aTransform.GetFullHomogenTransform(mxHomMat);
+            return;
         }
-        return;
-    }
-    else if( IsXMLToken( rLocalName, XML_VPN ) )
-    {
-        ::basegfx::B3DVector aNewVec;
-        SvXMLUnitConverter::convertB3DVector(aNewVec, rValue);
-
-        if(aNewVec != maVPN)
+        case XML_VRP:
         {
-            maVPN = aNewVec;
-            mbVPNUsed = true;
-        }
-        return;
-    }
-    else if( IsXMLToken( rLocalName, XML_VUP ) )
-    {
-        ::basegfx::B3DVector aNewVec;
-        SvXMLUnitConverter::convertB3DVector(aNewVec, rValue);
+            ::basegfx::B3DVector aNewVec;
+            SvXMLUnitConverter::convertB3DVector(aNewVec, rValue);
 
-        if(aNewVec != maVUP)
-        {
-            maVUP = aNewVec;
-            mbVUPUsed = true;
+            if(aNewVec != maVRP)
+            {
+                maVRP = aNewVec;
+                mbVRPUsed = true;
+            }
+            return;
         }
-        return;
-    }
-    else if( IsXMLToken( rLocalName, XML_PROJECTION ) )
-    {
-        if( IsXMLToken( rValue, XML_PARALLEL ) )
-            mxPrjMode = drawing::ProjectionMode_PARALLEL;
-        else
-            mxPrjMode = drawing::ProjectionMode_PERSPECTIVE;
-        return;
-    }
-    else if( IsXMLToken( rLocalName, XML_DISTANCE ) )
-    {
-        mrImport.GetMM100UnitConverter().convertMeasureToCore(mnDistance,
-                rValue);
-        return;
-    }
-    else if( IsXMLToken( rLocalName, XML_FOCAL_LENGTH ) )
-    {
-        mrImport.GetMM100UnitConverter().convertMeasureToCore(mnFocalLength,
-                rValue);
-        return;
-    }
-    else if( IsXMLToken( rLocalName, XML_SHADOW_SLANT ) )
-    {
-        ::sax::Converter::convertNumber(mnShadowSlant, rValue);
-        return;
-    }
-    else if( IsXMLToken( rLocalName, XML_SHADE_MODE ) )
-    {
-        if( IsXMLToken( rValue, XML_FLAT ) )
-            mxShadeMode = drawing::ShadeMode_FLAT;
-        else if( IsXMLToken( rValue, XML_PHONG ) )
-            mxShadeMode = drawing::ShadeMode_PHONG;
-        else if( IsXMLToken( rValue, XML_GOURAUD ) )
-            mxShadeMode = drawing::ShadeMode_SMOOTH;
-        else
-            mxShadeMode = drawing::ShadeMode_DRAFT;
-        return;
-    }
-    else if( IsXMLToken( rLocalName, XML_AMBIENT_COLOR ) )
-    {
-        ::sax::Converter::convertColor(maAmbientColor, rValue);
-        return;
-    }
-    else if( IsXMLToken( rLocalName, XML_LIGHTING_MODE ) )
-    {
-        (void)::sax::Converter::convertBool(mbLightingMode, rValue);
-        return;
+        case XML_VPN:
+        {
+            ::basegfx::B3DVector aNewVec;
+            SvXMLUnitConverter::convertB3DVector(aNewVec, rValue);
+
+            if(aNewVec != maVPN)
+            {
+                maVPN = aNewVec;
+                mbVPNUsed = true;
+            }
+            return;
+        }
+        case XML_VUP:
+        {
+            ::basegfx::B3DVector aNewVec;
+            SvXMLUnitConverter::convertB3DVector(aNewVec, rValue);
+
+            if(aNewVec != maVUP)
+            {
+                maVUP = aNewVec;
+                mbVUPUsed = true;
+            }
+            return;
+        }
+        case XML_PROJECTION:
+        {
+            if( IsXMLToken( rValue, XML_PARALLEL ) )
+                mxPrjMode = drawing::ProjectionMode_PARALLEL;
+            else
+                mxPrjMode = drawing::ProjectionMode_PERSPECTIVE;
+            return;
+        }
+        case XML_DISTANCE:
+        {
+            mrImport.GetMM100UnitConverter().convertMeasureToCore(mnDistance,
+                    rValue);
+            return;
+        }
+        case XML_FOCAL_LENGTH:
+        {
+            mrImport.GetMM100UnitConverter().convertMeasureToCore(mnFocalLength,
+                    rValue);
+            return;
+        }
+        case XML_SHADOW_SLANT:
+        {
+            ::sax::Converter::convertNumber(mnShadowSlant, rValue);
+            return;
+        }
+        case XML_SHADE_MODE:
+        {
+            if( IsXMLToken( rValue, XML_FLAT ) )
+                mxShadeMode = drawing::ShadeMode_FLAT;
+            else if( IsXMLToken( rValue, XML_PHONG ) )
+                mxShadeMode = drawing::ShadeMode_PHONG;
+            else if( IsXMLToken( rValue, XML_GOURAUD ) )
+                mxShadeMode = drawing::ShadeMode_SMOOTH;
+            else
+                mxShadeMode = drawing::ShadeMode_DRAFT;
+            return;
+        }
+        case XML_AMBIENT_COLOR:
+        {
+            ::sax::Converter::convertColor(maAmbientColor, rValue);
+            return;
+        }
+        case XML_LIGHTING_MODE:
+        {
+            (void)::sax::Converter::convertBool(mbLightingMode, rValue);
+            return;
+        }
+        default:
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttributeToken, rValue);
     }
 }
 

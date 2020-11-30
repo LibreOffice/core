@@ -304,11 +304,10 @@ SchXMLSeries2Context::~SchXMLSeries2Context()
     SAL_WARN_IF( !maPostponedSequences.empty(), "xmloff.chart", "maPostponedSequences is NULL");
 }
 
-void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLSeries2Context::startFastElement (sal_Int32 /*Element*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // parse attributes
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetSeriesAttrTokenMap();
     mnAttachedAxis = 1;
 
     bool bHasRange = false;
@@ -316,26 +315,22 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
     OUString aSeriesLabelString;
     bool bHideLegend = false;
 
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        OUString aValue = xAttrList->getValueByIndex( i );
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
+        OUString aValue = aIter.toString();
+        switch(aIter.getToken())
         {
-            case XML_TOK_SERIES_CELL_RANGE:
+            case XML_ELEMENT(CHART, XML_VALUES_CELL_RANGE_ADDRESS):
                 m_aSeriesRange = aValue;
                 bHasRange = true;
                 break;
-            case XML_TOK_SERIES_LABEL_ADDRESS:
+            case XML_ELEMENT(CHART, XML_LABEL_CELL_ADDRESS):
                 aSeriesLabelRange = aValue;
                 break;
-            case XML_TOK_SERIES_LABEL_STRING:
+            case XML_ELEMENT(LO_EXT, XML_LABEL_STRING):
                 aSeriesLabelString = aValue;
                 break;
-            case XML_TOK_SERIES_ATTACHED_AXIS:
+            case XML_ELEMENT(CHART, XML_ATTACHED_AXIS):
                 {
                     sal_Int32 nNumOfAxes = mrAxes.size();
                     for( sal_Int32 nCurrent = 0; nCurrent < nNumOfAxes; nCurrent++ )
@@ -348,10 +343,10 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                     }
                 }
                 break;
-            case XML_TOK_SERIES_STYLE_NAME:
+            case XML_ELEMENT(CHART, XML_STYLE_NAME):
                 msAutoStyleName = aValue;
                 break;
-            case XML_TOK_SERIES_CHART_CLASS:
+            case XML_ELEMENT(CHART, XML_CLASS):
                 {
                     OUString aClassName;
                     sal_uInt16 nClassPrefix =
@@ -364,9 +359,11 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                         maSeriesChartTypeName = aClassName;
                 }
                 break;
-            case XML_TOK_SERIES_HIDE_LEGEND:
+            case XML_ELEMENT(LO_EXT, XML_HIDE_LEGEND):
                 bHideLegend = aValue.toBoolean();
                 break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
@@ -733,7 +730,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLSeries2Context::
             break;
 
         case XML_ELEMENT(LO_EXT, XML_PROPERTY_MAPPING):
-            pContext = new SchXMLPropertyMappingContext( mrImportHelper,
+            pContext = new SchXMLPropertyMappingContext(
                     GetImport(),
                     mrLSequencesPerIndex, m_xSeries );
             break;

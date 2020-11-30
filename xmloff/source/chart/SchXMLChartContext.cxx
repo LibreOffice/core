@@ -1073,7 +1073,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLChartContext::cr
         case  XML_ELEMENT(TABLE, XML_TABLE):
             {
                 SchXMLTableContext * pTableContext =
-                    new SchXMLTableContext( mrImportHelper, GetImport(), maTable );
+                    new SchXMLTableContext( GetImport(), maTable );
                 m_bHasTableElement = true;
                 // #i85913# take into account column- and row- mapping for
                 // charts with own data only for those which were not copied
