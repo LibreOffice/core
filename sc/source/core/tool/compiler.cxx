@@ -5086,7 +5086,12 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
 {
     const FormulaToken* t = pTokenP;
     sal_uInt16 nFileId = t->GetIndex();
+<<<<<<< HEAD   (f33078 tdf#66043 sw: fix spell checking of word with deletion)
     ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+=======
+    ScExternalRefManager* pRefMgr = rDoc.GetExternalRefManager();
+    sal_uInt16 nUsedFileId = pRefMgr->convertFileIdToUsedFileId(nFileId);
+>>>>>>> CHANGE (7050a8 tdf#87973 XLSX export: fix lost file names in modified links)
     const OUString* pFileName = pRefMgr->getExternalFileName(nFileId);
     if (!pFileName)
         return;
@@ -5112,7 +5117,11 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
                     *pFileName << "' '" << t->GetString().getString() << "'");
 
             pConv->makeExternalRefStr(
+<<<<<<< HEAD   (f33078 tdf#66043 sw: fix spell checking of word with deletion)
                 pDoc->GetSheetLimits(), rBuffer, GetPos(), nFileId, *pFileName, aTabNames, t->GetString().getString(),
+=======
+                rDoc.GetSheetLimits(), rBuffer, GetPos(), nUsedFileId, *pFileName, aTabNames, t->GetString().getString(),
+>>>>>>> CHANGE (7050a8 tdf#87973 XLSX export: fix lost file names in modified links)
                 *t->GetDoubleRef());
         }
         break;

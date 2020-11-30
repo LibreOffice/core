@@ -269,6 +269,11 @@ public:
     void testTdf91251_missingOverflowRoundtrip();
     void testTdf137000_handle_upright();
     void testTdf126305_DataValidatyErrorAlert();
+<<<<<<< HEAD   (f33078 tdf#66043 sw: fix spell checking of word with deletion)
+=======
+    void testTdf76047_externalLink();
+    void testTdf87973_externalLinkSkipUnuseds();
+>>>>>>> CHANGE (7050a8 tdf#87973 XLSX export: fix lost file names in modified links)
     void testTdf129969();
     void testTdf84874();
 
@@ -434,6 +439,11 @@ public:
     CPPUNIT_TEST(testTdf91251_missingOverflowRoundtrip);
     CPPUNIT_TEST(testTdf137000_handle_upright);
     CPPUNIT_TEST(testTdf126305_DataValidatyErrorAlert);
+<<<<<<< HEAD   (f33078 tdf#66043 sw: fix spell checking of word with deletion)
+=======
+    CPPUNIT_TEST(testTdf76047_externalLink);
+    CPPUNIT_TEST(testTdf87973_externalLinkSkipUnuseds);
+>>>>>>> CHANGE (7050a8 tdf#87973 XLSX export: fix lost file names in modified links)
     CPPUNIT_TEST(testTdf129969);
     CPPUNIT_TEST(testTdf84874);
 
@@ -5447,6 +5457,74 @@ void ScExportTest::testTdf126305_DataValidatyErrorAlert()
     xDocSh->DoClose();
 }
 
+<<<<<<< HEAD   (f33078 tdf#66043 sw: fix spell checking of word with deletion)
+=======
+void ScExportTest::testTdf76047_externalLink()
+{
+    ScDocShellRef pShell = loadDoc("tdf76047_externalLink.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pShell.is());
+
+    // load data from external links. (tdf76047_externalLinkSource.ods)
+    // that file has to be in the same directory as tdf76047_externalLink.xlsx
+    pShell->ReloadAllLinks();
+    ScDocument& rDoc = pShell->GetDocument();
+
+    // compare the data loaded from external links with the expected result stored in the test file
+    for (int nCol = 1; nCol <= 5; nCol++)
+    {
+        for (int nRow = 3; nRow <= 5; nRow++)
+        {
+            OUString aStr1 = rDoc.GetString(ScAddress(nCol, nRow, 0));
+            OUString aStr2 = rDoc.GetString(ScAddress(nCol, nRow + 5, 0));
+            OUString aStr3 = rDoc.GetString(ScAddress(nCol, nRow + 11, 0));
+
+            CPPUNIT_ASSERT_EQUAL(aStr1, aStr3);
+            CPPUNIT_ASSERT_EQUAL(aStr2, aStr3);
+        }
+    }
+}
+
+void ScExportTest::testTdf87973_externalLinkSkipUnuseds()
+{
+    ScDocShellRef pShell = loadDoc("tdf87973_externalLinkSkipUnuseds.", FORMAT_ODS);
+    CPPUNIT_ASSERT(pShell.is());
+
+    // try to load data from external link: tdf132105_external.ods
+    // that file has to be in the same directory as tdf87973_externalLinkSkipUnuseds.ods
+    pShell->ReloadAllLinks();
+    ScDocument& rDoc = pShell->GetDocument();
+
+    // change external link to: 87973_externalSource.ods
+    OUString aFormula, bFormula;
+    rDoc.GetFormula(3, 1, 0, aFormula);
+    auto nIdxOfFilename = aFormula.indexOf("tdf132105_external.ods");
+    aFormula = aFormula.replaceAt(nIdxOfFilename, 22, "87973_externalSource.ods");
+    auto nIdxOfFile = aFormula.indexOf("file");
+
+    // saveAndReload save the file to a temporary directory
+    // the link must be changed to point to that directory
+    utl::TempFile aTempFile;
+    auto aTempFilename = aTempFile.GetURL();
+    auto nIdxOfTmpFile = aTempFilename.lastIndexOf('/');
+    aTempFilename = aTempFilename.copy(0, nIdxOfTmpFile + 1);
+
+    aFormula = aFormula.replaceAt(nIdxOfFile, nIdxOfFilename - nIdxOfFile, aTempFilename);
+    rDoc.SetFormula(ScAddress(3, 1, 0), aFormula, formula::FormulaGrammar::GRAM_NATIVE_UI);
+
+    // save and load back
+    ScDocShellRef pDocSh = saveAndReload(&(*pShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDocSh.is());
+
+    // check if the the new filename is present in the link (and not replaced by '[2]')
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+    rDoc2.GetFormula(3, 1, 0, bFormula);
+    CPPUNIT_ASSERT(bFormula.indexOf("tdf132105_external.ods") < 0);
+    CPPUNIT_ASSERT(bFormula.indexOf("87973_externalSource.ods") > 0);
+
+    pDocSh->DoClose();
+}
+
+>>>>>>> CHANGE (7050a8 tdf#87973 XLSX export: fix lost file names in modified links)
 void ScExportTest::testTdf129969()
 {
     ScDocShellRef xShell = loadDoc("external_hyperlink.", FORMAT_ODS);
