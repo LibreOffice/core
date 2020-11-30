@@ -2740,6 +2740,31 @@ const OUString* ScExternalRefManager::getExternalFileName(sal_uInt16 nFileId, bo
     return &maSrcFiles[nFileId].maFileName;
 }
 
+sal_uInt16 ScExternalRefManager::convertFileIdToUsedFileId(sal_uInt16 nFileId)
+{
+    if (!mbSkipUnusedFileIds)
+        return nFileId;
+    else
+        return maConvertFileIdToUsedFileId[nFileId];
+}
+
+void ScExternalRefManager::setSkipUnusedFileIds(std::vector<sal_uInt16>& rExternFileIds)
+{
+    mbSkipUnusedFileIds = true;
+    maConvertFileIdToUsedFileId.resize(maRefCells.size());
+    std::fill(maConvertFileIdToUsedFileId.begin(), maConvertFileIdToUsedFileId.end(), 0);
+    int nUsedCount = 0;
+    for (auto nEntry : rExternFileIds)
+    {
+        maConvertFileIdToUsedFileId[nEntry] = nUsedCount++;
+    }
+}
+
+void ScExternalRefManager::disableSkipUnusedFileIds()
+{
+    mbSkipUnusedFileIds = false;
+}
+
 std::vector<OUString> ScExternalRefManager::getAllCachedExternalFileNames() const
 {
     std::vector<OUString> aNames;

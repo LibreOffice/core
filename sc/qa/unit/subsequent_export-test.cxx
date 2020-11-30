@@ -269,6 +269,7 @@ public:
     void testTdf91251_missingOverflowRoundtrip();
     void testTdf137000_handle_upright();
     void testTdf126305_DataValidatyErrorAlert();
+    void testTdf87973_externalLinkSkipUnuseds();
     void testTdf129969();
     void testTdf84874();
 
@@ -434,6 +435,7 @@ public:
     CPPUNIT_TEST(testTdf91251_missingOverflowRoundtrip);
     CPPUNIT_TEST(testTdf137000_handle_upright);
     CPPUNIT_TEST(testTdf126305_DataValidatyErrorAlert);
+    CPPUNIT_TEST(testTdf87973_externalLinkSkipUnuseds);
     CPPUNIT_TEST(testTdf129969);
     CPPUNIT_TEST(testTdf84874);
 
@@ -5445,6 +5447,46 @@ void ScExportTest::testTdf126305_DataValidatyErrorAlert()
     assertXPath(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation[3]", "errorStyle", "information");
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf87973_externalLinkSkipUnuseds()
+{
+    ScDocShellRef pShell = loadDoc("tdf87973_externalLinkSkipUnuseds.", FORMAT_ODS);
+    CPPUNIT_ASSERT(pShell.is());
+
+    // try to load data from external link: tdf132105_external.ods
+    // that file has to be in the same directory as tdf87973_externalLinkSkipUnuseds.ods
+    pShell->ReloadAllLinks();
+    ScDocument& rDoc = pShell->GetDocument();
+
+    // change external link to: 87973_externalSource.ods
+    OUString aFormula, bFormula;
+    rDoc.GetFormula(3, 1, 0, aFormula);
+    auto nIdxOfFilename = aFormula.indexOf("tdf132105_external.ods");
+    aFormula = aFormula.replaceAt(nIdxOfFilename, 22, "87973_externalSource.ods");
+    auto nIdxOfFile = aFormula.indexOf("file");
+
+    // saveAndReload save the file to a temporary directory
+    // the link must be changed to point to that directory
+    utl::TempFile aTempFile;
+    auto aTempFilename = aTempFile.GetURL();
+    auto nIdxOfTmpFile = aTempFilename.lastIndexOf('/');
+    aTempFilename = aTempFilename.copy(0, nIdxOfTmpFile + 1);
+
+    aFormula = aFormula.replaceAt(nIdxOfFile, nIdxOfFilename - nIdxOfFile, aTempFilename);
+    rDoc.SetFormula(ScAddress(3, 1, 0), aFormula, formula::FormulaGrammar::GRAM_NATIVE_UI);
+
+    // save and load back
+    ScDocShellRef pDocSh = saveAndReload(&(*pShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDocSh.is());
+
+    // check if the the new filename is present in the link (and not replaced by '[2]')
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+    rDoc2.GetFormula(3, 1, 0, bFormula);
+    CPPUNIT_ASSERT(bFormula.indexOf("tdf132105_external.ods") < 0);
+    CPPUNIT_ASSERT(bFormula.indexOf("87973_externalSource.ods") > 0);
+
+    pDocSh->DoClose();
 }
 
 void ScExportTest::testTdf129969()
