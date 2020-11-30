@@ -40,10 +40,8 @@ using namespace ::xmloff::token;
 
 XMLSectionSourceImportContext::XMLSectionSourceImportContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     Reference<XPropertySet> & rSectPropSet) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName),
+        SvXMLImportContext(rImport),
         rSectionPropertySet(rSectPropSet)
 {
 }
@@ -52,54 +50,28 @@ XMLSectionSourceImportContext::~XMLSectionSourceImportContext()
 {
 }
 
-namespace {
-enum XMLSectionSourceToken
+void XMLSectionSourceImportContext::startFastElement( sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    XML_TOK_SECTION_XLINK_HREF,
-    XML_TOK_SECTION_TEXT_FILTER_NAME,
-    XML_TOK_SECTION_TEXT_SECTION_NAME
-};
-
-}
-
-const SvXMLTokenMapEntry aSectionSourceTokenMap[] =
-{
-    { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_SECTION_XLINK_HREF },
-    { XML_NAMESPACE_TEXT, XML_FILTER_NAME, XML_TOK_SECTION_TEXT_FILTER_NAME },
-    { XML_NAMESPACE_TEXT, XML_SECTION_NAME,
-                                        XML_TOK_SECTION_TEXT_SECTION_NAME },
-    XML_TOKEN_MAP_END
-};
-
-
-void XMLSectionSourceImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
-{
-    static const SvXMLTokenMap aTokenMap(aSectionSourceTokenMap);
     OUString sURL;
     OUString sFilterName;
     OUString sSectionName;
 
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-
-        switch (aTokenMap.Get(nPrefix, sLocalName))
+        OUString sValue = aIter.toString();
+        switch (aIter.getToken())
         {
-            case XML_TOK_SECTION_XLINK_HREF:
-                sURL = xAttrList->getValueByIndex(nAttr);
+            case XML_ELEMENT(XLINK, XML_HREF):
+                sURL = sValue;
                 break;
 
-            case XML_TOK_SECTION_TEXT_FILTER_NAME:
-                sFilterName = xAttrList->getValueByIndex(nAttr);
+            case XML_ELEMENT(TEXT, XML_FILTER_NAME):
+                sFilterName = sValue;
                 break;
 
-            case XML_TOK_SECTION_TEXT_SECTION_NAME:
-                sSectionName = xAttrList->getValueByIndex(nAttr);
+            case XML_ELEMENT(TEXT, XML_SECTION_NAME):
+                sSectionName = sValue;
                 break;
 
             default:
