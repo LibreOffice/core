@@ -860,20 +860,16 @@ static void GetAdjustmentValues( std::vector< css::beans::PropertyValue >& rDest
     }
 }
 
-void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void XMLEnhancedCustomShapeContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    sal_Int16 nLength = xAttrList->getLength();
-    if ( !nLength )
-        return;
-
     sal_Int32               nAttrNumber;
-    for( sal_Int16 nAttr = 0; nAttr < nLength; nAttr++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString aLocalName;
-        const OUString& rValue = xAttrList->getValueByIndex( nAttr );
-        /* sven fixme, this must be checked! sal_uInt16 nPrefix = */ GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
+        OUString rValue = aIter.toString();
 
-        switch( EASGet( aLocalName ) )
+        switch( EASGet( aIter.getToken() ) )
         {
             case EAS_type :
                 GetString( mrCustomShapeGeometry, rValue, EAS_Type );
