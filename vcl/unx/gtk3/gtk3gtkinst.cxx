@@ -8009,84 +8009,6 @@ struct CompareGtkTreePath
     }
 };
 
-int get_height_row(GtkTreeView* pTreeView, GList* pColumns)
-{
-    gint nMaxRowHeight = 0;
-    for (GList* pEntry = g_list_first(pColumns); pEntry; pEntry = g_list_next(pEntry))
-    {
-        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
-        GList *pRenderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(pColumn));
-        for (GList* pRenderer = g_list_first(pRenderers); pRenderer; pRenderer = g_list_next(pRenderer))
-        {
-            GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
-            gint nRowHeight;
-            gtk_cell_renderer_get_preferred_height(pCellRenderer, GTK_WIDGET(pTreeView), nullptr, &nRowHeight);
-            nMaxRowHeight = std::max(nMaxRowHeight, nRowHeight);
-        }
-        g_list_free(pRenderers);
-    }
-    return nMaxRowHeight;
-}
-
-int get_height_row_separator(GtkTreeView* pTreeView)
-{
-    gint nVerticalSeparator;
-    gtk_widget_style_get(GTK_WIDGET(pTreeView), "vertical-separator", &nVerticalSeparator, nullptr);
-    return nVerticalSeparator;
-}
-
-int get_height_rows(GtkTreeView* pTreeView, GList* pColumns, int nRows)
-{
-    gint nMaxRowHeight = get_height_row(pTreeView, pColumns);
-    gint nVerticalSeparator = get_height_row_separator(pTreeView);
-    return (nMaxRowHeight * nRows) + (nVerticalSeparator * (nRows + 1));
-}
-
-int get_height_rows(int nRowHeight, int nSeparatorHeight, int nRows)
-{
-    return (nRowHeight * nRows) + (nSeparatorHeight * (nRows + 1));
-}
-
-tools::Rectangle get_row_area(GtkTreeView* pTreeView, GList* pColumns, GtkTreePath* pPath)
-{
-    tools::Rectangle aRet;
-
-    GdkRectangle aRect;
-    for (GList* pEntry = g_list_last(pColumns); pEntry; pEntry = g_list_previous(pEntry))
-    {
-        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
-        gtk_tree_view_get_cell_area(pTreeView, pPath, pColumn, &aRect);
-        aRet.Union(tools::Rectangle(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height));
-    }
-
-    return aRet;
-}
-
-struct GtkTreeRowReferenceDeleter
-{
-    void operator()(GtkTreeRowReference* p) const
-    {
-        gtk_tree_row_reference_free(p);
-    }
-};
-
-bool separator_function(GtkTreePath* path, const std::vector<std::unique_ptr<GtkTreeRowReference, GtkTreeRowReferenceDeleter>>& rSeparatorRows)
-{
-    bool bFound = false;
-    for (auto& a : rSeparatorRows)
-    {
-        GtkTreePath* seppath = gtk_tree_row_reference_get_path(a.get());
-        if (seppath)
-        {
-            bFound = gtk_tree_path_compare(path, seppath) == 0;
-            gtk_tree_path_free(seppath);
-        }
-        if (bFound)
-            break;
-    }
-    return bFound;
-}
-
 void tree_store_set(GtkTreeModel* pTreeModel, GtkTreeIter *pIter, ...)
 {
     va_list args;
@@ -8245,7 +8167,6 @@ private:
     gint m_nExpanderToggleCol;
     gint m_nExpanderImageCol;
     gint m_nIdCol;
-    int m_nPendingVAdjustment;
     gulong m_nChangedSignalId;
     gulong m_nRowActivatedSignalId;
     gulong m_nTestExpandRowSignalId;
@@ -8574,8 +8495,6 @@ private:
         bRet = !bRet;
         m_Setter(m_pTreeModel, &iter, nCol, bRet, -1);
 
-        gint depth;
-
         set(iter, m_aToggleTriStateMap[nCol], false);
 
         signal_toggled(iter_col(GtkInstanceTreeIter(iter), to_external_model(nCol)));
@@ -8759,48 +8678,6 @@ private:
         return pThis->signal_key_press(pEvent);
     }
 
-    void set_font_color(const GtkTreeIter& iter, const Color& rColor)
-    {
-        if (rColor == COL_AUTO)
-            m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), m_nIdCol + 1, nullptr, -1);
-        else
-        {
-            GdkRGBA aColor{rColor.GetRed()/255.0, rColor.GetGreen()/255.0, rColor.GetBlue()/255.0, 0};
-            m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), m_nIdCol + 1, &aColor, -1);
-        }
-    }
-
-    int get_expander_size() const
-    {
-        gint nExpanderSize;
-        gint nHorizontalSeparator;
-
-        gtk_widget_style_get(GTK_WIDGET(m_pTreeView),
-                             "expander-size", &nExpanderSize,
-                             "horizontal-separator", &nHorizontalSeparator,
-                             nullptr);
-
-        return nExpanderSize + (nHorizontalSeparator/ 2);
-    }
-
-    void real_vadjustment_set_value(int value)
-    {
-        disable_notify_events();
-        gtk_adjustment_set_value(m_pVAdjustment, value);
-        enable_notify_events();
-    }
-
-    static gboolean setAdjustmentCallback(GtkWidget*, GdkFrameClock*, gpointer widget)
-    {
-        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
-        if (pThis->m_nPendingVAdjustment != -1)
-        {
-            pThis->real_vadjustment_set_value(pThis->m_nPendingVAdjustment);
-            pThis->m_nPendingVAdjustment = -1;
-        }
-        return false;
-    }
-
     bool iter_next(weld::TreeIter& rIter, bool bOnlyExpanded) const
     {
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
@@ -8856,7 +8733,6 @@ public:
         , m_nImageCol(-1)
         , m_nExpanderToggleCol(-1)
         , m_nExpanderImageCol(-1)
-        , m_nPendingVAdjustment(-1)
         , m_nChangedSignalId(g_signal_connect(gtk_tree_view_get_selection(pTreeView), "changed",
                              G_CALLBACK(signalChanged), this))
         , m_nRowActivatedSignalId(g_signal_connect(pTreeView, "row-activated", G_CALLBACK(signalRowActivated), this))

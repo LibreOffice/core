@@ -3603,7 +3603,7 @@ void SalInstanceTreeView::hide()
 
 void SalInstanceTreeView::insert(const weld::TreeIter* pParent, int pos, const OUString* pStr, const OUString* pId,
                     const OUString* pIconName, VirtualDevice* pImageSurface,
-                    const OUString* pExpanderName, bool bChildrenOnDemand, weld::TreeIter* pRet)
+                    const OUString* /*pExpanderName*/, bool bChildrenOnDemand, weld::TreeIter* pRet)
 {
     do_insert(pParent, pos, pStr, pId, pIconName, pImageSurface,
                   bChildrenOnDemand, pRet, false);
