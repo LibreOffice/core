@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a64dcb7_ff7f319e",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2044,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2020-11-30T11:59:50Z",
+      "side": 1,
+      "message": "have these concerns been taken into account or maybe fixed ?",
+      "revId": "eb34b3833f7042db05b10e6c092fcf8440f81994",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
