@@ -18,6 +18,7 @@
  */
 
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include "XNotifyingDataObject.hxx"
 #include "WinClipboard.hxx"
 
@@ -141,7 +142,7 @@ void CXNotifyingDataObject::lostOwnership( )
     }
     catch(RuntimeException&)
     {
-        OSL_FAIL( "RuntimeException caught" );
+        TOOLS_WARN_EXCEPTION( "vcl",  "" );
     }
 }
 

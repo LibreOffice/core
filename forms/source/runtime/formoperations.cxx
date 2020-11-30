@@ -60,6 +60,7 @@
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 
 namespace frm
@@ -1053,7 +1054,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FormOperations::propertyChange: caught an exception while updating the parser!" );
+            TOOLS_WARN_EXCEPTION( "forms.runtime", "FormOperations::propertyChange: caught an exception while updating the parser!" );
         }
         impl_invalidateAllSupportedFeatures_nothrow( aGuard );
     }
@@ -1561,7 +1562,7 @@ namespace frm
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "FormOperations::impl_executeAutoSort_throw: caught an exception while setting the parser properties!" );
+                TOOLS_WARN_EXCEPTION( "forms.runtime", "FormOperations::impl_executeAutoSort_throw: caught an exception while setting the parser properties!" );
             }
 
 
@@ -1635,7 +1636,7 @@ namespace frm
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "FormOperations::impl_executeAutoFilter_throw: caught an exception while setting the parser properties!" );
+                TOOLS_WARN_EXCEPTION( "forms.runtime", "FormOperations::impl_executeAutoFilter_throw: caught an exception while setting the parser properties!" );
             }
 
 

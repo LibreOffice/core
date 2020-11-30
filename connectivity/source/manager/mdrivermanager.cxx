@@ -393,7 +393,7 @@ void OSDBCDriverManager::initializeDriverPrecedence()
     }
     catch (Exception&)
     {
-        OSL_FAIL("OSDBCDriverManager::initializeDriverPrecedence: caught an exception while sorting the drivers!");
+        TOOLS_WARN_EXCEPTION( "connectivity.hsqldb", "OSDBCDriverManager::initializeDriverPrecedence: caught an exception while sorting the drivers!");
     }
 }
 

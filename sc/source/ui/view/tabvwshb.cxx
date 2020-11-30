@@ -47,6 +47,7 @@
 #include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <sot/exchange.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <tabvwsh.hxx>
 #include <scmod.hxx>
@@ -240,7 +241,7 @@ void ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, tools::Long nVerb )
                     }
                     catch( const uno::Exception & )
                     {
-                        OSL_FAIL( "Exception caught while querying chart" );
+                        TOOLS_WARN_EXCEPTION( "sc", "Exception caught while querying chart" );
                     }
                 }
             }

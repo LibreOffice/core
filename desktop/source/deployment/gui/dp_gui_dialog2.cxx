@@ -736,7 +736,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleCancelBtn, weld::Button&, void)
         }
         catch ( const uno::RuntimeException & )
         {
-            OSL_FAIL( "### unexpected RuntimeException!" );
+            TOOLS_WARN_EXCEPTION( "dbaccess", "" );
         }
     }
 }
@@ -1059,7 +1059,7 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCancelBtn, weld::Button&, void)
         }
         catch ( const uno::RuntimeException & )
         {
-            OSL_FAIL( "### unexpected RuntimeException!" );
+            TOOLS_WARN_EXCEPTION( "desktop", "" );
         }
     }
 }

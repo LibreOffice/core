@@ -309,7 +309,7 @@ void OReportController::disposing()
     }
     catch(const uno::Exception&)
     {
-        OSL_FAIL("Exception caught while disposing row sets.");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "Exception caught while disposing row sets.");
     }
     m_xRowSet.clear();
     m_xRowSetMediator.clear();

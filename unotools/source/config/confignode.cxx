@@ -197,7 +197,7 @@ namespace utl
             }
             catch(Exception&)
             {
-                OSL_FAIL("OConfigurationNode::getNodeNames: caught a generic exception!");
+                TOOLS_WARN_EXCEPTION( "unotools", "OConfigurationNode::getNodeNames");
             }
         }
 
@@ -219,13 +219,9 @@ namespace utl
             {
                 SAL_WARN( "unotools", "OConfigurationNode::removeNode: there is no element named: " << _rName );
             }
-            catch (WrappedTargetException&)
-            {
-                OSL_FAIL("OConfigurationNode::removeNode: caught a WrappedTargetException!");
-            }
             catch(Exception&)
             {
-                OSL_FAIL("OConfigurationNode::removeNode: caught a generic exception!");
+                TOOLS_WARN_EXCEPTION( "unotools", "OConfigurationNode::removeNode");
             }
         }
         return false;
@@ -311,7 +307,7 @@ namespace utl
         }
         catch(Exception&)
         {
-            OSL_FAIL("OConfigurationNode::openNode: caught an exception while retrieving the node!");
+            TOOLS_WARN_EXCEPTION( "unotools", "OConfigurationNode::openNode: caught an exception while retrieving the node!");
         }
         return OConfigurationNode();
     }
@@ -398,21 +394,9 @@ namespace utl
                 }
 
             }
-            catch(IllegalArgumentException&)
-            {
-                OSL_FAIL("OConfigurationNode::setNodeValue: could not replace the value: caught an IllegalArgumentException!");
-            }
-            catch(NoSuchElementException&)
-            {
-                OSL_FAIL("OConfigurationNode::setNodeValue: could not replace the value: caught a NoSuchElementException!");
-            }
-            catch(WrappedTargetException&)
-            {
-                OSL_FAIL("OConfigurationNode::setNodeValue: could not replace the value: caught a WrappedTargetException!");
-            }
             catch(Exception&)
             {
-                OSL_FAIL("OConfigurationNode::setNodeValue: could not replace the value: caught a generic Exception!");
+                TOOLS_WARN_EXCEPTION( "unotools", "OConfigurationNode::setNodeValue: could not replace the value");
             }
 
         }

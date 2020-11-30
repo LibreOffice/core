@@ -35,6 +35,7 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/types.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace calc
 {
@@ -465,7 +466,7 @@ namespace calc
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "OCellValueBinding::notifyModified: caught a (non-runtime) exception!" );
+                TOOLS_WARN_EXCEPTION( "sc", "OCellValueBinding::notifyModified: caught a (non-runtime) exception!" );
             }
         }
     }
@@ -540,7 +541,7 @@ namespace calc
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OCellValueBinding::initialize: caught an exception while retrieving the cell object!" );
+            TOOLS_WARN_EXCEPTION( "sc", "OCellValueBinding::initialize: caught an exception while retrieving the cell object!" );
         }
 
         if ( !m_xCell.is() )

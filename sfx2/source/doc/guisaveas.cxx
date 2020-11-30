@@ -241,7 +241,7 @@ public:
             }
             catch( const uno::Exception& )
             {
-                OSL_FAIL( "Unexpected exception!" );
+                TOOLS_WARN_EXCEPTION( "sfx.doc", "" );
             }
         }
     }

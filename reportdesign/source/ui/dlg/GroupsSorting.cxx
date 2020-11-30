@@ -38,6 +38,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 
@@ -476,7 +477,7 @@ bool OFieldExpressionControl::SaveModified()
         }
         catch(uno::Exception&)
         {
-            OSL_FAIL("OFieldExpressionControl::SaveModified: Exception caught!");
+            TOOLS_WARN_EXCEPTION( "reportdesign", "OFieldExpressionControl::SaveModified");
         }
     }
 
@@ -501,7 +502,7 @@ OUString OFieldExpressionControl::GetCellText( sal_Int32 nRow, sal_uInt16 /*nCol
         }
         catch (const uno::Exception&)
         {
-            OSL_FAIL("Exception caught while getting expression value from the group");
+            TOOLS_WARN_EXCEPTION( "reportdesign", "Exception caught while getting expression value from the group");
         }
     }
     return sText;
@@ -573,7 +574,7 @@ EditBrowseBox::RowStatus OFieldExpressionControl::GetRowStatus(sal_Int32 nRow) c
         }
         catch(uno::Exception&)
         {
-            OSL_FAIL("Exception caught while try to get a group!");
+            TOOLS_WARN_EXCEPTION( "reportdesign", "Exception caught while try to get a group!");
         }
     }
     return EditBrowseBox::CLEAN;
@@ -921,7 +922,7 @@ sal_Int32 OGroupsSortingDialog::getColumnDataType(const OUString& _sColumnName)
     }
     catch(uno::Exception&)
     {
-        OSL_FAIL("Exception caught while getting the type of a column");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "Exception caught while getting the type of a column");
     }
 
     return nDataType;

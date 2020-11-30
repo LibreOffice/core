@@ -85,7 +85,7 @@ namespace
             }
             catch(const uno::Exception&)
             {
-                OSL_FAIL("lcl_insertElements:Exception caught!");
+                TOOLS_WARN_EXCEPTION( "reportdesign", "lcl_insertElements");
             }
         }
     }
@@ -103,7 +103,7 @@ namespace
             }
             catch(const uno::Exception&)
             {
-                OSL_FAIL("lcl_setValues:Exception caught!");
+                TOOLS_WARN_EXCEPTION( "reportdesign", "lcl_setValues");
             }
         }
     }
@@ -143,7 +143,7 @@ OSectionUndo::~OSectionUndo()
         }
         catch(const uno::Exception &)
         {
-            OSL_FAIL("Exception caught!");
+            TOOLS_WARN_EXCEPTION( "reportdesign", "");
         }
     }
 }
@@ -334,7 +334,7 @@ void OGroupUndo::implReInsert( )
     }
     catch(uno::Exception&)
     {
-        OSL_FAIL("Exception caught while undoing remove group");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "Exception caught while undoing remove group");
     }
 }
 
@@ -346,7 +346,7 @@ void OGroupUndo::implReRemove( )
     }
     catch(uno::Exception&)
     {
-        OSL_FAIL("Exception caught while redoing remove group");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "Exception caught while redoing remove group");
     }
 }
 

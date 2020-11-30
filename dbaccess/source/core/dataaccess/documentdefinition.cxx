@@ -1282,7 +1282,7 @@ bool ODocumentDefinition::save(bool _bApprove, const css::uno::Reference<css::aw
     }
     catch(const Exception&)
     {
-        OSL_FAIL("ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
+        TOOLS_WARN_EXCEPTION( "dbaccess", "ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
     }
     return true;
 }
@@ -1376,7 +1376,7 @@ void ODocumentDefinition::saveAs()
     }
     catch(const Exception&)
     {
-        OSL_FAIL("ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
+        TOOLS_WARN_EXCEPTION( "dbaccess", "ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
     }
 }
 

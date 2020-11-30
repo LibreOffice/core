@@ -26,6 +26,7 @@
 #include <certificateviewer.hxx>
 #include <biginteger.hxx>
 #include <sax/tools/converter.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -416,7 +417,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, weld::Button&, void)
     }
     catch ( uno::Exception& )
     {
-        OSL_FAIL( "Exception while adding a signature!" );
+        TOOLS_WARN_EXCEPTION( "xmlsecurity.dialogs", "adding a signature!" );
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                   VclMessageType::Error, VclButtonsType::Ok,
                                                   XsResId(STR_XMLSECDLG_SIGNING_FAILED)));
@@ -446,7 +447,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, weld::Button&, void)
     }
     catch ( uno::Exception& )
     {
-        OSL_FAIL( "Exception while removing a signature!" );
+        TOOLS_WARN_EXCEPTION( "xmlsecurity.dialogs", "Exception while removing a signature!" );
         // Don't keep invalid entries...
         ImplGetSignatureInformations(/*bUseTempStream=*/true, /*bCacheLastSignature=*/true);
         ImplFillSignaturesBox();

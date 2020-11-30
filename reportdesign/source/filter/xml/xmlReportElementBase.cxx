@@ -25,6 +25,7 @@
 #include "xmlEnums.hxx"
 #include "xmlTable.hxx"
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 namespace rptxml
 {
@@ -86,7 +87,7 @@ void OXMLReportElementBase::endFastElement(sal_Int32 )
     }
     catch(Exception&)
     {
-        OSL_FAIL("Exception caught while inserting a new control!");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "Exception caught while inserting a new control!");
     }
 }
 

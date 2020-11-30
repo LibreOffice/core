@@ -923,7 +923,7 @@ UUIInteractionHelper::getInteractionHandlerList(
     }
     catch ( uno::Exception const & )
     {
-        OSL_FAIL( "GetInteractionHandlerList - Caught Exception!" );
+        TOOLS_WARN_EXCEPTION( "uui", "GetInteractionHandlerList" );
     }
 }
 

@@ -26,6 +26,7 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <tools/diagnose_ex.h>
 #include <swmodule.hxx>
 #include <view.hxx>
 
@@ -163,7 +164,7 @@ void SwMailMergeGreetingsPage::UpdatePreview()
                 }
                 catch (const sdbc::SQLException&)
                 {
-                    OSL_FAIL("SQLException caught");
+                    TOOLS_WARN_EXCEPTION( "sw", "");
                 }
             }
         }

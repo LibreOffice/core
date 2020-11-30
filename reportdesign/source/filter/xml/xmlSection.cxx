@@ -26,6 +26,7 @@
 #include "xmlTable.hxx"
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 
 namespace rptxml
@@ -79,7 +80,7 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
     }
     catch(Exception&)
     {
-        OSL_FAIL("Exception caught while filling the section props");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "Exception caught while filling the section props");
     }
 }
 

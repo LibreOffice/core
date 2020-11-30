@@ -54,6 +54,7 @@
 #include <svx/svxids.hrc>
 #include <vcl/EnumContext.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::sd::slidesorter;
 #define ShellClass_SlideSorterViewShell
@@ -139,7 +140,7 @@ SlideSorterViewShell::~SlideSorterViewShell()
     }
     catch( css::uno::Exception& )
     {
-        OSL_FAIL("sd::SlideSorterViewShell::~SlideSorterViewShell(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideSorterViewShell::~SlideSorterViewShell()" );
     }
     GetFrameView()->Disconnect();
 }

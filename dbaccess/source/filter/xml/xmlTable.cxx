@@ -30,6 +30,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 
 namespace dbaxml
@@ -152,7 +153,7 @@ void OXMLTable::setProperties(uno::Reference< XPropertySet > & _xProp )
     }
     catch(Exception&)
     {
-        OSL_FAIL("OXMLTable::EndElement -> exception caught");
+        TOOLS_WARN_EXCEPTION( "dbaccess", "OXMLTable::EndElement -> exception caught");
     }
 }
 
@@ -186,7 +187,7 @@ void OXMLTable::endFastElement(sal_Int32 )
     }
     catch(Exception&)
     {
-        OSL_FAIL("OXMLQuery::EndElement -> exception caught");
+        TOOLS_WARN_EXCEPTION( "dbaccess", "OXMLQuery::EndElement");
     }
 
 }

@@ -451,7 +451,7 @@ void GrammarCheckingIterator::ProcessResult(
             }
             catch (lang::IllegalArgumentException &)
             {
-                OSL_FAIL( "commitMultiTextMarkup: IllegalArgumentException exception caught" );
+                TOOLS_WARN_EXCEPTION( "linguistic", "commitMultiTextMarkup" );
             }
         }
 

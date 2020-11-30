@@ -43,6 +43,7 @@
 #include <view/SlsToolTip.hxx>
 #include <cache/SlsPageCache.hxx>
 #include <cache/SlsPageCacheManager.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <drawdoc.hxx>
 #include <ViewShellBase.hxx>
@@ -157,7 +158,7 @@ SlideSorterController::~SlideSorterController()
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( "sd::SlideSorterController::~SlideSorterController(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideSorterController::~SlideSorterController()" );
     }
 
     // dispose should have been called by now so that nothing is to be done
