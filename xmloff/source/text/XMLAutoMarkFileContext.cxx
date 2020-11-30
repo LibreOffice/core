@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <sal/log.hxx>
 
 
 using ::com::sun::star::uno::Any;
@@ -52,30 +53,31 @@ XMLAutoMarkFileContext::~XMLAutoMarkFileContext()
 }
 
 
-void XMLAutoMarkFileContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLAutoMarkFileContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // scan for text:alphabetical-index-auto-mark-file attribute, and if
     // found set value with the document
 
-    sal_Int16 nLength = xAttrList->getLength();
-    for( sal_Int16 i = 0; i < nLength; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
-
-        if ( ( XML_NAMESPACE_XLINK == nPrefix ) &&
-             IsXMLToken(sLocalName, XML_HREF) )
+        switch(aIter.getToken())
         {
-            Any aAny;
-            aAny <<= GetImport().GetAbsoluteReference( xAttrList->getValueByIndex(i) );
-            Reference<XPropertySet> xPropertySet(
-                GetImport().GetModel(), UNO_QUERY );
-            if (xPropertySet.is())
+            case XML_ELEMENT(XLINK, XML_HREF):
             {
-                xPropertySet->setPropertyValue( "IndexAutoMarkFileURL", aAny );
+                Any aAny;
+                aAny <<= GetImport().GetAbsoluteReference( aIter.toString() );
+                Reference<XPropertySet> xPropertySet(
+                    GetImport().GetModel(), UNO_QUERY );
+                if (xPropertySet.is())
+                {
+                    xPropertySet->setPropertyValue( "IndexAutoMarkFileURL", aAny );
+                }
+                break;
             }
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 }
