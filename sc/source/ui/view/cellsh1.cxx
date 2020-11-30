@@ -2917,124 +2917,149 @@ void ScCellShell::ExecuteDataPilotDialog()
 
         pTypeDlg->StartExecuteAsync([this, pTypeDlg, pTabViewShell,
                                     pScMod, pFact, &rDoc, &rMark, aDestPos](int nResult) mutable {
-            const char* pSrcErrorId = nullptr;
-            std::unique_ptr<ScDPObject> pNewDPObject;
 
             if (nResult == RET_OK )
             {
                 if ( pTypeDlg->IsExternal() )
                 {
                     std::vector<OUString> aSources = ScDPObject::GetRegisteredSources();
-                    ScopedVclPtr<AbstractScDataPilotServiceDlg> pServDlg(
+                    VclPtr<AbstractScDataPilotServiceDlg> pServDlg(
                         pFact->CreateScDataPilotServiceDlg(
                             pTabViewShell->GetFrameWeld(), aSources));
 
-                    if ( pServDlg->Execute() == RET_OK )
-                    {
-                        ScDPServiceDesc aServDesc(
-                                pServDlg->GetServiceName(),
-                                pServDlg->GetParSource(),
-                                pServDlg->GetParName(),
-                                pServDlg->GetParUser(),
-                                pServDlg->GetParPass() );
-                        pNewDPObject.reset(new ScDPObject(&rDoc));
-                        pNewDPObject->SetServiceData( aServDesc );
-                    }
+                    pServDlg->StartExecuteAsync([pServDlg, pScMod, pTabViewShell,
+                                                 aDestPos, &rDoc](int nResult2) mutable {
+                        if ( nResult2 == RET_OK )
+                        {
+                            ScDPServiceDesc aServDesc(
+                                    pServDlg->GetServiceName(),
+                                    pServDlg->GetParSource(),
+                                    pServDlg->GetParName(),
+                                    pServDlg->GetParUser(),
+                                    pServDlg->GetParPass() );
+                            std::unique_ptr<ScDPObject> pNewDPObject(new ScDPObject(&rDoc));
+                            pNewDPObject->SetServiceData( aServDesc );
+
+                            if ( pNewDPObject )
+                                pNewDPObject->SetOutRange( aDestPos );
+
+                            RunPivotLayoutDialog(pScMod, pTabViewShell, pNewDPObject);
+                        }
+
+                        pServDlg->disposeOnce();
+                    });
                 }
                 else if ( pTypeDlg->IsDatabase() )
                 {
                     assert(pFact && "ScAbstractFactory create fail!");
-                    ScopedVclPtr<AbstractScDataPilotDatabaseDlg> pDataDlg(
+                    VclPtr<AbstractScDataPilotDatabaseDlg> pDataDlg(
                         pFact->CreateScDataPilotDatabaseDlg(pTabViewShell->GetFrameWeld()));
                     assert(pDataDlg  && "Dialog create fail!");
-                    if ( pDataDlg->Execute() == RET_OK )
-                    {
-                        ScImportSourceDesc aImpDesc(&rDoc);
-                        pDataDlg->GetValues( aImpDesc );
-                        pNewDPObject.reset(new ScDPObject(&rDoc));
-                        pNewDPObject->SetImportDesc( aImpDesc );
-                    }
-                }
-                else if (pTypeDlg->IsNamedRange())
-                {
-                    OUString aName = pTypeDlg->GetSelectedNamedRange();
-                    ScSheetSourceDesc aShtDesc(&rDoc);
-                    aShtDesc.SetRangeName(aName);
-                    pSrcErrorId = aShtDesc.CheckSourceRange();
-                    if (!pSrcErrorId)
-                    {
-                        pNewDPObject.reset(new ScDPObject(&rDoc));
-                        pNewDPObject->SetSheetDesc(aShtDesc);
-                    }
-                }
-                else        // selection
-                {
-                    //! use database ranges (select before type dialog?)
-                    ScRange aRange;
-                    ScMarkType eType = GetViewData()->GetSimpleArea(aRange);
-                    if ( (eType & SC_MARK_SIMPLE) == SC_MARK_SIMPLE )
-                    {
-                        // Shrink the range to the data area.
-                        SCCOL nStartCol = aRange.aStart.Col(), nEndCol = aRange.aEnd.Col();
-                        SCROW nStartRow = aRange.aStart.Row(), nEndRow = aRange.aEnd.Row();
-                        if (rDoc.ShrinkToDataArea(aRange.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow))
+
+                    pDataDlg->StartExecuteAsync([pDataDlg, pScMod, pTabViewShell,
+                                                 aDestPos, &rDoc](int nResult2) mutable {
+                        if ( nResult2 == RET_OK )
                         {
-                            aRange.aStart.SetCol(nStartCol);
-                            aRange.aStart.SetRow(nStartRow);
-                            aRange.aEnd.SetCol(nEndCol);
-                            aRange.aEnd.SetRow(nEndRow);
-                            rMark.SetMarkArea(aRange);
-                            pTabViewShell->MarkRange(aRange);
+                            ScImportSourceDesc aImpDesc(&rDoc);
+                            pDataDlg->GetValues( aImpDesc );
+                            std::unique_ptr<ScDPObject> pNewDPObject(new ScDPObject(&rDoc));
+                            pNewDPObject->SetImportDesc( aImpDesc );
+
+                            if ( pNewDPObject )
+                                pNewDPObject->SetOutRange( aDestPos );
+
+                            RunPivotLayoutDialog(pScMod, pTabViewShell, pNewDPObject);
                         }
 
-                        bool bOK = true;
-                        if ( rDoc.HasSubTotalCells( aRange ) )
+                        pDataDlg->disposeOnce();
+                    });
+                }
+                else
+                {
+                    std::unique_ptr<ScDPObject> pNewDPObject;
+                    const char* pSrcErrorId = nullptr;
+
+                    if (pTypeDlg->IsNamedRange())
+                    {
+                        OUString aName = pTypeDlg->GetSelectedNamedRange();
+                        ScSheetSourceDesc aShtDesc(&rDoc);
+                        aShtDesc.SetRangeName(aName);
+                        pSrcErrorId = aShtDesc.CheckSourceRange();
+                        if (!pSrcErrorId)
                         {
-                            //  confirm selection if it contains SubTotal cells
-                            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pTabViewShell->GetFrameWeld(),
-                                                                        VclMessageType::Question, VclButtonsType::YesNo,
-                                                                        ScResId(STR_DATAPILOT_SUBTOTAL)));
-                            xQueryBox->set_default_response(RET_YES);
-                            if (xQueryBox->run() == RET_NO)
-                                bOK = false;
+                            pNewDPObject.reset(new ScDPObject(&rDoc));
+                            pNewDPObject->SetSheetDesc(aShtDesc);
                         }
-                        if (bOK)
+                    }
+                    else        // selection
+                    {
+                        //! use database ranges (select before type dialog?)
+                        ScRange aRange;
+                        ScMarkType eType = GetViewData()->GetSimpleArea(aRange);
+                        if ( (eType & SC_MARK_SIMPLE) == SC_MARK_SIMPLE )
                         {
-                            ScSheetSourceDesc aShtDesc(&rDoc);
-                            aShtDesc.SetSourceRange(aRange);
-                            pSrcErrorId = aShtDesc.CheckSourceRange();
-                            if (!pSrcErrorId)
+                            // Shrink the range to the data area.
+                            SCCOL nStartCol = aRange.aStart.Col(), nEndCol = aRange.aEnd.Col();
+                            SCROW nStartRow = aRange.aStart.Row(), nEndRow = aRange.aEnd.Row();
+                            if (rDoc.ShrinkToDataArea(aRange.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow))
                             {
-                                pNewDPObject.reset(new ScDPObject(&rDoc));
-                                pNewDPObject->SetSheetDesc( aShtDesc );
+                                aRange.aStart.SetCol(nStartCol);
+                                aRange.aStart.SetRow(nStartRow);
+                                aRange.aEnd.SetCol(nEndCol);
+                                aRange.aEnd.SetRow(nEndRow);
+                                rMark.SetMarkArea(aRange);
+                                pTabViewShell->MarkRange(aRange);
                             }
 
-                            //  output below source data
-                            if ( aRange.aEnd.Row()+2 <= rDoc.MaxRow() - 4 )
-                                aDestPos = ScAddress( aRange.aStart.Col(),
-                                                        aRange.aEnd.Row()+2,
-                                                        aRange.aStart.Tab() );
+                            bool bOK = true;
+                            if ( rDoc.HasSubTotalCells( aRange ) )
+                            {
+                                //  confirm selection if it contains SubTotal cells
+                                std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pTabViewShell->GetFrameWeld(),
+                                                                            VclMessageType::Question, VclButtonsType::YesNo,
+                                                                            ScResId(STR_DATAPILOT_SUBTOTAL)));
+                                xQueryBox->set_default_response(RET_YES);
+                                if (xQueryBox->run() == RET_NO)
+                                    bOK = false;
+                            }
+                            if (bOK)
+                            {
+                                ScSheetSourceDesc aShtDesc(&rDoc);
+                                aShtDesc.SetSourceRange(aRange);
+                                pSrcErrorId = aShtDesc.CheckSourceRange();
+                                if (!pSrcErrorId)
+                                {
+                                    pNewDPObject.reset(new ScDPObject(&rDoc));
+                                    pNewDPObject->SetSheetDesc( aShtDesc );
+                                }
+
+                                //  output below source data
+                                if ( aRange.aEnd.Row()+2 <= rDoc.MaxRow() - 4 )
+                                    aDestPos = ScAddress( aRange.aStart.Col(),
+                                                            aRange.aEnd.Row()+2,
+                                                            aRange.aStart.Tab() );
+                            }
                         }
                     }
+
+                    if (pSrcErrorId)
+                    {
+                        // Error occurred during data creation.  Launch an error and bail out.
+                        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pTabViewShell->GetFrameWeld(),
+                                                                    VclMessageType::Info, VclButtonsType::Ok,
+                                                                    ScResId(pSrcErrorId)));
+                        xInfoBox->run();
+                        return;
+                    }
+
+                    if ( pNewDPObject )
+                        pNewDPObject->SetOutRange( aDestPos );
+
+                    RunPivotLayoutDialog(pScMod, pTabViewShell, pNewDPObject);
                 }
             }
 
-            if (pSrcErrorId)
-            {
-                // Error occurred during data creation.  Launch an error and bail out.
-                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pTabViewShell->GetFrameWeld(),
-                                                            VclMessageType::Info, VclButtonsType::Ok,
-                                                            ScResId(pSrcErrorId)));
-                xInfoBox->run();
-                return;
-            }
-
-            if ( pNewDPObject )
-                pNewDPObject->SetOutRange( aDestPos );
-
             pTypeDlg->disposeOnce();
-
-            RunPivotLayoutDialog(pScMod, pTabViewShell, pNewDPObject);
         });
     }
 }

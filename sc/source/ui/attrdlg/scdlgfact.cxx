@@ -107,6 +107,11 @@ short AbstractScDataPilotDatabaseDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractScDataPilotDatabaseDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractScDataPilotSourceTypeDlg_Impl::Execute()
 {
     return m_xDlg->run();
@@ -120,6 +125,11 @@ bool AbstractScDataPilotSourceTypeDlg_Impl::StartExecuteAsync(AsyncContext &rCtx
 short AbstractScDataPilotServiceDlg_Impl::Execute()
 {
     return m_xDlg->run();
+}
+
+bool AbstractScDataPilotServiceDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractScDeleteCellDlg_Impl::Execute()
@@ -987,7 +997,7 @@ VclPtr<AbstractScCondFormatManagerDlg> ScAbstractDialogFactory_Impl::CreateScCon
 
 VclPtr<AbstractScDataPilotDatabaseDlg> ScAbstractDialogFactory_Impl::CreateScDataPilotDatabaseDlg(weld::Window* pParent)
 {
-    return VclPtr<AbstractScDataPilotDatabaseDlg_Impl>::Create(std::make_unique<ScDataPilotDatabaseDlg>(pParent));
+    return VclPtr<AbstractScDataPilotDatabaseDlg_Impl>::Create(std::make_shared<ScDataPilotDatabaseDlg>(pParent));
 }
 
 VclPtr<AbstractScDataPilotSourceTypeDlg> ScAbstractDialogFactory_Impl::CreateScDataPilotSourceTypeDlg(
@@ -999,7 +1009,7 @@ VclPtr<AbstractScDataPilotSourceTypeDlg> ScAbstractDialogFactory_Impl::CreateScD
 VclPtr<AbstractScDataPilotServiceDlg> ScAbstractDialogFactory_Impl::CreateScDataPilotServiceDlg(weld::Window* pParent,
                                                                         const std::vector<OUString>& rServices)
 {
-    return VclPtr<AbstractScDataPilotServiceDlg_Impl>::Create(std::make_unique<ScDataPilotServiceDlg>(pParent, rServices));
+    return VclPtr<AbstractScDataPilotServiceDlg_Impl>::Create(std::make_shared<ScDataPilotServiceDlg>(pParent, rServices));
 }
 
 VclPtr<AbstractScDeleteCellDlg> ScAbstractDialogFactory_Impl::CreateScDeleteCellDlg(weld::Window* pParent,
