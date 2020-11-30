@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cca38aa3_edca9d1b",
+        "filename": "external/python3/ExternalPackage_python3.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-11-30T11:32:08Z",
+      "side": 1,
+      "message": "please prefix the variable with module name \"python3_\"\n\nall makefiles are read by the same process so it\u0027s helpful to have some kind of namespacing to avoid conflicts",
+      "revId": "857791fe36a782b3692c7d22dc777a02827d6da7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
