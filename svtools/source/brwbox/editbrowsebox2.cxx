@@ -27,6 +27,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace svt
 {
@@ -110,7 +111,7 @@ void EditBrowseBoxImpl::clearActiveCell()
     }
     catch(const Exception&)
     {
-        OSL_FAIL( "EditBrowseBoxImpl::clearActiveCell: caught an exception while disposing the AccessibleCell!" );
+        TOOLS_WARN_EXCEPTION( "svtools", "EditBrowseBoxImpl::clearActiveCell: caught an exception while disposing the AccessibleCell!" );
     }
 
     m_xActiveCell = nullptr;

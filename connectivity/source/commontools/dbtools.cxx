@@ -345,7 +345,7 @@ Reference< XConnection> getConnection_withFeedback(const OUString& _rDataSourceN
     }
     catch(Exception&)
     {
-        OSL_FAIL("::dbtools::getConnection_withFeedback: unexpected (non-SQL) exception caught!");
+        TOOLS_WARN_EXCEPTION( "connectivity.commontools", "::dbtools::getConnection_withFeedback: unexpected (non-SQL) exception caught!");
     }
     return xReturn;
 }
@@ -463,7 +463,7 @@ static SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, 
             }
             catch(Exception&)
             {
-                OSL_FAIL("EXception when we set the new active connection!");
+                TOOLS_WARN_EXCEPTION( "connectivity.commontools", "EXception when we set the new active connection!");
             }
         }
     }
@@ -717,7 +717,7 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
     catch( const SQLException& e ) { if ( _pErrorInfo ) *_pErrorInfo = SQLExceptionInfo( e ); }
     catch( const Exception& )
     {
-        OSL_FAIL( "::dbtools::getFieldsByCommandDescriptor: caught an exception while retrieving the fields!" );
+        TOOLS_WARN_EXCEPTION( "connectivity.commontools", "::dbtools::getFieldsByCommandDescriptor: caught an exception while retrieving the fields!" );
     }
 
     return xFields;
@@ -1284,7 +1284,7 @@ Reference< XSingleSelectQueryComposer > getCurrentSettingsComposer(
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "::getCurrentSettingsComposer : caught an exception !" );
+        TOOLS_WARN_EXCEPTION( "connectivity.commontools", "::getCurrentSettingsComposer : caught an exception !" );
     }
 
     return xReturn;

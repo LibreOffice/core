@@ -677,7 +677,7 @@ void SectionPropertyMap::DontBalanceTextColumns()
     }
     catch ( const uno::Exception& )
     {
-        OSL_FAIL( "Exception in SectionPropertyMap::DontBalanceTextColumns" );
+        TOOLS_WARN_EXCEPTION( "writerfilter", "SectionPropertyMap::DontBalanceTextColumns" );
     }
 }
 
@@ -792,7 +792,7 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties( 
     }
     catch ( const uno::Exception& )
     {
-        OSL_FAIL( "Exception in SectionPropertyMap::ApplyColumnProperties" );
+        TOOLS_WARN_EXCEPTION( "writerfilter", "SectionPropertyMap::ApplyColumnProperties" );
     }
     return xColumns;
 }
@@ -1849,7 +1849,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
         catch ( const uno::Exception& )
         {
-            OSL_FAIL( "Exception in SectionPropertyMap::CloseSectionGroup" );
+            TOOLS_WARN_EXCEPTION( "writerfilter", "SectionPropertyMap::CloseSectionGroup" );
         }
     }
 
@@ -1999,7 +1999,7 @@ void SectionPropertyMap::ApplyProperties_( const uno::Reference< beans::XPropert
         }
         catch ( const uno::Exception& )
         {
-            OSL_FAIL( "Exception in SectionPropertyMap::ApplyProperties_" );
+            TOOLS_WARN_EXCEPTION( "writerfilter", "SectionPropertyMap::ApplyProperties_" );
         }
     }
     for ( size_t i = 0; i < vNames.size(); ++i )
@@ -2011,7 +2011,7 @@ void SectionPropertyMap::ApplyProperties_( const uno::Reference< beans::XPropert
         }
         catch ( const uno::Exception& )
         {
-            OSL_FAIL( "Exception in SectionPropertyMap::ApplyProperties_" );
+            TOOLS_WARN_EXCEPTION( "writerfilter", "SectionPropertyMap::ApplyProperties_" );
         }
     }
 }

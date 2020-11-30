@@ -40,6 +40,7 @@
 #include <editeng/editview.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/commandevent.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <app.hrc>
 #include <strings.hrc>
@@ -102,7 +103,7 @@ void DrawViewShell::DeleteActualPage()
     }
     catch( Exception& )
     {
-        OSL_FAIL("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
+        TOOLS_WARN_EXCEPTION( "sd", "SelectionManager::DeleteSelectedMasterPages()");
     }
 }
 

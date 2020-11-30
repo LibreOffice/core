@@ -77,7 +77,7 @@ namespace DOM
 
                 is.aInputStream = aContent.openStream();
             } catch (const css::uno::Exception&) {
-                OSL_FAIL("exception in default entity resolver");
+                TOOLS_WARN_EXCEPTION( "unoxml", "exception in default entity resolver");
                 is.aInputStream.clear();
             }
             return is;

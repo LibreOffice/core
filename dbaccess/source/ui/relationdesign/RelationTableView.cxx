@@ -28,6 +28,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <connectivity/dbtools.hxx>
+#include <tools/diagnose_ex.h>
 #include <helpids.h>
 #include <RelationDesignView.hxx>
 #include <JoinController.hxx>
@@ -208,7 +209,7 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
         }
         catch(const Exception&)
         {
-            OSL_FAIL("ORelationTableView::AddConnection: Exception occurred!");
+            TOOLS_WARN_EXCEPTION( "dbaccess", "ORelationTableView::AddConnection");
         }
     }
 }
@@ -269,7 +270,7 @@ bool ORelationTableView::RemoveConnection(VclPtr<OTableConnection>& rConn, bool 
     }
     catch(Exception&)
     {
-        OSL_FAIL("ORelationTableView::RemoveConnection: Something other than SQLException occurred!");
+        TOOLS_WARN_EXCEPTION( "dbaccess", "ORelationTableView::RemoveConnection: Something other than SQLException occurred!");
     }
     return false;
 }

@@ -36,6 +36,7 @@
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <numeric>
 
@@ -106,7 +107,7 @@ OXMLTable::OXMLTable( ORptFilter& rImport
     }
     catch(Exception&)
     {
-        OSL_FAIL("Exception caught while filling the section props");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "Exception caught while filling the section props");
     }
 }
 
@@ -251,7 +252,7 @@ void OXMLTable::endFastElement(sal_Int32 )
     }
     catch(Exception&)
     {
-        OSL_FAIL("OXMLTable::EndElement -> exception caught");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "OXMLTable::EndElement");
     }
 }
 

@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <ucbhelper/content.hxx>
 
 #include <unotools/pathoptions.hxx>
@@ -100,13 +101,13 @@ void ScGlobal::InitAddIns()
                 }
                 catch ( Exception& )
                 {
-                    OSL_FAIL( "ResultSetException caught!" );
+                    TOOLS_WARN_EXCEPTION( "sc", "" );
                 }
             }
         }
         catch ( Exception& )
         {
-            OSL_FAIL( "Exception caught!" );
+            TOOLS_WARN_EXCEPTION( "sc", "" );
         }
         catch ( ... )
         {
@@ -133,7 +134,7 @@ OUString ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
     }
     catch ( Exception& )
     {
-        OSL_FAIL( "GetOrdinalSuffix: exception caught during init" );
+        TOOLS_WARN_EXCEPTION( "sc", "GetOrdinalSuffix: exception caught during init" );
     }
     return OUString();
 }

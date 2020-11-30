@@ -23,6 +23,7 @@
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/any.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <process.h>
 #include <memory>
@@ -181,7 +182,7 @@ void SAL_CALL DragSource::startDrag(
         }
         catch(RuntimeException&)
         {
-            OSL_FAIL("Runtime exception during event dispatching");
+            TOOLS_WARN_EXCEPTION( "vcl", "Runtime exception during event dispatching");
         }
     }
 }

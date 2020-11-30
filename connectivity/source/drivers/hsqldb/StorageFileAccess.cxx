@@ -159,7 +159,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
     }
     catch(const Exception& e)
     {
-        OSL_FAIL("Exception caught! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_renameElement");
+        TOOLS_WARN_EXCEPTION( "connectivity.hsqldb", "Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_renameElement");
         StorageContainer::throwJavaException(e,env);
     }
 }

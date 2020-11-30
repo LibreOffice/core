@@ -26,6 +26,7 @@
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <memory>
 
@@ -95,7 +96,7 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const css::uno::Reference< 
     } catch (const Exception&)
     {
         // XXX
-        OSL_FAIL("Exception during UCB operatration.");
+        TOOLS_WARN_EXCEPTION( "forms.misc", "Exception during UCB operation.");
         return UNKNOWN_ERROR;
     }
 

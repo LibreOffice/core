@@ -35,6 +35,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <svl/style.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <tablefunction.hxx>
 #include <DrawViewShell.hxx>
@@ -80,7 +81,7 @@ static void apply_table_style( SdrTableObj* pObj, SdrModel const * pModel, const
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::apply_default_table_style(), exception caught!");
+        TOOLS_WARN_EXCEPTION( "sd", "sd::apply_default_table_style()");
     }
 }
 

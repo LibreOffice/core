@@ -29,6 +29,7 @@
 #include <model/SlsPageEnumerationProvider.hxx>
 #include <model/SlsPageDescriptor.hxx>
 #include <view/SlideSorterView.hxx>
+#include <tools/diagnose_ex.h>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <drawview.hxx>
@@ -174,7 +175,7 @@ void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& 
     }
     catch( Exception& )
     {
-        OSL_FAIL("SelectionManager::DeleteSelectedNormalPages(), exception caught!");
+        TOOLS_WARN_EXCEPTION( "sd", "SelectionManager::DeleteSelectedNormalPages()");
     }
 }
 
@@ -207,7 +208,7 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
     }
     catch( Exception& )
     {
-        OSL_FAIL("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
+        TOOLS_WARN_EXCEPTION( "sd", "SelectionManager::DeleteSelectedMasterPages()");
     }
 }
 

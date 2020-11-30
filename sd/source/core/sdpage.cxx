@@ -52,6 +52,7 @@
 #include <svx/sdtagitm.hxx>
 #include <svx/sdtcfitm.hxx>
 #include <svx/xfillit0.hxx>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -2713,7 +2714,7 @@ SdPage* SdPage::getImplementation( const css::uno::Reference< css::drawing::XDra
     }
     catch( css::uno::Exception& )
     {
-        OSL_FAIL("sd::SdPage::getImplementation(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::SdPage::getImplementation()" );
     }
 
     return nullptr;

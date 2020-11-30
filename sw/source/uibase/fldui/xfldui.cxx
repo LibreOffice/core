@@ -18,6 +18,7 @@
  */
 
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -108,7 +109,7 @@ bool SwFieldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTableQry
         }
         catch (const Exception&)
         {
-            OSL_FAIL("Exception in getColumns()");
+            TOOLS_WARN_EXCEPTION( "sw", "getColumns()");
         }
         if(xCols.is() && xCols->hasByName(rFieldName))
         {

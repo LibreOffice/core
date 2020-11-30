@@ -569,7 +569,7 @@ ErrCode XMLFilter::impl_Export(
             }
             catch (const uno::Exception&)
             {
-                OSL_FAIL("Exception caught!");
+                TOOLS_WARN_EXCEPTION( "chart2", "Exception caught!");
             }
         }
 

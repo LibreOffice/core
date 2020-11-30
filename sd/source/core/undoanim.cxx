@@ -27,6 +27,7 @@
 #include <sdresid.hxx>
 #include <CustomAnimationEffect.hxx>
 #include <drawdoc.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace com::sun::star::animations { class XAnimationNode; }
 
@@ -58,7 +59,7 @@ UndoAnimation::UndoAnimation( SdDrawDocument* pDoc, SdPage* pThePage )
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::UndoAnimation::UndoAnimation(), exception caught!");
+        TOOLS_WARN_EXCEPTION( "sd", "sd::UndoAnimation::UndoAnimation()");
     }
 }
 
@@ -85,7 +86,7 @@ void UndoAnimation::Undo()
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::UndoAnimation::Undo(), exception caught!");
+        TOOLS_WARN_EXCEPTION( "sd", "sd::UndoAnimation::Undo()");
     }
 }
 
@@ -100,7 +101,7 @@ void UndoAnimation::Redo()
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::UndoAnimation::Redo(), exception caught!");
+        TOOLS_WARN_EXCEPTION( "sd", "sd::UndoAnimation::Redo()");
     }
 }
 

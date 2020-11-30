@@ -29,6 +29,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace dbaxml
 {
@@ -81,7 +82,7 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
     }
     catch(Exception&)
     {
-        OSL_FAIL("OXMLHierarchyCollection::OXMLHierarchyCollection -> exception caught");
+        TOOLS_WARN_EXCEPTION( "dbaccess", "OXMLHierarchyCollection::OXMLHierarchyCollection");
     }
 }
 

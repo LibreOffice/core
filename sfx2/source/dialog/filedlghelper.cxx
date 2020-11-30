@@ -1176,7 +1176,7 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "FileDialogHelper_Impl::setControlHelpIds: caught an exception while setting the help ids!" );
+        TOOLS_WARN_EXCEPTION( "sfx.dialog", "FileDialogHelper_Impl::setControlHelpIds: caught an exception while setting the help ids!" );
     }
 }
 
@@ -1441,7 +1441,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
             }
             catch( const IllegalArgumentException& )
             {
-                OSL_FAIL( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
+                TOOLS_WARN_EXCEPTION( "sfx.dialog", "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
             }
         }
 
@@ -1462,7 +1462,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                 }
                 catch( const IllegalArgumentException& )
                 {
-                    OSL_FAIL( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
+                    TOOLS_WARN_EXCEPTION( "sfx.dialog", "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
                 }
             }
         }
@@ -2201,7 +2201,7 @@ void FileDialogHelper_Impl::setDefaultValues()
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FileDialogHelper_Impl::setDefaultValues: caught an exception while setting the display directory!" );
+            TOOLS_WARN_EXCEPTION( "sfx.dialog", "FileDialogHelper_Impl::setDefaultValues: caught an exception while setting the display directory!" );
         }
     }
 }

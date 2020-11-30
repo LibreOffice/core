@@ -214,7 +214,7 @@ bool FmSearchEngine::MoveCursor()
     }
     catch(...)
     {
-        OSL_FAIL("FmSearchEngine::MoveCursor : caught an unknown Exception !");
+        TOOLS_WARN_EXCEPTION( "svx", "FmSearchEngine::MoveCursor : caught an unknown Exception !");
         bSuccess = false;
     }
 

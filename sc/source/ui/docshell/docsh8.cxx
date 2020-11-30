@@ -214,7 +214,7 @@ bool ScDocShell::IsDocument( const INetURLObject& rURL )
     catch( uno::Exception& )
     {
         // ucb may throw different exceptions on failure now - warning only
-        OSL_FAIL( "Any other exception" );
+        TOOLS_WARN_EXCEPTION( "sc", "Any other exception" );
     }
 
     return bRet;
@@ -428,7 +428,7 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
     }
     catch ( uno::Exception& )
     {
-        OSL_FAIL("Unexpected exception in database");
+        TOOLS_WARN_EXCEPTION( "sc", "Unexpected exception in database");
         nErr = ERRCODE_IO_GENERAL;
     }
 
@@ -1072,7 +1072,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
     }
     catch ( uno::Exception& )
     {
-        OSL_FAIL("Unexpected exception in database");
+        TOOLS_WARN_EXCEPTION( "sc", "Unexpected exception in database");
         nErr = ERRCODE_IO_GENERAL;
     }
 

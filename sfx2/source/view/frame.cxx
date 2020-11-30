@@ -32,6 +32,7 @@
 #include <svl/stritem.hxx>
 #include <tools/svborder.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include <appdata.hxx>
 #include <sfx2/app.hxx>
@@ -639,7 +640,7 @@ void SfxFrame::CreateWorkWindow_Impl()
         }
         catch(Exception&)
         {
-            OSL_FAIL("SfxFrame::CreateWorkWindow_Impl: Exception caught. Please try to submit a reproducible bug!");
+            TOOLS_WARN_EXCEPTION( "sfx.view", "SfxFrame::CreateWorkWindow_Impl: Exception caught. Please try to submit a reproducible bug!");
         }
     }
 

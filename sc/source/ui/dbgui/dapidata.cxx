@@ -21,6 +21,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -62,7 +63,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg(weld::Window* pParent)
     }
     catch(uno::Exception&)
     {
-        OSL_FAIL("exception in database");
+        TOOLS_WARN_EXCEPTION( "sc", "exception in database");
     }
 
     m_xLbDatabase->set_active(0);
@@ -163,7 +164,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
     catch(uno::Exception&)
     {
         //  this may happen if an invalid database is selected -> no DBG_ERROR
-        OSL_FAIL("exception in database");
+        TOOLS_WARN_EXCEPTION( "sc", "exception in database");
     }
 }
 

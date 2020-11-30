@@ -34,6 +34,7 @@
 #include <com/sun/star/util/VetoException.hpp>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/docfile.hxx>
@@ -425,7 +426,7 @@ namespace frm
         catch( const Exception& )
         {
             css::uno::Any anyEx = cppu::getCaughtException();
-            OSL_FAIL( "OClickableImageBaseControl::implSubmit: caught an unknown exception!" );
+            TOOLS_WARN_EXCEPTION( "forms.component", "OClickableImageBaseControl::implSubmit: caught an unknown exception!" );
             throw WrappedTargetException( OUString(), *this, anyEx );
         }
     }

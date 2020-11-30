@@ -373,7 +373,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<css::io::XObjectInputStream>&
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "OComboBoxModel::read: caught an exception while examining the aggregate's string item list!" );
+        TOOLS_WARN_EXCEPTION( "forms.component", "OComboBoxModel::read: caught an exception while examining the aggregate's string item list!" );
     }
 
     // Version

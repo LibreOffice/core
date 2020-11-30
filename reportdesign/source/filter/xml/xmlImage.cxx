@@ -25,6 +25,7 @@
 #include <unotools/pathoptions.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 
@@ -90,7 +91,7 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
     }
     catch(Exception&)
     {
-        OSL_FAIL("Exception caught while filling the image props");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "Exception caught while filling the image props");
     }
 }
 

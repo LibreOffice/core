@@ -44,6 +44,7 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #define XML_RPT_ALIGNMENT   (XML_DB_TYPES_START+1)
 namespace rptxml
@@ -309,7 +310,7 @@ void OXMLHelper::copyStyleElements(const bool _bOld,const OUString& _sStyleName,
        }
     catch(uno::Exception&)
     {
-        OSL_FAIL("OXMLHelper::copyStyleElements -> exception caught");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "OXMLHelper::copyStyleElements");
     }
 }
 

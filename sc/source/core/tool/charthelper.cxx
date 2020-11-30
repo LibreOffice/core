@@ -28,6 +28,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <svtools/embedhlp.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
@@ -271,7 +272,7 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
     }
     catch (const uno::Exception&)
     {
-        OSL_FAIL("Exception in ScChartHelper::SetChartRanges - invalid range string?");
+        TOOLS_WARN_EXCEPTION( "sc", "Exception in ScChartHelper::SetChartRanges - invalid range string?");
     }
 
     xChartDoc->unlockControllers();

@@ -772,7 +772,7 @@ void ScDPObject::CreateObjects()
             }
             catch(uno::Exception&)
             {
-                OSL_FAIL("exception in refresh");
+                TOOLS_WARN_EXCEPTION( "sc", "exception in refresh");
             }
         }
 
@@ -3266,7 +3266,7 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
     }
     catch ( uno::Exception& )
     {
-        OSL_FAIL("Unexpected exception in database");
+        TOOLS_WARN_EXCEPTION( "sc", "Unexpected exception in database");
     }
 
     xRowSet.set(nullptr);

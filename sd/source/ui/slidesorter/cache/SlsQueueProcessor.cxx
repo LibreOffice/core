@@ -23,6 +23,7 @@
 
 #include <sdpage.hxx>
 #include <comphelper/profilezone.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace sd::slidesorter::cache {
 
@@ -161,13 +162,9 @@ void QueueProcessor::ProcessOneRequest (
             }
         }
     }
-    catch (css::uno::RuntimeException &)
-    {
-        OSL_FAIL("RuntimeException caught in QueueProcessor");
-    }
     catch (css::uno::Exception &)
     {
-        OSL_FAIL("Exception caught in QueueProcessor");
+        TOOLS_WARN_EXCEPTION( "sd", "QueueProcessor");
     }
 }
 

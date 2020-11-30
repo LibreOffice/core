@@ -987,7 +987,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
                     }
                     catch( const uno::Exception& )
                     {
-                        OSL_FAIL( "GeometryHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
+                        TOOLS_WARN_EXCEPTION( "reportdesign", "GeometryHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
                     }
                 }
             }
@@ -1160,7 +1160,7 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
                 }
                 catch( const uno::Exception& )
                 {
-                    OSL_FAIL( "GeometryHandler::convertToControlValue: caught an exception while converting via TypeConverter!" );
+                    TOOLS_WARN_EXCEPTION( "reportdesign", "GeometryHandler::convertToControlValue: caught an exception while converting via TypeConverter!" );
                 }
             }
             break;
@@ -1687,7 +1687,7 @@ void GeometryHandler::impl_fillMimeTypes_nothrow(::std::vector< OUString >& _out
     }
     catch(uno::Exception&)
     {
-        OSL_FAIL("Exception caught!");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "");
     }
 }
 
@@ -1718,7 +1718,7 @@ void GeometryHandler::impl_fillScopeList_nothrow(::std::vector< OUString >& _out
     }
     catch(uno::Exception&)
     {
-        OSL_FAIL("Exception caught!");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "");
     }
 }
 
@@ -1832,7 +1832,7 @@ bool GeometryHandler::isDefaultFunction( const OUString& _sQuotedFunction
     }
     catch(uno::Exception&)
     {
-        OSL_FAIL("Exception caught!");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "");
     }
     return bDefaultFunction;
 }
@@ -1871,7 +1871,7 @@ bool GeometryHandler::impl_isDefaultFunction_nothrow( const uno::Reference< repo
     }
     catch(uno::Exception&)
     {
-        OSL_FAIL("Exception caught!");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "");
     }
     return bDefaultFunction;
 }
@@ -1956,7 +1956,7 @@ void GeometryHandler::createDefaultFunction(::osl::ResettableMutexGuard& _aGuard
     }
     catch(uno::Exception&)
     {
-        OSL_FAIL("Exception caught!");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "");
     }
 }
 

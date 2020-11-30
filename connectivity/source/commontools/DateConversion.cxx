@@ -433,7 +433,7 @@ OUString DBTypeConversion::getFormattedValue(const Reference< XPropertySet>& _xC
     }
     catch (const Exception& )
     {
-        OSL_FAIL("DBTypeConversion::getValue: caught an exception while asking for the format key!");
+        TOOLS_WARN_EXCEPTION( "connectivity.commontools", "DBTypeConversion::getValue: caught an exception while asking for the format key!");
     }
 
     if (!nKey)

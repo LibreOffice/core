@@ -20,6 +20,7 @@
 #include "sdbcdriverenum.hxx"
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 
@@ -66,7 +67,7 @@ namespace offapp
         }
         catch(const Exception&)
         {
-            OSL_FAIL("ODriverEnumerationImpl::ODriverEnumerationImpl: caught an exception while enumerating the drivers!");
+            TOOLS_WARN_EXCEPTION( "cui.options", "ODriverEnumerationImpl::ODriverEnumerationImpl: caught an exception while enumerating the drivers!");
         }
     }
 

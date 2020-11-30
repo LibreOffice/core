@@ -28,6 +28,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/random.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 #include <memory>
@@ -1267,7 +1268,7 @@ void Metadatable::RemoveMetadataReference()
     }
     catch (const uno::Exception &)
     {
-        OSL_FAIL("Metadatable::RemoveMetadataReference: exception");
+        TOOLS_WARN_EXCEPTION( "sfx.doc", "Metadatable::RemoveMetadataReference");
     }
 }
 
@@ -1424,7 +1425,7 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
     }
     catch (const uno::Exception &)
     {
-        OSL_FAIL("Metadatable::RegisterAsCopyOf: exception");
+        TOOLS_WARN_EXCEPTION( "sfx.doc", "Metadatable::RegisterAsCopyOf");
     }
 }
 
@@ -1448,7 +1449,7 @@ std::shared_ptr<MetadatableUndo> Metadatable::CreateUndo() const
     }
     catch (const uno::Exception &)
     {
-        OSL_FAIL("Metadatable::CreateUndo: exception");
+        TOOLS_WARN_EXCEPTION( "sfx.doc", "Metadatable::CreateUndo");
     }
     return std::shared_ptr<MetadatableUndo>();
 }
@@ -1518,7 +1519,7 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
     }
     catch (const uno::Exception &)
     {
-        OSL_FAIL("Metadatable::JoinMetadatable: exception");
+        TOOLS_WARN_EXCEPTION( "sfx.doc", "Metadatable::JoinMetadatable");
     }
 }
 

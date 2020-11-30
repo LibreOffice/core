@@ -374,7 +374,7 @@ void OObjectBase::EndListening()
             }
             catch(const uno::Exception &)
             {
-                OSL_FAIL("OObjectBase::EndListening: Exception caught!");
+                TOOLS_WARN_EXCEPTION( "package", "OObjectBase::EndListening");
             }
         }
         m_xPropertyChangeListener.clear();

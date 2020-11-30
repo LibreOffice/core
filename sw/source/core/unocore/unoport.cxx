@@ -23,6 +23,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itemprop.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <unocrsrhelper.hxx>
 #include <unoparaframeenum.hxx>
@@ -523,7 +524,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPr
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
-            OSL_FAIL( "unexpected exception caught" );
+            TOOLS_WARN_EXCEPTION( "sw", "" );
             pFailed[ nFailed++ ].Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
         catch (lang::IllegalArgumentException &)
@@ -633,7 +634,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SwXTextPortion::GetPrope
             catch (const beans::UnknownPropertyException &)
             {
                 // should not occur because property was searched for before
-                OSL_FAIL( "unexpected exception caught" );
+                TOOLS_WARN_EXCEPTION( "sw", "unexpected exception caught" );
                 aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
             }
             catch (const lang::IllegalArgumentException &)

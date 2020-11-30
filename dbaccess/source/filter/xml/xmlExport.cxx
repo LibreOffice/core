@@ -1216,7 +1216,7 @@ void ODBExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     }
     catch(const Exception&)
     {
-        OSL_FAIL("ODBExport::GetViewSettings: Exception caught!");
+        TOOLS_WARN_EXCEPTION( "dbaccess", "ODBExport::GetViewSettings");
     }
 
 }

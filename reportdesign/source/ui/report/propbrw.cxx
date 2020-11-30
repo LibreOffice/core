@@ -235,7 +235,7 @@ OUString PropBrw::getCurrentPage() const
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "PropBrw::getCurrentPage: caught an exception while retrieving the current page!" );
+        TOOLS_WARN_EXCEPTION( "reportdesign", "PropBrw::getCurrentPage: caught an exception while retrieving the current page!" );
     }
     return sCurrentPage;
 }
@@ -255,7 +255,7 @@ bool PropBrw::Close()
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FmPropBrw::Close: caught an exception while asking the controller!" );
+            TOOLS_WARN_EXCEPTION( "reportdesign", "FmPropBrw::Close: caught an exception while asking the controller!" );
         }
     }
     implDetachController();
@@ -310,7 +310,7 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
+            TOOLS_WARN_EXCEPTION( "reportdesign", "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
         }
     }
     SetText( GetHeadlineName(_aObjects) );
@@ -446,7 +446,7 @@ void PropBrw::Update( OSectionView* pNewView )
                 }
                 catch( const Exception& )
                 {
-                    OSL_FAIL( "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
+                    TOOLS_WARN_EXCEPTION( "reportdesign", "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
                 }
             }
         }
@@ -489,7 +489,7 @@ void PropBrw::Update( OSectionView* pNewView )
     }
     catch ( Exception& )
     {
-        OSL_FAIL( "PropBrw::Update: Exception occurred!" );
+        TOOLS_WARN_EXCEPTION( "reportdesign", "PropBrw::Update" );
     }
 }
 
@@ -512,7 +512,7 @@ void PropBrw::Update( const uno::Reference< uno::XInterface>& _xReportComponent)
     }
     catch ( Exception& )
     {
-        OSL_FAIL( "PropBrw::Update: Exception occurred!" );
+        TOOLS_WARN_EXCEPTION( "reportdesign", "PropBrw::Update: Exception occurred!" );
     }
 }
 

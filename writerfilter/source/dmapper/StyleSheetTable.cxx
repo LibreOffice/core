@@ -1566,7 +1566,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
                 }
                 catch( const uno::Exception& )
                 {
-                    OSL_FAIL( "setPropertyValue exception");
+                    TOOLS_WARN_EXCEPTION( "writerfilter", "setPropertyValue");
                 }
             }
         }
@@ -1587,7 +1587,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
                 }
                 catch( const uno::Exception& )
                 {
-                    OSL_FAIL( "setPropertyValue exception");
+                    TOOLS_WARN_EXCEPTION( "writerfilter", "exception");
                 }
             }
         }
@@ -1639,7 +1639,7 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
             }
             catch( const uno::Exception& )
             {
-                OSL_FAIL( "Exception in StyleSheetTable::getOrCreateCharStyle - Style::setPropertyValue");
+                TOOLS_WARN_EXCEPTION( "writerfilter", "StyleSheetTable::getOrCreateCharStyle - Style::setPropertyValue");
             }
         }
         xCharStyles->insertByName( sListLabel, uno::makeAny( xStyle) );
@@ -1647,7 +1647,7 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
     }
     catch( const uno::Exception& )
     {
-        OSL_FAIL( "Exception in StyleSheetTable::getOrCreateCharStyle");
+        TOOLS_WARN_EXCEPTION( "writerfilter", "StyleSheetTable::getOrCreateCharStyle");
     }
 
     return sListLabel;

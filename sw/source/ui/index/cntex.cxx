@@ -27,6 +27,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <comphelper/string.hxx>
 #include <tools/UnitConversion.hxx>
+#include <tools/diagnose_ex.h>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <cnttab.hxx>
@@ -118,7 +119,7 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl, SwOneExampleFrame&, void
     }
     catch (const Exception&)
     {
-        OSL_FAIL("::CreateExample() - exception caught");
+        TOOLS_WARN_EXCEPTION( "sw", "::CreateExample()");
     }
 }
 
@@ -385,7 +386,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
     }
     catch (const Exception&)
     {
-        OSL_FAIL("::CreateExample() - exception caught");
+        TOOLS_WARN_EXCEPTION( "sw", "::CreateExample()");
     }
     m_xExampleFrame->Invalidate();
 }

@@ -1022,7 +1022,7 @@ bool SlideImpl::loadShapes()
             catch( ShapeLoadFailedException& )
             {
                 // TODO(E2): Error handling. For now, bail out
-                OSL_FAIL( "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
+                TOOLS_WARN_EXCEPTION( "slideshow", "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
                 return false;
 
             }
@@ -1062,7 +1062,7 @@ bool SlideImpl::loadShapes()
     catch( ShapeLoadFailedException& )
     {
         // TODO(E2): Error handling. For now, bail out
-        OSL_FAIL( "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
+        TOOLS_WARN_EXCEPTION( "slideshow", "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
         return false;
     }
     catch( uno::Exception& )

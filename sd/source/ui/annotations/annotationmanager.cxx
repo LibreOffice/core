@@ -41,6 +41,7 @@
 
 #include <tools/datetime.hxx>
 #include <tools/UnitConversion.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -185,7 +186,7 @@ void AnnotationManagerImpl::init()
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::AnnotationManagerImpl::AnnotationManagerImpl(), Exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::AnnotationManagerImpl::AnnotationManagerImpl()" );
     }
 
     try
@@ -911,7 +912,7 @@ void AnnotationManagerImpl::onSelectionChanged()
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::AnnotationManagerImpl::onSelectionChanged(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::AnnotationManagerImpl::onSelectionChanged()" );
     }
 }
 
@@ -985,7 +986,7 @@ void AnnotationManagerImpl::CreateTags()
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::AnnotationManagerImpl::onSelectionChanged(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::AnnotationManagerImpl::onSelectionChanged()" );
     }
 }
 

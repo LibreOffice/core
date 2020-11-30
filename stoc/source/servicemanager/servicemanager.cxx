@@ -288,11 +288,11 @@ void OServiceManager_Listener::disposing(const EventObject & rEvt )
     }
     catch( const IllegalArgumentException & )
     {
-        OSL_FAIL( "IllegalArgumentException caught" );
+        TOOLS_WARN_EXCEPTION( "stoc", "" );
     }
     catch( const NoSuchElementException & )
     {
-        OSL_FAIL( "NoSuchElementException caught" );
+        TOOLS_WARN_EXCEPTION( "stoc", "" );
     }
 }
 

@@ -26,6 +26,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <tools/color.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <oox/helper/propertymap.hxx>
 #include <oox/token/namespaces.hxx>
@@ -90,7 +91,7 @@ namespace oox::ppt {
         catch( Exception& )
         {
             // should not happen
-            OSL_FAIL( "exception raised" );
+            TOOLS_WARN_EXCEPTION( "oox", "" );
         }
     }
 
@@ -107,7 +108,7 @@ namespace oox::ppt {
         catch( Exception& )
         {
             // should not happen
-            OSL_FAIL( "exception raised" );
+            TOOLS_WARN_EXCEPTION( "oox", "" );
         }
     }
 

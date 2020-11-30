@@ -22,6 +22,7 @@
 #include <hsqldb/HStorageMap.hxx>
 #include "accesslog.hxx"
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include <string.h>
 
@@ -76,7 +77,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nativ
         }
         catch(const Exception&)
         {
-            OSL_FAIL( "NativeStorageAccess::close: caught an exception while flushing!" );
+            TOOLS_WARN_EXCEPTION( "connectivity.hsqldb", "NativeStorageAccess::close: caught an exception while flushing!" );
         }
 #ifdef HSQLDB_DBG
     {
@@ -426,7 +427,7 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jstring name, jstring key
     }
     catch(const Exception& e)
     {
-        OSL_FAIL("Exception caught! : write [BII)V");
+        TOOLS_WARN_EXCEPTION( "connectivity.hsqldb", "Exception caught! : write [BII)V");
         StorageContainer::throwJavaException(e,env);
     }
 }
@@ -479,7 +480,7 @@ void write_to_storage_stream( JNIEnv* env, jstring name, jstring key, jint v )
     }
     catch(const Exception& e)
     {
-        OSL_FAIL("Exception caught! : writeBytes(aData);");
+        TOOLS_WARN_EXCEPTION( "connectivity.hsqldb", "writeBytes(aData);");
         StorageContainer::throwJavaException(e,env);
     }
 }

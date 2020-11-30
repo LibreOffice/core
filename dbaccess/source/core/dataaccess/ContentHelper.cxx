@@ -34,6 +34,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <tools/diagnose_ex.h>
 #include <apitools.hxx>
 #include <sdbcoretools.hxx>
 #include <stringconstants.hxx>
@@ -374,7 +375,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
                     }
                     catch( const Exception& )
                     {
-                        OSL_FAIL( "OContentHelper::setPropertyValues('Title'): caught an exception while renaming!" );
+                        TOOLS_WARN_EXCEPTION( "dbaccess", "OContentHelper::setPropertyValues('Title'): caught an exception while renaming!" );
                     }
                 }
                 else

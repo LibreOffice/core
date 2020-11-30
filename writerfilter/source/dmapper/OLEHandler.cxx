@@ -306,7 +306,7 @@ OUString OLEHandler::copyOLEOStream(
     }
     catch( const uno::Exception& )
     {
-        OSL_FAIL("exception in OLEHandler::createOLEObject");
+        TOOLS_WARN_EXCEPTION( "writerfilter", "OLEHandler::createOLEObject");
     }
     return sRet;
 }

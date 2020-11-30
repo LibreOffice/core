@@ -22,6 +22,7 @@
 
 #include <com/sun/star/io/XSeekable.hpp>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 namespace oox {
 
@@ -72,7 +73,7 @@ sal_Int64 BinaryXSeekableStream::size() const
     }
     catch( Exception& )
     {
-        OSL_FAIL( "BinaryXSeekableStream::size - exception caught" );
+        TOOLS_WARN_EXCEPTION( "oox", "BinaryXSeekableStream::size" );
     }
     return -1;
 }
@@ -85,7 +86,7 @@ sal_Int64 BinaryXSeekableStream::tell() const
     }
     catch( Exception& )
     {
-        OSL_FAIL( "BinaryXSeekableStream::tell - exception caught" );
+        TOOLS_WARN_EXCEPTION( "oox", "BinaryXSeekableStream::tell" );
     }
     return -1;
 }

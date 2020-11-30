@@ -94,7 +94,7 @@ OXMLReport::OXMLReport( ORptFilter& rImport,
     }
     catch(Exception&)
     {
-        OSL_FAIL("Exception caught while filling the report definition props");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "Exception caught while filling the report definition props");
     }
 }
 

@@ -24,6 +24,7 @@
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
 
 #include <unotools/lingucfg.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/processfactory.hxx>
@@ -62,7 +63,7 @@ SwLinguServiceEventListener::SwLinguServiceEventListener()
     }
     catch (const uno::Exception&)
     {
-        OSL_FAIL("exception caught in SwLinguServiceEventListener c-tor" );
+        TOOLS_WARN_EXCEPTION( "sw", "SwLinguServiceEventListener c-tor" );
     }
 }
 

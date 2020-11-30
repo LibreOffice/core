@@ -27,6 +27,7 @@
 #include <hsqldb/HStorageMap.hxx>
 
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include "accesslog.hxx"
 
 #include <limits>
@@ -173,7 +174,7 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stor
             }
             catch(const Exception& e)
             {
-                OSL_FAIL("Exception caught! : skip();");
+                TOOLS_WARN_EXCEPTION( "connectivity.hsqldb", "skip();");
                 StorageContainer::throwJavaException(e,env);
             }
         }
@@ -216,7 +217,7 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
         }
         catch(const Exception& e)
         {
-            OSL_FAIL("Exception caught! : available();");
+            TOOLS_WARN_EXCEPTION( "connectivity.hsqldb", "available();");
             StorageContainer::throwJavaException(e,env);
         }
     }
@@ -260,7 +261,7 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
         }
         catch(const Exception& e)
         {
-            OSL_FAIL("Exception caught! : skip();");
+            TOOLS_WARN_EXCEPTION( "connectivity.hsqldb", "skip();");
             StorageContainer::throwJavaException(e,env);
         }
 

@@ -22,6 +22,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace rptxml
 {
@@ -76,7 +77,7 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
         }
         catch(const Exception&)
         {
-            OSL_FAIL("Exception caught while putting Function props!");
+            TOOLS_WARN_EXCEPTION( "reportdesign", "Exception caught while putting Function props!");
         }
     }
 }
@@ -106,7 +107,7 @@ void OXMLFunction::endFastElement(sal_Int32 )
             m_xFunction.clear();
         }catch(uno::Exception&)
         {
-            OSL_FAIL("Exception caught!");
+            TOOLS_WARN_EXCEPTION( "reportdesign", "");
         }
     }
 }

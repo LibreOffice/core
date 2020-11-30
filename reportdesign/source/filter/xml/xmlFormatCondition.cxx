@@ -23,6 +23,7 @@
 #include "xmlHelper.hxx"
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace rptxml
 {
@@ -67,7 +68,7 @@ OXMLFormatCondition::OXMLFormatCondition( ORptFilter& rImport,
     }
     catch(Exception&)
     {
-        OSL_FAIL("Exception caught while filling the report definition props");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "Exception caught while filling the report definition props");
     }
 }
 

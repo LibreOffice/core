@@ -1069,7 +1069,7 @@ void SAL_CALL OReportDefinition::close(sal_Bool bDeliverOwnership)
             catch (const util::CloseVetoException&) { throw; }
             catch (const uno::Exception&)
             {
-                OSL_FAIL( "ODatabaseDocument::impl_closeControllerFrames: caught an unexpected exception!" );
+                TOOLS_WARN_EXCEPTION( "reportdesign", "ODatabaseDocument::impl_closeControllerFrames" );
             }
         }
     }
@@ -1374,7 +1374,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         }
         catch (const uno::Exception&)
         {
-            OSL_FAIL("Exception Caught: Could not commit report storage!");
+            TOOLS_WARN_EXCEPTION( "reportdesign", "Could not commit report storage!");
             throw io::IOException();
         }
 

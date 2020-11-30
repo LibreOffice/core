@@ -33,6 +33,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
 #include <unotools/pathoptions.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <memory>
 
@@ -72,7 +73,7 @@ ButtonsImpl::ButtonsImpl( const OUString& rURL )
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::ButtonsImpl::ButtonsImpl(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::ButtonsImpl::ButtonsImpl()" );
     }
 }
 
@@ -87,7 +88,7 @@ Reference< XInputStream > ButtonsImpl::getInputStream( const OUString& rName )
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::ButtonsImpl::getInputStream(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::ButtonsImpl::getInputStream()" );
     }
     return xInputStream;
 }
@@ -110,7 +111,7 @@ bool ButtonsImpl::getGraphic( const Reference< XGraphicProvider >& xGraphicProvi
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::ButtonsImpl::getGraphic(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::ButtonsImpl::getGraphic()" );
     }
     return false;
 }
@@ -131,7 +132,7 @@ bool ButtonsImpl::copyGraphic( const OUString& rName, const OUString& rPath )
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::ButtonsImpl::copyGraphic(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::ButtonsImpl::copyGraphic()" );
     }
 
     return false;

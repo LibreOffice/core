@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/types.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #define CUIFM_PROP_HIDDEN "Hidden"
 #define CUIFM_PROP_LABEL "Label"
@@ -60,7 +61,8 @@ IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk, weld::Button&, void)
                 }
                 catch (...)
                 {
-                    OSL_FAIL("FmShowColsDialog::OnClickedOk Exception occurred!");
+                    TOOLS_WARN_EXCEPTION("cui.dialogs",
+                                         "FmShowColsDialog::OnClickedOk Exception occurred!");
                 }
             }
         }
@@ -96,7 +98,7 @@ void FmShowColsDialog::SetColumns(const css::uno::Reference<css::container::XInd
         }
         catch (...)
         {
-            OSL_FAIL("FmShowColsDialog::SetColumns Exception occurred!");
+            TOOLS_WARN_EXCEPTION("cui.dialogs", "FmShowColsDialog::SetColumns Exception occurred!");
         }
 
         // if the col is hidden, put it into the list

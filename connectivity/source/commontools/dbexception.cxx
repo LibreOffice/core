@@ -27,6 +27,7 @@
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
 #include <strings.hrc>
 #include <resource/sharedresources.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace dbtools
 {
@@ -197,7 +198,7 @@ void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, cons
     case TYPE::SQLWarning:   aAppend <<= SQLWarning();   break;
     case TYPE::SQLContext:   aAppend <<= SQLContext();   break;
     default:
-        OSL_FAIL( "SQLExceptionInfo::append: invalid exception type: this will crash!" );
+        TOOLS_WARN_EXCEPTION( "connectivity.commontools", "SQLExceptionInfo::append: invalid exception type: this will crash!" );
         break;
     }
 

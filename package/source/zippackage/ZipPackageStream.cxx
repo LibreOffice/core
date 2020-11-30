@@ -909,12 +909,12 @@ uno::Reference< io::XInputStream > ZipPackageStream::getRawData()
     }
     catch ( ZipException & )//rException )
     {
-        OSL_FAIL( "ZipException thrown" );//rException.Message);
+        TOOLS_WARN_EXCEPTION( "package", "" );
         return uno::Reference < io::XInputStream > ();
     }
     catch ( Exception & )
     {
-        OSL_FAIL( "Exception is thrown during stream wrapping!" );
+        TOOLS_WARN_EXCEPTION( "package", "Exception is thrown during stream wrapping!" );
         return uno::Reference < io::XInputStream > ();
     }
 }
@@ -936,7 +936,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream()
     }
     catch ( ZipException & )//rException )
     {
-        OSL_FAIL( "ZipException thrown" );//rException.Message);
+        TOOLS_WARN_EXCEPTION( "package", "" );
         return uno::Reference < io::XInputStream > ();
     }
     catch ( const Exception & )

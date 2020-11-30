@@ -30,6 +30,7 @@
 #include <com/sun/star/report/KeepTogether.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace rptxml
 {
@@ -164,7 +165,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
         }
         catch(const Exception&)
         {
-            OSL_FAIL("Exception caught while putting group props!");
+            TOOLS_WARN_EXCEPTION( "reportdesign", "Exception caught while putting group props!");
         }
     }
 }
@@ -236,7 +237,7 @@ void OXMLGroup::endFastElement(sal_Int32 )
         m_xGroups->insertByIndex(0,uno::makeAny(m_xGroup));
     }catch(uno::Exception&)
     {
-        OSL_FAIL("Exception caught!");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "");
     }
 }
 

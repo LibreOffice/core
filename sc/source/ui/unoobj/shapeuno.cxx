@@ -31,6 +31,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
@@ -1077,7 +1078,7 @@ static void lcl_CopyOneProperty( beans::XPropertySet& rDest, beans::XPropertySet
     }
     catch (uno::Exception&)
     {
-        OSL_FAIL("Exception in text field");
+        TOOLS_WARN_EXCEPTION( "sc", "Exception in text field");
     }
 }
 

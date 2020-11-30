@@ -30,6 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
 #include <com/sun/star/ui/dialogs/AddressBookSourcePilot.hpp>
@@ -701,7 +702,7 @@ void AssignmentPersistentData::ImplCommit()
         }
         catch(Exception&)
         {
-            OSL_FAIL("AddressBookSourceDialog::initializeDatasources: caught an exception while asking for the data source names!");
+            TOOLS_WARN_EXCEPTION( "svtools", "AddressBookSourceDialog::initializeDatasources: caught an exception while asking for the data source names!");
         }
     }
 

@@ -22,6 +22,7 @@
 #include <sfx2/dialoghelper.hxx>
 #include <svl/sharecontrolfile.hxx>
 #include <unotools/useroptions.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <docsh.hxx>
 
@@ -159,7 +160,7 @@ void ScShareDocumentDlg::UpdateView()
         }
         catch ( uno::Exception& )
         {
-            OSL_FAIL( "ScShareDocumentDlg::UpdateView(): caught exception" );
+            TOOLS_WARN_EXCEPTION( "sc", "ScShareDocumentDlg::UpdateView()" );
             m_xLbUsers->clear();
             m_xLbUsers->append_text(m_aStrNoUserData);
         }

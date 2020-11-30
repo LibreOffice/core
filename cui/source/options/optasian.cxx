@@ -22,6 +22,7 @@
 #include <optasian.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <o3tl/any.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svl/asiancfg.hxx>
@@ -183,7 +184,7 @@ bool SvxAsianLayoutPage::FillItemSet( SfxItemSet* )
         }
         catch (const Exception&)
         {
-            OSL_FAIL("exception in XForbiddenCharacters");
+            TOOLS_WARN_EXCEPTION( "cui.options", "in XForbiddenCharacters");
         }
     }
     eLastUsedLanguageTypeForForbiddenCharacters = m_xLanguageLB->get_active_id();
@@ -310,7 +311,7 @@ IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl, weld::ComboBox&, void)
             }
             catch (const Exception&)
             {
-                OSL_FAIL("exception in XForbiddenCharacters");
+                TOOLS_WARN_EXCEPTION( "cui.options", "in XForbiddenCharacters");
             }
         }
     }
@@ -368,7 +369,7 @@ IMPL_LINK(SvxAsianLayoutPage, ModifyHdl, weld::Entry&, rEdit, void)
         }
         catch (const Exception&)
         {
-            OSL_FAIL("exception in XForbiddenCharacters");
+            TOOLS_WARN_EXCEPTION( "cui.options", "in XForbiddenCharacters");
         }
     }
     pImpl->aConfig.SetStartEndChars( aLocale, bEnable ? &sStart : nullptr, bEnable ? &sEnd : nullptr);

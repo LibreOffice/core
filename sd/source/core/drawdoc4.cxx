@@ -29,6 +29,7 @@
 
 #include <DrawDocShell.hxx>
 #include <editeng/eeitem.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <vcl/idle.hxx>
 #include <vcl/settings.hxx>
@@ -621,7 +622,7 @@ static void implCreateTableTemplate( const Reference< XNameContainer >& xTableFa
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::implCreateTableTemplate(), exception caught!");
+        TOOLS_WARN_EXCEPTION( "sd", "sd::implCreateTableTemplate()");
     }
 }
 

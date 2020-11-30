@@ -25,6 +25,7 @@
 #include <strings.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace dbaxml
 {
@@ -111,7 +112,7 @@ void OXMLQuery::setProperties(Reference< XPropertySet > & _xProp )
     }
     catch(Exception&)
     {
-        OSL_FAIL("OXMLTable::EndElement -> exception caught");
+        TOOLS_WARN_EXCEPTION( "dbaccess", "OXMLTable::EndElement");
     }
 }
 

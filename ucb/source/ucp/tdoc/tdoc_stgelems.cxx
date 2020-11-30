@@ -136,7 +136,7 @@ Storage::~Storage()
     }
     catch ( ... )
     {
-        OSL_FAIL( "Storage::~Storage - Caught exception!" );
+        TOOLS_WARN_EXCEPTION( "ucb", "Storage::~Storage - Caught exception!" );
     }
 }
 

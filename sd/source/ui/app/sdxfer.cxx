@@ -40,6 +40,7 @@
 #include <svx/ImageMapInfo.hxx>
 #include <sot/formats.hxx>
 #include <svl/urlbmk.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -588,7 +589,7 @@ bool SdTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* 
             }
             catch( Exception& )
             {
-                OSL_FAIL( "sd::SdTransferable::WriteObject(), exception caught!" );
+                TOOLS_WARN_EXCEPTION( "sd", "sd::SdTransferable::WriteObject()" );
                 bRet = false;
             }
         }
