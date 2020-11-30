@@ -21,6 +21,7 @@
 #include <strings.hrc>
 #include <core_resource.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <tools/diagnose_ex.h>
 #include <Tools.hxx>
 #include <FormatCondition.hxx>
 #include <ReportHelperImpl.hxx>
@@ -171,7 +172,7 @@ OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContex
     }
     catch(uno::Exception&)
     {
-        OSL_FAIL("OFixedLine::OFixedLine: Exception caught!");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "OFixedLine::OFixedLine");
     }
     osl_atomic_decrement( &m_refCount );
 }

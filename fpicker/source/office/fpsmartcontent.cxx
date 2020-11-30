@@ -29,6 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 
 namespace svt
@@ -148,7 +149,7 @@ namespace svt
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "SmartContent::bindTo: unexpected exception caught!" );
+                TOOLS_WARN_EXCEPTION( "fpicker", "SmartContent::bindTo: unexpected exception caught!" );
             }
         }
         else

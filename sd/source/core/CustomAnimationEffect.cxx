@@ -18,6 +18,7 @@
  */
 
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/AnimateColor.hpp>
@@ -360,7 +361,7 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
     catch( Exception& )
     {
         nSubItems = 0;
-        OSL_FAIL( "sd::CustomAnimationEffect::getNumberOfSubitems(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::getNumberOfSubitems(), exception caught!" );
     }
 
     return nSubItems;
@@ -685,7 +686,7 @@ void CustomAnimationEffect::setTarget( const css::uno::Any& rTarget )
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::CustomAnimationEffect::setTarget(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setTarget()" );
     }
 }
 
@@ -720,7 +721,7 @@ void CustomAnimationEffect::setTargetSubItem( sal_Int16 nSubItem )
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::CustomAnimationEffect::setTargetSubItem(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setTargetSubItem()" );
     }
 }
 
@@ -772,7 +773,7 @@ void CustomAnimationEffect::setDuration( double fDuration )
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::CustomAnimationEffect::setDuration(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setDuration()" );
     }
 }
 
@@ -785,7 +786,7 @@ void CustomAnimationEffect::setBegin( double fBegin )
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::CustomAnimationEffect::setBegin(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setBegin()" );
     }
 }
 
@@ -798,7 +799,7 @@ void CustomAnimationEffect::setAcceleration( double fAcceleration )
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::CustomAnimationEffect::setAcceleration(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setAcceleration()" );
     }
 }
 
@@ -811,7 +812,7 @@ void CustomAnimationEffect::setDecelerate( double fDecelerate )
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::CustomAnimationEffect::setDecelerate(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setDecelerate()" );
     }
 }
 
@@ -824,7 +825,7 @@ void CustomAnimationEffect::setAutoReverse( bool bAutoReverse )
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::CustomAnimationEffect::setAutoReverse(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setAutoReverse()" );
     }
 }
 
@@ -1072,7 +1073,7 @@ void CustomAnimationEffect::setIterateType( sal_Int16 nIterateType )
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::CustomAnimationEffect::setIterateType(), Exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setIterateType()" );
     }
 }
 
@@ -1113,7 +1114,7 @@ OUString CustomAnimationEffect::getPath() const
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::CustomAnimationEffect::getPath(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::getPath()" );
     }
 
     return aPath;
@@ -1142,7 +1143,7 @@ void CustomAnimationEffect::setPath( const OUString& rPath )
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::CustomAnimationEffect::setPath(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setPath()" );
     }
 }
 
@@ -1180,7 +1181,7 @@ Any CustomAnimationEffect::getProperty( sal_Int32 nNodeType, std::u16string_view
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::CustomAnimationEffect::getProperty(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::getProperty()" );
     }
 
     return aProperty;
@@ -1232,7 +1233,7 @@ bool CustomAnimationEffect::setProperty( sal_Int32 nNodeType, std::u16string_vie
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::CustomAnimationEffect::setProperty(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setProperty()" );
     }
 
     return bChanged;
@@ -1285,7 +1286,7 @@ Any CustomAnimationEffect::getColor( sal_Int32 nIndex )
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::CustomAnimationEffect::getColor(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::getColor()" );
     }
 
     return aColor;
@@ -1342,7 +1343,7 @@ void CustomAnimationEffect::setColor( sal_Int32 nIndex, const Any& rColor )
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::CustomAnimationEffect::setColor(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setColor()" );
     }
 }
 
@@ -1377,7 +1378,7 @@ Any CustomAnimationEffect::getTransformationProperty( sal_Int32 nTransformType, 
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::CustomAnimationEffect::getTransformationProperty(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::getTransformationProperty()" );
     }
 
     return aProperty;
@@ -1426,7 +1427,7 @@ bool CustomAnimationEffect::setTransformationProperty( sal_Int32 nTransformType,
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::CustomAnimationEffect::setTransformationProperty(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setTransformationProperty()" );
     }
 
     return bChanged;
@@ -1449,7 +1450,7 @@ void CustomAnimationEffect::createAudio( const css::uno::Any& rSource )
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::CustomAnimationEffect::createAudio(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::createAudio()" );
     }
 }
 
@@ -1470,7 +1471,7 @@ static Reference< XCommand > findCommandNode( const Reference< XAnimationNode >&
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::findCommandNode(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::findCommandNode()" );
     }
 
     return xCommand;
@@ -1502,7 +1503,7 @@ void CustomAnimationEffect::removeAudio()
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::CustomAnimationEffect::removeAudio(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::removeAudio()" );
     }
 
 }
@@ -1522,7 +1523,7 @@ void CustomAnimationEffect::setAudio( const Reference< css::animations::XAudio >
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::CustomAnimationEffect::setAudio(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setAudio()" );
     }
 }
 
@@ -1548,7 +1549,7 @@ void CustomAnimationEffect::setStopAudio()
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::CustomAnimationEffect::setStopAudio(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationEffect::setStopAudio()" );
     }
 }
 
@@ -1762,7 +1763,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathOb
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::EffectSequenceHelper::append(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::EffectSequenceHelper::append()" );
     }
 
     return pEffect;
@@ -1787,7 +1788,7 @@ void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, con
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::EffectSequenceHelper::replace(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::EffectSequenceHelper::replace()" );
     }
 }
 
@@ -1946,7 +1947,7 @@ void EffectSequenceHelper::implRebuild()
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::EffectSequenceHelper::rebuild(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::EffectSequenceHelper::rebuild()" );
     }
 }
 
@@ -2083,7 +2084,7 @@ void stl_process_after_effect_node_func(AfterEffectNode const & rNode)
     }
     catch( Exception& )
     {
-        OSL_FAIL( "ppt::stl_process_after_effect_node_func::operator(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "ppt::stl_process_after_effect_node_func::operator()" );
     }
 }
 
@@ -2585,7 +2586,7 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( const CustomAnimatio
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::EffectSequenceHelper::createTextGroup(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::EffectSequenceHelper::createTextGroup()" );
     }
 }
 
@@ -2889,7 +2890,7 @@ void EffectSequenceHelper::create( const css::uno::Reference< css::animations::X
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::EffectSequenceHelper::create(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::EffectSequenceHelper::create()" );
     }
 }
 
@@ -2913,7 +2914,7 @@ void EffectSequenceHelper::createEffectsequence( const Reference< XAnimationNode
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::EffectSequenceHelper::createEffectsequence(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::EffectSequenceHelper::createEffectsequence()" );
     }
 }
 
@@ -2960,7 +2961,7 @@ void EffectSequenceHelper::createEffects( const Reference< XAnimationNode >& xNo
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::EffectSequenceHelper::createEffects(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::EffectSequenceHelper::createEffects()" );
     }
 }
 
@@ -3010,7 +3011,7 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::EffectSequenceHelper::processAfterEffect(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::EffectSequenceHelper::processAfterEffect()" );
     }
 }
 
@@ -3159,7 +3160,7 @@ void MainSequence::createMainSequence()
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::MainSequence::create(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::MainSequence::create()" );
         return;
     }
 
@@ -3514,7 +3515,7 @@ InteractiveSequence::InteractiveSequence( const Reference< XTimeContainer >& xSe
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::InteractiveSequence::InteractiveSequence(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::InteractiveSequence::InteractiveSequence()" );
         return;
     }
 }

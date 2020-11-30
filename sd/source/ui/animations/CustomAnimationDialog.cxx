@@ -47,6 +47,7 @@
 #include <sfx2/objsh.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <editeng/flstitem.hxx>
 
@@ -1397,7 +1398,7 @@ void CustomAnimationEffectTabPage::onSoundPreview()
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL("CustomAnimationEffectTabPage::onSoundPreview(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "CustomAnimationEffectTabPage::onSoundPreview()" );
     }
 #endif
 }

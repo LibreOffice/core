@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/datatransfer/clipboard/ClipboardEvent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -268,7 +269,7 @@ void CWinClipboard::notifyAllClipboardListener()
             }
             catch (uno::RuntimeException&)
             {
-                OSL_FAIL("RuntimeException caught");
+                TOOLS_WARN_EXCEPTION("vcl", "");
             }
         }
     }

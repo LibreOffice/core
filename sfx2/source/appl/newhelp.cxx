@@ -286,7 +286,7 @@ IMPL_LINK(ContentTabPage_Impl, ExpandingHdl, const weld::TreeIter&, rIter, bool)
         }
         catch (const Exception&)
         {
-            OSL_FAIL( "ContentListBox_Impl::RequestingChildren(): unexpected exception" );
+            TOOLS_WARN_EXCEPTION( "sfx.appl", "ContentListBox_Impl::RequestingChildren(): unexpected exception" );
         }
     }
 
@@ -678,7 +678,7 @@ void IndexTabPage_Impl::InitializeIndex()
     }
     catch( Exception& )
     {
-        OSL_FAIL( "IndexTabPage_Impl::InitializeIndex(): unexpected exception" );
+        TOOLS_WARN_EXCEPTION( "sfx.appl", "IndexTabPage_Impl::InitializeIndex(): unexpected exception" );
     }
 
     m_xIndexList->thaw();
@@ -1793,7 +1793,7 @@ Reference< XTextRange > SfxHelpTextWindow_Impl::getCursor() const
     }
     catch( Exception& )
     {
-        OSL_FAIL( "SfxHelpTextWindow_Impl::getCursor(): unexpected exception" );
+        TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelpTextWindow_Impl::getCursor(): unexpected exception" );
     }
 
     return xCursor;
@@ -1853,7 +1853,7 @@ IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, SelectHdl, Timer *, void)
     }
     catch( Exception& )
     {
-        OSL_FAIL( "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
+        TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
     }
 }
 
@@ -1942,7 +1942,7 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
     }
     catch( Exception& )
     {
-        OSL_FAIL( "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
+        TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
     }
 }
 
@@ -2408,7 +2408,7 @@ void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
     }
     catch( Exception& )
     {
-        OSL_FAIL( "SfxHelpWindow_Impl::OpenDoneHdl(): unexpected exception" );
+        TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelpWindow_Impl::OpenDoneHdl(): unexpected exception" );
     }
 
     // When the SearchPage opens the help doc, then select all words, which are equal to its text
@@ -2615,7 +2615,7 @@ void SfxHelpWindow_Impl::DoAction(std::string_view  rActionId)
             }
             catch( Exception& )
             {
-                OSL_FAIL( "SfxHelpWindow_Impl::DoAction(): unexpected exception" );
+                TOOLS_WARN_EXCEPTION( "sfx.appl", "SfxHelpWindow_Impl::DoAction(): unexpected exception" );
             }
         }
     }

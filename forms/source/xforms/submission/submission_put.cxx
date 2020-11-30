@@ -25,6 +25,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <ucbhelper/content.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace css::uno;
 using namespace css::ucb;
@@ -57,7 +58,7 @@ CSubmission::SubmissionResult CSubmissionPut::submit(const css::uno::Reference< 
     }
     catch ( const Exception& )
     {
-        OSL_FAIL( "Exception during UCB operation." );
+        TOOLS_WARN_EXCEPTION( "forms.misc", "Exception during UCB operation." );
         return UNKNOWN_ERROR;
     }
 

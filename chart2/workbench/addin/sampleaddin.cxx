@@ -55,7 +55,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch( const registry::InvalidRegistryException& )
         {
-            OSL_FAIL( "### InvalidRegistryException!" );
+            TOOLS_WARN_EXCEPTION( "chart2", "" );
         }
     }
     return sal_False;

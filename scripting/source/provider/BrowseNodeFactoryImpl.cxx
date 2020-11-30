@@ -355,7 +355,7 @@ public:
         }
         catch(  uno::Exception& )
         {
-            OSL_FAIL( "DefaultBrowseNode::DefaultBrowseNode: Caught exception!" );
+            TOOLS_WARN_EXCEPTION( "scripting", "DefaultBrowseNode::DefaultBrowseNode" );
         }
         OSL_ENSURE( m_xAggProxy.is(),
             "DefaultBrowseNode::DefaultBrowseNode: Wrapped BrowseNode cannot be aggregated!" );

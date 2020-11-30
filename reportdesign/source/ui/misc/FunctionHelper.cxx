@@ -21,6 +21,7 @@
 
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <formula/funcvarargs.h>
 
 
@@ -167,7 +168,7 @@ OUString FunctionDescription::getFormula(const ::std::vector< OUString >& _aArgu
     }
     catch(const uno::Exception&)
     {
-        OSL_FAIL("Exception caught!");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "");
     }
     return sFormula;
 }

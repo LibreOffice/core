@@ -35,6 +35,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlnamespace.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "xmlHelper.hxx"
 #include "xmlEnums.hxx"
@@ -229,7 +230,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
         }
         catch(uno::Exception&)
         {
-            OSL_FAIL("Exception caught while filling the report definition props");
+            TOOLS_WARN_EXCEPTION( "reportdesign", "Exception caught while filling the report definition props");
         }
         bExport = false;
     }

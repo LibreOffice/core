@@ -31,6 +31,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <strings.hxx>
 #include "xmlTable.hxx"
 #include "xmlFormattedField.hxx"
@@ -232,7 +233,7 @@ void OXMLCell::endFastElement(sal_Int32)
                }
             catch(uno::Exception&)
             {
-                OSL_FAIL("OXMLCell::EndElement -> exception caught");
+                TOOLS_WARN_EXCEPTION( "reportdesign", "OXMLCell::EndElement -> exception caught");
             }
         }
     }

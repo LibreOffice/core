@@ -68,10 +68,12 @@
 #include <tools/inetmsg.hxx>
 #include <tools/inetstrm.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <osl/mutex.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::dbtools;
 using namespace ::comphelper;
@@ -2933,7 +2935,7 @@ void ODatabaseForm::reload_impl(bool bMoveToFirst, const Reference< XInteraction
     }
     catch(const SQLException&)
     {
-        OSL_FAIL("ODatabaseForm::reload_impl : shouldn't executeRowSet catch this exception?");
+        TOOLS_WARN_EXCEPTION( "forms.component", "ODatabaseForm::reload_impl : shouldn't executeRowSet catch this exception?");
     }
 
     if (bSuccess)

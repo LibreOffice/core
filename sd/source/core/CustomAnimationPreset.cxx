@@ -79,7 +79,7 @@ static Reference< XNameAccess > getNodeAccess( const Reference< XMultiServiceFac
     }
     catch (const Exception&)
     {
-        OSL_FAIL( "sd::getNodeAccess(), Exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::getNodeAccess()" );
     }
 
     return xConfigAccess;
@@ -109,13 +109,9 @@ void implImportLabels( const Reference< XMultiServiceFactory >& xConfigProvider,
             }
         }
     }
-    catch (const lang::WrappedTargetException&)
-    {
-        OSL_FAIL( "sd::implImportLabels(), WrappedTargetException caught!" );
-    }
     catch (const Exception&)
     {
-        OSL_FAIL( "sd::implImportLabels(), Exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::implImportLabels()" );
     }
 }
 
@@ -171,7 +167,7 @@ Reference< XAnimationNode > CustomAnimationPreset::create( const OUString& rstrS
     }
     catch (const Exception&)
     {
-        OSL_FAIL( "sd::CustomAnimationPresets::create(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPresets::create()" );
     }
 
     Reference< XAnimationNode > xNode;
@@ -306,21 +302,9 @@ void CustomAnimationPresets::importEffects()
             }
         }
     }
-    catch (const xml::sax::SAXParseException&)
-    {
-        OSL_FAIL( "sd::CustomAnimationPresets::importEffects(), SAXParseException caught!" );
-    }
-    catch (const xml::sax::SAXException&)
-    {
-        OSL_FAIL( "sd::CustomAnimationPresets::importEffects(), SAXException caught!" );
-    }
-    catch (const io::IOException&)
-    {
-        OSL_FAIL( "sd::CustomAnimationPresets::importEffects(), IOException caught!" );
-    }
     catch (const Exception&)
     {
-        OSL_FAIL( "sd::CustomAnimationPresets::importEffects(), Exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPresets::importEffects()" );
     }
 }
 
@@ -350,13 +334,9 @@ void CustomAnimationPresets::importResources()
 
         importPresets( xConfigProvider, "/org.openoffice.Office.UI.Effects/Presets/Misc", maMiscPresets );
     }
-    catch (const lang::WrappedTargetException&)
-    {
-        OSL_FAIL( "sd::CustomAnimationPresets::importResources(), WrappedTargetException caught!" );
-    }
     catch (const Exception&)
     {
-        OSL_FAIL( "sd::CustomAnimationPresets::importResources(), Exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPresets::importResources()" );
     }
 }
 
@@ -410,7 +390,7 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
     }
     catch (const Exception&)
     {
-        OSL_FAIL( "sd::CustomAnimationPresets::importPresets(), Exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPresets::importPresets()" );
     }
 
 #ifdef DEBUG

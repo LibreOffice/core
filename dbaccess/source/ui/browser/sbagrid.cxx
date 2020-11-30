@@ -770,7 +770,7 @@ void SbaGridControl::SetRowHeight()
     }
     catch(Exception&)
     {
-        OSL_FAIL("setPropertyValue: PROPERTY_ROW_HEIGHT throws an exception");
+        TOOLS_WARN_EXCEPTION( "dbaccess", "setPropertyValue: PROPERTY_ROW_HEIGHT throws an exception");
     }
 }
 

@@ -91,7 +91,7 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
     }
     catch(uno::Exception&)
     {
-        OSL_FAIL("Exception caught!");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "");
     }
 
     m_pFunc.reset(new DlgEdFuncSelect( this ));
@@ -274,7 +274,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
             }
             catch(uno::Exception&)
             {
-                OSL_FAIL("Exception caught while pasting a new object!");
+                TOOLS_WARN_EXCEPTION( "reportdesign", "Exception caught while pasting a new object!");
             }
             if ( !_bForce )
                 break;
@@ -541,7 +541,7 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
     }
     catch(const uno::Exception &)
     {
-        OSL_FAIL("Exception caught: OReportSection::impl_adjustObjectSizePosition()");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "OReportSection::impl_adjustObjectSizePosition()");
     }
 }
 

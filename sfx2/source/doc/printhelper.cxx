@@ -38,6 +38,7 @@
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <osl/mutex.hxx>
@@ -539,21 +540,9 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                             css::ucb::NameClash::OVERWRITE);
                 }
             }
-            catch (const css::ucb::ContentCreationException&)
-            {
-                OSL_FAIL("content create exception");
-            }
-            catch (const css::ucb::CommandAbortedException&)
-            {
-                OSL_FAIL("command abort exception");
-            }
-            catch (const css::uno::RuntimeException&)
-            {
-                OSL_FAIL("runtime exception");
-            }
             catch (const css::uno::Exception&)
             {
-                OSL_FAIL("unknown exception");
+                TOOLS_WARN_EXCEPTION( "sfx.doc", "");
             }
 
             // kill the temp file!

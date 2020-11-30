@@ -34,6 +34,7 @@
 #include <comphelper/lok.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <officecfg/Office/UI/Effects.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -354,7 +355,7 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::TransitionPreset::importResources(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::TransitionPreset::importResources()" );
     }
 
     return bRet;

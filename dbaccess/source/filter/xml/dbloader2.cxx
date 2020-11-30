@@ -263,7 +263,7 @@ namespace
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "lcl_urlAllowsInteraction: caught an exception while analyzing the URL!" );
+            TOOLS_WARN_EXCEPTION( "dbaccess", "lcl_urlAllowsInteraction: caught an exception while analyzing the URL!" );
         }
         return bDoesAllow;
     }
@@ -518,7 +518,7 @@ IMPL_LINK_NOARG( DBContentLoader, OnStartTableWizard, void*, void )
     }
     catch(const Exception&)
     {
-        OSL_FAIL("caught an exception while starting the table wizard!");
+        TOOLS_WARN_EXCEPTION( "dbaccess", "caught an exception while starting the table wizard!");
     }
     m_xMySelf = nullptr;
 }

@@ -26,6 +26,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
@@ -366,7 +367,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     }
     catch ( uno::Exception& )
     {
-        OSL_FAIL("Unexpected exception in database");
+        TOOLS_WARN_EXCEPTION( "sc", "Unexpected exception in database");
     }
 
     //  test for cell protection

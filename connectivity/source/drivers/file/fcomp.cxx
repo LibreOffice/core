@@ -32,6 +32,7 @@
 #include <file/FDateFunctions.hxx>
 #include <file/FNumericFunctions.hxx>
 #include <file/FConnection.hxx>
+#include <tools/diagnose_ex.h>
 #include <sqlbison.hxx>
 #include <strings.hrc>
 
@@ -451,7 +452,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode const * pPredicateNo
         }
         catch(Exception &)
         {
-            OSL_FAIL("OPredicateCompiler::execute_Operand Exception");
+            TOOLS_WARN_EXCEPTION( "connectivity.drivers", "OPredicateCompiler::execute_Operand Exception");
         }
     }
     else if (SQL_ISRULE(pPredicateNode,parameter))
