@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ab98211_5f513ecd",
+        "filename": "offapi/com/sun/star/xml/sax/XFastParser.idl",
+        "patchSetId": 11
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-30T06:39:17Z",
+      "side": 1,
+      "message": "This seems to be a forgotten left-over from some intermediate experiment :-)",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 45
+      },
+      "revId": "f28c8085d14f65aa40da434c1d9d5ae60bfad862",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73b8b2fc_efdc5dc9",
+        "filename": "offapi/com/sun/star/xml/sax/XFastParser.idl",
+        "patchSetId": 11
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-11-30T06:39:17Z",
+      "side": 1,
+      "message": "Likely this should have a \"@since\"",
+      "range": {
+        "startLine": 162,
+        "startChar": 4,
+        "endLine": 162,
+        "endChar": 7
+      },
+      "revId": "f28c8085d14f65aa40da434c1d9d5ae60bfad862",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
