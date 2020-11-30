@@ -24,7 +24,6 @@
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Reference.h>
 
-
 namespace com::sun::star {
     namespace xml::sax {
         class XAttributeList;
@@ -35,7 +34,6 @@ class XMLTrackedChangesImportContext : public SvXMLImportContext
 {
 public:
 
-
     XMLTrackedChangesImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
@@ -43,8 +41,8 @@ public:
 
     virtual ~XMLTrackedChangesImportContext() override;
 
-    virtual void StartElement(
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
