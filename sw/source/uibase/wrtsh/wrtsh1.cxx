@@ -2064,7 +2064,7 @@ void SwWrtShell::ToggleOutlineContentVisibility(size_t nPos, bool bForceFold)
             if (pFrame && !pFrame->IsInDtor())
             {
                 SwFrameControlPtr pOutlineFrameControl = GetView().GetEditWin().GetFrameControlsManager().GetControl(FrameControlType::Outline, pFrame);
-                if (pOutlineFrameControl && pOutlineFrameControl->GetWindow() && !pOutlineFrameControl->GetWindow()->HasFocus())
+                if (pOutlineFrameControl && pOutlineFrameControl->GetWindow() && !pOutlineFrameControl->HasFocus())
                     GetView().GetEditWin().GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, pFrame);
             }
 
