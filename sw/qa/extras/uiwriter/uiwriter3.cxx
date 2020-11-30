@@ -3651,6 +3651,38 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133477)
     CPPUNIT_ASSERT_EQUAL(Color(0, 102, 204), aBitmap.GetPixelColor(1, 1));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf137546)
+{
+    // this test also covers tdf#124430
+    load(DATA_DIRECTORY, "tdf137546.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(751), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1468), xShape->getPosition().Y);
+
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(1);
+    SwContact* pTextBox = static_cast<SwContact*>(pObject->GetUserCall());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_FLYFRMFMT), pTextBox->GetFormat()->Which());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(2385), pObject->GetCurrentBoundRect().getX());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(3295), pObject->GetCurrentBoundRect().getY());
+
+    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:ObjectAlignRight", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(13769), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1468), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(9765), pObject->GetCurrentBoundRect().getX());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(3295), pObject->GetCurrentBoundRect().getY());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf137964)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf137964.odt");
