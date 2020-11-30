@@ -1133,7 +1133,7 @@ JavaVirtualMachine::~JavaVirtualMachine()
         }
         catch (css::uno::Exception &)
         {
-            OSL_FAIL("com.sun.star.uno.Exception caught");
+            TOOLS_WARN_EXCEPTION( "stoc", "");
         }
     if (m_xJavaConfiguration.is())
         // We should never get here, but just in case...
@@ -1143,7 +1143,7 @@ JavaVirtualMachine::~JavaVirtualMachine()
         }
         catch (css::uno::Exception &)
         {
-            OSL_FAIL("com.sun.star.uno.Exception caught");
+            TOOLS_WARN_EXCEPTION( "stoc", "");
         }
 }
 
@@ -1342,11 +1342,11 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
     }
     catch (css::uno::RuntimeException &)
     {
-        OSL_FAIL("RuntimeException");
+        TOOLS_WARN_EXCEPTION( "stoc", "");
     }
     catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
-        OSL_FAIL("jvmaccess::VirtualMachine::AttachGuard::CreationException");
+        TOOLS_WARN_EXCEPTION( "stoc", "");
     }
 }
 

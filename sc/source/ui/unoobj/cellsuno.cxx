@@ -43,6 +43,7 @@
 #include <svl/zformat.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <float.h>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
@@ -2599,7 +2600,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString
                 }
                 catch ( lang::IllegalArgumentException& )
                 {
-                    OSL_FAIL("exception when setting cell style");     // not supposed to happen
+                    TOOLS_WARN_EXCEPTION( "sc", "exception when setting cell style");     // not supposed to happen
                 }
             }
         }
@@ -2734,7 +2735,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
                     }
                     catch ( lang::IllegalArgumentException& )
                     {
-                        OSL_FAIL("exception when setting cell style");     // not supposed to happen
+                        TOOLS_WARN_EXCEPTION( "sc", "exception when setting cell style");     // not supposed to happen
                     }
                 }
             }

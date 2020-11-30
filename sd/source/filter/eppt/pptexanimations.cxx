@@ -58,6 +58,7 @@
 #include <filter/msfilter/escherex.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 
@@ -393,7 +394,7 @@ void AnimationExporter::processAfterEffectNodes( const Reference< XAnimationNode
     }
     catch( Exception& )
     {
-        OSL_FAIL( "(@CL)AnimationExporter::processAfterEffectNodes(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "(@CL)AnimationExporter::processAfterEffectNodes()" );
     }
 }
 

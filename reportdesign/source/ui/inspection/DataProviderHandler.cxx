@@ -43,6 +43,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <metadata.hxx>
 #include <osl/mutex.hxx>
+#include <tools/diagnose_ex.h>
 #include <core_resource.hxx>
 #include <helpids.h>
 #include <strings.hrc>
@@ -287,7 +288,7 @@ uno::Any SAL_CALL DataProviderHandler::convertToPropertyValue(const OUString & _
             }
             catch( const uno::Exception& )
             {
-                OSL_FAIL( "DataProviderHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
+                TOOLS_WARN_EXCEPTION( "reportdesign", "DataProviderHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
             }
             break;
         case PROPERTY_ID_MASTERFIELDS:
@@ -321,7 +322,7 @@ uno::Any SAL_CALL DataProviderHandler::convertToControlValue(const OUString & _r
             }
             catch( const uno::Exception& )
             {
-                OSL_FAIL( "GeometryHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
+                TOOLS_WARN_EXCEPTION( "reportdesign", "GeometryHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
             }
             break;
         default:

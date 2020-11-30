@@ -40,6 +40,7 @@
 #include <svl/stritem.hxx>
 #include <memory>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -240,7 +241,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
             }
             catch( const IllegalArgumentException& )
             {
-                OSL_FAIL( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
+                TOOLS_WARN_EXCEPTION( "sfx.doc", "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
             }
         }
 
@@ -261,7 +262,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
                 }
                 catch( const IllegalArgumentException& )
                 {
-                    OSL_FAIL( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
+                    TOOLS_WARN_EXCEPTION( "sfx.doc", "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
                 }
             }
         }

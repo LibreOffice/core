@@ -36,6 +36,7 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <sfx2/passwd.hxx>
 
@@ -154,7 +155,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
     }
     catch (const uno::Exception&)
     {
-        OSL_FAIL("exception caught");
+        TOOLS_WARN_EXCEPTION( "sw", "");
     }
     return xSmtpServer;
 }
@@ -258,7 +259,7 @@ OUString SwAddressPreview::FillData(
                     }
                     catch (const sdbc::SQLException&)
                     {
-                        OSL_FAIL("SQLException caught");
+                        TOOLS_WARN_EXCEPTION( "sw", "");
                     }
                 }
             }

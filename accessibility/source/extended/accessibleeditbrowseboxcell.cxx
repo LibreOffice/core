@@ -22,6 +22,7 @@
 
 #include <extended/accessibleeditbrowseboxcell.hxx>
 #include <comphelper/processfactory.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace accessibility
 {
@@ -224,7 +225,7 @@ namespace accessibility
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "EditBrowseBoxTableCellAccess::disposing: caught an exception while disposing the context!" );
+                TOOLS_WARN_EXCEPTION( "accessibility", "EditBrowseBoxTableCellAccess::disposing: caught an exception while disposing the context!" );
             }
         }
 

@@ -23,6 +23,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include <cmdid.h>
 #include <unomid.h>
@@ -677,7 +678,7 @@ SwXParagraph::setPropertyValuesTolerant(
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
-            OSL_FAIL( "unexpected exception caught" );
+            TOOLS_WARN_EXCEPTION( "sw", "unexpected exception caught" );
             pFailed[ nFailed++ ].Result =
                 beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
@@ -816,7 +817,7 @@ SwXParagraph::Impl::GetPropertyValuesTolerant_Impl(
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
-            OSL_FAIL( "unexpected exception caught" );
+            TOOLS_WARN_EXCEPTION( "sw", "unexpected exception caught" );
             rResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
         catch (lang::IllegalArgumentException &)

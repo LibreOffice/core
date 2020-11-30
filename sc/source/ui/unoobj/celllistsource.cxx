@@ -31,6 +31,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace calc
 {
@@ -327,7 +328,7 @@ namespace calc
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "OCellListSource::notifyModified: caught a (non-runtime) exception!" );
+                TOOLS_WARN_EXCEPTION( "sc", "OCellListSource::notifyModified: caught a (non-runtime) exception!" );
             }
         }
 
@@ -399,7 +400,7 @@ namespace calc
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OCellListSource::initialize: caught an exception while retrieving the cell object!" );
+            TOOLS_WARN_EXCEPTION( "sc", "OCellListSource::initialize: caught an exception while retrieving the cell object!" );
         }
 
         if ( !m_xRange.is() )

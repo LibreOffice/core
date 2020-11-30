@@ -141,7 +141,7 @@ void CXNotifyingDataObject::lostOwnership( )
     }
     catch(RuntimeException&)
     {
-        OSL_FAIL( "RuntimeException caught" );
+        TOOLS_WARN_EXCEPTION( "vcl",  "" );
     }
 }
 

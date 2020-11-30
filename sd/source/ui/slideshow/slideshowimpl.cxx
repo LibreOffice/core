@@ -1456,7 +1456,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape )
         }
         catch( uno::Exception& )
         {
-            OSL_FAIL("sd::SlideshowImpl::click(), exception caught!" );
+            TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::click()" );
         }
 #endif
     }
@@ -2520,7 +2520,7 @@ void SlideshowImpl::setAutoSaveState( bool bOn)
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::SlideshowImpl::setAutoSaveState(), exception caught!");
+        TOOLS_WARN_EXCEPTION( "sd", "sd::SlideshowImpl::setAutoSaveState()");
     }
 }
 

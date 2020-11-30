@@ -2355,7 +2355,7 @@ namespace accessibility
                 }
                 catch (const uno::Exception&)
                 {
-                    OSL_FAIL("AccessibleEditableTextPara::setAttributes exception in setPropertyValue");
+                    TOOLS_WARN_EXCEPTION( "dbaccess", "AccessibleEditableTextPara::setAttributes exception in setPropertyValue");
                 }
             }
 

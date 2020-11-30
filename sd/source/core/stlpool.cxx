@@ -46,6 +46,7 @@
 #include <editeng/emphasismarkitem.hxx>
 #include <svx/sdr/table/tabledesign.hxx>
 #include <editeng/autokernitem.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <editeng/lrspitem.hxx>
 #include <editeng/adjustitem.hxx>
@@ -551,7 +552,7 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool)
                     }
                     catch( Exception& )
                     {
-                        OSL_FAIL( "sd::SdStyleSheetPool::CopyTableStyles(), exception caught!" );
+                        TOOLS_WARN_EXCEPTION( "sd", "sd::SdStyleSheetPool::CopyTableStyles()" );
                     }
 
                     if( xTargetStyle.is() )
@@ -568,7 +569,7 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool)
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::SdStyleSheetPool::CopyTableStyles(), exception caught!");
+        TOOLS_WARN_EXCEPTION( "sd", "sd::SdStyleSheetPool::CopyTableStyles()");
     }
 }
 

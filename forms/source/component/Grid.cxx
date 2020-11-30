@@ -31,6 +31,7 @@
 #include <comphelper/types.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star::uno;
 
@@ -155,7 +156,7 @@ void OGridControlModel::cloneColumns( const OGridControlModel* _pOriginalContain
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "OGridControlModel::cloneColumns: caught an exception while cloning the columns!" );
+        TOOLS_WARN_EXCEPTION( "forms.component", "OGridControlModel::cloneColumns: caught an exception while cloning the columns!" );
     }
 }
 

@@ -31,6 +31,7 @@
 #include <o3tl/any.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
+#include <tools/diagnose_ex.h>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <ucbhelper/contentidentifier.hxx>
@@ -69,7 +70,7 @@ bool UCB_DeleteFile( const OUString& rURL )
     catch( css::uno::Exception& )
     {
         bRemoved = false;
-        OSL_FAIL( "Exception from executeCommand( delete )" );
+        TOOLS_WARN_EXCEPTION( "sw", "Exception from executeCommand( delete )" );
     }
     return bRemoved;
 }
@@ -97,7 +98,7 @@ bool UCB_MoveFile( const OUString& rURL, const OUString& rNewURL )
     }
     catch( css::uno::Exception& )
     {
-        OSL_FAIL( "Exception from executeCommand( transfer )" );
+        TOOLS_WARN_EXCEPTION( "sw", "Exception from executeCommand( transfer )" );
         bCopyCompleted = false;
     }
     return bCopyCompleted;
@@ -126,7 +127,7 @@ bool UCB_IsCaseSensitiveFileName( const OUString& rURL )
     catch( css::uno::Exception& )
     {
         bCaseSensitive = false;
-        OSL_FAIL( "Exception from compareContentIds()" );
+        TOOLS_WARN_EXCEPTION( "sw", "compareContentIds()" );
     }
     return bCaseSensitive;
 }
@@ -245,13 +246,13 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
             }
             catch( css::uno::Exception& )
             {
-                OSL_FAIL( "Exception caught!" );
+                TOOLS_WARN_EXCEPTION( "sw", "" );
             }
         }
     }
     catch( css::uno::Exception& )
     {
-        OSL_FAIL( "Exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sw", "" );
         bOk = false;
     }
     return bOk;
