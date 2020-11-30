@@ -8035,33 +8035,6 @@ int get_height_row_separator(GtkTreeView* pTreeView)
     return nVerticalSeparator;
 }
 
-int get_height_rows(GtkTreeView* pTreeView, GList* pColumns, int nRows)
-{
-    gint nMaxRowHeight = get_height_row(pTreeView, pColumns);
-    gint nVerticalSeparator = get_height_row_separator(pTreeView);
-    return (nMaxRowHeight * nRows) + (nVerticalSeparator * (nRows + 1));
-}
-
-int get_height_rows(int nRowHeight, int nSeparatorHeight, int nRows)
-{
-    return (nRowHeight * nRows) + (nSeparatorHeight * (nRows + 1));
-}
-
-tools::Rectangle get_row_area(GtkTreeView* pTreeView, GList* pColumns, GtkTreePath* pPath)
-{
-    tools::Rectangle aRet;
-
-    GdkRectangle aRect;
-    for (GList* pEntry = g_list_last(pColumns); pEntry; pEntry = g_list_previous(pEntry))
-    {
-        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
-        gtk_tree_view_get_cell_area(pTreeView, pPath, pColumn, &aRect);
-        aRet.Union(tools::Rectangle(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height));
-    }
-
-    return aRet;
-}
-
 struct GtkTreeRowReferenceDeleter
 {
     void operator()(GtkTreeRowReference* p) const
@@ -8069,23 +8042,6 @@ struct GtkTreeRowReferenceDeleter
         gtk_tree_row_reference_free(p);
     }
 };
-
-bool separator_function(GtkTreePath* path, const std::vector<std::unique_ptr<GtkTreeRowReference, GtkTreeRowReferenceDeleter>>& rSeparatorRows)
-{
-    bool bFound = false;
-    for (auto& a : rSeparatorRows)
-    {
-        GtkTreePath* seppath = gtk_tree_row_reference_get_path(a.get());
-        if (seppath)
-        {
-            bFound = gtk_tree_path_compare(path, seppath) == 0;
-            gtk_tree_path_free(seppath);
-        }
-        if (bFound)
-            break;
-    }
-    return bFound;
-}
 
 void tree_store_set(GtkTreeModel* pTreeModel, GtkTreeIter *pIter, ...)
 {
@@ -8573,8 +8529,6 @@ private:
         gtk_tree_model_get(m_pTreeModel, &iter, nCol, &bRet, -1);
         bRet = !bRet;
         m_Setter(m_pTreeModel, &iter, nCol, bRet, -1);
-
-        gint depth;
 
         set(iter, m_aToggleTriStateMap[nCol], false);
 
