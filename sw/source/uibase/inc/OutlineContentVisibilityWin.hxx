@@ -6,15 +6,18 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_OUTLINECONTENTVISIBILITYWIN_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_OUTLINECONTENTVISIBILITYWIN_HXX
+#pragma once
 
+#include <vcl/InterimItemWindow.hxx>
 #include "edtwin.hxx"
 #include "FrameControl.hxx"
 
-class SwOutlineContentVisibilityWin : public PushButton, public ISwFrameControl
+class SwOutlineContentVisibilityWin : public InterimItemWindow, public ISwFrameControl
 {
 private:
+    std::unique_ptr<weld::Button> m_xRightBtn;
+    std::unique_ptr<weld::Button> m_xDownBtn;
+
     VclPtr<SwEditWin> m_pEditWin;
     const SwFrame* m_pFrame;
     int m_nDelayAppearing; ///< Before we show the control, wait a few timer ticks to avoid appearing with every mouse over.
@@ -29,21 +32,24 @@ public:
     virtual ~SwOutlineContentVisibilityWin() override { disposeOnce(); }
     virtual void dispose() override;
 
-    virtual void KeyInput(const KeyEvent& rKEvt) override;
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
-    virtual void MouseMove(const MouseEvent& rMEvt) override;
     virtual void ShowAll(bool bShow) override;
     virtual bool Contains(const Point& rDocPt) const override;
     virtual void SetReadonly(bool /*bReadonly*/) override {}
+    virtual bool IsFocused() const override { return ControlHasFocus(); }
     virtual const SwFrame* GetFrame() override { return m_pFrame; }
     virtual SwEditWin* GetEditWin() override { return m_pEditWin; }
 
     void Set();
 
-private:
-    DECL_LINK(DelayHandler, Timer*, void);
-};
+    void SetSymbol(SymbolType eTyle);
+    SymbolType GetSymbol() const;
 
-#endif
+private:
+    DECL_LINK(DelayAppearHandler, Timer*, void);
+    DECL_LINK(IdleDisappearHandler, Timer*, void);
+    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
+    DECL_LINK(MouseMoveHdl, const MouseEvent&, bool);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
