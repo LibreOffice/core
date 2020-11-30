@@ -22,6 +22,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <sal/log.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
@@ -45,39 +46,40 @@ XMLChangeImportContext::~XMLChangeImportContext()
 {
 }
 
-void XMLChangeImportContext::StartElement(
-    const Reference<XAttributeList>& xAttrList)
+void XMLChangeImportContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-             IsXMLToken( sLocalName, XML_CHANGE_ID ) )
+        switch(aIter.getToken())
         {
-            // Id found! Now call RedlineImportHelper
-
-            // prepare parameters
-            rtl::Reference<XMLTextImportHelper> rHelper =
-                GetImport().GetTextImport();
-            OUString sID = xAttrList->getValueByIndex(nAttr);
-
-            // <text:change> is both start and end
-            if (Element::START == m_Element || Element::POINT == m_Element)
-                rHelper->RedlineSetCursor(sID, true, m_bIsOutsideOfParagraph);
-            if (Element::END == m_Element || Element::POINT == m_Element)
-                rHelper->RedlineSetCursor(sID, false, m_bIsOutsideOfParagraph);
-
-            // outside of paragraph and still open? set open redline ID
-            if (m_bIsOutsideOfParagraph)
+            case XML_ELEMENT(TEXT, XML_CHANGE_ID):
             {
-                rHelper->SetOpenRedlineId(sID);
+                // Id found! Now call RedlineImportHelper
+
+                // prepare parameters
+                rtl::Reference<XMLTextImportHelper> rHelper =
+                    GetImport().GetTextImport();
+                OUString sID = aIter.toString();
+
+                // <text:change> is both start and end
+                if (Element::START == m_Element || Element::POINT == m_Element)
+                    rHelper->RedlineSetCursor(sID, true, m_bIsOutsideOfParagraph);
+                if (Element::END == m_Element || Element::POINT == m_Element)
+                    rHelper->RedlineSetCursor(sID, false, m_bIsOutsideOfParagraph);
+
+                // outside of paragraph and still open? set open redline ID
+                if (m_bIsOutsideOfParagraph)
+                {
+                    rHelper->SetOpenRedlineId(sID);
+                }
+                break;
             }
+            // else: ignore
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
-        // else: ignore
     }
 }
 
