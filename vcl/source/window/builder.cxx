@@ -729,6 +729,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
                     SAL_WARN("vcl.builder", "unsupported image size " << rImageInfo.m_nSize);
                     break;
             }
+            m_pParserState->m_aStockMap.erase(aFind);
         }
     }
 
