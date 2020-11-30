@@ -67,6 +67,8 @@
 #include <memory>
 #include <comphelper/storagehelper.hxx>
 
+#include <externalrefmgr.hxx>
+
 #define DEBUG_XL_ENCRYPTION 0
 
 using ::com::sun::star::uno::XInterface;
@@ -1104,6 +1106,7 @@ bool XclExpXmlStream::exportDocument()
         if (xStatusIndicator.is())
             xStatusIndicator->setValue(40);
         aDocRoot.WriteXml( *this );
+        rDoc.GetExternalRefManager()->disableSkipUnusedFileIds();
     }
 
     PopStream();

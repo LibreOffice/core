@@ -5087,6 +5087,7 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
     const FormulaToken* t = pTokenP;
     sal_uInt16 nFileId = t->GetIndex();
     ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+    sal_uInt16 nUsedFileId = pRefMgr->convertFileIdToUsedFileId(nFileId);
     const OUString* pFileName = pRefMgr->getExternalFileName(nFileId);
     if (!pFileName)
         return;
@@ -5112,7 +5113,7 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
                     *pFileName << "' '" << t->GetString().getString() << "'");
 
             pConv->makeExternalRefStr(
-                pDoc->GetSheetLimits(), rBuffer, GetPos(), nFileId, *pFileName, aTabNames, t->GetString().getString(),
+                pDoc->GetSheetLimits(), rBuffer, GetPos(), nUsedFileId, *pFileName, aTabNames, t->GetString().getString(),
                 *t->GetDoubleRef());
         }
         break;
