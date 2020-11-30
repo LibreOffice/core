@@ -107,6 +107,11 @@ short AbstractScDataPilotDatabaseDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractScDataPilotDatabaseDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractScDataPilotSourceTypeDlg_Impl::Execute()
 {
     return m_xDlg->run();
@@ -120,6 +125,11 @@ bool AbstractScDataPilotSourceTypeDlg_Impl::StartExecuteAsync(AsyncContext &rCtx
 short AbstractScDataPilotServiceDlg_Impl::Execute()
 {
     return m_xDlg->run();
+}
+
+bool AbstractScDataPilotServiceDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractScDeleteCellDlg_Impl::Execute()
