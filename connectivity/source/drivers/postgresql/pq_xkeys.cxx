@@ -34,6 +34,10 @@
  *
  ************************************************************************/
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -83,26 +87,26 @@ Keys::Keys(
 Keys::~Keys()
 {}
 
-static sal_Int32 string2keytype( const OUString &type )
+static sal_Int32 string2keytype( std::u16string_view type )
 {
     sal_Int32 ret = css::sdbcx::KeyType::UNIQUE;
-    if ( type == "p" )
+    if ( type == u"p" )
         ret = css::sdbcx::KeyType::PRIMARY;
-    else if ( type == "f" )
+    else if ( type == u"f" )
         ret =  css::sdbcx::KeyType::FOREIGN;
     return ret;
 }
 
-static sal_Int32 string2keyrule( const OUString & rule )
+static sal_Int32 string2keyrule( std::u16string_view rule )
 {
     sal_Int32 ret = css::sdbc::KeyRule::NO_ACTION;
-    if( rule == "r" )
+    if( rule == u"r" )
         ret = css::sdbc::KeyRule::RESTRICT;
-    else if( rule == "c" )
+    else if( rule == u"c" )
         ret = css::sdbc::KeyRule::CASCADE;
-    else if( rule == "n" )
+    else if( rule == u"n" )
         ret = css::sdbc::KeyRule::SET_NULL;
-    else if( rule == "d" )
+    else if( rule == u"d" )
         ret = css::sdbc::KeyRule::SET_DEFAULT;
     return ret;
 }
