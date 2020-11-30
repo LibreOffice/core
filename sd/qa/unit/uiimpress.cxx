@@ -377,7 +377,12 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf134053)
     // rounding errors.
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Distance", 2117, fDistance, 12);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Dot length", 706, fDotLength, 12);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Dash length", 2822, fDashLength, 12);
+
+    // tdf#136957 (dotted lines are  disappearing in presentation mode)
+    // Test value used as 2854 instead of 2822 for tdf#136957 workaround.
+    // If this test fails as Expected: 2854 Actual:2822
+    // plaese test tdf#136957 manually and use 2822 as test value again.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Dash length", 2854, fDashLength, 12);
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSpellOnlineParameter)
