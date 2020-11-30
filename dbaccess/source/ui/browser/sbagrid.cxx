@@ -1061,6 +1061,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 {
     Reference< XPropertySet >  xDataSource = getDataSource();
     OSL_ENSURE(xDataSource.is(), "SbaGridControl::DoColumnDrag : invalid data source !");
+    ::dbtools::ensureRowSetConnection(Reference< XRowSet >(getDataSource(),UNO_QUERY), getContext(), nullptr);
 
     Reference< XPropertySet > xAffectedCol;
     Reference< XPropertySet > xAffectedField;
