@@ -28,10 +28,6 @@ namespace vcl {
     class IconThemeInfo;
 }
 
-namespace svt {
-    class SkiaCfg;
-}
-
 class OfaMiscTabPage : public SfxTabPage
 {
 private:
@@ -88,7 +84,6 @@ private:
     std::unique_ptr<SvtTabAppearanceCfg>    pAppearanceCfg;
     std::unique_ptr<CanvasSettings>         pCanvasSettings;
     std::unique_ptr<SvtOptionsDrawinglayer> mpDrawinglayerOpt;
-    std::unique_ptr<svt::SkiaCfg> mpSkiaConfig;
 
     std::vector<vcl::IconThemeInfo> mInstalledIconThemes;
 
