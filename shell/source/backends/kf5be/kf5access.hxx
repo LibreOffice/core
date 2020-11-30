@@ -22,6 +22,8 @@
 
 #include <sal/config.h>
 
+#include <string_view>
+
 #include <com/sun/star/beans/Optional.hpp>
 
 namespace com::sun::star::uno
@@ -31,7 +33,7 @@ class Any;
 
 namespace kf5access
 {
-css::beans::Optional<css::uno::Any> getValue(OUString const& id);
+css::beans::Optional<css::uno::Any> getValue(std::u16string_view id);
 }
 
 #endif
