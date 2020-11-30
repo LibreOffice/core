@@ -216,6 +216,18 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxAutoGrowVertical)
     CPPUNIT_ASSERT(aShapeRect.IsInside(aFlyRect));
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextboxModification)
+{
+    // Load a document with a textbox in it: the layout will have to position the shape part.
+    load(DATA_DIRECTORY, "textbox-modification.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+
+    // Without the accompanying fix in place, this test would have failed, as the document was
+    // marked as modified right after the import.
+    CPPUNIT_ASSERT(!pDocShell->IsModified());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
