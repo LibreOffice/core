@@ -206,6 +206,38 @@ bool FileDefinitionWidgetDraw::hitTestNativeControl(
     return false;
 }
 
+void FileDefinitionWidgetDraw::drawPolyPolygon(SalGraphics& rGraphics,
+                                               const basegfx::B2DHomMatrix& rObjectToDevice,
+                                               const basegfx::B2DPolyPolygon& i_rPolyPolygon,
+                                               double i_fTransparency)
+{
+    rGraphics.DrawPolyPolygon(rObjectToDevice, i_rPolyPolygon, i_fTransparency, nullptr);
+}
+
+void FileDefinitionWidgetDraw::drawPolyLine(
+    SalGraphics& rGraphics, const basegfx::B2DHomMatrix& rObjectToDevice,
+    const basegfx::B2DPolygon& i_rPolygon, double i_fTransparency, double i_fLineWidth,
+    const std::vector<double>* i_pStroke, basegfx::B2DLineJoin i_eLineJoin,
+    css::drawing::LineCap i_eLineCap, double i_fMiterMinimumAngle, bool bPixelSnapHairline)
+{
+    rGraphics.DrawPolyLine(rObjectToDevice, i_rPolygon, i_fTransparency, i_fLineWidth, i_pStroke,
+                           i_eLineJoin, i_eLineCap, i_fMiterMinimumAngle, bPixelSnapHairline,
+                           nullptr);
+}
+
+void FileDefinitionWidgetDraw::drawBitmap(SalGraphics& rGraphics, const SalTwoRect& rPosAry,
+                                          const SalBitmap& rSalBitmap)
+{
+    rGraphics.DrawBitmap(rPosAry, rSalBitmap, nullptr);
+}
+
+void FileDefinitionWidgetDraw::drawBitmap(SalGraphics& rGraphics, const SalTwoRect& rPosAry,
+                                          const SalBitmap& rSalBitmap,
+                                          const SalBitmap& rTransparentBitmap)
+{
+    rGraphics.DrawBitmap(rPosAry, rSalBitmap, rTransparentBitmap, nullptr);
+}
+
 namespace
 {
 void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics, tools::Long nX,
@@ -243,9 +275,9 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                 {
                     rGraphics.SetLineColor();
                     rGraphics.SetFillColor(Color(*rRectangle.mpFillColor));
-                    rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(),
-                                              basegfx::B2DPolyPolygon(aB2DPolygon),
-                                              1.0 - rRectangle.mnOpacity, nullptr);
+                    FileDefinitionWidgetDraw::drawPolyPolygon(rGraphics, basegfx::B2DHomMatrix(),
+                                                              basegfx::B2DPolyPolygon(aB2DPolygon),
+                                                              1.0 - rRectangle.mnOpacity);
                 }
                 else if (rRectangle.mpFillGradient)
                 {
@@ -295,11 +327,11 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                 {
                     rGraphics.SetLineColor(Color(*rRectangle.mpStrokeColor));
                     rGraphics.SetFillColor();
-                    rGraphics.DrawPolyLine(basegfx::B2DHomMatrix(), aB2DPolygon,
-                                           1.0 - rRectangle.mnOpacity, rRectangle.mnStrokeWidth,
-                                           nullptr, // MM01
-                                           basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND,
-                                           0.0f, false, nullptr);
+                    FileDefinitionWidgetDraw::drawPolyLine(
+                        rGraphics, basegfx::B2DHomMatrix(), aB2DPolygon, 1.0 - rRectangle.mnOpacity,
+                        rRectangle.mnStrokeWidth,
+                        nullptr, // MM01
+                        basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, false);
                 }
             }
             break;
@@ -333,8 +365,8 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                 {
                     rGraphics.SetLineColor();
                     rGraphics.SetFillColor(Color(*rPath.mpFillColor));
-                    rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(), aPolyPolygon,
-                                              1.0 - rPath.mnOpacity, nullptr);
+                    FileDefinitionWidgetDraw::drawPolyPolygon(rGraphics, basegfx::B2DHomMatrix(),
+                                                              aPolyPolygon, 1.0 - rPath.mnOpacity);
                 }
                 if (rPath.mpStrokeColor)
                 {
@@ -342,11 +374,11 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                     rGraphics.SetFillColor();
                     for (auto const& rPolygon : aPolyPolygon)
                     {
-                        rGraphics.DrawPolyLine(basegfx::B2DHomMatrix(), rPolygon,
-                                               1.0 - rPath.mnOpacity, rPath.mnStrokeWidth,
-                                               nullptr, // MM01
-                                               basegfx::B2DLineJoin::Round,
-                                               css::drawing::LineCap_ROUND, 0.0f, false, nullptr);
+                        FileDefinitionWidgetDraw::drawPolyLine(
+                            rGraphics, basegfx::B2DHomMatrix(), rPolygon, 1.0 - rPath.mnOpacity,
+                            rPath.mnStrokeWidth,
+                            nullptr, // MM01
+                            basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, false);
                     }
                 }
             }
@@ -381,14 +413,14 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
 
                 rGraphics.SetLineColor();
                 rGraphics.SetFillColor(rWidgetDraw.maFillColor);
-                rGraphics.DrawPolyPolygon(basegfx::B2DHomMatrix(),
-                                          basegfx::B2DPolyPolygon(aB2DPolygon), 0.0f, nullptr);
+                FileDefinitionWidgetDraw::drawPolyPolygon(
+                    rGraphics, basegfx::B2DHomMatrix(), basegfx::B2DPolyPolygon(aB2DPolygon), 0.0f);
                 rGraphics.SetLineColor(rWidgetDraw.maStrokeColor);
                 rGraphics.SetFillColor();
-                rGraphics.DrawPolyLine(
-                    basegfx::B2DHomMatrix(), aB2DPolygon, 0.0f, rWidgetDraw.mnStrokeWidth,
-                    nullptr, // MM01
-                    basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, false, nullptr);
+                FileDefinitionWidgetDraw::drawPolyLine(
+                    rGraphics, basegfx::B2DHomMatrix(), aB2DPolygon, 0.0f,
+                    rWidgetDraw.mnStrokeWidth, nullptr, // MM01
+                    basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, false);
             }
             break;
             case WidgetDrawActionType::LINE:
@@ -408,10 +440,10 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                       aRectPoint.Y() + (aRectSize.Height() * rWidgetDraw.mfY2) },
                 };
 
-                rGraphics.DrawPolyLine(
-                    basegfx::B2DHomMatrix(), aB2DPolygon, 0.0f, rWidgetDraw.mnStrokeWidth,
-                    nullptr, // MM01
-                    basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, false, nullptr);
+                FileDefinitionWidgetDraw::drawPolyLine(
+                    rGraphics, basegfx::B2DHomMatrix(), aB2DPolygon, 0.0f,
+                    rWidgetDraw.mnStrokeWidth, nullptr, // MM01
+                    basegfx::B2DLineJoin::Round, css::drawing::LineCap_ROUND, 0.0f, false);
             }
             break;
             case WidgetDrawActionType::IMAGE:
@@ -453,11 +485,12 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                     {
                         const std::shared_ptr<SalBitmap> pSalBitmapAlpha
                             = aBitmap.GetAlpha().ImplGetSalBitmap();
-                        rGraphics.DrawBitmap(aTR, *pSalBitmap, *pSalBitmapAlpha, nullptr);
+                        FileDefinitionWidgetDraw::drawBitmap(rGraphics, aTR, *pSalBitmap,
+                                                             *pSalBitmapAlpha);
                     }
                     else
                     {
-                        rGraphics.DrawBitmap(aTR, *pSalBitmap, nullptr);
+                        FileDefinitionWidgetDraw::drawBitmap(rGraphics, aTR, *pSalBitmap);
                     }
                 }
             }
