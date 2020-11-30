@@ -164,8 +164,9 @@ namespace xmloff
             sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 #if OSL_DEBUG_LEVEL > 0
-        virtual void StartElement(
-            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
+        virtual void SAL_CALL startFastElement(
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
         virtual void SAL_CALL characters(const OUString& _rChars) override;
 #endif
     };
@@ -181,8 +182,9 @@ namespace xmloff
         OSinglePropertyContext(SvXMLImport& _rImport,
                 const OPropertyImportRef& _rPropertyImporter);
 
-        virtual void StartElement(
-            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
+        virtual void SAL_CALL startFastElement(
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     };
 
     //= OListPropertyContext
@@ -197,8 +199,9 @@ namespace xmloff
         OListPropertyContext( SvXMLImport& _rImport,
                 const OPropertyImportRef& _rPropertyImporter );
 
-        virtual void StartElement(
-            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList ) override;
+        virtual void SAL_CALL startFastElement(
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
         virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
@@ -214,8 +217,9 @@ namespace xmloff
     public:
         OListValueContext( SvXMLImport& _rImport, OUString& _rListValueHolder );
 
-        virtual void StartElement(
-            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList ) override;
+        virtual void SAL_CALL startFastElement(
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     };
 
 }   // namespace xmloff

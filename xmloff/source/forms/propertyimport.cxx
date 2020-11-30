@@ -360,9 +360,11 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OPropertyElementsConte
 }
 
 #if OSL_DEBUG_LEVEL > 0
-    void OPropertyElementsContext::StartElement(const Reference< XAttributeList >& _rxAttrList)
+    void OPropertyElementsContext::startFastElement(
+        sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
     {
-        OSL_ENSURE(0 == _rxAttrList->getLength(), "OPropertyElementsContext::StartElement: the form:properties element should not have attributes!");
+        OSL_ENSURE(0 == xAttrList->getFastAttributes().getLength(), "OPropertyElementsContext::StartElement: the form:properties element should not have attributes!");
     }
 
     void OPropertyElementsContext::characters(const OUString& _rChars)
@@ -379,39 +381,31 @@ OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport,
 {
 }
 
-void OSinglePropertyContext::StartElement(const Reference< XAttributeList >& _rxAttrList)
+void OSinglePropertyContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     css::beans::PropertyValue aPropValue;      // the property the instance imports currently
     css::uno::Type aPropType;          // the type of the property the instance imports currently
 
     OUString sType, sValue;
-    const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
-    const sal_Int16 nAttrCount = _rxAttrList.is() ? _rxAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString& rAttrName = _rxAttrList->getNameByIndex( i );
-
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            rMap.GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        if( XML_NAMESPACE_FORM == nPrefix )
+        switch (aIter.getToken())
         {
-            if( token::IsXMLToken( aLocalName, token::XML_PROPERTY_NAME ) )
-                aPropValue.Name = _rxAttrList->getValueByIndex( i );
-
-        }
-        else if( XML_NAMESPACE_OFFICE == nPrefix )
-        {
-            if( token::IsXMLToken( aLocalName, token::XML_VALUE_TYPE ) )
-                sType = _rxAttrList->getValueByIndex( i );
-            else if( token::IsXMLToken( aLocalName,
-                                        token::XML_VALUE ) ||
-                        token::IsXMLToken( aLocalName,
-                                        token::XML_BOOLEAN_VALUE ) ||
-                     token::IsXMLToken( aLocalName,
-                                        token::XML_STRING_VALUE ) )
-                sValue = _rxAttrList->getValueByIndex( i );
+            case XML_ELEMENT(FORM, XML_PROPERTY_NAME):
+                aPropValue.Name = aIter.toString();
+                break;
+            case XML_ELEMENT(OFFICE, XML_VALUE_TYPE):
+                sType = aIter.toString();
+                break;
+            case XML_ELEMENT(OFFICE, XML_VALUE):
+            case XML_ELEMENT(OFFICE, XML_BOOLEAN_VALUE):
+            case XML_ELEMENT(OFFICE, XML_STRING_VALUE):
+                sValue = aIter.toString();
+                break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
@@ -444,33 +438,22 @@ OListPropertyContext::OListPropertyContext( SvXMLImport& _rImport,
 {
 }
 
-void OListPropertyContext::StartElement( const Reference< XAttributeList >& _rxAttrList )
+void OListPropertyContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    sal_Int32 nAttributeCount = _rxAttrList->getLength();
-
-    sal_uInt16 nNamespace;
-    OUString sAttributeName;
-    const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
-    for ( sal_Int32 i = 0; i < nAttributeCount; ++i )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        nNamespace = rMap.GetKeyByAttrName( _rxAttrList->getNameByIndex( i ), &sAttributeName );
-        if  (   ( XML_NAMESPACE_FORM == nNamespace )
-            &&  ( token::IsXMLToken( sAttributeName, token::XML_PROPERTY_NAME ) )
-            )
+        switch (aIter.getToken())
         {
-            m_sPropertyName = _rxAttrList->getValueByIndex( i );
-        }
-        else if (   ( XML_NAMESPACE_OFFICE == nNamespace )
-                &&  ( token::IsXMLToken( sAttributeName, token::XML_VALUE_TYPE ) )
-                )
-        {
-            m_sPropertyType = _rxAttrList->getValueByIndex( i );
-        }
-        else
-        {
-            OSL_FAIL( OStringBuffer( "OListPropertyContext::StartElement: unknown child element (\"").
-                append(OUStringToOString(sAttributeName, RTL_TEXTENCODING_ASCII_US)).
-                append("\")!").getStr() );
+            case XML_ELEMENT(FORM, XML_PROPERTY_NAME):
+                m_sPropertyName = aIter.toString();
+                break;
+            case XML_ELEMENT(OFFICE, XML_VALUE_TYPE):
+                m_sPropertyType = aIter.toString();
+                break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 }
@@ -517,31 +500,22 @@ OListValueContext::OListValueContext( SvXMLImport& _rImport, OUString& _rListVal
 {
 }
 
-void OListValueContext::StartElement( const Reference< XAttributeList >& _rxAttrList )
+void OListValueContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    const sal_Int32 nAttributeCount = _rxAttrList->getLength();
-
-    sal_uInt16 nNamespace;
-    OUString sAttributeName;
-    const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
-    for ( sal_Int32 i = 0; i < nAttributeCount; ++i )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        nNamespace = rMap.GetKeyByAttrName( _rxAttrList->getNameByIndex( i ), &sAttributeName );
-        if ( XML_NAMESPACE_OFFICE == nNamespace )
+        switch(aIter.getToken())
         {
-            if  (   token::IsXMLToken( sAttributeName, token::XML_VALUE )
-               ||   token::IsXMLToken( sAttributeName, token::XML_STRING_VALUE )
-               ||   token::IsXMLToken( sAttributeName, token::XML_BOOLEAN_VALUE )
-                )
-            {
-                m_rListValueHolder = _rxAttrList->getValueByIndex( i );
-                continue;
-            }
+            case XML_ELEMENT(OFFICE, XML_VALUE):
+            case XML_ELEMENT(OFFICE, XML_STRING_VALUE):
+            case XML_ELEMENT(OFFICE, XML_BOOLEAN_VALUE):
+                m_rListValueHolder = aIter.toString();
+                break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
-
-        OSL_FAIL( OStringBuffer( "OListValueContext::StartElement: unknown child element (\"").
-            append(OUStringToOString(sAttributeName, RTL_TEXTENCODING_ASCII_US)).
-            append("\")!").getStr() );
     }
 }
 
