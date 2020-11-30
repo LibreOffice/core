@@ -28,14 +28,16 @@
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace osl { class Mutex; }
 
-/*-************************************************************************************************************
-    @descr          The method GetList() returns a list of property values.
-                    Use follow defines to separate values by names.
-*//*-*************************************************************************************************************/
-#define DYNAMICMENU_PROPERTYNAME_URL                    "URL"
-#define DYNAMICMENU_PROPERTYNAME_TITLE                  "Title"
-#define DYNAMICMENU_PROPERTYNAME_IMAGEIDENTIFIER        "ImageIdentifier"
-#define DYNAMICMENU_PROPERTYNAME_TARGETNAME             "TargetName"
+/*-****************************************************************************************************************
+    @descr  struct to hold information about one menu entry.
+****************************************************************************************************************-*/
+struct SvtDynMenuEntry
+{
+    OUString    sURL;
+    OUString    sTitle;
+    OUString    sImageIdentifier;
+    OUString    sTargetName;
+};
 
 /*-************************************************************************************************************
     @descr          You can use these enum values to specify right menu if you call our interface methods.
@@ -77,7 +79,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtDynamicMenuOptions final : public ut
             @onerror    We return an empty list.
         *//*-*****************************************************************************************************/
 
-        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > GetMenu( EDynamicMenuType eMenu ) const;
+        std::vector< SvtDynMenuEntry > GetMenu( EDynamicMenuType eMenu ) const;
     private:
 
         /*-****************************************************************************************************

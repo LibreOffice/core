@@ -39,6 +39,11 @@ using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
+#define DYNAMICMENU_PROPERTYNAME_URL                    "URL"
+#define DYNAMICMENU_PROPERTYNAME_TITLE                  "Title"
+#define DYNAMICMENU_PROPERTYNAME_IMAGEIDENTIFIER        "ImageIdentifier"
+#define DYNAMICMENU_PROPERTYNAME_TARGETNAME             "TargetName"
+
 #define ROOTNODE_MENUS                                  "Office.Common/Menus/"
 #define PATHDELIMITER                                   "/"
 
@@ -52,25 +57,10 @@ using namespace ::com::sun::star::beans;
 
 #define PROPERTYCOUNT                                   4
 
-#define OFFSET_URL                                      0
-#define OFFSET_TITLE                                    1
-#define OFFSET_IMAGEIDENTIFIER                          2
-#define OFFSET_TARGETNAME                               3
-
 #define PATHPREFIX_SETUP                                "m"
 
 namespace {
 
-/*-****************************************************************************************************************
-    @descr  struct to hold information about one menu entry.
-****************************************************************************************************************-*/
-struct SvtDynMenuEntry
-{
-        OUString    sURL;
-        OUString    sTitle;
-        OUString    sImageIdentifier;
-        OUString    sTargetName;
-};
 
 /*-****************************************************************************************************************
     @descr  support simple menu structures and operations on it
@@ -97,39 +87,28 @@ class SvtDynMenu
         // Notice:   We build a property list with 4 entries and set it on result list then.
         //           Separator entries will be packed in another way then normal entries! We define
         //           special string "sSeparator" to perform too ...
-        Sequence< Sequence< PropertyValue > > GetList() const
+        std::vector< SvtDynMenuEntry > GetList() const
         {
             sal_Int32                             nSetupCount = static_cast<sal_Int32>(lSetupEntries.size());
             sal_Int32                             nUserCount  = static_cast<sal_Int32>(lUserEntries.size());
             sal_Int32                             nStep       = 0;
-            Sequence< PropertyValue >             lProperties ( PROPERTYCOUNT );
-            Sequence< Sequence< PropertyValue > > lResult     ( nSetupCount+nUserCount );
+            std::vector< SvtDynMenuEntry >        lResult ( nSetupCount+nUserCount );
             OUString                              sSeparator  ( "private:separator" );
-
-            lProperties[OFFSET_URL            ].Name = PROPERTYNAME_URL;
-            lProperties[OFFSET_TITLE          ].Name = PROPERTYNAME_TITLE;
-            lProperties[OFFSET_IMAGEIDENTIFIER].Name = PROPERTYNAME_IMAGEIDENTIFIER;
-            lProperties[OFFSET_TARGETNAME     ].Name = PROPERTYNAME_TARGETNAME;
 
             for( const auto& pList : {&lSetupEntries, &lUserEntries} )
             {
                 for( const auto& rItem : *pList )
                 {
+                    SvtDynMenuEntry entry;
                     if( rItem.sURL == sSeparator )
                     {
-                        lProperties[OFFSET_URL              ].Value <<= sSeparator;
-                        lProperties[OFFSET_TITLE            ].Value <<= OUString();
-                        lProperties[OFFSET_IMAGEIDENTIFIER  ].Value <<= OUString();
-                        lProperties[OFFSET_TARGETNAME       ].Value <<= OUString();
+                        entry.sURL = sSeparator;
                     }
                     else
                     {
-                        lProperties[OFFSET_URL              ].Value <<= rItem.sURL;
-                        lProperties[OFFSET_TITLE            ].Value <<= rItem.sTitle;
-                        lProperties[OFFSET_IMAGEIDENTIFIER  ].Value <<= rItem.sImageIdentifier;
-                        lProperties[OFFSET_TARGETNAME       ].Value <<= rItem.sTargetName;
+                        entry = rItem;
                     }
-                    lResult[nStep] = lProperties;
+                    lResult[nStep] = entry;
                     ++nStep;
                 }
             }
@@ -169,7 +148,7 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
                         => The code exist only for one time and isn't duplicated for every instance!
         *//*-*****************************************************************************************************/
 
-        Sequence< Sequence< PropertyValue > >   GetMenu     (           EDynamicMenuType    eMenu           ) const;
+        std::vector< SvtDynMenuEntry >   GetMenu     (           EDynamicMenuType    eMenu           ) const;
 
     private:
 
@@ -405,9 +384,9 @@ void SvtDynamicMenuOptions_Impl::ImplCommit()
 
 //  public method
 
-Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions_Impl::GetMenu( EDynamicMenuType eMenu ) const
+std::vector< SvtDynMenuEntry > SvtDynamicMenuOptions_Impl::GetMenu( EDynamicMenuType eMenu ) const
 {
-    Sequence< Sequence< PropertyValue > > lReturn;
+    std::vector< SvtDynMenuEntry > lReturn;
     switch( eMenu )
     {
         case EDynamicMenuType::NewMenu      :
@@ -536,7 +515,7 @@ SvtDynamicMenuOptions::~SvtDynamicMenuOptions()
 
 //  public method
 
-Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions::GetMenu( EDynamicMenuType eMenu ) const
+std::vector< SvtDynMenuEntry > SvtDynamicMenuOptions::GetMenu( EDynamicMenuType eMenu ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->GetMenu( eMenu );

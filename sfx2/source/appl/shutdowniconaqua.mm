@@ -414,15 +414,12 @@ void aqua_init_systray()
             // collect the URLs of the entries in the File/New menu
             SvtModuleOptions    aModuleOptions;
             std::set< OUString > aFileNewAppsAvailable;
-            SvtDynamicMenuOptions aOpt;
-            css::uno::Sequence < css::uno::Sequence < css::beans::PropertyValue > > const aNewMenu = aOpt.GetMenu( EDynamicMenuType::NewMenu );
+            std::vector < SvtDynMenuEntry > const aNewMenu = SvtDynamicMenuOptions().GetMenu( EDynamicMenuType::NewMenu );
 
-            for ( auto const & newMenuProp : aNewMenu )
+            for ( SvtDynMenuEntry const & newMenuProp : aNewMenu )
             {
-                comphelper::SequenceAsHashMap aEntryItems( newMenuProp );
-                OUString sURL( aEntryItems.getUnpackedValueOrDefault( "URL", OUString() ) );
-                if ( sURL.getLength() )
-                    aFileNewAppsAvailable.insert( sURL );
+                if ( !newMenuProp.sURL.isEmpty() )
+                    aFileNewAppsAvailable.insert( newMenuProp.sURL );
             }
 
             // describe the menu entries for launching the applications
