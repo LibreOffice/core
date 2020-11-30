@@ -49,6 +49,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
+#include <attrib.hxx>
 #include <detfunc.hxx>
 #include <document.hxx>
 #include <dociter.hxx>
