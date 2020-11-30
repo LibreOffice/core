@@ -2249,7 +2249,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
 
     case XML_TOK_TEXT_INDEX_TITLE:
     case XML_TOK_TEXT_SECTION:
-        pContext = new XMLSectionImportContext( rImport, nPrefix, rLocalName );
+        pContext = new XMLSectionImportContext( rImport );
         break;
 
     case XML_TOK_TEXT_TOC:
