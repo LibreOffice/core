@@ -1382,13 +1382,15 @@ bool ScDetectiveFunc::MarkInvalid(bool& rOverflow)
                     if ( bMarkEmpty )
                         for ( nRow = nNextRow; nRow < nCellRow && nInsCount < SC_DET_MAXCIRCLE; nRow++ )
                         {
-                            DrawCircle( nCol, nRow, aData );
+                            if(!pPattern->GetItem(ATTR_MERGE_FLAG).IsOverlapped())
+                               DrawCircle( nCol, nRow, aData );
                             ++nInsCount;
                         }
                     ScRefCellValue aCell = aCellIter.getRefCellValue();
                     if (!pData->IsDataValid(aCell, aCellIter.GetPos()))
                     {
-                        DrawCircle( nCol, nCellRow, aData );
+                        if(!pPattern->GetItem(ATTR_MERGE_FLAG).IsOverlapped())
+                           DrawCircle( nCol, nCellRow, aData );
                         ++nInsCount;
                     }
                     nNextRow = nCellRow + 1;
@@ -1396,7 +1398,8 @@ bool ScDetectiveFunc::MarkInvalid(bool& rOverflow)
                 if ( bMarkEmpty )
                     for ( nRow = nNextRow; nRow <= nRow2 && nInsCount < SC_DET_MAXCIRCLE; nRow++ )
                     {
-                        DrawCircle( nCol, nRow, aData );
+                        if(!pPattern->GetItem(ATTR_MERGE_FLAG).IsOverlapped())
+                           DrawCircle(nCol, nRow, aData);
                         ++nInsCount;
                     }
             }

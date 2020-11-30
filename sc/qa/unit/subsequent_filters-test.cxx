@@ -65,6 +65,8 @@
 #include <stlpool.hxx>
 #include <hints.hxx>
 #include <detfunc.hxx>
+#include <cellmergeoption.hxx>
+#include <undoblk.hxx>
 
 #include <orcusfilters.hxx>
 #include <filter.hxx>
@@ -102,6 +104,7 @@ public:
     virtual void tearDown() override;
 
     //ods, xls, xlsx filter tests
+    void testUpdateCircleInMergedCellODS();
     void testDeleteCircleInMergedCellODS();
     void testBooleanFormatXLSX();
     void testBasicCellContentODS();
@@ -292,6 +295,7 @@ public:
     void testDeleteCirclesInRowAndCol();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
+    CPPUNIT_TEST(testUpdateCircleInMergedCellODS);
     CPPUNIT_TEST(testDeleteCircleInMergedCellODS);
     CPPUNIT_TEST(testBooleanFormatXLSX);
     CPPUNIT_TEST(testBasicCellContentODS);
@@ -524,6 +528,37 @@ void testRangeNameImpl(const ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("formula Global5 should reference Global6 ( which is evaluated as local1 )", 5.0, aValue);
 }
 
+}
+
+void ScFiltersTest::testUpdateCircleInMergedCellODS()
+{
+    ScDocShellRef xDocSh = loadDoc("updateCircleInMergedCell.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load updateCircleInMergedCell.ods", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.EnableChangeReadOnly(true);
+
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
+
+    // There should be four circle objects!
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pPage->GetObjCount());
+
+    ScCellMergeOption aCellMergeOption(0,0,1,1); // A1:B2
+    aCellMergeOption.maTabs.insert(0);
+    xDocSh->GetDocFunc().MergeCells(aCellMergeOption, false, true, true, false);
+
+    // There should be a circle object!
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
+
+    std::unique_ptr<ScUndoRemoveMerge> pUndoRemoveMerge;
+    xDocSh->GetDocFunc().UnmergeCells(aCellMergeOption, true, pUndoRemoveMerge.get());
+
+    // There should be four circle objects!
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pPage->GetObjCount());
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testDeleteCircleInMergedCellODS()
