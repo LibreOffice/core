@@ -34,6 +34,24 @@
       "revId": "0072788c79c11e89fdf2fe3ca1ea09bae7684303",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e752df96_d8e7b871",
+        "filename": "sw/source/filter/html/css1atr.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-30T10:33:27Z",
+      "side": 1,
+      "message": "...and the OString from `char const *` ctor has an undocumented feature of supporting a null value, I see",
+      "parentUuid": "d8a6650b_fc82f02f",
+      "revId": "0072788c79c11e89fdf2fe3ca1ea09bae7684303",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
