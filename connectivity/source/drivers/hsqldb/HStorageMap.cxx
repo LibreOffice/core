@@ -73,7 +73,7 @@ namespace connectivity::hsqldb
             }
             catch(const Exception&)
             {
-                OSL_FAIL("Exception caught!");
+                TOOLS_WARN_EXCEPTION( "connectivity.hsqldb", "");
             }
         }
 

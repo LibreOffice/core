@@ -762,7 +762,7 @@ namespace editeng
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "HangulHanjaConversion_Impl::implChange: caught unexpected exception!" );
+                TOOLS_WARN_EXCEPTION( "editeng", "HangulHanjaConversion_Impl::implChange: caught unexpected exception!" );
                 aOffsets.realloc(0);
             }
         }

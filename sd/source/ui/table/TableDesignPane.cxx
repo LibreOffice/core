@@ -35,6 +35,7 @@
 #include <vcl/virdev.hxx>
 
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <svl/style.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/bindings.hxx>
@@ -118,7 +119,7 @@ TableDesignWidget::TableDesignWidget(weld::Builder& rBuilder, ViewShellBase& rBa
     }
     catch (const Exception&)
     {
-        OSL_FAIL( "sd::CustomAnimationPane::CustomAnimationPane(), Exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPane::CustomAnimationPane()" );
     }
 
     onSelectionChanged();
@@ -197,7 +198,7 @@ void TableDesignWidget::ApplyStyle()
     }
     catch( Exception& )
     {
-        OSL_FAIL("TableDesignWidget::implValueSetHdl(), exception caught!");
+        TOOLS_WARN_EXCEPTION( "sd", "TableDesignWidget::implValueSetHdl()");
     }
 }
 
@@ -272,7 +273,7 @@ void TableDesignWidget::onSelectionChanged()
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::TableDesignWidget::onSelectionChanged(), Exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::TableDesignWidget::onSelectionChanged()" );
     }
 
     if( mxSelectedTable != xNewSelection )
@@ -355,7 +356,7 @@ void TableDesignWidget::updateControls()
         }
         catch( Exception& )
         {
-            OSL_FAIL("sd::TableDesignWidget::updateControls(), exception caught!");
+            TOOLS_WARN_EXCEPTION( "sd", "sd::TableDesignWidget::updateControls()");
         }
         m_aCheckBoxes[i]->set_active(bUse);
         m_aCheckBoxes[i]->set_sensitive(bHasTable);
@@ -505,7 +506,7 @@ static void FillCellInfoVector( const Reference< XIndexAccess >& xTableStyle, Ce
     }
     catch(Exception&)
     {
-        OSL_FAIL("sd::FillCellInfoVector(), exception caught!");
+        TOOLS_WARN_EXCEPTION( "sd", "sd::FillCellInfoVector()");
     }
 }
 
@@ -734,7 +735,7 @@ void TableDesignWidget::FillDesignPreviewControl()
         }
         catch( Exception& )
         {
-            OSL_FAIL("sd::TableDesignWidget::FillDesignPreviewControl(), exception caught!");
+            TOOLS_WARN_EXCEPTION( "sd", "sd::TableDesignWidget::FillDesignPreviewControl()");
         }
         sal_Int32 nCols = 3;
         sal_Int32 nRows = (nCount+2)/3;
@@ -754,7 +755,7 @@ void TableDesignWidget::FillDesignPreviewControl()
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::TableDesignWidget::FillDesignPreviewControl(), exception caught!");
+        TOOLS_WARN_EXCEPTION( "sd", "sd::TableDesignWidget::FillDesignPreviewControl()");
     }
     m_xValueSet->SelectItem(nSelectedItem);
 }

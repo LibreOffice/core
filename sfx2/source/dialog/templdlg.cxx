@@ -44,6 +44,7 @@
 
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
@@ -1679,7 +1680,7 @@ static OUString getModuleIdentifier( const Reference< XModuleManager2 >& i_xModM
     }
     catch ( Exception& )
     {
-        OSL_FAIL( "getModuleIdentifier(): exception of XModuleManager::identify()" );
+        TOOLS_WARN_EXCEPTION( "sfx", "getModuleIdentifier(): exception of XModuleManager::identify()" );
     }
 
     return sIdentifier;

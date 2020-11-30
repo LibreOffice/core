@@ -37,6 +37,7 @@
 #include <vcl/weldutils.hxx>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
+#include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 
 #include <sdresid.hxx>
@@ -144,7 +145,7 @@ OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText 
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::getShapeDescription(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::getShapeDescription()" );
     }
 
     if (bAppendIndex)
@@ -909,7 +910,7 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
     }
     catch (const Exception&)
     {
-        OSL_FAIL("sd::CustomAnimationList::append(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationList::append()" );
     }
 }
 
@@ -963,7 +964,7 @@ void CustomAnimationList::onSelectionChanged(const Any& rSelection)
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::CustomAnimationList::onSelectionChanged(), Exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationList::onSelectionChanged()" );
     }
 }
 

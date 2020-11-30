@@ -21,6 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 using namespace css;
 using namespace ::com::sun::star::beans;
@@ -109,7 +110,7 @@ void SQLFetchThread::execute()
     }
     catch (uno::Exception&)
     {
-        OSL_FAIL("exception in database");
+        TOOLS_WARN_EXCEPTION("sc", "exception in database");
     }
 
     for (auto& itr : maDataTransformations)

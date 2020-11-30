@@ -161,7 +161,7 @@ OAppDetailPageHelper::~OAppDetailPageHelper()
     }
     catch(const Exception&)
     {
-        OSL_FAIL("Exception thrown while disposing preview frame!");
+        TOOLS_WARN_EXCEPTION( "dbaccess", "Exception thrown while disposing preview frame!");
     }
 
     for (auto& rpBox : m_aLists)

@@ -29,6 +29,7 @@
 #include <sot/stg.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <comphelper/storagehelper.hxx>
@@ -91,7 +92,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
         }
         catch(const uno::Exception&)
         {
-            OSL_FAIL("exception while creating AutoText storage");
+            TOOLS_WARN_EXCEPTION( "sw", "exception while creating AutoText storage");
         }
     }
     InitBlockMode ( refStg );

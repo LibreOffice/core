@@ -44,6 +44,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::svt;
 using namespace ::dbaui;
@@ -375,7 +376,7 @@ void OSelectionBrowseBox::Init()
     }
     catch(const SQLException&)
     {
-        OSL_FAIL("Caught Exception when asking for database metadata options!");
+        TOOLS_WARN_EXCEPTION( "dbaccess", "Caught Exception when asking for database metadata options!");
         m_nMaxColumns = 0;
     }
 }

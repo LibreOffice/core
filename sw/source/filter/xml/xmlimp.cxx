@@ -65,6 +65,7 @@
 #include <unotools/saveopt.hxx>
 #include <unotools/streamwrap.hxx>
 #include <tools/helpers.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <vcl/svapp.hxx>
 #include <unotxdoc.hxx>
@@ -1417,7 +1418,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             }
             catch( Exception& )
             {
-                OSL_FAIL( "SwXMLImport::SetConfigurationSettings: Exception!" );
+                TOOLS_WARN_EXCEPTION( "sw", "SwXMLImport::SetConfigurationSettings" );
             }
         }
     }
@@ -1434,7 +1435,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             xProps->setPropertyValue(embeddedDatabaseName->Name, embeddedDatabaseName->Value);
     } catch( Exception& )
     {
-        OSL_FAIL( "SwXMLImport::SetConfigurationSettings: Exception!" );
+        TOOLS_WARN_EXCEPTION( "sw", "SwXMLImport::SetConfigurationSettings" );
     }
 
     // finally, treat the non-default cases

@@ -470,7 +470,7 @@ IMPL_LINK_NOARG(OButtonControl, OnClick, void*, void)
 #endif
                 catch( const Exception& )
                 {
-                    OSL_FAIL( "OButtonControl::OnClick: caught an exception other than RuntimeException!" );
+                    TOOLS_WARN_EXCEPTION( "forms.component", "OButtonControl::OnClick: caught an exception other than RuntimeException!" );
                 }
             }
         }

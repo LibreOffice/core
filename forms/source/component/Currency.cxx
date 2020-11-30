@@ -23,6 +23,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <comphelper/types.hxx>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/form/FormComponentType.hpp>
 
 
@@ -99,7 +100,7 @@ void OCurrencyModel::implConstruct()
     }
     catch(const Exception&)
     {
-        OSL_FAIL( "OCurrencyModel::implConstruct: caught an exception while initializing the aggregate!" );
+        TOOLS_WARN_EXCEPTION( "forms.component", "OCurrencyModel::implConstruct: caught an exception while initializing the aggregate!" );
     }
 }
 

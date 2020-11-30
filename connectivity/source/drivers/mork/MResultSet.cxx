@@ -27,6 +27,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <vector>
 #include <algorithm>
@@ -1265,7 +1266,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
         }
         catch (Exception&)
         {
-            OSL_FAIL("OResultSet::setBoundedColumns: caught an Exception!");
+            TOOLS_WARN_EXCEPTION( "connectivity.hsqldb", "OResultSet::setBoundedColumns");
         }
     }
 }
