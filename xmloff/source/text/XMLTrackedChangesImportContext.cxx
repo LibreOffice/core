@@ -45,30 +45,22 @@ XMLTrackedChangesImportContext::~XMLTrackedChangesImportContext()
 {
 }
 
-void XMLTrackedChangesImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList )
+void XMLTrackedChangesImportContext::startFastElement( sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     bool bTrackChanges = true;
 
     // scan for text:track-changes and text:protection-key attributes
-    sal_Int16 nLength = xAttrList->getLength();
-    for( sal_Int16 i = 0; i < nLength; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
-
-        if ( XML_NAMESPACE_TEXT == nPrefix )
+        if (aIter.getToken() == XML_ELEMENT(TEXT, XML_TRACK_CHANGES) )
         {
-            if ( IsXMLToken( sLocalName, XML_TRACK_CHANGES ) )
+            bool bTmp(false);
+            if (::sax::Converter::convertBool(bTmp, aIter.toString()))
             {
-                bool bTmp(false);
-                if (::sax::Converter::convertBool(
-                    bTmp, xAttrList->getValueByIndex(i)) )
-                {
-                    bTrackChanges = bTmp;
-                }
+                bTrackChanges = bTmp;
             }
+            break;
         }
     }
 
