@@ -113,17 +113,17 @@ class SwCursorOszControl
 public:
     // So the compiler can initialize the class already. No DTOR and member
     // as public members
-    const SwFlyFrame *pEntry;
-    const SwFlyFrame *pStack1;
-    const SwFlyFrame *pStack2;
+    const SwFlyFrame* m_pEntry;
+    const SwFlyFrame* m_pStack1;
+    const SwFlyFrame* m_pStack2;
 
     bool ChkOsz( const SwFlyFrame *pFly )
         {
             bool bRet = true;
-            if ( pFly != pStack1 && pFly != pStack2 )
+            if (pFly != m_pStack1 && pFly != m_pStack2)
             {
-                pStack1 = pStack2;
-                pStack2 = pFly;
+                m_pStack1 = m_pStack2;
+                m_pStack2 = pFly;
                 bRet  = false;
             }
             return bRet;
@@ -131,14 +131,14 @@ public:
 
     void Entry( const SwFlyFrame *pFly )
         {
-            if ( !pEntry )
-                pEntry = pStack1 = pFly;
+            if (!m_pEntry)
+                m_pEntry = m_pStack1 = pFly;
         }
 
     void Exit( const SwFlyFrame *pFly )
         {
-            if ( pFly == pEntry )
-                pEntry = pStack1 = pStack2 = nullptr;
+            if (pFly == m_pEntry)
+                m_pEntry = m_pStack1 = m_pStack2 = nullptr;
         }
 };
 
