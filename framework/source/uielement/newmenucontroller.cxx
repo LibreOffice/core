@@ -325,40 +325,24 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const &
     if(xMenuItemDispatch == nullptr)
         return;
 
-    const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aDynamicMenuEntries =
+    const std::vector< SvtDynMenuEntry > aDynamicMenuEntries =
         SvtDynamicMenuOptions().GetMenu( m_bNewMenu ? EDynamicMenuType::NewMenu : EDynamicMenuType::WizardMenu );
 
-    OUString aTitle;
-    OUString aURL;
-    OUString aTargetFrame;
-    OUString aImageId;
     sal_uInt16 nItemId = 1;
 
     for ( const auto& aDynamicMenuEntry : aDynamicMenuEntries )
     {
-        for ( const auto& aProperty : aDynamicMenuEntry )
-        {
-            if ( aProperty.Name == DYNAMICMENU_PROPERTYNAME_URL )
-                aProperty.Value >>= aURL;
-            else if ( aProperty.Name == DYNAMICMENU_PROPERTYNAME_TITLE )
-                aProperty.Value >>= aTitle;
-            else if ( aProperty.Name == DYNAMICMENU_PROPERTYNAME_IMAGEIDENTIFIER )
-                aProperty.Value >>= aImageId;
-            else if ( aProperty.Name == DYNAMICMENU_PROPERTYNAME_TARGETNAME )
-                aProperty.Value >>= aTargetFrame;
-        }
-
-        if ( aTitle.isEmpty() && aURL.isEmpty() )
+        if ( aDynamicMenuEntry.sTitle.isEmpty() && aDynamicMenuEntry.sURL.isEmpty() )
             continue;
 
-        if ( aURL == "private:separator" )
+        if ( aDynamicMenuEntry.sURL == "private:separator" )
             pVCLPopupMenu->InsertSeparator();
         else
         {
-            pVCLPopupMenu->InsertItem( nItemId, aTitle );
-            pVCLPopupMenu->SetItemCommand( nItemId, aURL );
+            pVCLPopupMenu->InsertItem( nItemId, aDynamicMenuEntry.sTitle );
+            pVCLPopupMenu->SetItemCommand( nItemId, aDynamicMenuEntry.sURL );
 
-            void* nAttributePtr = MenuAttributes::CreateAttribute( aTargetFrame, aImageId );
+            void* nAttributePtr = MenuAttributes::CreateAttribute( aDynamicMenuEntry.sTargetName, aDynamicMenuEntry.sImageIdentifier );
             pVCLPopupMenu->SetUserValue( nItemId, nAttributePtr, MenuAttributes::ReleaseAttribute );
 
             nItemId++;
