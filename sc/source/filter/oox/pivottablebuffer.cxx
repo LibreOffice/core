@@ -39,6 +39,7 @@
 #include <com/sun/star/sheet/XSheetOperation.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/attributelist.hxx>
@@ -1313,7 +1314,7 @@ void PivotTable::finalizeImport()
     }
     catch( Exception& )
     {
-        OSL_FAIL( "PivotTable::finalizeImport - exception while creating the DataPilot table" );
+        TOOLS_WARN_EXCEPTION( "sc", "PivotTable::finalizeImport - exception while creating the DataPilot table" );
     }
 }
 

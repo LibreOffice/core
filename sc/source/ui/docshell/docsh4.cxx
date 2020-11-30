@@ -56,6 +56,7 @@ using namespace ::com::sun::star;
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1121,7 +1122,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             }
                             catch ( uno::Exception& )
                             {
-                                OSL_FAIL( "SID_SHARE_DOC: caught exception" );
+                                TOOLS_WARN_EXCEPTION( "sc", "SID_SHARE_DOC" );
                                 SC_MOD()->SetInSharedDocSaving( false );
 
                                 try

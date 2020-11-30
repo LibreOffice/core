@@ -181,7 +181,7 @@ void SAL_CALL DragSource::startDrag(
         }
         catch(RuntimeException&)
         {
-            OSL_FAIL("Runtime exception during event dispatching");
+            TOOLS_WARN_EXCEPTION( "vcl", "Runtime exception during event dispatching");
         }
     }
 }

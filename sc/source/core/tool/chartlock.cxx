@@ -20,6 +20,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <chartlock.hxx>
 #include <document.hxx>
@@ -92,7 +93,7 @@ ScChartLockGuard::ScChartLockGuard( ScDocument* pDoc ) :
         }
         catch ( uno::Exception& )
         {
-            OSL_FAIL("Unexpected exception in ScChartLockGuard");
+            TOOLS_WARN_EXCEPTION( "sc", "Unexpected exception in ScChartLockGuard");
         }
     }
 }
@@ -109,7 +110,7 @@ ScChartLockGuard::~ScChartLockGuard()
         }
         catch ( uno::Exception& )
         {
-            OSL_FAIL("Unexpected exception in ScChartLockGuard");
+            TOOLS_WARN_EXCEPTION( "sc", "Unexpected exception in ScChartLockGuard");
         }
     }
 }
@@ -133,7 +134,7 @@ void ScChartLockGuard::AlsoLockThisChart( const Reference< frame::XModel >& xMod
         }
         catch ( uno::Exception& )
         {
-            OSL_FAIL("Unexpected exception in ScChartLockGuard");
+            TOOLS_WARN_EXCEPTION( "sc", "Unexpected exception in ScChartLockGuard");
         }
     }
 }

@@ -211,7 +211,7 @@ namespace dbtools
                 }
                 catch( const Exception& )
                 {
-                    OSL_FAIL( "OPredicateInputController::implPredicateTree: caught an exception while dealing with the formats!" );
+                    TOOLS_WARN_EXCEPTION( "connectivity.commontools", "OPredicateInputController::implPredicateTree: caught an exception while dealing with the formats!" );
                 }
 
                 bool bDecDiffers = ( nCtxDecSep != nFmtDecSep );

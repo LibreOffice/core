@@ -51,6 +51,7 @@
 #include <comphelper/sequence.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/sidebar/Theme.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <svx/unoapi.hxx>
 #include <svx/svxids.hrc>
@@ -194,7 +195,7 @@ void CustomAnimationPane::initialize()
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::CustomAnimationPane::CustomAnimationPane(), Exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPane::CustomAnimationPane()" );
     }
 
     // get current page and update custom animation list
@@ -845,7 +846,7 @@ void CustomAnimationPane::onSelectionChanged()
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::CustomAnimationPane::onSelectionChanged(), Exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPane::onSelectionChanged()" );
     }
 }
 
@@ -1659,7 +1660,7 @@ void CustomAnimationPane::onChangeCurrentPage()
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::CustomAnimationPane::onChangeCurrentPage(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPane::onChangeCurrentPage()" );
     }
 }
 
@@ -1718,7 +1719,7 @@ static bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::CustomAnimationPane::getTextSelection(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPane::getTextSelection()" );
     }
 
     return false;

@@ -268,7 +268,7 @@ void CWinClipboard::notifyAllClipboardListener()
             }
             catch (uno::RuntimeException&)
             {
-                OSL_FAIL("RuntimeException caught");
+                TOOLS_WARN_EXCEPTION("vcl", "");
             }
         }
     }

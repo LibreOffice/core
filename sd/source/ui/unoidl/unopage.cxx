@@ -37,6 +37,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/metaact.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <AnnotationEnumeration.hxx>
 #include <createunopageimpl.hxx>
@@ -2860,7 +2861,7 @@ void SdMasterPage::setBackground( const Any& rValue )
     }
     catch( Exception& )
     {
-        OSL_FAIL("sd::SdMasterPage::setBackground(), exception caught!");
+        TOOLS_WARN_EXCEPTION( "sd", "sd::SdMasterPage::setBackground()");
     }
 }
 
@@ -2917,8 +2918,8 @@ void SdMasterPage::getBackground( Any& rValue )
     }
     catch( Exception& )
     {
+        TOOLS_WARN_EXCEPTION( "sd", "sd::SdMasterPage::getBackground()");
         rValue.clear();
-        OSL_FAIL("sd::SdMasterPage::getBackground(), exception caught!");
     }
 }
 

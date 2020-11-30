@@ -25,6 +25,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -259,7 +260,7 @@ namespace
         }
         catch (const Exception&)
         {
-            OSL_FAIL("DelayedFileDeletion::OnTryDeleteFile: caught a strange exception!" );
+            TOOLS_WARN_EXCEPTION( "sw", "DelayedFileDeletion::OnTryDeleteFile: caught a strange exception!" );
             bSuccess = true;
                 // can't do anything here ...
         }

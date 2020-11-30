@@ -40,6 +40,7 @@
 
 #include <com/sun/star/uno/Any.h>
 #include <SwStyleNameMapper.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <fmtmeta.hxx>
 #include <ndtxt.hxx>
@@ -743,7 +744,7 @@ void MetaField::GetPrefixAndSuffix(
     }
     catch (const uno::Exception&)
     {
-        OSL_FAIL("exception?");
+        TOOLS_WARN_EXCEPTION( "sw", "");
     }
 }
 

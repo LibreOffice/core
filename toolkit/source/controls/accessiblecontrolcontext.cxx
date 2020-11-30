@@ -95,7 +95,7 @@ namespace toolkit
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OAccessibleControlContext::create: caught an exception from the late ctor!" );
+            TOOLS_WARN_EXCEPTION( "toolkit", "OAccessibleControlContext::create: caught an exception from the late ctor!" );
         }
         return pNew;
     }

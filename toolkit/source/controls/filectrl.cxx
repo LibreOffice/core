@@ -26,6 +26,7 @@
 #include <osl/diagnose.h>
 #include <svl/svlresid.hxx>
 #include <svl/svl.hrc>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <vcl/toolkit/edit.hxx>
 
@@ -237,7 +238,7 @@ IMPL_LINK_NOARG(FileControl, ButtonHdl, Button*, void)
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "FileControl::ImplBrowseFile: caught an exception while executing the file picker!" );
+        TOOLS_WARN_EXCEPTION( "toolkit", "FileControl::ImplBrowseFile: caught an exception while executing the file picker!" );
     }
 }
 

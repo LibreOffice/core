@@ -23,6 +23,7 @@
 #include <strings.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace rptxml
 {
@@ -58,7 +59,7 @@ OXMLCondPrtExpr::OXMLCondPrtExpr( ORptFilter& _rImport
     }
     catch(const Exception&)
     {
-        OSL_FAIL("Exception caught while putting Function props!");
+        TOOLS_WARN_EXCEPTION( "reportdesign", "Exception caught while putting Function props!");
     }
 }
 

@@ -133,7 +133,7 @@ namespace utl
         catch( const CloseVetoException& ) { /* fine */ }
         catch( const Exception& )
         {
-            OSL_FAIL( "CloseableComponentImpl::nf_closeComponent: caught an unexpected exception!" );
+            TOOLS_WARN_EXCEPTION( "unotools", "CloseableComponentImpl::nf_closeComponent: caught an unexpected exception!" );
         }
 
         // reset

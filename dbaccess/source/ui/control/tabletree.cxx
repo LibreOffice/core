@@ -103,7 +103,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
     }
     catch(RuntimeException&)
     {
-        OSL_FAIL("OTableTreeListBox::UpdateTableList : caught a RuntimeException!");
+        TOOLS_WARN_EXCEPTION( "dbaccess", "OTableTreeListBox::UpdateTableList");
     }
     catch ( const SQLException& )
     {

@@ -22,6 +22,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace rptxml
 {
@@ -56,7 +57,7 @@ OXMLComponent::OXMLComponent( ORptFilter& _rImport
         }
         catch(const Exception&)
         {
-            OSL_FAIL("Exception caught while putting props into report component!");
+            TOOLS_WARN_EXCEPTION( "reportdesign", "Exception caught while putting props into report component!");
         }
     }
 }

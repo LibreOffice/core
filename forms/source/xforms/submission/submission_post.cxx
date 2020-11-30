@@ -26,6 +26,7 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/activedatasink.hxx>
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace css::uno;
 using namespace css::ucb;
@@ -68,7 +69,7 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const css::uno::Reference<
         }
     } catch (const Exception&)
     {
-        OSL_FAIL("Exception during UCB operatration.");
+        TOOLS_WARN_EXCEPTION( "forms.misc", "Exception during UCB operation.");
         return UNKNOWN_ERROR;
     }
 

@@ -26,6 +26,7 @@
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <sfx2/fcontnr.hxx>
 #include <svl/style.hxx>
@@ -931,7 +932,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
         }
         catch(...)
         {
-            OSL_FAIL("Exception while renaming styles @ SdDrawDocument::InsertBookmarkAsPage");
+            TOOLS_WARN_EXCEPTION( "sd", "Exception while renaming styles @ SdDrawDocument::InsertBookmarkAsPage");
         }
     }
     // remove copied styles not used on any inserted page and create

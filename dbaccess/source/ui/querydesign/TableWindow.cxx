@@ -31,6 +31,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -205,7 +206,7 @@ void OTableWindow::FillListBox()
     }
     catch(Exception&)
     {
-        OSL_FAIL("Exception occurred!");
+        TOOLS_WARN_EXCEPTION( "dbaccess", "");
     }
     try
     {
@@ -236,7 +237,7 @@ void OTableWindow::FillListBox()
     }
     catch(Exception&)
     {
-        OSL_FAIL("Exception occurred!");
+        TOOLS_WARN_EXCEPTION( "dbaccess", "");
     }
 }
 
