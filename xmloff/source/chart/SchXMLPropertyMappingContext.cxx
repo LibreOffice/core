@@ -13,6 +13,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <SchXMLImport.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
@@ -21,6 +22,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace ::xmloff::token;
 
 namespace {
 
@@ -60,13 +62,12 @@ Reference< chart2::data::XLabeledDataSequence2 > createAndAddSequenceToSeries( c
 
 }
 
-SchXMLPropertyMappingContext::SchXMLPropertyMappingContext( SchXMLImportHelper& rImpHelper,
+SchXMLPropertyMappingContext::SchXMLPropertyMappingContext(
         SvXMLImport& rImport,
         tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
         uno::Reference<
         chart2::XDataSeries > const & xSeries ):
     SvXMLImportContext( rImport ),
-    mrImportHelper( rImpHelper ),
     mxDataSeries(xSeries),
     mrLSequencesPerIndex(rLSequencesPerIndex)
 {
@@ -77,29 +78,25 @@ SchXMLPropertyMappingContext::~SchXMLPropertyMappingContext()
 {
 }
 
-void SchXMLPropertyMappingContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList )
+void SchXMLPropertyMappingContext::startFastElement (sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     OUString aRange;
     OUString aRole;
     // parse attributes
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetPropMappingAttrTokenMap();
-
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        OUString aValue = xAttrList->getValueByIndex( i );
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
+        OUString aValue = aIter.toString();
+        switch( aIter.getToken() )
         {
-            case XML_TOK_PROPERTY_MAPPING_PROPERTY:
+            case XML_ELEMENT(LO_EXT, XML_PROPERTY):
                 aRole = aValue;
                 break;
-            case XML_TOK_PROPERTY_MAPPING_RANGE:
+            case XML_ELEMENT(LO_EXT, XML_CELL_RANGE_ADDRESS):
                 aRange = aValue;
                 break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 

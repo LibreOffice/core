@@ -60,7 +60,7 @@ public:
     explicit SchXMLPositionAttributesHelper( SvXMLImport& rImporter );
     ~SchXMLPositionAttributesHelper();
 
-    void readPositioningAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, std::u16string_view rValue );
+    void readPositioningAttribute( sal_Int32 nAttributeToken, std::u16string_view rValue );
     void readAutomaticPositioningProperties( XMLPropStyleContext const * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt );
 
     bool hasPosSize() const;
@@ -100,10 +100,12 @@ public:
                            const css::awt::Size & rChartSize );
     virtual ~SchXMLPlotAreaContext() override;
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
 private:
@@ -194,11 +196,12 @@ public:
                              bool bSymbolSizeForSeriesIsMissingInFile );
     virtual ~SchXMLDataPointContext() override;
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
@@ -209,7 +212,9 @@ public:
             SvXMLImport& rImport
             , SchXMLPositionAttributesHelper& rPositioning );
     virtual ~SchXMLCoordinateRegionContext() override;
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 private:
     SchXMLPositionAttributesHelper& m_rPositioning;
@@ -235,7 +240,8 @@ public:
                             css::uno::Reference< css::chart::XDiagram > const & xDiagram,
                             ContextType eContextType );
     virtual ~SchXMLWallFloorContext() override;
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement (sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
 };
 
 class SchXMLStockContext : public SvXMLImportContext
@@ -259,7 +265,8 @@ public:
                         css::uno::Reference< css::chart::XDiagram > const & xDiagram,
                         ContextType eContextType );
     virtual ~SchXMLStockContext() override;
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement (sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
 };
 
 class SchXMLStatisticsObjectContext : public SvXMLImportContext
@@ -282,7 +289,8 @@ public:
 
     virtual ~SchXMLStatisticsObjectContext() override;
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement (sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
 
 private:
     SchXMLImportHelper &                           mrImportHelper;

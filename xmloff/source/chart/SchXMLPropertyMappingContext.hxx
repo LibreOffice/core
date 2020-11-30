@@ -25,7 +25,7 @@ class SchXMLPropertyMappingContext : public SvXMLImportContext
 {
 public:
 
-    SchXMLPropertyMappingContext( SchXMLImportHelper& rImpHelper,
+    SchXMLPropertyMappingContext(
                           SvXMLImport& rImport,
                           tSchXMLLSequencesPerIndex& rLSequencesPerIndex,
                               css::uno::Reference<
@@ -33,10 +33,10 @@ public:
 
     virtual ~SchXMLPropertyMappingContext() override;
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement (sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
 private:
 
-    SchXMLImportHelper& mrImportHelper;
     css::uno::Reference< css::chart2::XDataSeries > mxDataSeries;
 
     tSchXMLLSequencesPerIndex& mrLSequencesPerIndex;

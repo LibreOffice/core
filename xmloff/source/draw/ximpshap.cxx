@@ -336,7 +336,8 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
     }
 }
 
-void SdXMLShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>&)
+void SdXMLShapeContext::startFastElement (sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
 {
     GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
@@ -970,7 +971,8 @@ void SdXMLRectShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXMLRectShapeContext::startFastElement (sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create rectangle shape
     AddShape("com.sun.star.drawing.RectangleShape");
@@ -999,7 +1001,7 @@ void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
             }
         }
     }
-    SdXMLShapeContext::StartElement(xAttrList);
+    SdXMLShapeContext::startFastElement(nElement, xAttrList);
 }
 
 
@@ -1054,7 +1056,8 @@ void SdXMLLineShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXMLLineShapeContext::startFastElement (sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // #85920# use SetTransformation() to handle import of simple lines.
     // This is necessary to take into account all anchor positions and
@@ -1110,7 +1113,7 @@ void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     // set pos, size, shear and rotate and get copy of matrix
     SetTransformation();
 
-    SdXMLShapeContext::StartElement(xAttrList);
+    SdXMLShapeContext::startFastElement(nElement, xAttrList);
 }
 
 
@@ -1198,7 +1201,8 @@ void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXMLEllipseShapeContext::startFastElement (sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create rectangle shape
     AddShape("com.sun.star.drawing.EllipseShape");
@@ -1232,7 +1236,7 @@ void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         }
     }
 
-    SdXMLShapeContext::StartElement(xAttrList);
+    SdXMLShapeContext::startFastElement(nElement, xAttrList);
 }
 
 
@@ -1272,7 +1276,8 @@ SdXMLPolygonShapeContext::~SdXMLPolygonShapeContext()
 {
 }
 
-void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXMLPolygonShapeContext::startFastElement (sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // Add, set Style and properties from base shape
     if(mbClosed)
@@ -1339,7 +1344,7 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     // set pos, size, shear and rotate and get copy of matrix
     SetTransformation();
 
-    SdXMLShapeContext::StartElement(xAttrList);
+    SdXMLShapeContext::startFastElement(nElement, xAttrList);
 }
 
 
@@ -1376,7 +1381,8 @@ void SdXMLPathShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXMLPathShapeContext::startFastElement (sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create polygon shape
     if(maD.isEmpty())
@@ -1490,7 +1496,7 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     // set pos, size, shear and rotate
     SetTransformation();
 
-    SdXMLShapeContext::StartElement(xAttrList);
+    SdXMLShapeContext::startFastElement(nElement, xAttrList);
 }
 
 
@@ -1531,7 +1537,8 @@ void SdXMLTextBoxShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>&)
+void SdXMLTextBoxShapeContext::startFastElement (sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create textbox shape
     bool bIsPresShape = false;
@@ -1676,7 +1683,7 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         }
     }
 
-    SdXMLShapeContext::StartElement(mxAttrList);
+    SdXMLShapeContext::startFastElement(nElement, xAttrList);
 }
 
 
@@ -1708,7 +1715,8 @@ void SdXMLControlShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXMLControlShapeContext::startFastElement (sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create Control shape
     // add, set style and properties from base shape
@@ -1738,7 +1746,7 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     // set pos, size, shear and rotate
     SetTransformation();
 
-    SdXMLShapeContext::StartElement(xAttrList);
+    SdXMLShapeContext::startFastElement(nElement, xAttrList);
 }
 
 
@@ -1891,7 +1899,8 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const OUS
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXMLConnectorShapeContext::startFastElement (sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // For security reasons, do not add empty connectors. There may have been an error in EA2
     // that created empty, far set off connectors (e.g. 63 meters below top of document). This
@@ -2042,7 +2051,7 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
         }
     }
 
-    SdXMLShapeContext::StartElement(xAttrList);
+    SdXMLShapeContext::startFastElement(nElement, xAttrList);
 }
 
 
@@ -2098,7 +2107,8 @@ void SdXMLMeasureShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-void SdXMLMeasureShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXMLMeasureShapeContext::startFastElement (sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create Measure shape
     // add, set style and properties from base shape
@@ -2123,7 +2133,7 @@ void SdXMLMeasureShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         xText->setString( " " );
     }
 
-    SdXMLShapeContext::StartElement(xAttrList);
+    SdXMLShapeContext::startFastElement(nElement, xAttrList);
 }
 
 void SdXMLMeasureShapeContext::endFastElement(sal_Int32 nElement)
@@ -2178,7 +2188,8 @@ void SdXMLPageShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXMLPageShapeContext::startFastElement (sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create Page shape
     // add, set style and properties from base shape
@@ -2230,7 +2241,7 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
             xPropSet->setPropertyValue(aPageNumberStr, uno::makeAny( mnPageNumber ));
     }
 
-    SdXMLShapeContext::StartElement(xAttrList);
+    SdXMLShapeContext::startFastElement(nElement, xAttrList);
 }
 
 
@@ -2249,7 +2260,8 @@ SdXMLCaptionShapeContext::~SdXMLCaptionShapeContext()
 {
 }
 
-void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXMLCaptionShapeContext::startFastElement (sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create Caption shape
     // add, set style and properties from base shape
@@ -2301,7 +2313,7 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         }
     }
 
-    SdXMLShapeContext::StartElement(xAttrList);
+    SdXMLShapeContext::startFastElement(nElement, xAttrList);
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
@@ -2356,7 +2368,8 @@ void SdXMLGraphicObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-void SdXMLGraphicObjectShapeContext::StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& )
+void SdXMLGraphicObjectShapeContext::startFastElement (sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create graphic object shape
     OUString service;
@@ -2427,7 +2440,7 @@ void SdXMLGraphicObjectShapeContext::StartElement( const css::uno::Reference< cs
     // set pos, size, shear and rotate
     SetTransformation();
 
-    SdXMLShapeContext::StartElement(mxAttrList);
+    SdXMLShapeContext::startFastElement(nElement, xAttrList);
 }
 
 void SdXMLGraphicObjectShapeContext::endFastElement(sal_Int32 nElement)
@@ -2490,7 +2503,8 @@ SdXMLChartShapeContext::SdXMLChartShapeContext(
 {
 }
 
-void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXMLChartShapeContext::startFastElement (sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     const bool bIsPresentation = isPresentationShape();
 
@@ -2544,10 +2558,10 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
     // set pos, size, shear and rotate
     SetTransformation();
 
-    SdXMLShapeContext::StartElement(xAttrList);
+    SdXMLShapeContext::startFastElement(nElement, xAttrList);
 
     if( mxChartContext.is() )
-        mxChartContext->StartElement( xAttrList );
+        mxChartContext->startFastElement( nElement, xAttrList );
 }
 
 void SdXMLChartShapeContext::endFastElement(sal_Int32 nElement)
@@ -2585,7 +2599,8 @@ SdXMLObjectShapeContext::~SdXMLObjectShapeContext()
 {
 }
 
-void SdXMLObjectShapeContext::StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& )
+void SdXMLObjectShapeContext::startFastElement (sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
 {
     // #96717# in theorie, if we don't have a URL we shouldn't even
     // export this OLE shape. But practically it's too risky right now
@@ -2798,7 +2813,8 @@ SdXMLAppletShapeContext::~SdXMLAppletShapeContext()
 {
 }
 
-void SdXMLAppletShapeContext::StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& )
+void SdXMLAppletShapeContext::startFastElement (sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
 {
     AddShape("com.sun.star.drawing.AppletShape");
 
@@ -2948,21 +2964,19 @@ SdXMLPluginShapeContext::~SdXMLPluginShapeContext()
 {
 }
 
-void SdXMLPluginShapeContext::StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList)
+void SdXMLPluginShapeContext::startFastElement (sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
 
     // watch for MimeType attribute to see if we have a media object
-    for( sal_Int16 n = 0, nAttrCount = ( xAttrList.is() ? xAttrList->getLength() : 0 ); n < nAttrCount; ++n )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString    aLocalName;
-        sal_uInt16  nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( n ), &aLocalName );
-
-        if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( aLocalName, XML_MIME_TYPE ) )
+        if( aIter.getToken() == XML_ELEMENT(DRAW, XML_MIME_TYPE) )
         {
-            if( xAttrList->getValueByIndex( n ) == "application/vnd.sun.star.media" )
+            if( aIter.toString() == "application/vnd.sun.star.media" )
                 mbMedia = true;
             // leave this loop
-            n = nAttrCount - 1;
+            break;
         }
     }
 
@@ -3212,7 +3226,8 @@ SdXMLFloatingFrameShapeContext::~SdXMLFloatingFrameShapeContext()
 {
 }
 
-void SdXMLFloatingFrameShapeContext::StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& )
+void SdXMLFloatingFrameShapeContext::startFastElement (sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
 {
     AddShape("com.sun.star.drawing.FrameShape");
 
@@ -3530,7 +3545,8 @@ SvXMLImportContextRef SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPr
     return xContext;
 }
 
-void SdXMLFrameShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>&)
+void SdXMLFrameShapeContext::startFastElement (sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
 {
     // ignore
 }
@@ -3685,7 +3701,8 @@ void SdXMLCustomShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStri
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SdXMLCustomShapeContext::startFastElement (sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create rectangle shape
     AddShape("com.sun.star.drawing.CustomShape");
@@ -3718,7 +3735,7 @@ void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAtt
     {
         DBG_UNHANDLED_EXCEPTION( "xmloff", "setting enhanced customshape geometry" );
     }
-    SdXMLShapeContext::StartElement(xAttrList);
+    SdXMLShapeContext::startFastElement(nElement, xAttrList);
 }
 
 void SdXMLCustomShapeContext::endFastElement(sal_Int32 nElement)
@@ -3873,7 +3890,8 @@ SdXMLTableShapeContext::~SdXMLTableShapeContext()
 {
 }
 
-void SdXMLTableShapeContext::StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
+void SdXMLTableShapeContext::startFastElement (sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     OUString service("com.sun.star.drawing.TableShape");
 
@@ -3952,7 +3970,7 @@ void SdXMLTableShapeContext::StartElement( const css::uno::Reference< css::xml::
             mxTableImportContext = xTableImport->CreateTableContext( xColumnRowRange );
 
         if( mxTableImportContext.is() )
-            mxTableImportContext->StartElement( xAttrList );
+            mxTableImportContext->startFastElement( nElement, xAttrList );
     }
 }
 

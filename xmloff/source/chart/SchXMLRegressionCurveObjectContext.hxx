@@ -37,10 +37,12 @@ public:
 
     virtual ~SchXMLRegressionCurveObjectContext() override;
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 private:
 
@@ -61,7 +63,8 @@ public:
 
     virtual ~SchXMLEquationContext() override;
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement (sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
 
 private:
     SchXMLImportHelper&                           mrImportHelper;

@@ -59,25 +59,16 @@ SchXMLRegressionCurveObjectContext::~SchXMLRegressionCurveObjectContext()
 {
 }
 
-void SchXMLRegressionCurveObjectContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttributeList )
+void SchXMLRegressionCurveObjectContext::startFastElement (sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
-    sal_Int16 nAttributeCount = xAttributeList.is()? xAttributeList->getLength(): 0;
     OUString sAutoStyleName;
-
-    for( sal_Int16 i = 0; i < nAttributeCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttributeName = xAttributeList->getNameByIndex( i );
-        OUString aLocalName;
-
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttributeName, &aLocalName );
-
-        if( nPrefix == XML_NAMESPACE_CHART )
-        {
-            if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
-            {
-                sAutoStyleName = xAttributeList->getValueByIndex( i );
-            }
-        }
+        if (aIter.getToken() == XML_ELEMENT(CHART, XML_STYLE_NAME) )
+            sAutoStyleName = aIter.toString();
+        else
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }
 
     RegressionStyle aStyle( mxSeries, sAutoStyleName );
@@ -112,48 +103,46 @@ SchXMLEquationContext::SchXMLEquationContext(
 SchXMLEquationContext::~SchXMLEquationContext()
 {}
 
-void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLEquationContext::startFastElement (sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // parse attributes
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     SchXMLImport& rImport = static_cast< SchXMLImport& >(GetImport());
-    const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetRegEquationAttrTokenMap();
     OUString sAutoStyleName;
-
     bool bShowEquation = true;
     bool bShowRSquare = false;
     awt::Point aPosition;
     bool bHasXPos = false;
     bool bHasYPos = false;
 
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        OUString aValue = xAttrList->getValueByIndex( i );
-        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
+        OUString aValue = aIter.toString();
+        switch(aIter.getToken())
         {
-            case XML_TOK_REGEQ_POS_X:
+            case XML_ELEMENT(SVG, XML_X):
+            case XML_ELEMENT(SVG_COMPAT, XML_X):
                 rImport.GetMM100UnitConverter().convertMeasureToCore(
                         aPosition.X, aValue );
                 bHasXPos = true;
                 break;
-            case XML_TOK_REGEQ_POS_Y:
+            case XML_ELEMENT(SVG, XML_Y):
+            case XML_ELEMENT(SVG_COMPAT, XML_Y):
                 rImport.GetMM100UnitConverter().convertMeasureToCore(
                         aPosition.Y, aValue );
                 bHasYPos = true;
                 break;
-            case XML_TOK_REGEQ_DISPLAY_EQUATION:
+            case XML_ELEMENT(CHART, XML_DISPLAY_EQUATION):
                 (void)::sax::Converter::convertBool(bShowEquation, aValue);
                 break;
-            case XML_TOK_REGEQ_DISPLAY_R_SQUARE:
+            case XML_ELEMENT(CHART, XML_DISPLAY_R_SQUARE):
                 (void)::sax::Converter::convertBool(bShowRSquare, aValue);
                 break;
-            case XML_TOK_REGEQ_STYLE_NAME:
+            case XML_ELEMENT(CHART, XML_STYLE_NAME):
                 sAutoStyleName = aValue;
                 break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 

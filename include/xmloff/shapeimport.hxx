@@ -186,7 +186,7 @@ public:
     SvXMLImportContext * create3DLightContext( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
 
     /** this should be called for each scene attribute */
-    void processSceneAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
+    void processSceneAttribute( sal_Int32 nAttributeToken, const OUString& rValue );
 
     /** this sets the scene attributes at this propertyset */
     void setSceneAttributes( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );

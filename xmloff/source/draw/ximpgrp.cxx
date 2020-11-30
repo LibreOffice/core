@@ -71,7 +71,8 @@ SvXMLImportContextRef SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPr
     return xContext;
 }
 
-void SdXMLGroupShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>&)
+void SdXMLGroupShapeContext::startFastElement (sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
 {
     // create new group shape and add it to rShapes, use it
     // as base for the new group import
