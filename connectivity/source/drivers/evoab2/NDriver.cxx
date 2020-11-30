@@ -141,9 +141,9 @@ sal_Int32 SAL_CALL OEvoabDriver::getMinorVersion(  )
     return 0;
 }
 
-bool OEvoabDriver::acceptsURL_Stat( const OUString& url )
+bool OEvoabDriver::acceptsURL_Stat( std::u16string_view url )
 {
-    return ( url == "sdbc:address:evolution:local" || url == "sdbc:address:evolution:groupwise" || url == "sdbc:address:evolution:ldap" ) && EApiInit();
+    return ( url == u"sdbc:address:evolution:local" || url == u"sdbc:address:evolution:groupwise" || url == u"sdbc:address:evolution:ldap" ) && EApiInit();
 }
 
 
