@@ -966,8 +966,8 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
             sal_uInt32 nDistance = aLineDash.Distance;
             if (aLineCap != LineCap_BUTT && nDistance >= 99)
             {
-                nDistance -= 99;
-                nDotLen += 99;
+                nDistance -= 96;
+                nDotLen += 96;
                 if (nDashLen > 0)
                     nDashLen += 99;
             }
