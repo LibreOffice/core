@@ -25,7 +25,6 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
-#include <sal/log.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
 #include <xmloff/namespacemap.hxx>
