@@ -13,10 +13,12 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/request.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/svdpage.hxx>
 #include <unotools/tempfile.hxx>
+#include <vcl/keycodes.hxx>
 
 #include <docsh.hxx>
 #include <drwlayer.hxx>
@@ -35,6 +37,8 @@ public:
     ScShapeTest();
     void saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                        const OUString& rFilter);
+    void testTdf137576_LogicRectInDefaultMeasureline();
+    void testTdf137576_LogicRectInNewMeasureline();
     void testMeasurelineHideColSave();
     void testHideColsShow();
     void testTdf138138_MoveCellWithRotatedShape();
@@ -46,6 +50,8 @@ public:
     void testCustomShapeCellAnchoredRotatedShape();
 
     CPPUNIT_TEST_SUITE(ScShapeTest);
+    CPPUNIT_TEST(testTdf137576_LogicRectInDefaultMeasureline);
+    CPPUNIT_TEST(testTdf137576_LogicRectInNewMeasureline);
     CPPUNIT_TEST(testMeasurelineHideColSave);
     CPPUNIT_TEST(testHideColsShow);
     CPPUNIT_TEST(testTdf138138_MoveCellWithRotatedShape);
@@ -119,6 +125,121 @@ static void lcl_AssertPointEqualWithTolerance(const OString& sInfo, const Point 
     sMsg = sInfo + " Y expected " + OString::number(rExpected.Y()) + " actual "
            + OString::number(rActual.Y()) + " Tolerance " + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.Y() - rActual.Y()) <= nTolerance);
+}
+
+void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
+{
+    // Error was, that the empty logical rectangle of a default measure line (Ctrl+Click)
+    // resulted in zeros in NonRotatedAnchor and a wrong position when reloading.
+
+    // Load an empty document.
+    OUString aFileURL;
+    createFileURL("ManualColWidthRowHeight.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get ScDocShell
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT_MESSAGE("No ScDocShell", pDocSh);
+
+    // Create default measureline by SfxRequest that corresponds to Ctrl+Click
+    ScTabViewShell* pTabViewShell = pDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT_MESSAGE("No ScTabViewShell", pTabViewShell);
+    SfxRequest aReq(pTabViewShell->GetViewFrame(), SID_DRAW_MEASURELINE);
+    aReq.SetModifier(KEY_MOD1); // Ctrl
+    pTabViewShell->ExecDraw(aReq);
+
+    // Get document and newly created measure line.
+    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("No draw page", pPage);
+    SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("No object found", pObj);
+
+    // Anchor "to Cell (resize with cell)"
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, rDoc, 0 /*SCTAB*/, true /*bResizeWithCell*/);
+    // Deselect shape and switch to object selection type "Cell".
+    pTabViewShell->SetDrawShell(false);
+
+    // Hide column A.
+    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue("ToPoint", OUString("$A$1")),
+    };
+    dispatchCommand(xComponent, ".uno:GoToCell", aPropertyValues);
+    dispatchCommand(xComponent, ".uno:HideColumn", {});
+
+    // Get current position. I will not use absolute values for comparison, because document is loaded
+    // in full screen mode of unknown size and default object is placed in center of window.
+    Point aOldPos = pObj->GetRelativePos();
+
+    // Save and reload, get ScDocShell
+    saveAndReload(xComponent, "calc8");
+    CPPUNIT_ASSERT(xComponent);
+    pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Reload: Failed to access document shell", pFoundShell);
+    pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    // Get document and object
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+    pDrawLayer = rDoc2.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
+    pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Measure line lost", pObj);
+
+    // Assert object position is unchanged, besides Twips<->Hmm inaccuracy.
+    Point aNewPos = pObj->GetRelativePos();
+    lcl_AssertPointEqualWithTolerance("after reload", aOldPos, aNewPos, 1);
+
+    pDocSh->DoClose();
+}
+
+void ScShapeTest::testTdf137576_LogicRectInNewMeasureline()
+{
+    // Error was, that a new measure line had no logical rectangle. This resulted in zeros in
+    // NonRotatedAnchor. As a result the position was wrong when reloading.
+
+    // Load an empty document
+    OUString aFileURL;
+    createFileURL("ManualColWidthRowHeight.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get ScDocShell
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    // Get SdrPage
+    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("No draw page", pPage);
+
+    // Create a new measure line and insert it
+    Point aStartPoint(5000, 5500);
+    Point aEndPoint(13000, 8000);
+    SdrMeasureObj* pObj = new SdrMeasureObj(*pDrawLayer, aStartPoint, aEndPoint);
+    CPPUNIT_ASSERT_MESSAGE("Could not create measure line", pObj);
+    pPage->InsertObject(pObj);
+
+    // Anchor "to cell (resize with cell)" and examine NonRotatedAnchor
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, rDoc, 0 /*SCTAB*/, true /*bResizeWithCell*/);
+    ScDrawObjData* pNData = ScDrawLayer::GetNonRotatedObjData(pObj);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get NonRotatedAnchor", pNData);
+    // Without the fix all four values would be zero.
+    CPPUNIT_ASSERT(pNData->maStart.Col() == 1 && pNData->maStart.Row() == 2);
+    CPPUNIT_ASSERT(pNData->maEnd.Col() == 7 && pNData->maEnd.Row() == 2);
+
+    pDocSh->DoClose();
 }
 
 void ScShapeTest::testMeasurelineHideColSave()
