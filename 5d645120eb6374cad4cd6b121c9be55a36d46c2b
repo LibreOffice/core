@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8a953b0_aa3eea53",
+        "filename": "sd/qa/unit/uiimpress.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-11-30T17:08:04Z",
+      "side": 1,
+      "message": "I mentioned here.",
+      "range": {
+        "startLine": 382,
+        "startChar": 51,
+        "endLine": 382,
+        "endChar": 72
+      },
+      "revId": "5d645120eb6374cad4cd6b121c9be55a36d46c2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
