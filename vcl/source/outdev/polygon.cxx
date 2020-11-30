@@ -82,7 +82,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
                 aTransform,
                 aB2DPolyPolygon,
                 0.0,
-                this);
+                *this);
         }
 
         if(bSuccess && IsLineColor())
@@ -101,7 +101,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
                     css::drawing::LineCap_BUTT,
                     basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
                     bPixelSnapHairline,
-                    this);
+                    *this);
                 if (!bSuccess)
                     break;
             }
@@ -201,7 +201,7 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
                 aTransform,
                 basegfx::B2DPolyPolygon(aB2DPolygon),
                 0.0,
-                this);
+                *this);
         }
 
         if(bSuccess && IsLineColor())
@@ -218,7 +218,7 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
                 css::drawing::LineCap_BUTT,
                 basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
                 bPixelSnapHairline,
-                this);
+                *this);
         }
 
         if(bSuccess)
@@ -310,7 +310,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
                 aTransform,
                 aB2DPolyPolygon,
                 0.0,
-                this);
+                *this);
         }
 
         if(bSuccess && IsLineColor())
@@ -329,7 +329,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
                     css::drawing::LineCap_BUTT,
                     basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
                     bPixelSnapHairline,
-                    this);
+                    *this);
                 if (!bSuccess)
                     break;
             }
