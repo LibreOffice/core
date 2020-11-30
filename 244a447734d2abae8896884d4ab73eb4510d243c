@@ -22,6 +22,30 @@
       "revId": "244a447734d2abae8896884d4ab73eb4510d243c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cf17650_8a621452",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3014,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-11-30T21:20:36Z",
+      "side": 1,
+      "message": "see \u003chttps://gerrit.libreoffice.org/c/core/+/106919\u003e \"Fix stack-use-after-return\"",
+      "parentUuid": "655ddd6e_9fef2b45",
+      "range": {
+        "startLine": 3014,
+        "startChar": 32,
+        "endLine": 3014,
+        "endChar": 42
+      },
+      "revId": "244a447734d2abae8896884d4ab73eb4510d243c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
