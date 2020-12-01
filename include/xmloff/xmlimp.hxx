@@ -25,6 +25,7 @@
 #include <set>
 #include <stack>
 
+#include <o3tl/deleter.hxx>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
@@ -245,7 +246,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
 
     // tdf#69060 & tdf#137643 import embedded fonts and activate them in a
     // batch in EmbeddedFontsHelper's dtor
-    std::unique_ptr<EmbeddedFontsHelper> mxEmbeddedFontHelper;
+    std::unique_ptr<EmbeddedFontsHelper, o3tl::default_delete<EmbeddedFontsHelper>> mxEmbeddedFontHelper;
 
 protected:
     bool                        mbIsFormsSupported;
