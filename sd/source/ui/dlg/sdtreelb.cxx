@@ -758,7 +758,7 @@ OUString SdPageObjsTLV::GetObjectName(
         && aRet.isEmpty()
         && pObject!=nullptr)
     {
-        aRet = SdResId(STR_NAVIGATOR_SHAPE_BASE_NAME);
+        aRet = SdResId(STR_NAVIGATOR_SHAPE_BASE_NAME) + " (" + pObject->TakeObjNameSingul() +")";
         aRet = aRet.replaceFirst("%1", OUString::number(pObject->GetOrdNum() + 1));
     }
 
