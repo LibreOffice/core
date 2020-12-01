@@ -416,7 +416,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="adjustment">adjustment2</property>
+                        <property name="adjustment">adjustment3</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
