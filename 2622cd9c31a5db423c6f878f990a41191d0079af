@@ -70,6 +70,30 @@
       "revId": "2622cd9c31a5db423c6f878f990a41191d0079af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1266cd8d_868a387b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-12-01T11:34:48Z",
+      "side": 1,
+      "message": "Mike - I think you are looking for related bug tdf#138345. Microsoft ignores this setting in Character styles completely. If you mean something else by \"character level run\", please let me know.",
+      "parentUuid": "cfdf5058_c4a041b2",
+      "range": {
+        "startLine": 21,
+        "startChar": 18,
+        "endLine": 22,
+        "endChar": 40
+      },
+      "revId": "2622cd9c31a5db423c6f878f990a41191d0079af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
