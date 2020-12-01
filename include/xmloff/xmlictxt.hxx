@@ -86,11 +86,6 @@ public:
                                    const OUString& rLocalName,
                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
 
-    /** StartElement is called after a context has been constructed and
-     * before an elements context is parsed. It may be used for actions that
-     * require virtual methods. The default is to do nothing. */
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
-
     // css::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startFastElement (sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
