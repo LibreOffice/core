@@ -27,6 +27,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlement.hxx>
 #include <com/sun/star/text/BibliographyDataField.hpp>
+#include <sal/log.hxx>
 
 
 using namespace ::com::sun::star::text;
@@ -91,35 +92,33 @@ const SvXMLEnumMapEntry<sal_uInt16> aBibliographyDataFieldMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-void XMLIndexBibliographyEntryContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLIndexBibliographyEntryContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // handle both, style name and bibliography info
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        if (XML_NAMESPACE_TEXT == nPrefix)
+        switch(aIter.getToken())
         {
-            if ( IsXMLToken( sLocalName, XML_STYLE_NAME ) )
+            case XML_ELEMENT(TEXT, XML_STYLE_NAME):
             {
-                m_sCharStyleName = xAttrList->getValueByIndex(nAttr);
+                m_sCharStyleName = aIter.toString();
                 m_bCharStyleNameOK = true;
+                break;
             }
-            else if ( IsXMLToken( sLocalName, XML_BIBLIOGRAPHY_DATA_FIELD ) )
+            case XML_ELEMENT(TEXT, XML_BIBLIOGRAPHY_DATA_FIELD):
             {
                 sal_uInt16 nTmp;
-                if (SvXMLUnitConverter::convertEnum(
-                    nTmp, xAttrList->getValueByIndex(nAttr),
-                    aBibliographyDataFieldMap))
+                if (SvXMLUnitConverter::convertEnum(nTmp, aIter.toString(), aBibliographyDataFieldMap))
                 {
                     nBibliographyInfo = nTmp;
                     bBibliographyInfoOK = true;
                 }
+                break;
             }
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
