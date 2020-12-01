@@ -95,44 +95,31 @@ void XMLIndexTemplateContext::addTemplateEntry(
 }
 
 
-void XMLIndexTemplateContext::StartElement(
-        const Reference<XAttributeList> & xAttrList)
+void XMLIndexTemplateContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // process two attributes: style-name, outline-level
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        if (XML_NAMESPACE_TEXT == nPrefix)
+        if (aIter.getToken() == XML_ELEMENT(TEXT, XML_STYLE_NAME) )
         {
-            if ( IsXMLToken( sLocalName, XML_STYLE_NAME ) )
+            // style name
+            sStyleName = aIter.toString();
+            bStyleNameOK = true;
+        }
+        else if (eOutlineLevelAttrName != XML_TOKEN_INVALID &&
+                 aIter.getToken()  == XML_ELEMENT(TEXT, eOutlineLevelAttrName))
+        {
+            // we have an attr name! Then see if we have the attr, too.
+            // outline level
+            sal_uInt16 nTmp;
+            if (SvXMLUnitConverter::convertEnum(nTmp, aIter.toString(), pOutlineLevelNameMap))
             {
-                // style name
-                sStyleName = xAttrList->getValueByIndex(nAttr);
-                bStyleNameOK = true;
+                nOutlineLevel = nTmp;
+                bOutlineLevelOK = true;
             }
-            else if (eOutlineLevelAttrName != XML_TOKEN_INVALID)
-            {
-                // we have an attr name! Then see if we have the attr, too.
-                if (IsXMLToken(sLocalName, eOutlineLevelAttrName))
-                {
-                    // outline level
-                    sal_uInt16 nTmp;
-                    if (SvXMLUnitConverter::convertEnum(
-                        nTmp, xAttrList->getValueByIndex(nAttr),
-                        pOutlineLevelNameMap))
-                    {
-                        nOutlineLevel = nTmp;
-                        bOutlineLevelOK = true;
-                    }
-                    // else: illegal value -> ignore
-                }
-                // else: unknown attribute -> ignore
-            }
-            // else: we don't care about outline-level -> ignore
+            // else: illegal value -> ignore
         }
         // else: attribute not in text namespace -> ignore
     }
