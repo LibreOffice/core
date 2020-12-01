@@ -459,6 +459,7 @@ void Printer::ImplInitData()
     mbPrintFile         = false;
     mbInPrintPage       = false;
     mbNewJobSetup       = false;
+    mbSinglePrintJobs   = false;
     mpInfoPrinter       = nullptr;
     mpPrinter           = nullptr;
     mpDisplayDev        = nullptr;
