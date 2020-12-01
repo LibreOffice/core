@@ -54,29 +54,25 @@ XMLIndexTOCStylesContext::~XMLIndexTOCStylesContext()
 {
 }
 
-void XMLIndexTOCStylesContext::StartElement(
-    const Reference<XAttributeList> & xAttrList )
+void XMLIndexTOCStylesContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // find text:outline-level attribute
-    sal_Int16 nCount = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nCount; nAttr++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-             (IsXMLToken(sLocalName, XML_OUTLINE_LEVEL)) )
+        if ( aIter.getToken() == XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL) )
         {
             sal_Int32 nTmp;
             if (::sax::Converter::convertNumber(
-                    nTmp, xAttrList->getValueByIndex(nAttr), 1,
+                    nTmp, aIter.toString(), 1,
                     GetImport().GetTextImport()->GetChapterNumbering()->
                                                                 getCount()))
             {
                 // API numbers 0..9, we number 1..10
                 nOutlineLevel = nTmp-1;
             }
+            break;
         }
     }
 }
