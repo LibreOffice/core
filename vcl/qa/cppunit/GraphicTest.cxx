@@ -341,10 +341,10 @@ void GraphicTest::testSwapping()
         CPPUNIT_ASSERT_EQUAL(true, bool(xStream));
 
         // Check size of the stream
-        CPPUNIT_ASSERT_EQUAL(sal_uInt64(449), xStream->remainingSize());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(481), xStream->remainingSize());
 
         std::vector<unsigned char> aHash = calculateHash(xStream);
-        CPPUNIT_ASSERT_EQUAL(std::string("878281e583487b29ae09078e8040c01791c7649a"),
+        CPPUNIT_ASSERT_EQUAL(std::string("659edaff37a05ac603d08c90d2b5d26d9c90c78b"),
                              toHexString(aHash));
     }
 
@@ -413,10 +413,10 @@ void GraphicTest::testSwappingVectorGraphic()
         CPPUNIT_ASSERT_EQUAL(true, bool(xStream));
 
         // Check size of the stream
-        CPPUNIT_ASSERT_EQUAL(sal_uInt64(353), xStream->remainingSize());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(385), xStream->remainingSize());
 
         std::vector<unsigned char> aHash = calculateHash(xStream);
-        CPPUNIT_ASSERT_EQUAL(std::string("6ae83fc9c06ca253ada0b156d6e4700a4a028c34"),
+        CPPUNIT_ASSERT_EQUAL(std::string("75cb70498807b0c823cac760e00652842c1a63c3"),
                              toHexString(aHash));
     }
 
