@@ -107,6 +107,32 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTdf93998)
     xModelProps->getPropertyValue("Graphic") >>= xGraphic;
     CPPUNIT_ASSERT(xGraphic.is());
 }
+
+CPPUNIT_TEST_FIXTURE(UnodrawTest, testTableShadowDirect)
+{
+    // Create an Impress document an insert a table shape.
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance("com.sun.star.drawing.TableShape"), uno::UNO_QUERY);
+    xShape->setPosition(awt::Point(1000, 1000));
+    xShape->setSize(awt::Size(10000, 10000));
+    uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPages> xDrawPages = xSupplier->getDrawPages();
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
+    xDrawPage->add(xShape);
+
+    // Create a red shadow on it without touching its style.
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with throwing a
+    // beans.UnknownPropertyException, as shadow-as-direct-formatting on tables were not possible.
+    xShapeProps->setPropertyValue("Shadow", uno::makeAny(true));
+    sal_Int32 nRed = 0xff0000;
+    xShapeProps->setPropertyValue("ShadowColor", uno::makeAny(nRed));
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue("ShadowColor") >>= nRed);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xff0000), nRed);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

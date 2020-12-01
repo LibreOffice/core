@@ -739,6 +739,7 @@ static SfxItemPropertyMapEntry const * ImplGetSvxTableShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const  aTableShapePropertyMap_Impl[] =
     {
+        SHADOW_PROPERTIES
         { u"" UNO_NAME_MISC_OBJ_ZORDER,       OWN_ATTR_ZORDER, cppu::UnoType<sal_Int32>::get(), 0, 0},
         { u"" UNO_NAME_MISC_OBJ_LAYERID,      SDRATTR_LAYERID, cppu::UnoType<sal_Int16>::get(), 0,    0},
         { u"" UNO_NAME_MISC_OBJ_LAYERNAME,    SDRATTR_LAYERNAME, cppu::UnoType<OUString>::get(), 0, 0},
