@@ -26,6 +26,7 @@ const sal_uInt32 UP_LIMIT=0xFFFFFF00;
 template <class I, typename T> void write(I it, T n)
 {
     *it = static_cast<sal_uInt8>(n & 0xFF);
+    // coverity[stray_semicolon : FALSE] - coverity parse error
     if constexpr (sizeof(n) > 1)
     {
         for (std::size_t i = 1; i < sizeof(n); ++i)
