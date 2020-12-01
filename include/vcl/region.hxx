@@ -148,7 +148,9 @@ inline std::basic_ostream<charT, traits> & operator <<(
                       << *rRegion.getB2DPolyPolygon()
                       << ")";
     if (rRegion.getPolyPolygon())
-        return stream << "unimplemented";
+        return stream << "PolyPolygon("
+                      << *rRegion.getPolyPolygon()
+                      << ")";
     if (rRegion.getRegionBand())
     {   // inlined because RegionBand is private to vcl
         stream << "RegionBand(";
