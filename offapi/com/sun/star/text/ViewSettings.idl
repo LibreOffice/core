@@ -296,6 +296,12 @@ published service ViewSettings
     */
     [optional, property] boolean ShowChangesInMargin;
 
+    /** FLY_*; use DefaultAnchorType() to convert in RndStdIds
+
+        @since LibreOffice 7.2
+    */
+    [optional, property] long DefaultAnchor;
+
 };
 
 }; }; }; };
