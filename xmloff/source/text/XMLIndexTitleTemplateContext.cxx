@@ -23,6 +23,7 @@
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -50,27 +51,24 @@ XMLIndexTitleTemplateContext::~XMLIndexTitleTemplateContext()
 {
 }
 
-void XMLIndexTitleTemplateContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLIndexTitleTemplateContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // there's only one attribute: style-name
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-             (IsXMLToken(sLocalName, XML_STYLE_NAME)) )
+        if ( aIter.getToken() == XML_ELEMENT(TEXT, XML_STYLE_NAME) )
         {
-            sStyleName = xAttrList->getValueByIndex(nAttr);
+            sStyleName = aIter.toString();
             OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
                 XmlStyleFamily::TEXT_PARAGRAPH, sStyleName );
             const Reference < css::container::XNameContainer >&
                 rStyles = GetImport().GetTextImport()->GetParaStyles();
             bStyleNameOK = rStyles.is() && rStyles->hasByName( sDisplayStyleName );
         }
+        else
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }
 }
 
