@@ -4907,6 +4907,12 @@ void DocxAttributeOutput::CacheRelId(BitmapChecksum nChecksum, const OUString& r
         m_aSdrRelIdCache.top()[nChecksum] = rRelId;
 }
 
+uno::Reference<css::text::XTextFrame> DocxAttributeOutput::GetUnoTextFrame(
+    css::uno::Reference<css::drawing::XShape> xShape)
+{
+    return SwTextBoxHelper::getUnoTextFrame(xShape);
+}
+
 OString DocxAttributeOutput::getExistingGraphicRelId(BitmapChecksum nChecksum)
 {
     OString aResult;
