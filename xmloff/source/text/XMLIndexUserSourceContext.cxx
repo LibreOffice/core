@@ -33,8 +33,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::xmloff::token::IsXMLToken;
-using ::xmloff::token::XML_USER_INDEX_ENTRY_TEMPLATE;
-using ::xmloff::token::XML_OUTLINE_LEVEL;
+using namespace ::xmloff::token;
 
 XMLIndexUserSourceContext::XMLIndexUserSourceContext(
     SvXMLImport& rImport,
@@ -56,68 +55,68 @@ XMLIndexUserSourceContext::~XMLIndexUserSourceContext()
 }
 
 void XMLIndexUserSourceContext::ProcessAttribute(
-    enum IndexSourceParamEnum eParam,
+    sal_Int32 nAttributeToken,
     const OUString& rValue)
 {
     bool bTmp(false);
 
-    switch (eParam)
+    switch (nAttributeToken)
     {
-        case XML_TOK_INDEXSOURCE_USE_INDEX_MARKS:
+        case XML_ELEMENT(TEXT, XML_USE_INDEX_MARKS):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseMarks = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_USE_OBJECTS:
+        case XML_ELEMENT(TEXT, XML_USE_OBJECTS):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseObjects = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_USE_GRAPHICS:
+        case XML_ELEMENT(TEXT, XML_USE_GRAPHICS):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseGraphic = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_USE_TABLES:
+        case XML_ELEMENT(TEXT, XML_USE_TABLES):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseTables = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_USE_FRAMES:
+        case XML_ELEMENT(TEXT, XML_USE_FLOATING_FRAMES):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseFrames = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_COPY_OUTLINE_LEVELS:
+        case XML_ELEMENT(TEXT, XML_COPY_OUTLINE_LEVELS):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseLevelFromSource = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_USE_INDEX_SOURCE_STYLES:
+        case XML_ELEMENT(TEXT, XML_USE_INDEX_SOURCE_STYLES):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseLevelParagraphStyles = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_USER_INDEX_NAME:
+        case XML_ELEMENT(TEXT, XML_INDEX_NAME):
             sIndexName = rValue;
             break;
 
         default:
-            XMLIndexSourceBaseContext::ProcessAttribute(eParam, rValue);
+            XMLIndexSourceBaseContext::ProcessAttribute(nAttributeToken, rValue);
             break;
     }
 }

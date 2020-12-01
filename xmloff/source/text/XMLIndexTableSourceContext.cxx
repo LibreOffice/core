@@ -73,26 +73,26 @@ SvXMLEnumMapEntry<sal_uInt16> const lcl_aReferenceTypeTokenMap[] =
 };
 
 void XMLIndexTableSourceContext::ProcessAttribute(
-    enum IndexSourceParamEnum eParam,
+    sal_Int32 nAttributeToken,
     const OUString& rValue)
 {
     bool bTmp(false);
 
-    switch (eParam)
+    switch (nAttributeToken)
     {
-        case XML_TOK_INDEXSOURCE_USE_CAPTION:
+        case XML_ELEMENT(TEXT, XML_USE_CAPTION):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseCaption = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_SEQUENCE_NAME:
+        case XML_ELEMENT(TEXT, XML_CAPTION_SEQUENCE_NAME):
             sSequence = rValue;
             bSequenceOK = true;
             break;
 
-        case XML_TOK_INDEXSOURCE_SEQUENCE_FORMAT:
+        case XML_ELEMENT(TEXT, XML_CAPTION_SEQUENCE_FORMAT):
         {
              sal_uInt16 nTmp;
              if (SvXMLUnitConverter::convertEnum(nTmp, rValue,
@@ -105,7 +105,7 @@ void XMLIndexTableSourceContext::ProcessAttribute(
         }
 
         default:
-            XMLIndexSourceBaseContext::ProcessAttribute(eParam, rValue);
+            XMLIndexSourceBaseContext::ProcessAttribute(nAttributeToken, rValue);
             break;
     }
 }

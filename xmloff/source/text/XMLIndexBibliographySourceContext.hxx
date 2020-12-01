@@ -47,7 +47,7 @@ public:
 protected:
 
     virtual void ProcessAttribute(
-        enum IndexSourceParamEnum eParam,
+        sal_Int32 nAttributeToken,
         const OUString& rValue) override;
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;

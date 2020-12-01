@@ -38,8 +38,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::xmloff::token::IsXMLToken;
-using ::xmloff::token::XML_OBJECT_INDEX_ENTRY_TEMPLATE;
-using ::xmloff::token::XML_TOKEN_INVALID;
+using namespace ::xmloff::token;
 
 
 XMLIndexObjectSourceContext::XMLIndexObjectSourceContext(
@@ -60,42 +59,42 @@ XMLIndexObjectSourceContext::~XMLIndexObjectSourceContext()
 }
 
 void XMLIndexObjectSourceContext::ProcessAttribute(
-    enum IndexSourceParamEnum eParam,
+    sal_Int32 nAttributeToken,
     const OUString& rValue)
 {
     bool bTmp(false);
 
-    switch (eParam)
+    switch (nAttributeToken)
     {
-        case XML_TOK_INDEXSOURCE_USE_OTHER_OBJECTS:
+        case XML_ELEMENT(TEXT, XML_USE_OTHER_OBJECTS):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseOtherObjects = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_USE_SHEET:
+        case XML_ELEMENT(TEXT, XML_USE_SPREADSHEET_OBJECTS):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseCalc = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_USE_CHART:
+        case XML_ELEMENT(TEXT, XML_USE_CHART_OBJECTS):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseChart = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_USE_DRAW:
+        case XML_ELEMENT(TEXT, XML_USE_DRAW_OBJECTS):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseDraw = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_USE_MATH:
+        case XML_ELEMENT(TEXT, XML_USE_MATH_OBJECTS):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseMath = bTmp;
@@ -103,7 +102,7 @@ void XMLIndexObjectSourceContext::ProcessAttribute(
             break;
 
         default:
-            XMLIndexSourceBaseContext::ProcessAttribute(eParam, rValue);
+            XMLIndexSourceBaseContext::ProcessAttribute(nAttributeToken, rValue);
             break;
     }
 }

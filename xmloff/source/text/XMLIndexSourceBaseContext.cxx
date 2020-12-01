@@ -28,6 +28,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <sax/tools/converter.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 
 using namespace ::xmloff::token;
@@ -154,41 +155,29 @@ XMLIndexSourceBaseContext::~XMLIndexSourceBaseContext()
 {
 }
 
-void XMLIndexSourceBaseContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLIndexSourceBaseContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    static const SvXMLTokenMap aTokenMap(aIndexSourceTokenMap);
-
     // process attributes
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 i=0; i<nLength; i++)
-    {
-        // map to IndexSourceParamEnum
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
-        sal_uInt16 nToken = aTokenMap.Get(nPrefix, sLocalName);
-
-        // process attribute
-        ProcessAttribute(static_cast<enum IndexSourceParamEnum>(nToken),
-                         xAttrList->getValueByIndex(i));
-    }
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
+        ProcessAttribute(aIter.getToken(), aIter.toString());
 }
 
 void XMLIndexSourceBaseContext::ProcessAttribute(
-    enum IndexSourceParamEnum eParam,
+    sal_Int32 nAttributeToken,
     const OUString& rValue)
 {
-    switch (eParam)
+    switch (nAttributeToken)
     {
-        case XML_TOK_INDEXSOURCE_INDEX_SCOPE:
+        case XML_ELEMENT(TEXT, XML_INDEX_SCOPE):
             if ( IsXMLToken( rValue, XML_CHAPTER ) )
             {
                 bChapterIndex = true;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_RELATIVE_TABS:
+        case XML_ELEMENT(TEXT, XML_RELATIVE_TAB_STOP_POSITION):
         {
             bool bTmp(false);
             if (::sax::Converter::convertBool(bTmp, rValue))
@@ -200,6 +189,7 @@ void XMLIndexSourceBaseContext::ProcessAttribute(
 
         default:
             // unknown attribute -> ignore
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttributeToken, rValue);
             break;
     }
 }
