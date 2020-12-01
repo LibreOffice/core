@@ -13,6 +13,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/fract.hxx>
+#include "xparsmlbase.hxx"
 
 // MathML 3: 2.1.5.1 Syntax notation used in the MathML specification
 // <https://www.w3.org/TR/MathML/chapter2.html#id.2.1.5.1>
