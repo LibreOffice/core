@@ -25,6 +25,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <sax/tools/converter.hxx>
+#include <sal/log.hxx>
 #include "XMLIndexTOCSourceContext.hxx"
 #include "XMLIndexObjectSourceContext.hxx"
 #include "XMLIndexAlphabeticalSourceContext.hxx"
@@ -117,8 +118,9 @@ XMLIndexTOCContext::~XMLIndexTOCContext()
 {
 }
 
-void XMLIndexTOCContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLIndexTOCContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if (!bValid)
         return;
@@ -126,44 +128,41 @@ void XMLIndexTOCContext::StartElement(
     // find text:style-name attribute and set section style
     // find text:protected and set value
     // find text:name and set value (if not empty)
-    sal_Int16 nCount = xAttrList->getLength();
     bool bProtected = false;
     OUString sIndexName;
     OUString sXmlId;
     XMLPropStyleContext* pStyle(nullptr);
-    for(sal_Int16 nAttr = 0; nAttr < nCount; nAttr++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        if ( XML_NAMESPACE_TEXT == nPrefix)
+        switch(aIter.getToken())
         {
-            if ( IsXMLToken( sLocalName, XML_STYLE_NAME ) )
+            case XML_ELEMENT(TEXT, XML_STYLE_NAME):
             {
                 pStyle = GetImport().GetTextImport()->FindSectionStyle(
-                            xAttrList->getValueByIndex(nAttr));
+                            aIter.toString());
+                break;
             }
-            else if ( IsXMLToken( sLocalName, XML_PROTECTED ) )
+            case XML_ELEMENT(TEXT, XML_PROTECTED):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(
-                     bTmp, xAttrList->getValueByIndex(nAttr)))
+                if (::sax::Converter::convertBool(bTmp, aIter.toString()))
                 {
                     bProtected = bTmp;
                 }
+                break;
             }
-            else if ( IsXMLToken( sLocalName, XML_NAME ) )
+            case XML_ELEMENT(TEXT, XML_NAME):
             {
-                sIndexName = xAttrList->getValueByIndex(nAttr);
+                sIndexName = aIter.toString();
+                break;
             }
-        }
-        else if ( XML_NAMESPACE_XML == nPrefix)
-        {
-            if ( IsXMLToken( sLocalName, XML_ID ) )
+            case XML_ELEMENT(XML, XML_ID):
             {
-                sXmlId = xAttrList->getValueByIndex(nAttr);
+                sXmlId = aIter.toString();
+                break;
             }
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
