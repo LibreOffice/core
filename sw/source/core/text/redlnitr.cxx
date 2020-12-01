@@ -598,7 +598,8 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
         // TODO this is true initially but after delete ops it may be false... need to delete m_pMerged somewhere?
         // assert(SwRedlineTable::npos != nRedlPos);
         // false now with fieldmarks
-        assert(pRootFrame->GetFieldmarkMode() != sw::FieldmarkMode::ShowBoth
+        assert(!pRootFrame
+            || pRootFrame->GetFieldmarkMode() != sw::FieldmarkMode::ShowBoth
             || SwRedlineTable::npos != nRedlPos || m_pMergedPara->extents.size() <= 1);
     }
     if (!(pExtInp || m_pMergedPara || SwRedlineTable::npos != nRedlPos))
