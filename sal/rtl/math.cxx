@@ -1146,7 +1146,10 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
 
     // Rounding to decimals between integer distance precision (gaps) does not
     // make sense, do not even try to multiply/divide and introduce inaccuracy.
-    if (nDecPlaces >= 0 && fValue >= (static_cast<sal_Int64>(1) << 52))
+    // For same reasons, do not attempt to round integers to decimals.
+    if (nDecPlaces >= 0
+            && (fValue >= (static_cast<sal_Int64>(1) << 52)
+                || isRepresentableInteger(fValue)))
         return bSign ? -fValue : fValue;
 
     double fFac = 0;
