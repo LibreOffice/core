@@ -33,6 +33,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -258,6 +259,29 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                         rObj.SetRect( tools::Rectangle( aPosition, aSize ) );
                         rObj.SetAngle( 0 );
                         bDontWriteText = true;
+                    }
+                }
+            }
+            else if (eShapeType == mso_sptMax)
+            {
+                // We can't map this custom shape to a DOC preset and it has a bitmap fill.
+                // Make sure that at least the bitmap fill is not lost.
+                const Reference< XPropertySet > xPropSet = rObj.mXPropSet;
+                if(xPropSet.is())
+                {
+                    const Any aAny = xPropSet->getPropertyValue("FillStyle");
+                    if(aAny.hasValue())
+                    {
+                        drawing::FillStyle eFS;
+                        if(aAny >>= eFS)
+                        {
+                            if(eFS == drawing::FillStyle_BITMAP)
+                            {
+                                addShape( ESCHER_ShpInst_PictureFrame, ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor );
+                                if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "Bitmap", false, true, true, bOOxmlExport ) )
+                                    aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
+                            }
+                        }
                     }
                 }
             }
