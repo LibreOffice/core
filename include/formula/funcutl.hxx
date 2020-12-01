@@ -48,12 +48,12 @@ private:
 
     DECL_LINK( UpdateHdl, Timer*, void );
 
-protected:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(GetFocus, weld::Widget&, void);
     DECL_LINK(LoseFocus, weld::Widget&, void);
     DECL_LINK(Modify, weld::Entry&, void);
 
+protected:
     virtual bool KeyInput(const KeyEvent& rKEvt);
 
 public:
