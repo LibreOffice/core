@@ -36,11 +36,19 @@ $(eval $(call gb_UnpackedTarball_set_post_action,mariadb-connector-c, \
 			extern struct st_mysql_client_plugin pvio_socket_client_plugin\; \
 			extern struct st_mysql_client_plugin caching_sha2_password_client_plugin\; \
 			extern struct st_mysql_client_plugin mysql_native_password_client_plugin\; \
+			$(if $(filter WNT,$(OS)), \
+				extern struct st_mysql_client_plugin pvio_shmem_client_plugin\; \
+				extern struct st_mysql_client_plugin pvio_npipe_client_plugin\; \
+			) \
 			/' \
 		-e 's/@BUILTIN_PLUGINS@/ \
 			(struct st_mysql_client_plugin *)\&pvio_socket_client_plugin$(COMMA) \
 			(struct st_mysql_client_plugin *)\&caching_sha2_password_client_plugin$(COMMA) \
 			(struct st_mysql_client_plugin *)\&mysql_native_password_client_plugin$(COMMA) \
+			$(if $(filter WNT,$(OS)), \
+				(struct st_mysql_client_plugin *)\&pvio_shmem_client_plugin$(COMMA) \
+				(struct st_mysql_client_plugin *)\&pvio_npipe_client_plugin$(COMMA) \
+			) \
 			/' \
 		> libmariadb/ma_client_plugin.c \
 ))
