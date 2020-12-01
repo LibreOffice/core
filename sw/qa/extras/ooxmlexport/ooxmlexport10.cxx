@@ -58,12 +58,14 @@
 #include <comphelper/propertysequence.hxx>
 #include <svx/svdpage.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <textboxhelper.hxx>
 
 #include <swtypes.hxx>
 #include <drawdoc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <txtfrm.hxx>
 
 class Test : public SwModelTestBase
 {

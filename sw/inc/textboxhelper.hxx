@@ -35,6 +35,10 @@ namespace com::sun::star::drawing
 {
 class XShape;
 }
+namespace com::sun::star::text
+{
+class XTextFrame;
+}
 
 /**
  * A TextBox is a TextFrame, that is tied to a drawinglayer shape.
@@ -85,6 +89,9 @@ public:
     /// If we have an associated TextFrame, then return that.
     static SwFrameFormat*
     getOtherTextBoxFormat(css::uno::Reference<css::drawing::XShape> const& xShape);
+    /// If we have an associated TextFrame, then return its XTextFrame.
+    static css::uno::Reference<css::text::XTextFrame>
+    getUnoTextFrame(css::uno::Reference<css::drawing::XShape> const& xShape);
     /// Return the textbox rectangle of a draw shape (in twips).
     static tools::Rectangle getTextRectangle(SwFrameFormat* pShape, bool bAbsolute = true);
 

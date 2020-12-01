@@ -69,6 +69,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Any;
@@ -419,38 +420,41 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                 {
                     if( maTypeModel.maZIndex.toInt32() )
                     {
-                        uno::Sequence<beans::PropertyValue> aGrabBag;
                         uno::Reference<beans::XPropertySet> propertySet (xShape, uno::UNO_QUERY);
-                        propertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-                        sal_Int32 length;
-
-                        length = aGrabBag.getLength();
-                        aGrabBag.realloc( length+1 );
-                        aGrabBag[length].Name = "VML-Z-ORDER";
-                        aGrabBag[length].Value <<= maTypeModel.maZIndex.toInt32();
-
-                        if( !s_mso_next_textbox.isEmpty() )
+                        if (propertySet->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
                         {
+                            uno::Sequence<beans::PropertyValue> aGrabBag;
+                            propertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+                            sal_Int32 length;
+
                             length = aGrabBag.getLength();
                             aGrabBag.realloc( length+1 );
-                            aGrabBag[length].Name = "mso-next-textbox";
-                            aGrabBag[length].Value <<= s_mso_next_textbox;
-                        }
+                            aGrabBag[length].Name = "VML-Z-ORDER";
+                            aGrabBag[length].Value <<= maTypeModel.maZIndex.toInt32();
 
-                        if( !sLinkChainName.isEmpty() )
-                        {
-                            length = aGrabBag.getLength();
-                            aGrabBag.realloc( length+4 );
-                            aGrabBag[length].Name   = "TxbxHasLink";
-                            aGrabBag[length].Value   <<= true;
-                            aGrabBag[length+1].Name = "Txbx-Id";
-                            aGrabBag[length+1].Value <<= id;
-                            aGrabBag[length+2].Name = "Txbx-Seq";
-                            aGrabBag[length+2].Value <<= seq;
-                            aGrabBag[length+3].Name = "LinkChainName";
-                            aGrabBag[length+3].Value <<= sLinkChainName;
+                            if( !s_mso_next_textbox.isEmpty() )
+                            {
+                                length = aGrabBag.getLength();
+                                aGrabBag.realloc( length+1 );
+                                aGrabBag[length].Name = "mso-next-textbox";
+                                aGrabBag[length].Value <<= s_mso_next_textbox;
+                            }
+
+                            if( !sLinkChainName.isEmpty() )
+                            {
+                                length = aGrabBag.getLength();
+                                aGrabBag.realloc( length+4 );
+                                aGrabBag[length].Name   = "TxbxHasLink";
+                                aGrabBag[length].Value   <<= true;
+                                aGrabBag[length+1].Name = "Txbx-Id";
+                                aGrabBag[length+1].Value <<= id;
+                                aGrabBag[length+2].Name = "Txbx-Seq";
+                                aGrabBag[length+2].Value <<= seq;
+                                aGrabBag[length+3].Name = "LinkChainName";
+                                aGrabBag[length+3].Value <<= sLinkChainName;
+                            }
+                            propertySet->setPropertyValue( "InteropGrabBag", uno::makeAny(aGrabBag) );
                         }
-                        propertySet->setPropertyValue( "InteropGrabBag", uno::makeAny(aGrabBag) );
                     }
                 }
                 Reference< XControlShape > xControlShape( xShape, uno::UNO_QUERY );
@@ -459,6 +463,8 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                     PropertySet aControlShapeProp( xControlShape->getControl() );
                     aControlShapeProp.setProperty( PROP_EnableVisible, uno::makeAny( false ) );
                 }
+
+                xShape = finalImplConvertAndInsert(xShape);
                 /*  Notify the drawing that a new shape has been inserted. For
                     convenience, pass the rectangle that contains position and
                     size of the shape. */
@@ -883,10 +889,37 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     }
 
     lcl_SetAnchorType(aPropertySet, maTypeModel, rGraphicHelper );
-
     return xShape;
 }
 
+Reference<XShape> SimpleShape::finalImplConvertAndInsert(const css::uno::Reference<css::drawing::XShape>& rxShape) const
+{
+    // tdf#41466 This setting must be done here, because the position of textbox will be set as an
+    // effect of the PROP_TextBox property setting, and if we do this setting earlier (setting of
+    // properties of position and size) then the position of textbox will be set with wrong data.
+    // TODO: TextShape is set if we have rect shape in group; we should use the shape-with-textbox
+    // mechanism these sotuation too
+    if (getTextBox() && maService != "com.sun.star.text.TextFrame" && maService != "com.sun.star.drawing.TextShape"
+        && !maShapeModel.mbInGroup)
+    {
+        const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
+        const auto& nLeft = ConversionHelper::decodeMeasureToHmm(
+            rGraphicHelper, maTypeModel.maMarginLeft, 0, true, true);
+        PropertySet aPropertySet(rxShape);
+        aPropertySet.setProperty(PROP_HoriOrientPosition, nLeft);
+        const auto& nTop = ConversionHelper::decodeMeasureToHmm(
+            rGraphicHelper, maTypeModel.maMarginTop, 0, true, true);
+        aPropertySet.setProperty(PROP_VertOrientPosition, nTop);
+        aPropertySet.setProperty(PROP_TextBox, true);
+
+        // And these properties must be set after textbox creation (set PROP_Textbox property).
+        // Note: if you set a new property then you have to handle it in the proper
+        // SwTextBoxHelper::syncProperty function.
+        if (maTypeModel.maLayoutFlowAlt == "bottom-to-top")
+            aPropertySet.setAnyProperty(PROP_TextWritingMode, uno::makeAny(text::WritingMode2::BT_LR));
+    }
+    return ShapeBase::finalImplConvertAndInsert(rxShape);
+}
 Reference< XShape > SimpleShape::createEmbeddedPictureObject( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect, OUString const & rGraphicPath ) const
 {
     Reference<XGraphic> xGraphic = mrDrawing.getFilter().getGraphicHelper().importEmbeddedGraphic(rGraphicPath);
