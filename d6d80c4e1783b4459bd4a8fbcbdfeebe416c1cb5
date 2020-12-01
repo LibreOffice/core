@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00153270_3ed55597",
+        "filename": "chart2/source/tools/WrappedPropertySet.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-01T09:21:24Z",
+      "side": 1,
+      "message": "Here and elsewhere, the call to cppu::getCaughtException() from within TOOLS_WARN_EXCEPTION now violates the restrictions laid out in include/cppuhelper/exc_hlp.hxx.  Lets hope for the best.",
+      "revId": "d6d80c4e1783b4459bd4a8fbcbdfeebe416c1cb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
