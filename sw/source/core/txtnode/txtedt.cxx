@@ -1326,7 +1326,10 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
                 // check for: bAlter => xHyphWord.is()
                 OSL_ENSURE(!bSpell || xSpell.is(), "NULL pointer");
 
-                if( !xSpell->isValid( rWord, static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ) )
+                if( !xSpell->isValid( rWord, static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ) &&
+                    // redlines can leave CH_TXTATR_INWORD within word, we must remove them before spell checking
+                    (!bRestoreString || !xSpell->isValid( rWord.replaceAll(OUStringChar(CH_TXTATR_INWORD), ""),
+                            static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ) ) )
                 {
                     sal_Int32 nSmartTagStt = nBegin;
                     sal_Int32 nDummy = 1;
