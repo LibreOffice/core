@@ -1023,7 +1023,12 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
                 }
                 if( pArgs->xSpellAlt.is() )
                 {
-                    if (IsSymbolAt(aScanner.GetBegin()))
+                    if ( IsSymbolAt(aScanner.GetBegin()) ||
+                        // redlines can leave "in word" character within word,
+                        // we must remove them before spell checking
+                        // to avoid false alarm
+                        ( bRestoreString && pArgs->xSpeller->isValid( rWord.replaceAll(OUStringChar(CH_TXTATR_INWORD), ""),
+                            static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ) ) )
                     {
                         pArgs->xSpellAlt = nullptr;
                     }
@@ -1325,8 +1330,12 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
             {
                 // check for: bAlter => xHyphWord.is()
                 OSL_ENSURE(!bSpell || xSpell.is(), "NULL pointer");
-
-                if( !xSpell->isValid( rWord, static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ) )
+                if( !xSpell->isValid( rWord, static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ) &&
+                    // redlines can leave "in word" character within word,
+                    // we must remove them before spell checking
+                    // to avoid false alarm
+                    (!bRestoreString || !xSpell->isValid( rWord.replaceAll(OUStringChar(CH_TXTATR_INWORD), ""),
+                            static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ) ) )
                 {
                     sal_Int32 nSmartTagStt = nBegin;
                     sal_Int32 nDummy = 1;
