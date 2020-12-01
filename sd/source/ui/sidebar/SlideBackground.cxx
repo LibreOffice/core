@@ -348,6 +348,8 @@ void SlideBackground::HandleContextChange(
     else if ( IsDraw() )
     {
         mxMasterLabel->set_label(SdResId(STR_MASTERPAGE_LABEL));
+        mxDspMasterBackground->hide();
+        mxDspMasterObjects->hide();
 
         if (maContext == maDrawOtherContext)
         {
