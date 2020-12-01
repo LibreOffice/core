@@ -151,7 +151,7 @@ void SwFrameButtonPainter::PaintButton(drawinglayer::primitive2d::Primitive2DCon
         double nAngle = M_PI;
         if (bOnTop)
             nAngle = 0;
-        FillGradientAttribute aFillAttrs(drawinglayer::attribute::GradientStyle::Linear, 0.0, 0.0, 0.0, nAngle, aLighterColor, aFillColor, 10);
+        FillGradientAttribute aFillAttrs(drawinglayer::attribute::GradientStyle::Linear, 0.0, 0.0, 0.0, nAngle, aLighterColor, aFillColor);
         rSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
                             new drawinglayer::primitive2d::FillGradientPrimitive2D(aGradientRect, aFillAttrs)));
     }

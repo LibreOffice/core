@@ -53,7 +53,7 @@ public:
     /// constructors/assignmentoperator/destructor
     FillGradientAttribute(GradientStyle eStyle, double fBorder, double fOffsetX, double fOffsetY,
                           double fAngle, const basegfx::BColor& rStartColor,
-                          const basegfx::BColor& rEndColor, sal_uInt16 nSteps);
+                          const basegfx::BColor& rEndColor, sal_uInt16 nSteps = 0);
     FillGradientAttribute();
     FillGradientAttribute(const FillGradientAttribute&);
     FillGradientAttribute(FillGradientAttribute&&);
