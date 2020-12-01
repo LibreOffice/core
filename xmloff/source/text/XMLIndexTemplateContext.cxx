@@ -102,14 +102,13 @@ void XMLIndexTemplateContext::startFastElement(
     // process two attributes: style-name, outline-level
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        if (aIter.getToken() == XML_ELEMENT(TEXT, XML_STYLE_NAME) )
+        if(aIter.getToken() == XML_ELEMENT(TEXT, XML_STYLE_NAME))
         {
             // style name
             sStyleName = aIter.toString();
             bStyleNameOK = true;
         }
-        else if (eOutlineLevelAttrName != XML_TOKEN_INVALID &&
-                 aIter.getToken()  == XML_ELEMENT(TEXT, eOutlineLevelAttrName))
+        else if (aIter.getToken() == XML_ELEMENT(TEXT, eOutlineLevelAttrName))
         {
             // we have an attr name! Then see if we have the attr, too.
             // outline level
