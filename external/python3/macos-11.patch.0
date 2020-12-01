@@ -48,3 +48,23 @@
    #else
      #error "unknown architecture for universal build."
    #endif
+--- Modules/_posixsubprocess.c
++++ Modules/_posixsubprocess.c
+@@ -31,6 +31,8 @@
+ # define SYS_getdents64  __NR_getdents64
+ #endif
+ 
++#include <limits.h>
++
+ #if defined(__sun) && defined(__SVR4)
+ /* readdir64 is used to work around Solaris 9 bug 6395699. */
+ # define readdir readdir64
+@@ -202,7 +202,7 @@
+ #endif
+ #ifdef _SC_OPEN_MAX
+     local_max_fd = sysconf(_SC_OPEN_MAX);
+-    if (local_max_fd == -1)
++    if (local_max_fd == -1 || local_max_fd == LONG_MAX)
+ #endif
+         local_max_fd = 256;  /* Matches legacy Lib/subprocess.py behavior. */
+     return local_max_fd;
