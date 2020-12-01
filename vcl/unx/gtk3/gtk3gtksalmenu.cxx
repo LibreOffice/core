@@ -652,6 +652,28 @@ static void CloseMenuBar(GtkWidget *, gpointer pMenu)
     Application::PostUserEvent(static_cast<MenuBar*>(pMenu)->GetCloseButtonClickHdl());
 }
 
+GtkWidget* GtkSalMenu::AddButton(GtkWidget *pImage)
+{
+    GtkWidget* pButton = gtk_button_new();
+
+    gtk_button_set_relief(GTK_BUTTON(pButton), GTK_RELIEF_NONE);
+    gtk_button_set_focus_on_click(GTK_BUTTON(pButton), false);
+    gtk_widget_set_can_focus(pButton, false);
+
+    GtkStyleContext *pButtonContext = gtk_widget_get_style_context(GTK_WIDGET(pButton));
+
+    gtk_style_context_add_class(pButtonContext, "flat");
+    gtk_style_context_add_class(pButtonContext, "small-button");
+
+    gtk_widget_show(pImage);
+
+    gtk_widget_set_valign(pButton, GTK_ALIGN_CENTER);
+
+    gtk_container_add(GTK_CONTAINER(pButton), pImage);
+    gtk_widget_show_all(pButton);
+    return pButton;
+}
+
 void GtkSalMenu::ShowCloseButton(bool bShow)
 {
     assert(mbMenuBar);
@@ -668,35 +690,124 @@ void GtkSalMenu::ShowCloseButton(bool bShow)
         return;
     }
 
-    MenuBar *pVclMenuBar = static_cast<MenuBar*>(mpVCLMenu.get());
-    mpCloseButton = gtk_button_new();
-    gtk_widget_set_margin_start(mpCloseButton, 8);
+    if (mpCloseButton)
+        return;
+
+    GIcon* pIcon = g_themed_icon_new_with_default_fallbacks("window-close-symbolic");
+    GtkWidget* pImage = gtk_image_new_from_gicon(pIcon, GTK_ICON_SIZE_MENU);
+    g_object_unref(pIcon);
+
+    mpCloseButton = AddButton(pImage);
+
     gtk_widget_set_margin_end(mpCloseButton, 8);
-    g_signal_connect(mpCloseButton, "clicked", G_CALLBACK(CloseMenuBar), pVclMenuBar);
-
-    gtk_button_set_relief(GTK_BUTTON(mpCloseButton), GTK_RELIEF_NONE);
-    gtk_button_set_focus_on_click(GTK_BUTTON(mpCloseButton), false);
-    gtk_widget_set_can_focus(mpCloseButton, false);
-
-    GtkStyleContext *pButtonContext = gtk_widget_get_style_context(GTK_WIDGET(mpCloseButton));
-
-    gtk_style_context_add_class(pButtonContext, "flat");
-    gtk_style_context_add_class(pButtonContext, "small-button");
-
-    GIcon* icon = g_themed_icon_new_with_default_fallbacks("window-close-symbolic");
-    GtkWidget* image = gtk_image_new_from_gicon(icon, GTK_ICON_SIZE_MENU);
-    gtk_widget_show(image);
-    g_object_unref(icon);
 
     OUString sToolTip(VclResId(SV_HELPTEXT_CLOSEDOCUMENT));
-    gtk_widget_set_tooltip_text(mpCloseButton,
-        OUStringToOString(sToolTip, RTL_TEXTENCODING_UTF8).getStr());
+    gtk_widget_set_tooltip_text(mpCloseButton, sToolTip.toUtf8().getStr());
 
-    gtk_widget_set_valign(mpCloseButton, GTK_ALIGN_CENTER);
+    MenuBar *pVclMenuBar = static_cast<MenuBar*>(mpVCLMenu.get());
+    g_signal_connect(mpCloseButton, "clicked", G_CALLBACK(CloseMenuBar), pVclMenuBar);
 
-    gtk_container_add(GTK_CONTAINER(mpCloseButton), image);
-    gtk_grid_attach(GTK_GRID(mpMenuBarContainerWidget), GTK_WIDGET(mpCloseButton), 1, 0, 1, 1);
-    gtk_widget_show_all(mpCloseButton);
+    gtk_grid_attach(GTK_GRID(mpMenuBarContainerWidget), mpCloseButton, 1, 0, 1, 1);
+}
+
+namespace
+{
+    void DestroyMemoryStream(gpointer data)
+    {
+        SvMemoryStream* pMemStm = static_cast<SvMemoryStream*>(data);
+        delete pMemStm;
+    }
+}
+
+static void MenuButtonClicked(GtkWidget* pWidget, gpointer pMenu)
+{
+    const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pWidget));
+    OString aId(pStr, pStr ? strlen(pStr) : 0);
+    static_cast<MenuBar*>(pMenu)->HandleMenuButtonEvent(aId.toUInt32());
+}
+
+bool GtkSalMenu::AddMenuBarButton(const SalMenuButtonItem& rNewItem)
+{
+    if (!mbMenuBar)
+        return false;
+
+    if (!mpMenuBarContainerWidget)
+        return false;
+
+    GtkWidget* pImage = nullptr;
+    if (!!rNewItem.maImage)
+    {
+        SvMemoryStream* pMemStm = new SvMemoryStream;
+        vcl::PNGWriter aWriter(rNewItem.maImage.GetBitmapEx());
+        aWriter.Write(*pMemStm);
+
+        GBytes *pBytes = g_bytes_new_with_free_func(pMemStm->GetData(),
+                                                    pMemStm->TellEnd(),
+                                                    DestroyMemoryStream,
+                                                    pMemStm);
+
+        GIcon *pIcon = g_bytes_icon_new(pBytes);
+        pImage = gtk_image_new_from_gicon(pIcon, GTK_ICON_SIZE_MENU);
+        g_object_unref(pIcon);
+    }
+
+    GtkWidget* pButton = AddButton(pImage);
+
+    maExtraButtons.emplace_back(rNewItem.mnId, pButton);
+
+    gtk_buildable_set_name(GTK_BUILDABLE(pButton), OString::number(rNewItem.mnId).getStr());
+
+    gtk_widget_set_tooltip_text(pButton, rNewItem.maToolTipText.toUtf8().getStr());
+
+    MenuBar *pVclMenuBar = static_cast<MenuBar*>(mpVCLMenu.get());
+    g_signal_connect(pButton, "clicked", G_CALLBACK(MenuButtonClicked), pVclMenuBar);
+
+    if (mpCloseButton)
+    {
+        gtk_grid_insert_next_to(GTK_GRID(mpMenuBarContainerWidget), mpCloseButton, GTK_POS_LEFT);
+        gtk_grid_attach_next_to(GTK_GRID(mpMenuBarContainerWidget), pButton, mpCloseButton,
+                                GTK_POS_LEFT, 1, 1);
+    }
+    else
+        gtk_grid_attach(GTK_GRID(mpMenuBarContainerWidget), pButton, 1, 0, 1, 1);
+
+    return true;
+}
+
+void GtkSalMenu::RemoveMenuBarButton( sal_uInt16 nId )
+{
+    const auto it = std::find_if(maExtraButtons.begin(), maExtraButtons.end(), [&nId](const auto &item) {
+        return item.first == nId; });
+    if (it != maExtraButtons.end())
+    {
+        gint nAttach(0);
+        gtk_container_child_get(GTK_CONTAINER(mpMenuBarContainerWidget), it->second, "left-attach", &nAttach, nullptr);
+        gtk_widget_destroy(it->second);
+        gtk_grid_remove_column(GTK_GRID(mpMenuBarContainerWidget), nAttach);
+        maExtraButtons.erase(it);
+    }
+}
+
+tools::Rectangle GtkSalMenu::GetMenuBarButtonRectPixel(sal_uInt16 nId, SalFrame* pReferenceFrame)
+{
+    if (!pReferenceFrame)
+        return tools::Rectangle();
+
+    const auto it = std::find_if(maExtraButtons.begin(), maExtraButtons.end(), [&nId](const auto &item) {
+        return item.first == nId; });
+    if (it == maExtraButtons.end())
+        return tools::Rectangle();
+
+    GtkWidget* pButton = it->second;
+
+    GtkSalFrame* pFrame = static_cast<GtkSalFrame*>(pReferenceFrame);
+
+    int x, y;
+    if (!gtk_widget_translate_coordinates(pButton, GTK_WIDGET(pFrame->getMouseEventWidget()), 0, 0, &x, &y))
+        return tools::Rectangle();
+
+    return tools::Rectangle(Point(x, y), Size(gtk_widget_get_allocated_width(pButton),
+                                              gtk_widget_get_allocated_height(pButton)));
 }
 
 //Typically when the menubar is deactivated we want the focus to return
@@ -725,7 +836,6 @@ gboolean GtkSalMenu::SignalKey(GdkEventKey const * pEvent)
 {
     if (pEvent->keyval == GDK_KEY_F6)
     {
-        fprintf(stderr, "GtkSalMenu::SignalKey\n");
         mbReturnFocusToDocument = false;
         gtk_menu_shell_cancel(GTK_MENU_SHELL(mpMenuBarWidget));
         //because we return false here, the keypress will continue
@@ -1018,15 +1128,6 @@ void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const 
 
     if ( aLabel )
         g_free( aLabel );
-}
-
-namespace
-{
-    void DestroyMemoryStream(gpointer data)
-    {
-        SvMemoryStream* pMemStm = static_cast<SvMemoryStream*>(data);
-        delete pMemStm;
-    }
 }
 
 void GtkSalMenu::NativeSetItemIcon( unsigned nSection, unsigned nItemPos, const Image& rImage )
