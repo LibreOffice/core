@@ -1364,6 +1364,7 @@ void FastSaxParserImpl::callbackProcessingInstruction( const xmlChar *target, co
 
 xmlEntityPtr FastSaxParserImpl::callbackGetEntity( const xmlChar *name )
 {
+    if( !name ) return xmlGetPredefinedEntity(name);
     for( size_t i = 0; i < mEntityNames.size(); ++i )
     {
         if( mEntityNames[i].compareToAscii(XML_CAST(name)) == 0 )
@@ -1372,6 +1373,33 @@ xmlEntityPtr FastSaxParserImpl::callbackGetEntity( const xmlChar *name )
                 BAD_CAST(OUStringToOString(mEntityNames[i],RTL_TEXTENCODING_UTF8).getStr()),
                 XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
                 BAD_CAST(OUStringToOString(mEntityReplacements[i],RTL_TEXTENCODING_UTF8).getStr()));
+        }
+    }
+    sal_uInt32 cval = 0;
+    OUString ename = OUString::createFromAscii(XML_CAST(name));
+    if ( name[0] == '#' )
+    {
+        if( ename.getLength() < 2 ) return xmlGetPredefinedEntity(name);
+        if( ename[1] == 'x' ||  ename[1] == 'X' )
+        {
+            if( ename.getLength() < 3 ) return xmlGetPredefinedEntity(name);
+            cval = ename.copy(1, ename.getLength()-1 ).toUInt32(16);
+            OUString vname = OUString( &cval, 1 );
+            if( cval == 0 ) return xmlGetPredefinedEntity(name);
+            return xmlNewEntity( nullptr,
+                BAD_CAST(OUStringToOString(ename,RTL_TEXTENCODING_UTF8).getStr()),
+                XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
+                BAD_CAST(OUStringToOString(vname,RTL_TEXTENCODING_UTF8).getStr()));
+        }
+        else
+        {
+            cval = ename.copy(1, ename.getLength()-1).toUInt32();
+            OUString vname = OUString( &cval, 1 );
+            if( cval == 0 ) return xmlGetPredefinedEntity(name);
+            return xmlNewEntity( nullptr,
+                BAD_CAST(OUStringToOString(ename,RTL_TEXTENCODING_UTF8).getStr()),
+                XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
+                BAD_CAST(OUStringToOString(vname,RTL_TEXTENCODING_UTF8).getStr()));
         }
     }
     return xmlGetPredefinedEntity(name);
