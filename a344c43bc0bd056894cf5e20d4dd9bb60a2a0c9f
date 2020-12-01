@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4e763c5_11bd6079",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-12-01T11:42:37Z",
+      "side": 1,
+      "message": "Probably it is impossible to actually fully remove CHRATR_HIGHLIGHT from an SW character style. So probably removing from UNO is about the only thing we can do, right?",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 41
+      },
+      "revId": "a344c43bc0bd056894cf5e20d4dd9bb60a2a0c9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
