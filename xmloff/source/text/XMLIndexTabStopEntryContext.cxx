@@ -57,60 +57,61 @@ XMLIndexTabStopEntryContext::~XMLIndexTabStopEntryContext()
 {
 }
 
-void XMLIndexTabStopEntryContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLIndexTabStopEntryContext::startFastElement(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // process three attributes: type, position, leader char
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        OUString sAttr = xAttrList->getValueByIndex(nAttr);
-        if (XML_NAMESPACE_STYLE == nPrefix)
+        OUString sValue = aIter.toString();
+        switch(aIter.getToken())
         {
-            if ( IsXMLToken( sLocalName, XML_TYPE ) )
+            case XML_ELEMENT(STYLE, XML_TYPE):
             {
                 // if it's neither left nor right, value is
                 // ignored. Since left is default, we only need to
                 // check for right
-                bTabRightAligned = IsXMLToken( sAttr, XML_RIGHT );
+                bTabRightAligned = IsXMLToken( sValue, XML_RIGHT );
+                break;
             }
-            else if ( IsXMLToken( sLocalName, XML_POSITION ) )
+            case XML_ELEMENT(STYLE, XML_POSITION):
             {
                 sal_Int32 nTmp;
                 if (GetImport().GetMM100UnitConverter().
-                                        convertMeasureToCore(nTmp, sAttr))
+                                        convertMeasureToCore(nTmp, sValue))
                 {
                     nTabPosition = nTmp;
                     bTabPositionOK = true;
                 }
+                break;
             }
-            else if ( IsXMLToken( sLocalName, XML_LEADER_CHAR ) )
+            case XML_ELEMENT(STYLE, XML_LEADER_CHAR):
             {
-                sLeaderChar = sAttr;
+                sLeaderChar = sValue;
                 // valid only, if we have a char!
-                bLeaderCharOK = !sAttr.isEmpty();
+                bLeaderCharOK = !sValue.isEmpty();
+                break;
             }
-            // #i21237#
-            else if ( IsXMLToken( sLocalName, XML_WITH_TAB ) )
+            case XML_ELEMENT(STYLE, XML_WITH_TAB):
             {
+                // #i21237#
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, sAttr))
+                if (::sax::Converter::convertBool(bTmp, sValue))
                     bWithTab = bTmp;
+                break;
             }
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
             // else: unknown style: attribute -> ignore
         }
-        // else: no style attribute -> ignore
     }
 
     // how many entries? #i21237#
     m_nValues += 2 + (bTabPositionOK ? 1 : 0) + (bLeaderCharOK ? 1 : 0);
 
     // now try parent class (for character style)
-    XMLIndexSimpleEntryContext::StartElement( xAttrList );
+    XMLIndexSimpleEntryContext::startFastElement( nElement, xAttrList );
 }
 
 void XMLIndexTabStopEntryContext::FillPropertyValues(

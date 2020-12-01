@@ -26,6 +26,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 
@@ -54,21 +55,16 @@ XMLIndexSimpleEntryContext::~XMLIndexSimpleEntryContext()
 {
 }
 
-void XMLIndexSimpleEntryContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLIndexSimpleEntryContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // we know only one attribute: style-name
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-             IsXMLToken(sLocalName, XML_STYLE_NAME) )
+        if(aIter.getToken() == XML_ELEMENT(TEXT, XML_STYLE_NAME))
         {
-            m_sCharStyleName = xAttrList->getValueByIndex(nAttr);
+            m_sCharStyleName = aIter.toString();
             OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
                 XmlStyleFamily::TEXT_TEXT, m_sCharStyleName );
             // #142494#: Check if style exists
@@ -79,6 +75,8 @@ void XMLIndexSimpleEntryContext::StartElement(
             else
                 m_bCharStyleNameOK = false;
         }
+        else
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }
 
     // if we have a style name, set it!
