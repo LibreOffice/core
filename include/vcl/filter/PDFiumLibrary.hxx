@@ -31,6 +31,7 @@
 #include <vcl/Scanline.hxx>
 #include <vcl/pdf/PDFAnnotationSubType.hxx>
 #include <vcl/pdf/PDFPageObjectType.hxx>
+#include <vcl/pdf/PDFSegmentType.hxx>
 
 #include <fpdf_doc.h>
 
@@ -135,7 +136,7 @@ public:
     FPDF_PATHSEGMENT getPointer() const { return mpPathSegment; }
     basegfx::B2DPoint getPoint() const;
     bool isClosed() const;
-    int getType() const;
+    PDFSegmentType getType() const;
 };
 
 class VCL_DLLPUBLIC PDFiumPageObject final

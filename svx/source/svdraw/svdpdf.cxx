@@ -964,14 +964,14 @@ void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
             aB2DPoint.setX(aPoint.X());
             aB2DPoint.setY(aPoint.Y());
 
-            const int nSegmentType = pPathSegment->getType();
-            switch (nSegmentType)
+            const vcl::pdf::PDFSegmentType eSegmentType = pPathSegment->getType();
+            switch (eSegmentType)
             {
-                case FPDF_SEGMENT_LINETO:
+                case vcl::pdf::PDFSegmentType::Lineto:
                     aPoly.append(aB2DPoint);
                     break;
 
-                case FPDF_SEGMENT_BEZIERTO:
+                case vcl::pdf::PDFSegmentType::Bezierto:
                     aBezier.emplace_back(aB2DPoint.getX(), aB2DPoint.getY());
                     if (aBezier.size() == 3)
                     {
@@ -980,7 +980,7 @@ void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
                     }
                     break;
 
-                case FPDF_SEGMENT_MOVETO:
+                case vcl::pdf::PDFSegmentType::Moveto:
                     // New Poly.
                     if (aPoly.count() > 0)
                     {
@@ -991,9 +991,10 @@ void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
                     aPoly.append(aB2DPoint);
                     break;
 
-                case FPDF_SEGMENT_UNKNOWN:
+                case vcl::pdf::PDFSegmentType::Unknown:
                 default:
-                    SAL_WARN("sd.filter", "Unknown path segment type in PDF: " << nSegmentType);
+                    SAL_WARN("sd.filter", "Unknown path segment type in PDF: "
+                                              << static_cast<int>(eSegmentType));
                     break;
             }
         }

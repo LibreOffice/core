@@ -42,6 +42,15 @@ static_assert(static_cast<int>(vcl::pdf::PDFPageObjectType::Shading) == FPDF_PAG
 static_assert(static_cast<int>(vcl::pdf::PDFPageObjectType::Form) == FPDF_PAGEOBJ_FORM,
               "PDFPageObjectType::Form value mismatch");
 
+static_assert(static_cast<int>(vcl::pdf::PDFSegmentType::Unknown) == FPDF_SEGMENT_UNKNOWN,
+              "PDFSegmentType::Unknown value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFSegmentType::Lineto) == FPDF_SEGMENT_LINETO,
+              "PDFSegmentType::Lineto value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFSegmentType::Bezierto) == FPDF_SEGMENT_BEZIERTO,
+              "PDFSegmentType::Bezierto value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFSegmentType::Moveto) == FPDF_SEGMENT_MOVETO,
+              "PDFSegmentType::Moveto value mismatch");
+
 namespace
 {
 /// Callback class to be used with FPDF_SaveWithVersion().
@@ -604,7 +613,10 @@ basegfx::B2DPoint PDFiumPathSegment::getPoint() const
 
 bool PDFiumPathSegment::isClosed() const { return FPDFPathSegment_GetClose(mpPathSegment); }
 
-int PDFiumPathSegment::getType() const { return FPDFPathSegment_GetType(mpPathSegment); }
+PDFSegmentType PDFiumPathSegment::getType() const
+{
+    return static_cast<PDFSegmentType>(FPDFPathSegment_GetType(mpPathSegment));
+}
 
 PDFiumBitmap::PDFiumBitmap(FPDF_BITMAP pBitmap)
     : mpBitmap(pBitmap)
