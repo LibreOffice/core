@@ -90,7 +90,8 @@ SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nT
             if (!pName || *pName != SvGlobalName( SO3_SM_CLASSID ))
             {
                 // Default anchor for new graphics and objects is at-char, except for Math objects.
-                m_aSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_CHAR));
+                SwViewOption aViewOpt(*pSh->GetViewOptions());
+                m_aSet.Put(SwFormatAnchor(aViewOpt.GetDefaultAnchorType()));//RndStdIds::FLY_AT_CHAR
             }
         }
     }

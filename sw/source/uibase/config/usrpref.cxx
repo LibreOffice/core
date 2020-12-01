@@ -76,6 +76,7 @@ SwMasterUsrPref::~SwMasterUsrPref()
 }
 
 static const auto g_UpdateLinkIndex = 17;
+static const auto g_DefaultAnchor = 22;
 
 Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
 {
@@ -86,8 +87,8 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
         "Display/DrawingControl",                   //  2
         "Display/FieldCode",                        //  3
         "Display/Note",                             //  4
-        "Display/ShowContentTips",                      //  5
-        "NonprintingCharacter/MetaCharacters",     //   6
+        "Display/ShowContentTips",                  //  5
+        "NonprintingCharacter/MetaCharacters",      //  6
         "NonprintingCharacter/ParagraphEnd",        //  7
         "NonprintingCharacter/OptionalHyphen",      //  8
         "NonprintingCharacter/Space",               //  9
@@ -102,7 +103,8 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
         "Update/Field",                         // 18
         "Update/Chart",                         // 19
         "Display/ShowInlineTooltips",           // 20
-        "Display/UseHeaderFooterMenu"           // 21
+        "Display/UseHeaderFooterMenu",          // 21
+        "Display/DefaultAnchor"                 // 22
     };
 #if defined(__GNUC__) && !defined(__clang__)
     // clang 8.0.0 says strcmp isn't constexpr
@@ -170,8 +172,9 @@ void SwContentViewConfig::ImplCommit()
             case 19: bVal = rParent.IsUpdateCharts(); break;// "Update/Chart"
             case 20: bVal = rParent.IsShowInlineTooltips(); break;// "Display/ShowInlineTooltips"
             case 21: bVal = rParent.IsUseHeaderFooterMenu(); break;// "Display/UseHeaderFooterMenu"
+            case 22: pValues[nProp] <<= rParent.GetDefaultAnchor(); break;// "Display/DefaultAnchor"
         }
-        if (nProp != g_UpdateLinkIndex)
+        if ((nProp != g_UpdateLinkIndex) && (nProp != g_DefaultAnchor))
             pValues[nProp] <<= bVal;
     }
     PutProperties(aNames, aValues);
@@ -189,7 +192,8 @@ void SwContentViewConfig::Load()
         {
             if(pValues[nProp].hasValue())
             {
-                bool bSet = nProp != g_UpdateLinkIndex && *o3tl::doAccess<bool>(pValues[nProp]);
+                bool bSet = nProp != g_UpdateLinkIndex && nProp != g_DefaultAnchor
+                            && *o3tl::doAccess<bool>(pValues[nProp]);
                 switch(nProp)
                 {
                     case  0: rParent.SetGraphic(bSet);  break;// "Display/GraphicObject",
@@ -220,6 +224,13 @@ void SwContentViewConfig::Load()
                     case 19: rParent.SetUpdateCharts(bSet); break;// "Update/Chart"
                     case 20: rParent.SetShowInlineTooltips(bSet); break;// "Display/ShowInlineTooltips"
                     case 21: rParent.SetUseHeaderFooterMenu(bSet); break;// "Display/UseHeaderFooterMenu"
+                    case 22:
+                    {
+                        sal_Int32 nSet;
+                        pValues[nProp] >>= nSet;
+                        rParent.SetDefaultAnchor(nSet);
+                    }
+                    break; // "Display/DefaultAnchor"
                 }
             }
         }

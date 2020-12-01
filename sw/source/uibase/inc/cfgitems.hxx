@@ -52,6 +52,7 @@ class SW_DLLPUBLIC SwDocDisplayItem : public SfxPoolItem
     bool bCharHiddenText    :1;
     bool bBookmarks         :1;
     bool bManualBreak       :1;
+    sal_Int32 m_xDefaultAnchor;
 
 public:
                                 SwDocDisplayItem();

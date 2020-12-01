@@ -1199,6 +1199,7 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
     , m_xDirectCursorFillMode(m_xBuilder->weld_combo_box("cxDirectCursorFillMode"))
     , m_xCursorProtFrame(m_xBuilder->weld_frame("crsrprotframe"))
     , m_xCursorInProtCB(m_xBuilder->weld_check_button("cursorinprot"))
+    , m_xDefaultAnchorType(m_xBuilder->weld_combo_box("cxDefaultAnchor"))
     , m_xMathBaselineAlignmentCB(m_xBuilder->weld_check_button("mathbaseline"))
 {
     const SfxPoolItem* pItem = nullptr;
@@ -1289,6 +1290,7 @@ bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
     aDisp.bCharHiddenText       = m_xCharHiddenCB->get_active();
     aDisp.bBookmarks            = m_xBookmarkCB->get_active();
     aDisp.bManualBreak          = m_xBreakCB->get_active();
+    aDisp.m_xDefaultAnchor        = m_xDefaultAnchorType->get_active();
 
     bRet |= (!pOldAttr || aDisp != *pOldAttr);
     if(bRet)
@@ -1337,6 +1339,7 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
         m_xCharHiddenCB->set_active( pDocDisplayAttr->bCharHiddenText );
         m_xBookmarkCB->set_active(pDocDisplayAttr->bBookmarks);
         m_xBreakCB->set_active( pDocDisplayAttr->bManualBreak );
+        m_xDefaultAnchorType->set_active( pDocDisplayAttr->m_xDefaultAnchor );
     }
 }
 
