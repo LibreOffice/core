@@ -69,7 +69,6 @@ public:
     virtual ~TabBar() override;
     virtual void dispose() override;
 
-    virtual void Paint (vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rUpdateArea) override;
     virtual void DataChanged (const DataChangedEvent& rDataChangedEvent) override;
     virtual bool EventNotify (NotifyEvent& rEvent) override;
 
@@ -120,7 +119,6 @@ private:
     typedef ::std::vector<std::unique_ptr<Item>> ItemContainer;
     ItemContainer maItems;
     const ::std::function<void (const OUString& rsDeckId)> maDeckActivationFunctor;
-    sal_Int32 mnMenuSeparatorY;
     PopupMenuProvider maPopupMenuProvider;
 
     static void CreateTabItem(weld::Toolbar& rButton, const DeckDescriptor& rDeckDescriptor);
