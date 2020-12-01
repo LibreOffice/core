@@ -1025,6 +1025,8 @@ public:
     virtual void WriteTextBox(css::uno::Reference<css::drawing::XShape> xShape) override;
     virtual OUString FindRelId(BitmapChecksum nChecksum) override;
     virtual void CacheRelId(BitmapChecksum nChecksum, const OUString& rRelId) override;
+    virtual css::uno::Reference<css::text::XTextFrame> GetUnoTextFrame(
+        css::uno::Reference<css::drawing::XShape> xShape) override;
     virtual oox::drawingml::DrawingML& GetDrawingML() override;
     virtual void MaybeOutputBrushItem(SfxItemSet const&) override;
 
