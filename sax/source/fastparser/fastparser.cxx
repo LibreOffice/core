@@ -210,8 +210,8 @@ public:
     ~FastSaxParserImpl();
 
 private:
-    ::css::uno::Sequence< ::rtl::OUString > mEntityNames;
-    ::css::uno::Sequence< ::rtl::OUString > mEntityReplacements;
+    const ::css::uno::Sequence< ::rtl::OUString > * mEntityNames = nullptr;
+    const ::css::uno::Sequence< ::rtl::OUString > * mEntityReplacements = nullptr;
 
 public:
     // XFastParser
@@ -933,10 +933,25 @@ void FastSaxParserImpl::setNamespaceHandler( const Reference< XFastNamespaceHand
     maData.mxNamespaceHandler = Handler;
 }
 
+#include <stdio.h>
 void FastSaxParserImpl::setCustomEntityNames( const ::css::uno::Sequence< ::rtl::OUString >& names, const ::css::uno::Sequence< ::rtl::OUString >& replacements )
 {
-    mEntityNames = names;
-    mEntityReplacements = replacements;
+    //printf("\n\nMemory leak");
+    //getchar();
+    //printf("nl = %d\n",names.getLength());
+    //getchar();
+    //printf("rl = %d\n\n",replacements.getLength());
+    //getchar();
+    //OUString* namesdata = static_cast<OUString*>( malloc( sizeof(rtl::OUString) * names.getLength() ) );
+    //OUString* replacementsdata = static_cast<OUString*>( malloc( sizeof(rtl::OUString) * replacements.getLength() ) );
+    //for( sal_Int32 i = 0; i < names.getLength(); ++i ) namesdata[i] = ::rtl::OUString( names.getConstArray()[i] );
+    //for( sal_Int32 i = 0; i < replacements.getLength(); ++i ) replacementsdata[i] = ::rtl::OUString( replacements.getConstArray()[i] );
+    //namesdata = static_cast<OUString*>( memcpy( namesdata, names.getConstArray(), sizeof(rtl::OUString) * names.getLength() ) );
+    //replacementsdata = static_cast<OUString*>( memcpy( replacementsdata, replacements.getConstArray(), sizeof(rtl::OUString) * replacements.getLength() ) );
+    //mEntityNames = ::css::uno::Sequence< ::rtl::OUString >( namesdata, names.getLength() );
+    //mEntityReplacements = ::css::uno::Sequence< ::rtl::OUString >( replacementsdata, replacements.getLength() );
+    mEntityNames = &names;
+    mEntityReplacements = &replacements;
 }
 
 void FastSaxParserImpl::deleteUsedEvents()
@@ -1368,7 +1383,7 @@ xmlEntityPtr FastSaxParserImpl::callbackGetEntity( const xmlChar *name )
     if( !name )
         return xmlGetPredefinedEntity(name);
     const char* dname = XML_CAST(name);
-    for( size_t i = 0; i < mEntityNames.size(); ++i )
+    /*for( size_t i = 0; i < mEntityNames.size(); ++i )
     {
         if( mEntityNames[i].compareToAscii(dname) == 0 )
         {
@@ -1377,7 +1392,19 @@ xmlEntityPtr FastSaxParserImpl::callbackGetEntity( const xmlChar *name )
                 XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
                 BAD_CAST(OUStringToOString(mEntityReplacements[i],RTL_TEXTENCODING_UTF8).getStr()));
         }
-    }
+    }*/
+    //if( !mEntityNames || !mEntityReplacements )
+    //    return xmlGetPredefinedEntity(name);
+    /*for( sal_Int32 i = 0; i < (*mEntityNames).getLength(); ++i )
+    {
+        if( (*mEntityNames)[i].compareToAscii(dname) == 0 )
+        {
+            return xmlNewEntity( nullptr,
+                name,
+                XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
+                BAD_CAST(OUStringToOString((*mEntityReplacements)[i],RTL_TEXTENCODING_UTF8).getStr()));
+        }
+    }*/
     if ( dname[0] == '#' )
     {
         sal_uInt32 cval = 0;
