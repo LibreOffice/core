@@ -49,7 +49,7 @@ const char* lclAnovaLabels[] =
     nullptr
 };
 
-const OUStringLiteral strWildcardRange = u"%RANGE%";
+constexpr OUStringLiteral strWildcardRange = u"%RANGE%";
 
 OUString lclCreateMultiParameterFormula(
             ScRangeList&        aRangeList, const OUString& aFormulaTemplate,

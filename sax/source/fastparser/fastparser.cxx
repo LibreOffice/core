@@ -1495,20 +1495,20 @@ static void NormalizeURI( OUString& rName )
         bSuccess = NormalizeW3URI( rName );
 }
 
-const OUStringLiteral XML_URI_W3_PREFIX(u"http://www.w3.org/");
-const OUStringLiteral XML_URI_XFORMS_SUFFIX(u"/xforms");
-const OUStringLiteral XML_N_XFORMS_1_0(u"http://www.w3.org/2002/xforms");
-const OUStringLiteral XML_N_SVG(u"http://www.w3.org/2000/svg");
-const OUStringLiteral XML_N_SVG_COMPAT(u"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
-const OUStringLiteral XML_N_FO(u"http://www.w3.org/1999/XSL/Format");
-const OUStringLiteral XML_N_FO_COMPAT(u"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
-const OUStringLiteral XML_N_SMIL(u"http://www.w3.org/2001/SMIL20/");
-const OUStringLiteral XML_N_SMIL_OLD(u"http://www.w3.org/2001/SMIL20");
-const OUStringLiteral XML_N_SMIL_COMPAT(u"urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0");
-const OUStringLiteral XML_URN_OASIS_NAMES_TC(u"urn:oasis:names:tc");
-const OUStringLiteral XML_XMLNS(u"xmlns");
-const OUStringLiteral XML_OPENDOCUMENT(u"opendocument");
-const OUStringLiteral XML_1_0(u"1.0");
+constexpr OUStringLiteral XML_URI_W3_PREFIX(u"http://www.w3.org/");
+constexpr OUStringLiteral XML_URI_XFORMS_SUFFIX(u"/xforms");
+constexpr OUStringLiteral XML_N_XFORMS_1_0(u"http://www.w3.org/2002/xforms");
+constexpr OUStringLiteral XML_N_SVG(u"http://www.w3.org/2000/svg");
+constexpr OUStringLiteral XML_N_SVG_COMPAT(u"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
+constexpr OUStringLiteral XML_N_FO(u"http://www.w3.org/1999/XSL/Format");
+constexpr OUStringLiteral XML_N_FO_COMPAT(u"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
+constexpr OUStringLiteral XML_N_SMIL(u"http://www.w3.org/2001/SMIL20/");
+constexpr OUStringLiteral XML_N_SMIL_OLD(u"http://www.w3.org/2001/SMIL20");
+constexpr OUStringLiteral XML_N_SMIL_COMPAT(u"urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0");
+constexpr OUStringLiteral XML_URN_OASIS_NAMES_TC(u"urn:oasis:names:tc");
+constexpr OUStringLiteral XML_XMLNS(u"xmlns");
+constexpr OUStringLiteral XML_OPENDOCUMENT(u"opendocument");
+constexpr OUStringLiteral XML_1_0(u"1.0");
 
 static bool NormalizeW3URI( OUString& rName )
 {
