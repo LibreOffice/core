@@ -57,3 +57,20 @@
    #else
      #error "unknown architecture for universal build."
    #endif
+--- Modules/_posixsubprocess.c
++++ Modules/_posixsubprocess.c
+@@ -0,4 +0,5 @@
+ /* Authors: Gregory P. Smith & Jeffrey Yasskin */
++#include <limits.h>
+ #include "Python.h"
+ #if defined(HAVE_PIPE2) && !defined(_GNU_SOURCE)
+ # define _GNU_SOURCE
+@@ -202,7 +202,7 @@
+ #endif
+ #ifdef _SC_OPEN_MAX
+     local_max_fd = sysconf(_SC_OPEN_MAX);
+-    if (local_max_fd == -1)
++    if (local_max_fd == -1 || local_max_fd == LONG_MAX)
+ #endif
+         local_max_fd = 256;  /* Matches legacy Lib/subprocess.py behavior. */
+     return local_max_fd;
