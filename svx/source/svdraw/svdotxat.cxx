@@ -263,8 +263,12 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight()
         if (dynamic_cast<const SdrRectObj *>(this) != nullptr) { // this is a hack
             static_cast<SdrRectObj*>(this)->SetXPolyDirty();
         }
-        if (dynamic_cast<const SdrCaptionObj *>(this) != nullptr) { // this is a hack
-            static_cast<SdrCaptionObj*>(this)->ImpRecalcTail();
+        bool bScPostIt = false;
+        if (auto pCaptionObj = dynamic_cast<SdrCaptionObj *>(this)) { // this is a hack
+            pCaptionObj->ImpRecalcTail();
+            // tdf#114956, tdf#138549 use GetSpecialTextBoxShadow to recognize
+            // that this SdrCaption is for a ScPostit
+            bScPostIt = pCaptionObj->GetSpecialTextBoxShadow();
         }
 
         // to not slow down EditView visualization on Overlay (see
@@ -278,8 +282,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight()
             GetTextEditOutliner() &&
             GetTextEditOutliner()->hasEditViewCallbacks());
 
-        // tdf#114956 always broadcast change for ScPostIts
-        if (!bSuppressChangeWhenEditOnOverlay || GetName() == "ScPostIt")
+        if (!bSuppressChangeWhenEditOnOverlay || bScPostIt)
         {
             SetChanged();
             BroadcastObjectChange();
