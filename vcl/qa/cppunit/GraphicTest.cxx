@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -803,8 +802,8 @@ void GraphicTest::testSwappingGraphicProperties_SVG_WithGfxLink()
     CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
 
     // Check size in pixels
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(64), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(64), aGraphic.GetSizePixel().Height());
 
     // Set and check the PrefSize
     CPPUNIT_ASSERT_EQUAL(tools::Long(1349), aGraphic.GetPrefSize().Width());
@@ -823,8 +822,8 @@ void GraphicTest::testSwappingGraphicProperties_SVG_WithGfxLink()
     CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(64), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(64), aGraphic.GetSizePixel().Height());
 
     // SWAP IN
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
@@ -836,8 +835,8 @@ void GraphicTest::testSwappingGraphicProperties_SVG_WithGfxLink()
     CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(64), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(64), aGraphic.GetSizePixel().Height());
 }
 
 void GraphicTest::testSwappingGraphicProperties_SVG_WithoutGfxLink()
@@ -865,8 +864,8 @@ void GraphicTest::testSwappingGraphicProperties_SVG_WithoutGfxLink()
     CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
 
     // Check size in pixels
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(64), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(64), aGraphic.GetSizePixel().Height());
 
     // Set and check the PrefSize
     CPPUNIT_ASSERT_EQUAL(tools::Long(1349), aGraphic.GetPrefSize().Width());
@@ -885,8 +884,8 @@ void GraphicTest::testSwappingGraphicProperties_SVG_WithoutGfxLink()
 
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(64), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(64), aGraphic.GetSizePixel().Height());
 
     // SWAP IN
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
@@ -898,8 +897,8 @@ void GraphicTest::testSwappingGraphicProperties_SVG_WithoutGfxLink()
 
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(64), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(64), aGraphic.GetSizePixel().Height());
 }
 
 void GraphicTest::testSwappingVectorGraphic_PDF_WithGfxLink()
