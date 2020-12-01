@@ -22,6 +22,30 @@
       "revId": "2622cd9c31a5db423c6f878f990a41191d0079af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f62b7f5_77b36acb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-12-01T11:09:51Z",
+      "side": 1,
+      "message": "I think the rationale is that highlighting is not supported in char styles and you direct formatting only exists on the text portion list of a paragraph, i.e. not something you can nest.",
+      "parentUuid": "cfdf5058_c4a041b2",
+      "range": {
+        "startLine": 21,
+        "startChar": 18,
+        "endLine": 22,
+        "endChar": 40
+      },
+      "revId": "2622cd9c31a5db423c6f878f990a41191d0079af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
