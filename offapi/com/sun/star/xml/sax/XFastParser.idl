@@ -40,7 +40,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 #include <com/sum/star/xml/sax/XFastNamespaceHandler.idl>
-//#include <com/sun/star/xml/dom/XEntity.idl>
 
 
 module com {  module sun {  module star {  module xml {  module sax {
@@ -160,6 +159,7 @@ interface XFastParser: com::sun::star::uno::XInterface
     void setNamespaceHandler( [in] XFastNamespaceHandler Handler);
 
     /**
+      * @since 7.1
       * Simulate a DTD file.
       * Will allow to use customized entity references like &infin; .
       */
