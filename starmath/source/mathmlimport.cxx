@@ -1395,34 +1395,15 @@ void SmXMLOperatorContext_Impl::TCharacters(const OUString& rChars)
     SmToken bToken;
     if (bIsFenced)
     {
-        if (bIsStretchy)
-        {
-            if (isPrefix)
-                bToken
-                    = starmathdatabase::Identify_Prefix_SmXMLOperatorContext_Impl(aToken.cMathChar);
-            else if (isInfix)
-                bToken = SmToken(TMLINE, MS_VERTLINE, "mline", TG::NONE, 0);
-            else if (isPostfix)
-                bToken = starmathdatabase::Identify_Postfix_SmXMLOperatorContext_Impl(
-                    aToken.cMathChar);
-            else
-                bToken = starmathdatabase::Identify_PrefixPostfix_SmXMLOperatorContext_Impl(
-                    aToken.cMathChar);
-        }
+        if (isPrefix)
+            bToken = starmathdatabase::Identify_Prefix_SmXMLOperatorContext_Impl(aToken.cMathChar);
+        else if (isInfix)
+            bToken = SmToken(TMLINE, MS_VERTLINE, "mline", TG::NONE, 0);
+        else if (isPostfix)
+            bToken = starmathdatabase::Identify_Postfix_SmXMLOperatorContext_Impl(aToken.cMathChar);
         else
-        {
-            if (isPrefix)
-                bToken
-                    = starmathdatabase::Identify_Prefix_SmXMLOperatorContext_Impl(aToken.cMathChar);
-            else if (isInfix)
-                bToken = SmToken(TMLINE, MS_VERTLINE, "mline", TG::NONE, 0);
-            else if (isPostfix)
-                bToken = starmathdatabase::Identify_Postfix_SmXMLOperatorContext_Impl(
-                    aToken.cMathChar);
-            else
-                bToken = starmathdatabase::Identify_PrefixPostfix_SmXMLOperatorContext_Impl(
-                    aToken.cMathChar);
-        }
+            bToken = starmathdatabase::Identify_PrefixPostfix_SmXMLOperatorContext_Impl(
+                aToken.cMathChar);
     }
     else
         bToken
