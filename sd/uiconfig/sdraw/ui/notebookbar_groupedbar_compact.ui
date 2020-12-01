@@ -2757,20 +2757,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuSlide-DisplayMasterBackground">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:DisplayMasterBackground</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuSlide-DisplayMasterObjects">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:DisplayMasterObjects</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="MenuSlide-separator5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
