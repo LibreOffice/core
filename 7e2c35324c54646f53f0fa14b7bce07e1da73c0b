@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a2fe0d36_4ff98887",
+        "filename": "starmath/source/mathmlimport.cxx",
+        "patchSetId": 29
+      },
+      "lineNbr": 1418,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-12-01T13:34:31Z",
+      "side": 1,
+      "message": "coverity points out that the if and else branches here are identical, is there something missing here, or can be fold them together ?",
+      "revId": "7e2c35324c54646f53f0fa14b7bce07e1da73c0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
