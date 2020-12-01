@@ -3190,7 +3190,7 @@ bool ScDocShell::HasChangeRecordProtection() const
     return bRes;
 }
 
-void ScDocShell::SetChangeRecording( bool bActivate )
+void ScDocShell::SetChangeRecording( bool bActivate, bool /*bLockAllViews*/ )
 {
     bool bOldChangeRecording = IsChangeRecording();
 
