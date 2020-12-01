@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d1e0b99_d0fd61c4",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_aarch64/uno2cpp.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-01T08:52:47Z",
+      "side": 1,
+      "message": "any specific reason you made all those parameters const?",
+      "revId": "e0df85554b533fab67a5a91193024e4876c5ec02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
