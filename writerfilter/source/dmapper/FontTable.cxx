@@ -18,6 +18,7 @@
  */
 
 #include "FontTable.hxx"
+#include <o3tl/deleter.hxx>
 #include <ooxml/resourceids.hxx>
 #include <vector>
 #include <sal/log.hxx>
@@ -32,7 +33,7 @@ namespace writerfilter::dmapper
 
 struct FontTable_Impl
 {
-    std::unique_ptr<EmbeddedFontsHelper> xEmbeddedFontHelper;
+    std::unique_ptr<EmbeddedFontsHelper, o3tl::default_delete<EmbeddedFontsHelper>> xEmbeddedFontHelper;
     std::vector< FontEntry::Pointer_t > aFontEntries;
     FontEntry::Pointer_t pCurrentEntry;
     FontTable_Impl() {}
