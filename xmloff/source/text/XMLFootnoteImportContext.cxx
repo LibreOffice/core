@@ -73,8 +73,9 @@ XMLFootnoteImportContext::XMLFootnoteImportContext(
 {
 }
 
-void XMLFootnoteImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLFootnoteImportContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // create footnote
     Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),
@@ -84,18 +85,11 @@ void XMLFootnoteImportContext::StartElement(
 
     // create endnote or footnote
     bool bIsEndnote = false;
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr1 = 0; nAttr1 < nLength; nAttr1++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr1),
-                              &sLocalName );
-        if( XML_NAMESPACE_TEXT == nPrefix && IsXMLToken( sLocalName,
-                                                        XML_NOTE_CLASS ) )
+        if( aIter.getToken() == XML_ELEMENT(TEXT, XML_NOTE_CLASS) )
         {
-            const OUString& rValue = xAttrList->getValueByIndex( nAttr1 );
-            if( IsXMLToken( rValue, XML_ENDNOTE ) )
+            if( IsXMLToken( aIter.toString(), XML_ENDNOTE ) )
                 bIsEndnote = true;
             break;
         }
@@ -111,15 +105,9 @@ void XMLFootnoteImportContext::StartElement(
     rHelper.InsertTextContent(xTextContent);
 
     // process id attribute
-    for(sal_Int16 nAttr2 = 0; nAttr2 < nLength; nAttr2++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr2),
-                              &sLocalName );
-
-        if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-             IsXMLToken( sLocalName, XML_ID )   )
+        if( aIter.getToken() == XML_ELEMENT(TEXT, XML_ID) )
         {
             // get ID ...
             Reference<XPropertySet> xPropertySet(xTextContent, UNO_QUERY);
@@ -128,9 +116,8 @@ void XMLFootnoteImportContext::StartElement(
             aAny >>= nID;
 
             // ... and insert into map
-            rHelper.InsertFootnoteID(
-                xAttrList->getValueByIndex(nAttr2),
-                nID);
+            rHelper.InsertFootnoteID( aIter.toString(), nID);
+            break;
         }
     }
 
