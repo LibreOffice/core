@@ -50,42 +50,39 @@ XMLChangedRegionImportContext::~XMLChangedRegionImportContext()
 {
 }
 
-void XMLChangedRegionImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLChangedRegionImportContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // process attributes: id
     bool bHaveXmlId( false );
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-
-        const OUString sValue = xAttrList->getValueByIndex(nAttr);
-        if (XML_NAMESPACE_XML == nPrefix)
+        const OUString sValue = aIter.toString();
+        switch(aIter.getToken())
         {
-            if (IsXMLToken(sLocalName, XML_ID))
+            case XML_ELEMENT(XML, XML_ID):
             {
                 sID = sValue;
                 bHaveXmlId = true;
+                break;
             }
-        }
-        else if (XML_NAMESPACE_TEXT == nPrefix)
-        {
-            if (IsXMLToken(sLocalName, XML_ID))
+            case XML_ELEMENT(TEXT, XML_ID):
             {
                 if (!bHaveXmlId) { sID = sValue; }
+                break;
             }
-            else if( IsXMLToken( sLocalName, XML_MERGE_LAST_PARAGRAPH ) )
+            case XML_ELEMENT(TEXT, XML_MERGE_LAST_PARAGRAPH):
             {
                 bool bTmp(false);
                 if (::sax::Converter::convertBool(bTmp, sValue))
                 {
                     bMergeLastPara = bTmp;
                 }
+                break;
             }
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 }
