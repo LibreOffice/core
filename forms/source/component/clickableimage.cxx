@@ -310,9 +310,9 @@ namespace frm
                 }
                 else
                 {
-                    URL aHyperLink = m_pFeatureInterception->getTransformer().getStrictURLFromAscii( ".uno:OpenHyperlink" );
+                    URL aHyperLink = m_pFeatureInterception->getTransformer().getStrictURL(aURL.Complete);
 
-                    Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY_THROW)->queryDispatch(aHyperLink, OUString() , 0);
+                    Reference< XDispatch > xDisp =  m_pFeatureInterception->queryDispatch(aHyperLink);
 
                     if ( xDisp.is() )
                     {
