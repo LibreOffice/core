@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "933fcc3a_ab50f66e",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-12-01T18:31:31Z",
+      "side": 1,
+      "message": "\"to page\" is terrible and should not be selectable as a default",
+      "revId": "2164b5d30a55974b899a3b359dba291b717f6774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
