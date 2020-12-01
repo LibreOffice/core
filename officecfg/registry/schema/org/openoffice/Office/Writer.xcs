@@ -1087,6 +1087,31 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="DefaultAnchor" oor:type="xs:int" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Writer - View - Default Anchor -->
+          <info>
+            <desc>Specifies the anchor of newly inserted images.</desc>
+            <label>Default Anchor</label>
+          </info>
+          <constraints>
+            <enumeration oor:value="0">
+              <info>
+                <desc>FLY_TO_PARA</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="1">
+              <info>
+                <desc>FLY_TO_CHAR</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="2">
+              <info>
+                <desc>FLY_AS_CHAR</desc>
+              </info>
+            </enumeration>
+          </constraints>
+          <value>1</value>
+        </prop>
       </group>
       <group oor:name="NonprintingCharacter">
         <info>
