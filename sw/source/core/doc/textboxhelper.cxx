@@ -44,6 +44,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
@@ -357,6 +358,25 @@ SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(uno::Reference<drawing::XS
     return getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT);
 }
 
+uno::Reference<text::XTextFrame>
+SwTextBoxHelper::getUnoTextFrame(uno::Reference<drawing::XShape> const& xShape)
+{
+    if (xShape)
+    {
+        auto pFrameFormat = SwTextBoxHelper::getOtherTextBoxFormat(xShape);
+        if (pFrameFormat)
+        {
+            auto pSdrObj = pFrameFormat->FindSdrObject();
+            if (pSdrObj && pSdrObj->IsTextBox())
+            {
+                return uno::Reference<css::text::XTextFrame>(pSdrObj->getUnoShape(),
+                                                             uno::UNO_QUERY);
+            }
+        }
+    }
+    return uno::Reference<css::text::XTextFrame>();
+}
+
 template <typename T> static void lcl_queryInterface(const SwFrameFormat* pShape, uno::Any& rAny)
 {
     if (SwFrameFormat* pFormat = SwTextBoxHelper::getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT))
@@ -537,8 +557,11 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rP
     else if (rPropertyName == UNO_NAME_TEXT_WRITINGMODE)
     {
         text::WritingMode eMode;
+        sal_Int16 eMode2;
         if (rValue >>= eMode)
             syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(sal_Int16(eMode)));
+        else if (rValue >>= eMode2)
+            syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(eMode2));
     }
 }
 
