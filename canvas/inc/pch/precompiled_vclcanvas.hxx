@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-10-02 11:01:53 using:
+ Generated on 2020-12-01 16:34:48 using:
  ./bin/update_pch canvas vclcanvas --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -39,8 +39,8 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/gradient.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <vcl/svapp.hxx>
@@ -54,7 +54,6 @@
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/utils/canvastools.hxx>
@@ -81,6 +80,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/long.hxx>
 #include <tools/poly.hxx>
 #include <tools/stream.hxx>
 #endif // PCH_LEVEL >= 3
