@@ -25,40 +25,39 @@
 class SwTextNode;
 class SwCharFormat;
 
-class SW_DLLPUBLIC SwTextINetFormat : public SwTextAttrNesting, public SwClient
+class SW_DLLPUBLIC SwTextINetFormat final: public SwTextAttrNesting, public SwClient
 {
-    SwTextNode * m_pTextNode;
-    bool m_bVisited         : 1; // visited link?
-    bool m_bVisitedValid    : 1; // is m_bVisited valid?
+    private:
+        SwTextNode* m_pTextNode;
+        bool m_bVisited         : 1; // visited link?
+        bool m_bVisitedValid    : 1; // is m_bVisited valid?
+        virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
-protected:
-virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    public:
+        SwTextINetFormat( SwFormatINetFormat& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+        virtual ~SwTextINetFormat() override;
 
-public:
-    SwTextINetFormat( SwFormatINetFormat& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-    virtual ~SwTextINetFormat() override;
+        virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
 
-    virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
+        SAL_DLLPRIVATE void InitINetFormat(SwTextNode & rNode);
 
-    SAL_DLLPRIVATE void InitINetFormat(SwTextNode & rNode);
+        // get and set TextNode pointer
+        const SwTextNode* GetpTextNode() const { return m_pTextNode; }
+        inline const SwTextNode& GetTextNode() const;
+        inline SwTextNode& GetTextNode();
+        void ChgTextNode( SwTextNode* pNew ) { m_pTextNode = pNew; }
 
-    // get and set TextNode pointer
-    const SwTextNode* GetpTextNode() const { return m_pTextNode; }
-    inline const SwTextNode& GetTextNode() const;
-    inline SwTextNode& GetTextNode();
-    void ChgTextNode( SwTextNode* pNew ) { m_pTextNode = pNew; }
+              SwCharFormat* GetCharFormat();
+        const SwCharFormat* GetCharFormat() const
+                { return const_cast<SwTextINetFormat*>(this)->GetCharFormat(); }
 
-          SwCharFormat* GetCharFormat();
-    const SwCharFormat* GetCharFormat() const
-            { return const_cast<SwTextINetFormat*>(this)->GetCharFormat(); }
+        bool IsVisited() const { return m_bVisited; }
+        void SetVisited( bool bNew ) { m_bVisited = bNew; }
 
-    bool IsVisited() const { return m_bVisited; }
-    void SetVisited( bool bNew ) { m_bVisited = bNew; }
+        bool IsVisitedValid() const { return m_bVisitedValid; }
+        void SetVisitedValid( bool bNew ) { m_bVisitedValid = bNew; }
 
-    bool IsVisitedValid() const { return m_bVisitedValid; }
-    void SetVisitedValid( bool bNew ) { m_bVisitedValid = bNew; }
-
-    bool IsProtect() const;
+        bool IsProtect() const;
 };
 
 inline const SwTextNode& SwTextINetFormat::GetTextNode() const

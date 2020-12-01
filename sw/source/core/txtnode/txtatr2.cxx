@@ -158,22 +158,20 @@ SwCharFormat* SwTextINetFormat::GetCharFormat()
     return pRet;
 }
 
-void SwTextINetFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwTextINetFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    OSL_ENSURE(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
-             || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
-        "SwTextINetFormat::Modify(): unknown Modify");
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
+    const auto nWhich = pLegacy->GetWhich();
+    OSL_ENSURE(isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
+            || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
+            "SwTextINetFormat::SwClientNotify: unknown hint.");
+    if(!m_pTextNode)
+        return;
 
-    if ( m_pTextNode )
-    {
-        SwUpdateAttr aUpdateAttr(
-            GetStart(),
-            *GetEnd(),
-            nWhich);
-
-        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
-    }
+    const SwUpdateAttr aUpdateAttr(GetStart(), *GetEnd(), nWhich);
+    m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
 }
 
 bool SwTextINetFormat::GetInfo( SfxPoolItem& rInfo ) const
