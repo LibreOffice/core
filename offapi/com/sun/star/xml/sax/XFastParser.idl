@@ -160,7 +160,8 @@ interface XFastParser: com::sun::star::uno::XInterface
 
     /**
       * Simulate a DTD file.
-      * Will allow to use customized entity references like &infin; .
+      * Will allow to use customized entity references like &infin;
+      * Make sure the sequences still available until the destruction of the parser.
       * @since LibreOffice 7.1
       */
     void setCustomEntityNames( [in] sequence<string> names, [in] sequence<string> replacements);

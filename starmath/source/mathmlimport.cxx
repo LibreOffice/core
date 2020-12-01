@@ -267,6 +267,10 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(const Reference<io::XInputStrea
     {
         Reference<css::xml::sax::XFastParser> xFastParser(xFilter, UNO_QUERY);
         Reference<css::xml::sax::XFastDocumentHandler> xFastDocHandler(xFilter, UNO_QUERY);
+        //xFastParser->setCustomEntityNames(::css::uno::Sequence< ::rtl::OUString >(),
+        //                                  ::css::uno::Sequence< ::rtl::OUString >());
+        xFastParser->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntitiesNames,
+                                          starmathdatabase::icustomMathmlHtmlEntitiesValues);
         if (xFastParser)
             xFastParser->parseStream(aParserInput);
         else if (xFastDocHandler)
