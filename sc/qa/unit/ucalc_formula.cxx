@@ -8520,6 +8520,19 @@ void Test::testTdf107459()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testTdf138360()
+{
+    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
+
+    m_pDoc->SetString(ScAddress(0,0,0), "=ROUND(5e15+1;9)");
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(0.0, abs(5000000000000001.0 - m_pDoc->GetValue(ScAddress(0,0,0))));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testTdf133260()
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
