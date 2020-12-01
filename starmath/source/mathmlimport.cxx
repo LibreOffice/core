@@ -70,6 +70,7 @@ one go*/
 #include <utility.hxx>
 #include <visitors.hxx>
 #include <starmathdatabase.hxx>
+#include "xparsmlbase.hxx"
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -267,6 +268,8 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(const Reference<io::XInputStrea
     {
         Reference<css::xml::sax::XFastParser> xFastParser(xFilter, UNO_QUERY);
         Reference<css::xml::sax::XFastDocumentHandler> xFastDocHandler(xFilter, UNO_QUERY);
+        //xFastParser->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntitiesNames,
+        //                                  starmathdatabase::icustomMathmlHtmlEntitiesValues);
         if (xFastParser)
             xFastParser->parseStream(aParserInput);
         else if (xFastDocHandler)
