@@ -290,7 +290,7 @@ void doubleToString(typename T::String ** pResult,
         // Writing pDig up to decimals(-1,-2) then appending one digit from
         // pRou xor one or two digits from pSlot[].
         constexpr char pDig[] = "7976931348623157";
-        constexpr char pRou[] = "8087931459623267";     // the only up-carry is 80
+        constexpr char pRou[] = "8087931359623267";     // the only up-carry is 80
         static_assert(SAL_N_ELEMENTS(pDig) == SAL_N_ELEMENTS(pRou), "digit count mismatch");
         constexpr sal_Int32 nDig2 = RTL_CONSTASCII_LENGTH(pRou) - 2;
         sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH(pRou) + 8;  // + "-1.E+308"
