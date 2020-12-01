@@ -25,6 +25,7 @@
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 
+#include <svx/swframetypes.hxx>
 #include <sfx2/zoomitem.hxx>
 #include "swdllapi.h"
 
@@ -172,6 +173,7 @@ class SW_DLLPUBLIC SwViewOption
     bool            mbHideWhitespaceMode : 1; // Hide header, footer, and pagebreak.
     bool            m_bShowPlaceHolderFields : 1; // Only used in printing!
     mutable bool    m_bIdle;
+    sal_Int32       m_nDefaultAnchor;     // GetDefaultAnchorType() to convert int to RndStdIds
 
     // Scale
     sal_uInt16          m_nZoom;          // In percent.
@@ -663,6 +665,14 @@ public:
     static void     SetDocBoundaries(bool bSet)   {SetAppearanceFlag(ViewOptFlags::DocBoundaries, bSet);}
 
     static void     ApplyColorConfigValues(const svtools::ColorConfig& rConfig);
+
+    // get/set default anchor (0..2); use GetDefaultAnchorType() to convert into RndStdIds::FLY_*
+    sal_Int32 GetDefaultAnchor() const
+        {   return m_nDefaultAnchor; }
+    void SetDefaultAnchor( const sal_Int32 aFlag )
+        { m_nDefaultAnchor = aFlag; }
+
+    RndStdIds GetDefaultAnchorType();
 };
 
 inline bool SwViewOption::operator==( const SwViewOption &rOpt ) const
