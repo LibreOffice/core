@@ -261,6 +261,14 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     }
                 }
             }
+            else if (eShapeType == mso_sptMax)
+            {
+                // We can't map this custom shape to a DOC preset and it has a bitmap fill.
+                // Make sure that at least the bitmap fill is not lost.
+                addShape( ESCHER_ShpInst_PictureFrame, ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor );
+                if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "FillBitmap", false, true, true, bOOxmlExport ) )
+                    aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
+            }
             else
             {
                 addShape(sal::static_int_cast< sal_uInt16 >(eShapeType),
