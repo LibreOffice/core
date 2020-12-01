@@ -32,7 +32,6 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/BitmapMonochromeFilter.hxx>
-#include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 
 #include <canvas/canvastools.hxx>
@@ -189,15 +188,8 @@ namespace vclcanvas
 
         if( !bIdentityTransform )
         {
-            // Avoid the trick with the negative width in the OpenGL case,
-            // OutputDevice::DrawDeviceAlphaBitmap() doesn't like it.
             if (!::basegfx::fTools::equalZero( aTransform.get(0,1) ) ||
-                !::basegfx::fTools::equalZero( aTransform.get(1,0) )
-#if HAVE_FEATURE_UI
-                || OpenGLHelper::isVCLOpenGLEnabled()
-#endif
-                || SkiaHelper::isVCLSkiaEnabled()
-               )
+                !::basegfx::fTools::equalZero( aTransform.get(1,0) ))
             {
                 // "complex" transformation, employ affine
                 // transformator
