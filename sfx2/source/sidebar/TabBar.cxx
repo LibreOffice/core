@@ -237,6 +237,8 @@ TabBar::Item::Item(TabBar& rTabBar)
     : mrTabBar(rTabBar)
     , mxBuilder(Application::CreateBuilder(rTabBar.GetContainer(), "sfx/ui/tabbutton.ui"))
     , mxButton(mxBuilder->weld_toolbar("button"))
+    , mbIsHidden(false)
+    , mbIsHiddenByDefault(false)
 {
 }
 
