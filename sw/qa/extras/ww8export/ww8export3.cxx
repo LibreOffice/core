@@ -106,6 +106,23 @@ DECLARE_WW8EXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.doc")
                          aMap["NumberingType"].get<sal_uInt16>());
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf128501, "tdf128501.doc")
+{
+    if (!mbExported)
+    {
+        uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor = getShape(1);
+        CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"), xShapeDescriptor->getShapeType());
+    }
+    else
+    {
+        uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor = getShape(1);
+        // Without the fix in place, this test would have failed with
+        // - Expected: FrameShape
+        // - Actual  : com.sun.star.drawing.CustomShape
+        CPPUNIT_ASSERT_EQUAL(OUString("FrameShape"), xShapeDescriptor->getShapeType());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwModelTestBase, testArabicZeroNumberingFootnote)
 {
     // Create a document, set footnote numbering type to ARABIC_ZERO.
