@@ -261,6 +261,12 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     }
                 }
             }
+            else if (eShapeType == mso_sptMax)
+            {
+                addShape( ESCHER_ShpInst_PictureFrame, ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor );
+                if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "FillBitmap", false, true, true, bOOxmlExport ) )
+                    aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
+            }
             else
             {
                 addShape(sal::static_int_cast< sal_uInt16 >(eShapeType),
