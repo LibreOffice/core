@@ -935,8 +935,8 @@ void FastSaxParserImpl::setNamespaceHandler( const Reference< XFastNamespaceHand
 
 void FastSaxParserImpl::setCustomEntityNames( const ::css::uno::Sequence< ::rtl::OUString >& names, const ::css::uno::Sequence< ::rtl::OUString >& replacements )
 {
-    mEntityNames = names;
-    mEntityReplacements = replacements;
+    mEntityNames = ::css::uno::Sequence< ::rtl::OUString >(names);
+    mEntityReplacements = ::css::uno::Sequence< ::rtl::OUString >(replacements);
 }
 
 void FastSaxParserImpl::deleteUsedEvents()
