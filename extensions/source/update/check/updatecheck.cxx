@@ -427,7 +427,7 @@ UpdateCheckThread::runCheck( bool & rbExtensionsChecked )
          !aController->isDialogShowing() &&
          !rbExtensionsChecked )
     {
-        bool bHasExtensionUpdates = checkForExtensionUpdates( m_xContext );
+        bool bHasExtensionUpdates = true; // checkForExtensionUpdates( m_xContext );
         aController->setHasExtensionUpdates( bHasExtensionUpdates );
         if ( bHasExtensionUpdates )
             aController->setUIState( UPDATESTATE_EXT_UPD_AVAIL );
@@ -498,7 +498,7 @@ UpdateCheckThread::run()
             rModel.clear();
 
             // last == 0 means check immediately
-            bool checkNow = last <= 0;
+            bool checkNow = true; // last <= 0;
 
             // Reset the condition to avoid busy loops
             if( osl::Condition::result_ok == aResult )
@@ -1407,8 +1407,10 @@ void UpdateCheck::handleMenuBarUI( const rtl::Reference< UpdateHandler >& rUpdat
 }
 
 
-void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
+void UpdateCheck::setUIState(UpdateState eState, bool /*suppressBubble*/)
 {
+    bool suppressBubble = false;
+    (void) suppressBubble;
     std::unique_lock aGuard(m_aMutex);
 
     if( ! m_xMenuBarUI.is() &&
@@ -1423,7 +1425,7 @@ void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
 
     // Show bubble only when the status has changed
     if ( eState == m_eUpdateState )
-        suppressBubble = true;
+        suppressBubble = false;
     else
         m_eUpdateState = eState;
 
@@ -1434,8 +1436,8 @@ void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
     OUString aImageName(m_aImageName);
 
     aGuard.unlock();
-
-    handleMenuBarUI( aUpdateHandler, eState, suppressBubble );
+    // here?
+    handleMenuBarUI( aUpdateHandler, eState, false );
 
     if( (UPDATESTATE_UPDATE_AVAIL == eState)
      || (UPDATESTATE_DOWNLOAD_PAUSED == eState)
