@@ -49,6 +49,7 @@ void ScInputOptions::SetDefaults()
     bTextWysiwyg    = false;
     bReplCellsWarn  = true;
     bLegacyCellSelection = false;
+    bEnterPasteMode = false;
 }
 
 //  Config Item containing input options
