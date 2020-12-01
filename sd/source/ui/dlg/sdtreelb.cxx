@@ -701,7 +701,20 @@ void SdPageObjsTLV::Select()
     m_aChangeHdl.Call(*m_xTreeView);
 
     if (m_bSelectionHandlerNavigates)
-        m_aRowActivatedHdl.Call(*m_xTreeView);
+    {
+        SdrObject* pObject = reinterpret_cast<SdrObject*>(m_xTreeView->get_selected_id().toInt64());
+        if (pObject && pObject->GetName().isEmpty())
+        {
+            const bool bUndo = pObject->getSdrModelFromSdrObject().IsUndoEnabled();
+            pObject->getSdrModelFromSdrObject().EnableUndo(false);
+            pObject->SetName(m_xTreeView->get_selected_text(), false);
+            m_aRowActivatedHdl.Call(*m_xTreeView);
+            pObject->SetName(OUString(), false);
+            pObject->getSdrModelFromSdrObject().EnableUndo(bUndo);
+        }
+        else
+            m_aRowActivatedHdl.Call(*m_xTreeView);
+    }
 
     if (!m_xNavigator)
     {
