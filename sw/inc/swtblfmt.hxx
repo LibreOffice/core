@@ -55,7 +55,7 @@ class SAL_DLLPUBLIC_RTTI SwTableBoxFormat final : public SwFrameFormat
     {}
 
     // For recognition of changes (especially TableBoxAttribute).
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
     virtual bool supportsFullDrawingLayerFillAttributeSet() const override;
