@@ -1180,6 +1180,7 @@ IMPL_LINK(SidebarController, OnSubMenuItemSelected, const OString&, rCurItemId, 
                                             IsDocumentReadOnly(),
                                             mxFrame->getController());
                 // Notify the tab bar about the updated set of decks.
+                maFocusManager.Clear();
                 mpTabBar->SetDecks(aDecks);
                 mpTabBar->HighlightDeck(mpCurrentDeck->GetId());
                 mpTabBar->UpdateFocusManager(maFocusManager);
