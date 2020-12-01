@@ -23,6 +23,7 @@
 #include <com/sun/star/text/ChapterFormat.hpp>
 
 #include <sax/tools/converter.hxx>
+#include <sal/log.hxx>
 
 #include "XMLIndexTemplateContext.hxx"
 #include <xmloff/xmlimp.hxx>
@@ -74,46 +75,44 @@ const SvXMLEnumMapEntry<sal_uInt16> aChapterDisplayMap[] =
     { XML_TOKEN_INVALID,            0 }
 };
 
-void XMLIndexChapterInfoEntryContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLIndexChapterInfoEntryContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // handle both, style name and bibliography info
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        if (XML_NAMESPACE_TEXT == nPrefix)
+        switch(aIter.getToken())
         {
-            if ( IsXMLToken( sLocalName, XML_STYLE_NAME ) )
+            case XML_ELEMENT(TEXT, XML_STYLE_NAME):
             {
-                m_sCharStyleName = xAttrList->getValueByIndex(nAttr);
+                m_sCharStyleName = aIter.toString();
                 m_bCharStyleNameOK = true;
+                break;
             }
-            else if ( IsXMLToken( sLocalName, XML_DISPLAY ) )//i53420, always true, in TOC as well
+            case XML_ELEMENT(TEXT, XML_DISPLAY): //i53420, always true, in TOC as well
             {
                 sal_uInt16 nTmp;
-                if (SvXMLUnitConverter::convertEnum(
-                    nTmp, xAttrList->getValueByIndex(nAttr),
-                    aChapterDisplayMap))
+                if (SvXMLUnitConverter::convertEnum(nTmp, aIter.toString(), aChapterDisplayMap))
                 {
                     nChapterInfo = nTmp;
                     bChapterInfoOK = true;
                 }
+                break;
             }
-            else if ( IsXMLToken( sLocalName, XML_OUTLINE_LEVEL ) )
+            case XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL):
             {
                 sal_Int32 nTmp;
-                if (::sax::Converter::convertNumber(nTmp,
-                        xAttrList->getValueByIndex(nAttr)))
+                if (::sax::Converter::convertNumber(nTmp, aIter.toString()))
                 {
 //control on range is carried out in the UNO level
                     nOutlineLevel = static_cast<sal_uInt16>(nTmp);
                     bOutlineLevelOK = true;
                 }
+                break;
             }
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
