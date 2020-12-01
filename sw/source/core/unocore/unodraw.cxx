@@ -737,6 +737,15 @@ void SwXDrawPage::remove(const uno::Reference< drawing::XShape > & xShape)
     SolarMutexGuard aGuard;
     if(!m_pDoc)
         throw uno::RuntimeException();
+    // tdf#41466 remove TextFrame too which is belonged to the actual shape
+    auto xTextFrame = SwTextBoxHelper::getUnoTextFrame(xShape);
+    if (xTextFrame)
+    {
+        uno::Reference<lang::XComponent> xComp(xTextFrame, uno::UNO_QUERY);
+        if (xComp)
+            xComp->dispose();
+    }
+    // remove shape
     uno::Reference<lang::XComponent> xComp(xShape, uno::UNO_QUERY);
     xComp->dispose();
 }
