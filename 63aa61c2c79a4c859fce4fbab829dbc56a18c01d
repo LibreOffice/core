@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67731afe_65bac37a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-12-01T09:52:32Z",
+      "side": 1,
+      "message": "In general, we already have this functionality, e.g. SwAttrSet::GetFrameSize() takes a bool param to determine if we search in parents or not. It just sounds like this case needs more special control, so find to do it in the export filter.",
+      "revId": "63aa61c2c79a4c859fce4fbab829dbc56a18c01d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
