@@ -661,7 +661,7 @@ SdrObject* SdrObject::getParentSdrObjectFromSdrObject() const
     return pParent->getSdrObjectFromSdrObjList();
 }
 
-void SdrObject::SetName(const OUString& rStr)
+void SdrObject::SetName(const OUString& rStr, const bool bSetChanged)
 {
     if (!rStr.isEmpty() && !pPlusData)
     {
@@ -691,8 +691,11 @@ void SdrObject::SetName(const OUString& rStr)
     {
         getSdrModelFromSdrObject().EndUndo();
     }
-    SetChanged();
-    BroadcastObjectChange();
+    if (bSetChanged)
+    {
+        SetChanged();
+        BroadcastObjectChange();
+    }
 }
 
 OUString SdrObject::GetName() const
