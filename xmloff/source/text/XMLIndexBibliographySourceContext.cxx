@@ -26,6 +26,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 
 using namespace ::xmloff::token;
@@ -48,10 +49,11 @@ XMLIndexBibliographySourceContext::~XMLIndexBibliographySourceContext()
 }
 
 void XMLIndexBibliographySourceContext::ProcessAttribute(
-    enum IndexSourceParamEnum,
-    const OUString&)
+   sal_Int32 nAttributeToken,
+   const OUString& rValue)
 {
     // We have no attributes. Who wants attributes, anyway?
+    XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttributeToken, rValue);
 }
 
 void XMLIndexBibliographySourceContext::endFastElement(sal_Int32 )

@@ -54,12 +54,12 @@ XMLIndexTOCSourceContext::~XMLIndexTOCSourceContext()
 }
 
 void XMLIndexTOCSourceContext::ProcessAttribute(
-    enum IndexSourceParamEnum eParam,
+    sal_Int32 nAttributeToken,
     const OUString& rValue)
 {
-    switch (eParam)
+    switch (nAttributeToken)
     {
-        case XML_TOK_INDEXSOURCE_OUTLINE_LEVEL:
+        case XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL):
             if ( IsXMLToken( rValue, XML_NONE ) )
             {
                 // #104651# use OUTLINE_LEVEL and USE_OUTLINE_LEVEL instead of
@@ -80,7 +80,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_USE_OUTLINE_LEVEL:
+        case XML_ELEMENT(TEXT, XML_USE_OUTLINE_LEVEL):
         {
             bool bTmp(false);
             if (::sax::Converter::convertBool(bTmp, rValue))
@@ -91,7 +91,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
         }
 
 
-        case XML_TOK_INDEXSOURCE_USE_INDEX_MARKS:
+        case XML_ELEMENT(TEXT, XML_USE_INDEX_MARKS):
         {
             bool bTmp(false);
             if (::sax::Converter::convertBool(bTmp, rValue))
@@ -101,7 +101,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
             break;
         }
 
-        case XML_TOK_INDEXSOURCE_USE_INDEX_SOURCE_STYLES:
+        case XML_ELEMENT(TEXT, XML_USE_INDEX_SOURCE_STYLES):
         {
             bool bTmp(false);
             if (::sax::Converter::convertBool(bTmp, rValue))
@@ -113,7 +113,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
 
         default:
             // default: ask superclass
-            XMLIndexSourceBaseContext::ProcessAttribute(eParam, rValue);
+            XMLIndexSourceBaseContext::ProcessAttribute(nAttributeToken, rValue);
             break;
     }
 }

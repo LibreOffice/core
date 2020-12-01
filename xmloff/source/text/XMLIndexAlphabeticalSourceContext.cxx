@@ -40,8 +40,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::xmloff::token::IsXMLToken;
-using ::xmloff::token::XML_ALPHABETICAL_INDEX_ENTRY_TEMPLATE;
-using ::xmloff::token::XML_OUTLINE_LEVEL;
+using namespace ::xmloff::token;
 
 XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(
     SvXMLImport& rImport,
@@ -64,14 +63,14 @@ XMLIndexAlphabeticalSourceContext::~XMLIndexAlphabeticalSourceContext()
 }
 
 void XMLIndexAlphabeticalSourceContext::ProcessAttribute(
-    enum IndexSourceParamEnum eParam,
+    sal_Int32 nAttributeToken,
     const OUString& rValue)
 {
     bool bTmp(false);
 
-    switch (eParam)
+    switch (nAttributeToken)
     {
-        case XML_TOK_INDEXSOURCE_MAIN_ENTRY_STYLE:
+        case XML_ELEMENT(TEXT, XML_MAIN_ENTRY_STYLE_NAME):
             {
                 sMainEntryStyleName = rValue;
                 OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
@@ -82,79 +81,79 @@ void XMLIndexAlphabeticalSourceContext::ProcessAttribute(
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_IGNORE_CASE:
+        case XML_ELEMENT(TEXT, XML_IGNORE_CASE):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bCaseSensitive = !bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_SEPARATORS:
+        case XML_ELEMENT(TEXT, XML_ALPHABETICAL_SEPARATORS):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bSeparators = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_COMBINE_ENTRIES:
+        case XML_ELEMENT(TEXT, XML_COMBINE_ENTRIES):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bCombineEntries = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_COMBINE_WITH_DASH:
+        case XML_ELEMENT(TEXT, XML_COMBINE_ENTRIES_WITH_DASH):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bCombineDash = bTmp;
             }
             break;
-        case XML_TOK_INDEXSOURCE_KEYS_AS_ENTRIES:
+        case XML_ELEMENT(TEXT, XML_USE_KEYS_AS_ENTRIES):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bEntry = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_COMBINE_WITH_PP:
+        case XML_ELEMENT(TEXT, XML_COMBINE_ENTRIES_WITH_PP):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bCombinePP = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_CAPITALIZE:
+        case XML_ELEMENT(TEXT, XML_CAPITALIZE_ENTRIES):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUpperCase = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_COMMA_SEPARATED:
+        case XML_ELEMENT(TEXT, XML_COMMA_SEPARATED):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bCommaSeparated = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_SORT_ALGORITHM:
+        case XML_ELEMENT(TEXT, XML_SORT_ALGORITHM):
             sAlgorithm = rValue;
             break;
-        case XML_TOK_INDEXSOURCE_RFC_LANGUAGE_TAG:
+        case XML_ELEMENT(STYLE, XML_RFC_LANGUAGE_TAG):
             maLanguageTagODF.maRfcLanguageTag = rValue;
             break;
-        case XML_TOK_INDEXSOURCE_LANGUAGE:
+        case XML_ELEMENT(FO, XML_LANGUAGE):
             maLanguageTagODF.maLanguage = rValue;
             break;
-        case XML_TOK_INDEXSOURCE_SCRIPT:
+        case XML_ELEMENT(FO, XML_SCRIPT):
             maLanguageTagODF.maScript = rValue;
             break;
-        case XML_TOK_INDEXSOURCE_COUNTRY:
+        case XML_ELEMENT(FO, XML_COUNTRY):
             maLanguageTagODF.maCountry = rValue;
             break;
 
         default:
-            XMLIndexSourceBaseContext::ProcessAttribute(eParam, rValue);
+            XMLIndexSourceBaseContext::ProcessAttribute(nAttributeToken, rValue);
             break;
     }
 }
