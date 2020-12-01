@@ -30,8 +30,8 @@ class SvStream;
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Fraction final
 {
     /// these two fields form a boost::rational, but I didn't want to put more boost headers into the global space
-    sal_Int32       mnNumerator = 0;
-    sal_Int32       mnDenominator = 1;
+    sal_Int64       mnNumerator = 0;
+    sal_Int64       mnDenominator = 1;
     bool            mbValid = true;
 
 public:
@@ -49,13 +49,11 @@ public:
 
     bool            IsValid() const { return mbValid; }
 
-    sal_Int32       GetNumerator() const;
-    sal_Int32       GetDenominator() const;
+    sal_Int64       GetNumerator() const;
+    sal_Int64       GetDenominator() const;
 
     explicit operator sal_Int32() const;
-#if SAL_TYPES_SIZEOFPOINTER == 8
-    explicit operator ::tools::Long() const { return sal_Int32(*this); }
-#endif
+    explicit operator sal_Int64() const;
     explicit operator double() const;
 
     Fraction&       operator=( const Fraction& rfrFrac ) = default;
