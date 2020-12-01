@@ -56,43 +56,13 @@ SvXMLImportContextRef SvXMLImportContext::CreateChildContext( sal_uInt16 /*nPref
     return nullptr;
 }
 
-void SvXMLImportContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& )
-{
-}
-
 void SvXMLImportContext::endFastElement(sal_Int32 )
 {
 }
 
 // css::xml::sax::XFastContextHandler:
-void SAL_CALL SvXMLImportContext::startFastElement(sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+void SAL_CALL SvXMLImportContext::startFastElement(sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
 {
-    const OUString& rPrefix = SvXMLImport::getNamespacePrefixFromToken(nElement, &GetImport().GetNamespaceMap());
-    const OUString& rLocalName = SvXMLImport::getNameFromToken( nElement );
-    startUnknownElement( SvXMLImport::aDefaultNamespace, (rPrefix.isEmpty())? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName, Attribs );
-    mrImport.maAttrList->Clear();
-    mrImport.maNamespaceHandler->addNSDeclAttributes( mrImport.maAttrList );
-
-    for( auto &it : sax_fastparser::castToFastAttributeList( Attribs ) )
-    {
-        sal_Int32 nToken = it.getToken();
-        const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &GetImport().GetNamespaceMap());
-        OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
-        if ( !rAttrNamespacePrefix.isEmpty() )
-            sAttrName = rAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
-
-        mrImport.maAttrList->AddAttribute( sAttrName, "CDATA", it.toString() );
-    }
-
-    const uno::Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
-    for ( const auto& rUnknownAttrib : unknownAttribs )
-    {
-        const OUString& rAttrValue = rUnknownAttrib.Value;
-        const OUString& rAttrName = rUnknownAttrib.Name;
-        // note: rAttrName is expected to be namespace-prefixed here
-        mrImport.maAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
-    }
-    StartElement( mrImport.maAttrList.get() );
 }
 
 void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & /*rNamespace*/, const OUString & /*rElementName*/,
