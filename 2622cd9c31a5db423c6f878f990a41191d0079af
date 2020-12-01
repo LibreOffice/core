@@ -46,6 +46,30 @@
       "revId": "2622cd9c31a5db423c6f878f990a41191d0079af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "849d18d7_8832662c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-01T11:33:46Z",
+      "side": 1,
+      "message": "Ah, I see! Thanks. It\u0027s about MS file formats, that\u0027s what I didn\u0027t think about.",
+      "parentUuid": "4f62b7f5_77b36acb",
+      "range": {
+        "startLine": 21,
+        "startChar": 18,
+        "endLine": 22,
+        "endChar": 40
+      },
+      "revId": "2622cd9c31a5db423c6f878f990a41191d0079af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
