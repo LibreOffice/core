@@ -46,6 +46,7 @@
 #include <cassert>
 #include <cstring>
 #include <libxml/parser.h>
+#include <cstdint>
 
 // Inverse of libxml's BAD_CAST.
 #define XML_CAST( str ) reinterpret_cast< const char* >( str )
@@ -1364,14 +1365,48 @@ void FastSaxParserImpl::callbackProcessingInstruction( const xmlChar *target, co
 
 xmlEntityPtr FastSaxParserImpl::callbackGetEntity( const xmlChar *name )
 {
+    if( !name )
+        return xmlGetPredefinedEntity(name);
+    const char* dname = XML_CAST(name);
     for( size_t i = 0; i < mEntityNames.size(); ++i )
     {
-        if( mEntityNames[i].compareToAscii(XML_CAST(name)) == 0 )
+        if( mEntityNames[i].compareToAscii(dname) == 0 )
         {
             return xmlNewEntity( nullptr,
-                BAD_CAST(OUStringToOString(mEntityNames[i],RTL_TEXTENCODING_UTF8).getStr()),
+                name,
                 XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
                 BAD_CAST(OUStringToOString(mEntityReplacements[i],RTL_TEXTENCODING_UTF8).getStr()));
+        }
+    }
+    if ( dname[0] == '#' )
+    {
+        sal_uInt32 cval = 0;
+        int_fast16_t lname = strlen(dname);
+        if( lname < 2 )
+            return xmlGetPredefinedEntity(name);
+        if( dname[1] == 'x' ||  dname[1] == 'X' )
+        {
+            if( lname < 3 )
+                return xmlGetPredefinedEntity(name);
+            cval = static_cast<sal_uInt32>( strtoul( dname + 2, nullptr, 16 ) );
+            if( cval == 0 )
+                return xmlGetPredefinedEntity(name);
+            OUString vname( &cval, 1 );
+            return xmlNewEntity( nullptr,
+                name,
+                XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
+                BAD_CAST(OUStringToOString(vname,RTL_TEXTENCODING_UTF8).getStr()));
+        }
+        else
+        {
+            cval = static_cast<sal_uInt32>( strtoul( dname + 2, nullptr, 10 ) );
+            if( cval == 0 )
+                return xmlGetPredefinedEntity(name);
+            OUString vname( &cval, 1 );
+            return xmlNewEntity( nullptr,
+                name,
+                XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
+                BAD_CAST(OUStringToOString(vname,RTL_TEXTENCODING_UTF8).getStr()));
         }
     }
     return xmlGetPredefinedEntity(name);
