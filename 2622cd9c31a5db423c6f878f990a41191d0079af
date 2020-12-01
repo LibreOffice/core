@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cfdf5058_c4a041b2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-01T10:02:39Z",
+      "side": 1,
+      "message": "I might miss the context, but can\u0027t outer-level text runs define this setting on character level, too?",
+      "range": {
+        "startLine": 21,
+        "startChar": 18,
+        "endLine": 22,
+        "endChar": 40
+      },
+      "revId": "2622cd9c31a5db423c6f878f990a41191d0079af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
