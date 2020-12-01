@@ -1341,6 +1341,9 @@ bool SwDocShell::HasChangeRecordProtection() const
 
 void SwDocShell::SetChangeRecording( bool bActivate )
 {
+    // tdf#107870: prevent jumping to cursor
+    // auto aViewGuard(LockAllViews());
+
     RedlineFlags nOn = bActivate ? RedlineFlags::On : RedlineFlags::NONE;
     RedlineFlags nMode = m_pWrtShell->GetRedlineFlags();
     m_pWrtShell->SetRedlineFlagsAndCheckInsMode( (nMode & ~RedlineFlags::On) | nOn );
