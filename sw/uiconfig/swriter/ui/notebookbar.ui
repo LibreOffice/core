@@ -12485,7 +12485,6 @@
               </object>
               <packing>
                 <property name="position">8</property>
-                <property name="tab_fill">False</property>
               </packing>
             </child>
             <child type="tab">
