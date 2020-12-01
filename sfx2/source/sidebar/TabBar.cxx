@@ -95,16 +95,6 @@ void TabBar::dispose()
     InterimItemWindow::dispose();
 }
 
-void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rUpdateArea)
-{
-    InterimItemWindow::Paint(rRenderContext, rUpdateArea);
-
-    const sal_Int32 nHorizontalPadding(Theme::GetInteger(Theme::Int_TabMenuSeparatorPadding));
-    rRenderContext.SetLineColor(Theme::GetColor(Theme::Color_TabMenuSeparator));
-    rRenderContext.DrawLine(Point(nHorizontalPadding, mnMenuSeparatorY),
-                            Point(GetSizePixel().Width() - nHorizontalPadding, mnMenuSeparatorY));
-}
-
 sal_Int32 TabBar::GetDefaultWidth()
 {
     if (!gDefaultWidth)
