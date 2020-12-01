@@ -72,6 +72,75 @@
     },
     {
       "key": {
+        "uuid": "47acf695_6b279917",
+        "filename": "sw/source/uibase/config/usrpref.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-01T13:32:07Z",
+      "side": 1,
+      "message": "A typo?",
+      "range": {
+        "startLine": 179,
+        "startChar": 88,
+        "endLine": 179,
+        "endChar": 104
+      },
+      "revId": "4ea9c2f312432891aff0245dccfdfd242aa92fa8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69123a99_5f7cc5ee",
+        "filename": "sw/source/uibase/config/usrpref.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-01T13:32:07Z",
+      "side": 1,
+      "message": "Please don\u0027t comment out code, just delete",
+      "range": {
+        "startLine": 202,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 115
+      },
+      "revId": "4ea9c2f312432891aff0245dccfdfd242aa92fa8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5884649_6d8a0a18",
+        "filename": "sw/source/uibase/config/usrpref.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-01T13:32:07Z",
+      "side": 1,
+      "message": "looks like typo here, too",
+      "range": {
+        "startLine": 241,
+        "startChar": 35,
+        "endLine": 241,
+        "endChar": 51
+      },
+      "revId": "4ea9c2f312432891aff0245dccfdfd242aa92fa8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "25e0d494_05bd0649",
         "filename": "sw/source/uibase/frmdlg/frmmgr.cxx",
         "patchSetId": 1
