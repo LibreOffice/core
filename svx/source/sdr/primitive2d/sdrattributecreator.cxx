@@ -644,8 +644,7 @@ namespace drawinglayer::primitive2d
                         static_cast<double>(rGradient.GetYOffset()) * 0.01,
                         static_cast<double>(rGradient.GetAngle().get()) * F_PI1800,
                         basegfx::BColor(fStartLum, fStartLum, fStartLum),
-                        basegfx::BColor(fEndLum, fEndLum, fEndLum),
-                        0);
+                        basegfx::BColor(fEndLum, fEndLum, fEndLum));
                 }
             }
 

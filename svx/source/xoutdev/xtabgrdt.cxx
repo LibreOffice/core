@@ -153,7 +153,6 @@ BitmapEx XGradientList::CreateBitmap( tools::Long nIndex, const Size& rSize ) co
             }
         }
 
-        const sal_uInt16 nSteps((rSize.Width() + rSize.Height()) / 3);
         const drawinglayer::attribute::FillGradientAttribute aFillGradient(
             aGradientStyle,
             static_cast<double>(rGradient.GetBorder()) * 0.01,
@@ -161,8 +160,7 @@ BitmapEx XGradientList::CreateBitmap( tools::Long nIndex, const Size& rSize ) co
             static_cast<double>(rGradient.GetYOffset()) * 0.01,
             static_cast<double>(rGradient.GetAngle().get()) * F_PI1800,
             aStart,
-            aEnd,
-            nSteps);
+            aEnd);
 
         const drawinglayer::primitive2d::Primitive2DReference aGradientPrimitive(
             new drawinglayer::primitive2d::PolyPolygonGradientPrimitive2D(
