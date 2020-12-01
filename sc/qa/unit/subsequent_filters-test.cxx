@@ -552,8 +552,7 @@ void ScFiltersTest::testUpdateCircleInMergedCellODS()
     // There should be a circle object!
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
 
-    std::unique_ptr<ScUndoRemoveMerge> pUndoRemoveMerge;
-    xDocSh->GetDocFunc().UnmergeCells(aCellMergeOption, true, pUndoRemoveMerge.get());
+    xDocSh->GetDocFunc().UnmergeCells(aCellMergeOption, true, nullptr);
 
     // There should be four circle objects!
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pPage->GetObjCount());
