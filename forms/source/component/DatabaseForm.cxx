@@ -68,12 +68,10 @@
 #include <tools/inetmsg.hxx>
 #include <tools/inetstrm.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <osl/mutex.hxx>
-#include <tools/diagnose_ex.h>
 
 using namespace ::dbtools;
 using namespace ::comphelper;
