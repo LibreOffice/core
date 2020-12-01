@@ -83,6 +83,7 @@ bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             && mbHideWhitespaceMode == rOpt.mbHideWhitespaceMode
             && m_bShowPlaceHolderFields == rOpt.m_bShowPlaceHolderFields
             && m_bIdle == rOpt.m_bIdle
+            && m_nDefaultAnchor == rOpt.m_nDefaultAnchor
 #ifdef DBG_UTIL
             // correspond to the statements in ui/config/cfgvw.src
             && m_bTest1 == rOpt.IsTest1()
@@ -210,6 +211,8 @@ SwViewOption::SwViewOption() :
 
     m_bIdle = true;
 
+    m_nDefaultAnchor = 1; //FLY_TO_CHAR
+
 #ifdef DBG_UTIL
     // correspond to the statements in ui/config/cfgvw.src
     m_bTest1 = m_bTest2 = m_bTest3 = m_bTest4 =
@@ -248,6 +251,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     mbHideWhitespaceMode = rVOpt.mbHideWhitespaceMode;
     m_bShowPlaceHolderFields = rVOpt.m_bShowPlaceHolderFields;
     m_bIdle           = rVOpt.m_bIdle;
+    m_nDefaultAnchor  = rVOpt.m_nDefaultAnchor;
 
 #ifdef DBG_UTIL
     m_bTest1  = rVOpt.m_bTest1;
@@ -289,6 +293,7 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     mbHideWhitespaceMode = rVOpt.mbHideWhitespaceMode;
     m_bShowPlaceHolderFields = rVOpt.m_bShowPlaceHolderFields;
     m_bIdle           = rVOpt.m_bIdle;
+    m_nDefaultAnchor  = rVOpt.m_nDefaultAnchor;
 
 #ifdef DBG_UTIL
     m_bTest1  = rVOpt.m_bTest1;
@@ -358,6 +363,24 @@ sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
         }
     }
     return nRet;
+}
+
+RndStdIds SwViewOption::GetDefaultAnchorType()
+{
+    switch ( m_nDefaultAnchor )
+    {
+      case 0:
+        return RndStdIds::FLY_AT_PARA; //0
+        break;
+      case 1:
+        return RndStdIds::FLY_AT_CHAR; //4
+        break;
+      case 2:
+        return RndStdIds::FLY_AS_CHAR; //1
+        break;
+      default:
+        return RndStdIds::FLY_AT_CHAR; //4
+    }//switch
 }
 
 Color&   SwViewOption::GetDocColor()

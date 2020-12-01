@@ -41,6 +41,7 @@ SwDocDisplayItem::SwDocDisplayItem() :
     bCharHiddenText     =
     bBookmarks          =
     bManualBreak        = true;
+    m_xDefaultAnchor      = 1; //FLY_TO_CHAR
 };
 
 // Item for the Settings dialog, page document view
@@ -55,6 +56,7 @@ SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt ) :
     bCharHiddenText     = rVOpt.IsShowHiddenChar(true);
     bBookmarks          = rVOpt.IsShowBookmarks(true);
     bManualBreak        = rVOpt.IsLineBreak(true);
+    m_xDefaultAnchor    = rVOpt.GetDefaultAnchor();
 }
 
 SfxPoolItem* SwDocDisplayItem::Clone( SfxItemPool*  ) const
@@ -75,7 +77,8 @@ bool SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
               bSoftHyphen           == rItem.bSoftHyphen         &&
               bCharHiddenText       == rItem.bCharHiddenText         &&
               bBookmarks            == rItem.bBookmarks          &&
-              bManualBreak          == rItem.bManualBreak );
+              bManualBreak          == rItem.bManualBreak        &&
+              m_xDefaultAnchor      == rItem.m_xDefaultAnchor);
 }
 
 void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
@@ -88,6 +91,7 @@ void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetShowHiddenChar(bCharHiddenText );
     rVOpt.SetShowBookmarks(bBookmarks       );
     rVOpt.SetLineBreak  (bManualBreak       );
+    rVOpt.SetDefaultAnchor( m_xDefaultAnchor );
 }
 
 SwElemItem::SwElemItem() :

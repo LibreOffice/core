@@ -1218,6 +1218,7 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
     , m_xFillSpaceRB(m_xBuilder->weld_radio_button("fillspace"))
     , m_xCursorProtFrame(m_xBuilder->weld_frame("crsrprotframe"))
     , m_xCursorInProtCB(m_xBuilder->weld_check_button("cursorinprot"))
+    , m_xDefaultAnchorType(m_xBuilder->weld_combo_box("cxDefaultAnchor"))
     , m_xMathBaselineAlignmentCB(m_xBuilder->weld_check_button("mathbaseline"))
 {
     const SfxPoolItem* pItem = nullptr;

@@ -88,7 +88,9 @@ SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nT
 
         if (nType == Frmmgr_Type::GRF || nType == Frmmgr_Type::OLE)
         {
-            m_aSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_CHAR));
+            // Default anchor for new graphics and objects is at-char, except for Math objects.
+            SwViewOption aViewOpt(*pSh->GetViewOptions());
+            m_aSet.Put(SwFormatAnchor(aViewOpt.GetDefaultAnchorType()));//RndStdIds::FLY_AT_CHAR
         }
     }
     else if ( nType == Frmmgr_Type::NONE )
