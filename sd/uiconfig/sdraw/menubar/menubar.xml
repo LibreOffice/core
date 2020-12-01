@@ -448,10 +448,6 @@
       <menu:menuitem menu:id=".uno:InsertMasterPage"/>
       <menu:menuitem menu:id=".uno:DeleteMasterPage"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:DisplayMasterBackground"/>
-      <menu:menuitem menu:id=".uno:DisplayMasterObjects"/>
-      <menu:menuitem menu:id=".uno:MasterLayouts"/>
-      <menu:menuseparator/>
       <menu:menu menu:id=".uno:SlideMoveMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:MovePageFirst"/>
