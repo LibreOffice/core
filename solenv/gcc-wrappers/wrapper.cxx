@@ -188,6 +188,8 @@ string processccargs(vector<string> rawargs, string &env_prefix, bool &verbose)
         else if(!(*i).compare(0,4,"-Wl,")) {
             //TODO: drop other gcc-specific options
         }
+        else if(*i == "-RTCs")
+            ;//drop
         else if(*i == "-Werror")
             args.append("-WX");
         else if (*i == "--wrapper-print-cmdline")
