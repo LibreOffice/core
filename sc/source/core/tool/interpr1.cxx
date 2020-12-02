@@ -8241,8 +8241,6 @@ void ScInterpreter::ScIndirect()
                     if (nIndex >= 3 && sRefStr[nIndex-1] == '\'')
                     {
                         bExternalName = true;
-                        if (eConv == FormulaGrammar::CONV_OOO)
-                            eConv = FormulaGrammar::CONV_XL_A1;
                     }
                 }
             }
