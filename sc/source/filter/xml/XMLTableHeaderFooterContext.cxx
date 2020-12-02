@@ -96,7 +96,7 @@ XMLTableHeaderFooterContext::~XMLTableHeaderFooterContext()
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableHeaderFooterContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if (xHeaderFooterContent.is())
     {
@@ -124,18 +124,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableHeaderFooterCo
             return new XMLHeaderFooterRegionContext( GetImport(), xTempTextCursor);
         }
     }
-    return nullptr;
-}
 
-SvXMLImportContextRef XMLTableHeaderFooterContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
-{
-    SvXMLImportContext *pContext(nullptr);
-
-    if ((nPrefix == XML_NAMESPACE_TEXT) &&
-        IsXMLToken(rLocalName, XML_P))
+    if ( nElement == XML_ELEMENT(TEXT, XML_P) )
     {
         if (!xTextCursor.is())
         {
@@ -149,14 +139,14 @@ SvXMLImportContextRef XMLTableHeaderFooterContext::CreateChildContext(
                 bContainsCenter = true;
             }
         }
-        pContext =
+        return
             GetImport().GetTextImport()->CreateTextChildContext(GetImport(),
-                                                                    nPrefix,
-                                                                    rLocalName,
+                                                                    nElement,
                                                                     xAttrList);
     }
 
-    return pContext;
+    XMLOFF_WARN_UNKNOWN_ELEMENT("sc", nElement);
+    return nullptr;
 }
 
 void XMLTableHeaderFooterContext::endFastElement(sal_Int32 )
@@ -201,23 +191,19 @@ XMLHeaderFooterRegionContext::~XMLHeaderFooterRegionContext()
 {
 }
 
-SvXMLImportContextRef XMLHeaderFooterRegionContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLHeaderFooterRegionContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
 
-    if ((nPrefix == XML_NAMESPACE_TEXT) &&
-        IsXMLToken(rLocalName, XML_P))
+    if (nElement == XML_ELEMENT(TEXT, XML_P))
     {
-        pContext =
-            GetImport().GetTextImport()->CreateTextChildContext(GetImport(),
-                                                                    nPrefix,
-                                                                    rLocalName,
+        return GetImport().GetTextImport()->CreateTextChildContext(GetImport(),
+                                                                    nElement,
                                                                     xAttrList);
     }
-
+    XMLOFF_WARN_UNKNOWN_ELEMENT("sc", nElement);
     return pContext;
 }
 
