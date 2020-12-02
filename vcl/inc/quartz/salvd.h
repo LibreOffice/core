@@ -43,7 +43,7 @@ private:
     bool mbForeignContext;           // is mxContext from outside VCL
     CGContextHolder maBitmapContext;
     int mnBitmapDepth;
-    CGLayerHolder maLayer; // Quartz layer
+    CGLayerHolder maLayer;
     AquaSalGraphics* mpGraphics;     // current VirDev graphics
 
     tools::Long mnWidth;

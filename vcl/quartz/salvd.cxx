@@ -228,7 +228,7 @@ bool AquaSalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY )
     mnWidth = nDX;
     mnHeight = nDY;
 
-    // create a Quartz layer matching to the intended virdev usage
+    // create a CGLayer matching to the intended virdev usage
     CGContextHolder xCGContextHolder;
     if( mnBitmapDepth && (mnBitmapDepth < 16) )
     {
