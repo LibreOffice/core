@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dcb87815_ce6cf5c2",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3940,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-02T19:16:51Z",
+      "side": 1,
+      "message": "This looks like you saw the code that relates to the task, but you haven\u0027t finished the code using it?",
+      "range": {
+        "startLine": 3940,
+        "startChar": 4,
+        "endLine": 3940,
+        "endChar": 89
+      },
+      "revId": "d632d1101f63a0278c98eea3180260c1db934ece",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
