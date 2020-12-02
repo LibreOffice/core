@@ -16,6 +16,24 @@
       "revId": "2164b5d30a55974b899a3b359dba291b717f6774",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a85b877f_b73e1825",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-12-02T09:06:31Z",
+      "side": 1,
+      "message": "True, we dropped it from the context menu so having it as default is weird. Possible use case for \"to page\" is to have full page images. Better done with page background, of course.",
+      "parentUuid": "933fcc3a_ab50f66e",
+      "revId": "2164b5d30a55974b899a3b359dba291b717f6774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
