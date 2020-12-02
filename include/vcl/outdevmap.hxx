@@ -28,6 +28,16 @@ struct ImplMapRes
     tools::Long                mnMapScNumY;        // Scaling factor - numerator in Y direction
     tools::Long                mnMapScDenomX;      // Scaling factor - denominator in X direction
     tools::Long                mnMapScDenomY;      // Scaling factor - denominator in Y direction
+
+    ImplMapRes()
+        : mnMapOfsX(0)
+        , mnMapOfsY(0)
+        , mnMapScNumX(1)
+        , mnMapScNumY(1)
+        , mnMapScDenomX(1)
+        , mnMapScDenomY(1)
+    {
+    }
 };
 
 #endif // INCLUDED_VCL_OUTDEVMAP_HXX
