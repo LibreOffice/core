@@ -2512,7 +2512,6 @@ void ScViewFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
     for (const auto& rTab : rMark)
     {
         rFunc.ProtectSheet(rTab, rProtect);
-        SetTabProtectionSymbol(rTab, true);
     }
 
     if (bUndo)
