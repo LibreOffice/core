@@ -34,6 +34,24 @@
       "revId": "2164b5d30a55974b899a3b359dba291b717f6774",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce542b01_2ce0a001",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-02T09:14:52Z",
+      "side": 1,
+      "message": "This is off-topic here, but (answering Heiko\u0027s \"possible use case\", and meanwhile stating that I fully support Michael\u0027s PoV): there are perfectly valid use cases where \"better done with page background\" is not true. E.g., books with few fixed places for series of full-page illustrations, like page 1 to 300 - text, pages 301 to 320 - illustrations related to all the pages in the book, pages 321 to 620 - text.\n\nIn that case, you would need each page in the 301..320 range to have a dedicated style actually defining the page\u0027s content (which is not what styles are for), and would break the text flow that allows the text to freely flow from page 300 to page 321, if you don\u0027t use \"anchor to page\" here.\n\nBut indeed, \"to page\" as default makes no sense.",
+      "parentUuid": "a85b877f_b73e1825",
+      "revId": "2164b5d30a55974b899a3b359dba291b717f6774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
