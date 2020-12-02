@@ -416,7 +416,7 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, ShowPreviewHdl, weld::ToggleButton&, void)
             OUString sTemplate("internal/idxexample.odt");
 
             SvtPathOptions aOpt;
-            bool bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
+            bool bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::Paths::Template );
 
             if(!bExist)
             {

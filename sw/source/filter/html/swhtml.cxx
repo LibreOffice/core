@@ -175,13 +175,13 @@ OUString HTMLReader::GetTemplateName(SwDoc& rDoc) const
     // first search for OpenDocument Writer/Web template
     // OpenDocument Writer/Web template (extension .oth)
     OUString sTemplate( sTemplateWithoutExt + ".oth" );
-    if (aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE ))
+    if (aPathOpt.SearchFile( sTemplate, SvtPathOptions::Paths::Template ))
         return sTemplate;
 
         // no OpenDocument Writer/Web template found.
         // search for OpenOffice.org Writer/Web template
     sTemplate = sTemplateWithoutExt + ".stw";
-    if (aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE ))
+    if (aPathOpt.SearchFile( sTemplate, SvtPathOptions::Paths::Template ))
         return sTemplate;
 
     OSL_ENSURE( false, "The default HTML template cannot be found in the defined template directories!");
