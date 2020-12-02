@@ -237,7 +237,7 @@ void RecentDocsView::Reload()
 {
     Clear();
 
-    Sequence< Sequence< PropertyValue > > aHistoryList = SvtHistoryOptions().GetList( ePICKLIST );
+    Sequence< Sequence< PropertyValue > > aHistoryList = SvtHistoryOptions().GetList( EHistoryType::PickList );
     for ( int i = 0; i < aHistoryList.getLength(); i++ )
     {
         const Sequence< PropertyValue >& rRecentEntry = aHistoryList[i];
