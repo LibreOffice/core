@@ -81,7 +81,7 @@
 #define VT_BYREF            0x4000
 #define VT_TYPEMASK         0xFFF
 
-typedef std::map<OUString,sal_uInt32> Dictionary;
+typedef std::map<OUString,sal_uInt32> PropDictionary;
 
 struct PropEntry
 {
@@ -126,7 +126,7 @@ class Section final
 
         Section&                operator=( const Section& rSection );
         bool                    GetProperty( sal_uInt32 nId, PropItem& rPropItem );
-        void                    GetDictionary( Dictionary& rDict );
+        void                    GetDictionary( PropDictionary& rDict );
         const sal_uInt8*        GetFMTID() const { return aFMTID; };
         void                    Read( SotStorageStream* pStrm );
 };

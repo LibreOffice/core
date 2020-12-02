@@ -23,6 +23,7 @@
 
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <svtools/dialogclosedlistener.hxx>
+#include <unotools/pathoptions.hxx>
 
 // forward ---------------------------------------------------------------
 struct OptPath_Impl;
@@ -51,9 +52,9 @@ private:
 
     DECL_LINK(DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void);
 
-    void        GetPathList( sal_uInt16 _nPathHandle, OUString& _rInternalPath,
+    void        GetPathList( SvtPathOptions::Paths _nPathHandle, OUString& _rInternalPath,
                              OUString& _rUserPath, OUString& _rWritablePath, bool& _rReadOnly );
-    void        SetPathList( sal_uInt16 _nPathHandle,
+    void        SetPathList( SvtPathOptions::Paths _nPathHandle,
                              const OUString& _rUserPath, const OUString& _rWritablePath );
 
 public:

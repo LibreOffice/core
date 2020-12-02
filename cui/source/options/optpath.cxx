@@ -76,13 +76,13 @@ namespace {
 
 struct PathUserData_Impl
 {
-    sal_uInt16      nRealId;
+    SvtPathOptions::Paths  nRealId;
     SfxItemState    eState;
     OUString        sUserPath;
     OUString        sWritablePath;
     bool            bReadOnly;
 
-    explicit PathUserData_Impl(sal_uInt16 nId)
+    explicit PathUserData_Impl(SvtPathOptions::Paths nId)
         : nRealId(nId)
         , eState(SfxItemState::UNKNOWN)
         , bReadOnly(false)
@@ -92,7 +92,7 @@ struct PathUserData_Impl
 
 struct Handle2CfgNameMapping_Impl
 {
-    sal_uInt16      m_nHandle;
+    SvtPathOptions::Paths m_nHandle;
     const char* m_pCfgName;
 };
 
@@ -100,27 +100,27 @@ struct Handle2CfgNameMapping_Impl
 
 Handle2CfgNameMapping_Impl const Hdl2CfgMap_Impl[] =
 {
-    { SvtPathOptions::PATH_AUTOCORRECT, "AutoCorrect" },
-    { SvtPathOptions::PATH_AUTOTEXT,    "AutoText" },
-    { SvtPathOptions::PATH_BACKUP,      "Backup" },
-    { SvtPathOptions::PATH_GALLERY,     "Gallery" },
-    { SvtPathOptions::PATH_GRAPHIC,     "Graphic" },
-    { SvtPathOptions::PATH_TEMP,        "Temp" },
-    { SvtPathOptions::PATH_TEMPLATE,    "Template" },
-    { SvtPathOptions::PATH_WORK,        "Work" },
-    { SvtPathOptions::PATH_DICTIONARY,        "Dictionary" },
-    { SvtPathOptions::PATH_CLASSIFICATION, "Classification" },
+    { SvtPathOptions::Paths::AutoCorrect, "AutoCorrect" },
+    { SvtPathOptions::Paths::AutoText,    "AutoText" },
+    { SvtPathOptions::Paths::Backup,      "Backup" },
+    { SvtPathOptions::Paths::Gallery,     "Gallery" },
+    { SvtPathOptions::Paths::Graphic,     "Graphic" },
+    { SvtPathOptions::Paths::Temp,        "Temp" },
+    { SvtPathOptions::Paths::Template,    "Template" },
+    { SvtPathOptions::Paths::Work,        "Work" },
+    { SvtPathOptions::Paths::Dictionary,        "Dictionary" },
+    { SvtPathOptions::Paths::Classification, "Classification" },
 #if OSL_DEBUG_LEVEL > 1
-    { SvtPathOptions::PATH_LINGUISTIC,        "Linguistic" },
+    { SvtPathOptions::Paths::Linguistic,        "Linguistic" },
 #endif
-    { USHRT_MAX, nullptr }
+    { SvtPathOptions::Paths::LAST, nullptr }
 };
 
-static OUString getCfgName_Impl( sal_uInt16 _nHandle )
+static OUString getCfgName_Impl( SvtPathOptions::Paths _nHandle )
 {
     OUString sCfgName;
     sal_uInt16 nIndex = 0;
-    while ( Hdl2CfgMap_Impl[ nIndex ].m_nHandle != USHRT_MAX )
+    while ( Hdl2CfgMap_Impl[ nIndex ].m_nHandle != SvtPathOptions::Paths::LAST )
     {
         if ( Hdl2CfgMap_Impl[ nIndex ].m_nHandle == _nHandle )
         {
@@ -159,22 +159,22 @@ static OUString Convert_Impl( const OUString& rValue )
 
 // functions -------------------------------------------------------------
 
-static bool IsMultiPath_Impl( const sal_uInt16 nIndex )
+static bool IsMultiPath_Impl( const SvtPathOptions::Paths nIndex )
 {
 #if OSL_DEBUG_LEVEL > 1
-    return ( SvtPathOptions::PATH_AUTOCORRECT == nIndex ||
-             SvtPathOptions::PATH_AUTOTEXT == nIndex ||
-             SvtPathOptions::PATH_BASIC == nIndex ||
-             SvtPathOptions::PATH_GALLERY == nIndex ||
-             SvtPathOptions::PATH_TEMPLATE == nIndex );
+    return ( SvtPathOptions::Paths::AutoCorrect == nIndex ||
+             SvtPathOptions::Paths::AutoText == nIndex ||
+             SvtPathOptions::Paths::Basic == nIndex ||
+             SvtPathOptions::Paths::Gallery == nIndex ||
+             SvtPathOptions::Paths::Template == nIndex );
 #else
-    return ( SvtPathOptions::PATH_AUTOCORRECT == nIndex ||
-             SvtPathOptions::PATH_AUTOTEXT == nIndex ||
-             SvtPathOptions::PATH_BASIC == nIndex ||
-             SvtPathOptions::PATH_GALLERY == nIndex ||
-             SvtPathOptions::PATH_TEMPLATE == nIndex ||
-             SvtPathOptions::PATH_LINGUISTIC == nIndex ||
-             SvtPathOptions::PATH_DICTIONARY == nIndex  );
+    return ( SvtPathOptions::Paths::AutoCorrect == nIndex ||
+             SvtPathOptions::Paths::AutoText == nIndex ||
+             SvtPathOptions::Paths::Basic == nIndex ||
+             SvtPathOptions::Paths::Gallery == nIndex ||
+             SvtPathOptions::Paths::Template == nIndex ||
+             SvtPathOptions::Paths::Linguistic == nIndex ||
+             SvtPathOptions::Paths::Dictionary == nIndex  );
 #endif
 }
 
@@ -218,7 +218,7 @@ bool SvxPathTabPage::FillItemSet( SfxItemSet* )
     for (int i = 0, nEntryCount = m_xPathBox->n_children(); i < nEntryCount; ++i)
     {
         PathUserData_Impl* pPathImpl = reinterpret_cast<PathUserData_Impl*>(m_xPathBox->get_id(i).toInt64());
-        sal_uInt16 nRealId = pPathImpl->nRealId;
+        SvtPathOptions::Paths nRealId = pPathImpl->nRealId;
         if (pPathImpl->eState == SfxItemState::SET)
             SetPathList( nRealId, pPathImpl->sUserPath, pPathImpl->sWritablePath );
     }
@@ -230,52 +230,53 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
     m_xPathBox->clear();
 
     std::unique_ptr<weld::TreeIter> xIter = m_xPathBox->make_iterator();
-    for( sal_uInt16 i = 0; i <= sal_uInt16(SvtPathOptions::PATH_CLASSIFICATION); ++i )
+    for( sal_uInt16 i = 0; i <= sal_uInt16(SvtPathOptions::Paths::Classification); ++i )
     {
         // only writer uses autotext
-        if ( i == SvtPathOptions::PATH_AUTOTEXT
+        if ( static_cast<SvtPathOptions::Paths>(i) == SvtPathOptions::Paths::AutoText
             && !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
             continue;
 
         const char* pId = nullptr;
 
-        switch (i)
+        switch (static_cast<SvtPathOptions::Paths>(i))
         {
-            case SvtPathOptions::PATH_AUTOCORRECT:
+            case SvtPathOptions::Paths::AutoCorrect:
                 pId = RID_SVXSTR_KEY_AUTOCORRECT_DIR;
                 break;
-            case SvtPathOptions::PATH_AUTOTEXT:
+            case SvtPathOptions::Paths::AutoText:
                 pId = RID_SVXSTR_KEY_GLOSSARY_PATH;
                 break;
-            case SvtPathOptions::PATH_BACKUP:
+            case SvtPathOptions::Paths::Backup:
                 pId = RID_SVXSTR_KEY_BACKUP_PATH;
                 break;
-            case SvtPathOptions::PATH_GALLERY:
+            case SvtPathOptions::Paths::Gallery:
                 pId = RID_SVXSTR_KEY_GALLERY_DIR;
                 break;
-            case SvtPathOptions::PATH_GRAPHIC:
+            case SvtPathOptions::Paths::Graphic:
                 pId = RID_SVXSTR_KEY_GRAPHICS_PATH;
                 break;
-            case SvtPathOptions::PATH_TEMP:
+            case SvtPathOptions::Paths::Temp:
                 pId = RID_SVXSTR_KEY_TEMP_PATH;
                 break;
-            case SvtPathOptions::PATH_TEMPLATE:
+            case SvtPathOptions::Paths::Template:
                 pId = RID_SVXSTR_KEY_TEMPLATE_PATH;
                 break;
-            case SvtPathOptions::PATH_DICTIONARY:
+            case SvtPathOptions::Paths::Dictionary:
                 pId = RID_SVXSTR_KEY_DICTIONARY_PATH;
                 break;
-            case SvtPathOptions::PATH_CLASSIFICATION:
+            case SvtPathOptions::Paths::Classification:
                 pId = RID_SVXSTR_KEY_CLASSIFICATION_PATH;
                 break;
 #if OSL_DEBUG_LEVEL > 1
-            case SvtPathOptions::PATH_LINGUISTIC:
+            case SvtPathOptions::Paths::Linguistic:
                 pId = RID_SVXSTR_KEY_LINGUISTIC_DIR;
                 break;
 #endif
-            case SvtPathOptions::PATH_WORK:
+            case SvtPathOptions::Paths::Work:
                 pId = RID_SVXSTR_KEY_WORK_PATH;
                 break;
+            default: break;
         }
 
         if (pId)
@@ -287,7 +288,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
 
             OUString sInternal, sUser, sWritable;
             bool bReadOnly = false;
-            GetPathList( i, sInternal, sUser, sWritable, bReadOnly );
+            GetPathList( static_cast<SvtPathOptions::Paths>(i), sInternal, sUser, sWritable, bReadOnly );
 
             if (bReadOnly)
                 m_xPathBox->set_image(*xIter, RID_SVXBMP_LOCK);
@@ -308,7 +309,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
             m_xPathBox->set_sensitive(*xIter, !bReadOnly, 1);
             m_xPathBox->set_sensitive(*xIter, !bReadOnly, 2);
 
-            PathUserData_Impl* pPathImpl = new PathUserData_Impl(i);
+            PathUserData_Impl* pPathImpl = new PathUserData_Impl(static_cast<SvtPathOptions::Paths>(i));
             pPathImpl->sUserPath = sUser;
             pPathImpl->sWritablePath = sWritable;
             pPathImpl->bReadOnly = bReadOnly;
@@ -439,7 +440,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
     m_xPathBox->set_text(nEntry, Convert_Impl(sNewPathStr), 1);
     pPathImpl->eState = SfxItemState::SET;
     pPathImpl->sWritablePath = sNewPathStr;
-    if ( SvtPathOptions::PATH_WORK == pPathImpl->nRealId )
+    if ( SvtPathOptions::Paths::Work == pPathImpl->nRealId )
     {
         // Remove view options entry so the new work path
         // will be used for the next open dialog.
@@ -464,14 +465,14 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, weld::Button&, void)
     if (!pPathImpl || pPathImpl->bReadOnly)
         return;
 
-    sal_uInt16 nPos = pPathImpl->nRealId;
+    SvtPathOptions::Paths nPos = pPathImpl->nRealId;
     OUString sInternal, sUser, sWritable;
     bool bPickFile = false;
     bool bReadOnly = false;
     GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable, bReadOnly );
     sUser = pPathImpl->sUserPath;
     sWritable = pPathImpl->sWritablePath;
-    bPickFile = pPathImpl->nRealId == SvtPathOptions::PATH_CLASSIFICATION;
+    bPickFile = pPathImpl->nRealId == SvtPathOptions::Paths::Classification;
 
     if (IsMultiPath_Impl(nPos))
     {
@@ -583,7 +584,7 @@ IMPL_LINK( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt, void )
 }
 
 void SvxPathTabPage::GetPathList(
-    sal_uInt16 _nPathHandle, OUString& _rInternalPath,
+    SvtPathOptions::Paths _nPathHandle, OUString& _rInternalPath,
     OUString& _rUserPath, OUString& _rWritablePath, bool& _rReadOnly )
 {
     OUString sCfgName = getCfgName_Impl( _nPathHandle );
@@ -648,7 +649,7 @@ void SvxPathTabPage::GetPathList(
 
 
 void SvxPathTabPage::SetPathList(
-    sal_uInt16 _nPathHandle, const OUString& _rUserPath, const OUString& _rWritablePath )
+    SvtPathOptions::Paths _nPathHandle, const OUString& _rUserPath, const OUString& _rWritablePath )
 {
     OUString sCfgName = getCfgName_Impl( _nPathHandle );
 

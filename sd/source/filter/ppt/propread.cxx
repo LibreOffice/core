@@ -259,7 +259,7 @@ void Section::AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBu
     }
 }
 
-void Section::GetDictionary(Dictionary& rDict)
+void Section::GetDictionary(PropDictionary& rDict)
 {
     auto iter = std::find_if(maEntries.begin(), maEntries.end(),
         [](const std::unique_ptr<PropEntry>& rxEntry) { return rxEntry->mnId == 0; });

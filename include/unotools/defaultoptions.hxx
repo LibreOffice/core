@@ -22,6 +22,7 @@
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
+#include <unotools/pathoptions.hxx>
 #include <memory>
 
 class SvtDefaultOptions_Impl;
@@ -35,7 +36,7 @@ public:
     SvtDefaultOptions();
     virtual ~SvtDefaultOptions() override;
 
-    OUString GetDefaultPath(sal_uInt16 nId) const;
+    OUString GetDefaultPath(SvtPathOptions::Paths nId) const;
 };
 
 #endif // INCLUDED_UNOTOOLS_DEFAULTOPTIONS_HXX

@@ -37,37 +37,39 @@ private:
     std::shared_ptr<SvtPathOptions_Impl>    pImpl;
 
 public:
-    enum Paths
+
+    enum class Paths : sal_uInt16
     {
-        PATH_ADDIN,
-        PATH_AUTOCORRECT,
-        PATH_AUTOTEXT,
-        PATH_BACKUP,
-        PATH_BASIC,
-        PATH_BITMAP,
-        PATH_CONFIG,
-        PATH_DICTIONARY,
-        PATH_FAVORITES,
-        PATH_FILTER,
-        PATH_GALLERY,
-        PATH_GRAPHIC,
-        PATH_HELP,
-        PATH_ICONSET,
-        PATH_LINGUISTIC,
-        PATH_MODULE,
-        PATH_PALETTE,
-        PATH_PLUGIN,
-        PATH_STORAGE,
-        PATH_TEMP,
-        PATH_TEMPLATE,
-        PATH_USERCONFIG,
-        PATH_WORK,
-        PATH_CLASSIFICATION,
-        PATH_UICONFIG,
-        PATH_FINGERPRINT,
-        PATH_NUMBERTEXT,
-        PATH_COUNT // should always be the last element
+        AddIn,
+        AutoCorrect,
+        AutoText,
+        Backup,
+        Basic,
+        Bitmap,
+        Config,
+        Dictionary,
+        Favorites,
+        Filter,
+        Gallery,
+        Graphic,
+        Help,
+        IconSet,
+        Linguistic,
+        Module,
+        Palette,
+        Plugin,
+        Storage,
+        Temp,
+        Template,
+        UserConfig,
+        Work,
+        Classification,
+        UIConfig,
+        Fingerprint,
+        NumberText,
+        LAST // should always be the last element
     };
+
 
     SvtPathOptions();
     virtual ~SvtPathOptions() override;
@@ -127,7 +129,7 @@ public:
     OUString        SubstituteVariable( const OUString& rVar ) const;
     OUString        ExpandMacros( const OUString& rPath ) const;
     OUString        UseVariable( const OUString& rVar ) const;
-    bool            SearchFile( OUString& rIniFile, Paths ePath = PATH_USERCONFIG );
+    bool            SearchFile( OUString& rIniFile, Paths ePath = Paths::UserConfig );
 };
 
 #endif // INCLUDED_UNOTOOLS_PATHOPTIONS_HXX
