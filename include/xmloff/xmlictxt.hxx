@@ -107,6 +107,11 @@ public:
 
     virtual css::uno::Reference< XFastContextHandler >  SAL_CALL createFastChildContext(sal_Int32 Element,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
+    /**
+     * temporary method to forward call to CreateChildContext, for use during slow-to-fastparser transition
+     */
+    css::uno::Reference< XFastContextHandler > createFastChildContextFallback(sal_Int32 Element,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs);
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext(
         const OUString & Namespace, const OUString & Name,
