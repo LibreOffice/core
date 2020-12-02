@@ -43,9 +43,6 @@ using namespace ::com::sun::star::uno;
 #define DEFAULT_SECUREURL               Sequence< OUString >()
 #define DEFAULT_TRUSTEDAUTHORS          Sequence< SvtSecurityOptions::Certificate >()
 
-// xmlsec05 deprecated
-#define DEFAULT_STAROFFICEBASIC         eALWAYS_EXECUTE
-
 #define PROPERTYNAME_SECUREURL                  u"SecureURL"
 #define PROPERTYNAME_DOCWARN_SAVEORSEND         u"WarnSaveOrSendDoc"
 #define PROPERTYNAME_DOCWARN_SIGNING            u"WarnSignDoc"
@@ -72,10 +69,9 @@ using namespace ::com::sun::star::uno;
 #define PROPERTYHANDLE_SECUREURL                    0
 
 // xmlsec05 deprecated
-#define PROPERTYHANDLE_STAROFFICEBASIC  1
-#define PROPERTYHANDLE_EXECUTEPLUGINS   2
-#define PROPERTYHANDLE_WARNINGENABLED   3
-#define PROPERTYHANDLE_CONFIRMATIONENABLED 4
+#define PROPERTYHANDLE_EXECUTEPLUGINS   1
+#define PROPERTYHANDLE_WARNINGENABLED   2
+#define PROPERTYHANDLE_CONFIRMATIONENABLED 3
 // xmlsec05 deprecated
 
 #define PROPERTYHANDLE_DOCWARN_SAVEORSEND           5
@@ -185,7 +181,6 @@ class SvtSecurityOptions_Impl : public ConfigItem
         bool                                    m_bRODisableMacros;
 
         // xmlsec05 deprecated
-        EBasicSecurityMode      m_eBasicMode;
         bool                m_bExecutePlugins;
         bool                m_bWarning;
         bool                m_bConfirmation;
@@ -193,7 +188,6 @@ class SvtSecurityOptions_Impl : public ConfigItem
         bool                m_bROConfirmation;
         bool                m_bROWarning;
         bool                m_bROExecutePlugins;
-        bool                m_bROBasicMode;
         public:
         bool IsWarningEnabled() const { return m_bWarning;}
         void SetWarningEnabled( bool bSet );
@@ -201,9 +195,6 @@ class SvtSecurityOptions_Impl : public ConfigItem
         void SetConfirmationEnabled( bool bSet );
         bool    IsExecutePlugins() const { return m_bExecutePlugins;}
         void        SetExecutePlugins( bool bSet );
-        // xmlsec05 deprecated
-        EBasicSecurityMode      GetBasicMode    (                                               ) const { return m_eBasicMode;}
-        void                    SetBasicMode    (           EBasicSecurityMode      eMode       );
 };
 
 //  constructor
@@ -236,14 +227,12 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     ,m_bRODisableMacros     ( true                  ) // currently is not intended to be changed
 
     // xmlsec05 deprecated
-    ,   m_eBasicMode        ( DEFAULT_STAROFFICEBASIC )
     ,   m_bExecutePlugins   ( true                )
     ,   m_bWarning          ( true                )
     ,   m_bConfirmation     ( true                )
     ,   m_bROConfirmation   ( CFG_READONLY_DEFAULT    )
     ,   m_bROWarning        ( CFG_READONLY_DEFAULT    )
     ,   m_bROExecutePlugins ( CFG_READONLY_DEFAULT    )
-    ,   m_bROBasicMode      ( CFG_READONLY_DEFAULT    )
     // xmlsec05 deprecated
 
 {
@@ -372,14 +361,6 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
         break;
 
         // xmlsec05 deprecated
-        case PROPERTYHANDLE_STAROFFICEBASIC:
-        {
-            sal_Int32 nMode = 0;
-            rValue >>= nMode;
-            m_eBasicMode = static_cast<EBasicSecurityMode>(nMode);
-            m_bROBasicMode = bRO;
-        }
-        break;
         case PROPERTYHANDLE_EXECUTEPLUGINS:
         {
             rValue >>= m_bExecutePlugins;
@@ -487,8 +468,6 @@ sal_Int32 SvtSecurityOptions_Impl::GetHandle( std::u16string_view rName )
         nHandle = PROPERTYHANDLE_MACRO_DISABLE;
 
     // xmlsec05 deprecated
-    else if( rName == PROPERTYNAME_STAROFFICEBASIC )
-        nHandle = PROPERTYHANDLE_STAROFFICEBASIC;
     else if( rName == PROPERTYNAME_EXECUTEPLUGINS )
         nHandle = PROPERTYHANDLE_EXECUTEPLUGINS;
     else if( rName == PROPERTYNAME_WARNINGENABLED )
@@ -709,13 +688,6 @@ void SvtSecurityOptions_Impl::ImplCommit()
             break;
 
             // xmlsec05 deprecated
-            case PROPERTYHANDLE_STAROFFICEBASIC:
-            {
-                bDone = !m_bROBasicMode;
-                if( bDone )
-                    lValues[ nRealCount ] <<= static_cast<sal_Int32>(m_eBasicMode);
-            }
-            break;
             case PROPERTYHANDLE_EXECUTEPLUGINS:
             {
                 bDone = !m_bROExecutePlugins;
@@ -795,9 +767,6 @@ bool SvtSecurityOptions_Impl::IsReadOnly( SvtSecurityOptions::EOption eOption ) 
             break;
 
         // xmlsec05 deprecated
-        case SvtSecurityOptions::EOption::BasicMode:
-            bReadonly = m_bROBasicMode;
-            break;
         case SvtSecurityOptions::EOption::ExecutePlugins:
             bReadonly = m_bROExecutePlugins;
             break;
@@ -1073,17 +1042,6 @@ Mutex& SvtSecurityOptions::GetInitMutex()
     return theSecurityOptionsMutex::get();
 }
 
-void SvtSecurityOptions_Impl::SetBasicMode( EBasicSecurityMode eMode )
-{
-    DBG_ASSERT(!m_bROBasicMode, "SvtSecurityOptions_Impl::SetBasicMode()\nYou tried to write on a readonly value!\n");
-    if (!m_bROBasicMode && m_eBasicMode!=eMode)
-    {
-        m_eBasicMode = eMode;
-        SetModified();
-    }
-}
-
-
 void SvtSecurityOptions_Impl::SetExecutePlugins( bool bSet )
 {
     DBG_ASSERT(!m_bROExecutePlugins, "SvtSecurityOptions_Impl::SetExecutePlugins()\nYou tried to write on a readonly value!\n");
@@ -1150,18 +1108,6 @@ void SvtSecurityOptions::SetConfirmationEnabled( bool bSet )
 {
     MutexGuard aGuard( GetInitMutex() );
     m_pImpl->SetConfirmationEnabled( bSet );
-}
-
-void SvtSecurityOptions::SetBasicMode( EBasicSecurityMode eMode )
-{
-    MutexGuard aGuard( GetInitMutex() );
-    m_pImpl->SetBasicMode( eMode );
-}
-
-EBasicSecurityMode SvtSecurityOptions::GetBasicMode() const
-{
-    MutexGuard aGuard( GetInitMutex() );
-    return m_pImpl->GetBasicMode();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

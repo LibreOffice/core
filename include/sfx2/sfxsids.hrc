@@ -469,7 +469,6 @@ class SvxSearchItem;
 #define SID_GALLERY                         (SID_SFX_START + 960)
 #define SID_SEARCH_DLG                      (SID_SFX_START + 961)
 #define SID_SEARCH_QUIET                    (SID_SFX_START + 1684)
-#define SID_BASIC_ENABLED                   (SID_SFX_START + 964)
 #define SID_EXPORT_DIALOG                   (SID_SFX_START + 965)
 #define SID_IMPORT_DIALOG                   (SID_SFX_START + 966)
 
