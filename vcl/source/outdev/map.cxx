@@ -1289,17 +1289,11 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
         return rSource;                                                 \
                                                                         \
     ImplMapRes aMapResSource;                                           \
-    aMapResSource.mnMapOfsX          = 0;                               \
-    aMapResSource.mnMapOfsY          = 0;                               \
-    aMapResSource.mnMapScNumX        = 1;                               \
-    aMapResSource.mnMapScNumY        = 1;                               \
-    aMapResSource.mnMapScDenomX      = 1;                               \
-    aMapResSource.mnMapScDenomY      = 1;                               \
-    ImplMapRes aMapResDest(aMapResSource);                              \
+    ImplMapRes aMapResDest;                                             \
                                                                         \
     if ( !mbMap || pMapModeSource != &maMapMode )                       \
     {                                                                   \
-        if ( pMapModeSource->GetMapUnit() == MapUnit::MapRelative )             \
+        if ( pMapModeSource->GetMapUnit() == MapUnit::MapRelative )     \
             aMapResSource = maMapRes;                                   \
         ImplCalcMapResolution( *pMapModeSource,                         \
                                mnDPIX, mnDPIY, aMapResSource );         \
@@ -1347,13 +1341,7 @@ static void verifyUnitSourceDest( MapUnit eUnitSource, MapUnit eUnitDest )
 
 #define ENTER4( rMapModeSource, rMapModeDest )                          \
     ImplMapRes aMapResSource;                                           \
-    aMapResSource.mnMapOfsX          = 0;                               \
-    aMapResSource.mnMapOfsY          = 0;                               \
-    aMapResSource.mnMapScNumX        = 1;                               \
-    aMapResSource.mnMapScNumY        = 1;                               \
-    aMapResSource.mnMapScDenomX      = 1;                               \
-    aMapResSource.mnMapScDenomY      = 1;                               \
-    ImplMapRes aMapResDest(aMapResSource);                              \
+    ImplMapRes aMapResDest;                                             \
                                                                         \
     ImplCalcMapResolution( rMapModeSource, 72, 72, aMapResSource );     \
     ImplCalcMapResolution( rMapModeDest, 72, 72, aMapResDest )
