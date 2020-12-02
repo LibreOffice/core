@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7923a3f9_4e9b896a",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3993,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-02T06:36:52Z",
+      "side": 1,
+      "message": "It\u0027s always good to make the scope of a variable as small as possible. Modern C++ (C++17) has a useful syntax for the case when you create a variable just to be used in an \"if\" condition, and inside the \"if\" block:\n\n    if (const ScTabViewShell* pTabViewShell \u003d rDocShell.GetBestViewShell())\n\nThis uses the declared and initialized variable as its condition, implicitly casting it to bool. The variable is only visible inside the if(){} (and in its else{}), nicely limiting its scope.\nIt also has slightly different syntax for more complex cases, when the declared variable itself can\u0027t be used as condition, like in this case:\n\n    if (const OUString s \u003d SomeFunc(); !c.isEmpty())\n\n... which initializes the variable, and then explicitly uses it in a conditional expression. Please note the syntax, and use it wherever you need to introduce a variable to be used only inside if(){}. See https://en.cppreference.com/w/cpp/language/if for the reference.\n\nNote also, that using const is a good practice whenever you don\u0027t intend to modify the created variable after construction.",
+      "range": {
+        "startLine": 3992,
+        "startChar": 8,
+        "endLine": 3993,
+        "endChar": 26
+      },
+      "revId": "9e8573f203020dfdca35e54d9ea64315ed822e66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
