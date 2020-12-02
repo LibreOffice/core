@@ -1,0 +1,137 @@
+#!/bin/bash
+
+# Exit on errors
+set -e
+
+# Use of unset variable is an error
+set -u
+
+# If any part of a pipeline of commands fails, the whole pipeline fails
+set -o pipefail
+
+if [ `uname` != Darwin ]; then
+    echo This is for macOS only >&2
+    exit 1
+fi
+
+if [ $# != 3 ]; then
+    echo Usage: $0 app-bundle-1 app-bundle-2 output-app-bundle
+    exit 1
+fi
+
+if [ -d "$3" ]; then
+    echo The directory $3 exists already
+    exit 1
+fi
+
+if [ -f "$3" ]; then
+    echo $3 exists and is a file
+    exit 1
+fi
+
+if [ ! -d "$1" ]; then
+    echo No such directory: $1
+    exit 1
+fi
+
+if [ ! -d "$2" ]; then
+    echo No such directory: $2
+    exit 1
+fi
+
+ONE=$(cd "$1" && /bin/pwd)
+TWO=$(cd "$2" && /bin/pwd)
+mkdir "$3"
+OUT=$(cd "$3" && /bin/pwd)
+
+# Create all directories
+(
+    cd "$ONE"
+    find . -type d -print
+) |
+(
+    cd "$OUT"
+    while read dirname; do
+        mkdir -p "$dirname"
+    done
+)
+
+# Check which files in 1 exist in 2, and if they are executable, merge them into a fat copy. For
+# other files, just use one copy, assuming they are equivalent in most cases.
+(
+    cd "$ONE"
+    find . -type l -or -type f
+) |
+(
+    cd "$TWO"
+    while read fname; do
+        if test -L "$fname"; then
+            ln -s $(readlink "$fname") "$OUT/$fname"
+        elif test -f "$fname"; then
+            case "$fname" in
+                *.so | \
+                *.dylib | \
+                *.dylib.* | \
+                */Frameworks/LibreOfficePython.framework/Versions/*/LibreOfficePython | \
+                */Frameworks/LibreOfficePython.framework/Versions/*/Resources/Python.app/Contents/MacOS/LibreOfficePython | \
+                */Library/Spotlight/OOoSpotlightImporter.mdimporter/Contents/MacOS/OOoSpotlightImporter)
+                    lipo -create -output "$OUT/$fname" "$fname" "$ONE/$fname"
+                    ;;
+                # Ignore differences in these files. Let's hope it's just the timestamps.
+                *.ot[tp] | \
+                *.bau | \
+                *.pyc | \
+                */_sysconfigdata_m_darwin_darwin.py | \
+                */Contents/Resources/firebird/security3.fdb | \
+                */Contents/Resources/autocorr/acor_*.dat | \
+                */Contents/Resources/resource/*/LC_MESSAGES/*.mo | \
+                */Contents/Resources/config/images_*.zip)
+                    cp "$fname" "$OUT/$fname"
+                    ;;
+                *)
+                    case $(file --brief "$fname") in
+                        Mach-O\ 64-bit\ executable\ *)
+                            lipo -create -output "$OUT/$fname" "$fname" "$ONE/$fname"
+                            ;;
+                        *)
+                            cmp -s "$fname" "$ONE/$fname" ||
+                                echo "$fname differs and is not an executable!?" >&2
+                            cp "$fname" "$OUT/$fname"
+                    esac
+            esac
+        else
+            # We ignore some files that can't be built for macOS on arm64 for now
+            case "$fname" in
+                ./Contents/Frameworks/LibreOfficePython.framework/Versions/3.7/lib/python*/lib-dynload/_ctypes.cpython-*m.so)
+                    ;;
+                *)
+                    echo "$fname does not exist in $TWO" >&2
+                    ;;
+            esac
+            cp "$ONE/$fname" "$OUT/$fname"
+        fi
+    done
+)
+
+# Look for files in 2 that don't exist in 1
+(
+    cd "$TWO"
+    find . -type f -print
+) |
+(
+    cd "$ONE"
+    while read fname; do
+        if test -f "$fname"; then
+            :
+        else
+            echo "$fname does not exist in $ONE" >&2
+            cp "$TWO/$fname" "$OUT/$fname"
+        fi
+    done
+)
+
+# Local Variables:
+# tab-width: 4
+# indent-tabs-mode: nil
+# fill-column: 100
+# End:
