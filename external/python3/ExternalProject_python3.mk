@@ -1,4 +1,4 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t; fill-column: 100 -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -178,10 +178,27 @@ $(call gb_ExternalProject_get_state_target,python3,executables) : $(call gb_Exte
 		@executable_path/../LibreOfficePython python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)
 	touch $@
 
-# also delete binaries that are symlinked in scp2
+# Remove modules (both Python and binary bits) of questionable usefulness that we don't ship on
+# other platforms either. See the "packages not shipped" comment in ExternalPackage_python3.mk.
+
 $(call gb_ExternalProject_get_state_target,python3,removeunnecessarystuff) : $(call gb_ExternalProject_get_state_target,python3,build)
 	$(call gb_Output_announce,python3 - remove the stuff we don't need to ship,build,CUS,5)
+	rm -rf $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/dbm
+	rm -rf $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/sqlite3
+	rm -rf $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/curses
+	rm -rf $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/idlelib
+	rm -rf $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/tkinter
+	rm -rf $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/turtledemo
 	rm -rf $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/test
+	rm -rf $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/venv
+	# Then the binary libraries
+	rm -f $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_dbm.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so
+	rm -f $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_sqlite3.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so
+	rm -f $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_curses.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so
+	rm -f $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_curses_panel.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so
+	rm -f $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_idlelib.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so
+	rm -f $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_tkinter.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so
+	rm -f $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_test*.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so
 	touch $@
 
 endif
