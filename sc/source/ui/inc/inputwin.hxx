@@ -82,6 +82,8 @@ public:
     virtual EditView*       GetEditView() override;
     virtual bool            HasEditView() const override;
 
+    const OutputDevice&     GetEditViewDevice() const;
+
                         // for function autopilots
     virtual void            MakeDialogEditView() override;
 
@@ -207,8 +209,10 @@ public:
 
     virtual void            InsertAccessibleTextData(ScAccessibleEditLineTextData& rTextData) override;
     virtual EditView*       GetEditView() override;
-    tools::Long                    GetLastNumExpandedLines() const;
-    virtual tools::Long            GetNumLines() const override;
+    const OutputDevice&     GetEditViewDevice() const;
+    Point                   GetCursorScreenPixelPos(bool bBelowLine);
+    tools::Long             GetLastNumExpandedLines() const;
+    virtual tools::Long     GetNumLines() const override;
     int                     GetPixelHeightForLines(tools::Long nLines);
     weld::ScrolledWindow&   GetScrollWin();
     virtual const OUString& GetTextString() const override;
@@ -248,6 +252,7 @@ public:
     void                    StartEditEngine() override;
     virtual EditView*       GetEditView() override;
     virtual bool            HasEditView() const override;
+    Point                   GetCursorScreenPixelPos(bool bBelowLine);
     virtual void            Resize() override;
     virtual const OUString& GetTextString() const override;
     virtual void            StopEditEngine(bool bAll) override;
@@ -304,6 +309,8 @@ public:
 
     bool            IsInputActive();
     EditView*       GetEditView();
+    vcl::Window*    GetEditWindow();
+    Point           GetCursorScreenPixelPos(bool bBelowLine = false);
 
     void            TextGrabFocus();
     void            TextInvalidate();
