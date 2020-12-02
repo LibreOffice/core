@@ -53,8 +53,6 @@ public:
 
     XMLChangeInfoContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
         XMLChangedRegionImportContext& rChangedRegion,
         const OUString& rChangeType);
 

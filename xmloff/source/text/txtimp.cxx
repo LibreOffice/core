@@ -69,6 +69,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <txtlists.hxx>
 #include <xmloff/odffields.hxx>
+#include <comphelper/attributelist.hxx>
 
 using ::com::sun::star::ucb::XAnyCompare;
 
@@ -2130,6 +2131,48 @@ void XMLTextImportHelper::SetRuby(
 void XMLTextImportHelper::SetAutoStyles( SvXMLStylesContext *pStyles )
 {
     m_xImpl->m_xAutoStyles = pStyles;
+}
+
+SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
+        SvXMLImport& rImport,
+        sal_Int32 Element,
+        const Reference< XFastAttributeList > & Attribs,
+        XMLTextType eType )
+{
+    // fall back to slow-parser path
+    const OUString& rPrefix = SvXMLImport::getNamespacePrefixFromToken(Element, &GetXMLImport().GetNamespaceMap());
+    const OUString& rLocalName = SvXMLImport::getNameFromToken( Element );
+    OUString aName = rPrefix.isEmpty() ? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName;
+    OUString aLocalName;
+    sal_uInt16 nPrefix =
+        GetXMLImport().GetNamespaceMap().GetKeyByAttrName( aName, &aLocalName );
+
+    rtl::Reference < comphelper::AttributeList > maAttrList = new comphelper::AttributeList();
+
+    if ( Attribs.is() )
+    {
+        for( auto &it : sax_fastparser::castToFastAttributeList( Attribs ) )
+        {
+            sal_Int32 nToken = it.getToken();
+            const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &GetXMLImport().GetNamespaceMap());
+            OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
+            if ( !rAttrNamespacePrefix.isEmpty() )
+                sAttrName = rAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
+
+            maAttrList->AddAttribute( sAttrName, "CDATA", it.toString() );
+        }
+
+        const uno::Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
+        for ( const auto& rUnknownAttrib : unknownAttribs )
+        {
+            const OUString& rAttrValue = rUnknownAttrib.Value;
+            const OUString& rAttrName = rUnknownAttrib.Name;
+            // note: rAttrName is expected to be namespace-prefixed here
+            maAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
+        }
+    }
+
+    return CreateTextChildContext(rImport, nPrefix, aLocalName, maAttrList.get(), eType );
 }
 
 SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(

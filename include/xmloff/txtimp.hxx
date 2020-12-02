@@ -59,6 +59,7 @@ namespace frame { class XModel; }
 namespace container { class XNameContainer; class XIndexReplace; }
 namespace beans { class XPropertySet; }
 namespace xml::sax { class XAttributeList; }
+namespace xml::sax { class XFastAttributeList; }
 namespace util { struct DateTime; }
 }
 
@@ -395,6 +396,11 @@ public:
 
     void SetAutoStyles( SvXMLStylesContext *pStyles );
 
+    SvXMLImportContext *CreateTextChildContext(
+            SvXMLImport& rImport,
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            XMLTextType eType = XMLTextType::Shape );
     SvXMLImportContext *CreateTextChildContext(
             SvXMLImport& rImport,
             sal_uInt16 nPrefix, const OUString& rLocalName,
