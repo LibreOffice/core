@@ -40,4 +40,27 @@ class optionsDialog(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_tdf138596(self):
+        self.ui_test.create_doc_in_start_center("writer")
+
+        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xPages = xDialog.getChild("pages")
+        xWriterEntry = xPages.getChild('3')
+        xWriterEntry.executeAction("EXPAND", tuple())
+        xFormattingAidsEntry = xWriterEntry.getChild('2')
+        xFormattingAidsEntry.executeAction("SELECT", tuple())
+
+        xApplyBtn = xDialog.getChild("apply")
+
+        # Click apply button twice
+        # Without the fix in place, this test would have crashed here
+        xApplyBtn.executeAction("CLICK", tuple())
+        xApplyBtn.executeAction("CLICK", tuple())
+
+        xOKBtn = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
