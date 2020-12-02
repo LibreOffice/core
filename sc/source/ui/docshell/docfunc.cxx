@@ -3989,6 +3989,13 @@ bool ScDocFunc::Protect( SCTAB nTab, const OUString& rPassword )
         pNewProtection->setProtected(true);
         pNewProtection->setPassword(rPassword);
         rDoc.SetTabProtection(nTab, pNewProtection.get());
+        ScTabViewShell* pTabViewShell = rDocShell.GetBestViewShell();
+        if (pTabViewShell)
+        {
+            ScTabView* pTabView = pTabViewShell->GetViewData().GetView();
+            if (pTabView)
+                pTabView->SetTabProtectionSymbol(nTab, true);
+        }
         if (rDoc.IsUndoEnabled())
         {
             ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
@@ -4073,6 +4080,13 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
 
         ::std::unique_ptr<ScTableProtection> pNewProtection(new ScTableProtection(*pTabProtect));
         pNewProtection->setProtected(false);
+        ScTabViewShell* pTabViewShell = rDocShell.GetBestViewShell();
+        if (pTabViewShell)
+        {
+            ScTabView* pTabView = pTabViewShell->GetViewData().GetView();
+            if (pTabView)
+                pTabView->SetTabProtectionSymbol(nTab, false);
+        }
         rDoc.SetTabProtection(nTab, pNewProtection.get());
         if (rDoc.IsUndoEnabled())
         {
