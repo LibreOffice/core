@@ -46,6 +46,30 @@
       "revId": "a344c43bc0bd056894cf5e20d4dd9bb60a2a0c9f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ae991ef_0b478613",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-12-02T13:35:22Z",
+      "side": 1,
+      "message": "sw\\inc\\hintids.cxx\nconstexpr TypedWhichId\u003cSvxBrushItem\u003e RES_CHRATR_HIGHLIGHT(42);\n\n// list attributes for paragraphs.\n// intentionally these list attributes are not contained in paragraph styles\nconstexpr sal_uInt16 RES_PARATR_LIST_BEGIN(RES_PARATR_END);\n\nTo do something like that looks like it would require modifying every instance where a Set is defined for CharacterStyles and/or Character formatting, and add or remove an entry for RES_CHRATR_HIGHLIGHT.\n\nI\u0027m not comfortable doing something like that even if it is a good idea.",
+      "parentUuid": "65992c23_9660accc",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 41
+      },
+      "revId": "a344c43bc0bd056894cf5e20d4dd9bb60a2a0c9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
