@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-21 15:23:36 using:
+ Generated on 2020-12-02 16:52:26 using:
  ./bin/update_pch sd sdui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -50,6 +50,7 @@
 #include <string_view>
 #include <type_traits>
 #include <typeinfo>
+#include <unordered_map>
 #include <unordered_set>
 #include <utility>
 #include <vector>
@@ -98,7 +99,6 @@
 #include <vcl/GraphicObject.hxx>
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/ITiledRenderable.hxx>
-#include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
@@ -130,6 +130,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
@@ -176,6 +177,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
+#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
@@ -226,6 +228,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
@@ -401,6 +404,7 @@
 #include <svx/svdmrkv.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdpntv.hxx>
@@ -424,6 +428,7 @@
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
+#include <tools/degree.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>
@@ -432,6 +437,7 @@
 #include <tools/helpers.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>

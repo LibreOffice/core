@@ -714,13 +714,9 @@ constructor_map = {
     }
 
 custom_widgets = [
-    'ContextVBox',
-    'DropdownBox',
     'ManagedMenuButton',
     'NotebookbarTabControl',
     'NotebookbarToolBox',
-    'PriorityHBox',
-    'PriorityMergedHBox',
     ]
 
 def get_constructor_guard(constructor):

@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/builderfactory.hxx>
 #include <vcl/layout.hxx>
-#include <sfx2/viewfrm.hxx>
-#include "PriorityHBox.hxx"
+#include <PriorityHBox.hxx>
 #include <comphelper/lok.hxx>
 
 namespace
@@ -109,7 +107,7 @@ Size PriorityHBox::calculateRequisition() const
 
 void PriorityHBox::Resize()
 {
-    if (!m_bInitialized && SfxViewFrame::Current())
+    if (!m_bInitialized)
         Initialize();
 
     if (!m_bInitialized || comphelper::LibreOfficeKit::isActive())
@@ -172,7 +170,7 @@ void PriorityHBox::Resize()
 
 void PriorityHBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    if (!m_bInitialized && SfxViewFrame::Current())
+    if (!m_bInitialized)
         Initialize();
 
     VclHBox::Paint(rRenderContext, rRect);
@@ -195,7 +193,5 @@ void PriorityHBox::GetChildrenWithPriorities()
 
     std::sort(m_aSortedChildren.begin(), m_aSortedChildren.end(), lcl_comparePriority);
 }
-
-VCL_BUILDER_FACTORY(PriorityHBox)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
