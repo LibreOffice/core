@@ -646,6 +646,16 @@ EditView* ScInputWindow::GetEditView()
     return mxTextWindow->GetEditView();
 }
 
+vcl::Window* ScInputWindow::GetEditWindow()
+{
+    return mxTextWindow;
+}
+
+Point ScInputWindow::GetCursorScreenPixelPos(bool bBelow)
+{
+    return mxTextWindow->GetCursorScreenPixelPos(bBelow);
+}
+
 void ScInputWindow::MakeDialogEditView()
 {
     mxTextWindow->MakeDialogEditView();
@@ -885,6 +895,11 @@ ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
         mxButtonDown->show();
 }
 
+Point ScInputBarGroup::GetCursorScreenPixelPos(bool bBelow)
+{
+    return mxTextWndGroup->GetCursorScreenPixelPos(bBelow);
+}
+
 ScInputBarGroup::~ScInputBarGroup()
 {
     disposeOnce();
@@ -1096,7 +1111,7 @@ void ScInputBarGroup::TextGrabFocus()
     mxTextWndGroup->TextGrabFocus();
 }
 
-constexpr tools::Long gnBorderWidth = INPUTLINE_INSET_MARGIN + 1;
+constexpr tools::Long gnBorderWidth = (INPUTLINE_INSET_MARGIN + 1) * 2;
 constexpr tools::Long gnBorderHeight = INPUTLINE_INSET_MARGIN + 1;
 
 ScTextWndGroup::ScTextWndGroup(ScInputBarGroup& rParent, ScTabViewShell* pViewSh)
@@ -1106,6 +1121,28 @@ ScTextWndGroup::ScTextWndGroup(ScInputBarGroup& rParent, ScTabViewShell* pViewSh
     , mrParent(rParent)
 {
     mxScrollWin->connect_vadjustment_changed(LINK(this, ScTextWndGroup, Impl_ScrollHdl));
+}
+
+Point ScTextWndGroup::GetCursorScreenPixelPos(bool bBelow)
+{
+    Point aPos;
+    if (!HasEditView())
+        return aPos;
+    EditView* pEditView = GetEditView();
+    vcl::Cursor* pCur = pEditView->GetCursor();
+    if (!pCur)
+        return aPos;
+    Point aLogicPos = pCur->GetPos();
+    if (bBelow)
+        aLogicPos.AdjustY(pCur->GetHeight());
+    aPos = GetEditViewDevice().LogicToPixel(aLogicPos);
+    bool bRTL = mrParent.IsRTLEnabled();
+    if (bRTL)
+        aPos.setX(mxTextWnd->GetOutputSizePixel().Width() - aPos.X() + gnBorderWidth);
+    else
+        aPos.AdjustX(gnBorderWidth + 1);
+
+    return mrParent.OutputToScreenPixel(aPos);
 }
 
 ScTextWndGroup::~ScTextWndGroup()
@@ -1120,6 +1157,11 @@ void ScTextWndGroup::InsertAccessibleTextData(ScAccessibleEditLineTextData& rTex
 EditView* ScTextWndGroup::GetEditView()
 {
     return mxTextWnd->GetEditView();
+}
+
+const OutputDevice& ScTextWndGroup::GetEditViewDevice() const
+{
+    return mxTextWnd->GetEditViewDevice();
 }
 
 tools::Long ScTextWndGroup::GetLastNumExpandedLines() const
@@ -1241,6 +1283,11 @@ EditView* ScTextWnd::GetEditView()
 }
 
 bool ScTextWnd::HasEditView() const { return m_xEditView != nullptr; }
+
+const OutputDevice& ScTextWnd::GetEditViewDevice() const
+{
+    return EditViewOutputDevice();
+}
 
 int ScTextWnd::GetPixelHeightForLines(tools::Long nLines)
 {
@@ -1988,8 +2035,8 @@ void ScTextWnd::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     SetDragDataTransferrable(xHelper, DND_ACTION_COPY);
 
     OutputDevice& rDevice = pDrawingArea->get_ref_device();
-    pDrawingArea->set_margin_left(gnBorderWidth * 2);
-    pDrawingArea->set_margin_right(gnBorderWidth * 2);
+    pDrawingArea->set_margin_left(gnBorderWidth);
+    pDrawingArea->set_margin_right(gnBorderWidth);
     // leave 1 for the width of the scrolledwindow border
     pDrawingArea->set_margin_top(gnBorderHeight - 1);
     pDrawingArea->set_margin_bottom(gnBorderHeight - 1);
