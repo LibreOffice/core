@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2c5c7ad_7413ae5c",
+        "filename": "starmath/source/mathmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-02T10:14:04Z",
+      "side": 1,
+      "message": "This line is the difference between works and not works.\nLooks to me like a memory issue behind the scenes.\nWorking on it.",
+      "range": {
+        "startLine": 271,
+        "startChar": 8,
+        "endLine": 272,
+        "endChar": 93
+      },
+      "revId": "987f067c388c7988a127231dadad3854d340570f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
