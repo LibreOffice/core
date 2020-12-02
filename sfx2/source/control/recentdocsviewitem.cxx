@@ -163,7 +163,7 @@ void RecentDocsViewItem::MouseButtonUp(const MouseEvent& rMEvt)
     {
         if (getRemoveIconArea().IsInside(rMEvt.GetPosPixel()))
         {
-            SvtHistoryOptions().DeleteItem(ePICKLIST, maURL);
+            SvtHistoryOptions().DeleteItem(EHistoryType::PickList, maURL);
             mrParent.Reload();
             return;
         }

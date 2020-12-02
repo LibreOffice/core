@@ -180,7 +180,7 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStrin
         [menu removeItemAtIndex: 0];
 
     // update recent item list
-    css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aHistoryList( SvtHistoryOptions().GetList( ePICKLIST ) );
+    css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aHistoryList( SvtHistoryOptions().GetList( EHistoryType::PickList ) );
 
     int nPickListMenuItems = ( aHistoryList.getLength() > 99 ) ? 99 : aHistoryList.getLength();
 
