@@ -1293,7 +1293,7 @@
      <table:table-cell office:value-type="float" office:value="-12.0207780851555" calcext:value-type="float">
       <text:p>-12.0207780851555</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce24" table:formula="of:=ROUND([.A2];12)=ROUND([.B2];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce24" table:formula="of:=ROUND([.A2];11)=ROUND([.B2];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce31" table:formula="of:=FORMULA([.A2])" office:value-type="string" office:string-value="=NPER(0.06,153.75,2600)" calcext:value-type="string">

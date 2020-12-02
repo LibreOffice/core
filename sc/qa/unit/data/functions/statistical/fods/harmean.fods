@@ -4298,7 +4298,7 @@
      <table:table-cell office:value-type="float" office:value="17.4283840749415" calcext:value-type="float">
       <text:p>17.4283840749415</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A27];12)=ROUND([.B27];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A27];11)=ROUND([.B27];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A27])" office:value-type="string" office:string-value="=HARMEAN(I26:I29)" calcext:value-type="string">
@@ -4352,7 +4352,7 @@
      <table:table-cell office:value-type="float" office:value="18.4864864864865" calcext:value-type="float">
       <text:p>18.4864864864865</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A29];12)=ROUND([.B29];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A29];11)=ROUND([.B29];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A29])" office:value-type="string" office:string-value="=HARMEAN(I28:I31)" calcext:value-type="string">

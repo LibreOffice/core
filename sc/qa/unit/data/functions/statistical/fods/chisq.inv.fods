@@ -4443,7 +4443,7 @@
      <table:table-cell office:value-type="float" office:value="14.2040730851385" calcext:value-type="float">
       <text:p>14.2040730851385</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce28" table:formula="of:=ROUND([.A14];12)=ROUND([.B14];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=ROUND([.A14];11)=ROUND([.B14];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="{=CHISQ.INV(F1:F11,G1:G11)}" calcext:value-type="string">
@@ -4796,7 +4796,7 @@
      <table:table-cell office:value-type="float" office:value="15.2911628705065" calcext:value-type="float">
       <text:p>15.2911628705065</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce48" table:formula="of:=ROUND([.A27];12)=ROUND([.B27];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce48" table:formula="of:=ROUND([.A27];11)=ROUND([.B27];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A27])" office:value-type="string" office:string-value="{=CHISQ.INV(T2:T14,U2:U14)}" calcext:value-type="string">
@@ -4822,7 +4822,7 @@
      <table:table-cell office:value-type="float" office:value="20.4461298047275" calcext:value-type="float">
       <text:p>20.4461298047275</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce48" table:formula="of:=ROUND([.A28];12)=ROUND([.B28];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce48" table:formula="of:=ROUND([.A28];11)=ROUND([.B28];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A28])" office:value-type="string" office:string-value="{=CHISQ.INV(T2:T14,U2:U14)}" calcext:value-type="string">
@@ -4926,7 +4926,7 @@
      <table:table-cell office:value-type="float" office:value="15.6557151216055" calcext:value-type="float">
       <text:p>15.6557151216055</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce48" table:formula="of:=ROUND([.A32];12)=ROUND([.B32];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce48" table:formula="of:=ROUND([.A32];11)=ROUND([.B32];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A32])" office:value-type="string" office:string-value="{=CHISQ.INV(T2:T14,U2:U14)}" calcext:value-type="string">
@@ -5373,7 +5373,7 @@
      <table:table-cell office:value-type="float" office:value="5.8218731997855" calcext:value-type="float">
       <text:p>5.8218731997855</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce48" table:formula="of:=ROUND([.A49];12)=ROUND([.B49];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce48" table:formula="of:=ROUND([.A49];11)=ROUND([.B49];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A49])" office:value-type="string" office:string-value="{=CHISQ.INV(F1:F11,I1:I11)}" calcext:value-type="string">
