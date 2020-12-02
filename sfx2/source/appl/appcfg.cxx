@@ -386,34 +386,35 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 {
                     SfxAllEnumItem aValues(rPool.GetWhich(SID_ATTR_PATHNAME));
                     SvtPathOptions aPathCfg;
-                    for ( sal_uInt16 nProp = SvtPathOptions::PATH_ADDIN;
-                          nProp <= SvtPathOptions::PATH_WORK; nProp++ )
+                    for ( sal_uInt16 nProp = static_cast<sal_uInt16>(SvtPathOptions::Paths::AddIn);
+                          nProp <= static_cast<sal_uInt16>(SvtPathOptions::Paths::Work); nProp++ )
                     {
                         OUString aValue;
-                        switch ( nProp )
+                        switch ( static_cast<SvtPathOptions::Paths>(nProp) )
                         {
-                            case SvtPathOptions::PATH_ADDIN:        osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetAddinPath(), aValue ); break;
-                            case SvtPathOptions::PATH_AUTOCORRECT:  aValue = aPathCfg.GetAutoCorrectPath(); break;
-                            case SvtPathOptions::PATH_AUTOTEXT:     aValue = aPathCfg.GetAutoTextPath(); break;
-                            case SvtPathOptions::PATH_BACKUP:       aValue = aPathCfg.GetBackupPath(); break;
-                            case SvtPathOptions::PATH_BASIC:        aValue = aPathCfg.GetBasicPath(); break;
-                            case SvtPathOptions::PATH_BITMAP:       aValue = aPathCfg.GetBitmapPath(); break;
-                            case SvtPathOptions::PATH_CONFIG:       aValue = aPathCfg.GetConfigPath(); break;
-                            case SvtPathOptions::PATH_DICTIONARY:   aValue = aPathCfg.GetDictionaryPath(); break;
-                            case SvtPathOptions::PATH_FAVORITES:    aValue = aPathCfg.GetFavoritesPath(); break;
-                            case SvtPathOptions::PATH_FILTER:       osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetFilterPath(), aValue ); break;
-                            case SvtPathOptions::PATH_GALLERY:      aValue = aPathCfg.GetGalleryPath(); break;
-                            case SvtPathOptions::PATH_GRAPHIC:      aValue = aPathCfg.GetGraphicPath(); break;
-                            case SvtPathOptions::PATH_HELP:         osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetHelpPath(), aValue ); break;
-                            case SvtPathOptions::PATH_LINGUISTIC:   aValue = aPathCfg.GetLinguisticPath(); break;
-                            case SvtPathOptions::PATH_MODULE:       osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetModulePath(), aValue ); break;
-                            case SvtPathOptions::PATH_PALETTE:      aValue = aPathCfg.GetPalettePath(); break;
-                            case SvtPathOptions::PATH_PLUGIN:       osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetPluginPath(), aValue ); break;
-                            case SvtPathOptions::PATH_STORAGE:      osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetStoragePath(), aValue ); break;
-                            case SvtPathOptions::PATH_TEMP:         aValue = aPathCfg.GetTempPath(); break;
-                            case SvtPathOptions::PATH_TEMPLATE:     aValue = aPathCfg.GetTemplatePath(); break;
-                            case SvtPathOptions::PATH_USERCONFIG:   aValue = aPathCfg.GetUserConfigPath(); break;
-                            case SvtPathOptions::PATH_WORK:         aValue = aPathCfg.GetWorkPath(); break;
+                            case SvtPathOptions::Paths::AddIn:        osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetAddinPath(), aValue ); break;
+                            case SvtPathOptions::Paths::AutoCorrect:  aValue = aPathCfg.GetAutoCorrectPath(); break;
+                            case SvtPathOptions::Paths::AutoText:     aValue = aPathCfg.GetAutoTextPath(); break;
+                            case SvtPathOptions::Paths::Backup:       aValue = aPathCfg.GetBackupPath(); break;
+                            case SvtPathOptions::Paths::Basic:        aValue = aPathCfg.GetBasicPath(); break;
+                            case SvtPathOptions::Paths::Bitmap:       aValue = aPathCfg.GetBitmapPath(); break;
+                            case SvtPathOptions::Paths::Config:       aValue = aPathCfg.GetConfigPath(); break;
+                            case SvtPathOptions::Paths::Dictionary:   aValue = aPathCfg.GetDictionaryPath(); break;
+                            case SvtPathOptions::Paths::Favorites:    aValue = aPathCfg.GetFavoritesPath(); break;
+                            case SvtPathOptions::Paths::Filter:       osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetFilterPath(), aValue ); break;
+                            case SvtPathOptions::Paths::Gallery:      aValue = aPathCfg.GetGalleryPath(); break;
+                            case SvtPathOptions::Paths::Graphic:      aValue = aPathCfg.GetGraphicPath(); break;
+                            case SvtPathOptions::Paths::Help:         osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetHelpPath(), aValue ); break;
+                            case SvtPathOptions::Paths::Linguistic:   aValue = aPathCfg.GetLinguisticPath(); break;
+                            case SvtPathOptions::Paths::Module:       osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetModulePath(), aValue ); break;
+                            case SvtPathOptions::Paths::Palette:      aValue = aPathCfg.GetPalettePath(); break;
+                            case SvtPathOptions::Paths::Plugin:       osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetPluginPath(), aValue ); break;
+                            case SvtPathOptions::Paths::Storage:      osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetStoragePath(), aValue ); break;
+                            case SvtPathOptions::Paths::Temp:         aValue = aPathCfg.GetTempPath(); break;
+                            case SvtPathOptions::Paths::Template:     aValue = aPathCfg.GetTemplatePath(); break;
+                            case SvtPathOptions::Paths::UserConfig:   aValue = aPathCfg.GetUserConfigPath(); break;
+                            case SvtPathOptions::Paths::Work:         aValue = aPathCfg.GetWorkPath(); break;
+                            default: break;
                         }
                         aValues.SetTextByPos( nProp, aValue );
                     }
@@ -707,9 +708,9 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
             const OUString& sValue = pEnumItem->GetTextByPos(static_cast<sal_uInt16>(nPath));
             if ( sValue != aNoChangeStr )
             {
-                switch( nPath )
+                switch( static_cast<SvtPathOptions::Paths>(nPath) )
                 {
-                    case SvtPathOptions::PATH_ADDIN:
+                    case SvtPathOptions::Paths::AddIn:
                     {
                         OUString aTmp;
                         if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
@@ -717,24 +718,24 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                         break;
                     }
 
-                    case SvtPathOptions::PATH_AUTOCORRECT:  aPathOptions.SetAutoCorrectPath( sValue );break;
-                    case SvtPathOptions::PATH_AUTOTEXT:     aPathOptions.SetAutoTextPath( sValue );break;
-                    case SvtPathOptions::PATH_BACKUP:       aPathOptions.SetBackupPath( sValue );break;
-                    case SvtPathOptions::PATH_BASIC:        aPathOptions.SetBasicPath( sValue );break;
-                    case SvtPathOptions::PATH_BITMAP:       aPathOptions.SetBitmapPath( sValue );break;
-                    case SvtPathOptions::PATH_CONFIG:       aPathOptions.SetConfigPath( sValue );break;
-                    case SvtPathOptions::PATH_DICTIONARY:   aPathOptions.SetDictionaryPath( sValue );break;
-                    case SvtPathOptions::PATH_FAVORITES:    aPathOptions.SetFavoritesPath( sValue );break;
-                    case SvtPathOptions::PATH_FILTER:
+                    case SvtPathOptions::Paths::AutoCorrect:  aPathOptions.SetAutoCorrectPath( sValue );break;
+                    case SvtPathOptions::Paths::AutoText:     aPathOptions.SetAutoTextPath( sValue );break;
+                    case SvtPathOptions::Paths::Backup:       aPathOptions.SetBackupPath( sValue );break;
+                    case SvtPathOptions::Paths::Basic:        aPathOptions.SetBasicPath( sValue );break;
+                    case SvtPathOptions::Paths::Bitmap:       aPathOptions.SetBitmapPath( sValue );break;
+                    case SvtPathOptions::Paths::Config:       aPathOptions.SetConfigPath( sValue );break;
+                    case SvtPathOptions::Paths::Dictionary:   aPathOptions.SetDictionaryPath( sValue );break;
+                    case SvtPathOptions::Paths::Favorites:    aPathOptions.SetFavoritesPath( sValue );break;
+                    case SvtPathOptions::Paths::Filter:
                     {
                         OUString aTmp;
                         if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
                             aPathOptions.SetFilterPath( aTmp );
                         break;
                     }
-                    case SvtPathOptions::PATH_GALLERY:      aPathOptions.SetGalleryPath( sValue );break;
-                    case SvtPathOptions::PATH_GRAPHIC:      aPathOptions.SetGraphicPath( sValue );break;
-                    case SvtPathOptions::PATH_HELP:
+                    case SvtPathOptions::Paths::Gallery:      aPathOptions.SetGalleryPath( sValue );break;
+                    case SvtPathOptions::Paths::Graphic:      aPathOptions.SetGraphicPath( sValue );break;
+                    case SvtPathOptions::Paths::Help:
                     {
                         OUString aTmp;
                         if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
@@ -742,8 +743,8 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                         break;
                     }
 
-                    case SvtPathOptions::PATH_LINGUISTIC:   aPathOptions.SetLinguisticPath( sValue );break;
-                    case SvtPathOptions::PATH_MODULE:
+                    case SvtPathOptions::Paths::Linguistic:   aPathOptions.SetLinguisticPath( sValue );break;
+                    case SvtPathOptions::Paths::Module:
                     {
                         OUString aTmp;
                         if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
@@ -751,8 +752,8 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                         break;
                     }
 
-                    case SvtPathOptions::PATH_PALETTE:      aPathOptions.SetPalettePath( sValue );break;
-                    case SvtPathOptions::PATH_PLUGIN:
+                    case SvtPathOptions::Paths::Palette:      aPathOptions.SetPalettePath( sValue );break;
+                    case SvtPathOptions::Paths::Plugin:
                     {
                         OUString aTmp;
                         if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
@@ -760,7 +761,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                         break;
                     }
 
-                    case SvtPathOptions::PATH_STORAGE:
+                    case SvtPathOptions::Paths::Storage:
                     {
                         OUString aTmp;
                         if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
@@ -768,10 +769,10 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                         break;
                     }
 
-                    case SvtPathOptions::PATH_TEMP:         aPathOptions.SetTempPath( sValue );break;
-                    case SvtPathOptions::PATH_TEMPLATE:     aPathOptions.SetTemplatePath( sValue );break;
-                    case SvtPathOptions::PATH_USERCONFIG:   aPathOptions.SetUserConfigPath( sValue );break;
-                    case SvtPathOptions::PATH_WORK:         aPathOptions.SetWorkPath( sValue );break;
+                    case SvtPathOptions::Paths::Temp:         aPathOptions.SetTempPath( sValue );break;
+                    case SvtPathOptions::Paths::Template:     aPathOptions.SetTemplatePath( sValue );break;
+                    case SvtPathOptions::Paths::UserConfig:   aPathOptions.SetUserConfigPath( sValue );break;
+                    case SvtPathOptions::Paths::Work:         aPathOptions.SetWorkPath( sValue );break;
                     default: SAL_WARN( "sfx.appl", "SfxApplication::SetOptions_Impl() Invalid path number found for set directories!" );
                 }
             }

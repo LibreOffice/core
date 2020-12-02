@@ -93,7 +93,7 @@ public:
                     SvtDefaultOptions_Impl();
                     virtual ~SvtDefaultOptions_Impl() override;
 
-    OUString         GetDefaultPath( sal_uInt16 nId ) const;
+    OUString        GetDefaultPath( SvtPathOptions::Paths nId ) const;
     virtual void    Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 
 private:
@@ -122,28 +122,28 @@ struct PathToDefaultMapping_Impl
 
 PathToDefaultMapping_Impl const PathMap_Impl[] =
 {
-    { SvtPathOptions::PATH_ADDIN,           &SvtDefaultOptions_Impl::m_aAddinPath },
-    { SvtPathOptions::PATH_AUTOCORRECT,     &SvtDefaultOptions_Impl::m_aAutoCorrectPath },
-    { SvtPathOptions::PATH_AUTOTEXT,        &SvtDefaultOptions_Impl::m_aAutoTextPath },
-    { SvtPathOptions::PATH_BACKUP,          &SvtDefaultOptions_Impl::m_aBackupPath },
-    { SvtPathOptions::PATH_BASIC,           &SvtDefaultOptions_Impl::m_aBasicPath },
-    { SvtPathOptions::PATH_BITMAP,          &SvtDefaultOptions_Impl::m_aBitmapPath },
-    { SvtPathOptions::PATH_CONFIG,          &SvtDefaultOptions_Impl::m_aConfigPath },
-    { SvtPathOptions::PATH_DICTIONARY,      &SvtDefaultOptions_Impl::m_aDictionaryPath },
-    { SvtPathOptions::PATH_FAVORITES,       &SvtDefaultOptions_Impl::m_aFavoritesPath },
-    { SvtPathOptions::PATH_FILTER,          &SvtDefaultOptions_Impl::m_aFilterPath },
-    { SvtPathOptions::PATH_GALLERY,         &SvtDefaultOptions_Impl::m_aGalleryPath },
-    { SvtPathOptions::PATH_GRAPHIC,         &SvtDefaultOptions_Impl::m_aGraphicPath },
-    { SvtPathOptions::PATH_HELP,            &SvtDefaultOptions_Impl::m_aHelpPath },
-    { SvtPathOptions::PATH_LINGUISTIC,      &SvtDefaultOptions_Impl::m_aLinguisticPath },
-    { SvtPathOptions::PATH_MODULE,          &SvtDefaultOptions_Impl::m_aModulePath },
-    { SvtPathOptions::PATH_PALETTE,         &SvtDefaultOptions_Impl::m_aPalettePath },
-    { SvtPathOptions::PATH_PLUGIN,          &SvtDefaultOptions_Impl::m_aPluginPath },
-    { SvtPathOptions::PATH_TEMP,            &SvtDefaultOptions_Impl::m_aTempPath },
-    { SvtPathOptions::PATH_TEMPLATE,        &SvtDefaultOptions_Impl::m_aTemplatePath },
-    { SvtPathOptions::PATH_USERCONFIG,      &SvtDefaultOptions_Impl::m_aUserConfigPath },
-    { SvtPathOptions::PATH_WORK,            &SvtDefaultOptions_Impl::m_aWorkPath },
-    { SvtPathOptions::PATH_CLASSIFICATION,  &SvtDefaultOptions_Impl::m_aClassificationPath }
+    { SvtPathOptions::Paths::AddIn,           &SvtDefaultOptions_Impl::m_aAddinPath },
+    { SvtPathOptions::Paths::AutoCorrect,     &SvtDefaultOptions_Impl::m_aAutoCorrectPath },
+    { SvtPathOptions::Paths::AutoText,        &SvtDefaultOptions_Impl::m_aAutoTextPath },
+    { SvtPathOptions::Paths::Backup,          &SvtDefaultOptions_Impl::m_aBackupPath },
+    { SvtPathOptions::Paths::Basic,           &SvtDefaultOptions_Impl::m_aBasicPath },
+    { SvtPathOptions::Paths::Bitmap,          &SvtDefaultOptions_Impl::m_aBitmapPath },
+    { SvtPathOptions::Paths::Config,          &SvtDefaultOptions_Impl::m_aConfigPath },
+    { SvtPathOptions::Paths::Dictionary,      &SvtDefaultOptions_Impl::m_aDictionaryPath },
+    { SvtPathOptions::Paths::Favorites,       &SvtDefaultOptions_Impl::m_aFavoritesPath },
+    { SvtPathOptions::Paths::Filter,          &SvtDefaultOptions_Impl::m_aFilterPath },
+    { SvtPathOptions::Paths::Gallery,         &SvtDefaultOptions_Impl::m_aGalleryPath },
+    { SvtPathOptions::Paths::Graphic,         &SvtDefaultOptions_Impl::m_aGraphicPath },
+    { SvtPathOptions::Paths::Help,            &SvtDefaultOptions_Impl::m_aHelpPath },
+    { SvtPathOptions::Paths::Linguistic,      &SvtDefaultOptions_Impl::m_aLinguisticPath },
+    { SvtPathOptions::Paths::Module,          &SvtDefaultOptions_Impl::m_aModulePath },
+    { SvtPathOptions::Paths::Palette,         &SvtDefaultOptions_Impl::m_aPalettePath },
+    { SvtPathOptions::Paths::Plugin,          &SvtDefaultOptions_Impl::m_aPluginPath },
+    { SvtPathOptions::Paths::Temp,            &SvtDefaultOptions_Impl::m_aTempPath },
+    { SvtPathOptions::Paths::Template,        &SvtDefaultOptions_Impl::m_aTemplatePath },
+    { SvtPathOptions::Paths::UserConfig,      &SvtDefaultOptions_Impl::m_aUserConfigPath },
+    { SvtPathOptions::Paths::Work,            &SvtDefaultOptions_Impl::m_aWorkPath },
+    { SvtPathOptions::Paths::Classification,  &SvtDefaultOptions_Impl::m_aClassificationPath }
 };
 
 // functions -------------------------------------------------------------
@@ -197,21 +197,21 @@ void SvtDefaultOptions_Impl::ImplCommit()
 
 // class SvtDefaultOptions_Impl ------------------------------------------
 
-OUString SvtDefaultOptions_Impl::GetDefaultPath( sal_uInt16 nId ) const
+OUString SvtDefaultOptions_Impl::GetDefaultPath( SvtPathOptions::Paths nId ) const
 {
     OUString aRet;
     sal_uInt16 nIdx = 0;
 
-    while ( PathMap_Impl[nIdx]._ePath <= SvtPathOptions::PATH_CLASSIFICATION )
+    while ( PathMap_Impl[nIdx]._ePath <= SvtPathOptions::Paths::Classification )
     {
         if ( nId == PathMap_Impl[nIdx]._ePath && PathMap_Impl[nIdx]._pDefaultPath )
         {
             aRet = this->*(PathMap_Impl[nIdx]._pDefaultPath);
-            if ( nId == SvtPathOptions::PATH_ADDIN ||
-                 nId == SvtPathOptions::PATH_FILTER ||
-                 nId == SvtPathOptions::PATH_HELP ||
-                 nId == SvtPathOptions::PATH_MODULE ||
-                 nId == SvtPathOptions::PATH_PLUGIN )
+            if ( nId == SvtPathOptions::Paths::AddIn ||
+                 nId == SvtPathOptions::Paths::Filter ||
+                 nId == SvtPathOptions::Paths::Help ||
+                 nId == SvtPathOptions::Paths::Module ||
+                 nId == SvtPathOptions::Paths::Plugin )
             {
                 OUString aTmp;
                 osl::FileBase::getFileURLFromSystemPath( aRet, aTmp );
@@ -349,7 +349,7 @@ SvtDefaultOptions::~SvtDefaultOptions()
     pImpl.reset();
 }
 
-OUString SvtDefaultOptions::GetDefaultPath( sal_uInt16 nId ) const
+OUString SvtDefaultOptions::GetDefaultPath( SvtPathOptions::Paths nId ) const
 {
     return pImpl->GetDefaultPath( nId );
 }

@@ -359,11 +359,11 @@ bool ImplSdPPTImport::Import()
             pSection = const_cast<Section*>(pDInfoSec2->GetSection( aUserPropSetGUID ));
             if ( pSection )
             {
-                Dictionary aDict;
+                PropDictionary aDict;
                 pSection->GetDictionary(aDict);
                 if (!aDict.empty())
                 {
-                    Dictionary::const_iterator iter = aDict.find( OUString("_PID_HLINKS") );
+                    auto iter = aDict.find( OUString("_PID_HLINKS") );
 
                     if ( iter != aDict.end() )
                     {
