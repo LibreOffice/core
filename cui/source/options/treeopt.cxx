@@ -1142,7 +1142,7 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
         break;
         case SID_INET_DLG :
                 pRet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(),
-                                svl::Items<SID_BASIC_ENABLED, SID_BASIC_ENABLED,
+                                svl::Items<
                 //SID_OPTIONS_START - ..END
                                 SID_SAVEREL_INET, SID_SAVEREL_FSYS,
                                 SID_INET_NOPROXY, SID_INET_FTP_PROXY_PORT,

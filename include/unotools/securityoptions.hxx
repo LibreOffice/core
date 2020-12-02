@@ -63,7 +63,6 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSecurityOptions final : public utl::
         enum class EOption
         {
             SecureUrls,
-            BasicMode,                    // xmlsec05 deprecated
             ExecutePlugins,               // xmlsec05 deprecated
             Warning,                      // xmlsec05 deprecated
             Confirmation,                 // xmlsec05 deprecated
@@ -182,8 +181,6 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSecurityOptions final : public utl::
         // xmlsec05 deprecated methods
         bool    IsExecutePlugins() const;
         void        SetExecutePlugins( bool bSet );
-        EBasicSecurityMode  GetBasicMode(                           ) const;
-        void                SetBasicMode( EBasicSecurityMode eMode  );
         bool IsWarningEnabled() const;
         void SetWarningEnabled( bool bSet );
         bool IsConfirmationEnabled() const;

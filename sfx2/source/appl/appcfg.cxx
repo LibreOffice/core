@@ -269,16 +269,6 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                                 bRet = false;
                     }
                     break;
-                case SID_BASIC_ENABLED :
-                    {
-                        bRet = true;
-                        if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::EOption::BasicMode))
-                        {
-                            if ( !rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_BASIC_ENABLED ), sal::static_int_cast< sal_uInt16 >(aSecurityOptions.GetBasicMode()))))
-                                bRet = false;
-                        }
-                    }
-                    break;
                 case SID_INET_EXE_PLUGIN  :
                     {
                         bRet = true;
@@ -607,13 +597,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
         ShutdownIcon::SetAutostart( static_cast<const SfxBoolItem*>( pItem )->GetValue() );
-    }
-
-    // StarBasic Enable
-    if ( SfxItemState::SET == rSet.GetItemState(SID_BASIC_ENABLED, true, &pItem))
-    {
-        DBG_ASSERT(dynamic_cast< const SfxUInt16Item *>( pItem ) !=  nullptr, "SfxInt16Item expected");
-        aSecurityOptions.SetBasicMode( static_cast<EBasicSecurityMode>(static_cast<const SfxUInt16Item*>( pItem )->GetValue()) );
     }
 
     // Execute PlugIns
