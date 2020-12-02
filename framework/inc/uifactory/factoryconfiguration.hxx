@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_UIFACTORY_FACTORYCONFIGURATION_HXX
-#define INCLUDED_FRAMEWORK_INC_UIFACTORY_FACTORYCONFIGURATION_HXX
+#pragma once
 
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -88,6 +87,5 @@ private:
 };
 
 } // namespace framework
-#endif // INCLUDED_FRAMEWORK_INC_UIFACTORY_FACTORYCONFIGURATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
