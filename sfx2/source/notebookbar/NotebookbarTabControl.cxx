@@ -18,7 +18,6 @@
  */
 
 #include <vcl/builderfactory.hxx>
-#include <vcl/button.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/notebookbar.hxx>
 #include <vcl/tabpage.hxx>
@@ -161,7 +160,7 @@ NotebookbarTabControl::~NotebookbarTabControl()
 void NotebookbarTabControl::ArrowStops( sal_uInt16 nCode )
 {
     ToolBox* pToolBox( GetToolBox() );
-    PushButton* pOpenMenu( GetOpenMenu() );
+    Control* pOpenMenu( GetOpenMenu() );
 
     if ( nCode == KEY_LEFT )
     {

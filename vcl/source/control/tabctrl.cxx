@@ -2393,4 +2393,9 @@ Size NotebookbarTabControlBase::calculateRequisition() const
     return TabControl::ImplCalculateRequisition(m_nHeaderHeight);
 }
 
+Control* NotebookbarTabControlBase::GetOpenMenu()
+{
+    return m_pOpenMenu;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

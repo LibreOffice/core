@@ -205,7 +205,7 @@ public:
     void SetIconClickHdl( Link<NotebookBar*, void> aHdl );
     void SetToolBox( ToolBox* pToolBox );
     ToolBox* GetToolBox() { return m_pShortcuts; }
-    PushButton* GetOpenMenu() { return m_pOpenMenu; }
+    Control* GetOpenMenu();
 
     virtual Size        calculateRequisition() const override;
     static sal_uInt16   GetHeaderHeight();
