@@ -20,7 +20,10 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,firebird,\
 
 # * external/firebird/0001-Make-comparison-operator-member-functions-const.patch.1 is upstream at
 #   <https://github.com/FirebirdSQL/firebird/pull/227> "Make comparison operator member functions
-#   const":
+#   const";
+# * external/firebird/0001-Fix-checks-for-null-HANDLE-in-Windows-only-code.patch.1 is upstream at
+#   <https://github.com/FirebirdSQL/firebird/pull/301> "Fix checks for null HANDLE in Windows-only
+#   code":
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
         external/firebird/firebird.disable-ib-util-not-found.patch.1 \
 		external/firebird/firebird-Engine12.patch \
@@ -35,6 +38,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 		external/firebird/macos-arm64.patch.0 \
     external/firebird/firebird-btyacc-add-explicit-rule.patch \
     external/firebird/firebird-307.patch.1 \
+    external/firebird/0001-Fix-checks-for-null-HANDLE-in-Windows-only-code.patch.1 \
 ))
 
 ifeq ($(OS),WNT)
