@@ -523,7 +523,7 @@ IMPL_LINK (BackingWindow, MenuSelectHdl, const OString&, rId, void)
 {
     if (rId == "clear_all")
     {
-        SvtHistoryOptions().Clear(ePICKLIST);
+        SvtHistoryOptions().Clear(EHistoryType::PickList);
         mxAllRecentThumbnails->Reload();
         return;
     }

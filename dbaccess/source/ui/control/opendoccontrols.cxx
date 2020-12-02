@@ -130,7 +130,7 @@ namespace dbaui
     {
         OSL_ENSURE( _pAsciiModuleName, "OpenDocumentListBox::impl_init: invalid module name!" );
 
-        Sequence< Sequence< PropertyValue> > aHistory = SvtHistoryOptions().GetList( ePICKLIST );
+        Sequence< Sequence< PropertyValue> > aHistory = SvtHistoryOptions().GetList( EHistoryType::PickList );
         Reference< XNameAccess > xFilterFactory;
         xFilterFactory.set(::comphelper::getProcessServiceFactory()->createInstance(
             "com.sun.star.document.FilterFactory" ), css::uno::UNO_QUERY);

@@ -132,11 +132,11 @@ sal_uInt32 SvtHistoryOptions_Impl::GetCapacity(EHistoryType eHistory) const
     {
         switch (eHistory)
         {
-        case ePICKLIST:
+        case EHistoryType::PickList:
             xListAccess->getPropertyValue("PickListSize") >>= nSize;
             break;
 
-        case eHELPBOOKMARKS:
+        case EHistoryType::HelpBookmarks:
             xListAccess->getPropertyValue("HelpBookmarkSize") >>= nSize;
             break;
 
@@ -160,11 +160,11 @@ uno::Reference<container::XNameAccess> SvtHistoryOptions_Impl::GetListAccess(EHi
     {
         switch (eHistory)
         {
-        case ePICKLIST:
+        case EHistoryType::PickList:
             m_xCfg->getByName("PickList") >>= xListAccess;
             break;
 
-        case eHELPBOOKMARKS:
+        case EHistoryType::HelpBookmarks:
             m_xCfg->getByName("HelpBookmarks") >>= xListAccess;
             break;
 
