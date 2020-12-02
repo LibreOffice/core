@@ -4109,7 +4109,7 @@
      <table:table-cell office:value-type="float" office:value="10.4400868170485" calcext:value-type="float">
       <text:p>10.4400868170485</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A20];12)=ROUND([.B20];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A20];11)=ROUND([.B20];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A20])" office:value-type="string" office:string-value="=GEOMEAN(I19:I22)" calcext:value-type="string">
