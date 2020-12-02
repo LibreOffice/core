@@ -73,7 +73,8 @@ namespace drawinglayer
         Primitive2DContainer SVX_DLLPUBLIC createEmbeddedShadowPrimitive(
             const Primitive2DContainer& rContent,
             const attribute::SdrShadowAttribute& rShadow,
-            const basegfx::B2DHomMatrix& rObjectMatrix = basegfx::B2DHomMatrix());
+            const basegfx::B2DHomMatrix& rObjectMatrix = basegfx::B2DHomMatrix(),
+            const Primitive2DContainer* pContentForShadow = nullptr);
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
