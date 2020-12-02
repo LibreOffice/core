@@ -1133,6 +1133,9 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
 {
     OSL_ASSERT(nDecPlaces >= -20 && nDecPlaces <= 20);
 
+    if (!std::isfinite(fValue))
+        return fValue;
+
     if (fValue == 0.0)
         return fValue;
 
@@ -1190,24 +1193,7 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
     switch ( eMode )
     {
         case rtl_math_RoundingMode_Corrected :
-        {
-            int nExp;       // exponent for correction
-            if ( fValue > 0.0 )
-                nExp = static_cast<int>( floor( log10( fValue ) ) );
-            else
-                nExp = 0;
-
-            int nIndex;
-
-            if (nExp < 0)
-                nIndex = 15;
-            else if (nExp >= 14)
-                nIndex = 0;
-            else
-                nIndex = 15 - nExp;
-
-            fValue = floor(fValue + 0.5 + nCorrVal[nIndex]);
-        }
+            fValue = rtl::math::approxFloor(fValue + 0.5);
         break;
         case rtl_math_RoundingMode_Down:
             fValue = rtl::math::approxFloor(fValue);
@@ -1321,7 +1307,7 @@ double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
     if (!std::isfinite(fValue))
         return fOrigValue;
 
-    fValue = rtl_math_round(fValue, 0, rtl_math_RoundingMode_Corrected);
+    fValue = std::round(fValue);
     fValue /= fExpValue;
 
     // If the original value was near DBL_MAX we got an overflow. Restore and

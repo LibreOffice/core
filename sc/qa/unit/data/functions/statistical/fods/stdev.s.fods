@@ -4266,7 +4266,7 @@
      <table:table-cell table:style-name="ce19" office:value-type="float" office:value="27.4639157198435" calcext:value-type="float">
       <text:p>27.4639157198435</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ROUND([.A10];12)=ROUND([.B10];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce25" table:formula="of:=ROUND([.A10];11)=ROUND([.B10];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=STDEV.S(P3:P12)" calcext:value-type="string">
