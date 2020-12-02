@@ -40,6 +40,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/framelink.hxx>
 #include <svx/framelinkarray.hxx>
+#include <svx/sdooitm.hxx>
 #include <vcl/canvastools.hxx>
 
 #include <cell.hxx>
@@ -210,6 +211,7 @@ namespace sdr
                 // directly to aRetval, Border info to aBorderSequence and added
                 // later to get the correct overlapping
                 drawinglayer::primitive2d::Primitive2DContainer aRetval;
+                drawinglayer::primitive2d::Primitive2DContainer aRetvalForShadow;
                 const sal_Int32 nRowCount(xTable->getRowCount());
                 const sal_Int32 nColCount(xTable->getColumnCount());
                 const sal_Int32 nAllCount(nRowCount * nColCount);
@@ -322,6 +324,16 @@ namespace sdr
                                                 aCellMatrix, aAttribute));
                                         aRetval.append(xCellReference);
                                     }
+
+                                    // Create cell primitive without text.
+                                    aAttribute
+                                        = drawinglayer::primitive2d::createNewSdrFillTextAttribute(
+                                            rCellItemSet, nullptr);
+                                    const drawinglayer::primitive2d::Primitive2DReference
+                                        xCellReference(
+                                            new drawinglayer::primitive2d::SdrCellPrimitive2D(
+                                                aCellMatrix, aAttribute));
+                                    aRetvalForShadow.append(xCellReference);
                                 }
                             }
                         }
@@ -369,6 +381,10 @@ namespace sdr
                             new drawinglayer::primitive2d::TransformPrimitive2D(
                                 aTransform,
                                 aCellBorderPrimitives));
+
+                        // Borders are always the same for shadow as well.
+                        aRetvalForShadow.append(new drawinglayer::primitive2d::TransformPrimitive2D(
+                            aTransform, aCellBorderPrimitives));
                     }
                 }
 
@@ -381,7 +397,23 @@ namespace sdr
 
                     if(!aNewShadowAttribute.isDefault())
                     {
-                        aRetval = drawinglayer::primitive2d::createEmbeddedShadowPrimitive(aRetval, aNewShadowAttribute);
+                        bool bDirectShadow
+                            = rObjectItemSet.Get(SDRATTR_SHADOW, /*bSrchInParent=*/false)
+                                  .GetValue();
+                        if (bDirectShadow)
+                        {
+                            // Shadow as direct formatting: no shadow for text, to be compatible
+                            // with PowerPoint.
+                            basegfx::B2DHomMatrix aMatrix;
+                            aRetval = drawinglayer::primitive2d::createEmbeddedShadowPrimitive(
+                                aRetval, aNewShadowAttribute, aMatrix, &aRetvalForShadow);
+                        }
+                        else
+                        {
+                            // Shadow as style: shadow for text, to be backwards-compatible.
+                            aRetval = drawinglayer::primitive2d::createEmbeddedShadowPrimitive(
+                                aRetval, aNewShadowAttribute);
+                        }
                     }
                 }
 
