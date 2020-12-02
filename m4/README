@@ -1,3 +1,1 @@
 m4 - Macros to locate and utilise pkg-config.
-
-work around m4 bracket stripping in MINGWSTRIP construction
