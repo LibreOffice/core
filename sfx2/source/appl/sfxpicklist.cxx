@@ -134,7 +134,7 @@ void SfxPickListImpl::AddDocumentToPickList( const SfxObjectShell* pDocSh )
     }
 
     // add to svtool history options
-    SvtHistoryOptions().AppendItem( ePICKLIST,
+    SvtHistoryOptions().AppendItem( EHistoryType::PickList,
             aURL.GetURLNoPass( INetURLObject::DecodeMechanism::NONE ),
             aFilter,
             aTitle,

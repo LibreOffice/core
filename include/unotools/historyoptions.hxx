@@ -41,10 +41,10 @@ namespace com::sun::star::beans { struct PropertyValue; }
 #define HISTORY_PROPERTYNAME_THUMBNAIL      "Thumbnail"
 
 /// You can use these enum values to specify right history if you call our interface methods.
-enum EHistoryType
+enum class EHistoryType
 {
-    ePICKLIST       = 0,
-    eHELPBOOKMARKS  = 1
+    PickList,
+    HelpBookmarks
 };
 
 class SvtHistoryOptions_Impl;
