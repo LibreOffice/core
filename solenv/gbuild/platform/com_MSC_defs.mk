@@ -369,4 +369,11 @@ gb_WIN_GPG_cross_setup_exports = export REAL_BUILD_CC="$(filter-out -%,$(CC_FOR_
     && export CC_FOR_BUILD="$(call gb_Executable_get_target_for_build,gcc-wrapper) $(if $(verbose),--wrapper-print-cmdline) --wrapper-env-prefix=REAL_BUILD_ $(SOLARINC) -L$(subst ;, -L,$(ILIB_FOR_BUILD))" \
     && export RC='windres -O COFF --target=$(gb_WIN_GPG_WINDRES_target) --preprocessor='\''$(call gb_Executable_get_target_for_build,cpp) -+ -DRC_INVOKED -DWINAPI_FAMILY=0 $(SOLARINC)'\'
 
+# enable stack frame runtime error checking in DBGUTIL mode,
+# and switch to O1 because O2 is incompatible with RTCs
+ifeq ($(gb_ENABLE_DBGUTIL),$(true))
+gb_CFLAGS += -RTCs -O1
+gb_CXXFLAGS += -RTCs -O1
+endif
+
 # vim: set noet sw=4:
