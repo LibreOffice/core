@@ -3478,7 +3478,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
 
         if (bEndIsEqualEndPos)
         {
-            const_cast<SwNodeIndex&>(rRg.aEnd) = SwNodeIndex(aSavePos, +1);
+            const_cast<SwNodeIndex&>(rRg.aEnd).Assign(aSavePos.GetNode(), +1);
         }
     }
 
