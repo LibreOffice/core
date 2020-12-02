@@ -484,7 +484,8 @@ namespace drawinglayer::primitive2d
         Primitive2DContainer createEmbeddedShadowPrimitive(
             const Primitive2DContainer& rContent,
             const attribute::SdrShadowAttribute& rShadow,
-            const basegfx::B2DHomMatrix& rObjectMatrix)
+            const basegfx::B2DHomMatrix& rObjectMatrix,
+            const Primitive2DContainer* pContentForShadow)
         {
             if(!rContent.empty())
             {
@@ -524,7 +525,7 @@ namespace drawinglayer::primitive2d
                         aShadowOffset,
                         rShadow.getColor(),
                         rShadow.getBlur(),
-                        rContent));
+                        (pContentForShadow ? *pContentForShadow : rContent)));
 
                 if(0.0 != rShadow.getTransparence())
                 {

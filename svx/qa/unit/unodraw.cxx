@@ -16,12 +16,23 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <unotools/tempfile.hxx>
+#include <svx/unopage.hxx>
+#include <vcl/virdev.hxx>
+#include <svx/sdr/contact/displayinfo.hxx>
+#include <drawinglayer/tools/primitive2dxmldump.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <test/xmltesttools.hxx>
+
+#include <sdr/contact/objectcontactofobjlistpainter.hxx>
 
 using namespace ::com::sun::star;
 
@@ -30,7 +41,7 @@ namespace
 char const DATA_DIRECTORY[] = "/svx/qa/unit/data/";
 
 /// Tests for svx/source/unodraw/ code.
-class UnodrawTest : public test::BootstrapFixture, public unotest::MacrosTest
+class UnodrawTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
 protected:
     uno::Reference<lang::XComponent> mxComponent;
@@ -132,6 +143,37 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTableShadowDirect)
     xShapeProps->setPropertyValue("ShadowColor", uno::makeAny(nRed));
     CPPUNIT_ASSERT(xShapeProps->getPropertyValue("ShadowColor") >>= nRed);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xff0000), nRed);
+
+    // Add text.
+    uno::Reference<table::XCellRange> xTable(xShapeProps->getPropertyValue("Model"),
+                                             uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY);
+    xCell->setString("A1");
+
+    // Generates drawinglayer primitives for the shape.
+    auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
+    CPPUNIT_ASSERT(pDrawPage);
+    SdrPage* pSdrPage = pDrawPage->GetSdrPage();
+    ScopedVclPtrInstance<VirtualDevice> aVirtualDevice;
+    sdr::contact::ObjectContactOfObjListPainter aObjectContact(*aVirtualDevice,
+                                                               { pSdrPage->GetObj(0) }, nullptr);
+    const sdr::contact::ViewObjectContact& rDrawPageVOContact
+        = pSdrPage->GetViewContact().GetViewObjectContact(aObjectContact);
+    sdr::contact::DisplayInfo aDisplayInfo;
+    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
+        = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo);
+
+    // Check the primitives.
+    drawinglayer::Primitive2dXmlDump aDumper;
+    xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
+    assertXPath(pDocument, "//shadow", /*nNumberOfNodes=*/1);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. there was shadow for the cell text, while here PowerPoint-compatible output is expected,
+    // which has no shadow for cell text (only for cell borders and cell background).
+    assertXPath(pDocument, "//shadow//sdrblocktext", /*nNumberOfNodes=*/0);
 }
 }
 
