@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_UIFACTORY_MENUBARFACTORY_HXX
-#define INCLUDED_FRAMEWORK_INC_UIFACTORY_MENUBARFACTORY_HXX
+#pragma once
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -70,7 +69,5 @@ typedef ::cppu::WeakImplHelper<
             css::uno::Reference< css::uno::XComponentContext >     m_xContext;
     };
 }
-
-#endif // INCLUDED_FRAMEWORK_INC_UIFACTORY_MENUBARFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
