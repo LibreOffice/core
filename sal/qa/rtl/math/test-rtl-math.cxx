@@ -275,6 +275,17 @@ public:
         CPPUNIT_ASSERT_EQUAL(0.0, res);
     }
 
+    void test_round() {
+        double fVal = 5000000000000001.0;
+        CPPUNIT_ASSERT_EQUAL( 5000000000000001.0, rtl::math::round( fVal, 9, rtl_math_RoundingMode_Corrected));
+
+        fVal = 8796093022188.0;
+        CPPUNIT_ASSERT_EQUAL( 6093022188.0 , rtl::math::round( fVal, 9, rtl_math_RoundingMode_Corrected) - 8790000000000);
+
+        fVal = 4503599627370491.0;
+        CPPUNIT_ASSERT_EQUAL( 4503599627370000.0, rtl::math::round( fVal, -3, rtl_math_RoundingMode_Corrected));
+    }
+
     void test_doubleToString() {
         double fVal = 999999999999999.0;
         sal_Int32 aGroups[3] = { 3, 2, 0 };
@@ -596,6 +607,7 @@ public:
     CPPUNIT_TEST(test_stringToDouble_good);
     CPPUNIT_TEST(test_stringToDouble_bad);
     CPPUNIT_TEST(test_stringToDouble_exponent_without_digit);
+    CPPUNIT_TEST(test_round);
     CPPUNIT_TEST(test_doubleToString);
     CPPUNIT_TEST(test_erf);
     CPPUNIT_TEST(test_erfc);
