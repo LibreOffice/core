@@ -715,7 +715,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
                 OUString aSearchFile = pInfo->GetRelStorageName();
                 OUString aSearchFileOldFormat(aSearchFile);
                 SvtPathOptions aPathCFG;
-                if( aPathCFG.SearchFile( aSearchFileOldFormat, SvtPathOptions::PATH_BASIC ) )
+                if( aPathCFG.SearchFile( aSearchFileOldFormat, SvtPathOptions::Paths::Basic ) )
                 {
                     pInfo->SetStorageName( aSearchFile );
                 }
