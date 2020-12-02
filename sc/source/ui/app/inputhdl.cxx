@@ -1244,15 +1244,19 @@ void ScInputHandler::ShowTip( const OUString& rText )
 
     Point aPos;
     if (pInputWin && pInputWin->GetEditView() == pActiveView)
-        pTipVisibleParent = pInputWin;
+    {
+        pTipVisibleParent = pInputWin->GetEditWindow();
+        aPos = pInputWin->GetCursorScreenPixelPos();
+    }
     else
+    {
         pTipVisibleParent = pActiveView->GetWindow();
-    vcl::Cursor* pCur = pActiveView->GetCursor();
-    if (pCur)
-        aPos = pTipVisibleParent->LogicToPixel( pCur->GetPos() );
-    aPos = pTipVisibleParent->OutputToScreenPixel( aPos );
-    tools::Rectangle aRect( aPos, aPos );
+        if (vcl::Cursor* pCur = pActiveView->GetCursor())
+            aPos = pTipVisibleParent->LogicToPixel( pCur->GetPos() );
+        aPos = pTipVisibleParent->OutputToScreenPixel( aPos );
+    }
 
+    tools::Rectangle aRect( aPos, aPos );
     QuickHelpFlags const nAlign = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
     nTipVisible = Help::ShowPopover(pTipVisibleParent, aRect, rText, nAlign);
     pTipVisibleParent->AddEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleParentListener ) );
@@ -1268,17 +1272,22 @@ void ScInputHandler::ShowTipBelow( const OUString& rText )
 
     Point aPos;
     if (pInputWin && pInputWin->GetEditView() == pActiveView)
-        pTipVisibleSecParent = pInputWin;
-    else
-        pTipVisibleSecParent = pActiveView->GetWindow();
-    vcl::Cursor* pCur = pActiveView->GetCursor();
-    if ( pCur )
     {
-        Point aLogicPos = pCur->GetPos();
-        aLogicPos.AdjustY(pCur->GetHeight() );
-        aPos = pTipVisibleSecParent->LogicToPixel( aLogicPos );
+        pTipVisibleSecParent = pInputWin->GetEditWindow();
+        aPos = pInputWin->GetCursorScreenPixelPos(true);
     }
-    aPos = pTipVisibleSecParent->OutputToScreenPixel( aPos );
+    else
+    {
+        pTipVisibleSecParent = pActiveView->GetWindow();
+        if (vcl::Cursor* pCur = pActiveView->GetCursor())
+        {
+            Point aLogicPos = pCur->GetPos();
+            aLogicPos.AdjustY(pCur->GetHeight() );
+            aPos = pTipVisibleSecParent->LogicToPixel( aLogicPos );
+        }
+        aPos = pTipVisibleSecParent->OutputToScreenPixel( aPos );
+    }
+
     tools::Rectangle aRect( aPos, aPos );
     QuickHelpFlags const nAlign = QuickHelpFlags::Left | QuickHelpFlags::Top | QuickHelpFlags::NoEvadePointer;
     nTipVisibleSec = Help::ShowPopover(pTipVisibleSecParent, aRect, rText, nAlign);
