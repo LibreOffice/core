@@ -871,12 +871,12 @@ void CCIDecompressor::FillBits(sal_uInt8 * pTarget, sal_uInt16 nTargetBits,
 }
 
 sal_uInt16 CCIDecompressor::CountBits(const sal_uInt8 * pData, sal_uInt16 nDataSizeBits,
-                                  sal_uInt16 nBitPos, sal_uInt8 nBlackOrWhite)
+                                      sal_uInt16 nBitPos, sal_uInt8 nBlackOrWhite)
 {
     // here the number of bits belonging together is being counted
     // which all have the color nBlackOrWhite (0xff or 0x00)
     // from the position nBitPos on
-    sal_uInt16 nPos = nBitPos;
+    sal_uInt32 nPos = nBitPos;
     for (;;)
     {
         if (nPos>=nDataSizeBits)
@@ -888,9 +888,6 @@ sal_uInt16 CCIDecompressor::CountBits(const sal_uInt8 * pData, sal_uInt16 nDataS
         sal_uInt16 nLo = nPos & 7;
         if (nLo==0 && nData==nBlackOrWhite)
         {
-            //fail on overflow attempt
-            if (nPos > SAL_MAX_UINT16-8)
-                return 0;
             nPos+=8;
         }
         else
@@ -900,8 +897,6 @@ sal_uInt16 CCIDecompressor::CountBits(const sal_uInt8 * pData, sal_uInt16 nDataS
             ++nPos;
         }
     }
-    if (nPos<=nBitPos)
-        return 0;
     return nPos-nBitPos;
 }
 
