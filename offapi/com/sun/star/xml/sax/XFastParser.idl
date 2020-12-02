@@ -159,9 +159,9 @@ interface XFastParser: com::sun::star::uno::XInterface
     void setNamespaceHandler( [in] XFastNamespaceHandler Handler);
 
     /**
-      * @since LibreOffice 7.1
       * Simulate a DTD file.
       * Will allow to use customized entity references like &infin; .
+      * @since LibreOffice 7.1
       */
     void setCustomEntityNames( [in] sequence<string> names, [in] sequence<string> replacements);
 };
