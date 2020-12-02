@@ -48,8 +48,8 @@ endef
 # Avoid annoying warning D9025 about overriding command-line arguments.
 gb_Helper_remove_overridden_flags = \
     $(lastword $(filter -W4 -w,$(1))) \
-    $(filter-out -W4 -w -arch:SSE -arch:SSE2 -arch:AVX -arch:AVX2 -Od -O2,$(1)) \
-    $(lastword $(filter -Od -O2,$(1))) \
+    $(filter-out -W4 -w -arch:SSE -arch:SSE2 -arch:AVX -arch:AVX2 -Od,$(1)) \
+    $(lastword $(filter -Od,$(1))) \
     $(lastword $(filter -arch:SSE -arch:SSE2 -arch:AVX -arch:AVX2,$(1)))
 
 # $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins,symbols,compiler)

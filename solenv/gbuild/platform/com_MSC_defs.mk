@@ -263,9 +263,22 @@ gb_DEBUGINFO_FLAGS := \
 # See gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO
 gb_LINKER_DEBUGINFO_FLAGS :=
 
+ifeq ($(gb_ENABLE_DBGUTIL),$(true))
+gb_COMPILEROPTFLAGS := -Oy-  -RTCs
+gb_COMPILERNOOPTFLAGS := -Od  -RTCs
+gb_COMPILERDEBUGOPTFLAGS :=
+else
 gb_COMPILEROPTFLAGS := -O2 -Oy-
 gb_COMPILERNOOPTFLAGS := -Od
 gb_COMPILERDEBUGOPTFLAGS :=
+endif
+
+# enable stack frame runtime error checking in DBGUTIL mode,
+# and switch to O1 because O2 is incompatible with RTCs
+#ifeq ($(gb_ENABLE_DBGUTIL),$(true))
+#gb_CFLAGS += -RTCs
+#gb_CXXFLAGS += -RTCs
+#endif
 
 ifeq ($(gb_FULLDEPS),$(true))
 gb_COMPILERDEPFLAGS := -showIncludes
