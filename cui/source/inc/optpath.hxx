@@ -27,6 +27,7 @@
 // forward ---------------------------------------------------------------
 struct OptPath_Impl;
 class SvxPathTabPage;
+enum class SvtPath : sal_uInt16;
 
 // class SvxPathTabPage --------------------------------------------------
 class SvxPathTabPage : public SfxTabPage
@@ -51,9 +52,9 @@ private:
 
     DECL_LINK(DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void);
 
-    void        GetPathList( sal_uInt16 _nPathHandle, OUString& _rInternalPath,
+    void        GetPathList( SvtPath _nPathHandle, OUString& _rInternalPath,
                              OUString& _rUserPath, OUString& _rWritablePath, bool& _rReadOnly );
-    void        SetPathList( sal_uInt16 _nPathHandle,
+    void        SetPathList( SvtPath _nPathHandle,
                              const OUString& _rUserPath, const OUString& _rWritablePath );
 
 public:

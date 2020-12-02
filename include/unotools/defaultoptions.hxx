@@ -25,6 +25,7 @@
 #include <memory>
 
 class SvtDefaultOptions_Impl;
+enum class SvtPath : sal_uInt16;
 
 class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtDefaultOptions final : public utl::detail::Options
 {
@@ -35,7 +36,7 @@ public:
     SvtDefaultOptions();
     virtual ~SvtDefaultOptions() override;
 
-    OUString GetDefaultPath(sal_uInt16 nId) const;
+    OUString GetDefaultPath(SvtPath nId) const;
 };
 
 #endif // INCLUDED_UNOTOOLS_DEFAULTOPTIONS_HXX
