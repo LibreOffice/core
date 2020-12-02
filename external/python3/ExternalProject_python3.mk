@@ -181,10 +181,10 @@ $(call gb_ExternalProject_get_state_target,python3,removeunnecessarystuff) : $(c
 	rm -rf $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/test
 	rm -rf $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/venv
 	# Then the binary libraries
-	rm $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_dbm.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so
-	rm $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_sqlite3.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so
-	rm $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_curses.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so
-	rm $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_curses_panel.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so
+	rm -f $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_dbm.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so
+	rm -f $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_sqlite3.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so
+	rm -f $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_curses.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so
+	rm -f $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_curses_panel.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so
 	rm -f $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_idlelib.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so
 	rm -f $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_tkinter.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so
 	rm -f $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_test*.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so
