@@ -184,6 +184,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/calendar \
     vcl/source/control/combobox \
     vcl/source/control/ctrl \
+    vcl/source/control/ContextVBox \
+    vcl/source/control/DropdownBox \
     vcl/source/control/edit \
     vcl/source/control/field2 \
     vcl/source/control/field \
@@ -200,6 +202,9 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/imp_listbox \
     vcl/source/control/listbox \
     vcl/source/control/menubtn \
+    vcl/source/control/NotebookbarPopup \
+    vcl/source/control/PriorityHBox \
+    vcl/source/control/PriorityMergedHBox \
     vcl/source/control/notebookbar \
     vcl/source/control/WeldedTabbedNotebookbar \
     vcl/source/control/quickselectionengine \
