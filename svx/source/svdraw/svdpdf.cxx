@@ -883,35 +883,34 @@ void ImpSdrPdfImport::ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> co
         return;
     }
 
-    const int format = FPDFBitmap_GetFormat(bitmap->getPointer());
-    if (format == FPDFBitmap_Unknown)
+    const vcl::pdf::PDFBitmapType format = bitmap->getFormat();
+    if (format == vcl::pdf::PDFBitmapType::Unknown)
     {
         SAL_WARN("sd.filter", "Failed to get IMAGE format");
         return;
     }
 
-    const unsigned char* pBuf
-        = static_cast<const unsigned char*>(FPDFBitmap_GetBuffer(bitmap->getPointer()));
-    const int nWidth = FPDFBitmap_GetWidth(bitmap->getPointer());
-    const int nHeight = FPDFBitmap_GetHeight(bitmap->getPointer());
-    const int nStride = FPDFBitmap_GetStride(bitmap->getPointer());
+    const unsigned char* pBuf = bitmap->getBuffer();
+    const int nWidth = bitmap->getWidth();
+    const int nHeight = bitmap->getHeight();
+    const int nStride = bitmap->getStride();
     BitmapEx aBitmap(Size(nWidth, nHeight), 24);
 
     switch (format)
     {
-        case FPDFBitmap_BGR:
+        case vcl::pdf::PDFBitmapType::BGR:
             ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N24BitTcBgr, nHeight, nStride);
             break;
-        case FPDFBitmap_BGRx:
+        case vcl::pdf::PDFBitmapType::BGRx:
             ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N32BitTcRgba, nHeight, nStride);
             break;
-        case FPDFBitmap_BGRA:
+        case vcl::pdf::PDFBitmapType::BGRA:
             ReadRawDIB(aBitmap, pBuf, ScanlineFormat::N32BitTcBgra, nHeight, nStride);
             break;
         default:
             SAL_WARN("sd.filter", "Got IMAGE width: " << nWidth << ", height: " << nHeight
                                                       << ", stride: " << nStride
-                                                      << ", format: " << format);
+                                                      << ", format: " << static_cast<int>(format));
             break;
     }
 

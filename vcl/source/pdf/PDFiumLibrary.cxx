@@ -51,6 +51,17 @@ static_assert(static_cast<int>(vcl::pdf::PDFSegmentType::Bezierto) == FPDF_SEGME
 static_assert(static_cast<int>(vcl::pdf::PDFSegmentType::Moveto) == FPDF_SEGMENT_MOVETO,
               "PDFSegmentType::Moveto value mismatch");
 
+static_assert(static_cast<int>(vcl::pdf::PDFBitmapType::Unknown) == FPDFBitmap_Unknown,
+              "PDFBitmapType::Unknown value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFBitmapType::Gray) == FPDFBitmap_Gray,
+              "PDFBitmapType::Gray value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFBitmapType::BGR) == FPDFBitmap_BGR,
+              "PDFBitmapType::BGR value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFBitmapType::BGRx) == FPDFBitmap_BGRx,
+              "PDFBitmapType::BGRx value mismatch");
+static_assert(static_cast<int>(vcl::pdf::PDFBitmapType::BGRA) == FPDFBitmap_BGRA,
+              "PDFBitmapType::BGRA value mismatch");
+
 namespace
 {
 /// Callback class to be used with FPDF_SaveWithVersion().
@@ -649,6 +660,15 @@ ConstScanline PDFiumBitmap::getBuffer()
 }
 
 int PDFiumBitmap::getStride() { return FPDFBitmap_GetStride(mpBitmap); }
+
+int PDFiumBitmap::getWidth() { return FPDFBitmap_GetWidth(mpBitmap); }
+
+int PDFiumBitmap::getHeight() { return FPDFBitmap_GetHeight(mpBitmap); }
+
+PDFBitmapType PDFiumBitmap::getFormat()
+{
+    return static_cast<PDFBitmapType>(FPDFBitmap_GetFormat(mpBitmap));
+}
 
 PDFiumAnnotation::PDFiumAnnotation(FPDF_ANNOTATION pAnnotation)
     : mpAnnotation(pAnnotation)
