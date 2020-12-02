@@ -263,9 +263,16 @@ gb_DEBUGINFO_FLAGS := \
 # See gb_Windows_PE_TARGETTYPEFLAGS_DEBUGINFO
 gb_LINKER_DEBUGINFO_FLAGS :=
 
+# In --enable-dbgutl mode, we turn on RuntimeChecks (/RTC), which conflicts with /O2
+ifeq ($(gb_ENABLE_DBGUTIL),$(true))
+gb_COMPILEROPTFLAGS :=
+gb_COMPILERNOOPTFLAGS :=
+gb_COMPILERDEBUGOPTFLAGS :=
+else
 gb_COMPILEROPTFLAGS := -O2 -Oy-
 gb_COMPILERNOOPTFLAGS := -Od
 gb_COMPILERDEBUGOPTFLAGS :=
+endif
 
 ifeq ($(gb_FULLDEPS),$(true))
 gb_COMPILERDEPFLAGS := -showIncludes

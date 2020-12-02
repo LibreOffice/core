@@ -43,12 +43,15 @@ gb_LinkTarget__symbols_enabled = \
        $(or $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED),\
             $(filter $(1),$(ENABLE_SYMBOLS_FOR))))
 
-# debug flags, if the LinkTarget is named in the list of libraries of ENABLE_SYMBOLS_FOR
+# Debug flags, if the LinkTarget is named in the list of libraries of ENABLE_SYMBOLS_FOR.
+# Adding /RTCs (enable runtime checking on MSVC) here to avoid it getting passed down to all the externals,
+# where it is in turn passed to libtool, which misinterprets it as some other flag and exits with an error.
 gb_LinkTarget__get_debugflags= \
 $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS), \
-$(if $(ENABLE_OPTIMIZED_DEBUG),$(gb_COMPILERDEBUGOPTFLAGS), \
-$(gb_COMPILERNOOPTFLAGS))) \
-$(if $(call gb_LinkTarget__symbols_enabled,$(1)),$(gb_DEBUGINFO_FLAGS))
+	$(if $(ENABLE_OPTIMIZED_DEBUG),$(gb_COMPILERDEBUGOPTFLAGS), \
+		$(gb_COMPILERNOOPTFLAGS))) \
+$(if $(call gb_LinkTarget__symbols_enabled,$(1)),$(gb_DEBUGINFO_FLAGS)) \
+$(if $(filter MSC,$(COM)),$(if $(gb_ENABLE_DBGUTIL), -RTCs,),)
 
 # similar for LDFLAGS, use linker optimization flags in non-debug case,
 # but moreover strip debug from libraries for which debuginfo is not wanted
@@ -63,7 +66,7 @@ gb_LinkTarget__get_cflags=$(if $(CFLAGS),$(CFLAGS),$(call gb_LinkTarget__get_deb
 gb_LinkTarget__get_objcflags=$(if $(OBJCFLAGS),$(OBJCFLAGS),$(call gb_LinkTarget__get_debugflags,$(1)))
 gb_LinkTarget__get_cxxflags=$(if $(CXXFLAGS),$(CXXFLAGS),$(call gb_LinkTarget__get_debugflags,$(1)))
 gb_LinkTarget__get_objcxxflags=$(if $(OBJCXXFLAGS),$(OBJCXXFLAGS),$(call gb_LinkTarget__get_debugflags,$(1)))
-gb_LinkTarget__get_cxxclrflags=$(call gb_LinkTarget__get_debugflags,$(1))
+gb_LinkTarget__get_cxxclrflags=$(filter-out -RTCs,$(call gb_LinkTarget__get_debugflags,$(1)))
 # call gb_LinkTarget__get_ldflags,linktargetmakefilename
 gb_LinkTarget__get_ldflags=$(if $(LDFLAGS),$(LDFLAGS),$(call gb_LinkTarget__get_debugldflags,$(1)))
 
