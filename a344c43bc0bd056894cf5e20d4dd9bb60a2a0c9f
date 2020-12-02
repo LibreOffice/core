@@ -22,6 +22,30 @@
       "revId": "a344c43bc0bd056894cf5e20d4dd9bb60a2a0c9f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65992c23_9660accc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-12-02T11:15:26Z",
+      "side": 1,
+      "message": "I don\u0027t think it would be impossible, you could do that in a follow-up commit. For example I think numbering properties is a direct para property, you can\u0027t put it into a para style. That may be similar to what you would need to do here.",
+      "parentUuid": "b4e763c5_11bd6079",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 41
+      },
+      "revId": "a344c43bc0bd056894cf5e20d4dd9bb60a2a0c9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
