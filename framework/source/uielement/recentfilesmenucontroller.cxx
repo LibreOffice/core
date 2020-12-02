@@ -127,7 +127,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
     if ( !pVCLPopupMenu )
         return;
 
-    Sequence< Sequence< PropertyValue > > aHistoryList = SvtHistoryOptions().GetList( ePICKLIST );
+    Sequence< Sequence< PropertyValue > > aHistoryList = SvtHistoryOptions().GetList( EHistoryType::PickList );
 
     int nPickListMenuItems = std::min<sal_Int32>( aHistoryList.getLength(), MAX_MENU_ITEMS );
     m_aRecentFilesItems.clear();
@@ -292,7 +292,7 @@ void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent
 
     if ( aCommand == CMD_CLEAR_LIST )
     {
-        SvtHistoryOptions().Clear( ePICKLIST );
+        SvtHistoryOptions().Clear( EHistoryType::PickList );
         dispatchCommand(
             "vnd.org.libreoffice.recentdocs:ClearRecentFileList",
             css::uno::Sequence< css::beans::PropertyValue >() );
