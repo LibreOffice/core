@@ -810,14 +810,15 @@ void SwXTextRange::DeleteAndInsert(
 
     if (RANGE_IS_SECTION == m_pImpl->m_eRangePosition)
     {
-        SwSectionFormat const* pFormat(
-            static_cast<SwSectionFormat const*>(m_pImpl->m_pTableOrSectionFormat));
-        if (!pFormat)
+        SwSectionNode const* pSectionNode = m_pImpl->m_pTableOrSectionFormat ?
+            static_cast<SwSectionFormat const*>(m_pImpl->m_pTableOrSectionFormat)->GetSectionNode() :
+            nullptr;
+        if (!pSectionNode)
         {
             throw uno::RuntimeException("disposed?");
         }
         m_pImpl->m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
-        SwNodeIndex const start(*pFormat->GetSectionNode());
+        SwNodeIndex const start(*pSectionNode);
         SwNodeIndex const end(*start.GetNode().EndOfSectionNode());
 
         // delete tables at start
