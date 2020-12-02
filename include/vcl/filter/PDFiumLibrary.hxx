@@ -32,6 +32,7 @@
 #include <vcl/pdf/PDFAnnotationSubType.hxx>
 #include <vcl/pdf/PDFPageObjectType.hxx>
 #include <vcl/pdf/PDFSegmentType.hxx>
+#include <vcl/pdf/PDFBitmapType.hxx>
 
 #include <fpdf_doc.h>
 
@@ -85,6 +86,9 @@ public:
     void renderPageBitmap(PDFiumPage* pPage, int nStartX, int nStartY, int nSizeX, int nSizeY);
     ConstScanline getBuffer();
     int getStride();
+    int getWidth();
+    int getHeight();
+    PDFBitmapType getFormat();
 };
 
 class VCL_DLLPUBLIC PDFiumAnnotation final
