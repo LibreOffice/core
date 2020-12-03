@@ -161,7 +161,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/frmtypepage \
 	sw/uiconfig/swriter/ui/frmurlpage \
 	sw/uiconfig/swriter/ui/gotopagedialog \
-	sw/uiconfig/swriter/ui/headerfootermenu \
+	sw/uiconfig/swriter/ui/hfmenubutton \
 	sw/uiconfig/swriter/ui/indexentry \
 	sw/uiconfig/swriter/ui/inputfielddialog \
 	sw/uiconfig/swriter/ui/inputwinmenu \
@@ -204,6 +204,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/outlinenumbering \
 	sw/uiconfig/swriter/ui/outlinenumberingpage \
 	sw/uiconfig/swriter/ui/outlinepositionpage \
+	sw/uiconfig/swriter/ui/pbmenubutton \
 	sw/uiconfig/swriter/ui/querycontinuebegindialog \
 	sw/uiconfig/swriter/ui/querycontinueenddialog \
 	sw/uiconfig/swriter/ui/querydefaultcompatdialog \
@@ -232,7 +233,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/notebookbar_groups \
 	sw/uiconfig/swriter/ui/notebookbar_groupedbar_full \
 	sw/uiconfig/swriter/ui/notebookbar_groupedbar_compact \
-	sw/uiconfig/swriter/ui/pagebreakmenu \
 	sw/uiconfig/swriter/ui/pagecolumncontrol \
 	sw/uiconfig/swriter/ui/pagemargincontrol \
 	sw/uiconfig/swriter/ui/pageorientationcontrol \
@@ -295,6 +295,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/tokenwidget \
 	sw/uiconfig/swriter/ui/toxentrywidget \
 	sw/uiconfig/swriter/ui/toxbuttonwidget \
+	sw/uiconfig/swriter/ui/unfloatbutton \
 	sw/uiconfig/swriter/ui/viewoptionspage \
 	sw/uiconfig/swriter/ui/warndatasourcedialog \
 	sw/uiconfig/swriter/ui/warnemaildialog \

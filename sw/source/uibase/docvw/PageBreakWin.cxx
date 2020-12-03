@@ -24,6 +24,7 @@
 #include <pagefrm.hxx>
 #include <PostItMgr.hxx>
 #include <FrameControlsManager.hxx>
+#include <strings.hrc>
 #include <uiitems.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
@@ -95,24 +96,26 @@ namespace
 }
 
 SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwFrame *pFrame ) :
-    SwFrameMenuButtonBase( pEditWin, pFrame ),
-    m_aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/swriter/ui/pagebreakmenu.ui", ""),
-    m_pPopupMenu(m_aBuilder.get_menu("menu")),
+    SwFrameMenuButtonBase(pEditWin, pFrame, "modules/swriter/ui/pbmenubutton.ui", "PBMenuButton"),
+    m_xMenuButton(m_xBuilder->weld_menu_button("menubutton")),
     m_pLine( nullptr ),
     m_bIsAppearing( false ),
     m_nFadeRate( 100 ),
     m_nDelayAppearing( 0 ),
     m_bDestroyed( false )
 {
+    m_xMenuButton->connect_toggled(LINK(this, SwPageBreakWin, ToggleHdl));
+    m_xMenuButton->connect_selected(LINK(this, SwPageBreakWin, SelectHdl));
+    m_xMenuButton->set_accessible_name(SwResId(STR_PAGE_BREAK_BUTTON));
+
+    m_xVirDev = m_xMenuButton->create_virtual_device();
+    SetVirDevFont();
+
     // Use pixels for the rest of the drawing
-    SetMapMode( MapMode ( MapUnit::MapPixel ) );
+    m_xVirDev->SetMapMode( MapMode ( MapUnit::MapPixel ) );
 
     // Create the line control
     m_pLine = VclPtr<SwBreakDashedLine>::Create( GetEditWin(), &SwViewOption::GetPageBreakColor, this );
-
-    // Set the popup menu
-    m_pPopupMenu->SetDeactivateHdl( LINK( this, SwPageBreakWin, HideHandler ) );
-    SetPopupMenu(m_pPopupMenu);
 
     m_aFadeTimer.SetTimeout( 50 );
     m_aFadeTimer.SetInvokeHandler( LINK( this, SwPageBreakWin, FadeHandler ) );
@@ -129,15 +132,17 @@ void SwPageBreakWin::dispose()
     m_aFadeTimer.Stop();
 
     m_pLine.disposeAndClear();
-    m_pPopupMenu.clear();
-    m_aBuilder.disposeBuilder();
 
+    m_xMenuButton.reset();
     SwFrameMenuButtonBase::dispose();
 }
 
-void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
+void SwPageBreakWin::PaintButton()
 {
-    const ::tools::Rectangle aRect(::tools::Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
+    if (!m_xVirDev)
+        return;
+
+    const ::tools::Rectangle aRect(::tools::Rectangle(Point(0, 0), m_xVirDev->PixelToLogic(GetSizePixel())));
 
     // Properly paint the control
     BColor aColor = SwViewOption::GetPageBreakColor().getBColor();
@@ -209,17 +214,18 @@ void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
-        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
+        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(*m_xVirDev, aNewViewInfos));
 
     pProcessor->process(aGhostedSeq);
+
+    m_xMenuButton->set_custom_button(m_xVirDev.get());
 }
 
-void SwPageBreakWin::Select()
+IMPL_LINK(SwPageBreakWin, SelectHdl, const OString&, rIdent, void)
 {
     SwFrameControlPtr pThis = GetEditWin()->GetFrameControlsManager( ).GetControl( FrameControlType::PageBreak, GetFrame() );
 
-    OString sIdent = GetCurItemIdent();
-    if (sIdent == "edit")
+    if (rIdent == "edit")
     {
         const SwLayoutFrame* pBodyFrame = static_cast< const SwLayoutFrame* >( GetPageFrame()->Lower() );
         while ( pBodyFrame && !pBodyFrame->IsBodyFrame() )
@@ -271,7 +277,7 @@ void SwPageBreakWin::Select()
             pEditWin->GrabFocus( );
         }
     }
-    else if (sIdent == "delete")
+    else if (rIdent == "delete")
     {
         const SwLayoutFrame* pBodyFrame = static_cast< const SwLayoutFrame* >( GetPageFrame()->Lower() );
         while ( pBodyFrame && !pBodyFrame->IsBodyFrame() )
@@ -305,25 +311,6 @@ void SwPageBreakWin::Select()
     // The main reference has been deleted due to a page break removal
     if ( pThis.use_count() > 1 )
         Fade( false );
-}
-
-void SwPageBreakWin::MouseMove( const MouseEvent& rMEvt )
-{
-    if ( rMEvt.IsLeaveWindow() )
-    {
-        // don't fade if we just move to the 'line', or the popup menu is open
-        Point aEventPos( rMEvt.GetPosPixel() + rMEvt.GetPosPixel() );
-        if ( !Contains( aEventPos ) && !PopupMenu::IsInExecute() )
-            Fade( false );
-    }
-    else if ( !IsVisible() )
-        Fade( true );
-}
-
-void SwPageBreakWin::Activate( )
-{
-    Fade( true );
-    MenuButton::Activate();
 }
 
 void SwPageBreakWin::UpdatePosition(const std::optional<Point>& xEvtPt)
@@ -390,6 +377,7 @@ void SwPageBreakWin::UpdatePosition(const std::optional<Point>& xEvtPt)
     // Set the button position
     Point aBtnPos( nBtnLeft, nYLineOffset - BUTTON_HEIGHT / 2 );
     SetPosSizePixel( aBtnPos, aBtnSize );
+    m_xVirDev->SetOutputSizePixel(aBtnSize);
 
     // Set the line position
     Point aLinePos( nLineLeft, nYLineOffset - 5 );
@@ -429,11 +417,10 @@ void SwPageBreakWin::Fade( bool bFadeIn )
         m_aFadeTimer.Start( );
 }
 
-IMPL_LINK_NOARG(SwPageBreakWin, HideHandler, Menu *, bool)
+IMPL_LINK(SwPageBreakWin, ToggleHdl, weld::ToggleButton&, rMenuButton, void)
 {
-    Fade( false );
-
-    return false;
+    // hide on dropdown, draw fully unfaded if dropdown before fully faded in
+    Fade(rMenuButton.get_active());
 }
 
 IMPL_LINK_NOARG(SwPageBreakWin, FadeHandler, Timer *, void)
@@ -458,7 +445,7 @@ IMPL_LINK_NOARG(SwPageBreakWin, FadeHandler, Timer *, void)
     else
     {
         UpdatePosition();
-        Invalidate();
+        PaintButton();
     }
 
     if (IsVisible( ) && m_nFadeRate > 0 && m_nFadeRate < 100)

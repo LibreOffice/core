@@ -46,20 +46,31 @@
 #define BUTTON_WIDTH 12
 
 UnfloatTableButton::UnfloatTableButton(SwEditWin* pEditWin, const SwFrame* pFrame)
-    : SwFrameMenuButtonBase(pEditWin, pFrame)
+    : SwFrameMenuButtonBase(pEditWin, pFrame, "modules/swriter/ui/unfloatbutton.ui",
+                            "UnfloatButton")
+    , m_xPushButton(m_xBuilder->weld_button("button"))
     , m_sLabel(SwResId(STR_UNFLOAT_TABLE))
 {
+    m_xPushButton->set_accessible_name(m_sLabel);
+    m_xVirDev = m_xPushButton->create_virtual_device();
+    SetVirDevFont();
 }
 
 UnfloatTableButton::~UnfloatTableButton() { disposeOnce(); }
+
+void UnfloatTableButton::dispose()
+{
+    m_xPushButton.reset();
+    SwFrameMenuButtonBase::dispose();
+}
 
 void UnfloatTableButton::SetOffset(Point aTopRightPixel)
 {
     // Compute the text size and get the box position & size from it
     tools::Rectangle aTextRect;
-    GetTextBoundRect(aTextRect, m_sLabel);
-    tools::Rectangle aTextPxRect = LogicToPixel(aTextRect);
-    FontMetric aFontMetric = GetFontMetric(GetFont());
+    m_xVirDev->GetTextBoundRect(aTextRect, m_sLabel);
+    tools::Rectangle aTextPxRect = m_xVirDev->LogicToPixel(aTextRect);
+    FontMetric aFontMetric = m_xVirDev->GetFontMetric(m_xVirDev->GetFont());
     Size aBoxSize(aTextPxRect.GetWidth() + BUTTON_WIDTH + TEXT_PADDING * 2,
                   aFontMetric.GetLineHeight() + TEXT_PADDING * 2);
 
@@ -72,6 +83,9 @@ void UnfloatTableButton::SetOffset(Point aTopRightPixel)
 
     // Set the position & Size of the window
     SetPosSizePixel(aBoxPos, aBoxSize);
+    m_xVirDev->SetOutputSizePixel(aBoxSize);
+
+    PaintButton();
 }
 
 void UnfloatTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
@@ -177,12 +191,15 @@ void UnfloatTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
     }
 }
 
-void UnfloatTableButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void UnfloatTableButton::PaintButton()
 {
-    SetMapMode(MapMode(MapUnit::MapPixel));
+    if (!m_xVirDev)
+        return;
+
+    m_xVirDev->SetMapMode(MapMode(MapUnit::MapPixel));
     drawinglayer::primitive2d::Primitive2DContainer aSeq;
     const ::tools::Rectangle aRect(
-        ::tools::Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
+        ::tools::Rectangle(Point(0, 0), m_xVirDev->PixelToLogic(GetSizePixel())));
 
     // Create button
     SwFrameButtonPainter::PaintButton(aSeq, aRect, true);
@@ -191,12 +208,12 @@ void UnfloatTableButton::Paint(vcl::RenderContext& rRenderContext, const tools::
     basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
     basegfx::B2DVector aFontSize;
     drawinglayer::attribute::FontAttribute aFontAttr
-        = drawinglayer::primitive2d::getFontAttributeFromVclFont(
-            aFontSize, rRenderContext.GetFont(), false, false);
+        = drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, m_xVirDev->GetFont(),
+                                                                 false, false);
 
-    FontMetric aFontMetric = rRenderContext.GetFontMetric(rRenderContext.GetFont());
+    FontMetric aFontMetric = m_xVirDev->GetFontMetric(m_xVirDev->GetFont());
     double nTextOffsetY = aFontMetric.GetAscent() + TEXT_PADDING;
-    double nTextOffsetX = std::abs(aRect.GetWidth() - rRenderContext.GetTextWidth(m_sLabel)) / 2.0;
+    double nTextOffsetX = std::abs(aRect.GetWidth() - m_xVirDev->GetTextWidth(m_sLabel)) / 2.0;
     Point aTextPos(nTextOffsetX, nTextOffsetY);
 
     basegfx::B2DHomMatrix aTextMatrix(basegfx::utils::createScaleTranslateB2DHomMatrix(
@@ -211,10 +228,12 @@ void UnfloatTableButton::Paint(vcl::RenderContext& rRenderContext, const tools::
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
-        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext,
+        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(*m_xVirDev,
                                                                          aNewViewInfos));
 
     pProcessor->process(aSeq);
+
+    m_xPushButton->set_custom_button(m_xVirDev.get());
 }
 
 void UnfloatTableButton::ShowAll(bool bShow) { Show(bShow); }

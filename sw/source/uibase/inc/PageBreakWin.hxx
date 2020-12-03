@@ -11,7 +11,6 @@
 
 #include "edtwin.hxx"
 #include "FrameControl.hxx"
-#include <vcl/builder.hxx>
 #include <vcl/timer.hxx>
 #include <optional>
 
@@ -25,8 +24,7 @@ class SwPageFrame;
   */
 class SwPageBreakWin : public SwFrameMenuButtonBase
 {
-    VclBuilder            m_aBuilder;
-    VclPtr<PopupMenu>     m_pPopupMenu;
+    std::unique_ptr<weld::MenuButton> m_xMenuButton;
     VclPtr<vcl::Window>   m_pLine;
     bool                  m_bIsAppearing;
     int                   m_nFadeRate;
@@ -41,11 +39,6 @@ public:
     virtual ~SwPageBreakWin() override;
     virtual void dispose() override;
 
-    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect ) override;
-    virtual void Select( ) override;
-    virtual void MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void Activate( ) override;
-
     void UpdatePosition(const std::optional<Point>& xEvtPt = std::optional<Point>());
 
     virtual void ShowAll( bool bShow ) override;
@@ -56,9 +49,11 @@ public:
     void Fade( bool bFadeIn );
 
 private:
-    /// Hide the button (used when the popup menu is closed by clicking outside)
-    DECL_LINK( HideHandler, Menu *, bool );
     DECL_LINK( FadeHandler, Timer *, void );
+    /// Hide the button when the menu is toggled closed, e.g by clicking outside
+    DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
+    DECL_LINK(SelectHdl, const OString&, void);
+    void PaintButton();
 };
 
 #endif
