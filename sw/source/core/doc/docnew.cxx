@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <mutex>
+
 #include <config_features.h>
 
 #include <o3tl/sorted_vector.hxx>
@@ -584,7 +588,10 @@ SwDoc::~SwDoc()
 
     disposeXForms(); // #i113606#, dispose the XForms objects
 
-    delete mpNumberFormatter.load(); mpNumberFormatter= nullptr;
+    {
+        std::scoped_lock lock(mNumberFormatterMutex);
+        delete mpNumberFormatter; mpNumberFormatter= nullptr;
+    }
     mpFootnoteInfo.reset();
     mpEndNoteInfo.reset();
     mpLineNumberInfo.reset();
@@ -741,7 +748,10 @@ void SwDoc::ClearDoc()
 
     GetDocumentFieldsManager().ClearFieldTypes();
 
-    delete mpNumberFormatter.load(); mpNumberFormatter= nullptr;
+    {
+        std::scoped_lock lock(mNumberFormatterMutex);
+        delete mpNumberFormatter; mpNumberFormatter= nullptr;
+    }
 
     getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD );
     pFirstNd->ChgFormatColl( getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
