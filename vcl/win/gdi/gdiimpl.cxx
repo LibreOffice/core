@@ -2343,12 +2343,39 @@ bool WinSalGraphicsImpl::drawPolyLine(
         std::vector<Gdiplus::REAL> aDashArray(pStroke->size());
         const double fFactor(fLineWidth == 0 ? 1.0 : 1.0 / fLineWidth);
 
-        for(size_t a(0); a < pStroke->size(); a++)
+        // tdf#134128. ODF adds caps to the dashes and dots, but GDI makes caps from the
+        // dash or dot themselve. We tweak aDashArray to look the same in GDI (e.g. Impress edit mode)
+        // and other renderes (e.g. Impress slide show), while keeping the total length of the
+        // pattern.
+        // Patterns are always a sequence dash space dash space ...
+        if (eLineCap != css::drawing::LineCap_BUTT)
         {
-            aDashArray[a] = Gdiplus::REAL((*pStroke)[a] * fFactor);
+            size_t nSize = pStroke->size();
+            // We want to treat dash and space in pairs. There should be no odd size. If so, we ignore
+            // last item.
+            nSize /= 2;
+            for(size_t a(0); a < nSize; a++)
+            {
+                double fDashLengthRel = (*pStroke)[2 * a] * fFactor;
+                double fSpaceLengthRel = (*pStroke)[2 * a + 1] * fFactor;
+                // GDI allows only positive lengths for space, Skia negative lengths too. Thus the
+                // appearance is different, in case space is too small.
+                double fCorrect = fSpaceLengthRel - 1.0 <= 0 ? fSpaceLengthRel - 0.01 : 1.0;
+                aDashArray[2 * a] = Gdiplus::REAL(fDashLengthRel + fCorrect);
+                aDashArray[2 * a + 1] = Gdiplus::REAL(fSpaceLengthRel - fCorrect);
+            }
         }
-
-        aPen.SetDashCap(Gdiplus::DashCapFlat);
+        else
+        {
+            for(size_t a(0); a < pStroke->size(); a++)
+            {
+                aDashArray[a] = Gdiplus::REAL((*pStroke)[a] * fFactor);
+            }
+        }
+        if (eLineCap == css::drawing::LineCap_ROUND)
+            aPen.SetDashCap(Gdiplus::DashCapRound);
+        else
+            aPen.SetDashCap(Gdiplus::DashCapFlat); // "square" doesn't exist in Gdiplus
         aPen.SetDashOffset(Gdiplus::REAL(0.0));
         aPen.SetDashPattern(aDashArray.data(), aDashArray.size());
     }
