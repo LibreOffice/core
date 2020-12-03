@@ -83,12 +83,14 @@ public:
     ImageAlign      meImageAlign;
     SymbolAlign     meSymbolAlign;
 
+    Image           maCustomContentImage;
+
     /** StatusListener. Updates the button as the slot state changes */
     rtl::Reference<VclStatusListener<Button>> mpStatusListener;
 };
 
 ImplCommonButtonData::ImplCommonButtonData() : maFocusRect(), mnSeparatorX(0), mnButtonState(DrawButtonFlags::NONE),
-mbSmallSymbol(false), maImage(), meImageAlign(ImageAlign::Top), meSymbolAlign(SymbolAlign::LEFT)
+mbSmallSymbol(false), maImage(), meImageAlign(ImageAlign::Top), meSymbolAlign(SymbolAlign::LEFT), maCustomContentImage()
 {
 }
 
@@ -156,6 +158,20 @@ void Button::SetImageAlign( ImageAlign eAlign )
 ImageAlign Button::GetImageAlign() const
 {
     return mpButtonData->meImageAlign;
+}
+
+void Button::SetCustomButtonImage(const Image& rImage)
+{
+    if (rImage != mpButtonData->maCustomContentImage)
+    {
+        mpButtonData->maCustomContentImage = rImage;
+        StateChanged( StateChangedType::Data );
+    }
+}
+
+Image const & Button::GetCustomButtonImage() const
+{
+    return mpButtonData->maCustomContentImage;
 }
 
 tools::Long Button::ImplGetSeparatorX() const
@@ -1294,6 +1310,12 @@ void PushButton::FillLayoutData() const
 
 void PushButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
+    const Image& rCustomButtonImage = GetCustomButtonImage();
+    if (!!rCustomButtonImage)
+    {
+        rRenderContext.DrawImage(Point(0, 0), rCustomButtonImage);
+        return;
+    }
     ImplDrawPushButton(rRenderContext);
 }
 
