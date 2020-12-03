@@ -1524,7 +1524,6 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_TEXT_VIEW_SELECTION:
             case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
             case LOK_CALLBACK_CALC_FUNCTION_LIST:
-            case LOK_CALLBACK_JSDIALOG:
             {
                 // deleting the duplicate of visible cursor message can cause hyperlink popup not to show up on second/or more click on the same place.
                 // If the hyperlink is not empty we can bypass that to show the popup
