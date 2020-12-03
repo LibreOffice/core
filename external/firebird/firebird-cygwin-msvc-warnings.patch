@@ -203,9 +203,9 @@ diff -ur builds/posix/make.rules builds/posix/make.rules
 +	$(OBJ_DIR)/cloop/Lexer.obj \
 +	$(OBJ_DIR)/cloop/Parser.obj \
 +	$(OBJ_DIR)/cloop/Main.obj \
+ 	| $(BIN_DIR)
  
  	$(LD) $^ -o $@
- 
 @@ -105,24 +105,24 @@
  $(SRC_DIR)/tests/test1/CppTest.cpp: $(SRC_DIR)/tests/test1/CalcCppApi.h
  

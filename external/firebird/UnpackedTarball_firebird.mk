@@ -23,7 +23,10 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,firebird,\
 #   const";
 # * external/firebird/0001-Fix-checks-for-null-HANDLE-in-Windows-only-code.patch.1 is upstream at
 #   <https://github.com/FirebirdSQL/firebird/pull/301> "Fix checks for null HANDLE in Windows-only
-#   code":
+#   code",
+# * external/firebird/0001-extern-cloop-Missing-dependency-of-BIN_DIR-cloop-on-.patch.1 is upstream
+#   at <https://github.com/FirebirdSQL/firebird/pull/302> "extern/cloop: Missing dependency of
+#   $(BIN_DIR)/cloop on $(BIN_DIR)":
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
         external/firebird/firebird.disable-ib-util-not-found.patch.1 \
 		external/firebird/firebird-Engine12.patch \
@@ -39,6 +42,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
     external/firebird/firebird-btyacc-add-explicit-rule.patch \
     external/firebird/firebird-307.patch.1 \
     external/firebird/0001-Fix-checks-for-null-HANDLE-in-Windows-only-code.patch.1 \
+    external/firebird/0001-extern-cloop-Missing-dependency-of-BIN_DIR-cloop-on-.patch.1 \
 ))
 
 ifeq ($(OS),WNT)
