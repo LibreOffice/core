@@ -311,7 +311,7 @@ namespace frm
                 }
                 else
                 {
-                    URL aHyperLink = m_pFeatureInterception->getTransformer().getStrictURLFromAscii( OUStringToOString(aURL.Complete, RTL_TEXTENCODING_ASCII_US).getStr() );
+                    URL aHyperLink = m_pFeatureInterception->getTransformer().getStrictURL(aURL.Complete);
 
                     Reference< XDispatch > xDisp =  m_pFeatureInterception->queryDispatch(aHyperLink);
 
