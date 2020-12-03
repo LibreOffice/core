@@ -70,6 +70,14 @@ Private _DialogModel		As Object		&apos; com.sun.star.awt.XControlModel - stardiv
 Private _Displayed			As Boolean		&apos; True after Execute()
 Private _Modal				As Boolean		&apos; Set by Execute()
 
+&apos;	Cache for TreeControl events
+Private _TreeCache			As Object		&apos; Dictionary: key = control name, item = _TreeControl
+
+Type _TreeControl
+	OnNodeSelected			As String
+	OnNodeExpanded			As String
+End Type
+
 REM ============================================================ MODULE CONSTANTS
 
 Private Const OKBUTTON		= 1
@@ -92,6 +100,7 @@ Private Sub Class_Initialize()
 	Set _DialogModel = Nothing
 	_Displayed = False
 	_Modal = True
+	Set _TreeCache = ScriptForge.SF_Services.CreateScriptService(&quot;Dictionary&quot;)
 End Sub		&apos;	SFDialogs.SF_Dialog Constructor
 
 REM -----------------------------------------------------------------------------

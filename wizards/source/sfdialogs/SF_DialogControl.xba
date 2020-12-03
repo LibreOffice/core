@@ -23,6 +23,12 @@ Option Explicit
 &apos;&apos;&apos;		Essentially a single property &quot;Value&quot; maps many alternative UNO properties depending each on
 &apos;&apos;&apos;		the control type.
 &apos;&apos;&apos;
+&apos;&apos;&apos;		A special attention is given to controls with type TreeControl.
+&apos;&apos;&apos;		It is easy with the API proposed in the current class to populate a tree, either
+&apos;&apos;&apos;			- branch by branch (CreateRoot and AddChild), or
+&apos;&apos;&apos;			- with a set of branches at once (AddSubtree)
+&apos;&apos;&apos;		Additionally populating a TreeConctrol can be done statically or dynamically
+&apos;&apos;&apos;
 &apos;&apos;&apos;		Service invocation:
 &apos;&apos;&apos;			Dim myDialog As Object, myControl As Object
 &apos;&apos;&apos;				Set myDialog = CreateScriptService(&quot;SFDialogs.Dialog&quot;, &quot;GlobalScope&quot;, myLibrary, DialogName)
@@ -53,6 +59,7 @@ Private _DialogName			As String		&apos; Parent dialog name
 &apos;	Control UNO references
 Private _ControlModel		As Object		&apos; com.sun.star.awt.XControlModel
 Private _ControlView		As Object		&apos; com.sun.star.awt.XControl - stardiv.Toolkit.UnoDialogControl
+Private _TreeDataModel		As Object		&apos; com.sun.star.awt.tree.MutableTreeDataModel
 
 &apos;	Control attributes
 Private	_ImplementationName	As String
@@ -79,6 +86,7 @@ Private Const CTLRADIOBUTTON	= &quot;RadioButton&quot;
 Private Const CTLSCROLLBAR		= &quot;ScrollBar&quot;
 Private Const CTLTEXTFIELD		= &quot;TextField&quot;
 Private Const CTLTIMEFIELD		= &quot;TimeField&quot;
+Private Const CTLTREECONTROL	= &quot;TreeControl&quot;
 
 REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
@@ -92,6 +100,7 @@ Private Sub Class_Initialize()
 	_DialogName = &quot;&quot;
 	Set _ControlModel = Nothing
 	Set _ControlView = Nothing
+	Set _TreeDataModel = Nothing
 	_ImplementationName = &quot;&quot;
 	_ControlType = &quot;&quot;
 End Sub		&apos;	SFDialogs.SF_DialogControl Constructor
@@ -382,6 +391,30 @@ Property Let OnMouseReleased(Optional ByVal pvOnMouseReleased As Variant)
 End Property	&apos;	SFDialogs.SF_DialogControl.OnMouseReleased (let)
 
 REM -----------------------------------------------------------------------------
+Property Get OnNodeExpanded() As Variant
+&apos;&apos;&apos;	Get the script associated with the OnNodeExpanded event
+	OnNodeExpanded = _PropertyGet(&quot;OnNodeExpanded&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnNodeExpanded (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnNodeExpanded(Optional ByVal pvOnNodeExpanded As Variant)
+&apos;&apos;&apos;	Set the updatable property OnNodeExpanded
+	_PropertySet(&quot;OnNodeExpanded&quot;, pvOnNodeExpanded)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnNodeExpanded (let)
+
+REM -----------------------------------------------------------------------------
+Property Get OnNodeSelected() As Variant
+&apos;&apos;&apos;	Get the script associated with the OnNodeSelected event
+	OnNodeSelected = _PropertyGet(&quot;OnNodeSelected&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnNodeSelected (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnNodeSelected(Optional ByVal pvOnNodeSelected As Variant)
+&apos;&apos;&apos;	Set the updatable property OnNodeSelected
+	_PropertySet(&quot;OnNodeSelected&quot;, pvOnNodeSelected)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnNodeSelected (let)
+
+REM -----------------------------------------------------------------------------
 Property Get OnTextChanged() As Variant
 &apos;&apos;&apos;	Get the script associated with the OnTextChanged event
 	OnTextChanged = _PropertyGet(&quot;OnTextChanged&quot;)
@@ -507,7 +540,219 @@ Property Get XControlView() As Object
 	XControlView = _PropertyGet(&quot;XControlView&quot;, Nothing)
 End Property	&apos;	SFDialogs.SF_DialogControl.XControlView (get)
 
+REM -----------------------------------------------------------------------------
+Property Get XTreeDataModel() As Object
+&apos;&apos;&apos;	The XTreeDataModel property returns the model UNO object of the control
+	XTreeDataModel = _PropertyGet(&quot;XTreeDataModel&quot;, Nothing)
+End Property	&apos;	SFDialogs.SF_DialogControl.XTreeDataModel (get)
+
 REM ===================================================================== METHODS
+
+REM -----------------------------------------------------------------------------
+Public Function AddSubNode(Optional ByRef ParentNode As Variant _
+								, Optional ByVal DisplayValue As Variant _
+								, Optional ByRef DataValue As Variant _
+								) As Variant
+&apos;&apos;&apos;	Return a new node of the tree control subordinate to a parent node
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		ParentNode: A node UNO object,  of type com.sun.star.awt.tree.XMutableTreeNode
+&apos;&apos;&apos;		DisplayValue: the text appearing in the control box
+&apos;&apos;&apos;		DataValue: any value associated with the new node. Default = Empty
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The new node UNO object: com.sun.star.awt.tree.XMutableTreeNode
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Dim myTree As Object, myNode As Object, theRoot As Object
+&apos;&apos;&apos;			Set myTree = myDialog.Controls(&quot;myTreeControl&quot;)
+&apos;&apos;&apos;			Set theRoot = myTree.CreateRoot(&quot;Tree top&quot;)
+&apos;&apos;&apos;			Set myNode = myTree.AddSubNode(theRoot, &quot;A branch ...&quot;)
+
+Dim oNode As Object				&apos;	Return value
+Const cstThisSub = &quot;SFDialogs.DialogControl.AddSubNode&quot;
+Const cstSubArgs = &quot;ParentNode, DisplayValue, [DataValue=Empty]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oNode = Nothing
+
+Check:
+	If IsMissing(DataValue) Then DataValue = Empty
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(ParentNode, &quot;ParentNode&quot;, V_OBJECT) Then GoTo Catch
+		If ScriptForge.SF_Session.UnoObjectType(ParentNode) &lt;&gt; &quot;toolkit.MutableTreeNode&quot; Then GoTo Catch
+		If Not ScriptForge.SF_Utils._Validate(DisplayValue, &quot;DisplayValue&quot;, V_STRING) Then GoTo Catch
+	End If
+
+Try:
+	With _TreeDataModel
+		Set oNode = .createNode(DisplayValue, True)
+		oNode.DataValue = DataValue
+		ParentNode.appendChild(oNode)
+	End With
+
+Finally:
+	Set AddSubNode = oNode
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_DialogControl.AddSubNode
+
+REM -----------------------------------------------------------------------------
+Public Function AddSubTree(Optional ByRef ParentNode As Variant _
+								, Optional ByRef FlatTree As Variant _
+								, Optional ByVal WithDataValue As Variant _
+								) As Boolean
+&apos;&apos;&apos;	Return True when a subtree, subordinate to a parent node, could be inserted successfully in a tree control
+&apos;&apos;&apos;	If the parent node had already child nodes before calling this method, the child nodes are erased
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		ParentNode: A node UNO object,  of type com.sun.star.awt.tree.XMutableTreeNode
+&apos;&apos;&apos;		FlatTree: a 2D array sorted on the columns containing the DisplayValues
+&apos;&apos;&apos;				Flat tree		&gt;&gt;&gt;&gt;		Resulting subtree
+&apos;&apos;&apos;				A1	B1	C1					|__	A1		
+&apos;&apos;&apos;				A1	B1	C2						|__	B1	
+&apos;&apos;&apos;				A1	B2	C3							|__	C1
+&apos;&apos;&apos;				A2	B3	C4							|__	C2
+&apos;&apos;&apos;				A2	B3	C5							B2	
+&apos;&apos;&apos;				A3	B4	C6							|__	C3
+&apos;&apos;&apos;											|__	A2		
+&apos;&apos;&apos;												|__	B3	
+&apos;&apos;&apos;													|__	C4
+&apos;&apos;&apos;													|__	C5
+&apos;&apos;&apos;											|__	A3		
+&apos;&apos;&apos;												|__	B4	
+&apos;&apos;&apos;													|__	C6
+&apos;&apos;&apos;			Typically, such an array can be issued by the GetRows method applied on the SFDatabases.Database service
+&apos;&apos;&apos;			when the array item containing the text to be displayed is = &quot;&quot; or is empty/null,
+&apos;&apos;&apos;				no new subnode is created and the remainder of the row is skipped
+&apos;&apos;&apos;		WithDataValue:
+&apos;&apos;&apos;			When False (default), every column of FlatTree contains the text to be displayed in the tree control
+&apos;&apos;&apos;			When True, the texts to be displayed (DisplayValue) are in columns 0, 2, 4, ...
+&apos;&apos;&apos;				while the DataValues are in columns 1, 3, 5, ...
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The new node UNO object: com.sun.star.awt.tree.XMutableTreeNode
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Dim myTree As Object, theRoot As Object, oDb As Object, vData As Variant
+&apos;&apos;&apos;			Set myTree = myDialog.Controls(&quot;myTreeControl&quot;)
+&apos;&apos;&apos;			Set theRoot = myTree.CreateRoot(&quot;By product category&quot;)
+&apos;&apos;&apos;			Set oDb = CreateScriptService(&quot;SFDatabases.Database&quot;, &quot;/home/.../mydatabase.odb&quot;)
+&apos;&apos;&apos;			vData = oDb.GetRows(&quot;SELECT [Category].[Name], [Category].[ID], [Product].[Name], [Product].[ID] &quot; _
+&apos;&apos;&apos;				&amp; &quot;FROM [Category], [PRODUCT] WHERE [Product].[CategoryID] = [Category].[ID] &quot; _
+&apos;&apos;&apos;				&amp; &quot;ORDER BY [Category].[Name], [Product].[Name]&quot;)
+&apos;&apos;&apos;			myTree.AddSubTree(theRoot, vData)
+
+Dim bSubTree As Boolean				&apos;	Return value
+Dim oNode As Object					&apos;	com.sun.star.awt.tree.XMutableTreeNode
+Dim oNewNode As Object				&apos;	com.sun.star.awt.tree.XMutableTreeNode
+Dim lChildCount As Long				&apos;	Number of children nodes of a parent node
+Dim iStep As Integer				&apos;	1 when WithDataValue = False, 2 otherwise
+Dim bChange As Boolean				&apos;	When True, the item in FlatTree is different from the item above
+Dim sValue As String				&apos;	Alias for display values
+Dim i As Long, j As Long
+Const cstThisSub = &quot;SFDialogs.DialogControl.AddSubTree&quot;
+Const cstSubArgs = &quot;ParentNode, FlatTree, [WithDataValue=False]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bSubTree = False
+
+Check:
+	If IsMissing(WithDataValue) Or IsEmpty(WithDataValue) Then WithDataValue = False
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(ParentNode, &quot;ParentNode&quot;, V_OBJECT) Then GoTo Catch
+		If ScriptForge.SF_Session.UnoObjectType(ParentNode) &lt;&gt; &quot;toolkit.MutableTreeNode&quot; Then GoTo Catch
+		If Not ScriptForge.SF_Utils._ValidateArray(FlatTree, &quot;FlatTree&quot;, 2) Then GoTo Catch
+		If Not ScriptForge.SF_Utils._Validate(WithDataValue, &quot;WithDataValue&quot;, V_BOOLEAN) Then GoTo Catch
+	End If
+
+Try:
+	With _TreeDataModel
+		&apos;	Clean subtree
+		lChildCount = ParentNode.getChildCount()
+		For i = 1 To lChildCount
+			ParentNode.removeChildByIndex(0)		&apos;	This cleans all subtrees too
+		Next i
+		&apos;	Build a new subtree
+		If UBound(FlatTree, 1) &lt; LBound(FlatTree, 1) Then		&apos;Array is empty
+		Else
+			iStep = Iif(WithDataValue, 2, 1)
+			For i = LBound(FlatTree, 1) To UBound(FlatTree, 1)					&apos;	Array rows
+				bChange = ( i = 0 )
+				&apos;	Restart from the parent node at each i-iteration
+				Set oNode = ParentNode
+				For j = LBound(FlatTree, 2) To UBound(FlatTree, 2) Step iStep	&apos;	Array columns
+					If FlatTree(i, j) = &quot;&quot; Or IsNull(FlatTree(i, j)) Or IsEmpty(FlatTree(i, j)) Then
+						Set oNode = Nothing
+						Exit For		&apos;	Exit j-loop
+					End If
+					If Not bChange Then bChange = ( FlatTree(i, j) &lt;&gt; FlatTree(i - 1, j) )
+					If bChange Then		&apos;	Create new subnode at tree depth = j
+						If VarType(FlatTree(i, j)) = V_STRING Then sValue = FlatTree(i, j) Else sValue = ScriptForge.SF_String.Represent(FlatTree(i, j))
+						Set oNewNode = .createNode(sValue, True)
+						If WithDataValue Then oNewNode.DataValue = FlatTree(i, j + 1)
+						oNode.appendChild(oNewNode)
+						Set oNode = oNewNode
+					Else
+						&apos;	Position next current node on last child of actual current node
+						lChildCount = oNode.getChildCount()
+						If lChildCount &gt; 0 Then Set oNode = oNode.getChildAt(lChildCount - 1) Else Set oNode = Nothing
+					End If
+				Next j
+			Next i
+		End If			
+	End With
+
+Finally:
+	AddSubTree = bSubTree
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_DialogControl.AddSubTree
+
+REM -----------------------------------------------------------------------------
+Public Function CreateRoot(Optional ByVal DisplayValue As Variant _
+								, Optional ByRef DataValue As Variant _
+								) As Variant
+&apos;&apos;&apos;	Return a new root node of the tree control. The new tree root is inserted below pre-exiting root nodes
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		DisplayValue: the text appearing in the control box
+&apos;&apos;&apos;		DataValue: any value associated with the root node. Default = Empty
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The new root node as a UNO object of type com.sun.star.awt.tree.XMutableTreeNode
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Dim myTree As Object, myNode As Object
+&apos;&apos;&apos;			Set myTree = myDialog.Controls(&quot;myTreeControl&quot;)
+&apos;&apos;&apos;			Set myNode = myTree.CreateRoot(&quot;Tree starts here ...&quot;)
+
+Dim oRoot As Object				&apos;	Return value
+Const cstThisSub = &quot;SFDialogs.DialogControl.CreateRoot&quot;
+Const cstSubArgs = &quot;DisplayValue, [DataValue=Empty]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oRoot = Nothing
+
+Check:
+	If IsMissing(DataValue) Then DataValue = Empty
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(DisplayValue, &quot;DisplayValue&quot;, V_STRING) Then GoTo Catch
+	End If
+
+Try:
+	With _TreeDataModel
+		Set oRoot = .createNode(DisplayValue, True)
+		oRoot.DataValue = DataValue
+		.setRoot(oRoot)
+		&apos;	To be visible, a root must have contained at least 1 child. Create a fictive one and erase it.
+		&apos;	This behavious does not seem related to the RootDisplayed property ??
+		oRoot.appendChild(.createNode(&quot;Something&quot;, False))
+		oRoot.removeChildByIndex(0)
+	End With
+
+Finally:
+	Set CreateRoot = oRoot
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_DialogControl.CreateRoot
 
 REM -----------------------------------------------------------------------------
 Public Function GetProperty(Optional ByVal PropertyName As Variant) As Variant
@@ -833,10 +1078,14 @@ Try:
 	vServiceName = Split(_ControlModel.getServiceName(), &quot;.&quot;)
 	sType = vServiceName(UBound(vServiceName))
 	Select Case sType
-		Case &quot;UnoControlSpinButtonModel&quot;, &quot;TreeControlModel&quot;
-			_ControlType = &quot;&quot;	&apos;	Not supported
-		Case &quot;Edit&quot;				:	_ControlType = CTLTEXTFIELD
-		Case Else				:	_ControlType = sType
+		Case &quot;UnoControlSpinButtonModel&quot;
+			_ControlType = &quot;&quot;	&apos; Not supported
+		Case &quot;Edit&quot;					:	_ControlType = CTLTEXTFIELD
+		Case &quot;TreeControlModel&quot;	&apos; Initialize the data model
+			_ControlType = CTLTREECONTROL
+			Set _ControlModel.DataModel = ScriptForge.SF_Utils._GetUNOService(&quot;TreeDataModel&quot;)
+			_TreeDataModel = _ControlModel.DataModel
+		Case Else					:	_ControlType = sType
 	End Select
 	
 Finally:
@@ -1067,6 +1316,8 @@ Const cstSubArgs = &quot;&quot;
 			Set _PropertyGet = _ControlModel
 		Case UCase(&quot;XControlView&quot;)
 			Set _PropertyGet = _ControlView
+		Case UCase(&quot;XTreeDataModel&quot;)
+			Set _PropertyGet = _TreeDataModel
 		Case Else
 			_PropertyGet = Null
 	End Select
