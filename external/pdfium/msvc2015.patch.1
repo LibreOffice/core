@@ -1,0 +1,202 @@
+Fix MSVC 2015 build
+
+--- pdfium/third_party/base/optional.h.orig	2020-10-26 19:26:04.000000000 +0100
++++ pdfium/third_party/base/optional.h	2020-12-03 16:00:54.879883100 +0100
+@@ -36,7 +36,7 @@
+ struct OptionalStorageBase {
+   // Provide non-defaulted default ctor to make sure it's not deleted by
+   // non-trivial T::T() in the union.
+-  constexpr OptionalStorageBase() : dummy_() {}
++  OptionalStorageBase() : dummy_() {}
+ 
+   template <class... Args>
+   constexpr explicit OptionalStorageBase(in_place_t, Args&&... args)
+@@ -88,7 +88,7 @@
+ struct OptionalStorageBase<T, true /* trivially destructible */> {
+   // Provide non-defaulted default ctor to make sure it's not deleted by
+   // non-trivial T::T() in the union.
+-  constexpr OptionalStorageBase() : dummy_() {}
++  OptionalStorageBase() : dummy_() {}
+ 
+   template <class... Args>
+   constexpr explicit OptionalStorageBase(in_place_t, Args&&... args)
+@@ -607,32 +607,32 @@
+     return *this;
+   }
+ 
+-  constexpr const T* operator->() const {
++  const T* operator->() const {
+     CHECK(storage_.is_populated_);
+     return &storage_.value_;
+   }
+ 
+-  constexpr T* operator->() {
++  T* operator->() {
+     CHECK(storage_.is_populated_);
+     return &storage_.value_;
+   }
+ 
+-  constexpr const T& operator*() const & {
++  const T& operator*() const & {
+     CHECK(storage_.is_populated_);
+     return storage_.value_;
+   }
+ 
+-  constexpr T& operator*() & {
++  T& operator*() & {
+     CHECK(storage_.is_populated_);
+     return storage_.value_;
+   }
+ 
+-  constexpr const T&& operator*() const && {
++  const T&& operator*() const && {
+     CHECK(storage_.is_populated_);
+     return std::move(storage_.value_);
+   }
+ 
+-  constexpr T&& operator*() && {
++  T&& operator*() && {
+     CHECK(storage_.is_populated_);
+     return std::move(storage_.value_);
+   }
+@@ -641,22 +641,22 @@
+ 
+   constexpr bool has_value() const { return storage_.is_populated_; }
+ 
+-  constexpr T& value() & {
++  T& value() & {
+     CHECK(storage_.is_populated_);
+     return storage_.value_;
+   }
+ 
+-  constexpr const T& value() const & {
++  const T& value() const & {
+     CHECK(storage_.is_populated_);
+     return storage_.value_;
+   }
+ 
+-  constexpr T&& value() && {
++  T&& value() && {
+     CHECK(storage_.is_populated_);
+     return std::move(storage_.value_);
+   }
+ 
+-  constexpr const T&& value() const && {
++  const T&& value() const && {
+     CHECK(storage_.is_populated_);
+     return std::move(storage_.value_);
+   }
+--- pdfium/third_party/base/span.h.orig	2020-10-26 19:26:04.000000000 +0100
++++ pdfium/third_party/base/span.h	2020-12-03 16:28:15.642138100 +0100
+@@ -193,7 +193,7 @@
+ 
+   // TODO(dcheng): Implement construction from a |begin| and |end| pointer.
+   template <size_t N>
+-  constexpr span(T (&array)[N]) noexcept : span(array, N) {}
++  span(T (&array)[N]) noexcept : span(array, N) {}
+   // TODO(dcheng): Implement construction from std::array.
+   // Conversion from a container that provides |T* data()| and |integral_type
+   // size()|.
+--- pdfium/core/fpdfapi/page/cpdf_colorspace.cpp.orig	2020-12-03 16:54:15.514659400 +0100
++++ pdfium/core/fpdfapi/page/cpdf_colorspace.cpp	2020-12-03 16:38:52.167650200 +0100
+@@ -905,7 +905,7 @@
+     float R;
+     float G;
+     float B;
+-    GetRGB(lab, &R, &G, &B);
++    GetRGB(pdfium::span<float>(lab), &R, &G, &B);
+     pDestBuf[0] = static_cast<int32_t>(B * 255);
+     pDestBuf[1] = static_cast<int32_t>(G * 255);
+     pDestBuf[2] = static_cast<int32_t>(R * 255);
+--- pdfium/core/fpdfapi/page/cpdf_meshstream.cpp.orig	2020-12-03 16:54:09.233498800 +0100
++++ pdfium/core/fpdfapi/page/cpdf_meshstream.cpp	2020-12-03 16:41:29.173766500 +0100
+@@ -209,7 +209,7 @@
+       func->Call(color_value, 1, result, &nResults);
+   }
+ 
+-  m_pCS->GetRGB(result, &r, &g, &b);
++  m_pCS->GetRGB(pdfium::span<float>(result), &r, &g, &b);
+   return std::tuple<float, float, float>(r, g, b);
+ }
+ 
+--- pdfium/core/fpdfapi/parser/cpdf_security_handler.cpp.orig	2020-12-03 16:53:56.077095400 +0100
++++ pdfium/core/fpdfapi/parser/cpdf_security_handler.cpp	2020-12-03 16:44:23.951334200 +0100
+@@ -481,7 +481,7 @@
+   uint8_t passcode[32];
+   GetPassCode(owner_password, passcode);
+   uint8_t digest[16];
+-  CRYPT_MD5Generate(passcode, digest);
++  CRYPT_MD5Generate(pdfium::span<uint8_t>(passcode), digest);
+   if (m_Revision >= 3) {
+     for (uint32_t i = 0; i < 50; i++)
+       CRYPT_MD5Generate(digest, digest);
+@@ -570,10 +570,10 @@
+     uint8_t passcode[32];
+     GetPassCode(owner_password_copy, passcode);
+     uint8_t digest[16];
+-    CRYPT_MD5Generate(passcode, digest);
++    CRYPT_MD5Generate(pdfium::span<uint8_t>(passcode), digest);
+     if (m_Revision >= 3) {
+       for (uint32_t i = 0; i < 50; i++)
+-        CRYPT_MD5Generate(digest, digest);
++        CRYPT_MD5Generate(pdfium::span<uint8_t>(digest), digest);
+     }
+     uint8_t enckey[32];
+     memcpy(enckey, digest, key_len);
+--- pdfium/core/fpdfapi/page/cpdf_dib.cpp.orig	2020-12-03 16:53:44.548444600 +0100
++++ pdfium/core/fpdfapi/page/cpdf_dib.cpp	2020-12-03 16:49:11.937584700 +0100
+@@ -874,7 +874,7 @@
+     color_values[0] += m_CompData[0].m_DecodeStep;
+     color_values[1] += m_CompData[0].m_DecodeStep;
+     color_values[2] += m_CompData[0].m_DecodeStep;
+-    m_pColorSpace->GetRGB(color_values, &R, &G, &B);
++    m_pColorSpace->GetRGB(pdfium::span<float>(color_values), &R, &G, &B);
+     FX_ARGB argb1 = ArgbEncode(255, FXSYS_roundf(R * 255),
+                                FXSYS_roundf(G * 255), FXSYS_roundf(B * 255));
+     if (argb0 != 0xFF000000 || argb1 != 0xFFFFFFFF) {
+--- pdfium/third_party/base/allocator/partition_allocator/partition_alloc.cc.orig	2020-12-03 17:09:02.887283800 +0100
++++ pdfium/third_party/base/allocator/partition_allocator/partition_alloc.cc	2020-12-03 17:07:22.198993800 +0100
+@@ -67,12 +67,12 @@
+   // Chained hooks are not supported. Registering a non-null hook when a
+   // non-null hook is already registered indicates somebody is trying to
+   // overwrite a hook.
+-  CHECK((!allocation_observer_hook_ && !free_observer_hook_) ||
++  CHECK((!allocation_observer_hook_.load() && !free_observer_hook_.load()) ||
+         (!alloc_hook && !free_hook));
+   allocation_observer_hook_ = alloc_hook;
+   free_observer_hook_ = free_hook;
+ 
+-  hooks_enabled_ = allocation_observer_hook_ || allocation_override_hook_;
++  hooks_enabled_ = allocation_observer_hook_.load() || allocation_override_hook_.load();
+ }
+ 
+ void PartitionAllocHooks::SetOverrideHooks(AllocationOverrideHook* alloc_hook,
+@@ -80,14 +80,14 @@
+                                            ReallocOverrideHook realloc_hook) {
+   subtle::SpinLock::Guard guard(set_hooks_lock_);
+ 
+-  CHECK((!allocation_override_hook_ && !free_override_hook_ &&
+-         !realloc_override_hook_) ||
++  CHECK((!allocation_override_hook_.load() && !free_override_hook_.load() &&
++         !realloc_override_hook_.load()) ||
+         (!alloc_hook && !free_hook && !realloc_hook));
+   allocation_override_hook_ = alloc_hook;
+   free_override_hook_ = free_hook;
+   realloc_override_hook_ = realloc_hook;
+ 
+-  hooks_enabled_ = allocation_observer_hook_ || allocation_override_hook_;
++  hooks_enabled_ = allocation_observer_hook_.load() || allocation_override_hook_.load();
+ }
+ 
+ void PartitionAllocHooks::AllocationObserverHookIfEnabled(
+--- pdfium/third_party/base/allocator/partition_allocator/partition_page.h.orig	2020-12-03 17:13:56.944624000 +0100
++++ pdfium/third_party/base/allocator/partition_allocator/partition_page.h	2020-12-03 17:13:34.385932300 +0100
+@@ -25,6 +25,8 @@
+ struct DeferredUnmap {
+   void* ptr = nullptr;
+   size_t size = 0;
++  DeferredUnmap(void* const p, size_t const s) : ptr(p), size(s) {}
++  DeferredUnmap() = default;
+   // In most cases there is no page to unmap and ptr == nullptr. This function
+   // is inlined to avoid the overhead of a function call in the common case.
+   ALWAYS_INLINE void Run();
