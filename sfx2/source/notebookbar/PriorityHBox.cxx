@@ -19,7 +19,6 @@
 
 #include <vcl/builderfactory.hxx>
 #include <vcl/layout.hxx>
-#include <sfx2/viewfrm.hxx>
 #include "PriorityHBox.hxx"
 #include <comphelper/lok.hxx>
 
@@ -109,7 +108,7 @@ Size PriorityHBox::calculateRequisition() const
 
 void PriorityHBox::Resize()
 {
-    if (!m_bInitialized && SfxViewFrame::Current())
+    if (!m_bInitialized)
         Initialize();
 
     if (!m_bInitialized || comphelper::LibreOfficeKit::isActive())
@@ -172,7 +171,7 @@ void PriorityHBox::Resize()
 
 void PriorityHBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    if (!m_bInitialized && SfxViewFrame::Current())
+    if (!m_bInitialized)
         Initialize();
 
     VclHBox::Paint(rRenderContext, rRect);
