@@ -16,6 +16,24 @@
       "revId": "df198a6282bfd989050402fa4ffadb6b9209edb1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd3beb4b_516dab67",
+        "filename": "vcl/win/dtrans/MtaOleClipb.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-12-03T16:05:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf0bb030_97779aff",
+      "revId": "df198a6282bfd989050402fa4ffadb6b9209edb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
