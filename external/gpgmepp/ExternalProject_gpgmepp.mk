@@ -33,6 +33,7 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build): $(call gb_Executable_
 		   --disable-gpg-test \
 		   --disable-gpgsm-test \
 		   --disable-g13-test \
+           $(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 		   CFLAGS='$(CFLAGS) \
 				$(if $(ENABLE_OPTIMIZED), \
 					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
