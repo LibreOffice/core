@@ -1007,6 +1007,8 @@ public:
 
     virtual void set_font(const vcl::Font& rFont) override;
 
+    virtual void set_custom_button(VirtualDevice* pDevice) override;
+
     virtual ~SalInstanceButton() override;
 };
 

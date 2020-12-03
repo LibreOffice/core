@@ -2488,6 +2488,15 @@ void SalInstanceButton::set_font(const vcl::Font& rFont)
     m_xButton->Invalidate();
 }
 
+void SalInstanceButton::set_custom_button(VirtualDevice* pDevice)
+{
+    if (pDevice)
+        m_xButton->SetCustomButtonImage(createImage(*pDevice));
+    else
+        m_xButton->SetCustomButtonImage(Image());
+    m_xButton->Invalidate();
+}
+
 OUString SalInstanceButton::get_label() const { return m_xButton->GetText(); }
 
 SalInstanceButton::~SalInstanceButton() { m_xButton->SetClickHdl(Link<::Button*, void>()); }

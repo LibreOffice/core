@@ -1296,6 +1296,15 @@ public:
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont
     virtual void set_font(const vcl::Font& rFont) = 0;
 
+    /* Sometimes, a widget should behave like a button (activate on click,
+       accept keyboard focus, etc), but look entirely different.
+
+       pDevice, the custom look to use, or nullptr to unset.
+
+       Typically doing this is ill advised. Consider using
+       set_accessible_name if you do. */
+    virtual void set_custom_button(VirtualDevice* pDevice) = 0;
+
     void connect_clicked(const Link<Button&, void>& rLink) { m_aClickHdl = rLink; }
 };
 

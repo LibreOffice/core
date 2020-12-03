@@ -6815,8 +6815,10 @@ class GtkInstanceButton : public GtkInstanceContainer, public virtual weld::Butt
 {
 private:
     GtkButton* m_pButton;
+    GtkCssProvider* m_pCustomCssProvider;
     gulong m_nSignalId;
     std::unique_ptr<vcl::Font> m_xFont;
+    std::unique_ptr<utl::TempFile> m_xCustomImage;
 
     static void signalClicked(GtkButton*, gpointer widget)
     {
@@ -6856,6 +6858,39 @@ private:
         return pChild;
     }
 
+    // See: https://developer.gnome.org/Buttons/
+    void use_custom_content(VirtualDevice* pDevice)
+    {
+        GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(GTK_WIDGET(m_pButton));
+
+        if (m_pCustomCssProvider)
+        {
+            gtk_style_context_remove_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pCustomCssProvider));
+            m_pCustomCssProvider = nullptr;
+        }
+
+        m_xCustomImage.reset();
+
+        if (!pDevice)
+            return;
+
+        m_xCustomImage.reset(new utl::TempFile);
+        m_xCustomImage->EnableKillingFile(true);
+
+        cairo_surface_t* surface = get_underlying_cairo_surface(*pDevice);
+        Size aSize = pDevice->GetOutputSizePixel();
+        cairo_surface_write_to_png(surface, OUStringToOString(m_xCustomImage->GetFileName(), osl_getThreadTextEncoding()).getStr());
+
+        m_pCustomCssProvider = gtk_css_provider_new();
+        OUString aBuffer = "* { background-image: url(\"" + m_xCustomImage->GetURL() + "\"); "
+                           "background-size: " + OUString::number(aSize.Width()) + "px " + OUString::number(aSize.Height()) + "px; "
+                           "border-radius: 0; border-width: 0; }";
+        OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
+        gtk_css_provider_load_from_data(m_pCustomCssProvider, aResult.getStr(), aResult.getLength(), nullptr);
+        gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pCustomCssProvider),
+                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+
 protected:
     GtkWidget* get_label_widget()
     {
@@ -6875,6 +6910,7 @@ public:
     GtkInstanceButton(GtkButton* pButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pButton), pBuilder, bTakeOwnership)
         , m_pButton(pButton)
+        , m_pCustomCssProvider(nullptr)
         , m_nSignalId(g_signal_connect(pButton, "clicked", G_CALLBACK(signalClicked), this))
     {
         g_object_set_data(G_OBJECT(m_pButton), "g-lo-GtkInstanceButton", this);
@@ -6917,6 +6953,11 @@ public:
             gtk_button_set_image(m_pButton, gtk_image_new_from_pixbuf(pixbuf));
             g_object_unref(pixbuf);
         }
+    }
+
+    virtual void set_custom_button(VirtualDevice* pDevice) override
+    {
+        use_custom_content(pDevice);
     }
 
     virtual OUString get_label() const override
@@ -6971,6 +7012,9 @@ public:
     {
         g_object_steal_data(G_OBJECT(m_pButton), "g-lo-GtkInstanceButton");
         g_signal_handler_disconnect(m_pButton, m_nSignalId);
+        if (m_pCustomCssProvider)
+            use_custom_content(nullptr);
+        assert(!m_pCustomCssProvider);
     }
 };
 

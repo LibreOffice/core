@@ -82,6 +82,10 @@ public:
     DrawButtonFlags     GetButtonState() const;
     DrawButtonFlags&    GetButtonState();
 
+    /// Set an image to use as the complete render view of a custom button,
+    /// instead of the usual contents of a button
+    void                SetCustomButtonImage( const Image& rImage );
+    Image const &       GetCustomButtonImage() const;
 
     bool                IsSmallSymbol() const;
     void                SetSmallSymbol();
