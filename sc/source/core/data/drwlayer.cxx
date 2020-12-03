@@ -2231,7 +2231,7 @@ void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument
     {
         // tdf#137576. A SdrMeasureObj might have a wrong logic rect here. TakeUnrotatedSnapRect
         // calculates the current unrotated snap rectangle, sets logic rectangle and returns it.
-        static_cast<SdrObjCustomShape*>(&rObj)->TakeUnrotatedSnapRect(aObjRect2);
+        static_cast<SdrMeasureObj*>(&rObj)->TakeUnrotatedSnapRect(aObjRect2);
     }
     else
         aObjRect2 = rObj.GetLogicRect();
