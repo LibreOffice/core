@@ -5571,7 +5571,7 @@ void ScExportTest::testTdf87973_externalLinkSkipUnuseds()
     ScDocShellRef pDocSh = saveAndReload(&(*pShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(pDocSh.is());
 
-    // check if the the new filename is present in the link (and not replaced by '[2]')
+    // check if the new filename is present in the link (and not replaced by '[2]')
     ScDocument& rDoc2 = pDocSh->GetDocument();
     rDoc2.GetFormula(3, 1, 0, bFormula);
     CPPUNIT_ASSERT(bFormula.indexOf("tdf132105_external.ods") < 0);
