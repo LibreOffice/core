@@ -1,0 +1,20 @@
+--- extern/cloop/Makefile.orig	2020-12-03 13:46:12.193495624 +0100
++++ extern/cloop/Makefile	2020-12-03 13:52:14.041073374 +0100
+@@ -52,14 +52,15 @@
+ 
+ .PHONY: all mkdirs clean
+ 
+-all: mkdirs \
++all: \
+ 	$(BIN_DIR)/cloop	\
+ 	$(BIN_DIR)/test1-c$(SHRLIB_EXT)	\
+ 	$(BIN_DIR)/test1-c$(EXE_EXT)	\
+ 	$(BIN_DIR)/test1-cpp$(SHRLIB_EXT)	\
+ 	$(BIN_DIR)/test1-cpp$(EXE_EXT)	\
+ 	$(BIN_DIR)/test1-pascal$(SHRLIB_EXT)	\
+-	$(BIN_DIR)/test1-pascal$(EXE_EXT)
++	$(BIN_DIR)/test1-pascal$(EXE_EXT) \
++	| mkdirs
+ 
+ mkdirs: $(OBJ_DIRS) $(BIN_DIR) $(LIB_DIR)
+ 

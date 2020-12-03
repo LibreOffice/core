@@ -39,6 +39,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
     external/firebird/firebird-btyacc-add-explicit-rule.patch \
     external/firebird/firebird-307.patch.1 \
     external/firebird/0001-Fix-checks-for-null-HANDLE-in-Windows-only-code.patch.1 \
+    external/firebird/firebird-cloop-parallel.patch \
 ))
 
 ifeq ($(OS),WNT)
