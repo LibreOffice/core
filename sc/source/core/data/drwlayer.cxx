@@ -934,7 +934,7 @@ void ScDrawLayer::InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rDat
         {
             // Measure lines might have got wrong start and end anchor from XML import. Recreate
             // anchor from start and end point.
-            SdrMeasureObj* pMeasureObj = dynamic_cast<SdrMeasureObj*>(pObj);
+            SdrMeasureObj* pMeasureObj = static_cast<SdrMeasureObj*>(pObj);
             // tdf#137576. The logic rectangle has likely no current values here, but only the
             // 1cm x 1cm default size. The call of TakeUnrotatedSnapRect is currently (LO 7.2)
             // the only way to force a recalc of the logic rectangle.
@@ -2231,7 +2231,7 @@ void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument
     {
         // tdf#137576. A SdrMeasureObj might have a wrong logic rect here. TakeUnrotatedSnapRect
         // calculates the current unrotated snap rectangle, sets logic rectangle and returns it.
-        static_cast<SdrMeasureObj*>(&rObj)->TakeUnrotatedSnapRect(aObjRect2);
+        static_cast<SdrMeasureObj&>(rObj).TakeUnrotatedSnapRect(aObjRect2);
     }
     else
         aObjRect2 = rObj.GetLogicRect();
