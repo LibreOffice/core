@@ -40,8 +40,8 @@
 #include "tblenum.hxx"
 #include "ndarr.hxx"
 #include "ndtyp.hxx"
-#include <atomic>
 #include <memory>
+#include <mutex>
 #include <set>
 #include <tuple>
 #include <unordered_map>
@@ -261,7 +261,9 @@ class SW_DLLPUBLIC SwDoc final
     std::unique_ptr<SwAutoCorrExceptWord> mpACEWord;               /**< For the automated takeover of
                                                    auto-corrected words that are "re-corrected". */
     std::unique_ptr<SwURLStateChanged> mpURLStateChgd;             //< SfxClient for changes in INetHistory
-    std::atomic<SvNumberFormatter*> mpNumberFormatter;             //< NumFormatter for tables / fields
+
+    std::mutex mNumberFormatterMutex;
+    SvNumberFormatter* mpNumberFormatter;             //< NumFormatter for tables / fields
 
     mutable std::unique_ptr<SwNumRuleTable> mpNumRuleTable;     //< List of all named NumRules.
 
@@ -354,7 +356,7 @@ private:
                                 const OUString& rFormula,
                                 std::vector<OUString>& rUsedDBNames );
 
-    void EnsureNumberFormatter();
+    void EnsureNumberFormatter(); // must be called with mNumberFormatterMutex locked
 
     bool UnProtectTableCells( SwTable& rTable );
 
@@ -1408,6 +1410,7 @@ public:
     // Query NumberFormatter.
     SvNumberFormatter* GetNumberFormatter(bool bCreate = true)
     {
+        std::scoped_lock lock(mNumberFormatterMutex);
         if (bCreate)
             EnsureNumberFormatter();
         return mpNumberFormatter;

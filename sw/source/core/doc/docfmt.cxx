@@ -28,7 +28,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
 #include <svl/zforlist.hxx>
-#include <comphelper/doublecheckedinit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
 #include <sal/log.hxx>
@@ -1722,15 +1721,15 @@ SwTableLineFormat* SwDoc::MakeTableLineFormat()
 
 void SwDoc::EnsureNumberFormatter()
 {
-    comphelper::doubleCheckedInit(mpNumberFormatter, []()
+    if (mpNumberFormatter == nullptr)
     {
         LanguageType eLang = LANGUAGE_SYSTEM;
-        SvNumberFormatter* pRet = new SvNumberFormatter(comphelper::getProcessComponentContext(), eLang);
-        pRet->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
+        mpNumberFormatter = new SvNumberFormatter(comphelper::getProcessComponentContext(), eLang);
+        mpNumberFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
         if (!utl::ConfigManager::IsFuzzing())
-            pRet->SetYear2000(officecfg::Office::Common::DateFormat::TwoDigitYear::get());
-        return pRet;
-    });
+            mpNumberFormatter->SetYear2000(
+                officecfg::Office::Common::DateFormat::TwoDigitYear::get());
+    };
 }
 
 SwTableNumFormatMerge::SwTableNumFormatMerge( const SwDoc& rSrc, SwDoc& rDest )
