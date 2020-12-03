@@ -182,7 +182,8 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
             }
         }
 
-        if (rUIFile == "modules/scalc/ui/pivottablelayoutdialog.ui")
+        if (rUIFile == "modules/scalc/ui/pivottablelayoutdialog.ui"
+            || rUIFile == "modules/scalc/ui/selectsource.ui")
         {
             bUseJSBuilder = true;
         }
