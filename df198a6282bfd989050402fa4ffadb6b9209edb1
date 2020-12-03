@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf0bb030_97779aff",
+        "filename": "vcl/win/dtrans/MtaOleClipb.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-03T14:10:58Z",
+      "side": 1,
+      "message": "dwResult  should be DWORD",
+      "revId": "df198a6282bfd989050402fa4ffadb6b9209edb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
