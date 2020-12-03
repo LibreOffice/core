@@ -33,6 +33,8 @@
 #include <drawdoc.hxx>
 #include <dcontact.hxx>
 #include <svx/svdpage.hxx>
+#include <ndtxt.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 namespace
 {
@@ -216,6 +218,40 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132911)
     //Scheduler::ProcessEventsToIdle();
     //CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     //CPPUNIT_ASSERT_EQUAL(4, getShapes());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf61154)
+{
+    load(DATA_DIRECTORY, "tdf61154.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+
+    pWrtShell->GotoNextTOXBase();
+
+    // show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be off",
+                           !pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
+    pWrtShell->UpdateTableOf(*pTOXBase);
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    SwTextNode* pTitleNode = pShell->GetCursor()->GetNode().GetTextNode();
+    SwNodeIndex aIdx(*pTitleNode);
+
+    // table of contents node shouldn't contain tracked deletion
+    // This was "Text InsertedDeleted\t1"
+    SwTextNode* pNext = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext(&aIdx));
+    CPPUNIT_ASSERT_EQUAL(OUString("Text Inserted\t1"), pNext->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134404)
