@@ -185,6 +185,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/linenumbering \
 	sw/uiconfig/swriter/ui/mailconfigpage \
 	sw/uiconfig/swriter/ui/mailmergedialog \
+	sw/uiconfig/swriter/ui/menubutton \
 	sw/uiconfig/swriter/ui/mergeconnectdialog \
 	sw/uiconfig/swriter/ui/mergetabledialog \
 	sw/uiconfig/swriter/ui/newuserindexdialog \

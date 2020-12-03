@@ -41,10 +41,12 @@ public:
     virtual ~SwPageBreakWin() override;
     virtual void dispose() override;
 
+#if 0
     virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect ) override;
     virtual void Select( ) override;
     virtual void MouseMove( const MouseEvent& rMEvt ) override;
     virtual void Activate( ) override;
+#endif
 
     void UpdatePosition(const std::optional<Point>& xEvtPt = std::optional<Point>());
 

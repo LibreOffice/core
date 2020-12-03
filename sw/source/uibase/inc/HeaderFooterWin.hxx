@@ -50,9 +50,10 @@ public:
 
     void SetOffset( Point aOffset, tools::Long nXLineStart, tools::Long nXLineEnd );
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+#if 0
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void Select( ) override;
+#endif
 
     virtual void ShowAll( bool bShow ) override;
     virtual bool Contains( const Point &rDocPt ) const override;
@@ -66,6 +67,7 @@ public:
 
 private:
     DECL_LINK( FadeHandler, Timer *, void );
+    void PaintButton(vcl::RenderContext& rRenderContext);
 };
 
 #endif

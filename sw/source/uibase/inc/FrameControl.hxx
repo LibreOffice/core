@@ -10,6 +10,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FRAMECONTROL_HXX
 
 #include <vcl/menubtn.hxx>
+#include <vcl/InterimItemWindow.hxx>
 
 #include "edtwin.hxx"
 
@@ -54,8 +55,11 @@ public:
 
 /** Class sharing some MenuButton code
   */
-class SwFrameMenuButtonBase : public MenuButton, public ISwFrameControl
+class SwFrameMenuButtonBase : public InterimItemWindow, public ISwFrameControl
 {
+protected:
+    std::unique_ptr<weld::MenuButton> m_xMenuButton;
+private:
     VclPtr<SwEditWin>     m_pEditWin;
     const SwFrame*          m_pFrame;
 
@@ -68,7 +72,7 @@ public:
 
     virtual const SwFrame* GetFrame()   override { return m_pFrame; }
     virtual SwEditWin*   GetEditWin() override { return m_pEditWin; }
-    virtual bool IsFocused() const override { return HasFocus(); }
+    virtual bool IsFocused() const override { return ControlHasFocus(); }
     const SwPageFrame*     GetPageFrame() const;
 };
 

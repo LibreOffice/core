@@ -177,10 +177,11 @@ void SwFrameControlsManager::SetUnfloatTableButton( const SwFlyFrame* pFlyFrame,
     pControl->ShowAll( bShow );
 }
 
-SwFrameMenuButtonBase::SwFrameMenuButtonBase( SwEditWin* pEditWin, const SwFrame* pFrame ) :
-    MenuButton( pEditWin, WB_DIALOGCONTROL ),
-    m_pEditWin( pEditWin ),
-    m_pFrame( pFrame )
+SwFrameMenuButtonBase::SwFrameMenuButtonBase(SwEditWin* pEditWin, const SwFrame* pFrame)
+    : InterimItemWindow(pEditWin, "modules/swriter/ui/menubutton.ui", "MenuButton")
+    , m_xMenuButton(m_xBuilder->weld_menu_button("button"))
+    , m_pEditWin(pEditWin)
+    , m_pFrame(pFrame)
 {
 }
 
@@ -302,7 +303,8 @@ void SwFrameMenuButtonBase::dispose()
 {
     m_pEditWin.clear();
     m_pFrame = nullptr;
-    MenuButton::dispose();
+    m_xMenuButton.reset();
+    InterimItemWindow::dispose();
 }
 
 SwFrameControl::SwFrameControl( const VclPtr<vcl::Window> &pWindow )

@@ -49,6 +49,7 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/virdev.hxx>
 #include <memory>
 
 #define TEXT_PADDING 5
@@ -168,7 +169,7 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwFrame *pFrame
     m_pPopupMenu(m_aBuilder.get_menu("menu")),
     m_pLine( nullptr ),
     m_bIsAppearing( false ),
-    m_nFadeRate( 100 ),
+    m_nFadeRate( 0 ),
     m_aFadeTimer( )
 {
     //FIXME RenderContext
@@ -194,7 +195,7 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwFrame *pFrame
         m_pPopupMenu->SetItemText(m_pPopupMenu->GetItemId("delete"), SwResId(STR_DELETE_FOOTER));
     }
 
-    SetPopupMenu(m_pPopupMenu);
+//TODO    SetPopupMenu(m_pPopupMenu);
 
     m_aFadeTimer.SetTimeout(50);
     m_aFadeTimer.SetInvokeHandler(LINK(this, SwHeaderFooterWin, FadeHandler));
@@ -258,6 +259,12 @@ void SwHeaderFooterWin::SetOffset(Point aOffset, tools::Long nXLineStart, tools:
     // Set the position & Size of the window
     SetPosSizePixel(aBoxPos, aBoxSize);
 
+    ScopedVclPtr<VirtualDevice> xVirDev = m_xMenuButton->create_virtual_device();
+    xVirDev->SetOutputSizePixel(aBoxSize);
+    xVirDev->SetFont(GetFont());
+    PaintButton(*xVirDev);
+    m_xMenuButton->set_custom_button(xVirDev.get());
+
     double nYLinePos = aBoxPos.Y();
     if (!m_bIsHeader)
         nYLinePos += aBoxSize.Height();
@@ -288,7 +295,7 @@ bool SwHeaderFooterWin::Contains( const Point &rDocPt ) const
     return aLineRect.IsInside(rDocPt);
 }
 
-void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
+void SwHeaderFooterWin::PaintButton(vcl::RenderContext& rRenderContext)
 {
     // Use pixels for the rest of the drawing
     SetMapMode(MapMode(MapUnit::MapPixel));
@@ -476,6 +483,7 @@ void SwHeaderFooterWin::SetReadonly( bool bReadonly )
     ShowAll( !bReadonly );
 }
 
+#if 0
 void SwHeaderFooterWin::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (IsEmptyHeaderFooter())
@@ -489,11 +497,14 @@ void SwHeaderFooterWin::MouseButtonDown( const MouseEvent& rMEvt )
     else
         MenuButton::MouseButtonDown( rMEvt );
 }
+#endif
 
+#if 0
 void SwHeaderFooterWin::Select()
 {
     ExecuteCommand(GetCurItemIdent());
 }
+#endif
 
 IMPL_LINK_NOARG(SwHeaderFooterWin, FadeHandler, Timer *, void)
 {

@@ -112,7 +112,7 @@ SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwFrame *pFrame ) :
 
     // Set the popup menu
     m_pPopupMenu->SetDeactivateHdl( LINK( this, SwPageBreakWin, HideHandler ) );
-    SetPopupMenu(m_pPopupMenu);
+//TODO    SetPopupMenu(m_pPopupMenu);
 
     m_aFadeTimer.SetTimeout( 50 );
     m_aFadeTimer.SetInvokeHandler( LINK( this, SwPageBreakWin, FadeHandler ) );
@@ -135,6 +135,7 @@ void SwPageBreakWin::dispose()
     SwFrameMenuButtonBase::dispose();
 }
 
+#if 0
 void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
     const ::tools::Rectangle aRect(::tools::Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
@@ -213,7 +214,9 @@ void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
 
     pProcessor->process(aGhostedSeq);
 }
+#endif
 
+#if 0
 void SwPageBreakWin::Select()
 {
     SwFrameControlPtr pThis = GetEditWin()->GetFrameControlsManager( ).GetControl( FrameControlType::PageBreak, GetFrame() );
@@ -306,7 +309,9 @@ void SwPageBreakWin::Select()
     if ( pThis.use_count() > 1 )
         Fade( false );
 }
+#endif
 
+#if 0
 void SwPageBreakWin::MouseMove( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeaveWindow() )
@@ -319,12 +324,15 @@ void SwPageBreakWin::MouseMove( const MouseEvent& rMEvt )
     else if ( !IsVisible() )
         Fade( true );
 }
+#endif
 
+#if 0
 void SwPageBreakWin::Activate( )
 {
     Fade( true );
     MenuButton::Activate();
 }
+#endif
 
 void SwPageBreakWin::UpdatePosition(const std::optional<Point>& xEvtPt)
 {

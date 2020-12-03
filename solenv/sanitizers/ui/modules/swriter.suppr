@@ -87,6 +87,7 @@ sw/uiconfig/swriter/ui/outlinenumberingpage.ui://GtkDrawingArea[@id='preview'] n
 sw/uiconfig/swriter/ui/poseditbox.ui://GtkEntry[@id='entry'] no-labelled-by
 sw/uiconfig/swriter/ui/mailmerge.ui://GtkLabel[@id='fieldlabel'] orphan-label
 sw/uiconfig/swriter/ui/mailmerge.ui://GtkLabel[@id='mailformatlabel'] orphan-label
+sw/uiconfig/swriter/ui/menubutton.ui://GtkMenuButton[@id='button'] button-no-label
 sw/uiconfig/swriter/ui/mmaddressblockpage.ui://GtkLabel[@id='currentaddress'] orphan-label
 sw/uiconfig/swriter/ui/mmaddressblockpage.ui://GtkLabel[@id='label2'] orphan-label
 sw/uiconfig/swriter/ui/mmaddressblockpage.ui://GtkLabel[@id='label3'] orphan-label
