@@ -32,7 +32,7 @@ public:
 
     void CalcPosAndSize(const SwRect& rPortionPaintArea);
 
-    virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
     DECL_LINK(FieldPopupModeEndHdl, FloatingWindow*, void);
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
