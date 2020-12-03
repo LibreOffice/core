@@ -56,19 +56,18 @@ void FormFieldButton::CalcPosAndSize(const SwRect& rPortionPaintArea)
     }
 }
 
-void FormFieldButton::MouseButtonUp(const MouseEvent&)
+void FormFieldButton::MouseButtonDown(const MouseEvent&)
 {
     assert(GetParent());
-
-    Point aPixPos = GetPosPixel();
-    aPixPos.AdjustY(GetSizePixel().Height());
 
     // sets m_pFieldPopup
     InitPopup();
 
     m_pFieldPopup->SetPopupModeEndHdl(LINK(this, DropDownFormFieldButton, FieldPopupModeEndHdl));
 
-    tools::Rectangle aRect(GetParent()->OutputToScreenPixel(aPixPos), Size(0, 0));
+    Size aSize = GetSizePixel();
+    Point aPos(GetParent()->OutputToScreenPixel(GetPosPixel()));
+    tools::Rectangle aRect(aPos, aSize);
     m_pFieldPopup->StartPopupMode(aRect, FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus);
     Invalidate();
 }
