@@ -64,6 +64,7 @@ Private DatabaseContext		As Object	&apos; com.sun.star.sdb.DatabaseContext
 Private ConfigurationProvider _
 							As Object	&apos; com.sun.star.configuration.ConfigurationProvider
 Private MailService			As Object	&apos; com.sun.star.system.SimpleCommandMail or com.sun.star.system.SimpleSystemMail
+Private TreeDataModel		As Object	&apos; com.sun.star.awt.tree.MutableTreeDataModel
 
 &apos;	Specific persistent services objects or properties
 Private FileSystemNaming	As String	&apos; If &quot;SYS&quot;, file and folder naming is based on operating system notation
@@ -114,6 +115,7 @@ Private Sub Class_Initialize()
 	Set DatabaseContext = Nothing
 	Set ConfigurationProvider = Nothing
 	Set MailService = Nothing
+	Set TreeDataModel = Nothing
 	OSName = &quot;&quot;
 	SFDialogs = Empty
 End Sub		&apos;	ScriptForge.SF_Root Constructor
