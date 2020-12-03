@@ -19,185 +19,62 @@
 
 package com.sun.star.lib.loader;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class provides functionality for reading string values from the
- * Windows Registry. It requires the native library unowinreg.dll.
+ * Windows Registry.
  */
 final class WinRegKey {
 
-    private final String m_rootKeyName;
-    private final String m_subKeyName;
-
-    // native methods to access the windows registry
-    private static native boolean winreg_RegOpenClassesRoot( long[] hkresult );
-    private static native boolean winreg_RegOpenCurrentConfig(
-        long[] hkresult );
-    private static native boolean winreg_RegOpenCurrentUser( long[] hkresult );
-    private static native boolean winreg_RegOpenLocalMachine( long[] hkresult );
-    private static native boolean winreg_RegOpenUsers( long[] hkresult );
-    private static native boolean winreg_RegOpenKeyEx( long parent, String name,
-        long[] hkresult );
-    private static native boolean winreg_RegCloseKey( long hkey );
-    private static native boolean winreg_RegQueryValueEx(
-        long hkey, String value, long[] type,
-        byte[] data, long[] size );
-    private static native boolean winreg_RegQueryInfoKey(
-        long hkey, long[] subkeys, long[] maxSubkeyLen,
-        long[] values, long[] maxValueNameLen,
-        long[] maxValueLen, long[] secDescriptor );
-
-    // load the native library unowinreg.dll
-    static {
-        try {
-            ClassLoader cl = WinRegKey.class.getClassLoader();
-            InputStream is = cl.getResourceAsStream( "win/unowinreg.dll" );
-            if ( is != null ) {
-                // generate a temporary name for lib file and write to temp
-                // location
-                File libfile;
-                BufferedInputStream istream = null;
-                BufferedOutputStream ostream = null;
-                try {
-                    istream = new BufferedInputStream( is );
-                    libfile = File.createTempFile( "unowinreg", ".dll" );
-                    libfile.deleteOnExit(); // ensure deletion
-                    ostream = new BufferedOutputStream(
-                        new FileOutputStream( libfile ) );
-                    int bsize = 2048; int n = 0;
-                    byte[] buffer = new byte[bsize];
-                    while ( ( n = istream.read( buffer, 0, bsize ) ) != -1 ) {
-                        ostream.write( buffer, 0, n );
-                    }
-                } finally {
-                    if (istream != null) {
-                        istream.close();
-                    }
-                    if (ostream != null) {
-                        ostream.close();
-                    }
-                }
-                // load library
-                System.load( libfile.getPath() );
-            } else {
-                // If the library cannot be found as a class loader resource,
-                // try the global System.loadLibrary(). The JVM will look for
-                // it in the java.library.path.
-                System.loadLibrary( "unowinreg" );
-            }
-        } catch ( java.lang.Exception e ) {
-            System.err.println( "com.sun.star.lib.loader.WinRegKey: " +
-                "loading of native library failed!" + e );
-        }
-    }
+    private final String m_keyName;
 
     /**
      * Constructs a <code>WinRegKey</code>.
      */
-    public WinRegKey( String rootKeyName, String subKeyName ) {
-        m_rootKeyName = rootKeyName;
-        m_subKeyName = subKeyName;
+    public WinRegKey( String keyName ) {
+        m_keyName = keyName;
     }
 
     /**
-     * Reads a string value for the specified value name.
+     * Reads the default string value.
      */
-    public String getStringValue( String valueName ) throws WinRegKeyException {
-        byte[] data = getValue( valueName );
-        // remove terminating null character
-        return new String( data, 0, data.length - 1 );
-    }
-
-    /**
-     * Reads a value for the specified value name.
-     */
-    private byte[] getValue( String valueName ) throws WinRegKeyException {
-
-        byte[] result = null;
-        long[] hkey = {0};
-
-        // open the specified registry key
-        boolean bRet = false;
-        long[] hroot = {0};
-        if ( m_rootKeyName.equals( "HKEY_CLASSES_ROOT" ) ) {
-            bRet = winreg_RegOpenClassesRoot( hroot );
-        } else if ( m_rootKeyName.equals( "HKEY_CURRENT_CONFIG" ) ) {
-            bRet = winreg_RegOpenCurrentConfig( hroot );
-        } else if ( m_rootKeyName.equals( "HKEY_CURRENT_USER" ) ) {
-            bRet = winreg_RegOpenCurrentUser( hroot );
-        } else if ( m_rootKeyName.equals( "HKEY_LOCAL_MACHINE" ) ) {
-            bRet = winreg_RegOpenLocalMachine( hroot );
-        } else if ( m_rootKeyName.equals( "HKEY_USERS" ) ) {
-            bRet = winreg_RegOpenUsers( hroot );
-        } else {
-            throw new WinRegKeyException( "unknown root registry key!");
-        }
-        if ( !bRet ) {
-            throw new WinRegKeyException( "opening root registry key " +
-                "failed!" );
-        }
-        if ( !winreg_RegOpenKeyEx( hroot[0], m_subKeyName, hkey ) ) {
-            if ( !winreg_RegCloseKey( hroot[0] ) ) {
-                throw new WinRegKeyException( "opening registry key and " +
-                    "releasing root registry key handle failed!" );
+    public String getStringValue() throws WinRegKeyException {
+        try {
+            Process p = Runtime.getRuntime().exec(new String[]{"reg", "QUERY", m_keyName});
+            BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String v = null;
+            Pattern pt = Pattern.compile("\\s+\\(Default\\)\\s+REG_SZ\\s+(.+)");
+            for (;;) {
+                String s = r.readLine();
+                if (s == null) {
+                    break;
+                }
+                Matcher m = pt.matcher(s);
+                if (m.matches()) {
+                    if (v != null) {
+                        throw new WinRegKeyException("reg QUERY did not provided expected output");
+                    }
+                    v = m.group(1);
+                }
             }
-            throw new WinRegKeyException( "opening registry key failed!" );
-        }
-
-        // get the size of the longest data component among the key's values
-        long[] subkeys = {0};
-        long[] maxSubkeyLen = {0};
-        long[] values = {0};
-        long[] maxValueNameLen = {0};
-        long[] maxValueLen = {0};
-        long[] secDescriptor = {0};
-        if ( !winreg_RegQueryInfoKey( hkey[0], subkeys, maxSubkeyLen,
-                 values, maxValueNameLen, maxValueLen, secDescriptor ) ) {
-            if ( !winreg_RegCloseKey( hkey[0] ) ||
-                 !winreg_RegCloseKey( hroot[0] ) ) {
-                throw new WinRegKeyException( "retrieving information about " +
-                    "the registry key and releasing registry key handles " +
-                    "failed!" );
+            p.waitFor();
+            int e = p.exitValue();
+            if (e != 0) {
+                throw new WinRegKeyException("reg QUERY exited with " + e);
             }
-            throw new WinRegKeyException( "retrieving information about " +
-                "the registry key failed!" );
-        }
-
-        // get the data for the specified value name
-        byte[] buffer = new byte[ (int) maxValueLen[0] ];
-        long[] size = new long[1];
-        size[0] = buffer.length;
-        long[] type = new long[1];
-        type[0] = 0;
-        if ( !winreg_RegQueryValueEx( hkey[0], valueName, type, buffer,
-                 size ) ) {
-            if ( !winreg_RegCloseKey( hkey[0] ) ||
-                 !winreg_RegCloseKey( hroot[0] ) ) {
-                throw new WinRegKeyException( "retrieving data for the " +
-                    "specified value name and releasing registry key handles " +
-                    "failed!" );
+            if (v == null) {
+                throw new WinRegKeyException("reg QUERY did not provided expected output");
             }
-            throw new WinRegKeyException( "retrieving data for the " +
-                "specified value name failed!" );
+            return v;
+        } catch (WinRegKeyException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new WinRegKeyException(e);
         }
-
-        // release registry key handles
-        if ( !winreg_RegCloseKey( hkey[0] ) ||
-             !winreg_RegCloseKey( hroot[0] ) ) {
-            throw new WinRegKeyException( "releasing registry key handles " +
-                "failed!" );
-        }
-
-        result = new byte[ (int) size[0] ];
-        System.arraycopy( buffer, 0, result, 0, (int)size[0] );
-
-        return result;
     }
 }
 

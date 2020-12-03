@@ -535,7 +535,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	vclbootstrapprotector \
 	scqahelper \
 	swqahelper \
-	unowinreg \
 	wpftqahelper \
 	precompiled_system \
 	$(if $(filter MSC,$(COM)),cli_cppuhelper) \
@@ -854,7 +853,6 @@ $(eval $(call gb_Helper_register_packages_for_install,sdk,\
 	$(if $(ENABLE_JAVA), \
 		odk_javadoc \
 		odk_uno_loader_classes \
-		odk_unowinreg \
 	) \
 ))
 

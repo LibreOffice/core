@@ -27,8 +27,8 @@ final class WinRegKeyException extends java.lang.Exception {
     /**
      * Constructs a <code>WinRegKeyException</code>.
      */
-    public WinRegKeyException() {
-        super();
+    public WinRegKeyException(Throwable cause) {
+        super(cause);
     }
 
     /**

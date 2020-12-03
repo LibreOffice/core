@@ -1644,12 +1644,6 @@ libo_FUZZ_ARG_ENABLE(chart-tests,
          who can judge if a test failure is a regression or not.]),
 ,)
 
-AC_ARG_ENABLE(build-unowinreg,
-    AS_HELP_STRING([--enable-build-unowinreg],
-        [Do not use the prebuilt unowinreg.dll. Build it instead. The MinGW C++
-         compiler is needed on Linux.]),
-,)
-
 AC_ARG_ENABLE(build-opensymbol,
     AS_HELP_STRING([--enable-build-opensymbol],
         [Do not use the prebuilt opens___.ttf. Build it instead. This needs
@@ -2547,13 +2541,6 @@ AC_ARG_WITH(compat-oowrappers,
 AC_ARG_WITH(os-version,
     AS_HELP_STRING([--with-os-version=<OSVERSION>],
         [For FreeBSD users, use this option to override the detected OSVERSION.]),
-,)
-
-AC_ARG_WITH(mingw-cross-compiler,
-    AS_HELP_STRING([--with-mingw-cross-compiler=<mingw32-g++ command>],
-        [Specify the MinGW cross-compiler to use.
-         When building on the ODK on Unix and building unowinreg.dll,
-         specify the MinGW C++ cross-compiler.]),
 ,)
 
 AC_ARG_WITH(idlc-cpp,
@@ -4071,12 +4058,6 @@ fi
 AC_SUBST(VCVER)
 AC_SUBST(DEVENV)
 AC_SUBST(MSVC_CXX)
-
-#
-# unowinreg.dll
-#
-UNOWINREG_DLL="185d60944ea767075d27247c3162b3bc-unowinreg.dll"
-AC_SUBST(UNOWINREG_DLL)
 
 COM_IS_CLANG=
 AC_MSG_CHECKING([whether the compiler is actually Clang])
@@ -8717,54 +8698,10 @@ AC_SUBST([DOXYGEN])
 AC_MSG_CHECKING([whether to build the ODK])
 if test "$enable_odk" = "" -o "$enable_odk" != "no"; then
     AC_MSG_RESULT([yes])
-
-    if test "$with_java" != "no"; then
-        AC_MSG_CHECKING([whether to build unowinreg.dll])
-        if test "$_os" = "WINNT" -a "$enable_build_unowinreg" = ""; then
-            # build on Win by default
-            enable_build_unowinreg=yes
-        fi
-        if test "$enable_build_unowinreg" = "" -o "$enable_build_unowinreg" = "no"; then
-            AC_MSG_RESULT([no])
-            BUILD_UNOWINREG=
-        else
-            AC_MSG_RESULT([yes])
-            BUILD_UNOWINREG=TRUE
-        fi
-        if test "$_os" != "WINNT" -a "$BUILD_UNOWINREG" = "TRUE"; then
-            if test -z "$with_mingw_cross_compiler"; then
-                dnl Guess...
-                AC_CHECK_PROGS(MINGWCXX,i386-mingw32msvc-g++ i586-pc-mingw32-g++ i686-pc-mingw32-g++ i686-w64-mingw32-g++,false)
-            elif test -x "$with_mingw_cross_compiler"; then
-                 MINGWCXX="$with_mingw_cross_compiler"
-            else
-                AC_CHECK_TOOL(MINGWCXX, "$with_mingw_cross_compiler", false)
-            fi
-
-            if test "$MINGWCXX" = "false"; then
-                AC_MSG_ERROR([MinGW32 C++ cross-compiler not found.])
-            fi
-
-            mingwstrip_test="`echo $MINGWCXX | $SED -e s/g++/strip/`"
-            if test -x "$mingwstrip_test"; then
-                MINGWSTRIP="$mingwstrip_test"
-            else
-                AC_CHECK_TOOL(MINGWSTRIP, "$mingwstrip_test", false)
-            fi
-
-            if test "$MINGWSTRIP" = "false"; then
-                AC_MSG_ERROR(MinGW32 binutils not found.)
-            fi
-        fi
-    fi
     BUILD_TYPE="$BUILD_TYPE ODK"
 else
     AC_MSG_RESULT([no])
-    BUILD_UNOWINREG=
 fi
-AC_SUBST(BUILD_UNOWINREG)
-AC_SUBST(MINGWCXX)
-AC_SUBST(MINGWSTRIP)
 
 dnl ===================================================================
 dnl Check for system zlib

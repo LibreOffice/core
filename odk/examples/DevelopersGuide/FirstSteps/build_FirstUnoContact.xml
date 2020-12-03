@@ -34,7 +34,6 @@
     <fileset id="bootstrap.glue.code" dir="${OO_SDK_HOME}/classes">
         <patternset>
             <include name="com/sun/star/lib/loader/*.class"/>
-            <include name="win/unowinreg.dll"/>
         </patternset>
     </fileset>
 

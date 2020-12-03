@@ -7105,7 +7105,6 @@ odk/examples/cpp/custompanel/ctp_services.cxx
 odk/examples/cpp/remoteclient/remoteclient.cxx
 odk/source/unoapploader/unx/unoapploader.c
 odk/source/unoapploader/win/unoapploader.c
-odk/source/unowinreg/win/unowinreg.cxx
 officecfg/qa/cppheader.cxx
 onlineupdate/inc/Char16.h
 onlineupdate/source/libmar/sign/mar_sign.c
