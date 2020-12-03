@@ -1220,30 +1220,38 @@ bool LanguageTagImpl::canonicalize()
 
     if (!lt_tag_parse_disabled && lt_tag_parse(mpImplLangtag, OUStringToOString(maBcp47, RTL_TEXTENCODING_UTF8).getStr(), &aError.p))
     {
-        char* pTag = lt_tag_canonicalize( mpImplLangtag, &aError.p);
-        SAL_WARN_IF( !pTag, "i18nlangtag", "LanguageTagImpl::canonicalize: could not canonicalize '" << maBcp47 << "'");
-        if (pTag)
+        if (aError.p)
         {
-            OUString aNew( OUString::createFromAscii( pTag));
-            // Make the lt_tag_t follow the new string if different, which
-            // removes default script and such.
-            if (maBcp47 != aNew)
+            SAL_WARN("i18nlangtag", "LanguageTagImpl::canonicalize: could not parse '" << maBcp47 << "'");
+        }
+        else
+        {
+            char* pTag = lt_tag_canonicalize(mpImplLangtag, &aError.p);
+            SAL_WARN_IF(!pTag, "i18nlangtag", "LanguageTagImpl::canonicalize: could not canonicalize '" << maBcp47 << "'");
+            if (pTag)
             {
-                maBcp47 = aNew;
-                bChanged = true;
-                meIsIsoLocale = DECISION_DONTKNOW;
-                meIsIsoODF = DECISION_DONTKNOW;
-                if (!lt_tag_parse( mpImplLangtag, pTag, &aError.p))
+                OUString aNew(OUString::createFromAscii(pTag));
+                // Make the lt_tag_t follow the new string if different, which
+                // removes default script and such.
+                if (maBcp47 != aNew)
                 {
-                    SAL_WARN( "i18nlangtag", "LanguageTagImpl::canonicalize: could not reparse '" << maBcp47 << "'");
-                    free( pTag);
-                    meIsValid = DECISION_NO;
-                    return bChanged;
+                    maBcp47 = aNew;
+                    bChanged = true;
+                    meIsIsoLocale = DECISION_DONTKNOW;
+                    meIsIsoODF = DECISION_DONTKNOW;
+                    if (!lt_tag_parse(mpImplLangtag, pTag, &aError.p))
+                    {
+                        SAL_WARN("i18nlangtag", "LanguageTagImpl::canonicalize: could not reparse '"
+                                                    << maBcp47 << "'");
+                        free(pTag);
+                        meIsValid = DECISION_NO;
+                        return bChanged;
+                    }
                 }
+                free(pTag);
+                meIsValid = DECISION_YES;
+                return bChanged;
             }
-            free( pTag);
-            meIsValid = DECISION_YES;
-            return bChanged;
         }
     }
     else
