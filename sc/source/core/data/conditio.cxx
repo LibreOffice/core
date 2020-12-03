@@ -1820,6 +1820,10 @@ ScCondFormatData ScConditionalFormat::GetData( ScRefCellValue& rCell, const ScAd
             const ScCondFormatEntry& rEntry = static_cast<const ScCondFormatEntry&>(*rxEntry);
             if (rEntry.IsCellValid(rCell, rPos))
                 aData.aStyleName = rEntry.GetStyle();
+            else if(rCell.meType == CellType::CELLTYPE_STRING
+                    && (rEntry.GetOperation() == ScConditionMode::Greater
+                        || rEntry.GetOperation() == ScConditionMode::EqGreater))
+                aData.aStyleName = rEntry.GetStyle();
         }
         else if(rxEntry->GetType() == ScFormatEntry::Type::Colorscale && !aData.mxColorScale)
         {
