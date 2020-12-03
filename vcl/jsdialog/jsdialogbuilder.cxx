@@ -34,7 +34,7 @@ JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow,
 
 void JSDialogNotifyIdle::ForceUpdate() { m_bForce = true; }
 
-void JSDialogNotifyIdle::Invoke()
+void JSDialogNotifyIdle::send(boost::property_tree::ptree aTree)
 {
     try
     {
@@ -45,28 +45,6 @@ void JSDialogNotifyIdle::Invoke()
         if (pNotifier)
         {
             std::stringstream aStream;
-            boost::property_tree::ptree aTree = m_aContentWindow->DumpAsPropertyTree();
-            aTree.put("id", m_aNotifierWindow->GetLOKWindowId());
-            aTree.put("jsontype", m_sTypeOfJSON);
-
-            if (m_sTypeOfJSON == "autofilter")
-            {
-                vcl::Window* pWindow = m_aContentWindow.get();
-                DockingWindow* pDockingWIndow = dynamic_cast<DockingWindow*>(pWindow);
-                while (pWindow && !pDockingWIndow)
-                {
-                    pWindow = pWindow->GetParent();
-                    pDockingWIndow = dynamic_cast<DockingWindow*>(pWindow);
-                }
-
-                if (pDockingWIndow)
-                {
-                    Point aPos = pDockingWIndow->GetFloatingPos();
-                    aTree.put("posx", aPos.getX());
-                    aTree.put("posy", aPos.getY());
-                }
-            }
-
             boost::property_tree::write_json(aStream, aTree);
             const std::string message = aStream.str();
             if (m_bForce || message != m_LastNotificationMessage)
@@ -83,12 +61,59 @@ void JSDialogNotifyIdle::Invoke()
     }
 }
 
+boost::property_tree::ptree JSDialogNotifyIdle::dumpStatus()
+{
+    if (!m_aContentWindow || !m_aNotifierWindow)
+        return boost::property_tree::ptree();
+
+    boost::property_tree::ptree aTree = m_aContentWindow->DumpAsPropertyTree();
+    aTree.put("id", m_aNotifierWindow->GetLOKWindowId());
+    aTree.put("jsontype", m_sTypeOfJSON);
+
+    if (m_sTypeOfJSON == "autofilter")
+    {
+        vcl::Window* pWindow = m_aContentWindow.get();
+        DockingWindow* pDockingWIndow = dynamic_cast<DockingWindow*>(pWindow);
+        while (pWindow && !pDockingWIndow)
+        {
+            pWindow = pWindow->GetParent();
+            pDockingWIndow = dynamic_cast<DockingWindow*>(pWindow);
+        }
+
+        if (pDockingWIndow)
+        {
+            Point aPos = pDockingWIndow->GetFloatingPos();
+            aTree.put("posx", aPos.getX());
+            aTree.put("posy", aPos.getY());
+        }
+    }
+
+    return aTree;
+}
+
+boost::property_tree::ptree JSDialogNotifyIdle::generateCloseMessage()
+{
+    boost::property_tree::ptree aTree;
+    if (m_aNotifierWindow)
+        aTree.put("id", m_aNotifierWindow->GetLOKWindowId());
+    aTree.put("jsontype", m_sTypeOfJSON);
+    aTree.put("action", "close");
+
+    return aTree;
+}
+
+void JSDialogNotifyIdle::Invoke() { send(dumpStatus()); }
+
+void JSDialogNotifyIdle::sendClose() { send(generateCloseMessage()); }
+
 void JSDialogSender::notifyDialogState(bool bForce)
 {
     if (bForce)
         mpIdleNotify->ForceUpdate();
     mpIdleNotify->Start();
 }
+
+void JSDialogSender::sendClose() { mpIdleNotify->sendClose(); }
 
 // Drag and drop
 
@@ -618,6 +643,12 @@ void JSDialog::undo_collapse()
 {
     SalInstanceDialog::undo_collapse();
     notifyDialogState();
+}
+
+void JSDialog::response(int response)
+{
+    sendClose();
+    SalInstanceDialog::response(response);
 }
 
 JSLabel::JSLabel(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,

@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <boost/property_tree/ptree_fwd.hpp>
 
 class ToolBox;
 class SfxViewShell;
@@ -48,6 +49,12 @@ public:
 
     void Invoke() override;
     void ForceUpdate();
+    void sendClose();
+
+private:
+    void send(boost::property_tree::ptree aTree);
+    boost::property_tree::ptree dumpStatus();
+    boost::property_tree::ptree generateCloseMessage();
 };
 
 class VCL_DLLPUBLIC JSDialogSender
@@ -62,6 +69,7 @@ public:
     }
 
     void notifyDialogState(bool bForce = false);
+    void sendClose();
 };
 
 class JSDropTarget final
@@ -229,6 +237,7 @@ public:
 
     virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) override;
     virtual void undo_collapse() override;
+    virtual void response(int response) override;
 };
 
 class JSLabel : public JSWidget<SalInstanceLabel, FixedText>
