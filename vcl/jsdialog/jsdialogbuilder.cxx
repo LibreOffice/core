@@ -40,7 +40,7 @@ JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow,
 
 void JSDialogNotifyIdle::ForceUpdate() { m_bForce = true; }
 
-void JSDialogNotifyIdle::Invoke()
+void JSDialogNotifyIdle::send(std::unique_ptr<tools::JsonWriter> aJsonWriter)
 {
     if (!m_aNotifierWindow)
         return;
@@ -48,38 +48,62 @@ void JSDialogNotifyIdle::Invoke()
     const vcl::ILibreOfficeKitNotifier* pNotifier = m_aNotifierWindow->GetLOKNotifier();
     if (pNotifier)
     {
-        tools::JsonWriter aJsonWriter;
-        m_aContentWindow->DumpAsPropertyTree(aJsonWriter);
-        aJsonWriter.put("id", m_aNotifierWindow->GetLOKWindowId());
-        aJsonWriter.put("jsontype", m_sTypeOfJSON);
-
-        if (m_sTypeOfJSON == "autofilter")
-        {
-            vcl::Window* pWindow = m_aContentWindow.get();
-            DockingWindow* pDockingWIndow = dynamic_cast<DockingWindow*>(pWindow);
-            while (pWindow && !pDockingWIndow)
-            {
-                pWindow = pWindow->GetParent();
-                pDockingWIndow = dynamic_cast<DockingWindow*>(pWindow);
-            }
-
-            if (pDockingWIndow)
-            {
-                Point aPos = pDockingWIndow->GetFloatingPos();
-                aJsonWriter.put("posx", aPos.getX());
-                aJsonWriter.put("posy", aPos.getY());
-            }
-        }
-
-        if (m_bForce || !aJsonWriter.isDataEquals(m_LastNotificationMessage))
+        if (m_bForce || !aJsonWriter->isDataEquals(m_LastNotificationMessage))
         {
             m_bForce = false;
-            m_LastNotificationMessage = aJsonWriter.extractAsStdString();
+            m_LastNotificationMessage = aJsonWriter->extractAsStdString();
             pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG,
                                                   m_LastNotificationMessage.c_str());
         }
     }
 }
+
+std::unique_ptr<tools::JsonWriter> JSDialogNotifyIdle::dumpStatus() const
+{
+    std::unique_ptr<tools::JsonWriter> aJsonWriter(new tools::JsonWriter());
+
+    if (!m_aContentWindow || !m_aNotifierWindow)
+        return aJsonWriter;
+
+    m_aContentWindow->DumpAsPropertyTree(*aJsonWriter);
+    aJsonWriter->put("id", m_aNotifierWindow->GetLOKWindowId());
+    aJsonWriter->put("jsontype", m_sTypeOfJSON);
+
+    if (m_sTypeOfJSON == "autofilter")
+    {
+        vcl::Window* pWindow = m_aContentWindow.get();
+        DockingWindow* pDockingWIndow = dynamic_cast<DockingWindow*>(pWindow);
+        while (pWindow && !pDockingWIndow)
+        {
+            pWindow = pWindow->GetParent();
+            pDockingWIndow = dynamic_cast<DockingWindow*>(pWindow);
+        }
+
+        if (pDockingWIndow)
+        {
+            Point aPos = pDockingWIndow->GetFloatingPos();
+            aJsonWriter->put("posx", aPos.getX());
+            aJsonWriter->put("posy", aPos.getY());
+        }
+    }
+
+    return aJsonWriter;
+}
+
+std::unique_ptr<tools::JsonWriter> JSDialogNotifyIdle::generateCloseMessage() const
+{
+    std::unique_ptr<tools::JsonWriter> aJsonWriter(new tools::JsonWriter());
+    if (m_aNotifierWindow)
+        aJsonWriter->put("id", m_aNotifierWindow->GetLOKWindowId());
+    aJsonWriter->put("jsontype", m_sTypeOfJSON);
+    aJsonWriter->put("action", "close");
+
+    return aJsonWriter;
+}
+
+void JSDialogNotifyIdle::Invoke() { send(dumpStatus()); }
+
+void JSDialogNotifyIdle::sendClose() { send(generateCloseMessage()); }
 
 void JSDialogSender::notifyDialogState(bool bForce)
 {
@@ -87,6 +111,8 @@ void JSDialogSender::notifyDialogState(bool bForce)
         mpIdleNotify->ForceUpdate();
     mpIdleNotify->Start();
 }
+
+void JSDialogSender::sendClose() { mpIdleNotify->sendClose(); }
 
 namespace
 {
@@ -609,6 +635,12 @@ void JSDialog::undo_collapse()
 {
     SalInstanceDialog::undo_collapse();
     notifyDialogState();
+}
+
+void JSDialog::response(int response)
+{
+    sendClose();
+    SalInstanceDialog::response(response);
 }
 
 JSLabel::JSLabel(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
