@@ -30,6 +30,8 @@ private:
     std::unique_ptr<weld::RadioButton> m_xBtnDatabase;
     std::unique_ptr<weld::RadioButton> m_xBtnExternal;
     std::unique_ptr<weld::ComboBox> m_xLbNamedRange;
+    std::unique_ptr<weld::Button> m_xBtnOk;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
 
 public:
     ScDataPilotSourceTypeDlg(weld::Window* pParent, bool bEnableExternal);
@@ -42,6 +44,7 @@ public:
 
 private:
     DECL_LINK(RadioClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(ResponseHdl, weld::Button&, void);
 };
 
 class ScDataPilotServiceDlg : public weld::GenericDialogController
