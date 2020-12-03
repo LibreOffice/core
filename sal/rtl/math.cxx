@@ -1299,16 +1299,24 @@ double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
 
     int nExp = static_cast< int >(floor(log10(fValue)));
     nExp = 14 - nExp;
-    double fExpValue = getN10Exp(nExp);
+    double fExpValue = getN10Exp(abs(nExp));
 
-    fValue *= fExpValue;
+    if (nExp < 0)
+        fValue /= fExpValue;
+    else
+        fValue *= fExpValue;
+
     // If the original value was near DBL_MIN we got an overflow. Restore and
     // bail out.
     if (!std::isfinite(fValue))
         return fOrigValue;
 
     fValue = std::round(fValue);
-    fValue /= fExpValue;
+
+    if (nExp < 0)
+        fValue *= fExpValue;
+    else
+        fValue /= fExpValue;
 
     // If the original value was near DBL_MAX we got an overflow. Restore and
     // bail out.
