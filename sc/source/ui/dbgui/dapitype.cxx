@@ -31,11 +31,16 @@ ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(weld::Window* pParent, bool b
     , m_xBtnDatabase(m_xBuilder->weld_radio_button("database"))
     , m_xBtnExternal(m_xBuilder->weld_radio_button("external"))
     , m_xLbNamedRange(m_xBuilder->weld_combo_box("rangelb"))
+    , m_xBtnOk(m_xBuilder->weld_button("ok")) // for LOK jsdialog
+    , m_xBtnCancel(m_xBuilder->weld_button("cancel")) // for LOK jsdialog
 {
     m_xBtnSelection->connect_toggled( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
     m_xBtnNamedRange->connect_toggled( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
     m_xBtnDatabase->connect_toggled( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
     m_xBtnExternal->connect_toggled( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
+
+    m_xBtnOk->connect_clicked( LINK(this, ScDataPilotSourceTypeDlg, ResponseHdl ) );
+    m_xBtnCancel->connect_clicked( LINK(this, ScDataPilotSourceTypeDlg, ResponseHdl ) );
 
     if (!bEnableExternal)
         m_xBtnExternal->set_sensitive(false);
@@ -51,6 +56,14 @@ ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(weld::Window* pParent, bool b
 
     if (comphelper::LibreOfficeKit::isActive())
         m_xBtnDatabase->hide();
+}
+
+IMPL_LINK(ScDataPilotSourceTypeDlg, ResponseHdl, weld::Button&, rButton, void)
+{
+    if (&rButton == m_xBtnOk.get())
+        m_xDialog->response(RET_OK);
+    else
+        m_xDialog->response(RET_CANCEL);
 }
 
 ScDataPilotSourceTypeDlg::~ScDataPilotSourceTypeDlg()
