@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71ca4ff8_35e766ad",
+        "filename": "forms/source/component/clickableimage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-03T08:29:31Z",
+      "side": 1,
+      "message": "there is a corresponding frm::UrlTransformer::getStrictURL (forms/source/inc/urltransformer.hxx) that takes an OUString, so there should be no need for that conversion dance here",
+      "range": {
+        "startLine": 314,
+        "startChar": 78,
+        "endLine": 314,
+        "endChar": 99
+      },
+      "revId": "07be45d03f80fa681c697ca9f5a13084a81c7a26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
