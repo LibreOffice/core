@@ -64,7 +64,7 @@ void EmbeddedFontsHelper::clearTemporaryFontFiles()
 }
 
 bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStream >& stream, const OUString& fontName,
-    const char* extra, std::vector< unsigned char > key, bool eot )
+    const char* extra, std::vector< unsigned char > const & key, bool eot )
 {
     OUString fileUrl = EmbeddedFontsHelper::fileUrlForTemporaryFont( fontName, extra );
     osl::File file( fileUrl );

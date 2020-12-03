@@ -54,7 +54,7 @@ class FontTable : public LoggedProperties, public LoggedTable
 
     bool addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>& stream,
                          const OUString& fontName, const char* extra,
-                         std::vector<unsigned char> key);
+                         std::vector<unsigned char> const & key);
 
  private:
     // Properties

@@ -63,7 +63,7 @@ public:
     */
     bool addEmbeddedFont( const css::uno::Reference< css::io::XInputStream >& stream,
         const OUString& fontName, const char* extra,
-        std::vector< unsigned char > key, bool eot = false);
+        std::vector< unsigned char > const & key, bool eot = false);
 
     /**
       Returns a URL for a file where to store contents of a given temporary font.

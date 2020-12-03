@@ -226,7 +226,7 @@ sal_uInt32 FontTable::size()
 
 bool FontTable::addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>& stream,
                                 const OUString& fontName, const char* extra,
-                                std::vector<unsigned char> key)
+                                std::vector<unsigned char> const & key)
 {
     if (!m_pImpl->xEmbeddedFontHelper)
         m_pImpl->xEmbeddedFontHelper.reset(new EmbeddedFontsHelper);
