@@ -1,0 +1,67 @@
+From e594cf4c8590bd75a544860b472a5bbf6d5a3d0e Mon Sep 17 00:00:00 2001
+From: Stephan Bergmann <sbergman@redhat.com>
+Date: Thu, 3 Dec 2020 13:56:34 +0100
+Subject: [PATCH] extern/cloop: Missing dependency of $(BIN_DIR)/cloop on
+ $(BIN_DIR)
+
+When building Firebird 3.0.7 as part of LibreOffice, I saw it fail once (at
+<https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/74624/>) with
+
+[...]
+> config.status: creating gen/Makefile.extern.editline
+> config.status: creating src/include/gen/autoconfig.auto
+> config.status: executing libtool commands
+>
+>
+> The Firebird3 package has been configured with the following options:
+>
+>                     Raw devices : enabled
+>                    Service name : gds_db
+>                    Service port : 3050
+>                    GPRE modules : c_cxx.cpp
+>
+>                     Install Dir : /usr/local/firebird
+>
+> mkpar.c:182:2: warning: add explicit braces to avoid dangling else [-Wdangling-else]
+>         else
+>         ^
+> 1 warning generated.
+> main.o: In function `create_file_names':
+> main.c:(.text+0x976): warning: the use of `mktemp' is dangerous, better use `mkstemp'
+> /usr/bin/ld: cannot open output file /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/UnpackedTarball/firebird/gen/Debug/cloop/release/bin/cloop: No such file or directory
+> clang-5.0: error: linker command failed with exit code 1 (use -v to see invocation)
+> Makefile:84: recipe for target '/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/UnpackedTarball/firebird/gen/Debug/cloop/release/bin/cloop' failed
+> make[6]: *** [/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/UnpackedTarball/firebird/gen/Debug/cloop/release/bin/cloop] Error 1
+> make[6]: Target 'all' not remade because of errors.
+> Makefile:130: recipe for target 'extern' failed
+> make[5]: *** [extern] Error 2
+> Makefile:181: recipe for target 'master_process' failed
+> make[4]: *** [master_process] Error 2
+> Makefile:72: recipe for target 'Debug' failed
+> make[3]: *** [Debug] Error 2
+> Makefile:6: recipe for target 'Debug' failed
+> make[2]: *** [Debug] Error 2
+> /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/external/firebird/ExternalProject_firebird.mk:29: recipe for target '/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/ExternalProject/firebird/build' failed
+> make[1]: *** [/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/ExternalProject/firebird/build] Error 1
+[...]
+
+(cherry picked from commit 8e9c48a94659d0c8ac80f716d321b934d47bbed1)
+---
+ extern/cloop/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/extern/cloop/Makefile b/extern/cloop/Makefile
+index 6bc6af41a1..811711fcab 100644
+--- a/extern/cloop/Makefile
++++ b/extern/cloop/Makefile
+@@ -80,6 +80,7 @@ $(BIN_DIR)/cloop: \
+ 	$(OBJ_DIR)/cloop/Lexer.o \
+ 	$(OBJ_DIR)/cloop/Parser.o \
+ 	$(OBJ_DIR)/cloop/Main.o \
++	| $(BIN_DIR)
+ 
+ 	$(LD) $^ -o $@
+ 
+-- 
+2.28.0
+
