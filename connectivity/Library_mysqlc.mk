@@ -12,6 +12,7 @@ $(eval $(call gb_Library_Library,mysqlc))
 $(eval $(call gb_Library_use_externals,mysqlc,\
 	boost_headers \
 	mariadb-connector-c \
+	openssl \
 ))
 
 $(eval $(call gb_Library_set_include,mysqlc,\
