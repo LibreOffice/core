@@ -422,7 +422,7 @@ std::string JsonWriter::extractAsStdString()
     return ret;
 }
 
-bool JsonWriter::isDataEquals(const std::string& s)
+bool JsonWriter::isDataEquals(const std::string& s) const
 {
     return s.length() == static_cast<size_t>(mPos - mpBuffer)
            && memcmp(s.data(), mpBuffer, s.length()) == 0;

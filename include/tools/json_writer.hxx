@@ -76,7 +76,7 @@ public:
     std::string extractAsStdString();
 
     /** returns true if the current JSON data matches the string */
-    bool isDataEquals(const std::string&);
+    bool isDataEquals(const std::string&) const;
 
 private:
     void endNode();
