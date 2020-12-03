@@ -23,7 +23,6 @@
 #include <bitmaps.hlst>
 #include "PriorityHBox.hxx"
 #include "NotebookbarPopup.hxx"
-#include <sfx2/viewfrm.hxx>
 #include <comphelper/lok.hxx>
 
 #define DUMMY_WIDTH 50
@@ -62,7 +61,7 @@ public:
         if (comphelper::LibreOfficeKit::isActive())
             return VclHBox::Resize();
 
-        if (!m_bInitialized && SfxViewFrame::Current())
+        if (!m_bInitialized)
             Initialize();
 
         if (!m_bInitialized)
