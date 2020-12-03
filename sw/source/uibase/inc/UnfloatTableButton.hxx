@@ -24,21 +24,25 @@
  */
 class UnfloatTableButton : public SwFrameMenuButtonBase
 {
+    std::unique_ptr<weld::Button> m_xPushButton;
     OUString m_sLabel;
 
 public:
     UnfloatTableButton(SwEditWin* pEditWin, const SwFrame* pFrame);
+    virtual void dispose() override;
     virtual ~UnfloatTableButton() override;
 
     void SetOffset(Point aTopRightPixel);
 
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
     virtual void ShowAll(bool bShow) override;
     virtual bool Contains(const Point& rDocPt) const override;
 
     virtual void SetReadonly(bool bReadonly) override;
+
+private:
+    void PaintButton();
 };
 
 #endif

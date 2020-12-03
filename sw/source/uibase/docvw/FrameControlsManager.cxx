@@ -21,6 +21,8 @@
 #include <OutlineContentVisibilityWin.hxx>
 #include <ndtxt.hxx>
 #include <IDocumentOutlineNodes.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace std;
 
@@ -177,10 +179,11 @@ void SwFrameControlsManager::SetUnfloatTableButton( const SwFlyFrame* pFlyFrame,
     pControl->ShowAll( bShow );
 }
 
-SwFrameMenuButtonBase::SwFrameMenuButtonBase( SwEditWin* pEditWin, const SwFrame* pFrame ) :
-    MenuButton( pEditWin, WB_DIALOGCONTROL ),
-    m_pEditWin( pEditWin ),
-    m_pFrame( pFrame )
+SwFrameMenuButtonBase::SwFrameMenuButtonBase(SwEditWin* pEditWin, const SwFrame* pFrame,
+                                             const OUString& rUIXMLDescription, const OString& rID)
+    : InterimItemWindow(pEditWin, rUIXMLDescription, rID)
+    , m_pEditWin(pEditWin)
+    , m_pFrame(pFrame)
 {
 }
 
@@ -302,7 +305,16 @@ void SwFrameMenuButtonBase::dispose()
 {
     m_pEditWin.clear();
     m_pFrame = nullptr;
-    MenuButton::dispose();
+    m_xVirDev.disposeAndClear();
+    InterimItemWindow::dispose();
+}
+
+void SwFrameMenuButtonBase::SetVirDevFont()
+{
+    // Get the font and configure it
+    vcl::Font aFont = Application::GetSettings().GetStyleSettings().GetToolFont();
+    if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
+        pDefaultDevice->SetPointFont(*m_xVirDev, aFont);
 }
 
 SwFrameControl::SwFrameControl( const VclPtr<vcl::Window> &pWindow )

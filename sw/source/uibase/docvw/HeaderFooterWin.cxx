@@ -46,9 +46,9 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/virdev.hxx>
 #include <memory>
 
 #define TEXT_PADDING 5
@@ -162,20 +162,20 @@ void SwFrameButtonPainter::PaintButton(drawinglayer::primitive2d::Primitive2DCon
 }
 
 SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwFrame *pFrame, bool bHeader ) :
-    SwFrameMenuButtonBase( pEditWin, pFrame ),
-    m_aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/swriter/ui/headerfootermenu.ui", ""),
+    SwFrameMenuButtonBase(pEditWin, pFrame, "modules/swriter/ui/hfmenubutton.ui", "HFMenuButton"),
+    m_xMenuButton(m_xBuilder->weld_menu_button("menubutton")),
+    m_xPushButton(m_xBuilder->weld_button("button")),
     m_bIsHeader( bHeader ),
-    m_pPopupMenu(m_aBuilder.get_menu("menu")),
     m_pLine( nullptr ),
     m_bIsAppearing( false ),
     m_nFadeRate( 100 ),
     m_aFadeTimer( )
 {
-    //FIXME RenderContext
+    m_xVirDev = m_xMenuButton->create_virtual_device();
+    SetVirDevFont();
 
-    // Get the font and configure it
-    vcl::Font aFont = Application::GetSettings().GetStyleSettings().GetToolFont();
-    SetZoomedPointFont(*this, aFont);
+    m_xPushButton->connect_clicked(LINK(this, SwHeaderFooterWin, ClickHdl));
+    m_xMenuButton->connect_selected(LINK(this, SwHeaderFooterWin, SelectHdl));
 
     // Create the line control
     m_pLine = VclPtr<SwDashedLine>::Create(GetEditWin(), &SwViewOption::GetHeaderFooterMarkColor);
@@ -185,16 +185,14 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwFrame *pFrame
     // Rewrite the menu entries' text
     if (m_bIsHeader)
     {
-        m_pPopupMenu->SetItemText(m_pPopupMenu->GetItemId("edit"), SwResId(STR_FORMAT_HEADER));
-        m_pPopupMenu->SetItemText(m_pPopupMenu->GetItemId("delete"), SwResId(STR_DELETE_HEADER));
+        m_xMenuButton->set_item_label("edit", SwResId(STR_FORMAT_HEADER));
+        m_xMenuButton->set_item_label("delete", SwResId(STR_DELETE_HEADER));
     }
     else
     {
-        m_pPopupMenu->SetItemText(m_pPopupMenu->GetItemId("edit"), SwResId(STR_FORMAT_FOOTER));
-        m_pPopupMenu->SetItemText(m_pPopupMenu->GetItemId("delete"), SwResId(STR_DELETE_FOOTER));
+        m_xMenuButton->set_item_label("edit", SwResId(STR_FORMAT_FOOTER));
+        m_xMenuButton->set_item_label("delete", SwResId(STR_DELETE_FOOTER));
     }
-
-    SetPopupMenu(m_pPopupMenu);
 
     m_aFadeTimer.SetTimeout(50);
     m_aFadeTimer.SetInvokeHandler(LINK(this, SwHeaderFooterWin, FadeHandler));
@@ -207,9 +205,9 @@ SwHeaderFooterWin::~SwHeaderFooterWin( )
 
 void SwHeaderFooterWin::dispose()
 {
-    m_pPopupMenu.clear();
-    m_aBuilder.disposeBuilder();
     m_pLine.disposeAndClear();
+    m_xPushButton.reset();
+    m_xMenuButton.reset();
     SwFrameMenuButtonBase::dispose();
 }
 
@@ -234,12 +232,13 @@ void SwHeaderFooterWin::SetOffset(Point aOffset, tools::Long nXLineStart, tools:
 
     sal_Int32 nPos = m_sLabel.lastIndexOf("%1");
     m_sLabel = m_sLabel.replaceAt(nPos, 2, pDesc->GetName());
+    m_xMenuButton->set_accessible_name(m_sLabel);
 
     // Compute the text size and get the box position & size from it
     ::tools::Rectangle aTextRect;
-    GetTextBoundRect(aTextRect, m_sLabel);
-    ::tools::Rectangle aTextPxRect = LogicToPixel(aTextRect);
-    FontMetric aFontMetric = GetFontMetric(GetFont());
+    m_xVirDev->GetTextBoundRect(aTextRect, m_sLabel);
+    ::tools::Rectangle aTextPxRect = m_xVirDev->LogicToPixel(aTextRect);
+    FontMetric aFontMetric = m_xVirDev->GetFontMetric(m_xVirDev->GetFont());
     Size aBoxSize (aTextPxRect.GetWidth() + BUTTON_WIDTH + TEXT_PADDING * 2,
                    aFontMetric.GetLineHeight() + TEXT_PADDING  * 2 );
 
@@ -258,6 +257,9 @@ void SwHeaderFooterWin::SetOffset(Point aOffset, tools::Long nXLineStart, tools:
     // Set the position & Size of the window
     SetPosSizePixel(aBoxPos, aBoxSize);
 
+    m_xVirDev->SetOutputSizePixel(aBoxSize);
+    PaintButton();
+
     double nYLinePos = aBoxPos.Y();
     if (!m_bIsHeader)
         nYLinePos += aBoxSize.Height();
@@ -268,6 +270,10 @@ void SwHeaderFooterWin::SetOffset(Point aOffset, tools::Long nXLineStart, tools:
 
 void SwHeaderFooterWin::ShowAll(bool bShow)
 {
+    bool bIsEmptyHeaderFooter = IsEmptyHeaderFooter();
+    m_xMenuButton->set_visible(!bIsEmptyHeaderFooter);
+    m_xPushButton->set_visible(bIsEmptyHeaderFooter);
+
     if (!PopupMenu::IsInExecute())
     {
         m_bIsAppearing = bShow;
@@ -288,21 +294,24 @@ bool SwHeaderFooterWin::Contains( const Point &rDocPt ) const
     return aLineRect.IsInside(rDocPt);
 }
 
-void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
+void SwHeaderFooterWin::PaintButton()
 {
+    if (!m_xVirDev)
+        return;
+
     // Use pixels for the rest of the drawing
     SetMapMode(MapMode(MapUnit::MapPixel));
     drawinglayer::primitive2d::Primitive2DContainer aSeq;
-    const ::tools::Rectangle aRect(::tools::Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
+    const ::tools::Rectangle aRect(::tools::Rectangle(Point(0, 0), m_xVirDev->PixelToLogic(GetSizePixel())));
 
     SwFrameButtonPainter::PaintButton(aSeq, aRect, m_bIsHeader);
 
     // Create the text primitive
     basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
     B2DVector aFontSize;
-    FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, rRenderContext.GetFont(), false, false);
+    FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, m_xVirDev->GetFont(), false, false);
 
-    FontMetric aFontMetric = rRenderContext.GetFontMetric(rRenderContext.GetFont());
+    FontMetric aFontMetric = m_xVirDev->GetFontMetric(m_xVirDev->GetFont());
     double nTextOffsetY = aFontMetric.GetAscent() + TEXT_PADDING;
     Point aTextPos(TEXT_PADDING, nTextOffsetY);
 
@@ -320,7 +329,8 @@ void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const ::tools:
                            B2DSize(aRect.Right(), aRect.getHeight()));
 
     B2DPolygon aSign;
-    if (IsEmptyHeaderFooter())
+    bool bIsEmptyHeaderFooter = IsEmptyHeaderFooter();
+    if (bIsEmptyHeaderFooter)
     {
         // Create the + polygon
         double nLeft = aSignArea.getMinX() + TEXT_PADDING;
@@ -367,7 +377,7 @@ void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const ::tools:
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
-        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
+        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(*m_xVirDev, aNewViewInfos));
 
     // TODO Ghost it all if needed
     drawinglayer::primitive2d::Primitive2DContainer aGhostedSeq(1);
@@ -381,6 +391,11 @@ void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const ::tools:
                         new drawinglayer::primitive2d::ModifiedColorPrimitive2D(aSeq, aBColorModifier));
 
     pProcessor->process(aGhostedSeq);
+
+    if (bIsEmptyHeaderFooter)
+        m_xPushButton->set_custom_button(m_xVirDev.get());
+    else
+        m_xMenuButton->set_custom_button(m_xVirDev.get());
 }
 
 bool SwHeaderFooterWin::IsEmptyHeaderFooter( ) const
@@ -476,23 +491,22 @@ void SwHeaderFooterWin::SetReadonly( bool bReadonly )
     ShowAll( !bReadonly );
 }
 
-void SwHeaderFooterWin::MouseButtonDown( const MouseEvent& rMEvt )
+IMPL_LINK_NOARG(SwHeaderFooterWin, ClickHdl, weld::Button&, void)
 {
-    if (IsEmptyHeaderFooter())
-    {
-        SwView& rView = GetEditWin()->GetView();
-        SwWrtShell& rSh = rView.GetWrtShell();
+    SwView& rView = GetEditWin()->GetView();
+    SwWrtShell& rSh = rView.GetWrtShell();
 
-        const OUString& rStyleName = GetPageFrame()->GetPageDesc()->GetName();
-        rSh.ChangeHeaderOrFooter( rStyleName, m_bIsHeader, true, false );
-    }
-    else
-        MenuButton::MouseButtonDown( rMEvt );
+    const OUString& rStyleName = GetPageFrame()->GetPageDesc()->GetName();
+    rSh.ChangeHeaderOrFooter( rStyleName, m_bIsHeader, true, false );
+
+    m_xPushButton->hide();
+    m_xMenuButton->show();
+    PaintButton();
 }
 
-void SwHeaderFooterWin::Select()
+IMPL_LINK(SwHeaderFooterWin, SelectHdl, const OString&, rIdent, void)
 {
-    ExecuteCommand(GetCurItemIdent());
+    ExecuteCommand(rIdent);
 }
 
 IMPL_LINK_NOARG(SwHeaderFooterWin, FadeHandler, Timer *, void)
@@ -513,7 +527,7 @@ IMPL_LINK_NOARG(SwHeaderFooterWin, FadeHandler, Timer *, void)
         m_pLine->Show(false);
     }
     else
-        Invalidate();
+        PaintButton();
 
     if (IsVisible() && m_nFadeRate > 0 && m_nFadeRate < 100)
         m_aFadeTimer.Start();
