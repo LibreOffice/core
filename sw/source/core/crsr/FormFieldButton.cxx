@@ -15,11 +15,16 @@
 #include <vcl/event.hxx>
 
 FormFieldButton::FormFieldButton(SwEditWin* pEditWin, sw::mark::Fieldmark& rFieldmark)
-    : MenuButton(pEditWin, WB_DIALOGCONTROL)
+    : Control(pEditWin, WB_DIALOGCONTROL)
     , m_rFieldmark(rFieldmark)
 {
     assert(GetParent());
     assert(dynamic_cast<SwEditWin*>(GetParent()));
+
+    SetBackground();
+    EnableChildTransparentMode();
+    SetParentClipMode(ParentClipMode::NoClip);
+    SetPaintTransparent(true);
 }
 
 FormFieldButton::~FormFieldButton() { disposeOnce(); }
@@ -42,7 +47,7 @@ void FormFieldButton::DestroyPopup()
 void FormFieldButton::dispose()
 {
     DestroyPopup();
-    MenuButton::dispose();
+    Control::dispose();
 }
 
 void FormFieldButton::CalcPosAndSize(const SwRect& rPortionPaintArea)
@@ -142,7 +147,7 @@ void FormFieldButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
 WindowHitTest FormFieldButton::ImplHitTest(const Point& rFramePos)
 {
     // We need to check whether the position hits the button (the frame should be mouse transparent)
-    WindowHitTest aResult = MenuButton::ImplHitTest(rFramePos);
+    WindowHitTest aResult = Control::ImplHitTest(rFramePos);
     if (aResult != WindowHitTest::Inside)
         return aResult;
     else
