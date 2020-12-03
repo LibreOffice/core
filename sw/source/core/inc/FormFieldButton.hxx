@@ -7,10 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_TEXT_FORMEFIELDBUTTO_HXX
-#define INCLUDED_SW_SOURCE_CORE_TEXT_FORMEFIELDBUTTO_HXX
+#pragma once
 
-#include <vcl/menubtn.hxx>
+#include <vcl/ctrl.hxx>
 #include <swrect.hxx>
 
 class SwEditWin;
@@ -23,7 +22,7 @@ class Fieldmark;
 /**
  * This button is shown when the cursor is on a form field with drop-down capability.
  */
-class FormFieldButton : public MenuButton
+class FormFieldButton : public Control
 {
 public:
     FormFieldButton(SwEditWin* pEditWin, sw::mark::Fieldmark& rFieldMark);
@@ -47,7 +46,5 @@ protected:
     sw::mark::Fieldmark& m_rFieldmark;
     VclPtr<FloatingWindow> m_pFieldPopup;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
