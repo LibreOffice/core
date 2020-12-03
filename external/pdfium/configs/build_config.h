@@ -6,7 +6,7 @@
 
 // This file adds defines about the platform we're currently building on.
 //  Operating System:
-//    OS_WIN / OS_MACOSX / OS_LINUX / OS_POSIX (MACOSX or LINUX)
+//    OS_WIN / OS_APPLE / OS_LINUX / OS_POSIX (MACOSX or LINUX)
 //  Compiler:
 //    COMPILER_MSVC / COMPILER_GCC
 //  Processor:
@@ -21,7 +21,7 @@
 #define OS_ANDROID 1
 #define OS_LINUX 1
 #elif defined(__APPLE__)
-#define OS_MACOSX 1
+#define OS_APPLE 1
 #elif defined(__linux__)
 #define OS_LINUX 1
 #elif defined(__DragonFly__)
@@ -48,7 +48,7 @@
 
 // For access to standard POSIX features, use OS_POSIX instead of a more
 // specific macro.
-#if defined(OS_MACOSX) || defined(OS_LINUX) || defined(OS_BSD) || defined(OS_SOLARIS)
+#if defined(OS_APPLE) || defined(OS_LINUX) || defined(OS_BSD) || defined(OS_SOLARIS)
 #define OS_POSIX 1
 #endif
 
