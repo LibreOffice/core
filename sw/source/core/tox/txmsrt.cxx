@@ -551,7 +551,7 @@ TextAndReading SwTOXPara::GetText_Impl(SwRootFrame const*const pLayout) const
             assert(nEndIndex == -1);
             return TextAndReading(sw::GetExpandTextMerged(
                         pLayout, *static_cast<const SwTextNode*>(pNd),
-                        false, false, ExpandMode(0)),
+                        false, false, ExpandMode::HideDeletions),
                     OUString());
         }
         break;
