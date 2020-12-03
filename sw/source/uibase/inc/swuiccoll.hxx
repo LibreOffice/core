@@ -36,7 +36,6 @@ class SwCondCollPage : public SfxTabPage
 
     bool                m_bNewTemplate;
 
-    std::unique_ptr<weld::CheckButton> m_xConditionCB;
     std::unique_ptr<weld::TreeView> m_xTbLinks;
     std::unique_ptr<weld::TreeView> m_xStyleLB;
     std::unique_ptr<weld::ComboBox> m_xFilterLB;

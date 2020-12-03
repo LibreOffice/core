@@ -43,7 +43,6 @@ SwCondCollPage::SwCondCollPage(weld::Container* pPage, weld::DialogController* p
     , m_pCmds(SwCondCollItem::GetCmds())
     , m_pFormat(nullptr)
     , m_bNewTemplate(false)
-    , m_xConditionCB(m_xBuilder->weld_check_button("condstyle"))
     , m_xTbLinks(m_xBuilder->weld_tree_view("links"))
     , m_xStyleLB(m_xBuilder->weld_tree_view("styles"))
     , m_xFilterLB(m_xBuilder->weld_combo_box("filter"))
@@ -66,7 +65,6 @@ SwCondCollPage::SwCondCollPage(weld::Container* pPage, weld::DialogController* p
     SetExchangeSupport();
 
     // Install handlers
-    m_xConditionCB->connect_toggled(LINK(this, SwCondCollPage, OnOffHdl));
     m_xTbLinks->connect_row_activated(LINK(this, SwCondCollPage, AssignRemoveTreeListBoxHdl));
     m_xStyleLB->connect_row_activated(LINK(this, SwCondCollPage, AssignRemoveTreeListBoxHdl));
     m_xRemovePB->connect_clicked(LINK(this, SwCondCollPage, AssignRemoveClickHdl));
@@ -124,12 +122,6 @@ bool SwCondCollPage::FillItemSet(SfxItemSet *rSet)
 
 void SwCondCollPage::Reset(const SfxItemSet *)
 {
-    if (m_bNewTemplate)
-        m_xConditionCB->set_sensitive(true);
-    if (RES_CONDTXTFMTCOLL == m_pFormat->Which())
-        m_xConditionCB->set_active(true);
-    OnOffHdl(*m_xConditionCB);
-
     m_xTbLinks->clear();
 
     SfxStyleSheetBasePool* pPool = m_rSh.GetView().GetDocShell()->GetStyleSheetPool();
@@ -162,18 +154,6 @@ void SwCondCollPage::Reset(const SfxItemSet *)
             SelectTreeListBoxHdl(*m_xTbLinks);
         }
     }
-}
-
-IMPL_LINK(SwCondCollPage, OnOffHdl, weld::ToggleButton&, rBox, void)
-{
-    const bool bEnable = rBox.get_active();
-    m_xTbLinks->set_sensitive(bEnable);
-    m_xStyleLB->set_sensitive(bEnable);
-    m_xFilterLB->set_sensitive(bEnable);
-    m_xRemovePB->set_sensitive(bEnable);
-    m_xAssignPB->set_sensitive(bEnable);
-    if (bEnable)
-        SelectHdl(nullptr);
 }
 
 IMPL_LINK(SwCondCollPage, AssignRemoveClickHdl, weld::Button&, rBtn, void)
@@ -245,10 +225,10 @@ void SwCondCollPage::SelectHdl(const weld::Widget* pBox)
             : OUString();
         const OUString sStyle = m_xStyleLB->get_selected_text();
 
-        m_xAssignPB->set_sensitive(sStyle != sTbEntry && m_xConditionCB->get_active());
+        m_xAssignPB->set_sensitive(sStyle != sTbEntry);
 
         if (pBox != m_xStyleLB.get())
-            m_xRemovePB->set_sensitive(m_xConditionCB->get_active() && !sTbEntry.isEmpty());
+            m_xRemovePB->set_sensitive(!sTbEntry.isEmpty());
     }
 }
 
