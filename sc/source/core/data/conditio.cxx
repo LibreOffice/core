@@ -1126,9 +1126,10 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
         }
     }
 
-    // If number contains condition, always false, except for "not equal".
-    if ( !bIsStr1 && (eOp != ScConditionMode::Error && eOp != ScConditionMode::NoError) )
-        return ( eOp == ScConditionMode::NotEqual );
+    // If number contains condition, the "not equal" always true.
+    if ( !bIsStr1 && eOp == ScConditionMode::NotEqual
+        && (eOp != ScConditionMode::Error && eOp != ScConditionMode::NoError) )
+        return true;
     if ( eOp == ScConditionMode::Between || eOp == ScConditionMode::NotBetween )
         if ( !bIsStr2 )
             return false;

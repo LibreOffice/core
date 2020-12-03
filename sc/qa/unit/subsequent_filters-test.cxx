@@ -104,6 +104,7 @@ public:
     virtual void tearDown() override;
 
     //ods, xls, xlsx filter tests
+    void testCondFormat_tdf122094();
     void testUpdateCircleInMergedCellODS();
     void testDeleteCircleInMergedCellODS();
     void testBooleanFormatXLSX();
@@ -295,6 +296,7 @@ public:
     void testDeleteCirclesInRowAndCol();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
+    CPPUNIT_TEST(testCondFormat_tdf122094);
     CPPUNIT_TEST(testUpdateCircleInMergedCellODS);
     CPPUNIT_TEST(testDeleteCircleInMergedCellODS);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -528,6 +530,24 @@ void testRangeNameImpl(const ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("formula Global5 should reference Global6 ( which is evaluated as local1 )", 5.0, aValue);
 }
 
+}
+
+void ScFiltersTest::testCondFormat_tdf122094()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf122094.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf122094.xlsx", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    ScConditionalFormat* pFormat = rDoc.GetCondFormat(0, 0, 0);
+    CPPUNIT_ASSERT(pFormat);
+
+    ScRefCellValue aCell( rDoc, ScAddress(0, 0, 0));
+    OUString aCellStyle = pFormat->GetCellStyle(aCell, ScAddress(0, 0, 0));
+
+    CPPUNIT_ASSERT(!aCellStyle.isEmpty());
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testUpdateCircleInMergedCellODS()
