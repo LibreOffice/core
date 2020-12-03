@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b5a8ff6_9072d693",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5578,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-12-03T13:00:15Z",
+      "side": 1,
+      "message": "-1 (it\u0027s ok, if the string cannot be at the start if the link, but it would be more clear writing -1)",
+      "range": {
+        "startLine": 5578,
+        "startChar": 66,
+        "endLine": 5578,
+        "endChar": 67
+      },
+      "revId": "498c6b9f4ee53677381d10d41df0abc9782689c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "513e1f49_51bf6af6",
+        "filename": "sc/source/filter/excel/xelink.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2081,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-12-03T13:00:15Z",
+      "side": 1,
+      "message": "saved links",
+      "range": {
+        "startLine": 2081,
+        "startChar": 7,
+        "endLine": 2081,
+        "endChar": 13
+      },
+      "revId": "498c6b9f4ee53677381d10d41df0abc9782689c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

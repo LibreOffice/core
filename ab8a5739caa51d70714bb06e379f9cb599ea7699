@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3a6135f_c3040083",
+        "filename": "sc/inc/externalrefmgr.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-12-03T13:00:15Z",
+      "side": 1,
+      "message": "A Guard-like object could clean-up these, where its dtor can change the mode back  automatically.",
+      "range": {
+        "startLine": 605,
+        "startChar": 1,
+        "endLine": 605,
+        "endChar": 36
+      },
+      "revId": "ab8a5739caa51d70714bb06e379f9cb599ea7699",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
