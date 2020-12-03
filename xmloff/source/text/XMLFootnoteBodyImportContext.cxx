@@ -33,20 +33,16 @@ XMLFootnoteBodyImportContext::XMLFootnoteBodyImportContext( SvXMLImport& rImport
 {
 }
 
-SvXMLImportContextRef XMLFootnoteBodyImportContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFootnoteBodyImportContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // return text context
-    SvXMLImportContext *pContext =
+    return
         GetImport().GetTextImport()->CreateTextChildContext(GetImport(),
-                                                       nPrefix,
-                                                       rLocalName,
+                                                       nElement,
                                                        xAttrList,
                                                        XMLTextType::Footnote);
-
-    return pContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
