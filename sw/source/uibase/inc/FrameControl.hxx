@@ -9,7 +9,8 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_FRAMECONTROL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FRAMECONTROL_HXX
 
-#include <vcl/menubtn.hxx>
+#include <vcl/InterimItemWindow.hxx>
+#include <vcl/virdev.hxx>
 
 #include "edtwin.hxx"
 
@@ -54,8 +55,11 @@ public:
 
 /** Class sharing some MenuButton code
   */
-class SwFrameMenuButtonBase : public MenuButton, public ISwFrameControl
+class SwFrameMenuButtonBase : public InterimItemWindow, public ISwFrameControl
 {
+protected:
+    VclPtr<VirtualDevice> m_xVirDev;
+private:
     VclPtr<SwEditWin>     m_pEditWin;
     const SwFrame*          m_pFrame;
 
@@ -63,12 +67,15 @@ protected:
     virtual ~SwFrameMenuButtonBase() override { disposeOnce(); }
     virtual void dispose() override;
 
+    void SetVirDevFont();
+
 public:
-    SwFrameMenuButtonBase( SwEditWin* pEditWin, const SwFrame* pFrame );
+    SwFrameMenuButtonBase(SwEditWin* pEditWin, const SwFrame* pFrame,
+                          const OUString& rUIXMLDescription, const OString& rID);
 
     virtual const SwFrame* GetFrame()   override { return m_pFrame; }
     virtual SwEditWin*   GetEditWin() override { return m_pEditWin; }
-    virtual bool IsFocused() const override { return HasFocus(); }
+    virtual bool IsFocused() const override { return ControlHasFocus(); }
     const SwPageFrame*     GetPageFrame() const;
 };
 

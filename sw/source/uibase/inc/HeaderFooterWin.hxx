@@ -11,8 +11,8 @@
 
 #include "edtwin.hxx"
 #include "FrameControl.hxx"
-#include <vcl/builder.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/virdev.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 
 /**
@@ -34,10 +34,10 @@ public:
   */
 class SwHeaderFooterWin : public SwFrameMenuButtonBase
 {
-    VclBuilder            m_aBuilder;
+    std::unique_ptr<weld::MenuButton> m_xMenuButton;
+    std::unique_ptr<weld::Button> m_xPushButton;
     OUString              m_sLabel;
     bool                  m_bIsHeader;
-    VclPtr<PopupMenu>     m_pPopupMenu;
     VclPtr<vcl::Window>   m_pLine;
     bool                  m_bIsAppearing;
     int                   m_nFadeRate;
@@ -50,10 +50,6 @@ public:
 
     void SetOffset( Point aOffset, tools::Long nXLineStart, tools::Long nXLineEnd );
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void Select( ) override;
-
     virtual void ShowAll( bool bShow ) override;
     virtual bool Contains( const Point &rDocPt ) const override;
 
@@ -65,7 +61,10 @@ public:
     void SetReadonly( bool bReadonly ) override;
 
 private:
-    DECL_LINK( FadeHandler, Timer *, void );
+    DECL_LINK(FadeHandler, Timer *, void);
+    DECL_LINK(ClickHdl, weld::Button&, void);
+    DECL_LINK(SelectHdl, const OString&, void);
+    void PaintButton();
 };
 
 #endif
