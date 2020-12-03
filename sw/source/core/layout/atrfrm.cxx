@@ -2558,108 +2558,104 @@ bool SwFrameFormat::supportsFullDrawingLayerFillAttributeSet() const
     return true;
 }
 
-void SwFrameFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwFrameFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if (pNew)
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
+    const sal_uInt16 nNewWhich = pLegacy->m_pNew ? pLegacy->m_pNew->Which() : 0;
+    const SwAttrSetChg* pNewAttrSetChg = nullptr;
+    const SwFormatHeader* pH = nullptr;
+    const SwFormatFooter* pF = nullptr;
+    const SwPosition* pNewAnchorPosition = nullptr;
+    switch(nNewWhich)
     {
-        SwFormatHeader const *pH = nullptr;
-        SwFormatFooter const *pF = nullptr;
-
-        const sal_uInt16 nWhich = pNew->Which();
-
-        if( RES_ATTRSET_CHG == nWhich )
+        case RES_ATTRSET_CHG:
         {
-            static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
-                RES_HEADER, false, reinterpret_cast<const SfxPoolItem**>(&pH) );
-            static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
-                RES_FOOTER, false, reinterpret_cast<const SfxPoolItem**>(&pF) );
+            pNewAttrSetChg = static_cast<const SwAttrSetChg*>(pLegacy->m_pNew);
+            pH = pNewAttrSetChg->GetChgSet()->GetItem(RES_HEADER, false);
+            pF = pNewAttrSetChg->GetChgSet()->GetItem(RES_FOOTER, false);
 
             // reset fill information
-            if (maFillAttributes && supportsFullDrawingLayerFillAttributeSet())
+            if(maFillAttributes && supportsFullDrawingLayerFillAttributeSet())
             {
-                SfxItemIter aIter(*static_cast<const SwAttrSetChg*>(pNew)->GetChgSet());
-                bool bReset(false);
-
-                for(const SfxPoolItem* pItem = aIter.GetCurItem(); pItem && !bReset; pItem = aIter.NextItem())
+                SfxItemIter aIter(*pNewAttrSetChg->GetChgSet());
+                for(const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
                 {
-                    bReset = !IsInvalidItem(pItem) && pItem->Which() >= XATTR_FILL_FIRST && pItem->Which() <= XATTR_FILL_LAST;
-                }
-
-                if(bReset)
-                {
-                    maFillAttributes.reset();
+                    if(!IsInvalidItem(pItem) && pItem->Which() >= XATTR_FILL_FIRST && pItem->Which() <= XATTR_FILL_LAST)
+                    {
+                        maFillAttributes.reset();
+                        break;
+                    }
                 }
             }
+            const SwFormatAnchor* pAnchor = pNewAttrSetChg->GetChgSet()->GetItem(RES_ANCHOR, false);
+            if(pAnchor)
+            {
+                pNewAnchorPosition = pAnchor->GetContentAnchor();
+                assert(pNewAnchorPosition == nullptr || // style's set must not contain position!
+                        pNewAttrSetChg->GetTheChgdSet() == &m_aSet);
+            }
+            break;
         }
-        else if(RES_FMT_CHG == nWhich)
+        case RES_FMT_CHG:
         {
             // reset fill information on format change (e.g. style changed)
-            if (maFillAttributes && supportsFullDrawingLayerFillAttributeSet())
-            {
+            if(maFillAttributes && supportsFullDrawingLayerFillAttributeSet())
                 maFillAttributes.reset();
+            break;
+        }
+        case RES_HEADER:
+            pH = static_cast<const SwFormatHeader*>(pLegacy->m_pNew);
+            break;
+        case RES_FOOTER:
+            pF = static_cast<const SwFormatFooter*>(pLegacy->m_pNew);
+            break;
+        case RES_ANCHOR:
+            pNewAnchorPosition = static_cast<const SwFormatAnchor*>(pLegacy->m_pNew)->GetContentAnchor();
+            break;
+    }
+    const sal_uInt16 nOldWhich = pLegacy->m_pOld ? pLegacy->m_pOld->Which() : 0;
+    const SwPosition* pOldAnchorPosition = nullptr;
+    switch(nOldWhich)
+    {
+        case RES_ATTRSET_CHG:
+        {
+            const SwAttrSetChg* pOldAttrSetChg = nullptr;
+            pOldAttrSetChg = static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
+            const SwFormatAnchor* pAnchor = pOldAttrSetChg->GetChgSet()->GetItem(RES_ANCHOR, false);
+            if(pAnchor)
+            {
+                pOldAnchorPosition = pAnchor->GetContentAnchor();
+                assert(pOldAnchorPosition == nullptr || // style's set must not contain position!
+                        pOldAttrSetChg->GetTheChgdSet() == &m_aSet);
             }
+            break;
         }
-        else if( RES_HEADER == nWhich )
-            pH = static_cast<const SwFormatHeader*>(pNew);
-        else if( RES_FOOTER == nWhich )
-            pF = static_cast<const SwFormatFooter*>(pNew);
-
-        if( pH && pH->IsActive() && !pH->GetHeaderFormat() )
-        {   //If he doesn't have one, I'll add one
-            SwFrameFormat *pFormat = GetDoc()->getIDocumentLayoutAccess().MakeLayoutFormat( RndStdIds::HEADER, nullptr );
-            const_cast<SwFormatHeader *>(pH)->RegisterToFormat( *pFormat );
-        }
-
-        if( pF && pF->IsActive() && !pF->GetFooterFormat() )
-        {   //If he doesn't have one, I'll add one
-            SwFrameFormat *pFormat = GetDoc()->getIDocumentLayoutAccess().MakeLayoutFormat( RndStdIds::FOOTER, nullptr );
-            const_cast<SwFormatFooter *>(pF)->RegisterToFormat( *pFormat );
-        }
+        case RES_ANCHOR:
+            pOldAnchorPosition = static_cast<const SwFormatAnchor*>(pLegacy->m_pOld)->GetContentAnchor();
+            break;
+        case RES_REMOVE_UNO_OBJECT:
+            SetXObject(uno::Reference<uno::XInterface>(nullptr));
+            break;
     }
 
-    SwFormat::Modify( pOld, pNew );
-
-    if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
-    {   // invalidate cached uno object
-        SetXObject(uno::Reference<uno::XInterface>(nullptr));
+    assert(nOldWhich == nNewWhich || !nOldWhich || !nNewWhich);
+    if(pH && pH->IsActive() && !pH->GetHeaderFormat())
+    {   //If he doesn't have one, I'll add one
+        SwFrameFormat* pFormat = GetDoc()->getIDocumentLayoutAccess().MakeLayoutFormat(RndStdIds::HEADER, nullptr);
+        const_cast<SwFormatHeader*>(pH)->RegisterToFormat(*pFormat);
     }
-
-    const SwPosition* oldAnchorPosition = nullptr;
-    const SwPosition* newAnchorPosition = nullptr;
-    if( pNew && pNew->Which() == RES_ATTRSET_CHG )
-    {
-        const SfxPoolItem* tmp = nullptr;
-        static_cast< const SwAttrSetChg* >(pNew)->GetChgSet()->GetItemState( RES_ANCHOR, false, &tmp );
-        if( tmp )
-        {
-            newAnchorPosition = static_cast< const SwFormatAnchor* >( tmp )->GetContentAnchor();
-            assert(newAnchorPosition == nullptr || // style's set must not contain position!
-                static_cast<SwAttrSetChg const*>(pNew)->GetTheChgdSet() == &m_aSet);
-        }
+    if(pF && pF->IsActive() && !pF->GetFooterFormat())
+    {   //If he doesn't have one, I'll add one
+        SwFrameFormat* pFormat = GetDoc()->getIDocumentLayoutAccess().MakeLayoutFormat(RndStdIds::FOOTER, nullptr);
+        const_cast<SwFormatFooter*>(pF)->RegisterToFormat(*pFormat);
     }
-    if( pNew && pNew->Which() == RES_ANCHOR )
-        newAnchorPosition = static_cast< const SwFormatAnchor* >( pNew )->GetContentAnchor();
-    if( pOld && pOld->Which() == RES_ATTRSET_CHG )
-    {
-        const SfxPoolItem* tmp = nullptr;
-        static_cast< const SwAttrSetChg* >(pOld)->GetChgSet()->GetItemState( RES_ANCHOR, false, &tmp );
-        if( tmp )
-        {
-            oldAnchorPosition = static_cast< const SwFormatAnchor* >( tmp )->GetContentAnchor();
-            assert(oldAnchorPosition == nullptr || // style's set must not contain position!
-                static_cast<SwAttrSetChg const*>(pOld)->GetTheChgdSet() == &m_aSet);
-        }
-    }
-    if( pOld && pOld->Which() == RES_ANCHOR )
-        oldAnchorPosition = static_cast< const SwFormatAnchor* >( pOld )->GetContentAnchor();
-    if( oldAnchorPosition != nullptr && ( newAnchorPosition == nullptr || oldAnchorPosition->nNode.GetIndex() != newAnchorPosition->nNode.GetIndex()))
-    {
-        oldAnchorPosition->nNode.GetNode().RemoveAnchoredFly(this);
-    }
-    if( newAnchorPosition != nullptr && ( oldAnchorPosition == nullptr || oldAnchorPosition->nNode.GetIndex() != newAnchorPosition->nNode.GetIndex()))
-    {
-        newAnchorPosition->nNode.GetNode().AddAnchoredFly(this);
-    }
+    SwFormat::Modify(pLegacy->m_pOld, pLegacy->m_pNew);
+    if(pOldAnchorPosition != nullptr && (pNewAnchorPosition == nullptr || pOldAnchorPosition->nNode.GetIndex() != pNewAnchorPosition->nNode.GetIndex()))
+        pOldAnchorPosition->nNode.GetNode().RemoveAnchoredFly(this);
+    if(pNewAnchorPosition != nullptr && (pOldAnchorPosition == nullptr || pOldAnchorPosition->nNode.GetIndex() != pNewAnchorPosition->nNode.GetIndex()))
+        pNewAnchorPosition->nNode.GetNode().AddAnchoredFly(this);
 }
 
 void SwFrameFormat::RegisterToFormat( SwFormat& rFormat )

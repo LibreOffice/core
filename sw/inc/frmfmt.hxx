@@ -97,7 +97,7 @@ protected:
         sal_uInt16 nFormatWhich = RES_FRMFMT,
         const sal_uInt16* pWhichRange = nullptr);
 
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
     SwFrameFormat* GetOtherTextBoxFormat() const { return m_pOtherTextBoxFormat; }
     void SetOtherTextBoxFormat( SwFrameFormat *pFormat );
