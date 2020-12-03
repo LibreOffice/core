@@ -20,6 +20,16 @@
 #include <o3tl/safeint.hxx>
 
 #include <wrtsh.hxx>
+<<<<<<< HEAD   (35d74b tdf#135044 sw: fix Ctrl + drag textbox copy)
+=======
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
+#include <drawdoc.hxx>
+#include <dcontact.hxx>
+#include <svx/svdpage.hxx>
+#include <ndtxt.hxx>
+#include <IDocumentRedlineAccess.hxx>
+>>>>>>> CHANGE (daf2a7 tdf#61154 sw Table of Contents: remove tracked deletion)
 
 namespace
 {
@@ -64,6 +74,215 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
 }
 
+<<<<<<< HEAD   (35d74b tdf#135044 sw: fix Ctrl + drag textbox copy)
+=======
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134227)
+{
+    load(DATA_DIRECTORY, "tdf134227.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    // Without the fix in place, it would have crashed here
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Cut();
+
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    TransferableDataHelper aHelper(xTransfer.get());
+    SwTransferable::Paste(*pWrtShell, aHelper);
+
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135412)
+{
+    load(DATA_DIRECTORY, "tdf135412.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+    uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("X"), xShape->getString());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Cut();
+
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    TransferableDataHelper aHelper(xTransfer.get());
+    SwTransferable::Paste(*pWrtShell, aHelper);
+
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    // Without the fix in place, the text in the shape wouldn't be pasted
+    xShape.set(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("X"), xShape->getString());
+
+    //Without the fix in place, it would have crashed here
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+    xShape.set(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("X"), xShape->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132911)
+{
+    load(DATA_DIRECTORY, "tdf132911.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Cut();
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    TransferableDataHelper aHelper(xTransfer.get());
+    SwTransferable::Paste(*pWrtShell, aHelper);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    // Without the fix in place, it would have crashed here
+    SwTransferable::Paste(*pWrtShell, aHelper);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(8, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    SwTransferable::Paste(*pWrtShell, aHelper);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    SwTransferable::Paste(*pWrtShell, aHelper);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(8, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    //FIXME: tdf#135247
+    //dispatchCommand(mxComponent, ".uno:Undo", {});
+    //Scheduler::ProcessEventsToIdle();
+    //CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    //CPPUNIT_ASSERT_EQUAL(4, getShapes());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf61154)
+{
+    load(DATA_DIRECTORY, "tdf61154.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+
+    pWrtShell->GotoNextTOXBase();
+
+    // show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be off",
+                           !pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
+    pWrtShell->UpdateTableOf(*pTOXBase);
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    SwTextNode* pTitleNode = pShell->GetCursor()->GetNode().GetTextNode();
+    SwNodeIndex aIdx(*pTitleNode);
+
+    // table of contents node shouldn't contain tracked deletion
+    // This was "Text InsertedDeleted\t1"
+    SwTextNode* pNext = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext(&aIdx));
+    CPPUNIT_ASSERT_EQUAL(OUString("Text Inserted\t1"), pNext->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134404)
+{
+    load(DATA_DIRECTORY, "tdf134404.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    dispatchCommand(mxComponent, ".uno:GoToEndOfPage", {});
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:InsertPagebreak", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    dispatchCommand(mxComponent, ".uno:SwBackspace", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, the image would have been deleted
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+>>>>>>> CHANGE (daf2a7 tdf#61154 sw Table of Contents: remove tracked deletion)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf112342)
 {
     load(DATA_DIRECTORY, "tdf112342.docx");
