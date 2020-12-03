@@ -1,0 +1,3364 @@
+Restore numerics headers from release 4137
+
+diff -Naur workdir/UnpackedTarball/pdfium/third_party/base/numerics/checked_math.h workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/checked_math.h
+--- workdir/UnpackedTarball/pdfium/third_party/base/numerics/checked_math.h	2020-10-26 19:26:04.000000000 +0100
++++ workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/checked_math.h	1970-01-01 01:00:00.000000000 +0100
+@@ -1,395 +0,0 @@
+-// Copyright 2017 The Chromium Authors. All rights reserved.
+-// Use of this source code is governed by a BSD-style license that can be
+-// found in the LICENSE file.
+-
+-#ifndef THIRD_PARTY_BASE_NUMERICS_CHECKED_MATH_H_
+-#define THIRD_PARTY_BASE_NUMERICS_CHECKED_MATH_H_
+-
+-#include <stddef.h>
+-
+-#include <limits>
+-#include <type_traits>
+-
+-#include "third_party/base/numerics/checked_math_impl.h"
+-
+-namespace pdfium {
+-namespace base {
+-namespace internal {
+-
+-template <typename T>
+-class CheckedNumeric {
+-  static_assert(std::is_arithmetic<T>::value,
+-                "CheckedNumeric<T>: T must be a numeric type.");
+-
+- public:
+-  using type = T;
+-
+-  constexpr CheckedNumeric() = default;
+-
+-  // Copy constructor.
+-  template <typename Src>
+-  constexpr CheckedNumeric(const CheckedNumeric<Src>& rhs)
+-      : state_(rhs.state_.value(), rhs.IsValid()) {}
+-
+-  template <typename Src>
+-  friend class CheckedNumeric;
+-
+-  // This is not an explicit constructor because we implicitly upgrade regular
+-  // numerics to CheckedNumerics to make them easier to use.
+-  template <typename Src>
+-  constexpr CheckedNumeric(Src value)  // NOLINT(runtime/explicit)
+-      : state_(value) {
+-    static_assert(std::is_arithmetic<Src>::value, "Argument must be numeric.");
+-  }
+-
+-  // This is not an explicit constructor because we want a seamless conversion
+-  // from StrictNumeric types.
+-  template <typename Src>
+-  constexpr CheckedNumeric(
+-      StrictNumeric<Src> value)  // NOLINT(runtime/explicit)
+-      : state_(static_cast<Src>(value)) {}
+-
+-  // IsValid() - The public API to test if a CheckedNumeric is currently valid.
+-  // A range checked destination type can be supplied using the Dst template
+-  // parameter.
+-  template <typename Dst = T>
+-  constexpr bool IsValid() const {
+-    return state_.is_valid() &&
+-           IsValueInRangeForNumericType<Dst>(state_.value());
+-  }
+-
+-  // AssignIfValid(Dst) - Assigns the underlying value if it is currently valid
+-  // and is within the range supported by the destination type. Returns true if
+-  // successful and false otherwise.
+-  template <typename Dst>
+-#if defined(__clang__) || defined(__GNUC__)
+-  __attribute__((warn_unused_result))
+-#elif defined(_MSC_VER)
+-  _Check_return_
+-#endif
+-  constexpr bool
+-  AssignIfValid(Dst* result) const {
+-    return BASE_NUMERICS_LIKELY(IsValid<Dst>())
+-               ? ((*result = static_cast<Dst>(state_.value())), true)
+-               : false;
+-  }
+-
+-  // ValueOrDie() - The primary accessor for the underlying value. If the
+-  // current state is not valid it will CHECK and crash.
+-  // A range checked destination type can be supplied using the Dst template
+-  // parameter, which will trigger a CHECK if the value is not in bounds for
+-  // the destination.
+-  // The CHECK behavior can be overridden by supplying a handler as a
+-  // template parameter, for test code, etc. However, the handler cannot access
+-  // the underlying value, and it is not available through other means.
+-  template <typename Dst = T, class CheckHandler = CheckOnFailure>
+-  constexpr StrictNumeric<Dst> ValueOrDie() const {
+-    return BASE_NUMERICS_LIKELY(IsValid<Dst>())
+-               ? static_cast<Dst>(state_.value())
+-               : CheckHandler::template HandleFailure<Dst>();
+-  }
+-
+-  // ValueOrDefault(T default_value) - A convenience method that returns the
+-  // current value if the state is valid, and the supplied default_value for
+-  // any other state.
+-  // A range checked destination type can be supplied using the Dst template
+-  // parameter. WARNING: This function may fail to compile or CHECK at runtime
+-  // if the supplied default_value is not within range of the destination type.
+-  template <typename Dst = T, typename Src>
+-  constexpr StrictNumeric<Dst> ValueOrDefault(const Src default_value) const {
+-    return BASE_NUMERICS_LIKELY(IsValid<Dst>())
+-               ? static_cast<Dst>(state_.value())
+-               : checked_cast<Dst>(default_value);
+-  }
+-
+-  // Returns a checked numeric of the specified type, cast from the current
+-  // CheckedNumeric. If the current state is invalid or the destination cannot
+-  // represent the result then the returned CheckedNumeric will be invalid.
+-  template <typename Dst>
+-  constexpr CheckedNumeric<typename UnderlyingType<Dst>::type> Cast() const {
+-    return *this;
+-  }
+-
+-  // This friend method is available solely for providing more detailed logging
+-  // in the the tests. Do not implement it in production code, because the
+-  // underlying values may change at any time.
+-  template <typename U>
+-  friend U GetNumericValueForTest(const CheckedNumeric<U>& src);
+-
+-  // Prototypes for the supported arithmetic operator overloads.
+-  template <typename Src>
+-  constexpr CheckedNumeric& operator+=(const Src rhs);
+-  template <typename Src>
+-  constexpr CheckedNumeric& operator-=(const Src rhs);
+-  template <typename Src>
+-  constexpr CheckedNumeric& operator*=(const Src rhs);
+-  template <typename Src>
+-  constexpr CheckedNumeric& operator/=(const Src rhs);
+-  template <typename Src>
+-  constexpr CheckedNumeric& operator%=(const Src rhs);
+-  template <typename Src>
+-  constexpr CheckedNumeric& operator<<=(const Src rhs);
+-  template <typename Src>
+-  constexpr CheckedNumeric& operator>>=(const Src rhs);
+-  template <typename Src>
+-  constexpr CheckedNumeric& operator&=(const Src rhs);
+-  template <typename Src>
+-  constexpr CheckedNumeric& operator|=(const Src rhs);
+-  template <typename Src>
+-  constexpr CheckedNumeric& operator^=(const Src rhs);
+-
+-  constexpr CheckedNumeric operator-() const {
+-    // The negation of two's complement int min is int min, so we simply
+-    // check for that in the constexpr case.
+-    // We use an optimized code path for a known run-time variable.
+-    return MustTreatAsConstexpr(state_.value()) || !std::is_signed<T>::value ||
+-                   std::is_floating_point<T>::value
+-               ? CheckedNumeric<T>(
+-                     NegateWrapper(state_.value()),
+-                     IsValid() && (!std::is_signed<T>::value ||
+-                                   std::is_floating_point<T>::value ||
+-                                   NegateWrapper(state_.value()) !=
+-                                       std::numeric_limits<T>::lowest()))
+-               : FastRuntimeNegate();
+-  }
+-
+-  constexpr CheckedNumeric operator~() const {
+-    return CheckedNumeric<decltype(InvertWrapper(T()))>(
+-        InvertWrapper(state_.value()), IsValid());
+-  }
+-
+-  constexpr CheckedNumeric Abs() const {
+-    return !IsValueNegative(state_.value()) ? *this : -*this;
+-  }
+-
+-  template <typename U>
+-  constexpr CheckedNumeric<typename MathWrapper<CheckedMaxOp, T, U>::type> Max(
+-      const U rhs) const {
+-    using R = typename UnderlyingType<U>::type;
+-    using result_type = typename MathWrapper<CheckedMaxOp, T, U>::type;
+-    // TODO(jschuh): This can be converted to the MathOp version and remain
+-    // constexpr once we have C++14 support.
+-    return CheckedNumeric<result_type>(
+-        static_cast<result_type>(
+-            IsGreater<T, R>::Test(state_.value(), Wrapper<U>::value(rhs))
+-                ? state_.value()
+-                : Wrapper<U>::value(rhs)),
+-        state_.is_valid() && Wrapper<U>::is_valid(rhs));
+-  }
+-
+-  template <typename U>
+-  constexpr CheckedNumeric<typename MathWrapper<CheckedMinOp, T, U>::type> Min(
+-      const U rhs) const {
+-    using R = typename UnderlyingType<U>::type;
+-    using result_type = typename MathWrapper<CheckedMinOp, T, U>::type;
+-    // TODO(jschuh): This can be converted to the MathOp version and remain
+-    // constexpr once we have C++14 support.
+-    return CheckedNumeric<result_type>(
+-        static_cast<result_type>(
+-            IsLess<T, R>::Test(state_.value(), Wrapper<U>::value(rhs))
+-                ? state_.value()
+-                : Wrapper<U>::value(rhs)),
+-        state_.is_valid() && Wrapper<U>::is_valid(rhs));
+-  }
+-
+-  // This function is available only for integral types. It returns an unsigned
+-  // integer of the same width as the source type, containing the absolute value
+-  // of the source, and properly handling signed min.
+-  constexpr CheckedNumeric<typename UnsignedOrFloatForSize<T>::type>
+-  UnsignedAbs() const {
+-    return CheckedNumeric<typename UnsignedOrFloatForSize<T>::type>(
+-        SafeUnsignedAbs(state_.value()), state_.is_valid());
+-  }
+-
+-  constexpr CheckedNumeric& operator++() {
+-    *this += 1;
+-    return *this;
+-  }
+-
+-  constexpr CheckedNumeric operator++(int) {
+-    CheckedNumeric value = *this;
+-    *this += 1;
+-    return value;
+-  }
+-
+-  constexpr CheckedNumeric& operator--() {
+-    *this -= 1;
+-    return *this;
+-  }
+-
+-  constexpr CheckedNumeric operator--(int) {
+-    CheckedNumeric value = *this;
+-    *this -= 1;
+-    return value;
+-  }
+-
+-  // These perform the actual math operations on the CheckedNumerics.
+-  // Binary arithmetic operations.
+-  template <template <typename, typename, typename> class M,
+-            typename L,
+-            typename R>
+-  static constexpr CheckedNumeric MathOp(const L lhs, const R rhs) {
+-    using Math = typename MathWrapper<M, L, R>::math;
+-    T result = 0;
+-    bool is_valid =
+-        Wrapper<L>::is_valid(lhs) && Wrapper<R>::is_valid(rhs) &&
+-        Math::Do(Wrapper<L>::value(lhs), Wrapper<R>::value(rhs), &result);
+-    return CheckedNumeric<T>(result, is_valid);
+-  }
+-
+-  // Assignment arithmetic operations.
+-  template <template <typename, typename, typename> class M, typename R>
+-  constexpr CheckedNumeric& MathOp(const R rhs) {
+-    using Math = typename MathWrapper<M, T, R>::math;
+-    T result = 0;  // Using T as the destination saves a range check.
+-    bool is_valid = state_.is_valid() && Wrapper<R>::is_valid(rhs) &&
+-                    Math::Do(state_.value(), Wrapper<R>::value(rhs), &result);
+-    *this = CheckedNumeric<T>(result, is_valid);
+-    return *this;
+-  }
+-
+- private:
+-  CheckedNumericState<T> state_;
+-
+-  CheckedNumeric FastRuntimeNegate() const {
+-    T result;
+-    bool success = CheckedSubOp<T, T>::Do(T(0), state_.value(), &result);
+-    return CheckedNumeric<T>(result, IsValid() && success);
+-  }
+-
+-  template <typename Src>
+-  constexpr CheckedNumeric(Src value, bool is_valid)
+-      : state_(value, is_valid) {}
+-
+-  // These wrappers allow us to handle state the same way for both
+-  // CheckedNumeric and POD arithmetic types.
+-  template <typename Src>
+-  struct Wrapper {
+-    static constexpr bool is_valid(Src) { return true; }
+-    static constexpr Src value(Src value) { return value; }
+-  };
+-
+-  template <typename Src>
+-  struct Wrapper<CheckedNumeric<Src>> {
+-    static constexpr bool is_valid(const CheckedNumeric<Src> v) {
+-      return v.IsValid();
+-    }
+-    static constexpr Src value(const CheckedNumeric<Src> v) {
+-      return v.state_.value();
+-    }
+-  };
+-
+-  template <typename Src>
+-  struct Wrapper<StrictNumeric<Src>> {
+-    static constexpr bool is_valid(const StrictNumeric<Src>) { return true; }
+-    static constexpr Src value(const StrictNumeric<Src> v) {
+-      return static_cast<Src>(v);
+-    }
+-  };
+-};
+-
+-// Convenience functions to avoid the ugly template disambiguator syntax.
+-template <typename Dst, typename Src>
+-constexpr bool IsValidForType(const CheckedNumeric<Src> value) {
+-  return value.template IsValid<Dst>();
+-}
+-
+-template <typename Dst, typename Src>
+-constexpr StrictNumeric<Dst> ValueOrDieForType(
+-    const CheckedNumeric<Src> value) {
+-  return value.template ValueOrDie<Dst>();
+-}
+-
+-template <typename Dst, typename Src, typename Default>
+-constexpr StrictNumeric<Dst> ValueOrDefaultForType(
+-    const CheckedNumeric<Src> value,
+-    const Default default_value) {
+-  return value.template ValueOrDefault<Dst>(default_value);
+-}
+-
+-// Convience wrapper to return a new CheckedNumeric from the provided arithmetic
+-// or CheckedNumericType.
+-template <typename T>
+-constexpr CheckedNumeric<typename UnderlyingType<T>::type> MakeCheckedNum(
+-    const T value) {
+-  return value;
+-}
+-
+-// These implement the variadic wrapper for the math operations.
+-template <template <typename, typename, typename> class M,
+-          typename L,
+-          typename R>
+-constexpr CheckedNumeric<typename MathWrapper<M, L, R>::type> CheckMathOp(
+-    const L lhs,
+-    const R rhs) {
+-  using Math = typename MathWrapper<M, L, R>::math;
+-  return CheckedNumeric<typename Math::result_type>::template MathOp<M>(lhs,
+-                                                                        rhs);
+-}
+-
+-// General purpose wrapper template for arithmetic operations.
+-template <template <typename, typename, typename> class M,
+-          typename L,
+-          typename R,
+-          typename... Args>
+-constexpr CheckedNumeric<typename ResultType<M, L, R, Args...>::type>
+-CheckMathOp(const L lhs, const R rhs, const Args... args) {
+-  return CheckMathOp<M>(CheckMathOp<M>(lhs, rhs), args...);
+-}
+-
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Checked, Check, Add, +, +=)
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Checked, Check, Sub, -, -=)
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Checked, Check, Mul, *, *=)
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Checked, Check, Div, /, /=)
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Checked, Check, Mod, %, %=)
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Checked, Check, Lsh, <<, <<=)
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Checked, Check, Rsh, >>, >>=)
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Checked, Check, And, &, &=)
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Checked, Check, Or, |, |=)
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Checked, Check, Xor, ^, ^=)
+-BASE_NUMERIC_ARITHMETIC_VARIADIC(Checked, Check, Max)
+-BASE_NUMERIC_ARITHMETIC_VARIADIC(Checked, Check, Min)
+-
+-// These are some extra StrictNumeric operators to support simple pointer
+-// arithmetic with our result types. Since wrapping on a pointer is always
+-// bad, we trigger the CHECK condition here.
+-template <typename L, typename R>
+-L* operator+(L* lhs, const StrictNumeric<R> rhs) {
+-  uintptr_t result = CheckAdd(reinterpret_cast<uintptr_t>(lhs),
+-                              CheckMul(sizeof(L), static_cast<R>(rhs)))
+-                         .template ValueOrDie<uintptr_t>();
+-  return reinterpret_cast<L*>(result);
+-}
+-
+-template <typename L, typename R>
+-L* operator-(L* lhs, const StrictNumeric<R> rhs) {
+-  uintptr_t result = CheckSub(reinterpret_cast<uintptr_t>(lhs),
+-                              CheckMul(sizeof(L), static_cast<R>(rhs)))
+-                         .template ValueOrDie<uintptr_t>();
+-  return reinterpret_cast<L*>(result);
+-}
+-
+-}  // namespace internal
+-
+-using internal::CheckedNumeric;
+-using internal::IsValidForType;
+-using internal::ValueOrDieForType;
+-using internal::ValueOrDefaultForType;
+-using internal::MakeCheckedNum;
+-using internal::CheckMax;
+-using internal::CheckMin;
+-using internal::CheckAdd;
+-using internal::CheckSub;
+-using internal::CheckMul;
+-using internal::CheckDiv;
+-using internal::CheckMod;
+-using internal::CheckLsh;
+-using internal::CheckRsh;
+-using internal::CheckAnd;
+-using internal::CheckOr;
+-using internal::CheckXor;
+-
+-}  // namespace base
+-}  // namespace pdfium
+-
+-#endif  // THIRD_PARTY_BASE_NUMERICS_CHECKED_MATH_H_
+diff -Naur workdir/UnpackedTarball/pdfium/third_party/base/numerics/checked_math_impl.h workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/checked_math_impl.h
+--- workdir/UnpackedTarball/pdfium/third_party/base/numerics/checked_math_impl.h	2020-10-26 19:26:04.000000000 +0100
++++ workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/checked_math_impl.h	1970-01-01 01:00:00.000000000 +0100
+@@ -1,579 +0,0 @@
+-// Copyright 2017 The Chromium Authors. All rights reserved.
+-// Use of this source code is governed by a BSD-style license that can be
+-// found in the LICENSE file.
+-
+-#ifndef THIRD_PARTY_BASE_NUMERICS_CHECKED_MATH_IMPL_H_
+-#define THIRD_PARTY_BASE_NUMERICS_CHECKED_MATH_IMPL_H_
+-
+-#include <stddef.h>
+-#include <stdint.h>
+-
+-#include <climits>
+-#include <cmath>
+-#include <cstdlib>
+-#include <limits>
+-#include <type_traits>
+-
+-#include "third_party/base/numerics/safe_conversions.h"
+-#include "third_party/base/numerics/safe_math_shared_impl.h"
+-
+-namespace pdfium {
+-namespace base {
+-namespace internal {
+-
+-template <typename T>
+-constexpr bool CheckedAddImpl(T x, T y, T* result) {
+-  static_assert(std::is_integral<T>::value, "Type must be integral");
+-  // Since the value of x+y is undefined if we have a signed type, we compute
+-  // it using the unsigned type of the same size.
+-  using UnsignedDst = typename std::make_unsigned<T>::type;
+-  using SignedDst = typename std::make_signed<T>::type;
+-  UnsignedDst ux = static_cast<UnsignedDst>(x);
+-  UnsignedDst uy = static_cast<UnsignedDst>(y);
+-  UnsignedDst uresult = static_cast<UnsignedDst>(ux + uy);
+-  *result = static_cast<T>(uresult);
+-  // Addition is valid if the sign of (x + y) is equal to either that of x or
+-  // that of y.
+-  return (std::is_signed<T>::value)
+-             ? static_cast<SignedDst>((uresult ^ ux) & (uresult ^ uy)) >= 0
+-             : uresult >= uy;  // Unsigned is either valid or underflow.
+-}
+-
+-template <typename T, typename U, class Enable = void>
+-struct CheckedAddOp {};
+-
+-template <typename T, typename U>
+-struct CheckedAddOp<T,
+-                    U,
+-                    typename std::enable_if<std::is_integral<T>::value &&
+-                                            std::is_integral<U>::value>::type> {
+-  using result_type = typename MaxExponentPromotion<T, U>::type;
+-  template <typename V>
+-  static constexpr bool Do(T x, U y, V* result) {
+-    // TODO(jschuh) Make this "constexpr if" once we're C++17.
+-    if (CheckedAddFastOp<T, U>::is_supported)
+-      return CheckedAddFastOp<T, U>::Do(x, y, result);
+-
+-    // Double the underlying type up to a full machine word.
+-    using FastPromotion = typename FastIntegerArithmeticPromotion<T, U>::type;
+-    using Promotion =
+-        typename std::conditional<(IntegerBitsPlusSign<FastPromotion>::value >
+-                                   IntegerBitsPlusSign<intptr_t>::value),
+-                                  typename BigEnoughPromotion<T, U>::type,
+-                                  FastPromotion>::type;
+-    // Fail if either operand is out of range for the promoted type.
+-    // TODO(jschuh): This could be made to work for a broader range of values.
+-    if (BASE_NUMERICS_UNLIKELY(!IsValueInRangeForNumericType<Promotion>(x) ||
+-                               !IsValueInRangeForNumericType<Promotion>(y))) {
+-      return false;
+-    }
+-
+-    Promotion presult = {};
+-    bool is_valid = true;
+-    if (IsIntegerArithmeticSafe<Promotion, T, U>::value) {
+-      presult = static_cast<Promotion>(x) + static_cast<Promotion>(y);
+-    } else {
+-      is_valid = CheckedAddImpl(static_cast<Promotion>(x),
+-                                static_cast<Promotion>(y), &presult);
+-    }
+-    *result = static_cast<V>(presult);
+-    return is_valid && IsValueInRangeForNumericType<V>(presult);
+-  }
+-};
+-
+-template <typename T>
+-constexpr bool CheckedSubImpl(T x, T y, T* result) {
+-  static_assert(std::is_integral<T>::value, "Type must be integral");
+-  // Since the value of x+y is undefined if we have a signed type, we compute
+-  // it using the unsigned type of the same size.
+-  using UnsignedDst = typename std::make_unsigned<T>::type;
+-  using SignedDst = typename std::make_signed<T>::type;
+-  UnsignedDst ux = static_cast<UnsignedDst>(x);
+-  UnsignedDst uy = static_cast<UnsignedDst>(y);
+-  UnsignedDst uresult = static_cast<UnsignedDst>(ux - uy);
+-  *result = static_cast<T>(uresult);
+-  // Subtraction is valid if either x and y have same sign, or (x-y) and x have
+-  // the same sign.
+-  return (std::is_signed<T>::value)
+-             ? static_cast<SignedDst>((uresult ^ ux) & (ux ^ uy)) >= 0
+-             : x >= y;
+-}
+-
+-template <typename T, typename U, class Enable = void>
+-struct CheckedSubOp {};
+-
+-template <typename T, typename U>
+-struct CheckedSubOp<T,
+-                    U,
+-                    typename std::enable_if<std::is_integral<T>::value &&
+-                                            std::is_integral<U>::value>::type> {
+-  using result_type = typename MaxExponentPromotion<T, U>::type;
+-  template <typename V>
+-  static constexpr bool Do(T x, U y, V* result) {
+-    // TODO(jschuh) Make this "constexpr if" once we're C++17.
+-    if (CheckedSubFastOp<T, U>::is_supported)
+-      return CheckedSubFastOp<T, U>::Do(x, y, result);
+-
+-    // Double the underlying type up to a full machine word.
+-    using FastPromotion = typename FastIntegerArithmeticPromotion<T, U>::type;
+-    using Promotion =
+-        typename std::conditional<(IntegerBitsPlusSign<FastPromotion>::value >
+-                                   IntegerBitsPlusSign<intptr_t>::value),
+-                                  typename BigEnoughPromotion<T, U>::type,
+-                                  FastPromotion>::type;
+-    // Fail if either operand is out of range for the promoted type.
+-    // TODO(jschuh): This could be made to work for a broader range of values.
+-    if (BASE_NUMERICS_UNLIKELY(!IsValueInRangeForNumericType<Promotion>(x) ||
+-                               !IsValueInRangeForNumericType<Promotion>(y))) {
+-      return false;
+-    }
+-
+-    Promotion presult = {};
+-    bool is_valid = true;
+-    if (IsIntegerArithmeticSafe<Promotion, T, U>::value) {
+-      presult = static_cast<Promotion>(x) - static_cast<Promotion>(y);
+-    } else {
+-      is_valid = CheckedSubImpl(static_cast<Promotion>(x),
+-                                static_cast<Promotion>(y), &presult);
+-    }
+-    *result = static_cast<V>(presult);
+-    return is_valid && IsValueInRangeForNumericType<V>(presult);
+-  }
+-};
+-
+-template <typename T>
+-constexpr bool CheckedMulImpl(T x, T y, T* result) {
+-  static_assert(std::is_integral<T>::value, "Type must be integral");
+-  // Since the value of x*y is potentially undefined if we have a signed type,
+-  // we compute it using the unsigned type of the same size.
+-  using UnsignedDst = typename std::make_unsigned<T>::type;
+-  using SignedDst = typename std::make_signed<T>::type;
+-  const UnsignedDst ux = SafeUnsignedAbs(x);
+-  const UnsignedDst uy = SafeUnsignedAbs(y);
+-  UnsignedDst uresult = static_cast<UnsignedDst>(ux * uy);
+-  const bool is_negative =
+-      std::is_signed<T>::value && static_cast<SignedDst>(x ^ y) < 0;
+-  *result = is_negative ? 0 - uresult : uresult;
+-  // We have a fast out for unsigned identity or zero on the second operand.
+-  // After that it's an unsigned overflow check on the absolute value, with
+-  // a +1 bound for a negative result.
+-  return uy <= UnsignedDst(!std::is_signed<T>::value || is_negative) ||
+-         ux <= (std::numeric_limits<T>::max() + UnsignedDst(is_negative)) / uy;
+-}
+-
+-template <typename T, typename U, class Enable = void>
+-struct CheckedMulOp {};
+-
+-template <typename T, typename U>
+-struct CheckedMulOp<T,
+-                    U,
+-                    typename std::enable_if<std::is_integral<T>::value &&
+-                                            std::is_integral<U>::value>::type> {
+-  using result_type = typename MaxExponentPromotion<T, U>::type;
+-  template <typename V>
+-  static constexpr bool Do(T x, U y, V* result) {
+-    // TODO(jschuh) Make this "constexpr if" once we're C++17.
+-    if (CheckedMulFastOp<T, U>::is_supported)
+-      return CheckedMulFastOp<T, U>::Do(x, y, result);
+-
+-    using Promotion = typename FastIntegerArithmeticPromotion<T, U>::type;
+-    // Verify the destination type can hold the result (always true for 0).
+-    if (BASE_NUMERICS_UNLIKELY((!IsValueInRangeForNumericType<Promotion>(x) ||
+-                                !IsValueInRangeForNumericType<Promotion>(y)) &&
+-                               x && y)) {
+-      return false;
+-    }
+-
+-    Promotion presult = {};
+-    bool is_valid = true;
+-    if (CheckedMulFastOp<Promotion, Promotion>::is_supported) {
+-      // The fast op may be available with the promoted type.
+-      is_valid = CheckedMulFastOp<Promotion, Promotion>::Do(x, y, &presult);
+-    } else if (IsIntegerArithmeticSafe<Promotion, T, U>::value) {
+-      presult = static_cast<Promotion>(x) * static_cast<Promotion>(y);
+-    } else {
+-      is_valid = CheckedMulImpl(static_cast<Promotion>(x),
+-                                static_cast<Promotion>(y), &presult);
+-    }
+-    *result = static_cast<V>(presult);
+-    return is_valid && IsValueInRangeForNumericType<V>(presult);
+-  }
+-};
+-
+-// Division just requires a check for a zero denominator or an invalid negation
+-// on signed min/-1.
+-template <typename T, typename U, class Enable = void>
+-struct CheckedDivOp {};
+-
+-template <typename T, typename U>
+-struct CheckedDivOp<T,
+-                    U,
+-                    typename std::enable_if<std::is_integral<T>::value &&
+-                                            std::is_integral<U>::value>::type> {
+-  using result_type = typename MaxExponentPromotion<T, U>::type;
+-  template <typename V>
+-  static constexpr bool Do(T x, U y, V* result) {
+-    if (BASE_NUMERICS_UNLIKELY(!y))
+-      return false;
+-
+-    // The overflow check can be compiled away if we don't have the exact
+-    // combination of types needed to trigger this case.
+-    using Promotion = typename BigEnoughPromotion<T, U>::type;
+-    if (BASE_NUMERICS_UNLIKELY(
+-            (std::is_signed<T>::value && std::is_signed<U>::value &&
+-             IsTypeInRangeForNumericType<T, Promotion>::value &&
+-             static_cast<Promotion>(x) ==
+-                 std::numeric_limits<Promotion>::lowest() &&
+-             y == static_cast<U>(-1)))) {
+-      return false;
+-    }
+-
+-    // This branch always compiles away if the above branch wasn't removed.
+-    if (BASE_NUMERICS_UNLIKELY((!IsValueInRangeForNumericType<Promotion>(x) ||
+-                                !IsValueInRangeForNumericType<Promotion>(y)) &&
+-                               x)) {
+-      return false;
+-    }
+-
+-    Promotion presult = Promotion(x) / Promotion(y);
+-    *result = static_cast<V>(presult);
+-    return IsValueInRangeForNumericType<V>(presult);
+-  }
+-};
+-
+-template <typename T, typename U, class Enable = void>
+-struct CheckedModOp {};
+-
+-template <typename T, typename U>
+-struct CheckedModOp<T,
+-                    U,
+-                    typename std::enable_if<std::is_integral<T>::value &&
+-                                            std::is_integral<U>::value>::type> {
+-  using result_type = typename MaxExponentPromotion<T, U>::type;
+-  template <typename V>
+-  static constexpr bool Do(T x, U y, V* result) {
+-    if (BASE_NUMERICS_UNLIKELY(!y))
+-      return false;
+-
+-    using Promotion = typename BigEnoughPromotion<T, U>::type;
+-    if (BASE_NUMERICS_UNLIKELY(
+-            (std::is_signed<T>::value && std::is_signed<U>::value &&
+-             IsTypeInRangeForNumericType<T, Promotion>::value &&
+-             static_cast<Promotion>(x) ==
+-                 std::numeric_limits<Promotion>::lowest() &&
+-             y == static_cast<U>(-1)))) {
+-      *result = 0;
+-      return true;
+-    }
+-
+-    Promotion presult = static_cast<Promotion>(x) % static_cast<Promotion>(y);
+-    *result = static_cast<Promotion>(presult);
+-    return IsValueInRangeForNumericType<V>(presult);
+-  }
+-};
+-
+-template <typename T, typename U, class Enable = void>
+-struct CheckedLshOp {};
+-
+-// Left shift. Shifts less than 0 or greater than or equal to the number
+-// of bits in the promoted type are undefined. Shifts of negative values
+-// are undefined. Otherwise it is defined when the result fits.
+-template <typename T, typename U>
+-struct CheckedLshOp<T,
+-                    U,
+-                    typename std::enable_if<std::is_integral<T>::value &&
+-                                            std::is_integral<U>::value>::type> {
+-  using result_type = T;
+-  template <typename V>
+-  static constexpr bool Do(T x, U shift, V* result) {
+-    // Disallow negative numbers and verify the shift is in bounds.
+-    if (BASE_NUMERICS_LIKELY(!IsValueNegative(x) &&
+-                             as_unsigned(shift) <
+-                                 as_unsigned(std::numeric_limits<T>::digits))) {
+-      // Shift as unsigned to avoid undefined behavior.
+-      *result = static_cast<V>(as_unsigned(x) << shift);
+-      // If the shift can be reversed, we know it was valid.
+-      return *result >> shift == x;
+-    }
+-
+-    // Handle the legal corner-case of a full-width signed shift of zero.
+-    return std::is_signed<T>::value && !x &&
+-           as_unsigned(shift) == as_unsigned(std::numeric_limits<T>::digits);
+-  }
+-};
+-
+-template <typename T, typename U, class Enable = void>
+-struct CheckedRshOp {};
+-
+-// Right shift. Shifts less than 0 or greater than or equal to the number
+-// of bits in the promoted type are undefined. Otherwise, it is always defined,
+-// but a right shift of a negative value is implementation-dependent.
+-template <typename T, typename U>
+-struct CheckedRshOp<T,
+-                    U,
+-                    typename std::enable_if<std::is_integral<T>::value &&
+-                                            std::is_integral<U>::value>::type> {
+-  using result_type = T;
+-  template <typename V>
+-  static bool Do(T x, U shift, V* result) {
+-    // Use the type conversion push negative values out of range.
+-    if (BASE_NUMERICS_LIKELY(as_unsigned(shift) <
+-                             IntegerBitsPlusSign<T>::value)) {
+-      T tmp = x >> shift;
+-      *result = static_cast<V>(tmp);
+-      return IsValueInRangeForNumericType<V>(tmp);
+-    }
+-    return false;
+-  }
+-};
+-
+-template <typename T, typename U, class Enable = void>
+-struct CheckedAndOp {};
+-
+-// For simplicity we support only unsigned integer results.
+-template <typename T, typename U>
+-struct CheckedAndOp<T,
+-                    U,
+-                    typename std::enable_if<std::is_integral<T>::value &&
+-                                            std::is_integral<U>::value>::type> {
+-  using result_type = typename std::make_unsigned<
+-      typename MaxExponentPromotion<T, U>::type>::type;
+-  template <typename V>
+-  static constexpr bool Do(T x, U y, V* result) {
+-    result_type tmp = static_cast<result_type>(x) & static_cast<result_type>(y);
+-    *result = static_cast<V>(tmp);
+-    return IsValueInRangeForNumericType<V>(tmp);
+-  }
+-};
+-
+-template <typename T, typename U, class Enable = void>
+-struct CheckedOrOp {};
+-
+-// For simplicity we support only unsigned integers.
+-template <typename T, typename U>
+-struct CheckedOrOp<T,
+-                   U,
+-                   typename std::enable_if<std::is_integral<T>::value &&
+-                                           std::is_integral<U>::value>::type> {
+-  using result_type = typename std::make_unsigned<
+-      typename MaxExponentPromotion<T, U>::type>::type;
+-  template <typename V>
+-  static constexpr bool Do(T x, U y, V* result) {
+-    result_type tmp = static_cast<result_type>(x) | static_cast<result_type>(y);
+-    *result = static_cast<V>(tmp);
+-    return IsValueInRangeForNumericType<V>(tmp);
+-  }
+-};
+-
+-template <typename T, typename U, class Enable = void>
+-struct CheckedXorOp {};
+-
+-// For simplicity we support only unsigned integers.
+-template <typename T, typename U>
+-struct CheckedXorOp<T,
+-                    U,
+-                    typename std::enable_if<std::is_integral<T>::value &&
+-                                            std::is_integral<U>::value>::type> {
+-  using result_type = typename std::make_unsigned<
+-      typename MaxExponentPromotion<T, U>::type>::type;
+-  template <typename V>
+-  static constexpr bool Do(T x, U y, V* result) {
+-    result_type tmp = static_cast<result_type>(x) ^ static_cast<result_type>(y);
+-    *result = static_cast<V>(tmp);
+-    return IsValueInRangeForNumericType<V>(tmp);
+-  }
+-};
+-
+-// Max doesn't really need to be implemented this way because it can't fail,
+-// but it makes the code much cleaner to use the MathOp wrappers.
+-template <typename T, typename U, class Enable = void>
+-struct CheckedMaxOp {};
+-
+-template <typename T, typename U>
+-struct CheckedMaxOp<
+-    T,
+-    U,
+-    typename std::enable_if<std::is_arithmetic<T>::value &&
+-                            std::is_arithmetic<U>::value>::type> {
+-  using result_type = typename MaxExponentPromotion<T, U>::type;
+-  template <typename V>
+-  static constexpr bool Do(T x, U y, V* result) {
+-    result_type tmp = IsGreater<T, U>::Test(x, y) ? static_cast<result_type>(x)
+-                                                  : static_cast<result_type>(y);
+-    *result = static_cast<V>(tmp);
+-    return IsValueInRangeForNumericType<V>(tmp);
+-  }
+-};
+-
+-// Min doesn't really need to be implemented this way because it can't fail,
+-// but it makes the code much cleaner to use the MathOp wrappers.
+-template <typename T, typename U, class Enable = void>
+-struct CheckedMinOp {};
+-
+-template <typename T, typename U>
+-struct CheckedMinOp<
+-    T,
+-    U,
+-    typename std::enable_if<std::is_arithmetic<T>::value &&
+-                            std::is_arithmetic<U>::value>::type> {
+-  using result_type = typename LowestValuePromotion<T, U>::type;
+-  template <typename V>
+-  static constexpr bool Do(T x, U y, V* result) {
+-    result_type tmp = IsLess<T, U>::Test(x, y) ? static_cast<result_type>(x)
+-                                               : static_cast<result_type>(y);
+-    *result = static_cast<V>(tmp);
+-    return IsValueInRangeForNumericType<V>(tmp);
+-  }
+-};
+-
+-// This is just boilerplate that wraps the standard floating point arithmetic.
+-// A macro isn't the nicest solution, but it beats rewriting these repeatedly.
+-#define BASE_FLOAT_ARITHMETIC_OPS(NAME, OP)                              \
+-  template <typename T, typename U>                                      \
+-  struct Checked##NAME##Op<                                              \
+-      T, U,                                                              \
+-      typename std::enable_if<std::is_floating_point<T>::value ||        \
+-                              std::is_floating_point<U>::value>::type> { \
+-    using result_type = typename MaxExponentPromotion<T, U>::type;       \
+-    template <typename V>                                                \
+-    static constexpr bool Do(T x, U y, V* result) {                      \
+-      using Promotion = typename MaxExponentPromotion<T, U>::type;       \
+-      Promotion presult = x OP y;                                        \
+-      *result = static_cast<V>(presult);                                 \
+-      return IsValueInRangeForNumericType<V>(presult);                   \
+-    }                                                                    \
+-  };
+-
+-BASE_FLOAT_ARITHMETIC_OPS(Add, +)
+-BASE_FLOAT_ARITHMETIC_OPS(Sub, -)
+-BASE_FLOAT_ARITHMETIC_OPS(Mul, *)
+-BASE_FLOAT_ARITHMETIC_OPS(Div, /)
+-
+-#undef BASE_FLOAT_ARITHMETIC_OPS
+-
+-// Floats carry around their validity state with them, but integers do not. So,
+-// we wrap the underlying value in a specialization in order to hide that detail
+-// and expose an interface via accessors.
+-enum NumericRepresentation {
+-  NUMERIC_INTEGER,
+-  NUMERIC_FLOATING,
+-  NUMERIC_UNKNOWN
+-};
+-
+-template <typename NumericType>
+-struct GetNumericRepresentation {
+-  static const NumericRepresentation value =
+-      std::is_integral<NumericType>::value
+-          ? NUMERIC_INTEGER
+-          : (std::is_floating_point<NumericType>::value ? NUMERIC_FLOATING
+-                                                        : NUMERIC_UNKNOWN);
+-};
+-
+-template <typename T,
+-          NumericRepresentation type = GetNumericRepresentation<T>::value>
+-class CheckedNumericState {};
+-
+-// Integrals require quite a bit of additional housekeeping to manage state.
+-template <typename T>
+-class CheckedNumericState<T, NUMERIC_INTEGER> {
+- private:
+-  // is_valid_ precedes value_ because member intializers in the constructors
+-  // are evaluated in field order, and is_valid_ must be read when initializing
+-  // value_.
+-  bool is_valid_;
+-  T value_;
+-
+-  // Ensures that a type conversion does not trigger undefined behavior.
+-  template <typename Src>
+-  static constexpr T WellDefinedConversionOrZero(const Src value,
+-                                                 const bool is_valid) {
+-    using SrcType = typename internal::UnderlyingType<Src>::type;
+-    return (std::is_integral<SrcType>::value || is_valid)
+-               ? static_cast<T>(value)
+-               : static_cast<T>(0);
+-  }
+-
+- public:
+-  template <typename Src, NumericRepresentation type>
+-  friend class CheckedNumericState;
+-
+-  constexpr CheckedNumericState() : is_valid_(true), value_(0) {}
+-
+-  template <typename Src>
+-  constexpr CheckedNumericState(Src value, bool is_valid)
+-      : is_valid_(is_valid && IsValueInRangeForNumericType<T>(value)),
+-        value_(WellDefinedConversionOrZero(value, is_valid_)) {
+-    static_assert(std::is_arithmetic<Src>::value, "Argument must be numeric.");
+-  }
+-
+-  // Copy constructor.
+-  template <typename Src>
+-  constexpr CheckedNumericState(const CheckedNumericState<Src>& rhs)
+-      : is_valid_(rhs.IsValid()),
+-        value_(WellDefinedConversionOrZero(rhs.value(), is_valid_)) {}
+-
+-  template <typename Src>
+-  constexpr explicit CheckedNumericState(Src value)
+-      : is_valid_(IsValueInRangeForNumericType<T>(value)),
+-        value_(WellDefinedConversionOrZero(value, is_valid_)) {}
+-
+-  constexpr bool is_valid() const { return is_valid_; }
+-  constexpr T value() const { return value_; }
+-};
+-
+-// Floating points maintain their own validity, but need translation wrappers.
+-template <typename T>
+-class CheckedNumericState<T, NUMERIC_FLOATING> {
+- private:
+-  T value_;
+-
+-  // Ensures that a type conversion does not trigger undefined behavior.
+-  template <typename Src>
+-  static constexpr T WellDefinedConversionOrNaN(const Src value,
+-                                                const bool is_valid) {
+-    using SrcType = typename internal::UnderlyingType<Src>::type;
+-    return (StaticDstRangeRelationToSrcRange<T, SrcType>::value ==
+-                NUMERIC_RANGE_CONTAINED ||
+-            is_valid)
+-               ? static_cast<T>(value)
+-               : std::numeric_limits<T>::quiet_NaN();
+-  }
+-
+- public:
+-  template <typename Src, NumericRepresentation type>
+-  friend class CheckedNumericState;
+-
+-  constexpr CheckedNumericState() : value_(0.0) {}
+-
+-  template <typename Src>
+-  constexpr CheckedNumericState(Src value, bool is_valid)
+-      : value_(WellDefinedConversionOrNaN(value, is_valid)) {}
+-
+-  template <typename Src>
+-  constexpr explicit CheckedNumericState(Src value)
+-      : value_(WellDefinedConversionOrNaN(
+-            value,
+-            IsValueInRangeForNumericType<T>(value))) {}
+-
+-  // Copy constructor.
+-  template <typename Src>
+-  constexpr CheckedNumericState(const CheckedNumericState<Src>& rhs)
+-      : value_(WellDefinedConversionOrNaN(
+-            rhs.value(),
+-            rhs.is_valid() && IsValueInRangeForNumericType<T>(rhs.value()))) {}
+-
+-  constexpr bool is_valid() const {
+-    // Written this way because std::isfinite is not reliably constexpr.
+-    return MustTreatAsConstexpr(value_)
+-               ? value_ <= std::numeric_limits<T>::max() &&
+-                     value_ >= std::numeric_limits<T>::lowest()
+-               : std::isfinite(value_);
+-  }
+-  constexpr T value() const { return value_; }
+-};
+-
+-}  // namespace internal
+-}  // namespace base
+-}  // namespace pdfium
+-
+-#endif  // THIRD_PARTY_BASE_NUMERICS_CHECKED_MATH_IMPL_H_
+diff -Naur workdir/UnpackedTarball/pdfium/third_party/base/numerics/clamped_math.h workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/clamped_math.h
+--- workdir/UnpackedTarball/pdfium/third_party/base/numerics/clamped_math.h	2020-10-26 19:26:04.000000000 +0100
++++ workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/clamped_math.h	1970-01-01 01:00:00.000000000 +0100
+@@ -1,266 +0,0 @@
+-// Copyright 2017 The Chromium Authors. All rights reserved.
+-// Use of this source code is governed by a BSD-style license that can be
+-// found in the LICENSE file.
+-
+-#ifndef THIRD_PARTY_BASE_NUMERICS_CLAMPED_MATH_H_
+-#define THIRD_PARTY_BASE_NUMERICS_CLAMPED_MATH_H_
+-
+-#include <stddef.h>
+-
+-#include <limits>
+-#include <type_traits>
+-
+-#include "third_party/base/numerics/clamped_math_impl.h"
+-
+-namespace pdfium {
+-namespace base {
+-namespace internal {
+-
+-template <typename T>
+-class ClampedNumeric {
+-  static_assert(std::is_arithmetic<T>::value,
+-                "ClampedNumeric<T>: T must be a numeric type.");
+-
+- public:
+-  using type = T;
+-
+-  constexpr ClampedNumeric() : value_(0) {}
+-
+-  // Copy constructor.
+-  template <typename Src>
+-  constexpr ClampedNumeric(const ClampedNumeric<Src>& rhs)
+-      : value_(saturated_cast<T>(rhs.value_)) {}
+-
+-  template <typename Src>
+-  friend class ClampedNumeric;
+-
+-  // This is not an explicit constructor because we implicitly upgrade regular
+-  // numerics to ClampedNumerics to make them easier to use.
+-  template <typename Src>
+-  constexpr ClampedNumeric(Src value)  // NOLINT(runtime/explicit)
+-      : value_(saturated_cast<T>(value)) {
+-    static_assert(std::is_arithmetic<Src>::value, "Argument must be numeric.");
+-  }
+-
+-  // This is not an explicit constructor because we want a seamless conversion
+-  // from StrictNumeric types.
+-  template <typename Src>
+-  constexpr ClampedNumeric(
+-      StrictNumeric<Src> value)  // NOLINT(runtime/explicit)
+-      : value_(saturated_cast<T>(static_cast<Src>(value))) {}
+-
+-  // Returns a ClampedNumeric of the specified type, cast from the current
+-  // ClampedNumeric, and saturated to the destination type.
+-  template <typename Dst>
+-  constexpr ClampedNumeric<typename UnderlyingType<Dst>::type> Cast() const {
+-    return *this;
+-  }
+-
+-  // Prototypes for the supported arithmetic operator overloads.
+-  template <typename Src>
+-  constexpr ClampedNumeric& operator+=(const Src rhs);
+-  template <typename Src>
+-  constexpr ClampedNumeric& operator-=(const Src rhs);
+-  template <typename Src>
+-  constexpr ClampedNumeric& operator*=(const Src rhs);
+-  template <typename Src>
+-  constexpr ClampedNumeric& operator/=(const Src rhs);
+-  template <typename Src>
+-  constexpr ClampedNumeric& operator%=(const Src rhs);
+-  template <typename Src>
+-  constexpr ClampedNumeric& operator<<=(const Src rhs);
+-  template <typename Src>
+-  constexpr ClampedNumeric& operator>>=(const Src rhs);
+-  template <typename Src>
+-  constexpr ClampedNumeric& operator&=(const Src rhs);
+-  template <typename Src>
+-  constexpr ClampedNumeric& operator|=(const Src rhs);
+-  template <typename Src>
+-  constexpr ClampedNumeric& operator^=(const Src rhs);
+-
+-  constexpr ClampedNumeric operator-() const {
+-    // The negation of two's complement int min is int min, so that's the
+-    // only overflow case where we will saturate.
+-    return ClampedNumeric<T>(SaturatedNegWrapper(value_));
+-  }
+-
+-  constexpr ClampedNumeric operator~() const {
+-    return ClampedNumeric<decltype(InvertWrapper(T()))>(InvertWrapper(value_));
+-  }
+-
+-  constexpr ClampedNumeric Abs() const {
+-    // The negation of two's complement int min is int min, so that's the
+-    // only overflow case where we will saturate.
+-    return ClampedNumeric<T>(SaturatedAbsWrapper(value_));
+-  }
+-
+-  template <typename U>
+-  constexpr ClampedNumeric<typename MathWrapper<ClampedMaxOp, T, U>::type> Max(
+-      const U rhs) const {
+-    using result_type = typename MathWrapper<ClampedMaxOp, T, U>::type;
+-    return ClampedNumeric<result_type>(
+-        ClampedMaxOp<T, U>::Do(value_, Wrapper<U>::value(rhs)));
+-  }
+-
+-  template <typename U>
+-  constexpr ClampedNumeric<typename MathWrapper<ClampedMinOp, T, U>::type> Min(
+-      const U rhs) const {
+-    using result_type = typename MathWrapper<ClampedMinOp, T, U>::type;
+-    return ClampedNumeric<result_type>(
+-        ClampedMinOp<T, U>::Do(value_, Wrapper<U>::value(rhs)));
+-  }
+-
+-  // This function is available only for integral types. It returns an unsigned
+-  // integer of the same width as the source type, containing the absolute value
+-  // of the source, and properly handling signed min.
+-  constexpr ClampedNumeric<typename UnsignedOrFloatForSize<T>::type>
+-  UnsignedAbs() const {
+-    return ClampedNumeric<typename UnsignedOrFloatForSize<T>::type>(
+-        SafeUnsignedAbs(value_));
+-  }
+-
+-  constexpr ClampedNumeric& operator++() {
+-    *this += 1;
+-    return *this;
+-  }
+-
+-  constexpr ClampedNumeric operator++(int) {
+-    ClampedNumeric value = *this;
+-    *this += 1;
+-    return value;
+-  }
+-
+-  constexpr ClampedNumeric& operator--() {
+-    *this -= 1;
+-    return *this;
+-  }
+-
+-  constexpr ClampedNumeric operator--(int) {
+-    ClampedNumeric value = *this;
+-    *this -= 1;
+-    return value;
+-  }
+-
+-  // These perform the actual math operations on the ClampedNumerics.
+-  // Binary arithmetic operations.
+-  template <template <typename, typename, typename> class M,
+-            typename L,
+-            typename R>
+-  static constexpr ClampedNumeric MathOp(const L lhs, const R rhs) {
+-    using Math = typename MathWrapper<M, L, R>::math;
+-    return ClampedNumeric<T>(
+-        Math::template Do<T>(Wrapper<L>::value(lhs), Wrapper<R>::value(rhs)));
+-  }
+-
+-  // Assignment arithmetic operations.
+-  template <template <typename, typename, typename> class M, typename R>
+-  constexpr ClampedNumeric& MathOp(const R rhs) {
+-    using Math = typename MathWrapper<M, T, R>::math;
+-    *this =
+-        ClampedNumeric<T>(Math::template Do<T>(value_, Wrapper<R>::value(rhs)));
+-    return *this;
+-  }
+-
+-  template <typename Dst>
+-  constexpr operator Dst() const {
+-    return saturated_cast<typename ArithmeticOrUnderlyingEnum<Dst>::type>(
+-        value_);
+-  }
+-
+-  // This method extracts the raw integer value without saturating it to the
+-  // destination type as the conversion operator does. This is useful when
+-  // e.g. assigning to an auto type or passing as a deduced template parameter.
+-  constexpr T RawValue() const { return value_; }
+-
+- private:
+-  T value_;
+-
+-  // These wrappers allow us to handle state the same way for both
+-  // ClampedNumeric and POD arithmetic types.
+-  template <typename Src>
+-  struct Wrapper {
+-    static constexpr Src value(Src value) {
+-      return static_cast<typename UnderlyingType<Src>::type>(value);
+-    }
+-  };
+-};
+-
+-// Convience wrapper to return a new ClampedNumeric from the provided arithmetic
+-// or ClampedNumericType.
+-template <typename T>
+-constexpr ClampedNumeric<typename UnderlyingType<T>::type> MakeClampedNum(
+-    const T value) {
+-  return value;
+-}
+-
+-#if !BASE_NUMERICS_DISABLE_OSTREAM_OPERATORS
+-// Overload the ostream output operator to make logging work nicely.
+-template <typename T>
+-std::ostream& operator<<(std::ostream& os, const ClampedNumeric<T>& value) {
+-  os << static_cast<T>(value);
+-  return os;
+-}
+-#endif
+-
+-// These implement the variadic wrapper for the math operations.
+-template <template <typename, typename, typename> class M,
+-          typename L,
+-          typename R>
+-constexpr ClampedNumeric<typename MathWrapper<M, L, R>::type> ClampMathOp(
+-    const L lhs,
+-    const R rhs) {
+-  using Math = typename MathWrapper<M, L, R>::math;
+-  return ClampedNumeric<typename Math::result_type>::template MathOp<M>(lhs,
+-                                                                        rhs);
+-}
+-
+-// General purpose wrapper template for arithmetic operations.
+-template <template <typename, typename, typename> class M,
+-          typename L,
+-          typename R,
+-          typename... Args>
+-constexpr ClampedNumeric<typename ResultType<M, L, R, Args...>::type>
+-ClampMathOp(const L lhs, const R rhs, const Args... args) {
+-  return ClampMathOp<M>(ClampMathOp<M>(lhs, rhs), args...);
+-}
+-
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Clamped, Clamp, Add, +, +=)
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Clamped, Clamp, Sub, -, -=)
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Clamped, Clamp, Mul, *, *=)
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Clamped, Clamp, Div, /, /=)
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Clamped, Clamp, Mod, %, %=)
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Clamped, Clamp, Lsh, <<, <<=)
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Clamped, Clamp, Rsh, >>, >>=)
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Clamped, Clamp, And, &, &=)
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Clamped, Clamp, Or, |, |=)
+-BASE_NUMERIC_ARITHMETIC_OPERATORS(Clamped, Clamp, Xor, ^, ^=)
+-BASE_NUMERIC_ARITHMETIC_VARIADIC(Clamped, Clamp, Max)
+-BASE_NUMERIC_ARITHMETIC_VARIADIC(Clamped, Clamp, Min)
+-BASE_NUMERIC_COMPARISON_OPERATORS(Clamped, IsLess, <)
+-BASE_NUMERIC_COMPARISON_OPERATORS(Clamped, IsLessOrEqual, <=)
+-BASE_NUMERIC_COMPARISON_OPERATORS(Clamped, IsGreater, >)
+-BASE_NUMERIC_COMPARISON_OPERATORS(Clamped, IsGreaterOrEqual, >=)
+-BASE_NUMERIC_COMPARISON_OPERATORS(Clamped, IsEqual, ==)
+-BASE_NUMERIC_COMPARISON_OPERATORS(Clamped, IsNotEqual, !=)
+-
+-}  // namespace internal
+-
+-using internal::ClampedNumeric;
+-using internal::MakeClampedNum;
+-using internal::ClampMax;
+-using internal::ClampMin;
+-using internal::ClampAdd;
+-using internal::ClampSub;
+-using internal::ClampMul;
+-using internal::ClampDiv;
+-using internal::ClampMod;
+-using internal::ClampLsh;
+-using internal::ClampRsh;
+-using internal::ClampAnd;
+-using internal::ClampOr;
+-using internal::ClampXor;
+-
+-}  // namespace base
+-}  // namespace pdfium
+-
+-#endif  // THIRD_PARTY_BASE_NUMERICS_CLAMPED_MATH_H_
+diff -Naur workdir/UnpackedTarball/pdfium/third_party/base/numerics/clamped_math_impl.h workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/clamped_math_impl.h
+--- workdir/UnpackedTarball/pdfium/third_party/base/numerics/clamped_math_impl.h	2020-10-26 19:26:04.000000000 +0100
++++ workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/clamped_math_impl.h	1970-01-01 01:00:00.000000000 +0100
+@@ -1,343 +0,0 @@
+-// Copyright 2017 The Chromium Authors. All rights reserved.
+-// Use of this source code is governed by a BSD-style license that can be
+-// found in the LICENSE file.
+-
+-#ifndef THIRD_PARTY_BASE_NUMERICS_CLAMPED_MATH_IMPL_H_
+-#define THIRD_PARTY_BASE_NUMERICS_CLAMPED_MATH_IMPL_H_
+-
+-#include <stddef.h>
+-#include <stdint.h>
+-
+-#include <climits>
+-#include <cmath>
+-#include <cstdlib>
+-#include <limits>
+-#include <type_traits>
+-
+-#include "third_party/base/numerics/checked_math.h"
+-#include "third_party/base/numerics/safe_conversions.h"
+-#include "third_party/base/numerics/safe_math_shared_impl.h"
+-
+-namespace pdfium {
+-namespace base {
+-namespace internal {
+-
+-template <typename T,
+-          typename std::enable_if<std::is_integral<T>::value &&
+-                                  std::is_signed<T>::value>::type* = nullptr>
+-constexpr T SaturatedNegWrapper(T value) {
+-  return MustTreatAsConstexpr(value) || !ClampedNegFastOp<T>::is_supported
+-             ? (NegateWrapper(value) != std::numeric_limits<T>::lowest()
+-                    ? NegateWrapper(value)
+-                    : std::numeric_limits<T>::max())
+-             : ClampedNegFastOp<T>::Do(value);
+-}
+-
+-template <typename T,
+-          typename std::enable_if<std::is_integral<T>::value &&
+-                                  !std::is_signed<T>::value>::type* = nullptr>
+-constexpr T SaturatedNegWrapper(T value) {
+-  return T(0);
+-}
+-
+-template <
+-    typename T,
+-    typename std::enable_if<std::is_floating_point<T>::value>::type* = nullptr>
+-constexpr T SaturatedNegWrapper(T value) {
+-  return -value;
+-}
+-
+-template <typename T,
+-          typename std::enable_if<std::is_integral<T>::value>::type* = nullptr>
+-constexpr T SaturatedAbsWrapper(T value) {
+-  // The calculation below is a static identity for unsigned types, but for
+-  // signed integer types it provides a non-branching, saturated absolute value.
+-  // This works because SafeUnsignedAbs() returns an unsigned type, which can
+-  // represent the absolute value of all negative numbers of an equal-width
+-  // integer type. The call to IsValueNegative() then detects overflow in the
+-  // special case of numeric_limits<T>::min(), by evaluating the bit pattern as
+-  // a signed integer value. If it is the overflow case, we end up subtracting
+-  // one from the unsigned result, thus saturating to numeric_limits<T>::max().
+-  return static_cast<T>(SafeUnsignedAbs(value) -
+-                        IsValueNegative<T>(SafeUnsignedAbs(value)));
+-}
+-
+-template <
+-    typename T,
+-    typename std::enable_if<std::is_floating_point<T>::value>::type* = nullptr>
+-constexpr T SaturatedAbsWrapper(T value) {
+-  return value < 0 ? -value : value;
+-}
+-
+-template <typename T, typename U, class Enable = void>
+-struct ClampedAddOp {};
+-
+-template <typename T, typename U>
+-struct ClampedAddOp<T,
+-                    U,
+-                    typename std::enable_if<std::is_integral<T>::value &&
+-                                            std::is_integral<U>::value>::type> {
+-  using result_type = typename MaxExponentPromotion<T, U>::type;
+-  template <typename V = result_type>
+-  static constexpr V Do(T x, U y) {
+-    if (ClampedAddFastOp<T, U>::is_supported)
+-      return ClampedAddFastOp<T, U>::template Do<V>(x, y);
+-
+-    static_assert(std::is_same<V, result_type>::value ||
+-                      IsTypeInRangeForNumericType<U, V>::value,
+-                  "The saturation result cannot be determined from the "
+-                  "provided types.");
+-    const V saturated = CommonMaxOrMin<V>(IsValueNegative(y));
+-    V result = {};
+-    return BASE_NUMERICS_LIKELY((CheckedAddOp<T, U>::Do(x, y, &result)))
+-               ? result
+-               : saturated;
+-  }
+-};
+-
+-template <typename T, typename U, class Enable = void>
+-struct ClampedSubOp {};
+-
+-template <typename T, typename U>
+-struct ClampedSubOp<T,
+-                    U,
+-                    typename std::enable_if<std::is_integral<T>::value &&
+-                                            std::is_integral<U>::value>::type> {
+-  using result_type = typename MaxExponentPromotion<T, U>::type;
+-  template <typename V = result_type>
+-  static constexpr V Do(T x, U y) {
+-    // TODO(jschuh) Make this "constexpr if" once we're C++17.
+-    if (ClampedSubFastOp<T, U>::is_supported)
+-      return ClampedSubFastOp<T, U>::template Do<V>(x, y);
+-
+-    static_assert(std::is_same<V, result_type>::value ||
+-                      IsTypeInRangeForNumericType<U, V>::value,
+-                  "The saturation result cannot be determined from the "
+-                  "provided types.");
+-    const V saturated = CommonMaxOrMin<V>(!IsValueNegative(y));
+-    V result = {};
+-    return BASE_NUMERICS_LIKELY((CheckedSubOp<T, U>::Do(x, y, &result)))
+-               ? result
+-               : saturated;
+-  }
+-};
+-
+-template <typename T, typename U, class Enable = void>
+-struct ClampedMulOp {};
+-
+-template <typename T, typename U>
+-struct ClampedMulOp<T,
+-                    U,
+-                    typename std::enable_if<std::is_integral<T>::value &&
+-                                            std::is_integral<U>::value>::type> {
+-  using result_type = typename MaxExponentPromotion<T, U>::type;
+-  template <typename V = result_type>
+-  static constexpr V Do(T x, U y) {
+-    // TODO(jschuh) Make this "constexpr if" once we're C++17.
+-    if (ClampedMulFastOp<T, U>::is_supported)
+-      return ClampedMulFastOp<T, U>::template Do<V>(x, y);
+-
+-    V result = {};
+-    const V saturated =
+-        CommonMaxOrMin<V>(IsValueNegative(x) ^ IsValueNegative(y));
+-    return BASE_NUMERICS_LIKELY((CheckedMulOp<T, U>::Do(x, y, &result)))
+-               ? result
+-               : saturated;
+-  }
+-};
+-
+-template <typename T, typename U, class Enable = void>
+-struct ClampedDivOp {};
+-
+-template <typename T, typename U>
+-struct ClampedDivOp<T,
+-                    U,
+-                    typename std::enable_if<std::is_integral<T>::value &&
+-                                            std::is_integral<U>::value>::type> {
+-  using result_type = typename MaxExponentPromotion<T, U>::type;
+-  template <typename V = result_type>
+-  static constexpr V Do(T x, U y) {
+-    V result = {};
+-    if (BASE_NUMERICS_LIKELY((CheckedDivOp<T, U>::Do(x, y, &result))))
+-      return result;
+-    // Saturation goes to max, min, or NaN (if x is zero).
+-    return x ? CommonMaxOrMin<V>(IsValueNegative(x) ^ IsValueNegative(y))
+-             : SaturationDefaultLimits<V>::NaN();
+-  }
+-};
+-
+-template <typename T, typename U, class Enable = void>
+-struct ClampedModOp {};
+-
+-template <typename T, typename U>
+-struct ClampedModOp<T,
+-                    U,
+-                    typename std::enable_if<std::is_integral<T>::value &&
+-                                            std::is_integral<U>::value>::type> {
+-  using result_type = typename MaxExponentPromotion<T, U>::type;
+-  template <typename V = result_type>
+-  static constexpr V Do(T x, U y) {
+-    V result = {};
+-    return BASE_NUMERICS_LIKELY((CheckedModOp<T, U>::Do(x, y, &result)))
+-               ? result
+-               : x;
+-  }
+-};
+-
+-template <typename T, typename U, class Enable = void>
+-struct ClampedLshOp {};
+-
+-// Left shift. Non-zero values saturate in the direction of the sign. A zero
+-// shifted by any value always results in zero.
+-template <typename T, typename U>
+-struct ClampedLshOp<T,
+-                    U,
+-                    typename std::enable_if<std::is_integral<T>::value &&
+-                                            std::is_integral<U>::value>::type> {
+-  using result_type = T;
+-  template <typename V = result_type>
+-  static constexpr V Do(T x, U shift) {
+-    static_assert(!std::is_signed<U>::value, "Shift value must be unsigned.");
+-    if (BASE_NUMERICS_LIKELY(shift < std::numeric_limits<T>::digits)) {
+-      // Shift as unsigned to avoid undefined behavior.
+-      V result = static_cast<V>(as_unsigned(x) << shift);
+-      // If the shift can be reversed, we know it was valid.
+-      if (BASE_NUMERICS_LIKELY(result >> shift == x))
+-        return result;
+-    }
+-    return x ? CommonMaxOrMin<V>(IsValueNegative(x)) : 0;
+-  }
+-};
+-
+-template <typename T, typename U, class Enable = void>
+-struct ClampedRshOp {};
+-
+-// Right shift. Negative values saturate to -1. Positive or 0 saturates to 0.
+-template <typename T, typename U>
+-struct ClampedRshOp<T,
+-                    U,
+-                    typename std::enable_if<std::is_integral<T>::value &&
+-                                            std::is_integral<U>::value>::type> {
+-  using result_type = T;
+-  template <typename V = result_type>
+-  static constexpr V Do(T x, U shift) {
+-    static_assert(!std::is_signed<U>::value, "Shift value must be unsigned.");
+-    // Signed right shift is odd, because it saturates to -1 or 0.
+-    const V saturated = as_unsigned(V(0)) - IsValueNegative(x);
+-    return BASE_NUMERICS_LIKELY(shift < IntegerBitsPlusSign<T>::value)
+-               ? saturated_cast<V>(x >> shift)
+-               : saturated;
+-  }
+-};
+-
+-template <typename T, typename U, class Enable = void>
+-struct ClampedAndOp {};
+-
+-template <typename T, typename U>
+-struct ClampedAndOp<T,
+-                    U,
+-                    typename std::enable_if<std::is_integral<T>::value &&
+-                                            std::is_integral<U>::value>::type> {
+-  using result_type = typename std::make_unsigned<
+-      typename MaxExponentPromotion<T, U>::type>::type;
+-  template <typename V>
+-  static constexpr V Do(T x, U y) {
+-    return static_cast<result_type>(x) & static_cast<result_type>(y);
+-  }
+-};
+-
+-template <typename T, typename U, class Enable = void>
+-struct ClampedOrOp {};
+-
+-// For simplicity we promote to unsigned integers.
+-template <typename T, typename U>
+-struct ClampedOrOp<T,
+-                   U,
+-                   typename std::enable_if<std::is_integral<T>::value &&
+-                                           std::is_integral<U>::value>::type> {
+-  using result_type = typename std::make_unsigned<
+-      typename MaxExponentPromotion<T, U>::type>::type;
+-  template <typename V>
+-  static constexpr V Do(T x, U y) {
+-    return static_cast<result_type>(x) | static_cast<result_type>(y);
+-  }
+-};
+-
+-template <typename T, typename U, class Enable = void>
+-struct ClampedXorOp {};
+-
+-// For simplicity we support only unsigned integers.
+-template <typename T, typename U>
+-struct ClampedXorOp<T,
+-                    U,
+-                    typename std::enable_if<std::is_integral<T>::value &&
+-                                            std::is_integral<U>::value>::type> {
+-  using result_type = typename std::make_unsigned<
+-      typename MaxExponentPromotion<T, U>::type>::type;
+-  template <typename V>
+-  static constexpr V Do(T x, U y) {
+-    return static_cast<result_type>(x) ^ static_cast<result_type>(y);
+-  }
+-};
+-
+-template <typename T, typename U, class Enable = void>
+-struct ClampedMaxOp {};
+-
+-template <typename T, typename U>
+-struct ClampedMaxOp<
+-    T,
+-    U,
+-    typename std::enable_if<std::is_arithmetic<T>::value &&
+-                            std::is_arithmetic<U>::value>::type> {
+-  using result_type = typename MaxExponentPromotion<T, U>::type;
+-  template <typename V = result_type>
+-  static constexpr V Do(T x, U y) {
+-    return IsGreater<T, U>::Test(x, y) ? saturated_cast<V>(x)
+-                                       : saturated_cast<V>(y);
+-  }
+-};
+-
+-template <typename T, typename U, class Enable = void>
+-struct ClampedMinOp {};
+-
+-template <typename T, typename U>
+-struct ClampedMinOp<
+-    T,
+-    U,
+-    typename std::enable_if<std::is_arithmetic<T>::value &&
+-                            std::is_arithmetic<U>::value>::type> {
+-  using result_type = typename LowestValuePromotion<T, U>::type;
+-  template <typename V = result_type>
+-  static constexpr V Do(T x, U y) {
+-    return IsLess<T, U>::Test(x, y) ? saturated_cast<V>(x)
+-                                    : saturated_cast<V>(y);
+-  }
+-};
+-
+-// This is just boilerplate that wraps the standard floating point arithmetic.
+-// A macro isn't the nicest solution, but it beats rewriting these repeatedly.
+-#define BASE_FLOAT_ARITHMETIC_OPS(NAME, OP)                              \
+-  template <typename T, typename U>                                      \
+-  struct Clamped##NAME##Op<                                              \
+-      T, U,                                                              \
+-      typename std::enable_if<std::is_floating_point<T>::value ||        \
+-                              std::is_floating_point<U>::value>::type> { \
+-    using result_type = typename MaxExponentPromotion<T, U>::type;       \
+-    template <typename V = result_type>                                  \
+-    static constexpr V Do(T x, U y) {                                    \
+-      return saturated_cast<V>(x OP y);                                  \
+-    }                                                                    \
+-  };
+-
+-BASE_FLOAT_ARITHMETIC_OPS(Add, +)
+-BASE_FLOAT_ARITHMETIC_OPS(Sub, -)
+-BASE_FLOAT_ARITHMETIC_OPS(Mul, *)
+-BASE_FLOAT_ARITHMETIC_OPS(Div, /)
+-
+-#undef BASE_FLOAT_ARITHMETIC_OPS
+-
+-}  // namespace internal
+-}  // namespace base
+-}  // namespace pdfium
+-
+-#endif  // THIRD_PARTY_BASE_NUMERICS_CLAMPED_MATH_IMPL_H_
+diff -Naur workdir/UnpackedTarball/pdfium/third_party/base/numerics/safe_conversions.h workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/safe_conversions.h
+--- workdir/UnpackedTarball/pdfium/third_party/base/numerics/safe_conversions.h	2020-10-26 19:26:04.000000000 +0100
++++ workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/safe_conversions.h	2020-05-02 03:06:13.000000000 +0200
+@@ -8,21 +8,18 @@
+ #include <stddef.h>
+ 
+ #include <limits>
++#include <ostream>
+ #include <type_traits>
+ 
+ #include "third_party/base/numerics/safe_conversions_impl.h"
+ 
+-#if !defined(__native_client__) && (defined(__ARMEL__) || defined(__arch64__))
++#if defined(__ARMEL__) || defined(__arch64__)
+ #include "third_party/base/numerics/safe_conversions_arm_impl.h"
+ #define BASE_HAS_OPTIMIZED_SAFE_CONVERSIONS (1)
+ #else
+ #define BASE_HAS_OPTIMIZED_SAFE_CONVERSIONS (0)
+ #endif
+ 
+-#if !BASE_NUMERICS_DISABLE_OSTREAM_OPERATORS
+-#include <ostream>
+-#endif
+-
+ namespace pdfium {
+ namespace base {
+ namespace internal {
+@@ -312,14 +309,12 @@
+   return value;
+ }
+ 
+-#if !BASE_NUMERICS_DISABLE_OSTREAM_OPERATORS
+ // Overload the ostream output operator to make logging work nicely.
+ template <typename T>
+ std::ostream& operator<<(std::ostream& os, const StrictNumeric<T>& value) {
+   os << static_cast<T>(value);
+   return os;
+ }
+-#endif
+ 
+ #define BASE_NUMERIC_COMPARISON_OPERATORS(CLASS, NAME, OP)              \
+   template <typename L, typename R,                                     \
+diff -Naur workdir/UnpackedTarball/pdfium/third_party/base/numerics/safe_conversions_impl.h workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/safe_conversions_impl.h
+--- workdir/UnpackedTarball/pdfium/third_party/base/numerics/safe_conversions_impl.h	2020-10-26 19:26:04.000000000 +0100
++++ workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/safe_conversions_impl.h	2020-05-02 03:06:13.000000000 +0200
+@@ -81,9 +81,8 @@
+ constexpr typename std::make_unsigned<T>::type SafeUnsignedAbs(T value) {
+   static_assert(std::is_integral<T>::value, "Type must be integral");
+   using UnsignedT = typename std::make_unsigned<T>::type;
+-  return IsValueNegative(value)
+-             ? static_cast<UnsignedT>(0u - static_cast<UnsignedT>(value))
+-             : static_cast<UnsignedT>(value);
++  return IsValueNegative(value) ? 0 - static_cast<UnsignedT>(value)
++                                : static_cast<UnsignedT>(value);
+ }
+ 
+ // This allows us to switch paths on known compile-time constants.
+diff -Naur workdir/UnpackedTarball/pdfium/third_party/base/numerics/safe_math.h workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/safe_math.h
+--- workdir/UnpackedTarball/pdfium/third_party/base/numerics/safe_math.h	2020-10-26 19:26:04.000000000 +0100
++++ workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/safe_math.h	2020-05-02 03:06:13.000000000 +0200
+@@ -1,12 +1,510 @@
+-// Copyright 2017 The Chromium Authors. All rights reserved.
++// Copyright 2014 The Chromium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+ 
+ #ifndef THIRD_PARTY_BASE_NUMERICS_SAFE_MATH_H_
+ #define THIRD_PARTY_BASE_NUMERICS_SAFE_MATH_H_
+ 
+-#include "third_party/base/numerics/checked_math.h"
+-#include "third_party/base/numerics/clamped_math.h"
+-#include "third_party/base/numerics/safe_conversions.h"
++#include <stddef.h>
++
++#include <limits>
++#include <type_traits>
++
++#include "third_party/base/numerics/safe_math_impl.h"
++
++namespace pdfium {
++namespace base {
++namespace internal {
++
++// CheckedNumeric<> implements all the logic and operators for detecting integer
++// boundary conditions such as overflow, underflow, and invalid conversions.
++// The CheckedNumeric type implicitly converts from floating point and integer
++// data types, and contains overloads for basic arithmetic operations (i.e.: +,
++// -, *, / for all types and %, <<, >>, &, |, ^ for integers). Type promotions
++// are a slightly modified version of the standard C arithmetic rules with the
++// two differences being that there is no default promotion to int and bitwise
++// logical operations always return an unsigned of the wider type.
++//
++// You may also use one of the variadic convenience functions, which accept
++// standard arithmetic or CheckedNumeric types, perform arithmetic operations,
++// and return a CheckedNumeric result. The supported functions are:
++//  CheckAdd() - Addition.
++//  CheckSub() - Subtraction.
++//  CheckMul() - Multiplication.
++//  CheckDiv() - Division.
++//  CheckMod() - Modulous (integer only).
++//  CheckLsh() - Left integer shift (integer only).
++//  CheckRsh() - Right integer shift (integer only).
++//  CheckAnd() - Bitwise AND (integer only with unsigned result).
++//  CheckOr()  - Bitwise OR (integer only with unsigned result).
++//  CheckXor() - Bitwise XOR (integer only with unsigned result).
++//  CheckMax() - Maximum of supplied arguments.
++//  CheckMin() - Minimum of supplied arguments.
++//
++// The unary negation, increment, and decrement operators are supported, along
++// with the following unary arithmetic methods, which return a new
++// CheckedNumeric as a result of the operation:
++//  Abs() - Absolute value.
++//  UnsignedAbs() - Absolute value as an equal-width unsigned underlying type
++//          (valid for only integral types).
++//  Max() - Returns whichever is greater of the current instance or argument.
++//          The underlying return type is whichever has the greatest magnitude.
++//  Min() - Returns whichever is lowest of the current instance or argument.
++//          The underlying return type is whichever has can represent the lowest
++//          number in the smallest width (e.g. int8_t over unsigned, int over
++//          int8_t, and float over int).
++//
++// The following methods convert from CheckedNumeric to standard numeric values:
++//  AssignIfValid() - Assigns the underlying value to the supplied destination
++//          pointer if the value is currently valid and within the range
++//          supported by the destination type. Returns true on success.
++//  ****************************************************************************
++//  *  WARNING: All of the following functions return a StrictNumeric, which   *
++//  *  is valid for comparison and assignment operations, but will trigger a   *
++//  *  compile failure on attempts to assign to a type of insufficient range.  *
++//  ****************************************************************************
++//  IsValid() - Returns true if the underlying numeric value is valid (i.e. has
++//          has not wrapped and is not the result of an invalid conversion).
++//  ValueOrDie() - Returns the underlying value. If the state is not valid this
++//          call will crash on a CHECK.
++//  ValueOrDefault() - Returns the current value, or the supplied default if the
++//          state is not valid (will not trigger a CHECK).
++//
++// The following wrapper functions can be used to avoid the template
++// disambiguator syntax when converting a destination type.
++//   IsValidForType<>() in place of: a.template IsValid<Dst>()
++//   ValueOrDieForType<>() in place of: a.template ValueOrDie()
++//   ValueOrDefaultForType<>() in place of: a.template ValueOrDefault(default)
++//
++// The following are general utility methods that are useful for converting
++// between arithmetic types and CheckedNumeric types:
++//  CheckedNumeric::Cast<Dst>() - Instance method returning a CheckedNumeric
++//          derived from casting the current instance to a CheckedNumeric of
++//          the supplied destination type.
++//  MakeCheckedNum() - Creates a new CheckedNumeric from the underlying type of
++//          the supplied arithmetic, CheckedNumeric, or StrictNumeric type.
++//
++// Comparison operations are explicitly not supported because they could result
++// in a crash on an unexpected CHECK condition. You should use patterns like the
++// following for comparisons:
++//   CheckedNumeric<size_t> checked_size = untrusted_input_value;
++//   checked_size += HEADER LENGTH;
++//   if (checked_size.IsValid() && checked_size.ValueOrDie() < buffer_size)
++//     Do stuff...
++
++template <typename T>
++class CheckedNumeric {
++  static_assert(std::is_arithmetic<T>::value,
++                "CheckedNumeric<T>: T must be a numeric type.");
++
++ public:
++  using type = T;
++
++  constexpr CheckedNumeric() = default;
++
++  // Copy constructor.
++  template <typename Src>
++  constexpr CheckedNumeric(const CheckedNumeric<Src>& rhs)
++      : state_(rhs.state_.value(), rhs.IsValid()) {}
++
++  template <typename Src>
++  friend class CheckedNumeric;
++
++  // This is not an explicit constructor because we implicitly upgrade regular
++  // numerics to CheckedNumerics to make them easier to use.
++  template <typename Src>
++  constexpr CheckedNumeric(Src value)  // NOLINT(runtime/explicit)
++      : state_(value) {
++    static_assert(std::is_arithmetic<Src>::value, "Argument must be numeric.");
++  }
++
++  // This is not an explicit constructor because we want a seamless conversion
++  // from StrictNumeric types.
++  template <typename Src>
++  constexpr CheckedNumeric(
++      StrictNumeric<Src> value)  // NOLINT(runtime/explicit)
++      : state_(static_cast<Src>(value)) {}
++
++  // IsValid() - The public API to test if a CheckedNumeric is currently valid.
++  // A range checked destination type can be supplied using the Dst template
++  // parameter.
++  template <typename Dst = T>
++  constexpr bool IsValid() const {
++    return state_.is_valid() &&
++           IsValueInRangeForNumericType<Dst>(state_.value());
++  }
++
++  // AssignIfValid(Dst) - Assigns the underlying value if it is currently valid
++  // and is within the range supported by the destination type. Returns true if
++  // successful and false otherwise.
++  template <typename Dst>
++  constexpr bool AssignIfValid(Dst* result) const {
++    return IsValid<Dst>() ? ((*result = static_cast<Dst>(state_.value())), true)
++                          : false;
++  }
++
++  // ValueOrDie() - The primary accessor for the underlying value. If the
++  // current state is not valid it will CHECK and crash.
++  // A range checked destination type can be supplied using the Dst template
++  // parameter, which will trigger a CHECK if the value is not in bounds for
++  // the destination.
++  // The CHECK behavior can be overridden by supplying a handler as a
++  // template parameter, for test code, etc. However, the handler cannot access
++  // the underlying value, and it is not available through other means.
++  template <typename Dst = T, class CheckHandler = CheckOnFailure>
++  constexpr StrictNumeric<Dst> ValueOrDie() const {
++    return IsValid<Dst>() ? static_cast<Dst>(state_.value())
++                          : CheckHandler::template HandleFailure<Dst>();
++  }
++
++  // ValueOrDefault(T default_value) - A convenience method that returns the
++  // current value if the state is valid, and the supplied default_value for
++  // any other state.
++  // A range checked destination type can be supplied using the Dst template
++  // parameter. WARNING: This function may fail to compile or CHECK at runtime
++  // if the supplied default_value is not within range of the destination type.
++  template <typename Dst = T, typename Src>
++  constexpr StrictNumeric<Dst> ValueOrDefault(const Src default_value) const {
++    return IsValid<Dst>() ? static_cast<Dst>(state_.value())
++                          : checked_cast<Dst>(default_value);
++  }
++
++  // Returns a checked numeric of the specified type, cast from the current
++  // CheckedNumeric. If the current state is invalid or the destination cannot
++  // represent the result then the returned CheckedNumeric will be invalid.
++  template <typename Dst>
++  constexpr CheckedNumeric<typename UnderlyingType<Dst>::type> Cast() const {
++    return *this;
++  }
++
++  // This friend method is available solely for providing more detailed logging
++  // in the tests. Do not implement it in production code, because the
++  // underlying values may change at any time.
++  template <typename U>
++  friend U GetNumericValueForTest(const CheckedNumeric<U>& src);
++
++  // Prototypes for the supported arithmetic operator overloads.
++  template <typename Src>
++  CheckedNumeric& operator+=(const Src rhs);
++  template <typename Src>
++  CheckedNumeric& operator-=(const Src rhs);
++  template <typename Src>
++  CheckedNumeric& operator*=(const Src rhs);
++  template <typename Src>
++  CheckedNumeric& operator/=(const Src rhs);
++  template <typename Src>
++  CheckedNumeric& operator%=(const Src rhs);
++  template <typename Src>
++  CheckedNumeric& operator<<=(const Src rhs);
++  template <typename Src>
++  CheckedNumeric& operator>>=(const Src rhs);
++  template <typename Src>
++  CheckedNumeric& operator&=(const Src rhs);
++  template <typename Src>
++  CheckedNumeric& operator|=(const Src rhs);
++  template <typename Src>
++  CheckedNumeric& operator^=(const Src rhs);
++
++  constexpr CheckedNumeric operator-() const {
++    return CheckedNumeric<T>(
++        NegateWrapper(state_.value()),
++        IsValid() &&
++            (!std::is_signed<T>::value || std::is_floating_point<T>::value ||
++             NegateWrapper(state_.value()) !=
++                 std::numeric_limits<T>::lowest()));
++  }
++
++  constexpr CheckedNumeric operator~() const {
++    return CheckedNumeric<decltype(InvertWrapper(T()))>(
++        InvertWrapper(state_.value()), IsValid());
++  }
++
++  constexpr CheckedNumeric Abs() const {
++    return CheckedNumeric<T>(
++        AbsWrapper(state_.value()),
++        IsValid() &&
++            (!std::is_signed<T>::value || std::is_floating_point<T>::value ||
++             AbsWrapper(state_.value()) != std::numeric_limits<T>::lowest()));
++  }
++
++  template <typename U>
++  constexpr CheckedNumeric<typename MathWrapper<CheckedMaxOp, T, U>::type> Max(
++      const U rhs) const {
++    using R = typename UnderlyingType<U>::type;
++    using result_type = typename MathWrapper<CheckedMaxOp, T, U>::type;
++    // TODO(jschuh): This can be converted to the MathOp version and remain
++    // constexpr once we have C++14 support.
++    return CheckedNumeric<result_type>(
++        static_cast<result_type>(
++            IsGreater<T, R>::Test(state_.value(), Wrapper<U>::value(rhs))
++                ? state_.value()
++                : Wrapper<U>::value(rhs)),
++        state_.is_valid() && Wrapper<U>::is_valid(rhs));
++  }
++
++  template <typename U>
++  constexpr CheckedNumeric<typename MathWrapper<CheckedMinOp, T, U>::type> Min(
++      const U rhs) const {
++    using R = typename UnderlyingType<U>::type;
++    using result_type = typename MathWrapper<CheckedMinOp, T, U>::type;
++    // TODO(jschuh): This can be converted to the MathOp version and remain
++    // constexpr once we have C++14 support.
++    return CheckedNumeric<result_type>(
++        static_cast<result_type>(
++            IsLess<T, R>::Test(state_.value(), Wrapper<U>::value(rhs))
++                ? state_.value()
++                : Wrapper<U>::value(rhs)),
++        state_.is_valid() && Wrapper<U>::is_valid(rhs));
++  }
++
++  // This function is available only for integral types. It returns an unsigned
++  // integer of the same width as the source type, containing the absolute value
++  // of the source, and properly handling signed min.
++  constexpr CheckedNumeric<typename UnsignedOrFloatForSize<T>::type>
++  UnsignedAbs() const {
++    return CheckedNumeric<typename UnsignedOrFloatForSize<T>::type>(
++        SafeUnsignedAbs(state_.value()), state_.is_valid());
++  }
++
++  CheckedNumeric& operator++() {
++    *this += 1;
++    return *this;
++  }
++
++  CheckedNumeric operator++(int) {
++    CheckedNumeric value = *this;
++    *this += 1;
++    return value;
++  }
++
++  CheckedNumeric& operator--() {
++    *this -= 1;
++    return *this;
++  }
++
++  CheckedNumeric operator--(int) {
++    CheckedNumeric value = *this;
++    *this -= 1;
++    return value;
++  }
++
++  // These perform the actual math operations on the CheckedNumerics.
++  // Binary arithmetic operations.
++  template <template <typename, typename, typename> class M,
++            typename L,
++            typename R>
++  static CheckedNumeric MathOp(const L lhs, const R rhs) {
++    using Math = typename MathWrapper<M, L, R>::math;
++    T result = 0;
++    bool is_valid =
++        Wrapper<L>::is_valid(lhs) && Wrapper<R>::is_valid(rhs) &&
++        Math::Do(Wrapper<L>::value(lhs), Wrapper<R>::value(rhs), &result);
++    return CheckedNumeric<T>(result, is_valid);
++  }
++
++  // Assignment arithmetic operations.
++  template <template <typename, typename, typename> class M, typename R>
++  CheckedNumeric& MathOp(const R rhs) {
++    using Math = typename MathWrapper<M, T, R>::math;
++    T result = 0;  // Using T as the destination saves a range check.
++    bool is_valid = state_.is_valid() && Wrapper<R>::is_valid(rhs) &&
++                    Math::Do(state_.value(), Wrapper<R>::value(rhs), &result);
++    *this = CheckedNumeric<T>(result, is_valid);
++    return *this;
++  }
++
++ private:
++  CheckedNumericState<T> state_;
++
++  template <typename Src>
++  constexpr CheckedNumeric(Src value, bool is_valid)
++      : state_(value, is_valid) {}
++
++  // These wrappers allow us to handle state the same way for both
++  // CheckedNumeric and POD arithmetic types.
++  template <typename Src>
++  struct Wrapper {
++    static constexpr bool is_valid(Src) { return true; }
++    static constexpr Src value(Src value) { return value; }
++  };
++
++  template <typename Src>
++  struct Wrapper<CheckedNumeric<Src>> {
++    static constexpr bool is_valid(const CheckedNumeric<Src> v) {
++      return v.IsValid();
++    }
++    static constexpr Src value(const CheckedNumeric<Src> v) {
++      return v.state_.value();
++    }
++  };
++
++  template <typename Src>
++  struct Wrapper<StrictNumeric<Src>> {
++    static constexpr bool is_valid(const StrictNumeric<Src>) { return true; }
++    static constexpr Src value(const StrictNumeric<Src> v) {
++      return static_cast<Src>(v);
++    }
++  };
++};
++
++// Convenience functions to avoid the ugly template disambiguator syntax.
++template <typename Dst, typename Src>
++constexpr bool IsValidForType(const CheckedNumeric<Src> value) {
++  return value.template IsValid<Dst>();
++}
++
++template <typename Dst, typename Src>
++constexpr StrictNumeric<Dst> ValueOrDieForType(
++    const CheckedNumeric<Src> value) {
++  return value.template ValueOrDie<Dst>();
++}
++
++template <typename Dst, typename Src, typename Default>
++constexpr StrictNumeric<Dst> ValueOrDefaultForType(
++    const CheckedNumeric<Src> value,
++    const Default default_value) {
++  return value.template ValueOrDefault<Dst>(default_value);
++}
++
++// These variadic templates work out the return types.
++// TODO(jschuh): Rip all this out once we have C++14 non-trailing auto support.
++template <template <typename, typename, typename> class M,
++          typename L,
++          typename R,
++          typename... Args>
++struct ResultType;
++
++template <template <typename, typename, typename> class M,
++          typename L,
++          typename R>
++struct ResultType<M, L, R> {
++  using type = typename MathWrapper<M, L, R>::type;
++};
++
++template <template <typename, typename, typename> class M,
++          typename L,
++          typename R,
++          typename... Args>
++struct ResultType {
++  using type =
++      typename ResultType<M, typename ResultType<M, L, R>::type, Args...>::type;
++};
++
++// Convience wrapper to return a new CheckedNumeric from the provided arithmetic
++// or CheckedNumericType.
++template <typename T>
++constexpr CheckedNumeric<typename UnderlyingType<T>::type> MakeCheckedNum(
++    const T value) {
++  return value;
++}
++
++// These implement the variadic wrapper for the math operations.
++template <template <typename, typename, typename> class M,
++          typename L,
++          typename R>
++CheckedNumeric<typename MathWrapper<M, L, R>::type> ChkMathOp(const L lhs,
++                                                              const R rhs) {
++  using Math = typename MathWrapper<M, L, R>::math;
++  return CheckedNumeric<typename Math::result_type>::template MathOp<M>(lhs,
++                                                                        rhs);
++}
++
++// General purpose wrapper template for arithmetic operations.
++template <template <typename, typename, typename> class M,
++          typename L,
++          typename R,
++          typename... Args>
++CheckedNumeric<typename ResultType<M, L, R, Args...>::type>
++ChkMathOp(const L lhs, const R rhs, const Args... args) {
++  auto tmp = ChkMathOp<M>(lhs, rhs);
++  return tmp.IsValid() ? ChkMathOp<M>(tmp, args...)
++                       : decltype(ChkMathOp<M>(tmp, args...))(tmp);
++}
++
++// The following macros are just boilerplate for the standard arithmetic
++// operator overloads and variadic function templates. A macro isn't the nicest
++// solution, but it beats rewriting these over and over again.
++#define BASE_NUMERIC_ARITHMETIC_VARIADIC(NAME)                                \
++  template <typename L, typename R, typename... Args>                         \
++  CheckedNumeric<typename ResultType<Checked##NAME##Op, L, R, Args...>::type> \
++      Check##NAME(const L lhs, const R rhs, const Args... args) {             \
++    return ChkMathOp<Checked##NAME##Op, L, R, Args...>(lhs, rhs, args...);    \
++  }
++
++#define BASE_NUMERIC_ARITHMETIC_OPERATORS(NAME, OP, COMPOUND_OP)               \
++  /* Binary arithmetic operator for all CheckedNumeric operations. */          \
++  template <typename L, typename R,                                            \
++            typename std::enable_if<IsCheckedOp<L, R>::value>::type* =         \
++                nullptr>                                                       \
++  CheckedNumeric<typename MathWrapper<Checked##NAME##Op, L, R>::type>          \
++  operator OP(const L lhs, const R rhs) {                                      \
++    return decltype(lhs OP rhs)::template MathOp<Checked##NAME##Op>(lhs, rhs); \
++  }                                                                            \
++  /* Assignment arithmetic operator implementation from CheckedNumeric. */     \
++  template <typename L>                                                        \
++  template <typename R>                                                        \
++  CheckedNumeric<L>& CheckedNumeric<L>::operator COMPOUND_OP(const R rhs) {    \
++    return MathOp<Checked##NAME##Op>(rhs);                                     \
++  }                                                                            \
++  /* Variadic arithmetic functions that return CheckedNumeric. */              \
++  BASE_NUMERIC_ARITHMETIC_VARIADIC(NAME)
++
++BASE_NUMERIC_ARITHMETIC_OPERATORS(Add, +, +=)
++BASE_NUMERIC_ARITHMETIC_OPERATORS(Sub, -, -=)
++BASE_NUMERIC_ARITHMETIC_OPERATORS(Mul, *, *=)
++BASE_NUMERIC_ARITHMETIC_OPERATORS(Div, /, /=)
++BASE_NUMERIC_ARITHMETIC_OPERATORS(Mod, %, %=)
++BASE_NUMERIC_ARITHMETIC_OPERATORS(Lsh, <<, <<=)
++BASE_NUMERIC_ARITHMETIC_OPERATORS(Rsh, >>, >>=)
++BASE_NUMERIC_ARITHMETIC_OPERATORS(And, &, &=)
++BASE_NUMERIC_ARITHMETIC_OPERATORS(Or, |, |=)
++BASE_NUMERIC_ARITHMETIC_OPERATORS(Xor, ^, ^=)
++BASE_NUMERIC_ARITHMETIC_VARIADIC(Max)
++BASE_NUMERIC_ARITHMETIC_VARIADIC(Min)
++
++#undef BASE_NUMERIC_ARITHMETIC_VARIADIC
++#undef BASE_NUMERIC_ARITHMETIC_OPERATORS
++
++// These are some extra StrictNumeric operators to support simple pointer
++// arithmetic with our result types. Since wrapping on a pointer is always
++// bad, we trigger the CHECK condition here.
++template <typename L, typename R>
++L* operator+(L* lhs, const StrictNumeric<R> rhs) {
++  uintptr_t result = CheckAdd(reinterpret_cast<uintptr_t>(lhs),
++                              CheckMul(sizeof(L), static_cast<R>(rhs)))
++                         .template ValueOrDie<uintptr_t>();
++  return reinterpret_cast<L*>(result);
++}
++
++template <typename L, typename R>
++L* operator-(L* lhs, const StrictNumeric<R> rhs) {
++  uintptr_t result = CheckSub(reinterpret_cast<uintptr_t>(lhs),
++                              CheckMul(sizeof(L), static_cast<R>(rhs)))
++                         .template ValueOrDie<uintptr_t>();
++  return reinterpret_cast<L*>(result);
++}
++
++}  // namespace internal
++
++using internal::CheckedNumeric;
++using internal::IsValidForType;
++using internal::ValueOrDieForType;
++using internal::ValueOrDefaultForType;
++using internal::MakeCheckedNum;
++using internal::CheckMax;
++using internal::CheckMin;
++using internal::CheckAdd;
++using internal::CheckSub;
++using internal::CheckMul;
++using internal::CheckDiv;
++using internal::CheckMod;
++using internal::CheckLsh;
++using internal::CheckRsh;
++using internal::CheckAnd;
++using internal::CheckOr;
++using internal::CheckXor;
++
++}  // namespace base
++}  // namespace pdfium
+ 
+ #endif  // THIRD_PARTY_BASE_NUMERICS_SAFE_MATH_H_
+diff -Naur workdir/UnpackedTarball/pdfium/third_party/base/numerics/safe_math_arm_impl.h workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/safe_math_arm_impl.h
+--- workdir/UnpackedTarball/pdfium/third_party/base/numerics/safe_math_arm_impl.h	2020-10-26 19:26:04.000000000 +0100
++++ workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/safe_math_arm_impl.h	1970-01-01 01:00:00.000000000 +0100
+@@ -1,124 +0,0 @@
+-// Copyright 2017 The Chromium Authors. All rights reserved.
+-// Use of this source code is governed by a BSD-style license that can be
+-// found in the LICENSE file.
+-
+-#ifndef THIRD_PARTY_BASE_NUMERICS_SAFE_MATH_ARM_IMPL_H_
+-#define THIRD_PARTY_BASE_NUMERICS_SAFE_MATH_ARM_IMPL_H_
+-
+-#include <cassert>
+-#include <limits>
+-#include <type_traits>
+-
+-#include "third_party/base/numerics/safe_conversions.h"
+-
+-namespace pdfium {
+-namespace base {
+-namespace internal {
+-
+-template <typename T, typename U>
+-struct CheckedMulFastAsmOp {
+-  static const bool is_supported =
+-      FastIntegerArithmeticPromotion<T, U>::is_contained;
+-
+-  // The following is much more efficient than the Clang and GCC builtins for
+-  // performing overflow-checked multiplication when a twice wider type is
+-  // available. The below compiles down to 2-3 instructions, depending on the
+-  // width of the types in use.
+-  // As an example, an int32_t multiply compiles to:
+-  //    smull   r0, r1, r0, r1
+-  //    cmp     r1, r1, asr #31
+-  // And an int16_t multiply compiles to:
+-  //    smulbb  r1, r1, r0
+-  //    asr     r2, r1, #16
+-  //    cmp     r2, r1, asr #15
+-  template <typename V>
+-  __attribute__((always_inline)) static bool Do(T x, U y, V* result) {
+-    using Promotion = typename FastIntegerArithmeticPromotion<T, U>::type;
+-    Promotion presult;
+-
+-    presult = static_cast<Promotion>(x) * static_cast<Promotion>(y);
+-    *result = static_cast<V>(presult);
+-    return IsValueInRangeForNumericType<V>(presult);
+-  }
+-};
+-
+-template <typename T, typename U>
+-struct ClampedAddFastAsmOp {
+-  static const bool is_supported =
+-      BigEnoughPromotion<T, U>::is_contained &&
+-      IsTypeInRangeForNumericType<
+-          int32_t,
+-          typename BigEnoughPromotion<T, U>::type>::value;
+-
+-  template <typename V>
+-  __attribute__((always_inline)) static V Do(T x, U y) {
+-    // This will get promoted to an int, so let the compiler do whatever is
+-    // clever and rely on the saturated cast to bounds check.
+-    if (IsIntegerArithmeticSafe<int, T, U>::value)
+-      return saturated_cast<V>(x + y);
+-
+-    int32_t result;
+-    int32_t x_i32 = checked_cast<int32_t>(x);
+-    int32_t y_i32 = checked_cast<int32_t>(y);
+-
+-    asm("qadd %[result], %[first], %[second]"
+-        : [result] "=r"(result)
+-        : [first] "r"(x_i32), [second] "r"(y_i32));
+-    return saturated_cast<V>(result);
+-  }
+-};
+-
+-template <typename T, typename U>
+-struct ClampedSubFastAsmOp {
+-  static const bool is_supported =
+-      BigEnoughPromotion<T, U>::is_contained &&
+-      IsTypeInRangeForNumericType<
+-          int32_t,
+-          typename BigEnoughPromotion<T, U>::type>::value;
+-
+-  template <typename V>
+-  __attribute__((always_inline)) static V Do(T x, U y) {
+-    // This will get promoted to an int, so let the compiler do whatever is
+-    // clever and rely on the saturated cast to bounds check.
+-    if (IsIntegerArithmeticSafe<int, T, U>::value)
+-      return saturated_cast<V>(x - y);
+-
+-    int32_t result;
+-    int32_t x_i32 = checked_cast<int32_t>(x);
+-    int32_t y_i32 = checked_cast<int32_t>(y);
+-
+-    asm("qsub %[result], %[first], %[second]"
+-        : [result] "=r"(result)
+-        : [first] "r"(x_i32), [second] "r"(y_i32));
+-    return saturated_cast<V>(result);
+-  }
+-};
+-
+-template <typename T, typename U>
+-struct ClampedMulFastAsmOp {
+-  static const bool is_supported = CheckedMulFastAsmOp<T, U>::is_supported;
+-
+-  template <typename V>
+-  __attribute__((always_inline)) static V Do(T x, U y) {
+-    // Use the CheckedMulFastAsmOp for full-width 32-bit values, because
+-    // it's fewer instructions than promoting and then saturating.
+-    if (!IsIntegerArithmeticSafe<int32_t, T, U>::value &&
+-        !IsIntegerArithmeticSafe<uint32_t, T, U>::value) {
+-      V result;
+-      if (CheckedMulFastAsmOp<T, U>::Do(x, y, &result))
+-        return result;
+-      return CommonMaxOrMin<V>(IsValueNegative(x) ^ IsValueNegative(y));
+-    }
+-
+-    assert((FastIntegerArithmeticPromotion<T, U>::is_contained));
+-    using Promotion = typename FastIntegerArithmeticPromotion<T, U>::type;
+-    return saturated_cast<V>(static_cast<Promotion>(x) *
+-                             static_cast<Promotion>(y));
+-  }
+-};
+-
+-}  // namespace internal
+-}  // namespace base
+-}  // namespace pdfium
+-
+-#endif  // THIRD_PARTY_BASE_NUMERICS_SAFE_MATH_ARM_IMPL_H_
+diff -Naur workdir/UnpackedTarball/pdfium/third_party/base/numerics/safe_math_clang_gcc_impl.h workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/safe_math_clang_gcc_impl.h
+--- workdir/UnpackedTarball/pdfium/third_party/base/numerics/safe_math_clang_gcc_impl.h	2020-10-26 19:26:04.000000000 +0100
++++ workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/safe_math_clang_gcc_impl.h	1970-01-01 01:00:00.000000000 +0100
+@@ -1,159 +0,0 @@
+-// Copyright 2017 The Chromium Authors. All rights reserved.
+-// Use of this source code is governed by a BSD-style license that can be
+-// found in the LICENSE file.
+-
+-#ifndef THIRD_PARTY_BASE_NUMERICS_SAFE_MATH_CLANG_GCC_IMPL_H_
+-#define THIRD_PARTY_BASE_NUMERICS_SAFE_MATH_CLANG_GCC_IMPL_H_
+-
+-#include <cassert>
+-#include <limits>
+-#include <type_traits>
+-
+-#include "third_party/base/numerics/safe_conversions.h"
+-
+-#if !defined(__native_client__) && (defined(__ARMEL__) || defined(__arch64__))
+-#include "third_party/base/numerics/safe_math_arm_impl.h"
+-#define BASE_HAS_ASSEMBLER_SAFE_MATH (1)
+-#else
+-#define BASE_HAS_ASSEMBLER_SAFE_MATH (0)
+-#endif
+-
+-namespace pdfium {
+-namespace base {
+-namespace internal {
+-
+-// These are the non-functioning boilerplate implementations of the optimized
+-// safe math routines.
+-#if !BASE_HAS_ASSEMBLER_SAFE_MATH
+-template <typename T, typename U>
+-struct CheckedMulFastAsmOp {
+-  static const bool is_supported = false;
+-  template <typename V>
+-  static constexpr bool Do(T, U, V*) {
+-    // Force a compile failure if instantiated.
+-    return CheckOnFailure::template HandleFailure<bool>();
+-  }
+-};
+-
+-template <typename T, typename U>
+-struct ClampedAddFastAsmOp {
+-  static const bool is_supported = false;
+-  template <typename V>
+-  static constexpr V Do(T, U) {
+-    // Force a compile failure if instantiated.
+-    return CheckOnFailure::template HandleFailure<V>();
+-  }
+-};
+-
+-template <typename T, typename U>
+-struct ClampedSubFastAsmOp {
+-  static const bool is_supported = false;
+-  template <typename V>
+-  static constexpr V Do(T, U) {
+-    // Force a compile failure if instantiated.
+-    return CheckOnFailure::template HandleFailure<V>();
+-  }
+-};
+-
+-template <typename T, typename U>
+-struct ClampedMulFastAsmOp {
+-  static const bool is_supported = false;
+-  template <typename V>
+-  static constexpr V Do(T, U) {
+-    // Force a compile failure if instantiated.
+-    return CheckOnFailure::template HandleFailure<V>();
+-  }
+-};
+-#endif  // BASE_HAS_ASSEMBLER_SAFE_MATH
+-#undef BASE_HAS_ASSEMBLER_SAFE_MATH
+-
+-template <typename T, typename U>
+-struct CheckedAddFastOp {
+-  static const bool is_supported = true;
+-  template <typename V>
+-  __attribute__((always_inline)) static constexpr bool Do(T x, U y, V* result) {
+-    return !__builtin_add_overflow(x, y, result);
+-  }
+-};
+-
+-template <typename T, typename U>
+-struct CheckedSubFastOp {
+-  static const bool is_supported = true;
+-  template <typename V>
+-  __attribute__((always_inline)) static constexpr bool Do(T x, U y, V* result) {
+-    return !__builtin_sub_overflow(x, y, result);
+-  }
+-};
+-
+-template <typename T, typename U>
+-struct CheckedMulFastOp {
+-#if defined(__clang__)
+-  // TODO(jschuh): Get the Clang runtime library issues sorted out so we can
+-  // support full-width, mixed-sign multiply builtins.
+-  // https://crbug.com/613003
+-  // We can support intptr_t, uintptr_t, or a smaller common type.
+-  static const bool is_supported =
+-      (IsTypeInRangeForNumericType<intptr_t, T>::value &&
+-       IsTypeInRangeForNumericType<intptr_t, U>::value) ||
+-      (IsTypeInRangeForNumericType<uintptr_t, T>::value &&
+-       IsTypeInRangeForNumericType<uintptr_t, U>::value);
+-#else
+-  static const bool is_supported = true;
+-#endif
+-  template <typename V>
+-  __attribute__((always_inline)) static constexpr bool Do(T x, U y, V* result) {
+-    return CheckedMulFastAsmOp<T, U>::is_supported
+-               ? CheckedMulFastAsmOp<T, U>::Do(x, y, result)
+-               : !__builtin_mul_overflow(x, y, result);
+-  }
+-};
+-
+-template <typename T, typename U>
+-struct ClampedAddFastOp {
+-  static const bool is_supported = ClampedAddFastAsmOp<T, U>::is_supported;
+-  template <typename V>
+-  __attribute__((always_inline)) static V Do(T x, U y) {
+-    return ClampedAddFastAsmOp<T, U>::template Do<V>(x, y);
+-  }
+-};
+-
+-template <typename T, typename U>
+-struct ClampedSubFastOp {
+-  static const bool is_supported = ClampedSubFastAsmOp<T, U>::is_supported;
+-  template <typename V>
+-  __attribute__((always_inline)) static V Do(T x, U y) {
+-    return ClampedSubFastAsmOp<T, U>::template Do<V>(x, y);
+-  }
+-};
+-
+-template <typename T, typename U>
+-struct ClampedMulFastOp {
+-  static const bool is_supported = ClampedMulFastAsmOp<T, U>::is_supported;
+-  template <typename V>
+-  __attribute__((always_inline)) static V Do(T x, U y) {
+-    return ClampedMulFastAsmOp<T, U>::template Do<V>(x, y);
+-  }
+-};
+-
+-template <typename T>
+-struct ClampedNegFastOp {
+-  static const bool is_supported = std::is_signed<T>::value;
+-  __attribute__((always_inline)) static T Do(T value) {
+-    // Use this when there is no assembler path available.
+-    if (!ClampedSubFastAsmOp<T, T>::is_supported) {
+-      T result;
+-      return !__builtin_sub_overflow(T(0), value, &result)
+-                 ? result
+-                 : std::numeric_limits<T>::max();
+-    }
+-
+-    // Fallback to the normal subtraction path.
+-    return ClampedSubFastOp<T, T>::template Do<T>(T(0), value);
+-  }
+-};
+-
+-}  // namespace internal
+-}  // namespace base
+-}  // namespace pdfium
+-
+-#endif  // THIRD_PARTY_BASE_NUMERICS_SAFE_MATH_CLANG_GCC_IMPL_H_
+diff -Naur workdir/UnpackedTarball/pdfium/third_party/base/numerics/safe_math_impl.h workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/safe_math_impl.h
+--- workdir/UnpackedTarball/pdfium/third_party/base/numerics/safe_math_impl.h	1970-01-01 01:00:00.000000000 +0100
++++ workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/safe_math_impl.h	2020-05-02 03:06:13.000000000 +0200
+@@ -0,0 +1,647 @@
++// Copyright 2014 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#ifndef THIRD_PARTY_BASE_NUMERICS_SAFE_MATH_IMPL_H_
++#define THIRD_PARTY_BASE_NUMERICS_SAFE_MATH_IMPL_H_
++
++#include <stddef.h>
++#include <stdint.h>
++
++#include <climits>
++#include <cmath>
++#include <cstdlib>
++#include <limits>
++#include <type_traits>
++
++#include "third_party/base/numerics/safe_conversions.h"
++
++namespace pdfium {
++namespace base {
++namespace internal {
++
++// Everything from here up to the floating point operations is portable C++,
++// but it may not be fast. This code could be split based on
++// platform/architecture and replaced with potentially faster implementations.
++
++// This is used for UnsignedAbs, where we need to support floating-point
++// template instantiations even though we don't actually support the operations.
++// However, there is no corresponding implementation of e.g. SafeUnsignedAbs,
++// so the float versions will not compile.
++template <typename Numeric,
++          bool IsInteger = std::is_integral<Numeric>::value,
++          bool IsFloat = std::is_floating_point<Numeric>::value>
++struct UnsignedOrFloatForSize;
++
++template <typename Numeric>
++struct UnsignedOrFloatForSize<Numeric, true, false> {
++  using type = typename std::make_unsigned<Numeric>::type;
++};
++
++template <typename Numeric>
++struct UnsignedOrFloatForSize<Numeric, false, true> {
++  using type = Numeric;
++};
++
++// Probe for builtin math overflow support on Clang and version check on GCC.
++#if defined(EMSCRIPTEN)
++// Emscripten Clang reports that it has the builtins, it may be lowered to an
++// instruction that is unsupported in asm.js
++#define USE_OVERFLOW_BUILTINS (0)
++#elif defined(__has_builtin)
++#define USE_OVERFLOW_BUILTINS (__has_builtin(__builtin_add_overflow))
++#elif defined(__GNUC__)
++#define USE_OVERFLOW_BUILTINS (__GNUC__ >= 5)
++#else
++#define USE_OVERFLOW_BUILTINS (0)
++#endif
++
++template <typename T>
++bool CheckedAddImpl(T x, T y, T* result) {
++  static_assert(std::is_integral<T>::value, "Type must be integral");
++  // Since the value of x+y is undefined if we have a signed type, we compute
++  // it using the unsigned type of the same size.
++  using UnsignedDst = typename std::make_unsigned<T>::type;
++  using SignedDst = typename std::make_signed<T>::type;
++  auto ux = static_cast<UnsignedDst>(x);
++  auto uy = static_cast<UnsignedDst>(y);
++  auto uresult = static_cast<UnsignedDst>(ux + uy);
++  *result = static_cast<T>(uresult);
++  // Addition is valid if the sign of (x + y) is equal to either that of x or
++  // that of y.
++  return (std::is_signed<T>::value)
++             ? static_cast<SignedDst>((uresult ^ ux) & (uresult ^ uy)) >= 0
++             : uresult >= uy;  // Unsigned is either valid or underflow.
++}
++
++template <typename T, typename U, class Enable = void>
++struct CheckedAddOp {};
++
++template <typename T, typename U>
++struct CheckedAddOp<T,
++                    U,
++                    typename std::enable_if<std::is_integral<T>::value &&
++                                            std::is_integral<U>::value>::type> {
++  using result_type = typename MaxExponentPromotion<T, U>::type;
++  template <typename V>
++  static bool Do(T x, U y, V* result) {
++#if USE_OVERFLOW_BUILTINS
++    return !__builtin_add_overflow(x, y, result);
++#else
++    using Promotion = typename BigEnoughPromotion<T, U>::type;
++    Promotion presult;
++    // Fail if either operand is out of range for the promoted type.
++    // TODO(jschuh): This could be made to work for a broader range of values.
++    bool is_valid = IsValueInRangeForNumericType<Promotion>(x) &&
++                    IsValueInRangeForNumericType<Promotion>(y);
++
++    if (IsIntegerArithmeticSafe<Promotion, T, U>::value) {
++      presult = static_cast<Promotion>(x) + static_cast<Promotion>(y);
++    } else {
++      is_valid &= CheckedAddImpl(static_cast<Promotion>(x),
++                                 static_cast<Promotion>(y), &presult);
++    }
++    *result = static_cast<V>(presult);
++    return is_valid && IsValueInRangeForNumericType<V>(presult);
++#endif
++  }
++};
++
++template <typename T>
++bool CheckedSubImpl(T x, T y, T* result) {
++  static_assert(std::is_integral<T>::value, "Type must be integral");
++  // Since the value of x+y is undefined if we have a signed type, we compute
++  // it using the unsigned type of the same size.
++  using UnsignedDst = typename std::make_unsigned<T>::type;
++  using SignedDst = typename std::make_signed<T>::type;
++  auto ux = static_cast<UnsignedDst>(x);
++  auto uy = static_cast<UnsignedDst>(y);
++  auto uresult = static_cast<UnsignedDst>(ux - uy);
++  *result = static_cast<T>(uresult);
++  // Subtraction is valid if either x and y have same sign, or (x-y) and x have
++  // the same sign.
++  return (std::is_signed<T>::value)
++             ? static_cast<SignedDst>((uresult ^ ux) & (ux ^ uy)) >= 0
++             : x >= y;
++}
++
++template <typename T, typename U, class Enable = void>
++struct CheckedSubOp {};
++
++template <typename T, typename U>
++struct CheckedSubOp<T,
++                    U,
++                    typename std::enable_if<std::is_integral<T>::value &&
++                                            std::is_integral<U>::value>::type> {
++  using result_type = typename MaxExponentPromotion<T, U>::type;
++  template <typename V>
++  static bool Do(T x, U y, V* result) {
++#if USE_OVERFLOW_BUILTINS
++    return !__builtin_sub_overflow(x, y, result);
++#else
++    using Promotion = typename BigEnoughPromotion<T, U>::type;
++    Promotion presult;
++    // Fail if either operand is out of range for the promoted type.
++    // TODO(jschuh): This could be made to work for a broader range of values.
++    bool is_valid = IsValueInRangeForNumericType<Promotion>(x) &&
++                    IsValueInRangeForNumericType<Promotion>(y);
++
++    if (IsIntegerArithmeticSafe<Promotion, T, U>::value) {
++      presult = static_cast<Promotion>(x) - static_cast<Promotion>(y);
++    } else {
++      is_valid &= CheckedSubImpl(static_cast<Promotion>(x),
++                                 static_cast<Promotion>(y), &presult);
++    }
++    *result = static_cast<V>(presult);
++    return is_valid && IsValueInRangeForNumericType<V>(presult);
++#endif
++  }
++};
++
++template <typename T>
++bool CheckedMulImpl(T x, T y, T* result) {
++  static_assert(std::is_integral<T>::value, "Type must be integral");
++  // Since the value of x*y is potentially undefined if we have a signed type,
++  // we compute it using the unsigned type of the same size.
++  using UnsignedDst = typename std::make_unsigned<T>::type;
++  using SignedDst = typename std::make_signed<T>::type;
++  const UnsignedDst ux = SafeUnsignedAbs(x);
++  const UnsignedDst uy = SafeUnsignedAbs(y);
++  auto uresult = static_cast<UnsignedDst>(ux * uy);
++  const bool is_negative =
++      std::is_signed<T>::value && static_cast<SignedDst>(x ^ y) < 0;
++  *result = is_negative ? 0 - uresult : uresult;
++  // We have a fast out for unsigned identity or zero on the second operand.
++  // After that it's an unsigned overflow check on the absolute value, with
++  // a +1 bound for a negative result.
++  return uy <= UnsignedDst(!std::is_signed<T>::value || is_negative) ||
++         ux <= (std::numeric_limits<T>::max() + UnsignedDst(is_negative)) / uy;
++}
++
++template <typename T, typename U, class Enable = void>
++struct CheckedMulOp {};
++
++template <typename T, typename U>
++struct CheckedMulOp<T,
++                    U,
++                    typename std::enable_if<std::is_integral<T>::value &&
++                                            std::is_integral<U>::value>::type> {
++  using result_type = typename MaxExponentPromotion<T, U>::type;
++  template <typename V>
++  static bool Do(T x, U y, V* result) {
++#if USE_OVERFLOW_BUILTINS
++#if defined(__clang__)
++    // TODO(jschuh): Get the Clang runtime library issues sorted out so we can
++    // support full-width, mixed-sign multiply builtins.
++    // https://crbug.com/613003
++    static const bool kUseMaxInt =
++        // Narrower type than uintptr_t is always safe.
++        std::numeric_limits<__typeof__(x * y)>::digits <
++            std::numeric_limits<intptr_t>::digits ||
++        // Safe for intptr_t and uintptr_t if the sign matches.
++        (IntegerBitsPlusSign<__typeof__(x * y)>::value ==
++             IntegerBitsPlusSign<intptr_t>::value &&
++         std::is_signed<T>::value == std::is_signed<U>::value);
++#else
++    static const bool kUseMaxInt = true;
++#endif
++    if (kUseMaxInt)
++      return !__builtin_mul_overflow(x, y, result);
++#endif
++    using Promotion = typename FastIntegerArithmeticPromotion<T, U>::type;
++    Promotion presult;
++    // Fail if either operand is out of range for the promoted type.
++    // TODO(jschuh): This could be made to work for a broader range of values.
++    bool is_valid = IsValueInRangeForNumericType<Promotion>(x) &&
++                    IsValueInRangeForNumericType<Promotion>(y);
++
++    if (IsIntegerArithmeticSafe<Promotion, T, U>::value) {
++      presult = static_cast<Promotion>(x) * static_cast<Promotion>(y);
++    } else {
++      is_valid &= CheckedMulImpl(static_cast<Promotion>(x),
++                                 static_cast<Promotion>(y), &presult);
++    }
++    *result = static_cast<V>(presult);
++    return is_valid && IsValueInRangeForNumericType<V>(presult);
++  }
++};
++
++// Avoid poluting the namespace once we're done with the macro.
++#undef USE_OVERFLOW_BUILTINS
++
++// Division just requires a check for a zero denominator or an invalid negation
++// on signed min/-1.
++template <typename T>
++bool CheckedDivImpl(T x, T y, T* result) {
++  static_assert(std::is_integral<T>::value, "Type must be integral");
++  if (y && (!std::is_signed<T>::value ||
++            x != std::numeric_limits<T>::lowest() || y != static_cast<T>(-1))) {
++    *result = x / y;
++    return true;
++  }
++  return false;
++}
++
++template <typename T, typename U, class Enable = void>
++struct CheckedDivOp {};
++
++template <typename T, typename U>
++struct CheckedDivOp<T,
++                    U,
++                    typename std::enable_if<std::is_integral<T>::value &&
++                                            std::is_integral<U>::value>::type> {
++  using result_type = typename MaxExponentPromotion<T, U>::type;
++  template <typename V>
++  static bool Do(T x, U y, V* result) {
++    using Promotion = typename BigEnoughPromotion<T, U>::type;
++    Promotion presult;
++    // Fail if either operand is out of range for the promoted type.
++    // TODO(jschuh): This could be made to work for a broader range of values.
++    bool is_valid = IsValueInRangeForNumericType<Promotion>(x) &&
++                    IsValueInRangeForNumericType<Promotion>(y);
++    is_valid &= CheckedDivImpl(static_cast<Promotion>(x),
++                               static_cast<Promotion>(y), &presult);
++    *result = static_cast<V>(presult);
++    return is_valid && IsValueInRangeForNumericType<V>(presult);
++  }
++};
++
++template <typename T>
++bool CheckedModImpl(T x, T y, T* result) {
++  static_assert(std::is_integral<T>::value, "Type must be integral");
++  if (y > 0) {
++    *result = static_cast<T>(x % y);
++    return true;
++  }
++  return false;
++}
++
++template <typename T, typename U, class Enable = void>
++struct CheckedModOp {};
++
++template <typename T, typename U>
++struct CheckedModOp<T,
++                    U,
++                    typename std::enable_if<std::is_integral<T>::value &&
++                                            std::is_integral<U>::value>::type> {
++  using result_type = typename MaxExponentPromotion<T, U>::type;
++  template <typename V>
++  static bool Do(T x, U y, V* result) {
++    using Promotion = typename BigEnoughPromotion<T, U>::type;
++    Promotion presult;
++    bool is_valid = CheckedModImpl(static_cast<Promotion>(x),
++                                   static_cast<Promotion>(y), &presult);
++    *result = static_cast<V>(presult);
++    return is_valid && IsValueInRangeForNumericType<V>(presult);
++  }
++};
++
++template <typename T, typename U, class Enable = void>
++struct CheckedLshOp {};
++
++// Left shift. Shifts less than 0 or greater than or equal to the number
++// of bits in the promoted type are undefined. Shifts of negative values
++// are undefined. Otherwise it is defined when the result fits.
++template <typename T, typename U>
++struct CheckedLshOp<T,
++                    U,
++                    typename std::enable_if<std::is_integral<T>::value &&
++                                            std::is_integral<U>::value>::type> {
++  using result_type = T;
++  template <typename V>
++  static bool Do(T x, U shift, V* result) {
++    using ShiftType = typename std::make_unsigned<T>::type;
++    static const ShiftType kBitWidth = IntegerBitsPlusSign<T>::value;
++    const auto real_shift = static_cast<ShiftType>(shift);
++    // Signed shift is not legal on negative values.
++    if (!IsValueNegative(x) && real_shift < kBitWidth) {
++      // Just use a multiplication because it's easy.
++      // TODO(jschuh): This could probably be made more efficient.
++      if (!std::is_signed<T>::value || real_shift != kBitWidth - 1)
++        return CheckedMulOp<T, T>::Do(x, static_cast<T>(1) << shift, result);
++      return !x;  // Special case zero for a full width signed shift.
++    }
++    return false;
++  }
++};
++
++template <typename T, typename U, class Enable = void>
++struct CheckedRshOp {};
++
++// Right shift. Shifts less than 0 or greater than or equal to the number
++// of bits in the promoted type are undefined. Otherwise, it is always defined,
++// but a right shift of a negative value is implementation-dependent.
++template <typename T, typename U>
++struct CheckedRshOp<T,
++                    U,
++                    typename std::enable_if<std::is_integral<T>::value &&
++                                            std::is_integral<U>::value>::type> {
++  using result_type = T;
++  template <typename V = result_type>
++  static bool Do(T x, U shift, V* result) {
++    // Use the type conversion push negative values out of range.
++    using ShiftType = typename std::make_unsigned<T>::type;
++    if (static_cast<ShiftType>(shift) < IntegerBitsPlusSign<T>::value) {
++      T tmp = x >> shift;
++      *result = static_cast<V>(tmp);
++      return IsValueInRangeForNumericType<V>(tmp);
++    }
++    return false;
++  }
++};
++
++template <typename T, typename U, class Enable = void>
++struct CheckedAndOp {};
++
++// For simplicity we support only unsigned integer results.
++template <typename T, typename U>
++struct CheckedAndOp<T,
++                    U,
++                    typename std::enable_if<std::is_integral<T>::value &&
++                                            std::is_integral<U>::value>::type> {
++  using result_type = typename std::make_unsigned<
++      typename MaxExponentPromotion<T, U>::type>::type;
++  template <typename V = result_type>
++  static bool Do(T x, U y, V* result) {
++    result_type tmp = static_cast<result_type>(x) & static_cast<result_type>(y);
++    *result = static_cast<V>(tmp);
++    return IsValueInRangeForNumericType<V>(tmp);
++  }
++};
++
++template <typename T, typename U, class Enable = void>
++struct CheckedOrOp {};
++
++// For simplicity we support only unsigned integers.
++template <typename T, typename U>
++struct CheckedOrOp<T,
++                   U,
++                   typename std::enable_if<std::is_integral<T>::value &&
++                                           std::is_integral<U>::value>::type> {
++  using result_type = typename std::make_unsigned<
++      typename MaxExponentPromotion<T, U>::type>::type;
++  template <typename V = result_type>
++  static bool Do(T x, U y, V* result) {
++    result_type tmp = static_cast<result_type>(x) | static_cast<result_type>(y);
++    *result = static_cast<V>(tmp);
++    return IsValueInRangeForNumericType<V>(tmp);
++  }
++};
++
++template <typename T, typename U, class Enable = void>
++struct CheckedXorOp {};
++
++// For simplicity we support only unsigned integers.
++template <typename T, typename U>
++struct CheckedXorOp<T,
++                    U,
++                    typename std::enable_if<std::is_integral<T>::value &&
++                                            std::is_integral<U>::value>::type> {
++  using result_type = typename std::make_unsigned<
++      typename MaxExponentPromotion<T, U>::type>::type;
++  template <typename V = result_type>
++  static bool Do(T x, U y, V* result) {
++    result_type tmp = static_cast<result_type>(x) ^ static_cast<result_type>(y);
++    *result = static_cast<V>(tmp);
++    return IsValueInRangeForNumericType<V>(tmp);
++  }
++};
++
++// Max doesn't really need to be implemented this way because it can't fail,
++// but it makes the code much cleaner to use the MathOp wrappers.
++template <typename T, typename U, class Enable = void>
++struct CheckedMaxOp {};
++
++template <typename T, typename U>
++struct CheckedMaxOp<
++    T,
++    U,
++    typename std::enable_if<std::is_arithmetic<T>::value &&
++                            std::is_arithmetic<U>::value>::type> {
++  using result_type = typename MaxExponentPromotion<T, U>::type;
++  template <typename V = result_type>
++  static bool Do(T x, U y, V* result) {
++    *result = IsGreater<T, U>::Test(x, y) ? static_cast<result_type>(x)
++                                          : static_cast<result_type>(y);
++    return true;
++  }
++};
++
++// Min doesn't really need to be implemented this way because it can't fail,
++// but it makes the code much cleaner to use the MathOp wrappers.
++template <typename T, typename U, class Enable = void>
++struct CheckedMinOp {};
++
++template <typename T, typename U>
++struct CheckedMinOp<
++    T,
++    U,
++    typename std::enable_if<std::is_arithmetic<T>::value &&
++                            std::is_arithmetic<U>::value>::type> {
++  using result_type = typename LowestValuePromotion<T, U>::type;
++  template <typename V = result_type>
++  static bool Do(T x, U y, V* result) {
++    *result = IsLess<T, U>::Test(x, y) ? static_cast<result_type>(x)
++                                       : static_cast<result_type>(y);
++    return true;
++  }
++};
++
++// This is just boilerplate that wraps the standard floating point arithmetic.
++// A macro isn't the nicest solution, but it beats rewriting these repeatedly.
++#define BASE_FLOAT_ARITHMETIC_OPS(NAME, OP)                                    \
++  template <typename T, typename U>                                            \
++  struct Checked##NAME##Op<                                                    \
++      T, U, typename std::enable_if<std::is_floating_point<T>::value ||        \
++                                    std::is_floating_point<U>::value>::type> { \
++    using result_type = typename MaxExponentPromotion<T, U>::type;             \
++    template <typename V>                                                      \
++    static bool Do(T x, U y, V* result) {                                      \
++      using Promotion = typename MaxExponentPromotion<T, U>::type;             \
++      Promotion presult = x OP y;                                              \
++      *result = static_cast<V>(presult);                                       \
++      return IsValueInRangeForNumericType<V>(presult);                         \
++    }                                                                          \
++  };
++
++BASE_FLOAT_ARITHMETIC_OPS(Add, +)
++BASE_FLOAT_ARITHMETIC_OPS(Sub, -)
++BASE_FLOAT_ARITHMETIC_OPS(Mul, *)
++BASE_FLOAT_ARITHMETIC_OPS(Div, /)
++
++#undef BASE_FLOAT_ARITHMETIC_OPS
++
++// Wrap the unary operations to allow SFINAE when instantiating integrals versus
++// floating points. These don't perform any overflow checking. Rather, they
++// exhibit well-defined overflow semantics and rely on the caller to detect
++// if an overflow occured.
++
++template <typename T,
++          typename std::enable_if<std::is_integral<T>::value>::type* = nullptr>
++constexpr T NegateWrapper(T value) {
++  using UnsignedT = typename std::make_unsigned<T>::type;
++  // This will compile to a NEG on Intel, and is normal negation on ARM.
++  return static_cast<T>(UnsignedT(0) - static_cast<UnsignedT>(value));
++}
++
++template <
++    typename T,
++    typename std::enable_if<std::is_floating_point<T>::value>::type* = nullptr>
++constexpr T NegateWrapper(T value) {
++  return -value;
++}
++
++template <typename T,
++          typename std::enable_if<std::is_integral<T>::value>::type* = nullptr>
++constexpr typename std::make_unsigned<T>::type InvertWrapper(T value) {
++  return ~value;
++}
++
++template <typename T,
++          typename std::enable_if<std::is_integral<T>::value>::type* = nullptr>
++constexpr T AbsWrapper(T value) {
++  return static_cast<T>(SafeUnsignedAbs(value));
++}
++
++template <
++    typename T,
++    typename std::enable_if<std::is_floating_point<T>::value>::type* = nullptr>
++constexpr T AbsWrapper(T value) {
++  return value < 0 ? -value : value;
++}
++
++// Floats carry around their validity state with them, but integers do not. So,
++// we wrap the underlying value in a specialization in order to hide that detail
++// and expose an interface via accessors.
++enum NumericRepresentation {
++  NUMERIC_INTEGER,
++  NUMERIC_FLOATING,
++  NUMERIC_UNKNOWN
++};
++
++template <typename NumericType>
++struct GetNumericRepresentation {
++  static const NumericRepresentation value =
++      std::is_integral<NumericType>::value
++          ? NUMERIC_INTEGER
++          : (std::is_floating_point<NumericType>::value ? NUMERIC_FLOATING
++                                                        : NUMERIC_UNKNOWN);
++};
++
++template <typename T, NumericRepresentation type =
++                          GetNumericRepresentation<T>::value>
++class CheckedNumericState {};
++
++// Integrals require quite a bit of additional housekeeping to manage state.
++template <typename T>
++class CheckedNumericState<T, NUMERIC_INTEGER> {
++ private:
++  // is_valid_ precedes value_ because member intializers in the constructors
++  // are evaluated in field order, and is_valid_ must be read when initializing
++  // value_.
++  bool is_valid_;
++  T value_;
++
++  // Ensures that a type conversion does not trigger undefined behavior.
++  template <typename Src>
++  static constexpr T WellDefinedConversionOrZero(const Src value,
++                                                 const bool is_valid) {
++    using SrcType = typename internal::UnderlyingType<Src>::type;
++    return (std::is_integral<SrcType>::value || is_valid)
++               ? static_cast<T>(value)
++               : static_cast<T>(0);
++  }
++
++ public:
++  template <typename Src, NumericRepresentation type>
++  friend class CheckedNumericState;
++
++  constexpr CheckedNumericState() : is_valid_(true), value_(0) {}
++
++  template <typename Src>
++  constexpr CheckedNumericState(Src value, bool is_valid)
++      : is_valid_(is_valid && IsValueInRangeForNumericType<T>(value)),
++        value_(WellDefinedConversionOrZero(value, is_valid_)) {
++    static_assert(std::is_arithmetic<Src>::value, "Argument must be numeric.");
++  }
++
++  // Copy constructor.
++  template <typename Src>
++  constexpr CheckedNumericState(const CheckedNumericState<Src>& rhs)
++      : is_valid_(rhs.IsValid()),
++        value_(WellDefinedConversionOrZero(rhs.value(), is_valid_)) {}
++
++  template <typename Src>
++  constexpr explicit CheckedNumericState(Src value)
++      : is_valid_(IsValueInRangeForNumericType<T>(value)),
++        value_(WellDefinedConversionOrZero(value, is_valid_)) {}
++
++  constexpr bool is_valid() const { return is_valid_; }
++  constexpr T value() const { return value_; }
++};
++
++// Floating points maintain their own validity, but need translation wrappers.
++template <typename T>
++class CheckedNumericState<T, NUMERIC_FLOATING> {
++ private:
++  T value_;
++
++  // Ensures that a type conversion does not trigger undefined behavior.
++  template <typename Src>
++  static constexpr T WellDefinedConversionOrNaN(const Src value,
++                                                const bool is_valid) {
++    using SrcType = typename internal::UnderlyingType<Src>::type;
++    return (StaticDstRangeRelationToSrcRange<T, SrcType>::value ==
++                NUMERIC_RANGE_CONTAINED ||
++            is_valid)
++               ? static_cast<T>(value)
++               : std::numeric_limits<T>::quiet_NaN();
++  }
++
++ public:
++  template <typename Src, NumericRepresentation type>
++  friend class CheckedNumericState;
++
++  constexpr CheckedNumericState() : value_(0.0) {}
++
++  template <typename Src>
++  constexpr CheckedNumericState(Src value, bool is_valid)
++      : value_(WellDefinedConversionOrNaN(value, is_valid)) {}
++
++  template <typename Src>
++  constexpr explicit CheckedNumericState(Src value)
++      : value_(WellDefinedConversionOrNaN(
++            value,
++            IsValueInRangeForNumericType<T>(value))) {}
++
++  // Copy constructor.
++  template <typename Src>
++  constexpr CheckedNumericState(const CheckedNumericState<Src>& rhs)
++      : value_(WellDefinedConversionOrNaN(
++            rhs.value(),
++            rhs.is_valid() && IsValueInRangeForNumericType<T>(rhs.value()))) {}
++
++  constexpr bool is_valid() const {
++    // Written this way because std::isfinite is not reliably constexpr.
++    // TODO(jschuh): Fix this if the libraries ever get fixed.
++    return value_ <= std::numeric_limits<T>::max() &&
++           value_ >= std::numeric_limits<T>::lowest();
++  }
++  constexpr T value() const { return value_; }
++};
++
++template <template <typename, typename, typename> class M,
++          typename L,
++          typename R>
++struct MathWrapper {
++  using math = M<typename UnderlyingType<L>::type,
++                 typename UnderlyingType<R>::type,
++                 void>;
++  using type = typename math::result_type;
++};
++
++}  // namespace internal
++}  // namespace base
++}  // namespace pdfium
++
++#endif  // THIRD_PARTY_BASE_NUMERICS_SAFE_MATH_IMPL_H_
+diff -Naur workdir/UnpackedTarball/pdfium/third_party/base/numerics/safe_math_shared_impl.h workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/safe_math_shared_impl.h
+--- workdir/UnpackedTarball/pdfium/third_party/base/numerics/safe_math_shared_impl.h	2020-10-26 19:26:04.000000000 +0100
++++ workdir/UnpackedTarball/pdfium.4137/third_party/base/numerics/safe_math_shared_impl.h	1970-01-01 01:00:00.000000000 +0100
+@@ -1,242 +0,0 @@
+-// Copyright 2017 The Chromium Authors. All rights reserved.
+-// Use of this source code is governed by a BSD-style license that can be
+-// found in the LICENSE file.
+-
+-#ifndef THIRD_PARTY_BASE_NUMERICS_SAFE_MATH_SHARED_IMPL_H_
+-#define THIRD_PARTY_BASE_NUMERICS_SAFE_MATH_SHARED_IMPL_H_
+-
+-#include <stddef.h>
+-#include <stdint.h>
+-
+-#include <cassert>
+-#include <climits>
+-#include <cmath>
+-#include <cstdlib>
+-#include <limits>
+-#include <type_traits>
+-
+-#include "third_party/base/numerics/safe_conversions.h"
+-
+-#ifdef __asmjs__
+-// Optimized safe math instructions are incompatible with asmjs.
+-#define BASE_HAS_OPTIMIZED_SAFE_MATH (0)
+-// Where available use builtin math overflow support on Clang and GCC.
+-#elif !defined(__native_client__) &&                         \
+-      ((defined(__clang__) &&                                \
+-        ((__clang_major__ > 3) ||                            \
+-         (__clang_major__ == 3 && __clang_minor__ >= 4))) || \
+-       (defined(__GNUC__) && __GNUC__ >= 5))
+-#include "third_party/base/numerics/safe_math_clang_gcc_impl.h"
+-#define BASE_HAS_OPTIMIZED_SAFE_MATH (1)
+-#else
+-#define BASE_HAS_OPTIMIZED_SAFE_MATH (0)
+-#endif
+-
+-namespace pdfium {
+-namespace base {
+-namespace internal {
+-
+-// These are the non-functioning boilerplate implementations of the optimized
+-// safe math routines.
+-#if !BASE_HAS_OPTIMIZED_SAFE_MATH
+-template <typename T, typename U>
+-struct CheckedAddFastOp {
+-  static const bool is_supported = false;
+-  template <typename V>
+-  static constexpr bool Do(T, U, V*) {
+-    // Force a compile failure if instantiated.
+-    return CheckOnFailure::template HandleFailure<bool>();
+-  }
+-};
+-
+-template <typename T, typename U>
+-struct CheckedSubFastOp {
+-  static const bool is_supported = false;
+-  template <typename V>
+-  static constexpr bool Do(T, U, V*) {
+-    // Force a compile failure if instantiated.
+-    return CheckOnFailure::template HandleFailure<bool>();
+-  }
+-};
+-
+-template <typename T, typename U>
+-struct CheckedMulFastOp {
+-  static const bool is_supported = false;
+-  template <typename V>
+-  static constexpr bool Do(T, U, V*) {
+-    // Force a compile failure if instantiated.
+-    return CheckOnFailure::template HandleFailure<bool>();
+-  }
+-};
+-
+-template <typename T, typename U>
+-struct ClampedAddFastOp {
+-  static const bool is_supported = false;
+-  template <typename V>
+-  static constexpr V Do(T, U) {
+-    // Force a compile failure if instantiated.
+-    return CheckOnFailure::template HandleFailure<V>();
+-  }
+-};
+-
+-template <typename T, typename U>
+-struct ClampedSubFastOp {
+-  static const bool is_supported = false;
+-  template <typename V>
+-  static constexpr V Do(T, U) {
+-    // Force a compile failure if instantiated.
+-    return CheckOnFailure::template HandleFailure<V>();
+-  }
+-};
+-
+-template <typename T, typename U>
+-struct ClampedMulFastOp {
+-  static const bool is_supported = false;
+-  template <typename V>
+-  static constexpr V Do(T, U) {
+-    // Force a compile failure if instantiated.
+-    return CheckOnFailure::template HandleFailure<V>();
+-  }
+-};
+-
+-template <typename T>
+-struct ClampedNegFastOp {
+-  static const bool is_supported = false;
+-  static constexpr T Do(T) {
+-    // Force a compile failure if instantiated.
+-    return CheckOnFailure::template HandleFailure<T>();
+-  }
+-};
+-#endif  // BASE_HAS_OPTIMIZED_SAFE_MATH
+-#undef BASE_HAS_OPTIMIZED_SAFE_MATH
+-
+-// This is used for UnsignedAbs, where we need to support floating-point
+-// template instantiations even though we don't actually support the operations.
+-// However, there is no corresponding implementation of e.g. SafeUnsignedAbs,
+-// so the float versions will not compile.
+-template <typename Numeric,
+-          bool IsInteger = std::is_integral<Numeric>::value,
+-          bool IsFloat = std::is_floating_point<Numeric>::value>
+-struct UnsignedOrFloatForSize;
+-
+-template <typename Numeric>
+-struct UnsignedOrFloatForSize<Numeric, true, false> {
+-  using type = typename std::make_unsigned<Numeric>::type;
+-};
+-
+-template <typename Numeric>
+-struct UnsignedOrFloatForSize<Numeric, false, true> {
+-  using type = Numeric;
+-};
+-
+-// Wrap the unary operations to allow SFINAE when instantiating integrals versus
+-// floating points. These don't perform any overflow checking. Rather, they
+-// exhibit well-defined overflow semantics and rely on the caller to detect
+-// if an overflow occured.
+-
+-template <typename T,
+-          typename std::enable_if<std::is_integral<T>::value>::type* = nullptr>
+-constexpr T NegateWrapper(T value) {
+-  using UnsignedT = typename std::make_unsigned<T>::type;
+-  // This will compile to a NEG on Intel, and is normal negation on ARM.
+-  return static_cast<T>(UnsignedT(0) - static_cast<UnsignedT>(value));
+-}
+-
+-template <
+-    typename T,
+-    typename std::enable_if<std::is_floating_point<T>::value>::type* = nullptr>
+-constexpr T NegateWrapper(T value) {
+-  return -value;
+-}
+-
+-template <typename T,
+-          typename std::enable_if<std::is_integral<T>::value>::type* = nullptr>
+-constexpr typename std::make_unsigned<T>::type InvertWrapper(T value) {
+-  return ~value;
+-}
+-
+-template <typename T,
+-          typename std::enable_if<std::is_integral<T>::value>::type* = nullptr>
+-constexpr T AbsWrapper(T value) {
+-  return static_cast<T>(SafeUnsignedAbs(value));
+-}
+-
+-template <
+-    typename T,
+-    typename std::enable_if<std::is_floating_point<T>::value>::type* = nullptr>
+-constexpr T AbsWrapper(T value) {
+-  return value < 0 ? -value : value;
+-}
+-
+-template <template <typename, typename, typename> class M,
+-          typename L,
+-          typename R>
+-struct MathWrapper {
+-  using math = M<typename UnderlyingType<L>::type,
+-                 typename UnderlyingType<R>::type,
+-                 void>;
+-  using type = typename math::result_type;
+-};
+-
+-// These variadic templates work out the return types.
+-// TODO(jschuh): Rip all this out once we have C++14 non-trailing auto support.
+-template <template <typename, typename, typename> class M,
+-          typename L,
+-          typename R,
+-          typename... Args>
+-struct ResultType;
+-
+-template <template <typename, typename, typename> class M,
+-          typename L,
+-          typename R>
+-struct ResultType<M, L, R> {
+-  using type = typename MathWrapper<M, L, R>::type;
+-};
+-
+-template <template <typename, typename, typename> class M,
+-          typename L,
+-          typename R,
+-          typename... Args>
+-struct ResultType {
+-  using type =
+-      typename ResultType<M, typename ResultType<M, L, R>::type, Args...>::type;
+-};
+-
+-// The following macros are just boilerplate for the standard arithmetic
+-// operator overloads and variadic function templates. A macro isn't the nicest
+-// solution, but it beats rewriting these over and over again.
+-#define BASE_NUMERIC_ARITHMETIC_VARIADIC(CLASS, CL_ABBR, OP_NAME)       \
+-  template <typename L, typename R, typename... Args>                   \
+-  constexpr CLASS##Numeric<                                             \
+-      typename ResultType<CLASS##OP_NAME##Op, L, R, Args...>::type>     \
+-      CL_ABBR##OP_NAME(const L lhs, const R rhs, const Args... args) {  \
+-    return CL_ABBR##MathOp<CLASS##OP_NAME##Op, L, R, Args...>(lhs, rhs, \
+-                                                              args...); \
+-  }
+-
+-#define BASE_NUMERIC_ARITHMETIC_OPERATORS(CLASS, CL_ABBR, OP_NAME, OP, CMP_OP) \
+-  /* Binary arithmetic operator for all CLASS##Numeric operations. */          \
+-  template <typename L, typename R,                                            \
+-            typename std::enable_if<Is##CLASS##Op<L, R>::value>::type* =       \
+-                nullptr>                                                       \
+-  constexpr CLASS##Numeric<                                                    \
+-      typename MathWrapper<CLASS##OP_NAME##Op, L, R>::type>                    \
+-  operator OP(const L lhs, const R rhs) {                                      \
+-    return decltype(lhs OP rhs)::template MathOp<CLASS##OP_NAME##Op>(lhs,      \
+-                                                                     rhs);     \
+-  }                                                                            \
+-  /* Assignment arithmetic operator implementation from CLASS##Numeric. */     \
+-  template <typename L>                                                        \
+-  template <typename R>                                                        \
+-  constexpr CLASS##Numeric<L>& CLASS##Numeric<L>::operator CMP_OP(             \
+-      const R rhs) {                                                           \
+-    return MathOp<CLASS##OP_NAME##Op>(rhs);                                    \
+-  }                                                                            \
+-  /* Variadic arithmetic functions that return CLASS##Numeric. */              \
+-  BASE_NUMERIC_ARITHMETIC_VARIADIC(CLASS, CL_ABBR, OP_NAME)
+-
+-}  // namespace internal
+-}  // namespace base
+-}  // namespace pdfium
+-
+-#endif  // THIRD_PARTY_BASE_NUMERICS_SAFE_MATH_SHARED_IMPL_H_
