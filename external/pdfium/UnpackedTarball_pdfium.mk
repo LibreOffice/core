@@ -14,6 +14,9 @@ pdfium_patches += build.patch.1
 # Avoids Windows 8 build dependency.
 pdfium_patches += windows7.patch.1
 pdfium_patches += c++20-comparison.patch
+ifeq (MSC,$(COM))
+pdfium_patches += pdfium4137-numerics.patch.3 msvc2015.patch.1
+endif
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
