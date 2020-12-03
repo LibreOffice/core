@@ -315,6 +315,8 @@ static SwDoc& lcl_GetDoc(SwDocFac & rDocFac)
 void SwTransferable::ObjectReleased()
 {
     SwModule *pMod = SW_MOD();
+    if (!pMod)
+        return;
     if( this == pMod->m_pDragDrop )
         pMod->m_pDragDrop = nullptr;
     else if( this == pMod->m_pXSelection )
