@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b95bc041_713f9250",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3940,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-03T05:57:42Z",
+      "side": 1,
+      "message": "Please try to open two different Calc documents, and lock first tab in one of them. Check if this \"locks\" first tab in another.\n\nNote how GetFirst is used in GetBestViewShell, and why pointer to document shell is passed there.",
+      "range": {
+        "startLine": 3940,
+        "startChar": 4,
+        "endLine": 3940,
+        "endChar": 89
+      },
+      "revId": "49aca49ec4e1e6021a1dc5638754f4a44accd61b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24ec15f1_d4eab6e2",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3941,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-03T05:57:42Z",
+      "side": 1,
+      "message": "Why use \u0027(*fr).\u0027 instead of simple \u0027fr-\u003e\u0027 ?",
+      "range": {
+        "startLine": 3941,
+        "startChar": 76,
+        "endLine": 3941,
+        "endChar": 82
+      },
+      "revId": "49aca49ec4e1e6021a1dc5638754f4a44accd61b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6538156d_362a59bd",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3942,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-03T05:57:42Z",
+      "side": 1,
+      "message": "Why do you need this? Please try to check the inheritance graph of ScTabViewShell.",
+      "range": {
+        "startLine": 3942,
+        "startChar": 34,
+        "endLine": 3942,
+        "endChar": 72
+      },
+      "revId": "49aca49ec4e1e6021a1dc5638754f4a44accd61b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
