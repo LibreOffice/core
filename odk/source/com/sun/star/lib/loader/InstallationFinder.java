@@ -189,20 +189,20 @@ final class InstallationFinder {
      */
     private static String getPathFromWindowsRegistry() {
 
-        final String SUBKEYNAME = "Software\\LibreOffice\\UNO\\InstallPath";
+        final String SUBKEYNAME = "\\Software\\LibreOffice\\UNO\\InstallPath";
 
         String path = null;
 
         try {
             // read the key's default value from HKEY_CURRENT_USER
-            WinRegKey key = new WinRegKey( "HKEY_CURRENT_USER", SUBKEYNAME );
-            path = key.getStringValue( "" ); // default
+            WinRegKey key = new WinRegKey( "HKEY_CURRENT_USER" + SUBKEYNAME );
+            path = key.getStringValue();
         } catch ( WinRegKeyException e ) {
             try {
                 // read the key's default value from HKEY_LOCAL_MACHINE
-                WinRegKey key = new WinRegKey( "HKEY_LOCAL_MACHINE",
+                WinRegKey key = new WinRegKey( "HKEY_LOCAL_MACHINE" +
                                                SUBKEYNAME );
-                path = key.getStringValue( "" ); // default
+                path = key.getStringValue();
             } catch ( WinRegKeyException we ) {
                 System.err.println( "com.sun.star.lib.loader." +
                     "InstallationFinder::getPathFromWindowsRegistry: " +

@@ -94,5 +94,4 @@ JAVAMAKER="$(OO_SDK_HOME)/bin/javamaker"
 REGMERGE="$(OO_SDK_URE_BIN_DIR)/regmerge"
 
 SDK_JAVA_UNO_BOOTSTRAP_FILES=\
-    -C $(CLASSES_DIR) $(SQM)com/sun/star/lib/loader/$(SQM) \
-    -C $(CLASSES_DIR) $(SQM)win/unowinreg.dll$(SQM)
+    -C $(CLASSES_DIR) $(SQM)com/sun/star/lib/loader/$(SQM)

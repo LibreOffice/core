@@ -228,7 +228,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,ZMF,ZMF_TARBALL) \
 	,$(call fetch_Download_item,https://dev-www.libreoffice.org/src,$(item)))
 	$(foreach item, \
-		$(call fetch_Optional,ODK,UNOWINREG_DLL) \
 		$(call fetch_Optional,OPENSYMBOL,OPENSYMBOL_TTF) \
 		$(call fetch_Optional,ODFVALIDATOR,ODFVALIDATOR_JAR) \
 		$(call fetch_Optional,OFFICEOTRON,OFFICEOTRON_JAR) \
