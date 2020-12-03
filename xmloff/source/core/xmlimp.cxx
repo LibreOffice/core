@@ -450,7 +450,7 @@ SvXMLImport::~SvXMLImport() throw ()
 
 bool SvXMLImport::addEmbeddedFont(const css::uno::Reference< css::io::XInputStream >& stream,
                                   const OUString& fontName, const char* extra,
-                                  std::vector<unsigned char> key, bool eot)
+                                  std::vector<unsigned char> const & key, bool eot)
 {
     if (!mxEmbeddedFontHelper)
         mxEmbeddedFontHelper.reset(new EmbeddedFontsHelper);

@@ -585,7 +585,7 @@ public:
     // see EmbeddedFontsHelper::addEmbeddedFont
     bool addEmbeddedFont( const css::uno::Reference< css::io::XInputStream >& stream,
         const OUString& fontName, const char* extra,
-        std::vector< unsigned char > key, bool eot);
+        std::vector< unsigned char > const & key, bool eot);
 
     virtual void NotifyContainsEmbeddedFont() {}
 
