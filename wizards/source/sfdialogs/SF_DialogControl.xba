@@ -27,7 +27,7 @@ Option Explicit
 &apos;&apos;&apos;		It is easy with the API proposed in the current class to populate a tree, either
 &apos;&apos;&apos;			- branch by branch (CreateRoot and AddChild), or
 &apos;&apos;&apos;			- with a set of branches at once (AddSubtree)
-&apos;&apos;&apos;		Additionally populating a TreeConctrol can be done statically or dynamically
+&apos;&apos;&apos;		Additionally populating a TreeControl can be done statically or dynamically
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Service invocation:
 &apos;&apos;&apos;			Dim myDialog As Object, myControl As Object
@@ -741,7 +741,7 @@ Try:
 		oRoot.DataValue = DataValue
 		.setRoot(oRoot)
 		&apos;	To be visible, a root must have contained at least 1 child. Create a fictive one and erase it.
-		&apos;	This behavious does not seem related to the RootDisplayed property ??
+		&apos;	This behaviour does not seem related to the RootDisplayed property ??
 		oRoot.appendChild(.createNode(&quot;Something&quot;, False))
 		oRoot.removeChildByIndex(0)
 	End With
@@ -1069,7 +1069,7 @@ Public Sub _Initialize()
 &apos;&apos;&apos;		- Initialization of private members
 &apos;&apos;&apos;		- Collection of main attributes
 
-Dim vServiceName As Variant		&apos;	Splitted service name
+Dim vServiceName As Variant		&apos;	Split service name
 Dim sType As String				&apos;	Last component of service name
 Try:
 	_ImplementationName = _ControlModel.getImplementationName()
