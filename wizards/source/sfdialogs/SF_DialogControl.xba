@@ -149,6 +149,20 @@ Property Get ControlType() As String
 End Property	&apos;	SFDialogs.SF_DialogControl.ControlType
 
 REM -----------------------------------------------------------------------------
+Property Get CurrentNode() As Variant
+&apos;&apos;&apos;	The CurrentNode property returns the currently selected node
+&apos;&apos;&apos;	It returns Empty when there is no node selected
+&apos;&apos;&apos;	When there are several selections, it returns the topmost node among the selected ones
+	CurrentNode = _PropertyGet(&quot;CurrentNode&quot;, &quot;&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.CurrentNode (get)
+
+REM -----------------------------------------------------------------------------
+Property Let CurrentNode(Optional ByVal pvCurrentNode As Variant)
+&apos;&apos;&apos;	Set a single selection in a tree control
+	_PropertySet(&quot;CurrentNode&quot;, pvCurrentNode)
+End Property	&apos;	SFDialogs.SF_DialogControl.CurrentNode (let)
+
+REM -----------------------------------------------------------------------------
 Property Get Default() As Variant
 &apos;&apos;&apos;	The Default property specifies whether a command button is the default (OK) button.
 	Default = _PropertyGet(&quot;Default&quot;, False)
@@ -458,6 +472,12 @@ Property Let Picture(Optional ByVal pvPicture As Variant)
 &apos;&apos;&apos;	Set the updatable property Picture
 	_PropertySet(&quot;Picture&quot;, pvPicture)
 End Property	&apos;	SFDialogs.SF_DialogControl.Picture (let)
+
+REM -----------------------------------------------------------------------------
+Property Get RootNode() As Variant
+&apos;&apos;&apos;	The RootNode property returns the last root node of a tree control
+	RootNode = _PropertyGet(&quot;RootNode&quot;, &quot;&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.RootNode (get)
 
 REM -----------------------------------------------------------------------------
 Property Get RowSource() As Variant
@@ -1105,7 +1125,7 @@ Private Function _PropertyGet(Optional ByVal psProperty As String _
 
 Dim vGet As Variant							&apos;	Return value
 Static oSession As Object					&apos;	Alias of SF_Session
-Dim vSelection As Variant					&apos;	Alias of Model.SelectedItems
+Dim vSelection As Variant					&apos;	Alias of Model.SelectedItems or Model.Selection
 Dim vList As Variant						&apos;	Alias of Model.StringItemList
 Dim lIndex As Long							&apos;	Index in StringItemList
 Dim sItem As String							&apos;	A single item
@@ -1142,6 +1162,22 @@ Const cstSubArgs = &quot;&quot;
 			End Select
 		Case UCase(&quot;ControlType&quot;)
 			_PropertyGet = _ControlType
+		Case UCase(&quot;CurrentNode&quot;)
+			Select Case _ControlType
+				Case CTLTREECONTROL
+					If oSession.HasUNOMethod(_ControlView, &quot;getSelection&quot;) Then
+						_PropertyGet = Empty
+						If _ControlModel.SelectionType &lt;&gt; com.sun.star.view.SelectionType.NONE Then
+							vSelection = _ControlView.getSelection()
+							If IsArray(vSelection) Then
+								If UBound(vSelection) &gt;= 0 Then Set _PropertyGet = vSelection(0)
+							Else
+								Set _PropertyGet = vSelection
+							End If
+						End If
+					End If
+				Case Else	:	GoTo CatchType
+			End Select
 		Case UCase(&quot;Default&quot;)
 			Select Case _ControlType
 				Case CTLBUTTON
@@ -1221,6 +1257,12 @@ Const cstSubArgs = &quot;&quot;
 			Select Case _ControlType
 				Case CTLBUTTON, CTLIMAGECONTROL
 					If oSession.HasUnoProperty(_ControlModel, &quot;ImageURL&quot;) Then _PropertyGet = ScriptForge.SF_FileSystem._ConvertFromUrl(_ControlModel.ImageURL)
+				Case Else	:	GoTo CatchType
+			End Select
+		Case UCase(&quot;RootNode&quot;)
+			Select Case _ControlType
+				Case CTLTREECONTROL
+					_PropertyGet = _TreeDataModel.getRoot()
 				Case Else	:	GoTo CatchType
 			End Select
 		Case UCase(&quot;RowSource&quot;)
@@ -1379,6 +1421,15 @@ Const cstSubArgs = &quot;Value&quot;
 				Case CTLBUTTON, CTLCHECKBOX, CTLFIXEDLINE, CTLFIXEDTEXT, CTLGROUPBOX, CTLRADIOBUTTON
 					If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Caption&quot;, V_STRING) Then GoTo Finally
 					If oSession.HasUNOProperty(_ControlModel, &quot;Label&quot;) Then _ControlModel.Label = pvValue
+				Case Else	:	GoTo CatchType
+			End Select
+		Case UCAse(&quot;CurrentNode&quot;)
+			Select Case _ControlType
+				Case CTLTREECONTROL
+					If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Selection&quot;, ScriptForge.V_OBJECT) Then GoTo Finally
+					If oSession.UnoObjectType(pvValue) &lt;&gt; &quot;toolkit.MutableTreeNode&quot; Then GoTo CatchType
+					_ControlView.clearSelection()
+					_ControlView.addSelection(pvValue)
 				Case Else	:	GoTo CatchType
 			End Select
 		Case UCase(&quot;Default&quot;)
