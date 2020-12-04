@@ -122,21 +122,85 @@ bool StringView::VisitImplicitCastExpr(ImplicitCastExpr const* expr)
     {
         handleCXXConstructExpr(e1);
     }
-    else if (auto const e2 = dyn_cast<CXXMemberCallExpr>(e))
+    else if (auto const e2 = dyn_cast<CXXFunctionalCastExpr>(e))
     {
-        handleCXXMemberCallExpr(e2);
+        auto e3 = e2->getSubExpr();
+        if (auto const e4 = dyn_cast<CXXBindTemporaryExpr>(e3))
+        {
+            e3 = e4->getSubExpr();
+        }
+        if (auto const e4 = dyn_cast<CXXConstructExpr>(e3))
+        {
+            handleCXXConstructExpr(e4);
+        }
+    }
+    else if (auto const e3 = dyn_cast<CXXMemberCallExpr>(e))
+    {
+        handleCXXMemberCallExpr(e3);
     }
     return true;
 }
 
 void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
 {
-    if (expr->getNumArgs() != 0)
+    auto const d = expr->getConstructor();
+    switch (d->getNumParams())
     {
-        return;
+        case 0:
+            break;
+        case 1:
+        {
+            auto const t = d->getParamDecl(0)->getType();
+            if (t->isAnyCharacterType())
+            {
+                break;
+            }
+            loplugin::TypeCheck tc(t);
+            if (tc.LvalueReference()
+                    .Const()
+                    .Class("OStringLiteral")
+                    .Namespace("rtl")
+                    .GlobalNamespace()
+                || tc.LvalueReference()
+                       .Const()
+                       .Class("OUStringLiteral")
+                       .Namespace("rtl")
+                       .GlobalNamespace()
+                || tc.RvalueReference().Struct("OStringNumber").Namespace("rtl").GlobalNamespace()
+                || tc.RvalueReference().Struct("OUStringNumber").Namespace("rtl").GlobalNamespace()
+                || tc.ClassOrStruct("basic_string_view").StdNamespace())
+            {
+                break;
+            }
+            return;
+        }
+        case 2:
+        {
+            auto const t0 = d->getParamDecl(0)->getType();
+            if (t0->isPointerType() && t0->getPointeeType()->isAnyCharacterType())
+            {
+                auto const t = d->getParamDecl(1)->getType();
+                if (t->isIntegralType(compiler.getASTContext())
+                    && !(t->isBooleanType() || t->isAnyCharacterType()))
+                {
+                    break;
+                }
+            }
+            if (loplugin::TypeCheck(d->getParamDecl(1)->getType())
+                    .Struct("Dummy")
+                    .Namespace("libreoffice_internal")
+                    .Namespace("rtl")
+                    .GlobalNamespace())
+            {
+                break;
+            }
+            return;
+        }
+        default:
+            return;
     }
     report(DiagnosticsEngine::Warning,
-           "instead of an empty %0, pass an empty '%select{std::string_view|std::u16string_view}1'",
+           "instead of an %0, pass a '%select{std::string_view|std::u16string_view}1'",
            expr->getExprLoc())
         << expr->getType()
         << (loplugin::TypeCheck(expr->getType()).Class("OString").Namespace("rtl").GlobalNamespace()

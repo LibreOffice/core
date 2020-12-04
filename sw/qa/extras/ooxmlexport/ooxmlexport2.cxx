@@ -282,8 +282,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo51034, "fdo51034.odt")
 // Replace symbol - (i.e. U+2212) with ASCII - , LO does this change and it shouldn't matter.
 static void CHECK_FORMULA(OUString const & expected, OUString const & actual) {
     CPPUNIT_ASSERT_EQUAL(
-        expected.replaceAll( " ", "" ).replaceAll( OUString(u"\u2212"), "-" ),
-        actual.replaceAll( " ", "" ).replaceAll( OUString(u"\u2212"), "-" ));
+        expected.replaceAll( " ", "" ).replaceAll( u"\u2212", "-" ),
+        actual.replaceAll( " ", "" ).replaceAll( u"\u2212", "-" ));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testMathAccents, "math-accents.docx")

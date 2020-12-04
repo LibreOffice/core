@@ -7,10 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 void call_view(std::u16string_view) {}
 void call_view(std::string_view) {}
@@ -93,12 +98,44 @@ void f4(OUString s1, OUString s2)
 }
 }
 
-void f5()
+void f5(char const* s1, sal_Int32 n1, char16_t const* s2, sal_Int32 n2)
 {
-    // expected-error@+1 {{instead of an empty 'rtl::OString', pass an empty 'std::string_view' [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OString', pass a 'std::string_view' [loplugin:stringview]}}
     call_view(OString());
-    // expected-error@+1 {{instead of an empty 'rtl::OUString', pass an empty 'std::u16string_view' [loplugin:stringview]}}
+    // expected-error@+1 {{instead of an 'rtl::OString', pass a 'std::string_view' [loplugin:stringview]}}
+    call_view(OString("foo"));
+    // expected-error@+1 {{instead of an 'rtl::OString', pass a 'std::string_view' [loplugin:stringview]}}
+    call_view(OString(*s1));
+    // expected-error@+1 {{instead of an 'rtl::OString', pass a 'std::string_view' [loplugin:stringview]}}
+    call_view(OString(s1));
+    // expected-error@+1 {{instead of an 'rtl::OString', pass a 'std::string_view' [loplugin:stringview]}}
+    call_view(OString(s1, n1));
+    constexpr OStringLiteral l1("foo");
+    // expected-error@+1 {{instead of an 'rtl::OString', pass a 'std::string_view' [loplugin:stringview]}}
+    call_view(OString(l1));
+    // expected-error@+1 {{instead of an 'rtl::OString', pass a 'std::string_view' [loplugin:stringview]}}
+    call_view(OString(std::string_view("foo")));
+    // expected-error@+1 {{instead of an 'rtl::OString', pass a 'std::string_view' [loplugin:stringview]}}
+    call_view(OString(OString::number(0)));
+    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
     call_view(OUString());
+    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
+    call_view(OUString("foo"));
+    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
+    call_view(OUString(u"foo"));
+    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
+    call_view(OUString(*s2));
+    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
+    call_view(OUString(s2));
+    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
+    call_view(OUString(s2, n2));
+    constexpr OUStringLiteral l2(u"foo");
+    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
+    call_view(OUString(l2));
+    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
+    call_view(OUString(std::u16string_view(u"foo")));
+    // expected-error@+1 {{instead of an 'rtl::OUString', pass a 'std::u16string_view' [loplugin:stringview]}}
+    call_view(OUString(OUString::number(0)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
