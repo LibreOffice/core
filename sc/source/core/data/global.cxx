@@ -51,7 +51,6 @@
 #include <unotools/transliterationwrapper.hxx>
 
 #include <comphelper/lok.hxx>
-#include <vcl/opengl/OpenGLWrapper.hxx>
 
 #include <global.hxx>
 #include <scresid.hxx>
@@ -460,10 +459,9 @@ void ScGlobal::InitPPT()
 {
     OutputDevice* pDev = Application::GetDefaultDevice();
 
-    if (comphelper::LibreOfficeKit::isActive() || OpenGLWrapper::isVCLOpenGLEnabled())
+    if (comphelper::LibreOfficeKit::isActive())
     {
         // LOK: the below limited precision is not enough for RowColumnHeader.
-        // OpenGL: limited precision breaks AA of text in charts.
         nScreenPPTX = double(pDev->GetDPIX()) / double(TWIPS_PER_INCH);
         nScreenPPTY = double(pDev->GetDPIY()) / double(TWIPS_PER_INCH);
     }

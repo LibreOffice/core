@@ -790,15 +790,6 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
                                   | ImplFamilyToWin( rFont.GetFamilyType() );
     }
 
-    static BYTE nDefaultQuality = NONANTIALIASED_QUALITY;
-    if (nDefaultQuality == NONANTIALIASED_QUALITY)
-    {
-        if (OpenGLWrapper::isVCLOpenGLEnabled())
-            nDefaultQuality = ANTIALIASED_QUALITY;
-        else
-            nDefaultQuality = DEFAULT_QUALITY;
-    }
-
     rLogFont.lfWeight          = ImplWeightToWin( rFont.GetWeight() );
     rLogFont.lfHeight          = static_cast<LONG>(-rFont.mnHeight);
     rLogFont.lfWidth           = static_cast<LONG>(rFont.mnWidth);
@@ -808,7 +799,7 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     rLogFont.lfEscapement      = rFont.mnOrientation.get();
     rLogFont.lfOrientation     = rLogFont.lfEscapement;
     rLogFont.lfClipPrecision   = CLIP_DEFAULT_PRECIS;
-    rLogFont.lfQuality         = nDefaultQuality;
+    rLogFont.lfQuality         = DEFAULT_QUALITY;
     rLogFont.lfOutPrecision    = OUT_TT_PRECIS;
     if ( rFont.mnOrientation )
         rLogFont.lfClipPrecision |= CLIP_LH_ANGLES;

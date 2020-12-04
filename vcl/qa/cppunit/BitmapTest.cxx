@@ -360,10 +360,7 @@ void BitmapTest::testConvert()
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(10), pReadAccess->GetScanlineSize());
 #else
         if (!SkiaHelper::isVCLSkiaEnabled())
-#if HAVE_FEATURE_OPENGL
-            if (!OpenGLHelper::isVCLOpenGLEnabled())
-#endif
-                CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(12), pReadAccess->GetScanlineSize());
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(12), pReadAccess->GetScanlineSize());
 #endif
         CPPUNIT_ASSERT(pReadAccess->HasPalette());
         const BitmapColor& rColor = pReadAccess->GetPaletteColor(pReadAccess->GetPixelIndex(1, 1));
@@ -383,11 +380,6 @@ void BitmapTest::testConvert()
         if (SkiaHelper::isVCLSkiaEnabled()) // aligned to 4 bytes
             CPPUNIT_ASSERT_EQUAL(sal_uInt32(32), pReadAccess->GetScanlineSize());
         else
-#if HAVE_FEATURE_OPENGL
-            if (OpenGLHelper::isVCLOpenGLEnabled())
-            CPPUNIT_ASSERT_EQUAL(sal_uInt32(30), pReadAccess->GetScanlineSize());
-        else
-#endif
 #if defined LINUX || defined FREEBSD
         {
             CPPUNIT_ASSERT_EQUAL(sal_uInt32(32), pReadAccess->GetScanlineSize());

@@ -48,8 +48,6 @@ namespace cairocanvas
         if( !maArguments.hasElements() )
             return;
 
-        // tdf#93870 - force VCL canvas in OpenGL mode for now.
-        assert( !OpenGLWrapper::isVCLOpenGLEnabled() );
         assert( !SkiaHelper::isVCLSkiaEnabled() );
 
         /* maArguments:

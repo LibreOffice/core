@@ -51,8 +51,6 @@ class SalFrame;
 class X11Pixmap;
 class X11SalVirtualDevice;
 class X11SalGraphicsImpl;
-class X11OpenGLSalGraphicsImpl;
-class X11OpenGLSalVirtualDevice;
 class X11SkiaSalVirtualDevice;
 class FreetypeFont;
 class ImplLayoutArgs;
@@ -68,7 +66,6 @@ namespace basegfx {
 class X11SalGraphics final : public SalGraphics
 {
     friend class X11SalGraphicsImpl;
-    friend class X11OpenGLSalGraphicsImpl;
     friend class X11CairoTextRender;
 
 public:
@@ -78,7 +75,6 @@ public:
     void                            Init( SalFrame *pFrame, Drawable aDrawable, SalX11Screen nXScreen );
     void                            Init( X11SalVirtualDevice *pVirtualDevice, cairo_surface_t* pPreExistingTarget = nullptr,
                                           SalColormap* pColormap = nullptr, bool bDeleteColormap = false );
-    void                            Init( X11OpenGLSalVirtualDevice *pVirtualDevice );
     void                            Init( X11SkiaSalVirtualDevice *pVirtualDevice );
     void                            DeInit();
 
@@ -317,7 +313,6 @@ private:
 
     bool                            bWindow_ : 1;       // is Window
     bool                            bVirDev_ : 1;       // is VirDev
-    bool                            m_bOpenGL : 1;
     bool                            m_bSkia  : 1;
 
 private:

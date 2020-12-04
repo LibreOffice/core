@@ -31,13 +31,10 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #include <vcl/inputtypes.hxx>
-#include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/timer.hxx>
 #include <vclpluginapi.h>
 
-#include <opengl/salbmp.hxx>
-#include <opengl/win/gdiimpl.hxx>
 #include <win/wincomp.hxx>
 #include <win/salids.hrc>
 #include <win/saldata.hxx>
@@ -991,9 +988,6 @@ std::shared_ptr<SalBitmap> WinSalInstance::CreateSalBitmap()
         return std::make_shared<SkiaSalBitmap>();
     else
 #endif
-    if (OpenGLHelper::isVCLOpenGLEnabled())
-        return std::make_shared<OpenGLSalBitmap>();
-    else
         return std::make_shared<WinSalBitmap>();
 }
 

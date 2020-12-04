@@ -922,15 +922,6 @@ void SvmTest::checkBitmaps(const GDIMetaFile& rMetaFile)
     OUString crc1 = "b8dee5da";
     OUString crc2 = "281fc589";
     OUString crc3 = "5e01ddcc";
-#if HAVE_FEATURE_OPENGL
-    if (OpenGLHelper::isVCLOpenGLEnabled())
-    {
-        // OpenGL uses a different scaling algorithm and also a different RGB order.
-        crc1 = "5e01ddcc";
-        crc2 = "281fc589";
-        crc3 = "b8dee5da";
-    }
-#endif
 
     assertXPathAttrs(pDoc, "/metafile/bmp[1]", {{"x", "1"}, {"y", "2"}, {"crc", crc1}});
     assertXPathAttrs(pDoc, "/metafile/bmpscale[1]", {
@@ -988,37 +979,17 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
         return; // TODO SKIA using CRCs is broken (the idea of it)
 
     std::vector<OUString> aExpectedCRC;
-
-#if HAVE_FEATURE_OPENGL
-    if (OpenGLHelper::isVCLOpenGLEnabled())
+    aExpectedCRC.insert(aExpectedCRC.end(),
     {
-        aExpectedCRC.insert(aExpectedCRC.end(),
-        {
-            "08feb5d3",
-            "281fc589",
-            "b8dee5da",
-            "4df0e464",
-            "4322ee3a",
-            "1426653b",
-            "4fd547df",
-            "71efc447",
-        });
-    }
-    else
-#endif
-    {
-        aExpectedCRC.insert(aExpectedCRC.end(),
-        {
-            "d8377d4f",
-            "281fc589",
-            "5e01ddcc",
-            "4df0e464",
-            "4322ee3a",
-            "794c92a9",
-            "3c80d829",
-            "71efc447",
-        });
-    }
+        "d8377d4f",
+        "281fc589",
+        "5e01ddcc",
+        "4df0e464",
+        "4322ee3a",
+        "794c92a9",
+        "3c80d829",
+        "71efc447",
+    });
 
     assertXPathAttrs(pDoc, "/metafile/bmpex[1]", {
         {"x", "1"}, {"y", "1"}, {"crc", aExpectedCRC[0]}, {"transparenttype", "bitmap"}

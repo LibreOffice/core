@@ -78,9 +78,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/window.hxx>
 #include <vcl/IconThemeInfo.hxx>
-#if HAVE_FEATURE_OPENGL
-#include <vcl/opengl/OpenGLWrapper.hxx>
-#endif
 #include <vcl/skia/SkiaHelper.hxx>
 #include "optgdlg.hxx"
 #include <svtools/apearcfg.hxx>
@@ -467,13 +464,6 @@ CanvasSettings::CanvasSettings() :
 
 bool CanvasSettings::IsHardwareAccelerationAvailable() const
 {
-#if HAVE_FEATURE_OPENGL
-    if (OpenGLWrapper::isVCLOpenGLEnabled() && Application::GetToolkitName() != "gtk3")
-    {
-        mbHWAccelAvailable = false;
-        return false;
-    }
-#endif
     if( !mbHWAccelChecked )
     {
         mbHWAccelChecked = true;

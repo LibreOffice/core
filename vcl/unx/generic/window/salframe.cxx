@@ -301,8 +301,6 @@ static bool lcl_SelectAppIconPixmap( SalDisplay const *pDisplay, SalX11Screen nX
                                          sal_uInt16 nIcon, sal_uInt16 iconSize,
                                          Pixmap& icon_pixmap, Pixmap& icon_mask, NetWmIconData& netwm_icon)
 {
-    PreDefaultWinNoOpenGLZone aGuard;
-
     CreateNetWmAppIcon( nIcon, netwm_icon );
 
     OUString sIcon;

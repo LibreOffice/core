@@ -37,7 +37,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/opengl/OpenGLWrapper.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <vcl/svapp.hxx>
 
@@ -600,10 +599,6 @@ void TitleHelper::impl_appendDebugVersion (OUStringBuffer& sTitle)
     OUString sVersion = ::utl::Bootstrap::getBuildIdData("development");
     sTitle.append(" [");
     sTitle.append(sVersion);
-#if HAVE_FEATURE_UI
-    if (OpenGLWrapper::isVCLOpenGLEnabled() && !SkiaHelper::isVCLSkiaEnabled())
-        sTitle.append("-GL");
-#endif
     sTitle.append("]");
 }
 #else

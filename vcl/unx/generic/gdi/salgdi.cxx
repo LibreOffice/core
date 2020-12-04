@@ -44,15 +44,11 @@
 #include <textrender.hxx>
 #include <salvd.hxx>
 #include "gdiimpl.hxx"
-#include <opengl/x11/gdiimpl.hxx>
-#include <unx/x11/x11cairotextrender.hxx>
-#include <opengl/x11/cairotextrender.hxx>
 
+#include <unx/x11/x11cairotextrender.hxx>
 #include <unx/x11/xrender_peer.hxx>
 #include "cairo_xlib_cairo.hxx"
 #include <cairo-xlib.h>
-
-#include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <config_features.h>
 #include <vcl/skia/SkiaHelper.hxx>
@@ -79,7 +75,6 @@ X11SalGraphics::X11SalGraphics():
     hBrush_(None),
     bWindow_(false),
     bVirDev_(false),
-    m_bOpenGL(OpenGLHelper::isVCLOpenGLEnabled()),
     m_bSkia(SkiaHelper::isVCLSkiaEnabled())
 {
 #if HAVE_FEATURE_SKIA
@@ -90,12 +85,6 @@ X11SalGraphics::X11SalGraphics():
     }
     else
 #endif
-    if (m_bOpenGL)
-    {
-        mxImpl.reset(new X11OpenGLSalGraphicsImpl(*this));
-        mxTextRenderImpl.reset(new OpenGLX11CairoTextRender(*this));
-    }
-    else
     {
         mxTextRenderImpl.reset(new X11CairoTextRender(*this));
         mxImpl.reset(new X11SalGraphicsImpl(*this));
@@ -608,7 +597,7 @@ bool X11SalGraphics::drawPolyPolygon(
     // enable by setting to something
     static const char* pUseCairoForPolygons(getenv("SAL_ENABLE_USE_CAIRO_FOR_POLYGONS"));
 
-    if (!m_bOpenGL && !m_bSkia && nullptr != pUseCairoForPolygons && SupportsCairo())
+    if (!m_bSkia && nullptr != pUseCairoForPolygons && SupportsCairo())
     {
         // snap to raster if requested
         const bool bSnapPoints(!getAntiAlias());
@@ -729,7 +718,7 @@ bool X11SalGraphics::drawPolyLine(
     // disable by setting to something
     static const char* pUseCairoForFatLines(getenv("SAL_DISABLE_USE_CAIRO_FOR_FATLINES"));
 
-    if (!m_bOpenGL && !m_bSkia && nullptr == pUseCairoForFatLines && SupportsCairo())
+    if (!m_bSkia && nullptr == pUseCairoForFatLines && SupportsCairo())
     {
         cairo_t* cr = getCairoContext();
         clipRegion(cr);
