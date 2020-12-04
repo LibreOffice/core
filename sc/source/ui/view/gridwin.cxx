@@ -2089,23 +2089,26 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             pView->ResetBrushDocument();            // invalidates pBrushDoc pointer
     }
 
+    Point aPos = rMEvt.GetPosPixel();
+    SCCOL nPosX;
+    SCROW nPosY;
+    SCTAB nTab = mrViewData.GetTabNo();
+    mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
+    ScDPObject* pDPObj  = rDoc.GetDPAtCursor( nPosX, nPosY, nTab );
+
+    bool bInDataPilotTable = (pDPObj != nullptr);
+
     // double click (only left button)
     // in the tiled rendering case, single click works this way too
 
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
     bool bDouble = ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() );
-    if ((bDouble || bIsTiledRendering)
+    if ((bDouble || (bIsTiledRendering && !bInDataPilotTable))
             && !bRefMode
             && (nMouseStatus == SC_GM_DBLDOWN || (bIsTiledRendering && nMouseStatus != SC_GM_URLDOWN))
             && !pScMod->IsRefDialogOpen())
     {
         //  data pilot table
-        Point aPos = rMEvt.GetPosPixel();
-        SCCOL nPosX;
-        SCROW nPosY;
-        SCTAB nTab = mrViewData.GetTabNo();
-        mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
-        ScDPObject* pDPObj  = rDoc.GetDPAtCursor( nPosX, nPosY, nTab );
         if ( pDPObj && pDPObj->GetSaveData()->GetDrillDown() )
         {
             ScAddress aCellPos( nPosX, nPosY, mrViewData.GetTabNo() );
@@ -2221,9 +2224,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 if (isTiledRendering && pViewShell &&
                     (pViewShell->isLOKMobilePhone() || pViewShell->isLOKTablet()))
                 {
-                    Point aPos = rMEvt.GetPosPixel();
-                    SCCOL nPosX;
-                    SCROW nPosY;
+                    aPos = rMEvt.GetPosPixel();
                     mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
                     auto pForTabView = dynamic_cast<const ScTabViewShell *>(pViewShell);
                     OString aCursor = pForTabView->GetViewData().describeCellCursorAt(nPosX, nPosY);
@@ -2276,10 +2277,8 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = rDoc.GetVbaEventProcessor();
             if( xVbaEvents.is() ) try
             {
-                Point aPos = rMEvt.GetPosPixel();
-                SCCOL nPosX;
-                SCROW nPosY;
-                SCTAB nTab = mrViewData.GetTabNo();
+                aPos = rMEvt.GetPosPixel();
+                nTab = mrViewData.GetTabNo();
                 mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
                 OUString sURL;
                 ScRefCellValue aCell;
