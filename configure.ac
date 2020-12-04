@@ -10794,8 +10794,8 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE"; then
     kde4_libdirs="/usr/lib /usr/lib/kde4 /usr/lib/kde4/devel $x_libraries"
 
     if test -n "$supports_multilib"; then
-        qt4_libdirs="$qt4_libdirs /usr/lib64/qt4 /usr/lib64/qt /usr/lib64"
-        kde4_libdirs="$kde4_libdirs /usr/lib64 /usr/lib64/kde4 /usr/lib64/kde4/devel"
+        qt4_libdirs="/usr/lib64/qt4 /usr/lib64/qt /usr/lib64 $qt4_libdirs"
+        kde4_libdirs="/usr/lib64 /usr/lib64/kde4 /usr/lib64/kde4/devel $kde4_libdirs"
     fi
 
     if test -n "$QTDIR"; then
