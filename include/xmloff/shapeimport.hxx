@@ -256,6 +256,11 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape = false);
+    SvXMLShapeContext* CreateGroupChildContext(
+        SvXMLImport& rImport, sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        bool bTemporaryShape = false);
 
     SvXMLShapeContext* CreateFrameChildContext(
         SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,

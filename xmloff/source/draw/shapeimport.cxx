@@ -20,6 +20,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <comphelper/attributelist.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/PositionLayoutDir.hpp>
@@ -415,6 +416,49 @@ void XMLShapeImportHelper::SetStylesContext(SvXMLStylesContext* pNew)
 void XMLShapeImportHelper::SetAutoStylesContext(SvXMLStylesContext* pNew)
 {
     mxAutoStylesContext.set(pNew);
+}
+
+SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
+    SvXMLImport& rImport,
+    sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList>& Attribs,
+    uno::Reference< drawing::XShapes > const & rShapes,
+    bool bTemporaryShape)
+{
+    // fall back to slow-parser path
+    const OUString& rPrefix = SvXMLImport::getNamespacePrefixFromToken(Element, &rImport.GetNamespaceMap());
+    const OUString& rLocalName = SvXMLImport::getNameFromToken( Element );
+    OUString aName = rPrefix.isEmpty() ? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName;
+    OUString aLocalName;
+    sal_uInt16 nPrefix =
+        rImport.GetNamespaceMap().GetKeyByAttrName( aName, &aLocalName );
+
+    rtl::Reference < comphelper::AttributeList > maAttrList = new comphelper::AttributeList();
+
+    if ( Attribs.is() )
+    {
+        for( auto &it : sax_fastparser::castToFastAttributeList( Attribs ) )
+        {
+            sal_Int32 nToken = it.getToken();
+            const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &rImport.GetNamespaceMap());
+            OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
+            if ( !rAttrNamespacePrefix.isEmpty() )
+                sAttrName = rAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
+
+            maAttrList->AddAttribute( sAttrName, "CDATA", it.toString() );
+        }
+
+        const uno::Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
+        for ( const auto& rUnknownAttrib : unknownAttribs )
+        {
+            const OUString& rAttrValue = rUnknownAttrib.Value;
+            const OUString& rAttrName = rUnknownAttrib.Name;
+            // note: rAttrName is expected to be namespace-prefixed here
+            maAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
+        }
+    }
+
+    return CreateGroupChildContext(rImport, nPrefix, aLocalName, maAttrList.get(), rShapes, bTemporaryShape );
 }
 
 SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
