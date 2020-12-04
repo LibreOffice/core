@@ -23,7 +23,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/window.hxx>
 
 #include "postithelper.hxx"
@@ -53,7 +53,7 @@ namespace sw::sidebarwindows {
 
 namespace sw::annotation {
 
-class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
+class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public InterimItemWindow
 {
     public:
         SwAnnotationWin( SwEditWin& rEditWin,
@@ -105,7 +105,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         Outliner* GetOutliner() { return mpOutliner.get();}
         bool HasScrollbar() const;
         bool IsScrollbarVisible() const;
-        ScrollBar* Scrollbar() { return mpVScrollbar; }
+        weld::ScrolledWindow* Scrollbar() { return mxVScrollbar.get(); }
         ::sw::sidebarwindows::AnchorOverlayObject* Anchor() { return mpAnchor.get();}
         ::sw::sidebarwindows::ShadowOverlayObject* Shadow() { return mpShadow.get();}
         ::sw::overlay::OverlayRanges* TextRange() { return mpTextRangeOverlay.get();}
@@ -209,7 +209,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         virtual FactoryFunction GetUITestFactory() const override;
 
     private:
-        VclPtr<MenuButton> CreateMenuButton();
+
         virtual void    LoseFocus() override;
         virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
         virtual void    GetFocus() override;
@@ -218,14 +218,16 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         SfxItemSet  DefaultItem();
 
         DECL_LINK(ModifyHdl, LinkParamNone*, void);
-        DECL_LINK(ScrollHdl, ScrollBar*, void);
+        DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
         DECL_LINK(DeleteHdl, void*, void);
+        DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
+        DECL_LINK(SelectHdl, const OString&, void);
+        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
         sal_uInt32 CountFollowing();
 
         SvxLanguageItem GetLanguage() const;
 
-        VclBuilder      maBuilder;
         SwPostItMgr&    mrMgr;
         SwView&         mrView;
 
@@ -235,11 +237,12 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         std::unique_ptr<Outliner>       mpOutliner;
 
         VclPtr<sw::sidebarwindows::SidebarTextControl> mpSidebarTextControl;
-        VclPtr<ScrollBar>      mpVScrollbar;
-        VclPtr<FixedText>      mpMetadataAuthor;
-        VclPtr<FixedText>      mpMetadataDate;
-        VclPtr<FixedText>      mpMetadataResolved;
-        VclPtr<MenuButton>     mpMenuButton;
+        std::unique_ptr<weld::ScrolledWindow> mxVScrollbar;
+        vcl::Font maLabelFont;
+        std::unique_ptr<weld::Label> mxMetadataAuthor;
+        std::unique_ptr<weld::Label> mxMetadataDate;
+        std::unique_ptr<weld::Label> mxMetadataResolved;
+        std::unique_ptr<weld::MenuButton> mxMenuButton;
 
         std::unique_ptr<sw::sidebarwindows::AnchorOverlayObject> mpAnchor;
         std::unique_ptr<sw::sidebarwindows::ShadowOverlayObject> mpShadow;
@@ -272,7 +275,6 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
 
         SwFormatField*       mpFormatField;
         SwPostItField*       mpField;
-        VclPtr<PopupMenu>    mpButtonPopup;
 };
 
 } // end of namespace sw::annotation
