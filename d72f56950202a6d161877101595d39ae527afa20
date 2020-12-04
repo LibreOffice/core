@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2542077_ecedbc66",
+        "filename": "vcl/inc/schedulerimpl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-04T12:57:01Z",
+      "side": 1,
+      "message": "My doubt now is here. This is needed because *usually* it is already called with scheduler unlocked, so without the initial Lock, the following Unlock would fail assertion. But can\u0027t this Lock itself create a similar deadlock? :-/",
+      "range": {
+        "startLine": 73,
+        "startChar": 8,
+        "endLine": 73,
+        "endChar": 26
+      },
+      "revId": "d72f56950202a6d161877101595d39ae527afa20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
