@@ -396,7 +396,7 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id, 
     RememberWidget("__DIALOG__", pRet.get());
 
     const vcl::ILibreOfficeKitNotifier* pNotifier = pDialog->GetLOKNotifier();
-    if (pNotifier)
+    if (pNotifier && id != "MacroSelectorDialog")
     {
         std::stringstream aStream;
         boost::property_tree::ptree aTree = m_aOwnedToplevel->DumpAsPropertyTree();
