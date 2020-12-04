@@ -69,6 +69,30 @@
       "revId": "90be366bd1efa7f7221e5f862f9c54ac8faad393",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aeee413d_324a456c",
+        "filename": "offapi/com/sun/star/text/ViewSettings.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-12-04T08:27:42Z",
+      "side": 1,
+      "message": "See LineSpacingMode for an example.\nRather not use an actual UNO Enum here, since you can\u0027t add values later without breaking b/w compat. Rather a constant group, as seen in LineSpacingMode.",
+      "parentUuid": "d366bc42_738d6990",
+      "range": {
+        "startLine": 303,
+        "startChar": 25,
+        "endLine": 303,
+        "endChar": 29
+      },
+      "revId": "90be366bd1efa7f7221e5f862f9c54ac8faad393",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
