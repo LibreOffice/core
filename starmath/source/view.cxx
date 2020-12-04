@@ -1761,20 +1761,20 @@ void SmViewShell::Execute(SfxRequest& rReq)
                         aSel.nEndPos = nUtf16Pos;
                 }
 
-                ToggleUnicodeCodepoint aToggle;
-                while( nUtf16Pos && aToggle.AllowMoreInput( sInput[nUtf16Pos-1]) )
-                    --nUtf16Pos;
-                const OUString sReplacement = aToggle.ReplacementString();
-                if( !sReplacement.isEmpty() )
-                {
-                    pEditView->SetSelection( aSel );
-                    pEditEngine->UndoActionStart(EDITUNDO_REPLACEALL);
-                    aSel.nStartPos = aSel.nEndPos - aToggle.StringToReplace().getLength();
-                    pWin->SetSelection( aSel );
-                    pEditView->InsertText( sReplacement, true );
-                    pEditEngine->UndoActionEnd();
-                    pWin->Flush();
-                }
+//                ToggleUnicodeCodepoint aToggle;
+//                while( nUtf16Pos && aToggle.AllowMoreInput( sInput[nUtf16Pos-1]) )
+//                    --nUtf16Pos;
+//                const OUString sReplacement = aToggle.ReplacementString();
+//                if( !sReplacement.isEmpty() )
+//                {
+//                    pEditView->SetSelection( aSel );
+//                    pEditEngine->UndoActionStart(EDITUNDO_REPLACEALL);
+//                    aSel.nStartPos = aSel.nEndPos - aToggle.StringToReplace().getLength();
+//                    pWin->SetSelection( aSel );
+//                    pEditView->InsertText( sReplacement, true );
+//                    pEditEngine->UndoActionEnd();
+//                    pWin->Flush();
+//                }
             }
         }
         break;

@@ -78,6 +78,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
@@ -363,15 +364,16 @@ void SwTextShell::Execute(SfxRequest &rReq)
     {
         case SID_UNICODE_NOTATION_TOGGLE:
         {
-            tools::Long nMaxUnits = 256;
-            sal_Int32 nSelLength = rWrtSh.GetSelText().getLength();
-            if( rWrtSh.IsSelection() && !rWrtSh.IsMultiSelection() && (nSelLength < nMaxUnits) )
-                nMaxUnits = nSelLength;
+            const SfxViewShell* pVS = GetViewShell();
+            if (!pVS)
+                break;
+            css::uno::Reference<css::text::XTextViewCursorSupplier> xCS(pVS->GetController(),
+                                                                        css::uno::UNO_QUERY);
+            if (!xCS)
+                break;
 
-            tools::Long index = 0;
-            ToggleUnicodeCodepoint aToggle;
-            while( nMaxUnits-- && aToggle.AllowMoreInput(rWrtSh.GetChar(true, index-1)) )
-                --index;
+            auto xVC = xCS->getViewCursor();
+            ToggleUnicodeCodepoint aToggle(xVC->getText()->createTextCursorByRange(xVC));
 
             OUString sReplacement = aToggle.ReplacementString();
             if( !sReplacement.isEmpty() )

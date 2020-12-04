@@ -882,6 +882,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 {
                     OUString sInput = pOLV->GetSurroundingText();
                     ESelection aSel( pOLV->GetSelection() );
+
                     if( aSel.nStartPos > aSel.nEndPos )
                         aSel.nEndPos = aSel.nStartPos;
 
@@ -896,19 +897,19 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                             aSel.nEndPos = nUtf16Pos;
                     }
 
-                    ToggleUnicodeCodepoint aToggle;
-                    while( nUtf16Pos && aToggle.AllowMoreInput( sInput[nUtf16Pos-1]) )
-                        --nUtf16Pos;
-                    OUString sReplacement = aToggle.ReplacementString();
-                    if( !sReplacement.isEmpty() )
-                    {
-                        OUString sStringToReplace = aToggle.StringToReplace();
-                        mpDrawView->BegUndo(sStringToReplace +"->"+ sReplacement);
-                        aSel.nStartPos = aSel.nEndPos - sStringToReplace.getLength();
-                        pOLV->SetSelection( aSel );
-                        pOLV->InsertText(sReplacement, true);
-                        mpDrawView->EndUndo();
-                    }
+//                    ToggleUnicodeCodepoint aToggle;
+//                    while( nUtf16Pos && aToggle.AllowMoreInput( sInput[nUtf16Pos-1]) )
+//                        --nUtf16Pos;
+//                    OUString sReplacement = aToggle.ReplacementString();
+//                    if( !sReplacement.isEmpty() )
+//                    {
+//                        OUString sStringToReplace = aToggle.StringToReplace();
+//                        mpDrawView->BegUndo(sStringToReplace +"->"+ sReplacement);
+//                        aSel.nStartPos = aSel.nEndPos - sStringToReplace.getLength();
+//                        pOLV->SetSelection( aSel );
+//                        pOLV->InsertText(sReplacement, true);
+//                        mpDrawView->EndUndo();
+//                    }
                 }
             }
         }
