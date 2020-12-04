@@ -62,6 +62,8 @@
 #include <editeng/editobj.hxx>
 
 #include <memory>
+#include <string_view>
+
 #include <osl/endian.h>
 
 // We don't want to end up with 2GB read in one line just because of malformed
@@ -1542,7 +1544,7 @@ void ScImportExport::EmbeddedNullTreatment( OUString & rStr )
     sal_Unicode cNull = 0;
     if (rStr.indexOf( cNull) >= 0)
     {
-        rStr = rStr.replaceAll( OUString( &cNull, 1), "");
+        rStr = rStr.replaceAll( std::u16string_view( &cNull, 1), "");
     }
 }
 

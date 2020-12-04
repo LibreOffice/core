@@ -113,6 +113,16 @@ TypeCheck TypeCheck::LvalueReference() const {
     return TypeCheck();
 }
 
+TypeCheck TypeCheck::RvalueReference() const {
+    if (!type_.isNull()) {
+        auto const t = type_->getAs<clang::RValueReferenceType>();
+        if (t != nullptr) {
+            return TypeCheck(t->getPointeeType());
+        }
+    }
+    return TypeCheck();
+}
+
 TypeCheck TypeCheck::Pointer() const {
     if (!type_.isNull()) {
         auto const t = type_->getAs<clang::PointerType>();
