@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a5249b4_7c737ff8",
+        "filename": "sw/source/uibase/inc/OutlineContentVisibilityWin.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-12-04T06:07:13Z",
+      "side": 1,
+      "message": "I could not find where this link is used.",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 50
+      },
+      "revId": "0865857e7448d995b6e72d9c749d69da3f752e5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
