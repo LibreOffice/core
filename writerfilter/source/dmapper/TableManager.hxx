@@ -129,7 +129,6 @@ class TableManager : public virtual SvRefBase
         {
             // reset also table exception and
             // its copy set by the previous resetCellProps()
-            mpTableExceptionProps.clear();
             resetCellProps();
             mpRowProps.clear();
         }
@@ -156,6 +155,7 @@ class TableManager : public virtual SvRefBase
 
         void resetTableProps()
         {
+            mpTableExceptionProps.clear();
             if (mTableProps.size() > 0)
                 mTableProps.top().clear();
         }
