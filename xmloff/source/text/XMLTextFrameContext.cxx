@@ -1432,6 +1432,57 @@ void XMLTextFrameContext::endFastElement(sal_Int32 )
     GetImport().GetTextImport()->StoreLastImportedFrameName(pImpl->GetOrigName());
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext::createFastChildContext(
+    sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList>& xAttrList )
+{
+    SvXMLImportContextRef xContext;
+    if( !m_xImplContext.is() )
+    {
+    }
+    else if(getSupportsMultipleContents() && nElement == XML_ELEMENT(DRAW, XML_IMAGE))
+    {
+    }
+    else if( m_bSupportsReplacement && !m_xReplImplContext.is() &&
+             nElement == XML_ELEMENT(DRAW, XML_IMAGE) )
+    {
+    }
+    else if( nullptr != dynamic_cast< const XMLTextFrameContext_Impl*>( m_xImplContext.get() ))
+    {
+    }
+    // #i68101#
+    else if( nElement == XML_ELEMENT(SVG, XML_TITLE) || nElement == XML_ELEMENT(SVG, XML_DESC ) ||
+             nElement == XML_ELEMENT(SVG_COMPAT, XML_TITLE) || nElement == XML_ELEMENT(SVG_COMPAT, XML_DESC ) )
+    {
+        if (getSupportsMultipleContents())
+        {   // tdf#103567 ensure props are set on surviving shape
+            // note: no more draw:image can be added once we get here
+            m_xImplContext = solveMultipleImages();
+        }
+        xContext = &dynamic_cast<SvXMLImportContext&>(*m_xImplContext->createFastChildContextFallback( nElement, xAttrList ));
+    }
+    else if (nElement == XML_ELEMENT(LO_EXT, XML_SIGNATURELINE))
+    {
+        if (getSupportsMultipleContents())
+        {   // tdf#103567 ensure props are set on surviving shape
+            // note: no more draw:image can be added once we get here
+            m_xImplContext = solveMultipleImages();
+        }
+        xContext = &dynamic_cast<SvXMLImportContext&>(*m_xImplContext->createFastChildContextFallback(nElement, xAttrList));
+    }
+    else if (nElement == XML_ELEMENT(LO_EXT, XML_QRCODE))
+    {
+        if (getSupportsMultipleContents())
+        {   // tdf#103567 ensure props are set on surviving shape
+            // note: no more draw:image can be added once we get here
+            m_xImplContext = solveMultipleImages();
+        }
+        xContext = &dynamic_cast<SvXMLImportContext&>(*m_xImplContext->createFastChildContextFallback(nElement, xAttrList));
+    }
+
+    return xContext.get();
+}
+
 SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
         sal_uInt16 p_nPrefix,
         const OUString& rLocalName,
@@ -1648,30 +1699,12 @@ SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
     else if( p_nPrefix == XML_NAMESPACE_SVG &&  // #i68101#
                 (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
     {
-        if (getSupportsMultipleContents())
-        {   // tdf#103567 ensure props are set on surviving shape
-            // note: no more draw:image can be added once we get here
-            m_xImplContext = solveMultipleImages();
-        }
-        xContext = m_xImplContext->CreateChildContext( p_nPrefix, rLocalName, xAttrList );
     }
     else if (p_nPrefix == XML_NAMESPACE_LO_EXT && (IsXMLToken(rLocalName, XML_SIGNATURELINE)))
     {
-        if (getSupportsMultipleContents())
-        {   // tdf#103567 ensure props are set on surviving shape
-            // note: no more draw:image can be added once we get here
-            m_xImplContext = solveMultipleImages();
-        }
-        xContext = m_xImplContext->CreateChildContext(p_nPrefix, rLocalName, xAttrList);
     }
     else if (p_nPrefix == XML_NAMESPACE_LO_EXT && (IsXMLToken(rLocalName, XML_QRCODE)))
     {
-        if (getSupportsMultipleContents())
-        {   // tdf#103567 ensure props are set on surviving shape
-            // note: no more draw:image can be added once we get here
-            m_xImplContext = solveMultipleImages();
-        }
-        xContext = m_xImplContext->CreateChildContext(p_nPrefix, rLocalName, xAttrList);
     }
     else
     {
