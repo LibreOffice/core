@@ -400,8 +400,7 @@ void ScCheckListMenuControl::setSubMenuFocused(const ScCheckListMenuControl* pSu
 void ScCheckListMenuControl::EndPopupMode()
 {
     vcl::Window::GetDockingManager()->EndPopupMode(mxFrame);
-    if (!mbDisposing)
-        mxFrame->EnableDocking(false);
+    mxFrame->EnableDocking(false);
 }
 
 void ScCheckListMenuControl::StartPopupMode(const tools::Rectangle& rRect, FloatWinPopupFlags eFlags)
@@ -466,7 +465,6 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
     , mbCanHaveSubMenu(bCanHaveSubMenu)
     , maOpenTimer(this)
     , maCloseTimer(this)
-    , mbDisposing(false)
 {
     /*
        tdf#136559 If we have no dates we don't need a tree
@@ -581,7 +579,6 @@ void ScCheckListMenuControl::GrabFocus()
 
 ScCheckListMenuControl::~ScCheckListMenuControl()
 {
-    mbDisposing = true;
     EndPopupMode();
     for (auto& rMenuItem : maMenuItems)
         rMenuItem.mxSubMenuWin.disposeAndClear();
