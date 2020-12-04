@@ -46,7 +46,6 @@ public:
 
 private:
     DECL_LINK(DelayAppearHandler, Timer*, void);
-    DECL_LINK(IdleDisappearHandler, Timer*, void);
     DECL_LINK(MousePressHdl, const MouseEvent&, bool);
     DECL_LINK(MouseMoveHdl, const MouseEvent&, bool);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
