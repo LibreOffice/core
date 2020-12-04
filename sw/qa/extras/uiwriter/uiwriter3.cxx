@@ -254,6 +254,31 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf61154)
     CPPUNIT_ASSERT_EQUAL(OUString("Text Inserted\t1"), pNext->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf100691)
+{
+    load(DATA_DIRECTORY, "tdf100691.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+
+    pWrtShell->GotoNextTOXBase();
+
+    const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
+    pWrtShell->UpdateTableOf(*pTOXBase);
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    SwTextNode* pTitleNode = pShell->GetCursor()->GetNode().GetTextNode();
+    SwNodeIndex aIdx(*pTitleNode);
+
+    // table of contents node shouldn't contain invisible text
+    // This was "Text Hidden\t1"
+    SwTextNode* pNext = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext(&aIdx));
+    CPPUNIT_ASSERT_EQUAL(OUString("Text\t1"), pNext->GetText());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134404)
 {
     load(DATA_DIRECTORY, "tdf134404.odt");
