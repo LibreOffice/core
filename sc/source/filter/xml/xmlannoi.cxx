@@ -126,9 +126,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLAnnotationContext
 
     if( pShapeContext )
     {
-        auto p = pShapeContext->createFastChildContext(nElement, xAttrList);
-        if (!p)
-            p = pShapeContext->createFastChildContextFallback(nElement, xAttrList);
+        auto p = pShapeContext->createFastChildContextFallback(nElement, xAttrList);
         if (p)
             return p;
     }
