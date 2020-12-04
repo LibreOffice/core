@@ -38,6 +38,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <sal/log.hxx>
 #include <tools/UnitConversion.hxx>
+#include <svx/swframetypes.hxx>
 
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -164,31 +165,6 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
     text::WritingMode eMode;
     if (xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_WRITINGMODE) >>= eMode)
         syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(sal_Int16(eMode)));
-
-    const SwFormatAnchor& rAnch = pShape->GetAnchor();
-    if (!((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE && rAnch.GetPageNum() != 0)
-          || ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA
-               || rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
-              && rAnch.GetContentAnchor())))
-        return;
-
-    SfxItemSet aTxFrmSet(pFormat->GetDoc()->GetAttrPool(), aFrameFormatSetRange);
-
-    if (rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR
-        || rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA)
-        aTxFrmSet.Put(rAnch);
-
-    SwFormatVertOrient aVOri(pFormat->GetVertOrient());
-    SwFormatHoriOrient aHOri(pFormat->GetHoriOrient());
-    aVOri.SetVertOrient(pShape->GetVertOrient().GetVertOrient());
-    aHOri.SetHoriOrient(pShape->GetHoriOrient().GetHoriOrient());
-    aVOri.SetRelationOrient(pShape->GetVertOrient().GetRelationOrient());
-    aHOri.SetRelationOrient(pShape->GetHoriOrient().GetRelationOrient());
-    aTxFrmSet.Put(aVOri);
-    aTxFrmSet.Put(aHOri);
-
-    if (aTxFrmSet.Count())
-        pFormat->SetFormatAttr(aTxFrmSet);
 
     // Check if the shape had text before and move it to the new textframe
     if (bCopyText && !sCopyableText.isEmpty())
@@ -949,16 +925,6 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
     SfxItemIter aIter(rSet);
     const SfxPoolItem* pItem = aIter.GetCurItem();
 
-    const RndStdIds aAnchId = rShape.GetAnchor().GetAnchorId();
-    if (aAnchId == RndStdIds::FLY_AT_PAGE && rShape.GetAnchor().GetPageNum() != 0)
-    {
-        aTextBoxSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, rShape.GetAnchor().GetPageNum()));
-    }
-    if ((aAnchId == RndStdIds::FLY_AT_PARA || aAnchId == RndStdIds::FLY_AT_CHAR)
-        && rShape.GetAnchor().GetContentAnchor())
-    {
-        aTextBoxSet.Put(rShape.GetAnchor());
-    }
     do
     {
         switch (pItem->Which())
@@ -995,6 +961,10 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
             break;
             case RES_HORI_ORIENT:
             {
+                // The new position can be with anchor changing so sync it!
+                const text::TextContentAnchorType aNewAnchorType
+                    = mapAnchorType(rShape.GetAnchor().GetAnchorId());
+                syncProperty(&rShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE, uno::Any(aNewAnchorType));
                 auto& rOrient = static_cast<const SwFormatHoriOrient&>(*pItem);
                 if (bInlineAnchored)
                     return;
@@ -1035,6 +1005,24 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                     aSize.SetWidth(aRect.getWidth());
                     aSize.SetHeight(aRect.getHeight());
                     aTextBoxSet.Put(aSize);
+                }
+            }
+            break;
+            case RES_ANCHOR:
+            {
+                auto& rAnchor = static_cast<const SwFormatAnchor&>(*pItem);
+                if (rAnchor == rShape.GetAnchor())
+                // the anchor have to be synced
+                {
+                    const text::TextContentAnchorType aNewAnchorType
+                        = mapAnchorType(rShape.GetAnchor().GetAnchorId());
+                    syncProperty(&rShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE,
+                                 uno::Any(aNewAnchorType));
+                }
+                else
+                {
+                    SAL_WARN("sw.core", "SwTextBoxHelper::syncFlyFrameAttr: The anchor of the "
+                                        "shape different from the textframe!");
                 }
             }
             break;
