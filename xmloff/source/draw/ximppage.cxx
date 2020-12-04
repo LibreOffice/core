@@ -261,16 +261,15 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLGenericPageContex
         if( mxAnnotationAccess.is() )
             return new DrawAnnotationContext( GetImport(), xAttrList, mxAnnotationAccess );
     }
+    else
+    {
+        // call GroupChildContext function at common ShapeImport
+        auto p = GetImport().GetShapeImport()->CreateGroupChildContext(GetImport(), nElement, xAttrList, mxShapes);
+        if (p)
+            return p;
+    }
+    XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
-}
-
-SvXMLImportContextRef SdXMLGenericPageContext::CreateChildContext( sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference< xml::sax::XAttributeList>& xAttrList )
-{
-    // call GroupChildContext function at common ShapeImport
-    return GetImport().GetShapeImport()->CreateGroupChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList, mxShapes);
 }
 
 void SdXMLGenericPageContext::endFastElement(sal_Int32 )
