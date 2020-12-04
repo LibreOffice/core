@@ -41,6 +41,35 @@ SdXMLGroupShapeContext::~SdXMLGroupShapeContext()
 {
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLGroupShapeContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+   // #i68101#
+    if( nElement == XML_ELEMENT(SVG, XML_TITLE) ||
+        nElement == XML_ELEMENT(SVG, XML_DESC ) ||
+        nElement == XML_ELEMENT(SVG_COMPAT, XML_TITLE) ||
+        nElement == XML_ELEMENT(SVG_COMPAT, XML_DESC ) )
+    {
+        // handled in CreateChildContext
+    }
+    else if( nElement == XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS) )
+    {
+        // handled in CreateChildContext
+    }
+    else if( nElement == XML_ELEMENT(DRAW, XML_GLUE_POINT) )
+    {
+        // handled in CreateChildContext
+    }
+    else
+    {
+        // call GroupChildContext function at common ShapeImport
+        return GetImport().GetShapeImport()->CreateGroupChildContext(
+            GetImport(), nElement, xAttrList, mxChildren);
+    }
+    return nullptr;
+}
+
 SvXMLImportContextRef SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
@@ -63,9 +92,7 @@ SvXMLImportContextRef SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPr
     }
     else
     {
-        // call GroupChildContext function at common ShapeImport
-        xContext = GetImport().GetShapeImport()->CreateGroupChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList, mxChildren);
+        // handled in createFastChildContext
     }
 
     return xContext;
