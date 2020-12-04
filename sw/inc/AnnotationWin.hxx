@@ -23,13 +23,14 @@
 #include <basegfx/range/b2drange.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
-#include <vcl/builder.hxx>
-#include <vcl/window.hxx>
+#include <vcl/InterimItemWindow.hxx>
+#include <vcl/customweld.hxx>
 
 #include "postithelper.hxx"
 #include "swrect.hxx"
 #include "SidebarWindowsTypes.hxx"
 
+class EditView;
 class PopupMenu;
 class OutlinerParaObject;
 class SwPostItMgr;
@@ -53,7 +54,7 @@ namespace sw::sidebarwindows {
 
 namespace sw::annotation {
 
-class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
+class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public InterimItemWindow
 {
     public:
         SwAnnotationWin( SwEditWin& rEditWin,
@@ -105,7 +106,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         Outliner* GetOutliner() { return mpOutliner.get();}
         bool HasScrollbar() const;
         bool IsScrollbarVisible() const;
-        ScrollBar* Scrollbar() { return mpVScrollbar; }
+        weld::ScrolledWindow* Scrollbar() { return mxVScrollbar.get(); }
         ::sw::sidebarwindows::AnchorOverlayObject* Anchor() { return mpAnchor.get();}
         ::sw::sidebarwindows::ShadowOverlayObject* Shadow() { return mpShadow.get();}
         ::sw::overlay::OverlayRanges* TextRange() { return mpTextRangeOverlay.get();}
@@ -128,7 +129,6 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         void            ShowAnchorOnly(const Point &aPoint);
         void            ShowNote();
         void            HideNote();
-        void            InvalidateControl();
 
         void            ResetAttributes();
 
@@ -154,7 +154,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         sal_Int32   GetMinimumSizeWithMeta() const;
         sal_Int32   GetMinimumSizeWithoutMeta() const;
         sal_Int32   GetMetaButtonAreaWidth() const;
-        sal_Int32   GetScrollbarWidth() const;
+        int         GetPrefScrollbarWidth() const;
         sal_Int32   GetNumFields() const;
 
         void    SetSpellChecking();
@@ -169,7 +169,6 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         SwPostItHelper::SwLayoutStatus GetLayoutStatus() const { return mLayoutStatus; }
         const Color& GetChangeColor() const { return mChangeColor; }
 
-        DECL_LINK( WindowEventListener, VclWindowEvent&, void );
         bool IsMouseOverSidebarWin() const { return mbMouseOver; }
 
         void SetLanguage(const SvxLanguageItem& rNewItem);
@@ -177,11 +176,8 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         void ChangeSidebarItem( SwSidebarItem const & rSidebarItem );
         virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-        virtual void    Draw(OutputDevice* pDev, const Point&, DrawFlags) override;
-        virtual void KeyInput(const KeyEvent& rKeyEvt) override;
-        virtual void MouseButtonDown(const MouseEvent& rMouseEvent) override;
-        virtual void MouseButtonUp(const MouseEvent& rMouseEvent) override;
-        virtual void MouseMove(const MouseEvent& rMouseEvent) override;
+        void DrawForPage(OutputDevice* pDev, const Point& rPos);
+
         void PaintTile(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
         /// Is there a matching sub-widget inside this sidebar widget for rPointLogic?
         bool IsHitWindow(const Point& rPointLogic);
@@ -209,23 +205,25 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         virtual FactoryFunction GetUITestFactory() const override;
 
     private:
-        VclPtr<MenuButton> CreateMenuButton();
+
         virtual void    LoseFocus() override;
-        virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
         virtual void    GetFocus() override;
 
         void        SetSizePixel( const Size& rNewSize ) override;
         SfxItemSet  DefaultItem();
 
         DECL_LINK(ModifyHdl, LinkParamNone*, void);
-        DECL_LINK(ScrollHdl, ScrollBar*, void);
+        DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
         DECL_LINK(DeleteHdl, void*, void);
+        DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
+        DECL_LINK(SelectHdl, const OString&, void);
+        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+        DECL_LINK(MouseMoveHdl, const MouseEvent&, bool);
 
         sal_uInt32 CountFollowing();
 
         SvxLanguageItem GetLanguage() const;
 
-        VclBuilder      maBuilder;
         SwPostItMgr&    mrMgr;
         SwView&         mrView;
 
@@ -234,12 +232,14 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         std::unique_ptr<OutlinerView>   mpOutlinerView;
         std::unique_ptr<Outliner>       mpOutliner;
 
-        VclPtr<sw::sidebarwindows::SidebarTextControl> mpSidebarTextControl;
-        VclPtr<ScrollBar>      mpVScrollbar;
-        VclPtr<FixedText>      mpMetadataAuthor;
-        VclPtr<FixedText>      mpMetadataDate;
-        VclPtr<FixedText>      mpMetadataResolved;
-        VclPtr<MenuButton>     mpMenuButton;
+        std::unique_ptr<weld::ScrolledWindow> mxVScrollbar;
+        std::unique_ptr<sw::sidebarwindows::SidebarTextControl> mxSidebarTextControl;
+        std::unique_ptr<weld::CustomWeld> mxSidebarTextControlWin;
+        vcl::Font maLabelFont;
+        std::unique_ptr<weld::Label> mxMetadataAuthor;
+        std::unique_ptr<weld::Label> mxMetadataDate;
+        std::unique_ptr<weld::Label> mxMetadataResolved;
+        std::unique_ptr<weld::MenuButton> mxMenuButton;
 
         std::unique_ptr<sw::sidebarwindows::AnchorOverlayObject> mpAnchor;
         std::unique_ptr<sw::sidebarwindows::ShadowOverlayObject> mpShadow;
@@ -272,7 +272,6 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
 
         SwFormatField*       mpFormatField;
         SwPostItField*       mpField;
-        VclPtr<PopupMenu>    mpButtonPopup;
 };
 
 } // end of namespace sw::annotation

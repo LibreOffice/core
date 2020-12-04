@@ -27,7 +27,6 @@
 #include <IDocumentUndoRedo.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include "SidebarTxtControl.hxx"
-#include "SidebarScrollBar.hxx"
 #include "AnchorOverlayObject.hxx"
 #include "ShadowOverlayObject.hxx"
 #include "OverlayRanges.hxx"
@@ -56,7 +55,6 @@
 #include <vcl/event.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/menubtn.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/uitest/logger.hxx>
@@ -69,12 +67,14 @@
 #include <doc.hxx>
 #include <swmodule.hxx>
 
+#include <SwRewriter.hxx>
 #include <txtannotationfld.hxx>
 #include <ndtxt.hxx>
 
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/syslocale.hxx>
 #include <memory>
 #include <comphelper/lok.hxx>
 
@@ -94,62 +94,6 @@ void collectUIInformation( const OUString& aevent , const OUString& aID )
     UITestLogger::getInstance().logEvent(aDescription);
 }
 
-/// Translate absolute <-> relative twips: LOK wants absolute coordinates as output and gives absolute coordinates as input.
-void lcl_translateTwips(vcl::Window const & rParent, vcl::Window& rChild, MouseEvent* pMouseEvent)
-{
-    // Set map mode, so that callback payloads will contain absolute coordinates instead of relative ones.
-    Point aOffset(rChild.GetOutOffXPixel() - rParent.GetOutOffXPixel(), rChild.GetOutOffYPixel() - rParent.GetOutOffYPixel());
-    if (!rChild.IsMapModeEnabled())
-    {
-        MapMode aMapMode(rChild.GetMapMode());
-        aMapMode.SetMapUnit(MapUnit::MapTwip);
-        aMapMode.SetScaleX(rParent.GetMapMode().GetScaleX());
-        aMapMode.SetScaleY(rParent.GetMapMode().GetScaleY());
-        rChild.SetMapMode(aMapMode);
-        rChild.EnableMapMode();
-    }
-    aOffset = rChild.PixelToLogic(aOffset);
-    MapMode aMapMode(rChild.GetMapMode());
-    aMapMode.SetOrigin(aOffset);
-    aMapMode.SetMapUnit(rParent.GetMapMode().GetMapUnit());
-    rChild.SetMapMode(aMapMode);
-    rChild.EnableMapMode(false);
-
-    if (pMouseEvent)
-    {
-        // Set event coordinates, so they contain relative coordinates instead of absolute ones.
-        Point aPos = pMouseEvent->GetPosPixel();
-        aPos.Move(-aOffset.getX(), -aOffset.getY());
-        MouseEvent aMouseEvent(aPos, pMouseEvent->GetClicks(), pMouseEvent->GetMode(), pMouseEvent->GetButtons(), pMouseEvent->GetModifier());
-        *pMouseEvent = aMouseEvent;
-    }
-}
-
-/// Decide which one from the children of rParent should get rMouseEvent.
-vcl::Window* lcl_getHitWindow(sw::annotation::SwAnnotationWin& rParent, const MouseEvent& rMouseEvent)
-{
-    vcl::Window* pRet = nullptr;
-
-    rParent.EditWin().Push(PushFlags::MAPMODE);
-    rParent.EditWin().EnableMapMode();
-    for (sal_Int16 i = rParent.GetChildCount() - 1; i >= 0; --i)
-    {
-        vcl::Window* pChild = rParent.GetChild(i);
-
-        Point aPosition(rParent.GetPosPixel());
-        aPosition.Move(pChild->GetPosPixel().getX(), pChild->GetPosPixel().getY());
-        Size aSize(rParent.GetSizePixel());
-        tools::Rectangle aRectangleLogic(rParent.EditWin().PixelToLogic(aPosition), rParent.EditWin().PixelToLogic(aSize));
-        if (aRectangleLogic.IsInside(rMouseEvent.GetPosPixel()))
-        {
-            pRet = pChild;
-            break;
-        }
-    }
-    rParent.EditWin().Pop();
-    return pRet;
-}
-
 }
 
 namespace sw::annotation {
@@ -160,80 +104,22 @@ namespace sw::annotation {
 #define POSTIT_META_FIELD_HEIGHT  sal_Int32(15)
 #define POSTIT_MINIMUMSIZE_WITHOUT_META     50
 
-
-void SwAnnotationWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
-{
-    Window::Paint(rRenderContext, rRect);
-
-    if (!mpMetadataAuthor->IsVisible())
-        return;
-
-    //draw left over space
-    if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
-    {
-        rRenderContext.SetFillColor(COL_BLACK);
-    }
-    else
-    {
-        rRenderContext.SetFillColor(mColorDark);
-    }
-
-    sal_uInt32 boxHeight = mpMetadataAuthor->GetSizePixel().Height() + mpMetadataDate->GetSizePixel().Height();
-    boxHeight += IsResolved() ? mpMetadataResolved->GetSizePixel().Height() : 0;
-
-    rRenderContext.SetLineColor();
-    tools::Rectangle aRectangle(Point(mpMetadataAuthor->GetPosPixel().X() + mpMetadataAuthor->GetSizePixel().Width(),
-                               mpMetadataAuthor->GetPosPixel().Y()),
-                         Size(GetMetaButtonAreaWidth(), boxHeight));
-
-    if (comphelper::LibreOfficeKit::isActive())
-        aRectangle = rRect;
-    else
-        aRectangle = PixelToLogic(aRectangle);
-    rRenderContext.DrawRect(aRectangle);
-}
-
 void SwAnnotationWin::PaintTile(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    Paint(rRenderContext, rRect);
+    bool bMenuButtonVisible = mxMenuButton->get_visible();
+    // No point in showing this button till click on it are not handled.
+    if (bMenuButtonVisible)
+        mxMenuButton->hide();
 
-    for (sal_uInt16 i = 0; i < GetChildCount(); ++i)
-    {
-        vcl::Window* pChild = GetChild(i);
+    // draw left over space
+    if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+        rRenderContext.SetFillColor(COL_BLACK);
+    else
+        rRenderContext.SetFillColor(mColorDark);
+    rRenderContext.SetLineColor();
+    rRenderContext.DrawRect(rRect);
 
-        // No point in showing this button till click on it are not handled.
-        if (pChild == mpMenuButton.get())
-            continue;
-
-        if (!pChild->IsVisible())
-            continue;
-
-        rRenderContext.Push(PushFlags::MAPMODE);
-        Point aOffset(PixelToLogic(pChild->GetPosPixel()));
-        MapMode aMapMode(rRenderContext.GetMapMode());
-        aMapMode.SetOrigin(aMapMode.GetOrigin() + aOffset);
-        rRenderContext.SetMapMode(aMapMode);
-
-        bool bPopChild = false;
-        if (pChild->GetMapMode().GetMapUnit() != rRenderContext.GetMapMode().GetMapUnit())
-        {
-            // This is needed for the scrollbar that has its map unit in pixels.
-            pChild->Push(PushFlags::MAPMODE);
-            bPopChild = true;
-            pChild->EnableMapMode();
-            aMapMode = pChild->GetMapMode();
-            aMapMode.SetMapUnit(rRenderContext.GetMapMode().GetMapUnit());
-            aMapMode.SetScaleX(rRenderContext.GetMapMode().GetScaleX());
-            aMapMode.SetScaleY(rRenderContext.GetMapMode().GetScaleY());
-            pChild->SetMapMode(aMapMode);
-        }
-
-        pChild->Paint(rRenderContext, rRect);
-
-        if (bPopChild)
-            pChild->Pop();
-        rRenderContext.Pop();
-    }
+    m_xContainer->draw(rRenderContext, rRect.TopLeft(), GetSizePixel());
 
     const drawinglayer::geometry::ViewInformation2D aViewInformation;
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aViewInformation));
@@ -250,6 +136,9 @@ void SwAnnotationWin::PaintTile(vcl::RenderContext& rRenderContext, const tools:
     rRenderContext.Push(PushFlags::NONE);
     pProcessor.reset();
     rRenderContext.Push(PushFlags::NONE);
+
+    if (bMenuButtonVisible)
+        mxMenuButton->show();
 }
 
 bool SwAnnotationWin::IsHitWindow(const Point& rPointLogic)
@@ -260,62 +149,66 @@ bool SwAnnotationWin::IsHitWindow(const Point& rPointLogic)
 
 void SwAnnotationWin::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark)
 {
-    mpSidebarTextControl->Push(PushFlags::MAPMODE);
-    MouseEvent aMouseEvent(rPosition);
-    lcl_translateTwips(EditWin(), *mpSidebarTextControl, &aMouseEvent);
-    Point aPosition(aMouseEvent.GetPosPixel());
-
-    EditView& rEditView = GetOutlinerView()->GetEditView();
-    rEditView.SetCursorLogicPosition(aPosition, bPoint, bClearMark);
-
-    mpSidebarTextControl->Pop();
+    mxSidebarTextControl->SetCursorLogicPosition(rPosition, bPoint, bClearMark);
 }
 
-void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, DrawFlags nInFlags)
+void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
 {
+    pDev->Push();
+
+    pDev->SetFillColor(mColorDark);
+    pDev->SetLineColor();
+
+    pDev->SetTextColor(mColorAnchor);
+    vcl::Font aFont = maLabelFont;
+    aFont.SetFontHeight(aFont.GetFontHeight() * 20);
+    pDev->SetFont(aFont);
+
     Size aSz = PixelToLogic(GetSizePixel());
+    pDev->DrawRect(tools::Rectangle(rPt, aSz));
 
-    if (mpMetadataAuthor->IsVisible() )
+    if (mxMetadataAuthor->get_visible())
     {
-        pDev->SetFillColor(mColorDark);
-        pDev->SetLineColor();
-        pDev->DrawRect( tools::Rectangle( rPt, aSz ) );
+        int x, y, width, height;
+        mxMetadataAuthor->get_extents_relative_to(*m_xContainer, x, y, width, height);
+        Point aPos(rPt + PixelToLogic(Point(x, y)));
+        Size aSize(PixelToLogic(Size(width, height)));
+
+        pDev->Push(PushFlags::CLIPREGION);
+        pDev->IntersectClipRegion(tools::Rectangle(aPos, aSize));
+        pDev->DrawText(aPos, mxMetadataAuthor->get_label());
+        pDev->Pop();
     }
 
-    if (mpMetadataAuthor->IsVisible())
+//    m_xContainer->draw(*pDev, rPt, GetSizePixel());
+
+    if (mxMetadataDate->get_visible())
     {
-        vcl::Font aOrigFont(mpMetadataAuthor->GetControlFont());
-        Point aPos(PixelToLogic(mpMetadataAuthor->GetPosPixel()));
-        aPos += rPt;
-        vcl::Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetLabelFont() );
-        mpMetadataAuthor->SetControlFont( aFont );
-        mpMetadataAuthor->Draw(pDev, aPos, nInFlags);
-        mpMetadataAuthor->SetControlFont( aOrigFont );
+        int x, y, width, height;
+        mxMetadataDate->get_extents_relative_to(*m_xContainer, x, y, width, height);
+        Point aPos(rPt + PixelToLogic(Point(x, y)));
+        Size aSize(PixelToLogic(Size(width, height)));
+
+        pDev->Push(PushFlags::CLIPREGION);
+        pDev->IntersectClipRegion(tools::Rectangle(aPos, aSize));
+        pDev->DrawText(aPos, mxMetadataDate->get_label());
+        pDev->Pop();
     }
 
-    if (mpMetadataDate->IsVisible())
+    if (mxMetadataResolved->get_visible())
     {
-        vcl::Font aOrigFont(mpMetadataDate->GetControlFont());
-        Point aPos(PixelToLogic(mpMetadataDate->GetPosPixel()));
-        aPos += rPt;
-        vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetLabelFont() );
-        mpMetadataDate->SetControlFont( aFont );
-        mpMetadataDate->Draw(pDev, aPos, nInFlags);
-        mpMetadataDate->SetControlFont( aOrigFont );
+        int x, y, width, height;
+        mxMetadataResolved->get_extents_relative_to(*m_xContainer, x, y, width, height);
+        Point aPos(rPt + PixelToLogic(Point(x, y)));
+        Size aSize(PixelToLogic(Size(width, height)));
+
+        pDev->Push(PushFlags::CLIPREGION);
+        pDev->IntersectClipRegion(tools::Rectangle(aPos, aSize));
+        pDev->DrawText(aPos, mxMetadataResolved->get_label());
+        pDev->Pop();
     }
 
-    if (mpMetadataResolved->IsVisible())
-    {
-        vcl::Font aOrigFont(mpMetadataResolved->GetControlFont());
-        Point aPos(PixelToLogic(mpMetadataResolved->GetPosPixel()));
-        aPos += rPt;
-        vcl::Font aFont( mpMetadataResolved->GetSettings().GetStyleSettings().GetLabelFont() );
-        mpMetadataResolved->SetControlFont( aFont );
-        mpMetadataResolved->Draw(pDev, aPos, nInFlags);
-        mpMetadataResolved->SetControlFont( aOrigFont );
-    }
-
-    mpSidebarTextControl->Draw(pDev, rPt, nInFlags);
+    mxSidebarTextControl->DrawForPage(pDev, rPt);
 
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
@@ -328,85 +221,17 @@ void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, DrawFlags nInFl
         pProcessor->process(mpTextRangeOverlay->getOverlayObjectPrimitive2DSequence());
     pProcessor.reset();
 
-    if (!mpVScrollbar->IsVisible())
-        return;
-
-    // if there is a scrollbar shown, draw "..." to indicate the comment isn't
-    // completely shown
-    vcl::Font aOrigFont(mpMetadataDate->GetControlFont());
-    Color aOrigBg( mpMetadataDate->GetControlBackground() );
-    OUString sOrigText(mpMetadataDate->GetText());
-
-    Point aPos(PixelToLogic(mpMenuButton->GetPosPixel()));
-    aPos += rPt;
-
-    vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetLabelFont() );
-    mpMetadataDate->SetControlFont( aFont );
-    mpMetadataDate->SetControlBackground( Color(0xFFFFFF) );
-    mpMetadataDate->SetText("...");
-    Size aOrigSize = mpMetadataDate->GetSizePixel();
-    mpMetadataDate->SetSizePixel(mpMenuButton->GetSizePixel());
-    mpMetadataDate->Draw(pDev, aPos, nInFlags);
-    mpMetadataDate->SetSizePixel(aOrigSize);
-
-    mpMetadataDate->SetText(sOrigText);
-    mpMetadataDate->SetControlFont( aOrigFont );
-    mpMetadataDate->SetControlBackground( aOrigBg );
-}
-
-void SwAnnotationWin::KeyInput(const KeyEvent& rKeyEvent)
-{
-    if (mpSidebarTextControl)
+    if (mxVScrollbar->get_vpolicy() != VclPolicyType::NEVER)
     {
-        mpSidebarTextControl->Push(PushFlags::MAPMODE);
-        lcl_translateTwips(EditWin(), *mpSidebarTextControl, nullptr);
-
-        mpSidebarTextControl->KeyInput(rKeyEvent);
-
-        mpSidebarTextControl->Pop();
+        // if there is a scrollbar shown, draw "..." to indicate the comment isn't
+        // completely shown
+        int x, y, width, height;
+        mxMenuButton->get_extents_relative_to(*m_xContainer, x, y, width, height);
+        Point aPos(rPt + PixelToLogic(Point(x, y)));
+        pDev->DrawText(aPos, "...");
     }
-}
 
-void SwAnnotationWin::MouseMove(const MouseEvent& rMouseEvent)
-{
-    if (vcl::Window* pHit = lcl_getHitWindow(*this, rMouseEvent))
-    {
-        pHit->Push(PushFlags::MAPMODE);
-        MouseEvent aMouseEvent(rMouseEvent);
-        lcl_translateTwips(EditWin(), *pHit, &aMouseEvent);
-
-        pHit->MouseMove(aMouseEvent);
-
-        pHit->Pop();
-    }
-}
-
-void SwAnnotationWin::MouseButtonDown(const MouseEvent& rMouseEvent)
-{
-    if (vcl::Window* pHit = lcl_getHitWindow(*this, rMouseEvent))
-    {
-        pHit->Push(PushFlags::MAPMODE);
-        MouseEvent aMouseEvent(rMouseEvent);
-        lcl_translateTwips(EditWin(), *pHit, &aMouseEvent);
-
-        pHit->MouseButtonDown(aMouseEvent);
-
-        pHit->Pop();
-    }
-}
-
-void SwAnnotationWin::MouseButtonUp(const MouseEvent& rMouseEvent)
-{
-    if (vcl::Window* pHit = lcl_getHitWindow(*this, rMouseEvent))
-    {
-        pHit->Push(PushFlags::MAPMODE);
-        MouseEvent aMouseEvent(rMouseEvent);
-        lcl_translateTwips(EditWin(), *pHit, &aMouseEvent);
-
-        pHit->MouseButtonUp(aMouseEvent);
-
-        pHit->Pop();
-    }
+    pDev->Pop();
 }
 
 void SwAnnotationWin::SetPosSizePixelRect(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
@@ -458,63 +283,36 @@ SfxItemSet SwAnnotationWin::DefaultItem()
 
 void SwAnnotationWin::InitControls()
 {
-    AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
-
-    // actual window which holds the user text
-    mpSidebarTextControl = VclPtr<SidebarTextControl>::Create( *this,
-                                                 WB_NODIALOGCONTROL,
-                                                 mrView, mrMgr );
-    mpSidebarTextControl->SetPointer(PointerStyle::Text);
-
     // window controls for author and date
-    mpMetadataAuthor = VclPtr<FixedText>::Create(this);
-    mpMetadataAuthor->SetAccessibleName( SwResId( STR_ACCESS_ANNOTATION_AUTHOR_NAME ) );
-    mpMetadataAuthor->EnableRTL(AllSettings::GetLayoutRTL());
-    mpMetadataAuthor->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
-    // we should leave this setting alone, but for this we need a better layout algo
-    // with variable meta size height
-    {
-        AllSettings aSettings = mpMetadataAuthor->GetSettings();
-        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        vcl::Font aFont = aStyleSettings.GetLabelFont();
-        aFont.SetFontHeight(8);
-        aStyleSettings.SetLabelFont(aFont);
-        aSettings.SetStyleSettings(aStyleSettings);
-        mpMetadataAuthor->SetSettings(aSettings);
-    }
+    mxMetadataAuthor = m_xBuilder->weld_label("author");
+    mxMetadataAuthor->set_accessible_name( SwResId( STR_ACCESS_ANNOTATION_AUTHOR_NAME ) );
+    mxMetadataAuthor->set_direction(AllSettings::GetLayoutRTL());
 
-    mpMetadataDate = VclPtr<FixedText>::Create(this);
-    mpMetadataDate->SetAccessibleName( SwResId( STR_ACCESS_ANNOTATION_DATE_NAME ) );
-    mpMetadataDate->EnableRTL(AllSettings::GetLayoutRTL());
-    mpMetadataDate->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
-    // we should leave this setting alone, but for this we need a better layout algo
-    // with variable meta size height
-    {
-        AllSettings aSettings = mpMetadataDate->GetSettings();
-        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        vcl::Font aFont = aStyleSettings.GetLabelFont();
-        aFont.SetFontHeight(8);
-        aStyleSettings.SetLabelFont(aFont);
-        aSettings.SetStyleSettings(aStyleSettings);
-        mpMetadataDate->SetSettings(aSettings);
-    }
+    maLabelFont = Application::GetSettings().GetStyleSettings().GetLabelFont();
+    maLabelFont.SetFontHeight(8);
 
-    mpMetadataResolved = VclPtr<FixedText>::Create(this);
-    mpMetadataResolved->SetAccessibleName( SwResId( STR_ACCESS_ANNOTATION_RESOLVED_NAME ) );
-    mpMetadataResolved->EnableRTL(AllSettings::GetLayoutRTL());
-    mpMetadataResolved->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
     // we should leave this setting alone, but for this we need a better layout algo
     // with variable meta size height
-    {
-        AllSettings aSettings = mpMetadataResolved->GetSettings();
-        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        vcl::Font aFont = aStyleSettings.GetLabelFont();
-        aFont.SetFontHeight(8);
-        aStyleSettings.SetLabelFont(aFont);
-        aSettings.SetStyleSettings(aStyleSettings);
-        mpMetadataResolved->SetSettings(aSettings);
-        mpMetadataResolved->SetText( SwResId( STR_ACCESS_ANNOTATION_RESOLVED_NAME ) );
-    }
+    mxMetadataAuthor->set_font(maLabelFont);
+
+    mxMetadataDate = m_xBuilder->weld_label("date");
+    mxMetadataDate->set_accessible_name( SwResId( STR_ACCESS_ANNOTATION_DATE_NAME ) );
+    mxMetadataDate->set_direction(AllSettings::GetLayoutRTL());
+    mxMetadataDate->connect_mouse_move(LINK(this, SwAnnotationWin, MouseMoveHdl));
+
+    // we should leave this setting alone, but for this we need a better layout algo
+    // with variable meta size height
+    mxMetadataDate->set_font(maLabelFont);
+
+    mxMetadataResolved = m_xBuilder->weld_label("resolved");
+    mxMetadataResolved->set_accessible_name( SwResId( STR_ACCESS_ANNOTATION_RESOLVED_NAME ) );
+    mxMetadataResolved->set_direction(AllSettings::GetLayoutRTL());
+    mxMetadataResolved->connect_mouse_move(LINK(this, SwAnnotationWin, MouseMoveHdl));
+
+    // we should leave this setting alone, but for this we need a better layout algo
+    // with variable meta size height
+    mxMetadataResolved->set_font(maLabelFont);
+    mxMetadataResolved->set_label(SwResId(STR_ACCESS_ANNOTATION_RESOLVED_NAME));
 
     SwDocShell* aShell = mrView.GetDocShell();
     mpOutliner.reset(new Outliner(&aShell->GetPool(),OutlinerMode::TextObject));
@@ -522,21 +320,28 @@ void SwAnnotationWin::InitControls()
     mpOutliner->SetUpdateMode( true );
     Rescale();
 
-    mpSidebarTextControl->EnableRTL( false );
-    mpOutlinerView.reset(new OutlinerView ( mpOutliner.get(), mpSidebarTextControl ));
+    mpOutlinerView.reset(new OutlinerView(mpOutliner.get(), nullptr));
+    mpOutliner->InsertView(mpOutlinerView.get());
+
+    //create Scrollbars
+    mxVScrollbar = m_xBuilder->weld_scrolled_window("scrolledwindow", true);
+
+    // actual window which holds the user text
+    mxSidebarTextControl.reset(new SidebarTextControl(*this, mrView, mrMgr));
+    mxSidebarTextControlWin.reset(new weld::CustomWeld(*m_xBuilder, "editview", *mxSidebarTextControl));
+    mxSidebarTextControl->SetPointer(PointerStyle::Text);
+
     mpOutlinerView->SetBackgroundColor(COL_TRANSPARENT);
-    mpOutliner->InsertView(mpOutlinerView.get() );
     mpOutlinerView->SetOutputArea( PixelToLogic( tools::Rectangle(0,0,1,1) ) );
 
     mpOutlinerView->SetAttribs(DefaultItem());
 
-    //create Scrollbars
-    mpVScrollbar = VclPtr<SidebarScrollBar>::Create(*this, WB_3DLOOK |WB_VSCROLL|WB_DRAG, mrView);
-    mpVScrollbar->EnableNativeWidget(false);
-    mpVScrollbar->EnableRTL( false );
-    mpVScrollbar->SetScrollHdl(LINK(this, SwAnnotationWin, ScrollHdl));
-    mpVScrollbar->EnableDrag();
-    mpVScrollbar->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
+    mxVScrollbar->set_direction(false);
+    mxVScrollbar->connect_vadjustment_changed(LINK(this, SwAnnotationWin, ScrollHdl));
+    mxVScrollbar->connect_mouse_move(LINK(this, SwAnnotationWin, MouseMoveHdl));
+
+    mxMenuButton = m_xBuilder->weld_menu_button("menubutton");
+    mxMenuButton->set_size_request(METABUTTON_WIDTH, METABUTTON_HEIGHT);
 
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
     EEControlBits nCntrl = mpOutliner->GetControlWord();
@@ -559,18 +364,32 @@ void SwAnnotationWin::InitControls()
 
     CheckMetaText();
 
-    mpMenuButton = CreateMenuButton();
+    // expand %1 "Author"
+    OUString aText = mxMenuButton->get_item_label("deleteby");
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UndoArg1, GetAuthor());
+    aText = aRewriter.Apply(aText);
+    mxMenuButton->set_item_label("deleteby", aText);
+
+    mxMenuButton->set_accessible_name(SwResId(STR_ACCESS_ANNOTATION_BUTTON_NAME));
+    mxMenuButton->set_accessible_description(SwResId(STR_ACCESS_ANNOTATION_BUTTON_DESC));
+    mxMenuButton->set_tooltip_text(SwResId(STR_ACCESS_ANNOTATION_BUTTON_DESC));
+
+    mxMenuButton->connect_toggled(LINK(this, SwAnnotationWin, ToggleHdl));
+    mxMenuButton->connect_selected(LINK(this, SwAnnotationWin, SelectHdl));
+    mxMenuButton->connect_key_press(LINK(this, SwAnnotationWin, KeyInputHdl));
+    mxMenuButton->connect_mouse_move(LINK(this, SwAnnotationWin, MouseMoveHdl));
 
     SetLanguage(GetLanguage());
     GetOutlinerView()->StartSpeller();
     SetPostItText();
     mpOutliner->CompleteOnlineSpelling();
 
-    mpSidebarTextControl->Show();
-    mpMetadataAuthor->Show();
-    mpMetadataDate->Show();
-    if(IsResolved()) { mpMetadataResolved->Show(); }
-    mpVScrollbar->Show();
+    mxSidebarTextControl->Show();
+    mxMetadataAuthor->show();
+    mxMetadataDate->show();
+    mxMetadataResolved->set_visible(IsResolved());
+    mxVScrollbar->set_vpolicy(VclPolicyType::ALWAYS);
 }
 
 void SwAnnotationWin::CheckMetaText()
@@ -586,9 +405,9 @@ void SwAnnotationWin::CheckMetaText()
     {
         sMeta = OUString::Concat(sMeta.subView(0, 20)) + "...";
     }
-    if ( mpMetadataAuthor->GetText() != sMeta )
+    if ( mxMetadataAuthor->get_label() != sMeta )
     {
-        mpMetadataAuthor->SetText(sMeta);
+        mxMetadataAuthor->set_label(sMeta);
     }
 
     Date aDate = GetDate();
@@ -604,10 +423,15 @@ void SwAnnotationWin::CheckMetaText()
     {
         sMeta += " " + rLocalData.getTime( GetTime(),false );
     }
-    if ( mpMetadataDate->GetText() != sMeta )
+    if ( mxMetadataDate->get_label() != sMeta )
     {
-        mpMetadataDate->SetText(sMeta);
+        mxMetadataDate->set_label(sMeta);
     }
+
+    std::size_t aIndex = SW_MOD()->InsertRedlineAuthor(GetAuthor());
+    SetColor( SwPostItMgr::GetColorDark(aIndex),
+              SwPostItMgr::GetColorLight(aIndex),
+              SwPostItMgr::GetColorAnchor(aIndex));
 }
 
 void SwAnnotationWin::Rescale()
@@ -624,29 +448,18 @@ void SwAnnotationWin::Rescale()
     aMode.SetOrigin( Point() );
     mpOutliner->SetRefMapMode( aMode );
     SetMapMode( aMode );
-    mpSidebarTextControl->SetMapMode( aMode );
     const Fraction& rFraction = mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY();
-    if ( mpMetadataAuthor )
-    {
-        vcl::Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetLabelFont() );
-        sal_Int32 nHeight = tools::Long(aFont.GetFontHeight() * rFraction);
-        aFont.SetFontHeight( nHeight );
-        mpMetadataAuthor->SetControlFont( aFont );
-    }
-    if ( mpMetadataDate )
-    {
-        vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetLabelFont() );
-        sal_Int32 nHeight = tools::Long(aFont.GetFontHeight() * rFraction);
-        aFont.SetFontHeight( nHeight );
-        mpMetadataDate->SetControlFont( aFont );
-    }
-    if ( mpMetadataResolved )
-    {
-        vcl::Font aFont( mpMetadataResolved->GetSettings().GetStyleSettings().GetLabelFont() );
-        sal_Int32 nHeight = tools::Long(aFont.GetFontHeight() * rFraction);
-        aFont.SetFontHeight( nHeight );
-        mpMetadataResolved->SetControlFont( aFont );
-    }
+
+    vcl::Font aFont = maLabelFont;
+    sal_Int32 nHeight = tools::Long(aFont.GetFontHeight() * rFraction);
+    aFont.SetFontHeight( nHeight );
+
+    if (mxMetadataAuthor)
+        mxMetadataAuthor->set_font(aFont);
+    if (mxMetadataDate)
+        mxMetadataDate->set_font(aFont);
+    if (mxMetadataResolved)
+        mxMetadataResolved->set_font(aFont);
 }
 
 void SwAnnotationWin::SetPosAndSize()
@@ -658,23 +471,7 @@ void SwAnnotationWin::SetPosAndSize()
         bChange = true;
         SetSizePixel(mPosSize.GetSize());
 
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            // Position is not yet set at VCL level, but the map mode should
-            // contain the right origin to emit the correct cursor position.
-            mpSidebarTextControl->Push(PushFlags::MAPMODE);
-            Point aOffset(mPosSize.Left(), mPosSize.Top());
-            aOffset = PixelToLogic(aOffset);
-            MapMode aMapMode(mpSidebarTextControl->GetMapMode());
-            aMapMode.SetOrigin(aOffset);
-            mpSidebarTextControl->SetMapMode(aMapMode);
-            mpSidebarTextControl->EnableMapMode(false);
-        }
-
         DoResize();
-
-        if (comphelper::LibreOfficeKit::isActive())
-            mpSidebarTextControl->Pop();
     }
 
     if (GetPosPixel().X() != mPosSize.Left() || (std::abs(GetPosPixel().Y() - mPosSize.Top()) > 5) )
@@ -890,37 +687,19 @@ void SwAnnotationWin::DoResize()
     tools::ULong aWidth    =  GetSizePixel().Width();
 
     aHeight -= GetMetaHeight();
-    mpMetadataAuthor->Show();
-    if(IsResolved()) { mpMetadataResolved->Show(); }
-    mpMetadataDate->Show();
-    unsigned int numFields = GetNumFields();
+    mxMetadataAuthor->show();
+    if(IsResolved()) { mxMetadataResolved->show(); }
+    mxMetadataDate->show();
+
     if (aTextHeight > aHeight)
-    {   // we need vertical scrollbars and have to reduce the width
-        aWidth -= GetScrollbarWidth();
-        mpVScrollbar->Show();
+    {
+        // we need vertical scrollbars and have to reduce the width
+        aWidth -= mxVScrollbar->get_vscroll_width();
+        mxVScrollbar->set_vpolicy(VclPolicyType::ALWAYS);
     }
     else
     {
-        mpVScrollbar->Hide();
-    }
-
-    {
-        const Size aSizeOfMetadataControls( GetSizePixel().Width() - GetMetaButtonAreaWidth(),
-                                            GetMetaHeight()/numFields );
-        mpMetadataAuthor->setPosSizePixel( 0,
-                                           aHeight,
-                                           aSizeOfMetadataControls.Width(),
-                                           aSizeOfMetadataControls.Height() );
-        mpMetadataDate->setPosSizePixel( 0,
-                                         aHeight + aSizeOfMetadataControls.Height(),
-                                         aSizeOfMetadataControls.Width(),
-                                         aSizeOfMetadataControls.Height() );
-        if(IsResolved()) {
-            mpMetadataResolved->setPosSizePixel( 0,
-                                                 aHeight + aSizeOfMetadataControls.Height()*2,
-                                                 aSizeOfMetadataControls.Width(),
-                                                 aSizeOfMetadataControls.Height() );
-        }
+        mxVScrollbar->set_vpolicy(VclPolicyType::NEVER);
     }
 
     mpOutliner->SetPaperSize( PixelToLogic( Size(aWidth,aHeight) ) ) ;
@@ -930,12 +709,13 @@ void SwAnnotationWin::DoResize()
         mpOutlinerView->RegisterViewShell(&mrView);
     }
 
-    if (!mpVScrollbar->IsVisible())
+    if (mxVScrollbar->get_vpolicy() == VclPolicyType::NEVER)
     {   // if we do not have a scrollbar anymore, we want to see the complete text
         mpOutlinerView->SetVisArea( PixelToLogic( tools::Rectangle(0,0,aWidth,aHeight) ) );
     }
     tools::Rectangle aOutputArea = PixelToLogic(tools::Rectangle(0, 0, aWidth, aHeight));
     mpOutlinerView->SetOutputArea(aOutputArea);
+    mpOutlinerView->ShowCursor(true, true);
 
     // Don't leave an empty area at the bottom if we can move the text down.
     tools::Long nMaxVisAreaTop = mpOutliner->GetTextHeight() - aOutputArea.GetHeight();
@@ -944,38 +724,29 @@ void SwAnnotationWin::DoResize()
         GetOutlinerView()->Scroll(0, mpOutlinerView->GetVisArea().Top() - nMaxVisAreaTop);
     }
 
-    if (!AllSettings::GetLayoutRTL())
-    {
-        mpSidebarTextControl->setPosSizePixel(0, 0, aWidth, aHeight);
-        mpVScrollbar->setPosSizePixel( aWidth, 0, GetScrollbarWidth(), aHeight);
-    }
-    else
-    {
-        mpSidebarTextControl->setPosSizePixel( ( aTextHeight > aHeight ? GetScrollbarWidth() : 0 ), 0,
-                                      aWidth, aHeight);
-        mpVScrollbar->setPosSizePixel( 0, 0, GetScrollbarWidth(), aHeight);
-    }
+    int nUpper = mpOutliner->GetTextHeight();
+    int nCurrentDocPos = mpOutlinerView->GetVisArea().Top();
+    int nStepIncrement = mpOutliner->GetTextHeight() / 10;
+    int nPageIncrement = PixelToLogic(Size(0,aHeight)).Height() * 8 / 10;
+    int nPageSize = PixelToLogic(Size(0,aHeight)).Height();
 
-    mpVScrollbar->SetVisibleSize( PixelToLogic(Size(0,aHeight)).Height() );
-    mpVScrollbar->SetPageSize( PixelToLogic(Size(0,aHeight)).Height() * 8 / 10 );
-    mpVScrollbar->SetLineSize( mpOutliner->GetTextHeight() / 10 );
-    SetScrollbar();
-    mpVScrollbar->SetRange( Range(0, mpOutliner->GetTextHeight()));
+    /* limit the page size to below nUpper because gtk's gtk_scrolled_window_start_deceleration has
+       effectively...
 
-    //calculate rects for meta- button
-    const Fraction& fx( GetMapMode().GetScaleX() );
-    const Fraction& fy( GetMapMode().GetScaleY() );
+       lower = gtk_adjustment_get_lower
+       upper = gtk_adjustment_get_upper - gtk_adjustment_get_page_size
 
-    const Point aPos( mpMetadataAuthor->GetPosPixel());
-    mpMenuButton->setPosSizePixel( tools::Long(aPos.X()+GetSizePixel().Width()-(METABUTTON_WIDTH+10)*fx),
-                                   tools::Long(aPos.Y()+5*fy),
-                                   tools::Long(METABUTTON_WIDTH*fx),
-                                   tools::Long(METABUTTON_HEIGHT*fy) );
+       and requires that upper > lower or the deceleration animation never ends
+    */
+    nPageSize = std::min(nPageSize, nUpper);
+
+    mxVScrollbar->vadjustment_configure(nCurrentDocPos, 0, nUpper,
+                                        nStepIncrement, nPageIncrement, nPageSize);
 }
 
 void SwAnnotationWin::SetSizePixel( const Size& rNewSize )
 {
-    Window::SetSizePixel(rNewSize);
+    InterimItemWindow::SetSizePixel(rNewSize);
 
     if (mpShadow)
     {
@@ -987,7 +758,7 @@ void SwAnnotationWin::SetSizePixel( const Size& rNewSize )
 
 void SwAnnotationWin::SetScrollbar()
 {
-    mpVScrollbar->SetThumbPos(mpOutlinerView->GetVisArea().Top());
+    mxVScrollbar->vadjustment_set_value(mpOutlinerView->GetVisArea().Top());
 }
 
 void SwAnnotationWin::ResizeIfNecessary(tools::Long aOldHeight, tools::Long aNewHeight)
@@ -1037,41 +808,19 @@ void SwAnnotationWin::SetColor(Color aColorDark,Color aColorLight, Color aColorA
     if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         return;
 
-    {
-        mpMetadataAuthor->SetControlBackground(mColorDark);
-        AllSettings aSettings = mpMetadataAuthor->GetSettings();
-        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        aStyleSettings.SetLabelTextColor(aColorAnchor);
-        aSettings.SetStyleSettings(aStyleSettings);
-        mpMetadataAuthor->SetSettings(aSettings);
-    }
+    m_xContainer->set_background(mColorDark);
+    mxMenuButton->set_background(mColorDark);
 
-    {
-        mpMetadataDate->SetControlBackground(mColorDark);
-        AllSettings aSettings = mpMetadataDate->GetSettings();
-        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        aStyleSettings.SetLabelTextColor(aColorAnchor);
-        aSettings.SetStyleSettings(aStyleSettings);
-        mpMetadataDate->SetSettings(aSettings);
-    }
+    mxMetadataAuthor->set_font_color(aColorAnchor);
 
-    {
-        mpMetadataResolved->SetControlBackground(mColorDark);
-        AllSettings aSettings = mpMetadataResolved->GetSettings();
-        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        aStyleSettings.SetLabelTextColor(aColorAnchor);
-        aSettings.SetStyleSettings(aStyleSettings);
-        mpMetadataResolved->SetSettings(aSettings);
-    }
+    mxMetadataDate->set_font_color(aColorAnchor);
 
-    AllSettings aSettings2 = mpVScrollbar->GetSettings();
-    StyleSettings aStyleSettings2 = aSettings2.GetStyleSettings();
-    aStyleSettings2.SetButtonTextColor(Color(0,0,0));
-    aStyleSettings2.SetCheckedColor(mColorLight); // background
-    aStyleSettings2.SetShadowColor(mColorAnchor);
-    aStyleSettings2.SetFaceColor(mColorDark);
-    aSettings2.SetStyleSettings(aStyleSettings2);
-    mpVScrollbar->SetSettings(aSettings2);
+    mxMetadataResolved->set_font_color(aColorAnchor);
+
+    mxVScrollbar->customize_scrollbars(mColorLight,
+                                       mColorAnchor,
+                                       mColorDark,
+                                       GetPrefScrollbarWidth());
 }
 
 void SwAnnotationWin::SetSidebarPosition(sw::sidebarwindows::SidebarPosition eSidebarPosition)
@@ -1145,8 +894,8 @@ void SwAnnotationWin::SetLanguage(const SvxLanguageItem& rNewItem)
 
 void SwAnnotationWin::GetFocus()
 {
-    if (mpSidebarTextControl)
-        mpSidebarTextControl->GrabFocus();
+    if (mxSidebarTextControl)
+        mxSidebarTextControl->GrabFocus();
 }
 
 void SwAnnotationWin::LoseFocus()
@@ -1165,8 +914,6 @@ void SwAnnotationWin::ShowNote()
     if (mpTextRangeOverlay && !mpTextRangeOverlay->isVisible())
         mpTextRangeOverlay->setVisible(true);
 
-    // Invalidate.
-    InvalidateControl();
     collectUIInformation("SHOW",get_id());
 }
 
@@ -1186,15 +933,6 @@ void SwAnnotationWin::HideNote()
     if (mpTextRangeOverlay && mpTextRangeOverlay->isVisible())
         mpTextRangeOverlay->setVisible(false);
     collectUIInformation("HIDE",get_id());
-}
-
-void SwAnnotationWin::InvalidateControl()
-{
-    // Invalidate.
-    mpSidebarTextControl->Push(PushFlags::MAPMODE);
-    lcl_translateTwips(EditWin(), *mpSidebarTextControl, nullptr);
-    mpSidebarTextControl->Invalidate();
-    mpSidebarTextControl->Pop();
 }
 
 void SwAnnotationWin::ActivatePostIt()
@@ -1353,45 +1091,27 @@ void SwAnnotationWin::SwitchToPostIt(sal_uInt16 aDirection)
         pPostIt->GrabFocus();
 }
 
-IMPL_LINK( SwAnnotationWin, WindowEventListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK(SwAnnotationWin, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
 {
-    if ( rEvent.GetId() == VclEventId::WindowMouseMove )
+    if (rMEvt.IsEnterWindow())
     {
-        MouseEvent* pMouseEvt = static_cast<MouseEvent*>(rEvent.GetData());
-        if ( pMouseEvt->IsEnterWindow() )
+        mbMouseOver = true;
+        if ( !HasFocus() )
         {
-            mbMouseOver = true;
-            if ( !HasFocus() )
-            {
-                SetViewState(ViewState::VIEW);
-                Invalidate();
-            }
-        }
-        else if ( pMouseEvt->IsLeaveWindow())
-        {
-            mbMouseOver = false;
-            if ( !HasFocus() )
-            {
-                SetViewState(ViewState::NORMAL);
-                Invalidate();
-            }
+            SetViewState(ViewState::VIEW);
+            Invalidate();
         }
     }
-    else if ( rEvent.GetId() == VclEventId::WindowActivate &&
-              rEvent.GetWindow() == mpSidebarTextControl )
+    else if (rMEvt.IsLeaveWindow())
     {
-        SetActiveSidebarWin();
-        /* We want this SwAnnotationWin to become visible on activation,
-           but if we are activating because the mouse is pressed in the
-           annotation and SidebarTextControl::MouseButtonDown is calling
-           'GrabFocus' then leave the MakeVisible to
-           SidebarTextControl::MouseButtonUp instead. That way a mouse down
-           doesn't scroll the writer window while the mouse is pressed, and so
-           doesn't select random text as the editview is scrolled under the
-           mouse */
-        if (!mpSidebarTextControl->MouseDownGainingFocus())
-            mrMgr.MakeVisible( this );
+        mbMouseOver = false;
+        if ( !HasFocus() )
+        {
+            SetViewState(ViewState::NORMAL);
+            Invalidate();
+        }
     }
+    return false;
 }
 
 bool SwAnnotationWin::SetActiveSidebarWin()
@@ -1415,9 +1135,9 @@ void SwAnnotationWin::UnsetActiveSidebarWin()
     mrView.GetWrtShell().LockView( bLockView );
 }
 
-IMPL_LINK(SwAnnotationWin, ScrollHdl, ScrollBar*, pScroll, void)
+IMPL_LINK(SwAnnotationWin, ScrollHdl, weld::ScrolledWindow&, rScrolledWindow, void)
 {
-    tools::Long nDiff = GetOutlinerView()->GetEditView().GetVisArea().Top() - pScroll->GetThumbPos();
+    tools::Long nDiff = GetOutlinerView()->GetEditView().GetVisArea().Top() - rScrolledWindow.vadjustment_get_value();
     GetOutlinerView()->Scroll( 0, nDiff );
 }
 
@@ -1439,7 +1159,7 @@ void SwAnnotationWin::ResetAttributes()
     mpOutlinerView->SetAttribs(DefaultItem());
 }
 
-sal_Int32 SwAnnotationWin::GetScrollbarWidth() const
+int SwAnnotationWin::GetPrefScrollbarWidth() const
 {
     return mrView.GetWrtShell().GetViewOptions()->GetZoom() / 10;
 }
@@ -1608,12 +1328,12 @@ void SwAnnotationWin::SetChangeTracking( const SwPostItHelper::SwLayoutStatus aL
 
 bool SwAnnotationWin::HasScrollbar() const
 {
-    return mpVScrollbar != nullptr;
+    return static_cast<bool>(mxVScrollbar);
 }
 
 bool SwAnnotationWin::IsScrollbarVisible() const
 {
-    return HasScrollbar() && mpVScrollbar->IsVisible();
+    return HasScrollbar() && mxVScrollbar->get_vpolicy() == VclPolicyType::ALWAYS;
 }
 
 void SwAnnotationWin::ChangeSidebarItem( SwSidebarItem const & rSidebarItem )
@@ -1627,14 +1347,8 @@ void SwAnnotationWin::ChangeSidebarItem( SwSidebarItem const & rSidebarItem )
     mrSidebarItem = rSidebarItem;
     mpAnchorFrame = mrSidebarItem.maLayoutInfo.mpAnchorFrame;
 
-    if ( GetWindowPeer() )
-    {
-        SidebarWinAccessible* pAcc =
-                        static_cast<SidebarWinAccessible*>( GetWindowPeer() );
-        OSL_ENSURE( dynamic_cast<SidebarWinAccessible*>( GetWindowPeer() ),
-                "<SwAnnotationWin::ChangeSidebarItem(..)> - unexpected type of window peer -> crash possible!" );
+    if (SidebarWinAccessible* pAcc = dynamic_cast<SidebarWinAccessible*>(GetWindowPeer()))
         pAcc->ChangeSidebarItem( mrSidebarItem );
-    }
 
     if ( bAnchorChanged )
     {
