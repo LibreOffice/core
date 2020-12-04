@@ -57,6 +57,7 @@
 #include <iconview.hxx>
 #include <svdata.hxx>
 #include <bitmaps.hlst>
+#include <managedmenubutton.hxx>
 #include <messagedialog.hxx>
 #include <OptionalBox.hxx>
 #include <window.h>
@@ -1957,6 +1958,16 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     {
         // tdf#135495 fallback sfxlo-OptionalBox to VclOptionalBox as a stopgap
         xWindow = VclPtr<OptionalBox>::Create(pParent);
+    }
+    else if (name == "svtlo-ManagedMenuButton")
+    {
+        // like tdf#135495 keep the name svtlo-ManagedMenuButton even though its a misnomer
+        // and is not dlsymed from the svt library
+        xWindow = VclPtr<ManagedMenuButton>::Create(pParent, WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_FLATBUTTON);
+        OUString sMenu = BuilderUtils::extractCustomProperty(rMap);
+        if (!sMenu.isEmpty())
+            m_pParserState->m_aButtonMenuMaps.emplace_back(id, sMenu);
+        setupFromActionName(static_cast<Button*>(xWindow.get()), rMap, m_xFrame);
     }
     else if (name == "GtkIconView")
     {

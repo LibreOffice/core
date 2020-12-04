@@ -11421,7 +11421,6 @@ svtools/source/control/ctrlbox.cxx
 svtools/source/control/ctrltool.cxx
 svtools/source/control/indexentryres.cxx
 svtools/source/control/inettbc.cxx
-svtools/source/control/managedmenubutton.cxx
 svtools/source/control/ruler.cxx
 svtools/source/control/scriptedtext.cxx
 svtools/source/control/tabbar.cxx
@@ -14995,6 +14994,7 @@ vcl/source/control/imp_listbox.cxx
 vcl/source/control/ivctrl.cxx
 vcl/source/control/listbox.cxx
 vcl/source/control/longcurr.cxx
+vcl/source/control/managedmenubutton.cxx
 vcl/source/control/menubtn.cxx
 vcl/source/control/notebookbar.cxx
 vcl/source/control/prgsbar.cxx
