@@ -1171,11 +1171,6 @@ OUString Application::GetHWOSConfInfo(const int bSelection, const bool bLocalize
         }
         else
 #endif
-#if HAVE_FEATURE_OPENGL
-        if ( OpenGLWrapper::isVCLOpenGLEnabled() )
-            appendDetails(u"", Localize(SV_APP_GL, bLocalize));
-        else
-#endif
             appendDetails(u"", Localize(SV_APP_DEFAULT, bLocalize));
 
 #if (defined LINUX || defined _WIN32 || defined MACOSX || defined __FreeBSD__)

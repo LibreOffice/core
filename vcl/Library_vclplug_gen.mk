@@ -108,9 +108,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/window/salobj \
     vcl/unx/x11/x11sys \
     vcl/unx/x11/xlimits \
-    vcl/opengl/x11/cairotextrender \
     vcl/opengl/x11/gdiimpl \
-    vcl/opengl/x11/salvd \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
         vcl/skia/x11/gdiimpl \
         vcl/skia/x11/salvd \

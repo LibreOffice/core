@@ -34,9 +34,6 @@
 
 #include <salgdiimpl.hxx>
 #include "gdiimpl.hxx"
-#include <opengl/win/gdiimpl.hxx>
-
-#include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <config_features.h>
 #include <vcl/skia/SkiaHelper.hxx>
@@ -553,8 +550,6 @@ std::unique_ptr< CompatibleDC > CompatibleDC::create(SalGraphics &rGraphics, int
     if (SkiaHelper::isVCLSkiaEnabled())
         return std::make_unique< SkiaCompatibleDC >( rGraphics, x, y, width, height );
 #endif
-    if (OpenGLHelper::isVCLOpenGLEnabled())
-        return std::make_unique< OpenGLCompatibleDC >( rGraphics, x, y, width, height );
     return std::unique_ptr< CompatibleDC >( new CompatibleDC( rGraphics, x, y, width, height ));
 }
 
@@ -626,9 +621,6 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
         mpImpl.reset(new WinSkiaSalGraphicsImpl(*this, pProvider));
     else
 #endif
-    if (OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter)
-        mpImpl.reset(new WinOpenGLSalGraphicsImpl(*this, pProvider));
-    else
         mpImpl.reset(new WinSalGraphicsImpl(*this));
 }
 

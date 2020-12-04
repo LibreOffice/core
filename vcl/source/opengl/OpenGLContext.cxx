@@ -22,18 +22,11 @@
 #include <salgdi.hxx>
 #include <salinst.hxx>
 
-#include <opengl/framebuffer.hxx>
-#include <opengl/program.hxx>
-#include <opengl/texture.hxx>
 #include <opengl/zone.hxx>
-
-#include <opengl/RenderState.hxx>
 
 #include <config_features.h>
 
 using namespace com::sun::star;
-
-#define MAX_FRAMEBUFFER_COUNT 30
 
 static sal_Int64 nBufferSwapCounter = 0;
 
@@ -52,13 +45,6 @@ OpenGLContext::OpenGLContext():
     mbInitialized(false),
     mnRefCount(0),
     mbRequestLegacyContext(false),
-    mbVCLOnly(false),
-    mnFramebufferCount(0),
-    mpCurrentFramebuffer(nullptr),
-    mpFirstFramebuffer(nullptr),
-    mpLastFramebuffer(nullptr),
-    mpCurrentProgram(nullptr),
-    mpRenderState(new RenderState),
     mpPrevContext(nullptr),
     mpNextContext(nullptr)
 {
@@ -354,31 +340,6 @@ void OpenGLContext::reset()
 
     // reset the clip region
     maClipRegion.SetEmpty();
-    mpRenderState.reset(new RenderState);
-
-    // destroy all framebuffers
-    if( mpLastFramebuffer )
-    {
-        OpenGLFramebuffer* pFramebuffer = mpLastFramebuffer;
-
-        makeCurrent();
-        while( pFramebuffer )
-        {
-            OpenGLFramebuffer* pPrevFramebuffer = pFramebuffer->mpPrevFramebuffer;
-            delete pFramebuffer;
-            pFramebuffer = pPrevFramebuffer;
-        }
-        mnFramebufferCount = 0;
-        mpFirstFramebuffer = nullptr;
-        mpLastFramebuffer = nullptr;
-    }
-
-    // destroy all programs
-    if( !maPrograms.empty() )
-    {
-        makeCurrent();
-        maPrograms.clear();
-    }
 
     if( isCurrent() )
         resetCurrent();
@@ -428,13 +389,6 @@ bool OpenGLContext::hasCurrent()
 
 void OpenGLContext::clearCurrent()
 {
-    ImplSVData* pSVData = ImplGetSVData();
-
-    // release all framebuffers from the old context so we can re-attach the
-    // texture in the new context
-    rtl::Reference<OpenGLContext> pCurrentCtx = pSVData->maGDIData.mpLastContext;
-    if( pCurrentCtx.is() && pCurrentCtx->isCurrent() )
-        pCurrentCtx->ReleaseFramebuffers();
 }
 
 void OpenGLContext::prepareForYield()
@@ -467,46 +421,6 @@ void OpenGLContext::prepareForYield()
     assert (!hasCurrent());
 }
 
-rtl::Reference<OpenGLContext> OpenGLContext::getVCLContext(bool bMakeIfNecessary)
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    OpenGLContext *pContext = pSVData->maGDIData.mpLastContext;
-    while( pContext )
-    {
-        // check if this context is usable
-        if( pContext->isInitialized() && pContext->isVCLOnly() )
-            break;
-        pContext = pContext->mpPrevContext;
-    }
-    rtl::Reference<OpenGLContext> xContext;
-    vcl::Window* pDefWindow = !pContext && bMakeIfNecessary ? ImplGetDefaultWindow() : nullptr;
-    if (pDefWindow)
-    {
-        // create our magic fallback window context.
-#if HAVE_FEATURE_OPENGL
-        xContext = pDefWindow->GetGraphics()->GetOpenGLContext();
-        assert(xContext.is());
-#endif
-    }
-    else
-        xContext = pContext;
-
-    if( xContext.is() )
-        xContext->makeCurrent();
-
-    return xContext;
-}
-
-/*
- * We don't care what context we have, but we want one that is live,
- * ie. not reset underneath us, and is setup for VCL usage - ideally
- * not swapping context at all.
- */
-void OpenGLContext::makeVCLCurrent()
-{
-    getVCLContext();
-}
-
 void OpenGLContext::registerAsCurrent()
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -525,9 +439,6 @@ void OpenGLContext::registerAsCurrent()
         pSVData->maGDIData.mpLastContext->mpNextContext = this;
         pSVData->maGDIData.mpLastContext = this;
     }
-
-    // sync the render state with the current context
-    mpRenderState->sync();
 }
 
 void OpenGLContext::resetCurrent()
@@ -582,228 +493,6 @@ SystemChildWindow* OpenGLContext::getChildWindow()
 const SystemChildWindow* OpenGLContext::getChildWindow() const
 {
     return m_pChildWindow;
-}
-
-void OpenGLContext::BindFramebuffer( OpenGLFramebuffer* pFramebuffer )
-{
-    OpenGLZone aZone;
-
-    if( pFramebuffer != mpCurrentFramebuffer )
-    {
-        if( pFramebuffer )
-            pFramebuffer->Bind();
-        else
-            OpenGLFramebuffer::Unbind();
-        mpCurrentFramebuffer = pFramebuffer;
-    }
-}
-
-void OpenGLContext::AcquireDefaultFramebuffer()
-{
-    BindFramebuffer( nullptr );
-}
-
-OpenGLFramebuffer* OpenGLContext::AcquireFramebuffer( const OpenGLTexture& rTexture )
-{
-    OpenGLZone aZone;
-
-    OpenGLFramebuffer* pFramebuffer = nullptr;
-    OpenGLFramebuffer* pFreeFbo = nullptr;
-    OpenGLFramebuffer* pSameSizeFbo = nullptr;
-
-    // check if there is already a framebuffer attached to that texture
-    pFramebuffer = mpLastFramebuffer;
-    while( pFramebuffer )
-    {
-        if( pFramebuffer->IsAttached( rTexture ) )
-            break;
-        if( !pFreeFbo && pFramebuffer->IsFree() )
-            pFreeFbo = pFramebuffer;
-        if( !pSameSizeFbo &&
-            pFramebuffer->GetWidth() == rTexture.GetWidth() &&
-            pFramebuffer->GetHeight() == rTexture.GetHeight() )
-            pSameSizeFbo = pFramebuffer;
-        pFramebuffer = pFramebuffer->mpPrevFramebuffer;
-    }
-
-    // else use any framebuffer having the same size
-    if( !pFramebuffer && pSameSizeFbo )
-        pFramebuffer = pSameSizeFbo;
-
-    // else use the first free framebuffer
-    if( !pFramebuffer && pFreeFbo )
-        pFramebuffer = pFreeFbo;
-
-    // if there isn't any free one, create a new one if the limit isn't reached
-    if( !pFramebuffer && mnFramebufferCount < MAX_FRAMEBUFFER_COUNT )
-    {
-        mnFramebufferCount++;
-        pFramebuffer = new OpenGLFramebuffer();
-        if( mpLastFramebuffer )
-        {
-            pFramebuffer->mpPrevFramebuffer = mpLastFramebuffer;
-            mpLastFramebuffer = pFramebuffer;
-        }
-        else
-        {
-            mpFirstFramebuffer = pFramebuffer;
-            mpLastFramebuffer = pFramebuffer;
-        }
-    }
-
-    // last try, use any framebuffer
-    // TODO order the list of framebuffers as a LRU
-    if( !pFramebuffer )
-        pFramebuffer = mpFirstFramebuffer;
-
-    assert( pFramebuffer );
-    BindFramebuffer( pFramebuffer );
-    pFramebuffer->AttachTexture( rTexture );
-
-    state().viewport(tools::Rectangle(Point(), Size(rTexture.GetWidth(), rTexture.GetHeight())));
-
-    return pFramebuffer;
-}
-
-// FIXME: this method is rather grim from a perf. perspective.
-// We should instead (eventually) use pointers to associate the
-// framebuffer and texture cleanly.
-void OpenGLContext::UnbindTextureFromFramebuffers( GLuint nTexture )
-{
-    OpenGLFramebuffer* pFramebuffer;
-
-    // see if there is a framebuffer attached to that texture
-    pFramebuffer = mpLastFramebuffer;
-    while( pFramebuffer )
-    {
-        if (pFramebuffer->IsAttached(nTexture))
-        {
-            BindFramebuffer(pFramebuffer);
-            pFramebuffer->DetachTexture();
-        }
-        pFramebuffer = pFramebuffer->mpPrevFramebuffer;
-    }
-
-    // Lets just check that no other context has a framebuffer
-    // with this texture - that would be bad ...
-    assert( !IsTextureAttachedAnywhere( nTexture ) );
-}
-
-/// Method for debugging; check texture is not already attached.
-bool OpenGLContext::IsTextureAttachedAnywhere( GLuint nTexture )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    for( auto *pCheck = pSVData->maGDIData.mpLastContext; pCheck;
-               pCheck = pCheck->mpPrevContext )
-    {
-        for( auto pBuffer = pCheck->mpLastFramebuffer; pBuffer;
-                  pBuffer = pBuffer->mpPrevFramebuffer )
-        {
-            if( pBuffer->IsAttached( nTexture ) )
-                return true;
-        }
-    }
-    return false;
-}
-
-void OpenGLContext::ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer )
-{
-    if( pFramebuffer )
-        pFramebuffer->DetachTexture();
-}
-
-void OpenGLContext::ReleaseFramebuffer( const OpenGLTexture& rTexture )
-{
-    OpenGLZone aZone;
-
-    if (!rTexture) // no texture to release.
-        return;
-
-    OpenGLFramebuffer* pFramebuffer = mpLastFramebuffer;
-
-    while( pFramebuffer )
-    {
-        if( pFramebuffer->IsAttached( rTexture ) )
-        {
-            BindFramebuffer( pFramebuffer );
-            pFramebuffer->DetachTexture();
-            if (mpCurrentFramebuffer == pFramebuffer)
-                BindFramebuffer( nullptr );
-        }
-        pFramebuffer = pFramebuffer->mpPrevFramebuffer;
-    }
-}
-
-void OpenGLContext::ReleaseFramebuffers()
-{
-    OpenGLZone aZone;
-
-    OpenGLFramebuffer* pFramebuffer = mpLastFramebuffer;
-    while( pFramebuffer )
-    {
-        if (!pFramebuffer->IsFree())
-        {
-            BindFramebuffer( pFramebuffer );
-            pFramebuffer->DetachTexture();
-        }
-        pFramebuffer = pFramebuffer->mpPrevFramebuffer;
-    }
-    BindFramebuffer( nullptr );
-}
-
-OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble )
-{
-    OpenGLZone aZone;
-
-    // We cache the shader programs in a per-process run-time cache
-    // based on only the names and the preamble. We don't expect
-    // shader source files to change during the lifetime of a
-    // LibreOffice process.
-    OString aNameBasedKey = OUStringToOString(rVertexShader + "+" + rFragmentShader, RTL_TEXTENCODING_UTF8) + "+" + preamble;
-    if( !aNameBasedKey.isEmpty() )
-    {
-        ProgramCollection::iterator it = maPrograms.find( aNameBasedKey );
-        if( it != maPrograms.end() )
-            return it->second.get();
-    }
-
-    // Binary shader programs are cached persistently (between
-    // LibreOffice process instances) based on a hash of their source
-    // code, as the source code can and will change between
-    // LibreOffice versions even if the shader names don't change.
-    OString aPersistentKey = OpenGLHelper::GetDigest( rVertexShader, rFragmentShader, preamble );
-    std::shared_ptr<OpenGLProgram> pProgram = std::make_shared<OpenGLProgram>();
-    if( !pProgram->Load( rVertexShader, rFragmentShader, preamble, aPersistentKey ) )
-        return nullptr;
-
-    maPrograms.insert(std::make_pair(aNameBasedKey, pProgram));
-    return pProgram.get();
-}
-
-OpenGLProgram* OpenGLContext::UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble )
-{
-    OpenGLZone aZone;
-
-    OpenGLProgram* pProgram = GetProgram( rVertexShader, rFragmentShader, preamble );
-
-    if (pProgram && pProgram == mpCurrentProgram)
-    {
-        VCL_GL_INFO("Context::UseProgram: Reusing existing program " << pProgram->Id());
-        pProgram->Reuse();
-        return pProgram;
-    }
-
-    mpCurrentProgram = pProgram;
-
-    if (!mpCurrentProgram)
-    {
-        SAL_WARN("vcl.opengl", "OpenGLContext::UseProgram: mpCurrentProgram is 0");
-        return nullptr;
-    }
-
-    mpCurrentProgram->Use();
-
-    return mpCurrentProgram;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

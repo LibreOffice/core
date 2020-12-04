@@ -9,7 +9,7 @@
 
 #include <memory>
 #include <thread>
-#include <opengl/win/gdiimpl.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <sal/log.hxx>
@@ -453,7 +453,7 @@ bool compiledShaderBinariesWork()
 
     bResult =
         (
-#if 0 // Only look at shaders used by vcl for now
+#if 0 // Only look at shaders used by slideshow for now
          // canvas
          tryShaders("dummyVertexShader", "linearMultiColorGradientFragmentShader") &&
          tryShaders("dummyVertexShader", "linearTwoColorGradientFragmentShader") &&
@@ -461,48 +461,14 @@ bool compiledShaderBinariesWork()
          tryShaders("dummyVertexShader", "radialTwoColorGradientFragmentShader") &&
          tryShaders("dummyVertexShader", "rectangularMultiColorGradientFragmentShader") &&
          tryShaders("dummyVertexShader", "rectangularTwoColorGradientFragmentShader") &&
-         // chart2
-         (GLEW_VERSION_3_3 ?
-          (tryShaders("shape3DVertexShader", "shape3DFragmentShader") &&
-           tryShaders("shape3DVertexShaderBatchScroll", "shape3DFragmentShaderBatchScroll") &&
-           tryShaders("shape3DVertexShaderBatch", "shape3DFragmentShaderBatch") &&
-           tryShaders("textVertexShaderBatch", "textFragmentShaderBatch")) :
-          (tryShaders("shape3DVertexShaderV300", "shape3DFragmentShaderV300"))) &&
-         tryShaders("textVertexShader", "textFragmentShader") &&
-         tryShaders("screenTextVertexShader", "screenTextFragmentShader") &&
-         tryShaders("commonVertexShader", "commonFragmentShader") &&
-         tryShaders("pickingVertexShader", "pickingFragmentShader") &&
-         tryShaders("backgroundVertexShader", "backgroundFragmentShader") &&
-         tryShaders("symbolVertexShader", "symbolFragmentShader") &&
-         tryShaders("symbolVertexShader", "symbolFragmentShader") &&
+#endif
          // slideshow
          tryShaders("reflectionVertexShader", "reflectionFragmentShader") &&
          tryShaders("basicVertexShader", "basicFragmentShader") &&
          tryShaders("vortexVertexShader", "vortexFragmentShader", "vortexGeometryShader") &&
          tryShaders("basicVertexShader", "rippleFragmentShader") &&
          tryShaders("glitterVertexShader", "glitterFragmentShader") &&
-         tryShaders("honeycombVertexShader", "honeycombFragmentShader", "honeycombGeometryShader") &&
-#endif
-         // vcl
-         tryShaders("combinedVertexShader", "combinedFragmentShader") &&
-         tryShaders("dumbVertexShader", "invert50FragmentShader") &&
-         tryShaders("textureVertexShader", "areaScaleFragmentShader") &&
-         tryShaders("transformedTextureVertexShader", "maskedTextureFragmentShader") &&
-         tryShaders("transformedTextureVertexShader", "areaScaleFastFragmentShader") &&
-         tryShaders("transformedTextureVertexShader", "areaScaleFastFragmentShader", "", "#define MASKED") &&
-         tryShaders("transformedTextureVertexShader", "areaScaleFragmentShader") &&
-         tryShaders("transformedTextureVertexShader", "areaScaleFragmentShader", "", "#define MASKED") &&
-         tryShaders("transformedTextureVertexShader", "textureFragmentShader") &&
-         tryShaders("combinedTextureVertexShader", "combinedTextureFragmentShader") &&
-         tryShaders("combinedTextureVertexShader", "combinedTextureFragmentShader", "", "// flush shader\n") &&
-         tryShaders("textureVertexShader", "linearGradientFragmentShader") &&
-         tryShaders("textureVertexShader", "radialGradientFragmentShader") &&
-         tryShaders("textureVertexShader", "areaHashCRC64TFragmentShader") &&
-         tryShaders("textureVertexShader", "replaceColorFragmentShader") &&
-         tryShaders("textureVertexShader", "greyscaleFragmentShader") &&
-         tryShaders("textureVertexShader", "textureFragmentShader") &&
-         tryShaders("textureVertexShader", "convolutionFragmentShader") &&
-         tryShaders("textureVertexShader", "areaScaleFastFragmentShader"));
+         tryShaders("honeycombVertexShader", "honeycombFragmentShader", "honeycombGeometryShader"));
 
     return bResult;
 }
@@ -544,10 +510,7 @@ bool WinOpenGLContext::ImplInit()
     int WindowPix = 0;
     bool bMultiSampleSupport = false;
 
-    if (!mbVCLOnly)
-        bMultiSampleSupport = InitMultisample(PixelFormatFront, WindowPix, /*bUseDoubleBufferedRendering*/true, false);
-    else
-        VCL_GL_INFO("Skipping multisample detection for VCL.");
+    bMultiSampleSupport = InitMultisample(PixelFormatFront, WindowPix, /*bUseDoubleBufferedRendering*/true, false);
 
     if (bMultiSampleSupport && WindowPix != 0)
     {
@@ -709,190 +672,6 @@ bool WinOpenGLContext::ImplInit()
 OpenGLContext* WinSalInstance::CreateOpenGLContext()
 {
     return new WinOpenGLContext;
-}
-
-WinOpenGLSalGraphicsImpl::WinOpenGLSalGraphicsImpl(WinSalGraphics& rGraphics,
-                                                   SalGeometryProvider *mpProvider):
-    OpenGLSalGraphicsImpl(rGraphics,mpProvider),
-    mrWinParent(rGraphics)
-{
-}
-
-void WinOpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
-{
-    OpenGLSalGraphicsImpl *pImpl = pSrcGraphics ? static_cast< OpenGLSalGraphicsImpl* >(pSrcGraphics->GetImpl()) : static_cast< OpenGLSalGraphicsImpl *>(mrParent.GetImpl());
-    OpenGLSalGraphicsImpl::DoCopyBits( rPosAry, *pImpl );
-}
-
-rtl::Reference<OpenGLContext> WinOpenGLSalGraphicsImpl::CreateWinContext()
-{
-    rtl::Reference<WinOpenGLContext> xContext(new WinOpenGLContext);
-    xContext->setVCLOnly();
-    if (!xContext->init(mrWinParent.mhLocalDC, mrWinParent.mhWnd))
-    {
-        SAL_WARN("vcl.opengl", "Context could not be created.");
-        return rtl::Reference<OpenGLContext>();
-    }
-    return rtl::Reference<OpenGLContext>(xContext.get());
-}
-
-void WinOpenGLSalGraphicsImpl::Init()
-{
-    if (!IsOffscreen() && mpContext.is() && mpContext->isInitialized())
-    {
-        const GLWinWindow& rGLWindow = static_cast<const GLWinWindow&>(mpContext->getOpenGLWindow());
-        if (rGLWindow.hWnd != mrWinParent.mhWnd || rGLWindow.hDC == mrWinParent.mhLocalDC)
-        {
-            // This can legitimately happen, SalFrame keeps 2x
-            // SalGraphics which share the same hWnd and hDC.
-            // The shape 'Area' dialog does reparenting to trigger this.
-            SAL_WARN("vcl.opengl", "Unusual: Windows handle / DC changed without DeInit");
-            DeInit();
-        }
-    }
-
-    OpenGLSalGraphicsImpl::Init();
-}
-
-OpenGLControlsCache::OpenGLControlsCache(): cache(200) {}
-
-OpenGLControlCacheType & OpenGLControlsCache::get() {
-    SalData * data = GetSalData();
-    if (!data->m_pOpenGLControlsCache) {
-        data->m_pOpenGLControlsCache.reset(new OpenGLControlsCache);
-    }
-    return data->m_pOpenGLControlsCache->cache;
-}
-
-OpenGLCompatibleDC::OpenGLCompatibleDC(SalGraphics &rGraphics, int x, int y, int width, int height)
-: CompatibleDC( rGraphics, x, y, width, height, false )
-{
-}
-
-OpenGLTexture* OpenGLCompatibleDC::getOpenGLTexture() const
-{
-    if (!mpImpl)
-        return nullptr;
-
-    // turn what's in the mpData into a texture
-    return new OpenGLTexture(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_BGRA, GL_UNSIGNED_BYTE, mpData);
-}
-
-std::unique_ptr<CompatibleDC::Texture> OpenGLCompatibleDC::getAsMaskTexture() const
-{
-    auto ret = std::make_unique<OpenGLCompatibleDC::Texture>();
-    ret->texture = OpenGLTexture(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_BGRA, GL_UNSIGNED_BYTE, mpData);
-    return ret;
-}
-
-bool OpenGLCompatibleDC::copyToTexture(CompatibleDC::Texture& aTexture) const
-{
-    if (!mpImpl)
-        return false;
-
-    assert(dynamic_cast<OpenGLCompatibleDC::Texture*>(&aTexture));
-    return static_cast<OpenGLCompatibleDC::Texture&>(aTexture).texture.CopyData(
-        maRects.mnSrcWidth, maRects.mnSrcHeight, GL_BGRA, GL_UNSIGNED_BYTE, reinterpret_cast<sal_uInt8*>(mpData));
-}
-
-bool WinOpenGLSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey const & rControlCacheKey, int nX, int nY)
-{
-    static bool gbCacheEnabled = !getenv("SAL_WITHOUT_WIDGET_CACHE");
-
-    if (!gbCacheEnabled)
-        return false;
-
-    auto & gTextureCache = OpenGLControlsCache::get();
-    OpenGLControlCacheType::const_iterator iterator = gTextureCache.find(rControlCacheKey);
-
-    if (iterator == gTextureCache.end())
-        return false;
-
-    const std::unique_ptr<TextureCombo>& pCombo = iterator->second;
-
-    bool bRet = false;
-
-    PreDraw();
-
-    bRet = RenderTextureCombo(*pCombo, nX, nY);
-
-    PostDraw();
-
-    return bRet;
-}
-
-bool WinOpenGLSalGraphicsImpl::RenderTextureCombo(TextureCombo const & rCombo, int nX, int nY)
-{
-    OpenGLTexture& rTexture = *rCombo.mpTexture;
-
-    SalTwoRect aPosAry(0,   0, rTexture.GetWidth(), rTexture.GetHeight(),
-                       nX, nY, rTexture.GetWidth(), rTexture.GetHeight());
-
-    DrawTextureDiff(rTexture, *rCombo.mpMask, aPosAry, false);
-
-    return true;
-}
-
-bool WinOpenGLSalGraphicsImpl::RenderCompatibleDC(OpenGLCompatibleDC& rWhite, OpenGLCompatibleDC& rBlack,
-                                                  int nX, int nY, TextureCombo& rCombo)
-{
-    bool bRet = false;
-
-    PreDraw();
-
-    rCombo.mpTexture.reset(rWhite.getOpenGLTexture());
-    rCombo.mpMask.reset(rBlack.getOpenGLTexture());
-
-    bRet = RenderTextureCombo(rCombo, nX, nY);
-
-    PostDraw();
-    return bRet;
-}
-
-bool WinOpenGLSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, CompatibleDC& rBlack,
-                                                           int nX, int nY , ControlCacheKey& aControlCacheKey)
-{
-    assert(dynamic_cast<OpenGLCompatibleDC*>(&rWhite));
-    assert(dynamic_cast<OpenGLCompatibleDC*>(&rBlack));
-
-    std::unique_ptr<TextureCombo> pCombo(new TextureCombo);
-
-    bool bResult = RenderCompatibleDC(static_cast<OpenGLCompatibleDC&>(rWhite),
-        static_cast<OpenGLCompatibleDC&>(rBlack), nX, nY, *pCombo);
-    if (!bResult)
-        return false;
-
-    if (!aControlCacheKey.canCacheControl())
-        return true;
-
-    OpenGLControlCachePair pair(aControlCacheKey, std::move(pCombo));
-    OpenGLControlsCache::get().insert(std::move(pair));
-
-    return bResult;
-}
-
-void WinOpenGLSalGraphicsImpl::PreDrawText()
-{
-    PreDraw();
-}
-
-void WinOpenGLSalGraphicsImpl::PostDrawText()
-{
-    PostDraw();
-}
-
-void WinOpenGLSalGraphicsImpl::DeferredTextDraw(const CompatibleDC::Texture* pTexture, Color aMaskColor, const SalTwoRect& rPosAry)
-{
-    assert(dynamic_cast<const OpenGLCompatibleDC::Texture*>(pTexture));
-    mpRenderList->addDrawTextureWithMaskColor(
-        static_cast<const OpenGLCompatibleDC::Texture*>(pTexture)->texture, aMaskColor, rPosAry);
-    PostBatchDraw();
-}
-
-void WinOpenGLSalGraphicsImpl::DrawTextMask( CompatibleDC::Texture* pTexture, Color nMaskColor, const SalTwoRect& rPosAry )
-{
-    assert(dynamic_cast<OpenGLCompatibleDC::Texture*>(pTexture));
-    DrawMask( static_cast<OpenGLCompatibleDC::Texture*>(pTexture)->texture, nMaskColor, rPosAry );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

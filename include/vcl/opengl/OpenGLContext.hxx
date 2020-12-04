@@ -19,11 +19,6 @@
 #include <memory>
 #include <unordered_map>
 
-class OpenGLFramebuffer;
-class OpenGLProgram;
-class OpenGLTexture;
-class RenderState;
-
 /// Holds the information of our new child window
 struct VCL_DLLPUBLIC GLWindow
 {
@@ -72,24 +67,11 @@ public:
 
     // use these methods right after setting a context to make sure drawing happens
     // in the right FBO (default one is for onscreen painting)
-    void               BindFramebuffer( OpenGLFramebuffer* pFramebuffer );
     void               AcquireDefaultFramebuffer();
-    OpenGLFramebuffer* AcquireFramebuffer( const OpenGLTexture& rTexture );
-    static void        ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer );
     void UnbindTextureFromFramebuffers( GLuint nTexture );
     static bool        IsTextureAttachedAnywhere( GLuint nTexture );
 
-    void               ReleaseFramebuffer( const OpenGLTexture& rTexture );
     void               ReleaseFramebuffers();
-
-    // retrieve a program from the cache or compile/link it
-    OpenGLProgram*      GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble = "" );
-    OpenGLProgram*      UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble = "" );
-
-    RenderState& state()
-    {
-        return *mpRenderState;
-    }
 
     OpenGLCapabilitySwitch& getOpenGLCapabilitySwitch()
     {
@@ -107,10 +89,6 @@ public:
     /// Is there a current GL context ?
     static bool hasCurrent();
 
-    /// make a VCL context (any context) current, create it if necessary.
-    static void makeVCLCurrent();
-    /// fetch any VCL context, creating one if bMakeIfNecessary is set.
-    static rtl::Reference<OpenGLContext> getVCLContext(bool bMakeIfNecessary = true);
     /// make this GL context current - so it is implicit in subsequent GL calls
     virtual void makeCurrent();
     /// Put this GL context to the end of the context list.
@@ -134,10 +112,6 @@ public:
         return mbInitialized;
     }
 
-    /// VCL promiscuously re-uses its own contexts:
-    void setVCLOnly() { mbVCLOnly = true; }
-    bool isVCLOnly() const { return mbVCLOnly; }
-
     virtual SystemWindowData generateWinData(vcl::Window* pParent, bool bRequestLegacyContext);
 
 private:
@@ -159,21 +133,8 @@ protected:
     bool mbInitialized;
     int  mnRefCount;
     bool mbRequestLegacyContext;
-    bool mbVCLOnly;
-
-    int mnFramebufferCount;
-    OpenGLFramebuffer* mpCurrentFramebuffer;
-    OpenGLFramebuffer* mpFirstFramebuffer;
-    OpenGLFramebuffer* mpLastFramebuffer;
 
     OpenGLCapabilitySwitch maOpenGLCapabilitySwitch;
-
-private:
-    typedef std::unordered_map< OString, std::shared_ptr<OpenGLProgram> > ProgramCollection;
-    ProgramCollection maPrograms;
-    OpenGLProgram* mpCurrentProgram;
-
-    std::unique_ptr<RenderState> mpRenderState;
 
 public:
     vcl::Region maClipRegion;
