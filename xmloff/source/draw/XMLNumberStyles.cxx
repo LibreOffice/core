@@ -492,7 +492,7 @@ private:
     bool mbTextual;
     bool mbDecimal02;
     OUString maText;
-    css::uno::Reference< css::xml::sax::XFastContextHandler > mxSlaveContext;
+    SvXMLImportContextRef mxSlaveContext;
 
 public:
 
@@ -500,7 +500,7 @@ public:
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
         SdXMLNumberFormatImportContext* pParent,
-        const css::uno::Reference< css::xml::sax::XFastContextHandler >& rSlaveContext );
+        const SvXMLImportContextRef& rSlaveContext );
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
@@ -519,7 +519,7 @@ SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext(
     sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     SdXMLNumberFormatImportContext* pParent,
-    const css::uno::Reference< css::xml::sax::XFastContextHandler >& rSlaveContext )
+    const SvXMLImportContextRef& rSlaveContext )
 :   SvXMLImportContext(rImport),
     mpParent( pParent ),
     maNumberStyle( SvXMLImport::getNameFromToken(nElement) ),
@@ -555,7 +555,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLNumberFormatMembe
     sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    return mxSlaveContext->createFastChildContext( nElement, xAttrList );
+    return mxSlaveContext->createFastChildContextFallback( nElement, xAttrList );
 }
 
 void SdXMLNumberFormatMemberImportContext::startFastElement(
@@ -707,7 +707,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLNumberFormatImpor
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     return new SdXMLNumberFormatMemberImportContext( GetImport(), nElement, xAttrList,
-        this, SvXMLNumFormatContext::createFastChildContext( nElement, xAttrList ) );
+        this, &dynamic_cast<SvXMLImportContext&>(*SvXMLNumFormatContext::createFastChildContext( nElement, xAttrList )) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
