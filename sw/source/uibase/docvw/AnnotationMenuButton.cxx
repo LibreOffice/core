@@ -17,23 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AnnotationMenuButton.hxx"
-
+#include <AnnotationWin.hxx>
 #include <strings.hrc>
 
 #include <unotools/useroptions.hxx>
+
+#if 0
 
 #include <vcl/menu.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
+#endif
+#include <vcl/event.hxx>
 
 #include <cmdid.h>
-#include <AnnotationWin.hxx>
+
 #include <swtypes.hxx>
 
 namespace sw::annotation {
+
+#if 0
 
 static Color ColorFromAlphaColor(const sal_uInt8 aTransparency, const Color& aFront, const Color& aBack)
 {
@@ -42,92 +47,71 @@ static Color ColorFromAlphaColor(const sal_uInt8 aTransparency, const Color& aFr
                  sal_uInt8(aFront.GetBlue()  * aTransparency / 255.0 + aBack.GetBlue()  * (1 - aTransparency / 255.0)));
 }
 
-AnnotationMenuButton::AnnotationMenuButton(sw::annotation::SwAnnotationWin& rSidebarWin)
-    : MenuButton(&rSidebarWin)
-    , mrSidebarWin(rSidebarWin)
-{
-    AddEventListener(LINK(&mrSidebarWin, sw::annotation::SwAnnotationWin, WindowEventListener));
+#endif
 
-    SetAccessibleName(SwResId(STR_ACCESS_ANNOTATION_BUTTON_NAME));
-    SetAccessibleDescription(SwResId(STR_ACCESS_ANNOTATION_BUTTON_DESC));
-    SetQuickHelpText(GetAccessibleDescription());
-}
-
-AnnotationMenuButton::~AnnotationMenuButton()
+IMPL_LINK(SwAnnotationWin, SelectHdl, const OString&, rIdent, void)
 {
-    disposeOnce();
-}
-
-void AnnotationMenuButton::dispose()
-{
-    RemoveEventListener(LINK(&mrSidebarWin, sw::annotation::SwAnnotationWin, WindowEventListener));
-    MenuButton::dispose();
-}
-
-void AnnotationMenuButton::Select()
-{
-    OString sIdent = GetCurItemIdent();
-    if (sIdent.isEmpty())
+    if (rIdent.isEmpty())
         return;
 
     // tdf#136682 ensure this is the currently active sidebar win so the command
     // operates in an active sidebar context
-    bool bSwitchedFocus = mrSidebarWin.SetActiveSidebarWin();
+    bool bSwitchedFocus = SetActiveSidebarWin();
 
-    if (sIdent == "reply")
-        mrSidebarWin.ExecuteCommand(FN_REPLY);
-    if (sIdent == "resolve" || sIdent == "unresolve")
-        mrSidebarWin.ExecuteCommand(FN_RESOLVE_NOTE);
-    else if (sIdent == "resolvethread" || sIdent == "unresolvethread")
-        mrSidebarWin.ExecuteCommand(FN_RESOLVE_NOTE_THREAD);
-    else if (sIdent == "delete")
-        mrSidebarWin.ExecuteCommand(FN_DELETE_COMMENT);
-    else if (sIdent == "deletethread")
-        mrSidebarWin.ExecuteCommand(FN_DELETE_COMMENT_THREAD);
-    else if (sIdent == "deleteby")
-        mrSidebarWin.ExecuteCommand(FN_DELETE_NOTE_AUTHOR);
-    else if (sIdent == "deleteall")
-        mrSidebarWin.ExecuteCommand(FN_DELETE_ALL_NOTES);
-    else if (sIdent == "formatall")
-        mrSidebarWin.ExecuteCommand(FN_FORMAT_ALL_NOTES);
+    if (rIdent == "reply")
+        ExecuteCommand(FN_REPLY);
+    if (rIdent == "resolve" || rIdent == "unresolve")
+        ExecuteCommand(FN_RESOLVE_NOTE);
+    else if (rIdent == "resolvethread" || rIdent == "unresolvethread")
+        ExecuteCommand(FN_RESOLVE_NOTE_THREAD);
+    else if (rIdent == "delete")
+        ExecuteCommand(FN_DELETE_COMMENT);
+    else if (rIdent == "deletethread")
+        ExecuteCommand(FN_DELETE_COMMENT_THREAD);
+    else if (rIdent == "deleteby")
+        ExecuteCommand(FN_DELETE_NOTE_AUTHOR);
+    else if (rIdent == "deleteall")
+        ExecuteCommand(FN_DELETE_ALL_NOTES);
+    else if (rIdent == "formatall")
+        ExecuteCommand(FN_FORMAT_ALL_NOTES);
 
     if (bSwitchedFocus)
-        mrSidebarWin.UnsetActiveSidebarWin();
-    mrSidebarWin.GrabFocusToDocument();
+        UnsetActiveSidebarWin();
+    GrabFocusToDocument();
 }
 
-void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
+IMPL_LINK_NOARG(SwAnnotationWin, ToggleHdl, weld::ToggleButton&, void)
 {
-    PopupMenu* pButtonPopup(GetPopupMenu());
-    if (mrSidebarWin.IsReadOnly())
+    if (!mxMenuButton->get_active())
+        return;
+
+    bool bReadOnly = IsReadOnly();
+    if (bReadOnly)
     {
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("reply"), false);
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("resolve"), false);
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("unresolve"), false);
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("resolvethread"), false);
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("unresolvethread"), false);
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("delete"), false );
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("deletethread"), false );
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("deleteby"), false );
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("deleteall"), false );
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("formatall"), false );
+        mxMenuButton->set_item_sensitive("reply", false);
+        mxMenuButton->set_item_sensitive("resolve", false);
+        mxMenuButton->set_item_sensitive("unresolve", false);
+        mxMenuButton->set_item_sensitive("resolvethread", false);
+        mxMenuButton->set_item_sensitive("unresolvethread", false);
+        mxMenuButton->set_item_sensitive("delete", false );
     }
     else
     {
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("resolve"), !mrSidebarWin.IsResolved());
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("unresolve"), mrSidebarWin.IsResolved());
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("resolvethread"), !mrSidebarWin.IsThreadResolved());
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("unresolvethread"), mrSidebarWin.IsThreadResolved());
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("delete"), !mrSidebarWin.IsProtected());
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("deletethread"));
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("deleteby"));
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("deleteall"));
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("formatall"));
+        mxMenuButton->set_item_sensitive("resolve", !IsResolved());
+        mxMenuButton->set_item_sensitive("unresolve", IsResolved());
+        mxMenuButton->set_item_sensitive("resolvethread", !IsThreadResolved());
+        mxMenuButton->set_item_sensitive("unresolvethread", IsThreadResolved());
+        mxMenuButton->set_item_sensitive("delete", !IsProtected());
     }
 
-    if (mrSidebarWin.IsProtected())
+    mxMenuButton->set_item_sensitive("deletethread", !bReadOnly);
+    mxMenuButton->set_item_sensitive("deleteby", !bReadOnly);
+    mxMenuButton->set_item_sensitive("deleteall", !bReadOnly);
+    mxMenuButton->set_item_sensitive("formatall", !bReadOnly);
+
+    if (IsProtected())
     {
-        pButtonPopup->EnableItem(pButtonPopup->GetItemId("reply"), false);
+        mxMenuButton->set_item_sensitive("reply", false);
     }
     else
     {
@@ -141,18 +125,11 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
             }
         }
         // do not allow to reply to ourself and no answer possible if this note is in a protected section
-        if (sAuthor == mrSidebarWin.GetAuthor())
-        {
-            pButtonPopup->EnableItem(pButtonPopup->GetItemId("reply"), false);
-        }
-        else
-        {
-            pButtonPopup->EnableItem(pButtonPopup->GetItemId("reply"));
-        }
+        mxMenuButton->set_item_sensitive("reply", sAuthor != GetAuthor());
     }
-
-    MenuButton::MouseButtonDown(rMEvt);
 }
+
+#if 0
 
 void AnnotationMenuButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
@@ -207,18 +184,18 @@ void AnnotationMenuButton::Paint(vcl::RenderContext& rRenderContext, const tools
     aDecoView.DrawSymbol(aSymbolRect, SymbolType::SPIN_DOWN, (bHighContrast ? COL_WHITE : COL_BLACK));
 }
 
-void AnnotationMenuButton::KeyInput(const KeyEvent& rKeyEvt)
+#endif
+
+IMPL_LINK(SwAnnotationWin, KeyInputHdl, const KeyEvent&, rKeyEvt, bool)
 {
     const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
     if (rKeyCode.GetCode() == KEY_TAB)
     {
-        mrSidebarWin.ActivatePostIt();
-        mrSidebarWin.GrabFocus();
+        ActivatePostIt();
+        GrabFocus();
+        return true;
     }
-    else
-    {
-        MenuButton::KeyInput(rKeyEvt);
-    }
+    return false;
 }
 
 } // end of namespace sw::annotation
