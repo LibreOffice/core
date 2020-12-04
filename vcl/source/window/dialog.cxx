@@ -393,6 +393,14 @@ void Dialog::ImplInitDialogData()
     mpDialogImpl.reset(new DialogImpl);
 }
 
+void Dialog::PixelInvalidate(const tools::Rectangle* pRectangle)
+{
+    if (!mpDialogImpl->m_bLOKTunneling)
+        return;
+
+    Window::PixelInvalidate(pRectangle);
+}
+
 vcl::Window* Dialog::GetDefaultParent(WinBits nStyle)
 {
     vcl::Window* pParent = Application::GetDefDialogParent();
