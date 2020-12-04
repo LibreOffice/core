@@ -462,6 +462,7 @@ bool Application::Reschedule( bool i_bAllEvents )
 
 void Scheduler::ProcessEventsToIdle()
 {
+    SchedulerGuardReleaser aReleaser;
     int nSanity = 1;
     while( Application::Reschedule( true ) )
     {
