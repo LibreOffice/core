@@ -100,6 +100,7 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
                     mod.__file__ = filename
                     exec(codeobject, mod.__dict__)
                     g_loadedComponents[url] = mod
+                    fileHandle.close()
                 return mod
             elif "vnd.openoffice.pymodule" == protocol:
                 nSlash = dependent.rfind('/')
