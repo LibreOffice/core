@@ -19,7 +19,6 @@
 
 #include "SidebarTxtControl.hxx"
 
-#include "SidebarTxtControlAcc.hxx"
 #include <docsh.hxx>
 #include <doc.hxx>
 
@@ -59,34 +58,36 @@
 
 namespace sw::sidebarwindows {
 
-SidebarTextControl::SidebarTextControl( sw::annotation::SwAnnotationWin& rSidebarWin,
-                                      WinBits nBits,
-                                      SwView& rDocView,
-                                      SwPostItMgr& rPostItMgr )
-    : Control( &rSidebarWin, nBits )
-    , mrSidebarWin( rSidebarWin )
-    , mrDocView( rDocView )
-    , mrPostItMgr( rPostItMgr )
+SidebarTextControl::SidebarTextControl(sw::annotation::SwAnnotationWin& rSidebarWin,
+                                       SwView& rDocView,
+                                       SwPostItMgr& rPostItMgr)
+    : mrSidebarWin(rSidebarWin)
+    , mrDocView(rDocView)
+    , mrPostItMgr(rPostItMgr)
 {
-    AddEventListener( LINK( &mrSidebarWin, sw::annotation::SwAnnotationWin, WindowEventListener ) );
+//TODO    AddEventListener( LINK( &mrSidebarWin, sw::annotation::SwAnnotationWin, WindowEventListener ) );
 }
 
 SidebarTextControl::~SidebarTextControl()
 {
-    disposeOnce();
+//TODO    disposeOnce();
 }
 
+#if 0
 void SidebarTextControl::dispose()
 {
     RemoveEventListener( LINK( &mrSidebarWin, sw::annotation::SwAnnotationWin, WindowEventListener ) );
     Control::dispose();
 }
+#endif
 
-OutlinerView* SidebarTextControl::GetTextView() const
+void SidebarTextControl::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark)
 {
-    return mrSidebarWin.GetOutlinerView();
+    Point aMousePos = EditViewOutputDevice().PixelToLogic(rPosition);
+    m_xEditView->SetCursorLogicPosition(aMousePos, bPoint, bClearMark);
 }
 
+#if 0
 void SidebarTextControl::GetFocus()
 {
     Window::GetFocus();
@@ -398,7 +399,7 @@ void SidebarTextControl::Command( const CommandEvent& rCEvt )
             }
             else
             {
-                HandleScrollCommand( rCEvt, nullptr , mrSidebarWin.Scrollbar());
+//TODO                HandleScrollCommand( rCEvt, nullptr , mrSidebarWin.Scrollbar());
             }
         }
         else
@@ -447,6 +448,8 @@ css::uno::Reference< css::accessibility::XAccessible > SidebarTextControl::Creat
     css::uno::Reference< css::accessibility::XAccessible > xAcc( xWinPeer, css::uno::UNO_QUERY );
     return xAcc;
 }
+
+#endif
 
 } // end of namespace sw::sidebarwindows
 
