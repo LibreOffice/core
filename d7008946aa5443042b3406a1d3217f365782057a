@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac6cfea2_c5714cb2",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3942,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-04T08:40:28Z",
+      "side": 1,
+      "message": "Could you please describe, in steps, what you are doing here in these lines?",
+      "range": {
+        "startLine": 3940,
+        "startChar": 4,
+        "endLine": 3942,
+        "endChar": 62
+      },
+      "revId": "d7008946aa5443042b3406a1d3217f365782057a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
