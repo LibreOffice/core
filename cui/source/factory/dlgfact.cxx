@@ -145,6 +145,11 @@ short AbstractTitleDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractScriptSelectorDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return SfxDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractScriptSelectorDialog_Impl::Execute()
 {
     return m_xDlg->run();
@@ -1113,7 +1118,7 @@ void AbstractDialogFactory_Impl::ShowAsyncScriptErrorDialog(weld::Window* pParen
 VclPtr<AbstractScriptSelectorDialog> AbstractDialogFactory_Impl::CreateScriptSelectorDialog(weld::Window* pParent,
         const Reference<frame::XFrame>& rxFrame)
 {
-    return VclPtr<AbstractScriptSelectorDialog_Impl>::Create(std::make_unique<SvxScriptSelectorDialog>(pParent, rxFrame));
+    return VclPtr<AbstractScriptSelectorDialog_Impl>::Create(std::make_shared<SvxScriptSelectorDialog>(pParent, rxFrame));
 }
 
 OUString AbstractScriptSelectorDialog_Impl::GetScriptURL() const
