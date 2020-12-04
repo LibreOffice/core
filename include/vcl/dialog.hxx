@@ -103,6 +103,7 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void    Command( const CommandEvent& rCEvt ) override;
+    virtual void    PixelInvalidate(const tools::Rectangle* pRectangle) override;
 
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
