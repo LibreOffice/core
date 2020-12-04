@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-21 15:23:13 using:
+ Generated on 2020-12-04 09:59:34 using:
  ./bin/update_pch sc scui --cutoff=1 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -31,12 +31,12 @@
 #include <osl/time.h>
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
-#include <rtl/ustrbuf.hxx>
 #include <sal/config.h>
 #include <sal/types.h>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
@@ -54,6 +54,7 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/editobj.hxx>
@@ -73,7 +74,6 @@
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -85,7 +85,6 @@
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/inettbc.hxx>
-#include <svtools/miscopt.hxx>
 #include <svtools/restartdialog.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/unitconv.hxx>
@@ -96,9 +95,9 @@
 #include <svx/pageitem.hxx>
 #include <svx/txencbox.hxx>
 #include <tools/color.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
 #include <tools/lineend.hxx>
-#include <unicode/uclean.h>
 #include <unicode/ucsdet.h>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -111,6 +110,7 @@
 #include <attrib.hxx>
 #include <autoform.hxx>
 #include <calcconfig.hxx>
+#include <compiler.hxx>
 #include <condformatdlg.hxx>
 #include <condformathelper.hxx>
 #include <condformatmgr.hxx>

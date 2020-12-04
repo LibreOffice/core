@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-21 15:26:24 using:
+ Generated on 2020-12-04 10:00:05 using:
  ./bin/update_pch sw swui --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -95,7 +95,6 @@
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/IDialogRenderable.hxx>
-#include <vcl/ITiledRenderable.hxx>
 #include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/accessibletableprovider.hxx>
@@ -180,6 +179,7 @@
 #include <basic/basicdllapi.h>
 #include <basic/sbxcore.hxx>
 #include <basic/sbxdef.hxx>
+#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
@@ -333,6 +333,7 @@
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -341,21 +342,32 @@
 #include <editeng/editstat.hxx>
 #include <editeng/eedata.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/forbiddenruleitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/hngpnctitem.hxx>
+#include <editeng/hyphenzoneitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <editeng/numdef.hxx>
 #include <editeng/numitem.hxx>
+#include <editeng/orphitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/paragraphdata.hxx>
+#include <editeng/paravertalignitem.hxx>
+#include <editeng/pgrditem.hxx>
+#include <editeng/scriptspaceitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/sizeitem.hxx>
+#include <editeng/spltitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/svxfont.hxx>
+#include <editeng/tstpitem.hxx>
 #include <editeng/ulspitem.hxx>
+#include <editeng/widwitem.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
@@ -394,7 +406,6 @@
 #include <sfx2/shell.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/viewsh.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sot/sotdllapi.h>
@@ -456,6 +467,7 @@
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
+#include <tools/degree.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>
@@ -463,6 +475,7 @@
 #include <tools/globname.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/multisel.hxx>
 #include <tools/poly.hxx>
@@ -498,7 +511,6 @@
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <IDocumentDeviceAccess.hxx>
-#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IMark.hxx>
 #include <SwNumberTreeTypes.hxx>
@@ -513,7 +525,6 @@
 #include <column.hxx>
 #include <dbmgr.hxx>
 #include <doc.hxx>
-#include <docary.hxx>
 #include <docsh.hxx>
 #include <docstyle.hxx>
 #include <docufld.hxx>

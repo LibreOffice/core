@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-27 16:56:35 using:
+ Generated on 2020-12-04 09:59:12 using:
  ./bin/update_pch dbaccess dbu --cutoff=12 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <cstdlib>
 #include <cstring>
 #include <deque>
 #include <functional>
@@ -33,9 +34,9 @@
 #include <new>
 #include <optional>
 #include <ostream>
-#include <set>
 #include <string_view>
 #include <type_traits>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 #include <boost/property_tree/ptree_fwd.hpp>
@@ -155,7 +156,6 @@
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
@@ -182,7 +182,6 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svtools/svtdllapi.h>
-#include <svx/dataaccessdescriptor.hxx>
 #include <svx/svxdllapi.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
@@ -190,6 +189,7 @@
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
@@ -213,7 +213,6 @@
 #include <UITools.hxx>
 #include <browserids.hxx>
 #include <callbacks.hxx>
-#include <commontypes.hxx>
 #include <dbaccess/AsynchronousLink.hxx>
 #include <dbaccess/IController.hxx>
 #include <dbaccess/controllerframe.hxx>

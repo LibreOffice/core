@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-03 20:51:13 using:
+ Generated on 2020-12-04 09:59:40 using:
  ./bin/update_pch sot sot --cutoff=5 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,11 +23,13 @@
 #if PCH_LEVEL >= 1
 #include <cassert>
 #include <cstddef>
+#include <cstdlib>
 #include <limits>
 #include <memory>
 #include <new>
 #include <ostream>
 #include <string_view>
+#include <type_traits>
 #include <utility>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2

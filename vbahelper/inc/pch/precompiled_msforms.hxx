@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:07:08 using:
+ Generated on 2020-12-04 10:00:10 using:
  ./bin/update_pch vbahelper msforms --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,12 +25,14 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <cstdlib>
 #include <float.h>
 #include <functional>
 #include <initializer_list>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
+#include <map>
 #include <math.h>
 #include <memory>
 #include <new>
@@ -115,6 +117,7 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
@@ -143,9 +146,11 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <tools/color.hxx>
+#include <tools/degree.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>

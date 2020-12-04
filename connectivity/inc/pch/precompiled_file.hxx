@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-21 11:13:48 using:
+ Generated on 2020-12-04 09:59:08 using:
  ./bin/update_pch connectivity file --cutoff=2 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <cstdlib>
 #include <cstring>
 #include <functional>
 #include <initializer_list>
@@ -150,7 +151,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
-#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase_ex.hxx>
@@ -189,7 +189,9 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <tools/date.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/lineend.hxx>
+#include <tools/long.hxx>
 #include <tools/ref.hxx>
 #include <tools/stream.hxx>
 #include <tools/time.hxx>

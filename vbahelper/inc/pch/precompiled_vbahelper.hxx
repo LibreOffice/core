@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:07:21 using:
+ Generated on 2020-12-04 10:00:10 using:
  ./bin/update_pch vbahelper vbahelper --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -47,6 +47,7 @@
 #include <sal/macros.h>
 #include <sal/types.h>
 #include <vcl/IDialogRenderable.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/region.hxx>
 #include <vcl/svapp.hxx>

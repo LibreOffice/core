@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:14:55 using:
+ Generated on 2020-12-04 09:59:16 using:
  ./bin/update_pch hwpfilter hwp --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,6 +25,7 @@
 #include <assert.h>
 #include <cassert>
 #include <cstddef>
+#include <cstdlib>
 #include <errno.h>
 #include <iomanip>
 #include <limits>

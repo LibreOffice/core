@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-03 20:50:48 using:
+ Generated on 2020-12-04 09:59:15 using:
  ./bin/update_pch forms frm --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,6 +25,7 @@
 #include <cassert>
 #include <climits>
 #include <cstddef>
+#include <cstdlib>
 #include <functional>
 #include <iterator>
 #include <limits.h>
@@ -32,10 +33,13 @@
 #include <map>
 #include <memory>
 #include <new>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <string.h>
 #include <string_view>
+#include <type_traits>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 #include <boost/lexical_cast.hpp>
@@ -66,7 +70,6 @@
 #include <sal/types.h>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
-#include <vcl/event.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
@@ -230,12 +233,14 @@
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
+#include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/inetmime.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>

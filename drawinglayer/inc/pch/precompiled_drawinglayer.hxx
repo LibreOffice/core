@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-21 15:21:13 using:
+ Generated on 2020-12-04 09:59:13 using:
  ./bin/update_pch drawinglayer drawinglayer --cutoff=4 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstring>
+#include <cstdlib>
 #include <deque>
 #include <limits.h>
 #include <limits>
@@ -33,6 +33,7 @@
 #include <ostream>
 #include <string.h>
 #include <string_view>
+#include <type_traits>
 #include <utility>
 #include <vector>
 #endif // PCH_LEVEL >= 1
@@ -43,13 +44,12 @@
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.h>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textenc.h>
-#include <rtl/ustrbuf.h>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
@@ -69,7 +69,6 @@
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
-#include <basegfx/color/bcolormodifier.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
@@ -117,9 +116,11 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
+#include <tools/degree.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
 #endif // PCH_LEVEL >= 3
@@ -142,8 +143,6 @@
 #include <drawinglayer/primitive2d/PolyPolygonGradientPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonGraphicPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonHairlinePrimitive2D.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonHatchPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonMarkerPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
