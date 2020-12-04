@@ -404,7 +404,7 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id)
     RememberWidget("__DIALOG__", pRet.get());
 
     const vcl::ILibreOfficeKitNotifier* pNotifier = pDialog->GetLOKNotifier();
-    if (pNotifier)
+    if (pNotifier && id != "MacroSelectorDialog")
     {
         tools::JsonWriter aJsonWriter;
         m_aOwnedToplevel->DumpAsPropertyTree(aJsonWriter);
