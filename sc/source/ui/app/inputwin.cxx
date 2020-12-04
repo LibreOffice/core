@@ -1340,7 +1340,7 @@ void ScTextWnd::SetScrollBarRange()
         Size aOutputSize = rDevice.GetOutputSize();
 
         int nUpper = GetEditEngTxtHeight();
-        int nCurrentDocPos = m_xEditView->GetVisArea().TopLeft().Y();
+        int nCurrentDocPos = m_xEditView->GetVisArea().Top();
         int nStepIncrement = GetTextHeight();
         int nPageIncrement = aOutputSize.Height();
         int nPageSize = aOutputSize.Height();
