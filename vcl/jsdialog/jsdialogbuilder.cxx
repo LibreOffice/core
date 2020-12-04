@@ -375,35 +375,37 @@ VclPtr<vcl::Window>& JSInstanceBuilder::GetNotifierWindow()
 
 std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id, bool bTakeOwnership)
 {
+    std::unique_ptr<weld::Dialog> pRet;
     ::Dialog* pDialog = m_xBuilder->get<::Dialog>(id);
-    m_nWindowId = pDialog->GetLOKWindowId();
-    pDialog->SetLOKTunnelingState(false);
-
-    InsertWindowToMap(m_nWindowId);
 
     if (bTakeOwnership && pDialog)
     {
+        m_nWindowId = pDialog->GetLOKWindowId();
+        pDialog->SetLOKTunnelingState(false);
+
+        InsertWindowToMap(m_nWindowId);
+
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
         m_aOwnedToplevel.set(pDialog);
         m_xBuilder->drop_ownership(pDialog);
         m_bHasTopLevelDialog = true;
-    }
 
-    std::unique_ptr<weld::Dialog> pRet(pDialog ? new JSDialog(m_aOwnedToplevel, m_aOwnedToplevel,
-                                                              pDialog, this, false, m_sTypeOfJSON)
-                                               : nullptr);
+        pRet.reset(pDialog ? new JSDialog(m_aOwnedToplevel, m_aOwnedToplevel, pDialog, this, false,
+                                          m_sTypeOfJSON)
+                           : nullptr);
 
-    RememberWidget("__DIALOG__", pRet.get());
+        RememberWidget("__DIALOG__", pRet.get());
 
-    const vcl::ILibreOfficeKitNotifier* pNotifier = pDialog->GetLOKNotifier();
-    if (pNotifier && id != "MacroSelectorDialog")
-    {
-        std::stringstream aStream;
-        boost::property_tree::ptree aTree = m_aOwnedToplevel->DumpAsPropertyTree();
-        aTree.put("id", m_aOwnedToplevel->GetLOKWindowId());
-        boost::property_tree::write_json(aStream, aTree);
-        const std::string message = aStream.str();
-        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+        const vcl::ILibreOfficeKitNotifier* pNotifier = pDialog->GetLOKNotifier();
+        if (pNotifier && id != "MacroSelectorDialog")
+        {
+            std::stringstream aStream;
+            boost::property_tree::ptree aTree = m_aOwnedToplevel->DumpAsPropertyTree();
+            aTree.put("id", m_aOwnedToplevel->GetLOKWindowId());
+            boost::property_tree::write_json(aStream, aTree);
+            const std::string message = aStream.str();
+            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+        }
     }
 
     return pRet;
