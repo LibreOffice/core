@@ -4018,12 +4018,13 @@ void SdXMLTableShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStrin
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-SvXMLImportContextRef SdXMLTableShapeContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLTableShapeContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    if( mxTableImportContext.is() && (nPrefix == XML_NAMESPACE_TABLE) )
-        return mxTableImportContext->CreateChildContext(nPrefix, rLocalName, xAttrList);
-    else
-        return SdXMLShapeContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
+    if( mxTableImportContext.is() && IsTokenInNamespace(nElement, XML_NAMESPACE_TABLE) )
+        return mxTableImportContext->createFastChildContextFallback(nElement, xAttrList);
+    return SdXMLShapeContext::createFastChildContext(nElement, xAttrList);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
