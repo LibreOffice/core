@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#if 0
+
 #include "AnnotationMenuButton.hxx"
 
 #include <strings.hrc>
@@ -222,5 +224,7 @@ void AnnotationMenuButton::KeyInput(const KeyEvent& rKeyEvt)
 }
 
 } // end of namespace sw::annotation
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

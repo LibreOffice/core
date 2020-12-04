@@ -23,7 +23,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/window.hxx>
 
 #include "postithelper.hxx"
@@ -53,7 +53,7 @@ namespace sw::sidebarwindows {
 
 namespace sw::annotation {
 
-class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
+class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public InterimItemWindow
 {
     public:
         SwAnnotationWin( SwEditWin& rEditWin,
@@ -209,7 +209,9 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         virtual FactoryFunction GetUITestFactory() const override;
 
     private:
+#if 0
         VclPtr<MenuButton> CreateMenuButton();
+#endif
         virtual void    LoseFocus() override;
         virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
         virtual void    GetFocus() override;
@@ -225,7 +227,6 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
 
         SvxLanguageItem GetLanguage() const;
 
-        VclBuilder      maBuilder;
         SwPostItMgr&    mrMgr;
         SwView&         mrView;
 
@@ -236,10 +237,10 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
 
         VclPtr<sw::sidebarwindows::SidebarTextControl> mpSidebarTextControl;
         VclPtr<ScrollBar>      mpVScrollbar;
-        VclPtr<FixedText>      mpMetadataAuthor;
-        VclPtr<FixedText>      mpMetadataDate;
-        VclPtr<FixedText>      mpMetadataResolved;
-        VclPtr<MenuButton>     mpMenuButton;
+        std::unique_ptr<weld::Label> mxMetadataAuthor;
+        std::unique_ptr<weld::Label> mxMetadataDate;
+        std::unique_ptr<weld::Label> mxMetadataResolved;
+        std::unique_ptr<weld::MenuButton> mxMenuButton;
 
         std::unique_ptr<sw::sidebarwindows::AnchorOverlayObject> mpAnchor;
         std::unique_ptr<sw::sidebarwindows::ShadowOverlayObject> mpShadow;

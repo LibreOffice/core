@@ -56,7 +56,6 @@
 #include <vcl/event.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/menubtn.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/uitest/logger.hxx>
@@ -75,6 +74,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/syslocale.hxx>
 #include <memory>
 #include <comphelper/lok.hxx>
 
@@ -163,10 +163,12 @@ namespace sw::annotation {
 
 void SwAnnotationWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    Window::Paint(rRenderContext, rRect);
+    InterimItemWindow::Paint(rRenderContext, rRect);
 
-    if (!mpMetadataAuthor->IsVisible())
+    if (!mxMetadataAuthor->get_visible())
         return;
+
+#if 0
 
     //draw left over space
     if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
@@ -178,12 +180,12 @@ void SwAnnotationWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
         rRenderContext.SetFillColor(mColorDark);
     }
 
-    sal_uInt32 boxHeight = mpMetadataAuthor->GetSizePixel().Height() + mpMetadataDate->GetSizePixel().Height();
-    boxHeight += IsResolved() ? mpMetadataResolved->GetSizePixel().Height() : 0;
+    sal_uInt32 boxHeight = mxMetadataAuthor->GetSizePixel().Height() + mxMetadataDate->GetSizePixel().Height();
+    boxHeight += IsResolved() ? mxMetadataResolved->GetSizePixel().Height() : 0;
 
     rRenderContext.SetLineColor();
-    tools::Rectangle aRectangle(Point(mpMetadataAuthor->GetPosPixel().X() + mpMetadataAuthor->GetSizePixel().Width(),
-                               mpMetadataAuthor->GetPosPixel().Y()),
+    tools::Rectangle aRectangle(Point(mxMetadataAuthor->GetPosPixel().X() + mxMetadataAuthor->GetSizePixel().Width(),
+                               mxMetadataAuthor->GetPosPixel().Y()),
                          Size(GetMetaButtonAreaWidth(), boxHeight));
 
     if (comphelper::LibreOfficeKit::isActive())
@@ -191,10 +193,12 @@ void SwAnnotationWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     else
         aRectangle = PixelToLogic(aRectangle);
     rRenderContext.DrawRect(aRectangle);
+#endif
 }
 
 void SwAnnotationWin::PaintTile(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
+#if 0
     Paint(rRenderContext, rRect);
 
     for (sal_uInt16 i = 0; i < GetChildCount(); ++i)
@@ -250,6 +254,7 @@ void SwAnnotationWin::PaintTile(vcl::RenderContext& rRenderContext, const tools:
     rRenderContext.Push(PushFlags::NONE);
     pProcessor.reset();
     rRenderContext.Push(PushFlags::NONE);
+#endif
 }
 
 bool SwAnnotationWin::IsHitWindow(const Point& rPointLogic)
@@ -273,44 +278,47 @@ void SwAnnotationWin::SetCursorLogicPosition(const Point& rPosition, bool bPoint
 
 void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, DrawFlags nInFlags)
 {
+#if 0
     Size aSz = pDev->PixelToLogic(GetSizePixel());
 
-    if (mpMetadataAuthor->IsVisible() )
+    if (mxMetadataAuthor->get_visible() )
     {
         pDev->SetFillColor(mColorDark);
         pDev->SetLineColor();
         pDev->DrawRect( tools::Rectangle( rPt, aSz ) );
     }
 
-    if (mpMetadataAuthor->IsVisible())
+    if (mxMetadataAuthor->get_visible())
     {
-        vcl::Font aOrigFont(mpMetadataAuthor->GetControlFont());
-        Point aPos(PixelToLogic(mpMetadataAuthor->GetPosPixel()));
+#if 0
+        vcl::Font aOrigFont(mxMetadataAuthor->GetControlFont());
+        Point aPos(PixelToLogic(mxMetadataAuthor->GetPosPixel()));
         aPos += rPt;
-        vcl::Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetLabelFont() );
-        mpMetadataAuthor->SetControlFont( aFont );
-        mpMetadataAuthor->Draw(pDev, aPos, nInFlags);
-        mpMetadataAuthor->SetControlFont( aOrigFont );
+        vcl::Font aFont( mxMetadataAuthor->GetSettings().GetStyleSettings().GetLabelFont() );
+        mxMetadataAuthor->SetControlFont( aFont );
+        mxMetadataAuthor->Draw(pDev, aPos, nInFlags);
+        mxMetadataAuthor->SetControlFont( aOrigFont );
+#endif
     }
 
-    if (mpMetadataDate->IsVisible())
+    if (mxMetadataDate->get_visible())
     {
-        vcl::Font aOrigFont(mpMetadataDate->GetControlFont());
-        Point aPos(PixelToLogic(mpMetadataDate->GetPosPixel()));
+        vcl::Font aOrigFont(mxMetadataDate->GetControlFont());
+        Point aPos(PixelToLogic(mxMetadataDate->GetPosPixel()));
         aPos += rPt;
-        vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetLabelFont() );
-        mpMetadataDate->SetControlFont( aFont );
-        mpMetadataDate->SetControlFont( aOrigFont );
+        vcl::Font aFont( mxMetadataDate->GetSettings().GetStyleSettings().GetLabelFont() );
+        mxMetadataDate->SetControlFont( aFont );
+        mxMetadataDate->SetControlFont( aOrigFont );
     }
 
-    if (mpMetadataResolved->IsVisible())
+    if (mxMetadataResolved->IsVisible())
     {
-        vcl::Font aOrigFont(mpMetadataResolved->GetControlFont());
-        Point aPos(PixelToLogic(mpMetadataResolved->GetPosPixel()));
+        vcl::Font aOrigFont(mxMetadataResolved->GetControlFont());
+        Point aPos(PixelToLogic(mxMetadataResolved->GetPosPixel()));
         aPos += rPt;
-        vcl::Font aFont( mpMetadataResolved->GetSettings().GetStyleSettings().GetLabelFont() );
-        mpMetadataResolved->SetControlFont( aFont );
-        mpMetadataResolved->SetControlFont( aOrigFont );
+        vcl::Font aFont( mxMetadataResolved->GetSettings().GetStyleSettings().GetLabelFont() );
+        mxMetadataResolved->SetControlFont( aFont );
+        mxMetadataResolved->SetControlFont( aOrigFont );
     }
 
     Size aOrigSize(mpSidebarTextControl->GetSizePixel());
@@ -332,25 +340,26 @@ void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, DrawFlags nInFl
     if (!mpVScrollbar->IsVisible())
         return;
 
-    vcl::Font aOrigFont(mpMetadataDate->GetControlFont());
-    Color aOrigBg( mpMetadataDate->GetControlBackground() );
-    OUString sOrigText(mpMetadataDate->GetText());
+    vcl::Font aOrigFont(mxMetadataDate->GetControlFont());
+    Color aOrigBg( mxMetadataDate->GetControlBackground() );
+    OUString sOrigText(mxMetadataDate->GetText());
 
     Point aPos(PixelToLogic(mpMenuButton->GetPosPixel()));
     aPos += rPt;
 
-    vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetLabelFont() );
-    mpMetadataDate->SetControlFont( aFont );
-    mpMetadataDate->SetControlBackground( Color(0xFFFFFF) );
-    mpMetadataDate->SetText("...");
-    aOrigSize = mpMetadataDate->GetSizePixel();
-    mpMetadataDate->SetSizePixel(mpMenuButton->GetSizePixel());
-    mpMetadataDate->Draw(pDev, aPos, nInFlags);
-    mpMetadataDate->SetSizePixel(aOrigSize);
+    vcl::Font aFont( mxMetadataDate->GetSettings().GetStyleSettings().GetLabelFont() );
+    mxMetadataDate->SetControlFont( aFont );
+    mxMetadataDate->SetControlBackground( Color(0xFFFFFF) );
+    mxMetadataDate->SetText("...");
+    aOrigSize = mxMetadataDate->GetSizePixel();
+    mxMetadataDate->SetSizePixel(mpMenuButton->GetSizePixel());
+    mxMetadataDate->Draw(pDev, aPos, nInFlags);
+    mxMetadataDate->SetSizePixel(aOrigSize);
 
-    mpMetadataDate->SetText(sOrigText);
-    mpMetadataDate->SetControlFont( aOrigFont );
-    mpMetadataDate->SetControlBackground( aOrigBg );
+    mxMetadataDate->SetText(sOrigText);
+    mxMetadataDate->SetControlFont( aOrigFont );
+    mxMetadataDate->SetControlBackground( aOrigBg );
+#endif
 }
 
 void SwAnnotationWin::KeyInput(const KeyEvent& rKeyEvent)
@@ -466,53 +475,41 @@ void SwAnnotationWin::InitControls()
     mpSidebarTextControl->SetPointer(PointerStyle::Text);
 
     // window controls for author and date
-    mpMetadataAuthor = VclPtr<FixedText>::Create(this);
-    mpMetadataAuthor->SetAccessibleName( SwResId( STR_ACCESS_ANNOTATION_AUTHOR_NAME ) );
-    mpMetadataAuthor->EnableRTL(AllSettings::GetLayoutRTL());
-    mpMetadataAuthor->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
+    mxMetadataAuthor = m_xBuilder->weld_label("author");
+    mxMetadataAuthor->set_accessible_name( SwResId( STR_ACCESS_ANNOTATION_AUTHOR_NAME ) );
+    mxMetadataAuthor->set_direction(AllSettings::GetLayoutRTL());
+//TODO    mxMetadataAuthor->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
     // we should leave this setting alone, but for this we need a better layout algo
     // with variable meta size height
     {
-        AllSettings aSettings = mpMetadataAuthor->GetSettings();
-        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        vcl::Font aFont = aStyleSettings.GetLabelFont();
+        vcl::Font aFont = mxMetadataAuthor->get_font();
         aFont.SetFontHeight(8);
-        aStyleSettings.SetLabelFont(aFont);
-        aSettings.SetStyleSettings(aStyleSettings);
-        mpMetadataAuthor->SetSettings(aSettings);
+        mxMetadataAuthor->set_font(aFont);
     }
 
-    mpMetadataDate = VclPtr<FixedText>::Create(this);
-    mpMetadataDate->SetAccessibleName( SwResId( STR_ACCESS_ANNOTATION_DATE_NAME ) );
-    mpMetadataDate->EnableRTL(AllSettings::GetLayoutRTL());
-    mpMetadataDate->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
+    mxMetadataDate = m_xBuilder->weld_label("date");
+    mxMetadataDate->set_accessible_name( SwResId( STR_ACCESS_ANNOTATION_DATE_NAME ) );
+    mxMetadataDate->set_direction(AllSettings::GetLayoutRTL());
+//    mxMetadataDate->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
     // we should leave this setting alone, but for this we need a better layout algo
     // with variable meta size height
     {
-        AllSettings aSettings = mpMetadataDate->GetSettings();
-        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        vcl::Font aFont = aStyleSettings.GetLabelFont();
+        vcl::Font aFont = mxMetadataDate->get_font();
         aFont.SetFontHeight(8);
-        aStyleSettings.SetLabelFont(aFont);
-        aSettings.SetStyleSettings(aStyleSettings);
-        mpMetadataDate->SetSettings(aSettings);
+        mxMetadataDate->set_font(aFont);
     }
 
-    mpMetadataResolved = VclPtr<FixedText>::Create(this);
-    mpMetadataResolved->SetAccessibleName( SwResId( STR_ACCESS_ANNOTATION_RESOLVED_NAME ) );
-    mpMetadataResolved->EnableRTL(AllSettings::GetLayoutRTL());
-    mpMetadataResolved->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
+    mxMetadataResolved = m_xBuilder->weld_label("resolved");
+    mxMetadataResolved->set_accessible_name( SwResId( STR_ACCESS_ANNOTATION_RESOLVED_NAME ) );
+    mxMetadataResolved->set_direction(AllSettings::GetLayoutRTL());
+//    mxMetadataResolved->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
     // we should leave this setting alone, but for this we need a better layout algo
     // with variable meta size height
     {
-        AllSettings aSettings = mpMetadataResolved->GetSettings();
-        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        vcl::Font aFont = aStyleSettings.GetLabelFont();
+        vcl::Font aFont = mxMetadataResolved->get_font();
         aFont.SetFontHeight(8);
-        aStyleSettings.SetLabelFont(aFont);
-        aSettings.SetStyleSettings(aStyleSettings);
-        mpMetadataResolved->SetSettings(aSettings);
-        mpMetadataResolved->SetText( SwResId( STR_ACCESS_ANNOTATION_RESOLVED_NAME ) );
+        mxMetadataResolved->set_font(aFont);
+        mxMetadataResolved->set_label(SwResId(STR_ACCESS_ANNOTATION_RESOLVED_NAME));
     }
 
     SwDocShell* aShell = mrView.GetDocShell();
@@ -564,7 +561,8 @@ void SwAnnotationWin::InitControls()
 
     CheckMetaText();
 
-    mpMenuButton = CreateMenuButton();
+//    mpMenuButton = CreateMenuButton();
+    mxMenuButton = m_xBuilder->weld_menu_button("menubutton");
 
     SetLanguage(GetLanguage());
     GetOutlinerView()->StartSpeller();
@@ -572,9 +570,9 @@ void SwAnnotationWin::InitControls()
     mpOutliner->CompleteOnlineSpelling();
 
     mpSidebarTextControl->Show();
-    mpMetadataAuthor->Show();
-    mpMetadataDate->Show();
-    if(IsResolved()) { mpMetadataResolved->Show(); }
+    mxMetadataAuthor->show();
+    mxMetadataDate->show();
+    if(IsResolved()) { mxMetadataResolved->show(); }
     mpVScrollbar->Show();
 }
 
@@ -591,9 +589,9 @@ void SwAnnotationWin::CheckMetaText()
     {
         sMeta = OUString::Concat(sMeta.subView(0, 20)) + "...";
     }
-    if ( mpMetadataAuthor->GetText() != sMeta )
+    if ( mxMetadataAuthor->get_label() != sMeta )
     {
-        mpMetadataAuthor->SetText(sMeta);
+        mxMetadataAuthor->set_label(sMeta);
     }
 
     Date aDate = GetDate();
@@ -609,9 +607,9 @@ void SwAnnotationWin::CheckMetaText()
     {
         sMeta += " " + rLocalData.getTime( GetTime(),false );
     }
-    if ( mpMetadataDate->GetText() != sMeta )
+    if ( mxMetadataDate->get_label() != sMeta )
     {
-        mpMetadataDate->SetText(sMeta);
+        mxMetadataDate->set_label(sMeta);
     }
 }
 
@@ -631,27 +629,29 @@ void SwAnnotationWin::Rescale()
     SetMapMode( aMode );
     mpSidebarTextControl->SetMapMode( aMode );
     const Fraction& rFraction = mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY();
-    if ( mpMetadataAuthor )
+#if 0
+    if ( mxMetadataAuthor )
     {
-        vcl::Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetLabelFont() );
+        vcl::Font aFont( mxMetadataAuthor->GetSettings().GetStyleSettings().GetLabelFont() );
         sal_Int32 nHeight = tools::Long(aFont.GetFontHeight() * rFraction);
         aFont.SetFontHeight( nHeight );
-        mpMetadataAuthor->SetControlFont( aFont );
+        mxMetadataAuthor->SetControlFont( aFont );
     }
-    if ( mpMetadataDate )
+    if ( mxMetadataDate )
     {
-        vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetLabelFont() );
+        vcl::Font aFont( mxMetadataDate->GetSettings().GetStyleSettings().GetLabelFont() );
         sal_Int32 nHeight = tools::Long(aFont.GetFontHeight() * rFraction);
         aFont.SetFontHeight( nHeight );
-        mpMetadataDate->SetControlFont( aFont );
+        mxMetadataDate->SetControlFont( aFont );
     }
-    if ( mpMetadataResolved )
+    if ( mxMetadataResolved )
     {
-        vcl::Font aFont( mpMetadataResolved->GetSettings().GetStyleSettings().GetLabelFont() );
+        vcl::Font aFont( mxMetadataResolved->GetSettings().GetStyleSettings().GetLabelFont() );
         sal_Int32 nHeight = tools::Long(aFont.GetFontHeight() * rFraction);
         aFont.SetFontHeight( nHeight );
-        mpMetadataResolved->SetControlFont( aFont );
+        mxMetadataResolved->SetControlFont( aFont );
     }
+#endif
 }
 
 void SwAnnotationWin::SetPosAndSize()
@@ -895,9 +895,9 @@ void SwAnnotationWin::DoResize()
     tools::ULong aWidth    =  GetSizePixel().Width();
 
     aHeight -= GetMetaHeight();
-    mpMetadataAuthor->Show();
-    if(IsResolved()) { mpMetadataResolved->Show(); }
-    mpMetadataDate->Show();
+    mxMetadataAuthor->show();
+    if(IsResolved()) { mxMetadataResolved->show(); }
+    mxMetadataDate->show();
     mpSidebarTextControl->SetQuickHelpText(OUString());
     unsigned int numFields = GetNumFields();
     if (aTextHeight > aHeight)
@@ -913,20 +913,22 @@ void SwAnnotationWin::DoResize()
     {
         const Size aSizeOfMetadataControls( GetSizePixel().Width() - GetMetaButtonAreaWidth(),
                                             GetMetaHeight()/numFields );
-        mpMetadataAuthor->setPosSizePixel( 0,
+#if 0
+        mxMetadataAuthor->setPosSizePixel( 0,
                                            aHeight,
                                            aSizeOfMetadataControls.Width(),
                                            aSizeOfMetadataControls.Height() );
-        mpMetadataDate->setPosSizePixel( 0,
+        mxMetadataDate->setPosSizePixel( 0,
                                          aHeight + aSizeOfMetadataControls.Height(),
                                          aSizeOfMetadataControls.Width(),
                                          aSizeOfMetadataControls.Height() );
         if(IsResolved()) {
-            mpMetadataResolved->setPosSizePixel( 0,
+            mxMetadataResolved->setPosSizePixel( 0,
                                                  aHeight + aSizeOfMetadataControls.Height()*2,
                                                  aSizeOfMetadataControls.Width(),
                                                  aSizeOfMetadataControls.Height() );
         }
+#endif
     }
 
     mpOutliner->SetPaperSize( PixelToLogic( Size(aWidth,aHeight) ) ) ;
@@ -958,16 +960,18 @@ void SwAnnotationWin::DoResize()
     const Fraction& fx( GetMapMode().GetScaleX() );
     const Fraction& fy( GetMapMode().GetScaleY() );
 
-    const Point aPos( mpMetadataAuthor->GetPosPixel());
+#if 0
+    const Point aPos( mxMetadataAuthor->GetPosPixel());
     mpMenuButton->setPosSizePixel( tools::Long(aPos.X()+GetSizePixel().Width()-(METABUTTON_WIDTH+10)*fx),
                                    tools::Long(aPos.Y()+5*fy),
                                    tools::Long(METABUTTON_WIDTH*fx),
                                    tools::Long(METABUTTON_HEIGHT*fy) );
+#endif
 }
 
 void SwAnnotationWin::SetSizePixel( const Size& rNewSize )
 {
-    Window::SetSizePixel(rNewSize);
+    InterimItemWindow::SetSizePixel(rNewSize);
 
     if (mpShadow)
     {
@@ -1029,32 +1033,34 @@ void SwAnnotationWin::SetColor(Color aColorDark,Color aColorLight, Color aColorA
     if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         return;
 
+#if 0
     {
-        mpMetadataAuthor->SetControlBackground(mColorDark);
-        AllSettings aSettings = mpMetadataAuthor->GetSettings();
+        mxMetadataAuthor->SetControlBackground(mColorDark);
+        AllSettings aSettings = mxMetadataAuthor->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
         aStyleSettings.SetLabelTextColor(aColorAnchor);
         aSettings.SetStyleSettings(aStyleSettings);
-        mpMetadataAuthor->SetSettings(aSettings);
+        mxMetadataAuthor->SetSettings(aSettings);
     }
 
     {
-        mpMetadataDate->SetControlBackground(mColorDark);
-        AllSettings aSettings = mpMetadataDate->GetSettings();
+        mxMetadataDate->SetControlBackground(mColorDark);
+        AllSettings aSettings = mxMetadataDate->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
         aStyleSettings.SetLabelTextColor(aColorAnchor);
         aSettings.SetStyleSettings(aStyleSettings);
-        mpMetadataDate->SetSettings(aSettings);
+        mxMetadataDate->SetSettings(aSettings);
     }
 
     {
-        mpMetadataResolved->SetControlBackground(mColorDark);
-        AllSettings aSettings = mpMetadataResolved->GetSettings();
+        mxMetadataResolved->SetControlBackground(mColorDark);
+        AllSettings aSettings = mxMetadataResolved->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
         aStyleSettings.SetLabelTextColor(aColorAnchor);
         aSettings.SetStyleSettings(aStyleSettings);
-        mpMetadataResolved->SetSettings(aSettings);
+        mxMetadataResolved->SetSettings(aSettings);
     }
+#endif
 
     AllSettings aSettings2 = mpVScrollbar->GetSettings();
     StyleSettings aStyleSettings2 = aSettings2.GetStyleSettings();
@@ -1149,7 +1155,7 @@ void SwAnnotationWin::ShowNote()
 {
     SetPosAndSize();
     if (!IsVisible())
-        Window::Show();
+        InterimItemWindow::Show();
     if (mpShadow && !mpShadow->isVisible())
         mpShadow->setVisible(true);
     if (mpAnchor && !mpAnchor->isVisible())
@@ -1163,7 +1169,7 @@ void SwAnnotationWin::ShowNote()
 void SwAnnotationWin::HideNote()
 {
     if (IsVisible())
-        Window::Hide();
+        InterimItemWindow::Hide();
     if (mpAnchor)
     {
         if (mrMgr.IsShowAnchor())
