@@ -29,7 +29,6 @@
 #include <win/salids.hrc>
 #include <win/salgdi.h>
 #include <win/salframe.h>
-#include <opengl/salbmp.hxx>
 
 #include <vcl/BitmapAccessMode.hxx>
 #include <vcl/BitmapBuffer.hxx>
@@ -38,7 +37,6 @@
 #include <vcl/bitmapaccess.hxx>
 #include <outdata.hxx>
 #include <salgdiimpl.hxx>
-#include <opengl/win/gdiimpl.hxx>
 
 #include <config_features.h>
 #if HAVE_FEATURE_SKIA
@@ -109,11 +107,6 @@ public:
 void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
 {
     BitmapPalette aBitmapPalette;
-    OpenGLSalBitmap* pGLSalBitmap = dynamic_cast<OpenGLSalBitmap*>(&rSalBitmap);
-    if (pGLSalBitmap != nullptr)
-    {
-        aBitmapPalette = pGLSalBitmap->GetBitmapPalette();
-    }
 #if HAVE_FEATURE_SKIA
     if(SkiaSalBitmap* pSkiaSalBitmap = dynamic_cast<SkiaSalBitmap*>(&rSalBitmap))
         aBitmapPalette = pSkiaSalBitmap->Palette();
@@ -168,11 +161,11 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
 
 void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
 {
-    if (dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get()) == nullptr &&
+    if (dynamic_cast<const WinSalBitmap*>(&rSalBitmap) == nullptr
 #if HAVE_FEATURE_SKIA
-        dynamic_cast<WinSkiaSalGraphicsImpl*>(mpImpl.get()) == nullptr &&
+        && dynamic_cast<WinSkiaSalGraphicsImpl*>(mpImpl.get()) == nullptr
 #endif
-        dynamic_cast<const WinSalBitmap*>(&rSalBitmap) == nullptr)
+        )
     {
         std::unique_ptr<WinSalBitmap> pWinSalBitmap(new WinSalBitmap());
         SalBitmap& rConstBitmap = const_cast<SalBitmap&>(rSalBitmap);
@@ -189,11 +182,11 @@ void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSSalBitmap,
                               const SalBitmap& rSTransparentBitmap )
 {
-    if (dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get()) == nullptr &&
+    if (dynamic_cast<const WinSalBitmap*>(&rSSalBitmap) == nullptr
 #if HAVE_FEATURE_SKIA
-        dynamic_cast<WinSkiaSalGraphicsImpl*>(mpImpl.get()) == nullptr &&
+        && dynamic_cast<WinSkiaSalGraphicsImpl*>(mpImpl.get()) == nullptr
 #endif
-        dynamic_cast<const WinSalBitmap*>(&rSSalBitmap) == nullptr)
+        )
     {
         std::unique_ptr<WinSalBitmap> pWinSalBitmap(new WinSalBitmap());
         SalBitmap& rConstBitmap = const_cast<SalBitmap&>(rSSalBitmap);

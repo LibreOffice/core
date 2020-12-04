@@ -784,10 +784,6 @@ bool Bitmap::HasFastScale()
     if( SkiaHelper::isVCLSkiaEnabled() && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster)
         return true;
 #endif
-#if HAVE_FEATURE_OPENGL
-    if( OpenGLHelper::isVCLOpenGLEnabled())
-        return true;
-#endif
     return false;
 }
 

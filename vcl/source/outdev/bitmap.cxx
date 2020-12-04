@@ -697,10 +697,7 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
                 return;
         }
 
-        // we need to make sure OpenGL never reaches this slow code path
-#if HAVE_FEATURE_OPENGL
-        assert(!OpenGLHelper::isVCLOpenGLEnabled());
-#endif
+        // we need to make sure Skia never reaches this slow code path
         assert(!SkiaHelper::isVCLSkiaEnabled());
     }
 

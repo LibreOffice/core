@@ -37,7 +37,6 @@
 #include <osl/module.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 
-#include <opengl/win/gdiimpl.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -45,6 +44,7 @@
 #include <win/salgdi.h>
 #include <win/saldata.hxx>
 #include <win/scoped_gdi.hxx>
+#include <win/wingdiimpl.hxx>
 
 #include <uxtheme.h>
 #include <vssym32.h>

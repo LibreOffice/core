@@ -19,18 +19,11 @@
 #include <unx/salvd.h>
 #include <unx/x11/xlimits.hxx>
 
-#include <opengl/texture.hxx>
 #include <opengl/zone.hxx>
-#include <opengl/RenderState.hxx>
-#include <opengl/x11/gdiimpl.hxx>
-#include <opengl/x11/salvd.hxx>
 
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <sal/log.hxx>
-
-#include <o3tl/lru_map.hxx>
-#include <ControlCacheKey.hxx>
 
 static std::vector<GLXContext> g_vShareList;
 static bool g_bAnyCurrent;
@@ -555,44 +548,6 @@ bool GLX11Window::Synchronize(bool bOnoff) const
 OpenGLContext* X11SalInstance::CreateOpenGLContext()
 {
     return new X11OpenGLContext;
-}
-
-X11OpenGLSalGraphicsImpl::X11OpenGLSalGraphicsImpl( X11SalGraphics& rParent ):
-    OpenGLSalGraphicsImpl(rParent,rParent.GetGeometryProvider()),
-    mrX11Parent(rParent)
-{
-}
-
-X11OpenGLSalGraphicsImpl::~X11OpenGLSalGraphicsImpl()
-{
-}
-
-void X11OpenGLSalGraphicsImpl::Init()
-{
-    // The m_pFrame and m_pVDev pointers are updated late in X11
-    mpProvider = mrX11Parent.GetGeometryProvider();
-    OpenGLSalGraphicsImpl::Init();
-}
-
-rtl::Reference<OpenGLContext> X11OpenGLSalGraphicsImpl::CreateWinContext()
-{
-    NativeWindowHandleProvider *pProvider = dynamic_cast<NativeWindowHandleProvider*>(mrX11Parent.m_pFrame);
-
-    if( !pProvider )
-        return nullptr;
-
-    sal_uIntPtr aWin = pProvider->GetNativeWindowHandle();
-    rtl::Reference<X11OpenGLContext> xContext = new X11OpenGLContext;
-    xContext->setVCLOnly();
-    xContext->init( mrX11Parent.GetXDisplay(), aWin,
-                    mrX11Parent.m_nXScreen.getXScreen() );
-    return rtl::Reference<OpenGLContext>(xContext.get());
-}
-
-void X11OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
-{
-    OpenGLSalGraphicsImpl *pImpl = pSrcGraphics ? static_cast< OpenGLSalGraphicsImpl* >(pSrcGraphics->GetImpl()) : static_cast< OpenGLSalGraphicsImpl *>(mrX11Parent.GetImpl());
-    OpenGLSalGraphicsImpl::DoCopyBits( rPosAry, *pImpl );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
