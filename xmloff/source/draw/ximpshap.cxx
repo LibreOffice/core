@@ -169,6 +169,71 @@ SdXMLShapeContext::~SdXMLShapeContext()
 {
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShapeContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+    SvXMLImportContextRef xContext;
+    // #i68101#
+    if( nElement == XML_ELEMENT(SVG, XML_TITLE) || nElement == XML_ELEMENT(SVG, XML_DESC)
+        || nElement == XML_ELEMENT(SVG_COMPAT, XML_TITLE) || nElement == XML_ELEMENT(SVG_COMPAT, XML_DESC) )
+    {
+    }
+    else if( nElement == XML_ELEMENT(LO_EXT, XML_SIGNATURELINE) )
+    {
+    }
+    else if( nElement == XML_ELEMENT(LO_EXT, XML_QRCODE) )
+    {
+    }
+    else if( nElement == XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS) )
+    {
+    }
+    else if( nElement == XML_ELEMENT(DRAW, XML_GLUE_POINT) )
+    {
+    }
+    else if( nElement == XML_ELEMENT(DRAW, XML_THUMBNAIL) )
+    {
+    }
+    else
+    {
+        // create text cursor on demand
+        if( !mxCursor.is() )
+        {
+            uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
+            if( xText.is() )
+            {
+                rtl::Reference < XMLTextImportHelper > xTxtImport =
+                    GetImport().GetTextImport();
+                mxOldCursor = xTxtImport->GetCursor();
+                mxCursor = xText->createTextCursor();
+                if( mxCursor.is() )
+                {
+                    xTxtImport->SetCursor( mxCursor );
+                }
+
+                // remember old list item and block (#91964#) and reset them
+                // for the text frame
+                xTxtImport->PushListContext();
+                mbListContextPushed = true;
+            }
+        }
+
+        // if we have a text cursor, lets  try to import some text
+        if( mxCursor.is() )
+        {
+            xContext = GetImport().GetTextImport()->CreateTextChildContext(
+                GetImport(), nElement, xAttrList,
+                ( mbTextBox ? XMLTextType::TextBox : XMLTextType::Shape ) );
+        }
+    }
+
+    if (!xContext)
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
+
+    return xContext.get();
+}
+
+
 SvXMLImportContextRef SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
@@ -215,38 +280,6 @@ SvXMLImportContextRef SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefi
                     break;
                 }
             }
-        }
-    }
-    else
-    {
-        // create text cursor on demand
-        if( !mxCursor.is() )
-        {
-            uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
-            if( xText.is() )
-            {
-                rtl::Reference < XMLTextImportHelper > xTxtImport =
-                    GetImport().GetTextImport();
-                mxOldCursor = xTxtImport->GetCursor();
-                mxCursor = xText->createTextCursor();
-                if( mxCursor.is() )
-                {
-                    xTxtImport->SetCursor( mxCursor );
-                }
-
-                // remember old list item and block (#91964#) and reset them
-                // for the text frame
-                xTxtImport->PushListContext();
-                mbListContextPushed = true;
-            }
-        }
-
-        // if we have a text cursor, lets  try to import some text
-        if( mxCursor.is() )
-        {
-            xContext = GetImport().GetTextImport()->CreateTextChildContext(
-                GetImport(), p_nPrefix, rLocalName, xAttrList,
-                ( mbTextBox ? XMLTextType::TextBox : XMLTextType::Shape ) );
         }
     }
 
