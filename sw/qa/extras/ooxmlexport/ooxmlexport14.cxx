@@ -220,6 +220,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf130814model, "tdf130814.docx")
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf107020, "tdf107020.docx")
 {
+    if (!IsDefaultDPI())
+        return;
     xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(p_XmlDoc);
     assertXPath(
