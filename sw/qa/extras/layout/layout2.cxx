@@ -1022,6 +1022,29 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf132956)
                        "Category 1");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137819)
+{
+    // Open the bugdoc and check if it went wrong
+    SwDoc* pDoc = createDoc("tdf137819.fodt");
+    CPPUNIT_ASSERT(pDoc);
+
+    // Change the anchor if the textbox to As_char
+    uno::Reference<beans::XPropertySet> xShapePropSet(getShape(1), uno::UNO_QUERY);
+    xShapePropSet->setPropertyValue(
+        "AnchorType", uno::Any(text::TextContentAnchorType::TextContentAnchorType_AS_CHARACTER));
+
+    // Make the layout xml dump after the change
+    auto pXml = parseLayoutDump();
+    auto sTextRightSidePosition
+        = getXPath(pXml, "/root/page/body/txt[6]/anchored/fly/infos/bounds", "right");
+    auto sShapeRightSidePosition
+        = getXPath(pXml, "/root/page/body/txt[6]/anchored/SwAnchoredDrawObject/bounds", "right");
+    // Before the textframe did not follow the shape, now it supposed to
+    // so the right side of the shape must be greater than the right side of
+    // textframe:
+    CPPUNIT_ASSERT(sTextRightSidePosition.toInt32() < sShapeRightSidePosition.toInt32());
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122014)
 {
     SwDoc* pDoc = createDoc("tdf122014.docx");

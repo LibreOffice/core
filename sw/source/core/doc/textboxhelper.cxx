@@ -37,6 +37,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <sal/log.hxx>
 #include <tools/UnitConversion.hxx>
+#include <svx/swframetypes.hxx>
 
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -170,31 +171,6 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
         syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(sal_Int16(eMode)));
 
     // TODO: Text dialog attr setting to frame
-
-    const SwFormatAnchor& rAnch = pShape->GetAnchor();
-    if (!((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE && rAnch.GetPageNum() != 0)
-          || ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA
-               || rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
-              && rAnch.GetContentAnchor())))
-        return;
-
-    SfxItemSet aTxFrmSet(pFormat->GetDoc()->GetAttrPool(), aFrameFormatSetRange);
-
-    if (rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR
-        || rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA)
-        aTxFrmSet.Put(rAnch);
-
-    SwFormatVertOrient aVOri(pFormat->GetVertOrient());
-    SwFormatHoriOrient aHOri(pFormat->GetHoriOrient());
-    aVOri.SetVertOrient(pShape->GetVertOrient().GetVertOrient());
-    aHOri.SetHoriOrient(pShape->GetHoriOrient().GetHoriOrient());
-    aVOri.SetRelationOrient(pShape->GetVertOrient().GetRelationOrient());
-    aHOri.SetRelationOrient(pShape->GetHoriOrient().GetRelationOrient());
-    aTxFrmSet.Put(aVOri);
-    aTxFrmSet.Put(aHOri);
-
-    if (aTxFrmSet.Count())
-        pFormat->SetFormatAttr(aTxFrmSet);
 
     // Check if the shape had text before and move it to the new textframe
     if (bCopyText && !sCopyableText.isEmpty())
@@ -694,7 +670,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                         xPropertySet->setPropertyValue(
                             UNO_NAME_ANCHOR_TYPE,
                             uno::makeAny(
-                                text::TextContentAnchorType::TextContentAnchorType_AT_CHARACTER));
+                                text::TextContentAnchorType::TextContentAnchorType_AT_PARAGRAPH));
                     }
                     else // Otherwise copy the anchor type of the shape
                     {
@@ -839,6 +815,34 @@ void SwTextBoxHelper::restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrame
     }
 }
 
+text::TextContentAnchorType SwTextBoxHelper::mapAnchorType(const RndStdIds& rAnchorID)
+{
+    text::TextContentAnchorType aAnchorType;
+    switch (rAnchorID)
+    {
+        case RndStdIds::FLY_AS_CHAR:
+            aAnchorType = text::TextContentAnchorType::TextContentAnchorType_AS_CHARACTER;
+            break;
+        case RndStdIds::FLY_AT_CHAR:
+            aAnchorType = text::TextContentAnchorType::TextContentAnchorType_AT_CHARACTER;
+            break;
+        case RndStdIds::FLY_AT_PARA:
+            aAnchorType = text::TextContentAnchorType::TextContentAnchorType_AT_PARAGRAPH;
+            break;
+        case RndStdIds::FLY_AT_PAGE:
+            aAnchorType = text::TextContentAnchorType::TextContentAnchorType_AT_PAGE;
+            break;
+        case RndStdIds::FLY_AT_FLY:
+            aAnchorType = text::TextContentAnchorType::TextContentAnchorType_AT_FRAME;
+            break;
+        default:
+            aAnchorType = text::TextContentAnchorType::TextContentAnchorType_AT_PARAGRAPH;
+            SAL_WARN("sw.core", "SwTextBoxHelper::mapAnchorType: Unknown AnchorType!");
+            break;
+    }
+    return aAnchorType;
+}
+
 void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& rSet)
 {
     SwFrameFormat* pFormat = getOtherTextBoxFormat(&rShape, RES_DRAWFRMFMT);
@@ -850,22 +854,16 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
     SfxItemIter aIter(rSet);
     const SfxPoolItem* pItem = aIter.GetCurItem();
 
-    const RndStdIds aAnchId = rShape.GetAnchor().GetAnchorId();
-    if (aAnchId == RndStdIds::FLY_AT_PAGE && rShape.GetAnchor().GetPageNum() != 0)
-    {
-        aTextBoxSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, rShape.GetAnchor().GetPageNum()));
-    }
-    if ((aAnchId == RndStdIds::FLY_AT_PARA || aAnchId == RndStdIds::FLY_AT_CHAR)
-        && rShape.GetAnchor().GetContentAnchor())
-    {
-        aTextBoxSet.Put(rShape.GetAnchor());
-    }
     do
     {
         switch (pItem->Which())
         {
             case RES_VERT_ORIENT:
             {
+                // The new position can be with anchor changing so sync it!
+                const text::TextContentAnchorType aNewAnchorType
+                    = mapAnchorType(rShape.GetAnchor().GetAnchorId());
+                syncProperty(&rShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE, uno::Any(aNewAnchorType));
                 auto& rOrient = static_cast<const SwFormatVertOrient&>(*pItem);
                 SwFormatVertOrient aOrient(rOrient);
 
@@ -889,6 +887,10 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
             break;
             case RES_HORI_ORIENT:
             {
+                // The new position can be with anchor changing so sync it!
+                const text::TextContentAnchorType aNewAnchorType
+                    = mapAnchorType(rShape.GetAnchor().GetAnchorId());
+                syncProperty(&rShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE, uno::Any(aNewAnchorType));
                 auto& rOrient = static_cast<const SwFormatHoriOrient&>(*pItem);
                 SwFormatHoriOrient aOrient(rOrient);
 
@@ -924,6 +926,24 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                     aSize.SetWidth(aRect.getWidth());
                     aSize.SetHeight(aRect.getHeight());
                     aTextBoxSet.Put(aSize);
+                }
+            }
+            break;
+            case RES_ANCHOR:
+            {
+                auto& rAnchor = static_cast<const SwFormatAnchor&>(*pItem);
+                if (rAnchor == rShape.GetAnchor())
+                // the anchor have to be synced
+                {
+                    const text::TextContentAnchorType aNewAnchorType
+                        = mapAnchorType(rShape.GetAnchor().GetAnchorId());
+                    syncProperty(&rShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE,
+                                 uno::Any(aNewAnchorType));
+                }
+                else
+                {
+                    SAL_WARN("sw.core", "SwTextBoxHelper::syncFlyFrameAttr: The anchor of the "
+                                        "shape different from the textframe!");
                 }
             }
             break;
