@@ -1535,32 +1535,37 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
             do  // artificial loop for flow control
             {
-                ScopedVclPtr<AbstractScriptSelectorDialog> pDlg(pFact->CreateScriptSelectorDialog(lcl_getDialogParent(xFrame), xFrame));
+                VclPtr<AbstractScriptSelectorDialog> pDlg(pFact->CreateScriptSelectorDialog(lcl_getDialogParent(xFrame), xFrame));
                 OSL_ENSURE( pDlg, "SfxApplication::OfaExec_Impl( SID_RUNMACRO ): no dialog!" );
                 if ( !pDlg )
                     break;
                 pDlg->SetRunLabel();
 
-                short nDialogResult = pDlg->Execute();
-                if ( !nDialogResult )
-                    break;
+                pDlg->StartExecuteAsync([pDlg, xFrame](sal_Int32 nDialogResult) {
+                    if ( !nDialogResult )
+                    {
+                        pDlg->disposeOnce();
+                        return;
+                    }
 
-                Sequence< Any > args;
-                Sequence< sal_Int16 > outIndex;
-                Sequence< Any > outArgs;
-                Any ret;
+                    Sequence< Any > args;
+                    Sequence< sal_Int16 > outIndex;
+                    Sequence< Any > outArgs;
+                    Any ret;
 
-                Reference< XInterface > xScriptContext;
+                    Reference< XInterface > xScriptContext;
 
-                Reference< XController > xController;
-                if ( xFrame.is() )
-                    xController = xFrame->getController();
-                if ( xController.is() )
-                    xScriptContext = xController->getModel();
-                if ( !xScriptContext.is() )
-                    xScriptContext = xController;
+                    Reference< XController > xController;
+                    if ( xFrame.is() )
+                        xController = xFrame->getController();
+                    if ( xController.is() )
+                        xScriptContext = xController->getModel();
+                    if ( !xScriptContext.is() )
+                        xScriptContext = xController;
 
-                SfxObjectShell::CallXScript( xScriptContext, pDlg->GetScriptURL(), args, ret, outIndex, outArgs );
+                    SfxObjectShell::CallXScript( xScriptContext, pDlg->GetScriptURL(), args, ret, outIndex, outArgs );
+                    pDlg->disposeOnce();
+                });
             }
             while ( false );
             rReq.Done();

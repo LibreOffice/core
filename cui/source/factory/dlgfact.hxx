@@ -313,13 +313,14 @@ public:
 class SvxScriptSelectorDialog;
 class AbstractScriptSelectorDialog_Impl : public AbstractScriptSelectorDialog
 {
-    std::unique_ptr<SvxScriptSelectorDialog> m_xDlg;
+    std::shared_ptr<SvxScriptSelectorDialog> m_xDlg;
 public:
-    explicit AbstractScriptSelectorDialog_Impl(std::unique_ptr<SvxScriptSelectorDialog> p)
+    explicit AbstractScriptSelectorDialog_Impl(std::shared_ptr<SvxScriptSelectorDialog> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
     virtual OUString GetScriptURL() const override;
     virtual void SetRunLabel() override;
 };
