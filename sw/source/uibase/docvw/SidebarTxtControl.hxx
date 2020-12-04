@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/ctrl.hxx>
+#include <svx/weldeditview.hxx>
 
 class OutlinerView;
 class SwView;
@@ -29,7 +29,7 @@ namespace sw::annotation { class SwAnnotationWin; }
 
 namespace sw::sidebarwindows {
 
-class SidebarTextControl : public Control
+class SidebarTextControl : public WeldEditView
 {
     private:
         sw::annotation::SwAnnotationWin& mrSidebarWin;
@@ -40,39 +40,48 @@ class SidebarTextControl : public Control
         void MakeVisible();
 
     protected:
-        virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+#if 0
         /// @see Window::LogicInvalidate().
         void LogicInvalidate(const tools::Rectangle* pRectangle) override;
-        virtual void    Command( const CommandEvent& rCEvt ) override;
-        virtual void    LoseFocus() override;
-        virtual void    RequestHelp(const HelpEvent &rEvt) override;
-        virtual OUString GetSurroundingText() const override;
-        virtual Selection GetSurroundingTextSelection() const override;
-        virtual bool DeleteSurroundingText(const Selection& rSelection) override;
+#endif
+        virtual bool Command(const CommandEvent& rCEvt) override;
+        virtual void GetFocus() override;
+        virtual void LoseFocus() override;
+
+        virtual OUString RequestHelp(tools::Rectangle& rRect) override;
 
     public:
-        SidebarTextControl( sw::annotation::SwAnnotationWin& rSidebarWin,
-                           WinBits nBits,
+        SidebarTextControl(sw::annotation::SwAnnotationWin& rSidebarWin,
                            SwView& rDocView,
-                           SwPostItMgr& rPostItMgr );
+                           SwPostItMgr& rPostItMgr);
+
+        virtual EditView* GetEditView() const override;
+
+        virtual EditEngine* GetEditEngine() const override;
+
+        virtual void EditViewScrollStateChange() override;
+
+        void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+
         virtual ~SidebarTextControl() override;
+
+        void SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark);
+
+#if 0
         virtual void dispose() override;
-
-        virtual void GetFocus() override;
-        virtual void KeyInput( const KeyEvent& rKeyEvt ) override;
-        virtual void MouseButtonDown(const MouseEvent& rMouseEvent) override;
-        virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
-        virtual void MouseMove(const MouseEvent& rMEvt) override;
-
-        bool MouseDownGainingFocus() const { return mbMouseDownGainingFocus; }
+#endif
+        virtual bool KeyInput(const KeyEvent& rKeyEvt) override;
+        virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
+        virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
 
         OutlinerView* GetTextView() const;
 
         DECL_LINK( OnlineSpellCallback, SpellCallbackInfo&, void );
 
-        virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
-
+#if 0
         virtual void Draw(OutputDevice* pDev, const Point&, DrawFlags) override;
+#endif
 };
 
 } // end of namespace sw::sidebarwindows
