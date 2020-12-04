@@ -13459,8 +13459,6 @@ sw/source/uibase/docvw/ShadowOverlayObject.cxx
 sw/source/uibase/docvw/ShadowOverlayObject.hxx
 sw/source/uibase/docvw/SidebarTxtControl.cxx
 sw/source/uibase/docvw/SidebarTxtControl.hxx
-sw/source/uibase/docvw/SidebarTxtControlAcc.cxx
-sw/source/uibase/docvw/SidebarTxtControlAcc.hxx
 sw/source/uibase/docvw/SidebarWinAcc.cxx
 sw/source/uibase/docvw/SidebarWinAcc.hxx
 sw/source/uibase/docvw/edtdd.cxx

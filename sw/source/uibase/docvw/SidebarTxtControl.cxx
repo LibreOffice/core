@@ -19,7 +19,6 @@
 
 #include "SidebarTxtControl.hxx"
 
-#include "SidebarTxtControlAcc.hxx"
 #include <docsh.hxx>
 #include <doc.hxx>
 
@@ -59,34 +58,94 @@
 
 namespace sw::sidebarwindows {
 
-SidebarTextControl::SidebarTextControl( sw::annotation::SwAnnotationWin& rSidebarWin,
-                                      WinBits nBits,
-                                      SwView& rDocView,
-                                      SwPostItMgr& rPostItMgr )
-    : Control( &rSidebarWin, nBits )
-    , mrSidebarWin( rSidebarWin )
-    , mrDocView( rDocView )
-    , mrPostItMgr( rPostItMgr )
+SidebarTextControl::SidebarTextControl(sw::annotation::SwAnnotationWin& rSidebarWin,
+                                       SwView& rDocView,
+                                       SwPostItMgr& rPostItMgr)
+    : mrSidebarWin(rSidebarWin)
+    , mrDocView(rDocView)
+    , mrPostItMgr(rPostItMgr)
 {
-    AddEventListener( LINK( &mrSidebarWin, sw::annotation::SwAnnotationWin, WindowEventListener ) );
+//TODO    AddEventListener( LINK( &mrSidebarWin, sw::annotation::SwAnnotationWin, WindowEventListener ) );
+}
+
+EditView* SidebarTextControl::GetEditView() const
+{
+    OutlinerView* pOutlinerView = mrSidebarWin.GetOutlinerView();
+    if (!pOutlinerView)
+        return nullptr;
+    return &pOutlinerView->GetEditView();
+}
+
+EditEngine* SidebarTextControl::GetEditEngine() const
+{
+    OutlinerView* pOutlinerView = mrSidebarWin.GetOutlinerView();
+    if (!pOutlinerView)
+        return nullptr;
+    return pOutlinerView->GetEditView().GetEditEngine();
+}
+
+void SidebarTextControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    Size aSize(pDrawingArea->get_size_request());
+    if (aSize.Width() == -1)
+        aSize.setWidth(500);
+    if (aSize.Height() == -1)
+        aSize.setHeight(100);
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+
+    SetOutputSizePixel(aSize);
+
+    weld::CustomWidgetController::SetDrawingArea(pDrawingArea);
+
+    EnableRTL(false);
+
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    Color aBgColor = rStyleSettings.GetWindowColor();
+
+    OutputDevice& rDevice = pDrawingArea->get_ref_device();
+
+    rDevice.SetMapMode(MapMode(MapUnit::MapTwip));
+    rDevice.SetBackground(aBgColor);
+
+    Size aOutputSize(rDevice.PixelToLogic(aSize));
+    aSize = aOutputSize;
+    aSize.setHeight(aSize.Height());
+
+    EditView* pEditView = GetEditView();
+    pEditView->setEditViewCallbacks(this);
+
+    EditEngine* pEditEngine = GetEditEngine();
+    pEditEngine->SetPaperSize(aSize);
+    pEditEngine->SetRefDevice(&rDevice);
+
+    pEditView->SetOutputArea(tools::Rectangle(Point(0, 0), aOutputSize));
+    pEditView->SetBackgroundColor(aBgColor);
+
+    pDrawingArea->set_cursor(PointerStyle::Text);
+
+    InitAccessible();
 }
 
 SidebarTextControl::~SidebarTextControl()
 {
-    disposeOnce();
+//TODO    disposeOnce();
 }
 
+#if 0
 void SidebarTextControl::dispose()
 {
     RemoveEventListener( LINK( &mrSidebarWin, sw::annotation::SwAnnotationWin, WindowEventListener ) );
     Control::dispose();
 }
+#endif
 
-OutlinerView* SidebarTextControl::GetTextView() const
+void SidebarTextControl::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark)
 {
-    return mrSidebarWin.GetOutlinerView();
+    Point aMousePos = EditViewOutputDevice().PixelToLogic(rPosition);
+    m_xEditView->SetCursorLogicPosition(aMousePos, bPoint, bClearMark);
 }
 
+#if 0
 void SidebarTextControl::GetFocus()
 {
     Window::GetFocus();
@@ -398,7 +457,7 @@ void SidebarTextControl::Command( const CommandEvent& rCEvt )
             }
             else
             {
-                HandleScrollCommand( rCEvt, nullptr , mrSidebarWin.Scrollbar());
+//TODO                HandleScrollCommand( rCEvt, nullptr , mrSidebarWin.Scrollbar());
             }
         }
         else
@@ -446,6 +505,8 @@ css::uno::Reference< css::accessibility::XAccessible > SidebarTextControl::Creat
     css::uno::Reference< css::accessibility::XAccessible > xAcc( xWinPeer, css::uno::UNO_QUERY );
     return xAcc;
 }
+
+#endif
 
 } // end of namespace sw::sidebarwindows
 
