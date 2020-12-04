@@ -61,6 +61,7 @@
 #include <svx/xlnstit.hxx>
 #include <svx/xlnedit.hxx>
 #include <svx/xflhtit.hxx>
+#include <unomid.h>
 
 using namespace ::com::sun::star;
 
@@ -918,6 +919,14 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
 
                     SwFormatFlyCnt aFormat( pContact->GetFormat() );
                     pNd->InsertItem( aFormat, aPos.nContent.GetIndex(), 0 );
+
+                    // Has a textbox attached to the format? Sync it as well!
+                    if (SwTextBoxHelper::getOtherTextBoxFormat(pContact->GetFormat(),
+                                                               RES_DRAWFRMFMT))
+                    {
+                        SwTextBoxHelper::syncFlyFrameAttr(*pContact->GetFormat(),
+                                                          pContact->GetFormat()->GetAttrSet());
+                    }
                 }
                 break;
             default:
