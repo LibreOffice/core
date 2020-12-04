@@ -716,7 +716,6 @@ constructor_map = {
 custom_widgets = [
     'ContextVBox',
     'DropdownBox',
-    'ManagedMenuButton',
     'NotebookbarTabControl',
     'NotebookbarToolBox',
     'PriorityHBox',

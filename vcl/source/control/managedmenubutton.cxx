@@ -9,31 +9,13 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <vcl/builderfactory.hxx>
+
+#include <managedmenubutton.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/menubtn.hxx>
 
-#include <com/sun/star/awt/XPopupMenu.hpp>
-#include <com/sun/star/frame/theDesktop.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/theDesktop.hpp>
 #include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
-#include <com/sun/star/frame/XPopupMenuController.hpp>
-
-namespace {
-
-class ManagedMenuButton : public MenuButton
-{
-public:
-    ManagedMenuButton(vcl::Window* pParent, WinBits nStyle);
-    ~ManagedMenuButton() override;
-
-    void Activate() override;
-    void dispose() override;
-
-private:
-    css::uno::Reference<css::awt::XPopupMenu> m_xPopupMenu;
-    css::uno::Reference<css::frame::XPopupMenuController> m_xPopupController;
-};
 
 ManagedMenuButton::ManagedMenuButton(vcl::Window* pParent, WinBits nStyle)
     : MenuButton(pParent, nStyle)
@@ -114,9 +96,5 @@ void ManagedMenuButton::Activate()
     if (m_xPopupController.is())
         m_xPopupController->setPopupMenu(m_xPopupMenu);
 }
-
-}
-
-VCL_BUILDER_FACTORY_ARGS(ManagedMenuButton, WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_FLATBUTTON)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
