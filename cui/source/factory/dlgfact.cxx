@@ -145,6 +145,11 @@ short AbstractTitleDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractScriptSelectorDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return SfxDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractScriptSelectorDialog_Impl::Execute()
 {
     return m_xDlg->run();
