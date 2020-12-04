@@ -50,6 +50,7 @@ class MenuBarWindow;
 struct SystemMenuData;
 enum class FloatWinPopupFlags;
 
+namespace com::sun::star::awt { class XPopupMenu; }
 namespace com::sun::star::accessibility { class XAccessible;  }
 namespace com::sun::star::frame { class XFrame; }
 
@@ -520,6 +521,8 @@ public:
     void EndExecute();
     virtual void SelectItem(sal_uInt16 nId) override;
     void SetSelectedEntry( sal_uInt16 nId ); // for use by native submenu only
+
+    css::uno::Reference<css::awt::XPopupMenu> CreateMenuInterface();
 
     static bool IsInExecute();
     static PopupMenu* GetActivePopupMenu();

@@ -55,6 +55,9 @@ public:
     virtual void        SetWindowInterface( vcl::Window* pWindow, css::uno::Reference< css::awt::XWindowPeer> xIFace ) override;
     virtual VclPtr<vcl::Window> GetWindow(const css::uno::Reference<css::awt::XWindow>& rxWindow) override;
 
+    // Menu
+    virtual css::uno::Reference<css::awt::XPopupMenu> CreateMenuInterface( PopupMenu* pPopupMenu ) override;
+
     void                WindowDestroyed( vcl::Window* pWindow ) override;
 
     // Accessibility

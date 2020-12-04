@@ -3113,6 +3113,14 @@ tools::Long PopupMenu::ImplCalcHeight( sal_uInt16 nEntries ) const
     return nHeight;
 }
 
+css::uno::Reference<css::awt::XPopupMenu> PopupMenu::CreateMenuInterface()
+{
+    UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper();
+    if ( pWrapper )
+        return pWrapper->CreateMenuInterface(this);
+    return nullptr;
+}
+
 ImplMenuDelData::ImplMenuDelData( const Menu* pMenu )
 : mpNext( nullptr )
 , mpMenu( nullptr )

@@ -21,6 +21,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/awt/vclxcontainer.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <awt/vclxgraphics.hxx>
 
@@ -177,6 +178,11 @@ void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, css::uno::Reference< 
     }
     pVCLXWindow->SetWindow( pWindow );
     pWindow->SetWindowPeer( xIFace, pVCLXWindow );
+}
+
+css::uno::Reference<css::awt::XPopupMenu> UnoWrapper::CreateMenuInterface( PopupMenu* pPopupMenu )
+{
+    return new VCLXPopupMenu(pPopupMenu);
 }
 
 css::uno::Reference< css::awt::XGraphics> UnoWrapper::CreateGraphics( OutputDevice* pOutDev )

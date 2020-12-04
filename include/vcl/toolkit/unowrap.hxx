@@ -30,10 +30,12 @@
 #include <vcl/vclptr.hxx>
 
 namespace vcl { class Window; }
-class OutputDevice;
 class Menu;
+class OutputDevice;
+class PopupMenu;
 namespace com::sun::star::awt {
     class XGraphics;
+    class XPopupMenu;
     class XToolkit;
     class XWindow;
     class XWindowPeer;
@@ -55,9 +57,12 @@ public:
     virtual void                ReleaseAllGraphics( OutputDevice* pOutDev ) = 0;
 
     // Window
-    virtual css::uno::Reference< css::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow ) = 0;
+    virtual css::uno::Reference<css::awt::XWindowPeer> GetWindowInterface( vcl::Window* pWindow ) = 0;
     virtual void                SetWindowInterface( vcl::Window* pWindow, css::uno::Reference< css::awt::XWindowPeer > xIFace ) = 0;
     virtual VclPtr<vcl::Window> GetWindow(const css::uno::Reference<css::awt::XWindow>& rxWindow) = 0;
+
+    // PopupMenu
+    virtual css::uno::Reference<css::awt::XPopupMenu> CreateMenuInterface( PopupMenu* pPopupMenu ) = 0;
 
     virtual void                WindowDestroyed( vcl::Window* pWindow ) = 0;
 
