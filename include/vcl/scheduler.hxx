@@ -27,6 +27,7 @@ struct ImplSchedulerContext;
 class VCL_DLLPUBLIC Scheduler final
 {
     friend class SchedulerGuard;
+    friend class SchedulerGuardReleaser;
     friend class Task;
     Scheduler() = delete;
 
