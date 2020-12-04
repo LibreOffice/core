@@ -190,7 +190,8 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
         if (rUIFile == "modules/scalc/ui/pivottablelayoutdialog.ui"
             || rUIFile == "modules/scalc/ui/selectsource.ui"
             || rUIFile == "modules/scalc/ui/managenamesdialog.ui"
-            || rUIFile == "modules/scalc/ui/definename.ui")
+            || rUIFile == "modules/scalc/ui/definename.ui"
+            || rUIFile == "cui/ui/macroselectordialog.ui")
         {
             bUseJSBuilder = true;
         }
