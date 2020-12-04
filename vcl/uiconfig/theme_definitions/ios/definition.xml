@@ -5,9 +5,9 @@
         <faceColor value="#F7F7F7"/>
         <checkedColor value="#C0C0C0"/>
         <lightColor value="#FFFFFF"/>
-        <lightBorderColor value="#F7F7F7"/>
-        <shadowColor value="#808080"/>
-        <darkShadowColor value="#000000"/>
+        <lightBorderColor value="#808080"/>
+        <shadowColor value="#ffffff"/>
+        <darkShadowColor value="#808080"/>
         <buttonTextColor value="#007AFF"/>
         <defaultActionButtonTextColor value="#007AFF"/>
         <actionButtonTextColor value="#007AFF"/>
