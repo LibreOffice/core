@@ -388,6 +388,10 @@ void DockingManager::RemoveWindow( const vcl::Window *pWindow )
         const auto& xWrapper = *it;
         if (xWrapper && xWrapper->mpDockingWindow == pWindow)
         {
+            // deleting wrappers calls set of actions which may want to use
+            // wrapper we want to delete - avoid crash using temporary owner
+            // while erasing
+            auto pTemporaryOwner = std::move(*it);
             mvDockingWindows.erase( it );
             break;
         }
