@@ -178,6 +178,11 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
             rUIFile == "modules/scalc/ui/validationdialog.ui")
             bUseJSBuilder = true;
     }
+    else if (comphelper::LibreOfficeKit::isActive())
+    {
+        if (rUIFile == "cui/ui/macroselectordialog.ui")
+            bUseJSBuilder = true;
+    }
 
     if (bUseJSBuilder)
         return JSInstanceBuilder::CreateDialogBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
