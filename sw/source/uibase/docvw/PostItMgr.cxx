@@ -827,10 +827,7 @@ void SwPostItMgr::LayoutPostIts()
                                 comphelper::LibreOfficeKit::setTiledPainting(!visiblePostIt->HasChildPathFocus());
                             visiblePostIt->ShowNote();
                             if (!bTiledPainting)
-                            {
                                 comphelper::LibreOfficeKit::setTiledPainting(bTiledPainting);
-                                visiblePostIt->InvalidateControl();
-                            }
                         }
                         else
                         {
@@ -965,7 +962,7 @@ void SwPostItMgr::DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage)
         if (!pPostIt)
             continue;
         Point aPoint(mpEditWin->PixelToLogic(pPostIt->GetPosPixel()));
-        pPostIt->Draw(pOutDev, aPoint, DrawFlags::NONE);
+        pPostIt->DrawForPage(pOutDev, aPoint);
     }
 }
 
