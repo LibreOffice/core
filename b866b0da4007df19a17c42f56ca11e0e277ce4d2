@@ -16,6 +16,24 @@
       "revId": "b866b0da4007df19a17c42f56ca11e0e277ce4d2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b25bf1d_dcbadb3d",
+        "filename": "cui/uiconfig/ui/toolbarmodedialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-12-04T05:57:20Z",
+      "side": 1,
+      "message": "True, forgot that I\u0027ve put the whole string into a variable. There is more work on this dialog needed and I\u0027ll remove this flag again.",
+      "parentUuid": "72e98077_ad96de39",
+      "revId": "b866b0da4007df19a17c42f56ca11e0e277ce4d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
