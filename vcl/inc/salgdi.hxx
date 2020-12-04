@@ -81,9 +81,6 @@ public:
 
     virtual SalGraphicsImpl*    GetImpl() const = 0;
 
-    /// Check that our mpImpl is OpenGL and return the context, otherwise NULL.
-    rtl::Reference<OpenGLContext> GetOpenGLContext() const;
-
     void                        setAntiAlias(bool bNew) { m_bAntiAlias = bNew; }
     bool                        getAntiAlias() const { return m_bAntiAlias; }
 

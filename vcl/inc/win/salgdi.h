@@ -154,7 +154,6 @@ struct CompatibleDC::Texture
 class WinSalGraphics : public SalGraphics
 {
     friend class WinSalGraphicsImpl;
-    friend class WinOpenGLSalGraphicsImpl;
     friend class ScopedFont;
 
 protected:

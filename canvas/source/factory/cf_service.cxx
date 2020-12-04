@@ -299,12 +299,6 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
                      m_bCacheHasForcedLastImpl,
                      "ForceSafeServiceImpl" );
 
-    // tdf#93870 - force VCL canvas in OpenGL mode for now.
-#if HAVE_FEATURE_OPENGL
-    if( OpenGLWrapper::isVCLOpenGLEnabled() )
-        bForceLastEntry = true;
-#endif
-
     // use anti-aliasing canvas, if config flag set (or not existing)
     bool bUseAAEntry(true);
     checkConfigFlag( bUseAAEntry,

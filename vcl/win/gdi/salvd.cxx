@@ -28,7 +28,6 @@
 #include <win/salinst.h>
 #include <win/salgdi.h>
 #include <win/salvd.h>
-#include <opengl/win/gdiimpl.hxx>
 #include <sal/log.hxx>
 #include <o3tl/temporary.hxx>
 

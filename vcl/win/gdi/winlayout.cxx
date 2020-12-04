@@ -30,9 +30,6 @@
 #include <comphelper/windowserrorstring.hxx>
 #include <comphelper/scopeguard.hxx>
 
-#include <opengl/win/gdiimpl.hxx>
-#include <opengl/win/winlayout.hxx>
-
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <win/salgdi.h>
 #include <win/saldata.hxx>
@@ -61,8 +58,6 @@ GlobalWinGlyphCache* GlobalWinGlyphCache::get()
     SalData* data = GetSalData();
     if (!data->m_pGlobalWinGlyphCache)
     {
-        if (OpenGLHelper::isVCLOpenGLEnabled())
-            data->m_pGlobalWinGlyphCache.reset(new OpenGLGlobalWinGlyphCache);
     }
     return data->m_pGlobalWinGlyphCache.get();
 }

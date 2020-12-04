@@ -77,8 +77,6 @@ namespace dxcanvas
         if( maArguments.getLength() == 0 )
             return;
 
-        // tdf#93870 - force VCL canvas in OpenGL mode for now.
-        assert( !OpenGLWrapper::isVCLOpenGLEnabled() );
         assert( !SkiaHelper::isVCLSkiaEnabled() );
 
         SAL_INFO("canvas.directx", "Canvas::initialize called" );

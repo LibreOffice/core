@@ -516,17 +516,8 @@ void Window::ImplCallResize()
 {
     mpWindowImpl->mbCallResize = false;
 
-    // OpenGL has a charming feature of black clearing the whole window
-    // some legacy code eg. the app-menu has the beautiful feature of
-    // avoiding re-paints when width doesn't change => invalidate all.
-#if HAVE_FEATURE_OPENGL
-    if( OpenGLWrapper::isVCLOpenGLEnabled() )
-        Invalidate();
-
     // Normally we avoid blanking on re-size unless people might notice:
-    else
-#endif
-        if( GetBackground().IsGradient() )
+    if( GetBackground().IsGradient() )
         Invalidate();
 
     Resize();

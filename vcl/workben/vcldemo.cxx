@@ -57,17 +57,6 @@
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <opengl/zone.hxx>
-
-// internal headers for OpenGLTests class.
-#if HAVE_FEATURE_OPENGL
-#include <salgdi.hxx>
-#include <salframe.hxx>
-#include <opengl/gdiimpl.hxx>
-#include <opengl/texture.hxx>
-#include <opengl/framebuffer.hxx>
-#include <vcl/opengl/OpenGLHelper.hxx>
-#endif
 
 #define FIXME_SELF_INTERSECTING_WORKING 0
 #define FIXME_BOUNCE_BUTTON 0
@@ -1907,14 +1896,9 @@ class DemoWidgets : public WorkWindow
     VclPtr<VclBox> mpBox;
     VclPtr<ToolBox> mpToolbox;
     VclPtr<PushButton> mpButton;
-    VclPtr<VclHBox> mpHBox;
-    VclPtr<CheckBox> mpGLCheck;
-    VclPtr<ComboBox> mpGLCombo;
-    VclPtr<PushButton> mpGLButton;
     std::vector<VclPtr<VclHBox>> mvCursorBoxes;
     std::vector<VclPtr<PushButton>> mvCursorButtons;
 
-    DECL_LINK(GLTestClick, Button*, void);
     DECL_LINK(CursorButtonClick, Button*, void);
 
 public:
@@ -1922,11 +1906,7 @@ public:
         WorkWindow(nullptr, WB_APP | WB_STDWORK),
         mpBox(VclPtrInstance<VclVBox>(this, false, 3)),
         mpToolbox(VclPtrInstance<ToolBox>(mpBox.get())),
-        mpButton(VclPtrInstance<PushButton>(mpBox.get())),
-        mpHBox(VclPtrInstance<VclHBox>(mpBox.get(), true, 3)),
-        mpGLCheck(VclPtrInstance<CheckBox>(mpHBox.get())),
-        mpGLCombo(VclPtrInstance<ComboBox>(mpHBox.get())),
-        mpGLButton(VclPtrInstance<PushButton>(mpHBox.get()))
+        mpButton(VclPtrInstance<PushButton>(mpBox.get()))
     {
         SetText("VCL widget demo");
 
@@ -1946,18 +1926,6 @@ public:
 
         mpButton->SetText("Click me; go on");
         mpButton->Show();
-
-        mpGLCheck->SetText("Test in OGL zone");
-        mpGLCheck->Show();
-        mpGLCombo->InsertEntry("sleep 1 second");
-        mpGLCombo->InsertEntry("sleep 3 seconds");
-        mpGLCombo->InsertEntry("sleep 7 seconds");
-        mpGLCombo->SelectEntryPos(2);
-        mpGLCombo->Show();
-        mpGLButton->SetText("Execute test");
-        mpGLButton->SetClickHdl(LINK(this,DemoWidgets,GLTestClick));
-        mpGLButton->Show();
-        mpHBox->Show();
 
         int i = 0;
         VclHBox* pCurrentCursorHBox = nullptr;
@@ -1990,10 +1958,6 @@ public:
     virtual ~DemoWidgets() override { disposeOnce(); }
     virtual void dispose() override
     {
-        mpGLButton.disposeAndClear();
-        mpGLCombo.disposeAndClear();
-        mpGLCheck.disposeAndClear();
-        mpHBox.disposeAndClear();
         for (auto & p : mvCursorButtons)
             p.disposeAndClear();
         mvCursorButtons.clear();
@@ -2035,35 +1999,6 @@ public:
 
 }
 
-IMPL_LINK_NOARG(DemoWidgets, GLTestClick, Button*, void)
-{
-    sal_Int32 nSelected = mpGLCombo->GetSelectedEntryPos();
-    sal_uInt32 nDelaySeconds = 0;
-
-    switch (nSelected)
-    {
-    case 0:
-        nDelaySeconds = 1;
-        break;
-    case 1:
-        nDelaySeconds = 3;
-        break;
-    case 2:
-        nDelaySeconds = 7;
-        break;
-    default:
-        break;
-    }
-
-    // Only create OpenGLZone RAII object if asked for:
-    std::unique_ptr<OpenGLZone> zone;
-    if (mpGLCheck->IsChecked()) {
-        zone.reset(new OpenGLZone);
-    }
-
-    osl::Thread::wait(std::chrono::seconds(nDelaySeconds));
-}
-
 IMPL_LINK(DemoWidgets, CursorButtonClick, Button*, pButton, void)
 {
     for (size_t i=0; i<SAL_N_ELEMENTS(gvPointerData); ++i)
@@ -2095,8 +2030,6 @@ class DemoPopup : public FloatingWindow
 
     virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle&) override
     {
-        // Interestingly in GL mode on Windows, this doesn't render.
-
         Size aSize = GetOutputSizePixel();
         tools::Rectangle aTextRect(Point(6, 6), aSize);
 
@@ -2124,115 +2057,6 @@ class DemoPopup : public FloatingWindow
 };
 
 }
-
-class OpenGLTests
-{
-    VclPtr<WorkWindow> mxWinA;
-    VclPtr<WorkWindow> mxWinB;
-    rtl::Reference<OpenGLContext> mpA;
-    rtl::Reference<OpenGLContext> mpB;
-
-    static OpenGLSalGraphicsImpl *getImpl(const VclPtr<OutputDevice> &xOut)
-    {
-        SalGraphics *pGraphics = xOut->GetGraphics();
-        return dynamic_cast<OpenGLSalGraphicsImpl *>(pGraphics->GetImpl());
-    }
-public:
-    OpenGLTests() :
-        mxWinA(VclPtr<WorkWindow>::Create(nullptr, WB_APP | WB_STDWORK)),
-        mxWinB(VclPtr<WorkWindow>::Create(nullptr, WB_APP | WB_STDWORK))
-    {
-        OpenGLSalGraphicsImpl *pImplA;
-        OpenGLSalGraphicsImpl *pImplB;
-        if (!OpenGLHelper::isVCLOpenGLEnabled())
-        {
-            pImplA = pImplB = nullptr;
-            fprintf (stderr, "OpenGL is not enabled: try SAL_FORCEGL=1\n");
-            return;
-        }
-
-        pImplA = getImpl(mxWinA);
-        pImplB = getImpl(mxWinB);
-        assert (pImplA && pImplB);
-        mpA = pImplA->GetOpenGLContext();
-        mpB = pImplB->GetOpenGLContext();
-
-        assert (mpA.is() && mpB.is());
-        assert (mpA != mpB);
-    }
-    ~OpenGLTests()
-    {
-        mxWinB.disposeAndClear();
-        mxWinA.disposeAndClear();
-    }
-
-    void testCurrentFramebuffer()
-    {
-        fprintf(stderr,"test OpenGLContext's framebuffer association.\n");
-        mpA->makeCurrent();
-        OpenGLFramebuffer *pBuffer;
-        {
-            OpenGLTexture aTexture(256,128);
-            pBuffer = mpA->AcquireFramebuffer(aTexture);
-        }
-        assert (pBuffer->IsFree()); (void)pBuffer;
-        mpB->makeCurrent();
-        assert (mpA->mpCurrentFramebuffer == nullptr);
-    }
-
-    void testVirtualDevice()
-    {
-        fprintf(stderr, "test sharing OpenGLContexts with virtual-devices reference counting\n");
-        VclPtrInstance<WorkWindow> xTempWin(nullptr, WB_STDWORK);
-        xTempWin->Show();
-        // forcibly make this context current by rendering
-        xTempWin->DrawPixel(Point(0, 0), COL_RED);
-
-        // get some other guys to leach off this context
-        VclPtrInstance<VirtualDevice> xVDev;
-        OpenGLSalGraphicsImpl* pImpl = getImpl(xVDev);
-        assert(pImpl);
-        rtl::Reference<OpenGLContext> pContext = pImpl->GetOpenGLContext();
-        VclPtrInstance<VirtualDevice> xVDev2;
-        OpenGLSalGraphicsImpl* pImpl2 = getImpl(xVDev2);
-        assert(pImpl2);
-        rtl::Reference<OpenGLContext> pContext2 = pImpl2->GetOpenGLContext();
-
-        // sharing the same off-screen context.
-        assert(pContext == pContext2);
-        assert(pContext == getImpl(xTempWin)->GetOpenGLContext());
-        assert(pContext != mpA && pContext != mpB);
-        (void)pContext; (void)pContext2;
-
-        // Kill the parent we free-ride on ...
-        xTempWin.disposeAndClear();
-
-        // This appears to continue working; fun.
-        Point aPt(0, 0);
-        xVDev->DrawPixel(aPt, COL_GREEN);
-        assert(xVDev->GetPixel(aPt) == COL_GREEN);
-        xVDev.disposeAndClear();
-
-        // Switch context to see if we can switch back.
-        mxWinA->DrawPixel(aPt, COL_WHITE);
-
-        // Now try switching back to this guy ...
-        xVDev2->DrawPixel(aPt, COL_BLUE);
-        assert(xVDev2->GetPixel(aPt) == COL_BLUE);
-        xVDev2.disposeAndClear();
-    }
-
-    int execute()
-    {
-        if (!OpenGLHelper::isVCLOpenGLEnabled())
-            return 1;
-
-        testCurrentFramebuffer();
-        testVirtualDevice();
-
-        return 0;
-    }
-};
 
 namespace {
     void renderFonts()
@@ -2309,7 +2133,6 @@ class DemoApp : public Application
         fprintf(stderr,"  --widgets          - launch the widget test.\n");
         fprintf(stderr,"  --popup            - launch the popup test.\n");
         fprintf(stderr,"  --threads          - render from multiple threads.\n");
-        fprintf(stderr,"  --gltest           - run openGL regression tests.\n");
         fprintf(stderr,"  --font <fontname>  - run the font render test.\n");
         fprintf(stderr, "\n");
         return 0;
@@ -2322,8 +2145,9 @@ public:
     {
         try
         {
-            bool bWidgets = false, bThreads = false;
-            bool bPopup = false, bGLTest = false;
+            bool bWidgets = false;
+            bool bThreads = false;
+            bool bPopup = false;
             DemoRenderer aRenderer;
             std::vector<OUString> aFontNames;
 
@@ -2351,8 +2175,6 @@ public:
                     bWidgets = true;
                 else if (aArg == "--popup")
                     bPopup = true;
-                else if (aArg == "--gltest")
-                    bGLTest = true;
                 else if (aArg == "--threads")
                     bThreads = true;
                 else if (aArg == "--font" && !bLast)
@@ -2370,15 +2192,7 @@ public:
             VclPtr<DemoPopup> xPopup;
 
             aMainWin->SetText("Interactive VCL demo #1");
-#if HAVE_FEATURE_OPENGL
-            if (bGLTest)
-            {
-                OpenGLTests aTests;
-                return aTests.execute();
-            }
-            else
-#endif
-                 if (bWidgets)
+            if (bWidgets)
                 xWidgets = VclPtr< DemoWidgets >::Create ();
             else if (bPopup)
                 xPopup = VclPtrInstance< DemoPopup> ();

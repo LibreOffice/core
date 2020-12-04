@@ -592,16 +592,6 @@ else # ! DISABLE_GUI
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/opengl/DeviceInfo \
-    vcl/opengl/gdiimpl \
-    vcl/opengl/salbmp \
-    vcl/opengl/scale \
-    vcl/opengl/framebuffer \
-    vcl/opengl/program \
-    vcl/opengl/texture \
-    vcl/opengl/FixedTextureAtlas \
-    vcl/opengl/PackedTextureAtlas \
-    vcl/opengl/RenderList \
-    vcl/opengl/LineRenderUtils \
     vcl/source/opengl/OpenGLContext \
     vcl/source/opengl/OpenGLHelper \
     vcl/skia/SkiaHelper \
@@ -612,8 +602,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
         ) \
  ))
 
-# runtime dependency
-$(eval $(call gb_Library_use_package,vcl,vcl_opengl_shader))
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_package,vcl,vcl_opengl_denylist))
 endif

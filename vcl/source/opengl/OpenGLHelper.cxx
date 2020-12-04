@@ -884,26 +884,6 @@ const CrashWatchdogTimingsValues& OpenGLZone::getCrashWatchdogTimingsValues()
     return gWatchdogTimings.getWatchdogTimingsValues(eMode);
 }
 
-OpenGLVCLContextZone::OpenGLVCLContextZone()
-{
-    OpenGLContext::makeVCLCurrent();
-}
-
-namespace
-{
-    bool bTempOpenGLDisabled = false;
-}
-
-PreDefaultWinNoOpenGLZone::PreDefaultWinNoOpenGLZone()
-{
-    bTempOpenGLDisabled = true;
-}
-
-PreDefaultWinNoOpenGLZone::~PreDefaultWinNoOpenGLZone()
-{
-    bTempOpenGLDisabled = false;
-}
-
 static void reapGlxTest()
 {
     // Reap the glxtest child, or it'll stay around as a zombie,
@@ -936,11 +916,6 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
 
     // No hardware rendering, so no OpenGL
     if (Application::IsBitmapRendering())
-        return false;
-
-    //tdf#106155, disable GL while loading certain bitmaps needed for the initial toplevel windows
-    //under raw X (kde) vclplug
-    if (bTempOpenGLDisabled)
         return false;
 
     if (bSet)

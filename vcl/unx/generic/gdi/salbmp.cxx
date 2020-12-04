@@ -40,8 +40,6 @@
 #include <unx/x11/xlimits.hxx>
 
 #include <o3tl/safeint.hxx>
-#include <opengl/salbmp.hxx>
-#include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <config_features.h>
 #if HAVE_FEATURE_SKIA
@@ -63,9 +61,6 @@ std::shared_ptr<SalBitmap> X11SalInstance::CreateSalBitmap()
         return std::make_shared<SkiaSalBitmap>();
     else
 #endif
-    if (OpenGLHelper::isVCLOpenGLEnabled())
-        return std::make_shared<OpenGLSalBitmap>();
-    else
         return std::make_shared<X11SalBitmap>();
 }
 
