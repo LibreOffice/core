@@ -112,6 +112,10 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::cre
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLImportContext::createFastChildContextFallback(sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
+    auto p = createFastChildContext(Element, Attribs);
+    if (p)
+        return p;
+
     // fall back to slow-parser path
     const OUString& rPrefix = SvXMLImport::getNamespacePrefixFromToken(Element, &mrImport.GetNamespaceMap());
     const OUString& rLocalName = SvXMLImport::getNameFromToken( Element );
