@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:05:47 using:
+ Generated on 2020-12-04 09:59:39 using:
  ./bin/update_pch sdext PresentationMinimizer --cutoff=2 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,6 +27,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <cstdlib>
 #include <float.h>
 #include <functional>
 #include <initializer_list>
@@ -146,10 +147,12 @@
 #include <svtools/svtresid.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
+#include <tools/degree.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/toolsdllapi.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>

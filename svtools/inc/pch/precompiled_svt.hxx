@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-21 15:23:46 using:
+ Generated on 2020-12-04 09:59:40 using:
  ./bin/update_pch svtools svt --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -51,7 +51,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -127,7 +126,6 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
@@ -164,41 +162,11 @@
 #include <basegfx/vector/b2ivector.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
-#include <com/sun/star/awt/XActionListener.hpp>
-#include <com/sun/star/awt/XAdjustmentListener.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/awt/XDockableWindow.hpp>
-#include <com/sun/star/awt/XFocusListener.hpp>
-#include <com/sun/star/awt/XItemListener.hpp>
-#include <com/sun/star/awt/XKeyListener.hpp>
-#include <com/sun/star/awt/XLayoutConstrains.hpp>
-#include <com/sun/star/awt/XMenuListener.hpp>
-#include <com/sun/star/awt/XMouseListener.hpp>
-#include <com/sun/star/awt/XMouseMotionListener.hpp>
-#include <com/sun/star/awt/XPaintListener.hpp>
-#include <com/sun/star/awt/XSpinListener.hpp>
-#include <com/sun/star/awt/XStyleSettingsSupplier.hpp>
-#include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
-#include <com/sun/star/awt/XTabListener.hpp>
-#include <com/sun/star/awt/XTextListener.hpp>
-#include <com/sun/star/awt/XTopWindow2.hpp>
-#include <com/sun/star/awt/XTopWindowListener.hpp>
 #include <com/sun/star/awt/XUnitConversion.hpp>
-#include <com/sun/star/awt/XVclContainer.hpp>
-#include <com/sun/star/awt/XVclContainerListener.hpp>
-#include <com/sun/star/awt/XVclContainerPeer.hpp>
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
-#include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XWindow2.hpp>
-#include <com/sun/star/awt/XWindowListener.hpp>
-#include <com/sun/star/awt/grid/XGridSelectionListener.hpp>
-#include <com/sun/star/awt/tab/XTabPageContainerListener.hpp>
-#include <com/sun/star/awt/tree/XTreeEditListener.hpp>
-#include <com/sun/star/awt/tree/XTreeExpansionListener.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -211,7 +179,6 @@
 #include <com/sun/star/beans/XPropertySetOption.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
-#include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
@@ -243,7 +210,6 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -264,14 +230,11 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
-#include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/view/PrintableState.hpp>
-#include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/interfacecontainer2.hxx>
@@ -291,10 +254,6 @@
 #include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase_ex.hxx>
-#include <cppuhelper/implbase_ex_post.hxx>
-#include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
@@ -323,26 +282,21 @@
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
-#include <toolkit/awt/vclxcontainer.hxx>
-#include <toolkit/awt/vclxdevice.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/dllapi.h>
-#include <toolkit/helper/listenermultiplexer.hxx>
-#include <toolkit/helper/macros.hxx>
-#include <toolkit/helper/mutexhelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
+#include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
-#include <tools/lineend.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
@@ -374,6 +328,7 @@
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <svtools/brwbox.hxx>
+#include <svtools/brwhead.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>

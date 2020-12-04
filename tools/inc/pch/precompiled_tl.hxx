@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:17:30 using:
+ Generated on 2020-12-04 10:00:10 using:
  ./bin/update_pch tools tl --cutoff=5 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <cstdlib>
 #include <cstring>
 #include <limits>
 #include <memory>
@@ -32,6 +33,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <string_view>
+#include <type_traits>
 #include <utility>
 #include <vector>
 #include <boost/rational.hpp>
@@ -72,6 +74,7 @@
 #if PCH_LEVEL >= 4
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
+#include <tools/long.hxx>
 #include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
 #endif // PCH_LEVEL >= 4

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:05:53 using:
+ Generated on 2020-12-04 09:59:41 using:
  ./bin/update_pch svx svx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,7 +27,6 @@
 #include <climits>
 #include <cstddef>
 #include <cstdlib>
-#include <deque>
 #include <functional>
 #include <iomanip>
 #include <limits.h>
@@ -41,7 +40,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
@@ -107,6 +105,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
@@ -135,6 +134,7 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -162,6 +162,7 @@
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -278,6 +279,7 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -292,7 +294,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/dockwin.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
@@ -341,6 +342,7 @@
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
+#include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
@@ -349,6 +351,7 @@
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/resary.hxx>
@@ -395,7 +398,6 @@
 #include <svx/fmshell.hxx>
 #include <svx/fmtools.hxx>
 #include <svx/framebordertype.hxx>
-#include <svx/gallery1.hxx>
 #include <svx/galmisc.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/itextprovider.hxx>

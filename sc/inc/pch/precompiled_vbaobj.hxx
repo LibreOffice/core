@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-21 15:23:18 using:
+ Generated on 2020-12-04 09:59:35 using:
  ./bin/update_pch sc vbaobj --cutoff=1 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -209,7 +209,6 @@
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <editeng/eeitem.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <filter/msfilter/util.hxx>
 #include <o3tl/any.hxx>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-01 15:30:30 using:
+ Generated on 2020-12-04 09:59:40 using:
  ./bin/update_pch starmath sm --cutoff=5 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <cstdlib>
 #include <cstring>
 #include <functional>
 #include <limits.h>
@@ -37,6 +38,7 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
+#include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -61,7 +63,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/types.h>
-#include <vcl/IDialogRenderable.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/devicecoordinate.hxx>
@@ -69,7 +70,6 @@
 #include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
 #include <vcl/font.hxx>
-#include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
@@ -92,7 +92,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -112,7 +111,6 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/docfile.hxx>
 #include <sfx2/shell.hxx>
-#include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
@@ -122,12 +120,13 @@
 #include <svl/stritem.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
-#include <svtools/colorcfg.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/color.hxx>
+#include <tools/degree.hxx>
 #include <tools/gen.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
@@ -145,6 +144,7 @@
 #include <document.hxx>
 #include <node.hxx>
 #include <smmod.hxx>
+#include <starmathdatabase.hxx>
 #include <symbol.hxx>
 #include <unomodel.hxx>
 #include <utility.hxx>

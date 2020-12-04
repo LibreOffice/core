@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-21 15:21:26 using:
+ Generated on 2020-12-04 09:59:16 using:
  ./bin/update_pch framework fwk --cutoff=7 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <cstdlib>
 #include <float.h>
 #include <functional>
 #include <initializer_list>
@@ -93,7 +94,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
-#include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaactiontypes.hxx>
@@ -171,7 +171,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
@@ -229,21 +228,23 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/thread.hxx>
 #include <svl/svldllapi.h>
-#include <svtools/miscopt.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/toolboxcontroller.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
+#include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>

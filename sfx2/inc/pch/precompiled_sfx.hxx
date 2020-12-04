@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-11-14 15:11:04 using:
+ Generated on 2020-12-04 09:59:39 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,9 +26,11 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdlib>
+#include <deque>
 #include <functional>
 #include <initializer_list>
 #include <limits>
+#include <list>
 #include <map>
 #include <memory>
 #include <new>
@@ -50,7 +52,6 @@
 #if PCH_LEVEL >= 2
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
-#include <osl/endian.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
 #include <osl/module.h>
@@ -93,7 +94,6 @@
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builderfactory.hxx>
-#include <vcl/button.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/ctrl.hxx>
@@ -115,15 +115,15 @@
 #include <vcl/menu.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
-#include <vcl/taskpanelist.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/vclenum.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/vclreferencebase.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
@@ -152,7 +152,6 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -165,10 +164,8 @@
 #include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -272,7 +269,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/xml/sax/Parser.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/docpasswordhelper.hxx>
@@ -301,12 +297,10 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <framework/fwkdllapi.h>
@@ -317,7 +311,6 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <officecfg/Setup.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -344,7 +337,6 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/helpopt.hxx>
 #include <svtools/imagemgr.hxx>
-#include <svtools/langhelp.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/soerr.hxx>
@@ -367,7 +359,6 @@
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/svborder.hxx>
-#include <tools/svlibrary.h>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
 #include <typelib/typedescription.h>
@@ -386,6 +377,7 @@
 #include <unotools/saveopt.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/streamwrap.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -433,6 +425,7 @@
 #include <sfx2/inputdlg.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <sfx2/listview.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/module.hxx>

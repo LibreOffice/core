@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-01 15:29:38 using:
+ Generated on 2020-12-04 09:59:13 using:
  ./bin/update_pch desktop sofficeapp --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <cstdlib>
 #include <cstring>
 #include <deque>
 #include <float.h>
@@ -33,6 +34,7 @@
 #include <iomanip>
 #include <limits.h>
 #include <limits>
+#include <map>
 #include <math.h>
 #include <memory>
 #include <new>
@@ -165,10 +167,12 @@
 #include <svl/typedwhich.hxx>
 #include <svtools/svtdllapi.h>
 #include <tools/color.hxx>
+#include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>

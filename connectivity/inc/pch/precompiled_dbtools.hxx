@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-27 16:25:54 using:
+ Generated on 2020-12-04 09:59:07 using:
  ./bin/update_pch connectivity dbtools --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <cstdlib>
 #include <functional>
 #include <iterator>
 #include <limits>
@@ -34,6 +35,7 @@
 #include <set>
 #include <string.h>
 #include <string_view>
+#include <type_traits>
 #include <utility>
 #include <vector>
 #endif // PCH_LEVEL >= 1
@@ -53,7 +55,6 @@
 #include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
-#include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -121,7 +122,6 @@
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
@@ -149,9 +149,7 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>

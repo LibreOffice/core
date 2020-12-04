@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:04:52 using:
+ Generated on 2020-12-04 09:59:17 using:
  ./bin/update_pch reportdesign rpt --cutoff=9 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <cstdlib>
 #include <cstring>
 #include <deque>
 #include <float.h>
@@ -138,6 +139,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
@@ -223,6 +225,7 @@
 #include <svx/svddef.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdobjkind.hxx>
 #include <svx/svdsob.hxx>
 #include <svx/svdtext.hxx>
 #include <svx/svdtrans.hxx>
@@ -232,6 +235,7 @@
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
+#include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
@@ -239,6 +243,7 @@
 #include <tools/gen.hxx>
 #include <tools/helpers.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>

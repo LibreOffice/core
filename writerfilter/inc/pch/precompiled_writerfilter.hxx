@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-21 15:27:02 using:
+ Generated on 2020-12-04 10:00:12 using:
  ./bin/update_pch writerfilter writerfilter --cutoff=5 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -105,6 +105,7 @@
 #include <tools/color.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
+#include <tools/long.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <uno/data.h>

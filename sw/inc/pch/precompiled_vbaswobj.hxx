@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-27 16:26:57 using:
+ Generated on 2020-12-04 10:00:10 using:
  ./bin/update_pch sw vbaswobj --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -46,7 +46,6 @@
 #include <new>
 #include <optional>
 #include <ostream>
-#include <set>
 #include <stack>
 #include <stddef.h>
 #include <string.h>
@@ -171,6 +170,7 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
@@ -235,10 +235,22 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/editengdllapi.h>
+#include <editeng/forbiddenruleitem.hxx>
+#include <editeng/hngpnctitem.hxx>
+#include <editeng/hyphenzoneitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <editeng/numdef.hxx>
 #include <editeng/numitem.hxx>
+#include <editeng/orphitem.hxx>
+#include <editeng/paravertalignitem.hxx>
+#include <editeng/pgrditem.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/spltitem.hxx>
 #include <editeng/svxenum.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/widwitem.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/sorted_vector.hxx>
@@ -255,27 +267,34 @@
 #include <sot/sotdllapi.h>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/broadcast.hxx>
+#include <svl/cenumitm.hxx>
 #include <svl/cintitem.hxx>
+#include <svl/custritm.hxx>
+#include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 #include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
+#include <svl/stritem.hxx>
 #include <svl/style.hxx>
 #include <svl/stylesheetuser.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svl/undo.hxx>
-#include <svtools/svtdllapi.h>
 #include <svx/svxdllapi.h>
 #include <svx/xdef.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
+#include <tools/degree.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
@@ -326,8 +345,10 @@
 #include <node.hxx>
 #include <numrule.hxx>
 #include <pam.hxx>
+#include <paratr.hxx>
 #include <ring.hxx>
 #include <section.hxx>
+#include <swatrset.hxx>
 #include <swcrsr.hxx>
 #include <swdllapi.h>
 #include <swrect.hxx>

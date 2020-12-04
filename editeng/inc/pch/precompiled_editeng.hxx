@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-25 20:54:59 using:
+ Generated on 2020-12-04 09:59:13 using:
  ./bin/update_pch editeng editeng --cutoff=5 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,6 +27,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <cstdlib>
 #include <cstring>
 #include <deque>
 #include <float.h>
@@ -173,13 +174,13 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/solarmutex.hxx>
@@ -236,11 +237,13 @@
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
+#include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>

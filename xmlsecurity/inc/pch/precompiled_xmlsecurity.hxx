@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:07:16 using:
+ Generated on 2020-12-04 10:00:13 using:
  ./bin/update_pch xmlsecurity xmlsecurity --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,6 +26,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <cstdlib>
 #include <float.h>
 #include <functional>
 #include <initializer_list>
@@ -160,10 +161,12 @@
 #include <svl/sigstruct.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
+#include <tools/degree.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>

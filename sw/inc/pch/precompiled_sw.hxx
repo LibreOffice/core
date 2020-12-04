@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-03 20:51:31 using:
+ Generated on 2020-12-04 09:59:58 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -92,6 +92,7 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builderpage.hxx>
 #include <vcl/commandevent.hxx>
@@ -103,7 +104,6 @@
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/help.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/imap.hxx>
@@ -113,6 +113,8 @@
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/task.hxx>
+#include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <vcl/uitest/logger.hxx>
@@ -144,6 +146,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
@@ -194,6 +197,7 @@
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/TypeClass.hdl>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/XAccounting.hpp>
@@ -221,19 +225,18 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/weak.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <editeng/adjustitem.hxx>
-#include <editeng/blinkitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/contouritem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editengdllapi.h>
@@ -261,7 +264,6 @@
 #include <editeng/postitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/shaditem.hxx>
-#include <editeng/shdditem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/spltitem.hxx>
 #include <editeng/svxacorr.hxx>
@@ -279,6 +281,7 @@
 #include <libxml/xmlwriter.h>
 #include <o3tl/any.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/deleter.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
@@ -299,7 +302,6 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <sfx2/filedlghelper.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -317,7 +319,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <sot/storage.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
@@ -362,6 +363,7 @@
 #include <svx/srchdlg.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svditer.hxx>
+#include <svx/svdoashp.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdotext.hxx>
@@ -379,12 +381,14 @@
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xgrad.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/datetimeutils.hxx>
+#include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
@@ -392,6 +396,7 @@
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
@@ -637,6 +642,7 @@
 #include <uitool.hxx>
 #include <undobj.hxx>
 #include <unobaseclass.hxx>
+#include <unobookmark.hxx>
 #include <unochart.hxx>
 #include <unocoll.hxx>
 #include <unocrsr.hxx>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:04:23 using:
+ Generated on 2020-12-04 09:59:06 using:
  ./bin/update_pch comphelper comphelper --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <cstdlib>
 #include <cstring>
 #include <deque>
 #include <float.h>
@@ -65,7 +66,6 @@
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <rtl/math.h>
-#include <rtl/math.hxx>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.h>
@@ -186,14 +186,17 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>
 #include <tools/color.hxx>
+#include <tools/degree.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>

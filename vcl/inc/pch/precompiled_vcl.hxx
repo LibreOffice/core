@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-21 15:27:01 using:
+ Generated on 2020-12-04 10:00:12 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -158,6 +158,7 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
 #include <com/sun/star/uno/XAggregation.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
@@ -172,6 +173,7 @@
 #include <comphelper/string.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
+#include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
@@ -188,6 +190,7 @@
 #include <i18nutil/i18nutildllapi.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
@@ -210,6 +213,7 @@
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
+#include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>
@@ -218,6 +222,7 @@
 #include <tools/helpers.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
@@ -266,6 +271,7 @@
 #include <salvtables.hxx>
 #include <sft.hxx>
 #include <svdata.hxx>
+#include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/QueueInfo.hxx>
@@ -275,6 +281,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/button.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -323,6 +330,7 @@
 #include <vcl/toolkit/spinfld.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
 #include <vcl/toolkit/treelist.hxx>
+#include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/toolkit/treelistentries.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/toolkit/unowrap.hxx>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:05:25 using:
+ Generated on 2020-12-04 09:59:30 using:
  ./bin/update_pch sc sc --cutoff=12 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -96,7 +96,6 @@
 #include <rtl/tencinfo.h>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
-#include <rtl/unload.h>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
@@ -105,6 +104,7 @@
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
+#include <sal/mathconf.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
@@ -115,7 +115,6 @@
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/Scanline.hxx>
-#include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>
@@ -187,6 +186,7 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
+#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
@@ -258,8 +258,11 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
+#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/lok.hxx>
@@ -339,6 +342,8 @@
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>
+#include <sax/fastattribs.hxx>
+#include <sax/saxdllapi.h>
 #include <sax/tools/converter.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -433,6 +438,8 @@
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
+#include <tools/degree.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>
@@ -441,10 +448,12 @@
 #include <tools/helpers.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
+#include <tools/stream.hxx>
 #include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
@@ -461,7 +470,6 @@
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/configmgr.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <unotools/options.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
@@ -550,7 +558,6 @@
 #include <rangelst.hxx>
 #include <rangenam.hxx>
 #include <rangeutl.hxx>
-#include <rechead.hxx>
 #include <refdata.hxx>
 #include <reffact.hxx>
 #include <refundo.hxx>

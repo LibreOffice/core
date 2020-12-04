@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-11-05 12:52:18 using:
+ Generated on 2020-12-04 09:59:43 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -65,7 +65,6 @@
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
-#include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
@@ -220,6 +219,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
@@ -240,7 +240,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
-#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -262,6 +261,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/XAccounting.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
@@ -406,7 +406,6 @@
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
-#include <ucbhelper/content.hxx>
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
@@ -415,7 +414,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/options.hxx>
 #include <unotools/resmgr.hxx>
-#include <unotools/streamwrap.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
@@ -499,7 +497,6 @@
 #include <svx/svdtypes.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
-#include <svx/svx3ditems.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/unoapi.hxx>
