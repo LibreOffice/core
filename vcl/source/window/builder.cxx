@@ -190,7 +190,8 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
             || rUIFile == "modules/scalc/ui/datafielddialog.ui"
             || rUIFile == "modules/scalc/ui/pivotfielddialog.ui"
             || rUIFile == "modules/scalc/ui/datafieldoptionsdialog.ui"
-            || rUIFile == "svx/ui/fontworkgallerydialog.ui")
+            || rUIFile == "svx/ui/fontworkgallerydialog.ui"
+            || rUIFile == "cui/ui/macroselectordialog.ui")
         {
             bUseJSBuilder = true;
         }
