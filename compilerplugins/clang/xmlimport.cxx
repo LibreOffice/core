@@ -58,6 +58,9 @@ public:
         if (loplugin::isSamePathname(fn, SRCDIR
                                      "/xmloff/source/text/XMLIndexBibliographySourceContext.cxx"))
             return false;
+        // calling mxSlaveContext
+        if (loplugin::isSamePathname(fn, SRCDIR "/xmloff/source/draw/XMLNumberStyles.cxx"))
+            return false;
         return true;
     }
 

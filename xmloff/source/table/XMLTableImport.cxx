@@ -199,7 +199,7 @@ SvXMLImportContextRef XMLProxyContext::CreateChildContext( sal_uInt16 nPrefix, c
  css::uno::Reference< css::xml::sax::XFastContextHandler > XMLProxyContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
 {
     if( mxParent.is() )
-        return mxParent->createFastChildContext( nElement, xAttrList );
+        return mxParent->createFastChildContextFallback( nElement, xAttrList );
     return nullptr;
 }
 
