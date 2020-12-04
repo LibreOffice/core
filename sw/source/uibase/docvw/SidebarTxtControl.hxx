@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/ctrl.hxx>
+#include <svx/weldeditview.hxx>
 
 class OutlinerView;
 class SwView;
@@ -29,13 +29,14 @@ namespace sw::annotation { class SwAnnotationWin; }
 
 namespace sw::sidebarwindows {
 
-class SidebarTextControl : public Control
+class SidebarTextControl : public WeldEditView
 {
     private:
         sw::annotation::SwAnnotationWin& mrSidebarWin;
         SwView& mrDocView;
         SwPostItMgr& mrPostItMgr;
 
+#if 0
     protected:
         virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
         /// @see Window::LogicInvalidate().
@@ -46,13 +47,19 @@ class SidebarTextControl : public Control
         virtual OUString GetSurroundingText() const override;
         virtual Selection GetSurroundingTextSelection() const override;
         virtual bool DeleteSurroundingText(const Selection& rSelection) override;
+#endif
 
     public:
-        SidebarTextControl( sw::annotation::SwAnnotationWin& rSidebarWin,
-                           WinBits nBits,
+        SidebarTextControl(sw::annotation::SwAnnotationWin& rSidebarWin,
                            SwView& rDocView,
-                           SwPostItMgr& rPostItMgr );
+                           SwPostItMgr& rPostItMgr);
         virtual ~SidebarTextControl() override;
+
+        void SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark);
+
+        EditView* GetEditView() const { return m_xEditView.get(); }
+
+#if 0
         virtual void dispose() override;
 
         virtual void GetFocus() override;
@@ -60,14 +67,18 @@ class SidebarTextControl : public Control
         virtual void MouseButtonDown(const MouseEvent& rMouseEvent) override;
         virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
         virtual void MouseMove(const MouseEvent& rMEvt) override;
+#endif
 
         OutlinerView* GetTextView() const;
 
         DECL_LINK( OnlineSpellCallback, SpellCallbackInfo&, void );
 
+#if 0
+
         virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
         virtual void Draw(OutputDevice* pDev, const Point&, DrawFlags) override;
+#endif
 };
 
 } // end of namespace sw::sidebarwindows
