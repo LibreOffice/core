@@ -7420,6 +7420,46 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="VclOptionalBox" id="Data-Section-ManageXMLSource1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionManageXMLSource95">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
+                            <property name="toolbar_style">both</property>
+                            <property name="show_arrow">False</property>
+                            <property name="icon_size">3</property>
+                            <child>
+                              <object class="GtkToolButton" id="Data-ManageXMLSource">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:ManageXMLSource</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="VclOptionalBox" id="Data-Section-Source2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -7459,7 +7499,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="belowspacing13">
+                              <object class="sfxlo-NotebookbarToolBox" id="belowspacing12">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="valign">center</property>
@@ -7467,10 +7507,10 @@
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="Data-ManageXMLSource">
+                                  <object class="GtkToolButton" id="Data-DataProviderRefresh">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:ManageXMLSource</property>
+                                    <property name="action_name">.uno:DataProviderRefresh</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -7498,7 +7538,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
@@ -7553,24 +7593,66 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Data-Section-Calculate1">
+                      <object class="VclOptionalBox" id="Data-Section-PivotTable">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="GtkBox" id="GroupB49">
+                          <object class="GtkSeparator" id="separator377">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
+                            <property name="orientation">vertical</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="padding">5</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionPivotTable1">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
+                            <property name="toolbar_style">both</property>
+                            <property name="show_arrow">False</property>
+                            <property name="icon_size">3</property>
+                            <child>
+                              <object class="GtkToolButton" id="Data-PivotTable">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:DataDataPilotRun</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="GroupPivotTable1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="LeftParaMargin11">
+                              <object class="sfxlo-NotebookbarToolBox" id="ToolBoxPivotTable1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="valign">center</property>
@@ -7596,7 +7678,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="belowspacing12">
+                              <object class="sfxlo-NotebookbarToolBox" id="ToolBoxPivotTable2">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="valign">center</property>
@@ -7604,10 +7686,10 @@
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="Data-DataProviderRefresh">
+                                  <object class="GtkToolButton" id="Data-DeletePivotTable">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:DataProviderRefresh</property>
+                                    <property name="action_name">.uno:DeletePivotTable</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -7628,14 +7710,11 @@
                             <property name="position">2</property>
                           </packing>
                         </child>
-                        <style>
-                          <class name="priority-13"/>
-                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">4</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                     <child>
@@ -7690,7 +7769,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">5</property>
+                        <property name="position">6</property>
                       </packing>
                     </child>
                     <child>
@@ -7772,7 +7851,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">6</property>
+                        <property name="position">7</property>
                       </packing>
                     </child>
                     <child>
@@ -7866,7 +7945,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">7</property>
+                        <property name="position">8</property>
                       </packing>
                     </child>
                     <child>
@@ -7948,7 +8027,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">8</property>
+                        <property name="position">9</property>
                       </packing>
                     </child>
                     <child>
@@ -8003,7 +8082,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">9</property>
+                        <property name="position">10</property>
                       </packing>
                     </child>
                     <child>
@@ -8085,7 +8164,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">10</property>
+                        <property name="position">11</property>
                       </packing>
                     </child>
                     <child>
@@ -8167,7 +8246,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">11</property>
+                        <property name="position">12</property>
                       </packing>
                     </child>
                     <child>
@@ -8222,7 +8301,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">12</property>
+                        <property name="position">13</property>
                       </packing>
                     </child>
                     <child>
@@ -8304,7 +8383,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">13</property>
+                        <property name="position">14</property>
                       </packing>
                     </child>
                     <child>
@@ -8359,7 +8438,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">14</property>
+                        <property name="position">15</property>
                       </packing>
                     </child>
                     <child>
@@ -8441,7 +8520,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">15</property>
+                        <property name="position">16</property>
                       </packing>
                     </child>
                     <child>
@@ -8490,7 +8569,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">16</property>
+                        <property name="position">17</property>
                       </packing>
                     </child>
                   </object>
