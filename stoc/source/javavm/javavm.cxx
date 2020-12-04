@@ -574,6 +574,9 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
     if (aId != aProcessId)
         return css::uno::Any();
 
+    if (comphelper::IsContextFlagActive("DontEnableJava"))
+        return css::uno::Any();
+
     std::unique_ptr<JavaInfo> info;
     while (!m_xVirtualMachine.is()) // retry until successful
     {
