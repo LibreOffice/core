@@ -93,6 +93,30 @@
       "revId": "90be366bd1efa7f7221e5f862f9c54ac8faad393",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30fc212d_bd6713e8",
+        "filename": "offapi/com/sun/star/text/ViewSettings.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-12-04T12:08:51Z",
+      "side": 1,
+      "message": "Actually it\u0027s not needed. But would be cool to use the constants from Writer.xcs in the conversion from long to rndstdids. Works well as it is, however.",
+      "parentUuid": "aeee413d_324a456c",
+      "range": {
+        "startLine": 303,
+        "startChar": 25,
+        "endLine": 303,
+        "endChar": 29
+      },
+      "revId": "90be366bd1efa7f7221e5f862f9c54ac8faad393",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
