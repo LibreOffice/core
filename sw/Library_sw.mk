@@ -619,9 +619,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/docvw/OverlayRanges \
     sw/source/uibase/docvw/PostItMgr \
     sw/source/uibase/docvw/ShadowOverlayObject \
-    sw/source/uibase/docvw/SidebarScrollBar \
     sw/source/uibase/docvw/SidebarTxtControl \
-    sw/source/uibase/docvw/SidebarTxtControlAcc \
     sw/source/uibase/docvw/SidebarWinAcc \
     sw/source/uibase/docvw/HeaderFooterWin \
     sw/source/uibase/docvw/OutlineContentVisibilityWin \

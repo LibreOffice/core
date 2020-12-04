@@ -19,7 +19,6 @@
 
 #include "SidebarTxtControl.hxx"
 
-#include "SidebarTxtControlAcc.hxx"
 #include <docsh.hxx>
 #include <doc.hxx>
 
@@ -59,42 +58,82 @@
 
 namespace sw::sidebarwindows {
 
-SidebarTextControl::SidebarTextControl( sw::annotation::SwAnnotationWin& rSidebarWin,
-                                      WinBits nBits,
-                                      SwView& rDocView,
-                                      SwPostItMgr& rPostItMgr )
-    : Control( &rSidebarWin, nBits )
-    , mrSidebarWin( rSidebarWin )
-    , mrDocView( rDocView )
-    , mrPostItMgr( rPostItMgr )
+SidebarTextControl::SidebarTextControl(sw::annotation::SwAnnotationWin& rSidebarWin,
+                                       SwView& rDocView,
+                                       SwPostItMgr& rPostItMgr)
+    : mrSidebarWin(rSidebarWin)
+    , mrDocView(rDocView)
+    , mrPostItMgr(rPostItMgr)
     , mbMouseDownGainingFocus(false)
 {
-    AddEventListener( LINK( &mrSidebarWin, sw::annotation::SwAnnotationWin, WindowEventListener ) );
 }
 
-SidebarTextControl::~SidebarTextControl()
+EditView* SidebarTextControl::GetEditView() const
 {
-    disposeOnce();
+    OutlinerView* pOutlinerView = mrSidebarWin.GetOutlinerView();
+    if (!pOutlinerView)
+        return nullptr;
+    return &pOutlinerView->GetEditView();
 }
 
-void SidebarTextControl::dispose()
+EditEngine* SidebarTextControl::GetEditEngine() const
 {
-    RemoveEventListener( LINK( &mrSidebarWin, sw::annotation::SwAnnotationWin, WindowEventListener ) );
-    Control::dispose();
+    OutlinerView* pOutlinerView = mrSidebarWin.GetOutlinerView();
+    if (!pOutlinerView)
+        return nullptr;
+    return pOutlinerView->GetEditView().GetEditEngine();
 }
 
-OutlinerView* SidebarTextControl::GetTextView() const
+void SidebarTextControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    return mrSidebarWin.GetOutlinerView();
+    Size aSize(0, 0);
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+
+    SetOutputSizePixel(aSize);
+
+    weld::CustomWidgetController::SetDrawingArea(pDrawingArea);
+
+    EnableRTL(false);
+
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    Color aBgColor = rStyleSettings.GetWindowColor();
+
+    OutputDevice& rDevice = pDrawingArea->get_ref_device();
+
+    rDevice.SetMapMode(MapMode(MapUnit::MapTwip));
+    rDevice.SetBackground(aBgColor);
+
+    Size aOutputSize(rDevice.PixelToLogic(aSize));
+    aSize = aOutputSize;
+    aSize.setHeight(aSize.Height());
+
+    EditView* pEditView = GetEditView();
+    pEditView->setEditViewCallbacks(this);
+
+    EditEngine* pEditEngine = GetEditEngine();
+    pEditEngine->SetPaperSize(aSize);
+    pEditEngine->SetRefDevice(&rDevice);
+
+    pEditView->SetOutputArea(tools::Rectangle(Point(0, 0), aOutputSize));
+    pEditView->SetBackgroundColor(aBgColor);
+
+    pDrawingArea->set_cursor(PointerStyle::Text);
+
+    InitAccessible();
+}
+
+void SidebarTextControl::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark)
+{
+    Point aMousePos = EditViewOutputDevice().PixelToLogic(rPosition);
+    m_xEditView->SetCursorLogicPosition(aMousePos, bPoint, bClearMark);
 }
 
 void SidebarTextControl::GetFocus()
 {
-    Window::GetFocus();
+    WeldEditView::GetFocus();
     if ( !mrSidebarWin.IsMouseOver() )
-    {
         Invalidate();
-    }
+    mrSidebarWin.SetActiveSidebarWin();
 }
 
 void SidebarTextControl::LoseFocus()
@@ -102,15 +141,34 @@ void SidebarTextControl::LoseFocus()
     // write the visible text back into the SwField
     mrSidebarWin.UpdateData();
 
-    Window::LoseFocus();
+    WeldEditView::LoseFocus();
     if ( !mrSidebarWin.IsMouseOver() )
     {
         Invalidate();
     }
 }
 
-void SidebarTextControl::RequestHelp(const HelpEvent &rEvt)
+OUString SidebarTextControl::RequestHelp(tools::Rectangle& rHelpRect)
 {
+    if (EditView* pEditView = GetEditView())
+    {
+        Point aPos = rHelpRect.TopLeft();
+
+        const OutputDevice& rOutDev = pEditView->GetOutputDevice();
+        Point aLogicClick = rOutDev.PixelToLogic(aPos);
+        const SvxFieldItem* pItem = pEditView->GetField(aLogicClick);
+        if (pItem)
+        {
+            const SvxFieldData* pField = pItem->GetField();
+            const SvxURLField* pURL = dynamic_cast<const SvxURLField*>( pField  );
+            if (pURL)
+            {
+                rHelpRect = tools::Rectangle(aPos, Size(50, 10));
+                return SfxHelp::GetURLHelpText(pURL->GetURL());
+            }
+        }
+    }
+
     const char* pResId = nullptr;
     switch( mrSidebarWin.GetLayoutStatus() )
     {
@@ -126,18 +184,26 @@ void SidebarTextControl::RequestHelp(const HelpEvent &rEvt)
         OUString sText = SwResId(pResId) + ": " +
                         aContentAtPos.aFnd.pRedl->GetAuthorString() + " - " +
                         GetAppLangDateTimeString( aContentAtPos.aFnd.pRedl->GetTimeStamp() );
-        Help::ShowQuickHelp( this,PixelToLogic(tools::Rectangle(rEvt.GetMousePosPixel(),Size(50,10))),sText);
+        return sText;
     }
+
+    return OUString();
 }
 
-void SidebarTextControl::Draw(OutputDevice* pDev, const Point& rPt, DrawFlags)
+void SidebarTextControl::EditViewScrollStateChange()
+{
+    mrSidebarWin.SetScrollbar();
+}
+
+void SidebarTextControl::DrawForPage(OutputDevice* pDev, const Point& rPt)
 {
     //Take the control's height, but overwrite the scrollbar area if there was one
-    Size aSize(PixelToLogic(GetSizePixel()));
+    OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
+    Size aSize(rDevice.PixelToLogic(GetOutputSizePixel()));
 
-    if ( GetTextView() )
+    if (OutlinerView* pOutlinerView = mrSidebarWin.GetOutlinerView())
     {
-        GetTextView()->GetOutliner()->Draw(pDev, tools::Rectangle(rPt, aSize));
+        pOutlinerView->GetOutliner()->Draw(pDev, tools::Rectangle(rPt, aSize));
     }
 
     if ( mrSidebarWin.GetLayoutStatus()==SwPostItHelper::DELETED )
@@ -163,86 +229,56 @@ void SidebarTextControl::Draw(OutputDevice* pDev, const Point& rPt, DrawFlags)
 
 void SidebarTextControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
+    Size aSize = GetOutputSizePixel();
+    Point aPos;
+
     if (!rRenderContext.GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         if (mrSidebarWin.IsMouseOverSidebarWin() || HasFocus())
         {
-            rRenderContext.DrawGradient(tools::Rectangle(Point(0,0), rRenderContext.PixelToLogic(GetSizePixel())),
+            rRenderContext.DrawGradient(tools::Rectangle(aPos, rRenderContext.PixelToLogic(aSize)),
                                         Gradient(GradientStyle::Linear, mrSidebarWin.ColorDark(), mrSidebarWin.ColorDark()));
         }
         else
         {
-            rRenderContext.DrawGradient(tools::Rectangle(Point(0,0), rRenderContext.PixelToLogic(GetSizePixel())),
+            rRenderContext.DrawGradient(tools::Rectangle(aPos, rRenderContext.PixelToLogic(aSize)),
                            Gradient(GradientStyle::Linear, mrSidebarWin.ColorLight(), mrSidebarWin.ColorDark()));
         }
     }
 
-    if (GetTextView())
-    {
-        GetTextView()->Paint(rRect, &rRenderContext);
-    }
+    DoPaint(rRenderContext, rRect);
 
     if (mrSidebarWin.GetLayoutStatus() == SwPostItHelper::DELETED)
     {
         rRenderContext.SetLineColor(mrSidebarWin.GetChangeColor());
-        rRenderContext.DrawLine(rRenderContext.PixelToLogic(GetPosPixel()),
-                                rRenderContext.PixelToLogic(GetPosPixel() + Point(GetSizePixel().Width(),
-                                                                                  GetSizePixel().Height())));
-        rRenderContext.DrawLine(rRenderContext.PixelToLogic(GetPosPixel() + Point(GetSizePixel().Width(),
-                                                                                  0)),
-                                rRenderContext.PixelToLogic(GetPosPixel() + Point(0,
-                                                                                  GetSizePixel().Height())));
+        rRenderContext.DrawLine(rRenderContext.PixelToLogic(aPos),
+                                rRenderContext.PixelToLogic(aPos + Point(aSize.Width(),
+                                                                         aSize.Height())));
+        rRenderContext.DrawLine(rRenderContext.PixelToLogic(aPos + Point(aSize.Width(),
+                                                                         0)),
+                                rRenderContext.PixelToLogic(aPos + Point(0,
+                                                                         aSize.Height())));
     }
-}
-
-void SidebarTextControl::LogicInvalidate(const tools::Rectangle* pRectangle)
-{
-    tools::Rectangle aRectangle;
-
-    if (!pRectangle)
-    {
-        Push(PushFlags::MAPMODE);
-        EnableMapMode();
-        aRectangle = tools::Rectangle(Point(0, 0), PixelToLogic(GetSizePixel()));
-        Pop();
-    }
-    else
-        aRectangle = *pRectangle;
-
-    // Convert from relative twips to absolute ones.
-    vcl::Window& rParent = mrSidebarWin.EditWin();
-    Point aOffset(GetOutOffXPixel() - rParent.GetOutOffXPixel(), GetOutOffYPixel() - rParent.GetOutOffYPixel());
-    rParent.Push(PushFlags::MAPMODE);
-    rParent.EnableMapMode();
-    aOffset = rParent.PixelToLogic(aOffset);
-    rParent.Pop();
-    aRectangle.Move(aOffset.getX(), aOffset.getY());
-
-    OString sRectangle = aRectangle.toString();
-    SwWrtShell& rWrtShell = mrDocView.GetWrtShell();
-    SfxLokHelper::notifyInvalidation(rWrtShell.GetSfxViewShell(), sRectangle);
 }
 
 void SidebarTextControl::MakeVisible()
 {
-    // PostItMgr::MakeVisible can lose our MapMode, save it.
-    auto oldMapMode = GetMapMode();
     //let's make sure we see our note
     mrPostItMgr.MakeVisible(&mrSidebarWin);
-    if (comphelper::LibreOfficeKit::isActive())
-        SetMapMode(oldMapMode);
 }
 
-void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
+bool SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
 {
     if (getenv("SW_DEBUG") && rKeyEvt.GetKeyCode().GetCode() == KEY_F12)
     {
         if (rKeyEvt.GetKeyCode().IsShift())
         {
             mrDocView.GetDocShell()->GetDoc()->dumpAsXml();
-            return;
+            return true;
         }
     }
+
+    bool bDone = false;
 
     const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
     sal_uInt16 nKey = rKeyCode.GetCode();
@@ -250,6 +286,7 @@ void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
          ( (nKey == KEY_PAGEUP) || (nKey == KEY_PAGEDOWN) ) )
     {
         mrSidebarWin.SwitchToPostIt(nKey);
+        bDone = true;
     }
     else if ( nKey == KEY_ESCAPE ||
               ( rKeyCode.IsMod1() &&
@@ -257,17 +294,18 @@ void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
                   nKey == KEY_PAGEDOWN ) ) )
     {
         mrSidebarWin.SwitchToFieldPos();
+        bDone = true;
     }
     else if ( rKeyCode.GetFullCode() == KEY_INSERT )
     {
         mrSidebarWin.ToggleInsMode();
+        bDone = true;
     }
     else
     {
         MakeVisible();
 
         tools::Long aOldHeight = mrSidebarWin.GetPostItTextHeight();
-        bool bDone = false;
 
         /// HACK: need to switch off processing of Undo/Redo in Outliner
         if ( !( (nKey == KEY_Z || nKey == KEY_Y) && rKeyCode.IsMod1()) )
@@ -275,11 +313,12 @@ void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
             bool bIsProtected = mrSidebarWin.IsProtected();
             if ( !bIsProtected || !EditEngine::DoesKeyChangeText(rKeyEvt) )
             {
-                bDone = GetTextView() && GetTextView()->PostKeyEvent( rKeyEvt );
+                EditView* pEditView = GetEditView();
+                bDone = pEditView && pEditView->PostKeyEvent(rKeyEvt);
             }
             else
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui"));
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDrawingArea(), "modules/swriter/ui/inforeadonlydialog.ui"));
                 std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("InfoReadonlyDialog"));
                 xQuery->run();
             }
@@ -291,63 +330,38 @@ void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
             // write back data first when showing navigator
             if ( nKey==KEY_F5 )
                 mrSidebarWin.UpdateData();
-            if (!mrDocView.KeyInput(rKeyEvt))
-                Window::KeyInput(rKeyEvt);
+            bDone = mrDocView.KeyInput(rKeyEvt);
         }
     }
 
     mrDocView.GetViewFrame()->GetBindings().InvalidateAll(false);
+
+    return bDone;
 }
 
-void SidebarTextControl::MouseMove( const MouseEvent& rMEvt )
+bool SidebarTextControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    if ( !GetTextView() )
-        return;
-
-    OutlinerView* pOutlinerView( GetTextView() );
-    pOutlinerView->MouseMove( rMEvt );
-    // mba: why does OutlinerView not handle the modifier setting?!
-    // this forces the postit to handle *all* pointer types
-    SetPointer( pOutlinerView->GetPointer( rMEvt.GetPosPixel() ) );
-
-    const EditView& aEV = pOutlinerView->GetEditView();
-    const SvxFieldItem* pItem = aEV.GetFieldUnderMousePointer();
-    if ( pItem )
-    {
-        const SvxFieldData* pField = pItem->GetField();
-        const SvxURLField* pURL = dynamic_cast<const SvxURLField*>( pField  );
-        if ( pURL )
-        {
-            OUString sText(SfxHelp::GetURLHelpText(pURL->GetURL()));
-            Help::ShowQuickHelp(
-                this, PixelToLogic(tools::Rectangle(GetPosPixel(), Size(50, 10))), sText);
-        }
-    }
-}
-
-void SidebarTextControl::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    if ( GetTextView() )
+    if (EditView* pEditView = GetEditView())
     {
         SvtSecurityOptions aSecOpts;
         bool bExecuteMod = aSecOpts.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink);
 
         if ( !bExecuteMod || (rMEvt.GetModifier() == KEY_MOD1))
         {
-            const EditView& aEV = GetTextView()->GetEditView();
-            const SvxFieldItem* pItem = aEV.GetFieldUnderMousePointer();
-            if ( pItem )
+            const OutputDevice& rOutDev = pEditView->GetOutputDevice();
+            Point aLogicClick = rOutDev.PixelToLogic(rMEvt.GetPosPixel());
+            if (const SvxFieldItem* pItem = pEditView->GetField(aLogicClick))
             {
                 const SvxFieldData* pField = pItem->GetField();
                 const SvxURLField* pURL = dynamic_cast<const SvxURLField*>( pField  );
                 if ( pURL )
                 {
-                    GetTextView()->MouseButtonDown( rMEvt );
+                    pEditView->MouseButtonDown( rMEvt );
                     SwWrtShell &rSh = mrDocView.GetWrtShell();
                     const OUString& sURL( pURL->GetURL() );
                     const OUString& sTarget( pURL->GetTargetFrame() );
                     ::LoadURL(rSh, sURL, LoadUrlFlags::NONE, sTarget);
-                    return;
+                    return true;
                 }
             }
         }
@@ -356,22 +370,24 @@ void SidebarTextControl::MouseButtonDown( const MouseEvent& rMEvt )
     mbMouseDownGainingFocus = !HasFocus();
     GrabFocus();
 
-    if ( GetTextView() )
-    {
-        GetTextView()->MouseButtonDown( rMEvt );
-    }
+    bool bRet = WeldEditView::MouseButtonDown(rMEvt);
+
     mrDocView.GetViewFrame()->GetBindings().InvalidateAll(false);
+
+    return bRet;
 }
 
-void SidebarTextControl::MouseButtonUp( const MouseEvent& rMEvt )
+bool SidebarTextControl::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    if ( GetTextView() )
-        GetTextView()->MouseButtonUp( rMEvt );
+    bool bRet = WeldEditView::MouseButtonUp(rMEvt);
+
     if (mbMouseDownGainingFocus)
     {
         MakeVisible();
         mbMouseDownGainingFocus = false;
     }
+
+    return bRet;
 }
 
 IMPL_LINK( SidebarTextControl, OnlineSpellCallback, SpellCallbackInfo&, rInfo, void )
@@ -382,16 +398,18 @@ IMPL_LINK( SidebarTextControl, OnlineSpellCallback, SpellCallbackInfo&, rInfo, v
     }
 }
 
-void SidebarTextControl::Command( const CommandEvent& rCEvt )
+bool SidebarTextControl::Command( const CommandEvent& rCEvt )
 {
+    EditView* pEditView = GetEditView();
+
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
         if ( !mrSidebarWin.IsProtected() &&
-             GetTextView() &&
-             GetTextView()->IsWrongSpelledWordAtPos( rCEvt.GetMousePosPixel(), true ))
+             pEditView &&
+             pEditView->IsWrongSpelledWordAtPos( rCEvt.GetMousePosPixel(), true ))
         {
             Link<SpellCallbackInfo&,void> aLink = LINK(this, SidebarTextControl, OnlineSpellCallback);
-            GetTextView()->ExecuteSpellPopup(rCEvt.GetMousePosPixel(),&aLink);
+            pEditView->ExecuteSpellPopup(rCEvt.GetMousePosPixel(),&aLink);
         }
         else
         {
@@ -400,71 +418,35 @@ void SidebarTextControl::Command( const CommandEvent& rCEvt )
                 aPos = rCEvt.GetMousePosPixel();
             else
             {
-                const Size aSize = GetSizePixel();
+                const Size aSize = GetOutputSizePixel();
                 aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
             }
-            SfxDispatcher::ExecutePopup(this, &aPos);
+            SfxDispatcher::ExecutePopup(&mrSidebarWin, &aPos);
         }
+        return true;
     }
-    else
-    if (rCEvt.GetCommand() == CommandEventId::Wheel)
+    else if (rCEvt.GetCommand() == CommandEventId::Wheel)
     {
-        if (mrSidebarWin.IsScrollbarVisible())
+        // if no scrollbar, or extra keys held scroll the document and consume
+        // this event, otherwise don't consume and let the event get to the
+        // surrounding scrolled window
+        if (!mrSidebarWin.IsScrollbarVisible())
+        {
+            mrDocView.HandleWheelCommands(rCEvt);
+            return true;
+        }
+        else
         {
             const CommandWheelData* pData = rCEvt.GetWheelData();
             if (pData->IsShift() || pData->IsMod1() || pData->IsMod2())
             {
                 mrDocView.HandleWheelCommands(rCEvt);
-            }
-            else
-            {
-                HandleScrollCommand( rCEvt, nullptr , mrSidebarWin.Scrollbar());
+                return true;
             }
         }
-        else
-        {
-            mrDocView.HandleWheelCommands(rCEvt);
-        }
     }
-    else
-    {
-        if ( GetTextView() )
-            GetTextView()->Command( rCEvt );
-        else
-            Window::Command(rCEvt);
-    }
-}
 
-OUString SidebarTextControl::GetSurroundingText() const
-{
-    if (OutlinerView* pTextView = GetTextView())
-        return pTextView->GetSurroundingText();
-    return OUString();
-}
-
-Selection SidebarTextControl::GetSurroundingTextSelection() const
-{
-    if (OutlinerView* pTextView = GetTextView())
-        return pTextView->GetSurroundingTextSelection();
-    return Selection( 0, 0 );
-}
-
-bool SidebarTextControl::DeleteSurroundingText(const Selection& rSelection)
-{
-    if (OutlinerView* pTextView = GetTextView())
-        return pTextView->DeleteSurroundingText(rSelection);
-    return false;
-}
-
-css::uno::Reference< css::accessibility::XAccessible > SidebarTextControl::CreateAccessible()
-{
-
-    SidebarTextControlAccessible* pAcc( new SidebarTextControlAccessible( *this ) );
-    css::uno::Reference< css::awt::XWindowPeer > xWinPeer( pAcc );
-    SetWindowPeer( xWinPeer, pAcc );
-
-    css::uno::Reference< css::accessibility::XAccessible > xAcc( xWinPeer, css::uno::UNO_QUERY );
-    return xAcc;
+    return WeldEditView::Command(rCEvt);
 }
 
 } // end of namespace sw::sidebarwindows

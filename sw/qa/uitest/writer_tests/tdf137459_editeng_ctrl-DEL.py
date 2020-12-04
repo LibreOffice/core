@@ -27,11 +27,12 @@ class tdf137459(UITestCase):
         self.ui_test.wait_until_child_is_available(xMainWindow, 'Comment1')
 
         xComment1 = xMainWindow.getChild("Comment1")
+        xEditView1 = xComment1.getChild("editview")
         sText = "Ctrl+Del should not delete BACKWARDS"
-        xComment1.executeAction("TYPE", mkPropertyValues({"TEXT": sText}))
+        xEditView1.executeAction("TYPE", mkPropertyValues({"TEXT": sText}))
         self.assertEqual(get_state_as_dict(xComment1)["Text"], sText )
 
-        xComment1.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+DELETE"}))
+        xEditView1.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+DELETE"}))
         self.assertEqual(get_state_as_dict(xComment1)["Text"], sText )
 
         self.ui_test.close_doc()
