@@ -45,6 +45,30 @@
       "revId": "90be366bd1efa7f7221e5f862f9c54ac8faad393",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d366bc42_738d6990",
+        "filename": "offapi/com/sun/star/text/ViewSettings.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-12-04T08:23:35Z",
+      "side": 1,
+      "message": "How can I use an enum here? Or what constants are you talking about?",
+      "parentUuid": "61e887f4_293bccd8",
+      "range": {
+        "startLine": 303,
+        "startChar": 25,
+        "endLine": 303,
+        "endChar": 29
+      },
+      "revId": "90be366bd1efa7f7221e5f862f9c54ac8faad393",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
