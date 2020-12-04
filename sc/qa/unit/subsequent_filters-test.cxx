@@ -4997,6 +4997,8 @@ void ScFiltersTest::testPreviewMissingObjLink()
 
 void ScFiltersTest::testShapeRotationImport()
 {
+    if (!IsDefaultDPI())
+        return;
     // tdf#83593 Incorrectly calculated bounding rectangles caused shapes to appear as if there
     // were extra or missing rotations. Hence, we check the sizes of these rectangles.
     ScDocShellRef xDocSh = loadDoc("testShapeRotationImport.", FORMAT_XLSX);

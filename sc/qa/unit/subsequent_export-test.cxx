@@ -5405,6 +5405,8 @@ void ScExportTest::testHeaderFontStyleXLSX()
 
 void ScExportTest::testTdf135828_Shape_Rect()
 {
+    if (!IsDefaultDPI())
+        return;
     // tdf#135828 Check that the width and the height of rectangle of the shape
     // is correct.
     ScDocShellRef xShell = loadDoc("tdf135828_Shape_Rect.", FORMAT_XLSX);
