@@ -383,33 +383,35 @@ VclPtr<vcl::Window>& JSInstanceBuilder::GetNotifierWindow()
 
 std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id)
 {
+    std::unique_ptr<weld::Dialog> pRet;
     ::Dialog* pDialog = m_xBuilder->get<::Dialog>(id);
-    m_nWindowId = pDialog->GetLOKWindowId();
-    pDialog->SetLOKTunnelingState(false);
-
-    InsertWindowToMap(m_nWindowId);
 
     if (pDialog)
     {
+        m_nWindowId = pDialog->GetLOKWindowId();
+        pDialog->SetLOKTunnelingState(false);
+
+        InsertWindowToMap(m_nWindowId);
+
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
         m_aOwnedToplevel.set(pDialog);
         m_xBuilder->drop_ownership(pDialog);
         m_bHasTopLevelDialog = true;
-    }
 
-    std::unique_ptr<weld::Dialog> pRet(pDialog ? new JSDialog(m_aOwnedToplevel, m_aOwnedToplevel,
-                                                              pDialog, this, false, m_sTypeOfJSON)
-                                               : nullptr);
+        pRet.reset(pDialog ? new JSDialog(m_aOwnedToplevel, m_aOwnedToplevel, pDialog, this, false,
+                                          m_sTypeOfJSON)
+                           : nullptr);
 
-    RememberWidget("__DIALOG__", pRet.get());
+        RememberWidget("__DIALOG__", pRet.get());
 
-    const vcl::ILibreOfficeKitNotifier* pNotifier = pDialog->GetLOKNotifier();
-    if (pNotifier && id != "MacroSelectorDialog")
-    {
-        tools::JsonWriter aJsonWriter;
-        m_aOwnedToplevel->DumpAsPropertyTree(aJsonWriter);
-        aJsonWriter.put("id", m_aOwnedToplevel->GetLOKWindowId());
-        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aJsonWriter.extractData());
+        const vcl::ILibreOfficeKitNotifier* pNotifier = pDialog->GetLOKNotifier();
+        if (pNotifier && id != "MacroSelectorDialog")
+        {
+            tools::JsonWriter aJsonWriter;
+            m_aOwnedToplevel->DumpAsPropertyTree(aJsonWriter);
+            aJsonWriter.put("id", m_aOwnedToplevel->GetLOKWindowId());
+            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aJsonWriter.extractData());
+        }
     }
 
     return pRet;
