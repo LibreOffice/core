@@ -2578,11 +2578,12 @@ void SdXMLChartShapeContext::characters( const OUString& rChars )
         mxChartContext->characters( rChars );
 }
 
-SvXMLImportContextRef SdXMLChartShapeContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLChartShapeContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( mxChartContext.is() )
-        return mxChartContext->CreateChildContext( nPrefix, rLocalName, xAttrList );
+        return mxChartContext->createFastChildContextFallback( nElement, xAttrList );
 
     return nullptr;
 }
