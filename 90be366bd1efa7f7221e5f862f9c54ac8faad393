@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e1f77f56_871cdfc3",
+        "filename": "offapi/com/sun/star/text/ViewSettings.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-12-04T07:46:38Z",
+      "side": 1,
+      "message": "what does this mean?",
+      "range": {
+        "startLine": 299,
+        "startChar": 7,
+        "endLine": 299,
+        "endChar": 62
+      },
+      "revId": "90be366bd1efa7f7221e5f862f9c54ac8faad393",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61e887f4_293bccd8",
+        "filename": "offapi/com/sun/star/text/ViewSettings.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-12-04T07:46:38Z",
+      "side": 1,
+      "message": "Please use constants here instead of random numbers",
+      "range": {
+        "startLine": 303,
+        "startChar": 25,
+        "endLine": 303,
+        "endChar": 29
+      },
+      "revId": "90be366bd1efa7f7221e5f862f9c54ac8faad393",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
