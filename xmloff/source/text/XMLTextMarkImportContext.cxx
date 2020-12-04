@@ -166,7 +166,7 @@ void XMLTextMarkImportContext::startFastElement( sal_Int32 nElement,
         m_rHelper.pushFieldCtx( m_sBookmarkName, m_sFieldName );
     }
 
-    if (IsXMLToken(GetLocalName(), XML_BOOKMARK_START))
+    if ((nElement & TOKEN_MASK) == XML_BOOKMARK_START)
     {
         const OUString sHidden    = xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_HIDDEN));
         const OUString sCondition = xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_CONDITION));
@@ -241,12 +241,12 @@ static auto PopFieldmark(XMLTextImportHelper & rHelper) -> void
     }
 }
 
-void XMLTextMarkImportContext::endFastElement(sal_Int32 )
+void XMLTextMarkImportContext::endFastElement(sal_Int32 nElement)
 {
     static const char sAPI_bookmark[] = "com.sun.star.text.Bookmark";
 
     lcl_MarkType nTmp{};
-    if (!SvXMLUnitConverter::convertEnum(nTmp, GetLocalName(), lcl_aMarkTypeMap))
+    if (!SvXMLUnitConverter::convertEnum(nTmp, SvXMLImport::getNameFromToken(nElement), lcl_aMarkTypeMap))
         return;
 
     if (m_sBookmarkName.isEmpty() && TypeFieldmarkEnd != nTmp)
