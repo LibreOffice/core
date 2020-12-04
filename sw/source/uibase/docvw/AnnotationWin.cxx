@@ -19,7 +19,6 @@
 
 #include <AnnotationWin.hxx>
 
-#include "AnnotationMenuButton.hxx"
 #include <PostItMgr.hxx>
 
 #include <strings.hrc>
@@ -90,16 +89,10 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
                                   SwPostItMgr& aMgr,
                                   SwSidebarItem& rSidebarItem,
                                   SwFormatField* aField )
-    : Window(&rEditWin)
-    , maBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/swriter/ui/annotationmenu.ui", "")
+    : InterimItemWindow(&rEditWin, "modules/swriter/ui/annotation.ui", "Annotation")
     , mrMgr(aMgr)
     , mrView(rEditWin.GetView())
     , mnEventId(nullptr)
-    , mpSidebarTextControl(nullptr)
-    , mpVScrollbar(nullptr)
-    , mpMetadataAuthor(nullptr)
-    , mpMetadataDate(nullptr)
-    , mpMenuButton(nullptr)
     , mColorAnchor()
     , mColorDark()
     , mColorLight()
@@ -118,9 +111,10 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
     , mpAnchorFrame(rSidebarItem.maLayoutInfo.mpAnchorFrame)
     , mpFormatField(aField)
     , mpField( static_cast<SwPostItField*>(aField->GetField()))
-    , mpButtonPopup(nullptr)
 {
     set_id("Comment"+OUString::number(mpField->GetPostItId()));
+
+    m_xContainer->connect_mouse_move(LINK(this, SwAnnotationWin, MouseMoveHdl));
 
     mpShadow = sidebarwindows::ShadowOverlayObject::CreateShadowOverlayObject( mrView );
     if ( mpShadow )
@@ -145,9 +139,6 @@ SwAnnotationWin::~SwAnnotationWin()
 
 void SwAnnotationWin::dispose()
 {
-    mpButtonPopup.clear();
-    maBuilder.disposeBuilder();
-
     if (IsDisposed())
         return;
 
@@ -156,55 +147,28 @@ void SwAnnotationWin::dispose()
 
     Disable();
 
-    if ( mpSidebarTextControl )
-    {
-        if ( mpOutlinerView )
-        {
-            mpOutlinerView->SetWindow( nullptr );
-        }
-    }
-    mpSidebarTextControl.disposeAndClear();
+    mxSidebarTextControlWin.reset();
+    mxSidebarTextControl.reset();
 
-    mpOutlinerView.reset();
-    mpOutliner.reset();
-
-    if (mpMetadataAuthor)
-    {
-        mpMetadataAuthor->RemoveEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
-    }
-    mpMetadataAuthor.disposeAndClear();
-
-    if (mpMetadataResolved)
-    {
-        mpMetadataResolved->RemoveEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
-    }
-    mpMetadataResolved.disposeAndClear();
-
-    if (mpMetadataDate)
-    {
-        mpMetadataDate->RemoveEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
-    }
-    mpMetadataDate.disposeAndClear();
-
-    if (mpVScrollbar)
-    {
-        mpVScrollbar->RemoveEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
-    }
-    mpVScrollbar.disposeAndClear();
-
-    RemoveEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
+    mxMetadataAuthor.reset();
+    mxMetadataResolved.reset();
+    mxMetadataDate.reset();
+    mxVScrollbar.reset();
 
     mpAnchor.reset();
     mpShadow.reset();
 
     mpTextRangeOverlay.reset();
 
-    mpMenuButton.disposeAndClear();
+    mxMenuButton.reset();
 
     if (mnEventId)
         Application::RemoveUserEvent( mnEventId );
 
-    vcl::Window::dispose();
+    mpOutliner.reset();
+    mpOutlinerView.reset();
+
+    InterimItemWindow::dispose();
 }
 
 void SwAnnotationWin::SetPostItText()
@@ -254,9 +218,9 @@ void SwAnnotationWin::SetResolved(bool resolved)
     mpTextRangeOverlay.reset();
 
     if(IsResolved())
-        mpMetadataResolved->Show();
+        mxMetadataResolved->show();
     else
-        mpMetadataResolved->Hide();
+        mxMetadataResolved->hide();
 
     if(IsResolved() != oldState)
         mbResolvedStateUpdated = true;
@@ -435,21 +399,6 @@ sal_uInt32 SwAnnotationWin::CountFollowing()
                : nullptr;
     }
     return aCount - 1;
-}
-
-VclPtr<MenuButton> SwAnnotationWin::CreateMenuButton()
-{
-    mpButtonPopup = maBuilder.get_menu("menu");
-    sal_uInt16 nByAuthorId = mpButtonPopup->GetItemId("deleteby");
-    OUString aText = mpButtonPopup->GetItemText(nByAuthorId);
-    SwRewriter aRewriter;
-    aRewriter.AddRule(UndoArg1,GetAuthor());
-    aText = aRewriter.Apply(aText);
-    mpButtonPopup->SetItemText(nByAuthorId, aText);
-    VclPtrInstance<AnnotationMenuButton> pMenuButton( *this );
-    pMenuButton->SetPopupMenu( mpButtonPopup );
-    pMenuButton->Show();
-    return pMenuButton;
 }
 
 void SwAnnotationWin::InitAnswer(OutlinerParaObject const * pText)
