@@ -3309,65 +3309,51 @@ void XMLAnnotationImportContext::ProcessAttribute(
         XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
 
-SvXMLImportContextRef XMLAnnotationImportContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList >& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLAnnotationImportContext::createFastChildContext(
+    sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
-    if( XML_NAMESPACE_DC == nPrefix )
-    {
-        if( IsXMLToken( rLocalName, XML_CREATOR ) )
-            pContext = new XMLStringBufferImportContext(GetImport(), aAuthorBuffer);
-        else if( IsXMLToken( rLocalName, XML_DATE ) )
-            pContext = new XMLStringBufferImportContext(GetImport(), aDateBuffer);
-    }
-    else if (((XML_NAMESPACE_TEXT == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix)
-                 && IsXMLToken(rLocalName, XML_SENDER_INITIALS))
-             || (XML_NAMESPACE_META == nPrefix
-                 && IsXMLToken(rLocalName, XML_CREATOR_INITIALS)))
-    {
-        pContext = new XMLStringBufferImportContext(GetImport(), aInitialsBuffer);
-    }
+    if( nElement == XML_ELEMENT(DC, XML_CREATOR) )
+        return new XMLStringBufferImportContext(GetImport(), aAuthorBuffer);
+    else if( nElement == XML_ELEMENT(DC, XML_DATE) )
+        return new XMLStringBufferImportContext(GetImport(), aDateBuffer);
+    else if (nElement == XML_ELEMENT(TEXT,XML_SENDER_INITIALS) ||
+             nElement == XML_ELEMENT(LO_EXT, XML_SENDER_INITIALS) ||
+             nElement == XML_ELEMENT(META, XML_CREATOR_INITIALS))
+        return new XMLStringBufferImportContext(GetImport(), aInitialsBuffer);
 
-    if( !pContext )
+    try
     {
-        try
+        bool bOK = true;
+        if ( !mxField.is() )
+            bOK = CreateField( mxField, sServicePrefix + GetServiceName() );
+        if (bOK)
         {
-            bool bOK = true;
-            if ( !mxField.is() )
-                bOK = CreateField( mxField, sServicePrefix + GetServiceName() );
-            if (bOK)
+            Any aAny = mxField->getPropertyValue( "TextRange" );
+            Reference< XText > xText;
+            aAny >>= xText;
+            if( xText.is() )
             {
-                Any aAny = mxField->getPropertyValue( "TextRange" );
-                Reference< XText > xText;
-                aAny >>= xText;
-                if( xText.is() )
+                rtl::Reference < XMLTextImportHelper > xTxtImport = GetImport().GetTextImport();
+                if( !mxCursor.is() )
                 {
-                    rtl::Reference < XMLTextImportHelper > xTxtImport = GetImport().GetTextImport();
-                    if( !mxCursor.is() )
-                    {
-                        mxOldCursor = xTxtImport->GetCursor();
-                        mxCursor = xText->createTextCursor();
-                    }
+                    mxOldCursor = xTxtImport->GetCursor();
+                    mxCursor = xText->createTextCursor();
+                }
 
-                    if( mxCursor.is() )
-                    {
-                        xTxtImport->SetCursor( mxCursor );
-                        pContext = xTxtImport->CreateTextChildContext( GetImport(), nPrefix, rLocalName, xAttrList );
-                    }
+                if( mxCursor.is() )
+                {
+                    xTxtImport->SetCursor( mxCursor );
+                    return xTxtImport->CreateTextChildContext( GetImport(), nElement, xAttrList );
                 }
             }
         }
-        catch (const Exception&)
-        {
-        }
-
-        if( !pContext )
-            pContext = new XMLStringBufferImportContext(GetImport(), aTextBuffer);
+    }
+    catch (const Exception&)
+    {
     }
 
-    return pContext;
+    return new XMLStringBufferImportContext(GetImport(), aTextBuffer);
 }
 
 void XMLAnnotationImportContext::endFastElement(sal_Int32 )
