@@ -135,20 +135,6 @@ public:
 
     /// Reset the DC with the defined color.
     void fill(sal_uInt32 color);
-
-    /// Base texture class (OpenGL and Skia will provide their implementations).
-    struct Texture;
-
-    /// Obtain the texture in format for WinSalGraphicsImplBase::DrawTextMask().
-    virtual std::unique_ptr<Texture> getAsMaskTexture() const { abort(); };
-};
-
-struct CompatibleDC::Texture
-{
-    virtual ~Texture() {};
-    virtual bool isValid() const = 0;
-    virtual int GetWidth() const = 0;
-    virtual int GetHeight() const = 0;
 };
 
 class WinSalGraphics : public SalGraphics
@@ -178,9 +164,6 @@ private:
     RGNDATA*                mpClipRgnData;      // ClipRegion-Data
     RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
     int                     mnPenWidth;         // line width
-
-    bool CacheGlyphs(const GenericSalLayout& rLayout);
-    bool DrawCachedGlyphs(const GenericSalLayout& rLayout);
 
 public:
     HFONT ImplDoSetFont(FontSelectPattern const & i_rFont, const PhysicalFontFace * i_pFontFace, HFONT& o_rOldFont);
