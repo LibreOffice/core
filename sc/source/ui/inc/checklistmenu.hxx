@@ -293,7 +293,6 @@ private:
 
     SubMenuItemData   maOpenTimer;
     SubMenuItemData   maCloseTimer;
-    bool              mbDisposing;
 };
 
 /**
