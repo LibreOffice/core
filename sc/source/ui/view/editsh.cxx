@@ -361,21 +361,21 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             aSel.nEndPos = nUtf16Pos;
                    }
 
-                    ToggleUnicodeCodepoint aToggle;
-                    while( nUtf16Pos && aToggle.AllowMoreInput( sInput[nUtf16Pos-1]) )
-                        --nUtf16Pos;
-                    OUString sReplacement = aToggle.ReplacementString();
-                    if( !sReplacement.isEmpty() )
-                    {
-                        aSel.nStartPos = aSel.nEndPos - aToggle.StringToReplace().getLength();
-                        pTableView->SetSelection( aSel );
-                        pTableView->InsertText(sReplacement, true);
-                        if( pTopView )
-                        {
-                            pTopView->SetSelection( aSel );
-                            pTopView->InsertText(sReplacement, true);
-                        }
-                    }
+//                    ToggleUnicodeCodepoint aToggle;
+//                    while( nUtf16Pos && aToggle.AllowMoreInput( sInput[nUtf16Pos-1]) )
+//                        --nUtf16Pos;
+//                    OUString sReplacement = aToggle.ReplacementString();
+//                    if( !sReplacement.isEmpty() )
+//                    {
+//                        aSel.nStartPos = aSel.nEndPos - aToggle.StringToReplace().getLength();
+//                        pTableView->SetSelection( aSel );
+//                        pTableView->InsertText(sReplacement, true);
+//                        if( pTopView )
+//                        {
+//                            pTopView->SetSelection( aSel );
+//                            pTopView->InsertText(sReplacement, true);
+//                        }
+//                    }
                 }
             }
             break;

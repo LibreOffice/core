@@ -19,6 +19,7 @@
 
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/languagetagicu.hxx>
 #include <i18nutil/unicode.hxx>
@@ -824,198 +825,138 @@ OUString unicode::formatPercent(double dNumber,
     return aRet;
 }
 
-bool ToggleUnicodeCodepoint::AllowMoreInput(sal_Unicode uChar)
+namespace
 {
-    //arbitrarily chosen maximum length allowed - normal max usage would be around 30.
-    if( maInput.getLength() > 255 )
-        mbAllowMoreChars = false;
+enum class HexStringKind
+{
+    None,
+    Partial,
+    Full,
+};
 
-    if( !mbAllowMoreChars )
-        return false;
-
-    bool bPreventNonHex = false;
-    if( maInput.indexOf("U+") != -1 )
-        bPreventNonHex = true;
-
-    switch ( unicode::getUnicodeType(uChar) )
+HexStringKind IsHexString(const OUString& s)
+{
+    bool bHasU = false;
+    enum class HexNumStatus
     {
-        case css::i18n::UnicodeType::SURROGATE:
-            if( bPreventNonHex )
-            {
-                mbAllowMoreChars = false;
-                return false;
-            }
-
-            if( rtl::isLowSurrogate(uChar) && maUtf16.isEmpty() && maInput.isEmpty()  )
-            {
-                maUtf16.append(uChar);
-                return true;
-            }
-            if( rtl::isHighSurrogate(uChar) && maInput.isEmpty() )
-                maUtf16.insert(0, uChar );
-            //end of hex strings, or unexpected order of high/low, so don't accept more
-            if( !maUtf16.isEmpty() )
-                maInput.append(maUtf16);
-            if( !maCombining.isEmpty() )
-                maInput.append(maCombining);
-            mbAllowMoreChars = false;
+        Start,
+        U,
+        Plus,
+        Hexchar,
+        Invalid,
+    } eHexNumStatus
+        = HexNumStatus::Start;
+    int nHexChar = 0;
+    for (int i = 0; i < s.getLength(); ++i)
+    {
+        sal_Unicode c = s[i];
+        switch (c)
+        {
+            case 'U':
+            case 'u':
+                if (eHexNumStatus == HexNumStatus::Start || eHexNumStatus == HexNumStatus::Hexchar)
+                {
+                    bHasU = true;
+                    nHexChar = 0;
+                    eHexNumStatus = HexNumStatus::U;
+                }
+                else
+                    eHexNumStatus = HexNumStatus::Invalid;
+                break;
+            case '+':
+                if (eHexNumStatus == HexNumStatus::Start || eHexNumStatus == HexNumStatus::U)
+                    eHexNumStatus = HexNumStatus::Plus;
+                else
+                    eHexNumStatus = HexNumStatus::Invalid;
+                break;
+            default:
+                if ((eHexNumStatus == HexNumStatus::Start || eHexNumStatus == HexNumStatus::Plus
+                     || (eHexNumStatus == HexNumStatus::Hexchar && nHexChar < 8))
+                    && rtl::isAsciiHexDigit(c))
+                {
+                    eHexNumStatus = HexNumStatus::Hexchar;
+                    ++nHexChar;
+                }
+                else
+                    eHexNumStatus = HexNumStatus::Invalid;
+                break;
+        }
+        if (eHexNumStatus == HexNumStatus::Invalid)
             break;
-
-        case css::i18n::UnicodeType::NON_SPACING_MARK:
-        case css::i18n::UnicodeType::COMBINING_SPACING_MARK:
-            if( bPreventNonHex )
-            {
-                mbAllowMoreChars = false;
-                return false;
-            }
-
-            //extreme edge case: already invalid high/low surrogates with preceding combining chars, and now an extra combining mark.
-            if( !maUtf16.isEmpty() )
-            {
-                maInput = maUtf16;
-                if( !maCombining.isEmpty() )
-                    maInput.append(maCombining);
-                mbAllowMoreChars = false;
-                return false;
-            }
-            maCombining.insert(0, uChar);
-            break;
-
-        default:
-            //extreme edge case: already invalid high/low surrogates with preceding combining chars, and now an extra character.
-            if( !maUtf16.isEmpty() )
-            {
-                maInput = maUtf16;
-                if( !maCombining.isEmpty() )
-                    maInput.append(maCombining);
-                mbAllowMoreChars = false;
-                return false;
-            }
-
-            if( !maCombining.isEmpty() )
-            {
-                maCombining.insert(0, uChar);
-                maInput = maCombining;
-                mbAllowMoreChars = false;
-                return false;
-            }
-
-            // 0 - 1f are control characters.  Do not process those.
-            if( uChar < 0x20 )
-            {
-                mbAllowMoreChars = false;
-                return false;
-            }
-
-            switch( uChar )
-            {
-                case 'u':
-                case 'U':
-                    // U+ notation found.  Continue looking for another one.
-                    if( mbRequiresU )
-                    {
-                        mbRequiresU = false;
-                        maInput.insert(0,"U+");
-                    }
-                    // treat as a normal character
-                    else
-                    {
-                        mbAllowMoreChars = false;
-                        if( !bPreventNonHex )
-                            maInput.insertUtf32(0, uChar);
-                    }
-                    break;
-                case '+':
-                    // + already found: skip when not U, or edge case of +U+xxxx
-                    if( mbRequiresU || (maInput.indexOf("U+") == 0) )
-                        mbAllowMoreChars = false;
-                    // hex chars followed by '+' - now require a 'U'
-                    else if ( !maInput.isEmpty() )
-                        mbRequiresU = true;
-                    // treat as a normal character
-                    else
-                    {
-                        mbAllowMoreChars = false;
-                        if( !bPreventNonHex )
-                            maInput.insertUtf32(0, uChar);
-                    }
-                    break;
-                default:
-                    // + already found. Since not U, cancel further input
-                    if( mbRequiresU )
-                        mbAllowMoreChars = false;
-                    // maximum digits per notation is 8: only one notation
-                    else if( maInput.indexOf("U+") == -1 && maInput.getLength() == 8 )
-                        mbAllowMoreChars = false;
-                    // maximum digits per notation is 8: previous notation found
-                    else if( maInput.indexOf("U+") == 8 )
-                        mbAllowMoreChars = false;
-                    // a hex character. Add to string.
-                    else if( rtl::isAsciiHexDigit(uChar) )
-                    {
-                        mbIsHexString = true;
-                        maInput.insertUtf32(0, uChar);
-                    }
-                    // not a hex character: stop input. keep if it is the first input provided
-                    else
-                    {
-                        mbAllowMoreChars = false;
-                        if( maInput.isEmpty() )
-                            maInput.insertUtf32(0, uChar);
-                    }
-            }
     }
-    return mbAllowMoreChars;
+    if (eHexNumStatus == HexNumStatus::Hexchar)
+    {
+        if (s.matchIgnoreAsciiCase(u"U") || s.getLength() > 1 && !s.match(u"+") && !bHasU)
+            return HexStringKind::Full;
+        else
+            return HexStringKind::Partial;
+    }
+    return HexStringKind::None;
 }
 
-OUString ToggleUnicodeCodepoint::StringToReplace()
+bool ValidCode(sal_Unicode c) { return c >= 0x20 && rtl::isUnicodeCodePoint(c); }
+}
+
+// Called after reading non-selected hex characters to the left of the cursor, to only keep valid
+// hex string or a single character
+void ToggleUnicodeCodepoint::FinalizeHexString()
 {
-    if( maInput.isEmpty() )
+    // validate unicode notation.
+    OUString sIn = maInput.toAsciiUpperCase();
+    if (sal_Int32 nUPlus = sIn.indexOf("U+"); nUPlus >= 0)
     {
-        //edge case - input finished with incomplete low surrogate or combining characters without a base
-        if( mbAllowMoreChars )
+        // Numbers to the left of the first U+ are discarded
+        if (nUPlus > 0)
+            maInput = maInput.copy(maInput.getLength() - nUPlus - 1);
+        sIn = sIn.copy(nUPlus + 2);
+        for (nUPlus = sIn.indexOf("U+"); nUPlus >= 0; nUPlus = sIn.indexOf("U+"))
         {
-            if( !maUtf16.isEmpty() )
-                maInput = maUtf16;
-            if( !maCombining.isEmpty() )
-                maInput.append(maCombining);
+            sal_uInt32 nUnicode = sIn.copy(0, nUPlus).toUInt32(16);
+            // prevent creating control characters or invalid Unicode values
+            if (!ValidCode(nUnicode))
+                maInput = maInput.copy(maInput.getLength() - nUPlus - 1);
+            sIn = sIn.copy(nUPlus + 2);
         }
-        return maInput.toString();
     }
+    // Only trailing hex characters left in sIn
+    sal_uInt32 nUnicode = sIn.toUInt32(16);
+    if (!ValidCode(nUnicode))
+        maInput = maInput.copy(maInput.getLength() - 1);
+}
 
-    if( !mbIsHexString )
-        return maInput.toString();
-
-    //this function potentially modifies the input string.  Prevent addition of further characters
-    mbAllowMoreChars = false;
-
-    //validate unicode notation.
-    OUString sIn;
-    sal_uInt32 nUnicode = 0;
-    sal_Int32 nUPlus = maInput.indexOf("U+");
-    //if U+ notation used, strip off all extra chars added not in U+ notation
-    if( nUPlus != -1 )
+// Post-condition: maInput is the complete string to be converted
+ToggleUnicodeCodepoint::ToggleUnicodeCodepoint(
+    const css::uno::Reference<css::text::XTextCursor>& xCursor)
+{
+    OUString s = xCursor->getString();
+    const bool bSelection = !s.isEmpty();
+    bool bTryLeft = !bSelection; // only use selection if exists
+    do
     {
-        maInput.remove(0, nUPlus);
-        sIn = maInput.copy(2).makeStringAndClear();
-        nUPlus = sIn.indexOf("U+");
-    }
-    else
-        sIn = maInput.toString();
-    while( nUPlus != -1 )
-    {
-        nUnicode = sIn.copy(0, nUPlus).toUInt32(16);
-        //prevent creating control characters or invalid Unicode values
-        if( !rtl::isUnicodeCodePoint(nUnicode) || nUnicode < 0x20  )
-            maInput = sIn.copy(nUPlus);
-        sIn = sIn.copy(nUPlus+2);
-        nUPlus =  sIn.indexOf("U+");
-    }
+        if (bTryLeft)
+        {
+            xCursor->collapseToStart();
+            if (xCursor->goLeft(1, true))
+                s = xCursor->getString();
+            else
+                bTryLeft = false;
+        }
 
-    nUnicode = sIn.toUInt32(16);
-    if( !rtl::isUnicodeCodePoint(nUnicode) || nUnicode < 0x20 )
-       maInput.truncate().append( sIn[sIn.getLength()-1] );
-    return maInput.toString();
+        OUString aNewInput = s + maInput;
+        bool bAccept = true;
+        if (!maInput.isEmpty())
+        {
+            // we are reading grapheme by grapheme; something was already read into maInput. Only
+            // continue prepending if the result is a hex string
+            bAccept = IsHexString(aNewInput) != HexStringKind::None;
+        }
+        if (bAccept)
+            maInput = aNewInput;
+        else
+            bTryLeft = false;
+    } while (bTryLeft);
+    if (!bSelection && IsHexString(maInput) != HexStringKind::None)
+        FinalizeHexString(); // May truncate initially read string from left
 }
 
 sal_uInt32 ToggleUnicodeCodepoint::CharsToDelete()
@@ -1031,46 +972,56 @@ sal_uInt32 ToggleUnicodeCodepoint::CharsToDelete()
     return counter;
 }
 
-OUString ToggleUnicodeCodepoint::ReplacementString()
+OUString ToggleUnicodeCodepoint::ReplacementString() const
 {
-    OUString sIn = StringToReplace();
-    OUStringBuffer output = "";
-    sal_Int32 nUPlus = sIn.indexOf("U+");
-    // convert from hex notation to glyph
-    if( nUPlus != -1 || (sIn.getLength() > 1 && mbIsHexString) )
+    // First try convert from hex notation to glyph. May fail if original string was a selection
+    if (OUString sIn = maInput.toAsciiUpperCase(); IsHexString(sIn) == HexStringKind::Full)
     {
-        sal_uInt32 nUnicode = 0;
-        if( nUPlus == 0)
+        bool bValid = true;
+        OUStringBuffer output;
+        sal_Int32 nUPlus = sIn.indexOf("U+");
+        if (nUPlus > 0)
+            bValid = false;
+        else if (nUPlus == 0)
         {
             sIn = sIn.copy(2);
             nUPlus = sIn.indexOf("U+");
         }
-        while( nUPlus > 0 )
+        while (bValid && nUPlus >= 0)
         {
-            nUnicode = sIn.copy(0, nUPlus).toUInt32(16);
-            output.appendUtf32( nUnicode );
-
-            sIn = sIn.copy(nUPlus+2);
-            nUPlus = sIn.indexOf("U+");
+            sal_uInt32 nUnicode = sIn.copy(0, nUPlus).toUInt32(16);
+            if (!ValidCode(nUnicode))
+                bValid = false;
+            else
+            {
+                output.appendUtf32(nUnicode);
+                sIn = sIn.copy(nUPlus + 2);
+                nUPlus = sIn.indexOf("U+");
+            }
         }
-        nUnicode = sIn.toUInt32(16);
-        output.appendUtf32( nUnicode );
+        if (bValid)
+        {
+            sal_uInt32 nUnicode = sIn.toUInt32(16);
+            if (!ValidCode(nUnicode))
+                bValid = false;
+            else
+                output.appendUtf32(nUnicode);
+        }
+        if (bValid)
+            return output.makeStringAndClear();
     }
     // convert from glyph to hex notation
-    else
+    OUStringBuffer output;
+    for (sal_Int32 nPos = 0; nPos < maInput.getLength();)
     {
-        sal_Int32 nPos = 0;
-        while( nPos < sIn.getLength() )
-        {
-            OUStringBuffer aTmp = OUString::number(sIn.iterateCodePoints(&nPos),16);
-            //pad with zeros - minimum length of 4.
-            for( sal_Int32 i = 4 - aTmp.getLength(); i > 0; --i )
-                aTmp.insert( 0,"0" );
-            output.append( "U+" );
-            output.append( aTmp );
-        }
+        output.append("U+");
+        auto aTmp = OUString::number(maInput.iterateCodePoints(&nPos), 16);
+        // pad with zeros - minimum length of 4.
+        for (sal_Int32 i = 4 - aTmp.length; i > 0; --i)
+            output.append('0');
+        output.append(aTmp);
     }
-    return output.toString();
+    return output.makeStringAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,12 +20,17 @@
 #define INCLUDED_I18NUTIL_UNICODE_HXX
 
 #include <com/sun/star/i18n/UnicodeScript.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <sal/types.h>
 #include <rtl/ustrbuf.hxx>
 #include <unicode/uscript.h>
 #include <i18nutil/i18nutildllapi.h>
 
 class LanguageTag;
+namespace com::sun::star::text
+{
+class XTextCursor;
+}
 
 struct ScriptTypeList
 {
@@ -95,35 +100,22 @@ public:
 */
 class I18NUTIL_DLLPUBLIC ToggleUnicodeCodepoint
 {
-private:
-    OUStringBuffer maInput;
-    OUStringBuffer maUtf16;
-    OUStringBuffer maCombining;
-    bool mbAllowMoreChars = true;
-    bool mbRequiresU = false;
-    bool mbIsHexString = false;
-
 public:
-    /**
-    Build an input string of valid UTF16 units to toggle.
-        -do not call the other functions until the input process is complete
-        -build string from Right to Left.  (Start from the character to the left of the cursor: move left.)
-    */
-    bool AllowMoreInput(sal_Unicode uChar);
+    ToggleUnicodeCodepoint(const css::uno::Reference<css::text::XTextCursor>& xCursor);
+
+    OUString StringToReplace() const { return maInput; }
+    OUString ReplacementString() const;
 
     /**
-    Validates (and potentially modifies) the input string.
-        -all non-input functions must use this function to first to validate the input string
-        -additional input may be prevented after this function is called
-    */
-    OUString StringToReplace();
-    OUString ReplacementString();
-
-    /**
-    While sInput.getLength() returns the number of utf16 units to delete,
+    While maInput.getLength() returns the number of utf16 units to delete,
         this function returns the number of "characters" to delete - potentially a smaller number
     */
     sal_uInt32 CharsToDelete();
+
+private:
+    OUString maInput;
+
+    void FinalizeHexString();
 };
 
 #endif
