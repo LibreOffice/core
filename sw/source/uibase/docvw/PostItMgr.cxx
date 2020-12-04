@@ -1837,6 +1837,7 @@ tools::Long SwPostItMgr::GetNextBorder()
                 bool bFollow = (aNext != pPage->mvSidebarItems.end()) && (*aNext)->mpPostIt->IsFollow();
                 if ( pPage->bScrollbar || bFollow )
                 {
+                    fprintf(stderr, "this ret because %d\n", pPage->bScrollbar);
                     return -1;
                 }
                 else
