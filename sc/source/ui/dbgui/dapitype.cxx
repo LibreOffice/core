@@ -20,6 +20,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <dapitype.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace com::sun::star;
 
@@ -52,6 +53,9 @@ ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(weld::Window* pParent, bool b
 
     // Intentionally hide this button to see if anyone complains.
     m_xBtnExternal->hide();
+
+    if (comphelper::LibreOfficeKit::isActive())
+        m_xBtnDatabase->hide();
 }
 
 IMPL_LINK(ScDataPilotSourceTypeDlg, ResponseHdl, weld::Button&, rButton, void)
