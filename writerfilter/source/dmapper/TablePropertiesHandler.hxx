@@ -76,10 +76,7 @@ private:
     void tableExceptionProps( TablePropertyMapPtr pProps )
     {
         if ( m_pTableManager )
-        {
             m_pTableManager->tableExceptionProps( pProps );
-            cellProps( pProps );
-        }
         else
             m_pCurrentProperties->InsertProps(pProps.get());
     };
