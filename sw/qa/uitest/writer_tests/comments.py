@@ -33,7 +33,8 @@ class Comments(UITestCase):
         self.ui_test.wait_until_child_is_available(xMainWindow, 'Comment1')
 
         xComment1 = xMainWindow.getChild("Comment1")
-        xComment1.executeAction("TYPE", mkPropertyValues({"TEXT": "This is the First Comment"}))
+        xEditView1 = xComment1.getChild("editview")
+        xEditView1.executeAction("TYPE", mkPropertyValues({"TEXT": "This is the First Comment"}))
         self.assertEqual(get_state_as_dict(xComment1)["Text"], "This is the First Comment" )
         self.assertEqual(get_state_as_dict(xComment1)["Resolved"], "false" )
         self.assertEqual(get_state_as_dict(xComment1)["Author"], "Unknown Author" )
@@ -79,7 +80,8 @@ class Comments(UITestCase):
         # wait until the comment is available
         self.ui_test.wait_until_child_is_available(xMainWindow, 'Comment1')
         xComment1 = xMainWindow.getChild("Comment1")
-        xComment1.executeAction("TYPE", mkPropertyValues({"TEXT": "First Comment"}))
+        xEditView1 = xComment1.getChild("editview")
+        xEditView1.executeAction("TYPE", mkPropertyValues({"TEXT": "First Comment"}))
         xComment1.executeAction("LEAVE", mkPropertyValues({}))
         xwriter_edit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
 
@@ -88,7 +90,8 @@ class Comments(UITestCase):
         # wait until the comment is available
         self.ui_test.wait_until_child_is_available(xMainWindow, 'Comment2')
         xComment2 = xMainWindow.getChild("Comment2")
-        xComment2.executeAction("TYPE", mkPropertyValues({"TEXT": "Second Comment"}))
+        xEditView2 = xComment2.getChild("editview")
+        xEditView2.executeAction("TYPE", mkPropertyValues({"TEXT": "Second Comment"}))
         xComment2.executeAction("LEAVE", mkPropertyValues({}))
         xwriter_edit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
 
@@ -97,7 +100,8 @@ class Comments(UITestCase):
         # wait until the comment is available
         self.ui_test.wait_until_child_is_available(xMainWindow, 'Comment3')
         xComment3 = xMainWindow.getChild("Comment3")
-        xComment3.executeAction("TYPE", mkPropertyValues({"TEXT": "Third Comment"}))
+        xEditView3 = xComment3.getChild("editview")
+        xEditView3.executeAction("TYPE", mkPropertyValues({"TEXT": "Third Comment"}))
         xComment3.executeAction("LEAVE", mkPropertyValues({}))
         xwriter_edit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
 

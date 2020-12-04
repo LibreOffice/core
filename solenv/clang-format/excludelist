@@ -13378,7 +13378,6 @@ sw/source/uibase/dochdl/swdtflvr.cxx
 sw/source/uibase/docvw/AnchorOverlayObject.cxx
 sw/source/uibase/docvw/AnchorOverlayObject.hxx
 sw/source/uibase/docvw/AnnotationMenuButton.cxx
-sw/source/uibase/docvw/AnnotationMenuButton.hxx
 sw/source/uibase/docvw/AnnotationWin.cxx
 sw/source/uibase/docvw/AnnotationWin2.cxx
 sw/source/uibase/docvw/DashedLine.cxx
@@ -13392,8 +13391,6 @@ sw/source/uibase/docvw/ShadowOverlayObject.cxx
 sw/source/uibase/docvw/ShadowOverlayObject.hxx
 sw/source/uibase/docvw/SidebarTxtControl.cxx
 sw/source/uibase/docvw/SidebarTxtControl.hxx
-sw/source/uibase/docvw/SidebarTxtControlAcc.cxx
-sw/source/uibase/docvw/SidebarTxtControlAcc.hxx
 sw/source/uibase/docvw/SidebarWinAcc.cxx
 sw/source/uibase/docvw/SidebarWinAcc.hxx
 sw/source/uibase/docvw/edtdd.cxx
