@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/menubtn.hxx>
+#if 0
 
 namespace sw::annotation {
     class SwAnnotationWin;
@@ -47,5 +47,7 @@ class AnnotationMenuButton : public MenuButton
 };
 
 } // end of namespace sw::annotation
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
