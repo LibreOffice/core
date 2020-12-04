@@ -124,7 +124,10 @@ void Scheduler::ImplDeInitScheduler()
               "DeInit the scheduler - pending tasks: " << nTasks );
 
     // clean up all the sfx::SfxItemDisruptor_Impl Idles
+    sal_uInt32 nLockCount = Unlock(true);
+    assert(1 == nLockCount);
     ProcessEventsToIdle();
+    Lock(nLockCount);
 #endif
     rSchedCtx.mbActive = false;
 
