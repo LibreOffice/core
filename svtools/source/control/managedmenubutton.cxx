@@ -9,11 +9,11 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/menubtn.hxx>
 
+#include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/frame/theDesktop.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
@@ -31,7 +31,7 @@ public:
     void dispose() override;
 
 private:
-    rtl::Reference<VCLXPopupMenu> m_xPopupMenu;
+    css::uno::Reference<css::awt::XPopupMenu> m_xPopupMenu;
     css::uno::Reference<css::frame::XPopupMenuController> m_xPopupController;
 };
 
@@ -71,7 +71,7 @@ void ManagedMenuButton::Activate()
     }
 
     if (!m_xPopupMenu.is())
-        m_xPopupMenu.set(new VCLXPopupMenu(GetPopupMenu()));
+        m_xPopupMenu = GetPopupMenu()->CreateMenuInterface();
 
     // FIXME: get the frame from the parent VclBuilder.
     css::uno::Reference<css::uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
@@ -112,7 +112,7 @@ void ManagedMenuButton::Activate()
             "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext), css::uno::UNO_QUERY);
 
     if (m_xPopupController.is())
-        m_xPopupController->setPopupMenu(m_xPopupMenu.get());
+        m_xPopupController->setPopupMenu(m_xPopupMenu);
 }
 
 }
