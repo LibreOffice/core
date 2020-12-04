@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6ab53e6_5d100934",
+        "filename": "sw/uiconfig/swriter/ui/conditionpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-12-04T08:41:48Z",
+      "side": 1,
+      "message": "Although \"Options\" is a bit pointless we need the label for visual consistency.",
+      "range": {
+        "startLine": 307,
+        "startChar": 37,
+        "endLine": 307,
+        "endChar": 42
+      },
+      "revId": "2c748ec27cea4bea9fec102589bef68641186172",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
