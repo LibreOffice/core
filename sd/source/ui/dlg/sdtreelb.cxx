@@ -702,15 +702,23 @@ void SdPageObjsTLV::Select()
 
     if (m_bSelectionHandlerNavigates)
     {
-        SdrObject* pObject = reinterpret_cast<SdrObject*>(m_xTreeView->get_selected_id().toInt64());
-        if (pObject && pObject->GetName().isEmpty())
+        // Page items in the tree are given user data value 1.
+        // Drawing object items are given user data value of the object pointer they represent.
+        sal_Int64 nUserData = m_xTreeView->get_selected_id().toInt64();
+        if (nUserData != 1)
         {
-            const bool bUndo = pObject->getSdrModelFromSdrObject().IsUndoEnabled();
-            pObject->getSdrModelFromSdrObject().EnableUndo(false);
-            pObject->SetName(m_xTreeView->get_selected_text(), false);
-            m_aRowActivatedHdl.Call(*m_xTreeView);
-            pObject->SetName(OUString(), false);
-            pObject->getSdrModelFromSdrObject().EnableUndo(bUndo);
+            SdrObject* pObject = reinterpret_cast<SdrObject*>(nUserData);
+            if (pObject && pObject->GetName().isEmpty())
+            {
+                const bool bUndo = pObject->getSdrModelFromSdrObject().IsUndoEnabled();
+                pObject->getSdrModelFromSdrObject().EnableUndo(false);
+                pObject->SetName(m_xTreeView->get_selected_text(), false);
+                m_aRowActivatedHdl.Call(*m_xTreeView);
+                pObject->SetName(OUString(), false);
+                pObject->getSdrModelFromSdrObject().EnableUndo(bUndo);
+            }
+            else
+                m_aRowActivatedHdl.Call(*m_xTreeView);
         }
         else
             m_aRowActivatedHdl.Call(*m_xTreeView);
