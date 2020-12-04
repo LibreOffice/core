@@ -755,7 +755,8 @@ ImplWinData::ImplWinData() :
     mnTrackFlags(ShowTrackFlags::NONE),
     mnIsTopWindow(sal_uInt16(~0)), // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
     mbMouseOver(false),
-    mbEnableNativeWidget(false)
+    mbEnableNativeWidget(false),
+    mbIsJSDialog(false)
 {
 }
 
@@ -3178,6 +3179,17 @@ VclPtr<Window> Window::FindLOKWindow(vcl::LOKWindowId nWindowId)
         return it->second;
 
     return VclPtr<Window>();
+}
+
+bool Window::IsJSDialog()
+{
+    return ImplGetWinData()->mbIsJSDialog;
+}
+
+void Window::SetJSDialog(bool bJSDialog)
+{
+    if (ImplGetWinData()->mbIsJSDialog != bJSDialog)
+        ImplGetWinData()->mbIsJSDialog = bJSDialog;
 }
 
 bool Window::IsLOKWindowsEmpty()

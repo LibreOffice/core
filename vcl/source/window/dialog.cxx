@@ -623,7 +623,7 @@ void Dialog::dispose()
     xEventBroadcaster->documentEventOccured(aObject);
     UITestLogger::getInstance().log("Close Dialog");
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::LibreOfficeKit::isActive() && !IsJSDialog())
     {
         if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
         {
@@ -741,7 +741,7 @@ void Dialog::StateChanged( StateChangedType nType )
         DoInitialLayout();
 
         const bool bKitActive = comphelper::LibreOfficeKit::isActive();
-        if (bKitActive)
+        if (bKitActive && !IsJSDialog())
         {
             std::vector<vcl::LOKPayloadItem> aItems;
             aItems.emplace_back("type", "dialog");
@@ -778,7 +778,7 @@ void Dialog::StateChanged( StateChangedType nType )
 
         ImplMouseAutoPos( this );
     }
-    else if (nType == StateChangedType::Text)
+    else if (nType == StateChangedType::Text && !IsJSDialog())
     {
         if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
         {
@@ -796,7 +796,7 @@ void Dialog::StateChanged( StateChangedType nType )
         Invalidate();
     }
 
-    if (!mbModalMode && nType == StateChangedType::Visible)
+    if (!mbModalMode && nType == StateChangedType::Visible && !IsJSDialog())
     {
         if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
         {
@@ -986,7 +986,7 @@ bool Dialog::ImplStartExecute()
     else
         UITestLogger::getInstance().log("Open Modeless " + get_id());
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::LibreOfficeKit::isActive() && !IsJSDialog())
     {
         if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
         {
@@ -1087,7 +1087,7 @@ void Dialog::EndDialog( tools::Long nResult )
 
     Hide();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::LibreOfficeKit::isActive() && !IsJSDialog())
     {
         if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
         {
@@ -1348,7 +1348,7 @@ void Dialog::Resize()
 {
     SystemWindow::Resize();
 
-    if (comphelper::LibreOfficeKit::isDialogPainting())
+    if (comphelper::LibreOfficeKit::isDialogPainting() || IsJSDialog())
         return;
 
     if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())

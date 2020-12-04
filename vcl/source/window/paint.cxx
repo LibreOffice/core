@@ -1221,7 +1221,8 @@ void Window::LogicInvalidate(const tools::Rectangle* pRectangle)
 
 void Window::PixelInvalidate(const tools::Rectangle* pRectangle)
 {
-    if (comphelper::LibreOfficeKit::isDialogPainting() || !comphelper::LibreOfficeKit::isActive())
+    if (comphelper::LibreOfficeKit::isDialogPainting() || !comphelper::LibreOfficeKit::isActive() ||
+        IsJSDialog())
         return;
 
     Size aSize = GetSizePixel();

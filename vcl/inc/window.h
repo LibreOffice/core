@@ -117,6 +117,7 @@ struct ImplWinData
     sal_uInt16          mnIsTopWindow;
     bool                mbMouseOver;            //< tracks mouse over for native widget paint effect
     bool                mbEnableNativeWidget;   //< toggle native widget rendering
+    bool                mbIsJSDialog;           //< flag data to avoid sending window invalidate to client side
     ::std::list< VclPtr<vcl::Window> >
                         maTopWindowChildren;
 

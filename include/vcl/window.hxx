@@ -1175,6 +1175,10 @@ public:
     /// Find an existing Window based on the LOKWindowId.
     static VclPtr<vcl::Window>          FindLOKWindow(vcl::LOKWindowId nWindowId);
 
+    // Avoid sending window invalidate to client side
+    bool                                IsJSDialog();
+    void                                SetJSDialog(bool bJSDialog);
+
     /// check if LOK Window container is empty
     static bool                         IsLOKWindowsEmpty();
 

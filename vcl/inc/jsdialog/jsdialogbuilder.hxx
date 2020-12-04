@@ -177,6 +177,7 @@ public:
         : BaseInstanceClass(pObject, pBuilder, bTakeOwnership)
         , JSDialogSender(aNotifierWindow, aContentWindow, sTypeOfJSON)
     {
+        pObject->SetJSDialog(true);
     }
 
     virtual void show() override
