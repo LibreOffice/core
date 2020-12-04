@@ -22,6 +22,30 @@
       "revId": "0865857e7448d995b6e72d9c749d69da3f752e5e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "811de5cd_9ff9e706",
+        "filename": "sw/source/uibase/inc/OutlineContentVisibilityWin.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-12-04T09:19:11Z",
+      "side": 1,
+      "message": "yeah, left over junk from an experiment, will remove with https://gerrit.libreoffice.org/c/core/+/107188",
+      "parentUuid": "5a5249b4_7c737ff8",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 50
+      },
+      "revId": "0865857e7448d995b6e72d9c749d69da3f752e5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
