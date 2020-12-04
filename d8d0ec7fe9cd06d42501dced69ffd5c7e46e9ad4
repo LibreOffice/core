@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "680b8e5e_c301b78f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-12-04T15:38:07Z",
+      "side": 1,
+      "message": "Unconditionally assigning FormulaGrammar::CONV_XL_A1 would be wrong because eConv may already be FormulaGrammar::CONV_XL_R1C1 (and bTryXlA1\u003dfalse).",
+      "revId": "d8d0ec7fe9cd06d42501dced69ffd5c7e46e9ad4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
