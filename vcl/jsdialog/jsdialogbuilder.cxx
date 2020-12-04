@@ -374,15 +374,15 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id)
         m_aOwnedToplevel.set(pDialog);
         m_xBuilder->drop_ownership(pDialog);
         m_bHasTopLevelDialog = true;
-    }
 
-    const vcl::ILibreOfficeKitNotifier* pNotifier = pDialog->GetLOKNotifier();
-    if (pNotifier && id != "MacroSelectorDialog")
-    {
-        tools::JsonWriter aJsonWriter;
-        m_aOwnedToplevel->DumpAsPropertyTree(aJsonWriter);
-        aJsonWriter.put("id", m_aOwnedToplevel->GetLOKWindowId());
-        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aJsonWriter.extractData());
+        const vcl::ILibreOfficeKitNotifier* pNotifier = pDialog->GetLOKNotifier();
+        if (pNotifier && id != "MacroSelectorDialog")
+        {
+            tools::JsonWriter aJsonWriter;
+            m_aOwnedToplevel->DumpAsPropertyTree(aJsonWriter);
+            aJsonWriter.put("id", m_aOwnedToplevel->GetLOKWindowId());
+            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aJsonWriter.extractData());
+        }
     }
 
     return pRet;
