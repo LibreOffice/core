@@ -22,6 +22,30 @@
       "revId": "d7008946aa5443042b3406a1d3217f365782057a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a698af31_927c97eb",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3942,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2020-12-04T19:46:31Z",
+      "side": 1,
+      "message": "In the if condition, I tried to get the best view shell from rDocShell to ensure that if that two Docs are opened at a time and we apply ProtectSheet to Sheet1 in the first Doc, then ProtectSheet does not get applied to Sheet1 in the second Doc.\n\nThen after selecting the Best View Shell, I am iterating over all the frames to set the TabProtectionSymbol where needed.",
+      "parentUuid": "ac6cfea2_c5714cb2",
+      "range": {
+        "startLine": 3940,
+        "startChar": 4,
+        "endLine": 3942,
+        "endChar": 62
+      },
+      "revId": "d7008946aa5443042b3406a1d3217f365782057a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
