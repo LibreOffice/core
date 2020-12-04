@@ -65,25 +65,6 @@ public:
     }
 };
 
-class SchedulerGuardReleaser final
-{
-public:
-    SchedulerGuardReleaser()
-    {
-        Scheduler::Lock();
-        m_nLockCount = Scheduler::Unlock(true) - 1;
-    }
-
-    ~SchedulerGuardReleaser()
-    {
-        if (m_nLockCount)
-            Scheduler::Lock(m_nLockCount);
-    }
-
-private:
-    sal_uInt32 m_nLockCount;
-};
-
 #endif // INCLUDED_VCL_INC_SCHEDULERIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
