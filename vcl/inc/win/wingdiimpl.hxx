@@ -42,20 +42,6 @@ public:
     // Implementation for WinSalGraphics::DrawTextLayout().
     // Returns true if handled, if false, then WinSalGraphics will handle it itself.
     virtual bool DrawTextLayout(const GenericSalLayout&) { return false; }
-    // If true is returned, the following functions are used for text rendering.
-    virtual bool UseTextDraw() const { return false; }
-    virtual void PreDrawText() {}
-    virtual void PostDrawText() {}
-    virtual void DrawTextMask(CompatibleDC::Texture* /*rTexture*/, Color /*nMaskColor*/,
-                              const SalTwoRect& /*rPosAry*/)
-    {
-        abort();
-    };
-    virtual void DeferredTextDraw(const CompatibleDC::Texture* /*pTexture*/, Color /*nMaskColor*/,
-                                  const SalTwoRect& /*rPosAry*/)
-    {
-        abort();
-    };
 };
 
 #endif // INCLUDED_VCL_INC_WIN_WINGDIIMPL_HXX

@@ -27,90 +27,6 @@
 #include <win/salgdi.h>
 #include <o3tl/sorted_vector.hxx>
 
-class WinFontInstance;
-
-namespace
-{
-// Extra space at the top and bottom of the glyph in total = tmHeight / GLYPH_SPACE_RATIO;
-const int GLYPH_SPACE_RATIO = 8;
-// Border size at the top of the glyph = tmHeight / GLYPH_OFFSET_RATIO;
-const int GLYPH_OFFSET_RATIO = GLYPH_SPACE_RATIO * 2;
-}
-
-struct WinGlyphDrawElement
-{
-    tools::Rectangle maLocation;
-    int maLeftOverhangs;
-    std::unique_ptr<CompatibleDC::Texture> maTexture;
-    int mnBaselineOffset;
-    int mnHeight;
-    bool mbVertical;
-
-    int getExtraSpace() const
-    {
-        return std::max(mnHeight / GLYPH_SPACE_RATIO, 4);
-    }
-
-    int getExtraOffset() const
-    {
-        return std::max(mnHeight / GLYPH_OFFSET_RATIO, 2);
-    }
-};
-
-class WinGlyphCache;
-
-struct GlobalWinGlyphCache
-{
-    o3tl::sorted_vector<WinGlyphCache*> maWinGlyphCaches;
-
-    static GlobalWinGlyphCache * get();
-
-    virtual ~GlobalWinGlyphCache() {}
-    virtual bool AllocateTexture(WinGlyphDrawElement& rElement, CompatibleDC* dc) = 0;
-    virtual void NotifyElementUsed(WinGlyphDrawElement& /*rElement*/) {}
-    virtual void Prune() {}
-};
-
-class WinGlyphCache
-{
-protected:
-    std::unordered_map<int, WinGlyphDrawElement> maWinTextureCache;
-
-public:
-    WinGlyphCache()
-    {
-        if(GlobalWinGlyphCache* c = GlobalWinGlyphCache::get())
-            c->maWinGlyphCaches.insert(this);
-    }
-
-    virtual ~WinGlyphCache()
-    {
-        if(GlobalWinGlyphCache* c = GlobalWinGlyphCache::get())
-            c->maWinGlyphCaches.erase(this);
-    }
-
-    void PutDrawElementInCache(WinGlyphDrawElement&& rElement, int nGlyphIndex)
-    {
-        assert(GlobalWinGlyphCache::get());
-        assert(!IsGlyphCached(nGlyphIndex));
-        maWinTextureCache[nGlyphIndex] = std::move( rElement );
-    }
-
-    WinGlyphDrawElement& GetDrawElement(int nGlyphIndex)
-    {
-        assert(GlobalWinGlyphCache::get());
-        assert(IsGlyphCached(nGlyphIndex));
-        WinGlyphDrawElement& element = maWinTextureCache[nGlyphIndex];
-        GlobalWinGlyphCache::get()->NotifyElementUsed(element);
-        return element;
-    }
-
-    bool IsGlyphCached(int nGlyphIndex) const
-    {
-        return maWinTextureCache.find(nGlyphIndex) != maWinTextureCache.end();
-    }
-};
-
 // win32 specific logical font instance
 class WinFontInstance : public LogicalFontInstance
 {
@@ -135,9 +51,6 @@ public:
     const WinFontFace * GetFontFace() const { return static_cast<const WinFontFace *>(LogicalFontInstance::GetFontFace()); }
     WinFontFace * GetFontFace() { return static_cast<WinFontFace *>(LogicalFontInstance::GetFontFace()); }
 
-    bool CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, SalGraphics& rGraphics, const GenericSalLayout& rLayout);
-    WinGlyphCache& GetWinGlyphCache() { return maWinGlyphCache; }
-
     bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
 
 private:
@@ -149,7 +62,6 @@ private:
     WinSalGraphics *m_pGraphics;
     HFONT m_hFont;
     float m_fScale;
-    WinGlyphCache maWinGlyphCache;
 };
 
 class TextOutRenderer

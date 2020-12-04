@@ -42,7 +42,6 @@ class WinSalFrame;
 class WinSalVirtualDevice;
 class WinSalPrinter;
 namespace vcl { class Font; }
-struct GlobalWinGlyphCache;
 struct HDCCache;
 struct TempFontItem;
 class TextOutRenderer;
@@ -128,7 +127,6 @@ public:
     std::unique_ptr<TextOutRenderer> m_pD2DWriteTextOutRenderer;
     // tdf#107205 need 2 instances because D2DWrite can't rotate text
     std::unique_ptr<TextOutRenderer> m_pExTextOutRenderer;
-    std::unique_ptr<GlobalWinGlyphCache> m_pGlobalWinGlyphCache;
 #if HAVE_FEATURE_SKIA
     std::unique_ptr<SkiaControlsCache> m_pSkiaControlsCache;
 #endif

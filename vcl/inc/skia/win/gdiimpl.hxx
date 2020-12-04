@@ -31,21 +31,7 @@ class SkiaCompatibleDC : public CompatibleDC
 public:
     SkiaCompatibleDC(SalGraphics& rGraphics, int x, int y, int width, int height);
 
-    virtual std::unique_ptr<Texture> getAsMaskTexture() const override;
-
-    sk_sp<SkImage> getAsImage() const;
-    sk_sp<SkImage> getAsMaskImage() const;
     sk_sp<SkImage> getAsImageDiff(const SkiaCompatibleDC& white) const;
-
-    struct Texture;
-};
-
-struct SkiaCompatibleDC::Texture : public CompatibleDC::Texture
-{
-    sk_sp<SkImage> image;
-    virtual bool isValid() const { return image.get(); }
-    virtual int GetWidth() const { return image->width(); }
-    virtual int GetHeight() const { return image->height(); }
 };
 
 class WinSkiaSalGraphicsImpl : public SkiaSalGraphicsImpl, public WinSalGraphicsImplBase
