@@ -59,11 +59,9 @@ certain functionality.
 @section chart2
 
 @li @c chart2
-@li @c chart2.3dopengl
 @li @c chart2.accessibility
 @li @c chart2.areachart
 @li @c chart2.main
-@li @c chart2.opengl
 @li @c chart2.pie.label.bestfit
 @li @c chart2.pie.label.bestfit.inside
 @li @c chart2.template
@@ -394,7 +392,6 @@ certain functionality.
 @li @c svx.dialog
 @li @c svx.fmcomp
 @li @c svx.form
-@li @c svx.opengl
 @li @c svx.sdr
 @li @c svx.sidebar
 @li @c svx.stbcrtls - StatusBarControl
@@ -597,7 +594,6 @@ certain functionality.
 
 @li @c avmedia
 @li @c avmedia.gstreamer
-@li @c avmedia.opengl - OpenGL models
 @li @c avmedia.quicktime
 
 @section other
