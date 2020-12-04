@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72e98077_ad96de39",
+        "filename": "cui/uiconfig/ui/toolbarmodedialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2020-12-04T04:21:45Z",
+      "side": 1,
+      "message": "As I said on Bugzilla, this change is probably unnecessary since this string is not eventually used by the UI.  The UI uses RID_SVXSTR_UI_APPLYALL defined in cui/inc/strings.hrc and processed (substituting %MODULE) in cui/source/dialogs/toolbarmodedlg.cxx instead.\n\nBTW, if a hardcoded mnemonic is needed (RID_SVXSTR_UI_APPLYALL doesn\u0027t have one), Alt+P is not a good choice as it clashes with \"A_pply to All\".  I suggest \"Appl_y to %MODULE\" for Alt+Y.",
+      "revId": "b866b0da4007df19a17c42f56ca11e0e277ce4d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
