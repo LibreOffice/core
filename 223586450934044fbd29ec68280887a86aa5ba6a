@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c262aadc_0fb6df5b",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1367,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-05T11:35:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d335edf_c0e02f49",
+      "revId": "223586450934044fbd29ec68280887a86aa5ba6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e5975f11_d53cca99",
         "filename": "sax/source/fastparser/fastparser.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2020-12-03T13:48:08Z",
       "side": 1,
       "message": "we should be able to do these checks using the raw C APIs, i.e.\ncalling strlen() for the length, and then raw character access via the pointer\n\n- this is one of the few places we really care about performance, fastparser is sometimes used to load  200M big spreadsheets.",
+      "revId": "223586450934044fbd29ec68280887a86aa5ba6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4663fcf_a48afd75",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-05T11:35:55Z",
+      "side": 1,
+      "message": "Used more C tools to do the task.",
+      "parentUuid": "e5975f11_d53cca99",
       "revId": "223586450934044fbd29ec68280887a86aa5ba6a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
