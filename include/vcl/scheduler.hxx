@@ -36,8 +36,8 @@ class VCL_DLLPUBLIC Scheduler final
 
     static void ImplStartTimer ( sal_uInt64 nMS, bool bForce, sal_uInt64 nTime );
 
-    static void Lock( sal_uInt32 nLockCount = 1 );
-    static sal_uInt32 Unlock( bool bUnlockAll = false );
+    static void Lock();
+    static void Unlock();
 
 public:
     static constexpr sal_uInt64 ImmediateTimeoutMs = 0;

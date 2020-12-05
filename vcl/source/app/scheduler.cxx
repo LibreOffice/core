@@ -124,15 +124,13 @@ void Scheduler::ImplDeInitScheduler()
               "DeInit the scheduler - pending tasks: " << nTasks );
 
     // clean up all the sfx::SfxItemDisruptor_Impl Idles
-    sal_uInt32 nLockCount = Unlock(true);
-    assert(1 == nLockCount);
+    Unlock();
     ProcessEventsToIdle();
-    Lock(nLockCount);
+    Lock();
 #endif
     rSchedCtx.mbActive = false;
 
     assert( nullptr == rSchedCtx.mpSchedulerStack );
-    assert( 1 == rSchedCtx.maMutex.lockDepth() );
 
     if (rSchedCtx.mpSalTimer) rSchedCtx.mpSalTimer->Stop();
     delete rSchedCtx.mpSalTimer;
@@ -209,41 +207,36 @@ next_priority:
     rSchedCtx.mnTimerPeriod        = InfiniteTimeoutMs;
 }
 
-void SchedulerMutex::acquire( sal_uInt32 nLockCount )
+void SchedulerMutex::acquire()
 {
-    assert(nLockCount > 0);
-    for (sal_uInt32 i = 0; i != nLockCount; ++i) {
-        if (!maMutex.acquire())
-            abort();
-    }
-    mnLockDepth += nLockCount;
+    if (!m_aMutex.acquire())
+        std::abort();
+    if (m_bIsLocked)
+        std::abort();
+    m_bIsLocked = true;
 }
 
-sal_uInt32 SchedulerMutex::release( bool bUnlockAll )
+void SchedulerMutex::release()
 {
-    assert(mnLockDepth > 0);
-    const sal_uInt32 nLockCount =
-        (bUnlockAll || 0 == mnLockDepth) ? mnLockDepth : 1;
-    mnLockDepth -= nLockCount;
-    for (sal_uInt32 i = 0; i != nLockCount; ++i) {
-        if (!maMutex.release())
-            abort();
-    }
-    return nLockCount;
+    if (!m_bIsLocked)
+        std::abort();
+    m_bIsLocked = false;
+    if (!m_aMutex.release())
+        std::abort();
 }
 
-void Scheduler::Lock( sal_uInt32 nLockCount )
+void Scheduler::Lock()
 {
     ImplSVData* pSVData = ImplGetSVData();
     assert( pSVData != nullptr );
-    pSVData->maSchedCtx.maMutex.acquire( nLockCount );
+    pSVData->maSchedCtx.maMutex.acquire();
 }
 
-sal_uInt32 Scheduler::Unlock( bool bUnlockAll )
+void Scheduler::Unlock()
 {
     ImplSVData* pSVData = ImplGetSVData();
     assert( pSVData != nullptr );
-    return pSVData->maSchedCtx.maMutex.release( bUnlockAll );
+    pSVData->maSchedCtx.maMutex.release();
 }
 
 /**
@@ -476,7 +469,7 @@ bool Scheduler::ProcessTaskScheduling()
         rSchedCtx.mpSchedulerStackTop = pMostUrgent;
 
         // invoke the task
-        sal_uInt32 nLockCount = Unlock( true );
+        Unlock();
         /*
         * Current policy is that scheduler tasks aren't allowed to throw an exception.
         * Because otherwise the exception is caught somewhere totally unrelated.
@@ -503,7 +496,7 @@ bool Scheduler::ProcessTaskScheduling()
             SAL_WARN("vcl.schedule", "Uncaught exception during Task::Invoke()!");
             std::abort();
         }
-        Lock( nLockCount );
+        Lock();
         pMostUrgent->mbInScheduler = false;
 
         SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
