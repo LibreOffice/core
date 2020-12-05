@@ -6458,7 +6458,6 @@ include/vcl/lazydelete.hxx
 include/vcl/lineinfo.hxx
 include/vcl/mapmod.hxx
 include/vcl/menu.hxx
-include/vcl/menubtn.hxx
 include/vcl/metaact.hxx
 include/vcl/metaactiontypes.hxx
 include/vcl/metric.hxx
@@ -6523,6 +6522,7 @@ include/vcl/toolkit/imgctrl.hxx
 include/vcl/toolkit/ivctrl.hxx
 include/vcl/toolkit/longcurr.hxx
 include/vcl/toolkit/lstbox.hxx
+include/vcl/toolkit/menubtn.hxx
 include/vcl/toolkit/morebtn.hxx
 include/vcl/toolkit/prgsbar.hxx
 include/vcl/toolkit/roadmap.hxx
