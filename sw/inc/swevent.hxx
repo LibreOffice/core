@@ -116,18 +116,24 @@ struct SwCallMouseEvent final
 
     bool HasEvent() const { return EVENT_OBJECT_NONE != eType; }
 
-    virtual void Modify(SfxPoolItem const*const pOldValue, SfxPoolItem const*const pNewValue) override
+    virtual void SwClientNotify(const SwModify& rMod, const SfxHint& rHint) override
     {
+        auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+        if(!pLegacy)
+            return;
         assert(EVENT_OBJECT_IMAGE == eType || EVENT_OBJECT_URLITEM == eType || EVENT_OBJECT_IMAGEMAP == eType);
-        SwClient::Modify(pOldValue, pNewValue);
-        if (!GetRegisteredIn()
-            || (RES_FMT_CHG == pOldValue->Which()
-                && static_cast<SwFormatChg const*>(pOldValue)->pChangedFormat == PTR.pFormat)
-            || (RES_REMOVE_UNO_OBJECT == pOldValue->Which()
-                && static_cast<SwPtrMsgPoolItem const*>(pOldValue)->pObject == PTR.pFormat))
+        SwClient::SwClientNotify(rMod, rHint);
+        bool bClear = !GetRegisteredIn();
+        switch(pLegacy->GetWhich())
         {
-            Clear();
+            case RES_FMT_CHG:
+                bClear |= static_cast<SwFormatChg const*>(pLegacy->m_pOld)->pChangedFormat == PTR.pFormat;
+                break;
+            case RES_REMOVE_UNO_OBJECT:
+                bClear |= static_cast<SwPtrMsgPoolItem const*>(pLegacy->m_pOld)->pObject == PTR.pFormat;
         }
+        if(bClear)
+            Clear();
     }
 };
 
