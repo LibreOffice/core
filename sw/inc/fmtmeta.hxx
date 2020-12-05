@@ -152,8 +152,7 @@ protected:
     void SetXMeta(css::uno::Reference<css::rdf::XMetadatable> const& xMeta)
             { m_wXMeta = xMeta; }
 
-    /// SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
     explicit Meta(SwFormatMeta * const i_pFormat);

@@ -598,7 +598,7 @@ void SwFormatMeta::NotifyChangeTextNode(SwTextNode *const pTextNode)
     // where the hint is not deleted!
     OSL_ENSURE(m_pMeta, "SwFormatMeta::NotifyChangeTextNode: no Meta?");
     if (m_pMeta && (m_pMeta->GetFormatMeta() == this))
-    {   // do not call Modify, that would call SwXMeta::Modify!
+    {   // do not call Modify, that would call SwXMeta::SwClientNotify
         m_pMeta->NotifyChangeTextNode(pTextNode);
     }
 }
@@ -667,12 +667,14 @@ void Meta::NotifyChangeTextNode(SwTextNode *const pTextNode)
     }
 }
 
-// SwClient
-void Meta::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew )
+void Meta::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    NotifyClients(pOld, pNew);
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
+    CallSwClientNotify(rHint);
     GetNotifier().Broadcast(SfxHint(SfxHintId::DataChanged));
-    if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
+    if(RES_REMOVE_UNO_OBJECT == pLegacy->GetWhich())
     {   // invalidate cached uno object
         SetXMeta(uno::Reference<rdf::XMetadatable>(nullptr));
         GetNotifier().Broadcast(SfxHint(SfxHintId::Deinitializing));
