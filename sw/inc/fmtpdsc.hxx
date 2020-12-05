@@ -38,7 +38,6 @@ class SW_DLLPUBLIC SwFormatPageDesc : public SfxPoolItem, public SwClient
     sw::BroadcastingModify* m_pDefinedIn;       /**< Points to the object in which the
                                  attribute was set (ContentNode/Format). */
 protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
     virtual void SwClientNotify( const SwModify&, const SfxHint& rHint ) override;
 
 public:
