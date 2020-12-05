@@ -82,18 +82,20 @@ SwDDETable::~SwDDETable()
     }
 }
 
-void SwDDETable::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwDDETable::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    if( pNew && RES_UPDATEDDETBL == pNew->Which() )
-        ChangeContent();
-    else
-        SwTable::Modify( pOld, pNew );
-}
-
-void SwDDETable::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
-{
-    SwClient::SwClientNotify(rModify, rHint);
-    if(auto pFieldHint = dynamic_cast<const SwFieldHint*>(&rHint))
+    if(auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    {
+        switch(pLegacy->GetWhich())
+        {
+            case RES_UPDATEDDETBL:
+                ChangeContent();
+                break;
+            default:
+                SwTable::SwClientNotify(rModify, rHint);
+        }
+    }
+    else if(auto pFieldHint = dynamic_cast<const SwFieldHint*>(&rHint))
     {
         pFieldHint->m_pPaM->DeleteMark(); // TODO: this is really hackish
         // replace DDETable by real table
