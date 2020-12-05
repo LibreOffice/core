@@ -41,7 +41,6 @@ public:
     inline const SwDDEFieldType* GetDDEFieldType() const;
 
 private:
-    virtual void Modify(const SfxPoolItem*, const SfxPoolItem*) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 };
 
