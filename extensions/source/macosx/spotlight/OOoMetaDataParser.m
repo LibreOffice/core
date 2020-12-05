@@ -91,11 +91,7 @@ static NSDictionary *metaXML2MDIKeys;
 
     NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
 
-    // class 'OOoMetaDataParser' does not implement the 'NSXMLParserDelegate' protocol
-    // So instead of this:
-    // [parser setDelegate:self];
-    // do this:
-    ((id (*)(id, SEL, ...))objc_msgSend)(parser, @selector(setDelegate:), self);
+    [parser setDelegate:self];
 
     [parser setShouldResolveExternalEntities:NO];
     [parser parse];
