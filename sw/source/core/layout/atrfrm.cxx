@@ -669,67 +669,55 @@ SwFormatPageDesc* SwFormatPageDesc::Clone( SfxItemPool* ) const
     return new SwFormatPageDesc( *this );
 }
 
-void SwFormatPageDesc::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
+void SwFormatPageDesc::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    SwClient::SwClientNotify(rModify, rHint);
-    const SwPageDescHint* pHint = dynamic_cast<const SwPageDescHint*>(&rHint);
-    if ( !pHint )
-        return;
-
-    // mba: shouldn't that be broadcasted also?
-    SwFormatPageDesc aDfltDesc( pHint->GetPageDesc() );
-    SwPageDesc* pDesc = pHint->GetPageDesc();
-    const sw::BroadcastingModify* pMod = GetDefinedIn();
-    if ( pMod )
+    if(auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        if( auto pContentNode = dynamic_cast<const SwContentNode*>( pMod) )
-            const_cast<SwContentNode*>(pContentNode)->SetAttr( aDfltDesc );
-        else if( auto pFormat = dynamic_cast<const SwFormat*>( pMod) )
-            const_cast<SwFormat*>(pFormat)->SetFormatAttr( aDfltDesc );
-        else
+        if(m_pDefinedIn && RES_OBJECTDYING == pLegacy->GetWhich())
         {
-            OSL_FAIL( "What kind of sw::BroadcastingModify is this?" );
-            RegisterToPageDesc( *pDesc );
+            //The Pagedesc where I'm registered dies, therefore I unregister
+            //from that format. During this I get deleted!
+            if(typeid(SwFormat) == typeid(m_pDefinedIn))
+            {
+                bool const bResult = static_cast<SwFormat*>(m_pDefinedIn)->ResetFormatAttr(RES_PAGEDESC);
+                SAL_WARN_IF(!bResult, "sw.core", "FormatPageDesc not deleted in format.");
+            }
+            else if(typeid(SwContentNode) == typeid(m_pDefinedIn))
+            {
+                bool const bResult = static_cast<SwContentNode*>(m_pDefinedIn)->ResetAttr(RES_PAGEDESC);
+                SAL_WARN_IF(!bResult, "sw.core",  "FormatPageDesc not deleted in content node.");
+            }
+            else
+                SAL_WARN("sw.core", "SwFormatPageDesc defined in object of unknown type");
         }
     }
-    else
-        // there could be an Undo-copy
-        RegisterToPageDesc( *pDesc );
+    else if (const SwPageDescHint* pHint = dynamic_cast<const SwPageDescHint*>(&rHint))
+    {
+        // mba: shouldn't that be broadcasted also?
+        SwFormatPageDesc aDfltDesc(pHint->GetPageDesc());
+        SwPageDesc* pDesc = pHint->GetPageDesc();
+        const sw::BroadcastingModify* pMod = GetDefinedIn();
+        if(pMod)
+        {
+            if(auto pContentNode = dynamic_cast<const SwContentNode*>(pMod))
+                const_cast<SwContentNode*>(pContentNode)->SetAttr(aDfltDesc);
+            else if(auto pFormat = dynamic_cast<const SwFormat*>(pMod))
+                const_cast<SwFormat*>(pFormat)->SetFormatAttr( aDfltDesc );
+            else
+            {
+                SAL_WARN("sw.core", "What kind of sw::BroadcastingModify is this?");
+                RegisterToPageDesc(*pDesc);
+            }
+        }
+        else
+            // there could be an Undo-copy
+            RegisterToPageDesc(*pDesc);
+    }
 }
 
 void SwFormatPageDesc::RegisterToPageDesc( SwPageDesc& rDesc )
 {
     rDesc.Add( this );
-}
-
-void SwFormatPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
-{
-    if( !m_pDefinedIn )
-        return;
-
-    const sal_uInt16 nWhichId = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    switch( nWhichId )
-    {
-        case RES_OBJECTDYING:
-                //The Pagedesc where I'm registered dies, therefore I unregister
-                //from that format. During this I get deleted!
-            if( typeid(SwFormat) == typeid( m_pDefinedIn ))
-            {
-                bool const bResult =
-                    static_cast<SwFormat*>(m_pDefinedIn)->ResetFormatAttr(RES_PAGEDESC);
-                OSL_ENSURE( bResult, "FormatPageDesc not deleted" );
-            }
-            else if( typeid(SwContentNode) == typeid( m_pDefinedIn ))
-            {
-                bool const bResult = static_cast<SwContentNode*>(m_pDefinedIn)
-                        ->ResetAttr(RES_PAGEDESC);
-                OSL_ENSURE( bResult, "FormatPageDesc not deleted" );
-            }
-            break;
-
-        default:
-            /* do nothing */;
-    }
 }
 
 bool SwFormatPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
