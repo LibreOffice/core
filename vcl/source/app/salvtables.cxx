@@ -55,7 +55,7 @@
 #include <vcl/headbar.hxx>
 #include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/menubtn.hxx>
+#include <vcl/toolkit/menubtn.hxx>
 #include <vcl/toolkit/prgsbar.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <slider.hxx>
