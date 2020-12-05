@@ -21,6 +21,7 @@ package com.sun.star.lib.loader;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,7 +46,8 @@ final class WinRegKey {
     public String getStringValue() throws WinRegKeyException {
         try {
             Process p = Runtime.getRuntime().exec(new String[]{"reg", "QUERY", m_keyName});
-            BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            BufferedReader r = new BufferedReader(
+                new InputStreamReader(p.getInputStream(), Charset.defaultCharset()));
             String v = null;
             Pattern pt = Pattern.compile("\\s+\\(Default\\)\\s+REG_SZ\\s+(.+)");
             for (;;) {
