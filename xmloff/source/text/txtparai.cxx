@@ -2307,10 +2307,9 @@ void XMLParaContext::characters( const OUString& rChars )
 
 XMLNumberedParaContext::XMLNumberedParaContext(
         SvXMLImport& i_rImport,
-        sal_uInt16 i_nPrefix,
-        const OUString& i_rLocalName,
-        const Reference< xml::sax::XAttributeList > & i_xAttrList ) :
-    SvXMLImportContext( i_rImport, i_nPrefix, i_rLocalName ),
+        sal_Int32 /*nElement*/,
+        const Reference< xml::sax::XFastAttributeList > & xAttrList ) :
+    SvXMLImportContext( i_rImport ),
     m_Level(0),
     m_StartValue(-1),
     m_ListId(),
@@ -2318,53 +2317,43 @@ XMLNumberedParaContext::XMLNumberedParaContext(
 {
     OUString StyleName;
 
-    const SvXMLTokenMap& rTokenMap(
-        i_rImport.GetTextImport()->GetTextNumberedParagraphAttrTokenMap() );
-
-    const sal_Int16 nAttrCount( i_xAttrList.is() ?
-        i_xAttrList->getLength() : 0 );
-    for ( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString& rAttrName( i_xAttrList->getNameByIndex( i )  );
-        const OUString& rValue   ( i_xAttrList->getValueByIndex( i ) );
-
-        OUString aLocalName;
-        const sal_uInt16 nPrefix(
-            GetImport().GetNamespaceMap().GetKeyByAttrName(
-                rAttrName, &aLocalName ) );
-        switch( rTokenMap.Get( nPrefix, aLocalName ) )
+        OUString sValue = aIter.toString();
+        switch( aIter.getToken() )
         {
-            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_XMLID:
+            case XML_ELEMENT(XML, XML_ID):
 //FIXME: there is no UNO API for lists
                 break;
-            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_LIST_ID:
-                m_ListId = rValue;
+            case XML_ELEMENT(TEXT, XML_LIST_ID):
+                m_ListId = sValue;
                 break;
-            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_LEVEL:
+            case XML_ELEMENT(TEXT, XML_LEVEL):
                 {
-                    sal_Int32 nTmp = rValue.toInt32();
+                    sal_Int32 nTmp = sValue.toInt32();
                     if ( nTmp >= 1 && nTmp <= SHRT_MAX ) {
                         m_Level = static_cast<sal_uInt16>(nTmp) - 1;
                     }
                 }
                 break;
-            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_STYLE_NAME:
-                StyleName = rValue;
+            case XML_ELEMENT(TEXT, XML_STYLE_NAME):
+                StyleName = sValue;
                 break;
-            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_CONTINUE_NUMBERING:
+            case XML_ELEMENT(TEXT, XML_CONTINUE_NUMBERING):
                 // this attribute is deprecated
-//                ContinueNumbering = IsXMLToken(rValue, XML_TRUE);
-                break;
-            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_START_VALUE:
+                 break;
+            case XML_ELEMENT(TEXT, XML_START_VALUE):
                 {
-                    sal_Int32 nTmp = rValue.toInt32();
+                    sal_Int32 nTmp = sValue.toInt32();
                     if ( nTmp >= 0 && nTmp <= SHRT_MAX ) {
                         m_StartValue = static_cast<sal_Int16>(nTmp);
                     }
                 }
                 break;
-        }
-    }
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
+         }
+     }
 
     XMLTextListsHelper& rTextListsHelper(
         i_rImport.GetTextImport()->GetTextListHelper() );
