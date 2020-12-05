@@ -38,8 +38,6 @@
 
 using namespace ::com::sun::star;
 
-#define DDE_TXT_ENCODING    osl_getThreadTextEncoding()
-
 namespace {
 
 class SwIntrnlRefLink : public SwBaseLink
@@ -72,7 +70,7 @@ public:
         {
             uno::Sequence< sal_Int8 > aSeq;
             rValue >>= aSeq;
-            OUString sStr( reinterpret_cast<char const *>(aSeq.getConstArray()), aSeq.getLength(), DDE_TXT_ENCODING );
+            OUString sStr( reinterpret_cast<char const *>(aSeq.getConstArray()), aSeq.getLength(), osl_getThreadTextEncoding() );
 
             // remove not needed CR-LF at the end
             sal_Int32 n = sStr.getLength();
