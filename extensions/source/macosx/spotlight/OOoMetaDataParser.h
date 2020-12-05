@@ -20,7 +20,7 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface OOoMetaDataParser : NSObject {
+@interface OOoMetaDataParser : NSObject <NSXMLParserDelegate> {
     //indicates if content should be read
     BOOL shouldReadCharacters;
     //indicates if the current element is a custom metadata tag
