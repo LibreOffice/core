@@ -160,8 +160,6 @@ void collectUIInformation(const OUString& rAction, const OUString& aParameters)
 
 }
 
-#define DDE_TXT_ENCODING    osl_getThreadTextEncoding()
-
 namespace {
 
 class SwTransferDdeLink : public ::sfx2::SvBaseLink
@@ -2564,7 +2562,7 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
             return false;
         }   // report useful error!!
 
-        rtl_TextEncoding eEncoding = DDE_TXT_ENCODING;
+        rtl_TextEncoding eEncoding = osl_getThreadTextEncoding();
         aApp = read_zeroTerminated_uInt8s_ToOUString(*xStrm, eEncoding);
         aTopic = read_zeroTerminated_uInt8s_ToOUString(*xStrm, eEncoding);
         aItem = read_zeroTerminated_uInt8s_ToOUString(*xStrm, eEncoding);
@@ -4300,7 +4298,7 @@ bool SwTransferDdeLink::WriteData( SvStream& rStrm )
     if( !refObj.is() || !FindDocShell() )
         return false;
 
-    rtl_TextEncoding eEncoding = DDE_TXT_ENCODING;
+    rtl_TextEncoding eEncoding = osl_getThreadTextEncoding();
     const OString aAppNm(OUStringToOString(
         Application::GetAppName(), eEncoding));
     const OString aTopic(OUStringToOString(

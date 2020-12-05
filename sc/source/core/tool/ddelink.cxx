@@ -37,8 +37,6 @@
 #include <hints.hxx>
 
 
-#define DDE_TXT_ENCODING    osl_getThreadTextEncoding()
-
 bool ScDdeLink::bIsInUpdate = false;
 
 ScDdeLink::ScDdeLink( ScDocument& rD, const OUString& rA, const OUString& rT, const OUString& rI,
@@ -130,7 +128,7 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
         return SUCCESS;
 
     OUString aLinkStr;
-    ScByteSequenceToString::GetString( aLinkStr, rValue, DDE_TXT_ENCODING );
+    ScByteSequenceToString::GetString( aLinkStr, rValue, osl_getThreadTextEncoding() );
     aLinkStr = convertLineEnd(aLinkStr, LINEEND_LF);
 
     //  if string ends with line end, discard:
