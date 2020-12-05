@@ -46,6 +46,30 @@
       "revId": "d7008946aa5443042b3406a1d3217f365782057a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3694345b_01e40e67",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3942,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-05T11:27:52Z",
+      "side": 1,
+      "message": "When you called rDocShell.GetBestViewShell, you indeed got a shell related to current document. But (1) it\u0027s not necessarily the first such shell, and (2) then you started to use SfxViewFrame::GetNext on the result without filtering. #1 results in all possible previous shells/frames skipped (not updated); and #2 results in any following frame that belongs to a different document being incorrectly marked.\n\nLet\u0027s discuss ScDocShell::GetBestViewShell. Here\u0027s its code:\n\n    ScTabViewShell* ScDocShell::GetBestViewShell( bool bOnlyVisible )\n    {\n        ScTabViewShell* pViewSh \u003d ScTabViewShell::GetActiveViewShell();\n        // wrong Doc?\n        if( pViewSh \u0026\u0026 pViewSh-\u003eGetViewData().GetDocShell() !\u003d this )\n            pViewSh \u003d nullptr;\n        if( !pViewSh )\n        {\n            // 1. find ViewShell\n            SfxViewFrame* pFrame \u003d SfxViewFrame::GetFirst( this, bOnlyVisible );\n            if( pFrame )\n            {\n                SfxViewShell* p \u003d pFrame-\u003eGetViewShell();\n                pViewSh \u003d dynamic_cast\u003c ScTabViewShell *\u003e( p );\n            }\n        }\n        return pViewSh;\n    }\n\nFirst it calls ScTabViewShell::GetActiveViewShell, and immediately checks if it belongs to the correct document. If it happens to our document, it gets returned. It makes perfect sense, because if *some* of the current document shells is *active*, this shell is the *best*. Not necessarily first, but the one with which the work happens.\n\nBut if the current shell happens to belong to a different document, it calls SfxViewFrame::GetFirst - and note what it passes to this call! That was what I hoped you to look at. It passes *this* there as the first argument, and I hoped you to look what it means by looking at that method declaration and definition. Then I hoped that you realize that the SfxViewFrame::GetFirst and SfxViewFrame::GetNext create the pair that takes the same argument for this task.\n\nSo you should *not* use the ScDocShell::GetBestViewShell, and only use SfxViewFrame::GetFirst and SfxViewFrame::GetNext (to not skip relevant frames), but make sure to pass necessary parameter to them to make sure to not modify frames belonging to different documents.",
+      "parentUuid": "a698af31_927c97eb",
+      "range": {
+        "startLine": 3940,
+        "startChar": 4,
+        "endLine": 3942,
+        "endChar": 62
+      },
+      "revId": "d7008946aa5443042b3406a1d3217f365782057a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
