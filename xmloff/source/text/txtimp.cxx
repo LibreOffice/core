@@ -2135,13 +2135,44 @@ void XMLTextImportHelper::SetAutoStyles( SvXMLStylesContext *pStyles )
 
 SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         SvXMLImport& rImport,
-        sal_Int32 Element,
-        const Reference< XFastAttributeList > & Attribs,
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList > & xAttrList,
         XMLTextType eType )
 {
+    SvXMLImportContext *pContext = nullptr;
+    bool bContent = true;
+    switch (nElement)
+    {
+    case XML_ELEMENT(TEXT, XML_H):
+    case XML_ELEMENT(TEXT, XML_P):
+    case XML_ELEMENT(LO_EXT, XML_P):
+        pContext = new XMLParaContext( rImport,
+                                       nElement,
+                                       xAttrList );
+        if (m_xImpl->m_bProgress && XMLTextType::Shape != eType)
+        {
+            rImport.GetProgressBarHelper()->Increment();
+        }
+        break;
+    // #i52127#
+    case XML_ELEMENT(TEXT, XML_NUMBERED_PARAGRAPH):
+         pContext = new XMLNumberedParaContext(
+                        rImport, nElement, xAttrList );
+    }
+    if (pContext)
+    {
+        if( XMLTextType::Body == eType && bContent )
+        {
+            m_xImpl->m_bBodyContentStarted = false;
+        }
+        if( nElement != XML_ELEMENT(DRAW, XML_FRAME) )
+            ClearLastImportedTextFrameName();
+        return pContext;
+    }
+
     // fall back to slow-parser path
-    const OUString& rPrefix = SvXMLImport::getNamespacePrefixFromToken(Element, &GetXMLImport().GetNamespaceMap());
-    const OUString& rLocalName = SvXMLImport::getNameFromToken( Element );
+    const OUString& rPrefix = SvXMLImport::getNamespacePrefixFromToken(nElement, &GetXMLImport().GetNamespaceMap());
+    const OUString& rLocalName = SvXMLImport::getNameFromToken( nElement );
     OUString aName = rPrefix.isEmpty() ? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName;
     OUString aLocalName;
     sal_uInt16 nPrefix =
@@ -2149,9 +2180,9 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
 
     rtl::Reference < comphelper::AttributeList > maAttrList = new comphelper::AttributeList();
 
-    if ( Attribs.is() )
+    if ( xAttrList.is() )
     {
-        for( auto &it : sax_fastparser::castToFastAttributeList( Attribs ) )
+        for( auto &it : sax_fastparser::castToFastAttributeList( xAttrList ) )
         {
             sal_Int32 nToken = it.getToken();
             const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &GetXMLImport().GetNamespaceMap());
@@ -2162,7 +2193,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             maAttrList->AddAttribute( sAttrName, "CDATA", it.toString() );
         }
 
-        const uno::Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
+        const uno::Sequence< xml::Attribute > unknownAttribs = xAttrList->getUnknownAttributes();
         for ( const auto& rUnknownAttrib : unknownAttribs )
         {
             const OUString& rAttrValue = rUnknownAttrib.Value;
@@ -2184,26 +2215,14 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     SvXMLImportContext *pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = GetTextElemTokenMap();
-    bool bHeading = false;
     bool bContent = true;
     sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
     switch( nToken )
     {
     case XML_TOK_TEXT_H:
-        bHeading = true;
-        [[fallthrough]];
     case XML_TOK_TEXT_P:
-        pContext = new XMLParaContext( rImport,
-                                       nPrefix, rLocalName,
-                                       xAttrList, bHeading );
-        if (m_xImpl->m_bProgress && XMLTextType::Shape != eType)
-        {
-            rImport.GetProgressBarHelper()->Increment();
-        }
         break;
     case XML_TOK_TEXT_NUMBERED_PARAGRAPH:
-        pContext = new XMLNumberedParaContext(
-                        rImport, nPrefix, rLocalName, xAttrList );
         break;
     case XML_TOK_TEXT_LIST:
         pContext = new XMLTextListBlockContext( rImport, *this,
