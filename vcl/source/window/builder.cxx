@@ -36,7 +36,7 @@
 #include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/toolkit/lstbox.hxx>
-#include <vcl/menubtn.hxx>
+#include <vcl/toolkit/menubtn.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/toolkit/prgsbar.hxx>
 #include <vcl/scrbar.hxx>
