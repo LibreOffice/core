@@ -22,7 +22,7 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/menubtn.hxx>
+#include <vcl/toolkit/menubtn.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/logger.hxx>
