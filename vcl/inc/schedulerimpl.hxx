@@ -40,15 +40,18 @@ struct ImplSchedulerData final
 
 class SchedulerMutex final
 {
-    sal_uInt32          mnLockDepth;
-    osl::Mutex          maMutex;
+    // this simulates a non-recursive mutex
+    bool m_bIsLocked;
+    osl::Mutex m_aMutex;
 
 public:
-    SchedulerMutex() : mnLockDepth( 0 ) {}
+    SchedulerMutex()
+        : m_bIsLocked(false)
+    {
+    }
 
-    void acquire( sal_uInt32 nLockCount = 1 );
-    sal_uInt32 release( bool bUnlockAll = false );
-    sal_uInt32 lockDepth() const { return mnLockDepth; }
+    void acquire();
+    void release();
 };
 
 class SchedulerGuard final

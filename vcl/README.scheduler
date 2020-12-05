@@ -69,6 +69,10 @@ Scheduler, while the SchedulerLock would be long gone. OTOH this makes
 Task handling less error-prone, than doing "special" manual cleanup.
 There is also a "= TODOs and ideas =" to get rid if static Tasks.
 
+Actually the SchedulerMutex should never be locked when calling into
+non-scheduler code, so it was converted to simulate a non-recursive
+mutex later. As an alternative it could use a std::mutex.
+
 
 = Lifecycle / thread-safety of Scheduler-based objects =
 
@@ -403,3 +407,9 @@ will also affect the Gtk+ and KDE backend for the user event handling.
 
 This way it can be easier used to profile Tasks, eventually to improve LO's
 interactivity.
+
+== Convert SchedulerMutex to std::mutex ==
+
+Since the SchedulerMutex is non-recursive, it could use a std::mutex instead
+of simulating one still using the osl::Mutex. Not sure, if a deadlock instead
+of a crash, when called recursively, is the better "user experience"...
