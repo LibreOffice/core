@@ -199,22 +199,20 @@ SwTextRuby::~SwTextRuby()
 {
 }
 
-void SwTextRuby::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
+void SwTextRuby::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    OSL_ENSURE(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
-             || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
-        "SwTextRuby::Modify(): unknown Modify");
-
-    if ( m_pTextNode )
-    {
-        SwUpdateAttr aUpdateAttr(
-            GetStart(),
-            *GetEnd(),
-            nWhich);
-
-        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
-    }
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
+    const auto nWhich = pLegacy->GetWhich();
+    SAL_WARN_IF( !isCHRATR(nWhich)
+            && (RES_OBJECTDYING == nWhich)
+            && (RES_ATTRSET_CHG == nWhich)
+            && (RES_FMT_CHG == nWhich), "sw.core", "SwTextRuby::SwClientNotify(): unknown legacy hint");
+    if(!m_pTextNode)
+        return;
+    SwUpdateAttr aUpdateAttr(GetStart(), *GetEnd(), nWhich);
+    m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
 }
 
 bool SwTextRuby::GetInfo( SfxPoolItem& rInfo ) const
