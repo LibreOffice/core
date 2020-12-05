@@ -103,7 +103,7 @@
 #include <vcl/scheduler.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/longcurr.hxx>
-#include <vcl/menubtn.hxx>
+#include <vcl/toolkit/menubtn.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/split.hxx>

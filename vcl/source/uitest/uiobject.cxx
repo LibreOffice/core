@@ -29,7 +29,7 @@
 #include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
-#include <vcl/menubtn.hxx>
+#include <vcl/toolkit/menubtn.hxx>
 #include <vcl/toolkit/vclmedit.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <uiobject-internal.hxx>
