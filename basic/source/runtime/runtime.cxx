@@ -4177,14 +4177,8 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     }
     else if( eType != SbxVARIANT && static_cast<SbxDataType>(pVar->GetType() & 0x0FFF ) != eType )
     {
-        SbxVariable* q = new SbxVariable( eType );
-        aRefSaved.emplace_back(q );
-        *q = *pVar;
-        pVar = q;
-        if ( nIdx )
-        {
-            refParams->Put32( pVar, nIdx );
-        }
+        // tdf#43003 - convert parameter to the requested type
+        pVar->Convert(eType);
     }
     SetupArgs( pVar, nOp1 );
     PushVar( CheckArray( pVar ) );
