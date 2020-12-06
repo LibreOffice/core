@@ -567,7 +567,7 @@ Public Sub RaiseAbort(Optional ByVal Source As Variant)
 &apos;&apos;&apos;		Source: the line where the error occurred
 
 Dim sLocation As String		&apos;	Common header in error messages: location of error
-Dim vLocation As Variant	&apos;	Splitted array (library, module, method)
+Dim vLocation As Variant	&apos;	Split array (library, module, method)
 Dim sMessage As String		&apos;	Error message to log and to display
 Dim L10N As Object			&apos;	Alias to Interface
 Const cstTabSize = 4
@@ -631,7 +631,7 @@ Public Sub RaiseFatal(Optional ByVal ErrorCode As Variant _
 &apos;&apos;&apos;		pvArgs: the arguments to insert in the error message
 
 Dim sLocation As String		&apos;	Common header in error messages: location of error
-Dim vLocation As Variant	&apos;	Splitted array (library, module, method)
+Dim vLocation As Variant	&apos;	Split array (library, module, method)
 Dim sMessage As String		&apos;	Message to log and display
 Dim L10N As Object			&apos;	Alias of Interface
 Dim sAlt As String			&apos;	Alternative error messages
