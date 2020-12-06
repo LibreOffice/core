@@ -491,8 +491,8 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     void InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq);
 
     bool IsOutlineContentFolded(const size_t nPos);
-    void ToggleOutlineContentVisibility(SwNode* pNd, bool bForceFold = false);
-    void ToggleOutlineContentVisibility(const size_t nPos, bool bForceFold = false);
+    void ToggleOutlineContentVisibility(SwNode* pNd, const bool bForceFold = false);
+    void ToggleOutlineContentVisibility(const size_t nPos, const bool bForceFold = false);
 
 private:
 

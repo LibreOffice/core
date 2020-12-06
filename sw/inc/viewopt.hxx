@@ -61,6 +61,7 @@ enum class ViewOptFlags1 : sal_uInt64 {
     Synchronize   = 0x01000000,
     GridVisible   = 0x02000000,
     OnlineSpell   = 0x04000000,
+    TreatSubOutlineLevelsAsContent = 0x08000000,
     ShowInlineTooltips = 0x10000000, //tooltips on tracked changes
     ViewMetachars = 0x20000000,
     Pageback      = 0x40000000,
@@ -68,7 +69,7 @@ enum class ViewOptFlags1 : sal_uInt64 {
     ShowChangesInMargin = 0x100000000 //tracked deletions in margin
 };
 namespace o3tl {
-    template<> struct typed_flags<ViewOptFlags1> : is_typed_flags<ViewOptFlags1, 0x1F7dfcfff> {};
+    template<> struct typed_flags<ViewOptFlags1> : is_typed_flags<ViewOptFlags1, 0x1ffdfcfff> {};
 }
 
 enum class ViewOptCoreFlags2 {
@@ -305,6 +306,11 @@ public:
     bool IsShowOutlineContentVisibilityButton() const;
     void SetShowOutlineContentVisibilityButton(bool b)
         { SetCoreOption(b, ViewOptFlags1::ShowOutlineContentVisibilityButton); }
+
+    bool IsTreatSubOutlineLevelsAsContent() const;
+    void SetTreatSubOutlineLevelsAsContent(bool b)
+        { SetCoreOption(b, ViewOptFlags1::TreatSubOutlineLevelsAsContent); }
+
 
     bool IsShowHiddenChar(bool bHard = false) const
         { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::CharHidden) &&

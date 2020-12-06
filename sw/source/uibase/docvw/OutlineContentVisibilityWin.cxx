@@ -21,6 +21,8 @@
 #include <strings.hrc>
 #include <svx/svdview.hxx>
 
+#include <viewopt.hxx>
+
 SwOutlineContentVisibilityWin::SwOutlineContentVisibilityWin(SwEditWin* pEditWin,
                                                              const SwFrame* pFrame)
     : InterimItemWindow(pEditWin, "modules/swriter/ui/outlinebutton.ui", "OutlineButton")
@@ -151,6 +153,7 @@ void SwOutlineContentVisibilityWin::Set()
                     && pSttNd->GetTextNode()->GetAttrOutlineLevel()
                            >= pEndNd->GetTextNode()->GetAttrOutlineLevel())))
         {
+            pSttNd->GetTextNode()->SetAttrOutlineContentVisible(true);
             SetSymbol(SymbolType::DONTKNOW);
             Hide();
             return;
@@ -169,7 +172,8 @@ void SwOutlineContentVisibilityWin::Set()
         = rSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
     int nLevel = rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(m_nOutlinePos);
     OUString sQuickHelp(SwResId(STR_OUTLINE_CONTENT_TOGGLE_VISIBILITY));
-    if (m_nOutlinePos + 1 < nOutlineNodesCount
+    if (!rSh.GetViewOptions()->IsTreatSubOutlineLevelsAsContent()
+        && m_nOutlinePos + 1 < nOutlineNodesCount
         && rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(m_nOutlinePos + 1) > nLevel)
         sQuickHelp += " (" + SwResId(STR_OUTLINE_CONTENT_TOGGLE_VISIBILITY_EXT) + ")";
     SetQuickHelpText(sQuickHelp);
@@ -219,7 +223,9 @@ void SwOutlineContentVisibilityWin::ToggleOutlineContentVisibility(const bool bS
     // set cursor position here so Navigator tracks outline
     // when doc changed broadcast message is sent in toggle function
     rSh.GotoOutline(m_nOutlinePos);
-    if (bSubs)
+    if (rSh.GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
+        rSh.ToggleOutlineContentVisibility(m_nOutlinePos);
+    else if (bSubs)
     {
         // toggle including sub levels
         SwOutlineNodes::size_type nPos = m_nOutlinePos;

@@ -53,7 +53,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <sal/macros.h>
 #include <sfx2/dialoghelper.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -102,12 +101,16 @@ SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogControlle
     , m_xMetricLB(m_xBuilder->weld_combo_box("measureunit"))
     , m_xShowInlineTooltips(m_xBuilder->weld_check_button("changestooltip"))
     , m_xShowOutlineContentVisibilityButton(m_xBuilder->weld_check_button("outlinecontentvisibilitybutton"))
+    , m_xTreatSubOutlineLevelsAsContent(m_xBuilder->weld_check_button("suboutlinelevelsascontent"))
     , m_xShowChangesInMargin(m_xBuilder->weld_check_button("changesinmargin"))
     , m_xFieldHiddenCB(m_xBuilder->weld_check_button("hiddentextfield"))
     , m_xFieldHiddenParaCB(m_xBuilder->weld_check_button("hiddenparafield"))
 {
     if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
+    {
         m_xShowOutlineContentVisibilityButton->hide();
+        m_xTreatSubOutlineLevelsAsContent->hide();
+    }
 
     /* This part is visible only with Writer/Web->View dialogue. */
     const SfxPoolItem* pItem;
@@ -206,11 +209,10 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
         m_xSmoothCBox->set_active(pElemAttr->m_bSmoothScroll);
         m_xShowInlineTooltips->set_active(pElemAttr->m_bShowInlineTooltips);
         m_xShowOutlineContentVisibilityButton->set_active(pElemAttr->m_bShowOutlineContentVisibilityButton);
+        m_xTreatSubOutlineLevelsAsContent->set_active(pElemAttr->m_bTreatSubOutlineLevelsAsContent);
         m_xShowChangesInMargin->set_active(pElemAttr->m_bShowChangesInMargin);
         m_xFieldHiddenCB->set_active( pElemAttr->m_bFieldHiddenText );
         m_xFieldHiddenParaCB->set_active( pElemAttr->m_bShowHiddenPara );
-        if (GetActiveWrtShell()->GetViewOptions()->IsShowOutlineContentVisibilityButton() != pElemAttr->m_bShowOutlineContentVisibilityButton)
-            GetActiveWrtShell()->GetView().GetDocShell()->GetDispatcher()->Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON);
     }
     m_xMetricLB->set_active(-1);
     lcl_SelectMetricLB(*m_xMetricLB, SID_ATTR_METRIC, *rSet);
@@ -234,12 +236,10 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     aElem.m_bSmoothScroll         = m_xSmoothCBox->get_active();
     aElem.m_bShowInlineTooltips   = m_xShowInlineTooltips->get_active();
     aElem.m_bShowOutlineContentVisibilityButton = m_xShowOutlineContentVisibilityButton->get_active();
+    aElem.m_bTreatSubOutlineLevelsAsContent = m_xTreatSubOutlineLevelsAsContent->get_active();
     aElem.m_bShowChangesInMargin  = m_xShowChangesInMargin->get_active();
     aElem.m_bFieldHiddenText      = m_xFieldHiddenCB->get_active();
     aElem.m_bShowHiddenPara       = m_xFieldHiddenParaCB->get_active();
-
-    if (GetActiveWrtShell()->GetViewOptions()->IsShowOutlineContentVisibilityButton() != aElem.m_bShowOutlineContentVisibilityButton)
-        GetActiveWrtShell()->GetView().GetDocShell()->GetDispatcher()->Execute(FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON);
 
     bool bRet = !pOldAttr || aElem != *pOldAttr;
     if(bRet)
