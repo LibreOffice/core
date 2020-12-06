@@ -411,11 +411,11 @@ void SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
     }
 }
 
-void SwAuthorityFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
+void SwAuthorityFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
     //re-generate positions of the fields
     DelSequenceArray();
-    NotifyClients( pOld, pNew );
+    CallSwClientNotify(rHint);
 }
 
 sal_uInt16 SwAuthorityFieldType::GetSortKeyCount() const
