@@ -213,18 +213,18 @@ OUString SwUserFieldType::GetName() const
     return m_aName;
 }
 
-void SwUserFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwUserFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if( !pOld && !pNew )
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy->m_pOld && !pLegacy->m_pNew)
         m_bValidValue = false;
 
-    NotifyClients( pOld, pNew );
-
+    CallSwClientNotify(rHint);
     // update input fields that might be connected to the user field
-    if ( !IsModifyLocked() )
+    if (!IsModifyLocked())
     {
         LockModify();
-        GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Input )->UpdateFields();
+        GetDoc()->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Input)->UpdateFields();
         UnlockModify();
     }
 }

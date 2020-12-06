@@ -73,7 +73,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
 private:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 };
 
 inline bool SwUserFieldType::IsValid() const
