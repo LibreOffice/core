@@ -54,13 +54,14 @@ SwFormatRefMark* SwFormatRefMark::Clone( SfxItemPool* ) const
     return new SwFormatRefMark( *this );
 }
 
-void SwFormatRefMark::Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew)
+void SwFormatRefMark::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    NotifyClients(pOld, pNew);
-    if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
-    {   // invalidate cached UNO object
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
+    CallSwClientNotify(rHint);
+    if(RES_REMOVE_UNO_OBJECT == pLegacy->GetWhich())
         SetXRefMark(css::uno::Reference<css::text::XTextContent>(nullptr));
-    }
 }
 
 void SwFormatRefMark::InvalidateRefMark()
