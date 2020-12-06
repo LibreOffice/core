@@ -7,14 +7,14 @@
 #  *** are part of the LibreOffice project.                          ***
 #  *********************************************************************
 #  
-#  ScriptForge Release 7.1
+#  ScriptForge Release 7.2
 #  -----------------------
 #  
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-"POT-Creation-Date: 2020-10-10 16:05:30\n"
+"POT-Creation-Date: 2020-12-06 12:16:30\n"
 "PO-Revision-Date: YYYY-MM-DD HH:MM:SS\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -766,7 +766,7 @@ msgstr ""
 msgctxt "CONTROLTYPE"
 msgid  ""
 "The control '%1' in dialog '%2' is of type '%3'.\n"
-"The property '%4' is not applicable on that type of dialog controls."
+"The property or method '%4' is not applicable on that type of dialog controls."
 msgstr ""
 
 #. SF_DialogControl add line in textbox

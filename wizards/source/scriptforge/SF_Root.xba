@@ -752,7 +752,7 @@ Try:
 	&apos;	SF_DialogControl._SetProperty
 			.AddText(	Context := &quot;CONTROLTYPE&quot; _
 						, MsgId := &quot;The control &apos;%1&apos; in dialog &apos;%2&apos; is of type &apos;%3&apos;.\n&quot; _
-									&amp; &quot;The property &apos;%4&apos; is not applicable on that type of dialog controls.&quot; _
+									&amp; &quot;The property or method &apos;%4&apos; is not applicable on that type of dialog controls.&quot; _
 						, Comment :=	&quot;SF_DialogControl property setting\n&quot; _
 									&amp;	&quot;%1: An identifier\n&quot; _
 									&amp;	&quot;%2: An identifier\n&quot; _
