@@ -2738,7 +2738,7 @@ void DesktopLOKTest::testTextSelectionHandles()
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, com::sun::star::awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
     pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
-    CPPUNIT_ASSERT_EQUAL(OString(), OString(pText));
+    CPPUNIT_ASSERT_EQUAL(static_cast<char *>(nullptr), pText);
     free(pText);
     CPPUNIT_ASSERT_EQUAL(OString(), m_aTextSelectionStart);
     CPPUNIT_ASSERT_EQUAL(OString(), m_aTextSelectionEnd);
