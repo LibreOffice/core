@@ -596,6 +596,7 @@ Const cstSubArgs = &quot;ParentNode, DisplayValue, [DataValue=Empty]&quot;
 Check:
 	If IsMissing(DataValue) Then DataValue = Empty
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If _ControlType &lt;&gt; CTLTREECONTROL Then GoTo CatchType
 		If Not ScriptForge.SF_Utils._Validate(ParentNode, &quot;ParentNode&quot;, V_OBJECT) Then GoTo Catch
 		If ScriptForge.SF_Session.UnoObjectType(ParentNode) &lt;&gt; &quot;toolkit.MutableTreeNode&quot; Then GoTo Catch
 		If Not ScriptForge.SF_Utils._Validate(DisplayValue, &quot;DisplayValue&quot;, V_STRING) Then GoTo Catch
@@ -613,6 +614,9 @@ Finally:
 	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
 	Exit Function
 Catch:
+	GoTo Finally
+CatchType:
+	ScriptForge.SF_Exception.RaiseFatal(CONTROLTYPEERROR, _Name, _DialogName, _ControlType, &quot;AddSubNode&quot;)
 	GoTo Finally
 End Function	&apos;	SFDialogs.SF_DialogControl.AddSubNode
 
@@ -676,6 +680,7 @@ Const cstSubArgs = &quot;ParentNode, FlatTree, [WithDataValue=False]&quot;
 Check:
 	If IsMissing(WithDataValue) Or IsEmpty(WithDataValue) Then WithDataValue = False
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If _ControlType &lt;&gt; CTLTREECONTROL Then GoTo CatchType
 		If Not ScriptForge.SF_Utils._Validate(ParentNode, &quot;ParentNode&quot;, V_OBJECT) Then GoTo Catch
 		If ScriptForge.SF_Session.UnoObjectType(ParentNode) &lt;&gt; &quot;toolkit.MutableTreeNode&quot; Then GoTo Catch
 		If Not ScriptForge.SF_Utils._ValidateArray(FlatTree, &quot;FlatTree&quot;, 2) Then GoTo Catch
@@ -725,6 +730,9 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
+CatchType:
+	ScriptForge.SF_Exception.RaiseFatal(CONTROLTYPEERROR, _Name, _DialogName, _ControlType, &quot;AddSubTree&quot;)
+	GoTo Finally
 End Function	&apos;	SFDialogs.SF_DialogControl.AddSubTree
 
 REM -----------------------------------------------------------------------------
@@ -752,6 +760,7 @@ Const cstSubArgs = &quot;DisplayValue, [DataValue=Empty]&quot;
 Check:
 	If IsMissing(DataValue) Then DataValue = Empty
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If _ControlType &lt;&gt; CTLTREECONTROL Then GoTo CatchType
 		If Not ScriptForge.SF_Utils._Validate(DisplayValue, &quot;DisplayValue&quot;, V_STRING) Then GoTo Catch
 	End If
 
@@ -772,7 +781,64 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
+CatchType:
+	ScriptForge.SF_Exception.RaiseFatal(CONTROLTYPEERROR, _Name, _DialogName, _ControlType, &quot;CreateRoot&quot;)
+	GoTo Finally
 End Function	&apos;	SFDialogs.SF_DialogControl.CreateRoot
+
+REM -----------------------------------------------------------------------------
+Public Function FindNode(Optional ByVal DisplayValue As String _
+							, Optional ByRef DataValue As Variant _
+							, Optional ByVal CaseSensitive As Boolean _
+							) As Object
+&apos;&apos;&apos;	Traverses the tree and find recursively, starting from the root, a node meeting some criteria
+&apos;&apos;&apos;	Either (1 match is enough):
+&apos;&apos;&apos;		having its DisplayValue like DisplayValue
+&apos;&apos;&apos;		having its DataValue = DataValue
+&apos;&apos;&apos;	Comparisons may be or not case-sensitive
+&apos;&apos;&apos;	The first matching occurrence is returned
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		DisplayValue: the pattern to be matched
+&apos;&apos;&apos;		DataValue: a string, a numeric value or a date or Empty (if not applicable)
+&apos;&apos;&apos;		CaseSensitive: applicable on both criteria. Default = False
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The found node of type com.sun.star.awt.tree.XMutableTreeNode or Nothing if not found
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Dim myTree As Object, myNode As Object
+&apos;&apos;&apos;			Set myTree = myDialog.Controls(&quot;myTreeControl&quot;)
+&apos;&apos;&apos;			Set myNode = myTree.FindNode(&quot;*Sophie*&quot;, CaseSensitive := True)
+
+
+Dim oNode As Object				&apos;	Return value
+Const cstThisSub = &quot;SFDialogs.DialogControl.FindNode&quot;
+Const cstSubArgs = &quot;[DisplayValue=&quot;&quot;&quot;&quot;], [DataValue=Empty], [CaseSensitive=False]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oNode = Nothing
+
+Check:
+	If IsMissing(DisplayValue) Or IsEmpty(DisplayValue) Then DisplayValue = &quot;&quot;
+	If IsMissing(DataValue) Then DataValue = Empty
+	If IsMissing(CaseSensitive) Or IsEmpty(CaseSensitive) Then CaseSensitive = False
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If _ControlType &lt;&gt; CTLTREECONTROL Then GoTo CatchType
+		If Not ScriptForge.SF_Utils._Validate(DisplayValue, &quot;DisplayValue&quot;, V_STRING) Then GoTo Catch
+		If Not ScriptForge.SF_Utils._Validate(CaseSensitive, &quot;CaseSensitive&quot;, ScriptForge.V_BOOLEAN) Then GoTo Catch
+	End If
+
+Try:
+	Set oNode = _FindNode(_TreeDataModel.getRoot(), DisplayValue, DataValue, CaseSensitive)
+
+Finally:
+	Set FindNode = oNode
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchType:
+	ScriptForge.SF_Exception.RaiseFatal(CONTROLTYPEERROR, _Name, _DialogName, _ControlType, &quot;FindNode&quot;)
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_DialogControl.FindNode
 
 REM -----------------------------------------------------------------------------
 Public Function GetProperty(Optional ByVal PropertyName As Variant) As Variant
@@ -813,7 +879,11 @@ Public Function Methods() As Variant
 &apos;&apos;&apos;	Return the list of public methods of the Model service as an array
 
 	Methods = Array( _
-					&quot;SetFocus&quot; _
+					&quot;AddSubNode&quot; _
+					, &quot;AddSubTree&quot; _
+					, &quot;CreateRoot&quot; _
+					, &quot;FindNode&quot; _
+					, &quot;SetFocus&quot; _
 					, &quot;WriteLine&quot; _
 					)
 
@@ -1001,6 +1071,67 @@ CatchField:
 End Function	&apos;	SFControls.SF_DialogControl.WriteLine
 
 REM =========================================================== PRIVATE FUNCTIONS
+
+REM -----------------------------------------------------------------------------
+Private Function _FindNode(ByRef poNode As Object _
+							, ByVal psDisplayValue As String _
+							, ByRef pvDataValue As Variant _
+							, ByVal pbCaseSensitive As Boolean _
+							) As Object
+&apos;&apos;&apos;	Traverses the tree and find recursively, starting from the root, a node meeting some criteria
+&apos;&apos;&apos;	Either (1 match is enough):
+&apos;&apos;&apos;		having its DisplayValue like psDisplayValue
+&apos;&apos;&apos;		having its DataValue = pvDataValue
+&apos;&apos;&apos;	Comparisons may be or not case-sensitive
+&apos;&apos;&apos;	The first matching occurrence is returned
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		poNode: the current node, the root at 1st call
+&apos;&apos;&apos;		psDisplayValue: the pattern to be matched
+&apos;&apos;&apos;		pvDataValue: a string, a numeric value or a date or Empty (if not applicable)
+&apos;&apos;&apos;		pbCaseSensitive: applicable on both criteria
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The found node of type com.sun.star.awt.tree.XMutableTreeNode
+
+Dim oChild As Object			&apos;	Child node com.sun.star.awt.tree.XMutableTreeNode
+Dim oFind As Object				&apos;	Found node com.sun.star.awt.tree.XMutableTreeNode
+Dim lChildCount As Long			&apos;	Number of children of a node
+Dim bFound As Boolean			&apos;	True when node found
+Dim i As Long
+
+	Set _FindNode = Nothing
+	On Local Error GoTo Finally		&apos;	Better not found than raise an error
+
+Check:
+	&apos;	Does the actual node match the criteria ?
+	bFound = False
+	If Len(psDisplayValue) &gt; 0 Then
+		bFound = ScriptForge.SF_String.IsLike(poNode.DisplayValue, psDisplayValue, pbCaseSensitive)
+	End If
+	If Not bFound And Not IsEmpty(poNode.DataValue) Then
+		If Not IsEmpty(pvdataValue) Then bFound = ( ScriptForge.SF_Array._ValCompare(poNode.DataValue, pvDataB-Value, pbCaseSensitive) = 0 )
+	End If
+	If bFound Then
+		Set _FindNode = poNode
+		Exit Function
+	End If
+
+Try:
+	&apos;	Explore sub-branches
+	lChildCount = poNode.getChildCount
+	If lChildCount &gt; 0 Then
+		For i = 0 To lChildCount - 1
+			Set oChild = poNode.getChildAt(i)
+			Set oFind = _FindNode(oChild, psDisplayValue, pvDataValue, pbCaseSensitive)		&apos;	Recursive call
+			If Not IsNull(oFind) Then
+				Set _FindNode = oFind
+				Exit For
+			End If
+		Next i
+	End If
+
+Finally:
+	Exit Function
+End Function	&apos;	SFDialogs.SF_DialogControl._FindNode
 
 REM -----------------------------------------------------------------------------
 Private Function _FormatsList() As Variant
@@ -1428,8 +1559,13 @@ Const cstSubArgs = &quot;Value&quot;
 				Case CTLTREECONTROL
 					If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Selection&quot;, ScriptForge.V_OBJECT) Then GoTo Finally
 					If oSession.UnoObjectType(pvValue) &lt;&gt; &quot;toolkit.MutableTreeNode&quot; Then GoTo CatchType
-					_ControlView.clearSelection()
-					_ControlView.addSelection(pvValue)
+					With _ControlView
+						.clearSelection()
+						If Not IsNull(pvValue) Then
+							.addSelection(pvValue)
+							.makeNodeVisible(pvValue)		&apos;	Expand parent nodes and put node in the display area
+						End If
+					End With
 				Case Else	:	GoTo CatchType
 			End Select
 		Case UCase(&quot;Default&quot;)
