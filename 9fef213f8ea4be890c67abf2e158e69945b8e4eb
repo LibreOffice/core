@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85acecfc_ff7382e7",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-06T18:22:22Z",
+      "side": 1,
+      "message": "there is no need to copy into a new buffer here, since strtoul will stop when it hits a non-valid-digit character.\njust call \n    cval \u003d static_cast\u003csal_uInt32\u003e( strtoul( dname + 2, nullptr, 16 ) );",
+      "revId": "9fef213f8ea4be890c67abf2e158e69945b8e4eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be666af4_2cb2c48b",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1408,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-06T18:22:22Z",
+      "side": 1,
+      "message": "and similarly here",
+      "revId": "9fef213f8ea4be890c67abf2e158e69945b8e4eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
