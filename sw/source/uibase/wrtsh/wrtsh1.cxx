@@ -2007,14 +2007,14 @@ bool SwWrtShell::IsOutlineContentFolded(const size_t nPos)
     return false;
 }
 
-void SwWrtShell::ToggleOutlineContentVisibility(SwNode* pNd, bool bForceFold)
+void SwWrtShell::ToggleOutlineContentVisibility(SwNode* pNd, const bool bForceFold)
 {
     SwOutlineNodes::size_type nPos;
     if (GetNodes().GetOutLineNds().Seek_Entry(pNd, &nPos))
         ToggleOutlineContentVisibility(nPos, bForceFold);
 }
 
-void SwWrtShell::ToggleOutlineContentVisibility(size_t nPos, bool bForceFold)
+void SwWrtShell::ToggleOutlineContentVisibility(const size_t nPos, const bool bForceFold)
 {
     const SwNodes& rNodes = GetNodes();
     const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
@@ -2031,7 +2031,7 @@ void SwWrtShell::ToggleOutlineContentVisibility(size_t nPos, bool bForceFold)
 
     if (pSttNd->GetTableBox() || pSttNd->GetIndex() < rNodes.GetEndOfExtras().GetIndex())
     {
-        // limit folding to within table box
+        // limit toggle to within table box
         if (pSttNd->EndOfSectionIndex() < pEndNd->GetIndex() )
             pEndNd = pSttNd->EndOfSectionNode();
     }
@@ -2049,10 +2049,40 @@ void SwWrtShell::ToggleOutlineContentVisibility(size_t nPos, bool bForceFold)
         }
     }
 
+    if (GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
+    {
+        int nLevel = pSttNd->GetTextNode()->GetAttrOutlineLevel();
+        SwOutlineNodes::size_type iPos = nPos;
+        while (++iPos < rOutlineNodes.size() &&
+               rOutlineNodes[iPos]->GetTextNode()->GetAttrOutlineLevel() > nLevel);
+
+        // get the correct end node
+        // the outline node may be in frames, headers, footers special section of doc model
+        SwNode* pStartOfSectionNodeSttNd = pSttNd->StartOfSectionNode();
+        while (pStartOfSectionNodeSttNd->StartOfSectionNode()
+               != pStartOfSectionNodeSttNd->StartOfSectionNode()->StartOfSectionNode())
+        {
+            pStartOfSectionNodeSttNd = pStartOfSectionNodeSttNd->StartOfSectionNode();
+        }
+        pEndNd = pStartOfSectionNodeSttNd->EndOfSectionNode();
+
+        if (iPos < rOutlineNodes.size())
+        {
+            SwNode* pStartOfSectionNode = rOutlineNodes[iPos]->StartOfSectionNode();
+            while (pStartOfSectionNode->StartOfSectionNode()
+                   != pStartOfSectionNode->StartOfSectionNode()->StartOfSectionNode())
+            {
+                pStartOfSectionNode = pStartOfSectionNode->StartOfSectionNode();
+            }
+            if (pStartOfSectionNodeSttNd == pStartOfSectionNode)
+                pEndNd = rOutlineNodes[iPos];
+        }
+    }
+
+    SwNodeIndex aIdx(*pSttNd, +1); // the next node after pSttdNd in the doc model SwNodes
     if (IsOutlineContentFolded(nPos) && !bForceFold)
     {
         // unfold
-        SwNodeIndex aIdx(*pSttNd, +1);
         MakeFrames(GetDoc(), aIdx, *pEndNd);
 
         pSttNd->GetTextNode()->SetAttrOutlineContentVisible(true);
@@ -2094,17 +2124,18 @@ void SwWrtShell::ToggleOutlineContentVisibility(size_t nPos, bool bForceFold)
     else
     {
         // fold
-        for (SwNodeIndex aIdx(*pSttNd, +1); &aIdx.GetNode() != pEndNd; aIdx++)
+        while (aIdx != *pEndNd)
         {
             SwNode* pNd = &aIdx.GetNode();
             if (pNd->IsContentNode())
                 pNd->GetContentNode()->DelFrames(nullptr);
             else if (pNd->IsTableNode())
                 pNd->GetTableNode()->DelFrames(nullptr);
+            aIdx++;
         }
         pSttNd->GetTextNode()->SetAttrOutlineContentVisible(false);
     }
-    GetView().GetEditWin().Invalidate(InvalidateFlags::Update);
+
     GetDoc()->GetDocShell()->Broadcast(SfxHint(SfxHintId::DocChanged));
 }
 
