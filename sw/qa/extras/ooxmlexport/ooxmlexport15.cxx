@@ -886,12 +886,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf135667, "tdf135667.odt")
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:object/v:shape/v:stroke", "dashstyle", "Dash");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testImageSpaceSettings, "tdf135047_ImageSpaceSettings.fodt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testImageSpaceSettings, "tdf135047_ImageSpaceSettings.fodt")
 {
     // tdf#135047 The spaces of image were not saved.
     xmlDocUniquePtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:anchor", "distT", "90170");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:anchor", "distB", "90170");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:anchor", "distL", "90170");
