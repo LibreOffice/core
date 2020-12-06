@@ -574,8 +574,8 @@ public:
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 
 private:
-    /// Overlay, because there is nothing to update!
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem * ) override;
+    /// noop, there is nothing to update!
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 };
 
 // Relative page numbering.
@@ -611,7 +611,7 @@ class SwRefPageGetFieldType final : public SwFieldType
             SetGetExpFields const & rSetList, SwRootFrame const* pLayout);
 
     /// overwritten to update all RefPageGet fields
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem * ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 public:
     SwRefPageGetFieldType( SwDoc& rDoc );
     virtual std::unique_ptr<SwFieldType> Copy() const override;
