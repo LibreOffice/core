@@ -47,6 +47,10 @@ public:
             const OUString& rLName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             css::text::TextContentAnchorType eDefaultAnchorType );
+    XMLTextFrameHyperlinkContext( SvXMLImport& rImport,
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            css::text::TextContentAnchorType eDefaultAnchorType );
     virtual ~XMLTextFrameHyperlinkContext() override;
 
     SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,

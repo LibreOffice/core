@@ -2268,8 +2268,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             TextContentAnchorType eAnchorType =
                 XMLTextType::TextBox == eType ? TextContentAnchorType_AT_FRAME
                                                : TextContentAnchorType_AT_PAGE;
-            pContext = new XMLTextFrameContext( rImport, nPrefix,
-                                                rLocalName, xAttrList,
+            pContext = new XMLTextFrameContext( rImport, xAttrList,
                                                 eAnchorType );
             bContent = false;
         }
@@ -2316,7 +2315,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     case XML_TOK_TEXT_CHANGE_START:
     case XML_TOK_TEXT_CHANGE_END:
         pContext = new XMLChangeImportContext(
-            rImport, nPrefix, rLocalName,
+            rImport,
             ((nToken == XML_TOK_TEXT_CHANGE_END)
                 ? XMLChangeImportContext::Element::END
                 : (nToken == XML_TOK_TEXT_CHANGE_START)

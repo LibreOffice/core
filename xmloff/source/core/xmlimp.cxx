@@ -1582,6 +1582,36 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
     return *mpEventImportHelper;
 }
 
+css::uno::Reference< css::xml::sax::XAttributeList > SvXMLImport::convertToSlowAttrList(const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+{
+    maAttrList->Clear();
+
+    if ( Attribs.is() )
+    {
+        for( auto &it : sax_fastparser::castToFastAttributeList( Attribs ) )
+        {
+            sal_Int32 nToken = it.getToken();
+            const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &GetNamespaceMap());
+            OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
+            if ( !rAttrNamespacePrefix.isEmpty() )
+                sAttrName = rAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
+
+            maAttrList->AddAttribute( sAttrName, "CDATA", it.toString() );
+        }
+
+        const uno::Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
+        for ( const auto& rUnknownAttrib : unknownAttribs )
+        {
+            const OUString& rAttrValue = rUnknownAttrib.Value;
+            const OUString& rAttrName = rUnknownAttrib.Name;
+            // note: rAttrName is expected to be namespace-prefixed here
+            maAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
+        }
+    }
+
+    return maAttrList.get();
+}
+
 void SvXMLImport::SetFontDecls( XMLFontStylesContext *pFontDecls )
 {
     if (mxFontDecls.is())

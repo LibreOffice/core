@@ -64,10 +64,8 @@ const SvXMLTokenMapEntry aFootnoteChildTokenMap[] =
 
 XMLFootnoteImportContext::XMLFootnoteImportContext(
     SvXMLImport& rImport,
-    XMLTextImportHelper& rHlp,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName )
-:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+    XMLTextImportHelper& rHlp )
+:   SvXMLImportContext(rImport)
 ,   mbListContextPushed(false)
 ,   rHelper(rHlp)
 {

@@ -93,6 +93,56 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
     }
 }
 
+XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
+        SvXMLImport& rImport,
+        sal_Int32 /*nElement*/,
+        const Reference< XFastAttributeList > & xAttrList,
+        TextContentAnchorType eATyp ) :
+    SvXMLImportContext( rImport ),
+    eDefaultAnchorType( eATyp ),
+    bMap( false )
+{
+    OUString sShow;
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
+    {
+        OUString sValue = aIter.toString();
+        switch( aIter.getToken() )
+        {
+        case XML_ELEMENT(XLINK, XML_HREF):
+            sHRef = GetImport().GetAbsoluteReference( sValue );
+            break;
+        case XML_ELEMENT(OFFICE, XML_NAME):
+            sName = sValue;
+            break;
+        case XML_ELEMENT(OFFICE, XML_TARGET_FRAME_NAME):
+            sTargetFrameName = sValue;
+            break;
+        case XML_ELEMENT(XLINK, XML_SHOW):
+            sShow = sValue;
+            break;
+        case XML_ELEMENT(OFFICE, XML_SERVER_MAP):
+            {
+                bool bTmp(false);
+                if (::sax::Converter::convertBool( bTmp, sValue ))
+                {
+                    bMap = bTmp;
+                }
+            }
+            break;
+        default:
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
+         }
+    }
+
+    if( !sShow.isEmpty() && sTargetFrameName.isEmpty() )
+    {
+        if( IsXMLToken( sShow, XML_NEW ) )
+            sTargetFrameName = "_blank";
+        else if( IsXMLToken( sShow, XML_REPLACE ) )
+            sTargetFrameName = "_self";
+    }
+}
+
 XMLTextFrameHyperlinkContext::~XMLTextFrameHyperlinkContext()
 {
 }
@@ -108,8 +158,7 @@ SvXMLImportContextRef XMLTextFrameHyperlinkContext::CreateChildContext(
     if( XML_NAMESPACE_DRAW == nPrefix )
     {
         if( IsXMLToken( rLocalName, XML_FRAME ) )
-            pTextFrameContext = new XMLTextFrameContext( GetImport(), nPrefix,
-                                                rLocalName, xAttrList,
+            pTextFrameContext = new XMLTextFrameContext( GetImport(), xAttrList,
                                                 eDefaultAnchorType );
     }
 
