@@ -2344,8 +2344,8 @@ bool WinSalGraphicsImpl::drawPolyLine(
         const double fFactor(fLineWidth == 0 ? 1.0 : 1.0 / fLineWidth);
 
         // tdf#134128. ODF adds caps to the dashes and dots, but GDI makes caps from the
-        // dash or dot themselve. We tweak aDashArray to look the same in GDI (e.g. Impress edit mode)
-        // and other renderes (e.g. Impress slide show), while keeping the total length of the
+        // dash or dot themselves. We tweak aDashArray to look the same in GDI (e.g. Impress edit mode)
+        // and other renders (e.g. Impress slide show), while keeping the total length of the
         // pattern.
         // Patterns are always a sequence dash space dash space ...
         if (eLineCap != css::drawing::LineCap_BUTT)
