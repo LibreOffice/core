@@ -99,6 +99,35 @@
 		BE02FCEB171335B80069F37F /* vendorbase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vendorbase.cxx; path = ../jvmfwk/plugins/sunmajor/pluginlib/vendorbase.cxx; sourceTree = "<group>"; };
 		BE02FCEC171335B80069F37F /* vendorlist.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vendorlist.cxx; path = ../jvmfwk/plugins/sunmajor/pluginlib/vendorlist.cxx; sourceTree = "<group>"; };
 		BE145F5C17B24BA4004CBBBA /* sunjavaplugin.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sunjavaplugin.cxx; path = ../jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx; sourceTree = "<group>"; };
+		BE286950257D06C5000E863E /* TokenWriter.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TokenWriter.cxx; path = ../dbaccess/source/ui/misc/TokenWriter.cxx; sourceTree = "<group>"; };
+		BE286951257D06C5000E863E /* WNameMatch.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WNameMatch.cxx; path = ../dbaccess/source/ui/misc/WNameMatch.cxx; sourceTree = "<group>"; };
+		BE286952257D06C5000E863E /* singledoccontroller.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = singledoccontroller.cxx; path = ../dbaccess/source/ui/misc/singledoccontroller.cxx; sourceTree = "<group>"; };
+		BE286953257D06C5000E863E /* DExport.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DExport.cxx; path = ../dbaccess/source/ui/misc/DExport.cxx; sourceTree = "<group>"; };
+		BE286954257D06C5000E863E /* WTypeSelect.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WTypeSelect.cxx; path = ../dbaccess/source/ui/misc/WTypeSelect.cxx; sourceTree = "<group>"; };
+		BE286955257D06C5000E863E /* dsmeta.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dsmeta.cxx; path = ../dbaccess/source/ui/misc/dsmeta.cxx; sourceTree = "<group>"; };
+		BE286956257D06C5000E863E /* HtmlReader.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = HtmlReader.cxx; path = ../dbaccess/source/ui/misc/HtmlReader.cxx; sourceTree = "<group>"; };
+		BE286957257D06C5000E863E /* WExtendPages.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WExtendPages.cxx; path = ../dbaccess/source/ui/misc/WExtendPages.cxx; sourceTree = "<group>"; };
+		BE286958257D06C5000E863E /* charsets.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = charsets.cxx; path = ../dbaccess/source/ui/misc/charsets.cxx; sourceTree = "<group>"; };
+		BE286959257D06C5000E863E /* linkeddocuments.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = linkeddocuments.cxx; path = ../dbaccess/source/ui/misc/linkeddocuments.cxx; sourceTree = "<group>"; };
+		BE28695A257D06C5000E863E /* UpdateHelperImpl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = UpdateHelperImpl.hxx; path = ../dbaccess/source/ui/misc/UpdateHelperImpl.hxx; sourceTree = "<group>"; };
+		BE28695B257D06C5000E863E /* imageprovider.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imageprovider.cxx; path = ../dbaccess/source/ui/misc/imageprovider.cxx; sourceTree = "<group>"; };
+		BE28695C257D06C5000E863E /* WColumnSelect.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WColumnSelect.cxx; path = ../dbaccess/source/ui/misc/WColumnSelect.cxx; sourceTree = "<group>"; };
+		BE28695D257D06C5000E863E /* WCopyTable.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WCopyTable.cxx; path = ../dbaccess/source/ui/misc/WCopyTable.cxx; sourceTree = "<group>"; };
+		BE28695E257D06C5000E863E /* UITools.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = UITools.cxx; path = ../dbaccess/source/ui/misc/UITools.cxx; sourceTree = "<group>"; };
+		BE28695F257D06C5000E863E /* RowSetDrop.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RowSetDrop.cxx; path = ../dbaccess/source/ui/misc/RowSetDrop.cxx; sourceTree = "<group>"; };
+		BE286960257D06C5000E863E /* dbsubcomponentcontroller.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbsubcomponentcontroller.cxx; path = ../dbaccess/source/ui/misc/dbsubcomponentcontroller.cxx; sourceTree = "<group>"; };
+		BE286961257D06C5000E863E /* stringlistitem.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stringlistitem.cxx; path = ../dbaccess/source/ui/misc/stringlistitem.cxx; sourceTree = "<group>"; };
+		BE286962257D06C5000E863E /* RtfReader.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RtfReader.cxx; path = ../dbaccess/source/ui/misc/RtfReader.cxx; sourceTree = "<group>"; };
+		BE286963257D06C5000E863E /* controllerframe.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = controllerframe.cxx; path = ../dbaccess/source/ui/misc/controllerframe.cxx; sourceTree = "<group>"; };
+		BE286964257D06C5000E863E /* TableCopyHelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TableCopyHelper.cxx; path = ../dbaccess/source/ui/misc/TableCopyHelper.cxx; sourceTree = "<group>"; };
+		BE286965257D06C5000E863E /* defaultobjectnamecheck.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = defaultobjectnamecheck.cxx; path = ../dbaccess/source/ui/misc/defaultobjectnamecheck.cxx; sourceTree = "<group>"; };
+		BE286966257D06C5000E863E /* asyncmodaldialog.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = asyncmodaldialog.cxx; path = ../dbaccess/source/ui/misc/asyncmodaldialog.cxx; sourceTree = "<group>"; };
+		BE286967257D06C5000E863E /* WCPage.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WCPage.cxx; path = ../dbaccess/source/ui/misc/WCPage.cxx; sourceTree = "<group>"; };
+		BE286968257D06C5000E863E /* propertystorage.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = propertystorage.cxx; path = ../dbaccess/source/ui/misc/propertystorage.cxx; sourceTree = "<group>"; };
+		BE286969257D06C5000E863E /* datasourceconnector.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = datasourceconnector.cxx; path = ../dbaccess/source/ui/misc/datasourceconnector.cxx; sourceTree = "<group>"; };
+		BE28696A257D06C5000E863E /* indexcollection.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = indexcollection.cxx; path = ../dbaccess/source/ui/misc/indexcollection.cxx; sourceTree = "<group>"; };
+		BE28696B257D06C5000E863E /* databaseobjectview.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = databaseobjectview.cxx; path = ../dbaccess/source/ui/misc/databaseobjectview.cxx; sourceTree = "<group>"; };
+		BE28696C257D06C6000E863E /* dbaundomanager.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbaundomanager.cxx; path = ../dbaccess/source/ui/misc/dbaundomanager.cxx; sourceTree = "<group>"; };
 		BE2DACF1182D0CBB00A4D2F7 /* formulagroupcl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = formulagroupcl.cxx; path = ../sc/source/core/opencl/formulagroupcl.cxx; sourceTree = "<group>"; };
 		BE2DACF2182D0CBB00A4D2F7 /* op_database.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = op_database.cxx; path = ../sc/source/core/opencl/op_database.cxx; sourceTree = "<group>"; };
 		BE2DACF3182D0CBB00A4D2F7 /* op_financial.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = op_financial.cxx; path = ../sc/source/core/opencl/op_financial.cxx; sourceTree = "<group>"; };
@@ -770,6 +799,58 @@
 				BE0264B0237975E8008D3E52 /* viewdataentry.cxx */,
 			);
 			name = treelist;
+			sourceTree = "<group>";
+		};
+		BE28694D257D0668000E863E /* dbaccess */ = {
+			isa = PBXGroup;
+			children = (
+				BE28694E257D0682000E863E /* ui */,
+			);
+			name = dbaccess;
+			sourceTree = "<group>";
+		};
+		BE28694E257D0682000E863E /* ui */ = {
+			isa = PBXGroup;
+			children = (
+				BE28694F257D068E000E863E /* misc */,
+			);
+			name = ui;
+			sourceTree = "<group>";
+		};
+		BE28694F257D068E000E863E /* misc */ = {
+			isa = PBXGroup;
+			children = (
+				BE286966257D06C5000E863E /* asyncmodaldialog.cxx */,
+				BE286958257D06C5000E863E /* charsets.cxx */,
+				BE286963257D06C5000E863E /* controllerframe.cxx */,
+				BE28696B257D06C5000E863E /* databaseobjectview.cxx */,
+				BE286969257D06C5000E863E /* datasourceconnector.cxx */,
+				BE28696C257D06C6000E863E /* dbaundomanager.cxx */,
+				BE286960257D06C5000E863E /* dbsubcomponentcontroller.cxx */,
+				BE286965257D06C5000E863E /* defaultobjectnamecheck.cxx */,
+				BE286953257D06C5000E863E /* DExport.cxx */,
+				BE286955257D06C5000E863E /* dsmeta.cxx */,
+				BE286956257D06C5000E863E /* HtmlReader.cxx */,
+				BE28695B257D06C5000E863E /* imageprovider.cxx */,
+				BE28696A257D06C5000E863E /* indexcollection.cxx */,
+				BE286959257D06C5000E863E /* linkeddocuments.cxx */,
+				BE286968257D06C5000E863E /* propertystorage.cxx */,
+				BE28695F257D06C5000E863E /* RowSetDrop.cxx */,
+				BE286962257D06C5000E863E /* RtfReader.cxx */,
+				BE286952257D06C5000E863E /* singledoccontroller.cxx */,
+				BE286961257D06C5000E863E /* stringlistitem.cxx */,
+				BE286964257D06C5000E863E /* TableCopyHelper.cxx */,
+				BE286950257D06C5000E863E /* TokenWriter.cxx */,
+				BE28695E257D06C5000E863E /* UITools.cxx */,
+				BE28695A257D06C5000E863E /* UpdateHelperImpl.hxx */,
+				BE28695C257D06C5000E863E /* WColumnSelect.cxx */,
+				BE28695D257D06C5000E863E /* WCopyTable.cxx */,
+				BE286967257D06C5000E863E /* WCPage.cxx */,
+				BE286957257D06C5000E863E /* WExtendPages.cxx */,
+				BE286951257D06C5000E863E /* WNameMatch.cxx */,
+				BE286954257D06C5000E863E /* WTypeSelect.cxx */,
+			);
+			name = misc;
 			sourceTree = "<group>";
 		};
 		BE2DACF9182FAB3800A4D2F7 /* window */ = {
@@ -1504,6 +1585,7 @@
 			children = (
 				BEDCC8B62459A0DA00FB02BD /* bridges */,
 				BEDCC8FD246082D400FB02BD /* cui */,
+				BE28694D257D0668000E863E /* dbaccess */,
 				BEBF3E7E246ACF8900415E87 /* desktop */,
 				BE2DAD2B183148BE00A4D2F7 /* formula */,
 				BE82BE5918298DFB00A447B5 /* java */,
@@ -1785,8 +1867,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				LO_CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				LO_CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -1809,6 +1889,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LO_CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				LO_CLANG_CXX_LIBRARY = "libc++";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "";
@@ -1822,8 +1904,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				LO_CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				LO_CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -1838,6 +1918,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LO_CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				LO_CLANG_CXX_LIBRARY = "libc++";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
