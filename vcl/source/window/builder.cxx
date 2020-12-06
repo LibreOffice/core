@@ -1971,7 +1971,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "svtlo-ManagedMenuButton")
     {
-        // like tdf#135495 keep the name svtlo-ManagedMenuButton even though its a misnomer
+        // like tdf#135495 keep the name svtlo-ManagedMenuButton even though it's a misnomer
         // and is not dlsymed from the svt library
         xWindow = VclPtr<ManagedMenuButton>::Create(pParent, WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_FLATBUTTON);
         OUString sMenu = BuilderUtils::extractCustomProperty(rMap);
