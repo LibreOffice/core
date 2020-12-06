@@ -2087,7 +2087,7 @@ std::unique_ptr<SwFieldType> SwRefPageSetFieldType::Copy() const
 }
 
 // overridden since there is nothing to update
-void SwRefPageSetFieldType::Modify( const SfxPoolItem*, const SfxPoolItem * )
+void SwRefPageSetFieldType::SwClientNotify(const SwModify&, const SfxHint&)
 {
 }
 
@@ -2165,8 +2165,11 @@ std::unique_ptr<SwFieldType> SwRefPageGetFieldType::Copy() const
     return pNew;
 }
 
-void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwRefPageGetFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
     auto const ModifyImpl = [this](SwRootFrame const*const pLayout)
     {
         // first collect all SetPageRefFields
@@ -2181,7 +2184,7 @@ void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
     };
 
     // update all GetReference fields
-    if( !pNew && !pOld && HasWriterListeners() )
+    if( !pLegacy->m_pNew && !pLegacy->m_pOld && HasWriterListeners() )
     {
         SwRootFrame const* pLayout(nullptr);
         SwRootFrame const* pLayoutRLHidden(nullptr);
@@ -2204,7 +2207,7 @@ void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
     }
 
     // forward to text fields, they "expand" the text
-    NotifyClients( pOld, pNew );
+    CallSwClientNotify(rHint);
 }
 
 bool SwRefPageGetFieldType::MakeSetList(SetGetExpFields& rTmpLst,
