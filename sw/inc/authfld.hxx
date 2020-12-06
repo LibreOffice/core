@@ -69,7 +69,7 @@ class SW_DLLPUBLIC SwAuthorityFieldType final : public SwFieldType
     LanguageType            m_eLanguage;
     OUString                m_sSortAlgorithm;
 
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
     SwAuthorityFieldType(SwDoc* pDoc);
