@@ -32,6 +32,11 @@ constexpr sal_uInt32 createMagic(char char1, char char2, char char3, char char4)
            | (static_cast<sal_uInt32>(char3) << 8) | (static_cast<sal_uInt32>(char4) << 0);
 }
 
+constexpr sal_uInt32 constSvgMagic = createMagic('s', 'v', 'g', '0');
+constexpr sal_uInt32 constWmfMagic = createMagic('w', 'm', 'f', '0');
+constexpr sal_uInt32 constEmfMagic = createMagic('e', 'm', 'f', '0');
+constexpr sal_uInt32 constPdfMagic = createMagic('p', 'd', 'f', '0');
+
 class VCL_DLLPUBLIC TypeSerializer : public tools::GenericTypeSerializer
 {
 public:

@@ -50,11 +50,25 @@ private:
     void testUnloadedGraphicWmf();
     void testUnloadedGraphicAlpha();
     void testUnloadedGraphicSizeUnit();
-    void testSwapping();
-    void testSwappingVectorGraphic();
-    void testSwappingPageNumber();
+
     void testWMFRoundtrip();
     void testEmfToWmfConversion();
+
+    void testSwappingGraphic_PNG_WithGfxLink();
+    void testSwappingGraphic_PNG_WithoutGfxLink();
+    void testSwappingGraphicProperties_PNG_WithGfxLink();
+    void testSwappingGraphicProperties_PNG_WithoutGfxLink();
+
+    void testSwappingVectorGraphic_SVG_WithGfxLink();
+    void testSwappingVectorGraphic_SVG_WithoutGfxLink();
+    void testSwappingGraphicProperties_SVG_WithGfxLink();
+    void testSwappingGraphicProperties_SVG_WithoutGfxLink();
+
+    void testSwappingVectorGraphic_PDF_WithGfxLink();
+    void testSwappingVectorGraphic_PDF_WithoutGfxLink();
+
+    void testSwappingAnimationGraphic_GIF_WithGfxLink();
+    void testSwappingAnimationGraphic_GIF_WithoutGfxLink();
 
     CPPUNIT_TEST_SUITE(GraphicTest);
     CPPUNIT_TEST(testUnloadedGraphic);
@@ -62,11 +76,24 @@ private:
     CPPUNIT_TEST(testUnloadedGraphicWmf);
     CPPUNIT_TEST(testUnloadedGraphicAlpha);
     CPPUNIT_TEST(testUnloadedGraphicSizeUnit);
-    CPPUNIT_TEST(testSwapping);
-    CPPUNIT_TEST(testSwappingVectorGraphic);
-    CPPUNIT_TEST(testSwappingPageNumber);
     CPPUNIT_TEST(testWMFRoundtrip);
     CPPUNIT_TEST(testEmfToWmfConversion);
+
+    CPPUNIT_TEST(testSwappingGraphic_PNG_WithGfxLink);
+    CPPUNIT_TEST(testSwappingGraphic_PNG_WithoutGfxLink);
+    CPPUNIT_TEST(testSwappingGraphicProperties_PNG_WithGfxLink);
+    CPPUNIT_TEST(testSwappingGraphicProperties_PNG_WithoutGfxLink);
+
+    CPPUNIT_TEST(testSwappingVectorGraphic_SVG_WithGfxLink);
+    CPPUNIT_TEST(testSwappingVectorGraphic_SVG_WithoutGfxLink);
+    CPPUNIT_TEST(testSwappingGraphicProperties_SVG_WithGfxLink);
+    CPPUNIT_TEST(testSwappingGraphicProperties_SVG_WithoutGfxLink);
+
+    CPPUNIT_TEST(testSwappingVectorGraphic_PDF_WithGfxLink);
+    CPPUNIT_TEST(testSwappingVectorGraphic_PDF_WithoutGfxLink);
+
+    CPPUNIT_TEST(testSwappingAnimationGraphic_GIF_WithGfxLink);
+    CPPUNIT_TEST(testSwappingAnimationGraphic_GIF_WithoutGfxLink);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -306,6 +333,33 @@ void GraphicTest::testUnloadedGraphicSizeUnit()
     CPPUNIT_ASSERT_EQUAL(Size(400, 363), aGraphic.GetPrefSize());
 }
 
+void GraphicTest::testWMFRoundtrip()
+{
+    // Load a WMF file.
+    test::Directories aDirectories;
+    OUString aURL = aDirectories.getURLFromSrc("vcl/qa/cppunit/data/roundtrip.wmf");
+    SvFileStream aStream(aURL, StreamMode::READ);
+    sal_uInt64 nExpectedSize = aStream.TellEnd();
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+
+    // Save as WMF.
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    sal_uInt16 nFormat = rGraphicFilter.GetExportFormatNumberForShortName(u"WMF");
+    SvStream& rOutStream = *aTempFile.GetStream(StreamMode::READWRITE);
+    rGraphicFilter.ExportGraphic(aGraphic, OUString(), rOutStream, nFormat);
+
+    // Check if we preserved the WMF data perfectly.
+    sal_uInt64 nActualSize = rOutStream.TellEnd();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 6475
+    // - Actual  : 2826
+    // i.e. we lost some of the WMF data on roundtrip.
+    CPPUNIT_ASSERT_EQUAL(nExpectedSize, nActualSize);
+}
+
 void GraphicTest::testEmfToWmfConversion()
 {
     // Load EMF data.
@@ -363,7 +417,7 @@ void GraphicTest::testEmfToWmfConversion()
     CPPUNIT_ASSERT_LESSEQUAL(4, nCommentCount);
 }
 
-void GraphicTest::testSwapping()
+void GraphicTest::testSwappingGraphic_PNG_WithGfxLink()
 {
     // Prepare Graphic from a PNG image first
     Graphic aGraphic = makeUnloadedGraphic(u"png");
@@ -377,10 +431,64 @@ void GraphicTest::testSwapping()
 
     BitmapChecksum aChecksumBeforeSwapping = aGraphic.GetChecksum();
 
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.IsGfxLink());
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(319), aGraphic.GetGfxLink().GetDataSize());
 
     // We loaded the Graphic and made it available
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+    // Get the declared byte size of the graphic
+    sal_uLong rByteSize = aGraphic.GetSizeBytes();
+
+    // Check the swap file (shouldn't exist)
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileURL().isEmpty());
+
+    // Swapping out
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->swapOut());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+
+    // Byte size doesn't change when we swapped out
+    CPPUNIT_ASSERT_EQUAL(rByteSize, aGraphic.GetSizeBytes());
+
+    // Check the swap file (still shouldn't exist)
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileURL().isEmpty());
+
+    // Let's swap in
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
+    CPPUNIT_ASSERT_EQUAL(aChecksumBeforeSwapping, aGraphic.GetChecksum());
+
+    // Check the bitmap
+    CPPUNIT_ASSERT_EQUAL(tools::Long(120), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(true, checkBitmap(aGraphic));
+}
+
+void GraphicTest::testSwappingGraphic_PNG_WithoutGfxLink()
+{
+    // Prepare Graphic from a PNG image first
+
+    // Make sure to construct the Graphic from BitmapEx, so that we
+    // don't have the GfxLink present.
+    Graphic aGraphic(makeUnloadedGraphic(u"png").GetBitmapEx());
+
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(120), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetSizePixel().Height());
+
+    BitmapChecksum aChecksumBeforeSwapping = aGraphic.GetChecksum();
+
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.IsGfxLink());
+
+    // We loaded the Graphic and made it available
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
     // Get the declared byte size of the graphic
     sal_uLong rByteSize = aGraphic.GetSizeBytes();
     OUString rSwapFileURL = aGraphic.ImplGetImpGraphic()->getSwapFileURL();
@@ -403,19 +511,21 @@ void GraphicTest::testSwapping()
         CPPUNIT_ASSERT_EQUAL(true, bool(xStream));
 
         // Check size of the stream
-        CPPUNIT_ASSERT_EQUAL(sal_uInt64(449), xStream->remainingSize());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(36079), xStream->remainingSize());
 
         std::vector<unsigned char> aHash = calculateHash(xStream);
-        CPPUNIT_ASSERT_EQUAL(std::string("878281e583487b29ae09078e8040c01791c7649a"),
+        CPPUNIT_ASSERT_EQUAL(std::string("9347511e3b80dfdfaadf91a3bdef55a8ae85552b"),
                              toHexString(aHash));
     }
 
-    // Let's swap in
+    // SWAP IN
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
 
+    // reset the checksum to make sure we don't get the cached value
+    aGraphic.ImplGetImpGraphic()->resetChecksum();
     CPPUNIT_ASSERT_EQUAL(aChecksumBeforeSwapping, aGraphic.GetChecksum());
 
     // File shouldn't be available anymore
@@ -424,28 +534,192 @@ void GraphicTest::testSwapping()
     // Check the bitmap
     CPPUNIT_ASSERT_EQUAL(tools::Long(120), aGraphic.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetSizePixel().Height());
-    CPPUNIT_ASSERT_EQUAL(true, checkBitmap(aGraphic));
+
     CPPUNIT_ASSERT_EQUAL(true, checkBitmap(aGraphic));
 }
 
-void GraphicTest::testSwappingVectorGraphic()
+void GraphicTest::testSwappingGraphicProperties_PNG_WithGfxLink()
+{
+    // Prepare Graphic from a PNG image
+    Graphic aGraphic = makeUnloadedGraphic(u"png");
+
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+
+    // Origin URL
+    aGraphic.setOriginURL("Origin URL");
+    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+
+    //Set PrefMapMode
+    CPPUNIT_ASSERT_EQUAL(MapUnit::Map100thMM, aGraphic.GetPrefMapMode().GetMapUnit());
+    aGraphic.SetPrefMapMode(MapMode(MapUnit::MapTwip));
+    CPPUNIT_ASSERT_EQUAL(MapUnit::MapTwip, aGraphic.GetPrefMapMode().GetMapUnit());
+
+    // Set the PrefSize
+    CPPUNIT_ASSERT_EQUAL(tools::Long(6000), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(5000), aGraphic.GetPrefSize().Height());
+    aGraphic.SetPrefSize(Size(200, 100));
+    CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
+
+    // SWAP OUT
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->swapOut());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+
+    // Check properties
+    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+    CPPUNIT_ASSERT_EQUAL(MapUnit::MapTwip, aGraphic.GetPrefMapMode().GetMapUnit());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
+
+    // SWAP IN
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
+    // Check properties
+    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+    CPPUNIT_ASSERT_EQUAL(MapUnit::MapTwip, aGraphic.GetPrefMapMode().GetMapUnit());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
+}
+
+void GraphicTest::testSwappingGraphicProperties_PNG_WithoutGfxLink()
+{
+    // Prepare Graphic from a PNG image
+    Graphic aGraphic(makeUnloadedGraphic(u"png").GetBitmapEx());
+
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+
+    // Origin URL
+    aGraphic.setOriginURL("Origin URL");
+    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+
+    //Set PrefMapMode
+    CPPUNIT_ASSERT_EQUAL(MapUnit::Map100thMM, aGraphic.GetPrefMapMode().GetMapUnit());
+    aGraphic.SetPrefMapMode(MapMode(MapUnit::MapTwip));
+    CPPUNIT_ASSERT_EQUAL(MapUnit::MapTwip, aGraphic.GetPrefMapMode().GetMapUnit());
+
+    // Set the PrefSize
+    CPPUNIT_ASSERT_EQUAL(tools::Long(6000), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(5000), aGraphic.GetPrefSize().Height());
+    aGraphic.SetPrefSize(Size(200, 100));
+    CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
+
+    // SWAP OUT
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->swapOut());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+
+    // Check properties
+    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+    CPPUNIT_ASSERT_EQUAL(MapUnit::MapTwip, aGraphic.GetPrefMapMode().GetMapUnit());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
+
+    // SWAP IN
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
+    // Check properties
+    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+    CPPUNIT_ASSERT_EQUAL(MapUnit::MapTwip, aGraphic.GetPrefMapMode().GetMapUnit());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
+}
+
+void GraphicTest::testSwappingVectorGraphic_SVG_WithGfxLink()
 {
     test::Directories aDirectories;
     OUString aURL = aDirectories.getURLFromSrc(DATA_DIRECTORY) + "SimpleExample.svg";
     SvFileStream aStream(aURL, StreamMode::READ);
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+    // Loaded into "prepared" state
 
+    // Check that the state is as expected
     CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
 
     // Load the vector graphic
+    auto pVectorData = aGraphic.getVectorGraphicData();
+    CPPUNIT_ASSERT_EQUAL(true, bool(pVectorData));
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(223), pVectorData->getVectorGraphicDataArrayLength());
+
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.IsGfxLink());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(223), aGraphic.GetGfxLink().GetDataSize());
+
+    // Remember checksum so we can compare after swapping back in again
+    BitmapChecksum aBitmapChecksumBeforeSwapping = aGraphic.GetBitmapEx().GetChecksum();
+
+    // Check we are not swapped out yet
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
+    // Get the declared byte size of the graphic
+    sal_uLong rByteSize = aGraphic.GetSizeBytes();
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(223), rByteSize);
+
+    // Make sure we don't have a file
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileURL().isEmpty());
+
+    // SWAP OUT the Graphic and make sure it's not available currently
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->swapOut());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+
+    // We use GfxLink so no swap file in this case
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileURL().isEmpty());
+
+    // Byte size doesn't change when we swapped out
+    CPPUNIT_ASSERT_EQUAL(rByteSize, aGraphic.GetSizeBytes());
+
+    // SWAP IN
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
+    // Compare that the checksum of the bitmap is still the same
+    CPPUNIT_ASSERT_EQUAL(aBitmapChecksumBeforeSwapping, aGraphic.GetBitmapEx().GetChecksum());
+
+    // Byte size shouldn't change
+    CPPUNIT_ASSERT_EQUAL(rByteSize, aGraphic.GetSizeBytes());
+}
+
+void GraphicTest::testSwappingVectorGraphic_SVG_WithoutGfxLink()
+{
+    test::Directories aDirectories;
+    OUString aURL = aDirectories.getURLFromSrc(DATA_DIRECTORY) + "SimpleExample.svg";
+    SvFileStream aStream(aURL, StreamMode::READ);
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+
+    Graphic aInputGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(223),
+                         aInputGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength());
+
+    // Create graphic
+    Graphic aGraphic(aInputGraphic.getVectorGraphicData());
+
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
     CPPUNIT_ASSERT_EQUAL(true, bool(aGraphic.getVectorGraphicData()));
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(223),
                          aGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength());
-    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(223), aGraphic.GetGfxLink().GetDataSize());
-    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.IsGfxLink());
 
     BitmapChecksum aBitmapChecksumBeforeSwapping = aGraphic.GetBitmapEx().GetChecksum();
 
@@ -454,6 +728,7 @@ void GraphicTest::testSwappingVectorGraphic()
     // Get the declared byte size of the graphic
     sal_uLong rByteSize = aGraphic.GetSizeBytes();
     CPPUNIT_ASSERT_EQUAL(sal_uLong(223), rByteSize);
+
     OUString rSwapFileURL = aGraphic.ImplGetImpGraphic()->getSwapFileURL();
     CPPUNIT_ASSERT_EQUAL(true, rSwapFileURL.isEmpty());
 
@@ -468,17 +743,19 @@ void GraphicTest::testSwappingVectorGraphic()
 
     // Let's check the swap file
     rSwapFileURL = aGraphic.ImplGetImpGraphic()->getSwapFileURL();
+    CPPUNIT_ASSERT_EQUAL(false, rSwapFileURL.isEmpty());
     CPPUNIT_ASSERT_EQUAL(true, comphelper::DirectoryHelper::fileExists(rSwapFileURL));
 
-    { // Check the swap file content
+    {
+        // Check the swap file content
         std::unique_ptr<SvStream> xStream = createStream(rSwapFileURL);
         CPPUNIT_ASSERT_EQUAL(true, bool(xStream));
 
         // Check size of the stream
-        CPPUNIT_ASSERT_EQUAL(sal_uInt64(353), xStream->remainingSize());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(249), xStream->remainingSize());
 
         std::vector<unsigned char> aHash = calculateHash(xStream);
-        CPPUNIT_ASSERT_EQUAL(std::string("6ae83fc9c06ca253ada0b156d6e4700a4a028c34"),
+        CPPUNIT_ASSERT_EQUAL(std::string("322da9ea0683f03ce35cf8a71e59b686b9be28e8"),
                              toHexString(aHash));
     }
 
@@ -486,7 +763,17 @@ void GraphicTest::testSwappingVectorGraphic()
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+
+    // Check the Graphic
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(true, bool(aGraphic.getVectorGraphicData()));
+
+    sal_uInt32 nVectorByteSize = aGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(223), nVectorByteSize);
+
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.IsGfxLink());
 
     CPPUNIT_ASSERT_EQUAL(aBitmapChecksumBeforeSwapping, aGraphic.GetBitmapEx().GetChecksum());
 
@@ -494,7 +781,128 @@ void GraphicTest::testSwappingVectorGraphic()
     CPPUNIT_ASSERT_EQUAL(false, comphelper::DirectoryHelper::fileExists(rSwapFileURL));
 }
 
-void GraphicTest::testSwappingPageNumber()
+void GraphicTest::testSwappingGraphicProperties_SVG_WithGfxLink()
+{
+    // We check that Graphic properties like MapMode, PrefSize are properly
+    // restored through a swap cycle
+
+    test::Directories aDirectories;
+    OUString aURL = aDirectories.getURLFromSrc(DATA_DIRECTORY) + "SimpleExample.svg";
+    SvFileStream aStream(aURL, StreamMode::READ);
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+    // Loaded into "prepared" state
+
+    // Load the vector graphic
+    auto pVectorData = aGraphic.getVectorGraphicData();
+    CPPUNIT_ASSERT_EQUAL(true, bool(pVectorData));
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+
+    // Origin URL
+    aGraphic.setOriginURL("Origin URL");
+    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+
+    // Check size in pixels
+    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Height());
+
+    // Set and check the PrefSize
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1349), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1349), aGraphic.GetPrefSize().Height());
+    aGraphic.SetPrefSize(Size(200, 100));
+    CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
+
+    // SWAP OUT the Graphic and make sure it's not available currently
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->swapOut());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+
+    // Check properties
+    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Height());
+
+    // SWAP IN
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
+    // Check properties
+    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Height());
+}
+
+void GraphicTest::testSwappingGraphicProperties_SVG_WithoutGfxLink()
+{
+    test::Directories aDirectories;
+    OUString aURL = aDirectories.getURLFromSrc(DATA_DIRECTORY) + "SimpleExample.svg";
+    SvFileStream aStream(aURL, StreamMode::READ);
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+
+    Graphic aInputGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(223),
+                         aInputGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength());
+
+    // Create graphic
+    Graphic aGraphic(aInputGraphic.getVectorGraphicData());
+
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(true, bool(aGraphic.getVectorGraphicData()));
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.IsGfxLink());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
+    // Origin URL
+    aGraphic.setOriginURL("Origin URL");
+    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+
+    // Check size in pixels
+    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Height());
+
+    // Set and check the PrefSize
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1349), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1349), aGraphic.GetPrefSize().Height());
+    aGraphic.SetPrefSize(Size(200, 100));
+    CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
+
+    // SWAP OUT the Graphic and make sure it's not available currently
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->swapOut());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Height());
+
+    // SWAP IN
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Origin URL"), aGraphic.getOriginURL());
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Height());
+}
+
+void GraphicTest::testSwappingVectorGraphic_PDF_WithGfxLink()
 {
     test::Directories aDirectories;
     OUString aURL = aDirectories.getURLFromSrc(PDFEXPORT_DATA_DIRECTORY) + "SimpleMultiPagePDF.pdf";
@@ -507,6 +915,7 @@ void GraphicTest::testSwappingPageNumber()
 
     // Load the vector graphic
     CPPUNIT_ASSERT_EQUAL(true, bool(aGraphic.getVectorGraphicData()));
+
     // Set the page index
     aGraphic.getVectorGraphicData()->setPageIndex(1);
 
@@ -519,12 +928,12 @@ void GraphicTest::testSwappingPageNumber()
 
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
 
-    // Swapping out
+    // SWAP OUT
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->swapOut());
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->isSwappedOut());
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
 
-    // Let's swap in
+    // SWAP IN
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
@@ -533,31 +942,176 @@ void GraphicTest::testSwappingPageNumber()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aGraphic.getVectorGraphicData()->getPageIndex());
 }
 
-void GraphicTest::testWMFRoundtrip()
+void GraphicTest::testSwappingVectorGraphic_PDF_WithoutGfxLink()
 {
-    // Load a WMF file.
     test::Directories aDirectories;
-    OUString aURL = aDirectories.getURLFromSrc("vcl/qa/cppunit/data/roundtrip.wmf");
+    OUString aURL = aDirectories.getURLFromSrc(PDFEXPORT_DATA_DIRECTORY) + "SimpleMultiPagePDF.pdf";
     SvFileStream aStream(aURL, StreamMode::READ);
-    sal_uInt64 nExpectedSize = aStream.TellEnd();
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aInputGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+
+    // Create graphic
+    Graphic aGraphic(aInputGraphic.getVectorGraphicData());
+
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, bool(aGraphic.getVectorGraphicData()));
+
+    // Set the page index
+    aGraphic.getVectorGraphicData()->setPageIndex(1);
+
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
+                         aGraphic.getVectorGraphicData()->getVectorGraphicDataType());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(17693),
+                         aGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aGraphic.getVectorGraphicData()->getPageIndex());
+
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
+    // SWAP OUT
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->swapOut());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+
+    // SWAP IN
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aGraphic.getVectorGraphicData()->getPageIndex());
+}
+
+void GraphicTest::testSwappingAnimationGraphic_GIF_WithGfxLink()
+{
+    test::Directories aDirectories;
+    OUString aURL = aDirectories.getURLFromSrc(DATA_DIRECTORY) + "123_Numbers.gif";
+    SvFileStream aStream(aURL, StreamMode::READ);
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+    // Loaded into "prepared" state
 
-    // Save as WMF.
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-    sal_uInt16 nFormat = rGraphicFilter.GetExportFormatNumberForShortName(u"WMF");
-    SvStream& rOutStream = *aTempFile.GetStream(StreamMode::READWRITE);
-    rGraphicFilter.ExportGraphic(aGraphic, OUString(), rOutStream, nFormat);
+    // Check that the state is as expected
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
 
-    // Check if we preserved the WMF data perfectly.
-    sal_uInt64 nActualSize = rOutStream.TellEnd();
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
 
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 6475
-    // - Actual  : 2826
-    // i.e. we lost some of the WMF data on roundtrip.
-    CPPUNIT_ASSERT_EQUAL(nExpectedSize, nActualSize);
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.IsGfxLink());
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(124), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(146), aGraphic.GetSizePixel().Height());
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(1515), aGraphic.GetGfxLink().GetDataSize());
+
+    // Remember checksum so we can compare after swapping back in again
+    BitmapChecksum aBitmapChecksumBeforeSwapping = aGraphic.GetBitmapEx().GetChecksum();
+
+    // Check we are not swapped out yet
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
+    // Get the declared byte size of the graphic
+    sal_uLong rByteSize = aGraphic.GetSizeBytes();
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(50373), rByteSize);
+
+    // Make sure we don't have a file
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileURL().isEmpty());
+
+    // SWAP OUT the Graphic and make sure it's not available currently
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->swapOut());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+
+    // We use GfxLink so no swap file in this case
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileURL().isEmpty());
+
+    // Byte size doesn't change when we swapped out
+    CPPUNIT_ASSERT_EQUAL(rByteSize, aGraphic.GetSizeBytes());
+
+    // SWAP IN
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
+    // Compare that the checksum of the bitmap is still the same
+    CPPUNIT_ASSERT_EQUAL(aBitmapChecksumBeforeSwapping, aGraphic.GetBitmapEx().GetChecksum());
+
+    // Byte size shouldn't change
+    CPPUNIT_ASSERT_EQUAL(rByteSize, aGraphic.GetSizeBytes());
+}
+
+void GraphicTest::testSwappingAnimationGraphic_GIF_WithoutGfxLink()
+{
+    test::Directories aDirectories;
+    OUString aURL = aDirectories.getURLFromSrc(DATA_DIRECTORY) + "123_Numbers.gif";
+    SvFileStream aStream(aURL, StreamMode::READ);
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aInputGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+    Graphic aGraphic(aInputGraphic.GetAnimation());
+
+    // Check animation graphic
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.IsAnimated());
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(124), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(146), aGraphic.GetSizePixel().Height());
+
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.IsGfxLink());
+
+    // We loaded the Graphic and made it available
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
+    // Get the declared byte size of the graphic
+    sal_uLong rByteSize = aGraphic.GetSizeBytes();
+    OUString rSwapFileURL = aGraphic.ImplGetImpGraphic()->getSwapFileURL();
+    CPPUNIT_ASSERT_EQUAL(true, rSwapFileURL.isEmpty());
+
+    // SWAP OUT
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->swapOut());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+
+    // Byte size doesn't change when we swapped out
+    CPPUNIT_ASSERT_EQUAL(rByteSize, aGraphic.GetSizeBytes());
+
+    // Let's check the swap file
+    rSwapFileURL = aGraphic.ImplGetImpGraphic()->getSwapFileURL();
+    CPPUNIT_ASSERT_EQUAL(true, comphelper::DirectoryHelper::fileExists(rSwapFileURL));
+
+    {
+        // Check the swap file content
+        std::unique_ptr<SvStream> xStream = createStream(rSwapFileURL);
+        CPPUNIT_ASSERT_EQUAL(true, bool(xStream));
+
+        // Check size of the stream
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(15183), xStream->remainingSize());
+
+        std::vector<unsigned char> aHash = calculateHash(xStream);
+        CPPUNIT_ASSERT_EQUAL(std::string("deb13fdf0ffa0b58ce92fff0a6ca9e98c5d26ed9"),
+                             toHexString(aHash));
+    }
+
+    // SWAP IN
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
+    // File shouldn't be available anymore
+    CPPUNIT_ASSERT_EQUAL(false, comphelper::DirectoryHelper::fileExists(rSwapFileURL));
+
+    // Check the bitmap
+    CPPUNIT_ASSERT_EQUAL(tools::Long(124), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(146), aGraphic.GetSizePixel().Height());
+
+    // Byte size is still the same
+    CPPUNIT_ASSERT_EQUAL(rByteSize, aGraphic.GetSizeBytes());
 }
 
 } // namespace
