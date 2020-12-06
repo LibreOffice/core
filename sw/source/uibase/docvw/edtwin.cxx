@@ -577,7 +577,8 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                                         = rSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
                                 int nLevel = rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos);
                                 OUString sQuickHelp(SwResId(STR_CLICK_OUTLINE_CONTENT_TOGGLE_VISIBILITY));
-                                if (nPos + 1 < nOutlineNodesCount
+                                if (!rSh.GetViewOptions()->IsTreatSubOutlineLevelsAsContent()
+                                        && nPos + 1 < nOutlineNodesCount
                                         && rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos + 1) > nLevel)
                                     sQuickHelp += " (" + SwResId(STR_CLICK_OUTLINE_CONTENT_TOGGLE_VISIBILITY_EXT) + ")";
                                 SetQuickHelpText(sQuickHelp);
@@ -1362,7 +1363,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
     if (rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton())
     {
-        // not allowed if outline content is folded
+        // not allowed if outline content visibility is false
         sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
         if ((rSh.IsSttPara() && (nKey == KEY_BACKSPACE || nKey == KEY_LEFT))
                 || (rSh.IsEndOfPara() && (nKey == KEY_DELETE || nKey == KEY_RETURN || nKey == KEY_RIGHT)))
@@ -1374,13 +1375,13 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                 bool bOutlineContentVisibleAttr = true;
                 pContentNode->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
                 if (!bOutlineContentVisibleAttr)
-                    return; // outline node is folded
+                    return; // outline content visibility is false
                 if (rSh.IsSttPara() && (nKey == KEY_BACKSPACE || nKey == KEY_LEFT) && (nPos-1 != SwOutlineNodes::npos))
                 {
                     bOutlineContentVisibleAttr = true;
                     rSh.GetDoc()->GetNodes().GetOutLineNds()[nPos-1]->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
                     if (!bOutlineContentVisibleAttr)
-                        return; // previous outline node is folded
+                        return; // previous outline node has content visibility false
                 }
             }
         }
@@ -3538,7 +3539,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 MoveCursor(rSh, aDocPos, bOnlyText, bLockView);
                                 SwPaM aPam(*rSh.GetCurrentShellCursor().GetPoint());
                                 SwOutlineNodes::size_type nPos;
-                                if (rSh.GetNodes().GetOutLineNds().Seek_Entry( &aPam.GetPoint()->nNode.GetNode(), &nPos))
+                                if (rSh.GetNodes().GetOutLineNds().Seek_Entry(&aPam.GetPoint()->nNode.GetNode(), &nPos))
                                     rSh.ToggleOutlineContentVisibility(nPos);
                                 return;
                             }
@@ -3787,15 +3788,20 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 SwOutlineNodes::size_type nPos;
                 if (rSh.GetNodes().GetOutLineNds().Seek_Entry(&aPam.GetPoint()->nNode.GetNode(), &nPos))
                 {
-                    SwOutlineNodes::size_type nOutlineNodesCount = rSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
-                    int nLevel = rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos);
-                    bool bFold = rSh.IsOutlineContentFolded(nPos);
-                    do
+                    if (rSh.GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
+                        rSh.ToggleOutlineContentVisibility(nPos);
+                    else
                     {
-                        if (rSh.IsOutlineContentFolded(nPos) == bFold)
-                            rSh.ToggleOutlineContentVisibility(nPos);
-                    } while (++nPos < nOutlineNodesCount
-                             && rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos) > nLevel);
+                        SwOutlineNodes::size_type nOutlineNodesCount = rSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
+                        int nLevel = rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos);
+                        bool bVisible = rSh.IsOutlineContentVisible(nPos);
+                        do
+                        {
+                            if (rSh.IsOutlineContentVisible(nPos) == bVisible)
+                                rSh.ToggleOutlineContentVisibility(nPos);
+                        } while (++nPos < nOutlineNodesCount
+                                 && rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos) > nLevel);
+                    }
                     return;
                 }
             }
@@ -3944,15 +3950,15 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     // remove collapse button when saved frame is not frame at mouse position
                     if (m_pSavedOutlineFrame && /* is it possible that m_pSavedOutlineFrame is removed? */ !m_pSavedOutlineFrame->IsInDtor() &&
                             rNds.GetOutLineNds().Seek_Entry(static_cast<SwTextFrame*>(m_pSavedOutlineFrame)->GetTextNodeFirst(), &nPos) &&
-                            !rSh.IsOutlineContentFolded(nPos))
+                            rSh.IsOutlineContentVisible(nPos))
                     {
                         GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, m_pSavedOutlineFrame);
                     }
                     m_pSavedOutlineFrame = pContentFrame;
                 }
                 // show collapse button
-                if (rNds.GetOutLineNds().Seek_Entry(aSwContentAtPos.aFnd.pNode->GetTextNode(), &nPos) &&
-                        !rSh.IsOutlineContentFolded(nPos))
+                if (rNds.GetOutLineNds().Seek_Entry(aSwContentAtPos.aFnd.pNode->GetTextNode(),
+                                                    &nPos) && rSh.IsOutlineContentVisible(nPos))
                 {
                     GetFrameControlsManager().SetOutlineContentVisibilityButton(aSwContentAtPos.aFnd.pNode->GetTextNode());
                 }
@@ -3965,10 +3971,12 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             // remove collapse button if showing
             const SwNodes& rNds = rSh.GetDoc()->GetNodes();
             SwOutlineNodes::size_type nPos;
-            if (rNds.GetOutLineNds().Seek_Entry(static_cast<SwTextFrame*>(m_pSavedOutlineFrame)->GetTextNodeFirst(), &nPos) &&
-                    !rSh.IsOutlineContentFolded(nPos))
+            if (rNds.GetOutLineNds().Seek_Entry(static_cast<SwTextFrame*>(m_pSavedOutlineFrame)->
+                                                GetTextNodeFirst(), &nPos) &&
+                    rSh.IsOutlineContentVisible(nPos))
             {
-                GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, m_pSavedOutlineFrame);
+                GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline,
+                                                               m_pSavedOutlineFrame);
             }
             m_pSavedOutlineFrame = nullptr;
         }
@@ -4017,7 +4025,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             const SwNodes& rNds = rSh.GetDoc()->GetNodes();
             SwOutlineNodes::size_type nPos;
             rNds.GetOutLineNds().Seek_Entry(static_cast<SwTextFrame*>(m_pSavedOutlineFrame)->GetTextNodeFirst(), &nPos);
-            if (!rSh.IsOutlineContentFolded(nPos))
+            if (rSh.IsOutlineContentVisible(nPos))
                 GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, m_pSavedOutlineFrame);
             m_pSavedOutlineFrame = nullptr;
         }
@@ -6629,38 +6637,6 @@ void SwEditWin::SetGraphicTwipPosition(bool bStart, const Point& rPosition)
         MouseEvent aClickEvent(rPosition, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
         MouseButtonUp(aClickEvent);
     }
-}
-
-void SwEditWin::SetOutlineContentVisibilityButtons()
-{
-    SwWrtShell& rSh = m_rView.GetWrtShell();
-    const SwOutlineNodes& rOutlineNodes = rSh.GetDoc()->GetNodes().GetOutLineNds();
-    if (!rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton())
-    {
-        for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNodes.size(); ++nPos)
-        {
-            bool bOutlineContentVisibleAttr = true;
-            rOutlineNodes[nPos]->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
-            if (!bOutlineContentVisibleAttr)
-            {
-                // unfold and then set outline content visible attr to false for persistence
-                rSh.ToggleOutlineContentVisibility(nPos);
-                rOutlineNodes[nPos]->GetTextNode()->SetAttrOutlineContentVisible(false);
-            }
-        }
-        GetFrameControlsManager().HideControls(FrameControlType::Outline);
-    }
-    else
-    {
-        for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNodes.size(); ++nPos)
-        {
-            bool bOutlineContentVisibleAttr = true;
-            rOutlineNodes[nPos]->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
-            if (!bOutlineContentVisibleAttr)
-                rSh.ToggleOutlineContentVisibility(nPos, true);
-        }
-    }
-    GetView().Invalidate(); // set state of dependent slots (FN_TOGGLE_OUTLINE_CONTENT_VISIBILITY)
 }
 
 SwFrameControlsManager& SwEditWin::GetFrameControlsManager()

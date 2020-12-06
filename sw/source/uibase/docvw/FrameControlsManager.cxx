@@ -218,7 +218,7 @@ void SwFrameControlsManager::SetOutlineContentVisibilityButton(const SwTextNode*
 {
     const SwContentFrame* pContentFrame = pTextNd->getLayoutFrame(nullptr);
 
-    // has node frame changed or been deleted
+    // has node frame changed or been deleted?
     std::map<const SwTextNode*, const SwContentFrame*>::iterator iter = m_aTextNodeContentFrameMap.find(pTextNd);
     if (iter != m_aTextNodeContentFrameMap.end())
     {
@@ -272,17 +272,38 @@ void SwFrameControlsManager::SetOutlineContentVisibilityButton(const SwTextNode*
     {
         // show expand button immediately
         pWin->Show();
-        // outline content might not be folded, this happens on undo, outline moves, and folded outline content reveals
+        /*
+           The outline content might be visible here. This happens on document load,
+           undo outline moves, and show of outline content that itself has outline nodes
+           having outline content visibility attribute false, for example tables and text
+           frames containing outline nodes.
+        */
         SwOutlineNodes::size_type nPos;
         SwOutlineNodes rOutlineNds = m_pEditWin->GetView().GetWrtShell().GetNodes().GetOutLineNds();
         if (rOutlineNds.Seek_Entry(const_cast<SwTextNode*>(pTextNd), &nPos))
         {
-            // don't toggle if next node is an outline node or end node
-            SwNodeIndex aIdx(*pTextNd, 1);
-            if (!(aIdx.GetNode().IsEndNode() || ((nPos + 1 < rOutlineNds.size()) && &aIdx.GetNode() == rOutlineNds[nPos +1]))
-                    && aIdx.GetNode().IsContentNode() && aIdx.GetNode().GetContentNode()->getLayoutFrame(nullptr))
+            SwNodeIndex aIdx(*pTextNd, +1);
+            // there shouldn't be a layout frame
+            // if there is then force visiblity false
+            if (!m_pEditWin->GetView().GetWrtShell().GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
             {
-                m_pEditWin->GetView().GetWrtShell().ToggleOutlineContentVisibility(nPos, true); // force fold
+                if (!(aIdx.GetNode().IsEndNode() ||
+                      (nPos + 1 < rOutlineNds.size() && &aIdx.GetNode() == rOutlineNds[nPos +1]))
+                        && aIdx.GetNode().IsContentNode()
+                        // this determines if the content is really visible
+                        && aIdx.GetNode().GetContentNode()->getLayoutFrame(nullptr))
+                {
+                    // force outline content visibility false
+                    m_pEditWin->GetView().GetWrtShell().ToggleOutlineContentVisibility(nPos, true);
+                }
+            }
+            else if (!aIdx.GetNode().IsEndNode()
+                     && aIdx.GetNode().IsContentNode()
+                     // this determines if the content is really visible
+                     && aIdx.GetNode().GetContentNode()->getLayoutFrame(nullptr))
+            {
+                // force outline content visibility false
+                m_pEditWin->GetView().GetWrtShell().ToggleOutlineContentVisibility(nPos, true);
             }
         }
     }

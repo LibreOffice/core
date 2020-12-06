@@ -103,6 +103,11 @@ bool SwViewOption::IsShowOutlineContentVisibilityButton() const
         (m_nCoreOptions & ViewOptFlags1::ShowOutlineContentVisibilityButton);
 }
 
+bool SwViewOption::IsTreatSubOutlineLevelsAsContent() const
+{
+    return officecfg::Office::Common::Misc::ExperimentalMode::get() &&
+        (m_nCoreOptions & ViewOptFlags1::TreatSubOutlineLevelsAsContent);
+}
 
 void SwViewOption::DrawRect( OutputDevice *pOut,
                              const SwRect &rRect, ::Color nCol )

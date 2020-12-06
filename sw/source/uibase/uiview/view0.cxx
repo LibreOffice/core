@@ -57,6 +57,8 @@
 #include <swslots.hxx>
 #include <PostItMgr.hxx>
 
+#include <ndtxt.hxx>
+
 using namespace ::com::sun::star;
 
 #include <unotools/moduleoptions.hxx>
@@ -594,11 +596,41 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         break;
 
     case FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON:
+    {
         if( STATE_TOGGLE == eState )
             bFlag = !pOpt->IsShowOutlineContentVisibilityButton();
 
-        pOpt->SetShowOutlineContentVisibilityButton( bFlag );
+        SwWrtShell &rSh = GetWrtShell();
+
+        // move cursor to top of document
+        if (rSh.IsSelFrameMode())
+        {
+            rSh.UnSelectFrame();
+            rSh.LeaveSelFrameMode();
+        }
+        rSh.EnterStdMode();
+        rSh.SttEndDoc(true);
+
+        if (!bFlag)
+        {
+            // make all content visible
+            const SwOutlineNodes& rOutlineNds = rSh.GetNodes().GetOutLineNds();
+            for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
+            {
+                SwNode* pNd = rOutlineNds[nPos];
+                bool bOutlineContentVisibleAttr = true;
+                pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+                if (!bOutlineContentVisibleAttr)
+                {
+                    rSh.ToggleOutlineContentVisibility(nPos);
+                    pNd->GetTextNode()->SetAttrOutlineContentVisible(false);
+                }
+            }
+        }
+
+        pOpt->SetShowOutlineContentVisibilityButton(bFlag);
         break;
+    }
 
     case FN_SHOW_CHANGES_IN_MARGIN:
         if( STATE_TOGGLE == eState )
@@ -639,9 +671,6 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     // #i6193# let postits know about new spellcheck setting
     if ( nSlot == SID_AUTOSPELL_CHECK )
         GetPostItMgr()->SetSpellChecking();
-
-    if (nSlot == FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON)
-        GetEditWin().SetOutlineContentVisibilityButtons();
 
     const bool bLockedView = rSh.IsViewLocked();
     rSh.LockView( true );    //lock visible section
