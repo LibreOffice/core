@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79e9d44b_cc551c03",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 3940,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-06T07:04:18Z",
+      "side": 1,
+      "message": "Please describe where and how function \"SfxViewFrame::GetFirst\" is declared: write the file and line where the declaration is; write the declaration itself; and then please describe the meaning of all arguments in the declaration.",
+      "range": {
+        "startLine": 3940,
+        "startChar": 27,
+        "endLine": 3940,
+        "endChar": 49
+      },
+      "revId": "fa9a8e7e8124da961d5cf2f2ef23239d6a3d1f35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
