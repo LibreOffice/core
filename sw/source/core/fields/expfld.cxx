@@ -271,11 +271,13 @@ std::unique_ptr<SwFieldType> SwGetExpFieldType::Copy() const
     return std::make_unique<SwGetExpFieldType>(GetDoc());
 }
 
-void SwGetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* pNew )
+void SwGetExpFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if( pNew && RES_DOCPOS_UPDATE == pNew->Which() )
-        NotifyClients( nullptr, pNew );
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
     // do not expand anything else
+    if(!pLegacy || (pLegacy->GetWhich() != RES_DOCPOS_UPDATE))
+        return;
+    CallSwClientNotify(rHint);
 }
 
 SwGetExpField::SwGetExpField(SwGetExpFieldType* pTyp, const OUString& rFormel,
@@ -546,7 +548,7 @@ void SwSetExpField::ChgExpStr(const OUString& rExpand, SwRootFrame const*const p
     }
 }
 
-void SwSetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* )
+void SwSetExpFieldType::SwClientNotify(const SwModify&, const SfxHint&)
 {
     // do not expand further
 }
