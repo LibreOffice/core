@@ -160,11 +160,6 @@ namespace
 {
 #define NATIVE_FORMAT_50 COMPAT_FORMAT('N', 'A', 'T', '5')
 
-constexpr sal_uInt32 constSvgMagic = createMagic('s', 'v', 'g', '0');
-constexpr sal_uInt32 constWmfMagic = createMagic('w', 'm', 'f', '0');
-constexpr sal_uInt32 constEmfMagic = createMagic('e', 'm', 'f', '0');
-constexpr sal_uInt32 constPdfMagic = createMagic('p', 'd', 'f', '0');
-
 } // end anonymous namespace
 
 void TypeSerializer::readGraphic(Graphic& rGraphic)
