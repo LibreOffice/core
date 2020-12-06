@@ -731,7 +731,7 @@ void SwSectionFormat::MakeFrames()
     }
 }
 
-void SwSectionFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
+void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
     auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
     if(!pLegacy)
@@ -807,7 +807,7 @@ void SwSectionFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
         {
             // My Parents will be destroyed, so get the Parent's Parent
             // and update
-            SwFrameFormat::Modify( pOld, pNew ); // Rewire first!
+            SwFrameFormat::SwClientNotify(rMod, rHint);
             UpdateParent();
             return;
         }
@@ -819,13 +819,13 @@ void SwSectionFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
             dynamic_cast<const SwSectionFormat*>(static_cast<const SwFormatChg*>(pNew)->pChangedFormat) != nullptr )
         {
             // My Parent will be changed, thus I need to update
-            SwFrameFormat::Modify( pOld, pNew ); // Rewire first!
+            SwFrameFormat::SwClientNotify(rMod, rHint);
             UpdateParent();
             return;
         }
         break;
     }
-    SwFrameFormat::Modify( pOld, pNew );
+    SwFrameFormat::SwClientNotify(rMod, rHint);
 
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
     {   // invalidate cached uno object
