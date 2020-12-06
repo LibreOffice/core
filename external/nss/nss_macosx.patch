@@ -1,7 +1,17 @@
 diff -ru a/nspr/configure b/nspr/configure
 --- a/a/nspr/configure	2014-09-29 16:50:33.907375937 +0100
 +++ b/b/nspr/configure	2014-09-29 16:51:59.213931947 +0100
-@@ -6577,7 +6579,7 @@
+@@ -6453,6 +6453,9 @@
+     AS='$(CC) -x assembler-with-cpp'
+     CFLAGS="$CFLAGS -Wall -fno-common"
+     case "${target_cpu}" in
++        aarch64)
++            CPU_ARCH=arm64
++            ;;
+         arm*)
+             CPU_ARCH=arm
+             ;;
+@@ -6578,7 +6579,7 @@
  
  
      DSO_CFLAGS=-fPIC
@@ -31,7 +41,14 @@ diff -ru a/nss/coreconf/Darwin.mk b/nss/coreconf/Darwin.mk
  override CPU_ARCH	= x86
  endif
  else
-@@ -40,12 +48,16 @@
+@@ -40,19 +48,20 @@
+ ifeq (arm,$(CPU_ARCH))
+ # Nothing set for arm currently.
+ else
+-OS_REL_CFLAGS	= -Dppc
+-CC              += -arch ppc
+-CCC             += -arch ppc
+ endif
  endif
  
  ifneq (,$(MACOS_SDK_DIR))
