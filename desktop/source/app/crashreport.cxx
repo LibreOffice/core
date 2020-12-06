@@ -222,16 +222,17 @@ void CrashReporter::removeExceptionHandler()
 
 bool CrashReporter::IsDumpEnable()
 {
-    OUString sToken;
-    OString  sEnvVar(std::getenv("CRASH_DUMP_ENABLE"));
-    bool     bEnable = true;   // default, always on
-    // read configuration item 'CrashDumpEnable' -> bool on/off
-    if (rtl::Bootstrap::get("CrashDumpEnable", sToken) && sEnvVar.isEmpty())
-    {
-        bEnable = sToken.toBoolean();
+    auto const env = std::getenv("CRASH_DUMP_ENABLE");
+    if (env != nullptr && env[0] != '\0') {
+        return true;
     }
-
-    return bEnable;
+    // read configuration item 'CrashDumpEnable' -> bool on/off
+    OUString sToken;
+    if (rtl::Bootstrap::get("CrashDumpEnable", sToken))
+    {
+        return sToken.toBoolean();
+    }
+    return true; // default, always on
 }
 
 
