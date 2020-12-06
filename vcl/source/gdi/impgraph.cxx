@@ -1747,36 +1747,32 @@ BitmapChecksum ImpGraphic::ImplGetChecksum() const
     if (mnChecksum != 0)
         return mnChecksum;
 
-    BitmapChecksum nRet = 0;
-
     ensureAvailable();
 
-    if( ImplIsSupportedGraphic() && !isSwappedOut() )
+    switch (meType)
     {
-        switch( meType )
+        case GraphicType::NONE:
+        case GraphicType::Default:
+            break;
+
+        case GraphicType::Bitmap:
         {
-            case GraphicType::Default:
-            break;
-
-            case GraphicType::Bitmap:
-            {
-                if(maVectorGraphicData)
-                    nRet = maVectorGraphicData->GetChecksum();
-                else if( mpAnimation )
-                    nRet = mpAnimation->GetChecksum();
-                else
-                    nRet = maBitmapEx.GetChecksum();
-            }
-            break;
-
-            default:
-                nRet = maMetaFile.GetChecksum();
-            break;
+            if (maVectorGraphicData)
+                mnChecksum = maVectorGraphicData->GetChecksum();
+            else if (mpAnimation)
+                mnChecksum = mpAnimation->GetChecksum();
+            else
+                mnChecksum = maBitmapEx.GetChecksum();
         }
-    }
+        break;
 
-    mnChecksum = nRet;
-    return nRet;
+        case GraphicType::GdiMetafile:
+        {
+            mnChecksum = maMetaFile.GetChecksum();
+        }
+        break;
+    }
+    return mnChecksum;
 }
 
 bool ImpGraphic::ImplExportNative( SvStream& rOStm ) const
