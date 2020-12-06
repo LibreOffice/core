@@ -49,24 +49,24 @@ using namespace webdav_ucp;
 namespace {
 
 const ne_uri g_sUriDefaultsHTTP  = { const_cast<char *>("http"),
-                                     nullptr,
-                                     nullptr,
+                                     const_cast<char *>(""),
+                                     const_cast<char *>(""),
                                      DEFAULT_HTTP_PORT,
-                                     nullptr,
+                                     const_cast<char *>(""),
                                      nullptr,
                                      nullptr };
 const ne_uri g_sUriDefaultsHTTPS = { const_cast<char *>("https"),
-                                     nullptr,
-                                     nullptr,
+                                     const_cast<char *>(""),
+                                     const_cast<char *>(""),
                                      DEFAULT_HTTPS_PORT,
-                                     nullptr,
+                                     const_cast<char *>(""),
                                      nullptr,
                                      nullptr };
 const ne_uri g_sUriDefaultsFTP   = { const_cast<char *>("ftp"),
-                                     nullptr,
-                                     nullptr,
+                                     const_cast<char *>(""),
+                                     const_cast<char *>(""),
                                      DEFAULT_FTP_PORT,
-                                     nullptr,
+                                     const_cast<char *>(""),
                                      nullptr,
                                      nullptr };
 } // namespace
