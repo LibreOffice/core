@@ -1330,10 +1330,9 @@ bool XMLTextFrameContext::CreateIfNotThere( css::uno::Reference < css::beans::XP
 
 XMLTextFrameContext::XMLTextFrameContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         TextContentAnchorType eATyp )
-:   SvXMLImportContext( rImport, nPrfx, rLName )
+:   SvXMLImportContext( rImport )
 ,   MultiImageImportHelper()
 ,   m_xAttrList( new SvXMLAttributeList( xAttrList ) )
     // Implement Title/Description Elements UI (#i73249#)

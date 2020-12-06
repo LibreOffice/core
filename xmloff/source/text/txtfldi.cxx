@@ -129,6 +129,18 @@ XMLTextFieldImportContext::XMLTextFieldImportContext(
     sServiceName = OUString::createFromAscii(pService);
 }
 
+XMLTextFieldImportContext::XMLTextFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    const char* pService)
+:   SvXMLImportContext( rImport )
+,   rTextImportHelper(rHlp)
+,   sServicePrefix(sAPI_textfield_prefix)
+,   bValid(false)
+{
+    DBG_ASSERT(nullptr != pService, "Need service name!");
+    sServiceName = OUString::createFromAscii(pService);
+}
+
 void XMLTextFieldImportContext::startFastElement(
         sal_Int32 /*nElement*/,
         const Reference<XFastAttributeList> & xAttrList)
@@ -210,6 +222,25 @@ bool XMLTextFieldImportContext::CreateField(
     }
 
     return true;
+}
+
+/// create the appropriate field context from
+XMLTextFieldImportContext*
+XMLTextFieldImportContext::CreateTextFieldImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_Int32 nElement)
+{
+    const OUString& rPrefix = SvXMLImport::getNamespacePrefixFromToken(nElement, &rImport.GetNamespaceMap());
+    const OUString& rLocalName = SvXMLImport::getNameFromToken( nElement );
+    OUString aName = rPrefix.isEmpty() ? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName;
+    OUString aLocalName;
+    sal_uInt16 nPrefix =
+            rImport.GetNamespaceMap().GetKeyByAttrName( aName, &aLocalName );
+    const SvXMLTokenMap& rTokenMap =
+            rImport.GetTextImport()->GetTextPElemTokenMap();
+    sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
+    return CreateTextFieldImportContext(rImport, rHlp, nPrefix, rLocalName, nToken);
 }
 
 /// create the appropriate field context from
@@ -2981,11 +3012,8 @@ void XMLPageNameFieldImportContext::PrepareField(
 
 XMLUrlFieldImportContext::XMLUrlFieldImportContext(
     SvXMLImport& rImport,
-    XMLTextImportHelper& rHlp,
-    sal_uInt16 nPrfx,
-    const OUString& sLocalName) :
-        XMLTextFieldImportContext(rImport, rHlp, sAPI_url,
-                                  nPrfx, sLocalName),
+    XMLTextImportHelper& rHlp) :
+        XMLTextFieldImportContext(rImport, rHlp, sAPI_url),
         bFrameOK(false)
 {
 }

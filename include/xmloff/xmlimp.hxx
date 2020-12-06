@@ -384,6 +384,9 @@ public:
     // get import helper for events
     XMLEventImportHelper& GetEventImport();
 
+    css::uno::Reference< css::xml::sax::XAttributeList > convertToSlowAttrList(
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs);
+
     static const OUString & getNameFromToken( sal_Int32 nToken );
     static OUString getPrefixAndNameFromToken( sal_Int32 nToken );
     static OUString getNamespacePrefixFromToken(sal_Int32 nToken, const SvXMLNamespaceMap* pMap);

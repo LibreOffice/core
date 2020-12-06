@@ -69,6 +69,10 @@ public:
         const char* pService,               /// name of SO API service
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
+    XMLTextFieldImportContext(
+        SvXMLImport& rImport,                   /// XML Import
+        XMLTextImportHelper& rHlp,              /// Text import helper
+        const char* pService);               /// name of SO API service
 
     /// process character data: will be collected in member sContentBuffer
     virtual void SAL_CALL characters( const OUString& sContent ) override;
@@ -89,6 +93,10 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rName,
         sal_uInt16 nToken);
+    static XMLTextFieldImportContext* CreateTextFieldImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_Int32 nElement);
 
 protected:
     /// get helper
@@ -985,9 +993,7 @@ class XMLUrlFieldImportContext final : public XMLTextFieldImportContext
 public:
 
     XMLUrlFieldImportContext(SvXMLImport& rImport,
-                             XMLTextImportHelper& rHlp,
-                             sal_uInt16 nPrfx,
-                             const OUString& sLocalName);
+                             XMLTextImportHelper& rHlp);
 
 private:
     /// no attributes -> empty method
