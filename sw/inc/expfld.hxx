@@ -76,7 +76,7 @@ public:
     /** Overlay, because get-field cannot be changed and therefore
      does not need to be updated. Update at changing of set-values! */
 private:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 };
 
 class SW_DLLPUBLIC SwGetExpField final : public SwFormulaField
@@ -149,7 +149,7 @@ class SW_DLLPUBLIC SwSetExpFieldType final : public SwValueFieldType
     sal_uInt8       m_nLevel;
     bool        m_bDeleted;
 
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
     SwSetExpFieldType( SwDoc* pDoc, const OUString& rName,
