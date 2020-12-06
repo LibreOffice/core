@@ -49,6 +49,8 @@
 #include <globdoc.hxx>
 #include <wview.hxx>
 
+#include <ndtxt.hxx>
+
 #define ShellClass_SwView
 #define ShellClass_Text
 #define ShellClass_TextDrawText
@@ -56,6 +58,8 @@
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 #include <PostItMgr.hxx>
+
+#include <FrameControlsManager.hxx>
 
 using namespace ::com::sun::star;
 
@@ -597,6 +601,24 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         if( STATE_TOGGLE == eState )
             bFlag = !pOpt->IsShowOutlineContentVisibilityButton();
 
+        if (!bFlag)
+        {
+            // make all content visible
+            SwWrtShell &rSh = GetWrtShell();
+            const SwOutlineNodes& rOutlineNds = rSh.GetNodes().GetOutLineNds();
+            for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
+            {
+                SwNode* pNd = rOutlineNds[nPos];
+                bool bOutlineContentVisibleAttr = true;
+                pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+                if (!bOutlineContentVisibleAttr)
+                {
+                    rSh.ToggleOutlineContentVisibility(nPos);
+                    pNd->GetTextNode()->SetAttrOutlineContentVisible(false);
+                }
+            }
+        }
+
         pOpt->SetShowOutlineContentVisibilityButton( bFlag );
         break;
 
@@ -639,9 +661,6 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     // #i6193# let postits know about new spellcheck setting
     if ( nSlot == SID_AUTOSPELL_CHECK )
         GetPostItMgr()->SetSpellChecking();
-
-    if (nSlot == FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON)
-        GetEditWin().SetOutlineContentVisibilityButtons();
 
     const bool bLockedView = rSh.IsViewLocked();
     rSh.LockView( true );    //lock visible section

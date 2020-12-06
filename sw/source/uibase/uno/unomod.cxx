@@ -96,6 +96,7 @@ enum SwViewSettingsPropertyHandles
     HANDLE_VIEWSET_USE_HEADERFOOTERMENU,
     HANDLE_VIEWSET_BOOKMARKS,
     HANDLE_VIEWSET_SHOW_OUTLINECONTENTVISIBILITYBUTTON,
+    HANDLE_VIEWSET_TREAT_SUB_OUTLINE_LEVELS_AS_CONTENT,
     HANDLE_VIEWSET_CHANGES_IN_MARGIN
 };
 
@@ -136,6 +137,7 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
         { OUString( "ShowInlineTooltips" ),  HANDLE_VIEWSET_INLINECHANGES_TIPS      , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "UseHeaderFooterMenu" ), HANDLE_VIEWSET_USE_HEADERFOOTERMENU , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "ShowOutlineContentVisibilityButton" ), HANDLE_VIEWSET_SHOW_OUTLINECONTENTVISIBILITYBUTTON , cppu::UnoType<bool>::get(), PROPERTY_NONE},
+        { OUString( "TreatSubOutlineLevelsAsContent" ), HANDLE_VIEWSET_TREAT_SUB_OUTLINE_LEVELS_AS_CONTENT , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "ShowChangesInMargin" ), HANDLE_VIEWSET_CHANGES_IN_MARGIN,       cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "RasterResolutionX"),    HANDLE_VIEWSET_RASTER_RESOLUTION_X,     cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
         { OUString( "RasterResolutionY"),    HANDLE_VIEWSET_RASTER_RESOLUTION_Y,     cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
@@ -600,6 +602,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_INLINECHANGES_TIPS    : mpViewOption->SetShowInlineTooltips(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_USE_HEADERFOOTERMENU  : mpViewOption->SetUseHeaderFooterMenu(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_SHOW_OUTLINECONTENTVISIBILITYBUTTON : mpViewOption->SetShowOutlineContentVisibilityButton(*o3tl::doAccess<bool>(rValue)); break;
+        case  HANDLE_VIEWSET_TREAT_SUB_OUTLINE_LEVELS_AS_CONTENT : mpViewOption->SetTreatSubOutlineLevelsAsContent(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_CHANGES_IN_MARGIN     : mpViewOption->SetShowChangesInMargin(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_X   :
         {
