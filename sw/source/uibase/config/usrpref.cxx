@@ -76,7 +76,7 @@ SwMasterUsrPref::~SwMasterUsrPref()
 }
 
 const auto g_UpdateLinkIndex = 17;
-const auto g_DefaultAnchor = 24;
+const auto g_DefaultAnchor = 25;
 
 Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
 {
@@ -105,8 +105,9 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
         "Display/ShowInlineTooltips",           // 20
         "Display/UseHeaderFooterMenu",          // 21
         "Display/ShowOutlineContentVisibilityButton", // 22
-        "Display/ShowChangesInMargin",          // 23
-        "Display/DefaultAnchor"                 // 24
+        "Display/TreatSubOutlineLevelsAsContent",     // 23
+        "Display/ShowChangesInMargin",          // 24
+        "Display/DefaultAnchor"                 // 25
     };
 #if defined(__GNUC__) && !defined(__clang__)
     // clang 8.0.0 says strcmp isn't constexpr
@@ -175,8 +176,9 @@ void SwContentViewConfig::ImplCommit()
             case 20: bVal = m_rParent.IsShowInlineTooltips(); break;// "Display/ShowInlineTooltips"
             case 21: bVal = m_rParent.IsUseHeaderFooterMenu(); break;// "Display/UseHeaderFooterMenu"
             case 22: bVal = m_rParent.IsShowOutlineContentVisibilityButton(); break;// "Display/ShowOutlineContentVisibilityButton"
-            case 23: bVal = m_rParent.IsShowChangesInMargin(); break;// "Display/ShowChangesInMargin"
-            case 24: pValues[nProp] <<= m_rParent.GetDefaultAnchor(); break;// "Display/DefaultAnchor"
+            case 23: bVal = m_rParent.IsTreatSubOutlineLevelsAsContent(); break;// "Display/TreatSubOutlineLevelsAsContent"
+            case 24: bVal = m_rParent.IsShowChangesInMargin(); break;// "Display/ShowChangesInMargin"
+            case 25: pValues[nProp] <<= m_rParent.GetDefaultAnchor(); break;// "Display/DefaultAnchor"
         }
         if ((nProp != g_UpdateLinkIndex) && (nProp != g_DefaultAnchor))
             pValues[nProp] <<= bVal;
@@ -229,8 +231,9 @@ void SwContentViewConfig::Load()
                 case 20: m_rParent.SetShowInlineTooltips(bSet); break;// "Display/ShowInlineTooltips"
                 case 21: m_rParent.SetUseHeaderFooterMenu(bSet); break;// "Display/UseHeaderFooterMenu"
                 case 22: m_rParent.SetShowOutlineContentVisibilityButton(bSet); break;// "Display/ShowOutlineContententVisibilityButton"
-                case 23: m_rParent.SetShowChangesInMargin(bSet); break;// "Display/ShowChangesInMargin"
-                case 24:
+                case 23: m_rParent.SetTreatSubOutlineLevelsAsContent(bSet); break;// "Display/TreatSubOutlineLevelsAsContent"
+                case 24: m_rParent.SetShowChangesInMargin(bSet); break;// "Display/ShowChangesInMargin"
+                case 25:
                 {
                     sal_Int32 nSet;
                     pValues[nProp] >>= nSet;

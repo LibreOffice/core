@@ -21,6 +21,8 @@
 #include <strings.hrc>
 #include <svx/svdview.hxx>
 
+#include <viewopt.hxx>
+
 SwOutlineContentVisibilityWin::SwOutlineContentVisibilityWin(SwEditWin* pEditWin,
                                                              const SwFrame* pFrame)
     : InterimItemWindow(pEditWin, "modules/swriter/ui/outlinebutton.ui", "OutlineButton")
@@ -50,7 +52,7 @@ SwOutlineContentVisibilityWin::SwOutlineContentVisibilityWin(SwEditWin* pEditWin
     m_xRightBtn->connect_key_press(LINK(this, SwOutlineContentVisibilityWin, KeyInputHdl));
     m_xDownBtn->connect_key_press(LINK(this, SwOutlineContentVisibilityWin, KeyInputHdl));
 
-    m_aDelayTimer.SetTimeout(50);
+    m_aDelayTimer.SetTimeout(25);
     m_aDelayTimer.SetInvokeHandler(LINK(this, SwOutlineContentVisibilityWin, DelayAppearHandler));
 }
 
@@ -132,44 +134,17 @@ void SwOutlineContentVisibilityWin::Set()
         return;
     }
 
-    // don't set if no content and no subs with content
-    auto nPos = m_nOutlinePos;
-    SwNode* pSttNd = rOutlineNodes[nPos];
-    SwNode* pEndNd;
-    SwNodeIndex aIdx(*pSttNd);
-    while (true)
-    {
-        if (rOutlineNodes.size() > ++nPos)
-            pEndNd = rOutlineNodes[nPos];
-        else
-            pEndNd = &rSh.GetNodes().GetEndOfContent();
-        if (!pSttNd->IsEndNode())
-            aIdx.Assign(*pSttNd, +1);
-        if (pSttNd->IsEndNode()
-            || ((&aIdx.GetNode() == pEndNd && pEndNd->IsEndNode())
-                || (&aIdx.GetNode() == pEndNd && pSttNd->IsTextNode() && pEndNd->IsTextNode()
-                    && pSttNd->GetTextNode()->GetAttrOutlineLevel()
-                           >= pEndNd->GetTextNode()->GetAttrOutlineLevel())))
-        {
-            SetSymbol(SymbolType::DONTKNOW);
-            Hide();
-            return;
-        }
-        if (&aIdx.GetNode() != pEndNd)
-            break;
-        pSttNd = pEndNd;
-    }
-
     // set symbol displayed on button
-    SetSymbol(rSh.IsOutlineContentFolded(m_nOutlinePos) ? SymbolType::ARROW_RIGHT
-                                                        : SymbolType::ARROW_DOWN);
+    SetSymbol(rSh.IsOutlineContentVisible(m_nOutlinePos) ? SymbolType::ARROW_DOWN
+                                                         : SymbolType::ARROW_RIGHT);
 
     // set quick help
     SwOutlineNodes::size_type nOutlineNodesCount
         = rSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
     int nLevel = rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(m_nOutlinePos);
     OUString sQuickHelp(SwResId(STR_OUTLINE_CONTENT_TOGGLE_VISIBILITY));
-    if (m_nOutlinePos + 1 < nOutlineNodesCount
+    if (!rSh.GetViewOptions()->IsTreatSubOutlineLevelsAsContent()
+        && m_nOutlinePos + 1 < nOutlineNodesCount
         && rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(m_nOutlinePos + 1) > nLevel)
         sQuickHelp += " (" + SwResId(STR_OUTLINE_CONTENT_TOGGLE_VISIBILITY_EXT) + ")";
     SetQuickHelpText(sQuickHelp);
@@ -219,30 +194,30 @@ void SwOutlineContentVisibilityWin::ToggleOutlineContentVisibility(const bool bS
     // set cursor position here so Navigator tracks outline
     // when doc changed broadcast message is sent in toggle function
     rSh.GotoOutline(m_nOutlinePos);
-    if (bSubs)
+    if (rSh.GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
+        rSh.ToggleOutlineContentVisibility(m_nOutlinePos);
+    else if (bSubs)
     {
         // toggle including sub levels
         SwOutlineNodes::size_type nPos = m_nOutlinePos;
         SwOutlineNodes::size_type nOutlineNodesCount
             = rSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
         int nLevel = rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(m_nOutlinePos);
-        bool bFold = rSh.IsOutlineContentFolded(m_nOutlinePos);
+        bool bVisible = rSh.IsOutlineContentVisible(m_nOutlinePos);
         do
         {
-            if (rSh.IsOutlineContentFolded(nPos) == bFold)
+            if (rSh.IsOutlineContentVisible(nPos) == bVisible)
                 rSh.ToggleOutlineContentVisibility(nPos);
         } while (++nPos < nOutlineNodesCount
                  && rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos) > nLevel);
     }
     else
         rSh.ToggleOutlineContentVisibility(m_nOutlinePos);
-
     if (!m_bDestroyed)
     {
-        SetSymbol(rSh.IsOutlineContentFolded(m_nOutlinePos) ? SymbolType::ARROW_RIGHT
-                                                            : SymbolType::ARROW_DOWN);
+        SetSymbol(rSh.IsOutlineContentVisible(m_nOutlinePos) ? SymbolType::ARROW_DOWN
+                                                             : SymbolType::ARROW_RIGHT);
     }
-
     rSh.LockView(false);
 }
 

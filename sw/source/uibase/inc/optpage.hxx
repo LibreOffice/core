@@ -54,12 +54,15 @@ class SwContentOptPage : public SfxTabPage
     std::unique_ptr<weld::ComboBox> m_xMetricLB;
 
     std::unique_ptr<weld::CheckButton> m_xShowInlineTooltips;
+    std::unique_ptr<weld::Label> m_xOutlineLabel;
     std::unique_ptr<weld::CheckButton> m_xShowOutlineContentVisibilityButton;
+    std::unique_ptr<weld::CheckButton> m_xTreatSubOutlineLevelsAsContent;
     std::unique_ptr<weld::CheckButton> m_xShowChangesInMargin;
     std::unique_ptr<weld::CheckButton> m_xFieldHiddenCB;
     std::unique_ptr<weld::CheckButton> m_xFieldHiddenParaCB;
 
     DECL_LINK(VertRulerHdl, weld::ToggleButton&, void);
+    DECL_LINK(ShowOutlineContentVisibilityButtonHdl, weld::ToggleButton&, void);
 public:
     SwContentOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SwContentOptPage() override;

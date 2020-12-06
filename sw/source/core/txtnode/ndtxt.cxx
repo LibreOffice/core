@@ -4020,7 +4020,7 @@ void SwTextNode::SetAttrOutlineContentVisible(bool bVisible)
 {
     SfxGrabBagItem aGrabBagItem(RES_PARATR_GRABBAG);
     aGrabBagItem.GetGrabBag()["OutlineContentVisibleAttr"] <<= bVisible;
-    GetTextNode()->SetAttr(aGrabBagItem);
+    SetAttr(aGrabBagItem);
 }
 
 // #i70748#

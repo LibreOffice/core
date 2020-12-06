@@ -1989,32 +1989,30 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
             pFormat->Broadcast( SwFormatFieldHint( nullptr, SwFormatFieldHintWhich::FOCUS, &GetView() ) );
     }
 }
-bool SwWrtShell::IsOutlineContentFolded(const size_t nPos)
+bool SwWrtShell::IsOutlineContentVisible(const size_t nPos)
 {
     const SwNodes& rNodes = GetDoc()->GetNodes();
     const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
 
-    assert(nPos < rOutlineNodes.size());
-
     SwNode* pOutlineNode = rOutlineNodes[nPos];
     if (pOutlineNode->IsEndNode())
-        return false;
+        return true;
 
     bool bOutlineContentVisibleAttr = false;
     if (pOutlineNode->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr))
-        return !bOutlineContentVisibleAttr;
+        return bOutlineContentVisibleAttr;
 
-    return false;
+    return true;
 }
 
-void SwWrtShell::ToggleOutlineContentVisibility(SwNode* pNd, bool bForceFold)
+void SwWrtShell::ToggleOutlineContentVisibility(SwNode* pNd, const bool bForceNotVisible)
 {
     SwOutlineNodes::size_type nPos;
     if (GetNodes().GetOutLineNds().Seek_Entry(pNd, &nPos))
-        ToggleOutlineContentVisibility(nPos, bForceFold);
+        ToggleOutlineContentVisibility(nPos, bForceNotVisible);
 }
 
-void SwWrtShell::ToggleOutlineContentVisibility(size_t nPos, bool bForceFold)
+void SwWrtShell::ToggleOutlineContentVisibility(const size_t nPos, const bool bForceNotVisible)
 {
     const SwNodes& rNodes = GetNodes();
     const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
@@ -2031,7 +2029,7 @@ void SwWrtShell::ToggleOutlineContentVisibility(size_t nPos, bool bForceFold)
 
     if (pSttNd->GetTableBox() || pSttNd->GetIndex() < rNodes.GetEndOfExtras().GetIndex())
     {
-        // limit folding to within table box
+        // limit toggle to within table box
         if (pSttNd->EndOfSectionIndex() < pEndNd->GetIndex() )
             pEndNd = pSttNd->EndOfSectionNode();
     }
@@ -2049,17 +2047,47 @@ void SwWrtShell::ToggleOutlineContentVisibility(size_t nPos, bool bForceFold)
         }
     }
 
-    if (IsOutlineContentFolded(nPos) && !bForceFold)
+    if (GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
     {
-        // unfold
-        SwNodeIndex aIdx(*pSttNd, +1);
+        int nLevel = pSttNd->GetTextNode()->GetAttrOutlineLevel();
+        SwOutlineNodes::size_type iPos = nPos;
+        while (++iPos < rOutlineNodes.size() &&
+               rOutlineNodes[iPos]->GetTextNode()->GetAttrOutlineLevel() > nLevel);
+
+        // get the correct end node
+        // the outline node may be in frames, headers, footers special section of doc model
+        SwNode* pStartOfSectionNodeSttNd = pSttNd->StartOfSectionNode();
+        while (pStartOfSectionNodeSttNd->StartOfSectionNode()
+               != pStartOfSectionNodeSttNd->StartOfSectionNode()->StartOfSectionNode())
+        {
+            pStartOfSectionNodeSttNd = pStartOfSectionNodeSttNd->StartOfSectionNode();
+        }
+        pEndNd = pStartOfSectionNodeSttNd->EndOfSectionNode();
+
+        if (iPos < rOutlineNodes.size())
+        {
+            SwNode* pStartOfSectionNode = rOutlineNodes[iPos]->StartOfSectionNode();
+            while (pStartOfSectionNode->StartOfSectionNode()
+                   != pStartOfSectionNode->StartOfSectionNode()->StartOfSectionNode())
+            {
+                pStartOfSectionNode = pStartOfSectionNode->StartOfSectionNode();
+            }
+            if (pStartOfSectionNodeSttNd == pStartOfSectionNode)
+                pEndNd = rOutlineNodes[iPos];
+        }
+    }
+
+    SwNodeIndex aIdx(*pSttNd, +1); // the next node after pSttdNd in the doc model SwNodes
+    if (!IsOutlineContentVisible(nPos) && !bForceNotVisible)
+    {
+        // make visible
         MakeFrames(GetDoc(), aIdx, *pEndNd);
 
         pSttNd->GetTextNode()->SetAttrOutlineContentVisible(true);
 
         if (GetViewOptions()->IsShowOutlineContentVisibilityButton())
         {
-            // remove fold button if focus is not on outline frame control window
+            // remove button if focus is not on outline frame control window
             SwContentFrame* pFrame = pSttNd->GetTextNode()->getLayoutFrame(nullptr);
             if (pFrame && !pFrame->IsInDtor())
             {
@@ -2068,7 +2096,7 @@ void SwWrtShell::ToggleOutlineContentVisibility(size_t nPos, bool bForceFold)
                     GetView().GetEditWin().GetFrameControlsManager().RemoveControlsByType(FrameControlType::Outline, pFrame);
             }
 
-            // fold revealed outline nodes that have collapsed content
+            // toggle outline content made visible that have outline visible attribute false
             while (aIdx != *pEndNd)
             {
                 SwNode* pTmpNd = &aIdx.GetNode();
@@ -2083,7 +2111,7 @@ void SwWrtShell::ToggleOutlineContentVisibility(size_t nPos, bool bForceFold)
                         if (rOutlineNodes.Seek_Entry(pTmpTextNd, &iPos))
                         {
                             if (pTmpTextNd->getLayoutFrame(nullptr))
-                                ToggleOutlineContentVisibility(iPos, true);
+                                ToggleOutlineContentVisibility(iPos, true); // force not visible
                         }
                     }
                 }
@@ -2093,18 +2121,19 @@ void SwWrtShell::ToggleOutlineContentVisibility(size_t nPos, bool bForceFold)
     }
     else
     {
-        // fold
-        for (SwNodeIndex aIdx(*pSttNd, +1); &aIdx.GetNode() != pEndNd; aIdx++)
+        // remove content frames
+        while (aIdx != *pEndNd)
         {
             SwNode* pNd = &aIdx.GetNode();
             if (pNd->IsContentNode())
                 pNd->GetContentNode()->DelFrames(nullptr);
             else if (pNd->IsTableNode())
                 pNd->GetTableNode()->DelFrames(nullptr);
+            aIdx++;
         }
         pSttNd->GetTextNode()->SetAttrOutlineContentVisible(false);
     }
-    GetView().GetEditWin().Invalidate(InvalidateFlags::Update);
+
     GetDoc()->GetDocShell()->Broadcast(SfxHint(SfxHintId::DocChanged));
 }
 
