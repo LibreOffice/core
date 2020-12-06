@@ -490,9 +490,9 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     /// Inserts a new annotation/comment at the current cursor position / selection.
     void InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq);
 
-    bool IsOutlineContentFolded(const size_t nPos);
-    void ToggleOutlineContentVisibility(SwNode* pNd, bool bForceFold = false);
-    void ToggleOutlineContentVisibility(const size_t nPos, bool bForceFold = false);
+    bool IsOutlineContentVisible(const size_t nPos);
+    void ToggleOutlineContentVisibility(SwNode* pNd, const bool bForceNotVisible = false);
+    void ToggleOutlineContentVisibility(const size_t nPos, const bool bForceNotVisible = false);
 
 private:
 

@@ -1262,7 +1262,7 @@ static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, cons
             nPos++;
         }
 
-        bool bHasFolded(pThis->GetWrtShell()->IsOutlineContentFolded(nPos));
+        bool bHasFolded(!pThis->GetWrtShell()->IsOutlineContentVisible(nPos));
         bool bHasUnfolded(!bHasFolded);
 
         while ((++nPos < pThis->GetWrtShell()->getIDocumentOutlineNodesAccess()->getOutlineNodesCount()) &&
@@ -1278,7 +1278,7 @@ static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, cons
             if (rNodes.GoNext(&aIdx) == pEndNd)
                 continue; // skip if no content
 
-            if (pThis->GetWrtShell()->IsOutlineContentFolded(nPos))
+            if (!pThis->GetWrtShell()->IsOutlineContentVisible(nPos))
                 bHasFolded = true;
             else
                 bHasUnfolded = true;
@@ -2840,6 +2840,7 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
 
     SwOutlineNodes::difference_type nDirLast = bUp ? -1 : 1;
     bool bStartedAction = false;
+    std::vector<SwNode*> aOutlineNdsArray;
     for (auto const& pCurrentEntry : selected)
     {
         assert(pCurrentEntry && lcl_IsContent(*pCurrentEntry, *m_xTreeView));
@@ -2861,6 +2862,29 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
         if (!bStartedAction)
         {
             pShell->StartAllAction();
+            if (bUpDown)
+            {
+                if (pShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+                {
+                    // make all outline nodes content visible before move
+                    // restore outline nodes content visibile state after move
+                    SwOutlineNodes rOutlineNds = pShell->GetDoc()->GetNodes().GetOutLineNds();
+                    for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
+                    {
+                        SwNode* pNd = rOutlineNds[nPos];
+                        if (pNd->IsTextNode()) // should always be true
+                        {
+                            bool bOutlineContentVisibleAttr = true;
+                            pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+                            if (!bOutlineContentVisibleAttr)
+                            {
+                                aOutlineNdsArray.push_back(pNd);
+                                pShell->ToggleOutlineContentVisibility(nPos);
+                            }
+                        }
+                    }
+                }
+            }
             pShell->StartUndo(bLeftRight ? SwUndoId::OUTLINE_LR : SwUndoId::OUTLINE_UD);
             bStartedAction = true;
         }
@@ -3032,6 +3056,15 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
     if (bStartedAction)
     {
         pShell->EndUndo();
+        if (bUpDown)
+        {
+            if (pShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+            {
+                // restore state of outline content visibility to before move
+                for (SwNode* pNd : aOutlineNdsArray)
+                    pShell->ToggleOutlineContentVisibility(pNd, true);
+            }
+        }
         pShell->EndAllAction();
         if (m_aActiveContentArr[ContentTypeId::OUTLINE])
             m_aActiveContentArr[ContentTypeId::OUTLINE]->Invalidate();
@@ -3365,6 +3398,28 @@ void SwContentTree::MoveOutline(SwOutlineNodes::size_type nTargetPos)
 {
     SwWrtShell *const pShell = GetWrtShell();
     pShell->StartAllAction();
+    std::vector<SwNode*> aOutlineNdsArray;
+
+    if (pShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    {
+        // make all outline nodes content visible before move
+        // restore outline nodes content visibile state after move
+        SwOutlineNodes rOutlineNds = pShell->GetDoc()->GetNodes().GetOutLineNds();
+        for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
+        {
+            SwNode* pNd = rOutlineNds[nPos];
+            if (pNd->IsTextNode()) // should always be true
+            {
+                bool bOutlineContentVisibleAttr = true;
+                pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+                if (!bOutlineContentVisibleAttr)
+                {
+                    aOutlineNdsArray.push_back(pNd);
+                    pShell->ToggleOutlineContentVisibility(nPos);
+                }
+            }
+        }
+    }
     pShell->StartUndo(SwUndoId::OUTLINE_UD);
 
     SwOutlineNodes::size_type nPrevSourcePos = SwOutlineNodes::npos;
@@ -3415,6 +3470,12 @@ void SwContentTree::MoveOutline(SwOutlineNodes::size_type nTargetPos)
     }
 
     pShell->EndUndo();
+    if (pShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    {
+        // restore state of outline content visibility to before move
+        for (SwNode* pNd : aOutlineNdsArray)
+            pShell->ToggleOutlineContentVisibility(pNd, true);
+    }
     pShell->EndAllAction();
     m_aActiveContentArr[ContentTypeId::OUTLINE]->Invalidate();
     Display(true);
@@ -3726,6 +3787,11 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
             m_pActiveShell->EnterStdMode();
             m_bIgnoreViewChange = true;
             SwOutlineContent* pCntFirst = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xFirst).toInt64());
+            if (lcl_IsContentType(*xFirst, *m_xTreeView)) // Headings root entry
+                m_pActiveShell->GotoPage(1, true);
+            else
+                GotoContent(pCntFirst);
+            grab_focus();
             if (nSelectedPopupEntry == 1512)
             {
                 m_pActiveShell->ToggleOutlineContentVisibility(pCntFirst->GetOutlinePos());
@@ -3745,16 +3811,11 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
                 bool bFold(nSelectedPopupEntry == 1514);
                 do
                 {
-                    if (m_pActiveShell->IsOutlineContentFolded(nPos) == bFold)
+                    if (!m_pActiveShell->IsOutlineContentVisible(nPos) == bFold)
                         m_pActiveShell->ToggleOutlineContentVisibility(nPos);
                 } while (++nPos < nOutlineNodesCount
                          && (nLevel == -1 || m_pActiveShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos) > nLevel));
             }
-            if (lcl_IsContentType(*xFirst, *m_xTreeView)) // Headings root entry
-                m_pActiveShell->GotoPage(1, true);
-            else
-                GotoContent(pCntFirst);
-            grab_focus();
             m_bIgnoreViewChange = false;
         }
         break;

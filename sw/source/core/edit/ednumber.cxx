@@ -28,6 +28,9 @@
 #include <numrule.hxx>
 #include <osl/diagnose.h>
 
+#include <viewopt.hxx>
+#include <wrtsh.hxx>
+
 SwPamRanges::SwPamRanges( const SwPaM& rRing )
 {
     for(SwPaM& rTmp : const_cast<SwPaM*>(&rRing)->GetRingContainer())
@@ -391,8 +394,53 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
     EndAllAction();
 }
 
+namespace
+{
+class MakeAllOutlineContentTemporarilyVisibile
+{
+private:
+    SwWrtShell* pWrtShell;
+    std::vector<SwNode*> aOutlineNdsArray;
+public:
+    MakeAllOutlineContentTemporarilyVisibile(SwWrtShell* pShell)
+    {
+        pWrtShell = pShell;
+        if (pWrtShell && pWrtShell->GetViewOptions() && pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+        {
+            // make all outlines content visible and store outline nodes having
+            // content visible attribute value false
+            SwOutlineNodes rOutlineNds = pWrtShell->GetNodes().GetOutLineNds();
+            for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
+            {
+                SwNode* pNd = rOutlineNds[nPos];
+                if (pNd->IsTextNode()) // should always be true
+                {
+                    bool bOutlineContentVisibleAttr = true;
+                    pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+                    if (!bOutlineContentVisibleAttr)
+                    {
+                        aOutlineNdsArray.push_back(pNd);
+                        pWrtShell->ToggleOutlineContentVisibility(nPos);
+                    }
+                }
+            }
+        }
+    }
+
+    ~MakeAllOutlineContentTemporarilyVisibile()
+    {
+        // restore outlines content visibility
+        for (SwNode* pNd : aOutlineNdsArray)
+            pWrtShell->ToggleOutlineContentVisibility(pNd, true);
+    }
+};
+}
+
 bool SwEditShell::MoveParagraph( tools::Long nOffset )
 {
+    // make all outline nodes content temporarily visibile for paragraph move
+    MakeAllOutlineContentTemporarilyVisibile a(dynamic_cast<SwWrtShell*>(this));
+
     StartAllAction();
 
     SwPaM *pCursor = GetCursor();

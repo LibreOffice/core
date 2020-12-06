@@ -1079,6 +1079,14 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="TreatSubOutlineLevelsAsContent" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Writer - View - [Section] Outline mode -->
+          <info>
+            <desc>Enables the writer outline content visibility feature to treat sub outline levels as content.</desc>
+            <label>Treat sub outline levels as content</label>
+          </info>
+          <value>false</value>
+        </prop>
         <prop oor:name="ShowChangesInMargin" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options - Writer - View - [Section] Display tracked changes -->
           <info>
