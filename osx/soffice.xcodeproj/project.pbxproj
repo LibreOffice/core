@@ -562,23 +562,23 @@
 		BEBF3ED42472B21600415E87 /* dp_dependencies.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_dependencies.cxx; path = ../desktop/source/deployment/misc/dp_dependencies.cxx; sourceTree = "<group>"; };
 		BEBF3ED52472B21600415E87 /* dp_ucb.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dp_ucb.cxx; path = ../desktop/source/deployment/misc/dp_ucb.cxx; sourceTree = "<group>"; };
 		BEC676DE17461A720069E01D /* dbggui.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbggui.cxx; path = ../vcl/source/app/dbggui.cxx; sourceTree = "<group>"; };
-		BEDCC8B92459A10600FB02BD /* unointerfaceproxy.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unointerfaceproxy.cxx; path = ../../bridges/source/cpp_uno/shared/unointerfaceproxy.cxx; sourceTree = "<group>"; };
-		BEDCC8BA2459A10600FB02BD /* types.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = types.cxx; path = ../../bridges/source/cpp_uno/shared/types.cxx; sourceTree = "<group>"; };
-		BEDCC8BB2459A10600FB02BD /* vtables.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vtables.cxx; path = ../../bridges/source/cpp_uno/shared/vtables.cxx; sourceTree = "<group>"; };
-		BEDCC8BC2459A10600FB02BD /* vtablefactory.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vtablefactory.cxx; path = ../../bridges/source/cpp_uno/shared/vtablefactory.cxx; sourceTree = "<group>"; };
-		BEDCC8BD2459A10600FB02BD /* bridge.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bridge.cxx; path = ../../bridges/source/cpp_uno/shared/bridge.cxx; sourceTree = "<group>"; };
-		BEDCC8BE2459A10600FB02BD /* component.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = component.cxx; path = ../../bridges/source/cpp_uno/shared/component.cxx; sourceTree = "<group>"; };
-		BEDCC8BF2459A10600FB02BD /* cppinterfaceproxy.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cppinterfaceproxy.cxx; path = ../../bridges/source/cpp_uno/shared/cppinterfaceproxy.cxx; sourceTree = "<group>"; };
-		BEDCC8C12459A12E00FB02BD /* uno2cpp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uno2cpp.cxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/uno2cpp.cxx"; sourceTree = "<group>"; };
-		BEDCC8C22459A12E00FB02BD /* cpp2uno.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cpp2uno.cxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/cpp2uno.cxx"; sourceTree = "<group>"; };
-		BEDCC8C32459A12E00FB02BD /* share.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = share.hxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/share.hxx"; sourceTree = "<group>"; };
-		BEDCC8C42459A12E00FB02BD /* except.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = except.cxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/except.cxx"; sourceTree = "<group>"; };
-		BEDCC8C52459A12E00FB02BD /* abi.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = abi.cxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/abi.cxx"; sourceTree = "<group>"; };
-		BEDCC8C62459A12E00FB02BD /* call.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = call.cxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/call.cxx"; sourceTree = "<group>"; };
-		BEDCC8C72459A12E00FB02BD /* call.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = call.hxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/call.hxx"; sourceTree = "<group>"; };
-		BEDCC8C82459A12E00FB02BD /* abi.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = abi.hxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/abi.hxx"; sourceTree = "<group>"; };
-		BEDCC8C92459A12E00FB02BD /* callvirtualmethod.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = callvirtualmethod.hxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/callvirtualmethod.hxx"; sourceTree = "<group>"; };
-		BEDCC8CA2459A12E00FB02BD /* callvirtualmethod.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = callvirtualmethod.cxx; path = "../../../bridges/source/cpp_uno/gcc3_macosx_x86-64/callvirtualmethod.cxx"; sourceTree = "<group>"; };
+		BEDCC8B92459A10600FB02BD /* unointerfaceproxy.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unointerfaceproxy.cxx; path = ../bridges/source/cpp_uno/shared/unointerfaceproxy.cxx; sourceTree = "<group>"; };
+		BEDCC8BA2459A10600FB02BD /* types.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = types.cxx; path = ../bridges/source/cpp_uno/shared/types.cxx; sourceTree = "<group>"; };
+		BEDCC8BB2459A10600FB02BD /* vtables.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vtables.cxx; path = ../bridges/source/cpp_uno/shared/vtables.cxx; sourceTree = "<group>"; };
+		BEDCC8BC2459A10600FB02BD /* vtablefactory.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vtablefactory.cxx; path = ../bridges/source/cpp_uno/shared/vtablefactory.cxx; sourceTree = "<group>"; };
+		BEDCC8BD2459A10600FB02BD /* bridge.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bridge.cxx; path = ../bridges/source/cpp_uno/shared/bridge.cxx; sourceTree = "<group>"; };
+		BEDCC8BE2459A10600FB02BD /* component.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = component.cxx; path = ../bridges/source/cpp_uno/shared/component.cxx; sourceTree = "<group>"; };
+		BEDCC8BF2459A10600FB02BD /* cppinterfaceproxy.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cppinterfaceproxy.cxx; path = ../bridges/source/cpp_uno/shared/cppinterfaceproxy.cxx; sourceTree = "<group>"; };
+		BEDCC8C12459A12E00FB02BD /* uno2cpp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uno2cpp.cxx; path = "../bridges/source/cpp_uno/gcc3_macosx_x86-64/uno2cpp.cxx"; sourceTree = "<group>"; };
+		BEDCC8C22459A12E00FB02BD /* cpp2uno.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cpp2uno.cxx; path = "../bridges/source/cpp_uno/gcc3_macosx_x86-64/cpp2uno.cxx"; sourceTree = "<group>"; };
+		BEDCC8C32459A12E00FB02BD /* share.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = share.hxx; path = "../bridges/source/cpp_uno/gcc3_macosx_x86-64/share.hxx"; sourceTree = "<group>"; };
+		BEDCC8C42459A12E00FB02BD /* except.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = except.cxx; path = "../bridges/source/cpp_uno/gcc3_macosx_x86-64/except.cxx"; sourceTree = "<group>"; };
+		BEDCC8C52459A12E00FB02BD /* abi.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = abi.cxx; path = "../bridges/source/cpp_uno/gcc3_macosx_x86-64/abi.cxx"; sourceTree = "<group>"; };
+		BEDCC8C62459A12E00FB02BD /* call.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = call.cxx; path = "../bridges/source/cpp_uno/gcc3_macosx_x86-64/call.cxx"; sourceTree = "<group>"; };
+		BEDCC8C72459A12E00FB02BD /* call.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = call.hxx; path = "../bridges/source/cpp_uno/gcc3_macosx_x86-64/call.hxx"; sourceTree = "<group>"; };
+		BEDCC8C82459A12E00FB02BD /* abi.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = abi.hxx; path = "../bridges/source/cpp_uno/gcc3_macosx_x86-64/abi.hxx"; sourceTree = "<group>"; };
+		BEDCC8C92459A12E00FB02BD /* callvirtualmethod.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = callvirtualmethod.hxx; path = "../bridges/source/cpp_uno/gcc3_macosx_x86-64/callvirtualmethod.hxx"; sourceTree = "<group>"; };
+		BEDCC8CA2459A12E00FB02BD /* callvirtualmethod.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = callvirtualmethod.cxx; path = "../bridges/source/cpp_uno/gcc3_macosx_x86-64/callvirtualmethod.cxx"; sourceTree = "<group>"; };
 		BEDCC8F2246080F600FB02BD /* transliterationwrapper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = transliterationwrapper.cxx; path = ../unotools/source/i18n/transliterationwrapper.cxx; sourceTree = "<group>"; };
 		BEDCC8F3246080F600FB02BD /* localedatawrapper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = localedatawrapper.cxx; path = ../unotools/source/i18n/localedatawrapper.cxx; sourceTree = "<group>"; };
 		BEDCC8F4246080F600FB02BD /* readwritemutexguard.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = readwritemutexguard.cxx; path = ../unotools/source/i18n/readwritemutexguard.cxx; sourceTree = "<group>"; };
@@ -1533,7 +1533,7 @@
 				BEDCC8C02459A11C00FB02BD /* gcc3_macosx_x86-64 */,
 				BEDCC8B82459A0ED00FB02BD /* shared */,
 			);
-			path = cpp_uno;
+			name = cpp_uno;
 			sourceTree = "<group>";
 		};
 		BEDCC8B82459A0ED00FB02BD /* shared */ = {
@@ -1564,7 +1564,7 @@
 				BEDCC8C32459A12E00FB02BD /* share.hxx */,
 				BEDCC8C12459A12E00FB02BD /* uno2cpp.cxx */,
 			);
-			path = "gcc3_macosx_x86-64";
+			name = "gcc3_macosx_x86-64";
 			sourceTree = "<group>";
 		};
 		BEDCC8F02460807C00FB02BD /* unotools */ = {
