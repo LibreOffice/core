@@ -2546,7 +2546,7 @@ bool SwFrameFormat::supportsFullDrawingLayerFillAttributeSet() const
     return true;
 }
 
-void SwFrameFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
+void SwFrameFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
     auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
     if(!pLegacy)
@@ -2639,7 +2639,7 @@ void SwFrameFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
         SwFrameFormat* pFormat = GetDoc()->getIDocumentLayoutAccess().MakeLayoutFormat(RndStdIds::FOOTER, nullptr);
         const_cast<SwFormatFooter*>(pF)->RegisterToFormat(*pFormat);
     }
-    SwFormat::Modify(pLegacy->m_pOld, pLegacy->m_pNew);
+    SwFormat::SwClientNotify(rMod, rHint);
     if(pOldAnchorPosition != nullptr && (pNewAnchorPosition == nullptr || pOldAnchorPosition->nNode.GetIndex() != pNewAnchorPosition->nNode.GetIndex()))
         pOldAnchorPosition->nNode.GetNode().RemoveAnchoredFly(this);
     if(pNewAnchorPosition != nullptr && (pOldAnchorPosition == nullptr || pOldAnchorPosition->nNode.GetIndex() != pNewAnchorPosition->nNode.GetIndex()))

@@ -242,85 +242,92 @@ SwFormat::~SwFormat()
     }
 }
 
-void SwFormat::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
+void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    std::unique_ptr<SwAttrSetChg> pOldClientChg, pNewClientChg;
-    auto aDependArgs = std::pair<const SfxPoolItem*, const SfxPoolItem*>(pOldValue, pNewValue);
-    bool bPassToDepends = true;
-    const sal_uInt16 nWhich = pOldValue ? pOldValue->Which()
-            : pNewValue ? pNewValue->Which()
-            : 0;
-    switch( nWhich )
-    {
-    case 0:     break;          // Which-Id of 0?
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
 
-    case RES_OBJECTDYING:
-        // NB: this still notifies depends even if pNewValue is nullptr, which seems non-obvious
-        if (pNewValue)
+    std::unique_ptr<SwAttrSetChg> pOldClientChg, pNewClientChg;
+    auto aDependArgs = std::pair<const SfxPoolItem*, const SfxPoolItem*>(pLegacy->m_pOld, pLegacy->m_pNew);
+    bool bPassToDepends = true;
+    const sal_uInt16 nWhich = pLegacy->GetWhich();
+    switch(nWhich)
+    {
+        case 0:
+            break;
+        case RES_OBJECTDYING:
         {
+            // NB: this still notifies depends even if pLegacy->m_pNew is nullptr, which seems non-obvious
+            if(!pLegacy->m_pNew)
+                break;
             // If the dying object is the parent format of this format so
             // attach this to the parent of the parent
-            SwFormat* pFormat = static_cast<SwFormat*>(static_cast<const SwPtrMsgPoolItem*>(pNewValue)->pObject);
+            SwFormat* pFormat = static_cast<SwFormat*>(static_cast<const SwPtrMsgPoolItem*>(pLegacy->m_pNew)->pObject);
 
             // do not move if this is the topmost format
-            if( GetRegisteredIn() && GetRegisteredIn() == pFormat )
+            if(GetRegisteredIn() && GetRegisteredIn() == pFormat)
             {
-                if( pFormat->GetRegisteredIn() )
+                if(pFormat->GetRegisteredIn())
                 {
                     // if parent so register in new parent
-                    pFormat->DerivedFrom()->Add( this );
-                    m_aSet.SetParent( &DerivedFrom()->m_aSet );
+                    pFormat->DerivedFrom()->Add(this);
+                    m_aSet.SetParent(&DerivedFrom()->m_aSet);
                 }
                 else
                 {
                     // otherwise de-register at least from dying one
                     EndListeningAll();
-                    m_aSet.SetParent( nullptr );
+                    m_aSet.SetParent(nullptr);
                 }
             }
+            break;
         }
-        break;
-    case RES_ATTRSET_CHG:
-        // NB: this still notifies depends even if this condition is not met, which seems non-obvious
-        if (pOldValue && pNewValue && static_cast<const SwAttrSetChg*>(pOldValue)->GetTheChgdSet() != &m_aSet)
+        case RES_ATTRSET_CHG:
         {
-            // pass only those that are not set...
-            pNewClientChg.reset( new SwAttrSetChg(*static_cast<const SwAttrSetChg*>(pNewValue)) );
-            pNewClientChg->GetChgSet()->Differentiate( m_aSet );
-            if(pNewClientChg->Count()) // ... if any
+            // NB: this still notifies depends even if this condition is not met, which seems non-obvious
+            auto pOldAttrSetChg = static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
+            auto pNewAttrSetChg = static_cast<const SwAttrSetChg*>(pLegacy->m_pNew);
+            if (pOldAttrSetChg && pNewAttrSetChg && pOldAttrSetChg->GetTheChgdSet() != &m_aSet)
             {
-                pOldClientChg.reset( new SwAttrSetChg(*static_cast<const SwAttrSetChg*>(pOldValue)) );
-                pOldClientChg->GetChgSet()->Differentiate( m_aSet );
-                aDependArgs = std::pair<const SfxPoolItem*, const SfxPoolItem*>(pOldClientChg.get(), pNewClientChg.get());
+                // pass only those that are not set...
+                pNewClientChg.reset(new SwAttrSetChg(*pNewAttrSetChg));
+                pNewClientChg->GetChgSet()->Differentiate(m_aSet);
+                if(pNewClientChg->Count()) // ... if any
+                {
+                    pOldClientChg.reset(new SwAttrSetChg(*pOldAttrSetChg));
+                    pOldClientChg->GetChgSet()->Differentiate(m_aSet);
+                    aDependArgs = std::pair<const SfxPoolItem*, const SfxPoolItem*>(pOldClientChg.get(), pNewClientChg.get());
+                }
+                else
+                    bPassToDepends = false;
             }
-            else
-                bPassToDepends = false;
+            break;
         }
-        break;
-    case RES_FMT_CHG:
-        // if the format parent will be moved so register my attribute set at
-        // the new one
+        case RES_FMT_CHG:
+        {
+            // if the format parent will be moved so register my attribute set at
+            // the new one
 
-        // skip my own Modify
-        // NB: this still notifies depends even if this condition is not met, which seems non-obvious
-        if ( pOldValue && pNewValue &&
-            static_cast<const SwFormatChg*>(pOldValue)->pChangedFormat != this &&
-            static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat == GetRegisteredIn() )
-        {
-            // attach Set to new parent
-            m_aSet.SetParent( DerivedFrom() ? &DerivedFrom()->m_aSet : nullptr );
+            // skip my own Modify
+            // NB: this still notifies depends even if this condition is not met, which seems non-obvious
+            auto pOldFormatChg = static_cast<const SwFormatChg*>(pLegacy->m_pOld);
+            auto pNewFormatChg = static_cast<const SwFormatChg*>(pLegacy->m_pNew);
+            if(pOldFormatChg && pNewFormatChg && pOldFormatChg->pChangedFormat != this && pNewFormatChg->pChangedFormat == GetRegisteredIn())
+            {
+                // attach Set to new parent
+                m_aSet.SetParent(DerivedFrom() ? &DerivedFrom()->m_aSet : nullptr);
+            }
+            break;
         }
-        break;
-    default:
-        {
+        default:
             // attribute is defined in this format
-            if( SfxItemState::SET == m_aSet.GetItemState( nWhich, false ))
+            if(SfxItemState::SET == m_aSet.GetItemState(nWhich, false))
             {
                 // DropCaps might come into this block
-                OSL_ENSURE( RES_PARATR_DROP == nWhich, "Modify was sent without sender" );
+                SAL_WARN_IF(RES_PARATR_DROP != nWhich, "sw.core", "Hint was sent without sender");
                 bPassToDepends = false;
             }
-        }
     }
     if(bPassToDepends)
         NotifyClients(aDependArgs.first, aDependArgs.second);

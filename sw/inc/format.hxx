@@ -67,7 +67,7 @@ protected:
     SwFormat( SwAttrPool& rPool, const OUString &rFormatNm, const sal_uInt16* pWhichRanges,
             SwFormat *pDrvdFrame, sal_uInt16 nFormatWhich );
     SwFormat( const SwFormat& rFormat );
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
 
