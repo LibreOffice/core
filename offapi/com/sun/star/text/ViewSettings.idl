@@ -296,6 +296,12 @@ published service ViewSettings
     */
     [optional, property] boolean ShowChangesInMargin;
 
+    /** If this property is `TRUE`, sub outline levels are treated as content in
+        outline content visibility actions.
+
+        @since LibreOffice 7.2
+    */
+    [optional, property] boolean TreatSubOutlineLevelsAsContent;
 };
 
 }; }; }; };

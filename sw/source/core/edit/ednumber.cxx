@@ -28,6 +28,9 @@
 #include <numrule.hxx>
 #include <osl/diagnose.h>
 
+#include <viewopt.hxx>
+#include <wrtsh.hxx>
+
 SwPamRanges::SwPamRanges( const SwPaM& rRing )
 {
     for(SwPaM& rTmp : const_cast<SwPaM*>(&rRing)->GetRingContainer())
@@ -391,8 +394,49 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
     EndAllAction();
 }
 
+class OutlineContentVisibilityTemporaryReveal
+{
+private:
+    SwWrtShell* pWrtShell;
+    std::vector<SwNode*> aFoldedOutlineNdsArray;
+public:
+    OutlineContentVisibilityTemporaryReveal(SwWrtShell* pShell)
+    {
+        pWrtShell = pShell;
+        if (pWrtShell && pWrtShell->GetViewOptions() && pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+        {
+            // unfold all folded outline content
+            SwOutlineNodes rOutlineNds = pWrtShell->GetNodes().GetOutLineNds();
+            for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
+            {
+                SwNode* pNd = rOutlineNds[nPos];
+                if (pNd->IsTextNode()) // should always be true
+                {
+                    bool bOutlineContentVisibleAttr = true;
+                    pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+                    if (!bOutlineContentVisibleAttr)
+                    {
+                        aFoldedOutlineNdsArray.push_back(pNd);
+                        pWrtShell->ToggleOutlineContentVisibility(nPos);
+                    }
+                }
+            }
+        }
+    }
+
+    ~OutlineContentVisibilityTemporaryReveal()
+    {
+        // fold all outlines that were folded before move
+        for (SwNode* pNd : aFoldedOutlineNdsArray)
+            pWrtShell->ToggleOutlineContentVisibility(pNd, true);
+    }
+};
+
 bool SwEditShell::MoveParagraph( tools::Long nOffset )
 {
+    // makes all nodes temporarily visibile for paragraph move
+    OutlineContentVisibilityTemporaryReveal a(dynamic_cast<SwWrtShell*>(this));
+
     StartAllAction();
 
     SwPaM *pCursor = GetCursor();
