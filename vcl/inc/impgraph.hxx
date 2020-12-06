@@ -47,6 +47,13 @@ class ImpSwapFile;
 class GraphicConversionParameters;
 class ImpGraphic;
 
+enum class GraphicContentType : sal_Int32
+{
+    Bitmap,
+    Animation,
+    Vector
+};
+
 class VCL_DLLPUBLIC ImpGraphic final
 {
     friend class Graphic;
@@ -115,7 +122,9 @@ private:
         return mpGraphicID->getIDString();
     }
 
-    void                createSwapInfo();
+    void createSwapInfo();
+    void restoreFromSwapInfo();
+
     void                ImplClearGraphics();
     void                ImplClear();
 
@@ -170,7 +179,7 @@ private:
 private:
     // swapping methods
     bool swapInFromStream(SvStream& rStream);
-    void swapInGraphic(SvStream& rStream);
+    bool swapInGraphic(SvStream& rStream);
 
     bool swapInContent(SvStream& rStream);
     bool swapOutContent(SvStream& rStream);
@@ -205,6 +214,7 @@ private:
     sal_Int32 getPageNumber() const;
 
 public:
+    void resetChecksum() { mnChecksum = 0; }
     bool swapIn();
     bool swapOut();
     bool isSwappedOut() const { return mbSwapOut; }
