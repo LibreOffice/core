@@ -151,13 +151,14 @@ SwFormatFootnote* SwFormatFootnote::Clone( SfxItemPool* ) const
     return pNew;
 }
 
-void SwFormatFootnote::Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew)
+void SwFormatFootnote::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    NotifyClients(pOld, pNew);
-    if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
-    {   // invalidate cached UNO object
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
+    CallSwClientNotify(rHint);
+    if(RES_REMOVE_UNO_OBJECT == pLegacy->GetWhich())
         SetXFootnote(css::uno::Reference<css::text::XFootnote>(nullptr));
-    }
 }
 
 void SwFormatFootnote::InvalidateFootnote()

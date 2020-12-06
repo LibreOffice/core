@@ -61,9 +61,7 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SwFormatFootnote* Clone( SfxItemPool* pPool = nullptr ) const override;
 
-    // SwClient
-    virtual void Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew)
-        override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
     void InvalidateFootnote();
 
