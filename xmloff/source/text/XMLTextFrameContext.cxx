@@ -404,10 +404,6 @@ public:
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-    SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                const OUString& rLocalName,
-                 const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
-
     void SetHyperlink( const OUString& rHRef,
                        const OUString& rName,
                        const OUString& rTargetFrameName,
@@ -1219,23 +1215,19 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext_Im
             return pEContext;
         }
     }
-    return nullptr;
-}
-
-SvXMLImportContextRef XMLTextFrameContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
-{
-    SvXMLImportContext *pContext = nullptr;
 
     if( xOldTextCursor.is() )  // text-box
-        pContext = GetImport().GetTextImport()->CreateTextChildContext(
-                            GetImport(), nPrefix, rLocalName, xAttrList,
+    {
+        auto p = GetImport().GetTextImport()->CreateTextChildContext(
+                            GetImport(), nElement, xAttrList,
                             XMLTextType::TextBox );
+        if (p)
+            return p;
+    }
 
+    XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
-    return pContext;
+    return nullptr;
 }
 
 void XMLTextFrameContext_Impl::characters( const OUString& rChars )
