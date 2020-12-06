@@ -85,6 +85,11 @@ extern "C" void * allocExec(
     p = mmap(
         nullptr, n, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE | MAP_ANON | MAP_JIT, -1,
         0);
+    if (p == MAP_FAILED) {
+        auto const e = errno;
+        SAL_WARN("bridges.osx", "mmap failed with " << e << ", " << strerror(e));
+        p = nullptr;
+    }
 #else
     p = mmap(
         nullptr, n, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1,
