@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4995da6_dded0779",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 3942,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-07T04:35:44Z",
+      "side": 1,
+      "message": "Exactly. This function, that you use in line 3944, takes an optional argument pDoc, that allows GetFirst to only return frames that belong to the specified document. Exactly what you try to do in lines 3945-3947, for free.\n\nI tried to hint at it in comment from Dec 3:\n\n\u003e Note how GetFirst is used in GetBestViewShell, and *why pointer to document shell is passed there*.\n\nI told it also in my comment from Dec 5:\n\n\u003e and note what it passes to this call! That was what I hoped you to look at. It passes *this* there as the first argument ...\n\nFinally I forced you to look at the method declaration. But even that didn\u0027t allow you to understand that you need to call GetFirst (and GetNext) with *argument*.\n\nSo here is what *you* needed to do, not me here:\n\n    for (SfxViewFrame* fr \u003d SfxViewFrame::GetFirst(\u0026rDocShell); fr; fr \u003d SfxViewFrame::GetNext(*fr, \u0026rDocShell))\n        if (ScTabViewShell* pTabViewShell \u003d dynamic_cast\u003cScTabViewShell*\u003e(fr-\u003eGetViewShell()))\n            pTabViewShell-\u003eSetTabProtectionSymbol(nTab, true);",
+      "range": {
+        "startLine": 3942,
+        "startChar": 4,
+        "endLine": 3942,
+        "endChar": 48
+      },
+      "revId": "83e968a640dde6623fd2e30d53e5653a6d523c8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
