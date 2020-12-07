@@ -2011,7 +2011,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         VclPtr<vcl::Window> xWindowForPackingProps;
         extractModel(id, rMap);
         WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
-        //IconView manages its own scrolling,
+        //IconView manages it's own scrolling,
         vcl::Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
 
         VclPtr<IconView> xBox = VclPtr<IconView>::Create(pRealParent, nWinStyle);
