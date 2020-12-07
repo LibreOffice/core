@@ -231,7 +231,7 @@ void XMLVarFieldImportContext::PrepareField(
     aValueHelper.SetDefault(GetContent());
     aValueHelper.PrepareField(xPropertySet);
 
-    // finally, set the curren presentation
+    // finally, set the current presentation
     if (bSetPresentation)
     {
         Any aAny;
