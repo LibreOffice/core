@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-04 09:59:39 using:
+ Generated on 2020-12-07 11:30:59 using:
  ./bin/update_pch sd sdui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -99,7 +99,6 @@
 #include <vcl/GraphicObject.hxx>
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/ITiledRenderable.hxx>
-#include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
@@ -131,6 +130,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
@@ -349,7 +349,6 @@
 #include <sot/formats.hxx>
 #include <sot/sotdllapi.h>
 #include <svl/SfxBroadcaster.hxx>
-#include <svl/aeitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/intitem.hxx>
