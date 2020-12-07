@@ -6455,7 +6455,6 @@ include/vcl/EnumContext.hxx
 include/vcl/FilterConfigItem.hxx
 include/vcl/GraphicObject.hxx
 include/vcl/IDialogRenderable.hxx
-include/vcl/IPrioritable.hxx
 include/vcl/ITiledRenderable.hxx
 include/vcl/ImageTree.hxx
 include/vcl/Scanline.hxx
@@ -6528,7 +6527,8 @@ include/vcl/metaact.hxx
 include/vcl/metaactiontypes.hxx
 include/vcl/metric.hxx
 include/vcl/mnemonic.hxx
-include/vcl/notebookbar.hxx
+include/vcl/notebookbar/IPrioritable.hxx
+include/vcl/notebookbar/notebookbar.hxx
 include/vcl/oldprintadaptor.hxx
 include/vcl/opengl/OpenGLContext.hxx
 include/vcl/opengl/OpenGLHelper.hxx
@@ -10666,7 +10666,6 @@ sfx2/source/inc/templdgi.hxx
 sfx2/source/inc/tplcitem.hxx
 sfx2/source/inc/workwin.hxx
 sfx2/source/inet/inettbc.cxx
-sfx2/source/notebookbar/ContextVBox.cxx
 sfx2/source/notebookbar/NotebookbarTabControl.cxx
 sfx2/source/notebookbar/SfxNotebookBar.cxx
 sfx2/source/notify/eventsupplier.cxx
@@ -14979,6 +14978,7 @@ vcl/source/control/button.cxx
 vcl/source/control/calendar.cxx
 vcl/source/control/combobox.cxx
 vcl/source/control/ctrl.cxx
+vcl/source/control/ContextVBox.cxx
 vcl/source/control/edit.cxx
 vcl/source/control/field.cxx
 vcl/source/control/field2.cxx

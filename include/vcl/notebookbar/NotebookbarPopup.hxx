@@ -17,45 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/IPrioritable.hxx>
+#ifndef INCLUDED_SFX2_NOTEBOOKBAR_NOTEBOOKBARPOPUP_HXX
+#define INCLUDED_SFX2_NOTEBOOKBAR_NOTEBOOKBARPOPUP_HXX
+
 #include <vcl/layout.hxx>
-
-#include <vector>
-
-#ifndef INCLUDED_SFX2_NOTEBOOKBAR_PRIORITYHBOX_HXX
-#define INCLUDED_SFX2_NOTEBOOKBAR_PRIORITYHBOX_HXX
+#include <vcl/floatwin.hxx>
 
 /*
- * PriorityHBox is a VclHBox which hides its own children if there is no sufficient space.
- * Hiding order can be modified using child's priorities. If a control have default
- * priority assigned (VCL_PRIORITY_DEFAULT), it is always shown.
+ * Popup - shows hidden content, controls are moved to this popup
+ * and after close moved to the original parent
  */
 
-class PriorityHBox : public VclHBox
+class VCL_DLLPUBLIC NotebookbarPopup : public FloatingWindow
 {
-protected:
-    bool m_bInitialized;
-
-    std::vector<vcl::IPrioritable*> m_aSortedChildren;
-
-    virtual int GetHiddenCount() const;
-
-    virtual void GetChildrenWithPriorities();
+private:
+    VclPtr<VclHBox> m_pBox;
+    ScopedVclPtr<VclHBox> m_pParent;
 
 public:
-    explicit PriorityHBox(vcl::Window* pParent);
+    explicit NotebookbarPopup(const VclPtr<VclHBox>& pParent);
 
-    virtual ~PriorityHBox() override;
+    virtual ~NotebookbarPopup() override;
 
-    void Initialize();
+    VclHBox* getBox();
 
-    void SetSizeFromParent();
+    virtual void PopupModeEnd() override;
 
-    virtual Size calculateRequisition() const override;
+    void hideSeparators(bool bHide);
 
-    virtual void Resize() override;
+    void dispose() override;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    void ApplyBackground(vcl::Window* pWindow);
+
+    void RemoveBackground(vcl::Window* pWindow);
 };
 
 #endif

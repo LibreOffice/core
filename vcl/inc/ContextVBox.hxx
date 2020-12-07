@@ -17,33 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_NOTEBOOKBAR_DROPDOWNBOX_HXX
-#define INCLUDED_SFX2_NOTEBOOKBAR_DROPDOWNBOX_HXX
+#include <sal/config.h>
 
-#include <vcl/IPrioritable.hxx>
+#include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/layout.hxx>
-#include "NotebookbarPopup.hxx"
 
-class DropdownBox : public VclHBox, public vcl::IPrioritable
+/*
+ * ContextVBox is a VclVBox which shows own children depending on current context.
+ * This control can be used in the notebookbar .ui files
+ */
+
+class ContextVBox : public VclVBox, public NotebookbarContextControl
 {
-private:
-    bool m_bInFullView;
-    VclPtr<PushButton> m_pButton;
-    VclPtr<NotebookbarPopup> m_pPopup;
-
 public:
-    explicit DropdownBox(vcl::Window* pParent);
-    virtual ~DropdownBox() override;
-    virtual void dispose() override;
-
-    void HideContent() override;
-    void ShowContent() override;
-    bool IsHidden() override;
-
-private:
-    DECL_LINK(PBClickHdl, Button*, void);
+    explicit ContextVBox(vcl::Window* pParent);
+    virtual ~ContextVBox() override;
+    void SetContext(vcl::EnumContext::Context eContext) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
