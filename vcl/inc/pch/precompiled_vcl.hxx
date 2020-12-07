@@ -282,7 +282,6 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/button.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/commandevent.hxx>

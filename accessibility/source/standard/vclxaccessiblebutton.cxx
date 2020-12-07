@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <strings.hxx>
 
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/vclevent.hxx>
 
