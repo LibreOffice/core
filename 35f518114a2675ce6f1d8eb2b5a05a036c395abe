@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4909cc3c_714c9051",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 3031,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-12-07T19:31:08Z",
+      "side": 1,
+      "message": "This check is unnecessary because of GetProperty()",
+      "range": {
+        "startLine": 3031,
+        "startChar": 11,
+        "endLine": 3031,
+        "endChar": 85
+      },
+      "revId": "35f518114a2675ce6f1d8eb2b5a05a036c395abe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e376c9c_41c23d50",
+        "filename": "oox/source/vml/vmlshape.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-12-07T19:31:08Z",
+      "side": 1,
+      "message": "It seems for me, this extra check isn\u0027t necessary for the latest patch set, so it\u0027s better to remove.\n\n(Szabolcs, Balázs: thanks to this, I\u0027ve found an extra check in commit d3094b98231730b8e6d863c6a2fc0dd62f3e991a, see the comment in oox/source/export/drawingml.cxx, you can remove that here, too.)",
+      "range": {
+        "startLine": 423,
+        "startChar": 14,
+        "endLine": 458,
+        "endChar": 21
+      },
+      "revId": "35f518114a2675ce6f1d8eb2b5a05a036c395abe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01c1345c_30750114",
+        "filename": "oox/source/vml/vmlshape.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-12-07T19:31:08Z",
+      "side": 1,
+      "message": "to handle this situation",
+      "range": {
+        "startLine": 901,
+        "startChar": 17,
+        "endLine": 901,
+        "endChar": 36
+      },
+      "revId": "35f518114a2675ce6f1d8eb2b5a05a036c395abe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
