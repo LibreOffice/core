@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97839d29_30121520",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1384,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-07T13:13:29Z",
+      "side": 1,
+      "message": "the return type of std::strlen is std::size_t, why not use that here?",
+      "range": {
+        "startLine": 1384,
+        "startChar": 8,
+        "endLine": 1384,
+        "endChar": 20
+      },
+      "revId": "1a6191621a0257c479bdfe24e125c0258d4b3d0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
