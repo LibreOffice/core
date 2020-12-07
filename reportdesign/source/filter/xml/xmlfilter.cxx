@@ -665,38 +665,6 @@ SvXMLImportContext *ORptFilter::CreateFastContext( sal_Int32 nElement,
     return pContext;
 }
 
-const SvXMLTokenMap& ORptFilter::GetReportElemTokenMap() const
-{
-    if (!m_pReportElemTokenMap)
-        m_pReportElemTokenMap = OXMLHelper::GetReportElemTokenMap();
-    return *m_pReportElemTokenMap;
-}
-
-const SvXMLTokenMap& ORptFilter::GetCellElemTokenMap() const
-{
-    if (!m_pCellElemTokenMap)
-    {
-        static const SvXMLTokenMapEntry aElemTokenMap[]=
-        {
-            { XML_NAMESPACE_TEXT,   XML_P                           ,   XML_TOK_P                           },
-            { XML_NAMESPACE_REPORT, XML_FIXED_CONTENT               ,   XML_TOK_FIXED_CONTENT               },
-            { XML_NAMESPACE_REPORT, XML_FORMATTED_TEXT              ,   XML_TOK_FORMATTED_TEXT              },
-            { XML_NAMESPACE_REPORT, XML_IMAGE                       ,   XML_TOK_IMAGE                       },
-            { XML_NAMESPACE_REPORT, XML_SUB_DOCUMENT                ,   XML_TOK_SUB_DOCUMENT                },
-            { XML_NAMESPACE_DRAW,   XML_CUSTOM_SHAPE                ,   XML_TOK_CUSTOM_SHAPE                },
-            { XML_NAMESPACE_DRAW,   XML_FRAME                       ,   XML_TOK_FRAME                       },
-            { XML_NAMESPACE_TEXT,   XML_PAGE_NUMBER                 ,   XML_TOK_PAGE_NUMBER                 },
-            { XML_NAMESPACE_TEXT,   XML_PAGE_COUNT                  ,   XML_TOK_PAGE_COUNT                  },
-            { XML_NAMESPACE_TEXT,   XML_TAB                         ,   XML_TOK_TEXT_TAB_STOP               },
-            { XML_NAMESPACE_TEXT,   XML_LINE_BREAK                  ,   XML_TOK_TEXT_LINE_BREAK             },
-            { XML_NAMESPACE_TEXT,   XML_S                           ,   XML_TOK_TEXT_S                      },
-            XML_TOKEN_MAP_END
-        };
-        m_pCellElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
-    }
-    return *m_pCellElemTokenMap;
-}
-
 SvXMLImportContext* ORptFilter::CreateStylesContext( bool bIsAutoStyle )
 {
     SvXMLImportContext* pContext = bIsAutoStyle ? GetAutoStyles() : GetStyles();

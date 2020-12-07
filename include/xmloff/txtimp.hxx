@@ -402,17 +402,6 @@ public:
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             XMLTextType eType = XMLTextType::Shape );
 
-    SvXMLTokenMap const& GetTextElemTokenMap();
-    SvXMLTokenMap const& GetTextPElemTokenMap();
-    SvXMLTokenMap const& GetTextPAttrTokenMap();
-    SvXMLTokenMap const& GetTextFrameAttrTokenMap();
-    SvXMLTokenMap const& GetTextContourAttrTokenMap();
-    SvXMLTokenMap const& GetTextHyperlinkAttrTokenMap();
-
-    const SvXMLTokenMap& GetTextNumberedParagraphAttrTokenMap();
-    const SvXMLTokenMap& GetTextListBlockAttrTokenMap();
-    const SvXMLTokenMap& GetTextListBlockElemTokenMap();
-
     css::uno::Reference< css::text::XText > & GetText();
     css::uno::Reference< css::text::XTextCursor > & GetCursor();
     css::uno::Reference< css::text::XTextRange > & GetCursorAsRange();

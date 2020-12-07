@@ -63,8 +63,6 @@ class SwXMLImport: public SvXMLImport
 
     std::unique_ptr<SvXMLUnitConverter> m_pTwipUnitConv;
     std::unique_ptr<SvXMLImportItemMapper> m_pTableItemMapper;// paragraph item import
-    std::unique_ptr<SvXMLTokenMap> m_pTableElemTokenMap;
-    std::unique_ptr<SvXMLTokenMap> m_pTableCellAttrTokenMap;
 
     rtl::Reference<SvXMLGraphicHelper> m_xGraphicStorageHandler;
 
@@ -148,9 +146,6 @@ public:
     SvXMLImportContext *CreateTableItemImportContext( sal_Int32 nElement,
                 const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
                 XmlStyleFamily nSubFamily, SfxItemSet& rItemSet );
-
-    const SvXMLTokenMap& GetTableElemTokenMap();
-    const SvXMLTokenMap& GetTableCellAttrTokenMap();
 
     bool FindAutomaticStyle( XmlStyleFamily nFamily,
                              const OUString& rName,

@@ -76,10 +76,6 @@ public:
     static void removeTitle( eTitleType nTitleIndex
                     , const css::uno::Reference< css::frame::XModel >& xModel );
 
-    static void hideTitle( eTitleType nTitleIndex
-                    , const css::uno::Reference< css::frame::XModel >& xModel );
-
-
     static OUString getCompleteString( const css::uno::Reference< css::chart2::XTitle >& xTitle );
     static void setCompleteString( const OUString& rNewText
         , const css::uno::Reference< css::chart2::XTitle >& xTitle

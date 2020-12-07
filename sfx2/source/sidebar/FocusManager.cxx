@@ -265,21 +265,6 @@ void FocusManager::FocusButton (const sal_Int32 nButtonIndex)
     maButtons[nButtonIndex]->grab_focus();
 }
 
-void FocusManager::RemoveWindow (vcl::Window& rWindow)
-{
-    auto iPanel (::std::find(maPanels.begin(), maPanels.end(), &rWindow));
-    if (iPanel != maPanels.end())
-    {
-        if ((*iPanel)->GetTitleBar() != nullptr)
-        {
-            UnregisterWindow((*iPanel)->GetTitleBar()->GetToolBox());
-            UnregisterWindow((*iPanel)->GetTitleBar()->GetExpander());
-        }
-        maPanels.erase(iPanel);
-        return;
-    }
-}
-
 void FocusManager::MoveFocusInsidePanel (
     const FocusLocation& rFocusLocation,
     const sal_Int32 nDirection)

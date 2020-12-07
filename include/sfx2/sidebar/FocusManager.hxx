@@ -105,10 +105,6 @@ private:
     void RegisterWindow(weld::Widget& rWidget);
     static void UnregisterWindow(weld::Widget& rWidget);
 
-    /** Remove the window from the panel or the button container.
-    */
-    void RemoveWindow(vcl::Window& rWindow);
-
     void FocusDeckTitle();
     bool IsDeckTitleVisible() const;
     bool IsPanelTitleVisible(const sal_Int32 nPanelIndex) const;
@@ -127,7 +123,6 @@ private:
 
     void FocusPanelContent(const sal_Int32 nPanelIndex);
     void FocusButton(const sal_Int32 nButtonIndex);
-    void ClickButton(const sal_Int32 nButtonIndex);
     void MoveFocusInsidePanel(const FocusLocation& rLocation,
                               const sal_Int32 nDirection);
     void MoveFocusInsideDeckTitle(const FocusLocation& rLocation,

@@ -1747,18 +1747,6 @@ void SvXMLImport::SetError(
     SetError( nId, aSeq );
 }
 
-void SvXMLImport::SetError(
-    sal_Int32 nId,
-    const OUString& rMsg1,
-    const OUString& rMsg2)
-{
-    Sequence<OUString> aSeq(2);
-    OUString* pSeq = aSeq.getArray();
-    pSeq[0] = rMsg1;
-    pSeq[1] = rMsg2;
-    SetError( nId, aSeq );
-}
-
 void SvXMLImport::DisposingModel()
 {
     if( mxFontDecls.is() )

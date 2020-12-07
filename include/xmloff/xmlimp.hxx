@@ -481,8 +481,6 @@ public:
 
     void SetError( sal_Int32 nId );
     void SetError( sal_Int32 nId, const OUString& rMsg1 );
-    void SetError( sal_Int32 nId, const OUString& rMsg1,
-                                  const OUString& rMsg2 );
 
     virtual void DisposingModel();
 

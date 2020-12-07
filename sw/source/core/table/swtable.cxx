@@ -2743,11 +2743,6 @@ bool SwTable::HasLayout() const
     return pFrameFormat && SwIterator<SwTabFrame,SwFormat>(*pFrameFormat).First();
 }
 
-void SwTableLine::RegisterToFormat( SwFormat& rFormat )
-{
-    rFormat.Add( this );
-}
-
 void SwTableBox::RegisterToFormat( SwFormat& rFormat )
 {
     rFormat.Add( this );

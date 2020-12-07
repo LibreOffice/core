@@ -91,22 +91,6 @@ namespace xmloff::metadata
 
         typedef std::unordered_map< OUString, XMLTokenEnum > ReverseTokenLookup;
 
-        const ReverseTokenLookup& getReverseTokenLookup()
-        {
-            DBG_TESTSOLARMUTEX();
-            static ReverseTokenLookup s_reverseTokenLookup;
-            if ( s_reverseTokenLookup.empty() )
-            {
-                const PropertyDescription* desc = lcl_getPropertyMetaData();
-                while ( !desc->propertyName.isEmpty() )
-                {
-                    s_reverseTokenLookup[ token::GetXMLToken( desc->attribute.attributeToken ) ] = desc->attribute.attributeToken;
-                    ++desc;
-                }
-            }
-            return s_reverseTokenLookup;
-        }
-
         struct AttributeHash
         {
             size_t operator()( const AttributeDescription& i_attribute ) const
@@ -157,19 +141,6 @@ namespace xmloff::metadata
         const AttributesWithoutGroup::const_iterator pos = attributesWithoutGroups.find( i_attribute );
         if ( pos != attributesWithoutGroups.end() )
             o_propertyGroups = pos->second;
-    }
-
-    AttributeDescription getAttributeDescription( const sal_uInt16 i_namespacePrefix, const OUString& i_attributeName )
-    {
-        AttributeDescription attribute;
-        const ReverseTokenLookup& rTokenLookup( getReverseTokenLookup() );
-        const ReverseTokenLookup::const_iterator pos = rTokenLookup.find( i_attributeName );
-        if ( pos != rTokenLookup.end() )
-        {
-            attribute.namespacePrefix = i_namespacePrefix;
-            attribute.attributeToken = pos->second;
-        }
-        return attribute;
     }
 
     AttributeDescription getAttributeDescription( sal_Int32 nAttributeToken )

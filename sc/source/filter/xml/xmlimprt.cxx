@@ -332,40 +332,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     return pContext;
 }
 
-const SvXMLTokenMap& ScXMLImport::GetTableElemTokenMap()
-{
-    if( !pTableElemTokenMap )
-    {
-        static const SvXMLTokenMapEntry aTableTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE,  XML_NAMED_EXPRESSIONS,    XML_TOK_TABLE_NAMED_EXPRESSIONS },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMN_GROUP,   XML_TOK_TABLE_COL_GROUP       },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_COLUMNS, XML_TOK_TABLE_HEADER_COLS },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMNS,        XML_TOK_TABLE_COLS            },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMN,         XML_TOK_TABLE_COL         },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_PROTECTION,     XML_TOK_TABLE_PROTECTION    },
-            { XML_NAMESPACE_LO_EXT, XML_TABLE_PROTECTION,     XML_TOK_TABLE_PROTECTION_EXT  },
-            { XML_NAMESPACE_OFFICE_EXT, XML_TABLE_PROTECTION, XML_TOK_TABLE_PROTECTION_EXT  },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_ROW_GROUP,      XML_TOK_TABLE_ROW_GROUP       },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_ROWS,    XML_TOK_TABLE_HEADER_ROWS },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_ROWS,           XML_TOK_TABLE_ROWS            },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_ROW,            XML_TOK_TABLE_ROW         },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_SOURCE,         XML_TOK_TABLE_SOURCE      },
-            { XML_NAMESPACE_TABLE,  XML_SCENARIO,             XML_TOK_TABLE_SCENARIO        },
-            { XML_NAMESPACE_TABLE,  XML_SHAPES,               XML_TOK_TABLE_SHAPES      },
-            { XML_NAMESPACE_OFFICE, XML_FORMS,                XML_TOK_TABLE_FORMS           },
-            { XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS,      XML_TOK_TABLE_EVENT_LISTENERS },
-            { XML_NAMESPACE_OFFICE_EXT, XML_EVENT_LISTENERS,  XML_TOK_TABLE_EVENT_LISTENERS_EXT },
-            { XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMATS, XML_TOK_TABLE_CONDFORMATS },
-            XML_TOKEN_MAP_END
-        };
-
-        pTableElemTokenMap.reset(new SvXMLTokenMap( aTableTokenMap ));
-    } // if( !pTableElemTokenMap )
-
-    return *pTableElemTokenMap;
-}
-
 const SvXMLTokenMap& ScXMLImport::GetTableRowsElemTokenMap()
 {
     if( !pTableRowsElemTokenMap )
@@ -441,28 +407,6 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowCellElemTokenMap()
 
     return *pTableRowCellElemTokenMap;
 }
-
-const SvXMLTokenMap& ScXMLImport::GetTableAnnotationAttrTokenMap()
-{
-    if( !pTableAnnotationAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aTableAnnotationAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_OFFICE, XML_AUTHOR,                 XML_TOK_TABLE_ANNOTATION_ATTR_AUTHOR                },
-            { XML_NAMESPACE_OFFICE, XML_CREATE_DATE,            XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE           },
-            { XML_NAMESPACE_OFFICE, XML_CREATE_DATE_STRING,     XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE_STRING    },
-            { XML_NAMESPACE_OFFICE, XML_DISPLAY,                XML_TOK_TABLE_ANNOTATION_ATTR_DISPLAY               },
-            { XML_NAMESPACE_SVG,    XML_X,                      XML_TOK_TABLE_ANNOTATION_ATTR_X                     },
-            { XML_NAMESPACE_SVG,    XML_Y,                      XML_TOK_TABLE_ANNOTATION_ATTR_Y                     },
-            XML_TOKEN_MAP_END
-        };
-
-        pTableAnnotationAttrTokenMap.reset(new SvXMLTokenMap( aTableAnnotationAttrTokenMap ));
-    } // if( !pTableAnnotationAttrTokenMap )
-
-    return *pTableAnnotationAttrTokenMap;
-}
-
 
 void ScXMLImport::SetPostProcessData( sc::ImportPostProcessData* p )
 {
@@ -551,13 +495,11 @@ ScXMLImport::ScXMLImport(
 ScXMLImport::~ScXMLImport() throw()
 {
     //  delete pI18NMap;
-    pTableElemTokenMap.reset();
     pTableRowsElemTokenMap.reset();
     pTableRowElemTokenMap.reset();
     pTableRowAttrTokenMap.reset();
     pTableRowCellElemTokenMap.reset();
     pTableRowCellAttrTokenMap.reset();
-    pTableAnnotationAttrTokenMap.reset();
 
     pChangeTrackingImportHelper.reset();
     pNumberFormatAttributesExportHelper.reset();

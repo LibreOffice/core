@@ -62,8 +62,6 @@ public:
 protected:
     sal_uInt16 get_nId(int pos);
 
-    OUString get_selected_id() { return mxTreeView->get_selected_id(); }
-
     void select_id(const OUString& sId) { mxTreeView->select_id(sId); }
 
     int get_selected_index() { return mxTreeView->get_selected_index(); }

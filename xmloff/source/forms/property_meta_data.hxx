@@ -36,11 +36,6 @@ namespace xmloff::metadata
 
     /** retrieves the attribute descriptor for the attribute given by namespace prefix and attribute name
     */
-    AttributeDescription
-        getAttributeDescription( const sal_uInt16 i_namespacePrefix, const OUString& i_attributeName );
-
-    /** retrieves the attribute descriptor for the attribute given by namespace prefix and attribute name
-    */
     AttributeDescription getAttributeDescription( sal_Int32 nElement );
 
 } // namespace xmloff::metadata

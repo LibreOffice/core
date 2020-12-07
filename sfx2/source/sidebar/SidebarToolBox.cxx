@@ -171,27 +171,6 @@ Reference<frame::XToolbarController> SidebarToolBox::GetControllerForItemId (con
     return Reference<frame::XToolbarController>();
 }
 
-void SidebarToolBox::SetController(const sal_uInt16 nItemId,
-                                   const css::uno::Reference<css::frame::XToolbarController>& rxController)
-{
-    ControllerContainer::iterator iController (maControllers.find(nItemId));
-    if (iController != maControllers.end())
-    {
-        Reference<lang::XComponent> xComponent(rxController, UNO_QUERY);
-        if (xComponent.is())
-            xComponent->dispose();
-
-        iController->second = rxController;
-    }
-    else
-    {
-        maControllers[nItemId] = rxController;
-    }
-
-    if (rxController.is())
-        RegisterHandlers();
-}
-
 void SidebarToolBox::RegisterHandlers()
 {
     if ( ! mbAreHandlersRegistered)
