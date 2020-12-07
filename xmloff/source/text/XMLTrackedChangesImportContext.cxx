@@ -26,7 +26,6 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <sal/log.hxx>
 
 
 using ::com::sun::star::uno::Reference;
