@@ -1,4 +1,4 @@
-basic/source/comp/codegen.cxx:478
+basic/source/comp/codegen.cxx:482
     void (anonymous namespace)::OffSetAccumulator::start(const unsigned char *,)
 canvas/inc/base/bufferedgraphicdevicebase.hxx:107
     void canvas::BufferedGraphicDeviceBase::destroyBuffers()
@@ -16,8 +16,6 @@ vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
 vcl/inc/salinst.hxx:200
     void SalInstance::releaseMainThread()
-vcl/inc/salmenu.hxx:81
-    void SalMenu::RemoveMenuBarButton(unsigned short,)
 vcl/inc/salobj.hxx:49
     void SalObject::Enable(_Bool,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:66

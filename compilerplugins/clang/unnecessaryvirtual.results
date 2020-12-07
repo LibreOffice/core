@@ -1,22 +1,22 @@
-basic/source/comp/codegen.cxx:478
+basic/source/comp/codegen.cxx:482
     void (anonymous namespace)::OffSetAccumulator::start(const unsigned char *,)
-basic/source/comp/codegen.cxx:479
+basic/source/comp/codegen.cxx:483
     void (anonymous namespace)::OffSetAccumulator::processOpCode0(enum SbiOpcode,)
-basic/source/comp/codegen.cxx:480
+basic/source/comp/codegen.cxx:484
     void (anonymous namespace)::OffSetAccumulator::processOpCode1(enum SbiOpcode,type-parameter-0-0,)
-basic/source/comp/codegen.cxx:481
+basic/source/comp/codegen.cxx:485
     void (anonymous namespace)::OffSetAccumulator::processOpCode2(enum SbiOpcode,type-parameter-0-0,type-parameter-0-0,)
-basic/source/comp/codegen.cxx:490
+basic/source/comp/codegen.cxx:494
     _Bool (anonymous namespace)::OffSetAccumulator::processParams()
-basic/source/comp/codegen.cxx:501
+basic/source/comp/codegen.cxx:505
     void (anonymous namespace)::BufferTransformer::start(const unsigned char *,)
-basic/source/comp/codegen.cxx:502
-    void (anonymous namespace)::BufferTransformer::processOpCode0(enum SbiOpcode,)
 basic/source/comp/codegen.cxx:506
+    void (anonymous namespace)::BufferTransformer::processOpCode0(enum SbiOpcode,)
+basic/source/comp/codegen.cxx:510
     void (anonymous namespace)::BufferTransformer::processOpCode1(enum SbiOpcode,type-parameter-0-0,)
-basic/source/comp/codegen.cxx:531
+basic/source/comp/codegen.cxx:535
     void (anonymous namespace)::BufferTransformer::processOpCode2(enum SbiOpcode,type-parameter-0-0,type-parameter-0-0,)
-basic/source/comp/codegen.cxx:540
+basic/source/comp/codegen.cxx:544
     _Bool (anonymous namespace)::BufferTransformer::processParams()
 canvas/inc/base/basemutexhelper.hxx:58
     void canvas::BaseMutexHelper::disposing()
@@ -50,45 +50,45 @@ canvas/inc/base/bufferedgraphicdevicebase.hxx:229
     void canvas::BufferedGraphicDeviceBase::windowShown(const struct com::sun::star::lang::EventObject &,)
 canvas/inc/base/bufferedgraphicdevicebase.hxx:236
     void canvas::BufferedGraphicDeviceBase::windowHidden(const struct com::sun::star::lang::EventObject &,)
-canvas/inc/base/canvasbase.hxx:124
+canvas/inc/base/canvasbase.hxx:123
     void canvas::CanvasBase::disposeThis()
-canvas/inc/base/canvasbase.hxx:135
+canvas/inc/base/canvasbase.hxx:134
     void canvas::CanvasBase::clear()
-canvas/inc/base/canvasbase.hxx:144
+canvas/inc/base/canvasbase.hxx:143
     void canvas::CanvasBase::drawPoint(const struct com::sun::star::geometry::RealPoint2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
-canvas/inc/base/canvasbase.hxx:157
+canvas/inc/base/canvasbase.hxx:156
     void canvas::CanvasBase::drawLine(const struct com::sun::star::geometry::RealPoint2D &,const struct com::sun::star::geometry::RealPoint2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
-canvas/inc/base/canvasbase.hxx:173
+canvas/inc/base/canvasbase.hxx:172
     void canvas::CanvasBase::drawBezier(const struct com::sun::star::geometry::RealBezierSegment2D &,const struct com::sun::star::geometry::RealPoint2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
-canvas/inc/base/canvasbase.hxx:190
+canvas/inc/base/canvasbase.hxx:189
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
-canvas/inc/base/canvasbase.hxx:206
+canvas/inc/base/canvasbase.hxx:205
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::strokePolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const struct com::sun::star::rendering::StrokeAttributes &,)
-canvas/inc/base/canvasbase.hxx:223
+canvas/inc/base/canvasbase.hxx:222
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::strokeTexturedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Sequence<struct com::sun::star::rendering::Texture> &,const struct com::sun::star::rendering::StrokeAttributes &,)
-canvas/inc/base/canvasbase.hxx:241
+canvas/inc/base/canvasbase.hxx:240
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::strokeTextureMappedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Sequence<struct com::sun::star::rendering::Texture> &,const class com::sun::star::uno::Reference<class com::sun::star::geometry::XMapping2D> &,const struct com::sun::star::rendering::StrokeAttributes &,)
-canvas/inc/base/canvasbase.hxx:260
+canvas/inc/base/canvasbase.hxx:259
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> canvas::CanvasBase::queryStrokeShapes(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const struct com::sun::star::rendering::StrokeAttributes &,)
-canvas/inc/base/canvasbase.hxx:277
+canvas/inc/base/canvasbase.hxx:276
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::fillPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
-canvas/inc/base/canvasbase.hxx:293
+canvas/inc/base/canvasbase.hxx:292
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::fillTexturedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Sequence<struct com::sun::star::rendering::Texture> &,)
-canvas/inc/base/canvasbase.hxx:310
+canvas/inc/base/canvasbase.hxx:309
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::fillTextureMappedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Sequence<struct com::sun::star::rendering::Texture> &,const class com::sun::star::uno::Reference<class com::sun::star::geometry::XMapping2D> &,)
-canvas/inc/base/canvasbase.hxx:329
+canvas/inc/base/canvasbase.hxx:328
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCanvasFont> canvas::CanvasBase::createFont(const struct com::sun::star::rendering::FontRequest &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const struct com::sun::star::geometry::Matrix2D &,)
-canvas/inc/base/canvasbase.hxx:347
+canvas/inc/base/canvasbase.hxx:346
     class com::sun::star::uno::Sequence<struct com::sun::star::rendering::FontInfo> canvas::CanvasBase::queryAvailableFonts(const struct com::sun::star::rendering::FontInfo &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,)
-canvas/inc/base/canvasbase.hxx:361
+canvas/inc/base/canvasbase.hxx:360
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawText(const struct com::sun::star::rendering::StringContext &,const class com::sun::star::uno::Reference<class com::sun::star::rendering::XCanvasFont> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,signed char,)
-canvas/inc/base/canvasbase.hxx:383
+canvas/inc/base/canvasbase.hxx:382
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawTextLayout(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XTextLayout> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
-canvas/inc/base/canvasbase.hxx:400
+canvas/inc/base/canvasbase.hxx:399
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawBitmap(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
-canvas/inc/base/canvasbase.hxx:416
+canvas/inc/base/canvasbase.hxx:415
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawBitmapModulated(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
-canvas/inc/base/canvasbase.hxx:432
+canvas/inc/base/canvasbase.hxx:431
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XGraphicDevice> canvas::CanvasBase::getDevice()
 canvas/inc/base/canvascustomspritebase.hxx:93
     void canvas::CanvasCustomSpriteBase::disposeThis()
@@ -178,15 +178,15 @@ canvas/inc/base/graphicdevicebase.hxx:310
     void canvas::GraphicDeviceBase::addVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
 canvas/inc/base/graphicdevicebase.hxx:318
     void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
-canvas/inc/base/integerbitmapbase.hxx:44
+canvas/inc/base/integerbitmapbase.hxx:43
     class com::sun::star::uno::Sequence<signed char> canvas::IntegerBitmapBase::getData(struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerRectangle2D &,)
-canvas/inc/base/integerbitmapbase.hxx:58
+canvas/inc/base/integerbitmapbase.hxx:57
     void canvas::IntegerBitmapBase::setData(const class com::sun::star::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerRectangle2D &,)
-canvas/inc/base/integerbitmapbase.hxx:72
+canvas/inc/base/integerbitmapbase.hxx:71
     void canvas::IntegerBitmapBase::setPixel(const class com::sun::star::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerPoint2D &,)
-canvas/inc/base/integerbitmapbase.hxx:86
+canvas/inc/base/integerbitmapbase.hxx:85
     class com::sun::star::uno::Sequence<signed char> canvas::IntegerBitmapBase::getPixel(struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerPoint2D &,)
-canvas/inc/base/integerbitmapbase.hxx:100
+canvas/inc/base/integerbitmapbase.hxx:99
     struct com::sun::star::rendering::IntegerBitmapLayout canvas::IntegerBitmapBase::getMemoryLayout()
 canvas/inc/base/spritecanvasbase.hxx:84
     void canvas::SpriteCanvasBase::disposeThis()
@@ -216,6 +216,14 @@ chart2/source/inc/ModifyListenerCallBack.hxx:41
     void chart::ModifyListenerCallBack::~ModifyListenerCallBack()
 chart2/source/inc/WeakListenerAdapter.hxx:56
     void chart::WeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
+cui/source/inc/splitcelldlg.hxx:40
+    _Bool SvxSplitTableDlg::IsHorizontal()const
+cui/source/inc/splitcelldlg.hxx:41
+    _Bool SvxSplitTableDlg::IsProportional()const
+cui/source/inc/splitcelldlg.hxx:42
+    long SvxSplitTableDlg::GetCount()const
+cui/source/inc/splitcelldlg.hxx:44
+    void SvxSplitTableDlg::SetSplitVerticalByDefault()
 extensions/source/dbpilots/unoautopilot.hxx:81
     class cppu::IPropertyArrayHelper * dbp::OUnoAutoPilot::createArrayHelper()const
 extensions/source/propctrlr/commoncontrol.hxx:130
@@ -260,8 +268,6 @@ include/comphelper/unique_disposing_ptr.hxx:169
     void comphelper::unique_disposing_solar_mutex_reset_ptr::reset(type-parameter-0-0 *,)
 include/comphelper/weakeventlistener.hxx:120
     void comphelper::OWeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
-include/sfx2/templatelocalview.hxx:83
-    void TemplateLocalView::reload()
 include/svl/svdde.hxx:236
     class DdeData * DdeTopic::Get(enum SotClipboardFormatId,)
 include/svl/svdde.hxx:237
@@ -298,12 +304,8 @@ include/vbahelper/vbareturntypes.hxx:39
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
 include/vcl/customweld.hxx:45
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
-include/vcl/tabctrl.hxx:114
-    void TabControl::ActivatePage()
 include/vcl/toolkit/dialog.hxx:96
     void Dialog::set_content_area(class VclBox *,)
-include/vcl/uitest/uiobject.hxx:130
-    class std::unique_ptr<class UIObject, struct std::default_delete<class UIObject> > WindowUIObject::get_visible_child(const class rtl::OUString &,)
 include/vcl/weld.hxx:96
     void weld::Widget::set_visible(_Bool,)
 sc/source/core/opencl/formulagroupcl.cxx:1061
@@ -406,16 +408,16 @@ slideshow/source/inc/shape.hxx:221
     void slideshow::internal::Shape::setIsForeground(const _Bool,)
 sw/inc/flypos.hxx:37
     void SwPosFlyFrame::~SwPosFlyFrame()
-sw/source/ui/dbui/createaddresslistdialog.cxx:65
-    void (anonymous namespace)::SwAddressFragment::~SwAddressFragment()
 toolkit/inc/controls/geometrycontrolmodel.hxx:182
     void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
-vcl/inc/jsdialog/jsdialogbuilder.hxx:109
+vcl/inc/jsdialog/jsdialogbuilder.hxx:182
     void JSWidget::show()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:115
+vcl/inc/jsdialog/jsdialogbuilder.hxx:188
     void JSWidget::hide()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:121
+vcl/inc/jsdialog/jsdialogbuilder.hxx:195
     void JSWidget::set_sensitive(_Bool,)
+vcl/inc/jsdialog/jsdialogbuilder.hxx:201
+    class com::sun::star::uno::Reference<class com::sun::star::datatransfer::dnd::XDropTarget> JSWidget::get_drop_target()
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
 vcl/inc/salframe.hxx:194
@@ -424,12 +426,6 @@ vcl/inc/salinst.hxx:89
     _Bool SalInstance::SVMainHook(int *,)
 vcl/inc/salinst.hxx:200
     void SalInstance::releaseMainThread()
-vcl/inc/salmenu.hxx:80
-    _Bool SalMenu::AddMenuBarButton(const struct SalMenuButtonItem &,)
-vcl/inc/salmenu.hxx:81
-    void SalMenu::RemoveMenuBarButton(unsigned short,)
-vcl/inc/salmenu.hxx:93
-    class tools::Rectangle SalMenu::GetMenuBarButtonRectPixel(unsigned short,class SalFrame *,)
 vcl/inc/salobj.hxx:49
     void SalObject::Enable(_Bool,)
 vcl/inc/salprn.hxx:116
@@ -476,7 +472,7 @@ workdir/../vcl/inc/qt5/Qt5Frame.hxx:162
     void Qt5Frame::registerDropTarget(class Qt5DropTarget *,)
 workdir/../vcl/inc/qt5/Qt5Frame.hxx:163
     void Qt5Frame::deregisterDropTarget(const class Qt5DropTarget *,)
-workdir/../vcl/inc/qt5/Qt5Instance.hxx:83
+workdir/../vcl/inc/qt5/Qt5Instance.hxx:84
     class Qt5FilePicker * Qt5Instance::createPicker(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,enum QFileDialog::FileMode,)
 writerfilter/source/dmapper/TableManager.hxx:484
     void writerfilter::dmapper::TableManager::tableExceptionProps(const class tools::SvRef<class writerfilter::dmapper::TablePropertyMap> &,)
@@ -488,6 +484,6 @@ writerfilter/source/ooxml/OOXMLFactory.hxx:68
     void writerfilter::ooxml::OOXMLFactory_ns::endAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:69
     void writerfilter::ooxml::OOXMLFactory_ns::attributeAction(class writerfilter::ooxml::OOXMLFastContextHandler *,int,const class tools::SvRef<class writerfilter::ooxml::OOXMLValue> &,)
-xmloff/source/forms/elementimport.hxx:573
+xmloff/source/forms/elementimport.hxx:551
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> xmloff::OColumnImport::createElement()
 
