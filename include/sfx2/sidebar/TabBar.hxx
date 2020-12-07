@@ -24,7 +24,6 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/window.hxx>
 
 #include <functional>
 

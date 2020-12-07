@@ -324,11 +324,11 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
                     xObj->setVisualAreaSize( nAspect, aSz );
 
                     //  re-convert aSize to 1/100th mm to avoid rounding errors in comparison below
-                    aSize = vcl::Window::LogicToLogic( aTmp,
+                    aSize = OutputDevice::LogicToLogic( aTmp,
                                     MapMode( aMapUnit ), aMap100 );
                 }
                 else
-                    aSize = vcl::Window::LogicToLogic( aSize,
+                    aSize = OutputDevice::LogicToLogic( aSize,
                                     MapMode( aMapUnit ), aMap100 );
             }
 
@@ -506,7 +506,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
     }
     if (bSizeCh)
     {
-        aSize = vcl::Window::LogicToLogic( aSize, MapMode( MapUnit::Map100thMM ), MapMode( aMapUnit ) );
+        aSize = OutputDevice::LogicToLogic( aSize, MapMode( MapUnit::Map100thMM ), MapMode( aMapUnit ) );
         aSz.Width = aSize.Width();
         aSz.Height = aSize.Height();
         xObj->setVisualAreaSize( nAspect, aSz );
