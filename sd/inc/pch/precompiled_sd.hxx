@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-04 09:59:37 using:
+ Generated on 2020-12-07 11:30:57 using:
  ./bin/update_pch sd sd --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -43,7 +43,6 @@
 #include <utility>
 #include <vector>
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -69,7 +68,6 @@
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
@@ -355,7 +353,6 @@
 #include <sfx2/zoomitem.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <sot/storage.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/eitem.hxx>
 #include <svl/hint.hxx>
@@ -365,6 +362,7 @@
 #include <svl/languageoptions.hxx>
 #include <svl/lstner.hxx>
 #include <svl/macitem.hxx>
+#include <svl/metitem.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/srchitem.hxx>
@@ -374,11 +372,10 @@
 #include <svl/typedwhich.hxx>
 #include <svl/urlbmk.hxx>
 #include <svl/whiter.hxx>
-#include <svtools/popupwindowcontroller.hxx>
+#include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
-#include <svtools/toolboxcontroller.hxx>
 #include <svx/AccessibleShapeTreeInfo.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/IAccessibleViewForwarderListener.hxx>
@@ -445,9 +442,7 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnedit.hxx>
-#include <svx/xlnedwit.hxx>
 #include <svx/xlnstit.hxx>
-#include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xtable.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
