@@ -39,7 +39,7 @@
 #include "jawt_md.h"
 #include "NativeView.h"
 
-#define MY_ASSERT(X,S) if (!X) { fprintf(stderr,"%s\n",S); return 0L;}
+#define MY_ASSERT(X,S) if (!X) { fprintf(stderr,"%s\n",S); return 0;}
 
 #define SYSTEM_WIN32   1
 #define SYSTEM_WIN16   2
@@ -93,7 +93,7 @@ JNIEXPORT jlong JNICALL Java_NativeView_getNativeWindow
 
     /* Get the drawing surface */
     if ((ds = awt.GetDrawingSurface(env, obj_this)) == NULL)
-        return 0L;
+        return 0;
 
     /* Lock the drawing surface */
     lock = ds->Lock(ds);

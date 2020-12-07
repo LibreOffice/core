@@ -103,7 +103,7 @@ SAL_DLLPUBLIC_EXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindo
     /* Get the drawing surface */
     ds = awt.GetDrawingSurface(env, obj_this);
     if (ds == NULL)
-        return 0L;
+        return 0;
 
     /* Lock the drawing surface */
     lock = ds->Lock(ds);
