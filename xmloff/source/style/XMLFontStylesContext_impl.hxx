@@ -49,7 +49,7 @@ public:
             XMLFontStylesContext& rStyles );
     virtual ~XMLFontStyleContextFontFace() override;
 
-    void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
+    void SetAttribute( sal_Int32 nElement,
                        const OUString& rValue ) override;
 
     void FillProperties( ::std::vector< XMLPropertyState > &rProps,
@@ -98,7 +98,7 @@ public:
     XMLFontStyleContextFontFaceUri( SvXMLImport& rImport,
             const XMLFontStyleContextFontFace& font );
 
-    virtual void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
+    virtual void SetAttribute( sal_Int32 nElement,
         const OUString& rValue ) override;
     void SetFormat( const OUString& rFormat );
     void SAL_CALL endFastElement(sal_Int32 nElement) override;
@@ -116,7 +116,7 @@ public:
     XMLFontStyleContextFontFaceFormat( SvXMLImport& rImport,
             XMLFontStyleContextFontFaceUri& uri );
 
-    void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
+    void SetAttribute( sal_Int32 nElement,
         const OUString& rValue ) override;
 };
 

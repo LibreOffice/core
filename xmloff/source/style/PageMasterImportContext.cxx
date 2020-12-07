@@ -44,18 +44,16 @@ using namespace ::com::sun::star::lang;
 //
 using namespace ::com::sun::star::beans;
 
-void PageStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
-                                        const OUString& rLocalName,
+void PageStyleContext::SetAttribute( sal_Int32 nElement,
                                         const OUString& rValue )
 {
-    // TODO: use a map here
-    if( XML_NAMESPACE_STYLE == nPrefixKey && IsXMLToken( rLocalName, XML_PAGE_USAGE ) )
+    if( nElement == XML_ELEMENT(STYLE, XML_PAGE_USAGE) )
     {
         sPageUsage = rValue;
     }
     else
     {
-        XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+        XMLPropStyleContext::SetAttribute( nElement, rValue );
     }
 }
 

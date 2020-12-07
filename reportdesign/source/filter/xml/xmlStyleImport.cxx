@@ -127,17 +127,19 @@ void OControlStyleContext::AddProperty(const sal_Int16 nContextID, const uno::An
     GetProperties().push_back(aPropState); // has to be inserted in a sort order later
 }
 
-void OControlStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
-                                        const OUString& rLocalName,
+void OControlStyleContext::SetAttribute( sal_Int32 nElement,
                                         const OUString& rValue )
 {
-    // TODO: use a map here
-    if( IsXMLToken(rLocalName, XML_DATA_STYLE_NAME ) )
-        m_sDataStyleName = rValue;
-    else if ( IsXMLToken(rLocalName, XML_MASTER_PAGE_NAME ) )
-        ;
-    else
-        XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+    switch(nElement & TOKEN_MASK)
+    {
+        case XML_DATA_STYLE_NAME:
+            m_sDataStyleName = rValue;
+            break;
+        case XML_MASTER_PAGE_NAME:
+            break;
+        default:
+        XMLPropStyleContext::SetAttribute( nElement, rValue );
+    }
 }
 
 

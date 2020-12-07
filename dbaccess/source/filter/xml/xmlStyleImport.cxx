@@ -107,17 +107,20 @@ void OTableStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any&
     GetProperties().push_back(aPropState); // has to be inserted in a sort order later
 }
 
-void OTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
-                                        const OUString& rLocalName,
+void OTableStyleContext::SetAttribute( sal_Int32 nElement,
                                         const OUString& rValue )
 {
-    // TODO: use a map here
-    if( IsXMLToken(rLocalName, XML_DATA_STYLE_NAME ) )
-        m_sDataStyleName = rValue;
-    else if ( IsXMLToken(rLocalName, XML_MASTER_PAGE_NAME ) )
-        sPageStyle = rValue;
-    else
-        XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+    switch(nElement & TOKEN_MASK)
+    {
+        case XML_DATA_STYLE_NAME:
+            m_sDataStyleName = rValue;
+            break;
+        case XML_MASTER_PAGE_NAME:
+            sPageStyle = rValue;
+            break;
+        default:
+            XMLPropStyleContext::SetAttribute( nElement, rValue );
+    }
 }
 
 ODBFilter& OTableStyleContext::GetOwnImport()

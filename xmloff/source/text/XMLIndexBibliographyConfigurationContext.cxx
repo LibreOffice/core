@@ -73,62 +73,50 @@ XMLIndexBibliographyConfigurationContext::~XMLIndexBibliographyConfigurationCont
 }
 
 void XMLIndexBibliographyConfigurationContext::SetAttribute(
-    sal_uInt16 nPrefix,
-    const OUString& sLocalName,
+    sal_Int32 nElement,
     const OUString& sValue)
 {
-    if( XML_NAMESPACE_TEXT == nPrefix )
+    switch (nElement)
     {
-        if( IsXMLToken(sLocalName, XML_PREFIX) )
-        {
+        case XML_ELEMENT(TEXT, XML_PREFIX):
             sPrefix = sValue;
-        }
-        else if( IsXMLToken(sLocalName, XML_SUFFIX) )
-        {
+            break;
+        case XML_ELEMENT(TEXT, XML_SUFFIX):
             sSuffix = sValue;
-        }
-        else if( IsXMLToken(sLocalName, XML_NUMBERED_ENTRIES) )
+            break;
+        case XML_ELEMENT(TEXT, XML_NUMBERED_ENTRIES):
         {
             bool bTmp(false);
             if (::sax::Converter::convertBool(bTmp, sValue))
             {
                 bNumberedEntries = bTmp;
             }
+            break;
         }
-        else if( IsXMLToken(sLocalName, XML_SORT_BY_POSITION) )
+        case XML_ELEMENT(TEXT, XML_SORT_BY_POSITION):
         {
             bool bTmp(false);
             if (::sax::Converter::convertBool(bTmp, sValue))
             {
                 bSortByPosition = bTmp;
             }
+            break;
         }
-        else if( IsXMLToken(sLocalName, XML_SORT_ALGORITHM) )
-        {
+        case XML_ELEMENT(TEXT, XML_SORT_ALGORITHM):
             sAlgorithm = sValue;
-        }
-    }
-    else if( XML_NAMESPACE_FO == nPrefix )
-    {
-        if( IsXMLToken(sLocalName, XML_LANGUAGE) )
-        {
+            break;
+        case XML_ELEMENT(FO, XML_LANGUAGE):
             maLanguageTagODF.maLanguage = sValue;
-        }
-        else if( IsXMLToken(sLocalName, XML_SCRIPT) )
-        {
+            break;
+        case XML_ELEMENT(FO, XML_SCRIPT):
             maLanguageTagODF.maScript = sValue;
-        }
-        else if( IsXMLToken(sLocalName, XML_COUNTRY) )
-        {
+            break;
+        case XML_ELEMENT(FO, XML_COUNTRY):
             maLanguageTagODF.maCountry = sValue;
-        }
-    }
-    else if( XML_NAMESPACE_STYLE == nPrefix )
-    {
-        if( IsXMLToken(sLocalName, XML_RFC_LANGUAGE_TAG) )
-        {
+            break;
+        case XML_ELEMENT(STYLE, XML_RFC_LANGUAGE_TAG):
             maLanguageTagODF.maRfcLanguageTag = sValue;
-        }
+            break;
     }
 }
 

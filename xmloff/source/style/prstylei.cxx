@@ -54,17 +54,16 @@ using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
 using namespace com::sun::star::drawing;
 
-void XMLPropStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
-                                        const OUString& rLocalName,
+void XMLPropStyleContext::SetAttribute( sal_Int32 nElement,
                                         const OUString& rValue )
 {
-    if( XML_NAMESPACE_STYLE == nPrefixKey && IsXMLToken( rLocalName, XML_FAMILY ) )
+    if( nElement == XML_ELEMENT(STYLE, XML_FAMILY) )
     {
         SAL_WARN_IF( GetFamily() != SvXMLStylesContext::GetFamily( rValue ), "xmloff", "unexpected style family" );
     }
     else
     {
-        SvXMLStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+        SvXMLStyleContext::SetAttribute( nElement, rValue );
     }
 }
 

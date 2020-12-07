@@ -42,10 +42,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
-using ::xmloff::token::IsXMLToken;
-using ::xmloff::token::XML_TEXT_PROPERTIES;
-using ::xmloff::token::XML_GRAPHIC_PROPERTIES;
-using ::xmloff::token::XML_PARAGRAPH_PROPERTIES;
+using namespace ::xmloff::token;
 
 
 XMLShapeStyleContext::XMLShapeStyleContext(
@@ -61,22 +58,21 @@ XMLShapeStyleContext::~XMLShapeStyleContext()
 {
 }
 
-void XMLShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName, const OUString& rValue )
+void XMLShapeStyleContext::SetAttribute( sal_Int32 nElement, const OUString& rValue )
 {
-    if (m_sControlDataStyleName.isEmpty() && (::xmloff::token::GetXMLToken(::xmloff::token::XML_DATA_STYLE_NAME) == rLocalName))
+    if (m_sControlDataStyleName.isEmpty() && (nElement & TOKEN_MASK) == XML_DATA_STYLE_NAME)
     {
         m_sControlDataStyleName = rValue;
     }
-    else if( (XML_NAMESPACE_STYLE == nPrefixKey) && IsXMLToken( rLocalName, ::xmloff::token::XML_LIST_STYLE_NAME ) )
+    else if( nElement == XML_ELEMENT(STYLE, XML_LIST_STYLE_NAME) )
     {
         m_sListStyleName = rValue;
     }
     else
     {
-        XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+        XMLPropStyleContext::SetAttribute( nElement, rValue );
 
-        if( (XML_NAMESPACE_STYLE == nPrefixKey) &&
-            ( IsXMLToken( rLocalName, ::xmloff::token::XML_NAME ) || IsXMLToken( rLocalName, ::xmloff::token::XML_DISPLAY_NAME ) ) )
+        if( nElement == XML_ELEMENT(STYLE, XML_NAME) || nElement == XML_ELEMENT(STYLE, XML_DISPLAY_NAME) )
         {
             if( !GetName().isEmpty() && !GetDisplayName().isEmpty() && GetName() != GetDisplayName() )
             {

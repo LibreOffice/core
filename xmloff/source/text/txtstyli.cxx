@@ -74,38 +74,37 @@ const SvXMLEnumMapEntry<sal_uInt16> aCategoryMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
-                                        const OUString& rLocalName,
+void XMLTextStyleContext::SetAttribute( sal_Int32 nElement,
                                         const OUString& rValue )
 {
-    if( XML_NAMESPACE_STYLE == nPrefixKey )
+    switch (nElement)
     {
-        // TODO: use a map here
-        if( IsXMLToken( rLocalName, XML_AUTO_UPDATE ) )
+        case XML_ELEMENT(STYLE, XML_AUTO_UPDATE):
         {
             if( IsXMLToken( rValue, XML_TRUE ) )
                 m_isAutoUpdate = true;
+            break;
         }
-        else if( IsXMLToken( rLocalName, XML_LIST_STYLE_NAME ) )
+        case XML_ELEMENT(STYLE, XML_LIST_STYLE_NAME):
         {
             m_sListStyleName = rValue;
             // Inherited paragraph style lost information about unset numbering (#i69523#)
             m_bListStyleSet = true;
+            break;
         }
-        else if( IsXMLToken( rLocalName, XML_MASTER_PAGE_NAME ) )
+        case XML_ELEMENT(STYLE, XML_MASTER_PAGE_NAME):
         {
             m_sMasterPageName = rValue;
             m_bHasMasterPageName = true;
+            break;
         }
-        else if( IsXMLToken( rLocalName, XML_DATA_STYLE_NAME ) )
-        {
+        case XML_ELEMENT(STYLE, XML_DATA_STYLE_NAME):
             m_sDataStyleName = rValue;
-        }
-        else if( IsXMLToken( rLocalName, XML_CLASS ) )
-        {
+            break;
+        case XML_ELEMENT(STYLE, XML_CLASS):
             m_sCategoryVal = rValue;
-        }
-        else if( IsXMLToken( rLocalName, XML_DEFAULT_OUTLINE_LEVEL ) )
+            break;
+        case XML_ELEMENT(STYLE, XML_DEFAULT_OUTLINE_LEVEL):
         {
             sal_Int32 nTmp;
             if (::sax::Converter::convertNumber( nTmp, rValue ) &&
@@ -113,15 +112,10 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
             {
                 m_nOutlineLevel = static_cast<sal_Int8>(nTmp);
             }
+            break;
         }
-        else
-        {
-            XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
-        }
-    }
-    else
-    {
-        XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+        default:
+            XMLPropStyleContext::SetAttribute( nElement, rValue );
     }
 }
 

@@ -1276,7 +1276,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     eDateSecs( XML_DEA_NONE ),
     bDateNoDefault( false )
 {
-    SetAttribute(XML_NAMESPACE_STYLE, GetXMLToken(XML_NAME), rName);
+    SetAttribute(XML_ELEMENT(STYLE, XML_NAME), rName);
 }
 
 SvXMLNumFormatContext::~SvXMLNumFormatContext()

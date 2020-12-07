@@ -37,9 +37,7 @@ class XMLOFF_DLLPUBLIC XMLShapeStyleContext: public XMLPropStyleContext
 protected:
     OUString     m_sListStyleName;
 
-    virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
-                               const OUString& rValue ) override;
+    virtual void SetAttribute( sal_Int32 nElement, const OUString& rValue ) override;
 public:
 
     XMLShapeStyleContext(

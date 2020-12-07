@@ -117,19 +117,17 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextShapePropertySe
                         nElement, xAttrList, rProperties, rProp );
 }
 
-void XMLTextShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
-                                        const OUString& rLocalName,
+void XMLTextShapeStyleContext::SetAttribute( sal_Int32 nElement,
                                         const OUString& rValue )
 {
-    if( XML_NAMESPACE_STYLE == nPrefixKey &&
-        IsXMLToken( rLocalName, XML_AUTO_UPDATE ) )
+    if( nElement == XML_ELEMENT(STYLE, XML_AUTO_UPDATE) )
     {
           if( IsXMLToken( rValue, XML_TRUE ) )
             bAutoUpdate = true;
     }
     else
     {
-        XMLShapeStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+        XMLShapeStyleContext::SetAttribute( nElement, rValue );
     }
 }
 

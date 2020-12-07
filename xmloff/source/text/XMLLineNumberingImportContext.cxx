@@ -76,79 +76,47 @@ XMLLineNumberingImportContext::~XMLLineNumberingImportContext()
 {
 }
 
-void XMLLineNumberingImportContext::SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
+void XMLLineNumberingImportContext::SetAttribute( sal_Int32 nElement,
                                const OUString& rValue )
 {
-    static const SvXMLTokenMapEntry aLineNumberingTokenMap[] =
-    {
-        { XML_NAMESPACE_TEXT, XML_STYLE_NAME, XML_TOK_LINENUMBERING_STYLE_NAME },
-        { XML_NAMESPACE_TEXT, XML_NUMBER_LINES,
-              XML_TOK_LINENUMBERING_NUMBER_LINES },
-        { XML_NAMESPACE_TEXT, XML_COUNT_EMPTY_LINES,
-              XML_TOK_LINENUMBERING_COUNT_EMPTY_LINES },
-        { XML_NAMESPACE_TEXT, XML_COUNT_IN_TEXT_BOXES,
-              XML_TOK_LINENUMBERING_COUNT_IN_TEXT_BOXES },
-        { XML_NAMESPACE_TEXT, XML_RESTART_ON_PAGE,
-              XML_TOK_LINENUMBERING_RESTART_NUMBERING },
-        { XML_NAMESPACE_TEXT, XML_OFFSET, XML_TOK_LINENUMBERING_OFFSET },
-        { XML_NAMESPACE_STYLE, XML_NUM_FORMAT, XML_TOK_LINENUMBERING_NUM_FORMAT },
-        { XML_NAMESPACE_STYLE, XML_NUM_LETTER_SYNC,
-              XML_TOK_LINENUMBERING_NUM_LETTER_SYNC },
-        { XML_NAMESPACE_TEXT, XML_NUMBER_POSITION,
-              XML_TOK_LINENUMBERING_NUMBER_POSITION },
-        { XML_NAMESPACE_TEXT, XML_INCREMENT, XML_TOK_LINENUMBERING_INCREMENT },
-    //  { XML_NAMESPACE_TEXT, XML_LINENUMBERING_CONFIGURATION,
-    //        XML_TOK_LINENUMBERING_LINENUMBERING_CONFIGURATION },
-    //  { XML_NAMESPACE_TEXT, XML_INCREMENT, XML_TOK_LINENUMBERING_INCREMENT },
-    //  { XML_NAMESPACE_TEXT, XML_LINENUMBERING_SEPARATOR,
-    //        XML_TOK_LINENUMBERING_LINENUMBERING_SEPARATOR },
-
-        XML_TOKEN_MAP_END
-    };
-
-    static const SvXMLTokenMap aTokenMap(aLineNumberingTokenMap);
-
-    auto eToken = aTokenMap.Get(nPrefixKey, rLocalName);
-
     bool bTmp(false);
     sal_Int32 nTmp;
 
-    switch (eToken)
+    switch (nElement)
     {
-        case XML_TOK_LINENUMBERING_STYLE_NAME:
+        case XML_ELEMENT(TEXT, XML_STYLE_NAME):
             sStyleName = rValue;
             break;
 
-        case XML_TOK_LINENUMBERING_NUMBER_LINES:
+        case XML_ELEMENT(TEXT, XML_NUMBER_LINES):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bNumberLines = bTmp;
             }
             break;
 
-        case XML_TOK_LINENUMBERING_COUNT_EMPTY_LINES:
+        case XML_ELEMENT(TEXT, XML_COUNT_EMPTY_LINES):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bCountEmptyLines = bTmp;
             }
             break;
 
-        case XML_TOK_LINENUMBERING_COUNT_IN_TEXT_BOXES:
+        case XML_ELEMENT(TEXT, XML_COUNT_IN_TEXT_BOXES):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bCountInFloatingFrames = bTmp;
             }
             break;
 
-        case XML_TOK_LINENUMBERING_RESTART_NUMBERING:
+        case XML_ELEMENT(TEXT, XML_RESTART_ON_PAGE):
             if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bRestartNumbering = bTmp;
             }
             break;
 
-        case XML_TOK_LINENUMBERING_OFFSET:
+        case XML_ELEMENT(TEXT, XML_OFFSET):
             if (GetImport().GetMM100UnitConverter().
                     convertMeasureToCore(nTmp, rValue))
             {
@@ -156,15 +124,15 @@ void XMLLineNumberingImportContext::SetAttribute( sal_uInt16 nPrefixKey,
             }
             break;
 
-        case XML_TOK_LINENUMBERING_NUM_FORMAT:
+        case XML_ELEMENT(STYLE, XML_NUM_FORMAT):
             sNumFormat = rValue;
             break;
 
-        case XML_TOK_LINENUMBERING_NUM_LETTER_SYNC:
+        case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
             sNumLetterSync = rValue;
             break;
 
-        case XML_TOK_LINENUMBERING_NUMBER_POSITION:
+        case XML_ELEMENT(TEXT, XML_NUMBER_POSITION):
         {
             static const SvXMLEnumMapEntry<sal_Int16> aLineNumberPositionMap[] =
             {
@@ -180,7 +148,7 @@ void XMLLineNumberingImportContext::SetAttribute( sal_uInt16 nPrefixKey,
             break;
         }
 
-        case XML_TOK_LINENUMBERING_INCREMENT:
+        case XML_ELEMENT(TEXT, XML_INCREMENT):
             if (::sax::Converter::convertNumber(nTmp, rValue, 0))
             {
                 nIncrement = static_cast<sal_Int16>(nTmp);
