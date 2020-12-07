@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b9acdb2_e488cbbe",
+        "filename": "sc/source/ui/docshell/externalrefmgr.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2759,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-12-07T20:40:51Z",
+      "side": 1,
+      "message": "There are a large number of crashtesting failures on this line in today\u0027s results\n(https://dev-builds.libreoffice.org/crashtest/9c98bf224d1dc8c5cb91d49273836eeb6111d697/exportCrash.txt)\ne.g.\nwget https://bugs.documentfoundation.org/attachment.cgi?id\u003d138338 -O tdf114221-5.xls\n./instdir/program/soffice.bin --convert-to xlsx tdf114221-5.xls",
+      "revId": "f85d860ccbebd99bc128218148e2992c9415f221",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
