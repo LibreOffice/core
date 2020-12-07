@@ -7,12 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_NOTEBOOKBAR_HXX
-#define INCLUDED_VCL_NOTEBOOKBAR_HXX
+#pragma once
 
 #include <vcl/builder.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/NotebookBarAddonsMerger.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vcl/settings.hxx>
 #include <set>
 #include <vector>
@@ -74,7 +73,5 @@ private:
     void UpdateDefaultSettings();
     void UpdatePersonaSettings();
 };
-
-#endif // INCLUDED_VCL_NOTEBOOKBAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

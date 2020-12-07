@@ -20,10 +20,10 @@
 #ifndef INCLUDED_VCL_INC_BRDWIN_HXX
 #define INCLUDED_VCL_INC_BRDWIN_HXX
 
-#include <vcl/notebookbar.hxx>
+#include <vcl/notebookbar/notebookbar.hxx>
 #include <vcl/window.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <vcl/NotebookBarAddonsMerger.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 
