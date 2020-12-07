@@ -87,7 +87,7 @@ JNIEXPORT jlong JNICALL Java_embeddedobj_test_NativeView_getNativeWindow
 
     /* Get the drawing surface */
     if ((ds = awt.GetDrawingSurface(env, obj_this)) == NULL)
-        return 0L;
+        return 0;
 
     /* Lock the drawing surface */
     lock = ds->Lock(ds);

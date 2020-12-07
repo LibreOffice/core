@@ -74,7 +74,7 @@ DdeData& DdeData::operator=(DdeData&&) noexcept
 
 tools::Long DdeData::getSize() const
 {
-    return 0L;
+    return 0;
 }
 
 void const * DdeData::getData() const
@@ -86,7 +86,7 @@ struct DdeImp {};
 
 tools::Long DdeConnection::GetError() const
 {
-    return 0L;
+    return 0;
 }
 
 DdeConnection::DdeConnection( SAL_UNUSED_PARAMETER const OUString&, SAL_UNUSED_PARAMETER const OUString& )

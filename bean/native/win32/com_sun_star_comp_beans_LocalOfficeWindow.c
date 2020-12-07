@@ -97,7 +97,7 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
 
                                 /* Get the drawing surface */
     if ((ds = awt.GetDrawingSurface(env, obj_this)) == NULL)
-        return 0L;
+        return 0;
 
     /* Lock the drawing surface */
     lock = ds->Lock(ds);
