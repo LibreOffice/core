@@ -58,12 +58,12 @@ Task::mpSchedulerData, which is actually a part of the scheduler.
 Before invoking the task, we have to release the lock, so others can
 Start new Tasks.
 
-The Scheduler just processes it's own Tasks in the main thread and needs
+The Scheduler just processes its own Tasks in the main thread and needs
 the SolarMutex for it and for DeInit (tested by DBG_TESTSOLARMUTEX). All
 the other interaction just take the scheduler mutex or don't need locking
 at all.
 
-There is a "workaround" for static Task objecs, which would crash LO on
+There is a "workaround" for static Task objects, which would crash LO on
 destruction, because Task::~Task would try to de-register itself in the
 Scheduler, while the SchedulerLock would be long gone. OTOH this makes
 Task handling less error-prone, than doing "special" manual cleanup.
