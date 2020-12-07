@@ -90,17 +90,16 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
                     # read the file
                     filename = unohelper.fileUrlToSystemPath( url )
 
-                    fileHandle = open( filename, encoding='utf_8' )
-                    src = fileHandle.read().replace("\r","")
-                    if not src.endswith( "\n" ):
-                        src = src + "\n"
+                    with open( filename, encoding='utf_8' ) as fileHandle:
+                        src = fileHandle.read().replace("\r","")
+                        if not src.endswith( "\n" ):
+                            src = src + "\n"
 
-                    # compile and execute the module
-                    codeobject = compile( src, encfile(filename), "exec" )
-                    mod.__file__ = filename
-                    exec(codeobject, mod.__dict__)
-                    g_loadedComponents[url] = mod
-                    fileHandle.close()
+                        # compile and execute the module
+                        codeobject = compile( src, encfile(filename), "exec" )
+                        mod.__file__ = filename
+                        exec(codeobject, mod.__dict__)
+                        g_loadedComponents[url] = mod
                 return mod
             elif "vnd.openoffice.pymodule" == protocol:
                 nSlash = dependent.rfind('/')
