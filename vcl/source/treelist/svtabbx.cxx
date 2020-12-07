@@ -49,9 +49,29 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
     {
         auto aNode = rJsonWriter.startStruct();
 
+        // simple listbox value
         const SvLBoxItem* pIt = pEntry->GetFirstItem(SvLBoxItemType::String);
         if (pIt)
             rJsonWriter.put("text", static_cast<const SvLBoxString*>(pIt)->GetText());
+
+        // column based data
+        {
+            auto aColumns = rJsonWriter.startArray("columns");
+
+            for (size_t i = 0; i < pEntry->ItemCount(); i++)
+            {
+                SvLBoxItem& rItem = pEntry->GetItem(i);
+                if (rItem.GetType() == SvLBoxItemType::String)
+                {
+                    const SvLBoxString* pStringItem = dynamic_cast<const SvLBoxString*>(&rItem);
+                    if (pStringItem)
+                    {
+                        auto aColumn = rJsonWriter.startStruct();
+                        rJsonWriter.put("text", pStringItem->GetText());
+                    }
+                }
+            }
+        }
 
         if (bCheckButtons)
         {
@@ -545,6 +565,20 @@ sal_uLong SvHeaderTabListBox::Insert( SvTreeListEntry* pEntry, sal_uLong nRootPo
     sal_uLong nPos = SvTabListBox::Insert( pEntry, nRootPos );
     RecalculateAccessibleChildren();
     return nPos;
+}
+
+void SvHeaderTabListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    SvTabListBox::DumpAsPropertyTree(rJsonWriter);
+
+    auto aHeaders = rJsonWriter.startArray("headers");
+
+    HeaderBar* pHeaderBar = GetHeaderBar();
+    for(sal_uInt16 i = 0; i < pHeaderBar->GetItemCount(); i++)
+    {
+        auto aNode = rJsonWriter.startStruct();
+        rJsonWriter.put("text", pHeaderBar->GetItemText(pHeaderBar->GetItemId(i)));
+    }
 }
 
 IMPL_LINK_NOARG(SvHeaderTabListBox, ScrollHdl_Impl, SvTreeListBox*, void)
