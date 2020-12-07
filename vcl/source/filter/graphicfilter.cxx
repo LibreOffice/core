@@ -1960,9 +1960,15 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                 // do we have a native Vector Graphic Data RenderGraphic, whose data can be written directly?
                 auto const & rVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
 
+                bool bIsEMF = rGraphic.GetGfxLink().IsEMF();
+
+                // VectorGraphicDataType::Wmf means WMF or EMF, allow direct write in the WMF case
+                // only.
                 if (rVectorGraphicDataPtr
                     && rVectorGraphicDataPtr->getVectorGraphicDataArrayLength()
-                    && VectorGraphicDataType::Wmf == rVectorGraphicDataPtr->getVectorGraphicDataType())
+                    && VectorGraphicDataType::Wmf
+                           == rVectorGraphicDataPtr->getVectorGraphicDataType()
+                    && !bIsEMF)
                 {
                     rOStm.WriteBytes(rVectorGraphicDataPtr->getVectorGraphicDataArray().getConstArray(), rVectorGraphicDataPtr->getVectorGraphicDataArrayLength());
 
