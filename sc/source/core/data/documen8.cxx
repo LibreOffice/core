@@ -423,7 +423,8 @@ void ScDocument::CalculateInColumnInThread( ScInterpreterContext& rContext, cons
     // If any of the thread_local data would cause problems if they stay around for too long
     // (and e.g. outlive the ScDocument), clean them up here, they cannot be cleaned up
     // later from the main thread.
-    maThreadSpecific.xRecursionHelper->Clear();
+    if(maThreadSpecific.xRecursionHelper)
+        maThreadSpecific.xRecursionHelper->Clear();
 }
 
 void ScDocument::HandleStuffAfterParallelCalculation( SCCOL nColStart, SCCOL nColEnd, SCROW nRow, size_t nLen, SCTAB nTab, ScInterpreter* pInterpreter )
