@@ -267,7 +267,6 @@ namespace {
 class SwXMLTextStyleContext_Impl : public XMLTextStyleContext
 {
     std::unique_ptr<SwXMLConditions_Impl> pConditions;
-    uno::Reference < style::XStyle > xNewStyle;
 
 protected:
 
@@ -293,7 +292,7 @@ public:
 
 uno::Reference < style::XStyle > SwXMLTextStyleContext_Impl::Create()
 {
-
+    uno::Reference < style::XStyle > xNewStyle;
     if( pConditions && XmlStyleFamily::TEXT_PARAGRAPH == GetFamily() )
     {
         uno::Reference< lang::XMultiServiceFactory > xFactory( GetImport().GetModel(),
@@ -317,12 +316,11 @@ uno::Reference < style::XStyle > SwXMLTextStyleContext_Impl::Create()
 void
 SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
 {
-
-    if( pConditions && XmlStyleFamily::TEXT_PARAGRAPH == GetFamily() && xNewStyle.is() )
+    if( pConditions && XmlStyleFamily::TEXT_PARAGRAPH == GetFamily() && GetStyle().is() )
     {
         CommandStruct const*const pCommands = SwCondCollItem::GetCmds();
 
-        Reference< XPropertySet > xPropSet( xNewStyle, UNO_QUERY );
+        Reference< XPropertySet > xPropSet( GetStyle(), UNO_QUERY );
 
         uno::Sequence< beans::NamedValue > aSeq( pConditions->size() );
 
