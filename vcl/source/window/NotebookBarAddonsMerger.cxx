@@ -21,11 +21,11 @@
 
 #include <cstddef>
 
-#include <vcl/NotebookBarAddonsMerger.hxx>
+#include <vcl/notebookbar/IPrioritable.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/IPrioritable.hxx>
 #include <OptionalBox.hxx>
 
 const char STYLE_TEXT[] = "Text";

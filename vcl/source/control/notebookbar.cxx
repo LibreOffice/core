@@ -8,7 +8,7 @@
  */
 
 #include <vcl/layout.hxx>
-#include <vcl/notebookbar.hxx>
+#include <vcl/notebookbar/notebookbar.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/NotebookbarContextControl.hxx>

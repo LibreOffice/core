@@ -20,7 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <vcl/notebookbar.hxx>
+#include <vcl/notebookbar/notebookbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/event.hxx>

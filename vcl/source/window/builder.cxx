@@ -32,7 +32,7 @@
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/headbar.hxx>
-#include <vcl/IPrioritable.hxx>
+#include <vcl/notebookbar/IPrioritable.hxx>
 #include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/toolkit/lstbox.hxx>
@@ -59,7 +59,11 @@
 #include <bitmaps.hlst>
 #include <managedmenubutton.hxx>
 #include <messagedialog.hxx>
+#include <ContextVBox.hxx>
+#include <DropdownBox.hxx>
 #include <OptionalBox.hxx>
+#include <PriorityMergedHBox.hxx>
+#include <PriorityHBox.hxx>
 #include <window.h>
 #include <xmlreader/xmlreader.hxx>
 #include <desktop/crashreport.hxx>
@@ -1978,6 +1982,26 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         if (!sMenu.isEmpty())
             m_pParserState->m_aButtonMenuMaps.emplace_back(id, sMenu);
         setupFromActionName(static_cast<Button*>(xWindow.get()), rMap, m_xFrame);
+    }
+    else if (name == "sfxlo-PriorityMergedHBox")
+    {
+        // like tdf#135495 above, keep the sfxlo-PriorityMergedHBox even though its not in sfx anymore
+        xWindow = VclPtr<PriorityMergedHBox>::Create(pParent);
+    }
+    else if (name == "sfxlo-PriorityHBox")
+    {
+        // like tdf#135495 above, keep the sfxlo-PriorityMergedHBox even though its not in sfx anymore
+        xWindow = VclPtr<PriorityHBox>::Create(pParent);
+    }
+    else if (name == "sfxlo-DropdownBox")
+    {
+        // like tdf#135495 above, keep the sfxlo-PriorityMergedHBox even though its not in sfx anymore
+        xWindow = VclPtr<DropdownBox>::Create(pParent);
+    }
+    else if (name == "sfxlo-ContextVBox")
+    {
+        // like tdf#135495 above, keep the sfxlo-PriorityMergedHBox even though its not in sfx anymore
+        xWindow = VclPtr<ContextVBox>::Create(pParent);
     }
     else if (name == "GtkIconView")
     {

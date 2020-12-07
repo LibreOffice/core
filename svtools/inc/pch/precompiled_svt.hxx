@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-04 09:59:40 using:
+ Generated on 2020-12-07 11:31:00 using:
  ./bin/update_pch svtools svt --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -92,7 +92,6 @@
 #include <sal/typesizes.h>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicExternalLink.hxx>
-#include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/accessiblefactory.hxx>
 #include <vcl/alpha.hxx>
@@ -121,6 +120,7 @@
 #include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -237,7 +237,6 @@
 #include <com/sun/star/view/PrintableState.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/propertycontainer.hxx>
