@@ -285,8 +285,8 @@ SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
                                       const Frame_Info* pFrameInfo,
                                       const Por_Info* pPorInfo,
                                       OutputDevice const & rOut )
-  : nEndStructureElement( 0 ),
-    nRestoreCurrentTag( -1 ),
+  : m_nEndStructureElement( 0 ),
+    m_nRestoreCurrentTag( -1 ),
     mpNumInfo( pNumInfo ),
     mpFrameInfo( pFrameInfo ),
     mpPorInfo( pPorInfo )
@@ -389,7 +389,7 @@ bool SwTaggedPDFHelper::CheckReopenTag()
 
     if ( -1 != nReopenTag )
     {
-        nRestoreCurrentTag = mpPDFExtOutDevData->GetCurrentStructureElement();
+        m_nRestoreCurrentTag = mpPDFExtOutDevData->GetCurrentStructureElement();
         const bool bSuccess = mpPDFExtOutDevData->SetCurrentStructureElement( nReopenTag );
         OSL_ENSURE( bSuccess, "Failed to reopen tag" );
 
@@ -405,9 +405,9 @@ bool SwTaggedPDFHelper::CheckReopenTag()
 
 void SwTaggedPDFHelper::CheckRestoreTag() const
 {
-    if ( nRestoreCurrentTag != -1 )
+    if ( m_nRestoreCurrentTag != -1 )
     {
-        const bool bSuccess = mpPDFExtOutDevData->SetCurrentStructureElement( nRestoreCurrentTag );
+        const bool bSuccess = mpPDFExtOutDevData->SetCurrentStructureElement( m_nRestoreCurrentTag );
         OSL_ENSURE( bSuccess, "Failed to restore reopened tag" );
 
 #if OSL_DEBUG_LEVEL > 1
@@ -420,7 +420,7 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
 {
     // write new tag
     const sal_Int32 nId = mpPDFExtOutDevData->BeginStructureElement( eType, rString );
-    ++nEndStructureElement;
+    ++m_nEndStructureElement;
 
 #if OSL_DEBUG_LEVEL > 1
     aStructStack.push_back( static_cast<sal_uInt16>(eType) );
@@ -930,7 +930,7 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
 
         if ( -1 != nReopenTag )
         {
-            nRestoreCurrentTag = mpPDFExtOutDevData->GetCurrentStructureElement();
+            m_nRestoreCurrentTag = mpPDFExtOutDevData->GetCurrentStructureElement();
             mpPDFExtOutDevData->SetCurrentStructureElement( nReopenTag );
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1301,10 +1301,10 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
 void SwTaggedPDFHelper::EndStructureElements()
 {
-    while ( nEndStructureElement > 0 )
+    while ( m_nEndStructureElement > 0 )
     {
         EndTag();
-        --nEndStructureElement;
+        --m_nEndStructureElement;
     }
 
     CheckRestoreTag();

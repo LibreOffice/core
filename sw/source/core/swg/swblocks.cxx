@@ -48,19 +48,19 @@ sal_uInt16 SwImpBlocks::Hash( const OUString& r )
 }
 
 SwBlockName::SwBlockName( const OUString& rShort, const OUString& rLong )
-    : aShort( rShort ), aLong( rLong ), aPackageName (rShort),
-    bIsOnlyTextFlagInit( false ), bIsOnlyText( false )
+    : m_aShort( rShort ), m_aLong( rLong ), m_aPackageName (rShort),
+    m_bIsOnlyTextFlagInit( false ), m_bIsOnlyText( false )
 {
-    nHashS = SwImpBlocks::Hash( rShort );
-    nHashL = SwImpBlocks::Hash( rLong );
+    m_nHashS = SwImpBlocks::Hash( rShort );
+    m_nHashL = SwImpBlocks::Hash( rLong );
 }
 
 SwBlockName::SwBlockName( const OUString& rShort, const OUString& rLong, const OUString& rPackageName)
-    : aShort( rShort ), aLong( rLong ), aPackageName (rPackageName),
-    bIsOnlyTextFlagInit( false ), bIsOnlyText( false )
+    : m_aShort( rShort ), m_aLong( rLong ), m_aPackageName (rPackageName),
+    m_bIsOnlyTextFlagInit( false ), m_bIsOnlyText( false )
 {
-    nHashS = SwImpBlocks::Hash( rShort );
-    nHashL = SwImpBlocks::Hash( rLong );
+    m_nHashS = SwImpBlocks::Hash( rShort );
+    m_nHashL = SwImpBlocks::Hash( rLong );
 }
 
 /**
@@ -131,8 +131,8 @@ sal_uInt16 SwImpBlocks::GetIndex( const OUString& rShort ) const
     for( size_t i = 0; i < m_aNames.size(); i++ )
     {
         const SwBlockName* pName = m_aNames[ i ].get();
-        if( pName->nHashS == nHash
-         && pName->aShort == s )
+        if( pName->m_nHashS == nHash
+         && pName->m_aShort == s )
             return i;
     }
     return USHRT_MAX;
@@ -144,8 +144,8 @@ sal_uInt16 SwImpBlocks::GetLongIndex( const OUString& rLong ) const
     for( size_t i = 0; i < m_aNames.size(); i++ )
     {
         const SwBlockName* pName = m_aNames[ i ].get();
-        if( pName->nHashL == nHash
-         && pName->aLong == rLong )
+        if( pName->m_nHashL == nHash
+         && pName->m_aLong == rLong )
             return i;
     }
     return USHRT_MAX;
@@ -154,21 +154,21 @@ sal_uInt16 SwImpBlocks::GetLongIndex( const OUString& rLong ) const
 OUString SwImpBlocks::GetShortName( sal_uInt16 n ) const
 {
     if( n < m_aNames.size() )
-        return m_aNames[n]->aShort;
+        return m_aNames[n]->m_aShort;
     return OUString();
 }
 
 OUString SwImpBlocks::GetLongName( sal_uInt16 n ) const
 {
     if( n < m_aNames.size() )
-        return m_aNames[n]->aLong;
+        return m_aNames[n]->m_aLong;
     return OUString();
 }
 
 OUString SwImpBlocks::GetPackageName( sal_uInt16 n ) const
 {
     if( n < m_aNames.size() )
-        return m_aNames[n]->aPackageName;
+        return m_aNames[n]->m_aPackageName;
     return OUString();
 }
 
@@ -181,8 +181,8 @@ void SwImpBlocks::AddName( const OUString& rShort, const OUString& rLong,
         m_aNames.erase( m_aNames.begin() + nIdx );
     }
     std::unique_ptr<SwBlockName> pNew(new SwBlockName( rShort, rLong ));
-    pNew->bIsOnlyTextFlagInit = true;
-    pNew->bIsOnlyText = bOnlyText;
+    pNew->m_bIsOnlyTextFlagInit = true;
+    pNew->m_bIsOnlyText = bOnlyText;
     m_aNames.insert( std::move(pNew) );
 }
 
@@ -335,7 +335,7 @@ void SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString* l )
         m_nErr = m_pImp->Rename( n, aNew );
         if( !m_nErr )
         {
-            bool bOnlyText = m_pImp->m_aNames[ n ]->bIsOnlyText;
+            bool bOnlyText = m_pImp->m_aNames[ n ]->m_bIsOnlyText;
             m_pImp->m_aNames.erase( m_pImp->m_aNames.begin() + n );
             m_pImp->AddName( aNew, aLong, bOnlyText );
             m_nErr = m_pImp->MakeBlockList();
@@ -405,7 +405,7 @@ sal_uInt16 SwTextBlocks::PutDoc()
         {
             m_pImp->m_nCurrentIndex = GetIndex( m_pImp->m_aShort );
             if( m_pImp->m_nCurrentIndex != USHRT_MAX )
-                m_pImp->m_aNames[ m_pImp->m_nCurrentIndex ]->aLong = m_pImp->m_aLong;
+                m_pImp->m_aNames[ m_pImp->m_nCurrentIndex ]->m_aLong = m_pImp->m_aLong;
             else
             {
                 m_pImp->AddName( m_pImp->m_aShort, m_pImp->m_aLong );
@@ -448,7 +448,7 @@ sal_uInt16 SwTextBlocks::PutText( const OUString& rShort, const OUString& rName,
             {
                 nIdx = GetIndex( m_pImp->m_aShort );
                 if( nIdx != USHRT_MAX )
-                    m_pImp->m_aNames[ nIdx ]->aLong = rName;
+                    m_pImp->m_aNames[ nIdx ]->m_aLong = rName;
                 else
                 {
                     m_pImp->AddName( m_pImp->m_aShort, rName, true );
@@ -499,14 +499,14 @@ bool SwTextBlocks::IsOnlyTextBlock( sal_uInt16 nIdx ) const
     if( m_pImp && !m_pImp->m_bInPutMuchBlocks )
     {
         SwBlockName* pBlkNm = m_pImp->m_aNames[ nIdx ].get();
-        if( !pBlkNm->bIsOnlyTextFlagInit &&
+        if( !pBlkNm->m_bIsOnlyTextFlagInit &&
             !m_pImp->IsFileChanged() && !m_pImp->OpenFile() )
         {
-            pBlkNm->bIsOnlyText = m_pImp->IsOnlyTextBlock( pBlkNm->aShort );
-            pBlkNm->bIsOnlyTextFlagInit = true;
+            pBlkNm->m_bIsOnlyText = m_pImp->IsOnlyTextBlock( pBlkNm->m_aShort );
+            pBlkNm->m_bIsOnlyTextFlagInit = true;
             m_pImp->CloseFile();
         }
-        bRet = pBlkNm->bIsOnlyText;
+        bRet = pBlkNm->m_bIsOnlyText;
     }
     return bRet;
 }
@@ -516,8 +516,8 @@ bool SwTextBlocks::IsOnlyTextBlock( const OUString& rShort ) const
     sal_uInt16 nIdx = m_pImp->GetIndex( rShort );
     if( USHRT_MAX != nIdx )
     {
-        if( m_pImp->m_aNames[ nIdx ]->bIsOnlyTextFlagInit )
-            return m_pImp->m_aNames[ nIdx ]->bIsOnlyText;
+        if( m_pImp->m_aNames[ nIdx ]->m_bIsOnlyTextFlagInit )
+            return m_pImp->m_aNames[ nIdx ]->m_bIsOnlyText;
         return IsOnlyTextBlock( nIdx );
     }
 
