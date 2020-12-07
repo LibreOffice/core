@@ -144,7 +144,7 @@ public:
 };
 
 // Flys that are bound to LayoutFrames and not to Content
-class SwFlyLayFrame : public SwFlyFreeFrame
+class SwFlyLayFrame final: public SwFlyFreeFrame
 {
 public:
     // #i28701#
