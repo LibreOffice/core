@@ -48,9 +48,6 @@
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/scheduler.hxx>
-#if HAVE_FEATURE_OPENGL
-#include <vcl/opengl/OpenGLWrapper.hxx>
-#endif
 #include <vcl/skia/SkiaHelper.hxx>
 
 #include <salinst.hxx>

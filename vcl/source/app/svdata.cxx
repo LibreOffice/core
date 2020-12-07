@@ -49,9 +49,6 @@
 #include <com/sun/star/accessibility/MSAAService.hpp>
 
 #include <config_features.h>
-#if HAVE_FEATURE_OPENGL
-#include <vcl/opengl/OpenGLContext.hxx>
-#endif
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <cppuhelper/basemutex.hxx>
 

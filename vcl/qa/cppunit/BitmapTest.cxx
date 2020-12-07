@@ -20,9 +20,6 @@
 
 #include <rtl/strbuf.hxx>
 #include <config_features.h>
-#if HAVE_FEATURE_OPENGL
-#include <vcl/opengl/OpenGLHelper.hxx>
-#endif
 #include <vcl/skia/SkiaHelper.hxx>
 #include <vcl/BitmapMonochromeFilter.hxx>
 

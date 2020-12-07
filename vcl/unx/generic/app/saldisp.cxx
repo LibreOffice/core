@@ -44,8 +44,6 @@
 #include <X11/extensions/Xinerama.h>
 #endif
 
-#include <opengl/zone.hxx>
-
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
@@ -67,8 +65,6 @@
 #include <unx/wmadaptor.hxx>
 #include <unx/x11/xrender_peer.hxx>
 #include <unx/glyphcache.hxx>
-
-#include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <poll.h>
 #include <memory>
@@ -174,30 +170,6 @@ sal_GetServerVendor( Display *p_display )
     return vendor_unknown;
 }
 
-bool SalDisplay::BestOpenGLVisual(Display* pDisplay, int nScreen, XVisualInfo& rVI)
-{
-    OpenGLZone aZone;
-
-    XVisualInfo* pVI;
-    int aAttrib[] = { GLX_RGBA,
-                      GLX_RED_SIZE, 8,
-                      GLX_GREEN_SIZE, 8,
-                      GLX_BLUE_SIZE, 8,
-                      GLX_DEPTH_SIZE, 24,
-                      GLX_STENCIL_SIZE, 8,
-                      None };
-
-    pVI = glXChooseVisual( pDisplay, nScreen, aAttrib );
-    if( !pVI )
-        return false;
-
-    rVI = *pVI;
-    XFree( pVI );
-
-    CHECK_GL_ERROR();
-    return true;
-}
-
 bool SalDisplay::BestVisual( Display     *pDisplay,
                              int          nScreen,
                              XVisualInfo &rVI )
@@ -209,11 +181,6 @@ bool SalDisplay::BestVisual( Display     *pDisplay,
         sscanf( pVID, "%li", &nVID );
 
     if( nVID && sal_GetVisualInfo( pDisplay, nVID, rVI ) )
-        return rVI.visualid == nDefVID;
-
-// TODO SKIA
-    bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled();
-    if (bUseOpenGL && BestOpenGLVisual(pDisplay, nScreen, rVI))
         return rVI.visualid == nDefVID;
 
     XVisualInfo aVI;

@@ -30,7 +30,6 @@
 #include <comphelper/windowserrorstring.hxx>
 #include <comphelper/scopeguard.hxx>
 
-#include <vcl/opengl/OpenGLHelper.hxx>
 #include <win/salgdi.h>
 #include <win/saldata.hxx>
 #include <win/wingdiimpl.hxx>

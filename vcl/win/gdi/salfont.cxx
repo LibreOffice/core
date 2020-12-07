@@ -47,7 +47,6 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/fontcharmap.hxx>
-#include <vcl/opengl/OpenGLWrapper.hxx>
 #include <comphelper/scopeguard.hxx>
 
 #include <fontsubset.hxx>

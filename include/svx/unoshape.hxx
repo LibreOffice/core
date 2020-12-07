@@ -64,7 +64,6 @@ class SdrModel;
 class SvxDrawPage;
 class SvGlobalName;
 class Pair;
-class IOpenGLRenderer;
 
 // Dimension arrows change size/position on save/reload (#i59051#)
 namespace basegfx

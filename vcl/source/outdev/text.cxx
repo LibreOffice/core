@@ -38,9 +38,6 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/toolkit/controllayout.hxx>
-#ifdef MACOSX
-# include <vcl/opengl/OpenGLHelper.hxx>
-#endif
 
 #include <config_fuzzers.h>
 #include <outdata.hxx>

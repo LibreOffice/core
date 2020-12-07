@@ -40,7 +40,6 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/opengl/OpenGLWrapper.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>

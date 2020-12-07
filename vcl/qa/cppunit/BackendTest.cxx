@@ -84,7 +84,6 @@ public:
 // silently in case a new backend is added.
 #define SHOULD_ASSERT                                                                              \
     (assertBackendNameNotEmpty(aOutDevTest.getRenderBackendName())                                 \
-     && aOutDevTest.getRenderBackendName() != "opengl"                                             \
      && aOutDevTest.getRenderBackendName() != "qt5"                                                \
      && aOutDevTest.getRenderBackendName() != "qt5svp"                                             \
      && aOutDevTest.getRenderBackendName() != "gtk3svp"                                            \

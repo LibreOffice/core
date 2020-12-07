@@ -35,7 +35,6 @@ class SalGraphics;
 class SalBitmap;
 class SalFrame;
 class Gradient;
-class OpenGLContext;
 class SalVirtualDevice;
 struct SalGradient;
 
