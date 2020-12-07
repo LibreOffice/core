@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_OPTIONALBOX_HXX
 #define INCLUDED_VCL_OPTIONALBOX_HXX
 
-#include <vcl/IPrioritable.hxx>
+#include <vcl/notebookbar/IPrioritable.hxx>
 #include <vcl/layout.hxx>
 
 class OptionalBox final : public VclHBox, public vcl::IPrioritable

@@ -27,7 +27,7 @@
 #include <vcl/window.hxx>
 #include <vcl/windowstate.hxx>
 #include <memory>
-#include <vcl/NotebookBarAddonsMerger.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 
 class MenuBar;
 class NotebookBar;

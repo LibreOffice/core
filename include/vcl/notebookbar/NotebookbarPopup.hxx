@@ -17,31 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_NOTEBOOKBAR_DROPDOWNBOX_HXX
-#define INCLUDED_SFX2_NOTEBOOKBAR_DROPDOWNBOX_HXX
+#ifndef INCLUDED_SFX2_NOTEBOOKBAR_NOTEBOOKBARPOPUP_HXX
+#define INCLUDED_SFX2_NOTEBOOKBAR_NOTEBOOKBARPOPUP_HXX
 
-#include <vcl/IPrioritable.hxx>
 #include <vcl/layout.hxx>
-#include "NotebookbarPopup.hxx"
+#include <vcl/floatwin.hxx>
 
-class DropdownBox : public VclHBox, public vcl::IPrioritable
+/*
+ * Popup - shows hidden content, controls are moved to this popup
+ * and after close moved to the original parent
+ */
+
+class VCL_DLLPUBLIC NotebookbarPopup : public FloatingWindow
 {
 private:
-    bool m_bInFullView;
-    VclPtr<PushButton> m_pButton;
-    VclPtr<NotebookbarPopup> m_pPopup;
+    VclPtr<VclHBox> m_pBox;
+    ScopedVclPtr<VclHBox> m_pParent;
 
 public:
-    explicit DropdownBox(vcl::Window* pParent);
-    virtual ~DropdownBox() override;
-    virtual void dispose() override;
+    explicit NotebookbarPopup(const VclPtr<VclHBox>& pParent);
 
-    void HideContent() override;
-    void ShowContent() override;
-    bool IsHidden() override;
+    virtual ~NotebookbarPopup() override;
 
-private:
-    DECL_LINK(PBClickHdl, Button*, void);
+    VclHBox* getBox();
+
+    virtual void PopupModeEnd() override;
+
+    void hideSeparators(bool bHide);
+
+    void dispose() override;
+
+    void ApplyBackground(vcl::Window* pWindow);
+
+    void RemoveBackground(vcl::Window* pWindow);
 };
 
 #endif
