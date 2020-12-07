@@ -20,6 +20,10 @@
 #ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCEDITABLETEXT_H
 #define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCEDITABLETEXT_H
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "Resource.h"
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
@@ -104,7 +108,7 @@ private:
 
     css::uno::Reference<css::accessibility::XAccessibleEditableText> pRXEdtTxt;
 
-    static void get_AnyFromOLECHAR(const OUString &ouName, const OUString &ouValue, css::uno::Any &rAny);
+    static void get_AnyFromOLECHAR(std::u16string_view ouName, const OUString &ouValue, css::uno::Any &rAny);
 
     css::accessibility::XAccessibleEditableText* GetXInterface()
     {

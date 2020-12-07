@@ -1521,7 +1521,7 @@ Reference<XInterface> IUnknownWrapper::createComWrapperInstance()
 }
 
 
-void IUnknownWrapper::getMethodInfo(const OUString& sName, TypeDescription& methodInfo)
+void IUnknownWrapper::getMethodInfo(std::u16string_view sName, TypeDescription& methodInfo)
 {
     TypeDescription desc= getInterfaceMemberDescOfCurrentCall(sName);
     if( desc.is())
@@ -1532,7 +1532,7 @@ void IUnknownWrapper::getMethodInfo(const OUString& sName, TypeDescription& meth
     }
 }
 
-void IUnknownWrapper::getAttributeInfo(const OUString& sName, TypeDescription& attributeInfo)
+void IUnknownWrapper::getAttributeInfo(std::u16string_view sName, TypeDescription& attributeInfo)
 {
     TypeDescription desc= getInterfaceMemberDescOfCurrentCall(sName);
     if( desc.is())
@@ -1544,7 +1544,7 @@ void IUnknownWrapper::getAttributeInfo(const OUString& sName, TypeDescription& a
         }
     }
 }
-TypeDescription IUnknownWrapper::getInterfaceMemberDescOfCurrentCall(const OUString& sName)
+TypeDescription IUnknownWrapper::getInterfaceMemberDescOfCurrentCall(std::u16string_view sName)
 {
     TypeDescription ret;
 
