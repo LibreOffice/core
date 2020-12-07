@@ -17,24 +17,45 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OPTIONALBOX_HXX
-#define INCLUDED_VCL_OPTIONALBOX_HXX
-
 #include <vcl/notebookbar/IPrioritable.hxx>
 #include <vcl/layout.hxx>
 
-class OptionalBox final : public VclHBox, public vcl::IPrioritable
+#include <vector>
+
+#ifndef INCLUDED_SFX2_NOTEBOOKBAR_PRIORITYHBOX_HXX
+#define INCLUDED_SFX2_NOTEBOOKBAR_PRIORITYHBOX_HXX
+
+/*
+ * PriorityHBox is a VclHBox which hides its own children if there is no sufficient space.
+ * Hiding order can be modified using child's priorities. If a control have default
+ * priority assigned (VCL_PRIORITY_DEFAULT), it is always shown.
+ */
+
+class PriorityHBox : public VclHBox
 {
-private:
-    bool m_bInFullView;
+protected:
+    bool m_bInitialized;
+
+    std::vector<vcl::IPrioritable*> m_aSortedChildren;
+
+    virtual int GetHiddenCount() const;
+
+    virtual void GetChildrenWithPriorities();
 
 public:
-    explicit OptionalBox(vcl::Window* pParent);
-    virtual ~OptionalBox() override;
+    explicit PriorityHBox(vcl::Window* pParent);
 
-    void HideContent() override;
-    void ShowContent() override;
-    bool IsHidden() override;
+    virtual ~PriorityHBox() override;
+
+    void Initialize();
+
+    void SetSizeFromParent();
+
+    virtual Size calculateRequisition() const override;
+
+    virtual void Resize() override;
+
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 };
 
 #endif

@@ -28,7 +28,7 @@
  * and after close moved to the original parent
  */
 
-class NotebookbarPopup : public FloatingWindow
+class VCL_DLLPUBLIC NotebookbarPopup : public FloatingWindow
 {
 private:
     VclPtr<VclHBox> m_pBox;

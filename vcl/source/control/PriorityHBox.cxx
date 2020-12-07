@@ -17,9 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/builderfactory.hxx>
 #include <vcl/layout.hxx>
-#include "PriorityHBox.hxx"
+#include <PriorityHBox.hxx>
 #include <comphelper/lok.hxx>
 
 namespace
@@ -194,7 +193,5 @@ void PriorityHBox::GetChildrenWithPriorities()
 
     std::sort(m_aSortedChildren.begin(), m_aSortedChildren.end(), lcl_comparePriority);
 }
-
-VCL_BUILDER_FACTORY(PriorityHBox)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

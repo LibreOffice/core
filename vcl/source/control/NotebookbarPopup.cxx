@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "NotebookbarPopup.hxx"
-#include <vcl/IPrioritable.hxx>
+#include <vcl/notebookbar/NotebookbarPopup.hxx>
+#include <vcl/notebookbar/IPrioritable.hxx>
 #include <vcl/layout.hxx>
 
 NotebookbarPopup::NotebookbarPopup(const VclPtr<VclHBox>& pParent)
