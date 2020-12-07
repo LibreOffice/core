@@ -422,7 +422,6 @@ SvXMLImport::SvXMLImport(
     }
     registerNamespaces();
     maNamespaceAttrList = new comphelper::AttributeList;
-    maAttrList = new comphelper::AttributeList;
 }
 
 void SvXMLImport::cleanup() throw ()

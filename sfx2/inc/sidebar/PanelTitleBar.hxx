@@ -61,7 +61,6 @@ private:
     css::uno::Reference<css::frame::XToolbarController> mxController;
 
     VclPtr<Panel> mpPanel;
-    css::uno::Reference<css::frame::XFrame> mxFrame;
     OString msIdent;
     OUString msMoreOptionsCommand;
 };

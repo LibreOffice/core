@@ -229,7 +229,6 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
     std::set< OUString > embeddedFontUrlsKnown;
     css::uno::Reference< css::xml::sax::XFastParser > mxParser;
     rtl::Reference< SvXMLImportFastNamespaceHandler > maNamespaceHandler;
-    rtl::Reference < comphelper::AttributeList > maAttrList;
     rtl::Reference < comphelper::AttributeList > maNamespaceAttrList;
     css::uno::Reference< css::xml::sax::XFastDocumentHandler > mxFastDocumentHandler;
     static rtl::Reference< xmloff::token::FastTokenHandler > xTokenHandler;
