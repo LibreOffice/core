@@ -1942,7 +1942,11 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                 bool bDone = false;
 
                 const GfxLink& rLink = aGraphic.GetLink();
-                if (rLink.GetDataSize() && rLink.GetType() == GfxLinkType::NativeWmf)
+                bool bIsEMF = rLink.IsEMF();
+
+                // VectorGraphicDataType::Wmf means WMF or EMF, allow direct write in the WMF case
+                // only.
+                if (rLink.GetDataSize() && rLink.GetType() == GfxLinkType::NativeWmf && !bIsEMF)
                 {
                     // The source is already in WMF, no need to convert anything.
                     rOStm.WriteBytes(rLink.GetData(), rLink.GetDataSize());

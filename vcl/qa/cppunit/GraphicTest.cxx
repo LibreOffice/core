@@ -24,6 +24,7 @@
 #include <comphelper/hash.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
+#include <vcl/cvtgrf.hxx>
 
 using namespace css;
 
@@ -36,15 +37,19 @@ public:
 
 private:
     void testWMFRoundtrip();
+    void testEmfToWmfConversion();
 
     CPPUNIT_TEST_SUITE(GraphicTest);
     CPPUNIT_TEST(testWMFRoundtrip);
+    CPPUNIT_TEST(testEmfToWmfConversion);
     CPPUNIT_TEST_SUITE_END();
 };
 
 GraphicTest::~GraphicTest()
 {
 }
+
+char const DATA_DIRECTORY[] = "/vcl/qa/cppunit/data/";
 
 void GraphicTest::testWMFRoundtrip()
 {
@@ -79,6 +84,37 @@ void GraphicTest::testWMFRoundtrip()
     // i.e. we lost most of the WMF data on roundtrip. Still allow loosing some padding bytes at the
     // very end, that's harmless.
     CPPUNIT_ASSERT_LESSEQUAL(static_cast<sal_uInt64>(10), nExpectedSize - nActualSize);
+}
+
+void GraphicTest::testEmfToWmfConversion()
+{
+    // Load EMF data.
+    GraphicFilter aGraphicFilter;
+    test::Directories aDirectories;
+    OUString aURL = aDirectories.getURLFromSrc(DATA_DIRECTORY) + "to-wmf.emf";
+    SvFileStream aStream(aURL, StreamMode::READ);
+    Graphic aGraphic;
+    // This similar to an application/x-openoffice-wmf mime type in manifest.xml in the ODF case.
+    sal_uInt16 nFormat = aGraphicFilter.GetImportFormatNumberForShortName(u"WMF");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ERRCODE_NONE),
+                         aGraphicFilter.ImportGraphic(aGraphic, OUString(), aStream, nFormat));
+
+    // Save as WMF.
+    sal_uInt16 nFilterType = aGraphicFilter.GetExportFormatNumberForShortName(u"WMF");
+    SvMemoryStream aGraphicStream;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ERRCODE_NONE),
+                         aGraphicFilter.ExportGraphic(aGraphic, OUString(),
+                                                      aGraphicStream,
+                                                      nFilterType));
+    aGraphicStream.Seek(0);
+    sal_uInt32 nHeader = 0;
+    aGraphicStream.ReadUInt32(nHeader);
+    // 0xd7cdc69a in the spec.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0x9ac6cdd7
+    // - Actual  : 1
+    // i.e. EMF data was requested to be converted to WMF, but the output was still EMF.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0x9ac6cdd7), nHeader);
 }
 
 } // namespace
