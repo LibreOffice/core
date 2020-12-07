@@ -41,6 +41,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 
 #include <map>
+#include <string_view>
 #include <utility>
 
 using namespace vcl;
@@ -845,7 +846,7 @@ static void addList( NSView* pCurParent, CGFloat& rCurX, CGFloat& rCurY, CGFloat
 }
 
 static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat nAttachOffset,
-                    const OUString& rCtrlType,
+                    std::u16string_view rCtrlType,
                     const OUString& rText,
                     const OUString& rProperty, const PropertyValue* pValue,
                     sal_Int64 nMinValue, sal_Int64 nMaxValue,
@@ -898,7 +899,7 @@ static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat 
     aFieldRect.origin.y = rCurY - aFieldRect.size.height;
     [pFieldView setFrame: aFieldRect];
 
-    if( rCtrlType == "Range" )
+    if( rCtrlType == u"Range" )
     {
         // add a stepper control
         NSRect aStepFrame = { { aFieldRect.origin.x + aFieldRect.size.width + 5,
