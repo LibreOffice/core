@@ -25,7 +25,7 @@
 
 #include <config_options.h>
 #include <vcl/dllapi.h>
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <memory>
 
 struct ImplMoreButtonData;

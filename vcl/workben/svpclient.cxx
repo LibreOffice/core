@@ -29,7 +29,7 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/button.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/bitmapex.hxx>
