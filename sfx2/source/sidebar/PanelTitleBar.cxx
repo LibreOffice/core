@@ -37,7 +37,6 @@ PanelTitleBar::PanelTitleBar(const OUString& rsTitle,
                Theme::Color_PanelTitleBarBackground),
       mxExpander(m_xBuilder->weld_expander("expander")),
       mpPanel(pPanel),
-      mxFrame(),
       msIdent("button"),
       msMoreOptionsCommand()
 {
@@ -95,7 +94,6 @@ void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
         mxToolBox->set_item_visible(msIdent, false);
 
     msMoreOptionsCommand = rsCommandName;
-    mxFrame = rxFrame;
 
     if (msMoreOptionsCommand.isEmpty())
         return;

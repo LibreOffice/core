@@ -6,9 +6,9 @@ canvas/source/vcl/canvasbitmap.hxx:113
     vclcanvas::CanvasBitmap mxDevice css::uno::Reference<css::rendering::XGraphicDevice>
 canvas/source/vcl/impltools.hxx:114
     vclcanvas::tools::LocalGuard aSolarGuard class SolarMutexGuard
-chart2/source/controller/inc/RangeSelectionListener.hxx:62
+chart2/source/controller/inc/RangeSelectionListener.hxx:61
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
-chart2/source/inc/ModifyListenerCallBack.hxx:51
+chart2/source/inc/ModifyListenerCallBack.hxx:53
     chart::ModifyListenerCallBack m_xModifyListener css::uno::Reference<css::util::XModifyListener>
 comphelper/source/container/enumerablemap.cxx:297
     comphelper::(anonymous namespace)::MapEnumeration m_xKeepMapAlive Reference<class com::sun::star::uno::XInterface>
@@ -24,7 +24,7 @@ dbaccess/source/core/inc/databasecontext.hxx:84
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:115
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
-desktop/qa/desktop_lib/test_desktop_lib.cxx:2832
+desktop/qa/desktop_lib/test_desktop_lib.cxx:2902
       class AllSettings &
 emfio/source/emfuno/xemfparser.cxx:49
     emfio::emfreader::(anonymous namespace)::XEmfParser context_ uno::Reference<uno::XComponentContext>
@@ -34,7 +34,7 @@ helpcompiler/inc/HelpCompiler.hxx:196
     HelpCompiler lang const std::string
 include/basegfx/DrawCommands.hxx:142
     gfx::DrawPath mpFillGradient std::shared_ptr<GradientInfo>
-include/drawinglayer/primitive2d/textlayoutdevice.hxx:55
+include/drawinglayer/primitive2d/textlayoutdevice.hxx:64
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
 include/editeng/unotext.hxx:605
     SvxUnoTextRangeEnumeration mxParentText css::uno::Reference<css::text::XText>
@@ -170,13 +170,13 @@ include/sfx2/msg.hxx:147
     SfxType23 nAttribs sal_uInt16
 include/sfx2/msg.hxx:147
     SfxType23 pType const std::type_info *
-include/svtools/genericunodialog.hxx:155
+include/svtools/genericunodialog.hxx:154
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
-include/svtools/unoevent.hxx:163
+include/svtools/unoevent.hxx:162
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
 include/svx/imapdlg.hxx:91
     SvxIMapDlg aIMapItem class SvxIMapDlgItem
-include/unotest/macros_test.hxx:84
+include/unotest/macros_test.hxx:86
     unotest::MacrosTest mpDll std::unique_ptr<BasicDLL>
 include/vcl/commandevent.hxx:310
     CommandGestureData mfX const double
@@ -286,13 +286,13 @@ sal/qa/osl/security/osl_Security.cxx:154
     osl_Security::getUserName bRes1 _Bool
 sal/qa/osl/security/osl_Security.cxx:188
     osl_Security::getConfigDir bRes1 _Bool
-sc/source/core/data/document.cxx:1242
+sc/source/core/data/document.cxx:1240
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1243
+sc/source/core/data/document.cxx:1241
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aBulk class ScBulkBroadcast
-sc/source/filter/html/htmlpars.cxx:3019
+sc/source/filter/html/htmlpars.cxx:3018
     (anonymous namespace)::CSSHandler::MemStr mp const char *
-sc/source/filter/html/htmlpars.cxx:3020
+sc/source/filter/html/htmlpars.cxx:3019
     (anonymous namespace)::CSSHandler::MemStr mn size_t
 sc/source/filter/inc/sheetdatacontext.hxx:51
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
@@ -326,7 +326,11 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
     (anonymous namespace)::PDFGrammar::definition value rule<ScannerT>
 sfx2/inc/autoredactdialog.hxx:94
     SfxAutoRedactDialog m_xDocShell class SfxObjectShellLock
-sfx2/source/dialog/basedlgs.cxx:47
+sfx2/inc/sidebar/DeckTitleBar.hxx:54
+    sfx2::sidebar::DeckTitleBar maGrip class BitmapEx
+sfx2/inc/sidebar/TitleBar.hxx:56
+    sfx2::sidebar::TitleBar mxToolBoxController std::unique_ptr<ToolbarUnoDispatcher>
+sfx2/source/dialog/basedlgs.cxx:46
     SfxModelessDialog_Impl aMoveIdle class Idle
 sfx2/source/doc/doctempl.cxx:104
     DocTempl::(anonymous namespace)::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
@@ -344,17 +348,15 @@ starmath/inc/view.hxx:216
     SmViewShell maGraphicController class SmGraphicController
 starmath/source/accessibility.hxx:270
     SmEditSource rEditAcc class SmEditAccessible &
-starmath/source/mathmlimport.hxx:69
-    SmXMLImport pColorTokenMap std::unique_ptr<SvXMLTokenMap>
-svl/source/crypto/cryptosign.cxx:124
+svl/source/crypto/cryptosign.cxx:122
     (anonymous namespace)::Extension extnID SECItem
-svl/source/crypto/cryptosign.cxx:125
+svl/source/crypto/cryptosign.cxx:123
     (anonymous namespace)::Extension critical SECItem
-svl/source/crypto/cryptosign.cxx:126
+svl/source/crypto/cryptosign.cxx:124
     (anonymous namespace)::Extension extnValue SECItem
-svl/source/crypto/cryptosign.cxx:284
+svl/source/crypto/cryptosign.cxx:282
     (anonymous namespace)::PKIStatusInfo statusString SECItem
-svl/source/crypto/cryptosign.cxx:285
+svl/source/crypto/cryptosign.cxx:283
     (anonymous namespace)::PKIStatusInfo failInfo SECItem
 svx/source/dialog/contimp.hxx:75
     SvxSuperContourDlg aContourItem class SvxContourDlgItem
@@ -374,7 +376,7 @@ sw/source/core/layout/dbg_lay.cxx:179
     SwImplEnterLeave m_nAction enum DbgAction
 sw/source/uibase/inc/condedit.hxx:43
     ConditionEdit m_aDropTargetHelper class ConditionEditDropTarget
-sw/source/uibase/inc/conttree.hxx:297
+sw/source/uibase/inc/conttree.hxx:300
     SwGlobalTree m_aDropTargetHelper class SwGlobalTreeDropTarget
 sw/source/uibase/inc/swuicnttab.hxx:240
     SwTokenWindow m_aAdjustPositionsIdle class Idle
@@ -384,15 +386,15 @@ sw/source/uibase/inc/unodispatch.hxx:45
     SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard class SolarMutexGuard
 toolkit/source/awt/stylesettings.cxx:94
     toolkit::(anonymous namespace)::StyleMethodGuard m_aGuard class SolarMutexGuard
-unoidl/source/unoidlprovider.cxx:672
-    unoidl::detail::(anonymous namespace)::UnoidlCursor reference1_ rtl::Reference<UnoidlProvider>
 unoidl/source/unoidlprovider.cxx:673
+    unoidl::detail::(anonymous namespace)::UnoidlCursor reference1_ rtl::Reference<UnoidlProvider>
+unoidl/source/unoidlprovider.cxx:674
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference2_ rtl::Reference<UnoidlModuleEntity>
 vcl/inc/opengl/gdiimpl.hxx:52
     TextureCombo mpTexture std::unique_ptr<OpenGLTexture>
 vcl/inc/opengl/gdiimpl.hxx:53
     TextureCombo mpMask std::unique_ptr<OpenGLTexture>
-vcl/inc/opengl/zone.hxx:33
+vcl/inc/opengl/zone.hxx:35
     OpenGLVCLContextZone aZone class OpenGLZone
 vcl/inc/qt5/Qt5AccessibleEventListener.hxx:34
     Qt5AccessibleEventListener m_xAccessible css::uno::Reference<css::accessibility::XAccessible>
@@ -426,11 +428,11 @@ vcl/unx/gtk3/a11y/gtk3atkhypertext.cxx:31
     (anonymous namespace)::HyperLink atk_hyper_link const AtkHyperlink
 vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
-vcl/unx/gtk3/gtk3gtkinst.cxx:5230
+vcl/unx/gtk3/gtk3gtkinst.cxx:5256
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5374
+vcl/unx/gtk3/gtk3gtkinst.cxx:5400
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5382
+vcl/unx/gtk3/gtk3gtkinst.cxx:5408
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:42
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>

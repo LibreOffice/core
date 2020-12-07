@@ -51,7 +51,6 @@ private:
     std::unique_ptr<weld::Label> mxLabel;
 
     const std::function<void()> maCloserAction;
-    BitmapEx maGrip;
     bool mbIsCloserVisible;
 };
 
