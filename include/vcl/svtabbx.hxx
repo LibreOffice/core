@@ -224,6 +224,8 @@ public:
 
     virtual tools::Rectangle        GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
     virtual sal_Int32               GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
+
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 #endif // INCLUDED_VCL_SVTABBX_HXX

@@ -48,9 +48,31 @@ static boost::property_tree::ptree lcl_DumpEntryAndSiblings(SvTreeListEntry* pEn
     {
         boost::property_tree::ptree aEntry;
 
+        // simple listbox value
         const SvLBoxItem* pIt = pEntry->GetFirstItem(SvLBoxItemType::String);
         if (pIt)
             aEntry.put("text", static_cast<const SvLBoxString*>(pIt)->GetText());
+
+        // column based data
+        boost::property_tree::ptree aColumns;
+
+        for (size_t i = 0; i < pEntry->ItemCount(); i++)
+        {
+            boost::property_tree::ptree aItem;
+
+            SvLBoxItem& rItem = pEntry->GetItem(i);
+            if (rItem.GetType() == SvLBoxItemType::String)
+            {
+                const SvLBoxString* pStringItem = dynamic_cast<const SvLBoxString*>(&rItem);
+                if (pStringItem)
+                {
+                    aItem.put("text", pStringItem->GetText());
+                    aColumns.push_back(std::make_pair("", aItem));
+                }
+            }
+        }
+
+        aEntry.push_back(std::make_pair("columns", aColumns));
 
         if (bCheckButtons)
         {
@@ -587,6 +609,25 @@ sal_uLong SvHeaderTabListBox::Insert( SvTreeListEntry* pEntry, sal_uLong nRootPo
     sal_uLong nPos = SvTabListBox::Insert( pEntry, nRootPos );
     RecalculateAccessibleChildren();
     return nPos;
+}
+
+boost::property_tree::ptree SvHeaderTabListBox::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(SvTabListBox::DumpAsPropertyTree());
+
+    boost::property_tree::ptree aHeaders;
+
+    HeaderBar* pHeaderBar = GetHeaderBar();
+    for(sal_uInt16 i = 0; i < pHeaderBar->GetItemCount(); i++)
+    {
+        boost::property_tree::ptree aHeader;
+        aHeader.put("text", pHeaderBar->GetItemText(pHeaderBar->GetItemId(i)));
+        aHeaders.push_back(std::make_pair("", aHeader));
+    }
+
+    aTree.push_back(std::make_pair("headers", aHeaders));
+
+    return aTree;
 }
 
 IMPL_LINK_NOARG(SvHeaderTabListBox, ScrollHdl_Impl, SvTreeListBox*, void)
