@@ -85,12 +85,21 @@ extern "C" void * allocExec(
     p = mmap(
         nullptr, n, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE | MAP_ANON | MAP_JIT, -1,
         0);
-    if (p == MAP_FAILED) {
-        auto const e = errno;
-        SAL_WARN("bridges.osx", "mmap failed with " << e << ", " << strerror(e));
-        p = nullptr;
+    if (p != MAP_FAILED) {
+        goto done;
     }
-#else
+    {
+        auto const e = errno;
+        SAL_INFO("bridges.osx", "mmap failed with " << e);
+        if (e != EINVAL) {
+            p = nullptr;
+            goto done;
+        }
+    }
+    // At least some macOS 10.13 machines are reported to fail the above mmap with EINVAL (see
+    // tdf#134754 "Crash on macOS 10.13 opening local HSQLDB-based odb file in Base on LibreOffice 7
+    // rc1", so in that case retry with the "traditional" approach:
+#endif
     p = mmap(
         nullptr, n, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1,
         0);
@@ -102,6 +111,8 @@ extern "C" void * allocExec(
         munmap (p, n);
         p = nullptr;
     }
+#if defined MACOSX
+done:
 #endif
 #elif defined _WIN32
     p = VirtualAlloc(nullptr, n, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
