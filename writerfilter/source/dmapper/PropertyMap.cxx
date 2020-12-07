@@ -1037,15 +1037,6 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     //now set the top/bottom margin for the follow page style
     Insert( PROP_TOP_MARGIN, uno::makeAny( std::max<sal_Int32>(nTopMargin, 0) ) );
     Insert( PROP_BOTTOM_MARGIN, uno::makeAny( std::max<sal_Int32>(nBottomMargin, 0) ) );
-
-    if (bCopyFirstToFollow)
-    {
-        if (HasHeader(/*bFirstPage=*/true))
-            m_aFollowPageStyle->setPropertyValue("TopMargin", getProperty(PROP_TOP_MARGIN)->second);
-        if (HasFooter(/*bFirstPage=*/true))
-            m_aFollowPageStyle->setPropertyValue("BottomMargin",
-                                                 getProperty(PROP_BOTTOM_MARGIN)->second);
-    }
 }
 
 static uno::Reference< beans::XPropertySet > lcl_GetRangeProperties( bool bIsFirstSection,
