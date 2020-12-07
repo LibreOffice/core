@@ -34,19 +34,19 @@ class SvxMacroTableDtor;
 class SwBlockName
 {
     friend class SwImpBlocks;
-    sal_uInt16 nHashS, nHashL;     // Hash codes for testing
+    sal_uInt16 m_nHashS, m_nHashL;     // Hash codes for testing
 public:
-    OUString aShort;               /// Shortname
-    OUString aLong;                /// Longname
-    OUString aPackageName;         /// Package name
-    bool bIsOnlyTextFlagInit : 1;   /// Is the Flag valid?
-    bool bIsOnlyText : 1;           /// Unformatted text
+    OUString m_aShort;               /// Shortname
+    OUString m_aLong;                /// Longname
+    OUString m_aPackageName;         /// Package name
+    bool m_bIsOnlyTextFlagInit : 1;   /// Is the Flag valid?
+    bool m_bIsOnlyText : 1;           /// Unformatted text
 
     SwBlockName( const OUString& rShort, const OUString& rLong );
     SwBlockName( const OUString& rShort, const OUString& rLong, const OUString& rPackageName );
 
     /// For sorting in the array
-    bool operator< ( const SwBlockName& r ) const { return aShort <  r.aShort; }
+    bool operator< ( const SwBlockName& r ) const { return m_aShort <  r.m_aShort; }
 };
 
 class SwBlockNames : public o3tl::sorted_vector<std::unique_ptr<SwBlockName>, o3tl::less_uniqueptr_to<SwBlockName> > {};

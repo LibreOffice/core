@@ -49,26 +49,26 @@ using namespace ::com::sun::star;
 
 void SwXMLTextBlocks::InitBlockMode ( const uno::Reference < embed::XStorage >& rStorage )
 {
-    xBlkRoot = rStorage;
-    xRoot = nullptr;
+    m_xBlkRoot = rStorage;
+    m_xRoot = nullptr;
 }
 
 void SwXMLTextBlocks::ResetBlockMode ( )
 {
-    xBlkRoot = nullptr;
-    xRoot = nullptr;
+    m_xBlkRoot = nullptr;
+    m_xRoot = nullptr;
 }
 
 SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
     : SwImpBlocks(rFile)
-    , nFlags(SwXmlFlags::NONE)
+    , m_nFlags(SwXmlFlags::NONE)
 {
     SwDocShell* pDocSh = new SwDocShell ( SfxObjectCreateMode::INTERNAL );
     if( !pDocSh->DoInitNew() )
         return;
     m_bReadOnly = true;
     m_xDoc = pDocSh->GetDoc();
-    xDocShellRef = pDocSh;
+    m_xDocShellRef = pDocSh;
     m_xDoc->SetOle2Link( Link<bool,void>() );
     m_xDoc->GetIDocumentUndoRedo().DoUndo(false);
     uno::Reference< embed::XStorage > refStg;
@@ -103,14 +103,14 @@ SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
 
 SwXMLTextBlocks::SwXMLTextBlocks( const uno::Reference < embed::XStorage >& rStg, const OUString& rName )
     : SwImpBlocks( rName )
-    , nFlags(SwXmlFlags::NONE)
+    , m_nFlags(SwXmlFlags::NONE)
 {
     SwDocShell* pDocSh = new SwDocShell ( SfxObjectCreateMode::INTERNAL );
     if( !pDocSh->DoInitNew() )
         return;
     m_bReadOnly = false;
     m_xDoc = pDocSh->GetDoc();
-    xDocShellRef = pDocSh;
+    m_xDocShellRef = pDocSh;
     m_xDoc->SetOle2Link( Link<bool,void>() );
     m_xDoc->GetIDocumentUndoRedo().DoUndo(false);
 
@@ -124,9 +124,9 @@ SwXMLTextBlocks::~SwXMLTextBlocks()
     if ( m_bInfoChanged )
         WriteInfo();
     ResetBlockMode ();
-    if(xDocShellRef.is())
-        xDocShellRef->DoClose();
-    xDocShellRef = nullptr;
+    if(m_xDocShellRef.is())
+        m_xDocShellRef->DoClose();
+    m_xDocShellRef = nullptr;
 }
 
 void SwXMLTextBlocks::ClearDoc()
@@ -141,8 +141,8 @@ void SwXMLTextBlocks::ClearDoc()
 
 void SwXMLTextBlocks::AddName( const OUString& rShort, const OUString& rLong, bool bOnlyText )
 {
-    aPackageName = GeneratePackageName( rShort );
-    AddName(rShort, rLong, aPackageName, bOnlyText);
+    m_aPackageName = GeneratePackageName( rShort );
+    AddName(rShort, rLong, m_aPackageName, bOnlyText);
 }
 
 void SwXMLTextBlocks::AddName( const OUString& rShort, const OUString& rLong,
@@ -154,22 +154,22 @@ void SwXMLTextBlocks::AddName( const OUString& rShort, const OUString& rLong,
         m_aNames.erase( m_aNames.begin() + nIdx );
     }
     std::unique_ptr<SwBlockName> pNew(new SwBlockName( rShort, rLong, rPackageName ));
-    pNew->bIsOnlyTextFlagInit = true;
-    pNew->bIsOnlyText = bOnlyText;
+    pNew->m_bIsOnlyTextFlagInit = true;
+    pNew->m_bIsOnlyText = bOnlyText;
     m_aNames.insert( std::move(pNew) );
     m_bInfoChanged = true;
 }
 
 ErrCode SwXMLTextBlocks::Delete( sal_uInt16 n )
 {
-    const OUString aPckName (m_aNames[n]->aPackageName);
-    if ( xBlkRoot.is() &&
-            xBlkRoot->hasByName( aPckName ) && xBlkRoot->isStreamElement( aPckName ) )
+    const OUString aPckName (m_aNames[n]->m_aPackageName);
+    if ( m_xBlkRoot.is() &&
+            m_xBlkRoot->hasByName( aPckName ) && m_xBlkRoot->isStreamElement( aPckName ) )
     {
         try
         {
-            xBlkRoot->removeElement ( aPckName );
-            uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
+            m_xBlkRoot->removeElement ( aPckName );
+            uno::Reference < embed::XTransactedObject > xTrans( m_xBlkRoot, uno::UNO_QUERY );
             if ( xTrans.is() )
                 xTrans->commit();
             return ERRCODE_NONE;
@@ -184,46 +184,46 @@ ErrCode SwXMLTextBlocks::Delete( sal_uInt16 n )
 
 ErrCode SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const OUString& rNewShort )
 {
-    OSL_ENSURE( xBlkRoot.is(), "No storage set" );
-    if(!xBlkRoot.is())
+    OSL_ENSURE( m_xBlkRoot.is(), "No storage set" );
+    if(!m_xBlkRoot.is())
         return ERRCODE_NONE;
-    OUString aOldName (m_aNames[nIdx]->aPackageName);
+    OUString aOldName (m_aNames[nIdx]->m_aPackageName);
     m_aShort = rNewShort;
-    aPackageName = GeneratePackageName( m_aShort );
+    m_aPackageName = GeneratePackageName( m_aShort );
 
-    if(aOldName != aPackageName)
+    if(aOldName != m_aPackageName)
     {
         if (IsOnlyTextBlock ( nIdx ) )
         {
             OUString sExt(".xml");
             OUString aOldStreamName = aOldName  + sExt;
-            OUString aNewStreamName = aPackageName + sExt;
+            OUString aNewStreamName = m_aPackageName + sExt;
 
-            xRoot = xBlkRoot->openStorageElement( aOldName, embed::ElementModes::READWRITE );
+            m_xRoot = m_xBlkRoot->openStorageElement( aOldName, embed::ElementModes::READWRITE );
             try
             {
-                xRoot->renameElement ( aOldStreamName, aNewStreamName );
+                m_xRoot->renameElement ( aOldStreamName, aNewStreamName );
             }
             catch(const container::ElementExistException&)
             {
                 SAL_WARN("sw", "Couldn't rename " << aOldStreamName << " to " << aNewStreamName);
             }
-            uno::Reference < embed::XTransactedObject > xTrans( xRoot, uno::UNO_QUERY );
+            uno::Reference < embed::XTransactedObject > xTrans( m_xRoot, uno::UNO_QUERY );
             if ( xTrans.is() )
                 xTrans->commit();
-            xRoot = nullptr;
+            m_xRoot = nullptr;
         }
 
         try
         {
-            xBlkRoot->renameElement ( aOldName, aPackageName );
+            m_xBlkRoot->renameElement ( aOldName, m_aPackageName );
         }
         catch(const container::ElementExistException&)
         {
-            SAL_WARN("sw", "Couldn't rename " << aOldName << " to " << aPackageName);
+            SAL_WARN("sw", "Couldn't rename " << aOldName << " to " << m_aPackageName);
         }
     }
-    uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
+    uno::Reference < embed::XTransactedObject > xTrans( m_xBlkRoot, uno::UNO_QUERY );
     if ( xTrans.is() )
         xTrans->commit();
     // No need to commit xBlkRoot here as SwTextBlocks::Rename calls
@@ -233,15 +233,15 @@ ErrCode SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const OUString& rNewShort )
 
 ErrCode SwXMLTextBlocks::StartPutBlock( const OUString& rShort, const OUString& rPackageName )
 {
-    OSL_ENSURE( xBlkRoot.is(), "No storage set" );
-    if(!xBlkRoot.is())
+    OSL_ENSURE( m_xBlkRoot.is(), "No storage set" );
+    if(!m_xBlkRoot.is())
         return ERRCODE_NONE;
     GetIndex ( rShort );
     try
     {
-        xRoot = xBlkRoot->openStorageElement( rPackageName, embed::ElementModes::READWRITE );
+        m_xRoot = m_xBlkRoot->openStorageElement( rPackageName, embed::ElementModes::READWRITE );
 
-        uno::Reference< beans::XPropertySet > xRootProps( xRoot, uno::UNO_QUERY_THROW );
+        uno::Reference< beans::XPropertySet > xRootProps( m_xRoot, uno::UNO_QUERY_THROW );
         OUString aMime( SotExchange::GetFormatMimeType( SotClipboardFormatId::STARWRITER_8 ) );
         xRootProps->setPropertyValue( "MediaType", uno::makeAny( aMime ) );
     }
@@ -256,19 +256,19 @@ ErrCode SwXMLTextBlocks::BeginPutDoc( const OUString& rShort, const OUString& rL
     // Store in base class
     m_aShort = rShort;
     m_aLong = rLong;
-    aPackageName = GeneratePackageName( rShort );
+    m_aPackageName = GeneratePackageName( rShort );
     SetIsTextOnly( rShort, false);
-    return StartPutBlock (rShort, aPackageName);
+    return StartPutBlock (rShort, m_aPackageName);
 }
 
 ErrCode SwXMLTextBlocks::PutBlock()
 {
     ErrCode nRes = ERRCODE_NONE; // dead variable, this always returns 0
-    SwXmlFlags nCommitFlags = nFlags;
+    SwXmlFlags nCommitFlags = m_nFlags;
 
     WriterRef xWrt;
     ::GetXMLWriter ( OUString(), GetBaseURL(), xWrt);
-    SwWriter aWriter (xRoot, *m_xDoc );
+    SwWriter aWriter (m_xRoot, *m_xDoc );
 
     xWrt->m_bBlock = true;
     nRes = aWriter.Write ( xWrt );
@@ -284,7 +284,7 @@ ErrCode SwXMLTextBlocks::PutBlock()
         // called without optimization
         bool bOK = false;
 
-        if ( xRoot.is() )
+        if ( m_xRoot.is() )
         {
             std::unique_ptr<SfxMedium> pTmpMedium;
             try
@@ -292,7 +292,7 @@ ErrCode SwXMLTextBlocks::PutBlock()
                 uno::Reference< embed::XStorage > xTempStorage =
                     ::comphelper::OStorageHelper::GetTemporaryStorage();
 
-                xRoot->copyToStorage( xTempStorage );
+                m_xRoot->copyToStorage( xTempStorage );
 
                 // TODO/LATER: no progress bar?!
                 // TODO/MBA: strange construct
@@ -301,7 +301,7 @@ ErrCode SwXMLTextBlocks::PutBlock()
                 if( bTmpOK )
                     bTmpOK = pDocSh->SaveCompletedChildren();
 
-                xTempStorage->copyToStorage( xRoot );
+                xTempStorage->copyToStorage( m_xRoot );
                 bOK = bTmpOK;
             }
             catch(const uno::Exception&)
@@ -315,13 +315,13 @@ ErrCode SwXMLTextBlocks::PutBlock()
 
     try
     {
-        uno::Reference < embed::XTransactedObject > xTrans( xRoot, uno::UNO_QUERY );
+        uno::Reference < embed::XTransactedObject > xTrans( m_xRoot, uno::UNO_QUERY );
         if ( xTrans.is() )
             xTrans->commit();
-        xRoot = nullptr;
+        m_xRoot = nullptr;
         if ( nCommitFlags == SwXmlFlags::NONE )
         {
-            uno::Reference < embed::XTransactedObject > xTmpTrans( xBlkRoot, uno::UNO_QUERY );
+            uno::Reference < embed::XTransactedObject > xTmpTrans( m_xBlkRoot, uno::UNO_QUERY );
             if ( xTmpTrans.is() )
                 xTmpTrans->commit();
         }
@@ -366,19 +366,19 @@ bool SwXMLTextBlocks::PutMuchEntries( bool bOn )
             bRet = ERRCODE_NONE == OpenFile( false );
             if( bRet )
             {
-                nFlags |= SwXmlFlags::NoRootCommit;
+                m_nFlags |= SwXmlFlags::NoRootCommit;
                 m_bInPutMuchBlocks = true;
             }
         }
     }
     else if( m_bInPutMuchBlocks )
     {
-        nFlags &= ~SwXmlFlags::NoRootCommit;
-        if( xBlkRoot.is() )
+        m_nFlags &= ~SwXmlFlags::NoRootCommit;
+        if( m_xBlkRoot.is() )
         {
             try
             {
-                uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
+                uno::Reference < embed::XTransactedObject > xTrans( m_xBlkRoot, uno::UNO_QUERY );
                 if ( xTrans.is() )
                     xTrans->commit();
                 MakeBlockList();
@@ -424,7 +424,7 @@ void SwXMLTextBlocks::SetIsTextOnly( const OUString& rShort, bool bNewValue )
 {
     sal_uInt16 nIdx = GetIndex ( rShort );
     if (nIdx != USHRT_MAX)
-        m_aNames[nIdx]->bIsOnlyText = bNewValue;
+        m_aNames[nIdx]->m_bIsOnlyText = bNewValue;
 }
 
 bool SwXMLTextBlocks::IsOnlyTextBlock( const OUString& rShort ) const
@@ -433,13 +433,13 @@ bool SwXMLTextBlocks::IsOnlyTextBlock( const OUString& rShort ) const
     bool bRet = false;
     if (nIdx != USHRT_MAX)
     {
-        bRet = m_aNames[nIdx]->bIsOnlyText;
+        bRet = m_aNames[nIdx]->m_bIsOnlyText;
     }
     return bRet;
 }
 bool SwXMLTextBlocks::IsOnlyTextBlock( sal_uInt16 nIdx ) const
 {
-    return m_aNames[nIdx]->bIsOnlyText;
+    return m_aNames[nIdx]->m_bIsOnlyText;
 }
 
 bool SwXMLTextBlocks::IsFileUCBStorage( const OUString & rFileName)
@@ -490,9 +490,9 @@ ErrCode SwXMLTextBlocks::PutText( const OUString& rShort, const OUString& rName,
     m_aLong = rName;
     m_aCurrentText = rText;
     SetIsTextOnly( m_aShort, true );
-    aPackageName = GeneratePackageName( rShort );
+    m_aPackageName = GeneratePackageName( rShort );
     ClearDoc();
-    nRes = PutBlockText( rShort, rText, aPackageName );
+    nRes = PutBlockText( rShort, rText, m_aPackageName );
     return nRes;
 }
 

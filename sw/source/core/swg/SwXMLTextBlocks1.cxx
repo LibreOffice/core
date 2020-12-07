@@ -64,22 +64,22 @@ ErrCode SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
     {
         try
         {
-            xRoot = xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
-            xMedium = new SfxMedium( xRoot, GetBaseURL(), "writer8" );
-            SwReader aReader( *xMedium, aFolderName, m_xDoc.get() );
+            m_xRoot = m_xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
+            m_xMedium = new SfxMedium( m_xRoot, GetBaseURL(), "writer8" );
+            SwReader aReader( *m_xMedium, aFolderName, m_xDoc.get() );
             ReadXML->SetBlockMode( true );
             aReader.Read( *ReadXML );
             ReadXML->SetBlockMode( false );
             // Ole objects fail to display when inserted into the document, as
             // the ObjectReplacement folder and contents are missing
             OUString sObjReplacements( "ObjectReplacements" );
-            if ( xRoot->hasByName( sObjReplacements ) )
+            if ( m_xRoot->hasByName( sObjReplacements ) )
             {
                 uno::Reference< document::XStorageBasedDocument > xDocStor( m_xDoc->GetDocShell()->GetModel(), uno::UNO_QUERY_THROW );
                 uno::Reference< embed::XStorage > xStr( xDocStor->getDocumentStorage() );
                 if ( xStr.is() )
                 {
-                    xRoot->copyElementTo( sObjReplacements, xStr, sObjReplacements );
+                    m_xRoot->copyElementTo( sObjReplacements, xStr, sObjReplacements );
                     uno::Reference< embed::XTransactedObject > xTrans( xStr, uno::UNO_QUERY );
                     if ( xTrans.is() )
                         xTrans->commit();
@@ -90,21 +90,21 @@ ErrCode SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
         {
         }
 
-        xRoot = nullptr;
+        m_xRoot = nullptr;
     }
     else
     {
         OUString aStreamName = aFolderName + ".xml";
         try
         {
-            xRoot = xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
-            uno::Reference < io::XStream > xStream = xRoot->openStreamElement( aStreamName, embed::ElementModes::READ );
+            m_xRoot = m_xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
+            uno::Reference < io::XStream > xStream = m_xRoot->openStreamElement( aStreamName, embed::ElementModes::READ );
 
             uno::Reference< uno::XComponentContext > xContext =
                 comphelper::getProcessComponentContext();
 
             xml::sax::InputSource aParserInput;
-            aParserInput.sSystemId = m_aNames[nIdx]->aPackageName;
+            aParserInput.sSystemId = m_aNames[nIdx]->m_aPackageName;
 
             aParserInput.aInputStream = xStream->getInputStream();
 
@@ -145,7 +145,7 @@ ErrCode SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
         {
         }
 
-        xRoot = nullptr;
+        m_xRoot = nullptr;
     }
     return ERRCODE_NONE;
 }
@@ -163,9 +163,9 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
                                       SvxMacroTableDtor& rMacroTable )
 {
     // set current auto text
-    m_aShort = m_aNames[nIdx]->aShort;
-    m_aLong = m_aNames[nIdx]->aLong;
-    aPackageName = m_aNames[nIdx]->aPackageName;
+    m_aShort = m_aNames[nIdx]->m_aShort;
+    m_aLong = m_aNames[nIdx]->m_aLong;
+    m_aPackageName = m_aNames[nIdx]->m_aPackageName;
 
     // open stream in proper sub-storage
     CloseFile();
@@ -174,10 +174,10 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
 
     try
     {
-        xRoot = xBlkRoot->openStorageElement( aPackageName, embed::ElementModes::READ );
-        bool bOasis = SotStorage::GetVersion( xRoot ) > SOFFICE_FILEFORMAT_60;
+        m_xRoot = m_xBlkRoot->openStorageElement( m_aPackageName, embed::ElementModes::READ );
+        bool bOasis = SotStorage::GetVersion( m_xRoot ) > SOFFICE_FILEFORMAT_60;
 
-        uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement(
+        uno::Reference < io::XStream > xDocStream = m_xRoot->openStreamElement(
             "atevent.xml", embed::ElementModes::READ );
         OSL_ENSURE(xDocStream.is(), "Can't create stream");
         if ( !xDocStream.is() )
@@ -256,14 +256,14 @@ ErrCode SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText )
     {
         bool bTextOnly = true;
 
-        xRoot = xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
-        if ( !xRoot->hasByName( aStreamName ) || !xRoot->isStreamElement( aStreamName ) )
+        m_xRoot = m_xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
+        if ( !m_xRoot->hasByName( aStreamName ) || !m_xRoot->isStreamElement( aStreamName ) )
         {
             bTextOnly = false;
             aStreamName = "content.xml";
         }
 
-        uno::Reference < io::XStream > xContents = xRoot->openStreamElement( aStreamName, embed::ElementModes::READ );
+        uno::Reference < io::XStream > xContents = m_xRoot->openStreamElement( aStreamName, embed::ElementModes::READ );
         uno::Reference< uno::XComponentContext > xContext =
             comphelper::getProcessComponentContext();
 
@@ -301,7 +301,7 @@ ErrCode SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText )
             // re throw ?
         }
 
-        xRoot = nullptr;
+        m_xRoot = nullptr;
     }
     catch ( uno::Exception& )
     {
@@ -332,8 +332,8 @@ ErrCode SwXMLTextBlocks::PutBlockText( const OUString& rShort,
 
     try
     {
-    xRoot = xBlkRoot->openStorageElement( rPackageName, embed::ElementModes::WRITE );
-    uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement( aStreamName,
+    m_xRoot = m_xBlkRoot->openStorageElement( rPackageName, embed::ElementModes::WRITE );
+    uno::Reference < io::XStream > xDocStream = m_xRoot->openStreamElement( aStreamName,
                 embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
     uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
@@ -345,13 +345,13 @@ ErrCode SwXMLTextBlocks::PutBlockText( const OUString& rShort,
 
     xExp->exportDoc( rText );
 
-    uno::Reference < embed::XTransactedObject > xTrans( xRoot, uno::UNO_QUERY );
+    uno::Reference < embed::XTransactedObject > xTrans( m_xRoot, uno::UNO_QUERY );
     if ( xTrans.is() )
         xTrans->commit();
 
-    if (! (nFlags & SwXmlFlags::NoRootCommit) )
+    if (! (m_nFlags & SwXmlFlags::NoRootCommit) )
     {
-        uno::Reference < embed::XTransactedObject > xTmpTrans( xBlkRoot, uno::UNO_QUERY );
+        uno::Reference < embed::XTransactedObject > xTmpTrans( m_xBlkRoot, uno::UNO_QUERY );
         if ( xTmpTrans.is() )
             xTmpTrans->commit();
     }
@@ -361,7 +361,7 @@ ErrCode SwXMLTextBlocks::PutBlockText( const OUString& rShort,
         nRes = ERR_SWG_WRITE_ERROR;
     }
 
-    xRoot = nullptr;
+    m_xRoot = nullptr;
 
     //TODO/LATER: error handling
     /*
@@ -383,7 +383,7 @@ void SwXMLTextBlocks::ReadInfo()
     const OUString sDocName( XMLN_BLOCKLIST );
     try
     {
-        if ( !xBlkRoot.is() || !xBlkRoot->hasByName( sDocName ) || !xBlkRoot->isStreamElement( sDocName ) )
+        if ( !m_xBlkRoot.is() || !m_xBlkRoot->hasByName( sDocName ) || !m_xBlkRoot->isStreamElement( sDocName ) )
             return;
 
         uno::Reference< uno::XComponentContext > xContext =
@@ -392,7 +392,7 @@ void SwXMLTextBlocks::ReadInfo()
         xml::sax::InputSource aParserInput;
         aParserInput.sSystemId = sDocName;
 
-        uno::Reference < io::XStream > xDocStream = xBlkRoot->openStreamElement( sDocName, embed::ElementModes::READ );
+        uno::Reference < io::XStream > xDocStream = m_xBlkRoot->openStreamElement( sDocName, embed::ElementModes::READ );
         aParserInput.aInputStream = xDocStream->getInputStream();
 
         // get filter
@@ -416,7 +416,7 @@ void SwXMLTextBlocks::ReadInfo()
 }
 void SwXMLTextBlocks::WriteInfo()
 {
-    if ( !(xBlkRoot.is() || ERRCODE_NONE == OpenFile ( false )) )
+    if ( !(m_xBlkRoot.is() || ERRCODE_NONE == OpenFile ( false )) )
         return;
 
     uno::Reference< uno::XComponentContext > xContext =
@@ -434,7 +434,7 @@ void SwXMLTextBlocks::WriteInfo()
 
     try
     {
-    uno::Reference < io::XStream > xDocStream = xBlkRoot->openStreamElement( XMLN_BLOCKLIST,
+    uno::Reference < io::XStream > xDocStream = m_xBlkRoot->openStreamElement( XMLN_BLOCKLIST,
                 embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
     uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
@@ -446,7 +446,7 @@ void SwXMLTextBlocks::WriteInfo()
 
     xExp->exportDoc( XML_BLOCK_LIST );
 
-    uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
+    uno::Reference < embed::XTransactedObject > xTrans( m_xBlkRoot, uno::UNO_QUERY );
     if ( xTrans.is() )
         xTrans->commit();
     }
@@ -463,9 +463,9 @@ ErrCode SwXMLTextBlocks::SetMacroTable(
     const SvxMacroTableDtor& rMacroTable )
 {
     // set current autotext
-    m_aShort = m_aNames[nIdx]->aShort;
-    m_aLong = m_aNames[nIdx]->aLong;
-    aPackageName = m_aNames[nIdx]->aPackageName;
+    m_aShort = m_aNames[nIdx]->m_aShort;
+    m_aLong = m_aNames[nIdx]->m_aLong;
+    m_aPackageName = m_aNames[nIdx]->m_aPackageName;
 
     // start XML autotext event export
     ErrCode nRes = ERRCODE_NONE;
@@ -488,10 +488,10 @@ ErrCode SwXMLTextBlocks::SetMacroTable(
     {
         try
         {
-            xRoot = xBlkRoot->openStorageElement( aPackageName, embed::ElementModes::WRITE );
-            bool bOasis = SotStorage::GetVersion( xRoot ) > SOFFICE_FILEFORMAT_60;
+            m_xRoot = m_xBlkRoot->openStorageElement( m_aPackageName, embed::ElementModes::WRITE );
+            bool bOasis = SotStorage::GetVersion( m_xRoot ) > SOFFICE_FILEFORMAT_60;
 
-            uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement( "atevent.xml",
+            uno::Reference < io::XStream > xDocStream = m_xRoot->openStreamElement( "atevent.xml",
                         embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
             uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
@@ -538,15 +538,15 @@ ErrCode SwXMLTextBlocks::SetMacroTable(
                 nRes = ERR_SWG_WRITE_ERROR;
 
             // finally, commit stream, sub-storage and storage
-            uno::Reference < embed::XTransactedObject > xTmpTrans( xRoot, uno::UNO_QUERY );
+            uno::Reference < embed::XTransactedObject > xTmpTrans( m_xRoot, uno::UNO_QUERY );
             if ( xTmpTrans.is() )
                 xTmpTrans->commit();
 
-            uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
+            uno::Reference < embed::XTransactedObject > xTrans( m_xBlkRoot, uno::UNO_QUERY );
             if ( xTrans.is() )
                 xTrans->commit();
 
-            xRoot = nullptr;
+            m_xRoot = nullptr;
         }
         catch ( uno::Exception& )
         {

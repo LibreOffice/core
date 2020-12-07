@@ -33,7 +33,7 @@ SwXMLBlockListExport::SwXMLBlockListExport(
     const OUString &rFileName,
     uno::Reference< xml::sax::XDocumentHandler> const &rHandler)
 :   SvXMLExport( rContext, "", rFileName, util::MeasureUnit::CM, rHandler ),
-    rBlockList(rBlocks)
+    m_rBlockList(rBlocks)
 {
     GetNamespaceMap_().Add( GetXMLToken ( XML_NP_BLOCK_LIST ),
                             GetXMLToken ( XML_N_BLOCK_LIST ),
@@ -51,24 +51,24 @@ ErrCode SwXMLBlockListExport::exportDoc(enum XMLTokenEnum )
                    GetNamespaceMap_().GetNameByKey ( XML_NAMESPACE_BLOCKLIST ) );
     AddAttribute( XML_NAMESPACE_BLOCKLIST,
                   XML_LIST_NAME,
-                  rBlockList.GetName());
+                  m_rBlockList.GetName());
     {
         SvXMLElementExport aRoot (*this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK_LIST, true, true);
-        sal_uInt16 nBlocks= rBlockList.GetCount();
+        sal_uInt16 nBlocks= m_rBlockList.GetCount();
         for ( sal_uInt16 i = 0; i < nBlocks; i++)
         {
             AddAttribute( XML_NAMESPACE_BLOCKLIST,
                           XML_ABBREVIATED_NAME,
-                          rBlockList.GetShortName(i));
+                          m_rBlockList.GetShortName(i));
             AddAttribute( XML_NAMESPACE_BLOCKLIST,
                           XML_PACKAGE_NAME,
-                          rBlockList.GetPackageName(i));
+                          m_rBlockList.GetPackageName(i));
             AddAttribute( XML_NAMESPACE_BLOCKLIST,
                           XML_NAME,
-                          rBlockList.GetLongName(i));
+                          m_rBlockList.GetLongName(i));
             AddAttribute( XML_NAMESPACE_BLOCKLIST,
                           XML_UNFORMATTED_TEXT,
-                          rBlockList.IsOnlyTextBlock(i) ? XML_TRUE : XML_FALSE );
+                          m_rBlockList.IsOnlyTextBlock(i) ? XML_TRUE : XML_FALSE );
 
             SvXMLElementExport aBlock( *this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK, true, true);
         }
