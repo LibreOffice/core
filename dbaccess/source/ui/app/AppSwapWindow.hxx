@@ -23,6 +23,7 @@
 #include <AppElementType.hxx>
 #include <ChildWindow.hxx>
 
+struct ImplSVEvent;
 class MnemonicGenerator;
 
 namespace dbaui
