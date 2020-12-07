@@ -46,7 +46,7 @@
 #include <unotools/fltrcfg.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/window.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/wmf.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/documentinfo.hxx>
@@ -1752,7 +1752,7 @@ SdrObjectUniquePtr XclImpChartObj::DoCreateSdrObj( XclImpDffConverter& rDffConv,
             inserted into the draw page. */
         sal_Int64 nAspect = css::embed::Aspects::MSOLE_CONTENT;
         MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xEmbObj->getMapUnit( nAspect ) );
-        Size aSize( vcl::Window::LogicToLogic( rAnchorRect.GetSize(), MapMode( MapUnit::Map100thMM ), MapMode( aUnit ) ) );
+        Size aSize( OutputDevice::LogicToLogic( rAnchorRect.GetSize(), MapMode( MapUnit::Map100thMM ), MapMode( aUnit ) ) );
         css::awt::Size aAwtSize( aSize.Width(), aSize.Height() );
         xEmbObj->setVisualAreaSize( nAspect, aAwtSize );
 

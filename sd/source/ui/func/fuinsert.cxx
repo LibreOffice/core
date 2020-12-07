@@ -605,7 +605,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                             {
                                 awt::Size aSz = xObj->getVisualAreaSize( nAspect );
 
-                                Size aNewSize = Window::LogicToLogic( Size( aSz.Width, aSz.Height ),
+                                Size aNewSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ),
                                     MapMode( aMapUnit ), MapMode( MapUnit::Map100thMM ) );
                                 if ( aNewSize != aSize )
                                 {
