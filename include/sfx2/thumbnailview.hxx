@@ -16,7 +16,6 @@
 #include <memory>
 #include <vector>
 
-#include <vcl/ctrl.hxx>
 #include <vcl/customweld.hxx>
 
 class BitmapEx;
