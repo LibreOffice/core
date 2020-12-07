@@ -36,6 +36,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::xmloff::token;
 
 using ::com::sun::star::uno::Reference;
 
@@ -124,23 +125,21 @@ Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefRowsContext::createFas
     // #i101319# row elements inside group, rows or header-rows
     // are treated like row elements directly in the table element
 
-    const SvXMLTokenMap& rTokenMap = GetScImport().GetTableRowsElemTokenMap();
-    sal_uInt16 nToken = rTokenMap.Get( nElement );
     sax_fastparser::FastAttributeList *pAttribList =
         &sax_fastparser::castToFastAttributeList( xAttrList );
 
-    switch (nToken)
+    switch (nElement)
     {
-        case XML_TOK_TABLE_ROWS_ROW_GROUP:
-        case XML_TOK_TABLE_ROWS_HEADER_ROWS:
-        case XML_TOK_TABLE_ROWS_ROWS:
+        case XML_ELEMENT(TABLE, XML_TABLE_ROW_GROUP):
+        case XML_ELEMENT(TABLE, XML_TABLE_HEADER_ROWS):
+        case XML_ELEMENT(TABLE, XML_TABLE_ROWS):
             return new ScXMLExternalRefRowsContext(
                 GetScImport(), mrExternalRefInfo);
-        case XML_TOK_TABLE_ROWS_ROW:
+        case XML_ELEMENT(TABLE, XML_TABLE_ROW):
             return new ScXMLExternalRefRowContext(
                 GetScImport(), pAttribList, mrExternalRefInfo);
         default:
-            ;
+            XMLOFF_WARN_UNKNOWN_ELEMENT("sc", nElement);
     }
     return nullptr;
 }
@@ -155,15 +154,11 @@ ScXMLExternalRefRowContext::ScXMLExternalRefRowContext(
 {
     mrExternalRefInfo.mnCol = 0;
 
-    const SvXMLTokenMap& rAttrTokenMap = mrScImport.GetTableRowAttrTokenMap();
-    if ( !rAttrList.is() )
-        return;
-
     for (auto &it : *rAttrList)
     {
-        switch ( rAttrTokenMap.Get( it.getToken() ) )
+        switch (it.getToken())
         {
-            case XML_TOK_TABLE_ROW_ATTR_REPEATED:
+            case XML_ELEMENT(TABLE, XML_NUMBER_ROWS_REPEATED):
             {
                 mnRepeatRowCount = std::max(it.toInt32(), static_cast<sal_Int32>(1));
             }
@@ -179,12 +174,10 @@ ScXMLExternalRefRowContext::~ScXMLExternalRefRowContext()
 Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefRowContext::createFastChildContext(
     sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
 {
-    const SvXMLTokenMap& rTokenMap = mrScImport.GetTableRowElemTokenMap();
-    sal_uInt16 nToken = rTokenMap.Get( nElement );
     sax_fastparser::FastAttributeList *pAttribList =
         &sax_fastparser::castToFastAttributeList( xAttrList );
 
-    if (nToken == XML_TOK_TABLE_ROW_CELL || nToken == XML_TOK_TABLE_ROW_COVERED_CELL)
+    if (nElement == XML_ELEMENT(TABLE, XML_TABLE_CELL) || nElement == XML_ELEMENT(TABLE, XML_COVERED_TABLE_CELL))
         return new ScXMLExternalRefCellContext(mrScImport, pAttribList, mrExternalRefInfo);
 
     return nullptr;
@@ -235,15 +228,11 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
 {
     using namespace ::xmloff::token;
 
-    const SvXMLTokenMap& rTokenMap = rImport.GetTableRowCellAttrTokenMap();
-    if ( !rAttrList.is() )
-        return;
-
     for (auto &it : *rAttrList)
     {
-        switch ( rTokenMap.Get( it.getToken() ) )
+        switch ( it.getToken() )
         {
-            case XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME:
+            case XML_ELEMENT(TABLE, XML_STYLE_NAME):
             {
                 XMLTableStylesContext* pStyles = static_cast<XMLTableStylesContext*>(mrScImport.GetAutoStyles());
                 const XMLTableStyleContext* pStyle = static_cast<const XMLTableStyleContext*>(
@@ -252,17 +241,17 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
                     mnNumberFormat = const_cast<XMLTableStyleContext*>(pStyle)->GetNumberFormat();
             }
             break;
-            case XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED:
+            case XML_ELEMENT(TABLE, XML_NUMBER_COLUMNS_REPEATED):
             {
                 mnRepeatCount = ::std::max( it.toInt32(), static_cast<sal_Int32>(1) );
             }
             break;
-            case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE:
+            case XML_ELEMENT(OFFICE, XML_VALUE_TYPE):
             {
                 mnCellType = ScXMLImport::GetCellType( it.toCString(), it.getLength() );
             }
             break;
-            case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE:
+            case XML_ELEMENT(OFFICE, XML_VALUE):
             {
                 if ( !it.isEmpty() )
                 {
@@ -272,7 +261,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
                 }
             }
             break;
-            case XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE:
+            case XML_ELEMENT(OFFICE, XML_DATE_VALUE):
             {
                 if ( !it.isEmpty() && mrScImport.SetNullDateOnUnitConverter() )
                 {
@@ -282,7 +271,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
                 }
             }
             break;
-            case XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE:
+            case XML_ELEMENT(OFFICE, XML_TIME_VALUE):
             {
                 if ( !it.isEmpty() )
                 {
@@ -292,7 +281,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
                 }
             }
             break;
-            case XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE:
+            case XML_ELEMENT(OFFICE, XML_STRING_VALUE):
             {
                 if ( !it.isEmpty() )
                 {
@@ -302,7 +291,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
                 }
             }
             break;
-            case XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE:
+            case XML_ELEMENT(OFFICE, XML_BOOLEAN_VALUE):
             {
                 if ( !it.isEmpty() )
                 {
@@ -325,10 +314,7 @@ ScXMLExternalRefCellContext::~ScXMLExternalRefCellContext()
 Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefCellContext::createFastChildContext(
     sal_Int32 nElement, const Reference< XFastAttributeList >& /*xAttrList*/ )
 {
-    const SvXMLTokenMap& rTokenMap = mrScImport.GetTableRowCellElemTokenMap();
-    sal_uInt16 nToken = rTokenMap.Get( nElement );
-
-    if (nToken == XML_TOK_TABLE_ROW_CELL_P)
+    if (nElement == XML_ELEMENT(TEXT, XML_P))
         return new ScXMLExternalRefCellTextContext(mrScImport, *this);
 
     return nullptr;

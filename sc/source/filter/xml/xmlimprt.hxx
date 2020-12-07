@@ -219,12 +219,6 @@ class ScXMLImport: public SvXMLImport
     rtl::Reference < XMLPropertySetMapper >       xRowStylesPropertySetMapper;
     rtl::Reference < XMLPropertySetMapper >       xTableStylesPropertySetMapper;
 
-    std::unique_ptr<SvXMLTokenMap>           pTableRowsElemTokenMap;
-    std::unique_ptr<SvXMLTokenMap>           pTableRowElemTokenMap;
-    std::unique_ptr<SvXMLTokenMap>           pTableRowAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap>           pTableRowCellElemTokenMap;
-    std::unique_ptr<SvXMLTokenMap>           pTableRowCellAttrTokenMap;
-
     sc::ImportPostProcessData* mpPostProcessData; /// Lift cycle managed elsewhere, no need to delete.
 
     ScMyTables              aTables;
@@ -308,12 +302,6 @@ public:
     const rtl::Reference < XMLPropertySetMapper >& GetColumnStylesPropertySetMapper() const { return xColumnStylesPropertySetMapper; }
     const rtl::Reference < XMLPropertySetMapper >& GetRowStylesPropertySetMapper() const { return xRowStylesPropertySetMapper; }
     const rtl::Reference < XMLPropertySetMapper >& GetTableStylesPropertySetMapper() const { return xTableStylesPropertySetMapper; }
-
-    const SvXMLTokenMap& GetTableRowsElemTokenMap();
-    const SvXMLTokenMap& GetTableRowElemTokenMap();
-    const SvXMLTokenMap& GetTableRowAttrTokenMap();
-    const SvXMLTokenMap& GetTableRowCellElemTokenMap();
-    const SvXMLTokenMap& GetTableRowCellAttrTokenMap();
 
     void SetPostProcessData( sc::ImportPostProcessData* p );
     sc::ImportPostProcessData* GetPostProcessData() { return mpPostProcessData;}

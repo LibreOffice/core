@@ -172,34 +172,6 @@ Calc_XMLOasisSettingsImporter_get_implementation(
             { "com.sun.star.comp.Calc.XMLOasisSettingsImporter" } )));
 }
 
-const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
-{
-    static const SvXMLTokenMapEntry aTableRowCellAttrTokenMap[] =
-    {
-        { XML_NAMESPACE_TABLE,  XML_STYLE_NAME,                     XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME              },
-        { XML_NAMESPACE_TABLE,  XML_CONTENT_VALIDATION_NAME,        XML_TOK_TABLE_ROW_CELL_ATTR_CONTENT_VALIDATION_NAME },
-        { XML_NAMESPACE_TABLE,  XML_NUMBER_ROWS_SPANNED,            XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS            },
-        { XML_NAMESPACE_TABLE,  XML_NUMBER_COLUMNS_SPANNED,         XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_COLS            },
-        { XML_NAMESPACE_TABLE,  XML_NUMBER_MATRIX_COLUMNS_SPANNED,  XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_COLS     },
-        { XML_NAMESPACE_TABLE,  XML_NUMBER_MATRIX_ROWS_SPANNED,     XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_ROWS     },
-        { XML_NAMESPACE_TABLE,  XML_NUMBER_COLUMNS_REPEATED,        XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED                },
-        { XML_NAMESPACE_OFFICE, XML_VALUE_TYPE,                     XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE              },
-        { XML_NAMESPACE_CALC_EXT, XML_VALUE_TYPE,                   XML_TOK_TABLE_ROW_CELL_ATTR_NEW_VALUE_TYPE          },
-        { XML_NAMESPACE_OFFICE, XML_VALUE,                          XML_TOK_TABLE_ROW_CELL_ATTR_VALUE                   },
-        { XML_NAMESPACE_OFFICE, XML_DATE_VALUE,                     XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE              },
-        { XML_NAMESPACE_OFFICE, XML_TIME_VALUE,                     XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE              },
-        { XML_NAMESPACE_OFFICE, XML_STRING_VALUE,                   XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE            },
-        { XML_NAMESPACE_OFFICE, XML_BOOLEAN_VALUE,                  XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE           },
-        { XML_NAMESPACE_TABLE,  XML_FORMULA,                        XML_TOK_TABLE_ROW_CELL_ATTR_FORMULA                 },
-        { XML_NAMESPACE_OFFICE, XML_CURRENCY,                       XML_TOK_TABLE_ROW_CELL_ATTR_CURRENCY                },
-        XML_TOKEN_MAP_END
-    };
-
-    if ( !pTableRowCellAttrTokenMap )
-        pTableRowCellAttrTokenMap.reset(new SvXMLTokenMap( aTableRowCellAttrTokenMap ));
-    return *pTableRowCellAttrTokenMap;
-}
-
 namespace {
 
 // NB: virtually inherit so we can multiply inherit properly
@@ -332,81 +304,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     return pContext;
 }
 
-const SvXMLTokenMap& ScXMLImport::GetTableRowsElemTokenMap()
-{
-    if( !pTableRowsElemTokenMap )
-    {
-        static const SvXMLTokenMapEntry aTableRowsElemTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_TABLE_ROW_GROUP,     XML_TOK_TABLE_ROWS_ROW_GROUP    },
-            { XML_NAMESPACE_TABLE, XML_TABLE_HEADER_ROWS,   XML_TOK_TABLE_ROWS_HEADER_ROWS  },
-            { XML_NAMESPACE_TABLE, XML_TABLE_ROWS,          XML_TOK_TABLE_ROWS_ROWS         },
-            { XML_NAMESPACE_TABLE, XML_TABLE_ROW,           XML_TOK_TABLE_ROWS_ROW          },
-            XML_TOKEN_MAP_END
-        };
-
-        pTableRowsElemTokenMap.reset(new SvXMLTokenMap( aTableRowsElemTokenMap ));
-    } // if( !pTableRowsElemTokenMap )
-
-    return *pTableRowsElemTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetTableRowElemTokenMap()
-{
-    if( !pTableRowElemTokenMap )
-    {
-        static const SvXMLTokenMapEntry aTableRowTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_TABLE_CELL,      XML_TOK_TABLE_ROW_CELL              },
-            { XML_NAMESPACE_TABLE, XML_COVERED_TABLE_CELL,  XML_TOK_TABLE_ROW_COVERED_CELL      },
-            XML_TOKEN_MAP_END
-        };
-
-        pTableRowElemTokenMap.reset(new SvXMLTokenMap( aTableRowTokenMap ));
-    } // if( !pTableRowElemTokenMap )
-
-    return *pTableRowElemTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetTableRowAttrTokenMap()
-{
-    if( !pTableRowAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aTableRowAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_STYLE_NAME,                  XML_TOK_TABLE_ROW_ATTR_STYLE_NAME           },
-            { XML_NAMESPACE_TABLE, XML_VISIBILITY,                  XML_TOK_TABLE_ROW_ATTR_VISIBILITY           },
-            { XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_REPEATED,        XML_TOK_TABLE_ROW_ATTR_REPEATED             },
-            { XML_NAMESPACE_TABLE, XML_DEFAULT_CELL_STYLE_NAME,     XML_TOK_TABLE_ROW_ATTR_DEFAULT_CELL_STYLE_NAME },
-            //  { XML_NAMESPACE_TABLE, XML_USE_OPTIMAL_HEIGHT,          XML_TOK_TABLE_ROW_ATTR_USE_OPTIMAL_HEIGHT   },
-            XML_TOKEN_MAP_END
-        };
-
-        pTableRowAttrTokenMap.reset(new SvXMLTokenMap( aTableRowAttrTokenMap ));
-    } // if( !pTableRowAttrTokenMap )
-
-    return *pTableRowAttrTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetTableRowCellElemTokenMap()
-{
-    if( !pTableRowCellElemTokenMap )
-    {
-        static const SvXMLTokenMapEntry aTableRowCellTokenMap[] =
-        {
-            { XML_NAMESPACE_TEXT,   XML_P,                  XML_TOK_TABLE_ROW_CELL_P                    },
-            { XML_NAMESPACE_TABLE,  XML_SUB_TABLE,          XML_TOK_TABLE_ROW_CELL_TABLE                },
-            { XML_NAMESPACE_OFFICE, XML_ANNOTATION,         XML_TOK_TABLE_ROW_CELL_ANNOTATION           },
-            { XML_NAMESPACE_TABLE,  XML_DETECTIVE,          XML_TOK_TABLE_ROW_CELL_DETECTIVE            },
-            { XML_NAMESPACE_TABLE,  XML_CELL_RANGE_SOURCE,  XML_TOK_TABLE_ROW_CELL_CELL_RANGE_SOURCE    },
-            XML_TOKEN_MAP_END
-        };
-
-        pTableRowCellElemTokenMap.reset(new SvXMLTokenMap( aTableRowCellTokenMap ));
-    } // if( !pTableRowCellElemTokenMap )
-
-    return *pTableRowCellElemTokenMap;
-}
 
 void ScXMLImport::SetPostProcessData( sc::ImportPostProcessData* p )
 {
@@ -494,13 +391,6 @@ ScXMLImport::ScXMLImport(
 
 ScXMLImport::~ScXMLImport() throw()
 {
-    //  delete pI18NMap;
-    pTableRowsElemTokenMap.reset();
-    pTableRowElemTokenMap.reset();
-    pTableRowAttrTokenMap.reset();
-    pTableRowCellElemTokenMap.reset();
-    pTableRowCellAttrTokenMap.reset();
-
     pChangeTrackingImportHelper.reset();
     pNumberFormatAttributesExportHelper.reset();
     pStyleNumberFormats.reset();
