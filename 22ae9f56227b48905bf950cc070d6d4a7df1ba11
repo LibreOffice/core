@@ -16,6 +16,24 @@
       "revId": "22ae9f56227b48905bf950cc070d6d4a7df1ba11",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0d26dbe_4dfef480",
+        "filename": "starmath/source/xparsmlbase.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-07T15:09:51Z",
+      "side": 1,
+      "message": "You are right, hexadecimal values is 0x26.\nHowever, the priority is dealing with this error:\nhttps://ci.libreoffice.org/job/gerrit_linux_gcc_release/76274/\nThat list is just a dummy list for initializing the sequence.\nThe difference between break and no break are the commented lines on:\nstarmath/source/mathmlimport.cxx .\nThey may be uncommented on a posterior patch.",
+      "parentUuid": "96b4efe0_63b1ef0c",
+      "revId": "22ae9f56227b48905bf950cc070d6d4a7df1ba11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
