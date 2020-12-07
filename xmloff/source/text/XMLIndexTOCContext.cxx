@@ -45,7 +45,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlement.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 

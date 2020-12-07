@@ -35,7 +35,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
-#include <sal/log.hxx>
 
 
 using namespace ::com::sun::star::uno;
