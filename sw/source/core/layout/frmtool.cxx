@@ -677,9 +677,16 @@ SwFlyNotify::~SwFlyNotify()
         if ( pFly->IsFlyAtContentFrame() )
         {
             SwFrame *pNxt = pFly->AnchorFrame()->FindNext();
-            if ( pNxt )
+            while (pNxt)
             {
                 pNxt->InvalidatePos();
+                if (!pNxt->IsSctFrame())
+                {
+                    break;
+                }
+                // invalidating pos of a section frame doesn't have much
+                // effect, so try again with its lower
+                pNxt = static_cast<SwSectionFrame*>(pNxt)->Lower();
             }
         }
 
