@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ea7d0fa_8d0400be",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-12-07T09:47:29Z",
+      "side": 1,
+      "message": "It is also possible that this is only the makefile-based build system. We use it, but upstream considers it legacy. They primarily build with gyp+ninja instead, and they care mostly only about that one. :-) (Lubos had a go to switch to that, didn\u0027t go too well.)",
+      "revId": "796c7f612603490dda9277ced0f6ab3cce3bc116",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
