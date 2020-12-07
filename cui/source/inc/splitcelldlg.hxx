@@ -37,11 +37,11 @@ public:
 
     DECL_LINK(ClickHdl, weld::Button&, void);
 
-    virtual bool IsHorizontal() const;
-    virtual bool IsProportional() const;
-    virtual tools::Long GetCount() const;
+    bool IsHorizontal() const;
+    bool IsProportional() const;
+    tools::Long GetCount() const;
 
-    virtual void SetSplitVerticalByDefault();
+    void SetSplitVerticalByDefault();
 };
 
 class SvxAbstractSplitTableDialog_Impl : public SvxAbstractSplitTableDialog
