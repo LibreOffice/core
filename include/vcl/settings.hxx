@@ -124,8 +124,8 @@ public:
 
     static sal_uLong                GetActionDelay();
 
-    void                            SetMenuDelay( sal_uLong nDelay );
-    sal_uLong                       GetMenuDelay() const;
+    void                            SetMenuDelay( sal_uInt32 nDelay );
+    sal_uInt32                      GetMenuDelay() const;
 
     void                            SetFollow( MouseFollowFlags nFollow );
     MouseFollowFlags                GetFollow() const;

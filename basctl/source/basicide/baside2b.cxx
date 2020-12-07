@@ -1426,7 +1426,7 @@ void BreakPointWindow::ShowMarker(vcl::RenderContext& rRenderContext)
     aMarkerOff.setX( (aOutSz.Width() - aMarkerSz.Width()) / 2 );
     aMarkerOff.setY( (nLineHeight - aMarkerSz.Height()) / 2 );
 
-    sal_uLong nY = nMarkerPos * nLineHeight - nCurYOffset;
+    sal_uInt32 nY = nMarkerPos * nLineHeight - nCurYOffset;
     Point aPos(0, nY);
     aPos += aMarkerOff;
 

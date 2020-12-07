@@ -372,13 +372,13 @@ MouseSettings::GetActionDelay()
 }
 
 void
-MouseSettings::SetMenuDelay( sal_uLong nDelay )
+MouseSettings::SetMenuDelay( sal_uInt32 nDelay )
 {
     CopyData();
     mxData->mnMenuDelay = nDelay;
 }
 
-sal_uLong
+sal_uInt32
 MouseSettings::GetMenuDelay() const
 {
     return mxData->mnMenuDelay;
