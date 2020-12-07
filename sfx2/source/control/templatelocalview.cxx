@@ -177,18 +177,6 @@ void TemplateLocalView::showRegion(TemplateContainerItem const *pItem)
     maOpenRegionHdl.Call(nullptr);
 }
 
-void TemplateLocalView::showRegion(std::u16string_view rName)
-{
-    for (auto const & pRegion : maRegions)
-    {
-        if (pRegion->maTitle == rName)
-        {
-            showRegion(pRegion.get());
-            break;
-        }
-    }
-}
-
 TemplateContainerItem* TemplateLocalView::getRegion(std::u16string_view rName)
 {
     for (auto const & pRegion : maRegions)
@@ -196,27 +184,6 @@ TemplateContainerItem* TemplateLocalView::getRegion(std::u16string_view rName)
             return pRegion.get();
 
     return nullptr;
-}
-
-void TemplateLocalView::createContextMenu(const bool bIsDefault)
-{
-    mxContextMenu->clear();
-    mxContextMenu->append("open",SfxResId(STR_OPEN));
-    mxContextMenu->append("edit",SfxResId(STR_EDIT_TEMPLATE));
-
-    if(!bIsDefault)
-        mxContextMenu->append("default",SfxResId(STR_DEFAULT_TEMPLATE));
-    else
-        mxContextMenu->append("default",SfxResId(STR_RESET_DEFAULT));
-
-    mxContextMenu->append_separator("separator");
-    mxContextMenu->append("rename",SfxResId(STR_SFX_RENAME));
-    mxContextMenu->append("delete",SfxResId(STR_DELETE));
-    deselectItems();
-    maSelectedItem->setSelection(true);
-    maItemStateHdl.Call(maSelectedItem);
-    ContextMenuSelectHdl(mxContextMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(maPosition, Size(1,1))));
-    Invalidate();
 }
 
 void TemplateLocalView::ContextMenuSelectHdl(std::string_view  rIdent)

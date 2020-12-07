@@ -394,17 +394,6 @@ void TitleHelper::removeTitle( TitleHelper::eTitleType nTitleIndex
     }
 }
 
-void TitleHelper::hideTitle( TitleHelper::eTitleType nTitleIndex
-                    , const css::uno::Reference< css::frame::XModel >& xModel )
-{
-    uno::Reference< chart2::XTitle > xTitled( TitleHelper::getTitle( nTitleIndex, xModel ) );
-    if( xTitled.is())
-    {
-        css::uno::Reference<css::beans::XPropertySet> xProps(xTitled, css::uno::UNO_QUERY_THROW);
-        xProps->setPropertyValue("Visible",css::uno::Any(false));
-    }
-}
-
 bool TitleHelper::getTitleType( eTitleType& rType
                     , const css::uno::Reference< css::chart2::XTitle >& xTitle
                     , ChartModel& rModel )

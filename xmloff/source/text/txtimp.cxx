@@ -417,15 +417,6 @@ const SvXMLTokenMapEntry aTextHyperlinkAttrTokenMap[] =
 
 struct XMLTextImportHelper::Impl
 {
-    std::unique_ptr<SvXMLTokenMap> m_xTextElemTokenMap;
-    std::unique_ptr<SvXMLTokenMap> m_xTextPElemTokenMap;
-    std::unique_ptr<SvXMLTokenMap> m_xTextPAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap> m_xTextNumberedParagraphAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap> m_xTextListBlockAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap> m_xTextListBlockElemTokenMap;
-    std::unique_ptr<SvXMLTokenMap> m_xTextFrameAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap> m_xTextContourAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap> m_xTextHyperlinkAttrTokenMap;
     std::unique_ptr< std::vector<OUString> > m_xPrevFrmNames;
     std::unique_ptr< std::vector<OUString> > m_xNextFrmNames;
     std::unique_ptr<XMLTextListsHelper> m_xTextListsHelper;
@@ -665,66 +656,6 @@ SvXMLImport & XMLTextImportHelper::GetXMLImport()
 XMLTextListsHelper & XMLTextImportHelper::GetTextListHelper()
 {
     return *m_xImpl->m_xTextListsHelper;
-}
-
-const SvXMLTokenMap& XMLTextImportHelper::GetTextElemTokenMap()
-{
-    if (!m_xImpl->m_xTextElemTokenMap)
-    {
-        m_xImpl->m_xTextElemTokenMap.reset(
-            new SvXMLTokenMap( aTextElemTokenMap ));
-    }
-    return *m_xImpl->m_xTextElemTokenMap;
-}
-
-const SvXMLTokenMap& XMLTextImportHelper::GetTextPElemTokenMap()
-{
-    if (!m_xImpl->m_xTextPElemTokenMap)
-    {
-        m_xImpl->m_xTextPElemTokenMap.reset(
-            new SvXMLTokenMap( aTextPElemTokenMap ));
-    }
-    return *m_xImpl->m_xTextPElemTokenMap;
-}
-
-const SvXMLTokenMap& XMLTextImportHelper::GetTextPAttrTokenMap()
-{
-    if (!m_xImpl->m_xTextPAttrTokenMap)
-    {
-        m_xImpl->m_xTextPAttrTokenMap.reset(
-            new SvXMLTokenMap( aTextPAttrTokenMap ));
-    }
-    return *m_xImpl->m_xTextPAttrTokenMap;
-}
-
-const SvXMLTokenMap& XMLTextImportHelper::GetTextFrameAttrTokenMap()
-{
-    if (!m_xImpl->m_xTextFrameAttrTokenMap)
-    {
-        m_xImpl->m_xTextFrameAttrTokenMap.reset(
-            new SvXMLTokenMap( aTextFrameAttrTokenMap ));
-    }
-    return *m_xImpl->m_xTextFrameAttrTokenMap;
-}
-
-const SvXMLTokenMap& XMLTextImportHelper::GetTextContourAttrTokenMap()
-{
-    if (!m_xImpl->m_xTextContourAttrTokenMap)
-    {
-        m_xImpl->m_xTextContourAttrTokenMap.reset(
-            new SvXMLTokenMap( aTextContourAttrTokenMap ));
-    }
-    return *m_xImpl->m_xTextContourAttrTokenMap;
-}
-
-const SvXMLTokenMap& XMLTextImportHelper::GetTextHyperlinkAttrTokenMap()
-{
-    if (!m_xImpl->m_xTextHyperlinkAttrTokenMap)
-    {
-        m_xImpl->m_xTextHyperlinkAttrTokenMap.reset(
-            new SvXMLTokenMap( aTextHyperlinkAttrTokenMap ));
-    }
-    return *m_xImpl->m_xTextHyperlinkAttrTokenMap;
 }
 
 namespace
@@ -2445,36 +2376,6 @@ void XMLTextImportHelper::PopListContext()
     GetTextListHelper().PopListContext();
 }
 
-
-const SvXMLTokenMap& XMLTextImportHelper::GetTextNumberedParagraphAttrTokenMap()
-{
-    if (!m_xImpl->m_xTextNumberedParagraphAttrTokenMap)
-    {
-        m_xImpl->m_xTextNumberedParagraphAttrTokenMap.reset(
-            new SvXMLTokenMap( aTextNumberedParagraphAttrTokenMap ) );
-    }
-    return *m_xImpl->m_xTextNumberedParagraphAttrTokenMap;
-}
-
-const SvXMLTokenMap& XMLTextImportHelper::GetTextListBlockAttrTokenMap()
-{
-    if (!m_xImpl->m_xTextListBlockAttrTokenMap)
-    {
-        m_xImpl->m_xTextListBlockAttrTokenMap.reset(
-            new SvXMLTokenMap( aTextListBlockAttrTokenMap ) );
-    }
-    return *m_xImpl->m_xTextListBlockAttrTokenMap;
-}
-
-const SvXMLTokenMap& XMLTextImportHelper::GetTextListBlockElemTokenMap()
-{
-    if (!m_xImpl->m_xTextListBlockElemTokenMap)
-    {
-        m_xImpl->m_xTextListBlockElemTokenMap.reset(
-            new SvXMLTokenMap( aTextListBlockElemTokenMap ) );
-    }
-    return *m_xImpl->m_xTextListBlockElemTokenMap;
-}
 
 SvI18NMap& XMLTextImportHelper::GetRenameMap()
 {

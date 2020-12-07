@@ -953,7 +953,6 @@ private:
     virtual void PrepareField(
         const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 
-    static const char* MapBibliographyFieldName(const OUString& sName);
     static const char* MapBibliographyFieldName(sal_Int32 nElement);
 };
 

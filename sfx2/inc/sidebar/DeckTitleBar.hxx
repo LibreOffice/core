@@ -44,8 +44,6 @@ public:
 private:
     virtual void HandleToolBoxItemClick() override;
 
-    DECL_LINK(DrawGripHdl, weld::DrawingArea::draw_args, void);
-
     std::unique_ptr<GripWidget> mxGripWidget;
     std::unique_ptr<weld::CustomWeld> mxGripWeld;
     std::unique_ptr<weld::Label> mxLabel;

@@ -60,19 +60,6 @@ private:
     css::uno::Reference< css::chart::XChartDocument > mxChartDoc;
     SvXMLStylesContext* mpAutoStyles;
 
-    std::unique_ptr<SvXMLTokenMap> mpChartDocElemTokenMap;
-    std::unique_ptr<SvXMLTokenMap> mpTableElemTokenMap;
-    std::unique_ptr<SvXMLTokenMap> mpChartElemTokenMap;
-    std::unique_ptr<SvXMLTokenMap> mpPlotAreaElemTokenMap;
-    std::unique_ptr<SvXMLTokenMap> mpSeriesElemTokenMap;
-
-    std::unique_ptr<SvXMLTokenMap> mpChartAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap> mpPlotAreaAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap> mpCellAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap> mpSeriesAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap> mpPropMappingAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap> mpRegEquationAttrTokenMap;
-
 public:
 
     SchXMLImportHelper();
@@ -96,19 +83,6 @@ public:
 
     const css::uno::Reference< css::chart::XChartDocument >& GetChartDocument() const
         { return mxChartDoc; }
-
-    const SvXMLTokenMap& GetDocElemTokenMap();
-    const SvXMLTokenMap& GetTableElemTokenMap();
-    const SvXMLTokenMap& GetChartElemTokenMap();
-    const SvXMLTokenMap& GetPlotAreaElemTokenMap();
-    const SvXMLTokenMap& GetSeriesElemTokenMap();
-    const SvXMLTokenMap& GetPropMappingAttrTokenMap();
-
-    const SvXMLTokenMap& GetChartAttrTokenMap();
-    const SvXMLTokenMap& GetPlotAreaAttrTokenMap();
-    const SvXMLTokenMap& GetCellAttrTokenMap();
-    const SvXMLTokenMap& GetSeriesAttrTokenMap();
-    const SvXMLTokenMap& GetRegEquationAttrTokenMap();
 
     static XmlStyleFamily GetChartFamilyID() { return XmlStyleFamily::SCH_CHART_ID; }
 

@@ -52,9 +52,6 @@ public:
     virtual bool EventNotify(NotifyEvent& rEvent) override;
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
-    void SetController(const sal_uInt16 nItemId,
-                       const css::uno::Reference<css::frame::XToolbarController>& rxController);
-
     void InitToolBox(VclBuilder::stringmap& rMap);
 
 protected:

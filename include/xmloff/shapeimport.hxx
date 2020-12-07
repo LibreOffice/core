@@ -229,16 +229,6 @@ class XMLOFF_DLLPUBLIC XMLShapeImportHelper : public salhelper::SimpleReferenceO
     rtl::Reference<SvXMLStylesContext> mxStylesContext;
     rtl::Reference<SvXMLStylesContext> mxAutoStylesContext;
 
-    // contexts for xShape contents TokenMaps
-    std::unique_ptr<SvXMLTokenMap>              mpGroupShapeElemTokenMap;
-    std::unique_ptr<SvXMLTokenMap>              mpFrameShapeElemTokenMap;
-    std::unique_ptr<SvXMLTokenMap>              mp3DSceneShapeElemTokenMap;
-    std::unique_ptr<SvXMLTokenMap>              mp3DObjectAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap>              mp3DPolygonBasedAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap>              mp3DCubeObjectAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap>              mp3DSphereObjectAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap>              mp3DLightAttrTokenMap;
-
     rtl::Reference< XMLTableImport > mxShapeTableImport;
 
 protected:
@@ -270,15 +260,6 @@ public:
         SvXMLImport& rImport, sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
-
-    const SvXMLTokenMap& GetGroupShapeElemTokenMap();
-    const SvXMLTokenMap& GetFrameShapeElemTokenMap();
-    const SvXMLTokenMap& Get3DSceneShapeElemTokenMap();
-    const SvXMLTokenMap& Get3DObjectAttrTokenMap();
-    const SvXMLTokenMap& Get3DPolygonBasedAttrTokenMap();
-    const SvXMLTokenMap& Get3DCubeObjectAttrTokenMap();
-    const SvXMLTokenMap& Get3DSphereObjectAttrTokenMap();
-    const SvXMLTokenMap& Get3DLightAttrTokenMap();
 
     // Styles and AutoStyles contexts
     SvXMLStylesContext* GetStylesContext() const { return mxStylesContext.get(); }

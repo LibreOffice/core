@@ -86,10 +86,6 @@ public:
 
     void showRegion (TemplateContainerItem const *pItem);
 
-    void showRegion (std::u16string_view rName);
-
-    void createContextMenu(const bool bIsDefault );
-
     void ContextMenuSelectHdl(std::string_view  rIdent);
 
     TemplateContainerItem* getRegion(std::u16string_view sStr);

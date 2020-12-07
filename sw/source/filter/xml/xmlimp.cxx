@@ -345,8 +345,6 @@ SwXMLImport::~SwXMLImport() throw ()
         SAL_WARN("sw", "endDocument skipped, dropping shapes now to avoid dangling SvTextShapeImportHelper pointing to this");
         ClearShapeImport();
     }
-    m_pTableElemTokenMap.reset();
-    m_pTableCellAttrTokenMap.reset();
     FinitItemImport();
 }
 

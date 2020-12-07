@@ -118,8 +118,6 @@ public:
     virtual bool GetInfo( SfxPoolItem& ) const override;
 
     /// Get and set Modify pointer.
-    const sw::FormatDropDefiner* GetDefinedIn() const
-            { return m_pDefinedIn; };
     void ChgDefinedIn( const sw::FormatDropDefiner* pDefiner )
             { m_pDefinedIn = const_cast<sw::FormatDropDefiner*>(pDefiner); };
 };

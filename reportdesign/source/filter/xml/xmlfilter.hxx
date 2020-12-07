@@ -58,9 +58,6 @@ private:
 
     TGroupFunctionMap                               m_aFunctions;
 
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pReportElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>        m_pCellElemTokenMap;
-
     rtl::Reference < XMLPropertyHandlerFactory >      m_xPropHdlFactory;
     rtl::Reference < XMLPropertySetMapper >           m_xCellStylesPropertySetMapper;
     rtl::Reference < XMLPropertySetMapper >           m_xColumnStylesPropertySetMapper;
@@ -99,9 +96,6 @@ public:
 
     virtual void SAL_CALL startDocument() override;
     virtual void SAL_CALL endDocument() override;
-
-    const SvXMLTokenMap& GetReportElemTokenMap() const;
-    const SvXMLTokenMap& GetCellElemTokenMap() const;
 
     const rtl::Reference< XMLPropertySetMapper >& GetCellStylesPropertySetMapper()      const   {
         return m_xCellStylesPropertySetMapper;
