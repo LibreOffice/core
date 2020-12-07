@@ -16,9 +16,7 @@
     && HAVE_FEATURE_OPENGL
 /* Run test for OpenGL support in own process to avoid crash with broken
  * OpenGL drivers. Start process as early as possible.
- * In non-headless mode, the process will be reaped in X11OpenGLDeviceInfo::GetData
- * (vcl/opengl/x11/X11DeviceInfo.cxx).  In headless mode, the process will be reaped late in
- * Desktop::Main (desktop/source/app/app.cxx).
+ * The process will be reaped late in Desktop::Main (desktop/source/app/app.cxx).
  */
 
 bool fire_glxtest_process();
