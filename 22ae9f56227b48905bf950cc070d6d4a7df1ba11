@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "96b4efe0_63b1ef0c",
+        "filename": "starmath/source/xparsmlbase.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2020-12-07T12:53:54Z",
+      "side": 1,
+      "message": "I\u0027m not so good at C++ , but does this mean decimal 38, not 0x38? \nUnicode Character \u0027AMPERSAND\u0027 is U+0026 (hexadecimal)\n\nWould it be better to have a unit test?",
+      "revId": "22ae9f56227b48905bf950cc070d6d4a7df1ba11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
