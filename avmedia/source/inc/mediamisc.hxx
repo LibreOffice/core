@@ -32,8 +32,6 @@
 #endif
 #endif
 
-#define AVMEDIA_OPENGL_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_OpenGL"
-
 // Mime types
 #define AVMEDIA_MIMETYPE_COMMON "application/vnd.sun.star.media"
 

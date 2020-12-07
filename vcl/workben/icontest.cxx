@@ -38,8 +38,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/image.hxx>
-#include <vcl/opengl/OpenGLContext.hxx>
-#include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclmain.hxx>
 #include <vcl/wrkwin.hxx>

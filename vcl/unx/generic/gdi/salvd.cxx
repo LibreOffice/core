@@ -28,8 +28,6 @@
 #include <unx/salvd.h>
 #include <unx/x11/xlimits.hxx>
 
-#include <vcl/opengl/OpenGLHelper.hxx>
-
 #include <config_features.h>
 #include <vcl/skia/SkiaHelper.hxx>
 #if HAVE_FEATURE_SKIA

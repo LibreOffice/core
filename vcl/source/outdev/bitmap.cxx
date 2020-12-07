@@ -28,9 +28,6 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <config_features.h>
-#if HAVE_FEATURE_OPENGL
-#include <vcl/opengl/OpenGLHelper.hxx>
-#endif
 #include <vcl/skia/SkiaHelper.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>

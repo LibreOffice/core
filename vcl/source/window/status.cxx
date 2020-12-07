@@ -29,9 +29,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 #include <config_features.h>
-#if HAVE_FEATURE_OPENGL
-#include <vcl/opengl/OpenGLWrapper.hxx>
-#endif
 #include <svdata.hxx>
 #include <window.h>
 

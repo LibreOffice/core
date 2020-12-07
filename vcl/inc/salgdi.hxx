@@ -43,7 +43,6 @@ class SalLayout;
 class ImplLayoutArgs;
 namespace tools { class Rectangle; }
 class FontSubsetInfo;
-class OpenGLContext;
 class OutputDevice;
 class FreetypeFont;
 struct SystemGraphicsData;

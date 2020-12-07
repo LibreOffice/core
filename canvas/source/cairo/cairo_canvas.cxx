@@ -25,7 +25,6 @@
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/sysdata.hxx>
-#include <vcl/opengl/OpenGLWrapper.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
