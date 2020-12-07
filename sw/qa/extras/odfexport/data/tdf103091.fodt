@@ -32,7 +32,7 @@
    <style:paragraph-properties fo:margin-top="0.423cm" fo:margin-bottom="0.212cm" fo:keep-with-next="always"/>
    <style:text-properties style:font-name="Liberation Sans" fo:font-size="14pt" style:font-name-asian="DejaVu Sans Mono" style:font-size-asian="14pt" style:font-name-complex="DejaVu Sans" style:font-size-complex="14pt"/>
   </style:style>
-  <style:style style:name="Conditional" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
+  <style:style style:name="Text Body" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
    <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.212cm"/>
    <style:map style:condition="table-header()" style:apply-style-name="Addressee"/>
    <style:map style:condition="table()" style:apply-style-name="Bibliography_20_1"/>
