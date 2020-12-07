@@ -25,8 +25,10 @@
 #include <comphelper/hash.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
+#include <vcl/cvtgrf.hxx>
 
 #include <impgraph.hxx>
+#include <graphic/GraphicFormatDetector.hxx>
 
 #if USE_TLS_NSS
 #include <nss.h>
@@ -51,6 +53,7 @@ private:
     void testSwappingVectorGraphic();
     void testSwappingPageNumber();
     void testWMFRoundtrip();
+    void testEmfToWmfConversion();
 
     CPPUNIT_TEST_SUITE(GraphicTest);
     CPPUNIT_TEST(testUnloadedGraphic);
@@ -62,6 +65,7 @@ private:
     CPPUNIT_TEST(testSwappingVectorGraphic);
     CPPUNIT_TEST(testSwappingPageNumber);
     CPPUNIT_TEST(testWMFRoundtrip);
+    CPPUNIT_TEST(testEmfToWmfConversion);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -299,6 +303,38 @@ void GraphicTest::testUnloadedGraphicSizeUnit()
     // - Actual  : 42x42
     // i.e. a mm100 size was used as a hint and the inch size was set for a non-matching unit.
     CPPUNIT_ASSERT_EQUAL(Size(400, 363), aGraphic.GetPrefSize());
+}
+
+void GraphicTest::testEmfToWmfConversion()
+{
+    // Load EMF data.
+    GraphicFilter aGraphicFilter;
+    test::Directories aDirectories;
+    OUString aURL = aDirectories.getURLFromSrc(DATA_DIRECTORY) + "to-wmf.emf";
+    SvFileStream aStream(aURL, StreamMode::READ);
+    Graphic aGraphic;
+    // This similar to an application/x-openoffice-wmf mime type in manifest.xml in the ODF case.
+    sal_uInt16 nFormat = aGraphicFilter.GetImportFormatNumberForShortName(u"WMF");
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE,
+                         aGraphicFilter.ImportGraphic(aGraphic, OUString(), aStream, nFormat));
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Wmf,
+                         aGraphic.getVectorGraphicData()->getVectorGraphicDataType());
+
+    // Save as WMF.
+    sal_uInt16 nFilterType = aGraphicFilter.GetExportFormatNumberForShortName(u"WMF");
+    SvMemoryStream aGraphicStream;
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aGraphicFilter.ExportGraphic(aGraphic, OUString(),
+                                                                    aGraphicStream, nFilterType));
+    aGraphicStream.Seek(0);
+    vcl::GraphicFormatDetector aDetector(aGraphicStream, OUString());
+    CPPUNIT_ASSERT(aDetector.detect());
+    CPPUNIT_ASSERT(aDetector.checkWMForEMF());
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: WMF
+    // - Actual  : EMF
+    // i.e. EMF data was requested to be converted to WMF, but the output was still EMF.
+    CPPUNIT_ASSERT_EQUAL(OUString("WMF"), aDetector.msDetectedFormat);
 }
 
 void GraphicTest::testSwapping()
