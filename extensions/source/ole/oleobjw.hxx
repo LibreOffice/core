@@ -23,6 +23,7 @@
 #include "ole2uno.hxx"
 #include "wincrap.hxx"
 
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -149,11 +150,11 @@ protected:
     // These functions are for the case if an object of this class wraps an IDispatch
     // object that implements UNO interfaces. In that case the member m_seqTypes
     // is set through XInitialization::initialize.
-    void getMethodInfo(const OUString& sName, TypeDescription& methodDescription);
+    void getMethodInfo(std::u16string_view sName, TypeDescription& methodDescription);
     // After return attributInfo contains typelib_InterfaceAttributeTypeDescription::pAttributeTypeRef
-    void getAttributeInfo(const OUString& sName, TypeDescription& attributeInfo);
+    void getAttributeInfo(std::u16string_view sName, TypeDescription& attributeInfo);
     // used by get MethodInfo
-    TypeDescription  getInterfaceMemberDescOfCurrentCall(const OUString& sName);
+    TypeDescription  getInterfaceMemberDescOfCurrentCall(std::u16string_view sName);
     /** Returns always a valid ITypeInfo interface or throws a BridgeRuntimeError.
         The returned interface does not need to be AddRef'ed as long as it is locally
         used. The interface is kept in the instance of this class.
