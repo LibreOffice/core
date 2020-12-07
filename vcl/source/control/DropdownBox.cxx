@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/builderfactory.hxx>
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>
-#include "DropdownBox.hxx"
+#include <DropdownBox.hxx>
 
 #define NOTEBOOK_HEADER_HEIGHT 30
 
@@ -113,7 +112,5 @@ IMPL_LINK(DropdownBox, PBClickHdl, Button*, /*pButton*/, void)
     m_pPopup->StartPopupMode(aRect, FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus
                                         | FloatWinPopupFlags::AllMouseButtonClose);
 }
-
-VCL_BUILDER_FACTORY(DropdownBox)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

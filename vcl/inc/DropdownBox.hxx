@@ -17,45 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/IPrioritable.hxx>
+#ifndef INCLUDED_SFX2_NOTEBOOKBAR_DROPDOWNBOX_HXX
+#define INCLUDED_SFX2_NOTEBOOKBAR_DROPDOWNBOX_HXX
+
+#include <vcl/notebookbar/IPrioritable.hxx>
+#include <vcl/notebookbar/NotebookbarPopup.hxx>
 #include <vcl/layout.hxx>
 
-#include <vector>
-
-#ifndef INCLUDED_SFX2_NOTEBOOKBAR_PRIORITYHBOX_HXX
-#define INCLUDED_SFX2_NOTEBOOKBAR_PRIORITYHBOX_HXX
-
-/*
- * PriorityHBox is a VclHBox which hides its own children if there is no sufficient space.
- * Hiding order can be modified using child's priorities. If a control have default
- * priority assigned (VCL_PRIORITY_DEFAULT), it is always shown.
- */
-
-class PriorityHBox : public VclHBox
+class DropdownBox : public VclHBox, public vcl::IPrioritable
 {
-protected:
-    bool m_bInitialized;
-
-    std::vector<vcl::IPrioritable*> m_aSortedChildren;
-
-    virtual int GetHiddenCount() const;
-
-    virtual void GetChildrenWithPriorities();
+private:
+    bool m_bInFullView;
+    VclPtr<PushButton> m_pButton;
+    VclPtr<NotebookbarPopup> m_pPopup;
 
 public:
-    explicit PriorityHBox(vcl::Window* pParent);
+    explicit DropdownBox(vcl::Window* pParent);
+    virtual ~DropdownBox() override;
+    virtual void dispose() override;
 
-    virtual ~PriorityHBox() override;
+    void HideContent() override;
+    void ShowContent() override;
+    bool IsHidden() override;
 
-    void Initialize();
-
-    void SetSizeFromParent();
-
-    virtual Size calculateRequisition() const override;
-
-    virtual void Resize() override;
-
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+private:
+    DECL_LINK(PBClickHdl, Button*, void);
 };
 
 #endif
