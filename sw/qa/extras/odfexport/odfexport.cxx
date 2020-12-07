@@ -1094,7 +1094,7 @@ DECLARE_ODFEXPORT_TEST(testTdf103091, "tdf103091.fodt")
     // check that all conditional paragraph style conditions are imported
     uno::Reference<container::XNameAccess> xParaStyles(getStyles("ParagraphStyles"));
     uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getByName(
-            "Conditional"), uno::UNO_QUERY);
+            "Text Body"), uno::UNO_QUERY);
     auto conditions(getProperty<uno::Sequence<beans::NamedValue>>(xStyle1, "ParaStyleConditions"));
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(28), conditions.getLength());

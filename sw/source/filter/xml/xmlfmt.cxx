@@ -303,12 +303,12 @@ uno::Reference < style::XStyle > SwXMLTextStyleContext_Impl::Create()
 void
 SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
 {
-
-    if( pConditions && XmlStyleFamily::TEXT_PARAGRAPH == GetFamily() && xNewStyle.is() )
+    assert( (!xNewStyle.is() || xNewStyle == GetStyle()) && "info-gathering: original code just used GetStyle, so why xNewStyle?");
+    if( pConditions && XmlStyleFamily::TEXT_PARAGRAPH == GetFamily() && GetStyle().is() )
     {
         CommandStruct const*const pCommands = SwCondCollItem::GetCmds();
 
-        Reference< XPropertySet > xPropSet( xNewStyle, UNO_QUERY );
+        Reference< XPropertySet > xPropSet( GetStyle(), UNO_QUERY );
 
         uno::Sequence< beans::NamedValue > aSeq( pConditions->size() );
 
