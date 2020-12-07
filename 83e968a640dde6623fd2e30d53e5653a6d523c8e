@@ -22,6 +22,30 @@
       "revId": "83e968a640dde6623fd2e30d53e5653a6d523c8e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edb06894_e0896996",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 3942,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-07T07:55:38Z",
+      "side": 1,
+      "message": "... and since SetTabProtectionSymbol is a method of ScTabView, we need not to cast to ScTabViewShell, just to ScTabView:\n\n    for (SfxViewFrame* fr \u003d SfxViewFrame::GetFirst(\u0026rDocShell); fr; fr \u003d SfxViewFrame::GetNext(*fr, \u0026rDocShell))\n        if (auto pTabView \u003d dynamic_cast\u003cScTabView*\u003e(fr-\u003eGetViewShell()))\n            pTabView-\u003eSetTabProtectionSymbol(nTab, true);",
+      "parentUuid": "c4995da6_dded0779",
+      "range": {
+        "startLine": 3942,
+        "startChar": 4,
+        "endLine": 3942,
+        "endChar": 48
+      },
+      "revId": "83e968a640dde6623fd2e30d53e5653a6d523c8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
