@@ -79,8 +79,7 @@ class XMLTableStyleContext : public XMLPropStyleContext
 
 protected:
 
-    virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
+    virtual void SetAttribute( sal_Int32 nElement,
                                const OUString& rValue ) override;
 
 public:

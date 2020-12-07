@@ -380,7 +380,7 @@ class SwXMLCellStyleContext : public XMLPropStyleContext
 public:
     using XMLPropStyleContext::XMLPropStyleContext;
     virtual void FillPropertySet(const css::uno::Reference<css::beans::XPropertySet>& rPropSet) override;
-    virtual void SetAttribute(sal_uInt16 nPrefixKey, const OUString& rLocalName, const OUString& rValue) override;
+    virtual void SetAttribute(sal_Int32 nElement, const OUString& rValue) override;
 };
 
 class SwXMLItemSetStyleContext_Impl : public SvXMLStyleContext
@@ -402,8 +402,7 @@ class SwXMLItemSetStyleContext_Impl : public SvXMLStyleContext
 
 protected:
 
-    virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
+    virtual void SetAttribute( sal_Int32 nElement,
                                const OUString& rValue ) override;
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
@@ -484,26 +483,26 @@ void SwXMLCellStyleContext::FillPropertySet(const css::uno::Reference<css::beans
     XMLPropStyleContext::FillPropertySet(rPropSet);
 }
 
-void SwXMLCellStyleContext::SetAttribute(sal_uInt16 nPrefixKey, const OUString& rLocalName, const OUString& rValue)
+void SwXMLCellStyleContext::SetAttribute(sal_Int32 nElement, const OUString& rValue)
 {
-    if (IsXMLToken(rLocalName, XML_DATA_STYLE_NAME))
+    if ((nElement & TOKEN_MASK) == XML_DATA_STYLE_NAME)
         m_sDataStyleName = rValue;
     else
-        XMLPropStyleContext::SetAttribute(nPrefixKey, rLocalName, rValue);
+        XMLPropStyleContext::SetAttribute(nElement, rValue);
 }
 
-void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
-                                           const OUString& rLocalName,
+void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_Int32 nElement,
                                            const OUString& rValue )
 {
-    if( XML_NAMESPACE_STYLE == nPrefixKey )
+    switch(nElement)
     {
-        if ( IsXMLToken( rLocalName, XML_MASTER_PAGE_NAME ) )
+        case XML_ELEMENT(STYLE, XML_MASTER_PAGE_NAME):
         {
             sMasterPageName = rValue;
             bHasMasterPageName = true;
+            break;
         }
-        else if ( IsXMLToken( rLocalName, XML_DATA_STYLE_NAME ) )
+        case XML_ELEMENT(STYLE, XML_DATA_STYLE_NAME):
         {
             // if we have a valid data style name
             if (!rValue.isEmpty())
@@ -511,15 +510,10 @@ void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
                 sDataStyleName = rValue;
                 bDataStyleIsResolved = false;   // needs to be resolved
             }
+            break;
         }
-        else
-        {
-            SvXMLStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
-        }
-    }
-    else
-    {
-        SvXMLStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+        default:
+            SvXMLStyleContext::SetAttribute( nElement, rValue );
     }
 }
 

@@ -396,17 +396,20 @@ ScCondFormatEntry* ScXMLMapContext::CreateConditionEntry()
     return pEntry;
 }
 
-void XMLTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
-                                        const OUString& rLocalName,
+void XMLTableStyleContext::SetAttribute( sal_Int32 nElement,
                                         const OUString& rValue )
 {
-    // TODO: use a map here
-    if( IsXMLToken(rLocalName, XML_DATA_STYLE_NAME ) )
-        sDataStyleName = rValue;
-    else if ( IsXMLToken(rLocalName, XML_MASTER_PAGE_NAME ) )
-        sPageStyle = rValue;
-    else
-        XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+    switch(nElement & TOKEN_MASK)
+    {
+        case XML_DATA_STYLE_NAME:
+            sDataStyleName = rValue;
+            break;
+        case XML_MASTER_PAGE_NAME:
+            sPageStyle = rValue;
+            break;
+        default:
+            XMLPropStyleContext::SetAttribute( nElement, rValue );
+    }
 }
 
 

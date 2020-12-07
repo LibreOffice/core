@@ -57,9 +57,7 @@ class XMLOFF_DLLPUBLIC SvXMLStyleContext : public SvXMLImportContext
 
 protected:
 
-    virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
-                               const OUString& rValue );
+    virtual void SetAttribute( sal_Int32 nElement, const OUString& rValue );
 
     void SetFamily( XmlStyleFamily nSet ) { mnFamily = nSet; }
     void SetAutoName( const OUString& rName ) { maAutoName = rName; }

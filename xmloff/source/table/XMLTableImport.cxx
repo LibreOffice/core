@@ -169,8 +169,7 @@ public:
 
     virtual void CreateAndInsert( bool bOverwrite ) override;
 protected:
-    virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
+    virtual void SetAttribute( sal_Int32 nElement,
                                const OUString& rValue ) override;
 private:
     XMLTableTemplate maTableTemplate;
@@ -732,13 +731,12 @@ XMLTableTemplateContext::XMLTableTemplateContext( SvXMLImport& rImport )
 {
 }
 
-void XMLTableTemplateContext::SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
+void XMLTableTemplateContext::SetAttribute( sal_Int32 nElement,
                                const OUString& rValue )
 {
-    if( (nPrefixKey == XML_NAMESPACE_TEXT && IsXMLToken( rLocalName, XML_STYLE_NAME ))
+    if( nElement == XML_ELEMENT(TEXT, XML_STYLE_NAME)
         // Writer specific: according to oasis odf 1.2 prefix should be "table" and element name should be "name"
-        || (nPrefixKey == XML_NAMESPACE_TABLE && IsXMLToken( rLocalName, XML_NAME )))
+        || nElement == XML_ELEMENT(TABLE, XML_NAME) )
     {
         msTemplateStyleName = rValue;
     }

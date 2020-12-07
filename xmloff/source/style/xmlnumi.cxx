@@ -845,18 +845,16 @@ SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAli
     rLLevel.SetLabelFollowedBy( eLabelFollowedBy );
 }
 
-void SvxXMLListStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
-                                           const OUString& rLocalName,
+void SvxXMLListStyleContext::SetAttribute( sal_Int32 nElement,
                                            const OUString& rValue )
 {
-    if( XML_NAMESPACE_TEXT == nPrefixKey &&
-        IsXMLToken( rLocalName, XML_CONSECUTIVE_NUMBERING ) )
+    if( nElement == XML_ELEMENT(TEXT, XML_CONSECUTIVE_NUMBERING) )
     {
         bConsecutive = IsXMLToken( rValue, XML_TRUE );
     }
     else
     {
-        SvXMLStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+        SvXMLStyleContext::SetAttribute( nElement, rValue );
     }
 }
 

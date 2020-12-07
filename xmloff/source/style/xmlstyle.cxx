@@ -62,47 +62,37 @@ using namespace ::xmloff::token;
 constexpr OUStringLiteral gsParaStyleServiceName( u"com.sun.star.style.ParagraphStyle" );
 constexpr OUStringLiteral gsTextStyleServiceName( u"com.sun.star.style.CharacterStyle" );
 
-void SvXMLStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
-                                      const OUString& rLocalName,
+void SvXMLStyleContext::SetAttribute( sal_Int32 nElement,
                                       const OUString& rValue )
 {
-    // TODO: use a map here
-    if( XML_NAMESPACE_STYLE == nPrefixKey )
+    switch (nElement)
     {
-        if( IsXMLToken( rLocalName, XML_FAMILY ) )
+        case XML_ELEMENT(STYLE, XML_FAMILY):
         {
             if( IsXMLToken( rValue, XML_PARAGRAPH ) )
                 mnFamily = XmlStyleFamily(SfxStyleFamily::Para);
             else if( IsXMLToken( rValue, XML_TEXT ) )
                 mnFamily = XmlStyleFamily(SfxStyleFamily::Char);
+            break;
         }
-        else if( IsXMLToken( rLocalName, XML_NAME ) )
-        {
+        case XML_ELEMENT(STYLE, XML_NAME):
             maName = rValue;
-        }
-        else if( IsXMLToken( rLocalName, XML_DISPLAY_NAME ) )
-        {
+            break;
+        case XML_ELEMENT(STYLE, XML_DISPLAY_NAME):
             maDisplayName = rValue;
-        }
-        else if( IsXMLToken( rLocalName, XML_PARENT_STYLE_NAME ) )
-        {
+            break;
+        case XML_ELEMENT(STYLE, XML_PARENT_STYLE_NAME):
             maParentName = rValue;
-        }
-        else if( IsXMLToken( rLocalName, XML_NEXT_STYLE_NAME ) )
-        {
+            break;
+        case XML_ELEMENT(STYLE, XML_NEXT_STYLE_NAME):
             maFollow = rValue;
-        }
-        else if( IsXMLToken( rLocalName, XML_HIDDEN ) )
-        {
+            break;
+        case XML_ELEMENT(STYLE, XML_HIDDEN):
             mbHidden = rValue.toBoolean();
-        }
-    }
-    else if (XML_NAMESPACE_LO_EXT == nPrefixKey)
-    {
-        if (IsXMLToken(rLocalName, XML_HIDDEN))
-        {
+            break;
+        case XML_ELEMENT(LO_EXT, XML_HIDDEN):
             mbHidden = rValue.toBoolean();
-        }
+            break;
     }
 }
 
@@ -127,19 +117,8 @@ void SvXMLStyleContext::startFastElement(
     sal_Int32 /*nElement*/,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    // Fall back from fastparser to slowparser code
     for( auto &it : sax_fastparser::castToFastAttributeList( xAttrList ) )
-    {
-        sal_Int32 nToken = it.getToken();
-        const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &GetImport().GetNamespaceMap());
-        OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
-        if ( !rAttrNamespacePrefix.isEmpty() )
-            sAttrName = rAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        SetAttribute( nPrefix, aLocalName, it.toString() );
-    }
+        SetAttribute( it.getToken(), it.toString() );
 }
 
 void SvXMLStyleContext::SetDefaults()

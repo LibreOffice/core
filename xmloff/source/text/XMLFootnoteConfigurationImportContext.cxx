@@ -190,17 +190,6 @@ const SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-const SvXMLTokenMap&
-    XMLFootnoteConfigurationImportContext::GetFtnConfigAttrTokenMap()
-{
-    if (!pAttrTokenMap)
-    {
-        pAttrTokenMap.reset( new SvXMLTokenMap(aTextFieldAttrTokenMap) );
-    }
-
-    return *pAttrTokenMap;
-}
-
 SvXMLEnumMapEntry<sal_Int16> const aFootnoteNumberingMap[] =
 {
     { XML_PAGE,             FootnoteNumbering::PER_PAGE },
@@ -209,25 +198,25 @@ SvXMLEnumMapEntry<sal_Int16> const aFootnoteNumberingMap[] =
     { XML_TOKEN_INVALID,    0 },
 };
 
-void XMLFootnoteConfigurationImportContext::SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
+void XMLFootnoteConfigurationImportContext::SetAttribute( sal_Int32 nElement,
                                const OUString& rValue )
 {
-    switch (GetFtnConfigAttrTokenMap().Get(nPrefixKey, rLocalName))
+    switch (nElement)
     {
-        case XML_TOK_FTNCONFIG_CITATION_STYLENAME:
+        case XML_ELEMENT(TEXT, XML_CITATION_STYLE_NAME):
             sCitationStyle = rValue;
             break;
-        case XML_TOK_FTNCONFIG_ANCHOR_STYLENAME:
+        case XML_ELEMENT(TEXT, XML_CITATION_BODY_STYLE_NAME):
             sAnchorStyle = rValue;
             break;
-        case XML_TOK_FTNCONFIG_DEFAULT_STYLENAME:
+        case XML_ELEMENT(TEXT, XML_DEFAULT_STYLE_NAME):
             sDefaultStyle = rValue;
             break;
-        case XML_TOK_FTNCONFIG_PAGE_STYLENAME:
+        case XML_ELEMENT(TEXT, XML_MASTER_PAGE_NAME):
             sPageStyle = rValue;
             break;
-        case XML_TOK_FTNCONFIG_OFFSET:
+        case XML_ELEMENT(TEXT, XML_START_VALUE):
+        case XML_ELEMENT(TEXT, XML_OFFSET): // for backwards compatibility with SRC630 & earlier
         {
             sal_Int32 nTmp;
             if (::sax::Converter::convertNumber(nTmp, rValue))
@@ -236,25 +225,27 @@ void XMLFootnoteConfigurationImportContext::SetAttribute( sal_uInt16 nPrefixKey,
             }
             break;
         }
-        case XML_TOK_FTNCONFIG_NUM_PREFIX:
+        case XML_ELEMENT(STYLE, XML_NUM_PREFIX):
+        case XML_ELEMENT(TEXT, XML_NUM_PREFIX): // for backwards compatibility with SRC630 & earlier
             sPrefix = rValue;
             break;
-        case XML_TOK_FTNCONFIG_NUM_SUFFIX:
+        case XML_ELEMENT(STYLE, XML_NUM_SUFFIX):
+        case XML_ELEMENT(TEXT, XML_NUM_SUFFIX): // for backwards compatibility with SRC630 & earlier
             sSuffix = rValue;
             break;
-        case XML_TOK_FTNCONFIG_NUM_FORMAT:
+        case XML_ELEMENT(STYLE, XML_NUM_FORMAT):
             sNumFormat = rValue;
             break;
-        case XML_TOK_FTNCONFIG_NUM_SYNC:
+        case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
             sNumSync = rValue;
             break;
-        case XML_TOK_FTNCONFIG_START_AT:
+        case XML_ELEMENT(TEXT, XML_START_NUMBERING_AT):
         {
             (void)SvXMLUnitConverter::convertEnum(nNumbering, rValue,
                                                   aFootnoteNumberingMap);
             break;
         }
-        case XML_TOK_FTNCONFIG_POSITION:
+        case XML_ELEMENT(TEXT, XML_FOOTNOTES_POSITION):
             bPosition = IsXMLToken( rValue, XML_DOCUMENT );
             break;
         default:

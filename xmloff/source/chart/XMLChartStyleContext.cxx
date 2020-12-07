@@ -42,21 +42,19 @@ using ::xmloff::token::XML_CHART_PROPERTIES;
 
 
 void XMLChartStyleContext::SetAttribute(
-    sal_uInt16 nPrefixKey,
-    const OUString& rLocalName,
+    sal_Int32 nElement,
     const OUString& rValue )
 {
-    if( IsXMLToken( rLocalName, XML_DATA_STYLE_NAME ) )
+    switch (nElement & TOKEN_MASK)
     {
-        msDataStyleName =rValue;
-    }
-    else if( IsXMLToken( rLocalName, XML_PERCENTAGE_DATA_STYLE_NAME ) )
-    {
-        msPercentageDataStyleName =rValue;
-    }
-    else
-    {
-        XMLShapeStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+        case XML_DATA_STYLE_NAME:
+            msDataStyleName = rValue;
+            break;
+        case XML_PERCENTAGE_DATA_STYLE_NAME:
+            msPercentageDataStyleName = rValue;
+            break;
+        default:
+            XMLShapeStyleContext::SetAttribute( nElement, rValue );
     }
 }
 

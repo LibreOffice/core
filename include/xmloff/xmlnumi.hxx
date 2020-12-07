@@ -43,8 +43,7 @@ class XMLOFF_DLLPUBLIC SvxXMLListStyleContext final
     bool                        bConsecutive : 1;
     bool                        bOutline : 1;
 
-    SAL_DLLPRIVATE virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
+    SAL_DLLPRIVATE virtual void SetAttribute( sal_Int32 nElement,
                                const OUString& rValue ) override;
 
 public:

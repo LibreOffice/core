@@ -44,17 +44,14 @@ class XMLFootnoteConfigurationImportContext final : public SvXMLStyleContext
     OUString sBeginNotice;
     OUString sEndNotice;
 
-    std::unique_ptr<SvXMLTokenMap> pAttrTokenMap;
-
     sal_Int16 nOffset;
     sal_Int16 nNumbering;
     bool bPosition;
     bool bIsEndnote;
 
     /// parse attributes
-    virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const OUString& rLocalName,
-                               const OUString& rValue ) override;
+    virtual void SetAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+
 public:
 
 
@@ -68,9 +65,6 @@ public:
     /// for footnotes, also parse begin and end notices
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-
-    /// get token map for attributes
-    const SvXMLTokenMap& GetFtnConfigAttrTokenMap();
 
     /// set configuration at document; calls ProcessSettings
     /* Move code from <CreateAndInsertLate(..)> to <Finish(..)>, because
