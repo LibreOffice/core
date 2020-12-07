@@ -1548,11 +1548,8 @@ int Desktop::Main()
         CheckOpenCLCompute(xDesktop);
 #endif
 
-        // In headless mode, reap the process started by fire_glxtest_process() early in soffice_main
-        // (desktop/source/app/sofficemain.cxx).
-        if (rCmdLineArgs.IsHeadless()) {
-            reap_glxtest_process();
-        }
+        // Reap the process started by fire_glxtest_process().
+        reap_glxtest_process();
 
         // Release solar mutex just before we wait for our client to connect
         {
