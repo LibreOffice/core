@@ -22,8 +22,8 @@ static void checkStyleNames(const OString& aLanguage)
     std::map<OString,sal_uInt16> aLocalizedNumStyleNames;
     std::vector<PoEntry> repeatedEntries;
 
-    OString aPoPath = getenv("SRC_ROOT") +
-                      OStringLiteral("/translations/source/") +
+    OString aPoPath = OString::Concat(getenv("SRC_ROOT")) +
+                      "/translations/source/" +
                       aLanguage + "/sw/messages.po";
     PoIfstream aPoInput;
     aPoInput.open(aPoPath);
@@ -144,8 +144,8 @@ static void checkFunctionNames(const OString& aLanguage)
     OString aPoPaths[2];
     OUString aPoPathURL;
 
-    aPoPaths[0] = getenv("SRC_ROOT") +
-                      OStringLiteral("/translations/source/") +
+    aPoPaths[0] = OString::Concat(getenv("SRC_ROOT")) +
+                      "/translations/source/" +
                       aLanguage +
                       "/formula/messages.po";
     PoIfstream aPoInput;
@@ -180,8 +180,8 @@ static void checkFunctionNames(const OString& aLanguage)
     }
     aPoInput.close();
 
-    aPoPaths[1] = getenv("SRC_ROOT") +
-        OStringLiteral("/translations/source/") +
+    aPoPaths[1] = OString::Concat(getenv("SRC_ROOT")) +
+        "/translations/source/" +
         aLanguage +
         "/scaddins/messages.po";
     aPoInput.open(aPoPaths[1]);
@@ -290,8 +290,8 @@ static void checkFunctionNames(const OString& aLanguage)
 // with '|', too.
 static void checkVerticalBar(const OString& aLanguage)
 {
-    OString aPoPath = getenv("SRC_ROOT") +
-                      OStringLiteral("/translations/source/") +
+    OString aPoPath = OString::Concat(getenv("SRC_ROOT")) +
+                      "/translations/source/" +
                       aLanguage +
                       "/instsetoo_native/inc_openoffice/windows/msi_languages.po";
     PoIfstream aPoInput;
@@ -343,8 +343,8 @@ static void checkVerticalBar(const OString& aLanguage)
 // must not contain spaces
 static void checkMathSymbolNames(const OString& aLanguage)
 {
-    OString aPoPath = getenv("SRC_ROOT") +
-                      OStringLiteral("/translations/source/") +
+    OString aPoPath = OString::Concat(getenv("SRC_ROOT")) +
+                      "/translations/source/" +
                       aLanguage +
                       "/starmath/messages.po";
     PoIfstream aPoInput;
