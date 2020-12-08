@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae757f53_bc6e45d0",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-08T10:42:12Z",
+      "side": 1,
+      "message": "Removing configuration properties is always a mild compatibility issue, but I guess there is no way here to stick with UseOpenGL instead of replacing it with its kind-of-counterpart DisableOpenGL?",
+      "revId": "004d8e9adbf1e84bb2a10728f066326a4bc3d421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
