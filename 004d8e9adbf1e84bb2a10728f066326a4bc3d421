@@ -16,6 +16,24 @@
       "revId": "004d8e9adbf1e84bb2a10728f066326a4bc3d421",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69b4a983_718533d9",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-12-08T11:41:24Z",
+      "side": 1,
+      "message": "UseOpenGL really means \u0027UseVCLOpenGLBackend\u0027, which is now pointless, with that no longer existing, so the mild compatibility issue already exists without the option removed. Moreover that means that many users have it set to false, which in turn means reusing it would suddenly disable their OpenGL slide transitions.\nThe new option means \u0027disable VCL support for OpenGL\u0027, which should disable OpenGL use altogether, so it\u0027s not really a counterpart. Perhaps the new option belongs elsewhere in config, or should be better named, if you have suggestions for either.",
+      "parentUuid": "ae757f53_bc6e45d0",
+      "revId": "004d8e9adbf1e84bb2a10728f066326a4bc3d421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
