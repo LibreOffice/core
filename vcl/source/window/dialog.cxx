@@ -1643,6 +1643,11 @@ void Dialog::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     SystemWindow::DumpAsPropertyTree(rJsonWriter);
     rJsonWriter.put("title", GetText());
+    if (vcl::Window* pActionArea = get_action_area())
+    {
+        if (!pActionArea->IsVisible())
+            rJsonWriter.put("collapsed", "true");
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
