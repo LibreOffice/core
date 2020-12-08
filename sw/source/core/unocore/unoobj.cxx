@@ -2025,8 +2025,7 @@ void SwUnoCursorHelper::SetPropertyToDefault(
 
     if (pEntry->nWID < RES_FRMATR_END)
     {
-        o3tl::sorted_vector<sal_uInt16> aWhichIds;
-        aWhichIds.insert( pEntry->nWID );
+        const o3tl::sorted_vector<sal_uInt16> aWhichIds{ pEntry->nWID };
         if (pEntry->nWID < RES_PARATR_BEGIN)
         {
             rDoc.ResetAttrs(rPaM, true, aWhichIds);

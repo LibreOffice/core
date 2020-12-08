@@ -812,18 +812,15 @@ namespace
                         SwPaM aPam( *pTNd, pTNd->GetText().getLength() );
                         o3tl::sorted_vector<sal_uInt16> aResetAttrsArray;
 
-                        sal_uInt16 aResetableSetRange[] = {
-                                RES_PARATR_BEGIN, RES_PARATR_END - 1,
-                                RES_PARATR_LIST_BEGIN, RES_FRMATR_END - 1,
-                                0
+                        constexpr std::pair<sal_uInt16, sal_uInt16> aResetableSetRange[] = {
+                            { RES_PARATR_BEGIN, RES_PARATR_END - 1 },
+                            { RES_PARATR_LIST_BEGIN, RES_FRMATR_END - 1 },
                         };
 
-                        const sal_uInt16 *pUShorts = aResetableSetRange;
-                        while (*pUShorts)
+                        for (const auto& [nBegin, nEnd] : aResetableSetRange)
                         {
-                            for (sal_uInt16 i = pUShorts[0]; i <= pUShorts[1]; ++i)
+                            for (sal_uInt16 i = nBegin; i <= nEnd; ++i)
                                 aResetAttrsArray.insert( i );
-                            pUShorts += 2;
                         }
 
                         rDoc.ResetAttrs(aPam, false, aResetAttrsArray);

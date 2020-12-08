@@ -60,8 +60,7 @@ namespace {
     void lcl_ResetIndentAttrs(SwDoc *pDoc, const SwPaM &rPam, sal_uInt16 marker,
             SwRootFrame const*const pLayout)
     {
-        o3tl::sorted_vector<sal_uInt16> aResetAttrsArray;
-        aResetAttrsArray.insert( marker );
+        const o3tl::sorted_vector<sal_uInt16> aResetAttrsArray{ marker };
         // #i114929#
         // On a selection setup a corresponding Point-and-Mark in order to get
         // the indentation attribute reset on all paragraphs touched by the selection

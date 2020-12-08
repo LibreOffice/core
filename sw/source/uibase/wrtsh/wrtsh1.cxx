@@ -1609,7 +1609,7 @@ void SwWrtShell::AutoUpdatePara(SwTextFormatColl* pColl, const SfxItemSet& rStyl
     StartAction();
     if(bReset)
     {
-        ResetAttr( o3tl::sorted_vector<sal_uInt16>(), pCursor );
+        ResetAttr({}, pCursor);
         SetAttrSet(aCoreSet, SetAttrMode::DEFAULT, pCursor);
     }
     mxDoc->ChgFormat(*pColl, rStyleSet );

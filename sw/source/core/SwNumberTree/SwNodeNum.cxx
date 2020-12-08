@@ -336,13 +336,10 @@ void SwNodeNum::UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
 
     pTextNode->RemoveFromList();
     // --> clear all list attributes and the list style
-    o3tl::sorted_vector<sal_uInt16> aResetAttrsArray;
-    aResetAttrsArray.insert( RES_PARATR_LIST_ID );
-    aResetAttrsArray.insert( RES_PARATR_LIST_LEVEL );
-    aResetAttrsArray.insert( RES_PARATR_LIST_ISRESTART );
-    aResetAttrsArray.insert( RES_PARATR_LIST_RESTARTVALUE );
-    aResetAttrsArray.insert( RES_PARATR_LIST_ISCOUNTED );
-    aResetAttrsArray.insert( RES_PARATR_NUMRULE );
+    const o3tl::sorted_vector<sal_uInt16> aResetAttrsArray{
+        RES_PARATR_LIST_ID,           RES_PARATR_LIST_LEVEL,     RES_PARATR_LIST_ISRESTART,
+        RES_PARATR_LIST_RESTARTVALUE, RES_PARATR_LIST_ISCOUNTED, RES_PARATR_NUMRULE
+    };
     SwPaM aPam( *pTextNode );
     pTextNode->GetDoc().ResetAttrs( aPam, false,
                                     aResetAttrsArray,
