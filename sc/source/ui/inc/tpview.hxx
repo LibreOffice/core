@@ -73,6 +73,7 @@ public:
 };
 
 class ScDocument;
+class SvxLanguageBox;
 class ScTpLayoutOptions : public SfxTabPage
 {
     ScDocument *pDoc;
@@ -96,8 +97,15 @@ class ScTpLayoutOptions : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xLegacyCellSelectionCB;
     std::unique_ptr<weld::CheckButton> m_xEnterPasteModeCB;
 
+    std::unique_ptr<weld::RadioButton> m_xNumPasteAlwaysPromptRB;
+    std::unique_ptr<weld::RadioButton> m_xNumPasteAutomaticRB;
+    std::unique_ptr<weld::RadioButton> m_xNumPasteNeverPromptRB;
+    std::unique_ptr<SvxLanguageBox> m_xNumPasteLanguageLB;
+    std::unique_ptr<weld::CheckButton> m_xNumPasteDateCB;
+
     DECL_LINK(MetricHdl, weld::ComboBox&, void );
     DECL_LINK( AlignHdl, weld::ToggleButton&, void );
+    DECL_LINK(NumPasteRadioHdl, weld::ToggleButton&, void );
 
 
 public:

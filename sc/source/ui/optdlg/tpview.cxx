@@ -30,6 +30,7 @@
 #include <scmod.hxx>
 #include <svl/eitem.hxx>
 #include <svx/colorbox.hxx>
+#include <svx/langbox.hxx>
 #include <svtools/unitconv.hxx>
 
 ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet&  rArgSet)
@@ -319,11 +320,20 @@ ScTpLayoutOptions::ScTpLayoutOptions(weld::Container* pPage, weld::DialogControl
     , m_xReplWarnCB(m_xBuilder->weld_check_button("replwarncb"))
     , m_xLegacyCellSelectionCB(m_xBuilder->weld_check_button("legacy_cell_selection_cb"))
     , m_xEnterPasteModeCB(m_xBuilder->weld_check_button("enter_paste_mode_cb"))
+    , m_xNumPasteAlwaysPromptRB(m_xBuilder->weld_radio_button("num_paste_prompt"))
+    , m_xNumPasteAutomaticRB(m_xBuilder->weld_radio_button("num_paste_auto"))
+    , m_xNumPasteNeverPromptRB(m_xBuilder->weld_radio_button("num_paste_no_prompt"))
+    , m_xNumPasteLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("num_paste_lang")))
+    , m_xNumPasteDateCB(m_xBuilder->weld_check_button("num_paste_date"))
 {
     SetExchangeSupport();
 
     m_xUnitLB->connect_changed( LINK( this, ScTpLayoutOptions, MetricHdl ) );
     m_xAlignCB->connect_toggled(LINK(this, ScTpLayoutOptions, AlignHdl));
+
+    m_xNumPasteAlwaysPromptRB->connect_toggled(LINK(this, ScTpLayoutOptions, NumPasteRadioHdl));
+    m_xNumPasteAutomaticRB->connect_toggled(LINK(this, ScTpLayoutOptions, NumPasteRadioHdl));
+    m_xNumPasteNeverPromptRB->connect_toggled(LINK(this, ScTpLayoutOptions, NumPasteRadioHdl));
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(SCSTR_UNIT); ++i)
     {
@@ -348,10 +358,19 @@ ScTpLayoutOptions::ScTpLayoutOptions(weld::Container* pPage, weld::DialogControl
             }
         }
     }
+
+    m_xNumPasteLanguageLB->SetLanguageList(
+        SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, false);
 }
 
 ScTpLayoutOptions::~ScTpLayoutOptions()
 {
+}
+
+IMPL_LINK(ScTpLayoutOptions, NumPasteRadioHdl, weld::ToggleButton&, rBtn, void)
+{
+    m_xNumPasteLanguageLB->set_sensitive(&rBtn == m_xNumPasteNeverPromptRB.get());
+    m_xNumPasteDateCB->set_sensitive(&rBtn != m_xNumPasteAlwaysPromptRB.get());
 }
 
 std::unique_ptr<SfxTabPage> ScTpLayoutOptions::Create( weld::Container* pPage, weld::DialogController* pController,
