@@ -85,6 +85,32 @@ int CompatibleWriterCallback(FPDF_FILEWRITE* pFileWrite, const void* pData, unsi
 
 namespace vcl::pdf
 {
+namespace
+{
+class PDFiumBitmapImpl final : public PDFiumBitmap
+{
+private:
+    FPDF_BITMAP mpBitmap;
+
+    PDFiumBitmapImpl(const PDFiumBitmapImpl&) = delete;
+    PDFiumBitmapImpl& operator=(const PDFiumBitmapImpl&) = delete;
+
+public:
+    PDFiumBitmapImpl(FPDF_BITMAP pBitmap);
+    ~PDFiumBitmapImpl() override;
+    FPDF_BITMAP getPointer() { return mpBitmap; }
+
+    void fillRect(int left, int top, int width, int height, sal_uInt32 nColor) override;
+    void renderPageBitmap(PDFiumPage* pPage, int nStartX, int nStartY, int nSizeX,
+                          int nSizeY) override;
+    ConstScanline getBuffer() override;
+    int getStride() override;
+    int getWidth() override;
+    int getHeight() override;
+    PDFBitmapType getFormat() override;
+};
+}
+
 OUString convertPdfDateToISO8601(OUString const& rInput)
 {
     if (rInput.getLength() < 6)
@@ -208,7 +234,7 @@ std::unique_ptr<PDFiumBitmap> PDFium::createBitmap(int nWidth, int nHeight, int 
     }
     else
     {
-        pPDFiumBitmap = std::make_unique<PDFiumBitmap>(pPdfBitmap);
+        pPDFiumBitmap = std::make_unique<PDFiumBitmapImpl>(pPdfBitmap);
     }
     return pPDFiumBitmap;
 }
@@ -560,7 +586,7 @@ std::unique_ptr<PDFiumBitmap> PDFiumPageObject::getImageBitmap()
     FPDF_BITMAP pBitmap = FPDFImageObj_GetBitmap(mpPageObject);
     if (pBitmap)
     {
-        pPDFiumBitmap = std::make_unique<PDFiumBitmap>(pBitmap);
+        pPDFiumBitmap = std::make_unique<PDFiumBitmapImpl>(pBitmap);
     }
     return pPDFiumBitmap;
 }
@@ -569,8 +595,8 @@ BitmapChecksum PDFiumPage::getChecksum(int nMDPPerm)
 {
     size_t nPageWidth = getWidth();
     size_t nPageHeight = getHeight();
-    auto pPdfBitmap
-        = std::make_unique<PDFiumBitmap>(FPDFBitmap_Create(nPageWidth, nPageHeight, /*alpha=*/1));
+    auto pPdfBitmap = std::make_unique<PDFiumBitmapImpl>(
+        FPDFBitmap_Create(nPageWidth, nPageHeight, /*alpha=*/1));
     if (!pPdfBitmap)
     {
         return 0;
@@ -629,12 +655,12 @@ PDFSegmentType PDFiumPathSegment::getType() const
     return static_cast<PDFSegmentType>(FPDFPathSegment_GetType(mpPathSegment));
 }
 
-PDFiumBitmap::PDFiumBitmap(FPDF_BITMAP pBitmap)
+PDFiumBitmapImpl::PDFiumBitmapImpl(FPDF_BITMAP pBitmap)
     : mpBitmap(pBitmap)
 {
 }
 
-PDFiumBitmap::~PDFiumBitmap()
+PDFiumBitmapImpl::~PDFiumBitmapImpl()
 {
     if (mpBitmap)
     {
@@ -642,30 +668,30 @@ PDFiumBitmap::~PDFiumBitmap()
     }
 }
 
-void PDFiumBitmap::fillRect(int left, int top, int width, int height, sal_uInt32 nColor)
+void PDFiumBitmapImpl::fillRect(int left, int top, int width, int height, sal_uInt32 nColor)
 {
     FPDFBitmap_FillRect(mpBitmap, left, top, width, height, nColor);
 }
 
-void PDFiumBitmap::renderPageBitmap(PDFiumPage* pPage, int nStartX, int nStartY, int nSizeX,
-                                    int nSizeY)
+void PDFiumBitmapImpl::renderPageBitmap(PDFiumPage* pPage, int nStartX, int nStartY, int nSizeX,
+                                        int nSizeY)
 {
     FPDF_RenderPageBitmap(mpBitmap, pPage->getPointer(), nStartX, nStartY, nSizeX, nSizeY,
                           /*rotate=*/0, /*flags=*/0);
 }
 
-ConstScanline PDFiumBitmap::getBuffer()
+ConstScanline PDFiumBitmapImpl::getBuffer()
 {
     return static_cast<ConstScanline>(FPDFBitmap_GetBuffer(mpBitmap));
 }
 
-int PDFiumBitmap::getStride() { return FPDFBitmap_GetStride(mpBitmap); }
+int PDFiumBitmapImpl::getStride() { return FPDFBitmap_GetStride(mpBitmap); }
 
-int PDFiumBitmap::getWidth() { return FPDFBitmap_GetWidth(mpBitmap); }
+int PDFiumBitmapImpl::getWidth() { return FPDFBitmap_GetWidth(mpBitmap); }
 
-int PDFiumBitmap::getHeight() { return FPDFBitmap_GetHeight(mpBitmap); }
+int PDFiumBitmapImpl::getHeight() { return FPDFBitmap_GetHeight(mpBitmap); }
 
-PDFBitmapType PDFiumBitmap::getFormat()
+PDFBitmapType PDFiumBitmapImpl::getFormat()
 {
     return static_cast<PDFBitmapType>(FPDFBitmap_GetFormat(mpBitmap));
 }
