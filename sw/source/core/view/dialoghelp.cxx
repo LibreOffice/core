@@ -10,7 +10,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/window.hxx>
 
 #include <dialoghelp.hxx>
 #include <doc.hxx>
