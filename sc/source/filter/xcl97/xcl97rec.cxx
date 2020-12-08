@@ -1100,6 +1100,16 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
     awt::Point  aTopLeft    = rShape->getPosition();
     awt::Size   aSize       = rShape->getSize();
 
+    // size is correct, but aTopLeft needs correction for rotated shapes
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rShape.get());
+    sal_Int32 nRotation = pObj->GetRotateAngle();
+    if ( pObj && nRotation != 0 && pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE )
+    {
+        const tools::Rectangle& aSnapRect(pObj->GetSnapRect()); // bounding box of the rotated shape
+        aTopLeft.X = aSnapRect.getX() + (aSnapRect.GetWidth() / 2) - (aSize.Width / 2);
+        aTopLeft.Y = aSnapRect.getY() + (aSnapRect.GetHeight() / 2) - (aSize.Height / 2);
+    }
+
     uno::Reference< beans::XPropertySet > xShapeProperties(rShape, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xShapeProperties->getPropertySetInfo();
     if (xPropertySetInfo->hasPropertyByName("RotateAngle"))
