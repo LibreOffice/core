@@ -74,6 +74,16 @@ bool operator < (const MyFieldAssignmentInfo &lhs, const MyFieldAssignmentInfo &
 static std::set<MyFieldAssignmentInfo> assignedSet;
 static std::set<MyFieldInfo> definitionSet;
 
+std::string escape(std::string s)
+{
+    std::string out;
+    for (size_t i=0; i<s.length(); ++i)
+        if (int(s[i]) != 0 && int(s[i]) < 128)
+            out += s[i];
+        else
+            out += "\\" + std::to_string((int)s[i]);
+    return out;
+}
 
 class SingleValFields:
     public RecursiveASTVisitor<SingleValFields>, public loplugin::Plugin
@@ -92,7 +102,7 @@ public:
             // writing to the same logfile
             std::string output;
             for (const MyFieldAssignmentInfo & s : assignedSet)
-                output += "asgn:\t" + s.parentClass + "\t" + s.fieldName + "\t" + s.value + "\n";
+                output += "asgn:\t" + s.parentClass + "\t" + s.fieldName + "\t" + escape(s.value) + "\n";
             for (const MyFieldInfo & s : definitionSet)
                 output += "defn:\t" + s.parentClass + "\t" + s.fieldName + "\t" + s.fieldType + "\t" + s.sourceLocation + "\n";
             std::ofstream myfile;

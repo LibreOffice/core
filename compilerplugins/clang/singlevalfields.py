@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import sys
 import re
@@ -15,7 +15,7 @@ def normalizeTypeParams( line ):
     return normalizeTypeParamsRegex.sub("type-parameter-?-?", line)
 
 # reading as binary (since we known it is pure ascii) is much faster than reading as unicode
-with io.open("workdir/loplugin.singlevalfields.log", "rb", buffering=1024*1024) as txt:
+with io.open("workdir/loplugin.singlevalfields.log", "r", buffering=1024*1024) as txt:
     for line in txt:
         tokens = line.strip().split("\t")
         if tokens[0] == "defn:":
@@ -44,7 +44,7 @@ with io.open("workdir/loplugin.singlevalfields.log", "rb", buffering=1024*1024) 
 tmp1list = list()
 # look for things which have two values - zero and one
 tmp2list = list()
-for fieldInfo, assignValues in fieldAssignDict.iteritems():
+for fieldInfo, assignValues in fieldAssignDict.items():
     v0 = fieldInfo[0] + " " + fieldInfo[1]
     v1 = (",".join(assignValues))
     v2 = ""
