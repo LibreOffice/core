@@ -27,7 +27,6 @@ class SwWrtShell;
 class SwView;
 class EditEngine;
 class EditView;
-class OutlinerView;
 class SfxItemSet;
 class SfxRequest;
 struct ESelection;
@@ -35,14 +34,14 @@ enum class SvtScriptType;
 
 namespace SwLangHelper
 {
-    extern void GetLanguageStatus( OutlinerView* pOLV, SfxItemSet& rSet );
-    extern bool SetLanguageStatus( OutlinerView* pOLV, SfxRequest &rReq, SwView const &rView, SwWrtShell &rSh );
+    extern void GetLanguageStatus( EditView& rEditView, SfxItemSet& rSet );
+    extern bool SetLanguageStatus( EditView& rEditView, SfxRequest &rReq, SwView const &rView, SwWrtShell &rSh );
 
     extern void SetLanguage( SwWrtShell &rWrtSh, std::u16string_view rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
-    extern void SetLanguage( SwWrtShell &rWrtSh, OutlinerView const * pOLV, const ESelection& rSelection, std::u16string_view rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
+    extern void SetLanguage( SwWrtShell &rWrtSh, EditEngine* pEditEngine, const ESelection& rSelection, std::u16string_view rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
     extern void SetLanguage_None( SwWrtShell &rWrtSh, bool bIsForSelection, SfxItemSet &rCoreSet );
-    extern void SetLanguage_None( SwWrtShell &rWrtSh, OutlinerView const * pOLV, const ESelection& rSelection, bool bIsForSelection, SfxItemSet &rCoreSet  );
-    extern void ResetLanguages( SwWrtShell &rWrtSh, OutlinerView const * pOLV = nullptr );
+    extern void SetLanguage_None( SwWrtShell &rWrtSh, EditEngine* pEditEngine, const ESelection& rSelection, bool bIsForSelection, SfxItemSet &rCoreSet  );
+    extern void ResetLanguages( SwWrtShell &rWrtSh, EditView* pEditView = nullptr );
 
     // document
     extern void SelectCurrentPara( SwWrtShell &rWrtSh );

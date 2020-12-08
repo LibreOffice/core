@@ -55,14 +55,13 @@ using namespace ::com::sun::star;
 namespace SwLangHelper
 {
 
-    void GetLanguageStatus( OutlinerView* pOLV, SfxItemSet& rSet )
+    void GetLanguageStatus(EditView& rEditView, SfxItemSet& rSet)
     {
-        ESelection aSelection = pOLV->GetSelection();
-        EditView& rEditView=pOLV->GetEditView();
-        EditEngine* pEditEngine=rEditView.GetEditEngine();
+        ESelection aSelection = rEditView.GetSelection();
+        EditEngine* pEditEngine= rEditView.GetEditEngine();
 
         // the value of used script types
-        const SvtScriptType nScriptType =pOLV->GetSelectedScriptType();
+        const SvtScriptType nScriptType = rEditView.GetSelectedScriptType();
         OUString aScriptTypesInUse( OUString::number( static_cast<int>(nScriptType) ) );//pEditEngine->GetScriptType(aSelection)
 
         // get keyboard language
@@ -77,7 +76,7 @@ namespace SwLangHelper
 
         // get the language that is in use
         OUString aCurrentLang("*");
-        SfxItemSet aSet(pOLV->GetAttribs());
+        SfxItemSet aSet(rEditView.GetAttribs());
         nLang = SwLangHelper::GetCurrentLanguage( aSet,nScriptType );
         if (nLang != LANGUAGE_DONTKNOW)
             aCurrentLang = SvtLanguageTable::GetLanguageString( nLang );
@@ -95,12 +94,11 @@ namespace SwLangHelper
         rSet.Put( aItem );
     }
 
-    bool SetLanguageStatus( OutlinerView* pOLV, SfxRequest &rReq, SwView const &rView, SwWrtShell &rSh )
+    bool SetLanguageStatus(EditView& rEditView, SfxRequest &rReq, SwView const &rView, SwWrtShell &rSh)
     {
         bool bRestoreSelection = false;
-        SfxItemSet aEditAttr(pOLV->GetAttribs());
-        ESelection   aSelection  = pOLV->GetSelection();
-        EditView   & rEditView   = pOLV->GetEditView();
+        SfxItemSet aEditAttr(rEditView.GetAttribs());
+        ESelection   aSelection  = rEditView.GetSelection();
         EditEngine * pEditEngine = rEditView.GetEditEngine();
 
         // get the language
@@ -158,7 +156,7 @@ namespace SwLangHelper
                 {
                     bRestoreSelection = true;
                     SwLangHelper::SelectPara( rEditView, aSelection );
-                    aSelection = pOLV->GetSelection();
+                    aSelection = rEditView.GetSelection();
                 }
                 if (!bForSelection) // document language to be changed...
                 {
@@ -172,11 +170,11 @@ namespace SwLangHelper
                 }
 
                 if (aNewLangText == "LANGUAGE_NONE")
-                    SwLangHelper::SetLanguage_None( rSh, pOLV, aSelection, bForSelection, aEditAttr );
+                    SwLangHelper::SetLanguage_None( rSh, pEditEngine, aSelection, bForSelection, aEditAttr );
                 else if (aNewLangText == "RESET_LANGUAGES")
-                    SwLangHelper::ResetLanguages( rSh, pOLV );
+                    SwLangHelper::ResetLanguages( rSh, &rEditView );
                 else
-                    SwLangHelper::SetLanguage( rSh, pOLV, aSelection, aNewLangText, bForSelection, aEditAttr );
+                    SwLangHelper::SetLanguage( rSh, pEditEngine, aSelection, aNewLangText, bForSelection, aEditAttr );
 
                 // ugly hack, as it seems that EditView/EditEngine does not update their spellchecking marks
                 // when setting a new language attribute
@@ -221,14 +219,11 @@ namespace SwLangHelper
         SetLanguage( rWrtSh, nullptr , ESelection(), rLangText, bIsForSelection, rCoreSet );
     }
 
-    void SetLanguage( SwWrtShell &rWrtSh, OutlinerView const * pOLV, const ESelection& rSelection, std::u16string_view rLangText, bool bIsForSelection, SfxItemSet &rCoreSet )
+    void SetLanguage( SwWrtShell &rWrtSh, EditEngine* pEditEngine, const ESelection& rSelection, std::u16string_view rLangText, bool bIsForSelection, SfxItemSet &rCoreSet )
     {
         const LanguageType nLang = SvtLanguageTable::GetLanguageType( rLangText );
         if (nLang == LANGUAGE_DONTKNOW)
             return;
-
-        EditEngine* pEditEngine = pOLV ? pOLV->GetEditView().GetEditEngine() : nullptr;
-        OSL_ENSURE( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
 
         //get ScriptType
         sal_uInt16 nLangWhichId = 0;
@@ -303,7 +298,7 @@ namespace SwLangHelper
         SetLanguage_None( rWrtSh,nullptr,ESelection(),bIsForSelection,rCoreSet );
     }
 
-    void SetLanguage_None( SwWrtShell &rWrtSh, OutlinerView const * pOLV, const ESelection& rSelection, bool bIsForSelection, SfxItemSet &rCoreSet )
+    void SetLanguage_None(SwWrtShell &rWrtSh, EditEngine* pEditEngine, const ESelection& rSelection, bool bIsForSelection, SfxItemSet &rCoreSet)
     {
         // EditEngine IDs
         const sal_uInt16 aLangWhichId_EE[3] =
@@ -327,8 +322,6 @@ namespace SwLangHelper
             // (for paragraph is handled by previously having set the selection to the
             // whole paragraph)
 
-            EditEngine* pEditEngine = pOLV ? pOLV->GetEditView().GetEditEngine() : nullptr;
-            OSL_ENSURE( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
             if (pEditEngine)
             {
                 for (sal_uInt16 i : aLangWhichId_EE)
@@ -358,19 +351,18 @@ namespace SwLangHelper
         }
     }
 
-    void ResetLanguages( SwWrtShell &rWrtSh, OutlinerView const * pOLV )
+    void ResetLanguages( SwWrtShell &rWrtSh, EditView* pEditView )
     {
         // reset language for current selection.
         // The selection should already have been expanded to the whole paragraph or
         // to all text in the document if those are the ranges where to reset
         // the language attributes
 
-        if (pOLV)
+        if (pEditView)
         {
-            EditView &rEditView = pOLV->GetEditView();
-            rEditView.RemoveAttribs( true, EE_CHAR_LANGUAGE );
-            rEditView.RemoveAttribs( true, EE_CHAR_LANGUAGE_CJK );
-            rEditView.RemoveAttribs( true, EE_CHAR_LANGUAGE_CTL );
+            pEditView->RemoveAttribs( true, EE_CHAR_LANGUAGE );
+            pEditView->RemoveAttribs( true, EE_CHAR_LANGUAGE_CJK );
+            pEditView->RemoveAttribs( true, EE_CHAR_LANGUAGE_CTL );
         }
         else
         {

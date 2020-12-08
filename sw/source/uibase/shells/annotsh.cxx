@@ -1249,7 +1249,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                 pOLV->GetEditView().SelectCurrentWord();
             }
 
-            bRestoreSelection = SwLangHelper::SetLanguageStatus(pOLV,rReq,rView,rSh);
+            bRestoreSelection = SwLangHelper::SetLanguageStatus(pOLV->GetEditView(),rReq,rView,rSh);
             break;
         }
         case SID_THES:
@@ -1363,7 +1363,7 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
         {
             case SID_LANGUAGE_STATUS:
             {
-                SwLangHelper::GetLanguageStatus(pOLV,rSet);
+                SwLangHelper::GetLanguageStatus(pOLV->GetEditView(), rSet);
                 break;
             }
 

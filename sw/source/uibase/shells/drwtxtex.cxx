@@ -145,7 +145,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 pOLV->GetEditView().SelectCurrentWord();
             }
 
-            bRestoreSelection = SwLangHelper::SetLanguageStatus(pOLV,rReq,GetView(),rSh);
+            bRestoreSelection = SwLangHelper::SetLanguageStatus(pOLV->GetEditView(), rReq, GetView(), rSh);
             break;
         }
 
@@ -671,7 +671,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
         {
             case SID_LANGUAGE_STATUS: //20412:
             {
-                SwLangHelper::GetLanguageStatus(pOLV, rSet);
+                SwLangHelper::GetLanguageStatus(pOLV->GetEditView(), rSet);
                 nSlotId = 0;
                 break;
             }
