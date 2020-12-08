@@ -28,7 +28,6 @@
 #include <xmloff/xmlstyle.hxx>
 
 struct XMLPropertyState;
-class SvXMLTokenMap;
 class XMLFontFamilyNamePropHdl;
 class XMLFontFamilyPropHdl;
 class XMLFontPitchPropHdl;
@@ -41,8 +40,6 @@ class XMLOFF_DLLPUBLIC XMLFontStylesContext final : public SvXMLStylesContext
     std::unique_ptr<XMLFontPitchPropHdl>         pPitchHdl;
     std::unique_ptr<XMLFontEncodingPropHdl>      pEncHdl;
 
-    std::unique_ptr<SvXMLTokenMap>           pFontStyleAttrTokenMap;
-
     rtl_TextEncoding        eDfltEncoding;
 
     using SvXMLStylesContext::CreateStyleChildContext;
@@ -54,11 +51,6 @@ public:
     XMLFontStylesContext( SvXMLImport& rImport, rtl_TextEncoding eDfltEnc );
 
     ~XMLFontStylesContext() override;
-
-    const SvXMLTokenMap& GetFontStyleAttrTokenMap() const
-    {
-        return *pFontStyleAttrTokenMap;
-    }
 
     bool FillProperties( const OUString& rName,
                          ::std::vector< XMLPropertyState > &rProps,
