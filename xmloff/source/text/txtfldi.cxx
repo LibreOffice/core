@@ -2599,20 +2599,6 @@ void XMLReferenceFieldImportContext::PrepareField(
 
 // field declarations container
 
-namespace {
-
-enum DdeFieldDeclAttrs
-{
-    XML_TOK_DDEFIELD_NAME,
-    XML_TOK_DDEFIELD_APPLICATION,
-    XML_TOK_DDEFIELD_TOPIC,
-    XML_TOK_DDEFIELD_ITEM,
-    XML_TOK_DDEFIELD_UPDATE
-};
-
-}
-
-
 XMLDdeFieldDeclsImportContext::XMLDdeFieldDeclsImportContext(SvXMLImport& rImport) :
         SvXMLImportContext(rImport)
 {

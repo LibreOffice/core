@@ -78,38 +78,6 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
-namespace {
-
-enum SwXMLTableElemTokens
-{
-    XML_TOK_TABLE_HEADER_COLS,
-    XML_TOK_TABLE_COLS,
-    XML_TOK_TABLE_COL,
-    XML_TOK_TABLE_HEADER_ROWS,
-    XML_TOK_TABLE_ROWS,
-    XML_TOK_TABLE_ROW,
-    XML_TOK_OFFICE_DDE_SOURCE,
-};
-
-enum SwXMLTableCellAttrTokens
-{
-    XML_TOK_TABLE_XMLID,
-    XML_TOK_TABLE_STYLE_NAME,
-    XML_TOK_TABLE_NUM_COLS_SPANNED,
-    XML_TOK_TABLE_NUM_ROWS_SPANNED,
-    XML_TOK_TABLE_NUM_COLS_REPEATED,
-    XML_TOK_TABLE_FORMULA,
-    XML_TOK_TABLE_VALUE,
-    XML_TOK_TABLE_TIME_VALUE,
-    XML_TOK_TABLE_DATE_VALUE,
-    XML_TOK_TABLE_BOOLEAN_VALUE,
-    XML_TOK_TABLE_PROTECTED,
-    XML_TOK_TABLE_STRING_VALUE,
-    XML_TOK_TABLE_VALUE_TYPE,
-};
-
-}
-
 class SwXMLTableCell_Impl
 {
     OUString aStyleName;

@@ -49,19 +49,6 @@ using namespace ::xmloff::token;
 
 #define XML_STYLE_FAMILY_FONT XmlStyleFamily::PAGE_MASTER
 
-namespace {
-
-enum XMLFontStyleAttrTokens
-{
-    XML_TOK_FONT_STYLE_ATTR_FAMILY,
-    XML_TOK_FONT_STYLE_ATTR_FAMILY_GENERIC,
-    XML_TOK_FONT_STYLE_ATTR_STYLENAME,
-    XML_TOK_FONT_STYLE_ATTR_PITCH,
-    XML_TOK_FONT_STYLE_ATTR_CHARSET,
-};
-
-}
-
 XMLFontStyleContextFontFace::XMLFontStyleContextFontFace( SvXMLImport& rImport,
         XMLFontStylesContext& rStyles ) :
     SvXMLStyleContext( rImport, XML_STYLE_FAMILY_FONT ),

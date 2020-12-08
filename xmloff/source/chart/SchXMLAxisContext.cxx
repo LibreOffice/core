@@ -819,15 +819,6 @@ DateScaleContext::DateScaleContext(
 
 namespace
 {
-enum DateScaleAttributeTokens
-{
-    XML_TOK_DATESCALE_BASE_TIME_UNIT,
-    XML_TOK_DATESCALE_MAJOR_INTERVAL_VALUE,
-    XML_TOK_DATESCALE_MAJOR_INTERVAL_UNIT,
-    XML_TOK_DATESCALE_MINOR_INTERVAL_VALUE,
-    XML_TOK_DATESCALE_MINOR_INTERVAL_UNIT
-};
-
 sal_Int32 lcl_getTimeUnit( const OUString& rValue )
 {
     sal_Int32 nTimeUnit = css::chart::TimeUnit::DAY;
