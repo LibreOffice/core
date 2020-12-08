@@ -1100,6 +1100,25 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
     awt::Point  aTopLeft    = rShape->getPosition();
     awt::Size   aSize       = rShape->getSize();
 
+    // The reason why everything goes wrong with rotated custom shapes when we export is:
+    // 1, the logic rect is magically very far away from where I expect it to be,
+    // but fortunately it contains the correct size of the shape.
+    // 2, the snap rect contains(!) the rotated shape, it is not the rotated shape,
+    // it is a rectangle around the rotated shape, and this rectangle is correctly positioned.
+    // So we have to turn the contained shape inside the snaprect back into a position that can
+    // give us a good topleft point to export while using the correct size from logicrect.
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rShape.get());
+    sal_Int32 nRotation = pObj->GetRotateAngle();
+    if (nRotation != 0 && pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE)
+    {
+        auto aRealSize = pObj->GetLogicRect().GetSize(); // This is the correct size of the shape.
+        auto aSnapRect = pObj->GetSnapRect(); // This is the key to the correct position of the shape.
+        // Now for every rectangle-like shape:
+        aTopLeft.X = aSnapRect.getX() + (aSnapRect.GetWidth() / 2) - (aRealSize.getWidth() / 2);
+        aTopLeft.Y = aSnapRect.getY() + (aSnapRect.GetHeight() / 2) - (aRealSize.getHeight() / 2);
+        aSize = awt::Size(sal_Int32(aRealSize.getWidth()), sal_Int32(aRealSize.getHeight()));
+    }
+
     uno::Reference< beans::XPropertySet > xShapeProperties(rShape, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xShapeProperties->getPropertySetInfo();
     if (xPropertySetInfo->hasPropertyByName("RotateAngle"))
