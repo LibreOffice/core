@@ -623,6 +623,7 @@ public:
     virtual short Execute() override;
     virtual LanguageType GetLanguageType() const override;
     virtual bool IsDateConversionSet() const override;
+    virtual bool IsSavePreferenceSet() const override;
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;

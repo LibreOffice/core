@@ -854,6 +854,11 @@ bool AbstractScTextImportOptionsDlg_Impl::IsDateConversionSet() const
     return m_xDlg->isDateConversionSet();
 }
 
+bool AbstractScTextImportOptionsDlg_Impl::IsSavePreferenceSet() const
+{
+    return m_xDlg->isSavePreferenceSet();
+}
+
 BitmapEx AbstractScTextImportOptionsDlg_Impl::createScreenshot() const
 {
     VclPtr<VirtualDevice> xDialogSurface(m_xDlg->getDialog()->screenshot());
