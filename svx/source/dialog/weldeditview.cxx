@@ -45,6 +45,43 @@
 #include <vcl/svapp.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
+void WeldEditView::SetText(const OUString& rStr) { GetEditEngine()->SetText(rStr); }
+
+OUString WeldEditView::GetText() const { return GetEditEngine()->GetText(); }
+
+void WeldEditView::SetModifyHdl(const Link<LinkParamNone*, void>& rLink)
+{
+    GetEditEngine()->SetModifyHdl(rLink);
+}
+
+EditView* WeldEditView::GetEditView() const { return m_xEditView.get(); }
+
+EditEngine* WeldEditView::GetEditEngine() const { return m_xEditEngine.get(); }
+
+bool WeldEditView::HasSelection() const
+{
+    EditView* pEditView = GetEditView();
+    return pEditView && pEditView->HasSelection();
+}
+
+void WeldEditView::Cut()
+{
+    if (EditView* pEditView = GetEditView())
+        pEditView->Cut();
+}
+
+void WeldEditView::Copy()
+{
+    if (EditView* pEditView = GetEditView())
+        pEditView->Copy();
+}
+
+void WeldEditView::Paste()
+{
+    if (EditView* pEditView = GetEditView())
+        pEditView->Paste();
+}
+
 WeldEditView::WeldEditView() {}
 
 // tdf#127033 want to use UI font so override makeEditEngine to enable that
@@ -76,13 +113,13 @@ void WeldEditView::makeEditEngine()
 
 void WeldEditView::Resize()
 {
-    if (m_xEditView)
+    if (EditView* pEditView = GetEditView())
     {
         OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
         Size aOutputSize(rDevice.PixelToLogic(GetOutputSizePixel()));
         Size aSize(aOutputSize);
-        m_xEditEngine->SetPaperSize(aSize);
-        m_xEditView->SetOutputArea(tools::Rectangle(Point(0, 0), aOutputSize));
+        GetEditEngine()->SetPaperSize(aSize);
+        pEditView->SetOutputArea(tools::Rectangle(Point(0, 0), aOutputSize));
     }
     weld::CustomWidgetController::Resize();
 }
@@ -99,21 +136,21 @@ void WeldEditView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
     std::vector<tools::Rectangle> aLogicRects;
 
-    if (m_xEditView)
+    if (EditView* pEditView = GetEditView())
     {
-        m_xEditView->SetBackgroundColor(aBgColor);
+        pEditView->SetBackgroundColor(aBgColor);
 
-        m_xEditView->Paint(rRect, &rRenderContext);
+        pEditView->Paint(rRect, &rRenderContext);
 
         if (HasFocus())
         {
-            m_xEditView->ShowCursor(false);
-            vcl::Cursor* pCursor = m_xEditView->GetCursor();
+            pEditView->ShowCursor(false);
+            vcl::Cursor* pCursor = pEditView->GetCursor();
             pCursor->DrawToDevice(rRenderContext);
         }
 
         // get logic selection
-        m_xEditView->GetSelectionRectangles(aLogicRects);
+        pEditView->GetSelectionRectangles(aLogicRects);
     }
 
     rRenderContext.SetLineColor();
@@ -128,7 +165,8 @@ void WeldEditView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
 bool WeldEditView::MouseMove(const MouseEvent& rMEvt)
 {
-    return m_xEditView && m_xEditView->MouseMove(rMEvt);
+    EditView* pEditView = GetEditView();
+    return pEditView && pEditView->MouseMove(rMEvt);
 }
 
 bool WeldEditView::MouseButtonDown(const MouseEvent& rMEvt)
@@ -139,35 +177,40 @@ bool WeldEditView::MouseButtonDown(const MouseEvent& rMEvt)
     if (!HasFocus())
         GrabFocus();
 
-    return m_xEditView && m_xEditView->MouseButtonDown(rMEvt);
+    EditView* pEditView = GetEditView();
+    return pEditView && pEditView->MouseButtonDown(rMEvt);
 }
 
 bool WeldEditView::MouseButtonUp(const MouseEvent& rMEvt)
 {
     if (IsMouseCaptured())
         ReleaseMouse();
-    return m_xEditView && m_xEditView->MouseButtonUp(rMEvt);
+    EditView* pEditView = GetEditView();
+    return pEditView && pEditView->MouseButtonUp(rMEvt);
 }
 
 bool WeldEditView::KeyInput(const KeyEvent& rKEvt)
 {
+    EditView* pEditView = GetEditView();
+
     sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
 
     if (nKey == KEY_TAB)
     {
         return false;
     }
-    else if (m_xEditView && !m_xEditView->PostKeyEvent(rKEvt))
+    else if (pEditView && !pEditView->PostKeyEvent(rKEvt))
     {
         if (rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsMod2())
         {
             if (nKey == KEY_A)
             {
-                sal_Int32 nPar = m_xEditEngine->GetParagraphCount();
+                EditEngine* pEditEngine = GetEditEngine();
+                sal_Int32 nPar = pEditEngine->GetParagraphCount();
                 if (nPar)
                 {
-                    sal_Int32 nLen = m_xEditEngine->GetTextLen(nPar - 1);
-                    m_xEditView->SetSelection(ESelection(0, 0, nPar - 1, nLen));
+                    sal_Int32 nLen = pEditEngine->GetTextLen(nPar - 1);
+                    pEditView->SetSelection(ESelection(0, 0, nPar - 1, nLen));
                 }
                 return true;
             }
@@ -181,9 +224,10 @@ bool WeldEditView::KeyInput(const KeyEvent& rKEvt)
 
 bool WeldEditView::Command(const CommandEvent& rCEvt)
 {
-    if (!m_xEditView)
+    EditView* pEditView = GetEditView();
+    if (!pEditView)
         return false;
-    m_xEditView->Command(rCEvt);
+    pEditView->Command(rCEvt);
     return true;
 }
 
@@ -1434,29 +1478,37 @@ void WeldEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
     pDrawingArea->set_cursor(PointerStyle::Text);
 
+    InitAccessible();
+}
+
+void WeldEditView::InitAccessible()
+{
     if (m_xAccessible.is())
-        m_xAccessible->Init(m_xEditEngine.get(), m_xEditView.get());
+        m_xAccessible->Init(GetEditEngine(), GetEditView());
 }
 
 int WeldEditView::GetSurroundingText(OUString& rSurrounding)
 {
-    if (!m_xEditView)
+    EditView* pEditView = GetEditView();
+    if (!pEditView)
         return -1;
-    rSurrounding = m_xEditView->GetSurroundingText();
-    return m_xEditView->GetSurroundingTextSelection().Min();
+    rSurrounding = pEditView->GetSurroundingText();
+    return pEditView->GetSurroundingTextSelection().Min();
 }
 
 bool WeldEditView::DeleteSurroundingText(const Selection& rRange)
 {
-    if (!m_xEditView)
+    EditView* pEditView = GetEditView();
+    if (!pEditView)
         return false;
-    return m_xEditView->DeleteSurroundingText(rRange);
+    return pEditView->DeleteSurroundingText(rRange);
 }
 
 void WeldEditView::GetFocus()
 {
-    if (m_xEditView)
-        m_xEditView->ShowCursor(false);
+    EditView* pEditView = GetEditView();
+    if (pEditView)
+        pEditView->ShowCursor(false);
 
     weld::CustomWidgetController::GetFocus();
 

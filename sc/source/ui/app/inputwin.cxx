@@ -951,7 +951,7 @@ void ScInputBarGroup::MakeDialogEditView()
     mxTextWndGroup->MakeDialogEditView();
 }
 
-EditView* ScInputBarGroup::GetEditView()
+EditView* ScInputBarGroup::GetEditView() const
 {
     return mxTextWndGroup->GetEditView();
 }
@@ -1150,7 +1150,7 @@ void ScTextWndGroup::InsertAccessibleTextData(ScAccessibleEditLineTextData& rTex
     mxTextWnd->InsertAccessibleTextData(rTextData);
 }
 
-EditView* ScTextWndGroup::GetEditView()
+EditView* ScTextWndGroup::GetEditView() const
 {
     return mxTextWnd->GetEditView();
 }
@@ -1271,10 +1271,10 @@ void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangl
     WeldEditView::Paint(rRenderContext, rRect);
 }
 
-EditView* ScTextWnd::GetEditView()
+EditView* ScTextWnd::GetEditView() const
 {
     if ( !m_xEditView )
-        InitEditEngine();
+        const_cast<ScTextWnd&>(*this).InitEditEngine();
     return m_xEditView.get();
 }
 
