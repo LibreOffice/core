@@ -26,6 +26,7 @@
 #include <memory>
 #include <vcl/graph.hxx>
 #include <vcl/pdfread.hxx>
+#include <rtl/bootstrap.hxx>
 
 #ifdef DBG_UTIL
 #include <vcl/pngwrite.hxx>
@@ -799,7 +800,9 @@ namespace emfio
         bool    bStatus = ReadHeader();
         bool    bHaveDC = false;
 
-        static bool bEnableEMFPlus = ( getenv( "EMF_PLUS_DISABLE" ) == nullptr );
+        OUString aEMFPlusDisable;
+        rtl::Bootstrap::get("EMF_PLUS_DISABLE", aEMFPlusDisable);
+        bool bEnableEMFPlus = aEMFPlusDisable.isEmpty();
 
         SAL_INFO("emfio", "EMF_PLUS_DISABLE is " << (bEnableEMFPlus ? "enabled" : "disabled"));
 
