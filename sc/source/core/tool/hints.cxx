@@ -23,8 +23,7 @@
 
 ScPaintHint::ScPaintHint( const ScRange& rRng, PaintPartFlags nPaint ) :
     aRange( rRng ),
-    nParts( nPaint ),
-    bPrint( true )
+    nParts( nPaint )
 {
 }
 

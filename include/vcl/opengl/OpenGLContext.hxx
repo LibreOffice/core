@@ -137,7 +137,6 @@ protected:
     OpenGLCapabilitySwitch maOpenGLCapabilitySwitch;
 
 public:
-    vcl::Region maClipRegion;
 
     // Don't hold references to ourselves:
     OpenGLContext *mpPrevContext;

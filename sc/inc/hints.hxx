@@ -29,7 +29,6 @@ class SC_DLLPUBLIC ScPaintHint final : public SfxHint
 {
     ScRange         aRange;
     PaintPartFlags  nParts;
-    bool            bPrint;     //  flag indicating whether print/preview if affected
 
 public:
                     ScPaintHint() = delete;
@@ -43,7 +42,6 @@ public:
     SCROW           GetEndRow() const       { return aRange.aEnd.Row(); }
     SCTAB           GetEndTab() const       { return aRange.aEnd.Tab(); }
     PaintPartFlags  GetParts() const        { return nParts; }
-    bool            GetPrintFlag() const    { return bPrint; }
 };
 
 class ScUpdateRefHint final : public SfxHint
