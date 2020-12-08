@@ -1356,10 +1356,11 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr_WithLength )( IMPL_RTL_STRINGDATA*
     SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
+    assert(pCharStr != nullptr || nLen == 0);
     assert(nLen >= 0);
     IMPL_RTL_STRINGDATA* pOrg;
 
-    if ( !pCharStr || (nLen <= 0) )
+    if ( nLen == 0 )
     {
         IMPL_RTL_STRINGNAME( new )( ppThis );
         return;
