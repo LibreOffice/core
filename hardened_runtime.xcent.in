@@ -5,7 +5,11 @@
         <!-- AppleScript support -->
         <key>com.apple.security.automation.apple-events</key>
         <true/>
-        <!-- Needed for our runtime machine code generation -->
+        <!-- Needed for our C++/binary UNO bridge runtime machine code generation: -->
+        <key>com.apple.security.cs.allow-jit</key>
+        <true/>
+        <!-- Needed for our C++/binary UNO bridge runtime machine code generation on old macOS that
+             reject mmap MAP_JIT (macOS <= 10.13?); and for in-process JVM: -->
         <key>com.apple.security.cs.disable-executable-page-protection</key>
         <true/>
         <!-- allow use of third-party plugins/frameworks (aka Java) -->
