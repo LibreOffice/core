@@ -30,9 +30,9 @@ void SkConvertRGBAToRGB(uint8_t* dest, const uint32_t* src, int count)
     SkLoOpts::RGB1_to_RGB(dest, src, count);
 }
 
-void SkConvertRGBAToGrayFast(uint8_t* dest, const uint32_t* src, int count)
+void SkConvertRGBAToR(uint8_t* dest, const uint32_t* src, int count)
 {
-    SkLoOpts::RGB1_to_gray_fast(dest, src, count);
+    SkLoOpts::RGB1_to_R(dest, src, count);
 }
 
 // The rest is mostly based on Skia's SkOpts.cpp, reduced to only SSSE3 so far.
@@ -52,7 +52,7 @@ namespace SkLoOpts {
     // They'll still get a chance to be replaced with even better ones, e.g. using SSE4.1.
 #define DEFINE_DEFAULT(name) decltype(name) name = SK_OPTS_NS::name
     DEFINE_DEFAULT(RGB1_to_RGB);
-    DEFINE_DEFAULT(RGB1_to_gray_fast);
+    DEFINE_DEFAULT(RGB1_to_R);
 #undef DEFINE_DEFAULT
 
     // Each Init_foo() is defined in its own file.

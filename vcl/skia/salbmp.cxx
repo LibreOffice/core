@@ -1072,8 +1072,7 @@ void SkiaSalBitmap::EnsureBitmapData()
     { // no actual data conversion, use one color channel as the gray value
         if (int(bitmap.rowBytes()) == mSize.Width() * 4 && mSize.Width() * 1 == mScanlineSize)
         {
-            SkConvertRGBAToGrayFast(mBuffer.get(), bitmap.getAddr32(0, 0),
-                                    mSize.Height() * mSize.Width());
+            SkConvertRGBAToR(mBuffer.get(), bitmap.getAddr32(0, 0), mSize.Height() * mSize.Width());
         }
         else
         {
@@ -1081,7 +1080,7 @@ void SkiaSalBitmap::EnsureBitmapData()
             {
                 const uint32_t* src = bitmap.getAddr32(0, y);
                 sal_uInt8* dest = mBuffer.get() + mScanlineSize * y;
-                SkConvertRGBAToGrayFast(dest, src, mSize.Width());
+                SkConvertRGBAToR(dest, src, mSize.Width());
             }
         }
     }

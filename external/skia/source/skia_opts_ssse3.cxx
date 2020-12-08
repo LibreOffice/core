@@ -12,6 +12,6 @@
 namespace SkLoOpts {
     void Init_ssse3() {
         RGB1_to_RGB           = ssse3::RGB1_to_RGB;
-        RGB1_to_gray_fast     = ssse3::RGB1_to_gray_fast;
+        RGB1_to_R             = ssse3::RGB1_to_R;
     }
 }
