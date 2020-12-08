@@ -1611,6 +1611,11 @@ boost::property_tree::ptree Dialog::DumpAsPropertyTree()
 {
     boost::property_tree::ptree aTree(SystemWindow::DumpAsPropertyTree());
     aTree.put("title", GetText());
+    if (vcl::Window* pActionArea = get_action_area())
+    {
+        if (!pActionArea->IsVisible())
+            aTree.put("collapsed", "true");
+    }
     return aTree;
 }
 
