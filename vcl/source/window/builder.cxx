@@ -191,7 +191,20 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
             || rUIFile == "modules/scalc/ui/selectsource.ui"
             || rUIFile == "modules/scalc/ui/managenamesdialog.ui"
             || rUIFile == "modules/scalc/ui/definename.ui"
-            || rUIFile == "cui/ui/macroselectordialog.ui")
+            || rUIFile == "cui/ui/macroselectordialog.ui"
+            || rUIFile == "modules/scalc/ui/correlationdialog.ui"
+            || rUIFile == "modules/scalc/ui/samplingdialog.ui"
+            || rUIFile == "modules/scalc/ui/descriptivestatisticsdialog.ui"
+            || rUIFile == "modules/scalc/ui/analysisofvariancedialog.ui"
+            || rUIFile == "modules/scalc/ui/covariancedialog.ui"
+            || rUIFile == "modules/scalc/ui/exponentialsmoothingdialog.ui"
+            || rUIFile == "modules/scalc/ui/movingaveragedialog.ui"
+            || rUIFile == "modules/scalc/ui/regressiondialog.ui"
+            || rUIFile == "modules/scalc/ui/ttestdialog.ui"
+            || rUIFile == "modules/scalc/ui/ttestdialog.ui"
+            || rUIFile == "modules/scalc/ui/ztestdialog.ui"
+            || rUIFile == "modules/scalc/ui/chisquaretestdialog.ui"
+            || rUIFile == "modules/scalc/ui/fourieranalysisdialog.ui")
         {
             bUseJSBuilder = true;
         }
