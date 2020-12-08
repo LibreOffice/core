@@ -53,15 +53,6 @@ enum XMLFootnoteChildToken {
 
 }
 
-const SvXMLTokenMapEntry aFootnoteChildTokenMap[] =
-{
-    { XML_NAMESPACE_TEXT, XML_NOTE_CITATION,
-      XML_TOK_FTN_NOTE_CITATION },
-    { XML_NAMESPACE_TEXT, XML_NOTE_BODY, XML_TOK_FTN_NOTE_BODY },
-    XML_TOKEN_MAP_END
-};
-
-
 XMLFootnoteImportContext::XMLFootnoteImportContext(
     SvXMLImport& rImport,
     XMLTextImportHelper& rHlp )
