@@ -268,6 +268,7 @@ public:
     void testTdf126305_DataValidatyErrorAlert();
     void testTdf76047_externalLink();
     void testTdf87973_externalLinkSkipUnuseds();
+    void testTdf138741_externalLinkSkipUnusedsCrash();
     void testTdf129969();
     void testTdf84874();
     void testTdf136721_paper_size();
@@ -440,6 +441,7 @@ public:
     CPPUNIT_TEST(testTdf126305_DataValidatyErrorAlert);
     CPPUNIT_TEST(testTdf76047_externalLink);
     CPPUNIT_TEST(testTdf87973_externalLinkSkipUnuseds);
+    CPPUNIT_TEST(testTdf138741_externalLinkSkipUnusedsCrash);
     CPPUNIT_TEST(testTdf129969);
     CPPUNIT_TEST(testTdf84874);
     CPPUNIT_TEST(testTdf136721_paper_size);
@@ -5578,6 +5580,17 @@ void ScExportTest::testTdf87973_externalLinkSkipUnuseds()
     CPPUNIT_ASSERT(bFormula.indexOf("87973_externalSource.ods") > 0);
 
     pDocSh->DoClose();
+}
+
+void ScExportTest::testTdf138741_externalLinkSkipUnusedsCrash()
+{
+    ScDocShellRef xShell = loadDoc("tdf138741_externalLinkSkipUnusedsCrash.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell);
+
+    //without the fix in place, it would have crashed at export time
+    ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+
+    xShell->DoClose();
 }
 
 void ScExportTest::testTdf129969()
