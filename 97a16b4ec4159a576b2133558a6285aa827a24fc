@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "247bb3ec_213fcf42",
+        "filename": "sw/source/uibase/shells/textsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-08T09:41:51Z",
+      "side": 1,
+      "message": "Wrt initializer list - it doesn\u0027t work as standalone declaration (see patch set 1), and I didn\u0027t want an bulky in-place declaration in the \u0027for\u0027. But I somehow overlooked the plain C-style arrays and std::array. Thank you!",
+      "parentUuid": "9a76fc58_ddfad90c",
+      "revId": "97a16b4ec4159a576b2133558a6285aa827a24fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed9a3446_2207297a",
         "filename": "sw/source/uibase/shells/textsh1.cxx",
         "patchSetId": 2
@@ -30,6 +48,30 @@
       "writtenOn": "2020-12-08T09:37:11Z",
       "side": 1,
       "message": "It is now rather unclear that this comment appertains to the RES_FRAMEDIR hole in the below array.",
+      "range": {
+        "startLine": 604,
+        "startChar": 16,
+        "endLine": 604,
+        "endChar": 72
+      },
+      "revId": "97a16b4ec4159a576b2133558a6285aa827a24fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a275a6d8_55b70ae6",
+        "filename": "sw/source/uibase/shells/textsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-08T09:41:51Z",
+      "side": 1,
+      "message": "True; but I want to move the hole here, and not use the old separate removal. What would be your suggestion here?",
+      "parentUuid": "ed9a3446_2207297a",
       "range": {
         "startLine": 604,
         "startChar": 16,
