@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_TPHFEDIT_HXX
 
 #include <scdllapi.h>
+#include <editutil.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <tools/wintypes.hxx>
 #include <svx/weldeditview.hxx>
@@ -31,7 +32,6 @@
 
 namespace com::sun::star::accessibility { class XAccessible; }
 
-class ScHeaderEditEngine;
 class ScPatternAttr;
 class EditView;
 class EditTextObject;
@@ -64,7 +64,7 @@ public:
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-    ScHeaderEditEngine* GetEditEngine() const;
+    ScHeaderEditEngine* GetEditEngine() const override;
     void SetObjectSelectHdl( const Link<ScEditWindow&,void>& aLink) { aObjectSelectLink = aLink; }
     void SetGetFocusHdl(const std::function<void (ScEditWindow&)>& rLink) { m_GetFocusLink = rLink; }
 

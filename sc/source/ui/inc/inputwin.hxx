@@ -57,7 +57,7 @@ public:
     virtual const OUString& GetTextString() const = 0;
     virtual void            StartEditEngine() = 0;
     virtual void            StopEditEngine( bool bAll ) = 0;
-    virtual EditView*       GetEditView() = 0;
+    virtual EditView*       GetEditView() const = 0;
     virtual bool            HasEditView() const = 0;
     virtual void            MakeDialogEditView() = 0;
     virtual void            SetFormulaMode( bool bSet ) = 0;
@@ -79,7 +79,7 @@ public:
     virtual const OUString& GetTextString() const override;
 
     bool                    IsInputActive() override;
-    virtual EditView*       GetEditView() override;
+    virtual EditView*       GetEditView() const override;
     virtual bool            HasEditView() const override;
 
     const OutputDevice&     GetEditViewDevice() const;
@@ -208,7 +208,7 @@ public:
     virtual ~ScTextWndGroup() override;
 
     virtual void            InsertAccessibleTextData(ScAccessibleEditLineTextData& rTextData) override;
-    virtual EditView*       GetEditView() override;
+    virtual EditView*       GetEditView() const override;
     const OutputDevice&     GetEditViewDevice() const;
     Point                   GetCursorScreenPixelPos(bool bBelowLine);
     tools::Long             GetLastNumExpandedLines() const;
@@ -250,7 +250,7 @@ public:
     virtual void            RemoveAccessibleTextData(ScAccessibleEditLineTextData& rTextData) override;
     void                    SetTextString(const OUString& rString) override;
     void                    StartEditEngine() override;
-    virtual EditView*       GetEditView() override;
+    virtual EditView*       GetEditView() const override;
     virtual bool            HasEditView() const override;
     Point                   GetCursorScreenPixelPos(bool bBelowLine);
     virtual void            Resize() override;
