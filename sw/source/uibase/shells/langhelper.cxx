@@ -374,11 +374,8 @@ namespace SwLangHelper
         }
         else
         {
-            o3tl::sorted_vector<sal_uInt16> aAttribs;
-            aAttribs.insert( RES_CHRATR_LANGUAGE );
-            aAttribs.insert( RES_CHRATR_CJK_LANGUAGE );
-            aAttribs.insert( RES_CHRATR_CTL_LANGUAGE );
-            rWrtSh.ResetAttr( aAttribs );
+            rWrtSh.ResetAttr(
+                { RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE });
         }
     }
 

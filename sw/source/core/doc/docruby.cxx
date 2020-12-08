@@ -94,8 +94,7 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList )
 void SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList )
 {
     GetIDocumentUndoRedo().StartUndo( SwUndoId::SETRUBYATTR, nullptr );
-    o3tl::sorted_vector<sal_uInt16> aDelArr;
-    aDelArr.insert( RES_TXTATR_CJK_RUBY );
+    const o3tl::sorted_vector<sal_uInt16> aDelArr{ RES_TXTATR_CJK_RUBY };
 
     SwRubyList::size_type nListEntry = 0;
 

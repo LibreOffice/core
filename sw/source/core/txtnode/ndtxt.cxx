@@ -3720,12 +3720,10 @@ void SwTextNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
 namespace {
     void lcl_ResetParAttrs( SwTextNode &rTextNode )
     {
-        o3tl::sorted_vector<sal_uInt16> aAttrs;
-        aAttrs.insert( RES_PARATR_LIST_ID );
-        aAttrs.insert( RES_PARATR_LIST_LEVEL );
-        aAttrs.insert( RES_PARATR_LIST_ISRESTART );
-        aAttrs.insert( RES_PARATR_LIST_RESTARTVALUE );
-        aAttrs.insert( RES_PARATR_LIST_ISCOUNTED );
+        const o3tl::sorted_vector<sal_uInt16> aAttrs{ RES_PARATR_LIST_ID, RES_PARATR_LIST_LEVEL,
+                                                      RES_PARATR_LIST_ISRESTART,
+                                                      RES_PARATR_LIST_RESTARTVALUE,
+                                                      RES_PARATR_LIST_ISCOUNTED };
         SwPaM aPam( rTextNode );
         // #i96644#
         // suppress side effect "send data changed events"
