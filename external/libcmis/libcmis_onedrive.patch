@@ -1,0 +1,436 @@
+diff --git a/src/libcmis/http-session.cxx b/src/libcmis/http-session.cxx
+index 2638482..227667e 100644
+--- a/src/libcmis/http-session.cxx
++++ b/src/libcmis/http-session.cxx
+@@ -293,6 +293,94 @@ libcmis::HttpResponsePtr HttpSession::httpGetRequest( string url )
+     return response;
+ }
+ 
++libcmis::HttpResponsePtr HttpSession::httpPatchRequest( string url, istream& is, vector< string > headers )
++{
++    checkOAuth2( url );
++
++    // Duplicate istream in case we need to retry
++    string isStr( static_cast< stringstream const&>( stringstream( ) << is.rdbuf( ) ).str( ) );
++
++    istringstream isOriginal( isStr ), isBackup( isStr );
++
++    // Reset the handle for the request
++    curl_easy_reset( m_curlHandle );
++    initProtocols( );
++
++    libcmis::HttpResponsePtr response( new libcmis::HttpResponse( ) );
++
++    curl_easy_setopt( m_curlHandle, CURLOPT_WRITEFUNCTION, lcl_bufferData );
++    curl_easy_setopt( m_curlHandle, CURLOPT_WRITEDATA, response->getData( ).get( ) );
++
++    curl_easy_setopt( m_curlHandle, CURLOPT_HEADERFUNCTION, &lcl_getHeaders );
++    curl_easy_setopt( m_curlHandle, CURLOPT_WRITEHEADER, response.get() );
++
++    curl_easy_setopt( m_curlHandle, CURLOPT_MAXREDIRS, 20);
++
++    // Get the stream length
++    is.seekg( 0, ios::end );
++    long size = is.tellg( );
++    is.seekg( 0, ios::beg );
++    curl_easy_setopt( m_curlHandle, CURLOPT_INFILESIZE, size );
++    curl_easy_setopt( m_curlHandle, CURLOPT_READDATA, &isOriginal );
++    curl_easy_setopt( m_curlHandle, CURLOPT_READFUNCTION, lcl_readStream );
++    curl_easy_setopt( m_curlHandle, CURLOPT_UPLOAD, 1 );
++    curl_easy_setopt( m_curlHandle, CURLOPT_CUSTOMREQUEST, "PATCH" );
++    curl_easy_setopt( m_curlHandle, CURLOPT_IOCTLFUNCTION, lcl_ioctlStream );
++    curl_easy_setopt( m_curlHandle, CURLOPT_IOCTLDATA, &isOriginal );
++
++    // If we know for sure that 100-Continue won't be accepted,
++    // don't even try with it to save one HTTP request.
++    if ( m_no100Continue )
++        headers.push_back( "Expect:" );
++    try
++    {
++        httpRunRequest( url, headers );
++        response->getData( )->finish();
++    }
++    catch ( const CurlException& )
++    {
++        long status = getHttpStatus( );
++        /** If we had a HTTP 417 response, this is likely to be due to some
++            HTTP 1.0 proxy / server not accepting the "Expect: 100-continue"
++            header. Try to disable this header and try again.
++        */
++        if ( status == 417 && !m_no100Continue)
++        {
++            // Remember that we don't want 100-Continue for the future requests
++            m_no100Continue = true;
++            response = httpPutRequest( url, isBackup, headers );
++        }
++
++        // If the access token is expired, we get 401 error,
++        // Need to use the refresh token to get a new one.
++        if ( status == 401 && !getRefreshToken( ).empty( ) && !m_refreshedToken )
++        {
++
++            // Refresh the token
++            oauth2Refresh();
++
++            // Resend the query
++            try
++            {
++                // Avoid infinite recursive call
++                m_refreshedToken = true;
++                response = httpPutRequest( url, isBackup, headers );
++                m_refreshedToken = false;
++            }
++            catch (const CurlException&)
++            {
++                m_refreshedToken = false;
++                throw;
++            }
++        }
++        // Has tried but failed
++        if ( ( status != 417 || m_no100Continue ) &&
++             ( status != 401 || getRefreshToken( ).empty( ) || m_refreshedToken ) ) throw;
++    }
++    m_refreshedToken = false;
++    return response;
++}
++
+ libcmis::HttpResponsePtr HttpSession::httpPutRequest( string url, istream& is, vector< string > headers )
+ {
+     checkOAuth2( url );
+diff --git a/src/libcmis/http-session.hxx b/src/libcmis/http-session.hxx
+index 851d52d..29de64d 100644
+--- a/src/libcmis/http-session.hxx
++++ b/src/libcmis/http-session.hxx
+@@ -132,6 +132,9 @@ class HttpSession
+         virtual void setOAuth2Data( libcmis::OAuth2DataPtr oauth2 );
+ 
+         libcmis::HttpResponsePtr httpGetRequest( std::string url );
++        libcmis::HttpResponsePtr httpPatchRequest( std::string url,
++                                                 std::istream& is,
++                                                 std::vector< std::string > headers );
+         libcmis::HttpResponsePtr httpPutRequest( std::string url,
+                                                  std::istream& is,
+                                                  std::vector< std::string > headers );
+diff --git a/src/libcmis/oauth2-handler.cxx b/src/libcmis/oauth2-handler.cxx
+index a3320e3..842769f 100644
+--- a/src/libcmis/oauth2-handler.cxx
++++ b/src/libcmis/oauth2-handler.cxx
+@@ -91,8 +91,8 @@ void OAuth2Handler::fetchTokens( string authCode )
+     string post =
+         "code="              + authCode +
+         "&client_id="        + m_data->getClientId() +
+-        "&client_secret="    + m_data->getClientSecret() +
+         "&redirect_uri="     + m_data->getRedirectUri() +
++        "&scope="            + libcmis::escape( m_data->getScope() ) +
+         "&grant_type=authorization_code" ;
+ 
+     istringstream is( post );
+@@ -121,7 +121,6 @@ void OAuth2Handler::refresh( )
+     string post =
+         "refresh_token="     + m_refresh +
+         "&client_id="        + m_data->getClientId() +
+-        "&client_secret="    + m_data->getClientSecret() +
+         "&grant_type=refresh_token" ;
+ 
+     istringstream is( post );
+diff --git a/src/libcmis/oauth2-providers.cxx b/src/libcmis/oauth2-providers.cxx
+index 8cf9652..654021f 100644
+--- a/src/libcmis/oauth2-providers.cxx
++++ b/src/libcmis/oauth2-providers.cxx
+@@ -312,7 +312,7 @@ OAuth2Parser OAuth2Providers::getOAuth2Parser( const std::string& url )
+         return OAuth2Alfresco;
+     else if ( boost::starts_with( url, "https://www.googleapis.com/drive/v2" ) )
+         return OAuth2Gdrive;
+-    else if ( boost::starts_with( url, "https://apis.live.net/v5.0" ) )
++    else if ( boost::starts_with( url, "https://graph.microsoft.com/v1.0" ) )
+         return OAuth2Onedrive;
+ 
+     return OAuth2Gdrive;
+diff --git a/src/libcmis/onedrive-document.cxx b/src/libcmis/onedrive-document.cxx
+index f753b42..863a92f 100644
+--- a/src/libcmis/onedrive-document.cxx
++++ b/src/libcmis/onedrive-document.cxx
+@@ -73,7 +73,7 @@ boost::shared_ptr< istream > OneDriveDocument::getContentStream( string /*stream
+     boost::shared_ptr< istream > stream;
+     string streamUrl = getStringProperty( "source" );
+     if ( streamUrl.empty( ) )
+-        throw libcmis::Exception( "can not found stream url" );
++        throw libcmis::Exception( "could not find stream url" );
+ 
+     try
+     {
+@@ -89,15 +89,15 @@ boost::shared_ptr< istream > OneDriveDocument::getContentStream( string /*stream
+ void OneDriveDocument::setContentStream( boost::shared_ptr< ostream > os, 
+                                          string /*contentType*/, 
+                                          string fileName, 
+-                                         bool /*overwrite*/ ) 
++                                         bool bReplaceExisting )
+ {
+     if ( !os.get( ) )
+         throw libcmis::Exception( "Missing stream" );
+-    
++
+     string metaUrl = getUrl( );
+ 
+     // Update file name meta information
+-    if ( !fileName.empty( ) && fileName != getContentFilename( ) )
++    if ( bReplaceExisting && !fileName.empty( ) && fileName != getContentFilename( ) )
+     {
+         Json metaJson;
+         Json fileJson( fileName.c_str( ) );
+@@ -108,7 +108,7 @@ void OneDriveDocument::setContentStream( boost::shared_ptr< ostream > os,
+         headers.push_back( "Content-Type: application/json" );
+         try
+         {
+-            getSession()->httpPutRequest( metaUrl, is, headers );
++            getSession()->httpPatchRequest( metaUrl, is, headers );
+         }
+         catch ( const CurlException& e )
+         {
+@@ -117,9 +117,9 @@ void OneDriveDocument::setContentStream( boost::shared_ptr< ostream > os,
+     }
+ 
+     fileName = libcmis::escape( getStringProperty( "cmis:name" ) );
+-    string putUrl = getSession( )->getBindingUrl( ) + "/" + 
+-                    getStringProperty( "cmis:parentId" ) + "/files/" +
+-                    fileName + "?overwrite=true";
++    string putUrl = getSession( )->getBindingUrl( ) + "/me/drive/items/" +
++                    getStringProperty( "cmis:parentId" ) + ":/" +
++                    fileName + ":/content";
+     
+     // Upload stream
+     boost::shared_ptr< istream> is ( new istream ( os->rdbuf( ) ) );
+@@ -142,6 +142,7 @@ void OneDriveDocument::setContentStream( boost::shared_ptr< ostream > os,
+ libcmis::DocumentPtr OneDriveDocument::checkOut( )
+ {
+     // OneDrive doesn't have CheckOut, so just return the same document here
++    // TODO: no longer true - onedrive now has checkout/checkin
+     libcmis::ObjectPtr obj = getSession( )->getObject( getId( ) );
+     libcmis::DocumentPtr checkout =
+         boost::dynamic_pointer_cast< libcmis::Document > ( obj );
+diff --git a/src/libcmis/onedrive-folder.cxx b/src/libcmis/onedrive-folder.cxx
+index a9ae694..c1980c8 100644
+--- a/src/libcmis/onedrive-folder.cxx
++++ b/src/libcmis/onedrive-folder.cxx
+@@ -57,7 +57,9 @@ OneDriveFolder::~OneDriveFolder( )
+ vector< libcmis::ObjectPtr > OneDriveFolder::getChildren( ) 
+ {
+     vector< libcmis::ObjectPtr > children;
+-    string query = getSession( )->getBindingUrl( ) + "/" + getId( ) + "/files";
++    // TODO: limited to 200 items by default - to get more one would have to
++    // follow @odata.nextLink or change pagination size
++    string query = getSession( )->getBindingUrl( ) + "/me/drive/items/" + getId( ) + "/children";
+ 
+     string res;
+     try
+@@ -70,7 +72,7 @@ vector< libcmis::ObjectPtr > OneDriveFolder::getChildren( )
+     }
+ 
+     Json jsonRes = Json::parse( res );
+-    Json::JsonVector objs = jsonRes["data"].getList( );
++    Json::JsonVector objs = jsonRes["value"].getList( );
+     
+     // Create children objects from Json objects
+     for(unsigned int i = 0; i < objs.size(); i++)
+@@ -85,8 +87,7 @@ libcmis::FolderPtr OneDriveFolder::createFolder(
+     const PropertyPtrMap& properties ) 
+ {
+     Json propsJson = OneDriveUtils::toOneDriveJson( properties );
+-
+-    string uploadUrl = getSession( )->getBindingUrl( ) + "/" + getId( );
++    string uploadUrl = getSession( )->getBindingUrl( ) + "/me/drive/items/" + getId( ) + "/children";
+     
+     std::istringstream is( propsJson.toString( ) );
+     string response;
+@@ -126,9 +127,10 @@ libcmis::DocumentPtr OneDriveFolder::createDocument(
+         }
+     }
+ 
++    // TODO: limited to 4MB, larger uploads need dedicated UploadSession
+     fileName = libcmis::escape( fileName );
+-    string newDocUrl = getSession( )->getBindingUrl( ) + "/" +
+-                       getId( ) + "/files/" + fileName;
++    string newDocUrl = getSession( )->getBindingUrl( ) + "/me/drive/items/" +
++                       getId( ) + ":/" + fileName + ":/content";
+     boost::shared_ptr< istream> is ( new istream ( os->rdbuf( ) ) );
+     vector< string > headers;
+     string res;
+diff --git a/src/libcmis/onedrive-object.cxx b/src/libcmis/onedrive-object.cxx
+index 976a97b..b6106a3 100644
+--- a/src/libcmis/onedrive-object.cxx
++++ b/src/libcmis/onedrive-object.cxx
+@@ -65,7 +65,7 @@ void OneDriveObject::initializeFromJson ( Json json, string /*id*/, string /*nam
+     Json::JsonObject objs = json.getObjects( );
+     Json::JsonObject::iterator it;
+     PropertyPtr property;
+-    bool isFolder = json["type"].toString( ) == "folder";
++    bool isFolder = json["folder"].toString( ) != "";
+     for ( it = objs.begin( ); it != objs.end( ); ++it)
+     {
+         property.reset( new OneDriveProperty( it->first, it->second ) );
+@@ -74,7 +74,12 @@ void OneDriveObject::initializeFromJson ( Json json, string /*id*/, string /*nam
+         {
+             property.reset( new OneDriveProperty( "cmis:contentStreamFileName", it->second ) );
+             m_properties[ property->getPropertyType( )->getId()] = property;
+-        }
++        } else if ( it->first == "parentReference" ) {
++            if (it->second["id"].toString() != "") {
++                property.reset( new OneDriveProperty( "cmis:parentId", it->second["id"] ) );
++                m_properties[ property->getPropertyType( )->getId()] = property;
++            }
++       }
+     }
+ 
+     m_refreshTimestamp = time( NULL );
+@@ -122,7 +127,7 @@ void OneDriveObject::remove( bool /*allVersions*/ )
+ 
+ string OneDriveObject::getUrl( )
+ {
+-    return getSession( )->getBindingUrl( ) + "/" + getId( );
++    return getSession( )->getBindingUrl( ) + "/me/drive/items/" + getId( );
+ }
+ 
+ string OneDriveObject::getUploadUrl( )
+diff --git a/src/libcmis/onedrive-repository.cxx b/src/libcmis/onedrive-repository.cxx
+index 3eaac9c..b01f5c2 100644
+--- a/src/libcmis/onedrive-repository.cxx
++++ b/src/libcmis/onedrive-repository.cxx
+@@ -35,7 +35,7 @@ OneDriveRepository::OneDriveRepository( ) :
+     m_description = "One Drive repository";
+     m_productName = "One Drive";
+     m_productVersion = "v5";
+-    m_rootId = "me/skydrive";
++    m_rootId = "/me/drive/root";
+  
+     m_capabilities[ ACL ] = "discover";
+     m_capabilities[ AllVersionsSearchable ] = "true";
+diff --git a/src/libcmis/onedrive-session.cxx b/src/libcmis/onedrive-session.cxx
+index c6f4270..a603278 100644
+--- a/src/libcmis/onedrive-session.cxx
++++ b/src/libcmis/onedrive-session.cxx
+@@ -79,7 +79,9 @@ libcmis::ObjectPtr OneDriveSession::getObject( string objectId )
+ {
+     // Run the http request to get the properties definition
+     string res;
+-    string objectLink = m_bindingUrl + "/" + objectId;
++    string objectLink = m_bindingUrl + "/me/drive/items/" + objectId;
++    if (objectId == getRootId())
++        objectLink = m_bindingUrl + objectId;
+     try
+     {
+         res = httpGetRequest( objectLink )->getStream()->str();
+@@ -95,12 +97,11 @@ libcmis::ObjectPtr OneDriveSession::getObject( string objectId )
+ libcmis::ObjectPtr OneDriveSession::getObjectFromJson( Json& jsonRes ) 
+ {
+     libcmis::ObjectPtr object;
+-    string kind = jsonRes["type"].toString( );
+-    if ( kind == "folder" || kind == "album" )
++    if ( jsonRes["folder"].toString() != "" )
+     {
+         object.reset( new OneDriveFolder( this, jsonRes ) );
+     }
+-    else if ( kind == "file" )
++    else if ( jsonRes["file"].toString() != "" )
+     {
+         object.reset( new OneDriveDocument( this, jsonRes ) );
+     }
+@@ -113,44 +114,18 @@ libcmis::ObjectPtr OneDriveSession::getObjectFromJson( Json& jsonRes )
+ 
+ libcmis::ObjectPtr OneDriveSession::getObjectByPath( string path )
+ {
+-    string id;
+-    if ( path == "/" )
+-    {
+-        id = "me/skydrive";
+-    }
+-    else
++    string res;
++    string objectQuery = m_bindingUrl + "/me/drive/root:" + libcmis::escape( path );
++    try
+     {
+-        path = "/SkyDrive" + path;
+-        size_t pos = path.rfind("/");
+-        string name = libcmis::escape( path.substr( pos + 1, path.size( ) ) );
+-        string res;
+-        string objectQuery = m_bindingUrl + "/me/skydrive/search?q=" + name;
+-        try
+-        {
+-            res = httpGetRequest( objectQuery )->getStream( )->str( );
+-        }
+-        catch ( const CurlException& e )
+-        {
+-            throw e.getCmisException( );
+-        }
+-        Json jsonRes = Json::parse( res );
+-        Json::JsonVector objs = jsonRes["data"].getList( );
+-        
+-        // Searching for a match in the path to the object
+-        for ( unsigned int i = 0; i < objs.size( ); i++ )
+-        {   
+-            if ( isAPathMatch( objs[i], path ) )
+-            {
+-                id = objs[i]["id"].toString( );
+-                break;
+-            }
+-        }
++        res = httpGetRequest( objectQuery )->getStream( )->str( );
+     }
+-    if ( id.empty( ) )
++    catch ( const CurlException& e )
+     {
+-        throw libcmis::Exception( "No file could be found" );
++        throw libcmis::Exception( "No file could be found for path " + path + ": " + e.what() );
+     }
+-    return getObject( id );
++    Json jsonRes = Json::parse( res );
++    return getObjectFromJson( jsonRes );
+ }
+ 
+ bool OneDriveSession::isAPathMatch( Json objectJson, string path )
+diff --git a/src/libcmis/onedrive-utils.cxx b/src/libcmis/onedrive-utils.cxx
+index dc6ec5d..17ed324 100644
+--- a/src/libcmis/onedrive-utils.cxx
++++ b/src/libcmis/onedrive-utils.cxx
+@@ -44,16 +44,16 @@ string OneDriveUtils::toCmisKey( const string& key )
+         convertedKey = "cmis:createdBy";
+     else if ( key == "description" )
+         convertedKey = "cmis:description";
+-    else if ( key == "created_time" )
++    else if ( key == "createdDateTime" )
+         convertedKey = "cmis:creationDate";
+-    else if ( key == "updated_time" )
++    else if ( key == "lastModifiedDateTime" )
+         convertedKey = "cmis:lastModificationDate";
+     else if ( key == "name" )
+         convertedKey = "cmis:name";
+     else if ( key == "size" )
+         convertedKey = "cmis:contentStreamLength";
+-    else if ( key == "parent_id" )
+-        convertedKey = "cmis:parentId";
++    else if ( key == "@microsoft.graph.downloadUrl" )
++        convertedKey = "source";
+     else convertedKey = key;
+     return convertedKey;
+ }
+@@ -75,8 +75,6 @@ string OneDriveUtils::toOneDriveKey( const string& key )
+         convertedKey = "name";
+     else if ( key == "cmis:contentStreamLength" )
+         convertedKey = "file_size";
+-    else if ( key == "cmis:parentId" )
+-        convertedKey = "parent_id";
+     else convertedKey = key;
+     return convertedKey;
+ }
+diff --git a/src/libcmis/session-factory.cxx b/src/libcmis/session-factory.cxx
+index ba55cd9..e740afb 100644
+--- a/src/libcmis/session-factory.cxx
++++ b/src/libcmis/session-factory.cxx
+@@ -71,7 +71,7 @@ namespace libcmis
+                 session = new GDriveSession( bindingUrl, username, password,
+                                              oauth2, verbose );
+             }
+-            else if ( bindingUrl == "https://apis.live.net/v5.0" )
++            else if ( bindingUrl == "https://graph.microsoft.com/v1.0" )
+             {
+                 session = new OneDriveSession( bindingUrl, username, password,
+                                                oauth2, verbose);
