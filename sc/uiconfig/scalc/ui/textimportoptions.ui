@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkDialog" id="TextImportOptionsDialog">
@@ -10,7 +10,7 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">
@@ -53,12 +53,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="help">
-                <property name="label" translatable="yes" context="stock">_Help</property>
+              <object class="GtkCheckButton" id="keepasking">
+                <property name="label" translatable="yes" context="textimportoptions|keepasking">Keep asking during this session</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use-underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="active">True</property>
+                <property name="draw-indicator">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -204,7 +205,6 @@
     <action-widgets>
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
-      <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>
 </interface>

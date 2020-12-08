@@ -31,6 +31,7 @@ ScTextImportOptionsDlg::ScTextImportOptionsDlg(weld::Window* pParent)
     , m_xRbAutomatic(m_xBuilder->weld_radio_button("automatic"))
     , m_xRbCustom(m_xBuilder->weld_radio_button("custom"))
     , m_xBtnConvertDate(m_xBuilder->weld_check_button("convertdata"))
+    , m_xBtnKeepAsking(m_xBuilder->weld_check_button("keepasking"))
     , m_xLbCustomLang(new SvxLanguageBox(m_xBuilder->weld_combo_box("lang")))
 {
     init();
@@ -51,6 +52,11 @@ LanguageType ScTextImportOptionsDlg::getLanguageType() const
 bool ScTextImportOptionsDlg::isDateConversionSet() const
 {
     return m_xBtnConvertDate->get_active();
+}
+
+bool ScTextImportOptionsDlg::isKeepAskingSet() const
+{
+    return m_xBtnKeepAsking->get_active();
 }
 
 void ScTextImportOptionsDlg::init()

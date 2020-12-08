@@ -33,6 +33,7 @@ public:
 
     LanguageType getLanguageType() const;
     bool isDateConversionSet() const;
+    bool isKeepAskingSet() const;
 
 private:
     void init();
@@ -42,6 +43,7 @@ private:
     std::unique_ptr<weld::RadioButton> m_xRbAutomatic;
     std::unique_ptr<weld::RadioButton> m_xRbCustom;
     std::unique_ptr<weld::CheckButton> m_xBtnConvertDate;
+    std::unique_ptr<weld::CheckButton> m_xBtnKeepAsking;
     std::unique_ptr<SvxLanguageBox> m_xLbCustomLang;
 
     DECL_LINK(OKHdl, weld::Button&, void);
