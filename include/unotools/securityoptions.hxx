@@ -38,18 +38,6 @@ namespace osl { class Mutex; }
 class SvtSecurityOptions_Impl;
 
 /*-************************************************************************************************************
-    @descr          These values present modes to handle StarOffice basic scripts.
-                    see GetBasicMode/SetBasicMode() for further information
-*//*-*************************************************************************************************************/
-
-enum EBasicSecurityMode
-{
-    eNEVER_EXECUTE  = 0,
-    eFROM_LIST      = 1,
-    eALWAYS_EXECUTE = 2
-};
-
-/*-************************************************************************************************************
     @short          collect information about security features
     @ATTENTION      This class is partially threadsafe.
 
@@ -63,9 +51,6 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSecurityOptions final : public utl::
         enum class EOption
         {
             SecureUrls,
-            ExecutePlugins,               // xmlsec05 deprecated
-            Warning,                      // xmlsec05 deprecated
-            Confirmation,                 // xmlsec05 deprecated
             DocWarnSaveOrSend,
             DocWarnSigning,
             DocWarnPrint,
@@ -177,14 +162,6 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSecurityOptions final : public utl::
         bool        IsOptionSet     ( EOption eOption                   ) const;
         void        SetOption       ( EOption eOption, bool bValue      );
         bool        IsOptionEnabled ( EOption eOption                   ) const;
-
-        // xmlsec05 deprecated methods
-        bool    IsExecutePlugins() const;
-        void        SetExecutePlugins( bool bSet );
-        bool IsWarningEnabled() const;
-        void SetWarningEnabled( bool bSet );
-        bool IsConfirmationEnabled() const;
-        void SetConfirmationEnabled( bool bSet );
 
     //  private methods
 

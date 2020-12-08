@@ -59,31 +59,19 @@ using namespace ::com::sun::star::uno;
 #define PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER u"SerialNumber"
 #define PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA      u"RawData"
 
-// xmlsec05 deprecated
-#define PROPERTYNAME_EXECUTEPLUGINS     u"ExecutePlugins"
-#define PROPERTYNAME_WARNINGENABLED     u"Warning"
-#define PROPERTYNAME_CONFIRMATIONENABLED u"Confirmation"
-// xmlsec05 deprecated
-
 #define PROPERTYHANDLE_SECUREURL                    0
 
-// xmlsec05 deprecated
-#define PROPERTYHANDLE_EXECUTEPLUGINS   1
-#define PROPERTYHANDLE_WARNINGENABLED   2
-#define PROPERTYHANDLE_CONFIRMATIONENABLED 3
-// xmlsec05 deprecated
-
-#define PROPERTYHANDLE_DOCWARN_SAVEORSEND           4
-#define PROPERTYHANDLE_DOCWARN_SIGNING              5
-#define PROPERTYHANDLE_DOCWARN_PRINT                6
-#define PROPERTYHANDLE_DOCWARN_CREATEPDF            7
-#define PROPERTYHANDLE_DOCWARN_REMOVEPERSONALINFO   8
-#define PROPERTYHANDLE_DOCWARN_RECOMMENDPASSWORD    9
-#define PROPERTYHANDLE_CTRLCLICK_HYPERLINK          10
-#define PROPERTYHANDLE_BLOCKUNTRUSTEDREFERERLINKS   11
-#define PROPERTYHANDLE_MACRO_SECLEVEL               12
-#define PROPERTYHANDLE_MACRO_TRUSTEDAUTHORS         13
-#define PROPERTYHANDLE_MACRO_DISABLE                14
+#define PROPERTYHANDLE_DOCWARN_SAVEORSEND           1
+#define PROPERTYHANDLE_DOCWARN_SIGNING              2
+#define PROPERTYHANDLE_DOCWARN_PRINT                3
+#define PROPERTYHANDLE_DOCWARN_CREATEPDF            4
+#define PROPERTYHANDLE_DOCWARN_REMOVEPERSONALINFO   5
+#define PROPERTYHANDLE_DOCWARN_RECOMMENDPASSWORD    6
+#define PROPERTYHANDLE_CTRLCLICK_HYPERLINK          7
+#define PROPERTYHANDLE_BLOCKUNTRUSTEDREFERERLINKS   8
+#define PROPERTYHANDLE_MACRO_SECLEVEL               9
+#define PROPERTYHANDLE_MACRO_TRUSTEDAUTHORS         10
+#define PROPERTYHANDLE_MACRO_DISABLE                11
 
 #define PROPERTYHANDLE_INVALID                      -1
 
@@ -178,22 +166,6 @@ class SvtSecurityOptions_Impl : public ConfigItem
         bool                                    m_bROSecLevel;
         bool                                    m_bROTrustedAuthors;
         bool                                    m_bRODisableMacros;
-
-        // xmlsec05 deprecated
-        bool                m_bExecutePlugins;
-        bool                m_bWarning;
-        bool                m_bConfirmation;
-
-        bool                m_bROConfirmation;
-        bool                m_bROWarning;
-        bool                m_bROExecutePlugins;
-        public:
-        bool IsWarningEnabled() const { return m_bWarning;}
-        void SetWarningEnabled( bool bSet );
-        bool IsConfirmationEnabled() const { return m_bConfirmation;}
-        void SetConfirmationEnabled( bool bSet );
-        bool    IsExecutePlugins() const { return m_bExecutePlugins;}
-        void        SetExecutePlugins( bool bSet );
 };
 
 //  constructor
@@ -224,16 +196,6 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     ,m_bROSecLevel          ( CFG_READONLY_DEFAULT      )
     ,m_bROTrustedAuthors    ( CFG_READONLY_DEFAULT      )
     ,m_bRODisableMacros     ( true                  ) // currently is not intended to be changed
-
-    // xmlsec05 deprecated
-    ,   m_bExecutePlugins   ( true                )
-    ,   m_bWarning          ( true                )
-    ,   m_bConfirmation     ( true                )
-    ,   m_bROConfirmation   ( CFG_READONLY_DEFAULT    )
-    ,   m_bROWarning        ( CFG_READONLY_DEFAULT    )
-    ,   m_bROExecutePlugins ( CFG_READONLY_DEFAULT    )
-    // xmlsec05 deprecated
-
 {
     Sequence< OUString >    seqNames    = GetPropertyNames  (           );
     Sequence< Any >         seqValues   = GetProperties     ( seqNames  );
@@ -359,27 +321,6 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
         }
         break;
 
-        // xmlsec05 deprecated
-        case PROPERTYHANDLE_EXECUTEPLUGINS:
-        {
-            rValue >>= m_bExecutePlugins;
-            m_bROExecutePlugins = bRO;
-        }
-        break;
-        case PROPERTYHANDLE_WARNINGENABLED:
-        {
-            rValue >>= m_bWarning;
-            m_bROWarning = bRO;
-        }
-        break;
-        case PROPERTYHANDLE_CONFIRMATIONENABLED:
-        {
-            rValue >>= m_bConfirmation;
-            m_bROConfirmation = bRO;
-        }
-        break;
-        // xmlsec05 deprecated
-
 #if OSL_DEBUG_LEVEL > 0
         default:
             assert(false && "Unknown property!");
@@ -465,15 +406,6 @@ sal_Int32 SvtSecurityOptions_Impl::GetHandle( std::u16string_view rName )
         nHandle = PROPERTYHANDLE_MACRO_TRUSTEDAUTHORS;
     else if( rName == PROPERTYNAME_MACRO_DISABLE )
         nHandle = PROPERTYHANDLE_MACRO_DISABLE;
-
-    // xmlsec05 deprecated
-    else if( rName == PROPERTYNAME_EXECUTEPLUGINS )
-        nHandle = PROPERTYHANDLE_EXECUTEPLUGINS;
-    else if( rName == PROPERTYNAME_WARNINGENABLED )
-        nHandle = PROPERTYHANDLE_WARNINGENABLED;
-    else if( rName == PROPERTYNAME_CONFIRMATIONENABLED )
-        nHandle = PROPERTYHANDLE_CONFIRMATIONENABLED;
-    // xmlsec05 deprecated
 
     else
         nHandle = PROPERTYHANDLE_INVALID;
@@ -686,30 +618,6 @@ void SvtSecurityOptions_Impl::ImplCommit()
             }
             break;
 
-            // xmlsec05 deprecated
-            case PROPERTYHANDLE_EXECUTEPLUGINS:
-            {
-                bDone = !m_bROExecutePlugins;
-                if( bDone )
-                    lValues[ nRealCount ] <<= m_bExecutePlugins;
-            }
-            break;
-            case PROPERTYHANDLE_WARNINGENABLED:
-            {
-                bDone = !m_bROWarning;
-                if( bDone )
-                    lValues[ nRealCount ] <<= m_bWarning;
-            }
-            break;
-            case PROPERTYHANDLE_CONFIRMATIONENABLED:
-            {
-                bDone = !m_bROConfirmation;
-                if( bDone )
-                    lValues[ nRealCount ] <<= m_bConfirmation;
-            }
-            break;
-            // xmlsec05 deprecated
-
             default:
                 bDone = false;
         }
@@ -764,18 +672,6 @@ bool SvtSecurityOptions_Impl::IsReadOnly( SvtSecurityOptions::EOption eOption ) 
         case SvtSecurityOptions::EOption::BlockUntrustedRefererLinks:
             bReadonly = m_bROBlockUntrustedRefererLinks;
             break;
-
-        // xmlsec05 deprecated
-        case SvtSecurityOptions::EOption::ExecutePlugins:
-            bReadonly = m_bROExecutePlugins;
-            break;
-        case SvtSecurityOptions::EOption::Warning:
-            bReadonly = m_bROWarning;
-            break;
-        case SvtSecurityOptions::EOption::Confirmation:
-            bReadonly = m_bROConfirmation;
-            break;
-        // xmlsec05 deprecated
 
         default:
             bReadonly = true;
@@ -872,9 +768,6 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
     return Sequence< OUString >
     {
         PROPERTYNAME_SECUREURL,
-        PROPERTYNAME_EXECUTEPLUGINS,
-        PROPERTYNAME_WARNINGENABLED,
-        PROPERTYNAME_CONFIRMATIONENABLED,
         PROPERTYNAME_DOCWARN_SAVEORSEND,
         PROPERTYNAME_DOCWARN_SIGNING,
         PROPERTYNAME_DOCWARN_PRINT,
@@ -1038,74 +931,6 @@ namespace
 Mutex& SvtSecurityOptions::GetInitMutex()
 {
     return theSecurityOptionsMutex::get();
-}
-
-void SvtSecurityOptions_Impl::SetExecutePlugins( bool bSet )
-{
-    DBG_ASSERT(!m_bROExecutePlugins, "SvtSecurityOptions_Impl::SetExecutePlugins()\nYou tried to write on a readonly value!\n");
-    if (!m_bROExecutePlugins && m_bExecutePlugins!=bSet)
-    {
-        m_bExecutePlugins = bSet;
-        SetModified();
-    }
-}
-
-
-void SvtSecurityOptions_Impl::SetWarningEnabled( bool bSet )
-{
-    DBG_ASSERT(!m_bROWarning, "SvtSecurityOptions_Impl::SetWarningEnabled()\nYou tried to write on a readonly value!\n");
-    if (!m_bROWarning && m_bWarning!=bSet)
-    {
-        m_bWarning = bSet;
-        SetModified();
-    }
-}
-
-
-void SvtSecurityOptions_Impl::SetConfirmationEnabled( bool bSet )
-{
-    DBG_ASSERT(!m_bROConfirmation, "SvtSecurityOptions_Impl::SetConfirmationEnabled()\nYou tried to write on a readonly value!\n");
-    if (!m_bROConfirmation && m_bConfirmation!=bSet)
-    {
-        m_bConfirmation = bSet;
-        SetModified();
-    }
-}
-
-bool SvtSecurityOptions::IsExecutePlugins() const
-{
-    MutexGuard aGuard( GetInitMutex() );
-    return m_pImpl->IsExecutePlugins();
-}
-
-void SvtSecurityOptions::SetExecutePlugins( bool bSet )
-{
-    MutexGuard aGuard( GetInitMutex() );
-    m_pImpl->SetExecutePlugins( bSet );
-}
-
-bool SvtSecurityOptions::IsWarningEnabled() const
-{
-    MutexGuard aGuard( GetInitMutex() );
-    return m_pImpl->IsWarningEnabled();
-}
-
-void SvtSecurityOptions::SetWarningEnabled( bool bSet )
-{
-    MutexGuard aGuard( GetInitMutex() );
-    m_pImpl->SetWarningEnabled( bSet );
-}
-
-bool SvtSecurityOptions::IsConfirmationEnabled() const
-{
-    MutexGuard aGuard( GetInitMutex() );
-    return m_pImpl->IsConfirmationEnabled();
-}
-
-void SvtSecurityOptions::SetConfirmationEnabled( bool bSet )
-{
-    MutexGuard aGuard( GetInitMutex() );
-    m_pImpl->SetConfirmationEnabled( bSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
