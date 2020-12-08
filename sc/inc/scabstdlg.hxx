@@ -393,6 +393,7 @@ protected:
 public:
     virtual LanguageType GetLanguageType() const = 0;
     virtual bool IsDateConversionSet() const = 0;
+    virtual bool IsSavePreferenceSet() const = 0;
 };
 
 class ScAbstractDialogFactory

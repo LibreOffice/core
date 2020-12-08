@@ -9,12 +9,12 @@
     <property name="step_increment">0.1</property>
     <property name="page_increment">0.1</property>
   </object>
-  <object class="GtkBox" id="ScGeneralPage">
+  <object class="GtkGrid" id="ScGeneralPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="orientation">vertical</property>
-    <property name="spacing">12</property>
+    <property name="row_spacing">12</property>
+    <property name="column_spacing">24</property>
     <child>
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
@@ -110,9 +110,8 @@
         </child>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
       </packing>
     </child>
     <child>
@@ -203,9 +202,8 @@
         </child>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
+        <property name="left_attach">1</property>
+        <property name="top_attach">0</property>
       </packing>
     </child>
     <child>
@@ -442,6 +440,84 @@
                     <property name="width">2</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkRadioButton" id="num_paste_prompt">
+                      <property name="label" translatable="yes" context="scgeneralpage|num_paste_prompt">Always ask for locale and date rules when pasting numbers</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">num_paste_no_prompt</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">10</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="num_paste_auto">
+                    <property name="label" translatable="yes" context="scgeneralpage|num_paste_auto">Automatically detect locale when pasting numbers</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">num_paste_no_prompt</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">11</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="num_paste_no_prompt">
+                    <property name="label" translatable="yes" context="scgeneralpage|num_paste_no_prompt">When pasting numbers use this locale without prompting:</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">12</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="num_paste_lang">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">12</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkAlignment">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="left_padding">12</property>
+                    <child>
+                      <object class="GtkCheckButton" id="num_paste_date">
+                        <property name="label" translatable="yes" context="scgeneralpage|num_paste_date">When pasting numbers, detect special numbers (such as dates)</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">13</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
               </object>
             </child>
           </object>
@@ -458,9 +534,9 @@
         </child>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">2</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+        <property name="width">2</property>
       </packing>
     </child>
   </object>
