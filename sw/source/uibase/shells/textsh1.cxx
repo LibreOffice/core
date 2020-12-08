@@ -595,26 +595,23 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // remove the languages from that)
             o3tl::sorted_vector<sal_uInt16> aAttribs;
 
-            sal_uInt16 aResetableSetRange[] = {
-                RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-                RES_CHRATR_BEGIN, RES_CHRATR_LANGUAGE - 1,
-                RES_CHRATR_LANGUAGE + 1, RES_CHRATR_CJK_LANGUAGE - 1,
-                RES_CHRATR_CJK_LANGUAGE + 1, RES_CHRATR_CTL_LANGUAGE - 1,
-                RES_CHRATR_CTL_LANGUAGE + 1, RES_CHRATR_END-1,
-                RES_PARATR_BEGIN, RES_PARATR_END-1,
-                RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
-                RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-                0
+            constexpr std::pair<sal_uInt16, sal_uInt16> aResetableSetRange[] = {
+                // tdf#40496: we don't want to change writing direction, so exclude RES_FRAMEDIR:
+                { RES_FRMATR_BEGIN, RES_FRAMEDIR - 1 },
+                { RES_FRAMEDIR + 1, RES_FRMATR_END - 1 },
+                { RES_CHRATR_BEGIN, RES_CHRATR_LANGUAGE - 1 },
+                { RES_CHRATR_LANGUAGE + 1, RES_CHRATR_CJK_LANGUAGE - 1 },
+                { RES_CHRATR_CJK_LANGUAGE + 1, RES_CHRATR_CTL_LANGUAGE - 1 },
+                { RES_CHRATR_CTL_LANGUAGE + 1, RES_CHRATR_END - 1 },
+                { RES_PARATR_BEGIN, RES_PARATR_END - 1 },
+                { RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER },
+                { RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1 },
             };
-            const sal_uInt16 *pUShorts = aResetableSetRange;
-            while (*pUShorts)
+            for (const auto& [nBegin, nEnd] : aResetableSetRange)
             {
-                for (sal_uInt16 i = pUShorts[0]; i <= pUShorts[1]; ++i)
+                for (sal_uInt16 i = nBegin; i <= nEnd; ++i)
                     aAttribs.insert( i );
-                pUShorts += 2;
             }
-            // we don't want to change writing direction.
-            aAttribs.erase( RES_FRAMEDIR );
             rWrtSh.ResetAttr( aAttribs );
 
             // also clear the direct formatting flag inside SwTableBox(es)
@@ -902,9 +899,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rWrtSh.SelWrd();
             }
             //now remove the attribute
-            o3tl::sorted_vector<sal_uInt16> aAttribs;
-            aAttribs.insert( RES_TXTATR_INETFMT );
-            rWrtSh.ResetAttr( aAttribs );
+            rWrtSh.ResetAttr({ RES_TXTATR_INETFMT });
             if(!bSel)
             {
                 rWrtSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
