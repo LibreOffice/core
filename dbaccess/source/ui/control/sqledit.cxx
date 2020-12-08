@@ -75,7 +75,7 @@ SQLEditView::SQLEditView()
 
 void SQLEditView::DisableInternalUndo()
 {
-    GetEditEngine().EnableUndo(false);
+    GetEditEngine()->EnableUndo(false);
     m_bDisableInternalUndo = true;
 }
 
@@ -122,7 +122,7 @@ void SQLEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     WeldEditView::SetDrawingArea(pDrawingArea);
 
-    EditEngine& rEditEngine = GetEditEngine();
+    EditEngine& rEditEngine = *GetEditEngine();
 
     rEditEngine.SetDefaultHorizontalTextDirection(EEHorizontalTextDirection::L2R);
     rEditEngine.SetModifyHdl(LINK(this, SQLEditView, ModifyHdl));
@@ -191,7 +191,7 @@ Color SQLEditView::GetColorValue(TokenType aToken)
 void SQLEditView::UpdateData()
 {
     m_bInUpdate = true;
-    EditEngine& rEditEngine = GetEditEngine();
+    EditEngine& rEditEngine = *GetEditEngine();
 
     bool bUndoEnabled = rEditEngine.IsUndoEnabled();
     rEditEngine.EnableUndo(false);
@@ -368,7 +368,7 @@ void SQLEditView::ImplSetFont()
     // see SmEditWindow::DataChanged for a similar case
     SetItemPoolFont(m_pItemPool); // change default font
     // re-create with the new font
-    EditEngine& rEditEngine = GetEditEngine();
+    EditEngine& rEditEngine = *GetEditEngine();
     OUString aTxt(rEditEngine.GetText());
     rEditEngine.Clear();
     SetTextAndUpdate(aTxt);
