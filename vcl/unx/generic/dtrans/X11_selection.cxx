@@ -675,7 +675,9 @@ SelectionManager& SelectionManager::get( const OUString& rDisplayName )
 
     OUString aDisplayName( rDisplayName );
     if( aDisplayName.isEmpty() )
-        aDisplayName = OStringToOUString( getenv( "DISPLAY" ), RTL_TEXTENCODING_ISO_8859_1 );
+        if (auto const env = getenv( "DISPLAY" )) {
+            aDisplayName = OStringToOUString( env, RTL_TEXTENCODING_ISO_8859_1 );
+        }
     SelectionManager* pInstance = nullptr;
 
     std::unordered_map< OUString, SelectionManager* >::iterator it = getInstances().find( aDisplayName );
