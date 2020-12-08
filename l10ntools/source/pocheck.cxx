@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <cassert>
 #include <iostream>
 #include <map>
 #include <vector>
@@ -395,7 +398,9 @@ int main()
 {
     try
     {
-        OString aLanguages(getenv("ALL_LANGS"));
+        auto const env = getenv("ALL_LANGS");
+        assert(env != nullptr);
+        OString aLanguages(env);
         if( aLanguages.isEmpty() )
         {
             std::cerr << "Usage: LD_LIBRARY_PATH=instdir/program make cmd cmd=workdir/LinkTarget/Executable/pocheck\n";

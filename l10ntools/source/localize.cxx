@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <cassert>
 #include <cstddef>
 #include <cstdlib>
 #include <iostream>
@@ -90,12 +91,16 @@ void handleCommand(
     OStringBuffer buf;
     if (rExecutable == "uiex" || rExecutable == "hrcex")
     {
-        buf.append(OString(getenv("SRC_ROOT")));
+        auto const env = getenv("SRC_ROOT");
+        assert(env != nullptr);
+        buf.append(OString(env));
         buf.append("/solenv/bin/");
     }
     else
     {
-        buf.append(OString(getenv("WORKDIR_FOR_BUILD")));
+        auto const env = getenv("WORKDIR_FOR_BUILD");
+        assert(env != nullptr);
+        buf.append(OString(env));
         buf.append("/LinkTarget/Executable/");
     }
     buf.append(rExecutable.data());
