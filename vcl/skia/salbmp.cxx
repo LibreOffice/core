@@ -754,10 +754,46 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
     if (mImage)
     {
         SkiaZone zone;
-        sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize, kAlpha_8_SkColorType);
-        assert(surface);
-        SkPaint paint;
-        paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+        bool scaling = mImage->width() != mSize.Width() || mImage->height() != mSize.Height();
+        SkPixmap pixmap;
+        // Note: We cannot do this when 'scaling' because SkCanvas::drawImageRect()
+        // with kAlpha_8_SkColorType as source and destination would act as SkBlendMode::kSrcOver
+        // despite SkBlendMode::kSrc set (https://bugs.chromium.org/p/skia/issues/detail?id=9692).
+        if (mImage->peekPixels(&pixmap) && !scaling)
+        {
+            assert(pixmap.colorType() == kN32_SkColorType);
+            // In non-GPU mode, convert 32bit data to 8bit alpha, this is faster than
+            // the SkColorFilter below. Since this is the VCL alpha-vdev alpha, where
+            // all R,G,B are the same and in fact mean alpha, this means we simply take one
+            // 8bit channel from the input, and that's the output.
+            SkBitmap bitmap;
+            if (!bitmap.installPixels(pixmap))
+                abort();
+            SkBitmap alphaBitmap;
+            if (!alphaBitmap.tryAllocPixels(SkImageInfo::MakeA8(bitmap.width(), bitmap.height())))
+                abort();
+            if (int(bitmap.rowBytes()) == bitmap.width() * 4)
+            {
+                SkConvertRGBAToR(alphaBitmap.getAddr8(0, 0), bitmap.getAddr32(0, 0),
+                                 bitmap.width() * bitmap.height());
+            }
+            else
+            {
+                for (tools::Long y = 0; y < bitmap.height(); ++y)
+                    SkConvertRGBAToR(alphaBitmap.getAddr8(0, y), bitmap.getAddr32(0, y),
+                                     bitmap.width());
+            }
+            alphaBitmap.setImmutable();
+            sk_sp<SkImage> alphaImage = SkiaHelper::createSkImage(alphaBitmap);
+            assert(alphaImage);
+            SAL_INFO("vcl.skia.trace", "getalphaskimage(" << this << ") from raster image");
+            // Don't bother here with ConserveMemory(), mImage -> mAlphaImage conversions should
+            // generally only happen with the separate-alpha-outdev hack, and those bitmaps should
+            // be temporary.
+            SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
+            thisPtr->mAlphaImage = alphaImage;
+            return mAlphaImage;
+        }
         // Move the R channel value to the alpha channel. This seems to be the only
         // way to reinterpret data in SkImage as an alpha SkImage without accessing the pixels.
         // NOTE: The matrix is 4x5 organized as columns (i.e. each line is a column, not a row).
@@ -765,13 +801,16 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
                                            0, 0, 0, 0, 0, // G column
                                            0, 0, 0, 0, 0, // B column
                                            1, 0, 0, 0, 0); // A column
+        SkPaint paint;
         paint.setColorFilter(SkColorFilters::Matrix(redToAlpha));
-        bool scaling = mImage->width() != mSize.Width() || mImage->height() != mSize.Height();
         if (scaling)
         {
             assert(!mBuffer); // This code should be only called if only mImage holds data.
             paint.setFilterQuality(mScaleQuality);
         }
+        sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize, kAlpha_8_SkColorType);
+        assert(surface);
+        paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
         surface->getCanvas()->drawImageRect(mImage,
                                             SkRect::MakeWH(mImage->width(), mImage->height()),
                                             SkRect::MakeWH(mSize.Width(), mSize.Height()), &paint);
