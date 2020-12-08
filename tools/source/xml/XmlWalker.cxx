@@ -90,7 +90,8 @@ OString XmlWalker::attribute(const OString& sName)
 {
     xmlChar* xmlName = xmlCharStrdup(sName.getStr());
     xmlChar* xmlAttribute = xmlGetProp(mpImpl->mpCurrent, xmlName);
-    OString aAttributeContent(reinterpret_cast<const char*>(xmlAttribute));
+    OString aAttributeContent(
+        xmlAttribute == nullptr ? "" : reinterpret_cast<const char*>(xmlAttribute));
     xmlFree(xmlAttribute);
     xmlFree(xmlName);
 

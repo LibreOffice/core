@@ -277,7 +277,8 @@ SvCommand::SvCommand( int argc, char ** argv )
 
     aList.clear();
 
-    OString aInc(getenv("INCLUDE"));
+    auto const env = getenv("INCLUDE");
+    OString aInc(env == nullptr ? "" : env);
     // append include environment variable
     if( aInc.getLength() )
     {
