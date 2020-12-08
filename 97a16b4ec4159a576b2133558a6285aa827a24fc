@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a76fc58_ddfad90c",
+        "filename": "sw/source/uibase/shells/textsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-08T09:37:11Z",
+      "side": 1,
+      "message": "This breaks --with-latest-c++ builds that pick up C++ \u003e\u003d 20 on platforms where the C++ standard library does not yet support \u003chttps://wg21.link/P1004R2\u003e \"Making std::vector constexpr\" (which isn\u0027t yet supported anywhere according to \u003chttps://en.cppreference.com/w/cpp/compiler_support#C.2B.2B20_library_features\u003e).\n\nBut why use a std::vector anyway, when something more lightweight like a plain array (or std::array, or std::initializer_list) would work just as well?",
+      "revId": "97a16b4ec4159a576b2133558a6285aa827a24fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed9a3446_2207297a",
+        "filename": "sw/source/uibase/shells/textsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-08T09:37:11Z",
+      "side": 1,
+      "message": "It is now rather unclear that this comment appertains to the RES_FRAMEDIR hole in the below array.",
+      "range": {
+        "startLine": 604,
+        "startChar": 16,
+        "endLine": 604,
+        "endChar": 72
+      },
+      "revId": "97a16b4ec4159a576b2133558a6285aa827a24fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
