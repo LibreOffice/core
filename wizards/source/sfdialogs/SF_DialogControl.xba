@@ -25,7 +25,7 @@ Option Explicit
 &apos;&apos;&apos;
 &apos;&apos;&apos;		A special attention is given to controls with type TreeControl.
 &apos;&apos;&apos;		It is easy with the API proposed in the current class to populate a tree, either
-&apos;&apos;&apos;			- branch by branch (CreateRoot and AddChild), or
+&apos;&apos;&apos;			- branch by branch (CreateRoot and AddSubNode), or
 &apos;&apos;&apos;			- with a set of branches at once (AddSubtree)
 &apos;&apos;&apos;		Additionally populating a TreeControl can be done statically or dynamically
 &apos;&apos;&apos;
@@ -54,6 +54,7 @@ Private ServiceName 		As String
 
 &apos;	Control naming
 Private _Name				As String
+Private _IndexOfNames		As Long			&apos; Index in ElementNames array. Used to access SF_Dialog._ControlCache
 Private _DialogName			As String		&apos; Parent dialog name
 
 &apos;	Control UNO references
@@ -64,6 +65,13 @@ Private _TreeDataModel		As Object		&apos; com.sun.star.awt.tree.MutableTreeDataM
 &apos;	Control attributes
 Private	_ImplementationName	As String
 Private _ControlType		As String		&apos; One of the CTLxxx constants
+
+&apos;	Tree control on-select and on-expand attributes
+&apos;	Tree controls may be associated with events not defined in the Basic IDE
+Private _OnNodeSelected		As String		&apos; Script to invoke when a node is selected
+Private _OnNodeExpanded		As String		&apos; Script to invoke when a node is expanded
+Private _SelectListener		As Object		&apos; com.sun.star.view.XSelectionChangeListener
+Private _ExpandListener		As Object		&apos; com.sun.star.awt.tree.XTreeExpansionListener
 
 REM ============================================================ MODULE CONSTANTS
 
@@ -88,7 +96,7 @@ Private Const CTLTEXTFIELD		= &quot;TextField&quot;
 Private Const CTLTIMEFIELD		= &quot;TimeField&quot;
 Private Const CTLTREECONTROL	= &quot;TreeControl&quot;
 
-REM ===================================================== CONSTRUCTOR/DESTRUCTOR
+REM ====================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Private Sub Class_Initialize()
@@ -97,12 +105,17 @@ Private Sub Class_Initialize()
 	ObjectType = &quot;DIALOGCONTROL&quot;
 	ServiceName = &quot;SFDialogs.DialogControl&quot;
 	_Name = &quot;&quot;
+	_IndexOfNames = -1
 	_DialogName = &quot;&quot;
 	Set _ControlModel = Nothing
 	Set _ControlView = Nothing
 	Set _TreeDataModel = Nothing
 	_ImplementationName = &quot;&quot;
 	_ControlType = &quot;&quot;
+	_OnNodeSelected = &quot;&quot;
+	_OnNodeExpanded = &quot;&quot;
+	Set _SelectListener = Nothing
+	Set _ExpandListener = Nothing
 End Sub		&apos;	SFDialogs.SF_DialogControl Constructor
 
 REM -----------------------------------------------------------------------------
@@ -918,6 +931,8 @@ Public Function Properties() As Variant
 					, &quot;OnMouseMoved&quot; _
 					, &quot;OnMousePressed&quot; _
 					, &quot;OnMouseReleased&quot; _
+					, &quot;OnNodeExpanded&quot; _
+					, &quot;OnNodeSelected&quot; _
 					, &quot;OnTextChanged&quot; _
 					, &quot;Page&quot; _
 					, &quot;Parent&quot; _
@@ -1218,10 +1233,12 @@ REM ----------------------------------------------------------------------------
 Public Sub _Initialize()
 &apos;&apos;&apos;	Complete the object creation process:
 &apos;&apos;&apos;		- Initialization of private members
-&apos;&apos;&apos;		- Collection of main attributes
+&apos;&apos;&apos;		- Collection of specific attributes
+&apos;&apos;&apos;		- synchonization with parent dialog instance
 
 Dim vServiceName As Variant		&apos;	Split service name
 Dim sType As String				&apos;	Last component of service name
+
 Try:
 	_ImplementationName = _ControlModel.getImplementationName()
 
@@ -1232,13 +1249,17 @@ Try:
 		Case &quot;UnoControlSpinButtonModel&quot;
 			_ControlType = &quot;&quot;	&apos; Not supported
 		Case &quot;Edit&quot;					:	_ControlType = CTLTEXTFIELD
-		Case &quot;TreeControlModel&quot;	&apos; Initialize the data model
+		Case &quot;TreeControlModel&quot;
+			&apos;	Initialize the data model
 			_ControlType = CTLTREECONTROL
 			Set _ControlModel.DataModel = ScriptForge.SF_Utils._GetUNOService(&quot;TreeDataModel&quot;)
 			_TreeDataModel = _ControlModel.DataModel
 		Case Else					:	_ControlType = sType
 	End Select
-	
+
+	&apos;	Store  the SF_DialogControl object in the parent cache
+	Set _Parent._ControlCache(_IndexOfNames) = [Me]
+
 Finally:
 	Exit Sub
 End Sub			&apos;	SFDialogs.SF_DialogControl._Initialize
@@ -1380,6 +1401,18 @@ Const cstSubArgs = &quot;&quot;
 			Else
 				_PropertyGet = &quot;&quot;
 			End If
+		Case UCase(&quot;OnNodeExpanded&quot;)
+			Select Case _ControlType
+				Case CTLTREECONTROL
+					_PropertyGet = _OnNodeExpanded
+				Case Else	:	GoTo CatchType
+			End Select
+		Case UCase(&quot;OnNodeSelected&quot;)
+			Select Case _ControlType
+				Case CTLTREECONTROL
+					_PropertyGet = _OnNodeSelected
+				Case Else	:	GoTo CatchType
+			End Select
 		Case UCase(&quot;Page&quot;)
 			If oSession.HasUnoProperty(_ControlModel, &quot;Step&quot;) Then _PropertyGet = _ControlModel.Step
 		Case UCase(&quot;Parent&quot;)
@@ -1563,7 +1596,10 @@ Const cstSubArgs = &quot;Value&quot;
 						.clearSelection()
 						If Not IsNull(pvValue) Then
 							.addSelection(pvValue)
-							.makeNodeVisible(pvValue)		&apos;	Expand parent nodes and put node in the display area
+							&apos;	Suspending temporarily the expansion listener avoids conflicts
+							If Len(_OnNodeExpanded) &gt; 0 Then _ControlView.removeTreeExpansionListener(_ExpandListener)
+							.makeNodeVisible(pvValue)	&apos; Expand parent nodes and put node in the display area
+							If Len(_OnNodeExpanded) &gt; 0 Then _ControlView.addTreeExpansionListener(_ExpandListener)
 						End If
 					End With
 				Case Else	:	GoTo CatchType
@@ -1650,6 +1686,42 @@ Const cstSubArgs = &quot;Value&quot;
 						, _GetListener(psProperty) _
 						, pvValue _
 						)
+		Case UCase(&quot;OnNodeExpanded&quot;)
+			Select Case _ControlType
+				Case CTLTREECONTROL
+					If Not ScriptForge.SF_Utils._Validate(pvValue, psProperty, V_STRING) Then GoTo Finally
+					&apos;	If the listener was already set, then stop it
+					If Len(_OnNodeExpanded) &gt; 0 Then
+						_ControlView.removeTreeExpansionListener(_ExpandListener)
+						Set _ExpandListener = Nothing
+						_OnNodeExpanded = &quot;&quot;
+					End If
+					&apos;	Setup a new fresh listener
+					If Len(pvValue) &gt; 0 Then
+						Set _ExpandListener = CreateUnoListener(&quot;_SFEXP_&quot;, &quot;com.sun.star.awt.tree.XTreeExpansionListener&quot;)
+						_ControlView.addTreeExpansionListener(_ExpandListener)
+						_OnNodeExpanded = pvValue
+					End If
+				Case Else	:	GoTo CatchType
+			End Select
+		Case UCase(&quot;OnNodeSelected&quot;)
+			Select Case _ControlType
+				Case CTLTREECONTROL
+					If Not ScriptForge.SF_Utils._Validate(pvValue, psProperty, V_STRING) Then GoTo Finally
+					&apos;	If the listener was already set, then stop it
+					If Len(_OnNodeSelected) &gt; 0 Then
+						_ControlView.removeSelectionChangeListener(_SelectListener)
+						Set _SelectListener = Nothing
+						_OnNodeSelected = &quot;&quot;
+					End If
+					&apos;	Setup a new fresh listener
+					If Len(pvValue) &gt; 0 Then
+						Set _SelectListener = CreateUnoListener(&quot;_SFSEL_&quot;, &quot;com.sun.star.view.XSelectionChangeListener&quot;)
+						_ControlView.addSelectionChangeListener(_SelectListener)
+						_OnNodeSelected = pvValue
+					End If
+				Case Else	:	GoTo CatchType
+			End Select
 		Case UCase(&quot;Page&quot;)
 			If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Page&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
 			If oSession.HasUnoProperty(_ControlModel, &quot;Step&quot;) Then _ControlModel.Step = CLng(pvValue)

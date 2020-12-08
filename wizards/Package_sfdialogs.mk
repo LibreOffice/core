@@ -22,6 +22,7 @@ $(eval $(call gb_Package_Package,wizards_basicsrvsfdialogs,$(SRCDIR)/wizards/sou
 $(eval $(call gb_Package_add_files,wizards_basicsrvsfdialogs,$(LIBO_SHARE_FOLDER)/basic/SFDialogs,\
 	SF_Dialog.xba \
 	SF_DialogControl.xba \
+	SF_DialogListener.xba \
 	SF_Register.xba \
 	__License.xba \
 	dialog.xlb \

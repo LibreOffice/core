@@ -70,20 +70,15 @@ Private _DialogModel		As Object		&apos; com.sun.star.awt.XControlModel - stardiv
 Private _Displayed			As Boolean		&apos; True after Execute()
 Private _Modal				As Boolean		&apos; Set by Execute()
 
-&apos;	Cache for TreeControl events
-Private _TreeCache			As Object		&apos; Dictionary: key = control name, item = _TreeControl
-
-Type _TreeControl
-	OnNodeSelected			As String
-	OnNodeExpanded			As String
-End Type
+&apos;	Persistent storage for controls
+Private _ControlCache		As Variant		&apos; Array of control objects sorted like ElementNames of the Dialog model
 
 REM ============================================================ MODULE CONSTANTS
 
 Private Const OKBUTTON		= 1
 Private Const CANCELBUTTON	= 0
 
-REM ===================================================== CONSTRUCTOR/DESTRUCTOR
+REM ====================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Private Sub Class_Initialize()
@@ -100,7 +95,7 @@ Private Sub Class_Initialize()
 	Set _DialogModel = Nothing
 	_Displayed = False
 	_Modal = True
-	Set _TreeCache = ScriptForge.SF_Services.CreateScriptService(&quot;Dictionary&quot;)
+	_ControlCache = Array()
 End Sub		&apos;	SFDialogs.SF_Dialog Constructor
 
 REM -----------------------------------------------------------------------------
@@ -381,7 +376,9 @@ Public Function Controls(Optional ByVal ControlName As Variant) As Variant
 &apos;&apos;&apos;				myList = myDialog.Controls()
 &apos;&apos;&apos;				Set myControl = myDialog.Controls(&quot;myTextBox&quot;)
 
-Dim oControl As Object			&apos;	The new control class instance
+Dim oControl As Object				&apos;	The new control class instance
+Dim lIndexOfNames As Long			&apos;	Index in ElementNames array. Used to access _ControlCache
+Dim vControl As Variant				&apos;	Alias of _ControlCache entry
 Const cstThisSub = &quot;SFDialogs.Dialog.Controls&quot;
 Const cstSubArgs = &quot;[ControlName]&quot;
 
@@ -399,17 +396,25 @@ Try:
 		Controls = _DialogModel.getElementNames()
 	Else
 		If Not _DialogModel.hasByName(ControlName) Then GoTo CatchNotFound
-		&apos;	Create the new dialog control class instance
-		Set oControl = New SF_DialogControl
-		With oControl
-			._Name = ControlName
-			Set .[Me] = oControl
-			Set .[_Parent] = [Me]
-			._DialogName = _Name
-			Set ._ControlModel = _DialogModel.getByName(ControlName)
-			Set ._ControlView = _DialogControl.getControl(ControlName)
-			._Initialize()
-		End With
+		lIndexOfNames = ScriptForge.IndexOf(_DialogModel.getElementNames(), ControlName, CaseSensitive := True)
+		&apos;	Reuse cache when relevant
+		vControl = _ControlCache(lIndexOfNames)
+		If IsEmpty(vControl) Then
+			&apos;	Create the new dialog control class instance
+			Set oControl = New SF_DialogControl
+			With oControl
+				._Name = ControlName
+				Set .[Me] = oControl
+				Set .[_Parent] = [Me]
+				._IndexOfNames = ScriptForge.IndexOf(_DialogModel.getElementNames(), ControlName, CaseSensitive := True)
+				._DialogName = _Name
+				Set ._ControlModel = _DialogModel.getByName(ControlName)
+				Set ._ControlView = _DialogControl.getControl(ControlName)
+				._Initialize()
+			End With
+		Else
+			Set oControl = vControl
+		End If
 		Set Controls = oControl
 	End If
 
@@ -710,6 +715,7 @@ Public Sub _Initialize()
 &apos;&apos;&apos;		- Initialization of private members
 &apos;&apos;&apos;		- Creation of the dialog graphical interface
 &apos;&apos;&apos;		- Addition of the new object in the Dialogs buffer
+&apos;&apos;&apos;		- Initialisation of persistent storage for controls
 
 Try:
 	&apos;	Create the graphical interface
@@ -718,7 +724,11 @@ Try:
 
 	&apos;	Add dialog reference to cache
 	_CacheIndex = SF_Register._AddDialogToCache(_DialogControl, [Me])
-	85
+
+	&apos;	Size the persistent storage
+	_ControlCache = Array()
+	ReDim _ControlCache(0 To UBound(_DialogModel.getElementNames()))
+
 Finally:
 	Exit Sub
 End Sub			&apos;	SFDialogs.SF_Dialog._Initialize

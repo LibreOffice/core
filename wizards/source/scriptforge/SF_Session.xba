@@ -42,7 +42,7 @@ REM ============================================================ MODULE CONSTANT
 &apos;&apos;&apos;			ExecuteBasicScript()
 &apos;&apos;&apos;			ExecutePythonScript()
 &apos;&apos;&apos;		Example:
-&apos;&apos;&apos;			session.ExecuteBasicScript(session.SCRIPTISEMBEDDED, &quot;Standard.myLib.myFunc&quot;, etc)
+&apos;&apos;&apos;			session.ExecuteBasicScript(session.SCRIPTISEMBEDDED, &quot;Standard.myModule.myFunc&quot;, etc)
 
 Const cstSCRIPTISEMBEDDED		= &quot;document&quot;				&apos; a library of the document						(BASIC + PYTHON)
 Const cstSCRIPTISAPPLICATION	= &quot;application&quot;				&apos; a shared library								(BASIC)
@@ -51,6 +51,11 @@ Const cstSCRIPTISPERSOXT		= &quot;user:uno_packages&quot;		&apos; an extension f
 Const cstSCRIPTISSHARED			= &quot;share&quot;					&apos; a library of LibreOffice Macros				(PYTHON)
 Const cstSCRIPTISSHAROXT		= &quot;share:uno_packages&quot;		&apos; an extension for all users					(PYTHON)
 Const cstSCRIPTISOXT			= &quot;uno_packages&quot;			&apos; an extension but install params are unknown	(PYTHON)
+
+&apos;&apos;&apos;	To build or to parse scripting framework URI&apos;s
+Const cstScript1				= &quot;vnd.sun.star.script:&quot;
+Const cstScript2				= &quot;?language=&quot;
+Const cstScript3				= &quot;&amp;location=&quot;
 
 REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 
@@ -861,6 +866,42 @@ End Function	&apos;	ScriptForge.SF_Session.WebService
 REM =========================================================== PRIVATE FUNCTIONS
 
 REM -----------------------------------------------------------------------------
+Private Function _ExecuteScript(ByVal psScript As String _
+									, ByRef poEvent As Object _
+									) As Variant
+&apos;&apos;&apos;	Execute the script expressed in the scripting framework_URI notation
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		psScript: read https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification
+&apos;&apos;&apos;		poEvent: the event object which triggered the execution. It is given as argument to the called script
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The return value after the script execution. May be ignored for events
+
+Dim sScope As String			&apos;	The scope part of the script URI
+Dim sLanguage As String			&apos;	The language part of the script URI
+Dim sScript As String			&apos;	The script part of the script URI
+Dim vStrings As Variant			&apos;	Array of strings: (script, language, scope)
+Const cstComma = &quot;,&quot;
+
+Try:
+	If ScriptForge.SF_String.StartsWith(psScript, cstScript1) Then
+		&apos;	Parse script
+		vStrings = Split( _
+						Replace( _
+							Replace(Mid(psScript, Len(cstScript1) + 1), cstScript2, cstComma) _
+							, cstScript3, cstComma) _
+						, cstComma)
+		sScript = vStrings(0)	:	sLanguage = vStrings(1)	:	sScope = vStrings(2)
+		&apos;	Execute script
+		If UCase(sLanguage) = &quot;BASIC&quot; Then
+			_ExecuteScript = ExecuteBasicScript(sScope, sScript, poEvent)
+		Else	&apos;	Python
+			_ExecuteScript = ExecutePythonScript(sScope, sScript, poEvent)
+		End If
+	End If
+
+End Function	&apos;	ScriptForge.SF_Session._ExecuteScript
+
+REM -----------------------------------------------------------------------------
 Private Function _GetScript(ByVal psLanguage As String _
 								, ByVal psScope As String _
 								, ByVal psScript As String _
@@ -881,9 +922,6 @@ Private Function _GetScript(ByVal psLanguage As String _
 Dim sScript As String			&apos;	The complete script string
 Dim oScriptProvider As Object	&apos;	Script provider singleton
 Dim oScript As Object			&apos;	Return value
-Const cstScript1 = &quot;vnd.sun.star.script:&quot;
-Const cstScript2 = &quot;?language=&quot;
-Const cstScript3 = &quot;&amp;location=&quot;
 
 Try:
 	&apos;	Build script string
