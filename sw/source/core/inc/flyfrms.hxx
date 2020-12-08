@@ -152,7 +152,7 @@ public:
     SwFlyLayFrame( SwFlyFrameFormat*, SwFrame*, SwFrame *pAnchor );
 
 protected:
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 };
 
 // Flys that are bound to Content but not in Content
