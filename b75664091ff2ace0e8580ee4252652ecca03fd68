@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc970e62_f6868cbc",
+        "filename": "include/sax/fastparser.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-08T06:53:48Z",
+      "side": 1,
+      "message": "Sequence and OUString are copy-on-write, reference-counted data types, so there is no need to worry about memory management for them",
+      "revId": "b75664091ff2ace0e8580ee4252652ecca03fd68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
