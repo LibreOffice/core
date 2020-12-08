@@ -1179,6 +1179,8 @@ public:
     // XTransitionFactory
     virtual sal_Bool SAL_CALL hasTransition( sal_Int16 transitionType, sal_Int16 transitionSubType ) override
     {
+        if( !OpenGLHelper::supportsOpenGL())
+            return false;
         // A set of css::animation::TransitionSubType that don't have any meaning (in the SMIL 2.0
         // standard) for MISCSHAPEWIPE have been chosen to refer to some of these "fancy" optional
         // transitions. (The only subtypes of 'miscShapeWipe' defined in the standard are 'heart'

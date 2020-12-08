@@ -21,7 +21,7 @@
 /// Helper to do a SAL_INFO as well as a GL log.
 #define VCL_GL_INFO(stream) \
     do { \
-        if (SAL_DETAIL_ENABLE_LOG_INFO && OpenGLHelper::isVCLOpenGLEnabled()) \
+        if (SAL_DETAIL_ENABLE_LOG_INFO) \
         { \
             ::std::ostringstream detail_stream; \
             detail_stream << stream;            \
@@ -32,7 +32,7 @@
 /// Helper to do a SAL_WARN as well as a GL log.
 #define VCL_GL_WARN(stream) \
     do { \
-        if (SAL_DETAIL_ENABLE_LOG_INFO && OpenGLHelper::isVCLOpenGLEnabled()) \
+        if (SAL_DETAIL_ENABLE_LOG_INFO) \
         { \
             ::std::ostringstream detail_stream; \
             detail_stream << stream;            \
@@ -105,14 +105,9 @@ public:
     static bool isDeviceDenylisted();
 
     /**
-     * checks if the system supports all features that are necessary for the OpenGL VCL support
+     * checks if the system supports all features that are necessary for the OpenGL support
      */
-    static bool supportsVCLOpenGL();
-
-    /**
-     * Returns true if VCL has OpenGL rendering enabled
-     */
-    static bool isVCLOpenGLEnabled();
+    static bool supportsOpenGL();
 };
 
 #ifdef SAL_LOG_WARN

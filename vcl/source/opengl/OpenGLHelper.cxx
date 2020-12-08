@@ -784,12 +784,16 @@ bool OpenGLHelper::isDeviceDenylisted()
     return bDenylisted;
 }
 
-bool OpenGLHelper::supportsVCLOpenGL()
+bool OpenGLHelper::supportsOpenGL()
 {
-    static bool bDisableGL = !!getenv("SAL_DISABLEGL");
-    bool bDenylisted = isDeviceDenylisted();
-
-    return !bDisableGL && !bDenylisted;
+    if( getenv("SAL_DISABLEGL") != nullptr )
+        return false;
+    if( isDeviceDenylisted())
+        return false;
+    if( officecfg::Office::Common::VCL::DisableOpenGL::get())
+        return false;
+    WatchdogThread::start();
+    return true;
 }
 
 namespace
@@ -853,7 +857,7 @@ void OpenGLZone::hardDisable()
     // Disable the OpenGL support
     std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
         comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::VCL::UseOpenGL::set(false,  xChanges);
+    officecfg::Office::Common::VCL::DisableOpenGL::set(true, xChanges);
     xChanges->commit();
 
     // Force synchronous config write
@@ -882,91 +886,6 @@ const CrashWatchdogTimingsValues& OpenGLZone::getCrashWatchdogTimingsValues()
     // The shader compiler can take a long time, first time.
     CrashWatchdogTimingMode eMode = gbInShaderCompile ? CrashWatchdogTimingMode::SHADER_COMPILE : CrashWatchdogTimingMode::NORMAL;
     return gWatchdogTimings.getWatchdogTimingsValues(eMode);
-}
-
-static void reapGlxTest()
-{
-    // Reap the glxtest child, or it'll stay around as a zombie,
-    // as X11OpenGLDeviceInfo::GetData() will not get called.
-    static bool bTestReaped = false;
-    if(!bTestReaped)
-    {
-        reap_glxtest_process();
-        bTestReaped = true;
-    }
-}
-
-bool OpenGLHelper::isVCLOpenGLEnabled()
-{
-    // Skia always takes precedence if enabled
-    if( SkiaHelper::isVCLSkiaEnabled())
-    {
-        reapGlxTest();
-        return false;
-    }
-
-    /**
-     * The !bSet part should only be called once! Changing the results in the same
-     * run will mix OpenGL and normal rendering.
-     */
-
-    static bool bSet = false;
-    static bool bEnable = false;
-    static bool bForceOpenGL = false;
-
-    // No hardware rendering, so no OpenGL
-    if (Application::IsBitmapRendering())
-        return false;
-
-    if (bSet)
-    {
-        return bForceOpenGL || bEnable;
-    }
-    /*
-     * There are a number of cases that these environment variables cover:
-     *  * SAL_FORCEGL forces OpenGL independent of any other option
-     *  * SAL_DISABLEGL or a denylisted driver avoid the use of OpenGL if SAL_FORCEGL is not set
-     */
-
-    bSet = true;
-    bForceOpenGL = !!getenv("SAL_FORCEGL") || officecfg::Office::Common::VCL::ForceOpenGL::get();
-
-    bool bRet = false;
-    bool bSupportsVCLOpenGL = supportsVCLOpenGL();
-    // always call supportsVCLOpenGL to de-zombie the glxtest child process on X11
-    if (bForceOpenGL)
-    {
-        bRet = true;
-    }
-    else if (bSupportsVCLOpenGL)
-    {
-        static bool bEnableGLEnv = !!getenv("SAL_ENABLEGL");
-
-        bEnable = bEnableGLEnv;
-
-        if (officecfg::Office::Common::VCL::UseOpenGL::get())
-            bEnable = true;
-
-        // Force disable in safe mode
-        if (Application::IsSafeModeEnabled())
-            bEnable = false;
-
-        bRet = bEnable;
-    }
-
-    if (bRet)
-        WatchdogThread::start();
-    else
-        reapGlxTest();
-
-    CrashReporter::addKeyValue("UseOpenGL", OUString::boolean(bRet), CrashReporter::Write);
-
-    return bRet;
-}
-
-bool OpenGLWrapper::isVCLOpenGLEnabled()
-{
-    return OpenGLHelper::isVCLOpenGLEnabled();
 }
 
 void OpenGLHelper::debugMsgStream(std::ostringstream const &pStream)
