@@ -304,28 +304,50 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             tools::SvRef<SotTempStream> xStream;
             if ( aDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream.is() )
             {
+                // Static variables for per-session storage. This could be
+                // changed to longer-term storage in future.
+                static bool bHaveSavedPreferences = false;
+                static LanguageType eSavedLanguage;
+                static bool bSavedDateConversion;
+
                 if (nFormatId == SotClipboardFormatId::HTML &&
                     !comphelper::LibreOfficeKit::isActive())
                 {
-                    // Launch the text import options dialog.  For now, we do
-                    // this for html pasting only, but in the future it may
-                    // make sense to do it for other data types too.
-                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    vcl::Window* pParent = GetActiveWin();
-                    ScopedVclPtr<AbstractScTextImportOptionsDlg> pDlg(
-                        pFact->CreateScTextImportOptionsDlg(pParent ? pParent->GetFrameWeld() : nullptr));
-
-                    if (pDlg->Execute() == RET_OK)
+                    if (bHaveSavedPreferences)
                     {
                         ScAsciiOptions aOptions;
-                        aOptions.SetLanguage(pDlg->GetLanguageType());
-                        aOptions.SetDetectSpecialNumber(pDlg->IsDateConversionSet());
+                        aOptions.SetLanguage(eSavedLanguage);
+                        aOptions.SetDetectSpecialNumber(bSavedDateConversion);
                         pObj->SetExtOptions(aOptions);
                     }
                     else
                     {
-                        // prevent error dialog for user cancel action
-                        bRet = true;
+                        // Launch the text import options dialog.  For now, we do
+                        // this for html pasting only, but in the future it may
+                        // make sense to do it for other data types too.
+                        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                        vcl::Window* pParent = GetActiveWin();
+                        ScopedVclPtr<AbstractScTextImportOptionsDlg> pDlg(
+                            pFact->CreateScTextImportOptionsDlg(pParent ? pParent->GetFrameWeld() : nullptr));
+
+                        if (pDlg->Execute() == RET_OK)
+                        {
+                            ScAsciiOptions aOptions;
+                            aOptions.SetLanguage(pDlg->GetLanguageType());
+                            aOptions.SetDetectSpecialNumber(pDlg->IsDateConversionSet());
+                            if (!pDlg->IsKeepAskingSet())
+                            {
+                                bHaveSavedPreferences = true;
+                                eSavedLanguage = pDlg->GetLanguageType();
+                                bSavedDateConversion = pDlg->IsDateConversionSet();
+                            }
+                            pObj->SetExtOptions(aOptions);
+                        }
+                        else
+                        {
+                            // prevent error dialog for user cancel action
+                            bRet = true;
+                        }
                     }
                 }
                 if(!bRet)
