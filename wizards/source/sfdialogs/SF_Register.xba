@@ -203,6 +203,8 @@ Dim oBasicDialog As Object		&apos;	Return value
 Dim oCache As _DialogCache		&apos;	Entry in the cache
 
 	Set oBasicDialog = Nothing
+
+Try:
 	For Each oCache In _SF_.SFDialogs
 		If EqualUnoObjects(poDialog, oCache.XUnoDialog) And Not oCache.Terminated Then
 			Set oBasicDialog = oCache.BasicDialog
@@ -210,8 +212,9 @@ Dim oCache As _DialogCache		&apos;	Entry in the cache
 		End If
 	Next oCache
 
+Finally:
 	Set _FindDialogInCache = oBasicDialog
-
+	Exit Function
 End Function	&apos;	SFDialogs.SF_Documents._FindDialogInCache
 
 REM -----------------------------------------------------------------------------
@@ -231,7 +234,7 @@ Dim vLibrary As Variant				&apos;	Alias of pvArgs(1)
 Dim vDialogName As Variant			&apos;	Alias of pvArgs(2)
 Dim oLibraries As Object			&apos;	com.sun.star.comp.sfx2.DialogLibraryContainer
 Dim oLibrary As Object				&apos;	com.sun.star.container.XNameAccess
-Dim o_DialogProvider As Object		&apos;	com.sun.star.io.XInputStreamProvider
+Dim oDialogProvider As Object		&apos;	com.sun.star.io.XInputStreamProvider
 Dim oEnum As Object					&apos;	com.sun.star.container.XEnumeration
 Dim oComp As Object					&apos;	com.sun.star.lang.XComponent
 Dim vWindow As Window				&apos;	A single component
@@ -301,7 +304,7 @@ Try:
 		If Not .isLibraryLoaded(vLibrary) Then .loadLibrary(vLibrary)
 		Set oLibrary = .getByName(vLibrary)
 		If Not oLibrary.hasByName(vDialogName) Then GoTo CatchNotFound
-		Set o_DialogProvider = oLibrary.getByName(vDialogName)
+		Set oDialogProvider = oLibrary.getByName(vDialogName)
 	End With
 
 	Set oDialog = New SF_Dialog
@@ -310,7 +313,7 @@ Try:
 		If VarType(vContainer) = V_STRING Then ._Container = vContainer Else ._Container = vWindow.WindowName
 		._Library = vLibrary
 		._Name = vDialogName
-		Set ._DialogProvider = o_DialogProvider
+		Set ._DialogProvider = oDialogProvider
 		._Initialize()
 	End With
 

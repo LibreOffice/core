@@ -5,4 +5,5 @@
  <library:element library:name="SF_Register"/>
  <library:element library:name="SF_Dialog"/>
  <library:element library:name="SF_DialogControl"/>
+ <library:element library:name="SF_DialogListener"/>
 </library:library>
