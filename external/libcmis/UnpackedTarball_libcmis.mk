@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libcmis,1))
 $(eval $(call gb_UnpackedTarball_add_patches,libcmis, \
 	external/libcmis/libcmis-libxml2_compatibility.patch \
 	external/libcmis/0001-rename-class-GetObject-to-avoid-name-clash-on-Window.patch \
+	external/libcmis/libcmis_onedrive.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
