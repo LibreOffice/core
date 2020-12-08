@@ -653,12 +653,12 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
 {
     OUString sSerialNum = xmlsecurity::bigIntegerToNumericString( Author->getSerialNumber() );
 
-    Sequence< SvtSecurityOptions::Certificate > aTrustedAuthors = SvtSecurityOptions().GetTrustedAuthors();
+    std::vector< SvtSecurityOptions::Certificate > aTrustedAuthors = SvtSecurityOptions().GetTrustedAuthors();
 
     return std::any_of(aTrustedAuthors.begin(), aTrustedAuthors.end(),
         [&Author, &sSerialNum](const SvtSecurityOptions::Certificate& rAuthor) {
-            return ( rAuthor[0] == Author->getIssuerName() )
-                && ( rAuthor[1] == sSerialNum );
+            return ( rAuthor.SubjectName == Author->getIssuerName() )
+                && ( rAuthor.SerialNumber == sSerialNum );
         });
 }
 
@@ -762,20 +762,16 @@ void DocumentDigitalSignatures::addAuthorToTrustedSources(
 {
     SvtSecurityOptions aSecOpts;
 
-    SvtSecurityOptions::Certificate aNewCert( 3 );
-    aNewCert[ 0 ] = Author->getIssuerName();
-    aNewCert[ 1 ] = xmlsecurity::bigIntegerToNumericString( Author->getSerialNumber() );
+    SvtSecurityOptions::Certificate aNewCert;
+    aNewCert.SubjectName = Author->getIssuerName();
+    aNewCert.SerialNumber = xmlsecurity::bigIntegerToNumericString( Author->getSerialNumber() );
 
     OUStringBuffer aStrBuffer;
     ::comphelper::Base64::encode(aStrBuffer, Author->getEncoded());
-    aNewCert[ 2 ] = aStrBuffer.makeStringAndClear();
+    aNewCert.RawData = aStrBuffer.makeStringAndClear();
 
-
-    Sequence< SvtSecurityOptions::Certificate > aTrustedAuthors = aSecOpts.GetTrustedAuthors();
-    sal_Int32 nCnt = aTrustedAuthors.getLength();
-    aTrustedAuthors.realloc( nCnt + 1 );
-    aTrustedAuthors[ nCnt ] = aNewCert;
-
+    std::vector< SvtSecurityOptions::Certificate > aTrustedAuthors = aSecOpts.GetTrustedAuthors();
+    aTrustedAuthors.push_back( aNewCert );
     aSecOpts.SetTrustedAuthors( aTrustedAuthors );
 }
 
