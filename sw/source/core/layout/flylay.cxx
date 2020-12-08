@@ -725,80 +725,75 @@ SwFlyLayFrame::SwFlyLayFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame 
 
 // #i28701#
 
-void SwFlyLayFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
+void SwFlyLayFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    const SwFormatAnchor *pAnch = nullptr;
-
-    if (pNew)
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
+    const SwFormatAnchor* pAnch = nullptr;
+    switch(pLegacy->GetWhich())
     {
-        const sal_uInt16 nWhich = pNew->Which();
-        if( RES_ATTRSET_CHG == nWhich && SfxItemState::SET ==
-            static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState( RES_ANCHOR, false,
-                reinterpret_cast<const SfxPoolItem**>(&pAnch) ))
-            ; // GetItemState sets the anchor pointer!
-
-        else if( RES_ANCHOR == nWhich )
+        case RES_ATTRSET_CHG:
         {
-            // Change of anchor. I'm attaching myself to the new place.
-            // It's not allowed to change the anchor type. This is only
-            // possible via SwFEShell.
-            pAnch = static_cast<const SwFormatAnchor*>(pNew);
+            pAnch = static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet()->GetItem(RES_ANCHOR, false);
+            break;
         }
+        case RES_ANCHOR:
+            pAnch = static_cast<const SwFormatAnchor*>(pLegacy->m_pNew);
     }
 
-    if( pAnch )
+    if(!pAnch)
     {
-        OSL_ENSURE( pAnch->GetAnchorId() ==
-                GetFormat()->GetAnchor().GetAnchorId(),
-                "8-) Invalid change of anchor type." );
+        SwFlyFrame::Modify(pLegacy->m_pOld, pLegacy->m_pNew);
+        return;
+    }
+    SAL_WARN_IF(pAnch->GetAnchorId() == GetFormat()->GetAnchor().GetAnchorId(), "sw.core", "Invalid change of anchor type.");
 
-        // Unregister, get hold of the page, attach to the corresponding LayoutFrame.
-        SwRect aOld( GetObjRectWithSpaces() );
-        // #i28701# - use new method <GetPageFrame()>
-        SwPageFrame *pOldPage = GetPageFrame();
-        AnchorFrame()->RemoveFly( this );
+    // Unregister, get hold of the page, attach to the corresponding LayoutFrame.
+    SwRect aOld(GetObjRectWithSpaces());
+    // #i28701# - use new method <GetPageFrame()>
+    SwPageFrame* pOldPage = GetPageFrame();
+    AnchorFrame()->RemoveFly(this);
 
-        if ( RndStdIds::FLY_AT_PAGE == pAnch->GetAnchorId() )
+    if(RndStdIds::FLY_AT_PAGE == pAnch->GetAnchorId())
+    {
+        SwRootFrame* pRoot = getRootFrame();
+        SwPageFrame* pTmpPage = static_cast<SwPageFrame*>(pRoot->Lower());
+        sal_uInt16 nPagesToFlip = pAnch->GetPageNum()-1;
+        while(pTmpPage && nPagesToFlip)
         {
-            sal_uInt16 nPgNum = pAnch->GetPageNum();
-            SwRootFrame *pRoot = getRootFrame();
-            SwPageFrame *pTmpPage = static_cast<SwPageFrame*>(pRoot->Lower());
-            for ( sal_uInt16 i = 1; (i <= nPgNum) && pTmpPage; ++i,
-                                pTmpPage = static_cast<SwPageFrame*>(pTmpPage->GetNext()) )
-            {
-                if ( i == nPgNum )
-                {
-                    // #i50432# - adjust synopsis of <PlaceFly(..)>
-                    pTmpPage->PlaceFly( this, nullptr );
-                }
-            }
-            if( !pTmpPage )
-            {
-                pRoot->SetAssertFlyPages();
-                pRoot->AssertFlyPages();
-            }
+            pTmpPage = static_cast<SwPageFrame*>(pTmpPage->GetNext());
+            --nPagesToFlip;
         }
-        else
+        if(!nPagesToFlip)
         {
-            SwNodeIndex aIdx( pAnch->GetContentAnchor()->nNode );
-            SwContentFrame *pContent = GetFormat()->GetDoc()->GetNodes().GoNext( &aIdx )->
-                GetContentNode()->getLayoutFrame(getRootFrame(), nullptr, nullptr);
-            if( pContent )
-            {
-                SwFlyFrame *pTmp = pContent->FindFlyFrame();
-                if( pTmp )
-                    pTmp->AppendFly( this );
-            }
+            // #i50432# - adjust synopsis of <PlaceFly(..)>
+            pTmpPage->PlaceFly(this, nullptr);
         }
-        // #i28701# - use new method <GetPageFrame()>
-        if ( pOldPage && pOldPage != GetPageFrame() )
-            NotifyBackground( pOldPage, aOld, PrepareHint::FlyFrameLeave );
-        SetCompletePaint();
-        InvalidateAll();
-        SetNotifyBack();
+        if(!pTmpPage)
+        {
+            pRoot->SetAssertFlyPages();
+            pRoot->AssertFlyPages();
+        }
     }
     else
-        SwFlyFrame::Modify( pOld, pNew );
+    {
+        SwNodeIndex aIdx(pAnch->GetContentAnchor()->nNode);
+        SwContentFrame* pContent = GetFormat()->GetDoc()->GetNodes().GoNext(&aIdx)->
+                GetContentNode()->getLayoutFrame(getRootFrame(), nullptr, nullptr);
+        if(pContent)
+        {
+            SwFlyFrame *pTmp = pContent->FindFlyFrame();
+            if(pTmp)
+                pTmp->AppendFly(this);
+        }
+    }
+    // #i28701# - use new method <GetPageFrame()>
+    if ( pOldPage && pOldPage != GetPageFrame() )
+        NotifyBackground( pOldPage, aOld, PrepareHint::FlyFrameLeave );
+    SetCompletePaint();
+    InvalidateAll();
+    SetNotifyBack();
 }
 
 void SwPageFrame::AppendFlyToPage( SwFlyFrame *pNew )
