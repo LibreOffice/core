@@ -1150,7 +1150,7 @@ Public Sub _Initialize()
 &apos;&apos;&apos;	Complete the object creation process:
 &apos;&apos;&apos;		- Initialization of private members
 &apos;&apos;&apos;		- Collection of specific attributes
-&apos;&apos;&apos;		- synchonization with parent dialog instance
+&apos;&apos;&apos;		- synchronization with parent dialog instance
 
 Dim vServiceName As Variant		&apos;	Split service name
 Dim sType As String				&apos;	Last component of service name
