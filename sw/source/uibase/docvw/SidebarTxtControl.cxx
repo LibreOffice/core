@@ -417,17 +417,16 @@ void SidebarTextControl::Command( const CommandEvent& rCEvt )
 
 OUString SidebarTextControl::GetSurroundingText() const
 {
-    if (GetTextView())
-        return GetTextView()->GetSurroundingText();
+    if (OutlinerView* pTextView = GetTextView())
+        return pTextView->GetSurroundingText();
     return OUString();
 }
 
 Selection SidebarTextControl::GetSurroundingTextSelection() const
 {
-    if( GetTextView() )
-        return GetTextView()->GetSurroundingTextSelection();
-    else
-        return Selection( 0, 0 );
+    if (OutlinerView* pTextView = GetTextView())
+        return pTextView->GetSurroundingTextSelection();
+    return Selection( 0, 0 );
 }
 
 bool SidebarTextControl::DeleteSurroundingText(const Selection& rSelection)
