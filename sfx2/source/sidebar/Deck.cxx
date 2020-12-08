@@ -200,7 +200,7 @@ void Deck::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     rJsonWriter.put("text", GetText());
     rJsonWriter.put("enabled", IsEnabled());
 
-    auto childrenNode = rJsonWriter.startNode("children");
+    auto childrenNode = rJsonWriter.startArray("children");
     for (auto &it : maPanels)
     {
         if (it->IsLurking())
@@ -214,13 +214,13 @@ void Deck::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         if (!pWindow)
             continue;
 
-        auto childNode = rJsonWriter.startNode("");
+        auto childNode = rJsonWriter.startStruct();
         rJsonWriter.put("id", it->GetId());
         rJsonWriter.put("type", "panel");
         rJsonWriter.put("text", it->GetText());
         rJsonWriter.put("enabled", it->IsEnabled());
 
-        auto children2Node = rJsonWriter.startNode("children");
+        auto children2Node = rJsonWriter.startArray("children");
         pWindow->DumpAsPropertyTree(rJsonWriter);
     }
 }
