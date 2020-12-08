@@ -1522,7 +1522,7 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
 
     pMenu->InsertItem(MENUITEM_TOOLBAR_DOCKALLTOOLBAR, FwkResId(STR_TOOLBAR_DOCK_ALL_TOOLBARS));
     pMenu->InsertSeparator();
-    pMenu->InsertItem(MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, FwkResId(STR_TOOLBAR_LOCK_TOOLBAR));
+    pMenu->InsertItem(MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, FwkResId(STR_TOOLBAR_LOCK_TOOLBAR), MenuItemBits::CHECKABLE);
     pMenu->InsertItem(MENUITEM_TOOLBAR_CLOSE, FwkResId(STR_TOOLBAR_CLOSE_TOOLBAR));
 
     if (m_pToolBar->IsCustomize())
