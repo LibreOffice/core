@@ -181,7 +181,7 @@
 #define STR_ERR_NEWSCENARIO                     NC_("STR_ERR_NEWSCENARIO", "The scenario ranges must be selected in order to be able to create a new scenario.")
 #define STR_NOAREASELECTED                      NC_("STR_NOAREASELECTED", "A range has not been selected.")
 #define STR_NEWTABNAMENOTUNIQUE                 NC_("STR_NEWTABNAMENOTUNIQUE", "This name already exists.")
-#define STR_INVALIDTABNAME                      NC_("STR_INVALIDTABNAME", "Invalid sheet name.\nThe sheet name must not be empty or a duplicate of \nan existing name and may not contain the characters [ ] * ? : / \\ \nor the character ' (apostrophe) as first or last character.")
+#define STR_INVALIDTABNAME                      NC_("STR_INVALIDTABNAME", "Invalid sheet name.\n\nThe sheet name must not:\n• be empty\n• already exist\n• contain [ ] * ? : / \\ \n• use ' (apostrophe) as first or last character.")
 #define STR_SCENARIO                            NC_("STR_SCENARIO", "Scenario")
 #define STR_PIVOT_TABLE                         NC_("STR_PIVOT_TABLE", "Pivot Table")
  // Text strings for captions of subtotal functions.
