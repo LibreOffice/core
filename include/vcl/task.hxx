@@ -91,7 +91,7 @@ public:
 
     /**
      * This function must be called for static tasks, so the Task destructor
-     * ignores the SchedulerMutex, as it may not be available anymore.
+     * ignores the scheduler mutex, as it may not be available anymore.
      * The cleanup is still correct, as it has already happened in
      * DeInitScheduler call well before the static destructor calls.
      */
