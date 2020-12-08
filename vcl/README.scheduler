@@ -60,7 +60,7 @@ Start new Tasks.
 
 The Scheduler just processes it's own Tasks in the main thread and needs
 the SolarMutex for it and for DeInit (tested by DBG_TESTSOLARMUTEX). All
-the other interaction just take the SchedulerMutex or don't need locking
+the other interaction just take the scheduler mutex or don't need locking
 at all.
 
 There is a "workaround" for static Task objecs, which would crash LO on
@@ -69,9 +69,9 @@ Scheduler, while the SchedulerLock would be long gone. OTOH this makes
 Task handling less error-prone, than doing "special" manual cleanup.
 There is also a "= TODOs and ideas =" to get rid if static Tasks.
 
-Actually the SchedulerMutex should never be locked when calling into
-non-scheduler code, so it was converted to simulate a non-recursive
-mutex later. As an alternative it could use a std::mutex.
+Actually the scheduler mutex should never be locked when calling into
+non-scheduler code, so it was converted to a non-recursive
+std::mutex.
 
 
 = Lifecycle / thread-safety of Scheduler-based objects =
@@ -407,9 +407,3 @@ will also affect the Gtk+ and KDE backend for the user event handling.
 
 This way it can be easier used to profile Tasks, eventually to improve LO's
 interactivity.
-
-== Convert SchedulerMutex to std::mutex ==
-
-Since the SchedulerMutex is non-recursive, it could use a std::mutex instead
-of simulating one still using the osl::Mutex. Not sure, if a deadlock instead
-of a crash, when called recursively, is the better "user experience"...

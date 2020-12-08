@@ -207,36 +207,18 @@ next_priority:
     rSchedCtx.mnTimerPeriod        = InfiniteTimeoutMs;
 }
 
-void SchedulerMutex::acquire()
-{
-    if (!m_aMutex.acquire())
-        std::abort();
-    if (m_bIsLocked)
-        std::abort();
-    m_bIsLocked = true;
-}
-
-void SchedulerMutex::release()
-{
-    if (!m_bIsLocked)
-        std::abort();
-    m_bIsLocked = false;
-    if (!m_aMutex.release())
-        std::abort();
-}
-
 void Scheduler::Lock()
 {
     ImplSVData* pSVData = ImplGetSVData();
     assert( pSVData != nullptr );
-    pSVData->maSchedCtx.maMutex.acquire();
+    pSVData->maSchedCtx.maMutex.lock();
 }
 
 void Scheduler::Unlock()
 {
     ImplSVData* pSVData = ImplGetSVData();
     assert( pSVData != nullptr );
-    pSVData->maSchedCtx.maMutex.release();
+    pSVData->maSchedCtx.maMutex.unlock();
 }
 
 /**

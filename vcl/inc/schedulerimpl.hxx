@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_INC_SCHEDULERIMPL_HXX
 
 #include "salwtype.hxx"
-#include <osl/mutex.hxx>
 #include <vcl/scheduler.hxx>
 
 class Task;
@@ -36,22 +35,6 @@ struct ImplSchedulerData final
     bool               mbInScheduler; ///< Task currently processed?
 
     const char *GetDebugName() const;
-};
-
-class SchedulerMutex final
-{
-    // this simulates a non-recursive mutex
-    bool m_bIsLocked;
-    osl::Mutex m_aMutex;
-
-public:
-    SchedulerMutex()
-        : m_bIsLocked(false)
-    {
-    }
-
-    void acquire();
-    void release();
 };
 
 class SchedulerGuard final
