@@ -34,6 +34,24 @@
       "revId": "004d8e9adbf1e84bb2a10728f066326a4bc3d421",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ced39bd0_05b3cc0a",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-08T11:52:20Z",
+      "side": 1,
+      "message": "Thanks for clarifying.  And I don\u0027t have any suggestions for improvement.",
+      "parentUuid": "69b4a983_718533d9",
+      "revId": "004d8e9adbf1e84bb2a10728f066326a4bc3d421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
