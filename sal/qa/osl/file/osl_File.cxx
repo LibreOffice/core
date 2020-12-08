@@ -931,7 +931,7 @@ namespace osl_FileBase
         OString sURL("file://~/tmp");
         char* home_path;
         home_path = getenv("HOME");
-        OString expResult(home_path);
+        OString expResult(home_path ? home_path : "");
         expResult += "/tmp";
         checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, expResult);
 #endif
@@ -1009,7 +1009,7 @@ namespace osl_FileBase
         OString sSysPath("~/tmp");
         char* home_path;
         home_path = getenv("HOME");
-        OString expResult(home_path);
+        OString expResult(home_path ? home_path : "");
         expResult = "file://"+ expResult + "/tmp";
         checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, expResult);
         checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "~/tmp");

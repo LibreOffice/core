@@ -47,7 +47,9 @@ ScreenshotTest::ScreenshotTest()
     , maParent(nullptr, "vcl/ui/screenshotparent.ui", "ScreenShot")
     , mxParentWidget(maParent.getDialog()->weld_content_area())
 {
-    maCurrentLanguage = OUString::fromUtf8(getenv("LO_TEST_LOCALE"));
+    if (auto const env = getenv("LO_TEST_LOCALE")) {
+        maCurrentLanguage = OUString::fromUtf8(env);
+    }
 }
 
 ScreenshotTest::~ScreenshotTest()

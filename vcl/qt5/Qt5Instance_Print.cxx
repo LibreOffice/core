@@ -50,7 +50,10 @@ static OUString getPdfDir(const PrinterInfo& rInfo)
             sal_Int32 nPos = 0;
             aDir = aToken.getToken(1, '=', nPos);
             if (aDir.isEmpty())
-                aDir = OStringToOUString(OString(getenv("HOME")), osl_getThreadTextEncoding());
+                if (auto const env = getenv("HOME"))
+                {
+                    aDir = OStringToOUString(OString(env), osl_getThreadTextEncoding());
+                }
             break;
         }
     }

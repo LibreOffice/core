@@ -512,7 +512,11 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname)
             {
                 pRet = static_cast<oslHostAddr>(
                     rtl_allocateZeroMemory(sizeof(struct oslHostAddrImpl)));
-                rtl_uString_newFromStr(&pRet->pHostName, o3tl::toU(pIter->ai_canonname));
+                if (pIter->ai_canonname == nullptr) {
+                    rtl_uString_new(&pRet->pHostName);
+                } else {
+                    rtl_uString_newFromStr(&pRet->pHostName, o3tl::toU(pIter->ai_canonname));
+                }
                 pRet->pSockAddr = createSocketAddr();
                 memcpy(& pRet->pSockAddr->m_sockaddr,
                        pIter->ai_addr, pIter->ai_addrlen);
