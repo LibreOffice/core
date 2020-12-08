@@ -56,14 +56,6 @@ public:
 
     void reset();
 
-    // use these methods right after setting a context to make sure drawing happens
-    // in the right FBO (default one is for onscreen painting)
-    void               AcquireDefaultFramebuffer();
-    void UnbindTextureFromFramebuffers( GLuint nTexture );
-    static bool        IsTextureAttachedAnywhere( GLuint nTexture );
-
-    void               ReleaseFramebuffers();
-
     /// Is this GL context the current context ?
     virtual bool isCurrent();
     /// Is any GL context the current context ?

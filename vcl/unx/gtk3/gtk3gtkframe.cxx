@@ -4494,11 +4494,6 @@ sal_uIntPtr GtkSalFrame::GetNativeWindowHandle(GtkWidget *pWidget)
     return 0;
 }
 
-sal_uIntPtr GtkSalFrame::GetNativeWindowHandle()
-{
-    return GetNativeWindowHandle(m_pWindow);
-}
-
 void GtkDragSource::set_datatransfer(const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
                                      const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener)
 {

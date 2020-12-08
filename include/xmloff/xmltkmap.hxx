@@ -60,7 +60,6 @@ public:
     ~SvXMLTokenMap();
 
     sal_uInt16 Get( sal_uInt16 nPrefix, const OUString& rLName ) const;
-    sal_uInt16 Get( sal_Int32 nFastTok ) const;
 };
 
 #endif // INCLUDED_XMLOFF_XMLTKMAP_HXX
