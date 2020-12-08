@@ -237,6 +237,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/tbxctrls/linewidthctrl \
     svx/source/tbxctrls/tbunocontroller \
     svx/source/tbxctrls/tbunosearchcontrollers \
+    svx/source/tbxctrls/tbunodevtoolscontrollers \
     svx/source/tbxctrls/tbxcolor \
     svx/source/tbxctrls/tbxdrctl \
     svx/source/tbxctrls/verttexttbxctrl \
