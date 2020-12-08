@@ -328,46 +328,5 @@ CatchNotFound:
 	GoTo Finally
 End Function	&apos;	SFDialogs.SF_Register._NewDialog
 
-REM -----------------------------------------------------------------------------
-Public Sub _SetEventScript(poObject As Object _
-							, ByVal psEvent As String _
-							, ByVal psListener As String _
-							, ByVal psScriptCode As String _
-							)
-&apos;&apos;&apos;	Set/replace a script event in a Dialog or DialogControl model
-&apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		poObject: the Dialog or DialogControl model
-&apos;&apos;&apos;		psEvent: the name of the event which triggers the script
-&apos;&apos;&apos;		psListener: getting/Setting macros triggered by events requires a Listener-EventName pair
-&apos;&apos;&apos;		psScriptCode: the script to associate with the event as a string
-&apos;&apos;&apos;			If = &quot;&quot;, then the event is completely removed
-
-Dim oEvents As Object			&apos;	The set of events of the model
-Dim sEventName As String		&apos;	The full name of the event
-Dim oEvent As Object			&apos;	com.sun.star.script.ScriptEventDescriptor
-
-Check:
-	If Not SF_Session.HasUnoMethod(poObject, &quot;getEvents&quot;) Then GoTo Finally
-
-Try:
-	&apos;	Remove existing event, if any, then store the new script code if &lt;&gt; &quot;&quot;
-	Set oEvents = poObject.getEvents()
-	sEventName = &quot;com.sun.star.awt.&quot; &amp; psListener &amp; &quot;::&quot; &amp; psEvent
-	If oEvents.hasByName(sEventName) Then oEvents.removeByName(sEventName)
-	If Len(psScriptCode) &gt; 0 Then
-		Set oEvent = CreateUnoStruct(&quot;com.sun.star.script.ScriptEventDescriptor&quot;)
-		With oEvent
-			.ListenerType = psListener
-			.EventMethod = psEvent
-			.ScriptType = &quot;Script&quot;			&apos;	Better than &quot;Basic&quot;
-			.ScriptCode = psScriptCode
-		End With
-		oEvents.insertByName(sEventName, oEvent)
-	End If
-
-Finally:
-	Exit Sub
-End Sub			&apos;	SFDialogs.SF_Register._SetEventScript
-
 REM ============================================== END OF SFDIALOGS.SF_REGISTER
 </script:module>
