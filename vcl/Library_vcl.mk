@@ -596,7 +596,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 else # ! DISABLE_GUI
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/opengl/DeviceInfo \
+    vcl/source/opengl/DeviceInfo \
     vcl/source/opengl/OpenGLContext \
     vcl/source/opengl/OpenGLHelper \
     vcl/skia/SkiaHelper \
@@ -617,7 +617,7 @@ $(eval $(call gb_Library_add_libs,vcl,\
     -lXext \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/opengl/x11/X11DeviceInfo \
+    vcl/source/opengl/x11/X11DeviceInfo \
 ))
 endif
 endif # ! DISABLE_GUI
@@ -709,7 +709,7 @@ endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/opengl/win/WinDeviceInfo \
+    vcl/source/opengl/win/WinDeviceInfo \
     vcl/source/app/salplug \
 ))
 

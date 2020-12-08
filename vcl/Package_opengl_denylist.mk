@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,vcl_opengl_denylist,$(SRCDIR)/vcl/opengl))
+$(eval $(call gb_Package_Package,vcl_opengl_denylist,$(SRCDIR)/vcl/source/opengl))
 
 $(eval $(call gb_Package_add_files,vcl_opengl_denylist,$(LIBO_SHARE_FOLDER)/opengl,\
 	opengl_denylist_windows.xml \
