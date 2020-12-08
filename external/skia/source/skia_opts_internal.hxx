@@ -20,7 +20,7 @@ static void RGB1_to_RGB_portable(uint8_t dst[], const uint32_t* src, int count) 
         dst += 3;
     }
 }
-static void RGB1_to_gray_fast_portable(uint8_t dst[], const uint32_t* src, int count) {
+static void RGB1_to_R_portable(uint8_t dst[], const uint32_t* src, int count) {
     for (int i = 0; i < count; i++) {
         dst[i] = src[i] & 0xFF;
     }
@@ -48,7 +48,7 @@ inline void RGB1_to_RGB(uint8_t dst[], const uint32_t* src, int count) {
         RGB1_to_RGB_portable(dst, src, count);
 }
 
-inline void RGB1_to_gray_fast(uint8_t dst[], const uint32_t* src, int count) {
+inline void RGB1_to_R(uint8_t dst[], const uint32_t* src, int count) {
         const uint8_t X = 0xFF; // Used a placeholder.  The value of X is irrelevant.
         __m128i pack = _mm_setr_epi8(0,4,8,12, X,X,X,X,X,X,X,X,X,X,X,X);
 
@@ -66,15 +66,15 @@ inline void RGB1_to_gray_fast(uint8_t dst[], const uint32_t* src, int count) {
             dst += 4;
             count -= 4;
         }
-        RGB1_to_gray_fast_portable(dst, src, count);
+        RGB1_to_R_portable(dst, src, count);
 }
 
 #else
 inline void RGB1_to_RGB(uint8_t dst[], const uint32_t* src, int count) {
     RGB1_to_RGB_portable(dst, src, count);
 }
-inline void RGB1_to_gray_fast(uint8_t dst[], const uint32_t* src, int count) {
-    RGB1_to_gray_fast_portable(dst, src, count);
+inline void RGB1_to_R(uint8_t dst[], const uint32_t* src, int count) {
+    RGB1_to_R_portable(dst, src, count);
 }
 #endif
 
