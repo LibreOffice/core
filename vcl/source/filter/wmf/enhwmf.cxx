@@ -21,6 +21,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/dibtools.hxx>
 #include <o3tl/make_unique.hxx>
+#include <rtl/bootstrap.hxx>
 
 #include "winmtf.hxx"
 
@@ -648,7 +649,9 @@ bool EnhWMFReader::ReadEnhWMF()
     bool    bStatus = ReadHeader();
     bool    bHaveDC = false;
 
-    static bool bEnableEMFPlus = ( getenv( "EMF_PLUS_DISABLE" ) == nullptr );
+    OUString aEMFPlusDisable;
+    rtl::Bootstrap::get("EMF_PLUS_DISABLE", aEMFPlusDisable);
+    bool bEnableEMFPlus = aEMFPlusDisable.isEmpty();
 
     while( bStatus && nRecordCount-- && pWMF->good())
     {
