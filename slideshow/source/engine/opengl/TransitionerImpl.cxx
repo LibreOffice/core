@@ -1322,6 +1322,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 slideshow_OGLTransitionFactoryImpl_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
+    if( !OpenGLHelper::supportsOpenGL())
+        return nullptr;
     return cppu::acquire(new OGLTransitionFactoryImpl());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
