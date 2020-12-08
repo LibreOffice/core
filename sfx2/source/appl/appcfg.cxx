@@ -269,36 +269,6 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                                 bRet = false;
                     }
                     break;
-                case SID_INET_EXE_PLUGIN  :
-                    {
-                        bRet = true;
-                        if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::EOption::ExecutePlugins))
-                        {
-                            if ( !rSet.Put( SfxBoolItem( SID_INET_EXE_PLUGIN, aSecurityOptions.IsExecutePlugins() ) ) )
-                                bRet = false;
-                        }
-                    }
-                    break;
-                case SID_MACRO_WARNING :
-                    {
-                        bRet = true;
-                        if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::EOption::Warning))
-                        {
-                            if ( !rSet.Put( SfxBoolItem( SID_MACRO_WARNING, aSecurityOptions.IsWarningEnabled() ) ) )
-                                bRet = false;
-                        }
-                    }
-                    break;
-                case SID_MACRO_CONFIRMATION :
-                    {
-                        bRet = true;
-                        if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::EOption::Confirmation))
-                        {
-                            if ( !rSet.Put( SfxBoolItem( SID_MACRO_CONFIRMATION, aSecurityOptions.IsConfirmationEnabled() ) ) )
-                                bRet = false;
-                        }
-                    }
-                    break;
                 case SID_SECURE_URL :
                     {
                         bRet = true;
@@ -599,13 +569,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         ShutdownIcon::SetAutostart( static_cast<const SfxBoolItem*>( pItem )->GetValue() );
     }
 
-    // Execute PlugIns
-    if ( SfxItemState::SET == rSet.GetItemState(SID_INET_EXE_PLUGIN, true, &pItem))
-    {
-        DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "SfxBoolItem expected");
-        aSecurityOptions.SetExecutePlugins( static_cast<const SfxBoolItem *>( pItem )->GetValue() );
-    }
-
     if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_INET_PROXY_TYPE), true, &pItem))
     {
         DBG_ASSERT( dynamic_cast< const SfxUInt16Item *>( pItem ) !=  nullptr, "UInt16Item expected" );
@@ -651,17 +614,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         css::uno::Sequence< OUString > seqURLs;
         static_cast<const SfxStringListItem*>(pItem)->GetStringList(seqURLs);
         aSecurityOptions.SetSecureURLs( seqURLs );
-    }
-
-    if ( SfxItemState::SET == rSet.GetItemState(SID_MACRO_WARNING, true, &pItem))
-    {
-        DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "SfxBoolItem expected");
-        aSecurityOptions.SetWarningEnabled( static_cast<const SfxBoolItem *>(pItem)->GetValue() );
-    }
-    if ( SfxItemState::SET == rSet.GetItemState(SID_MACRO_CONFIRMATION, true, &pItem))
-    {
-        DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "SfxBoolItem expected");
-        aSecurityOptions.SetConfirmationEnabled( static_cast<const SfxBoolItem *>(pItem)->GetValue() );
     }
 
     // Store changed data

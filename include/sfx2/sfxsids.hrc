@@ -204,8 +204,7 @@ class SvxSearchItem;
 #define SID_VIEW_DATA_SOURCE_BROWSER        (SID_SFX_START + 1660)
 #define SID_UNPACK                          (SID_SFX_START + 1662)
 // (SID_SFX_START + 1663) used further down
-#define SID_MACRO_WARNING                   (SID_SFX_START + 1664)
-#define SID_MACRO_CONFIRMATION              (SID_SFX_START + 1665)
+    // FREE
 #define SID_OUTPUTSTREAM                    (SID_SFX_START + 1666)
 #define SID_IMAGE_ORIENTATION               (SID_SFX_START + 1667)
 
@@ -523,8 +522,6 @@ class SvxSearchItem;
 #define SID_INET_HTTP_PROXY_PORT        (SID_OPTIONS_START + 39)
 #define SID_INET_FTP_PROXY_NAME         (SID_OPTIONS_START + 40)
 #define SID_INET_FTP_PROXY_PORT         (SID_OPTIONS_START + 41)
-
-#define SID_INET_EXE_PLUGIN             (SID_OPTIONS_START + 52)
 
 #define SID_SAVEREL_INET                (SID_OPTIONS_START + 30)
 #define SID_SAVEREL_FSYS                (SID_OPTIONS_START + 31)
