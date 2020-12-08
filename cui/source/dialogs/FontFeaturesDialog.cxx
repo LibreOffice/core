@@ -75,6 +75,9 @@ void FontFeaturesDialog::initialize()
 
     fillGrid(rFilteredFontFeatures);
 
+    if (m_aFeatureItems.size()>10)
+        m_xContentWindow->set_size_request(-1,200);
+
     updateFontPreview();
 }
 
