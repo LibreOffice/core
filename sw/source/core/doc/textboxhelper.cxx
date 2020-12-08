@@ -442,7 +442,8 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rP
         uno::Reference<beans::XPropertySet> xFrameParaProps(xCursor, uno::UNO_QUERY);
 
         // And simply map the property
-        switch (rValue.get<drawing::TextHorizontalAdjust>())
+        const auto eValue = rValue.get<drawing::TextHorizontalAdjust>();
+        switch (eValue)
         {
             case drawing::TextHorizontalAdjust::TextHorizontalAdjust_CENTER:
                 xFrameParaProps->setPropertyValue(
@@ -460,6 +461,9 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rP
                     uno::makeAny(style::ParagraphAdjust::ParagraphAdjust_RIGHT)); //1
                 break;
             default:
+                SAL_WARN("sw.core",
+                         "SwTextBoxHelper::syncProperty: unhandled TextHorizontalAdjust: "
+                             << static_cast<sal_Int32>(eValue));
                 break;
         }
         return;
@@ -510,6 +514,11 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rP
                 case -270:
                     nDirection = text::WritingMode2::BT_LR;
                     break;
+                default:
+                    SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled property value: "
+                                        "CustomShapeGeometry:TextPreRotateAngle: "
+                                            << nAngle);
+                    break;
             }
 
             if (nDirection)
@@ -539,6 +548,9 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rP
         else if (rValue >>= eMode2)
             syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(eMode2));
     }
+    else
+        SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled property: "
+                                << static_cast<OUString>(rPropertyName));
 }
 
 void SwTextBoxHelper::getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
@@ -567,6 +579,10 @@ void SwTextBoxHelper::getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, 
         break;
         case MID_CHAIN_NAME:
             rValue <<= pFormat->GetName();
+            break;
+        default:
+            SAL_WARN("sw.core", "SwTextBoxHelper::getProperty: unhandled member-id: "
+                                    << static_cast<sal_uInt16>(nMemberID));
             break;
     }
 }
@@ -604,6 +620,11 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                     aPropertyName = UNO_NAME_HORI_ORIENT_POSITION;
                     bAdjustX = true;
                     break;
+                default:
+                    SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled member-id: "
+                                            << static_cast<sal_uInt16>(nMemberID)
+                                            << " (which-id: " << nWID << ")");
+                    break;
             }
             break;
         case RES_LR_SPACE:
@@ -615,6 +636,11 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                     break;
                 case MID_R_MARGIN:
                     aPropertyName = UNO_NAME_RIGHT_MARGIN;
+                    break;
+                default:
+                    SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled member-id: "
+                                            << static_cast<sal_uInt16>(nMemberID)
+                                            << " (which-id: " << nWID << ")");
                     break;
             }
             break;
@@ -631,6 +657,11 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                 case MID_VERTORIENT_POSITION:
                     aPropertyName = UNO_NAME_VERT_ORIENT_POSITION;
                     bAdjustY = true;
+                    break;
+                default:
+                    SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled member-id: "
+                                            << static_cast<sal_uInt16>(nMemberID)
+                                            << " (which-id: " << nWID << ")");
                     break;
             }
             break;
@@ -688,6 +719,11 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                     return;
                 }
                 break;
+                default:
+                    SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled member-id: "
+                                            << static_cast<sal_uInt16>(nMemberID)
+                                            << " (which-id: " << nWID << ")");
+                    break;
             }
             break;
         case FN_TEXT_RANGE:
@@ -712,6 +748,11 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                 case MID_CHAIN_NEXTNAME:
                     aPropertyName = UNO_NAME_CHAIN_NEXT_NAME;
                     break;
+                default:
+                    SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled member-id: "
+                                            << static_cast<sal_uInt16>(nMemberID)
+                                            << " (which-id: " << nWID << ")");
+                    break;
             }
             break;
         case RES_TEXT_VERT_ADJUST:
@@ -732,6 +773,11 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                 case BOTTOM_BORDER_DISTANCE:
                     aPropertyName = UNO_NAME_BOTTOM_BORDER_DISTANCE;
                     break;
+                default:
+                    SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled member-id: "
+                                            << static_cast<sal_uInt16>(nMemberID)
+                                            << " (which-id: " << nWID << ")");
+                    break;
             }
             break;
         case RES_OPAQUE:
@@ -746,7 +792,17 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                 case MID_ALLOW_OVERLAP:
                     aPropertyName = UNO_NAME_ALLOW_OVERLAP;
                     break;
+                default:
+                    SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled member-id: "
+                                            << static_cast<sal_uInt16>(nMemberID)
+                                            << " (which-id: " << nWID << ")");
+                    break;
             }
+            break;
+        default:
+            SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: unhandled which-id: "
+                                    << nWID << " (member-id: " << static_cast<sal_uInt16>(nMemberID)
+                                    << ")");
             break;
     }
 
