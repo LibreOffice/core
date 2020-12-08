@@ -850,18 +850,9 @@
       <info>
         <desc>Contains settings for VCL.</desc>
       </info>
-      <prop oor:name="UseOpenGL" oor:type="xs:boolean" oor:nillable="false">
+      <prop oor:name="DisableOpenGL" oor:type="xs:boolean" oor:nillable="false">
         <info>
-           <desc>Specifies if OpenGL rendering should be used in VCL backends
-                supporting it.</desc>
-        </info>
-        <value>false</value>
-      </prop>
-      <prop oor:name="ForceOpenGL" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-           <desc>Specifies if OpenGL rendering should be used in VCL backends
-               supporting it. This one forces the use of OpenGL even if the
-                denylist would block the OpenGL driver.</desc>
+           <desc>Specifies if all OpenGL usage should be disabled.</desc>
         </info>
         <value>false</value>
       </prop>

@@ -14,6 +14,7 @@
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/opengl/OpenGLHelper.hxx>
 
 #include "ogl_canvascustomsprite.hxx"
 #include "ogl_spritecanvas.hxx"
@@ -154,6 +155,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_rendering_SpriteCanvas_OGL_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
+    if( !OpenGLHelper::supportsOpenGL())
+        return nullptr;
     auto p = new oglcanvas::SpriteCanvas(args, context);
     cppu::acquire(p);
     p->initialize();

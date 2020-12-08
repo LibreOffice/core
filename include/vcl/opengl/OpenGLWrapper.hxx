@@ -20,18 +20,11 @@ struct VCL_DLLPUBLIC OpenGLWrapper
 {
     OpenGLWrapper() = delete; // Should not be instantiated
 
-    /**
-     * Returns true if VCL has OpenGL rendering enabled
-     */
 #if HAVE_FEATURE_UI
-    static bool isVCLOpenGLEnabled();
-
     /**
      * Returns the number of times OpenGL buffers have been swapped.
      */
     static sal_Int64 getBufferSwapCounter();
-#else
-    static bool isVCLOpenGLEnabled() { return false; }
 #endif
 };
 
