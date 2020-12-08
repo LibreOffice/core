@@ -2084,6 +2084,8 @@ void XclExpSupbookBuffer::SaveXml( XclExpXmlStream& rStrm )
     for (size_t nPos = 0, nSize = maSupbookList.GetSize(); nPos < nSize; ++nPos)
     {
         XclExpSupbookRef xRef(maSupbookList.GetRecord(nPos));
+        // fileIDs are indexed from 1 in xlsx, and from 0 in ScExternalRefManager
+        // converting between them require a -1 or +1
         if (xRef->GetType() == XclSupbookType::Extern)
             aExternFileIds.push_back(xRef->GetFileId() - 1);
     }
