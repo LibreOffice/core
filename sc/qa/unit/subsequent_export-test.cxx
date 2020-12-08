@@ -5409,8 +5409,9 @@ void ScExportTest::testTdf135828_Shape_Rect()
 {
     if (!IsDefaultDPI())
         return;
-    // tdf#135828 Check that the width and the height of rectangle of the shape
-    // is correct.
+    // tdf#135828 Check that the width and the height of rectangle of the shape is correct.
+    // tdf#123613 Check the positioning, and allow massive rounding errors because of the back and
+    // forth conversion between emu and hmm.
     ScDocShellRef xShell = loadDoc("tdf135828_Shape_Rect.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
@@ -5422,8 +5423,15 @@ void ScExportTest::testTdf135828_Shape_Rect()
     xmlDocUniquePtr pDrawing = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
     CPPUNIT_ASSERT(pDrawing);
 
-    assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:spPr/a:xfrm/a:ext", "cx", "294480"); // width
-    assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:spPr/a:xfrm/a:ext", "cy", "1990440"); // height
+    double nXPosOfTopleft = getXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:spPr/a:xfrm/a:off", "x" ).toDouble();
+    double nYPosOfTopleft = getXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:spPr/a:xfrm/a:off", "y" ).toDouble();
+    double nWidth         = getXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:spPr/a:xfrm/a:ext", "cx").toDouble();
+    double nHeight        = getXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:spPr/a:xfrm/a:ext", "cy").toDouble();
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(  854640, nXPosOfTopleft, 10000);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( -570600, nYPosOfTopleft, 10000);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(  294840,         nWidth, 10000);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 1988280,        nHeight, 10000);
 }
 
 void ScExportTest::testTdf123353()
