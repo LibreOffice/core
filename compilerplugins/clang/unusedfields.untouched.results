@@ -24,8 +24,6 @@ dbaccess/source/core/inc/databasecontext.hxx:84
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:115
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
-desktop/qa/desktop_lib/test_desktop_lib.cxx:2902
-      class AllSettings &
 emfio/source/emfuno/xemfparser.cxx:49
     emfio::emfreader::(anonymous namespace)::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:43
@@ -188,8 +186,10 @@ include/vcl/filter/PngImageReader.hxx:31
     vcl::PngImageReader mxStatusIndicator css::uno::Reference<css::task::XStatusIndicator>
 include/vcl/font/Feature.hxx:100
     vcl::font::Feature m_eType enum vcl::font::FeatureType
-include/vcl/NotebookBarAddonsMerger.hxx:36
+include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:36
     NotebookBarAddonsItem aImage class Image
+include/vcl/opengl/OpenGLContext.hxx:43
+    OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
 include/vcl/pdf/PDFAnnotationMarker.hxx:65
     vcl::pdf::PDFAnnotationMarkerHighlight meTextMarkerType enum vcl::pdf::PDFTextMarkerType
 include/vcl/uitest/uiobject.hxx:283
@@ -228,6 +228,8 @@ lingucomponent/source/languageguessing/simpleguesser.cxx:83
     (anonymous namespace)::textcat_t output char [1024]
 lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char [2]
+postprocess/qa/services.cxx:91
+      const css::uno::Sequence<OUString> &
 pyuno/source/module/pyuno_callable.cxx:45
     pyuno::(anonymous namespace)::PyUNO_callable ob_base PyObject
 pyuno/source/module/pyuno_impl.hxx:137
@@ -326,8 +328,6 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
     (anonymous namespace)::PDFGrammar::definition value rule<ScannerT>
 sfx2/inc/autoredactdialog.hxx:94
     SfxAutoRedactDialog m_xDocShell class SfxObjectShellLock
-sfx2/inc/sidebar/DeckTitleBar.hxx:54
-    sfx2::sidebar::DeckTitleBar maGrip class BitmapEx
 sfx2/inc/sidebar/TitleBar.hxx:56
     sfx2::sidebar::TitleBar mxToolBoxController std::unique_ptr<ToolbarUnoDispatcher>
 sfx2/source/dialog/basedlgs.cxx:46
@@ -390,12 +390,6 @@ unoidl/source/unoidlprovider.cxx:673
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference1_ rtl::Reference<UnoidlProvider>
 unoidl/source/unoidlprovider.cxx:674
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference2_ rtl::Reference<UnoidlModuleEntity>
-vcl/inc/opengl/gdiimpl.hxx:52
-    TextureCombo mpTexture std::unique_ptr<OpenGLTexture>
-vcl/inc/opengl/gdiimpl.hxx:53
-    TextureCombo mpMask std::unique_ptr<OpenGLTexture>
-vcl/inc/opengl/zone.hxx:35
-    OpenGLVCLContextZone aZone class OpenGLZone
 vcl/inc/qt5/Qt5AccessibleEventListener.hxx:34
     Qt5AccessibleEventListener m_xAccessible css::uno::Reference<css::accessibility::XAccessible>
 vcl/inc/salprn.hxx:45

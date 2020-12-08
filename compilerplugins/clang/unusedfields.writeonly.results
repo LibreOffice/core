@@ -388,15 +388,15 @@ include/unotools/fontcfg.hxx:159
     utl::FontSubstConfiguration maSubstHash utl::FontSubstConfiguration::UniqueSubstHash
 include/vcl/menu.hxx:457
     MenuBar::MenuBarButtonCallbackArg bHighlight _Bool
-include/vcl/NotebookBarAddonsMerger.hxx:45
+include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:45
     AddonNotebookBarItem sTarget class rtl::OUString
-include/vcl/NotebookBarAddonsMerger.hxx:46
+include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:46
     AddonNotebookBarItem sContext class rtl::OUString
-include/vcl/NotebookBarAddonsMerger.hxx:47
+include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:47
     AddonNotebookBarItem sControlType class rtl::OUString
-include/vcl/NotebookBarAddonsMerger.hxx:48
+include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:48
     AddonNotebookBarItem nWidth sal_uInt16
-include/vcl/opengl/OpenGLContext.hxx:32
+include/vcl/opengl/OpenGLContext.hxx:27
     GLWindow bMultiSampleSupported _Bool
 include/vcl/pdfextoutdevdata.hxx:83
     vcl::PDFExtOutDevData mbSinglePageSheets _Bool
@@ -418,14 +418,12 @@ include/vcl/vclenum.hxx:202
     ItalicMatrix yx double
 include/vcl/vclenum.hxx:202
     ItalicMatrix yy double
-include/xmloff/shapeimport.hxx:178
+include/xmloff/shapeimport.hxx:94
     SdXML3DSceneAttributesHelper mbVRPUsed _Bool
-include/xmloff/shapeimport.hxx:179
+include/xmloff/shapeimport.hxx:95
     SdXML3DSceneAttributesHelper mbVPNUsed _Bool
-include/xmloff/shapeimport.hxx:180
+include/xmloff/shapeimport.hxx:96
     SdXML3DSceneAttributesHelper mbVUPUsed _Bool
-include/xmloff/xmlimp.hxx:232
-    SvXMLImport maAttrList rtl::Reference<comphelper::AttributeList>
 io/source/stm/odata.cxx:243
     io_stm::(anonymous namespace)::ODataInputStream::readDouble()::(anonymous union)::(anonymous) n1 sal_uInt32
 io/source/stm/odata.cxx:243
@@ -600,15 +598,15 @@ sc/source/ui/vba/vbachartobject.hxx:44
     ScVbaChartObject oShapeHelper std::unique_ptr<ov::ShapeHelper>
 sd/inc/sdmod.hxx:133
     SdModule mpErrorHdl std::unique_ptr<SfxErrorHandler>
-sd/qa/unit/tiledrendering/tiledrendering.cxx:197
+sd/qa/unit/tiledrendering/tiledrendering.cxx:196
     SdTiledRenderingTest m_bFound _Bool
-sd/qa/unit/tiledrendering/tiledrendering.cxx:198
+sd/qa/unit/tiledrendering/tiledrendering.cxx:197
     SdTiledRenderingTest m_nPart sal_Int32
-sd/qa/unit/tiledrendering/tiledrendering.cxx:200
+sd/qa/unit/tiledrendering/tiledrendering.cxx:199
     SdTiledRenderingTest m_aSearchResultPart std::vector<int>
-sd/qa/unit/tiledrendering/tiledrendering.cxx:201
+sd/qa/unit/tiledrendering/tiledrendering.cxx:200
     SdTiledRenderingTest m_nSelectionBeforeSearchResult int
-sd/qa/unit/tiledrendering/tiledrendering.cxx:202
+sd/qa/unit/tiledrendering/tiledrendering.cxx:201
     SdTiledRenderingTest m_nSelectionAfterSearchResult int
 sd/source/ui/dlg/RemoteDialogClientBox.hxx:67
     sd::ClientBox m_vEntries std::vector<TClientBoxEntry>
@@ -620,9 +618,9 @@ sd/source/ui/inc/animobjs.hxx:122
     sd::AnimationWindow pControllerItem std::unique_ptr<AnimationControllerItem>
 sd/source/ui/inc/fudspord.hxx:51
     sd::FuDisplayOrder mpOverlay std::unique_ptr<SdrDropMarkerOverlay>
-sd/source/ui/inc/navigatr.hxx:125
+sd/source/ui/inc/navigatr.hxx:124
     SdNavigatorWin mpNavigatorCtrlItem std::unique_ptr<SdNavigatorControllerItem>
-sd/source/ui/inc/navigatr.hxx:126
+sd/source/ui/inc/navigatr.hxx:125
     SdNavigatorWin mpPageNameCtrlItem std::unique_ptr<SdPageNameControllerItem>
 sd/source/ui/inc/tools/TimerBasedTaskExecution.hxx:73
     sd::tools::TimerBasedTaskExecution mpSelf std::shared_ptr<TimerBasedTaskExecution>
@@ -652,8 +650,6 @@ sdext/source/presenter/PresenterTimer.cxx:103
     sdext::presenter::(anonymous namespace)::TimerScheduler mpLateDestroy std::shared_ptr<TimerScheduler>
 sfx2/inc/notebookbar/NotebookbarTabControl.hxx:41
     NotebookbarTabControl m_pListener css::uno::Reference<css::ui::XUIConfigurationListener>
-sfx2/inc/sidebar/PanelTitleBar.hxx:64
-    sfx2::sidebar::PanelTitleBar mxFrame css::uno::Reference<css::frame::XFrame>
 sfx2/source/appl/fileobj.hxx:40
     SvFileObject mxDelMed tools::SvRef<SfxMedium>
 sfx2/source/doc/sfxbasemodel.cxx:448
@@ -986,10 +982,6 @@ vcl/inc/driverblocklist.hxx:114
     DriverBlocklist::DriverInfo maMsg class rtl::OUString
 vcl/inc/fontselect.hxx:62
     FontSelectPattern mfExactHeight float
-vcl/inc/opengl/RenderList.hxx:29
-    Vertex color glm::vec4
-vcl/inc/opengl/RenderList.hxx:30
-    Vertex lineData glm::vec4
 vcl/inc/pdf/BitmapID.hxx:23
     vcl::pdf::BitmapID m_nChecksum BitmapChecksum
 vcl/inc/pdf/BitmapID.hxx:24
@@ -1090,7 +1082,7 @@ vcl/unx/gtk3/gtk3hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection GDBusConnection *
 vcl/unx/gtk3/gtk3hudawareness.cxx:21
     (anonymous namespace)::HudAwarenessHandle notify GDestroyNotify
-vcl/workben/vcldemo.cxx:1748
+vcl/workben/vcldemo.cxx:1737
     (anonymous namespace)::DemoWin mxThread rtl::Reference<RenderThread>
 writerfilter/source/dmapper/DomainMapperTableHandler.cxx:239
     writerfilter::dmapper::TableInfo aTablePropertyIds std::vector<PropertyIds>
@@ -1116,7 +1108,7 @@ xmloff/source/forms/elementexport.hxx:104
     xmloff::OControlExport m_pOuterElement std::unique_ptr<SvXMLElementExport>
 xmloff/source/forms/officeforms.hxx:69
     xmloff::OFormsRootExport m_pImplElement std::unique_ptr<SvXMLElementExport>
-xmloff/source/text/txtimp.cxx:437
+xmloff/source/text/txtimp.cxx:104
     XMLTextImportHelper::Impl m_xFrameImpPrMap rtl::Reference<SvXMLImportPropertyMapper>
 xmlsecurity/inc/certificatechooser.hxx:52
     CertificateChooser mvUserData std::vector<std::shared_ptr<UserData> >

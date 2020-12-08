@@ -340,10 +340,6 @@ include/unoidl/unoidl.hxx:453
     unoidl::ConstantValue::(anonymous) doubleValue double
 include/unotest/bootstrapfixturebase.hxx:52
     test::BootstrapFixtureBase m_directories class test::Directories
-include/vcl/opengl/OpenGLContext.hxx:48
-    OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
-include/vcl/opengl/OpenGLContext.hxx:167
-    OpenGLContext mpLastFramebuffer class OpenGLFramebuffer *
 io/source/stm/odata.cxx:559
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n1 sal_uInt32
 io/source/stm/odata.cxx:559
@@ -480,13 +476,13 @@ sd/source/ui/inc/unopage.hxx:226
     SdMasterPage maTypeSequence css::uno::Sequence<css::uno::Type>
 sd/source/ui/remotecontrol/DiscoveryService.hxx:37
     sd::DiscoveryService zService class sd::ZeroconfService *
-sd/source/ui/sidebar/MasterPageContainer.cxx:142
+sd/source/ui/sidebar/MasterPageContainer.cxx:140
     sd::sidebar::MasterPageContainer::Implementation maLargePreviewBeingCreated class Image
-sd/source/ui/sidebar/MasterPageContainer.cxx:143
+sd/source/ui/sidebar/MasterPageContainer.cxx:141
     sd::sidebar::MasterPageContainer::Implementation maSmallPreviewBeingCreated class Image
-sd/source/ui/sidebar/MasterPageContainer.cxx:148
+sd/source/ui/sidebar/MasterPageContainer.cxx:146
     sd::sidebar::MasterPageContainer::Implementation maLargePreviewNotAvailable class Image
-sd/source/ui/sidebar/MasterPageContainer.cxx:149
+sd/source/ui/sidebar/MasterPageContainer.cxx:147
     sd::sidebar::MasterPageContainer::Implementation maSmallPreviewNotAvailable class Image
 sd/source/ui/slideshow/showwindow.hxx:99
     sd::ShowWindow mbMouseCursorHidden _Bool
@@ -552,7 +548,7 @@ svx/source/inc/gridcell.hxx:527
     DbPatternField m_pValueFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
 svx/source/inc/gridcell.hxx:528
     DbPatternField m_pPaintFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
-svx/source/inc/svdpdf.hxx:70
+svx/source/inc/svdpdf.hxx:64
     ImpSdrPdfImport maDash class XDash
 sw/inc/acmplwrd.hxx:42
     SwAutoCompleteWord m_LookupTree editeng::Trie
