@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "bba36822_bf803ba7",
+        "filename": "sw/source/uibase/shells/textsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-08T10:40:43Z",
+      "side": 1,
+      "message": "I don\u0027t think that std::pair needs c++20 bits here. It\u0027s constexpr since c++11, and it\u0027s only explicit for not implicitly default-constructible pieces.\n\nI suppose it failed because initializer_list does not hold the data, only reference to it. Hence the temporary used for its creation got dandling, or something like that.",
+      "parentUuid": "90249312_66c9b8cd",
+      "revId": "97a16b4ec4159a576b2133558a6285aa827a24fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed9a3446_2207297a",
         "filename": "sw/source/uibase/shells/textsh1.cxx",
         "patchSetId": 2
@@ -114,6 +132,30 @@
       "side": 1,
       "message": "change the comment to something like\n\n  // tdf#40496: we don\u0027t want to change writing direction, so exclude RES_FRAMEDIR:",
       "parentUuid": "a275a6d8_55b70ae6",
+      "range": {
+        "startLine": 604,
+        "startChar": 16,
+        "endLine": 604,
+        "endChar": 72
+      },
+      "revId": "97a16b4ec4159a576b2133558a6285aa827a24fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48ea2ee4_17348165",
+        "filename": "sw/source/uibase/shells/textsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-08T10:40:43Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "4d2dbd8f_5e78a3b5",
       "range": {
         "startLine": 604,
         "startChar": 16,
