@@ -2751,7 +2751,7 @@ sal_uInt16 ScExternalRefManager::convertFileIdToUsedFileId(sal_uInt16 nFileId)
 void ScExternalRefManager::setSkipUnusedFileIds(std::vector<sal_uInt16>& rExternFileIds)
 {
     mbSkipUnusedFileIds = true;
-    maConvertFileIdToUsedFileId.resize(maRefCells.size());
+    maConvertFileIdToUsedFileId.resize(maSrcFiles.size());
     std::fill(maConvertFileIdToUsedFileId.begin(), maConvertFileIdToUsedFileId.end(), 0);
     int nUsedCount = 0;
     for (auto nEntry : rExternFileIds)
