@@ -53,6 +53,7 @@ void FontFeaturesDialog::initialize()
                                               DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
     aVDev->SetOutputSizePixel(Size(10, 10));
 
+    m_xContentWindow->set_size_request(-1, 200);
     vcl::Font aFont = aVDev->GetFont();
     aFont.SetFamilyName(m_sFontName);
     aVDev->SetFont(aFont);
@@ -74,6 +75,9 @@ void FontFeaturesDialog::initialize()
     }
 
     fillGrid(rFilteredFontFeatures);
+
+    if(m_aFeatureItems.size() < 10)
+        m_xContentWindow->set_size_request(-1, 70);
 
     updateFontPreview();
 }
