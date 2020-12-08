@@ -62,27 +62,6 @@ enum XMLFontStyleAttrTokens
 
 }
 
-static const SvXMLTokenMapEntry* lcl_getFontStyleAttrTokenMap()
-{
-    static const SvXMLTokenMapEntry aFontStyleAttrTokenMap[] =
-    {
-        { XML_NAMESPACE_SVG, XML_FONT_FAMILY,
-                XML_TOK_FONT_STYLE_ATTR_FAMILY },
-        { XML_NAMESPACE_STYLE, XML_FONT_FAMILY_GENERIC,
-                XML_TOK_FONT_STYLE_ATTR_FAMILY_GENERIC },
-        { XML_NAMESPACE_STYLE, XML_FONT_ADORNMENTS,
-                XML_TOK_FONT_STYLE_ATTR_STYLENAME },
-        { XML_NAMESPACE_STYLE, XML_FONT_PITCH,
-                XML_TOK_FONT_STYLE_ATTR_PITCH },
-        { XML_NAMESPACE_STYLE, XML_FONT_CHARSET,
-                XML_TOK_FONT_STYLE_ATTR_CHARSET },
-
-        XML_TOKEN_MAP_END
-    };
-    return aFontStyleAttrTokenMap;
-}
-
-
 XMLFontStyleContextFontFace::XMLFontStyleContextFontFace( SvXMLImport& rImport,
         XMLFontStylesContext& rStyles ) :
     SvXMLStyleContext( rImport, XML_STYLE_FAMILY_FONT ),
@@ -361,7 +340,6 @@ XMLFontStylesContext::XMLFontStylesContext( SvXMLImport& rImport,
     pFamilyHdl( new XMLFontFamilyPropHdl ),
     pPitchHdl( new XMLFontPitchPropHdl ),
     pEncHdl( new XMLFontEncodingPropHdl ),
-    pFontStyleAttrTokenMap( new SvXMLTokenMap(lcl_getFontStyleAttrTokenMap()) ),
     eDfltEncoding( eDfltEnc )
 {
 }
