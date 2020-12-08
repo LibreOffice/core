@@ -440,6 +440,35 @@
 		BE82C42418C86E010050EB79 /* spinfld.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = spinfld.cxx; path = ../vcl/source/control/spinfld.cxx; sourceTree = "<group>"; };
 		BE82C42518C86E010050EB79 /* tabctrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tabctrl.cxx; path = ../vcl/source/control/tabctrl.cxx; sourceTree = "<group>"; };
 		BE82C42618C86E010050EB79 /* throbber.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = throbber.cxx; path = ../vcl/source/control/throbber.cxx; sourceTree = "<group>"; };
+		BEACEEC7257FC852001BAABA /* itemwin.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = itemwin.cxx; path = ../svx/source/tbxctrls/itemwin.cxx; sourceTree = "<group>"; };
+		BEACEEC8257FC852001BAABA /* tbxdrctl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tbxdrctl.cxx; path = ../svx/source/tbxctrls/tbxdrctl.cxx; sourceTree = "<group>"; };
+		BEACEEC9257FC852001BAABA /* SvxColorValueSet.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SvxColorValueSet.cxx; path = ../svx/source/tbxctrls/SvxColorValueSet.cxx; sourceTree = "<group>"; };
+		BEACEECA257FC852001BAABA /* linectrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = linectrl.cxx; path = ../svx/source/tbxctrls/linectrl.cxx; sourceTree = "<group>"; };
+		BEACEECB257FC852001BAABA /* tbunocontroller.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tbunocontroller.cxx; path = ../svx/source/tbxctrls/tbunocontroller.cxx; sourceTree = "<group>"; };
+		BEACEECC257FC852001BAABA /* extrusioncontrols.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = extrusioncontrols.cxx; path = ../svx/source/tbxctrls/extrusioncontrols.cxx; sourceTree = "<group>"; };
+		BEACEECD257FC852001BAABA /* Palette.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Palette.cxx; path = ../svx/source/tbxctrls/Palette.cxx; sourceTree = "<group>"; };
+		BEACEECE257FC852001BAABA /* linemetricbox.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = linemetricbox.hxx; path = ../svx/source/tbxctrls/linemetricbox.hxx; sourceTree = "<group>"; };
+		BEACEECF257FC852001BAABA /* SvxColorChildWindow.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SvxColorChildWindow.cxx; path = ../svx/source/tbxctrls/SvxColorChildWindow.cxx; sourceTree = "<group>"; };
+		BEACEED0257FC852001BAABA /* tbxcolorupdate.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tbxcolorupdate.cxx; path = ../svx/source/tbxctrls/tbxcolorupdate.cxx; sourceTree = "<group>"; };
+		BEACEED1257FC852001BAABA /* verttexttbxctrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = verttexttbxctrl.cxx; path = ../svx/source/tbxctrls/verttexttbxctrl.cxx; sourceTree = "<group>"; };
+		BEACEED2257FC852001BAABA /* PaletteManager.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PaletteManager.cxx; path = ../svx/source/tbxctrls/PaletteManager.cxx; sourceTree = "<group>"; };
+		BEACEED3257FC853001BAABA /* bulletsnumbering.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bulletsnumbering.cxx; path = ../svx/source/tbxctrls/bulletsnumbering.cxx; sourceTree = "<group>"; };
+		BEACEED4257FC853001BAABA /* lboxctrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = lboxctrl.cxx; path = ../svx/source/tbxctrls/lboxctrl.cxx; sourceTree = "<group>"; };
+		BEACEED5257FC853001BAABA /* StylesPreviewToolBoxControl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = StylesPreviewToolBoxControl.cxx; path = ../svx/source/tbxctrls/StylesPreviewToolBoxControl.cxx; sourceTree = "<group>"; };
+		BEACEED6257FC853001BAABA /* colrctrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = colrctrl.cxx; path = ../svx/source/tbxctrls/colrctrl.cxx; sourceTree = "<group>"; };
+		BEACEED7257FC853001BAABA /* layctrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = layctrl.cxx; path = ../svx/source/tbxctrls/layctrl.cxx; sourceTree = "<group>"; };
+		BEACEED8257FC853001BAABA /* tbcontrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tbcontrl.cxx; path = ../svx/source/tbxctrls/tbcontrl.cxx; sourceTree = "<group>"; };
+		BEACEED9257FC853001BAABA /* formatpaintbrushctrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = formatpaintbrushctrl.cxx; path = ../svx/source/tbxctrls/formatpaintbrushctrl.cxx; sourceTree = "<group>"; };
+		BEACEEDA257FC853001BAABA /* tbunodevtoolscontrollers.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tbunodevtoolscontrollers.cxx; path = ../svx/source/tbxctrls/tbunodevtoolscontrollers.cxx; sourceTree = "<group>"; };
+		BEACEEDB257FC853001BAABA /* SvxPresetListBox.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SvxPresetListBox.cxx; path = ../svx/source/tbxctrls/SvxPresetListBox.cxx; sourceTree = "<group>"; };
+		BEACEEDC257FC853001BAABA /* fillctrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fillctrl.cxx; path = ../svx/source/tbxctrls/fillctrl.cxx; sourceTree = "<group>"; };
+		BEACEEDD257FC853001BAABA /* grafctrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = grafctrl.cxx; path = ../svx/source/tbxctrls/grafctrl.cxx; sourceTree = "<group>"; };
+		BEACEEDE257FC853001BAABA /* tbunosearchcontrollers.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tbunosearchcontrollers.cxx; path = ../svx/source/tbxctrls/tbunosearchcontrollers.cxx; sourceTree = "<group>"; };
+		BEACEEDF257FC853001BAABA /* extrusioncontrols.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = extrusioncontrols.hxx; path = ../svx/source/tbxctrls/extrusioncontrols.hxx; sourceTree = "<group>"; };
+		BEACEEE0257FC853001BAABA /* linewidthctrl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = linewidthctrl.cxx; path = ../svx/source/tbxctrls/linewidthctrl.cxx; sourceTree = "<group>"; };
+		BEACEEE1257FC853001BAABA /* StylesPreviewWindow.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = StylesPreviewWindow.cxx; path = ../svx/source/tbxctrls/StylesPreviewWindow.cxx; sourceTree = "<group>"; };
+		BEACEEE2257FC853001BAABA /* fontworkgallery.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fontworkgallery.cxx; path = ../svx/source/tbxctrls/fontworkgallery.cxx; sourceTree = "<group>"; };
+		BEACEEE3257FC853001BAABA /* tbxcolor.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tbxcolor.cxx; path = ../svx/source/tbxctrls/tbxcolor.cxx; sourceTree = "<group>"; };
 		BEBF3E2D246588AE00415E87 /* salinit.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salinit.cxx; path = ../sal/osl/unx/salinit.cxx; sourceTree = "<group>"; };
 		BEBF3E2E246588AE00415E87 /* module.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = module.cxx; path = ../sal/osl/unx/module.cxx; sourceTree = "<group>"; };
 		BEBF3E2F246588AE00415E87 /* unixerrnostring.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = unixerrnostring.hxx; path = ../sal/osl/unx/unixerrnostring.hxx; sourceTree = "<group>"; };
@@ -1282,6 +1311,50 @@
 			name = control;
 			sourceTree = "<group>";
 		};
+		BEACEEC5257FC7F5001BAABA /* svx */ = {
+			isa = PBXGroup;
+			children = (
+				BEACEEC6257FC82A001BAABA /* tbxctrls */,
+			);
+			name = svx;
+			sourceTree = "<group>";
+		};
+		BEACEEC6257FC82A001BAABA /* tbxctrls */ = {
+			isa = PBXGroup;
+			children = (
+				BEACEED3257FC853001BAABA /* bulletsnumbering.cxx */,
+				BEACEED6257FC853001BAABA /* colrctrl.cxx */,
+				BEACEECC257FC852001BAABA /* extrusioncontrols.cxx */,
+				BEACEEDF257FC853001BAABA /* extrusioncontrols.hxx */,
+				BEACEEDC257FC853001BAABA /* fillctrl.cxx */,
+				BEACEEE2257FC853001BAABA /* fontworkgallery.cxx */,
+				BEACEED9257FC853001BAABA /* formatpaintbrushctrl.cxx */,
+				BEACEEDD257FC853001BAABA /* grafctrl.cxx */,
+				BEACEEC7257FC852001BAABA /* itemwin.cxx */,
+				BEACEED7257FC853001BAABA /* layctrl.cxx */,
+				BEACEED4257FC853001BAABA /* lboxctrl.cxx */,
+				BEACEECA257FC852001BAABA /* linectrl.cxx */,
+				BEACEECE257FC852001BAABA /* linemetricbox.hxx */,
+				BEACEEE0257FC853001BAABA /* linewidthctrl.cxx */,
+				BEACEECD257FC852001BAABA /* Palette.cxx */,
+				BEACEED2257FC852001BAABA /* PaletteManager.cxx */,
+				BEACEED5257FC853001BAABA /* StylesPreviewToolBoxControl.cxx */,
+				BEACEEE1257FC853001BAABA /* StylesPreviewWindow.cxx */,
+				BEACEECF257FC852001BAABA /* SvxColorChildWindow.cxx */,
+				BEACEEC9257FC852001BAABA /* SvxColorValueSet.cxx */,
+				BEACEEDB257FC853001BAABA /* SvxPresetListBox.cxx */,
+				BEACEED8257FC853001BAABA /* tbcontrl.cxx */,
+				BEACEECB257FC852001BAABA /* tbunocontroller.cxx */,
+				BEACEEDA257FC853001BAABA /* tbunodevtoolscontrollers.cxx */,
+				BEACEEDE257FC853001BAABA /* tbunosearchcontrollers.cxx */,
+				BEACEEE3257FC853001BAABA /* tbxcolor.cxx */,
+				BEACEED0257FC852001BAABA /* tbxcolorupdate.cxx */,
+				BEACEEC8257FC852001BAABA /* tbxdrctl.cxx */,
+				BEACEED1257FC852001BAABA /* verttexttbxctrl.cxx */,
+			);
+			name = tbxctrls;
+			sourceTree = "<group>";
+		};
 		BEBF3E2A2465886A00415E87 /* sal */ = {
 			isa = PBXGroup;
 			children = (
@@ -1593,6 +1666,7 @@
 				BE82BE5818298DEB00A447B5 /* sc */,
 				BE02646523797385008D3E52 /* sd */,
 				BE49324C2478EC840013BCD6 /* sfx2 */,
+				BEACEEC5257FC7F5001BAABA /* svx */,
 				BEBF3E662465907000415E87 /* sw */,
 				BEBF3E8D246AD70C00415E87 /* ucb */,
 				BEDCC8F02460807C00FB02BD /* unotools */,
