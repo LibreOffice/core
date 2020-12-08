@@ -63,17 +63,17 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSecurityOptions final : public utl::
             BlockUntrustedRefererLinks
         };
 
-        typedef css::uno::Sequence< OUString > Certificate;
-
-        /*
-        // MT: Doesn't work for sequence...
         struct Certificate
         {
             OUString SubjectName;
             OUString SerialNumber;
             OUString RawData;
+
+            bool operator==(const Certificate& other) const
+            {
+                return SubjectName == other.SubjectName && SerialNumber == other.SerialNumber && RawData == other.RawData;
+            }
         };
-        */
 
     public:
          SvtSecurityOptions();
@@ -155,8 +155,8 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSecurityOptions final : public utl::
 
         bool isTrustedLocationUriForUpdatingLinks(OUString const & uri) const;
 
-        css::uno::Sequence< Certificate >  GetTrustedAuthors       (                                                                   ) const;
-        void                               SetTrustedAuthors       ( const css::uno::Sequence< Certificate >& rAuthors    );
+        std::vector< Certificate >   GetTrustedAuthors() const;
+        void                         SetTrustedAuthors( const std::vector< Certificate >& rAuthors );
 
         // for bool options only!
         bool        IsOptionSet     ( EOption eOption                   ) const;

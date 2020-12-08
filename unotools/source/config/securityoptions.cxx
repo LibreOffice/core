@@ -41,7 +41,7 @@ using namespace ::com::sun::star::uno;
 
 #define ROOTNODE_SECURITY               "Office.Common/Security/Scripting"
 #define DEFAULT_SECUREURL               Sequence< OUString >()
-#define DEFAULT_TRUSTEDAUTHORS          Sequence< SvtSecurityOptions::Certificate >()
+#define DEFAULT_TRUSTEDAUTHORS          std::vector< SvtSecurityOptions::Certificate >()
 
 #define PROPERTYNAME_SECUREURL                  u"SecureURL"
 #define PROPERTYNAME_DOCWARN_SAVEORSEND         u"WarnSaveOrSendDoc"
@@ -120,8 +120,8 @@ class SvtSecurityOptions_Impl : public ConfigItem
 
         inline bool         IsMacroDisabled         (                                               ) const;
 
-        const Sequence< SvtSecurityOptions::Certificate >& GetTrustedAuthors(                                                                                       ) const { return m_seqTrustedAuthors;}
-        void                                        SetTrustedAuthors       ( const Sequence< SvtSecurityOptions::Certificate >& rAuthors                           );
+        const std::vector< SvtSecurityOptions::Certificate >& GetTrustedAuthors() const { return m_seqTrustedAuthors;}
+        void                SetTrustedAuthors       ( const std::vector< SvtSecurityOptions::Certificate >& rAuthors );
 
         bool                IsOptionSet     ( SvtSecurityOptions::EOption eOption                   ) const;
         void                SetOption       ( SvtSecurityOptions::EOption eOption, bool bValue  );
@@ -151,7 +151,7 @@ class SvtSecurityOptions_Impl : public ConfigItem
         bool                                    m_bCtrlClickHyperlink;
         bool                                    m_bBlockUntrustedRefererLinks;
         sal_Int32                                   m_nSecLevel;
-        Sequence< SvtSecurityOptions::Certificate > m_seqTrustedAuthors;
+        std::vector< SvtSecurityOptions::Certificate > m_seqTrustedAuthors;
         bool                                    m_bDisableMacros;
 
         bool                                    m_bROSecureURLs;
@@ -330,7 +330,7 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
 
 void SvtSecurityOptions_Impl::LoadAuthors()
 {
-    m_seqTrustedAuthors.realloc( 0 );       // first clear
+    m_seqTrustedAuthors.clear();       // first clear
     const Sequence< OUString > lAuthors = GetNodeNames( PROPERTYNAME_MACRO_TRUSTEDAUTHORS );
     sal_Int32               c1 = lAuthors.getLength();
     if( !c1 )
@@ -356,26 +356,26 @@ void SvtSecurityOptions_Impl::LoadAuthors()
         return;
 
     std::vector< SvtSecurityOptions::Certificate > v;
-    SvtSecurityOptions::Certificate aCert( 3 );
+    SvtSecurityOptions::Certificate aCert;
     i2 = 0;
     for( sal_Int32 i1 = 0; i1 < c1; ++i1 )
     {
-        lValues[ i2 ] >>= aCert[ 0 ];
+        lValues[ i2 ] >>= aCert.SubjectName;
         ++i2;
-        lValues[ i2 ] >>= aCert[ 1 ];
+        lValues[ i2 ] >>= aCert.SerialNumber;
         ++i2;
-        lValues[ i2 ] >>= aCert[ 2 ];
+        lValues[ i2 ] >>= aCert.RawData;
         ++i2;
         // Filter out TrustedAuthor entries with empty RawData, which
         // would cause an unexpected std::bad_alloc in
         // SecurityEnvironment_NssImpl::createCertificateFromAscii and
         // have been observed in the wild (fdo#55019):
-        if( !aCert[ 2 ].isEmpty() )
+        if( !aCert.RawData.isEmpty() )
         {
             v.push_back( aCert );
         }
     }
-    m_seqTrustedAuthors = comphelper::containerToSequence(v);
+    m_seqTrustedAuthors = v;
 }
 
 sal_Int32 SvtSecurityOptions_Impl::GetHandle( std::u16string_view rName )
@@ -583,7 +583,7 @@ void SvtSecurityOptions_Impl::ImplCommit()
                 bDone = !m_bROTrustedAuthors;
                 if( bDone )
                 {
-                    sal_Int32   nCnt = m_seqTrustedAuthors.getLength();
+                    sal_Int32   nCnt = m_seqTrustedAuthors.size();
                     if( nCnt )
                     {
                         for( sal_Int32 i = 0; i < nCnt; ++i )
@@ -593,11 +593,11 @@ void SvtSecurityOptions_Impl::ImplCommit()
                                 + OUString::number(i) + "/");
                             Sequence< css::beans::PropertyValue >    lPropertyValues( 3 );
                             lPropertyValues[ 0 ].Name = aPrefix + PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME;
-                            lPropertyValues[ 0 ].Value <<= m_seqTrustedAuthors[ i ][0];
+                            lPropertyValues[ 0 ].Value <<= m_seqTrustedAuthors[ i ].SubjectName;
                             lPropertyValues[ 1 ].Name = aPrefix + PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER;
-                            lPropertyValues[ 1 ].Value <<= m_seqTrustedAuthors[ i ][1];
+                            lPropertyValues[ 1 ].Value <<= m_seqTrustedAuthors[ i ].SerialNumber;
                             lPropertyValues[ 2 ].Name = aPrefix + PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA;
-                            lPropertyValues[ 2 ].Value <<= m_seqTrustedAuthors[ i ][2];
+                            lPropertyValues[ 2 ].Value <<= m_seqTrustedAuthors[ i ].RawData;
 
                             SetSetProperties( PROPERTYNAME_MACRO_TRUSTEDAUTHORS, lPropertyValues );
                         }
@@ -717,7 +717,7 @@ void SvtSecurityOptions_Impl::SetMacroSecurityLevel( sal_Int32 _nLevel )
 }
 
 
-void SvtSecurityOptions_Impl::SetTrustedAuthors( const Sequence< SvtSecurityOptions::Certificate >& rAuthors )
+void SvtSecurityOptions_Impl::SetTrustedAuthors( const std::vector< SvtSecurityOptions::Certificate >& rAuthors )
 {
     DBG_ASSERT(!m_bROTrustedAuthors, "SvtSecurityOptions_Impl::SetTrustedAuthors()\nYou tried to write on a readonly value!\n");
     if( !m_bROTrustedAuthors && rAuthors != m_seqTrustedAuthors )
@@ -893,13 +893,13 @@ bool SvtSecurityOptions::IsMacroDisabled() const
     return m_pImpl->IsMacroDisabled();
 }
 
-Sequence< SvtSecurityOptions::Certificate > SvtSecurityOptions::GetTrustedAuthors() const
+std::vector< SvtSecurityOptions::Certificate > SvtSecurityOptions::GetTrustedAuthors() const
 {
     MutexGuard aGuard( GetInitMutex() );
     return m_pImpl->GetTrustedAuthors();
 }
 
-void SvtSecurityOptions::SetTrustedAuthors( const Sequence< Certificate >& rAuthors )
+void SvtSecurityOptions::SetTrustedAuthors( const std::vector< Certificate >& rAuthors )
 {
     MutexGuard aGuard( GetInitMutex() );
     m_pImpl->SetTrustedAuthors( rAuthors );

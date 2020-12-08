@@ -216,23 +216,23 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, ViewCertPBHdl, weld::Button&, voi
     uno::Reference< css::security::XCertificate > xCert;
     try
     {
-        xCert = m_pDlg->m_xSecurityEnvironment->getCertificate(m_aTrustedAuthors[nSelected][0],
-                        xmlsecurity::numericStringToBigInteger(m_aTrustedAuthors[nSelected][1]));
+        xCert = m_pDlg->m_xSecurityEnvironment->getCertificate(m_aTrustedAuthors[nSelected].SubjectName,
+                        xmlsecurity::numericStringToBigInteger(m_aTrustedAuthors[nSelected].SerialNumber));
     }
     catch (...)
     {
-        TOOLS_WARN_EXCEPTION("xmlsecurity.dialogs", "matching certificate not found for: " << m_aTrustedAuthors[nSelected][0]);
+        TOOLS_WARN_EXCEPTION("xmlsecurity.dialogs", "matching certificate not found for: " << m_aTrustedAuthors[nSelected].SubjectName);
     }
 
     if (!xCert.is())
     {
         try
         {
-            xCert = m_pDlg->m_xSecurityEnvironment->createCertificateFromAscii(m_aTrustedAuthors[nSelected][2]);
+            xCert = m_pDlg->m_xSecurityEnvironment->createCertificateFromAscii(m_aTrustedAuthors[nSelected].RawData);
         }
         catch (...)
         {
-            TOOLS_WARN_EXCEPTION("xmlsecurity.dialogs", "certificate data couldn't be parsed: " << m_aTrustedAuthors[nSelected][2]);
+            TOOLS_WARN_EXCEPTION("xmlsecurity.dialogs", "certificate data couldn't be parsed: " << m_aTrustedAuthors[nSelected].RawData);
         }
     }
 
@@ -243,7 +243,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, ViewCertPBHdl, weld::Button&, voi
     }
     else
         // should never happen, as we parsed the certificate data when we added it!
-        ShowBrokenCertificateError(m_aTrustedAuthors[nSelected][2]);
+        ShowBrokenCertificateError(m_aTrustedAuthors[nSelected].RawData);
 }
 
 IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, RemoveCertPBHdl, weld::Button&, void)
@@ -252,7 +252,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, RemoveCertPBHdl, weld::Button&, v
     if (nEntry != -1)
     {
         sal_uInt16 nAuthor = m_xTrustCertLB->get_id(nEntry).toUInt32();
-        ::comphelper::removeElementAt( m_aTrustedAuthors, nAuthor );
+        m_aTrustedAuthors.erase(m_aTrustedAuthors.begin() + nAuthor);
 
         FillCertLB();
         ImplCheckButtons();
@@ -328,19 +328,19 @@ void MacroSecurityTrustedSourcesTP::FillCertLB(const bool bShowWarnings)
 {
     m_xTrustCertLB->clear();
 
-    sal_uInt32 nEntries = m_aTrustedAuthors.getLength();
+    sal_uInt32 nEntries = m_aTrustedAuthors.size();
 
     if ( !(nEntries && m_pDlg->m_xSecurityEnvironment.is()) )
         return;
 
     for( sal_uInt32 nEntry = 0 ; nEntry < nEntries ; ++nEntry )
     {
-        css::uno::Sequence< OUString >&              rEntry = m_aTrustedAuthors[ nEntry ];
+        SvtSecurityOptions::Certificate&              rEntry = m_aTrustedAuthors[ nEntry ];
 
         try
         {
             // create from RawData
-            uno::Reference< css::security::XCertificate > xCert = m_pDlg->m_xSecurityEnvironment->createCertificateFromAscii(rEntry[2]);
+            uno::Reference< css::security::XCertificate > xCert = m_pDlg->m_xSecurityEnvironment->createCertificateFromAscii(rEntry.RawData);
             m_xTrustCertLB->append(OUString::number(nEntry), xmlsec::GetContentPart(xCert->getSubjectName(), xCert->getCertificateKind()));
             m_xTrustCertLB->set_text(nEntry, xmlsec::GetContentPart(xCert->getIssuerName(), xCert->getCertificateKind()), 1);
             m_xTrustCertLB->set_text(nEntry, utl::GetDateTimeString(xCert->getNotValidAfter()), 2);
@@ -349,8 +349,8 @@ void MacroSecurityTrustedSourcesTP::FillCertLB(const bool bShowWarnings)
         {
             if (bShowWarnings)
             {
-                TOOLS_WARN_EXCEPTION("xmlsecurity.dialogs", "certificate data couldn't be parsed: " << rEntry[2]);
-                OUString sData = rEntry[2];
+                TOOLS_WARN_EXCEPTION("xmlsecurity.dialogs", "certificate data couldn't be parsed: " << rEntry.RawData);
+                OUString sData = rEntry.RawData;
                 css::uno::Any tools_warn_exception(DbgGetCaughtException());
                 OUString sException = OStringToOUString(exceptionToString(tools_warn_exception), RTL_TEXTENCODING_UTF8);
                 if (!sException.isEmpty())

@@ -92,7 +92,7 @@ public:
 class MacroSecurityTrustedSourcesTP : public MacroSecurityTP
 {
 private:
-    css::uno::Sequence< SvtSecurityOptions::Certificate > m_aTrustedAuthors;
+    std::vector< SvtSecurityOptions::Certificate > m_aTrustedAuthors;
 
     bool          mbAuthorsReadonly;
     bool          mbURLsReadonly;
