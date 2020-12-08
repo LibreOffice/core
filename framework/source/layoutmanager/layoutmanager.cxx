@@ -1411,7 +1411,7 @@ IMPL_LINK( LayoutManager, WindowEventListener, VclWindowEvent&, rEvent, void )
 
 void SAL_CALL LayoutManager::createElement( const OUString& aName )
 {
-    SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::createElement" );
+    SAL_INFO( "fwk", "LayoutManager::createElement " << aName );
 
     SolarMutexClearableGuard aReadLock;
     Reference< XFrame > xFrame = m_xFrame;
@@ -1500,7 +1500,7 @@ void SAL_CALL LayoutManager::createElement( const OUString& aName )
 
 void SAL_CALL LayoutManager::destroyElement( const OUString& aName )
 {
-    SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::destroyElement" );
+    SAL_INFO( "fwk", "LayoutManager::destroyElement " << aName );
 
     bool bMustBeLayouted(false);
     bool bNotify(false);
@@ -1579,7 +1579,7 @@ sal_Bool SAL_CALL LayoutManager::requestElement( const OUString& rResourceURL )
     SolarMutexClearableGuard aWriteLock;
 
     OString aResName = OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
-    SAL_INFO( "fwk", "framework (cd100003) Element " << aResName << " requested." );
+    SAL_INFO( "fwk", "LayoutManager::requestElement " << aResName );
 
     if (( aElementType.equalsIgnoreAsciiCase("statusbar") &&
           aElementName.equalsIgnoreAsciiCase("statusbar") ) ||
@@ -1696,8 +1696,6 @@ Sequence< Reference< ui::XUIElement > > SAL_CALL LayoutManager::getElements()
 
 sal_Bool SAL_CALL LayoutManager::showElement( const OUString& aName )
 {
-    SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::showElement" );
-
     bool            bResult( false );
     bool            bNotify( false );
     bool            bMustLayout( false );
@@ -1707,7 +1705,7 @@ sal_Bool SAL_CALL LayoutManager::showElement( const OUString& aName )
     parseResourceURL( aName, aElementType, aElementName );
 
     OString aResName = OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
-    SAL_INFO( "fwk", "framework (cd100003) Element " << aResName );
+    SAL_INFO( "fwk", "LayoutManager::showElement " << aResName );
 
     if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
          aElementName.equalsIgnoreAsciiCase("menubar") )
@@ -1774,8 +1772,6 @@ sal_Bool SAL_CALL LayoutManager::showElement( const OUString& aName )
 
 sal_Bool SAL_CALL LayoutManager::hideElement( const OUString& aName )
 {
-    SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::hideElement" );
-
     bool            bNotify( false );
     bool            bMustLayout( false );
     OUString aElementType;
@@ -1783,7 +1779,7 @@ sal_Bool SAL_CALL LayoutManager::hideElement( const OUString& aName )
 
     parseResourceURL( aName, aElementType, aElementName );
     OString aResName = OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
-    SAL_INFO( "fwk", "framework (cd100003) Element " << aResName );
+    SAL_INFO( "fwk", "LayoutManager::hideElement " << aResName );
 
     if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
          aElementName.equalsIgnoreAsciiCase("menubar") )
@@ -2159,10 +2155,7 @@ void SAL_CALL LayoutManager::lock()
     sal_Int32 nLockCount( m_nLockCount );
     aReadLock.clear();
 
-    SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::lock lockCount=" << nLockCount );
-#ifdef DBG_UTIL
     SAL_INFO( "fwk", "LayoutManager::lock " << reinterpret_cast<sal_Int64>(this) << " - " << nLockCount );
-#endif
 
     Any a( nLockCount );
     implts_notifyListeners( frame::LayoutManagerEvents::LOCK, a );
@@ -2176,10 +2169,8 @@ void SAL_CALL LayoutManager::unlock()
     sal_Int32 nLockCount( m_nLockCount );
     aReadLock.clear();
 
-    SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::unlock lockCount=" << nLockCount );
-#ifdef DBG_UTIL
     SAL_INFO( "fwk", "LayoutManager::unlock " << reinterpret_cast<sal_Int64>(this) << " - " << nLockCount);
-#endif
+
     // conform to documentation: unlock with lock count == 0 means force a layout
 
     {
@@ -2216,7 +2207,7 @@ void LayoutManager::implts_doLayout_notify( bool bOuterResize )
 
 bool LayoutManager::implts_doLayout( bool bForceRequestBorderSpace, bool bOuterResize )
 {
-    SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::implts_doLayout" );
+    SAL_INFO( "fwk", "LayoutManager::implts_doLayout" );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aReadLock;
@@ -2713,7 +2704,7 @@ void SAL_CALL LayoutManager::frameAction( const FrameActionEvent& aEvent )
 {
     if (( aEvent.Action == FrameAction_COMPONENT_ATTACHED ) || ( aEvent.Action == FrameAction_COMPONENT_REATTACHED ))
     {
-        SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::frameAction (COMPONENT_ATTACHED|REATTACHED)" );
+        SAL_INFO( "fwk", "LayoutManager::frameAction (COMPONENT_ATTACHED|REATTACHED)" );
 
         {
             SolarMutexGuard aWriteLock;
@@ -2726,13 +2717,13 @@ void SAL_CALL LayoutManager::frameAction( const FrameActionEvent& aEvent )
     }
     else if (( aEvent.Action == FrameAction_FRAME_UI_ACTIVATED ) || ( aEvent.Action == FrameAction_FRAME_UI_DEACTIVATING ))
     {
-        SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::frameAction (FRAME_UI_ACTIVATED|DEACTIVATING)" );
+        SAL_INFO( "fwk", "LayoutManager::frameAction (FRAME_UI_ACTIVATED|DEACTIVATING)" );
 
         implts_toggleFloatingUIElementsVisibility( aEvent.Action == FrameAction_FRAME_UI_ACTIVATED );
     }
     else if ( aEvent.Action == FrameAction_COMPONENT_DETACHING )
     {
-        SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::frameAction (COMPONENT_DETACHING)" );
+        SAL_INFO( "fwk", "LayoutManager::frameAction (COMPONENT_DETACHING)" );
 
         implts_reset( false );
     }
