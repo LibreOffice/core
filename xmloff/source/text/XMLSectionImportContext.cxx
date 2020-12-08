@@ -50,23 +50,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
-namespace {
-
-enum XMLSectionToken
-{
-    XML_TOK_SECTION_XMLID,
-    XML_TOK_SECTION_STYLE_NAME,
-    XML_TOK_SECTION_NAME,
-    XML_TOK_SECTION_CONDITION,
-    XML_TOK_SECTION_DISPLAY,
-    XML_TOK_SECTION_PROTECT,
-    XML_TOK_SECTION_PROTECTION_KEY,
-    XML_TOK_SECTION_IS_HIDDEN
-};
-
-}
-
-
 
 // section import: This one is fairly tricky due to a variety of
 // limits of the core or the API. The main problem is that if you

@@ -150,25 +150,6 @@ XMLFootnoteConfigurationImportContext::~XMLFootnoteConfigurationImportContext()
 {
 }
 
-namespace {
-
-enum XMLFtnConfigToken
-{
-    XML_TOK_FTNCONFIG_CITATION_STYLENAME,
-    XML_TOK_FTNCONFIG_ANCHOR_STYLENAME,
-    XML_TOK_FTNCONFIG_DEFAULT_STYLENAME,
-    XML_TOK_FTNCONFIG_PAGE_STYLENAME,
-    XML_TOK_FTNCONFIG_OFFSET,
-    XML_TOK_FTNCONFIG_NUM_PREFIX,
-    XML_TOK_FTNCONFIG_NUM_SUFFIX,
-    XML_TOK_FTNCONFIG_NUM_FORMAT,
-    XML_TOK_FTNCONFIG_NUM_SYNC,
-    XML_TOK_FTNCONFIG_START_AT,
-    XML_TOK_FTNCONFIG_POSITION
-};
-
-}
-
 SvXMLEnumMapEntry<sal_Int16> const aFootnoteNumberingMap[] =
 {
     { XML_PAGE,             FootnoteNumbering::PER_PAGE },
