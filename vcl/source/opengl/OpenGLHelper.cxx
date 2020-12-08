@@ -964,11 +964,6 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
     return bRet;
 }
 
-bool OpenGLWrapper::isVCLOpenGLEnabled()
-{
-    return OpenGLHelper::isVCLOpenGLEnabled();
-}
-
 void OpenGLHelper::debugMsgStream(std::ostringstream const &pStream)
 {
     debugMsgPrint(

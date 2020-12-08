@@ -28,10 +28,6 @@ class X11CairoTextRender : public CairoTextRender
 protected:
     X11SalGraphics& mrParent;
 
-protected:
-    size_t GetWidth() const;
-    size_t GetHeight() const;
-
 public:
     explicit X11CairoTextRender(X11SalGraphics& rParent);
 

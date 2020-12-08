@@ -102,9 +102,4 @@ sal_uInt16 SvXMLTokenMap::Get( sal_uInt16 nKeyPrefix,
     return m_pImpl->get( nKeyPrefix, rLName );
 }
 
-sal_uInt16 SvXMLTokenMap::Get( sal_Int32 nFastTok ) const
-{
-    return m_pImpl->get( nFastTok );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
