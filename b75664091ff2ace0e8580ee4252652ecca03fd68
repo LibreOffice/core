@@ -52,6 +52,24 @@
       "revId": "b75664091ff2ace0e8580ee4252652ecca03fd68",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53c10faf_5d631c58",
+        "filename": "include/sax/fastparser.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-08T19:05:51Z",
+      "side": 1,
+      "message": "In order to seek for the error I changed it to:\nconst css::uno::Sequence\u003cOUString\u003e * mSomething;\nIn setCustomEntityNames use mSomething \u003d \u0026Something.\nI initialize it as nullptr during class construction.\nAll the instructions depending on it are commented, so they don\u0027t interfere.\nI\u0027ve already tried to comment everything inside setCustomEntityNames so it would run nothing,\nas it never was called.\nIt\u0027s just the fact of calling setCustomEntityNames what provoques the memory error.",
+      "parentUuid": "0b1faac6_e9f5cd0a",
+      "revId": "b75664091ff2ace0e8580ee4252652ecca03fd68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
