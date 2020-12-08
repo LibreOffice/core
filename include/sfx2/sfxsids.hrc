@@ -514,6 +514,9 @@ class SvxSearchItem;
 
 #define SID_INET_PROXY_TYPE             (SID_OPTIONS_START + 23)
 
+#define SID_SAVEREL_INET                (SID_OPTIONS_START + 30)
+#define SID_SAVEREL_FSYS                (SID_OPTIONS_START + 31)
+
 #define SID_PASSWORD                    (SID_OPTIONS_START + 36)
 
 #define SID_INET_NOPROXY                (SID_OPTIONS_START + 37)
@@ -522,9 +525,6 @@ class SvxSearchItem;
 #define SID_INET_HTTP_PROXY_PORT        (SID_OPTIONS_START + 39)
 #define SID_INET_FTP_PROXY_NAME         (SID_OPTIONS_START + 40)
 #define SID_INET_FTP_PROXY_PORT         (SID_OPTIONS_START + 41)
-
-#define SID_SAVEREL_INET                (SID_OPTIONS_START + 30)
-#define SID_SAVEREL_FSYS                (SID_OPTIONS_START + 31)
 
 // Automatic update of Styles - manage TabPage
 #define SID_ATTR_AUTO_STYLE_UPDATE      (SID_OPTIONS_START + 65)
