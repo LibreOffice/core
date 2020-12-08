@@ -154,6 +154,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_rendering_SpriteCanvas_OGL_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
+    if( !OpenGLHelper::supportsOpenGL())
+        return nullptr;
     auto p = new oglcanvas::SpriteCanvas(args, context);
     cppu::acquire(p);
     p->initialize();
