@@ -34,6 +34,24 @@
       "revId": "b75664091ff2ace0e8580ee4252652ecca03fd68",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b1faac6_e9f5cd0a",
+        "filename": "include/sax/fastparser.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-08T18:07:34Z",
+      "side": 1,
+      "message": "FastSaxParserImpl holds these things with \n    css::uno::Sequence\u003cOUString\u003e mSomething;\nwhich means the data in those OUString will live at least to the end of the FastSaxParser.\n\nI just you try running the relevant unit test under \u0027valgrind memcheck\u0027, there are normally instructions printed out when the test fails.\n\nWhat might be happening is that in the call to xmlNewEntity requires that the  \n    const xmlchar*\ndata it receives live for the lifetime of the parser, while right now the\n    BAD_CAST(OUStringToOString(mEntityReplacements.......\nwill only live for the duration of xmlNewEntity call itself.",
+      "parentUuid": "647e297d_5af00ec1",
+      "revId": "b75664091ff2ace0e8580ee4252652ecca03fd68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
