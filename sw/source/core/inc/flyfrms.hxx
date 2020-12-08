@@ -144,15 +144,13 @@ public:
 };
 
 // Flys that are bound to LayoutFrames and not to Content
-class SwFlyLayFrame : public SwFlyFreeFrame
+class SwFlyLayFrame final: public SwFlyFreeFrame
 {
 public:
     // #i28701#
 
     SwFlyLayFrame( SwFlyFrameFormat*, SwFrame*, SwFrame *pAnchor );
-
-protected:
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 };
 
 // Flys that are bound to Content but not in Content
