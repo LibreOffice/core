@@ -16,6 +16,24 @@
       "revId": "b75664091ff2ace0e8580ee4252652ecca03fd68",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "647e297d_5af00ec1",
+        "filename": "include/sax/fastparser.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-08T17:04:11Z",
+      "side": 1,
+      "message": "So, even if the sequences are destroyed, the data wouldn\u0027t corrupt?\nI\u0027ve been trying to solve a quite mysterious memory error and right now,\nfast parser is using pointer references to the sequences.",
+      "parentUuid": "dc970e62_f6868cbc",
+      "revId": "b75664091ff2ace0e8580ee4252652ecca03fd68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
