@@ -70,25 +70,19 @@ public:
 
 class PDFiumPage;
 
-class VCL_DLLPUBLIC PDFiumBitmap final
+class VCL_DLLPUBLIC PDFiumBitmap
 {
-private:
-    FPDF_BITMAP mpBitmap;
-
-    PDFiumBitmap(const PDFiumBitmap&) = delete;
-    PDFiumBitmap& operator=(const PDFiumBitmap&) = delete;
-
 public:
-    PDFiumBitmap(FPDF_BITMAP pBitmap);
-    ~PDFiumBitmap();
-    FPDF_BITMAP getPointer() { return mpBitmap; }
-    void fillRect(int left, int top, int width, int height, sal_uInt32 nColor);
-    void renderPageBitmap(PDFiumPage* pPage, int nStartX, int nStartY, int nSizeX, int nSizeY);
-    ConstScanline getBuffer();
-    int getStride();
-    int getWidth();
-    int getHeight();
-    PDFBitmapType getFormat();
+    virtual ~PDFiumBitmap() = default;
+    virtual void fillRect(int left, int top, int width, int height, sal_uInt32 nColor) = 0;
+    virtual void renderPageBitmap(PDFiumPage* pPage, int nStartX, int nStartY, int nSizeX,
+                                  int nSizeY)
+        = 0;
+    virtual ConstScanline getBuffer() = 0;
+    virtual int getStride() = 0;
+    virtual int getWidth() = 0;
+    virtual int getHeight() = 0;
+    virtual PDFBitmapType getFormat() = 0;
 };
 
 class VCL_DLLPUBLIC PDFiumAnnotation final
