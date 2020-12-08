@@ -68,6 +68,29 @@
       "revId": "35f518114a2675ce6f1d8eb2b5a05a036c395abe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8ea938e_ab21d192",
+        "filename": "oox/source/vml/vmlshapecontext.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-12-08T07:24:32Z",
+      "side": 1,
+      "message": "Is this really needed?",
+      "range": {
+        "startLine": 520,
+        "startChar": 10,
+        "endLine": 520,
+        "endChar": 90
+      },
+      "revId": "35f518114a2675ce6f1d8eb2b5a05a036c395abe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
