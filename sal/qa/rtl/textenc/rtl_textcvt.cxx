@@ -56,7 +56,7 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet) {
     {
         rtl_TextToUnicodeConverter aConverter
             = rtl_createTextToUnicodeConverter(rSet.m_nEncoding);
-        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(OUString("rtl_createTextToUnicodeConverter(" + OUString::createFromAscii(rtl_getMimeCharsetFromTextEncoding(rSet.m_nEncoding)) + ") failed"),
+        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(OUString("rtl_createTextToUnicodeConverter(" + OUString::number(rSet.m_nEncoding) + ") failed"),
                                                  RTL_TEXTENCODING_UTF8).getStr(),
                                aConverter != nullptr);
         rtl_TextToUnicodeContext aContext
