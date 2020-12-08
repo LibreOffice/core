@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad02c22a_62ae5739",
+        "filename": "sc/inc/globstr.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-12-08T15:57:56Z",
+      "side": 1,
+      "message": "Do you think it is a bad idea to use U+2022 here?",
+      "range": {
+        "startLine": 184,
+        "startChar": 124,
+        "endLine": 184,
+        "endChar": 151
+      },
+      "revId": "72b8c12d34097e83dee047fbe0d5cc38962eb1a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
