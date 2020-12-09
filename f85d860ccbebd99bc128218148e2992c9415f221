@@ -16,6 +16,24 @@
       "revId": "f85d860ccbebd99bc128218148e2992c9415f221",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c76b8c6a_4b97dbce",
+        "filename": "sc/source/ui/docshell/externalrefmgr.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2759,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2020-12-09T10:24:20Z",
+      "side": 1,
+      "message": "Sorry, i thought maRefCells store informations for all the files, because i seen maRefCells elements with 0 Cells.\nNow i see, there are cases when a file is not inserted into the maRefCells, but inserted to maSrcFiles... in that case maConvertFileIdToUsedFileId was allocated less elements as many was used later.\nI hope this should be good enought solution for that:\nhttps://gerrit.libreoffice.org/c/core/+/107434\nThx for the bug report.",
+      "parentUuid": "4b9acdb2_e488cbbe",
+      "revId": "f85d860ccbebd99bc128218148e2992c9415f221",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
