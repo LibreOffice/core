@@ -216,7 +216,7 @@ OUString SwUserFieldType::GetName() const
 void SwUserFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
     auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy->m_pOld && !pLegacy->m_pNew)
+    if (pLegacy && !pLegacy->m_pOld && !pLegacy->m_pNew)
         m_bValidValue = false;
 
     CallSwClientNotify(rHint);
