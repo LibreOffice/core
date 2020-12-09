@@ -595,7 +595,7 @@ void BitmapEx::Replace( const Color& rSearchColor, const Color& rReplaceColor )
         maBitmap.Replace( rSearchColor, rReplaceColor );
 }
 
-void BitmapEx::Replace( const Color* pSearchColors, const Color* pReplaceColors, sal_uLong nColorCount )
+void BitmapEx::Replace( const Color* pSearchColors, const Color* pReplaceColors, size_t nColorCount )
 {
     if (!!maBitmap)
         maBitmap.Replace( pSearchColors, pReplaceColors, nColorCount, /*pTols*/nullptr );
@@ -1324,7 +1324,7 @@ void BitmapEx::Replace(const Color& rSearchColor,
 
 void BitmapEx::Replace( const Color* pSearchColors,
                         const Color* pReplaceColors,
-                        sal_uLong nColorCount,
+                        size_t nColorCount,
                         sal_uInt8 const * pTols )
 {
     maBitmap.Replace( pSearchColors, pReplaceColors, nColorCount, pTols );

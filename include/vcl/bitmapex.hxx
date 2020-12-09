@@ -286,7 +286,7 @@ public:
     void                Replace(
                             const Color* pSearchColors,
                             const Color* pReplaceColors,
-                            sal_uLong nColorCount );
+                            size_t nColorCount );
 
     /** Replace all pixel having one the search colors with the corresponding replace color
 
@@ -309,7 +309,7 @@ public:
     void                Replace(
                             const Color* pSearchColors,
                             const Color* pReplaceColors,
-                            sal_uLong nColorCount,
+                            size_t nColorCount,
                             sal_uInt8 const * pTols );
 
     /** Replace transparency with given color.
