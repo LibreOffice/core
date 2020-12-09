@@ -50,7 +50,6 @@ namespace {
 class WinOpenGLContext : public OpenGLContext
 {
 public:
-    bool init( HDC hDC, HWND hWnd );
     virtual void initWindow() override;
 private:
     GLWinWindow m_aGLWin;
@@ -133,16 +132,6 @@ void WinOpenGLContext::makeCurrent()
     g_bAnyCurrent = true;
 
     registerAsCurrent();
-}
-
-bool WinOpenGLContext::init(HDC hDC, HWND hWnd)
-{
-    if (isInitialized())
-        return true;
-
-    m_aGLWin.hDC = hDC;
-    m_aGLWin.hWnd = hWnd;
-    return ImplInit();
 }
 
 void WinOpenGLContext::initWindow()
