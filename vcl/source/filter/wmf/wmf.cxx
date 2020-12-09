@@ -23,6 +23,8 @@
 #include <vcl/gdimetafiletools.hxx>
 #include <vcl/graph.hxx>
 
+using namespace com::sun::star;
+
 bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF )
 {
     // tdf#111484 Use new method to import Metafile. Take current StreamPos
@@ -80,7 +82,32 @@ bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream
         clipMetafileContentAgainstOwnRegions(aGdiMetaFile);
     }
 
-    return aWMFWriter.WriteWMF( aGdiMetaFile, rTargetStream, pConfigItem, bPlaceable );
+    bool bRet = aWMFWriter.WriteWMF(aGdiMetaFile, rTargetStream, pConfigItem, bPlaceable);
+    return bRet;
+}
+
+bool ConvertGraphicToWMF(const Graphic& rGraphic, SvStream& rTargetStream,
+                         FilterConfigItem const* pConfigItem, bool bPlaceable)
+{
+    GfxLink aLink = rGraphic.GetGfxLink();
+    if (aLink.IsEMF() && aLink.GetData() && aLink.GetDataSize())
+    {
+        // This may be an EMF+ file, converting that to WMF is better done by re-parsing EMF+ as EMF
+        // and converting that to WMF.
+        uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aLink.GetData()),
+                                      aLink.GetDataSize());
+        auto aVectorGraphicData
+            = std::make_shared<VectorGraphicData>(aData, OUString(), VectorGraphicDataType::Emf);
+        aVectorGraphicData->setEnableEMFPlus(false);
+        Graphic aGraphic(aVectorGraphicData);
+        bool bRet = ConvertGDIMetaFileToWMF(aGraphic.GetGDIMetaFile(), rTargetStream, pConfigItem,
+                                            bPlaceable);
+        return bRet;
+    }
+
+    bool bRet = ConvertGDIMetaFileToWMF(rGraphic.GetGDIMetaFile(), rTargetStream, pConfigItem,
+                                        bPlaceable);
+    return bRet;
 }
 
 bool ConvertGDIMetaFileToEMF(const GDIMetaFile & rMTF, SvStream & rTargetStream)

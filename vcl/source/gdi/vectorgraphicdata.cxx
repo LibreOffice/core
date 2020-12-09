@@ -34,6 +34,7 @@
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/wmfexternal.hxx>
@@ -220,6 +221,16 @@ void VectorGraphicData::ensureSequenceAndRange()
                 aSizeHint.X = maSizeHint.getX();
                 aSizeHint.Y = maSizeHint.getY();
                 xEmfParser->setSizeHint(aSizeHint);
+
+                if (!mbEnableEMFPlus)
+                {
+                    auto aVector
+                        = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(
+                            aSequence);
+                    aVector.push_back(
+                        comphelper::makePropertyValue("EMFPlusEnable", uno::makeAny(false)));
+                    aSequence = comphelper::containerToSequence(aVector);
+                }
 
                 maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(myInputStream, maPath, aSequence));
             }

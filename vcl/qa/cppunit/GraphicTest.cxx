@@ -26,6 +26,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <vcl/metaact.hxx>
 
 #include <impgraph.hxx>
 #include <graphic/GraphicFormatDetector.hxx>
@@ -335,6 +336,31 @@ void GraphicTest::testEmfToWmfConversion()
     // - Actual  : EMF
     // i.e. EMF data was requested to be converted to WMF, but the output was still EMF.
     CPPUNIT_ASSERT_EQUAL(OUString("WMF"), aDetector.msDetectedFormat);
+
+    // Import the WMF result and check for traces of EMF+ in it.
+    Graphic aWmfGraphic;
+    aGraphicStream.Seek(0);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aGraphicFilter.ImportGraphic(aWmfGraphic, OUString(),
+                                                                    aGraphicStream, nFormat));
+    int nCommentCount = 0;
+    for (size_t i = 0; i < aWmfGraphic.GetGDIMetaFile().GetActionSize(); ++i)
+    {
+        MetaAction* pAction = aWmfGraphic.GetGDIMetaFile().GetAction(i);
+        if (pAction->GetType() == MetaActionType::COMMENT)
+        {
+            auto pComment = static_cast<MetaCommentAction*>(pAction);
+            if (pComment->GetComment().startsWith("EMF_PLUS"))
+            {
+                ++nCommentCount;
+            }
+        }
+    }
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected less or equal than: 4
+    // - Actual  : 8
+    // i.e. even more EMF+ comments were left in the WMF output. The ideal would be to get this down
+    // to 0, though.
+    CPPUNIT_ASSERT_LESSEQUAL(4, nCommentCount);
 }
 
 void GraphicTest::testSwapping()

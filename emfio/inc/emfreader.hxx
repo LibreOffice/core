@@ -35,6 +35,7 @@ namespace emfio
         /// Another format is read already, can ignore actual EMF data.
         bool mbReadOtherGraphicFormat = false;
         basegfx::B2DTuple maSizeHint;
+        bool mbEnableEMFPlus = true;
 
         bool        ReadHeader();
         // reads and converts the rectangle
@@ -49,6 +50,7 @@ namespace emfio
         /// Parses EMR_COMMENT_MULTIFORMATS.
         void ReadMultiformatsComment();
         void SetSizeHint(const basegfx::B2DTuple& rSizeHint) { maSizeHint = rSizeHint; }
+        void SetEnableEMFPlus(bool bEnableEMFPlus) { mbEnableEMFPlus = bEnableEMFPlus; }
 
     private:
         template <class T> void ReadAndDrawPolyPolygon(sal_uInt32 nNextPos);
