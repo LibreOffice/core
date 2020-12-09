@@ -914,15 +914,13 @@ void ImpSdrPdfImport::ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> co
             break;
     }
 
-    float left;
-    float bottom;
-    float right;
-    float top;
-    if (!FPDFPageObj_GetBounds(pPageObject->getPointer(), &left, &bottom, &right, &top))
-    {
-        SAL_WARN("sd.filter", "FAILED to get image bounds");
-    }
-
+    basegfx::B2DRectangle aBounds = pPageObject->getBounds();
+    float left = aBounds.getMinX();
+    // Upside down.
+    float bottom = aBounds.getMinY();
+    float right = aBounds.getMaxX();
+    // Upside down.
+    float top = aBounds.getMaxY();
     tools::Rectangle aRect = PointsToLogic(left, right, top, bottom);
     aRect.AdjustRight(1);
     aRect.AdjustBottom(1);

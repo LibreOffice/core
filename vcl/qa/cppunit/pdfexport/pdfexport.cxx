@@ -1535,9 +1535,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106702)
         if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Image)
             continue;
 
-        float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
-        FPDFPageObj_GetBounds(pPageObject->getPointer(), &fLeft, &fBottom, &fRight, &fTop);
-        nExpected = fTop;
+        // Top, but upside down.
+        nExpected = pPageObject->getBounds().getMaxY();
         break;
     }
 
@@ -1552,9 +1551,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106702)
         if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Image)
             continue;
 
-        float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
-        FPDFPageObj_GetBounds(pPageObject->getPointer(), &fLeft, &fBottom, &fRight, &fTop);
-        nActual = fTop;
+        // Top, but upside down.
+        nActual = pPageObject->getBounds().getMaxY();
         break;
     }
 
@@ -1593,9 +1591,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf113143)
         if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Image)
             continue;
 
-        float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
-        FPDFPageObj_GetBounds(pPageObject->getPointer(), &fLeft, &fBottom, &fRight, &fTop);
-        nLarger = fRight - fLeft;
+        nLarger = pPageObject->getBounds().getWidth();
         break;
     }
 
@@ -1610,9 +1606,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf113143)
         if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Image)
             continue;
 
-        float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
-        FPDFPageObj_GetBounds(pPageObject->getPointer(), &fLeft, &fBottom, &fRight, &fTop);
-        nSmaller = fRight - fLeft;
+        nSmaller = pPageObject->getBounds().getWidth();
         break;
     }
 
@@ -1652,8 +1646,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115262)
     for (int i = 0; i < nPageObjectCount; ++i)
     {
         std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
-        float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
-        FPDFPageObj_GetBounds(pPageObject->getPointer(), &fLeft, &fBottom, &fRight, &fTop);
+        // Top, but upside down.
+        float fTop = pPageObject->getBounds().getMaxY();
 
         if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Image)
         {
