@@ -1372,16 +1372,17 @@ xmlEntityPtr FastSaxParserImpl::callbackGetEntity( const xmlChar *name )
     int lname = strlen(dname);
     if( lname == 0 )
         return xmlGetPredefinedEntity(name);
-    if( !mEntityNames.hasElements() )
-        return xmlGetPredefinedEntity(name);
-    for( size_t i = 0; i < mEntityNames.size(); ++i )
+    if( mEntityNames.hasElements() )
     {
-        if( mEntityNames[i].compareToAscii(dname) == 0 )
-        {
-            return xmlNewEntity( nullptr,
-                name,
-                XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
-                BAD_CAST(OUStringToOString(mEntityReplacements[i],RTL_TEXTENCODING_UTF8).getStr()));
+        for( size_t i = 0; i < mEntityNames.size(); ++i )
+        {const
+            if( mEntityNames[i].compareToAscii(dname) == 0 )
+            {
+                return xmlNewEntity( nullptr,
+                    name,
+                    XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
+                    BAD_CAST(OUStringToOString(mEntityReplacements[i],RTL_TEXTENCODING_UTF8).getStr()));
+            }
         }
     }
     if( lname < 2 )
