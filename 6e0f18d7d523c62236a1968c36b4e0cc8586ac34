@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "7a0c1fe9_983480ac",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-09T15:55:09Z",
+      "side": 1,
+      "message": "It was. I\u0027m patching over this, so I take care.",
+      "parentUuid": "ff3b35de_cb572c16",
+      "range": {
+        "startLine": 936,
+        "startChar": 0,
+        "endLine": 936,
+        "endChar": 18
+      },
+      "revId": "6e0f18d7d523c62236a1968c36b4e0cc8586ac34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d6b25f8d_7dd30315",
         "filename": "starmath/source/mathmlattr.hxx",
         "patchSetId": 17
@@ -60,6 +84,30 @@
       "writtenOn": "2020-12-09T14:29:10Z",
       "side": 1,
       "message": "This include also seems strange, given no further changes in this file.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 26
+      },
+      "revId": "6e0f18d7d523c62236a1968c36b4e0cc8586ac34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10d56e7d_a6f28384",
+        "filename": "starmath/source/mathmlattr.hxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-09T15:55:09Z",
+      "side": 1,
+      "message": "It is included by mathmlimport.hxx who is included by mathmlimport.cxx",
+      "parentUuid": "d6b25f8d_7dd30315",
       "range": {
         "startLine": 16,
         "startChar": 0,
