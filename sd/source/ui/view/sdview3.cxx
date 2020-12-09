@@ -994,12 +994,13 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             nOptions |= SdrInsertFlags::DONTMARK;
                     }
 
-                    InsertObjectAtView( pObj, *pPV, nOptions );
+                    // bInserted of false means that pObj has been deleted
+                    bool bInserted = InsertObjectAtView( pObj, *pPV, nOptions );
 
-                    if( pImageMap )
+                    if (bInserted && pImageMap)
                         pObj->AppendUserData( std::unique_ptr<SdrObjUserData>(new SvxIMapInfo( *pImageMap )) );
 
-                    if (pObj->IsChart())
+                    if (bInserted && pObj->IsChart())
                     {
                         bool bDisableDataTableDialog = false;
                         svt::EmbeddedObjectRef::TryRunningState( xObj );
