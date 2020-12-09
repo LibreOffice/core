@@ -926,12 +926,12 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, sa
 
     if (pAcc)
     {
-        std::unique_ptr<int[]> pMinR(new int[nColorCount]);
-        std::unique_ptr<int[]> pMaxR(new int[nColorCount]);
-        std::unique_ptr<int[]> pMinG(new int[nColorCount]);
-        std::unique_ptr<int[]> pMaxG(new int[nColorCount]);
-        std::unique_ptr<int[]> pMinB(new int[nColorCount]);
-        std::unique_ptr<int[]> pMaxB(new int[nColorCount]);
+        std::vector<int> aMinR(nColorCount);
+        std::vector<int> aMaxR(nColorCount);
+        std::vector<int> aMinG(nColorCount);
+        std::vector<int> aMaxG(nColorCount);
+        std::vector<int> aMinB(nColorCount);
+        std::vector<int> aMaxB(nColorCount);
 
         if (pTols)
         {
@@ -940,12 +940,12 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, sa
                 const Color& rCol = pSearchColors[i];
                 const sal_uInt8 nTol = pTols[i];
 
-                pMinR[i] = std::clamp(rCol.GetRed() - nTol, 0, 255);
-                pMaxR[i] = std::clamp(rCol.GetRed() + nTol, 0, 255);
-                pMinG[i] = std::clamp(rCol.GetGreen() - nTol, 0, 255);
-                pMaxG[i] = std::clamp(rCol.GetGreen() + nTol, 0, 255);
-                pMinB[i] = std::clamp(rCol.GetBlue() - nTol, 0, 255);
-                pMaxB[i] = std::clamp(rCol.GetBlue() + nTol, 0, 255);
+                aMinR[i] = std::clamp(rCol.GetRed() - nTol, 0, 255);
+                aMaxR[i] = std::clamp(rCol.GetRed() + nTol, 0, 255);
+                aMinG[i] = std::clamp(rCol.GetGreen() - nTol, 0, 255);
+                aMaxG[i] = std::clamp(rCol.GetGreen() + nTol, 0, 255);
+                aMinB[i] = std::clamp(rCol.GetBlue() - nTol, 0, 255);
+                aMaxB[i] = std::clamp(rCol.GetBlue() + nTol, 0, 255);
             }
         }
         else
@@ -954,12 +954,12 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, sa
             {
                 const Color& rCol = pSearchColors[i];
 
-                pMinR[i] = rCol.GetRed();
-                pMaxR[i] = rCol.GetRed();
-                pMinG[i] = rCol.GetGreen();
-                pMaxG[i] = rCol.GetGreen();
-                pMinB[i] = rCol.GetBlue();
-                pMaxB[i] = rCol.GetBlue();
+                aMinR[i] = rCol.GetRed();
+                aMaxR[i] = rCol.GetRed();
+                aMinG[i] = rCol.GetGreen();
+                aMaxG[i] = rCol.GetGreen();
+                aMinB[i] = rCol.GetBlue();
+                aMaxB[i] = rCol.GetBlue();
             }
         }
 
@@ -972,9 +972,9 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, sa
 
                 for (sal_uLong i = 0; i < nColorCount; i++)
                 {
-                    if (pMinR[i] <= rCol.GetRed() && pMaxR[i] >= rCol.GetRed()
-                        && pMinG[i] <= rCol.GetGreen() && pMaxG[i] >= rCol.GetGreen()
-                        && pMinB[i] <= rCol.GetBlue() && pMaxB[i] >= rCol.GetBlue())
+                    if (aMinR[i] <= rCol.GetRed() && aMaxR[i] >= rCol.GetRed()
+                        && aMinG[i] <= rCol.GetGreen() && aMaxG[i] >= rCol.GetGreen()
+                        && aMinB[i] <= rCol.GetBlue() && aMaxB[i] >= rCol.GetBlue())
                     {
                         pAcc->SetPaletteColor(nEntry, pReplaceColors[i]);
                         break;
@@ -984,26 +984,25 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, sa
         }
         else
         {
-            BitmapColor aCol;
-            std::unique_ptr<BitmapColor[]> pReplaces(new BitmapColor[nColorCount]);
+            std::vector<BitmapColor> aReplaces(nColorCount);
 
             for (sal_uLong i = 0; i < nColorCount; i++)
-                pReplaces[i] = pAcc->GetBestMatchingColor(pReplaceColors[i]);
+                aReplaces[i] = pAcc->GetBestMatchingColor(pReplaceColors[i]);
 
             for (tools::Long nY = 0, nHeight = pAcc->Height(); nY < nHeight; nY++)
             {
                 Scanline pScanline = pAcc->GetScanline(nY);
                 for (tools::Long nX = 0, nWidth = pAcc->Width(); nX < nWidth; nX++)
                 {
-                    aCol = pAcc->GetPixelFromData(pScanline, nX);
+                    BitmapColor aCol = pAcc->GetPixelFromData(pScanline, nX);
 
                     for (sal_uLong i = 0; i < nColorCount; i++)
                     {
-                        if (pMinR[i] <= aCol.GetRed() && pMaxR[i] >= aCol.GetRed()
-                            && pMinG[i] <= aCol.GetGreen() && pMaxG[i] >= aCol.GetGreen()
-                            && pMinB[i] <= aCol.GetBlue() && pMaxB[i] >= aCol.GetBlue())
+                        if (aMinR[i] <= aCol.GetRed() && aMaxR[i] >= aCol.GetRed()
+                            && aMinG[i] <= aCol.GetGreen() && aMaxG[i] >= aCol.GetGreen()
+                            && aMinB[i] <= aCol.GetBlue() && aMaxB[i] >= aCol.GetBlue())
                         {
-                            pAcc->SetPixelOnData(pScanline, nX, pReplaces[i]);
+                            pAcc->SetPixelOnData(pScanline, nX, aReplaces[i]);
                             break;
                         }
                     }
