@@ -40,6 +40,11 @@ public:
     {
         rDrawingArea.click(rPos);
     }
+
+    static void trigger_value_changed(weld::SpinButton& rSpinButton)
+    {
+        rSpinButton.signal_value_changed();
+    }
 };
 
 namespace jsdialog
