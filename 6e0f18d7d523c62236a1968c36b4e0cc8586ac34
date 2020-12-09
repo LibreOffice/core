@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ff3b35de_cb572c16",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2020-12-09T14:33:23Z",
+      "side": 1,
+      "message": "probably printf was used for debugging purpose.\n\nhttps://gerrit.libreoffice.org/c/core/+/107038/5..6/sax/source/fastparser/fastparser.cxx",
+      "parentUuid": "9af33875_d6c185ee",
+      "range": {
+        "startLine": 936,
+        "startChar": 0,
+        "endLine": 936,
+        "endChar": 18
+      },
+      "revId": "6e0f18d7d523c62236a1968c36b4e0cc8586ac34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d6b25f8d_7dd30315",
         "filename": "starmath/source/mathmlattr.hxx",
         "patchSetId": 17
