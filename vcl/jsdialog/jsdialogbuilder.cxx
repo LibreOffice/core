@@ -40,20 +40,27 @@ JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow,
 
 void JSDialogNotifyIdle::ForceUpdate() { m_bForce = true; }
 
-void JSDialogNotifyIdle::send(std::unique_ptr<tools::JsonWriter> aJsonWriter)
+void JSDialogNotifyIdle::send(tools::JsonWriter& aJsonWriter)
 {
     if (!m_aNotifierWindow)
+    {
+        free(aJsonWriter.extractData());
         return;
+    }
 
     const vcl::ILibreOfficeKitNotifier* pNotifier = m_aNotifierWindow->GetLOKNotifier();
     if (pNotifier)
     {
-        if (m_bForce || !aJsonWriter->isDataEquals(m_LastNotificationMessage))
+        if (m_bForce || !aJsonWriter.isDataEquals(m_LastNotificationMessage))
         {
             m_bForce = false;
-            m_LastNotificationMessage = aJsonWriter->extractAsStdString();
+            m_LastNotificationMessage = aJsonWriter.extractAsStdString();
             pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG,
                                                   m_LastNotificationMessage.c_str());
+        }
+        else
+        {
+            free(aJsonWriter.extractData());
         }
     }
 }
@@ -101,9 +108,9 @@ std::unique_ptr<tools::JsonWriter> JSDialogNotifyIdle::generateCloseMessage() co
     return aJsonWriter;
 }
 
-void JSDialogNotifyIdle::Invoke() { send(dumpStatus()); }
+void JSDialogNotifyIdle::Invoke() { send(*dumpStatus()); }
 
-void JSDialogNotifyIdle::sendClose() { send(generateCloseMessage()); }
+void JSDialogNotifyIdle::sendClose() { send(*generateCloseMessage()); }
 
 void JSDialogSender::notifyDialogState(bool bForce)
 {
