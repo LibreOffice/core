@@ -191,18 +191,16 @@ public:
 };
 
 // Flys that are bound to a character in Content
-class SwFlyInContentFrame : public SwFlyFrame
+class SwFlyInContentFrame final: public SwFlyFrame
 {
     Point m_aRef;  // relative to this point AbsPos is being calculated
 
     virtual void DestroyImpl() override;
     virtual ~SwFlyInContentFrame() override;
 
-protected:
-    virtual void NotifyBackground( SwPageFrame *pPage,
-                                   const SwRect& rRect, PrepareHint eHint) override;
+    virtual void NotifyBackground(SwPageFrame *pPage, const SwRect& rRect, PrepareHint eHint) override;
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
-    virtual void  Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
     // #i28701#
