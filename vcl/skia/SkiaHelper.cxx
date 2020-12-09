@@ -507,7 +507,8 @@ void addCachedImage(const OString& key, sk_sp<SkImage> image)
     imageCache->push_front({ key, image, size });
     imageCacheSize += size;
     SAL_INFO("vcl.skia.trace", "addcachedimage " << image << " :" << size << "/" << imageCacheSize);
-    while (imageCacheSize > MAX_CACHE_SIZE)
+    const int maxSize = maxImageCacheSize();
+    while (imageCacheSize > maxSize)
     {
         assert(!imageCache->empty());
         imageCacheSize -= imageCache->back().size;
@@ -552,6 +553,12 @@ void removeCachedImage(sk_sp<SkImage> image)
         else
             ++it;
     }
+}
+
+int maxImageCacheSize()
+{
+    // Defaults to 4x 2000px 32bpp images, 64MiB.
+    return officecfg::Office::Common::Cache::Skia::ImageCacheSize::get();
 }
 
 void cleanup()
