@@ -22,6 +22,30 @@
       "revId": "72b8c12d34097e83dee047fbe0d5cc38962eb1a6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f4204dc_5e6381ce",
+        "filename": "sc/inc/globstr.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-12-09T23:47:46Z",
+      "side": 1,
+      "message": "No. Argument in https://bugs.documentfoundation.org/show_bug.cgi?id\u003d138662#c12",
+      "parentUuid": "ad02c22a_62ae5739",
+      "range": {
+        "startLine": 184,
+        "startChar": 124,
+        "endLine": 184,
+        "endChar": 151
+      },
+      "revId": "72b8c12d34097e83dee047fbe0d5cc38962eb1a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
