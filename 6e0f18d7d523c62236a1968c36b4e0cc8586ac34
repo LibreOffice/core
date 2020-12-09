@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af33875_d6c185ee",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-09T14:27:36Z",
+      "side": 1,
+      "message": "Why the include, and why in the middle of the file?",
+      "range": {
+        "startLine": 936,
+        "startChar": 0,
+        "endLine": 936,
+        "endChar": 18
+      },
+      "revId": "6e0f18d7d523c62236a1968c36b4e0cc8586ac34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
