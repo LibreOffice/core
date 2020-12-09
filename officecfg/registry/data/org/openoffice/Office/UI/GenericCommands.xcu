@@ -17,6 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../../component-update.dtd">
+
+<!-- The meaning of the bits of the magic numbers in the "Properties" things can be found:
+
+In framework/source/uielement/uicommanddescription.cxx:
+bit 0 (0x1): const sal_Int32 COMMAND_PROPERTY_IMAGE = 1;
+bit 1 (0x2): const sal_Int32 COMMAND_PROPERTY_ROTATE = 2;
+bit 2 (0x4): const sal_Int32 COMMAND_PROPERTY_MIRROR = 4;
+
+In framework/inc/properties.h
+bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
+
+-->
+
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="GenericCommands" oor:package="org.openoffice.Office.UI">
   <node oor:name="UserInterface">
     <node oor:name="Commands">
