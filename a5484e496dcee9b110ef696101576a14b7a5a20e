@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35f65996_8d6d5077",
+        "filename": "l10ntools/source/merge.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-09T06:20:05Z",
+      "side": 1,
+      "message": "This asserts locally. It obviously returns nullptr here, where in \u0027config_host.mk\u0027 it\u0027s \"export ENABLE_RELEASE_BUILD\u003d\"",
+      "range": {
+        "startLine": 117,
+        "startChar": 4,
+        "endLine": 117,
+        "endChar": 27
+      },
+      "revId": "a5484e496dcee9b110ef696101576a14b7a5a20e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
