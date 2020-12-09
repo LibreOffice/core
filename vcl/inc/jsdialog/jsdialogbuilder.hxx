@@ -51,7 +51,7 @@ public:
     void sendClose();
 
 private:
-    void send(std::unique_ptr<tools::JsonWriter> aJsonWriter);
+    void send(tools::JsonWriter& aJsonWriter);
     std::unique_ptr<tools::JsonWriter> dumpStatus() const;
     std::unique_ptr<tools::JsonWriter> generateCloseMessage() const;
 };
