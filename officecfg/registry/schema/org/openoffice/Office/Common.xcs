@@ -1589,6 +1589,20 @@
           <value>10</value>
         </prop>
       </group>
+      <group oor:name="Skia">
+        <info>
+          <desc>Specifies a group of cache options related to Skia-based drawing.</desc>
+        </info>
+        <prop oor:name="ImageCacheSize" oor:type="xs:long" oor:nillable="false">
+          <info>
+            <desc>Specifies the maximum cache size in bytes for all images used by Skia-based
+            drawing code. Larger size may improve drawing performance when using
+            many large images in software rendering mode.</desc>
+            <label>Image Cache Size</label>
+          </info>
+          <value>64000000</value>
+        </prop>
+      </group>
     </group>
     <group oor:name="Path">
       <!--OldLocation: soffice.ini -->

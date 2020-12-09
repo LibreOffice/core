@@ -1574,7 +1574,7 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
         }
     }
     // Do not cache the result if it would take most of the cache and thus get evicted soon.
-    if (targetSize.Width() * targetSize.Height() * 4 > SkiaHelper::MAX_CACHE_SIZE * 0.7)
+    if (targetSize.Width() * targetSize.Height() * 4 > SkiaHelper::maxImageCacheSize() * 0.7)
         return image;
     OString key;
     OStringBuffer keyBuf;
