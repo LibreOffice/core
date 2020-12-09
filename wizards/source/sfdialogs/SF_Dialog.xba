@@ -474,7 +474,7 @@ Public Function GetProperty(Optional ByVal PropertyName As Variant) As Variant
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		oDlg.GetProperty(&quot;Caption&quot;)
 
-Const cstThisSub = &quot;Model.GetProperty&quot;
+Const cstThisSub = &quot;SFDialogs.Dialog.GetProperty&quot;
 Const cstSubArgs = &quot;&quot;
 
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
