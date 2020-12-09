@@ -271,10 +271,7 @@ bool SalInstanceWidget::has_focus() const { return m_xWidget->HasFocus(); }
 
 bool SalInstanceWidget::is_active() const { return m_xWidget->IsActive(); }
 
-bool SalInstanceWidget::has_child_focus() const
-{
-    return m_xWidget->HasChildPathFocus(true);
-}
+bool SalInstanceWidget::has_child_focus() const { return m_xWidget->HasChildPathFocus(true); }
 
 void SalInstanceWidget::set_has_default(bool has_default)
 {
@@ -317,7 +314,10 @@ vcl::Font SalInstanceWidget::get_font() { return m_xWidget->GetPointFont(*m_xWid
 
 OString SalInstanceWidget::get_buildable_name() const { return m_xWidget->get_id().toUtf8(); }
 
-void SalInstanceWidget::set_buildable_name(const OString& rId) { return m_xWidget->set_id(OUString::fromUtf8(rId)); }
+void SalInstanceWidget::set_buildable_name(const OString& rId)
+{
+    return m_xWidget->set_id(OUString::fromUtf8(rId));
+}
 
 void SalInstanceWidget::set_help_id(const OString& rId) { return m_xWidget->SetHelpId(rId); }
 

@@ -14919,7 +14919,6 @@ vcl/source/app/i18nhelp.cxx
 vcl/source/app/idle.cxx
 vcl/source/app/salplug.cxx
 vcl/source/app/salusereventlist.cxx
-vcl/source/app/salvtables.cxx
 vcl/source/app/scheduler.cxx
 vcl/source/app/session.cxx
 vcl/source/app/settings.cxx
