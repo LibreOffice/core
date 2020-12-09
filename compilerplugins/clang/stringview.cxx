@@ -143,6 +143,7 @@ bool StringView::VisitImplicitCastExpr(ImplicitCastExpr const* expr)
 
 void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
 {
+    bool charArg = false;
     auto const d = expr->getConstructor();
     switch (d->getNumParams())
     {
@@ -153,6 +154,7 @@ void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
             auto const t = d->getParamDecl(0)->getType();
             if (t->isAnyCharacterType())
             {
+                charArg = true;
                 break;
             }
             loplugin::TypeCheck tc(t);
@@ -200,13 +202,14 @@ void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
             return;
     }
     report(DiagnosticsEngine::Warning,
-           "instead of an %0, pass a '%select{std::string_view|std::u16string_view}1'",
+           "instead of an %0, pass a '%select{std::string_view|std::u16string_view}1'"
+           "%select{| (or an '%select{rtl::OStringChar|rtl::OUStringChar}1')}2",
            expr->getExprLoc())
         << expr->getType()
         << (loplugin::TypeCheck(expr->getType()).Class("OString").Namespace("rtl").GlobalNamespace()
                 ? 0
                 : 1)
-        << expr->getSourceRange();
+        << charArg << expr->getSourceRange();
 }
 
 void StringView::handleCXXMemberCallExpr(CXXMemberCallExpr const* expr)
