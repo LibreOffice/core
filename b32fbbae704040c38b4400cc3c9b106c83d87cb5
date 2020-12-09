@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e90d78c_be196c17",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1596,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-09T12:31:26Z",
+      "side": 1,
+      "message": "Is 32-bit xs:int a good choice here, or might 64-bit xs:long be better?",
+      "range": {
+        "startLine": 1596,
+        "startChar": 50,
+        "endLine": 1596,
+        "endChar": 56
+      },
+      "revId": "b32fbbae704040c38b4400cc3c9b106c83d87cb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b5839ed_6d12ff40",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1598,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-09T12:31:26Z",
+      "side": 1,
+      "message": "...in bytes?",
+      "range": {
+        "startLine": 1598,
+        "startChar": 40,
+        "endLine": 1598,
+        "endChar": 50
+      },
+      "revId": "b32fbbae704040c38b4400cc3c9b106c83d87cb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
