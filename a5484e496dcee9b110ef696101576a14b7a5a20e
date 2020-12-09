@@ -22,6 +22,30 @@
       "revId": "a5484e496dcee9b110ef696101576a14b7a5a20e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc6c0e0a_cc6fc983",
+        "filename": "l10ntools/source/merge.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-09T08:05:45Z",
+      "side": 1,
+      "message": "Interesting, my assumption about GNU Make would be that such an export line causes the env var to be set but empty in spawned sub-processes, so the getenv call should return non-null.  (But I apparently only tested with --enable-release-build builds.)  Do you have a log of what make sub-target exactly failed?",
+      "parentUuid": "35f65996_8d6d5077",
+      "range": {
+        "startLine": 117,
+        "startChar": 4,
+        "endLine": 117,
+        "endChar": 27
+      },
+      "revId": "a5484e496dcee9b110ef696101576a14b7a5a20e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
