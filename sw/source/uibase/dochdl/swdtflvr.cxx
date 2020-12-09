@@ -245,7 +245,9 @@ SwTransferable::SwTransferable( SwWrtShell& rSh )
     : m_pWrtShell( &rSh ),
     m_pCreatorView( nullptr ),
     m_pOrigGraphic( nullptr ),
-    m_eBufferType( TransferBufferType::NONE )
+    m_eBufferType( TransferBufferType::NONE ),
+    m_bOldIdle(false),
+    m_bCleanUp(false)
 {
     rSh.GetView().AddTransferable(*this);
     SwDocShell* pDShell = rSh.GetDoc()->GetDocShell();
