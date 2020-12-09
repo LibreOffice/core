@@ -90,45 +90,50 @@ void SwFlyInContentFrame::SetRefPoint( const Point& rPoint,
     }
 }
 
-void SwFlyInContentFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
+void SwFlyInContentFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    bool bCallPrepare = false;
-    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    if (RES_ATTRSET_CHG == nWhich && pNew)
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
+    std::pair<std::unique_ptr<SwAttrSetChg>, std::unique_ptr<SwAttrSetChg>> aTweakedChgs;
+    std::pair<const SfxPoolItem*, const SfxPoolItem*> aSuperArgs(nullptr, nullptr);
+    switch(pLegacy->GetWhich())
     {
-        if(pOld &&
-            (SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->
-            GetItemState(RES_SURROUND, false) ||
-            SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->
-            GetItemState(RES_FRMMACRO, false)) )
+        case RES_ATTRSET_CHG:
         {
-            SwAttrSetChg aOld( *static_cast<const SwAttrSetChg*>(pOld) );
-            SwAttrSetChg aNew( *static_cast<const SwAttrSetChg*>(pNew) );
-
-            aOld.ClearItem( RES_SURROUND );
-            aNew.ClearItem( RES_SURROUND );
-            aOld.ClearItem( RES_FRMMACRO );
-            aNew.ClearItem( RES_FRMMACRO );
-            if( aNew.Count() )
+            auto pOldAttrSetChg = static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
+            auto pNewAttrSetChg = static_cast<const SwAttrSetChg*>(pLegacy->m_pNew);
+            if(pOldAttrSetChg
+                    && pNewAttrSetChg
+                    && ((SfxItemState::SET == pNewAttrSetChg->GetChgSet()->GetItemState(RES_SURROUND, false))
+                    || (SfxItemState::SET == pNewAttrSetChg->GetChgSet()->GetItemState(RES_FRMMACRO, false))))
             {
-                SwFlyFrame::Modify( &aOld, &aNew );
-                bCallPrepare = true;
-            }
+                aTweakedChgs.second = std::make_unique<SwAttrSetChg>(*pOldAttrSetChg);
+                aTweakedChgs.second->ClearItem(RES_SURROUND);
+                aTweakedChgs.second->ClearItem(RES_FRMMACRO);
+                if(aTweakedChgs.second->Count())
+                {
+                    aTweakedChgs.first = std::make_unique<SwAttrSetChg>(*pOldAttrSetChg);
+                    aTweakedChgs.first->ClearItem(RES_SURROUND);
+                    aTweakedChgs.first->ClearItem(RES_FRMMACRO);
+                    aSuperArgs = std::pair<const SfxPoolItem*, const SfxPoolItem*>(aTweakedChgs.first.get(), aTweakedChgs.second.get());
+                }
+            } else if(pNewAttrSetChg->GetChgSet()->Count())
+                aSuperArgs = std::pair<const SfxPoolItem*, const SfxPoolItem*>(pLegacy->m_pOld, pLegacy->m_pNew);
+            break;
         }
-        else if( static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->Count())
-        {
-            SwFlyFrame::Modify( pOld, pNew );
-            bCallPrepare = true;
-        }
+        case RES_SURROUND:
+        case RES_FRMMACRO:
+            break;
+        default:
+            aSuperArgs = std::pair<const SfxPoolItem*, const SfxPoolItem*>(pLegacy->m_pOld, pLegacy->m_pNew);
     }
-    else if( nWhich != RES_SURROUND && RES_FRMMACRO != nWhich )
+    if(aSuperArgs.second)
     {
-        SwFlyFrame::Modify( pOld, pNew );
-        bCallPrepare = true;
+        SwFlyFrame::Modify(aSuperArgs.first, aSuperArgs.second);
+        if(GetAnchorFrame())
+            AnchorFrame()->Prepare(PrepareHint::FlyFrameAttributesChanged, GetFormat());
     }
-
-    if ( bCallPrepare && GetAnchorFrame() )
-        AnchorFrame()->Prepare( PrepareHint::FlyFrameAttributesChanged, GetFormat() );
 }
 
 /// Here the content gets formatted initially.
