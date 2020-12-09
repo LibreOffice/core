@@ -933,7 +933,6 @@ void FastSaxParserImpl::setNamespaceHandler( const Reference< XFastNamespaceHand
     maData.mxNamespaceHandler = Handler;
 }
 
-#include <stdio.h>
 void FastSaxParserImpl::setCustomEntityNames( const ::css::uno::Sequence< ::rtl::OUString >& names, const ::css::uno::Sequence< ::rtl::OUString >& replacements )
 {
     mEntityNames = names;
@@ -1364,54 +1363,51 @@ void FastSaxParserImpl::callbackProcessingInstruction( const xmlChar *target, co
         rEntity.processingInstruction( rEvent.msNamespace, rEvent.msElementName );
 }
 
-xmlEntityPtr FastSaxParserImpl::callbackGetEntity( const xmlChar *name )
+xmlEntityPtr FastSaxParserImpl::callbackGetEntity(const xmlChar* name)
 {
-    if( !name )
+    if (!name)
         return xmlGetPredefinedEntity(name);
     const char* dname = XML_CAST(name);
     int lname = strlen(dname);
-    if( lname == 0 )
+    if (lname == 0)
         return xmlGetPredefinedEntity(name);
-    if( !mEntityNames.hasElements() )
-        return xmlGetPredefinedEntity(name);
-    for( size_t i = 0; i < mEntityNames.size(); ++i )
+    if (mEntityNames.hasElements())
     {
-        if( mEntityNames[i].compareToAscii(dname) == 0 )
+        for (size_t i = 0; i < mEntityNames.size(); ++i)
         {
-            return xmlNewEntity( nullptr,
-                name,
-                XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
-                BAD_CAST(OUStringToOString(mEntityReplacements[i],RTL_TEXTENCODING_UTF8).getStr()));
+            if (mEntityNames[i].compareToAscii(dname) == 0)
+            {
+                return xmlNewEntity(
+                    nullptr, name, XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
+                    BAD_CAST(
+                        OUStringToOString(mEntityReplacements[i], RTL_TEXTENCODING_UTF8).getStr()));
+            }
         }
     }
-    if( lname < 2 )
+    if (lname < 2)
         return xmlGetPredefinedEntity(name);
-    if ( dname[0] == '#' )
+    if (dname[0] == '#')
     {
         sal_uInt32 cval = 0;
-        if( dname[1] == 'x' ||  dname[1] == 'X' )
+        if (dname[1] == 'x' || dname[1] == 'X')
         {
-            if( lname < 3 )
+            if (lname < 3)
                 return xmlGetPredefinedEntity(name);
-            cval = static_cast<sal_uInt32>( strtoul( dname + 2, nullptr, 16 ) );
-            if( cval == 0 )
+            cval = static_cast<sal_uInt32>(strtoul(dname + 2, nullptr, 16));
+            if (cval == 0)
                 return xmlGetPredefinedEntity(name);
-            OUString vname( &cval, 1 );
-            return xmlNewEntity( nullptr,
-                name,
-                XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
-                BAD_CAST(OUStringToOString(vname,RTL_TEXTENCODING_UTF8).getStr()));
+            OUString vname(&cval, 1);
+            return xmlNewEntity(nullptr, name, XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
+                                BAD_CAST(OUStringToOString(vname, RTL_TEXTENCODING_UTF8).getStr()));
         }
         else
         {
-            cval = static_cast<sal_uInt32>( strtoul( dname + 2, nullptr, 10 ) );
-            if( cval == 0 )
+            cval = static_cast<sal_uInt32>(strtoul(dname + 2, nullptr, 10));
+            if (cval == 0)
                 return xmlGetPredefinedEntity(name);
-            OUString vname( &cval, 1 );
-            return xmlNewEntity( nullptr,
-                name,
-                XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
-                BAD_CAST(OUStringToOString(vname,RTL_TEXTENCODING_UTF8).getStr()));
+            OUString vname(&cval, 1);
+            return xmlNewEntity(nullptr, name, XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
+                                BAD_CAST(OUStringToOString(vname, RTL_TEXTENCODING_UTF8).getStr()));
         }
     }
     return xmlGetPredefinedEntity(name);
