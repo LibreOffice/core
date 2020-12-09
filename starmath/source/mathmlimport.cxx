@@ -63,6 +63,7 @@ one go*/
 #include <memory>
 
 #include "mathmlattr.hxx"
+#include "xparsmlbase.hxx"
 #include "mathmlimport.hxx"
 #include <document.hxx>
 #include <smdll.hxx>
