@@ -1127,12 +1127,6 @@ IMPL_LINK_NOARG(SlideTransitionPane, VariantListBoxSelected, ListBox&, void)
 
 IMPL_LINK_NOARG(SlideTransitionPane, DurationModifiedHdl, Edit&, void)
 {
-    double duration_value = static_cast<double>(mpCBX_duration->GetValue());
-    if(duration_value <= 0.0)
-        mpCBX_duration->SetValue(0);
-    else
-        mpCBX_duration->SetValue(duration_value);
-
     applyToSelectedPages();
 }
 
