@@ -1589,6 +1589,8 @@ public:
 
 class VCL_DLLPUBLIC SpinButton : virtual public Entry
 {
+    friend class ::LOKTrigger;
+
 protected:
     Link<SpinButton&, void> m_aValueChangedHdl;
     Link<SpinButton&, void> m_aOutputHdl;
