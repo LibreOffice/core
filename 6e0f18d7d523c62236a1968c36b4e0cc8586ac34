@@ -117,6 +117,30 @@
       "revId": "6e0f18d7d523c62236a1968c36b4e0cc8586ac34",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdeef974_e64547b6",
+        "filename": "starmath/source/mathmlattr.hxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-09T15:56:22Z",
+      "side": 1,
+      "message": "Sorry, didn\u0027t get it. What is included by what and why?",
+      "parentUuid": "10d56e7d_a6f28384",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 26
+      },
+      "revId": "6e0f18d7d523c62236a1968c36b4e0cc8586ac34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
