@@ -157,7 +157,7 @@ static void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >
         rxFieldProps->setPropertyValue( "Items", uno::makeAny( sItems ) );
 
     sal_Int32 nResult = pFFDataHandler->getDropDownResult().toInt32();
-    if ( nResult )
+    if (nResult > 0 && nResult < sItems.size())
         rxFieldProps->setPropertyValue( "SelectedItem", uno::makeAny( sItems[ nResult ] ) );
     if ( !pFFDataHandler->getHelpText().isEmpty() )
          rxFieldProps->setPropertyValue( "Help", uno::makeAny( pFFDataHandler->getHelpText() ) );
