@@ -1527,11 +1527,20 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
             if ( SwTransferable::PasteData( rData, rSh, EXCHG_OUT_ACTION_INSERT_STRING, nActionFlags, SotClipboardFormatId::HTML,
                                         nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext, ePasteTable) )
             {
-                pDispatch->Execute(FN_CHAR_LEFT, SfxCallMode::SYNCHRON);
-                pDispatch->Execute(FN_TABLE_SELECT_ALL, SfxCallMode::SYNCHRON);
-                pDispatch->Execute(SID_COPY, SfxCallMode::SYNCHRON);
+                bool bFoundTemporaryTable = false;
+                pDispatch->Execute(FN_LINE_UP, SfxCallMode::SYNCHRON);
+                if (rSh.GetDoc()->IsIdxInTable(rSh.GetCursor()->GetNode()) != nullptr)
+                {
+                    bFoundTemporaryTable = true;
+                    pDispatch->Execute(FN_TABLE_SELECT_ALL, SfxCallMode::SYNCHRON);
+                    pDispatch->Execute(SID_COPY, SfxCallMode::SYNCHRON);
+                }
                 for(sal_uInt32 a = 0; a < 1 + (nLevel * 2); a++)
                     pDispatch->Execute(SID_UNDO, SfxCallMode::SYNCHRON);
+                // clipboard content hasn't changed (limit potential infinite
+                // recursion with the same non-native table, as was in tdf#138688)
+                if (!bFoundTemporaryTable)
+                    return false;
                 if (ePasteTable == PasteTableType::PASTE_TABLE)
                     pDispatch->Execute(FN_PASTE_NESTED_TABLE, SfxCallMode::SYNCHRON);
                 else if (ePasteTable == PasteTableType::PASTE_ROW)
