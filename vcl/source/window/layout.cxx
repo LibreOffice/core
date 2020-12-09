@@ -692,6 +692,39 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
     }
 }
 
+void VclButtonBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    VclBox::DumpAsPropertyTree(rJsonWriter);
+    rJsonWriter.put("type", "buttonbox");
+
+    switch(m_eLayoutStyle)
+    {
+        case VclButtonBoxStyle::Default:
+            rJsonWriter.put("layoutstyle", "default");
+            break;
+
+        case VclButtonBoxStyle::Spread:
+            rJsonWriter.put("layoutstyle", "spread");
+            break;
+
+        case VclButtonBoxStyle::Edge:
+            rJsonWriter.put("layoutstyle", "edge");
+            break;
+
+        case VclButtonBoxStyle::Center:
+            rJsonWriter.put("layoutstyle", "center");
+            break;
+
+        case VclButtonBoxStyle::Start:
+            rJsonWriter.put("layoutstyle", "start");
+            break;
+
+        case VclButtonBoxStyle::End:
+            rJsonWriter.put("layoutstyle", "end");
+            break;
+    }
+}
+
 namespace {
 
 struct ButtonOrder
