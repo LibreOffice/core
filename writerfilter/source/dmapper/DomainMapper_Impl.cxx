@@ -79,6 +79,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <editeng/flditem.hxx>
 #include <editeng/unotext.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/temporary.hxx>
 #include <oox/mathml/import.hxx>
 #include <xmloff/odffields.hxx>
@@ -157,7 +158,7 @@ static void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >
         rxFieldProps->setPropertyValue( "Items", uno::makeAny( sItems ) );
 
     sal_Int32 nResult = pFFDataHandler->getDropDownResult().toInt32();
-    if ( nResult )
+    if (nResult > 0 && o3tl::make_unsigned(nResult) < sItems.size())
         rxFieldProps->setPropertyValue( "SelectedItem", uno::makeAny( sItems[ nResult ] ) );
     if ( !pFFDataHandler->getHelpText().isEmpty() )
          rxFieldProps->setPropertyValue( "Help", uno::makeAny( pFFDataHandler->getHelpText() ) );
