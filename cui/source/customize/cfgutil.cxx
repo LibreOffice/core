@@ -589,14 +589,17 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
                         bChildOnDemand = true;
                     }
 
-                    OUString aImage = GetImage(theChild, m_xContext, bIsRootNode);
+                    if (!comphelper::LibreOfficeKit::isActive() || bChildOnDemand)
+                    {
+                        OUString aImage = GetImage(theChild, m_xContext, bIsRootNode);
 
-                    aArr.push_back( std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER,
-                            0, static_cast<void *>( theChild.get())));
+                        aArr.push_back( std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER,
+                                                                            0, static_cast<void *>( theChild.get())));
 
-                    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
-                    m_xTreeView->insert(pParentEntry, -1, &uiName, &sId, nullptr, nullptr, bChildOnDemand, m_xScratchIter.get());
-                    m_xTreeView->set_image(*m_xScratchIter, aImage);
+                        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
+                        m_xTreeView->insert(pParentEntry, -1, &uiName, &sId, nullptr, nullptr, bChildOnDemand, m_xScratchIter.get());
+                        m_xTreeView->set_image(*m_xScratchIter, aImage);
+                    }
                 }
             }
         }
