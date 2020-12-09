@@ -1203,7 +1203,7 @@
             <desc>Specifies whether hidden paragraphs are displayed on the screen.</desc>
             <label>Hidden paragraphs</label>
           </info>
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="HiddenCharacter" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options - Text document  Formatting aids - [Section] Display of -->
