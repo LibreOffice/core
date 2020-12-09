@@ -21,7 +21,6 @@
 #include <sal/log.hxx>
 
 #include <algorithm>
-#include <cassert>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -114,8 +113,7 @@ MergeDataFile::MergeDataFile(
     bool bCaseSensitive, bool bWithQtz )
 {
     auto const env = getenv("ENABLE_RELEASE_BUILD");
-    assert(env != nullptr);
-    OString sEnableReleaseBuild(env);
+    OString sEnableReleaseBuild(env == nullptr ? "" : env);
 
     std::ifstream aInputStream( rFileName.getStr() );
     if ( !aInputStream.is_open() )
