@@ -32,6 +32,7 @@ namespace emfio
         bool        mbRecordPath : 1;
         bool        mbEMFPlus : 1;
         bool        mbEMFPlusDualMode : 1;
+        bool mbEnableEMFPlus = true;
 
         bool        ReadHeader();
         // reads and converts the rectangle
@@ -43,6 +44,7 @@ namespace emfio
 
         bool ReadEnhWMF();
         void ReadGDIComment(sal_uInt32 nCommentId);
+        void SetEnableEMFPlus(bool bEnableEMFPlus) { mbEnableEMFPlus = bEnableEMFPlus; }
 
     private:
         template <class T> void ReadAndDrawPolyPolygon(sal_uInt32 nNextPos);

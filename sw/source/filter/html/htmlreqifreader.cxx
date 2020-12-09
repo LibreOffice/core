@@ -448,7 +448,7 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode)
         uno::Sequence<beans::PropertyValue> aFilterData
             = { comphelper::makePropertyValue("EmbedEMF", false) };
         FilterConfigItem aConfigItem(&aFilterData);
-        if (ConvertGDIMetaFileToWMF(pGraphic->GetGDIMetaFile(), aGraphicStream, &aConfigItem))
+        if (ConvertGraphicToWMF(*pGraphic, aGraphicStream, &aConfigItem))
         {
             pPresentationData = static_cast<const sal_uInt8*>(aGraphicStream.GetData());
             nPresentationData = aGraphicStream.TellEnd();

@@ -34,6 +34,7 @@
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/wmfexternal.hxx>
@@ -207,6 +208,16 @@ void VectorGraphicData::ensureSequenceAndRange()
                 if (mpExternalHeader)
                 {
                     aSequence = mpExternalHeader->getSequence();
+                }
+
+                if (!mbEnableEMFPlus)
+                {
+                    auto aVector
+                        = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(
+                            aSequence);
+                    aVector.push_back(
+                        comphelper::makePropertyValue("EMFPlusEnable", uno::makeAny(false)));
+                    aSequence = comphelper::containerToSequence(aVector);
                 }
 
                 if (myInputStream.is())

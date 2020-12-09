@@ -74,6 +74,8 @@ private:
     // If the vector format has more pages this denotes which page to render
     sal_Int32 mnPageIndex;
 
+    bool mbEnableEMFPlus = true;
+
     // on demand creators
     void ensurePdfReplacement();
     void ensureReplacement();
@@ -112,6 +114,8 @@ public:
     BitmapChecksum GetChecksum() const;
 
     sal_Int32 getPageIndex() const { return std::max(sal_Int32(0), mnPageIndex); }
+
+    void setEnableEMFPlus(bool bEnableEMFPlus) { mbEnableEMFPlus = bEnableEMFPlus; }
 
     bool isPrimitiveSequenceCreated() const { return mbSequenceCreated; }
 };
