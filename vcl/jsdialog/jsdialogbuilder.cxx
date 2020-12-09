@@ -808,7 +808,7 @@ JSSpinButton::JSSpinButton(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Wind
 void JSSpinButton::set_value(int value)
 {
     SalInstanceSpinButton::set_value(value);
-    notifyDialogState();
+    notifyDialogState(true); // if input is limited we can receive the same JSON
 }
 
 JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, VclPtr<vcl::Window> aContentWindow,
