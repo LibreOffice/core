@@ -3379,6 +3379,9 @@ boost::property_tree::ptree Window::DumpAsPropertyTree()
                     aSubTree.put("left", sLeft);
                     aSubTree.put("top", sTop);
                 }
+                int nWidth = pChild->get_grid_width();
+                if (nWidth > 1)
+                    aSubTree.put("width", nWidth);
                 aChildren.push_back(std::make_pair("", aSubTree));
             }
             pChild = pChild->mpWindowImpl->mpNext;
