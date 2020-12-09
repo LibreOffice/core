@@ -1776,8 +1776,7 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                         aParagraph->getProperties().getFirstLineIndentation() = -285750 / EMU_PER_HMM;
 
                     // It is not possible to change the bullet style for text.
-                    OUString aBulletChar = OUString::fromUtf8(u8"•");
-                    aParagraph->getProperties().getBulletList().setBulletChar(aBulletChar);
+                    aParagraph->getProperties().getBulletList().setBulletChar(u"•");
                     aParagraph->getProperties().getBulletList().setSuffixNone();
                     isBulletList = true;
                 }
