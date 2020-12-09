@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <string_view>
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -55,7 +56,7 @@ class UStringMixEqual
 
 public:
     UStringMixEqual(bool bCaseSensitive = true):m_bCaseSensitive(bCaseSensitive){}
-    bool operator() (const OUString& lhs, const OUString& rhs) const
+    bool operator() (const OUString& lhs, std::u16string_view rhs) const
     {
         return m_bCaseSensitive ? lhs == rhs : lhs.equalsIgnoreAsciiCase( rhs );
     }

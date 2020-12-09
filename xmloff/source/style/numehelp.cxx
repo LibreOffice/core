@@ -284,7 +284,7 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(SvXMLExpor
 }
 
 void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(SvXMLExport& rXMLExport,
-    const OUString& rValue, const OUString& rCharacters,
+    const OUString& rValue, std::u16string_view rCharacters,
     bool bExportValue, bool bExportTypeAttribute)
 {
     if (bExportTypeAttribute)
@@ -494,7 +494,7 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
 }
 
 void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
-    const OUString& rValue, const OUString& rCharacters,
+    const OUString& rValue, std::u16string_view rCharacters,
     bool bExportValue,
     sal_uInt16 nNamespace)
 {

@@ -23,6 +23,7 @@
 #include <config_java.h>
 
 #include <map>
+#include <string_view>
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
@@ -98,7 +99,7 @@ namespace connectivity
     OOO_DLLPUBLIC_DBTOOLS
     OSQLColumns::const_iterator find(   const OSQLColumns::const_iterator& first,
                                         const OSQLColumns::const_iterator& last,
-                                        const OUString& _rVal,
+                                        std::u16string_view _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase);
 
     // search from first to last the column with the realname _rVal
@@ -106,7 +107,7 @@ namespace connectivity
     OOO_DLLPUBLIC_DBTOOLS
     OSQLColumns::const_iterator findRealName(   const OSQLColumns::const_iterator& first,
                                                 const OSQLColumns::const_iterator& last,
-                                                const OUString& _rVal,
+                                                std::u16string_view _rVal,
                                                 const ::comphelper::UStringMixEqual& _rCase);
 
     // the first two find methods are much faster than the one below
@@ -116,7 +117,7 @@ namespace connectivity
     OSQLColumns::const_iterator find(   OSQLColumns::const_iterator first,
                                         const OSQLColumns::const_iterator& last,
                                         const OUString& _rProp,
-                                        const OUString& _rVal,
+                                        std::u16string_view _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase);
 
     /// @throws css::lang::DisposedException

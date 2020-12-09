@@ -402,7 +402,7 @@ uno::Reference<container::XIndexReplace>
 XMLTextListsHelper::MakeNumRule(
     SvXMLImport & i_rImport,
     const uno::Reference<container::XIndexReplace>& i_rNumRule,
-    const OUString& i_ParentStyleName,
+    std::u16string_view i_ParentStyleName,
     const OUString& i_StyleName,
     sal_Int16 & io_rLevel,
     bool* o_pRestartNumbering,

@@ -1128,7 +1128,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         // show style, unless name will be shown
         ProcessValueAndType(IsStringField(nToken, rPropSet),
                             GetIntProperty(gsPropertyNumberFormat, rPropSet),
-                            "", "", 0.0, // values not used
+                            "", u"", 0.0, // values not used
                             false,
                             false,
                             !bCmd,
@@ -1169,7 +1169,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                        bCmd);
         ProcessValueAndType(IsStringField(nToken, rPropSet),
                             GetIntProperty(gsPropertyNumberFormat, rPropSet),
-                            "", "", 0.0, // values not used
+                            "", u"", 0.0, // values not used
                             false, false, !bCmd,
                             ! GetOptionalBoolProperty(
                                  gsPropertyIsFixedLanguage,
@@ -1252,7 +1252,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         {
             ProcessValueAndType(false,
                                 GetIntProperty(gsPropertyNumberFormat,rPropSet),
-                                "", "", 0.0, // not used
+                                "", u"", 0.0, // not used
                                 false, false, true,
                                 ! GetOptionalBoolProperty(
                                     gsPropertyIsFixedLanguage,
@@ -1294,7 +1294,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         {
             ProcessValueAndType(false,
                                 GetIntProperty(gsPropertyNumberFormat,rPropSet),
-                                "", "", 0.0, // not used
+                                "", u"", 0.0, // not used
                                 false, false, true,
                                 ! GetOptionalBoolProperty(
                                     gsPropertyIsFixedLanguage,
@@ -1426,7 +1426,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         {
             ProcessValueAndType(false,  // doesn't happen for text
                                 GetIntProperty(gsPropertyNumberFormat,rPropSet),
-                                "", "", 0.0, // not used
+                                "", u"", 0.0, // not used
                                 false, false, true, false);
         }
         ProcessDisplay(GetBoolProperty(gsPropertyIsVisible, rPropSet),
@@ -1451,7 +1451,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     case FIELD_ID_DOCINFO_PRINT_DATE:
         ProcessValueAndType(false,
                             GetIntProperty(gsPropertyNumberFormat, rPropSet),
-                            "", "", 0.0,
+                            "", u"", 0.0,
                             false, false, true,
                             ! GetOptionalBoolProperty(
                                     gsPropertyIsFixedLanguage,
@@ -1482,7 +1482,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     {
         ProcessValueAndType(false,  // doesn't happen for text
                                 GetIntProperty(gsPropertyNumberFormat,rPropSet),
-                                "", "", 0.0, // not used
+                                "", u"", 0.0, // not used
                                 false, false, true,
                                 ! GetOptionalBoolProperty(
                                     gsPropertyIsFixedLanguage,
@@ -1854,7 +1854,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                         GetBoolProperty(gsPropertyIsShowFormula, rPropSet) );
         ProcessValueAndType( false,
                              GetIntProperty(gsPropertyNumberFormat, rPropSet),
-                             "", "", 0.0f,
+                             "", u"", 0.0f,
                              false, false, true,
                              false );
         ExportElement( XML_TABLE_FORMULA, sPresentation );
@@ -2049,7 +2049,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                 ProcessValueAndType(
                     bIsString,
                     GetIntProperty(gsPropertyNumberFormat, xFieldPropSet),
-                    "", "", 0.0,
+                    "", u"", 0.0,
                     false, true, false, false);
             }
             else
@@ -2062,7 +2062,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                 // from NumberFormats
                 ProcessValueAndType(
                     bIsString,
-                    0, "", "", 0.0,
+                    0, "", u"", 0.0,
                     false, true, false, false);
             }
 
@@ -2135,7 +2135,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                 // expression:
                 ProcessValueAndType(
                     false,
-                    0, "", "",
+                    0, "", u"",
                     GetDoubleProperty(gsPropertyValue, xPropSet),
                     true,
                     true,
@@ -2334,7 +2334,7 @@ void XMLTextFieldExport::ExportMetaField(
         // style:data-style-name
         ProcessValueAndType(false,
             GetIntProperty(gsPropertyNumberFormat, i_xMeta),
-            "", "", 0.0, false, false, true,
+            "", u"", 0.0, false, false, true,
             false  );
 
         // text:meta-field without xml:id is invalid
@@ -2357,7 +2357,7 @@ void XMLTextFieldExport::ProcessValueAndType(
     bool bIsString,     /// do we process a string or a number?
     sal_Int32 nFormatKey,   /// format key for NumberFormatter; inv. if string
     const OUString& sContent,   /// string content; possibly invalid
-    const OUString& sDefault,   /// default string
+    std::u16string_view sDefault, /// default string
     double fValue,          /// float content; possibly invalid
     bool bExportValue,  /// export value attribute?
     bool bExportValueType,  /// export value-type attribute?
@@ -2487,7 +2487,7 @@ void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
 /// export a string attribute
 void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
                                        const OUString& sValue,
-                                       const OUString& sDefault)
+                                       std::u16string_view sDefault)
 {
     if (sValue != sDefault)
     {
@@ -2499,7 +2499,7 @@ void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
 void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
                                        sal_uInt16 nValuePrefix,
                                        const OUString& sValue,
-                                       const OUString& sDefault)
+                                       std::u16string_view sDefault)
 {
     if (sValue != sDefault)
     {

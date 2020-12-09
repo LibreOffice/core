@@ -824,7 +824,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                         if (!bIsStandard)
                         {
                             if ( nCellType == util::NumberFormat::TEXT )
-                                aHelper.SetNumberFormatAttributes("", "");
+                                aHelper.SetNumberFormatAttributes("", u"");
                             else
                                 aHelper.SetNumberFormatAttributes(nFormatKey, 0.0, false);
                         }

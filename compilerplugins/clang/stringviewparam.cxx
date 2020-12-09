@@ -161,28 +161,37 @@ DeclRefExpr const* relevantCXXMemberCallExpr(CXXMemberCallExpr const* expr)
     return relevantDeclRefExpr(expr->getImplicitObjectArgument());
 }
 
-DeclRefExpr const* relevantCXXOperatorCallExpr(CXXOperatorCallExpr const* expr)
+SmallVector<DeclRefExpr const*, 2> wrap(DeclRefExpr const* expr)
+{
+    if (expr == nullptr)
+    {
+        return {};
+    }
+    return { expr };
+}
+
+SmallVector<DeclRefExpr const*, 2> relevantCXXOperatorCallExpr(CXXOperatorCallExpr const* expr)
 {
     if (expr->getOperator() == OO_Subscript)
     {
         auto const e = expr->getArg(0);
         if (relevantStringType(e->getType()) == StringType::None)
         {
-            return nullptr;
+            return {};
         }
-        return relevantDeclRefExpr(e);
+        return wrap(relevantDeclRefExpr(e));
     }
     else if (compat::isComparisonOp(expr))
     {
         auto arg0 = compat::IgnoreImplicit(expr->getArg(0));
         if (isa<clang::StringLiteral>(arg0))
         {
-            return relevantDeclRefExpr(expr->getArg(1));
+            return wrap(relevantDeclRefExpr(expr->getArg(1)));
         }
         auto arg1 = compat::IgnoreImplicit(expr->getArg(1));
         if (isa<clang::StringLiteral>(arg1))
         {
-            return relevantDeclRefExpr(expr->getArg(0));
+            return wrap(relevantDeclRefExpr(arg0));
         }
 
         // TODO Can't currently convert rtl::OString because we end up with ambiguous operator==
@@ -191,21 +200,27 @@ DeclRefExpr const* relevantCXXOperatorCallExpr(CXXOperatorCallExpr const* expr)
         auto st2 = relevantStringType(arg1->getType());
         if (st1 == StringType::RtlOustring && st2 == StringType::RtlOustring)
         {
-            auto e1 = relevantDeclRefExpr(expr->getArg(0));
-            if (e1)
-                return e1;
-            return relevantDeclRefExpr(expr->getArg(1));
+            SmallVector<DeclRefExpr const*, 2> v;
+            if (auto const e = relevantDeclRefExpr(arg0))
+            {
+                v.push_back(e);
+            }
+            if (auto const e = relevantDeclRefExpr(arg1))
+            {
+                v.push_back(e);
+            }
+            return v;
         }
-        if (st1 == StringType::RtlOustring && isStringView(expr->getArg(1)->getType()))
+        if (st1 == StringType::RtlOustring && isStringView(arg1->getType()))
         {
-            return relevantDeclRefExpr(expr->getArg(0));
+            return wrap(relevantDeclRefExpr(arg0));
         }
-        if (st2 == StringType::RtlOustring && isStringView(expr->getArg(0)->getType()))
+        if (st2 == StringType::RtlOustring && isStringView(arg0->getType()))
         {
-            return relevantDeclRefExpr(expr->getArg(1));
+            return wrap(relevantDeclRefExpr(arg1));
         }
     }
-    return nullptr;
+    return {};
 }
 
 class StringViewParam final
@@ -381,14 +396,17 @@ public:
         {
             return true;
         }
-        auto const e = relevantCXXOperatorCallExpr(expr);
-        if (e == nullptr)
+        auto const es = relevantCXXOperatorCallExpr(expr);
+        if (es.empty())
         {
             return FunctionAddress::TraverseCXXOperatorCallExpr(expr);
         }
-        currentGoodUses_.insert(e);
+        currentGoodUses_.insert(es.begin(), es.end());
         auto const ret = FunctionAddress::TraverseCXXOperatorCallExpr(expr);
-        currentGoodUses_.erase(e);
+        for (auto const i : es)
+        {
+            currentGoodUses_.erase(i);
+        }
         return ret;
     }
 

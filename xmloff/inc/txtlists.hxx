@@ -24,6 +24,7 @@
 #include <map>
 #include <memory>
 #include <stack>
+#include <string_view>
 #include <tuple>
 #include <vector>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -115,7 +116,7 @@ class XMLTextListsHelper
         static css::uno::Reference< css::container::XIndexReplace> MakeNumRule(
             SvXMLImport & i_rImport,
             const css::uno::Reference< css::container::XIndexReplace>& i_xNumRule,
-            const OUString& i_ParentStyleName,
+            std::u16string_view i_ParentStyleName,
             const OUString& i_StyleName,
             sal_Int16 & io_rLevel,
             bool* o_pRestartNumbering = nullptr,

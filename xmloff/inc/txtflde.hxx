@@ -33,7 +33,7 @@
 #include <map>
 #include <set>
 #include <memory>
-
+#include <string_view>
 
 class SvXMLExport;
 struct XMLPropertyState;
@@ -274,14 +274,14 @@ private:
     void ProcessString(
         enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
         const OUString& sValue,  /// attribute value
-        const OUString& sDefault); /// default value; omit if equal
+        std::u16string_view sDefault); /// default value; omit if equal
 
     /// export a string attribute, omit if default
     void ProcessString(
         enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
         sal_uInt16 nValuePrefix,
         const OUString& sValue,  /// attribute value
-        const OUString& sDefault); /// default value; omit if equal
+        std::u16string_view sDefault); /// default value; omit if equal
 
     /// export a string attribute
     void ProcessString(
@@ -313,7 +313,7 @@ private:
         bool bIsString,     /// do we process a string or a number?
         sal_Int32 nFormatKey,   /// format key for NumberFormatter; possibly -1
         const OUString& sContent, /// string content; possibly invalid
-        const OUString& sDefault, /// default string
+        std::u16string_view sDefault, /// default string
         double fValue,          /// float content; possibly invalid
         bool bExportValue,  /// export value attribute?
         bool bExportValueType,  /// export value-type attribute?
