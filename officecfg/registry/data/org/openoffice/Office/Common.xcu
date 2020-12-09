@@ -343,7 +343,7 @@
       </node>
       <node oor:name="m14" oor:op="replace" install:module="base">
         <prop oor:name="URL" oor:type="xs:string">
-          <value>slot:10934</value>
+          <value>.uno:AutoPilotAddressDataSource</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">Address Data Source...</value>
