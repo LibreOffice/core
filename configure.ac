@@ -2625,7 +2625,7 @@ if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
         <true/>'
 else
     AC_MSG_RESULT([yes])
-    ENABLE_RELEASE_BUILD=TRUE
+    ENABLE_RELEASE_BUILD=
     GET_TASK_ALLOW_ENTITLEMENT=''
 fi
 AC_SUBST(ENABLE_RELEASE_BUILD)
