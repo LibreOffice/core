@@ -1265,7 +1265,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InterfaceOleWrapper::GetIDsOfNames(REFIID /*ri
                             bool bFound = false;
                             for (int j = 0; j < aParamInfos.getLength(); ++j)
                             {
-                                if (aParamInfos[j].aName.equalsIgnoreAsciiCase(OUString(o3tl::toU(rgszNames[i]))))
+                                if (aParamInfos[j].aName.equalsIgnoreAsciiCase(o3tl::toU(rgszNames[i])))
                                 {
                                     rgdispid[i] = j;
                                     bFound = true;
