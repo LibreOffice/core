@@ -445,7 +445,7 @@ public:
     bool                    Replace(
                                 const Color* pSearchColors,
                                 const Color* rReplaceColors,
-                                sal_uLong nColorCount,
+                                size_t nColorCount,
                                 sal_uInt8 const * pTols );
 
     /** Convert the bitmap to a meta file

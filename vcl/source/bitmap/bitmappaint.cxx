@@ -913,7 +913,7 @@ bool Bitmap::Replace(const Color& rSearchColor, const Color& rReplaceColor, sal_
     return bRet;
 }
 
-bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, sal_uLong nColorCount,
+bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, size_t nColorCount,
                      sal_uInt8 const* pTols)
 {
     // Bitmaps with 1 bit color depth can cause problems if they have other entries than black/white
@@ -935,7 +935,7 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, sa
 
         if (pTols)
         {
-            for (sal_uLong i = 0; i < nColorCount; i++)
+            for (size_t i = 0; i < nColorCount; ++i)
             {
                 const Color& rCol = pSearchColors[i];
                 const sal_uInt8 nTol = pTols[i];
@@ -950,7 +950,7 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, sa
         }
         else
         {
-            for (sal_uLong i = 0; i < nColorCount; i++)
+            for (size_t i = 0; i < nColorCount; ++i)
             {
                 const Color& rCol = pSearchColors[i];
 
@@ -970,7 +970,7 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, sa
             {
                 const BitmapColor& rCol = pAcc->GetPaletteColor(nEntry);
 
-                for (sal_uLong i = 0; i < nColorCount; i++)
+                for (size_t i = 0; i < nColorCount; ++i)
                 {
                     if (aMinR[i] <= rCol.GetRed() && aMaxR[i] >= rCol.GetRed()
                         && aMinG[i] <= rCol.GetGreen() && aMaxG[i] >= rCol.GetGreen()
@@ -986,7 +986,7 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, sa
         {
             std::vector<BitmapColor> aReplaces(nColorCount);
 
-            for (sal_uLong i = 0; i < nColorCount; i++)
+            for (size_t i = 0; i < nColorCount; ++i)
                 aReplaces[i] = pAcc->GetBestMatchingColor(pReplaceColors[i]);
 
             for (tools::Long nY = 0, nHeight = pAcc->Height(); nY < nHeight; nY++)
@@ -996,7 +996,7 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, sa
                 {
                     BitmapColor aCol = pAcc->GetPixelFromData(pScanline, nX);
 
-                    for (sal_uLong i = 0; i < nColorCount; i++)
+                    for (size_t i = 0; i < nColorCount; ++i)
                     {
                         if (aMinR[i] <= aCol.GetRed() && aMaxR[i] >= aCol.GetRed()
                             && aMinG[i] <= aCol.GetGreen() && aMaxG[i] >= aCol.GetGreen()
