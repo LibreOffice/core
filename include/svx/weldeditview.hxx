@@ -55,6 +55,8 @@ protected:
 
     void InitAccessible();
 
+    void DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
+
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual bool MouseMove(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
