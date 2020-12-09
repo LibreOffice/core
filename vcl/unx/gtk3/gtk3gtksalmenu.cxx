@@ -325,7 +325,7 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
                 pSubMenuModel = g_lo_menu_get_submenu_from_item_in_section( pLOMenu, nSection, nItemPos );
             }
 
-            g_object_unref( pSubMenuModel );
+            assert(pSubMenuModel);
 
             if (bRecurse || bNonMenuChangedToMenu)
             {
@@ -334,6 +334,8 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
                 pSubmenu->SetActionGroup( G_ACTION_GROUP( pActionGroup ) );
                 pSubmenu->ImplUpdate(true, bRemoveDisabledEntries);
             }
+
+            g_object_unref( pSubMenuModel );
         }
 
         g_free( aNativeCommand );
