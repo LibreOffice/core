@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9b6b2b9_8b34e4dd",
+        "filename": "vcl/source/bitmap/bitmappaint.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-09T20:08:35Z",
+      "side": 1,
+      "message": "ah, should have been sal_uInt8, not sal_Int8",
+      "revId": "0d19b6ffbb4b398814d7975e74a3841de5116545",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
