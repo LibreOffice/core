@@ -607,20 +607,23 @@ const GDIMetaFile& ImpGraphic::ImplGetGDIMetaFile() const
             pThat->maEx = maSvgData->getReplacement();
         }
 
+        // Using maEx.GetPrefSize() directly would not fall back from logic size to pixel size.
+        Size aPrefSize = ImplGetPrefSize();
+
         // #123983# directly create a metafile with the same PrefSize and PrefMapMode
         // the bitmap has, this will be an always correct metafile
         if(maEx.IsTransparent())
         {
-            pThat->maMetaFile.AddAction(new MetaBmpExScaleAction(Point(), maEx.GetPrefSize(), maEx));
+            pThat->maMetaFile.AddAction(new MetaBmpExScaleAction(Point(), aPrefSize, maEx));
         }
         else
         {
-            pThat->maMetaFile.AddAction(new MetaBmpScaleAction(Point(), maEx.GetPrefSize(), maEx.GetBitmap()));
+            pThat->maMetaFile.AddAction(new MetaBmpScaleAction(Point(), aPrefSize, maEx.GetBitmap()));
         }
 
         pThat->maMetaFile.Stop();
         pThat->maMetaFile.WindStart();
-        pThat->maMetaFile.SetPrefSize(maEx.GetPrefSize());
+        pThat->maMetaFile.SetPrefSize(aPrefSize);
         pThat->maMetaFile.SetPrefMapMode(maEx.GetPrefMapMode());
     }
 
