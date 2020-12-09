@@ -62,8 +62,6 @@ export LOCAL_COMMON_OUT := $(instsetoo_OUT)
 
 instsetoo_native_WITH_LANG := en-US $(filter-out en-US,$(gb_WITH_LANG))
 
-PRODUCTNAME_no_spaces := $(subst $(WHITESPACE),,$(PRODUCTNAME))
-
 ifeq (WNT,$(OS))
 define instsetoo_native_msitemplates
 
@@ -85,7 +83,7 @@ $(foreach pkgformat,$(5),\
 && $(if $(filter-out archive,$(pkgformat)),ENABLE_STRIP=1) $(PERL) -w $< \
 	-f $(BUILDDIR)/instsetoo_native/util/openoffice.lst \
 	-l $(subst $(WHITESPACE),$(COMMA),$(strip $(2))) \
-	-p $(PRODUCTNAME_no_spaces)$(3) \
+	-p $(PRODUCTNAME_WITHOUT_SPACES)$(3) \
 	-u $(instsetoo_OUT) \
 	-buildid $(if $(filter deb0 rpm0,$(pkgformat)$(LIBO_VERSION_PATCH)),1,$(LIBO_VERSION_PATCH)) \
 	$(if $(filter WNT,$(OS)), \
@@ -104,13 +102,13 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony:
 	rm -rf $(instsetoo_OUT)
 ifeq (TRUE,$(LIBO_TEST_INSTALL))
 	$(call instsetoo_native_install_command,openoffice,en-US,,,archive)
-	unzip -q -d $(TESTINSTALLDIR) $(instsetoo_OUT)/$(PRODUCTNAME_no_spaces)/archive/install/en-US/LibreOffice*_archive.zip
+	unzip -q -d $(TESTINSTALLDIR) $(instsetoo_OUT)/$(PRODUCTNAME_WITHOUT_SPACES)/archive/install/en-US/LibreOffice*_archive.zip
 	mv $(TESTINSTALLDIR)/LibreOffice*_archive/LibreOffice*/* $(TESTINSTALLDIR)/
 	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive/LibreOffice*
 	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive
 ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
 	$(call instsetoo_native_install_command,sdkoo,en-US,_SDK,,archive)
-	unzip -q -d $(TESTINSTALLDIR) $(instsetoo_OUT)/$(PRODUCTNAME_no_spaces)_SDK/archive/install/en-US/LibreOffice*_archive_sdk.zip
+	unzip -q -d $(TESTINSTALLDIR) $(instsetoo_OUT)/$(PRODUCTNAME_WITHOUT_SPACES)_SDK/archive/install/en-US/LibreOffice*_archive_sdk.zip
 	mv $(TESTINSTALLDIR)/LibreOffice*_archive_sdk/LibreOffice*_SDK/sdk \
         $(TESTINSTALLDIR)/
 	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive_sdk/LibreOffice*_SDK
@@ -157,8 +155,8 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_main_signing.do
 			$(if $(PFXFILE),-f $(PFXFILE)) \
 			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
 			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
-			-d $(PRODUCTNAME)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH) \
-			$(WORKDIR)/installation/$(PRODUCTNAME)/msi/install/*/*.msi \
+			-d $(PRODUCTNAME_WITHOUT_SPACES)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH) \
+			$(WORKDIR)/installation/$(PRODUCTNAME_WITHOUT_SPACES)/msi/install/*/*.msi \
 	&& touch $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
@@ -171,8 +169,8 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_helppack_signin
 			$(if $(PFXFILE),-f $(PFXFILE)) \
 			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
 			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
-			-d $(PRODUCTNAME)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\ Helppack \
-			$(WORKDIR)/installation/$(PRODUCTNAME)_helppack/msi/install/*/*.msi \
+			-d $(PRODUCTNAME_WITHOUT_SPACES)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\ Helppack \
+			$(WORKDIR)/installation/$(PRODUCTNAME_WITHOUT_SPACES)_helppack/msi/install/*/*.msi \
 	&& touch $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
@@ -185,8 +183,8 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_sdk_signing.don
 			$(if $(PFXFILE),-f $(PFXFILE)) \
 			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
 			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
-			-d $(PRODUCTNAME)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\ SDK \
-			$(WORKDIR)/installation/$(PRODUCTNAME)_SDK/msi/install/*/*.msi \
+			-d $(PRODUCTNAME_WITHOUT_SPACES)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\ SDK \
+			$(WORKDIR)/installation/$(PRODUCTNAME_WITHOUT_SPACES)_SDK/msi/install/*/*.msi \
 	&& touch $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
