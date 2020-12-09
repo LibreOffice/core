@@ -366,7 +366,7 @@ $(call gb_Extension_get_workdir,$(1))/help/$(5)/$(3) : \
 	$$(call gb_Helper_abbreviate_dirs, \
 		mkdir -p $$(dir $$@) && \
 		$(if $(filter qtz,$(5)), \
-			$(gb_Extension_HELPEXCOMMAND) -i $$< -o $$@ -l $(5) -m \
+			$$(gb_Extension_HELPEXCOMMAND) -i $$< -o $$@ -l $(5) -m \
 			, \
 			$(if $(filter-out en-US,$(5)), \
 				MERGEINPUT=`$(gb_MKTEMP)` && \
