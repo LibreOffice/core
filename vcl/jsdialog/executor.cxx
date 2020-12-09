@@ -128,14 +128,24 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
             auto pSpinField = dynamic_cast<weld::SpinButton*>(pWidget);
             if (pSpinField)
             {
+                if (sAction == "change")
+                {
+                    OString sValue = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                    int nValue = std::atoi(sValue.getStr());
+                    pSpinField->set_value(nValue);
+                    LOKTrigger::trigger_value_changed(*pSpinField);
+                    return true;
+                }
                 if (sAction == "plus")
                 {
                     pSpinField->set_value(pSpinField->get_value() + 1);
+                    LOKTrigger::trigger_value_changed(*pSpinField);
                     return true;
                 }
                 else if (sAction == "minus")
                 {
                     pSpinField->set_value(pSpinField->get_value() - 1);
+                    LOKTrigger::trigger_value_changed(*pSpinField);
                     return true;
                 }
             }
