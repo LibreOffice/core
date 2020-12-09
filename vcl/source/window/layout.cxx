@@ -684,6 +684,41 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
     }
 }
 
+boost::property_tree::ptree VclButtonBox::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree = VclBox::DumpAsPropertyTree();
+    aTree.put("type", "buttonbox");
+
+    switch(m_eLayoutStyle)
+    {
+        case VclButtonBoxStyle::Default:
+            aTree.put("layoutstyle", "default");
+            break;
+
+        case VclButtonBoxStyle::Spread:
+            aTree.put("layoutstyle", "spread");
+            break;
+
+        case VclButtonBoxStyle::Edge:
+            aTree.put("layoutstyle", "edge");
+            break;
+
+        case VclButtonBoxStyle::Center:
+            aTree.put("layoutstyle", "center");
+            break;
+
+        case VclButtonBoxStyle::Start:
+            aTree.put("layoutstyle", "start");
+            break;
+
+        case VclButtonBoxStyle::End:
+            aTree.put("layoutstyle", "end");
+            break;
+    }
+
+    return aTree;
+}
+
 struct ButtonOrder
 {
     const char* m_aType;

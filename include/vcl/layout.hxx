@@ -212,6 +212,7 @@ public:
     }
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
     void sort_native_button_order();
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 protected:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
