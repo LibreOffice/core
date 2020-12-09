@@ -126,20 +126,25 @@ void WeldEditView::Resize()
 
 void WeldEditView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    rRenderContext.Push(PushFlags::ALL);
-    rRenderContext.SetClipRegion();
-
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
 
     rRenderContext.SetBackground(aBgColor);
+    if (EditView* pEditView = GetEditView())
+        pEditView->SetBackgroundColor(aBgColor);
+
+    DoPaint(rRenderContext, rRect);
+}
+
+void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+{
+    rRenderContext.Push(PushFlags::ALL);
+    rRenderContext.SetClipRegion();
 
     std::vector<tools::Rectangle> aLogicRects;
 
     if (EditView* pEditView = GetEditView())
     {
-        pEditView->SetBackgroundColor(aBgColor);
-
         pEditView->Paint(rRect, &rRenderContext);
 
         if (HasFocus())
