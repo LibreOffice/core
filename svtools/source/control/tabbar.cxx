@@ -395,8 +395,9 @@ IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel, void )
     ResetPostEvent();
     maLoseFocusIdle.Stop();
 
-    // do it idle in case we quickly regain focus
-    if (!m_xEntry->has_focus())
+    // We need this query, because the edit gets a losefocus event,
+    // when it shows the context menu or the insert symbol dialog
+    if (!m_xEntry->has_focus() && m_xEntry->has_child_focus())
         maLoseFocusIdle.Start();
     else
         GetParent()->EndEditMode( pCancel != nullptr );
@@ -406,7 +407,13 @@ IMPL_LINK_NOARG(TabBarEdit, ImplEndTimerHdl, Timer *, void)
 {
     if (m_xEntry->has_focus())
         return;
-    GetParent()->EndEditMode( true );
+
+    // We need this query, because the edit gets a losefocus event,
+    // when it shows the context menu or the insert symbol dialog
+    if (m_xEntry->has_child_focus())
+        maLoseFocusIdle.Start();
+    else
+        GetParent()->EndEditMode( true );
 }
 
 namespace {

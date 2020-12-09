@@ -213,6 +213,8 @@ public:
 
     virtual bool is_active() const override;
 
+    virtual bool has_child_focus() const override;
+
     virtual void set_has_default(bool has_default) override;
 
     virtual bool get_has_default() const override;

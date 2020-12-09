@@ -89,8 +89,12 @@ protected:
 public:
     virtual void set_sensitive(bool sensitive) = 0;
     virtual bool get_sensitive() const = 0;
+
+    /* visibility */
+
     virtual void show() = 0;
     virtual void hide() = 0;
+
     // This function simply calls show() or hide() but is convenient when the
     // visibility depends on some condition
     virtual void set_visible(bool visible)
@@ -100,17 +104,43 @@ public:
         else
             hide();
     }
-    virtual bool get_visible() const = 0; //if this widget visibility is true
-    virtual bool is_visible() const = 0; //if this widget visibility and all parents is true
+
+    // return if this widget's visibility is true
+    virtual bool get_visible() const = 0;
+
+    // return if this widget's visibility and that of all its parents is true
+    virtual bool is_visible() const = 0;
+
+    /* focus */
+
+    // sets if this widget can own the keyboard focus
     virtual void set_can_focus(bool bCanFocus) = 0;
+
+    // causes this widget to have the keyboard focus
     virtual void grab_focus() = 0;
+
+    // returns if this widget has the keyboard focus
     virtual bool has_focus() const = 0;
-    virtual bool is_active() const = 0; //if this widget has the focus within the active window
+
+    // if the widget that has focus is a child, which includes toplevel popup
+    // children, of this widget. So an Entry with an active popup (or dialog)
+    // has has_child_focus of true, but has_focus of false, while its popup is
+    // shown
+    virtual bool has_child_focus() const = 0;
+
+    // return if this widget has the keyboard focus within the active window
+    // TODO: review if this has any practical difference from has_focus()
+    virtual bool is_active() const = 0;
+
     virtual void set_has_default(bool has_default) = 0;
     virtual bool get_has_default() const = 0;
+
+    /* size */
     virtual void set_size_request(int nWidth, int nHeight) = 0;
     virtual Size get_size_request() const = 0;
     virtual Size get_preferred_size() const = 0;
+
+    /* measure */
     virtual float get_approximate_digit_width() const = 0;
     virtual int get_text_height() const = 0;
     virtual Size get_pixel_size(const OUString& rText) const = 0;
@@ -460,6 +490,7 @@ public:
     // resized, calling set_centered_on_parent with false will turn this
     // off again.
     virtual void set_centered_on_parent(bool bTrackGeometryRequests) = 0;
+    // returns whether the widget that has focus is within this Window
     virtual bool has_toplevel_focus() const = 0;
     virtual void present() = 0;
     virtual void set_window_state(const OString& rStr) = 0;
