@@ -3382,6 +3382,10 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
                     rJsonWriter.put("left", nLeft);
                     rJsonWriter.put("top", nTop);
                 }
+
+                int nWidth = pChild->get_grid_width();
+                if (nWidth > 1)
+                    rJsonWriter.put("width", nWidth);
             }
             pChild = pChild->mpWindowImpl->mpNext;
         }
