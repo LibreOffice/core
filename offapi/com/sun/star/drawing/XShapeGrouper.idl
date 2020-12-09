@@ -39,8 +39,8 @@ published interface XShapeGrouper: com::sun::star::uno::XInterface
 
         <p>Grouping of objects in text documents works only if none
         of the objects has an anchor of type
-        com::sun::star::text::TextContentAnchorType::AS_CHARACTER
-        </p>.
+        com::sun::star::text::TextContentAnchorType::AS_CHARACTER .
+        </p>
 
         @param xShapes
             the Shapes that will be grouped. They
