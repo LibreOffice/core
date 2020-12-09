@@ -125,7 +125,7 @@ void VclComplexTextTest::testKashida()
     // Cache the glyph list of some Arabic text.
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
     auto aText
-        = OUString::fromUtf8(u8"ﻊﻨﺻﺭ ﺎﻠﻓﻮﺴﻓﻭﺭ ﻊﻨﺻﺭ ﻒﻟﺰﻳ ﺺﻠﺑ. ﺖﺘﻛﻮﻧ ﺎﻟﺩﻭﺭﺓ ﺎﻟﺭﺎﺒﻋﺓ ﻢﻧ ١٥ ﻊﻨﺻﺭﺍ.");
+        = OUString(u"ﻊﻨﺻﺭ ﺎﻠﻓﻮﺴﻓﻭﺭ ﻊﻨﺻﺭ ﻒﻟﺰﻳ ﺺﻠﺑ. ﺖﺘﻛﻮﻧ ﺎﻟﺩﻭﺭﺓ ﺎﻟﺭﺎﺒﻋﺓ ﻢﻧ ١٥ ﻊﻨﺻﺭﺍ.");
     std::unique_ptr<SalLayout> pLayout = pOutputDevice->ImplLayout(
         aText, 0, aText.getLength(), Point(0, 0), 0, nullptr, SalLayoutFlags::GlyphItemsOnly);
     const SalLayoutGlyphs* pGlyphs = pLayout->GetGlyphs();

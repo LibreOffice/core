@@ -538,7 +538,7 @@ DECLARE_WW8EXPORT_TEST(testTdf67207_MERGEFIELD, "mailmerge.doc")
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextField.Database"));
     OUString sValue;
     xTextField->getPropertyValue("Content") >>= sValue;
-    CPPUNIT_ASSERT_EQUAL(OUString::fromUtf8(u8"«Name»"), sValue);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"«Name»"), sValue);
 
     uno::Reference<beans::XPropertySet> xFiledMaster = xDependent->getTextFieldMaster();
     uno::Reference<lang::XServiceInfo> xFiledMasterServiceInfo(xFiledMaster, uno::UNO_QUERY_THROW);
