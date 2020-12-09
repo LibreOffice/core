@@ -46,6 +46,30 @@
       "revId": "a5484e496dcee9b110ef696101576a14b7a5a20e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef0b96b7_16c9765a",
+        "filename": "l10ntools/source/merge.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-09T08:11:22Z",
+      "side": 1,
+      "message": "https://pastebin.com/PjV3fBiH",
+      "parentUuid": "cc6c0e0a_cc6fc983",
+      "range": {
+        "startLine": 117,
+        "startChar": 4,
+        "endLine": 117,
+        "endChar": 27
+      },
+      "revId": "a5484e496dcee9b110ef696101576a14b7a5a20e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
