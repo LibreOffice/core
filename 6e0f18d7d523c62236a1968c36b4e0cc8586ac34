@@ -141,6 +141,30 @@
       "revId": "6e0f18d7d523c62236a1968c36b4e0cc8586ac34",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93af7f7c_a41c9655",
+        "filename": "starmath/source/mathmlattr.hxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-09T16:09:50Z",
+      "side": 1,
+      "message": "It is used over here:\nhttps://gerrit.libreoffice.org/c/core/+/107038/17/starmath/source/mathmlimport.cxx\nstarmathdatabase::icustomMathmlHtmlEntitiesNames,\nstarmathdatabase::icustomMathmlHtmlEntitiesValues\nThat file imports mathmlattr.hxx\nhttps://opengrok.libreoffice.org/xref/core/starmath/source/mathmlimport.cxx?r\u003de8c8af66#65\nAnd in a future it will also be used in mathmlexport.cxx  for exporting. mathmlexport.cxx also uses it, mathmlattr it is a formating handle helper.\nThere is no really a why, just had to be imported somewhere.\nIf there is some kind of rule about the where I\u0027m not up to date, can move it.",
+      "parentUuid": "fdeef974_e64547b6",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 26
+      },
+      "revId": "6e0f18d7d523c62236a1968c36b4e0cc8586ac34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
