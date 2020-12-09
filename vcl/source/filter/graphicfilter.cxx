@@ -1985,7 +1985,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                 if (!bDone)
                 {
                     // #i119735# just use GetGDIMetaFile, it will create a buffered version of contained bitmap now automatically
-                    if (!ConvertGDIMetaFileToWMF(aGraphic.GetGDIMetaFile(), rOStm, &aConfigItem))
+                    if (!ConvertGraphicToWMF(aGraphic, rOStm, &aConfigItem))
                         nStatus = ERRCODE_GRFILTER_FORMATERROR;
 
                     if (rOStm.GetError())

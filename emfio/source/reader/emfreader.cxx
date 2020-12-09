@@ -803,6 +803,12 @@ namespace emfio
         OUString aEMFPlusDisable;
         rtl::Bootstrap::get("EMF_PLUS_DISABLE", aEMFPlusDisable);
         bool bEnableEMFPlus = aEMFPlusDisable.isEmpty();
+        if (!mbEnableEMFPlus)
+        {
+            // EMF+ is enabled if neither the bootstrap variable, not the member variable disables
+            // it.
+            bEnableEMFPlus = mbEnableEMFPlus;
+        }
 
         SAL_INFO("emfio", "EMF_PLUS_DISABLE is " << (bEnableEMFPlus ? "enabled" : "disabled"));
 

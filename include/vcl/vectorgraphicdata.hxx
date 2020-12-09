@@ -77,6 +77,8 @@ private:
     /// Useful for PDF, which is vector-based, but still rendered to a bitmap.
     basegfx::B2DTuple maSizeHint;
 
+    bool mbEnableEMFPlus = true;
+
     // on demand creators
     void ensurePdfReplacement();
     void ensureReplacement();
@@ -127,6 +129,8 @@ public:
     }
 
     const basegfx::B2DTuple& getSizeHint() const { return maSizeHint; }
+
+    void setEnableEMFPlus(bool bEnableEMFPlus) { mbEnableEMFPlus = bEnableEMFPlus; }
 
     bool isPrimitiveSequenceCreated() const { return mbSequenceCreated; }
 };

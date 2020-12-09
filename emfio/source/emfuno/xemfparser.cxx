@@ -33,6 +33,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <sal/log.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <wmfreader.hxx>
 #include <emfreader.hxx>
@@ -87,6 +88,17 @@ namespace emfio::emfreader
             {
                 WmfExternal aExternalHeader;
                 const bool bExternalHeaderUsed(aExternalHeader.setSequence(rProperties));
+                bool bEnableEMFPlus = true;
+                comphelper::SequenceAsHashMap aMap(rProperties);
+                auto it = aMap.find("EMFPlusEnable");
+                if (it != aMap.end())
+                {
+                    bool bValue;
+                    if (it->second >>= bValue)
+                    {
+                        bEnableEMFPlus = bValue;
+                    }
+                }
 
                 // rough check - import and conv to primitive
                 GDIMetaFile aMtf;
@@ -110,6 +122,10 @@ namespace emfio::emfreader
                         // read and get possible failure/error, ReadEnhWMF returns success
                         emfio::EmfReader aReader(*pStream, aMtf);
                         aReader.SetSizeHint(maSizeHint);
+                        if (!bEnableEMFPlus)
+                        {
+                            aReader.SetEnableEMFPlus(bEnableEMFPlus);
+                        }
                         bReadError = !aReader.ReadEnhWMF();
                     }
                     else
