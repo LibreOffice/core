@@ -492,7 +492,7 @@ void ORelationController::loadData()
     }
 }
 
-TTableWindowData::value_type ORelationController::existsTable(const OUString& _rComposedTableName)  const
+TTableWindowData::value_type ORelationController::existsTable(std::u16string_view _rComposedTableName)  const
 {
     ::comphelper::UStringMixEqual bCase(true);
     for (auto const& elem : m_vTableData)

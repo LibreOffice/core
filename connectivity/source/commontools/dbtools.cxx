@@ -1964,7 +1964,7 @@ void checkDisposed(bool _bThrow)
 
 OSQLColumns::const_iterator find(const OSQLColumns::const_iterator& first,
                                         const OSQLColumns::const_iterator& last,
-                                        const OUString& _rVal,
+                                        std::u16string_view _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
 {
     OUString sName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
@@ -1973,7 +1973,7 @@ OSQLColumns::const_iterator find(const OSQLColumns::const_iterator& first,
 
 OSQLColumns::const_iterator findRealName(const OSQLColumns::const_iterator& first,
                                         const OSQLColumns::const_iterator& last,
-                                        const OUString& _rVal,
+                                        std::u16string_view _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
 {
     OUString sRealName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME);
@@ -1983,7 +1983,7 @@ OSQLColumns::const_iterator findRealName(const OSQLColumns::const_iterator& firs
 OSQLColumns::const_iterator find(OSQLColumns::const_iterator first,
                                         const OSQLColumns::const_iterator& last,
                                         const OUString& _rProp,
-                                        const OUString& _rVal,
+                                        std::u16string_view _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
 {
     while (first != last && !_rCase(getString((*first)->getPropertyValue(_rProp)),_rVal))

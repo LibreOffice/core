@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "SelectionBrowseBox.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -596,12 +600,12 @@ bool OSelectionBrowseBox::fillColumnRef(const OSQLParseNode* _pColumnRef, const 
     return fillColumnRef(sColumnName,sTableRange,_rxConnection->getMetaData(),_pEntry,_bListAction);
 }
 
-bool OSelectionBrowseBox::fillColumnRef(const OUString& _sColumnName, const OUString& _sTableRange, const Reference<XDatabaseMetaData>& _xMetaData, OTableFieldDescRef const & _pEntry, bool& _bListAction)
+bool OSelectionBrowseBox::fillColumnRef(const OUString& _sColumnName, std::u16string_view _sTableRange, const Reference<XDatabaseMetaData>& _xMetaData, OTableFieldDescRef const & _pEntry, bool& _bListAction)
 {
     bool bError = false;
     ::comphelper::UStringMixEqual bCase(_xMetaData->supportsMixedCaseQuotedIdentifiers());
     // check if the table name is the same
-    if ( !_sTableRange.isEmpty() && (bCase(_pEntry->GetTable(),_sTableRange) || bCase(_pEntry->GetAlias(),_sTableRange)) )
+    if ( !_sTableRange.empty() && (bCase(_pEntry->GetTable(),_sTableRange) || bCase(_pEntry->GetAlias(),_sTableRange)) )
     { // a table was already inserted and the tables contains that column name
 
         if ( !_pEntry->GetTabWindow() )
@@ -807,7 +811,7 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef co
                     if ( nFunCount == 4 && SQL_ISRULE(pColumnRef->getChild(3),column_ref) )
                         bError = fillColumnRef( pColumnRef->getChild(3), xConnection, aSelEntry, _bListAction );
                     else if ( nFunCount == 3 ) // we have a COUNT(*) here, so take the first table
-                        bError = fillColumnRef( "*", OUString(), xMetaData, aSelEntry, _bListAction );
+                        bError = fillColumnRef( "*", std::u16string_view(), xMetaData, aSelEntry, _bListAction );
                     else
                     {
                         nFunctionType |= FKT_NUMERIC;

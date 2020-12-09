@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <set>
+#include <string_view>
 
 namespace com::sun::star::util { class XNumberFormats; }
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
@@ -91,7 +92,7 @@ public:
                                           bool bExportValue = true);
     static void SetNumberFormatAttributes(SvXMLExport& rXMLExport,
                                           const OUString& rValue,
-                                          const OUString& rCharacters,
+                                          std::u16string_view rCharacters,
                                           bool bExportValue,
                                           bool bExportTypeAttribute = true);
 
@@ -106,7 +107,7 @@ public:
                                           bool bExportValue = true,
                                           sal_uInt16 nNamespace = XML_NAMESPACE_OFFICE, bool bExportCurrencySymbol = true);
     void SetNumberFormatAttributes(const OUString& rValue,
-                                          const OUString& rCharacters,
+                                          std::u16string_view rCharacters,
                                           bool bExportValue = true,
                                           sal_uInt16 nNamespace = XML_NAMESPACE_OFFICE);
 };

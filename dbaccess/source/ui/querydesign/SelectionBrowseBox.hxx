@@ -18,6 +18,10 @@
  */
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <svtools/editbrowsebox.hxx>
 #include <TableFieldDescription.hxx>
 #include <TableWindowListBox.hxx>
@@ -268,7 +272,7 @@ namespace dbaui
                                         OTableFieldDescRef const & _pEntry,
                                         bool& _bListAction);
         bool            fillColumnRef(  const OUString& _sColumnName,
-                                        const OUString& _sTableRange,
+                                        std::u16string_view _sTableRange,
                                         const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _xMetaData,
                                         OTableFieldDescRef const & _pEntry,
                                         bool& _bListAction);

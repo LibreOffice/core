@@ -50,8 +50,14 @@ template <> void f5<OUString>(OUString const&) {}
 
 void f6([[maybe_unused]] OUString const&) {}
 
-// expected-error@+1 {{replace function parameter of type 'const rtl::OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
-bool f7(const OUString& p1, OUString p2) { return p1 == p2; }
+bool f7(
+    // expected-error@+1 {{replace function parameter of type 'const rtl::OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
+    const OUString& p1,
+    // expected-error@+1 {{replace function parameter of type 'const rtl::OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
+    const OUString& p2)
+{
+    return p1 == p2;
+}
 // expected-error@+1 {{replace function parameter of type 'const rtl::OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
 bool f8(const OUString& p1, std::u16string_view p2) { return p1 == p2; }
 
