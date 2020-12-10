@@ -273,6 +273,22 @@ public:
         rtl_uString_newFromStr( &pData, value );
     }
 
+    /**
+      New string from a Unicode 32 character buffer array.
+
+      @param    value       a NULL-terminated Unicode 32 character array.
+    */
+    OUString( const sal_Unicode32 * value )
+    {
+        pData = NULL;
+        sal_Int32 i;
+        for ( i=0; value[i]!='\0'; ++i );
+        rtl_uString_newFromCodePoints( &pData, const_cast<const sal_uInt32*>(value), i );
+        if (pData == NULL) {
+            throw std::bad_alloc();
+        }
+    }
+
 #endif
 
     /**
