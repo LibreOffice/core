@@ -32,6 +32,7 @@ class XLineStyleItem;
 class XLineDashItem;
 
 typedef std::function<bool(const OUString&, const css::uno::Any&)> LineStyleSelectFunction;
+typedef std::function<void(bool)> LineStyleIsNoneFunction;
 
 // SvxLineStyleController:
 class SVXCORE_DLLPUBLIC SvxLineStyleToolBoxControl final : public svt::PopupWindowController
@@ -40,6 +41,7 @@ private:
     std::unique_ptr<svx::ToolboxButtonLineStyleUpdater> m_xBtnUpdater;
 
     LineStyleSelectFunction m_aLineStyleSelectFunction;
+    LineStyleIsNoneFunction m_aLineStyleIsNoneFunction;
 
 public:
     SvxLineStyleToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
@@ -56,7 +58,10 @@ public:
 
     virtual ~SvxLineStyleToolBoxControl() override;
 
+    // called when the user selects a line style
     void setLineStyleSelectFunction(const LineStyleSelectFunction& aLineStyleSelectFunction);
+    // called when the line style changes, can be used to trigger disabling the arrows if the none line style is selected
+    void setLineStyleIsNoneFunction(const LineStyleIsNoneFunction& aLineStyleIsNoneFunction);
     void dispatchLineStyleCommand(const OUString& rCommand, const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
 
 private:
