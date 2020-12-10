@@ -62,6 +62,7 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual Size    GetOptimalSize() const override;
+    virtual void    DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 
 class VCL_DLLPUBLIC FixedBitmap final : public Control
