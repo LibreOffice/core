@@ -976,16 +976,6 @@ configmgr/source/access.hxx:442
     enum configmgr::Access::(anonymous at /home/noel/libo/configmgr/source/access.hxx:441:5) IS_ANY
 configmgr/source/partial.hxx:33
     enum configmgr::Partial::Containment CONTAINS_SUBNODES
-connectivity/source/drivers/mork/MorkParser.hxx:59
-    enum MorkErrors NoError
-connectivity/source/drivers/mork/MorkParser.hxx:60
-    enum MorkErrors FailedToOpen
-connectivity/source/drivers/mork/MorkParser.hxx:61
-    enum MorkErrors DefectedFormat
-connectivity/source/drivers/mork/MorkParser.hxx:143
-    enum MorkParser::NP Values
-connectivity/source/drivers/mork/MStatement.hxx:99
-    enum connectivity::mork::OCommonStatement::StatementType eCreateTable
 connectivity/source/inc/java/sql/ConnectionLog.hxx:67
     enum connectivity::java::sql::ConnectionLog::ObjectType CONNECTION
 connectivity/source/inc/java/sql/ConnectionLog.hxx:68

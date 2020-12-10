@@ -281,12 +281,6 @@ postprocess_FILES_main += \
 	$(call gb_XcuModuleTarget_get_target,connectivity/registry/odbc)/org/openoffice/Office/DataAccess/Drivers-odbc.xcu \
 	$(call gb_XcuModuleTarget_get_target,connectivity/registry/mysql_jdbc)/org/openoffice/Office/DataAccess/Drivers-mysql_jdbc.xcu
 postprocess_DRIVERS += dbase flat odbc mysql_jdbc
-ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
-postprocess_FILES_main += $(call gb_XcuModuleTarget_get_target,connectivity/registry/mork)/org/openoffice/Office/DataAccess/Drivers-mork.xcu
-postprocess_DRIVERS += mork
-endif
-endif
 endif
 ifeq (MACOSX,$(OS))
 postprocess_FILES_main += \

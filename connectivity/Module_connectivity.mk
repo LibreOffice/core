@@ -99,21 +99,6 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
-
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Configuration_mork \
-	Executable_mork_helper \
-	Library_mork \
-	Library_mozbootstrap \
-))
-
-$(eval $(call gb_Module_add_check_targets,connectivity,\
-	CppunitTest_connectivity_mork \
-))
-
-endif
-
 ifeq ($(OS),WNT)
 # "ADO is not available on 64bit" said the commit
 ifneq ($(CPUNAME),X86_64)

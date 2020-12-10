@@ -51,13 +51,11 @@ namespace abp
         //
         // On Linux:
         // - EVOLUTION, EVOLUTION_GROUPWISE, EVOLUTION_LDAP (if applicable)
-        // - MORK (via mork driver, which is built unconditionally)
         // - KAB (if applicable)
         // - OTHER
         //
         // On macOS:
         // - MACAB (if applicable)
-        // - MORK (via mork driver, which is built unconditionally)
         // - OTHER
         //
         // On Windows:
@@ -113,7 +111,6 @@ namespace abp
         m_aAllTypes.push_back( ButtonItem( m_xEvolution.get(), AST_EVOLUTION, bHaveEvolution ) );
         m_aAllTypes.push_back( ButtonItem( m_xEvolutionGroupwise.get(), AST_EVOLUTION_GROUPWISE, bHaveEvolution ) );
         m_aAllTypes.push_back( ButtonItem( m_xEvolutionLdap.get(), AST_EVOLUTION_LDAP, bHaveEvolution ) );
-        m_aAllTypes.push_back( ButtonItem( m_xMORK.get(), AST_MORK, true ) );
         m_aAllTypes.push_back( ButtonItem( m_xThunderbird.get(), AST_THUNDERBIRD, true ) );
         m_aAllTypes.push_back( ButtonItem( m_xKab.get(), AST_KAB, bHaveKab ) );
         m_aAllTypes.push_back( ButtonItem( m_xMacab.get(), AST_MACAB, bHaveMacab ) );
