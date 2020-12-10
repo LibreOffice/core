@@ -89,6 +89,8 @@ protected:
         SetCursorRect(rRefDevice.LogicToPixel(rRect),
                       rRefDevice.LogicToPixel(Size(nExtTextInputWidth, 0)).Width());
     }
+
+    virtual weld::Widget* EditViewPopupParent() const override { return GetDrawingArea(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
