@@ -36,26 +36,20 @@ const char SELECTWIDTH[] = "SelectWidth";
 namespace svx::sidebar {
 
 // trigger disabling the arrows if the none line style is selected
-class DisableArrowsWrapper
+class LineStyleNoneChange
 {
 private:
     LinePropertyPanelBase& m_rPanel;
 
 public:
-    DisableArrowsWrapper(LinePropertyPanelBase& rPanel)
+    LineStyleNoneChange(LinePropertyPanelBase& rPanel)
         : m_rPanel(rPanel)
     {
     }
 
-    bool operator()(std::u16string_view rCommand, const css::uno::Any& rValue)
+    void operator()(bool bLineStyleNone)
     {
-        if (rCommand == u".uno:XLineStyle")
-        {
-            css::drawing::LineStyle eLineStyle(css::drawing::LineStyle_NONE);
-            rValue >>= eLineStyle;
-            m_rPanel.SetNoneLineStyle(eLineStyle == css::drawing::LineStyle_NONE);
-        }
-        return false;
+        m_rPanel.SetNoneLineStyle(bLineStyleNone);
     }
 };
 
@@ -89,7 +83,7 @@ LinePropertyPanelBase::LinePropertyPanelBase(
     mxGridLineProps(m_xBuilder->weld_widget("lineproperties")),
     mxBoxArrowProps(m_xBuilder->weld_widget("arrowproperties")),
     mxLineWidthPopup(new LineWidthPopup(mxTBWidth.get(), *this)),
-    mxDisableArrowsWrapper(new DisableArrowsWrapper(*this)),
+    mxLineStyleNoneChange(new LineStyleNoneChange(*this)),
     mnTrans(0),
     meMapUnit(MapUnit::MapMM),
     mnWidthCoreValue(0),
@@ -150,7 +144,7 @@ void LinePropertyPanelBase::Initialize()
     mxLBCapStyle->connect_changed( LINK( this, LinePropertyPanelBase, ChangeCapStyleHdl ) );
 
     SvxLineStyleToolBoxControl* pLineStyleControl = getLineStyleToolBoxControl(*mxLineStyleDispatch);
-    pLineStyleControl->setLineStyleSelectFunction(*mxDisableArrowsWrapper);
+    pLineStyleControl->setLineStyleIsNoneFunction(*mxLineStyleNoneChange);
 }
 
 void LinePropertyPanelBase::updateLineTransparence(bool bDisabled, bool bSetOrDefault,
