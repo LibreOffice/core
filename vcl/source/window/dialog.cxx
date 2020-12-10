@@ -1648,6 +1648,11 @@ void Dialog::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         if (!pActionArea->IsVisible())
             rJsonWriter.put("collapsed", "true");
     }
+
+    OUString sDialogId = OStringToOUString(GetHelpId(), RTL_TEXTENCODING_ASCII_US);
+    sal_Int32 nStartPos = sDialogId.lastIndexOf('/');
+    nStartPos = nStartPos >= 0 ? nStartPos + 1 : 0;
+    rJsonWriter.put("dialogid", sDialogId.copy(nStartPos));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
