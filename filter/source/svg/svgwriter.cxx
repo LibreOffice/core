@@ -1136,6 +1136,7 @@ bool SVGTextWriter::nextTextPortion()
                 sInfo = "type: " + sPortionType + "; ";
             }
 #endif
+            msPageCount = "";
             if( xPortionTextRange.is() )
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -1186,6 +1187,10 @@ bool SVGTextWriter::nextTextPortion()
                                 || sFieldName == "Footer" || sFieldName == "PageNumber" )
                         {
                             mbIsPlaceholderShape = true;
+                        }
+                        else if (sFieldName == "PageCount")
+                        {
+                            msPageCount = xTextField->getPresentation( /* show command: */ false );
                         }
                         else
                         {
@@ -1704,6 +1709,12 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
             SvXMLElementExport aSVGAElem( mrExport, XML_NAMESPACE_NONE, "a", mbIWS, mbIWS );
             mrExport.GetDocHandler()->characters( rText );
         }
+    }
+    else if ( !msPageCount.isEmpty() )
+    {
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "PageCount" );
+        SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
+        mrExport.GetDocHandler()->characters( msPageCount );
     }
     else
     {

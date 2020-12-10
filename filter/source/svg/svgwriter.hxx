@@ -227,6 +227,7 @@ class SVGTextWriter final
     bool                                        mbIsURLField;
     OUString                                    msUrl;
     OUString                                    msHyperlinkIdList;
+    OUString                                    msPageCount;
     bool                                        mbIsPlaceholderShape;
     static const bool                           mbIWS = false;
     vcl::Font                                   maCurrentFont;
