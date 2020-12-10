@@ -45,6 +45,7 @@ class OutlinerViewShell;
 class SvxSearchItem;
 class SvxFieldItem;
 namespace vcl { class Window; }
+namespace weld { class Widget; }
 class KeyEvent;
 class MouseEvent;
 class CommandEvent;
@@ -107,6 +108,11 @@ public:
 
     // return the OutputDevice that the EditView will draw to
     virtual OutputDevice& EditViewOutputDevice() const = 0;
+
+    virtual weld::Widget* EditViewPopupParent() const
+    {
+        return nullptr;
+    }
 
     // Triggered to update InputEngine context information
     virtual void EditViewInputContext(const InputContext& rInputContext) = 0;
