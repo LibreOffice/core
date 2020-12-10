@@ -926,12 +926,12 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, si
 
     if (pAcc)
     {
-        std::vector<int> aMinR(nColorCount);
-        std::vector<int> aMaxR(nColorCount);
-        std::vector<int> aMinG(nColorCount);
-        std::vector<int> aMaxG(nColorCount);
-        std::vector<int> aMinB(nColorCount);
-        std::vector<int> aMaxB(nColorCount);
+        std::vector<sal_uInt8> aMinR(nColorCount);
+        std::vector<sal_uInt8> aMaxR(nColorCount);
+        std::vector<sal_uInt8> aMinG(nColorCount);
+        std::vector<sal_uInt8> aMaxG(nColorCount);
+        std::vector<sal_uInt8> aMinB(nColorCount);
+        std::vector<sal_uInt8> aMaxB(nColorCount);
 
         if (pTols)
         {
