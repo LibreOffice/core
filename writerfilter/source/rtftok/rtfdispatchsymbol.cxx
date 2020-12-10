@@ -39,7 +39,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         return RTFError::OK;
     }
     // Trivial symbols
-    sal_uInt8 cCh = 0;
+    char cCh = 0;
     switch (nKeyword)
     {
         case RTF_TAB:
@@ -78,7 +78,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         default:
             break;
     }
-    if (cCh > 0)
+    if (cCh != 0)
     {
         OUString aStr(OStringToOUString(OString(cCh), RTL_TEXTENCODING_MS_1252));
         text(aStr);
