@@ -1309,7 +1309,25 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                 {
                     // The shape is a customshape: then inform it about the calculated fly size.
                     Size aSize(getFrameArea().Width(), getFrameArea().Height());
+
                     pCustomShape->SuggestTextFrameSize(aSize);
+
+                    // tdf#137803: Fix the position of the shape during autoSize
+                    // get the text area of the shape
+                    const tools::Rectangle aTextRectangle
+                        = SwTextBoxHelper::getTextRectangle(pShapeFormat, false);
+                    // store the relaive position of the text area depending on the shape
+                    const Point aTextBoxPosition(aTextRectangle.getX(), aTextRectangle.getY());
+                    // get the original textframe position
+                    SwFormatHoriOrient aHOri = GetFormat()->GetHoriOrient();
+                    SwFormatVertOrient aVOri = GetFormat()->GetVertOrient();
+                    // calc the right position of the shape depending on text area
+                    aHOri.SetPos(aHOri.GetPos() - aTextBoxPosition.getX());
+                    aVOri.SetPos(aVOri.GetPos() - aTextBoxPosition.getY());
+                    // save the new position for the shape
+                    pShapeFormat->SetFormatAttr(aHOri);
+                    pShapeFormat->SetFormatAttr(aVOri);
+
                     // Do the calculations normally done after touching editeng text of the shape.
                     pCustomShape->NbcSetOutlinerParaObjectForText(nullptr, nullptr);
                 }
