@@ -613,39 +613,15 @@ oslSocketResult SAL_CALL osl_getLocalHostname (rtl_uString **strLocalHostname)
             char Host[256]= "";
             if (gethostname(Host, sizeof(Host)) == 0)
             {
-                /* check if we have an FQDN; if not, try to determine it via dns first: */
-                if (strchr(Host, '.') == nullptr)
+                OUString u;
+                if (rtl_convertStringToUString(
+                        &u.pData, Host, strlen(Host), osl_getThreadTextEncoding(),
+                        (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+                            | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+                            | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR))
+                    && o3tl::make_unsigned(u.getLength()) < SAL_N_ELEMENTS(LocalHostname))
                 {
-                    oslHostAddr pAddr;
-                    rtl_uString     *hostName= nullptr;
-
-                    rtl_string2UString(
-                        &hostName, Host, strlen(Host),
-                        RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
-                    OSL_ASSERT(hostName != nullptr);
-
-                    pAddr = osl_createHostAddrByName(hostName);
-                    rtl_uString_release (hostName);
-
-                    if (pAddr && pAddr->pHostName)
-                        memcpy(LocalHostname, pAddr->pHostName->buffer, sizeof(sal_Unicode)*(rtl_ustr_getLength(pAddr->pHostName->buffer)+1));
-                    else
-                        memset(LocalHostname, 0, sizeof(LocalHostname));
-
-                    osl_destroyHostAddr (pAddr);
-                }
-                if (LocalHostname[0] == u'\0')
-                {
-                    OUString u;
-                    if (rtl_convertStringToUString(
-                            &u.pData, Host, strlen(Host), osl_getThreadTextEncoding(),
-                            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
-                             | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
-                             | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR))
-                        && o3tl::make_unsigned(u.getLength()) < SAL_N_ELEMENTS(LocalHostname))
-                    {
-                        memcpy(LocalHostname, u.getStr(), (u.getLength() + 1) * sizeof (sal_Unicode));
-                    }
+                    memcpy(LocalHostname, u.getStr(), (u.getLength() + 1) * sizeof (sal_Unicode));
                 }
             }
 
