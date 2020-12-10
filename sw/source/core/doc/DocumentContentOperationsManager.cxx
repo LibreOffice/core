@@ -4725,7 +4725,6 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     if (rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         pUndo = new SwUndoCpyDoc(*pCopyPam);
-        rDoc.GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
         pFlysAtInsPos = pUndo->GetFlysAnchoredAt();
     }
     else
@@ -5152,6 +5151,8 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     // If Undo is enabled, store the inserted area
     if (rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
+        // append it after styles have been copied when copying nodes
+        rDoc.GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
         pUndo->SetInsertRange(*pCopyPam, true, nDeleteTextNodes);
     }
 
