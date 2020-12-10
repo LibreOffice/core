@@ -2287,7 +2287,7 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value xml:lang="en-US">Manage Templates</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Show Templates Manager</value>
+          <value xml:lang="en-US">Open Templates Manager</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3508,7 +3508,7 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
       </node>
       <node oor:name=".uno:OpenTemplate" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Open Template...</value>
+          <value xml:lang="en-US">~Edit Template...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
