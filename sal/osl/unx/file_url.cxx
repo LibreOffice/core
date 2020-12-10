@@ -265,7 +265,7 @@ template<typename T> oslFileError getSystemPathFromFileUrl(
                 != 0))
         {
             OUString hostname;
-            if (osl_getLocalHostname(&hostname.pData) != osl_Socket_Ok
+            if (osl_getLocalHostnameFQDN(&hostname.pData) != osl_Socket_Ok
                 || (rtl_ustr_compareIgnoreAsciiCase_WithLength(
                         url.pData->buffer + i, j - i, hostname.getStr(), hostname.getLength())
                     != 0))
