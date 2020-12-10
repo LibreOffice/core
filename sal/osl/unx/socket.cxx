@@ -865,9 +865,9 @@ void SAL_CALL osl_destroyHostAddr (oslHostAddr pAddr)
     }
 }
 
-oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **ustrLocalHostname)
+oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **ustrLocalHostname, bool bRetrieveFQDN)
 {
-    static auto const init = []() -> std::pair<oslSocketResult, OUString> {
+    static auto const init = [bRetrieveFQDN]() -> std::pair<oslSocketResult, OUString> {
             char LocalHostname[256] = "";
 
 #ifdef SYSV
@@ -887,13 +887,11 @@ oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **ustrLocalHostname)
             LocalHostname[sizeof(LocalHostname)-1] = 0;
 
             /* check if we have an FQDN */
-            if (strchr(LocalHostname, '.') == nullptr)
+            if (bRetrieveFQDN && strchr(LocalHostname, '.') == nullptr)
             {
                 oslHostAddr Addr;
-
                 /* no, determine it via dns */
                 Addr = osl_psz_createHostAddrByName(LocalHostname);
-
                 const char *pStr;
                 if ((pStr = osl_psz_getHostnameOfHostAddr(Addr)) != nullptr)
                 {

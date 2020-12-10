@@ -909,11 +909,12 @@ SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_getSocketAddrOfHostAddr(const oslHostAd
 /** Retrieve this machines hostname.
     May not always be a fully qualified domain name (FQDN).
     @param  strLocalHostname out-parameter. The string that receives the local host name.
+    @param bRetrieveFQDN Whether DNS should be called to retrieve the FQDN
     @retval sal_True upon success
     @retval sal_False
 */
-SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **strLocalHostname);
-
+SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString** strLocalHostname,
+                                                            bool bRetrieveFQDN = false);
 
 /**@} end section oslHostAddr
 */
