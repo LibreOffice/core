@@ -66,6 +66,8 @@ public:
     /// Get a property of the underlying TextFrame.
     static void getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
                             css::uno::Any& rValue);
+    /// Get a property of the underlying TextFrame.
+    static css::uno::Any getProperty(SwFrameFormat const* pShape, OUString sPropName);
 
     /// Similar to syncProperty(), but used by the internal API (e.g. for UI purposes).
     static void syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& rSet);
