@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90f9b624_aa1a51a5",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1408,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-10T15:10:51Z",
+      "side": 1,
+      "message": "Unfortunately, this (1) uses 2 space indenting instead of 4 that we use; (2) modifies the lines not related to the change.",
+      "range": {
+        "startLine": 1366,
+        "startChar": 0,
+        "endLine": 1408,
+        "endChar": 38
+      },
+      "revId": "aa822d1d1fcad101bb28a953eee156d1df678682",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

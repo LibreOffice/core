@@ -46,6 +46,30 @@
       "revId": "12f8c70f912691afa8da4094b6ae9e72d4c80b1a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fbe2beb_10415ed9",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1384,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-10T15:10:51Z",
+      "side": 1,
+      "message": "What I specifically meant was:\n\n1. In lines 1374, 1376 and 1378, put a space after if; remove spaces inside brackets (between brackets and contents).\n2. In lines 1380-1383, make sure the lines are not longer than 100 characters; write it this way (as clang-format suggests):\n\n                return xmlNewEntity(\n                    nullptr, name, XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,\n                    BAD_CAST(\n                        OUStringToOString(mEntityReplacements[i], RTL_TEXTENCODING_UTF8).getStr()));\n\n... and no change in other lines.",
+      "parentUuid": "7f06a99d_6099a755",
+      "range": {
+        "startLine": 1374,
+        "startChar": 4,
+        "endLine": 1384,
+        "endChar": 13
+      },
+      "revId": "12f8c70f912691afa8da4094b6ae9e72d4c80b1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
