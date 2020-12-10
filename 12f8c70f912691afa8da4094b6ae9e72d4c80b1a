@@ -22,6 +22,30 @@
       "revId": "12f8c70f912691afa8da4094b6ae9e72d4c80b1a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a04345b8_03528411",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1384,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-10T15:09:48Z",
+      "side": 1,
+      "message": "I don\u0027t know if clang allows to format single lines.\nSince I\u0027m only working in one small function clang-formated the whole function.",
+      "parentUuid": "7f06a99d_6099a755",
+      "range": {
+        "startLine": 1374,
+        "startChar": 4,
+        "endLine": 1384,
+        "endChar": 13
+      },
+      "revId": "12f8c70f912691afa8da4094b6ae9e72d4c80b1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
