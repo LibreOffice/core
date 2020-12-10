@@ -969,9 +969,9 @@ void SwTextBoxHelper::updateTextBoxMargin(SdrObject* pObj)
     syncProperty(pParentFormat, UNO_NAME_TEXT_HORZADJUST,
                  xPropertySet->getPropertyValue(UNO_NAME_TEXT_HORZADJUST));
 
-    //FIXME: Sync autogrow: needs repositioning after sync
-    //syncProperty(pParentFormat, RES_FRM_SIZE, MID_FRMSIZE_IS_AUTO_HEIGHT,
-    //             xPropertySet->getPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT));
+    // tdf137803: Sync autogrow: needs repositioning after sync
+    syncProperty(pParentFormat, RES_FRM_SIZE, MID_FRMSIZE_IS_AUTO_HEIGHT,
+                 xPropertySet->getPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
