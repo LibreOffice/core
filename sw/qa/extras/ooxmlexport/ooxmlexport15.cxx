@@ -43,7 +43,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123621, "tdf123621.docx")
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
     assertXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
-        "/wp:positionV/wp:posOffset", "1080135");
+        "/wp:positionV/wp:posOffset", "1979930");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf131801, "tdf131801.docx")
