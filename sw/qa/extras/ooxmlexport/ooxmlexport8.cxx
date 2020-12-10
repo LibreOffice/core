@@ -547,7 +547,7 @@ DECLARE_OOXMLEXPORT_TEST(testTDF91260, "tdf91260.docx")
 
     uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5450), xShape->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(21946), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(24486), xShape->getPosition().Y);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo74357, "fdo74357.docx")
