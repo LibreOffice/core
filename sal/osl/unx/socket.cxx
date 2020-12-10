@@ -36,6 +36,7 @@
 
 #include "sockimpl.hxx"
 #include "unixerrnostring.hxx"
+#include <oslsocket.hxx>
 
 /* defines for poll */
 #ifdef HAVE_POLL_H
@@ -865,9 +866,11 @@ void SAL_CALL osl_destroyHostAddr (oslHostAddr pAddr)
     }
 }
 
-oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **ustrLocalHostname)
+namespace
 {
-    static auto const init = []() -> std::pair<oslSocketResult, OUString> {
+oslSocketResult lcl_getLocalHostname(rtl_uString **ustrLocalHostname, bool bUseFQDN)
+{
+    static auto const init = [bUseFQDN]() -> std::pair<oslSocketResult, OUString> {
             char LocalHostname[256] = "";
 
 #ifdef SYSV
@@ -887,7 +890,7 @@ oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **ustrLocalHostname)
             LocalHostname[sizeof(LocalHostname)-1] = 0;
 
             /* check if we have an FQDN */
-            if (strchr(LocalHostname, '.') == nullptr)
+            if (bUseFQDN && strchr(LocalHostname, '.') == nullptr)
             {
                 oslHostAddr Addr;
 
@@ -914,6 +917,17 @@ oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **ustrLocalHostname)
     rtl_uString_assign(ustrLocalHostname,init.second.pData);
 
     return init.first;
+}
+}
+
+oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **ustrLocalHostname)
+{
+    return lcl_getLocalHostname(ustrLocalHostname, false);
+}
+
+oslSocketResult osl_getLocalHostnameFQDN(rtl_uString **ustrLocalHostname)
+{
+    return lcl_getLocalHostname(ustrLocalHostname, true);
 }
 
 oslSocketAddr SAL_CALL osl_resolveHostname(rtl_uString *ustrHostname)
