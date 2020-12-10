@@ -122,6 +122,70 @@ private:
     sal_Unicode buffer[N] = {}; //TODO: drop initialization for C++20 (P1331R2)
 };
 
+template<std::size_t N> class SAL_WARN_UNUSED OUStringLiteral32 {
+    static_assert(N != 0);
+    static_assert( 2*(N - 1) <= std::numeric_limits<sal_Int32>::max(), "literal too long");
+
+public:
+#if HAVE_CPP_CONSTEVAL
+    consteval
+#else
+    constexpr
+#endif
+    OUStringLiteral32(char16_t const (&literal)[N]) {
+        assertLayout();
+        assert(literal[N - 1] == '\0');
+        //TODO: Use C++20 constexpr std::copy_n (P0202R3):
+        for (std::size_t i = 0; i != N; ++i) {
+            buffer[i] = literal[i];
+        }
+    }
+
+#if HAVE_CPP_CONSTEVAL
+    consteval
+#else
+    constexpr
+#endif
+    OUStringLiteral32(char32_t const (&literal)[N]) {
+        assertLayout();
+        assert(literal[N - 1] == '\0');
+        sal_Int32 i;
+        for (i = 0; i < N; ++i) {
+            OSL_ASSERT(rtl::isUnicodeCodePoint(codePoints[i]));
+            if (codePoints[i] > 0xFFFF) ++length;
+        }
+        for (i = 0; i < N; ++i) {
+            buffer += rtl::splitSurrogates(literal[i], p);
+        }
+    }
+
+    constexpr sal_Int32 getLength() const { return length; }
+
+    constexpr sal_Unicode const * getStr() const SAL_RETURNS_NONNULL { return buffer; }
+
+    constexpr operator std::u16string_view() const { return {buffer, sal_uInt32(length)}; }
+
+private:
+    static constexpr void assertLayout() {
+        // These static_asserts verifying the layout compatibility with rtl_uString cannot be class
+        // member declarations, as offsetof requires a complete type, so defer them to here:
+        static_assert(offsetof(OUStringLiteral32, refCount) == offsetof(rtl_uString, refCount));
+        static_assert(std::is_same_v<decltype(refCount), decltype(rtl_uString::refCount)>);
+        static_assert(offsetof(OUStringLiteral32, length) == offsetof(rtl_uString, length));
+        static_assert(std::is_same_v<decltype(length), decltype(rtl_uString::length)>);
+        static_assert(offsetof(OUStringLiteral32, buffer) == offsetof(rtl_uString, buffer));
+        static_assert(
+            std::is_same_v<
+                std::remove_extent_t<decltype(buffer)>,
+                std::remove_extent_t<decltype(rtl_uString::buffer)>>);
+    }
+
+    // Same layout as rtl_uString (include/rtl/ustring.h):
+    oslInterlockedCount refCount = 0x40000000; // SAL_STRING_STATIC_FLAG (sal/rtl/strimp.hxx)
+    sal_Int32 length = N - 1;
+    sal_Unicode buffer[N*2] = {}; //TODO: drop initialization for C++20 (P1331R2)
+};
+
 #if defined RTL_STRING_UNITTEST
 namespace libreoffice_internal {
 template<std::size_t N> struct ExceptConstCharArrayDetector<OUStringLiteral<N>> {};
@@ -271,6 +335,22 @@ public:
     {
         pData = NULL;
         rtl_uString_newFromStr( &pData, value );
+    }
+
+    /**
+      New string from a Unicode 32 character buffer array.
+
+      @param    value       a NULL-terminated Unicode 32 character array.
+    */
+    OUString( const sal_Unicode32 * value )
+    {
+        pData = NULL;
+        sal_Int32 i;
+        for ( i=0; value[i]!='\0'; ++i );
+        rtl_uString_newFromCodePoints( &pData, const_cast<const sal_uInt32*>(value), i );
+        if (pData == NULL) {
+            throw std::bad_alloc();
+        }
     }
 
 #endif
