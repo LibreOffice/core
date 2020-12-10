@@ -102,14 +102,6 @@ connectivity/source/drivers/firebird/Util.hxx:122
     class rtl::OUString escapeWith(const class rtl::OUString &,const char,const char)
     const char aKey
     39
-connectivity/source/drivers/mork/MorkParser.hxx:79
-    struct MorkTableMap * MorkParser::getTables(int)
-    int tableScope
-    128
-connectivity/source/drivers/mork/MQueryHelper.hxx:169
-    _Bool connectivity::mork::MQueryHelper::getRowValue(class connectivity::ORowSetValue &,int,const class rtl::OUString &,int)
-    int nType
-    12
 connectivity/source/inc/java/sql/ConnectionLog.hxx:106
     void connectivity::java::sql::ConnectionLog::log(const int,const class rtl::OUString &,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
     const int _nLogLevel

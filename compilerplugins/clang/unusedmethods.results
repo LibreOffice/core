@@ -56,8 +56,6 @@ connectivity/source/drivers/firebird/Util.hxx:72
     short connectivity::firebird::ColumnTypeInfo::getSubType() const
 connectivity/source/drivers/firebird/Util.hxx:74
     const class rtl::OUString & connectivity::firebird::ColumnTypeInfo::getCharacterSet() const
-connectivity/source/drivers/mork/mork_helper.cxx:37
-    int main(int,char **)
 connectivity/source/drivers/mysqlc/mysqlc_connection.hxx:176
     class rtl::OUString connectivity::mysqlc::OConnection::transFormPreparedStatement(const class rtl::OUString &)
 connectivity/source/drivers/mysqlc/mysqlc_prepared_resultset.hxx:94
