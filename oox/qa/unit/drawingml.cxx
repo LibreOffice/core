@@ -291,6 +291,25 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testCameraRotationRevolution)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(27000), nRotateAngle1);
 }
 
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTableShadow)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "table-shadow.pptx";
+    load(aURL);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    bool bShadow = false;
+    CPPUNIT_ASSERT(xShape->getPropertyValue("Shadow") >>= bShadow);
+
+    // Without the accompanying fix in place, this test would have failed, because shadow on a table
+    // was lost on import.
+    CPPUNIT_ASSERT(bShadow);
+    sal_Int32 nColor = 0;
+    CPPUNIT_ASSERT(xShape->getPropertyValue("ShadowColor") >>= nColor);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xff0000), nColor);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
