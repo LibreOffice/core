@@ -9,6 +9,7 @@ from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict, type_text
+from uitest.uihelper.calc import enter_text_to_cell
 import org.libreoffice.unotest
 import pathlib
 
@@ -19,7 +20,6 @@ def get_url_for_data_file(file_name):
 
 class sheetToTable(UITestCase):
     def test_sheet_to_table_without_hidden_rows(self):
-        print(get_url_for_data_file("hiddenRow.ods"))
         calc_doc = self.ui_test.load_file(get_url_for_data_file("hiddenRow.ods"))
         xCalcDoc = self.xUITest.getTopFocusWindow()
         self.xUITest.executeCommand(".uno:SelectAll")
@@ -42,7 +42,6 @@ class sheetToTable(UITestCase):
         self.ui_test.close_doc()
 
     def test_tdf138688(self):
-        print(get_url_for_data_file("hiddenRow.ods"))
         calc_doc = self.ui_test.load_file(get_url_for_data_file("hiddenRow.ods"))
         xCalcDoc = self.xUITest.getTopFocusWindow()
         self.xUITest.executeCommand(".uno:SelectAll")
@@ -72,4 +71,37 @@ class sheetToTable(UITestCase):
         self.assertEqual(table.getCellByName("A1").getString(), "1")
         # This was "2 (hidden)" (copied hidden row)
         self.assertEqual(table.getCellByName("A2").getString(), "3")
+        self.ui_test.close_doc()
+
+    def test_tdf129083(self):
+        calc_doc = self.ui_test.create_doc_in_start_center("calc")
+
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
+
+        enter_text_to_cell(gridwin, "A1", "Test 1")
+        enter_text_to_cell(gridwin, "A2", "Test 2")
+        enter_text_to_cell(gridwin, "A3", "Test 3")
+        enter_text_to_cell(gridwin, "A4", "Test 4")
+
+        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A4"}))
+
+        self.xUITest.executeCommand(".uno:Copy")
+
+        self.ui_test.close_doc()
+
+        writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf129083.odt"))
+        document = self.ui_test.get_component()
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+
+        self.xUITest.executeCommand(".uno:Paste")
+
+        self.assertEqual(document.TextTables.getCount(), 1)
+        table = document.getTextTables()[0]
+        self.assertEqual(len(table.getRows()), 4)
+        self.assertEqual(table.getCellByName("A1").getString(), "Test 1")
+        self.assertEqual(table.getCellByName("A2").getString(), "Test 2")
+        self.assertEqual(table.getCellByName("A3").getString(), "Test 3")
+        self.assertEqual(table.getCellByName("A4").getString(), "Test 4")
         self.ui_test.close_doc()
