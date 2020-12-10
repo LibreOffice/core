@@ -935,7 +935,15 @@ void SwAnnotationWin::DoResize()
     {   // if we do not have a scrollbar anymore, we want to see the complete text
         mpOutlinerView->SetVisArea( PixelToLogic( tools::Rectangle(0,0,aWidth,aHeight) ) );
     }
-    mpOutlinerView->SetOutputArea( PixelToLogic( tools::Rectangle(0,0,aWidth,aHeight) ) );
+    tools::Rectangle aOutputArea = PixelToLogic(tools::Rectangle(0, 0, aWidth, aHeight));
+    mpOutlinerView->SetOutputArea(aOutputArea);
+
+    // Don't leave an empty area at the bottom if we can move the text down.
+    tools::Long nMaxVisAreaTop = mpOutliner->GetTextHeight() - aOutputArea.GetHeight();
+    if (mpOutlinerView->GetVisArea().Top() > nMaxVisAreaTop)
+    {
+        GetOutlinerView()->Scroll(0, mpOutlinerView->GetVisArea().Top() - nMaxVisAreaTop);
+    }
 
     if (!AllSettings::GetLayoutRTL())
     {
