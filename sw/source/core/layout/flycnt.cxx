@@ -47,6 +47,7 @@
 #include "objectformattertxtfrm.hxx"
 #include <HandleAnchorNodeChg.hxx>
 #include <ndtxt.hxx>
+#include <textboxhelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -395,6 +396,26 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
         SwRectFnSet aRectFnSet(this);
         Point aOldPos( aRectFnSet.GetPos(getFrameArea()) );
         SwFlyFreeFrame::MakeAll(pRenderContext);
+
+        // tdf#137803: Fix the position of the shape during autoSize
+        SwFrameFormat* pFrameFormat = static_cast<SwFrameFormat*>(GetFormat());
+        SwFrameFormat* pShapeFormat
+            = SwTextBoxHelper::getOtherTextBoxFormat(pFrameFormat, RES_FLYFRMFMT);
+        if (pShapeFormat && pFrameFormat)
+        {
+            // get the text area of the shape
+            const tools::Rectangle aTextRectangle
+                = SwTextBoxHelper::getTextRectangle(pShapeFormat, false);
+            // get the original textframe position
+            SwFormatHoriOrient aHOri = pFrameFormat->GetHoriOrient();
+            SwFormatVertOrient aVOri = pFrameFormat->GetVertOrient();
+            // calc the right position of the shape depending on text area
+            aHOri.SetPos(aHOri.GetPos() - aTextRectangle.getX());
+            aVOri.SetPos(aVOri.GetPos() - aTextRectangle.getY());
+            // save the new position for the shape
+            pShapeFormat->SetFormatAttr(aHOri);
+            pShapeFormat->SetFormatAttr(aVOri);
+        }
         const bool bPosChgDueToOwnFormat =
                                 aOldPos != aRectFnSet.GetPos(getFrameArea());
         // #i3317#
