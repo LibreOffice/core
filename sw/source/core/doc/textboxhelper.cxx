@@ -572,6 +572,21 @@ void SwTextBoxHelper::getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, 
     }
 }
 
+css::uno::Any SwTextBoxHelper::getProperty(SwFrameFormat const* pShape, OUString sPropName)
+{
+    if (!pShape)
+        return uno::Any();
+
+    SwFrameFormat* pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT);
+    if (!pFormat)
+        return uno::Any();
+
+    uno::Reference<beans::XPropertySet> const xPropertySet(
+        SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat), uno::UNO_QUERY);
+
+    return xPropertySet->getPropertyValue(sPropName);
+}
+
 void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
                                    const css::uno::Any& rValue)
 {
@@ -638,6 +653,9 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
         case RES_FRM_SIZE:
             switch (nMemberID)
             {
+                case MID_FRMSIZE_WIDTH_TYPE:
+                    aPropertyName = UNO_NAME_WIDTH_TYPE;
+                    break;
                 case MID_FRMSIZE_IS_AUTO_HEIGHT:
                     aPropertyName = UNO_NAME_FRAME_ISAUTOMATIC_HEIGHT;
                     break;
@@ -946,9 +964,15 @@ void SwTextBoxHelper::updateTextBoxMargin(SdrObject* pObj)
     syncProperty(pParentFormat, UNO_NAME_TEXT_HORZADJUST,
                  xPropertySet->getPropertyValue(UNO_NAME_TEXT_HORZADJUST));
 
-    //FIXME: Sync autogrow: needs repositioning after sync
-    //syncProperty(pParentFormat, RES_FRM_SIZE, MID_FRMSIZE_IS_AUTO_HEIGHT,
-    //             xPropertySet->getPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT));
+    // tdf137803: Sync autogrow:
+    const bool bIsAutoGrow
+        = xPropertySet->getPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT).get<bool>();
+    const bool bIsAutoWrap = xPropertySet->getPropertyValue(UNO_NAME_TEXT_WORDWRAP).get<bool>();
+
+    syncProperty(pParentFormat, RES_FRM_SIZE, MID_FRMSIZE_IS_AUTO_HEIGHT, uno::Any(bIsAutoGrow));
+
+    syncProperty(pParentFormat, RES_FRM_SIZE, MID_FRMSIZE_WIDTH_TYPE,
+                 uno::Any(bIsAutoWrap ? text::SizeType::FIX : text::SizeType::MIN));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
