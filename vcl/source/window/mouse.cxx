@@ -312,7 +312,11 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
 
     pSVData->mpWinData->mpFocusWin = this;
 
+<<<<<<< HEAD   (fae487 make Skia image cache size configurable)
     if ( pOldFocusWindow && pOldFocusWindow->mpWindowImpl )
+=======
+    if ( pOldFocusWindow && ! pOldFocusWindow->IsDisposed() )
+>>>>>>> CHANGE (0facc5 Avoid crashes when focus window has been disposed.)
     {
         // Cursor hidden
         if ( pOldFocusWindow->mpWindowImpl->mpCursor )
@@ -321,7 +325,7 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
 
     // !!!!! due to old SV-Office Activate/Deactivate handling
     // !!!!! first as before
-    if ( pOldFocusWindow )
+    if ( pOldFocusWindow && ! pOldFocusWindow->IsDisposed() )
     {
         // remember Focus
         vcl::Window* pOldOverlapWindow = pOldFocusWindow->ImplGetFirstOverlapWindow();
