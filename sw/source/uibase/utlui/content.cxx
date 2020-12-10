@@ -1177,6 +1177,9 @@ static bool lcl_InsertExpandCollapseAllItem(const weld::TreeView& rContentTree, 
 
 static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, const weld::TreeView& rContentTree, const weld::TreeIter& rEntry, weld::Menu& rPop)
 {
+    // If anybody knows what these magic numbers mean, please either
+    // add a comment here, or replace them with some suitable symbolic
+    // names that are defined somewhere else.
     rPop.set_sensitive(OString::number(1512), false);
     rPop.set_sensitive(OString::number(1513), false);
     rPop.set_sensitive(OString::number(1514), false);
@@ -1306,6 +1309,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     std::unique_ptr<weld::Menu> xSubPopOutlineTracking = xBuilder->weld_menu("outlinetracking");
 
     std::unique_ptr<weld::Menu> xSubPopOutlineContent = xBuilder->weld_menu("outlinecontent");
+
+    // More magic numbers, huh.
     xSubPopOutlineContent->append(OUString::number(1512), SwResId(STR_OUTLINE_CONTENT_VISIBILITY_TOGGLE));
     xSubPopOutlineContent->append(OUString::number(1513), SwResId(STR_OUTLINE_CONTENT_VISIBILITY_HIDE_ALL));
     xSubPopOutlineContent->append(OUString::number(1514), SwResId(STR_OUTLINE_CONTENT_VISIBILITY_SHOW_ALL));
