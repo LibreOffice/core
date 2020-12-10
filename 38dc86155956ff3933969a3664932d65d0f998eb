@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ea234a5_0052c109",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-12-10T14:32:03Z",
+      "side": 1,
+      "message": "why \u003e 0 and not \u003e\u003d 0 ?",
+      "revId": "38dc86155956ff3933969a3664932d65d0f998eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
