@@ -70,6 +70,30 @@
       "revId": "12f8c70f912691afa8da4094b6ae9e72d4c80b1a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe4526d1_3653f86a",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1384,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-10T15:13:45Z",
+      "side": 1,
+      "message": "OK, let me revert the change.",
+      "parentUuid": "9fbe2beb_10415ed9",
+      "range": {
+        "startLine": 1374,
+        "startChar": 4,
+        "endLine": 1384,
+        "endChar": 13
+      },
+      "revId": "12f8c70f912691afa8da4094b6ae9e72d4c80b1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
