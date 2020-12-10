@@ -31,7 +31,6 @@
 #include <memory>
 
 class SwWrtShell;
-class SwNavigationPI;
 class SwNavigationChild;
 class SfxBindings;
 class SwNavigationConfig;
