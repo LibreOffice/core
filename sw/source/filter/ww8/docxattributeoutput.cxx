@@ -380,6 +380,12 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
 
 void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo )
 {
+    // Paragraphs (in headers/footers/comments/frames etc) can start before another finishes.
+    // So a stack is needed to keep track of each paragraph's status separately.
+    // Complication: Word can't handle nested text boxes, so those need to be collected together.
+    if ( !m_aFramesOfParagraph.size() || !m_nTextFrameLevel )
+        m_aFramesOfParagraph.push(std::vector<ww8::Frame>());
+
     // look ahead for floating tables that were put into a frame during import
     // floating tables in shapes are not supported: exclude this case
     if (!pTextNodeInfo && !m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen())
@@ -644,10 +650,13 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
         assert(!m_pPostponedCustomShape);
         m_pPostponedCustomShape.reset(new std::vector<PostponedDrawing>);
-        for (size_t nIndex = 0; nIndex < m_aFramesOfParagraph.size(); ++nIndex)
+
+        // The for loop can change the size of m_aFramesOfParagraph, so the max size cannot be set in stone before the loop.
+        size_t nFrames = m_aFramesOfParagraph.size() ? m_aFramesOfParagraph.top().size() : 0;
+        for (size_t nIndex = 0; nIndex < nFrames; ++nIndex)
         {
             m_bParagraphFrameOpen = true;
-            ww8::Frame aFrame = m_aFramesOfParagraph[nIndex];
+            ww8::Frame aFrame = m_aFramesOfParagraph.top()[nIndex];
             const SwFrameFormat& rFrameFormat = aFrame.GetFrameFormat();
 
             if (!TextBoxIsFramePr(rFrameFormat) || m_bWritingHeaderFooter)
@@ -711,6 +720,8 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                 std::shared_ptr<ww8::Frame> pFramePr = std::make_shared<ww8::Frame>(aFrame);
                 aFramePrTextbox.push_back(pFramePr);
             }
+
+            nFrames = m_aFramesOfParagraph.size() ? m_aFramesOfParagraph.top().size() : 0;
         }
         if (!m_pPostponedCustomShape->empty())
         {
@@ -720,7 +731,8 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         }
         m_pPostponedCustomShape.reset();
 
-        m_aFramesOfParagraph.clear();
+        if ( m_aFramesOfParagraph.size() )
+            m_aFramesOfParagraph.top().clear();
 
         if (!pTextNodeInfoInner)
         {
@@ -730,6 +742,8 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     }
 
     --m_nTextFrameLevel;
+    if ( m_aFramesOfParagraph.size() && !m_nTextFrameLevel )
+        m_aFramesOfParagraph.pop();
 
     /* If m_nHyperLinkCount > 0 that means hyperlink tag is not yet closed.
      * This is due to nested hyperlink tags. So close it before end of paragraph.
@@ -6037,10 +6051,10 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
                 // The frame output is postponed to the end of the anchor paragraph
                 bool bDuplicate = false;
                 const OUString& rName = rFrame.GetFrameFormat().GetName();
-                unsigned nSize = m_aFramesOfParagraph.size();
+                unsigned nSize = m_aFramesOfParagraph.size() ? m_aFramesOfParagraph.top().size() : 0;
                 for( unsigned nIndex = 0; nIndex < nSize; ++nIndex )
                 {
-                    const OUString& rNameExisting = m_aFramesOfParagraph[nIndex].GetFrameFormat().GetName();
+                    const OUString& rNameExisting = m_aFramesOfParagraph.top()[nIndex].GetFrameFormat().GetName();
 
                     if (!rName.isEmpty() && !rNameExisting.isEmpty())
                     {
@@ -6052,7 +6066,8 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
                 if( !bDuplicate )
                 {
                     m_bPostponedProcessingFly = true ;
-                    m_aFramesOfParagraph.emplace_back(rFrame);
+                    if ( m_aFramesOfParagraph.size() )
+                        m_aFramesOfParagraph.top().emplace_back(rFrame);
                 }
             }
             break;
