@@ -36,6 +36,7 @@
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <osl/socket.h>
+#include <oslsocket.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/process.h>
@@ -246,7 +247,7 @@ template<typename T> oslFileError getSystemPathFromFileUrl(
     if (url.indexOf('?', i) != -1 || url.indexOf('#', i) != -1)
         return osl_File_E_INVAL;
     // Handle authority, supporting a host of "localhost", "127.0.0.1", or the exact value (e.g.,
-    // not supporting an additional final dot, for simplicity) reported by osl_getLocalHostname
+    // not supporting an additional final dot, for simplicity) reported by osl_getLocalHostnameFQDN
     // (and, in each case, ignoring case of ASCII letters):
     if (url.getLength() - i >= 2 && url[i] == '/' && url[i + 1] == '/')
     {
@@ -265,7 +266,9 @@ template<typename T> oslFileError getSystemPathFromFileUrl(
                 != 0))
         {
             OUString hostname;
-            if (osl_getLocalHostname(&hostname.pData) != osl_Socket_Ok
+            // The 'file' URI Scheme does imply that we want a FQDN in this case
+            // See https://tools.ietf.org/html/rfc8089#section-3
+            if (osl_getLocalHostnameFQDN(&hostname.pData) != osl_Socket_Ok
                 || (rtl_ustr_compareIgnoreAsciiCase_WithLength(
                         url.pData->buffer + i, j - i, hostname.getStr(), hostname.getLength())
                     != 0))
