@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "815a2c45_eff8efd3",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1596,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-12-10T15:21:57Z",
+      "side": 1,
+      "message": "I actually basically copy\u0026pasted from the other cache entries above (including just saying \"size\" without any \"in bytes\"). I wonder if somebody would realistically want a 1GiB cache for Skia images (that\u0027s something like 20000x20000 pixels worth of screen area), but I suppose I can go with long.",
+      "parentUuid": "9e90d78c_be196c17",
+      "range": {
+        "startLine": 1596,
+        "startChar": 50,
+        "endLine": 1596,
+        "endChar": 56
+      },
+      "revId": "b32fbbae704040c38b4400cc3c9b106c83d87cb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b5839ed_6d12ff40",
         "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
         "patchSetId": 1
