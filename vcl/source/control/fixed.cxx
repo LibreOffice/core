@@ -25,6 +25,7 @@
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 #include <controldata.hxx>
+#include <tools/json_writer.hxx>
 
 #define FIXEDLINE_TEXT_BORDER    4
 
@@ -654,6 +655,13 @@ void FixedLine::DataChanged( const DataChangedEvent& rDCEvt )
 Size FixedLine::GetOptimalSize() const
 {
     return CalcWindowSize( FixedText::CalcMinimumTextSize ( this ) );
+}
+
+void FixedLine::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    Control::DumpAsPropertyTree(rJsonWriter);
+    rJsonWriter.put("type", "separator");
+    rJsonWriter.put("orientation", (GetStyle() & WB_VERT) ? "vertical" : "horizontal");
 }
 
 void FixedBitmap::ImplInit( vcl::Window* pParent, WinBits nStyle )
