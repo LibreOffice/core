@@ -61,6 +61,7 @@
 #include <unotools/configmgr.hxx>
 #include <tools/svlibrary.h>
 #include <tools/diagnose_ex.h>
+#include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
