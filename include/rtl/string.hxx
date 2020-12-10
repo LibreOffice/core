@@ -243,6 +243,12 @@ public:
         rtl_string_newFromStr_WithLength( &pData, &value, 1 );
     }
 
+#if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST_CONCAT
+    // Catch inadvertent conversions to the above ctor (e.g., from sal_[u]Int8, aka [un]signed
+    // char):
+    OString(int) = delete;
+#endif
+
     /**
       New string from a character buffer array.
 

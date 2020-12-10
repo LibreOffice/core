@@ -54,8 +54,8 @@ bool isCompatible(SvStream& rInStream, sal_uInt64 nPos, sal_uInt64 nSize)
         || aFirstBytes[3] != 'F' || aFirstBytes[4] != '-')
         return false;
 
-    sal_Int32 nMajor = OString(aFirstBytes[5]).toInt32();
-    sal_Int32 nMinor = OString(aFirstBytes[7]).toInt32();
+    sal_Int32 nMajor = OString(char(aFirstBytes[5])).toInt32();
+    sal_Int32 nMinor = OString(char(aFirstBytes[7])).toInt32();
     return !(nMajor > 1 || (nMajor == 1 && nMinor > 6));
 }
 
