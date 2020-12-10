@@ -39,7 +39,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         return RTFError::OK;
     }
     // Trivial symbols
-    sal_uInt8 cCh = 0;
+    char cCh = 0;
     switch (nKeyword)
     {
         case RTF_TAB:
@@ -55,30 +55,30 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             cCh = '}';
             break;
         case RTF_EMDASH:
-            cCh = 151;
+            cCh = char(151);
             break;
         case RTF_ENDASH:
-            cCh = 150;
+            cCh = char(150);
             break;
         case RTF_BULLET:
-            cCh = 149;
+            cCh = char(149);
             break;
         case RTF_LQUOTE:
-            cCh = 145;
+            cCh = char(145);
             break;
         case RTF_RQUOTE:
-            cCh = 146;
+            cCh = char(146);
             break;
         case RTF_LDBLQUOTE:
-            cCh = 147;
+            cCh = char(147);
             break;
         case RTF_RDBLQUOTE:
-            cCh = 148;
+            cCh = char(148);
             break;
         default:
             break;
     }
-    if (cCh > 0)
+    if (cCh != 0)
     {
         OUString aStr(OStringToOUString(OString(cCh), RTL_TEXTENCODING_MS_1252));
         text(aStr);
