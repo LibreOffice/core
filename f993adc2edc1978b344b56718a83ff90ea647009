@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "54e0b779_0bb28dfc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-12-10T13:21:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e77bf37_73ac79c8",
+      "range": {
+        "startLine": 17,
+        "startChar": 15,
+        "endLine": 17,
+        "endChar": 16
+      },
+      "revId": "f993adc2edc1978b344b56718a83ff90ea647009",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e49a4288_ac320010",
         "filename": "sal/osl/w32/socket.cxx",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "f993adc2edc1978b344b56718a83ff90ea647009",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60b8b80c_84853c36",
+        "filename": "sal/osl/w32/socket.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-12-10T13:21:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e49a4288_ac320010",
+      "range": {
+        "startLine": 614,
+        "startChar": 16,
+        "endLine": 614,
+        "endChar": 27
+      },
+      "revId": "f993adc2edc1978b344b56718a83ff90ea647009",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
