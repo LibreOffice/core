@@ -90,7 +90,8 @@ struct GetPPDAttribs
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-        OString aResult = cupsGetPPD(m_aParameter.getStr());
+        const char* pResult = cupsGetPPD(m_aParameter.getStr());
+        OString aResult = pResult ? OString(pResult) : OString();
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
