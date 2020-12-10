@@ -248,6 +248,7 @@ public:
     void testTdf74363();
     void testTdf80663();
     void testTdf57197();
+    void testTdf131990();
     void testTdf90808();
     void testTdf97601();
     void testTdf75137();
@@ -480,6 +481,7 @@ public:
     CPPUNIT_TEST(testTdf74363);
     CPPUNIT_TEST(testTdf80663);
     CPPUNIT_TEST(testTdf57197);
+    CPPUNIT_TEST(testTdf131990);
     CPPUNIT_TEST(testTdf90808);
     CPPUNIT_TEST(testTdf97601);
     CPPUNIT_TEST(testTdf75137);
@@ -3815,6 +3817,15 @@ void SwUiWriterTest::testTdf57197()
     rUndoManager.Undo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getColumns()->getCount());
+}
+
+void SwUiWriterTest::testTdf131990()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    CPPUNIT_ASSERT(!pWrtShell->Up( false, 1, true ));
+    CPPUNIT_ASSERT(!pWrtShell->Down( false, 1, true ));
 }
 
 void SwUiWriterTest::testTdf90808()
