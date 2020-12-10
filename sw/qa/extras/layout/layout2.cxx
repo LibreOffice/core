@@ -49,6 +49,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdotext.hxx>
 #include <dcontact.hxx>
+#include <textboxhelper.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
 
@@ -1517,6 +1518,39 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf120287c)
     // This was 2, the second line was not broken into a 2nd and a 3rd one,
     // rendering text outside the paragraph frame.
     assertXPath(pXmlDoc, "/root/page/body/txt[1]/LineBreak", 3);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137803)
+{
+    // Open the desired bugdoc
+    createDoc("tdf137803.fodt");
+
+    // There is a shape-textbox and the textbox inside the shape.
+    // Now let's set the text autogrowheight to true:
+    uno::Reference<beans::XPropertySet> xShapeProps(getShape(1), uno::UNO_QUERY);
+    xShapeProps->setPropertyValue("TextAutoGrowHeight", uno::Any(true));
+
+    // Sync the autosize prop to the textbox manually
+    SwFrameFormat* pShape(SwTextBoxHelper::getOtherTextBoxFormat(
+        SwTextBoxHelper::getOtherTextBoxFormat(getShape(1)), RES_FLYFRMFMT));
+    SwTextBoxHelper::syncProperty(pShape, std::u16string_view(u"TextAutoGrowHeight"),
+                                  uno::Any(true));
+    calcLayout();
+
+    // Without this fix, the textbox fall apart, now it must be inside the shape
+    // so let's check it. First create a layout dump:
+    auto pXmlDump(parseLayoutDump());
+
+    // Get the bottom positions for the shape and textframe
+    sal_Int32 nShapeBottomPos(
+        getXPath(pXmlDump, "/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds", "bottom")
+            .toInt32());
+    sal_Int32 nTextFrameBottomPos(
+        getXPath(pXmlDump, "/root/page/body/txt/anchored/fly/infos/bounds", "bottom").toInt32());
+
+    // If the textframe inside the shape, the textframe bottom position must be less
+    // than the bottom of the shape positrion, so check it:
+    CPPUNIT_ASSERT_LESS(nShapeBottomPos, nTextFrameBottomPos);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122878)
