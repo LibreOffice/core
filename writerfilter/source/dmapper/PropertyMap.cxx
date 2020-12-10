@@ -1836,12 +1836,16 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             {
                 // Avoid setting page style in case of autotext: so inserting the autotext at the
                 // end of the document does not introduce an unwanted page break.
-                if (!rDM_Impl.IsReadGlossaries() && !rDM_Impl.IsInFootOrEndnote())
+                // Also avoid setting the page style at the very beginning if it still is the default page style.
+                const OUString sPageStyleName = m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName;
+                if (!rDM_Impl.IsReadGlossaries()
+                    && !rDM_Impl.IsInFootOrEndnote()
+                    && !(m_bIsFirstSection && sPageStyleName == getPropertyName( PROP_STANDARD ) && m_nPageNumber < 0)
+                   )
                 {
                     xRangeProperties->setPropertyValue(
                         getPropertyName( PROP_PAGE_DESC_NAME ),
-                        uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName
-                            : m_sFollowPageStyleName ) );
+                        uno::makeAny(sPageStyleName) );
                 }
 
                 if (0 <= m_nPageNumber)
