@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f06a99d_6099a755",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1384,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-10T06:35:47Z",
+      "side": 1,
+      "message": "The changed lines do not follow our clang-format rules. Please make sure that all *edited* lines are properly clang-formatted (of course, the rest of the file should not be re-formatted, but making sure that changed lines follow the rules ensures that there will be no \"reformat\" noise in them later).",
+      "range": {
+        "startLine": 1374,
+        "startChar": 4,
+        "endLine": 1384,
+        "endChar": 13
+      },
+      "revId": "12f8c70f912691afa8da4094b6ae9e72d4c80b1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
