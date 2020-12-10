@@ -312,7 +312,7 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
 
     pSVData->mpWinData->mpFocusWin = this;
 
-    if ( pOldFocusWindow )
+    if ( pOldFocusWindow && ! pOldFocusWindow->IsDisposed() )
     {
         // Cursor hidden
         if ( pOldFocusWindow->mpWindowImpl->mpCursor )
@@ -321,7 +321,7 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
 
     // !!!!! due to old SV-Office Activate/Deactivate handling
     // !!!!! first as before
-    if ( pOldFocusWindow )
+    if ( pOldFocusWindow && ! pOldFocusWindow->IsDisposed() )
     {
         // remember Focus
         vcl::Window* pOldOverlapWindow = pOldFocusWindow->ImplGetFirstOverlapWindow();
