@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4bc56cb3_feae6f50",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-12-10T13:16:30Z",
+      "side": 1,
+      "message": "so it\u0027s the bounding box of the shape",
+      "range": {
+        "startLine": 1106,
+        "startChar": 0,
+        "endLine": 1107,
+        "endChar": 94
+      },
+      "revId": "3d7e019b49f15745e74d0e84e1800e4fcc146c3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78c0a6f6_2b610632",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-12-10T13:16:30Z",
+      "side": 1,
+      "message": "pObj can be nullptr!",
+      "range": {
+        "startLine": 1112,
+        "startChar": 26,
+        "endLine": 1112,
+        "endChar": 30
+      },
+      "revId": "3d7e019b49f15745e74d0e84e1800e4fcc146c3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6f7e58e_fc736e6f",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-12-10T13:16:30Z",
+      "side": 1,
+      "message": "Is it sure? It seems, it\u0027s the same, as aSize, but it\u0027s bigger with one twip (for selection?).",
+      "range": {
+        "startLine": 1114,
+        "startChar": 8,
+        "endLine": 1114,
+        "endChar": 98
+      },
+      "revId": "3d7e019b49f15745e74d0e84e1800e4fcc146c3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca813b80_a8178307",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-12-10T13:16:30Z",
+      "side": 1,
+      "message": "const tools::Rectangle\u0026",
+      "range": {
+        "startLine": 1115,
+        "startChar": 8,
+        "endLine": 1115,
+        "endChar": 12
+      },
+      "revId": "3d7e019b49f15745e74d0e84e1800e4fcc146c3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa6c98d3_0b961796",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-12-10T13:16:30Z",
+      "side": 1,
+      "message": "so it seems, this is unnecessary",
+      "range": {
+        "startLine": 1119,
+        "startChar": 8,
+        "endLine": 1119,
+        "endChar": 93
+      },
+      "revId": "3d7e019b49f15745e74d0e84e1800e4fcc146c3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
