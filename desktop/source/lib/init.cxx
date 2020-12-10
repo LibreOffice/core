@@ -3619,6 +3619,9 @@ static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOu
             case LOK_DOCTYPE_PRESENTATION:
                 aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
                 break;
+            case LOK_DOCTYPE_DRAWING:
+                aMediaDescriptor["FilterName"] <<= OUString("draw_svg_Export");
+                break;
             case LOK_DOCTYPE_TEXT:
                 aMediaDescriptor["FilterName"] <<= OUString("writer_svg_Export");
                 break;
