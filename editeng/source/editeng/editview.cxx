@@ -868,7 +868,7 @@ bool EditView::IsCursorAtWrongSpelledWord()
 
 bool EditView::IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong )
 {
-    Point aPos ( pImpEditView->GetWindow()->PixelToLogic( rPosPixel ) );
+    Point aPos(pImpEditView->GetOutputDevice().PixelToLogic(rPosPixel));
     aPos = pImpEditView->GetDocPos( aPos );
     EditPaM aPaM = pImpEditView->pEditEngine->GetPaM(aPos, false);
     return pImpEditView->IsWrongSpelledWord( aPaM , bMarkIfWrong );
@@ -911,7 +911,7 @@ static void LOKSendSpellPopupMenu(Menu* pMenu, LanguageType nGuessLangWord,
 
 void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void> const * pCallBack )
 {
-    Point aPos ( pImpEditView->GetWindow()->PixelToLogic( rPosPixel ) );
+    Point aPos(pImpEditView->GetOutputDevice().PixelToLogic(rPosPixel));
     aPos = pImpEditView->GetDocPos( aPos );
     EditPaM aPaM = pImpEditView->pEditEngine->GetPaM(aPos, false);
     Reference< linguistic2::XSpellChecker1 >  xSpeller( pImpEditView->pEditEngine->pImpEditEngine->GetSpeller() );
