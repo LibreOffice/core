@@ -5248,6 +5248,8 @@ void SwTextNode::TriggerNodeUpdate(const sw::LegacyModifyHint& rHint)
             && GetRegisteredIn() == static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat
             && GetNodes().IsDocNodes() )
     {
+        assert(dynamic_cast<SwTextFormatColl const*>(static_cast<const SwFormatChg*>(pOldValue)->pChangedFormat));
+        assert(dynamic_cast<SwTextFormatColl const*>(static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat));
         ChgTextCollUpdateNum(
                 static_cast<const SwTextFormatColl*>(static_cast<const SwFormatChg*>(pOldValue)->pChangedFormat),
                 static_cast<const SwTextFormatColl*>(static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat) );
