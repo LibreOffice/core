@@ -91,6 +91,7 @@ void SAL_CALL SvxLineStyleToolBoxControl::statusChanged( const frame::FeatureSta
         const SvxDashListItem* pItem = pSh->GetItem( SID_DASH_LIST );
         if (pItem)
         {
+            bool bNoneLineStyle = false;
             XDashListRef xList = pItem->GetDashList();
             int nIndex = m_xBtnUpdater->GetStyleIndex();
             switch (nIndex)
@@ -107,6 +108,7 @@ void SAL_CALL SvxLineStyleToolBoxControl::statusChanged( const frame::FeatureSta
                     }
                     else
                         pToolBox->SetItemImage(nId, Image(aEmpty));
+                    bNoneLineStyle = true;
                     break;
                 }
                 case 1:
@@ -128,6 +130,9 @@ void SAL_CALL SvxLineStyleToolBoxControl::statusChanged( const frame::FeatureSta
                         pToolBox->SetItemImage(nId, Image(xList->GetUiBitmap(nIndex - 2)));
                     break;
             }
+
+            if (m_aLineStyleIsNoneFunction)
+                m_aLineStyleIsNoneFunction(bNoneLineStyle);
         }
     }
 }
@@ -170,6 +175,11 @@ void SvxLineStyleToolBoxControl::initialize( const css::uno::Sequence<css::uno::
 void SvxLineStyleToolBoxControl::setLineStyleSelectFunction(const LineStyleSelectFunction& rLineStyleSelectFunction)
 {
     m_aLineStyleSelectFunction = rLineStyleSelectFunction;
+}
+
+void SvxLineStyleToolBoxControl::setLineStyleIsNoneFunction(const LineStyleIsNoneFunction& rLineStyleIsNoneFunction)
+{
+    m_aLineStyleIsNoneFunction = rLineStyleIsNoneFunction;
 }
 
 void SvxLineStyleToolBoxControl::dispatchLineStyleCommand(const OUString& rCommand, const Sequence<PropertyValue>& rArgs)

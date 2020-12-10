@@ -45,7 +45,7 @@ namespace svx
 namespace sidebar
 {
 
-class DisableArrowsWrapper;
+class LineStyleNoneChange;
 
 class SVX_DLLPUBLIC LinePropertyPanelBase : public PanelLayout
 {
@@ -116,7 +116,7 @@ private:
     //popup windows
     std::unique_ptr<LineWidthPopup> mxLineWidthPopup;
 
-    std::unique_ptr<DisableArrowsWrapper> mxDisableArrowsWrapper;
+    std::unique_ptr<LineStyleNoneChange> mxLineStyleNoneChange;
 
     sal_uInt16      mnTrans;
     MapUnit         meMapUnit;
