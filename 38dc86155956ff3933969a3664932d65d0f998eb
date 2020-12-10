@@ -16,6 +16,24 @@
       "revId": "38dc86155956ff3933969a3664932d65d0f998eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3853ba52_2f7bbdef",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-12-10T14:48:22Z",
+      "side": 1,
+      "message": "because the original is \"if (nResult)\" and I didn\u0027t want to change how it worked, even though it looks dodgy to me.\n\nThe version in master included the comment \"I wonder if the test !\u003d 0 is what was really intended here, but keep that legacy logic anyway\" which this version didn\u0027t (for some reason I forget) https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003da0f44c862d06981d5ae2625f0a8032e40ce76c4d",
+      "parentUuid": "1ea234a5_0052c109",
+      "revId": "38dc86155956ff3933969a3664932d65d0f998eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
