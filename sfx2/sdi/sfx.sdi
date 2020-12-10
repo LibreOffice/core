@@ -2993,9 +2993,9 @@ SfxVoidItem TemplateManager SID_TEMPLATE_MANAGER
     RecordPerSet;
     Asynchron;
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Application;
 ]
 
