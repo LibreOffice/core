@@ -74,6 +74,19 @@ static boost::property_tree::ptree lcl_DumpEntryAndSiblings(SvTreeListEntry* pEn
 
         aEntry.push_back(std::make_pair("columns", aColumns));
 
+        // SalInstanceTreeView does not use the flag CHILDREN_ON_DEMAND
+        // and it creates a dummy child
+        const SvTreeListEntries& rChildren = pEntry->GetChildEntries();
+        if (rChildren.size() == 1)
+        {
+            auto& rChild = rChildren[0];
+            if (const SvLBoxItem* pChild = rChild->GetFirstItem(SvLBoxItemType::String))
+            {
+                if (static_cast<const SvLBoxString*>(pChild)->GetText() == "<dummy>")
+                    aEntry.put("ondemand", "true");
+            }
+        }
+
         if (bCheckButtons)
         {
             SvButtonState eCheckState = pTabListBox->GetCheckButtonState(pEntry);
