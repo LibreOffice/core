@@ -822,6 +822,13 @@ OutputDevice& ImpEditView::GetOutputDevice() const
     return *pOutWin;
 }
 
+weld::Widget* ImpEditView::GetPopupParent() const
+{
+    if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
+        return pCallbacks->EditViewPopupParent();
+    return pOutWin->GetFrameWeld();
+}
+
 void ImpEditView::SetOutputArea( const tools::Rectangle& rRect )
 {
     const OutputDevice& rOutDev = GetOutputDevice();
