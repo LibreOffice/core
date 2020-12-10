@@ -36,7 +36,6 @@ class SfxBindings;
 class SwNavigationConfig;
 class SwView;
 class SfxObjectShellLock;
-class SfxChildWindowContext;
 enum class RegionMode;
 class SpinField;
 
