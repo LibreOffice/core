@@ -131,7 +131,6 @@ public:
     PDFiumPathSegment(FPDF_PATHSEGMENT pPathSegment);
     ~PDFiumPathSegment();
 
-    FPDF_PATHSEGMENT getPointer() const { return mpPathSegment; }
     basegfx::B2DPoint getPoint() const;
     bool isClosed() const;
     PDFSegmentType getType() const;
