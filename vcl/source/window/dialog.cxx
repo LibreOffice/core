@@ -1616,6 +1616,12 @@ boost::property_tree::ptree Dialog::DumpAsPropertyTree()
         if (!pActionArea->IsVisible())
             aTree.put("collapsed", "true");
     }
+
+    OUString sDialogId = OStringToOUString(GetHelpId(), RTL_TEXTENCODING_ASCII_US);
+    sal_Int32 nStartPos = sDialogId.lastIndexOf('/');
+    nStartPos = nStartPos >= 0 ? nStartPos + 1 : 0;
+    aTree.put("dialogid", sDialogId.copy(nStartPos));
+
     return aTree;
 }
 
