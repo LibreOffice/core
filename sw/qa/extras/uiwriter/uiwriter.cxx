@@ -213,6 +213,7 @@ public:
     void testCreatePortions();
     void testBookmarkUndo();
     void testFdo85876();
+    void testTdf81226();
     void testTdf79717();
     void testTdf137532();
     void testFdo87448();
@@ -444,6 +445,7 @@ public:
     CPPUNIT_TEST(testCreatePortions);
     CPPUNIT_TEST(testBookmarkUndo);
     CPPUNIT_TEST(testFdo85876);
+    CPPUNIT_TEST(testTdf81226);
     CPPUNIT_TEST(testTdf79717);
     CPPUNIT_TEST(testTdf137532);
     CPPUNIT_TEST(testFdo87448);
@@ -2019,6 +2021,21 @@ void SwUiWriterTest::testFdo85876()
         // this used to be BOLD too with fdo#85876
         CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xCursor, "CharWeight"));
     }
+}
+
+void SwUiWriterTest::testTdf81226()
+{
+    SwDoc* const pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("before");
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    pWrtShell->Down(false);
+    pWrtShell->Insert("after");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: beforeafter
+    // - Actual  : beafterfore
+    CPPUNIT_ASSERT_EQUAL(OUString("beforeafter"), getParagraph(1)->getString());
 }
 
 void SwUiWriterTest::testTdf79717()
