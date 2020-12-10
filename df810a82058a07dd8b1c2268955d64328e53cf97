@@ -22,6 +22,30 @@
       "revId": "df810a82058a07dd8b1c2268955d64328e53cf97",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6aff360d_b869d3d3",
+        "filename": "dbaccess/source/ui/querydesign/SelectionBrowseBox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 814,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-10T08:01:55Z",
+      "side": 1,
+      "message": "Yes, very similar to how `\"\"` could have been used instead of `OUString()` in the past.  (Especially when doing such semi-mechanical changes at scale, I generally try to introduce as little arbitrary variance as possible.)\n\nThat said, there is an important difference between creating a std::u16string_view s with `std::u16string_view()` and with `u\"\"`:  For the former, s.data() returns null, while for the latter it is guaranteed to return non-null.  There could be code that does not expect s.data() to return null, so `u\"\"` would probably be considered the better choice overall.",
+      "parentUuid": "95af1ff0_def4c5ec",
+      "range": {
+        "startLine": 814,
+        "startChar": 53,
+        "endLine": 814,
+        "endChar": 74
+      },
+      "revId": "df810a82058a07dd8b1c2268955d64328e53cf97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
