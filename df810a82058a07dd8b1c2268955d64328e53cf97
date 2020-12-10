@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95af1ff0_def4c5ec",
+        "filename": "dbaccess/source/ui/querydesign/SelectionBrowseBox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 814,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-10T04:22:38Z",
+      "side": 1,
+      "message": "Can\u0027t simple u\"\" be used here instead of explicit default ctor?",
+      "range": {
+        "startLine": 814,
+        "startChar": 53,
+        "endLine": 814,
+        "endChar": 74
+      },
+      "revId": "df810a82058a07dd8b1c2268955d64328e53cf97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
