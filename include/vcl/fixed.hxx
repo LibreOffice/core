@@ -113,6 +113,8 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     virtual Size    GetOptimalSize() const override;
+
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 class VCL_DLLPUBLIC FixedBitmap final : public Control

@@ -25,6 +25,7 @@
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 #include <controldata.hxx>
+#include <boost/property_tree/ptree.hpp>
 
 #define FIXEDLINE_TEXT_BORDER    4
 
@@ -654,6 +655,14 @@ void FixedLine::DataChanged( const DataChangedEvent& rDCEvt )
 Size FixedLine::GetOptimalSize() const
 {
     return CalcWindowSize( FixedText::CalcMinimumTextSize ( this ) );
+}
+
+boost::property_tree::ptree FixedLine::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(Control::DumpAsPropertyTree());
+    aTree.put("type", "separator");
+    aTree.put("orientation", (GetStyle() & WB_VERT) ? "vertical" : "horizontal");
+    return aTree;
 }
 
 void FixedBitmap::ImplInit( vcl::Window* pParent, WinBits nStyle )
