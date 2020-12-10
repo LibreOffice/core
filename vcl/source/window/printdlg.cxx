@@ -82,7 +82,8 @@ IMPL_LINK (MoreOptionsDialog, ClickHdl, weld::Button&, rButton, void)
 {
     if (&rButton == mxOKButton.get())
     {
-        mpParent->mbSingleJobs = mxSingleJobsBox->get_active();
+        bool bChecked = mxSingleJobsBox->get_active();
+        mpParent->maPController->setValue("SinglePrintJobs", makeAny(bChecked));
         m_xDialog->response(RET_OK);
     }
     else if (&rButton == mxCancelButton.get())
