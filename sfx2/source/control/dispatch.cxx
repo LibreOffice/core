@@ -1106,7 +1106,8 @@ void SfxDispatcher::Update_Impl( bool bForce )
         if (pAct == this)
         {
             pWork->ResetObjectBars_Impl();
-            pWork->ResetChildWindows_Impl();
+            if (!comphelper::LibreOfficeKit::isActive())
+                pWork->ResetChildWindows_Impl();
         }
     }
 
@@ -1220,6 +1221,10 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
 
             SfxShellFeature nFeature = pIFace->GetChildWindowFeature(nNo);
             if ((nFeature != SfxShellFeature::NONE) && !pShell->HasUIFeature(nFeature))
+                continue;
+
+            // Don't add childwindows activated in other view in online
+            if (comphelper::LibreOfficeKit::isActive() && !pWorkWin->HasChildWindow_Impl(nId))
                 continue;
 
             // slot decides whether a ChildWindow is shown when document is OLE server or OLE client
