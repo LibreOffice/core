@@ -1564,6 +1564,13 @@ bool VclAlignment::set_property(const OString &rKey, const OUString &rValue)
     return true;
 }
 
+boost::property_tree::ptree VclAlignment::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(VclContainer::DumpAsPropertyTree());
+    aTree.put("type", "alignment");
+    return aTree;
+}
+
 void VclExpander::dispose()
 {
     m_pDisclosureButton.disposeAndClear();
