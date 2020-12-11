@@ -348,7 +348,7 @@ FmSearchEngine::SearchResult FmSearchEngine::SearchSpecial(bool _bSearchForNull,
 }
 
 
-FmSearchEngine::SearchResult FmSearchEngine::SearchWildcard(const OUString& strExpression, sal_Int32& nFieldPos,
+FmSearchEngine::SearchResult FmSearchEngine::SearchWildcard(std::u16string_view strExpression, sal_Int32& nFieldPos,
     FieldCollection::iterator& iterFieldLoop, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
 {
     // memorize the start position

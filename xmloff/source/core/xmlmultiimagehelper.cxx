@@ -31,7 +31,7 @@ namespace
         OUString sMimeType;
         if (rString.startsWith("vnd.sun.star.Package"))
         {
-            OString aExtension = OUStringToOString(rString.copy(rString.lastIndexOf(".") + 1), RTL_TEXTENCODING_ASCII_US);
+            OString aExtension = OUStringToOString(rString.subView(rString.lastIndexOf(".") + 1), RTL_TEXTENCODING_ASCII_US);
             sMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension(aExtension);
         }
         return sMimeType;

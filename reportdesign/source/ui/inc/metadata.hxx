@@ -22,6 +22,8 @@
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <o3tl/typed_flags_set.hxx>
+
+#include <string_view>
 #include <vector>
 
     //= UI flags (for all browsable properties)
@@ -82,7 +84,7 @@ namespace rptui
     class HelpIdUrl
     {
     public:
-        static OUString getHelpURL( const OString& _sHelpId );
+        static OUString getHelpURL( std::string_view _sHelpId );
     };
 
 

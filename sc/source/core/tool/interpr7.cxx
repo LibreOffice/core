@@ -30,6 +30,7 @@
 
 #include <cstring>
 #include <memory>
+#include <string_view>
 
 using namespace com::sun::star;
 
@@ -178,13 +179,13 @@ void ScInterpreter::ScFilterXML()
                             xmlNsPtr ns = reinterpret_cast<xmlNsPtr>(pNodeSet->nodeTab[nNode]);
                             xmlNodePtr cur = reinterpret_cast<xmlNodePtr>(ns->next);
                             std::shared_ptr<xmlChar> pChar2(xmlNodeGetContent(cur), xmlFree);
-                            aResult = OStringToOUString(OString(reinterpret_cast<char*>(pChar2.get())), RTL_TEXTENCODING_UTF8);
+                            aResult = OStringToOUString(std::string_view(reinterpret_cast<char*>(pChar2.get())), RTL_TEXTENCODING_UTF8);
                         }
                         else
                         {
                             xmlNodePtr cur = pNodeSet->nodeTab[nNode];
                             std::shared_ptr<xmlChar> pChar2(xmlNodeGetContent(cur), xmlFree);
-                            aResult = OStringToOUString(OString(reinterpret_cast<char*>(pChar2.get())), RTL_TEXTENCODING_UTF8);
+                            aResult = OStringToOUString(std::string_view(reinterpret_cast<char*>(pChar2.get())), RTL_TEXTENCODING_UTF8);
                         }
                         if (xResMat)
                             xResMat->PutString( mrStrPool.intern( aResult), 0, nNode);

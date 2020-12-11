@@ -91,7 +91,7 @@ namespace sax_fastparser {
         mnDoubleStrCapacity = RTL_STR_MAX_VALUEOFDOUBLE;
     }
 
-    void FastSaxSerializer::write( const OUString& sOutput, bool bEscape )
+    void FastSaxSerializer::write( std::u16string_view sOutput, bool bEscape )
     {
         write( OUStringToOString(sOutput, RTL_TEXTENCODING_UTF8), bEscape );
 

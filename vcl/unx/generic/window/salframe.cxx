@@ -2204,7 +2204,7 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
 void X11SalFrame::StartPresentation( bool bStart )
 {
     maScreenSaverInhibitor.inhibit( bStart,
-                                    "presentation",
+                                    u"presentation",
                                     true, // isX11
                                     mhWindow,
                                     GetXDisplay() );

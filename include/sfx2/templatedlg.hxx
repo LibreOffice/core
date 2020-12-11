@@ -14,6 +14,7 @@
 #include <sfx2/dllapi.h>
 
 #include <set>
+#include <string_view>
 
 #include <vcl/idle.hxx>
 #include <vcl/timer.hxx>
@@ -68,7 +69,7 @@ protected:
     DECL_LINK(TVItemStateHdl, const ThumbnailViewItem*, void);
 
     DECL_LINK(MenuSelectHdl, const OString&, void);
-    void DefaultTemplateMenuSelectHdl(const OString& rIdent);
+    void DefaultTemplateMenuSelectHdl(std::string_view rIdent);
 
     DECL_LINK(OpenRegionHdl, void*, void);
     DECL_LINK(CreateContextMenuHdl, ThumbnailViewItem*, void);

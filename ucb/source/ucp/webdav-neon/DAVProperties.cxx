@@ -43,7 +43,7 @@ void DAVProperties::createNeonPropName( const OUString & rFullName,
         rName.nspace = "DAV:";
         rName.name
             = strdup( OUStringToOString(
-                        rFullName.copy( RTL_CONSTASCII_LENGTH( "DAV:" ) ),
+                        rFullName.subView( RTL_CONSTASCII_LENGTH( "DAV:" ) ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
     }
     else if ( rFullName.startsWith( "http://apache.org/dav/props/" ) )
@@ -51,7 +51,7 @@ void DAVProperties::createNeonPropName( const OUString & rFullName,
         rName.nspace = "http://apache.org/dav/props/";
         rName.name
             = strdup( OUStringToOString(
-                        rFullName.copy(
+                        rFullName.subView(
                             RTL_CONSTASCII_LENGTH(
                                 "http://apache.org/dav/props/" ) ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -61,7 +61,7 @@ void DAVProperties::createNeonPropName( const OUString & rFullName,
         rName.nspace = "http://ucb.openoffice.org/dav/props/";
         rName.name
             = strdup( OUStringToOString(
-                        rFullName.copy(
+                        rFullName.subView(
                             RTL_CONSTASCII_LENGTH(
                                 "http://ucb.openoffice.org/dav/props/" ) ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );

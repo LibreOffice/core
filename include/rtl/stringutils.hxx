@@ -45,6 +45,7 @@ namespace rtl
 struct SAL_WARN_UNUSED OStringChar {
     constexpr OStringChar(char theC): c(theC) {}
     template<typename T> OStringChar(T &&) = delete;
+    constexpr operator std::string_view() const { return {&c, 1}; }
     char const c;
 };
 

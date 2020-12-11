@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <map>
+#include <string_view>
 
 #include <com/sun/star/uno/Sequence.h>
 #include <connectivity/dbtoolsdllapi.hxx>
@@ -57,7 +58,7 @@ namespace connectivity
     {
         typedef salhelper::SingletonRef<DriversConfigImpl> OSharedConfigNode;
 
-        const ::comphelper::NamedValueCollection& impl_get(const OUString& _sURL,sal_Int32 _nProps) const;
+        const ::comphelper::NamedValueCollection& impl_get(std::u16string_view _sURL,sal_Int32 _nProps) const;
     public:
         DriversConfig(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
         ~DriversConfig();
@@ -65,11 +66,11 @@ namespace connectivity
         DriversConfig( const DriversConfig& );
         DriversConfig& operator=( const DriversConfig& );
 
-        OUString getDriverFactoryName(const OUString& _sUrl) const;
-        OUString getDriverTypeDisplayName(const OUString& _sUrl) const;
-        const ::comphelper::NamedValueCollection& getProperties(const OUString& _sURL) const;
-        const ::comphelper::NamedValueCollection& getFeatures(const OUString& _sURL) const;
-        const ::comphelper::NamedValueCollection& getMetaData(const OUString& _sURL) const;
+        OUString getDriverFactoryName(std::u16string_view _sUrl) const;
+        OUString getDriverTypeDisplayName(std::u16string_view _sUrl) const;
+        const ::comphelper::NamedValueCollection& getProperties(std::u16string_view _sURL) const;
+        const ::comphelper::NamedValueCollection& getFeatures(std::u16string_view _sURL) const;
+        const ::comphelper::NamedValueCollection& getMetaData(std::u16string_view _sURL) const;
         css::uno::Sequence< OUString > getURLs() const;
     private:
         OSharedConfigNode                                  m_aNode;

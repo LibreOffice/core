@@ -57,7 +57,7 @@ namespace XSLT
         }
     }
 
-    void OleHandler::initRootStorageFromBase64(const OString& content)
+    void OleHandler::initRootStorageFromBase64(std::string_view content)
     {
         Sequence<sal_Int8> oleData;
         ::comphelper::Base64::decode(oleData, OStringToOUString(
@@ -132,7 +132,7 @@ namespace XSLT
     }
 
     void
-    OleHandler::insertByName(const OUString& streamName, const OString& content)
+    OleHandler::insertByName(const OUString& streamName, std::string_view content)
     {
         if ( streamName == "oledata.mso" )
         {
@@ -167,7 +167,7 @@ namespace XSLT
     }
 
     void
-    OleHandler::insertSubStorage(const OUString& streamName, const OString& content)
+    OleHandler::insertSubStorage(const OUString& streamName, std::string_view content)
     {
         //decode the base64 string
         Sequence<sal_Int8> oledata;

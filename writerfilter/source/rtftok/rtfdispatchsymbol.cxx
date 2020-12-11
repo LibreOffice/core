@@ -80,7 +80,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     }
     if (cCh > 0)
     {
-        OUString aStr(OStringToOUString(OString(char(cCh)), RTL_TEXTENCODING_MS_1252));
+        OUString aStr(OStringToOUString(OStringChar(char(cCh)), RTL_TEXTENCODING_MS_1252));
         text(aStr);
         return RTFError::OK;
     }

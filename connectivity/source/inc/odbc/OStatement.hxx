@@ -35,6 +35,7 @@
 #include <odbc/OFunctions.hxx>
 #include <odbc/OConnection.hxx>
 #include <odbc/odbcbasedllapi.hxx>
+#include <string_view>
 #include <vector>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -91,7 +92,7 @@ namespace connectivity::odbc
             void setMaxRows(sal_Int64 _par0)                ;
             void setFetchDirection(sal_Int32 _par0)         ;
             void setFetchSize(sal_Int32 _par0)              ;
-            void setCursorName(const OUString &_par0);
+            void setCursorName(std::u16string_view _par0);
             void setEscapeProcessing( const bool _bEscapeProc );
             template < typename T, SQLINTEGER BufferLength > SQLRETURN setStmtOption (SQLINTEGER fOption, T value) const;
 

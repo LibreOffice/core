@@ -20,6 +20,10 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_PERSISTENTWINDOWSTATE_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_PERSISTENTWINDOWSTATE_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
@@ -154,7 +158,7 @@ class PersistentWindowState final : public  ::cppu::WeakImplHelper<
                     contains the information about position and size.
          */
         static void implst_setWindowStateOnWindow(const css::uno::Reference< css::awt::XWindow >& xWindow     ,
-                                                  const OUString&                          sWindowState);
+                                                  std::u16string_view                      sWindowState);
 
 }; // class PersistentWindowState
 

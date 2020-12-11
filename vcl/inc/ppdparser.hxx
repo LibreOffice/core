@@ -23,6 +23,7 @@
 
 #include <cstddef>
 #include <memory>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -166,7 +167,7 @@ private:
     PPDParser(const OUString& rFile, const std::vector<PPDKey*>& keys);
 
     void parseOrderDependency(const OString& rLine);
-    void parseOpenUI(const OString& rLine, const OString& rPPDGroup);
+    void parseOpenUI(const OString& rLine, std::string_view rPPDGroup);
     void parseConstraint(const OString& rLine);
     void parse( std::vector< OString >& rLines );
 

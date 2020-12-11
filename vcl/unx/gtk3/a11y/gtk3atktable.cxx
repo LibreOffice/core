@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "atkwrapper.hxx"
 
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
@@ -37,7 +41,7 @@ atk_object_wrapper_conditional_ref( const uno::Reference< accessibility::XAccess
 
 // FIXME
 static const gchar *
-getAsConst( const OUString& rString )
+getAsConst( std::u16string_view rString )
 {
     static const int nMax = 10;
     static OString aUgly[nMax];

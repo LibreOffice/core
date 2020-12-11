@@ -1723,7 +1723,7 @@ void SwWW8Writer::InsAsString16(ww::bytes &rO, const OUString& rStr)
         SwWW8Writer::InsUInt16( rO, *pStr );
 }
 
-void SwWW8Writer::InsAsString8(ww::bytes &rO, const OUString& rStr,
+void SwWW8Writer::InsAsString8(ww::bytes &rO, std::u16string_view rStr,
         rtl_TextEncoding eCodeSet)
 {
     OString sTmp(OUStringToOString(rStr, eCodeSet));
@@ -1756,7 +1756,7 @@ void SwWW8Writer::WriteString_xstz(SvStream& rStrm, const OUString& rStr, bool b
     rStrm.WriteBytes(aBytes.data(), aBytes.size());
 }
 
-void SwWW8Writer::WriteString8(SvStream& rStrm, const OUString& rStr,
+void SwWW8Writer::WriteString8(SvStream& rStrm, std::u16string_view rStr,
     bool bAddZero, rtl_TextEncoding eCodeSet)
 {
     ww::bytes aBytes;

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 
 #include <curl/curl.h>
 
@@ -70,7 +73,8 @@ static void openFile( OutData& out )
     sal_Int32 nIndex = aURL.lastIndexOf('/');
     if( nIndex > 0 )
     {
-        out.File = out.DestinationDir + OStringToOUString(aURL.copy(nIndex), RTL_TEXTENCODING_UTF8);
+        out.File = out.DestinationDir
+            + OStringToOUString(aURL.subView(nIndex), RTL_TEXTENCODING_UTF8);
 
         oslFileError rc;
 
@@ -206,7 +210,7 @@ Download::getProxyForURL(const OUString& rURL, OString& rHost, sal_Int32& rPort)
 }
 
 
-static bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHost, sal_Int32 nProxyPort)
+static bool curl_run(std::u16string_view rURL, OutData& out, const OString& aProxyHost, sal_Int32 nProxyPort)
 {
     /* Need to investigate further whether it is necessary to call
      * curl_global_init or not - leave it for now (as the ftp UCB content

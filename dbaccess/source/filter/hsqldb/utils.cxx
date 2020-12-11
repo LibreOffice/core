@@ -51,7 +51,7 @@ int getHexValue(sal_Unicode c)
 } // unnamed namespace
 
 //Convert ascii escaped unicode to utf-8
-OUString utils::convertToUTF8(const OString& original)
+OUString utils::convertToUTF8(std::string_view original)
 {
     OUString res = OStringToOUString(original, RTL_TEXTENCODING_UTF8);
     for (sal_Int32 i = 0;;)

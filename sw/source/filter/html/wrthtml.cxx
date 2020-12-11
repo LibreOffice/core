@@ -1470,7 +1470,7 @@ sal_Int32 SwHTMLWriter::indexOfDotLeaders( sal_uInt16 nPoolId, const OUString& r
         (nPoolId >= RES_POOLCOLL_TOX_AUTHORITIES1 && nPoolId <= RES_POOLCOLL_TOX_USER10))) {
              sal_Int32 i = rStr.lastIndexOf('\t');
              // there are only ASCII (Latin-1) characters after the tabulator
-             if (i > -1 && OUStringToOString(rStr.copy(i + 1), RTL_TEXTENCODING_ASCII_US).indexOf('?') == -1)
+             if (i > -1 && OUStringToOString(rStr.subView(i + 1), RTL_TEXTENCODING_ASCII_US).indexOf('?') == -1)
                  return i;
     }
     return -1;

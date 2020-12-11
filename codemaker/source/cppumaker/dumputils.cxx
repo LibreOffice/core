@@ -70,7 +70,7 @@ bool dumpNamespaceClose(
 }
 
 void dumpTypeIdentifier(FileStream & out, OUString const & entityName) {
-    out << entityName.copy(entityName.lastIndexOf('.') + 1);
+    out << entityName.subView(entityName.lastIndexOf('.') + 1);
 }
 
 }

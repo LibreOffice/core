@@ -61,6 +61,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include <algorithm>
+#include <string_view>
 
 namespace {
 
@@ -78,7 +79,7 @@ OUString getArgument(sal_Int32 index) {
     return arg;
 }
 
-std::string convertLazy(OUString const & s16) {
+std::string convertLazy(std::u16string_view s16) {
     OString s8(OUStringToOString(s16, osl_getThreadTextEncoding()));
     static_assert(sizeof (sal_Int32) <= sizeof (std::string::size_type), "must be at least the same size");
         // ensure following cast is legitimate

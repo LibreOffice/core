@@ -20,6 +20,9 @@
 #ifndef INCLUDED_OOX_HELPER_ATTRIBUTELIST_HXX
 #define INCLUDED_OOX_HELPER_ATTRIBUTELIST_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -50,7 +53,7 @@ class OOX_DLLPUBLIC AttributeConversion
 {
 public:
     /** Returns the XML token identifier from the passed string. */
-    static sal_Int32    decodeToken( const OUString& rValue );
+    static sal_Int32    decodeToken( std::u16string_view rValue );
 
     /** Returns the decoded string value. All characters in the format
         '_xHHHH_' (H being a hexadecimal digit), will be decoded. */

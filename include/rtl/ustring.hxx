@@ -800,11 +800,19 @@ public:
                 < 0 - if this string is less than the string argument
                 > 0 - if this string is greater than the string argument
     */
+#if defined LIBO_INTERNAL_ONLY
+    sal_Int32 compareTo( std::u16string_view str ) const
+    {
+        return rtl_ustr_compare_WithLength( pData->buffer, pData->length,
+                                            str.data(), str.length() );
+    }
+#else
     sal_Int32 compareTo( const OUString & str ) const
     {
         return rtl_ustr_compare_WithLength( pData->buffer, pData->length,
                                             str.pData->buffer, str.pData->length );
     }
+#endif
 
     /**
       Compares two strings with a maximum count of characters.
@@ -821,11 +829,19 @@ public:
 
       @since UDK 3.2.7
     */
+#if defined LIBO_INTERNAL_ONLY
+    sal_Int32 compareTo( std::u16string_view str, sal_Int32 maxLength ) const
+    {
+        return rtl_ustr_shortenedCompare_WithLength( pData->buffer, pData->length,
+                                                     str.data(), str.length(), maxLength );
+    }
+#else
     sal_Int32 compareTo( const OUString & str, sal_Int32 maxLength ) const
     {
         return rtl_ustr_shortenedCompare_WithLength( pData->buffer, pData->length,
                                                      str.pData->buffer, str.pData->length, maxLength );
     }
+#endif
 
     /**
       Compares two strings in reverse order.
@@ -3101,6 +3117,20 @@ public:
      *
      * @since LibreOffice 4.4
      */
+#if defined LIBO_INTERNAL_ONLY
+    static OUString fromUtf8(std::string_view rSource)
+    {
+        OUString aTarget;
+        bool bSuccess = rtl_convertStringToUString(&aTarget.pData,
+                                                   rSource.data(),
+                                                   rSource.length(),
+                                                   RTL_TEXTENCODING_UTF8,
+                                                   RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR|RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR|RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR);
+        (void) bSuccess;
+        assert(bSuccess);
+        return aTarget;
+    }
+#else
     static OUString fromUtf8(const OString& rSource)
     {
         OUString aTarget;
@@ -3113,6 +3143,7 @@ public:
         assert(bSuccess);
         return aTarget;
     }
+#endif
 
     /**
      * Convert this string to an OString, assuming that the string can be
@@ -3519,12 +3550,21 @@ struct OUStringHash
     <http://udk.openoffice.org/cpp/man/spec/textconversion.html> for more
     details.
  */
+#if defined LIBO_INTERNAL_ONLY
+inline OUString OStringToOUString( std::string_view rStr,
+                                   rtl_TextEncoding encoding,
+                                   sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS )
+{
+    return OUString( rStr.data(), rStr.length(), encoding, convertFlags );
+}
+#else
 inline OUString OStringToOUString( const OString & rStr,
                                    rtl_TextEncoding encoding,
                                    sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS )
 {
     return OUString( rStr.getStr(), rStr.getLength(), encoding, convertFlags );
 }
+#endif
 
 /** Convert an OUString to an OString, using a specific text encoding.
 
@@ -3543,12 +3583,21 @@ inline OUString OStringToOUString( const OString & rStr,
     <http://udk.openoffice.org/cpp/man/spec/textconversion.html> for more
     details.
  */
+#if defined LIBO_INTERNAL_ONLY
+inline OString OUStringToOString( std::u16string_view rUnicode,
+                                  rtl_TextEncoding encoding,
+                                  sal_uInt32 convertFlags = OUSTRING_TO_OSTRING_CVTFLAGS )
+{
+    return OString( rUnicode.data(), rUnicode.length(), encoding, convertFlags );
+}
+#else
 inline OString OUStringToOString( const OUString & rUnicode,
                                   rtl_TextEncoding encoding,
                                   sal_uInt32 convertFlags = OUSTRING_TO_OSTRING_CVTFLAGS )
 {
     return OString( rUnicode.getStr(), rUnicode.getLength(), encoding, convertFlags );
 }
+#endif
 
 /* ======================================================================= */
 

@@ -23,6 +23,7 @@
 #include "aststack.hxx"
 #include "options.hxx"
 #include <memory>
+#include <string_view>
 
 #ifdef SAL_UNX
 #define SEPARATOR '/'
@@ -46,7 +47,7 @@ public:
 
     void init();
 
-    bool dumpDeps(OString const& rDepFile,
+    bool dumpDeps(std::string_view rDepFile,
                   OString const& rTarget);
 
     Options* getOptions()
@@ -142,7 +143,7 @@ sal_Int32 compileFile(const OString * pathname);
 sal_Int32 produceFile(const OString& filenameBase,
         sPair_t const*const pDepFile);
     // filenameBase is filename without ".idl"
-void removeIfExists(const OString& pathname);
+void removeIfExists(std::string_view pathname);
 
 bool copyFile(const OString* source, const OString& target);
     // a null source means stdin

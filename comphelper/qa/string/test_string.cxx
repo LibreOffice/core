@@ -91,7 +91,7 @@ public:
         const OUString& str1, sal_Int32 off1, sal_Int32 len1,
         const OUString& str2, sal_Int32 off2, sal_Int32 len2) override
     {
-        return str1.copy(off1, len1).compareTo(str2.copy(off2, len2));
+        return str1.copy(off1, len1).compareTo(str2.subView(off2, len2));
     }
     virtual sal_Int32 SAL_CALL compareString(
         const OUString& str1,
@@ -238,7 +238,7 @@ void TestString::testNatural()
     );
     // Original behavior
     CPPUNIT_ASSERT(
-        OUString("Heading 9").compareTo("Heading 10") > 0
+        OUString("Heading 9").compareTo(u"Heading 10") > 0
     );
     CPPUNIT_ASSERT(
         compareNatural("Heading 10", "Heading 9", xCollator, xBI, lang::Locale()) > 0
@@ -248,7 +248,7 @@ void TestString::testNatural()
         compareNatural("July, the 4th", "July, the 10th", xCollator, xBI, lang::Locale()) < 0
     );
     CPPUNIT_ASSERT(
-        OUString("July, the 4th").compareTo("July, the 10th") > 0
+        OUString("July, the 4th").compareTo(u"July, the 10th") > 0
     );
     CPPUNIT_ASSERT(
         compareNatural("July, the 10th", "July, the 4th", xCollator, xBI, lang::Locale()) > 0
@@ -258,7 +258,7 @@ void TestString::testNatural()
         compareNatural("abc08", "abc010", xCollator, xBI, lang::Locale()) < 0
     );
     CPPUNIT_ASSERT(
-        OUString("abc08").compareTo("abc010") > 0
+        OUString("abc08").compareTo(u"abc010") > 0
     );
     CPPUNIT_ASSERT(
         compareNatural("abc010", "abc08", xCollator, xBI, lang::Locale()) > 0

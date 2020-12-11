@@ -42,6 +42,7 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <string_view>
 
 using namespace psp;
 using namespace osl;
@@ -673,7 +674,7 @@ namespace
         std::unique_ptr<weld::Entry> m_xPassEdit;
 
     public:
-        RTSPWDialog(weld::Window* pParent, const OString& rServer, const OString& rUserName);
+        RTSPWDialog(weld::Window* pParent, std::string_view rServer, std::string_view rUserName);
 
         OString getDomain() const
         {
@@ -709,7 +710,7 @@ namespace
         }
     };
 
-    RTSPWDialog::RTSPWDialog(weld::Window* pParent, const OString& rServer, const OString& rUserName)
+    RTSPWDialog::RTSPWDialog(weld::Window* pParent, std::string_view rServer, std::string_view rUserName)
         : GenericDialogController(pParent, "vcl/ui/cupspassworddialog.ui", "CUPSPasswordDialog")
         , m_xText(m_xBuilder->weld_label("text"))
         , m_xDomainLabel(m_xBuilder->weld_label("label3"))
@@ -723,7 +724,7 @@ namespace
         aText = aText.replaceFirst("%s", OStringToOUString(rServer, osl_getThreadTextEncoding()));
         m_xText->set_label(aText);
         m_xDomainEdit->set_text("WORKGROUP");
-        if (rUserName.isEmpty())
+        if (rUserName.empty())
             m_xUserEdit->grab_focus();
         else
         {
@@ -732,7 +733,7 @@ namespace
         }
     }
 
-    bool AuthenticateQuery(const OString& rServer, OString& rUserName, OString& rPassword)
+    bool AuthenticateQuery(std::string_view rServer, OString& rUserName, OString& rPassword)
     {
         bool bRet = false;
 

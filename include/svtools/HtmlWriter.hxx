@@ -12,6 +12,7 @@
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
+#include <string_view>
 #include <vector>
 #include <svtools/svtdllapi.h>
 
@@ -45,7 +46,7 @@ public:
     void attribute(const OString& aAttribute, const char* aValue);
     void attribute(const OString& aAttribute, sal_Int32 aValue);
     void attribute(const OString& aAttribute, const OString& aValue);
-    void attribute(const OString& aAttribute, const OUString& aValue);
+    void attribute(const OString& aAttribute, std::u16string_view aValue);
     // boolean attribute e.g. <img ismap>
     void attribute(const OString& aAttribute);
 

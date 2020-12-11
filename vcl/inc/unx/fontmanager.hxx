@@ -31,6 +31,7 @@
 #include <map>
 #include <set>
 #include <memory>
+#include <string_view>
 #include <vector>
 #include <unordered_map>
 
@@ -157,7 +158,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     // There may be multiple font ids for font collections
     std::vector<fontID> findFontFileIDs( int nDirID, const OString& rFile ) const;
 
-    static FontFamily matchFamilyName( const OUString& rFamily );
+    static FontFamily matchFamilyName( std::u16string_view rFamily );
 
     PrintFont* getFont( fontID nID ) const
     {

@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_FILTER_WW8_DOCXATTRIBUTEOUTPUT_HXX
 
 #include <memory>
+#include <string_view>
 
 #include "attributeoutputbase.hxx"
 #include "fields.hxx"
@@ -723,7 +724,7 @@ private:
     void EndSdtBlock();
 
     void WriteFormDateStart(const OUString& sFullDate, const OUString& sDateFormat, const OUString& sLang);
-    void WriteSdtDropDownStart(OUString const& rName, OUString const& rSelected, uno::Sequence<OUString> const& rListItems);
+    void WriteSdtDropDownStart(std::u16string_view rName, OUString const& rSelected, uno::Sequence<OUString> const& rListItems);
     void WriteSdtDropDownEnd(OUString const& rSelected, uno::Sequence<OUString> const& rListItems);
     void WriteSdtEnd();
 

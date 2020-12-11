@@ -823,7 +823,7 @@ void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
     nActBitmapPercent=0;
 }
 
-void WMFWriter::WMFRecord_TextOut(const Point & rPoint, const OUString & rStr)
+void WMFWriter::WMFRecord_TextOut(const Point & rPoint, std::u16string_view rStr)
 {
     rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
     OString aString(OUStringToOString(rStr, eChrSet));

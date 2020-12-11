@@ -1212,7 +1212,7 @@ begin i12626 methods
 
 Implements Algorithm 3.2, step 1 only
 */
-void PDFWriterImpl::padPassword( const OUString& i_rPassword, sal_uInt8* o_pPaddedPW )
+void PDFWriterImpl::padPassword( std::u16string_view i_rPassword, sal_uInt8* o_pPaddedPW )
 {
     // get ansi-1252 version of the password string CHECKIT ! i12626
     OString aString( OUStringToOString( i_rPassword, RTL_TEXTENCODING_MS_1252 ) );

@@ -27,7 +27,7 @@ using namespace ::com::sun::star::uno ;
 
 namespace xmlsecurity
 {
-Sequence< sal_Int8 > numericStringToBigInteger ( const OUString& numeral )
+Sequence< sal_Int8 > numericStringToBigInteger ( std::u16string_view numeral )
 {
     xmlChar* chNumeral ;
     const xmlSecByte* bnInteger ;

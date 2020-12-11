@@ -263,7 +263,7 @@ void PrinterInfoManager::initialize()
                 if (aKey.startsWith("PPD_"))
                 {
                     aValue = aConfig.ReadKey( aKey );
-                    const PPDKey* pKey = m_aGlobalDefaults.m_pParser->getKey(OStringToOUString(aKey.copy(4), RTL_TEXTENCODING_ISO_8859_1));
+                    const PPDKey* pKey = m_aGlobalDefaults.m_pParser->getKey(OStringToOUString(aKey.subView(4), RTL_TEXTENCODING_ISO_8859_1));
                     if( pKey )
                     {
                         m_aGlobalDefaults.m_aContext.
@@ -329,10 +329,10 @@ void PrinterInfoManager::initialize()
                 // initialize to global defaults
                 aPrinter.m_aInfo = m_aGlobalDefaults;
 
-                aPrinterName = OStringToOUString(aValue.copy(nNamePos+1),
+                aPrinterName = OStringToOUString(aValue.subView(nNamePos+1),
                     RTL_TEXTENCODING_UTF8);
                 aPrinter.m_aInfo.m_aPrinterName = aPrinterName;
-                aPrinter.m_aInfo.m_aDriverName = OStringToOUString(aValue.copy(0, nNamePos), RTL_TEXTENCODING_UTF8);
+                aPrinter.m_aInfo.m_aDriverName = OStringToOUString(aValue.subView(0, nNamePos), RTL_TEXTENCODING_UTF8);
 
                 // set parser, merge settings
                 // don't do this for CUPS printers as this is done
@@ -448,7 +448,7 @@ void PrinterInfoManager::initialize()
                     if( aKey.startsWith("PPD_") && aPrinter.m_aInfo.m_pParser )
                     {
                         aValue = aConfig.ReadKey( aKey );
-                        const PPDKey* pKey = aPrinter.m_aInfo.m_pParser->getKey(OStringToOUString(aKey.copy(4), RTL_TEXTENCODING_ISO_8859_1));
+                        const PPDKey* pKey = aPrinter.m_aInfo.m_pParser->getKey(OStringToOUString(aKey.subView(4), RTL_TEXTENCODING_ISO_8859_1));
                         if( pKey )
                         {
                             aPrinter.m_aInfo.m_aContext.
@@ -828,7 +828,7 @@ static void standardSysQueueTokenHandler(
             if( nAftPos != -1 )
             {
                 // get the queue name between fore and aft tokens
-                OUString aSysQueue( OStringToOUString( line.copy( nPos, nAftPos - nPos ), aEncoding ) );
+                OUString aSysQueue( OStringToOUString( line.subView( nPos, nAftPos - nPos ), aEncoding ) );
                 // do not insert duplicates (e.g. lpstat tends to produce such lines)
                 if( aUniqueSet.insert( aSysQueue ).second )
                 {

@@ -48,7 +48,7 @@ void FrameGrabber::disposePipeline()
     }
 }
 
-FrameGrabber::FrameGrabber( const OUString &rURL ) :
+FrameGrabber::FrameGrabber( std::u16string_view rURL ) :
     FrameGrabber_BASE()
 {
     gchar *pPipelineStr;
@@ -87,7 +87,7 @@ FrameGrabber::~FrameGrabber()
     disposePipeline();
 }
 
-FrameGrabber* FrameGrabber::create( const OUString &rURL )
+FrameGrabber* FrameGrabber::create( std::u16string_view rURL )
 {
     return new FrameGrabber( rURL );
 }

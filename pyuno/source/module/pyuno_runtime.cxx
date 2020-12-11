@@ -474,8 +474,8 @@ PyRef Runtime::any2PyObject (const Any &a ) const
             {
                 if( pEnumDesc->pEnumValues[i] == l )
                 {
-                    OString v = OUStringToOString( pEnumDesc->ppEnumNames[i], RTL_TEXTENCODING_ASCII_US);
-                    OString e = OUStringToOString( pEnumDesc->aBase.pTypeName, RTL_TEXTENCODING_ASCII_US);
+                    OString v = OUStringToOString( OUString::unacquired(&pEnumDesc->ppEnumNames[i]), RTL_TEXTENCODING_ASCII_US);
+                    OString e = OUStringToOString( OUString::unacquired(&pEnumDesc->aBase.pTypeName), RTL_TEXTENCODING_ASCII_US);
                     return PyRef( PyUNO_Enum_new(e.getStr(),v.getStr(), *this ), SAL_NO_ACQUIRE );
                 }
             }

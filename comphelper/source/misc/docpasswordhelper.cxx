@@ -20,6 +20,7 @@
 #include <config_gpgme.h>
 
 #include <algorithm>
+#include <string_view>
 
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -56,11 +57,11 @@ using namespace ::com::sun::star;
 namespace comphelper {
 
 
-static uno::Sequence< sal_Int8 > GeneratePBKDF2Hash( const OUString& aPassword, const uno::Sequence< sal_Int8 >& aSalt, sal_Int32 nCount, sal_Int32 nHashLength )
+static uno::Sequence< sal_Int8 > GeneratePBKDF2Hash( std::u16string_view aPassword, const uno::Sequence< sal_Int8 >& aSalt, sal_Int32 nCount, sal_Int32 nHashLength )
 {
     uno::Sequence< sal_Int8 > aResult;
 
-    if ( !aPassword.isEmpty() && aSalt.hasElements() && nCount && nHashLength )
+    if ( !aPassword.empty() && aSalt.hasElements() && nCount && nHashLength )
     {
         OString aBytePass = OUStringToOString( aPassword, RTL_TEXTENCODING_UTF8 );
         // FIXME this is subject to the SHA1-bug tdf#114939 - see also
@@ -84,7 +85,7 @@ IDocPasswordVerifier::~IDocPasswordVerifier()
 }
 
 
-uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswordInfo( const OUString& aPassword )
+uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswordInfo( std::u16string_view aPassword )
 {
     uno::Sequence< beans::PropertyValue > aResult;
 
@@ -109,10 +110,10 @@ uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswo
 }
 
 
-bool DocPasswordHelper::IsModifyPasswordCorrect( const OUString& aPassword, const uno::Sequence< beans::PropertyValue >& aInfo )
+bool DocPasswordHelper::IsModifyPasswordCorrect( std::u16string_view aPassword, const uno::Sequence< beans::PropertyValue >& aInfo )
 {
     bool bResult = false;
-    if ( !aPassword.isEmpty() && aInfo.hasElements() )
+    if ( !aPassword.empty() && aInfo.hasElements() )
     {
         OUString sAlgorithm;
         uno::Sequence< sal_Int8 > aSalt;
@@ -223,7 +224,7 @@ sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
 
 
 sal_uInt16 DocPasswordHelper::GetXLHashAsUINT16(
-                const OUString& aUString,
+                std::u16string_view aUString,
                 rtl_TextEncoding nEnc )
 {
     sal_uInt16 nResult = 0;
@@ -248,7 +249,7 @@ sal_uInt16 DocPasswordHelper::GetXLHashAsUINT16(
 
 
 Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
-                const OUString& aUString )
+                std::u16string_view aUString )
 {
     sal_uInt16 nHash = GetXLHashAsUINT16( aUString );
     return {sal_Int8(nHash >> 8), sal_Int8(nHash & 0xFF)};

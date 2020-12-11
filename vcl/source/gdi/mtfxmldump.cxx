@@ -1101,7 +1101,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.attribute("color", convertColorToString(pMetaTextFillColorAction->GetColor()));
 
                 if (pMetaTextFillColorAction->IsSetting())
-                    rWriter.attribute("setting", OUString("true"));
+                    rWriter.attribute("setting", u"true");
 
                 rWriter.endElement();
             }

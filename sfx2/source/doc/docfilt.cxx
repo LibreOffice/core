@@ -43,7 +43,7 @@ SfxFilter::SfxFilter( const OUString& rProvider, const OUString &rFilterName ) :
 }
 
 SfxFilter::SfxFilter( const OUString &rName,
-                      const OUString &rWildCard,
+                      std::u16string_view rWildCard,
                       SfxFilterFlags nType,
                       SotClipboardFormatId lFmt,
                       const OUString &rTypNm,
@@ -71,7 +71,7 @@ SfxFilter::SfxFilter( const OUString &rName,
     // truncate to first empty extension
     if (aExts[0]==';')
     {
-        aWildCard.setGlob("");
+        aWildCard.setGlob(u"");
         return;
     }
     const sal_Int32 nIdx{ aExts.indexOf(";;") };
@@ -80,7 +80,7 @@ SfxFilter::SfxFilter( const OUString &rName,
     else if (aExts[nLen-1]==';')
         --nLen;
     if (nLen<aExts.getLength())
-        aWildCard.setGlob(aExts.copy(0, nLen));
+        aWildCard.setGlob(aExts.subView(0, nLen));
 }
 
 SfxFilter::~SfxFilter()

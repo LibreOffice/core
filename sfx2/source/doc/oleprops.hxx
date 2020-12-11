@@ -22,6 +22,8 @@
 
 #include <map>
 #include <memory>
+#include <string_view>
+
 #include <osl/thread.h>
 #include <rtl/ustring.hxx>
 #include <sot/storage.hxx>
@@ -152,7 +154,7 @@ public:
 private:
     OUString            ImplLoadString8( SvStream& rStrm ) const;
     static OUString     ImplLoadString16( SvStream& rStrm );
-    void                ImplSaveString8( SvStream& rStrm, const OUString& rValue ) const;
+    void                ImplSaveString8( SvStream& rStrm, std::u16string_view rValue ) const;
     static void         ImplSaveString16( SvStream& rStrm, const OUString& rValue );
 };
 

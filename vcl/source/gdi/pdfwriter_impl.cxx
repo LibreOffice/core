@@ -141,7 +141,7 @@ void appendHex(sal_Int8 nInt, OStringBuffer& rBuffer)
     rBuffer.append( pHexDigits[ nInt & 15 ] );
 }
 
-void appendName( const OUString& rStr, OStringBuffer& rBuffer )
+void appendName( std::u16string_view rStr, OStringBuffer& rBuffer )
 {
 // FIXME i59651 add a check for max length of 127 chars? Per PDF spec 1.4, appendix C.1
 // I guess than when reading the #xx sequence it will count for a single character.
@@ -1541,7 +1541,7 @@ inline void PDFWriterImpl::appendLiteralStringEncrypt( std::string_view rInStrin
     rOutBuffer.append( ")" );
 }
 
-void PDFWriterImpl::appendLiteralStringEncrypt( const OUString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer, rtl_TextEncoding nEnc )
+void PDFWriterImpl::appendLiteralStringEncrypt( std::u16string_view rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer, rtl_TextEncoding nEnc )
 {
     OString aBufferString( OUStringToOString( rInString, nEnc ) );
     sal_Int32 nLen = aBufferString.getLength();
@@ -2435,7 +2435,7 @@ static bool getPfbSegmentLengths( const unsigned char* pFontBytes, int nByteLen,
     return true;
 }
 
-static void appendSubsetName( int nSubsetID, const OUString& rPSName, OStringBuffer& rBuffer )
+static void appendSubsetName( int nSubsetID, std::u16string_view rPSName, OStringBuffer& rBuffer )
 {
     if( nSubsetID )
     {

@@ -199,7 +199,8 @@ static void LogProbe(
 {
     OString sTemp;
     if ( pMemberType && pMemberType->pTypeName )
-        sTemp = OUStringToOString(pMemberType->pTypeName,RTL_TEXTENCODING_ASCII_US);
+        sTemp = OUStringToOString(
+            OUString::unacquired(&pMemberType->pTypeName),RTL_TEXTENCODING_ASCII_US);
     if ( pre  )
     {
         SAL_INFO("cppu.log", "{ LogBridge () " << sTemp );

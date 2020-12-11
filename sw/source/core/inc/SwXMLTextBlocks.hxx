@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <sfx2/objsh.hxx>
 #include "swblocks.hxx"
 #include <o3tl/typed_flags_set.hxx>
@@ -53,7 +57,7 @@ public:
     SwXMLTextBlocks( const css::uno::Reference < css::embed::XStorage >&, const OUString& rFile );
     void   AddName( const OUString&, const OUString&, const OUString&, bool bOnlyText );
     virtual void   AddName( const OUString&, const OUString&, bool bOnlyText = false ) override;
-    static OUString GeneratePackageName ( const OUString& rShort );
+    static OUString GeneratePackageName ( std::u16string_view rShort );
     virtual ~SwXMLTextBlocks() override;
     virtual ErrCode Delete( sal_uInt16 ) override;
     virtual ErrCode Rename( sal_uInt16, const OUString& ) override;
@@ -70,7 +74,7 @@ public:
     static bool IsFileUCBStorage( const OUString & rFileName);
 
     // Methods for the new Autocorrecter
-    ErrCode GetText( const OUString& rShort, OUString& );
+    ErrCode GetText( std::u16string_view rShort, OUString& );
 
     virtual bool IsOnlyTextBlock( const OUString& rShort ) const override;
     bool IsOnlyTextBlock( sal_uInt16 nIdx ) const;
@@ -85,7 +89,7 @@ public:
     //void  SetDoc( SwDoc * pNewDoc);
     ErrCode StartPutBlock( const OUString& rShort, const OUString& rPackageName );
     ErrCode PutBlock();
-    ErrCode GetBlockText( const OUString& rShort, OUString& rText );
+    ErrCode GetBlockText( std::u16string_view rShort, OUString& rText );
     ErrCode PutBlockText( const OUString& rShort, const OUString& rText, const OUString& rPackageName );
     void MakeBlockText( const OUString& rText );
 };

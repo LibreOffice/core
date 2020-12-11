@@ -1599,7 +1599,7 @@ OSQLParseNode::OSQLParseNode(const char * pNewValue,
     OSL_ENSURE(m_eNodeType >= SQLNodeType::Rule && m_eNodeType <= SQLNodeType::Concat,"OSQLParseNode: created with invalid NodeType");
 }
 
-OSQLParseNode::OSQLParseNode(const OString &_rNewValue,
+OSQLParseNode::OSQLParseNode(std::string_view _rNewValue,
                              SQLNodeType eNewNodeType,
                              sal_uInt32 nNewNodeID)
         :m_pParent(nullptr)
@@ -2508,7 +2508,7 @@ void OSQLParseNode::parseLeaf(OUStringBuffer& rString, const SQLParseNodeParamet
 }
 
 
-sal_Int32 OSQLParser::getFunctionReturnType(const OUString& _sFunctionName, const IParseContext* pContext)
+sal_Int32 OSQLParser::getFunctionReturnType(std::u16string_view _sFunctionName, const IParseContext* pContext)
 {
     sal_Int32 nType = DataType::VARCHAR;
     OString sFunctionName(OUStringToOString(_sFunctionName,RTL_TEXTENCODING_UTF8));

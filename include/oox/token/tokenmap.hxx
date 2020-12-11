@@ -20,6 +20,9 @@
 #ifndef INCLUDED_OOX_TOKEN_TOKENMAP_HXX
 #define INCLUDED_OOX_TOKEN_TOKENMAP_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
 #include <vector>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -40,7 +43,7 @@ public:
                         ~TokenMap();
 
     /** Returns the token identifier for the passed Unicode token name. */
-    static sal_Int32    getTokenFromUnicode( const OUString& rUnicodeName );
+    static sal_Int32    getTokenFromUnicode( std::u16string_view rUnicodeName );
 
     /** Returns the UTF8 name of the passed token identifier as byte sequence. */
     css::uno::Sequence< sal_Int8 > const &

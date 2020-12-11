@@ -822,7 +822,7 @@ void ODatabaseMetaDataResultSet::openTypeInfo()
 }
 
 void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const OUString& schemaPattern,
-                            const OUString& tableNamePattern,
+                            std::u16string_view tableNamePattern,
                             const Sequence< OUString >& types )
 {
     OString aPKQ,aPKO,aPKN,aCOL;
@@ -919,7 +919,8 @@ void ODatabaseMetaDataResultSet::openSchemas()
 }
 
 void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, const OUString& schema,
-                                        const OUString& table,   const OUString& columnNamePattern )
+                                        std::u16string_view table,
+                                        std::u16string_view columnNamePattern )
 {
     const OUString *pSchemaPat = nullptr;
 
@@ -953,7 +954,7 @@ void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, cons
 }
 
 void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             const OUString& schemaPattern,
-                                const OUString& tableNamePattern,    const OUString& columnNamePattern )
+                                std::u16string_view tableNamePattern,    std::u16string_view columnNamePattern )
 {
     const OUString *pSchemaPat = nullptr;
 
@@ -1020,7 +1021,7 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
 }
 
 void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     const OUString& schemaPattern,
-                                const OUString& procedureNamePattern,const OUString& columnNamePattern )
+                                std::u16string_view procedureNamePattern,std::u16string_view columnNamePattern )
 {
     const OUString *pSchemaPat = nullptr;
 
@@ -1053,7 +1054,7 @@ void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     
 }
 
 void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const OUString& schemaPattern,
-                                const OUString& procedureNamePattern)
+                                std::u16string_view procedureNamePattern)
 {
     const OUString *pSchemaPat = nullptr;
 
@@ -1083,11 +1084,11 @@ void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const OUStri
 }
 
 void ODatabaseMetaDataResultSet::openSpecialColumns(bool _bRowVer,const Any& catalog, const OUString& schema,
-                                    const OUString& table,sal_Int32 scope,   bool nullable )
+                                    std::u16string_view table,sal_Int32 scope,   bool nullable )
 {
     // Some ODBC drivers really don't like getting an empty string as tableName
     // E.g. psqlodbc up to at least version 09.01.0100 segfaults
-    if (table.isEmpty())
+    if (table.empty())
     {
         const char errMsg[] = "ODBC: Trying to get special columns of empty table name";
         const char SQLState[] = "HY009";
@@ -1123,13 +1124,13 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(bool _bRowVer,const Any& cat
 }
 
 void ODatabaseMetaDataResultSet::openVersionColumns(const Any& catalog, const OUString& schema,
-                                    const OUString& table)
+                                    std::u16string_view table)
 {
     openSpecialColumns(true,catalog,schema,table,SQL_SCOPE_TRANSACTION,false);
 }
 
 void ODatabaseMetaDataResultSet::openBestRowIdentifier( const Any& catalog, const OUString& schema,
-                                        const OUString& table,sal_Int32 scope,bool nullable )
+                                        std::u16string_view table,sal_Int32 scope,bool nullable )
 {
     openSpecialColumns(false,catalog,schema,table,scope,nullable);
 }
@@ -1198,7 +1199,7 @@ void ODatabaseMetaDataResultSet::openExportedKeys(const Any& catalog, const OUSt
 }
 
 void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const OUString& schema,
-                                  const OUString& table)
+                                  std::u16string_view table)
 {
     const OUString *pSchemaPat = nullptr;
 
@@ -1228,7 +1229,7 @@ void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const OUStr
 }
 
 void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const OUString& schemaPattern,
-                                  const OUString& tableNamePattern)
+                                  std::u16string_view tableNamePattern)
 {
     const OUString *pSchemaPat = nullptr;
 
@@ -1257,7 +1258,7 @@ void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const O
 }
 
 void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const OUString& schema,
-                                const OUString& table, bool unique, bool approximate )
+                                std::u16string_view table, bool unique, bool approximate )
 {
     const OUString *pSchemaPat = nullptr;
 

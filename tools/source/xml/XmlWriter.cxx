@@ -131,7 +131,7 @@ void XmlWriter::attribute(const OString& name, const OString& value)
     xmlFree(xmlName);
 }
 
-void XmlWriter::attribute(const OString& name, const OUString& value)
+void XmlWriter::attribute(const OString& name, std::u16string_view value)
 {
     attribute(name, OUStringToOString(value, RTL_TEXTENCODING_UTF8).getStr());
 }
@@ -153,7 +153,7 @@ void XmlWriter::content(const OString& sValue)
     xmlFree(xmlValue);
 }
 
-void XmlWriter::content(const OUString& sValue)
+void XmlWriter::content(std::u16string_view sValue)
 {
     content(OUStringToOString(sValue, RTL_TEXTENCODING_UTF8));
 }

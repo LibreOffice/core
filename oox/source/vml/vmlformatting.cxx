@@ -88,7 +88,7 @@ bool ConversionHelper::separatePair( OUString& orValue1, OUString& orValue2,
     return !orValue1.isEmpty() && !orValue2.isEmpty();
 }
 
-bool ConversionHelper::decodeBool( const OUString& rValue )
+bool ConversionHelper::decodeBool( std::u16string_view rValue )
 {
     sal_Int32 nToken = AttributeConversion::decodeToken( rValue );
     // anything else than 't' or 'true' is considered to be false, as specified
@@ -276,7 +276,7 @@ Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
         if( (2 <= nOpenParen) && (nOpenParen + 1 < nCloseParen) && (nCloseParen + 1 == aColorIndex.getLength()) )
         {
             sal_Int32 nModToken = XML_TOKEN_INVALID;
-            switch( AttributeConversion::decodeToken( aColorIndex.copy( 0, nOpenParen ) ) )
+            switch( AttributeConversion::decodeToken( aColorIndex.subView( 0, nOpenParen ) ) )
             {
                 case XML_darken:    nModToken = XML_shade;break;
                 case XML_lighten:   nModToken = XML_tint;

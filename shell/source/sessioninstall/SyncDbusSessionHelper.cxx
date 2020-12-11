@@ -12,6 +12,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <gio/gio.h>
 #include <memory>
+#include <string_view>
 #include <vector>
 
 using namespace ::com::sun::star::lang;
@@ -37,7 +38,7 @@ namespace
             }
             GError*& getRef() { return m_pError; }
     };
-    GDBusProxy* lcl_GetPackageKitProxy(const OUString& sInterface)
+    GDBusProxy* lcl_GetPackageKitProxy(std::u16string_view sInterface)
     {
         const OString sFullInterface = "org.freedesktop.PackageKit." + OUStringToOString(sInterface, RTL_TEXTENCODING_ASCII_US);
         GDBusProxy* proxy = nullptr;
@@ -66,7 +67,7 @@ namespace
 void request(
     char const * method,
     css::uno::Sequence<OUString> const & resources,
-    OUString const & interaction)
+    std::u16string_view interaction)
 {
     // Keep strings alive until after call to g_dbus_proxy_call_sync
     std::vector<OString> resUtf8;
@@ -79,7 +80,7 @@ void request(
     }
     auto iactUtf8(OUStringToOString(interaction, RTL_TEXTENCODING_UTF8));
     std::shared_ptr<GDBusProxy> proxy(
-        lcl_GetPackageKitProxy("Modify2"), GObjectDeleter<GDBusProxy>());
+        lcl_GetPackageKitProxy(u"Modify2"), GObjectDeleter<GDBusProxy>());
     GErrorWrapper error;
     std::shared_ptr<GVariant> result(g_dbus_proxy_call_sync(
         proxy.get(), method,
@@ -182,7 +183,7 @@ void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, 
 {
     const OString sPackagenameAscii = OUStringToOString(sPackagename, RTL_TEXTENCODING_ASCII_US);
     const OString sInteractionAscii = OUStringToOString(sInteraction, RTL_TEXTENCODING_ASCII_US);
-    std::shared_ptr<GDBusProxy> proxy(lcl_GetPackageKitProxy("Query"), GObjectDeleter<GDBusProxy>());
+    std::shared_ptr<GDBusProxy> proxy(lcl_GetPackageKitProxy(u"Query"), GObjectDeleter<GDBusProxy>());
     GErrorWrapper error;
     std::shared_ptr<GVariant> result(g_dbus_proxy_call_sync (proxy.get(),
                      "IsInstalled",

@@ -22,6 +22,7 @@
 
 #include <cassert>
 #include <stdio.h>
+#include <string_view>
 
 #include <helper.hxx>
 #include <common.hxx>
@@ -741,7 +742,7 @@ void XMLElement::Print(XMLNode *pCur, OStringBuffer& rBuffer, bool bRootelement 
 namespace
 {
 
-OUString lcl_pathnameToAbsoluteUrl(const OString& rPathname)
+OUString lcl_pathnameToAbsoluteUrl(std::string_view rPathname)
 {
     OUString sPath = OStringToOUString(rPathname, RTL_TEXTENCODING_UTF8 );
     OUString sUrl;
@@ -1112,7 +1113,7 @@ OString XMLUtil::QuotHTML( const OString &rString )
     sReturn.append('\0');
     return
         OUStringToOString(
-            OUString(reinterpret_cast<const sal_Unicode*>(sReturn.getBuffer())),
+            reinterpret_cast<const sal_Unicode*>(sReturn.getBuffer()),
             RTL_TEXTENCODING_UTF8);
 }
 

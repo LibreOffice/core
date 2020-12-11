@@ -20,6 +20,9 @@
 #ifndef INCLUDED_REGISTRY_SOURCE_REGIMPL_HXX
 #define INCLUDED_REGISTRY_SOURCE_REGIMPL_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
 #include <unordered_map>
 
 #include <regapi.hxx>
@@ -111,7 +114,7 @@ private:
                                  bool bReport);
 
     static RegError checkBlop(store::OStoreStream& rValue,
-                          const OUString& sTargetPath,
+                          std::u16string_view sTargetPath,
                           sal_uInt32 srcValueSize,
                           sal_uInt8 const * pSrcBuffer,
                           bool bReport);

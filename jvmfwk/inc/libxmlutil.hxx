@@ -19,6 +19,10 @@
 #ifndef INCLUDED_JVMFWK_INC_LIBXMLUTIL_HXX
 #define INCLUDED_JVMFWK_INC_LIBXMLUTIL_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <libxml/parser.h>
 #include <libxml/xpath.h>
 #include <rtl/ustring.hxx>
@@ -84,7 +88,7 @@ class CXmlCharPtr
 public:
     CXmlCharPtr();
     CXmlCharPtr(xmlChar* aDoc);
-    explicit CXmlCharPtr(const OUString&);
+    explicit CXmlCharPtr(std::u16string_view);
     ~CXmlCharPtr();
     CXmlCharPtr& operator=(xmlChar* pObj);
     operator xmlChar*() const { return _object; }

@@ -246,7 +246,7 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
     return ERRCODE_NONE;
 }
 
-ErrCode SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText )
+ErrCode SwXMLTextBlocks::GetBlockText( std::u16string_view rShort, OUString& rText )
 {
     OUString aFolderName = GeneratePackageName ( rShort );
     OUString aStreamName = aFolderName + ".xml";

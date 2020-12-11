@@ -25,6 +25,7 @@
 #include <rtl/ustrbuf.hxx>
 #include "tox.hxx"
 #include <cstdio>
+#include <string_view>
 #include <unordered_map>
 
 class SwContentNode;
@@ -51,7 +52,7 @@ extern bool bDbgOutStdErr;
 extern bool bDbgOutPrintAttrSet;
 
 const char* dbg_out(const void* pVoid);
-const char* dbg_out(const OUString& aStr);
+const char* dbg_out(std::u16string_view aStr);
 const char* dbg_out(const SwRect& rRect);
 const char* dbg_out(const SwFrameFormat& rFrameFormat);
 SW_DLLPUBLIC const char* dbg_out(const SwNode& rNode);

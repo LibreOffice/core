@@ -28,6 +28,7 @@
 #include <tools/wldcrd.hxx>
 
 #include <memory>
+#include <string_view>
 
 namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::uno { template <typename > class Reference; }
@@ -63,7 +64,7 @@ public:
     SfxFilter( const OUString& rProvider, const OUString& rFilterName );
 
     SfxFilter( const OUString &rName,
-               const OUString &rWildCard,
+               std::u16string_view rWildCard,
                SfxFilterFlags nFormatType,
                SotClipboardFormatId lFormat,
                const OUString &rTypeName,

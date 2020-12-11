@@ -37,6 +37,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XCOLUMNS_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XCOLUMNS_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "pq_xcontainer.hxx"
 #include "pq_xbase.hxx"
 
@@ -46,8 +50,8 @@ namespace pq_sdbc_driver
 {
 
 void alterColumnByDescriptor(
-    const OUString & schemaName,
-    const OUString & tableName,
+    std::u16string_view schemaName,
+    std::u16string_view tableName,
     ConnectionSettings *settings,
     const css::uno::Reference< css::sdbc::XStatement > &stmt,
     const css::uno::Reference< css::beans::XPropertySet > & past,

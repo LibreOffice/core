@@ -174,7 +174,7 @@ WritePS (osl::File* pFile, const OString &rString)
 }
 
 bool
-WritePS (osl::File* pFile, const OUString &rString)
+WritePS (osl::File* pFile, std::u16string_view rString)
 {
     return WritePS (pFile, OUStringToOString(rString, RTL_TEXTENCODING_ASCII_US));
 }

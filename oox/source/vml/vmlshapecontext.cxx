@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <oox/vml/vmlshapecontext.hxx>
 
 #include <oox/core/xmlfilterbase.hxx>
@@ -126,9 +130,9 @@ OptValue< DoublePair > lclDecodePercentPair( const AttributeList& rAttribs, sal_
     namespace (VML for spreadsheets). Supported values: f, t, False, True.
     @param bDefaultForEmpty  Default value for the empty string.
  */
-bool lclDecodeVmlxBool( const OUString& rValue, bool bDefaultForEmpty )
+bool lclDecodeVmlxBool( std::u16string_view rValue, bool bDefaultForEmpty )
 {
-    if( rValue.isEmpty() ) return bDefaultForEmpty;
+    if( rValue.empty() ) return bDefaultForEmpty;
     sal_Int32 nToken = AttributeConversion::decodeToken( rValue );
     // anything else than 't' or 'True' is considered to be false, as specified
     return (nToken == XML_t) || (nToken == XML_True);

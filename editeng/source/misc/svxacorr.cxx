@@ -1884,7 +1884,7 @@ OUString EncryptBlockName_Imp(const OUString& rName)
 }
 
 /* This code is copied from SwXMLTextBlocks::GeneratePackageName */
-static void GeneratePackageName ( const OUString& rShort, OUString& rPackageName )
+static void GeneratePackageName ( std::u16string_view rShort, OUString& rPackageName )
 {
     OString sByte(OUStringToOString(rShort, RTL_TEXTENCODING_UTF7));
     OUStringBuffer aBuf(OStringToOUString(sByte, RTL_TEXTENCODING_ASCII_US));

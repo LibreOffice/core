@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <math.h>
+#include <string_view>
 
 #include <o3tl/float_int_conversion.hxx>
 #include <tools/debug.hxx>
@@ -1499,7 +1500,7 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
                 }
                 else
                 {
-                    write_uInt16_lenPrefixed_uInt8s_FromOUString(r, OUString(), RTL_TEXTENCODING_ASCII_US);
+                    write_uInt16_lenPrefixed_uInt8s_FromOUString(r, std::u16string_view(), RTL_TEXTENCODING_ASCII_US);
             }
             break;
             case SbxERROR:

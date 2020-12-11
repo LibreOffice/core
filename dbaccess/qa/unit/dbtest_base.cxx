@@ -47,7 +47,9 @@ utl::TempFile DBTestBase::createTempCopy(OUString const & pathname) {
     tmp.EnableKillingFile();
     auto const e = osl::File::copy(url, tmp.GetURL());
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        (OUStringToOString("<" + url + "> -> <" + tmp.GetURL() + ">", RTL_TEXTENCODING_UTF8)
+        (OString(
+            "<" + OUStringToOString(url, RTL_TEXTENCODING_UTF8) + "> -> <"
+            + OUStringToOString(tmp.GetURL(), RTL_TEXTENCODING_UTF8) + ">")
          .getStr()),
         osl::FileBase::E_None, e);
     return tmp;

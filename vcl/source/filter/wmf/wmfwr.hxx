@@ -168,7 +168,7 @@ private:
     void WMFRecord_SetWindowExt(const Size & rSize);
     void WMFRecord_SetWindowOrg(const Point & rPoint);
     void WMFRecord_StretchDIB(const Point & rPoint, const Size & rSize, const Bitmap & rBitmap, sal_uInt32 nROP = 0 );
-    void WMFRecord_TextOut(const Point & rPoint, const OUString & rString);
+    void WMFRecord_TextOut(const Point & rPoint, std::u16string_view rString);
     void WMFRecord_IntersectClipRect( const tools::Rectangle& rRect);
 
     sal_uInt16 AllocHandle();

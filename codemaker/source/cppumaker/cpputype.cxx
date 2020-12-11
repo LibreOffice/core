@@ -25,6 +25,7 @@
 #include <cstdlib>
 #include <map>
 #include <set>
+#include <string_view>
 #include <memory>
 #include <vector>
 #include <iostream>
@@ -164,7 +165,7 @@ public:
     void dump(CppuOptions const & options);
 
     void dumpFile(
-        OUString const & uri, OUString const & name, bool hpp,
+        std::u16string_view uri, OUString const & name, bool hpp,
         CppuOptions const & options);
 
     void dumpDependedTypes(
@@ -219,7 +220,7 @@ protected:
 
     OUString resolveOuterTypedefs(OUString const & name) const;
 
-    OUString resolveAllTypedefs(OUString const & name) const;
+    OUString resolveAllTypedefs(std::u16string_view name) const;
 
     codemaker::cpp::IdentifierTranslationMode isGlobal() const;
 
@@ -412,7 +413,7 @@ void CppuType::dump(CppuOptions const & options)
 }
 
 void CppuType::dumpFile(
-    OUString const & uri, OUString const & name, bool hpp,
+    std::u16string_view uri, OUString const & name, bool hpp,
     CppuOptions const & options)
 {
     OUString fileUri(
@@ -990,7 +991,7 @@ OUString CppuType::resolveOuterTypedefs(OUString const & name) const
     }
 }
 
-OUString CppuType::resolveAllTypedefs(OUString const & name) const
+OUString CppuType::resolveAllTypedefs(std::u16string_view name) const
 {
     sal_Int32 k1;
     OUString n(b2u(codemaker::UnoType::decompose(u2b(name), &k1)));
@@ -1126,11 +1127,11 @@ private:
     }
 
     void dumpExceptionTypeName(
-        FileStream & out, OUString const & prefix, sal_uInt32 index,
-        OUString const & name) const;
+        FileStream & out, std::u16string_view prefix, sal_uInt32 index,
+        std::u16string_view name) const;
 
     sal_Int32 dumpExceptionTypeNames(
-        FileStream & out, OUString const & prefix,
+        FileStream & out, std::u16string_view prefix,
         std::vector< OUString > const & exceptions, bool runtimeException) const;
 
     rtl::Reference< unoidl::InterfaceTypeEntity > entity_;
@@ -1456,9 +1457,9 @@ void InterfaceType::dumpCppuAttributes(FileStream & out, sal_uInt32 & index)
             << "::rtl::OUString sAttributeName" << n << "( \"" << name_
             << "::" << attr.name << "\" );\n";
         sal_Int32 getExcn = dumpExceptionTypeNames(
-                                out, "get", attr.getExceptions, false);
+                                out, u"get", attr.getExceptions, false);
         sal_Int32 setExcn = dumpExceptionTypeNames(
-                                out, "set", attr.setExceptions, false);
+                                out, u"set", attr.setExceptions, false);
         out << indent()
             << ("typelib_typedescription_newExtendedInterfaceAttribute("
                 " &pAttribute,\n");
@@ -1525,7 +1526,7 @@ void InterfaceType::dumpCppuMethods(FileStream & out, sal_uInt32 & index)
             ++m;
         }
         sal_Int32 excn = dumpExceptionTypeNames(
-                             out, "", method.exceptions,
+                             out, u"", method.exceptions,
                              method.name != "acquire" && method.name != "release");
         out << indent() << "::rtl::OUString sReturnType" << n << "( \""
             << returnType << "\" );\n" << indent()
@@ -1589,15 +1590,15 @@ void InterfaceType::dumpMethodsCppuDecl(
 }
 
 void InterfaceType::dumpExceptionTypeName(
-    FileStream & out, OUString const & prefix, sal_uInt32 index,
-    OUString const & name) const
+    FileStream & out, std::u16string_view prefix, sal_uInt32 index,
+    std::u16string_view name) const
 {
     out << indent() << "::rtl::OUString the_" << prefix << "ExceptionName"
         << index << "( \"" << name << "\" );\n";
 }
 
 sal_Int32 InterfaceType::dumpExceptionTypeNames(
-    FileStream & out, OUString const & prefix,
+    FileStream & out, std::u16string_view prefix,
     std::vector< OUString > const & exceptions, bool runtimeException) const
 {
     sal_Int32 count = 0;
@@ -1608,7 +1609,7 @@ sal_Int32 InterfaceType::dumpExceptionTypeNames(
     }
     if (runtimeException) {
         dumpExceptionTypeName(
-            out, prefix, count++, "com.sun.star.uno.RuntimeException");
+            out, prefix, count++, u"com.sun.star.uno.RuntimeException");
     }
     if (count != 0) {
         out << indent() << "rtl_uString * the_" << prefix << "Exceptions[] = {";
@@ -1765,7 +1766,7 @@ void ConstantGroup::dumpDeclaration(FileStream & out)
     }
 }
 
-void dumpTypeParameterName(FileStream & out, OUString const & name)
+void dumpTypeParameterName(FileStream & out, std::u16string_view name)
 {
     // Prefix all type parameters with "typeparam_" to avoid problems when a
     // struct member has the same name as a type parameter, as in
@@ -2722,7 +2723,7 @@ void PolyStructType::dumpTemplateParameters(FileStream & out) const
     out << " >";
 }
 
-OUString typeToIdentifier(OUString const & name)
+OUString typeToIdentifier(std::u16string_view name)
 {
     sal_Int32 k;
     OUString n(b2u(codemaker::UnoType::decompose(u2b(name), &k)));
@@ -3553,7 +3554,7 @@ private:
 };
 
 void failsToSupply(
-    FileStream & o, OUString const & service, OString const & type)
+    FileStream & o, std::u16string_view service, OString const & type)
 {
     o << "::rtl::OUString(\"component context fails to supply service \") + \""
       << service << "\" + \" of type \" + \"" << type << "\"";

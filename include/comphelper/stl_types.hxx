@@ -39,7 +39,7 @@ struct UStringMixLess
     bool m_bCaseSensitive;
 public:
     UStringMixLess(bool bCaseSensitive = true):m_bCaseSensitive(bCaseSensitive){}
-    bool operator() (const OUString& x, const OUString& y) const
+    bool operator() (const OUString& x, std::u16string_view y) const
     {
         if (m_bCaseSensitive)
             return x.compareTo(y) < 0;

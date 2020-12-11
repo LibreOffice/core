@@ -18,6 +18,7 @@
  */
 
 #include <iostream>
+#include <string_view>
 
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
@@ -91,7 +92,7 @@ public:
 
     // implementation specific
     /// @throws RuntimeException
-    void SetFingerPrintsDB( const OUString &fileName );
+    void SetFingerPrintsDB( std::u16string_view fileName );
 };
 
 }
@@ -165,7 +166,7 @@ Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
     if (nStartPos < 0 || nLen < 0 || nStartPos + nLen > rText.getLength())
         throw lang::IllegalArgumentException();
 
-    OString o( OUStringToOString( rText.copy(nStartPos, nLen), RTL_TEXTENCODING_UTF8 ) );
+    OString o( OUStringToOString( rText.subView(nStartPos, nLen), RTL_TEXTENCODING_UTF8 ) );
     Guess g = m_aGuesser.GuessPrimaryLanguage(o.getStr());
     lang::Locale aRes;
     aRes.Language   = OUString::createFromAscii( g.GetLanguage().c_str() );
@@ -176,7 +177,7 @@ Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
 #define DEFAULT_CONF_FILE_NAME "fpdb.conf"
 
 void LangGuess_Impl::SetFingerPrintsDB(
-        const OUString &filePath )
+        std::u16string_view filePath )
 {
     //! text encoding for file name / path needs to be in the same encoding the OS uses
     OString path = OUStringToOString( filePath, osl_getThreadTextEncoding() );

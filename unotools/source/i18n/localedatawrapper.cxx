@@ -619,7 +619,7 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
     if ( !aCurrSeq.hasElements() )
     {
         if (areChecksEnabled())
-            outputCheckMessage(OUString("LocaleDataWrapper::getCurrSymbolsImpl: no currency at all, using ShellsAndPebbles"));
+            outputCheckMessage("LocaleDataWrapper::getCurrSymbolsImpl: no currency at all, using ShellsAndPebbles");
         aCurrSymbol = "ShellsAndPebbles";
         aCurrBankSymbol = aCurrSymbol;
         nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
@@ -1699,7 +1699,7 @@ OUString LocaleDataWrapper::appendLocaleInfo(const OUString& rDebugMsg) const
 }
 
 // static
-void LocaleDataWrapper::outputCheckMessage( const OUString& rMsg )
+void LocaleDataWrapper::outputCheckMessage( std::u16string_view rMsg )
 {
     outputCheckMessage(OUStringToOString(rMsg, RTL_TEXTENCODING_UTF8).getStr());
 }

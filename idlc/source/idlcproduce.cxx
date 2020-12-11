@@ -113,7 +113,7 @@ static bool cleanPath()
     return true;
 }
 
-void removeIfExists(const OString& pathname)
+void removeIfExists(std::string_view pathname)
 {
     osl::File::remove(OStringToOUString(pathname, RTL_TEXTENCODING_UTF8));
 }

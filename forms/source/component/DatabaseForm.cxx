@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 
 #include <componenttools.hxx>
 #include "DatabaseForm.hxx"
@@ -916,7 +919,7 @@ void ODatabaseForm::Encode( OUString& rString )
 
 
 void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const OUString& rName,
-    const OUString& rData )
+    std::u16string_view rData )
 {
     // Create part as MessageChild
     std::unique_ptr<INetMIMEMessage> pChild(new INetMIMEMessage);
@@ -2075,7 +2078,7 @@ void SAL_CALL ODatabaseForm::submit( const Reference<XControl>& Control,
 }
 
 static void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLTransformer>& xTransformer,const OUString& aURLStr,const OUString& aReferer,const OUString& aTargetName
-                  ,const OUString& aData,rtl_TextEncoding _eEncoding)
+                  ,std::u16string_view aData,rtl_TextEncoding _eEncoding)
 {
     URL aURL;
     aURL.Complete = aURLStr;

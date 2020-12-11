@@ -20,6 +20,10 @@
 #ifndef INCLUDED_FPICKER_SOURCE_OFFICE_OFFICECONTROLACCESS_HXX
 #define INCLUDED_FPICKER_SOURCE_OFFICE_OFFICECONTROLACCESS_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "fileview.hxx"
 #include "pickercallbacks.hxx"
 #include <o3tl/typed_flags_set.hxx>
@@ -66,14 +70,14 @@ namespace svt
         OControlAccess( IFilePickerController* pController, SvtFileView* pFileView );
 
         // XControlAccess implementation
-        void setControlProperty( const OUString& rControlName, const OUString& rControlProperty, const css::uno::Any& rValue );
-        css::uno::Any  getControlProperty( const OUString& rControlName, const OUString& rControlProperty );
+        void setControlProperty( std::u16string_view rControlName, const OUString& rControlProperty, const css::uno::Any& rValue );
+        css::uno::Any  getControlProperty( std::u16string_view rControlName, const OUString& rControlProperty );
 
         // XControlInformation implementation
         css::uno::Sequence< OUString >  getSupportedControls(  ) const;
-        css::uno::Sequence< OUString >  getSupportedControlProperties( const OUString& rControlName );
-        static bool                     isControlSupported( const OUString& rControlName );
-        bool                            isControlPropertySupported( const OUString& rControlName, const OUString& rControlProperty );
+        css::uno::Sequence< OUString >  getSupportedControlProperties( std::u16string_view rControlName );
+        static bool                     isControlSupported( std::u16string_view rControlName );
+        bool                            isControlPropertySupported( std::u16string_view rControlName, const OUString& rControlProperty );
 
         // XFilePickerControlAccess
         void                        setValue( sal_Int16 nId, sal_Int16 nCtrlAction, const css::uno::Any& rValue );
@@ -105,7 +109,7 @@ namespace svt
                                         weld::Widget* pControl, PropFlags nProperty, const css::uno::Any& rValue,
                                         bool bIgnoreIllegalArgument = true );
 
-        weld::Widget* implGetControl( const OUString& rControlName, sal_Int16* pId, PropFlags* pPropertyMask = nullptr ) const;
+        weld::Widget* implGetControl( std::u16string_view rControlName, sal_Int16* pId, PropFlags* pPropertyMask = nullptr ) const;
 
         /** implements the various methods for retrieving properties from controls
 

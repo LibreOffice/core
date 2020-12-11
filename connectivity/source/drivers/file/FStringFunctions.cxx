@@ -43,7 +43,7 @@ ORowSetValue OOp_Ascii::operate(const ORowSetValue& lhs) const
 {
     if (lhs.isNull())
         return lhs;
-    OString sStr(OUStringToOString(lhs, RTL_TEXTENCODING_ASCII_US));
+    OString sStr(OUStringToOString(lhs.getString(), RTL_TEXTENCODING_ASCII_US));
     sal_Int32 nAscii = sStr.toChar();
     return nAscii;
 }

@@ -788,9 +788,9 @@ IMPL_LINK( SfxFilterMatcher, MaybeFileHdl_Impl, OUString*, pString, bool )
 {
     std::shared_ptr<const SfxFilter> pFilter = GetFilter4Extension( *pString );
     return pFilter &&
-        !pFilter->GetWildcard().Matches("") &&
-        !pFilter->GetWildcard().Matches("*.*") &&
-        !pFilter->GetWildcard().Matches("*");
+        !pFilter->GetWildcard().Matches(u"") &&
+        !pFilter->GetWildcard().Matches(u"*.*") &&
+        !pFilter->GetWildcard().Matches(u"*");
 }
 
 

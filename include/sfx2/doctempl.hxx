@@ -19,8 +19,11 @@
 #ifndef INCLUDED_SFX2_DOCTEMPL_HXX
 #define INCLUDED_SFX2_DOCTEMPL_HXX
 
-#include <rtl/ustring.hxx>
 #include <sal/config.h>
+
+#include <string_view>
+
+#include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <sfx2/dllapi.h>
 #include <tools/ref.hxx>
@@ -94,7 +97,8 @@ public:
     bool            CopyTo(sal_uInt16 nRegion, sal_uInt16 nIdx, const OUString &rName) const;
     bool            CopyFrom(sal_uInt16 nRegion, sal_uInt16 nIdx, OUString &rName);
 
-    bool            GetFull( std::u16string_view rRegion, const OUString& rName, OUString& rPath );
+    bool            GetFull(
+        std::u16string_view rRegion, std::u16string_view rName, OUString& rPath );
     bool            GetLogicNames( const OUString& rPath, OUString& rRegion, OUString& rName ) const;
 
     /** updates the configuration where the document templates structure is stored.

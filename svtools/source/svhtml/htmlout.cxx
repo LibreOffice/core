@@ -789,7 +789,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
 
 SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
                                    const OUString& rBaseURL,
-                                   const OUString& rSource,
+                                   std::u16string_view rSource,
                                    const OUString& rLanguage,
                                    ScriptType eScriptType,
                                    const OUString& rSrc,
@@ -846,7 +846,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 
     rStrm.WriteOString( sOut.makeStringAndClear() );
 
-    if( !rSource.isEmpty() || pSBLibrary || pSBModule )
+    if( !rSource.empty() || pSBLibrary || pSBModule )
     {
         rStrm.WriteCharPtr( SAL_NEWLINE_STRING );
 
@@ -877,7 +877,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
             }
         }
 
-        if( !rSource.isEmpty() )
+        if( !rSource.empty() )
         {
             // we write the module in ANSI-charset, but with
             // the system new line.

@@ -27,6 +27,7 @@
 #include <rtl/ustring.hxx>
 
 #include <sstream>
+#include <string_view>
 
 namespace {
 
@@ -43,7 +44,7 @@ template< typename T > void checkEqual(T const & value, T const & argument) {
         s << value << " != " << argument;
         throw CheckFailed(
             OStringToOUString(
-                OString(s.str().c_str()), RTL_TEXTENCODING_UTF8));
+                std::string_view(s.str()), RTL_TEXTENCODING_UTF8));
     }
 }
 

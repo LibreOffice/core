@@ -932,7 +932,7 @@ sax_fastparser::FSHelperPtr XclExpXmlStream::GetStreamForPath( const OUString& s
     return maOpenedStreamMap[ sPath ].second;
 }
 
-void XclExpXmlStream::WriteAttribute(sal_Int32 nAttr, const OUString& sVal)
+void XclExpXmlStream::WriteAttribute(sal_Int32 nAttr, std::u16string_view sVal)
 {
     GetCurrentStream()->write(" ")->writeId(nAttr)->write("=\"")->writeEscaped(sVal)->write("\"");
 }

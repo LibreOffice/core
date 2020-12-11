@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 #include <utility>
 #include <vector>
 #include <deque>
@@ -71,12 +74,12 @@ private:
     OString m_aWildString;
 
 public:
-    explicit WildCard( const OUString& rWildCard )
+    explicit WildCard( std::u16string_view rWildCard )
     : m_aWildString(
         OUStringToOString(
             rWildCard, RTL_TEXTENCODING_UTF8 ).toAsciiLowerCase() ) {}
 
-    bool Matches( const OUString & rStr ) const;
+    bool Matches( std::u16string_view rStr ) const;
 };
 
 }
@@ -161,7 +164,7 @@ private:
 // WildCard Implementation.
 
 
-bool WildCard::Matches( const OUString& rString ) const
+bool WildCard::Matches( std::u16string_view rString ) const
 {
     OString aString
         = OUStringToOString( rString, RTL_TEXTENCODING_UTF8 ).toAsciiLowerCase();

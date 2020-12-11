@@ -75,7 +75,7 @@ using namespace ::com::sun::star;
 namespace sfx2 {
 
 
-bool isValidNCName(OUString const & i_rIdref)
+bool isValidNCName(std::u16string_view i_rIdref)
 {
     const OString id(
         OUStringToOString(i_rIdref, RTL_TEXTENCODING_UTF8) );
@@ -101,7 +101,7 @@ static bool isStylesFile (OUString const & i_rPath)
 }
 
 bool isValidXmlId(OUString const & i_rStreamName,
-    OUString const & i_rIdref)
+    std::u16string_view i_rIdref)
 {
     return isValidNCName(i_rIdref)
         && (isContentFile(i_rStreamName) || isStylesFile(i_rStreamName));

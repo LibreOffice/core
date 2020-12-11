@@ -139,9 +139,9 @@ void CommandEnvironmentImpl::printLicense(
 
     OUString sNewLine("\n");
 
-    dp_misc::writeConsole(sNewLine + sNewLine + s1 + sNewLine + sNewLine);
-    dp_misc::writeConsole(sLicense + sNewLine + sNewLine);
-    dp_misc::writeConsole(s2 + sNewLine);
+    dp_misc::writeConsole(OUString(sNewLine + sNewLine + s1 + sNewLine + sNewLine));
+    dp_misc::writeConsole(OUString(sLicense + sNewLine + sNewLine));
+    dp_misc::writeConsole(OUString(s2 + sNewLine));
     dp_misc::writeConsole(s3);
 
     //the user may enter "yes" or "no", we compare in a case insensitive way
@@ -168,7 +168,7 @@ void CommandEnvironmentImpl::printLicense(
         }
         else
         {
-            dp_misc::writeConsole(sNewLine + sNewLine + s4 + sNewLine);
+            dp_misc::writeConsole(OUString(sNewLine + sNewLine + s4 + sNewLine));
         }
     }
     while(true);
@@ -254,7 +254,7 @@ void CommandEnvironmentImpl::handle(
     {
         OUString sMsg(DpResId(RID_STR_UNSUPPORTED_PLATFORM));
         sMsg = sMsg.replaceAll("%Name", platExc.package->getDisplayName());
-        dp_misc::writeConsole("\n" + sMsg + "\n\n");
+        dp_misc::writeConsole(OUString("\n" + sMsg + "\n\n"));
         approve = true;
     }
     else {
@@ -272,7 +272,7 @@ void CommandEnvironmentImpl::handle(
     if (abort && m_option_verbose)
     {
         OUString msg = ::comphelper::anyToString(request);
-        dp_misc::writeConsoleError("\nERROR: " + msg + "\n");
+        dp_misc::writeConsoleError(OUString("\nERROR: " + msg + "\n"));
     }
 
     // select:
@@ -339,15 +339,15 @@ void CommandEnvironmentImpl::update_( Any const & Status )
     for ( sal_Int32 n = 0; n < m_logLevel; ++n )
     {
         if (bUseErr)
-            dp_misc::writeConsoleError(" ");
+            dp_misc::writeConsoleError(u" ");
         else
-            dp_misc::writeConsole(" ");
+            dp_misc::writeConsole(u" ");
     }
 
     if (bUseErr)
-        dp_misc::writeConsoleError(msg + "\n");
+        dp_misc::writeConsoleError(OUString(msg + "\n"));
     else
-        dp_misc::writeConsole(msg + "\n");
+        dp_misc::writeConsole(OUString(msg + "\n"));
 }
 
 

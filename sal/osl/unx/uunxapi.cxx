@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <config_features.h>
 
 #include "uunxapi.hxx"
@@ -31,9 +35,9 @@
 #include <osl/detail/android-bootstrap.h>
 #endif
 
-OString osl::OUStringToOString(const OUString& s)
+OString osl::OUStringToOString(std::u16string_view s)
 {
-    return OUStringToOString(s, osl_getThreadTextEncoding());
+    return rtl::OUStringToOString(s, osl_getThreadTextEncoding());
 }
 
 #if HAVE_FEATURE_MACOSX_SANDBOX
@@ -198,7 +202,7 @@ namespace {
 
 OString toOString(OString const & s) { return s; }
 
-OString toOString(OUString const & s) { return osl::OUStringToOString(s); }
+OString toOString(std::u16string_view s) { return osl::OUStringToOString(s); }
 
 template<typename T> T fromOString(OString const &) = delete;
 

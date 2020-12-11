@@ -61,6 +61,7 @@
 #include <osl/thread.hxx>
 #include <osl/file.hxx>
 #include <iostream>
+#include <string_view>
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
@@ -89,7 +90,7 @@ struct DispatchHolder
     Reference< XDispatch > xDispatch;
 };
 
-std::shared_ptr<const SfxFilter> impl_lookupExportFilterForUrl( const OUString& rUrl, const OUString& rFactory )
+std::shared_ptr<const SfxFilter> impl_lookupExportFilterForUrl( std::u16string_view rUrl, const OUString& rFactory )
 {
     // create the list of filters
     OUStringBuffer sQuery(256);

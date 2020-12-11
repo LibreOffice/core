@@ -1973,7 +1973,7 @@ void GtkSalFrame::StartPresentation( bool bStart )
     }
 
     m_ScreenSaverInhibitor.inhibit( bStart,
-                                    "presentation",
+                                    u"presentation",
                                     getDisplay()->IsX11Display(),
                                     aWindow,
                                     aDisplay );

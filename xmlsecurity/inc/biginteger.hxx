@@ -20,6 +20,9 @@
 #pragma once
 
 #include <sal/config.h>
+
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/uno/Sequence.h>
@@ -30,7 +33,7 @@ namespace xmlsecurity
 {
 XSECXMLSEC_DLLPUBLIC OUString bigIntegerToNumericString(const css::uno::Sequence<sal_Int8>& serial);
 XSECXMLSEC_DLLPUBLIC css::uno::Sequence<sal_Int8>
-numericStringToBigInteger(const OUString& serialNumber);
+numericStringToBigInteger(std::u16string_view serialNumber);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

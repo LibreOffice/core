@@ -2007,7 +2007,7 @@ static void lcl_string_append(OUStringBuffer &rString, const OUString &sString)
     rString.append(sString);
 }
 
-static void lcl_string_append(OStringBuffer &rString, const OUString &sString)
+static void lcl_string_append(OStringBuffer &rString, std::u16string_view sString)
 {
     rString.append(OUStringToOString( sString, RTL_TEXTENCODING_UTF8  ));
 }

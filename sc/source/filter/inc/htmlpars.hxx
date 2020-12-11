@@ -23,6 +23,7 @@
 #include <memory>
 #include <map>
 #include <stack>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 #include <o3tl/sorted_vector.hxx>
@@ -600,7 +601,7 @@ private:
     /** Closes the current table, regardless on opening tag. */
     void                CloseTable( const HtmlImportInfo& rInfo );
 
-    static void         ParseStyle(const OUString& rStrm);
+    static void         ParseStyle(std::u16string_view rStrm);
 
     DECL_LINK( HTMLImportHdl, HtmlImportInfo&, void );
 

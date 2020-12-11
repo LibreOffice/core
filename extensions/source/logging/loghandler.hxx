@@ -20,6 +20,10 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_LOGGING_LOGHANDLER_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_LOGGING_LOGHANDLER_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/logging/XLogFormatter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/logging/LogRecord.hpp>
@@ -59,7 +63,7 @@ namespace logging
         void    setIsInitialized() { m_bInitialized = true; }
 
         bool    getEncoding(        OUString& _out_rEncoding ) const;
-        bool    setEncoding( const  OUString& _rEncoding     );
+        bool    setEncoding( std::u16string_view _rEncoding  );
 
         rtl_TextEncoding
                 getTextEncoding() const { return m_eEncoding; }

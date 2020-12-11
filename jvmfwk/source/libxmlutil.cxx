@@ -94,7 +94,7 @@ CXmlCharPtr::CXmlCharPtr(xmlChar * aChar)
 {
 }
 
-CXmlCharPtr::CXmlCharPtr(const OUString & s):
+CXmlCharPtr::CXmlCharPtr(std::u16string_view s):
     _object(nullptr)
 {
     OString o = OUStringToOString(s, RTL_TEXTENCODING_UTF8);

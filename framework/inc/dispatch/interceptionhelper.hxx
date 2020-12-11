@@ -32,6 +32,7 @@
 #include <cppuhelper/weakref.hxx>
 
 #include <deque>
+#include <string_view>
 
 namespace framework{
 
@@ -103,7 +104,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
                 @return An iterator object, which points directly to the located item inside this list.
                         In case no interceptor could be found, it points to the end of this list!
               */
-            iterator findByPattern(const OUString& sURL)
+            iterator findByPattern(std::u16string_view sURL)
             {
                 iterator pIt;
                 for (pIt=begin(); pIt!=end(); ++pIt)

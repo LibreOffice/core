@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <jobs/configaccess.hxx>
 #include <jobs/jobdata.hxx>
 #include <classes/converter.hxx>
@@ -415,15 +419,15 @@ void JobData::disableJob()
     aConfig.close();
 }
 
-static bool isEnabled( const OUString& sAdminTime ,
-                    const OUString& sUserTime  )
+static bool isEnabled( std::u16string_view sAdminTime ,
+                    std::u16string_view sUserTime  )
 {
     /*Attention!
         To prevent interpreting of TriGraphs inside next const string value,
         we have to encode all '?' signs. Otherwise e.g. "??-" will be translated
         to "~" ...
      */
-    WildCard aISOPattern("\?\?\?\?-\?\?-\?\?*");
+    WildCard aISOPattern(u"\?\?\?\?-\?\?-\?\?*");
 
     bool bValidAdmin = aISOPattern.Matches(sAdminTime);
     bool bValidUser  = aISOPattern.Matches(sUserTime );

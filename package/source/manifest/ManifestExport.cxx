@@ -187,7 +187,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                                         sCdataAttribute,
                                         MANIFEST_OASIS_NAMESPACE );
             bAcceptNonemptyVersion = true;
-            if ( aDocVersion.compareTo( ODFVER_012_TEXT ) >= 0 )
+            if ( aDocVersion.compareTo( u"" ODFVER_012_TEXT ) >= 0 )
             {
                 // this is ODF12 or later generation, let encrypted
                 // streams contain start-key-generation entry
@@ -241,7 +241,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             xHandler->ignorableWhitespace ( sWhiteSpace );
 
             // ==== manifest:keyinfo & children
-            bool const isODF13(aDocVersion.compareTo(ODFVER_013_TEXT) >= 0);
+            bool const isODF13(aDocVersion.compareTo(u"" ODFVER_013_TEXT) >= 0);
             if (!isODF13)
             {
                 xHandler->startElement(sManifestKeyInfoElement, nullptr);

@@ -1604,7 +1604,7 @@ bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
     // the check returns sal_False only if the storage version could be retrieved
     bool bResult = true;
 
-    if ( !aODFVersion.isEmpty() && aODFVersion.compareTo( ODFVER_012_TEXT ) >= 0 )
+    if ( !aODFVersion.isEmpty() && aODFVersion.compareTo( u"" ODFVER_012_TEXT ) >= 0 )
     {
         // check the consistency only for the ODF1.2 and later ( according to content.xml )
         // manifest.xml might have no version, it should be checked here and the correct version should be set

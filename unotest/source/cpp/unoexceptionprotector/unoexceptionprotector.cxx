@@ -18,6 +18,7 @@
  */
 
 #include <string>
+#include <string_view>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -33,7 +34,7 @@
 namespace {
 
 // Best effort conversion:
-std::string convert(OUString const & s16) {
+std::string convert(std::u16string_view s16) {
     OString s8(OUStringToOString(s16, osl_getThreadTextEncoding()));
     static_assert(sizeof (sal_Int32) <= sizeof (std::string::size_type), "got to be at least equal");
         // ensure following cast is legitimate
@@ -64,8 +65,7 @@ bool Prot::protect(
         reportError(
             context,
             CppUnit::Message(
-                convert(
-                    "An uncaught exception of type " + a.getValueTypeName()),
+                "An uncaught exception of type " + convert(a.getValueTypeName()),
                 convert(e.Message)));
     }
     return false;

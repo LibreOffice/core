@@ -99,7 +99,7 @@ void BinaryXOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes, size_
 }
 
 void
-BinaryOutputStream::writeCharArrayUC( const OUString& rString, rtl_TextEncoding eTextEnc )
+BinaryOutputStream::writeCharArrayUC( std::u16string_view rString, rtl_TextEncoding eTextEnc )
 {
     OString sBuf( OUStringToOString( rString, eTextEnc ) );
     sBuf = sBuf.replace( '\0', '?' );

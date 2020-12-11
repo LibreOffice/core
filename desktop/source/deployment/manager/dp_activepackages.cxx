@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <string_view>
 #include <utility>
 
 #include <osl/diagnose.h>
@@ -44,11 +45,11 @@ namespace {
 
 constexpr const char separator[] = "\xff";
 
-OString oldKey(OUString const & fileName) {
+OString oldKey(std::u16string_view fileName) {
     return OUStringToOString(fileName, RTL_TEXTENCODING_UTF8);
 }
 
-OString newKey(OUString const & id) {
+OString newKey(std::u16string_view id) {
     return separator + OUStringToOString(id, RTL_TEXTENCODING_UTF8);
 }
 

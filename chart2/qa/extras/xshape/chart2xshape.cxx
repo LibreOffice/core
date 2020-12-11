@@ -16,6 +16,7 @@
 #include <test/xmltesttools.hxx>
 
 #include <fstream>
+#include <string_view>
 
 class Chart2XShapeTest : public ChartTest, public XmlTestTools
 {
@@ -49,7 +50,7 @@ private:
 
 namespace
 {
-bool checkDumpAgainstFile(const OUString& rDump, const OUString& aFilePath)
+bool checkDumpAgainstFile(const OUString& rDump, std::u16string_view aFilePath)
 {
     OString aOFile = OUStringToOString(aFilePath, RTL_TEXTENCODING_UTF8);
 

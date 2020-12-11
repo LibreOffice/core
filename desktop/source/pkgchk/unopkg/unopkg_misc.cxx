@@ -227,7 +227,7 @@ namespace {
 void printf_space( sal_Int32 space )
 {
     while (space--)
-        dp_misc::writeConsole("  ");
+        dp_misc::writeConsole(u"  ");
 }
 
 
@@ -235,7 +235,7 @@ void printf_line(
     OUString const & name, OUString const & value, sal_Int32 level )
 {
     printf_space( level );
-    dp_misc::writeConsole(name + ": " + value + "\n");
+    dp_misc::writeConsole(OUString(name + ": " + value + "\n"));
 }
 
 
@@ -282,13 +282,13 @@ void printf_package(
     Sequence< Reference<deployment::XPackage> > seq(
         xPackage->getBundle( Reference<task::XAbortChannel>(), xCmdEnv ) );
     printf_space( level + 1 );
-    dp_misc::writeConsole("bundled Packages: {\n");
+    dp_misc::writeConsole(u"bundled Packages: {\n");
     std::vector<Reference<deployment::XPackage> >vec_bundle;
     ::comphelper::sequenceToContainer(vec_bundle, seq);
     printf_packages( vec_bundle, std::vector<bool>(vec_bundle.size()),
                      xCmdEnv, level + 2 );
     printf_space( level + 1 );
-    dp_misc::writeConsole("}\n");
+    dp_misc::writeConsole(u"}\n");
 }
 
 } // anon namespace
@@ -300,7 +300,7 @@ static void printf_unaccepted_licenses(
             dp_misc::getIdentifier(ext) );
         printf_line( "Identifier", id, 0 );
         printf_space(1);
-        dp_misc::writeConsole("License not accepted\n\n");
+        dp_misc::writeConsole(u"License not accepted\n\n");
 }
 
 
@@ -314,7 +314,7 @@ void printf_packages(
     if (allExtensions.empty())
     {
         printf_space( level );
-        dp_misc::writeConsole("<none>\n");
+        dp_misc::writeConsole(u"<none>\n");
     }
     else
     {
@@ -325,7 +325,7 @@ void printf_packages(
                 printf_unaccepted_licenses(extension);
             else
                 printf_package( extension, xCmdEnv, level );
-            dp_misc::writeConsole("\n");
+            dp_misc::writeConsole(u"\n");
             ++index;
         }
     }
@@ -365,16 +365,16 @@ Reference<XComponentContext> connectToOffice(
 
     if (verbose)
     {
-        dp_misc::writeConsole(
+        dp_misc::writeConsole(OUString(
             "Raising process: " + appURL +
             "\nArguments: --nologo --nodefault " + args[2] +
-            "\n");
+            "\n"));
     }
 
     ::dp_misc::raiseProcess( appURL, args );
 
     if (verbose)
-        dp_misc::writeConsole("OK.  Connecting...");
+        dp_misc::writeConsole(u"OK.  Connecting...");
 
     OUString sUnoUrl = "uno:pipe,name=" + pipeId + ";urp;StarOffice.ComponentContext";
     Reference<XComponentContext> xRet(
@@ -382,7 +382,7 @@ Reference<XComponentContext> connectToOffice(
             sUnoUrl, xLocalComponentContext ),
         UNO_QUERY_THROW );
     if (verbose)
-        dp_misc::writeConsole("OK.\n");
+        dp_misc::writeConsole(u"OK.\n");
 
     return xRet;
 }

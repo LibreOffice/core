@@ -94,7 +94,7 @@ namespace
     {
         //DOUBLE VERTICAL LINE instead of || because the translations make their
         //way into action_names under gtk3 where || is illegal
-        return OUStringToOString(OUString(u'\x2016'), RTL_TEXTENCODING_UTF8);
+        return OUStringToOString(u"\x2016", RTL_TEXTENCODING_UTF8);
     }
 }
 

@@ -86,7 +86,7 @@ FastSerializerHelper* FastSerializerHelper::write(const OString& value)
     return this;
 }
 
-FastSerializerHelper* FastSerializerHelper::write(const OUString& value)
+FastSerializerHelper* FastSerializerHelper::write(std::u16string_view value)
 {
     mpSerializer->write(value);
     return this;
@@ -116,9 +116,9 @@ FastSerializerHelper* FastSerializerHelper::writeEscaped(const char* value)
     return this;
 }
 
-FastSerializerHelper* FastSerializerHelper::writeEscaped(const OUString& value)
+FastSerializerHelper* FastSerializerHelper::writeEscaped(std::u16string_view value)
 {
-    if (!value.isEmpty())
+    if (!value.empty())
         mpSerializer->write(value, true);
     return this;
 }

@@ -20,6 +20,10 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_GENERAL_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_GENERAL_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/form/XBoundComponent.hpp>
@@ -124,12 +128,12 @@ class BibGeneralPage : public TabPage
     BibDataManager*     pDatMan;
 
     bool
-                                AddXControl( const OUString& rName, FixedText& rLabel, const OString& sHelpId,
+                                AddXControl( const OUString& rName, FixedText& rLabel, std::string_view sHelpId,
                                             sal_Int16& rIndex, std::vector<vcl::Window*>& rChildren );
 
     void                        AddControlWithError( const OUString& rColumnName, FixedText& rLabel,
                                             OUString& rErrorString,
-                                            const OString& sHelpId, sal_uInt16 nIndexInFTArray, std::vector<vcl::Window*>& rChildren );
+                                            std::string_view sHelpId, sal_uInt16 nIndexInFTArray, std::vector<vcl::Window*>& rChildren );
 
 protected:
     void                        InitFixedTexts();     // create mnemonics and set text an all fixed texts

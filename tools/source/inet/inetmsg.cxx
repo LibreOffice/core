@@ -82,7 +82,7 @@ static sal_uInt16 ParseMonth(const OString& rStr, sal_Int32& nIndex)
 }
 
 bool INetMIMEMessage::ParseDateField (
-    const OUString& rDateFieldW, DateTime& rDateTime)
+    std::u16string_view rDateFieldW, DateTime& rDateTime)
 {
     OString aDateField(OUStringToOString(rDateFieldW,
         RTL_TEXTENCODING_ASCII_US));
@@ -272,7 +272,7 @@ void INetMIMEMessage::EnableAttachMultipartFormDataChild()
     // Set header fields.
     SetMIMEVersion("1.0");
     SetContentType(
-        OUString::fromUtf8("multipart/form-data; boundary=" + m_aBoundary));
+        "multipart/form-data; boundary=" + OUString::fromUtf8(m_aBoundary));
     SetContentTransferEncoding("7bit");
 }
 

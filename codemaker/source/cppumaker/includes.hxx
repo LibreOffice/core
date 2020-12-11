@@ -21,6 +21,7 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <string_view>
 #include <vector>
 #include "dependencies.hxx"
 
@@ -68,7 +69,7 @@ private:
     Includes(Includes const &) = delete;
     Includes& operator =(const Includes&) = delete;
 
-    bool isInterfaceType(OString const & entityName) const;
+    bool isInterfaceType(std::string_view entityName) const;
 
     rtl::Reference< TypeManager > m_manager;
     Dependencies::Map m_map;

@@ -13,6 +13,7 @@
 #include <tools/toolsdllapi.h>
 #include <rtl/ustring.hxx>
 #include <memory>
+#include <string_view>
 #include <vector>
 
 class SvStream;
@@ -48,14 +49,14 @@ public:
     void endElement();
 
     void attribute(const OString& sTagName, const OString& aValue);
-    void attribute(const OString& sTagName, const OUString& aValue);
+    void attribute(const OString& sTagName, std::u16string_view aValue);
     void attribute(const OString& sTagName, sal_Int32 aNumber);
     void attributeDouble(const OString& sTagName, double aNumber);
     void attributeBase64(const OString& sTagName, std::vector<sal_uInt8> const& rValueInBytes);
     void attributeBase64(const OString& sTagName, std::vector<char> const& rValueInBytes);
 
     void content(const OString& sValue);
-    void content(const OUString& sValue);
+    void content(std::u16string_view sValue);
 
     void element(const OString& sName);
 };

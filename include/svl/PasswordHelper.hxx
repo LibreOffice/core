@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SVL_PASSWORDHELPER_HXX
 #define INCLUDED_SVL_PASSWORDHELPER_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <svl/svldllapi.h>
 #include <sal/types.h>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -33,8 +37,8 @@ public:
     SVL_DLLPUBLIC static void     GetHashPassword(css::uno::Sequence <sal_Int8>& rPassHash, const char* pPass, sal_uInt32 nLen);
 
     SVL_DLLPUBLIC static void     GetHashPassword(css::uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass);
-    SVL_DLLPUBLIC static void     GetHashPasswordSHA1UTF8(css::uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass);
-    SVL_DLLPUBLIC static void     GetHashPasswordSHA256(css::uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass);
+    SVL_DLLPUBLIC static void     GetHashPasswordSHA1UTF8(css::uno::Sequence<sal_Int8>& rPassHash, std::u16string_view sPass);
+    SVL_DLLPUBLIC static void     GetHashPasswordSHA256(css::uno::Sequence<sal_Int8>& rPassHash, std::u16string_view sPass);
     /**
     Use this method to compare a given string with another given Hash value.
     This is necessary, because in older versions exists different hashes of the same string. They were endian dependent.

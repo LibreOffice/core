@@ -23,6 +23,7 @@
 #include <list>
 #include <vector>
 #include <set>
+#include <string_view>
 
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
@@ -55,7 +56,7 @@ public:
     friend FileStream &operator<<(FileStream& o, const ::rtl::OString& s);
     friend FileStream &operator<<(FileStream& o, ::rtl::OStringBuffer const * s);
     friend FileStream &operator<<(FileStream& o, const ::rtl::OStringBuffer& s);
-    friend FileStream & operator <<(FileStream & out, rtl::OUString const & s);
+    friend FileStream & operator <<(FileStream & out, std::u16string_view s);
 
 private:
     oslFileHandle m_file;

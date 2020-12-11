@@ -10,6 +10,10 @@
 #ifndef INCLUDED_SVX_SIGNATURELINEHELPER_HXX
 #define INCLUDED_SVX_SIGNATURELINEHELPER_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
 
@@ -51,7 +55,7 @@ SVX_DLLPUBLIC OUString getLocalizedDate();
 /**
  * Interprets rSVG as a graphic and gives back the resulting UNO wrapper.
  */
-SVX_DLLPUBLIC css::uno::Reference<css::graphic::XGraphic> importSVG(const OUString& rSVG);
+SVX_DLLPUBLIC css::uno::Reference<css::graphic::XGraphic> importSVG(std::u16string_view rSVG);
 
 /**
  * Sets xCertificate as the signing certificate of the selected shape on pView.

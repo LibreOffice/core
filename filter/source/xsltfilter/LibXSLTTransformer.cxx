@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <cstring>
 #include <map>
+#include <string_view>
 #include <utility>
 #include <vector>
 #include <libxml/parser.h>
@@ -147,7 +148,7 @@ namespace XSLT
             streamName = ensureStringValue(streamName, ctxt);
 
             oh->insertByName(OStringToOUString(reinterpret_cast<char*>(streamName->stringval), RTL_TEXTENCODING_UTF8),
-                             OString(reinterpret_cast<char*>(value->stringval)));
+                             std::string_view(reinterpret_cast<char*>(value->stringval)));
             valuePush(ctxt, xmlXPathNewCString(""));
         }
 

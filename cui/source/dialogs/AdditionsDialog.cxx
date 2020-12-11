@@ -7,6 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  */
+
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <config_folders.h>
 
 #include <AdditionsDialog.hxx>
@@ -142,54 +147,61 @@ void parseResponse(const std::string& rResponse, std::vector<AdditionInfo>& aAdd
         try
         {
             AdditionInfo aNewAddition = {
-                OStringToOUString(OString(arrayElement.child("id").string_value().get()),
+                OStringToOUString(std::string_view(arrayElement.child("id").string_value().get()),
                                   RTL_TEXTENCODING_UTF8),
-                OStringToOUString(OString(arrayElement.child("name").string_value().get()),
-                                  RTL_TEXTENCODING_UTF8),
-                OStringToOUString(OString(arrayElement.child("author").string_value().get()),
-                                  RTL_TEXTENCODING_UTF8),
-                OStringToOUString(OString(arrayElement.child("url").string_value().get()),
-                                  RTL_TEXTENCODING_UTF8),
-                OStringToOUString(OString(arrayElement.child("screenshotURL").string_value().get()),
+                OStringToOUString(std::string_view(arrayElement.child("name").string_value().get()),
                                   RTL_TEXTENCODING_UTF8),
                 OStringToOUString(
-                    OString(arrayElement.child("extensionIntroduction").string_value().get()),
+                    std::string_view(arrayElement.child("author").string_value().get()),
                     RTL_TEXTENCODING_UTF8),
-                OStringToOUString(
-                    OString(arrayElement.child("extensionDescription").string_value().get()),
-                    RTL_TEXTENCODING_UTF8),
-                OStringToOUString(OString(arrayElement.child("releases")
-                                              .child(0)
-                                              .child("compatibility")
-                                              .string_value()
-                                              .get()),
-                                  RTL_TEXTENCODING_UTF8),
-                OStringToOUString(OString(arrayElement.child("releases")
-                                              .child(0)
-                                              .child("releaseName")
-                                              .string_value()
-                                              .get()),
-                                  RTL_TEXTENCODING_UTF8),
-                OStringToOUString(OString(arrayElement.child("releases")
-                                              .child(0)
-                                              .child("license")
-                                              .string_value()
-                                              .get()),
-                                  RTL_TEXTENCODING_UTF8),
-                OStringToOUString(OString(arrayElement.child("commentNumber").string_value().get()),
-                                  RTL_TEXTENCODING_UTF8),
-                OStringToOUString(OString(arrayElement.child("commentURL").string_value().get()),
-                                  RTL_TEXTENCODING_UTF8),
-                OStringToOUString(OString(arrayElement.child("rating").string_value().get()),
+                OStringToOUString(std::string_view(arrayElement.child("url").string_value().get()),
                                   RTL_TEXTENCODING_UTF8),
                 OStringToOUString(
-                    OString(arrayElement.child("downloadNumber").string_value().get()),
+                    std::string_view(arrayElement.child("screenshotURL").string_value().get()),
                     RTL_TEXTENCODING_UTF8),
-                OStringToOUString(OString(arrayElement.child("releases")
-                                              .child(0)
-                                              .child("downloadURL")
-                                              .string_value()
-                                              .get()),
+                OStringToOUString(
+                    std::string_view(
+                        arrayElement.child("extensionIntroduction").string_value().get()),
+                    RTL_TEXTENCODING_UTF8),
+                OStringToOUString(
+                    std::string_view(
+                        arrayElement.child("extensionDescription").string_value().get()),
+                    RTL_TEXTENCODING_UTF8),
+                OStringToOUString(std::string_view(arrayElement.child("releases")
+                                                       .child(0)
+                                                       .child("compatibility")
+                                                       .string_value()
+                                                       .get()),
+                                  RTL_TEXTENCODING_UTF8),
+                OStringToOUString(std::string_view(arrayElement.child("releases")
+                                                       .child(0)
+                                                       .child("releaseName")
+                                                       .string_value()
+                                                       .get()),
+                                  RTL_TEXTENCODING_UTF8),
+                OStringToOUString(std::string_view(arrayElement.child("releases")
+                                                       .child(0)
+                                                       .child("license")
+                                                       .string_value()
+                                                       .get()),
+                                  RTL_TEXTENCODING_UTF8),
+                OStringToOUString(
+                    std::string_view(arrayElement.child("commentNumber").string_value().get()),
+                    RTL_TEXTENCODING_UTF8),
+                OStringToOUString(
+                    std::string_view(arrayElement.child("commentURL").string_value().get()),
+                    RTL_TEXTENCODING_UTF8),
+                OStringToOUString(
+                    std::string_view(arrayElement.child("rating").string_value().get()),
+                    RTL_TEXTENCODING_UTF8),
+                OStringToOUString(
+                    std::string_view(arrayElement.child("downloadNumber").string_value().get()),
+                    RTL_TEXTENCODING_UTF8),
+                OStringToOUString(std::string_view(arrayElement.child("releases")
+                                                       .child(0)
+                                                       .child("downloadURL")
+                                                       .string_value()
+                                                       .get()),
                                   RTL_TEXTENCODING_UTF8)
             };
 

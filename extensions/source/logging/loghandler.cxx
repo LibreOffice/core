@@ -109,7 +109,7 @@ namespace logging
     }
 
 
-    bool LogHandlerHelper::setEncoding( const OUString& _rEncoding )
+    bool LogHandlerHelper::setEncoding( std::u16string_view _rEncoding )
     {
         OString sAsciiEncoding( OUStringToOString( _rEncoding, RTL_TEXTENCODING_ASCII_US ) );
         rtl_TextEncoding eEncoding = rtl_getTextEncodingFromMimeCharset( sAsciiEncoding.getStr() );

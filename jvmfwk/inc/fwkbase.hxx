@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <optional>
+#include <string_view>
 #include <vector>
 
 #include <rtl/ustring.hxx>
@@ -39,7 +40,7 @@ class VendorSettings
 public:
     VendorSettings();
 
-    std::optional<VersionInfo> getVersionInformation(const OUString& sVendor) const;
+    std::optional<VersionInfo> getVersionInformation(std::u16string_view sVendor) const;
 };
 
 /* The class offers functions to retrieve verified bootstrap parameters.

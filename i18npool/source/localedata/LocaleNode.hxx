@@ -20,6 +20,7 @@
 #define INCLUDED_I18NPOOL_SOURCE_LOCALEDATA_LOCALENODE_HXX
 
 #include <string>
+#include <string_view>
 #include <vector>
 #include <memory>
 
@@ -41,13 +42,13 @@ public:
     void  writeAsciiString(const char *str)const ;
     void  writeInt(sal_Int16 nb) const;
     void  writeFunction(const char *func, const char *count, const char *array) const;
-    void  writeRefFunction(const char *func, const OUString& useLocale) const;
+    void  writeRefFunction(const char *func, std::u16string_view useLocale) const;
     void  writeFunction(const char *func, const char *count, const char *array, const char *from, const char *to) const;
-    void  writeRefFunction(const char *func, const OUString& useLocale, const char *to) const;
+    void  writeRefFunction(const char *func, std::u16string_view useLocale, const char *to) const;
     void  writeFunction2(const char *func, const char *style, const char* attr, const char *array) const;
-    void  writeRefFunction2(const char *func, const OUString& useLocale) const;
+    void  writeRefFunction2(const char *func, std::u16string_view useLocale) const;
     void  writeFunction3(const char *func, const char *style, const char* levels, const char* attr, const char *array) const;
-    void  writeRefFunction3(const char *func, const OUString& useLocale) const;
+    void  writeRefFunction3(const char *func, std::u16string_view useLocale) const;
     void  writeIntParameter(const char* pAsciiStr, const sal_Int16 count, sal_Int16 val) const;
     bool  writeDefaultParameter(const char* pAsciiStr, std::u16string_view str, sal_Int16 count) const;
     void  writeParameter(const char* pAsciiStr, const OUString& aChars) const;
@@ -109,13 +110,14 @@ public:
     // ++nError with output to stderr
     void incError( const char* pStr ) const;
     // ++nError with output to stderr
-    void incError( const OUString& rStr ) const;
+    void incError( std::u16string_view rStr ) const;
     // ++nError with output to stderr, pStr should contain "%d"
     void incErrorInt( const char* pStr, int nVal ) const;
     // ++nError with output to stderr, pStr should contain "%s"
-    void incErrorStr( const char* pStr, const OUString& rVal ) const;
+    void incErrorStr( const char* pStr, std::u16string_view rVal ) const;
     // ++nError with output to stderr, pStr should contain "%s %s"
-    void incErrorStrStr( const char* pStr, const OUString& rVal1, const OUString& rVal2 ) const;
+    void incErrorStrStr( const char* pStr, std::u16string_view rVal1, std::u16string_view rVal2 )
+        const;
     static LocaleNode* createNode (const OUString& name,const Reference< XAttributeList > & attr);
 };
 
@@ -176,8 +178,8 @@ public:
 
     virtual void generateCode (const OFileWriter &of) const override;
 
-    bool expectedCalendarElement( const OUString& rName,
-            const LocaleNode* pNode, sal_Int16 nChild, const OUString& rCalendarID ) const;
+    bool expectedCalendarElement( std::u16string_view rName,
+            const LocaleNode* pNode, sal_Int16 nChild, std::u16string_view rCalendarID ) const;
 };
 
 class LCCurrencyNode : public LocaleNode {

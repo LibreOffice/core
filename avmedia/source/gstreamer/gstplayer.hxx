@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <osl/conditn.hxx>
 #include "gstcommon.hxx"
 
@@ -42,7 +46,7 @@ public:
     explicit Player();
     virtual ~Player() override;
 
-    void preparePlaybin( const OUString& rURL, GstElement *pSink );
+    void preparePlaybin( std::u16string_view rURL, GstElement *pSink );
     bool create( const OUString& rURL );
     void processMessage( GstMessage *message );
     GstBusSyncReply processSyncMessage( GstMessage *message );

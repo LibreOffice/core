@@ -38,6 +38,7 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
+#include <string_view>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -141,7 +142,7 @@ public:
 
 struct alphaSort
 {
-    bool operator()( const OUString& a, const OUString& b )
+    bool operator()( const OUString& a, std::u16string_view b )
     {
         return a.compareTo( b ) < 0;
     }

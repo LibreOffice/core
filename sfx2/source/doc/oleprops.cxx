@@ -303,7 +303,7 @@ OUString SfxOleStringHelper::ImplLoadString16( SvStream& rStrm )
     return aValue;
 }
 
-void SfxOleStringHelper::ImplSaveString8( SvStream& rStrm, const OUString& rValue ) const
+void SfxOleStringHelper::ImplSaveString8( SvStream& rStrm, std::u16string_view rValue ) const
 {
     // encode to byte string
     OString aEncoded(OUStringToOString(rValue, GetTextEncoding()));

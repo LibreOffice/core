@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SAL_OSL_UNX_UUNXAPI_HXX
 #define INCLUDED_SAL_OSL_UNX_UUNXAPI_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -42,7 +46,7 @@ int ftruncate_with_name(int fd, sal_uInt64 uSize, rtl_String* path);
 
 namespace osl
 {
-    OString OUStringToOString(const OUString& s);
+    OString OUStringToOString(std::u16string_view s);
 
     int access(const OString& strPath, int mode);
 

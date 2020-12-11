@@ -25,6 +25,7 @@
 #include <opencl/OpenCLZone.hxx>
 
 #include <memory>
+#include <string_view>
 
 #include <stdlib.h>
 
@@ -230,7 +231,7 @@ std::vector<std::shared_ptr<osl::File> > binaryGenerated( const char * clFileNam
     return aGeneratedFiles;
 }
 
-bool writeBinaryToFile( const OString& rFileName, const char* binary, size_t numBytes )
+bool writeBinaryToFile( std::string_view rFileName, const char* binary, size_t numBytes )
 {
     osl::File file(OStringToOUString(rFileName, RTL_TEXTENCODING_UTF8));
     osl::FileBase::RC status = file.open(

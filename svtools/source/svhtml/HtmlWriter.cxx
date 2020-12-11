@@ -131,7 +131,7 @@ void HtmlWriter::attribute(const OString& aAttribute, const char* pValue)
     attribute(aAttribute, OString(pValue));
 }
 
-void HtmlWriter::attribute(const OString& aAttribute, const OUString& aValue)
+void HtmlWriter::attribute(const OString& aAttribute, std::u16string_view aValue)
 {
     attribute(aAttribute, OUStringToOString(aValue, RTL_TEXTENCODING_UTF8));
 }

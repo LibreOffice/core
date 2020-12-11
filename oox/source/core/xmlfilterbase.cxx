@@ -20,6 +20,8 @@
 #include <oox/core/xmlfilterbase.hxx>
 
 #include <cstdio>
+#include <string_view>
+
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/Pair.hpp>
@@ -554,7 +556,7 @@ OUString XmlFilterBase::addRelation( const Reference< XOutputStream >& rOutputSt
 }
 
 static void
-writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const OUString& sValue )
+writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, std::u16string_view sValue )
 {
     pDoc->startElement(nXmlElement);
     pDoc->writeEscaped( sValue );
@@ -761,7 +763,7 @@ writeAppProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >
     //     * 14:  [Office 2010]
     //     * 15:  [Office 2013/2016/2019]  [LO >= 7.0]
     // The LibreOffice is application on 2013/2016/2019 level
-    writeElement( pAppProps, XML_AppVersion, "15.0000" );
+    writeElement( pAppProps, XML_AppVersion, u"15.0000" );
 
     // OOXTODO Calculate DocSecurity value based on security (password, read-only etc.)
     it = aUserDefinedProperties.find("DocSecurity");

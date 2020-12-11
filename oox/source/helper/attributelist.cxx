@@ -86,7 +86,7 @@ sal_Int32 getHighlightColorTokenFromString(std::u16string_view sColorName)
     return XML_TOKEN_INVALID;
 }
 
-sal_Int32 AttributeConversion::decodeToken( const OUString& rValue )
+sal_Int32 AttributeConversion::decodeToken( std::u16string_view rValue )
 {
     return TokenMap::getTokenFromUnicode( rValue );
 }

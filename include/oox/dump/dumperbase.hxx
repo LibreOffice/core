@@ -25,6 +25,7 @@
 #include <map>
 #include <memory>
 #include <set>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -329,7 +330,7 @@ public:
     static OUString trimSpaces( const OUString& rStr );
     static OUString trimTrailingNul( const OUString& rStr );
 
-    static OString convertToUtf8( const OUString& rStr );
+    static OString convertToUtf8( std::u16string_view rStr );
     static DataType     convertToDataType( std::u16string_view rStr );
     static FormatType   convertToFormatType( std::u16string_view rStr );
 

@@ -25,7 +25,7 @@
 
 using namespace com::sun::star;
 
-void SvPasswordHelper::GetHashPasswordSHA256(uno::Sequence<sal_Int8>& rPassHash, OUString const& rPassword)
+void SvPasswordHelper::GetHashPasswordSHA256(uno::Sequence<sal_Int8>& rPassHash, std::u16string_view rPassword)
 {
     OString const tmp(OUStringToOString(rPassword, RTL_TEXTENCODING_UTF8));
     ::std::vector<unsigned char> const hash(::comphelper::Hash::calculateHash(
@@ -36,7 +36,7 @@ void SvPasswordHelper::GetHashPasswordSHA256(uno::Sequence<sal_Int8>& rPassHash,
     rtl_secureZeroMemory(const_cast<char *>(tmp.getStr()), tmp.getLength());
 }
 
-void SvPasswordHelper::GetHashPasswordSHA1UTF8(uno::Sequence<sal_Int8>& rPassHash, OUString const& rPassword)
+void SvPasswordHelper::GetHashPasswordSHA1UTF8(uno::Sequence<sal_Int8>& rPassHash, std::u16string_view rPassword)
 {
     OString const tmp(OUStringToOString(rPassword, RTL_TEXTENCODING_UTF8));
     ::std::vector<unsigned char> const hash(::comphelper::Hash::calculateHash(

@@ -108,7 +108,7 @@ OUString getLocalizedDate()
     return rLocaleData.getDate(aDateTime);
 }
 
-uno::Reference<graphic::XGraphic> importSVG(const OUString& rSVG)
+uno::Reference<graphic::XGraphic> importSVG(std::u16string_view rSVG)
 {
     SvMemoryStream aSvgStream(4096, 4096);
     aSvgStream.WriteOString(OUStringToOString(rSVG, RTL_TEXTENCODING_UTF8));

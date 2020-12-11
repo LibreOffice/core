@@ -18,6 +18,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/weld.hxx>
 #include <map>
+#include <string_view>
 
 class VclAbstractDialog;
 typedef std::map<OString, sal_uInt32> mapType;
@@ -70,7 +71,7 @@ public:
     /// This should be used with care - no active layouting will be done, only the
     /// VclBuilder will be activated for layouting. Result can thus vary drastically
     /// compared to the active dialog (can be compared with dialog previewer)
-    void dumpDialogToPath(const OString& rUIXMLDescription);
+    void dumpDialogToPath(std::string_view rUIXMLDescription);
 
     /// helper to process all known dialogs
     void processAllKnownDialogs();

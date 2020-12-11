@@ -159,7 +159,7 @@ void NeonLockStore::registerSession( HttpSession * pHttpSession )
     ne_lockstore_register( m_pNeonLockStore, pHttpSession );
 }
 
-NeonLock * NeonLockStore::findByUri( OUString const & rUri )
+NeonLock * NeonLockStore::findByUri( std::u16string_view rUri )
 {
     osl::MutexGuard aGuard( m_aMutex );
 

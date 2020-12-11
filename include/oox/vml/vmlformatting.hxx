@@ -20,6 +20,9 @@
 #ifndef INCLUDED_OOX_VML_VMLFORMATTING_HXX
 #define INCLUDED_OOX_VML_VMLFORMATTING_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -59,7 +62,7 @@ namespace ConversionHelper
     /** Returns the boolean value from the passed string of a VML attribute.
         Supported values: 'f', 't', 'false', 'true'. False for anything else.
      */
-    OOX_DLLPUBLIC bool         decodeBool( const OUString& rValue );
+    OOX_DLLPUBLIC bool         decodeBool( std::u16string_view rValue );
 
     /** Converts the passed VML percentage measure string to a normalized
         floating-point value.

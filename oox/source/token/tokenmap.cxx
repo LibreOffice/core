@@ -74,7 +74,7 @@ TokenMap::~TokenMap()
 {
 }
 
-sal_Int32 TokenMap::getTokenFromUnicode( const OUString& rUnicodeName )
+sal_Int32 TokenMap::getTokenFromUnicode( std::u16string_view rUnicodeName )
 {
     OString aUtf8Name = OUStringToOString( rUnicodeName, RTL_TEXTENCODING_UTF8 );
     const struct xmltoken* pToken = Perfect_Hash::in_word_set( aUtf8Name.getStr(), aUtf8Name.getLength() );

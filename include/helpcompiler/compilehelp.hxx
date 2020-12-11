@@ -20,6 +20,10 @@
 #ifndef INCLUDED_HELPCOMPILER_COMPILEHELP_HXX
 #define INCLUDED_HELPCOMPILER_COMPILEHELP_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <sal/types.h>
 
 #if defined(HELPLINKER_DLLIMPLEMENTATION)
@@ -58,10 +62,10 @@ struct HelpProcessingErrorInfo
 HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 (
      const OUString& aOfficeHelpPath,
-    const OUString& aExtensionName,
+    std::u16string_view aExtensionName,
     const OUString& aExtensionLanguageRoot,
     sal_Int32 nXhpFileCount, const OUString* pXhpFiles,
-    const OUString& aDestination,
+    std::u16string_view aDestination,
     HelpProcessingErrorInfo& o_rHelpProcessingErrorInfo
 );
 

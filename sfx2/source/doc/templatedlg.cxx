@@ -538,7 +538,7 @@ IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, const OString&, rIdent, void)
         DefaultTemplateMenuSelectHdl(rIdent);
 }
 
-void SfxTemplateManagerDlg::DefaultTemplateMenuSelectHdl(const OString& rIdent)
+void SfxTemplateManagerDlg::DefaultTemplateMenuSelectHdl(std::string_view rIdent)
 {
     OUString aServiceName = SfxObjectShell::GetServiceNameFromFactory(OUString::fromUtf8(rIdent));
 

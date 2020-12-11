@@ -48,7 +48,7 @@ PyRef ustring2PyUnicode( const OUString & str )
     return ret;
 }
 
-PyRef ustring2PyString( const OUString &str )
+PyRef ustring2PyString( std::u16string_view str )
 {
     OString o = OUStringToOString( str, osl_getThreadTextEncoding() );
     return PyRef( PyUnicode_FromString( o.getStr() ), SAL_NO_ACQUIRE );
@@ -95,7 +95,7 @@ bool isLog( RuntimeCargo const * cargo, sal_Int32 loglevel )
     return cargo && cargo->logFile && loglevel <= cargo->logLevel;
 }
 
-void log( RuntimeCargo * cargo, sal_Int32 level, const OUString &logString )
+void log( RuntimeCargo * cargo, sal_Int32 level, std::u16string_view logString )
 {
     log( cargo, level, OUStringToOString( logString, osl_getThreadTextEncoding() ).getStr() );
 }

@@ -10,6 +10,10 @@
 #ifndef INCLUDED_VCL_UITEST_LOGGER_HXX
 #define INCLUDED_VCL_UITEST_LOGGER_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <vcl/dllapi.h>
 
 #include <tools/stream.hxx>
@@ -46,7 +50,7 @@ public:
 
     void logAction(vcl::Window* const& xUIWin, VclEventId nEvent);
 
-    void log(const OUString& rString);
+    void log(std::u16string_view rString);
 
     void logKeyInput(VclPtr<vcl::Window> const& xUIElement, const KeyEvent& rEvent);
 

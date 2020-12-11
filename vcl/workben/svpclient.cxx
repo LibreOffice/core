@@ -179,7 +179,7 @@ void MyWin::parseList( const OString& rList )
             continue;
 
         if( aLine.startsWith( "ElementType: " ) )
-            aElementType = OStringToOUString( aLine.copy( 13 ), RTL_TEXTENCODING_ASCII_US );
+            aElementType = OStringToOUString( aLine.subView( 13 ), RTL_TEXTENCODING_ASCII_US );
         else
         {
             OUString aNewElement =
@@ -258,7 +258,7 @@ IMPL_LINK_NOARG( MyWin, SelectHdl, ListBox&, void)
 
     OString aCommand =
         "get " +
-        OUStringToOString( aEntry.copy( nPos+2 ), RTL_TEXTENCODING_ASCII_US );
+        OUStringToOString( aEntry.subView( nPos+2 ), RTL_TEXTENCODING_ASCII_US );
     OString aAnswer( processCommand( aCommand ) );
     SvMemoryStream aStream( aAnswer.getLength() );
     aStream.WriteBytes( aAnswer.getStr(), aAnswer.getLength() );

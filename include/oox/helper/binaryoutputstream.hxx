@@ -83,7 +83,7 @@ public:
 
     void writeCompressedUnicodeArray( const OUString& rString, bool bCompressed );
 
-    void writeCharArrayUC( const OUString& rString, rtl_TextEncoding eTextEnc );
+    void writeCharArrayUC( std::u16string_view rString, rtl_TextEncoding eTextEnc );
 
     void writeUnicodeArray( const OUString& rString );
 

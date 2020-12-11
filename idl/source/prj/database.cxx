@@ -22,6 +22,8 @@
 #include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string_view>
+
 #include <database.hxx>
 #include <globals.hxx>
 #include <rtl/strbuf.hxx>
@@ -129,7 +131,7 @@ void SvIdlDataBase::InsertId( const OString& rIdName, sal_uLong nVal )
     pIdTable->Insert( rIdName, &nHash )->SetValue( nVal );
 }
 
-bool SvIdlDataBase::ReadIdFile( const OString& rOFileName )
+bool SvIdlDataBase::ReadIdFile( std::string_view rOFileName )
 {
     OUString rFileName = OStringToOUString(rOFileName, RTL_TEXTENCODING_ASCII_US);
     OUString aFullName;
@@ -506,7 +508,7 @@ struct WriteDep
 {
     SvFileStream & m_rStream;
     explicit WriteDep(SvFileStream & rStream) : m_rStream(rStream) { }
-    void operator() (OUString const& rItem)
+    void operator() (std::u16string_view rItem)
     {
         m_rStream.WriteCharPtr( " \\\n " );
         m_rStream.WriteOString( OUStringToOString(rItem, RTL_TEXTENCODING_UTF8) );
@@ -519,7 +521,7 @@ struct WriteDummy
 {
     SvFileStream & m_rStream;
     explicit WriteDummy(SvFileStream & rStream) : m_rStream(rStream) { }
-    void operator() (OUString const& rItem)
+    void operator() (std::u16string_view rItem)
     {
         m_rStream.WriteOString( OUStringToOString(rItem, RTL_TEXTENCODING_UTF8) );
         m_rStream.WriteCharPtr( " :\n\n" );
@@ -529,7 +531,7 @@ struct WriteDummy
 }
 
 void SvIdlDataBase::WriteDepFile(
-        SvFileStream & rStream, OUString const& rTarget)
+        SvFileStream & rStream, std::u16string_view rTarget)
 {
     rStream.WriteOString( OUStringToOString(rTarget, RTL_TEXTENCODING_UTF8) );
     rStream.WriteCharPtr( " :" );

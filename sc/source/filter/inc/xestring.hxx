@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XESTRING_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XESTRING_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "xlstring.hxx"
 #include "ftools.hxx"
 
@@ -78,7 +82,7 @@ public:
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
     void                AssignByte(
-                            const OUString& rString,
+                            std::u16string_view rString,
                             rtl_TextEncoding eTextEnc,
                             XclStrFlags nFlags = XclStrFlags::NONE,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
@@ -91,7 +95,7 @@ public:
 
     /** Appends a string. Uses the string flags used in constructor or last Assign().
         @descr  This object must be a BIFF2-BIFF7 byte string. */
-    void                AppendByte( const OUString& rString, rtl_TextEncoding eTextEnc );
+    void                AppendByte( std::u16string_view rString, rtl_TextEncoding eTextEnc );
     /** Appends a character. Uses the string flags used in constructor or last Assign().
         @descr  This object must be a BIFF2-BIFF7 byte string. */
     void                AppendByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc );

@@ -18,6 +18,10 @@
  */
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <connectivity/sqlnode.hxx>
 
 namespace connectivity
@@ -33,7 +37,7 @@ namespace connectivity
         OSQLInternalNode(const char* pNewValue,
                          SQLNodeType eNodeType,
                          sal_uInt32 nNodeID = 0);
-        OSQLInternalNode(const OString& _rNewValue,
+        OSQLInternalNode(std::string_view _rNewValue,
                          SQLNodeType eNodeType,
                          sal_uInt32 nNodeID = 0);
         OSQLInternalNode(const OUString& _rNewValue,

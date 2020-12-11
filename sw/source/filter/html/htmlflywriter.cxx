@@ -799,7 +799,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
     return sRetEndTags;
 }
 
-void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, const OUString& rAlternateText, HtmlFrmOpts nFrameOptions)
+void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, std::u16string_view rAlternateText, HtmlFrmOpts nFrameOptions)
 {
     bool bReplacement = (nFrameOptions & HtmlFrmOpts::Replacement) || mbReqIF;
     const SfxPoolItem* pItem;
@@ -822,7 +822,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
     }
 
     // alt
-    if( (nFrameOptions & HtmlFrmOpts::Alt) && !rAlternateText.isEmpty() && !bReplacement )
+    if( (nFrameOptions & HtmlFrmOpts::Alt) && !rAlternateText.empty() && !bReplacement )
     {
         aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_alt, rAlternateText);
     }
@@ -1420,7 +1420,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
 
     if( !aIMapName.isEmpty() )
     {
-        aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_usemap, "#" + aIMapName);
+        aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_usemap, OUString("#" + aIMapName));
     }
 
     if (bReplacement)

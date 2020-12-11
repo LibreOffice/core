@@ -17,11 +17,12 @@
 #include <vcl/dllapi.h>
 
 #include <optional>
+#include <string_view>
 
 class VCL_PLUGIN_PUBLIC ScreenSaverInhibitor
 {
 public:
-    void inhibit(bool bInhibit, const OUString& sReason, bool bIsX11,
+    void inhibit(bool bInhibit, std::u16string_view sReason, bool bIsX11,
                  const std::optional<unsigned int>& xid, std::optional<Display*> pDisplay);
 
 private:

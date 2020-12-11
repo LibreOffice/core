@@ -832,7 +832,7 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
     }
 }
 
-sal_Int32 FontSizeNames::Name2Size( const OUString& rName ) const
+sal_Int32 FontSizeNames::Name2Size( std::u16string_view rName ) const
 {
     if ( mnElem )
     {

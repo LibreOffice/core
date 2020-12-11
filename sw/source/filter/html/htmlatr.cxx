@@ -2573,7 +2573,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
 
     // dot leaders: print the skipped page number in a different span element
     if (nIndexTab > -1) {
-        OString sOut = OUStringToOString(rStr.copy(nIndexTab + 1), RTL_TEXTENCODING_ASCII_US);
+        OString sOut = OUStringToOString(rStr.subView(nIndexTab + 1), RTL_TEXTENCODING_ASCII_US);
         rWrt.Strm().WriteOString( "</span><span>" + sOut + "</span>" );
     }
 

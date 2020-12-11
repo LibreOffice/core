@@ -22,6 +22,7 @@
 #include <memory>
 #include <vector>
 #include <set>
+#include <string_view>
 #include <map>
 
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -481,7 +482,7 @@ public:
     OString OutFrameFormatOptions( const SwFrameFormat& rFrameFormat, const OUString& rAltText,
                                    HtmlFrmOpts nFrameOpts );
 
-    void writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, const OUString& rAltText, HtmlFrmOpts nFrameOpts);
+    void writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, std::u16string_view rAltText, HtmlFrmOpts nFrameOpts);
 
     void OutCSS1_TableFrameFormatOptions( const SwFrameFormat& rFrameFormat );
     void OutCSS1_TableCellBorderHack(const SwFrameFormat& rFrameFormat);

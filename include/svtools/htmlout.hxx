@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <svtools/svtdllapi.h>
 #include <tools/solar.h>
 #include <rtl/textenc.h>
@@ -76,7 +80,7 @@ struct HTMLOutFuncs
 
     SVT_DLLPUBLIC static SvStream& OutScript( SvStream& rStrm,
                                 const OUString& rBaseURL,
-                                const OUString& rSource,
+                                std::u16string_view rSource,
                                 const OUString& rLanguage,
                                 ScriptType eScriptType,
                                 const OUString& rSrc,

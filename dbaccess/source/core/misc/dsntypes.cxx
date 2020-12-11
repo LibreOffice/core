@@ -72,7 +72,7 @@ ODsnTypeCollection::~ODsnTypeCollection()
 #endif
 }
 
-OUString ODsnTypeCollection::getTypeDisplayName(const OUString& _sURL) const
+OUString ODsnTypeCollection::getTypeDisplayName(std::u16string_view _sURL) const
 {
     return m_aDriverConfig.getDriverTypeDisplayName(_sURL);
 }
@@ -130,7 +130,7 @@ bool ODsnTypeCollection::hasDriver( const char* _pAsciiPattern ) const
     return !sPrefix.isEmpty();
 }
 
-bool ODsnTypeCollection::isConnectionUrlRequired(const OUString& _sURL) const
+bool ODsnTypeCollection::isConnectionUrlRequired(std::u16string_view _sURL) const
 {
     OUString sRet;
     OUString sOldPattern;
@@ -146,7 +146,7 @@ bool ODsnTypeCollection::isConnectionUrlRequired(const OUString& _sURL) const
     return !sRet.isEmpty() && sRet[sRet.getLength()-1] == '*';
 }
 
-OUString ODsnTypeCollection::getMediaType(const OUString& _sURL) const
+OUString ODsnTypeCollection::getMediaType(std::u16string_view _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("MediaType",OUString());
@@ -236,43 +236,43 @@ void ODsnTypeCollection::extractHostNamePort(const OUString& _rDsn,OUString& _sD
     }
 }
 
-OUString ODsnTypeCollection::getJavaDriverClass(const OUString& _sURL) const
+OUString ODsnTypeCollection::getJavaDriverClass(std::u16string_view _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getProperties(_sURL);
     return aFeatures.getOrDefault("JavaDriverClass",OUString());
 }
 
-bool ODsnTypeCollection::isFileSystemBased(const OUString& _sURL) const
+bool ODsnTypeCollection::isFileSystemBased(std::u16string_view _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("FileSystemBased",false);
 }
 
-bool ODsnTypeCollection::supportsTableCreation(const OUString& _sURL) const
+bool ODsnTypeCollection::supportsTableCreation(std::u16string_view _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("SupportsTableCreation",false);
 }
 
-bool ODsnTypeCollection::supportsColumnDescription(const OUString& _sURL) const
+bool ODsnTypeCollection::supportsColumnDescription(std::u16string_view _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("SupportsColumnDescription",false);
 }
 
-bool ODsnTypeCollection::supportsBrowsing(const OUString& _sURL) const
+bool ODsnTypeCollection::supportsBrowsing(std::u16string_view _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("SupportsBrowsing",false);
 }
 
-bool ODsnTypeCollection::supportsDBCreation(const OUString& _sURL) const
+bool ODsnTypeCollection::supportsDBCreation(std::u16string_view _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("SupportsDBCreation",false);
 }
 
-Sequence<PropertyValue> ODsnTypeCollection::getDefaultDBSettings( const OUString& _sURL ) const
+Sequence<PropertyValue> ODsnTypeCollection::getDefaultDBSettings( std::u16string_view _sURL ) const
 {
     const ::comphelper::NamedValueCollection& aProperties = m_aDriverConfig.getProperties(_sURL);
     return aProperties.getPropertyValues();
@@ -467,7 +467,7 @@ void ODsnTypeCollection::fillPageIds(const OUString& _sURL,std::vector<sal_Int16
     }
 }
 
-OUString ODsnTypeCollection::getType(const OUString& _sURL) const
+OUString ODsnTypeCollection::getType(std::u16string_view _sURL) const
 {
     OUString sOldPattern;
     for (auto const& dsnPrefix : m_aDsnPrefixes)
@@ -481,7 +481,7 @@ OUString ODsnTypeCollection::getType(const OUString& _sURL) const
     return sOldPattern;
 }
 
-sal_Int32 ODsnTypeCollection::getIndexOf(const OUString& _sURL) const
+sal_Int32 ODsnTypeCollection::getIndexOf(std::u16string_view _sURL) const
 {
     sal_Int32 nRet = -1;
     OUString sOldPattern;

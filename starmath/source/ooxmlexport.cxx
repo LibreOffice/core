@@ -217,7 +217,7 @@ void SmOoxmlExport::HandleAttribute( const SmAttributNode* pNode, int nLevel )
             m_pSerializer->startElementNS(XML_m, XML_acc);
             m_pSerializer->startElementNS(XML_m, XML_accPr);
             OString value = OUStringToOString(
-                OUString( pNode->Attribute()->GetToken().cMathChar ), RTL_TEXTENCODING_UTF8 );
+                OUStringChar( pNode->Attribute()->GetToken().cMathChar ), RTL_TEXTENCODING_UTF8 );
             m_pSerializer->singleElementNS(XML_m, XML_chr, FSNS(XML_m, XML_val), value);
             m_pSerializer->endElementNS( XML_m, XML_accPr );
             m_pSerializer->startElementNS(XML_m, XML_e);
@@ -286,7 +286,7 @@ static OString mathSymbolToString( const SmNode* node )
     const SmTextNode* txtnode = static_cast< const SmTextNode* >( node );
     assert( txtnode->GetText().getLength() == 1 );
     sal_Unicode chr = SmTextNode::ConvertSymbolToUnicode( txtnode->GetText()[0] );
-    return OUStringToOString( OUString( chr ), RTL_TEXTENCODING_UTF8 );
+    return OUStringToOString( OUStringChar( chr ), RTL_TEXTENCODING_UTF8 );
 }
 
 void SmOoxmlExport::HandleOperator( const SmOperNode* pNode, int nLevel )

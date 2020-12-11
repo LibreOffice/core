@@ -21,6 +21,7 @@
 
 #include <algorithm>
 #include <cstring>
+#include <string_view>
 
 #include <codemaker/codemaker.hxx>
 #include <codemaker/commonjava.hxx>
@@ -34,7 +35,7 @@ namespace skeletonmaker::java {
 static void printType(
     std::ostream & o, ProgramOptions const & options,
     rtl::Reference< TypeManager > const & manager,
-    codemaker::UnoType::Sort sort, OUString const & nucleus, sal_Int32 rank,
+    codemaker::UnoType::Sort sort, std::u16string_view nucleus, sal_Int32 rank,
     std::vector< OUString > const & arguments, bool referenceType,
     bool defaultvalue)
 {
@@ -623,7 +624,7 @@ static void printServiceMembers(
 static void printMapsToJavaType(
     std::ostream & o, ProgramOptions const & options,
     rtl::Reference< TypeManager > const & manager,
-    codemaker::UnoType::Sort sort, OUString const & nucleus, sal_Int32 rank,
+    codemaker::UnoType::Sort sort, std::u16string_view nucleus, sal_Int32 rank,
     std::vector< OUString > const & arguments, const char * javaTypeSort)
 {
     o << "maps to Java 1.5 ";
@@ -631,7 +632,7 @@ static void printMapsToJavaType(
         o << javaTypeSort << ' ';
     }
     o << "type \"";
-    if (rank == 0 && nucleus == "com.sun.star.uno.XInterface") {
+    if (rank == 0 && nucleus == u"com.sun.star.uno.XInterface") {
         o << "com.sun.star.uno.XInterface";
     } else {
         printType(

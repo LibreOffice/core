@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <string_view>
 #include <vector>
 
 #include <dbadllapi.hxx>
@@ -117,7 +118,7 @@ public:
     ~ODsnTypeCollection();
 
     /// get the datasource type display name from a DSN string
-    OUString getTypeDisplayName(const OUString& _sURL) const;
+    OUString getTypeDisplayName(std::u16string_view _sURL) const;
 
     /// on a given string, cut the type prefix and return the result
     OUString cutPrefix(const OUString& _sURL) const;
@@ -129,10 +130,10 @@ public:
     bool    hasDriver( const char* _pAsciiPattern ) const;
 
     /// on a given string, return the Java Driver Class
-    OUString getJavaDriverClass(const OUString& _sURL) const;
+    OUString getJavaDriverClass(std::u16string_view _sURL) const;
 
     /// returns the media type of a file based database
-    OUString getMediaType(const OUString& _sURL) const;
+    OUString getMediaType(std::u16string_view _sURL) const;
 
     /// returns the dsn prefix for a given media type
     OUString getDatasourcePrefixFromMediaType(std::u16string_view _sMediaType, std::u16string_view _sExtension );
@@ -140,21 +141,21 @@ public:
     void extractHostNamePort(const OUString& _rDsn,OUString& _sDatabaseName,OUString& _rHostname,sal_Int32& _nPortNumber) const;
 
     /// check if the given data source allows creation of tables
-    bool supportsTableCreation(const OUString& _sURL) const;
+    bool supportsTableCreation(std::u16string_view _sURL) const;
 
     /// check if the given data source allows to show column description.
-    bool supportsColumnDescription(const OUString& _sURL) const;
+    bool supportsColumnDescription(std::u16string_view _sURL) const;
 
     // check if a Browse button may be shown to insert connection url
-    bool supportsBrowsing(const OUString& _sURL) const;
+    bool supportsBrowsing(std::u16string_view _sURL) const;
 
     // check if a Create New Database button may be shown to insert connection url
-    bool supportsDBCreation(const OUString& _sURL) const;
+    bool supportsDBCreation(std::u16string_view _sURL) const;
 
     /// check if the given data source type is based on the file system - i.e. the URL is a prefix plus a file URL
-    bool isFileSystemBased(const OUString& _sURL) const;
+    bool isFileSystemBased(std::u16string_view _sURL) const;
 
-    bool isConnectionUrlRequired(const OUString& _sURL) const;
+    bool isConnectionUrlRequired(std::u16string_view _sURL) const;
 
     /// checks if the given data source type embeds its data into the database document
     static bool isEmbeddedDatabase( const OUString& _sURL );
@@ -167,7 +168,7 @@ public:
     /** returns default settings for newly created databases of the given type.
     */
     css::uno::Sequence< css::beans::PropertyValue>
-            getDefaultDBSettings( const OUString& _sURL ) const;
+            getDefaultDBSettings( std::u16string_view _sURL ) const;
 
     /// get access to the first element of the types collection
     inline TypeIterator    begin() const;
@@ -178,9 +179,9 @@ public:
 
     DATASOURCE_TYPE determineType(const OUString& _rDsn) const;
 
-    sal_Int32 getIndexOf(const OUString& _sURL) const;
+    sal_Int32 getIndexOf(std::u16string_view _sURL) const;
     sal_Int32 size() const;
-    OUString getType(const OUString& _sURL) const;
+    OUString getType(std::u16string_view _sURL) const;
 };
 
 //- ODsnTypeCollection::TypeIterator

@@ -626,7 +626,7 @@ OString SessionManagerClient::getPreviousSessionID()
         if(aArg.match("--session="))
         {
             aPrevId = OUStringToOString(
-                aArg.copy(RTL_CONSTASCII_LENGTH("--session=")),
+                aArg.subView(RTL_CONSTASCII_LENGTH("--session=")),
                 osl_getThreadTextEncoding());
             break;
         }

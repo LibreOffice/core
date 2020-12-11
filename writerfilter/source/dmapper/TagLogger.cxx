@@ -167,7 +167,7 @@ struct TheTagLogger:
     }
 
 #ifdef DBG_UTIL
-    void TagLogger::attribute(const std::string & name, const OUString & value)
+    void TagLogger::attribute(const std::string & name, std::u16string_view value)
     {
         attribute( name, OUStringToOString( value, RTL_TEXTENCODING_ASCII_US ).getStr() );
     }
@@ -218,7 +218,7 @@ struct TheTagLogger:
         xmlFree( xmlChars );
     }
 
-    void TagLogger::chars(const OUString & rChars)
+    void TagLogger::chars(std::u16string_view rChars)
     {
         chars(OUStringToOString(rChars, RTL_TEXTENCODING_ASCII_US).getStr());
     }

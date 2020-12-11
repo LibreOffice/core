@@ -11,6 +11,7 @@
 
 #include <cassert>
 #include <random>
+#include <string_view>
 
 #include <oox/ole/vbaexport.hxx>
 
@@ -53,7 +54,7 @@
 
 namespace {
 
-void exportString(SvStream& rStrm, const OUString& rString)
+void exportString(SvStream& rStrm, std::u16string_view rString)
 {
     OString aStringCorrectCodepage = OUStringToOString(rString, CODEPAGE);
     rStrm.WriteOString(aStringCorrectCodepage);
@@ -778,20 +779,20 @@ void exportModuleStream(SvStream& rStrm, const OUString& rSourceCode, const OUSt
 {
     SvMemoryStream aModuleStream(4096, 4096);
 
-    exportString(aModuleStream, "Attribute VB_Name = \"" + aElementName + "\"\r\n");
+    exportString(aModuleStream, OUString("Attribute VB_Name = \"" + aElementName + "\"\r\n"));
     if (rInfo.ModuleType == 4)
     {
         if (isWorkbook(rInfo.ModuleObject))
-            exportString(aModuleStream, "Attribute VB_Base = \"0{00020819-0000-0000-C000-000000000046}\"\r\n");
+            exportString(aModuleStream, u"Attribute VB_Base = \"0{00020819-0000-0000-C000-000000000046}\"\r\n");
         else
-            exportString(aModuleStream, "Attribute VB_Base = \"0{00020820-0000-0000-C000-000000000046}\"\r\n");
+            exportString(aModuleStream, u"Attribute VB_Base = \"0{00020820-0000-0000-C000-000000000046}\"\r\n");
 
-        exportString(aModuleStream, "Attribute VB_GlobalNameSpace = False\r\n");
-        exportString(aModuleStream, "Attribute VB_Creatable = False\r\n");
-        exportString(aModuleStream, "Attribute VB_PredeclaredId = True\r\n");
-        exportString(aModuleStream, "Attribute VB_Exposed = True\r\n");
-        exportString(aModuleStream, "Attribute VB_TemplateDerived = False\r\n");
-        exportString(aModuleStream, "Attribute VB_Customizable = True\r\n");
+        exportString(aModuleStream, u"Attribute VB_GlobalNameSpace = False\r\n");
+        exportString(aModuleStream, u"Attribute VB_Creatable = False\r\n");
+        exportString(aModuleStream, u"Attribute VB_PredeclaredId = True\r\n");
+        exportString(aModuleStream, u"Attribute VB_Exposed = True\r\n");
+        exportString(aModuleStream, u"Attribute VB_TemplateDerived = False\r\n");
+        exportString(aModuleStream, u"Attribute VB_Customizable = True\r\n");
     }
     OUString aSourceCode = rSourceCode.replaceFirst("Option VBASupport 1\n", "");
     const sal_Int32 nPos = aSourceCode.indexOf("Rem Attribute VBA_ModuleType=");
@@ -833,11 +834,11 @@ void exportPROJECTStream(SvStream& rStrm, const css::uno::Reference<css::contain
     // section 2.3.1.1ProjectProperties
 
     // section 2.3.1.2 ProjectId
-    exportString(rStrm, "ID=\"");
+    exportString(rStrm, u"ID=\"");
     OUString aProjectID
         = OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_UTF8);
     exportString(rStrm, aProjectID);
-    exportString(rStrm, "\"\r\n");
+    exportString(rStrm, u"\"\r\n");
 
     // section 2.3.1.3 ProjectModule
     for (sal_Int32 i = 0; i < n; ++i)
@@ -846,81 +847,81 @@ void exportPROJECTStream(SvStream& rStrm, const css::uno::Reference<css::contain
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(rModuleName);
         if(aModuleInfo.ModuleType == 1)
         {
-            exportString(rStrm, "Module=" + rModuleName + "\r\n");
+            exportString(rStrm, OUString("Module=" + rModuleName + "\r\n"));
         }
         else if(aModuleInfo.ModuleType == 4)
         {
-            exportString(rStrm, "Document=" + rModuleName + "/&H00000000\r\n");
+            exportString(rStrm, OUString("Document=" + rModuleName + "/&H00000000\r\n"));
         }
     }
 
     // section 2.3.1.11 ProjectName
-    exportString(rStrm, "Name=\"" + projectName + "\"\r\n");
+    exportString(rStrm, OUString("Name=\"" + projectName + "\"\r\n"));
 
     // section 2.3.1.12 ProjectHelpId
-    exportString(rStrm, "HelpContextID=\"0\"\r\n");
+    exportString(rStrm, u"HelpContextID=\"0\"\r\n");
 
     // section 2.3.1.14 ProjectVersionCompat32
-    exportString(rStrm, "VersionCompatible32=\"393222000\"\r\n");
+    exportString(rStrm, u"VersionCompatible32=\"393222000\"\r\n");
 
     // section 2.3.1.15 ProjectProtectionState
 #if VBA_ENCRYPTION
-    exportString(rStrm, "CMG=\"");
+    exportString(rStrm, u"CMG=\"");
     SvMemoryStream aProtectedStream(4096, 4096);
     aProtectedStream.WriteUInt32(0x00000000);
     const sal_uInt8* pData = static_cast<const sal_uInt8*>(aProtectedStream.GetData());
     sal_uInt8 nProjKey = VBAEncryption::calculateProjKey(aProjectID);
     VBAEncryption aProtectionState(pData, 4, rStrm, nProjKey);
     aProtectionState.write();
-    exportString(rStrm, "\"\r\n");
+    exportString(rStrm, u"\"\r\n");
 #else
     exportString(rStrm, "CMG=\"BEBC9256EEAAA8AEA8AEA8AEA8AE\"\r\n");
 #endif
 
     // section 2.3.1.16 ProjectPassword
 #if VBA_ENCRYPTION
-    exportString(rStrm, "DPB=\"");
+    exportString(rStrm, u"DPB=\"");
     aProtectedStream.Seek(0);
     aProtectedStream.WriteUInt8(0x00);
     pData = static_cast<const sal_uInt8*>(aProtectedStream.GetData());
     VBAEncryption aProjectPassword(pData, 1, rStrm, nProjKey);
     aProjectPassword.write();
-    exportString(rStrm, "\"\r\n");
+    exportString(rStrm, u"\"\r\n");
 #else
     exportString(rStrm, "DPB=\"7C7E5014B0D3B1D3B1D3\"\r\n");
 #endif
 
     // section 2.3.1.17 ProjectVisibilityState
 #if VBA_ENCRYPTION
-    exportString(rStrm, "GC=\"");
+    exportString(rStrm, u"GC=\"");
     aProtectedStream.Seek(0);
     aProtectedStream.WriteUInt8(0xFF);
     pData = static_cast<const sal_uInt8*>(aProtectedStream.GetData());
     VBAEncryption aVisibilityState(pData, 1, rStrm, nProjKey);
     aVisibilityState.write();
-    exportString(rStrm, "\"\r\n\r\n");
+    exportString(rStrm, u"\"\r\n\r\n");
 #else
     exportString(rStrm, "GC=\"3A3816DAD5DBD5DB2A\"\r\n\r\n");
 #endif
 
     // section 2.3.1.18 HostExtenders
-    exportString(rStrm, "[Host Extender Info]\r\n"
+    exportString(rStrm, u"[Host Extender Info]\r\n"
                         "&H00000001={3832D640-CF90-11CF-8E43-00A0C911005A};VBE;&H00000000\r\n\r\n"
     );
 
     // section 2.3.1.19 ProjectWorkspace
-    exportString(rStrm, "[Workspace]\r\n");
+    exportString(rStrm, u"[Workspace]\r\n");
     for (sal_Int32 i = 0; i < n; ++i)
     {
         const OUString& rModuleName = aElementNames[rLibraryMap[i]];
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(rModuleName);
         if(aModuleInfo.ModuleType == 1)
         {
-            exportString(rStrm,  rModuleName + "=25, 25, 1439, 639, \r\n");
+            exportString(rStrm,  OUString(rModuleName + "=25, 25, 1439, 639, \r\n"));
         }
         else
         {
-            exportString(rStrm, rModuleName + "=0, 0, 0, 0, C\r\n");
+            exportString(rStrm, OUString(rModuleName + "=0, 0, 0, 0, C\r\n"));
         }
     }
 }

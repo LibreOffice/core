@@ -20,6 +20,10 @@
 #ifndef INCLUDED_VCL_GENERIC_PRINT_PSPUTIL_HXX
 #define INCLUDED_VCL_GENERIC_PRINT_PSPUTIL_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <osl/file.hxx>
 
 #include <rtl/math.hxx>
@@ -45,7 +49,7 @@ inline void getValueOfDouble( OStringBuffer& pBuffer, double f, int nPrecision =
 bool    WritePS (osl::File* pFile, const char* pString);
 bool    WritePS (osl::File* pFile, const char* pString, sal_uInt64 nInLength);
 bool    WritePS (osl::File* pFile, const OString &rString);
-bool    WritePS (osl::File* pFile, const OUString &rString);
+bool    WritePS (osl::File* pFile, std::u16string_view rString);
 
 }  /* namespace psp */
 

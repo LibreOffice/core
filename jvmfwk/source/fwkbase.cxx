@@ -113,9 +113,9 @@ VendorSettings::VendorSettings()
                 "[Java framework] Error in constructor VendorSettings::VendorSettings() (fwkbase.cxx)");
 }
 
-std::optional<VersionInfo> VendorSettings::getVersionInformation(const OUString & sVendor) const
+std::optional<VersionInfo> VendorSettings::getVersionInformation(std::u16string_view sVendor) const
 {
-    OSL_ASSERT(!sVendor.isEmpty());
+    OSL_ASSERT(!sVendor.empty());
     OString osVendor = OUStringToOString(sVendor, RTL_TEXTENCODING_UTF8);
     CXPathObjectPtr pathObject = xmlXPathEvalExpression(
         reinterpret_cast<xmlChar const *>(

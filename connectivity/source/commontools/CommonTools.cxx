@@ -141,7 +141,7 @@ namespace connectivity
         return aRet;
     }
 
-    bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const OUString& _sClassName )
+    bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,std::u16string_view _sClassName )
     {
         bool bRet = false;
         if ( _pJVM.is() )

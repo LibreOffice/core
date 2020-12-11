@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <string_view>
 #include <vector>
 
 #include <propertybaghelper.hxx>
@@ -505,7 +506,7 @@ private:
 
     void FillSuccessfulList(HtmlSuccessfulObjList& rList, const css::uno::Reference< css::awt::XControl>& rxSubmitButton, const css::awt::MouseEvent& MouseEvt);
 
-    static void InsertTextPart(INetMIMEMessage& rParent, const OUString& rName, const OUString& rData);
+    static void InsertTextPart(INetMIMEMessage& rParent, const OUString& rName, std::u16string_view rData);
     static void InsertFilePart(INetMIMEMessage& rParent, const OUString& rName, const OUString& rFileName);
     static void Encode(OUString& rString);
 

@@ -23,7 +23,7 @@
 #include "dxfblkrd.hxx"
 #include "dxftblrd.hxx"
 #include <array>
-
+#include <string_view>
 
 //--------------------Other stuff---------------------------------------------
 
@@ -100,7 +100,7 @@ public:
 
     rtl_TextEncoding getTextEncoding() const;
     void setTextEncoding(rtl_TextEncoding aEnc) { mEnc = aEnc; }
-    OUString ToOUString(const OString& s) const;
+    OUString ToOUString(std::string_view s) const;
 
     double getGlobalLineTypeScale() const { return mfGlobalLineTypeScale; }
     void setGlobalLineTypeScale(double fGlobalLineTypeScale) { mfGlobalLineTypeScale = fGlobalLineTypeScale; }

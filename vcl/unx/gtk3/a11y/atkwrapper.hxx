@@ -20,6 +20,10 @@
 #ifndef INCLUDED_VCL_UNX_GTK_A11Y_ATKWRAPPER_HXX
 #define INCLUDED_VCL_UNX_GTK_A11Y_ATKWRAPPER_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <atk/atk.h>
 #include <gtk/gtk.h>
 #include <gtk/gtk-a11y.h>
@@ -112,7 +116,7 @@ void                   valueIfaceInit(AtkValueIface *iface);
 #define ATK_IS_OBJECT_WRAPPER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), ATK_TYPE_OBJECT_WRAPPER))
 
 static inline gchar *
-OUStringToGChar(const OUString& rString )
+OUStringToGChar(std::u16string_view rString )
 {
     OString aUtf8 = OUStringToOString( rString, RTL_TEXTENCODING_UTF8 );
     return g_strdup( aUtf8.getStr() );

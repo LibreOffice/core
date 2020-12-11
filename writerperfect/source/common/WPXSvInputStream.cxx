@@ -27,6 +27,7 @@
 #include <climits>
 #include <limits>
 #include <memory>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -623,7 +624,7 @@ bool WPXSvInputStreamImpl::existsSubStream(const char* const name)
     PositionHolder pos(mxSeekable);
     mxSeekable->seek(0);
 
-    const OUString aName(OStringToOUString(OString(name), RTL_TEXTENCODING_UTF8));
+    const OUString aName(OStringToOUString(std::string_view(name), RTL_TEXTENCODING_UTF8));
 
     if (isOLE())
     {
@@ -653,7 +654,7 @@ librevenge::RVNGInputStream* WPXSvInputStreamImpl::getSubStreamByName(const char
     PositionHolder pos(mxSeekable);
     mxSeekable->seek(0);
 
-    const OUString aName(OStringToOUString(OString(name), RTL_TEXTENCODING_UTF8));
+    const OUString aName(OStringToOUString(std::string_view(name), RTL_TEXTENCODING_UTF8));
 
     if (isOLE())
     {

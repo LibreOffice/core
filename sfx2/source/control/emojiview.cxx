@@ -21,6 +21,7 @@
 #include <orcus/config.hpp>
 #include <orcus/pstring.hpp>
 #include <string>
+#include <string_view>
 #include <fstream>
 
 using namespace ::com::sun::star;
@@ -66,7 +67,7 @@ EmojiView::EmojiView(std::unique_ptr<weld::ScrolledWindow> xWindow)
     // locate json data file
     OUString sPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/emojiconfig/emoji.json");
     rtl::Bootstrap::expandMacros(sPath);
-    std::string strPath = OUStringToOString(sPath.copy(strlen("file://")), RTL_TEXTENCODING_UTF8).getStr();
+    std::string strPath = OUStringToOString(sPath.subView(strlen("file://")), RTL_TEXTENCODING_UTF8).getStr();
 
     std::ifstream file(strPath);
     if(!file.is_open())
@@ -139,15 +140,15 @@ void EmojiView::Populate()
                 // get values of parameters in AppendItem() function
                 if(emojiParam == "unicode")
                 {
-                    sTitle = OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
+                    sTitle = OStringToOUString(std::string_view( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
                 }
                 else if(emojiParam == "category")
                 {
-                    sCategory = OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
+                    sCategory = OStringToOUString(std::string_view( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
                 }
                 else if(emojiParam == "name")
                 {
-                    sName = OStringToOUString(OString( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
+                    sName = OStringToOUString(std::string_view( prop.string_value().get(), prop.string_value().size() ), RTL_TEXTENCODING_UTF8);
                 }
                 else if(emojiParam == "duplicate")
                 {

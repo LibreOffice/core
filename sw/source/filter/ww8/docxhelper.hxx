@@ -10,6 +10,10 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_DOCXHELPER_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_DOCXHELPER_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 
 struct DocxStringTokenMap
@@ -18,7 +22,7 @@ struct DocxStringTokenMap
     sal_Int32 nToken;
 };
 
-sal_Int32 DocxStringGetToken(DocxStringTokenMap const* pMap, const OUString& rName);
+sal_Int32 DocxStringGetToken(DocxStringTokenMap const* pMap, std::u16string_view rName);
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXHELPER_HXX
 

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "gtk3_kde5_filepicker_ipc.hxx"
 
 #undef Region
@@ -53,7 +57,7 @@ OUString applicationDirPath()
     const auto utf8Path = applicationSystemPath.toUtf8();
     auto ret = boost::filesystem::path(utf8Path.getStr(), utf8Path.getStr() + utf8Path.getLength());
     ret.remove_filename();
-    return OUString::fromUtf8(OString(ret.c_str()));
+    return OUString::fromUtf8(std::string_view(ret.c_str()));
 }
 
 OUString findPickerExecutable()
@@ -72,7 +76,7 @@ OUString findPickerExecutable()
 void readIpcArg(std::istream& stream, OUString& str)
 {
     const auto buffer = readIpcStringArg(stream);
-    str = OUString::fromUtf8(OString(buffer.data(), buffer.size()));
+    str = OUString::fromUtf8(std::string_view(buffer.data(), buffer.size()));
 }
 
 void readIpcArg(std::istream& stream, css::uno::Sequence<OUString>& seq)

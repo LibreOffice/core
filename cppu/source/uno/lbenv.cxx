@@ -41,6 +41,7 @@
 #include "prim.hxx"
 #include "loadmodule.hxx"
 
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 #include <stdio.h>
@@ -672,7 +673,7 @@ void writeLine(
 
 
 void writeLine(
-    void * stream, const OUString & rLine, const char * pFilter )
+    void * stream, std::u16string_view rLine, const char * pFilter )
 {
     OString aLine( OUStringToOString(
                               rLine, RTL_TEXTENCODING_ASCII_US ) );
@@ -777,7 +778,8 @@ extern "C" void SAL_CALL uno_dumpEnvironmentByName(
     else
     {
         writeLine(
-            stream, "environment \"" + OUString::unacquired(&pEnvDcp) + "\" does not exist!",
+            stream,
+            OUString("environment \"" + OUString::unacquired(&pEnvDcp) + "\" does not exist!"),
             pFilter );
     }
 }

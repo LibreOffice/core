@@ -30,6 +30,7 @@
 #include <sft.hxx>
 
 #include <algorithm>
+#include <string_view>
 
 #include <rtl/instance.hxx>
 #include <TypeSerializer.hxx>
@@ -581,7 +582,7 @@ namespace
                     pClose++;
                 if( pClose - pOpen > 1 )
                 {
-                    o_rResult.SetFamilyName( OStringToOUString( OString( pOpen+1, pClose-pOpen-1 ), RTL_TEXTENCODING_ASCII_US ) );
+                    o_rResult.SetFamilyName( OStringToOUString( std::string_view( pOpen+1, pClose-pOpen-1 ), RTL_TEXTENCODING_ASCII_US ) );
                 }
             }
 

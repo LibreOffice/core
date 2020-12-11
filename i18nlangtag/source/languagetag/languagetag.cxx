@@ -1521,7 +1521,7 @@ void LanguageTag::convertFromRtlLocale()
     if (maLocale.Variant.isEmpty())
         return;
 
-    OString aStr = OUStringToOString( maLocale.Language + "_" + maLocale.Country + maLocale.Variant,
+    OString aStr = OUStringToOString(maLocale.Language, RTL_TEXTENCODING_UTF8) + "_" + OUStringToOString(OUString(maLocale.Country + maLocale.Variant),
             RTL_TEXTENCODING_UTF8);
     /* FIXME: let liblangtag parse this entirely with
      * lt_tag_convert_from_locale() but that needs a patch to pass the

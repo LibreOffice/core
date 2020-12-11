@@ -42,6 +42,7 @@
 #include <rtl/strbuf.hxx>
 #include <libxml/xmlwriter.h>
 #include <iostream>
+#include <string_view>
 #include <rtl/ustring.hxx>
 
 #define DEBUG_DUMPER 0
@@ -62,9 +63,9 @@ void dumpPropertyValueAsElement(const beans::PropertyValue& rPropertyValue, xmlT
 void dumpFillStyleAsAttribute(css::drawing::FillStyle eFillStyle, xmlTextWriterPtr xmlWriter);
 void dumpFillColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter);
 void dumpFillTransparenceAsAttribute(sal_Int32 aTransparence, xmlTextWriterPtr xmlWriter);
-void dumpFillTransparenceGradientNameAsAttribute(const OUString& sTranspGradName, xmlTextWriterPtr xmlWriter);
+void dumpFillTransparenceGradientNameAsAttribute(std::u16string_view sTranspGradName, xmlTextWriterPtr xmlWriter);
 void dumpFillTransparenceGradientAsElement(const css::awt::Gradient& rTranspGrad, xmlTextWriterPtr xmlWriter);
-void dumpFillGradientNameAsAttribute(const OUString& sGradName, xmlTextWriterPtr xmlWriter);
+void dumpFillGradientNameAsAttribute(std::u16string_view sGradName, xmlTextWriterPtr xmlWriter);
 void dumpFillGradientAsElement(const css::awt::Gradient& rGradient, xmlTextWriterPtr xmlWriter);
 void dumpFillHatchAsElement(const css::drawing::Hatch& rHatch, xmlTextWriterPtr xmlWriter);
 void dumpFillBackgroundAsAttribute(bool bBackground, xmlTextWriterPtr xmlWriter);
@@ -84,13 +85,13 @@ void dumpFillBitmapTileAsAttribute(bool bBitmapTile, xmlTextWriterPtr xmlWriter)
 // LineProperties.idl
 void dumpLineStyleAsAttribute(css::drawing::LineStyle eLineStyle, xmlTextWriterPtr xmlWriter);
 void dumpLineDashAsElement(const css::drawing::LineDash& rLineDash, xmlTextWriterPtr xmlWriter);
-void dumpLineDashNameAsAttribute(const OUString& sLineDashName, xmlTextWriterPtr xmlWriter);
+void dumpLineDashNameAsAttribute(std::u16string_view sLineDashName, xmlTextWriterPtr xmlWriter);
 void dumpLineColorAsAttribute(sal_Int32 aLineColor, xmlTextWriterPtr xmlWriter);
 void dumpLineTransparenceAsAttribute(sal_Int32 aLineTransparence, xmlTextWriterPtr xmlWriter);
 void dumpLineWidthAsAttribute(sal_Int32 aLineWidth, xmlTextWriterPtr xmlWriter);
 void dumpLineJointAsAttribute(css::drawing::LineJoint eLineJoint, xmlTextWriterPtr xmlWriter);
-void dumpLineStartNameAsAttribute(const OUString& sLineStartName, xmlTextWriterPtr xmlWriter);
-void dumpLineEndNameAsAttribute(const OUString& sLineEndName, xmlTextWriterPtr xmlWriter);
+void dumpLineStartNameAsAttribute(std::u16string_view sLineStartName, xmlTextWriterPtr xmlWriter);
+void dumpLineEndNameAsAttribute(std::u16string_view sLineEndName, xmlTextWriterPtr xmlWriter);
 void dumpLineStartAsElement(const css::drawing::PolyPolygonBezierCoords& rLineStart, xmlTextWriterPtr xmlWriter);
 void dumpLineEndAsElement(const css::drawing::PolyPolygonBezierCoords& rLineEnd, xmlTextWriterPtr xmlWriter);
 void dumpLineStartCenterAsAttribute(bool bLineStartCenter, xmlTextWriterPtr xmlWriter);
@@ -142,23 +143,24 @@ void dumpShadowYDistanceAsAttribute(sal_Int32 aShadowYDistance, xmlTextWriterPtr
 //Shape.idl
 void dumpZOrderAsAttribute(sal_Int32 aZOrder, xmlTextWriterPtr xmlWriter);
 void dumpLayerIDAsAttribute(sal_Int32 aLayerID, xmlTextWriterPtr xmlWriter);
-void dumpLayerNameAsAttribute(const OUString& sLayerName, xmlTextWriterPtr xmlWriter);
+void dumpLayerNameAsAttribute(std::u16string_view sLayerName, xmlTextWriterPtr xmlWriter);
 void dumpVisibleAsAttribute(bool bVisible, xmlTextWriterPtr xmlWriter);
 void dumpPrintableAsAttribute(bool bPrintable, xmlTextWriterPtr xmlWriter);
 void dumpMoveProtectAsAttribute(bool bMoveProtect, xmlTextWriterPtr xmlWriter);
-void dumpNameAsAttribute(const OUString& sName, xmlTextWriterPtr xmlWriter);
+void dumpNameAsAttribute(std::u16string_view sName, xmlTextWriterPtr xmlWriter);
 void dumpSizeProtectAsAttribute(bool bSizeProtect, xmlTextWriterPtr xmlWriter);
 void dumpHomogenMatrixLine3(const css::drawing::HomogenMatrixLine3& rLine, xmlTextWriterPtr xmlWriter);
 void dumpTransformationAsElement(const css::drawing::HomogenMatrix3& rTransformation, xmlTextWriterPtr xmlWriter);
 void dumpNavigationOrderAsAttribute(sal_Int32 aNavigationOrder, xmlTextWriterPtr xmlWriter);
-void dumpHyperlinkAsAttribute(const OUString& sHyperlink, xmlTextWriterPtr xmlWriter);
+void dumpHyperlinkAsAttribute(std::u16string_view sHyperlink, xmlTextWriterPtr xmlWriter);
 void dumpInteropGrabBagAsElement(const uno::Sequence< beans::PropertyValue>& aInteropGrabBag, xmlTextWriterPtr xmlWriter);
 
 // CustomShape.idl
-void dumpCustomShapeEngineAsAttribute(const OUString& sCustomShapeEngine, xmlTextWriterPtr xmlWriter);
-void dumpCustomShapeDataAsAttribute(const OUString& sCustomShapeData, xmlTextWriterPtr xmlWriter);
+void dumpCustomShapeEngineAsAttribute(std::u16string_view sCustomShapeEngine, xmlTextWriterPtr xmlWriter);
+void dumpCustomShapeDataAsAttribute(
+    std::u16string_view sCustomShapeData, xmlTextWriterPtr xmlWriter);
 void dumpCustomShapeGeometryAsElement(const css::uno::Sequence< css::beans::PropertyValue>& aCustomShapeGeometry, xmlTextWriterPtr xmlWriter);
-void dumpCustomShapeReplacementURLAsAttribute(const OUString& sCustomShapeReplacementURL, xmlTextWriterPtr xmlWriter);
+void dumpCustomShapeReplacementURLAsAttribute(std::u16string_view sCustomShapeReplacementURL, xmlTextWriterPtr xmlWriter);
 
 // XShape.idl
 void dumpPositionAsAttribute(const css::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
@@ -229,7 +231,7 @@ void dumpFillTransparenceAsAttribute(sal_Int32 aTransparence, xmlTextWriterPtr x
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillTransparence"), "%" SAL_PRIdINT32, aTransparence);
 }
 
-void dumpFillTransparenceGradientNameAsAttribute(const OUString& sTranspGradName, xmlTextWriterPtr xmlWriter)
+void dumpFillTransparenceGradientNameAsAttribute(std::u16string_view sTranspGradName, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillTransparenceGradientName"), "%s",
         OUStringToOString(sTranspGradName, RTL_TEXTENCODING_UTF8).getStr());
@@ -279,7 +281,7 @@ void dumpFillTransparenceGradientAsElement(const awt::Gradient& rTranspGrad, xml
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void dumpFillGradientNameAsAttribute(const OUString& sGradName, xmlTextWriterPtr xmlWriter)
+void dumpFillGradientNameAsAttribute(std::u16string_view sGradName, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillGradientName"), "%s",
         OUStringToOString(sGradName, RTL_TEXTENCODING_UTF8).getStr());
@@ -493,7 +495,7 @@ void dumpLineDashAsElement(const drawing::LineDash& rLineDash, xmlTextWriterPtr 
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void dumpLineDashNameAsAttribute(const OUString& sLineDashName, xmlTextWriterPtr xmlWriter)
+void dumpLineDashNameAsAttribute(std::u16string_view sLineDashName, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineDashName"), "%s",
         OUStringToOString(sLineDashName, RTL_TEXTENCODING_UTF8).getStr());
@@ -538,13 +540,13 @@ void dumpLineJointAsAttribute(drawing::LineJoint eLineJoint, xmlTextWriterPtr xm
     }
 }
 
-void dumpLineStartNameAsAttribute(const OUString& sLineStartName, xmlTextWriterPtr xmlWriter)
+void dumpLineStartNameAsAttribute(std::u16string_view sLineStartName, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineStartName"), "%s",
     OUStringToOString(sLineStartName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
-void dumpLineEndNameAsAttribute(const OUString& sLineEndName, xmlTextWriterPtr xmlWriter)
+void dumpLineEndNameAsAttribute(std::u16string_view sLineEndName, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineEndName"), "%s",
     OUStringToOString(sLineEndName, RTL_TEXTENCODING_UTF8).getStr());
@@ -989,7 +991,7 @@ void dumpLayerIDAsAttribute(sal_Int32 aLayerID, xmlTextWriterPtr xmlWriter)
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("layerID"), "%" SAL_PRIdINT32, aLayerID);
 }
 
-void dumpLayerNameAsAttribute(const OUString& sLayerName, xmlTextWriterPtr xmlWriter)
+void dumpLayerNameAsAttribute(std::u16string_view sLayerName, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("layerName"), "%s",
         OUStringToOString(sLayerName, RTL_TEXTENCODING_UTF8).getStr());
@@ -1019,9 +1021,9 @@ void dumpMoveProtectAsAttribute(bool bMoveProtect, xmlTextWriterPtr xmlWriter)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("moveProtect"), "%s", "false");
 }
 
-void dumpNameAsAttribute(const OUString& sName, xmlTextWriterPtr xmlWriter)
+void dumpNameAsAttribute(std::u16string_view sName, xmlTextWriterPtr xmlWriter)
 {
-    if(!sName.isEmpty() && !m_bNameDumped)
+    if(!sName.empty() && !m_bNameDumped)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s", OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
         m_bNameDumped = true;
@@ -1065,7 +1067,7 @@ void dumpNavigationOrderAsAttribute(sal_Int32 aNavigationOrder, xmlTextWriterPtr
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("navigationOrder"), "%" SAL_PRIdINT32, aNavigationOrder);
 }
 
-void dumpHyperlinkAsAttribute(const OUString& sHyperlink, xmlTextWriterPtr xmlWriter)
+void dumpHyperlinkAsAttribute(std::u16string_view sHyperlink, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("hyperlink"), "%s",
         OUStringToOString(sHyperlink, RTL_TEXTENCODING_UTF8).getStr());
@@ -1108,13 +1110,14 @@ void dumpShapeDescriptorAsAttribute( const uno::Reference< drawing::XShapeDescri
 // ---------- CustomShape.idl ----------
 
 
-void dumpCustomShapeEngineAsAttribute(const OUString& sCustomShapeEngine, xmlTextWriterPtr xmlWriter)
+void dumpCustomShapeEngineAsAttribute(std::u16string_view sCustomShapeEngine, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("customShapeEngine"), "%s",
         OUStringToOString(sCustomShapeEngine, RTL_TEXTENCODING_UTF8).getStr());
 }
 
-void dumpCustomShapeDataAsAttribute(const OUString& sCustomShapeData, xmlTextWriterPtr xmlWriter)
+void dumpCustomShapeDataAsAttribute(
+    std::u16string_view sCustomShapeData, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("customShapeData"), "%s",
         OUStringToOString(sCustomShapeData, RTL_TEXTENCODING_UTF8).getStr());
@@ -1220,7 +1223,7 @@ void dumpCustomShapeGeometryAsElement(const uno::Sequence< beans::PropertyValue>
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void dumpCustomShapeReplacementURLAsAttribute(const OUString& sCustomShapeReplacementURL, xmlTextWriterPtr xmlWriter)
+void dumpCustomShapeReplacementURLAsAttribute(std::u16string_view sCustomShapeReplacementURL, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("customShapeReplacementURL"), "%s",
         OUStringToOString(sCustomShapeReplacementURL, RTL_TEXTENCODING_UTF8).getStr());

@@ -20,6 +20,7 @@
 #include "elementlist.hxx"
 
 #include <string.h>
+#include <string_view>
 
 #include <cppuhelper/implbase.hxx>
 #include <o3tl/safeint.hxx>
@@ -58,7 +59,7 @@ namespace
 namespace DOM
 {
 
-    static xmlChar* lcl_initXmlString(OUString const& rString)
+    static xmlChar* lcl_initXmlString(std::u16string_view rString)
     {
         OString const os =
             OUStringToOString(rString, RTL_TEXTENCODING_UTF8);
@@ -69,7 +70,7 @@ namespace DOM
 
     CElementList::CElementList(::rtl::Reference<CElement> const& pElement,
             ::osl::Mutex & rMutex,
-            OUString const& rName, OUString const*const pURI)
+            std::u16string_view rName, OUString const*const pURI)
         : m_xImpl(new CElementListImpl(pElement, rMutex, rName, pURI))
     {
         if (pElement.is()) {
@@ -79,7 +80,7 @@ namespace DOM
 
     CElementListImpl::CElementListImpl(::rtl::Reference<CElement> const& pElement,
             ::osl::Mutex & rMutex,
-            OUString const& rName, OUString const*const pURI)
+            std::u16string_view rName, OUString const*const pURI)
         : m_pElement(pElement)
         , m_rMutex(rMutex)
         , m_pName(lcl_initXmlString(rName))

@@ -20,6 +20,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_STATEMENTCOMMONBASE_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_STATEMENTCOMMONBASE_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "Connection.hxx"
 #include "SubComponent.hxx"
 
@@ -81,7 +85,7 @@ namespace connectivity::firebird
             virtual ~OStatementCommonBase() override;
 
             /// @throws css::sdbc::SQLException
-            void prepareAndDescribeStatement(const OUString& sqlIn,
+            void prepareAndDescribeStatement(std::u16string_view sqlIn,
                                              XSQLDA*& pOutSqlda,
                                              XSQLDA* pInSqlda=nullptr);
 

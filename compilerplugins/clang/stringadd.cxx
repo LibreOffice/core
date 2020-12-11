@@ -291,18 +291,36 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
     {
         // check for calls through OUString::number/OUString::unacquired
         if (auto calleeMethodDecl = dyn_cast_or_null<CXXMethodDecl>(callExpr->getCalleeDecl()))
-            if (calleeMethodDecl && calleeMethodDecl->getIdentifier())
+            if (calleeMethodDecl)
             {
-                auto name = calleeMethodDecl->getName();
-                if (callExpr->getNumArgs() > 0
-                    && (name == "number" || name == "unacquired" || name == "boolean"
-                        || name == "copy"))
+                if (calleeMethodDecl->getIdentifier())
                 {
-                    auto tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
-                    if (tc.Class("OUString") || tc.Class("OString"))
+                    auto name = calleeMethodDecl->getName();
+                    if (callExpr->getNumArgs() > 0
+                        && (name == "number" || name == "unacquired" || name == "boolean"
+                            || name == "copy"))
                     {
-                        if (isSideEffectFree(callExpr->getArg(0)))
-                            return true;
+                        auto tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
+                        if (tc.Class("OUString") || tc.Class("OString"))
+                        {
+                            if (isSideEffectFree(callExpr->getArg(0)))
+                                return true;
+                        }
+                    }
+                }
+                else if (auto const d = dyn_cast<CXXConversionDecl>(calleeMethodDecl))
+                {
+                    if (loplugin::TypeCheck(d->getConversionType())
+                            .ClassOrStruct("basic_string_view")
+                            .StdNamespace())
+                    {
+                        auto const tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
+                        if (tc.Class("OUString").Namespace("rtl").GlobalNamespace()
+                            || tc.Class("OString").Namespace("rtl").GlobalNamespace())
+                        {
+                            if (isSideEffectFree(callExpr->getCallee()))
+                                return true;
+                        }
                     }
                 }
             }

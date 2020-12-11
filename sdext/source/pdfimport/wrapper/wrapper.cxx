@@ -59,6 +59,7 @@
 #include <vcl/virdev.hxx>
 
 #include <memory>
+#include <string_view>
 #include <unordered_map>
 #include <string.h>
 #include <stdlib.h>
@@ -890,7 +891,7 @@ void Parser::parseLine( const OString& rLine )
 
 } // namespace
 
-static bool checkEncryption( const OUString&                               i_rPath,
+static bool checkEncryption( std::u16string_view                           i_rPath,
                              const uno::Reference< task::XInteractionHandler >& i_xIHdl,
                              OUString&                                     io_rPwd,
                              bool&                                              o_rIsEncrypted,

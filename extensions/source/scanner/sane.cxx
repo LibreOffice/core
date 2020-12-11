@@ -414,7 +414,7 @@ void Sane::SetOptionValue( int n, bool bSet )
     ControlOption( n, SANE_ACTION_SET_VALUE, &nRet );
 }
 
-void Sane::SetOptionValue( int n, const OUString& rSet )
+void Sane::SetOptionValue( int n, std::u16string_view rSet )
 {
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_STRING )
         return;

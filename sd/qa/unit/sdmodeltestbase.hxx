@@ -11,6 +11,8 @@
 #define INCLUDED_SD_QA_UNIT_SDMODELTESTBASE_HXX
 
 #include <memory>
+#include <string_view>
+
 #include <test/bootstrapfixture.hxx>
 #include <test/xmldiff.hxx>
 #include <test/xmltesttools.hxx>
@@ -305,7 +307,7 @@ protected:
 
         @param bCreate Instead of comparing to the reference file(s), create it/them.
     */
-    void compareWithShapesDump( ::sd::DrawDocShellRef xDocShRef, const OUString &rShapesDumpFileNameBase, bool bCreate )
+    void compareWithShapesDump( ::sd::DrawDocShellRef xDocShRef, std::u16string_view rShapesDumpFileNameBase, bool bCreate )
     {
         CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.is() );
         CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );

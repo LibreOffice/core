@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/QueueInfo.hxx>
@@ -51,7 +55,8 @@ static OUString getPdfDir( const PrinterInfo& rInfo )
             aDir = aToken.getToken( 1, '=', nPos );
             if( aDir.isEmpty() )
                 if (auto const env = getenv( "HOME" )) {
-                    aDir = OStringToOUString( OString( env ), osl_getThreadTextEncoding() );
+                    aDir = OStringToOUString(
+                        std::string_view( env ), osl_getThreadTextEncoding() );
                 }
             break;
         }

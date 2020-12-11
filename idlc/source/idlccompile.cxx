@@ -265,7 +265,7 @@ sal_Int32 compileFile(const OString * pathname)
         {
             token = dOpt.getToken( 0, ' ', nIndex );
             if (token.getLength())
-                lCppArgs.push_back(OStringToOUString("-D" + token, RTL_TEXTENCODING_UTF8));
+                lCppArgs.push_back("-D" + OStringToOUString(token, RTL_TEXTENCODING_UTF8));
         } while( nIndex != -1 );
     }
 
@@ -277,7 +277,7 @@ sal_Int32 compileFile(const OString * pathname)
         {
             token = incOpt.getToken( 0, ' ', nIndex );
             if (token.getLength())
-                lCppArgs.push_back(OStringToOUString("-I" + token, RTL_TEXTENCODING_UTF8));
+                lCppArgs.push_back("-I" + OStringToOUString(token, RTL_TEXTENCODING_UTF8));
         } while( nIndex != -1 );
     }
 

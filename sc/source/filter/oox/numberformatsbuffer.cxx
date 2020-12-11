@@ -1934,7 +1934,7 @@ void NumberFormat::setFormatCode( const OUString& rFmtCode )
 void NumberFormat::setFormatCode( const Locale& rLocale, const char* pcFmtCode )
 {
     maModel.maLocale = rLocale;
-    maModel.maFmtCode = OStringToOUString( OString( pcFmtCode ), RTL_TEXTENCODING_UTF8 );
+    maModel.maFmtCode = OStringToOUString( std::string_view( pcFmtCode ), RTL_TEXTENCODING_UTF8 );
     maModel.mnPredefId = -1;
 }
 

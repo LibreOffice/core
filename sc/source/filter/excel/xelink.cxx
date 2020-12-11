@@ -38,6 +38,7 @@
 
 #include <vector>
 #include <memory>
+#include <string_view>
 
 using ::std::unique_ptr;
 using ::std::vector;
@@ -274,7 +275,7 @@ public:
 
 private:
     /** Initializes the record data with the passed encoded URL. */
-    void                Init( const OUString& rEncUrl );
+    void                Init( std::u16string_view rEncUrl );
     /** Writes the contents of the EXTERNSHEET  record. */
     virtual void        WriteBody( XclExpStream& rStrm ) override;
 
@@ -1457,14 +1458,14 @@ void XclExpExternSheetBase::WriteExtNameBufferXml( XclExpXmlStream& rStrm )
 XclExpExternSheet::XclExpExternSheet( const XclExpRoot& rRoot, sal_Unicode cCode ) :
     XclExpExternSheetBase( rRoot, EXC_ID_EXTERNSHEET )
 {
-    Init( OUString(cCode) );
+    Init( OUStringChar(cCode) );
 }
 
 XclExpExternSheet::XclExpExternSheet( const XclExpRoot& rRoot, const OUString& rTabName ) :
     XclExpExternSheetBase( rRoot, EXC_ID_EXTERNSHEET )
 {
     // reference to own sheet: \03<sheetname>
-    Init(OUStringChar(EXC_EXTSH_TABNAME) + rTabName);
+    Init(OUString(OUStringChar(EXC_EXTSH_TABNAME) + rTabName));
 }
 
 void XclExpExternSheet::Save( XclExpStream& rStrm )
@@ -1475,7 +1476,7 @@ void XclExpExternSheet::Save( XclExpStream& rStrm )
     WriteExtNameBuffer( rStrm );
 }
 
-void XclExpExternSheet::Init( const OUString& rEncUrl )
+void XclExpExternSheet::Init( std::u16string_view rEncUrl )
 {
     OSL_ENSURE_BIFF( GetBiff() <= EXC_BIFF5 );
     maTabName.AssignByte( rEncUrl, GetTextEncoding(), XclStrFlags::EightBitLength );

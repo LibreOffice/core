@@ -804,7 +804,7 @@ i12626
 // test if the encryption is active, if yes than encrypt the unicode string  and add to the OStringBuffer parameter
     void appendUnicodeTextStringEncrypt( const OUString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
 
-    void appendLiteralStringEncrypt( const OUString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer, rtl_TextEncoding nEnc = RTL_TEXTENCODING_ASCII_US );
+    void appendLiteralStringEncrypt( std::u16string_view rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer, rtl_TextEncoding nEnc = RTL_TEXTENCODING_ASCII_US );
     void appendLiteralStringEncrypt( std::string_view rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
 
     /* creates fonts and subsets that will be emitted later */
@@ -1011,7 +1011,7 @@ i12626
     methods for PDF security
 
     pad a password according  algorithm 3.2, step 1 */
-    static void padPassword( const OUString& i_rPassword, sal_uInt8* o_pPaddedPW );
+    static void padPassword( std::u16string_view i_rPassword, sal_uInt8* o_pPaddedPW );
     /* algorithm 3.2: compute an encryption key */
     static bool computeEncryptionKey( EncHashTransporter*,
                                       vcl::PDFWriter::PDFEncryptionProperties& io_rProperties,

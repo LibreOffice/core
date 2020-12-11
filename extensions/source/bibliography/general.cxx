@@ -423,7 +423,7 @@ void BibGeneralPage::CommitActiveControl()
 }
 
 void BibGeneralPage::AddControlWithError( const OUString& rColumnName, FixedText &rLabel,
-    OUString& rErrorString, const OString& sHelpId, sal_uInt16 nIndexInFTArray, std::vector<vcl::Window*> &rChildren)
+    OUString& rErrorString, std::string_view sHelpId, sal_uInt16 nIndexInFTArray, std::vector<vcl::Window*> &rChildren)
 {
     const OUString aColumnUIName(rLabel.GetText());
     // adds also the XControl and creates a map entry in nFT2CtrlMap[] for mapping between control and FT
@@ -448,7 +448,7 @@ void BibGeneralPage::AddControlWithError( const OUString& rColumnName, FixedText
 
 bool  BibGeneralPage::AddXControl(
         const OUString& rName,
-        FixedText& rLabel, const OString& sHelpId, sal_Int16& rIndex,
+        FixedText& rLabel, std::string_view sHelpId, sal_Int16& rIndex,
         std::vector<vcl::Window*>& rChildren)
 {
     uno::Reference< awt::XControlModel >  xCtrModel;

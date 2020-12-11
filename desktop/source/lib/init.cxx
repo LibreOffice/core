@@ -31,6 +31,8 @@
 #include <algorithm>
 #include <memory>
 #include <iostream>
+#include <string_view>
+
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -283,7 +285,7 @@ static char *convertOString(const OString &rStr)
     return pMemory;
 }
 
-static char *convertOUString(const OUString &aStr)
+static char *convertOUString(std::u16string_view aStr)
 {
     return convertOString(OUStringToOString(aStr, RTL_TEXTENCODING_UTF8));
 }
@@ -3492,7 +3494,7 @@ static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsig
         return;
     }
 
-    SfxLokHelper::postExtTextEventAsync(pWindow, nType, OUString::fromUtf8(OString(pText, strlen(pText))));
+    SfxLokHelper::postExtTextEventAsync(pWindow, nType, OUString::fromUtf8(std::string_view(pText, strlen(pText))));
 }
 
 static void doc_removeTextContext(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, int nCharBefore, int nCharAfter)
@@ -4584,7 +4586,7 @@ static char* getFonts (const char* pCommand)
     return pJson;
 }
 
-static char* getFontSubset (const OString& aFontName)
+static char* getFontSubset (std::string_view aFontName)
 {
     OUString aFoundFont(::rtl::Uri::decode(OStringToOUString(aFontName, RTL_TEXTENCODING_UTF8), rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8));
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
@@ -5053,7 +5055,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     }
     else if (aCommand.startsWith(aFontSubset))
     {
-        return getFontSubset(OString(pCommand + aFontSubset.getLength()));
+        return getFontSubset(std::string_view(pCommand + aFontSubset.getLength()));
     }
     else
     {

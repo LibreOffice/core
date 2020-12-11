@@ -154,7 +154,7 @@ static bool ResponseFile( std::vector<OUString> * pList, int argc, char ** argv 
                                static_cast<unsigned char>(aStr[n]) ) )
                         n++;
                     if( n != nPos )
-                        pList->push_back( OStringToOUString(aStr.copy(nPos, n - nPos), RTL_TEXTENCODING_ASCII_US) );
+                        pList->push_back( OStringToOUString(aStr.subView(nPos, n - nPos), RTL_TEXTENCODING_ASCII_US) );
                 }
             }
         }

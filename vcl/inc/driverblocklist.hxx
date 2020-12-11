@@ -26,7 +26,7 @@ enum class VersionType
 };
 
 VCL_DLLPUBLIC bool IsDeviceBlocked(const OUString& blocklistURL, VersionType versionType,
-                                   const OUString& driverVersion, std::u16string_view vendorId,
+                                   std::u16string_view driverVersion, std::u16string_view vendorId,
                                    const OUString& deviceId);
 
 #ifdef _WIN32
@@ -125,7 +125,7 @@ private:
     void handleList(xmlreader::XmlReader& rReader);
     void handleContent(xmlreader::XmlReader& rReader);
     static void handleDevices(DriverInfo& rDriver, xmlreader::XmlReader& rReader);
-    uint64_t getVersion(const OString& rString);
+    uint64_t getVersion(std::string_view rString);
 
     enum class BlockType
     {
@@ -142,10 +142,13 @@ private:
 
 OUString VCL_DLLPUBLIC GetVendorId(DeviceVendor id);
 
-bool VCL_DLLPUBLIC FindBlocklistedDeviceInList(
-    std::vector<DriverInfo>& aDeviceInfos, VersionType versionType, OUString const& sDriverVersion,
-    std::u16string_view sAdapterVendorID, OUString const& sAdapterDeviceID, OperatingSystem system,
-    const OUString& blocklistURL = OUString());
+bool VCL_DLLPUBLIC FindBlocklistedDeviceInList(std::vector<DriverInfo>& aDeviceInfos,
+                                               VersionType versionType,
+                                               std::u16string_view sDriverVersion,
+                                               std::u16string_view sAdapterVendorID,
+                                               OUString const& sAdapterDeviceID,
+                                               OperatingSystem system,
+                                               const OUString& blocklistURL = OUString());
 
 #define GFX_DRIVER_VERSION(a, b, c, d)                                                             \
     ((uint64_t(a) << 48) | (uint64_t(b) << 32) | (uint64_t(c) << 16) | uint64_t(d))
