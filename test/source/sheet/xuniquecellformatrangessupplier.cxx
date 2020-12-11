@@ -27,7 +27,7 @@ void XUniqueCellFormatRangesSupplier::testGetUniqueCellFormatRanges()
     auto count = xIndexAccess->getCount();
     CPPUNIT_ASSERT_MESSAGE("No elements found", count);
     for (auto i = 0; i<count; i++) {
-        CPPUNIT_ASSERT_NO_THROW_MESSAGE(OUStringToOString("Unable to access element " + OUString::number(i), RTL_TEXTENCODING_UTF8).getStr(),
+        CPPUNIT_ASSERT_NO_THROW_MESSAGE(OString("Unable to access element " + OString::number(i)).getStr(),
                                         xIndexAccess->getByIndex(i));
     }
 }

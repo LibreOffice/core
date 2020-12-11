@@ -224,8 +224,10 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
         }
     }
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        OUStringToOString("failed to execute: " + aCommand + "\n" + aContentOUString,
-            RTL_TEXTENCODING_UTF8).getStr(), 0, returnValue);
+        OString(
+            "failed to execute: " + OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8) + "\n"
+            + OUStringToOString(aContentOUString, RTL_TEXTENCODING_UTF8)).getStr(),
+        0, returnValue);
 #else
     (void)rPath;
     (void)eFormat;

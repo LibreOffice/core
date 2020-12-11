@@ -83,14 +83,14 @@ void ScreenshotTest::implSaveScreenshot(const BitmapEx& rScreenshot, const OStri
     auto const e = osl::Directory::createPath(dirUrl);
     if (e != osl::FileBase::E_EXIST) {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            OUStringToOString(
-                "Failed to create " + dirUrl, RTL_TEXTENCODING_UTF8).getStr(),
+            OString("Failed to create " + OUStringToOString(dirUrl, RTL_TEXTENCODING_UTF8))
+                .getStr(),
             osl::FileBase::E_None, e);
     }
 
     auto const pngUrl = OUString(dirUrl + "/" + aBasename + ".png");
     SvFileStream aNew(pngUrl, StreamMode::WRITE | StreamMode::TRUNC);
-    CPPUNIT_ASSERT_MESSAGE(OUStringToOString("Failed to open <" + pngUrl + ">: " + OUString::number(sal_uInt32(aNew.GetErrorCode())), RTL_TEXTENCODING_UTF8).getStr(), aNew.IsOpen());
+    CPPUNIT_ASSERT_MESSAGE(OString("Failed to open <" + OUStringToOString(pngUrl, RTL_TEXTENCODING_UTF8) + ">: " + OString::number(sal_uInt32(aNew.GetErrorCode()))).getStr(), aNew.IsOpen());
 
     std::cout << "saving " << pngUrl << ":\n";
     vcl::PNGWriter aPNGWriter(rScreenshot);

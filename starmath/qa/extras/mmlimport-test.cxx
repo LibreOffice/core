@@ -72,7 +72,8 @@ private:
         pSrcMed->UseInteractionHandler(false);
         bool bLoaded = mxDocShell->DoLoad(pSrcMed);
         CPPUNIT_ASSERT_MESSAGE(
-            OUStringToOString("failed to load " + rURL, RTL_TEXTENCODING_UTF8).getStr(), bLoaded);
+            OString("failed to load " + OUStringToOString(rURL, RTL_TEXTENCODING_UTF8)).getStr(),
+            bLoaded);
     }
 
     SmDocShellRef mxDocShell;
