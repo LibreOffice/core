@@ -185,6 +185,7 @@ public:
     void testTdf138204();
     void testTdf138181();
     void testCustomShapeText();
+    void testuserShapesXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -332,6 +333,7 @@ public:
     CPPUNIT_TEST(testTdf138204);
     CPPUNIT_TEST(testTdf138181);
     CPPUNIT_TEST(testCustomShapeText);
+    CPPUNIT_TEST(testuserShapesXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3052,6 +3054,34 @@ void Chart2ExportTest::testCustomShapeText()
     Reference<drawing::XShape> xCustomShape(xDrawPage->getByIndex(1), UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xCustomShape.is());
 
+    Reference< text::XText > xRange(xCustomShape, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!xRange->getString().isEmpty());
+}
+
+void Chart2ExportTest::testuserShapesXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf128621.xlsx");
+    reload("Calc Office Open XML");
+
+    Reference< chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    // test that the custom shape exists
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShape> xCustomShape(xDrawPage->getByIndex(1), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xCustomShape.is());
+    // test type of shape
+    CPPUNIT_ASSERT(xCustomShape->getShapeType().endsWith("CustomShape"));
+    // test custom shape position
+    awt::Point aPosition = xCustomShape->getPosition();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1356, aPosition.X, 300);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(9107, aPosition.Y, 300);
+    // test custom shape size
+    awt::Size aSize = xCustomShape->getSize();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(9520, aSize.Width, 300);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1805, aSize.Height, 300);
+    // test custom shape text
     Reference< text::XText > xRange(xCustomShape, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(!xRange->getString().isEmpty());
 }

@@ -82,12 +82,7 @@ public:
     virtual void        Save( XclExpStream& rStrm ) override;
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
-    static void        ResetCounters();
-
-    static sal_Int32    getNewDrawingUniqueId() { return ++mnDrawingMLCount;  }
-
 private:
-    static  sal_Int32   mnDrawingMLCount, mnVmlCount;
     SCTAB               mnScTab;
 
     XclEscherEx&        mrEscherEx;
