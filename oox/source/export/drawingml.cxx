@@ -209,6 +209,8 @@ void WriteGradientPath(const awt::Gradient& rGradient, const FSHelperPtr& pFS, c
 int DrawingML::mnImageCounter = 1;
 int DrawingML::mnWdpImageCounter = 1;
 std::map<OUString, OUString> DrawingML::maWdpCache;
+sal_Int32 DrawingML::mnDrawingMLCount = 0;
+sal_Int32 DrawingML::mnVmlCount = 0;
 
 sal_Int16 DrawingML::GetScriptType(const OUString& rStr)
 {
@@ -239,6 +241,12 @@ void DrawingML::ResetCounters()
     mnImageCounter = 1;
     mnWdpImageCounter = 1;
     maWdpCache.clear();
+}
+
+void DrawingML::ResetMlCounters()
+{
+    mnDrawingMLCount = 0;
+    mnVmlCount = 0;
 }
 
 bool DrawingML::GetProperty( const Reference< XPropertySet >& rXPropertySet, const OUString& aName )
@@ -4950,6 +4958,67 @@ void DrawingML::writeDiagramRels(const uno::Sequence<uno::Sequence<uno::Any>>& x
         }
         dataImagebin->closeInput();
     }
+}
+
+void DrawingML::WriteFromTo(const uno::Reference<css::drawing::XShape>& rXShape, const awt::Size& aPageSize,
+                            const FSHelperPtr& pDrawing)
+{
+    awt::Point aTopLeft = rXShape->getPosition();
+    awt::Size aSize = rXShape->getSize();
+
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rXShape.get());
+    if (pObj)
+    {
+        sal_Int32 nRotation = pObj->GetRotateAngle();
+        if (nRotation != 0)
+        {
+            sal_Int16 nHalfWidth = aSize.Width / 2;
+            sal_Int16 nHalfHeight = aSize.Height / 2;
+            // aTopLeft needs correction for rotated customshapes
+            if (pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE)
+            {
+                const tools::Rectangle& aSnapRect(pObj->GetSnapRect()); // bounding box of the rotated shape
+                aTopLeft.X = aSnapRect.getX() + (aSnapRect.GetWidth() / 2) - nHalfWidth;
+                aTopLeft.Y = aSnapRect.getY() + (aSnapRect.GetHeight() / 2) - nHalfHeight;
+            }
+
+            // MSO changes the anchor positions at these angles and that does an extra 90 degrees
+            // rotation on our shapes, so we output it in such position that MSO
+            // can draw this shape correctly.
+            if ((nRotation >= 45 * 100 && nRotation < 135 * 100) || (nRotation >= 225 * 100 && nRotation < 315 * 100))
+            {
+                aTopLeft.X = aTopLeft.X - nHalfHeight + nHalfWidth;
+                aTopLeft.Y = aTopLeft.Y - nHalfWidth + nHalfHeight;
+
+                std::swap(aSize.Width, aSize.Height);
+            }
+        }
+    }
+
+    tools::Rectangle aLocation(aTopLeft.X, aTopLeft.Y, aTopLeft.X + aSize.Width, aTopLeft.Y + aSize.Height);
+    double nXpos = static_cast<double>(aLocation.TopLeft().getX()) / static_cast<double>(aPageSize.Width);
+    double nYpos = static_cast<double>(aLocation.TopLeft().getY()) / static_cast<double>(aPageSize.Height);
+
+    pDrawing->startElement(FSNS(XML_cdr, XML_from));
+    pDrawing->startElement(FSNS(XML_cdr, XML_x));
+    pDrawing->write(nXpos);
+    pDrawing->endElement(FSNS(XML_cdr, XML_x));
+    pDrawing->startElement(FSNS(XML_cdr, XML_y));
+    pDrawing->write(nYpos);
+    pDrawing->endElement(FSNS(XML_cdr, XML_y));
+    pDrawing->endElement(FSNS(XML_cdr, XML_from));
+
+    nXpos = static_cast<double>(aLocation.BottomRight().getX()) / static_cast<double>(aPageSize.Width);
+    nYpos = static_cast<double>(aLocation.BottomRight().getY()) / static_cast<double>(aPageSize.Height);
+
+    pDrawing->startElement(FSNS(XML_cdr, XML_to));
+    pDrawing->startElement(FSNS(XML_cdr, XML_x));
+    pDrawing->write(nXpos);
+    pDrawing->endElement(FSNS(XML_cdr, XML_x));
+    pDrawing->startElement(FSNS(XML_cdr, XML_y));
+    pDrawing->write(nYpos);
+    pDrawing->endElement(FSNS(XML_cdr, XML_y));
+    pDrawing->endElement(FSNS(XML_cdr, XML_to));
 }
 
 }

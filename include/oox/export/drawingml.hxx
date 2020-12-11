@@ -141,6 +141,8 @@ private:
     static int mnImageCounter;
     static int mnWdpImageCounter;
     static std::map<OUString, OUString> maWdpCache;
+    static sal_Int32 mnDrawingMLCount;
+    static sal_Int32 mnVmlCount;
 
     /// To specify where write eg. the images to (like 'ppt', or 'word' - according to the OPC).
     DocumentType meDocumentType;
@@ -293,11 +295,19 @@ public:
     void writeDiagramRels(const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& xRelSeq,
                           const css::uno::Reference<css::io::XOutputStream>& xOutStream,
                           const OUString& sGrabBagProperyName, int nDiagramId);
+    static void WriteFromTo(const css::uno::Reference<css::drawing::XShape>& rXShape, const css::awt::Size& aPageSize,
+                            const sax_fastparser::FSHelperPtr& pDrawing);
+
     static bool IsGroupShape( const css::uno::Reference< css::drawing::XShape >& rXShape );
     static bool IsDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape);
     sal_Int32 getBulletMarginIndentation (const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,sal_Int16 nLevel, std::u16string_view propName);
 
     static void ResetCounters();
+
+    static void ResetMlCounters();
+
+    static sal_Int32 getNewDrawingUniqueId() { return ++mnDrawingMLCount; }
+    static sal_Int32 getNewVMLUniqueId() { return ++mnVmlCount; }
 
     // A Helper to decide the script type for given text in order to call WriteRunProperties.
     static sal_Int16 GetScriptType(const OUString& rStr);
