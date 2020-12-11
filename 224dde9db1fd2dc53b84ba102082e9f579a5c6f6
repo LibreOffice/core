@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2690f07a_bee8ecca",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 3940,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-11T06:08:10Z",
+      "side": 1,
+      "message": "This is overlong: our clang-format rules require that lines should be no longer than 100 characters.\n\n*If* you use Visual Studio (or VS Code), you may select the lines that you edited, and press Ctrl+K Ctrl+F. That clang-formats only selected lines. Other IDEs may provide similar functions.",
+      "range": {
+        "startLine": 3940,
+        "startChar": 4,
+        "endLine": 3940,
+        "endChar": 112
+      },
+      "revId": "224dde9db1fd2dc53b84ba102082e9f579a5c6f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
