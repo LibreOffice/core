@@ -1104,6 +1104,27 @@ haiku*)
     _os=Haiku
     ;;
 
+emscripten*)
+    build_gstreamer_1_0=no
+    enable_coinmp=yes
+    enable_lpsolve=no
+    enable_report_builder=no
+    with_theme="breeze"
+    test_cups=no
+    test_dbus=no
+    test_fontconfig=no
+    test_freetype=no
+    test_gtk=no
+    test_kde4=no
+    test_randr=no
+    test_xrender=no
+    enable_postgresql_sdbc=no
+    enable_firebird_sdbc=no
+    enable_mariadb_sdbc=no
+    with_system_zlib=no
+    _os=Emscripten
+    ;;
+
 *)
     AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice for!])
     ;;
@@ -1788,6 +1809,13 @@ libo_FUZZ_ARG_ENABLE(cipher-openssl-backend,
     AS_HELP_STRING([--enable-cipher-openssl-backend],
         [Enable using OpenSSL as the actual implementation of the rtl/cipher.h functionality.
          Requires --enable-openssl.]))
+
+AC_ARG_ENABLE(nss,
+    AS_HELP_STRING([--disable-nss],
+        [Disable using NSS. If disabled,
+         components will either use GNUTLS or openssl. Work in progress,
+         use only if you are hacking on it.]),
+,enable_nss=yes)
 
 AC_ARG_ENABLE(library-bin-tar,
     AS_HELP_STRING([--enable-library-bin-tar],
@@ -4096,6 +4124,8 @@ if test "$COM_IS_CLANG" = TRUE; then
         [my_apple_clang=yes],[my_apple_clang=])
     if test "$my_apple_clang" = yes; then
         AC_MSG_RESULT([assumed yes (Apple Clang)])
+    elif test "$_os" = Emscripten; then
+        AC_MSG_RESULT([assumed yes (Emscripten Clang)])
     else
         if test "$_os" = WINNT; then
             dnl In which case, assume clang-cl:
@@ -5046,6 +5076,25 @@ solaris*)
     SOLARINC="$SOLARINC -I/usr/local/include"
     ;;
 
+emscripten*)
+    COM=GCC
+    USING_X11=
+    OS=EMSCRIPTEN
+    RTL_OS=Emscripten
+    P_SEP=:
+
+    case "$host_cpu" in
+    wasm32|wasm64)
+        ;;
+    *)
+        AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
+        ;;
+    esac
+    CPUNAME=INTEL
+    RTL_ARCH=x86
+    PLATFORMID=linux_x86
+    ;;
+
 *)
     AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice for!])
     ;;
@@ -5172,7 +5221,8 @@ if test "$cross_compiling" = "yes"; then
     unset CC CXX SYSBASE CFLAGS
     unset AR NM OBJDUMP PKG_CONFIG RANLIB READELF STRIP
     unset CPPUNIT_CFLAGS CPPUNIT_LIBS
-    unset LIBXML_CFLAGS LIBXML_LIBS LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC PKG_CONFIG_LIBDIR
+    unset LIBXML_CFLAGS LIBXML_LIBS LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC
+    unset PKG_CONFIG_LIBDIR PKG_CONFIG_PATH
     if test -n "$CC_FOR_BUILD"; then
         export CC="$CC_FOR_BUILD"
         CC_BASE=`first_arg_basename "$CC"`
@@ -5218,6 +5268,7 @@ if test "$cross_compiling" = "yes"; then
         --disable-gstreamer-1-0 \
         --disable-gtk3 \
         --disable-mariadb-sdbc \
+        --disable-nss \
         --disable-online-update \
         --disable-opencl \
         --disable-pdfimport \
@@ -5240,7 +5291,9 @@ if test "$cross_compiling" = "yes"; then
     PERMITTED_BUILD_TARGETS="
         AVMEDIA
         BOOST
+        CAIRO
         CLUCENE
+        CURL
         DBCONNECTIVITY
         DESKTOP
         DYNLOADING
@@ -6053,6 +6106,7 @@ if test "$_os" != "WINNT"; then
 fi
 AC_SUBST(AR)
 AC_SUBST(DLLTOOL)
+AC_SUBST(LD)
 AC_SUBST(NM)
 AC_SUBST(OBJDUMP)
 AC_SUBST(PKG_CONFIG)
@@ -9187,6 +9241,9 @@ if test "$with_system_libxml" = "auto"; then
     WINNT|iOS|Android)
         with_system_libxml="$with_system_libs"
         ;;
+    Emscripten)
+        with_system_libxml=no
+        ;;
     *)
         if test "$enable_fuzzers" != "yes"; then
             with_system_libxml=yes
@@ -10191,7 +10248,7 @@ AC_SUBST(SYSTEM_OPENLDAP)
 dnl ===================================================================
 dnl Check for system NSS
 dnl ===================================================================
-if test "$enable_fuzzers" != "yes"; then
+if test "$enable_fuzzers" != "yes" -a "$enable_nss" = "yes"; then
     libo_CHECK_SYSTEM_MODULE([nss],[NSS],[nss >= 3.9.3 nspr >= 4.8])
     AC_DEFINE(HAVE_FEATURE_NSS)
     ENABLE_NSS="TRUE"
@@ -11352,6 +11409,8 @@ if test -z "$build_vcl_plugins"; then
     build_vcl_plugins="none"
 fi
 AC_MSG_NOTICE([VCLplugs to be built: $build_vcl_plugins])
+VCL_PLUGIN_INFO=$R
+AC_SUBST([VCL_PLUGIN_INFO])
 
 dnl ===================================================================
 dnl check for dbus support
