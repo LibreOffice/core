@@ -765,7 +765,7 @@ void SwFlyLayFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
             pTmpPage = static_cast<SwPageFrame*>(pTmpPage->GetNext());
             --nPagesToFlip;
         }
-        if(!nPagesToFlip)
+        if(pTmpPage && !nPagesToFlip)
         {
             // #i50432# - adjust synopsis of <PlaceFly(..)>
             pTmpPage->PlaceFly(this, nullptr);
