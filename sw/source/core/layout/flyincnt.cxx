@@ -118,7 +118,7 @@ void SwFlyInContentFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
                     aTweakedChgs.first->ClearItem(RES_FRMMACRO);
                     aSuperArgs = std::pair<const SfxPoolItem*, const SfxPoolItem*>(aTweakedChgs.first.get(), aTweakedChgs.second.get());
                 }
-            } else if(pNewAttrSetChg->GetChgSet()->Count())
+            } else if (pNewAttrSetChg && pNewAttrSetChg->GetChgSet()->Count())
                 aSuperArgs = std::pair<const SfxPoolItem*, const SfxPoolItem*>(pLegacy->m_pOld, pLegacy->m_pNew);
             break;
         }
