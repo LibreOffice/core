@@ -1042,33 +1042,20 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nCurrentPos )
     {
         //All columns will be changed proportionally with,
         //the table width is adjusted accordingly.
-        OSL_ENSURE(nDiff * m_nNoOfVisibleCols <= m_pTableData->GetSpace() - m_nTableWidth, "wrong maximum" );
-        tools::Long nAdd = nDiff;
-        if(nDiff * m_nNoOfVisibleCols > m_pTableData->GetSpace() - m_nTableWidth)
+        const double fOrigColWidth = std::max(SwTwips(1), GetVisibleWidth(nCurrentPos) - nDiff);
+        const double fMaxWidth = std::max(m_pTableData->GetSpace(), m_nTableWidth);
+        const double fMaxPercent = fMaxWidth / m_nTableWidth;
+        const double fPercentChange = std::min(fMaxPercent, GetVisibleWidth(nCurrentPos)/fOrigColWidth);
+        SwTwips nNewTableSize = 0;
+        for( sal_uInt16 i = 0; i < m_nNoOfVisibleCols; i++ )
         {
-            nAdd = (m_pTableData->GetSpace() - m_nTableWidth) / m_nNoOfVisibleCols;
-            SetVisibleWidth(nCurrentPos, GetVisibleWidth(nCurrentPos) - nDiff + nAdd );
-            nDiff = nAdd;
+            SwTwips nNewColWidth = round( fPercentChange * (i == nCurrentPos ? fOrigColWidth : GetVisibleWidth(i)) );
+            if ( nNewColWidth < MINLAY )
+                nNewColWidth = MINLAY;
+            SetVisibleWidth(i, nNewColWidth);
+            nNewTableSize += nNewColWidth;
         }
-        if(nAdd)
-            for( sal_uInt16 i = 0; i < m_nNoOfVisibleCols; i++ )
-            {
-                if(i == nCurrentPos)
-                    continue;
-                SwTwips nVisWidth;
-                if((nVisWidth = GetVisibleWidth(i)) + nDiff < MINLAY)
-                {
-                    nAdd += nVisWidth - MINLAY;
-                    SetVisibleWidth(i, MINLAY);
-                }
-                else
-                {
-                    SetVisibleWidth(i, nVisWidth + nDiff);
-                    nAdd += nDiff;
-                }
-
-            }
-        m_nTableWidth += nAdd;
+        m_nTableWidth = nNewTableSize;
     }
 
     if (!m_bPercentMode)
