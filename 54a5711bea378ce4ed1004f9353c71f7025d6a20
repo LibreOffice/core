@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43cd29b0_13e95b59",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 3511,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-12-11T23:01:47Z",
+      "side": 1,
+      "message": "Hmmm...I wrote a comment asking about whether it is all right to keep following the UI guidelines and push the Unicode window by using U+2026 here.   But I cannot see that it was recorded here -- so here is another attempt.",
+      "range": {
+        "startLine": 3511,
+        "startChar": 34,
+        "endLine": 3511,
+        "endChar": 50
+      },
+      "revId": "54a5711bea378ce4ed1004f9353c71f7025d6a20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

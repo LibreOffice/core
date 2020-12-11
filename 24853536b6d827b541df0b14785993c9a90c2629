@@ -16,6 +16,24 @@
       "revId": "24853536b6d827b541df0b14785993c9a90c2629",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e4fefea_bd28da3f",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 3511,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-12-11T23:01:47Z",
+      "side": 1,
+      "message": "Fine with me.",
+      "parentUuid": "f40f5ecf_66f2c3e6",
+      "revId": "24853536b6d827b541df0b14785993c9a90c2629",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
