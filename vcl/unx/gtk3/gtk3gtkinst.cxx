@@ -8117,7 +8117,7 @@ public:
             if (!pTriggerEvent)
                 pTriggerEvent = pKeyEvent;
 
-            gtk_menu_popup_at_rect(m_pMenu, gtk_widget_get_window(pWidget), &aRect, GDK_GRAVITY_NORTH_WEST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
+            gtk_menu_popup_at_rect(m_pMenu, gtk_widget_get_window(pWidget), &aRect, GDK_GRAVITY_SOUTH_WEST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
 
             gdk_event_free(pKeyEvent);
         }
