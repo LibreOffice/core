@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a313bb05_eda16167",
+        "filename": "sw/source/core/crsr/swcrsr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2098,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-11T15:32:38Z",
+      "side": 1,
+      "message": "A formatting nitpick: space missing between if and parenthesis",
+      "range": {
+        "startLine": 2098,
+        "startChar": 12,
+        "endLine": 2098,
+        "endChar": 20
+      },
+      "revId": "d51303113558f15c5dc097cde7682df0afb00c39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d953828_802e5f98",
+        "filename": "sw/source/core/crsr/swcrsr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2101,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-11T15:32:38Z",
+      "side": 1,
+      "message": "The two lines could be re-written as\n\n                if (SwTextNode* pTextNd \u003d GetPoint()-\u003enNode.GetNode().GetTextNode())\n\nwhich is irrelevant here, but generally is a good-to-use language feature, because it limits the scope of the introduced name to the if block. As said, not really relevant here, so feel free to ignore :-)",
+      "range": {
+        "startLine": 2100,
+        "startChar": 16,
+        "endLine": 2101,
+        "endChar": 28
+      },
+      "revId": "d51303113558f15c5dc097cde7682df0afb00c39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
