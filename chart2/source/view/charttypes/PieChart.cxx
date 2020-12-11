@@ -386,14 +386,14 @@ void PieChart::createTextLabelShape(
 
     // set the maximum text width to be used when text wrapping is enabled
     double fTextMaximumFrameWidth = 0.8 * fPieRadius;
-    if( nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE && m_aAvailableOuterRect.getWidth() )
+    if (nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE
+        && m_aAvailableOuterRect.getWidth())
     {
-        if (fAngleDegree < 67.5 || fAngleDegree >= 292.5)
-            fTextMaximumFrameWidth = m_aAvailableOuterRect.getMaxX() - aPieLabelInfo.aFirstPosition.getX();
-        else if (fAngleDegree < 112.5 || fAngleDegree >= 247.5)
-            fTextMaximumFrameWidth = m_aAvailableOuterRect.getWidth();
+        if ((fAngleDegree >= 67.5 && fAngleDegree <= 112.5)
+            || (fAngleDegree >= 247.5 && fAngleDegree <= 292.5))
+            fTextMaximumFrameWidth = m_aAvailableOuterRect.getWidth() / 3.0;
         else
-            fTextMaximumFrameWidth = aPieLabelInfo.aFirstPosition.getX() - m_aAvailableOuterRect.getMinX();
+            fTextMaximumFrameWidth = 0.85 * (m_aAvailableOuterRect.getWidth() / 2.0 - fPieRadius);
     }
     sal_Int32 nTextMaximumFrameWidth = ceil(fTextMaximumFrameWidth);
 
@@ -424,17 +424,12 @@ void PieChart::createTextLabelShape(
         {
             if (m_aAvailableOuterRect.getWidth())
             {
-                if (fAngleDegree < 67.5 || fAngleDegree >= 292.5)
-                    fTextMaximumFrameWidth
-                        = 0.8
-                          * (m_aAvailableOuterRect.getMaxX() - aPieLabelInfo.aFirstPosition.getX());
-                else if (fAngleDegree < 112.5 || fAngleDegree >= 247.5)
-                    fTextMaximumFrameWidth = 0.8 * m_aAvailableOuterRect.getWidth();
+                if ((fAngleDegree >= 67.5 && fAngleDegree <= 112.5)
+                    || (fAngleDegree >= 247.5 && fAngleDegree <= 292.5))
+                    fTextMaximumFrameWidth = m_aAvailableOuterRect.getWidth() / 3.0;
                 else
                     fTextMaximumFrameWidth
-                        = 0.8
-                          * (aPieLabelInfo.aFirstPosition.getX() - m_aAvailableOuterRect.getMinX());
-
+                        = 0.85 * (m_aAvailableOuterRect.getWidth() / 2.0 - fPieRadius);
                 nTextMaximumFrameWidth = ceil(fTextMaximumFrameWidth);
             }
 
