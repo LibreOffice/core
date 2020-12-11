@@ -35,7 +35,7 @@ icu::Locale LanguageTagIcu::getIcuLocale( const LanguageTag & rLanguageTag )
 
 
 // static
-icu::Locale LanguageTagIcu::getIcuLocale( const LanguageTag & rLanguageTag, const OUString & rVariant, const OUString & rKeywords )
+icu::Locale LanguageTagIcu::getIcuLocale( const LanguageTag & rLanguageTag, std::u16string_view rVariant, std::u16string_view rKeywords )
 {
     /* FIXME: how should this work with any BCP47? */
     return icu::Locale(

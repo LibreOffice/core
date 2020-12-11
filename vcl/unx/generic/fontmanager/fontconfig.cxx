@@ -18,6 +18,8 @@
  */
 
 #include <memory>
+#include <string_view>
+
 #include <unx/fontmanager.hxx>
 #include <unx/helper.hxx>
 #include <comphelper/sequence.hxx>
@@ -618,7 +620,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int>& o
                 if( eSlantRes == FcResultMatch )
                     xUpdate->m_eItalic = convertSlant(slant);
                 if( eStyleRes == FcResultMatch )
-                    xUpdate->m_aStyleName = OStringToOUString( OString( reinterpret_cast<char*>(style) ), RTL_TEXTENCODING_UTF8 );
+                    xUpdate->m_aStyleName = OStringToOUString( std::string_view( reinterpret_cast<char*>(style) ), RTL_TEXTENCODING_UTF8 );
                 if( eIndexRes == FcResultMatch )
                     xUpdate->m_nVariationEntry = GetVariationIndex(nEntryId);
 

@@ -25,6 +25,7 @@
 #include <tools/inetmime.hxx>
 #include <tools/stream.hxx>
 
+#include <string_view>
 #include <vector>
 #include <map>
 #include <memory>
@@ -142,7 +143,7 @@ public:
     void         SetDocumentLB (SvLockBytes *pDocLB) { m_xDocLB = pDocLB; }
 
     static bool ParseDateField (
-        const OUString& rDateField, DateTime& rDateTime);
+        std::u16string_view rDateField, DateTime& rDateTime);
 
     void     SetMIMEVersion (const OUString& rVersion);
     void     SetContentDisposition (const OUString& rDisposition);

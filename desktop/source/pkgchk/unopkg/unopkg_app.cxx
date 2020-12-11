@@ -70,8 +70,8 @@ struct ExtensionName
 };
 
 
-const char s_usingText [] =
-"\n"
+const char16_t s_usingText [] =
+u"\n"
 "using: " APP_NAME " add <options> extension-path...\n"
 "       " APP_NAME " validate <options> extension-identifier...\n"
 "       " APP_NAME " remove <options> extension-identifier...\n"
@@ -231,7 +231,7 @@ extern "C" int unopkg_main()
             return 0;
         }
         else if (isOption( info_version, &nPos )) {
-            dp_misc::writeConsole("\n" APP_NAME " Version 3.3\n");
+            dp_misc::writeConsole(u"\n" APP_NAME " Version 3.3\n");
             return 0;
         }
         //consume all bootstrap variables which may occur before the sub-command
@@ -271,12 +271,12 @@ extern "C" int unopkg_main()
                     if (cmdArg[ 0 ] == '-')
                     {
                         // is option:
-                        dp_misc::writeConsoleError(
+                        dp_misc::writeConsoleError(OUString(
                                  "\nERROR: unexpected option " +
                                  cmdArg +
                                  "!\n       Use " APP_NAME " " +
                                  toString(info_help) +
-                                 " to print all options.\n");
+                                 " to print all options.\n"));
                         return 1;
                     }
                     else
@@ -478,7 +478,7 @@ extern "C" int unopkg_main()
                       vec_packages.size(), false);
 
                 dp_misc::writeConsole(
-                    "All deployed " + repository + " extensions:\n\n");
+                    OUString("All deployed " + repository + " extensions:\n\n"));
             }
             else
             {
@@ -612,7 +612,7 @@ extern "C" int unopkg_main()
     catch (const LockFileException & e)
     {
         // No logger since it requires UNO which we don't have here
-        dp_misc::writeConsoleError(e.Message + "\n");
+        dp_misc::writeConsoleError(OUString(e.Message + "\n"));
         bShowFailedMsg = false;
     }
     catch (const css::uno::Exception & e ) {

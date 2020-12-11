@@ -265,7 +265,7 @@ void Includes::dumpInclude(
         << (hpp ? "hpp" : "hdl") << "\"\n";
 }
 
-bool Includes::isInterfaceType(OString const & entityName) const {
+bool Includes::isInterfaceType(std::string_view entityName) const {
     return m_manager->getSort(b2u(entityName)) == UnoType::Sort::Interface;
 }
 

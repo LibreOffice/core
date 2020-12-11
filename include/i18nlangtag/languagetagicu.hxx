@@ -11,6 +11,9 @@
 #define INCLUDED_I18NLANGTAG_LANGUAGETAGICU_HXX
 
 #include <sal/config.h>
+
+#include <string_view>
+
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <rtl/ustring.hxx>
 #include <unicode/locid.h>
@@ -46,7 +49,7 @@ public:
 
         Always resolves an empty tag to the system locale.
      */
-    static  icu::Locale     getIcuLocale( const LanguageTag & rLanguageTag, const OUString & rVariant, const OUString & rKeywords);
+    static  icu::Locale     getIcuLocale( const LanguageTag & rLanguageTag, std::u16string_view rVariant, std::u16string_view rKeywords);
 };
 
 #endif  // INCLUDED_I18NLANGTAG_LANGUAGETAGICU_HXX

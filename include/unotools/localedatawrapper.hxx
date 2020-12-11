@@ -395,7 +395,7 @@ public:
     /** Output a message during locale data checking. The (UTF-8) string is
         written to stderr and in a non-product build or if DBG_UTIL is enabled
         also raised as an assertion message box. */
-    static  void                outputCheckMessage( const OUString& rMsg );
+    static  void                outputCheckMessage( std::u16string_view rMsg );
     static  void                outputCheckMessage( const char* pStr);
 
     LocaleDataWrapper(const LocaleDataWrapper&) = delete;

@@ -318,7 +318,7 @@ INetContentType INetContentTypes::GetContentTypeFromURL(OUString const & rURL)
         if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_FILE))
             if (rURL[ rURL.getLength() - 1 ] == '/') // folder
                 if (rURL.getLength() > RTL_CONSTASCII_LENGTH("file:///"))
-                    if (WildCard("*/{*}/").Matches(rURL)) // special folder
+                    if (WildCard(u"*/{*}/").Matches(rURL)) // special folder
                         eTypeID = CONTENT_TYPE_X_CNT_FSYSSPECIALFOLDER;
                     else
                         // drive? -> "file:///?|/"

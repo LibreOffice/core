@@ -1249,7 +1249,7 @@ namespace cmis
     }
 
     void Content::insert( const uno::Reference< io::XInputStream > & xInputStream,
-        bool bReplaceExisting, const OUString& rMimeType,
+        bool bReplaceExisting, std::u16string_view rMimeType,
         const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
         if ( !xInputStream.is() )

@@ -22,6 +22,7 @@
 #include "pyuno_impl.hxx"
 
 #include <cassert>
+#include <string_view>
 #include <unordered_map>
 
 #include <osl/module.hxx>
@@ -216,7 +217,7 @@ OUString getLibDir()
     return sLibDir;
 }
 
-void raisePySystemException( const char * exceptionType, const OUString & message )
+void raisePySystemException( const char * exceptionType, std::u16string_view message )
 {
     OString buf = OStringLiteral("Error during bootstrapping uno (") +
             exceptionType +

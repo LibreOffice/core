@@ -125,7 +125,7 @@ void InitPoFile(
     {
         OUString outDir =
             OStringToOUString(
-                rPotDir.copy(0,rPotDir.lastIndexOf('/')), RTL_TEXTENCODING_UTF8);
+                rPotDir.subView(0,rPotDir.lastIndexOf('/')), RTL_TEXTENCODING_UTF8);
         OUString outDirUrl;
         if (osl::FileBase::getFileURLFromSystemPath(outDir, outDirUrl)
             != osl::FileBase::E_None)
@@ -406,7 +406,7 @@ void handleDirectory(
     //Remove empty pot directory
     OUString sPoPath =
         OStringToOUString(
-            aPotDir.copy(0,aPotDir.lastIndexOf('/')), RTL_TEXTENCODING_UTF8);
+            aPotDir.subView(0,aPotDir.lastIndexOf('/')), RTL_TEXTENCODING_UTF8);
     OUString sPoUrl;
     if (osl::FileBase::getFileURLFromSystemPath(sPoPath, sPoUrl)
         != osl::FileBase::E_None)

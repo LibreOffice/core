@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 
 #include <rtl/ustring.hxx>
 
@@ -34,7 +37,7 @@
  * The return value is NULL terminated. The application has the responsibility to
  * deallocate the return value.
  */
-static xmlChar* ous_to_xmlstr( const OUString& oustr )
+static xmlChar* ous_to_xmlstr( std::u16string_view oustr )
 {
     OString ostr = OUStringToOString( oustr , RTL_TEXTENCODING_UTF8 ) ;
     return xmlStrndup( reinterpret_cast<xmlChar const *>(ostr.getStr()), static_cast<int>(ostr.getLength()) ) ;
@@ -44,7 +47,7 @@ static xmlChar* ous_to_xmlstr( const OUString& oustr )
  * The return value is NULL terminated. The application has the responsibility to
  * deallocate the return value.
  */
-static xmlChar* ous_to_nxmlstr( const OUString& oustr, int& length )
+static xmlChar* ous_to_nxmlstr( std::u16string_view oustr, int& length )
 {
     OString ostr = OUStringToOString( oustr , RTL_TEXTENCODING_UTF8 ) ;
     length = ostr.getLength();
@@ -248,7 +251,7 @@ void SAXHelper::endDocument()
  * XDocumentHandler -- start an xml element
  */
 void SAXHelper::startElement(
-    const OUString& aName,
+    std::u16string_view aName,
     const css::uno::Sequence< css::xml::csax::XMLAttribute >& aAttributes )
 {
     const xmlChar* fullName = nullptr ;
@@ -284,7 +287,7 @@ void SAXHelper::startElement(
 /**
  * XDocumentHandler -- end an xml element
  */
-void SAXHelper::endElement( const OUString& aName )
+void SAXHelper::endElement( std::u16string_view aName )
 {
     xmlChar* fullname = ous_to_xmlstr( aName ) ;
     m_pSaxHandler->endElement( m_pParserCtxt , fullname ) ;
@@ -299,7 +302,7 @@ void SAXHelper::endElement( const OUString& aName )
 /**
  * XDocumentHandler -- an xml element or cdata characters
  */
-void SAXHelper::characters( const OUString& aChars )
+void SAXHelper::characters( std::u16string_view aChars )
 {
     const xmlChar* chars = nullptr ;
     int length = 0 ;
@@ -316,7 +319,7 @@ void SAXHelper::characters( const OUString& aChars )
 /**
  * XDocumentHandler -- ignorable xml white space
  */
-void SAXHelper::ignorableWhitespace( const OUString& aWhitespaces )
+void SAXHelper::ignorableWhitespace( std::u16string_view aWhitespaces )
 {
     const xmlChar* chars = nullptr ;
     int length = 0 ;
@@ -334,8 +337,8 @@ void SAXHelper::ignorableWhitespace( const OUString& aWhitespaces )
  * XDocumentHandler -- preprocessing instruction
  */
 void SAXHelper::processingInstruction(
-    const OUString& aTarget,
-    const OUString& aData )
+    std::u16string_view aTarget,
+    std::u16string_view aData )
 {
     xmlChar* target = nullptr ;
     xmlChar* data = nullptr ;

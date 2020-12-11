@@ -41,6 +41,7 @@
 #include <queue>
 #include <memory>
 #include <stack>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 #include <cassert>
@@ -228,7 +229,7 @@ public:
     void registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken );
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    OUString const & getNamespaceURL( const OUString& rPrefix );
+    OUString const & getNamespaceURL( std::u16string_view rPrefix );
     /// @throws css::uno::RuntimeException
     void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler );
     /// @throws css::uno::RuntimeException
@@ -911,7 +912,7 @@ void FastSaxParserImpl::registerNamespace( const OUString& NamespaceURL, sal_Int
     throw IllegalArgumentException("namespace URL is already registered: " + NamespaceURL, css::uno::Reference<css::uno::XInterface >(), 0);
 }
 
-OUString const & FastSaxParserImpl::getNamespaceURL( const OUString& rPrefix )
+OUString const & FastSaxParserImpl::getNamespaceURL( std::u16string_view rPrefix )
 {
     try
     {

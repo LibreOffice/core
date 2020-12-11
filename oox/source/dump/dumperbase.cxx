@@ -617,7 +617,7 @@ OUString StringHelper::trimTrailingNul( const OUString& rStr )
     return rStr;
 }
 
-OString StringHelper::convertToUtf8( const OUString& rStr )
+OString StringHelper::convertToUtf8( std::u16string_view rStr )
 {
     return OUStringToOString( rStr, RTL_TEXTENCODING_UTF8 );
 }
@@ -2153,7 +2153,7 @@ OUString InputObjectBase::dumpCharArray( const String& rName, sal_Int32 nLen, rt
         ::std::vector< char > aBuffer( static_cast< std::size_t >( nLen ) + 1 );
         sal_Int32 nCharsRead = mxStrm->readMemory(aBuffer.data(), nLen);
         aBuffer[ nCharsRead ] = 0;
-        aString = OStringToOUString(OString(aBuffer.data()), eTextEnc);
+        aString = OStringToOUString(std::string_view(aBuffer.data()), eTextEnc);
     }
     if( bHideTrailingNul )
         aString = StringHelper::trimTrailingNul( aString );

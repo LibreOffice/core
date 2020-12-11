@@ -86,7 +86,7 @@ bool WildCard::ImpMatch( const char *pWild, const char *pStr )
     return ( *pStr == '\0' ) && ( *pWild == '\0' );
 }
 
-bool WildCard::Matches( const OUString& rString ) const
+bool WildCard::Matches( std::u16string_view rString ) const
 {
     OString aTmpWild = aWildString;
     OString aString(OUStringToOString(rString, osl_getThreadTextEncoding()));

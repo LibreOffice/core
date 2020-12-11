@@ -63,7 +63,7 @@ OString scopedCppName(OString const & type, bool ns_alias)
 }
 
 OString translateUnoToCppType(
-    codemaker::UnoType::Sort sort, OUString const & nucleus)
+    codemaker::UnoType::Sort sort, std::u16string_view nucleus)
 {
     OStringBuffer buf;
     if (sort <= codemaker::UnoType::Sort::Any) {
@@ -75,7 +75,7 @@ OString translateUnoToCppType(
         buf.append(cppTypes[static_cast<int>(sort)]);
     } else {
         if (sort == codemaker::UnoType::Sort::Interface
-            && nucleus == "com.sun.star.uno.XInterface")
+            && nucleus == u"com.sun.star.uno.XInterface")
         {
             buf.append("::css::uno::XInterface");
         } else {

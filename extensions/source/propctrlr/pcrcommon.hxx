@@ -23,6 +23,10 @@
 #define EDITOR_LIST_APPEND              (SAL_MAX_UINT16)
 #define EDITOR_LIST_ENTRY_NOTFOUND      (SAL_MAX_UINT16)
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
@@ -66,7 +70,7 @@ namespace pcr
     {
     public:
         static OString getHelpId( const OUString& _rHelpURL );
-        static OUString getHelpURL( const OString& );
+        static OUString getHelpURL( std::string_view );
     };
 
 

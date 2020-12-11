@@ -44,7 +44,7 @@ namespace pcr
     }
 
 
-    OUString HelpIdUrl::getHelpURL( const OString& sHelpId )
+    OUString HelpIdUrl::getHelpURL( std::string_view sHelpId )
     {
         OUStringBuffer aBuffer;
         OUString aTmp( OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8) );

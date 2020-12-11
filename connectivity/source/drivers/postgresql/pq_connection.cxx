@@ -443,7 +443,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
         nColon = url.indexOf( ':' , 1+ nColon );
         if( nColon != -1 )
         {
-             o = OUStringToOString( url.copy(nColon+1), ConnectionSettings::encoding );
+             o = OUStringToOString( url.subView(nColon+1), ConnectionSettings::encoding );
         }
     }
     {

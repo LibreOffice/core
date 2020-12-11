@@ -650,7 +650,7 @@ OUString lcl_getObjectCIDForCommand( std::string_view rDispatchCommand, const un
 }
 // anonymous namespace
 
-void ChartController::executeDispatch_FormatObject(const OUString& rDispatchCommand)
+void ChartController::executeDispatch_FormatObject(std::u16string_view rDispatchCommand)
 {
     uno::Reference< XChartDocument > xChartDocument( getModel(), uno::UNO_QUERY );
     OString aCommand( OUStringToOString( rDispatchCommand, RTL_TEXTENCODING_ASCII_US ) );

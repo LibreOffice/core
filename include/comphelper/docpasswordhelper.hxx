@@ -21,6 +21,7 @@
 #define INCLUDED_COMPHELPER_DOCPASSWORDHELPER_HXX
 
 #include <comphelper/comphelperdllapi.h>
+#include <string_view>
 #include <vector>
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/hash.hxx>
@@ -110,7 +111,7 @@ public:
       */
 
     static css::uno::Sequence< css::beans::PropertyValue >
-        GenerateNewModifyPasswordInfo( const OUString& aPassword );
+        GenerateNewModifyPasswordInfo( std::u16string_view aPassword );
 
 
     /** This helper function allows to check whether
@@ -128,7 +129,7 @@ public:
       */
 
     static bool IsModifyPasswordCorrect(
-                const OUString& aPassword,
+                std::u16string_view aPassword,
                 const css::uno::Sequence< css::beans::PropertyValue >& aInfo );
 
 
@@ -162,7 +163,7 @@ public:
       */
 
     static sal_uInt16 GetXLHashAsUINT16(
-                const OUString& aString,
+                std::u16string_view aString,
                 rtl_TextEncoding nEnc = RTL_TEXTENCODING_UTF8 );
 
 
@@ -178,7 +179,7 @@ public:
       */
 
     static css::uno::Sequence< sal_Int8 > GetXLHashAsSequence(
-                const OUString& aString );
+                std::u16string_view aString );
 
 
     /** Convenience function to calculate a salted hash with iterations as

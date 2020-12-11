@@ -8,6 +8,7 @@
  */
 
 #include <iostream>
+#include <string_view>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -33,7 +34,7 @@ using namespace com::sun::star;
 namespace
 {
 /// Does PDF to PNG conversion using pdfium.
-void generatePreview(const OString& rPdfPath, const OString& rPngPath)
+void generatePreview(std::string_view rPdfPath, std::string_view rPngPath)
 {
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic;

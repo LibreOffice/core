@@ -1976,7 +1976,7 @@ void DocxAttributeOutput::WriteSdtEnd()
 }
 
 void DocxAttributeOutput::WriteSdtDropDownStart(
-        OUString const& rName,
+        std::u16string_view rName,
         OUString const& rSelected,
         uno::Sequence<OUString> const& rListItems)
 {
@@ -2856,7 +2856,7 @@ static bool impl_WriteRunText( FSHelperPtr const & pSerializer, sal_Int32 nTextT
     else
         pSerializer->startElementNS(XML_w, nTextToken);
 
-    pSerializer->writeEscaped( OUString( pBegin, pEnd - pBegin ) );
+    pSerializer->writeEscaped( std::u16string_view( pBegin, pEnd - pBegin ) );
 
     pSerializer->endElementNS( XML_w, nTextToken );
 
@@ -4520,7 +4520,7 @@ void DocxAttributeOutput::StartStyles()
     LatentStyles();
 }
 
-sal_Int32 DocxStringGetToken(DocxStringTokenMap const * pMap, const OUString& rName)
+sal_Int32 DocxStringGetToken(DocxStringTokenMap const * pMap, std::u16string_view rName)
 {
     OString sName = OUStringToOString(rName, RTL_TEXTENCODING_UTF8);
     while (pMap->pToken)

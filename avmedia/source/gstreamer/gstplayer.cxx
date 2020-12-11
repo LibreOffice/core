@@ -527,7 +527,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
     return GST_BUS_PASS;
 }
 
-void Player::preparePlaybin( const OUString& rURL, GstElement *pSink )
+void Player::preparePlaybin( std::u16string_view rURL, GstElement *pSink )
 {
     if (mpPlaybin != nullptr)
     {

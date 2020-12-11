@@ -3841,7 +3841,7 @@ void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
         AutoMarkEntry* pEntry = rpEntry.get();
         if(!pEntry->sComment.isEmpty())
         {
-            rOutStr.WriteByteStringLine( "#" + pEntry->sComment, eTEnc );
+            rOutStr.WriteByteStringLine( OUString("#" + pEntry->sComment), eTEnc );
         }
 
         OUString sWrite( pEntry->sSearch + ";" +

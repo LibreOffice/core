@@ -24,6 +24,7 @@
 #include <tools/ref.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <string>
+#include <string_view>
 #include <libxml/xmlwriter.h>
 
 namespace writerfilter
@@ -52,11 +53,11 @@ namespace writerfilter
 #endif
         void attribute(const std::string & name, const std::string & value);
 #ifdef DBG_UTIL
-        void attribute(const std::string & name, const OUString & value);
+        void attribute(const std::string & name, std::u16string_view value);
         void attribute(const std::string & name, sal_uInt32 value);
         void attribute(const std::string & name, const css::uno::Any& aAny);
         void chars(const std::string & chars);
-        void chars(const OUString & chars);
+        void chars(std::u16string_view chars);
         void endElement();
 #endif
     };

@@ -29,10 +29,10 @@ namespace {
         sal_Int32 nIndex = rHelpId.lastIndexOf( '/' );
 
         if( nIndex > 0 )
-            rDirname = OStringToOUString( rHelpId.copy( 0, nIndex ), RTL_TEXTENCODING_UTF8 );
+            rDirname = OStringToOUString( rHelpId.subView( 0, nIndex ), RTL_TEXTENCODING_UTF8 );
 
         if( rHelpId.getLength() > nIndex+1 )
-            rBasename= OStringToOUString( rHelpId.copy( nIndex+1 ), RTL_TEXTENCODING_UTF8 );
+            rBasename= OStringToOUString( rHelpId.subView( nIndex+1 ), RTL_TEXTENCODING_UTF8 );
     }
 }
 
@@ -197,9 +197,9 @@ void ScreenshotTest::dumpDialogToPath(weld::Builder& rBuilder)
     }
 }
 
-void ScreenshotTest::dumpDialogToPath(const OString& rUIXMLDescription)
+void ScreenshotTest::dumpDialogToPath(std::string_view rUIXMLDescription)
 {
-    if (rUIXMLDescription.isEmpty())
+    if (rUIXMLDescription.empty())
         return;
 
     bool bNonConforming = rUIXMLDescription == "modules/swriter/ui/sidebarstylepresets.ui" ||

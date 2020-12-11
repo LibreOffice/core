@@ -19,6 +19,8 @@
 
 
 #include <stdio.h>
+#include <string_view>
+
 #include <sal/main.h>
 #include <osl/file.h>
 #include <osl/thread.h>
@@ -80,7 +82,8 @@ FileEmitContext::FileEmitContext( const char* pFileName, const char* pOrigName, 
       m_aReadHandle( nullptr ),
       m_nReadLen( 0 )
 {
-    OUString aSysFile( OStringToOUString( OString( pFileName ), osl_getThreadTextEncoding() ) );
+    OUString aSysFile(
+        OStringToOUString( std::string_view( pFileName ), osl_getThreadTextEncoding() ) );
     OUString aURL;
     if( osl_getFileURLFromSystemPath( aSysFile.pData, &aURL.pData ) != osl_File_E_None )
     {
@@ -118,7 +121,8 @@ FileEmitContext::~FileEmitContext()
 
 void FileEmitContext::openReadFile( const char* pInFile )
 {
-    OUString aSysFile( OStringToOUString( OString( pInFile ), osl_getThreadTextEncoding() ) );
+    OUString aSysFile(
+        OStringToOUString( std::string_view( pInFile ), osl_getThreadTextEncoding() ) );
     OUString aURL;
     if( osl_getFileURLFromSystemPath( aSysFile.pData, &aURL.pData ) != osl_File_E_None )
     {

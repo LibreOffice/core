@@ -569,7 +569,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
             // collide, or PGPKeyID format might change - can't we
             // keep the xCert itself in rInfo?
             rSigInfo.Signer = xGpgSecEnv->getCertificate(
-                rInfo.ouGpgKeyID, xmlsecurity::numericStringToBigInteger(""));
+                rInfo.ouGpgKeyID, xmlsecurity::numericStringToBigInteger(u""));
             rSigInfo.CertificateStatus = xGpgSecEnv->verifyCertificate(
                 rSigInfo.Signer, Sequence<Reference<css::security::XCertificate>>());
         }

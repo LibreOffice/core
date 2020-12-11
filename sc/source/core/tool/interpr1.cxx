@@ -3462,7 +3462,7 @@ void ScInterpreter::ScCode()
             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |
             RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT |
             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE;
-        PushInt( static_cast<unsigned char>(OUStringToOString(OUString(aStr[0]), osl_getThreadTextEncoding(), convertFlags).toChar()) );
+        PushInt( static_cast<unsigned char>(OUStringToOString(OUStringChar(aStr[0]), osl_getThreadTextEncoding(), convertFlags).toChar()) );
     }
 }
 

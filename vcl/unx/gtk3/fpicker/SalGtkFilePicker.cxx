@@ -50,6 +50,7 @@
 #include <algorithm>
 #include <set>
 #include <string.h>
+#include <string_view>
 
 #include "SalGtkFilePicker.hxx"
 
@@ -1106,7 +1107,7 @@ static void HackWidthToFirst(GtkComboBox *pWidget)
     gtk_widget_set_size_request(GTK_WIDGET(pWidget), requisition.width, -1);
 }
 
-static void ComboBoxAppendText(GtkComboBox *pCombo, const OUString &rStr)
+static void ComboBoxAppendText(GtkComboBox *pCombo, std::u16string_view rStr)
 {
   GtkTreeIter aIter;
   GtkListStore *pStore = GTK_LIST_STORE(gtk_combo_box_get_model(pCombo));

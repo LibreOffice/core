@@ -20,6 +20,10 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_LOGGEDRESOURCES_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_LOGGEDRESOURCES_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <dmapper/resourcemodel.hxx>
 
 namespace writerfilter
@@ -33,7 +37,7 @@ public:
 
     void startElement(const std::string& sElement);
     static void endElement();
-    static void chars(const OUString& rChars);
+    static void chars(std::u16string_view rChars);
     static void chars(const std::string& rChars);
     static void attribute(const std::string& rName, const std::string& rValue);
     static void attribute(const std::string& rName, sal_uInt32 nValue);

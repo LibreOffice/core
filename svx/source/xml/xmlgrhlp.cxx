@@ -467,7 +467,7 @@ OUString SvXMLGraphicHelper::ImplGetGraphicMimeType( const OUString& rFileName )
 {
     if( ( rFileName.getLength() >= 4 ) && ( rFileName[ rFileName.getLength() - 4 ] == '.' ) )
     {
-        const OString aExt(OUStringToOString(rFileName.copy(rFileName.getLength() - 3),
+        const OString aExt(OUStringToOString(rFileName.subView(rFileName.getLength() - 3),
             RTL_TEXTENCODING_ASCII_US));
         return comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension( aExt );
     }

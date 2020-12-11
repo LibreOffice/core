@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <string_view>
 #include <vector>
 
 #include <codemaker/unotype.hxx>
@@ -63,11 +64,11 @@ private:
 };
 
 
-inline OString u2b(OUString const & s) {
+inline OString u2b(std::u16string_view s) {
     return OUStringToOString(s, RTL_TEXTENCODING_UTF8);
 }
 
-inline OUString b2u(OString const & s) {
+inline OUString b2u(std::string_view s) {
     return OStringToOUString(s, RTL_TEXTENCODING_UTF8);
 }
 

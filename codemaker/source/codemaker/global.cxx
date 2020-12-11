@@ -356,7 +356,7 @@ FileStream &operator<<(FileStream& o, const OStringBuffer& s) {
     return o;
 }
 
-FileStream & operator <<(FileStream & out, OUString const & s) {
+FileStream & operator <<(FileStream & out, std::u16string_view s) {
     return out << OUStringToOString(s, RTL_TEXTENCODING_UTF8);
 }
 

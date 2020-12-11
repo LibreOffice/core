@@ -82,7 +82,7 @@ const char * dbg_out(const void * pVoid)
     return dbg_out(aTmpStr);
 }
 
-const char * dbg_out(const OUString & aStr)
+const char * dbg_out(std::u16string_view aStr)
 {
     aDbgOutResult = OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US);
 

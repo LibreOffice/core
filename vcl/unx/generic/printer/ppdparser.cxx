@@ -1091,7 +1091,8 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
         nPos = aCurrentLine.indexOf(':');
         if( nPos != -1 )
         {
-            aOption = OStringToOUString( aCurrentLine.copy( 1, nPos-1 ), RTL_TEXTENCODING_MS_1252 );
+            aOption = OStringToOUString(
+                aCurrentLine.subView( 1, nPos-1 ), RTL_TEXTENCODING_MS_1252 );
             aOption = GetCommandLineToken( 1, aOption );
             sal_Int32 nTransPos = aOption.indexOf( '/' );
             if( nTransPos != -1 )
@@ -1143,7 +1144,7 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
                 nTransPos = aLine.indexOf('"');
                 if (nTransPos == -1)
                     nTransPos = aLine.getLength();
-                aValue = OStringToOUString(aLine.copy(0, nTransPos), RTL_TEXTENCODING_MS_1252);
+                aValue = OStringToOUString(aLine.subView(0, nTransPos), RTL_TEXTENCODING_MS_1252);
                 // after the second doublequote can follow a / and a translation
                 if (nTransPos < aLine.getLength() - 2)
                 {
@@ -1173,7 +1174,7 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
                 nTransPos = aLine.indexOf('/');
                 if (nTransPos == -1)
                     nTransPos = aLine.getLength();
-                aValue = OStringToOUString(aLine.copy(0, nTransPos), RTL_TEXTENCODING_MS_1252);
+                aValue = OStringToOUString(aLine.subView(0, nTransPos), RTL_TEXTENCODING_MS_1252);
                 if (nTransPos+1 < aLine.getLength())
                     aValueTranslation = handleTranslation( aLine.copy( nTransPos+1 ), bIsGlobalizedLine );
                 eType = eString;
@@ -1235,7 +1236,7 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
         if (aLine.startsWith("*Default"))
         {
             SAL_INFO("vcl.unx.print", "Found a default: '" << aLine << "'");
-            OUString aKey(OStringToOUString(aLine.copy(8), RTL_TEXTENCODING_MS_1252));
+            OUString aKey(OStringToOUString(aLine.subView(8), RTL_TEXTENCODING_MS_1252));
             sal_Int32 nPos = aKey.indexOf( ':' );
             if( nPos != -1 )
             {
@@ -1272,7 +1273,7 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
     }
 }
 
-void PPDParser::parseOpenUI(const OString& rLine, const OString& rPPDGroup)
+void PPDParser::parseOpenUI(const OString& rLine, std::string_view rPPDGroup)
 {
     OUString aTranslation;
     OString aKey = rLine;
@@ -1916,11 +1917,12 @@ void PPDContext::rebuildFromStreamBuffer(const std::vector<char> &rBuffer)
         sal_Int32 nPos = aLine.indexOf(':');
         if( nPos != -1 )
         {
-            const PPDKey* pKey = m_pParser->getKey( OStringToOUString( aLine.copy( 0, nPos ), RTL_TEXTENCODING_MS_1252 ) );
+            const PPDKey* pKey = m_pParser->getKey( OStringToOUString( aLine.subView( 0, nPos ), RTL_TEXTENCODING_MS_1252 ) );
             if( pKey )
             {
                 const PPDValue* pValue = nullptr;
-                OUString aOption(OStringToOUString(aLine.copy(nPos+1), RTL_TEXTENCODING_MS_1252));
+                OUString aOption(
+                    OStringToOUString(aLine.subView(nPos+1), RTL_TEXTENCODING_MS_1252));
                 if (aOption != "*nil")
                     pValue = pKey->getValue( aOption );
                 m_aCurrentValues[ pKey ] = pValue;

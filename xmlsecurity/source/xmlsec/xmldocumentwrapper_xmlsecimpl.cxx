@@ -53,7 +53,7 @@ XMLDocumentWrapper_XmlSecImpl::XMLDocumentWrapper_XmlSecImpl()
     /*
      * creates the virtual root element
      */
-    saxHelper.startElement("root", uno::Sequence<css::xml::csax::XMLAttribute>());
+    saxHelper.startElement(u"root", uno::Sequence<css::xml::csax::XMLAttribute>());
 
     m_pRootElement = saxHelper.getCurrentNode();
     m_pCurrentElement = m_pRootElement;

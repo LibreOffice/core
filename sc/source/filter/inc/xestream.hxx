@@ -22,6 +22,8 @@
 
 #include <map>
 #include <stack>
+#include <string_view>
+
 #include <rtl/strbuf.hxx>
 
 #include <oox/core/xmlfilterbase.hxx>
@@ -328,8 +330,8 @@ private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
     virtual OUString SAL_CALL getImplementationName() override;
     ScDocShell *getDocShell();
-    void WriteAttribute(sal_Int32 nAttr, const OUString& sVal);
-    void WriteAttribute(sal_Int32 nAttr, const OString& sVal)
+    void WriteAttribute(sal_Int32 nAttr, std::u16string_view sVal);
+    void WriteAttribute(sal_Int32 nAttr, std::string_view sVal)
     {
         WriteAttribute(nAttr, OStringToOUString(sVal, RTL_TEXTENCODING_UTF8));
     }

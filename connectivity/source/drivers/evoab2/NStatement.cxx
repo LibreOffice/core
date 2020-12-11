@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -54,9 +58,9 @@ EBookQuery * createTrue()
     return e_book_query_from_string("(exists \"full_name\")");
 }
 
-EBookQuery * createTest( const OUString &aColumnName,
+EBookQuery * createTest( std::u16string_view aColumnName,
                              EBookQueryTest eTest,
-                             const OUString &aMatch )
+                             std::u16string_view aMatch )
 {
     OString sMatch = OUStringToOString( aMatch, RTL_TEXTENCODING_UTF8 );
     OString sColumnName = OUStringToOString( aColumnName, RTL_TEXTENCODING_UTF8 );
@@ -364,7 +368,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         {
             // String containing only a '%' and nothing else matches everything
             pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS,
-                                  "" );
+                                  u"" );
         }
         else if( aMatchString.indexOf( WILDCARD ) == -1 )
         {   // Simple string , eg. "to match" "contains in evo"
@@ -381,9 +385,10 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         else if( aMatchString.indexOf ( WILDCARD ) == aMatchString.lastIndexOf ( WILDCARD ) )
         {   // One occurrence of '%'  matches...
             if ( aMatchString.startsWith(OUStringChar(WILDCARD)) )
-                pResult = createTest( aColumnName, E_BOOK_QUERY_ENDS_WITH, aMatchString.copy( 1 ) );
+                pResult = createTest(
+                    aColumnName, E_BOOK_QUERY_ENDS_WITH, aMatchString.subView( 1 ) );
             else if ( aMatchString.indexOf ( WILDCARD ) == aMatchString.getLength() - 1 )
-                pResult = createTest( aColumnName, E_BOOK_QUERY_BEGINS_WITH, aMatchString.copy( 0, aMatchString.getLength() - 1 ) );
+                pResult = createTest( aColumnName, E_BOOK_QUERY_BEGINS_WITH, aMatchString.subView( 0, aMatchString.getLength() - 1 ) );
             else
                 m_xConnection->throwGenericSQLException(STR_QUERY_LIKE_WILDCARD,*this);
         }
@@ -391,7 +396,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
                  aMatchString.startsWith(OUStringChar(WILDCARD)) &&
                  aMatchString.indexOf ( WILDCARD, 1) == aMatchString.getLength() - 1 ) {
             // one '%' at the start and another at the end
-            pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS, aMatchString.copy (1, aMatchString.getLength() - 2) );
+            pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS, aMatchString.subView (1, aMatchString.getLength() - 2) );
         }
         else
             m_xConnection->throwGenericSQLException(STR_QUERY_LIKE_WILDCARD_MANY,*this);

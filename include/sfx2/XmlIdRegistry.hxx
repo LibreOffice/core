@@ -22,6 +22,8 @@
 
 #include <sal/config.h>
 
+#include <string_view>
+
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
 
@@ -37,10 +39,10 @@ namespace sfx2 {
 // XML ID utilities --------------------------------------------------
 
 /** is i_rIdref a valid NCName ? */
-bool SFX2_DLLPUBLIC isValidNCName(OUString const & i_rIdref);
+bool SFX2_DLLPUBLIC isValidNCName(std::u16string_view i_rIdref);
 
 bool SFX2_DLLPUBLIC isValidXmlId(OUString const & i_rStreamName,
-    OUString const & i_rIdref);
+    std::u16string_view i_rIdref);
 
 // XML ID handling ---------------------------------------------------
 

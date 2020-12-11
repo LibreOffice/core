@@ -37,7 +37,7 @@ public:
 } test;
 #endif
 
-SunVersion::SunVersion(const OUString &usVer):
+SunVersion::SunVersion(std::u16string_view usVer):
     m_nUpdateSpecial(0), m_preRelease(Rel_NONE)
 {
     OString sVersion= OUStringToOString(usVer, osl_getThreadTextEncoding());

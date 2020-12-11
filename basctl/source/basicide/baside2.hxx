@@ -35,6 +35,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <set>
+#include <string_view>
 
 #include <vcl/textdata.hxx>
 #include <basic/codecompletecache.hxx>
@@ -58,7 +59,7 @@ class ModulWindowLayout;
 // tools Strings limited to 64K).
 // defined in baside2b.cxx
 OUString getTextEngineText (ExtTextEngine&);
-void setTextEngineText (ExtTextEngine&, OUString const&);
+void setTextEngineText (ExtTextEngine&, std::u16string_view);
 
 class EditorWindow final : public vcl::Window, public SfxListener
 {

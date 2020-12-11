@@ -11,6 +11,7 @@
 #include <rtl/ustring.hxx>
 
 #include <memory>
+#include <string_view>
 #include <vector>
 
 #include <config_options_calc.h>
@@ -45,7 +46,7 @@ class FormulaLogger
 
     void writeAscii( const char* s );
     void writeAscii( const char* s, size_t n );
-    void write( const OUString& ou );
+    void write( std::u16string_view ou );
     void write( sal_Int32 n );
 
     void sync();

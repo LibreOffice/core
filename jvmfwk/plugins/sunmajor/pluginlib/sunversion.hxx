@@ -20,6 +20,10 @@
 #ifndef INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_SUNVERSION_HXX
 #define INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_SUNVERSION_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 
 namespace jfw_plugin
@@ -83,7 +87,7 @@ class SunVersion final
 
 public:
     explicit SunVersion(const char* szVer);
-    explicit SunVersion(const OUString& usVer);
+    explicit SunVersion(std::u16string_view usVer);
     ~SunVersion();
 
     /**

@@ -3091,7 +3091,7 @@ public:
 
 }
 
-void ScHTMLQueryParser::ParseStyle(const OUString& rStrm)
+void ScHTMLQueryParser::ParseStyle(std::u16string_view rStrm)
 {
     OString aStr = OUStringToOString(rStrm, RTL_TEXTENCODING_UTF8);
     CSSHandler aHdl;

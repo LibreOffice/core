@@ -208,7 +208,7 @@ appendKeyStrokes(OStringBuffer& rBuffer, const uno::Sequence< awt::KeyStroke >& 
             {
                 // The KeyCode approach did not work, probably a non ascii character
                 // let's hope that there is a character given in KeyChar.
-                rBuffer.append(OUStringToOString(OUString(rKeyStroke.KeyChar), RTL_TEXTENCODING_UTF8));
+                rBuffer.append(OUStringToOString(OUStringChar(rKeyStroke.KeyChar), RTL_TEXTENCODING_UTF8));
             }
         }
     }

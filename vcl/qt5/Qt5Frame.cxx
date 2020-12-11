@@ -742,7 +742,7 @@ void Qt5Frame::StartPresentation(bool bStart)
         aDisplay = QX11Info::display();
     }
 
-    m_ScreenSaverInhibitor.inhibit(bStart, "presentation", QX11Info::isPlatformX11(), aRootWindow,
+    m_ScreenSaverInhibitor.inhibit(bStart, u"presentation", QX11Info::isPlatformX11(), aRootWindow,
                                    aDisplay);
 #else
     (void)bStart;

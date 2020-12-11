@@ -25,6 +25,8 @@
 #endif
 
 #include <memory>
+#include <string_view>
+
 #include <vcl/dllapi.h>
 #include <vcl/syswin.hxx>
 #include <vcl/vclptr.hxx>
@@ -85,7 +87,7 @@ public:
 
 protected:
     explicit        Dialog( WindowType nType );
-    explicit        Dialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription);
+    explicit        Dialog( vcl::Window* pParent, std::u16string_view rID, const OUString& rUIXMLDescription);
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags ) override;
     virtual void    settingOptimalLayoutSize(Window *pBox) override;
 

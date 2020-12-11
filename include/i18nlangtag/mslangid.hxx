@@ -25,6 +25,8 @@
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <com/sun/star/lang/Locale.hpp>
+
+#include <string_view>
 #include <vector>
 
 struct IsoLanguageCountryEntry;
@@ -251,7 +253,7 @@ public:
 
         /** Used by convertUnxByteStringToLanguage(OString) */
         I18NLANGTAG_DLLPRIVATE static LanguageType convertIsoNamesToLanguage(
-                const OString& rLang, const OString& rCountry );
+                std::string_view rLang, std::string_view rCountry );
 
 
         /** Used by lookupFallbackLocale(Locale) */

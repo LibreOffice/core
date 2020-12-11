@@ -558,7 +558,7 @@ bool PrintFontManager::analyzeSfntFile( PrintFont* pFont ) const
                  if ( dotIndex == -1 )
                      dotIndex = pFont->m_aFontFile.getLength();
 
-                 pFont->m_aFamilyName = OStringToOUString(pFont->m_aFontFile.copy(0, dotIndex), aEncoding);
+                 pFont->m_aFamilyName = OStringToOUString(pFont->m_aFontFile.subView(0, dotIndex), aEncoding);
             }
         }
         for (auto const& aAlias : aNames)
@@ -841,7 +841,7 @@ int PrintFontManager::getFontFaceVariation( fontID nFontID ) const
     return nRet;
 }
 
-FontFamily PrintFontManager::matchFamilyName( const OUString& rFamily )
+FontFamily PrintFontManager::matchFamilyName( std::u16string_view rFamily )
 {
     struct family_t {
         const char*  mpName;

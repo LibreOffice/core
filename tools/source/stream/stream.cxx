@@ -706,7 +706,7 @@ bool SvStream::WriteUnicodeOrByteText( const OUString& rStr, rtl_TextEncoding eD
     }
 }
 
-bool SvStream::WriteByteStringLine( const OUString& rStr, rtl_TextEncoding eDestCharSet )
+bool SvStream::WriteByteStringLine( std::u16string_view rStr, rtl_TextEncoding eDestCharSet )
 {
     return WriteLine(OUStringToOString(rStr, eDestCharSet));
 }

@@ -21,7 +21,7 @@
 #define INCLUDED_UNOXML_SOURCE_DOM_ELEMENTLIST_HXX
 
 #include <vector>
-
+#include <string_view>
 #include <memory>
 
 #include <libxml/tree.h>
@@ -63,7 +63,7 @@ namespace DOM
     public:
         CElementListImpl(::rtl::Reference<CElement> const& pElement,
                 ::osl::Mutex & rMutex,
-                OUString const& rName, OUString const*const pURI);
+                std::u16string_view rName, OUString const*const pURI);
 
         void registerListener(CElement & rElement);
 
@@ -91,7 +91,7 @@ namespace DOM
     public:
         CElementList(::rtl::Reference<CElement> const& pElement,
                 ::osl::Mutex & rMutex,
-                OUString const& rName, OUString const*const pURI = nullptr);
+                std::u16string_view rName, OUString const*const pURI = nullptr);
 
         /**
         The number of nodes in the list.

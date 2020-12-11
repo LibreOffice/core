@@ -328,8 +328,8 @@ void Columns::refresh()
 
 
 void alterColumnByDescriptor(
-    const OUString & schemaName,
-    const OUString & tableName,
+    std::u16string_view schemaName,
+    std::u16string_view tableName,
     ConnectionSettings *settings,
     const Reference< XStatement > &stmt,
     const css::uno::Reference< css::beans::XPropertySet > & past,

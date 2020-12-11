@@ -119,7 +119,8 @@ void XclExpString::Assign( sal_Unicode cChar )
 }
 
 void XclExpString::AssignByte(
-        const OUString& rString, rtl_TextEncoding eTextEnc, XclStrFlags nFlags, sal_uInt16 nMaxLen )
+        std::u16string_view rString, rtl_TextEncoding eTextEnc, XclStrFlags nFlags,
+        sal_uInt16 nMaxLen )
 {
     // length may differ from length of rString
     OString aByteStr(OUStringToOString(rString, eTextEnc));
@@ -133,9 +134,9 @@ void XclExpString::Append( const OUString& rString )
     BuildAppend( rString.getStr(), rString.getLength() );
 }
 
-void XclExpString::AppendByte( const OUString& rString, rtl_TextEncoding eTextEnc )
+void XclExpString::AppendByte( std::u16string_view rString, rtl_TextEncoding eTextEnc )
 {
-    if (!rString.isEmpty())
+    if (!rString.empty())
     {
         // length may differ from length of rString
         OString aByteStr(OUStringToOString(rString, eTextEnc));

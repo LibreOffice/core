@@ -18,6 +18,7 @@
  */
 
 #include <stdio.h>
+#include <string_view>
 
 #include <sal/main.h>
 #include <sal/log.hxx>
@@ -68,7 +69,7 @@ static void out( const char * pText )
         fprintf( stderr, "%s", pText );
 }
 
-static void out( const OUString & rText )
+static void out( std::u16string_view rText )
 {
     if (! s_quiet)
     {

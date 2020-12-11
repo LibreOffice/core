@@ -19,6 +19,10 @@
 #ifndef INCLUDED_TOOLS_WLDCRD_HXX
 #define INCLUDED_TOOLS_WLDCRD_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <tools/toolsdllapi.h>
 #include <osl/thread.h>
 #include <rtl/ustring.hxx>
@@ -38,7 +42,7 @@ public:
     {
     }
 
-    WildCard(const OUString& rWildCard, const char cSeparator = '\0')
+    WildCard(std::u16string_view rWildCard, const char cSeparator = '\0')
         : aWildString(OUStringToOString(rWildCard, osl_getThreadTextEncoding()))
         , cSepSymbol(cSeparator)
     {
@@ -49,12 +53,12 @@ public:
         return OStringToOUString(aWildString, osl_getThreadTextEncoding());
     }
 
-    void setGlob(const OUString& rString)
+    void setGlob(std::u16string_view rString)
     {
         aWildString = OUStringToOString(rString, osl_getThreadTextEncoding());
     }
 
-    bool Matches( const OUString& rStr ) const;
+    bool Matches( std::u16string_view rStr ) const;
 };
 
 #endif

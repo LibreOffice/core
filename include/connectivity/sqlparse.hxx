@@ -20,6 +20,7 @@
 #define INCLUDED_CONNECTIVITY_SQLPARSE_HXX
 
 #include <memory>
+#include <string_view>
 
 #include <com/sun/star/uno/Reference.h>
 #include <osl/mutex.hxx>
@@ -195,7 +196,7 @@ namespace connectivity
         // RuleId with enum, far more efficient
         static sal_uInt32 RuleID(OSQLParseNode::Rule eRule);
         // compares the _sFunctionName with all known function names and return the DataType of the return value
-        static sal_Int32 getFunctionReturnType(const OUString& _sFunctionName, const IParseContext* pContext);
+        static sal_Int32 getFunctionReturnType(std::u16string_view _sFunctionName, const IParseContext* pContext);
 
         // returns the type for a parameter in a given function name
         static sal_Int32 getFunctionParameterType(sal_uInt32 _nTokenId,sal_uInt32 _nPos);

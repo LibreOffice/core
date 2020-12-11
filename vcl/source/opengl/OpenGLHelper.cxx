@@ -25,6 +25,7 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 
 #include <stdarg.h>
+#include <string_view>
 #include <vector>
 #include <unordered_map>
 
@@ -301,15 +302,15 @@ namespace
         return false;
     }
 
-    OString createFileName( const OUString& rVertexShaderName,
-                            const OUString& rFragmentShaderName,
-                            const OUString& rGeometryShaderName,
+    OString createFileName( std::u16string_view rVertexShaderName,
+                            std::u16string_view rFragmentShaderName,
+                            std::u16string_view rGeometryShaderName,
                             const OString& rDigest )
     {
         OString aFileName = getCacheFolder() +
             OUStringToOString( rVertexShaderName, RTL_TEXTENCODING_UTF8 ) + "-" +
             OUStringToOString( rFragmentShaderName, RTL_TEXTENCODING_UTF8 ) + "-";
-        if (!rGeometryShaderName.isEmpty())
+        if (!rGeometryShaderName.empty())
             aFileName += OUStringToOString( rGeometryShaderName, RTL_TEXTENCODING_UTF8 ) + "-";
         aFileName += rDigest + ".bin";
         return aFileName;

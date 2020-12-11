@@ -20,6 +20,10 @@
 #ifndef INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SERIALIZATION_URLENCODED_HXX
 #define INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SERIALIZATION_URLENCODED_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/io/XPipe.hpp>
 
 #include <rtl/strbuf.hxx>
@@ -32,7 +36,7 @@ private:
     css::uno::Reference<css::io::XPipe> m_aPipe;
 
     static bool is_unreserved(char);
-    static void encode_and_append(const OUString& aString, OStringBuffer& aBuffer);
+    static void encode_and_append(std::u16string_view aString, OStringBuffer& aBuffer);
     void serialize_node(const css::uno::Reference<css::xml::dom::XNode>& aNode);
 
 public:

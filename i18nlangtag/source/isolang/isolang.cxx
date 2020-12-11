@@ -1416,8 +1416,8 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
 
 
 // static
-LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OString& rLang,
-        const OString& rCountry )
+LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( std::string_view rLang,
+        std::string_view rCountry )
 {
     OUString aLang = OStringToOUString( rLang, RTL_TEXTENCODING_ASCII_US);
     OUString aCountry = OStringToOUString( rCountry, RTL_TEXTENCODING_ASCII_US);

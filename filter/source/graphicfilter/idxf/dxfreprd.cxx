@@ -436,7 +436,7 @@ namespace {
     }
 }
 
-OUString DXFRepresentation::ToOUString(const OString& s) const
+OUString DXFRepresentation::ToOUString(std::string_view s) const
 {
     OUString result = OStringToOUString(s, getTextEncoding(),
                                            RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR

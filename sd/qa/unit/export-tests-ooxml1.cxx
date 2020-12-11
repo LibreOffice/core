@@ -6,6 +6,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <officecfg/Office/Common.hxx>
 #include "sdmodeltestbase.hxx"
 #include <Outliner.hxx>
@@ -537,7 +542,7 @@ void SdOOXMLExportTest1::testTableCellFillProperties()
     uno::Reference< lang::XComponent > xComponent = xDocShRef->GetModel();
     uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[PPTX].pFilterName), RTL_TEXTENCODING_UTF8);
+    aMediaDescriptor["FilterName"] <<= OStringToOUString(std::string_view(aFileFormats[PPTX].pFilterName), RTL_TEXTENCODING_UTF8);
 
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();

@@ -434,8 +434,8 @@ void lcl_parseEquations(std::vector<OUString>& rEquations, const OString& rValue
         else if (rValue[i] == '"' && bInString)
         {
             bInString = false;
-            rEquations.push_back(
-                OUString::fromUtf8(rValue.copy(nStart + strlen("\""), i - nStart - strlen("\""))));
+            rEquations.push_back(OUString::fromUtf8(
+                rValue.subView(nStart + strlen("\""), i - nStart - strlen("\""))));
         }
     }
 }
@@ -763,8 +763,8 @@ void CustomShapeProperties::initializePresetDataMap()
             else
                 maPresetDataMap[TokenMap::getTokenFromUnicode(aName)] = aPropertyMap;
             aName = OUString::fromUtf8(
-                aLine.copy(strlen(aCommentPrefix),
-                           aLine.getLength() - strlen(aCommentPrefix) - strlen(" */")));
+                aLine.subView(strlen(aCommentPrefix),
+                              aLine.getLength() - strlen(aCommentPrefix) - strlen(" */")));
         }
         else
         {

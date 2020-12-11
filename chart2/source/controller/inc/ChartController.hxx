@@ -40,6 +40,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <memory>
+#include <string_view>
 
 namespace com::sun::star::accessibility { class XAccessible; }
 namespace com::sun::star::accessibility { class XAccessibleContext; }
@@ -426,7 +427,7 @@ private:
 
     //executeDispatch methods
     void executeDispatch_ObjectProperties();
-    void executeDispatch_FormatObject( const OUString& rDispatchCommand );
+    void executeDispatch_FormatObject( std::u16string_view rDispatchCommand );
     void executeDlg_ObjectProperties( const OUString& rObjectCID );
     bool executeDlg_ObjectProperties_withoutUndoGuard( const OUString& rObjectCID, bool bSuccessOnUnchanged );
 

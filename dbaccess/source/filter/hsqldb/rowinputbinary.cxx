@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "rowinputbinary.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
@@ -82,7 +86,8 @@ OUString lcl_double_dabble(const std::vector<sal_uInt8>& bytes)
         digit += '0';
 
     /* Resize and return the resulting string. */
-    return OStringToOUString(OString(scratch.data(), scratch.size()), RTL_TEXTENCODING_UTF8);
+    return OStringToOUString(std::string_view(scratch.data(), scratch.size()),
+                             RTL_TEXTENCODING_UTF8);
 }
 
 OUString lcl_makeStringFromBigint(const std::vector<sal_uInt8>& bytes)

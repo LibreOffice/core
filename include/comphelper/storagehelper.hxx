@@ -24,6 +24,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <memory>
+#include <string_view>
 
 #define PACKAGE_STORAGE_FORMAT_STRING   "PackageFormat"
 #define ZIP_STORAGE_FORMAT_STRING       "ZipFormat"
@@ -171,7 +172,7 @@ public:
 
     static css::uno::Sequence< css::beans::NamedValue >
         CreatePackageEncryptionData(
-            const OUString& aPassword );
+            std::u16string_view aPassword );
 
     static css::uno::Sequence< css::beans::NamedValue >
         CreateGpgPackageEncryptionData();

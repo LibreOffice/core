@@ -57,7 +57,7 @@ void OFileWriter::writeFunction(const char *func, const char *count, const char 
     fprintf(m_f, "\treturn (sal_Unicode**)%s;\n}\n", array);
 }
 
-void OFileWriter::writeRefFunction(const char *func, const OUString& useLocale) const
+void OFileWriter::writeRefFunction(const char *func, std::u16string_view useLocale) const
 {
     OString aRefLocale( OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US) );
     const char* locale = aRefLocale.getStr();
@@ -75,7 +75,7 @@ void OFileWriter::writeFunction(const char *func, const char *count, const char 
     fprintf(m_f, "\treturn (sal_Unicode**)%s;\n}\n", array);
 }
 
-void OFileWriter::writeRefFunction(const char *func, const OUString& useLocale, const char *to) const
+void OFileWriter::writeRefFunction(const char *func, std::u16string_view useLocale, const char *to) const
 {
     OString aRefLocale( OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US) );
     const char* locale = aRefLocale.getStr();
@@ -94,7 +94,7 @@ void OFileWriter::writeFunction2(const char *func, const char *style, const char
     fprintf(m_f, "\treturn %s;\n}\n", array);
 }
 
-void OFileWriter::writeRefFunction2(const char *func, const OUString& useLocale) const
+void OFileWriter::writeRefFunction2(const char *func, std::u16string_view useLocale) const
 {
     OString aRefLocale( OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US) );
     const char* locale = aRefLocale.getStr();
@@ -112,7 +112,7 @@ void OFileWriter::writeFunction3(const char *func, const char *style, const char
     fprintf(m_f, "\treturn %s;\n}\n", array);
 }
 
-void OFileWriter::writeRefFunction3(const char *func, const OUString& useLocale) const
+void OFileWriter::writeRefFunction3(const char *func, std::u16string_view useLocale) const
 {
     OString aRefLocale( OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US) );
     const char* locale = aRefLocale.getStr();

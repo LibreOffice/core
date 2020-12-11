@@ -315,7 +315,7 @@ struct WriteDummy
 }
 
 bool
-Idlc::dumpDeps(OString const& rDepFile, OString const& rTarget)
+Idlc::dumpDeps(std::string_view rDepFile, OString const& rTarget)
 {
     ::osl::File depFile(
             OStringToOUString(rDepFile, osl_getThreadTextEncoding()));

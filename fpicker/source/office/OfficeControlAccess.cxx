@@ -211,7 +211,7 @@ namespace svt
         return sHelpURL;
     }
 
-    Any OControlAccess::getControlProperty( const OUString& rControlName, const OUString& rControlProperty )
+    Any OControlAccess::getControlProperty( std::u16string_view rControlName, const OUString& rControlProperty )
     {
         // look up the control
         sal_Int16 nControlId = -1;
@@ -232,7 +232,7 @@ namespace svt
         return implGetControlProperty( pControl, aPropDesc->nPropertyId );
     }
 
-    weld::Widget* OControlAccess::implGetControl( const OUString& rControlName, sal_Int16* _pId, PropFlags* _pPropertyMask ) const
+    weld::Widget* OControlAccess::implGetControl( std::u16string_view rControlName, sal_Int16* _pId, PropFlags* _pPropertyMask ) const
     {
         weld::Widget* pControl = nullptr;
         ControlDescription tmpDesc;
@@ -260,7 +260,7 @@ namespace svt
         return pControl;
     }
 
-    void OControlAccess::setControlProperty( const OUString& rControlName, const OUString& rControlProperty, const css::uno::Any& rValue )
+    void OControlAccess::setControlProperty( std::u16string_view rControlName, const OUString& rControlProperty, const css::uno::Any& rValue )
     {
         // look up the control
         sal_Int16 nControlId = -1;
@@ -292,7 +292,7 @@ namespace svt
         return aControls;
     }
 
-    Sequence< OUString > OControlAccess::getSupportedControlProperties( const OUString& rControlName )
+    Sequence< OUString > OControlAccess::getSupportedControlProperties( std::u16string_view rControlName )
     {
         sal_Int16 nControlId = -1;
         PropFlags nPropertyMask = PropFlags::NONE;
@@ -311,7 +311,7 @@ namespace svt
         return aProps;
     }
 
-    bool OControlAccess::isControlSupported( const OUString& rControlName )
+    bool OControlAccess::isControlSupported( std::u16string_view rControlName )
     {
         ControlDescription tmpDesc;
         OString aControlName = OUStringToOString(rControlName, RTL_TEXTENCODING_UTF8);
@@ -319,7 +319,7 @@ namespace svt
         return ::std::binary_search( s_pControls, s_pControlsEnd, tmpDesc, ControlDescriptionLookup() );
     }
 
-    bool OControlAccess::isControlPropertySupported( const OUString& rControlName, const OUString& rControlProperty )
+    bool OControlAccess::isControlPropertySupported( std::u16string_view rControlName, const OUString& rControlProperty )
     {
         // look up the control
         sal_Int16 nControlId = -1;

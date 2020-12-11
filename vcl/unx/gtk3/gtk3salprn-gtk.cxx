@@ -33,6 +33,7 @@
 
 #include <cstring>
 #include <map>
+#include <string_view>
 
 namespace beans = com::sun::star::beans;
 namespace uno = com::sun::star::uno;
@@ -285,7 +286,7 @@ lcl_setHelpText(
 GtkWidget*
 lcl_makeFrame(
         GtkWidget* const i_pChild,
-        const OUString &i_rText,
+        std::u16string_view i_rText,
         const uno::Sequence<OUString> &i_rHelpTexts,
         sal_Int32* const io_pCurHelpText)
 {

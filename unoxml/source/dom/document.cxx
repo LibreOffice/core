@@ -440,8 +440,8 @@ namespace DOM
         OString oPrefix, oName, oUri;
         if (i != -1)
         {
-            oPrefix = OUStringToOString(qname.copy(0, i), RTL_TEXTENCODING_UTF8);
-            oName = OUStringToOString(qname.copy(i+1), RTL_TEXTENCODING_UTF8);
+            oPrefix = OUStringToOString(qname.subView(0, i), RTL_TEXTENCODING_UTF8);
+            oName = OUStringToOString(qname.subView(i+1), RTL_TEXTENCODING_UTF8);
         }
         else
         {
@@ -530,9 +530,9 @@ namespace DOM
         xmlChar const *pName;
         OString o1, o2, o3;
         if ( i != -1) {
-            o1 = OUStringToOString(qname.copy(0, i), RTL_TEXTENCODING_UTF8);
+            o1 = OUStringToOString(qname.subView(0, i), RTL_TEXTENCODING_UTF8);
             pPrefix = reinterpret_cast<xmlChar const *>(o1.getStr());
-            o2 = OUStringToOString(qname.copy(i+1), RTL_TEXTENCODING_UTF8);
+            o2 = OUStringToOString(qname.subView(i+1), RTL_TEXTENCODING_UTF8);
             pName = reinterpret_cast<xmlChar const *>(o2.getStr());
         } else {
             // default prefix

@@ -36,7 +36,7 @@ void XmpMetadata::write()
 
     // Header
     mpMemoryStream->WriteOString("<?xpacket begin=\"");
-    mpMemoryStream->WriteOString(OUStringToOString(OUString(u'\xFEFF'), RTL_TEXTENCODING_UTF8));
+    mpMemoryStream->WriteOString(OUStringToOString(u"\xFEFF", RTL_TEXTENCODING_UTF8));
     mpMemoryStream->WriteOString("\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>\n");
 
     {

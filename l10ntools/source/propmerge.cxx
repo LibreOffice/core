@@ -13,6 +13,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <string_view>
 
 #include <export.hxx>
 #include <common.hxx>
@@ -59,7 +60,7 @@ namespace
     }
 
     //Escape unicode characters
-    void lcl_PrintJavaStyle( const OString& rText, std::ofstream &rOfstream )
+    void lcl_PrintJavaStyle( std::string_view rText, std::ofstream &rOfstream )
     {
         const OUString sTemp =
             OStringToOUString( rText, RTL_TEXTENCODING_UTF8 );

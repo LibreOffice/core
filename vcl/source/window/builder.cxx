@@ -1654,7 +1654,7 @@ VclBuilder::customMakeWidget GetCustomMakeWidget(const OString& rName)
 
 #ifndef DISABLE_DYNLOADING
         const OUString sModule = SAL_DLLPREFIX
-                                 + OStringToOUString(name.copy(0, nDelim), RTL_TEXTENCODING_UTF8)
+                                 + OStringToOUString(name.subView(0, nDelim), RTL_TEXTENCODING_UTF8)
                                  + SAL_DLLEXTENSION;
         ModuleMap::iterator aI = g_aModuleMap.find(sModule);
         if (aI == g_aModuleMap.end())
@@ -3429,7 +3429,7 @@ void VclBuilder::handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader)
             sal_Int32 nDelim = sID.indexOf(':');
             if (nDelim != -1)
             {
-                sCustomProperty = OUString::fromUtf8(sID.copy(nDelim+1));
+                sCustomProperty = OUString::fromUtf8(sID.subView(nDelim+1));
                 sID = sID.copy(0, nDelim);
             }
         }
@@ -3722,7 +3722,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pA
                 sal_Int32 nDelim = sID.indexOf(':');
                 if (nDelim != -1)
                 {
-                    sCustomProperty = OUString::fromUtf8(sID.copy(nDelim+1));
+                    sCustomProperty = OUString::fromUtf8(sID.subView(nDelim+1));
                     sID = sID.copy(0, nDelim);
                 }
             }

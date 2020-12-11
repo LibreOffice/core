@@ -461,7 +461,7 @@ namespace dbaui
         // If no driver for embedded DBs is installed, and no dBase driver, then hide the "Create new database" option
         sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( dbaccess::ODsnTypeCollection::getEmbeddedDatabase() );
         if ( nCreateNewDBIndex == -1 )
-            nCreateNewDBIndex = m_pCollection->getIndexOf( "sdbc:dbase:" );
+            nCreateNewDBIndex = m_pCollection->getIndexOf( u"sdbc:dbase:" );
         bool bHideCreateNew = ( nCreateNewDBIndex == -1 );
 
         // also, if our application policies tell us to hide the option, do it
@@ -551,7 +551,7 @@ namespace dbaui
         // Sets the default selected database on startup.
         if (m_xRB_CreateDatabase->get_active() )
         {
-            return m_pCollection->getTypeDisplayName( "sdbc:firebird:" );
+            return m_pCollection->getTypeDisplayName( u"sdbc:firebird:" );
         }
 
         return OGeneralPage::getDatasourceName( _rSet );

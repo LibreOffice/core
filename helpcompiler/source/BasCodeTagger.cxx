@@ -141,7 +141,7 @@ void BasicCodeTagger::tagParagraph( xmlNodePtr paragraph )
     m_Highlighter.getHighlightPortions( strLine, portions );
     for (auto const& portion : portions)
     {
-        OString sToken(OUStringToOString(strLine.copy(portion.nBegin, portion.nEnd-portion.nBegin), RTL_TEXTENCODING_UTF8));
+        OString sToken(OUStringToOString(strLine.subView(portion.nBegin, portion.nEnd-portion.nBegin), RTL_TEXTENCODING_UTF8));
         xmlNodePtr text = xmlNewText(reinterpret_cast<const xmlChar*>(sToken.getStr()));
         if ( portion.tokenType != TokenType::Whitespace )
         {

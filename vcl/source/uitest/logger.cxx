@@ -181,12 +181,12 @@ void UITestLogger::logAction(vcl::Window* const& xUIWin, VclEventId nEvent)
         maStream.WriteLine(OUStringToOString(aAction, RTL_TEXTENCODING_UTF8));
 }
 
-void UITestLogger::log(const OUString& rString)
+void UITestLogger::log(std::u16string_view rString)
 {
     if (!mbValid)
         return;
 
-    if (rString.isEmpty())
+    if (rString.empty())
         return;
 
     maStream.WriteLine(OUStringToOString(rString, RTL_TEXTENCODING_UTF8));

@@ -12,6 +12,8 @@
 #include <deque>
 #include <stack>
 #include <string.h>
+#include <string_view>
+
 #include <osl/process.h>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
@@ -3271,7 +3273,7 @@ namespace
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
 
-    void set_title(GtkWindow* pWindow, const OUString& rTitle)
+    void set_title(GtkWindow* pWindow, std::u16string_view rTitle)
     {
         gtk_window_set_title(pWindow, OUStringToOString(rTitle, RTL_TEXTENCODING_UTF8).getStr());
     }
@@ -3283,14 +3285,14 @@ namespace
         return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
     }
 
-    void set_primary_text(GtkMessageDialog* pMessageDialog, const OUString& rText)
+    void set_primary_text(GtkMessageDialog* pMessageDialog, std::u16string_view rText)
     {
         g_object_set(G_OBJECT(pMessageDialog), "text",
             OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
             nullptr);
     }
 
-    void set_secondary_text(GtkMessageDialog* pMessageDialog, const OUString& rText)
+    void set_secondary_text(GtkMessageDialog* pMessageDialog, std::u16string_view rText)
     {
         g_object_set(G_OBJECT(pMessageDialog), "secondary-text",
                 OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
@@ -3507,7 +3509,7 @@ public:
             g_signal_handlers_unblock_by_func(a.second, reinterpret_cast<void*>(signalActivate), this);
     }
 
-    void insert_item(int pos, const OUString& rId, const OUString& rStr,
+    void insert_item(int pos, std::u16string_view rId, const OUString& rStr,
                      const OUString* pIconName, const VirtualDevice* pImageSurface,
                      TriState eCheckRadioFalse)
     {
@@ -3552,7 +3554,7 @@ public:
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
     }
 
-    void insert_separator(int pos, const OUString& rId)
+    void insert_separator(int pos, std::u16string_view rId)
     {
         GtkWidget* pItem = gtk_separator_menu_item_new();
         gtk_buildable_set_name(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr());
@@ -9473,7 +9475,7 @@ public:
         OString str;
         int index;
         int col;
-        Search(const OUString& rText, int nCol)
+        Search(std::u16string_view rText, int nCol)
             : str(OUStringToOString(rText, RTL_TEXTENCODING_UTF8))
             , index(-1)
             , col(nCol)
@@ -9497,7 +9499,7 @@ public:
         return found;
     }
 
-    void insert_row(GtkListStore* pListStore, GtkTreeIter& iter, int pos, const OUString* pId, const OUString& rText, const OUString* pIconName, const VirtualDevice* pDevice)
+    void insert_row(GtkListStore* pListStore, GtkTreeIter& iter, int pos, const OUString* pId, std::u16string_view rText, const OUString* pIconName, const VirtualDevice* pDevice)
     {
         if (!pIconName && !pDevice)
         {
@@ -10046,13 +10048,13 @@ private:
         }
     }
 
-    void set(const GtkTreeIter& iter, int col, const OUString& rText)
+    void set(const GtkTreeIter& iter, int col, std::u16string_view rText)
     {
         OString aStr(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
         m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), col, aStr.getStr(), -1);
     }
 
-    void set(int pos, int col, const OUString& rText)
+    void set(int pos, int col, std::u16string_view rText)
     {
         GtkTreeIter iter;
         if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
@@ -14479,7 +14481,7 @@ private:
         return sRet;
     }
 
-    void set(int pos, int col, const OUString& rText)
+    void set(int pos, int col, std::u16string_view rText)
     {
         GtkTreeIter iter;
         if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
@@ -14489,7 +14491,7 @@ private:
         }
     }
 
-    int find(const OUString& rStr, int col, bool bSearchMRUArea) const
+    int find(std::u16string_view rStr, int col, bool bSearchMRUArea) const
     {
         GtkTreeIter iter;
         if (!gtk_tree_model_get_iter_first(m_pTreeModel, &iter))
@@ -15013,12 +15015,12 @@ private:
             signal_changed();
     }
 
-    int find_text_including_mru(const OUString& rStr, bool bSearchMRU) const
+    int find_text_including_mru(std::u16string_view rStr, bool bSearchMRU) const
     {
         return find(rStr, m_nTextCol, bSearchMRU);
     }
 
-    int find_id_including_mru(const OUString& rId, bool bSearchMRU) const
+    int find_id_including_mru(std::u16string_view rId, bool bSearchMRU) const
     {
         return find(rId, m_nIdCol, bSearchMRU);
     }
@@ -15033,7 +15035,7 @@ private:
         return get(pos, m_nIdCol);
     }
 
-    void set_id_including_mru(int pos, const OUString& rId)
+    void set_id_including_mru(int pos, std::u16string_view rId)
     {
         set(pos, m_nIdCol, rId);
     }
@@ -15077,14 +15079,14 @@ private:
         GtkTreeIter iter;
         if (!gtk_tree_view_get_row_separator_func(m_pTreeView))
             gtk_tree_view_set_row_separator_func(m_pTreeView, separatorFunction, this, nullptr);
-        insert_row(GTK_LIST_STORE(m_pTreeModel), iter, pos, &rId, "", nullptr, nullptr);
+        insert_row(GTK_LIST_STORE(m_pTreeModel), iter, pos, &rId, u"", nullptr, nullptr);
         GtkTreePath* pPath = gtk_tree_path_new_from_indices(pos, -1);
         m_aSeparatorRows.emplace_back(gtk_tree_row_reference_new(m_pTreeModel, pPath));
         gtk_tree_path_free(pPath);
         enable_notify_events();
     }
 
-    void insert_including_mru(int pos, const OUString& rText, const OUString* pId, const OUString* pIconName, const VirtualDevice* pImageSurface)
+    void insert_including_mru(int pos, std::u16string_view rText, const OUString* pId, const OUString* pIconName, const VirtualDevice* pImageSurface)
     {
         disable_notify_events();
         GtkTreeIter iter;

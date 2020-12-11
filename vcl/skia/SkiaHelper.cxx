@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <vcl/skia/SkiaHelper.hxx>
 
 #if !HAVE_FEATURE_SKIA
@@ -87,7 +91,7 @@ static void writeToLog(SvStream& stream, const char* key, const char* value)
     stream.WriteChar('\n');
 }
 
-static void writeToLog(SvStream& stream, const char* key, const OUString& value)
+static void writeToLog(SvStream& stream, const char* key, std::u16string_view value)
 {
     writeToLog(stream, key, OUStringToOString(value, RTL_TEXTENCODING_UTF8).getStr());
 }

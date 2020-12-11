@@ -562,7 +562,7 @@ void Dialog::doDeferredInit(WinBits nBits)
     mbIsDeferredInit = false;
 }
 
-Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription)
+Dialog::Dialog(vcl::Window* pParent, std::u16string_view rID, const OUString& rUIXMLDescription)
     : SystemWindow(WindowType::DIALOG)
     , mnInitFlag(InitFlag::Default)
 {
@@ -624,7 +624,7 @@ void Dialog::dispose()
     css::document::DocumentEvent aObject;
     aObject.EventName = "DialogClosed";
     xEventBroadcaster->documentEventOccured(aObject);
-    UITestLogger::getInstance().log("Close Dialog");
+    UITestLogger::getInstance().log(u"Close Dialog");
 
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -995,9 +995,9 @@ bool Dialog::ImplStartExecute()
     aObject.EventName = "DialogExecute";
     xEventBroadcaster->documentEventOccured(aObject);
     if (bModal)
-        UITestLogger::getInstance().log("Open Modal " + get_id());
+        UITestLogger::getInstance().log(OUString("Open Modal " + get_id()));
     else
-        UITestLogger::getInstance().log("Open Modeless " + get_id());
+        UITestLogger::getInstance().log(OUString("Open Modeless " + get_id()));
 
     bool bTunnelingEnabled = mpDialogImpl->m_bLOKTunneling;
     if (comphelper::LibreOfficeKit::isActive() && bTunnelingEnabled)

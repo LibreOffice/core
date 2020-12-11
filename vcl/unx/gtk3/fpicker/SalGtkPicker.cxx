@@ -254,7 +254,7 @@ OUString SalGtkPicker::implgetDisplayDirectory()
     return aCurrentFolderName;
 }
 
-void SalGtkPicker::implsetTitle( const OUString& aTitle )
+void SalGtkPicker::implsetTitle( std::u16string_view aTitle )
 {
     OSL_ASSERT( m_pDialog != nullptr );
 

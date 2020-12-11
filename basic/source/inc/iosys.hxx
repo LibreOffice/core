@@ -20,6 +20,8 @@
 #pragma once
 
 #include <memory>
+#include <string_view>
+
 #include <tools/stream.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
@@ -58,7 +60,7 @@ class SbiStream
 public:
     SbiStream();
    ~SbiStream();
-    ErrCode const & Open( const OString&, StreamMode, SbiStreamFlags, short );
+    ErrCode const & Open( std::string_view, StreamMode, SbiStreamFlags, short );
     ErrCode const & Close();
     ErrCode Read(OString&, sal_uInt16 = 0, bool bForceReadingPerByte=false);
     ErrCode const & Read( char& );
@@ -96,7 +98,7 @@ public:
     void  SetChannel( short n  )       { nChan = n;   }
     short GetChannel() const           { return nChan;}
     void  ResetChannel()               { nChan = 0;   }
-    void  Open( short, const OString&, StreamMode, SbiStreamFlags, short );
+    void  Open( short, std::string_view, StreamMode, SbiStreamFlags, short );
     void  Close();
     void  Read(OString&);
     char  Read();

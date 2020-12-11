@@ -63,6 +63,7 @@
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 #include <memory>
 #include <random>
+#include <string_view>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 using namespace comphelper;
@@ -2575,7 +2576,7 @@ static OUString implSetupWildcard(const OUString& rFileParam, SbiRTLData& rRTLDa
     return aPathStr;
 }
 
-static bool implCheckWildcard(const OUString& rName, SbiRTLData const& rRTLData)
+static bool implCheckWildcard(std::u16string_view rName, SbiRTLData const& rRTLData)
 {
     bool bMatch = true;
 

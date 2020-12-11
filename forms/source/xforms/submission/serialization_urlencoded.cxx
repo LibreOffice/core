@@ -69,7 +69,8 @@ bool CSerializationURLEncoded::is_unreserved(char c)
     }
     return false;
 }
-void  CSerializationURLEncoded::encode_and_append(const OUString& aString, OStringBuffer& aBuffer)
+void  CSerializationURLEncoded::encode_and_append(
+    std::u16string_view aString, OStringBuffer& aBuffer)
 {
     OString utf8String = OUStringToOString(aString, RTL_TEXTENCODING_UTF8);
     const sal_uInt8 *pString = reinterpret_cast< const sal_uInt8 * >( utf8String.getStr() );

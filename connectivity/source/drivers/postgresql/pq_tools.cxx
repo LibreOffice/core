@@ -57,6 +57,7 @@
 
 #include <libpq-fe.h>
 #include <string.h>
+#include <string_view>
 
 using com::sun::star::beans::XPropertySet;
 
@@ -91,16 +92,16 @@ OUString concatQualified( const OUString & a, const OUString &b)
     return a + "." + b;
 }
 
-static OString iOUStringToOString( const OUString& str, ConnectionSettings const *settings) {
+static OString iOUStringToOString( std::u16string_view str, ConnectionSettings const *settings) {
     OSL_ENSURE(settings, "pgsql-sdbc: OUStringToOString got NULL settings");
-    return OUStringToOString( str, ConnectionSettings::encoding );
+    return rtl::OUStringToOString( str, ConnectionSettings::encoding );
 }
 
-OString OUStringToOString( const OUString& str, ConnectionSettings const *settings) {
+OString OUStringToOString( std::u16string_view str, ConnectionSettings const *settings) {
     return iOUStringToOString( str, settings );
 }
 
-void bufferEscapeConstant( OUStringBuffer & buf, const OUString & value, ConnectionSettings *settings )
+void bufferEscapeConstant( OUStringBuffer & buf, std::u16string_view value, ConnectionSettings *settings )
 {
 
     OString y = iOUStringToOString( value, settings );
@@ -127,14 +128,14 @@ void bufferEscapeConstant( OUStringBuffer & buf, const OUString & value, Connect
     buf.append( OStringToOUString( strbuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ) );
 }
 
-static void ibufferQuoteConstant( OUStringBuffer & buf, const OUString & value, ConnectionSettings *settings )
+static void ibufferQuoteConstant( OUStringBuffer & buf, std::u16string_view value, ConnectionSettings *settings )
 {
     buf.append( "'" );
     bufferEscapeConstant( buf, value, settings );
     buf.append( "'" );
 }
 
-void bufferQuoteConstant( OUStringBuffer & buf, const OUString & value, ConnectionSettings *settings )
+void bufferQuoteConstant( OUStringBuffer & buf, std::u16string_view value, ConnectionSettings *settings )
 {
     return ibufferQuoteConstant( buf, value, settings );
 }
@@ -151,7 +152,7 @@ void bufferQuoteAnyConstant( OUStringBuffer & buf, const Any &val, ConnectionSet
         buf.append( "NULL" );
 }
 
-static void ibufferQuoteIdentifier( OUStringBuffer & buf, const OUString &toQuote, ConnectionSettings *settings )
+static void ibufferQuoteIdentifier( OUStringBuffer & buf, std::u16string_view toQuote, ConnectionSettings *settings )
 {
     OSL_ENSURE(settings, "pgsql-sdbc: bufferQuoteIdentifier got NULL settings");
 
@@ -171,14 +172,14 @@ static void ibufferQuoteIdentifier( OUStringBuffer & buf, const OUString &toQuot
     PQfreemem( cstr );
 }
 
-void bufferQuoteIdentifier( OUStringBuffer & buf, const OUString &toQuote, ConnectionSettings *settings )
+void bufferQuoteIdentifier( OUStringBuffer & buf, std::u16string_view toQuote, ConnectionSettings *settings )
 {
     return ibufferQuoteIdentifier(buf, toQuote, settings);
 }
 
 
 void bufferQuoteQualifiedIdentifier(
-    OUStringBuffer & buf, const OUString &schema, const OUString &table, ConnectionSettings *settings )
+    OUStringBuffer & buf, std::u16string_view schema, std::u16string_view table, ConnectionSettings *settings )
 {
     ibufferQuoteIdentifier(buf, schema, settings);
     buf.append( "." );
@@ -187,9 +188,9 @@ void bufferQuoteQualifiedIdentifier(
 
 void bufferQuoteQualifiedIdentifier(
     OUStringBuffer & buf,
-    const OUString &schema,
-    const OUString &table,
-    const OUString &col,
+    std::u16string_view schema,
+    std::u16string_view table,
+    std::u16string_view col,
     ConnectionSettings *settings)
 {
     ibufferQuoteIdentifier(buf, schema, settings);
@@ -544,10 +545,10 @@ void tokenizeSQL( const OString & sql, std::vector< OString > &vec  )
 }
 
 
-void splitConcatenatedIdentifier( const OUString & source, OUString *first, OUString *second)
+void splitConcatenatedIdentifier( std::u16string_view source, OUString *first, OUString *second)
 {
     std::vector< OString > vec;
-    tokenizeSQL( OUStringToOString( source, RTL_TEXTENCODING_UTF8 ), vec );
+    tokenizeSQL( rtl::OUStringToOString( source, RTL_TEXTENCODING_UTF8 ), vec );
     switch (vec.size())
     {
     case 1:

@@ -121,7 +121,7 @@ OUString getTextEngineText (ExtTextEngine& rEngine)
     return aText;
 }
 
-void setTextEngineText (ExtTextEngine& rEngine, OUString const& aStr)
+void setTextEngineText (ExtTextEngine& rEngine, std::u16string_view aStr)
 {
     rEngine.SetText(OUString());
     OString aUTF8Str = OUStringToOString( aStr, RTL_TEXTENCODING_UTF8 );

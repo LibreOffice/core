@@ -138,7 +138,7 @@ namespace connectivity
         @param  _sClassName
             The class name to look for.
     */
-    OOO_DLLPUBLIC_DBTOOLS bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const OUString& _sClassName );
+    OOO_DLLPUBLIC_DBTOOLS bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,std::u16string_view _sClassName );
 #endif
 }
 

@@ -35,6 +35,8 @@
 
 #include <keythi.h>
 #include <certt.h>
+
+#include <string_view>
 #include <vector>
 
 #include <xmlsec-wrapper.h>
@@ -131,7 +133,7 @@ private:
 
         static X509Certificate_NssImpl* createAndAddCertificateFromPackage(
                                     const css::uno::Sequence<sal_Int8>& raDerCertificate,
-                                    OUString const & raString);
+                                    std::u16string_view raString);
         static SECKEYPrivateKey* insertPrivateKey(css::uno::Sequence<sal_Int8> const & raPrivateKey);
 
         static X509Certificate_NssImpl* createX509CertificateFromDER(const css::uno::Sequence<sal_Int8>& raDerCertificate);

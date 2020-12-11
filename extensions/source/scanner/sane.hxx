@@ -18,6 +18,10 @@
  */
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <cppuhelper/implbase.hxx>
 #include <osl/thread.h>
 #include <osl/module.h>
@@ -144,7 +148,7 @@ public:
     bool            GetOptionValue( int, double* );
 
     void            SetOptionValue( int, bool );
-    void            SetOptionValue( int, const OUString& );
+    void            SetOptionValue( int, std::u16string_view );
     void            SetOptionValue( int, double, int nElement = 0 );
     void            SetOptionValue( int, double const * );
 

@@ -99,7 +99,7 @@ struct PluginMutex: public ::rtl::Static<osl::Mutex, PluginMutex> {};
 OString getPluginJarPath(
     std::u16string_view sVendor,
     const OUString& sLocation,
-    const OUString& sVersion)
+    std::u16string_view sVersion)
 {
     OString ret;
     OUString sName1("javaplugin.jar");

@@ -124,7 +124,7 @@ void SAL_CALL OStatementCommonBase::close()
     dispose();
 }
 
-void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
+void OStatementCommonBase::prepareAndDescribeStatement(std::u16string_view sql,
                                                       XSQLDA*& pOutSqlda,
                                                       XSQLDA* pInSqlda)
 {

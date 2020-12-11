@@ -36,7 +36,7 @@ jclass java_lang_Class::getMyClass() const
     return theClass;
 }
 
-java_lang_Class* java_lang_Class::forName(const OUString& _par0)
+java_lang_Class* java_lang_Class::forName(std::u16string_view _par0)
 {
     jobject out(nullptr);
     SDBThreadAttach t;

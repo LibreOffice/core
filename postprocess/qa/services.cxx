@@ -25,6 +25,7 @@
 #include <iostream>
 #include <map>
 #include <set>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -46,7 +47,7 @@
 
 namespace {
 
-OString msg(OUString const & string) {
+OString msg(std::u16string_view string) {
     return OUStringToOString(string, osl_getThreadTextEncoding());
 }
 

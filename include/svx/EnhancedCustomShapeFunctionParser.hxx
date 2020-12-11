@@ -25,6 +25,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
 #include <memory>
 #include <ostream>
+#include <string_view>
 #include <vector>
 
 #include <svx/svxdllapi.h>
@@ -233,7 +234,7 @@ public:
         @return the generated function object.
        */
 
-    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) static std::shared_ptr<ExpressionNode> const & parseFunction( const OUString& rFunction, const EnhancedCustomShape2d& rCustoShape );
+    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) static std::shared_ptr<ExpressionNode> const & parseFunction( std::u16string_view rFunction, const EnhancedCustomShape2d& rCustoShape );
 
     // this is a singleton
     FunctionParser() = delete;

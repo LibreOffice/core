@@ -33,7 +33,7 @@ OSQLInternalNode::OSQLInternalNode(const char* pNewValue,
 }
 
 
-OSQLInternalNode::OSQLInternalNode(const OString &NewValue,
+OSQLInternalNode::OSQLInternalNode(std::string_view NewValue,
                                  SQLNodeType eNodeType,
                                  sal_uInt32 nNodeID)
                 :OSQLParseNode(NewValue,eNodeType,nNodeID)

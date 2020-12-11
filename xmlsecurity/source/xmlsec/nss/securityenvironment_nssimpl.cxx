@@ -432,7 +432,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl::buildCertifi
 
 X509Certificate_NssImpl* SecurityEnvironment_NssImpl::createAndAddCertificateFromPackage(
                                                         const css::uno::Sequence<sal_Int8>& raDERCertificate,
-                                                        OUString const & raString)
+                                                        std::u16string_view raString)
 {
     auto pCertificateBytes = reinterpret_cast<char *>(const_cast<sal_Int8 *>(raDERCertificate.getConstArray()));
     CERTCertificate* pCERTCertificate = CERT_DecodeCertFromPackage(pCertificateBytes, raDERCertificate.getLength());
@@ -913,7 +913,7 @@ uno::Reference<security::XCertificate> SecurityEnvironment_NssImpl::createDERCer
     if (!pPrivateKey)
         return uno::Reference<security::XCertificate>();
 
-    X509Certificate_NssImpl* pX509Certificate = createAndAddCertificateFromPackage(raDERCertificate, "TCu,TCu,TCu");
+    X509Certificate_NssImpl* pX509Certificate = createAndAddCertificateFromPackage(raDERCertificate, u"TCu,TCu,TCu");
     if (!pX509Certificate)
         return uno::Reference<security::XCertificate>();
 

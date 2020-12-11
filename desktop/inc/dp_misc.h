@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -106,13 +110,13 @@ oslProcess raiseProcess( OUString const & appURL,
     as target encoding.
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-void writeConsole(OUString const & sText);
+void writeConsole(std::u16string_view sText);
 
 /** writes the argument to the console using the error stream.
     Otherwise the same as writeConsole.
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-void writeConsoleError(OUString const & sText);
+void writeConsoleError(std::u16string_view sText);
 
 
 /** reads from the console.

@@ -39,6 +39,7 @@
 #include <odbc/ODatabaseMetaData.hxx>
 #include <odbc/odbcbasedllapi.hxx>
 #include <memory>
+#include <string_view>
 
 namespace connectivity::odbc
     {
@@ -199,31 +200,31 @@ namespace connectivity::odbc
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             void openTables(const css::uno::Any& catalog, const OUString& schemaPattern,
-                                            const OUString& tableNamePattern, const css::uno::Sequence< OUString >& types );
+                                            std::u16string_view tableNamePattern, const css::uno::Sequence< OUString >& types );
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             void openColumnPrivileges(      const css::uno::Any& catalog,    const OUString& schema,
-                                                                    const OUString& table,   const OUString& columnNamePattern );
+                                                                    std::u16string_view table,   std::u16string_view columnNamePattern );
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             void openColumns(       const css::uno::Any& catalog,                            const OUString& schemaPattern,
-                                                    const OUString& tableNamePattern,        const OUString& columnNamePattern );
+                                                    std::u16string_view tableNamePattern,        std::u16string_view columnNamePattern );
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             void openProcedureColumns(      const css::uno::Any& catalog,            const OUString& schemaPattern,
-                                                            const OUString& procedureNamePattern,const OUString& columnNamePattern );
+                                                            std::u16string_view procedureNamePattern,std::u16string_view columnNamePattern );
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             void openProcedures(    const css::uno::Any& catalog,            const OUString& schemaPattern,
-                                                            const OUString& procedureNamePattern);
+                                                            std::u16string_view procedureNamePattern);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             void openVersionColumns(const css::uno::Any& catalog, const OUString& schema,
-                                                            const OUString& table);
+                                                            std::u16string_view table);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             void openBestRowIdentifier( const css::uno::Any& catalog, const OUString& schema,
-                                                                    const OUString& table,sal_Int32 scope, bool nullable );
+                                                                    std::u16string_view table,sal_Int32 scope, bool nullable );
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             void openForeignKeys( const css::uno::Any& catalog, const OUString* schema,const OUString* table,
@@ -236,19 +237,19 @@ namespace connectivity::odbc
             void openImportedKeys(const css::uno::Any& catalog, const OUString& schema,const OUString& table);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void openPrimaryKeys(const css::uno::Any& catalog, const OUString& schema,const OUString& table);
+            void openPrimaryKeys(const css::uno::Any& catalog, const OUString& schema,std::u16string_view table);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             void openTablePrivileges(const css::uno::Any& catalog, const OUString& schemaPattern,
-                                                              const OUString& tableNamePattern);
+                                                              std::u16string_view tableNamePattern);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             void openSpecialColumns(bool _bRowVer,const css::uno::Any& catalog, const OUString& schema,
-                                                                    const OUString& table,sal_Int32 scope,   bool nullable );
+                                                                    std::u16string_view table,sal_Int32 scope,   bool nullable );
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             void openIndexInfo( const css::uno::Any& catalog, const OUString& schema,
-                                                    const OUString& table,bool unique,bool approximate );
+                                                    std::u16string_view table,bool unique,bool approximate );
 
         protected:
             using OPropertySetHelper::getFastPropertyValue;

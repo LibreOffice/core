@@ -61,6 +61,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 
 #include <string.h>
+#include <string_view>
 
 using osl::MutexGuard;
 
@@ -239,7 +240,7 @@ sal_Int32 Statement::executeUpdate( const OUString& sql )
 /// @throws SQLException
 static void raiseSQLException(
     const Reference< XInterface> & owner,
-    const OString & sql,
+    std::string_view sql,
     const char * errorMsg,
     const char *errorType = nullptr )
 {

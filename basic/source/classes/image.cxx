@@ -28,6 +28,7 @@
 #include <image.hxx>
 #include <codegen.hxx>
 #include <memory>
+#include <string_view>
 
 SbiImage::SbiImage()
     : bError(false)
@@ -459,7 +460,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         for( size_t i = 0; i < mvStringOffsets.size(); i++ )
         {
             sal_uInt16 nOff = static_cast<sal_uInt16>(mvStringOffsets[ i ]);
-            OString aStr(OUStringToOString(OUString(pStrings.get() + nOff), eCharSet));
+            OString aStr(OUStringToOString(std::u16string_view(pStrings.get() + nOff), eCharSet));
             memcpy( pByteStrings.get() + nOff, aStr.getStr(), (aStr.getLength() + 1) * sizeof( char ) );
         }
         r.WriteUInt32( nStringSize );

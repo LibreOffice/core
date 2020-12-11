@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 
 #include "passwordcontainer.hxx"
 
@@ -76,7 +79,7 @@ static OUString createIndex(const std::vector< OUString >& lines)
 }
 
 
-static std::vector< OUString > getInfoFromInd( const OUString& aInd )
+static std::vector< OUString > getInfoFromInd( std::u16string_view aInd )
 {
     std::vector< OUString > aResult;
     bool aStart = true;

@@ -41,7 +41,7 @@ void LoggedResourcesHelper::startElement(const std::string& sElement)
 
 void LoggedResourcesHelper::endElement() { TagLogger::getInstance().endElement(); }
 
-void LoggedResourcesHelper::chars(const OUString& rChars)
+void LoggedResourcesHelper::chars(std::u16string_view rChars)
 {
     TagLogger::getInstance().chars(rChars);
 }

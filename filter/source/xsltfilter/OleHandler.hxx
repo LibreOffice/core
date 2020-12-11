@@ -13,6 +13,7 @@
 #include <cstdio>
 #include <cstring>
 #include <map>
+#include <string_view>
 #include <vector>
 #include <iostream>
 #include <libxml/parser.h>
@@ -66,7 +67,7 @@ namespace XSLT
             if (m_tcontext)
                 m_tcontext->_private = nullptr;
         }
-        void    insertByName(const OUString& streamName, const OString& content);
+        void    insertByName(const OUString& streamName, std::string_view content);
         OString getByName(const OUString& streamName);
         void registercontext(xsltTransformContextPtr context)
         {
@@ -83,8 +84,8 @@ namespace XSLT
 
         void    ensureCreateRootStorage();
         OString encodeSubStorage(const OUString& streamName);
-        void    insertSubStorage(const OUString& streamName, const OString& content);
-        void    initRootStorageFromBase64(const OString& content);
+        void    insertSubStorage(const OUString& streamName, std::string_view content);
+        void    initRootStorageFromBase64(std::string_view content);
         css::uno::Reference<XStream> createTempFile();
     };
 }

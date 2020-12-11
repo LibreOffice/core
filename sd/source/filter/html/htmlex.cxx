@@ -1144,7 +1144,7 @@ bool HtmlExport::CreateHtmlTextForPresPages()
 
 /** exports the given html data into a non unicode file in the current export path with
     the given filename */
-bool HtmlExport::WriteHtml( const OUString& rFileName, bool bAddExtension, const OUString& rHtmlData )
+bool HtmlExport::WriteHtml( const OUString& rFileName, bool bAddExtension, std::u16string_view rHtmlData )
 {
     ErrCode nErr = ERRCODE_NONE;
 

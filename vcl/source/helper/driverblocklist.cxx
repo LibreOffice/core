@@ -96,7 +96,7 @@ static VersionComparisonOp getComparison(std::string_view rString)
     throw InvalidFileException();
 }
 
-static OUString GetVendorId(const OString& rString)
+static OUString GetVendorId(std::string_view rString)
 {
     if (rString == "all")
     {
@@ -271,7 +271,7 @@ static bool SplitDriverVersion(const char* aSource, char* aAStr, char* aBStr, ch
     return true;
 }
 
-static bool ParseDriverVersion(const OUString& aVersion, uint64_t& rNumericVersion,
+static bool ParseDriverVersion(std::u16string_view aVersion, uint64_t& rNumericVersion,
                                VersionType versionType)
 {
     rNumericVersion = 0;
@@ -311,7 +311,7 @@ static bool ParseDriverVersion(const OUString& aVersion, uint64_t& rNumericVersi
     return true;
 }
 
-uint64_t Parser::getVersion(const OString& rString)
+uint64_t Parser::getVersion(std::string_view rString)
 {
     OUString aString = OStringToOUString(rString, RTL_TEXTENCODING_UTF8);
     uint64_t nVersion;
@@ -596,11 +596,12 @@ DriverInfo::DriverInfo(OperatingSystem os, const OUString& vendor, VersionCompar
     , mnDriverVersionMax(0)
 {
     if (suggestedVersion)
-        maSuggestedVersion = OStringToOUString(OString(suggestedVersion), RTL_TEXTENCODING_UTF8);
+        maSuggestedVersion
+            = OStringToOUString(std::string_view(suggestedVersion), RTL_TEXTENCODING_UTF8);
 }
 
 bool FindBlocklistedDeviceInList(std::vector<DriverInfo>& aDeviceInfos, VersionType versionType,
-                                 OUString const& sDriverVersion,
+                                 std::u16string_view sDriverVersion,
                                  std::u16string_view sAdapterVendorID,
                                  OUString const& sAdapterDeviceID, OperatingSystem system,
                                  const OUString& blocklistURL)
@@ -705,7 +706,7 @@ bool FindBlocklistedDeviceInList(std::vector<DriverInfo>& aDeviceInfos, VersionT
 }
 
 bool IsDeviceBlocked(const OUString& blocklistURL, VersionType versionType,
-                     const OUString& driverVersion, std::u16string_view vendorId,
+                     std::u16string_view driverVersion, std::u16string_view vendorId,
                      const OUString& deviceId)
 {
     std::vector<DriverInfo> driverList;

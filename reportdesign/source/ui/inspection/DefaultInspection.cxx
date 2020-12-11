@@ -30,7 +30,7 @@
 
 namespace rptui
 {
-    OUString HelpIdUrl::getHelpURL( const OString& sHelpId )
+    OUString HelpIdUrl::getHelpURL( std::string_view sHelpId )
     {
         OUString aTmp( OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8) );
         DBG_ASSERT( INetURLObject( aTmp ).GetProtocol() == INetProtocol::NotValid, "Wrong HelpId!" );

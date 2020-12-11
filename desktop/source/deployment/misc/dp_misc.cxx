@@ -455,19 +455,19 @@ Reference<XInterface> resolveUnoURL(
     return nullptr; // warning C4715
 }
 
-static void writeConsoleWithStream(OUString const & sText, FILE * stream)
+static void writeConsoleWithStream(std::u16string_view sText, FILE * stream)
 {
     OString s = OUStringToOString(sText, osl_getThreadTextEncoding());
     fprintf(stream, "%s", s.getStr());
     fflush(stream);
 }
 
-void writeConsole(OUString const & sText)
+void writeConsole(std::u16string_view sText)
 {
     writeConsoleWithStream(sText, stdout);
 }
 
-void writeConsoleError(OUString const & sText)
+void writeConsoleError(std::u16string_view sText)
 {
     writeConsoleWithStream(sText, stderr);
 }
@@ -479,7 +479,7 @@ OUString readConsole()
     // read one char less so that the last char in buf is always zero
     if (fgets(buf, 1024, stdin) != nullptr)
     {
-        OUString value = OStringToOUString(OString(buf), osl_getThreadTextEncoding());
+        OUString value = OStringToOUString(std::string_view(buf), osl_getThreadTextEncoding());
         return value.trim();
     }
     throw css::uno::RuntimeException("reading from stdin failed");

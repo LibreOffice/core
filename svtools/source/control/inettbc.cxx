@@ -1131,7 +1131,7 @@ void FilterMatch::createWildCardFilterList(const OUString& _rFilterList,::std::v
     else
     {
         // no filter is given -> match all
-        _rFilters.emplace_back("*" );
+        _rFilters.emplace_back(u"*" );
     }
 }
 

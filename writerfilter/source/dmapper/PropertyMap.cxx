@@ -16,6 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "PropertyMap.hxx"
 #include "TagLogger.hxx"
 #include <ooxml/resourceids.hxx>
@@ -316,7 +321,7 @@ void PropertyMap::dumpXml() const
                     TagLogger::getInstance().attribute( "floatValue", aFloat );
 
                     rPropPair.second.getValue() >>= auInt;
-                    TagLogger::getInstance().attribute( "stringValue", OUString() );
+                    TagLogger::getInstance().attribute( "stringValue", std::u16string_view() );
                 }
                 catch ( ... )
                 {

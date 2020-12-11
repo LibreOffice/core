@@ -126,7 +126,7 @@ std::map<OUString, std::vector<OUString>> EPUBExportTest::parseCss(const OUStrin
         pStream->ReadLine(aLine);
         if (aLine.endsWith("{"))
             // '.name {' -> 'name'
-            aRuleName = OUString::fromUtf8(aLine.copy(1, aLine.getLength() - 3));
+            aRuleName = OUString::fromUtf8(aLine.subView(1, aLine.getLength() - 3));
         else if (aLine.endsWith(";"))
             aRet[aRuleName].push_back(OUString::fromUtf8(aLine));
     }

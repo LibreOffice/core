@@ -10,6 +10,10 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_CMIS_CMIS_CONTENT_HXX
 #define INCLUDED_UCB_SOURCE_UCP_CMIS_CMIS_CONTENT_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "cmis_url.hxx"
 #include "children_provider.hxx"
 
@@ -104,7 +108,7 @@ private:
 
     /// @throws css::uno::Exception
     void insert( const css::uno::Reference< css::io::XInputStream > & xInputStream,
-        bool bReplaceExisting, const OUString & rMimeType,
+        bool bReplaceExisting, std::u16string_view rMimeType,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
     /// @throws css::uno::Exception

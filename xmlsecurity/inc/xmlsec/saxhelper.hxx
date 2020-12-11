@@ -20,6 +20,10 @@
 #ifndef INCLUDED_XMLSECURITY_INC_XMLSEC_SAXHELPER_HXX
 #define INCLUDED_XMLSECURITY_INC_XMLSEC_SAXHELPER_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <libxml/tree.h>
 
 #include <rtl/ustring.hxx>
@@ -55,27 +59,27 @@ class SAXHelper final
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
         void startElement(
-            const OUString& aName ,
+            std::u16string_view aName ,
             const css::uno::Sequence<
                 css::xml::csax::XMLAttribute >& aAttributes ) ;
 
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
-        void endElement( const OUString& aName ) ;
+        void endElement( std::u16string_view aName ) ;
 
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
-        void characters( const OUString& aChars ) ;
+        void characters( std::u16string_view aChars ) ;
 
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
-        void ignorableWhitespace( const OUString& aWhitespaces ) ;
+        void ignorableWhitespace( std::u16string_view aWhitespaces ) ;
 
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
         void processingInstruction(
-            const OUString& aTarget ,
-            const OUString& aData ) ;
+            std::u16string_view aTarget ,
+            std::u16string_view aData ) ;
 
 } ;
 

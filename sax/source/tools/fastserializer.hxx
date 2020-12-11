@@ -28,6 +28,7 @@
 #include "CachedOutputStream.hxx"
 
 #include <stack>
+#include <string_view>
 #include <map>
 #include <memory>
 
@@ -111,7 +112,7 @@ public:
     OString getId( ::sal_Int32 Element );
 
     void write( double value );
-    void write( const OUString& s, bool bEscape = false );
+    void write( std::u16string_view s, bool bEscape = false );
     void write( const OString& s, bool bEscape = false );
     void write( const char* pStr, sal_Int32 nLen, bool bEscape = false );
 

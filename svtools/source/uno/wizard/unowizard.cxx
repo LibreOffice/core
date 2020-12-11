@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 
 #include "wizardshell.hxx"
 
@@ -138,7 +141,7 @@ namespace {
     {
     }
 
-    OUString lcl_getHelpURL( const OString& sHelpId )
+    OUString lcl_getHelpURL( std::string_view sHelpId )
     {
         OUStringBuffer aBuffer;
         OUString aTmp(

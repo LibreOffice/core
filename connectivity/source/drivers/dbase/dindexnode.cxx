@@ -760,7 +760,7 @@ int ONDXKey::Compare(const ONDXKey& rKey) const
     }
     else if (IsText(getDBType()))
     {
-        nRes = getValue().getString().compareTo(rKey.getValue());
+        nRes = getValue().getString().compareTo(rKey.getValue().getString());
     }
     else
     {

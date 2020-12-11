@@ -119,7 +119,7 @@ public:
     void                SetTargetURL( const OUString& rURL ) { maTargetURL = rURL; }
     void                SetHierarchyURL( const OUString& rURL) { maOwnURL = rURL; }
 
-    int                 Compare( const OUString& rTitle ) const;
+    int                 Compare( std::u16string_view rTitle ) const;
 };
 
 }
@@ -138,7 +138,7 @@ class RegionData_Impl
     OUString                    maOwnURL;
 
 private:
-    size_t                      GetEntryPos( const OUString& rTitle,
+    size_t                      GetEntryPos( std::u16string_view rTitle,
                                              bool& rFound ) const;
 
 public:
@@ -148,7 +148,7 @@ public:
     void                SetHierarchyURL( const OUString& rURL) { maOwnURL = rURL; }
 
     DocTempl_EntryData_Impl*     GetEntry( size_t nIndex ) const;
-    DocTempl_EntryData_Impl*     GetEntry( const OUString& rName ) const;
+    DocTempl_EntryData_Impl*     GetEntry( std::u16string_view rName ) const;
 
     const OUString&     GetTitle() const { return maTitle; }
     const OUString&     GetHierarchyURL();
@@ -1090,7 +1090,7 @@ bool SfxDocumentTemplates::SetName( const OUString& rName, sal_uInt16 nRegion, s
 bool SfxDocumentTemplates::GetFull
 (
     std::u16string_view rRegion,      // Region Name
-    const OUString &rName,        // Template Name
+    std::u16string_view rName,    // Template Name
     OUString &rPath               // Out: Path + File name
 )
 
@@ -1112,7 +1112,7 @@ bool SfxDocumentTemplates::GetFull
     DocTemplLocker_Impl aLocker( *pImp );
 
     // We don't search for empty names!
-    if ( rName.isEmpty() )
+    if ( rName.empty() )
         return false;
 
     if ( ! pImp->Construct() )
@@ -1249,7 +1249,7 @@ DocTempl_EntryData_Impl::DocTempl_EntryData_Impl( RegionData_Impl* pParent,
 }
 
 
-int DocTempl_EntryData_Impl::Compare( const OUString& rTitle ) const
+int DocTempl_EntryData_Impl::Compare( std::u16string_view rTitle ) const
 {
     return maTitle.compareTo( rTitle );
 }
@@ -1301,7 +1301,7 @@ RegionData_Impl::RegionData_Impl( const SfxDocTemplate_Impl* pParent,
 }
 
 
-size_t RegionData_Impl::GetEntryPos( const OUString& rTitle, bool& rFound ) const
+size_t RegionData_Impl::GetEntryPos( std::u16string_view rTitle, bool& rFound ) const
 {
     const size_t nCount = maEntries.size();
 
@@ -1378,7 +1378,7 @@ const OUString& RegionData_Impl::GetHierarchyURL()
 }
 
 
-DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( const OUString& rName ) const
+DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( std::u16string_view rName ) const
 {
     bool    bFound = false;
     tools::Long        nPos = GetEntryPos( rName, bFound );

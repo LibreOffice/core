@@ -189,9 +189,9 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
             aOslDTime.Day, aOslDTime.Month, aOslDTime.Year, false);
 }
 
-uno::Sequence< OUString > OOXMLDocPropHandler::GetKeywordsSet( const OUString& aChars )
+uno::Sequence< OUString > OOXMLDocPropHandler::GetKeywordsSet( std::u16string_view aChars )
 {
-    if ( !aChars.isEmpty() )
+    if ( !aChars.empty() )
     {
         std::string aUtf8Chars = OUStringToOString( aChars, RTL_TEXTENCODING_UTF8 ).getStr();
         std::vector<std::string> aUtf8Result;

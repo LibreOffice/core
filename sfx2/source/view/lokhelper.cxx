@@ -456,7 +456,7 @@ void SfxLokHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* 
 
 void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
                                 vcl::LOKWindowId nLOKWindowId,
-                                const OUString& rAction,
+                                std::u16string_view rAction,
                                 const std::vector<vcl::LOKPayloadItem>& rPayload)
 {
     assert(pThisView != nullptr && "pThisView must be valid");

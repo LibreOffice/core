@@ -157,7 +157,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAttributeValues)
     aHtml.prettyPrint(false);
     aHtml.start("abc");
     aHtml.attribute("one", OString("one"));
-    aHtml.attribute("two", OUString("two"));
+    aHtml.attribute("two", u"two");
     aHtml.attribute("three", sal_Int32(12));
     aHtml.end();
 

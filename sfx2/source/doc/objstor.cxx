@@ -1198,7 +1198,7 @@ bool SfxObjectShell::SaveTo_Impl
             // document, but technically this is not correct, so this prevents old
             // signatures to be copied over to a version 1.2 document
             bNoPreserveForOasis = (
-                                   (0 <= aODFVersion.compareTo(ODFVER_012_TEXT) && nVersion < SvtSaveOptions::ODFSVER_012) ||
+                                   (0 <= aODFVersion.compareTo(u"" ODFVER_012_TEXT) && nVersion < SvtSaveOptions::ODFSVER_012) ||
                                    (aODFVersion.isEmpty() && nVersion >= SvtSaveOptions::ODFSVER_012)
                                   );
         }

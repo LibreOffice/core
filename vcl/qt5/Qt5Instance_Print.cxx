@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <Qt5Instance.hxx>
 #include <Qt5Printer.hxx>
 
@@ -52,7 +56,7 @@ static OUString getPdfDir(const PrinterInfo& rInfo)
             if (aDir.isEmpty())
                 if (auto const env = getenv("HOME"))
                 {
-                    aDir = OStringToOUString(OString(env), osl_getThreadTextEncoding());
+                    aDir = OStringToOUString(std::string_view(env), osl_getThreadTextEncoding());
                 }
             break;
         }

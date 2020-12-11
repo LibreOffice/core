@@ -73,7 +73,7 @@ sal_Int32 StyleContainer::impl_getStyleId( const Style& rStyle, bool bSubStyle )
     return nRet;
 }
 
-sal_Int32 StyleContainer::getStandardStyleId( const OString& rName )
+sal_Int32 StyleContainer::getStandardStyleId( std::string_view rName )
 {
     PropertyMap aProps;
     aProps[ "style:family" ] = OStringToOUString( rName, RTL_TEXTENCODING_UTF8 );

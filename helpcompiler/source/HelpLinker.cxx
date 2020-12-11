@@ -847,10 +847,10 @@ HelpProcessingErrorInfo& HelpProcessingErrorInfo::operator=( const struct HelpPr
 bool compileExtensionHelp
 (
     const OUString& aOfficeHelpPath,
-    const OUString& aExtensionName,
+    std::u16string_view aExtensionName,
     const OUString& aExtensionLanguageRoot,
     sal_Int32 nXhpFileCount, const OUString* pXhpFiles,
-    const OUString& aDestination,
+    std::u16string_view aDestination,
     HelpProcessingErrorInfo& o_rHelpProcessingErrorInfo
 )
 {

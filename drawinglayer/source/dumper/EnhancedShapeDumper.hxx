@@ -8,6 +8,10 @@
  */
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <libxml/xmlwriter.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -73,7 +77,7 @@ public:
 
     // EnhancedCustomShapeGeometry.idl
     void dumpEnhancedCustomShapeGeometryService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);
-    void dumpTypeAsAttribute(const OUString& sType);
+    void dumpTypeAsAttribute(std::u16string_view sType);
     void dumpViewBoxAsElement(css::awt::Rectangle aViewBox);
     void dumpMirroredXAsAttribute(bool bMirroredX); // also used in EnhancedCustomShapeHandle
     void dumpMirroredYAsAttribute(bool bMirroredY); // also used in EnhancedCustomShapeHandle

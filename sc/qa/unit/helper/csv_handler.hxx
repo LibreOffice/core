@@ -10,6 +10,10 @@
 #ifndef INCLUDED_SC_QA_UNIT_HELPER_CSV_HANDLER_HXX
 #define INCLUDED_SC_QA_UNIT_HELPER_CSV_HANDLER_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "qahelper.hxx"
 
 #include <patattr.hxx>
@@ -45,7 +49,7 @@ inline OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab)
         OString::number(nRow);
 }
 
-inline OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rExpectedString, const OUString& rString)
+inline OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, std::u16string_view rExpectedString, std::u16string_view rString)
 {
     return createErrorMessage(nCol, nRow, nTab) + "; Expected: '"
         + OUStringToOString(rExpectedString, RTL_TEXTENCODING_UTF8) + "' Found: '"

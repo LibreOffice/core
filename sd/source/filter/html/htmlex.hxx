@@ -29,6 +29,7 @@
 #include "htmlpublishmode.hxx"
 
 #include <memory>
+#include <string_view>
 #include <vector>
 
 namespace basegfx { class B2DPolyPolygon; }
@@ -207,7 +208,7 @@ class HtmlExport final
     void ExportWebCast();
     void ExportSingleDocument();
 
-    bool WriteHtml( const OUString& rFileName, bool bAddExtension, const OUString& rHtmlData );
+    bool WriteHtml( const OUString& rFileName, bool bAddExtension, std::u16string_view rHtmlData );
     static OUString GetButtonName( int nButton );
 
     void WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutliner,

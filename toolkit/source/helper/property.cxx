@@ -34,6 +34,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <algorithm>
+#include <string_view>
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
@@ -280,7 +281,7 @@ struct ImplPropertyInfoCompareFunctor
     {
         return lhs.aName.compareTo(rhs.aName) < 0;
     }
-    bool operator()(const ImplPropertyInfo& lhs,const OUString& rhs)  const
+    bool operator()(const ImplPropertyInfo& lhs,std::u16string_view rhs)  const
     {
         return lhs.aName.compareTo(rhs) < 0;
     }

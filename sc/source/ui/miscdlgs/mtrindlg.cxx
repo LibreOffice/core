@@ -30,8 +30,8 @@ ScMetricInputDlg::ScMetricInputDlg( weld::Window*         pParent,
                                     tools::Long            nMaximum,
                                     tools::Long            nMinimum)
 
-    : GenericDialogController(pParent, OStringToOUString("modules/scalc/ui/" +
-        sDialogName.toAsciiLowerCase() + ".ui", RTL_TEXTENCODING_UTF8), sDialogName)
+    : GenericDialogController(pParent, "modules/scalc/ui/" + OStringToOUString(
+        sDialogName.toAsciiLowerCase(), RTL_TEXTENCODING_UTF8) + ".ui", sDialogName)
     , m_xEdValue(m_xBuilder->weld_metric_spin_button("value", FieldUnit::CM))
     , m_xBtnDefVal(m_xBuilder->weld_check_button("default"))
 {

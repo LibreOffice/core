@@ -9,11 +9,15 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 
 namespace dbahsql::utils
 {
-OUString convertToUTF8(const OString& original);
+OUString convertToUTF8(std::string_view original);
 
 OUString getTableNameFromStmt(const OUString& sSql);
 

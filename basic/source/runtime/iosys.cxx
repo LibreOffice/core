@@ -421,7 +421,7 @@ void    UCBStream::SetSize( sal_uInt64 )
 
 
 ErrCode const & SbiStream::Open
-( const OString& rName, StreamMode nStrmMode, SbiStreamFlags nFlags, short nL )
+( std::string_view rName, StreamMode nStrmMode, SbiStreamFlags nFlags, short nL )
 {
     nMode   = nFlags;
     nLen    = nL;
@@ -631,7 +631,7 @@ ErrCode SbiIoSystem::GetError()
     return n;
 }
 
-void SbiIoSystem::Open(short nCh, const OString& rName, StreamMode nMode, SbiStreamFlags nFlags, short nLen)
+void SbiIoSystem::Open(short nCh, std::string_view rName, StreamMode nMode, SbiStreamFlags nFlags, short nLen)
 {
     nError = ERRCODE_NONE;
     if( nCh >= CHANNELS || !nCh )

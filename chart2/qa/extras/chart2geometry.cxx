@@ -23,6 +23,7 @@
 #include <libxml/xpathInternals.h>
 
 #include <algorithm>
+#include <string_view>
 
 using uno::Reference;
 using beans::XPropertySet;
@@ -170,7 +171,7 @@ void Chart2GeometryTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
     }
 }
 
-static OString OU2O(const OUString& sOUSource)
+static OString OU2O(std::u16string_view sOUSource)
 {
     return rtl::OUStringToOString(sOUSource, RTL_TEXTENCODING_UTF8);
 }

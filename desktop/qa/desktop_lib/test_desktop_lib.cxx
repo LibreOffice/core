@@ -2084,7 +2084,7 @@ void DesktopLOKTest::testGetFontSubset()
         rtl_UriEncodeKeepEscapes,
         RTL_TEXTENCODING_UTF8
     );
-    OString aCommand = OUStringToOString(".uno:FontSubset&name=" + aFontName, RTL_TEXTENCODING_UTF8);
+    OString aCommand = ".uno:FontSubset&name=" + OUStringToOString(aFontName, RTL_TEXTENCODING_UTF8);
     boost::property_tree::ptree aTree;
     char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, aCommand.getStr());
     std::stringstream aStream(pJSON);

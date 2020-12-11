@@ -27,6 +27,7 @@
 
 #include <rtl/ustring.hxx>
 #include <set>
+#include <string_view>
 #include <exception>
 
 class SvCommand;
@@ -112,7 +113,7 @@ public:
     sal_uInt32              GetUniqueId() { return ++nUniqueId; }
     bool                    FindId( const OString& rIdName, sal_uLong * pVal );
     void                    InsertId( const OString& rIdName, sal_uLong nVal );
-    bool                    ReadIdFile( const OString& rFileName );
+    bool                    ReadIdFile( std::string_view rFileName );
 
     SvMetaType *            FindType( const OString& rName );
     static SvMetaType *     FindType( const SvMetaType *, SvRefMemberList<SvMetaType *>& );
@@ -124,7 +125,7 @@ public:
     SvMetaClass *           ReadKnownClass( SvTokenStream & rInStm );
     SvMetaClass *           FindKnownClass( const OString& aName );
     void AddDepFile(OUString const& rFileName);
-    void WriteDepFile(SvFileStream & rStream, OUString const& rTarget);
+    void WriteDepFile(SvFileStream & rStream, std::u16string_view rTarget);
 };
 
 class SvIdlWorkingBase : public SvIdlDataBase

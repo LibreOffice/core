@@ -429,7 +429,7 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeGeometryService(const uno::Refe
             dumpHandlesAsElement(aHandles);
     }
 }
-void EnhancedShapeDumper::dumpTypeAsAttribute(const OUString& sType)
+void EnhancedShapeDumper::dumpTypeAsAttribute(std::u16string_view sType)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%s",
         OUStringToOString(sType, RTL_TEXTENCODING_UTF8).getStr());

@@ -27,6 +27,7 @@
 #include <sax/saxdllapi.h>
 #include <optional>
 #include <memory>
+#include <string_view>
 #include <utility>
 
 namespace com::sun::star::io { class XOutputStream; }
@@ -132,13 +133,13 @@ public:
 
     FastSerializerHelper* write(const char* value);
     FastSerializerHelper* write(const OString& value);
-    FastSerializerHelper* write(const OUString& value);
+    FastSerializerHelper* write(std::u16string_view value);
     FastSerializerHelper* write(sal_Int32 value);
     FastSerializerHelper* write(sal_Int64 value);
     FastSerializerHelper* write(double value);
 
     FastSerializerHelper* writeEscaped(const char* value);
-    FastSerializerHelper* writeEscaped(const OUString& value);
+    FastSerializerHelper* writeEscaped(std::u16string_view value);
 
     FastSerializerHelper* writeId(sal_Int32 tokenId);
 

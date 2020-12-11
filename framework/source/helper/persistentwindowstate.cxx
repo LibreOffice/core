@@ -222,11 +222,11 @@ OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::
 }
 
 void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Reference< css::awt::XWindow >& xWindow     ,
-                                                          const OUString&                          sWindowState)
+                                                          std::u16string_view                      sWindowState)
 {
     if (
         (!xWindow.is()                ) ||
-        ( sWindowState.isEmpty() )
+        ( sWindowState.empty() )
        )
         return;
 

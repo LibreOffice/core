@@ -51,6 +51,7 @@ typedef unsigned short WORD;
 #include <map>
 #include <iterator>
 #include <string>
+#include <string_view>
 
 #ifndef _WIN32
 #include <cstring>
@@ -70,11 +71,11 @@ void ShowUsage()
     std::cout << "-rcf Name of the resource file footer" << std::endl;
 }
 
-OUString OStringToOUString(const OString& str)
-{ return OStringToOUString(str, osl_getThreadTextEncoding()); }
+OUString OStringToOUString(std::string_view str)
+{ return rtl::OStringToOUString(str, osl_getThreadTextEncoding()); }
 
-OString OUStringToOString(const OUString& str)
-{ return OUStringToOString(str, osl_getThreadTextEncoding()); }
+OString OUStringToOString(std::u16string_view str)
+{ return rtl::OUStringToOString(str, osl_getThreadTextEncoding()); }
 
 /** Get the directory where the module
     is located as system directory, the

@@ -20,6 +20,8 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <string_view>
+
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
@@ -89,8 +91,8 @@ static bool check( bool b , char const * message )
 
 namespace {
 
-bool checkEmpty(OUString const & string, char const * message) {
-    bool ok = string.isEmpty();
+bool checkEmpty(std::u16string_view string, char const * message) {
+    bool ok = string.empty();
     if (!ok) {
         fprintf(
             stderr, "%s failed: %s\n", message,

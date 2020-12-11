@@ -47,6 +47,7 @@
 #include <cstddef>
 #include <memory>
 #include <map>
+#include <string_view>
 #include <vector>
 
 
@@ -946,7 +947,7 @@ public:
     static void InsUInt16(ww::bytes &rO, sal_uInt16 n);
     static void InsUInt32(ww::bytes &rO, sal_uInt32 n);
     static void InsAsString16(ww::bytes &rO, const OUString& rStr);
-    static void InsAsString8(ww::bytes & O, const OUString& rStr,
+    static void InsAsString8(ww::bytes & O, std::u16string_view rStr,
         rtl_TextEncoding eCodeSet);
 
     static sal_uLong FillUntil( SvStream& rStrm, sal_uLong nEndPos = 0 );
@@ -960,7 +961,7 @@ public:
 
     static void WriteString16(SvStream& rStrm, const OUString& rStr,
         bool bAddZero);
-    static void WriteString8(SvStream& rStrm, const OUString& rStr,
+    static void WriteString8(SvStream& rStrm, std::u16string_view rStr,
         bool bAddZero, rtl_TextEncoding eCodeSet);
 
     static void WriteString_xstz(SvStream& rStrm, const OUString& rStr, bool bAddZero);

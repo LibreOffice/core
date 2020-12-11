@@ -659,11 +659,11 @@ namespace DOM
         if (idx != -1)
         {
             o2 = OUStringToOString(
-                qualifiedName.copy(0,idx),
+                qualifiedName.subView(0,idx),
                 RTL_TEXTENCODING_UTF8);
             pPrefix = reinterpret_cast<xmlChar const *>(o2.getStr());
             o3 = OUStringToOString(
-                qualifiedName.copy(idx+1),
+                qualifiedName.subView(idx+1),
                 RTL_TEXTENCODING_UTF8);
             pLName = reinterpret_cast<xmlChar const *>(o3.getStr());
         }  else {

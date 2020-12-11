@@ -144,7 +144,7 @@ DriversConfig& DriversConfig::operator=( const DriversConfig& _rhs )
 }
 
 
-OUString DriversConfig::getDriverFactoryName(const OUString& _sURL) const
+OUString DriversConfig::getDriverFactoryName(std::u16string_view _sURL) const
 {
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
     OUString sRet;
@@ -162,7 +162,7 @@ OUString DriversConfig::getDriverFactoryName(const OUString& _sURL) const
     return sRet;
 }
 
-OUString DriversConfig::getDriverTypeDisplayName(const OUString& _sURL) const
+OUString DriversConfig::getDriverTypeDisplayName(std::u16string_view _sURL) const
 {
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
     OUString sRet;
@@ -180,22 +180,25 @@ OUString DriversConfig::getDriverTypeDisplayName(const OUString& _sURL) const
     return sRet;
 }
 
-const ::comphelper::NamedValueCollection& DriversConfig::getProperties(const OUString& _sURL) const
+const ::comphelper::NamedValueCollection& DriversConfig::getProperties(std::u16string_view _sURL)
+    const
 {
     return impl_get(_sURL,1);
 }
 
-const ::comphelper::NamedValueCollection& DriversConfig::getFeatures(const OUString& _sURL) const
+const ::comphelper::NamedValueCollection& DriversConfig::getFeatures(std::u16string_view _sURL)
+    const
 {
     return impl_get(_sURL,0);
 }
 
-const ::comphelper::NamedValueCollection& DriversConfig::getMetaData(const OUString& _sURL) const
+const ::comphelper::NamedValueCollection& DriversConfig::getMetaData(std::u16string_view _sURL)
+    const
 {
     return impl_get(_sURL,2);
 }
 
-const ::comphelper::NamedValueCollection& DriversConfig::impl_get(const OUString& _sURL,sal_Int32 _nProps) const
+const ::comphelper::NamedValueCollection& DriversConfig::impl_get(std::u16string_view _sURL,sal_Int32 _nProps) const
 {
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
     const ::comphelper::NamedValueCollection* pRet = nullptr;

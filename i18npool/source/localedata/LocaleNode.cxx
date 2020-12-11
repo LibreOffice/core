@@ -201,7 +201,7 @@ void LocaleNode::incError( const char* pStr ) const
     fprintf( stderr, "Error: %s\n", pStr);
 }
 
-void LocaleNode::incError( const OUString& rStr ) const
+void LocaleNode::incError( std::u16string_view rStr ) const
 {
     incError( OSTR( rStr));
 }
@@ -212,13 +212,13 @@ void LocaleNode::incErrorInt( const char* pStr, int nVal ) const
     fprintf( stderr, pStr, nVal);
 }
 
-void LocaleNode::incErrorStr( const char* pStr, const OUString& rVal ) const
+void LocaleNode::incErrorStr( const char* pStr, std::u16string_view rVal ) const
 {
     ++nError;
     fprintf( stderr, pStr, OSTR( rVal));
 }
 
-void LocaleNode::incErrorStrStr( const char* pStr, const OUString& rVal1, const OUString& rVal2 ) const
+void LocaleNode::incErrorStrStr( const char* pStr, std::u16string_view rVal1, std::u16string_view rVal2 ) const
 {
     ++nError;
     fprintf(stderr, pStr, OSTR(rVal1), OSTR(rVal2));
@@ -1526,8 +1526,8 @@ static void lcl_writeAbbrFullNarrArrays( const OFileWriter & of, sal_Int16 nCoun
     }
 }
 
-bool LCCalendarNode::expectedCalendarElement( const OUString& rName,
-        const LocaleNode* pNode, sal_Int16 nChild, const OUString& rCalendarID ) const
+bool LCCalendarNode::expectedCalendarElement( std::u16string_view rName,
+        const LocaleNode* pNode, sal_Int16 nChild, std::u16string_view rCalendarID ) const
 {
     bool bFound = true;
     if (nChild >= 0)
@@ -1734,7 +1734,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         } else {
             if (erasNode == nullptr)
                 erasNode = calNode -> getChildAt(nChild);
-            if (!expectedCalendarElement("Eras", erasNode, -1, calendarID))
+            if (!expectedCalendarElement(u"Eras", erasNode, -1, calendarID))
             {
                 --nChild;
             }
@@ -1746,7 +1746,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 elementTag = "era";
                 for (j = 0; j < nbOfEras[i]; j++) {
                     LocaleNode *currNode = erasNode -> getChildAt(j);
-                    if (!expectedCalendarElement("Era", currNode, -1, calendarID))
+                    if (!expectedCalendarElement(u"Era", currNode, -1, calendarID))
                     {
                         continue;   // for
                     }
@@ -1764,7 +1764,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         }
         ++nChild;
 
-        if (expectedCalendarElement("StartDayOfWeek", calNode, nChild, calendarID))
+        if (expectedCalendarElement(u"StartDayOfWeek", calNode, nChild, calendarID))
         {
             str = calNode->getChildAt(nChild)->getChildAt(0)->getValue();
             if (nbOfDays[i])
@@ -1783,7 +1783,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             ++nChild;
         }
 
-        if (expectedCalendarElement("MinimalDaysInFirstWeek", calNode, nChild, calendarID))
+        if (expectedCalendarElement(u"MinimalDaysInFirstWeek", calNode, nChild, calendarID))
         {
             str = calNode ->getChildAt(nChild)-> getValue();
             sal_Int16 nDays = sal::static_int_cast<sal_Int16>( str.toInt32() );

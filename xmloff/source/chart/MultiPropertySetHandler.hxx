@@ -22,6 +22,7 @@
 
 #include <map>
 #include <memory>
+#include <string_view>
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -94,7 +95,7 @@ class   OUStringComparison
 {
 public:
     /// Compare two strings.  Returns true if the first is before the second.
-    bool    operator()  (const OUString & a, const OUString & b) const
+    bool    operator()  (const OUString & a, std::u16string_view b) const
     {
         return (a.compareTo (b) < 0);
     }

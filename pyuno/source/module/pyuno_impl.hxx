@@ -39,6 +39,7 @@
 
 #include <pyuno.hxx>
 
+#include <string_view>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -76,7 +77,7 @@ const sal_Int32 ARGS = 2;
 }
 
 bool isLog( RuntimeCargo const *cargo, sal_Int32 loglevel );
-void log( RuntimeCargo *cargo, sal_Int32 level, const OUString &logString );
+void log( RuntimeCargo *cargo, sal_Int32 level, std::u16string_view logString );
 void log( RuntimeCargo *cargo, sal_Int32 level, const char *str );
 void logCall( RuntimeCargo *cargo, const char *intro,
               void * ptr, const OUString & aFunctionName,
@@ -168,7 +169,7 @@ typedef struct
 } PyUNO_list_iterator;
 
 PyRef ustring2PyUnicode( const OUString &source );
-PyRef ustring2PyString( const OUString & source );
+PyRef ustring2PyString( std::u16string_view source );
 OUString pyString2ustring( PyObject *str );
 
 /// @throws css::reflection::InvocationTargetException

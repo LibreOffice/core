@@ -833,7 +833,7 @@ void OStatement_Base::setMaxFieldSize(sal_Int64 _par0)
     setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_MAX_LENGTH, _par0);
 }
 
-void OStatement_Base::setCursorName(const OUString &_par0)
+void OStatement_Base::setCursorName(std::u16string_view _par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     OString aName(OUStringToOString(_par0,getOwnConnection()->getTextEncoding()));

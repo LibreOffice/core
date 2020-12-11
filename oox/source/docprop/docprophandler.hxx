@@ -59,7 +59,7 @@ public:
     void AddCustomProperty( const css::uno::Any& aAny );
 
     static css::util::DateTime GetDateTimeFromW3CDTF( const OUString& aChars );
-    static css::uno::Sequence< OUString > GetKeywordsSet( const OUString& aChars );
+    static css::uno::Sequence< OUString > GetKeywordsSet( std::u16string_view aChars );
     void UpdateDocStatistic( const OUString& aChars );
 
     // com.sun.star.xml.sax.XFastDocumentHandler

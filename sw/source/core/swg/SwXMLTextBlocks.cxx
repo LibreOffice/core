@@ -341,7 +341,7 @@ ErrCode SwXMLTextBlocks::PutDoc()
     return nErr;
 }
 
-ErrCode SwXMLTextBlocks::GetText( const OUString& rShort, OUString& rText )
+ErrCode SwXMLTextBlocks::GetText( std::u16string_view rShort, OUString& rText )
 {
     return GetBlockText( rShort, rText );
 }
@@ -459,7 +459,7 @@ bool SwXMLTextBlocks::IsFileUCBStorage( const OUString & rFileName)
     return bRet;
 }
 
-OUString SwXMLTextBlocks::GeneratePackageName ( const OUString& rShort )
+OUString SwXMLTextBlocks::GeneratePackageName ( std::u16string_view rShort )
 {
     OString sByte(OUStringToOString(rShort, RTL_TEXTENCODING_UTF7));
     OUStringBuffer aBuf(OStringToOUString(sByte, RTL_TEXTENCODING_ASCII_US));

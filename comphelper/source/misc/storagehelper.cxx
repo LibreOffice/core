@@ -379,11 +379,11 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
 }
 
 
-uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( const OUString& aPassword )
+uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( std::u16string_view aPassword )
 {
     // TODO/LATER: Should not the method be part of DocPasswordHelper?
     uno::Sequence< beans::NamedValue > aEncryptionData;
-    if ( !aPassword.isEmpty() )
+    if ( !aPassword.empty() )
     {
         sal_Int32 nSha1Ind = 0;
         // generate SHA256 start key

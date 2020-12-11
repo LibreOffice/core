@@ -22,6 +22,8 @@
 
 #include <sal/config.h>
 
+#include <string_view>
+
 #include <codemaker/unotype.hxx>
 
 namespace rtl {
@@ -43,7 +45,7 @@ namespace codemaker::cpp {
 rtl::OString scopedCppName(rtl::OString const & type, bool ns_alias=true);
 
 rtl::OString translateUnoToCppType(
-    codemaker::UnoType::Sort sort, rtl::OUString const & nucleus);
+    codemaker::UnoType::Sort sort, std::u16string_view nucleus);
 
 enum class IdentifierTranslationMode {
     Global,

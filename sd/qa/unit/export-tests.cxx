@@ -6,6 +6,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <officecfg/Office/Common.hxx>
 #include "sdmodeltestbase.hxx"
 #include <sdpage.hxx>
@@ -416,7 +421,7 @@ void SdExportTest::testSwappedOutImageExport()
         uno::Reference< lang::XComponent > xComponent = xDocShRef->GetModel();
         uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
         utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[vFormats[nExportFormat]].pFilterName), RTL_TEXTENCODING_UTF8);
+        aMediaDescriptor["FilterName"] <<= OStringToOUString(std::string_view(aFileFormats[vFormats[nExportFormat]].pFilterName), RTL_TEXTENCODING_UTF8);
 
         utl::TempFile aTempFile;
         aTempFile.EnableKillingFile();
@@ -472,7 +477,7 @@ void SdExportTest::testOOoXMLAnimations()
     uno::Reference<lang::XComponent> xComponent = xDocShRef->GetModel();
     uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(getFormat(ODP)->pFilterName), RTL_TEXTENCODING_UTF8);
+    aMediaDescriptor["FilterName"] <<= OStringToOUString(std::string_view(getFormat(ODP)->pFilterName), RTL_TEXTENCODING_UTF8);
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
@@ -548,7 +553,7 @@ void SdExportTest::testUnknownAttributes()
     uno::Reference<lang::XComponent> xComponent = xDocShRef->GetModel();
     uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(getFormat(ODP)->pFilterName), RTL_TEXTENCODING_UTF8);
+    aMediaDescriptor["FilterName"] <<= OStringToOUString(std::string_view(getFormat(ODP)->pFilterName), RTL_TEXTENCODING_UTF8);
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
@@ -601,7 +606,7 @@ void SdExportTest::testLinkedGraphicRT()
         uno::Reference< lang::XComponent > xComponent = xDocShRef->GetModel();
         uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
         utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[vFormats[nExportFormat]].pFilterName), RTL_TEXTENCODING_UTF8);
+        aMediaDescriptor["FilterName"] <<= OStringToOUString(std::string_view(aFileFormats[vFormats[nExportFormat]].pFilterName), RTL_TEXTENCODING_UTF8);
 
         // Check if the graphic has been imported correctly (before doing the export/import run)
         {
@@ -713,7 +718,7 @@ void SdExportTest::testImageWithSpecialID()
         uno::Reference< lang::XComponent > xComponent = xDocShRef->GetModel();
         uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
         utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[vFormats[nExportFormat]].pFilterName), RTL_TEXTENCODING_UTF8);
+        aMediaDescriptor["FilterName"] <<= OStringToOUString(std::string_view(aFileFormats[vFormats[nExportFormat]].pFilterName), RTL_TEXTENCODING_UTF8);
 
         utl::TempFile aTempFile;
         aTempFile.EnableKillingFile();
@@ -1014,7 +1019,7 @@ void SdExportTest::testTdf115394PPT()
     uno::Reference< lang::XComponent > xComponent = xDocShRef->GetModel();
     uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
-    aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[PPT].pFilterName), RTL_TEXTENCODING_UTF8);
+    aMediaDescriptor["FilterName"] <<= OStringToOUString(std::string_view(aFileFormats[PPT].pFilterName), RTL_TEXTENCODING_UTF8);
 
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
@@ -1053,7 +1058,7 @@ void SdExportTest::testBulletsAsImage()
         uno::Reference< lang::XComponent > xComponent = xDocShRef->GetModel();
         uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
         utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[nExportFormat].pFilterName), RTL_TEXTENCODING_UTF8);
+        aMediaDescriptor["FilterName"] <<= OStringToOUString(std::string_view(aFileFormats[nExportFormat].pFilterName), RTL_TEXTENCODING_UTF8);
 
         utl::TempFile aTempFile;
         aTempFile.EnableKillingFile();

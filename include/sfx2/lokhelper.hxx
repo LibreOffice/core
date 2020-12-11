@@ -18,6 +18,7 @@
 #include <cstddef>
 #include <rtl/string.hxx>
 #include <optional>
+#include <string_view>
 
 struct SFX2_DLLPUBLIC LokMouseEventData
 {
@@ -97,7 +98,7 @@ public:
     /// Emits a LOK_CALLBACK_WINDOW
     static void notifyWindow(const SfxViewShell* pThisView,
                              vcl::LOKWindowId nWindowId,
-                             const OUString& rAction,
+                             std::u16string_view rAction,
                              const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>());
     /// Emits a LOK_CALLBACK_DOCUMENT_SIZE_CHANGED - if @bInvalidateAll - first invalidates all parts
     static void notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll = true);

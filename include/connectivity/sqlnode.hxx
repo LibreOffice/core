@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
 #include <set>
+#include <string_view>
 #include <vector>
 #include <rtl/ustrbuf.hxx>
 
@@ -230,7 +231,7 @@ namespace connectivity
                       SQLNodeType _eNodeType,
                       sal_uInt32 _nNodeID = 0);
 
-        OSQLParseNode(const OString& _rValue,
+        OSQLParseNode(std::string_view _rValue,
                       SQLNodeType eNewNodeType,
                       sal_uInt32 nNewNodeID=0);
 

@@ -27,6 +27,7 @@
 #include <rtl/string.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
+#include <string_view>
 
 class StreamData;
 
@@ -309,7 +310,7 @@ public:
     */
     bool            ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
                                         sal_Int32 nMaxBytesToRead = 0xFFFE );
-    bool            WriteByteStringLine( const OUString& rStr, rtl_TextEncoding eDestCharSet );
+    bool            WriteByteStringLine( std::u16string_view rStr, rtl_TextEncoding eDestCharSet );
 
     /// Switch to no endian swapping and write 0xfeff
     void            StartWritingUnicodeText();
@@ -560,7 +561,7 @@ TOOLS_DLLPUBLIC std::size_t write_uInt16_lenPrefixed_uInt8s_FromOString(SvStream
 /// of 8bit units from an OUString, returned value is number of bytes written
 /// (including byte-count of prefix)
 inline std::size_t write_uInt16_lenPrefixed_uInt8s_FromOUString(SvStream& rStrm,
-                                               const OUString &rStr,
+                                               std::u16string_view rStr,
                                                rtl_TextEncoding eEnc)
 {
     return write_uInt16_lenPrefixed_uInt8s_FromOString(rStrm, OUStringToOString(rStr, eEnc));

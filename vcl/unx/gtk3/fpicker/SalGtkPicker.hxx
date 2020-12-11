@@ -20,6 +20,10 @@
 #ifndef INCLUDED_VCL_UNX_GTK_FPICKER_SALGTKPICKER_HXX
 #define INCLUDED_VCL_UNX_GTK_FPICKER_SALGTKPICKER_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <osl/mutex.hxx>
 #include <tools/link.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -52,7 +56,7 @@ class SalGtkPicker
         GtkWidget  *m_pDialog;
     protected:
         /// @throws css::uno::RuntimeException
-        void implsetTitle( const OUString& aTitle );
+        void implsetTitle( std::u16string_view aTitle );
 
         /// @throws css::lang::IllegalArgumentException
         /// @throws css::uno::RuntimeException

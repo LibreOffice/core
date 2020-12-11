@@ -297,7 +297,7 @@ void FormulaLogger::writeAscii( const char* s, size_t n )
     mpLogFile->write(s, n, nBytes);
 }
 
-void FormulaLogger::write( const OUString& ou )
+void FormulaLogger::write( std::u16string_view ou )
 {
     OString s = OUStringToOString(ou, RTL_TEXTENCODING_UTF8).getStr();
     writeAscii(s.getStr(), s.getLength());

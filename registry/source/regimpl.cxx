@@ -1005,7 +1005,7 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
 }
 
 RegError ORegistry::checkBlop(OStoreStream& rValue,
-                              const OUString& sTargetPath,
+                              std::u16string_view sTargetPath,
                               sal_uInt32 srcValueSize,
                               sal_uInt8 const * pSrcBuffer,
                               bool bReport)

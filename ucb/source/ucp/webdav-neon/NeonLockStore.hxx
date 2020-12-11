@@ -30,6 +30,7 @@
 
 #include <config_lgpl.h>
 #include <map>
+#include <string_view>
 
 #include <ne_locks.h>
 
@@ -74,7 +75,7 @@ public:
 
     void registerSession( HttpSession * pHttpSession );
 
-    NeonLock * findByUri( OUString const & rUri );
+    NeonLock * findByUri( std::u16string_view rUri );
 
     void addLock( NeonLock * pLock,
                   rtl::Reference< NeonSession > const & xSession,

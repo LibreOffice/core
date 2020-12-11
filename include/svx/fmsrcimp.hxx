@@ -33,6 +33,7 @@
 
 #include <deque>
 #include <memory>
+#include <string_view>
 #include <vector>
 
 namespace com::sun::star::awt { class XCheckBox; }
@@ -324,7 +325,7 @@ private:
     // starting the loop), not in every loop step
     SVX_DLLPRIVATE SearchResult SearchSpecial(bool _bSearchForNull, sal_Int32& nFieldPos, FieldCollection::iterator& iterFieldLoop,
         const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);
-    SVX_DLLPRIVATE SearchResult SearchWildcard(const OUString& strExpression, sal_Int32& nFieldPos, FieldCollection::iterator& iterFieldLoop,
+    SVX_DLLPRIVATE SearchResult SearchWildcard(std::u16string_view strExpression, sal_Int32& nFieldPos, FieldCollection::iterator& iterFieldLoop,
         const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);
     SVX_DLLPRIVATE SearchResult SearchRegularApprox(const OUString& strExpression, sal_Int32& nFieldPos, FieldCollection::iterator& iterFieldLoop,
         const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);

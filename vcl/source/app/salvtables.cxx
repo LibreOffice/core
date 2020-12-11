@@ -689,7 +689,7 @@ Image createImage(const VirtualDevice& rDevice)
     return Image(rDevice.GetBitmapEx(Point(), rDevice.GetOutputSizePixel()));
 }
 
-sal_uInt16 insert_to_menu(sal_uInt16 nLastId, PopupMenu* pMenu, int pos, const OUString& rId,
+sal_uInt16 insert_to_menu(sal_uInt16 nLastId, PopupMenu* pMenu, int pos, std::u16string_view rId,
                           const OUString& rStr, const OUString* pIconName,
                           const VirtualDevice* pImageSurface, TriState eCheckRadioFalse)
 {

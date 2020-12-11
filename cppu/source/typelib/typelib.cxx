@@ -279,7 +279,7 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl()
             typelib_TypeDescriptionReference * pTDR = rEntry.second;
             if (pTDR)
             {
-                OString aTypeName( OUStringToOString( pTDR->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
+                OString aTypeName( OUStringToOString( OUString::unacquired(&pTDR->pTypeName), RTL_TEXTENCODING_ASCII_US ) );
                 SAL_INFO("cppu.typelib", "remaining type: " << aTypeName << "; ref count = " << pTDR->nRefCount);
             }
             else

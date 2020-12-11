@@ -28,7 +28,7 @@
 
 #include <vector>
 #include <memory>
-
+#include <string_view>
 
 class ImplFontListNameInfo;
 class OutputDevice;
@@ -205,7 +205,7 @@ public:
     sal_Int32               Count() const { return mnElem; }
     bool                    IsEmpty() const { return !mnElem; }
 
-    sal_Int32               Name2Size( const OUString& ) const;
+    sal_Int32               Name2Size( std::u16string_view ) const;
     OUString                Size2Name( sal_Int32 ) const;
 
     OUString                GetIndexName( sal_Int32 nIndex ) const;

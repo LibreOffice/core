@@ -57,28 +57,28 @@ bool isWhitespace( sal_Unicode c );
 
 OUString concatQualified( const OUString & a, const OUString &b);
 
-OString OUStringToOString( const OUString& str, ConnectionSettings const *settings);
+OString OUStringToOString( std::u16string_view str, ConnectionSettings const *settings);
 
-void bufferQuoteConstant( OUStringBuffer & buf, const OUString & str, ConnectionSettings *settings );
+void bufferQuoteConstant( OUStringBuffer & buf, std::u16string_view str, ConnectionSettings *settings );
 void bufferQuoteAnyConstant( OUStringBuffer & buf, const css::uno::Any &val, ConnectionSettings *settings );
 
-void bufferEscapeConstant( OUStringBuffer & buf, const OUString & str, ConnectionSettings *settings );
+void bufferEscapeConstant( OUStringBuffer & buf, std::u16string_view str, ConnectionSettings *settings );
 
 OUString sqltype2string(
     const css::uno::Reference< css::beans::XPropertySet > & column );
 
 
 void bufferQuoteQualifiedIdentifier(
-    OUStringBuffer & buf, const OUString &schema, const OUString &name, ConnectionSettings *settings );
+    OUStringBuffer & buf, std::u16string_view schema, std::u16string_view name, ConnectionSettings *settings );
 
 void bufferQuoteQualifiedIdentifier(
     OUStringBuffer & buf,
-    const OUString &schema,
-    const OUString &name,
-    const OUString &col,
+    std::u16string_view schema,
+    std::u16string_view name,
+    std::u16string_view col,
     ConnectionSettings *settings );
 
-void bufferQuoteIdentifier( OUStringBuffer & buf, const OUString &toQuote, ConnectionSettings *settings );
+void bufferQuoteIdentifier( OUStringBuffer & buf, std::u16string_view toQuote, ConnectionSettings *settings );
 void bufferKey2TableConstraint(
     OUStringBuffer &buf,
     const css::uno::Reference< css::beans::XPropertySet > &key,
@@ -115,7 +115,7 @@ OUString array2String( const css::uno::Sequence< css::uno::Any > &seq );
 css::uno::Reference< css::sdbc::XConnection > extractConnectionFromStatement(
     const css::uno::Reference< css::uno::XInterface > & stmt );
 
-void splitConcatenatedIdentifier( const OUString & source, OUString *first, OUString *second);
+void splitConcatenatedIdentifier( std::u16string_view source, OUString *first, OUString *second);
 
 
 void fillAttnum2attnameMap(

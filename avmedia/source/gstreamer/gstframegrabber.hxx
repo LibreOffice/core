@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "gstplayer.hxx"
 #include <com/sun/star/media/XFrameGrabber.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -39,7 +43,7 @@ public:
     const FrameGrabber& operator=(const FrameGrabber&) =delete;
 
     // static create method instead of public Ctor
-    static FrameGrabber* create( const OUString &rURL );
+    static FrameGrabber* create( std::u16string_view rURL );
 
     virtual ~FrameGrabber() override;
 
@@ -52,7 +56,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 private:
-    explicit FrameGrabber( const OUString &aURL );
+    explicit FrameGrabber( std::u16string_view aURL );
 };
 
 } // avmedia::gst
