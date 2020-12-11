@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f40f5ecf_66f2c3e6",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 3511,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-12-11T20:04:51Z",
+      "side": 1,
+      "message": "The indefinite article is not needed IMO",
+      "revId": "24853536b6d827b541df0b14785993c9a90c2629",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
