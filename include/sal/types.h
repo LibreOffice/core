@@ -23,6 +23,7 @@
 #include "sal/config.h"
 
 #include <stddef.h>
+#include <stdint.h>
 
 #include "sal/macros.h"
 #include "sal/typesizes.h"
@@ -39,7 +40,12 @@ typedef unsigned char sal_Bool;
 typedef signed char         sal_Int8;
 typedef unsigned char       sal_uInt8;
 
-#if SAL_TYPES_SIZEOFSHORT == 2
+#ifdef LIBO_INTERNAL_ONLY
+
+typedef int16_t           sal_Int16;
+typedef uint16_t          sal_uInt16;
+
+#elif SAL_TYPES_SIZEOFSHORT == 2
     typedef signed short      sal_Int16;
     typedef unsigned short    sal_uInt16;
 #else
@@ -183,9 +189,15 @@ typedef void *                   sal_Handle;
 #define SAL_MIN_INT8          ((sal_Int8)   (-0x7F - 1))
 #define SAL_MAX_INT8          ((sal_Int8)   0x7F)
 #define SAL_MAX_UINT8         ((sal_uInt8)  0xFF)
+#ifdef LIBO_INTERNAL_ONLY
+#define SAL_MIN_INT16         ((sal_Int16)  INT16_MIN)
+#define SAL_MAX_INT16         ((sal_Int16)  INT16_MAX)
+#define SAL_MAX_UINT16        ((sal_uInt16) UINT16_MAX)
+#else
 #define SAL_MIN_INT16         ((sal_Int16)  (-0x7FFF - 1))
 #define SAL_MAX_INT16         ((sal_Int16)  0x7FFF)
 #define SAL_MAX_UINT16        ((sal_uInt16) 0xFFFF)
+#endif
 #define SAL_MIN_INT32         ((sal_Int32)  (-0x7FFFFFFF - 1))
 #define SAL_MAX_INT32         ((sal_Int32)  0x7FFFFFFF)
 #define SAL_MAX_UINT32        ((sal_uInt32) 0xFFFFFFFF)
