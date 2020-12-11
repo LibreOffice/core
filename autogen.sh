@@ -313,7 +313,7 @@ if (defined $ENV{NOCONFIGURE}) {
         $ENV{"PROGRAMFILESX86"} = $ENV{"ProgramFiles(x86)"};
     }
 
-    system ("./configure", @args) && die "Error running configure";
+    system ("emconfigure", "./configure", @args) && die "Error running configure";
 }
 
 # Local Variables:

@@ -13,6 +13,10 @@ $(eval $(call gb_ExternalProject_register_targets,libxml2,\
 	build \
 ))
 
+ifeq ($(OS),EMSCRIPTEN)
+$(call gb_ExternalProject_use_external_project,libxml2,icu)
+endif
+
 ifeq ($(OS),WNT)
 $(call gb_ExternalProject_use_external_project,libxml2,icu)
 

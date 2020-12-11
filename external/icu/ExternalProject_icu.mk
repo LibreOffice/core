@@ -73,8 +73,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 		./configure \
 			--disable-layout --disable-samples \
 			$(if $(filter FUZZERS,$(BUILD_TYPE)),--disable-release) \
-			$(if $(filter iOS ANDROID,$(OS)),--disable-dyload) \
-			$(if $(filter ANDROID,$(OS)),--disable-strict ac_cv_c_bigendian=no) \
+			$(if $(filter ENSCRIPTEN ANDROID,$(OS)),--disable-strict ac_cv_c_bigendian=no) \
 			$(if $(filter SOLARIS AIX,$(OS)),--disable-64bit-libs) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),\
 				--with-data-packaging=static --enable-static --disable-shared --disable-dyload,\

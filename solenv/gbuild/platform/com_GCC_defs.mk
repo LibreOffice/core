@@ -49,6 +49,7 @@ gb_COMPILERDEFS := \
 	-DBOOST_ERROR_CODE_HEADER_ONLY \
 	-DBOOST_SYSTEM_NO_DEPRECATED \
 	-DCPPU_ENV=$(gb_CPPU_ENV) \
+	$(if $(filter EMSCRIPTEN,$(OS)),-U_FORTIFY_SOURCE) \
 
 gb_CFLAGS_COMMON := \
 	-Wall \
@@ -63,7 +64,7 @@ gb_CFLAGS_COMMON := \
 	-fmessage-length=0 \
 	-fno-common \
 	-pipe \
-	-fstack-protector-strong \
+	$(if $(filter EMSCRIPTEN,$(OS)),-fno-stack-protector,-fstack-protector-strong) \
 	$(if $(gb_COLOR),-fdiagnostics-color=always) \
 
 gb_CXXFLAGS_COMMON := \
@@ -80,7 +81,7 @@ gb_CXXFLAGS_COMMON := \
 	-fmessage-length=0 \
 	-fno-common \
 	-pipe \
-	-fstack-protector-strong \
+	$(if $(filter EMSCRIPTEN,$(OS)),-fno-stack-protector,-fstack-protector-strong) \
 	$(if $(gb_COLOR),-fdiagnostics-color=always) \
 
 ifeq ($(HAVE_WDEPRECATED_COPY_DTOR),TRUE)

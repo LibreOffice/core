@@ -1,0 +1,144 @@
+= Setup for the LO WASM build (with Qt) =
+
+We're using Qt 5.15 with the officially supported emscripten v1.39.8.
+But there are several potential problems with threads and exceptions, so this will likely
+change later zo a newer emscripten.
+
+Qt WASM is not yet used with LO, just if you're wondering!
+
+== Setup emscripten ==
+
+https://emscripten.org/docs/getting_started/index.html
+
+git clone https://github.com/emscripten-core/emsdk.git
+./emsdk install 1.39.8
+./emsdk activate --embedded 1.39.8
+
+Example bashrc scriptlet:
+
+EMSDK_ENV=$HOME/Development/libreoffice/git_emsdk/emsdk_env.sh
+[ -f "$EMSDK_ENV" ] && \. "$EMSDK_ENV" 1>/dev/null 2>&1
+
+
+== Setup LO ==
+
+Currently autogen.sh is patched to use emconfigure. That basically sets various environment vars,
+especially EMMAKEN_JUST_CONFIGURE, which will create the correct output file names, checked by
+configure (a.out).
+
+--host=wasm64-local-emscripten
+--disable-cups
+--disable-dconf
+--disable-gio
+--disable-dbus
+--disable-sdremote-bluetooth
+--disable-gstreamer-1-0
+--disable-odk
+--disable-postgresql-sdbc
+--disable-firebird-sdbc
+--disable-mariadb-sdbc
+--disable-nss
+--disable-python
+--disable-randr
+--disable-pdfimport
+--disable-report-builder
+--disable-lpsolve
+--disable-coinmp
+--without-fonts
+--without-java
+--without-junit
+--without-helppack-integration
+--without-system-dicts
+--with-theme=no
+--disable-cairo-canvas
+--disable-scripting
+--disable-dynamic-loading
+--disable-ccache
+--disable-gtk3
+--enable-qt5
+
+Will also be encoded in configure.ac at some point, some already is.
+
+
+== Setup Qt ==
+
+https://doc.qt.io/qt-5/wasm.html
+
+I originally build the Qt 5.15 branch, but probably better to build a tag like v5.15.2.
+
+./configure -xplatform wasm-emscripten -feature-thread -compile-examples -prefix $PWD/qtbase
+make -j<CORES> module-qtbase module-qtdeclarative
+
+Building with examples will break with some of them, but at that point Qt already works.
+
+If you get a configure failure for Qt:
+
+Checking for target architecture... Project ERROR: target architecture detection binary not found.
+
+Edit qtbase/config.tests/arch/write_info.pri
+-     ext = .wasm
++     ext = .js.wasm
+
+Current Qt fails to start the demo webserver: https://bugreports.qt.io/browse/QTCREATORBUG-24072
+Use: emrun --serve_after_close to run Qt WASM demos
+
+
+= Mixed information, links, problems, TODO =
+
+More info on Qt WASM emscripten pthreads: https://wiki.qt.io/Qt_for_WebAssembly#Multithreading_Support
+
+Qt with threads has further memory limit. From Qt configure:
+Project MESSAGE: Setting PTHREAD_POOL_SIZE to 4
+Project MESSAGE: Setting TOTAL_MEMORY to 1GB
+
+LO uses a nested event loop to run dialogs in general, but that won't work, because you can't drive
+the browser event loop. like VCL does with the system event loop in the various VCL backends.
+Changing this will need some major work (basically dropping Application::Execute).
+
+But with the know problems with exceptions and threads, this might change:
+- https://github.com/emscripten-core/emscripten/pull/11518
+- https://github.com/emscripten-core/emscripten/issues/11503
+- https://github.com/emscripten-core/emscripten/issues/11233
+- https://github.com/emscripten-core/emscripten/issues/12035
+
+We're also using emconfigure at the moment. Originally I patched emscripten, because it
+woulden't create the correct a.out file for C++ configure tests. Later I found that
+the emconfigure sets EMMAKEN_JUST_CONFIGURE to work around the problem.
+
+But it sets many more environment variables with "em<tool>" variants. This can all be moved
+into LO configure later.
+
+ICU bug: https://github.com/emscripten-core/emscripten/issues/10129
+Alternative, probably: https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Intl
+
+There is a wasm64, but that still uses 32bit pointers!
+
+Old outdated docs: https://wiki.documentfoundation.org/Development/Emscripten
+Reverted patch: https://cgit.freedesktop.org/libreoffice/core/commit/?id=0e21f6619c72f1e17a7b0a52b6317810973d8a3e
+
+Generally https://emscripten.org/docs/porting:
+- https://emscripten.org/docs/porting/guidelines/api_limitations.html#api-limitations
+- https://emscripten.org/docs/porting/files/file_systems_overview.html#file-system-overview
+- https://emscripten.org/docs/porting/pthreads.html
+- https://emscripten.org/docs/porting/emscripten-runtime-environment.html
+
+This will be interesting: https://emscripten.org/docs/getting_started/FAQ.html#how-do-i-run-an-event-loop
+
+This didn't help much yet: https://github.com/emscripten-ports
+
+https://www.qt.io/qt-examples-for-webassembly
+http://qtandeverything.blogspot.com/2017/06/qt-for-web-assembly.html
+http://qtandeverything.blogspot.com/2020/
+https://emscripten.org/docs/api_reference/Filesystem-API.html
+https://discuss.python.org/t/add-a-webassembly-wasm-runtime/3957/12
+http://git.savannah.gnu.org/cgit/config.git
+https://webassembly.org/specs/
+https://developer.chrome.com/docs/native-client/
+https://emscripten.org/docs/getting_started/downloads.html
+https://github.com/openpgpjs/openpgpjs/blob/master/README.md#getting-started
+https://developer.mozilla.org/en-US/docs/WebAssembly/Using_the_JavaScript_API
+https://github.com/bytecodealliance/wasmtime/blob/main/docs/WASI-intro.md
+https://www.ip6.li/de/security/x.509_kochbuch/openssl-fuer-webassembly-compilieren
+https://emscripten.org/docs/introducing_emscripten/about_emscripten.html#about-emscripten-porting-code
+https://emscripten.org/docs/compiling/Building-Projects.html
+
