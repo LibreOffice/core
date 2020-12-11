@@ -1681,10 +1681,15 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
     // Add relation for this stream, e.g. xl/externalLinks/_rels/externalLink1.xml.rels
     sal_uInt16 nLevel = 0;
     bool bRel = true;
+
+    // BuildFileName delete ../ and convert them to nLevel
+    // but addrelation needs ../ instead of nLevel, so we have to convert it back
+    OUString sFile = XclExpHyperlink::BuildFileName(nLevel, bRel, maUrl, GetRoot(), true);
+    while (nLevel-- > 0)
+        sFile = "../" + sFile;
+
     OUString sId = rStrm.addRelation( pExternalLink->getOutputStream(),
-            oox::getRelationship(Relationship::EXTERNALLINKPATH),
-            XclExpHyperlink::BuildFileName( nLevel, bRel, maUrl, GetRoot(), true),
-            true );
+            oox::getRelationship(Relationship::EXTERNALLINKPATH), sFile, true );
 
     pExternalLink->startElement( XML_externalLink,
             XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8());

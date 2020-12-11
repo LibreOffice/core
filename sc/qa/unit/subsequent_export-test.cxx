@@ -269,6 +269,7 @@ public:
     void testTdf76047_externalLink();
     void testTdf87973_externalLinkSkipUnuseds();
     void testTdf138741_externalLinkSkipUnusedsCrash();
+    void testTdf138824_linkToParentDirectory();
     void testTdf129969();
     void testTdf84874();
     void testTdf136721_paper_size();
@@ -442,6 +443,7 @@ public:
     CPPUNIT_TEST(testTdf76047_externalLink);
     CPPUNIT_TEST(testTdf87973_externalLinkSkipUnuseds);
     CPPUNIT_TEST(testTdf138741_externalLinkSkipUnusedsCrash);
+    CPPUNIT_TEST(testTdf138824_linkToParentDirectory);
     CPPUNIT_TEST(testTdf129969);
     CPPUNIT_TEST(testTdf84874);
     CPPUNIT_TEST(testTdf136721_paper_size);
@@ -5561,7 +5563,7 @@ void ScExportTest::testTdf87973_externalLinkSkipUnuseds()
     ScDocument& rDoc = pShell->GetDocument();
 
     // change external link to: 87973_externalSource.ods
-    OUString aFormula, bFormula;
+    OUString aFormula, aFormula2;
     rDoc.GetFormula(3, 1, 0, aFormula);
     auto nIdxOfFilename = aFormula.indexOf("tdf132105_external.ods");
     aFormula = aFormula.replaceAt(nIdxOfFilename, 22, "87973_externalSource.ods");
@@ -5583,9 +5585,9 @@ void ScExportTest::testTdf87973_externalLinkSkipUnuseds()
 
     // check if the new filename is present in the link (and not replaced by '[2]')
     ScDocument& rDoc2 = pDocSh->GetDocument();
-    rDoc2.GetFormula(3, 1, 0, bFormula);
-    CPPUNIT_ASSERT(bFormula.indexOf("tdf132105_external.ods") < 0);
-    CPPUNIT_ASSERT(bFormula.indexOf("87973_externalSource.ods") > 0);
+    rDoc2.GetFormula(3, 1, 0, aFormula2);
+    CPPUNIT_ASSERT(aFormula2.indexOf("tdf132105_external.ods") < 0);
+    CPPUNIT_ASSERT(aFormula2.indexOf("87973_externalSource.ods") >= 0);
 
     pDocSh->DoClose();
 }
@@ -5599,6 +5601,48 @@ void ScExportTest::testTdf138741_externalLinkSkipUnusedsCrash()
     ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
 
     xShell->DoClose();
+}
+
+void ScExportTest::testTdf138824_linkToParentDirectory()
+{
+    ScDocShellRef xShell = loadDoc("childDir/tdf138824_linkToParentDirectory.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocument& rDoc = xShell->GetDocument();
+
+    // saveAndReload save the file to a temporary directory
+    // the link must be changed to point to that parent directory
+    utl::TempFile aTempFile;
+    auto aTempFilename = aTempFile.GetURL();
+    auto nIdxOfTmpFile = aTempFilename.lastIndexOf('/');
+    nIdxOfTmpFile = aTempFilename.lastIndexOf('/', nIdxOfTmpFile);
+    aTempFilename = aTempFilename.copy(0, nIdxOfTmpFile + 1);
+
+    // change external link to tmp directory
+    OUString aFormula;
+    rDoc.GetFormula(3, 1, 0, aFormula);
+    auto nIdxOfFilename = aFormula.indexOf("tdf138824_externalSource.ods");
+    auto nIdxOfFile = aFormula.indexOf("file");
+
+    aFormula = aFormula.replaceAt(nIdxOfFile, nIdxOfFilename - nIdxOfFile, aTempFilename);
+    rDoc.SetFormula(ScAddress(3, 1, 0), aFormula, formula::FormulaGrammar::GRAM_NATIVE_UI);
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(
+        pXPathFile, m_xSFactory, "xl/externalLinks/_rels/externalLink1.xml.rels");
+    CPPUNIT_ASSERT(pDoc);
+
+    // it should be "../tdf138824_externalSource.ods" but because of an other bug,
+    // on linux some other directory names may added into the middle
+    OUString aValue = getXPath(pDoc, "/r:Relationships/r:Relationship", "Target");
+    CPPUNIT_ASSERT_EQUAL(0, static_cast<int>(aValue.indexOf("../")));
+    CPPUNIT_ASSERT(aValue.indexOf("/tdf138824_externalSource.ods") > 0);
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testTdf129969()
