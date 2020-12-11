@@ -1248,7 +1248,7 @@ OUString XclExpTbxControlObj::SaveControlPropertiesXml(XclExpXmlStream& rStrm) c
     {
         case EXC_OBJTYPE_CHECKBOX:
         {
-            const sal_Int32 nDrawing = XclExpObjList::getNewDrawingUniqueId();
+            const sal_Int32 nDrawing = DrawingML::getNewDrawingUniqueId();
             sax_fastparser::FSHelperPtr pFormControl = rStrm.CreateOutputStream(
                     XclXmlUtils::GetStreamName( "xl/", "ctrlProps/ctrlProps", nDrawing ),
                     XclXmlUtils::GetStreamName( "../", "ctrlProps/ctrlProps", nDrawing ),

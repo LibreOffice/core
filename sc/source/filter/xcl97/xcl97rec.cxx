@@ -81,9 +81,6 @@ using ::oox::drawingml::ShapeExport;
 using ::oox::vml::VMLExport;
 using namespace oox;
 
-sal_Int32 XclExpObjList::mnDrawingMLCount;
-sal_Int32 XclExpObjList::mnVmlCount;
-
 XclExpObjList::XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx ) :
     XclExpRoot( rRoot ),
     mnScTab( rRoot.GetCurrScTab() ),
@@ -237,7 +234,7 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
     if (aList.empty())
         return;
 
-    sal_Int32 nDrawing = XclExpObjList::getNewDrawingUniqueId();
+    sal_Int32 nDrawing = drawingml::DrawingML::getNewDrawingUniqueId();
     OUString sId;
     sax_fastparser::FSHelperPtr pDrawing = rStrm.CreateOutputStream(
             XclXmlUtils::GetStreamName( "xl/", "drawings/drawing", nDrawing ),
@@ -318,12 +315,12 @@ void SaveFormControlObjects(XclExpObjList& rList, XclExpXmlStream& rStrm)
     rWorksheet->endElement(FSNS(XML_mc, XML_AlternateContent));
 }
 
-void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nVmlCount )
+void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
 {
     if( GetVmlObjectCount( rList ) == 0 )
         return;
 
-    sal_Int32 nDrawing = ++nVmlCount;
+    sal_Int32 nDrawing = drawingml::DrawingML::getNewVMLUniqueId();
     OUString sId;
     sax_fastparser::FSHelperPtr pVmlDrawing = rStrm.CreateOutputStream(
             XclXmlUtils::GetStreamName( "xl/", "drawings/vmlDrawing", nDrawing ),
@@ -365,14 +362,8 @@ void XclExpObjList::SaveXml( XclExpXmlStream& rStrm )
         return;
 
     SaveDrawingMLObjects( *this, rStrm );
-    SaveVmlObjects( *this, rStrm, mnVmlCount );
+    SaveVmlObjects( *this, rStrm );
     SaveFormControlObjects( *this, rStrm );
-}
-
-void XclExpObjList::ResetCounters()
-{
-    mnDrawingMLCount    = 0;
-    mnVmlCount          = 0;
 }
 
 // --- class XclObj --------------------------------------------------
