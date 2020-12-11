@@ -1580,6 +1580,12 @@ bool VclAlignment::set_property(const OString &rKey, const OUString &rValue)
     return true;
 }
 
+void VclAlignment::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    VclContainer::DumpAsPropertyTree(rJsonWriter);
+    rJsonWriter.put("type", "alignment");
+}
+
 class DisclosureButton final : public CheckBox
 {
     virtual void ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext) override

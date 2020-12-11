@@ -461,6 +461,7 @@ public:
     {
     }
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 private:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
