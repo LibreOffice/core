@@ -30,6 +30,7 @@ namespace starmathdatabase
   * We allow the import of HTML5 entities because are compatible with mathml
   * and ill formated are expected.
   * On export only mathml entities are allowed.
+  * Some documentation: https://www.w3.org/TR/MathML3/chapter7.html
   */
 /**
   * Entity names for mathml. Example: &infin;
