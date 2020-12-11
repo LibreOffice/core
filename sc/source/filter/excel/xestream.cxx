@@ -1021,7 +1021,7 @@ bool XclExpXmlStream::exportDocument()
     // SfxMedium::GetOutStream() anywhere in the xlsx export filter code!
     // Instead, write via XOutputStream instance.
     tools::SvRef<SotStorage> rStorage = static_cast<SotStorage*>(nullptr);
-    XclExpObjList::ResetCounters();
+    drawingml::DrawingML::ResetMlCounters();
 
     XclExpRootData aData(
         EXC_BIFF8, *pShell->GetMedium (), rStorage, rDoc,

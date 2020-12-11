@@ -209,6 +209,8 @@ void WriteGradientPath(const awt::Gradient& rGradient, const FSHelperPtr& pFS, c
 int DrawingML::mnImageCounter = 1;
 int DrawingML::mnWdpImageCounter = 1;
 std::map<OUString, OUString> DrawingML::maWdpCache;
+sal_Int32 DrawingML::mnDrawingMLCount = 0;
+sal_Int32 DrawingML::mnVmlCount = 0;
 
 sal_Int16 DrawingML::GetScriptType(const OUString& rStr)
 {
@@ -239,6 +241,12 @@ void DrawingML::ResetCounters()
     mnImageCounter = 1;
     mnWdpImageCounter = 1;
     maWdpCache.clear();
+}
+
+void DrawingML::ResetMlCounters()
+{
+    mnDrawingMLCount = 0;
+    mnVmlCount = 0;
 }
 
 bool DrawingML::GetProperty( const Reference< XPropertySet >& rXPropertySet, const OUString& aName )
@@ -4950,6 +4958,40 @@ void DrawingML::writeDiagramRels(const uno::Sequence<uno::Sequence<uno::Any>>& x
         }
         dataImagebin->closeInput();
     }
+}
+
+void DrawingML::WriteFromTo(const uno::Reference<css::drawing::XShape>& rXShape, const awt::Size& aPageSize,
+                            const FSHelperPtr& pDrawing)
+{
+    awt::Point aTopLeft = rXShape->getPosition();
+    awt::Size aSize = rXShape->getSize();
+
+    // TODO: rotated shapes have wrong position, already at oox import
+
+    tools::Rectangle aLocation(aTopLeft.X, aTopLeft.Y, aTopLeft.X + aSize.Width, aTopLeft.Y + aSize.Height);
+    double nXpos = static_cast<double>(aLocation.TopLeft().getX()) / static_cast<double>(aPageSize.Width);
+    double nYpos = static_cast<double>(aLocation.TopLeft().getY()) / static_cast<double>(aPageSize.Height);
+
+    pDrawing->startElement(FSNS(XML_cdr, XML_from));
+    pDrawing->startElement(FSNS(XML_cdr, XML_x));
+    pDrawing->write(nXpos);
+    pDrawing->endElement(FSNS(XML_cdr, XML_x));
+    pDrawing->startElement(FSNS(XML_cdr, XML_y));
+    pDrawing->write(nYpos);
+    pDrawing->endElement(FSNS(XML_cdr, XML_y));
+    pDrawing->endElement(FSNS(XML_cdr, XML_from));
+
+    nXpos = static_cast<double>(aLocation.BottomRight().getX()) / static_cast<double>(aPageSize.Width);
+    nYpos = static_cast<double>(aLocation.BottomRight().getY()) / static_cast<double>(aPageSize.Height);
+
+    pDrawing->startElement(FSNS(XML_cdr, XML_to));
+    pDrawing->startElement(FSNS(XML_cdr, XML_x));
+    pDrawing->write(nXpos);
+    pDrawing->endElement(FSNS(XML_cdr, XML_x));
+    pDrawing->startElement(FSNS(XML_cdr, XML_y));
+    pDrawing->write(nYpos);
+    pDrawing->endElement(FSNS(XML_cdr, XML_y));
+    pDrawing->endElement(FSNS(XML_cdr, XML_to));
 }
 
 }
