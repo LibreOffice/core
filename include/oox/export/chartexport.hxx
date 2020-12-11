@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <oox/dllapi.h>
 #include <oox/export/drawingml.hxx>
+#include <oox/export/shapes.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/tokens.hxx>
 #include <rtl/ustring.hxx>
@@ -140,6 +141,7 @@ private:
                           const OUString* pSubText = nullptr );
     void exportPlotArea( const css::uno::Reference<
                              css::chart::XChartDocument >& rChartDoc );
+    void exportAdditionalShapes( const css::uno::Reference<css::chart::XChartDocument >& rChartDoc );
     void exportFill( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
     void exportSolidFill(const css::uno::Reference<css::beans::XPropertySet>& xPropSet);
     void exportGradientFill( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
