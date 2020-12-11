@@ -66,8 +66,9 @@ static void assertMotionPath(const OUString &rStr1, const OUString &rStr2, const
     sal_Int32 nIdx1 = 0;
     sal_Int32 nIdx2 = 0;
 
-    OString sMessage = OUStringToOString("Motion path values mismatch.\nExpect: " + rStr1 +
-            "\nActual: " + rStr2, RTL_TEXTENCODING_UTF8);
+    OString sMessage = "Motion path values mismatch.\nExpect: " +
+            OUStringToOString(rStr1, RTL_TEXTENCODING_UTF8) +
+            "\nActual: " + OUStringToOString(rStr2, RTL_TEXTENCODING_UTF8);
 
     while(nIdx1 != -1 && nIdx2 != -1)
     {

@@ -39,7 +39,7 @@ namespace
     };
     GDBusProxy* lcl_GetPackageKitProxy(const OUString& sInterface)
     {
-        const OString sFullInterface = OUStringToOString("org.freedesktop.PackageKit." + sInterface, RTL_TEXTENCODING_ASCII_US);
+        const OString sFullInterface = "org.freedesktop.PackageKit." + OUStringToOString(sInterface, RTL_TEXTENCODING_ASCII_US);
         GDBusProxy* proxy = nullptr;
         {
             GErrorWrapper error;

@@ -157,7 +157,7 @@ protected:
             {
                 if (xDocShRef.is())
                     xDocShRef->DoClose();
-                CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "failed to load Draw doc" + rURL, RTL_TEXTENCODING_UTF8 ).getStr(), false );
+                CPPUNIT_ASSERT_MESSAGE( OString("failed to load Draw doc" + OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 )).getStr(), false );
             }
             CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
             return xDocShRef;
@@ -182,7 +182,7 @@ protected:
             {
                 if (xDocShRef.is())
                     xDocShRef->DoClose();
-                CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "failed to load " + rURL, RTL_TEXTENCODING_UTF8 ).getStr(), false );
+                CPPUNIT_ASSERT_MESSAGE( OString("failed to load " + OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 )).getStr(), false );
             }
             CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
             return xDocShRef;
