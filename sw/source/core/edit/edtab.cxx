@@ -148,17 +148,19 @@ bool SwEditShell::TextToTable( const SwInsertTableOptions& rInsTableOpts,
 bool SwEditShell::TableToText( sal_Unicode cCh )
 {
     SwWait aWait( *GetDoc()->GetDocShell(), true );
-    bool bRet = false;
     SwPaM* pCursor = GetCursor();
     const SwTableNode* pTableNd =
             GetDoc()->IsIdxInTable( pCursor->GetPoint()->nNode );
+    if (!pTableNd)
+        return false;
+
     if( IsTableMode() )
     {
         ClearMark();
         pCursor = GetCursor();
     }
-    else if( !pTableNd || pCursor->GetNext() != pCursor )
-        return bRet;
+    else if (pCursor->GetNext() != pCursor)
+        return false;
 
     // TL_CHART2:
     // tell the charts about the table to be deleted and have them use their own data
@@ -177,7 +179,7 @@ bool SwEditShell::TableToText( sal_Unicode cCh )
 
     //Modified for bug #i119954# Application crashed if undo/redo convert nest table to text
     StartUndo();
-    bRet = ConvertTableToText( pTableNd, cCh );
+    bool bRet = ConvertTableToText( pTableNd, cCh );
     EndUndo();
     //End  for bug #i119954#
     pCursor->GetPoint()->nNode = aTabIdx;
