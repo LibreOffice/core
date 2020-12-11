@@ -458,6 +458,7 @@ public:
     {
     }
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 private:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
