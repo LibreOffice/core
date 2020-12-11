@@ -183,7 +183,7 @@
           <XShapes>
            <XShape positionX="17907" positionY="9977" sizeX="6114" sizeY="849" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0">
             <XShapes>
-             <XShape positionX="17907" positionY="9977" sizeX="6114" sizeY="849" type="com.sun.star.drawing.TextShape" text="Yellow - The color of sun and honey&#10;33%" fontHeight="12.000000" fontColor="595959" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="LEFT" textVerticalAdjust="TOP" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="8732" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+             <XShape positionX="17907" positionY="9977" sizeX="6114" sizeY="849" type="com.sun.star.drawing.TextShape" text="Yellow - The color of sun and honey&#10;33%" fontHeight="12.000000" fontColor="595959" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="LEFT" textVerticalAdjust="TOP" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="7129" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
               <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
               <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
               <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
@@ -332,5 +332,3 @@
   </Transformation>
  </XShape>
 </XShapes>
-
-

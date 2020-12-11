@@ -856,6 +856,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137154)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(nX4, nX1, 50);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138777)
+{
+    SwDoc* pDoc = createDoc("outside_long_data_label.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    const sal_Int32 nFirstLabelLines
+        = getXPathContent(pXmlDoc, "count(//text[contains(text(),\"really\")])").toInt32();
+
+    // This failed, if the first data label didn't break to multiple lines.
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(1), nFirstLabelLines);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130031)
 {
     SwDoc* pDoc = createDoc("tdf130031.docx");
