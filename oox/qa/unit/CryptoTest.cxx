@@ -123,7 +123,7 @@ void CryptoTest::testStandard2007()
     SvMemoryStream aUnencryptedInput;
     SvMemoryStream aEncryptedStream;
 
-    OString aTestString = OUStringToOString("1234567890ABCDEFG", RTL_TEXTENCODING_UTF8);
+    OString aTestString = "1234567890ABCDEFG";
 
     aUnencryptedInput.WriteBytes(aTestString.getStr(), aTestString.getLength() + 1);
     aUnencryptedInput.Seek(STREAM_SEEK_TO_BEGIN);
@@ -343,7 +343,7 @@ void CryptoTest::testAgileEncryptingAndDecrypting()
     SvMemoryStream aEncryptionInfo;
     SvMemoryStream aEncryptedStream;
 
-    OString aTestString = OUStringToOString("1234567890ABCDEFGH", RTL_TEXTENCODING_UTF8);
+    OString aTestString = "1234567890ABCDEFGH";
 
     {
         oox::crypto::AgileEngine aEngine;
