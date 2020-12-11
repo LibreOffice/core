@@ -1080,10 +1080,12 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
 
     aPopupMenu->RemoveDisabledEntries( true, true );
 
+    // PaMtoEditCursor returns Logical units
     tools::Rectangle aTempRect = pImpEditView->pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly );
-    Point aScreenPos = pImpEditView->GetWindowPos( aTempRect.TopLeft() );
-    aScreenPos = pImpEditView->GetWindow()->OutputToScreenPixel( aScreenPos );
-    aTempRect = pImpEditView->GetWindow()->LogicToPixel( tools::Rectangle(aScreenPos, aTempRect.GetSize() ));
+    // GetWindowPos works in Logical units
+    aTempRect = pImpEditView->GetWindowPos(aTempRect);
+    // Convert to pixels
+    aTempRect = pImpEditView->GetWindow()->LogicToPixel(aTempRect);
 
     //tdf#106123 store and restore the EditPaM around the menu Execute
     //because the loss of focus in the current editeng causes writer
