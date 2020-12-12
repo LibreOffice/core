@@ -131,7 +131,7 @@ bool TemplateSearchView::Command(const CommandEvent& rCEvt)
     return true;
 }
 
-void TemplateSearchView::createContextMenu(const bool bIsDefault)
+void TemplateSearchView::createContextMenu(const bool bIsDefault, const bool bIsBuiltIn)
 {
     mxContextMenu->clear();
     mxContextMenu->append(MNI_OPEN,SfxResId(STR_OPEN));
@@ -144,6 +144,11 @@ void TemplateSearchView::createContextMenu(const bool bIsDefault)
 
     mxContextMenu->append_separator("separator");
     mxContextMenu->append(MNI_DELETE,SfxResId(STR_DELETE));
+    if(bIsBuiltIn)
+    {
+        mxContextMenu->set_sensitive(MNI_EDIT, false);
+        mxContextMenu->set_sensitive(MNI_DELETE, false);
+    }
     if(mViewMode == TemplateViewMode::eThumbnailView)
     {
         maSelectedItem->setSelection(true);

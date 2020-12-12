@@ -158,6 +158,8 @@ public:
 
     static bool IsDefaultTemplate(const OUString& rPath);
 
+    static bool IsInternalTemplate(const OUString& rPath);
+
 protected:
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
 
