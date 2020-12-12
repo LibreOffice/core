@@ -2577,12 +2577,7 @@ OUString Edit::GetText() const
     if ( mpSubEdit )
         return mpSubEdit->GetText();
     else
-    {
-        if (!maText.isEmpty())
-            return maText.toString();
-        else
-            return OUString();
-    }
+        return maText.toString();
 }
 
 void Edit::SetCursorAtLast(){

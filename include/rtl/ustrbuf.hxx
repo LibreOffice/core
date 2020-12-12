@@ -538,6 +538,8 @@ public:
      */
     const OUString toString() const
     {
+        if (isEmpty())
+            return OUString();
         return OUString(pData->buffer, pData->length);
     }
 
