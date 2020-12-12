@@ -22,6 +22,30 @@
       "revId": "54a5711bea378ce4ed1004f9353c71f7025d6a20",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37bffc10_a66fc680",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 3511,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-12-12T19:10:30Z",
+      "side": 1,
+      "message": "Ok. U+2026 removed.",
+      "parentUuid": "43cd29b0_13e95b59",
+      "range": {
+        "startLine": 3511,
+        "startChar": 34,
+        "endLine": 3511,
+        "endChar": 50
+      },
+      "revId": "54a5711bea378ce4ed1004f9353c71f7025d6a20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
