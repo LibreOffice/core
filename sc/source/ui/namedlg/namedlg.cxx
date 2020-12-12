@@ -459,6 +459,7 @@ IMPL_LINK_NOARG(ScNameDlg, OkBtnHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(ScNameDlg, CancelBtnHdl, weld::Button&, void)
 {
+    mbCloseWithoutUndo = true;
     response(RET_CANCEL);
 }
 
