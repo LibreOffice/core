@@ -728,19 +728,9 @@ SwFlyLayFrame::SwFlyLayFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame 
 void SwFlyLayFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
     auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy)
+    if(!pLegacy || !pLegacy->m_pNew)
         return;
-    const SwFormatAnchor* pAnch = nullptr;
-    switch(pLegacy->GetWhich())
-    {
-        case RES_ATTRSET_CHG:
-        {
-            pAnch = static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet()->GetItem(RES_ANCHOR, false);
-            break;
-        }
-        case RES_ANCHOR:
-            pAnch = static_cast<const SwFormatAnchor*>(pLegacy->m_pNew);
-    }
+    const auto pAnch = GetAnchorFromPoolItem(*pLegacy->m_pNew);
 
     if(!pAnch)
     {

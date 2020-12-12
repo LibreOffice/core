@@ -4371,7 +4371,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                                 pObject->InvalidateObjPos();
                             }
                         }
-                        // SwFlyAtContentFrame::Modify() always appends to
+                        // SwFlyAtContentFrame::SwClientNotify() always appends to
                         // the master frame, so do the same here.
                         // (RemoveFootnotesForNode must be called at least once)
                         if (!pFrame->IsFollow())
