@@ -3422,7 +3422,6 @@ editeng/inc/editattr.hxx
 editeng/inc/editdoc.hxx
 editeng/inc/edtspell.hxx
 editeng/inc/eerdll2.hxx
-editeng/inc/helpids.h
 editeng/inc/unomodel.hxx
 editeng/qa/items/borderline_test.cxx
 editeng/qa/lookuptree/lookuptree_test.cxx

@@ -20,7 +20,6 @@
 
 #include <memory>
 #include <sal/macros.h>
-#include <vcl/builder.hxx>
 #include <vcl/image.hxx>
 
 #include <com/sun/star/i18n/WordType.hpp>
@@ -47,9 +46,7 @@
 #include <eerdll2.hxx>
 #include <editeng/editrids.hrc>
 #include <editeng.hxx>
-#include <helpids.h>
 #include <i18nlangtag/lang.h>
-#include <vcl/menu.hxx>
 #include <vcl/window.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <editeng/unolingu.hxx>
@@ -874,7 +871,7 @@ bool EditView::IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWron
     return pImpEditView->IsWrongSpelledWord( aPaM , bMarkIfWrong );
 }
 
-static void LOKSendSpellPopupMenu(Menu* pMenu, LanguageType nGuessLangWord,
+static void LOKSendSpellPopupMenu(const weld::Menu& rMenu, LanguageType nGuessLangWord,
                                   LanguageType nGuessLangPara, sal_uInt16 nSuggestions)
 {
     if (!comphelper::LibreOfficeKit::isActive())
@@ -892,13 +889,13 @@ static void LOKSendSpellPopupMenu(Menu* pMenu, LanguageType nGuessLangWord,
     {
         for(int i = 0; i < nSuggestions; ++i)
         {
-            sal_uInt16 nItemId = MN_ALTSTART + i;
-            OUString sText = pMenu->GetItemText(nItemId);
+            OString sItemId = OString::number(MN_ALTSTART + i);
+            OUString sText = rMenu.get_label(sItemId);
             aItemTree.put("text", sText.toUtf8().getStr());
             aItemTree.put("type", "command");
             OUString sCommandString = ".uno:SpellCheckApplySuggestion?ApplyRule:string=Spelling_" + sText;
             aItemTree.put("command", sCommandString.toUtf8().getStr());
-            aItemTree.put("enabled", pMenu->IsItemEnabled(nItemId));
+            aItemTree.put("enabled", rMenu.get_sensitive(sItemId));
             aMenu.push_back(std::make_pair("", aItemTree));
             aItemTree.clear();
         }
@@ -912,10 +909,10 @@ static void LOKSendSpellPopupMenu(Menu* pMenu, LanguageType nGuessLangWord,
     OUString aTmpWord( SvtLanguageTable::GetLanguageString( nGuessLangWord ) );
     OUString aTmpPara( SvtLanguageTable::GetLanguageString( nGuessLangPara ) );
 
-    aItemTree.put("text", pMenu->GetItemText(pMenu->GetItemId("ignore")).toUtf8().getStr());
+    aItemTree.put("text", rMenu.get_label("ignore").toUtf8().getStr());
     aItemTree.put("type", "command");
     aItemTree.put("command", ".uno:SpellCheckIgnoreAll?Type:string=Spelling");
-    aItemTree.put("enabled", pMenu->IsItemEnabled(pMenu->GetItemId("ignore")));
+    aItemTree.put("enabled", rMenu.get_sensitive("ignore"));
     aMenu.push_back(std::make_pair("", aItemTree));
     aItemTree.clear();
 
@@ -923,19 +920,19 @@ static void LOKSendSpellPopupMenu(Menu* pMenu, LanguageType nGuessLangWord,
     aMenu.push_back(std::make_pair("", aItemTree));
     aItemTree.clear();
 
-    aItemTree.put("text", pMenu->GetItemText(MN_WORDLANGUAGE).toUtf8().getStr());
+    aItemTree.put("text", rMenu.get_label("wordlanguage").toUtf8().getStr());
     aItemTree.put("type", "command");
     OUString sCommandString = ".uno:LanguageStatus?Language:string=Current_" + aTmpWord;
     aItemTree.put("command", sCommandString.toUtf8().getStr());
-    aItemTree.put("enabled", pMenu->IsItemEnabled(MN_WORDLANGUAGE));
+    aItemTree.put("enabled", rMenu.get_sensitive("wordlanguage"));
     aMenu.push_back(std::make_pair("", aItemTree));
     aItemTree.clear();
 
-    aItemTree.put("text", pMenu->GetItemText(MN_PARALANGUAGE).toUtf8().getStr());
+    aItemTree.put("text", rMenu.get_label("paralanguage").toUtf8().getStr());
     aItemTree.put("type", "command");
     sCommandString = ".uno:LanguageStatus?Language:string=Paragraph_" + aTmpPara;
     aItemTree.put("command", sCommandString.toUtf8().getStr());
-    aItemTree.put("enabled", pMenu->IsItemEnabled(MN_PARALANGUAGE));
+    aItemTree.put("enabled", rMenu.get_sensitive("paralanguage"));
     aMenu.push_back(std::make_pair("", aItemTree));
     aItemTree.clear();
 
@@ -957,17 +954,18 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
     if ( !(xSpeller.is() && pImpEditView->IsWrongSpelledWord( aPaM, true )) )
         return;
 
-    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "editeng/ui/spellmenu.ui", "");
-    VclPtr<PopupMenu> aPopupMenu(aBuilder.get_menu("editviewspellmenu"));
-    const sal_uInt16 nAutoCorrId = aPopupMenu->GetItemId("autocorrect");
-    PopupMenu *pAutoMenu = aPopupMenu->GetPopupMenu(nAutoCorrId);
-    const sal_uInt16 nInsertId = aPopupMenu->GetItemId("insert");
-    PopupMenu *pInsertMenu = aPopupMenu->GetPopupMenu(nInsertId);  // add word to user-dictionaries
-    pInsertMenu->SetMenuFlags( MenuFlags::NoAutoMnemonics );         //! necessary to retrieve the correct dictionary names later
-    const sal_uInt16 nAddId = aPopupMenu->GetItemId("add");
-    const sal_uInt16 nIgnoreId = aPopupMenu->GetItemId("ignore");
-    const sal_uInt16 nCheckId = aPopupMenu->GetItemId("check");
-    const sal_uInt16 nAutoCorrectDlgId = aPopupMenu->GetItemId("autocorrectdlg");
+    // PaMtoEditCursor returns Logical units
+    tools::Rectangle aTempRect = pImpEditView->pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly );
+    // GetWindowPos works in Logical units
+    aTempRect = pImpEditView->GetWindowPos(aTempRect);
+    // Convert to pixels
+    aTempRect = pImpEditView->GetWindow()->LogicToPixel(aTempRect);
+
+    weld::Widget* pPopupParent = pImpEditView->GetPopupParent(aTempRect);
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "editeng/ui/spellmenu.ui"));
+    std::unique_ptr<weld::Menu> xPopupMenu(xBuilder->weld_menu("editviewspellmenu"));
+    std::unique_ptr<weld::Menu> xInsertMenu(xBuilder->weld_menu("insertmenu")); // add word to user-dictionaries
+    std::unique_ptr<weld::Menu> xAutoMenu(xBuilder->weld_menu("automenu"));
 
     EditPaM aPaM2( aPaM );
     aPaM2.SetIndex( aPaM2.GetIndex()+1 );
@@ -1023,22 +1021,16 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         if (nGuessLangPara == LANGUAGE_NONE)
             nGuessLangPara = nGuessLangWord;
 
-        aPopupMenu->InsertSeparator();
+        xPopupMenu->append_separator("separator1");
         OUString aTmpWord( SvtLanguageTable::GetLanguageString( nGuessLangWord ) );
         OUString aTmpPara( SvtLanguageTable::GetLanguageString( nGuessLangPara ) );
         OUString aWordStr( EditResId( RID_STR_WORD ) );
         aWordStr = aWordStr.replaceFirst( "%x", aTmpWord );
         OUString aParaStr( EditResId( RID_STR_PARAGRAPH ) );
         aParaStr = aParaStr.replaceFirst( "%x", aTmpPara );
-        aPopupMenu->InsertItem( MN_WORDLANGUAGE, aWordStr );
-        aPopupMenu->SetHelpId( MN_WORDLANGUAGE, HID_EDITENG_SPELLER_WORDLANGUAGE );
-        aPopupMenu->InsertItem( MN_PARALANGUAGE, aParaStr );
-        aPopupMenu->SetHelpId( MN_PARALANGUAGE, HID_EDITENG_SPELLER_PARALANGUAGE );
+        xPopupMenu->append("wordlanguage", aWordStr);
+        xPopupMenu->append("paralanguage", aParaStr);
     }
-
-    // ## Create mnemonics here
-    aPopupMenu->CreateAutoMnemonics();
-    aPopupMenu->SetMenuFlags(aPopupMenu->GetMenuFlags() | MenuFlags::NoAutoMnemonics);
 
     // Replace suggestions...
     Sequence< OUString > aAlt;
@@ -1051,13 +1043,16 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         for ( sal_uInt16 nW = 0; nW < nWords; nW++ )
         {
             OUString aAlternate( pAlt[nW] );
-            aPopupMenu->InsertItem( MN_ALTSTART+nW, aAlternate, MenuItemBits::NONE, OString(), nW );
-            pAutoMenu->InsertItem( MN_AUTOSTART+nW, aAlternate, MenuItemBits::NONE, OString(), nW );
+            xPopupMenu->append(OUString::number(MN_ALTSTART + nW), aAlternate);
+            xAutoMenu->append(OUString::number(MN_AUTOSTART + nW), aAlternate);
         }
-        aPopupMenu->InsertSeparator(OString(), nWords);
+        xPopupMenu->append_separator("separator2");
     }
     else
-        aPopupMenu->RemoveItem(nAutoCorrId);   // delete?
+    {
+        xAutoMenu.reset();
+        xPopupMenu->remove("autocorrect");
+    }
 
     SvtLinguConfig aCfg;
 
@@ -1090,11 +1085,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
                 && (nCheckedLanguage == nActLanguage || LANGUAGE_NONE == nActLanguage )
                 && (!xStor.is() || !xStor->isReadonly()) )
             {
-                // the extra 1 is because of the (possible) external
-                // linguistic entry above
-                sal_uInt16 nPos = MN_DICTSTART + i;
-                pInsertMenu->InsertItem( nPos, xDicTmp->getName() );
-                aDicNameSingle = xDicTmp->getName();
+                OUString sImage;
 
                 uno::Reference< lang::XServiceInfo > xSvcInfo( xDicTmp, uno::UNO_QUERY );
                 if (xSvcInfo.is())
@@ -1102,28 +1093,34 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
                     OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
                             xSvcInfo->getImplementationName()) );
                     if (!aDictionaryImageUrl.isEmpty() )
-                    {
-                        Image aImage( aDictionaryImageUrl );
-                        pInsertMenu->SetItemImage( nPos, aImage );
-                    }
+                        sImage = aDictionaryImageUrl;
                 }
+
+                if (sImage.isEmpty())
+                {
+                    xInsertMenu->append(OUString::number(MN_DICTSTART + i), xDicTmp->getName());
+                }
+                else
+                {
+                    Image aImage(sImage);
+                    ScopedVclPtr<VirtualDevice> xVirDev(pPopupParent->create_virtual_device());
+                    Size aSize(aImage.GetSizePixel());
+                    xVirDev->SetOutputSizePixel(aSize);
+                    xVirDev->DrawImage(Point(0, 0), aImage);
+                    xInsertMenu->append(OUString::number(MN_DICTSTART + i), xDicTmp->getName(), *xVirDev);
+                }
+                aDicNameSingle = xDicTmp->getName();
             }
         }
     }
 
-    if (pInsertMenu->GetItemCount() != 1)
-        aPopupMenu->EnableItem(nAddId, false);
-    if (pInsertMenu->GetItemCount() < 2)
-        aPopupMenu->EnableItem(nInsertId, false);
-
-    aPopupMenu->RemoveDisabledEntries( true, true );
-
-    // PaMtoEditCursor returns Logical units
-    tools::Rectangle aTempRect = pImpEditView->pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly );
-    // GetWindowPos works in Logical units
-    aTempRect = pImpEditView->GetWindowPos(aTempRect);
-    // Convert to pixels
-    aTempRect = pImpEditView->GetWindow()->LogicToPixel(aTempRect);
+    if (xInsertMenu->n_children() != 1)
+        xPopupMenu->remove("add");
+    if (xInsertMenu->n_children() < 2)
+    {
+        xInsertMenu.reset();
+        xPopupMenu->remove("insert");
+    }
 
     //tdf#106123 store and restore the EditPaM around the menu Execute
     //because the loss of focus in the current editeng causes writer
@@ -1139,17 +1136,18 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         const SfxViewShell* pViewShell = SfxViewShell::Current();
         if (pViewShell && pViewShell->isLOKMobilePhone())
         {
-            LOKSendSpellPopupMenu(aPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
+            LOKSendSpellPopupMenu(*xPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
             return;
         }
         // note, there is special handling of this menu 'editviewspellmenu' by vcl's PopupMenu::ImplExecute
     }
-    sal_uInt16 nId = aPopupMenu->Execute(pImpEditView->GetWindow(), aTempRect, PopupMenuFlags::NoMouseUpClose);
+
+    OString sId = xPopupMenu->popup_at_rect(pPopupParent, aTempRect);
 
     aPaM2 = pImpEditView->pEditEngine->pImpEditEngine->CreateEditPaM(aP2);
     aPaM = pImpEditView->pEditEngine->pImpEditEngine->CreateEditPaM(aP);
 
-    if (nId == nIgnoreId)
+    if (sId == "ignore")
     {
         OUString aWord = pImpEditView->SpellIgnoreWord();
         if ( pCallBack )
@@ -1159,9 +1157,9 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         }
         SetSelection( aOldSel );
     }
-    else if ( ( nId == MN_WORDLANGUAGE ) || ( nId == MN_PARALANGUAGE ) )
+    else if (sId == "wordlanguage" || sId == "paralanguage")
     {
-        LanguageType nLangToUse = (nId == MN_WORDLANGUAGE) ? nGuessLangWord : nGuessLangPara;
+        LanguageType nLangToUse = (sId == "wordlanguage") ? nGuessLangWord : nGuessLangPara;
         SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLangToUse );
 
         SfxItemSet aAttrs = GetEditEngine()->GetEmptyItemSet();
@@ -1171,7 +1169,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE_CTL ) );
         if (nScriptType == SvtScriptType::ASIAN)
             aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE_CJK ) );
-        if ( nId == MN_PARALANGUAGE )
+        if (sId == "paralanguage")
         {
             ESelection aSel = GetSelection();
             aSel.nStartPos = 0;
@@ -1183,12 +1181,12 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
 
         if ( pCallBack )
         {
-            SpellCallbackInfo aInf( ( nId == MN_WORDLANGUAGE ) ? SpellCallbackCommand::WORDLANGUAGE : SpellCallbackCommand::PARALANGUAGE );
+            SpellCallbackInfo aInf( (sId == "wordlanguage") ? SpellCallbackCommand::WORDLANGUAGE : SpellCallbackCommand::PARALANGUAGE );
             pCallBack->Call( aInf );
         }
         SetSelection( aOldSel );
     }
-    else if (nId == nCheckId)
+    else if (sId == "check")
     {
         if ( !pCallBack )
         {
@@ -1206,16 +1204,19 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             pCallBack->Call( aInf );
         }
     }
-    else if (nId == nAutoCorrectDlgId && pCallBack)
+    else if (sId == "autocorrectdlg" && pCallBack)
     {
         SpellCallbackInfo aInf( SpellCallbackCommand::AUTOCORRECT_OPTIONS, OUString() );
         pCallBack->Call( aInf );
     }
-    else if ( nId >= MN_DICTSTART || nId == nAddId)
+    else if ( sId.toInt32() >= MN_DICTSTART || sId == "add")
     {
         OUString aDicName;
-        if (nId >= MN_DICTSTART)
-            aDicName = pInsertMenu->GetItemText(nId);
+        if (sId.toInt32() >= MN_DICTSTART)
+        {
+            // strip_mnemonic is necessary to retrieve the correct dictionary name
+            aDicName = pPopupParent->strip_mnemonic(xInsertMenu->get_label(sId));
+        }
         else
             aDicName = aDicNameSingle;
 
@@ -1240,19 +1241,19 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         }
         SetSelection( aOldSel );
     }
-    else if ( nId >= MN_AUTOSTART )
+    else if ( sId.toInt32() >= MN_AUTOSTART )
     {
-        DBG_ASSERT(nId - MN_AUTOSTART < aAlt.getLength(), "index out of range");
-        OUString aWord = pAlt[nId - MN_AUTOSTART];
+        DBG_ASSERT(sId.toInt32() - MN_AUTOSTART < aAlt.getLength(), "index out of range");
+        OUString aWord = pAlt[sId.toInt32() - MN_AUTOSTART];
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
         if ( pAutoCorrect )
             pAutoCorrect->PutText( aSelected, aWord, pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 ) );
         InsertText( aWord );
     }
-    else if ( nId >= MN_ALTSTART )  // Replace
+    else if ( sId.toInt32() >= MN_ALTSTART )  // Replace
     {
-        DBG_ASSERT(nId - MN_ALTSTART < aAlt.getLength(), "index out of range");
-        OUString aWord = pAlt[nId - MN_ALTSTART];
+        DBG_ASSERT(sId.toInt32() - MN_ALTSTART < aAlt.getLength(), "index out of range");
+        OUString aWord = pAlt[sId.toInt32() - MN_ALTSTART];
         InsertText( aWord );
     }
     else
