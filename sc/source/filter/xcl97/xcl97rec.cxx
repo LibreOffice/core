@@ -1100,35 +1100,33 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
     awt::Point  aTopLeft    = rShape->getPosition();
     awt::Size   aSize       = rShape->getSize();
 
-    // size is correct, but aTopLeft needs correction for rotated shapes
+    // There are a few cases where we must adjust these values
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rShape.get());
-    sal_Int32 nRotation = pObj->GetRotateAngle();
-    if ( pObj && nRotation != 0 && pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE )
+    if (pObj)
     {
-        const tools::Rectangle& aSnapRect(pObj->GetSnapRect()); // bounding box of the rotated shape
-        aTopLeft.X = aSnapRect.getX() + (aSnapRect.GetWidth() / 2) - (aSize.Width / 2);
-        aTopLeft.Y = aSnapRect.getY() + (aSnapRect.GetHeight() / 2) - (aSize.Height / 2);
-    }
-
-    uno::Reference< beans::XPropertySet > xShapeProperties(rShape, uno::UNO_QUERY_THROW);
-    uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xShapeProperties->getPropertySetInfo();
-    if (xPropertySetInfo->hasPropertyByName("RotateAngle"))
-    {
-        uno::Any nRotProp = xShapeProperties->getPropertyValue("RotateAngle");
-        sal_Int32 nRot = nRotProp.get<sal_Int32>();
-
-        if ((nRot >= 45 * 100 && nRot < 135 * 100) || (nRot >= 225 * 100 && nRot < 315 * 100))
+        sal_Int32 nRotation = pObj->GetRotateAngle();
+        if (nRotation != 0)
         {
+            sal_Int16 nHalfWidth = aSize.Width / 2;
+            sal_Int16 nHalfHeight = aSize.Height / 2;
+            // aTopLeft needs correction for rotated customshapes
+            if (pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE)
+            {
+                const tools::Rectangle& aSnapRect(pObj->GetSnapRect()); // bounding box of the rotated shape
+                aTopLeft.X = aSnapRect.getX() + (aSnapRect.GetWidth() / 2) - nHalfWidth;
+                aTopLeft.Y = aSnapRect.getY() + (aSnapRect.GetHeight() / 2) - nHalfHeight;
+            }
+
             // MSO changes the anchor positions at these angles and that does an extra 90 degrees
             // rotation on our shapes, so we output it in such position that MSO
             // can draw this shape correctly.
+            if ((nRotation >= 45 * 100 && nRotation < 135 * 100) || (nRotation >= 225 * 100 && nRotation < 315 * 100))
+            {
+                aTopLeft.X = aTopLeft.X - nHalfHeight + nHalfWidth;
+                aTopLeft.Y = aTopLeft.Y - nHalfWidth + nHalfHeight;
 
-            sal_Int16 nHalfWidth = aSize.Width / 2;
-            sal_Int16 nHalfHeight = aSize.Height / 2;
-            aTopLeft.X = aTopLeft.X - nHalfHeight + nHalfWidth;
-            aTopLeft.Y = aTopLeft.Y - nHalfWidth + nHalfHeight;
-
-            std::swap(aSize.Width, aSize.Height);
+                std::swap(aSize.Width, aSize.Height);
+            }
         }
     }
 
