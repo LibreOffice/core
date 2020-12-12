@@ -36,7 +36,6 @@ bool isVCLSkiaEnabled() { return false; }
 #include <osl/file.hxx>
 #include <tools/stream.hxx>
 #include <list>
-#include <string_view>
 
 #include <SkCanvas.h>
 #include <SkPaint.h>
