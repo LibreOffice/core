@@ -671,9 +671,9 @@ IMPL_LINK(SfxTemplateManagerDlg, CreateContextMenuHdl, ThumbnailViewItem*, pItem
     if (pViewItem)
     {
         if (mxSearchView->IsVisible())
-            mxSearchView->createContextMenu(pViewItem->IsDefaultTemplate());
+            mxSearchView->createContextMenu(pViewItem->IsDefaultTemplate(), TemplateLocalView::IsInternalTemplate(pViewItem->getPath()));
         else
-            mxLocalView->createContextMenu(pViewItem->IsDefaultTemplate());
+            mxLocalView->createContextMenu(pViewItem->IsDefaultTemplate(), TemplateLocalView::IsInternalTemplate(pViewItem->getPath()));
     }
 }
 
