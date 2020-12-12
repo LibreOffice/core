@@ -1102,8 +1102,7 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
 
     // size is correct, but aTopLeft needs correction for rotated shapes
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rShape.get());
-    sal_Int32 nRotation = pObj->GetRotateAngle();
-    if ( pObj && nRotation != 0 && pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE )
+    if ( pObj && pObj->GetRotateAngle() != 0 && pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE )
     {
         const tools::Rectangle& aSnapRect(pObj->GetSnapRect()); // bounding box of the rotated shape
         aTopLeft.X = aSnapRect.getX() + (aSnapRect.GetWidth() / 2) - (aSize.Width / 2);
