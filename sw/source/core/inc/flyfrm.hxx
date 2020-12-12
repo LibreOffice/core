@@ -75,6 +75,7 @@ class SW_DLLPUBLIC SwFlyFrame : public SwLayoutFrame, public SwAnchoredObject
 protected:
     // Predecessor/Successor for chaining with text flow
     SwFlyFrame *m_pPrevLink, *m_pNextLink;
+   static const SwFormatAnchor* GetAnchorFromPoolItem(const SfxPoolItem& rItem);
 
 private:
     // It must be possible to block Content-bound flys so that they will be not

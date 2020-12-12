@@ -2927,4 +2927,16 @@ SwTwips SwFlyFrame::CalcContentHeight(const SwBorderAttrs *pAttrs, const SwTwips
     return nHeight;
 }
 
+const SwFormatAnchor* SwFlyFrame::GetAnchorFromPoolItem(const SfxPoolItem& rItem)
+{
+    switch(rItem.Which())
+    {
+        case RES_ATTRSET_CHG:
+            return static_cast<const SwAttrSetChg*>(&rItem)->GetChgSet()->GetItem(RES_ANCHOR, false);
+        case RES_ANCHOR:
+            return static_cast<const SwFormatAnchor*>(&rItem);
+        default:
+            return nullptr;
+    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
