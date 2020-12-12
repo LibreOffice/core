@@ -93,15 +93,15 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
 
     // fix PaM for deletions shown in margin
     bool bIsDeletion = dynamic_cast<SwUndoRedlineDelete*>(this);
+    const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
     sal_uInt32 nMaxId = SAL_MAX_UINT32;
-    if ( bIsDeletion )
+    if ( bIsDeletion && rTable.size() > 0 )
     {
         // Nodes of the deletion range are in the newest invisible redlines.
         // Set all redlines visible and recover the original deletion range.
-        for (sal_uInt32 nNodes = 0; nNodes <  m_nEndNode - m_nSttNode + 1; ++ nNodes)
+        for (sal_uInt32 nNodes = 0; nNodes <  m_nEndNode - m_nSttNode + 1; ++nNodes)
         {
             SwRedlineTable::size_type nCurRedlinePos = 0;
-            const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
             SwRangeRedline * pRedline(rTable[nCurRedlinePos]);
 
             // search last but nNodes redline by its nth biggest id
