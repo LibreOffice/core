@@ -79,123 +79,107 @@ SwFlyAtContentFrame::SwFlyAtContentFrame( SwFlyFrameFormat *pFormat, SwFrame* pS
 
 // #i28701#
 
-void SwFlyAtContentFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
+void SwFlyAtContentFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    const SwFormatAnchor *pAnch = nullptr;
-
-    if (pNew)
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
+    const SwFormatAnchor* pAnch = pLegacy->m_pNew ? GetAnchorFromPoolItem(*pLegacy->m_pNew) : nullptr;
+    if(!pAnch)
     {
-        const sal_uInt16 nWhich = pNew->Which();
-        if( RES_ATTRSET_CHG == nWhich && SfxItemState::SET ==
-            static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState( RES_ANCHOR, false,
-                reinterpret_cast<const SfxPoolItem**>(&pAnch) ))
-            ;       // The anchor pointer is set at GetItemState!
-
-        else if( RES_ANCHOR == nWhich )
-        {
-            //Change anchor, I move myself to a new place.
-            //The anchor type must not change, this is only possible using
-            //SwFEShell.
-            pAnch = static_cast<const SwFormatAnchor*>(pNew);
-        }
+        SwFlyFrame::Modify(pLegacy->m_pOld, pLegacy->m_pNew);
+        return;
     }
+    OSL_ENSURE(pAnch->GetAnchorId() == GetFormat()->GetAnchor().GetAnchorId(),
+            "Illegal change of anchor type.");
 
-    if( pAnch )
+    //Unregister, get hold of a new anchor and attach it
+    SwRect aOld(GetObjRectWithSpaces());
+    SwPageFrame* pOldPage = FindPageFrame();
+    const SwFrame* pOldAnchor = GetAnchorFrame();
+    SwContentFrame* pContent = const_cast<SwContentFrame*>(static_cast<const SwContentFrame*>(GetAnchorFrame()));
+    AnchorFrame()->RemoveFly(this);
+
+    const bool bBodyFootnote = (pContent->IsInDocBody() || pContent->IsInFootnote());
+
+    // Search the new anchor using the NodeIdx; the relation between old
+    // and new NodeIdx determines the search direction
+    const SwNodeIndex aNewIdx(pAnch->GetContentAnchor()->nNode);
+    SwNodeIndex aOldIdx(pContent->IsTextFrame()
+            // sw_redlinehide: can pick any node here, the compare with
+            // FrameContainsNode should catch it
+            ? *static_cast<SwTextFrame *>(pContent)->GetTextNodeFirst()
+            : *static_cast<SwNoTextFrame *>(pContent)->GetNode());
+
+    //fix: depending on which index was smaller, searching in the do-while
+    //loop previously was done forward or backwards respectively. This however
+    //could lead to an infinite loop. To at least avoid the loop, searching
+    //is now done in only one direction. Getting hold of a frame from the node
+    //is still possible if the new anchor could not be found. Chances are
+    //good that this will be the correct one.
+    // consider the case that at found anchor frame candidate already a
+    // fly frame of the given fly format is registered.
+    // consider, that <pContent> is the already
+    // the new anchor frame.
+    bool bFound(FrameContainsNode(*pContent, aNewIdx.GetIndex()));
+    const bool bNext = !bFound && aOldIdx < aNewIdx;
+    while(pContent && !bFound)
     {
-        OSL_ENSURE( pAnch->GetAnchorId() == GetFormat()->GetAnchor().GetAnchorId(),
-                "Illegal change of anchor type. " );
-
-        //Unregister, get hold of a new anchor and attach it
-        SwRect aOld( GetObjRectWithSpaces() );
-        SwPageFrame *pOldPage = FindPageFrame();
-        const SwFrame *pOldAnchor = GetAnchorFrame();
-        SwContentFrame *pContent = const_cast<SwContentFrame*>(static_cast<const SwContentFrame*>(GetAnchorFrame()));
-        AnchorFrame()->RemoveFly( this );
-
-        const bool bBodyFootnote = (pContent->IsInDocBody() || pContent->IsInFootnote());
-
-        // Search the new anchor using the NodeIdx; the relation between old
-        // and new NodeIdx determines the search direction
-        const SwNodeIndex aNewIdx( pAnch->GetContentAnchor()->nNode );
-        SwNodeIndex aOldIdx( pContent->IsTextFrame()
-                // sw_redlinehide: can pick any node here, the compare with
-                // FrameContainsNode should catch it
-                ? *static_cast<SwTextFrame *>(pContent)->GetTextNodeFirst()
-                : *static_cast<SwNoTextFrame *>(pContent)->GetNode() );
-
-        //fix: depending on which index was smaller, searching in the do-while
-        //loop previously was done forward or backwards respectively. This however
-        //could lead to an infinite loop. To at least avoid the loop, searching
-        //is now done in only one direction. Getting hold of a frame from the node
-        //is still possible if the new anchor could not be found. Chances are
-        //good that this will be the correct one.
-        // consider the case that at found anchor frame candidate already a
-        // fly frame of the given fly format is registered.
-        // consider, that <pContent> is the already
-        // the new anchor frame.
-        bool bFound( FrameContainsNode(*pContent, aNewIdx.GetIndex()) );
-        const bool bNext = !bFound && aOldIdx < aNewIdx;
-        while ( pContent && !bFound )
+        do
         {
-            do
-            {
-                if ( bNext )
-                    pContent = pContent->GetNextContentFrame();
-                else
-                    pContent = pContent->GetPrevContentFrame();
-            } while ( pContent &&
-                      ( bBodyFootnote != ( pContent->IsInDocBody() ||
-                                           pContent->IsInFootnote() ) ) );
-            if ( pContent )
-                bFound = FrameContainsNode(*pContent, aNewIdx.GetIndex());
+            if(bNext)
+                pContent = pContent->GetNextContentFrame();
+            else
+                pContent = pContent->GetPrevContentFrame();
+        } while(pContent &&
+                  (bBodyFootnote != (pContent->IsInDocBody() || pContent->IsInFootnote())));
+        if(pContent)
+            bFound = FrameContainsNode(*pContent, aNewIdx.GetIndex());
 
-            // check, if at found anchor frame candidate already a fly frame
-            // of the given fly frame format is registered.
-            if (bFound && pContent && pContent->GetDrawObjs())
+        // check, if at found anchor frame candidate already a fly frame
+        // of the given fly frame format is registered.
+        if(bFound && pContent && pContent->GetDrawObjs())
+        {
+            SwFrameFormat* pMyFlyFrameFormat(&GetFrameFormat());
+            SwSortedObjs &rObjs = *pContent->GetDrawObjs();
+            for(SwAnchoredObject* rObj : rObjs)
             {
-                SwFrameFormat* pMyFlyFrameFormat( &GetFrameFormat() );
-                SwSortedObjs &rObjs = *pContent->GetDrawObjs();
-                for(SwAnchoredObject* rObj : rObjs)
+                SwFlyFrame* pFlyFrame = dynamic_cast<SwFlyFrame*>(rObj);
+                if (pFlyFrame &&
+                     &(pFlyFrame->GetFrameFormat()) == pMyFlyFrameFormat)
                 {
-                    SwFlyFrame* pFlyFrame = dynamic_cast<SwFlyFrame*>(rObj);
-                    if ( pFlyFrame &&
-                         &(pFlyFrame->GetFrameFormat()) == pMyFlyFrameFormat )
-                    {
-                        bFound = false;
-                        break;
-                    }
+                    bFound = false;
+                    break;
                 }
             }
         }
-        if ( !pContent )
-        {
-            SwContentNode *pNode = aNewIdx.GetNode().GetContentNode();
-            std::pair<Point, bool> const tmp(pOldAnchor->getFrameArea().Pos(), false);
-            pContent = pNode->getLayoutFrame(getRootFrame(), nullptr, &tmp);
-            OSL_ENSURE( pContent, "New anchor not found" );
-        }
-        //Flys are never attached to a follow, but always on the master which
-        //we are going to search now.
-        SwContentFrame* pFlow = pContent;
-        while ( pFlow->IsFollow() )
-            pFlow = pFlow->FindMaster();
-        pContent = pFlow;
-
-        //and *puff* it's attached...
-        pContent->AppendFly( this );
-        if ( pOldPage && pOldPage != FindPageFrame() )
-            NotifyBackground( pOldPage, aOld, PrepareHint::FlyFrameLeave );
-
-        //Fix(3495)
-        InvalidatePos_();
-        InvalidatePage();
-        SetNotifyBack();
-        // #i28701# - reset member <maLastCharRect> and
-        // <mnLastTopOfLine> for to-character anchored objects.
-        ClearCharRectAndTopOfLine();
     }
-    else
-        SwFlyFrame::Modify( pOld, pNew );
+    if(!pContent)
+    {
+        SwContentNode *pNode = aNewIdx.GetNode().GetContentNode();
+        std::pair<Point, bool> const tmp(pOldAnchor->getFrameArea().Pos(), false);
+        pContent = pNode->getLayoutFrame(getRootFrame(), nullptr, &tmp);
+        OSL_ENSURE(pContent, "New anchor not found");
+    }
+    //Flys are never attached to a follow, but always on the master which
+    //we are going to search now.
+    SwContentFrame* pFlow = pContent;
+    while(pFlow->IsFollow())
+        pFlow = pFlow->FindMaster();
+    pContent = pFlow;
+
+    //and *puff* it's attached...
+    pContent->AppendFly( this );
+    if(pOldPage && pOldPage != FindPageFrame())
+        NotifyBackground(pOldPage, aOld, PrepareHint::FlyFrameLeave);
+
+    //Fix(3495)
+    InvalidatePos_();
+    InvalidatePage();
+    SetNotifyBack();
+    // #i28701# - reset member <maLastCharRect> and
+    // <mnLastTopOfLine> for to-character anchored objects.
+    ClearCharRectAndTopOfLine();
 }
 
 //We need some helper classes to monitor the oscillation and a few functions
