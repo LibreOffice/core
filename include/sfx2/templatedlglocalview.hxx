@@ -26,7 +26,7 @@ public:
 
     void showRegion(std::u16string_view rName);
 
-    void createContextMenu(const bool bIsDefault);
+    void createContextMenu(const bool bIsDefault, const bool bIsBuiltIn);
 
     virtual void Show() override;
 

@@ -26,6 +26,11 @@
 #include <sfx2/strings.hrc>
 #include <bitmaps.hlst>
 
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/util/thePathSettings.hpp>
+#include <unotools/ucbhelper.hxx>
+#include <sfxurlrelocator.hxx>
+
 using namespace ::com::sun::star;
 
 bool ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION filter, std::u16string_view rExt)
@@ -952,5 +957,23 @@ void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pItem)
         maOpenTemplateHdl.Call(pViewItem);
 }
 
+bool TemplateLocalView::IsInternalTemplate(const OUString& rPath)
+{
+    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    css::uno::Reference< css::util::XPathSettings > xPathSettings = css::util::thePathSettings::get(xContext);
+
+    uno::Sequence<OUString> maInternalTemplateDirs;
+    uno::Any aAny = xPathSettings->getPropertyValue("Template_internal");
+    aAny >>= maInternalTemplateDirs;
+    SfxURLRelocator_Impl maRelocator(xContext);
+    for (auto& rInternalTemplateDir : maInternalTemplateDirs)
+    {
+        maRelocator.makeRelocatableURL(rInternalTemplateDir);
+        maRelocator.makeAbsoluteURL(rInternalTemplateDir);
+        if(::utl::UCBContentHelper::IsSubPath(rInternalTemplateDir, rPath))
+            return true;
+    }
+    return false;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

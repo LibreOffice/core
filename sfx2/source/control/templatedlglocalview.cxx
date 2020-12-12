@@ -63,7 +63,7 @@ void TemplateDlgLocalView::showRegion(std::u16string_view rName)
     }
 }
 
-void TemplateDlgLocalView::createContextMenu(const bool bIsDefault)
+void TemplateDlgLocalView::createContextMenu(const bool bIsDefault, const bool bIsBuiltIn)
 {
     mxContextMenu->clear();
     mxContextMenu->append("open", SfxResId(STR_OPEN));
@@ -77,6 +77,12 @@ void TemplateDlgLocalView::createContextMenu(const bool bIsDefault)
     mxContextMenu->append_separator("separator");
     mxContextMenu->append("rename", SfxResId(STR_SFX_RENAME));
     mxContextMenu->append("delete", SfxResId(STR_DELETE));
+    if (bIsBuiltIn)
+    {
+        mxContextMenu->set_sensitive("rename", false);
+        mxContextMenu->set_sensitive("edit", false);
+        mxContextMenu->set_sensitive("delete", false);
+    }
     if (mViewMode == TemplateViewMode::eThumbnailView)
     {
         deselectItems();
