@@ -80,7 +80,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTextBoxNodeSplit)
     SwWrtShell* pWrtShell = pShell->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStart=*/false);
     // Without the accompanying fix in place, this would have crashed in
-    // SwFlyAtContentFrame::Modify().
+    // SwFlyAtContentFrame::SwClientNotify().
     pWrtShell->SplitNode();
 }
 
