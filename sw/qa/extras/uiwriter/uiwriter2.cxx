@@ -1957,6 +1957,36 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137503)
     CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138605)
+{
+    SwDoc* const pDoc(createDoc());
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert
+                                                      | RedlineFlags::ShowDelete);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // insert a word, delete it with change tracking and try to undo it
+    pWrtShell->Insert("word");
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    // this crashed due to bad access to the empty redline table
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    // more Undo
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("word"));
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith(""));
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138135)
 {
     load(DATA_DIRECTORY, "tdf132160.odt");
