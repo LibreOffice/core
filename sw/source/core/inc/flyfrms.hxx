@@ -154,9 +154,8 @@ public:
 };
 
 // Flys that are bound to Content but not in Content
-class SwFlyAtContentFrame : public SwFlyFreeFrame
+class SwFlyAtContentFrame final: public SwFlyFreeFrame
 {
-protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
 
     // #i28701#
@@ -168,7 +167,7 @@ protected:
         #i28701#
     */
     virtual void RegisterAtCorrectPage() override;
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
     // #i28701#
