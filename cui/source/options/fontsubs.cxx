@@ -227,7 +227,7 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet* )
     m_xCheckLB->set_sort_column(2);
     m_xCheckLB->set_sort_indicator(TRISTATE_TRUE, 2);
 
-    CheckEnable();
+    SelectHdl(m_xFont1CB.get());
 
     //fill font name box first
     m_xNonPropFontsOnlyCB->set_active(
@@ -271,7 +271,7 @@ namespace
     {
         for (int i = 0, nEntryCount = rTreeView.n_children(); i < nEntryCount; ++i)
         {
-            if (rTreeView.get_text(i, 3) == rCol)
+            if (rTreeView.get_text(i, 2) == rCol)
                 return i;
         }
         return -1;
@@ -282,7 +282,7 @@ namespace
         int nRow = findText(rTreeView, rCol1);
         if (nRow == -1)
             return false;
-        return rTreeView.get_text(nRow, 4) == rCol2;
+        return rTreeView.get_text(nRow, 3) == rCol2;
     }
 }
 
@@ -323,11 +323,17 @@ void SvxFontSubstTabPage::SelectHdl(const weld::Widget* pWin)
 
     if (pWin == m_xCheckLB.get())
     {
-        if (m_xCheckLB->count_selected_rows() == 1)
+        const int nSelectedRowCount = m_xCheckLB->count_selected_rows();
+        if (nSelectedRowCount == 1)
         {
             int nRow = m_xCheckLB->get_selected_index();
             m_xFont1CB->set_entry_text(m_xCheckLB->get_text(nRow, 2));
             m_xFont2CB->set_entry_text(m_xCheckLB->get_text(nRow, 3));
+        }
+        else if (nSelectedRowCount > 1)
+        {
+            m_xFont1CB->set_entry_text(OUString());
+            m_xFont2CB->set_entry_text(OUString());
         }
     }
 
@@ -344,6 +350,8 @@ void SvxFontSubstTabPage::SelectHdl(const weld::Widget* pWin)
                 m_xCheckLB->select(nPos);
             }
         }
+        else
+            m_xCheckLB->unselect_all();
     }
 
     CheckEnable();
@@ -370,13 +378,15 @@ void SvxFontSubstTabPage::CheckEnable()
 {
     bool bEnableAll = m_xUseTableCB->get_active();
     m_xCheckLB->set_sensitive(bEnableAll);
+    m_xFont1CB->set_sensitive(bEnableAll);
+    m_xFont2CB->set_sensitive(bEnableAll);
+
+    bool bApply = bEnableAll, bDelete = bEnableAll;
+
     if (bEnableAll)
     {
-        bool bApply, bDelete;
-
         int nEntry = m_xCheckLB->get_selected_index();
 
-        // because of OS/2 optimization error (Bug #56267) a bit more intricate:
         if (m_xFont1CB->get_active_text().isEmpty() || m_xFont2CB->get_active_text().isEmpty())
             bApply = false;
         else if (m_xFont1CB->get_active_text() == m_xFont2CB->get_active_text())
@@ -389,27 +399,10 @@ void SvxFontSubstTabPage::CheckEnable()
             bApply = true;
 
         bDelete = nEntry != -1;
-
-        m_xApply->set_sensitive(bApply);
-        m_xDelete->set_sensitive(bDelete);
     }
 
-    if (bEnableAll)
-    {
-        if (!m_xCheckLB->get_sensitive())
-        {
-            m_xCheckLB->set_sensitive(true);
-            SelectHdl(m_xFont1CB.get());
-        }
-    }
-    else
-    {
-        if (m_xCheckLB->get_sensitive())
-        {
-            m_xCheckLB->set_sensitive(false);
-            m_xCheckLB->unselect_all();
-        }
-    }
+    m_xApply->set_sensitive(bApply);
+    m_xDelete->set_sensitive(bDelete);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
