@@ -90,7 +90,7 @@ void SwFlyInContentFrame::SetRefPoint( const Point& rPoint,
     }
 }
 
-void SwFlyInContentFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
+void SwFlyInContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
     auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
     if(!pLegacy)
@@ -130,7 +130,7 @@ void SwFlyInContentFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
     }
     if(aSuperArgs.second)
     {
-        SwFlyFrame::Modify(aSuperArgs.first, aSuperArgs.second);
+        SwFlyFrame::SwClientNotify(rMod, sw::LegacyModifyHint(aSuperArgs.first, aSuperArgs.second));
         if(GetAnchorFrame())
             AnchorFrame()->Prepare(PrepareHint::FlyFrameAttributesChanged, GetFormat());
     }
