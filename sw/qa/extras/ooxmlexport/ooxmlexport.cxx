@@ -467,31 +467,31 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testMsoPosition, "bnc884615-mso-position.doc
         // We write the frames out in different order than they were read, so check it's the correct
         // textbox first by checking width. These tests may need reordering if that gets fixed.
         OUString style1 = getXPath(doc, "/w:ftr/w:p/w:r[3]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
-        CPPUNIT_ASSERT( style1.indexOf( ";width:531pt;" ) >= 0 );
-        CPPUNIT_ASSERT( style1.indexOf( ";mso-position-vertical-relative:page" ) >= 0 );
-        CPPUNIT_ASSERT( style1.indexOf( ";mso-position-horizontal-relative:page" ) >= 0 );
+        CPPUNIT_ASSERT( style1.indexOf( ";width:36pt;" ) >= 0 );
+        CPPUNIT_ASSERT( style1.indexOf( ";mso-position-horizontal-relative:text" ) >= 0 );
+        CPPUNIT_ASSERT( style1.indexOf( ";mso-position-vertical-relative:text" ) >= 0 );
         OUString style2 = getXPath(doc, "/w:ftr/w:p/w:r[4]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
         CPPUNIT_ASSERT( style2.indexOf( ";width:549pt;" ) >= 0 );
         CPPUNIT_ASSERT( style2.indexOf( ";mso-position-vertical-relative:text" ) >= 0 );
         CPPUNIT_ASSERT( style2.indexOf( ";mso-position-horizontal:center" ) >= 0 );
         CPPUNIT_ASSERT( style2.indexOf( ";mso-position-horizontal-relative:text" ) >= 0 );
         OUString style3 = getXPath(doc, "/w:ftr/w:p/w:r[5]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
-        CPPUNIT_ASSERT( style3.indexOf( ";width:36pt;" ) >= 0 );
-        CPPUNIT_ASSERT( style3.indexOf( ";mso-position-horizontal-relative:text" ) >= 0 );
-        CPPUNIT_ASSERT( style3.indexOf( ";mso-position-vertical-relative:text" ) >= 0 );
+        CPPUNIT_ASSERT( style3.indexOf( ";width:531pt;" ) >= 0 );
+        CPPUNIT_ASSERT( style3.indexOf( ";mso-position-vertical-relative:page" ) >= 0 );
+        CPPUNIT_ASSERT( style3.indexOf( ";mso-position-horizontal-relative:page" ) >= 0 );
     }
 
     xmlDocUniquePtr doc = parseExport("word/header1.xml");
     OUString style1 = getXPath(doc, "/w:hdr/w:p/w:r[2]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
-    CPPUNIT_ASSERT( style1.indexOf( ";width:335.75pt;" ) >= 0 );
+    CPPUNIT_ASSERT( style1.indexOf( ";width:138.15pt;" ) >= 0 );
     CPPUNIT_ASSERT( style1.indexOf( ";mso-position-horizontal-relative:page" ) >= 0 );
     CPPUNIT_ASSERT( style1.indexOf( ";mso-position-vertical-relative:page" ) >= 0 );
     OUString style2 = getXPath(doc, "/w:hdr/w:p/w:r[3]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
-    CPPUNIT_ASSERT( style2.indexOf( ";width:138.15pt;" ) >= 0 );
+    CPPUNIT_ASSERT( style2.indexOf( ";width:163.8pt;" ) >= 0 );
     CPPUNIT_ASSERT( style2.indexOf( ";mso-position-horizontal-relative:page" ) >= 0 );
     CPPUNIT_ASSERT( style2.indexOf( ";mso-position-vertical-relative:page" ) >= 0 );
     OUString style3 = getXPath(doc, "/w:hdr/w:p/w:r[4]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
-    CPPUNIT_ASSERT( style3.indexOf( ";width:163.8pt;" ) >= 0 );
+    CPPUNIT_ASSERT( style3.indexOf( ";width:335.75pt;" ) >= 0 );
     CPPUNIT_ASSERT( style3.indexOf( ";mso-position-horizontal-relative:page" ) >= 0 );
     CPPUNIT_ASSERT( style3.indexOf( ";mso-position-vertical-relative:page" ) >= 0 );
 
