@@ -33,7 +33,7 @@ enum class SwFindMode
     None = 0, EndNote = 1, LastCnt = 2, MyLast = 4
 };
 
-class SwSectionFrame: public SwLayoutFrame, public SwFlowFrame
+class SwSectionFrame final: public SwLayoutFrame, public SwFlowFrame
 {
     SwSection* m_pSection;
     bool m_bFootnoteAtEnd; // footnotes at the end of section
@@ -56,11 +56,9 @@ class SwSectionFrame: public SwLayoutFrame, public SwFlowFrame
     virtual void DestroyImpl() override;
     virtual ~SwSectionFrame() override;
 
-protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
     virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool &rReformat ) override;
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
     virtual void SwClientNotify( const SwModify&, const SfxHint& ) override;
 
 public:
