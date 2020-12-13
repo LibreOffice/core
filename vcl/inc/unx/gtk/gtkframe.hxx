@@ -30,7 +30,6 @@
 #include <salframe.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/sysdata.hxx>
-#include <unx/nativewindowhandleprovider.hxx>
 #include <unx/saltype.h>
 #include <unx/screensaverinhibitor.hxx>
 
@@ -63,7 +62,6 @@ class GtkDnDTransferable;
 class GtkSalMenu;
 
 class GtkSalFrame final : public SalFrame
-                  , public NativeWindowHandleProvider
 {
     struct IMHandler
     {
@@ -504,7 +502,6 @@ public:
     static GtkSalFrame         *getFromWindow( GtkWidget *pWindow );
 
     sal_uIntPtr                 GetNativeWindowHandle(GtkWidget *pWidget);
-    virtual sal_uIntPtr         GetNativeWindowHandle() override;
 
     //Call the usual SalFrame Callback, but catch uno exceptions and delegate
     //to GtkSalData to rethrow them after the gsignal is processed when its safe

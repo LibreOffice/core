@@ -58,30 +58,6 @@ void X11CairoTextRender::clipRegion(cairo_t* cr)
     }
 }
 
-size_t X11CairoTextRender::GetWidth() const
-{
-    SalGeometryProvider *pProvider = mrParent.m_pFrame;
-    if( !pProvider )
-        pProvider = mrParent.m_pVDev;
-
-    if( pProvider )
-        return pProvider->GetWidth();
-    else
-        return 1;
-}
-
-size_t X11CairoTextRender::GetHeight() const
-{
-    SalGeometryProvider *pProvider = mrParent.m_pFrame;
-    if( !pProvider )
-        pProvider = mrParent.m_pVDev;
-
-    if( pProvider )
-        return pProvider->GetHeight();
-    else
-        return 1;
-}
-
 void X11CairoTextRender::releaseCairoContext(cairo_t* cr)
 {
     X11SalGraphics::releaseCairoContext(cr);

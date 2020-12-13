@@ -168,77 +168,6 @@ namespace
 {
     const sal_uInt32 GLenumSize = sizeof(GLenum);
 
-    OString getHexString(const sal_uInt8* pData, sal_uInt32 nLength)
-    {
-        static const char* const pHexData = "0123456789ABCDEF";
-
-        bool bIsZero = true;
-        OStringBuffer aHexStr;
-        for(size_t i = 0; i < nLength; ++i)
-        {
-            sal_uInt8 val = pData[i];
-            if( val != 0 )
-                bIsZero = false;
-            aHexStr.append( pHexData[ val & 0xf ] );
-            aHexStr.append( pHexData[ val >> 4 ] );
-        }
-        if( bIsZero )
-            return OString();
-        else
-            return aHexStr.makeStringAndClear();
-    }
-
-    OString generateMD5(const void* pData, size_t length)
-    {
-        sal_uInt8 pBuffer[RTL_DIGEST_LENGTH_MD5];
-        rtlDigestError aError = rtl_digest_MD5(pData, length,
-                pBuffer, RTL_DIGEST_LENGTH_MD5);
-        SAL_WARN_IF(aError != rtl_Digest_E_None, "vcl.opengl", "md5 generation failed");
-
-        return getHexString(pBuffer, RTL_DIGEST_LENGTH_MD5);
-    }
-
-    OString getDeviceInfoString()
-    {
-#if defined( SAL_UNX ) && !defined( MACOSX ) && !defined( IOS )&& !defined( ANDROID ) && !defined( HAIKU )
-        const X11OpenGLDeviceInfo aInfo;
-        return aInfo.GetOS() +
-            aInfo.GetOSRelease() +
-            aInfo.GetRenderer() +
-            aInfo.GetVendor() +
-            aInfo.GetVersion();
-#elif defined( _WIN32 )
-        const WinOpenGLDeviceInfo aInfo;
-        return OUStringToOString(aInfo.GetAdapterVendorID(), RTL_TEXTENCODING_UTF8) +
-            OUStringToOString(aInfo.GetAdapterDeviceID(), RTL_TEXTENCODING_UTF8) +
-            OUStringToOString(aInfo.GetDriverVersion(), RTL_TEXTENCODING_UTF8) +
-            OString::number(DriverBlocklist::GetWindowsVersion());
-#else
-        return OString::Concat(reinterpret_cast<const char*>(glGetString(GL_VENDOR))) +
-            reinterpret_cast<const char*>(glGetString(GL_RENDERER)) +
-            reinterpret_cast<const char*>(glGetString(GL_VERSION));
-#endif
-    }
-
-    OString getStringDigest( const OUString& rVertexShaderName,
-                             const OUString& rFragmentShaderName,
-                             const OString& rPreamble )
-    {
-        // read shaders source
-        OString aVertexShaderSource = getShaderSource( rVertexShaderName );
-        OString aFragmentShaderSource = getShaderSource( rFragmentShaderName );
-
-        // get info about the graphic device
-        static const OString aDeviceInfo (getDeviceInfoString());
-
-        OString aMessage = rPreamble +
-            aVertexShaderSource +
-            aFragmentShaderSource +
-            aDeviceInfo;
-
-        return generateMD5(aMessage.getStr(), aMessage.getLength());
-    }
-
     OString getCacheFolder()
     {
         OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
@@ -369,13 +298,6 @@ namespace
         else
             SAL_INFO("vcl.opengl", "Writing binary file '" << rBinaryFileName << "': success");
     }
-}
-
-OString OpenGLHelper::GetDigest( const OUString& rVertexShaderName,
-                                      const OUString& rFragmentShaderName,
-                                      const OString& rPreamble )
-{
-    return getStringDigest(rVertexShaderName, rFragmentShaderName, rPreamble);
 }
 
 GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,

@@ -25,7 +25,6 @@
 #include <unx/saltype.h>
 #include <unx/saldisp.hxx>
 #include <unx/screensaverinhibitor.hxx>
-#include <unx/nativewindowhandleprovider.hxx>
 #include <salframe.hxx>
 #include <salwtype.hxx>
 #include <salinst.hxx>
@@ -58,7 +57,7 @@ enum class WMWindowType
     Dock
 };
 
-class X11SalFrame final : public SalFrame, public NativeWindowHandleProvider
+class X11SalFrame final : public SalFrame
 {
     friend class vcl_sal::WMAdaptor;
     friend class vcl_sal::NetWMAdaptor;
@@ -258,8 +257,6 @@ public:
     virtual void                    UnionClipRegion( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
     // done setting up the clipregion
     virtual void                    EndSetClipRegion() override;
-
-    virtual sal_uIntPtr         GetNativeWindowHandle() override;
 
     /// @internal
     void setPendingSizeEvent();
