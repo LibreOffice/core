@@ -386,8 +386,6 @@ namespace xmloff
 
     void OPropertyExport::exportRelativeTargetLocation(const OUString& _sPropertyName,CCAFlags _nProperty,bool _bAddType)
     {
-        DBG_CHECK_PROPERTY( _sPropertyName, OUString );
-
         Any aAny = m_xProps->getPropertyValue(_sPropertyName);
 
         OUString sTargetLocation;
@@ -401,6 +399,11 @@ namespace xmloff
         {
             auto sURL = aAny.get<OUString>();
             sTargetLocation = m_rContext.getGlobalContext().AddEmbeddedObject(sURL);
+        }
+        else
+        {
+            SAL_WARN("xmloff.forms", "OPropertyExport::exportRelativeTargetLocation: "
+                "Value of " << _sPropertyName << " not found!");
         }
 
         if (!sTargetLocation.isEmpty())
