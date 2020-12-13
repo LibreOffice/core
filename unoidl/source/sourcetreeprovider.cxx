@@ -49,7 +49,7 @@ OUString getFileName(OUString const & uri, osl::FileStatus const & status) {
         return status.getFileName();
     }
     OString dir(OUStringToOString(path, osl_getThreadTextEncoding()));
-    OString name(OUStringToOString(uri.copy(i), osl_getThreadTextEncoding()));
+    OString name(OUStringToOString(uri.subView(i), osl_getThreadTextEncoding()));
     DIR * d = opendir(dir.getStr());
     if (d == nullptr) {
         SAL_WARN("unoidl", "cannot opendir(" << dir << ")");
