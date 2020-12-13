@@ -38,7 +38,7 @@ class SwAnchoredObject;
 
 /// A page of the document layout. Upper frame is expected to be an SwRootFrame
 /// instance. At least an SwBodyFrame lower is expected.
-class SAL_DLLPUBLIC_RTTI SwPageFrame: public SwFootnoteBossFrame
+class SAL_DLLPUBLIC_RTTI SwPageFrame final: public SwFootnoteBossFrame
 {
     friend class SwFrame;
 
@@ -99,10 +99,7 @@ class SAL_DLLPUBLIC_RTTI SwPageFrame: public SwFootnoteBossFrame
 
     virtual void DestroyImpl() override;
     virtual ~SwPageFrame() override;
-
-protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
     /// Calculate the content height of a page (without columns).
