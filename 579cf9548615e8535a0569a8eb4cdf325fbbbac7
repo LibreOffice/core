@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "364bad04_2acbda46",
+        "filename": "vcl/source/control/edit.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2584,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-13T08:39:53Z",
+      "side": 1,
+      "message": "Stephan, this looks unexpected?\n\nCiting from tdf#138857 comment 3:\n\n\u003e - if I call toString() on an empty OUStringBuffer, LO crashes\n\u003e \n\u003e Thread 1 \"soffice.bin\" received signal SIGSEGV, Segmentation fault.\n\u003e 0x00007ffff7f333a9 in rtl_uString_newFromStr_WithLength (ppThis\u003d0x7fffff7ff0a0, pCharStr\u003d0x55555ac25018 u\"\", nLen\u003d0) at sal/rtl/strtmpl.cxx:1367\n\u003e 1367    {\n\u003e (gdb) bt 10\n\u003e #0  0x00007ffff7f333a9 in rtl_uString_newFromStr_WithLength (ppThis\u003d0x7fffff7ff0a0, pCharStr\u003d0x55555ac25018 u\"\", nLen\u003d0) at sal/rtl/strtmpl.cxx:1367\n\u003e #1  0x00007ffff376cb3a in rtl::OUString::OUString (length\u003d\u003coptimized out\u003e, value\u003d\u003coptimized out\u003e, this\u003d0x7fffff7ff0a0) at include/rtl/ustring.hxx:289\n\u003e #2  rtl::OUStringBuffer::toString (this\u003d\u003coptimized out\u003e) at include/rtl/ustrbuf.hxx:541\n\u003e #3  Edit::GetText (this\u003d\u003coptimized out\u003e) at vcl/source/control/edit.cxx:2580\n\u003e #4  0x00007ffff376cb00 in Edit::GetText (this\u003d\u003coptimized out\u003e) at vcl/source/control/edit.cxx:2578\n\u003e #5  0x00007ffff3a4a575 in SalInstanceComboBoxWithEdit::get_active_text (this\u003d\u003coptimized out\u003e) at vcl/source/app/salvtables.cxx:6125\n\u003e #6  0x00007fffa7be5cba in SvxFontSubstTabPage::SelectHdl (this\u003dthis@entry\u003d0x55555c054660, pWin\u003d0x55555c008fb8) at cui/source/options/fontsubs.cxx:336\n\u003e #7  0x00007fffa7be58a8 in SvxFontSubstTabPage::CheckEnable (this\u003dthis@entry\u003d0x55555c054660) at cui/source/options/fontsubs.cxx:396\n\u003e #8  0x00007fffa7be5c00 in SvxFontSubstTabPage::SelectHdl (this\u003dthis@entry\u003d0x55555c054660, pWin\u003d0x55555c008fb8) at cui/source/options/fontsubs.cxx:349\n\u003e #9  0x00007fffa7be58a8 in SvxFontSubstTabPage::CheckEnable (this\u003dthis@entry\u003d0x55555c054660) at cui/source/options/fontsubs.cxx:396\n\u003e \n\u003e I think OUStringBuffer::toString should work with empty strings.",
+      "range": {
+        "startLine": 2581,
+        "startChar": 8,
+        "endLine": 2584,
+        "endChar": 30
+      },
+      "revId": "579cf9548615e8535a0569a8eb4cdf325fbbbac7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
