@@ -495,52 +495,6 @@ void SwPageFrame::PreparePage( bool bFootnote )
     }
 }
 
-void SwPageFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
-{
-    SwViewShell *pSh = getRootFrame()->GetCurrShell();
-    if ( pSh )
-        pSh->SetFirstVisPageInvalid();
-    sal_uInt8 nInvFlags = 0;
-
-    if( pNew && RES_ATTRSET_CHG == pNew->Which() )
-    {
-        SfxItemIter aNIter( *static_cast<const SwAttrSetChg*>(pNew)->GetChgSet() );
-        SfxItemIter aOIter( *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
-        const SfxPoolItem* pNItem = aNIter.GetCurItem();
-        const SfxPoolItem* pOItem = aOIter.GetCurItem();
-        SwAttrSetChg aOldSet( *static_cast<const SwAttrSetChg*>(pOld) );
-        SwAttrSetChg aNewSet( *static_cast<const SwAttrSetChg*>(pNew) );
-        do
-        {
-            UpdateAttr_(pOItem, pNItem, nInvFlags, &aOldSet, &aNewSet);
-            pNItem = aNIter.NextItem();
-            pOItem = aOIter.NextItem();
-        } while (pNItem);
-        if ( aOldSet.Count() || aNewSet.Count() )
-            SwLayoutFrame::Modify( &aOldSet, &aNewSet );
-    }
-    else
-        UpdateAttr_( pOld, pNew, nInvFlags );
-
-    if ( nInvFlags == 0 )
-        return;
-
-    InvalidatePage( this );
-    if ( nInvFlags & 0x01 )
-        InvalidatePrt_();
-    if ( nInvFlags & 0x02 )
-        SetCompletePaint();
-    if ( nInvFlags & 0x04 && GetNext() )
-        GetNext()->InvalidatePos();
-    if ( nInvFlags & 0x08 )
-        PrepareHeader();
-    if ( nInvFlags & 0x10 )
-        PrepareFooter();
-    if ( nInvFlags & 0x20 )
-        CheckGrid( nInvFlags & 0x40 );
-}
-
-
 void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
     if(typeid(sw::PageFootnoteHint) == typeid(rHint))
@@ -554,7 +508,51 @@ void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
         // here, the page might be destroyed:
         static_cast<SwRootFrame*>(GetUpper())->RemoveFootnotes(nullptr, false, true);
     }
-    else
+    else if(auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    {
+        if(auto pSh = getRootFrame()->GetCurrShell())
+            pSh->SetFirstVisPageInvalid();
+
+        sal_uInt8 nInvFlags = 0;
+        if(pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
+        {
+            auto& rOldSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
+            auto& rNewSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pNew);
+            SfxItemIter aOIter(*rOldSetChg.GetChgSet());
+            SfxItemIter aNIter(*rNewSetChg.GetChgSet());
+            const SfxPoolItem* pOItem = aOIter.GetCurItem();
+            const SfxPoolItem* pNItem = aNIter.GetCurItem();
+            SwAttrSetChg aOldSet(rOldSetChg);
+            SwAttrSetChg aNewSet(rNewSetChg);
+            do
+            {
+                UpdateAttr_(pOItem, pNItem, nInvFlags, &aOldSet, &aNewSet);
+                pOItem = aOIter.NextItem();
+                pNItem = aNIter.NextItem();
+            } while(pNItem);
+            if(aOldSet.Count() || aNewSet.Count())
+                SwLayoutFrame::Modify(&aOldSet, &aNewSet);
+        }
+        else
+            UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, nInvFlags);
+
+        if (nInvFlags == 0)
+            return;
+
+        InvalidatePage( this );
+        if(nInvFlags & 0x01)
+            InvalidatePrt_();
+        if(nInvFlags & 0x02)
+            SetCompletePaint();
+        if(nInvFlags & 0x04 && GetNext() )
+            GetNext()->InvalidatePos();
+        if(nInvFlags & 0x08)
+            PrepareHeader();
+        if(nInvFlags & 0x10)
+            PrepareFooter();
+        if(nInvFlags & 0x20)
+            CheckGrid(nInvFlags & 0x40);
+    } else
         SwFrame::SwClientNotify(rModify, rHint);
 }
 
