@@ -97,6 +97,16 @@ public:
 
     constexpr sal_Int32 getLength() const { return length; }
 
+    sal_Int32 getCodepointsCount() const {
+        sal_Int32 i;
+        sal_Int32 points = 0;
+        // After a hight surrogate goes a low one.
+        // We will assume it is correctly encoded.
+        for ( i = 0; i < length; ++i ) {
+            if (! rtl::isHighSurrogate(buffer[i]) ) points++;
+        }
+    }
+
     constexpr sal_Unicode const * getStr() const SAL_RETURNS_NONNULL { return buffer; }
 
     constexpr operator std::u16string_view() const { return {buffer, sal_uInt32(length)}; }
@@ -271,6 +281,19 @@ public:
     {
         pData = NULL;
         rtl_uString_newFromStr( &pData, value );
+    }
+
+    /**
+      New string from a Unicode 32 character buffer array.
+
+      @param    value       a NULL-terminated Unicode 32 character array.
+    */
+    OUString( const char32_t * value )
+    {
+        pData = NULL;
+        sal_Int32 codePointCount;
+        for ( codePointCount = 0; value[codePointCount] != '\0'; ++i );
+        rtl_uString_newFromCodePoints(&pData, const_cast<const char32_t *>(value), codePointCount);
     }
 
 #endif
