@@ -252,7 +252,7 @@ include/comphelper/servicedecl.hxx:132
     comphelper::service_decl::ServiceDecl m_pImplName const char *const
 include/comphelper/servicedecl.hxx:133
     comphelper::service_decl::ServiceDecl m_pServiceNames const char *const
-include/connectivity/DriversConfig.hxx:75
+include/connectivity/DriversConfig.hxx:76
     connectivity::DriversConfig m_aNode connectivity::DriversConfig::OSharedConfigNode
 include/connectivity/sdbcx/VDescriptor.hxx:51
     connectivity::sdbcx::ODescriptor m_aCase comphelper::UStringMixEqual
@@ -260,7 +260,7 @@ include/connectivity/sdbcx/VTable.hxx:77
     connectivity::sdbcx::OTable m_xColumns rtl::Reference<OCollection>
 include/connectivity/sdbcx/VTable.hxx:78
     connectivity::sdbcx::OTable m_xIndexes rtl::Reference<OCollection>
-include/connectivity/sqlparse.hxx:103
+include/connectivity/sqlparse.hxx:104
     connectivity::OSQLParser_Data aErrors ::connectivity::SQLError
 include/editeng/brushitem.hxx:51
     SvxBrushItem maSecOptions class SvtSecurityOptions
@@ -340,15 +340,11 @@ include/unoidl/unoidl.hxx:453
     unoidl::ConstantValue::(anonymous) doubleValue double
 include/unotest/bootstrapfixturebase.hxx:52
     test::BootstrapFixtureBase m_directories class test::Directories
-include/vcl/opengl/OpenGLContext.hxx:48
-    OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
-include/vcl/opengl/OpenGLContext.hxx:167
-    OpenGLContext mpLastFramebuffer class OpenGLFramebuffer *
 io/source/stm/odata.cxx:559
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n1 sal_uInt32
 io/source/stm/odata.cxx:559
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n2 sal_uInt32
-libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:46
+libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:47
     (anonymous namespace)::GtvLokDialogPrivate m_nChildKeyModifier guint32
 libreofficekit/source/gtk/lokdocview.cxx:85
     (anonymous namespace)::LOKDocViewPrivateImpl m_bIsLoading _Bool
@@ -416,7 +412,7 @@ sc/source/filter/inc/commentsbuffer.hxx:41
     oox::xls::CommentModel maAnchor css::awt::Rectangle
 sc/source/filter/inc/htmlexp.hxx:118
     ScHTMLExport pFileNameMap ScHTMLExport::FileNameMapPtr
-sc/source/filter/inc/htmlpars.hxx:56
+sc/source/filter/inc/htmlpars.hxx:57
     ScHTMLStyles maEmpty const class rtl::OUString
 sc/source/filter/inc/namebuff.hxx:81
     RangeNameBufferWK3::Entry nAbsInd sal_uInt16
@@ -480,13 +476,13 @@ sd/source/ui/inc/unopage.hxx:226
     SdMasterPage maTypeSequence css::uno::Sequence<css::uno::Type>
 sd/source/ui/remotecontrol/DiscoveryService.hxx:37
     sd::DiscoveryService zService class sd::ZeroconfService *
-sd/source/ui/sidebar/MasterPageContainer.cxx:142
+sd/source/ui/sidebar/MasterPageContainer.cxx:140
     sd::sidebar::MasterPageContainer::Implementation maLargePreviewBeingCreated class Image
-sd/source/ui/sidebar/MasterPageContainer.cxx:143
+sd/source/ui/sidebar/MasterPageContainer.cxx:141
     sd::sidebar::MasterPageContainer::Implementation maSmallPreviewBeingCreated class Image
-sd/source/ui/sidebar/MasterPageContainer.cxx:148
+sd/source/ui/sidebar/MasterPageContainer.cxx:146
     sd::sidebar::MasterPageContainer::Implementation maLargePreviewNotAvailable class Image
-sd/source/ui/sidebar/MasterPageContainer.cxx:149
+sd/source/ui/sidebar/MasterPageContainer.cxx:147
     sd::sidebar::MasterPageContainer::Implementation maSmallPreviewNotAvailable class Image
 sd/source/ui/slideshow/showwindow.hxx:99
     sd::ShowWindow mbMouseCursorHidden _Bool
@@ -496,7 +492,7 @@ sd/source/ui/slidesorter/inc/controller/SlsAnimator.hxx:97
     sd::slidesorter::controller::Animator maElapsedTime ::canvas::tools::ElapsedTime
 sdext/source/pdfimport/inc/pdfihelper.hxx:100
     pdfi::GraphicsContext BlendMode sal_Int8
-sdext/source/pdfimport/tree/style.hxx:43
+sdext/source/pdfimport/tree/style.hxx:44
     pdfi::StyleContainer::Style Contents class rtl::OUString
 sfx2/source/appl/lnkbase2.cxx:99
     sfx2::(anonymous namespace)::ImplDdeItem pLink class sfx2::SvBaseLink *
@@ -552,7 +548,7 @@ svx/source/inc/gridcell.hxx:527
     DbPatternField m_pValueFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
 svx/source/inc/gridcell.hxx:528
     DbPatternField m_pPaintFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
-svx/source/inc/svdpdf.hxx:70
+svx/source/inc/svdpdf.hxx:64
     ImpSdrPdfImport maDash class XDash
 sw/inc/acmplwrd.hxx:42
     SwAutoCompleteWord m_LookupTree editeng::Trie
@@ -626,7 +622,7 @@ ucb/source/ucp/hierarchy/hierarchydatasupplier.cxx:76
     hierarchy_ucp::DataSupplier_Impl m_aIterator class HierarchyEntry::iterator
 ucb/source/ucp/package/pkgprovider.hxx:51
     package_ucp::ContentProvider m_pPackages std::unique_ptr<Packages>
-ucbhelper/source/client/proxydecider.cxx:130
+ucbhelper/source/client/proxydecider.cxx:133
     ucbhelper::proxydecider_impl::InternetProxyDecider_Impl m_aEmptyProxy const struct ucbhelper::InternetProxyServer
 ucbhelper/source/provider/propertyvalueset.cxx:88
     ucbhelper_impl::PropertyValue aString class rtl::OUString
@@ -692,7 +688,7 @@ unotools/source/config/saveopt.cxx:82
     (anonymous namespace)::SvtSaveOptions_Impl bROUserAutoSave _Bool
 vcl/inc/BitmapFastScaleFilter.hxx:31
     BitmapFastScaleFilter maSize class Size
-vcl/inc/ppdparser.hxx:130
+vcl/inc/ppdparser.hxx:131
     psp::PPDParser::PPDConstraint m_pKey1 const class psp::PPDKey *
 vcl/inc/printerinfomanager.hxx:75
     psp::PrinterInfoManager::SystemPrintQueue m_aComment class rtl::OUString
@@ -700,7 +696,7 @@ vcl/inc/salwtype.hxx:164
     SalWheelMouseEvent mbDeltaIsPixel _Bool
 vcl/inc/salwtype.hxx:218
     SalQueryCharPositionEvent mnCharPos sal_uLong
-vcl/inc/svdata.hxx:315
+vcl/inc/svdata.hxx:316
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
 vcl/inc/toolbox.h:108
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<sal_uInt16>
@@ -966,13 +962,13 @@ vcl/source/treelist/headbar.cxx:41
     ImplHeadItem maHelpId class rtl::OString
 vcl/source/treelist/headbar.cxx:42
     ImplHeadItem maImage class Image
-vcl/unx/gtk3/a11y/atkwrapper.hxx:47
+vcl/unx/gtk3/a11y/atkwrapper.hxx:51
     AtkObjectWrapper aParent AtkObject
-vcl/unx/gtk3/a11y/atkwrapper.hxx:75
+vcl/unx/gtk3/a11y/atkwrapper.hxx:79
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:1650
+vcl/unx/gtk3/gtk3gtkinst.cxx:1652
      out gpointer *
 writerfilter/source/ooxml/OOXMLFactory.hxx:57
     writerfilter::ooxml::AttributeInfo m_nToken writerfilter::Token_t
