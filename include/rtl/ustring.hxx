@@ -39,6 +39,7 @@
 #include "rtl/string.hxx"
 #include "rtl/stringutils.hxx"
 #include "rtl/textenc.h"
+#include "rtl/character.hxx"
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 #include "config_global.h"
@@ -750,6 +751,26 @@ public:
                 object.
     */
     sal_Int32 getLength() const { return pData->length; }
+
+#ifdef LIBO_INTERNAL_ONLY
+    /**
+      Returns the codepoints of this string.
+
+      The length is equal to the number of Unicode codepoints in this string.
+
+      @return   the codepoints number of the sequence of characters represented by this
+                object.
+    */
+    sal_Int32 getCodepointsCount() const {
+        sal_Int32 points = 0;
+        // After a high surrogate goes a low one.
+        // We will assume it is correctly encoded.
+        for ( sal_Int32 i = 0; i < pData->length; ++i ) {
+            if ( !rtl::isHighSurrogate(pData->buffer[i]) ) ++points;
+        }
+        return points;
+    }
+#endif
 
     /**
       Checks if a string is empty.
