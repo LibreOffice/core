@@ -2322,76 +2322,79 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
     return nReal;
 }
 
-void SwContentFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
+void SwContentFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
     sal_uInt8 nInvFlags = 0;
-
-    if( pNew && RES_ATTRSET_CHG == pNew->Which() && pOld )
+    if(pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which() && pLegacy->m_pOld)
     {
-        SfxItemIter aNIter( *static_cast<const SwAttrSetChg*>(pNew)->GetChgSet() );
-        SfxItemIter aOIter( *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
+        auto& rOldSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
+        auto& rNewSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pNew);
+        SfxItemIter aOIter(*rOldSetChg.GetChgSet());
+        SfxItemIter aNIter(*rNewSetChg.GetChgSet());
         const SfxPoolItem* pNItem = aNIter.GetCurItem();
         const SfxPoolItem* pOItem = aOIter.GetCurItem();
-        SwAttrSetChg aOldSet( *static_cast<const SwAttrSetChg*>(pOld) );
-        SwAttrSetChg aNewSet( *static_cast<const SwAttrSetChg*>(pNew) );
+        SwAttrSetChg aOldSet(rOldSetChg);
+        SwAttrSetChg aNewSet(rNewSetChg);
         do
         {
             UpdateAttr_(pOItem, pNItem, nInvFlags, &aOldSet, &aNewSet);
             pNItem = aNIter.NextItem();
             pOItem = aOIter.NextItem();
-        } while (pNItem);
-        if ( aOldSet.Count() || aNewSet.Count() )
-            SwFrame::Modify( &aOldSet, &aNewSet );
+        } while(pNItem);
+        if(aOldSet.Count() || aNewSet.Count())
+            SwFrame::Modify(&aOldSet, &aNewSet);
     }
     else
-        UpdateAttr_( pOld, pNew, nInvFlags );
+        UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, nInvFlags);
 
-    if ( nInvFlags == 0 )
+    if(nInvFlags == 0)
         return;
 
-    SwPageFrame *pPage = FindPageFrame();
-    InvalidatePage( pPage );
-    if ( nInvFlags & 0x01 )
+    SwPageFrame* pPage = FindPageFrame();
+    InvalidatePage(pPage);
+    if(nInvFlags & 0x01)
         SetCompletePaint();
-    if ( nInvFlags & 0x02 )
+    if(nInvFlags & 0x02)
         InvalidatePos_();
-    if ( nInvFlags & 0x04 )
+    if(nInvFlags & 0x04 )
         InvalidateSize_();
-    if ( nInvFlags & 0x88 )
+    if(nInvFlags & 0x88)
     {
-        if( IsInSct() && !GetPrev() )
+        if(IsInSct() && !GetPrev())
         {
-            SwSectionFrame *pSect = FindSctFrame();
-            if( pSect->ContainsAny() == this )
+            SwSectionFrame* pSect = FindSctFrame();
+            if(pSect->ContainsAny() == this)
             {
                 pSect->InvalidatePrt_();
-                pSect->InvalidatePage( pPage );
+                pSect->InvalidatePage(pPage);
             }
         }
         InvalidatePrt_();
     }
     SwFrame* pNextFrame = GetIndNext();
-    if ( pNextFrame && nInvFlags & 0x10)
+    if(pNextFrame && nInvFlags & 0x10)
     {
         pNextFrame->InvalidatePrt_();
-        pNextFrame->InvalidatePage( pPage );
+        pNextFrame->InvalidatePage(pPage);
     }
-    if ( pNextFrame && nInvFlags & 0x80 )
+    if(pNextFrame && nInvFlags & 0x80)
     {
         pNextFrame->SetCompletePaint();
     }
-    if ( nInvFlags & 0x20 )
+    if(nInvFlags & 0x20)
     {
         SwFrame* pPrevFrame = GetPrev();
-        if ( pPrevFrame )
+        if(pPrevFrame)
         {
             pPrevFrame->InvalidatePrt_();
-            pPrevFrame->InvalidatePage( pPage );
+            pPrevFrame->InvalidatePage(pPage);
         }
     }
-    if ( nInvFlags & 0x40 )
+    if(nInvFlags & 0x40)
         InvalidateNextPos();
-
 }
 
 void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
