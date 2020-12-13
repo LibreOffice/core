@@ -2566,49 +2566,50 @@ void SwSectionFrame::CalcEndAtEndFlag()
     }
 }
 
-void SwSectionFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
+void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    sal_uInt8 nInvFlags = 0;
-
-    if( pNew && RES_ATTRSET_CHG == pNew->Which() )
+    if(const auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        SfxItemIter aNIter( *static_cast<const SwAttrSetChg*>(pNew)->GetChgSet() );
-        SfxItemIter aOIter( *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
-        const SfxPoolItem* pNItem = aNIter.GetCurItem();
-        const SfxPoolItem* pOItem = aOIter.GetCurItem();
-        SwAttrSetChg aOldSet( *static_cast<const SwAttrSetChg*>(pOld) );
-        SwAttrSetChg aNewSet( *static_cast<const SwAttrSetChg*>(pNew) );
-        do
+        sal_uInt8 nInvFlags = 0;
+        if(pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
         {
-            UpdateAttr_(pOItem, pNItem, nInvFlags, &aOldSet, &aNewSet);
-            pNItem = aNIter.NextItem();
-            pOItem = aOIter.NextItem();
-        } while (pNItem);
-        if ( aOldSet.Count() || aNewSet.Count() )
-            SwLayoutFrame::Modify( &aOldSet, &aNewSet );
+            auto& rOldSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
+            auto& rNewSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pNew);
+            SfxItemIter aOIter(*rOldSetChg.GetChgSet());
+            SfxItemIter aNIter(*rNewSetChg.GetChgSet());
+            const SfxPoolItem* pOItem = aOIter.GetCurItem();
+            const SfxPoolItem* pNItem = aNIter.GetCurItem();
+            SwAttrSetChg aOldSet(rOldSetChg);
+            SwAttrSetChg aNewSet(rNewSetChg);
+            do
+            {
+                UpdateAttr_(pOItem, pNItem, nInvFlags, &aOldSet, &aNewSet);
+                pNItem = aNIter.NextItem();
+                pOItem = aOIter.NextItem();
+            } while (pNItem);
+            if(aOldSet.Count() || aNewSet.Count())
+                SwLayoutFrame::Modify(&aOldSet, &aNewSet);
+        }
+        else
+            UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, nInvFlags);
+
+        if(nInvFlags != 0)
+        {
+            if(nInvFlags & 0x01)
+                InvalidateSize();
+            if(nInvFlags & 0x10)
+                SetCompletePaint();
+        }
+    }
+    else if(const auto pHint = dynamic_cast<const SwSectionFrameMoveAndDeleteHint*>(&rHint))
+    {
+        // #i117863#
+        if(&rMod != GetDep())
+            return;
+        SwSectionFrame::MoveContentAndDelete(this, pHint->IsSaveContent());
     }
     else
-        UpdateAttr_( pOld, pNew, nInvFlags );
-
-    if ( nInvFlags != 0 )
-    {
-        if ( nInvFlags & 0x01 )
-            InvalidateSize();
-        if ( nInvFlags & 0x10 )
-            SetCompletePaint();
-    }
-}
-
-void SwSectionFrame::SwClientNotify( const SwModify& rMod, const SfxHint& rHint )
-{
-    SwFrame::SwClientNotify(rMod, rHint);
-    // #i117863#
-    if(&rMod != GetDep())
-        return;
-    const auto pHint = dynamic_cast<const SwSectionFrameMoveAndDeleteHint*>(&rHint);
-    if(!pHint)
-        return;
-    SwSectionFrame::MoveContentAndDelete( this, pHint->IsSaveContent() );
+        SwFrame::SwClientNotify(rMod, rHint);
 }
 
 void SwSectionFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
