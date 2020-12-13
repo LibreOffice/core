@@ -73,25 +73,6 @@
 
 #include <postwin.h>
 
-void SalAbort( const OUString& rErrorText, bool )
-{
-    ImplFreeSalGDI();
-
-    if ( rErrorText.isEmpty() )
-    {
-        // make sure crash reporter is triggered
-        RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, nullptr );
-        FatalAppExitW( 0, L"Application Error" );
-    }
-    else
-    {
-        CrashReporter::addKeyValue("AbortMessage", rErrorText, CrashReporter::Write);
-        // make sure crash reporter is triggered
-        RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, nullptr );
-        FatalAppExitW( 0, o3tl::toW(rErrorText.getStr()) );
-    }
-}
-
 static LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 
 class SalYieldMutex : public comphelper::SolarMutex
