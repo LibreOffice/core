@@ -186,19 +186,6 @@ void AquaSalInstance::AfterAppInit()
 #endif
 }
 
-void SalAbort( const OUString& rErrorText, bool bDumpCore )
-{
-    if( rErrorText.isEmpty() )
-        fprintf( stderr, "Application Error " );
-    else
-        fprintf( stderr, "%s ",
-            OUStringToOString( rErrorText, osl_getThreadTextEncoding() ).getStr() );
-    if( bDumpCore )
-        abort();
-    else
-        _exit(1);
-}
-
 SalYieldMutex::SalYieldMutex()
     : m_aCodeBlock( nullptr )
 {
