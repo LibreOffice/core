@@ -39,6 +39,7 @@
 #include "rtl/string.hxx"
 #include "rtl/stringutils.hxx"
 #include "rtl/textenc.h"
+#include "rtl/character.hxx"
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 #include "config_global.h"
@@ -259,6 +260,21 @@ public:
             = libreoffice_internal::Dummy()):
         pData(nullptr)
     { rtl_uString_newFromStr(&pData, value); }
+
+    /**
+      New string from a Unicode 32 character buffer array.
+
+      @param    value       a NULL-terminated Unicode 32 character array.
+    */
+    OUString( const char32_t * value )
+    {
+        pData = NULL;
+        sal_Int32 codePointCount;
+        if( !value ) throw std::bad_alloc();
+        for ( codePointCount = 0; value[codePointCount] != '\0'; ++codePointCount );
+        rtl_uString_newFromCodePoints(&pData, reinterpret_cast<const sal_uInt32 *>(value), codePointCount);
+        if (pData == NULL) throw std::bad_alloc();
+    }
 
 #else
 
@@ -751,6 +767,26 @@ public:
     */
     sal_Int32 getLength() const { return pData->length; }
 
+#ifdef LIBO_INTERNAL_ONLY
+    /**
+      Returns the codepoints of this string.
+
+      The length is equal to the number of Unicode codepoints in this string.
+
+      @return   the codepoints number of the sequence of characters represented by this
+                object.
+    */
+    sal_Int32 getCodepointsCount() const {
+        sal_Int32 points = 0;
+        // After a high surrogate goes a low one.
+        // We will assume it is correctly encoded.
+        for ( sal_Int32 i = 0; i < getLength(); ++i ) {
+            if ( !rtl::isHighSurrogate(buffer[i]) ) ++points;
+        }
+        return points;
+    }
+#endif
+
     /**
       Checks if a string is empty.
 
@@ -787,6 +823,35 @@ public:
         assert(index >= 0 && static_cast<sal_uInt32>(index) < static_cast<sal_uInt32>(getLength()));
         return getStr()[index];
     }
+
+#if defined LIBO_INTERNAL_ONLY
+    /**
+      Access to individual codepoints.
+
+      @param index must be non-negative and less than length.
+
+      @return the codepoint at the given index.
+
+      @since LibreOffice 7.1
+    */
+    char32_t getCodepointAt(sal_Int32 index) const {
+        // silence spurious -Werror=strict-overflow warnings from GCC 4.8.2
+        sal_Int32 points = 0;
+        // After a high surrogate goes a low one.
+        // We will assume it is correctly encoded.
+        for ( sal_Int32 i = 0; i < length; ++i ) {
+            if ( !rtl::isLowSurrogate(buffer[i]) ) ++points;
+            if( points == index )
+            {
+                if ( isHighSurrogate(index[i]) )
+                    return static_cast<char32_t>( combineSurrogates( buffer[i], buffer[i+1] ) );
+                else
+                    return static_cast<char32_t>( buffer[i] );
+            }
+        }
+        return return static_cast<char32_t>('\0');
+    }
+#endif
 
     /**
       Compares two strings.
