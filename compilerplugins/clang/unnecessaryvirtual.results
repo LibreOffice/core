@@ -216,14 +216,6 @@ chart2/source/inc/ModifyListenerCallBack.hxx:41
     void chart::ModifyListenerCallBack::~ModifyListenerCallBack()
 chart2/source/inc/WeakListenerAdapter.hxx:56
     void chart::WeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
-cui/source/inc/splitcelldlg.hxx:40
-    _Bool SvxSplitTableDlg::IsHorizontal()const
-cui/source/inc/splitcelldlg.hxx:41
-    _Bool SvxSplitTableDlg::IsProportional()const
-cui/source/inc/splitcelldlg.hxx:42
-    long SvxSplitTableDlg::GetCount()const
-cui/source/inc/splitcelldlg.hxx:44
-    void SvxSplitTableDlg::SetSplitVerticalByDefault()
 extensions/source/dbpilots/unoautopilot.hxx:81
     class cppu::IPropertyArrayHelper * dbp::OUnoAutoPilot::createArrayHelper()const
 extensions/source/propctrlr/commoncontrol.hxx:130
@@ -304,9 +296,9 @@ include/vbahelper/vbareturntypes.hxx:39
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
 include/vcl/customweld.hxx:45
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
-include/vcl/toolkit/dialog.hxx:96
+include/vcl/toolkit/dialog.hxx:98
     void Dialog::set_content_area(class VclBox *,)
-include/vcl/weld.hxx:96
+include/vcl/weld.hxx:100
     void weld::Widget::set_visible(_Bool,)
 sc/source/core/opencl/formulagroupcl.cxx:1061
     _Bool sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::NeedParallelReduction()const
@@ -410,14 +402,16 @@ sw/inc/flypos.hxx:37
     void SwPosFlyFrame::~SwPosFlyFrame()
 toolkit/inc/controls/geometrycontrolmodel.hxx:182
     void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
-vcl/inc/jsdialog/jsdialogbuilder.hxx:182
+vcl/inc/jsdialog/jsdialogbuilder.hxx:190
     void JSWidget::show()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:188
+vcl/inc/jsdialog/jsdialogbuilder.hxx:196
     void JSWidget::hide()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:195
+vcl/inc/jsdialog/jsdialogbuilder.hxx:203
     void JSWidget::set_sensitive(_Bool,)
-vcl/inc/jsdialog/jsdialogbuilder.hxx:201
+vcl/inc/jsdialog/jsdialogbuilder.hxx:209
     class com::sun::star::uno::Reference<class com::sun::star::datatransfer::dnd::XDropTarget> JSWidget::get_drop_target()
+vcl/inc/salbmp.hxx:118
+    void SalBitmap::updateChecksum()const
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
 vcl/inc/salframe.hxx:194
@@ -454,7 +448,7 @@ vcl/inc/unx/saldisp.hxx:195
     void SalXLib::StopTimer()
 vcl/inc/unx/saldisp.hxx:197
     _Bool SalXLib::CheckTimeout(_Bool,)
-vcl/inc/unx/saldisp.hxx:405
+vcl/inc/unx/saldisp.hxx:404
     void SalX11Display::Yield()
 vcl/inc/unx/salframe.h:207
     void X11SalFrame::updateGraphics(_Bool,)

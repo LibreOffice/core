@@ -115,7 +115,7 @@ protected:
     bool           mbChecksumValid;
 
 protected:
-    virtual void updateChecksum() const;
+    void updateChecksum() const;
     // helper function to convert data in 1,2,4 bpp formats to a 8/24/32bpp format
     enum class BitConvert
     {
