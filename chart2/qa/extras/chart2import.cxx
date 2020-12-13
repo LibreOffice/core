@@ -32,6 +32,8 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <iterator>
+#include <vcl/outdev.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
@@ -2645,15 +2647,26 @@ void Chart2ImportTest::testTdfCustomShapePos()
     Reference< chart2::XChartDocument > xChartDoc(getChartDocFromWriter(0), UNO_QUERY_THROW);
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
-    Reference<drawing::XShape> xCustomShape(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
-
-    // test position and size of a custom shape within a chart
-    awt::Point aPosition = xCustomShape->getPosition();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(8845, aPosition.X, 300);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(855, aPosition.Y, 300);
-    awt::Size aSize = xCustomShape->getSize();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(4831, aSize.Width, 300);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1550, aSize.Height, 300);
+    // test position and size of a custom shape within a chart, rotated by 0 degree.
+    {
+        Reference<drawing::XShape> xCustomShape(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+        awt::Point aPosition = xCustomShape->getPosition();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(8845, aPosition.X, 300);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(855, aPosition.Y, 300);
+        awt::Size aSize = xCustomShape->getSize();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(4831, aSize.Width, 300);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1550, aSize.Height, 300);
+    }
+    // test position and size of a custom shape within a chart, rotated by 90 degree.
+    {
+        Reference<drawing::XShape> xCustomShape(xDrawPage->getByIndex(1), UNO_QUERY_THROW);
+        awt::Point aPosition = xCustomShape->getPosition();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1658, aPosition.X, 300);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6119, aPosition.Y, 300);
+        awt::Size aSize = xCustomShape->getSize();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(4165, aSize.Width, 300);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1334, aSize.Height, 300);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
