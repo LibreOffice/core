@@ -908,11 +908,7 @@ cmd/32/flowchartshapes.flowchart-data.png cmd/32/basicshapes.parallelogram.png
 cmd/32/flowchartshapes.flowchart-extract.png cmd/32/basicshapes.isosceles-triangle.png
 cmd/32/flowchartshapes.flowchart-magnetic-disk.png cmd/32/basicshapes.can.png
 cmd/32/flowchartshapes.flowchart-manual-operation.png cmd/32/basicshapes.trapezoid.png
-cmd/32/flowchartshapes.flowchart-merge.png cmd/32/fontworkshapetype.fontwork-triangle-down.png
 cmd/32/fontworkgalleryfloater.png cmd/32/fontwork.png
-cmd/32/fontworkshapetype.fontwork-circle-pour.png cmd/32/basicshapes.ring.png
-cmd/32/fontworkshapetype.fontwork-fade-down.png cmd/32/basicshapes.trapezoid.png
-cmd/32/fontworkshapetype.fontwork-triangle-up.png cmd/32/basicshapes.isosceles-triangle.png
 cmd/32/linetoolbox.png cmd/32/freeline.png
 cmd/32/measureattributes.png cmd/32/measureline.png
 cmd/32/pie.png cmd/32/basicshapes.circle-pie.png
@@ -939,11 +935,7 @@ cmd/lc_flowchartshapes.flowchart-data.png cmd/lc_basicshapes.parallelogram.png
 cmd/lc_flowchartshapes.flowchart-extract.png cmd/lc_basicshapes.isosceles-triangle.png
 cmd/lc_flowchartshapes.flowchart-magnetic-disk.png cmd/lc_basicshapes.can.png
 cmd/lc_flowchartshapes.flowchart-manual-operation.png cmd/lc_basicshapes.trapezoid.png
-cmd/lc_flowchartshapes.flowchart-merge.png cmd/lc_fontworkshapetype.fontwork-triangle-down.png
 cmd/lc_fontworkgalleryfloater.png cmd/lc_fontwork.png
-cmd/lc_fontworkshapetype.fontwork-circle-pour.png cmd/lc_basicshapes.ring.png
-cmd/lc_fontworkshapetype.fontwork-fade-down.png cmd/lc_basicshapes.trapezoid.png
-cmd/lc_fontworkshapetype.fontwork-triangle-up.png cmd/lc_basicshapes.isosceles-triangle.png
 cmd/lc_linetoolbox.png cmd/lc_freeline.png
 cmd/lc_measureattributes.png cmd/lc_measureline.png
 cmd/lc_pie.png cmd/lc_basicshapes.circle-pie.png
@@ -970,11 +962,7 @@ cmd/sc_flowchartshapes.flowchart-data.png cmd/sc_basicshapes.parallelogram.png
 cmd/sc_flowchartshapes.flowchart-extract.png cmd/sc_basicshapes.isosceles-triangle.png
 cmd/sc_flowchartshapes.flowchart-magnetic-disk.png cmd/sc_basicshapes.can.png
 cmd/sc_flowchartshapes.flowchart-manual-operation.png cmd/sc_basicshapes.trapezoid.png
-cmd/sc_flowchartshapes.flowchart-merge.png cmd/sc_fontworkshapetype.fontwork-triangle-down.png
 cmd/sc_fontworkgalleryfloater.png cmd/sc_fontwork.png
-cmd/sc_fontworkshapetype.fontwork-circle-pour.png cmd/sc_basicshapes.ring.png
-cmd/sc_fontworkshapetype.fontwork-fade-down.png cmd/sc_basicshapes.trapezoid.png
-cmd/sc_fontworkshapetype.fontwork-triangle-up.png cmd/sc_basicshapes.isosceles-triangle.png
 cmd/sc_linetoolbox.png cmd/sc_freeline.png
 cmd/sc_measureattributes.png cmd/sc_measureline.png
 cmd/sc_pie.png cmd/sc_basicshapes.circle-pie.png
