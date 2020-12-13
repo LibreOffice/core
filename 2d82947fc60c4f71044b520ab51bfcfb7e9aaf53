@@ -16,6 +16,24 @@
       "revId": "2d82947fc60c4f71044b520ab51bfcfb7e9aaf53",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99da4145_d9f25ad5",
+        "filename": "cui/source/options/fontsubs.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-12-13T00:08:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fdfb625_e965807b",
+      "revId": "2d82947fc60c4f71044b520ab51bfcfb7e9aaf53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
