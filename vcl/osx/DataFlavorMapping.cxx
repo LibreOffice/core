@@ -35,6 +35,7 @@
 
 #include <cassert>
 #include <string.h>
+#include <string_view>
 
 #include <premac.h>
 #include <Cocoa/Cocoa.h>
@@ -67,7 +68,7 @@ namespace
     return OUString(utf8Str, len, RTL_TEXTENCODING_UTF8);
   }
 
-  NSString* OUStringToNSString(const OUString& ustring)
+  NSString* OUStringToNSString(std::u16string_view ustring)
   {
     OString utf8Str = OUStringToOString(ustring, RTL_TEXTENCODING_UTF8);
     return [NSString stringWithCString: utf8Str.getStr() encoding: NSUTF8StringEncoding];
