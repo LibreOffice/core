@@ -195,10 +195,18 @@ SvxPathTabPage::SvxPathTabPage(weld::Container* pPage, weld::DialogController* p
                                  m_xPathBox->get_height_rows(20));
 
     m_xPathBox->connect_row_activated( LINK( this, SvxPathTabPage, DoubleClickPathHdl_Impl ) );
+    m_xPathBox->connect_column_clicked(LINK(this, SvxPathTabPage, HeaderBarClick));
     m_xPathBox->connect_changed( LINK( this, SvxPathTabPage, PathSelect_Impl ) );
     m_xPathBox->set_selection_mode(SelectionMode::Multiple);
 
     xDialogListener->SetDialogClosedLink( LINK( this, SvxPathTabPage, DialogClosedHdl ) );
+}
+
+IMPL_LINK(SvxPathTabPage, HeaderBarClick, int, nColumn, void)
+{
+    bool bSortAtoZ = !m_xPathBox->get_sort_order();
+    m_xPathBox->set_sort_order(bSortAtoZ);
+    m_xPathBox->set_sort_indicator(bSortAtoZ ? TRISTATE_TRUE : TRISTATE_FALSE, nColumn);
 }
 
 SvxPathTabPage::~SvxPathTabPage()
@@ -228,6 +236,7 @@ bool SvxPathTabPage::FillItemSet( SfxItemSet* )
 void SvxPathTabPage::Reset( const SfxItemSet* )
 {
     m_xPathBox->clear();
+    m_xPathBox->make_unsorted();
 
     std::unique_ptr<weld::TreeIter> xIter = m_xPathBox->make_iterator();
     for( sal_uInt16 i = 0; i <= sal_uInt16(SvtPathOptions::Paths::Classification); ++i )
@@ -320,6 +329,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
     }
 
     m_xPathBox->columns_autosize();
+    m_xPathBox->make_sorted();
     PathSelect_Impl(*m_xPathBox);
 }
 

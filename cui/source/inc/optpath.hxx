@@ -49,6 +49,7 @@ private:
     DECL_LINK(StandardHdl_Impl, weld::Button&, void);
 
     DECL_LINK(PathSelect_Impl, weld::TreeView&, void);
+    DECL_LINK(HeaderBarClick, int, void);
 
     DECL_LINK(DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void);
 
