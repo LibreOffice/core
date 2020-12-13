@@ -30,6 +30,14 @@
 #include <ostream>
 #include <utility>
 
+#ifdef __APPLE__
+#include <stdint.h>
+typedef uint16_t char16_t;
+typedef uint32_t char32_t;
+#else
+#include <uchar.h>
+#endif
+
 #if defined LIBO_INTERNAL_ONLY
 #include <string_view>
 #include <type_traits>
@@ -39,6 +47,7 @@
 #include "rtl/string.hxx"
 #include "rtl/stringutils.hxx"
 #include "rtl/textenc.h"
+#include "rtl/character.hxx"
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 #include "config_global.h"
@@ -96,6 +105,17 @@ public:
     }
 
     constexpr sal_Int32 getLength() const { return length; }
+
+    sal_Int32 getCodepointsCount() const {
+        sal_Int32 i;
+        sal_Int32 points = 0;
+        // After a hight surrogate goes a low one.
+        // We will assume it is correctly encoded.
+        for ( i = 0; i < length; ++i ) {
+            if ( !rtl::isHighSurrogate(buffer[i]) ) ++points;
+        }
+        return points;
+    }
 
     constexpr sal_Unicode const * getStr() const SAL_RETURNS_NONNULL { return buffer; }
 
@@ -271,6 +291,21 @@ public:
     {
         pData = NULL;
         rtl_uString_newFromStr( &pData, value );
+    }
+
+    /**
+      New string from a Unicode 32 character buffer array.
+
+      @param    value       a NULL-terminated Unicode 32 character array.
+    */
+    OUString( const char32_t * value )
+    {
+        pData = NULL;
+        sal_Int32 codePointCount;
+        if( !value ) throw std::bad_alloc();
+        for ( codePointCount = 0; value[codePointCount] != '\0'; ++codePointCount );
+        rtl_uString_newFromCodePoints(&pData, reinterpret_cast<const sal_uInt32 *>(value), codePointCount);
+        if (pData == NULL) throw std::bad_alloc();
     }
 
 #endif
