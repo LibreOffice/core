@@ -1,6 +1,1 @@
-<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="9.610169" x2="9.576271" y1="4.610169" y2="11.593221"><stop offset="0" stop-color="#fff"/><stop offset=".02580903" stop-color="#fff" stop-opacity=".235294"/><stop offset="1" stop-color="#fff" stop-opacity=".156863"/><stop offset="1" stop-color="#fff" stop-opacity=".392157"/></linearGradient><linearGradient id="b" gradientUnits="userSpaceOnUse" x1="2.440678" x2="2.372881" y1="12.81356" y2="2.915254"><stop offset="0" stop-opacity=".339506"/><stop offset="1" stop-opacity=".246914"/></linearGradient>
-
-
-
-     /&amp;gt;
- <g fill="none"><g transform="translate(0 -.5)"><path d="m.5 3v10h15v-5-5z" stroke="url(#b)" stroke-linejoin="round"/><path d="m1.4869712 3.9766685v8.0466635h13.0260578v-4.0233318-4.0233317z" stroke="url(#a)" stroke-width=".973942"/></g><path d="m3 10 10-5" stroke="#e9e9e9" stroke-linecap="round"/></g></svg>
+<svg height="16" viewBox="0 0 4.2333332 4.2333335" width="16" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#7239b3" transform="scale(.26458333)"><path d="m.5 2.5v10h15v-5-5z" stroke-linejoin="round"/><path d="m3 10 10-5" stroke-linecap="round"/></g></svg>
