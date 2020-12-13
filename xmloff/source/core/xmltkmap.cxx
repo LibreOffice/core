@@ -47,7 +47,6 @@ private:
 public:
     void insert( const SvXMLTokenMapEntry& rEntry );
     sal_uInt16 get( sal_uInt16 nKeyPrefix, const OUString& rLName ) const;
-    sal_uInt16 get( sal_Int32 nFastTok ) const;
 };
 
 void SvXMLTokenMap_Impl::insert( const SvXMLTokenMapEntry& rEntry )
@@ -73,15 +72,6 @@ sal_uInt16 SvXMLTokenMap_Impl::get( sal_uInt16 nKeyPrefix, const OUString& rLNam
         return XML_TOK_UNKNOWN;
 }
 
-sal_uInt16 SvXMLTokenMap_Impl::get( sal_Int32 nFastTok ) const
-{
-    auto aIter( m_aFastTokenToTokenMap.find( nFastTok ) );
-    if ( aIter != m_aFastTokenToTokenMap.end() )
-        return (*aIter).second;
-    else
-        return XML_TOK_UNKNOWN;
-}
-
 SvXMLTokenMap::SvXMLTokenMap( const SvXMLTokenMapEntry *pMap )
     : m_pImpl( new SvXMLTokenMap_Impl )
 {
@@ -100,11 +90,6 @@ sal_uInt16 SvXMLTokenMap::Get( sal_uInt16 nKeyPrefix,
                                const OUString& rLName ) const
 {
     return m_pImpl->get( nKeyPrefix, rLName );
-}
-
-sal_uInt16 SvXMLTokenMap::Get( sal_Int32 nFastTok ) const
-{
-    return m_pImpl->get( nFastTok );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
