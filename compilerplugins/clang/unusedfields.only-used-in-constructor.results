@@ -338,11 +338,13 @@ include/vcl/commandevent.hxx:315
     CommandGestureData meOrientation const enum PanningOrientation
 include/vcl/font/Feature.hxx:100
     vcl::font::Feature m_eType enum vcl::font::FeatureType
-include/vcl/NotebookBarAddonsMerger.hxx:36
+include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:36
     NotebookBarAddonsItem aImage class Image
+include/vcl/opengl/OpenGLContext.hxx:43
+    OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
 include/vcl/pdf/PDFAnnotationMarker.hxx:65
     vcl::pdf::PDFAnnotationMarkerHighlight meTextMarkerType enum vcl::pdf::PDFTextMarkerType
-include/xmloff/shapeimport.hxx:140
+include/xmloff/shapeimport.hxx:56
     SdXML3DLightContext mbSpecular _Bool
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:51
     GtvApplicationWindow parent_instance GtkApplicationWindow
@@ -406,9 +408,9 @@ oox/source/ppt/timenodelistcontext.cxx:856
     oox::ppt::(anonymous namespace)::AnimMotionContext mnAngle sal_Int32
 pyuno/source/module/pyuno_callable.cxx:45
     pyuno::(anonymous namespace)::PyUNO_callable ob_base PyObject
-pyuno/source/module/pyuno_impl.hxx:137
+pyuno/source/module/pyuno_impl.hxx:138
     pyuno::(anonymous) ob_base PyObject
-pyuno/source/module/pyuno_impl.hxx:237
+pyuno/source/module/pyuno_impl.hxx:238
     pyuno::stRuntimeImpl ob_base PyObject
 reportdesign/source/core/api/ReportDefinition.cxx:237
     reportdesign::(anonymous namespace)::OStyle m_aSize awt::Size
@@ -484,7 +486,7 @@ sc/source/filter/html/htmlpars.cxx:3018
     (anonymous namespace)::CSSHandler::MemStr mp const char *
 sc/source/filter/html/htmlpars.cxx:3019
     (anonymous namespace)::CSSHandler::MemStr mn size_t
-sc/source/filter/inc/htmlpars.hxx:613
+sc/source/filter/inc/htmlpars.hxx:614
     ScHTMLQueryParser mnUnusedId ScHTMLTableId
 sc/source/filter/inc/sheetdatacontext.hxx:51
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
@@ -612,8 +614,6 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:266
     (anonymous namespace)::PDFGrammar::definition xref rule<ScannerT>
 sfx2/inc/autoredactdialog.hxx:94
     SfxAutoRedactDialog m_xDocShell class SfxObjectShellLock
-sfx2/inc/sidebar/DeckTitleBar.hxx:54
-    sfx2::sidebar::DeckTitleBar maGrip class BitmapEx
 sfx2/source/dialog/basedlgs.cxx:46
     SfxModelessDialog_Impl aMoveIdle class Idle
 sfx2/source/doc/doctempl.cxx:104
@@ -690,7 +690,7 @@ svx/source/dialog/framelinkarray.cxx:385
     svx::frame::(anonymous namespace)::MergedCellIterator mnFirstRow size_t
 svx/source/dialog/imapwnd.hxx:87
     IMapWindow maItemInfos struct SfxItemInfo [1]
-svx/source/dialog/weldeditview.cxx:323
+svx/source/dialog/weldeditview.cxx:372
     (anonymous namespace)::WeldEditSource m_rEditAcc class WeldEditAccessible &
 svx/source/inc/datanavi.hxx:189
     svxform::XFormsPage m_aDropHelper class svxform::DataTreeDropTarget
@@ -716,7 +716,7 @@ sw/inc/unosett.hxx:145
     SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
 sw/qa/core/test_ToxTextGenerator.cxx:140
     (anonymous namespace)::ToxTextGeneratorWithMockedChapterField mChapterFieldType class SwChapterFieldType
-sw/qa/extras/uiwriter/uiwriter.cxx:4587
+sw/qa/extras/uiwriter/uiwriter.cxx:4615
     (anonymous namespace)::IdleTask maIdle class Idle
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
@@ -768,15 +768,9 @@ vcl/inc/canvasbitmap.hxx:40
     vcl::unotools::VclCanvasBitmap m_aAlpha ::Bitmap
 vcl/inc/graphic/Manager.hxx:39
     vcl::graphic::Manager maSwapOutTimer class Timer
-vcl/inc/opengl/RenderList.hxx:29
-    Vertex color glm::vec4
-vcl/inc/opengl/RenderList.hxx:30
-    Vertex lineData glm::vec4
-vcl/inc/opengl/zone.hxx:35
-    OpenGLVCLContextZone aZone class OpenGLZone
-vcl/inc/salvtables.hxx:540
+vcl/inc/salvtables.hxx:542
     SalInstanceEntry m_aTextFilter class WeldTextFilter
-vcl/inc/salvtables.hxx:922
+vcl/inc/salvtables.hxx:924
     SalInstanceComboBoxWithEdit m_aTextFilter class WeldTextFilter
 vcl/inc/svimpbox.hxx:120
     SvImpLBox m_aFctSet class ImpLBSelEng
@@ -814,9 +808,9 @@ vcl/source/gdi/pdfbuildin_fonts.hxx:33
     vcl::pdf::BuildinFont m_nDescent const int
 vcl/source/gdi/pdfbuildin_fonts.hxx:40
     vcl::pdf::BuildinFont m_aWidths const int [256]
-vcl/unx/gtk3/a11y/atkwrapper.hxx:47
+vcl/unx/gtk3/a11y/atkwrapper.hxx:51
     AtkObjectWrapper aParent AtkObject
-vcl/unx/gtk3/a11y/atkwrapper.hxx:75
+vcl/unx/gtk3/a11y/atkwrapper.hxx:79
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk3/a11y/gtk3atkhypertext.cxx:31
     (anonymous namespace)::HyperLink atk_hyper_link const AtkHyperlink
@@ -824,19 +818,19 @@ vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:4883
+vcl/unx/gtk3/gtk3gtkinst.cxx:4918
     (anonymous namespace)::GtkInstanceAssistant m_pButtonBox GtkButtonBox *
-vcl/unx/gtk3/gtk3gtkinst.cxx:5256
+vcl/unx/gtk3/gtk3gtkinst.cxx:5291
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5400
+vcl/unx/gtk3/gtk3gtkinst.cxx:5435
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5408
+vcl/unx/gtk3/gtk3gtkinst.cxx:5443
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
-vcl/unx/gtk3/gtk3gtkinst.cxx:7743
+vcl/unx/gtk3/gtk3gtkinst.cxx:7778
     (anonymous namespace)::GtkInstanceMenuToggleButton m_pContainer GtkContainer *
-vcl/unx/gtk3/gtk3gtkinst.cxx:14109
+vcl/unx/gtk3/gtk3gtkinst.cxx:14144
     (anonymous namespace)::GtkInstanceComboBox m_pOverlay GtkOverlay *
-vcl/unx/gtk3/gtk3gtkinst.cxx:14115
+vcl/unx/gtk3/gtk3gtkinst.cxx:14150
     (anonymous namespace)::GtkInstanceComboBox m_pMenuTextRenderer GtkCellRenderer *
 writerfilter/source/dmapper/PropertyMap.hxx:220
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32

@@ -33,7 +33,6 @@ class Menu;
 
 struct NotebookBarAddonsItem
 {
-    Image aImage;
     std::vector<Image> aImageValues;
     std::vector<css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>> aAddonValues;
 };

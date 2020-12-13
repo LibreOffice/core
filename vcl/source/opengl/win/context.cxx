@@ -650,11 +650,6 @@ bool WinOpenGLContext::ImplInit()
 
     bFirstCall = false;
 
-    static OString aVendor(reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
-
-    if (aVendor.equalsIgnoreAsciiCase("intel"))
-        maOpenGLCapabilitySwitch.mbLimitedShaderRegisters = true;
-
     return true;
 }
 

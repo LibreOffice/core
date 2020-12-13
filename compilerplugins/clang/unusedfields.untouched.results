@@ -12,6 +12,8 @@ chart2/source/inc/ModifyListenerCallBack.hxx:53
     chart::ModifyListenerCallBack m_xModifyListener css::uno::Reference<css::util::XModifyListener>
 comphelper/source/container/enumerablemap.cxx:297
     comphelper::(anonymous namespace)::MapEnumeration m_xKeepMapAlive Reference<class com::sun::star::uno::XInterface>
+connectivity/source/drivers/mork/MDatabaseMetaData.hxx:28
+    connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
 cppu/source/threadpool/threadpool.cxx:365
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:59
@@ -24,7 +26,7 @@ dbaccess/source/sdbtools/inc/connectiondependent.hxx:115
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
 desktop/qa/desktop_lib/test_desktop_lib.cxx:2902
       class AllSettings &
-emfio/source/emfuno/xemfparser.cxx:49
+emfio/source/emfuno/xemfparser.cxx:50
     emfio::emfreader::(anonymous namespace)::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:43
     ScannerManager maProtector osl::Mutex
@@ -186,8 +188,10 @@ include/vcl/filter/PngImageReader.hxx:31
     vcl::PngImageReader mxStatusIndicator css::uno::Reference<css::task::XStatusIndicator>
 include/vcl/font/Feature.hxx:100
     vcl::font::Feature m_eType enum vcl::font::FeatureType
-include/vcl/NotebookBarAddonsMerger.hxx:36
+include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:36
     NotebookBarAddonsItem aImage class Image
+include/vcl/opengl/OpenGLContext.hxx:43
+    OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
 include/vcl/pdf/PDFAnnotationMarker.hxx:65
     vcl::pdf::PDFAnnotationMarkerHighlight meTextMarkerType enum vcl::pdf::PDFTextMarkerType
 include/vcl/uitest/uiobject.hxx:283
@@ -228,9 +232,9 @@ lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char [2]
 pyuno/source/module/pyuno_callable.cxx:45
     pyuno::(anonymous namespace)::PyUNO_callable ob_base PyObject
-pyuno/source/module/pyuno_impl.hxx:137
+pyuno/source/module/pyuno_impl.hxx:138
     pyuno::(anonymous) ob_base PyObject
-pyuno/source/module/pyuno_impl.hxx:237
+pyuno/source/module/pyuno_impl.hxx:238
     pyuno::stRuntimeImpl ob_base PyObject
 reportdesign/source/ui/inc/ReportWindow.hxx:52
     rptui::OReportWindow m_pObjFac std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory> >
@@ -324,8 +328,6 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
     (anonymous namespace)::PDFGrammar::definition value rule<ScannerT>
 sfx2/inc/autoredactdialog.hxx:94
     SfxAutoRedactDialog m_xDocShell class SfxObjectShellLock
-sfx2/inc/sidebar/DeckTitleBar.hxx:54
-    sfx2::sidebar::DeckTitleBar maGrip class BitmapEx
 sfx2/inc/sidebar/TitleBar.hxx:56
     sfx2::sidebar::TitleBar mxToolBoxController std::unique_ptr<ToolbarUnoDispatcher>
 sfx2/source/dialog/basedlgs.cxx:46
@@ -358,7 +360,7 @@ svl/source/crypto/cryptosign.cxx:283
     (anonymous namespace)::PKIStatusInfo failInfo SECItem
 svx/source/dialog/contimp.hxx:75
     SvxSuperContourDlg aContourItem class SvxContourDlgItem
-svx/source/dialog/weldeditview.cxx:323
+svx/source/dialog/weldeditview.cxx:372
     (anonymous namespace)::WeldEditSource m_rEditAcc class WeldEditAccessible &
 svx/source/inc/datanavi.hxx:189
     svxform::XFormsPage m_aDropHelper class svxform::DataTreeDropTarget
@@ -388,12 +390,6 @@ unoidl/source/unoidlprovider.cxx:673
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference1_ rtl::Reference<UnoidlProvider>
 unoidl/source/unoidlprovider.cxx:674
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference2_ rtl::Reference<UnoidlModuleEntity>
-vcl/inc/opengl/gdiimpl.hxx:52
-    TextureCombo mpTexture std::unique_ptr<OpenGLTexture>
-vcl/inc/opengl/gdiimpl.hxx:53
-    TextureCombo mpMask std::unique_ptr<OpenGLTexture>
-vcl/inc/opengl/zone.hxx:35
-    OpenGLVCLContextZone aZone class OpenGLZone
 vcl/inc/qt5/Qt5AccessibleEventListener.hxx:34
     Qt5AccessibleEventListener m_xAccessible css::uno::Reference<css::accessibility::XAccessible>
 vcl/inc/salprn.hxx:45
@@ -426,11 +422,11 @@ vcl/unx/gtk3/a11y/gtk3atkhypertext.cxx:31
     (anonymous namespace)::HyperLink atk_hyper_link const AtkHyperlink
 vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
-vcl/unx/gtk3/gtk3gtkinst.cxx:5256
+vcl/unx/gtk3/gtk3gtkinst.cxx:5291
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5400
+vcl/unx/gtk3/gtk3gtkinst.cxx:5435
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5408
+vcl/unx/gtk3/gtk3gtkinst.cxx:5443
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:42
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>

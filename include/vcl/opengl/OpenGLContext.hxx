@@ -38,15 +38,6 @@ struct VCL_DLLPUBLIC GLWindow
     virtual ~GLWindow();
 };
 
-struct VCL_DLLPUBLIC OpenGLCapabilitySwitch
-{
-    bool mbLimitedShaderRegisters;
-
-    OpenGLCapabilitySwitch()
-        : mbLimitedShaderRegisters(false)
-    {}
-};
-
 class VCL_DLLPUBLIC OpenGLContext
 {
     friend class OpenGLTests;
@@ -72,11 +63,6 @@ public:
     static bool        IsTextureAttachedAnywhere( GLuint nTexture );
 
     void               ReleaseFramebuffers();
-
-    OpenGLCapabilitySwitch& getOpenGLCapabilitySwitch()
-    {
-        return maOpenGLCapabilitySwitch;
-    }
 
     /// Is this GL context the current context ?
     virtual bool isCurrent();
@@ -133,8 +119,6 @@ protected:
     bool mbInitialized;
     int  mnRefCount;
     bool mbRequestLegacyContext;
-
-    OpenGLCapabilitySwitch maOpenGLCapabilitySwitch;
 
 public:
     vcl::Region maClipRegion;
