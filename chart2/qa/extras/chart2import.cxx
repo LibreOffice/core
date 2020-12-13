@@ -32,6 +32,8 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <iterator>
+#include <vcl/outdev.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
@@ -2578,8 +2580,59 @@ void Chart2ImportTest::testTdf134225()
     awt::Point aLabelPosition2 = xDataPointLabel2->getPosition();
 
     // Check the distance between the position of the 1st data point label and the second one
+<<<<<<< HEAD   (fe8568 tdf#138892 writerfilter: cancel style list if bNoNumbering)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1800, sal_Int32(aLabelPosition2.X - aLabelPosition1.X), 200);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2123, sal_Int32(aLabelPosition2.Y - aLabelPosition1.Y), 200);
+=======
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1669, sal_Int32(aLabelPosition2.X - aLabelPosition1.X), 30);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2166, sal_Int32(aLabelPosition2.Y - aLabelPosition1.Y), 30);
+#endif
+}
+
+void Chart2ImportTest::testTdf136105()
+{
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (Application::GetDefaultDevice()->GetDPIX() != 96
+        || Application::GetDefaultDevice()->GetDPIY() != 96)
+        return;
+
+    load("/chart2/qa/extras/data/xlsx/", "tdf136105.xlsx");
+    // 1st chart with fix inner position and size
+    {
+        Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+            UNO_QUERY_THROW);
+
+        Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+        Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+        Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+        Reference<drawing::XShape> xDataPointLabel(getShapeByName(xShapes,
+            "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"), UNO_SET_THROW);
+
+        CPPUNIT_ASSERT(xDataPointLabel.is());
+        // Check the position of the 1st data point label, which is out from the pie slice
+        awt::Point aLabelPosition = xDataPointLabel->getPosition();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(8797, aLabelPosition.X, 500);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1374, aLabelPosition.Y, 500);
+    }
+    // 2nd chart with auto inner position and size
+    {
+        Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(1, mxComponent),
+            UNO_QUERY_THROW);
+
+        Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+        Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+        Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+        Reference<drawing::XShape> xDataPointLabel(getShapeByName(xShapes,
+            "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"), UNO_SET_THROW);
+
+        CPPUNIT_ASSERT(xDataPointLabel.is());
+        // Check the position of the 1st data point label, which is out from the pie slice
+        awt::Point aLabelPosition = xDataPointLabel->getPosition();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(8610, aLabelPosition.X, 500);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1684, aLabelPosition.Y, 500);
+    }
+>>>>>>> CHANGE (277b22 tdf#138889 OOXML chart: fix import of rotated shapes)
 }
 
 void Chart2ImportTest::testTdf91250()
@@ -2645,15 +2698,26 @@ void Chart2ImportTest::testTdfCustomShapePos()
     Reference< chart2::XChartDocument > xChartDoc(getChartDocFromWriter(0), UNO_QUERY_THROW);
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
-    Reference<drawing::XShape> xCustomShape(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
-
-    // test position and size of a custom shape within a chart
-    awt::Point aPosition = xCustomShape->getPosition();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(8845, aPosition.X, 300);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(855, aPosition.Y, 300);
-    awt::Size aSize = xCustomShape->getSize();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(4831, aSize.Width, 300);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1550, aSize.Height, 300);
+    // test position and size of a custom shape within a chart, rotated by 0 degree.
+    {
+        Reference<drawing::XShape> xCustomShape(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+        awt::Point aPosition = xCustomShape->getPosition();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(8845, aPosition.X, 300);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(855, aPosition.Y, 300);
+        awt::Size aSize = xCustomShape->getSize();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(4831, aSize.Width, 300);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1550, aSize.Height, 300);
+    }
+    // test position and size of a custom shape within a chart, rotated by 90 degree.
+    {
+        Reference<drawing::XShape> xCustomShape(xDrawPage->getByIndex(1), UNO_QUERY_THROW);
+        awt::Point aPosition = xCustomShape->getPosition();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1658, aPosition.X, 300);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6119, aPosition.Y, 300);
+        awt::Size aSize = xCustomShape->getSize();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(4165, aSize.Width, 300);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1334, aSize.Height, 300);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);

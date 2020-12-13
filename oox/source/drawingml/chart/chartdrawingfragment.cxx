@@ -209,6 +209,15 @@ void ChartDrawingFragment::onEndElement()
         EmuRectangle aShapeRectEmu = mxAnchor->calcAnchorRectEmu( maChartRectEmu );
         if( (aShapeRectEmu.X >= 0) && (aShapeRectEmu.Y >= 0) && (aShapeRectEmu.Width >= 0) && (aShapeRectEmu.Height >= 0) )
         {
+            const sal_Int32 aRotation = mxShape->getRotation();
+            if( (aRotation >= 45 * PER_DEGREE && aRotation < 135 * PER_DEGREE) || (aRotation >= 225 * PER_DEGREE && aRotation < 315 * PER_DEGREE) )
+            {
+                sal_Int64 nHalfWidth = aShapeRectEmu.Width / 2;
+                sal_Int64 nHalfHeight = aShapeRectEmu.Height / 2;
+                aShapeRectEmu.X = aShapeRectEmu.X + nHalfWidth - nHalfHeight;
+                aShapeRectEmu.Y = aShapeRectEmu.Y + nHalfHeight - nHalfWidth;
+                std::swap(aShapeRectEmu.Width, aShapeRectEmu.Height);
+            }
             // TODO: DrawingML implementation expects 32-bit coordinates for EMU rectangles (change that to EmuRectangle)
             awt::Rectangle aShapeRectEmu32(
                 getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.X, 0, SAL_MAX_INT32 ),
