@@ -13988,7 +13988,8 @@ AC_CONFIG_FILES([config_host.mk
                  bin/officeotron.sh
                  hardened_runtime.xcent
                  instsetoo_native/util/openoffice.lst
-                 sysui/desktop/macosx/Info.plist])
+                 sysui/desktop/macosx/Info.plist
+                 vs-code-template.code-workspace:.vscode/vs-code-template.code-workspace.in])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
 AC_CONFIG_HEADERS([config_host/config_box2d.h])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
