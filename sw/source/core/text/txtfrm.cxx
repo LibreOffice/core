@@ -1957,7 +1957,7 @@ static bool hasA11yRelevantAttribute( const std::vector<sal_uInt16>& rWhichFmtAt
 // as their implementation of SwClientNotify is SwClient's which calls Modify.
 // Therefore we also don't need to call SwClient::SwClientNotify(rModify, rHint)
 // because that's all it does, and this implementation calls
-// SwContentFrame::Modify() when appropriate.
+// SwContentFrame::SwClientNotifyy() when appropriate.
 void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
 {
     SfxPoolItem const* pOld(nullptr);
@@ -2011,7 +2011,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                 return;
             }
         }
-        SwContentFrame::Modify( pOld, pNew );
+        SwContentFrame::SwClientNotify(rModify, sw::LegacyModifyHint(pOld, pNew));
         if( nWhich == RES_FMT_CHG && getRootFrame()->GetCurrShell() )
         {
             // collection has changed
@@ -2536,11 +2536,11 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                     }
                     if (aOldSet.Count() || aNewSet.Count())
                     {
-                        SwContentFrame::Modify( &aOldSet, &aNewSet );
+                        SwContentFrame::SwClientNotify(rModify, sw::LegacyModifyHint(&aOldSet, &aNewSet));
                     }
                 }
                 else
-                    SwContentFrame::Modify( pOld, pNew );
+                    SwContentFrame::SwClientNotify(rModify, sw::LegacyModifyHint(pOld, pNew));
             }
 
             if (isA11yRelevantAttribute(nWhich))
