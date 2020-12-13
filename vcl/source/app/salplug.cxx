@@ -36,6 +36,7 @@
 #include <unistd.h>
 #else
 #include <saldatabasic.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <Windows.h>
 #endif
 
@@ -292,17 +293,39 @@ void DestroySalInstance( SalInstance *pInst )
 
 void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
+#if defined _WIN32
+    //TODO: ImplFreeSalGDI();
+#endif
+
     if( rErrorText.isEmpty() )
+    {
+#if defined _WIN32
+        // make sure crash reporter is triggered
+        RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, nullptr );
+        FatalAppExitW( 0, L"Application Error" );
+#else
         std::fprintf( stderr, "Application Error\n" );
+#endif
+    }
     else
     {
         CrashReporter::addKeyValue("AbortMessage", rErrorText, CrashReporter::Write);
+#if defined _WIN32
+        // make sure crash reporter is triggered
+        RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, nullptr );
+        FatalAppExitW( 0, o3tl::toW(rErrorText.getStr()) );
+#else
         std::fprintf( stderr, "%s\n", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
+#endif
     }
+#if defined _WIN32
+    (void) bDumpCore;
+#else
     if( bDumpCore )
         abort();
     else
         _exit(1);
+#endif
 }
 
 const OUString& SalGetDesktopEnvironment()
