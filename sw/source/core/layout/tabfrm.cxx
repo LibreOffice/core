@@ -3257,64 +3257,69 @@ SwTwips SwTabFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
     return nDist;
 }
 
-void SwTabFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
+void SwTabFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
     sal_uInt8 nInvFlags = 0;
-    bool bAttrSetChg = pNew && RES_ATTRSET_CHG == pNew->Which();
+    bool bAttrSetChg = pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which();
 
-    if( bAttrSetChg )
+    if(bAttrSetChg)
     {
-        SfxItemIter aNIter( *static_cast<const SwAttrSetChg*>(pNew)->GetChgSet() );
-        SfxItemIter aOIter( *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
-        const SfxPoolItem* pNItem = aNIter.GetCurItem();
+        auto& rOldSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
+        auto& rNewSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pNew);
+        SfxItemIter aOIter(*rOldSetChg.GetChgSet());
+        SfxItemIter aNIter(*rNewSetChg.GetChgSet());
         const SfxPoolItem* pOItem = aOIter.GetCurItem();
-        SwAttrSetChg aOldSet( *static_cast<const SwAttrSetChg*>(pOld) );
-        SwAttrSetChg aNewSet( *static_cast<const SwAttrSetChg*>(pNew) );
+        const SfxPoolItem* pNItem = aNIter.GetCurItem();
+        SwAttrSetChg aOldSet(rOldSetChg);
+        SwAttrSetChg aNewSet(rNewSetChg);
         do
         {
             UpdateAttr_(pOItem, pNItem, nInvFlags, &aOldSet, &aNewSet);
             pNItem = aNIter.NextItem();
             pOItem = aOIter.NextItem();
-        } while (pNItem);
-        if ( aOldSet.Count() || aNewSet.Count() )
-            SwLayoutFrame::Modify( &aOldSet, &aNewSet );
+        } while(pNItem);
+        if(aOldSet.Count() || aNewSet.Count())
+            SwLayoutFrame::Modify(&aOldSet, &aNewSet);
     }
     else
-        UpdateAttr_( pOld, pNew, nInvFlags );
+        UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, nInvFlags);
 
-    if ( nInvFlags == 0 )
+    if(nInvFlags == 0)
         return;
 
-    SwPageFrame *pPage = FindPageFrame();
-    InvalidatePage( pPage );
-    if ( nInvFlags & 0x02 )
+    SwPageFrame* pPage = FindPageFrame();
+    InvalidatePage(pPage);
+    if(nInvFlags & 0x02)
         InvalidatePrt_();
-    if ( nInvFlags & 0x40 )
+    if(nInvFlags & 0x40)
         InvalidatePos_();
-    SwFrame *pTmp = GetIndNext();
-    if ( nullptr != pTmp )
+    SwFrame* pTmp = GetIndNext();
+    if(nullptr != pTmp)
     {
-        if ( nInvFlags & 0x04 )
+        if(nInvFlags & 0x04)
         {
             pTmp->InvalidatePrt_();
-            if ( pTmp->IsContentFrame() )
-                pTmp->InvalidatePage( pPage );
+            if(pTmp->IsContentFrame())
+                pTmp->InvalidatePage(pPage);
         }
-        if ( nInvFlags & 0x10 )
+        if(nInvFlags & 0x10)
             pTmp->SetCompletePaint();
     }
-    if ( nInvFlags & 0x08 && nullptr != (pTmp = GetPrev()) )
+    if(nInvFlags & 0x08 && nullptr != (pTmp = GetPrev()))
     {
         pTmp->InvalidatePrt_();
-        if ( pTmp->IsContentFrame() )
+        if(pTmp->IsContentFrame())
             pTmp->InvalidatePage( pPage );
     }
-    if ( nInvFlags & 0x20  )
+    if(nInvFlags & 0x20)
     {
-        if ( pPage && pPage->GetUpper() && !IsFollow() )
+        if(pPage && pPage->GetUpper() && !IsFollow())
             static_cast<SwRootFrame*>(pPage->GetUpper())->InvalidateBrowseWidth();
     }
-    if ( nInvFlags & 0x80 )
+    if(nInvFlags & 0x80)
         InvalidateNextPos();
 }
 

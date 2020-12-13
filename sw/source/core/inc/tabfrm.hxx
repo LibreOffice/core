@@ -27,7 +27,7 @@ class SwBorderAttrs;
 class SwAttrSetChg;
 
 /// SwTabFrame is one table in the document layout, containing rows (which contain cells).
-class SwTabFrame: public SwLayoutFrame, public SwFlowFrame
+class SwTabFrame final: public SwLayoutFrame, public SwFlowFrame
 {
     friend void CalcContent( SwLayoutFrame *pLay, bool bNoColl );
 
@@ -105,10 +105,9 @@ class SwTabFrame: public SwLayoutFrame, public SwFlowFrame
     virtual void DestroyImpl() override;
     virtual ~SwTabFrame() override;
 
-protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
     // only changes the Framesize, not the PrtArea size
     virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
 
