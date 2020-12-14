@@ -20,6 +20,7 @@
 #include "vclpixelprocessor2d.hxx"
 #include "vclhelperbufferdevice.hxx"
 #include "helperwrongspellrenderer.hxx"
+#include <comphelper/lok.hxx>
 
 #include <sal/log.hxx>
 #include <vcl/BitmapBasicMorphologyFilter.hxx>
@@ -695,31 +696,50 @@ void VclPixelProcessor2D::processControlPrimitive2D(
 
         if (xNewGraphics.is())
         {
-            // link graphics and view
-            xControlView->setGraphics(xNewGraphics);
-
-            // get position
-            const basegfx::B2DHomMatrix aObjectToPixel(maCurrentTransformation
-                                                       * rControlPrimitive.getTransform());
-            const basegfx::B2DPoint aTopLeftPixel(aObjectToPixel * basegfx::B2DPoint(0.0, 0.0));
-
             // find out if the control is already visualized as a VCL-ChildWindow. If yes,
             // it does not need to be painted at all.
             uno::Reference<awt::XWindow2> xControlWindow(rXControl, uno::UNO_QUERY_THROW);
-            const bool bControlIsVisibleAsChildWindow(rXControl->getPeer().is()
-                                                      && xControlWindow->isVisible());
+            bool bControlIsVisibleAsChildWindow(rXControl->getPeer().is()
+                                                && xControlWindow->isVisible());
+
+            // tdf#131281 The FormControls are not painted when using the Tiled Rendering for a simple
+            // reason: when e.g. bControlIsVisibleAsChildWindow is true. This is the case because the
+            // office is in non-layout mode (default for controls at startup). For the common office
+            // this means that there exists a real VCL-System-Window for the control, so it is *not*
+            // painted here due to being exactly obscured by that real Window (and creates danger of
+            // flickering, too).
+            // Tiled Rendering clients usually do *not* have real VCL-Windows for the controls, but
+            // exactly that would be needed on each client displaying the tiles (what would be hard
+            // to do but also would have advantages - the clients would have real controls in the
+            //  shape of their traget system which could be interacted with...). It is also what the
+            // office does.
+            // For now, fallback to just render these controls when Tiled Rendering is active to just
+            // have them displayed on all clients.
+            if (bControlIsVisibleAsChildWindow && comphelper::LibreOfficeKit::isActive())
+            {
+                // Do force paint when we are in Tiled Renderer and FormControl is 'visible'
+                bControlIsVisibleAsChildWindow = false;
+            }
 
             if (!bControlIsVisibleAsChildWindow)
             {
-                // draw it. Do not forget to use the evtl. offsetted origin of the target device,
+                // Needs to be drawn. Link new graphics and view
+                xControlView->setGraphics(xNewGraphics);
+
+                // get position
+                const basegfx::B2DHomMatrix aObjectToPixel(maCurrentTransformation
+                                                           * rControlPrimitive.getTransform());
+                const basegfx::B2DPoint aTopLeftPixel(aObjectToPixel * basegfx::B2DPoint(0.0, 0.0));
+
+                // Do not forget to use the evtl. offsetted origin of the target device,
                 // e.g. when used with mask/transparence buffer device
                 const Point aOrigin(mpOutputDevice->GetMapMode().GetOrigin());
                 xControlView->draw(aOrigin.X() + basegfx::fround(aTopLeftPixel.getX()),
                                    aOrigin.Y() + basegfx::fround(aTopLeftPixel.getY()));
-            }
 
-            // restore original graphics
-            xControlView->setGraphics(xOriginalGraphics);
+                // restore original graphics
+                xControlView->setGraphics(xOriginalGraphics);
+            }
         }
     }
     catch (const uno::Exception&)
