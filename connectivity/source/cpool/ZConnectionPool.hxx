@@ -142,7 +142,7 @@ namespace connectivity
         void invalidatePooledConnections();
     };
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZCONNECTIONPOOL_HXX
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
