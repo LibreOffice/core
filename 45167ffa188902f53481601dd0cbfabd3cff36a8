@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "513fc85e_7877847f",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-14T14:50:48Z",
+      "side": 1,
+      "message": "\u003e If we are going to add this function here, it should be LIBO_INTERNAL_ONLY.\n\n(Had missed that this was already in a larger LIBO_INTERNAL_ONLY block anyway.)",
+      "parentUuid": "648f3eb6_e58a5018",
+      "revId": "45167ffa188902f53481601dd0cbfabd3cff36a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "62b93a13_59614a22",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 21
