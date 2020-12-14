@@ -347,8 +347,6 @@ DdeService* DdeInternal::FindService( HSZ hService )
 DdeTopic* DdeInternal::FindTopic( DdeService& rService, HSZ hTopic )
 {
     std::vector<DdeTopic*> &rTopics = rService.aTopics;
-    DdeInstData* pInst = ImpGetInstData();
-    assert(pInst);
 
     auto iter = std::find_if(rTopics.begin(), rTopics.end(),
         [&hTopic](const DdeTopic* pTopic) { return *pTopic->pName == hTopic; });
