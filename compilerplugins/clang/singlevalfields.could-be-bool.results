@@ -1,6 +1,3 @@
-chart2/source/view/inc/PlottingPositionHelper.hxx:205
-    chart::PolarPlottingPositionHelper m_fRadiusOffset
-    double
 connectivity/source/inc/dbase/dindexnode.hxx:120
     connectivity::dbase::ONDXPage bNoDelete
     unsigned int
@@ -22,9 +19,9 @@ filter/source/graphicfilter/eps/eps.cxx:140
 include/opencl/openclwrapper.hxx:46
     openclwrapper::GPUEnv mnIsUserCreated
     int
-include/svtools/ruler.hxx:622
+include/svtools/ruler.hxx:621
     Ruler mnBorderWidth
-    long
+    tools::Long
 include/tools/ref.hxx:126
     SvRefBase bNoDelete
     unsigned int
@@ -33,17 +30,17 @@ include/vbahelper/vbapagesetupbase.hxx:50
     sal_Int32
 include/vcl/headbar.hxx:208
     HeaderBar mnBorderOff1
-    long
+    tools::Long
 include/vcl/headbar.hxx:209
     HeaderBar mnBorderOff2
-    long
-include/vcl/toolkit/dialog.hxx:52
+    tools::Long
+include/vcl/toolkit/dialog.hxx:54
     Dialog mnMousePositioned
-    long
-jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:190
+    tools::Long
+jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:191
     (anonymous) g_bInGetJavaVM
     sig_atomic_t
-libreofficekit/source/gtk/tilebuffer.hxx:227
+libreofficekit/source/gtk/tilebuffer.hxx:232
     LOEvent m_nSetGraphicSelectionType
     int
 sal/rtl/cipher.cxx:113
@@ -57,17 +54,17 @@ sc/source/filter/inc/stylesbuffer.hxx:291
     sal_Int32
 sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1083
     (anonymous namespace)::ScPagePreviewCountData nHeaders
-    long
+    tools::Long
 sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1084
     (anonymous namespace)::ScPagePreviewCountData nTables
-    long
+    tools::Long
 sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1086
     (anonymous namespace)::ScPagePreviewCountData nFooters
-    long
-sc/source/ui/vba/vbahyperlink.hxx:83
+    tools::Long
+sc/source/ui/vba/vbahyperlink.hxx:84
     ScVbaHyperlink mnType
-    long
-sd/qa/unit/tiledrendering/tiledrendering.cxx:853
+    tools::Long
+sd/qa/unit/tiledrendering/tiledrendering.cxx:854
     (anonymous namespace)::ViewCallback m_nPart
     int
 soltools/cpp/_tokens.c:35
@@ -82,13 +79,13 @@ soltools/cpp/cpp.h:121
 svx/source/inc/cell.hxx:202
     sdr::table::Cell mnCellContentType
     css::table::CellContentType
-svx/source/table/tablertfimporter.cxx:55
+svx/source/table/tablertfimporter.cxx:56
     sdr::table::(anonymous namespace)::RTFCellDefault mnRowSpan
     sal_Int32
-sw/source/filter/ww8/docxexport.hxx:99
+sw/source/filter/ww8/docxexport.hxx:98
     DocxExport m_nHeadersFootersInSection
     sal_Int32
-sw/source/filter/ww8/ww8scan.hxx:58
+sw/source/filter/ww8/ww8scan.hxx:57
     SprmInfo nVari
     unsigned int
 sw/source/uibase/inc/tautofmt.hxx:48
@@ -97,7 +94,7 @@ sw/source/uibase/inc/tautofmt.hxx:48
 vcl/inc/unx/i18n_ic.hxx:32
     SalI18N_InputContext mbUseable
     int
-vcl/inc/unx/salframe.h:127
+vcl/inc/unx/salframe.h:126
     X11SalFrame mbInputFocus
     int
 vcl/unx/generic/app/saldata.cxx:449
@@ -109,12 +106,12 @@ vcl/unx/generic/app/saldata.cxx:502
 vcl/unx/generic/app/sm.cxx:184
     /home/noel/libo2/vcl/unx/generic/app/sm.cxx nSmDel
     int
-vcl/workben/icontest.cxx:147
+vcl/workben/icontest.cxx:145
     (anonymous namespace)::IconTestApp nRet
     int
 workdir/LexTarget/l10ntools/source/cfglex.cxx:2293
     /home/noel/libo2/workdir/LexTarget/l10ntools/source/cfglex.cxx bText
     int
-writerfilter/source/dmapper/PageBordersHandler.hxx:50
+writerfilter/source/dmapper/PageBordersHandler.hxx:48
     writerfilter::dmapper::PageBordersHandler m_eOffsetFrom
     class SectionPropertyMap::BorderOffsetFrom

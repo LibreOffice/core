@@ -338,9 +338,6 @@ void OpenGLContext::reset()
 
     OpenGLZone aZone;
 
-    // reset the clip region
-    maClipRegion.SetEmpty();
-
     if( isCurrent() )
         resetCurrent();
 

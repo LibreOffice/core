@@ -38,12 +38,9 @@ void ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if (const ScPaintHint* pPaintHint = dynamic_cast<const ScPaintHint*>(&rHint))
     {
-        if ( pPaintHint->GetPrintFlag() )
-        {
-            PaintPartFlags nParts = pPaintHint->GetParts();
-            if (nParts & ( PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size ))
-                bDataChanged = true;
-        }
+        PaintPartFlags nParts = pPaintHint->GetParts();
+        if (nParts & ( PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size ))
+            bDataChanged = true;
     }
     else
     {
