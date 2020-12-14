@@ -266,6 +266,7 @@ static bool implMakeAbsoluteURL(OUString & _rsPathOrURL)
     return bURL && implEnsureAbsolute(_rsPathOrURL);
 }
 
+#if !defined NDEBUG
 static PathStatus dbgCheckStatusOfURL(OUString const& _sURL)
 {
     using namespace osl;
@@ -274,6 +275,7 @@ static PathStatus dbgCheckStatusOfURL(OUString const& _sURL)
 
     return implCheckStatusOfURL(_sURL,aDirItem);
 }
+#endif
 
 static PathStatus checkStatusAndNormalizeURL(OUString & _sURL)
 {
@@ -325,7 +327,7 @@ static PathStatus getDerivedPath(
             aStatus = checkStatusAndNormalizeURL(sDerivedURL);
 
         else // the relative appendix must be valid
-            OSL_ASSERT(aStatus != Bootstrap::PATH_VALID || dbgCheckStatusOfURL(sDerivedURL) == Bootstrap::PATH_VALID);
+            assert(aStatus != Bootstrap::PATH_VALID || dbgCheckStatusOfURL(sDerivedURL) == Bootstrap::PATH_VALID);
 
         _rData.getFrom(_sBootstrapParameter, _rURL, sDerivedURL);
 
