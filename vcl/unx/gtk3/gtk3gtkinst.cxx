@@ -26,6 +26,7 @@
 #include <unx/gtk/gtksalmenu.hxx>
 #include <headless/svpvd.hxx>
 #include <headless/svpbmp.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/inputtypes.hxx>
 #include <vcl/transfer.hxx>
 #include <unx/genpspgraphics.h>
@@ -8104,10 +8105,26 @@ public:
 #if GTK_CHECK_VERSION(3,22,0)
         if (gtk_check_version(3, 22, 0) == nullptr)
         {
-            GdkRectangle aRect{static_cast<int>(rRect.Left()), static_cast<int>(rRect.Top()),
-                               static_cast<int>(rRect.GetWidth()), static_cast<int>(rRect.GetHeight())};
-            if (SwapForRTL(pWidget))
-                aRect.x = gtk_widget_get_allocated_width(pWidget) - aRect.width - 1 - aRect.x;
+            GdkRectangle aRect;
+            if (GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pWidget))
+            {
+                // this is the relatively unusual case where pParent is the toplevel GtkSalFrame and not a stock GtkWidget
+                // so use the same style of logic as GtkSalMenu::ShowNativePopupMenu to get the right position
+                tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(pFrame->GetWindow(), rRect);
+                aFloatRect.Move(-pFrame->maGeometry.nX, -pFrame->maGeometry.nY);
+
+                aRect = GdkRectangle{static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
+                                     static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
+
+                pWidget = pFrame->getMouseEventWidget();
+            }
+            else
+            {
+                aRect = GdkRectangle{static_cast<int>(rRect.Left()), static_cast<int>(rRect.Top()),
+                                     static_cast<int>(rRect.GetWidth()), static_cast<int>(rRect.GetHeight())};
+                if (SwapForRTL(pWidget))
+                    aRect.x = gtk_widget_get_allocated_width(pWidget) - aRect.width - 1 - aRect.x;
+            }
 
             // Send a keyboard event through gtk_main_do_event to toggle any active tooltip offs
             // before trying to launch the menu
