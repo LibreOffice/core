@@ -93,6 +93,8 @@ gb_AFLAGS := $(AFLAGS)
 # C4275: non-DLL-interface classkey 'identifier' used as base for
 #   DLL-interface classkey 'identifier'
 
+# C4505: 'function' : unreferenced local function has been removed
+
 # C4611: interaction between 'function' and C++ object destruction is
 #   non-portable
 
@@ -110,6 +112,7 @@ gb_CFLAGS := \
 	-nologo \
 	-W4 \
 	-wd4244 \
+	-wd4505 \
 
 gb_CXXFLAGS_DISABLE_WARNINGS = -w
 
