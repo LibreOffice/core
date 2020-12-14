@@ -1957,7 +1957,7 @@ static bool hasA11yRelevantAttribute( const std::vector<sal_uInt16>& rWhichFmtAt
 // as their implementation of SwClientNotify is SwClient's which calls Modify.
 // Therefore we also don't need to call SwClient::SwClientNotify(rModify, rHint)
 // because that's all it does, and this implementation calls
-// SwContentFrame::SwClientNotifyy() when appropriate.
+// SwContentFrame::SwClientNotify() when appropriate.
 void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
 {
     SfxPoolItem const* pOld(nullptr);
