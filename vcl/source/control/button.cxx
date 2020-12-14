@@ -236,6 +236,8 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
         tools::Rectangle textRect = GetTextRect(
             tools::Rectangle(Point(), Size(0x7fffffff, 0x7fffffff)), aText, nTextStyle);
         // If the button text doesn't fit into it, put it into a tooltip (might happen in sidebar)
+        if (GetQuickHelpText()!= aText)
+            SetQuickHelpText("");
         if (GetQuickHelpText().isEmpty() && textRect.getWidth() > rSize.getWidth())
             SetQuickHelpText(aText);
 
