@@ -69,7 +69,7 @@ bool SvxTableShape::setPropertyValueImpl(
     case OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN:
     case OWN_ATTR_TABLETEMPLATE_LASTCOLUMN:
     case OWN_ATTR_TABLETEMPLATE_BANDINGROWS:
-    case OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS:
+    case OWN_ATTR_TABLETEMPLATE_BANDINGCOLUMNS:
     {
         if( HasSdrObject() )
         {
@@ -82,7 +82,7 @@ bool SvxTableShape::setPropertyValueImpl(
             case OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN:        rValue >>= aSettings.mbUseFirstColumn; break;
             case OWN_ATTR_TABLETEMPLATE_LASTCOLUMN:         rValue >>= aSettings.mbUseLastColumn; break;
             case OWN_ATTR_TABLETEMPLATE_BANDINGROWS:        rValue >>= aSettings.mbUseRowBanding; break;
-            case OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS:    rValue >>= aSettings.mbUseColumnBanding; break;
+            case OWN_ATTR_TABLETEMPLATE_BANDINGCOLUMNS:    rValue >>= aSettings.mbUseColumnBanding; break;
             }
 
             static_cast< sdr::table::SdrTableObj* >( GetSdrObject() )->setTableStyleSettings(aSettings);
@@ -134,7 +134,7 @@ bool SvxTableShape::getPropertyValueImpl(
     case OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN:
     case OWN_ATTR_TABLETEMPLATE_LASTCOLUMN:
     case OWN_ATTR_TABLETEMPLATE_BANDINGROWS:
-    case OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS:
+    case OWN_ATTR_TABLETEMPLATE_BANDINGCOLUMNS:
     {
         if( HasSdrObject() )
         {
@@ -147,7 +147,7 @@ bool SvxTableShape::getPropertyValueImpl(
             case OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN:        rValue <<= aSettings.mbUseFirstColumn; break;
             case OWN_ATTR_TABLETEMPLATE_LASTCOLUMN:         rValue <<= aSettings.mbUseLastColumn; break;
             case OWN_ATTR_TABLETEMPLATE_BANDINGROWS:        rValue <<= aSettings.mbUseRowBanding; break;
-            case OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS:    rValue <<= aSettings.mbUseColumnBanding; break;
+            case OWN_ATTR_TABLETEMPLATE_BANDINGCOLUMNS:    rValue <<= aSettings.mbUseColumnBanding; break;
             }
         }
 

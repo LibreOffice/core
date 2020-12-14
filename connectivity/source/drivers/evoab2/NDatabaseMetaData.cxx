@@ -277,7 +277,7 @@ ODatabaseMetaDataResultSet::ORows OEvoabDatabaseMetaData::getColumnRows( const O
     aRow[11] = new ORowSetValueDecorator(s_nNULLABLE);
     // REMARKS
     aRow[12] = ODatabaseMetaDataResultSet::getEmptyValue();
-    // COULUMN_DEF, not used
+    // COLUMN_DEF, not used
     aRow[13] = ODatabaseMetaDataResultSet::getEmptyValue();
     // SQL_DATA_TYPE, not used
     aRow[14] = ODatabaseMetaDataResultSet::getEmptyValue();
