@@ -3312,7 +3312,9 @@ if test $_os = Darwin; then
 
     AC_MSG_CHECKING([whether to create a Mac App Store package])
 
-    if test -n "$enable_macosx_package_signing" -a -z "$MACOSX_CODESIGNING_IDENTITY"; then
+    if test -z "$enable_macosx_package_signing" || test "$enable_macosx_package_signing" == no; then
+        AC_MSG_RESULT([no])
+    elif test -z "$MACOSX_CODESIGNING_IDENTITY"; then
         AC_MSG_ERROR([You forgot --enable-macosx-code-signing])
     elif test "$enable_macosx_package_signing" = yes; then
         # By default use the first suitable certificate.
@@ -3326,12 +3328,10 @@ if test $_os = Darwin; then
         else
             AC_MSG_ERROR([Could not find any suitable '3rd Party Mac Developer Installer' certificate])
         fi
-    elif test -n "$enable_macosx_package_signing"; then
+    else
         MACOSX_PACKAGE_SIGNING_IDENTITY=$enable_macosx_package_signing
         pretty_name=`security find-identity -v | grep "$MACOSX_PACKAGE_SIGNING_IDENTITY" | sed -e 's/^[[^"]]*"//' -e 's/"//'`
         AC_MSG_RESULT([yes, using the identity $MACOSX_PACKAGE_SIGNING_IDENTITY for $pretty_name])
-    else
-        AC_MSG_RESULT([no])
     fi
 
     if test -n "$MACOSX_CODESIGNING_IDENTITY" -a -n "$MACOSX_PACKAGE_SIGNING_IDENTITY" -a "$MACOSX_CODESIGNING_IDENTITY" = "$MACOSX_PACKAGE_SIGNING_IDENTITY"; then
