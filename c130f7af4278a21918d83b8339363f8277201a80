@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0431f9f_51b45578",
+        "filename": "vcl/win/dtrans/WinClipboard.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-14T07:23:36Z",
+      "side": 1,
+      "message": "eeek, two different mutexes in one function, and we\u0027re holding this one during the call to CDOTransferable::create",
+      "revId": "c130f7af4278a21918d83b8339363f8277201a80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38885141_75280eb5",
+        "filename": "vcl/win/dtrans/WinClipboard.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-14T07:23:36Z",
+      "side": 1,
+      "message": "appartment-\u003eapartment",
+      "revId": "c130f7af4278a21918d83b8339363f8277201a80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
