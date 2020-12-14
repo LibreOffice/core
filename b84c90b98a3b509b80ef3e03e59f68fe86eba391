@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0719708_8ba678c6",
+        "filename": "vcl/source/control/edit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2580,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-12-14T08:55:39Z",
+      "side": 1,
+      "message": "I got a segfault in here, when the OUStringBuffer length was 0, because it was calling into rtl_uString_newFromStr_WithLength in my backtrace. Happend when you open the options with the font replacement table with the 2nd patch in this patchset applied.",
+      "revId": "b84c90b98a3b509b80ef3e03e59f68fe86eba391",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
