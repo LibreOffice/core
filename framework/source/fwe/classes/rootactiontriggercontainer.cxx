@@ -206,8 +206,7 @@ sal_Bool SAL_CALL RootActionTriggerContainer::supportsService( const OUString& S
 
 Sequence< OUString > SAL_CALL RootActionTriggerContainer::getSupportedServiceNames()
 {
-    Sequence< OUString > seqServiceNames { SERVICENAME_ACTIONTRIGGERCONTAINER };
-    return seqServiceNames;
+    return { SERVICENAME_ACTIONTRIGGERCONTAINER };
 }
 
 // XUnoTunnel
