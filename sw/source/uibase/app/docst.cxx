@@ -554,6 +554,12 @@ public:
         ApplyHdl(nullptr);
     }
     VclPtr<SfxAbstractApplyTabDialog> m_pDlg;
+    // true if the document was initially modified before ApplyStyle was created
+    // or if ApplyStyle:::apply was called
+    bool DocIsModified() const
+    {
+        return m_bModified;
+    }
 private:
     SwDocShell &m_rDocSh;
     bool m_bNew;
@@ -632,6 +638,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
     if( !m_bModified )
     {
         pDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
+        m_bModified = true;
     }
 
     pWrtShell->EndAllAction();
@@ -906,7 +913,7 @@ void SwDocShell::Edit(
                                     && pStyle->IsUsed()
                                     && !pStyle->IsUserDefined();
 
-        pDlg->StartExecuteAsync([bIsDefaultPage, bModified, bNew, nFamily, nSlot, nNewStyleUndoId, pApplyStyleHelper, pRequest, xTmp, this](sal_Int32 nResult){
+        pDlg->StartExecuteAsync([bIsDefaultPage, bNew, nFamily, nSlot, nNewStyleUndoId, pApplyStyleHelper, pRequest, xTmp, this](sal_Int32 nResult){
             if (RET_OK == nResult)
                 pApplyStyleHelper->apply();
 
@@ -963,6 +970,8 @@ void SwDocShell::Edit(
                 m_pWrtShell->EndUndo(nNewStyleUndoId, &aRewriter);
             }
 
+            bool bDocModified = pApplyStyleHelper->DocIsModified();
+
             if (RET_OK != nResult)
             {
                 if (bNew)
@@ -971,7 +980,7 @@ void SwDocShell::Edit(
                     m_xDoc->GetIDocumentUndoRedo().ClearRedo();
                 }
 
-                if (!bModified)
+                if (!bDocModified)
                     m_xDoc->getIDocumentState().ResetModified();
             }
 
@@ -987,7 +996,7 @@ void SwDocShell::Edit(
             if (pRequest)
                 pRequest->Done();
 
-            if (bIsDefaultPage && bModified)
+            if (bIsDefaultPage && bDocModified)
             {
                 uno::Reference< style::XStyleFamiliesSupplier > xStyleFamSupp(GetModel(), uno::UNO_QUERY);
 
