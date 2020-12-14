@@ -155,6 +155,7 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
             // wait for SalYieldMutex::release() to set the condition
             osl::Condition::Result res = m_condition.wait();
             assert(osl::Condition::Result::result_ok == res);
+            (void) res;
         }
         while ( true );
     }
