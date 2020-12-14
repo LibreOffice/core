@@ -67,7 +67,8 @@ namespace
             osl::FileBase::getSystemPathFromFileURL(execdir, sExecDir);
 
             OStringBuffer aBuffer("<?xml version=\"1.0\"?>\n<fontconfig><dir>");
-            aBuffer.append(OUStringToOString(sExecDir + getExecutableName(), osl_getThreadTextEncoding())).append(".fonts");
+            aBuffer.append(OUStringToOString(sExecDir, osl_getThreadTextEncoding()))
+                   .append(OUStringToOString(getExecutableName(), osl_getThreadTextEncoding())).append(".fonts");
             aBuffer.append("</dir><cachedir>/tmp/cache/fontconfig</cachedir></fontconfig>");
             OString aConf = aBuffer.makeStringAndClear();
             sal_uInt64 aBytesWritten;
