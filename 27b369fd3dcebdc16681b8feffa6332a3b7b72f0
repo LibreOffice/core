@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9c110f5_7df40707",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1416,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-12-14T07:45:14Z",
+      "side": 1,
+      "message": "No way, really.\n\nThis is just like the original SolarMutex, before I included the std::abort() for underflows, which was ignoring them and \"hope nothing breaks\", which (obviously?) doesn\u0027t work.\n\nJust make it a rule, that SolarMutex must be held to query the clipboard content, if there is no other way around it.\n\nIt may need much more work to fix everything, like we had to fix quite a few crashes over a long time for rare code paths, which triggered the std::abort(), but there is no way around it.\n\nI\u0027ll try again to reproduce this deadlock and see, if I can find the origin. I still have the feeling, that something else eventually now forgot locking. And I\u0027ll have to re-check other platforms code.\n\nFWIW Qt5Clipboard::flushClipboard() is the only Qt5Clipboard function taking the SolarMutex.",
+      "revId": "27b369fd3dcebdc16681b8feffa6332a3b7b72f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
