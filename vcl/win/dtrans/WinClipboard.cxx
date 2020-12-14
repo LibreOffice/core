@@ -27,6 +27,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
+#include <tools/debug.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/datatransfer/clipboard/RenderingCapabilities.hpp>
 #include "XNotifyingDataObject.hxx"
@@ -243,7 +245,8 @@ void SAL_CALL CWinClipboard::removeClipboardListener(
 
 IMPL_LINK_NOARG(CWinClipboard, ClipboardContentChangedHdl, Timer*, void)
 {
-    m_foreignContent.clear();
+    DBG_TESTSOLARMUTEX();
+    SolarMutexReleaser aReleaser;
 
     if (rBHelper.bDisposed)
         return;
@@ -341,6 +344,8 @@ void WINAPI CWinClipboard::onWM_CLIPBOARDUPDATE()
 
     if (!s_pCWinClipbImpl)
         return;
+
+    s_pCWinClipbImpl->m_foreignContent.clear();
 
     if (!s_pCWinClipbImpl->m_aNotifyClipboardChangeIdle.IsActive())
         s_pCWinClipbImpl->m_aNotifyClipboardChangeIdle.Start();
