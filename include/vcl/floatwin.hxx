@@ -117,6 +117,7 @@ public:
                                                 sal_uInt16& rArrangeIndex, Point* pLOKTwipsPos = nullptr);
                    static Point     ImplConvertToAbsPos(vcl::Window* pReference, const Point& rPos);
                    static tools::Rectangle ImplConvertToAbsPos(vcl::Window* pReference, const tools::Rectangle& rRect);
+                   static tools::Rectangle ImplConvertToRelPos(vcl::Window* pReference, const tools::Rectangle& rRect);
     SAL_DLLPRIVATE void             ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPtr<vcl::Window>& xFocusId );
     SAL_DLLPRIVATE tools::Rectangle&       ImplGetItemEdgeClipRect();
     SAL_DLLPRIVATE bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }
