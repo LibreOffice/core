@@ -1442,7 +1442,6 @@ sal_uInt64 SvStream::remainingSize()
     sal_uInt64 const nCurr = Tell();
     sal_uInt64 const nEnd = TellEnd();
     sal_uInt64 nMaxAvailable = nEnd > nCurr ? (nEnd-nCurr) : 0;
-    Seek(nCurr);
     return nMaxAvailable;
 }
 
