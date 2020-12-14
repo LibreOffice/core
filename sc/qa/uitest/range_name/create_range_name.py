@@ -170,6 +170,17 @@ class CreateRangeNameTest(UITestCase):
         # and AssertionError: '=Sheet1.localRangeName' != '=localrangename'
         self.assertEqual("=Sheet1.localRangeName", get_cell_by_position(document, 0, 1, 0).getFormula())
 
+        self.ui_test.execute_dialog_through_command(".uno:DefineName")
+        xDialog = self.xUITest.getTopFocusWindow()
+
+        # tdf#138851: Without the fix in place, this test would have failed with
+        # AssertionError: 'Sheet1' != 'Document (Global)'
+        xScope = xDialog.getChild("scope")
+        self.assertEqual("Sheet1", get_state_as_dict(xScope)['SelectEntryText'])
+
+        xOkBtn = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOkBtn)
+
         self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
