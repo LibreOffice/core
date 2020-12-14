@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.38.1 -->
 <interface domain="editeng">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkMenu" id="menu">
@@ -10,6 +10,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="spellmenu|ignore">I_gnore All</property>
+        <property name="use_underline">True</property>
       </object>
     </child>
     <child>
@@ -19,7 +20,7 @@
         <property name="label" translatable="yes" context="spellmenu|insert">_Add to Dictionary</property>
         <property name="use_underline">True</property>
         <child type="submenu">
-          <object class="GtkMenu">
+          <object class="GtkMenu" id="insertmenu">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
@@ -55,7 +56,7 @@
         <property name="label" translatable="yes" context="spellmenu|autocorrect">AutoCorrect _To</property>
         <property name="use_underline">True</property>
         <child type="submenu">
-          <object class="GtkMenu">
+          <object class="GtkMenu" id="automenu">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
