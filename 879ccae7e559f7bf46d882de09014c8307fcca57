@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63c86afe_e9032898",
+        "filename": "starmath/source/mathmlimport.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-14T15:49:01Z",
+      "side": 1,
+      "message": "this functionality is already available through OUString::iterateCodePoints",
+      "revId": "879ccae7e559f7bf46d882de09014c8307fcca57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
