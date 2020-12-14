@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f1f4cde_f4b311a5",
+        "filename": "include/sfx2/strings.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-12-14T13:43:22Z",
+      "side": 1,
+      "message": "The existing message says:  \"Do you want to update style based formatting according to the modified template?\"",
+      "range": {
+        "startLine": 56,
+        "startChar": 152,
+        "endLine": 56,
+        "endChar": 238
+      },
+      "revId": "466d35488138cdb235996195578078923696d68c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f219d844_3f97aa71",
+        "filename": "include/sfx2/strings.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-12-14T13:43:22Z",
+      "side": 1,
+      "message": "The initial concern of tdf#138893",
+      "range": {
+        "startLine": 73,
+        "startChar": 83,
+        "endLine": 73,
+        "endChar": 127
+      },
+      "revId": "466d35488138cdb235996195578078923696d68c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5ebf8e0_f3be7883",
+        "filename": "include/sfx2/strings.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-12-14T13:43:22Z",
+      "side": 1,
+      "message": "Added \"s\" to exists.",
+      "range": {
+        "startLine": 74,
+        "startChar": 84,
+        "endLine": 74,
+        "endChar": 155
+      },
+      "revId": "466d35488138cdb235996195578078923696d68c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
