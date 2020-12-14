@@ -28,9 +28,11 @@ namespace test::oustringbuffer {
 
 class ToString: public CppUnit::TestFixture {
 private:
+    void testEmptyToString();
     void testToString();
 
     CPPUNIT_TEST_SUITE(ToString);
+    CPPUNIT_TEST(testEmptyToString);
     CPPUNIT_TEST(testToString);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -38,6 +40,12 @@ private:
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test::oustringbuffer::ToString);
+
+void test::oustringbuffer::ToString::testEmptyToString() {
+    OUStringBuffer sb;
+    OUString str = sb.toString();
+    CPPUNIT_ASSERT_EQUAL(OUString(), str);
+}
 
 void test::oustringbuffer::ToString::testToString() {
     OUStringBuffer sb("test string");
