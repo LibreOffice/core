@@ -26,6 +26,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
+#include <tools/debug.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/datatransfer/clipboard/RenderingCapabilities.hpp>
 #include "XNotifyingDataObject.hxx"
@@ -89,6 +91,9 @@ CWinClipboard::~CWinClipboard()
 
 uno::Reference<datatransfer::XTransferable> SAL_CALL CWinClipboard::getContents()
 {
+    DBG_TESTSOLARMUTEX();
+    SolarMutexReleaser aReleaser;
+
     osl::MutexGuard aGuard(m_aMutex);
 
     if (rBHelper.bDisposed)
@@ -242,7 +247,8 @@ void SAL_CALL CWinClipboard::removeClipboardListener(
 
 IMPL_LINK_NOARG(CWinClipboard, ClipboardContentChangedHdl, Timer*, void)
 {
-    m_foreignContent.clear();
+    DBG_TESTSOLARMUTEX();
+    SolarMutexReleaser aReleaser;
 
     if (rBHelper.bDisposed)
         return;
@@ -260,7 +266,11 @@ IMPL_LINK_NOARG(CWinClipboard, ClipboardContentChangedHdl, Timer*, void)
     try
     {
         cppu::OInterfaceIteratorHelper iter(*pICHelper);
-        uno::Reference<datatransfer::XTransferable> rXTransf(getContents());
+        uno::Reference<datatransfer::XTransferable> rXTransf;
+        {
+            SolarMutexGuard aGuard;
+            rXTransf.set(getContents());
+        }
         datatransfer::clipboard::ClipboardEvent aClipbEvent(static_cast<XClipboard*>(this),
                                                             rXTransf);
 
@@ -340,6 +350,8 @@ void WINAPI CWinClipboard::onWM_CLIPBOARDUPDATE()
 
     if (!s_pCWinClipbImpl)
         return;
+
+    s_pCWinClipbImpl->m_foreignContent.clear();
 
     if (!s_pCWinClipbImpl->m_aNotifyClipboardChangeIdle.IsActive())
         s_pCWinClipbImpl->m_aNotifyClipboardChangeIdle.Start();
