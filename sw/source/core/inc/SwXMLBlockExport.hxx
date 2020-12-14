@@ -44,7 +44,7 @@ public:
 class SwXMLTextBlockExport : public SvXMLExport
 {
 private:
-    SwXMLTextBlocks &rBlockList;
+    SwXMLTextBlocks &m_rBlockList;
 
 public:
     SwXMLTextBlockExport(
