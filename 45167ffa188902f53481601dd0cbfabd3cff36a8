@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "b2ae9aad_03fa9c2a",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-14T15:46:16Z",
+      "side": 1,
+      "message": "\u003e I prefer to keep changes separated. However, here it is.\n\nKeeping changes separate is generally fine.  But introducing a function needs a motivation, and that motivation needs to be known when reviewing the function.\n\n\u003e It will be on mathml import, for identifying unicode 32 opperators.\n\u003e Right now I can\u0027t take it much farther, there\u0027s more ground work to do about it.\n\u003e \n\u003e A text with one single codepoint is an opperator.\n\u003e There is this mathematical operator bloc: \n\u003e Mathbb \u0026 Fractur: https://www.unicode.org/charts/PDF/U1D400.pdf\n\u003e Those are the most important because mathmlvsupports them, but not LO.\n\nSorry, I don\u0027t understand your changes to starmath/source/mathmlimport.cxx out of context, or your above explanation.  (If you see the need to add a function to OUString, then please introduce it in the context of the change that would use it, with a proper commit message detailing the commit\u0027s main change.  That may feel counter-intuitive to keeping changes separate, but it really is the only way to meaningfully review such additions.)\n\n\u003e This stills a little distant in the future since first there is opensymbol2, using unicode 32 on starmath tokens, ... But prefer to apply all changes to OUString in one go.\n\nIf you don\u0027t need the functionality now, then don\u0027t add it now.  That only causes unnecessary work for reviewers.",
+      "parentUuid": "6f01c955_3dd2de95",
+      "revId": "45167ffa188902f53481601dd0cbfabd3cff36a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62b93a13_59614a22",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 21
@@ -219,6 +237,24 @@
     },
     {
       "key": {
+        "uuid": "b33d4ca7_01d6c304",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-14T15:46:16Z",
+      "side": 1,
+      "message": "...for which a sal_Unicode/char16_t u\"...\" string literal will work just fine?",
+      "parentUuid": "cbd609cf_c0d9a20b",
+      "revId": "45167ffa188902f53481601dd0cbfabd3cff36a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "226e35e7_38faef1e",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 21
@@ -254,6 +290,30 @@
       "side": 1,
       "message": "I can\u0027t count codepoints if it is null pointer, it will generate a memory error.\nCome from C where there is no throwing of exceptions, so don\u0027t know them. If there is one more suited I\u0027ll change it.",
       "parentUuid": "226e35e7_38faef1e",
+      "range": {
+        "startLine": 312,
+        "startChar": 8,
+        "endLine": 312,
+        "endChar": 44
+      },
+      "revId": "45167ffa188902f53481601dd0cbfabd3cff36a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4413d49a_6e6852f9",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-14T15:46:16Z",
+      "side": 1,
+      "message": "value being non-null should apparently be a precondition of the function (you can check it with assert, but it makes no sense to broaden the function\u0027s interface and treat null with a bad_alloc)",
+      "parentUuid": "7917d585_0e610d63",
       "range": {
         "startLine": 312,
         "startChar": 8,
