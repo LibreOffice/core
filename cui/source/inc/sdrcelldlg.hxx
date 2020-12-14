@@ -22,6 +22,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/xtable.hxx>
+#include <svx/tabarea.hxx>
 
 class SdrModel;
 class SvxFormatCellsDialog : public SfxTabDialogController
@@ -30,6 +31,7 @@ private:
     const SfxItemSet&   mrOutAttrs;
 
     XColorListRef       mpColorTab;
+    ChangeType          mnColorTabState;
     XGradientListRef    mpGradientList;
     XHatchListRef       mpHatchingList;
     XBitmapListRef      mpBitmapList;

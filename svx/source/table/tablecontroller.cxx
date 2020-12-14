@@ -925,6 +925,18 @@ void SvxTableController::onFormatTable(const SfxRequest& rReq)
     aNewAttr.Put( aBoxItem );
     aNewAttr.Put( aBoxInfoItem );
 
+    // Fill in shadow properties.
+    const SfxItemSet& rTableItemSet = rTableObj.GetMergedItemSet();
+    for (sal_uInt16 nWhich = SDRATTR_SHADOW_FIRST; nWhich <= SDRATTR_SHADOW_LAST; ++nWhich)
+    {
+        if (rTableItemSet.GetItemState(nWhich, false) != SfxItemState::SET)
+        {
+            continue;
+        }
+
+        aNewAttr.Put(rTableItemSet.Get(nWhich));
+    }
+
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     VclPtr<SfxAbstractTabDialog> xDlg( pFact->CreateSvxFormatCellsDialog(
         rReq.GetFrameWeld(),
