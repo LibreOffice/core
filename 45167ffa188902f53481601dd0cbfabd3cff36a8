@@ -255,6 +255,24 @@
     },
     {
       "key": {
+        "uuid": "3bc6b180_c812cc40",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-14T16:54:09Z",
+      "side": 1,
+      "message": "I got things like: U\"\\U0001D49F\"\nI don\u0027t have knowledge of guarantees of correct split.",
+      "parentUuid": "b33d4ca7_01d6c304",
+      "revId": "45167ffa188902f53481601dd0cbfabd3cff36a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "226e35e7_38faef1e",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 21
@@ -323,6 +341,30 @@
       "revId": "45167ffa188902f53481601dd0cbfabd3cff36a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41be7535_e2b0252b",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-14T16:54:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4413d49a_6e6852f9",
+      "range": {
+        "startLine": 312,
+        "startChar": 8,
+        "endLine": 312,
+        "endChar": 44
+      },
+      "revId": "45167ffa188902f53481601dd0cbfabd3cff36a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

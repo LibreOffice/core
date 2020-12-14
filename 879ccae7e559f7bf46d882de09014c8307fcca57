@@ -16,6 +16,24 @@
       "revId": "879ccae7e559f7bf46d882de09014c8307fcca57",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35129e82_76ae8e42",
+        "filename": "starmath/source/mathmlimport.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-14T16:54:09Z",
+      "side": 1,
+      "message": "Missundertood what it was.\nI still don\u0027t get how it works, but gonna find out, mathml won\u0027t work untill it\u0027s fine.",
+      "parentUuid": "63c86afe_e9032898",
+      "revId": "879ccae7e559f7bf46d882de09014c8307fcca57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
