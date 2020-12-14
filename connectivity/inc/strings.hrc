@@ -17,22 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_STRINGS_HRC
-#define CONNECTIVITY_STRINGS_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
-// = the mozab driver's resource strings
-#define STR_ERR_EXECUTING_QUERY                 NC_("STR_ERR_EXECUTING_QUERY", "An error occurred while executing the query.")
-#define STR_QUERY_AT_LEAST_ONE_TABLES           NC_("STR_QUERY_AT_LEAST_ONE_TABLES", "The query can not be executed. It needs at least one table.")
-#define STR_NO_COUNT_SUPPORT                    NC_("STR_NO_COUNT_SUPPORT", "The driver does not support the 'COUNT' function.")
-#define STR_STMT_TYPE_NOT_SUPPORTED             NC_("STR_STMT_TYPE_NOT_SUPPORTED", "This statement type not supported by this database driver.")
-#define STR_UNSPECIFIED_ERROR                   NC_("STR_UNSPECIFIED_ERROR", "An unknown error occurred.")
-#define STR_ERROR_REFRESH_ROW                   NC_("STR_ERROR_REFRESH_ROW", "An error occurred while refreshing the current row.")
-#define STR_ERROR_GET_ROW                       NC_("STR_ERROR_GET_ROW", "An error occurred while getting the current row.")
-#define STR_QUERY_INVALID_IS_NULL_COLUMN        NC_("STR_QUERY_INVALID_IS_NULL_COLUMN", "The query can not be executed. The 'IS NULL' can only be used with a column name.")
-#define STR_ILLEGAL_MOVEMENT                    NC_("STR_ILLEGAL_MOVEMENT", "Illegal cursor movement occurred.")
-#define STR_COMMIT_ROW                          NC_("STR_COMMIT_ROW", "Please commit row '$position$' before update rows or insert new rows.")
 // = common strings
 #define STR_NO_CONNECTION_GIVEN                 NC_("STR_NO_CONNECTION_GIVEN", "No connection to the database exists.")
 #define STR_WRONG_PARAM_INDEX                   NC_("STR_WRONG_PARAM_INDEX", "You tried to set a parameter at position '$pos$' but there is/are only '$count$' parameter(s) allowed. One reason may be that the property \"ParameterNameSubstitution\" is not set to TRUE in the data source.")
@@ -138,7 +126,5 @@
 #define STR_DB_NOT_CONNECTED                    NC_("STR_DB_NOT_CONNECTED", "No connection to the database exists.")
 #define STR_AB_ADDRESSBOOK_NOT_FOUND            NC_("STR_AB_ADDRESSBOOK_NOT_FOUND", "No $1$ exists.")
 #define STR_DATA_CANNOT_SELECT_UNFILTERED       NC_("STR_DATA_CANNOT_SELECT_UNFILTERED", "Unable to display the complete table content. Please apply a filter.")
-
-#endif // CONNECTIVITY_RESOURCE_MOZAB_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

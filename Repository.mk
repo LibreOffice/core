@@ -43,7 +43,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	localize \
 	makedepend \
 	mbsdiff \
-	mork_helper \
 	osl_process_child \
 	pdf2xml \
 	pdfunzip \
@@ -384,8 +383,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(MERGELIBS),merged) \
 	migrationoo2 \
 	migrationoo3 \
-	mork \
-	mozbootstrap \
 	msfilter \
 	$(call gb_Helper_optional,SCRIPTING,msforms) \
 	mtfrenderer \
