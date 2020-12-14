@@ -62,8 +62,10 @@ void WinSalTimer::ImplStop()
 
 void WinSalTimer::ImplStart( sal_uInt64 nMS )
 {
+#if !defined NDEBUG
     SalData* pSalData = GetSalData();
     assert( !pSalData->mpInstance || pSalData->mnAppThreadId == GetCurrentThreadId() );
+#endif
 
     // DueTime parameter is a DWORD, which is always an unsigned 32bit
     if (nMS > SAL_MAX_UINT32)
