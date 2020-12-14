@@ -79,6 +79,7 @@
 #include <vcl/pngwrite.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/syswin.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/wrkwin.hxx>
