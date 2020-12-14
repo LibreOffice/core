@@ -88,6 +88,24 @@
       "revId": "27b369fd3dcebdc16681b8feffa6332a3b7b72f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6766a4a9_8e5ec466",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1416,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-14T08:27:08Z",
+      "side": 1,
+      "message": "And yes, I don\u0027t think that a rule to hold the solar mutex would work here. Main thread already owns it in this case; and trying to acquire the mutex earlier in the clipboard thread (I suppose not what you proposed; writing just in case) would not change things here.",
+      "parentUuid": "25e5caae_c70d8cbd",
+      "revId": "27b369fd3dcebdc16681b8feffa6332a3b7b72f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
