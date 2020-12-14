@@ -393,6 +393,7 @@ public:
     void ScrollStateChange();
 
     OutputDevice&   GetOutputDevice() const;
+    weld::Widget*   GetPopupParent(tools::Rectangle& rRect) const;
     vcl::Window*    GetWindow() const           { return pOutWin; }
 
     void            SetSelectionMode( EESelectionMode eMode );
