@@ -202,13 +202,10 @@ ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalet
 // Ideally LO should move to RGBA bitmaps. Until then, try to be faster with 1bpp bitmaps.
 typedef void(*WriteColorFunction)( sal_uInt8 color8Bit, sal_uInt8*& dst );
 void writeColorA8(sal_uInt8 color8Bit, sal_uInt8*& dst ) { *dst++ = color8Bit; };
-void writeColorRGB(sal_uInt8 color8Bit, sal_uInt8*& dst ) { *dst++ = color8Bit; *dst++ = color8Bit; *dst++ = color8Bit; };
 void writeColorRGBA(sal_uInt8 color8Bit, sal_uInt8*& dst ) { *dst++ = color8Bit; *dst++ = color8Bit; *dst++ = color8Bit; *dst++ = 0xff; };
 typedef void(*WriteBlackWhiteFunction)( sal_uInt8*& dst, int count );
 void writeBlackA8(sal_uInt8*& dst, int count ) { memset( dst, 0, count ); dst += count; };
 void writeWhiteA8(sal_uInt8*& dst, int count ) { memset( dst, 0xff, count ); dst += count; };
-void writeBlackRGB(sal_uInt8*& dst, int count ) { memset( dst, 0, count * 3 ); dst += count * 3; };
-void writeWhiteRGB(sal_uInt8*& dst, int count ) { memset( dst, 0xff, count * 3 ); dst += count * 3; };
 void writeWhiteRGBA(sal_uInt8*& dst, int count ) { memset( dst, 0xff, count * 4 ); dst += count * 4; };
 void writeBlackRGBA(sal_uInt8*& dst, int count )
 {
@@ -285,12 +282,6 @@ std::unique_ptr< sal_uInt8[] > SalBitmap::convertDataBitCount( const sal_uInt8* 
                 writeBlackWhiteData< writeColorA8, writeBlackA8, writeWhiteA8 >
                     ( src, data.get(), width, height, bytesPerRow );
                 return data;
-            case BitConvert::BGR :
-            case BitConvert::RGB :
-                // BGR/RGB is the same, all 3 values get the same value
-                writeBlackWhiteData< writeColorRGB, writeBlackRGB, writeWhiteRGB >
-                    ( src, data.get(), width, height, bytesPerRow );
-                return data;
             case BitConvert::BGRA :
             case BitConvert::RGBA :
                 // BGRA/RGBA is the same, all 3 values get the same value
@@ -317,24 +308,6 @@ std::unique_ptr< sal_uInt8[] > SalBitmap::convertDataBitCount( const sal_uInt8* 
                 while( nX-- )
                 {
                     const BitmapColor& c = pSrcFormat->ReadPixel();
-                    *pDstData++ = c.GetBlue();
-                }
-                break;
-            case BitConvert::BGR :
-                while( nX-- )
-                {
-                    const BitmapColor& c = pSrcFormat->ReadPixel();
-                    *pDstData++ = c.GetBlue();
-                    *pDstData++ = c.GetGreen();
-                    *pDstData++ = c.GetRed();
-                }
-                break;
-            case BitConvert::RGB :
-                while( nX-- )
-                {
-                    const BitmapColor& c = pSrcFormat->ReadPixel();
-                    *pDstData++ = c.GetRed();
-                    *pDstData++ = c.GetGreen();
                     *pDstData++ = c.GetBlue();
                 }
                 break;

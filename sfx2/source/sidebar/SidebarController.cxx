@@ -99,16 +99,6 @@ namespace
 namespace sfx2::sidebar {
 
 namespace {
-    enum MenuId
-    {
-        MID_UNLOCK_TASK_PANEL = 1,
-        MID_LOCK_TASK_PANEL,
-        MID_HIDE_SIDEBAR,
-        MID_CUSTOMIZATION,
-        MID_RESTORE_DEFAULT,
-        MID_FIRST_PANEL,
-        MID_FIRST_HIDE = 1000
-    };
 
     /** When in doubt, show this deck.
     */

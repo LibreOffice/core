@@ -47,22 +47,6 @@ namespace rptxml
         XML_TOK_SUB_BODY                ,
     };
 
-    enum XMLCell
-    {
-        XML_TOK_P,
-        XML_TOK_FIXED_CONTENT,
-        XML_TOK_FORMATTED_TEXT,
-        XML_TOK_IMAGE,
-        XML_TOK_SUB_DOCUMENT,
-        XML_TOK_CUSTOM_SHAPE,
-        XML_TOK_PAGE_NUMBER,
-        XML_TOK_PAGE_COUNT,
-        XML_TOK_TEXT_TAB_STOP,
-        XML_TOK_TEXT_LINE_BREAK,
-        XML_TOK_TEXT_S,
-        XML_TOK_FRAME
-    };
-
     enum XMLSubDocument
     {
         XML_TOK_MASTER_DETAIL_FIELD
