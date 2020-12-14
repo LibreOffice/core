@@ -256,7 +256,7 @@
                             <property name="resize-mode">queue</property>
                             <items>
                               <item id="0" translatable="yes" context="templatedlg|applist">All Applications</item>
-                              <item id="0" translatable="yes" context="templatedlg|applist">Documents</item>
+                              <item id="0" translatable="yes" context="templatedlg|applist">Text Documents</item>
                               <item id="0" translatable="yes" context="templatedlg|applist">Spreadsheets</item>
                               <item id="0" translatable="yes" context="templatedlg|applist">Presentations</item>
                               <item id="0" translatable="yes" context="templatedlg|applist">Drawings</item>
