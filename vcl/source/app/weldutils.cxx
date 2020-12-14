@@ -14,6 +14,8 @@
 #include <svl/zformat.hxx>
 #include <vcl/builderpage.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/event.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>
@@ -545,6 +547,21 @@ void WidgetStatusListener::dispose()
     }
     mxFrame.clear();
     mWidget = nullptr;
+}
+
+weld::Window* GetPopupParent(vcl::Window& rOutWin, tools::Rectangle& rRect)
+{
+    rRect.SetPos(rOutWin.OutputToScreenPixel(rRect.TopLeft()));
+    rRect = FloatingWindow::ImplConvertToAbsPos(&rOutWin, rRect);
+
+    vcl::Window* pWin = &rOutWin;
+    while (!pWin->IsTopWindow())
+        pWin = pWin->GetParent();
+
+    rRect = FloatingWindow::ImplConvertToRelPos(pWin, rRect);
+    rRect.SetPos(pWin->ScreenToOutputPixel(rRect.TopLeft()));
+
+    return rOutWin.GetFrameWeld();
 }
 }
 
