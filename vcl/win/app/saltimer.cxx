@@ -45,7 +45,7 @@ void WinSalTimer::ImplStop()
     if ( m_bSetTimerRunning )
     {
         m_bSetTimerRunning = false;
-        KillTimer( GetSalData()->mpInstance->mhComWnd, m_aWmTimerId );
+        KillTimer( pInst->mhComWnd, m_aWmTimerId );
     }
     m_bDirectTimeout = false;
 
