@@ -477,7 +477,7 @@ public:
         Return an OString instance reflecting the current content
         of this OStringBuffer.
      */
-    const OString toString() const
+    OString toString() const
     {
         return OString(pData->buffer, pData->length);
     }
