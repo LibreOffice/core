@@ -25,6 +25,11 @@
 
 class CalendarWrapper;
 
+namespace vcl
+{
+class Window;
+}
+
 namespace weld
 {
 typedef cppu::WeakComponentImplHelper<css::awt::XWindow> TransportAsXWindow_Base;
@@ -423,6 +428,11 @@ VCL_DLLPUBLIC void RemoveParentKeepChildren(weld::TreeView& rTreeView, weld::Tre
 
 // return the min height of a weld::Entry
 VCL_DLLPUBLIC int GetMinimumEditHeight();
+
+// return the weld::Window of the SalFrame rOutWin is in, and convert rRect
+// from relative to rOutWin to relative to that weld::Window suitable for use
+// with popup_at_rect
+VCL_DLLPUBLIC weld::Window* GetPopupParent(vcl::Window& rOutWin, tools::Rectangle& rRect);
 }
 
 #endif
