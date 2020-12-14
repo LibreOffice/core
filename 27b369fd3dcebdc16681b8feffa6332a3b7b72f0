@@ -106,6 +106,24 @@
       "revId": "27b369fd3dcebdc16681b8feffa6332a3b7b72f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c4f3ba3_f140e033",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1416,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-12-14T08:33:51Z",
+      "side": 1,
+      "message": "That made-up rule was just based on the fact, that you wanted to \"maybe release SolarMutex\". I didn\u0027t yet look into this new backtraces, so very likely the real solution will be different.",
+      "parentUuid": "6766a4a9_8e5ec466",
+      "revId": "27b369fd3dcebdc16681b8feffa6332a3b7b72f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
