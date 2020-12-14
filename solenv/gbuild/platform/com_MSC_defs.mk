@@ -155,8 +155,12 @@ endif
 ifneq ($(COM_IS_CLANG),TRUE)
 
 # clang-cl doesn't support -Wv:18 for now
+# Work around MSVC 2017 C4702 compiler bug with release builds
+# http://document-foundation-mail-archive.969070.n3.nabble.com/Windows-32-bit-build-failure-unreachable-code-tp4243848.html
+# http://document-foundation-mail-archive.969070.n3.nabble.com/64-bit-Windows-build-failure-after-MSVC-Update-tp4246816.html
 gb_CXXFLAGS += \
 	-Wv:18 \
+	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4702) \
 
 endif
 
