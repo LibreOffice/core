@@ -536,7 +536,7 @@ public:
         Return an OUString instance reflecting the current content
         of this OUStringBuffer.
      */
-    const OUString toString() const
+    OUString toString() const
     {
         return OUString(pData->buffer, pData->length);
     }
