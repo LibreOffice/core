@@ -2873,16 +2873,37 @@ tools::Rectangle Window::ImplOutputToUnmirroredAbsoluteScreenPixel( const tools:
     // and is used for positioning of RTL popup windows correctly on the screen
     SalFrameGeometry g = mpWindowImpl->mpFrame->GetUnmirroredGeometry();
 
-    Point p1 = OutputToScreenPixel( rRect.TopRight() );
+    Point p1 = rRect.TopRight();
+    p1 = OutputToScreenPixel(p1);
     p1.setX( g.nX+g.nWidth-p1.X() );
     p1.AdjustY(g.nY );
 
-    Point p2 = OutputToScreenPixel( rRect.BottomLeft() );
+    Point p2 = rRect.BottomLeft();
+    p2 = OutputToScreenPixel(p2);
     p2.setX( g.nX+g.nWidth-p2.X() );
     p2.AdjustY(g.nY );
 
     return tools::Rectangle( p1, p2 );
 }
+
+tools::Rectangle Window::ImplUnmirroredAbsoluteScreenToOutputPixel( const tools::Rectangle &rRect ) const
+{
+    // undo ImplOutputToUnmirroredAbsoluteScreenPixel
+    SalFrameGeometry g = mpWindowImpl->mpFrame->GetUnmirroredGeometry();
+
+    Point p1 = rRect.TopRight();
+    p1.AdjustY(-g.nY );
+    p1.setX( g.nX+g.nWidth-p1.X() );
+    p1 = ScreenToOutputPixel(p1);
+
+    Point p2 = rRect.BottomLeft();
+    p2.AdjustY(-g.nY);
+    p2.setX( g.nX+g.nWidth-p2.X() );
+    p2 = ScreenToOutputPixel(p2);
+
+    return tools::Rectangle( p1, p2 );
+}
+
 
 tools::Rectangle Window::GetWindowExtentsRelative(const vcl::Window *pRelativeWindow) const
 {

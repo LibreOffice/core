@@ -524,6 +524,29 @@ tools::Rectangle FloatingWindow::ImplConvertToAbsPos(vcl::Window* pReference, co
     }
     else
         aFloatRect.SetPos(pReference->OutputToAbsoluteScreenPixel(pReference->ScreenToOutputPixel(rRect.TopLeft())));
+
+    return aFloatRect;
+}
+
+tools::Rectangle FloatingWindow::ImplConvertToRelPos(vcl::Window* pReference, const tools::Rectangle& rRect)
+{
+    tools::Rectangle aFloatRect = rRect;
+
+    const OutputDevice *pParentWinOutDev = pReference->GetOutDev();
+
+    // compare coordinates in absolute screen coordinates
+    // Keep in sync with FloatingWindow::ImplFloatHitTest, e.g. fdo#33509
+    if( pReference->HasMirroredGraphics()  )
+    {
+        aFloatRect = pReference->ImplUnmirroredAbsoluteScreenToOutputPixel(aFloatRect);
+        aFloatRect.SetPos(pReference->OutputToScreenPixel(aFloatRect.TopLeft()));
+
+        if(!pReference->IsRTLEnabled() )
+            pParentWinOutDev->ReMirror(aFloatRect);
+    }
+    else
+        aFloatRect.SetPos(pReference->OutputToScreenPixel(pReference->AbsoluteScreenToOutputPixel(rRect.TopLeft())));
+
     return aFloatRect;
 }
 
