@@ -82,8 +82,6 @@ certain functionality.
 @li @c connectivity.kab
 @li @c connectivity.macab
 @li @c connectivity.manager
-@li @c connectivity.mork
-@li @c connectivity.mozab
 @li @c connectivity.mysqlc
 @li @c connectivity.odbc
 @li @c connectivity.parse
