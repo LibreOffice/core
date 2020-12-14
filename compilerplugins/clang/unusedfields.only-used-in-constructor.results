@@ -154,8 +154,6 @@ dbaccess/source/core/dataaccess/connection.hxx:101
     dbaccess::OConnection m_nInAppend std::atomic<std::size_t>
 dbaccess/source/core/inc/databasecontext.hxx:84
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
-desktop/qa/desktop_lib/test_desktop_lib.cxx:2902
-      class AllSettings &
 drawinglayer/inc/texture/texture3d.hxx:55
     drawinglayer::texture::GeoTexSvxBitmapEx maBitmap class Bitmap
 drawinglayer/inc/texture/texture3d.hxx:57
@@ -338,10 +336,6 @@ include/vcl/commandevent.hxx:315
     CommandGestureData meOrientation const enum PanningOrientation
 include/vcl/font/Feature.hxx:100
     vcl::font::Feature m_eType enum vcl::font::FeatureType
-include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:36
-    NotebookBarAddonsItem aImage class Image
-include/vcl/opengl/OpenGLContext.hxx:43
-    OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
 include/vcl/pdf/PDFAnnotationMarker.hxx:65
     vcl::pdf::PDFAnnotationMarkerHighlight meTextMarkerType enum vcl::pdf::PDFTextMarkerType
 include/xmloff/shapeimport.hxx:56
@@ -478,6 +472,8 @@ sc/inc/compiler.hxx:266
     ScCompiler::AddInMap pUpper const char *
 sc/inc/token.hxx:403
     SingleDoubleRefModifier aDub struct ScComplexRefData
+sc/qa/unit/ucalc_formula.cxx:3134
+      class Test *
 sc/source/core/data/document.cxx:1240
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1241
