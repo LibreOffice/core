@@ -273,6 +273,24 @@
     },
     {
       "key": {
+        "uuid": "c62ae85e_153c8108",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-14T18:45:31Z",
+      "side": 1,
+      "message": "again, u\"\\U0001D49F\" works just fine",
+      "parentUuid": "3bc6b180_c812cc40",
+      "revId": "45167ffa188902f53481601dd0cbfabd3cff36a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "226e35e7_38faef1e",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 21
