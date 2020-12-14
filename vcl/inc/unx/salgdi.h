@@ -42,18 +42,13 @@
 /* From <X11/Intrinsic.h> */
 typedef unsigned long Pixel;
 
-class FontAttributes;
-class FontSelectPattern;
 class SalBitmap;
 class SalColormap;
 class SalDisplay;
 class SalFrame;
-class X11Pixmap;
 class X11SalVirtualDevice;
 class X11SalGraphicsImpl;
 class X11SkiaSalVirtualDevice;
-class FreetypeFont;
-class ImplLayoutArgs;
 class PhysicalFontCollection;
 class PhysicalFontFace;
 class SalGraphicsImpl;

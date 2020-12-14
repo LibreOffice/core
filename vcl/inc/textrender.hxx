@@ -22,7 +22,6 @@
 
 #include "salgdi.hxx"
 
-class ImplLayoutArgs;
 class ImplFontMetricData;
 class PhysicalFontCollection;
 class PhysicalFontFace;
