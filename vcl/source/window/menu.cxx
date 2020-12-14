@@ -2808,8 +2808,6 @@ sal_uInt16 PopupMenu::Execute( vcl::Window* pExecWindow, const tools::Rectangle&
         nPopupModeFlags = FloatWinPopupFlags::Down;
     else if ( nFlags & PopupMenuFlags::ExecuteUp )
         nPopupModeFlags = FloatWinPopupFlags::Up;
-    else if ( nFlags & PopupMenuFlags::ExecuteLeft )
-        nPopupModeFlags = FloatWinPopupFlags::Left;
     else if ( nFlags & PopupMenuFlags::ExecuteRight )
         nPopupModeFlags = FloatWinPopupFlags::Right;
     else

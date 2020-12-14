@@ -71,7 +71,6 @@ enum class PopupMenuFlags
     NONE            = 0x0000,
     ExecuteDown     = 0x0001,
     ExecuteUp       = 0x0002,
-    ExecuteLeft     = 0x0004,
     ExecuteRight    = 0x0008,
     NoMouseUpClose  = 0x0010,
 //If there isn't enough space to put the menu where it wants
@@ -84,7 +83,7 @@ enum class PopupMenuFlags
 
 namespace o3tl
 {
-    template<> struct typed_flags<PopupMenuFlags> : is_typed_flags<PopupMenuFlags, 0x003f> {};
+    template<> struct typed_flags<PopupMenuFlags> : is_typed_flags<PopupMenuFlags, 0x003b> {};
 }
 
 enum class MenuFlags

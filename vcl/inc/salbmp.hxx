@@ -120,8 +120,6 @@ protected:
     enum class BitConvert
     {
         A8,
-        RGB,
-        BGR,
         RGBA,
         BGRA
     };
