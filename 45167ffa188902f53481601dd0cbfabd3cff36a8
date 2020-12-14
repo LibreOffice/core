@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "aa4dc5e0_1f4f90ea",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-14T15:09:27Z",
+      "side": 1,
+      "message": "Thanks you for this tip.\nIt was driving me mad.",
+      "parentUuid": "0b755ed2_a43fd22a",
+      "revId": "45167ffa188902f53481601dd0cbfabd3cff36a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "648f3eb6_e58a5018",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 21
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "6f01c955_3dd2de95",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-14T15:09:27Z",
+      "side": 1,
+      "message": "I prefer to keep changes separated. However, here it is.\nIt will be on mathml import, for identifying unicode 32 opperators.\nRight now I can\u0027t take it much farther, there\u0027s more ground work to do about it.\n\nA text with one single codepoint is an opperator.\nThere is this mathematical operator bloc: \nMathbb \u0026 Fractur: https://www.unicode.org/charts/PDF/U1D400.pdf\nThose are the most important because mathmlvsupports them, but not LO.\nThis stills a little distant in the future since first there is opensymbol2, using unicode 32 on starmath tokens, ... But prefer to apply all changes to OUString in one go.\n\nAlso, moved to the correct place.",
+      "parentUuid": "648f3eb6_e58a5018",
+      "revId": "45167ffa188902f53481601dd0cbfabd3cff36a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62b93a13_59614a22",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 21
@@ -74,6 +110,30 @@
       "revId": "45167ffa188902f53481601dd0cbfabd3cff36a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76f8aaef_c2945380",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-14T15:09:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62b93a13_59614a22",
+      "range": {
+        "startLine": 117,
+        "startChar": 8,
+        "endLine": 117,
+        "endChar": 20
+      },
+      "revId": "45167ffa188902f53481601dd0cbfabd3cff36a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -100,6 +160,30 @@
     },
     {
       "key": {
+        "uuid": "7548c19a_870836a7",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-14T15:09:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d0174ae_75d5a3d8",
+      "range": {
+        "startLine": 119,
+        "startChar": 19,
+        "endLine": 119,
+        "endChar": 24
+      },
+      "revId": "45167ffa188902f53481601dd0cbfabd3cff36a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a0d1c04d_0c5d848d",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 21
@@ -117,6 +201,24 @@
     },
     {
       "key": {
+        "uuid": "cbd609cf_c0d9a20b",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-14T15:09:27Z",
+      "side": 1,
+      "message": "I want to use it to load U\"string\".\nExample of code: https://gerrit.libreoffice.org/c/core/+/107608\nKeep in mind that final touches will depend on this.",
+      "parentUuid": "a0d1c04d_0c5d848d",
+      "revId": "45167ffa188902f53481601dd0cbfabd3cff36a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "226e35e7_38faef1e",
         "filename": "include/rtl/ustring.hxx",
         "patchSetId": 21
@@ -128,6 +230,30 @@
       "writtenOn": "2020-12-14T09:53:03Z",
       "side": 1,
       "message": "why?",
+      "range": {
+        "startLine": 312,
+        "startChar": 8,
+        "endLine": 312,
+        "endChar": 44
+      },
+      "revId": "45167ffa188902f53481601dd0cbfabd3cff36a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7917d585_0e610d63",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-14T15:09:27Z",
+      "side": 1,
+      "message": "I can\u0027t count codepoints if it is null pointer, it will generate a memory error.\nCome from C where there is no throwing of exceptions, so don\u0027t know them. If there is one more suited I\u0027ll change it.",
+      "parentUuid": "226e35e7_38faef1e",
       "range": {
         "startLine": 312,
         "startChar": 8,
