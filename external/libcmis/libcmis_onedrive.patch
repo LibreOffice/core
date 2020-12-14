@@ -256,7 +256,7 @@ index a9ae694..c1980c8 100644
      vector< string > headers;
      string res;
 diff --git a/src/libcmis/onedrive-object.cxx b/src/libcmis/onedrive-object.cxx
-index 976a97b..b6106a3 100644
+index 976a97b..8deb591 100644
 --- a/src/libcmis/onedrive-object.cxx
 +++ b/src/libcmis/onedrive-object.cxx
 @@ -65,7 +65,7 @@ void OneDriveObject::initializeFromJson ( Json json, string /*id*/, string /*nam
@@ -291,6 +291,15 @@ index 976a97b..b6106a3 100644
  }
  
  string OneDriveObject::getUploadUrl( )
+@@ -152,7 +157,7 @@ libcmis::ObjectPtr OneDriveObject::updateProperties(
+     {   
+         vector< string > headers;
+         headers.push_back( "Content-Type: application/json" );
+-        response = getSession( )->httpPutRequest( getUrl( ), is, headers );
++        response = getSession( )->httpPatchRequest( getUrl( ), is, headers );
+     }
+     catch ( const CurlException& e )
+     {   
 diff --git a/src/libcmis/onedrive-repository.cxx b/src/libcmis/onedrive-repository.cxx
 index 3eaac9c..b01f5c2 100644
 --- a/src/libcmis/onedrive-repository.cxx
