@@ -34,6 +34,24 @@
       "revId": "27b369fd3dcebdc16681b8feffa6332a3b7b72f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8a29625_5d62ae78",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1416,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-12-14T07:58:53Z",
+      "side": 1,
+      "message": "\u003e \u003e Just make it a rule, that SolarMutex must be held to query the clipboard content, if there is no other way around it.\n\u003e \u003e \n\u003e \n\u003e That does not work. \n\u003e Here, we have an ABBA deadlock, where two different mutexes are acquired in different orders.\n\nI didn\u0027t yet look into the new backtraces. Then the locking order must be fixed. A \"maybe release lock\" is borderline undefined behavior IMHO.",
+      "parentUuid": "b3e38777_51bf15ff",
+      "revId": "27b369fd3dcebdc16681b8feffa6332a3b7b72f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
