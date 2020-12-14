@@ -79,6 +79,7 @@ public:
     tools::Long            mnSeparatorX;
     DrawButtonFlags mnButtonState;
     bool            mbSmallSymbol;
+    bool            mbGeneratedTooltip;
 
     Image           maImage;
     ImageAlign      meImageAlign;
@@ -91,7 +92,7 @@ public:
 };
 
 ImplCommonButtonData::ImplCommonButtonData() : maFocusRect(), mnSeparatorX(0), mnButtonState(DrawButtonFlags::NONE),
-mbSmallSymbol(false), maImage(), meImageAlign(ImageAlign::Top), meSymbolAlign(SymbolAlign::LEFT), maCustomContentImage()
+mbSmallSymbol(false), mbGeneratedTooltip(false), maImage(), meImageAlign(ImageAlign::Top), meSymbolAlign(SymbolAlign::LEFT), maCustomContentImage()
 {
 }
 
@@ -237,8 +238,13 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
         tools::Rectangle textRect = GetTextRect(
             tools::Rectangle(Point(), Size(0x7fffffff, 0x7fffffff)), aText, nTextStyle);
         // If the button text doesn't fit into it, put it into a tooltip (might happen in sidebar)
+        if (GetQuickHelpText()!= aText && mpButtonData->mbGeneratedTooltip)
+            SetQuickHelpText("");
         if (GetQuickHelpText().isEmpty() && textRect.getWidth() > rSize.getWidth())
+        {
             SetQuickHelpText(aText);
+            mpButtonData->mbGeneratedTooltip = true;
+        }
 
         ImplSetFocusRect(aOutRect);
         rSize = aOutRect.GetSize();
