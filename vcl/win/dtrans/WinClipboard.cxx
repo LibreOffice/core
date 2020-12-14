@@ -92,9 +92,6 @@ CWinClipboard::~CWinClipboard()
 
 uno::Reference<datatransfer::XTransferable> SAL_CALL CWinClipboard::getContents()
 {
-    DBG_TESTSOLARMUTEX();
-    SolarMutexReleaser aReleaser;
-
     osl::MutexGuard aGuard(m_aMutex);
 
     if (rBHelper.bDisposed)
@@ -129,8 +126,14 @@ uno::Reference<datatransfer::XTransferable> SAL_CALL CWinClipboard::getContents(
         // com smart pointer to the IDataObject from clipboard
         IDataObjectPtr pIDo(new CAPNDataObject(pIDataObject));
 
-        // remember pIDo destroys itself due to the smart pointer
-        rClipContent = CDOTransferable::create(m_xContext, pIDo);
+        {
+            // before calling COM methods of an apartment-threaded COM object, release solar mutex
+            // to avoid deadlocking on waiting clipboard thread that would try to acquire it
+            SolarMutexReleaserIfAcquired aReleaser;
+
+            // remember pIDo destroys itself due to the smart pointer
+            rClipContent = CDOTransferable::create(m_xContext, pIDo);
+        }
 
         osl::MutexGuard aGuard2(m_ClipContentMutex);
         m_foreignContent = rClipContent;
