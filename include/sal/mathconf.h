@@ -66,7 +66,7 @@ extern "C" {
                           || __cplusplus >= 201103L \
                           || defined(IOS) )
 #define SAL_MATH_FINITE(d) std::isfinite(d)
-#elif defined( IOS )
+#elif defined __APPLE__ && !(defined __i386__ || defined __x86_64__)
 #define SAL_MATH_FINITE(d) isfinite(d)
 #elif defined( WNT)
 #define SAL_MATH_FINITE(d) _finite(d)
