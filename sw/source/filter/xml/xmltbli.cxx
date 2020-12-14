@@ -356,15 +356,14 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
     m_sSaveParaDefault = GetImport().GetTextImport()->GetCellParaStyleDefault();
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString sValue = aIter.toString();
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(TABLE, XML_STYLE_NAME):
-            m_aStyleName = sValue;
-            GetImport().GetTextImport()->SetCellParaStyleDefault(sValue);
+            m_aStyleName = aIter.toString();
+            GetImport().GetTextImport()->SetCellParaStyleDefault(m_aStyleName);
             break;
         case XML_ELEMENT(TABLE, XML_NUMBER_COLUMNS_SPANNED):
-            m_nColSpan = static_cast<sal_uInt32>(std::max<sal_Int32>(1, sValue.toInt32()));
+            m_nColSpan = static_cast<sal_uInt32>(std::max<sal_Int32>(1, aIter.toInt32()));
             if (m_nColSpan > 256)
             {
                 SAL_INFO("sw.xml", "ignoring huge table:number-columns-spanned " << m_nColSpan);
@@ -372,7 +371,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             }
             break;
         case XML_ELEMENT(TABLE, XML_NUMBER_ROWS_SPANNED):
-            m_nRowSpan = static_cast<sal_uInt32>(std::max<sal_Int32>(1, sValue.toInt32()));
+            m_nRowSpan = static_cast<sal_uInt32>(std::max<sal_Int32>(1, aIter.toInt32()));
             if (m_nRowSpan > 8192 || (m_nRowSpan > 256 && utl::ConfigManager::IsFuzzing()))
             {
                 SAL_INFO("sw.xml", "ignoring huge table:number-rows-spanned " << m_nRowSpan);
@@ -380,7 +379,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             }
             break;
         case XML_ELEMENT(TABLE, XML_NUMBER_COLUMNS_REPEATED):
-            m_nColRepeat = static_cast<sal_uInt32>(std::max<sal_Int32>(1, sValue.toInt32()));
+            m_nColRepeat = static_cast<sal_uInt32>(std::max<sal_Int32>(1, aIter.toInt32()));
             if (m_nColRepeat > 256)
             {
                 SAL_INFO("sw.xml", "ignoring huge table:number-columns-repeated " << m_nColRepeat);
@@ -391,14 +390,14 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             {
                 OUString sTmp;
                 const sal_uInt16 nPrefix2 = GetImport().GetNamespaceMap().
-                        GetKeyByAttrValueQName(sValue, &sTmp);
-                m_sFormula = XML_NAMESPACE_OOOW == nPrefix2 ? sTmp : sValue;
+                        GetKeyByAttrValueQName(aIter.toString(), &sTmp);
+                m_sFormula = XML_NAMESPACE_OOOW == nPrefix2 ? sTmp : aIter.toString();
             }
             break;
         case XML_ELEMENT(OFFICE, XML_VALUE):
             {
                 double fTmp;
-                if (::sax::Converter::convertDouble(fTmp, sValue))
+                if (::sax::Converter::convertDouble(fTmp, aIter.toString()))
                 {
                     m_fValue = fTmp;
                     m_bHasValue = true;
@@ -408,7 +407,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
         case XML_ELEMENT(OFFICE, XML_TIME_VALUE):
             {
                 double fTmp;
-                if (::sax::Converter::convertDuration(fTmp, sValue))
+                if (::sax::Converter::convertDuration(fTmp, aIter.toString()))
                 {
                     m_fValue = fTmp;
                     m_bHasValue = true;
@@ -419,7 +418,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             {
                 double fTmp;
                 if (GetImport().GetMM100UnitConverter().convertDateTime(fTmp,
-                                                                      sValue))
+                                                                      aIter.toString()))
                 {
                     m_fValue = fTmp;
                     m_bHasValue = true;
@@ -429,7 +428,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
         case XML_ELEMENT(OFFICE, XML_BOOLEAN_VALUE):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, sValue))
+                if (::sax::Converter::convertBool(bTmp, aIter.toString()))
                 {
                     m_fValue = (bTmp ? 1.0 : 0.0);
                     m_bHasValue = true;
@@ -440,7 +439,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
         case XML_ELEMENT(TABLE, XML_PROTECTED):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, sValue))
+                if (::sax::Converter::convertBool(bTmp, aIter.toString()))
                 {
                     m_bProtect = bTmp;
                 }
@@ -448,13 +447,13 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             break;
         case XML_ELEMENT(OFFICE, XML_STRING_VALUE):
             {
-                m_StringValue = sValue;
+                m_StringValue = aIter.toString();
                 m_bHasStringValue = true;
             }
             break;
         case XML_ELEMENT(OFFICE, XML_VALUE_TYPE):
             {
-                if ("string" == sValue)
+                if ("string" == aIter.toString())
                 {
                     m_bValueTypeIsString = true;
                 }
@@ -635,15 +634,14 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
 
     for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {
-        OUString sValue = aIter.toString();
         switch (aIter.getToken())
         {
             case XML_ELEMENT(TABLE, XML_STYLE_NAME):
-                aStyleName = sValue;
+                aStyleName = aIter.toString();
                 break;
             case XML_ELEMENT(TABLE, XML_NUMBER_COLUMNS_REPEATED):
             {
-                nColRep = static_cast<sal_uInt32>(std::max<sal_Int32>(1, sValue.toInt32()));
+                nColRep = static_cast<sal_uInt32>(std::max<sal_Int32>(1, aIter.toInt32()));
                 if (nColRep > 256)
                 {
                     SAL_INFO("sw.xml", "ignoring huge table:number-columns-repeated " << nColRep);
@@ -652,7 +650,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
                 break;
             }
             case XML_ELEMENT(TABLE, XML_DEFAULT_CELL_STYLE_NAME):
-                aDfltCellStyleName = sValue;
+                aDfltCellStyleName = aIter.toString();
                 break;
             case XML_ELEMENT(XML, XML_ID):
             {
@@ -775,15 +773,14 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString sValue = aIter.toString();
         switch(aIter.getToken())
         {
             case XML_ELEMENT(TABLE, XML_STYLE_NAME):
-                aStyleName = sValue;
+                aStyleName = aIter.toString();
                 break;
             case XML_ELEMENT(STYLE,  XML_NUMBER_ROWS_REPEATED):
             {
-                nRowRepeat = static_cast<sal_uInt32>(std::max<sal_Int32>(1, sValue.toInt32()));
+                nRowRepeat = static_cast<sal_uInt32>(std::max<sal_Int32>(1, aIter.toInt32()));
                 if (nRowRepeat > 8192 || (nRowRepeat > 256 && utl::ConfigManager::IsFuzzing()))
                 {
                     SAL_INFO("sw.xml", "ignoring huge table:number-rows-repeated " << nRowRepeat);
@@ -792,13 +789,13 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
                 break;
             }
             case XML_ELEMENT(STYLE, XML_DEFAULT_CELL_STYLE_NAME):
-                aDfltCellStyleName = sValue;
+                aDfltCellStyleName = aIter.toString();
                 break;
             case XML_ELEMENT(XML, XML_ID):
-                sXmlId = sValue;
+                sXmlId = aIter.toString();
                 break;
             default:
-                SAL_WARN("sw", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+                XMLOFF_WARN_UNKNOWN("sw", aIter);
         }
     }
     if( GetTable()->IsValid() )

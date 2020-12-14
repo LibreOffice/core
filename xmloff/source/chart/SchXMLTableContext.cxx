@@ -427,9 +427,8 @@ void SchXMLTableColumnContext::startFastElement (sal_Int32 /*nElement*/,
         {
             case XML_ELEMENT(TABLE, XML_NUMBER_COLUMNS_REPEATED):
             {
-                OUString aValue = aIter.toString();
-                if( !aValue.isEmpty())
-                    nRepeated = aValue.toInt32();
+                if( !aIter.isEmpty())
+                    nRepeated = aIter.toInt32();
                 break;
             }
             case XML_ELEMENT(TABLE, XML_VISIBILITY):

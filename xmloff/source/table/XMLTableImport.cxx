@@ -619,21 +619,19 @@ XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport,
     // read attributes for the table-cell
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString sValue = aIter.toString();
-
         switch (aIter.getToken())
         {
             case XML_ELEMENT(TABLE, XML_NUMBER_COLUMNS_REPEATED):
-                mnRepeated = sValue.toInt32();
+                mnRepeated = aIter.toInt32();
                 break;
             case XML_ELEMENT(TABLE, XML_NUMBER_COLUMNS_SPANNED):
-                mnColSpan = sValue.toInt32();
+                mnColSpan = aIter.toInt32();
                 break;
             case XML_ELEMENT(TABLE, XML_NUMBER_ROWS_SPANNED):
-                mnRowSpan = sValue.toInt32();
+                mnRowSpan = aIter.toInt32();
                 break;
             case XML_ELEMENT(TABLE, XML_STYLE_NAME):
-                sStyleName = sValue;
+                sStyleName = aIter.toString();
                 break;
             case XML_ELEMENT(XML, XML_ID):
 //FIXME: TODO
