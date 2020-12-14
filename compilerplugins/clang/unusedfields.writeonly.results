@@ -104,16 +104,12 @@ codemaker/source/javamaker/classfile.cxx:508
      floatBytes float
 codemaker/source/javamaker/classfile.cxx:540
      doubleBytes double
-comphelper/qa/container/comphelper_ifcontainer.cxx:44
-    (anonymous namespace)::ContainerListener m_pStats struct (anonymous namespace)::ContainerStats *const
 comphelper/qa/unit/parallelsorttest.cxx:44
     ParallelSortTest mnThreads size_t
 comphelper/source/misc/asyncnotification.cxx:86
     comphelper::EventNotifierImpl pKeepThisAlive std::shared_ptr<AsyncEventNotifierAutoJoin>
 configmgr/source/components.cxx:162
     configmgr::Components::WriteThread reference_ rtl::Reference<WriteThread> *
-connectivity/source/drivers/mork/MorkParser.hxx:132
-    MorkParser error_ enum MorkErrors
 connectivity/source/inc/calc/CConnection.hxx:51
     connectivity::calc::OCalcConnection::CloseVetoButTerminateListener m_pCloseListener std::unique_ptr<utl::CloseVeto>
 connectivity/source/inc/odbc/OConnection.hxx:54
@@ -180,6 +176,8 @@ cppu/source/uno/copy.hxx:38
     cppu::(anonymous namespace)::SequencePrefix nRefCount sal_Int32
 cppu/source/uno/copy.hxx:39
     cppu::(anonymous namespace)::SequencePrefix nElements sal_Int32
+cppuhelper/qa/ifcontainer/cppu_ifcontainer.cxx:45
+    (anonymous namespace)::ContainerListener m_pStats struct (anonymous namespace)::ContainerStats *
 cppuhelper/source/access_control.cxx:79
     cppu::(anonymous namespace)::permission m_str1 rtl_uString *
 cppuhelper/source/access_control.cxx:80
@@ -210,8 +208,6 @@ dbaccess/source/ui/app/AppDetailView.hxx:107
     dbaui::OApplicationDetailView m_aExternalMnemonics class MnemonicGenerator
 dbaccess/source/ui/browser/dbloader.cxx:59
     (anonymous namespace)::DBContentLoader m_xListener Reference<class com::sun::star::frame::XLoadEventListener>
-desktop/qa/desktop_lib/test_desktop_lib.cxx:280
-    DesktopLOKTest m_bModified _Bool
 desktop/source/app/app.cxx:1209
     desktop::(anonymous namespace)::ExecuteGlobals pLanguageOptions std::unique_ptr<SvtLanguageOptions>
 desktop/source/app/app.cxx:1210
@@ -388,13 +384,13 @@ include/unotools/fontcfg.hxx:159
     utl::FontSubstConfiguration maSubstHash utl::FontSubstConfiguration::UniqueSubstHash
 include/vcl/menu.hxx:457
     MenuBar::MenuBarButtonCallbackArg bHighlight _Bool
-include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:45
+include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:44
     AddonNotebookBarItem sTarget class rtl::OUString
-include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:46
+include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:45
     AddonNotebookBarItem sContext class rtl::OUString
-include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:47
+include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:46
     AddonNotebookBarItem sControlType class rtl::OUString
-include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:48
+include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:47
     AddonNotebookBarItem nWidth sal_uInt16
 include/vcl/opengl/OpenGLContext.hxx:27
     GLWindow bMultiSampleSupported _Bool
@@ -1022,11 +1018,11 @@ vcl/inc/scanlinewriter.hxx:35
     vcl::ScanlineWriter mpCurrentScanline sal_uInt8 *
 vcl/inc/svdata.hxx:454
     ImplSVEvent mpInstanceRef VclPtr<vcl::Window>
-vcl/inc/unx/gtk/gtkframe.hxx:80
+vcl/inc/unx/gtk/gtkframe.hxx:78
     GtkSalFrame::IMHandler::PreviousKeyPress window GdkWindow *
-vcl/inc/unx/gtk/gtkframe.hxx:81
+vcl/inc/unx/gtk/gtkframe.hxx:79
     GtkSalFrame::IMHandler::PreviousKeyPress send_event gint8
-vcl/inc/unx/gtk/gtkframe.hxx:82
+vcl/inc/unx/gtk/gtkframe.hxx:80
     GtkSalFrame::IMHandler::PreviousKeyPress time guint32
 vcl/inc/WidgetThemeLibrary.hxx:20
     vcl::WidgetDrawStyle nSize uint32_t
@@ -1100,6 +1096,8 @@ xmlhelp/source/cxxhelp/provider/databases.hxx:264
     chelp::Databases m_aZipFileTable chelp::Databases::ZipFileTable
 xmlhelp/source/cxxhelp/provider/databases.hxx:270
     chelp::Databases m_aCollatorTable chelp::Databases::CollatorTable
+xmloff/source/core/xmltkmap.cxx:45
+    SvXMLTokenMap_Impl m_aFastTokenToTokenMap std::unordered_map<sal_Int32, sal_uInt16>
 xmloff/source/draw/ximpstyl.hxx:216
     SdXMLMasterStylesContext maMasterPageList std::vector<rtl::Reference<SdXMLMasterPageContext> >
 xmloff/source/forms/elementexport.hxx:47

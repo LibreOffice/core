@@ -42,7 +42,6 @@ private:
     };
     std::unordered_map< std::pair<sal_uInt16, OUString>,
                         sal_uInt16, PairHash> m_aPrefixAndNameToTokenMap;
-    std::unordered_map< sal_Int32, sal_uInt16> m_aFastTokenToTokenMap;
 
 public:
     void insert( const SvXMLTokenMapEntry& rEntry );
@@ -55,12 +54,6 @@ void SvXMLTokenMap_Impl::insert( const SvXMLTokenMapEntry& rEntry )
                                        GetXMLToken( rEntry.eLocalName ) ), rEntry.nToken ) ).second;
     assert(inserted && "duplicate token");
     (void)inserted;
-    if( rEntry.nFastToken )
-    {
-        bool inserted2 = m_aFastTokenToTokenMap.insert( std::make_pair( rEntry.nFastToken, rEntry.nToken ) ).second;
-        assert(inserted2 && "duplicate token");
-        (void)inserted2;
-    }
 }
 
 sal_uInt16 SvXMLTokenMap_Impl::get( sal_uInt16 nKeyPrefix, const OUString& rLName ) const
