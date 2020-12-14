@@ -666,9 +666,8 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLChangeTextPContext
         sal_Int32 nRepeat(0);
         for( auto& aIter : sax_fastparser::castToFastAttributeList(mxAttrList) )
         {
-            const OUString sValue = aIter.toString();
             if (aIter.getToken() == XML_ELEMENT(TEXT, XML_C))
-                nRepeat = sValue.toInt32();
+                nRepeat = aIter.toInt32();
             else
                 XMLOFF_WARN_UNKNOWN("sc", aIter);
         }

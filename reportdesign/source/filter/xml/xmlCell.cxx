@@ -62,18 +62,16 @@ OXMLCell::OXMLCell( ORptFilter& rImport
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
-        OUString sValue = aIter.toString();
-
         switch( aIter.getToken() )
         {
             case XML_ELEMENT(TABLE, XML_STYLE_NAME):
-                m_sStyleName = sValue;
+                m_sStyleName = aIter.toString();
                 break;
             case XML_ELEMENT(TABLE, XML_NUMBER_COLUMNS_SPANNED):
-                m_pContainer->setColumnSpanned(sValue.toInt32());
+                m_pContainer->setColumnSpanned(aIter.toInt32());
                 break;
             case XML_ELEMENT(TABLE, XML_NUMBER_ROWS_SPANNED):
-                m_pContainer->setRowSpanned(sValue.toInt32());
+                m_pContainer->setRowSpanned(aIter.toInt32());
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("reportdesign", aIter);
