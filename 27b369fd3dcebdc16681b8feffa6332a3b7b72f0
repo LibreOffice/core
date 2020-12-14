@@ -52,6 +52,24 @@
       "revId": "27b369fd3dcebdc16681b8feffa6332a3b7b72f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25e5caae_c70d8cbd",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1416,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-14T08:23:22Z",
+      "side": 1,
+      "message": "Jan-Marek, I trust you understand this best, and of course I expected that this would be controversial. Not attached to this - and I\u0027m abandoning it now, since I don\u0027t think I can propose a proper fix here ATM. Additionally, the proposal from Noel to redirect the call to TransferableHelper::lostOwnership (which does not seem to need any data in objects being destroyed) to main thread (user event?) looks nice.\n\nJust to clarify - strictly speaking, we don\u0027t acquire two mutexes in different order here, only solar mutex is used in this deadlock, and a (OS-specific) serialization of COM invocations to the COM object creator thread.\n\nMain thread acquires solar mutex, and calls a method of an object originally created in clipboard thread. This blocking call is serialized to the clipboard thread, so main thread is waiting for clipboard thread to handle it.\n\nClipboard thread is still handling some previous event, and in this process, needs solar mutex, which results in the deadlock.",
+      "parentUuid": "a8a29625_5d62ae78",
+      "revId": "27b369fd3dcebdc16681b8feffa6332a3b7b72f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
