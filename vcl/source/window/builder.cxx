@@ -3330,6 +3330,8 @@ VclPtr<Menu> VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString 
     else
         pCurrentMenu = VclPtr<PopupMenu>::Create();
 
+    pCurrentMenu->set_id(OStringToOUString(rID, RTL_TEXTENCODING_UTF8));
+
     int nLevel = 1;
 
     stringmap aProperties;
