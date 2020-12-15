@@ -274,9 +274,6 @@ public:
                                     const Gradient& rGradient,
                                     const OutputDevice& rOutDev);
 
-    bool DrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon,
-                      SalGradient const & rGradient);
-
     // CopyArea --> No RasterOp, but ClipRegion
     void                        CopyArea(
                                     tools::Long nDestX, tools::Long nDestY,

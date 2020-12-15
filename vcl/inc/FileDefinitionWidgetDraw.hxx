@@ -69,6 +69,10 @@ public:
 
     static void drawBitmap(SalGraphics& rGraphics, const SalTwoRect& rPosAry,
                            const SalBitmap& rSalBitmap, const SalBitmap& rTransparentBitmap);
+
+    static void implDrawGradient(SalGraphics& rGraphics,
+                                 const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                 const SalGradient& rGradient);
 };
 
 } // end vcl namespace
