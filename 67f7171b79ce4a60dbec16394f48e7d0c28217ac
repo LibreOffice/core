@@ -22,6 +22,30 @@
       "revId": "67f7171b79ce4a60dbec16394f48e7d0c28217ac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8a62c7f_85ea8d2b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-15T13:11:13Z",
+      "side": 1,
+      "message": "That was it. Stephan Bergmann told me there was no need to it. That paragraph should be purged out, but can\u0027t update the commit.",
+      "parentUuid": "01e4b387_115fed3a",
+      "range": {
+        "startLine": 9,
+        "startChar": 51,
+        "endLine": 9,
+        "endChar": 72
+      },
+      "revId": "67f7171b79ce4a60dbec16394f48e7d0c28217ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
