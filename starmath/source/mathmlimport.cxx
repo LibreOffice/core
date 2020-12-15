@@ -1398,25 +1398,39 @@ public:
 
 void SmXMLOperatorContext_Impl::TCharacters(const OUString& rChars)
 {
-    aToken.cMathChar = rChars[0];
-    SmToken bToken;
-    if (bIsFenced)
-    {
-        if (isPrefix)
-            bToken = starmathdatabase::Identify_Prefix_SmXMLOperatorContext_Impl(aToken.cMathChar);
-        else if (isInfix)
-            bToken = SmToken(TMLINE, MS_VERTLINE, "mline", TG::NONE, 0);
-        else if (isPostfix)
-            bToken = starmathdatabase::Identify_Postfix_SmXMLOperatorContext_Impl(aToken.cMathChar);
+    sal_Int32 index = 0;
+    rChars.iterateCodePoints(&index, 1);
+    if (index == rChars.getLength())
+    { // This is a normal opperator
+
+        // TODO, when feasible implement char32_t
+        index = 0;
+        aToken.cMathChar = rChars.iterateCodePoints(&index, 0);
+        SmToken bToken;
+        if (bIsFenced)
+        {
+            if (isPrefix)
+                bToken
+                    = starmathdatabase::Identify_Prefix_SmXMLOperatorContext_Impl(aToken.cMathChar);
+            else if (isInfix)
+                bToken = SmToken(TMLINE, MS_VERTLINE, "mline", TG::NONE, 0);
+            else if (isPostfix)
+                bToken = starmathdatabase::Identify_Postfix_SmXMLOperatorContext_Impl(
+                    aToken.cMathChar);
+            else
+                bToken = starmathdatabase::Identify_PrefixPostfix_SmXMLOperatorContext_Impl(
+                    aToken.cMathChar);
+        }
         else
-            bToken = starmathdatabase::Identify_PrefixPostfix_SmXMLOperatorContext_Impl(
-                aToken.cMathChar);
+            bToken = starmathdatabase::Identify_SmXMLOperatorContext_Impl(aToken.cMathChar,
+                                                                          bIsStretchy);
+        if (bToken.eType != TERROR)
+            aToken = bToken;
     }
     else
-        bToken
-            = starmathdatabase::Identify_SmXMLOperatorContext_Impl(aToken.cMathChar, bIsStretchy);
-    if (bToken.eType != TERROR)
-        aToken = bToken;
+    { // This responds to func or oper
+        // TODO
+    }
 }
 
 void SmXMLOperatorContext_Impl::endFastElement(sal_Int32)

@@ -211,6 +211,14 @@ SmToken starmathdatabase::Identify_SmXMLOperatorContext_Impl(sal_Unicode cChar, 
             return SmToken(TRPARENT, MS_RPARENT, ")", TG::RBrace, 5);
         case MS_NONE:
             return SmToken(TNONE, MS_NONE, "none", TG::RBrace | TG::LBrace, 5);
+        case MS_IT:
+            return SmToken(TIT, MS_IT, "it", TG::Product, 5);
+        case MS_AP:
+            return SmToken(TAP, MS_AP, "ap", TG::Product, 5);
+        case MS_IC:
+            return SmToken(TIC, MS_IC, "ic", TG::NONE, 5);
+        case MS_IA:
+            return SmToken(TIA, MS_IA, "ia", TG::NONE, 5);
         default:
             return SmToken(TERROR, MS_NONE, "", TG::NONE, SAL_MAX_UINT16);
     }
