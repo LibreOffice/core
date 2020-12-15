@@ -14,7 +14,10 @@
 #include <DrawViewShell.hxx>
 #include <sdpage.hxx>
 
+#include <sfx2/sidebar/Sidebar.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <svx/uiobject.hxx>
+#include <tools/debug.hxx>
 
 namespace
 {
@@ -122,6 +125,19 @@ void ImpressWindowUIObject::execute(const OUString& rAction, const StringMap& rP
             SdrObject* pObj = getObject(mxWindow, aName);
             SdrPageView* pPageView = getViewShell(mxWindow)->GetView()->GetSdrPageView();
             getViewShell(mxWindow)->GetView()->MarkObj(pObj, pPageView);
+        }
+    }
+    else if (rAction == "SIDEBAR")
+    {
+        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+        DBG_ASSERT(pViewFrm, "ImpressWindowUIObject::execute: no viewframe");
+        pViewFrm->ShowChildWindow(SID_SIDEBAR);
+
+        auto itr = rParameters.find("PANEL");
+        if (itr != rParameters.end())
+        {
+            OUString aVal = itr->second;
+            ::sfx2::sidebar::Sidebar::ShowPanel(aVal, pViewFrm->GetFrame().GetFrameInterface());
         }
     }
     else if (rAction == "DESELECT")
