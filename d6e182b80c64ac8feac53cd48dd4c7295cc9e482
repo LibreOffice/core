@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e493d917_51b8fb47",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-15T16:54:35Z",
+      "side": 1,
+      "message": "please rather use std::sort",
+      "revId": "d6e182b80c64ac8feac53cd48dd4c7295cc9e482",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "579c48d1_9d8da2a1",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1430,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-15T16:54:35Z",
+      "side": 1,
+      "message": "and then use std::lower_bound here to search the array",
+      "revId": "d6e182b80c64ac8feac53cd48dd4c7295cc9e482",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
