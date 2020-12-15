@@ -273,7 +273,8 @@ static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputS
                 rContext.pCYMKBuffer.resize(nWidth * 4);
             }
 
-            for (*pLines = 0; *pLines < nHeight && !source->no_data_available; (*pLines)++)
+            // tdf#138950 allow up to one short read (no_data_available_failures <= 1) to not trigger cancelling import
+            for (*pLines = 0; *pLines < nHeight && source->no_data_available_failures <= 1; (*pLines)++)
             {
                 size_t yIndex = *pLines;
 
