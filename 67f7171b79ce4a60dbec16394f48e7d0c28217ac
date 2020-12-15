@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01e4b387_115fed3a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-15T12:44:15Z",
+      "side": 1,
+      "message": "What do you mean? U\"\" is C++11 feature, and it is indeed available. Do you mean that we don\u0027t have a LO-specific type for its result (other than already available char_32t)? Maybe we don\u0027t need such a type, and char_32t is OK?",
+      "range": {
+        "startLine": 9,
+        "startChar": 51,
+        "endLine": 9,
+        "endChar": 72
+      },
+      "revId": "67f7171b79ce4a60dbec16394f48e7d0c28217ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
