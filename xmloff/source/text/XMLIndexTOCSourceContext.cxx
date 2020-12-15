@@ -53,14 +53,12 @@ XMLIndexTOCSourceContext::~XMLIndexTOCSourceContext()
 {
 }
 
-void XMLIndexTOCSourceContext::ProcessAttribute(
-    sal_Int32 nAttributeToken,
-    const OUString& rValue)
+void XMLIndexTOCSourceContext::ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter)
 {
-    switch (nAttributeToken)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL):
-            if ( IsXMLToken( rValue, XML_NONE ) )
+            if ( IsXMLToken( aIter, XML_NONE ) )
             {
                 // #104651# use OUTLINE_LEVEL and USE_OUTLINE_LEVEL instead of
                 // OUTLINE_LEVEL with values none|1..10. For backwards
@@ -71,7 +69,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
             {
                 sal_Int32 nTmp;
                 if (::sax::Converter::convertNumber(
-                    nTmp, rValue, 1, GetImport().GetTextImport()->
+                    nTmp, aIter.toView(), 1, GetImport().GetTextImport()->
                     GetChapterNumbering()->getCount()))
                 {
                     bUseOutline = true;
@@ -83,7 +81,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
         case XML_ELEMENT(TEXT, XML_USE_OUTLINE_LEVEL):
         {
             bool bTmp(false);
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bUseOutline = bTmp;
             }
@@ -94,7 +92,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
         case XML_ELEMENT(TEXT, XML_USE_INDEX_MARKS):
         {
             bool bTmp(false);
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bUseMarks = bTmp;
             }
@@ -104,7 +102,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
         case XML_ELEMENT(TEXT, XML_USE_INDEX_SOURCE_STYLES):
         {
             bool bTmp(false);
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bUseParagraphStyles = bTmp;
             }
@@ -113,7 +111,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
 
         default:
             // default: ask superclass
-            XMLIndexSourceBaseContext::ProcessAttribute(nAttributeToken, rValue);
+            XMLIndexSourceBaseContext::ProcessAttribute(aIter);
             break;
     }
 }
