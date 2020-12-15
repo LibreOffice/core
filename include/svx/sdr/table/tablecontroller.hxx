@@ -85,6 +85,7 @@ public:
 
     SVX_DLLPRIVATE void MergeAttrFromSelectedCells(SfxItemSet& rAttr, bool bOnlyHardAttr) const;
     SVX_DLLPRIVATE void SetAttrToSelectedCells(const SfxItemSet& rAttr, bool bReplaceAll);
+    void SetAttrToSelectedShape(const SfxItemSet& rAttr);
     /** Fill the values that are common for all selected cells.
       *
       * This lets the Borders dialog to display the line arrangement

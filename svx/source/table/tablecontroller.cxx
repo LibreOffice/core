@@ -977,7 +977,26 @@ void SvxTableController::onFormatTable(const SfxRequest& rReq)
             if( aNewBoxItem.GetDistance( SvxBoxItemLine::BOTTOM ) != aBoxItem.GetDistance( SvxBoxItemLine::BOTTOM ) )
                 aNewSet.Put(makeSdrTextLowerDistItem( aNewBoxItem.GetDistance( SvxBoxItemLine::BOTTOM ) ) );
 
-            this->SetAttrToSelectedCells(aNewSet, false);
+            if (checkTableObject() && mxTable.is())
+            {
+                // Create a single undo action when applying the result of the dialog.
+                SdrTableObj& rTableObject(*mxTableObj);
+                SdrModel& rSdrModel(rTableObject.getSdrModelFromSdrObject());
+                bool bUndo = rSdrModel.IsUndoEnabled();
+                if (bUndo)
+                {
+                    rSdrModel.BegUndo(SvxResId(STR_TABLE_NUMFORMAT));
+                }
+
+                this->SetAttrToSelectedCells(aNewSet, false);
+
+                this->SetAttrToSelectedShape(aNewSet);
+
+                if (bUndo)
+                {
+                    rSdrModel.EndUndo();
+                }
+            }
         }
 
         xDlg->disposeOnce();
@@ -2705,6 +2724,18 @@ void SvxTableController::SetAttrToSelectedCells(const SfxItemSet& rAttr, bool bR
         rModel.EndUndo();
 }
 
+void SvxTableController::SetAttrToSelectedShape(const SfxItemSet& rAttr)
+{
+    if (!checkTableObject() || !mxTable.is())
+        return;
+
+    // Filter out non-shadow items from rAttr.
+    SfxItemSet aSet(*rAttr.GetPool(), svl::Items<SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST>{});
+    aSet.Put(rAttr);
+
+    // Set shadow items on the marked shape.
+    mrView.SetAttrToMarked(aSet, /*bReplaceAll=*/false);
+}
 
 bool SvxTableController::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
 {
