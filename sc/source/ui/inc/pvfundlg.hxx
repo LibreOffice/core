@@ -71,6 +71,7 @@ private:
 
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(DblClickHdl, weld::TreeView&, bool);
+    DECL_LINK(ButtonClicked, weld::Button&, void);
 
 private:
     std::unique_ptr<ScDPFunctionListBox> mxLbFunc;
@@ -81,6 +82,8 @@ private:
     std::unique_ptr<weld::Label>         mxFtBaseItem;
     std::unique_ptr<weld::ComboBox>      mxLbBaseItem;
     std::unique_ptr<weld::Button>        mxBtnOk;
+    std::unique_ptr<weld::Button>        mxBtnCancel;
+    std::unique_ptr<weld::Expander>      mxExpander;
 
     NameMapType          maBaseFieldNameMap; // cache for base field display -> original name.
     NameMapType          maBaseItemNameMap;  // cache for base item display -> original name.
@@ -108,6 +111,7 @@ private:
     DECL_LINK( DblClickHdl, weld::TreeView&, bool );
     DECL_LINK( RadioClickHdl, weld::Button&, void );
     DECL_LINK( ClickHdl, weld::Button&, void );
+    DECL_LINK( ButtonClicked, weld::Button&, void );
 
 private:
     ScDPObject&          mrDPObj;            /// The DataPilot object (for member names).
@@ -123,6 +127,7 @@ private:
     std::unique_ptr<weld::Label>         mxFtName;
     std::unique_ptr<weld::CheckButton>   mxCbShowAll;
     std::unique_ptr<weld::Button>        mxBtnOk;
+    std::unique_ptr<weld::Button>        mxBtnCancel;
     std::unique_ptr<weld::Button>        mxBtnOptions;
 
     std::shared_ptr<ScDPSubtotalOptDlg> mxOptionsDlg;
@@ -149,6 +154,7 @@ private:
     DECL_LINK( RadioClickHdl, weld::Button&, void );
     DECL_LINK( CheckHdl, weld::Button&, void );
     DECL_LINK( SelectHdl, weld::ComboBox&, void );
+    DECL_LINK( ButtonClicked, weld::Button&, void );
 
 private:
     std::unique_ptr<weld::ComboBox>     m_xLbSortBy;
@@ -170,6 +176,8 @@ private:
     std::unique_ptr<weld::TreeView>     m_xLbHide;
     std::unique_ptr<weld::Label>        m_xFtHierarchy;
     std::unique_ptr<weld::ComboBox>     m_xLbHierarchy;
+    std::unique_ptr<weld::Button>       m_xBtnOk;
+    std::unique_ptr<weld::Button>       m_xBtnCancel;
 
     ScDPObject&         mrDPObj;            /// The DataPilot object (for member names).
     ScDPLabelData       maLabelData;        /// Cache for members data.
