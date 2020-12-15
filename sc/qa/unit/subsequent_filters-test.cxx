@@ -104,6 +104,7 @@ public:
     virtual void tearDown() override;
 
     //ods, xls, xlsx filter tests
+    void testExtCondFormatXLSX();
     void testUpdateCircleInMergedCellODS();
     void testDeleteCircleInMergedCellODS();
     void testBooleanFormatXLSX();
@@ -295,6 +296,7 @@ public:
     void testDeleteCirclesInRowAndCol();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
+    CPPUNIT_TEST(testExtCondFormatXLSX);
     CPPUNIT_TEST(testUpdateCircleInMergedCellODS);
     CPPUNIT_TEST(testDeleteCircleInMergedCellODS);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -528,6 +530,42 @@ void testRangeNameImpl(const ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("formula Global5 should reference Global6 ( which is evaluated as local1 )", 5.0, aValue);
 }
 
+}
+
+void ScFiltersTest::testExtCondFormatXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf122102.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf122102.xlsx", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // contains text and not contains text conditions
+    ScConditionalFormat* pFormatA1 = rDoc.GetCondFormat(0, 0, 0);
+    CPPUNIT_ASSERT(pFormatA1);
+    ScConditionalFormat* pFormatA2 = rDoc.GetCondFormat(0, 1, 0);
+    CPPUNIT_ASSERT(pFormatA2);
+    ScConditionalFormat* pFormatA3 = rDoc.GetCondFormat(0, 2, 0);
+    CPPUNIT_ASSERT(pFormatA3);
+    ScConditionalFormat* pFormatA4 = rDoc.GetCondFormat(0, 3, 0);
+    CPPUNIT_ASSERT(pFormatA4);
+
+    ScRefCellValue aCellA1(rDoc, ScAddress(0, 0, 0));
+    OUString aCellStyleA1 = pFormatA1->GetCellStyle(aCellA1, ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(!aCellStyleA1.isEmpty());
+
+    ScRefCellValue aCellA2(rDoc, ScAddress(0, 1, 0));
+    OUString aCellStyleA2 = pFormatA2->GetCellStyle(aCellA2, ScAddress(0, 1, 0));
+    CPPUNIT_ASSERT(!aCellStyleA2.isEmpty());
+
+    ScRefCellValue aCellA3(rDoc, ScAddress(0, 2, 0));
+    OUString aCellStyleA3 = pFormatA3->GetCellStyle(aCellA3, ScAddress(0, 2, 0));
+    CPPUNIT_ASSERT(!aCellStyleA3.isEmpty());
+
+    ScRefCellValue aCellA4(rDoc, ScAddress(0, 3, 0));
+    OUString aCellStyleA4 = pFormatA4->GetCellStyle(aCellA4, ScAddress(0, 3, 0));
+    CPPUNIT_ASSERT(!aCellStyleA4.isEmpty());
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testUpdateCircleInMergedCellODS()
