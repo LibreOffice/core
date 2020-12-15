@@ -49,4 +49,13 @@ public class OfficeMasterPage extends Section
     {
         setAttribute(OfficeNamespaces.STYLE_NS, "page-layout-name", name);
     }
+
+    public void setNextMasterPage(final String name)
+    {
+        setAttribute(OfficeNamespaces.STYLE_NS, "next-style-name", name);
+    }
+
+    public String getNextMasterPage() {
+        return (String) getAttribute(OfficeNamespaces.STYLE_NS, "next-style-name");
+    }
 }
