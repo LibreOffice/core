@@ -56,7 +56,7 @@ XFormsSubmissionContext::XFormsSubmissionContext(
 
 namespace {
 
-Any toBool( std::u16string_view rValue )
+Any toBool( std::string_view rValue )
 {
     Any aValue;
     bool bValue(false);
@@ -69,59 +69,58 @@ Any toBool( std::u16string_view rValue )
 
 } // namespace
 
-void XFormsSubmissionContext::HandleAttribute( sal_Int32 nAttributeToken,
-                                               const OUString& rValue )
+void XFormsSubmissionContext::HandleAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch( nAttributeToken & TOKEN_MASK )
+    switch( aIter.getToken() & TOKEN_MASK )
     {
     case XML_ID:
-        xforms_setValue( mxSubmission, "ID", rValue );
+        xforms_setValue( mxSubmission, "ID", aIter.toString() );
         break;
     case XML_BIND:
-        xforms_setValue( mxSubmission, "Bind", rValue );
+        xforms_setValue( mxSubmission, "Bind", aIter.toString() );
         break;
     case XML_REF:
-        xforms_setValue( mxSubmission, "Ref", rValue );
+        xforms_setValue( mxSubmission, "Ref", aIter.toString() );
         break;
     case XML_ACTION:
-        xforms_setValue( mxSubmission, "Action", rValue );
+        xforms_setValue( mxSubmission, "Action", aIter.toString() );
         break;
     case XML_METHOD:
-        xforms_setValue( mxSubmission, "Method", rValue );
+        xforms_setValue( mxSubmission, "Method", aIter.toString() );
         break;
     case XML_VERSION:
-        xforms_setValue( mxSubmission, "Version", rValue );
+        xforms_setValue( mxSubmission, "Version", aIter.toString() );
         break;
     case XML_INDENT:
-        xforms_setValue( mxSubmission, "Indent", toBool( rValue ) );
+        xforms_setValue( mxSubmission, "Indent", toBool( aIter.toView() ) );
         break;
     case XML_MEDIATYPE:
-        xforms_setValue( mxSubmission, "MediaType", rValue );
+        xforms_setValue( mxSubmission, "MediaType", aIter.toString() );
         break;
     case XML_ENCODING:
-        xforms_setValue( mxSubmission, "Encoding", rValue );
+        xforms_setValue( mxSubmission, "Encoding", aIter.toString() );
         break;
     case XML_OMIT_XML_DECLARATION:
         xforms_setValue( mxSubmission, "OmitXmlDeclaration",
-                      toBool( rValue ) );
+                      toBool( aIter.toView() ) );
         break;
     case XML_STANDALONE:
-        xforms_setValue( mxSubmission, "Standalone", toBool( rValue ) );
+        xforms_setValue( mxSubmission, "Standalone", toBool( aIter.toView() ) );
         break;
     case XML_CDATA_SECTION_ELEMENTS:
-        xforms_setValue( mxSubmission, "CDataSectionElement", rValue );
+        xforms_setValue( mxSubmission, "CDataSectionElement", aIter.toString() );
         break;
     case XML_REPLACE:
-        xforms_setValue( mxSubmission, "Replace", rValue );
+        xforms_setValue( mxSubmission, "Replace", aIter.toString() );
         break;
     case XML_SEPARATOR:
-        xforms_setValue( mxSubmission, "Separator", rValue );
+        xforms_setValue( mxSubmission, "Separator", aIter.toString() );
         break;
     case XML_INCLUDENAMESPACEPREFIXES:
-        xforms_setValue( mxSubmission, "IncludeNamespacePrefixes", rValue );
+        xforms_setValue( mxSubmission, "IncludeNamespacePrefixes", aIter.toString() );
         break;
     default:
-        XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttributeToken, rValue);
+        XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         assert( false && "unknown attribute" );
         break;
     }
