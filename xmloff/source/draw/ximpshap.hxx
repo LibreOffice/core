@@ -112,7 +112,7 @@ public:
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue );
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & );
 
 };
 
@@ -134,7 +134,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
 // draw:line context
@@ -158,7 +158,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
 // draw:ellipse and draw:circle context
@@ -185,7 +185,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
 // draw:polyline and draw:polygon context
@@ -207,7 +207,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
 // draw:path context
@@ -229,7 +229,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
 // draw:text-box context
@@ -250,7 +250,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
 // draw:control context
@@ -272,7 +272,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
 // draw:connector context
@@ -309,7 +309,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
 // draw:measure context
@@ -333,7 +333,7 @@ public:
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
 // draw:page context
@@ -354,7 +354,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
 // draw:caption context
@@ -377,7 +377,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
 // office:image context
@@ -404,7 +404,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
 // chart:chart context
@@ -455,7 +455,7 @@ public:
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
 // draw:applet
@@ -486,7 +486,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
 // draw:plugin
@@ -516,7 +516,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 
     const OUString& getMimeType() const { return maMimeType; }
 };
@@ -542,7 +542,7 @@ public:
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
 // draw:-frame
@@ -576,7 +576,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
 class SdXMLCustomShapeContext : public SdXMLShapeContext
@@ -602,7 +602,7 @@ public:
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 };
 
 // draw:table
@@ -625,7 +625,7 @@ public:
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual bool processAttribute( sal_Int32 nElement, const OUString& rValue ) override;
+    virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
 
 private:
     SvXMLImportContextRef mxTableImportContext;
