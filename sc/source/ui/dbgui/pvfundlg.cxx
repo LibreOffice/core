@@ -245,6 +245,8 @@ ScDPFunctionDlg::ScDPFunctionDlg(
     , mxFtBaseItem(m_xBuilder->weld_label("baseitemft"))
     , mxLbBaseItem(m_xBuilder->weld_combo_box("baseitem"))
     , mxBtnOk(m_xBuilder->weld_button("ok"))
+    , mxBtnCancel(m_xBuilder->weld_button("cancel"))
+    , mxExpander(m_xBuilder->weld_expander("expander"))
     , mrLabelVec(rLabelVec)
     , mbEmptyItem(false)
 {
@@ -291,6 +293,9 @@ DataPilotFieldReference ScDPFunctionDlg::GetFieldRef() const
 
 void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData )
 {
+    mxBtnOk->connect_clicked( LINK( this, ScDPFunctionDlg, ButtonClicked ) );
+    mxBtnCancel->connect_clicked( LINK( this, ScDPFunctionDlg, ButtonClicked ) );
+
     // list box
     PivotFunc nFuncMask = (rFuncData.mnFuncMask == PivotFunc::NONE) ? PivotFunc::Sum : rFuncData.mnFuncMask;
     mxLbFunc->SetSelection( nFuncMask );
@@ -436,6 +441,14 @@ IMPL_LINK( ScDPFunctionDlg, SelectHdl, weld::ComboBox&, rLBox, void )
         sal_uInt16 nItemPos = (mxLbBaseItem->get_count() > SC_BASEITEM_USER_POS) ? SC_BASEITEM_USER_POS : SC_BASEITEM_PREV_POS;
         mxLbBaseItem->set_active( nItemPos );
     }
+}
+
+IMPL_LINK(ScDPFunctionDlg, ButtonClicked, weld::Button&, rButton, void)
+{
+    if (&rButton == mxBtnOk.get())
+        response(RET_OK);
+    else
+        response(RET_CANCEL);
 }
 
 IMPL_LINK_NOARG(ScDPFunctionDlg, DblClickHdl, weld::TreeView&, bool)

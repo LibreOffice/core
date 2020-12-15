@@ -71,6 +71,7 @@ private:
 
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(DblClickHdl, weld::TreeView&, bool);
+    DECL_LINK(ButtonClicked, weld::Button&, void);
 
 private:
     std::unique_ptr<ScDPFunctionListBox> mxLbFunc;
@@ -81,6 +82,8 @@ private:
     std::unique_ptr<weld::Label>         mxFtBaseItem;
     std::unique_ptr<weld::ComboBox>      mxLbBaseItem;
     std::unique_ptr<weld::Button>        mxBtnOk;
+    std::unique_ptr<weld::Button>        mxBtnCancel;
+    std::unique_ptr<weld::Expander>      mxExpander;
 
     NameMapType          maBaseFieldNameMap; // cache for base field display -> original name.
     NameMapType          maBaseItemNameMap;  // cache for base item display -> original name.
