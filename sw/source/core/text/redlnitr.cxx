@@ -957,11 +957,14 @@ bool SwRedlineItr::CheckLine(
 
     SwPosition const start(*m_rDoc.GetNodes()[nStartNode]->GetContentNode(), nChkStart);
     SwPosition const end(*m_rDoc.GetNodes()[nEndNode]->GetContentNode(), nChkEnd);
+    SwRangeRedline const* pPrevRedline = nullptr;
+    bool isBreak(false);
     for (m_nAct = m_nFirst; m_nAct < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); ++m_nAct)
     {
         SwRangeRedline const*const pRedline(
             m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nAct ] );
-        bool isBreak(false);
+        // collect text of the hidden redlines at the end of the line
+        bool isExtendText(false);
         switch (ComparePosition(*pRedline->Start(), *pRedline->End(), start, end))
         {
             case SwComparePosition::Behind:
@@ -984,13 +987,35 @@ bool SwRedlineItr::CheckLine(
                 if (rRedlineText.isEmpty() && pRedline->GetType() == RedlineType::Delete)
                 {
                     rRedlineText = const_cast<SwRangeRedline*>(pRedline)->GetDescr(/*bSimplified=*/true);
+                    pPrevRedline = pRedline;
+                    isExtendText = true;
+                }
+                // join the text of the next short delete redlines in the same position
+                // i.e. characters deleted by pressing backspace or delete
+                else if (pPrevRedline && pRedline->GetType() == RedlineType::Delete &&
+                    *pRedline->Start() == *pPrevRedline->Start() && *pRedline->End() == *pPrevRedline->End() )
+                {
+                    OUString sExtendText(const_cast<SwRangeRedline*>(pRedline)->GetDescr(/*bSimplified=*/true));
+                    if (!sExtendText.isEmpty())
+                    {
+                        if (rRedlineText.getLength() < 12)
+                        {
+                            // TODO: remove extra space from GetDescr(true),
+                            // but show deletion of paragraph or line break
+                            rRedlineText = rRedlineText +
+                                    const_cast<SwRangeRedline*>(pRedline)->GetDescr(/*bSimplified=*/true).subView(1);
+                        }
+                        else
+                            rRedlineText = OUString::Concat(rRedlineText.subView(0, rRedlineText.getLength() - 3)) + "...";
+                    }
+                    isExtendText = true;
                 }
                 break;
             }
             case SwComparePosition::Before:
                 break; // -Werror=switch
         }
-        if (isBreak)
+        if (isBreak && !isExtendText)
         {
             break;
         }
