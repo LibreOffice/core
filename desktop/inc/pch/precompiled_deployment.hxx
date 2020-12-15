@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:04:39 using:
+ Generated on 2020-12-15 11:15:31 using:
  ./bin/update_pch desktop deployment --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,6 +26,7 @@
 #include <memory>
 #include <optional>
 #include <ostream>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 #endif // PCH_LEVEL >= 1

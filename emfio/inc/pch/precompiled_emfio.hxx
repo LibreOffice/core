@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-21 15:21:15 using:
+ Generated on 2020-12-15 11:15:33 using:
  ./bin/update_pch emfio emfio --cutoff=8 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -29,12 +29,12 @@
 #include <osl/endian.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
+#include <rtl/bootstrap.hxx>
 #include <rtl/crc.h>
 #include <rtl/instance.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <rtl/tencinfo.h>
-#include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/types.h>
