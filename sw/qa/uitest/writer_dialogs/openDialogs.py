@@ -11,7 +11,7 @@ from uitest.uihelper.testDialog import testDialog
 
 dialogs = [
     {"command": ".uno:OpenRemote", "closeButton": "cancel"},
-    {"command": ".uno:NewDoc", "closeButton": "cancel"},
+    {"command": ".uno:NewDoc", "closeButton": "close"},
     {"command": ".uno:SaveAsTemplate", "closeButton": "cancel"},
     {"command": ".uno:ExportToPDF", "closeButton": "cancel", "skipTestOK": True},
         # export needs filesystem
