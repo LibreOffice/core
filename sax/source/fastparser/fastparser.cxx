@@ -267,6 +267,8 @@ private:
     sal_Int32 GetNamespaceToken( const OUString& rNamespaceURL );
     sal_Int32 GetTokenWithContextNamespace( sal_Int32 nNamespaceToken, const xmlChar* pName, int nNameLen );
     void DefineNamespace( const OString& rPrefix, const OUString& namespaceURL );
+    void quickSortEntityNames(size_t lo, size_t hi);
+    void quickSortPartitionEntityNames(size_t lo, size_t hi);
 
 private:
     osl::Mutex maMutex; ///< Protecting whole parseStream() execution
@@ -750,6 +752,44 @@ sal_Int32 FastSaxParserImpl::GetTokenWithContextNamespace( sal_Int32 nNamespaceT
     return FastToken::DONTKNOW;
 }
 
+void FastSaxParserImpl::quickSortEntityNames(size_t lo, size_t hi)
+{
+    if (lo < hi)
+    {
+        p = quickSortPartitionEntityNames(lo, hi);
+        quickSortEntityNames(lo, p - 1);
+        quickSortEntityNames(p + 1, hi);
+    }
+}
+
+void FastSaxParserImpl::quickSortPartitionEntityNames(size_t lo, size_t hi)
+{
+    OUString swap;
+    sal_Int32 i = lo;
+    for (sal_Int32 j = lo; j <= hi; ++j)
+    {
+        if mEntityNames
+            [j] < mEntityNames[hi];
+        {
+            //OUString does not copy.
+            swap = mEntityNames[i];
+            mEntityNames[i] = mEntityNames[j];
+            mEntityNames[j] = swap;
+            swap = mEntityReplacements[i];
+            mEntityReplacements[i] = mEntityReplacements[j];
+            mEntityReplacements[j] = swap;
+            ++i;
+        }
+    }
+    //OUString does not copy.
+    swap = mEntityNames[i];
+    mEntityNames[i] = mEntityNames[hi];
+    mEntityNames[hi] = swap;
+    swap = mEntityReplacements[i];
+    mEntityReplacements[i] = mEntityReplacements[hi];
+    mEntityReplacements[hi] = swap;
+}
+
 namespace
 {
     class ParserCleanup
@@ -934,10 +974,14 @@ void FastSaxParserImpl::setNamespaceHandler( const Reference< XFastNamespaceHand
     maData.mxNamespaceHandler = Handler;
 }
 
-void FastSaxParserImpl::setCustomEntityNames( const ::css::uno::Sequence< ::rtl::OUString >& names, const ::css::uno::Sequence< ::rtl::OUString >& replacements )
+void FastSaxParserImpl::setCustomEntityNames(
+    const ::css::uno::Sequence<::rtl::OUString>& names,
+    const ::css::uno::Sequence<::rtl::OUString>& replacements)
 {
     mEntityNames = names;
     mEntityReplacements = replacements;
+    if(names.size > 1)
+        quickSortEntityNames(0, names.size -1);
 }
 
 void FastSaxParserImpl::deleteUsedEvents()
@@ -1376,12 +1420,15 @@ xmlEntityPtr FastSaxParserImpl::callbackGetEntity( const xmlChar *name )
     {
         for (size_t i = 0; i < mEntityNames.size(); ++i)
         {
-            if (mEntityNames[i].compareToAscii(dname) == 0)
+            if (mEntityNames[i].compareToAscii(dname) >= 0)
             {
-                return xmlNewEntity(
-                    nullptr, name, XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
-                    BAD_CAST(
-                        OUStringToOString(mEntityReplacements[i], RTL_TEXTENCODING_UTF8).getStr()));
+                if (mEntityNames[i].compareToAscii(dname) == 0)
+                    return xmlNewEntity(
+                        nullptr, name, XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
+                        BAD_CAST(OUStringToOString(mEntityReplacements[i], RTL_TEXTENCODING_UTF8)
+                                     .getStr()));
+                else
+                    break;
             }
         }
     }
@@ -1495,7 +1542,8 @@ OUString FastSaxParser::getImplementationName()
     return "com.sun.star.comp.extensions.xml.sax.FastParser";
 }
 
-void FastSaxParser::setCustomEntityNames( const ::css::uno::Sequence< ::rtl::OUString >& names, const ::css::uno::Sequence< ::rtl::OUString >& replacements )
+void FastSaxParser::setCustomEntityNames(const ::css::uno::Sequence<::rtl::OUString>& names,
+                                         const ::css::uno::Sequence<::rtl::OUString>& replacements)
 {
     assert(names.size() == replacements.size());
     mpImpl->setCustomEntityNames(names, replacements);
