@@ -225,9 +225,19 @@ short AbstractScDPFunctionDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractScDPFunctionDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractScDPSubtotalDlg_Impl::Execute()
 {
     return m_xDlg->run();
+}
+
+bool AbstractScDPSubtotalDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractScDPNumGroupDlg_Impl::Execute()

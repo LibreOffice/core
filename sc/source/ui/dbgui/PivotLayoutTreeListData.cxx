@@ -85,27 +85,32 @@ IMPL_LINK_NOARG(ScPivotLayoutTreeListData, DoubleClickHdl, weld::TreeView&, bool
 
     ScAbstractDialogFactory* pFactory = ScAbstractDialogFactory::Create();
 
-    ScopedVclPtr<AbstractScDPFunctionDlg> pDialog(
+    VclPtr<AbstractScDPFunctionDlg> pDialog(
         pFactory->CreateScDPFunctionDlg(mxControl.get(), mpParent->GetLabelDataVector(), rCurrentLabelData, rCurrentFunctionData));
 
-    if (pDialog->Execute() == RET_OK)
-    {
-        rCurrentFunctionData.mnFuncMask = pDialog->GetFuncMask();
-        rCurrentLabelData.mnFuncMask = pDialog->GetFuncMask();
+    pDialog->StartExecuteAsync([this, pDialog, pCurrentItemValue, rCurrentFunctionData,
+                                rCurrentLabelData, nEntry](int nResult) mutable {
+        if (nResult == RET_OK)
+        {
+            rCurrentFunctionData.mnFuncMask = pDialog->GetFuncMask();
+            rCurrentLabelData.mnFuncMask = pDialog->GetFuncMask();
 
-        rCurrentFunctionData.maFieldRef = pDialog->GetFieldRef();
+            rCurrentFunctionData.maFieldRef = pDialog->GetFieldRef();
 
-        ScDPLabelData& rDFData = mpParent->GetLabelData(rCurrentFunctionData.mnCol);
+            ScDPLabelData& rDFData = mpParent->GetLabelData(rCurrentFunctionData.mnCol);
 
-        AdjustDuplicateCount(pCurrentItemValue);
+            AdjustDuplicateCount(pCurrentItemValue);
 
-        OUString sDataItemName = lclCreateDataItemName(
-                                    rCurrentFunctionData.mnFuncMask,
-                                    rDFData.maName,
-                                    rCurrentFunctionData.mnDupCount);
+            OUString sDataItemName = lclCreateDataItemName(
+                                        rCurrentFunctionData.mnFuncMask,
+                                        rDFData.maName,
+                                        rCurrentFunctionData.mnDupCount);
 
-        mxControl->set_text(nEntry, sDataItemName);
-    }
+            mxControl->set_text(nEntry, sDataItemName);
+        }
+
+        pDialog->disposeOnce();
+    });
 
     return true;
 }

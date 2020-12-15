@@ -89,6 +89,8 @@ private:
     bool                 mbEmptyItem;        /// true = Empty base item in listbox.
 };
 
+class ScDPSubtotalOptDlg;
+
 class ScDPSubtotalDlg : public weld::GenericDialogController
 {
 public:
@@ -122,6 +124,8 @@ private:
     std::unique_ptr<weld::CheckButton>   mxCbShowAll;
     std::unique_ptr<weld::Button>        mxBtnOk;
     std::unique_ptr<weld::Button>        mxBtnOptions;
+
+    std::shared_ptr<ScDPSubtotalOptDlg> mxOptionsDlg;
 };
 
 class ScDPSubtotalOptDlg : public weld::GenericDialogController
