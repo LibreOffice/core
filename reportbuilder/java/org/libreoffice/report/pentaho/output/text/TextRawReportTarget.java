@@ -84,6 +84,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     private static final String NORMAL = "normal";
     private static final String PARAGRAPH_PROPERTIES = "paragraph-properties";
     private static final String STANDARD = "Standard";
+    private static final String FOLLOWING_STANDARD = "FollowingStandard";
     private static final String TABLE_PROPERTIES = "table-properties";
     private static final String VARIABLES_HIDDEN_STYLE_WITH_KEEPWNEXT = "variables_paragraph_with_next";
     private static final String VARIABLES_HIDDEN_STYLE_WITHOUT_KEEPWNEXT = "variables_paragraph_without_next";
@@ -109,7 +110,9 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     private boolean pageHeaderOnReportHeader;
     private int contentProcessingState;
     private OfficeMasterPage currentMasterPage;
+    private OfficeMasterPage nextMasterPage;
     private final FastStack activePageContext;
+    private final FastStack nextPageContext;
     private MasterPageFactory masterPageFactory;
     private LengthCalculator sectionHeight;
     private String variables;
@@ -135,6 +138,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     {
         super(reportJob, resourceManager, baseResource, inputRepository, outputRepository, target, imageService, datasourcefactory);
         activePageContext = new FastStack();
+        nextPageContext = new FastStack();
         this.sectionNames = new AttributeNameGenerator();
 
         this.tableLayoutConfig = TABLE_LAYOUT_SINGLE_DETAIL_TABLE;
@@ -208,6 +212,10 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     {
         return (PageContext) activePageContext.peek();
     }
+    private PageContext getNextContext()
+    {
+        return (PageContext) nextPageContext.peek();
+    }
 
     private String createMasterPage(final boolean printHeader,
             final boolean printFooter)
@@ -221,6 +229,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         final String activePageFooter;
         // Check, whether the report header can have a page-header
         final PageContext context = getCurrentContext();
+        final PageContext nextContext = getNextContext();
         if (printFooter)
         {
             activePageFooter = context.getPageFooterContent();
@@ -230,14 +239,17 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             activePageFooter = null;
         }
         final String activePageHeader;
+        final String nextPageHeader;
         if (printHeader)
         {
             // we have to insert a manual pagebreak after the report header.
             activePageHeader = context.getPageHeaderContent();
+            nextPageHeader = nextContext.getPageHeaderContent();
         }
         else
         {
             activePageHeader = null;
+            nextPageHeader = null;
         }
 
         final String masterPageName;
@@ -246,9 +258,11 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
 
             final CSSNumericValue headerSize = context.getAllHeaderSize();
             final CSSNumericValue footerSize = context.getAllFooterSize();
+            final CSSNumericValue nextHeaderSize = nextContext.getAllHeaderSize();
 
 
             currentMasterPage = masterPageFactory.createMasterPage(STANDARD, activePageHeader, activePageFooter);
+            nextMasterPage = masterPageFactory.createMasterPage(FOLLOWING_STANDARD, nextPageHeader, activePageFooter);
 
             // todo: Store the page-layouts as well.
             // The page layouts are derived from a common template, but as the
@@ -262,22 +276,67 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             {
                 // there is no pagelayout. Create one ..
                 final String derivedLayout = masterPageFactory.createPageStyle(getGlobalStylesCollection().getAutomaticStyles(), headerSize, footerSize);
+                final String derivedLayoutNext = masterPageFactory.createPageStyle(getGlobalStylesCollection().getAutomaticStyles(), nextHeaderSize, footerSize);
                 currentMasterPage.setPageLayout(derivedLayout);
+                nextMasterPage.setPageLayout(derivedLayoutNext);
             }
             else
             {
                 final String derivedLayout = masterPageFactory.derivePageStyle(pageLayoutTemplate,
                         getPredefinedStylesCollection().getAutomaticStyles(),
                         getGlobalStylesCollection().getAutomaticStyles(), headerSize, footerSize);
+                final String derivedLayoutNext = masterPageFactory.derivePageStyle(pageLayoutTemplate,
+                        getPredefinedStylesCollection().getAutomaticStyles(),
+                        getGlobalStylesCollection().getAutomaticStyles(), nextHeaderSize, footerSize);
                 currentMasterPage.setPageLayout(derivedLayout);
+                nextMasterPage.setPageLayout(derivedLayoutNext);
             }
+            officeMasterStyles.addMasterPage(nextMasterPage);
+            currentMasterPage.setNextMasterPage(nextMasterPage.getStyleName());
             officeMasterStyles.addMasterPage(currentMasterPage);
             masterPageName = currentMasterPage.getStyleName();
+        }
+        else if(!masterPageFactory.containsMasterPage(FOLLOWING_STANDARD, nextPageHeader, activePageFooter)){
+            // retrieve the master-page.
+            final CSSNumericValue nextHeaderSize = nextContext.getAllHeaderSize();
+            final CSSNumericValue footerSize = context.getAllFooterSize();
+            final OfficeMasterPage masterPage = masterPageFactory.getMasterPage(STANDARD, activePageHeader, activePageFooter);
+            nextMasterPage = masterPageFactory.createMasterPage(FOLLOWING_STANDARD, nextPageHeader, activePageFooter);
+            final OfficeStylesCollection officeStylesCollection = getGlobalStylesCollection();
+            final OfficeMasterStyles officeMasterStyles = officeStylesCollection.getMasterStyles();
+            final String pageLayoutTemplate = currentMasterPage.getPageLayout();
+            if (ObjectUtilities.equal(masterPage.getStyleName(), currentMasterPage.getStyleName()))
+            {
+                // They are the same,
+                masterPageName = null;
+            }
+            else
+            {
+                // reuse the existing one ..
+                currentMasterPage = masterPage;
+                masterPageName = currentMasterPage.getStyleName();
+            }
+            if (pageLayoutTemplate == null)
+            {
+                // there is no pagelayout. Create one ..
+                final String derivedLayoutNext = masterPageFactory.createPageStyle(getGlobalStylesCollection().getAutomaticStyles(), nextHeaderSize, footerSize);
+                nextMasterPage.setPageLayout(derivedLayoutNext);
+            }
+            else
+            {
+                final String derivedLayoutNext = masterPageFactory.derivePageStyle(pageLayoutTemplate,
+                        getPredefinedStylesCollection().getAutomaticStyles(),
+                        getGlobalStylesCollection().getAutomaticStyles(), nextHeaderSize, footerSize);
+                nextMasterPage.setPageLayout(derivedLayoutNext);
+            }
+            officeMasterStyles.addMasterPage(nextMasterPage);
+            currentMasterPage.setNextMasterPage(nextMasterPage.getStyleName());
         }
         else
         {
             // retrieve the master-page.
             final OfficeMasterPage masterPage = masterPageFactory.getMasterPage(STANDARD, activePageHeader, activePageFooter);
+            final OfficeMasterPage nextMasterPage = masterPageFactory.getMasterPage(FOLLOWING_STANDARD, nextPageHeader, activePageFooter);
             if (ObjectUtilities.equal(masterPage.getStyleName(), currentMasterPage.getStyleName()))
             {
                 // They are the same,
@@ -433,6 +492,8 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
 
         activePageContext.clear();
         activePageContext.push(new PageContext());
+        nextPageContext.clear();
+        nextPageContext.push(new PageContext());
 
         final OfficeStylesCollection predefStyles = getPredefinedStylesCollection();
         masterPageFactory = new MasterPageFactory(predefStyles.getMasterStyles());
@@ -515,7 +576,9 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         if (colCount != null)
         {
             final PageContext pageContext = getCurrentContext();
+            final PageContext nPageContext = getNextContext();
             pageContext.setColumnCount(colCount);
+            nPageContext.setColumnCount(colCount);
         }
 
     }
@@ -687,7 +750,13 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             }
 
             // process the styles as usual
-            performStyleProcessing(attrs);
+            final int currentRole = getCurrentRole();
+            if(currentRole == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER) {
+                performStyleProcessingAll(attrs);
+            }
+            else {
+                performStyleProcessing(attrs);
+            }
             final XmlWriter xmlWriter = getXmlWriter();
             final AttributeList attrList = buildAttributeList(attrs);
             xmlWriter.writeTag(namespace, elementType, attrList, XmlWriterSupport.OPEN);
@@ -769,7 +838,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                 // But we skip this (and therefore the resulting pagebreak) if there is no manual break
                 // and no other condition that would force a break.
             }
-            else if (currentRole == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER || currentRole == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER)
+            else if (currentRole == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER)
             {
                 breakDefinition = null;
                 // no pagebreaks ..
@@ -777,6 +846,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             else if (currentMasterPage == null || isPagebreakPending())
             {
                 // Must be the first table, as we have no master-page yet.
+                boolean isbreaking = isPagebreakPending();
                 masterPageName = createMasterPage(true, true);
                 setPagebreakDefinition(null);
                 if (masterPageName == null)
@@ -784,14 +854,22 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                     // we should always have a master-page ...
                     masterPageName = currentMasterPage.getStyleName();
                 }
-                breakDefinition = new PageBreakDefinition(isResetPageNumber());
+                if(isbreaking) {
+                    breakDefinition = new PageBreakDefinition(isResetPageNumber());
+                }
+                else {
+                    breakDefinition = null;
+                }
             }
             else
             {
+                if(currentRole == OfficeDocumentReportTarget.ROLE_DETAIL) {
+                    createMasterPage(true, true);
+                }
                 breakDefinition = null;
             }
         }
-        else if (isPagebreakPending() && currentRole != OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER && currentRole != OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER)
+        else if (isPagebreakPending() && currentRole != OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER)
         {
             // Derive an automatic style for the pagebreak.
             breakDefinition = getPagebreakDefinition();
@@ -827,7 +905,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
 
                 final OfficeStyle style = deriveStyle(OfficeToken.PARAGRAPH, TextRawReportTarget.VARIABLES_HIDDEN_STYLE_WITH_KEEPWNEXT);
                 style.setAttribute(OfficeNamespaces.STYLE_NS, "master-page-name", masterPageName);
-                if (breakDefinition.isResetPageNumber())
+                if (breakDefinition != null && breakDefinition.isResetPageNumber())
                 {
                     final Element paragraphProps = produceFirstChild(style, OfficeNamespaces.STYLE_NS, PARAGRAPH_PROPERTIES);
                     paragraphProps.setAttribute(OfficeNamespaces.STYLE_NS, "page-number", "1");
@@ -885,7 +963,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                 // Patch the current styles.
                 // This usually only happens on Table-Styles or Paragraph-Styles
                 style.setAttribute(OfficeNamespaces.STYLE_NS, "master-page-name", masterPageName);
-                if (breakDefinition.isResetPageNumber())
+                if (breakDefinition != null && breakDefinition.isResetPageNumber())
                 {
                     final Element paragraphProps = produceFirstChild(style, OfficeNamespaces.STYLE_NS, PARAGRAPH_PROPERTIES);
                     paragraphProps.setAttribute(OfficeNamespaces.STYLE_NS, "page-number", "1");
@@ -976,7 +1054,12 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             }
 
             // process the styles as usual
-            performStyleProcessing(attrs);
+            if(currentRole == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER) {
+                performStyleProcessingAll(attrs);
+            }
+            else {
+                performStyleProcessing(attrs);
+            }
         }
 
         final String namespace = ReportTargetUtil.getNamespaceFromAttribute(attrs);
@@ -1089,6 +1172,11 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         super.startGroup(attrs);
         final PageContext pageContext = new PageContext(getCurrentContext());
         activePageContext.push(pageContext);
+        if (getGroupContext().isGroupWithRepeatingSection())
+        {
+            final PageContext nPageContext = new PageContext(getNextContext());
+            nextPageContext.push(nPageContext);
+        }
 
         final Object resetPageNumber = attrs.getAttribute(OfficeNamespaces.OOREPORT_NS, "reset-page-number");
         if (OfficeToken.TRUE.equals(resetPageNumber))
@@ -1123,10 +1211,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     @Override
     protected void startGroupInstance(final AttributeMap attrs)
     {
-        if (getGroupContext().isGroupWithRepeatingSection())
-        {
-            setPagebreakDefinition(new PageBreakDefinition(isResetPageNumber()));
-        }
     }
 
     @Override
@@ -1135,7 +1219,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     {
         if (getGroupContext().isGroupWithRepeatingSection())
         {
-            setPagebreakDefinition(new PageBreakDefinition(isResetPageNumber()));
+            nextPageContext.pop();
         }
 
         super.endGroup(attrs);
@@ -1148,9 +1232,22 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             throws ReportProcessingException
     {
         final PageContext pageContext = getCurrentContext();
+        final PageContext nPageContext = getNextContext();
         if (pageContext.isSectionOpen())
         {
             pageContext.setSectionOpen(false);
+            try
+            {
+                getXmlWriter().writeCloseTag();
+            }
+            catch (IOException e)
+            {
+                throw new ReportProcessingException("IOError", e);
+            }
+        }
+        if (nPageContext.isSectionOpen())
+        {
+            nPageContext.setSectionOpen(false);
             try
             {
                 getXmlWriter().writeCloseTag();
@@ -1176,22 +1273,34 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         if (role == OfficeDocumentReportTarget.ROLE_PAGE_HEADER)
         {
             final PageContext pageContext = getCurrentContext();
-            pageContext.setHeader(applyColumnsToPageBand(finishBuffering(), pageContext.getActiveColumns()).getXmlBuffer(), result);
+            final PageContext nextContext = getNextContext();
+            final BufferState bstate = finishBuffering();
+            nextContext.setHeader(applyColumnsToPageBand(bstate, nextContext.getActiveColumns()).getXmlBuffer(), result);
+            pageContext.setHeader(applyColumnsToPageBand(bstate, pageContext.getActiveColumns()).getXmlBuffer(), result);
         }
         else if (role == OfficeDocumentReportTarget.ROLE_PAGE_FOOTER)
         {
             final PageContext pageContext = getCurrentContext();
-            pageContext.setFooter(applyColumnsToPageBand(finishBuffering(), pageContext.getActiveColumns()).getXmlBuffer(), result);
+            final PageContext nextContext = getNextContext();
+            final BufferState bstate = finishBuffering();
+            nextContext.setFooter(applyColumnsToPageBand(bstate, nextContext.getActiveColumns()).getXmlBuffer(), result);
+            pageContext.setFooter(applyColumnsToPageBand(bstate, pageContext.getActiveColumns()).getXmlBuffer(), result);
         }
         else if (role == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER)
         {
-            final PageContext pageContext = getCurrentContext();
-            pageContext.setHeader(applyColumnsToPageBand(finishBuffering(), pageContext.getActiveColumns()).getXmlBuffer(), result);
+            final PageContext nextContext = getNextContext();
+            final BufferState bstate = finishBuffering();
+            nextContext.setHeader(applyColumnsToPageBand(bstate, nextContext.getActiveColumns()).getXmlBuffer(), result);
+            final String headerText = bstate.getXmlBuffer();
+            getXmlWriter().writeText(headerText);
         }
         else if (role == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER)
         {
             final PageContext pageContext = getCurrentContext();
-            pageContext.setFooter(applyColumnsToPageBand(finishBuffering(), pageContext.getActiveColumns()).getXmlBuffer(), result);
+            final PageContext nextContext = getNextContext();
+            final BufferState bstate = finishBuffering();
+            nextContext.setFooter(applyColumnsToPageBand(bstate, nextContext.getActiveColumns()).getXmlBuffer(), result);
+            pageContext.setFooter(applyColumnsToPageBand(bstate, pageContext.getActiveColumns()).getXmlBuffer(), result);
         }
         else if (role == OfficeDocumentReportTarget.ROLE_VARIABLES)
         {
