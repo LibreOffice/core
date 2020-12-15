@@ -45,7 +45,7 @@ void TokenContext::startFastElement(
     // - other: warning
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
-        HandleAttribute( aIter.getToken(), aIter.toString() );
+        HandleAttribute( aIter );
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > TokenContext::createFastChildContext(

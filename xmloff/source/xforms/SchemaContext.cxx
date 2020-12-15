@@ -44,9 +44,7 @@ SchemaContext::SchemaContext(
 {
 }
 
-void SchemaContext::HandleAttribute(
-    sal_Int32,
-    const OUString& )
+void SchemaContext::HandleAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & )
 {
 }
 

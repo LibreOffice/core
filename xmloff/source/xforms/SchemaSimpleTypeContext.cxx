@@ -44,14 +44,12 @@ SchemaSimpleTypeContext::SchemaSimpleTypeContext(
 {
 }
 
-void SchemaSimpleTypeContext::HandleAttribute(
-    sal_Int32 nAttributeToken,
-    const OUString& rValue )
+void SchemaSimpleTypeContext::HandleAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch (nAttributeToken & TOKEN_MASK)
+    switch (aIter.getToken() & TOKEN_MASK)
     {
         case XML_NAME:
-            msTypeName = rValue;
+            msTypeName = aIter.toString();
             break;
     }
 }
