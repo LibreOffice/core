@@ -57,17 +57,16 @@ bool XMLClipPropertyHandler::equals(
            aCrop1.Right == aCrop2.Right;
 }
 
-bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLClipPropertyHandler::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     bool bRet = false;
-    sal_Int32 nLen = rStrImpValue.getLength();
+    sal_Int32 nLen = rStrImpValue.size();
     if( nLen > 6 &&
-        rStrImpValue.startsWith( GetXMLToken(XML_RECT)) &&
-        rStrImpValue[4] == '(' &&
+        rStrImpValue.substr(0, 4) == "rect(" &&
         rStrImpValue[nLen-1] == ')' )
     {
         GraphicCrop aCrop;
-        OUString sTmp( rStrImpValue.copy( 5, nLen-6 ) );
+        OUString sTmp = OUString::fromUtf8(rStrImpValue.substr( 5, nLen-6 ));
 
         bool bHasComma = sTmp.indexOf( ',' ) != -1;
         SvXMLTokenEnumerator aTokenEnum( sTmp, bHasComma ? ',' : ' ' );

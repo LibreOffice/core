@@ -58,7 +58,7 @@ XMLParaAdjustPropHdl::~XMLParaAdjustPropHdl()
     // nothing to do
 }
 
-bool XMLParaAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLParaAdjustPropHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     style::ParagraphAdjust eAdjust;
     bool bRet = SvXMLUnitConverter::convertEnum( eAdjust, rStrImpValue, pXML_Para_Adjust_Enum );
@@ -92,7 +92,7 @@ XMLLastLineAdjustPropHdl::~XMLLastLineAdjustPropHdl()
     // nothing to do
 }
 
-bool XMLLastLineAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLLastLineAdjustPropHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     style::ParagraphAdjust eAdjust;
     bool bRet = SvXMLUnitConverter::convertEnum( eAdjust, rStrImpValue, pXML_Para_Align_Last_Enum );

@@ -41,12 +41,12 @@ XMLAxisPositionPropertyHdl::XMLAxisPositionPropertyHdl( bool bCrossingValue )
 XMLAxisPositionPropertyHdl::~XMLAxisPositionPropertyHdl()
 {}
 
-bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
+bool XMLAxisPositionPropertyHdl::importXML( std::string_view rStrImpValue,
                                                   uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     bool bResult = false;
 
-    if( rStrImpValue == GetXMLToken(XML_START) )
+    if( IsXMLToken(rStrImpValue, XML_START) )
     {
         if( !m_bCrossingValue )
         {
@@ -54,7 +54,7 @@ bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
             bResult = true;
         }
     }
-    else if( rStrImpValue == GetXMLToken(XML_END) )
+    else if( IsXMLToken(rStrImpValue, XML_END) )
     {
         if( !m_bCrossingValue )
         {
@@ -62,7 +62,7 @@ bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
             bResult = true;
         }
     }
-    else if( rStrImpValue == GetXMLToken(XML_0) )
+    else if( IsXMLToken(rStrImpValue, XML_0) )
     {
         if( !m_bCrossingValue )
         {

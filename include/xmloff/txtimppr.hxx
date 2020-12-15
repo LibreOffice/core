@@ -49,7 +49,7 @@ class XMLOFF_DLLPUBLIC XMLTextImportPropertyMapper final : public SvXMLImportPro
     virtual bool handleSpecialItem(
             XMLPropertyState& rProperty,
             ::std::vector< XMLPropertyState >& rProperties,
-            const OUString& rValue,
+            std::string_view rValue,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap ) const override;
 public:

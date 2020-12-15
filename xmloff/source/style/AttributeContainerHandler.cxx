@@ -73,7 +73,7 @@ bool XMLAttributeContainerHandler::equals(
     return false;
 }
 
-bool XMLAttributeContainerHandler::importXML( const OUString& /*rStrImpValue*/, Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
+bool XMLAttributeContainerHandler::importXML( std::string_view /*rStrImpValue*/, Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     return true;
 }

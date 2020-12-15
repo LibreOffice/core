@@ -33,7 +33,7 @@ public:
 
     /// TabStops will be imported/exported as XML-Elements. So the Import/Export-work must be done at another place.
     using XMLPropertyHandler::importXML;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 
 private:

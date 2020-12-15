@@ -312,7 +312,7 @@ void PageStyleContext::FillPropertySet_PageStyle(
     {
         uno::Any aPageUsage;
         XMLPMPropHdl_PageStyleLayout aPageUsageHdl;
-        if (aPageUsageHdl.importXML(sPageUsage, aPageUsage, GetImport().GetMM100UnitConverter()))
+        if (aPageUsageHdl.importXML(sPageUsage.toUtf8(), aPageUsage, GetImport().GetMM100UnitConverter()))
             rPropSet->setPropertyValue("PageStyleLayout", aPageUsage);
     }
 }

@@ -52,7 +52,7 @@ bool XMLTabStopPropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
     return false;
 }
 
-bool XMLTabStopPropHdl::importXML( const OUString&, css::uno::Any&, const SvXMLUnitConverter& ) const
+bool XMLTabStopPropHdl::importXML( std::string_view, css::uno::Any&, const SvXMLUnitConverter& ) const
 {
     return false;
 }

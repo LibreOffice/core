@@ -564,7 +564,7 @@ XMLChartImportPropertyMapper::~XMLChartImportPropertyMapper()
 bool XMLChartImportPropertyMapper::handleSpecialItem(
     XMLPropertyState& rProperty,
     ::std::vector< XMLPropertyState >& rProperties,
-    const OUString& rValue,
+    std::string_view rValue,
     const SvXMLUnitConverter& rUnitConverter,
     const SvXMLNamespaceMap& rNamespaceMap ) const
 {
@@ -658,13 +658,13 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
 
             case XML_SCH_CONTEXT_SPECIAL_ERRORBAR_RANGE:
                 {
-                    rProperty.maValue <<= rValue;
+                    rProperty.maValue <<= OUString::fromUtf8(rValue);
                 }
                 break;
 
             // deprecated from 6.0 beta on
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
-                rProperty.maValue <<= mrImport.loadGraphicByURL(rValue);
+                rProperty.maValue <<= mrImport.loadGraphicByURL(OUString::fromUtf8(rValue));
                 break;
 
             case XML_SCH_CONTEXT_SPECIAL_REGRESSION_TYPE:

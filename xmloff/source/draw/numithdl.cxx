@@ -39,7 +39,7 @@ bool XMLNumRulePropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
     return mxNumRuleCompare.is() && mxNumRuleCompare->compare( r1, r2 ) == 0;
 }
 
-bool XMLNumRulePropHdl::importXML( const OUString& /*rStrImpValue*/, css::uno::Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
+bool XMLNumRulePropHdl::importXML( std::string_view /*rStrImpValue*/, css::uno::Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     return false;
 }

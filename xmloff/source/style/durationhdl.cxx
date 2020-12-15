@@ -27,7 +27,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
 bool XMLDurationMS16PropHdl_Impl::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {

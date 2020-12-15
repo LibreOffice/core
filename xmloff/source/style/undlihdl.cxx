@@ -110,7 +110,7 @@ XMLUnderlineTypePropHdl::~XMLUnderlineTypePropHdl()
     // nothing to do
 }
 
-bool XMLUnderlineTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLUnderlineTypePropHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 eNewUnderline(0);
     bool bRet = SvXMLUnitConverter::convertEnum(
@@ -191,7 +191,7 @@ XMLUnderlineStylePropHdl::~XMLUnderlineStylePropHdl()
     // nothing to do
 }
 
-bool XMLUnderlineStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLUnderlineStylePropHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 eNewUnderline(0);
     bool bRet = SvXMLUnitConverter::convertEnum(
@@ -280,7 +280,7 @@ XMLUnderlineWidthPropHdl::~XMLUnderlineWidthPropHdl()
     // nothing to do
 }
 
-bool XMLUnderlineWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLUnderlineWidthPropHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 eNewUnderline(0);
     bool bRet = SvXMLUnitConverter::convertEnum(

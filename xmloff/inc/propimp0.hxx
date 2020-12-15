@@ -28,7 +28,7 @@ class XMLDurationPropertyHdl final : public XMLPropertyHandler
 {
 public:
     virtual ~XMLDurationPropertyHdl() override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
@@ -40,7 +40,7 @@ private:
 public:
     explicit XMLOpacityPropertyHdl( SvXMLImport* pImport );
     virtual ~XMLOpacityPropertyHdl() override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
@@ -48,7 +48,7 @@ class XMLTextAnimationStepPropertyHdl final : public XMLPropertyHandler
 {
 public:
     virtual ~XMLTextAnimationStepPropertyHdl() override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
@@ -61,7 +61,7 @@ private:
 public:
     explicit XMLDateTimeFormatHdl( SvXMLExport* pExport );
     virtual ~XMLDateTimeFormatHdl() override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 

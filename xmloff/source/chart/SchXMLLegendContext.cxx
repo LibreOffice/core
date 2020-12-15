@@ -90,7 +90,7 @@ void SchXMLLegendContext::startFastElement( sal_Int32 /*nElement*/,
             case XML_ELEMENT(CHART, XML_LEGEND_POSITION):
                 try
                 {
-                    if( SchXMLEnumConverter::getLegendPositionConverter().importXML( aIter.toString(), aAny, GetImport().GetMM100UnitConverter() ) )
+                    if( SchXMLEnumConverter::getLegendPositionConverter().importXML( aIter.toView(), aAny, GetImport().GetMM100UnitConverter() ) )
                         xLegendProps->setPropertyValue("Alignment", aAny );
                 }
                 catch(const beans::UnknownPropertyException&)
@@ -125,7 +125,7 @@ void SchXMLLegendContext::startFastElement( sal_Int32 /*nElement*/,
                 sAutoStyleName = aIter.toString();
                 break;
             case  XML_ELEMENT(STYLE, XML_LEGEND_EXPANSION):
-                SchXMLEnumConverter::getLegendPositionConverter().importXML( aIter.toString(), aAny, GetImport().GetMM100UnitConverter() );
+                SchXMLEnumConverter::getLegendPositionConverter().importXML( aIter.toView(), aAny, GetImport().GetMM100UnitConverter() );
                 bHasExpansion = (aAny>>=nLegendExpansion);
                 break;
             case XML_ELEMENT(STYLE, XML_LEGEND_EXPANSION_ASPECT_RATIO):

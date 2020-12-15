@@ -34,7 +34,7 @@ XMLShadowedPropHdl::~XMLShadowedPropHdl()
     // nothing to do
 }
 
-bool XMLShadowedPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLShadowedPropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bValue = ! IsXMLToken( rStrImpValue, XML_NONE );
     rValue <<= bValue;

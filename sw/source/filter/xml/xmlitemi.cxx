@@ -53,13 +53,13 @@ public:
     virtual bool handleSpecialItem( const SvXMLItemMapEntry& rEntry,
                                 SfxPoolItem& rItem,
                                 SfxItemSet& rSet,
-                                const OUString& rValue,
+                                std::string_view rValue,
                                 const SvXMLUnitConverter& rUnitConverter ) override;
 
     virtual bool
     handleNoItem(SvXMLItemMapEntry const& rEntry,
                  SfxItemSet & rSet,
-                 OUString const& rValue,
+                 std::string_view rValue,
                  SvXMLUnitConverter const& rUnitConverter,
                  SvXMLNamespaceMap const& rNamespaceMap) override;
 
@@ -105,7 +105,7 @@ bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
                                         const SvXMLItemMapEntry& rEntry,
                                         SfxPoolItem& rItem,
                                         SfxItemSet& rItemSet,
-                                        const OUString& rValue,
+                                        std::string_view rValue,
                                         const SvXMLUnitConverter& rUnitConv )
 {
     bool bRet = false;
@@ -158,14 +158,14 @@ bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
 bool SwXMLImportTableItemMapper_Impl::handleNoItem(
      SvXMLItemMapEntry const& rEntry,
      SfxItemSet & rSet,
-     OUString const& rValue,
+     std::string_view rValue,
      SvXMLUnitConverter const& rUnitConverter,
      SvXMLNamespaceMap const& rNamespaceMap)
 {
     if ((XML_NAMESPACE_FO == rEntry.nNameSpace) &&
         (xmloff::token::XML_MARGIN == rEntry.eLocalName))
     {
-        m_FoMarginValue = rValue;
+        m_FoMarginValue = OUString::fromUtf8(rValue);
         return true;
     }
     else
@@ -209,7 +209,7 @@ void SwXMLImportTableItemMapper_Impl::finished(
         {
             std::unique_ptr<SfxPoolItem> pNewItem(pItem->Clone());
             bool const bPut = PutXMLValue(
-                    *pNewItem, m_FoMarginValue, Ids[i][1], rUnitConverter);
+                    *pNewItem, m_FoMarginValue.toUtf8().getStr(), Ids[i][1], rUnitConverter);
             if (bPut)
             {
                 rSet.Put(std::move(pNewItem));

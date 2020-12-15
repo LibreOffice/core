@@ -30,7 +30,7 @@ XMLConstantsPropertyHandler::~XMLConstantsPropertyHandler()
 }
 
 bool XMLConstantsPropertyHandler::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     Any& rValue,
     const SvXMLUnitConverter& ) const
 {

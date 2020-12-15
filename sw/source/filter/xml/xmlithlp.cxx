@@ -74,7 +74,7 @@ const sal_uInt16 aBorderWidths[] =
         DEF_LINE_WIDTH_1,
 };
 
-bool sw_frmitems_parseXMLBorder( const OUString& rValue,
+bool sw_frmitems_parseXMLBorder( std::string_view rValue,
                                       const SvXMLUnitConverter& rUnitConverter,
                                       bool& rHasStyle, sal_uInt16& rStyle,
                                       bool& rHasWidth, sal_uInt16& rWidth,
@@ -82,7 +82,8 @@ bool sw_frmitems_parseXMLBorder( const OUString& rValue,
                                       bool& rHasColor, Color& rColor )
 {
     OUString aToken;
-    SvXMLTokenEnumerator aTokens( rValue );
+    OUString sValue = OUString::fromUtf8(rValue);
+    SvXMLTokenEnumerator aTokens( sValue );
 
     rHasStyle = false;
     rHasWidth = false;
