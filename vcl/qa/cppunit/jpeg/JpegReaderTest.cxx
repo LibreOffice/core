@@ -28,11 +28,13 @@ public:
     void testReadRGB();
     void testReadGray();
     void testReadCMYK();
+    void testTdf138950();
 
     CPPUNIT_TEST_SUITE(JpegReaderTest);
     CPPUNIT_TEST(testReadRGB);
     CPPUNIT_TEST(testReadGray);
     CPPUNIT_TEST(testReadCMYK);
+    CPPUNIT_TEST(testTdf138950);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -160,6 +162,33 @@ void JpegReaderTest::testReadCMYK()
     CPPUNIT_ASSERT(checkRect(aBitmap, 3, 8, 8, Color(0x00, 0x00, 0xff), maxDelta));
 
     CPPUNIT_ASSERT_EQUAL(4, getNumberOfImageComponents(aGraphic));
+}
+
+void JpegReaderTest::testTdf138950()
+{
+    Graphic aGraphic = loadJPG(getFullUrl("tdf138950.jpeg"));
+    Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
+    Size aSize = aBitmap.GetSizePixel();
+    CPPUNIT_ASSERT_EQUAL(tools::Long(720), aSize.Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1280), aSize.Height());
+
+    Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+    int nBlackCount = 0;
+    for (tools::Long nY = 0; nY < aSize.Height(); ++nY)
+    {
+        for (tools::Long nX = 0; nX < aSize.Width(); ++nX)
+        {
+            const Color aColor = pReadAccess->GetColor(nY, nX);
+            if ((aColor.GetRed() == 0x00) && (aColor.GetGreen() == 0x00)
+                && (aColor.GetBlue() == 0x00))
+                ++nBlackCount;
+        }
+    }
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 921600
+    CPPUNIT_ASSERT_EQUAL(0, nBlackCount);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(JpegReaderTest);
