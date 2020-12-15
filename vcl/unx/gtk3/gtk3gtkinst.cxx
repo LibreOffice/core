@@ -2117,8 +2117,14 @@ private:
         // #i1820# use locale specific decimal separator
         if (pEvent->keyval == GDK_KEY_KP_Decimal && Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep())
         {
-            OUString aSep(Application::GetSettings().GetLocaleDataWrapper().getNumDecimalSep());
-            pEvent->keyval = aSep[0];
+            GtkWindow* pFocusWin = get_focus_window();
+            GtkWidget* pFocus = pFocusWin ? gtk_window_get_focus(pFocusWin) : nullptr;
+            // tdf#138932 except if the target is a GtkEntry used for passwords
+            if (!pFocus || !GTK_IS_ENTRY(pFocus) || gtk_entry_get_visibility(GTK_ENTRY(pFocus)))
+            {
+                OUString aSep(Application::GetSettings().GetLocaleDataWrapper().getNumDecimalSep());
+                pEvent->keyval = aSep[0];
+            }
         }
 
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
