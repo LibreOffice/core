@@ -13137,6 +13137,18 @@ public:
         enable_notify_events();
     }
 
+    virtual void disable_notify_events() override
+    {
+        g_signal_handler_block(m_pButton, m_nValueChangedSignalId);
+        GtkInstanceEntry::disable_notify_events();
+    }
+
+    virtual void enable_notify_events() override
+    {
+        GtkInstanceEntry::enable_notify_events();
+        g_signal_handler_unblock(m_pButton, m_nValueChangedSignalId);
+    }
+
     virtual ~GtkInstanceFormattedSpinButton() override
     {
         g_signal_handler_disconnect(m_pButton, m_nInputSignalId);
