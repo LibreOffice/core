@@ -16,7 +16,7 @@ class ImpressDrawinglayerTest(UITestCase):
         self.ui_test.create_doc_in_start_center("impress")
 
         xTemplateDlg = self.xUITest.getTopFocusWindow()
-        xCancelBtn = xTemplateDlg.getChild("cancel")
+        xCancelBtn = xTemplateDlg.getChild("close")
         self.ui_test.close_dialog_through_button(xCancelBtn)
 
         change_measurement_unit(self, 'Centimeter')
@@ -67,7 +67,7 @@ class ImpressDrawinglayerTest(UITestCase):
         self.ui_test.create_doc_in_start_center("impress")
 
         xTemplateDlg = self.xUITest.getTopFocusWindow()
-        xCancelBtn = xTemplateDlg.getChild("cancel")
+        xCancelBtn = xTemplateDlg.getChild("close")
         self.ui_test.close_dialog_through_button(xCancelBtn)
 
         change_measurement_unit(self, 'Centimeter')

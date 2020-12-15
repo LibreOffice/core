@@ -12,7 +12,7 @@ class customSlideShow(UITestCase):
         MainDoc = self.ui_test.create_doc_in_start_center("impress")
         MainWindow = self.xUITest.getTopFocusWindow()
         TemplateDialog = self.xUITest.getTopFocusWindow()
-        cancel = TemplateDialog.getChild("cancel")
+        cancel = TemplateDialog.getChild("close")
         self.ui_test.close_dialog_through_button(cancel)
         self.ui_test.execute_dialog_through_command(".uno:CustomShowDialog")
         CustomSlideShows = self.xUITest.getTopFocusWindow()

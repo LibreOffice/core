@@ -11,7 +11,7 @@ class slideShowSettings(UITestCase):
         MainDoc = self.ui_test.create_doc_in_start_center("impress")
         MainWindow = self.xUITest.getTopFocusWindow()
         TemplateDialog = self.xUITest.getTopFocusWindow()
-        cancel = TemplateDialog.getChild("cancel")
+        cancel = TemplateDialog.getChild("close")
         self.ui_test.close_dialog_through_button(cancel)
         self.xUITest.executeCommand(".uno:InsertPage")
         self.ui_test.execute_dialog_through_command(".uno:PresentationDialog")
