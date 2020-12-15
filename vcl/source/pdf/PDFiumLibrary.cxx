@@ -109,6 +109,22 @@ public:
     int getHeight() override;
     PDFBitmapType getFormat() override;
 };
+
+class PDFiumPathSegmentImpl final : public PDFiumPathSegment
+{
+private:
+    FPDF_PATHSEGMENT mpPathSegment;
+
+    PDFiumPathSegmentImpl(const PDFiumPathSegmentImpl&) = delete;
+    PDFiumPathSegmentImpl& operator=(const PDFiumPathSegmentImpl&) = delete;
+
+public:
+    PDFiumPathSegmentImpl(FPDF_PATHSEGMENT pPathSegment);
+
+    basegfx::B2DPoint getPoint() const override;
+    bool isClosed() const override;
+    PDFSegmentType getType() const override;
+};
 }
 
 OUString convertPdfDateToISO8601(OUString const& rInput)
@@ -568,7 +584,7 @@ std::unique_ptr<PDFiumPathSegment> PDFiumPageObject::getPathSegment(int index)
     FPDF_PATHSEGMENT pPathSegment = FPDFPath_GetPathSegment(mpPageObject, index);
     if (pPathSegment)
     {
-        pPDFiumPathSegment = std::make_unique<PDFiumPathSegment>(pPathSegment);
+        pPDFiumPathSegment = std::make_unique<PDFiumPathSegmentImpl>(pPathSegment);
     }
     return pPDFiumPathSegment;
 }
@@ -632,14 +648,12 @@ double PDFiumPage::getHeight() { return FPDF_GetPageHeight(mpPage); }
 
 bool PDFiumPage::hasTransparency() { return FPDFPage_HasTransparency(mpPage); }
 
-PDFiumPathSegment::PDFiumPathSegment(FPDF_PATHSEGMENT pPathSegment)
+PDFiumPathSegmentImpl::PDFiumPathSegmentImpl(FPDF_PATHSEGMENT pPathSegment)
     : mpPathSegment(pPathSegment)
 {
 }
 
-PDFiumPathSegment::~PDFiumPathSegment() {}
-
-basegfx::B2DPoint PDFiumPathSegment::getPoint() const
+basegfx::B2DPoint PDFiumPathSegmentImpl::getPoint() const
 {
     basegfx::B2DPoint aPoint;
     float fx, fy;
@@ -648,9 +662,9 @@ basegfx::B2DPoint PDFiumPathSegment::getPoint() const
     return aPoint;
 }
 
-bool PDFiumPathSegment::isClosed() const { return FPDFPathSegment_GetClose(mpPathSegment); }
+bool PDFiumPathSegmentImpl::isClosed() const { return FPDFPathSegment_GetClose(mpPathSegment); }
 
-PDFSegmentType PDFiumPathSegment::getType() const
+PDFSegmentType PDFiumPathSegmentImpl::getType() const
 {
     return static_cast<PDFSegmentType>(FPDFPathSegment_GetType(mpPathSegment));
 }
