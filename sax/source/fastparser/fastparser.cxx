@@ -200,6 +200,21 @@ struct Entity : public ParserData
     Event& getEvent( CallbackType aType );
 };
 
+// Stuff for custom entity names
+struct ReplacementPair
+{
+    OUString name;
+    OUString replacement;
+};
+inline bool operator<(const ReplacementPair& lhs, const ReplacementPair& rhs)
+{
+    return lhs.name < rhs.name;
+}
+inline bool operator<(const ReplacementPair& lhs, const char* rhs)
+{
+    return lhs.name.compareToAscii(rhs) < 0;
+}
+
 } // namespace
 
 namespace sax_fastparser {
@@ -211,8 +226,7 @@ public:
     ~FastSaxParserImpl();
 
 private:
-    ::css::uno::Sequence< ::rtl::OUString > mEntityNames;
-    ::css::uno::Sequence< ::rtl::OUString > mEntityReplacements;
+    std::vector<ReplacementPair> m_Replacements;
 
 public:
     // XFastParser
@@ -934,10 +948,18 @@ void FastSaxParserImpl::setNamespaceHandler( const Reference< XFastNamespaceHand
     maData.mxNamespaceHandler = Handler;
 }
 
-void FastSaxParserImpl::setCustomEntityNames( const ::css::uno::Sequence< ::rtl::OUString >& names, const ::css::uno::Sequence< ::rtl::OUString >& replacements )
+void FastSaxParserImpl::setCustomEntityNames(
+    const ::css::uno::Sequence<::rtl::OUString>& names,
+    const ::css::uno::Sequence<::rtl::OUString>& replacements)
 {
-    mEntityNames = names;
-    mEntityReplacements = replacements;
+    m_Replacements.resize(names.size());
+    for (size_t i = 0; i < names.size(); ++i)
+    {
+        m_Replacements[i].name = names[i];
+        m_Replacements[i].replacement = replacements[i];
+    }
+    if (names.size() > 1)
+        std::sort(m_Replacements.begin(), m_Replacements.end());
 }
 
 void FastSaxParserImpl::deleteUsedEvents()
@@ -1372,18 +1394,13 @@ xmlEntityPtr FastSaxParserImpl::callbackGetEntity( const xmlChar *name )
     int lname = strlen(dname);
     if( lname == 0 )
         return xmlGetPredefinedEntity(name);
-    if (mEntityNames.hasElements())
+    if (m_Replacements.size() > 0)
     {
-        for (size_t i = 0; i < mEntityNames.size(); ++i)
-        {
-            if (mEntityNames[i].compareToAscii(dname) == 0)
-            {
-                return xmlNewEntity(
-                    nullptr, name, XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
-                    BAD_CAST(
-                        OUStringToOString(mEntityReplacements[i], RTL_TEXTENCODING_UTF8).getStr()));
-            }
-        }
+        auto it = std::lower_bound(m_Replacements.begin(), m_Replacements.end(), dname);
+        if (it != m_Replacements.end() && it->name.compareToAscii(dname) == 0)
+            return xmlNewEntity(
+                nullptr, name, XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
+                BAD_CAST(OUStringToOString(it->replacement, RTL_TEXTENCODING_UTF8).getStr()));
     }
     if( lname < 2 )
         return xmlGetPredefinedEntity(name);
@@ -1495,7 +1512,8 @@ OUString FastSaxParser::getImplementationName()
     return "com.sun.star.comp.extensions.xml.sax.FastParser";
 }
 
-void FastSaxParser::setCustomEntityNames( const ::css::uno::Sequence< ::rtl::OUString >& names, const ::css::uno::Sequence< ::rtl::OUString >& replacements )
+void FastSaxParser::setCustomEntityNames(const ::css::uno::Sequence<::rtl::OUString>& names,
+                                         const ::css::uno::Sequence<::rtl::OUString>& replacements)
 {
     assert(names.size() == replacements.size());
     mpImpl->setCustomEntityNames(names, replacements);
