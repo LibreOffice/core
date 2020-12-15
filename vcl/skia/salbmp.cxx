@@ -68,6 +68,7 @@ SkiaSalBitmap::SkiaSalBitmap(const sk_sp<SkImage>& image)
     mBitCount = 32;
     mSize = mPixelsSize = Size(image->width(), image->height());
     ComputeScanlineSize();
+    mAnyAccessCount = 0;
 #ifdef DBG_UTIL
     mWriteAccessCount = 0;
 #endif
@@ -76,15 +77,13 @@ SkiaSalBitmap::SkiaSalBitmap(const sk_sp<SkImage>& image)
 
 bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal)
 {
+    assert(mAnyAccessCount == 0);
     ResetAllData();
     if (!isValidBitCount(nBitCount))
         return false;
     mPalette = rPal;
     mBitCount = nBitCount;
     mSize = mPixelsSize = rSize;
-#ifdef DBG_UTIL
-    mWriteAccessCount = 0;
-#endif
     if (!ComputeScanlineSize())
     {
         mBitCount = 0;
@@ -150,6 +149,7 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, SalGraphics* pGraphics)
 
 bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
 {
+    assert(mAnyAccessCount == 0);
     const SkiaSalBitmap& src = static_cast<const SkiaSalBitmap&>(rSalBmp);
     mImage = src.mImage;
     mAlphaImage = src.mAlphaImage;
@@ -162,9 +162,6 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
     mScaleQuality = src.mScaleQuality;
     mEraseColorSet = src.mEraseColorSet;
     mEraseColor = src.mEraseColor;
-#ifdef DBG_UTIL
-    mWriteAccessCount = 0;
-#endif
     if (nNewBitCount != src.GetBitCount())
     {
         // This appears to be unused(?). Implement this just in case, but be lazy
@@ -188,6 +185,7 @@ void SkiaSalBitmap::Destroy()
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
+    assert(mAnyAccessCount == 0);
     ResetAllData();
 }
 
@@ -226,7 +224,10 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
     buffer->mnHeight = mSize.Height();
     buffer->mnBitCount = mBitCount;
     buffer->maPalette = mPalette;
-    buffer->mpBits = mBuffer.get();
+    if (nMode != BitmapAccessMode::Info)
+        buffer->mpBits = mBuffer.get();
+    else
+        buffer->mpBits = nullptr;
     if (mPixelsSize == mSize)
         buffer->mnScanlineSize = mScanlineSize;
     else
@@ -266,6 +267,7 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
             abort();
     }
     buffer->mnFormat |= ScanlineFormat::TopDown;
+    ++mAnyAccessCount;
 #ifdef DBG_UTIL
     if (nMode == BitmapAccessMode::Write)
         ++mWriteAccessCount;
@@ -285,11 +287,13 @@ void SkiaSalBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
         ResetToBuffer();
         InvalidateChecksum();
     }
+    assert(mAnyAccessCount > 0);
+    --mAnyAccessCount;
     // Are there any more ground movements underneath us ?
     assert(pBuffer->mnWidth == mSize.Width());
     assert(pBuffer->mnHeight == mSize.Height());
     assert(pBuffer->mnBitCount == mBitCount);
-    assert(pBuffer->mpBits == mBuffer.get());
+    assert(pBuffer->mpBits == mBuffer.get() || nMode == BitmapAccessMode::Info);
     verify();
     delete pBuffer;
 }
@@ -456,6 +460,9 @@ bool SkiaSalBitmap::InterpretAs8Bit()
 
 bool SkiaSalBitmap::Erase(const Color& color)
 {
+#ifdef DBG_UTIL
+    assert(mWriteAccessCount == 0);
+#endif
     // Optimized variant, just remember the color and apply it when needed,
     // which may save having to do format conversions (e.g. GetSkImage()
     // may directly erase the SkImage).
@@ -473,6 +480,9 @@ void SkiaSalBitmap::EraseInternal(const Color& color)
 
 bool SkiaSalBitmap::AlphaBlendWith(const SalBitmap& rSalBmp)
 {
+#ifdef DBG_UTIL
+    assert(mWriteAccessCount == 0);
+#endif
     const SkiaSalBitmap* otherBitmap = dynamic_cast<const SkiaSalBitmap*>(&rSalBmp);
     if (!otherBitmap)
         return false;
@@ -720,7 +730,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
     thisPtr->mImage = image;
     // The data is now stored both in the SkImage and in our mBuffer, so drop the buffer
     // if conserving memory. It'll be converted back by EnsureBitmapData() if needed.
-    if (ConserveMemory())
+    if (ConserveMemory() && mAnyAccessCount == 0)
     {
         SAL_INFO("vcl.skia.trace", "getskimage(" << this << "): dropping buffer");
         thisPtr->ResetToSkImage(mImage);
@@ -869,7 +879,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
     // The data is now stored both in the SkImage and in our mBuffer, so drop the buffer
     // if conserving memory and the conversion back would be simple (it'll be converted back
     // by EnsureBitmapData() if needed).
-    if (ConserveMemory() && mBitCount == 8 && mPalette.IsGreyPalette8Bit())
+    if (ConserveMemory() && mBitCount == 8 && mPalette.IsGreyPalette8Bit() && mAnyAccessCount == 0)
     {
         SAL_INFO("vcl.skia.trace", "getalphaskimage(" << this << "): dropping buffer");
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
@@ -1155,6 +1165,9 @@ void SkiaSalBitmap::EnsureBitmapData()
 
 void SkiaSalBitmap::EnsureBitmapUniqueData()
 {
+#ifdef DBG_UTIL
+    assert(mWriteAccessCount == 0);
+#endif
     EnsureBitmapData();
     assert(mPixelsSize == mSize);
     if (mBuffer.use_count() > 1)
@@ -1182,6 +1195,7 @@ void SkiaSalBitmap::ResetToBuffer()
 
 void SkiaSalBitmap::ResetToSkImage(sk_sp<SkImage> image)
 {
+    assert(mAnyAccessCount == 0); // can't reset mBuffer if there's a read access pointing to it
     SkiaZone zone;
     mBuffer.reset();
     mImage = image;
@@ -1191,6 +1205,7 @@ void SkiaSalBitmap::ResetToSkImage(sk_sp<SkImage> image)
 
 void SkiaSalBitmap::ResetAllData()
 {
+    assert(mAnyAccessCount == 0);
     SkiaZone zone;
     mBuffer.reset();
     mImage.reset();
