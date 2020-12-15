@@ -38,12 +38,12 @@ XMLLineHeightHdl::~XMLLineHeightHdl()
     // nothing to do
 }
 
-bool XMLLineHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLLineHeightHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     style::LineSpacing aLSp;
     sal_Int32 nTemp = 0;
 
-    if( -1 != rStrImpValue.indexOf( '%' ) )
+    if( std::string_view::npos != rStrImpValue.find( '%' ) )
     {
         aLSp.Mode = style::LineSpacingMode::PROP;
         if (!::sax::Converter::convertPercent( nTemp, rStrImpValue ))
@@ -100,7 +100,7 @@ XMLLineHeightAtLeastHdl::~XMLLineHeightAtLeastHdl()
     // nothing to do
 }
 
-bool XMLLineHeightAtLeastHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLLineHeightAtLeastHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     style::LineSpacing aLSp;
 
@@ -139,7 +139,7 @@ XMLLineSpacingHdl::~XMLLineSpacingHdl()
     // nothing to do
 }
 
-bool XMLLineSpacingHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLLineSpacingHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     style::LineSpacing aLSp;
     sal_Int32 nTemp;

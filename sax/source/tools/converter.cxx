@@ -686,6 +686,29 @@ bool Converter::convertDouble(double& rValue,
 }
 
 /** convert string to double number (using ::rtl::math) */
+bool Converter::convertDouble(double& rValue,
+    std::string_view rString, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit)
+{
+    rtl_math_ConversionStatus eStatus;
+    rValue = rtl_math_stringToDouble(rString.data(),
+                                    rString.data() + rString.size(),
+                                    '.', ',',
+                                    &eStatus, nullptr);
+
+    if(eStatus == rtl_math_ConversionStatus_Ok)
+    {
+        OUStringBuffer sUnit;
+        // fdo#48969: switch source and target because factor is used to divide!
+        double const fFactor =
+            GetConversionFactor(sUnit, nTargetUnit, nSourceUnit);
+        if(fFactor != 1.0 && fFactor != 0.0)
+            rValue /= fFactor;
+    }
+
+    return ( eStatus == rtl_math_ConversionStatus_Ok );
+}
+
+/** convert string to double number (using ::rtl::math) */
 bool Converter::convertDouble(double& rValue, std::u16string_view rString)
 {
     rtl_math_ConversionStatus eStatus;
@@ -1183,13 +1206,13 @@ readUnsignedNumberMaxDigits(int maxDigits,
 
     while (nPos < rString.size())
     {
-        const sal_Unicode c = rString[nPos];
+        const typename V::value_type c = rString[nPos];
         if (('0' <= c) && (c <= '9'))
         {
             if (maxDigits > 0)
             {
                 nTemp *= 10;
-                nTemp += (c - u'0');
+                nTemp += (c - '0');
                 if (nTemp >= SAL_MAX_INT32)
                 {
                     bOverflow = true;
@@ -1215,8 +1238,10 @@ readUnsignedNumberMaxDigits(int maxDigits,
     return bOverflow ? R_OVERFLOW : R_SUCCESS;
 }
 
+
+template<typename V>
 static bool
-readDurationT(std::u16string_view rString, size_t & io_rnPos)
+readDurationT(V rString, size_t & io_rnPos)
 {
     if ((io_rnPos < rString.size()) &&
         (rString[io_rnPos] == 'T' || rString[io_rnPos] == 't'))
@@ -1227,10 +1252,11 @@ readDurationT(std::u16string_view rString, size_t & io_rnPos)
     return false;
 }
 
+template<typename V>
 static bool
-readDurationComponent(std::u16string_view rString,
+readDurationComponent(V rString,
     size_t & io_rnPos, sal_Int32 & io_rnTemp, bool & io_rbTimePart,
-    sal_Int32 & o_rnTarget, const sal_Unicode cLower, const sal_Unicode cUpper)
+    sal_Int32 & o_rnTarget, const typename V::value_type cLower, const typename V::value_type cUpper)
 {
     if (io_rnPos < rString.size())
     {
@@ -1257,11 +1283,12 @@ readDurationComponent(std::u16string_view rString,
     return true;
 }
 
-/** convert ISO8601 "duration" string to util::Duration */
-bool Converter::convertDuration(util::Duration& rDuration,
-                                std::u16string_view rString)
+
+template<typename V>
+static bool lcl_convertDuration(util::Duration& rDuration,
+                                V rString)
 {
-    std::u16string_view string = trim(rString);
+    V string = trim(rString);
     size_t nPos(0);
 
     bool bIsNegativeDuration(false);
@@ -1417,6 +1444,19 @@ bool Converter::convertDuration(util::Duration& rDuration,
     return bSuccess;
 }
 
+/** convert ISO8601 "duration" string to util::Duration */
+bool Converter::convertDuration(util::Duration& rDuration,
+                                std::u16string_view rString)
+{
+    return lcl_convertDuration(rDuration, rString);
+}
+
+/** convert ISO8601 "duration" string to util::Duration */
+bool Converter::convertDuration(util::Duration& rDuration,
+                                std::string_view rString)
+{
+    return lcl_convertDuration(rDuration, rString);
+}
 
 static void
 lcl_AppendTimezone(OUStringBuffer & i_rBuffer, int const nOffset)
@@ -2063,33 +2103,31 @@ bool Converter::parseDateOrDateTime(
                 pDate, rDateTime, rbDateTime, pTimeZoneOffset, rString, false);
 }
 
-/** gets the position of the first comma after npos in the string
-    rStr. Commas inside '"' pairs are not matched */
-sal_Int32 Converter::indexOfComma( std::u16string_view rStr,
-                                            sal_Int32 nPos )
+template<typename V>
+static sal_Int32 lcl_indexOfComma( V rStr, sal_Int32 nPos )
 {
-    sal_Unicode cQuote = 0;
+    typename V::value_type cQuote = 0;
     sal_Int32 nLen = rStr.size();
     for( ; nPos < nLen; nPos++ )
     {
-        sal_Unicode c = rStr[nPos];
+        typename V::value_type c = rStr[nPos];
         switch( c )
         {
-        case u'\'':
+        case '\'':
             if( 0 == cQuote )
                 cQuote = c;
             else if( '\'' == cQuote )
                 cQuote = 0;
             break;
 
-        case u'"':
+        case '"':
             if( 0 == cQuote )
                 cQuote = c;
             else if( '\"' == cQuote )
                 cQuote = 0;
             break;
 
-        case u',':
+        case ',':
             if( 0 == cQuote )
                 return nPos;
             break;
@@ -2097,6 +2135,22 @@ sal_Int32 Converter::indexOfComma( std::u16string_view rStr,
     }
 
     return -1;
+}
+
+/** gets the position of the first comma after npos in the string
+    rStr. Commas inside '"' pairs are not matched */
+sal_Int32 Converter::indexOfComma( std::u16string_view rStr,
+                                            sal_Int32 nPos )
+{
+    return lcl_indexOfComma(rStr, nPos);
+}
+
+/** gets the position of the first comma after npos in the string
+    rStr. Commas inside '"' pairs are not matched */
+sal_Int32 Converter::indexOfComma( std::string_view rStr,
+                                            sal_Int32 nPos )
+{
+    return lcl_indexOfComma(rStr, nPos);
 }
 
 double Converter::GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit)

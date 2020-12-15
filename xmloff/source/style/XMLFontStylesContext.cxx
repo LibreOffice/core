@@ -71,7 +71,7 @@ void XMLFontStyleContextFontFace::SetAttribute( sal_Int32 nElement,
     {
     case XML_ELEMENT(SVG, XML_FONT_FAMILY):
     case XML_ELEMENT(SVG_COMPAT, XML_FONT_FAMILY):
-        if( GetStyles()->GetFamilyNameHdl().importXML( rValue, aAny,
+        if( GetStyles()->GetFamilyNameHdl().importXML( rValue.toUtf8().getStr(), aAny,
                                                           rUnitConv ) )
             aFamilyName = aAny;
         break;
@@ -79,17 +79,17 @@ void XMLFontStyleContextFontFace::SetAttribute( sal_Int32 nElement,
         aStyleName <<= rValue;
         break;
     case XML_ELEMENT(STYLE, XML_FONT_FAMILY_GENERIC):
-        if( GetStyles()->GetFamilyHdl().importXML( rValue, aAny,
+        if( GetStyles()->GetFamilyHdl().importXML( rValue.toUtf8().getStr(), aAny,
                                                       rUnitConv ) )
             aFamily = aAny;
         break;
     case XML_ELEMENT(STYLE, XML_FONT_PITCH):
-        if( GetStyles()->GetPitchHdl().importXML( rValue, aAny,
+        if( GetStyles()->GetPitchHdl().importXML( rValue.toUtf8().getStr(), aAny,
                                                       rUnitConv ) )
             aPitch = aAny;
         break;
     case XML_ELEMENT(STYLE, XML_FONT_CHARSET):
-        if( GetStyles()->GetEncodingHdl().importXML( rValue, aAny,
+        if( GetStyles()->GetEncodingHdl().importXML( rValue.toUtf8().getStr(), aAny,
                                                       rUnitConv ) )
             aEnc = aAny;
         break;

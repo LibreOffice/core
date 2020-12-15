@@ -48,7 +48,7 @@ using namespace ::com::sun::star::text;
 bool XMLTextImportPropertyMapper::handleSpecialItem(
             XMLPropertyState& rProperty,
             ::std::vector< XMLPropertyState >& rProperties,
-            const OUString& rValue,
+            std::string_view rValue,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap ) const
 {
@@ -95,7 +95,7 @@ bool XMLTextImportPropertyMapper::handleSpecialItem(
               ) && "illegal property map" );
 
             GetImport().GetFontDecls()->FillProperties(
-                            rValue, rProperties,
+                            OUString::fromUtf8(rValue), rProperties,
                             rProperty.mnIndex+1, rProperty.mnIndex+2,
                             rProperty.mnIndex+3, rProperty.mnIndex+4,
                             rProperty.mnIndex+5 );

@@ -226,7 +226,7 @@ bool XMLPropertySetMapper::exportXML(
 
 // Import a Property
 bool XMLPropertySetMapper::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
         XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter ) const
 {

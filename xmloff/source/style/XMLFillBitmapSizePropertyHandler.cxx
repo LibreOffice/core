@@ -37,14 +37,14 @@ XMLFillBitmapSizePropertyHandler::~XMLFillBitmapSizePropertyHandler()
 }
 
 bool XMLFillBitmapSizePropertyHandler::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Int32 nValue;
     bool bRet;
 
-    if( rStrImpValue.indexOf( '%' ) != -1 )
+    if( rStrImpValue.find( '%' ) != std::string_view::npos )
     {
         bRet = ::sax::Converter::convertPercent( nValue, rStrImpValue );
         nValue *= -1;

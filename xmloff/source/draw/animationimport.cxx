@@ -275,7 +275,7 @@ Any AnimationsImportHelperImpl::convertValue( XMLTokenEnum eAttributeName, const
 
         const XMLPropertyHandler* pHandler = mrImport.GetShapeImport()->GetSdPropHdlFactory()->GetPropertyHandler( nType );
         if( pHandler )
-            pHandler->importXML( rValue, aAny, mrImport.GetMM100UnitConverter() );
+            pHandler->importXML( rValue.toUtf8(), aAny, mrImport.GetMM100UnitConverter() );
 
         return aAny;
     }

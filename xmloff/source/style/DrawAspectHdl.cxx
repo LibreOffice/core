@@ -32,7 +32,7 @@ DrawAspectHdl::~DrawAspectHdl()
     // nothing to do
 }
 
-bool DrawAspectHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool DrawAspectHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int64 nAspect = 0;
 

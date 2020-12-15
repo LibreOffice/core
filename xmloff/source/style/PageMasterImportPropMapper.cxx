@@ -51,7 +51,7 @@ PageMasterImportPropertyMapper::~PageMasterImportPropertyMapper()
 bool PageMasterImportPropertyMapper::handleSpecialItem(
         XMLPropertyState& rProperty,
         std::vector< XMLPropertyState >& rProperties,
-        const OUString& rValue,
+        std::string_view rValue,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap ) const
 {
@@ -62,7 +62,7 @@ bool PageMasterImportPropertyMapper::handleSpecialItem(
     if( CTF_PM_REGISTER_STYLE==nContextID )
     {
         OUString sDisplayName( rImport.GetStyleDisplayName(
-                    XmlStyleFamily::TEXT_PARAGRAPH, rValue ) );
+                    XmlStyleFamily::TEXT_PARAGRAPH, OUString::fromUtf8(rValue) ) );
         Reference < XNameContainer > xParaStyles =
             rImport.GetTextImport()->GetParaStyles();
         if( xParaStyles.is() && xParaStyles->hasByName( sDisplayName ) )

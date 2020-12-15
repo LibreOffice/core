@@ -46,7 +46,7 @@ XMLFmtBreakBeforePropHdl::~XMLFmtBreakBeforePropHdl()
     // Nothing to do
 }
 
-bool XMLFmtBreakBeforePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFmtBreakBeforePropHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 nEnum;
     bool bRet = SvXMLUnitConverter::convertEnum( nEnum, rStrImpValue, pXML_BreakTypes );
@@ -115,7 +115,7 @@ XMLFmtBreakAfterPropHdl::~XMLFmtBreakAfterPropHdl()
     // Nothing to do
 }
 
-bool XMLFmtBreakAfterPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFmtBreakAfterPropHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 nEnum;
     bool bRet = SvXMLUnitConverter::convertEnum( nEnum, rStrImpValue, pXML_BreakTypes );

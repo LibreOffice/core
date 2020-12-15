@@ -44,7 +44,7 @@ XMLDurationPropertyHdl::~XMLDurationPropertyHdl()
 }
 
 bool XMLDurationPropertyHdl::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     css::uno::Any& rValue,
     const SvXMLUnitConverter& ) const
 {
@@ -61,7 +61,7 @@ bool XMLDurationPropertyHdl::importXML(
         return true;
     }
 
-    SAL_WARN_IF(!rStrImpValue.isEmpty(), "xmloff", "Invalid duration: " << rStrImpValue);
+    SAL_WARN_IF(!rStrImpValue.empty(), "xmloff", "Invalid duration: " << rStrImpValue);
 
     return false;
 }
@@ -100,21 +100,21 @@ XMLOpacityPropertyHdl::~XMLOpacityPropertyHdl()
 }
 
 bool XMLOpacityPropertyHdl::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     css::uno::Any& rValue,
     const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
     sal_Int32 nValue = 0;
 
-    if( rStrImpValue.indexOf( '%' ) != -1 )
+    if( rStrImpValue.find( '%' ) != std::string_view::npos )
     {
         if (::sax::Converter::convertPercent( nValue, rStrImpValue ))
             bRet = true;
     }
     else
     {
-        nValue = sal_Int32( rStrImpValue.toDouble() * 100.0 );
+        nValue = sal_Int32( rtl_str_toDouble(rStrImpValue.data()) * 100.0 );
         bRet = true;
     }
 
@@ -175,17 +175,17 @@ XMLTextAnimationStepPropertyHdl::~XMLTextAnimationStepPropertyHdl()
 }
 
 bool XMLTextAnimationStepPropertyHdl::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     css::uno::Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
 {
     bool bRet = false;
     sal_Int32 nValue = 0;
 
-    sal_Int32 nPos = rStrImpValue.indexOf( "px" );
-    if( nPos != -1 )
+    size_t nPos = rStrImpValue.find( "px" );
+    if( nPos != std::string_view::npos )
     {
-        if (::sax::Converter::convertNumber(nValue, rStrImpValue.subView(0, nPos)))
+        if (::sax::Converter::convertNumber(nValue, rStrImpValue.substr(0, nPos)))
         {
             rValue <<= sal_Int16( -nValue );
             bRet = true;
@@ -241,9 +241,9 @@ XMLDateTimeFormatHdl::~XMLDateTimeFormatHdl()
 {
 }
 
-bool XMLDateTimeFormatHdl::importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLDateTimeFormatHdl::importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    rValue <<= rStrImpValue;
+    rValue <<= OUString::fromUtf8(rStrImpValue);
     return true;
 }
 

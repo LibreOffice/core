@@ -32,7 +32,7 @@ public:
     virtual ~XMLIsPercentagePropertyHandler () override;
 
     virtual bool importXML(
-            const OUString& rStrImpValue,
+            std::string_view rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML(

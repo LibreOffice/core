@@ -122,7 +122,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
 
                     if( 0 == (pEntry->nMemberId&MID_SW_FLAG_SPECIAL_ITEM_IMPORT) )
                     {
-                        bPut = PutXMLValue( *pNewItem, sValue,
+                        bPut = PutXMLValue( *pNewItem, aIter.toView(),
                                             static_cast<sal_uInt16>( pEntry->nMemberId & MID_SW_FLAG_MASK ),
                                             rUnitConverter );
 
@@ -130,7 +130,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                     else
                     {
                         bPut = handleSpecialItem( *pEntry, *pNewItem, rSet,
-                                                  sValue, rUnitConverter );
+                                                  aIter.toView(), rUnitConverter );
                     }
 
                     if( bPut )
@@ -143,7 +143,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
             }
             else if( 0 != (pEntry->nMemberId & MID_SW_FLAG_NO_ITEM_IMPORT) )
             {
-                handleNoItem( *pEntry, rSet, sValue, rUnitConverter,
+                handleNoItem( *pEntry, rSet, aIter.toView(), rUnitConverter,
                               rNamespaceMap );
             }
         }
@@ -254,7 +254,7 @@ bool
 SvXMLImportItemMapper::handleSpecialItem(  const SvXMLItemMapEntry& /*rEntry*/,
                                             SfxPoolItem& /*rItem*/,
                                             SfxItemSet& /*rSet*/,
-                                            const OUString& /*rValue*/,
+                                            std::string_view /*rValue*/,
                                             const SvXMLUnitConverter& /*rUnitConverter*/ )
 {
     OSL_FAIL( "unsupported special item in xml import" );
@@ -265,7 +265,7 @@ SvXMLImportItemMapper::handleSpecialItem(  const SvXMLItemMapEntry& /*rEntry*/,
     MID_SW_FLAG_NO_ITEM_IMPORT flag set */
 bool SvXMLImportItemMapper::handleNoItem( const SvXMLItemMapEntry& /*rEntry*/,
                                            SfxItemSet& /*rSet*/,
-                                           const OUString& /*rValue*/,
+                                           std::string_view /*rValue*/,
                                            const SvXMLUnitConverter& /*rUnitConverter*/,
                                            const SvXMLNamespaceMap& /*rNamespaceMap*/ )
 {
@@ -309,7 +309,7 @@ struct BoxHolder
 // put an XML-string value into an item
 bool SvXMLImportItemMapper::PutXMLValue(
     SfxPoolItem& rItem,
-    const OUString& rValue,
+    std::string_view rValue,
     sal_uInt16 nMemberId,
     const SvXMLUnitConverter& rUnitConverter )
 {
@@ -329,7 +329,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                     sal_Int32 nProp = 100;
                     sal_Int32 nAbs = 0;
 
-                    if( rValue.indexOf( '%' ) != -1 )
+                    if( rValue.find( '%' ) != std::string_view::npos )
                         bOk = ::sax::Converter::convertPercent(nProp, rValue);
                     else
                         bOk = rUnitConverter.convertMeasureToCore(nAbs, rValue);
@@ -354,7 +354,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                     sal_Int32 nProp = 100;
                     sal_Int32 nAbs = 0;
 
-                    if( rValue.indexOf( '%' ) != -1 )
+                    if( rValue.find( '%' ) != std::string_view::npos )
                         bOk = ::sax::Converter::convertPercent(nProp, rValue);
                     else
                         bOk = rUnitConverter.convertMeasureToCore(nAbs, rValue,
@@ -386,7 +386,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
             sal_Int32 nProp = 100;
             sal_Int32 nAbs = 0;
 
-            if( rValue.indexOf( '%' ) != -1 )
+            if( rValue.find( '%' ) != std::string_view::npos )
                 bOk = ::sax::Converter::convertPercent( nProp, rValue );
             else
                 bOk = rUnitConverter.convertMeasureToCore( nAbs, rValue );
@@ -412,7 +412,8 @@ bool SvXMLImportItemMapper::PutXMLValue(
             bool bColorFound = false;
             bool bOffsetFound = false;
 
-            SvXMLTokenEnumerator aTokenEnum( rValue );
+            OUString sValue = OUString::fromUtf8(rValue);
+            SvXMLTokenEnumerator aTokenEnum( sValue );
 
             Color aColor( 128,128, 128 );
             rShadow.SetLocation( SvxShadowLocation::BottomRight );
@@ -572,7 +573,8 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 case TOP_BORDER_LINE_WIDTH:
                 case BOTTOM_BORDER_LINE_WIDTH:
                 {
-                    SvXMLTokenEnumerator aTokenEnum( rValue );
+                    OUString sValue = OUString::fromUtf8(rValue);
+                    SvXMLTokenEnumerator aTokenEnum( sValue );
 
                     sal_Int32 nInWidth, nDistance, nOutWidth;
 
@@ -730,8 +732,8 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 {
                     SvxGraphicPosition ePos = GPOS_NONE, eTmp;
                     SvxGraphicPosition nTmp;
-                    SvXMLTokenEnumerator aTokenEnum( rValue );
-                    std::u16string_view aToken;
+                    SvXMLTokenEnumeratorChar aTokenEnum( rValue );
+                    std::string_view aToken;
                     bool bHori = false, bVert = false;
                     bOk = true;
                     while( bOk && aTokenEnum.getNextToken( aToken ) )
@@ -740,7 +742,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         {
                             bOk = false;
                         }
-                        else if( std::u16string_view::npos != aToken.find( '%' ) )
+                        else if( std::string_view::npos != aToken.find( '%' ) )
                         {
                             sal_Int32 nPrc = 50;
                             if (::sax::Converter::convertPercent(nPrc, aToken))
@@ -811,7 +813,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 break;
 
                 case MID_GRAPHIC_FILTER:
-                    rBrush.SetGraphicFilter( rValue );
+                    rBrush.SetGraphicFilter( OUString::fromUtf8(rValue) );
                     bOk = true;
                     break;
                 }
@@ -878,7 +880,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
             if( bOk )
                 rVertOrient.SetVertOrient( nValue );
             //#i8855# text::VertOrientation::NONE is stored as empty string and should be applied here
-            else if(rValue.isEmpty())
+            else if(rValue.empty())
             {
                 rVertOrient.SetVertOrient( text::VertOrientation::NONE );
                 bOk = true;
@@ -935,10 +937,10 @@ bool SvXMLImportItemMapper::PutXMLValue(
                     break;
                 case MID_FRMSIZE_REL_COL_WIDTH:
                 {
-                    sal_Int32 nPos = rValue.indexOf( '*' );
-                    if( -1 != nPos )
+                    size_t nPos = rValue.find( '*' );
+                    if( std::string_view::npos != nPos )
                     {
-                        sal_Int32 nValue = rValue.toInt32();
+                        sal_Int32 nValue = rtl_str_toInt32(rValue.data(), 10);
                         if( nValue < MINLAY )
                             nValue = MINLAY;
                         else if( nValue > SAL_MAX_UINT16 )

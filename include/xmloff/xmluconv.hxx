@@ -67,6 +67,22 @@ public:
     bool getNextToken( std::u16string_view& rToken );
 };
 
+class XMLOFF_DLLPUBLIC SvXMLTokenEnumeratorChar
+{
+private:
+    std::string_view     maTokenString;
+    size_t               mnNextTokenPos;
+    char                 mcSeparator;
+
+public:
+    SvXMLTokenEnumeratorChar( std::string_view rString, char cSeparator = ' ' );
+    /** just so no-one accidentally passes a temporary to this, and ends up with this class
+     * accessing the temporary after the temporary has been deleted. */
+    SvXMLTokenEnumeratorChar( OString&& , char cSeparator = ' ' ) = delete;
+
+    bool getNextToken( std::string_view& rToken );
+};
+
 /** the SvXMLTypeConverter converts values of various types from
     their internal representation to the textual form used in xml
     and back.
@@ -292,6 +308,10 @@ public:
     /** convert string (hex) to number (sal_uInt32) */
     static bool convertHex( sal_uInt32& nVal,
                               std::u16string_view rValue );
+
+    /** convert string (hex) to number (sal_uInt32) */
+    static bool convertHex( sal_uInt32& nVal,
+                              std::string_view rValue );
 
     /** convert number (sal_uInt32) to string (hex) */
     static void convertHex( OUStringBuffer& rBuffer,
