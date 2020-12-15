@@ -207,7 +207,7 @@ void OAdoColumn::fillPropertyValues()
             ::comphelper::UStringMixEqual aCase(false);
             OTypeInfoMap::const_iterator aFind = std::find_if(pTypeInfoMap->begin(), pTypeInfoMap->end(),
                 [&aCase] (const OTypeInfoMap::value_type& typeInfo) {
-                    return aCase(typeInfo.second->getDBName(), OUString("VarBinary"));
+                    return aCase(typeInfo.second->getDBName(), u"VarBinary");
                 });
 
             if ( aFind != pTypeInfoMap->end() ) // change column type if necessary
