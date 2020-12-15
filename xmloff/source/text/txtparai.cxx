@@ -661,7 +661,7 @@ public:
 
     virtual void SAL_CALL characters( const OUString& i_rChars ) override;
 
-    virtual void ProcessAttribute(sal_Int32 nAttributeToken, OUString const & i_rValue);
+    virtual void ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter);
 
     virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange)
         = 0;
@@ -686,7 +686,7 @@ void XMLMetaImportContextBase::startFastElement(
         const Reference<xml::sax::XFastAttributeList> & xAttrList)
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
-        ProcessAttribute(aIter.getToken(), aIter.toString());
+        ProcessAttribute(aIter);
 }
 
 void XMLMetaImportContextBase::endFastElement(sal_Int32 )
@@ -719,13 +719,12 @@ void XMLMetaImportContextBase::characters( const OUString& i_rChars )
     GetImport().GetTextImport()->InsertString(i_rChars, m_rIgnoreLeadingSpace);
 }
 
-void XMLMetaImportContextBase::ProcessAttribute(sal_Int32 nAttributeToken,
-    OUString const & i_rValue)
+void XMLMetaImportContextBase::ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter)
 {
-    if ( nAttributeToken == XML_ELEMENT(XML, XML_ID) )
-        m_XmlId = i_rValue;
+    if ( aIter.getToken() == XML_ELEMENT(XML, XML_ID) )
+        m_XmlId = aIter.toString();
     else
-        XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttributeToken, i_rValue);
+        XMLOFF_WARN_UNKNOWN("xmloff", aIter);
 }
 
 namespace {
@@ -748,8 +747,7 @@ public:
         XMLHints_Impl& i_rHints,
         bool & i_rIgnoreLeadingSpace );
 
-    virtual void ProcessAttribute(sal_Int32 nAttributeToken,
-        OUString const & i_rValue) override;
+    virtual void ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter) override;
 
     virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange) override;
 };
@@ -767,28 +765,26 @@ XMLMetaImportContext::XMLMetaImportContext(
 {
 }
 
-void XMLMetaImportContext::ProcessAttribute(sal_Int32 nAttributeToken,
-    OUString const & i_rValue)
+void XMLMetaImportContext::ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter)
 {
-    switch (nAttributeToken)
+    switch (aIter.getToken())
     {
         // RDFa
         case XML_ELEMENT(XHTML, XML_ABOUT):
-            m_sAbout = i_rValue;
+            m_sAbout = aIter.toString();
             m_bHaveAbout = true;
             break;
         case XML_ELEMENT(XHTML, XML_PROPERTY):
-            m_sProperty = i_rValue;
+            m_sProperty = aIter.toString();
             break;
         case XML_ELEMENT(XHTML, XML_CONTENT):
-            m_sContent = i_rValue;
+            m_sContent = aIter.toString();
             break;
         case XML_ELEMENT(XHTML, XML_DATATYPE):
-            m_sDatatype = i_rValue;
+            m_sDatatype = aIter.toString();
             break;
         default:
-            XMLMetaImportContextBase::ProcessAttribute(
-                nAttributeToken, i_rValue);
+            XMLMetaImportContextBase::ProcessAttribute(aIter);
     }
 }
 
@@ -835,8 +831,7 @@ public:
         XMLHints_Impl& i_rHints,
         bool & i_rIgnoreLeadingSpace );
 
-    virtual void ProcessAttribute(sal_Int32 nAttributeToken,
-        OUString const & i_rValue) override;
+    virtual void ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter) override;
 
     virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange) override;
 };
@@ -853,17 +848,15 @@ XMLMetaFieldImportContext::XMLMetaFieldImportContext(
 {
 }
 
-void XMLMetaFieldImportContext::ProcessAttribute(sal_Int32 nAttributeToken,
-    OUString const & i_rValue)
+void XMLMetaFieldImportContext::ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter)
 {
-    switch (nAttributeToken)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(STYLE, XML_DATA_STYLE_NAME):
-            m_DataStyleName = i_rValue;
+            m_DataStyleName = aIter.toString();
             break;
         default:
-            XMLMetaImportContextBase::ProcessAttribute(
-                nAttributeToken, i_rValue);
+            XMLMetaImportContextBase::ProcessAttribute(aIter);
     }
 }
 
