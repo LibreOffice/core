@@ -30,11 +30,11 @@ XMLIsPercentagePropertyHandler::~XMLIsPercentagePropertyHandler()
 }
 
 bool XMLIsPercentagePropertyHandler::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     Any& rValue,
     const SvXMLUnitConverter& ) const
 {
-    rValue <<= rStrImpValue.indexOf( '%' ) != -1;
+    rValue <<= rStrImpValue.find( '%' ) != std::string_view::npos;
     return true;
 }
 

@@ -33,15 +33,15 @@ XMLNamedBoolPropertyHdl::~XMLNamedBoolPropertyHdl()
     // Nothing to do
 }
 
-bool XMLNamedBoolPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLNamedBoolPropertyHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    if( rStrImpValue == maTrueStr )
+    if( maTrueStr.equalsAsciiL(rStrImpValue.data(), rStrImpValue.size()) )
     {
         rValue <<= true;
         return true;
     }
 
-    if( rStrImpValue == maFalseStr )
+    if( maFalseStr.equalsAsciiL(rStrImpValue.data(), rStrImpValue.size()) )
     {
         rValue <<= false;
         return true;

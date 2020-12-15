@@ -49,14 +49,14 @@ public:
     virtual bool handleSpecialItem( const SvXMLItemMapEntry& rEntry,
                                     SfxPoolItem& rItem,
                                     SfxItemSet& rSet,
-                                    const OUString& rValue,
+                                    std::string_view rValue,
                                     const SvXMLUnitConverter& rUnitConverter );
 
     /** this method is called for every item that has the
         MID_SW_FLAG_NO_ITEM_IMPORT flag set */
     virtual bool handleNoItem( const SvXMLItemMapEntry& rEntry,
                                SfxItemSet& rSet,
-                               const OUString& rValue,
+                               std::string_view rValue,
                                const SvXMLUnitConverter& rUnitConverter,
                                const SvXMLNamespaceMap& rNamespaceMap );
 
@@ -72,7 +72,7 @@ public:
         upon an XML attribute value. */
     static bool PutXMLValue(
         SfxPoolItem& rItem,
-        const OUString& rValue,
+        std::string_view rValue,
         sal_uInt16 nMemberId,
         const SvXMLUnitConverter& rUnitConverter );
 private:

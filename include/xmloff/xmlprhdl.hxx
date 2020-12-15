@@ -48,7 +48,7 @@ public:
         @retval true if the value was successfully converted to Any
         @retval false if the value was not recognised (warning will be printed)
      */
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const =0;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const =0;
     /// Exports the given value according to the XML-data-type corresponding to
     /// the derived class.
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const =0;

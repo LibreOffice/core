@@ -109,7 +109,7 @@ public:
         const SvXMLUnitConverter& rUnitConverter ) const;
 
     bool importXML(
-        const OUString& rStrImpValue, XMLPropertyState& rProperty,
+        std::string_view rStrImpValue, XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter ) const;
 
     /** searches for an entry that matches the given api name, namespace and local name or -1 if nothing found */

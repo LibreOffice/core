@@ -37,9 +37,9 @@ XMLCharHeightHdl::~XMLCharHeightHdl()
     // nothing to do
 }
 
-bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharHeightHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    if( rStrImpValue.indexOf( '%' ) == -1 )
+    if( rStrImpValue.find( '%' ) == std::string_view::npos )
     {
         double fSize;
         sal_Int16 const eSrcUnit = ::sax::Converter::GetUnitFromString(
@@ -82,9 +82,9 @@ XMLCharHeightPropHdl::~XMLCharHeightPropHdl()
     // nothing to do
 }
 
-bool XMLCharHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharHeightPropHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    if( rStrImpValue.indexOf( '%' ) != -1 )
+    if( rStrImpValue.find( '%' ) != std::string_view::npos )
     {
         sal_Int32 nPrc = 100;
         if (::sax::Converter::convertPercent( nPrc, rStrImpValue ))
@@ -119,7 +119,7 @@ XMLCharHeightDiffHdl::~XMLCharHeightDiffHdl()
     // nothing to do
 }
 
-bool XMLCharHeightDiffHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharHeightDiffHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nRel = 0;
 

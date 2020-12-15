@@ -35,7 +35,7 @@ public:
                                 const css::uno::Any& rAny2
                                 ) const override;
     virtual bool            importXML(
-                                const OUString& rStrImpValue,
+                                std::string_view rStrImpValue,
                                 css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
@@ -53,7 +53,7 @@ class XMLPMPropHdl_NumFormat : public XMLPropertyHandler
 public:
     virtual                 ~XMLPMPropHdl_NumFormat() override;
     virtual bool            importXML(
-                                const OUString& rStrImpValue,
+                                std::string_view rStrImpValue,
                                 css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
@@ -71,7 +71,7 @@ class XMLPMPropHdl_NumLetterSync : public XMLPropertyHandler
 public:
     virtual                 ~XMLPMPropHdl_NumLetterSync() override;
     virtual bool            importXML(
-                                const OUString& rStrImpValue,
+                                std::string_view rStrImpValue,
                                 css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
@@ -89,7 +89,7 @@ class XMLPMPropHdl_PaperTrayNumber : public XMLPropertyHandler
 public:
     virtual                 ~XMLPMPropHdl_PaperTrayNumber() override;
     virtual bool            importXML(
-                                const OUString& rStrImpValue,
+                                std::string_view rStrImpValue,
                                 css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
@@ -111,7 +111,7 @@ public:
     virtual                 ~XMLPMPropHdl_Print() override;
 
     virtual bool            importXML(
-                                const OUString& rStrImpValue,
+                                std::string_view rStrImpValue,
                                 css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
@@ -129,7 +129,7 @@ class XMLPMPropHdl_CenterHorizontal : public XMLPropertyHandler
 public:
     virtual                 ~XMLPMPropHdl_CenterHorizontal() override;
     virtual bool            importXML(
-                                const OUString& rStrImpValue,
+                                std::string_view rStrImpValue,
                                 css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;
@@ -145,7 +145,7 @@ class XMLPMPropHdl_CenterVertical : public XMLPropertyHandler
 public:
     virtual                 ~XMLPMPropHdl_CenterVertical() override;
     virtual bool            importXML(
-                                const OUString& rStrImpValue,
+                                std::string_view rStrImpValue,
                                 css::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const override;

@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/Any.hxx>
 
 using namespace ::com::sun::star::uno;
-
+using namespace ::xmloff::token;
 
 
 
@@ -40,16 +40,16 @@ XMLWordWrapPropertyHdl::~XMLWordWrapPropertyHdl()
     // Nothing to do
 }
 
-bool XMLWordWrapPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLWordWrapPropertyHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRetValue = false;
     bool bValue = false;
-    if( rStrImpValue == GetXMLToken( xmloff::token::XML_WRAP ) )
+    if( IsXMLToken(rStrImpValue, XML_WRAP ) )
     {
         bValue = true;
         bRetValue = true;
     }
-    if( rStrImpValue == GetXMLToken( xmloff::token::XML_NO_WRAP ) )
+    if( IsXMLToken(rStrImpValue, XML_NO_WRAP ) )
     {
         bValue = false;
         bRetValue = true;

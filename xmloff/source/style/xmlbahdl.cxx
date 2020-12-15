@@ -92,7 +92,7 @@ XMLNumberPropHdl::~XMLNumberPropHdl()
     // nothing to do
 }
 
-bool XMLNumberPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLNumberPropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue = 0;
     bool bRet = ::sax::Converter::convertNumber( nValue, rStrImpValue );
@@ -118,13 +118,13 @@ bool XMLNumberPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, con
 
 
 XMLNumberNonePropHdl::XMLNumberNonePropHdl( sal_Int8 nB ) :
-    sZeroStr( GetXMLToken(XML_NO_LIMIT) ),
+    meZeroStr( XML_NO_LIMIT ),
     nBytes( nB )
 {
 }
 
 XMLNumberNonePropHdl::XMLNumberNonePropHdl( enum XMLTokenEnum eZeroString, sal_Int8 nB ) :
-    sZeroStr( GetXMLToken( eZeroString ) ),
+    meZeroStr( eZeroString ),
     nBytes( nB )
 {
 }
@@ -134,12 +134,12 @@ XMLNumberNonePropHdl::~XMLNumberNonePropHdl()
     // nothing to do
 }
 
-bool XMLNumberNonePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLNumberNonePropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
 
     sal_Int32 nValue = 0;
-    if( rStrImpValue == sZeroStr )
+    if( IsXMLToken(rStrImpValue, meZeroStr) )
     {
         bRet = true;
     }
@@ -161,7 +161,7 @@ bool XMLNumberNonePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
     {
         if( nValue == 0 )
         {
-            rStrExpValue = sZeroStr;
+            rStrExpValue = GetXMLToken(meZeroStr);
         }
         else
         {
@@ -180,7 +180,7 @@ XMLMeasurePropHdl::~XMLMeasurePropHdl()
     // nothing to do
 }
 
-bool XMLMeasurePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLMeasurePropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Int32 nValue = 0;
     bool bRet = rUnitConverter.convertMeasureToCore( nValue, rStrImpValue );
@@ -211,7 +211,7 @@ XMLBoolFalsePropHdl::~XMLBoolFalsePropHdl()
     // nothing to do
 }
 
-bool XMLBoolFalsePropHdl::importXML( const OUString&, Any&, const SvXMLUnitConverter& ) const
+bool XMLBoolFalsePropHdl::importXML( std::string_view, Any&, const SvXMLUnitConverter& ) const
 {
     return false;
 }
@@ -227,7 +227,7 @@ XMLBoolPropHdl::~XMLBoolPropHdl()
     // nothing to do
 }
 
-bool XMLBoolPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLBoolPropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bValue(false);
     bool const bRet = ::sax::Converter::convertBool( bValue, rStrImpValue );
@@ -259,7 +259,7 @@ XMLNBoolPropHdl::~XMLNBoolPropHdl()
     // nothing to do
 }
 
-bool XMLNBoolPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLNBoolPropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bValue(false);
     bool const bRet = ::sax::Converter::convertBool( bValue, rStrImpValue );
@@ -291,7 +291,7 @@ XMLPercentPropHdl::~XMLPercentPropHdl()
     // nothing to do
 }
 
-bool XMLPercentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLPercentPropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue = 0;
     bool const bRet = ::sax::Converter::convertPercent( nValue, rStrImpValue );
@@ -318,15 +318,15 @@ bool XMLPercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, co
 }
 
 
-bool XMLDoublePercentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLDoublePercentPropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
 
     double fValue = 1.0;
 
-    if( rStrImpValue.indexOf( '%' ) == -1 )
+    if( rStrImpValue.find( '%' ) == std::string_view::npos )
     {
-        fValue = rStrImpValue.toDouble();
+        fValue = rtl_str_toDouble(rStrImpValue.data());
     }
     else
     {
@@ -367,7 +367,7 @@ XMLNegPercentPropHdl::~XMLNegPercentPropHdl()
     // nothing to do
 }
 
-bool XMLNegPercentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLNegPercentPropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue = 0;
     bool bRet = ::sax::Converter::convertPercent( nValue, rStrImpValue );
@@ -400,7 +400,7 @@ XMLMeasurePxPropHdl::~XMLMeasurePxPropHdl()
     // nothing to do
 }
 
-bool XMLMeasurePxPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLMeasurePxPropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue = 0;
     bool bRet = ::sax::Converter::convertMeasurePx( nValue, rStrImpValue );
@@ -431,18 +431,19 @@ XMLColorPropHdl::~XMLColorPropHdl()
     // Nothing to do
 }
 
-bool XMLColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLColorPropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
 
-    if( rStrImpValue.matchIgnoreAsciiCase( "hsl" ) )
+    if( rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
+            rStrImpValue.data(), rStrImpValue.size(), "hsl", 3, 3) == 0 )
     {
-        sal_Int32 nOpen = rStrImpValue.indexOf( '(' );
-        sal_Int32 nClose = rStrImpValue.lastIndexOf( ')' );
+        size_t nOpen = rStrImpValue.find( '(' );
+        size_t nClose = rStrImpValue.find( ')' );
 
-        if( (nOpen != -1) && (nClose > nOpen) )
+        if( (nOpen != std::string_view::npos) && (nClose > nOpen) )
         {
-            const OUString aTmp( rStrImpValue.copy( nOpen+1, nClose - nOpen-1) );
+            const OUString aTmp( OUString::fromUtf8(rStrImpValue.substr( nOpen+1, nClose - nOpen-1)) );
 
             sal_Int32 nIndex = 0;
 
@@ -500,7 +501,7 @@ XMLHexPropHdl::~XMLHexPropHdl()
     // Nothing to do
 }
 
-bool XMLHexPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLHexPropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt32 nRsid;
     bool bRet = SvXMLUnitConverter::convertHex( nRsid, rStrImpValue );
@@ -536,9 +537,9 @@ XMLStringPropHdl::~XMLStringPropHdl()
     // Nothing to do
 }
 
-bool XMLStringPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLStringPropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    rValue <<= rStrImpValue;
+    rValue <<= OUString::fromUtf8(rStrImpValue);
     return true;
 }
 
@@ -577,7 +578,7 @@ XMLDoublePropHdl::~XMLDoublePropHdl()
     // Nothing to do
 }
 
-bool XMLDoublePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLDoublePropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     double fDblValue(0.0);
     bool const bRet = ::sax::Converter::convertDouble(fDblValue, rStrImpValue);
@@ -605,8 +606,7 @@ bool XMLDoublePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, con
 
 XMLColorTransparentPropHdl::XMLColorTransparentPropHdl(
     enum XMLTokenEnum eTransparent ) :
-    sTransparent( GetXMLToken(
-        eTransparent != XML_TOKEN_INVALID ? eTransparent : XML_TRANSPARENT ) )
+    meTransparent( eTransparent != XML_TOKEN_INVALID ? eTransparent : XML_TRANSPARENT )
 {
     // Nothing to do
 }
@@ -616,11 +616,11 @@ XMLColorTransparentPropHdl::~XMLColorTransparentPropHdl()
     // Nothing to do
 }
 
-bool XMLColorTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLColorTransparentPropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
 
-    if( rStrImpValue != sTransparent )
+    if( !IsXMLToken(rStrImpValue, meTransparent) )
     {
         sal_Int32 nColor(0);
         bRet = ::sax::Converter::convertColor( nColor, rStrImpValue );
@@ -635,7 +635,7 @@ bool XMLColorTransparentPropHdl::exportXML( OUString& rStrExpValue, const Any& r
     bool bRet = false;
     sal_Int32 nColor = 0;
 
-    if( rStrExpValue == sTransparent )
+    if( IsXMLToken(rStrExpValue, meTransparent) )
         bRet = false;
     else if( rValue >>= nColor )
     {
@@ -652,8 +652,7 @@ bool XMLColorTransparentPropHdl::exportXML( OUString& rStrExpValue, const Any& r
 
 XMLIsTransparentPropHdl::XMLIsTransparentPropHdl(
     enum XMLTokenEnum eTransparent, bool bTransPropVal ) :
-    sTransparent( GetXMLToken(
-        eTransparent != XML_TOKEN_INVALID ? eTransparent : XML_TRANSPARENT ) ),
+    meTransparent( eTransparent != XML_TOKEN_INVALID ? eTransparent : XML_TRANSPARENT ),
     bTransPropValue( bTransPropVal )
 {
 }
@@ -663,9 +662,9 @@ XMLIsTransparentPropHdl::~XMLIsTransparentPropHdl()
     // Nothing to do
 }
 
-bool XMLIsTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLIsTransparentPropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    bool bValue = ( (rStrImpValue == sTransparent) == bTransPropValue);
+    bool bValue = ( IsXMLToken(rStrImpValue, meTransparent) == bTransPropValue);
     rValue <<= bValue;
 
     return true;
@@ -683,7 +682,7 @@ bool XMLIsTransparentPropHdl::exportXML( OUString& rStrExpValue, const Any& rVal
 
     if( bIsTrans )
     {
-        rStrExpValue = sTransparent;
+        rStrExpValue = GetXMLToken(meTransparent);
         bRet = true;
     }
 
@@ -701,7 +700,7 @@ XMLColorAutoPropHdl::~XMLColorAutoPropHdl()
     // Nothing to do
 }
 
-bool XMLColorAutoPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLColorAutoPropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
 
@@ -745,7 +744,7 @@ XMLIsAutoColorPropHdl::~XMLIsAutoColorPropHdl()
     // Nothing to do
 }
 
-bool XMLIsAutoColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLIsAutoColorPropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     // An auto color overrides any other color set!
     bool bValue;
@@ -779,7 +778,7 @@ XMLCompareOnlyPropHdl::~XMLCompareOnlyPropHdl()
     // Nothing to do
 }
 
-bool XMLCompareOnlyPropHdl::importXML( const OUString&, Any&, const SvXMLUnitConverter& ) const
+bool XMLCompareOnlyPropHdl::importXML( std::string_view, Any&, const SvXMLUnitConverter& ) const
 {
     SAL_WARN( "xmloff", "importXML called for compare-only-property" );
     return false;
@@ -802,7 +801,7 @@ XMLNumberWithoutZeroPropHdl::~XMLNumberWithoutZeroPropHdl()
 }
 
 bool XMLNumberWithoutZeroPropHdl::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     Any& rValue,
     const SvXMLUnitConverter& ) const
 {
@@ -834,7 +833,7 @@ XMLNumberWithAutoForVoidPropHdl::~XMLNumberWithAutoForVoidPropHdl()
 }
 
 bool XMLNumberWithAutoForVoidPropHdl::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     Any& rValue,
     const SvXMLUnitConverter& ) const
 {
@@ -842,7 +841,7 @@ bool XMLNumberWithAutoForVoidPropHdl::importXML(
     bool bRet = ::sax::Converter::convertNumber( nValue, rStrImpValue );
     if( bRet )
         lcl_xmloff_setAny( rValue, nValue, 2 );
-    else if( rStrImpValue == GetXMLToken( XML_AUTO ) )
+    else if( IsXMLToken( rStrImpValue, XML_AUTO ) )
     {
         rValue.clear(); // void
         bRet = true;

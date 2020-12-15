@@ -33,7 +33,7 @@ XMLEnumPropertyHdl::~XMLEnumPropertyHdl()
     // Nothing to do
 }
 
-bool XMLEnumPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLEnumPropertyHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 nValue = 0;
 

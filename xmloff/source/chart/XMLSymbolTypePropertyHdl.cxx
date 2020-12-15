@@ -84,7 +84,7 @@ bool lcl_convertEnum(
 
 bool lcl_convertEnum(
     sal_Int32 & rEnum,
-    std::u16string_view rValue,
+    std::string_view rValue,
     const SvXMLSignedEnumMapEntry *pMap )
 {
     while( pMap->eToken != XML_TOKEN_INVALID )
@@ -110,7 +110,7 @@ XMLSymbolTypePropertyHdl::XMLSymbolTypePropertyHdl( bool bIsNamedSymbol )
 XMLSymbolTypePropertyHdl::~XMLSymbolTypePropertyHdl()
 {}
 
-bool XMLSymbolTypePropertyHdl::importXML( const OUString& rStrImpValue,
+bool XMLSymbolTypePropertyHdl::importXML( std::string_view rStrImpValue,
                                                   uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     bool bResult = false;

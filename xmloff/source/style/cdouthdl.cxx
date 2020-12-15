@@ -79,7 +79,7 @@ XMLCrossedOutTypePropHdl::~XMLCrossedOutTypePropHdl()
     // nothing to do
 }
 
-bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCrossedOutTypePropHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 eNewStrikeout = 0;
     bool bRet = SvXMLUnitConverter::convertEnum(
@@ -153,7 +153,7 @@ XMLCrossedOutStylePropHdl::~XMLCrossedOutStylePropHdl()
     // nothing to do
 }
 
-bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCrossedOutStylePropHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 eNewStrikeout(0);
     bool bRet = SvXMLUnitConverter::convertEnum(
@@ -200,7 +200,7 @@ XMLCrossedOutWidthPropHdl::~XMLCrossedOutWidthPropHdl()
     // nothing to do
 }
 
-bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCrossedOutWidthPropHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 eNewStrikeout = 0;
     bool bRet = SvXMLUnitConverter::convertEnum(
@@ -269,11 +269,11 @@ XMLCrossedOutTextPropHdl::~XMLCrossedOutTextPropHdl()
     // nothing to do
 }
 
-bool XMLCrossedOutTextPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCrossedOutTextPropHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
 
-    if( !rStrImpValue.isEmpty() )
+    if( !rStrImpValue.empty() )
     {
         sal_Int16 eStrikeout = ('/' == rStrImpValue[0]
                                         ? awt::FontStrikeout::SLASH

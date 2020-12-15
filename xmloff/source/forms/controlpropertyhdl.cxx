@@ -141,7 +141,7 @@ namespace xmloff
         return bSuccess;
     }
 
-    bool OControlTextEmphasisHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
+    bool OControlTextEmphasisHandler::importXML( std::string_view _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         bool bSuccess = true;
         sal_uInt16 nEmphasis = awt::FontEmphasisMark::NONE;
@@ -150,7 +150,8 @@ namespace xmloff
         bool bHasPos = false, bHasType = false;
 
         OUString sToken;
-        SvXMLTokenEnumerator aTokenEnum(_rStrImpValue);
+        OUString sValue = OUString::fromUtf8(_rStrImpValue);
+        SvXMLTokenEnumerator aTokenEnum(sValue);
         while (aTokenEnum.getNextToken(sToken))
         {
             if (!bHasPos)
@@ -195,10 +196,11 @@ namespace xmloff
     {
     }
 
-    bool OControlBorderHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
+    bool OControlBorderHandler::importXML( std::string_view _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         OUString sToken;
-        SvXMLTokenEnumerator aTokens(_rStrImpValue);
+        OUString sValue = OUString::fromUtf8(_rStrImpValue);
+        SvXMLTokenEnumerator aTokens(sValue);
 
         sal_uInt16 nStyle = 1;
 
@@ -273,7 +275,7 @@ namespace xmloff
     {
     }
 
-    bool OFontWidthHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
+    bool OFontWidthHandler::importXML( std::string_view _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         sal_Int32 nWidth = 0;
         bool const bSuccess = ::sax::Converter::convertMeasure(
@@ -303,7 +305,7 @@ namespace xmloff
     {
     }
 
-    bool ORotationAngleHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
+    bool ORotationAngleHandler::importXML( std::string_view _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         double fValue;
         bool const bSucces =
