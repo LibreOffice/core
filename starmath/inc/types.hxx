@@ -204,6 +204,12 @@ sal_Unicode const MS_SUCCEEDSEQUIV = 0x227F;
 sal_Unicode const MS_NOTPRECEDES = 0x2280;
 sal_Unicode const MS_NOTSUCCEEDS = 0x2281;
 
+//mathml
+sal_Unicode const MS_IT = 0x2061;
+sal_Unicode const MS_AP = 0x2062;
+sal_Unicode const MS_IC = 0x2063;
+sal_Unicode const MS_IA = 0x2064;
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

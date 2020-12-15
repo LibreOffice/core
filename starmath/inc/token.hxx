@@ -85,7 +85,7 @@ enum SmTokenType
     TLIM,           TLIMSUP,        TLIMINF,        TTOWARD,        // Limits
     TOVER,          TTIMES,         TCDOT,          TDIV,           // Product type
     TSLASH,         TBACKSLASH,     TWIDESLASH,     TWIDEBACKSLASH, //Slash
-    TFRAC,          TIT,                                            // mathml related
+    TFRAC,                                                          // mathml related
     // Structure
     TMATRIX,         TPOUND,        TDPOUND,        TSTACK,         TBINOM,
     // Logic
@@ -143,7 +143,9 @@ enum SmTokenType
     TSQRT,          TNROOT,         TFACT,          TABS,           // roots, n! |z|
     // Color
     TRGB,           TRGBA,          THEX,           THTMLCOL,       TDVIPSNAMESCOL,
-    TICONICCOL,     TMATHMLCOL
+    TICONICCOL,     TMATHMLCOL,
+    // Mathml
+    TIT,            TAP,            TIC,            TIA             // invisible commands
     // clang-format on
 };
 
