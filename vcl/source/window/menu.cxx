@@ -2714,14 +2714,12 @@ MenuFloatingWindow * PopupMenu::ImplGetFloatingWindow() const {
 }
 
 PopupMenu::PopupMenu()
-    : mpLOKNotifier(nullptr)
 {
     mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
 }
 
 PopupMenu::PopupMenu( const PopupMenu& rMenu )
-    : Menu(),
-      mpLOKNotifier(nullptr)
+    : Menu()
 {
     mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
     *this = rMenu;
@@ -2922,8 +2920,12 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
     }
 
     VclPtrInstance<MenuFloatingWindow> pWin( this, pW, WB_BORDER | WB_SYSTEMWINDOW );
-    if (comphelper::LibreOfficeKit::isActive() && mpLOKNotifier)
-        pWin->SetLOKNotifier(mpLOKNotifier);
+    if (comphelper::LibreOfficeKit::isActive() && get_id() == "editviewspellmenu")
+    {
+        VclPtr<vcl::Window> xNotifierParent = pW->GetParentWithLOKNotifier();
+        assert(xNotifierParent && xNotifierParent->GetLOKNotifier() && "editview menu without LOKNotifier");
+        pWin->SetLOKNotifier(xNotifierParent->GetLOKNotifier());
+    }
 
     if( pSVData->maNWFData.mbFlatMenu )
         pWin->SetBorderStyle( WindowBorderStyle::NOBORDER );

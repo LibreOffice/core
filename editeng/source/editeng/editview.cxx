@@ -920,7 +920,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         return;
 
     VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "editeng/ui/spellmenu.ui", "");
-    VclPtr<PopupMenu> aPopupMenu(aBuilder.get_menu("menu"));
+    VclPtr<PopupMenu> aPopupMenu(aBuilder.get_menu("editviewspellmenu"));
     const sal_uInt16 nAutoCorrId = aPopupMenu->GetItemId("autocorrect");
     PopupMenu *pAutoMenu = aPopupMenu->GetPopupMenu(nAutoCorrId);
     const sal_uInt16 nInsertId = aPopupMenu->GetItemId("insert");
@@ -1104,8 +1104,6 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             LOKSendSpellPopupMenu(aPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
             return;
         }
-        else // For desktop and tablets, we use the tunneled dialog
-            aPopupMenu->SetLOKNotifier(pViewShell);
     }
     sal_uInt16 nId = aPopupMenu->Execute(pImpEditView->GetWindow(), aTempRect, PopupMenuFlags::NoMouseUpClose);
 
