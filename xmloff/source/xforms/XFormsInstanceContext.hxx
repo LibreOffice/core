@@ -60,9 +60,7 @@ public:
     virtual void SAL_CALL endUnknownElement(const OUString & Namespace, const OUString & Name) override;
 
 protected:
-    virtual void HandleAttribute(
-        sal_Int32 nAttributeToken,
-        const OUString& rValue ) override;
+    virtual void HandleAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter ) override;
 
     virtual SvXMLImportContext* HandleChild(
         sal_Int32 nElementToken,

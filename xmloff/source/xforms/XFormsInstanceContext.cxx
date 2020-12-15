@@ -134,20 +134,18 @@ void XFormsInstanceContext::endUnknownElement(const OUString & /*Namespace*/, co
     mxModel->getInstances()->insert( makeAny( aSequence ) );
 }
 
-void XFormsInstanceContext::HandleAttribute(
-    sal_Int32 nAttributeToken,
-    const OUString& rValue )
+void XFormsInstanceContext::HandleAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch( nAttributeToken & TOKEN_MASK )
+    switch( aIter.getToken() & TOKEN_MASK )
     {
     case XML_SRC:
-        msURL = rValue;
+        msURL = aIter.toString();
         break;
     case XML_ID:
-        msId = rValue;
+        msId = aIter.toString();
         break;
     default:
-        XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttributeToken, rValue);
+        XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         assert( false && "this should not happen" );
         break;
     }

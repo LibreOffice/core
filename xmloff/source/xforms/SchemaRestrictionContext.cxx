@@ -90,14 +90,12 @@ void SchemaRestrictionContext::CreateDataType()
     SAL_WARN_IF( !mxDataType.is(), "xmloff", "can't create type" );
 }
 
-void SchemaRestrictionContext::HandleAttribute(
-    sal_Int32 nAttributeToken,
-    const OUString& rValue )
+void SchemaRestrictionContext::HandleAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch (nAttributeToken & TOKEN_MASK)
+    switch (aIter.getToken() & TOKEN_MASK)
     {
         case XML_BASE:
-            msBaseName = rValue;
+            msBaseName = aIter.toString();
             break;
     }
 }

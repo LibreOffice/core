@@ -64,9 +64,7 @@ public:
 
 protected:
     /** will be called for each attribute */
-    virtual void HandleAttribute(
-        sal_Int32 nAttributeToken,
-        const OUString& rValue ) = 0;
+    virtual void HandleAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter ) = 0;
 
     /** will be called for each child element */
     virtual SvXMLImportContext* HandleChild(
