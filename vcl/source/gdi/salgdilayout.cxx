@@ -553,8 +553,14 @@ bool SalGraphics::DrawPolyLine(
         bPixelSnapHairline);
 }
 
-bool SalGraphics::DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient )
+bool SalGraphics::DrawGradient(const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, const OutputDevice& rOutDev)
 {
+    if( (m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled() )
+    {
+        tools::PolyPolygon aFinal(mirror(rPolyPoly.getB2DPolyPolygon(), rOutDev));
+        return drawGradient(aFinal, rGradient);
+    }
+
     return drawGradient( rPolyPoly, rGradient );
 }
 

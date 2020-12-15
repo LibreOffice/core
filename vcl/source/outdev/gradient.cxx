@@ -107,7 +107,7 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
 
                 // try to draw gradient natively
                 if (!mbOutputClipped)
-                    bDrawn = mpGraphics->DrawGradient( aClixPolyPoly, aGradient );
+                    bDrawn = mpGraphics->DrawGradient( aClixPolyPoly, aGradient, *this );
 
                 if (!bDrawn && !mbOutputClipped)
                 {
