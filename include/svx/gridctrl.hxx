@@ -26,7 +26,6 @@
 #include <svtools/recorditemwindow.hxx>
 #include <osl/mutex.hxx>
 #include <svx/svxdllapi.h>
-#include <vcl/menu.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
 #include <vector>
@@ -40,6 +39,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormatter; }
 
 class CursorWrapper;
+class PopupMenu;
 
 bool CompareBookmark(const css::uno::Any& aLeft, const css::uno::Any& aRight);
 

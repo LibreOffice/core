@@ -19,6 +19,7 @@
 
 #include <vcl/builderfactory.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/notebookbar/notebookbar.hxx>
 #include <vcl/tabpage.hxx>
 #include <sfx2/viewfrm.hxx>

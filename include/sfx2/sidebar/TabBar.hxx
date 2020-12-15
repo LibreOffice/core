@@ -23,9 +23,10 @@
 #include <sfx2/sidebar/ResourceManager.hxx>
 
 #include <vcl/InterimItemWindow.hxx>
-#include <vcl/menu.hxx>
 
 #include <functional>
+
+namespace com::sun::star::frame { class XFrame; }
 
 namespace svt { class AcceleratorExecute; }
 

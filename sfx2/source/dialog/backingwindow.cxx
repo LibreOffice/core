@@ -22,6 +22,7 @@
 #include <vcl/accel.hxx>
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>

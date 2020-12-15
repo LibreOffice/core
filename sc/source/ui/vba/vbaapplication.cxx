@@ -85,6 +85,8 @@
 #include <scmod.hxx>
 #include <scdll.hxx>
 
+#include <list>
+
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;

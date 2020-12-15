@@ -50,6 +50,7 @@
 #include <rptui_slotid.hrc>
 
 #include <vcl/commandevent.hxx>
+#include <vcl/menu.hxx>
 
 #include <svl/itempool.hxx>
 #include <svtools/extcolorcfg.hxx>

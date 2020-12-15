@@ -49,6 +49,7 @@
 #include <svl/urihelper.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/commandevent.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/txtattr.hxx>

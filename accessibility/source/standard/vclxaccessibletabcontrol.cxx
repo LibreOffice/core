@@ -28,6 +28,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/vclevent.hxx>
 
 #include <vector>
 
