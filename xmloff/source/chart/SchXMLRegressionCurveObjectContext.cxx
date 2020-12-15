@@ -117,29 +117,28 @@ void SchXMLEquationContext::startFastElement (sal_Int32 /*nElement*/,
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString aValue = aIter.toString();
         switch(aIter.getToken())
         {
             case XML_ELEMENT(SVG, XML_X):
             case XML_ELEMENT(SVG_COMPAT, XML_X):
                 rImport.GetMM100UnitConverter().convertMeasureToCore(
-                        aPosition.X, aValue );
+                        aPosition.X, aIter.toView() );
                 bHasXPos = true;
                 break;
             case XML_ELEMENT(SVG, XML_Y):
             case XML_ELEMENT(SVG_COMPAT, XML_Y):
                 rImport.GetMM100UnitConverter().convertMeasureToCore(
-                        aPosition.Y, aValue );
+                        aPosition.Y, aIter.toView() );
                 bHasYPos = true;
                 break;
             case XML_ELEMENT(CHART, XML_DISPLAY_EQUATION):
-                (void)::sax::Converter::convertBool(bShowEquation, aValue);
+                (void)::sax::Converter::convertBool(bShowEquation, aIter.toView());
                 break;
             case XML_ELEMENT(CHART, XML_DISPLAY_R_SQUARE):
-                (void)::sax::Converter::convertBool(bShowRSquare, aValue);
+                (void)::sax::Converter::convertBool(bShowRSquare, aIter.toView());
                 break;
             case XML_ELEMENT(CHART, XML_STYLE_NAME):
-                sAutoStyleName = aValue;
+                sAutoStyleName = aIter.toString();
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);

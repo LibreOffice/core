@@ -49,13 +49,10 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
     bool bFoundAppendTableAliasName = false;
     bool bFoundSuppressVersionColumns = false;
 
-    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     if (xDataSource.is())
     {
         for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
         {
-            OUString sValue = aIter.toString();
-
             aProperty.Name.clear();
             aProperty.Value = Any();
 
@@ -64,7 +61,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 case XML_CONNECTION_RESOURCE:
                     try
                     {
-                        xDataSource->setPropertyValue(PROPERTY_URL,makeAny(sValue));
+                        xDataSource->setPropertyValue(PROPERTY_URL,makeAny(aIter.toString()));
                     }
                     catch(const Exception&)
                     {
@@ -74,7 +71,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 case XML_SUPPRESS_VERSION_COLUMNS:
                     try
                     {
-                        xDataSource->setPropertyValue(PROPERTY_SUPPRESSVERSIONCL,makeAny(sValue == s_sTRUE));
+                        xDataSource->setPropertyValue(PROPERTY_SUPPRESSVERSIONCL,makeAny(IsXMLToken(aIter, XML_TRUE)));
                         bFoundSuppressVersionColumns = true;
                     }
                     catch(const Exception&)
@@ -90,15 +87,15 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                     break;
                 case XML_IS_FIRST_ROW_HEADER_LINE:
                     aProperty.Name = INFO_TEXTFILEHEADER;
-                    aProperty.Value <<= (sValue == s_sTRUE);
+                    aProperty.Value <<= IsXMLToken(aIter, XML_TRUE);
                     break;
                 case XML_SHOW_DELETED:
                     aProperty.Name = INFO_SHOWDELETEDROWS;
-                    aProperty.Value <<= (sValue == s_sTRUE);
+                    aProperty.Value <<= IsXMLToken(aIter, XML_TRUE);
                     break;
                 case XML_IS_TABLE_NAME_LENGTH_LIMITED:
                     aProperty.Name = INFO_ALLOWLONGTABLENAMES;
-                    aProperty.Value <<= (sValue == s_sTRUE);
+                    aProperty.Value <<= IsXMLToken(aIter, XML_TRUE);
                     bFoundTableNameLengthLimited = true;
                     break;
                 case XML_SYSTEM_DRIVER_SETTINGS:
@@ -106,54 +103,54 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                     break;
                 case XML_ENABLE_SQL92_CHECK:
                     aProperty.Name = PROPERTY_ENABLESQL92CHECK;
-                    aProperty.Value <<= (sValue == s_sTRUE);
+                    aProperty.Value <<= IsXMLToken(aIter, XML_TRUE);
                     break;
                 case XML_APPEND_TABLE_ALIAS_NAME:
                     aProperty.Name = INFO_APPEND_TABLE_ALIAS;
-                    aProperty.Value <<= (sValue == s_sTRUE);
+                    aProperty.Value <<= IsXMLToken(aIter, XML_TRUE);
                     bFoundAppendTableAliasName = true;
                     break;
                 case XML_PARAMETER_NAME_SUBSTITUTION:
                     aProperty.Name = INFO_PARAMETERNAMESUBST;
-                    aProperty.Value <<= (sValue == s_sTRUE);
+                    aProperty.Value <<= IsXMLToken(aIter, XML_TRUE);
                     bFoundParamNameSubstitution = true;
                     break;
                 case XML_IGNORE_DRIVER_PRIVILEGES:
                     aProperty.Name = INFO_IGNOREDRIVER_PRIV;
-                    aProperty.Value <<= (sValue == s_sTRUE);
+                    aProperty.Value <<= IsXMLToken(aIter, XML_TRUE);
                     break;
                 case XML_BOOLEAN_COMPARISON_MODE:
                     aProperty.Name = PROPERTY_BOOLEANCOMPARISONMODE;
-                    if ( sValue == "equal-integer" )
+                    if ( aIter.toView() == "equal-integer" )
                         aProperty.Value <<= sal_Int32(0);
-                    else if ( sValue == "is-boolean" )
+                    else if ( aIter.toView() == "is-boolean" )
                         aProperty.Value <<= sal_Int32(1);
-                    else if ( sValue == "equal-boolean" )
+                    else if ( aIter.toView() == "equal-boolean" )
                         aProperty.Value <<= sal_Int32(2);
-                    else if ( sValue == "equal-use-only-zero" )
+                    else if ( aIter.toView() == "equal-use-only-zero" )
                         aProperty.Value <<= sal_Int32(3);
                     break;
                 case XML_USE_CATALOG:
                     aProperty.Name = INFO_USECATALOG;
-                    aProperty.Value <<= (sValue == s_sTRUE);
+                    aProperty.Value <<= IsXMLToken(aIter, XML_TRUE);
                     break;
                 case XML_BASE_DN:
                     aProperty.Name = INFO_CONN_LDAP_BASEDN;
                     break;
                 case XML_MAX_ROW_COUNT:
                     aProperty.Name = INFO_CONN_LDAP_ROWCOUNT;
-                    aProperty.Value <<= sValue.toInt32();
+                    aProperty.Value <<= aIter.toInt32();
                     break;
                 case XML_JAVA_CLASSPATH:
                     aProperty.Name = "JavaDriverClassPath";
                     break;
                 default:
-                    XMLOFF_WARN_UNKNOWN_ATTR("dbaccess", aIter.getToken(), aIter.toString());
+                    XMLOFF_WARN_UNKNOWN("dbaccess", aIter);
             }
             if ( !aProperty.Name.isEmpty() )
             {
                 if ( !aProperty.Value.hasValue() )
-                    aProperty.Value <<= sValue;
+                    aProperty.Value <<= aIter.toString();
                 rImport.addInfo(aProperty);
             }
         }

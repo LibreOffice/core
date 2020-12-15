@@ -27,6 +27,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <sax/saxdllapi.h>
 
+#include <string_view>
 #include <vector>
 
 namespace com::sun::star::xml::sax { class XFastTokenHandler; }
@@ -171,6 +172,11 @@ public:
             assert(mnIdx < mrList.maAttributeTokens.size());
             return rtl_str_toDouble(mrList.getFastAttributeValue(mnIdx));
         }
+        bool toBoolean() const
+        {
+            assert(mnIdx < mrList.maAttributeTokens.size());
+            return rtl_str_toBoolean(mrList.getFastAttributeValue(mnIdx));
+        }
         OUString toString() const
         {
             assert(mnIdx < mrList.maAttributeTokens.size());
@@ -187,6 +193,11 @@ public:
         {
             assert(mnIdx < mrList.maAttributeTokens.size());
             return mrList.AttributeValueLength(mnIdx);
+        }
+        std::string_view toView() const
+        {
+            assert(mnIdx < mrList.maAttributeTokens.size());
+            return std::string_view(mrList.getFastAttributeValue(mnIdx), mrList.AttributeValueLength(mnIdx));
         }
         bool isString(const char *str) const
         {

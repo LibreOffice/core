@@ -44,44 +44,42 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
 {
 
     OSL_ENSURE(m_xReportComponent.is(),"Component is NULL!");
-    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
 
     try
     {
         for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
         {
-            OUString sValue = aIter.toString();
-
             switch( aIter.getToken() )
             {
                 case XML_ELEMENT(FORM, XML_IMAGE_DATA):
                 {
                     SvtPathOptions aPathOptions;
+                    OUString sValue = aIter.toString();
                     sValue = aPathOptions.SubstituteVariable(sValue);
                     _xComponent->setImageURL(rImport.GetAbsoluteReference( sValue ));
                     break;
                 }
                 case XML_ELEMENT(REPORT, XML_PRESERVE_IRI):
-                    _xComponent->setPreserveIRI(s_sTRUE == sValue);
+                    _xComponent->setPreserveIRI(IsXMLToken(aIter, XML_TRUE));
                     break;
                 case XML_ELEMENT(REPORT, XML_SCALE):
                 {
                     sal_Int16 nRet = awt::ImageScaleMode::NONE;
-                    if ( s_sTRUE == sValue )
+                    if ( IsXMLToken(aIter, XML_TRUE) )
                     {
                         nRet = awt::ImageScaleMode::ANISOTROPIC;
                     }
                     else
                     {
                         const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetImageScaleOptions();
-                        bool bConvertOk = SvXMLUnitConverter::convertEnum( nRet, sValue, aXML_EnumMap );
+                        bool bConvertOk = SvXMLUnitConverter::convertEnum( nRet, aIter.toString(), aXML_EnumMap );
                         SAL_WARN_IF(!bConvertOk, "reportdesign", "convertEnum failed");
                     }
                     _xComponent->setScaleMode( nRet );
                     break;
                 }
                 case XML_ELEMENT(REPORT, XML_FORMULA):
-                    _xComponent->setDataField(ORptFilter::convertFormula(sValue));
+                    _xComponent->setDataField(ORptFilter::convertFormula(aIter.toString()));
                     break;
                 default:
                     XMLOFF_WARN_UNKNOWN("reportdesign", aIter);

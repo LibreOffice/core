@@ -47,23 +47,21 @@ void XMLTextDropCapImportContext::ProcessAttrs(
     sal_Int32 nTmp;
     for (auto &aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        const OUString sValue = aIter.toString();
-
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(STYLE, XML_LINES):
-            if (::sax::Converter::convertNumber( nTmp, sValue, 0, 255 ))
+            if (::sax::Converter::convertNumber( nTmp, aIter.toView(), 0, 255 ))
             {
                 aFormat.Lines = nTmp < 2 ? 0 : static_cast<sal_Int8>(nTmp);
             }
             break;
 
         case XML_ELEMENT(STYLE, XML_LENGTH):
-            if( IsXMLToken( sValue, XML_WORD ) )
+            if( IsXMLToken( aIter, XML_WORD ) )
             {
                 bWholeWord = true;
             }
-            else if (::sax::Converter::convertNumber( nTmp, sValue, 1, 255 ))
+            else if (::sax::Converter::convertNumber( nTmp, aIter.toView(), 1, 255 ))
             {
                 bWholeWord = false;
                 aFormat.Count = static_cast<sal_Int8>(nTmp);
@@ -72,14 +70,14 @@ void XMLTextDropCapImportContext::ProcessAttrs(
 
         case XML_ELEMENT(STYLE, XML_DISTANCE):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        nTmp, sValue, 0 ))
+                        nTmp, aIter.toView(), 0 ))
             {
                 aFormat.Distance = static_cast<sal_uInt16>(nTmp);
             }
             break;
 
         case XML_ELEMENT(STYLE, XML_STYLE_NAME):
-            sStyleName = sValue;
+            sStyleName = aIter.toString();
             break;
 
         default:

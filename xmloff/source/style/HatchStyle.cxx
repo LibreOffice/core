@@ -75,34 +75,33 @@ void XMLHatchStyleImport::importXML(
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        const OUString aStrValue = aIter.toString();
         switch( aIter.getToken() )
         {
             case XML_ELEMENT(DRAW, XML_NAME):
             case XML_ELEMENT(DRAW_OOO, XML_NAME):
-                rStrName = aStrValue;
+                rStrName = aIter.toString();
                 break;
             case XML_ELEMENT(DRAW, XML_DISPLAY_NAME):
             case XML_ELEMENT(DRAW_OOO, XML_DISPLAY_NAME):
-                aDisplayName = aStrValue;
+                aDisplayName = aIter.toString();
                 break;
             case XML_ELEMENT(DRAW, XML_STYLE):
             case XML_ELEMENT(DRAW_OOO, XML_STYLE):
-                SvXMLUnitConverter::convertEnum( aHatch.Style, aStrValue, pXML_HatchStyle_Enum );
+                SvXMLUnitConverter::convertEnum( aHatch.Style, aIter.toString(), pXML_HatchStyle_Enum );
                 break;
             case XML_ELEMENT(DRAW, XML_COLOR):
             case XML_ELEMENT(DRAW_OOO, XML_COLOR):
-                ::sax::Converter::convertColor(aHatch.Color, aStrValue);
+                ::sax::Converter::convertColor(aHatch.Color, aIter.toString());
                 break;
             case XML_ELEMENT(DRAW, XML_DISTANCE):
             case XML_ELEMENT(DRAW_OOO, XML_DISTANCE):
-                rUnitConverter.convertMeasureToCore(aHatch.Distance, aStrValue);
+                rUnitConverter.convertMeasureToCore(aHatch.Distance, aIter.toView());
                 break;
             case XML_ELEMENT(DRAW, XML_ROTATION):
             case XML_ELEMENT(DRAW_OOO, XML_ROTATION):
             {
                 sal_Int32 nValue;
-                if (::sax::Converter::convertNumber(nValue, aStrValue, 0, 3600))
+                if (::sax::Converter::convertNumber(nValue, aIter.toView(), 0, 3600))
                     aHatch.Angle = sal_Int16(nValue);
                 break;
             }

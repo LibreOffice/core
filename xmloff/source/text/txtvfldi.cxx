@@ -715,7 +715,7 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
             {
                 sal_Int32 nLevel;
                 bool const bRet = ::sax::Converter::convertNumber(
-                    nLevel, aIter.toString(), 0,
+                    nLevel, aIter.toView(), 0,
                     GetImport().GetTextImport()->GetChapterNumbering()->
                                                                getCount());
                 if (bRet)

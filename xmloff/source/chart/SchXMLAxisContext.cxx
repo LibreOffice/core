@@ -235,30 +235,29 @@ void SchXMLAxisContext::startFastElement( sal_Int32 /*nElement*/,
     // parse attributes
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString aValue = aIter.toString();
         switch(aIter.getToken())
         {
             case XML_ELEMENT(CHART, XML_DIMENSION):
                 {
                     SchXMLAxisDimension nEnumVal;
-                    if( SvXMLUnitConverter::convertEnum( nEnumVal, aValue, aXMLAxisDimensionMap ))
+                    if( SvXMLUnitConverter::convertEnum( nEnumVal, aIter.toString(), aXMLAxisDimensionMap ))
                         m_aCurrentAxis.eDimension = nEnumVal;
                 }
                 break;
             case XML_ELEMENT(CHART, XML_NAME):
-                m_aCurrentAxis.aName = aValue;
+                m_aCurrentAxis.aName = aIter.toString();
                 break;
             case XML_ELEMENT(CHART, XML_AXIS_TYPE):
             case XML_ELEMENT(CHART_EXT, XML_AXIS_TYPE):
                 sal_uInt16 nEnumVal;
-                if( SvXMLUnitConverter::convertEnum( nEnumVal, aValue, aXMLAxisTypeMap ))
+                if( SvXMLUnitConverter::convertEnum( nEnumVal, aIter.toString(), aXMLAxisTypeMap ))
                 {
                     m_nAxisType = nEnumVal;
                     m_bAxisTypeImported = true;
                 }
                 break;
             case XML_ELEMENT(CHART, XML_STYLE_NAME):
-                m_aAutoStyleName = aValue;
+                m_aAutoStyleName = aIter.toString();
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
@@ -611,7 +610,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLAxisContext::cre
                 switch (aIter.getToken())
                 {
                     case XML_ELEMENT(CHART, XML_CLASS):
-                        if( IsXMLToken( aIter.toString(), XML_MINOR ) )
+                        if( IsXMLToken( aIter, XML_MINOR ) )
                             bIsMajor = false;
                         break;
                     case XML_ELEMENT(CHART, XML_STYLE_NAME):
@@ -819,7 +818,7 @@ DateScaleContext::DateScaleContext(
 
 namespace
 {
-sal_Int32 lcl_getTimeUnit( const OUString& rValue )
+sal_Int32 lcl_getTimeUnit( const sax_fastparser::FastAttributeList::FastAttributeIter& rValue )
 {
     sal_Int32 nTimeUnit = css::chart::TimeUnit::DAY;
     if( IsXMLToken( rValue, XML_DAYS ) )
@@ -846,12 +845,11 @@ void DateScaleContext::startFastElement( sal_Int32 /*nElement*/,
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString aValue = aIter.toString();
         switch( aIter.getToken() )
         {
             case  XML_ELEMENT(CHART, XML_BASE_TIME_UNIT):
                 {
-                    aIncrement.TimeResolution <<= lcl_getTimeUnit(aValue);
+                    aIncrement.TimeResolution <<= lcl_getTimeUnit(aIter);
                     bSetNewIncrement = true;
                 }
                 break;
@@ -859,7 +857,7 @@ void DateScaleContext::startFastElement( sal_Int32 /*nElement*/,
                 {
                     chart::TimeInterval aInterval(1,0);
                     aIncrement.MajorTimeInterval >>= aInterval;
-                    ::sax::Converter::convertNumber( aInterval.Number, aValue );
+                    ::sax::Converter::convertNumber( aInterval.Number, aIter.toView() );
                     aIncrement.MajorTimeInterval <<= aInterval;
                     bSetNewIncrement = true;
                 }
@@ -868,7 +866,7 @@ void DateScaleContext::startFastElement( sal_Int32 /*nElement*/,
                 {
                     chart::TimeInterval aInterval(1,0);
                     aIncrement.MajorTimeInterval >>= aInterval;
-                    aInterval.TimeUnit = lcl_getTimeUnit(aValue);
+                    aInterval.TimeUnit = lcl_getTimeUnit(aIter);
                     aIncrement.MajorTimeInterval <<= aInterval;
                     bSetNewIncrement = true;
                 }
@@ -877,7 +875,7 @@ void DateScaleContext::startFastElement( sal_Int32 /*nElement*/,
                 {
                     chart::TimeInterval aInterval(1,0);
                     aIncrement.MinorTimeInterval >>= aInterval;
-                    ::sax::Converter::convertNumber( aInterval.Number, aValue );
+                    ::sax::Converter::convertNumber( aInterval.Number, aIter.toView() );
                     aIncrement.MinorTimeInterval <<= aInterval;
                     bSetNewIncrement = true;
                 }
@@ -886,7 +884,7 @@ void DateScaleContext::startFastElement( sal_Int32 /*nElement*/,
                 {
                     chart::TimeInterval aInterval(1,0);
                     aIncrement.MinorTimeInterval >>= aInterval;
-                    aInterval.TimeUnit = lcl_getTimeUnit(aValue);
+                    aInterval.TimeUnit = lcl_getTimeUnit(aIter);
                     aIncrement.MinorTimeInterval <<= aInterval;
                     bSetNewIncrement = true;
                 }

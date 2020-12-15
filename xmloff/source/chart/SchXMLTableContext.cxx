@@ -261,7 +261,7 @@ void SchXMLTableContext::startFastElement (sal_Int32 /*nElement*/,
                 mrTable.aTableNameOfFile = aIter.toString();
                 break;
             case XML_ELEMENT(TABLE, XML_PROTECTED):
-                if ( IsXMLToken( aIter.toString(), XML_TRUE ) )
+                if ( IsXMLToken( aIter, XML_TRUE ) )
                 {
                     mrTable.bProtected = true;
                 }
@@ -574,7 +574,6 @@ SchXMLTableCellContext::~SchXMLTableCellContext()
 void SchXMLTableCellContext::startFastElement (sal_Int32 /*nElement*/,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
-    OUString aValue;
     OUString aCellContent;
     SchXMLCellType eValueType  = SCH_CELL_TYPE_UNKNOWN;
 
@@ -583,10 +582,9 @@ void SchXMLTableCellContext::startFastElement (sal_Int32 /*nElement*/,
         switch(aIter.getToken())
         {
             case XML_ELEMENT(OFFICE, XML_VALUE_TYPE):
-                aValue = aIter.toString();
-                if( IsXMLToken( aValue, XML_FLOAT ) )
+                if( IsXMLToken( aIter, XML_FLOAT ) )
                     eValueType = SCH_CELL_TYPE_FLOAT;
-                else if( IsXMLToken( aValue, XML_STRING ) )
+                else if( IsXMLToken( aIter, XML_STRING ) )
                     eValueType = SCH_CELL_TYPE_STRING;
                 break;
 

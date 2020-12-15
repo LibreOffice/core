@@ -45,30 +45,27 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
     OSL_ENSURE(m_xFunctions.is(),"Functions is NULL!");
     m_xFunction = m_xFunctions->createFunction();
 
-    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
-        OUString sValue = aIter.toString();
-
         try
         {
             switch( aIter.getToken() )
             {
                 case XML_ELEMENT(REPORT, XML_NAME):
-                    m_xFunction->setName(sValue);
+                    m_xFunction->setName(aIter.toString());
                     break;
                 case XML_ELEMENT(REPORT, XML_FORMULA):
-                    m_xFunction->setFormula(ORptFilter::convertFormula(sValue));
+                    m_xFunction->setFormula(ORptFilter::convertFormula(aIter.toString()));
                     break;
                 case XML_ELEMENT(REPORT, XML_PRE_EVALUATED):
-                    m_xFunction->setPreEvaluated(sValue == s_sTRUE);
+                    m_xFunction->setPreEvaluated(IsXMLToken(aIter, XML_TRUE));
                     break;
                 case XML_ELEMENT(REPORT, XML_INITIAL_FORMULA):
-                    if ( !sValue.isEmpty() )
-                        m_xFunction->setInitialFormula(beans::Optional< OUString>(true,ORptFilter::convertFormula(sValue)));
+                    if ( !aIter.isEmpty() )
+                        m_xFunction->setInitialFormula(beans::Optional< OUString>(true,ORptFilter::convertFormula(aIter.toString())));
                     break;
                 case XML_ELEMENT(REPORT, XML_DEEP_TRAVERSING):
-                    m_xFunction->setDeepTraversing(sValue == s_sTRUE);
+                    m_xFunction->setDeepTraversing(IsXMLToken(aIter, XML_TRUE));
                     break;
                 default:
                     XMLOFF_WARN_UNKNOWN("reportdesign", aIter);

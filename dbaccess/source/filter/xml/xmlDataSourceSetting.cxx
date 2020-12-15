@@ -47,12 +47,10 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
-        OUString sValue = aIter.toString();
-
         switch( aIter.getToken() & TOKEN_MASK )
         {
             case XML_DATA_SOURCE_SETTING_IS_LIST:
-                m_bIsList = sValue == "true";
+                m_bIsList = aIter.toView() == "true";
                 break;
             case XML_DATA_SOURCE_SETTING_TYPE:
                 {
@@ -71,17 +69,17 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                         return tmp;
                     }();
 
-                    const std::map< OUString, css::uno::Type >::const_iterator aTypePos = s_aTypeNameMap.find(sValue);
+                    const std::map< OUString, css::uno::Type >::const_iterator aTypePos = s_aTypeNameMap.find(aIter.toString());
                     OSL_ENSURE(s_aTypeNameMap.end() != aTypePos, "OXMLDataSourceSetting::OXMLDataSourceSetting: invalid type!");
                     if (s_aTypeNameMap.end() != aTypePos)
                         m_aPropType = aTypePos->second;
                 }
                 break;
             case XML_DATA_SOURCE_SETTING_NAME:
-                m_aSetting.Name = sValue;
+                m_aSetting.Name = aIter.toString();
                 break;
             default:
-                XMLOFF_WARN_UNKNOWN_ATTR("dbaccess", aIter.getToken(), aIter.toString());
+                XMLOFF_WARN_UNKNOWN("dbaccess", aIter);
         }
     }
 

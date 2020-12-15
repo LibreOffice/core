@@ -78,48 +78,46 @@ void XMLGradientStyleImport::importXML(
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        const OUString aStrValue = aIter.toString();
-
         sal_Int32 nTmpValue;
 
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(DRAW, XML_NAME):
-            rStrName = aStrValue;
+            rStrName = aIter.toString();
             break;
         case XML_ELEMENT(DRAW, XML_DISPLAY_NAME):
-            aDisplayName = aStrValue;
+            aDisplayName = aIter.toString();
             break;
         case XML_ELEMENT(DRAW, XML_STYLE):
-            SvXMLUnitConverter::convertEnum( aGradient.Style, aStrValue, pXML_GradientStyle_Enum );
+            SvXMLUnitConverter::convertEnum( aGradient.Style, aIter.toString(), pXML_GradientStyle_Enum );
             break;
         case XML_ELEMENT(DRAW, XML_CX):
-            ::sax::Converter::convertPercent( nTmpValue, aStrValue );
+            ::sax::Converter::convertPercent( nTmpValue, aIter.toView() );
             aGradient.XOffset = static_cast< sal_Int16 >( nTmpValue );
             break;
         case XML_ELEMENT(DRAW, XML_CY):
-            ::sax::Converter::convertPercent( nTmpValue, aStrValue );
+            ::sax::Converter::convertPercent( nTmpValue, aIter.toView() );
             aGradient.YOffset = static_cast< sal_Int16 >( nTmpValue );
             break;
         case XML_ELEMENT(DRAW, XML_START_COLOR):
-            ::sax::Converter::convertColor(aGradient.StartColor, aStrValue);
+            ::sax::Converter::convertColor(aGradient.StartColor, aIter.toString());
             break;
         case XML_ELEMENT(DRAW, XML_END_COLOR):
-            ::sax::Converter::convertColor(aGradient.EndColor, aStrValue);
+            ::sax::Converter::convertColor(aGradient.EndColor, aIter.toString());
             break;
         case XML_ELEMENT(DRAW, XML_START_INTENSITY):
-            ::sax::Converter::convertPercent( nTmpValue, aStrValue );
+            ::sax::Converter::convertPercent( nTmpValue, aIter.toView() );
             aGradient.StartIntensity = static_cast< sal_Int16 >( nTmpValue );
             break;
         case XML_ELEMENT(DRAW, XML_END_INTENSITY):
-            ::sax::Converter::convertPercent( nTmpValue, aStrValue );
+            ::sax::Converter::convertPercent( nTmpValue, aIter.toView() );
             aGradient.EndIntensity = static_cast< sal_Int16 >( nTmpValue );
             break;
         case XML_ELEMENT(DRAW, XML_GRADIENT_ANGLE):
             {
                 auto const cmp12(rImport.GetODFVersion().compareTo(u"" ODFVER_012_TEXT));
                 bool const bSuccess =
-                    ::sax::Converter::convertAngle(aGradient.Angle, aStrValue,
+                    ::sax::Converter::convertAngle(aGradient.Angle, aIter.toView(),
                         // tdf#89475 try to detect borked OOo angles
                         (cmp12 < 0) || (cmp12 == 0
                             && (rImport.isGeneratorVersionOlderThan(SvXMLImport::AOO_4x, SvXMLImport::LO_7x)
@@ -129,7 +127,7 @@ void XMLGradientStyleImport::importXML(
             }
             break;
         case XML_ELEMENT(DRAW, XML_BORDER):
-            ::sax::Converter::convertPercent( nTmpValue, aStrValue );
+            ::sax::Converter::convertPercent( nTmpValue, aIter.toView() );
             aGradient.Border = static_cast< sal_Int16 >( nTmpValue );
             break;
 

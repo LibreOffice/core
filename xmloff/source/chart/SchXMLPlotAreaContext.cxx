@@ -225,23 +225,23 @@ void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
             case XML_ELEMENT(SVG_COMPAT, XML_WIDTH):
             case XML_ELEMENT(SVG, XML_HEIGHT):
             case XML_ELEMENT(SVG_COMPAT, XML_HEIGHT):
-                m_aOuterPositioning.readPositioningAttribute( aIter.getToken(), aValue );
+                m_aOuterPositioning.readPositioningAttribute( aIter.getToken(), aIter.toView() );
                 break;
             case XML_ELEMENT(CHART, XML_STYLE_NAME):
-                msAutoStyleName = aValue;
+                msAutoStyleName = aIter.toString();
                 break;
             case XML_ELEMENT(TABLE, XML_CELL_RANGE_ADDRESS):
-                mrChartAddress = lcl_ConvertRange( aValue, xNewDoc );
+                mrChartAddress = lcl_ConvertRange( aIter.toString(), xNewDoc );
                 // indicator for getting data from the outside
                 m_rbHasRangeAtPlotArea = true;
                 break;
             case XML_ELEMENT(CHART, XML_DATA_SOURCE_HAS_LABELS):
                 {
-                    if( aValue == ::xmloff::token::GetXMLToken( ::xmloff::token::XML_BOTH ))
+                    if( IsXMLToken(aIter, XML_BOTH) )
                         mrColHasLabels = mrRowHasLabels = true;
-                    else if( aValue == ::xmloff::token::GetXMLToken( ::xmloff::token::XML_ROW ))
+                    else if( IsXMLToken(aIter, XML_ROW) )
                         mrRowHasLabels = true;
-                    else if( aValue == ::xmloff::token::GetXMLToken( ::xmloff::token::XML_COLUMN ))
+                    else if( IsXMLToken(aIter, XML_COLUMN) )
                         mrColHasLabels = true;
                 }
                 break;
@@ -643,14 +643,13 @@ void SchXMLDataLabelContext::startFastElement(
 {
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sValue = aIter.toString();
         switch(aIter.getToken())
         {
             case XML_ELEMENT(SVG, XML_X):
             case XML_ELEMENT(SVG_COMPAT, XML_X):
             {
                 sal_Int32 nResultValue;
-                GetImport().GetMM100UnitConverter().convertMeasureToCore(nResultValue, sValue);
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(nResultValue, aIter.toView());
                 mrDataLabelStyle.mo_nLabelAbsolutePosX = nResultValue;
                 break;
             }
@@ -658,12 +657,12 @@ void SchXMLDataLabelContext::startFastElement(
             case XML_ELEMENT(SVG_COMPAT, XML_Y):
             {
                 sal_Int32 nResultValue;
-                GetImport().GetMM100UnitConverter().convertMeasureToCore(nResultValue, sValue);
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(nResultValue, aIter.toView());
                 mrDataLabelStyle.mo_nLabelAbsolutePosY = nResultValue;
                 break;
             }
             case XML_ELEMENT(CHART, XML_STYLE_NAME):
-                mrDataLabelStyle.msStyleName = sValue;
+                mrDataLabelStyle.msStyleName = aIter.toString();
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
@@ -744,7 +743,7 @@ void SchXMLDataPointContext::startFastElement (sal_Int32 /*Element*/,
                 break;
             case XML_ELEMENT(LO_EXT, XML_HIDE_LEGEND):
             {
-                bool bHideLegend = aIter.toString().toBoolean();
+                bool bHideLegend = aIter.toBoolean();
                 if (bHideLegend)
                 {
                     uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
@@ -818,7 +817,7 @@ bool SchXMLPositionAttributesHelper::isAutomatic() const
     return m_bAutoSize || m_bAutoPosition;
 }
 
-void SchXMLPositionAttributesHelper::readPositioningAttribute( sal_Int32 nAttributeToken, std::u16string_view rValue )
+void SchXMLPositionAttributesHelper::readPositioningAttribute( sal_Int32 nAttributeToken, std::string_view rValue )
 {
     if( !IsTokenInNamespace(nAttributeToken, XML_NAMESPACE_SVG) && !IsTokenInNamespace(nAttributeToken, XML_NAMESPACE_SVG_COMPAT) )
         return;
@@ -854,7 +853,7 @@ void SchXMLPositionAttributesHelper::readPositioningAttribute( sal_Int32 nAttrib
             break;
         }
         default:
-            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttributeToken, OUString(rValue));
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttributeToken, OUString::fromUtf8(rValue));
     }
 }
 
@@ -887,7 +886,7 @@ void SchXMLCoordinateRegionContext::startFastElement (sal_Int32 /*Element*/,
 {
     // parse attributes
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
-        m_rPositioning.readPositioningAttribute( aIter.getToken(), aIter.toString() );
+        m_rPositioning.readPositioningAttribute( aIter.getToken(), aIter.toView() );
 }
 
 SchXMLWallFloorContext::SchXMLWallFloorContext(

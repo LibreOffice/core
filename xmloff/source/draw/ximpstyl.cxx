@@ -294,54 +294,53 @@ SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString sValue = aIter.toString();
         switch(aIter.getToken())
         {
             case XML_ELEMENT(FO, XML_MARGIN_TOP):
             case XML_ELEMENT(FO_COMPAT, XML_MARGIN_TOP):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
-                        mnBorderTop, sValue);
+                        mnBorderTop, aIter.toView());
                 break;
             }
             case XML_ELEMENT(FO, XML_MARGIN_BOTTOM):
             case XML_ELEMENT(FO_COMPAT, XML_MARGIN_BOTTOM):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
-                        mnBorderBottom, sValue);
+                        mnBorderBottom, aIter.toView());
                 break;
             }
             case XML_ELEMENT(FO, XML_MARGIN_LEFT):
             case XML_ELEMENT(FO_COMPAT, XML_MARGIN_LEFT):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
-                        mnBorderLeft, sValue);
+                        mnBorderLeft, aIter.toView());
                 break;
             }
             case XML_ELEMENT(FO, XML_MARGIN_RIGHT):
             case XML_ELEMENT(FO_COMPAT, XML_MARGIN_RIGHT):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
-                        mnBorderRight, sValue);
+                        mnBorderRight, aIter.toView());
                 break;
             }
             case XML_ELEMENT(FO, XML_PAGE_WIDTH):
             case XML_ELEMENT(FO_COMPAT, XML_PAGE_WIDTH):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
-                        mnWidth, sValue);
+                        mnWidth, aIter.toView());
                 break;
             }
             case XML_ELEMENT(FO, XML_PAGE_HEIGHT):
             case XML_ELEMENT(FO_COMPAT, XML_PAGE_HEIGHT):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
-                        mnHeight, sValue);
+                        mnHeight, aIter.toView());
                 break;
             }
             case XML_ELEMENT(STYLE, XML_PRINT_ORIENTATION):
             {
-                if( IsXMLToken( sValue, XML_PORTRAIT ) )
+                if( IsXMLToken( aIter, XML_PORTRAIT ) )
                     meOrientation = view::PaperOrientation_PORTRAIT;
                 else
                     meOrientation = view::PaperOrientation_LANDSCAPE;
@@ -633,19 +632,18 @@ SdXMLPresentationPlaceholderContext::SdXMLPresentationPlaceholderContext(
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString sValue = aIter.toString();
         switch(aIter.getToken())
         {
             case XML_ELEMENT(PRESENTATION, XML_OBJECT):
             {
-                msName = sValue;
+                msName = aIter.toString();
                 break;
             }
             case XML_ELEMENT(SVG, XML_X):
             case XML_ELEMENT(SVG_COMPAT, XML_X):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
-                        mnX, sValue);
+                        mnX, aIter.toView());
                 break;
             }
             case XML_ELEMENT(SVG, XML_Y):
@@ -1373,18 +1371,17 @@ SdXMLHeaderFooterDeclContext::SdXMLHeaderFooterDeclContext(SvXMLImport& rImport,
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString sValue = aIter.toString();
         if( aIter.getToken() == XML_ELEMENT(PRESENTATION, XML_NAME) )
         {
-            maStrName = sValue;
+            maStrName = aIter.toString();
         }
         else if( aIter.getToken() == XML_ELEMENT(PRESENTATION, XML_SOURCE) )
         {
-            mbFixed = IsXMLToken( sValue, XML_FIXED );
+            mbFixed = IsXMLToken( aIter, XML_FIXED );
         }
         else if( aIter.getToken() == XML_ELEMENT(STYLE, XML_DATA_STYLE_NAME) )
         {
-            maStrDateTimeFormat = sValue;
+            maStrDateTimeFormat = aIter.toString();
         }
         else
         {

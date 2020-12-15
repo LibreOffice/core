@@ -421,12 +421,11 @@ SvXMLNumFmtPropContext::SvXMLNumFmtPropContext( SvXMLImport& rImport,
 {
     for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {
-        OUString sValue = aIter.toString();
         switch ( aIter.getToken())
         {
             case XML_ELEMENT(FO, XML_COLOR):
             case XML_ELEMENT(FO_COMPAT, XML_COLOR):
-                bColSet = ::sax::Converter::convertColor( m_nColor, sValue );
+                bColSet = ::sax::Converter::convertColor( m_nColor, aIter.toString() );
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
@@ -456,10 +455,9 @@ SvXMLNumFmtEmbeddedTextContext::SvXMLNumFmtEmbeddedTextContext( SvXMLImport& rIm
 
     for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {
-        OUString sValue = aIter.toString();
         if ( aIter.getToken() == XML_ELEMENT(NUMBER, XML_POSITION) )
         {
-            if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
+            if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 0 ))
                 nTextPosition = nAttrVal;
         }
         else
@@ -655,11 +653,10 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
 
     for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {
-        OUString sValue = aIter.toString();
         switch (aIter.getToken())
         {
             case XML_ELEMENT(NUMBER, XML_DECIMAL_PLACES):
-                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
+                if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 0 ))
                 {
                     // fdo#58539 & gnome#627420: limit number of digits during import
                     aNumInfo.nDecimals = std::min<sal_Int32>(nAttrVal, NF_MAX_FORMAT_SYMBOLS);
@@ -667,61 +664,61 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 break;
             case XML_ELEMENT(LO_EXT, XML_MIN_DECIMAL_PLACES):
             case XML_ELEMENT(NUMBER, XML_MIN_DECIMAL_PLACES):
-                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
+                if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 0 ))
                     aNumInfo.nMinDecimalDigits = nAttrVal;
                 break;
             case XML_ELEMENT(NUMBER, XML_MIN_INTEGER_DIGITS):
-                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
+                if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 0 ))
                     aNumInfo.nInteger = nAttrVal;
                 break;
             case XML_ELEMENT(NUMBER, XML_GROUPING):
-                if (::sax::Converter::convertBool( bAttrBool, sValue ))
+                if (::sax::Converter::convertBool( bAttrBool, aIter.toView() ))
                     aNumInfo.bGrouping = bAttrBool;
                 break;
             case XML_ELEMENT(NUMBER, XML_DISPLAY_FACTOR):
-                if (::sax::Converter::convertDouble( fAttrDouble, sValue ))
+                if (::sax::Converter::convertDouble( fAttrDouble, aIter.toView() ))
                     aNumInfo.fDisplayFactor = fAttrDouble;
                 break;
             case XML_ELEMENT(NUMBER, XML_DECIMAL_REPLACEMENT):
-                if ( sValue == " " )
+                if ( aIter.toView() == " " )
                 {
                     aNumInfo.bDecAlign = true; // space replacement for "?"
                     bVarDecimals = true;
                 }
                 else
-                    if ( sValue.isEmpty() )
+                    if ( aIter.isEmpty() )
                         bVarDecimals = true;   // empty replacement string: variable decimals
                     else                                // all other strings
                         aNumInfo.bDecReplace = true;    // decimal replacement with dashes
                 break;
             case XML_ELEMENT(NUMBER, XML_MIN_EXPONENT_DIGITS):
-                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
+                if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 0 ))
                     aNumInfo.nExpDigits = std::min<sal_Int32>(nAttrVal, NF_MAX_FORMAT_SYMBOLS);
                 break;
             case XML_ELEMENT(NUMBER, XML_EXPONENT_INTERVAL):
             case XML_ELEMENT(LO_EXT, XML_EXPONENT_INTERVAL):
-                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
+                if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 0 ))
                     aNumInfo.nExpInterval = nAttrVal;
                 break;
             case XML_ELEMENT(NUMBER, XML_FORCED_EXPONENT_SIGN):
             case XML_ELEMENT(LO_EXT, XML_FORCED_EXPONENT_SIGN):
-                if (::sax::Converter::convertBool( bAttrBool, sValue ))
+                if (::sax::Converter::convertBool( bAttrBool, aIter.toView() ))
                     aNumInfo.bExpSign = bAttrBool;
                 break;
             case XML_ELEMENT(NUMBER, XML_MIN_NUMERATOR_DIGITS):
-                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
+                if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 0 ))
                     aNumInfo.nMinNumerDigits = nAttrVal;
                 break;
             case XML_ELEMENT(NUMBER, XML_MIN_DENOMINATOR_DIGITS):
-                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
+                if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 0 ))
                     aNumInfo.nMinDenomDigits = nAttrVal;
                 break;
             case XML_ELEMENT(LO_EXT, XML_MAX_NUMERATOR_DIGITS):
-                if (::sax::Converter::convertNumber( nAttrVal, sValue, 1 ))  // at least one '#'
+                if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 1 ))  // at least one '#'
                     aNumInfo.nMaxNumerDigits = nAttrVal;
                 break;
             case XML_ELEMENT(NUMBER, XML_DENOMINATOR_VALUE):
-                if (::sax::Converter::convertNumber( nAttrVal, sValue, 1 )) // 0 is not valid
+                if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 1 )) // 0 is not valid
                 {
                     aNumInfo.nFracDenominator = nAttrVal;
                     bIsMaxDenominator = false;
@@ -729,7 +726,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 break;
             case XML_ELEMENT(NUMBER, XML_MAX_DENOMINATOR_VALUE):  // part of ODF 1.3
             case XML_ELEMENT(LO_EXT, XML_MAX_DENOMINATOR_VALUE):
-                if (::sax::Converter::convertNumber( nAttrVal, sValue, 1 ) && aNumInfo.nFracDenominator <= 0)
+                if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 1 ) && aNumInfo.nFracDenominator <= 0)
                 {   // if denominator value not yet defined
                     aNumInfo.nFracDenominator = nAttrVal;
                     bIsMaxDenominator = true;
@@ -737,39 +734,39 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 break;
             case XML_ELEMENT(LO_EXT, XML_ZEROS_NUMERATOR_DIGITS):
             case XML_ELEMENT(NUMBER, XML_ZEROS_NUMERATOR_DIGITS):
-                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
+                if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 0 ))
                     aNumInfo.nZerosNumerDigits = nAttrVal;
                 break;
             case XML_ELEMENT(NUMBER, XML_ZEROS_DENOMINATOR_DIGITS):
             case XML_ELEMENT(LO_EXT, XML_ZEROS_DENOMINATOR_DIGITS):
-                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
+                if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 0 ))
                     aNumInfo.nZerosDenomDigits = nAttrVal;
                  break;
             case XML_ELEMENT(NUMBER, XML_INTEGER_FRACTION_DELIMITER):
             case XML_ELEMENT(LO_EXT, XML_INTEGER_FRACTION_DELIMITER):
-                aNumInfo.aIntegerFractionDelimiter = sValue;
+                aNumInfo.aIntegerFractionDelimiter = aIter.toString();
                 break;
             case XML_ELEMENT(NUMBER, XML_RFC_LANGUAGE_TAG):
-                aLanguageTagODF.maRfcLanguageTag = sValue;
+                aLanguageTagODF.maRfcLanguageTag = aIter.toString();
                 break;
             case XML_ELEMENT(NUMBER, XML_LANGUAGE):
-                aLanguageTagODF.maLanguage = sValue;
+                aLanguageTagODF.maLanguage = aIter.toString();
                 break;
             case XML_ELEMENT(NUMBER, XML_SCRIPT):
-                aLanguageTagODF.maScript = sValue;
+                aLanguageTagODF.maScript = aIter.toString();
                 break;
             case XML_ELEMENT(NUMBER, XML_COUNTRY):
-                aLanguageTagODF.maCountry = sValue;
+                aLanguageTagODF.maCountry = aIter.toString();
                 break;
             case XML_ELEMENT(NUMBER, XML_STYLE):
-                SvXMLUnitConverter::convertEnum( bLong, sValue, aStyleValueMap );
+                SvXMLUnitConverter::convertEnum( bLong, aIter.toString(), aStyleValueMap );
                 break;
             case XML_ELEMENT(NUMBER, XML_TEXTUAL):
-                if (::sax::Converter::convertBool( bAttrBool, sValue ))
+                if (::sax::Converter::convertBool( bAttrBool, aIter.toView() ))
                     bTextual = bAttrBool;
                 break;
             case XML_ELEMENT(NUMBER, XML_CALENDAR):
-                sCalendar = sValue;
+                sCalendar = aIter.toString();
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
@@ -1146,59 +1143,58 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
 
     for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {
-        OUString sValue = aIter.toString();
         switch (aIter.getToken())
         {
         //  attributes for a style
             case XML_ELEMENT(STYLE, XML_NAME):
                 break;
             case XML_ELEMENT(NUMBER, XML_RFC_LANGUAGE_TAG):
-                aLanguageTagODF.maRfcLanguageTag = sValue;
+                aLanguageTagODF.maRfcLanguageTag = aIter.toString();
                 break;
             case XML_ELEMENT(NUMBER, XML_LANGUAGE):
-                aLanguageTagODF.maLanguage = sValue;
+                aLanguageTagODF.maLanguage = aIter.toString();
                 break;
             case XML_ELEMENT(NUMBER, XML_SCRIPT):
-                aLanguageTagODF.maScript = sValue;
+                aLanguageTagODF.maScript = aIter.toString();
                 break;
             case XML_ELEMENT(NUMBER, XML_COUNTRY):
-                aLanguageTagODF.maCountry = sValue;
+                aLanguageTagODF.maCountry = aIter.toString();
                 break;
             case XML_ELEMENT(NUMBER, XML_TITLE):
-                sFormatTitle = sValue;
+                sFormatTitle = aIter.toString();
                 break;
             case XML_ELEMENT(NUMBER, XML_AUTOMATIC_ORDER):
-                if (::sax::Converter::convertBool( bAttrBool, sValue ))
+                if (::sax::Converter::convertBool( bAttrBool, aIter.toView() ))
                     bAutoOrder = bAttrBool;
                 break;
             case XML_ELEMENT(NUMBER, XML_FORMAT_SOURCE):
-                SvXMLUnitConverter::convertEnum( bFromSystem, sValue, aFormatSourceMap );
+                SvXMLUnitConverter::convertEnum( bFromSystem, aIter.toString(), aFormatSourceMap );
                 break;
             case XML_ELEMENT(NUMBER, XML_TRUNCATE_ON_OVERFLOW):
-                if (::sax::Converter::convertBool( bAttrBool, sValue ))
+                if (::sax::Converter::convertBool( bAttrBool, aIter.toView() ))
                     bTruncate = bAttrBool;
                 break;
             case XML_ELEMENT(STYLE, XML_VOLATILE):
                 //  volatile formats can be removed after importing
                 //  if not used in other styles
-                if (::sax::Converter::convertBool( bAttrBool, sValue ))
+                if (::sax::Converter::convertBool( bAttrBool, aIter.toView() ))
                     bRemoveAfterUse = bAttrBool;
                 break;
             case XML_ELEMENT(NUMBER, XML_TRANSLITERATION_FORMAT):
-                aNatNumAttr.Format = sValue;
+                aNatNumAttr.Format = aIter.toString();
                 break;
             case XML_ELEMENT(LO_EXT, XML_TRANSLITERATION_SPELLOUT):
             case XML_ELEMENT(NUMBER, XML_TRANSLITERATION_SPELLOUT):
-                aSpellout = sValue;
+                aSpellout = aIter.toString();
                 break;
             case XML_ELEMENT(NUMBER, XML_TRANSLITERATION_LANGUAGE):
-                aNatNumAttr.Locale.Language = sValue;
+                aNatNumAttr.Locale.Language = aIter.toString();
                 break;
             case XML_ELEMENT(NUMBER, XML_TRANSLITERATION_COUNTRY):
-                aNatNumAttr.Locale.Country = sValue;
+                aNatNumAttr.Locale.Country = aIter.toString();
                 break;
             case XML_ELEMENT(NUMBER, XML_TRANSLITERATION_STYLE):
-                aNatNumAttr.Style = sValue;
+                aNatNumAttr.Style = aIter.toString();
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);

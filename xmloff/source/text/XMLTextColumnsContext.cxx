@@ -87,18 +87,17 @@ XMLTextColumnContext_Impl::XMLTextColumnContext_Impl(
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString sValue = aIter.toString();
         sal_Int32 nVal;
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(STYLE, XML_REL_WIDTH):
             {
-                sal_Int32 nPos = sValue.indexOf( '*' );
-                if( nPos != -1 && nPos+1 == sValue.getLength() )
+                size_t nPos = aIter.toView().find( '*' );
+                if( nPos != std::string_view::npos && static_cast<sal_Int32>(nPos+1) == aIter.getLength() )
                 {
                     if (::sax::Converter::convertNumber(
                                 nVal,
-                                std::u16string_view(sValue).substr(0, nPos),
+                                aIter.toView().substr(0, nPos),
                                 0, USHRT_MAX))
                         aColumn.Width = nVal;
                 }
@@ -107,13 +106,13 @@ XMLTextColumnContext_Impl::XMLTextColumnContext_Impl(
         case XML_ELEMENT(FO, XML_START_INDENT):
         case XML_ELEMENT(FO_COMPAT, XML_START_INDENT):
             if( GetImport().GetMM100UnitConverter().
-                                convertMeasureToCore( nVal, sValue ) )
+                                convertMeasureToCore( nVal, aIter.toView() ) )
                 aColumn.LeftMargin = nVal;
             break;
         case XML_ELEMENT(FO, XML_END_INDENT):
         case XML_ELEMENT(FO_COMPAT, XML_END_INDENT):
             if( GetImport().GetMM100UnitConverter().
-                                convertMeasureToCore( nVal, sValue ) )
+                                convertMeasureToCore( nVal, aIter.toView() ) )
                 aColumn.RightMargin = nVal;
             break;
         default:
@@ -158,30 +157,28 @@ XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        const OUString sValue = aIter.toString();
-
         sal_Int32 nVal;
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(STYLE,  XML_WIDTH):
             if( GetImport().GetMM100UnitConverter().
-                                convertMeasureToCore( nVal, sValue ) )
+                                convertMeasureToCore( nVal, aIter.toView() ) )
                 nWidth = nVal;
             break;
         case XML_ELEMENT(STYLE, XML_HEIGHT):
-            if (::sax::Converter::convertPercent( nVal, sValue ) &&
+            if (::sax::Converter::convertPercent( nVal, aIter.toView() ) &&
                  nVal >=1 && nVal <= 100 )
                 nHeight = static_cast<sal_Int8>(nVal);
             break;
         case XML_ELEMENT(STYLE, XML_COLOR):
-            ::sax::Converter::convertColor( nColor, sValue );
+            ::sax::Converter::convertColor( nColor, aIter.toView() );
             break;
         case XML_ELEMENT(STYLE, XML_VERTICAL_ALIGN):
-            SvXMLUnitConverter::convertEnum( eVertAlign, sValue,
+            SvXMLUnitConverter::convertEnum( eVertAlign, aIter.toString(),
                                              pXML_Sep_Align_Enum );
             break;
         case XML_ELEMENT(STYLE, XML_STYLE):
-            SvXMLUnitConverter::convertEnum( nStyle, sValue,
+            SvXMLUnitConverter::convertEnum( nStyle, aIter.toString(),
                                              pXML_Sep_Style_Enum );
             break;
         default:
@@ -211,19 +208,18 @@ XMLTextColumnsContext::XMLTextColumnsContext(
     sal_Int32 nVal;
     for (auto &aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        const OUString sValue = aIter.toString();
         switch(aIter.getToken())
         {
             case XML_ELEMENT(FO, XML_COLUMN_COUNT):
             case XML_ELEMENT(FO_COMPAT, XML_COLUMN_COUNT):
-                if(::sax::Converter::convertNumber( nVal, sValue, 0, SHRT_MAX ))
+                if(::sax::Converter::convertNumber( nVal, aIter.toView(), 0, SHRT_MAX ))
                     nCount = static_cast<sal_Int16>(nVal);
                 break;
             case XML_ELEMENT(FO, XML_COLUMN_GAP):
             case XML_ELEMENT(FO_COMPAT, XML_COLUMN_GAP):
             {
                 bAutomatic = GetImport().GetMM100UnitConverter().
-                    convertMeasureToCore( nAutomaticDistance, sValue );
+                    convertMeasureToCore( nAutomaticDistance, aIter.toView() );
                 break;
             }
             default:

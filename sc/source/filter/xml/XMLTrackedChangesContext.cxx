@@ -522,7 +522,7 @@ ScXMLCellContentDeletionContext::ScXMLCellContentDeletionContext(  ScXMLImport& 
     {
         auto aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_ID ) ) );
         if (aIter != rAttrList->end())
-            nID = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+            nID = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toView() );
     }
 }
 
@@ -568,7 +568,7 @@ ScXMLDependenceContext::ScXMLDependenceContext(  ScXMLImport& rImport,
     {
         auto aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_ID ) ) );
         if (aIter != rAttrList->end())
-            nID = ScXMLChangeTrackingImportHelper::GetIDFromString(aIter.toString());
+            nID = ScXMLChangeTrackingImportHelper::GetIDFromString(aIter.toView());
     }
     pChangeTrackingImportHelper->AddDependence(nID);
 }
@@ -608,7 +608,7 @@ ScXMLChangeDeletionContext::ScXMLChangeDeletionContext(  ScXMLImport& rImport,
     {
         auto aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_ID ) ) );
         if (aIter != rAttrList->end())
-            nID = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+            nID = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toView() );
     }
     pChangeTrackingImportHelper->AddDeleted(nID);
 }
@@ -907,7 +907,7 @@ ScXMLPreviousContext::ScXMLPreviousContext(  ScXMLImport& rImport,
     {
         auto aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_ID ) ) );
         if (aIter != rAttrList->end())
-            nID = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+            nID = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toView() );
     }
 }
 
@@ -948,7 +948,7 @@ ScXMLContentChangeContext::ScXMLContentChangeContext(  ScXMLImport& rImport,
             switch (aIter.getToken())
             {
             case XML_ELEMENT( TABLE, XML_ID ):
-                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toView() );
                 break;
             case XML_ELEMENT( TABLE, XML_ACCEPTANCE_STATE ):
                 if (IsXMLToken( aIter, XML_ACCEPTED ))
@@ -957,7 +957,7 @@ ScXMLContentChangeContext::ScXMLContentChangeContext(  ScXMLImport& rImport,
                     nActionState = SC_CAS_REJECTED;
                 break;
             case XML_ELEMENT( TABLE, XML_REJECTING_CHANGE_ID ):
-                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toView() );
             }
         }
     }
@@ -1024,7 +1024,7 @@ ScXMLInsertionContext::ScXMLInsertionContext( ScXMLImport& rImport,
             switch (aIter.getToken())
             {
             case XML_ELEMENT( TABLE, XML_ID ):
-                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toView() );
                 break;
             case XML_ELEMENT( TABLE, XML_ACCEPTANCE_STATE ):
                 if (IsXMLToken( aIter, XML_ACCEPTED ))
@@ -1033,7 +1033,7 @@ ScXMLInsertionContext::ScXMLInsertionContext( ScXMLImport& rImport,
                     nActionState = SC_CAS_REJECTED;
                 break;
             case XML_ELEMENT( TABLE, XML_REJECTING_CHANGE_ID ):
-                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toView() );
                 break;
             case XML_ELEMENT( TABLE, XML_TYPE ):
                 if (IsXMLToken( aIter, XML_ROW ))
@@ -1098,15 +1098,13 @@ ScXMLInsertionCutOffContext::ScXMLInsertionCutOffContext( ScXMLImport& rImport,
     sal_Int32 nPosition(0);
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        const OUString sValue = aIter.toString();
-
         switch (aIter.getToken())
         {
             case XML_ELEMENT(TABLE, XML_ID):
-                nID = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
+                nID = ScXMLChangeTrackingImportHelper::GetIDFromString(aIter.toView());
                 break;
             case XML_ELEMENT(TABLE, XML_POSITION):
-                ::sax::Converter::convertNumber(nPosition, sValue);
+                ::sax::Converter::convertNumber(nPosition, aIter.toView());
                 break;
         }
     }
@@ -1126,22 +1124,20 @@ ScXMLMovementCutOffContext::ScXMLMovementCutOffContext( ScXMLImport& rImport,
     bool bPosition(false);
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        const OUString sValue = aIter.toString();
-
         switch (aIter.getToken())
         {
             case XML_ELEMENT(TABLE, XML_ID):
-                nID = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
+                nID = ScXMLChangeTrackingImportHelper::GetIDFromString(aIter.toView());
                 break;
             case XML_ELEMENT(TABLE, XML_POSITION):
                 bPosition = true;
-                ::sax::Converter::convertNumber(nPosition, sValue);
+                ::sax::Converter::convertNumber(nPosition, aIter.toView());
                 break;
             case XML_ELEMENT(TABLE, XML_START_POSITION):
-                ::sax::Converter::convertNumber(nStartPosition, sValue);
+                ::sax::Converter::convertNumber(nStartPosition, aIter.toView());
                 break;
             case XML_ELEMENT(TABLE, XML_END_POSITION):
-                ::sax::Converter::convertNumber(nEndPosition, sValue);
+                ::sax::Converter::convertNumber(nEndPosition, aIter.toView());
                 break;
         }
     }
@@ -1193,7 +1189,7 @@ ScXMLDeletionContext::ScXMLDeletionContext( ScXMLImport& rImport,
             switch (nToken)
             {
             case XML_ELEMENT( TABLE, XML_ID ):
-                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toView() );
                 break;
             case XML_ELEMENT( TABLE, XML_ACCEPTANCE_STATE ):
                 if (IsXMLToken( aIter, XML_ACCEPTED ))
@@ -1202,7 +1198,7 @@ ScXMLDeletionContext::ScXMLDeletionContext( ScXMLImport& rImport,
                     nActionState = SC_CAS_REJECTED;
                 break;
             case XML_ELEMENT( TABLE, XML_REJECTING_CHANGE_ID ):
-                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toView() );
                 break;
             case XML_ELEMENT( TABLE, XML_TYPE ):
                 if (IsXMLToken( aIter, XML_ROW ))
@@ -1279,7 +1275,7 @@ ScXMLMovementContext::ScXMLMovementContext( ScXMLImport& rImport,
             switch (aIter.getToken())
             {
             case XML_ELEMENT( TABLE, XML_ID ):
-                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toView() );
                 break;
             case XML_ELEMENT( TABLE, XML_ACCEPTANCE_STATE ):
                 if (IsXMLToken( aIter, XML_ACCEPTED ))
@@ -1288,7 +1284,7 @@ ScXMLMovementContext::ScXMLMovementContext( ScXMLImport& rImport,
                     nActionState = SC_CAS_REJECTED;
                 break;
             case XML_ELEMENT( TABLE, XML_REJECTING_CHANGE_ID ):
-                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toView() );
                 break;
             }
         }
@@ -1352,7 +1348,7 @@ ScXMLRejectionContext::ScXMLRejectionContext( ScXMLImport& rImport,
             switch (aIter.getToken())
             {
             case XML_ELEMENT( TABLE, XML_ID ):
-                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toView() );
                 break;
             case XML_ELEMENT( TABLE, XML_ACCEPTANCE_STATE ):
                 if (IsXMLToken( aIter, XML_ACCEPTED ))
@@ -1361,7 +1357,7 @@ ScXMLRejectionContext::ScXMLRejectionContext( ScXMLImport& rImport,
                     nActionState = SC_CAS_REJECTED;
                 break;
             case XML_ELEMENT( TABLE, XML_REJECTING_CHANGE_ID ):
-                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toView() );
                 break;
             }
         }

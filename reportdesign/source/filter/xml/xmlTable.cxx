@@ -72,32 +72,29 @@ OXMLTable::OXMLTable( ORptFilter& rImport
 
     if (!m_xSection.is())
         return;
-    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     try
     {
         for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
         {
-            OUString sValue = aIter.toString();
-
             switch( aIter.getToken() )
             {
                 case XML_ELEMENT(REPORT, XML_VISIBLE):
-                    m_xSection->setVisible(sValue == s_sTRUE);
+                    m_xSection->setVisible(IsXMLToken(aIter, XML_TRUE));
                     break;
                 case XML_ELEMENT(REPORT, XML_FORCE_NEW_PAGE):
-                    m_xSection->setForceNewPage(lcl_getForceNewPageOption(sValue));
+                    m_xSection->setForceNewPage(lcl_getForceNewPageOption(aIter.toString()));
                     break;
                 case XML_ELEMENT(REPORT, XML_FORCE_NEW_COLUMN):
-                    m_xSection->setNewRowOrCol(lcl_getForceNewPageOption(sValue));
+                    m_xSection->setNewRowOrCol(lcl_getForceNewPageOption(aIter.toString()));
                     break;
                 case XML_ELEMENT(REPORT, XML_KEEP_TOGETHER):
-                    m_xSection->setKeepTogether(sValue == s_sTRUE);
+                    m_xSection->setKeepTogether(IsXMLToken(aIter, XML_TRUE));
                     break;
                 case XML_ELEMENT(TABLE, XML_NAME):
-                    m_xSection->setName(sValue);
+                    m_xSection->setName(aIter.toString());
                     break;
                 case XML_ELEMENT(TABLE, XML_STYLE_NAME):
-                    m_sStyleName = sValue;
+                    m_sStyleName = aIter.toString();
                     break;
                 default:
                     XMLOFF_WARN_UNKNOWN("reportdesign", aIter);

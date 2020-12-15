@@ -77,14 +77,12 @@ void XMLSectionFootnoteConfigImport::startFastElement(
     // iterate over xattribute list and fill values
     for (auto &aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sAttrValue = aIter.toString();
-
         switch(aIter.getToken())
         {
             case XML_ELEMENT(TEXT, XML_START_VALUE):
             {
                 sal_Int32 nTmp;
-                if (::sax::Converter::convertNumber(nTmp, sAttrValue))
+                if (::sax::Converter::convertNumber(nTmp, aIter.toView()))
                 {
                     nNumRestartAt = static_cast< sal_Int16 >( nTmp ) - 1;
                     bNumRestart = true;
@@ -93,31 +91,31 @@ void XMLSectionFootnoteConfigImport::startFastElement(
             }
             case XML_ELEMENT(TEXT, XML_NOTE_CLASS):
             {
-                if( IsXMLToken( sAttrValue, XML_ENDNOTE ) )
+                if( IsXMLToken( aIter, XML_ENDNOTE ) )
                     bEndnote = true;
                 break;
             }
             case XML_ELEMENT(STYLE, XML_NUM_PREFIX):
             {
-                sNumPrefix = sAttrValue;
+                sNumPrefix = aIter.toString();
                 bNumOwn = true;
                 break;
             }
             case XML_ELEMENT(TEXT, XML_NUM_SUFFIX):
             {
-                sNumSuffix = sAttrValue;
+                sNumSuffix = aIter.toString();
                 bNumOwn = true;
                 break;
             }
             case XML_ELEMENT(TEXT, XML_NUM_FORMAT):
             {
-                sNumFormat = sAttrValue;
+                sNumFormat = aIter.toString();
                 bNumOwn = true;
                 break;
             }
             case XML_ELEMENT(TEXT, XML_NUM_LETTER_SYNC):
             {
-                sNumLetterSync = sAttrValue;
+                sNumLetterSync = aIter.toString();
                 bNumOwn = true;
                 break;
             }

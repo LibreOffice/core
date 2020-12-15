@@ -55,12 +55,10 @@ OXMLRowColumn::OXMLRowColumn( ORptFilter& rImport
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
-        OUString sValue = aIter.toString();
-
         switch( aIter.getToken() )
         {
             case XML_ELEMENT(TABLE, XML_STYLE_NAME):
-                fillStyle(sValue);
+                fillStyle(aIter.toString());
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("reportdesign", aIter);

@@ -88,14 +88,13 @@ void XMLTextShapeImportHelper::addShape(
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString sValue = aIter.toString();
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(TEXT, XML_ANCHOR_TYPE):
             {
                 TextContentAnchorType eNew;
                 // OD 2004-06-01 #i26791# - allow all anchor types
-                if ( XMLAnchorTypePropHdl::convert( sValue, eNew ) )
+                if ( XMLAnchorTypePropHdl::convert( aIter.toString(), eNew ) )
                 {
                     eAnchorType = eNew;
                 }
@@ -104,13 +103,13 @@ void XMLTextShapeImportHelper::addShape(
         case XML_ELEMENT(TEXT, XML_ANCHOR_PAGE_NUMBER):
             {
                 sal_Int32 nTmp;
-                if (::sax::Converter::convertNumber(nTmp, sValue, 1, SHRT_MAX))
+                if (::sax::Converter::convertNumber(nTmp, aIter.toView(), 1, SHRT_MAX))
                     nPage = static_cast<sal_Int16>(nTmp);
             }
             break;
         case XML_ELEMENT(SVG, XML_Y):
         case XML_ELEMENT(SVG_COMPAT, XML_Y):
-            rImport.GetMM100UnitConverter().convertMeasureToCore( nY, sValue );
+            rImport.GetMM100UnitConverter().convertMeasureToCore( nY, aIter.toString() );
             break;
         }
     }

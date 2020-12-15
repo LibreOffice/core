@@ -58,28 +58,26 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString sValue = aIter.toString();
-
         switch( aIter.getToken() )
         {
             case XML_ELEMENT(OFFICE, XML_AUTHOR):
             {
-                maAuthorBuffer = sValue;
+                maAuthorBuffer = aIter.toString();
             }
             break;
             case XML_ELEMENT(OFFICE, XML_CREATE_DATE):
             {
-                maCreateDateBuffer = sValue;
+                maCreateDateBuffer = aIter.toString();
             }
             break;
             case XML_ELEMENT(OFFICE, XML_CREATE_DATE_STRING):
             {
-                maCreateDateStringBuffer = sValue;
+                maCreateDateStringBuffer = aIter.toString();
             }
             break;
             case XML_ELEMENT(OFFICE, XML_DISPLAY):
             {
-                mrAnnotationData.mbShown = IsXMLToken(sValue, XML_TRUE);
+                mrAnnotationData.mbShown = IsXMLToken(aIter, XML_TRUE);
             }
             break;
             case XML_ELEMENT(SVG, XML_X):
@@ -95,7 +93,7 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
             }
             break;
             default:
-                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 }

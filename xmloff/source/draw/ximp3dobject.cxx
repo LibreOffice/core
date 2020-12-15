@@ -97,14 +97,12 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
 {
     for(auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sValue = aIter.toString();
-
         switch(aIter.getToken())
         {
             case XML_ELEMENT(DR3D, XML_MIN_EDGE):
             {
                 ::basegfx::B3DVector aNewVec;
-                SvXMLUnitConverter::convertB3DVector(aNewVec, sValue);
+                SvXMLUnitConverter::convertB3DVector(aNewVec, aIter.toView());
 
                 if(aNewVec != maMinEdge)
                     maMinEdge = aNewVec;
@@ -113,7 +111,7 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
             case XML_ELEMENT(DR3D, XML_MAX_EDGE):
             {
                 ::basegfx::B3DVector aNewVec;
-                SvXMLUnitConverter::convertB3DVector(aNewVec, sValue);
+                SvXMLUnitConverter::convertB3DVector(aNewVec, aIter.toView());
 
                 if(aNewVec != maMaxEdge)
                     maMaxEdge = aNewVec;
@@ -176,14 +174,12 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
 {
     for(auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sValue = aIter.toString();
-
         switch(aIter.getToken())
         {
             case XML_ELEMENT(DR3D, XML_CENTER):
             {
                 ::basegfx::B3DVector aNewVec;
-                SvXMLUnitConverter::convertB3DVector(aNewVec, sValue);
+                SvXMLUnitConverter::convertB3DVector(aNewVec, aIter.toView());
 
                 if(aNewVec != maCenter)
                     maCenter = aNewVec;
@@ -192,7 +188,7 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
             case XML_ELEMENT(DR3D, XML_SIZE):
             {
                 ::basegfx::B3DVector aNewVec;
-                SvXMLUnitConverter::convertB3DVector(aNewVec, sValue);
+                SvXMLUnitConverter::convertB3DVector(aNewVec, aIter.toView());
 
                 if(aNewVec != maSphereSize)
                     maSphereSize = aNewVec;

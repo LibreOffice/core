@@ -65,7 +65,7 @@ QRCodeContext::QRCodeContext(SvXMLImport& rImport, sal_Int32 /*nElement*/,
             case XML_ELEMENT(LO_EXT, XML_QRCODE_BORDER):
             {
                 sal_Int32 nAttrVal;
-                if (sax::Converter::convertNumber(nAttrVal, aIter.toString(), 0))
+                if (sax::Converter::convertNumber(nAttrVal, aIter.toView(), 0))
                     aQRCode.Border = nAttrVal;
                 break;
             }

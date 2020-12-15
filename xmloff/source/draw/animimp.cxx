@@ -395,14 +395,13 @@ XMLAnimationsSoundContext::XMLAnimationsSoundContext( SvXMLImport& rImport, sal_
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString sValue = aIter.toString();
         switch( aIter.getToken() )
         {
             case XML_ELEMENT(XLINK, XML_HREF):
-                pParent->maSoundURL = rImport.GetAbsoluteReference(sValue);
+                pParent->maSoundURL = rImport.GetAbsoluteReference(aIter.toString());
                 break;
             case XML_ELEMENT(PRESENTATION, XML_PLAY_FULL):
-                pParent->mbPlayFull = IsXMLToken( sValue, XML_TRUE );
+                pParent->mbPlayFull = IsXMLToken( aIter, XML_TRUE );
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
@@ -450,34 +449,33 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString sValue = aIter.toString();
         switch( aIter.getToken() )
         {
             case XML_ELEMENT(DRAW, XML_SHAPE_ID):
-                maShapeId = sValue;
+                maShapeId = aIter.toString();
                 break;
             case XML_ELEMENT(DRAW, XML_COLOR):
-                ::sax::Converter::convertColor(maDimColor, sValue);
+                ::sax::Converter::convertColor(maDimColor, aIter.toString());
                 break;
 
             case XML_ELEMENT(PRESENTATION, XML_EFFECT):
-                SvXMLUnitConverter::convertEnum( meEffect, sValue, aXML_AnimationEffect_EnumMap );
+                SvXMLUnitConverter::convertEnum( meEffect, aIter.toString(), aXML_AnimationEffect_EnumMap );
                 break;
             case XML_ELEMENT(PRESENTATION, XML_DIRECTION):
-                SvXMLUnitConverter::convertEnum( meDirection, sValue, aXML_AnimationDirection_EnumMap );
+                SvXMLUnitConverter::convertEnum( meDirection, aIter.toString(), aXML_AnimationDirection_EnumMap );
                 break;
             case XML_ELEMENT(PRESENTATION, XML_START_SCALE):
             {
                 sal_Int32 nScale;
-                if (::sax::Converter::convertPercent( nScale, sValue ))
+                if (::sax::Converter::convertPercent( nScale, aIter.toView() ))
                     mnStartScale = static_cast<sal_Int16>(nScale);
                 break;
             }
             case XML_ELEMENT(PRESENTATION, XML_SPEED):
-                SvXMLUnitConverter::convertEnum( meSpeed, sValue, aXML_AnimationSpeed_EnumMap );
+                SvXMLUnitConverter::convertEnum( meSpeed, aIter.toString(), aXML_AnimationSpeed_EnumMap );
                 break;
             case XML_ELEMENT(PRESENTATION, XML_PATH_ID):
-                maPathShapeId = sValue;
+                maPathShapeId = aIter.toString();
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);

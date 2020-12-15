@@ -42,23 +42,20 @@ OXMLFormatCondition::OXMLFormatCondition( ORptFilter& rImport,
 {
 
     OSL_ENSURE(m_xComponent.is(),"Component is NULL!");
-    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     try
     {
         for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
         {
-            OUString sValue = aIter.toString();
-
             switch( aIter.getToken() )
             {
                 case XML_ELEMENT(REPORT, XML_ENABLED):
-                    m_xComponent->setEnabled(sValue == s_sTRUE);
+                    m_xComponent->setEnabled(IsXMLToken(aIter, XML_TRUE));
                     break;
                 case XML_ELEMENT(REPORT, XML_FORMULA):
-                    m_xComponent->setFormula(ORptFilter::convertFormula(sValue));
+                    m_xComponent->setFormula(ORptFilter::convertFormula(aIter.toString()));
                     break;
                 case XML_ELEMENT(REPORT, XML_STYLE_NAME):
-                    m_sStyleName = sValue;
+                    m_sStyleName = aIter.toString();
                     break;
                 default:
                     XMLOFF_WARN_UNKNOWN("reportdesign", aIter);

@@ -59,55 +59,53 @@ SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        const OUString sValue = aIter.toString();
-
         sal_Int32 nVal;
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(STYLE, XML_POSITION):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    nVal, sValue))
+                    nVal, aIter.toView()))
             {
                 aTabStop.Position = nVal;
             }
             break;
         case XML_ELEMENT(STYLE, XML_TYPE):
-            if( IsXMLToken( sValue, XML_LEFT ) )
+            if( IsXMLToken( aIter, XML_LEFT ) )
             {
                 aTabStop.Alignment = style::TabAlign_LEFT;
             }
-            else if( IsXMLToken( sValue, XML_RIGHT ) )
+            else if( IsXMLToken( aIter, XML_RIGHT ) )
             {
                 aTabStop.Alignment = style::TabAlign_RIGHT;
             }
-            else if( IsXMLToken( sValue, XML_CENTER ) )
+            else if( IsXMLToken( aIter, XML_CENTER ) )
             {
                 aTabStop.Alignment = style::TabAlign_CENTER;
             }
-            else if( IsXMLToken( sValue, XML_CHAR ) )
+            else if( IsXMLToken( aIter, XML_CHAR ) )
             {
                 aTabStop.Alignment = style::TabAlign_DECIMAL;
             }
-            else if( IsXMLToken( sValue, XML_DEFAULT ) )
+            else if( IsXMLToken( aIter, XML_DEFAULT ) )
             {
                 aTabStop.Alignment = style::TabAlign_DEFAULT;
             }
             break;
         case XML_ELEMENT(STYLE, XML_CHAR):
-            if( !sValue.isEmpty() )
-                aTabStop.DecimalChar = sValue[0];
+            if( !aIter.isEmpty() )
+                aTabStop.DecimalChar = aIter.toString()[0];
             break;
         case XML_ELEMENT(STYLE, XML_LEADER_STYLE):
-            if( IsXMLToken( sValue, XML_NONE ) )
+            if( IsXMLToken( aIter, XML_NONE ) )
                 aTabStop.FillChar = ' ';
-            else if( IsXMLToken( sValue, XML_DOTTED ) )
+            else if( IsXMLToken( aIter, XML_DOTTED ) )
                 aTabStop.FillChar = '.';
             else
                 aTabStop.FillChar = '_';
             break;
         case XML_ELEMENT(STYLE, XML_LEADER_TEXT):
-            if( !sValue.isEmpty() )
-                cTextFillChar = sValue[0];
+            if( !aIter.isEmpty() )
+                cTextFillChar = aIter.toString()[0];
             break;
         default:
             XMLOFF_WARN_UNKNOWN("xmloff", aIter);

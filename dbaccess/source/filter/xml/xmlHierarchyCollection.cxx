@@ -50,12 +50,10 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
     OUString sName;
     for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
-        OUString sValue = aIter.toString();
-
         switch( aIter.getToken() & TOKEN_MASK )
         {
             case XML_NAME:
-                sName = sValue;
+                sName = aIter.toString();
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("dbaccess", aIter);

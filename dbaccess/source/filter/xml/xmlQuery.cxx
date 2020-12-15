@@ -44,15 +44,13 @@ OXMLQuery::OXMLQuery( ODBFilter& rImport
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
-        OUString sValue = aIter.toString();
-
         switch( aIter.getToken() & TOKEN_MASK )
         {
             case XML_COMMAND:
-                m_sCommand = sValue;
+                m_sCommand = aIter.toString();
                 break;
             case XML_ESCAPE_PROCESSING:
-                m_bEscapeProcessing = sValue == "true";
+                m_bEscapeProcessing = aIter.toView() == "true";
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("dbaccess", aIter);

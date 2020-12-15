@@ -106,14 +106,13 @@ XMLEventSoundContext::XMLEventSoundContext( SvXMLImport& rImp, const Reference< 
 {
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sValue = aIter.toString();
         switch( aIter.getToken() )
         {
             case XML_ELEMENT(XLINK, XML_HREF):
-                pParent->maData.msSoundURL = rImp.GetAbsoluteReference(sValue);
+                pParent->maData.msSoundURL = rImp.GetAbsoluteReference(aIter.toString());
                 break;
             case XML_ELEMENT(PRESENTATION, XML_PLAY_FULL):
-                pParent->maData.mbPlayFull = IsXMLToken( sValue, XML_TRUE );
+                pParent->maData.mbPlayFull = IsXMLToken( aIter, XML_TRUE );
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
@@ -145,36 +144,35 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,
     OUString sEventName;
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sValue = aIter.toString();
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(PRESENTATION, XML_ACTION):
-            SvXMLUnitConverter::convertEnum( maData.meClickAction, sValue, aXML_EventActions_EnumMap );
+            SvXMLUnitConverter::convertEnum( maData.meClickAction, aIter.toString(), aXML_EventActions_EnumMap );
             break;
         case XML_ELEMENT(PRESENTATION, XML_EFFECT):
-            SvXMLUnitConverter::convertEnum( maData.meEffect, sValue, aXML_AnimationEffect_EnumMap );
+            SvXMLUnitConverter::convertEnum( maData.meEffect, aIter.toString(), aXML_AnimationEffect_EnumMap );
             break;
         case XML_ELEMENT(PRESENTATION, XML_DIRECTION):
-            SvXMLUnitConverter::convertEnum( maData.meDirection, sValue, aXML_AnimationDirection_EnumMap );
+            SvXMLUnitConverter::convertEnum( maData.meDirection, aIter.toString(), aXML_AnimationDirection_EnumMap );
             break;
         case XML_ELEMENT(PRESENTATION, XML_START_SCALE):
             {
                 sal_Int32 nScale;
-                if (::sax::Converter::convertPercent( nScale, sValue ))
+                if (::sax::Converter::convertPercent( nScale, aIter.toView() ))
                     maData.mnStartScale = static_cast<sal_Int16>(nScale);
             }
             break;
         case XML_ELEMENT(PRESENTATION, XML_SPEED):
-            SvXMLUnitConverter::convertEnum( maData.meSpeed, sValue, aXML_AnimationSpeed_EnumMap );
+            SvXMLUnitConverter::convertEnum( maData.meSpeed, aIter.toString(), aXML_AnimationSpeed_EnumMap );
             break;
         case XML_ELEMENT(PRESENTATION, XML_VERB):
-            ::sax::Converter::convertNumber( maData.mnVerb, sValue );
+            ::sax::Converter::convertNumber( maData.mnVerb, aIter.toView() );
             break;
         case XML_ELEMENT(SCRIPT, XML_EVENT_NAME):
             {
-                sEventName = sValue;
+                sEventName = aIter.toString();
                 sal_uInt16 nScriptPrefix =
-                    GetImport().GetNamespaceMap().GetKeyByAttrValueQName(sValue, &sEventName);
+                    GetImport().GetNamespaceMap().GetKeyByAttrValueQName(sEventName, &sEventName);
                 maData.mbValid = XML_NAMESPACE_DOM == nScriptPrefix && sEventName == "click";
             }
             break;
@@ -182,7 +180,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,
             {
                 // language is not evaluated!
                 OUString aScriptLanguage;
-                maData.msLanguage = sValue;
+                maData.msLanguage = aIter.toString();
                 sal_uInt16 nScriptPrefix = rImp.GetNamespaceMap().
                     GetKeyByAttrValueQName(maData.msLanguage, &aScriptLanguage);
                 if( XML_NAMESPACE_OOO == nScriptPrefix )
@@ -190,18 +188,18 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,
             }
             break;
         case XML_ELEMENT(SCRIPT, XML_MACRO_NAME):
-            maData.msMacroName = sValue;
+            maData.msMacroName = aIter.toString();
             break;
         case XML_ELEMENT(XLINK, XML_HREF):
             {
                 if ( maData.mbScript )
                 {
-                    maData.msMacroName = sValue;
+                    maData.msMacroName = aIter.toString();
                 }
                 else
                 {
                     const OUString &rTmp =
-                        rImp.GetAbsoluteReference(sValue);
+                        rImp.GetAbsoluteReference(aIter.toString());
                     INetURLObject::translateToInternal( rTmp, maData.msBookmark,
                         INetURLObject::DecodeMechanism::Unambiguous );
                 }

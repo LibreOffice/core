@@ -85,13 +85,12 @@ void SchXMLLegendContext::startFastElement( sal_Int32 /*nElement*/,
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString aValue = aIter.toString();
         switch(aIter.getToken())
         {
             case XML_ELEMENT(CHART, XML_LEGEND_POSITION):
                 try
                 {
-                    if( SchXMLEnumConverter::getLegendPositionConverter().importXML( aValue, aAny, GetImport().GetMM100UnitConverter() ) )
+                    if( SchXMLEnumConverter::getLegendPositionConverter().importXML( aIter.toString(), aAny, GetImport().GetMM100UnitConverter() ) )
                         xLegendProps->setPropertyValue("Alignment", aAny );
                 }
                 catch(const beans::UnknownPropertyException&)
@@ -102,7 +101,7 @@ void SchXMLLegendContext::startFastElement( sal_Int32 /*nElement*/,
             case  XML_ELEMENT(LO_EXT, XML_OVERLAY):
                 try
                 {
-                    bOverlay = aValue.toBoolean();
+                    bOverlay = aIter.toBoolean();
                     xLegendProps->setPropertyValue("Overlay", uno::makeAny(bOverlay));
                 }
                 catch(const beans::UnknownPropertyException&)
@@ -113,20 +112,20 @@ void SchXMLLegendContext::startFastElement( sal_Int32 /*nElement*/,
             case XML_ELEMENT(SVG, XML_X):
             case XML_ELEMENT(SVG_COMPAT, XML_X):
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        aLegendPos.X, aValue );
+                        aLegendPos.X, aIter.toView() );
                 bHasXPosition = true;
                 break;
             case XML_ELEMENT(SVG, XML_Y):
             case XML_ELEMENT(SVG_COMPAT, XML_Y):
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        aLegendPos.Y, aValue );
+                        aLegendPos.Y, aIter.toView() );
                 bHasYPosition = true;
                 break;
             case XML_ELEMENT(CHART, XML_STYLE_NAME):
-                sAutoStyleName = aValue;
+                sAutoStyleName = aIter.toString();
                 break;
             case  XML_ELEMENT(STYLE, XML_LEGEND_EXPANSION):
-                SchXMLEnumConverter::getLegendPositionConverter().importXML( aValue, aAny, GetImport().GetMM100UnitConverter() );
+                SchXMLEnumConverter::getLegendPositionConverter().importXML( aIter.toString(), aAny, GetImport().GetMM100UnitConverter() );
                 bHasExpansion = (aAny>>=nLegendExpansion);
                 break;
             case XML_ELEMENT(STYLE, XML_LEGEND_EXPANSION_ASPECT_RATIO):
@@ -135,14 +134,14 @@ void SchXMLLegendContext::startFastElement( sal_Int32 /*nElement*/,
             case XML_ELEMENT(SVG_COMPAT, XML_WIDTH):
             case XML_ELEMENT(CHART_EXT, XML_WIDTH):
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        aLegendSize.Width, aValue );
+                        aLegendSize.Width, aIter.toView() );
                 bHasWidth = true;
                 break;
             case XML_ELEMENT(SVG, XML_HEIGHT):
             case XML_ELEMENT(SVG_COMPAT, XML_HEIGHT):
             case XML_ELEMENT(CHART_EXT, XML_HEIGHT):
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        aLegendSize.Height, aValue );
+                        aLegendSize.Height, aIter.toView() );
                 bHasHeight = true;
                 break;
             default:

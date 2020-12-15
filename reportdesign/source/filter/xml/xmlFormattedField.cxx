@@ -43,12 +43,10 @@ OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport
     {
         for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
         {
-            OUString sValue = aIter.toString();
-
             switch( aIter.getToken() )
             {
                 case XML_ELEMENT(REPORT, XML_FORMULA):
-                    _xComponent->setDataField(ORptFilter::convertFormula(sValue));
+                    _xComponent->setDataField(ORptFilter::convertFormula(aIter.toString()));
                     break;
                 case XML_ELEMENT(REPORT, XML_SELECT_PAGE):
                     _xComponent->setDataField("rpt:PageNumber()");

@@ -140,7 +140,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexBibliographyCo
                 case XML_ELEMENT(TEXT, XML_SORT_ASCENDING):
                 {
                     bool bTmp(false);
-                    if (::sax::Converter::convertBool(bTmp, aIter.toString()))
+                    if (::sax::Converter::convertBool(bTmp, aIter.toView()))
                         bSort = bTmp;
                     break;
                 }

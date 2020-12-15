@@ -258,29 +258,28 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString sValue = aIter.toString();
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(TEXT, XML_LEVEL):
-            nLevel = sValue.toInt32();
+            nLevel = aIter.toInt32();
             if( nLevel >= 1 )
                 nLevel--;
             else
                 nLevel = 0;
             break;
         case XML_ELEMENT(TEXT, XML_STYLE_NAME):
-            sTextStyleName = sValue;
+            sTextStyleName = aIter.toString();
             break;
         case XML_ELEMENT(TEXT, XML_BULLET_CHAR):
-            if (!sValue.isEmpty())
+            if (!aIter.isEmpty())
             {
                 sal_Int32 nIndexUtf16 = 0;
-                cBullet = sValue.iterateCodePoints(&nIndexUtf16);
+                cBullet = aIter.toString().iterateCodePoints(&nIndexUtf16);
             }
             break;
         case XML_ELEMENT(XLINK, XML_HREF):
             if( bImage )
-                sImageURL = sValue;
+                sImageURL = aIter.toString();
             break;
         case XML_ELEMENT(XLINK, XML_TYPE):
         case XML_ELEMENT(XLINK, XML_SHOW):
@@ -289,22 +288,22 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
             break;
         case XML_ELEMENT(STYLE, XML_NUM_FORMAT):
             if( bNum )
-                sNumFormat = sValue;
+                sNumFormat = aIter.toString();
             break;
         case XML_ELEMENT(STYLE, XML_NUM_PREFIX):
-            sPrefix = sValue;
+            sPrefix = aIter.toString();
             break;
         case XML_ELEMENT(STYLE, XML_NUM_SUFFIX):
-            sSuffix = sValue;
+            sSuffix = aIter.toString();
             break;
         case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
             if( bNum )
-                sNumLetterSync = sValue;
+                sNumLetterSync = aIter.toString();
             break;
         case XML_ELEMENT(TEXT, XML_START_VALUE):
             if( bNum )
             {
-                sal_Int32 nTmp = sValue.toInt32();
+                sal_Int32 nTmp = aIter.toInt32();
                 nNumStartValue =
                     (nTmp < 0) ? 1 : ( (nTmp>SHRT_MAX) ? SHRT_MAX
                                                         : static_cast<sal_Int16>(nTmp) );
@@ -313,7 +312,7 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
         case XML_ELEMENT(TEXT, XML_DISPLAY_LEVELS):
             if( bNum )
             {
-                sal_Int32 nTmp = sValue.toInt32();
+                sal_Int32 nTmp = aIter.toInt32();
                 nNumDisplayLevels =
                     (nTmp < 1) ? 1 : ( (nTmp>SHRT_MAX) ? SHRT_MAX
                                                         : static_cast<sal_Int16>(nTmp) );
@@ -553,74 +552,73 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString sValue = aIter.toString();
         sal_Int32 nVal;
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(TEXT, XML_SPACE_BEFORE):
-            if (rUnitConv.convertMeasureToCore(nVal, sValue, SHRT_MIN, SHRT_MAX))
+            if (rUnitConv.convertMeasureToCore(nVal, aIter.toView(), SHRT_MIN, SHRT_MAX))
                 rListLevel.SetSpaceBefore( nVal );
             break;
         case XML_ELEMENT(TEXT, XML_MIN_LABEL_WIDTH):
-            if (rUnitConv.convertMeasureToCore( nVal, sValue, 0, SHRT_MAX ))
+            if (rUnitConv.convertMeasureToCore( nVal, aIter.toView(), 0, SHRT_MAX ))
                 rListLevel.SetMinLabelWidth( nVal );
             break;
         case XML_ELEMENT(TEXT, XML_MIN_LABEL_DISTANCE):
-            if (rUnitConv.convertMeasureToCore( nVal, sValue, 0, USHRT_MAX ))
+            if (rUnitConv.convertMeasureToCore( nVal, aIter.toView(), 0, USHRT_MAX ))
                 rListLevel.SetMinLabelDist( nVal );
             break;
         case XML_ELEMENT(FO, XML_TEXT_ALIGN):
         case XML_ELEMENT(FO_COMPAT, XML_TEXT_ALIGN):
-            if( !sValue.isEmpty() )
+            if( !aIter.isEmpty() )
             {
                 sal_Int16 eAdjust = HoriOrientation::LEFT;
-                if( IsXMLToken( sValue, XML_CENTER ) )
+                if( IsXMLToken( aIter, XML_CENTER ) )
                     eAdjust = HoriOrientation::CENTER;
-                else if( IsXMLToken( sValue, XML_END ) )
+                else if( IsXMLToken( aIter, XML_END ) )
                     eAdjust = HoriOrientation::RIGHT;
                 rListLevel.SetAdjust( eAdjust );
             }
             break;
         case XML_ELEMENT(STYLE, XML_FONT_NAME):
-            sFontName = sValue;
+            sFontName = aIter.toString();
             break;
         case XML_ELEMENT(FO, XML_FONT_FAMILY):
         case XML_ELEMENT(FO_COMPAT, XML_FONT_FAMILY):
-            sFontFamily = sValue;
+            sFontFamily = aIter.toString();
             break;
         case XML_ELEMENT(STYLE, XML_FONT_FAMILY_GENERIC):
-            sFontFamilyGeneric = sValue;
+            sFontFamilyGeneric = aIter.toString();
             break;
         case XML_ELEMENT(STYLE, XML_FONT_STYLE_NAME):
-            sFontStyleName = sValue;
+            sFontStyleName = aIter.toString();
             break;
         case XML_ELEMENT(STYLE, XML_FONT_PITCH):
-            sFontPitch = sValue;
+            sFontPitch = aIter.toString();
             break;
         case XML_ELEMENT(STYLE, XML_FONT_CHARSET):
-            sFontCharset = sValue;
+            sFontCharset = aIter.toString();
             break;
         case XML_ELEMENT(STYLE, XML_VERTICAL_POS):
-            sVerticalPos = sValue;
+            sVerticalPos = aIter.toString();
             break;
         case XML_ELEMENT(STYLE, XML_VERTICAL_REL):
-            sVerticalRel = sValue;
+            sVerticalRel = aIter.toString();
             break;
         case XML_ELEMENT(FO, XML_WIDTH):
         case XML_ELEMENT(FO_COMPAT, XML_WIDTH):
-            if (rUnitConv.convertMeasureToCore(nVal, sValue))
+            if (rUnitConv.convertMeasureToCore(nVal, aIter.toView()))
                 rListLevel.SetImageWidth( nVal );
             break;
         case XML_ELEMENT(FO, XML_HEIGHT):
         case XML_ELEMENT(FO_COMPAT, XML_HEIGHT):
-            if (rUnitConv.convertMeasureToCore(nVal, sValue))
+            if (rUnitConv.convertMeasureToCore(nVal, aIter.toView()))
                 rListLevel.SetImageHeight( nVal );
             break;
         case XML_ELEMENT(FO, XML_COLOR):
         case XML_ELEMENT(FO_COMPAT, XML_COLOR):
             {
                 sal_Int32 nColor(0);
-                if (::sax::Converter::convertColor( nColor, sValue ))
+                if (::sax::Converter::convertColor( nColor, aIter.toView() ))
                 {
                     rListLevel.SetColor( Color(nColor) );
                 }
@@ -628,19 +626,19 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
             break;
         case XML_ELEMENT(STYLE, XML_USE_WINDOW_FONT_COLOR):
             {
-                if( IsXMLToken( sValue, XML_TRUE ) )
+                if( IsXMLToken( aIter, XML_TRUE ) )
                     rListLevel.SetColor(COL_AUTO);
             }
             break;
         case XML_ELEMENT(FO, XML_FONT_SIZE):
         case XML_ELEMENT(FO_COMPAT, XML_FONT_SIZE):
-            if (::sax::Converter::convertPercent( nVal, sValue ))
+            if (::sax::Converter::convertPercent( nVal, aIter.toView() ))
                 rListLevel.SetRelSize( static_cast<sal_Int16>(nVal) );
             break;
         case XML_ELEMENT(TEXT, XML_LIST_LEVEL_POSITION_AND_SPACE_MODE):
             {
                 sal_Int16 ePosAndSpaceMode = PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION;
-                if( IsXMLToken( sValue, XML_LABEL_ALIGNMENT ) )
+                if( IsXMLToken( aIter, XML_LABEL_ALIGNMENT ) )
                     ePosAndSpaceMode = PositionAndSpaceMode::LABEL_ALIGNMENT;
                 rListLevel.SetPosAndSpaceMode( ePosAndSpaceMode );
             }
@@ -805,8 +803,6 @@ SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAli
     sal_Int16 eLabelFollowedBy = LabelFollow::LISTTAB;
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString sValue = aIter.toString();
-
         sal_Int32 nVal;
         switch( aIter.getToken() )
         {
@@ -816,26 +812,26 @@ SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAli
                 if( eLabelFollowedBy == LabelFollow::NEWLINE)
                     //NewLine from LO_EXT has precedence over other values of the Non LO_EXT namespace
                     break;
-                if( IsXMLToken( sValue, XML_SPACE ) )
+                if( IsXMLToken( aIter, XML_SPACE ) )
                     eLabelFollowedBy = LabelFollow::SPACE;
-                else if( IsXMLToken( sValue, XML_NOTHING ) )
+                else if( IsXMLToken( aIter, XML_NOTHING ) )
                     eLabelFollowedBy = LabelFollow::NOTHING;
-                else if( IsXMLToken( sValue, XML_NEWLINE ) )
+                else if( IsXMLToken( aIter, XML_NEWLINE ) )
                     eLabelFollowedBy = LabelFollow::NEWLINE;
             }
             break;
         case XML_ELEMENT(TEXT, XML_LIST_TAB_STOP_POSITION):
-            if (rUnitConv.convertMeasureToCore(nVal, sValue, 0, SHRT_MAX))
+            if (rUnitConv.convertMeasureToCore(nVal, aIter.toView(), 0, SHRT_MAX))
                 rLLevel.SetListtabStopPosition( nVal );
             break;
         case XML_ELEMENT(FO, XML_TEXT_INDENT):
         case XML_ELEMENT(FO_COMPAT, XML_TEXT_INDENT):
-            if (rUnitConv.convertMeasureToCore(nVal, sValue, SHRT_MIN, SHRT_MAX))
+            if (rUnitConv.convertMeasureToCore(nVal, aIter.toView(), SHRT_MIN, SHRT_MAX))
                 rLLevel.SetFirstLineIndent( nVal );
             break;
         case XML_ELEMENT(FO, XML_MARGIN_LEFT):
         case XML_ELEMENT(FO_COMPAT, XML_MARGIN_LEFT):
-            if (rUnitConv.convertMeasureToCore(nVal, sValue, SHRT_MIN, SHRT_MAX))
+            if (rUnitConv.convertMeasureToCore(nVal, aIter.toView(), SHRT_MIN, SHRT_MAX))
                 rLLevel.SetIndentAt( nVal );
             break;
         default:

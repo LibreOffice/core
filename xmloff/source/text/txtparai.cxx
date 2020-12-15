@@ -1637,38 +1637,37 @@ XMLParaContext::XMLParaContext(
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sValue = aIter.toString();
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(XML, XML_ID):
-            m_sXmlId = sValue;
+            m_sXmlId = aIter.toString();
             bHaveXmlId = true;
             break;
         case XML_ELEMENT(XHTML, XML_ABOUT):
-            m_sAbout = sValue;
+            m_sAbout = aIter.toString();
             m_bHaveAbout = true;
             break;
         case XML_ELEMENT(XHTML, XML_PROPERTY):
-            m_sProperty = sValue;
+            m_sProperty = aIter.toString();
             break;
         case XML_ELEMENT(XHTML, XML_CONTENT):
-            m_sContent = sValue;
+            m_sContent = aIter.toString();
             break;
         case XML_ELEMENT(XHTML, XML_DATATYPE):
-            m_sDatatype = sValue;
+            m_sDatatype = aIter.toString();
             break;
         case XML_ELEMENT(TEXT, XML_ID):
-            if (!bHaveXmlId) { m_sXmlId = sValue; }
+            if (!bHaveXmlId) { m_sXmlId = aIter.toString(); }
             break;
         case XML_ELEMENT(TEXT, XML_STYLE_NAME):
-            sStyleName = sValue;
+            sStyleName = aIter.toString();
             break;
         case XML_ELEMENT(TEXT, XML_COND_STYLE_NAME):
-            aCondStyleName = sValue;
+            aCondStyleName = aIter.toString();
             break;
         case XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL):
             {
-                sal_Int32 nTmp = sValue.toInt32();
+                sal_Int32 nTmp = aIter.toInt32();
                 if( nTmp > 0 )
                 {
                     if( nTmp > 127 )
@@ -1682,28 +1681,27 @@ XMLParaContext::XMLParaContext(
         case XML_ELEMENT(LO_EXT, XML_OUTLINE_CONTENT_VISIBLE):
             {
                 bool bBool(false);
-                if (::sax::Converter::convertBool(bBool, sValue))
+                if (::sax::Converter::convertBool(bBool, aIter.toView()))
                     mbOutlineContentVisible = bBool;
             }
             break;
         case XML_ELEMENT(TEXT, XML_IS_LIST_HEADER):
             {
                 bool bBool(false);
-                if (::sax::Converter::convertBool(bBool, sValue))
+                if (::sax::Converter::convertBool(bBool, aIter.toView()))
                     bIsListHeader = bBool;
             }
             break;
         case XML_ELEMENT(TEXT, XML_RESTART_NUMBERING):
             {
                 bool bBool(false);
-                if (::sax::Converter::convertBool(bBool, sValue))
+                if (::sax::Converter::convertBool(bBool, aIter.toView()))
                     bIsRestart = bBool;
             }
             break;
         case XML_ELEMENT(TEXT, XML_START_VALUE):
             {
-                nStartValue = sal::static_int_cast< sal_Int16 >(
-                    sValue.toInt32());
+                nStartValue = sal::static_int_cast< sal_Int16 >(aIter.toInt32());
             }
             break;
         default:
@@ -2031,25 +2029,24 @@ XMLNumberedParaContext::XMLNumberedParaContext(
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sValue = aIter.toString();
         switch( aIter.getToken() )
         {
             case XML_ELEMENT(XML, XML_ID):
 //FIXME: there is no UNO API for lists
                 break;
             case XML_ELEMENT(TEXT, XML_LIST_ID):
-                m_ListId = sValue;
+                m_ListId = aIter.toString();
                 break;
             case XML_ELEMENT(TEXT, XML_LEVEL):
                 {
-                    sal_Int32 nTmp = sValue.toInt32();
+                    sal_Int32 nTmp = aIter.toInt32();
                     if ( nTmp >= 1 && nTmp <= SHRT_MAX ) {
                         m_Level = static_cast<sal_uInt16>(nTmp) - 1;
                     }
                 }
                 break;
             case XML_ELEMENT(TEXT, XML_STYLE_NAME):
-                StyleName = sValue;
+                StyleName = aIter.toString();
                 break;
             case XML_ELEMENT(TEXT, XML_CONTINUE_NUMBERING):
                 // this attribute is deprecated
@@ -2057,7 +2054,7 @@ XMLNumberedParaContext::XMLNumberedParaContext(
                 break;
             case XML_ELEMENT(TEXT, XML_START_VALUE):
                 {
-                    sal_Int32 nTmp = sValue.toInt32();
+                    sal_Int32 nTmp = aIter.toInt32();
                     if ( nTmp >= 0 && nTmp <= SHRT_MAX ) {
                         m_StartValue = static_cast<sal_Int16>(nTmp);
                     }

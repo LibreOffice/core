@@ -397,7 +397,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
         case XML_ELEMENT(OFFICE, XML_VALUE):
             {
                 double fTmp;
-                if (::sax::Converter::convertDouble(fTmp, aIter.toString()))
+                if (::sax::Converter::convertDouble(fTmp, aIter.toView()))
                 {
                     m_fValue = fTmp;
                     m_bHasValue = true;
@@ -506,7 +506,7 @@ css::uno::Reference<css::xml::sax::XFastContextHandler> SwXMLTableCellContext_Im
         {
             if( aIter.getToken() == XML_ELEMENT(TABLE, XML_IS_SUB_TABLE) )
             {
-                if ( IsXMLToken( aIter.toString(), XML_TRUE ) )
+                if ( IsXMLToken( aIter, XML_TRUE ) )
                     bSubTable = true;
             }
             else
@@ -925,25 +925,24 @@ void SwXMLDDETableContext_Impl::startFastElement(
 {
     for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {
-        OUString aValue = aIter.toString();
         switch (aIter.getToken())
         {
             case XML_ELEMENT(OFFICE, XML_DDE_APPLICATION):
-                sDDEApplication = aValue;
+                sDDEApplication = aIter.toString();
                 break;
             case XML_ELEMENT(OFFICE, XML_DDE_TOPIC):
-                sDDETopic = aValue;
+                sDDETopic = aIter.toString();
                 break;
             case XML_ELEMENT(OFFICE, XML_DDE_ITEM):
-                sDDEItem = aValue;
+                sDDEItem = aIter.toString();
                 break;
             case XML_ELEMENT(OFFICE, XML_NAME):
-                sConnectionName = aValue;
+                sConnectionName = aIter.toString();
                 break;
             case XML_ELEMENT(OFFICE, XML_AUTOMATIC_UPDATE):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, aValue))
+                if (::sax::Converter::convertBool(bTmp, aIter.toView()))
                 {
                     bIsAutomaticUpdate = bTmp;
                 }

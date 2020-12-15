@@ -56,7 +56,7 @@ void XMLLineNumberingSeparatorImportContext::startFastElement(
         if ( aIter.getToken() == XML_ELEMENT(TEXT, XML_INCREMENT) )
         {
             sal_Int32 nTmp;
-            if (::sax::Converter::convertNumber(nTmp, aIter.toString(), 0))
+            if (::sax::Converter::convertNumber(nTmp, aIter.toView(), 0))
             {
                 rLineNumberingContext.SetSeparatorIncrement(static_cast<sal_Int16>(nTmp));
             }

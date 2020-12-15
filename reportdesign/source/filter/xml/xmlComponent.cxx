@@ -42,14 +42,12 @@ OXMLComponent::OXMLComponent( ORptFilter& _rImport
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
-        OUString sValue = aIter.toString();
-
         try
         {
             switch( aIter.getToken() )
             {
                 case XML_ELEMENT(DRAW, XML_NAME):
-                    m_xComponent->setName(sValue);
+                    m_xComponent->setName(aIter.toString());
                     break;
                 default:
                     XMLOFF_WARN_UNKNOWN("reportdesign", aIter);

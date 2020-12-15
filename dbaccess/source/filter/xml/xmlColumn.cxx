@@ -48,38 +48,36 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
     OUString sType;
     for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
-        OUString sValue = aIter.toString();
-
         switch( aIter.getToken() & TOKEN_MASK )
         {
             case XML_NAME:
-                m_sName = sValue;
+                m_sName = aIter.toString();
                 break;
             case XML_STYLE_NAME:
-                m_sStyleName = sValue;
+                m_sStyleName = aIter.toString();
                 break;
             case XML_HELP_MESSAGE:
-                m_sHelpMessage = sValue;
+                m_sHelpMessage = aIter.toString();
                 break;
             case XML_VISIBILITY:
-                m_bHidden = sValue != "visible";
+                m_bHidden = aIter.toView() != "visible";
                 break;
             case XML_TYPE_NAME:
-                sType = sValue;
+                sType = aIter.toString();
                 OSL_ENSURE(!sType.isEmpty(),"No type name set");
                 break;
             case XML_DEFAULT_VALUE:
-                if ( !(sValue.isEmpty() || sType.isEmpty()) )
-                    m_aDefaultValue <<= sValue;
+                if ( !(aIter.isEmpty() || sType.isEmpty()) )
+                    m_aDefaultValue <<= aIter.toString();
                 break;
             case XML_VISIBLE:
-                m_bHidden = sValue == "false";
+                m_bHidden = aIter.toView() == "false";
                 break;
             case XML_DEFAULT_CELL_STYLE_NAME:
-                m_sCellStyleName = sValue;
+                m_sCellStyleName = aIter.toString();
                 break;
             default:
-                XMLOFF_WARN_UNKNOWN_ATTR("dbaccess", aIter.getToken(), aIter.toString());
+                XMLOFF_WARN_UNKNOWN("dbaccess", aIter);
         }
     }
 }

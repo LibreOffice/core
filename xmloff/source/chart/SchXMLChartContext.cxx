@@ -319,17 +319,17 @@ void SchXMLChartContext::startFastElement( sal_Int32 /*nElement*/,
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString aValue = aIter.toString();
         switch( aIter.getToken() )
         {
             case XML_ELEMENT(LO_EXT, XML_DATA_PILOT_SOURCE):
-                msDataPilotSource = aValue;
+                msDataPilotSource = aIter.toString();
                 break;
             case XML_ELEMENT(XLINK, XML_HREF):
-                m_aXLinkHRefAttributeToIndicateDataProvider = aValue;
+                m_aXLinkHRefAttributeToIndicateDataProvider = aIter.toString();
                 break;
             case XML_ELEMENT(CHART, XML_CLASS):
                 {
+                    OUString aValue = aIter.toString();
                     OUString sClassName;
                     sal_uInt16 nClassPrefix =
                         GetImport().GetNamespaceMap().GetKeyByAttrValueQName(
@@ -365,24 +365,24 @@ void SchXMLChartContext::startFastElement( sal_Int32 /*nElement*/,
             case XML_ELEMENT(SVG, XML_WIDTH):
             case XML_ELEMENT(SVG_COMPAT, XML_WIDTH):
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        maChartSize.Width, aValue );
+                        maChartSize.Width, aIter.toView() );
                 break;
 
             case XML_ELEMENT(SVG, XML_HEIGHT):
             case XML_ELEMENT(SVG_COMPAT, XML_HEIGHT):
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        maChartSize.Height, aValue );
+                        maChartSize.Height, aIter.toView() );
                 break;
 
             case XML_ELEMENT(CHART, XML_STYLE_NAME):
-                sAutoStyleName = aValue;
+                sAutoStyleName = aIter.toString();
                 break;
 
             case XML_ELEMENT(CHART, XML_COLUMN_MAPPING):
-                msColTrans = aValue;
+                msColTrans = aIter.toString();
                 break;
             case XML_ELEMENT(CHART,  XML_ROW_MAPPING):
-                msRowTrans = aValue;
+                msRowTrans = aIter.toString();
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
@@ -1176,14 +1176,13 @@ void SchXMLTitleContext::startFastElement( sal_Int32 /*nElement*/,
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString aValue = aIter.toString();
         switch (aIter.getToken())
         {
             case XML_ELEMENT(SVG, XML_X):
             case XML_ELEMENT(SVG_COMPAT, XML_X):
             {
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        aPosition.X, aValue );
+                        aPosition.X, aIter.toView() );
                 bHasXPosition = true;
                 break;
             }
@@ -1191,12 +1190,12 @@ void SchXMLTitleContext::startFastElement( sal_Int32 /*nElement*/,
             case XML_ELEMENT(SVG_COMPAT, XML_Y):
             {
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        aPosition.Y, aValue );
+                        aPosition.Y, aIter.toView() );
                 bHasYPosition = true;
                 break;
             }
             case XML_ELEMENT(CHART, XML_STYLE_NAME):
-                msAutoStyleName = aValue;
+                msAutoStyleName = aIter.toString();
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);

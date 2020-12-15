@@ -58,26 +58,24 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
     m_xGroup = m_xGroups->createGroup();
 
     m_xGroup->setSortAscending(false);// the default value has to be set
-    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
-        OUString sValue = aIter.toString();
-
         try
         {
             switch( aIter.getToken() )
             {
                 case XML_ELEMENT(REPORT, XML_START_NEW_COLUMN):
-                    m_xGroup->setStartNewColumn(sValue == s_sTRUE);
+                    m_xGroup->setStartNewColumn(IsXMLToken(aIter, XML_TRUE));
                     break;
                 case XML_ELEMENT(REPORT, XML_RESET_PAGE_NUMBER):
-                    m_xGroup->setResetPageNumber(sValue == s_sTRUE);
+                    m_xGroup->setResetPageNumber(IsXMLToken(aIter, XML_TRUE));
                     break;
                 case XML_ELEMENT(REPORT, XML_SORT_ASCENDING):
-                    m_xGroup->setSortAscending(sValue == s_sTRUE);
+                    m_xGroup->setSortAscending(IsXMLToken(aIter, XML_TRUE));
                     break;
                 case XML_ELEMENT(REPORT, XML_GROUP_EXPRESSION):
                     {
+                        OUString sValue = aIter.toString();
                         sal_Int32 nLen = sValue.getLength();
                         if ( nLen )
                         {
@@ -156,7 +154,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                     }
                     break;
                 case XML_ELEMENT(REPORT, XML_KEEP_TOGETHER):
-                    m_xGroup->setKeepTogether(lcl_getKeepTogetherOption(sValue));
+                    m_xGroup->setKeepTogether(lcl_getKeepTogetherOption(aIter.toString()));
                     break;
                 default:
                     XMLOFF_WARN_UNKNOWN("reportdesign", aIter);

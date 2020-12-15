@@ -64,7 +64,6 @@ void XMLIndexTabStopEntryContext::startFastElement(
     // process three attributes: type, position, leader char
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sValue = aIter.toString();
         switch(aIter.getToken())
         {
             case XML_ELEMENT(STYLE, XML_TYPE):
@@ -72,14 +71,14 @@ void XMLIndexTabStopEntryContext::startFastElement(
                 // if it's neither left nor right, value is
                 // ignored. Since left is default, we only need to
                 // check for right
-                bTabRightAligned = IsXMLToken( sValue, XML_RIGHT );
+                bTabRightAligned = IsXMLToken( aIter, XML_RIGHT );
                 break;
             }
             case XML_ELEMENT(STYLE, XML_POSITION):
             {
                 sal_Int32 nTmp;
                 if (GetImport().GetMM100UnitConverter().
-                                        convertMeasureToCore(nTmp, sValue))
+                                        convertMeasureToCore(nTmp, aIter.toView()))
                 {
                     nTabPosition = nTmp;
                     bTabPositionOK = true;
@@ -88,16 +87,16 @@ void XMLIndexTabStopEntryContext::startFastElement(
             }
             case XML_ELEMENT(STYLE, XML_LEADER_CHAR):
             {
-                sLeaderChar = sValue;
+                sLeaderChar = aIter.toString();
                 // valid only, if we have a char!
-                bLeaderCharOK = !sValue.isEmpty();
+                bLeaderCharOK = !sLeaderChar.isEmpty();
                 break;
             }
             case XML_ELEMENT(STYLE, XML_WITH_TAB):
             {
                 // #i21237#
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, sValue))
+                if (::sax::Converter::convertBool(bTmp, aIter.toView()))
                     bWithTab = bTmp;
                 break;
             }

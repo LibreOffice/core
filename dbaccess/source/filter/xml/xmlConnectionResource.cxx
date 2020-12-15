@@ -42,7 +42,6 @@ OXMLConnectionResource::OXMLConnectionResource( ODBFilter& rImport,
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
-        OUString sValue = aIter.toString();
         aProperty.Name.clear();
         aProperty.Value = Any();
 
@@ -51,7 +50,7 @@ OXMLConnectionResource::OXMLConnectionResource( ODBFilter& rImport,
             case XML_ELEMENT(XLINK, XML_HREF):
                 try
                 {
-                    xDataSource->setPropertyValue(PROPERTY_URL,makeAny(sValue));
+                    xDataSource->setPropertyValue(PROPERTY_URL,makeAny(aIter.toString()));
                 }
                 catch(const Exception&)
                 {
@@ -68,12 +67,12 @@ OXMLConnectionResource::OXMLConnectionResource( ODBFilter& rImport,
                 aProperty.Name = "Actuate";
                 break;
             default:
-                XMLOFF_WARN_UNKNOWN_ATTR("dbaccess", aIter.getToken(), aIter.toString());
+                XMLOFF_WARN_UNKNOWN("dbaccess", aIter);
         }
         if ( !aProperty.Name.isEmpty() )
         {
             if ( !aProperty.Value.hasValue() )
-                aProperty.Value <<= sValue;
+                aProperty.Value <<= aIter.toString();
             rImport.addInfo(aProperty);
         }
     }
