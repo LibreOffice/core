@@ -3479,6 +3479,17 @@ namespace xmloff::token {
         const XMLTokenEntry* pToken = &aTokenList[static_cast<sal_uInt16>(eToken)];
         return aIter.isString( pToken->pChar );
     }
+
+    bool IsXMLToken(
+        std::string_view aStr,
+        enum XMLTokenEnum eToken )
+    {
+        assert(XML_TOKEN_INVALID < eToken);
+        assert(eToken < XML_TOKEN_END);
+
+        const XMLTokenEntry* pToken = &aTokenList[static_cast<sal_uInt16>(eToken)];
+        return aStr == pToken->pChar;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

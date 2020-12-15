@@ -43,7 +43,7 @@ XMLCaseMapPropHdl::~XMLCaseMapPropHdl()
     // nothing to do
 }
 
-bool XMLCaseMapPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCaseMapPropHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 nVal;
     bool bRet = SvXMLUnitConverter::convertEnum(
@@ -77,7 +77,7 @@ XMLCaseMapVariantHdl::~XMLCaseMapVariantHdl()
     // nothing to do
 }
 
-bool XMLCaseMapVariantHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCaseMapVariantHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
 

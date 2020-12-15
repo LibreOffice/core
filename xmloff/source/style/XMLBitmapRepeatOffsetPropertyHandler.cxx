@@ -45,11 +45,12 @@ XMLBitmapRepeatOffsetPropertyHandler::~XMLBitmapRepeatOffsetPropertyHandler()
 }
 
 bool XMLBitmapRepeatOffsetPropertyHandler::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     Any& rValue,
     const SvXMLUnitConverter& ) const
 {
-    SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
+    OUString sValue = OUString::fromUtf8(rStrImpValue);
+    SvXMLTokenEnumerator aTokenEnum( sValue );
     OUString aToken;
     if( aTokenEnum.getNextToken( aToken ) )
     {
