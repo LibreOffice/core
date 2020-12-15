@@ -144,6 +144,16 @@ public:
         return bRet;
     }
 
+    /** convert string to enum using given enum map, if the enum is
+        not found in the map, this method will return false */
+    template<typename EnumT>
+    static bool convertEnum( EnumT& rEnum,
+                             std::string_view rValue,
+                             const SvXMLEnumMapEntry<EnumT> *pMap )
+    {
+        return convertEnum(rEnum, OUString::fromUtf8(rValue), pMap);
+    }
+
     /** convert string to enum using given token map, if the enum is
         not found in the map, this method will return false */
     template<typename EnumT>

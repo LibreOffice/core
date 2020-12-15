@@ -228,7 +228,7 @@ SvXMLShapeContext* XMLShapeImportHelper::Create3DSceneChildContext(
     // now parse the attribute list and call the child context for each unknown attribute
     for(auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        if (!pContext->processAttribute( aIter.getToken(), aIter.toString() ))
+        if (!pContext->processAttribute( aIter ))
             XMLOFF_WARN_UNKNOWN("xmloff", aIter);
 
     }
@@ -360,7 +360,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
     // now parse the attribute list and call the child context for each unknown attribute
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        if (!pContext->processAttribute( aIter.getToken(), aIter.toString() ))
+        if (!pContext->processAttribute( aIter ))
             XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }
     return pContext;
@@ -438,7 +438,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
         // now parse the attribute list and call the child context for each unknown attribute
         for(auto& aIter : *xCombinedAttrList)
         {
-            if (!pContext->processAttribute( aIter.getToken(), aIter.toString() ))
+            if (!pContext->processAttribute( aIter ))
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
