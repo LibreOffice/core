@@ -94,7 +94,7 @@ public:
 
 protected:
 
-    virtual void ProcessAttribute(sal_Int32 nAttrToken, const OUString& rValue);
+    virtual void ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter &);
 
     virtual void Prepare(
         css::uno::Reference<css::beans::XPropertySet> & rPropertySet);
@@ -135,7 +135,7 @@ void XMLImageMapObjectContext::startFastElement( sal_Int32 /*nElement*/,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
-        ProcessAttribute(aIter.getToken(), aIter.toString());
+        ProcessAttribute(aIter);
 }
 
 void XMLImageMapObjectContext::endFastElement(sal_Int32 )
@@ -179,29 +179,28 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLImageMapObjectConte
 }
 
 void XMLImageMapObjectContext::ProcessAttribute(
-    sal_Int32 nAttrToken,
-    const OUString& rValue)
+    const sax_fastparser::FastAttributeList::FastAttributeIter & aIter)
 {
-    switch (nAttrToken)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(XLINK, XML_HREF):
-            sUrl = GetImport().GetAbsoluteReference(rValue);
+            sUrl = GetImport().GetAbsoluteReference(aIter.toString());
             break;
 
         case XML_ELEMENT(OFFICE, XML_TARGET_FRAME_NAME):
-            sTargt = rValue;
+            sTargt = aIter.toString();
             break;
 
         case XML_ELEMENT(DRAW, XML_NOHREF):
-            bIsActive = ! IsXMLToken(rValue, XML_NOHREF);
+            bIsActive = ! IsXMLToken(aIter, XML_NOHREF);
             break;
 
         case XML_ELEMENT(OFFICE, XML_NAME):
-            sNam = rValue;
+            sNam = aIter.toString();
             break;
         default:
             // do nothing
-            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, rValue);
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
             break;
     }
 }
@@ -236,8 +235,7 @@ public:
 
 protected:
     virtual void ProcessAttribute(
-        sal_Int32 nAttrToken,
-        const OUString& rValue) override;
+        const sax_fastparser::FastAttributeList::FastAttributeIter &) override;
 
     virtual void Prepare(
         css::uno::Reference<css::beans::XPropertySet> & rPropertySet) override;
@@ -258,16 +256,15 @@ XMLImageMapRectangleContext::XMLImageMapRectangleContext(
 }
 
 void XMLImageMapRectangleContext::ProcessAttribute(
-    sal_Int32 nAttrToken,
-    const OUString& rValue)
+    const sax_fastparser::FastAttributeList::FastAttributeIter & aIter)
 {
     sal_Int32 nTmp;
-    switch (nAttrToken)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(SVG, XML_X):
         case XML_ELEMENT(SVG_COMPAT, XML_X):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
-                                                                   rValue))
+                                                                   aIter.toView()))
             {
                 aRectangle.X = nTmp;
                 bXOK = true;
@@ -276,7 +273,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
         case  XML_ELEMENT(SVG, XML_Y):
         case  XML_ELEMENT(SVG_COMPAT, XML_Y):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
-                                                                   rValue))
+                                                                   aIter.toView()))
             {
                 aRectangle.Y = nTmp;
                 bYOK = true;
@@ -285,7 +282,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
         case XML_ELEMENT(SVG, XML_WIDTH):
         case XML_ELEMENT(SVG_COMPAT, XML_WIDTH):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
-                                                                   rValue))
+                                                                   aIter.toView()))
             {
                 aRectangle.Width = nTmp;
                 bWidthOK = true;
@@ -294,14 +291,14 @@ void XMLImageMapRectangleContext::ProcessAttribute(
         case  XML_ELEMENT(SVG, XML_HEIGHT):
         case  XML_ELEMENT(SVG_COMPAT, XML_HEIGHT):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
-                                                                   rValue))
+                                                                   aIter.toView()))
             {
                 aRectangle.Height = nTmp;
                 bHeightOK = true;
             }
             break;
         default:
-            XMLImageMapObjectContext::ProcessAttribute(nAttrToken, rValue);
+            XMLImageMapObjectContext::ProcessAttribute(aIter);
     }
 
     bValid = bHeightOK && bXOK && bYOK && bWidthOK;
@@ -333,9 +330,7 @@ public:
         css::uno::Reference<css::container::XIndexContainer> const & xMap);
 
 protected:
-    virtual void ProcessAttribute(
-        sal_Int32 nAttrToken,
-        const OUString& rValue) override;
+    virtual void ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter &) override;
 
     virtual void Prepare(
         css::uno::Reference<css::beans::XPropertySet> & rPropertySet) override;
@@ -354,22 +349,21 @@ XMLImageMapPolygonContext::XMLImageMapPolygonContext(
 }
 
 void XMLImageMapPolygonContext::ProcessAttribute(
-    sal_Int32 nAttrToken,
-    const OUString& rValue)
+    const sax_fastparser::FastAttributeList::FastAttributeIter & aIter)
 {
-    switch (nAttrToken)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(DRAW, XML_POINTS):
-            sPointsString = rValue;
+            sPointsString = aIter.toString();
             bPointsOK = true;
             break;
         case XML_ELEMENT(SVG, XML_VIEWBOX):
         case XML_ELEMENT(SVG_COMPAT, XML_VIEWBOX):
-            sViewBoxString = rValue;
+            sViewBoxString = aIter.toString();
             bViewBoxOK = true;
             break;
         default:
-            XMLImageMapObjectContext::ProcessAttribute(nAttrToken, rValue);
+            XMLImageMapObjectContext::ProcessAttribute(aIter);
             break;
     }
 
@@ -417,8 +411,7 @@ public:
 
 protected:
     virtual void ProcessAttribute(
-        sal_Int32 nAttrToken,
-        const OUString& rValue) override;
+        const sax_fastparser::FastAttributeList::FastAttributeIter &) override;
 
     virtual void Prepare(
         css::uno::Reference<css::beans::XPropertySet> & rPropertySet) override;
@@ -439,16 +432,15 @@ XMLImageMapCircleContext::XMLImageMapCircleContext(
 }
 
 void XMLImageMapCircleContext::ProcessAttribute(
-    sal_Int32 nAttrToken,
-    const OUString& rValue)
+    const sax_fastparser::FastAttributeList::FastAttributeIter & aIter)
 {
     sal_Int32 nTmp;
-    switch (nAttrToken)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(SVG, XML_CX):
         case XML_ELEMENT(SVG_COMPAT, XML_CX):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
-                                                                   rValue))
+                                                                   aIter.toView()))
             {
                 aCenter.X = nTmp;
                 bXOK = true;
@@ -457,7 +449,7 @@ void XMLImageMapCircleContext::ProcessAttribute(
         case XML_ELEMENT(SVG, XML_CY):
         case XML_ELEMENT(SVG_COMPAT, XML_CY):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
-                                                                   rValue))
+                                                                   aIter.toView()))
             {
                 aCenter.Y = nTmp;
                 bYOK = true;
@@ -466,14 +458,14 @@ void XMLImageMapCircleContext::ProcessAttribute(
         case XML_ELEMENT(SVG, XML_R):
         case XML_ELEMENT(SVG_COMPAT, XML_R):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
-                                                                   rValue))
+                                                                   aIter.toView()))
             {
                 nRadius = nTmp;
                 bRadiusOK = true;
             }
             break;
         default:
-            XMLImageMapObjectContext::ProcessAttribute(nAttrToken, rValue);
+            XMLImageMapObjectContext::ProcessAttribute(aIter);
     }
 
     bValid = bRadiusOK && bXOK && bYOK;
