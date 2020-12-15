@@ -62,17 +62,15 @@ XMLIndexAlphabeticalSourceContext::~XMLIndexAlphabeticalSourceContext()
 {
 }
 
-void XMLIndexAlphabeticalSourceContext::ProcessAttribute(
-    sal_Int32 nAttributeToken,
-    const OUString& rValue)
+void XMLIndexAlphabeticalSourceContext::ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter)
 {
     bool bTmp(false);
 
-    switch (nAttributeToken)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(TEXT, XML_MAIN_ENTRY_STYLE_NAME):
             {
-                sMainEntryStyleName = rValue;
+                sMainEntryStyleName = aIter.toString();
                 OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
                     XmlStyleFamily::TEXT_TEXT, sMainEntryStyleName );
                 const Reference < css::container::XNameContainer >&
@@ -82,78 +80,78 @@ void XMLIndexAlphabeticalSourceContext::ProcessAttribute(
             break;
 
         case XML_ELEMENT(TEXT, XML_IGNORE_CASE):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bCaseSensitive = !bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_ALPHABETICAL_SEPARATORS):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bSeparators = bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_COMBINE_ENTRIES):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bCombineEntries = bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_COMBINE_ENTRIES_WITH_DASH):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bCombineDash = bTmp;
             }
             break;
         case XML_ELEMENT(TEXT, XML_USE_KEYS_AS_ENTRIES):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bEntry = bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_COMBINE_ENTRIES_WITH_PP):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bCombinePP = bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_CAPITALIZE_ENTRIES):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bUpperCase = bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_COMMA_SEPARATED):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bCommaSeparated = bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_SORT_ALGORITHM):
-            sAlgorithm = rValue;
+            sAlgorithm = aIter.toString();
             break;
         case XML_ELEMENT(STYLE, XML_RFC_LANGUAGE_TAG):
-            maLanguageTagODF.maRfcLanguageTag = rValue;
+            maLanguageTagODF.maRfcLanguageTag = aIter.toString();
             break;
         case XML_ELEMENT(FO, XML_LANGUAGE):
-            maLanguageTagODF.maLanguage = rValue;
+            maLanguageTagODF.maLanguage = aIter.toString();
             break;
         case XML_ELEMENT(FO, XML_SCRIPT):
-            maLanguageTagODF.maScript = rValue;
+            maLanguageTagODF.maScript = aIter.toString();
             break;
         case XML_ELEMENT(FO, XML_COUNTRY):
-            maLanguageTagODF.maCountry = rValue;
+            maLanguageTagODF.maCountry = aIter.toString();
             break;
 
         default:
-            XMLIndexSourceBaseContext::ProcessAttribute(nAttributeToken, rValue);
+            XMLIndexSourceBaseContext::ProcessAttribute(aIter);
             break;
     }
 }

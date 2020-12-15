@@ -61,17 +61,15 @@ void XMLIndexSourceBaseContext::startFastElement(
 {
     // process attributes
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
-        ProcessAttribute(aIter.getToken(), aIter.toString());
+        ProcessAttribute(aIter);
 }
 
-void XMLIndexSourceBaseContext::ProcessAttribute(
-    sal_Int32 nAttributeToken,
-    const OUString& rValue)
+void XMLIndexSourceBaseContext::ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter)
 {
-    switch (nAttributeToken)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(TEXT, XML_INDEX_SCOPE):
-            if ( IsXMLToken( rValue, XML_CHAPTER ) )
+            if ( IsXMLToken( aIter, XML_CHAPTER ) )
             {
                 bChapterIndex = true;
             }
@@ -80,7 +78,7 @@ void XMLIndexSourceBaseContext::ProcessAttribute(
         case XML_ELEMENT(TEXT, XML_RELATIVE_TAB_STOP_POSITION):
         {
             bool bTmp(false);
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bRelativeTabs = bTmp;
             }
@@ -89,7 +87,7 @@ void XMLIndexSourceBaseContext::ProcessAttribute(
 
         default:
             // unknown attribute -> ignore
-            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttributeToken, rValue);
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
             break;
     }
 }
