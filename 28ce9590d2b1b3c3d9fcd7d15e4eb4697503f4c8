@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c15786dc_c7972d1c",
+        "filename": "vcl/win/dtrans/WinClipboard.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-12-15T13:59:07Z",
+      "side": 1,
+      "message": "We could replace this with a SolarMutexGuard...",
+      "revId": "28ce9590d2b1b3c3d9fcd7d15e4eb4697503f4c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
