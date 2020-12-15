@@ -25,6 +25,7 @@
 #include <vcl/event.hxx>
 #include <vcl/fieldvalues.hxx>
 #include <vcl/image.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <svl/eitem.hxx>

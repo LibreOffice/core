@@ -52,10 +52,11 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include <vcl/weld.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
+#include <vcl/weld.hxx>
 #include <osl/mutex.hxx>
 
 namespace dbaui

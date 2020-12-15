@@ -39,6 +39,7 @@
 #include <svl/numuno.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
+#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 
 #include <svl/zforlist.hxx>

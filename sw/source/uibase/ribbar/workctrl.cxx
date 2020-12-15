@@ -39,6 +39,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/event.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/ustring.hxx>
 #include <swabstdlg.hxx>

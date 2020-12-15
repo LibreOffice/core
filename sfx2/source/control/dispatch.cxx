@@ -63,6 +63,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/menu.hxx>
 
 #include <sfxtypes.hxx>
 #include <slotserv.hxx>

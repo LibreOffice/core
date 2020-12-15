@@ -38,6 +38,7 @@
 #include <strings.hxx>
 #include <helpids.h>
 #include "QTableWindow.hxx"
+#include <vcl/menu.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include "QueryDesignFieldUndoAct.hxx"

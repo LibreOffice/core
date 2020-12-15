@@ -24,6 +24,7 @@
 #include <vcl/notebookbar/IPrioritable.hxx>
 #include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/toolbox.hxx>
 #include <OptionalBox.hxx>

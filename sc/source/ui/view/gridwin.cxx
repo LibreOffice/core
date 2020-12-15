@@ -40,6 +40,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/inputctx.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <sot/formats.hxx>
 #include <comphelper/classids.hxx>

@@ -22,6 +22,7 @@
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <tabcont.hxx>
 #include <tabvwsh.hxx>

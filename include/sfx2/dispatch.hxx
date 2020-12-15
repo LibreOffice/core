@@ -30,9 +30,9 @@
 #include <o3tl/span.hxx>
 
 #include <boost/property_tree/ptree_fwd.hpp>
-#include <vcl/menu.hxx>
 #include <initializer_list>
 
+class Menu;
 class SfxSlotServer;
 class SfxRequest;
 class SfxViewFrame;
