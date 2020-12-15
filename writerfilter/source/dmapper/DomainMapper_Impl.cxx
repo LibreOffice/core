@@ -1393,7 +1393,7 @@ static sal_Int32 lcl_getListId(const StyleSheetEntryPtr& rEntry, const StyleShee
     return lcl_getListId(pParent, rStyleTable, rNumberingFromBaseStyle);
 }
 
-void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, const bool bRemove )
+void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, const bool bRemove, const bool bNoNumbering )
 {
     if (m_bDiscardHeaderFooter)
         return;
@@ -1448,7 +1448,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         //apply numbering level/style to paragraph if it was set at the style, but only if the paragraph itself
         //does not specify the numbering
         const sal_Int16 nListLevel = pStyleSheetProperties->GetListLevel();
-        if ( !isNumberingViaRule && nListLevel >= 0 )
+        if ( !bNoNumbering && !isNumberingViaRule && nListLevel >= 0 )
             pParaContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny(nListLevel), false );
 
         bool bNumberingFromBaseStyle = false;
@@ -1456,7 +1456,9 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         auto const pList(GetListTable()->GetList(nListId));
         if (pList && nListId >= 0 && !pParaContext->isSet(PROP_NUMBERING_STYLE_NAME))
         {
-            if ( !isNumberingViaRule )
+            if ( bNoNumbering )
+                pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny(OUString()) );
+            else if ( !isNumberingViaRule )
             {
                 isNumberingViaStyle = true;
                 // Since LO7.0/tdf#131321 fixed the loss of numbering in styles, this OUGHT to be obsolete,
