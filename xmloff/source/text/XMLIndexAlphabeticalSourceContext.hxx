@@ -62,9 +62,7 @@ public:
 
 protected:
 
-    virtual void ProcessAttribute(
-        sal_Int32 nAttributeToken,
-        const OUString& rValue) override;
+    virtual void ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter) override;
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
