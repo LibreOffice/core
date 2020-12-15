@@ -124,7 +124,9 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         //  the dialog has been opened in a different view
         //  -> lock the dispatcher for this view (modal mode)
 
-        GetViewData().GetDispatcher().Lock( true );    // lock is reset when closing dialog
+        if (!comphelper::LibreOfficeKit::isActive())
+            GetViewData().GetDispatcher().Lock( true );    // lock is reset when closing dialog
+
         return nullptr;
     }
 
