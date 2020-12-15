@@ -230,7 +230,8 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
 #endif // HAVE_FEATURE_PDFIUM
 }
 
-bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
+bool importPdfVectorGraphicData(SvStream& rStream,
+                                std::shared_ptr<VectorGraphicData>& rVectorGraphicData)
 {
     VectorGraphicDataArray aPdfDataArray = createVectorGraphicDataArray(rStream);
     if (!aPdfDataArray.hasElements())
@@ -239,10 +240,18 @@ bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
         return false;
     }
 
-    auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aPdfDataArray, OUString(),
-                                                                     VectorGraphicDataType::Pdf);
+    rVectorGraphicData = std::make_shared<VectorGraphicData>(aPdfDataArray, OUString(),
+                                                             VectorGraphicDataType::Pdf);
 
-    rGraphic = Graphic(aVectorGraphicDataPtr);
+    return true;
+}
+
+bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
+{
+    std::shared_ptr<VectorGraphicData> pVectorGraphicData;
+    if (!importPdfVectorGraphicData(rStream, pVectorGraphicData))
+        return false;
+    rGraphic = Graphic(pVectorGraphicData);
     return true;
 }
 
