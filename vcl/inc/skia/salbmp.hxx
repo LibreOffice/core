@@ -177,6 +177,7 @@ private:
     // Erase() is delayed, just sets these two instead of filling the buffer.
     bool mEraseColorSet = false;
     Color mEraseColor;
+    int mAnyAccessCount = 0; // number of any kind of AcquireAccess() that have not been released
 #ifdef DBG_UTIL
     int mWriteAccessCount = 0; // number of write AcquireAccess() that have not been released
 #endif
