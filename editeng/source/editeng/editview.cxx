@@ -1104,6 +1104,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             LOKSendSpellPopupMenu(aPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
             return;
         }
+        // note, there is special handling of this menu 'editviewspellmenu' by vcl's PopupMenu::ImplExecute
     }
     sal_uInt16 nId = aPopupMenu->Execute(pImpEditView->GetWindow(), aTempRect, PopupMenuFlags::NoMouseUpClose);
 
