@@ -148,10 +148,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="cancel">
-                <property name="label">gtk-cancel</property>
+              <object class="GtkButton" id="close">
+                <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="can_default">True</property>
                 <property name="receives-default">True</property>
                 <property name="use-stock">True</property>
               </object>
@@ -770,7 +771,7 @@
     <action-widgets>
       <action-widget response="-11">help</action-widget>
       <action-widget response="-5">ok</action-widget>
-      <action-widget response="-6">cancel</action-widget>
+      <action-widget response="-7">close</action-widget>
     </action-widgets>
   </object>
 </interface>
