@@ -16,6 +16,24 @@
       "revId": "a2be757821b2e6f7fa870797bd1f584309bf3b99",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4778f19d_01cfccfa",
+        "filename": "starmath/source/mathmlimport.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 1406,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-15T10:58:54Z",
+      "side": 1,
+      "message": "(...and using the default incrementCodePoints\u003d1 in the iterateCodePoints call...)",
+      "parentUuid": "aa3f3c4c_04a0894b",
+      "revId": "a2be757821b2e6f7fa870797bd1f584309bf3b99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
