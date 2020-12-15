@@ -16,7 +16,7 @@ class autocorrectOptions(UITestCase):
    def test_autocorrect_options_impress(self):
         self.ui_test.create_doc_in_start_center("impress")
         xTemplateDlg = self.xUITest.getTopFocusWindow()
-        xCancelBtn = xTemplateDlg.getChild("cancel")
+        xCancelBtn = xTemplateDlg.getChild("close")
         self.ui_test.close_dialog_through_button(xCancelBtn)
         document = self.ui_test.get_component()
 

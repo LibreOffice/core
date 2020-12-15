@@ -13,7 +13,7 @@ class tdf91762(UITestCase):
    def test_tdf91762(self):
         self.ui_test.create_doc_in_start_center("impress")
         xTemplateDlg = self.xUITest.getTopFocusWindow()
-        xCancelBtn = xTemplateDlg.getChild("cancel")
+        xCancelBtn = xTemplateDlg.getChild("close")
         self.ui_test.close_dialog_through_button(xCancelBtn)
 
         self.xUITest.executeCommand(".uno:AssignLayout?WhatLayout:long=1")
