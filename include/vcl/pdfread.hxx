@@ -34,7 +34,12 @@ VCL_DLLPUBLIC size_t RenderPDFBitmaps(const void* pBuffer, int nSize,
                                       std::vector<BitmapEx>& rBitmaps, size_t nFirstPage = 0,
                                       int nPages = 1, const basegfx::B2DTuple* pSizeHint = nullptr);
 
-/// Imports a PDF stream into rGraphic as VectorGraphicData.
+/// Imports a PDF stream as a VectorGraphicData.
+VCL_DLLPUBLIC bool
+importPdfVectorGraphicData(SvStream& rStream,
+                           std::shared_ptr<VectorGraphicData>& rVectorGraphicData);
+
+/// Imports a PDF stream into rGraphic.
 VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic);
 
 struct PDFGraphicAnnotation
