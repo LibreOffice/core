@@ -32,7 +32,7 @@ XMLOpaquePropHdl::~XMLOpaquePropHdl()
     // nothing to do
 }
 
-bool XMLOpaquePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLOpaquePropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bValue = IsXMLToken( rStrImpValue, XML_FOREGROUND );
     rValue <<= bValue;

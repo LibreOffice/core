@@ -29,7 +29,7 @@ XMLTextOrientationHdl::~XMLTextOrientationHdl()
 }
 
 bool XMLTextOrientationHdl::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     css::uno::Any& rValue,
     const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {

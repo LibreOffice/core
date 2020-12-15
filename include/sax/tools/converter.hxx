@@ -184,6 +184,13 @@ public:
                                 sal_Int16 nSourceUnit,
                                 sal_Int16 nTargetUnit );
 
+    /** convert string to double number (using ::rtl::math) and DO convert from
+        source unit to target unit. */
+    static bool convertDouble(  double& rValue,
+                                std::string_view rString,
+                                sal_Int16 nSourceUnit,
+                                sal_Int16 nTargetUnit );
+
     /** convert string to double number (using ::rtl::math) without unit conversion */
     static bool convertDouble(double& rValue, std::u16string_view rString);
 
@@ -221,6 +228,10 @@ public:
     /** convert XMLSchema-2 "duration" string to util::Duration */
     static bool convertDuration(css::util::Duration& rDuration,
                         std::u16string_view rString);
+
+    /** convert XMLSchema-2 "duration" string to util::Duration */
+    static bool convertDuration(css::util::Duration& rDuration,
+                        std::string_view rString);
 
     /** convert util::Date to XMLSchema-2 "date" string */
     static void convertDate( OUStringBuffer& rBuffer,
@@ -274,6 +285,11 @@ public:
     /** gets the position of the first comma after npos in the string
         rStr. Commas inside '"' pairs are not matched */
     static sal_Int32 indexOfComma( std::u16string_view rStr,
+                                   sal_Int32 nPos );
+
+    /** gets the position of the first comma after npos in the string
+        rStr. Commas inside '"' pairs are not matched */
+    static sal_Int32 indexOfComma( std::string_view rStr,
                                    sal_Int32 nPos );
 
     static double GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit);

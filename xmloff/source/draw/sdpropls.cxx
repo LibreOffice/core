@@ -767,7 +767,7 @@ class XMLCaptionEscapeRelative : public XMLPropertyHandler
 {
 public:
     virtual bool importXML(
-            const OUString& rStrImpValue,
+            std::string_view rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML(
@@ -778,7 +778,7 @@ public:
 
 }
 
-bool XMLCaptionEscapeRelative::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCaptionEscapeRelative::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue;
 
@@ -811,7 +811,7 @@ public:
     explicit XMLMoveSizeProtectHdl( sal_Int32 nType ) : mnType( nType ) {}
 
     virtual bool importXML(
-            const OUString& rStrImpValue,
+            std::string_view rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML(
@@ -824,9 +824,9 @@ private:
 
 }
 
-bool XMLMoveSizeProtectHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLMoveSizeProtectHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    const bool bValue = rStrImpValue.indexOf( GetXMLToken( mnType == XML_SD_TYPE_MOVE_PROTECT ? XML_POSITION : XML_SIZE ) ) != -1;
+    const bool bValue = mnType == XML_SD_TYPE_MOVE_PROTECT ? IsXMLToken(rStrImpValue, XML_POSITION) : IsXMLToken(rStrImpValue, XML_SIZE);
     rValue <<= bValue;
     return true;
 }
@@ -853,14 +853,14 @@ namespace {
 class XMLSdHeaderFooterVisibilityTypeHdl : public XMLPropertyHandler
 {
 public:
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
 }
 
 bool XMLSdHeaderFooterVisibilityTypeHdl::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
         css::uno::Any& rValue,
         const SvXMLUnitConverter& ) const
 {
@@ -897,14 +897,14 @@ namespace {
 class XMLSdRotationAngleTypeHdl : public XMLPropertyHandler
 {
 public:
-    virtual bool importXML(const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter) const override;
+    virtual bool importXML(std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter) const override;
     virtual bool exportXML(OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter) const override;
 };
 
 }
 
 bool XMLSdRotationAngleTypeHdl::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     css::uno::Any& rValue,
     const SvXMLUnitConverter&) const
 {
@@ -951,7 +951,7 @@ public:
             const SvXMLEnumMapEntry<drawing::TextFitToSizeType> *const pMap)
         : XMLEnumPropertyHdl(pMap) {}
 
-    virtual bool importXML(const OUString& rStrImpValue, uno::Any& rValue,
+    virtual bool importXML(std::string_view rStrImpValue, uno::Any& rValue,
                            const SvXMLUnitConverter& rUC) const override
     {
         // we don't know here what the actual attribute name is -

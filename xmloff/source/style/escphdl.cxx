@@ -37,11 +37,12 @@ XMLEscapementPropHdl::~XMLEscapementPropHdl()
     // nothing to do
 }
 
-bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLEscapementPropHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int16 nVal;
 
-    SvXMLTokenEnumerator aTokens( rStrImpValue );
+    OUString sValue = OUString::fromUtf8(rStrImpValue);
+    SvXMLTokenEnumerator aTokens( sValue );
 
     std::u16string_view aToken;
     if( ! aTokens.getNextToken( aToken ) )
@@ -101,12 +102,13 @@ XMLEscapementHeightPropHdl::~XMLEscapementHeightPropHdl()
     // nothing to do
 }
 
-bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLEscapementHeightPropHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     if( IsXMLToken( rStrImpValue, XML_CASEMAP_SMALL_CAPS ) )
         return false;
 
-    SvXMLTokenEnumerator aTokens( rStrImpValue );
+    OUString sValue = OUString::fromUtf8(rStrImpValue);
+    SvXMLTokenEnumerator aTokens( sValue );
 
     std::u16string_view aToken;
     if( ! aTokens.getNextToken( aToken ) )

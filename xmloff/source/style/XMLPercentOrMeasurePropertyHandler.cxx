@@ -39,11 +39,11 @@ XMLPercentOrMeasurePropertyHandler::~XMLPercentOrMeasurePropertyHandler()
 }
 
 bool XMLPercentOrMeasurePropertyHandler::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
 {
-    if( rStrImpValue.indexOf( '%' ) != -1 )
+    if( rStrImpValue.find( '%' ) != std::string_view::npos )
         return false;
 
     sal_Int32 nValue;

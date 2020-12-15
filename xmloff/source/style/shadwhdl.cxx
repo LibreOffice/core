@@ -40,7 +40,7 @@ XMLShadowPropHdl::~XMLShadowPropHdl()
     // nothing to do
 }
 
-bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLShadowPropHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     bool bRet = false;
     table::ShadowFormat aShadow;
@@ -48,7 +48,8 @@ bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
 
     bool bColorFound = false;
     bool bOffsetFound = false;
-    SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
+    OUString sValue = OUString::fromUtf8(rStrImpValue);
+    SvXMLTokenEnumerator aTokenEnum( sValue );
     Color aColor( 128,128, 128 );
     std::u16string_view aToken;
 

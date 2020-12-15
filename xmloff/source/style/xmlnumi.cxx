@@ -546,8 +546,8 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
 {
     SvXMLUnitConverter& rUnitConv = GetImport().GetMM100UnitConverter();
 
-    OUString sFontName, sFontFamily, sFontStyleName, sFontFamilyGeneric,
-             sFontPitch, sFontCharset;
+    OUString sFontName, sFontStyleName;
+    std::string_view sFontFamily, sFontFamilyGeneric, sFontPitch, sFontCharset;
     OUString sVerticalPos, sVerticalRel;
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
@@ -584,19 +584,19 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
             break;
         case XML_ELEMENT(FO, XML_FONT_FAMILY):
         case XML_ELEMENT(FO_COMPAT, XML_FONT_FAMILY):
-            sFontFamily = aIter.toString();
+            sFontFamily = aIter.toView();
             break;
         case XML_ELEMENT(STYLE, XML_FONT_FAMILY_GENERIC):
-            sFontFamilyGeneric = aIter.toString();
+            sFontFamilyGeneric = aIter.toView();
             break;
         case XML_ELEMENT(STYLE, XML_FONT_STYLE_NAME):
             sFontStyleName = aIter.toString();
             break;
         case XML_ELEMENT(STYLE, XML_FONT_PITCH):
-            sFontPitch = aIter.toString();
+            sFontPitch = aIter.toView();
             break;
         case XML_ELEMENT(STYLE, XML_FONT_CHARSET):
-            sFontCharset = aIter.toString();
+            sFontCharset = aIter.toView();
             break;
         case XML_ELEMENT(STYLE, XML_VERTICAL_POS):
             sVerticalPos = aIter.toString();
@@ -686,7 +686,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
             }
         }
     }
-    if( !sFontFamily.isEmpty() )
+    if( !sFontFamily.empty() )
     {
         Any aAny;
 
@@ -699,7 +699,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
         }
 
         XMLFontFamilyPropHdl aFamilyHdl;
-        if( !sFontFamilyGeneric.isEmpty() &&
+        if( !sFontFamilyGeneric.empty() &&
             aFamilyHdl.importXML( sFontFamilyGeneric, aAny, rUnitConv  ) )
         {
             sal_Int16 nTmp = 0;
@@ -711,7 +711,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
             rListLevel.SetBulletFontStyleName( sFontStyleName );
 
         XMLFontPitchPropHdl aPitchHdl;
-        if( !sFontPitch.isEmpty() &&
+        if( !sFontPitch.empty() &&
             aPitchHdl.importXML( sFontPitch, aAny, rUnitConv  ) )
         {
             sal_Int16 nTmp = 0;
@@ -720,7 +720,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
         }
 
         XMLFontEncodingPropHdl aEncHdl;
-        if( !sFontCharset.isEmpty() &&
+        if( !sFontCharset.empty() &&
             aEncHdl.importXML( sFontCharset, aAny, rUnitConv  ) )
         {
             sal_Int16 nTmp = 0;

@@ -33,7 +33,7 @@ using namespace com::sun::star;
 XMLErrorIndicatorPropertyHdl::~XMLErrorIndicatorPropertyHdl()
 {}
 
-bool XMLErrorIndicatorPropertyHdl::importXML( const OUString& rStrImpValue,
+bool XMLErrorIndicatorPropertyHdl::importXML( std::string_view rStrImpValue,
                                                   uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     bool bValue(false);

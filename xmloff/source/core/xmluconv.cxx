@@ -524,6 +524,37 @@ bool SvXMLTokenEnumerator::getNextToken( std::u16string_view& rToken )
     return true;
 }
 
+SvXMLTokenEnumeratorChar::SvXMLTokenEnumeratorChar( std::string_view rString, char cSeparator /* = ' ' */ )
+: maTokenString( rString ), mnNextTokenPos(0), mcSeparator( cSeparator )
+{
+}
+
+bool SvXMLTokenEnumeratorChar::getNextToken( std::string_view& rToken )
+{
+    if( std::string_view::npos == mnNextTokenPos )
+        return false;
+
+    size_t nTokenEndPos = maTokenString.find( mcSeparator, mnNextTokenPos );
+    if( nTokenEndPos != std::string_view::npos )
+    {
+        rToken = maTokenString.substr( mnNextTokenPos,
+                                     nTokenEndPos - mnNextTokenPos );
+        mnNextTokenPos = nTokenEndPos + 1;
+
+        // if the mnNextTokenPos is at the end of the string, we have
+        // to deliver an empty token
+        if( mnNextTokenPos > maTokenString.size() )
+            mnNextTokenPos = std::u16string_view::npos;
+    }
+    else
+    {
+        rToken = maTokenString.substr( mnNextTokenPos );
+        mnNextTokenPos = std::string_view::npos;
+    }
+
+    return true;
+}
+
 static bool lcl_getPositions(std::u16string_view _sValue, OUString& _rContentX, OUString& _rContentY, OUString& _rContentZ)
 {
     if(_sValue.empty() || _sValue[0] != '(')
@@ -954,6 +985,23 @@ OUString SvXMLUnitConverter::encodeStyleName(
 
 /** convert string (hex) to number (sal_uInt32) */
 bool SvXMLUnitConverter::convertHex( sal_uInt32& nVal, std::u16string_view rValue )
+{
+    if( rValue.size() != 8 )
+        return false;
+
+    nVal = 0;
+    for ( int i = 0; i < 8; i++ )
+    {
+        nVal = ( nVal << 4 )
+            | sal::static_int_cast< sal_uInt32 >( lcl_gethex( rValue[i] ) );
+    }
+
+    return true;
+}
+
+/** convert string (hex) to number (sal_uInt32) */
+bool SvXMLUnitConverter::convertHex( sal_uInt32& nVal,
+                                       std::string_view rValue )
 {
     if( rValue.size() != 8 )
         return false;

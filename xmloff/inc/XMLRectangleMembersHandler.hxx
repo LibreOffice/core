@@ -41,7 +41,7 @@ public:
 
     /// Imports the given value in case of the given XML-data-type
     virtual bool importXML(
-            const OUString& rStrImpValue,
+            std::string_view rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
 

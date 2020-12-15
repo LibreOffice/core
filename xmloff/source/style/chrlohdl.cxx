@@ -74,15 +74,16 @@ bool XMLCharLanguageHdl::equals( const css::uno::Any& r1, const css::uno::Any& r
     return bRet;
 }
 
-bool XMLCharLanguageHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharLanguageHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     lang::Locale aLocale;
     rValue >>= aLocale;
 
     if( !IsXMLToken(rStrImpValue, XML_NONE) )
     {
+        OUString sValue = OUString::fromUtf8(rStrImpValue);
         if (aLocale.Variant.isEmpty())
-            aLocale.Language = rStrImpValue;
+            aLocale.Language = sValue;
         else
         {
             if (!aLocale.Language.isEmpty() || aLocale.Variant[0] != '-')
@@ -92,7 +93,7 @@ bool XMLCharLanguageHdl::importXML( const OUString& rStrImpValue, uno::Any& rVal
             }
             else
             {
-                aLocale.Variant = rStrImpValue + aLocale.Variant;
+                aLocale.Variant = sValue + aLocale.Variant;
                 if (!aLocale.Country.isEmpty())
                     aLocale.Variant += "-" + aLocale.Country;
                 aLocale.Language = I18NLANGTAG_QLT;
@@ -166,13 +167,14 @@ bool XMLCharScriptHdl::equals( const css::uno::Any& r1, const css::uno::Any& r2 
     return bRet;
 }
 
-bool XMLCharScriptHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharScriptHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     lang::Locale aLocale;
     rValue >>= aLocale;
 
     if( !IsXMLToken( rStrImpValue, XML_NONE ) )
     {
+        OUString sValue = OUString::fromUtf8(rStrImpValue);
         // Import the script only if we don't have a full BCP 47 language tag
         // in Variant yet.
         if (aLocale.Variant.isEmpty())
@@ -182,11 +184,11 @@ bool XMLCharScriptHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
                 SAL_INFO( "xmloff.style", "XMLCharScriptHdl::importXML - script but no language yet");
                 // Temporarily store in Variant and hope the best (we will get
                 // a language later, yes?)
-                aLocale.Variant = "-" + rStrImpValue;
+                aLocale.Variant = "-" + sValue;
             }
             else
             {
-                aLocale.Variant = aLocale.Language + "-" + rStrImpValue;
+                aLocale.Variant = aLocale.Language + "-" + sValue;
                 if (!aLocale.Country.isEmpty())
                     aLocale.Variant += "-" + aLocale.Country;
                 aLocale.Language = I18NLANGTAG_QLT;
@@ -195,7 +197,7 @@ bool XMLCharScriptHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
         else if (aLocale.Variant[0] == '-')
         {
             SAL_WARN( "xmloff.style", "XMLCharScriptHdl::importXML - attempt to insert script twice: "
-                    << rStrImpValue << " -> " << aLocale.Variant);
+                    << sValue << " -> " << aLocale.Variant);
         }
         else
         {
@@ -208,7 +210,7 @@ bool XMLCharScriptHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
             if (!aLanguageTag.hasScript())
             {
                 SAL_WARN( "xmloff.style", "XMLCharScriptHdl::importXML - attempt to insert script over bcp47: "
-                        << rStrImpValue << " -> " << aLanguageTag.getBcp47());
+                        << sValue << " -> " << aLanguageTag.getBcp47());
             }
 #endif
         }
@@ -260,7 +262,7 @@ bool XMLCharCountryHdl::equals( const css::uno::Any& r1, const css::uno::Any& r2
     return bRet;
 }
 
-bool XMLCharCountryHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharCountryHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     lang::Locale aLocale;
     rValue >>= aLocale;
@@ -269,7 +271,7 @@ bool XMLCharCountryHdl::importXML( const OUString& rStrImpValue, uno::Any& rValu
     {
         if (aLocale.Country.isEmpty())
         {
-            aLocale.Country = rStrImpValue;
+            aLocale.Country = OUString::fromUtf8(rStrImpValue);
             if (aLocale.Variant.getLength() >= 7 && aLocale.Language == I18NLANGTAG_QLT)
             {
                 // already assembled language tag, at least ll-Ssss and not
@@ -279,7 +281,7 @@ bool XMLCharCountryHdl::importXML( const OUString& rStrImpValue, uno::Any& rValu
                 {
                     i = aLocale.Variant.indexOf( '-', i+1);
                     if (i < 0)                                  // no other separator
-                        aLocale.Variant += "-" + rStrImpValue;  // append country
+                        aLocale.Variant += "-" + OUString::fromUtf8(rStrImpValue);  // append country
                 }
             }
         }
@@ -331,14 +333,14 @@ bool XMLCharRfcLanguageTagHdl::equals( const css::uno::Any& r1, const css::uno::
     return bRet;
 }
 
-bool XMLCharRfcLanguageTagHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharRfcLanguageTagHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     lang::Locale aLocale;
     rValue >>= aLocale;
 
     if( !IsXMLToken( rStrImpValue, XML_NONE ) )
     {
-        aLocale.Variant = rStrImpValue;
+        aLocale.Variant = OUString::fromUtf8(rStrImpValue);
         aLocale.Language = I18NLANGTAG_QLT;
     }
 

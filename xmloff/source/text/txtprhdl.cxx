@@ -260,7 +260,7 @@ public:
 
     /// TabStops will be imported/exported as XML-Elements. So the Import/Export-work must be done at another place.
     virtual bool importXML(
-            const OUString& rStrImpValue,
+            std::string_view rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
@@ -286,7 +286,7 @@ bool XMLDropCapPropHdl_Impl::equals(
 }
 
 bool XMLDropCapPropHdl_Impl::importXML(
-        const OUString&,
+        std::string_view,
            Any&,
         const SvXMLUnitConverter& ) const
 {
@@ -309,7 +309,7 @@ class XMLOpaquePropHdl_Impl : public XMLPropertyHandler
 {
 public:
     virtual bool importXML(
-            const OUString& rStrImpValue,
+            std::string_view rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
@@ -321,7 +321,7 @@ public:
 }
 
 bool XMLOpaquePropHdl_Impl::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {
@@ -357,7 +357,7 @@ class XMLContourModePropHdl_Impl : public XMLPropertyHandler
 {
 public:
     virtual bool importXML(
-            const OUString& rStrImpValue,
+            std::string_view rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
@@ -369,7 +369,7 @@ public:
 }
 
 bool XMLContourModePropHdl_Impl::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {
@@ -405,7 +405,7 @@ class XMLParagraphOnlyPropHdl_Impl : public XMLPropertyHandler
 {
 public:
     virtual bool importXML(
-            const OUString& rStrImpValue,
+            std::string_view rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
@@ -417,7 +417,7 @@ public:
 }
 
 bool XMLParagraphOnlyPropHdl_Impl::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {
@@ -467,7 +467,7 @@ class XMLWrapPropHdl_Impl : public XMLPropertyHandler
 {
 public:
     virtual bool importXML(
-            const OUString& rStrImpValue,
+            std::string_view rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
@@ -479,7 +479,7 @@ public:
 }
 
 bool XMLWrapPropHdl_Impl::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {
@@ -514,13 +514,13 @@ namespace {
 
 class XMLFrameProtectPropHdl_Impl : public XMLPropertyHandler
 {
-    const OUString sVal;
+    XMLTokenEnum meVal;
 public:
     explicit XMLFrameProtectPropHdl_Impl( enum XMLTokenEnum eVal ) :
-           sVal( GetXMLToken(eVal) ) {}
+           meVal( eVal ) {}
 
     virtual bool importXML(
-            const OUString& rStrImpValue,
+            std::string_view rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
@@ -532,7 +532,7 @@ public:
 }
 
 bool XMLFrameProtectPropHdl_Impl::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {
@@ -541,12 +541,12 @@ bool XMLFrameProtectPropHdl_Impl::importXML(
     if( ! IsXMLToken( rStrImpValue, XML_NONE ) )
     {
         bRet = false;
-        SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
-        std::u16string_view aToken;
+        SvXMLTokenEnumeratorChar aTokenEnum( rStrImpValue );
+        std::string_view aToken;
         while( aTokenEnum.getNextToken( aToken ) )
         {
             bRet = true;
-            if( aToken == sVal )
+            if( IsXMLToken(aToken, meVal) )
             {
                 bVal = true;
                 break;
@@ -570,11 +570,11 @@ bool XMLFrameProtectPropHdl_Impl::exportXML(
         if( rStrExpValue.isEmpty() ||
             IsXMLToken( rStrExpValue, XML_NONE ) )
         {
-               rStrExpValue = sVal;
+               rStrExpValue = GetXMLToken(meVal);
         }
         else
         {
-            rStrExpValue += " " + sVal;
+            rStrExpValue += " " + GetXMLToken(meVal);
         }
     }
     else if( rStrExpValue.isEmpty() )
@@ -596,7 +596,7 @@ SvXMLEnumMapEntry<TextContentAnchorType> const pXML_Anchor_Enum[] =
 };
 
 bool XMLAnchorTypePropHdl::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {
@@ -672,7 +672,7 @@ bool XMLTextColumnsPropertyHandler::equals(
 }
 
 bool XMLTextColumnsPropertyHandler::importXML(
-        const OUString&,
+        std::string_view,
            Any&,
         const SvXMLUnitConverter& ) const
 {
@@ -695,7 +695,7 @@ class XMLHoriMirrorPropHdl_Impl : public XMLPropertyHandler
 {
 public:
     virtual bool importXML(
-            const OUString& rStrImpValue,
+            std::string_view rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
@@ -707,7 +707,7 @@ public:
 }
 
 bool XMLHoriMirrorPropHdl_Impl::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {
@@ -737,16 +737,16 @@ namespace {
 
 class XMLGrfMirrorPropHdl_Impl : public XMLPropertyHandler
 {
-    const OUString sVal;
+    XMLTokenEnum meVal;
     bool bHori;
 
 public:
     XMLGrfMirrorPropHdl_Impl( enum XMLTokenEnum eVal, bool bH ) :
-           sVal( GetXMLToken( eVal ) ),
+           meVal( eVal ),
         bHori( bH ) {}
 
     virtual bool importXML(
-            const OUString& rStrImpValue,
+            std::string_view rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
@@ -758,7 +758,7 @@ public:
 }
 
 bool XMLGrfMirrorPropHdl_Impl::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {
@@ -767,12 +767,12 @@ bool XMLGrfMirrorPropHdl_Impl::importXML(
     if( ! IsXMLToken( rStrImpValue, XML_NONE ) )
     {
         bRet = false;
-        SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
-        std::u16string_view aToken;
+        SvXMLTokenEnumeratorChar aTokenEnum( rStrImpValue );
+        std::string_view aToken;
         while( aTokenEnum.getNextToken( aToken ) )
         {
             bRet = true;
-            if( aToken == sVal ||
+            if( IsXMLToken(aToken, meVal) ||
                  (bHori && IsXMLToken( aToken, XML_HORIZONTAL ) ) )
             {
                 bVal = true;
@@ -797,7 +797,7 @@ bool XMLGrfMirrorPropHdl_Impl::exportXML(
         if( rStrExpValue.isEmpty() ||
             IsXMLToken( rStrExpValue, XML_NONE ) )
         {
-               rStrExpValue = sVal;
+               rStrExpValue = GetXMLToken(meVal);
         }
         else if( bHori &&
                  /* XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
@@ -811,7 +811,7 @@ bool XMLGrfMirrorPropHdl_Impl::exportXML(
         }
         else
         {
-            rStrExpValue += " " + sVal;
+            rStrExpValue += " " + GetXMLToken(meVal);
         }
     }
     else if( rStrExpValue.isEmpty() )
@@ -840,7 +840,7 @@ public:
     XMLTextEmphasizePropHdl_Impl() {}
 
     virtual bool importXML(
-            const OUString& rStrImpValue,
+            std::string_view rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
@@ -852,7 +852,7 @@ public:
 }
 
 bool XMLTextEmphasizePropHdl_Impl::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {
@@ -862,7 +862,8 @@ bool XMLTextEmphasizePropHdl_Impl::importXML(
     bool bHasPos = false, bHasType = false;
     std::u16string_view aToken;
 
-    SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
+    OUString sValue = OUString::fromUtf8(rStrImpValue);
+    SvXMLTokenEnumerator aTokenEnum( sValue );
     while( aTokenEnum.getNextToken( aToken ) )
     {
         if( !bHasPos && IsXMLToken( aToken, XML_ABOVE ) )
@@ -940,7 +941,7 @@ public:
     XMLTextCombineCharPropHdl_Impl() {}
 
     virtual bool importXML(
-            const OUString& rStrImpValue,
+            std::string_view rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
@@ -952,14 +953,13 @@ public:
 }
 
 bool XMLTextCombineCharPropHdl_Impl::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    if( !rStrImpValue.isEmpty() )
-        rValue <<= rStrImpValue.copy( 0, 1 );
-    else
-        rValue <<= rStrImpValue;
+    if( !rStrImpValue.empty() )
+        rStrImpValue = rStrImpValue.substr( 0, 1 );
+    rValue <<= OUString::fromUtf8(rStrImpValue);
 
     return true;
 }
@@ -983,7 +983,7 @@ public:
     XMLTextRelWidthHeightPropHdl_Impl() {}
 
     virtual bool importXML(
-            const OUString& rStrImpValue,
+            std::string_view rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
@@ -995,7 +995,7 @@ public:
 }
 
 bool XMLTextRelWidthHeightPropHdl_Impl::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {
@@ -1030,14 +1030,14 @@ namespace {
 
 class XMLTextSyncWidthHeightPropHdl_Impl : public XMLPropertyHandler
 {
-    const OUString sValue;
+    enum XMLTokenEnum meValue;
 
 public:
     explicit XMLTextSyncWidthHeightPropHdl_Impl( enum XMLTokenEnum eValue ) :
-           sValue( GetXMLToken(eValue) )    {}
+           meValue( eValue )    {}
 
     virtual bool importXML(
-            const OUString& rStrImpValue,
+            std::string_view rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
@@ -1049,11 +1049,11 @@ public:
 }
 
 bool XMLTextSyncWidthHeightPropHdl_Impl::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    rValue <<= (rStrImpValue == sValue);
+    rValue <<= IsXMLToken(rStrImpValue, meValue);
 
     return true;
 }
@@ -1066,7 +1066,7 @@ bool XMLTextSyncWidthHeightPropHdl_Impl::exportXML(
     bool bRet = false;
     if( *o3tl::doAccess<bool>(rValue) )
     {
-        rStrExpValue = sValue;
+        rStrExpValue = GetXMLToken(meValue);
         bRet = true;
     }
 
@@ -1082,7 +1082,7 @@ public:
     XMLTextRotationAnglePropHdl_Impl()  {}
 
     virtual bool importXML(
-            const OUString& rStrImpValue,
+            std::string_view rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
@@ -1094,7 +1094,7 @@ public:
 }
 
 bool XMLTextRotationAnglePropHdl_Impl::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {
@@ -1143,7 +1143,7 @@ public:
     XMLNumber8OneBasedHdl() {}
 
     virtual bool importXML(
-            const OUString& rStrImpValue,
+            std::string_view rStrImpValue,
             css::uno::Any& rValue,
             const SvXMLUnitConverter& ) const override;
     virtual bool exportXML(
@@ -1155,7 +1155,7 @@ public:
 }
 
 bool XMLNumber8OneBasedHdl::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {
@@ -1187,7 +1187,7 @@ class XMLGraphicPropertyHandler : public XMLPropertyHandler
 public:
     XMLGraphicPropertyHandler() {}
 
-    virtual bool importXML(const OUString& , uno::Any& , const SvXMLUnitConverter& ) const override
+    virtual bool importXML(std::string_view , uno::Any& , const SvXMLUnitConverter& ) const override
     {
         SAL_WARN( "xmloff", "drop caps are an element import property" );
         return false;

@@ -686,6 +686,29 @@ bool Converter::convertDouble(double& rValue,
 }
 
 /** convert string to double number (using ::rtl::math) */
+bool Converter::convertDouble(double& rValue,
+    std::string_view rString, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit)
+{
+    rtl_math_ConversionStatus eStatus;
+    rValue = rtl_math_stringToDouble(rString.data(),
+                                    rString.data() + rString.size(),
+                                    '.', ',',
+                                    &eStatus, nullptr);
+
+    if(eStatus == rtl_math_ConversionStatus_Ok)
+    {
+        OUStringBuffer sUnit;
+        // fdo#48969: switch source and target because factor is used to divide!
+        double const fFactor =
+            GetConversionFactor(sUnit, nTargetUnit, nSourceUnit);
+        if(fFactor != 1.0 && fFactor != 0.0)
+            rValue /= fFactor;
+    }
+
+    return ( eStatus == rtl_math_ConversionStatus_Ok );
+}
+
+/** convert string to double number (using ::rtl::math) */
 bool Converter::convertDouble(double& rValue, std::u16string_view rString)
 {
     rtl_math_ConversionStatus eStatus;
@@ -1172,6 +1195,36 @@ readUnsignedNumber(V rString,
 
 template<typename V>
 static Result
+readUnsignedNumber(std::string_view rString,
+    size_t & io_rnPos, sal_Int32 & o_rNumber)
+{
+    size_t nPos(io_rnPos);
+
+    while (nPos < rString.size())
+    {
+        const char c = rString[nPos];
+        if (('0' > c) || (c > '9'))
+            break;
+        ++nPos;
+    }
+
+    if (io_rnPos == nPos) // read something?
+    {
+        o_rNumber = -1;
+        return R_NOTHING;
+    }
+
+    const sal_Int64 nTemp = rtl_str_toInt64_WithLength(rString.data() + io_rnPos, 10, nPos - io_rnPos);
+
+    const bool bOverflow = (nTemp >= SAL_MAX_INT32);
+
+    io_rnPos = nPos;
+    o_rNumber = nTemp;
+    return bOverflow ? R_OVERFLOW : R_SUCCESS;
+}
+
+template<typename V>
+static Result
 readUnsignedNumberMaxDigits(int maxDigits,
                             V rString, size_t & io_rnPos,
                             sal_Int32 & o_rNumber)
@@ -1184,6 +1237,50 @@ readUnsignedNumberMaxDigits(int maxDigits,
     while (nPos < rString.size())
     {
         const sal_Unicode c = rString[nPos];
+        if (('0' <= c) && (c <= '9'))
+        {
+            if (maxDigits > 0)
+            {
+                nTemp *= 10;
+                nTemp += (c - u'0');
+                if (nTemp >= SAL_MAX_INT32)
+                {
+                    bOverflow = true;
+                }
+                --maxDigits;
+            }
+        }
+        else
+        {
+            break;
+        }
+        ++nPos;
+    }
+
+    if (io_rnPos == nPos) // read something?
+    {
+        o_rNumber = -1;
+        return R_NOTHING;
+    }
+
+    io_rnPos = nPos;
+    o_rNumber = nTemp;
+    return bOverflow ? R_OVERFLOW : R_SUCCESS;
+}
+
+static Result
+readUnsignedNumberMaxDigits(int maxDigits,
+                            std::string_view rString, size_t & io_rnPos,
+                            sal_Int32 & o_rNumber)
+{
+    bool bOverflow(false);
+    sal_Int64 nTemp(0);
+    size_t nPos(io_rnPos);
+    OSL_ENSURE(maxDigits >= 0, "negative amount of digits makes no sense");
+
+    while (nPos < rString.size())
+    {
+        const char c = rString[nPos];
         if (('0' <= c) && (c <= '9'))
         {
             if (maxDigits > 0)
@@ -1228,7 +1325,49 @@ readDurationT(std::u16string_view rString, size_t & io_rnPos)
 }
 
 static bool
+readDurationT(std::string_view rString, size_t & io_rnPos)
+{
+    if ((io_rnPos < rString.size()) &&
+        (rString[io_rnPos] == 'T' || rString[io_rnPos] == 't'))
+    {
+        ++io_rnPos;
+        return true;
+    }
+    return false;
+}
+
+static bool
 readDurationComponent(std::u16string_view rString,
+    size_t & io_rnPos, sal_Int32 & io_rnTemp, bool & io_rbTimePart,
+    sal_Int32 & o_rnTarget, const sal_Unicode cLower, const sal_Unicode cUpper)
+{
+    if (io_rnPos < rString.size())
+    {
+        if (cLower == rString[io_rnPos] || cUpper == rString[io_rnPos])
+        {
+            ++io_rnPos;
+            if (-1 != io_rnTemp)
+            {
+                o_rnTarget = io_rnTemp;
+                io_rnTemp = -1;
+                if (!io_rbTimePart)
+                {
+                    io_rbTimePart = readDurationT(rString, io_rnPos);
+                }
+                return (R_OVERFLOW !=
+                        readUnsignedNumber(rString, io_rnPos, io_rnTemp));
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+static bool
+readDurationComponent(std::string_view rString,
     size_t & io_rnPos, sal_Int32 & io_rnTemp, bool & io_rbTimePart,
     sal_Int32 & o_rnTarget, const sal_Unicode cLower, const sal_Unicode cUpper)
 {
@@ -1417,6 +1556,165 @@ bool Converter::convertDuration(util::Duration& rDuration,
     return bSuccess;
 }
 
+/** convert ISO8601 "duration" string to util::Duration */
+bool Converter::convertDuration(util::Duration& rDuration,
+                                std::string_view rString)
+{
+    std::string_view string = trim(rString);
+    size_t nPos(0);
+
+    bool bIsNegativeDuration(false);
+    if (!string.empty() && ('-' == string[0]))
+    {
+        bIsNegativeDuration = true;
+        ++nPos;
+    }
+
+    if (nPos < string.size()
+        && string[nPos] != 'P' && string[nPos] != 'p') // duration must start with "P"
+    {
+        return false;
+    }
+
+    ++nPos;
+
+    /// last read number; -1 == no valid number! always reset after using!
+    sal_Int32 nTemp(-1);
+    bool bTimePart(false); // have we read 'T'?
+    bool bSuccess(false);
+    sal_Int32 nYears(0);
+    sal_Int32 nMonths(0);
+    sal_Int32 nDays(0);
+    sal_Int32 nHours(0);
+    sal_Int32 nMinutes(0);
+    sal_Int32 nSeconds(0);
+    sal_Int32 nNanoSeconds(0);
+
+    bTimePart = readDurationT(string, nPos);
+    bSuccess = (R_SUCCESS == readUnsignedNumber(string, nPos, nTemp));
+
+    if (!bTimePart && bSuccess)
+    {
+        bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
+                     nYears, 'y', 'Y');
+    }
+
+    if (!bTimePart && bSuccess)
+    {
+        bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
+                     nMonths, 'm', 'M');
+    }
+
+    if (!bTimePart && bSuccess)
+    {
+        bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
+                     nDays, 'd', 'D');
+    }
+
+    if (bTimePart)
+    {
+        if (-1 == nTemp) // a 'T' must be followed by a component
+        {
+            bSuccess = false;
+        }
+
+        if (bSuccess)
+        {
+            bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
+                         nHours, 'h', 'H');
+        }
+
+        if (bSuccess)
+        {
+            bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
+                         nMinutes, 'm', 'M');
+        }
+
+        // eeek! seconds are icky.
+        if ((nPos < string.size()) && bSuccess)
+        {
+            if (string[nPos] == '.' ||
+                string[nPos] == ',')
+            {
+                ++nPos;
+                if (-1 != nTemp)
+                {
+                    nSeconds = nTemp;
+                    nTemp = -1;
+                    const sal_Int32 nStart(nPos);
+                    bSuccess = readUnsignedNumberMaxDigits(9, string, nPos, nTemp) == R_SUCCESS;
+                    if ((nPos < string.size()) && bSuccess)
+                    {
+                        if (-1 != nTemp)
+                        {
+                            nNanoSeconds = nTemp;
+                            sal_Int32 nDigits = nPos - nStart;
+                            assert(nDigits >= 0);
+                            for (; nDigits < 9; ++nDigits)
+                            {
+                                nNanoSeconds *= 10;
+                            }
+                            nTemp=-1;
+                            if ('S' == string[nPos] || 's' == string[nPos])
+                            {
+                                ++nPos;
+                            }
+                            else
+                            {
+                                bSuccess = false;
+                            }
+                        }
+                        else
+                        {
+                            bSuccess = false;
+                        }
+                    }
+                }
+                else
+                {
+                    bSuccess = false;
+                }
+            }
+            else if ('S' == string[nPos] || 's' == string[nPos])
+            {
+                ++nPos;
+                if (-1 != nTemp)
+                {
+                    nSeconds = nTemp;
+                    nTemp = -1;
+                }
+                else
+                {
+                    bSuccess = false;
+                }
+            }
+        }
+    }
+
+    if (nPos != string.size()) // string not processed completely?
+    {
+        bSuccess = false;
+    }
+
+    if (nTemp != -1) // unprocessed number?
+    {
+        bSuccess = false;
+    }
+
+    if (bSuccess)
+    {
+        rDuration.Negative      = bIsNegativeDuration;
+        rDuration.Years         = static_cast<sal_Int16>(nYears);
+        rDuration.Months        = static_cast<sal_Int16>(nMonths);
+        rDuration.Days          = static_cast<sal_Int16>(nDays);
+        rDuration.Hours         = static_cast<sal_Int16>(nHours);
+        rDuration.Minutes       = static_cast<sal_Int16>(nMinutes);
+        rDuration.Seconds       = static_cast<sal_Int16>(nSeconds);
+        rDuration.NanoSeconds   = nNanoSeconds;
+    }
+
+    return bSuccess;
+}
 
 static void
 lcl_AppendTimezone(OUStringBuffer & i_rBuffer, int const nOffset)
@@ -2073,6 +2371,42 @@ sal_Int32 Converter::indexOfComma( std::u16string_view rStr,
     for( ; nPos < nLen; nPos++ )
     {
         sal_Unicode c = rStr[nPos];
+        switch( c )
+        {
+        case u'\'':
+            if( 0 == cQuote )
+                cQuote = c;
+            else if( '\'' == cQuote )
+                cQuote = 0;
+            break;
+
+        case u'"':
+            if( 0 == cQuote )
+                cQuote = c;
+            else if( '\"' == cQuote )
+                cQuote = 0;
+            break;
+
+        case u',':
+            if( 0 == cQuote )
+                return nPos;
+            break;
+        }
+    }
+
+    return -1;
+}
+
+/** gets the position of the first comma after npos in the string
+    rStr. Commas inside '"' pairs are not matched */
+sal_Int32 Converter::indexOfComma( std::string_view rStr,
+                                            sal_Int32 nPos )
+{
+    char cQuote = 0;
+    sal_Int32 nLen = rStr.size();
+    for( ; nPos < nLen; nPos++ )
+    {
+        char c = rStr[nPos];
         switch( c )
         {
         case u'\'':
