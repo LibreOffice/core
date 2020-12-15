@@ -41,7 +41,7 @@ namespace xmloff
     public:
         ORotationAngleHandler();
 
-        virtual bool importXML( const OUString& _rStrImpValue, css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
+        virtual bool importXML( std::string_view _rStrImpValue, css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
         virtual bool exportXML( OUString& _rStrExpValue, const css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
     };
 
@@ -53,7 +53,7 @@ namespace xmloff
     public:
         OFontWidthHandler();
 
-        virtual bool importXML( const OUString& _rStrImpValue, css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
+        virtual bool importXML( std::string_view _rStrImpValue, css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
         virtual bool exportXML( OUString& _rStrExpValue, const css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
     };
 
@@ -71,7 +71,7 @@ namespace xmloff
 
         OControlBorderHandler( const BorderFacet _eFacet );
 
-        virtual bool importXML( const OUString& _rStrImpValue, css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
+        virtual bool importXML( std::string_view _rStrImpValue, css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
         virtual bool exportXML( OUString& _rStrExpValue, const css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
 
     private:
@@ -86,7 +86,7 @@ namespace xmloff
     public:
         OControlTextEmphasisHandler();
 
-        virtual bool importXML( const OUString& _rStrImpValue, css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
+        virtual bool importXML( std::string_view _rStrImpValue, css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
         virtual bool exportXML( OUString& _rStrExpValue, const css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
     };
 

@@ -63,7 +63,7 @@ XMLFontWeightPropHdl::~XMLFontWeightPropHdl()
     // Nothing to do
 }
 
-bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFontWeightPropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
     sal_uInt16 nWeight = 0;

@@ -36,7 +36,7 @@ XMLKerningPropHdl::~XMLKerningPropHdl()
     // nothing to do
 }
 
-bool XMLKerningPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLKerningPropHdl::importXML( std::string_view rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     bool bRet = true;
     sal_Int32 nKerning = 0;

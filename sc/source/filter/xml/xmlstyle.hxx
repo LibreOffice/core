@@ -218,7 +218,7 @@ class XmlScPropHdl_CellProtection : public XMLPropertyHandler
 public:
     virtual ~XmlScPropHdl_CellProtection() override;
     virtual bool equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
@@ -227,7 +227,7 @@ class XmlScPropHdl_PrintContent : public XMLPropertyHandler
 public:
     virtual ~XmlScPropHdl_PrintContent() override;
     virtual bool equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
@@ -236,7 +236,7 @@ class XmlScPropHdl_JustifyMethod : public XMLPropertyHandler
 public:
     virtual ~XmlScPropHdl_JustifyMethod() override;
     virtual bool equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
@@ -245,7 +245,7 @@ class XmlScPropHdl_HoriJustify : public XMLPropertyHandler
 public:
     virtual ~XmlScPropHdl_HoriJustify() override;
     virtual bool equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
@@ -254,7 +254,7 @@ class XmlScPropHdl_HoriJustifySource : public XMLPropertyHandler
 public:
     virtual ~XmlScPropHdl_HoriJustifySource() override;
     virtual bool equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
@@ -263,7 +263,7 @@ class XmlScPropHdl_HoriJustifyRepeat : public XMLPropertyHandler
 public:
     virtual ~XmlScPropHdl_HoriJustifyRepeat() override;
     virtual bool equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
@@ -272,7 +272,7 @@ class XmlScPropHdl_Orientation : public XMLPropertyHandler
 public:
     virtual ~XmlScPropHdl_Orientation() override;
     virtual bool equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
@@ -281,7 +281,7 @@ class XmlScPropHdl_RotateAngle : public XMLPropertyHandler
 public:
     virtual ~XmlScPropHdl_RotateAngle() override;
     virtual bool equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
@@ -290,7 +290,7 @@ class XmlScPropHdl_RotateReference : public XMLPropertyHandler
 public:
     virtual ~XmlScPropHdl_RotateReference() override;
     virtual bool equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
@@ -299,7 +299,7 @@ class XmlScPropHdl_VertJustify : public XMLPropertyHandler
 public:
     virtual ~XmlScPropHdl_VertJustify() override;
     virtual bool equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
@@ -308,7 +308,7 @@ class XmlScPropHdl_BreakBefore : public XMLPropertyHandler
 public:
     virtual ~XmlScPropHdl_BreakBefore() override;
     virtual bool equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
@@ -317,7 +317,7 @@ class XmlScPropHdl_IsTextWrapped : public XMLPropertyHandler
 public:
     virtual ~XmlScPropHdl_IsTextWrapped() override;
     virtual bool equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
@@ -325,7 +325,7 @@ class XmlScPropHdl_IsEqual : public XMLPropertyHandler
 {
 public:
     virtual bool equals( const css::uno::Any& /* r1 */, const css::uno::Any& /* r2 */ ) const override { return true; }
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 
@@ -334,7 +334,7 @@ class XmlScPropHdl_Vertical : public XMLPropertyHandler
 public:
     virtual ~XmlScPropHdl_Vertical() override;
     virtual bool equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const override;
-    virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    virtual bool importXML( std::string_view rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
 

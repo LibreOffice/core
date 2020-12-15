@@ -132,11 +132,9 @@ void SvXMLImportPropertyMapper::importXML(
         if ( !aPrefix.isEmpty() )
             sAttrName = aPrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
 
-        const OUString sValue = aIter.toString();
-
         importXMLAttribute(rProperties, rUnitConverter, rNamespaceMap,
             nPropType, nStartIdx, nEndIdx, xAttrContainer,
-            sAttrName, aNamespaceURI, sValue);
+            sAttrName, aNamespaceURI, aIter.toView());
     }
 
     const css::uno::Sequence< css::xml::Attribute > unknownAttribs = xAttrList->getUnknownAttributes();
@@ -154,7 +152,7 @@ void SvXMLImportPropertyMapper::importXML(
 
         importXMLAttribute(rProperties, rUnitConverter, rNamespaceMap,
             nPropType, nStartIdx, nEndIdx, xAttrContainer,
-            rAttribute.Name, rAttribute.NamespaceURL, rAttribute.Value);
+            rAttribute.Name, rAttribute.NamespaceURL, rAttribute.Value.toUtf8().getStr());
     }
 
     finished( rProperties, nStartIdx, nEndIdx );
@@ -170,7 +168,7 @@ void SvXMLImportPropertyMapper::importXMLAttribute(
         Reference< XNameContainer >& xAttrContainer,
         const OUString& rAttrName,
         const OUString& aNamespaceURI,
-        const OUString& sValue) const
+        std::string_view sValue) const
 {
     OUString aLocalName, aPrefix, aNamespace;
     sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName( rAttrName, &aPrefix,
@@ -268,7 +266,7 @@ void SvXMLImportPropertyMapper::importXMLAttribute(
                     {
                         Sequence<OUString> aSeq(2);
                         aSeq[0] = rAttrName;
-                        aSeq[1] = sValue;
+                        aSeq[1] = OUString::fromUtf8(sValue);
                         rImport.SetError( XMLERROR_FLAG_WARNING |
                                           XMLERROR_STYLE_ATTR_VALUE,
                                           aSeq );
@@ -329,7 +327,7 @@ void SvXMLImportPropertyMapper::importXMLAttribute(
                 {
                     AttributeData aData;
                     aData.Type = GetXMLToken( XML_CDATA );
-                    aData.Value = sValue;
+                    aData.Value = OUString::fromUtf8(sValue);
                     OUString sName;
                     if( XML_NAMESPACE_NONE != nPrefix )
                     {
@@ -350,7 +348,7 @@ void SvXMLImportPropertyMapper::importXMLAttribute(
 bool SvXMLImportPropertyMapper::handleSpecialItem(
         XMLPropertyState& rProperty,
         vector< XMLPropertyState >& rProperties,
-        const OUString& rValue,
+        std::string_view rValue,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap ) const
 {

@@ -285,6 +285,10 @@ public:
     static bool convertHex( sal_uInt32& nVal,
                               std::u16string_view rValue );
 
+    /** convert string (hex) to number (sal_uInt32) */
+    static bool convertHex( sal_uInt32& nVal,
+                              std::string_view rValue );
+
     /** convert number (sal_uInt32) to string (hex) */
     static void convertHex( OUStringBuffer& rBuffer,
                                sal_uInt32 nVal );

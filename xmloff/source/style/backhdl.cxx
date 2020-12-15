@@ -51,12 +51,13 @@ XMLBackGraphicPositionPropHdl::~XMLBackGraphicPositionPropHdl()
     // Nothing to do
 }
 
-bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLBackGraphicPositionPropHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = true;
     style::GraphicLocation ePos = style::GraphicLocation_NONE, eTmp;
     style::GraphicLocation nTmpGraphicLocation;
-    SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
+    OUString sValue = OUString::fromUtf8(rStrImpValue);
+    SvXMLTokenEnumerator aTokenEnum( sValue );
     OUString aToken;
     bool bHori = false, bVert = false;
 

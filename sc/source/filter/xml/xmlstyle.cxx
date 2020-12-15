@@ -914,7 +914,7 @@ bool XmlScPropHdl_CellProtection::equals(
 }
 
 bool XmlScPropHdl_CellProtection::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     css::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -966,11 +966,11 @@ bool XmlScPropHdl_CellProtection::importXML(
         }
         else
         {
-            sal_Int32 i(0);
-            while (i < rStrImpValue.getLength() && rStrImpValue[i] != ' ')
+            size_t i(0);
+            while (i < rStrImpValue.size() && rStrImpValue[i] != ' ')
                 ++i;
-            OUString sFirst(rStrImpValue.copy(0, i));
-            OUString sSecond(rStrImpValue.copy(i + 1));
+            std::string_view sFirst(rStrImpValue.substr(0, i));
+            std::string_view sSecond(rStrImpValue.substr(i + 1));
             aCellProtection.IsFormulaHidden = false;
             aCellProtection.IsHidden = false;
             aCellProtection.IsLocked = false;
@@ -1048,7 +1048,7 @@ bool XmlScPropHdl_PrintContent::equals(
 }
 
 bool XmlScPropHdl_PrintContent::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     css::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1112,7 +1112,7 @@ bool XmlScPropHdl_JustifyMethod::equals(
 }
 
 bool XmlScPropHdl_JustifyMethod::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     css::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1186,7 +1186,7 @@ bool XmlScPropHdl_HoriJustify::equals(
 }
 
 bool XmlScPropHdl_HoriJustify::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     css::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1290,7 +1290,7 @@ bool XmlScPropHdl_HoriJustifySource::equals(
 }
 
 bool XmlScPropHdl_HoriJustifySource::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     css::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1350,7 +1350,7 @@ bool XmlScPropHdl_HoriJustifyRepeat::equals(
 }
 
 bool XmlScPropHdl_HoriJustifyRepeat::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     css::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1410,7 +1410,7 @@ bool XmlScPropHdl_Orientation::equals(
 }
 
 bool XmlScPropHdl_Orientation::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     css::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1479,7 +1479,7 @@ bool XmlScPropHdl_RotateAngle::equals(
 }
 
 bool XmlScPropHdl_RotateAngle::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     css::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1528,7 +1528,7 @@ bool XmlScPropHdl_RotateReference::equals(
 }
 
 bool XmlScPropHdl_RotateReference::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     css::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1625,7 +1625,7 @@ bool XmlScPropHdl_VertJustify::equals(
 }
 
 bool XmlScPropHdl_VertJustify::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     css::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1734,7 +1734,7 @@ bool XmlScPropHdl_BreakBefore::equals(
 }
 
 bool XmlScPropHdl_BreakBefore::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     css::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1790,7 +1790,7 @@ bool XmlScPropHdl_IsTextWrapped::equals(
 }
 
 bool XmlScPropHdl_IsTextWrapped::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     css::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1831,7 +1831,7 @@ bool XmlScPropHdl_IsTextWrapped::exportXML(
     return bRetval;
 }
 
-bool XmlScPropHdl_IsEqual::importXML( const OUString& /* rStrImpValue */,
+bool XmlScPropHdl_IsEqual::importXML( std::string_view /* rStrImpValue */,
     css::uno::Any& /* rValue */,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1859,7 +1859,7 @@ bool XmlScPropHdl_Vertical::equals(
 }
 
 bool XmlScPropHdl_Vertical::importXML(
-    const OUString& rStrImpValue,
+    std::string_view rStrImpValue,
     css::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {

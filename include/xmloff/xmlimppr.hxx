@@ -102,7 +102,7 @@ public:
     virtual bool handleSpecialItem(
             XMLPropertyState& rProperty,
             ::std::vector< XMLPropertyState >& rProperties,
-            const OUString& rValue,
+            std::string_view rValue,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap ) const;
 
@@ -187,7 +187,7 @@ private:
         css::uno::Reference< css::container::XNameContainer >& xAttrContainer,
         const OUString& sAttrName,
         const OUString& aNamespaceURI,
-        const OUString& sValue) const;
+        std::string_view sValue) const;
 };
 
 

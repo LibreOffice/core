@@ -46,7 +46,7 @@ XMLPosturePropHdl::~XMLPosturePropHdl()
     // nothing to do
 }
 
-bool XMLPosturePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLPosturePropHdl::importXML( std::string_view rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     FontItalic ePosture;
     bool bRet = SvXMLUnitConverter::convertEnum( ePosture, rStrImpValue, aPostureGenericMapping );

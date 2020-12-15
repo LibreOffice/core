@@ -948,6 +948,23 @@ bool SvXMLUnitConverter::convertHex( sal_uInt32& nVal, std::u16string_view rValu
     return true;
 }
 
+/** convert string (hex) to number (sal_uInt32) */
+bool SvXMLUnitConverter::convertHex( sal_uInt32& nVal,
+                                       std::string_view rValue )
+{
+    if( rValue.size() != 8 )
+        return false;
+
+    nVal = 0;
+    for ( int i = 0; i < 8; i++ )
+    {
+        nVal = ( nVal << 4 )
+            | sal::static_int_cast< sal_uInt32 >( lcl_gethex( rValue[i] ) );
+    }
+
+    return true;
+}
+
 /** convert number (sal_uInt32) to string (hex) */
 void SvXMLUnitConverter::convertHex( OUStringBuffer& rBuffer,
                                         sal_uInt32 nVal )

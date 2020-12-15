@@ -43,12 +43,10 @@ void SwXMLBrushItemImportContext::ProcessAttrs(
 {
     for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {
-        const OUString sValue = aIter.toString();
-
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(XLINK, XML_HREF):
-            m_xGraphic = GetImport().loadGraphicByURL(sValue);
+            m_xGraphic = GetImport().loadGraphicByURL(aIter.toString());
             break;
         case XML_ELEMENT(XLINK, XML_TYPE):
         case XML_ELEMENT(XLINK, XML_ACTUATE):
@@ -56,15 +54,15 @@ void SwXMLBrushItemImportContext::ProcessAttrs(
             break;
         case XML_ELEMENT(STYLE, XML_POSITION):
             SvXMLImportItemMapper::PutXMLValue(
-                *pItem, sValue, MID_GRAPHIC_POSITION, rUnitConv );
+                *pItem, aIter.toView(), MID_GRAPHIC_POSITION, rUnitConv );
             break;
         case XML_ELEMENT(STYLE, XML_REPEAT):
             SvXMLImportItemMapper::PutXMLValue(
-                *pItem, sValue, MID_GRAPHIC_REPEAT, rUnitConv );
+                *pItem, aIter.toView(), MID_GRAPHIC_REPEAT, rUnitConv );
             break;
         case XML_ELEMENT(STYLE, XML_FILTER_NAME):
             SvXMLImportItemMapper::PutXMLValue(
-                *pItem, sValue, MID_GRAPHIC_FILTER, rUnitConv );
+                *pItem, aIter.toView(), MID_GRAPHIC_FILTER, rUnitConv );
             break;
         default:
             XMLOFF_WARN_UNKNOWN("sw", aIter);

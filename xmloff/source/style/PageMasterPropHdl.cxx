@@ -51,7 +51,7 @@ bool XMLPMPropHdl_PageStyleLayout::equals( const Any& rAny1, const Any& rAny2 ) 
 }
 
 bool XMLPMPropHdl_PageStyleLayout::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
         Any& rValue,
         const SvXMLUnitConverter& ) const
 {
@@ -111,13 +111,13 @@ XMLPMPropHdl_NumFormat::~XMLPMPropHdl_NumFormat()
 }
 
 bool XMLPMPropHdl_NumFormat::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
         Any& rValue,
         const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Int16 nSync = sal_Int16();
     sal_Int16 nNumType = NumberingType::NUMBER_NONE;
-    rUnitConverter.convertNumFormat( nNumType, rStrImpValue, u"", true );
+    rUnitConverter.convertNumFormat( nNumType, OUString::fromUtf8(rStrImpValue), u"", true );
 
     if( !(rValue >>= nSync) )
         nSync = NumberingType::NUMBER_NONE;
@@ -167,13 +167,13 @@ XMLPMPropHdl_NumLetterSync::~XMLPMPropHdl_NumLetterSync()
 }
 
 bool XMLPMPropHdl_NumLetterSync::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
         Any& rValue,
         const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Int16 nNumType;
     sal_Int16 nSync = NumberingType::NUMBER_NONE;
-    rUnitConverter.convertNumFormat( nSync, rStrImpValue,
+    rUnitConverter.convertNumFormat( nSync, OUString::fromUtf8(rStrImpValue),
                                      GetXMLToken( XML_A ), true );
 
     if( !(rValue >>= nNumType) )
@@ -221,7 +221,7 @@ XMLPMPropHdl_PaperTrayNumber::~XMLPMPropHdl_PaperTrayNumber()
 }
 
 bool XMLPMPropHdl_PaperTrayNumber::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
         Any& rValue,
         const SvXMLUnitConverter& ) const
 {
@@ -278,16 +278,17 @@ XMLPMPropHdl_Print::~XMLPMPropHdl_Print()
 }
 
 bool XMLPMPropHdl_Print::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
         Any& rValue,
         const SvXMLUnitConverter& ) const
 {
     sal_Int32   nTokenIndex = 0;
     bool        bFound  = false;
+    OUString sValue = OUString::fromUtf8(rStrImpValue);
 
     do
     {
-        bFound = (sAttrValue == rStrImpValue.getToken( 0, ' ', nTokenIndex ));
+        bFound = (sAttrValue == sValue.getToken( 0, ' ', nTokenIndex ));
     }
     while ( (nTokenIndex >= 0) && !bFound );
 
@@ -317,13 +318,13 @@ XMLPMPropHdl_CenterHorizontal::~XMLPMPropHdl_CenterHorizontal()
 }
 
 bool XMLPMPropHdl_CenterHorizontal::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
         Any& rValue,
         const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
 
-    if (!rStrImpValue.isEmpty())
+    if (!rStrImpValue.empty())
         if (IsXMLToken( rStrImpValue, XML_BOTH) ||
             IsXMLToken( rStrImpValue, XML_HORIZONTAL))
         {
@@ -358,13 +359,13 @@ XMLPMPropHdl_CenterVertical::~XMLPMPropHdl_CenterVertical()
 }
 
 bool XMLPMPropHdl_CenterVertical::importXML(
-        const OUString& rStrImpValue,
+        std::string_view rStrImpValue,
         Any& rValue,
         const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
 
-    if (!rStrImpValue.isEmpty())
+    if (!rStrImpValue.empty())
         if (IsXMLToken(rStrImpValue, XML_BOTH) ||
             IsXMLToken(rStrImpValue, XML_VERTICAL) )
         {
