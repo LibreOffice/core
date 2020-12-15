@@ -58,51 +58,49 @@ XMLIndexObjectSourceContext::~XMLIndexObjectSourceContext()
 {
 }
 
-void XMLIndexObjectSourceContext::ProcessAttribute(
-    sal_Int32 nAttributeToken,
-    const OUString& rValue)
+void XMLIndexObjectSourceContext::ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter)
 {
     bool bTmp(false);
 
-    switch (nAttributeToken)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(TEXT, XML_USE_OTHER_OBJECTS):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bUseOtherObjects = bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_USE_SPREADSHEET_OBJECTS):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bUseCalc = bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_USE_CHART_OBJECTS):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bUseChart = bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_USE_DRAW_OBJECTS):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bUseDraw = bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_USE_MATH_OBJECTS):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bUseMath = bTmp;
             }
             break;
 
         default:
-            XMLIndexSourceBaseContext::ProcessAttribute(nAttributeToken, rValue);
+            XMLIndexSourceBaseContext::ProcessAttribute(aIter);
             break;
     }
 }

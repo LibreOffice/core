@@ -72,30 +72,28 @@ SvXMLEnumMapEntry<sal_uInt16> const lcl_aReferenceTypeTokenMap[] =
     { XML_TOKEN_INVALID,        0 }
 };
 
-void XMLIndexTableSourceContext::ProcessAttribute(
-    sal_Int32 nAttributeToken,
-    const OUString& rValue)
+void XMLIndexTableSourceContext::ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter)
 {
     bool bTmp(false);
 
-    switch (nAttributeToken)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(TEXT, XML_USE_CAPTION):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bUseCaption = bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_CAPTION_SEQUENCE_NAME):
-            sSequence = rValue;
+            sSequence = aIter.toString();
             bSequenceOK = true;
             break;
 
         case XML_ELEMENT(TEXT, XML_CAPTION_SEQUENCE_FORMAT):
         {
              sal_uInt16 nTmp;
-             if (SvXMLUnitConverter::convertEnum(nTmp, rValue,
+             if (SvXMLUnitConverter::convertEnum(nTmp, aIter.toString(),
                                                  lcl_aReferenceTypeTokenMap))
              {
                  nDisplayFormat = nTmp;
@@ -105,7 +103,7 @@ void XMLIndexTableSourceContext::ProcessAttribute(
         }
 
         default:
-            XMLIndexSourceBaseContext::ProcessAttribute(nAttributeToken, rValue);
+            XMLIndexSourceBaseContext::ProcessAttribute(aIter);
             break;
     }
 }

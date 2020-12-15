@@ -54,69 +54,67 @@ XMLIndexUserSourceContext::~XMLIndexUserSourceContext()
 {
 }
 
-void XMLIndexUserSourceContext::ProcessAttribute(
-    sal_Int32 nAttributeToken,
-    const OUString& rValue)
+void XMLIndexUserSourceContext::ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter)
 {
     bool bTmp(false);
 
-    switch (nAttributeToken)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(TEXT, XML_USE_INDEX_MARKS):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bUseMarks = bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_USE_OBJECTS):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bUseObjects = bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_USE_GRAPHICS):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bUseGraphic = bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_USE_TABLES):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bUseTables = bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_USE_FLOATING_FRAMES):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bUseFrames = bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_COPY_OUTLINE_LEVELS):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bUseLevelFromSource = bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_USE_INDEX_SOURCE_STYLES):
-            if (::sax::Converter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bUseLevelParagraphStyles = bTmp;
             }
             break;
 
         case XML_ELEMENT(TEXT, XML_INDEX_NAME):
-            sIndexName = rValue;
+            sIndexName = aIter.toString();
             break;
 
         default:
-            XMLIndexSourceBaseContext::ProcessAttribute(nAttributeToken, rValue);
+            XMLIndexSourceBaseContext::ProcessAttribute(aIter);
             break;
     }
 }

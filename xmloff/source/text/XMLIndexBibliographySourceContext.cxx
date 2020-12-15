@@ -48,12 +48,10 @@ XMLIndexBibliographySourceContext::~XMLIndexBibliographySourceContext()
 {
 }
 
-void XMLIndexBibliographySourceContext::ProcessAttribute(
-   sal_Int32 nAttributeToken,
-   const OUString& rValue)
+void XMLIndexBibliographySourceContext::ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter)
 {
     // We have no attributes. Who wants attributes, anyway?
-    XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttributeToken, rValue);
+    XMLOFF_WARN_UNKNOWN("xmloff", aIter);
 }
 
 void XMLIndexBibliographySourceContext::endFastElement(sal_Int32 )
