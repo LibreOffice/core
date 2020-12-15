@@ -465,26 +465,28 @@ public:
 
 class AbstractScDPFunctionDlg_Impl : public AbstractScDPFunctionDlg
 {
-    std::unique_ptr<ScDPFunctionDlg> m_xDlg;
+    std::shared_ptr<ScDPFunctionDlg> m_xDlg;
 public:
-    explicit AbstractScDPFunctionDlg_Impl(std::unique_ptr<ScDPFunctionDlg> p)
+    explicit AbstractScDPFunctionDlg_Impl(std::shared_ptr<ScDPFunctionDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short           Execute() override;
+    virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual PivotFunc GetFuncMask() const override;
     virtual css::sheet::DataPilotFieldReference GetFieldRef() const override;
 };
 
 class AbstractScDPSubtotalDlg_Impl : public AbstractScDPSubtotalDlg
 {
-    std::unique_ptr<ScDPSubtotalDlg> m_xDlg;
+    std::shared_ptr<ScDPSubtotalDlg> m_xDlg;
 public:
-    explicit AbstractScDPSubtotalDlg_Impl(std::unique_ptr<ScDPSubtotalDlg> p)
+    explicit AbstractScDPSubtotalDlg_Impl(std::shared_ptr<ScDPSubtotalDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short           Execute() override;
+    virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual PivotFunc GetFuncMask() const override;
     virtual void FillLabelData( ScDPLabelData& rLabelData ) const override;
 };
