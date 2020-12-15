@@ -3580,7 +3580,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 xContext->Erase(PROP_NUMBERING_LEVEL);
             }
             m_pImpl->SetParaSectpr(false);
-            finishParagraph(bRemove);
+            finishParagraph(bRemove, bNoNumbering);
             if (bRemove)
                 m_pImpl->RemoveLastParagraph();
         }
@@ -4067,11 +4067,11 @@ void DomainMapper::HandleRedline( Sprm& rSprm )
     m_pImpl->SetCurrentRedlineIsRead();
 }
 
-void DomainMapper::finishParagraph(const bool bRemove)
+void DomainMapper::finishParagraph(const bool bRemove, const bool bNoNumbering)
 {
     if (m_pImpl->m_pSdtHelper->validateDateFormat())
         m_pImpl->m_pSdtHelper->createDateContentControl();
-    m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH), bRemove);
+    m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH), bRemove, bNoNumbering);
 }
 
 } //namespace writerfilter
