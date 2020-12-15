@@ -271,7 +271,8 @@ public:
 
     bool                        DrawGradient(
                                     const tools::PolyPolygon& rPolyPoly,
-                                    const Gradient& rGradient );
+                                    const Gradient& rGradient,
+                                    const OutputDevice& rOutDev);
 
     bool DrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon,
                       SalGradient const & rGradient);
