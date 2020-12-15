@@ -84,7 +84,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column )
     {
         WpADOProperties aProps( aField.get_Properties() );
         if ( aProps.IsValid() )
-            bRet = OTools::getValue( aProps, OUString("ISCASESENSITIVE") ).getBool();
+            bRet = OTools::getValue(aProps, u"ISCASESENSITIVE").getBool();
     }
     return bRet;
 }
@@ -114,7 +114,7 @@ OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 column )
     {
         WpADOProperties aProps( aField.get_Properties() );
         if ( aProps.IsValid() )
-            sTableName = OTools::getValue( aProps, OUString("BASETABLENAME") ).getString();
+            sTableName = OTools::getValue(aProps, u"BASETABLENAME").getString();
     }
     return sTableName;
 }
@@ -160,7 +160,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column )
         WpADOProperties aProps( aField.get_Properties() );
         if ( aProps.IsValid() )
         {
-            bRet = OTools::getValue( aProps, OUString("ISAUTOINCREMENT") ).getBool();
+            bRet = OTools::getValue(aProps, u"ISAUTOINCREMENT").getBool();
         }
     }
     return bRet;

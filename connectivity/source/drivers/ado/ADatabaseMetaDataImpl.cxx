@@ -559,7 +559,7 @@ void OAdoTable::fillPropertyValues()
         {
             WpADOProperties aProps = m_aTable.get_Properties();
             if(aProps.IsValid())
-                m_Description = OTools::getValue(aProps,OUString("Description")).getString();
+                m_Description = OTools::getValue(aProps, u"Description").getString();
         }
     }
 }

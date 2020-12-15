@@ -207,7 +207,7 @@ void OAdoTable::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rV
 
             case PROPERTY_ID_DESCRIPTION:
                 OTools::putValue(   m_aTable.get_Properties(),
-                                OUString("Description"),
+                                u"Description",
                                 getString(rValue));
                 break;
 

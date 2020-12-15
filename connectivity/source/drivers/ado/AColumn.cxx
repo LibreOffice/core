@@ -103,7 +103,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
 {
     if(m_aColumn.IsValid())
     {
-        const char* pAdoPropertyName = nullptr;
+        std::u16string_view sAdoPropertyName;
 
         switch(nHandle)
         {
@@ -161,21 +161,21 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 break;
 
             case PROPERTY_ID_ISAUTOINCREMENT:
-                OTools::putValue( m_aColumn.get_Properties(), OUString( "Autoincrement" ), getBOOL( rValue ) );
+                OTools::putValue(m_aColumn.get_Properties(), u"Autoincrement", getBOOL(rValue));
                 break;
 
             case PROPERTY_ID_IM001:
             case PROPERTY_ID_DESCRIPTION:
-                pAdoPropertyName = "Description";
+                sAdoPropertyName = u"Description";
                 break;
 
             case PROPERTY_ID_DEFAULTVALUE:
-                pAdoPropertyName = "Default";
+                sAdoPropertyName = u"Default";
                 break;
         }
 
-        if ( pAdoPropertyName )
-            OTools::putValue( m_aColumn.get_Properties(), OUString::createFromAscii( pAdoPropertyName ), getString( rValue ) );
+        if (!sAdoPropertyName.empty())
+            OTools::putValue(m_aColumn.get_Properties(), sAdoPropertyName, getString(rValue));
     }
     OColumn_ADO::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
@@ -236,11 +236,11 @@ void OAdoColumn::fillPropertyValues()
 
             if ( aProps.IsValid() )
             {
-                m_IsAutoIncrement = OTools::getValue( aProps, OUString("Autoincrement") ).getBool();
+                m_IsAutoIncrement = OTools::getValue(aProps, u"Autoincrement").getBool();
 
-                m_Description = OTools::getValue( aProps, OUString("Description") ).getString();
+                m_Description = OTools::getValue(aProps, u"Description").getString();
 
-                m_DefaultValue = OTools::getValue( aProps, OUString("Default") ).getString();
+                m_DefaultValue = OTools::getValue(aProps, u"Default").getString();
             }
         }
     }
