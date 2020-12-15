@@ -14,7 +14,7 @@ class ImpressLayouts(UITestCase):
         self.ui_test.create_doc_in_start_center("impress")
 
         xTemplateDlg = self.xUITest.getTopFocusWindow()
-        xCancelBtn = xTemplateDlg.getChild("cancel")
+        xCancelBtn = xTemplateDlg.getChild("close")
         self.ui_test.close_dialog_through_button(xCancelBtn)
 
         layouts= (".uno:AssignLayout?WhatLayout:long=20", ".uno:AssignLayout?WhatLayout:long=19",

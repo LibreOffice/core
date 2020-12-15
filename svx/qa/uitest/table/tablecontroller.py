@@ -15,7 +15,7 @@ class SvxTableControllerTest(UITestCase):
         # Create an Impress document with a single table in it.
         self.ui_test.create_doc_in_start_center("impress")
         template = self.xUITest.getTopFocusWindow()
-        self.ui_test.close_dialog_through_button(template.getChild("cancel"))
+        self.ui_test.close_dialog_through_button(template.getChild("close"))
         self.xUITest.executeCommand(".uno:SelectAll")
         self.xUITest.executeCommand(".uno:Delete")
         self.xUITest.executeCommand(".uno:InsertTable?Columns:short=2&Rows:short=2")
