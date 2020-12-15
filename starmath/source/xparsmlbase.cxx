@@ -1161,7 +1161,7 @@ static OUString icustomMathmlHtmlEntitiesNamesData[2125] = {
     u"in",
     u"incare",
     u"infin",
-    u"infintie",
+    u"infinite",
     u"inodot",
     u"int",
     u"intcal",
