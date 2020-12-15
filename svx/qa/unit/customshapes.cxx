@@ -90,6 +90,88 @@ sal_uInt8 CustomshapesTest::countShapes()
     return xDrawPage->getCount();
 }
 
+void lcl_AssertRectEqualWithTolerance(const OString& sInfo, const tools::Rectangle& rExpected,
+                                      const tools::Rectangle& rActual, const sal_Int32 nTolerance)
+{
+    // Left
+    OString sMsg = sInfo + " Left expected " + OString::number(rExpected.Left()) + " actual "
+                   + OString::number(rActual.Left()) + " Tolerance " + OString::number(nTolerance);
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
+                           std::abs(rExpected.Left() - rActual.Left()) <= nTolerance);
+
+    // Top
+    sMsg = sInfo + " Top expected " + OString::number(rExpected.Top()) + " actual "
+           + OString::number(rActual.Top()) + " Tolerance " + OString::number(nTolerance);
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.Top() - rActual.Top()) <= nTolerance);
+
+    // Width
+    sMsg = sInfo + " Width expected " + OString::number(rExpected.GetWidth()) + " actual "
+           + OString::number(rActual.GetWidth()) + " Tolerance " + OString::number(nTolerance);
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
+                           std::abs(rExpected.GetWidth() - rActual.GetWidth()) <= nTolerance);
+
+    // Height
+    sMsg = sInfo + " Height expected " + OString::number(rExpected.GetHeight()) + " actual "
+           + OString::number(rActual.GetHeight()) + " Tolerance " + OString::number(nTolerance);
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
+                           std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
+}
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testResizeRotatedShape)
+{
+    // tdf#138945 Setting width or height for a rotated or sheared shape in the Position&Size dialog
+    // had resulted in a mismatch of handle position and shape outline. That becomes visible in object
+    // properties as mismatch of frame rectangle and bound rectangle.
+    // Problem was, that fObjectRotation was not updated.
+
+    // Load document and get shape. It is a rectangle custom shape with 45° shear and 330° rotation.
+    OUString aURL
+        = m_directories.getURLFromSrc(sDataDirectory) + "tdf138945_resizeRotatedShape.odg";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.comp.presentation.PresentationDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+
+    // Change height and mirror vertical
+    {
+        SdrObjCustomShape& rSdrShape(
+            static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+        rSdrShape.NbcResize(rSdrShape.GetRelativePos(), Fraction(1.0), Fraction(-0.5));
+        tools::Rectangle aSnapRect(rSdrShape.GetSnapRect());
+        tools::Rectangle aBoundRect(rSdrShape.GetCurrentBoundRect());
+        lcl_AssertRectEqualWithTolerance("height changed, mirror vert", aSnapRect, aBoundRect, 3);
+    }
+
+    // Change height
+    {
+        SdrObjCustomShape& rSdrShape(
+            static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+        rSdrShape.NbcResize(rSdrShape.GetRelativePos(), Fraction(1.0), Fraction(2.0));
+        tools::Rectangle aSnapRect(rSdrShape.GetSnapRect());
+        tools::Rectangle aBoundRect(rSdrShape.GetCurrentBoundRect());
+        lcl_AssertRectEqualWithTolerance("height changed", aSnapRect, aBoundRect, 3);
+    }
+
+    // Change width
+    {
+        SdrObjCustomShape& rSdrShape(
+            static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+        rSdrShape.NbcResize(rSdrShape.GetRelativePos(), Fraction(2.0), Fraction(1.0));
+        tools::Rectangle aSnapRect(rSdrShape.GetSnapRect());
+        tools::Rectangle aBoundRect(rSdrShape.GetCurrentBoundRect());
+        lcl_AssertRectEqualWithTolerance("width changed", aSnapRect, aBoundRect, 3);
+    }
+
+    // Change width and mirror horizontal
+    {
+        SdrObjCustomShape& rSdrShape(
+            static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+        rSdrShape.NbcResize(rSdrShape.GetRelativePos(), Fraction(-0.5), Fraction(1.0));
+        tools::Rectangle aSnapRect(rSdrShape.GetSnapRect());
+        tools::Rectangle aBoundRect(rSdrShape.GetCurrentBoundRect());
+        lcl_AssertRectEqualWithTolerance("width changed, mirror hori", aSnapRect, aBoundRect, 3);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testViewBoxLeftTop)
 {
     // tdf#121890 formula values "left" and "top" are wrongly calculated
