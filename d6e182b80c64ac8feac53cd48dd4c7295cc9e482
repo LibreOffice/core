@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c4f4feb5_0a49cdf1",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-15T18:28:14Z",
+      "side": 1,
+      "message": "I need to sort it keeping the correspondence between mEntityNames and mEntityReplacements.\n\nSo this has no use:\ntemplate\u003c class RandomIt, class Compare \u003e\nvoid sort( RandomIt first, RandomIt last, Compare comp );\n\nMaybe this ?:\ntemplate\u003c class ExecutionPolicy, class RandomIt, class Compare \u003e\nvoid sort( ExecutionPolicy\u0026\u0026 policy, RandomIt first, RandomIt last, Compare comp );\n -\u003e But I can\u0027t understand how I am supposed to add the swap method to the std::execution.\n -\u003e So, if it is possible could you give me some more guidance?",
+      "parentUuid": "e493d917_51b8fb47",
+      "revId": "d6e182b80c64ac8feac53cd48dd4c7295cc9e482",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "579c48d1_9d8da2a1",
         "filename": "sax/source/fastparser/fastparser.cxx",
         "patchSetId": 2
