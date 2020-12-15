@@ -1000,8 +1000,6 @@ void VLegend::createShapes(
                     std::vector<ViewLegendEntry> aNewEntries = pLegendEntryProvider->createLegendEntries(
                                                                     aMaxSymbolExtent, eLegendPosition, xLegendProp,
                                                                     xLegendContainer, m_xShapeFactory, m_xContext, mrModel);
-                    if (aNewEntries.size() == 0)
-                        return;
                     aViewEntries.insert( aViewEntries.end(), aNewEntries.begin(), aNewEntries.end() );
                 }
             }
@@ -1042,17 +1040,14 @@ void VLegend::createShapes(
                     // create the buttons
                     pButton->createShapes(xModelPage);
                 }
+
+                Reference<drawing::XShape> xBorder = pShapeFactory->createRectangle(
+                    xLegendContainer, aLegendSize, awt::Point(0, 0), aLineFillProperties.first,
+                    aLineFillProperties.second, ShapeFactory::StackPosition::Bottom);
+
+                //because of this name this border will be used for marking the legend
+                ShapeFactory::setShapeName(xBorder, "MarkHandles");
             }
-
-            Reference< drawing::XShape > xBorder =
-                pShapeFactory->createRectangle( xLegendContainer,
-                        aLegendSize,
-                        awt::Point(0,0),
-                        aLineFillProperties.first,
-                        aLineFillProperties.second, ShapeFactory::StackPosition::Bottom );
-
-            //because of this name this border will be used for marking the legend
-            ShapeFactory::setShapeName( xBorder, "MarkHandles" );
         }
     }
     catch( const uno::Exception & )
