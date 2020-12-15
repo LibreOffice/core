@@ -214,7 +214,6 @@ void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString aValue = aIter.toString();
         switch( aIter.getToken() )
         {
             case XML_ELEMENT(SVG, XML_X):
@@ -256,7 +255,7 @@ void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
             case XML_ELEMENT(DR3D, XML_SHADE_MODE):
             case XML_ELEMENT(DR3D, XML_AMBIENT_COLOR):
             case XML_ELEMENT(DR3D, XML_LIGHTING_MODE):
-                maSceneImportHelper.processSceneAttribute( aIter.getToken(), aValue );
+                maSceneImportHelper.processSceneAttribute( aIter );
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);

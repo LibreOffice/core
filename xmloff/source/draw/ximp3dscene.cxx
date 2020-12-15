@@ -127,7 +127,7 @@ void SdXML3DSceneShapeContext::startFastElement(
 
     // read attributes for the 3DScene
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
-        processSceneAttribute( aIter.getToken(), aIter.toString() );
+        processSceneAttribute( aIter );
 
     // #91047# call parent function is missing here, added it
     if(mxShape.is())
@@ -216,8 +216,9 @@ SvXMLImportContext * SdXML3DSceneAttributesHelper::create3DLightContext( const c
 }
 
 /** this should be called for each scene attribute */
-void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_Int32 nAttributeToken, const OUString& rValue )
+void SdXML3DSceneAttributesHelper::processSceneAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
+    auto nAttributeToken = aIter.getToken();
     if( !IsTokenInNamespace(nAttributeToken, XML_NAMESPACE_DR3D) )
         return;
 
@@ -225,7 +226,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_Int32 nAttributeTo
     {
         case XML_TRANSFORM:
         {
-            SdXMLImExTransform3D aTransform(rValue, mrImport.GetMM100UnitConverter());
+            SdXMLImExTransform3D aTransform(aIter.toString(), mrImport.GetMM100UnitConverter());
             if(aTransform.NeedsAction())
                 mbSetTransform = aTransform.GetFullHomogenTransform(mxHomMat);
             return;
@@ -233,7 +234,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_Int32 nAttributeTo
         case XML_VRP:
         {
             ::basegfx::B3DVector aNewVec;
-            SvXMLUnitConverter::convertB3DVector(aNewVec, rValue);
+            SvXMLUnitConverter::convertB3DVector(aNewVec, aIter.toView());
 
             if(aNewVec != maVRP)
             {
@@ -245,7 +246,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_Int32 nAttributeTo
         case XML_VPN:
         {
             ::basegfx::B3DVector aNewVec;
-            SvXMLUnitConverter::convertB3DVector(aNewVec, rValue);
+            SvXMLUnitConverter::convertB3DVector(aNewVec, aIter.toView());
 
             if(aNewVec != maVPN)
             {
@@ -257,7 +258,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_Int32 nAttributeTo
         case XML_VUP:
         {
             ::basegfx::B3DVector aNewVec;
-            SvXMLUnitConverter::convertB3DVector(aNewVec, rValue);
+            SvXMLUnitConverter::convertB3DVector(aNewVec, aIter.toView());
 
             if(aNewVec != maVUP)
             {
@@ -268,7 +269,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_Int32 nAttributeTo
         }
         case XML_PROJECTION:
         {
-            if( IsXMLToken( rValue, XML_PARALLEL ) )
+            if( IsXMLToken( aIter, XML_PARALLEL ) )
                 mxPrjMode = drawing::ProjectionMode_PARALLEL;
             else
                 mxPrjMode = drawing::ProjectionMode_PERSPECTIVE;
@@ -277,27 +278,27 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_Int32 nAttributeTo
         case XML_DISTANCE:
         {
             mrImport.GetMM100UnitConverter().convertMeasureToCore(mnDistance,
-                    rValue);
+                    aIter.toView());
             return;
         }
         case XML_FOCAL_LENGTH:
         {
             mrImport.GetMM100UnitConverter().convertMeasureToCore(mnFocalLength,
-                    rValue);
+                    aIter.toView());
             return;
         }
         case XML_SHADOW_SLANT:
         {
-            ::sax::Converter::convertNumber(mnShadowSlant, rValue);
+            ::sax::Converter::convertNumber(mnShadowSlant, aIter.toView());
             return;
         }
         case XML_SHADE_MODE:
         {
-            if( IsXMLToken( rValue, XML_FLAT ) )
+            if( IsXMLToken( aIter, XML_FLAT ) )
                 mxShadeMode = drawing::ShadeMode_FLAT;
-            else if( IsXMLToken( rValue, XML_PHONG ) )
+            else if( IsXMLToken( aIter, XML_PHONG ) )
                 mxShadeMode = drawing::ShadeMode_PHONG;
-            else if( IsXMLToken( rValue, XML_GOURAUD ) )
+            else if( IsXMLToken( aIter, XML_GOURAUD ) )
                 mxShadeMode = drawing::ShadeMode_SMOOTH;
             else
                 mxShadeMode = drawing::ShadeMode_DRAFT;
@@ -305,16 +306,16 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_Int32 nAttributeTo
         }
         case XML_AMBIENT_COLOR:
         {
-            ::sax::Converter::convertColor(maAmbientColor, rValue);
+            ::sax::Converter::convertColor(maAmbientColor, aIter.toView());
             return;
         }
         case XML_LIGHTING_MODE:
         {
-            (void)::sax::Converter::convertBool(mbLightingMode, rValue);
+            (void)::sax::Converter::convertBool(mbLightingMode, aIter.toView());
             return;
         }
         default:
-            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttributeToken, rValue);
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }
 }
 
