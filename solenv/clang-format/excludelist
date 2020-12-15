@@ -12413,6 +12413,7 @@ sw/qa/extras/ooxmlexport/ooxmlexport11.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport13.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport14.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport15.cxx
+sw/qa/extras/ooxmlexport/ooxmlexport16.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport2.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport3.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport4.cxx
