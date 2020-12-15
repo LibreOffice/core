@@ -601,7 +601,7 @@ void CompatibleDC::fill(sal_uInt32 color)
         *p++ = color;
 }
 
-WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd, SalGeometryProvider *pProvider):
+WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd, [[maybe_unused]] SalGeometryProvider *pProvider):
     mhLocalDC(nullptr),
     mbPrinter(eType == WinSalGraphics::PRINTER),
     mbVirDev(eType == WinSalGraphics::VIRTUAL_DEVICE),
