@@ -488,8 +488,6 @@ class VCL_DLLPUBLIC PopupMenu : public Menu
     friend struct MenuItemData;
 
 private:
-    const vcl::ILibreOfficeKitNotifier* mpLOKNotifier; ///< To emit the LOK callbacks eg. for dialog tunneling.
-
     SAL_DLLPRIVATE MenuFloatingWindow * ImplGetFloatingWindow() const;
 
 protected:
@@ -525,12 +523,6 @@ public:
 
     static bool IsInExecute();
     static PopupMenu* GetActivePopupMenu();
-
-    /// Interface to register for dialog / window tunneling.
-    void SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier)
-    {
-        mpLOKNotifier = pNotifier;
-    }
 
     PopupMenu& operator=( const PopupMenu& rMenu );
 };

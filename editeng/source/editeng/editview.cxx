@@ -1104,8 +1104,6 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             LOKSendSpellPopupMenu(aPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
             return;
         }
-        else // For desktop and tablets, we use the tunneled dialog
-            aPopupMenu->SetLOKNotifier(pViewShell);
     }
     sal_uInt16 nId = aPopupMenu->Execute(pImpEditView->GetWindow(), aTempRect, PopupMenuFlags::NoMouseUpClose);
 
