@@ -627,6 +627,8 @@ void SidebarController::OpenThenToggleDeck (
         }
     }
     RequestOpenDeck();
+    // before SwitchToDeck which may cause the rsDeckId string to be released
+    collectUIInformation(rsDeckId);
     SwitchToDeck(rsDeckId);
 
     // Make sure the sidebar is wide enough to fit the requested content
@@ -637,8 +639,6 @@ void SidebarController::OpenThenToggleDeck (
         if (mnSavedSidebarWidth < nRequestedWidth)
             SetChildWindowWidth(nRequestedWidth);
     }
-
-    collectUIInformation(rsDeckId);
 }
 
 void SidebarController::OpenThenSwitchToDeck (
