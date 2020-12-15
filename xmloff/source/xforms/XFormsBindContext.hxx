@@ -49,8 +49,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 protected:
-    virtual void HandleAttribute( sal_Int32 nAttributeToken,
-                                  const OUString& rValue ) override;
+    virtual void HandleAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter ) override;
 
     virtual SvXMLImportContext* HandleChild(
         sal_Int32 nElementToken,

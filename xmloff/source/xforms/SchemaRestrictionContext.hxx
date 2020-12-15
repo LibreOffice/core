@@ -51,9 +51,7 @@ private:
 
     // implement TokenContext methods:
 
-    virtual void HandleAttribute(
-        sal_Int32 nAttributeToken,
-        const OUString& rValue ) override;
+    virtual void HandleAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter ) override;
 
     virtual SvXMLImportContext* HandleChild(
         sal_Int32 nElementToken,

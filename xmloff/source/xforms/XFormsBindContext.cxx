@@ -59,37 +59,36 @@ XFormsBindContext::XFormsBindContext(
     mxModel->getBindings()->insert( makeAny( mxBinding ) );
 }
 
-void XFormsBindContext::HandleAttribute( sal_Int32 nAttributeToken,
-                                         const OUString& rValue )
+void XFormsBindContext::HandleAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch( nAttributeToken & TOKEN_MASK )
+    switch( aIter.getToken() & TOKEN_MASK )
     {
     case XML_NODESET:
-        xforms_setValue( mxBinding, "BindingExpression", rValue );
+        xforms_setValue( mxBinding, "BindingExpression", aIter.toString() );
         break;
     case XML_ID:
-        xforms_setValue( mxBinding, "BindingID", rValue );
+        xforms_setValue( mxBinding, "BindingID", aIter.toString() );
         break;
     case XML_READONLY:
-        xforms_setValue( mxBinding, "ReadonlyExpression", rValue );
+        xforms_setValue( mxBinding, "ReadonlyExpression", aIter.toString() );
         break;
     case XML_RELEVANT:
-        xforms_setValue( mxBinding, "RelevantExpression", rValue );
+        xforms_setValue( mxBinding, "RelevantExpression", aIter.toString() );
         break;
     case XML_REQUIRED:
-        xforms_setValue( mxBinding, "RequiredExpression", rValue );
+        xforms_setValue( mxBinding, "RequiredExpression", aIter.toString() );
         break;
     case XML_CONSTRAINT:
-        xforms_setValue( mxBinding, "ConstraintExpression", rValue );
+        xforms_setValue( mxBinding, "ConstraintExpression", aIter.toString() );
         break;
     case XML_CALCULATE:
-        xforms_setValue( mxBinding, "CalculateExpression", rValue );
+        xforms_setValue( mxBinding, "CalculateExpression", aIter.toString() );
         break;
     case XML_TYPE:
         xforms_setValue( mxBinding, "Type",
-                      makeAny( xforms_getTypeName( mxModel->getDataTypeRepository(),
+                         xforms_getTypeName( mxModel->getDataTypeRepository(),
                                        GetImport().GetNamespaceMap(),
-                                       rValue ) ) );
+                                       aIter.toString() ) );
         break;
     default:
         assert( false && "should not happen" );

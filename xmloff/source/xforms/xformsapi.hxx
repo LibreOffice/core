@@ -44,18 +44,26 @@ css::uno::Reference<css::beans::XPropertySet> xforms_findXFormsBinding( css::uno
 
 css::uno::Reference<css::beans::XPropertySet> xforms_findXFormsSubmission( css::uno::Reference<css::frame::XModel> const &, const OUString& );
 
-void xforms_setValue(
+void xforms_setValueAny(
     css::uno::Reference<css::beans::XPropertySet> const & xPropSet,
     const OUString& rName,
     const css::uno::Any& rAny );
 
 template<typename T>
-void xforms_setValue(
+inline void xforms_setValue(
     css::uno::Reference<css::beans::XPropertySet>& xPropSet,
     const OUString& rName,
-    T& aValue )
+    const T& aValue )
 {
-    xforms_setValue( xPropSet, rName, css::uno::makeAny( aValue ) );
+    xforms_setValueAny( xPropSet, rName, css::uno::makeAny( aValue ) );
+}
+template<>
+inline void xforms_setValue(
+    css::uno::Reference<css::beans::XPropertySet>& xPropSet,
+    const OUString& rName,
+    const css::uno::Any& aValue )
+{
+    xforms_setValueAny( xPropSet, rName, aValue );
 }
 
 sal_uInt16 xforms_getTypeClass(

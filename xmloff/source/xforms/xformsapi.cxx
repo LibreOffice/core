@@ -164,7 +164,7 @@ Reference<XPropertySet> xforms_findXFormsSubmission(
     return lcl_findXFormsBindingOrSubmission( xDocument, rBindingID, false );
 }
 
-void xforms_setValue( Reference<XPropertySet> const & xPropertySet,
+void xforms_setValueAny( Reference<XPropertySet> const & xPropertySet,
                    const OUString& rName,
                    const Any& rAny )
 {

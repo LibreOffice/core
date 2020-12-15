@@ -50,20 +50,18 @@ XFormsModelContext::XFormsModelContext( SvXMLImport& rImport ) :
 {
 }
 
-void XFormsModelContext::HandleAttribute(
-    sal_Int32 nAttributeToken,
-    const OUString& rValue )
+void XFormsModelContext::HandleAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch( nAttributeToken & TOKEN_MASK)
+    switch( aIter.getToken() & TOKEN_MASK)
     {
     case XML_ID:
-        mxModel->setPropertyValue( "ID", makeAny( rValue ) );
+        mxModel->setPropertyValue( "ID", makeAny( aIter.toString() ) );
         break;
     case XML_SCHEMA:
         GetImport().SetError( XMLERROR_XFORMS_NO_SCHEMA_SUPPORT );
         break;
     default:
-        XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttributeToken, rValue);
+        XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         assert( false && "this should not happen" );
         break;
     }
