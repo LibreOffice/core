@@ -245,6 +245,8 @@ ScDPFunctionDlg::ScDPFunctionDlg(
     , mxFtBaseItem(m_xBuilder->weld_label("baseitemft"))
     , mxLbBaseItem(m_xBuilder->weld_combo_box("baseitem"))
     , mxBtnOk(m_xBuilder->weld_button("ok"))
+    , mxBtnCancel(m_xBuilder->weld_button("cancel"))
+    , mxExpander(m_xBuilder->weld_expander("expander"))
     , mrLabelVec(rLabelVec)
     , mbEmptyItem(false)
 {
@@ -291,6 +293,9 @@ DataPilotFieldReference ScDPFunctionDlg::GetFieldRef() const
 
 void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData )
 {
+    mxBtnOk->connect_clicked( LINK( this, ScDPFunctionDlg, ButtonClicked ) );
+    mxBtnCancel->connect_clicked( LINK( this, ScDPFunctionDlg, ButtonClicked ) );
+
     // list box
     PivotFunc nFuncMask = (rFuncData.mnFuncMask == PivotFunc::NONE) ? PivotFunc::Sum : rFuncData.mnFuncMask;
     mxLbFunc->SetSelection( nFuncMask );
@@ -438,6 +443,14 @@ IMPL_LINK( ScDPFunctionDlg, SelectHdl, weld::ComboBox&, rLBox, void )
     }
 }
 
+IMPL_LINK(ScDPFunctionDlg, ButtonClicked, weld::Button&, rButton, void)
+{
+    if (&rButton == mxBtnOk.get())
+        response(RET_OK);
+    else
+        response(RET_CANCEL);
+}
+
 IMPL_LINK_NOARG(ScDPFunctionDlg, DblClickHdl, weld::TreeView&, bool)
 {
     m_xDialog->response(RET_OK);
@@ -459,6 +472,7 @@ ScDPSubtotalDlg::ScDPSubtotalDlg(weld::Widget* pParent, ScDPObject& rDPObj,
     , mxFtName(m_xBuilder->weld_label("name"))
     , mxCbShowAll(m_xBuilder->weld_check_button("showall"))
     , mxBtnOk(m_xBuilder->weld_button("ok"))
+    , mxBtnCancel(m_xBuilder->weld_button("cancel"))
     , mxBtnOptions(m_xBuilder->weld_button("options"))
 {
     mxLbFunc->set_selection_mode(SelectionMode::Multiple);
@@ -496,6 +510,9 @@ void ScDPSubtotalDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 
 void ScDPSubtotalDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData )
 {
+    mxBtnOk->connect_clicked( LINK( this, ScDPSubtotalDlg, ButtonClicked ) );
+    mxBtnCancel->connect_clicked( LINK( this, ScDPSubtotalDlg, ButtonClicked ) );
+
     // field name
     mxFtName->set_label(rLabelData.getDisplayName());
 
@@ -523,6 +540,14 @@ void ScDPSubtotalDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncDa
 
     // options
     mxBtnOptions->connect_clicked( LINK( this, ScDPSubtotalDlg, ClickHdl ) );
+}
+
+IMPL_LINK(ScDPSubtotalDlg, ButtonClicked, weld::Button&, rButton, void)
+{
+    if (&rButton == mxBtnOk.get())
+        response(RET_OK);
+    else
+        response(RET_CANCEL);
 }
 
 IMPL_LINK(ScDPSubtotalDlg, RadioClickHdl, weld::Button&, rBtn, void)
@@ -625,6 +650,8 @@ ScDPSubtotalOptDlg::ScDPSubtotalOptDlg(weld::Window* pParent, ScDPObject& rDPObj
     , m_xLbHide(m_xBuilder->weld_tree_view("hideitems"))
     , m_xFtHierarchy(m_xBuilder->weld_label("hierarchyft"))
     , m_xLbHierarchy(m_xBuilder->weld_combo_box("hierarchy"))
+    , m_xBtnOk(m_xBuilder->weld_button("ok"))
+    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
     , mrDPObj(rDPObj)
     , maLabelData(rLabelData)
 {
@@ -690,6 +717,9 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 
 void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayout )
 {
+    m_xBtnOk->connect_clicked(LINK(this, ScDPSubtotalOptDlg, ButtonClicked));
+    m_xBtnCancel->connect_clicked(LINK(this, ScDPSubtotalOptDlg, ButtonClicked));
+
     // *** SORTING ***
 
     sal_Int32 nSortMode = maLabelData.maSortInfo.Mode;
@@ -818,6 +848,14 @@ sal_Int32 ScDPSubtotalOptDlg::FindListBoxEntry(
         ++nPos;
     }
     return bFound ? nPos : -1;
+}
+
+IMPL_LINK(ScDPSubtotalOptDlg, ButtonClicked, weld::Button&, rButton, void)
+{
+    if (&rButton == m_xBtnOk.get())
+        response(RET_OK);
+    else
+        response(RET_CANCEL);
 }
 
 IMPL_LINK(ScDPSubtotalOptDlg, RadioClickHdl, weld::Button&, rBtn, void)
