@@ -135,6 +135,16 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
             eOperator =  CondFormatBuffer::convertToInternalOperator(aToken);
             return this;
         }
+        else if(aType == "containsText")
+        {
+            eOperator = ScConditionMode::ContainsText;
+            return this;
+        }
+        else if(aType == "notContainsText")
+        {
+            eOperator = ScConditionMode::NotContainsText;
+            return this;
+        }
         else
         {
             SAL_WARN("sc", "unhandled XLS14_TOKEN(cfRule) with type: " << aType);
@@ -181,7 +191,8 @@ void ExtConditionalFormattingContext::onEndElement()
     {
         case XM_TOKEN(f):
         {
-            rFormulas.push_back(aChars);
+            if(!aChars.startsWith("ISERROR(SEARCH(") && !aChars.startsWith("NOT(ISERROR(SEARCH("))
+               rFormulas.push_back(aChars);
         }
         break;
         case XLS14_TOKEN( cfRule ):
