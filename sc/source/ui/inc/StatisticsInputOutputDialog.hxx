@@ -69,6 +69,7 @@ protected:
 private:
     // Widgets
     std::unique_ptr<weld::Button>       mxButtonOk;
+    std::unique_ptr<weld::Button>       mxButtonCancel;
 
     formula::RefEdit*      mpActiveEdit;
     ScAddress              mCurrentAddress;
@@ -78,7 +79,7 @@ private:
     void GetRangeFromSelection();
 
     DECL_LINK( GroupByChanged, weld::ToggleButton&, void );
-    DECL_LINK( OkClicked, weld::Button&, void );
+    DECL_LINK( ButtonClicked, weld::Button&, void );
     DECL_LINK( GetEditFocusHandler,  formula::RefEdit&, void );
     DECL_LINK( GetButtonFocusHandler,  formula::RefButton&, void );
     DECL_LINK( LoseEditFocusHandler, formula::RefEdit&, void );

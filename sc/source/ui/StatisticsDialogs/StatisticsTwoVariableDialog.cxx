@@ -39,6 +39,7 @@ ScStatisticsTwoVariableDialog::ScStatisticsTwoVariableDialog(
     , mOutputAddress(ScAddress::INITIALIZE_INVALID)
     , mGroupedBy(BY_COLUMN)
     , mxButtonOk(m_xBuilder->weld_button("ok"))
+    , mxButtonCancel(m_xBuilder->weld_button("cancel"))
     , mxGroupByColumnsRadio(m_xBuilder->weld_radio_button("groupedby-columns-radio"))
     , mxGroupByRowsRadio(m_xBuilder->weld_radio_button("groupedby-rows-radio"))
     , mpActiveEdit(nullptr)
@@ -64,7 +65,8 @@ ScStatisticsTwoVariableDialog::~ScStatisticsTwoVariableDialog()
 
 void ScStatisticsTwoVariableDialog::Init()
 {
-    mxButtonOk->connect_clicked( LINK( this, ScStatisticsTwoVariableDialog, OkClicked ) );
+    mxButtonCancel->connect_clicked( LINK( this, ScStatisticsTwoVariableDialog, ButtonClicked ) );
+    mxButtonOk->connect_clicked( LINK( this, ScStatisticsTwoVariableDialog, ButtonClicked ) );
     mxButtonOk->set_sensitive(false);
 
     Link<formula::RefEdit&,void> aEditLink = LINK( this, ScStatisticsTwoVariableDialog, GetEditFocusHandler );
@@ -179,10 +181,15 @@ void ScStatisticsTwoVariableDialog::SetReference( const ScRange& rReferenceRange
     ValidateDialogInput();
 }
 
-IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, OkClicked, weld::Button&, void )
+IMPL_LINK( ScStatisticsTwoVariableDialog, ButtonClicked, weld::Button&, rButton, void )
 {
-    CalculateInputAndWriteToOutput();
-    response(RET_OK);
+    if (&rButton == mxButtonOk.get())
+    {
+        CalculateInputAndWriteToOutput();
+        response(RET_OK);
+    }
+    else
+        response(RET_CANCEL);
 }
 
 IMPL_LINK(ScStatisticsTwoVariableDialog, GetEditFocusHandler, formula::RefEdit&, rCtrl, void)

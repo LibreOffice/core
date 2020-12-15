@@ -65,6 +65,7 @@ ScStatisticsInputOutputDialog::ScStatisticsInputOutputDialog(
     , mOutputAddress(ScAddress::INITIALIZE_INVALID)
     , mGroupedBy(BY_COLUMN)
     , mxButtonOk(m_xBuilder->weld_button("ok"))
+    , mxButtonCancel(m_xBuilder->weld_button("cancel"))
     , mpActiveEdit(nullptr)
     , mCurrentAddress(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo())
     , mDialogLostFocus(false)
@@ -85,7 +86,8 @@ ScStatisticsInputOutputDialog::~ScStatisticsInputOutputDialog()
 
 void ScStatisticsInputOutputDialog::Init()
 {
-    mxButtonOk->connect_clicked( LINK( this, ScStatisticsInputOutputDialog, OkClicked ) );
+    mxButtonCancel->connect_clicked( LINK( this, ScStatisticsInputOutputDialog, ButtonClicked ) );
+    mxButtonOk->connect_clicked( LINK( this, ScStatisticsInputOutputDialog, ButtonClicked ) );
     mxButtonOk->set_sensitive(false);
 
     Link<formula::RefEdit&,void> aEditLink = LINK( this, ScStatisticsInputOutputDialog, GetEditFocusHandler );
@@ -167,10 +169,15 @@ void ScStatisticsInputOutputDialog::SetReference( const ScRange& rReferenceRange
     ValidateDialogInput();
 }
 
-IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, OkClicked, weld::Button&, void )
+IMPL_LINK( ScStatisticsInputOutputDialog, ButtonClicked, weld::Button&, rButton, void )
 {
-    CalculateInputAndWriteToOutput();
-    response(RET_OK);
+    if (&rButton == mxButtonOk.get())
+    {
+        CalculateInputAndWriteToOutput();
+        response(RET_OK);
+    }
+    else
+        response(RET_CANCEL);
 }
 
 IMPL_LINK(ScStatisticsInputOutputDialog, GetEditFocusHandler, formula::RefEdit&, rCtrl, void)
