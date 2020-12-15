@@ -37,6 +37,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/toolkit/dialog.hxx>
+#include <vcl/toolkit/edit.hxx>
 #include <vcl/help.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/menu.hxx>
@@ -876,16 +877,6 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
             return true;
     }
 
-    // #i1820# use locale specific decimal separator
-    if( nEvCode == KEY_DECIMAL )
-    {
-        if( Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep() )
-        {
-            OUString aSep( pWindow->GetSettings().GetLocaleDataWrapper().getNumDecimalSep() );
-            nCharCode = static_cast<sal_uInt16>(aSep[0]);
-        }
-    }
-
     bool bCtrlF6 = (aKeyCode.GetCode() == KEY_F6) && aKeyCode.IsMod1();
 
     // determine last input time
@@ -969,6 +960,20 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
     VclPtr<vcl::Window> pChild = ImplGetKeyInputWindow( pWindow );
     if ( !pChild )
         return false;
+
+    // #i1820# use locale specific decimal separator
+    if (nEvCode == KEY_DECIMAL)
+    {
+        // tdf#138932: don't modify the meaning of the key for password box
+        bool bPass = false;
+        if (auto pEdit = dynamic_cast<Edit*>(pChild.get()))
+            bPass = pEdit->IsPassword();
+        if (!bPass && Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep())
+        {
+            OUString aSep(pWindow->GetSettings().GetLocaleDataWrapper().getNumDecimalSep());
+            nCharCode = static_cast<sal_uInt16>(aSep[0]);
+        }
+    }
 
     // RTL: mirror cursor keys
     const OutputDevice *pChildOutDev = pChild->GetOutDev();
