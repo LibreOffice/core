@@ -137,6 +137,8 @@ private:
 
     std::list<Link<VclMenuEvent&,void> >  maEventListeners;
 
+    OUString maID;
+
     OUString aTitleText;         // PopupMenu text
     sal_uInt16 nTitleHeight;
 
@@ -388,6 +390,16 @@ public:
     bool HandleMenuCommandEvent(Menu *pMenu, sal_uInt16 nEventId) const;
     bool HandleMenuActivateEvent(Menu *pMenu) const;
     bool HandleMenuDeActivateEvent(Menu *pMenu) const;
+
+    /**
+     * Sets an ID.
+     */
+    void set_id(const OUString& rID) { maID = rID; }
+
+    /**
+     * Get the ID of the window.
+     */
+    const OUString& get_id() const { return maID; }
 };
 
 class VCL_DLLPUBLIC MenuBar : public Menu
