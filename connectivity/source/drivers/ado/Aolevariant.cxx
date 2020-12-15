@@ -45,20 +45,20 @@ OLEString::OLEString(const BSTR& _sBStr)
     :m_sStr(_sBStr)
 {
 }
-OLEString::OLEString(const OUString& _sBStr)
+OLEString::OLEString(std::u16string_view _sBStr)
 {
-    m_sStr = ::SysAllocString(o3tl::toW(_sBStr.getStr()));
+    m_sStr = SysAllocStringLen(o3tl::toW(_sBStr.data()), _sBStr.length());
 }
 OLEString::~OLEString()
 {
     if(m_sStr)
         ::SysFreeString(m_sStr);
 }
-OLEString& OLEString::operator=(const OUString& _rSrc)
+OLEString& OLEString::operator=(std::u16string_view _rSrc)
 {
     if(m_sStr)
         ::SysFreeString(m_sStr);
-    m_sStr = ::SysAllocString(o3tl::toW(_rSrc.getStr()));
+    m_sStr = SysAllocStringLen(o3tl::toW(_rSrc.data()), _rSrc.length());
     return *this;
 }
 OLEString& OLEString::operator=(const OLEString& _rSrc)
@@ -118,11 +118,11 @@ OLEVariant::OLEVariant(sal_Int16 n)             {   VariantInit(this);  vt = VT_
 OLEVariant::OLEVariant(sal_Int32 n)             {   VariantInit(this);  vt = VT_I4;     lVal        = n;}
 OLEVariant::OLEVariant(sal_Int64 x)             {   VariantInit(this);  vt = VT_I4;     lVal        = static_cast<LONG>(x);}
 
-OLEVariant::OLEVariant(const OUString& us)
+OLEVariant::OLEVariant(std::u16string_view us)
 {
     ::VariantInit(this);
     vt      = VT_BSTR;
-    bstrVal = SysAllocString(o3tl::toW(us.getStr()));
+    bstrVal = SysAllocStringLen(o3tl::toW(us.data()), us.length());
 }
 OLEVariant::~OLEVariant()
 {
@@ -273,12 +273,12 @@ void OLEVariant::setBool(bool b)
     vt = VT_BOOL;
     boolVal     = b ? VARIANT_TRUE : VARIANT_FALSE;
 }
-void OLEVariant::setString(const OUString& us)
+void OLEVariant::setString(std::u16string_view us)
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
     vt = VT_BSTR;
-    bstrVal     = ::SysAllocString(o3tl::toW(us.getStr()));
+    bstrVal = SysAllocStringLen(o3tl::toW(us.data()), us.length());
 }
 void OLEVariant::setNoArg()
 {
