@@ -119,21 +119,13 @@ public:
 
 class PDFiumTextPage;
 
-class VCL_DLLPUBLIC PDFiumPathSegment final
+class VCL_DLLPUBLIC PDFiumPathSegment
 {
-private:
-    FPDF_PATHSEGMENT mpPathSegment;
-
-    PDFiumPathSegment(const PDFiumPathSegment&) = delete;
-    PDFiumPathSegment& operator=(const PDFiumPathSegment&) = delete;
-
 public:
-    PDFiumPathSegment(FPDF_PATHSEGMENT pPathSegment);
-    ~PDFiumPathSegment();
-
-    basegfx::B2DPoint getPoint() const;
-    bool isClosed() const;
-    PDFSegmentType getType() const;
+    virtual ~PDFiumPathSegment() = default;
+    virtual basegfx::B2DPoint getPoint() const = 0;
+    virtual bool isClosed() const = 0;
+    virtual PDFSegmentType getType() const = 0;
 };
 
 class VCL_DLLPUBLIC PDFiumPageObject final
