@@ -278,15 +278,15 @@ void VectorGraphicData::ensureSequenceAndRange()
     mbSequenceCreated = true;
 }
 
-auto VectorGraphicData::getSizeBytes() const -> std::pair<State, size_t>
+std::pair<VectorGraphicData::State, size_t> VectorGraphicData::getSizeBytes() const
 {
-    if (maSequence.empty() && maVectorGraphicDataArray.hasElements())
+    if (!maSequence.empty() && maVectorGraphicDataArray.hasElements())
     {
-        return std::make_pair(State::UNPARSED, maVectorGraphicDataArray.getLength());
+        return std::make_pair(State::PARSED, maVectorGraphicDataArray.getLength() + mNestedBitmapSize);
     }
     else
     {
-        return std::make_pair(State::PARSED, maVectorGraphicDataArray.getLength() + mNestedBitmapSize);
+        return std::make_pair(State::UNPARSED, maVectorGraphicDataArray.getLength());
     }
 }
 
