@@ -723,10 +723,21 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         return groupContext;
     }
 
+    protected void performStyleProcessingAll(final AttributeMap attrs)
+            throws ReportProcessingException
+    {
+        performStyleProcessingOne(attrs,globalStylesCollection);
+        performStyleProcessingOne(attrs,contentStylesCollection);
+    }
     protected void performStyleProcessing(final AttributeMap attrs)
             throws ReportProcessingException
     {
         final OfficeStylesCollection stylesCollection = getStylesCollection();
+        performStyleProcessingOne(attrs,stylesCollection);
+    }
+    protected void performStyleProcessingOne(final AttributeMap attrs, final OfficeStylesCollection stylesCollection)
+            throws ReportProcessingException
+    {
         final OfficeStylesCollection predefCollection = getPredefinedStylesCollection();
         final OfficeStylesCollection globalStylesCollection = getGlobalStylesCollection();
 
