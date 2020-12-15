@@ -36,6 +36,8 @@ public:
         rToolbar.signal_clicked(rIdent);
     }
 
+    static void trigger_clicked(weld::Button& rButton) { rButton.signal_clicked(); }
+
     static void trigger_click(weld::DrawingArea& rDrawingArea, const Point& rPos)
     {
         rDrawingArea.click(rPos);

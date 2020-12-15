@@ -106,6 +106,7 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                 {
                     bool bChecked = rData["data"] == "true";
                     pCheckButton->set_state(bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
+                    LOKTrigger::trigger_clicked(*static_cast<weld::Button*>(pCheckButton));
                     LOKTrigger::trigger_toggled(*static_cast<weld::ToggleButton*>(pCheckButton));
                     return true;
                 }
