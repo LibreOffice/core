@@ -87,27 +87,33 @@ IMPL_LINK_NOARG(ScPivotLayoutTreeListData, DoubleClickHdl, weld::TreeView&, bool
 
     ScAbstractDialogFactory* pFactory = ScAbstractDialogFactory::Create();
 
-    ScopedVclPtr<AbstractScDPFunctionDlg> pDialog(
+    VclPtr<AbstractScDPFunctionDlg> pDialog(
         pFactory->CreateScDPFunctionDlg(mxControl.get(), mpParent->GetLabelDataVector(), rCurrentLabelData, rCurrentFunctionData));
 
-    if (pDialog->Execute() == RET_OK)
-    {
-        rCurrentFunctionData.mnFuncMask = pDialog->GetFuncMask();
-        rCurrentLabelData.mnFuncMask = pDialog->GetFuncMask();
+    pDialog->StartExecuteAsync([this, pDialog, pCurrentItemValue,
+                                rCurrentLabelData, nEntry](int nResult) mutable {
+        if (nResult == RET_OK)
+        {
+            ScPivotFuncData& rFunctionData = pCurrentItemValue->maFunctionData;
+            rFunctionData.mnFuncMask = pDialog->GetFuncMask();
+            rCurrentLabelData.mnFuncMask = pDialog->GetFuncMask();
 
-        rCurrentFunctionData.maFieldRef = pDialog->GetFieldRef();
+            rFunctionData.maFieldRef = pDialog->GetFieldRef();
 
-        ScDPLabelData& rDFData = mpParent->GetLabelData(rCurrentFunctionData.mnCol);
+            ScDPLabelData& rDFData = mpParent->GetLabelData(rFunctionData.mnCol);
 
-        AdjustDuplicateCount(pCurrentItemValue);
+            AdjustDuplicateCount(pCurrentItemValue);
 
-        OUString sDataItemName = lclCreateDataItemName(
-                                    rCurrentFunctionData.mnFuncMask,
-                                    rDFData.maName,
-                                    rCurrentFunctionData.mnDupCount);
+            OUString sDataItemName = lclCreateDataItemName(
+                                        rFunctionData.mnFuncMask,
+                                        rDFData.maName,
+                                        rFunctionData.mnDupCount);
 
-        mxControl->set_text(nEntry, sDataItemName);
-    }
+            mxControl->set_text(nEntry, sDataItemName);
+        }
+
+        pDialog->disposeOnce();
+    });
 
     return true;
 }

@@ -18,6 +18,7 @@ class ScPivotLayoutTreeList : public ScPivotLayoutTreeListBase
 {
 private:
     std::vector<std::unique_ptr<ScItemValue>> maItemValues;
+    std::vector<ScDPName> maDataFieldNames;
 
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);

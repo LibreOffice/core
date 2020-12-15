@@ -565,9 +565,12 @@ IMPL_LINK(ScDPSubtotalDlg, ClickHdl, weld::Button&, rBtn, void)
 {
     if (&rBtn == mxBtnOptions.get())
     {
-        ScDPSubtotalOptDlg aDlg(m_xDialog.get(), mrDPObj, maLabelData, mrDataFields, mbEnableLayout);
-        if (aDlg.run() == RET_OK)
-            aDlg.FillLabelData(maLabelData);
+        mxOptionsDlg = std::make_shared<ScDPSubtotalOptDlg>(m_xDialog.get(), mrDPObj, maLabelData, mrDataFields, mbEnableLayout);
+
+        weld::DialogController::runAsync(mxOptionsDlg, [this](int nResult) {
+            if (nResult == RET_OK)
+                mxOptionsDlg->FillLabelData(maLabelData);
+        });
     }
 }
 

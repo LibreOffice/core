@@ -230,9 +230,19 @@ short AbstractScDPFunctionDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractScDPFunctionDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractScDPSubtotalDlg_Impl::Execute()
 {
     return m_xDlg->run();
+}
+
+bool AbstractScDPSubtotalDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractScDPNumGroupDlg_Impl::Execute()
@@ -1123,7 +1133,7 @@ VclPtr<AbstractScDPFunctionDlg> ScAbstractDialogFactory_Impl::CreateScDPFunction
                                                                                     const ScDPLabelData& rLabelData,
                                                                                     const ScPivotFuncData& rFuncData)
 {
-    return VclPtr<AbstractScDPFunctionDlg_Impl>::Create(std::make_unique<ScDPFunctionDlg>(pParent, rLabelVec, rLabelData, rFuncData));
+    return VclPtr<AbstractScDPFunctionDlg_Impl>::Create(std::make_shared<ScDPFunctionDlg>(pParent, rLabelVec, rLabelData, rFuncData));
 }
 
 VclPtr<AbstractScDPSubtotalDlg> ScAbstractDialogFactory_Impl::CreateScDPSubtotalDlg(weld::Widget* pParent,
@@ -1132,7 +1142,7 @@ VclPtr<AbstractScDPSubtotalDlg> ScAbstractDialogFactory_Impl::CreateScDPSubtotal
                                                                                     const ScPivotFuncData& rFuncData,
                                                                                     const ScDPNameVec& rDataFields)
 {
-    return VclPtr<AbstractScDPSubtotalDlg_Impl>::Create(std::make_unique<ScDPSubtotalDlg>(pParent, rDPObj, rLabelData, rFuncData, rDataFields, true/*bEnableLayout*/));
+    return VclPtr<AbstractScDPSubtotalDlg_Impl>::Create(std::make_shared<ScDPSubtotalDlg>(pParent, rDPObj, rLabelData, rFuncData, rDataFields, true/*bEnableLayout*/));
 }
 
 VclPtr<AbstractScDPNumGroupDlg> ScAbstractDialogFactory_Impl::CreateScDPNumGroupDlg(weld::Window* pParent, const ScDPNumGroupInfo& rInfo)
