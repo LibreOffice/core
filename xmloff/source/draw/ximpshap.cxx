@@ -782,73 +782,73 @@ void SdXMLShapeContext::SetThumbnail()
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
     sal_Int32 nTmp;
-    switch (nElement)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(DRAW, XML_ZINDEX):
         case XML_ELEMENT(DRAW_EXT, XML_ZINDEX):
-            mnZOrder = rValue.toInt32();
+            mnZOrder = aIter.toInt32();
             break;
         case XML_ELEMENT(DRAW, XML_ID):
         case XML_ELEMENT(DRAW_EXT, XML_ID):
-            if (!mbHaveXmlId) { maShapeId = rValue; }
+            if (!mbHaveXmlId) { maShapeId = aIter.toString(); }
             break;
         case XML_ELEMENT(DRAW, XML_NAME):
         case XML_ELEMENT(DRAW_EXT, XML_NAME):
-            maShapeName = rValue;
+            maShapeName = aIter.toString();
             break;
         case XML_ELEMENT(DRAW, XML_STYLE_NAME):
         case XML_ELEMENT(DRAW_EXT, XML_STYLE_NAME):
-            maDrawStyleName = rValue;
+            maDrawStyleName = aIter.toString();
             break;
         case XML_ELEMENT(DRAW, XML_TEXT_STYLE_NAME):
         case XML_ELEMENT(DRAW_EXT, XML_TEXT_STYLE_NAME):
-            maTextStyleName = rValue;
+            maTextStyleName = aIter.toString();
             break;
         case XML_ELEMENT(DRAW, XML_LAYER):
         case XML_ELEMENT(DRAW_EXT, XML_LAYER):
-            maLayerName = rValue;
+            maLayerName = aIter.toString();
             break;
         case XML_ELEMENT(DRAW, XML_TRANSFORM):
         case XML_ELEMENT(DRAW_EXT, XML_TRANSFORM):
-            mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());
+            mnTransform.SetString(aIter.toString(), GetImport().GetMM100UnitConverter());
             break;
         case XML_ELEMENT(DRAW, XML_DISPLAY):
         case XML_ELEMENT(DRAW_EXT, XML_DISPLAY):
-            mbVisible = IsXMLToken( rValue, XML_ALWAYS ) || IsXMLToken( rValue, XML_SCREEN );
-            mbPrintable = IsXMLToken( rValue, XML_ALWAYS ) || IsXMLToken( rValue, XML_PRINTER );
+            mbVisible = IsXMLToken( aIter, XML_ALWAYS ) || IsXMLToken( aIter, XML_SCREEN );
+            mbPrintable = IsXMLToken( aIter, XML_ALWAYS ) || IsXMLToken( aIter, XML_PRINTER );
             break;
         case XML_ELEMENT(PRESENTATION, XML_USER_TRANSFORMED):
-            mbIsUserTransformed = IsXMLToken( rValue, XML_TRUE );
+            mbIsUserTransformed = IsXMLToken( aIter, XML_TRUE );
             break;
         case XML_ELEMENT(PRESENTATION, XML_PLACEHOLDER):
-            mbIsPlaceholder = IsXMLToken( rValue, XML_TRUE );
+            mbIsPlaceholder = IsXMLToken( aIter, XML_TRUE );
             if( mbIsPlaceholder )
                 mbClearDefaultAttributes = false;
             break;
         case XML_ELEMENT(PRESENTATION, XML_CLASS):
-            maPresentationClass = rValue;
+            maPresentationClass = aIter.toString();
             break;
         case XML_ELEMENT(PRESENTATION, XML_STYLE_NAME):
-            maDrawStyleName = rValue;
+            maDrawStyleName = aIter.toString();
             mnStyleFamily = XmlStyleFamily::SD_PRESENTATION_ID;
             break;
         case XML_ELEMENT(SVG, XML_X):
         case XML_ELEMENT(SVG_COMPAT, XML_X):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    maPosition.X, rValue);
+                    maPosition.X, aIter.toView());
             break;
         case XML_ELEMENT(SVG, XML_Y):
         case XML_ELEMENT(SVG_COMPAT, XML_Y):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    maPosition.Y, rValue);
+                    maPosition.Y, aIter.toView());
             break;
         case XML_ELEMENT(SVG, XML_WIDTH):
         case XML_ELEMENT(SVG_COMPAT, XML_WIDTH):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    maSize.Width, rValue);
+                    maSize.Width, aIter.toView());
             if (maSize.Width > 0)
                 maSize.Width = o3tl::saturating_add<sal_Int32>(maSize.Width, 1);
             else if (maSize.Width < 0)
@@ -857,7 +857,7 @@ bool SdXMLShapeContext::processAttribute( sal_Int32 nElement, const OUString& rV
         case XML_ELEMENT(SVG, XML_HEIGHT):
         case XML_ELEMENT(SVG_COMPAT, XML_HEIGHT):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    maSize.Height, rValue);
+                    maSize.Height, aIter.toView());
             if (maSize.Height > 0)
                 maSize.Height = o3tl::saturating_add<sal_Int32>(maSize.Height, 1);
             else if (maSize.Height < 0)
@@ -867,19 +867,19 @@ bool SdXMLShapeContext::processAttribute( sal_Int32 nElement, const OUString& rV
         case XML_ELEMENT(SVG_COMPAT, XML_TRANSFORM):
             // because of #85127# take svg:transform into account and handle like
             // draw:transform for compatibility
-            mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());
+            mnTransform.SetString(aIter.toString(), GetImport().GetMM100UnitConverter());
             break;
         case XML_ELEMENT(STYLE, XML_REL_WIDTH):
-            if (sax::Converter::convertPercent(nTmp, rValue))
+            if (sax::Converter::convertPercent(nTmp, aIter.toView()))
                 mnRelWidth = static_cast<sal_Int16>(nTmp);
             break;
         case XML_ELEMENT(STYLE, XML_REL_HEIGHT):
-            if (sax::Converter::convertPercent(nTmp, rValue))
+            if (sax::Converter::convertPercent(nTmp, aIter.toView()))
                 mnRelHeight = static_cast<sal_Int16>(nTmp);
             break;
         case XML_ELEMENT(NONE, XML_ID):
         case XML_ELEMENT(XML, XML_ID):
-            maShapeId = rValue;
+            maShapeId = aIter.toString();
             mbHaveXmlId = true;
             break;
         default:
@@ -922,16 +922,16 @@ SdXMLRectShapeContext::~SdXMLRectShapeContext()
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLRectShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLRectShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch (nElement)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(DRAW, XML_CORNER_RADIUS):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    mnRadius, rValue);
+                    mnRadius, aIter.toView());
             break;
         default:
-            return SdXMLShapeContext::processAttribute( nElement, rValue );
+            return SdXMLShapeContext::processAttribute( aIter );
     }
     return true;
 }
@@ -988,32 +988,32 @@ SdXMLLineShapeContext::~SdXMLLineShapeContext()
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLLineShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLLineShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch (nElement)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(SVG, XML_X1):
         case XML_ELEMENT(SVG_COMPAT, XML_X1):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    mnX1, rValue);
+                    mnX1, aIter.toView());
             break;
         case XML_ELEMENT(SVG, XML_Y1):
         case XML_ELEMENT(SVG_COMPAT, XML_Y1):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    mnY1, rValue);
+                    mnY1, aIter.toView());
             break;
         case XML_ELEMENT(SVG, XML_X2):
         case XML_ELEMENT(SVG_COMPAT, XML_X2):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    mnX2, rValue);
+                    mnX2, aIter.toView());
             break;
         case XML_ELEMENT(SVG, XML_Y2):
         case XML_ELEMENT(SVG_COMPAT, XML_Y2):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    mnY2, rValue);
+                    mnY2, aIter.toView());
             break;
         default:
-            return SdXMLShapeContext::processAttribute( nElement, rValue );
+            return SdXMLShapeContext::processAttribute( aIter );
     }
     return true;
 }
@@ -1100,56 +1100,56 @@ SdXMLEllipseShapeContext::~SdXMLEllipseShapeContext()
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLEllipseShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLEllipseShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch (nElement)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(SVG, XML_RX):
         case XML_ELEMENT(SVG_COMPAT, XML_RX):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    mnRX, rValue);
+                    mnRX, aIter.toView());
             break;
         case XML_ELEMENT(SVG, XML_RY):
         case XML_ELEMENT(SVG_COMPAT, XML_RY):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    mnRY, rValue);
+                    mnRY, aIter.toView());
             break;
         case XML_ELEMENT(SVG, XML_CX):
         case XML_ELEMENT(SVG_COMPAT, XML_CX):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    mnCX, rValue);
+                    mnCX, aIter.toView());
             break;
         case XML_ELEMENT(SVG, XML_CY):
         case XML_ELEMENT(SVG_COMPAT, XML_CY):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    mnCY, rValue);
+                    mnCY, aIter.toView());
             break;
         case XML_ELEMENT(SVG, XML_R):
         case XML_ELEMENT(SVG_COMPAT, XML_R):
             // single radius, it's a circle and both radii are the same
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    mnRX, rValue);
+                    mnRX, aIter.toView());
             mnRY = mnRX;
             break;
         case XML_ELEMENT(DRAW, XML_KIND):
-            SvXMLUnitConverter::convertEnum( meKind, rValue, aXML_CircleKind_EnumMap );
+            SvXMLUnitConverter::convertEnum( meKind, aIter.toString(), aXML_CircleKind_EnumMap );
             break;
         case XML_ELEMENT(DRAW, XML_START_ANGLE):
         {
             double dStartAngle;
-            if (::sax::Converter::convertDouble( dStartAngle, rValue ))
+            if (::sax::Converter::convertDouble( dStartAngle, aIter.toView() ))
                 mnStartAngle = static_cast<sal_Int32>(dStartAngle * 100.0);
             break;
         }
         case XML_ELEMENT(DRAW, XML_END_ANGLE):
         {
             double dEndAngle;
-            if (::sax::Converter::convertDouble( dEndAngle, rValue ))
+            if (::sax::Converter::convertDouble( dEndAngle, aIter.toView() ))
                 mnEndAngle = static_cast<sal_Int32>(dEndAngle * 100.0);
             break;
         }
         default:
-            return SdXMLShapeContext::processAttribute( nElement, rValue );
+            return SdXMLShapeContext::processAttribute( aIter );
     }
     return true;
 }
@@ -1203,19 +1203,19 @@ SdXMLPolygonShapeContext::SdXMLPolygonShapeContext(
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLPolygonShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLPolygonShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch (nElement)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(SVG, XML_VIEWBOX):
         case XML_ELEMENT(SVG_COMPAT, XML_VIEWBOX):
-            maViewBox = rValue;
+            maViewBox = aIter.toString();
             break;
         case XML_ELEMENT(DRAW, XML_POINTS):
-            maPoints = rValue;
+            maPoints = aIter.toString();
             break;
         default:
-            return SdXMLShapeContext::processAttribute( nElement, rValue );
+            return SdXMLShapeContext::processAttribute( aIter);
     }
     return true;
 }
@@ -1310,20 +1310,20 @@ SdXMLPathShapeContext::~SdXMLPathShapeContext()
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLPathShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLPathShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch (nElement)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(SVG, XML_VIEWBOX):
         case XML_ELEMENT(SVG_COMPAT, XML_VIEWBOX):
-            maViewBox = rValue;
+            maViewBox = aIter.toString();
             break;
         case XML_ELEMENT(SVG, XML_D):
         case XML_ELEMENT(SVG_COMPAT, XML_D):
-            maD = rValue;
+            maD = aIter.toString();
             break;
         default:
-            return SdXMLShapeContext::processAttribute( nElement, rValue );
+            return SdXMLShapeContext::processAttribute( aIter );
     }
     return true;
 }
@@ -1462,19 +1462,19 @@ SdXMLTextBoxShapeContext::~SdXMLTextBoxShapeContext()
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLTextBoxShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLTextBoxShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch (nElement)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(DRAW, XML_CORNER_RADIUS):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    mnRadius, rValue);
+                    mnRadius, aIter.toView());
             break;
         case XML_ELEMENT(DRAW, XML_CHAIN_NEXT_NAME):
-            maChainNextName = rValue;
+            maChainNextName = aIter.toString();
             break;
         default:
-            return SdXMLShapeContext::processAttribute( nElement, rValue );
+            return SdXMLShapeContext::processAttribute( aIter );
     }
     return true;
 }
@@ -1643,15 +1643,15 @@ SdXMLControlShapeContext::~SdXMLControlShapeContext()
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLControlShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLControlShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch (nElement)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(DRAW, XML_CONTROL):
-            maFormId = rValue;
+            maFormId = aIter.toString();
             break;
         default:
-            return SdXMLShapeContext::processAttribute( nElement, rValue );
+            return SdXMLShapeContext::processAttribute( aIter );
     }
     return true;
 }
@@ -1731,25 +1731,26 @@ bool SvXMLImport::needFixPositionAfterZ() const
 
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLConnectorShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLConnectorShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch( nElement )
+    switch( aIter.getToken() )
     {
         case XML_ELEMENT(DRAW, XML_START_SHAPE):
-            maStartShapeId = rValue;
+            maStartShapeId = aIter.toString();
             break;
         case XML_ELEMENT(DRAW, XML_START_GLUE_POINT):
-            mnStartGlueId = rValue.toInt32();
+            mnStartGlueId = aIter.toInt32();
             break;
         case XML_ELEMENT(DRAW, XML_END_SHAPE):
-            maEndShapeId = rValue;
+            maEndShapeId = aIter.toString();
             break;
         case XML_ELEMENT(DRAW, XML_END_GLUE_POINT):
-            mnEndGlueId = rValue.toInt32();
+            mnEndGlueId = aIter.toInt32();
             break;
         case XML_ELEMENT(DRAW, XML_LINE_SKEW):
         {
-            SvXMLTokenEnumerator aTokenEnum( rValue );
+            OUString sValue = aIter.toString();
+            SvXMLTokenEnumerator aTokenEnum( sValue );
             OUString aToken;
             if( aTokenEnum.getNextToken( aToken ) )
             {
@@ -1770,40 +1771,40 @@ bool SdXMLConnectorShapeContext::processAttribute( sal_Int32 nElement, const OUS
         }
         case XML_ELEMENT(DRAW, XML_TYPE):
         {
-            (void)SvXMLUnitConverter::convertEnum( mnType, rValue, aXML_ConnectionKind_EnumMap );
+            (void)SvXMLUnitConverter::convertEnum( mnType, aIter.toString(), aXML_ConnectionKind_EnumMap );
             break;
         }
         // #121965# draw:transform may be used in ODF1.2, e.g. exports from MS seem to use these
         case XML_ELEMENT(DRAW, XML_TRANSFORM):
-            mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());
+            mnTransform.SetString(aIter.toString(), GetImport().GetMM100UnitConverter());
             break;
 
         case XML_ELEMENT(SVG, XML_X1):
         case XML_ELEMENT(SVG_COMPAT, XML_X1):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    maStart.X, rValue);
+                    maStart.X, aIter.toView());
             break;
         case XML_ELEMENT(SVG, XML_Y1):
         case XML_ELEMENT(SVG_COMPAT, XML_Y1):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    maStart.Y, rValue);
+                    maStart.Y, aIter.toView());
             break;
         case XML_ELEMENT(SVG, XML_X2):
         case XML_ELEMENT(SVG_COMPAT, XML_X2):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    maEnd.X, rValue);
+                    maEnd.X, aIter.toView());
             break;
         case XML_ELEMENT(SVG, XML_Y2):
         case XML_ELEMENT(SVG_COMPAT, XML_Y2):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    maEnd.Y, rValue);
+                    maEnd.Y, aIter.toView());
             break;
         case XML_ELEMENT(SVG, XML_D):
         case XML_ELEMENT(SVG_COMPAT, XML_D):
         {
             basegfx::B2DPolyPolygon aPolyPolygon;
 
-            if(basegfx::utils::importFromSvgD(aPolyPolygon, rValue, GetImport().needFixPositionAfterZ(), nullptr))
+            if(basegfx::utils::importFromSvgD(aPolyPolygon, aIter.toString(), GetImport().needFixPositionAfterZ(), nullptr))
             {
                 if(aPolyPolygon.count())
                 {
@@ -1818,7 +1819,7 @@ bool SdXMLConnectorShapeContext::processAttribute( sal_Int32 nElement, const OUS
             break;
         }
         default:
-            return SdXMLShapeContext::processAttribute( nElement, rValue );
+            return SdXMLShapeContext::processAttribute( aIter );
     }
     return true;
 }
@@ -1995,40 +1996,40 @@ SdXMLMeasureShapeContext::~SdXMLMeasureShapeContext()
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLMeasureShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLMeasureShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch( nElement )
+    switch( aIter.getToken() )
     {
         case XML_ELEMENT(SVG, XML_X1):
         case XML_ELEMENT(SVG_COMPAT, XML_X1):
         {
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    maStart.X, rValue);
+                    maStart.X, aIter.toView());
             break;
         }
         case XML_ELEMENT(SVG, XML_Y1):
         case XML_ELEMENT(SVG_COMPAT, XML_Y1):
         {
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    maStart.Y, rValue);
+                    maStart.Y, aIter.toView());
             break;
         }
         case XML_ELEMENT(SVG, XML_X2):
         case XML_ELEMENT(SVG_COMPAT, XML_X2):
         {
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    maEnd.X, rValue);
+                    maEnd.X, aIter.toView());
             break;
         }
         case XML_ELEMENT(SVG, XML_Y2):
         case XML_ELEMENT(SVG_COMPAT, XML_Y2):
         {
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    maEnd.Y, rValue);
+                    maEnd.Y, aIter.toView());
             break;
         }
         default:
-            return SdXMLShapeContext::processAttribute( nElement, rValue );
+            return SdXMLShapeContext::processAttribute( aIter );
     }
     return true;
 }
@@ -2100,12 +2101,12 @@ SdXMLPageShapeContext::~SdXMLPageShapeContext()
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLPageShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLPageShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    if( nElement == XML_ELEMENT(DRAW, XML_PAGE_NUMBER) )
-        mnPageNumber = rValue.toInt32();
+    if( aIter.getToken() == XML_ELEMENT(DRAW, XML_PAGE_NUMBER) )
+        mnPageNumber = aIter.toInt32();
     else
-        return SdXMLShapeContext::processAttribute( nElement, rValue );
+        return SdXMLShapeContext::processAttribute( aIter );
     return true;
 }
 
@@ -2238,24 +2239,24 @@ void SdXMLCaptionShapeContext::startFastElement (sal_Int32 nElement,
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLCaptionShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLCaptionShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch (nElement)
+    switch (aIter.getToken())
     {
         case XML_ELEMENT(DRAW, XML_CAPTION_POINT_X):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    maCaptionPoint.X, rValue);
+                    maCaptionPoint.X, aIter.toView());
             break;
         case XML_ELEMENT(DRAW, XML_CAPTION_POINT_Y):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    maCaptionPoint.Y, rValue);
+                    maCaptionPoint.Y, aIter.toView());
             break;
         case XML_ELEMENT(DRAW, XML_CORNER_RADIUS):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    mnRadius, rValue);
+                    mnRadius, aIter.toView());
             break;
         default:
-            return SdXMLShapeContext::processAttribute( nElement, rValue );
+            return SdXMLShapeContext::processAttribute( aIter );
     }
     return true;
 }
@@ -2271,12 +2272,12 @@ SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLGraphicObjectShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLGraphicObjectShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    if( nElement == XML_ELEMENT(XLINK, XML_HREF) )
-        maURL = rValue;
+    if( aIter.getToken() == XML_ELEMENT(XLINK, XML_HREF) )
+        maURL = aIter.toString();
     else
-        return SdXMLShapeContext::processAttribute( nElement, rValue );
+        return SdXMLShapeContext::processAttribute( aIter );
     return true;
 }
 
@@ -2645,18 +2646,18 @@ void SdXMLObjectShapeContext::endFastElement(sal_Int32 nElement)
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLObjectShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLObjectShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch( nElement )
+    switch( aIter.getToken() )
     {
         case XML_ELEMENT(DRAW, XML_CLASS_ID):
-            maCLSID = rValue;
+            maCLSID = aIter.toString();
             break;
         case XML_ELEMENT(XLINK, XML_HREF):
-            maHref = rValue;
+            maHref = aIter.toString();
             break;
         default:
-            return SdXMLShapeContext::processAttribute( nElement, rValue );
+            return SdXMLShapeContext::processAttribute( aIter );
     }
     return true;
 }
@@ -2725,24 +2726,24 @@ void SdXMLAppletShapeContext::startFastElement (sal_Int32 /*nElement*/,
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLAppletShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLAppletShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch( nElement )
+    switch( aIter.getToken() )
     {
         case XML_ELEMENT(DRAW, XML_APPLET_NAME):
-            maAppletName = rValue;
+            maAppletName = aIter.toString();
             break;
         case XML_ELEMENT(DRAW, XML_CODE):
-            maAppletCode = rValue;
+            maAppletCode = aIter.toString();
             break;
         case XML_ELEMENT(DRAW, XML_MAY_SCRIPT):
-            mbIsScript = IsXMLToken( rValue, XML_TRUE );
+            mbIsScript = IsXMLToken( aIter, XML_TRUE );
             break;
         case XML_ELEMENT(XLINK, XML_HREF):
-            maHref = GetImport().GetAbsoluteReference(rValue);
+            maHref = GetImport().GetAbsoluteReference(aIter.toString());
             break;
         default:
-            return SdXMLShapeContext::processAttribute( nElement, rValue );
+            return SdXMLShapeContext::processAttribute( aIter );
     }
     return true;
 }
@@ -2917,18 +2918,18 @@ lcl_GetMediaReference(SvXMLImport const& rImport, OUString const& rURL)
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLPluginShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLPluginShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch( nElement )
+    switch( aIter.getToken() )
     {
         case XML_ELEMENT(DRAW, XML_MIME_TYPE):
-            maMimeType = rValue;
+            maMimeType = aIter.toString();
             break;
         case XML_ELEMENT(XLINK, XML_HREF):
-            maHref = lcl_GetMediaReference(GetImport(), rValue);
+            maHref = lcl_GetMediaReference(GetImport(), aIter.toString());
             break;
         default:
-            return SdXMLShapeContext::processAttribute( nElement, rValue );
+            return SdXMLShapeContext::processAttribute( aIter );
     }
     return true;
 }
@@ -3115,18 +3116,18 @@ void SdXMLFloatingFrameShapeContext::startFastElement (sal_Int32 /*nElement*/,
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLFloatingFrameShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLFloatingFrameShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    switch( nElement )
+    switch( aIter.getToken() )
     {
         case XML_ELEMENT(DRAW, XML_FRAME_NAME):
-            maFrameName = rValue;
+            maFrameName = aIter.toString();
             break;
         case XML_ELEMENT(XLINK, XML_HREF):
-            maHref = GetImport().GetAbsoluteReference(rValue);
+            maHref = GetImport().GetAbsoluteReference(aIter.toString());
             break;
         default:
-            return SdXMLShapeContext::processAttribute( nElement, rValue );
+            return SdXMLShapeContext::processAttribute( aIter );
     }
     return true;
 }
@@ -3467,11 +3468,11 @@ void SdXMLFrameShapeContext::endFastElement(sal_Int32 nElement)
     SdXMLShapeContext::endFastElement(nElement);
 }
 
-bool SdXMLFrameShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLFrameShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
     bool bId( false );
 
-    switch ( nElement )
+    switch ( aIter.getToken() )
     {
         case XML_ELEMENT(DRAW, XML_ID):
         case XML_ELEMENT(DRAW_EXT, XML_ID):
@@ -3483,7 +3484,7 @@ bool SdXMLFrameShapeContext::processAttribute( sal_Int32 nElement, const OUStrin
     }
 
     if ( bId )
-        return SdXMLShapeContext::processAttribute( nElement, rValue );
+        return SdXMLShapeContext::processAttribute( aIter );
     return true; // deliberately ignoring other attributes
 }
 
@@ -3521,18 +3522,18 @@ SdXMLCustomShapeContext::~SdXMLCustomShapeContext()
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLCustomShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLCustomShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
-    if( nElement == XML_ELEMENT(DRAW, XML_ENGINE) )
+    if( aIter.getToken() == XML_ELEMENT(DRAW, XML_ENGINE) )
     {
-        maCustomShapeEngine = rValue;
+        maCustomShapeEngine = aIter.toString();
     }
-    else if (nElement == XML_ELEMENT(DRAW, XML_DATA) )
+    else if (aIter.getToken() == XML_ELEMENT(DRAW, XML_DATA) )
     {
-        maCustomShapeData = rValue;
+        maCustomShapeData = aIter.toString();
     }
     else
-        return SdXMLShapeContext::processAttribute( nElement, rValue );
+        return SdXMLShapeContext::processAttribute( aIter );
     return true;
 }
 
@@ -3821,13 +3822,14 @@ void SdXMLTableShapeContext::endFastElement(sal_Int32 nElement)
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
-bool SdXMLTableShapeContext::processAttribute( sal_Int32 nElement, const OUString& rValue )
+bool SdXMLTableShapeContext::processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
 {
+    auto nElement = aIter.getToken();
     if( IsTokenInNamespace(nElement, XML_NAMESPACE_TABLE) )
     {
         if( (nElement & TOKEN_MASK) == XML_TEMPLATE_NAME )
         {
-            msTemplateStyleName = rValue;
+            msTemplateStyleName = aIter.toString();
         }
         else
         {
@@ -3837,7 +3839,7 @@ bool SdXMLTableShapeContext::processAttribute( sal_Int32 nElement, const OUStrin
             {
                 if( (nElement & TOKEN_MASK) == pEntry->meXMLName )
                 {
-                    if( IsXMLToken( rValue, XML_TRUE ) )
+                    if( IsXMLToken( aIter, XML_TRUE ) )
                         maTemplateStylesUsed[i] = true;
                     break;
                 }
@@ -3846,7 +3848,7 @@ bool SdXMLTableShapeContext::processAttribute( sal_Int32 nElement, const OUStrin
             }
         }
     }
-    return SdXMLShapeContext::processAttribute( nElement, rValue );
+    return SdXMLShapeContext::processAttribute( aIter );
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLTableShapeContext::createFastChildContext(
