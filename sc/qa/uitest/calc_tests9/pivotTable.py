@@ -53,7 +53,7 @@ class pivotTable(UITestCase):
                 self.assertEqual('true', get_state_as_dict(xEmptyLine)['Selected'])
 
                 xOKBtn = dialog2.getChild("ok")
-                self.ui_test.close_dialog_through_button(xOKBtn)
+                xOKBtn.executeAction("CLICK", tuple())
 
             def handle_options_dialog_second_time(dialog2):
                 xEmptyLine = dialog2.getChild("emptyline")
@@ -62,7 +62,7 @@ class pivotTable(UITestCase):
                 self.assertEqual('false', get_state_as_dict(xEmptyLine)['Selected'])
 
                 xCancelBtn = dialog2.getChild("cancel")
-                self.ui_test.close_dialog_through_button(xCancelBtn)
+                xCancelBtn.executeAction("CLICK", tuple())
 
             def handle_options_dialog_third_time(dialog2):
                 xEmptyLine = dialog2.getChild("emptyline")
@@ -70,7 +70,7 @@ class pivotTable(UITestCase):
                 self.assertEqual('true', get_state_as_dict(xEmptyLine)['Selected'])
 
                 xOKBtn = dialog2.getChild("ok")
-                self.ui_test.close_dialog_through_button(xOKBtn)
+                xOKBtn.executeAction("CLICK", tuple())
 
             self.ui_test.execute_blocking_action(optionBtn.executeAction, args=('CLICK', ()),
                     dialog_handler=handle_options_dialog_first_time)

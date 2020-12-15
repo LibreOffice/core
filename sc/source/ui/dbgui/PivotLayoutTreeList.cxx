@@ -41,27 +41,31 @@ IMPL_LINK_NOARG(ScPivotLayoutTreeList, DoubleClickHdl, weld::TreeView&, bool)
     ScItemValue* pCurrentItemValue
         = reinterpret_cast<ScItemValue*>(mxControl->get_id(nEntry).toInt64());
     ScPivotFuncData& rCurrentFunctionData = pCurrentItemValue->maFunctionData;
+    SCCOL nCurrentColumn = rCurrentFunctionData.mnCol;
 
-    if (mpParent->IsDataElement(rCurrentFunctionData.mnCol))
+    if (mpParent->IsDataElement(nCurrentColumn))
         return true;
 
-    SCCOL nCurrentColumn = rCurrentFunctionData.mnCol;
     ScDPLabelData& rCurrentLabelData = mpParent->GetLabelData(nCurrentColumn);
 
     ScAbstractDialogFactory* pFactory = ScAbstractDialogFactory::Create();
 
-    std::vector<ScDPName> aDataFieldNames;
-    mpParent->PushDataFieldNames(aDataFieldNames);
+    maDataFieldNames.clear();
+    mpParent->PushDataFieldNames(maDataFieldNames);
 
-    ScopedVclPtr<AbstractScDPSubtotalDlg> pDialog(
+    VclPtr<AbstractScDPSubtotalDlg> pDialog(
         pFactory->CreateScDPSubtotalDlg(mxControl.get(), mpParent->maPivotTableObject,
-                                        rCurrentLabelData, rCurrentFunctionData, aDataFieldNames));
+                                        rCurrentLabelData, rCurrentFunctionData, maDataFieldNames));
 
-    if (pDialog->Execute() == RET_OK)
-    {
-        pDialog->FillLabelData(rCurrentLabelData);
-        rCurrentFunctionData.mnFuncMask = pDialog->GetFuncMask();
-    }
+    pDialog->StartExecuteAsync([this, pDialog, pCurrentItemValue, nCurrentColumn](int nResult) {
+        if (nResult == RET_OK)
+        {
+            pDialog->FillLabelData(mpParent->GetLabelData(nCurrentColumn));
+            pCurrentItemValue->maFunctionData.mnFuncMask = pDialog->GetFuncMask();
+        }
+
+        pDialog->disposeOnce();
+    });
 
     return true;
 }
