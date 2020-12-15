@@ -64,6 +64,7 @@ private:
     std::unique_ptr<weld::RadioButton> mxPeriodicMethodRadio;
 
     std::unique_ptr<weld::Button> mxButtonOk;
+    std::unique_ptr<weld::Button> mxButtonCancel;
 
     void Init();
     void GetRangeFromSelection();
@@ -75,7 +76,7 @@ private:
     ScRange PerformRandomSamplingKeepOrder(ScDocShell* pDocShell);
     ScRange PerformPeriodicSampling(ScDocShell* pDocShell);
 
-    DECL_LINK( OkClicked, weld::Button&, void );
+    DECL_LINK( ButtonClicked, weld::Button&, void );
     DECL_LINK( GetEditFocusHandler, formula::RefEdit&, void );
     DECL_LINK( GetButtonFocusHandler, formula::RefButton&, void );
     DECL_LINK( LoseEditFocusHandler, formula::RefEdit&, void );
