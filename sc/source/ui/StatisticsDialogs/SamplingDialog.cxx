@@ -46,6 +46,7 @@ ScSamplingDialog::ScSamplingDialog(SfxBindings* pSfxBindings, SfxChildWindow* pC
     , mxKeepOrder(m_xBuilder->weld_check_button("keep-order"))
     , mxPeriodicMethodRadio(m_xBuilder->weld_radio_button("periodic-method-radio"))
     , mxButtonOk(m_xBuilder->weld_button("ok"))
+    , mxButtonCancel(m_xBuilder->weld_button("cancel"))
 {
     mxInputRangeEdit->SetReferences(this, mxInputRangeLabel.get());
     mxInputRangeButton->SetReferences(this, mxInputRangeEdit.get());
@@ -63,7 +64,8 @@ ScSamplingDialog::~ScSamplingDialog()
 
 void ScSamplingDialog::Init()
 {
-    mxButtonOk->connect_clicked( LINK( this, ScSamplingDialog, OkClicked ) );
+    mxButtonCancel->connect_clicked( LINK( this, ScSamplingDialog, ButtonClicked ) );
+    mxButtonOk->connect_clicked( LINK( this, ScSamplingDialog, ButtonClicked ) );
     mxButtonOk->set_sensitive(false);
 
     Link<formula::RefEdit&,void> aEditLink = LINK( this, ScSamplingDialog, GetEditFocusHandler );
@@ -417,10 +419,15 @@ IMPL_LINK(ScSamplingDialog, GetButtonFocusHandler, formula::RefButton&, rCtrl, v
 }
 
 
-IMPL_LINK_NOARG(ScSamplingDialog, OkClicked, weld::Button&, void)
+IMPL_LINK(ScSamplingDialog, ButtonClicked, weld::Button&, rButton, void)
 {
-    PerformSampling();
-    response(RET_OK);
+    if (&rButton == mxButtonOk.get())
+    {
+        PerformSampling();
+        response(RET_OK);
+    }
+    else
+        response(RET_CANCEL);
 }
 
 IMPL_LINK_NOARG(ScSamplingDialog, LoseEditFocusHandler, formula::RefEdit&, void)
