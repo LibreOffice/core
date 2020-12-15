@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa3f3c4c_04a0894b",
+        "filename": "starmath/source/mathmlimport.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 1406,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-15T10:56:25Z",
+      "side": 1,
+      "message": "So to find out whether rChars contains exactly one Unicode character, instead of introducing that getCodepointsCount, you can check `index \u003d\u003d rChars.getLength()` after the iterateCodePoints call.",
+      "revId": "a2be757821b2e6f7fa870797bd1f584309bf3b99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
