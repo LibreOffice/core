@@ -219,6 +219,7 @@ void TabBar::CreateTabItem(weld::Toolbar& rItem, const DeckDescriptor& rDeckDesc
     rItem.set_accessible_name(rDeckDescriptor.msTitle);
     rItem.set_accessible_description(rDeckDescriptor.msHelpText);
     rItem.set_tooltip_text(rDeckDescriptor.msHelpText);
+    rItem.set_item_tooltip_text("toggle", rDeckDescriptor.msHelpText);
 }
 
 css::uno::Reference<css::graphic::XGraphic> TabBar::GetItemImage(const DeckDescriptor& rDeckDescriptor) const
