@@ -59,7 +59,7 @@ struct SourceManagerStruct {
     SvStream*   stream;                 /* source stream */
     JOCTET*     buffer;                 /* start of buffer */
     boolean     start_of_file;          /* have we gotten any data yet? */
-    boolean     no_data_available;
+    int         no_data_available_failures;
 };
 
 #endif
