@@ -1922,6 +1922,21 @@ GtkWindow* get_focus_window()
     return pFocus;
 }
 
+void LocalizeDecimalSeparator(GdkEventKey* pEvent)
+{
+    // #i1820# use locale specific decimal separator
+    if (pEvent->keyval == GDK_KEY_KP_Decimal && Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep())
+    {
+        GtkWindow* pFocusWin = get_focus_window();
+        GtkWidget* pFocus = pFocusWin ? gtk_window_get_focus(pFocusWin) : nullptr;
+        // tdf#138932 except if the target is a GtkEntry used for passwords
+        if (!pFocus || !GTK_IS_ENTRY(pFocus) || gtk_entry_get_visibility(GTK_ENTRY(pFocus)))
+        {
+            OUString aSep(Application::GetSettings().GetLocaleDataWrapper().getNumDecimalSep());
+            pEvent->keyval = aSep[0];
+        }
+    }
+}
 
 class GtkInstanceWidget : public virtual weld::Widget
 {
@@ -2114,19 +2129,7 @@ private:
 
     static gboolean signalKey(GtkWidget*, GdkEventKey* pEvent, gpointer widget)
     {
-        // #i1820# use locale specific decimal separator
-        if (pEvent->keyval == GDK_KEY_KP_Decimal && Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep())
-        {
-            GtkWindow* pFocusWin = get_focus_window();
-            GtkWidget* pFocus = pFocusWin ? gtk_window_get_focus(pFocusWin) : nullptr;
-            // tdf#138932 except if the target is a GtkEntry used for passwords
-            if (!pFocus || !GTK_IS_ENTRY(pFocus) || gtk_entry_get_visibility(GTK_ENTRY(pFocus)))
-            {
-                OUString aSep(Application::GetSettings().GetLocaleDataWrapper().getNumDecimalSep());
-                pEvent->keyval = aSep[0];
-            }
-        }
-
+        LocalizeDecimalSeparator(pEvent);
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         return pThis->signal_key(pEvent);
     }
@@ -14605,6 +14608,7 @@ private:
     static gboolean signalEntryKeyPress(GtkWidget*, GdkEventKey* pEvent, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
+        LocalizeDecimalSeparator(pEvent);
         return pThis->signal_entry_key_press(pEvent);
     }
 
