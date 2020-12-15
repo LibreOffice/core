@@ -557,16 +557,11 @@ bool SalGraphics::DrawGradient(const tools::PolyPolygon& rPolyPoly, const Gradie
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled() )
     {
-        tools::PolyPolygon aFinal(mirror(rPolyPoly.getB2DPolyPolygon(), rOutDev));
-        return drawGradient(aFinal, rGradient);
+        tools::PolyPolygon aMirrored(mirror(rPolyPoly.getB2DPolyPolygon(), rOutDev));
+        return drawGradient(aMirrored, rGradient);
     }
 
     return drawGradient( rPolyPoly, rGradient );
-}
-
-bool SalGraphics::DrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon, SalGradient const & rSalGradient)
-{
-    return implDrawGradient(rPolyPolygon, rSalGradient);
 }
 
 void SalGraphics::CopyArea( tools::Long nDestX, tools::Long nDestY,

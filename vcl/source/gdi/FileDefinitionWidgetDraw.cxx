@@ -237,6 +237,13 @@ void FileDefinitionWidgetDraw::drawBitmap(SalGraphics& rGraphics, const SalTwoRe
     rGraphics.drawBitmap(rPosAry, rSalBitmap, rTransparentBitmap);
 }
 
+void FileDefinitionWidgetDraw::implDrawGradient(SalGraphics& rGraphics,
+                                                const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                                const SalGradient& rGradient)
+{
+    rGraphics.implDrawGradient(rPolyPolygon, rGradient);
+}
+
 namespace
 {
 void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics, tools::Long nX,
@@ -319,7 +326,8 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                             aColor.SetTransparency(rStop.mfOpacity * (1.0f - rRectangle.mnOpacity));
                             aGradient.maStops.emplace_back(aColor, rStop.mfOffset);
                         }
-                        rGraphics.DrawGradient(basegfx::B2DPolyPolygon(aB2DPolygon), aGradient);
+                        FileDefinitionWidgetDraw::implDrawGradient(
+                            rGraphics, basegfx::B2DPolyPolygon(aB2DPolygon), aGradient);
                     }
                 }
                 if (rRectangle.mpStrokeColor)
