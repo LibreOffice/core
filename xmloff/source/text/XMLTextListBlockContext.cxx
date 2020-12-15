@@ -84,7 +84,6 @@ XMLTextListBlockContext::XMLTextListBlockContext(
     bool bIsContinueNumberingAttributePresent( false );
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sValue = aIter.toString();
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(XML, XML_ID):
@@ -92,20 +91,20 @@ XMLTextListBlockContext::XMLTextListBlockContext(
             // xml:id is also the list ID (#i92221#)
             if ( mnLevel == 0 ) // root <list> element
             {
-                msListId = sValue;
+                msListId = aIter.toString();
             }
             break;
         case XML_ELEMENT(TEXT, XML_CONTINUE_NUMBERING):
-            mbRestartNumbering = !IsXMLToken(sValue, XML_TRUE);
+            mbRestartNumbering = !IsXMLToken(aIter, XML_TRUE);
             bIsContinueNumberingAttributePresent = true;
             break;
         case XML_ELEMENT(TEXT, XML_STYLE_NAME):
-            msListStyleName = sValue;
+            msListStyleName = aIter.toString();
             break;
         case XML_ELEMENT(TEXT, XML_CONTINUE_LIST):
             if ( mnLevel == 0 ) // root <list> element
             {
-                msContinueListId = sValue;
+                msContinueListId = aIter.toString();
             }
             break;
         default:

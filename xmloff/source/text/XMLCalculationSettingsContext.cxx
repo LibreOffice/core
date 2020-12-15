@@ -47,9 +47,7 @@ XMLCalculationSettingsContext::XMLCalculationSettingsContext( SvXMLImport& rImpo
     {
         if (aIter.getToken() == XML_ELEMENT(TABLE, XML_NULL_YEAR) )
         {
-            sal_Int32 nTemp;
-            ::sax::Converter::convertNumber(nTemp, aIter.toString());
-            nYear= static_cast <sal_Int16> (nTemp);
+            nYear = static_cast <sal_Int16> (aIter.toInt32());
         }
         else
             XMLOFF_WARN_UNKNOWN("xmloff", aIter);

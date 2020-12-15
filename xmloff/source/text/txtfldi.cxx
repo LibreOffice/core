@@ -2665,7 +2665,7 @@ void XMLDdeFieldDeclImportContext::startFastElement(
             case XML_ELEMENT(OFFICE, XML_AUTOMATIC_UPDATE):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, aIter.toString()) )
+                if (::sax::Converter::convertBool(bTmp, aIter.toView()) )
                 {
                     bUpdate = bTmp;
                 }
@@ -3445,19 +3445,18 @@ static bool lcl_ProcessLabel(
     bool bValid = false;
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sValue = aIter.toString();
         switch (aIter.getToken())
         {
             case XML_ELEMENT(TEXT, XML_VALUE):
             {
-                rLabel = sValue;
+                rLabel = aIter.toString();
                 bValid = true;
                 break;
             }
             case XML_ELEMENT(TEXT, XML_CURRENT_SELECTED):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool( bTmp, sValue ))
+                if (::sax::Converter::convertBool( bTmp, aIter.toView() ))
                     rIsSelected = bTmp;
                 break;
             }

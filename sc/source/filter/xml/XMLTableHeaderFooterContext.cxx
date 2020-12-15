@@ -56,7 +56,7 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
     for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {
         if( aIter.getToken() == XML_ELEMENT(STYLE, XML_DISPLAY) )
-            bDisplay = IsXMLToken(aIter.toString(), XML_TRUE);
+            bDisplay = IsXMLToken(aIter, XML_TRUE);
         else
             XMLOFF_WARN_UNKNOWN("sc", aIter);
     }

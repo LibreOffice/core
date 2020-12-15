@@ -264,6 +264,219 @@ bool Converter::convertMeasure( sal_Int32& rValue,
     return true;
 }
 
+/** convert string to measure using optional min and max values*/
+bool Converter::convertMeasure( sal_Int32& rValue,
+                                std::string_view rString,
+                                sal_Int16 nTargetUnit /* = MeasureUnit::MM_100TH */,
+                                sal_Int32 nMin /* = SAL_MIN_INT32 */,
+                                sal_Int32 nMax /* = SAL_MAX_INT32 */ )
+{
+    bool bNeg = false;
+    double nVal = 0;
+
+    sal_Int32 nPos = 0;
+    sal_Int32 const nLen = rString.size();
+
+    // skip white space
+    while( (nPos < nLen) && (rString[nPos] <= ' ') )
+        nPos++;
+
+    if( nPos < nLen && '-' == rString[nPos] )
+    {
+        bNeg = true;
+        nPos++;
+    }
+
+    // get number
+    while( nPos < nLen &&
+           '0' <= rString[nPos] &&
+           '9' >= rString[nPos] )
+    {
+        // TODO: check overflow!
+        nVal *= 10;
+        nVal += (rString[nPos] - '0');
+        nPos++;
+    }
+    if( nPos < nLen && '.' == rString[nPos] )
+    {
+        nPos++;
+        double nDiv = 1.;
+
+        while( nPos < nLen &&
+               '0' <= rString[nPos] &&
+               '9' >= rString[nPos] )
+        {
+            // TODO: check overflow!
+            nDiv *= 10;
+            nVal += ( static_cast<double>(rString[nPos] - '0') / nDiv );
+            nPos++;
+        }
+    }
+
+    // skip white space
+    while( (nPos < nLen) && (rString[nPos] <= ' ') )
+        nPos++;
+
+    if( nPos < nLen )
+    {
+
+        if( MeasureUnit::PERCENT == nTargetUnit )
+        {
+            if( '%' != rString[nPos] )
+                return false;
+        }
+        else if( MeasureUnit::PIXEL == nTargetUnit )
+        {
+            if( nPos + 1 >= nLen ||
+                ('p' != rString[nPos] &&
+                 'P' != rString[nPos])||
+                ('x' != rString[nPos+1] &&
+                 'X' != rString[nPos+1]) )
+                return false;
+        }
+        else
+        {
+            OSL_ENSURE( MeasureUnit::TWIP == nTargetUnit || MeasureUnit::POINT == nTargetUnit ||
+                        MeasureUnit::MM_100TH == nTargetUnit || MeasureUnit::MM_10TH == nTargetUnit ||
+                        MeasureUnit::PIXEL == nTargetUnit, "unit is not supported");
+            const char *aCmpsL[3] = { nullptr, nullptr, nullptr };
+            const char *aCmpsU[3] = { nullptr, nullptr, nullptr };
+            double aScales[3] = { 1., 1., 1. };
+
+            if( MeasureUnit::TWIP == nTargetUnit )
+            {
+                switch( rString[nPos] )
+                {
+                case u'c':
+                case u'C':
+                    aCmpsL[0] = "cm";
+                    aCmpsU[0] = "CM";
+                    aScales[0] = (72.*20.)/2.54; // twip
+                    break;
+                case u'i':
+                case u'I':
+                    aCmpsL[0] = "in";
+                    aCmpsU[0] = "IN";
+                    aScales[0] = 72.*20.; // twip
+                    break;
+                case u'm':
+                case u'M':
+                    aCmpsL[0] = "mm";
+                    aCmpsU[0] = "MM";
+                    aScales[0] = (72.*20.)/25.4; // twip
+                    break;
+                case u'p':
+                case u'P':
+                    aCmpsL[0] = "pt";
+                    aCmpsU[0] = "PT";
+                    aScales[0] = 20.; // twip
+
+                    aCmpsL[1] = "pc";
+                    aCmpsU[1] = "PC";
+                    aScales[1] = 12.*20.; // twip
+                    break;
+                }
+            }
+            else if( MeasureUnit::MM_100TH == nTargetUnit || MeasureUnit::MM_10TH == nTargetUnit )
+            {
+                double nScaleFactor = (MeasureUnit::MM_100TH == nTargetUnit) ? 100.0 : 10.0;
+                switch( rString[nPos] )
+                {
+                case u'c':
+                case u'C':
+                    aCmpsL[0] = "cm";
+                    aCmpsU[0] = "CM";
+                    aScales[0] = 10.0 * nScaleFactor; // mm/100
+                    break;
+                case u'i':
+                case u'I':
+                    aCmpsL[0] = "in";
+                    aCmpsU[0] = "IN";
+                    aScales[0] = 1000.*2.54; // mm/100
+                    break;
+                case u'm':
+                case u'M':
+                    aCmpsL[0] = "mm";
+                    aCmpsU[0] = "MM";
+                    aScales[0] = 1.0 * nScaleFactor; // mm/100
+                    break;
+                case u'p':
+                case u'P':
+                    aCmpsL[0] = "pt";
+                    aCmpsU[0] = "PT";
+                    aScales[0] = (10.0 * nScaleFactor*2.54)/72.; // mm/100
+
+                    aCmpsL[1] = "pc";
+                    aCmpsU[1] = "PC";
+                    aScales[1] = (10.0 * nScaleFactor*2.54)/12.; // mm/100
+
+                    aCmpsL[2] = "px";
+                    aCmpsU[2] = "PX";
+                    aScales[2] = 0.28 * nScaleFactor; // mm/100
+                    break;
+                }
+            }
+            else if( MeasureUnit::POINT == nTargetUnit )
+            {
+                if( rString[nPos] == 'p' || rString[nPos] == 'P' )
+                {
+                    aCmpsL[0] = "pt";
+                    aCmpsU[0] = "PT";
+                    aScales[0] = 1;
+                }
+            }
+
+            if( aCmpsL[0] == nullptr )
+                return false;
+
+            double nScale = 0.;
+            for( sal_uInt16 i= 0; i < 3; i++ )
+            {
+                sal_Int32 nTmp = nPos; // come back to the initial position before each iteration
+                const char *pL = aCmpsL[i];
+                if( pL )
+                {
+                    const char *pU = aCmpsU[i];
+                    while( nTmp < nLen && *pL )
+                    {
+                        sal_Unicode c = rString[nTmp];
+                        if( c != *pL && c != *pU )
+                            break;
+                        pL++;
+                        pU++;
+                        nTmp++;
+                    }
+                    if( !*pL && (nTmp == nLen || ' ' == rString[nTmp]) )
+                    {
+                        nScale = aScales[i];
+                        break;
+                    }
+                }
+            }
+
+            if( 0. == nScale )
+                return false;
+
+            // TODO: check overflow
+            if( nScale != 1. )
+                nVal *= nScale;
+        }
+    }
+
+    nVal += .5;
+    if( bNeg )
+        nVal = -nVal;
+
+    if( nVal <= static_cast<double>(nMin) )
+        rValue = nMin;
+    else if( nVal >= static_cast<double>(nMax) )
+        rValue = nMax;
+    else
+        rValue = static_cast<sal_Int32>(nVal);
+
+    return true;
+}
+
 /** convert measure in given unit to string with given unit */
 void Converter::convertMeasure( OUStringBuffer& rBuffer,
                                 sal_Int32 nMeasure,
@@ -431,6 +644,14 @@ bool Converter::convertBool( bool& rBool, std::u16string_view rString )
     return rBool || (rString == u"false");
 }
 
+/** convert string to boolean */
+bool Converter::convertBool( bool& rBool, std::string_view rString )
+{
+    rBool = rString == "true";
+
+    return rBool || (rString == "false");
+}
+
 /** convert boolean to string */
 void Converter::convertBool( OUStringBuffer& rBuffer, bool bValue )
 {
@@ -439,6 +660,12 @@ void Converter::convertBool( OUStringBuffer& rBuffer, bool bValue )
 
 /** convert string to percent */
 bool Converter::convertPercent( sal_Int32& rPercent, std::u16string_view rString )
+{
+    return convertMeasure( rPercent, rString, MeasureUnit::PERCENT );
+}
+
+/** convert string to percent */
+bool Converter::convertPercent( sal_Int32& rPercent, std::string_view rString )
 {
     return convertMeasure( rPercent, rString, MeasureUnit::PERCENT );
 }
@@ -452,6 +679,12 @@ void Converter::convertPercent( OUStringBuffer& rBuffer, sal_Int32 nValue )
 
 /** convert string to pixel measure */
 bool Converter::convertMeasurePx( sal_Int32& rPixel, std::u16string_view rString )
+{
+    return convertMeasure( rPixel, rString, MeasureUnit::PIXEL );
+}
+
+/** convert string to pixel measure */
+bool Converter::convertMeasurePx( sal_Int32& rPixel, std::string_view rString )
 {
     return convertMeasure( rPixel, rString, MeasureUnit::PIXEL );
 }
@@ -478,6 +711,23 @@ static int lcl_gethex( int nChar )
 
 /** convert string to rgb color */
 bool Converter::convertColor( sal_Int32& rColor, std::u16string_view rValue )
+{
+    if( rValue.size() != 7 || rValue[0] != '#' )
+        return false;
+
+    rColor = lcl_gethex( rValue[1] ) * 16 + lcl_gethex( rValue[2] );
+    rColor <<= 8;
+
+    rColor |= ( lcl_gethex( rValue[3] ) * 16 + lcl_gethex( rValue[4] ) );
+    rColor <<= 8;
+
+    rColor |= ( lcl_gethex( rValue[5] ) * 16 + lcl_gethex( rValue[6] ) );
+
+    return true;
+}
+
+/** convert string to rgb color */
+bool Converter::convertColor( sal_Int32& rColor, std::string_view rValue )
 {
     if( rValue.size() != 7 || rValue[0] != '#' )
         return false;
@@ -526,6 +776,19 @@ bool Converter::convertNumber(  sal_Int32& rValue,
     return bRet;
 }
 
+/** convert string to number with optional min and max values */
+bool Converter::convertNumber(  sal_Int32& rValue,
+                                std::string_view aString,
+                                sal_Int32 nMin, sal_Int32 nMax )
+{
+    rValue = 0;
+    sal_Int64 nNumber = 0;
+    bool bRet = convertNumber64(nNumber,aString,nMin,nMax);
+    if ( bRet )
+        rValue = static_cast<sal_Int32>(nNumber);
+    return bRet;
+}
+
 /** convert string to 64-bit number with optional min and max values */
 bool Converter::convertNumber64( sal_Int64& rValue,
                                  std::u16string_view aString,
@@ -554,6 +817,43 @@ bool Converter::convertNumber64( sal_Int64& rValue,
     }
 
     rValue = rtl_ustr_toInt64_WithLength(aString.data() + nNumberStartPos, 10, nPos - nNumberStartPos);
+
+    if( rValue < nMin )
+        rValue = nMin;
+    else if( rValue > nMax )
+        rValue = nMax;
+
+    return ( nPos == nLen && rValue >= nMin && rValue <= nMax );
+}
+
+/** convert string to 64-bit number with optional min and max values */
+bool Converter::convertNumber64( sal_Int64& rValue,
+                                 std::string_view aString,
+                                 sal_Int64 nMin, sal_Int64 nMax )
+{
+    sal_Int32 nPos = 0;
+    sal_Int32 const nLen = aString.size();
+
+    // skip white space
+    while( (nPos < nLen) && (aString[nPos] <= ' ') )
+        nPos++;
+
+    sal_Int32 nNumberStartPos = nPos;
+
+    if( nPos < nLen && '-' == aString[nPos] )
+    {
+        nPos++;
+    }
+
+    // get number
+    while( nPos < nLen &&
+           '0' <= aString[nPos] &&
+           '9' >= aString[nPos] )
+    {
+        nPos++;
+    }
+
+    rValue = rtl_str_toInt64_WithLength(aString.data() + nNumberStartPos, 10, nPos - nNumberStartPos);
 
     if( rValue < nMin )
         rValue = nMin;
@@ -623,6 +923,14 @@ bool Converter::convertDouble(double& rValue, std::u16string_view rString)
     return ( eStatus == rtl_math_ConversionStatus_Ok );
 }
 
+/** convert string to double number (using ::rtl::math) */
+bool Converter::convertDouble(double& rValue, std::string_view rString)
+{
+    rtl_math_ConversionStatus eStatus;
+    rValue = ::rtl::math::stringToDouble( rString, '.', ',', &eStatus );
+    return ( eStatus == rtl_math_ConversionStatus_Ok );
+}
+
 /** convert number, 10th of degrees with range [0..3600] to SVG angle */
 void Converter::convertAngle(OUStringBuffer& rBuffer, sal_Int16 const nAngle,
         SvtSaveOptions::ODFSaneDefaultVersion const nVersion)
@@ -662,6 +970,56 @@ bool Converter::convertAngle(sal_Int16& rAngle, std::u16string_view rString,
         nValue = (fValue * 9.0 / 10.0) * 10.0;
     }
     else if (std::u16string_view::npos != rString.find(u"rad"))
+    {
+        nValue = basegfx::rad2deg(fValue) * 10.0;
+    }
+    else // no explicit unit
+    {
+        if (isWrongOOo10thDegAngle)
+        {
+            nValue = fValue; // wrong, but backward compatible with OOo/LO < 7.0
+        }
+        else
+        {
+            nValue = fValue * 10.0; // ODF 1.2
+        }
+    }
+    // limit to valid range [0..3600]
+    nValue = nValue % 3600;
+    if (nValue < 0)
+    {
+        nValue += 3600;
+    }
+    assert(0 <= nValue && nValue <= 3600);
+    if (bRet)
+    {
+        rAngle = sal::static_int_cast<sal_Int16>(nValue);
+    }
+    return bRet;
+}
+
+/** convert SVG angle to number, 10th of degrees with range [0..3600] */
+bool Converter::convertAngle(sal_Int16& rAngle, std::string_view rString,
+        bool const isWrongOOo10thDegAngle)
+{
+    // ODF 1.1 leaves it undefined what the number means, but ODF 1.2 says it's
+    // degrees, while OOo has historically used 10th of degrees :(
+    // So import degrees when we see the "deg" suffix but continue with 10th of
+    // degrees for now for the sake of existing OOo/LO documents, until the
+    // new versions that can read "deg" suffix are widely deployed and we can
+    // start to write the "deg" suffix.
+    sal_Int32 nValue(0);
+    double fValue(0.0);
+    bool bRet = ::sax::Converter::convertDouble(fValue, rString);
+    if (std::string_view::npos != rString.find("deg"))
+    {
+        nValue = fValue * 10.0;
+    }
+    else if (std::string_view::npos != rString.find("grad"))
+    {
+        nValue = (fValue * 9.0 / 10.0) * 10.0;
+    }
+    else if (std::string_view::npos != rString.find("rad"))
     {
         nValue = basegfx::rad2deg(fValue) * 10.0;
     }
@@ -2342,6 +2700,90 @@ sal_Int16 Converter::GetUnitFromString(std::u16string_view rString, sal_Int16 nD
     return nRetUnit;
 }
 
+sal_Int16 Converter::GetUnitFromString(std::string_view rString, sal_Int16 nDefaultUnit)
+{
+    sal_Int32 nPos = 0;
+    sal_Int32 nLen = rString.size();
+    sal_Int16 nRetUnit = nDefaultUnit;
+
+    // skip white space
+    while( nPos < nLen && ' ' == rString[nPos] )
+        nPos++;
+
+    // skip negative
+    if( nPos < nLen && '-' == rString[nPos] )
+        nPos++;
+
+    // skip number
+    while( nPos < nLen && '0' <= rString[nPos] && '9' >= rString[nPos] )
+        nPos++;
+
+    if( nPos < nLen && '.' == rString[nPos] )
+    {
+        nPos++;
+        while( nPos < nLen && '0' <= rString[nPos] && '9' >= rString[nPos] )
+            nPos++;
+    }
+
+    // skip white space
+    while( nPos < nLen && ' ' == rString[nPos] )
+        nPos++;
+
+    if( nPos < nLen )
+    {
+        switch(rString[nPos])
+        {
+            case u'%' :
+            {
+                nRetUnit = MeasureUnit::PERCENT;
+                break;
+            }
+            case u'c':
+            case u'C':
+            {
+                if(nPos+1 < nLen && (rString[nPos+1] == 'm'
+                    || rString[nPos+1] == 'M'))
+                    nRetUnit = MeasureUnit::CM;
+                break;
+            }
+            case u'e':
+            case u'E':
+            {
+                // CSS1_EMS or CSS1_EMX later
+                break;
+            }
+            case u'i':
+            case u'I':
+            {
+                if(nPos+1 < nLen && (rString[nPos+1] == 'n'
+                    || rString[nPos+1] == 'N'))
+                    nRetUnit = MeasureUnit::INCH;
+                break;
+            }
+            case u'm':
+            case u'M':
+            {
+                if(nPos+1 < nLen && (rString[nPos+1] == 'm'
+                    || rString[nPos+1] == 'M'))
+                    nRetUnit = MeasureUnit::MM;
+                break;
+            }
+            case u'p':
+            case u'P':
+            {
+                if(nPos+1 < nLen && (rString[nPos+1] == 't'
+                    || rString[nPos+1] == 'T'))
+                    nRetUnit = MeasureUnit::POINT;
+                if(nPos+1 < nLen && (rString[nPos+1] == 'c'
+                    || rString[nPos+1] == 'C'))
+                    nRetUnit = MeasureUnit::TWIP;
+                break;
+            }
+        }
+    }
+
+    return nRetUnit;
+}
 
 bool Converter::convertAny(OUStringBuffer&    rsValue,
                            OUStringBuffer&    rsType ,

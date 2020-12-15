@@ -3420,7 +3420,7 @@ void SdXMLFrameShapeContext::endFastElement(sal_Int32 nElement)
             switch (aIter.getToken())
             {
                 case XML_ELEMENT(PRESENTATION, XML_PLACEHOLDER):
-                    mbIsPlaceholder = IsXMLToken( aIter.toString(), XML_TRUE );
+                    mbIsPlaceholder = IsXMLToken( aIter, XML_TRUE );
                     break;
                 case XML_ELEMENT(PRESENTATION, XML_CLASS):
                     maPresentationClass = aIter.toString();

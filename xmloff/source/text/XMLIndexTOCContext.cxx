@@ -145,7 +145,7 @@ void XMLIndexTOCContext::startFastElement(
             case XML_ELEMENT(TEXT, XML_PROTECTED):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, aIter.toString()))
+                if (::sax::Converter::convertBool(bTmp, aIter.toView()))
                 {
                     bProtected = bTmp;
                 }

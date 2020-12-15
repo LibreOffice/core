@@ -115,6 +115,13 @@ public:
                          sal_Int32 nMin = SAL_MIN_INT32,
                          sal_Int32 nMax = SAL_MAX_INT32) const;
 
+    /** convert string to measure with meCoreMeasureUnit,
+        using optional min and max values*/
+    bool convertMeasureToCore( sal_Int32& rValue,
+                         std::string_view rString,
+                         sal_Int32 nMin = SAL_MIN_INT32,
+                         sal_Int32 nMax = SAL_MAX_INT32) const;
+
     /** convert measure to string: from meCoreMeasureUnit to meXMLMeasureUnit */
     void convertMeasureToXML( OUStringBuffer& rBuffer,
                          sal_Int32 nMeasure ) const;
@@ -205,13 +212,17 @@ public:
     static bool convertB3DVector( ::basegfx::B3DVector& rVector,
                               const OUString& rValue );
 
+    /** convert string to ::basegfx::B3DVector */
+    static bool convertB3DVector( ::basegfx::B3DVector& rVector,
+                              std::string_view rValue );
+
     /** convert B3DVector to string */
     static void convertB3DVector( OUStringBuffer &rBuffer,
         const ::basegfx::B3DVector& rVector );
 
     /** convert string to Position3D */
     bool convertPosition3D( css::drawing::Position3D& rPosition,
-                              const OUString& rValue );
+                              std::string_view rValue );
 
     /** convert Position3D to string */
     void convertPosition3D( OUStringBuffer &rBuffer,

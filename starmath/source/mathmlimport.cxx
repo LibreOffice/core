@@ -565,18 +565,19 @@ void SmXMLContext_Helper::RetrieveAttrs(
     bool bMvFound = false;
     for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sValue = aIter.toString();
         // sometimes they have namespace, sometimes not?
         switch (aIter.getToken() & TOKEN_MASK)
         {
             case XML_FONTWEIGHT:
-                nIsBold = sal_Int8(sValue == GetXMLToken(XML_BOLD));
+                nIsBold = sal_Int8(IsXMLToken(aIter, XML_BOLD));
                 break;
             case XML_FONTSTYLE:
-                nIsItalic = sal_Int8(sValue == GetXMLToken(XML_ITALIC));
+                nIsItalic = sal_Int8(IsXMLToken(aIter, XML_ITALIC));
                 break;
             case XML_FONTSIZE:
             case XML_MATHSIZE:
+            {
+                OUString sValue = aIter.toString();
                 ::sax::Converter::convertDouble(nFontSize, sValue);
                 rContext.GetSmImport().GetMM100UnitConverter().SetXMLMeasureUnit(
                     util::MeasureUnit::POINT);
@@ -591,14 +592,15 @@ void SmXMLContext_Helper::RetrieveAttrs(
                     }
                 }
                 break;
+            }
             case XML_FONTFAMILY:
-                sFontFamily = sValue;
+                sFontFamily = aIter.toString();
                 break;
             case XML_COLOR:
-                sColor = sValue;
+                sColor = aIter.toString();
                 break;
             case XML_MATHCOLOR:
-                sColor = sValue;
+                sColor = aIter.toString();
                 break;
             case XML_MATHVARIANT:
                 bMvFound = true;
@@ -1053,18 +1055,17 @@ void SmXMLFencedContext_Impl::startFastElement(
 {
     for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sValue = aIter.toString();
         switch (aIter.getToken())
         {
             //temp, starmath cannot handle multichar brackets (I think)
             case XML_OPEN:
-                cBegin = sValue[0];
+                cBegin = aIter.toString()[0];
                 break;
             case XML_CLOSE:
-                cEnd = sValue[0];
+                cEnd = aIter.toString()[0];
                 break;
             case XML_STRETCHY:
-                bIsStretchy = sValue == GetXMLToken(XML_TRUE);
+                bIsStretchy = IsXMLToken(aIter, XML_TRUE);
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("starmath", aIter);
@@ -1210,12 +1211,11 @@ void SmXMLAnnotationContext_Impl::startFastElement(
 {
     for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sValue = aIter.toString();
         // sometimes they have namespace, sometimes not?
         switch (aIter.getToken() & TOKEN_MASK)
         {
             case XML_ENCODING:
-                bIsStarMath = sValue == "StarMath 5.0";
+                bIsStarMath = aIter.toView() == "StarMath 5.0";
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("starmath", aIter);
@@ -1441,19 +1441,18 @@ void SmXMLOperatorContext_Impl::startFastElement(
 
     for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sValue = aIter.toString();
         switch (aIter.getToken())
         {
             case XML_STRETCHY:
-                bIsStretchy = sValue == GetXMLToken(XML_TRUE);
+                bIsStretchy = IsXMLToken(aIter, XML_TRUE);
                 break;
             case XML_FENCE:
-                bIsFenced = sValue == GetXMLToken(XML_TRUE);
+                bIsFenced = IsXMLToken(aIter, XML_TRUE);
                 break;
             case XML_FORM:
-                isPrefix = sValue == GetXMLToken(XML_PREFIX); // <
-                isInfix = sValue == GetXMLToken(XML_INFIX); // |
-                isPostfix = sValue == GetXMLToken(XML_POSTFIX); // >
+                isPrefix = IsXMLToken(aIter, XML_PREFIX); // <
+                isInfix = IsXMLToken(aIter, XML_INFIX); // |
+                isPostfix = IsXMLToken(aIter, XML_POSTFIX); // >
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("starmath", aIter);
@@ -2494,12 +2493,11 @@ void SmXMLActionContext_Impl::startFastElement(
 {
     for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sValue = aIter.toString();
         switch (aIter.getToken())
         {
             case XML_SELECTION:
             {
-                sal_uInt32 n = sValue.toUInt32();
+                sal_Int32 n = aIter.toInt32();
                 if (n > 0)
                     mnSelection = static_cast<size_t>(n);
             }

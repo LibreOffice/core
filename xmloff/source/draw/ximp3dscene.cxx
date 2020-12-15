@@ -49,36 +49,35 @@ SdXML3DLightContext::SdXML3DLightContext(
     // read attributes for the 3DScene
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sValue = aIter.toString();
         switch(aIter.getToken())
         {
             case XML_ELEMENT(DR3D, XML_DIFFUSE_COLOR):
             {
-                ::sax::Converter::convertColor(maDiffuseColor, sValue);
+                ::sax::Converter::convertColor(maDiffuseColor, aIter.toString());
                 break;
             }
             case XML_ELEMENT(DR3D, XML_DIRECTION):
             {
                 ::basegfx::B3DVector aVal;
-                SvXMLUnitConverter::convertB3DVector(aVal, sValue);
+                SvXMLUnitConverter::convertB3DVector(aVal, aIter.toString());
                 if (!std::isnan(aVal.getX()) && !std::isnan(aVal.getY()) && !std::isnan(aVal.getZ()))
                 {
                     maDirection = aVal;
                 }
                 else
                 {
-                    SAL_WARN("xmloff", "NaNs found in light direction: " << sValue);
+                    SAL_WARN("xmloff", "NaNs found in light direction: " << aIter.toString());
                 }
                 break;
             }
             case XML_ELEMENT(DR3D, XML_ENABLED):
             {
-                (void)::sax::Converter::convertBool(mbEnabled, sValue);
+                (void)::sax::Converter::convertBool(mbEnabled, aIter.toView());
                 break;
             }
             case XML_ELEMENT(DR3D, XML_SPECULAR):
             {
-                (void)::sax::Converter::convertBool(mbSpecular, sValue);
+                (void)::sax::Converter::convertBool(mbSpecular, aIter.toView());
                 break;
             }
             default:

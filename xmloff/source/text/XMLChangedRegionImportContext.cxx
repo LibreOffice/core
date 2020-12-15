@@ -58,24 +58,23 @@ void XMLChangedRegionImportContext::startFastElement(
     bool bHaveXmlId( false );
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString sValue = aIter.toString();
         switch(aIter.getToken())
         {
             case XML_ELEMENT(XML, XML_ID):
             {
-                sID = sValue;
+                sID = aIter.toString();
                 bHaveXmlId = true;
                 break;
             }
             case XML_ELEMENT(TEXT, XML_ID):
             {
-                if (!bHaveXmlId) { sID = sValue; }
+                if (!bHaveXmlId) { sID = aIter.toString(); }
                 break;
             }
             case XML_ELEMENT(TEXT, XML_MERGE_LAST_PARAGRAPH):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, sValue))
+                if (::sax::Converter::convertBool(bTmp, aIter.toView()))
                 {
                     bMergeLastPara = bTmp;
                 }

@@ -49,42 +49,39 @@ OXMLReport::OXMLReport( ORptFilter& rImport,
 
     impl_initRuntimeDefaults();
 
-    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     try
     {
         for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
         {
-            OUString sValue = aIter.toString();
-
             switch( aIter.getToken() )
             {
                 case XML_ELEMENT(REPORT, XML_COMMAND_TYPE):
                     {
                         sal_Int32 nRet = sdb::CommandType::COMMAND;
                         const SvXMLEnumMapEntry<sal_Int32>* aXML_EnumMap = OXMLHelper::GetCommandTypeOptions();
-                        bool bConvertOk = SvXMLUnitConverter::convertEnum( nRet, sValue, aXML_EnumMap );
+                        bool bConvertOk = SvXMLUnitConverter::convertEnum( nRet, aIter.toString(), aXML_EnumMap );
                         SAL_WARN_IF(!bConvertOk, "reportdesign", "convertEnum failed");
                         m_xReportDefinition->setCommandType(nRet);
                     }
                     break;
                 case XML_ELEMENT(REPORT, XML_COMMAND):
-                    m_xReportDefinition->setCommand(sValue);
+                    m_xReportDefinition->setCommand(aIter.toString());
                     break;
                 case XML_ELEMENT(REPORT, XML_FILTER):
-                    m_xReportDefinition->setFilter(sValue);
+                    m_xReportDefinition->setFilter(aIter.toString());
                     break;
                 case XML_ELEMENT(REPORT, XML_CAPTION):
                 case XML_ELEMENT(OFFICE, XML_CAPTION):
-                    m_xReportDefinition->setCaption(sValue);
+                    m_xReportDefinition->setCaption(aIter.toString());
                     break;
                 case XML_ELEMENT(REPORT, XML_ESCAPE_PROCESSING):
-                    m_xReportDefinition->setEscapeProcessing(sValue == s_sTRUE);
+                    m_xReportDefinition->setEscapeProcessing(IsXMLToken(aIter, XML_TRUE));
                     break;
                 case XML_ELEMENT(OFFICE, XML_MIMETYPE):
-                    m_xReportDefinition->setMimeType(sValue);
+                    m_xReportDefinition->setMimeType(aIter.toString());
                     break;
                 case XML_ELEMENT(DRAW, XML_NAME):
-                    m_xReportDefinition->setName(sValue);
+                    m_xReportDefinition->setName(aIter.toString());
                     break;
                 default:
                     XMLOFF_WARN_UNKNOWN("reportdesign", aIter);

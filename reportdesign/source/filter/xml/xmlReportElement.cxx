@@ -45,20 +45,17 @@ OXMLReportElement::OXMLReportElement( ORptFilter& rImport,
 
     OSL_ENSURE(m_xComponent.is(),"Component is NULL!");
 
-    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     try
     {
         for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
         {
-            OUString sValue = aIter.toString();
-
             switch( aIter.getToken() )
             {
                 case XML_ELEMENT(REPORT, XML_PRINT_WHEN_GROUP_CHANGE):
-                    m_xComponent->setPrintWhenGroupChange(s_sTRUE == sValue);
+                    m_xComponent->setPrintWhenGroupChange(IsXMLToken(aIter, XML_TRUE));
                     break;
                 case XML_ELEMENT(REPORT, XML_PRINT_REPEATED_VALUES):
-                    m_xComponent->setPrintRepeatedValues(sValue == s_sTRUE);
+                    m_xComponent->setPrintRepeatedValues(IsXMLToken(aIter, XML_TRUE));
                     break;
                 default:
                     XMLOFF_WARN_UNKNOWN("reportdesign", aIter);

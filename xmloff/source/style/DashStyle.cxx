@@ -78,66 +78,64 @@ void XMLDashStyleImport::importXML(
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        const OUString aStrValue = aIter.toString();
-
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(DRAW, XML_NAME):
         case XML_ELEMENT(DRAW_OOO, XML_NAME):
             {
-                rStrName = aStrValue;
+                rStrName = aIter.toString();
             }
             break;
         case XML_ELEMENT(DRAW, XML_DISPLAY_NAME):
         case XML_ELEMENT(DRAW_OOO, XML_DISPLAY_NAME):
             {
-                aDisplayName = aStrValue;
+                aDisplayName = aIter.toString();
             }
             break;
         case XML_ELEMENT(DRAW, XML_STYLE):
         case XML_ELEMENT(DRAW_OOO, XML_STYLE):
             {
-                SvXMLUnitConverter::convertEnum( aLineDash.Style, aStrValue, pXML_DashStyle_Enum );
+                SvXMLUnitConverter::convertEnum( aLineDash.Style, aIter.toString(), pXML_DashStyle_Enum );
             }
             break;
         case XML_ELEMENT(DRAW, XML_DOTS1):
         case XML_ELEMENT(DRAW_OOO, XML_DOTS1):
-            aLineDash.Dots = static_cast<sal_Int16>(aStrValue.toInt32());
+            aLineDash.Dots = static_cast<sal_Int16>(aIter.toInt32());
             break;
 
         case XML_ELEMENT(DRAW, XML_DOTS1_LENGTH):
         case XML_ELEMENT(DRAW_OOO, XML_DOTS1_LENGTH):
             {
-                if( aStrValue.indexOf( '%' ) != -1 ) // it's a percentage
+                if( aIter.toView().find( '%' ) != std::string_view::npos ) // it's a percentage
                 {
                     bIsRel = true;
-                    ::sax::Converter::convertPercent(aLineDash.DotLen, aStrValue);
+                    ::sax::Converter::convertPercent(aLineDash.DotLen, aIter.toView());
                 }
                 else
                 {
                     rUnitConverter.convertMeasureToCore( aLineDash.DotLen,
-                            aStrValue );
+                            aIter.toView() );
                 }
             }
             break;
 
         case XML_ELEMENT(DRAW, XML_DOTS2):
         case XML_ELEMENT(DRAW_OOO, XML_DOTS2):
-            aLineDash.Dashes = static_cast<sal_Int16>(aStrValue.toInt32());
+            aLineDash.Dashes = static_cast<sal_Int16>(aIter.toInt32());
             break;
 
         case XML_ELEMENT(DRAW, XML_DOTS2_LENGTH):
         case XML_ELEMENT(DRAW_OOO, XML_DOTS2_LENGTH):
             {
-                if( aStrValue.indexOf( '%' ) != -1 ) // it's a percentage
+                if( aIter.toView().find( '%' ) != std::string_view::npos ) // it's a percentage
                 {
                     bIsRel = true;
-                    ::sax::Converter::convertPercent(aLineDash.DashLen, aStrValue);
+                    ::sax::Converter::convertPercent(aLineDash.DashLen, aIter.toView());
                 }
                 else
                 {
                     rUnitConverter.convertMeasureToCore( aLineDash.DashLen,
-                            aStrValue );
+                            aIter.toView() );
                 }
             }
             break;
@@ -145,15 +143,15 @@ void XMLDashStyleImport::importXML(
         case XML_ELEMENT(DRAW, XML_DISTANCE):
         case XML_ELEMENT(DRAW_OOO, XML_DISTANCE):
             {
-                if( aStrValue.indexOf( '%' ) != -1 ) // it's a percentage
+                if( aIter.toView().find( '%' ) != std::string_view::npos ) // it's a percentage
                 {
                     bIsRel = true;
-                    ::sax::Converter::convertPercent(aLineDash.Distance, aStrValue);
+                    ::sax::Converter::convertPercent(aLineDash.Distance, aIter.toView());
                 }
                 else
                 {
                     rUnitConverter.convertMeasureToCore( aLineDash.Distance,
-                            aStrValue );
+                            aIter.toView() );
                 }
             }
             break;

@@ -54,7 +54,7 @@ void XMLTrackedChangesImportContext::startFastElement( sal_Int32 /*nElement*/,
         if (aIter.getToken() == XML_ELEMENT(TEXT, XML_TRACK_CHANGES) )
         {
             bool bTmp(false);
-            if (::sax::Converter::convertBool(bTmp, aIter.toString()))
+            if (::sax::Converter::convertBool(bTmp, aIter.toView()))
             {
                 bTrackChanges = bTmp;
             }

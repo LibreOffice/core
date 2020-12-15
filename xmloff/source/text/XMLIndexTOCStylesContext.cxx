@@ -65,7 +65,7 @@ void XMLIndexTOCStylesContext::startFastElement(
         {
             sal_Int32 nTmp;
             if (::sax::Converter::convertNumber(
-                    nTmp, aIter.toString(), 1,
+                    nTmp, aIter.toView(), 1,
                     GetImport().GetTextImport()->GetChapterNumbering()->
                                                                 getCount()))
             {

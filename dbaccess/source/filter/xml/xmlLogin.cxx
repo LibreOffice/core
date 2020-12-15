@@ -36,15 +36,12 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
 {
     Reference<XPropertySet> xDataSource(rImport.getDataSource());
 
-    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     bool bUserFound = false;
     if (!xDataSource.is())
         return;
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
-        OUString sValue = aIter.toString();
-
         try
         {
             switch( aIter.getToken() & TOKEN_MASK )
@@ -55,7 +52,7 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
                         bUserFound = true;
                         try
                         {
-                            xDataSource->setPropertyValue(PROPERTY_USER,makeAny(sValue));
+                            xDataSource->setPropertyValue(PROPERTY_USER,makeAny(aIter.toString()));
                         }
                         catch(const Exception&)
                         {
@@ -66,7 +63,7 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
                 case XML_IS_PASSWORD_REQUIRED:
                     try
                     {
-                        xDataSource->setPropertyValue(PROPERTY_ISPASSWORDREQUIRED,makeAny(sValue == s_sTRUE));
+                        xDataSource->setPropertyValue(PROPERTY_ISPASSWORDREQUIRED,makeAny(IsXMLToken(aIter, XML_TRUE)));
                     }
                     catch(const Exception&)
                     {
@@ -79,14 +76,14 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
                         bUserFound = true;
                         PropertyValue aProperty;
                         aProperty.Name = "UseSystemUser";
-                        aProperty.Value <<= (sValue == s_sTRUE);
+                        aProperty.Value <<= IsXMLToken(aIter, XML_TRUE);
                         rImport.addInfo(aProperty);
                     }
                     break;
                 case XML_LOGIN_TIMEOUT:
                     try
                     {
-                        Reference< XDataSource>(xDataSource,UNO_QUERY_THROW)->setLoginTimeout(sValue.toInt32());
+                        Reference< XDataSource>(xDataSource,UNO_QUERY_THROW)->setLoginTimeout(aIter.toInt32());
                     }
                     catch(const Exception&)
                     {

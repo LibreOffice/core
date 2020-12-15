@@ -220,40 +220,39 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sValue = aIter.toString();
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(SVG, XML_VIEWBOX):
         case XML_ELEMENT(SVG_COMPAT, XML_VIEWBOX):
-            sViewBox = sValue;
+            sViewBox = aIter.toString();
             break;
         case XML_ELEMENT(SVG, XML_D):
         case XML_ELEMENT(SVG_COMPAT, XML_D):
             if( bPath )
-                sD = sValue;
+                sD = aIter.toString();
             break;
         case XML_ELEMENT(DRAW,XML_POINTS):
             if( !bPath )
-                sPoints = sValue;
+                sPoints = aIter.toString();
             break;
         case XML_ELEMENT(SVG, XML_WIDTH):
         case XML_ELEMENT(SVG_COMPAT, XML_WIDTH):
-            if (::sax::Converter::convertMeasurePx(nWidth, sValue))
+            if (::sax::Converter::convertMeasurePx(nWidth, aIter.toView()))
                 bPixelWidth = true;
             else
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        nWidth, sValue);
+                        nWidth, aIter.toView());
             break;
         case XML_ELEMENT(SVG, XML_HEIGHT):
         case XML_ELEMENT(SVG_COMPAT, XML_HEIGHT):
-            if (::sax::Converter::convertMeasurePx(nHeight, sValue))
+            if (::sax::Converter::convertMeasurePx(nHeight, aIter.toView()))
                 bPixelHeight = true;
             else
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        nHeight, sValue);
+                        nHeight, aIter.toView());
             break;
         case  XML_ELEMENT(DRAW, XML_RECREATE_ON_EDIT):
-            bAuto = IsXMLToken(sValue, XML_TRUE);
+            bAuto = IsXMLToken(aIter, XML_TRUE);
             break;
         }
     }
@@ -836,22 +835,22 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
     bOwnBase64Stream = false;
     mbMultipleContent = bMultipleContent;
 
-    auto processAttr = [&](sal_Int32 nElement, OUString rValue) -> void
+    auto processAttr = [&](sal_Int32 nElement, const sax_fastparser::FastAttributeList::FastAttributeIter& aIter) -> void
     {
         switch( nElement )
         {
         case XML_ELEMENT(DRAW, XML_STYLE_NAME):
-            sStyleName = rValue;
+            sStyleName = aIter.toString();
             break;
         case XML_ELEMENT(DRAW, XML_NAME):
-            m_sOrigName = rValue;
-            sName = rValue;
+            m_sOrigName = aIter.toString();
+            sName = m_sOrigName;
             break;
         case XML_ELEMENT(DRAW, XML_FRAME_NAME):
-            sFrameName = rValue;
+            sFrameName = aIter.toString();
             break;
         case XML_ELEMENT(DRAW, XML_APPLET_NAME):
-            sAppletName = rValue;
+            sAppletName = aIter.toString();
             break;
         case XML_ELEMENT(TEXT, XML_ANCHOR_TYPE):
             if( TextContentAnchorType_AT_PARAGRAPH == eAnchorType ||
@@ -860,7 +859,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             {
 
                 TextContentAnchorType eNew;
-                if( XMLAnchorTypePropHdl::convert( rValue, eNew ) &&
+                if( XMLAnchorTypePropHdl::convert( aIter.toString(), eNew ) &&
                     ( TextContentAnchorType_AT_PARAGRAPH == eNew ||
                       TextContentAnchorType_AT_CHARACTER == eNew ||
                       TextContentAnchorType_AS_CHARACTER == eNew ||
@@ -871,83 +870,83 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         case XML_ELEMENT(TEXT, XML_ANCHOR_PAGE_NUMBER):
             {
                 sal_Int32 nTmp;
-                if (::sax::Converter::convertNumber(nTmp, rValue, 1, SHRT_MAX))
+                if (::sax::Converter::convertNumber(nTmp, aIter.toView(), 1, SHRT_MAX))
                     nPage = static_cast<sal_Int16>(nTmp);
             }
             break;
         case XML_ELEMENT(SVG, XML_X):
         case XML_ELEMENT(SVG_COMPAT, XML_X):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    nX, rValue);
+                    nX, aIter.toView());
             break;
         case XML_ELEMENT(SVG, XML_Y):
         case XML_ELEMENT(SVG_COMPAT, XML_Y):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    nY, rValue );
+                    nY, aIter.toView() );
             break;
         case XML_ELEMENT(SVG, XML_WIDTH):
         case XML_ELEMENT(SVG_COMPAT, XML_WIDTH):
             // relative widths are obsolete since SRC617. Remove them some day!
-            if( rValue.indexOf( '%' ) != -1 )
+            if( aIter.toView().find( '%' ) != std::string_view::npos )
             {
                 sal_Int32 nTmp;
-                ::sax::Converter::convertPercent( nTmp, rValue );
+                ::sax::Converter::convertPercent( nTmp, aIter.toView() );
                 nRelWidth = static_cast<sal_Int16>(nTmp);
             }
             else
             {
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        nWidth, rValue, 0 );
+                        nWidth, aIter.toView(), 0 );
             }
             break;
         case XML_ELEMENT(STYLE, XML_REL_WIDTH):
-            if( IsXMLToken(rValue, XML_SCALE) )
+            if( IsXMLToken(aIter, XML_SCALE) )
             {
                 bSyncWidth = true;
             }
             else
             {
                 sal_Int32 nTmp;
-                if (::sax::Converter::convertPercent( nTmp, rValue ))
+                if (::sax::Converter::convertPercent( nTmp, aIter.toView() ))
                     nRelWidth = static_cast<sal_Int16>(nTmp);
             }
             break;
         case XML_ELEMENT(FO, XML_MIN_WIDTH):
         case XML_ELEMENT(FO_COMPAT, XML_MIN_WIDTH):
-            if( rValue.indexOf( '%' ) != -1 )
+            if( aIter.toView().find( '%' ) != std::string_view::npos )
             {
                 sal_Int32 nTmp;
-                ::sax::Converter::convertPercent( nTmp, rValue );
+                ::sax::Converter::convertPercent( nTmp, aIter.toView() );
                 nRelWidth = static_cast<sal_Int16>(nTmp);
             }
             else
             {
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        nWidth, rValue, 0 );
+                        nWidth, aIter.toView(), 0 );
             }
             bMinWidth = true;
             break;
         case XML_ELEMENT(SVG, XML_HEIGHT):
         case XML_ELEMENT(SVG_COMPAT, XML_HEIGHT):
             // relative heights are obsolete since SRC617. Remove them some day!
-            if( rValue.indexOf( '%' ) != -1 )
+            if( aIter.toView().find( '%' ) != std::string_view::npos )
             {
                 sal_Int32 nTmp;
-                ::sax::Converter::convertPercent( nTmp, rValue );
+                ::sax::Converter::convertPercent( nTmp, aIter.toView() );
                 nRelHeight = static_cast<sal_Int16>(nTmp);
             }
             else
             {
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        nHeight, rValue, 0 );
+                        nHeight, aIter.toView(), 0 );
             }
             break;
         case XML_ELEMENT(STYLE, XML_REL_HEIGHT):
-            if( IsXMLToken( rValue, XML_SCALE ) )
+            if( IsXMLToken( aIter, XML_SCALE ) )
             {
                 bSyncHeight = true;
             }
-            else if( IsXMLToken( rValue, XML_SCALE_MIN ) )
+            else if( IsXMLToken( aIter, XML_SCALE_MIN ) )
             {
                 bSyncHeight = true;
                 bMinHeight = true;
@@ -955,33 +954,33 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             else
             {
                 sal_Int32 nTmp;
-                if (::sax::Converter::convertPercent( nTmp, rValue ))
+                if (::sax::Converter::convertPercent( nTmp, aIter.toView() ))
                     nRelHeight = static_cast<sal_Int16>(nTmp);
             }
             break;
         case XML_ELEMENT(FO, XML_MIN_HEIGHT):
         case XML_ELEMENT(FO_COMPAT, XML_MIN_HEIGHT):
-            if( rValue.indexOf( '%' ) != -1 )
+            if( aIter.toView().find( '%' ) != std::string_view::npos )
             {
                 sal_Int32 nTmp;
-                ::sax::Converter::convertPercent( nTmp, rValue );
+                ::sax::Converter::convertPercent( nTmp, aIter.toView() );
                 nRelHeight = static_cast<sal_Int16>(nTmp);
             }
             else
             {
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        nHeight, rValue, 0 );
+                        nHeight, aIter.toView(), 0 );
             }
             bMinHeight = true;
             break;
         case XML_ELEMENT(DRAW, XML_ZINDEX):
-            ::sax::Converter::convertNumber( nZIndex, rValue, -1 );
+            ::sax::Converter::convertNumber( nZIndex, aIter.toView(), -1 );
             break;
         case XML_ELEMENT(DRAW, XML_CHAIN_NEXT_NAME):
-            sNextName = rValue;
+            sNextName = aIter.toString();
             break;
         case XML_ELEMENT(XLINK, XML_HREF):
-            sHRef = rValue;
+            sHRef = aIter.toString();
             break;
         case XML_ELEMENT(DRAW, XML_TRANSFORM):
             {
@@ -997,7 +996,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                 // but is not generally available (as it should be, a 'current' UnitConverter should
                 // be available at GetExport() - and maybe was once). May have to be addressed as soon
                 // as translate transformations are used here.
-                aSdXMLImExTransform2D.SetString(rValue, GetImport().GetMM100UnitConverter());
+                aSdXMLImExTransform2D.SetString(aIter.toString(), GetImport().GetMM100UnitConverter());
                 aSdXMLImExTransform2D.GetFullTransform(aFullTransform);
 
                 if(!aFullTransform.isIdentity())
@@ -1045,32 +1044,32 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             }
             break;
         case XML_ELEMENT(DRAW, XML_CODE):
-            sCode = rValue;
+            sCode = aIter.toString();
             break;
         case XML_ELEMENT(DRAW, XML_OBJECT):
             break;
         case XML_ELEMENT(DRAW, XML_ARCHIVE):
             break;
         case XML_ELEMENT(DRAW, XML_MAY_SCRIPT):
-            bMayScript = IsXMLToken( rValue, XML_TRUE );
+            bMayScript = IsXMLToken( aIter, XML_TRUE );
             break;
         case XML_ELEMENT(DRAW, XML_MIME_TYPE):
         case XML_ELEMENT(LO_EXT, XML_MIME_TYPE):
-            sMimeType = rValue;
+            sMimeType = aIter.toString();
             break;
         case XML_ELEMENT(DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES):
         case XML_ELEMENT(DRAW, XML_NOTIFY_ON_UPDATE_OF_TABLE):
-            sTblName = rValue;
+            sTblName = aIter.toString();
             break;
         default:
-            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nElement, rValue);
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     };
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(rAttrList) )
-            processAttr(aIter.getToken(), aIter.toString());
+            processAttr(aIter.getToken(), aIter);
     for( auto& aIter : sax_fastparser::castToFastAttributeList(rFrameAttrList) )
-            processAttr(aIter.getToken(), aIter.toString());
+            processAttr(aIter.getToken(), aIter);
 
     if( ( (XML_TEXT_FRAME_GRAPHIC == nType ||
            XML_TEXT_FRAME_OBJECT == nType ||
@@ -1354,8 +1353,7 @@ XMLTextFrameContext::XMLTextFrameContext(
             case XML_ELEMENT(TEXT, XML_ANCHOR_TYPE):
             {
                 TextContentAnchorType eNew;
-                if( XMLAnchorTypePropHdl::convert( aIter.toString(),
-                            eNew ) &&
+                if( XMLAnchorTypePropHdl::convert( aIter.toString(), eNew ) &&
                     ( TextContentAnchorType_AT_PARAGRAPH == eNew ||
                       TextContentAnchorType_AT_CHARACTER == eNew ||
                       TextContentAnchorType_AS_CHARACTER == eNew ||

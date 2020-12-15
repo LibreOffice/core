@@ -187,7 +187,7 @@ public:
     void SetProtection(const css::uno::Sequence<sal_Int8>& rProtect) { aProtect = rProtect; }
     void StartChangeAction(const ScChangeActionType nActionType);
 
-    static sal_uInt32 GetIDFromString(const OUString& sID);
+    static sal_uInt32 GetIDFromString(std::string_view sID);
 
     void SetActionNumber(const sal_uInt32 nActionNumber) { pCurrentAction->nActionNumber = nActionNumber; }
     void SetActionState(const ScChangeActionState nActionState) { pCurrentAction->nActionState = nActionState; }

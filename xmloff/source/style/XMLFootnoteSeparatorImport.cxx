@@ -89,14 +89,13 @@ void XMLFootnoteSeparatorImport::startFastElement(
     // iterate over xattribute list and fill values
     for (auto &aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sAttrValue = aIter.toString();
         sal_Int32 nTmp;
         switch (aIter.getToken())
         {
             case XML_ELEMENT(STYLE, XML_WIDTH):
             {
                 if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    nTmp, sAttrValue))
+                    nTmp, aIter.toView()))
                 {
                     nLineWeight = static_cast<sal_Int16>(nTmp);
                 }
@@ -105,14 +104,14 @@ void XMLFootnoteSeparatorImport::startFastElement(
             case XML_ELEMENT(STYLE, XML_DISTANCE_BEFORE_SEP):
             {
                 if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                                                        nTmp, sAttrValue))
+                                                        nTmp, aIter.toView()))
                     nLineTextDistance = nTmp;
                 break;
             }
             case XML_ELEMENT(STYLE, XML_DISTANCE_AFTER_SEP):
             {
                 if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                                                        nTmp, sAttrValue))
+                                                        nTmp, aIter.toView()))
                     nLineDistance = nTmp;
                 break;
             }
@@ -127,18 +126,18 @@ void XMLFootnoteSeparatorImport::startFastElement(
                 };
 
                 SvXMLUnitConverter::convertEnum(
-                            eLineAdjust, sAttrValue, aXML_HorizontalAdjust_Enum);
+                            eLineAdjust, aIter.toString(), aXML_HorizontalAdjust_Enum);
                 break;
             }
             case XML_ELEMENT(STYLE, XML_REL_WIDTH ):
             {
-                if (::sax::Converter::convertPercent(nTmp, sAttrValue))
+                if (::sax::Converter::convertPercent(nTmp, aIter.toView()))
                     nLineRelWidth = static_cast<sal_uInt8>(nTmp);
                 break;
             }
             case XML_ELEMENT(STYLE, XML_COLOR):
             {
-                if (::sax::Converter::convertColor(nTmp, sAttrValue))
+                if (::sax::Converter::convertColor(nTmp, aIter.toView()))
                 {
                     nLineColor = nTmp;
                 }
@@ -155,7 +154,7 @@ void XMLFootnoteSeparatorImport::startFastElement(
                     { XML_TOKEN_INVALID, 0 }
                 };
 
-                SvXMLUnitConverter::convertEnum(nLineStyle, sAttrValue, aXML_LineStyle_Enum);
+                SvXMLUnitConverter::convertEnum(nLineStyle, aIter.toString(), aXML_LineStyle_Enum);
                 break;
             }
             default:

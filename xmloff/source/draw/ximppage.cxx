@@ -92,8 +92,6 @@ DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, const Refere
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString sValue = aIter.toString();
-
         switch( aIter.getToken() )
         {
             case XML_ELEMENT(SVG, XML_X):
@@ -101,7 +99,7 @@ DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, const Refere
             {
                 sal_Int32 x;
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        x, sValue);
+                        x, aIter.toView());
                 aPosition.X = static_cast<double>(x) / 100.0;
                 break;
             }
@@ -110,7 +108,7 @@ DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, const Refere
             {
                 sal_Int32 y;
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        y, sValue);
+                        y, aIter.toView());
                 aPosition.Y = static_cast<double>(y) / 100.0;
                 break;
             }
@@ -119,7 +117,7 @@ DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, const Refere
             {
                 sal_Int32 w;
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        w, sValue);
+                        w, aIter.toView());
                 aSize.Width = static_cast<double>(w) / 100.0;
                 break;
             }
@@ -128,7 +126,7 @@ DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, const Refere
             {
                 sal_Int32 h;
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        h, sValue);
+                        h, aIter.toView());
                 aSize.Height = static_cast<double>(h) / 100.0;
             }
             break;

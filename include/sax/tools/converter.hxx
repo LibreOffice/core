@@ -64,6 +64,13 @@ public:
                                 sal_Int32 nMin = SAL_MIN_INT32,
                                 sal_Int32 nMax = SAL_MAX_INT32 );
 
+    /** convert string to measure using optional min and max values*/
+    static bool convertMeasure( sal_Int32& rValue,
+                                std::string_view rString,
+                                sal_Int16 nTargetUnit = css::util::MeasureUnit::MM_100TH,
+                                sal_Int32 nMin = SAL_MIN_INT32,
+                                sal_Int32 nMax = SAL_MAX_INT32 );
+
     /** convert measure to string */
     static void convertMeasure( OUStringBuffer& rBuffer,
                                 sal_Int32 nMeasure,
@@ -74,6 +81,10 @@ public:
     static bool convertBool( bool& rBool,
                              std::u16string_view rString );
 
+    /** convert string to boolean */
+    static bool convertBool( bool& rBool,
+                             std::string_view rString );
+
     /** convert boolean to string */
     static void convertBool( OUStringBuffer& rBuffer,
                              bool bValue );
@@ -82,13 +93,21 @@ public:
     static bool convertPercent( sal_Int32& rValue,
                                 std::u16string_view rString );
 
+    /** convert string to percent */
+    static bool convertPercent( sal_Int32& rValue,
+                                std::string_view rString );
+
     /** convert percent to string */
     static void convertPercent( OUStringBuffer& rBuffer,
                                 sal_Int32 nValue );
 
-    /** convert string to pixel measure unite */
+    /** convert string to pixel measure unit */
     static bool convertMeasurePx( sal_Int32& rValue,
                                   std::u16string_view rString );
+
+    /** convert string to pixel measure unit */
+    static bool convertMeasurePx( sal_Int32& rValue,
+                                  std::string_view rString );
 
     /** convert pixel measure unit to string */
     static void convertMeasurePx( OUStringBuffer& rBuffer,
@@ -97,6 +116,8 @@ public:
     /** convert string to rgb color */
     static bool convertColor( sal_Int32& rColor,
                               std::u16string_view rValue );
+    static bool convertColor( sal_Int32& rColor,
+                              std::string_view rValue );
     static bool convertColor( ::Color& rColor,
                               std::u16string_view rValue )
     {
@@ -120,8 +141,20 @@ public:
                                sal_Int32 nMax = SAL_MAX_INT32 );
 
     /** convert string to number with optional min and max values */
+    static bool convertNumber( sal_Int32& rValue,
+                               std::string_view aString,
+                               sal_Int32 nMin = SAL_MIN_INT32,
+                               sal_Int32 nMax = SAL_MAX_INT32 );
+
+    /** convert string to number with optional min and max values */
     static bool convertNumber64(sal_Int64& rValue,
                                 std::u16string_view aString,
+                                sal_Int64 nMin = SAL_MIN_INT64,
+                                sal_Int64 nMax = SAL_MAX_INT64);
+
+    /** convert string to number with optional min and max values */
+    static bool convertNumber64(sal_Int64& rValue,
+                                std::string_view aString,
                                 sal_Int64 nMin = SAL_MIN_INT64,
                                 sal_Int64 nMax = SAL_MAX_INT64);
 
@@ -146,12 +179,19 @@ public:
     /** convert string to double number (using ::rtl::math) without unit conversion */
     static bool convertDouble(double& rValue, std::u16string_view rString);
 
+    /** convert string to double number (using ::rtl::math) without unit conversion */
+    static bool convertDouble(double& rValue, std::string_view rString);
+
     /** convert number, 10th of degrees with range [0..3600] to SVG angle */
     static void convertAngle(OUStringBuffer& rBuffer, sal_Int16 nAngle,
             SvtSaveOptions::ODFSaneDefaultVersion nVersion);
 
     /** convert SVG angle to number, 10th of degrees with range [0..3600] */
     static bool convertAngle(sal_Int16& rAngle, std::u16string_view rString,
+            bool isWrongOOo10thDegAngle);
+
+    /** convert SVG angle to number, 10th of degrees with range [0..3600] */
+    static bool convertAngle(sal_Int16& rAngle, std::string_view rString,
             bool isWrongOOo10thDegAngle);
 
     /** convert double to XMLSchema-2 "duration" string; negative durations allowed */
@@ -209,6 +249,7 @@ public:
 
     static double GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit);
     static sal_Int16 GetUnitFromString(std::u16string_view rString, sal_Int16 nDefaultUnit);
+    static sal_Int16 GetUnitFromString(std::string_view rString, sal_Int16 nDefaultUnit);
 
     /** convert an Any to string (typesafe) */
     static bool convertAny(OUStringBuffer&          rsValue,

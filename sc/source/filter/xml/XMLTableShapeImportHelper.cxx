@@ -97,8 +97,6 @@ void XMLTableShapeImportHelper::finishShape(
             SdrLayerID nLayerID = SDRLAYER_NOTFOUND;
             for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
             {
-                const OUString sValue = aIter.toString();
-
                 switch(aIter.getToken())
                 {
                     case XML_ELEMENT(TABLE, XML_END_CELL_ADDRESS):
@@ -106,7 +104,7 @@ void XMLTableShapeImportHelper::finishShape(
                         sal_Int32 nOffset(0);
                         ScDocument* pDoc = static_cast<ScXMLImport&>(mrImporter).GetDocument();
                         assert(pDoc);
-                        ScRangeStringConverter::GetAddressFromString(aAnchor.maEnd, sValue, *pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset);
+                        ScRangeStringConverter::GetAddressFromString(aAnchor.maEnd, aIter.toString(), *pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset);
                         // When the cell end address is set, we let the shape resize with the cell
                         aAnchor.mbResizeWithCell = true;
                         break;
@@ -115,7 +113,7 @@ void XMLTableShapeImportHelper::finishShape(
                     {
                         static_cast<ScXMLImport&>(mrImporter).
                             GetMM100UnitConverter().convertMeasureToCore(
-                                    nEndX, sValue);
+                                    nEndX, aIter.toView());
                         aAnchor.maEndOffset.setX( nEndX );
                         break;
                     }
@@ -123,16 +121,16 @@ void XMLTableShapeImportHelper::finishShape(
                     {
                         static_cast<ScXMLImport&>(mrImporter).
                             GetMM100UnitConverter().convertMeasureToCore(
-                                    nEndY, sValue);
+                                    nEndY, aIter.toView());
                         aAnchor.maEndOffset.setY( nEndY );
                         break;
                     }
                     case XML_ELEMENT(TABLE, XML_TABLE_BACKGROUND):
-                        if (IsXMLToken(sValue, XML_TRUE))
+                        if (IsXMLToken(aIter, XML_TRUE))
                             nLayerID = SC_LAYER_BACK;
                         break;
                     case XML_ELEMENT(DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES):
-                        xRangeList = sValue;
+                        xRangeList = aIter.toString();
                         break;
                     default: ;
                 }
@@ -216,7 +214,7 @@ void XMLTableShapeImportHelper::finishShape(
         {
             if (aIter.getToken() == XML_ELEMENT(TABLE, XML_TABLE_BACKGROUND))
             {
-                if (IsXMLToken(aIter.toString(), XML_TRUE))
+                if (IsXMLToken(aIter, XML_TRUE))
                     nLayerID = SC_LAYER_BACK;
                 break;
             }

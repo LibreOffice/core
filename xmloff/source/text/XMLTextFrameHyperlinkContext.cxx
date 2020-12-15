@@ -49,25 +49,24 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sValue = aIter.toString();
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(XLINK, XML_HREF):
-            sHRef = GetImport().GetAbsoluteReference( sValue );
+            sHRef = GetImport().GetAbsoluteReference( aIter.toString() );
             break;
         case XML_ELEMENT(OFFICE, XML_NAME):
-            sName = sValue;
+            sName = aIter.toString();
             break;
         case XML_ELEMENT(OFFICE, XML_TARGET_FRAME_NAME):
-            sTargetFrameName = sValue;
+            sTargetFrameName = aIter.toString();
             break;
         case XML_ELEMENT(XLINK, XML_SHOW):
-            sShow = sValue;
+            sShow = aIter.toString();
             break;
         case XML_ELEMENT(OFFICE, XML_SERVER_MAP):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool( bTmp, sValue ))
+                if (::sax::Converter::convertBool( bTmp, aIter.toView() ))
                 {
                     bMap = bTmp;
                 }

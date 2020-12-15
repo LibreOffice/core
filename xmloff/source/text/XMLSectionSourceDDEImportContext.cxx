@@ -75,7 +75,7 @@ void XMLSectionSourceDDEImportContext::startFastElement(sal_Int32 /*nElement*/,
             case XML_ELEMENT(OFFICE, XML_AUTOMATIC_UPDATE):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, aIter.toString()))
+                if (::sax::Converter::convertBool(bTmp, aIter.toView()))
                 {
                     bAutomaticUpdate = bTmp;
                 }

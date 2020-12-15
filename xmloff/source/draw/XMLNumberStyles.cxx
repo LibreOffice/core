@@ -531,18 +531,16 @@ SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext(
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString sValue = aIter.toString();
-
         switch (aIter.getToken())
         {
             case XML_ELEMENT(NUMBER, XML_DECIMAL_PLACES):
-                mbDecimal02 =  IsXMLToken( sValue, XML_2 );
+                mbDecimal02 =  IsXMLToken( aIter, XML_2 );
                 break;
             case XML_ELEMENT(NUMBER, XML_STYLE):
-                mbLong = IsXMLToken( sValue, XML_LONG );
+                mbLong = IsXMLToken( aIter, XML_LONG );
                 break;
             case XML_ELEMENT(NUMBER, XML_TEXTUAL):
-                mbTextual = IsXMLToken( sValue, XML_TRUE );
+                mbTextual = IsXMLToken( aIter, XML_TRUE );
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);
@@ -591,9 +589,8 @@ SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rIm
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString sValue = aIter.toString();
         if( aIter.getToken() == XML_ELEMENT(NUMBER, XML_AUTOMATIC_ORDER) )
-                mbAutomatic = IsXMLToken( sValue, XML_TRUE );
+                mbAutomatic = IsXMLToken( aIter, XML_TRUE );
         else
             XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }

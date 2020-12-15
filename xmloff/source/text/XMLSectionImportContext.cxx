@@ -198,22 +198,21 @@ void XMLSectionImportContext::ProcessAttributes(
 {
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sValue = aIter.toString();
-
         switch (aIter.getToken())
         {
             case XML_ELEMENT(XML, XML_ID):
-                sXmlId = sValue;
+                sXmlId = aIter.toString();
                 break;
             case XML_ELEMENT(TEXT, XML_STYLE_NAME):
-                sStyleName = sValue;
+                sStyleName = aIter.toString();
                 break;
             case XML_ELEMENT(TEXT, XML_NAME):
-                sName = sValue;
+                sName = aIter.toString();
                 bValid = true;
                 break;
             case XML_ELEMENT(TEXT, XML_CONDITION):
                 {
+                    OUString sValue = aIter.toString();
                     OUString sTmp;
                     sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
                                     GetKeyByAttrValueQName(sValue, &sTmp);
@@ -227,12 +226,12 @@ void XMLSectionImportContext::ProcessAttributes(
                 }
                 break;
             case XML_ELEMENT(TEXT, XML_DISPLAY):
-                if (IsXMLToken(sValue, XML_TRUE))
+                if (IsXMLToken(aIter, XML_TRUE))
                 {
                     bIsVisible = true;
                 }
-                else if ( IsXMLToken(sValue, XML_NONE) ||
-                          IsXMLToken(sValue, XML_CONDITION) )
+                else if ( IsXMLToken(aIter, XML_NONE) ||
+                          IsXMLToken(aIter, XML_CONDITION) )
                 {
                     bIsVisible = false;
                 }
@@ -241,7 +240,7 @@ void XMLSectionImportContext::ProcessAttributes(
             case XML_ELEMENT(TEXT, XML_IS_HIDDEN):
                 {
                     bool bTmp(false);
-                    if (::sax::Converter::convertBool(bTmp, sValue))
+                    if (::sax::Converter::convertBool(bTmp, aIter.toView()))
                     {
                         bIsCurrentlyVisible = !bTmp;
                         bIsCurrentlyVisibleOK = true;
@@ -249,7 +248,7 @@ void XMLSectionImportContext::ProcessAttributes(
                 }
                 break;
             case XML_ELEMENT(TEXT, XML_PROTECTION_KEY):
-                ::comphelper::Base64::decode(aSequence, sValue);
+                ::comphelper::Base64::decode(aSequence, aIter.toString());
                 bSequenceOK = true;
                 break;
             case XML_ELEMENT(TEXT, XML_PROTECTED):
@@ -257,7 +256,7 @@ void XMLSectionImportContext::ProcessAttributes(
             case XML_ELEMENT(TEXT, XML_PROTECT):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, sValue))
+                if (::sax::Converter::convertBool(bTmp, aIter.toView()))
                 {
                     bProtect = bTmp;
                 }

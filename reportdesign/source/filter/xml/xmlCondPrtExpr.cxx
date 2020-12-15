@@ -43,12 +43,10 @@ OXMLCondPrtExpr::OXMLCondPrtExpr( ORptFilter& _rImport
     {
         for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
         {
-            OUString sValue = aIter.toString();
-
             switch( aIter.getToken() )
             {
                 case XML_ELEMENT(REPORT, XML_FORMULA):
-                    m_xComponent->setPropertyValue(PROPERTY_CONDITIONALPRINTEXPRESSION,uno::makeAny(ORptFilter::convertFormula(sValue)));
+                    m_xComponent->setPropertyValue(PROPERTY_CONDITIONALPRINTEXPRESSION,uno::makeAny(ORptFilter::convertFormula(aIter.toString())));
                     break;
                 default:
                     XMLOFF_WARN_UNKNOWN("reportdesign", aIter);

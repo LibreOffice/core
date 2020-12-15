@@ -55,23 +55,20 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
 
     if (!m_xSection.is())
         return;
-    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     try
     {
         for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
         {
-            OUString sValue = aIter.toString();
-
             switch( aIter.getToken() )
             {
                 case XML_ELEMENT(REPORT, XML_PAGE_PRINT_OPTION):
                     if ( _bPageHeader )
-                        m_xSection->getReportDefinition()->setPageHeaderOption(lcl_getReportPrintOption(sValue));
+                        m_xSection->getReportDefinition()->setPageHeaderOption(lcl_getReportPrintOption(aIter.toString()));
                     else
-                        m_xSection->getReportDefinition()->setPageFooterOption(lcl_getReportPrintOption(sValue));
+                        m_xSection->getReportDefinition()->setPageFooterOption(lcl_getReportPrintOption(aIter.toString()));
                     break;
                 case XML_ELEMENT(REPORT, XML_REPEAT_SECTION):
-                    m_xSection->setRepeatSection(sValue == s_sTRUE );
+                    m_xSection->setRepeatSection(IsXMLToken(aIter, XML_TRUE));
                     break;
                 default:
                     XMLOFF_WARN_UNKNOWN("reportdesign", aIter);

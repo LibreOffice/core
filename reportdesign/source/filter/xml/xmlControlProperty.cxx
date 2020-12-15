@@ -64,12 +64,10 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))
     {
-        OUString sValue = aIter.toString();
-
         switch( aIter.getToken() )
         {
             case XML_ELEMENT(FORM, XML_LIST_PROPERTY):
-                m_bIsList = sValue == "true";
+                m_bIsList = aIter.toView() == "true";
                 break;
             case XML_ELEMENT(OOO, XML_VALUE_TYPE):
                 {
@@ -88,14 +86,14 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
                         { GetXMLToken( XML_VOID)      , cppu::UnoType<void>::get() },
                     };
 
-                    const std::map< OUString, css::uno::Type >::const_iterator aTypePos = s_aTypeNameMap.find(sValue);
+                    const std::map< OUString, css::uno::Type >::const_iterator aTypePos = s_aTypeNameMap.find(aIter.toString());
                     OSL_ENSURE(s_aTypeNameMap.end() != aTypePos, "OXMLControlProperty::OXMLControlProperty: invalid type!");
                     if (s_aTypeNameMap.end() != aTypePos)
                         m_aPropType = aTypePos->second;
                 }
                 break;
             case XML_ELEMENT(FORM, XML_PROPERTY_NAME):
-                m_aSetting.Name = sValue;
+                m_aSetting.Name = aIter.toString();
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("reportdesign", aIter);

@@ -193,15 +193,15 @@ void ScXMLChangeTrackingImportHelper::StartChangeAction(const ScChangeActionType
     }
 }
 
-sal_uInt32 ScXMLChangeTrackingImportHelper::GetIDFromString(const OUString& sID)
+sal_uInt32 ScXMLChangeTrackingImportHelper::GetIDFromString(std::string_view sID)
 {
     sal_uInt32 nResult(0);
-    if (!sID.isEmpty())
+    if (!sID.empty())
     {
-        if (sID.startsWith(SC_CHANGE_ID_PREFIX))
+        if (sID.substr(0, strlen(SC_CHANGE_ID_PREFIX)) == SC_CHANGE_ID_PREFIX)
         {
             sal_Int32 nValue;
-            ::sax::Converter::convertNumber(nValue, std::u16string_view(sID).substr(strlen(SC_CHANGE_ID_PREFIX)));
+            ::sax::Converter::convertNumber(nValue, sID.substr(strlen(SC_CHANGE_ID_PREFIX)));
             OSL_ENSURE(nValue > 0, "wrong change action ID");
             nResult = nValue;
         }

@@ -136,7 +136,7 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     {
         if( aIter.getToken() == XML_ELEMENT(TEXT, XML_NOTE_CLASS) )
         {
-            if( IsXMLToken(aIter.toString(), XML_ENDNOTE ) )
+            if( IsXMLToken(aIter, XML_ENDNOTE ) )
             {
                 bIsEndnote = true;
                 SetFamily( XmlStyleFamily::TEXT_FOOTNOTECONFIG );
