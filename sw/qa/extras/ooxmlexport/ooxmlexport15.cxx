@@ -468,7 +468,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf136589_paraHadField, "tdf136589_paraHadField.doc
     // The section break should not add an additional CR - which equals an empty page two.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
-    //tdf#118711 - don't explicity specify the default page style at the beginning of the document
+    //tdf#118711 - don't explicitly specify the default page style at the beginning of the document
     uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(uno::Any(), xPara->getPropertyValue("PageDescName"));
 }

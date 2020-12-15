@@ -1231,7 +1231,7 @@ bool ImpGraphic::swapOutContent(SvStream& rStream)
 
     sal_uLong nDataFieldPos;
 
-    // Write te SWAP ID
+    // Write the SWAP ID
     rStream.WriteUInt32(SWAP_FORMAT_ID);
 
     rStream.WriteInt32(static_cast<sal_Int32>(meType));
