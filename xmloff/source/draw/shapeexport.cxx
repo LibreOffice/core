@@ -2498,7 +2498,6 @@ void XMLShapeExport::ImpExportControlShape(
         if( xControlModel.is() )
         {
             OUString sControlId = mrExport.GetFormExport()->getControlId( xControlModel );
-            assert(!sControlId.isEmpty());
             mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CONTROL, sControlId );
         }
     }
