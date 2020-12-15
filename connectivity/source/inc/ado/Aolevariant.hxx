@@ -40,13 +40,13 @@ namespace connectivity::ado
         public:
             OLEString();
             OLEString(const BSTR& _sBStr);
-            OLEString(const OUString& _sBStr);
+            OLEString(std::u16string_view _sBStr);
             OLEString(const OLEString& _rRh)
             {
                 OLEString::operator=(_rRh);
             }
             ~OLEString();
-            OLEString& operator=(const OUString& _rSrc);
+            OLEString& operator=(std::u16string_view _rSrc);
             OLEString& operator=(const BSTR& _rSrc);
             OLEString& operator=(const OLEString& _rSrc);
             OUString asOUString() const;
@@ -68,7 +68,11 @@ namespace connectivity::ado
             OLEVariant(sal_Int32 n) ;
             OLEVariant(sal_Int64 x) ;
 
-            OLEVariant(const OUString& us) ;
+            OLEVariant(std::u16string_view us);
+            OLEVariant(const OUString& us)
+                : OLEVariant(std::u16string_view(us))
+            {
+            }
             ~OLEVariant()                   ;
             OLEVariant(const css::util::Date& x );
             OLEVariant(const css::util::Time& x );
@@ -93,7 +97,7 @@ namespace connectivity::ado
             void setChar(unsigned char a)           ;
             void setCurrency(double aCur)           ;
             void setBool(bool b)                    ;
-            void setString(const OUString& us) ;
+            void setString(std::u16string_view us);
             void setNoArg()                         ;
 
             void setIDispatch(IDispatch* pDispInterface);
