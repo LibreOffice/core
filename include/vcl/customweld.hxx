@@ -76,6 +76,7 @@ public:
     {
         m_pDrawingArea->set_size_request(nWidth, nHeight);
     }
+    Size get_size_request() const { return m_pDrawingArea->get_size_request(); }
     void queue_resize() { m_pDrawingArea->queue_resize(); }
     CustomWidgetController()
         : m_pDrawingArea(nullptr)
