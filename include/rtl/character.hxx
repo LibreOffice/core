@@ -119,7 +119,7 @@ template <typename T> inline bool isAsciiUpperCase(T code)
 inline bool isAsciiAlpha(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
-    return isAsciiLowerCase(code) || isAsciiUpperCase(code);
+    return (code >= 'a' && code <= 'z') || (code >= 'A' && code <= 'Z');
 }
 
 #if defined LIBO_INTERNAL_ONLY
@@ -161,7 +161,8 @@ template <typename T> inline bool isAsciiDigit(T code) { return isAsciiDigit(sal
 inline bool isAsciiAlphanumeric(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
-    return isAsciiDigit(code) || isAsciiAlpha(code);
+    return (code >= '0' && code <= '9') || (code >= 'a' && code <= 'z')
+           || (code >= 'A' && code <= 'Z');
 }
 
 #if defined LIBO_INTERNAL_ONLY
@@ -185,7 +186,7 @@ template <typename T> inline bool isAsciiAlphanumeric(T code)
 inline bool isAsciiCanonicHexDigit(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
-    return isAsciiDigit(code) || (code >= 'A' && code <= 'F');
+    return code >= '0' && code <= '9' || (code >= 'A' && code <= 'F');
 }
 
 #if defined LIBO_INTERNAL_ONLY
@@ -209,7 +210,8 @@ template <typename T> inline bool isAsciiCanonicHexDigit(T code)
 inline bool isAsciiHexDigit(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
-    return isAsciiCanonicHexDigit(code) || (code >= 'a' && code <= 'f');
+    return code >= '0' && code <= '9' || (code >= 'A' && code <= 'F')
+           || (code >= 'a' && code <= 'f');
 }
 
 #if defined LIBO_INTERNAL_ONLY
@@ -280,7 +282,7 @@ template <typename T> inline bool isAsciiWhiteSpace(T code)
 inline sal_uInt32 toAsciiUpperCase(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
-    return isAsciiLowerCase(code) ? code - 32 : code;
+    return code >= 'a' && code <= 'z' ? code - 32 : code;
 }
 
 #if defined LIBO_INTERNAL_ONLY
@@ -303,7 +305,7 @@ template <typename T> inline sal_uInt32 toAsciiUpperCase(T code)
 inline sal_uInt32 toAsciiLowerCase(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
-    return isAsciiUpperCase(code) ? code + 32 : code;
+    return code >= 'A' && code <= 'Z' ? code + 32 : code;
 }
 
 #if defined LIBO_INTERNAL_ONLY
@@ -329,8 +331,6 @@ template <typename T> inline sal_uInt32 toAsciiLowerCase(T code)
  */
 inline sal_Int32 compareIgnoreAsciiCase(sal_uInt32 code1, sal_uInt32 code2)
 {
-    assert(isUnicodeCodePoint(code1));
-    assert(isUnicodeCodePoint(code2));
     return static_cast<sal_Int32>(toAsciiLowerCase(code1))
            - static_cast<sal_Int32>(toAsciiLowerCase(code2));
 }
@@ -458,8 +458,10 @@ inline std::size_t splitSurrogates(sal_uInt32 code, sal_Unicode* output)
     }
     else
     {
-        output[0] = getHighSurrogate(code);
-        output[1] = getLowSurrogate(code);
+        output[0]
+            = static_cast<sal_Unicode>(((code - 0x10000) >> 10) | detail::surrogatesHighFirst);
+        output[1]
+            = static_cast<sal_Unicode>(((code - 0x10000) & 0x3FF) | detail::surrogatesLowFirst);
         return 2;
     }
 }
@@ -474,7 +476,8 @@ inline std::size_t splitSurrogates(sal_uInt32 code, sal_Unicode* output)
 */
 inline bool isUnicodeScalarValue(sal_uInt32 code)
 {
-    return isUnicodeCodePoint(code) && !isSurrogate(code);
+    return isUnicodeCodePoint(code)
+           && (code < detail::surrogatesHighFirst || code > detail::surrogatesLowLast);
 }
 }
 
