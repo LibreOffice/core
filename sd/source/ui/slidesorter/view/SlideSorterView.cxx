@@ -654,6 +654,14 @@ void SlideSorterView::Paint (
             continue;
         pDescriptor->GetPage()->getGraphicsForPrefetch(graphics);
     }
+    // Handle also one page before and after to have those in advance on scrolling.
+    for (::tools::Long nIndex : { aRange.Min() - 1, aRange.Max() + 1 })
+    {
+        model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nIndex));
+        if (!pDescriptor)
+            continue;
+        pDescriptor->GetPage()->getGraphicsForPrefetch(graphics);
+    }
     if(graphics.size() > 1) // threading does not help with loading just one
         GraphicFilter::GetGraphicFilter().MakeGraphicsAvailableThreaded(graphics);
 
