@@ -667,6 +667,18 @@ std::unique_ptr<weld::Expander> JSInstanceBuilder::weld_expander(const OString& 
     return pWeldWidget;
 }
 
+std::unique_ptr<weld::IconView> JSInstanceBuilder::weld_icon_view(const OString& id)
+{
+    ::IconView* pIconView = m_xBuilder->get<::IconView>(id);
+    auto pWeldWidget
+        = pIconView ? std::make_unique<JSIconView>(this, pIconView, this, false) : nullptr;
+
+    if (pWeldWidget)
+        RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
 weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
                                                             VclMessageType eMessageType,
                                                             VclButtonsType eButtonType,
@@ -1053,6 +1065,44 @@ JSExpander::JSExpander(JSDialogSender* pSender, ::VclExpander* pExpander,
 void JSExpander::set_expanded(bool bExpand)
 {
     SalInstanceExpander::set_expanded(bExpand);
+    notifyDialogState();
+}
+
+JSIconView::JSIconView(JSDialogSender* pSender, ::IconView* pIconView, SalInstanceBuilder* pBuilder,
+                       bool bTakeOwnership)
+    : JSWidget<SalInstanceIconView, ::IconView>(pSender, pIconView, pBuilder, bTakeOwnership)
+{
+}
+
+void JSIconView::insert(int pos, const OUString* pStr, const OUString* pId,
+                        const OUString* pIconName, weld::TreeIter* pRet)
+{
+    SalInstanceIconView::insert(pos, pStr, pId, pIconName, pRet);
+    notifyDialogState();
+}
+
+void JSIconView::insert(int pos, const OUString* pStr, const OUString* pId,
+                        const VirtualDevice* pIcon, weld::TreeIter* pRet)
+{
+    SalInstanceIconView::insert(pos, pStr, pId, pIcon, pRet);
+    notifyDialogState();
+}
+
+void JSIconView::clear()
+{
+    SalInstanceIconView::clear();
+    notifyDialogState();
+}
+
+void JSIconView::select(int pos)
+{
+    SalInstanceIconView::select(pos);
+    notifyDialogState();
+}
+
+void JSIconView::unselect(int pos)
+{
+    SalInstanceIconView::unselect(pos);
     notifyDialogState();
 }
 
