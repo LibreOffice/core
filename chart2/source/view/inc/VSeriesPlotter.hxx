@@ -426,6 +426,7 @@ protected:
     bool m_bPointsWereSkipped;
     bool m_bPieLabelsAllowToMove;
     basegfx::B2IRectangle m_aAvailableOuterRect;
+    css::awt::Size m_aPageReferenceSize;
 
 private:
     typedef std::map< sal_Int32 , ExplicitScaleData > tSecondaryValueScales;
@@ -433,7 +434,6 @@ private:
 
     typedef std::map< sal_Int32 , std::unique_ptr<PlottingPositionHelper> > tSecondaryPosHelperMap;
     mutable tSecondaryPosHelperMap   m_aSecondaryPosHelperMap;
-    css::awt::Size      m_aPageReferenceSize;
 };
 
 } //namespace chart
