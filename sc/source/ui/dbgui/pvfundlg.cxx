@@ -482,6 +482,16 @@ ScDPSubtotalDlg::ScDPSubtotalDlg(weld::Widget* pParent, ScDPObject& rDPObj,
 
 ScDPSubtotalDlg::~ScDPSubtotalDlg()
 {
+    CloseSubdialog();
+}
+
+void ScDPSubtotalDlg::CloseSubdialog()
+{
+    if (mxOptionsDlg && mxOptionsDlg->getDialog())
+    {
+        mxOptionsDlg->getDialog()->response(RET_CANCEL);
+        mxOptionsDlg = nullptr;
+    }
 }
 
 PivotFunc ScDPSubtotalDlg::GetFuncMask() const
@@ -544,6 +554,8 @@ void ScDPSubtotalDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncDa
 
 IMPL_LINK(ScDPSubtotalDlg, ButtonClicked, weld::Button&, rButton, void)
 {
+    CloseSubdialog();
+
     if (&rButton == mxBtnOk.get())
         response(RET_OK);
     else
@@ -570,6 +582,7 @@ IMPL_LINK(ScDPSubtotalDlg, ClickHdl, weld::Button&, rBtn, void)
         weld::DialogController::runAsync(mxOptionsDlg, [this](int nResult) {
             if (nResult == RET_OK)
                 mxOptionsDlg->FillLabelData(maLabelData);
+            mxOptionsDlg = nullptr;
         });
     }
 }

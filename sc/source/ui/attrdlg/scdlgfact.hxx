@@ -475,6 +475,7 @@ public:
     virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual PivotFunc GetFuncMask() const override;
     virtual css::sheet::DataPilotFieldReference GetFieldRef() const override;
+    virtual void Response(int nResponse) override;
 };
 
 class AbstractScDPSubtotalDlg_Impl : public AbstractScDPSubtotalDlg
@@ -489,6 +490,7 @@ public:
     virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual PivotFunc GetFuncMask() const override;
     virtual void FillLabelData( ScDPLabelData& rLabelData ) const override;
+    virtual void Response(int nResponse) override;
 };
 
 class AbstractScDPNumGroupDlg_Impl : public AbstractScDPNumGroupDlg

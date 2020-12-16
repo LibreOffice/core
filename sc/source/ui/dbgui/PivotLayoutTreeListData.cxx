@@ -15,7 +15,6 @@
 
 #include <vcl/event.hxx>
 #include <pivot.hxx>
-#include <scabstdlg.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 
@@ -69,7 +68,13 @@ ScPivotLayoutTreeListData::ScPivotLayoutTreeListData(std::unique_ptr<weld::TreeV
 }
 
 ScPivotLayoutTreeListData::~ScPivotLayoutTreeListData()
-{}
+{
+    if (mpFunctionDlg)
+    {
+        mpFunctionDlg->Response(RET_CANCEL);
+        mpFunctionDlg.clear();
+    }
+}
 
 IMPL_LINK_NOARG(ScPivotLayoutTreeListData, DoubleClickHdl, weld::TreeView&, bool)
 {
@@ -85,17 +90,16 @@ IMPL_LINK_NOARG(ScPivotLayoutTreeListData, DoubleClickHdl, weld::TreeView&, bool
 
     ScAbstractDialogFactory* pFactory = ScAbstractDialogFactory::Create();
 
-    VclPtr<AbstractScDPFunctionDlg> pDialog(
-        pFactory->CreateScDPFunctionDlg(mxControl.get(), mpParent->GetLabelDataVector(), rCurrentLabelData, rCurrentFunctionData));
+    mpFunctionDlg = pFactory->CreateScDPFunctionDlg(mxControl.get(), mpParent->GetLabelDataVector(), rCurrentLabelData, rCurrentFunctionData);
 
-    pDialog->StartExecuteAsync([this, pDialog, pCurrentItemValue, rCurrentFunctionData,
+    mpFunctionDlg->StartExecuteAsync([this, pCurrentItemValue, rCurrentFunctionData,
                                 rCurrentLabelData, nEntry](int nResult) mutable {
         if (nResult == RET_OK)
         {
-            rCurrentFunctionData.mnFuncMask = pDialog->GetFuncMask();
-            rCurrentLabelData.mnFuncMask = pDialog->GetFuncMask();
+            rCurrentFunctionData.mnFuncMask = mpFunctionDlg->GetFuncMask();
+            rCurrentLabelData.mnFuncMask = mpFunctionDlg->GetFuncMask();
 
-            rCurrentFunctionData.maFieldRef = pDialog->GetFieldRef();
+            rCurrentFunctionData.maFieldRef = mpFunctionDlg->GetFieldRef();
 
             ScDPLabelData& rDFData = mpParent->GetLabelData(rCurrentFunctionData.mnCol);
 
@@ -109,7 +113,7 @@ IMPL_LINK_NOARG(ScPivotLayoutTreeListData, DoubleClickHdl, weld::TreeView&, bool
             mxControl->set_text(nEntry, sDataItemName);
         }
 
-        pDialog->disposeOnce();
+        mpFunctionDlg->disposeOnce();
     });
 
     return true;
