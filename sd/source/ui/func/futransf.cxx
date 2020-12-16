@@ -106,8 +106,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         bWelded = true;
     }
 
-    if (!pDlg)
-        return;
+    assert(pDlg && "there must be a dialog at this point");
 
     auto pRequest = std::make_shared<SfxRequest>(rReq);
     rReq.Ignore(); // the 'old' request is not relevant any more
