@@ -5499,7 +5499,7 @@ OutputDevice& SalInstanceDrawingArea::get_ref_device()
 
 void SalInstanceDrawingArea::click(const Point& rPos)
 {
-    MouseEvent aEvent(rPos);
+    MouseEvent aEvent(rPos, 1, MouseEventModifiers::NONE,  MOUSE_LEFT, 0);
     m_xDrawingArea->MouseButtonDown(aEvent);
     m_xDrawingArea->MouseButtonUp(aEvent);
 }
