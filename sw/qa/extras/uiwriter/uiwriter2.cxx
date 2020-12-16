@@ -2084,6 +2084,47 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137771)
     CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testJoinParaChangesInMargin)
+{
+    load(DATA_DIRECTORY, "tdf54819.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // switch on "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+
+    SwWrtShell* const pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+
+    // turn on red-lining and show changes
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert
+                                                      | RedlineFlags::ShowDelete);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // delete a character and the paragraph break at the end of the paragraph
+    dispatchCommand(mxComponent, ".uno:GotoEndOfPara", {});
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsudolor sit amet."), getParagraph(1)->getString());
+
+    // Undo
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    // this would crash due to bad redline range
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum"), getParagraph(1)->getString());
+
+    // switch off "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138479)
 {
     SwDoc* const pDoc = createDoc();
