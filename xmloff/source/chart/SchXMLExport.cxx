@@ -1550,7 +1550,11 @@ static void lcl_exportComplexLabel( const Sequence< uno::Any >& rComplexLabel, S
         OUString aString;
         if( !(rElem >>= aString) )
         {
-            //todo?
+            double aNum;
+            if (rElem >>= aNum)
+            {
+                aString = OUString::number(aNum);
+            }
         }
         SchXMLTools::exportText( rExport, aString, false /*bConvertTabsLFs*/ );
     }
