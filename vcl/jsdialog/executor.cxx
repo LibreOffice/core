@@ -141,6 +141,25 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
             {
                 if (sAction == "click")
                 {
+                    int separatorPos = rData["data"].indexOf(';');
+                    if (separatorPos > 0)
+                    {
+                        // x;y
+                        std::string_view clickPosX = OUStringToOString(rData["data"].subView(0, separatorPos),
+                                                              RTL_TEXTENCODING_ASCII_US);
+                        std::string_view clickPosY = OUStringToOString(rData["data"].subView(separatorPos + 1),
+                                                              RTL_TEXTENCODING_ASCII_US);
+                        if (!clickPosX.empty() && !clickPosY.empty())
+                        {
+                            double posX = std::atof(clickPosX.data());
+                            double posY = std::atof(clickPosY.data());
+                            Size size = pArea->get_size_request();
+                            posX = posX * size.Width();
+                            posY = posY * size.Height();
+                            LOKTrigger::trigger_click(*pArea, Point(posX, posY));
+                            return true;
+                        }
+                    }
                     LOKTrigger::trigger_click(*pArea, Point(10, 10));
                     return true;
                 }
