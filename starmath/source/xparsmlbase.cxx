@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "xparsmlbase.hxx"
+using namespace starmathdatabase;
 
-static OUString icustomMathmlHtmlEntitiesNamesData[2125] = {
+static OUString icustomMathmlHtmlEntitiesNamesData[SM_CUSTOM_ENTITY_COUNT_IMPORT] = {
     // clang-format off
     u"AElig",
     u"AMP",
@@ -2148,7 +2149,7 @@ static OUString icustomMathmlHtmlEntitiesNamesData[2125] = {
     // clang-format on
 };
 
-static OUString icustomMathmlHtmlEntitiesValuesData[2125] = {
+static OUString icustomMathmlHtmlEntitiesValuesData[SM_CUSTOM_ENTITY_COUNT_IMPORT] = {
     // clang-format off
     u"\u00C6",
     u"\u0026",
@@ -4278,10 +4279,25 @@ static OUString icustomMathmlHtmlEntitiesValuesData[2125] = {
     // clang-format on
 };
 
-const ::css::uno::Sequence<::rtl::OUString>
-    starmathdatabase::icustomMathmlHtmlEntitiesNames(icustomMathmlHtmlEntitiesNamesData, 2125);
+static OUString icustomMathmlHtmlEntitiesNamesExportData[SM_CUSTOM_ENTITY_COUNT_EXPORT]
+    = { u"&sigma;", u"&infin;" };
+
+static sal_uInt32 icustomMathmlHtmlEntitiesValuesExportData[SM_CUSTOM_ENTITY_COUNT_EXPORT]
+    = { 0x000003C3, 0x0000221E };
 
 const ::css::uno::Sequence<::rtl::OUString>
-    starmathdatabase::icustomMathmlHtmlEntitiesValues(icustomMathmlHtmlEntitiesValuesData, 2125);
+    starmathdatabase::icustomMathmlHtmlEntitiesNames(icustomMathmlHtmlEntitiesNamesData,
+                                                     SM_CUSTOM_ENTITY_COUNT_IMPORT);
+
+const ::css::uno::Sequence<::rtl::OUString>
+    starmathdatabase::icustomMathmlHtmlEntitiesValues(icustomMathmlHtmlEntitiesValuesData,
+                                                      SM_CUSTOM_ENTITY_COUNT_IMPORT);
+
+const ::css::uno::Sequence<::rtl::OUString>
+    starmathdatabase::icustomMathmlHtmlEntitiesNamesExport(icustomMathmlHtmlEntitiesNamesExportData,
+                                                           SM_CUSTOM_ENTITY_COUNT_EXPORT);
+
+const ::css::uno::Sequence<sal_uInt32> starmathdatabase::icustomMathmlHtmlEntitiesValuesExport(
+    icustomMathmlHtmlEntitiesValuesExportData, SM_CUSTOM_ENTITY_COUNT_EXPORT);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,6 +21,7 @@
 
 #include <com/sun/star/io/XActiveDataSource.idl>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.idl>
+#include <com/sun/star/beans/Pair.idl>
 
 
 module com {  module sun {  module star {  module xml {  module sax {
@@ -35,6 +36,11 @@ interface XWriter
 {
     interface com::sun::star::io::XActiveDataSource;
     interface com::sun::star::xml::sax::XExtendedDocumentHandler;
+
+    /** Adds support for custom entity names list
+      * @since LibreOffice 7.2
+      */
+    void setCustomEntityNames( [in] sequence< com::sun::star::beans::Pair<string,string> > replacements );
 };
 
 
