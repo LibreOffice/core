@@ -968,6 +968,28 @@ void JSTreeView::drag_end()
     g_DragSource = nullptr;
 }
 
+void JSTreeView::insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
+                        const OUString* pId, const OUString* pIconName,
+                        VirtualDevice* pImageSurface, bool bChildrenOnDemand, weld::TreeIter* pRet)
+{
+    SalInstanceTreeView::insert(pParent, pos, pStr, pId, pIconName, pImageSurface,
+                                bChildrenOnDemand, pRet);
+
+    notifyDialogState();
+}
+
+void JSTreeView::set_text(int row, const OUString& rText, int col)
+{
+    SalInstanceTreeView::set_text(row, rText, col);
+    notifyDialogState();
+}
+
+void JSTreeView::set_text(const weld::TreeIter& rIter, const OUString& rStr, int col)
+{
+    SalInstanceTreeView::set_text(rIter, rStr, col);
+    notifyDialogState();
+}
+
 JSExpander::JSExpander(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
                        ::VclExpander* pExpander, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
                        std::string sTypeOfJSON)
