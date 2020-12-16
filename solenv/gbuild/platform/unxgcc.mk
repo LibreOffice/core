@@ -135,7 +135,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		    $(T_LIBS) \
 		    $(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS)$(filter-out XTRUE,X$(ENABLE_RUNTIME_OPTIMIZATIONS)),$(T_STDLIBS_CXX)) \
 		    -Wl$(COMMA)--end-group \
-		    , \
+		, \
 		    -Wl$(COMMA)--start-group \
 		    $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		    $(T_LIBS) \

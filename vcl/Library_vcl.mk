@@ -605,6 +605,24 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 endif
 
+ifeq ($(OS),EMSCRIPTEN)
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/unx/generic/printer/jobdata \
+    vcl/unx/generic/printer/ppdparser \
+    vcl/null/printerinfomanager \
+    vcl/wasm/salplug \
+    $(vcl_headless_code) \
+    $(vcl_headless_freetype_code) \
+))
+
+$(eval $(call gb_Library_use_externals,vcl,\
+    cairo \
+    expat \
+    fontconfig \
+    freetype \
+))
+endif
+
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,vcl,\
     -lm $(DLOPEN_LIBS) \

@@ -55,6 +55,9 @@
 #include <orcus/config.hpp>
 #include <orcus/pstring.hpp>
 
+#ifdef PAGE_SIZE
+#undef PAGE_SIZE
+#endif
 #define PAGE_SIZE 30
 
 using namespace css;
