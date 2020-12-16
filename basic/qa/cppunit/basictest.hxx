@@ -18,6 +18,7 @@
 #include <basic/sbmod.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbuno.hxx>
+#include <rtl/ustrbuf.hxx>
 
 class MacroSnippet
 {
@@ -30,6 +31,7 @@ private:
 
     void InitSnippet();
     void MakeModule(const OUString& sSource);
+    void LoadFileToBuffer(const OUString& fileURL, OUStringBuffer& buf, sal_Int32 offset);
 
 public:
     explicit MacroSnippet(const OUString& sSource);
