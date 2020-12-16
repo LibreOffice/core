@@ -80,6 +80,7 @@ Private Const BASEDOCUMENTOPENERROR	=	&quot;BASEDOCUMENTOPENERROR&quot;
 Private Const CALCADDRESSERROR		=	&quot;CALCADDRESSERROR&quot;
 Private Const DUPLICATESHEETERROR	=	&quot;DUPLICATESHEETERROR&quot;
 Private Const OFFSETADDRESSERROR	=	&quot;OFFSETADDRESSERROR&quot;
+Private Const CALCFORMNOTFOUNDERROR	=	&quot;CALCFORMNOTFOUNDERROR&quot;
 
 REM ============================================================= PRIVATE MEMBERS
 
@@ -115,7 +116,9 @@ Private Const MAXROWS			= 2^20					&apos;	Max number of rows in a sheet
 
 Private Const CALCREFERENCE		= &quot;SF_CalcReference&quot;	&apos;	Object type of _Address
 
-REM ===================================================== CONSTRUCTOR/DESTRUCTOR
+Private Const ISCALCFORM		= 2						&apos;	Form is stored in a Calc document
+
+REM ====================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Private Sub Class_Initialize()
@@ -163,7 +166,7 @@ Const cstSubArgs = &quot;Selection&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive(True) Then GoTo Finally
+		If Not _IsStillAlive(True) Then GoTo Finally
 		If IsArray(pvSelection) Then
 			If Not ScriptForge.SF_Utils._ValidateArray(pvSelection, &quot;pvSelection&quot;, 1, V_STRING, True)  Then GoTo Finally
 		Else
@@ -276,7 +279,7 @@ Const cstSubArgs = &quot;[SheetName]&quot;
 Check:
 	If IsMissing(SheetName) Or IsEmpty(SheetName) Then SheetName = &quot;&quot;
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive() Then GoTo Finally
+		If Not _IsStillAlive() Then GoTo Finally
 		If Not _ValidateSheet(SheetName, &quot;SheetName&quot;, , , True) Then GoTo Finally
 	End If
 
@@ -315,7 +318,7 @@ Const cstSubArgs = &quot;Range&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive() Then GoTo Finally
+		If Not _IsStillAlive() Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
 	End If
 
@@ -360,7 +363,7 @@ Const cstSubArgs = &quot;Range&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive() Then GoTo Finally
+		If Not _IsStillAlive() Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
 	End If
 
@@ -399,7 +402,7 @@ Const cstSubArgs = &quot;Range&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive() Then GoTo Finally
+		If Not _IsStillAlive() Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
 	End If
 
@@ -460,7 +463,7 @@ Const cstSubArgs = &quot;SheetName, NewName, [BeforeSheet=&quot;&quot;&quot;&quo
 Check:
 	If IsMissing(BeforeSheet) Or IsEmpty(BeforeSheet) Then BeforeSheet = 32768
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive(True) Then GoTo Finally
+		If Not _IsStillAlive(True) Then GoTo Finally
 		If Not _ValidateSheet(SheetName, &quot;SheetName&quot;, , True, , , True) Then GoTo Finally
 		If Not _ValidateSheet(NewName, &quot;NewName&quot;, True) Then GoTo Finally
 		If Not _ValidateSheet(BeforeSheet, &quot;BeforeSheet&quot;, , True, , True) Then GoTo Finally
@@ -549,7 +552,7 @@ Const cstSubArgs = &quot;FileName, SheetName, NewName, [BeforeSheet=&quot;&quot;
 Check:
 	If IsMissing(BeforeSheet) Or IsEmpty(BeforeSheet) Then BeforeSheet = 32768
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive(True) Then GoTo Finally
+		If Not _IsStillAlive(True) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._ValidateFile(FileName, &quot;FileName&quot;) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(SheetName, &quot;SheetName&quot;, V_STRING) Then GoTo Finally
 		If Not _ValidateSheet(NewName, &quot;NewName&quot;, True) Then GoTo Finally
@@ -623,7 +626,7 @@ Const cstSubArgs = &quot;SourceRange, DestinationCell&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive(True) Then GoTo Finally
+		If Not _IsStillAlive(True) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(SourceRange, &quot;SourceRange&quot;, Array(V_STRING, ScriptForge.V_OBJECT), , , CALCREFERENCE) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(DestinationCell, &quot;DestinationCell&quot;, V_STRING) Then GoTo Finally
 	End If
@@ -714,7 +717,7 @@ Const cstSubArgs = &quot;SourceRange, DestinationRange&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive(True) Then GoTo Finally
+		If Not _IsStillAlive(True) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(SourceRange, &quot;SourceRange&quot;, Array(V_STRING, ScriptForge.V_OBJECT), , , CALCREFERENCE) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(DestinationRange, &quot;DestinationRange&quot;, V_STRING) Then GoTo Finally
 	End If
@@ -849,6 +852,86 @@ Finally:
 End Function	&apos;	SF_Documents.SF_Calc.DSum
 
 REM -----------------------------------------------------------------------------
+Public Function Forms(Optional ByVal SheetName As Variant _
+							, Optional ByVal Form As Variant _
+							) As Variant
+&apos;&apos;&apos;	Return either
+&apos;&apos;&apos;		- the list of the Forms contained in the given sheet
+&apos;&apos;&apos;		- a SFDocuments.Form object based on its name or its index
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Form: a form stored in the document given by its name or its index
+&apos;&apos;&apos;			When absent, the list of available forms is returned
+&apos;&apos;&apos;			To get the first (unique ?) form stored in the form document, set Form = 0
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		CALCFORMNOTFOUNDERROR		Form not found
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A zero-base array of strings if Form is absent
+&apos;&apos;&apos;		An instance of the SF_Form class if Form exists
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;			Dim myForm As Object, myList As Variant
+&apos;&apos;&apos;				myList = oDoc.Forms()
+&apos;&apos;&apos;				Set myForm = oDoc.Forms(&quot;myForm&quot;)
+
+Dim oForm As Object					&apos;	The new Form class instance
+Dim oMainForm As Object				&apos;	com.sun.star.comp.sdb.Content
+Dim oXForm As Object				&apos;	com.sun.star.form.XForm or com.sun.star.comp.forms.ODatabaseForm
+Dim vFormNames As Variant			&apos;	Array of form names
+Dim oForms As Object				&apos;	Forms collection
+Const cstDrawPage = -1				&apos;	There is no DrawPages collection in Calc sheets
+
+Const cstThisSub = &quot;SFDocuments.Calc.Forms&quot;
+Const cstSubArgs = &quot;SheetName, [Form=&quot;&quot;&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+
+Check:
+	If IsMissing(Form) Or IsEmpty(Form) Then Form = &quot;&quot;
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not _ValidateSheet(SheetName, &quot;SheetName&quot;, , True) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Form, &quot;Form&quot;, Array(V_STRING, ScriptForge.V_NUMERIC)) Then GoTo Finally
+	End If
+
+Try:
+	&apos;	Start from the Calc sheet and go down to forms
+	Set oForms = _Component.getSheets.getByName(SheetName).DrawPage.Forms
+	vFormNames = oForms.getElementNames()
+
+	If Len(Form) = 0 Then	&apos;	Return the list of valid form names
+		Forms = vFormNames
+	Else
+		If VarType(Form) = V_STRING Then	&apos;	Find the form by name
+		If Not ScriptForge.SF_Utils._Validate(Form, &quot;Form&quot;, V_STRING, vFormNames) Then GoTo Finally
+			Set oXForm = oForms.getByName(Form)
+		Else								&apos;	Find the form by index
+			If Form &lt; 0 Or Form &gt;= oForms.Count Then GoTo CatchNotFound
+			Set oXForm = oForms.getByIndex(Form)
+		End If
+		&apos;	Create the new Form class instance
+		Set oForm = New SF_Form
+		With oForm
+			._Name = oXForm.Name
+			Set .[Me] = oForm
+			Set .[_Parent] = [Me]
+			._DrawPage = cstDrawPage
+			._UsualName = SheetName &amp; &quot; : &quot; &amp; ._Name
+			Set ._MainForm = Nothing
+			._FormType = ISCALCFORM
+			Set ._Form = oXForm
+		End With
+		Set Forms = oForm
+	End If
+
+Finally:
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchNotFound:
+	ScriptForge.SF_Exception.RaiseFatal(CALCFORMNOTFOUNDERROR, Form, _FileIdent())
+End Function	&apos;	SFDocuments.SF_Calc.Forms
+
+REM -----------------------------------------------------------------------------
 Function GetColumnName(Optional ByVal ColumnNumber As Variant) As String
 &apos;&apos;&apos;	Convert a column number (range 1, 2,..1024) into its letter counterpart (range &apos;A&apos;, &apos;B&apos;,..&apos;AMJ&apos;).
 &apos;&apos;&apos;	Args:
@@ -905,7 +988,7 @@ Const cstSubArgs = &quot;Range&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive() Then GoTo Finally
+		If Not _IsStillAlive() Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
 	End If
 
@@ -988,7 +1071,7 @@ Const cstSubArgs = &quot;Range&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive() Then GoTo Finally
+		If Not _IsStillAlive() Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
 	End If
 
@@ -1053,7 +1136,7 @@ Const cstSubArgs = &quot;FileName, DestinationCell, [FilterOptions]=&quot;&quot;
 Check:
 	If IsMissing(FilterOptions) Or IsEmpty(FilterOptions) Then FilterOptions = cstFilterOptions
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive(True) Then GoTo Finally
+		If Not _IsStillAlive(True) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._ValidateFile(FileName, &quot;FileName&quot;) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(DestinationCell, &quot;DestinationCell&quot;, V_STRING) Then GoTo Finally
 	End If
@@ -1129,7 +1212,7 @@ Check:
 	If IsMissing(RegistrationName) Or IsEmpty(RegistrationName) Then RegistrationName = &quot;&quot;
 	If IsMissing(DirectSQL) Or IsEmpty(DirectSQL) Then DirectSQL = False
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive(True) Then GoTo Finally
+		If Not _IsStillAlive(True) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._ValidateFile(FileName, &quot;FileName&quot;, , True) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(DestinationCell, &quot;DestinationCell&quot;, V_STRING) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(SQLCommand, &quot;SQLCommand&quot;, V_STRING) Then GoTo Finally
@@ -1219,7 +1302,7 @@ Const cstSubArgs = &quot;SheetName, [BeforeSheet=&quot;&quot;&quot;&quot;]&quot;
 Check:
 	If IsMissing(BeforeSheet) Or IsEmpty(BeforeSheet) Then BeforeSheet = 32768
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive(True) Then GoTo Finally
+		If Not _IsStillAlive(True) Then GoTo Finally
 		If Not _ValidateSheet(SheetName, &quot;SheetName&quot;, True) Then GoTo Finally
 		If Not _ValidateSheet(BeforeSheet, &quot;BeforeSheet&quot;, , True, , True) Then GoTo Finally
 	End If
@@ -1321,7 +1404,7 @@ Const cstSubArgs = &quot;Source, Destination&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive(True) Then GoTo Finally
+		If Not _IsStillAlive(True) Then GoTo Finally
 		If Not _Validate(Source, &quot;Source&quot;, V_STRING) Then GoTo Finally
 		If Not _Validate(Destination, &quot;Destination&quot;, V_STRING) Then GoTo Finally
 	End If
@@ -1375,7 +1458,7 @@ Const cstSubArgs = &quot;SheetName, [BeforeSheet=&quot;&quot;&quot;&quot;]&quot;
 Check:
 	If IsMissing(BeforeSheet) Or IsEmpty(BeforeSheet) Then BeforeSheet = 32768
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive(True) Then GoTo Finally
+		If Not _IsStillAlive(True) Then GoTo Finally
 		If Not _ValidateSheet(SheetName, &quot;SheetName&quot;, , True) Then GoTo Finally
 		If Not _ValidateSheet(BeforeSheet, &quot;BeforeSheet&quot;, , True, , True) Then GoTo Finally
 	End If
@@ -1442,7 +1525,7 @@ Check:
 	If IsMissing(Height) Or IsEmpty(Height) Then Height = 0
 	If IsMissing(Width) Or IsEmpty(Width) Then Width = 0
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive() Then GoTo Finally
+		If Not _IsStillAlive() Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(Rows, &quot;Rows&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(Columns, &quot;Columns&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
@@ -1517,7 +1600,7 @@ Const cstSubArgs = &quot;SheetName&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive(True) Then GoTo Finally
+		If Not _IsStillAlive(True) Then GoTo Finally
 		If Not _ValidateSheet(SheetName, &quot;SheetName&quot;, , True) Then GoTo Finally
 	End If
 
@@ -1557,7 +1640,7 @@ Const cstSubArgs = &quot;SheetName, NewName&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive(True) Then GoTo Finally
+		If Not _IsStillAlive(True) Then GoTo Finally
 		If Not _ValidateSheet(SheetName, &quot;SheetName&quot;, , True) Then GoTo Finally
 		If Not _ValidateSheet(NewName, &quot;NewName&quot;, True) Then GoTo Finally
 	End If
@@ -1604,7 +1687,7 @@ Const cstSubArgs = &quot;TargetCell, Value&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive() Then GoTo Finally
+		If Not _IsStillAlive() Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(TargetCell, &quot;TargetCell&quot;, V_STRING) Then GoTo Finally
 		If IsArray(Value) Then
 			If Not ScriptForge.SF_Utils._ValidateArray(Value, &quot;Value&quot;) Then GoTo Finally
@@ -1659,7 +1742,7 @@ Const cstSubArgs = &quot;TargetRange, Style&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive() Then GoTo Finally
+		If Not _IsStillAlive() Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(TargetRange, &quot;TargetRange&quot;, V_STRING) Then GoTo Finally
 		Set oStyleFamilies = _Component.StyleFamilies
 		If oStyleFamilies.hasByName(cstStyle) Then vStyles = oStyleFamilies.getByName(cstStyle).getElementNames() Else vStyles = Array()
@@ -1714,7 +1797,7 @@ Const cstSubArgs = &quot;TargetRange, Formula&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive() Then GoTo Finally
+		If Not _IsStillAlive() Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(TargetRange, &quot;TargetRange&quot;, V_STRING) Then GoTo Finally
 		If IsArray(Formula) Then
 			If Not ScriptForge.SF_Utils._ValidateArray(Formula, &quot;Formula&quot;, 0, V_STRING) Then GoTo Finally
@@ -1831,7 +1914,7 @@ Const cstSubArgs = &quot;TargetRange, Value&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive() Then GoTo Finally
+		If Not _IsStillAlive() Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(TargetRange, &quot;TargetRange&quot;, V_STRING) Then GoTo Finally
 		If IsArray(Value) Then
 			If Not ScriptForge.SF_Utils._ValidateArray(Value, &quot;Value&quot;) Then GoTo Finally
@@ -1920,7 +2003,7 @@ Check:
 	If IsMissing(CaseSensitive) Or IsEmpty(CaseSensitive) Then CaseSensitive = False
 	If IsMissing(SortColumns) Or IsEmpty(SortColumns) Then SortColumns = False
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive() Then GoTo Finally
+		If Not _IsStillAlive() Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._ValidateArray(SortKeys, &quot;SortKeys&quot;, 1, V_NUMERIC, True) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(DestinationCell, &quot;DestinationCell&quot;, V_STRING) Then GoTo Finally
@@ -2339,7 +2422,7 @@ Const cstSubArgs = &quot;Range&quot;
 
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive() Then GoTo Finally
+		If Not _IsStillAlive() Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
 	End If
 
@@ -2363,6 +2446,15 @@ Finally:
 Catch:
 	GoTo Finally
 End Function	&apos;	SF_Documents.SF_Calc._DFunction
+
+REM -----------------------------------------------------------------------------
+Private Function _FileIdent() As String
+&apos;&apos;&apos;	Returns a file identification from the information that is currently available
+&apos;&apos;&apos;	Useful e.g. for display in error messages
+
+	_FileIdent = [_Super]._FileIdent()
+
+End Function	&apos;	SFDocuments.SF_Calc._FileIdent
 
 REM -----------------------------------------------------------------------------
 Function _GetColumnName(ByVal plColumnNumber As Long) As String
@@ -2389,6 +2481,29 @@ Try:
 Finally:
 	_GetColumnName = sCol
 End Function	&apos;	SFDocuments.SF_Calc._GetColumnName
+
+REM -----------------------------------------------------------------------------
+Private Function _IsStillAlive(Optional ByVal pbForUpdate As Boolean _
+									, Optional ByVal pbError As Boolean _
+									) As Boolean
+&apos;&apos;&apos;	Returns True if the document has not been closed manually or incidentally since the last use
+&apos;&apos;&apos;	If dead the actual instance is disposed. The execution is cancelled when pbError = True (default)
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		pbForUpdate: if True (default = False), check additionally if document is open for editing
+&apos;&apos;&apos;		pbError: if True (default), raise a fatal error
+
+Dim bAlive As Boolean			&apos;	Return value
+
+	If IsMissing(pbForUpdate) Then pbForUpdate = False
+	If IsMissing(pbError) Then pbError = True
+
+Try:
+	bAlive = [_Super]._IsStillAlive(pbForUpdate, pbError)
+
+Finally:
+	_IsStillAlive = bAlive
+	Exit Function
+End Function	&apos;	SFDocuments.SF_Calc._IsStillAlive
 
 REM -----------------------------------------------------------------------------
 Private Function _LastCell(ByRef poSheet As Object) As Variant
@@ -2632,7 +2747,7 @@ Const cstSubArgs = &quot;&quot;
 
 	cstThisSub = &quot;SFDocuments.SF_Calc.get&quot; &amp; psProperty
 	ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
-	If Not [_Super]._IsStillAlive() Then GoTo Finally
+	If Not _IsStillAlive() Then GoTo Finally
 
 	Select Case psProperty
 		Case &quot;CurrentSelection&quot;
@@ -2782,6 +2897,7 @@ Private Function _ValidateSheet(Optional ByRef pvSheetName As Variant _
 &apos;&apos;&apos;	Sheet designation validation function similar to the SF_Utils._ValidateXXX functions
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		pvSheetName: string or numeric position
+&apos;&apos;&apos;		pvArgName: the name of the variable to be used in the error message
 &apos;&apos;&apos;		pvNew: if True, sheet must not exist (default = False)
 &apos;&apos;&apos;		pvActive: if True, the shortcut &quot;~&quot; is accepted (default = False)
 &apos;&apos;&apos;		pvOptional: if True, a zero-length string is accepted (default = False)

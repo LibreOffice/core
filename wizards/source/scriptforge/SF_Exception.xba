@@ -104,6 +104,12 @@ Const CALCADDRESSERROR			=	&quot;CALCADDRESSERROR&quot;
 Const DUPLICATESHEETERROR		=	&quot;DUPLICATESHEETERROR&quot;
 Const OFFSETADDRESSERROR		=	&quot;OFFSETADDRESSERROR&quot;
 
+&apos;	SF_Form
+Const FORMDEADERROR				=	&quot;FORMDEADERROR&quot;
+Const CALCFORMNOTFOUNDERROR		=	&quot;CALCFORMNOTFOUNDERROR&quot;
+Const WRITERFORMNOTFOUNDERROR	=	&quot;WRITERFORMNOTFOUNDERROR&quot;
+Const BASEFORMNOTFOUNDERROR		=	&quot;BASEFORMNOTFOUNDERROR&quot;
+
 &apos;	SF_Dialog
 Const DIALOGNOTFOUNDERROR		=	&quot;DIALOGNOTFOUNDERROR&quot;
 Const DIALOGDEADERROR			=	&quot;DIALOGDEADERROR&quot;
@@ -824,6 +830,18 @@ Try:
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;OFFSETADDRESS&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3), pvArgs(4) _
 									, pvArgs(5), pvArgs(6), pvArgs(7), pvArgs(8), pvArgs(9), pvArgs(10), pvArgs(11))
+			Case FORMDEADERROR		&apos;	SF_Form._IsStillAlive(FormName, DocumentName)
+				sMessage = sLocation _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;FORMDEAD&quot;, pvArgs(0), pvArgs(1))
+			Case CALCFORMNOTFOUNDERROR	&apos;	SF_Calc.Forms(Index, SheetName, Document)
+				sMessage = sLocation _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;CALCFORMNOTFOUND&quot;, pvArgs(0), pvArgs(1), pvArgs(2))
+			Case WRITERFORMNOTFOUNDERROR	&apos;	SF_Document.Forms(Index, Document)
+				sMessage = sLocation _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;WRITERFORMNOTFOUND&quot;, pvArgs(0), pvArgs(1))
+			Case BASEFORMNOTFOUNDERROR	&apos;	SF_Base.Forms(Index, FormDocument, BaseDocument)
+				sMessage = sLocation _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;BASEFORMNOTFOUND&quot;, pvArgs(0), pvArgs(1), pvArgs(2))
 			Case DIALOGNOTFOUNDERROR	&apos;	SF_Dialog._NewDialog(Service, DialogName, WindowName)
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DIALOGNOTFOUND&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3), pvArgs(4) _

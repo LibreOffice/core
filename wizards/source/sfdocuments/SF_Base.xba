@@ -26,7 +26,9 @@ Option Explicit
 &apos;&apos;&apos;		the parent methods and properties.
 &apos;&apos;&apos;		They should also duplicate some generic private members as a subset of their own set of members
 &apos;&apos;&apos;
-&apos;&apos;&apos;		The SF_Base module is provided only to block parent properties that are NOT applicable to Base documents
+&apos;&apos;&apos;		The SF_Base module is provided mainly to block parent properties that are NOT applicable to Base documents
+&apos;&apos;&apos;		In addition, it provides methods to identify form documents and access their internal forms
+&apos;&apos;&apos;			(read more elsewhere (the &quot;SFDocuments.Form&quot; service) about this subject)
 &apos;&apos;&apos;
 &apos;&apos;&apos;		The current module is closely related to the &quot;UI&quot; service of the ScriptForge library
 &apos;&apos;&apos;
@@ -46,6 +48,8 @@ Option Explicit
 REM ================================================================== EXCEPTIONS
 
 Private Const DBCONNECTERROR			=	&quot;DBCONNECTERROR&quot;
+Private Const FORMDEADERROR				=	&quot;FORMDEADERROR&quot;
+Private Const BASEFORMNOTFOUNDERROR		=	&quot;BASEFORMNOTFOUNDERROR&quot;
 
 REM ============================================================= PRIVATE MEMBERS
 
@@ -55,14 +59,18 @@ Private [_Super]				As Object		&apos;	Document superclass, which the current ins
 Private ObjectType				As String		&apos;	Must be BASE
 Private ServiceName				As String
 
-&apos;	Window component
+&apos;	UNO references
 Private _Component				As Object		&apos;	com.sun.star.comp.dba.ODatabaseDocument
 Private _DataSource				As Object		&apos;	com.sun.star.comp.dba.ODatabaseSource
 Private _Database				As Object		&apos;	SFDatabases.Database service instance
+Private _FormDocuments			As Object
 
 REM ============================================================ MODULE CONSTANTS
 
-REM ===================================================== CONSTRUCTOR/DESTRUCTOR
+Const ISBASEFORM = 2				&apos;	Form is stored in a Base document
+Const cstToken = &quot;//&quot;				&apos;	Form names accept special characters but not slashes
+
+REM ====================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Private Sub Class_Initialize()
@@ -74,6 +82,7 @@ Private Sub Class_Initialize()
 	Set _Component = Nothing
 	Set _DataSource = Nothing
 	Set _Database = Nothing
+	Set _FormDocuments = Nothing
 End Sub		&apos;	SFDocuments.SF_Base Constructor
 
 REM -----------------------------------------------------------------------------
@@ -107,7 +116,7 @@ Const cstSubArgs = &quot;[SaveAsk=True]&quot;
 Check:
 	If IsMissing(SaveAsk) Or IsEmpty(SaveAsk) Then SaveAsk = True
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive(True) Then GoTo Finally
+		If Not _IsStillAlive(True) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(SaveAsk, &quot;SaveAsk&quot;, V_BOOLEAN) Then GoTo Finally
 	End If
 
@@ -122,6 +131,131 @@ Finally:
 Catch:
 	GoTo Finally
 End Function   &apos;   SFDocuments.SF_Base.CloseDocument
+
+REM -----------------------------------------------------------------------------
+Public Function FormDocuments() As Variant
+&apos;&apos;&apos;	Return the list of the FormDocuments contained in the Base document
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A zero-base array of strings
+&apos;&apos;&apos;		Each entry is the full path name of a form document. The path separator is the slash (&quot;/&quot;)
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;			Dim myForm As Object, myList As Variant
+&apos;&apos;&apos;				myList = oDoc.FormDocuments()
+
+Dim vFormNames As Variant			&apos;	Array of all form names present in the document
+Const cstThisSub = &quot;SFDocuments.Base.FormDocuments&quot;
+Const cstSubArgs = &quot;&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+	End If
+
+Try:
+	&apos;	Build list of available FormDocuments recursively with _CollectFormDocuments
+	If IsNull(_FormDocuments) Then Set _FormDocuments = _Component.getFormDocuments()
+	vFormNames = Split(_CollectFormDocuments(_FormDocuments), cstToken)
+		
+Finally:
+	FormDocuments = vFormNames
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Base.FormDocuments
+
+REM -----------------------------------------------------------------------------
+Public Function Forms(Optional ByVal FormDocument As Variant _
+							, Optional ByVal Form As Variant _
+							) As Variant
+&apos;&apos;&apos;	Return either
+&apos;&apos;&apos;		- the list of the Forms contained in the form document
+&apos;&apos;&apos;		- a SFDocuments.Form object based on its name or its index
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		FormDocument: a valid document form name as a case-sensitive string
+&apos;&apos;&apos;		Form: a form stored in the Base document given by its name or its index
+&apos;&apos;&apos;			When absent, the list of available forms is returned
+&apos;&apos;&apos;			To get the first (unique ?) form stored in the form document, set Form = 0
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A zero-base array of strings if Form is absent
+&apos;&apos;&apos;		An instance of the SF_Form class if Form exists
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		FORMDEADERROR			The form is not open
+&apos;&apos;&apos;		BASEFORMNOTFOUNDERROR	FormDocument OK but Form not found
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;			Dim myForm As Object, myList As Variant
+&apos;&apos;&apos;				myList = oDoc.Forms(&quot;Folder1/myFormDocument&quot;)
+&apos;&apos;&apos;				Set myForm = oDoc.Forms(&quot;Folder1/myFormDocument&quot;, 0)
+
+Dim oForm As Object					&apos;	The new Form class instance
+Dim oMainForm As Object				&apos;	com.sun.star.comp.sdb.Content
+Dim oXForm As Object				&apos;	com.sun.star.form.XForm
+Dim vFormDocuments As Variant		&apos;	Array of form documents
+Dim vFormNames As Variant			&apos;	Array of form names
+Dim oForms As Object				&apos;	Forms collection
+Const cstDrawPage = 0				&apos;	Only 1 drawpage in a Base document
+
+Const cstThisSub = &quot;SFDocuments.Base.Forms&quot;
+Const cstSubArgs = &quot;FormDocument, [Form=&quot;&quot;&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+
+Check:
+	If IsMissing(Form) Or IsEmpty(Form) Then Form = &quot;&quot;
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		&apos;	Build list of available FormDocuments recursively with _CollectFormDocuments
+		If IsNull(_FormDocuments) Then Set _FormDocuments = _Component.getFormDocuments()
+		vFormDocuments = Split(_CollectFormDocuments(_FormDocuments), cstToken)
+		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormDocuments) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Form, &quot;Form&quot;, Array(V_STRING, ScriptForge.V_NUMERIC)) Then GoTo Finally
+	End If
+	If Not IsLoaded(FormDocument) Then GoTo CatchClosed
+
+Try:
+	&apos;	Start from the form document and go down to forms
+	Set oMainForm = _FormDocuments.getByHierarchicalName(FormDocument)
+	Set oForms = oMainForm.Component.DrawPages(cstDrawPage).Forms
+	vFormNames = oForms.getElementNames()
+
+	If Len(Form) = 0 Then	&apos;	Return the list of valid form names
+		Forms = vFormNames
+	Else
+		If VarType(Form) = V_STRING Then	&apos;	Find the form by name
+			If Not ScriptForge.SF_Utils._Validate(Form, &quot;Form&quot;, V_STRING, vFormNames) Then GoTo Finally
+			Set oXForm = oForms.getByName(Form)
+		Else								&apos;	Find the form by index
+			If Form &lt; 0 Or Form &gt;= oForms.Count Then GoTo CatchNotFound
+			Set oXForm = oForms.getByIndex(Form)
+		End If
+		&apos;	Create the new Form class instance
+		Set oForm = New SF_Form
+		With oForm
+			._Name = oXForm.Name
+			Set .[Me] = oForm
+			Set .[_Parent] = [Me]
+			._DrawPage = cstDrawPage
+			._UsualName = FormDocument &amp; &quot; : &quot; &amp; ._Name
+			Set ._MainForm = oMainForm
+			._FormType = ISBASEFORM
+			Set ._Form = oXForm
+		End With
+		Set Forms = oForm
+	End If
+
+Finally:
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchClosed:
+	ScriptForge.SF_Exception.RaiseFatal(FORMDEADERROR, FormDocument, _FileIdent())
+CatchNotFound:
+	ScriptForge.SF_Exception.RaiseFatal(BASEFORMNOTFOUNDERROR, Form, FormDocument, _FileIdent())
+End Function	&apos;	SFDocuments.SF_Base.Forms
 
 REM -----------------------------------------------------------------------------
 Public Function GetDatabase(Optional ByVal User As Variant _
@@ -148,7 +282,7 @@ Check:
 	If IsMissing(User) Or IsEmpty(User) Then User = &quot;&quot;
 	If IsMissing(Password) Or IsEmpty(Password) Then Password = &quot;&quot;
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not [_Super]._IsStillAlive(True) Then GoTo Finally
+		If Not _IsStillAlive(True) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(User, &quot;User&quot;, V_STRING) Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(Password, &quot;Password&quot;, V_STRING) Then GoTo Finally
 	End If
@@ -210,12 +344,60 @@ Catch:
 End Function	&apos;	SFDocuments.SF_Base.GetProperty
 
 REM -----------------------------------------------------------------------------
+Public Function IsLoaded(Optional ByVal FormDocument As Variant) As Boolean
+&apos;&apos;&apos;	Return True if the given FormDocument is open for the user
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		FormDocument: a valid document form name as a case-sensitive string
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True if the form document is currently open, otherise False
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		Form is invalid
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		MsgBox oDoc.IsLoaded(&quot;Folder1/myFormDocument&quot;)
+
+Dim bLoaded As Boolean				&apos;	Return value
+Dim vFormNames As Variant			&apos;	Array of all document form names present in the document
+Dim oMainForm As Object				&apos;	com.sun.star.comp.sdb.Content
+Const cstThisSub = &quot;SFDocuments.Base.IsLoaded&quot;
+Const cstSubArgs = &quot;FormDocument&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bLoaded = False
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		&apos;	Build list of available FormDocuments recursively with _CollectFormDocuments
+		If IsNull(_FormDocuments) Then Set _FormDocuments = _Component.getFormDocuments()
+		vFormNames = Split(_CollectFormDocuments(_FormDocuments), cstToken)
+		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormNames) Then GoTo Finally
+	End If
+
+Try:
+
+	Set oMainForm = _FormDocuments.getByHierarchicalName(FormDocument)
+	&apos;	A document form that has never been opened has no component
+	&apos;	If ever opened and closed afterwards, it keeps the Component but loses its Controller
+	bLoaded = Not IsNull(oMainForm.Component)
+	If bLoaded Then bLoaded = Not IsNull(oMainForm.Component.CurrentController)
+
+Finally:
+	IsLoaded = bLoaded
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Base.IsLoaded
+
+REM -----------------------------------------------------------------------------
 Public Function Methods() As Variant
 &apos;&apos;&apos;	Return the list of public methods of the Model service as an array
 
 	Methods = Array( _
 					&quot;Activate&quot; _
 					, &quot;CloseDocument&quot; _
+					, &quot;FormDocuments&quot; _
+					, &quot;Forms&quot; _
 					, &quot;GetDatabase&quot; _
 					, &quot;RunCommand&quot; _
 					, &quot;Save&quot; _
@@ -274,7 +456,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	SFDocuments.SF_Documents.SetProperty
+End Function	&apos;	SFDocuments.SF_Base.SetProperty
 
 REM ======================================================= SUPERCLASS PROPERTIES
 
@@ -418,6 +600,73 @@ End Function   &apos;   SFDocuments.SF_Base.SaveCopyAs
 REM =========================================================== PRIVATE FUNCTIONS
 
 REM -----------------------------------------------------------------------------
+Private Function _CollectFormDocuments(ByRef poContainer As Object) As String
+&apos;&apos;&apos;	Returns a token-separated string of all hierarchical formdocument names
+&apos;&apos;&apos;	depending on the formdocuments container in argument
+&apos;&apos;&apos;	The function traverses recursively the whle tree below the container
+&apos;&apos;&apos;	The initial call starts from the container _Component.getFormDocuments
+&apos;&apos;&apos;	The list contains closed and open forms
+
+Dim sCollectNames As String			&apos;	Returno value
+Dim oSubItem As Object				&apos;	com.sun.star.container.XNameAccess (folder) or com.sun.star.ucb.XContent (form)
+Dim sFormName As String				&apos;	Single form name
+Dim i As Long
+Const cstFormType = &quot;application/vnd.oasis.opendocument.text&quot;
+									&apos;	Identifies forms. Folders have a zero-length content type
+
+	On Local Error GoTo Finally
+
+Try:
+	sCollectNames = &quot;&quot;
+	With poContainer
+		For i = 0 To .Count - 1
+			Set oSubItem = .getByIndex(i)
+			If oSubItem.ContentType = cstFormType Then		&apos;	Add the form to the list
+				sCollectNames = sCollectNames &amp; cstToken &amp; oSubItem.HierarchicalName
+			Else
+				sCollectNames = sCollectNames &amp; cstToken &amp; _CollectFormDocuments(oSubItem)
+			End If
+		Next i
+	End With
+
+Finally:
+	_CollectFormDocuments = Mid(sCollectNames, Len(cstToken) + 1)	&apos;	Skip the initial token
+	Exit Function
+End Function	&apos;	SFDocuments.SF_Base._CollectFormDocuments
+
+REM -----------------------------------------------------------------------------
+Private Function _FileIdent() As String
+&apos;&apos;&apos;	Returns a file identification from the information that is currently available
+&apos;&apos;&apos;	Useful e.g. for display in error messages
+
+	_FileIdent = [_Super]._FileIdent()
+
+End Function	&apos;	SFDocuments.SF_Base._FileIdent
+
+REM -----------------------------------------------------------------------------
+Private Function _IsStillAlive(Optional ByVal pbForUpdate As Boolean _
+									, Optional ByVal pbError As Boolean _
+									) As Boolean
+&apos;&apos;&apos;	Returns True if the document has not been closed manually or incidentally since the last use
+&apos;&apos;&apos;	If dead the actual instance is disposed. The execution is cancelled when pbError = True (default)
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		pbForUpdate: if True (default = False), check additionally if document is open for editing
+&apos;&apos;&apos;		pbError: if True (default), raise a fatal error
+
+Dim bAlive As Boolean			&apos;	Return value
+
+	If IsMissing(pbForUpdate) Then pbForUpdate = False
+	If IsMissing(pbError) Then pbError = True
+
+Try:
+	bAlive = [_Super]._IsStillAlive(pbForUpdate, pbError)
+
+Finally:
+	_IsStillAlive = bAlive
+	Exit Function
+End Function	&apos;	SFDocuments.SF_Base._IsStillAlive
+
+REM -----------------------------------------------------------------------------
 Private Function _PropertyGet(Optional ByVal psProperty As String _
 								, Optional ByVal pvArg As Variant _
 								) As Variant
@@ -437,7 +686,7 @@ Const cstSubArgs = &quot;&quot;
 
 	cstThisSub = &quot;SFDocuments.SF_Base.get&quot; &amp; psProperty
 	ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
-	If Not [_Super]._IsStillAlive() Then GoTo Finally
+	If Not _IsStillAlive() Then GoTo Finally
 
 	Select Case psProperty
 		Case Else

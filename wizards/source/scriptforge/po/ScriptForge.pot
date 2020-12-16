@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-"POT-Creation-Date: 2020-12-06 12:16:30\n"
+"POT-Creation-Date: 2020-12-15 15:57:29\n"
 "PO-Revision-Date: YYYY-MM-DD HH:MM:SS\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -465,7 +465,7 @@ msgstr ""
 #. SF_Session.ExecuteBasicScript error message
 #. %1: An identifier
 #. %2: A string
-#. %3: A number
+#. %3: A (long) string
 #, kde-format
 msgctxt "SCRIPTEXEC"
 msgid  ""
@@ -726,6 +726,62 @@ msgid  ""
 "« %11 » = %12"
 msgstr ""
 
+#. SF_Dialog._IsStillAlive error message
+#. %1: An identifier%2: A file name
+#, kde-format
+msgctxt "FORMDEAD"
+msgid  ""
+"The requested action could not be executed because the form is not "
+"open or the document was closed inadvertently.\n"
+"\n"
+"The concerned form is '%1' in document '%2'."
+msgstr ""
+
+#. SF_Form determination
+#. %1: A number
+#. %2: A sheet name
+#. %3: A file name
+#, kde-format
+msgctxt "CALCFORMNOTFOUND"
+msgid  ""
+"The requested form could not be found in the Calc sheet. The given "
+"index is off-limits.\n"
+"\n"
+"The concerned Calc document is '%3'.\n"
+"\n"
+"The name of the sheet = '%2'\n"
+"The index = %1"
+msgstr ""
+
+#. SF_Form determination
+#. %1: A number
+#. %2: A file name
+#, kde-format
+msgctxt "WRITERFORMNOTFOUND"
+msgid  ""
+"The requested form could not be found in the Writer document. The "
+"given index is off-limits.\n"
+"\n"
+"The concerned Writer document is '%2'.\n"
+"\n"
+"The index = %1"
+msgstr ""
+
+#. SF_Form determination
+#. %1: A number
+#. %2: A string
+#. %3: A file name
+#, kde-format
+msgctxt "BASEFORMNOTFOUND"
+msgid  ""
+"The requested form could not be found in the form document '%2'. The "
+"given index is off-limits.\n"
+"\n"
+"The concerned Base document is '%3'.\n"
+"\n"
+"The index = %1"
+msgstr ""
+
 #. SF_Dialog creation
 #. %1: An identifier
 #. %2: A string
@@ -766,7 +822,8 @@ msgstr ""
 msgctxt "CONTROLTYPE"
 msgid  ""
 "The control '%1' in dialog '%2' is of type '%3'.\n"
-"The property or method '%4' is not applicable on that type of dialog controls."
+"The property or method '%4' is not applicable on that type of dialog "
+"controls."
 msgstr ""
 
 #. SF_DialogControl add line in textbox
