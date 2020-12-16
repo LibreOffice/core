@@ -35,6 +35,9 @@ class SidebarTextControl : public Control
         sw::annotation::SwAnnotationWin& mrSidebarWin;
         SwView& mrDocView;
         SwPostItMgr& mrPostItMgr;
+        bool mbMouseDownGainingFocus;
+
+        void MakeVisible();
 
     protected:
         virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
@@ -60,6 +63,8 @@ class SidebarTextControl : public Control
         virtual void MouseButtonDown(const MouseEvent& rMouseEvent) override;
         virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
         virtual void MouseMove(const MouseEvent& rMEvt) override;
+
+        bool MouseDownGainingFocus() const { return mbMouseDownGainingFocus; }
 
         OutlinerView* GetTextView() const;
 

@@ -1378,7 +1378,16 @@ IMPL_LINK( SwAnnotationWin, WindowEventListener, VclWindowEvent&, rEvent, void )
               rEvent.GetWindow() == mpSidebarTextControl )
     {
         SetActiveSidebarWin();
-        mrMgr.MakeVisible( this );
+        /* We want this SwAnnotationWin to become visible on activation,
+           but if we are activating because the mouse is pressed in the
+           annotation and SidebarTextControl::MouseButtonDown is calling
+           'GrabFocus' then leave the MakeVisible to
+           SidebarTextControl::MouseButtonUp instead. That way a mouse down
+           doesn't scroll the writer window while the mouse is pressed, and so
+           doesn't select random text as the editview is scrolled under the
+           mouse */
+        if (!mpSidebarTextControl->MouseDownGainingFocus())
+            mrMgr.MakeVisible( this );
     }
 }
 
