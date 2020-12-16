@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "xparsmlbase.hxx"
+using namespace starmathdatabase;
 
 static OUString icustomMathmlHtmlEntitiesNamesData[2125] = {
     // clang-format off
@@ -4283,5 +4284,16 @@ const ::css::uno::Sequence<::rtl::OUString>
 
 const ::css::uno::Sequence<::rtl::OUString>
     starmathdatabase::icustomMathmlHtmlEntitiesValues(icustomMathmlHtmlEntitiesValuesData, 2125);
+
+static ::css::beans::Pair<::rtl::OUString, ::rtl::OUString>
+    icustomMathmlHtmlEntitiesNamesExportData[2] = {
+        // clang-format off
+        { u"&sigma;", u"\u03C3"},
+        { u"&infin;", u"\u221E"}
+        // clang-format on
+    };
+
+const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>
+    starmathdatabase::icustomMathmlHtmlEntitiesExport(icustomMathmlHtmlEntitiesNamesExportData, 2);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

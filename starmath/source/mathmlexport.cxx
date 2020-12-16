@@ -58,6 +58,7 @@
 #include <stack>
 
 #include "mathmlexport.hxx"
+#include "xparsmlbase.hxx"
 #include <strings.hrc>
 #include <smmod.hxx>
 #include <unomodel.hxx>
@@ -240,6 +241,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(const Reference<io::XOutputStream
 
     // connect XML writer to output stream
     xSaxWriter->setOutputStream(xOutputStream);
+    xSaxWriter->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntitiesExport);
 
     // prepare arguments (prepend doc handler to given arguments)
     Sequence<Any> aArgs(2);

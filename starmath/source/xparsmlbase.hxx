@@ -21,6 +21,8 @@
 #define XPARSEMLBASE
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/beans/Pair.hpp>
+
 namespace starmathdatabase
 {
 /**
@@ -37,11 +39,20 @@ namespace starmathdatabase
   * Must be in sync with customMathmlHtmlEntitiesNames.
   */
 const extern ::css::uno::Sequence<::rtl::OUString> icustomMathmlHtmlEntitiesNames;
+
 /**
   * Entity values for mathml. Example: &infin; -> "\u8734";
   * Must be in sync with customMathmlHtmlEntitiesNames.
   */
 const extern ::css::uno::Sequence<::rtl::OUString> icustomMathmlHtmlEntitiesValues;
+
+/**
+  * Entity names for mathml. Example: "\u8734"; -> &infin;
+  * These ones are to be used on file export.
+  * Must be in sync with customMathmlHtmlEntitiesNames.
+  */
+const extern ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>
+    icustomMathmlHtmlEntitiesExport;
 };
 
 #endif /*XPARSEMLBASE*/
