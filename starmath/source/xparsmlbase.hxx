@@ -21,6 +21,9 @@
 #define XPARSEMLBASE
 
 #include <com/sun/star/uno/Sequence.hxx>
+
+#define SM_CUSTOM_ENTITY_COUNT_IMPORT 2125
+#define SM_CUSTOM_ENTITY_COUNT_EXPORT 2
 namespace starmathdatabase
 {
 /**
@@ -32,16 +35,34 @@ namespace starmathdatabase
   * On export only mathml entities are allowed.
   * Some documentation: https://www.w3.org/TR/MathML3/chapter7.html
   */
+
 /**
   * Entity names for mathml. Example: &infin;
+  * This ones are to be used on import.
   * Must be in sync with customMathmlHtmlEntitiesNames.
   */
 const extern ::css::uno::Sequence<::rtl::OUString> icustomMathmlHtmlEntitiesNames;
+
 /**
   * Entity values for mathml. Example: &infin; -> "\u8734";
+  * This ones are to be used on import.
   * Must be in sync with customMathmlHtmlEntitiesNames.
   */
 const extern ::css::uno::Sequence<::rtl::OUString> icustomMathmlHtmlEntitiesValues;
+
+/**
+  * Entity names for mathml. Example: &infin;
+  * This ones are to be used on file export.
+  * Must be in sync with customMathmlHtmlEntitiesNames.
+  */
+const extern ::css::uno::Sequence<::rtl::OUString> icustomMathmlHtmlEntitiesNamesExport;
+
+/**
+  * Entity values for mathml. Example: &infin; -> "\u8734";
+  * This ones are to be used on file export.
+  * Must be in sync with customMathmlHtmlEntitiesNames.
+  */
+const extern ::css::uno::Sequence<sal_uInt32> icustomMathmlHtmlEntitiesValuesExport;
 };
 
 #endif /*XPARSEMLBASE*/

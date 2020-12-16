@@ -22,6 +22,7 @@
 #include <cassert>
 #include <set>
 #include <stack>
+#include <vector>
 
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -72,6 +73,21 @@ enum SaxInvalidCharacterError
     SAX_ERROR
 };
 
+// Stuff for custom entity names
+struct ReplacementPair
+{
+    OUString name;
+    sal_uInt32 replacement;
+};
+inline bool operator<(const ReplacementPair& lhs, const ReplacementPair& rhs)
+{
+    return lhs.replacement < rhs.replacement;
+}
+inline bool operator<(const ReplacementPair& lhs, sal_uInt32 rhs)
+{
+    return lhs.replacement < rhs;
+}
+
 class SaxWriterHelper
 {
 #ifdef DBG_UTIL
@@ -87,6 +103,8 @@ private:
     sal_Int32                   nLastLineFeedPos; // is negative after writing a sequence
     sal_uInt32                  nCurrentPos;
     bool                    m_bStartElementFinished;
+
+    std::vector<ReplacementPair> m_Replacements;
 
     /// @throws SAXException
     sal_uInt32 writeSequence();
@@ -175,6 +193,10 @@ public:
 
     /// @throws SAXException
     void clearBuffer();
+
+    // Use custom entity names
+    void setCustomEntityNames(const ::css::uno::Sequence<::rtl::OUString>& names,
+                              const ::css::uno::Sequence<sal_uInt32>& replacements);
 };
 
 const bool g_bValidCharsBelow32[32] =
@@ -239,6 +261,20 @@ void SaxWriterHelper::AddBytes(sal_Int8* pTarget, sal_uInt32& rPos,
         AddBytes(pTarget, rPos, &pBytes[nCount], nRestCount);
 }
 
+void SaxWriterHelper::setCustomEntityNames(
+    const ::css::uno::Sequence<::rtl::OUString>& names,
+    const ::css::uno::Sequence<sal_uInt32>& replacements)
+{
+    m_Replacements.resize(names.size());
+    for (size_t i = 0; i < names.size(); ++i)
+    {
+        m_Replacements[i].name = names[i];
+        m_Replacements[i].replacement = replacements[i];
+    }
+    if (names.size() > 1)
+        std::sort(m_Replacements.begin(), m_Replacements.end());
+}
+
 /** Converts a UTF-16 string to UTF-8 and does XML normalization
 
     @param pTarget
@@ -267,7 +303,7 @@ bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
             {
                 switch( c )
                 {
-                    case '&':  // resemble to &amp;
+                    /*case '&':  // resemble to &amp;
                     {
                         if ((rPos + 5) > SEQUENCESIZE)
                             AddBytes(pTarget, rPos, reinterpret_cast<sal_Int8 const *>("&amp;"), 5);
@@ -277,7 +313,7 @@ bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
                             rPos += 5;
                         }
                     }
-                    break;
+                    break;*/
                     case '<':
                     {
                         if ((rPos + 4) > SEQUENCESIZE)
@@ -988,6 +1024,9 @@ public: // XDocumentHandler
     virtual void SAL_CALL processingInstruction(const OUString& aTarget,
                                                 const OUString& aData) override;
     virtual void SAL_CALL setDocumentLocator(const Reference< XLocator > & xLocator) override;
+    virtual void setCustomEntityNames(
+        const ::css::uno::Sequence<::rtl::OUString>& names,
+        const ::css::uno::Sequence<sal_uInt32>& replacements) override;
 
 public: // XExtendedDocumentHandler
     virtual void SAL_CALL startCDATA() override;
@@ -1302,6 +1341,14 @@ void SAXWriter::processingInstruction(const OUString& aTarget, const OUString& a
 void SAXWriter::setDocumentLocator(const Reference< XLocator >&)
 {
 
+}
+
+void SAXWriter::setCustomEntityNames(
+    const ::css::uno::Sequence<::rtl::OUString>& names,
+    const ::css::uno::Sequence<sal_uInt32>& replacements)
+{
+    assert(names.size() == replacements.size());
+    m_pSaxWriterHelper->setCustomEntityNames(names, replacements);
 }
 
 void SAXWriter::startCDATA()
