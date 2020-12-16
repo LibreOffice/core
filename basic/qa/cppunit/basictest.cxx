@@ -21,16 +21,16 @@ void MacroSnippet::InitSnippet()
     StarBASIC::SetGlobalErrorHdl( LINK( this, MacroSnippet, BasicErrorHdl ) );
 }
 
-void MacroSnippet::MakeModule( const OUString& sSource )
+void MacroSnippet::MakeModule(const OUString& sName, const OUString& sSource)
 {
-    mpMod = mpBasic->MakeModule( "TestModule", sSource );
+    mpMod = mpBasic->MakeModule(sName, sSource);
 }
 
 MacroSnippet::MacroSnippet( const OUString& sSource )
     : mbError(false)
 {
     InitSnippet();
-    MakeModule( sSource );
+    MakeModule("TestModule", sSource);
 }
 
 MacroSnippet::MacroSnippet()
@@ -39,7 +39,7 @@ MacroSnippet::MacroSnippet()
     InitSnippet();
 }
 
-void MacroSnippet::LoadSourceFromFile( const OUString& sMacroFileURL )
+void MacroSnippet::LoadSourceFromFile(const OUString& sModuleName, const OUString& sMacroFileURL)
 {
     OUString sSource;
     fprintf(stderr,"loadSource opening macro file %s\n", OUStringToOString( sMacroFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -66,7 +66,7 @@ void MacroSnippet::LoadSourceFromFile( const OUString& sMacroFileURL )
         }
     }
     CPPUNIT_ASSERT_MESSAGE( "Source is empty", ( sSource.getLength() > 0 ) );
-    MakeModule( sSource );
+    MakeModule(sModuleName, sSource);
 }
 
 SbxVariableRef MacroSnippet::Run( const css::uno::Sequence< css::uno::Any >& rArgs )
