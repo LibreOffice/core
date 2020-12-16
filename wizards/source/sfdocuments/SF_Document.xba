@@ -24,6 +24,8 @@ Option Explicit
 &apos;&apos;&apos;			- accessing their standard or custom properties
 &apos;&apos;&apos;		Specific properties and methods are implemented in the concerned subclass(es) SF_Calc, SF_Writer, ...
 &apos;&apos;&apos;
+&apos;&apos;&apos;		Documents might contain forms. The current service gives access to the &quot;SFDocuments.Form&quot; service
+&apos;&apos;&apos;
 &apos;&apos;&apos;		To workaround the absence of class inheritance in LibreOffice Basic, some redundancy is necessary
 &apos;&apos;&apos;		Each subclass MUST implement also the generic methods and properties, even if they only call
 &apos;&apos;&apos;		the parent methods and properties implemented below
@@ -53,10 +55,13 @@ Private Const DOCUMENTSAVEERROR		=	&quot;DOCUMENTSAVEERROR&quot;
 Private Const DOCUMENTSAVEASERROR	=	&quot;DOCUMENTSAVEASERROR&quot;
 Private Const DOCUMENTREADONLYERROR	=	&quot;DOCUMENTREADONLYERROR&quot;
 
+Private Const FORMDEADERROR			=	&quot;FORMDEADERROR&quot;
+
 REM ============================================================= PRIVATE MEMBERS
 
 Private [Me]					As Object
 Private [_Parent]				As Object
+Private [_SubClass]				As Object		&apos;	Subclass instance
 Private ObjectType				As String		&apos;	Must be DOCUMENT
 Private ServiceName				As String
 
@@ -74,12 +79,15 @@ Private _CustomProperties		As Object		&apos;	Dictionary of custom properties
 
 REM ============================================================ MODULE CONSTANTS
 
-REM ===================================================== CONSTRUCTOR/DESTRUCTOR
+Const ISDOCFORM = 1				&apos;	Form is stored in a Calc, Writer, ... document
+
+REM ====================================================== CONSTRUCTOR/DESTRUCTOR
 
 REM -----------------------------------------------------------------------------
 Private Sub Class_Initialize()
 	Set [Me] = Nothing
 	Set [_Parent] = Nothing
+	Set [_SubClass] = Nothing
 	ObjectType = &quot;DOCUMENT&quot;
 	ServiceName = &quot;SFDocuments.Document&quot;
 	Set _Component = Nothing
@@ -447,6 +455,84 @@ Finally:
 Catch:
 	GoTo Finally
 End Function   &apos;   SFDocuments.SF_Document.CloseDocument
+
+REM -----------------------------------------------------------------------------
+Public Function Forms(Optional ByVal Form As Variant) As Variant
+&apos;&apos;&apos;	APPLICABLE ONLY ON WRITER DOCUMENTS
+&apos;&apos;&apos;	Return either
+&apos;&apos;&apos;		- the list of the Forms contained in the form document
+&apos;&apos;&apos;		- a SFDocuments.Form object based on its name or its index
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Form: a form stored in the document given by its name or its index
+&apos;&apos;&apos;			When absent, the list of available forms is returned
+&apos;&apos;&apos;			To get the first (unique ?) form stored in the form document, set Form = 0
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		WRITERFORMNOTFOUNDERROR		Form not found
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A zero-base array of strings if Form is absent
+&apos;&apos;&apos;		An instance of the SF_Form class if Form exists
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;			Dim myForm As Object, myList As Variant
+&apos;&apos;&apos;				myList = oDoc.Forms()
+&apos;&apos;&apos;				Set myForm = oDoc.Forms(&quot;myForm&quot;)
+
+Dim oForm As Object					&apos;	The new Form class instance
+Dim oMainForm As Object				&apos;	com.sun.star.comp.sdb.Content
+Dim oXForm As Object				&apos;	com.sun.star.form.XForm
+Dim vFormNames As Variant			&apos;	Array of form names
+Dim oForms As Object				&apos;	Forms collection
+Const cstDrawPage = 0				&apos;	Only 1 drawpage in a Writer document
+
+Const cstThisSub = &quot;SFDocuments.Document.Forms&quot;
+Const cstSubArgs = &quot;[Form=&quot;&quot;&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+
+Check:
+	If IsMissing(Form) Or IsEmpty(Form) Then Form = &quot;&quot;
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Form, &quot;Form&quot;, Array(V_STRING, ScriptForge.V_NUMERIC)) Then GoTo Finally
+	End If
+
+Try:
+	&apos;	Start from the document component and go down to forms
+	Set oForms = _Component.DrawPages(cstDrawPage).Forms
+	vFormNames = oForms.getElementNames()
+
+	If Len(Form) = 0 Then	&apos;	Return the list of valid form names
+		Forms = vFormNames
+	Else
+		If VarType(Form) = V_STRING Then	&apos;	Find the form by name
+		If Not ScriptForge.SF_Utils._Validate(Form, &quot;Form&quot;, V_STRING, vFormNames) Then GoTo Finally
+			Set oXForm = oForms.getByName(Form)
+		Else								&apos;	Find the form by index
+			If Form &lt; 0 Or Form &gt;= oForms.Count Then GoTo CatchNotFound
+			Set oXForm = oForms.getByIndex(Form)
+		End If
+		&apos;	Create the new Form class instance
+		Set oForm = New SF_Form
+		With oForm
+			._Name = oXForm.Name
+			Set .[Me] = oForm
+			Set .[_Parent] = [Me]
+			._DrawPage = cstDrawPage
+			._UsualName = ._Name
+			Set ._MainForm = Nothing
+			._FormType = ISDOCFORM
+			Set ._Form = oXForm
+		End With
+		Set Forms = oForm
+	End If
+
+Finally:
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchNotFound:
+	ScriptForge.SF_Exception.RaiseFatal(WRITERFORMNOTFOUNDERROR, Form, _FileIdent())
+End Function	&apos;	SFDocuments.SF_Document.Forms
 
 REM -----------------------------------------------------------------------------
 Public Function GetProperty(Optional ByVal PropertyName As Variant) As Variant

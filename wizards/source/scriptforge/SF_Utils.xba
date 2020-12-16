@@ -226,6 +226,8 @@ Dim sHeader As String			&apos;	The specific header to insert
 
 Try:
 	With _SF_
+		If Not IsNull(.Interface) Then .Interface.Dispose()
+		._LoadLocalizedInterface(psMode := &quot;ADDTEXT&quot;)	&apos;	Force reload of labels from the code
 		.Interface.ExportToPOTFile(FileName, Header := sHeader)
 	End With
 

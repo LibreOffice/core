@@ -23,6 +23,7 @@ $(eval $(call gb_Package_add_files,wizards_basicsrvsfdocuments,$(LIBO_SHARE_FOLD
 	SF_Base.xba \
 	SF_Calc.xba \
 	SF_Document.xba \
+	SF_Form.xba \
 	SF_Register.xba \
 	__License.xba \
 	dialog.xlb \

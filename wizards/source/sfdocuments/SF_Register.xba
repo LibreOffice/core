@@ -158,10 +158,12 @@ Try:
 				Set oDocument = New SF_Base
 				Set oSuperDocument = New SF_Document
 				Set oDocument.[_Super] = oSuperDocument		&apos;	Now both super and subclass are twinned
+				Set oSuperDocument.[_SubClass] = oDocument
 			Case &quot;Calc&quot;
 				Set oDocument = New SF_Calc
 				Set oSuperDocument = New SF_Document
 				Set oDocument.[_Super] = oSuperDocument		&apos;	Now both super and subclass are twinned
+				Set oSuperDocument.[_SubClass] = oDocument
 			Case Else		&apos;	Only superclass
 				Set oDocument = New SF_Document
 				Set oSuperDocument = oDocument

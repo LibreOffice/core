@@ -133,7 +133,7 @@ End Function	&apos;	SFDatabases.SF_Register._NewDatabase
 
 REM -----------------------------------------------------------------------------
 Public Function _NewDatabaseFromSource(Optional ByVal pvArgs As Variant) As Object
-&apos;ByRef poDataSource As Object _
+&apos;										ByRef poDataSource As Object _
 &apos;											, ByVal psUser As String _
 &apos;											, ByVal psPassword As String _
 &apos;											) As Object
