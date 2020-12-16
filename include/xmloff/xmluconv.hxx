@@ -60,6 +60,9 @@ private:
 
 public:
     SvXMLTokenEnumerator( const OUString& rString, sal_Unicode cSeparator = u' ' );
+    /** just so no-one accidentally passes a temporary to this, and ends up with this class
+     * accessing the temporary after the temporary has been deleted. */
+    SvXMLTokenEnumerator( OUString&& , sal_Unicode cSeparator = u' ' ) = delete;
 
     bool getNextToken( OUString& rToken );
 };
