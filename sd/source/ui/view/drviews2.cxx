@@ -1480,7 +1480,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_ATTR_TRANSFORM:
         {
             SetCurrentFunction( FuTransform::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq ) );
-            if (rReq.GetArgs())
+            // tdf#138963 conditions tested for here must be the same as those
+            // of the early returns from FuTransform::DoExecute
+            if (rReq.GetArgs() || !mpDrawView->AreObjectsMarked())
             {
                 Invalidate(SID_RULER_OBJECT);
                 Cancel();
