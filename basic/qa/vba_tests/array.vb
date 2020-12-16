@@ -1,31 +1,20 @@
 Rem Attribute VBA_ModuleType=VBAModule
 Option VBASupport 1
 Option Explicit
-Dim passCount As Integer
-Dim failCount As Integer
-Dim result As String
+
 Type MyType
     ax(3) As Integer
     bx As Double
 End Type
 
 Function doUnitTest() As String
-result = verify_testARRAY()
-If failCount <> 0 Or passCount = 0 Then
-    doUnitTest = result
-Else
-    doUnitTest = "OK"
-End If
+verify_testARRAY
+doUnitTest = TestUtilModule.GetResult()
 End Function
 
+Sub verify_testARRAY()
 
-
-Function verify_testARRAY() As String
-
-    passCount = 0
-    failCount = 0
-
-    result = "Test Results" & Chr$(10) & "============" & Chr$(10)
+    TestUtilModule.TestInit
 
     Dim testName As String
     Dim a, b, C As Variant
@@ -35,26 +24,26 @@ Function verify_testARRAY() As String
 
     b = 10
     C = a(0)
-    TestLog_ASSERT b = C, "the return ARRAY is: " & C
+    TestUtilModule.AssertTrue(b = C, "the return ARRAY is: " & C)
 
     b = 20
     C = a(1)
-    TestLog_ASSERT b = C, "the return ARRAY is: " & C
+    TestUtilModule.AssertTrue(b = C, "the return ARRAY is: " & C)
 
     b = 30
     C = a(2)
-    TestLog_ASSERT b = C, "the return ARRAY is: " & C
+    TestUtilModule.AssertTrue(b = C, "the return ARRAY is: " & C)
 
     Dim MyWeek, MyDay
     MyWeek = Array("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 
     b = "Tue"
     MyDay = MyWeek(1)   ' MyDay contains "Tue".
-    TestLog_ASSERT b = MyDay, "the return ARRAY is: " & MyDay
+    TestUtilModule.AssertTrue(b = MyDay, "the return ARRAY is: " & MyDay)
 
     b = "Thu"
         MyDay = MyWeek(3)   ' MyDay contains "Thu".
-    TestLog_ASSERT b = MyDay, "the return ARRAY is: " & MyDay
+    TestUtilModule.AssertTrue(b = MyDay, "the return ARRAY is: " & MyDay)
 
 Dim mt As MyType
     mt.ax(0) = 42
@@ -62,36 +51,16 @@ Dim mt As MyType
     mt.bx = 3.14
      b = 43
         C = mt.ax(1)
-    TestLog_ASSERT b = C, "the return ARRAY is: " & C
+    TestUtilModule.AssertTrue(b = C, "the return ARRAY is: " & C)
 
     b = 3.14
     C = mt.bx
-    TestLog_ASSERT b = C, "the return ARRAY is: " & C
+    TestUtilModule.AssertTrue(b = C, "the return ARRAY is: " & C)
 
-    result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
-    verify_testARRAY = result
+    TestUtilModule.TestEnd
 
-    Exit Function
+    Exit Sub
 errorHandler:
-        TestLog_ASSERT (False), testName & ": hit error handler"
-End Function
-
-Sub TestLog_ASSERT(assertion As Boolean, Optional testId As String, Optional testComment As String)
-
-    If assertion = True Then
-        passCount = passCount + 1
-    Else
-        Dim testMsg As String
-        If Not IsMissing(testId) Then
-            testMsg = testMsg + " : " + testId
-        End If
-        If Not IsMissing(testComment) And Not (testComment = "") Then
-            testMsg = testMsg + " (" + testComment + ")"
-        End If
-
-        result = result & Chr$(10) & " Failed: " & testMsg
-        failCount = failCount + 1
-    End If
-
+        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
 End Sub
 

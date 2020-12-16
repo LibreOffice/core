@@ -29,13 +29,13 @@ private:
     StarBASICRef mpBasic;
 
     void InitSnippet();
-    void MakeModule(const OUString& sSource);
+    void MakeModule(const OUString& sName, const OUString& sSource);
 
 public:
     explicit MacroSnippet(const OUString& sSource);
     MacroSnippet();
 
-    void LoadSourceFromFile(const OUString& sMacroFileURL);
+    void LoadSourceFromFile(const OUString& sName, const OUString& sMacroFileURL);
 
     SbxVariableRef Run(const css::uno::Sequence<css::uno::Any>& rArgs);
 

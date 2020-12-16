@@ -70,7 +70,7 @@ void Coverage::run_test(const OUString& sFileURL)
     m_sCurrentTest = sFileURL;
     bool bResult = false;
     MacroSnippet testMacro;
-    testMacro.LoadSourceFromFile( sFileURL );
+    testMacro.LoadSourceFromFile("TestModule", sFileURL);
     testMacro.Compile();
     if( !testMacro.HasError() )
     {
