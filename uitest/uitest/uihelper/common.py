@@ -37,6 +37,10 @@ def change_measurement_unit(UITestCase, unit):
     elif 'metric' in xDialogOpt.getChildren():
         xUnit = xDialogOpt.getChild("metric")
 
+    # Impress
+    elif 'units' in xDialogOpt.getChildren():
+        xUnit = xDialogOpt.getChild("units")
+
     props = {"TEXT": unit}
     actionProps = mkPropertyValues(props)
     xUnit.executeAction("SELECT", actionProps)
