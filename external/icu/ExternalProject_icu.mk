@@ -73,7 +73,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 		./configure \
 			--disable-layout --disable-samples \
 			$(if $(filter FUZZERS,$(BUILD_TYPE)),--disable-release) \
-			$(if $(filter ENSCRIPTEN ANDROID,$(OS)),--disable-strict ac_cv_c_bigendian=no) \
+			$(if $(filter EMSCRIPTEN ANDROID,$(OS)),--disable-strict ac_cv_c_bigendian=no) \
 			$(if $(filter SOLARIS AIX,$(OS)),--disable-64bit-libs) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),\
 				--with-data-packaging=static --enable-static --disable-shared --disable-dyload,\
@@ -81,6 +81,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)\
 				--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source \
 				--disable-tools --disable-extras) \
+			AR="$(AR)" RANLIB="$(RANLIB)" \
 		&& $(MAKE) $(if $(CROSS_COMPILING),DATASUBDIR=data) $(if $(verbose),VERBOSE=1) \
 		$(if $(filter MACOSX,$(OS)), \
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl \

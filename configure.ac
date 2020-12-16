@@ -804,6 +804,8 @@ dnl Sequential to keep the logic very simple
 dnl These values may be checked and reset later.
 dnl ===================================================================
 #defaults unless the os test overrides this:
+test_cmis=yes
+test_curl=yes
 test_randr=yes
 test_xrender=yes
 test_cups=yes
@@ -957,6 +959,7 @@ darwin*|macos*) # macOS
 ;;
 
 ios*) # iOS
+    test_cmis=no
     test_randr=no
     test_xrender=no
     test_freetype=no
@@ -1110,12 +1113,13 @@ emscripten*)
     enable_lpsolve=no
     enable_report_builder=no
     with_theme="breeze"
+    test_cmis=no
     test_cups=no
+    test_curl=no
     test_dbus=no
     test_fontconfig=no
     test_freetype=no
     test_gtk=no
-    test_kde4=no
     test_randr=no
     test_xrender=no
     enable_postgresql_sdbc=no
@@ -5219,7 +5223,7 @@ if test "$cross_compiling" = "yes"; then
     (
     unset COM USING_X11 OS CPUNAME
     unset CC CXX SYSBASE CFLAGS
-    unset AR NM OBJDUMP PKG_CONFIG RANLIB READELF STRIP
+    unset AR LD NM OBJDUMP PKG_CONFIG RANLIB READELF STRIP
     unset CPPUNIT_CFLAGS CPPUNIT_LIBS
     unset LIBXML_CFLAGS LIBXML_LIBS LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC
     unset PKG_CONFIG_LIBDIR PKG_CONFIG_PATH
@@ -5516,6 +5520,11 @@ if test "$USING_X11" != TRUE; then
     test_qt5=no
     test_gtk3_kde5=no
     enable_cairo_canvas=no
+fi
+
+if test "$OS" = "EMSCRIPTEN"; then
+    enable_cairo_canvas=yes
+    test_qt5=yes
 fi
 
 if test "$OS" = "HAIKU"; then
@@ -7099,7 +7108,7 @@ dnl ===================================================================
 dnl Check for system libcmis
 dnl ===================================================================
 # libcmis requires curl and we can't build curl for iOS
-if test $_os != iOS; then
+if test "$test_cmis" = "yes"; then
     libo_CHECK_SYSTEM_MODULE([libcmis],[LIBCMIS],[libcmis-0.5 >= 0.5.2])
     ENABLE_LIBCMIS=TRUE
 else
@@ -10074,7 +10083,7 @@ if test "$with_system_curl" = "auto"; then
     with_system_curl="$with_system_libs"
 fi
 
-if test "$with_system_curl" = "yes"; then
+if test "$test_curl" = "yes" -a "$with_system_curl" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_CURL=TRUE
 
@@ -10106,6 +10115,8 @@ if test "$with_system_curl" = "yes"; then
     fi
 
     ENABLE_CURL=TRUE
+elif test "$test_curl" = "no"; then
+    AC_MSG_RESULT([none])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_CURL=
@@ -12463,7 +12474,11 @@ then
     fi
 
     qt5_test_include="QtWidgets/qapplication.h"
-    qt5_test_library="libQt5Widgets.so"
+    if test "$_os" = "Emscripten"; then
+        qt5_test_library="libQt5Widgets.a"
+    else
+        qt5_test_library="libQt5Widgets.so"
+    fi
 
     dnl Check for qmake5
     AC_PATH_PROGS( QMAKE5, [qmake-qt5 qmake], no, [$QT5DIR/bin:$PATH])
