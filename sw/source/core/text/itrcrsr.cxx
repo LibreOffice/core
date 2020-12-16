@@ -1271,6 +1271,12 @@ static bool ConsiderNextPortionForCursorOffset(const SwLinePortion* pPor, sal_uI
         return false;
     }
 
+    // tdf#138592: consider all following zero-width text portions of current text portion,
+    // like combining characters.
+    if (nWidth30 == nX && pPor->IsTextPortion() && pPor->GetNextPortion()->IsTextPortion()
+        && pPor->GetNextPortion()->Width() == 0)
+        return true;
+
     // If we're past the target position, stop the iteration in general.
     // Exception: don't stop the iteration between as-char fly portions and their comments.
     if (nWidth30 >= nX && (!pPor->IsFlyCntPortion() || !pPor->GetNextPortion()->IsPostItsPortion()))
