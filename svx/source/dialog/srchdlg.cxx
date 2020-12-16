@@ -591,7 +591,7 @@ bool SvxSearchDialog::IsOtherOptionsExpanded() const
            m_xWildcardBtn->get_active() ||
            m_xNotesBtn->get_active() ||
            m_xIncludeKashida->get_active() ||
-           m_xIncludeDiacritics->get_active();
+           !m_xIncludeDiacritics->get_active();//tdf#138173
 }
 
 void SvxSearchDialog::Activate()
