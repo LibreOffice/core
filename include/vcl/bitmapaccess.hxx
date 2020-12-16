@@ -130,6 +130,16 @@ public:
 
     sal_uInt16 GetBestPaletteIndex(const BitmapColor& rBitmapColor) const;
 
+    bool PaletteDiffers(BitmapPalette const& rPal)
+    {
+        bool bPaletteDiffers = !HasPalette() || rPal.GetEntryCount() != GetPaletteEntryCount();
+
+        if (!bPaletteDiffers)
+            return (rPal != GetPalette());
+        else
+            return true;
+    }
+
     ColorMask& GetColorMask() const
     {
         assert(mpBuffer && "Access is not valid!");

@@ -343,12 +343,8 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
     if( pReadAcc )
     {
         const BitmapPalette& rPal = GetGreyPalette( nGreys );
-        bool bPalDiffers = !pReadAcc->HasPalette() || ( rPal.GetEntryCount() != pReadAcc->GetPaletteEntryCount() );
 
-        if( !bPalDiffers )
-            bPalDiffers = ( rPal != pReadAcc->GetPalette() );
-
-        if( bPalDiffers )
+        if (pReadAcc->PaletteDiffers(rPal))
         {
             Bitmap aNewBmp( GetSizePixel(), ( nGreys == 16 ) ? 4 : 8, &rPal );
             BitmapScopedWriteAccess pWriteAcc(aNewBmp);
