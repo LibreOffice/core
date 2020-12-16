@@ -8,9 +8,6 @@
 
 Option VBASupport 1
 Option Explicit
-Dim passCount As Integer
-Dim failCount As Integer
-Dim result As String
 
 Function doUnitTest()
     ''' This routine is QA/…/test_vba.cxx main entry point '''
@@ -57,7 +54,7 @@ catch:
     TestLog_ASSERT Err.Source = CurErrSource, "Err.Source failure", "Err.Source = " & Err.Source
     TestLog_ASSERT Err.Description = CurErrDescription, "Err.Description failure", "Err.Description = " & Err.Description
 
-    TestLog_ASSERT Erl = 42, "line# failure", "Erl = " & Erl ' WATCH OUT for HARDCODED LINE # HERE !
+    TestLog_ASSERT Erl = 39, "line# failure", "Erl = " & Erl ' WATCH OUT for HARDCODED LINE # HERE !
     TestLog_ASSERT Err = CurErrNo, "Err# failure", "Err = " & Err
     TestLog_ASSERT Error = CurErrDescription, "Error description failure", "Error$ = " & Error$
 
@@ -66,21 +63,6 @@ End Sub
 
 Sub DEV_TEST : doUnitTest : MsgBox result : End Sub
 
-Sub TestLog_ASSERT(assertion As Boolean, Optional testId As String, Optional testComment As String)
-
-    If assertion = True Then
-        passCount = passCount + 1
-    Else
-        Dim testMsg As String
-        If Not IsMissing(testId) Then
-            testMsg = testMsg + testId + ":"
-        End If
-        If Not IsMissing(testComment) And Not (testComment = "") Then
-            testMsg = testMsg + " (" + testComment + ")"
-        End If
-
-        result = result & vbNewLine & "Failed: " & testMsg
-        failCount = failCount + 1
-    End If
-
-End Sub
+' The includes must go at the bottom to preserve a constant line numbering above.
+#include _test_header.vb
+#include _test_asserts.vb

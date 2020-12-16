@@ -39,34 +39,62 @@ MacroSnippet::MacroSnippet()
     InitSnippet();
 }
 
-void MacroSnippet::LoadSourceFromFile( const OUString& sMacroFileURL )
+void MacroSnippet::LoadFileToBuffer(const OUString& fileURL, OUStringBuffer& buf, sal_Int32 offset)
 {
-    OUString sSource;
-    fprintf(stderr,"loadSource opening macro file %s\n", OUStringToOString( sMacroFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
-
-    osl::File aFile(sMacroFileURL);
-    if(aFile.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
+    osl::File aFile(fileURL);
+    if (aFile.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
     {
         sal_uInt64 size;
-        if(aFile.getSize(size) == osl::FileBase::E_None)
+        if (aFile.getSize(size) == osl::FileBase::E_None)
         {
-            void* buffer = calloc(1, size+1);
+            void* buffer = calloc(1, size + 1);
             CPPUNIT_ASSERT(buffer);
             sal_uInt64 size_read;
-            if(aFile.read( buffer, size, size_read) == osl::FileBase::E_None)
+            if (aFile.read(buffer, size, size_read) == osl::FileBase::E_None)
             {
-                if(size == size_read)
+                if (size == size_read)
                 {
                     OUString sCode(static_cast<char*>(buffer), size, RTL_TEXTENCODING_UTF8);
-                    sSource = sCode;
+                    buf.insert(offset, sCode);
                 }
             }
 
             free(buffer);
         }
     }
-    CPPUNIT_ASSERT_MESSAGE( "Source is empty", ( sSource.getLength() > 0 ) );
-    MakeModule( sSource );
+}
+
+void MacroSnippet::LoadSourceFromFile(const OUString& sMacroFileURL)
+{
+    OUStringBuffer sSource;
+    SAL_INFO("basic", "loadSource opening macro file " <<
+            OUStringToOString(sMacroFileURL, RTL_TEXTENCODING_UTF8).getStr() << "\n");
+    LoadFileToBuffer(sMacroFileURL, sSource, 0);
+
+    // Support simple include statements
+    OUString includePrefix = "\n#include ";
+    int directoryUrlLen = sMacroFileURL.lastIndexOf(u'/') + 1;
+    OUString directoryUrl = sMacroFileURL.copy(0, directoryUrlLen);
+    int numIncludes = 0;
+    for (sal_Int32 preProcIndex = sSource.indexOf(includePrefix, 0); preProcIndex >= 0;
+         preProcIndex = sSource.indexOf(includePrefix, preProcIndex + 1))
+    {
+        sal_Int32 filenameIndex = preProcIndex + includePrefix.getLength();
+        sal_Int32 eol = sSource.indexOf(u'\n', filenameIndex);
+        CPPUNIT_ASSERT_MESSAGE("Invalid include statement in VB test", eol >= 0);
+        if (eol < 0)
+            break;
+
+        const sal_Unicode* includeFilename = sSource.getStr() + filenameIndex;
+        OUString includeFilenameStr = OUString(includeFilename, eol - filenameIndex);
+        OUString includeFilenameURL = directoryUrl + includeFilenameStr;
+
+        LoadFileToBuffer(includeFilenameURL, sSource, eol + 1);
+        CPPUNIT_ASSERT_MESSAGE("Too many include statements in VB test", ++numIncludes < 100);
+    }
+
+    CPPUNIT_ASSERT_MESSAGE("Source is empty", sSource.getLength() > 0);
+    MakeModule(sSource.toString());
 }
 
 SbxVariableRef MacroSnippet::Run( const css::uno::Sequence< css::uno::Any >& rArgs )

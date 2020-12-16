@@ -14,9 +14,8 @@ Option Explicit
 ' the system.
 '
 
-Dim passCount As Integer
-Dim failCount As Integer
-Dim result As String
+#include _test_header.vb
+#include _test_asserts.vb
 
 Private Declare Function QueryPerformanceCounter Lib "kernel32" (ByRef lpPerformanceCount As Currency) As Long
 Private Declare Function QueryPerformanceFrequency Lib "kernel32" (ByRef lpFrequency As Currency) As Long
@@ -66,21 +65,3 @@ errorHandler:
 
 End Function
 
-Sub TestLog_ASSERT(assertion As Boolean, Optional testId As String, Optional testComment As String)
-
-    If assertion = True Then
-        passCount = passCount + 1
-    Else
-        Dim testMsg As String
-        If Not IsMissing(testId) Then
-            testMsg = testMsg + " : " + testId
-        End If
-        If Not IsMissing(testComment) And Not (testComment = "") Then
-            testMsg = testMsg + " (" + testComment + ")"
-        End If
-
-        result = result & Chr$(10) & " Failed: " & testMsg
-        failCount = failCount + 1
-    End If
-
-End Sub

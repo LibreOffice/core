@@ -1,9 +1,8 @@
 Option VBASupport 1
 Option Explicit
 
-Dim passCount As Integer
-Dim failCount As Integer
-Dim result As String
+#include _test_header.vb
+#include _test_asserts.vb
 
 Function doUnitTest() As String
 result = verify_format()
@@ -429,22 +428,4 @@ errorHandler:
         TestLog_ASSERT (false), testName & ": hit error handler"
 End Sub
 
-Sub TestLog_ASSERT(assertion As Boolean, Optional testId As String, Optional testComment As String)
-
-    If assertion = True Then
-        passCount = passCount + 1
-    Else
-        Dim testMsg As String
-        If Not IsMissing(testId) Then
-            testMsg = testMsg + " : " + testId
-        End If
-        If Not IsMissing(testComment) And Not (testComment = "") Then
-            testMsg = testMsg + " (" + testComment + ")"
-        End If
-
-        result = result & Chr$(10) & " Failed: " & testMsg
-        failCount = failCount + 1
-    End If
-
-End Sub
 
