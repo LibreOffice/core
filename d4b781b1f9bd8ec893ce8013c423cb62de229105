@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95e058cf_ba5d81ce",
+        "filename": "sc/source/ui/namedlg/namedlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-12-16T22:53:54Z",
+      "side": 1,
+      "message": "(just a remark) Odd naming for this functionality.. so \"close without undo\" in this constellation means \"ignore changes and close\" ...",
+      "range": {
+        "startLine": 461,
+        "startChar": 4,
+        "endLine": 461,
+        "endChar": 22
+      },
+      "revId": "d4b781b1f9bd8ec893ce8013c423cb62de229105",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
