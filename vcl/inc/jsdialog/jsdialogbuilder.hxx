@@ -372,6 +372,15 @@ public:
 
     virtual weld::TreeView* get_drag_source() const override;
 
+    using SalInstanceTreeView::insert;
+    virtual void insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
+                        const OUString* pId, const OUString* pIconName,
+                        VirtualDevice* pImageSurface, const OUString* pExpanderName,
+                        bool bChildrenOnDemand, weld::TreeIter* pRet) override;
+
+    virtual void set_text(int row, const OUString& rText, int col = -1) override;
+    virtual void set_text(const weld::TreeIter& rIter, const OUString& rStr, int col = -1) override;
+
     void drag_start();
     void drag_end();
 };
