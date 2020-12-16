@@ -1994,6 +1994,36 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testCommentCursorPosition)
     // bb<comment>|   - the cursor should move behind the |, not before it.
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testCombiningCharacterCursorPosition)
+{
+    // Load a document that has "a" in it, followed by a combining acute in a separate rext span
+    SwDoc* pDoc = createDoc("tdf138592-a-acute.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    SwRootFrame* pRoot = pWrtShell->GetLayout();
+    CPPUNIT_ASSERT(pRoot->GetLower()->IsPageFrame());
+    SwPageFrame* pPage = static_cast<SwPageFrame*>(pRoot->GetLower());
+    CPPUNIT_ASSERT(pPage->GetLower()->IsBodyFrame());
+    SwBodyFrame* pBody = static_cast<SwBodyFrame*>(pPage->GetLower());
+    CPPUNIT_ASSERT(pBody->GetLower()->IsTextFrame());
+    SwTextFrame* pTextFrame = static_cast<SwTextFrame*>(pBody->GetLower());
+
+    // Set a point in the whitespace past the end of the first line.
+    Point aPoint = pWrtShell->getShellCursor(false)->GetSttPos();
+    aPoint.AdjustX(10000);
+
+    // Ask for the doc model pos of this layout point.
+    SwPosition aPosition(*pTextFrame->GetTextNodeForFirstText());
+    pTextFrame->GetModelPositionForViewPoint(&aPosition, aPoint);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. the cursor got positioned before the acute, so typing shifted the acute (applying it
+    // to newly typed characters) instead of adding content after it.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aPosition.nContent.GetIndex());
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf64222)
 {
     createDoc("tdf64222.docx");
