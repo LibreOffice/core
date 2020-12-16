@@ -17,7 +17,10 @@ pdfium_patches += c++20-comparison.patch
 pdfium_patches += AnnotationInkAndVertices.patch.1
 pdfium_patches += AnnotationBorderProperties.patch.1
 pdfium_patches += AnnotationLineStartAndEnd.patch.1
+# Backport of <https://pdfium-review.googlesource.com/c/pdfium/+/75910>.
 pdfium_patches += SignatureGetDocMDPPermission.patch.1
+# Backport of <https://pdfium-review.googlesource.com/c/pdfium/+/76850>.
+pdfium_patches += FPDF_GetTrailerEnds-make-this-not-depend-on-whitespa.patch.1
 
 # Work around <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94141> "c++20 rewritten operator==
 # recursive call mixing friend and external operators for template class" in GCC with
