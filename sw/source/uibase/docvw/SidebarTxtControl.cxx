@@ -67,6 +67,7 @@ SidebarTextControl::SidebarTextControl( sw::annotation::SwAnnotationWin& rSideba
     , mrSidebarWin( rSidebarWin )
     , mrDocView( rDocView )
     , mrPostItMgr( rPostItMgr )
+    , mbMouseDownGainingFocus(false)
 {
     AddEventListener( LINK( &mrSidebarWin, sw::annotation::SwAnnotationWin, WindowEventListener ) );
 }
@@ -215,6 +216,16 @@ void SidebarTextControl::LogicInvalidate(const tools::Rectangle* pRectangle)
     SfxLokHelper::notifyInvalidation(rWrtShell.GetSfxViewShell(), sRectangle);
 }
 
+void SidebarTextControl::MakeVisible()
+{
+    // PostItMgr::MakeVisible can lose our MapMode, save it.
+    auto oldMapMode = GetMapMode();
+    //let's make sure we see our note
+    mrPostItMgr.MakeVisible(&mrSidebarWin);
+    if (comphelper::LibreOfficeKit::isActive())
+        SetMapMode(oldMapMode);
+}
+
 void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
 {
     if (getenv("SW_DEBUG") && rKeyEvt.GetKeyCode().GetCode() == KEY_F12)
@@ -246,12 +257,7 @@ void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
     }
     else
     {
-        // MakeVisible can lose our MapMode, save it.
-        auto oldMapMode = GetMapMode();
-        //let's make sure we see our note
-        mrPostItMgr.MakeVisible(&mrSidebarWin);
-        if (comphelper::LibreOfficeKit::isActive())
-            SetMapMode(oldMapMode);
+        MakeVisible();
 
         tools::Long aOldHeight = mrSidebarWin.GetPostItTextHeight();
         bool bDone = false;
@@ -340,7 +346,9 @@ void SidebarTextControl::MouseButtonDown( const MouseEvent& rMEvt )
         }
     }
 
+    mbMouseDownGainingFocus = !HasFocus();
     GrabFocus();
+
     if ( GetTextView() )
     {
         GetTextView()->MouseButtonDown( rMEvt );
@@ -352,6 +360,11 @@ void SidebarTextControl::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( GetTextView() )
         GetTextView()->MouseButtonUp( rMEvt );
+    if (mbMouseDownGainingFocus)
+    {
+        MakeVisible();
+        mbMouseDownGainingFocus = false;
+    }
 }
 
 IMPL_LINK( SidebarTextControl, OnlineSpellCallback, SpellCallbackInfo&, rInfo, void )
