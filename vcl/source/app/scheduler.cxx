@@ -442,6 +442,7 @@ bool Scheduler::ProcessTaskScheduling()
         // prepare Scheduler object for deletion after handling
         pTask->SetDeletionFlags();
 
+        assert(!pMostUrgent->mbInScheduler);
         pMostUrgent->mbInScheduler = true;
 
         // always push the stack, as we don't traverse the whole list to push later
@@ -479,6 +480,8 @@ bool Scheduler::ProcessTaskScheduling()
             std::abort();
         }
         Lock();
+
+        assert(pMostUrgent->mbInScheduler);
         pMostUrgent->mbInScheduler = false;
 
         SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
