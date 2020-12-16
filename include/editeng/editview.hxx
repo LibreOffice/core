@@ -177,7 +177,7 @@ public:
     void            InvalidateWindow(const tools::Rectangle& rClipRect);
     void            InvalidateOtherViewWindows( const tools::Rectangle& rInvRect );
     void            Invalidate();
-    Pair            Scroll( tools::Long nHorzScroll, tools::Long nVertScroll, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );
+    ::Pair          Scroll( tools::Long nHorzScroll, tools::Long nVertScroll, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );
 
     void            SetBroadcastLOKViewCursor(bool bSet);
     tools::Rectangle       GetEditCursor() const;
