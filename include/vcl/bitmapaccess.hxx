@@ -53,6 +53,16 @@ public:
         return mpBuffer ? mpBuffer->mnHeight : 0L;
     }
 
+    bool PaletteDiffers(BitmapPalette const& rPal)
+    {
+        bool bPaletteDiffers = !HasPalette() || rPal.GetEntryCount() != GetPaletteEntryCount();
+
+        if (!bPaletteDiffers)
+            return (rPal != GetPalette());
+        else
+            return true;
+    }
+
     bool IsTopDown() const
     {
         assert(mpBuffer && "Access is not valid!");
