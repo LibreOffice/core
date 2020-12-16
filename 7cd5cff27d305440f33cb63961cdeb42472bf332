@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d2cb209_30f107eb",
+        "filename": "sc/source/filter/oox/extlstcontext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-12-16T19:52:17Z",
+      "side": 1,
+      "message": "It would be fine to add some comment to the not obvious changes. It seems for me, that here we hope, that formulas beginning with this sequences are always exceptions, causing potential regressions...",
+      "range": {
+        "startLine": 194,
+        "startChar": 12,
+        "endLine": 194,
+        "endChar": 98
+      },
+      "revId": "7cd5cff27d305440f33cb63961cdeb42472bf332",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
