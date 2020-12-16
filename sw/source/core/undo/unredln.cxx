@@ -108,7 +108,7 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
             for( SwRedlineTable::size_type n = 1; n < rTable.size(); ++n )
             {
                 SwRangeRedline *pRed(rTable[n]);
-                if ( pRedline->GetId() < pRed->GetId() && pRed->GetId() < nMaxId )
+                if ( !pRed->HasMark() && pRedline->GetId() < pRed->GetId() && pRed->GetId() < nMaxId )
                 {
                     nCurRedlinePos = n;
                     pRedline = pRed;
@@ -117,7 +117,7 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
 
             nMaxId = pRedline->GetId();
 
-            if ( !pRedline->IsVisible() )
+            if ( !pRedline->IsVisible() && !pRedline->HasMark() )
             {
                 // set it visible
                 pRedline->Show(0, rTable.GetPos(pRedline), /*bForced=*/true);
