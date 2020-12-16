@@ -1695,7 +1695,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 
     // seek to end of TIFF if succeeded
     pTIFF->SetEndian( nOrigNumberFormat );
-    pTIFF->Seek(bStatus ? nMaxPos : nOrigPos);
+    pTIFF->Seek(bStatus ? nMaxPos + pTIFF->remainingSize(): nOrigPos);
 
     if ( aAnimation.Count() )
     {
