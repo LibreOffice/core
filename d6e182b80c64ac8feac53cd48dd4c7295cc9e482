@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "8c92d75a_9bd44cb2",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-16T08:21:19Z",
+      "side": 1,
+      "message": "ah, I see the problem. Probably easiest to copy data into a structure like\n\n    struct ReplacementPair { OUString name; OUString replacement; };\n    std::vector\u003cReplacementPair\u003e m_Replacements;\n    bool operator\u003c(const ReplacementPair\u0026 lhs, const ReplacementPair\u0026 rhs)\n    { return lhs.name \u003c rhs.name; }\n\nthen\n\n    std::sort(m_Replacements.begin(), m_Replacements.end());\n\nthen can search by\n\n    auto it \u003d std::lower_bound(m_Replacements.begin(), m_Replacements.end(), name,\n        bool operator\u003c(const ReplacementPair\u0026 lhs, const OUString\u0026 rhs)\n    { return lhs.name \u003c rhs; }\n    );\n    if (it !\u003d m_Replacements.end() \u0026\u0026 it-\u003ename \u003d\u003d name)\n        return ....",
+      "parentUuid": "c4f4feb5_0a49cdf1",
+      "revId": "d6e182b80c64ac8feac53cd48dd4c7295cc9e482",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "579c48d1_9d8da2a1",
         "filename": "sax/source/fastparser/fastparser.cxx",
         "patchSetId": 2
