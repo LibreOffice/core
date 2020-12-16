@@ -15,11 +15,13 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/propertysequence.hxx>
 
+#if HAVE_FEATURE_PDFIUM
 // Prevent workdir/UnpackedTarball/pdfium/public/fpdfview.h from including windows.h in a way that
 // it will define e.g. Yield as a macro:
 #include <prewin.h>
 #include <postwin.h>
 #include <fpdfview.h>
+#endif
 
 #include <unotools/tempfile.hxx>
 #include <unotools/mediadescriptor.hxx>
