@@ -35,6 +35,11 @@ interface XWriter
 {
     interface com::sun::star::io::XActiveDataSource;
     interface com::sun::star::xml::sax::XExtendedDocumentHandler;
+
+    /** Adds support for custom entity names list
+      * @since LibreOffice 7.1
+      */
+    void setCustomEntityNames( [in] sequence<string> names, [in] sequence<string> replacements );
 };
 
 
