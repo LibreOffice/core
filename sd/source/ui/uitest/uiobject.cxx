@@ -110,7 +110,7 @@ void ImpressWindowUIObject::execute(const OUString& rAction, const StringMap& rP
             auto itr = rParameters.find("PAGE");
             OUString aVal = itr->second;
             sal_Int32 nVal = aVal.toInt32();
-            getViewShell(mxWindow)->SwitchPage(nVal);
+            getViewShell(mxWindow)->SwitchPage(nVal - 1);
         }
     }
     else if (rAction == "SELECT")
