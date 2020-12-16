@@ -30,6 +30,7 @@
 class ToolBox;
 class SfxViewShell;
 class VclMultiLineEdit;
+class IconView;
 
 typedef std::map<OString, weld::Widget*> WidgetMap;
 
@@ -174,6 +175,8 @@ public:
                                                            bool bTakeOwnership = false) override;
     virtual std::unique_ptr<weld::Expander> weld_expander(const OString& id,
                                                           bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::IconView> weld_icon_view(const OString& id,
+                                                           bool bTakeOwnership = false) override;
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
                                                     VclMessageType eMessageType,
@@ -406,6 +409,23 @@ public:
                std::string sTypeOfJSON);
 
     virtual void set_expanded(bool bExpand) override;
+};
+
+class JSIconView : public JSWidget<SalInstanceIconView, ::IconView>
+{
+public:
+    JSIconView(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+               ::IconView* pIconView, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+               std::string sTypeOfJSON);
+
+    virtual void insert(int pos, const OUString* pStr, const OUString* pId,
+                        const OUString* pIconName, weld::TreeIter* pRet) override;
+
+    virtual void insert(int pos, const OUString* pStr, const OUString* pId,
+                        const VirtualDevice* pIcon, weld::TreeIter* pRet) override;
+    virtual void clear() override;
+    virtual void select(int pos) override;
+    virtual void unselect(int pos) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
