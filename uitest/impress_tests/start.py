@@ -6,12 +6,8 @@
 #
 
 from uitest.uihelper.common import get_state_as_dict
-
 from libreoffice.uno.propertyvalue import mkPropertyValues
-
 from uitest.framework import UITestCase
-
-import time
 
 class SimpleImpressTest(UITestCase):
     def test_start_impress(self):
@@ -41,7 +37,15 @@ class SimpleImpressTest(UITestCase):
 
         xEditWin = xImpressDoc.getChild("impress_win")
 
-        xEditWin.executeAction("GOTO", mkPropertyValues({"PAGE": "2"}))
+        self.assertEqual(get_state_as_dict(xEditWin)["CurrentSlide"], "1")
+
+        self.xUITest.executeCommand(".uno:InsertPage")
+
+        self.assertEqual(get_state_as_dict(xEditWin)["CurrentSlide"], "2")
+
+        xEditWin.executeAction("GOTO", mkPropertyValues({"PAGE": "1"}))
+
+        self.assertEqual(get_state_as_dict(xEditWin)["CurrentSlide"], "1")
 
         self.ui_test.close_doc()
 
