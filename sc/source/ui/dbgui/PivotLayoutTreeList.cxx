@@ -15,7 +15,6 @@
 
 #include <vcl/event.hxx>
 #include <pivot.hxx>
-#include <scabstdlg.hxx>
 
 ScPivotLayoutTreeList::ScPivotLayoutTreeList(std::unique_ptr<weld::TreeView> xControl)
     : ScPivotLayoutTreeListBase(std::move(xControl))
@@ -24,7 +23,14 @@ ScPivotLayoutTreeList::ScPivotLayoutTreeList(std::unique_ptr<weld::TreeView> xCo
     mxControl->connect_row_activated(LINK(this, ScPivotLayoutTreeList, DoubleClickHdl));
 }
 
-ScPivotLayoutTreeList::~ScPivotLayoutTreeList() {}
+ScPivotLayoutTreeList::~ScPivotLayoutTreeList()
+{
+    if (mpSubtotalDlg)
+    {
+        mpSubtotalDlg->Response(RET_CANCEL);
+        mpSubtotalDlg.clear();
+    }
+}
 
 void ScPivotLayoutTreeList::Setup(ScPivotLayoutDialog* pParent, SvPivotTreeListType eType)
 {
@@ -53,18 +59,18 @@ IMPL_LINK_NOARG(ScPivotLayoutTreeList, DoubleClickHdl, weld::TreeView&, bool)
     maDataFieldNames.clear();
     mpParent->PushDataFieldNames(maDataFieldNames);
 
-    VclPtr<AbstractScDPSubtotalDlg> pDialog(
-        pFactory->CreateScDPSubtotalDlg(mxControl.get(), mpParent->maPivotTableObject,
-                                        rCurrentLabelData, rCurrentFunctionData, maDataFieldNames));
+    mpSubtotalDlg = pFactory->CreateScDPSubtotalDlg(mxControl.get(), mpParent->maPivotTableObject,
+                                                    rCurrentLabelData, rCurrentFunctionData,
+                                                    maDataFieldNames);
 
-    pDialog->StartExecuteAsync([this, pDialog, pCurrentItemValue, nCurrentColumn](int nResult) {
+    mpSubtotalDlg->StartExecuteAsync([this, pCurrentItemValue, nCurrentColumn](int nResult) {
         if (nResult == RET_OK)
         {
-            pDialog->FillLabelData(mpParent->GetLabelData(nCurrentColumn));
-            pCurrentItemValue->maFunctionData.mnFuncMask = pDialog->GetFuncMask();
+            mpSubtotalDlg->FillLabelData(mpParent->GetLabelData(nCurrentColumn));
+            pCurrentItemValue->maFunctionData.mnFuncMask = mpSubtotalDlg->GetFuncMask();
         }
 
-        pDialog->disposeOnce();
+        mpSubtotalDlg.disposeAndClear();
     });
 
     return true;
