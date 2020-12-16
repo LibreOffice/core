@@ -1411,7 +1411,7 @@ sal_uInt64 SvStream::Seek(sal_uInt64 const nFilePos)
 
 bool checkSeek(SvStream &rSt, sal_uInt64 nOffset)
 {
-    const sal_uInt64 nMaxSeek(rSt.Tell() + rSt.remainingSize());
+    const sal_uInt64 nMaxSeek = rSt.TellEnd();
     return (nOffset <= nMaxSeek && rSt.Seek(nOffset) == nOffset);
 }
 
