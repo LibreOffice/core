@@ -23,6 +23,8 @@ class SimpleImpressTest(UITestCase):
         xEditWin = xImpressDoc.getChild("impress_win")
         xEditWin.executeAction("SET", mkPropertyValues({"ZOOM": "200"}))
 
+        self.assertEqual(get_state_as_dict(xEditWin)["Zoom"], "200")
+
         self.ui_test.close_doc()
 
     def test_select_page(self):
@@ -46,38 +48,6 @@ class SimpleImpressTest(UITestCase):
         xEditWin.executeAction("GOTO", mkPropertyValues({"PAGE": "1"}))
 
         self.assertEqual(get_state_as_dict(xEditWin)["CurrentSlide"], "1")
-
-        self.ui_test.close_doc()
-
-    def test_select_text(self):
-
-        self.ui_test.create_doc_in_start_center("impress")
-
-        xTemplateDlg = self.xUITest.getTopFocusWindow()
-        xCancelBtn = xTemplateDlg.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
-
-        xImpressDoc = self.xUITest.getTopFocusWindow()
-
-        xEditWin = xImpressDoc.getChild("impress_win")
-
-        self.ui_test.close_doc()
-
-    def test_select_object(self):
-
-        self.ui_test.create_doc_in_start_center("impress")
-
-        xTemplateDlg = self.xUITest.getTopFocusWindow()
-        xCancelBtn = xTemplateDlg.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
-
-        xImpressDoc = self.xUITest.getTopFocusWindow()
-        print(xImpressDoc.getChildren())
-
-        xEditWin = xImpressDoc.getChild("impress_win")
-
-        xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
-        xEditWin.executeAction("DESELECT", tuple())
 
         self.ui_test.close_doc()
 
