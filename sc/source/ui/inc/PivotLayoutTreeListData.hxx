@@ -13,6 +13,7 @@
 #include "PivotLayoutTreeListBase.hxx"
 #include <vector>
 #include <memory>
+#include <scabstdlg.hxx>
 
 class ScPivotLayoutTreeListData final : public ScPivotLayoutTreeListBase
 {
@@ -34,6 +35,8 @@ private:
     void AdjustDuplicateCount(ScItemValue* pInputItemValue);
 
     std::vector<std::unique_ptr<ScItemValue>> maDataItemValues;
+
+    VclPtr<AbstractScDPFunctionDlg> mpFunctionDlg;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
