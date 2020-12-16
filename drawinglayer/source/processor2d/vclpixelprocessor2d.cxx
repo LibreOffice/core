@@ -711,7 +711,7 @@ void VclPixelProcessor2D::processControlPrimitive2D(
             // Tiled Rendering clients usually do *not* have real VCL-Windows for the controls, but
             // exactly that would be needed on each client displaying the tiles (what would be hard
             // to do but also would have advantages - the clients would have real controls in the
-            //  shape of their traget system which could be interacted with...). It is also what the
+            //  shape of their target system which could be interacted with...). It is also what the
             // office does.
             // For now, fallback to just render these controls when Tiled Rendering is active to just
             // have them displayed on all clients.
