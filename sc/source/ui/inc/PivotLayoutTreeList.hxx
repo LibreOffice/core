@@ -12,12 +12,15 @@
 
 #include <memory>
 #include "PivotLayoutTreeListBase.hxx"
+#include <scabstdlg.hxx>
 
 class ScPivotLayoutTreeList : public ScPivotLayoutTreeListBase
 {
 private:
     std::vector<std::unique_ptr<ScItemValue>> maItemValues;
     std::vector<ScDPName> maDataFieldNames;
+
+    VclPtr<AbstractScDPSubtotalDlg> mpSubtotalDlg;
 
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);

@@ -106,6 +106,7 @@ public:
 
 private:
     void                Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
+    void                CloseSubdialog();
 
     DECL_LINK( DblClickHdl, weld::TreeView&, bool );
     DECL_LINK( RadioClickHdl, weld::Button&, void );

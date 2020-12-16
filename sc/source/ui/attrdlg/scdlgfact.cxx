@@ -760,6 +760,11 @@ PivotFunc AbstractScDPFunctionDlg_Impl::GetFuncMask() const
      return m_xDlg->GetFuncMask();
 }
 
+void AbstractScDPFunctionDlg_Impl::Response(int nResponse)
+{
+    m_xDlg->response(nResponse);
+}
+
 css::sheet::DataPilotFieldReference AbstractScDPFunctionDlg_Impl::GetFieldRef() const
 {
     return m_xDlg->GetFieldRef();
@@ -773,6 +778,11 @@ PivotFunc AbstractScDPSubtotalDlg_Impl::GetFuncMask() const
 void AbstractScDPSubtotalDlg_Impl::FillLabelData( ScDPLabelData& rLabelData ) const
 {
     m_xDlg->FillLabelData( rLabelData );
+}
+
+void AbstractScDPSubtotalDlg_Impl::Response(int nResponse)
+{
+    m_xDlg->response(nResponse);
 }
 
 ScDPNumGroupInfo AbstractScDPNumGroupDlg_Impl::GetGroupInfo() const
