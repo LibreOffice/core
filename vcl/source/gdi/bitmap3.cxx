@@ -343,7 +343,6 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
     if( pReadAcc )
     {
         const BitmapPalette& rPal = GetGreyPalette( nGreys );
-        sal_uLong nShift = ( ( nGreys == 16 ) ? 4UL : 0UL );
         bool bPalDiffers = !pReadAcc->HasPalette() || ( rPal.GetEntryCount() != pReadAcc->GetPaletteEntryCount() );
 
         if( !bPalDiffers )
@@ -358,6 +357,8 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
             {
                 const tools::Long nWidth = pWriteAcc->Width();
                 const tools::Long nHeight = pWriteAcc->Height();
+
+                sal_uLong nShift = ((nGreys == 16) ? 4UL : 0UL);
 
                 if( pReadAcc->HasPalette() )
                 {
