@@ -3818,7 +3818,8 @@ static sal_Int32 lcl_CalculateDir(const double dX, const double dY)
 void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
 {
     Sequence< PropertyValue > aGrabBag, aEffects, aOuterShdwProps;
-    if( GetProperty( rXPropSet, "InteropGrabBag" ) )
+    bool bHasInteropGrabBag = rXPropSet->getPropertySetInfo()->hasPropertyByName("InteropGrabBag");
+    if (bHasInteropGrabBag && GetProperty(rXPropSet, "InteropGrabBag"))
     {
         mAny >>= aGrabBag;
         auto pProp = std::find_if(std::cbegin(aGrabBag), std::cend(aGrabBag),
