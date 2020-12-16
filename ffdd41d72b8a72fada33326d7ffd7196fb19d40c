@@ -94,6 +94,30 @@
       "revId": "ffdd41d72b8a72fada33326d7ffd7196fb19d40c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c14ae713_14f6d805",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-16T16:12:16Z",
+      "side": 1,
+      "message": "\u003e Do you have a suggestion?\n\nme? sorry, no",
+      "parentUuid": "2b0559b1_89f17f69",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 31
+      },
+      "revId": "ffdd41d72b8a72fada33326d7ffd7196fb19d40c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
