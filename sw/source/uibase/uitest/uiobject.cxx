@@ -14,6 +14,7 @@
 #include <wrtsh.hxx>
 #include <navipi.hxx>
 #include <ndtxt.hxx>
+#include <viewopt.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/viewfrm.hxx>
 
@@ -49,6 +50,7 @@ StringMap SwEditWinUIObject::get_state()
     aMap["CurrentPage"] = OUString::number(nPageNum);
     rWrtShell.GetPageNum(nPageNum, nVirtPageNum, false);
     aMap["TopVisiblePage"] = OUString::number(nPageNum);
+    aMap["Zoom"] = OUString::number(rWrtShell.GetViewOptions()->GetZoom());
 
     sal_uInt16 nPages = rWrtShell.GetPageCnt();
     aMap["Pages"] = OUString::number(nPages);
