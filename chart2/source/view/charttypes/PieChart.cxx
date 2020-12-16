@@ -468,49 +468,78 @@ void PieChart::createTextLabelShape(
     }
 
     bool bShowLeaderLine = rSeries.getPropertiesOfSeries()
-                                        ->getPropertyValue("ShowCustomLeaderLines")
-                                        .get<sal_Bool>();
-    if (m_bPieLabelsAllowToMove && rSeries.isLabelCustomPos(nPointIndex) && bShowLeaderLine)
+                                   ->getPropertyValue("ShowCustomLeaderLines")
+                                   .get<sal_Bool>();
+    if (m_bPieLabelsAllowToMove)
     {
-        sal_Int32 nX1 = aPieLabelInfo.aOuterPosition.getX();
-        sal_Int32 nY1 = aPieLabelInfo.aOuterPosition.getY();
-        sal_Int32 nX2 = nX1;
-        sal_Int32 nY2 = nY1;
         ::basegfx::B2IRectangle aRect(lcl_getRect(aPieLabelInfo.xLabelGroupShape));
-        if (nX1 < aRect.getMinX())
-            nX2 = aRect.getMinX();
-        else if (nX1 > aRect.getMaxX())
-            nX2 = aRect.getMaxX();
+        sal_Int32 nPageWidth = m_aPageReferenceSize.Width;
+        sal_Int32 nPageHeight = m_aPageReferenceSize.Height;
 
-        if (nY1 < aRect.getMinY())
-            nY2 = aRect.getMinY();
-        else if (nY1 > aRect.getMaxY())
-            nY2 = aRect.getMaxY();
+        // the data label should be inside the chart area
+        awt::Point aShapePos = aPieLabelInfo.xLabelGroupShape->getPosition();
+        if (aRect.getMinX() < 0)
+            aPieLabelInfo.xLabelGroupShape->setPosition(
+                awt::Point(aShapePos.X - aRect.getMinX(), aShapePos.Y));
+        if (aRect.getMinY() < 0)
+            aPieLabelInfo.xLabelGroupShape->setPosition(
+                awt::Point(aShapePos.X, aShapePos.Y - aRect.getMinY()));
+        if (aRect.getMaxX() > nPageWidth)
+            aPieLabelInfo.xLabelGroupShape->setPosition(
+                awt::Point(aShapePos.X - (aRect.getMaxX() - nPageWidth), aShapePos.Y));
+        if (aRect.getMaxY() > nPageHeight)
+            aPieLabelInfo.xLabelGroupShape->setPosition(
+                awt::Point(aShapePos.X, aShapePos.Y - (aRect.getMaxY() - nPageHeight)));
 
-        sal_Int32 nSquaredDistanceFromOrigin
-            = (nX2 - aOrigin.X) * (nX2 - aOrigin.X) + (nY2 - aOrigin.Y) * (nY2 - aOrigin.Y);
-
-        // tdf#138018 Don't show leader line when custom positioned data label is inside pie chart
-        if (nSquaredDistanceFromOrigin > fSquaredPieRadius)
+        if (rSeries.isLabelCustomPos(nPointIndex) && bShowLeaderLine)
         {
-            drawing::PointSequenceSequence aPoints(1);
-            aPoints[0].realloc(2);
-            aPoints[0][0].X = nX1;
-            aPoints[0][0].Y = nY1;
-            aPoints[0][1].X = nX2;
-            aPoints[0][1].Y = nY2;
+            sal_Int32 nX1 = aPieLabelInfo.aOuterPosition.getX();
+            sal_Int32 nY1 = aPieLabelInfo.aOuterPosition.getY();
+            sal_Int32 nX2 = nX1;
+            sal_Int32 nY2 = nY1;
+            if (nX1 < aRect.getMinX())
+                nX2 = aRect.getMinX();
+            else if (nX1 > aRect.getMaxX())
+                nX2 = aRect.getMaxX();
 
-            uno::Reference<beans::XPropertySet> xProp(aPieLabelInfo.xTextShape, uno::UNO_QUERY);
-            VLineProperties aVLineProperties;
-            if (xProp.is())
+            if (nY1 < aRect.getMinY())
+                nY2 = aRect.getMinY();
+            else if (nY1 > aRect.getMaxY())
+                nY2 = aRect.getMaxY();
+
+            sal_Int32 nSquaredDistanceFromOrigin
+                = (nX2 - aOrigin.X) * (nX2 - aOrigin.X) + (nY2 - aOrigin.Y) * (nY2 - aOrigin.Y);
+
+            // tdf#138018 Don't show leader line when custom positioned data label is inside pie chart
+            if (nSquaredDistanceFromOrigin > fSquaredPieRadius)
             {
-                sal_Int32 nColor = 0;
-                xProp->getPropertyValue("CharColor") >>= nColor;
-                //automatic font color does not work for lines -> fallback to black
-                if (nColor != -1)
-                    aVLineProperties.Color <<= nColor;
+                //when the line is very short compared to the page size don't create one
+                ::basegfx::B2DVector aLength(nX1 - nX2, nY1 - nY2);
+                double fPageDiagonaleLength = sqrt(double(nPageWidth) * double(nPageWidth)
+                                                   + double(nPageHeight) * double(nPageHeight));
+                if ((aLength.getLength() / fPageDiagonaleLength) >= 0.01)
+                {
+                    drawing::PointSequenceSequence aPoints(1);
+                    aPoints[0].realloc(2);
+                    aPoints[0][0].X = nX1;
+                    aPoints[0][0].Y = nY1;
+                    aPoints[0][1].X = nX2;
+                    aPoints[0][1].Y = nY2;
+
+                    uno::Reference<beans::XPropertySet> xProp(aPieLabelInfo.xTextShape,
+                                                              uno::UNO_QUERY);
+                    VLineProperties aVLineProperties;
+                    if (xProp.is())
+                    {
+                        sal_Int32 nColor = 0;
+                        xProp->getPropertyValue("CharColor") >>= nColor;
+                        //automatic font color does not work for lines -> fallback to black
+                        if (nColor != -1)
+                            aVLineProperties.Color <<= nColor;
+                    }
+                    m_pShapeFactory->createLine2D(xTextTarget, aPoints, &aVLineProperties);
+                }
             }
-            m_pShapeFactory->createLine2D(xTextTarget, aPoints, &aVLineProperties);
         }
     }
 
