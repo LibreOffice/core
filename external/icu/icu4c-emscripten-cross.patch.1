@@ -10,7 +10,7 @@
  		]
 --- /dev/null
 +++ icu/source/config/mh-emscripten	2015-10-06 12:01:00.497972406 +0200
-@@ -0,0 +1,89 @@
+@@ -0,0 +1,85 @@
 +## Emscripten-specific setup
 +## Copyright (c) 1999-2013, International Business Machines Corporation and
 +## others. All Rights Reserved.
@@ -52,18 +52,15 @@
 +## Shared object suffix
 +SO = so
 +## Non-shared intermediate object suffix
-+STATIC_O = ao
++STATIC_O = o
 +
 +## Compilation rules
++# WASM needs -pthread for atomics support
 +%.$(STATIC_O): $(srcdir)/%.c
-+	$(call SILENT_COMPILE,$(strip $(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS)) -o $@ $<)
-+%.o: $(srcdir)/%.c
-+	$(call SILENT_COMPILE,$(strip $(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS)) -o $@ $<)
++	$(call SILENT_COMPILE,$(strip $(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS)) -pthread -o $@ $<)
 +
 +%.$(STATIC_O): $(srcdir)/%.cpp
-+	$(call SILENT_COMPILE,$(strip $(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS)) -o $@ $<)
-+%.o: $(srcdir)/%.cpp
-+	$(call SILENT_COMPILE,$(strip $(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS)) -o $@ $<)
++	$(call SILENT_COMPILE,$(strip $(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS)) -pthread -o $@ $<)
 +
 +
 +## Dependency rules

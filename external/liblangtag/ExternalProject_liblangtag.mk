@@ -29,7 +29,7 @@ $(call gb_ExternalProject_get_state_target,liblangtag,build):
 			--enable-shared --disable-static) \
 		$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 		$(if $(filter TRUE,$(HAVE_GCC_BUILTIN_ATOMIC)),"lt_cv_has_atomic=yes","lt_cv_has_atomic=no") \
-		CFLAGS='$(CFLAGS) \
+		CFLAGS='$(CFLAGS) -pthread \
 				$(if $(ENABLE_OPTIMIZED), \
 					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
 				$(if $(call gb_Module__symbols_enabled,liblangtag),$(gb_DEBUGINFO_FLAGS))' \

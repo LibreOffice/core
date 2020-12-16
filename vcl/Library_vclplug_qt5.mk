@@ -81,8 +81,6 @@ $(eval $(call gb_Library_add_libs,vclplug_qt5,\
 endif
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
-    vcl/qt5/Qt5AccessibleEventListener \
-    vcl/qt5/Qt5AccessibleWidget \
     vcl/qt5/Qt5Bitmap \
     vcl/qt5/Qt5Clipboard \
     vcl/qt5/Qt5Data \
@@ -111,8 +109,15 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/Qt5Transferable \
     vcl/qt5/Qt5VirtualDevice \
     vcl/qt5/Qt5Widget \
+))
+
+ifneq ($(OS),EMSCRIPTEN)
+$(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
+    vcl/qt5/Qt5AccessibleEventListener \
+    vcl/qt5/Qt5AccessibleWidget \
     vcl/qt5/Qt5XAccessible \
 ))
+endif
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,vclplug_qt5,\

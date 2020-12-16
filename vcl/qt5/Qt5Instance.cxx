@@ -562,7 +562,7 @@ void* Qt5Instance::CreateGStreamerSink(const SystemChildWindow* pWindow)
 
     return pVideosink;
 #else
-    (void*)pWindow;
+    Q_UNUSED(pWindow);
     return nullptr;
 #endif
 }

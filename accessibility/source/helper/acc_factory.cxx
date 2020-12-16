@@ -378,7 +378,11 @@ Reference< XAccessible > AccessibleFactory::createAccessibleIconChoiceCtrl(
 
 Reference< XAccessible > AccessibleFactory::createAccessibleTabBar( TabBar& _rTabBar ) const
 {
+#if HAVE_FEATURE_SCRIPTING
     return new AccessibleTabBar( &_rTabBar );
+#else
+    return nullptr;
+#endif
 }
 
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleTextWindowContext(
