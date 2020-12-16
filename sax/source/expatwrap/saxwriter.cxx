@@ -22,6 +22,7 @@
 #include <cassert>
 #include <set>
 #include <stack>
+#include <vector>
 
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -72,6 +73,21 @@ enum SaxInvalidCharacterError
     SAX_ERROR
 };
 
+// Stuff for custom entity names
+struct ReplacementPair
+{
+    OUString name;
+    sal_uInt32 replacement;
+};
+inline bool operator<(const ReplacementPair& lhs, const ReplacementPair& rhs)
+{
+    return lhs.replacement < rhs.replacement;
+}
+inline bool operator<(const ReplacementPair& lhs, sal_uInt32 rhs)
+{
+    return lhs.replacement < rhs;
+}
+
 class SaxWriterHelper
 {
 #ifdef DBG_UTIL
@@ -87,6 +103,8 @@ private:
     sal_Int32                   nLastLineFeedPos; // is negative after writing a sequence
     sal_uInt32                  nCurrentPos;
     bool                    m_bStartElementFinished;
+
+    std::vector<ReplacementPair> m_Replacements;
 
     /// @throws SAXException
     sal_uInt32 writeSequence();
@@ -175,6 +193,10 @@ public:
 
     /// @throws SAXException
     void clearBuffer();
+
+    // Use custom entity names
+    void setCustomEntityNames(const ::css::uno::Sequence<::rtl::OUString>& names,
+                              const ::css::uno::Sequence<sal_uInt32>& replacements);
 };
 
 const bool g_bValidCharsBelow32[32] =
@@ -239,6 +261,20 @@ void SaxWriterHelper::AddBytes(sal_Int8* pTarget, sal_uInt32& rPos,
         AddBytes(pTarget, rPos, &pBytes[nCount], nRestCount);
 }
 
+void SaxWriterHelper::setCustomEntityNames(
+    const ::css::uno::Sequence<::rtl::OUString>& names,
+    const ::css::uno::Sequence<sal_uInt32>& replacements)
+{
+    m_Replacements.resize(names.size());
+    for (size_t i = 0; i < names.size(); ++i)
+    {
+        m_Replacements[i].name = names[i];
+        m_Replacements[i].replacement = replacements[i];
+    }
+    if (names.size() > 1)
+        std::sort(m_Replacements.begin(), m_Replacements.end());
+}
+
 /** Converts a UTF-16 string to UTF-8 and does XML normalization
 
     @param pTarget
@@ -246,22 +282,19 @@ void SaxWriterHelper::AddBytes(sal_Int8* pTarget, sal_uInt32& rPos,
            must call calcXMLByteLength on the same string, to ensure,
            that there is enough memory for converting.
  */
-bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
-                        sal_Int32 nStrLen,
-                        bool bDoNormalization,
-                        bool bNormalizeWhitespace,
-                        sal_Int8 *pTarget,
-                        sal_uInt32& rPos )
+bool SaxWriterHelper::convertToXML(const sal_Unicode* pStr, sal_Int32 nStrLen,
+                                   bool bDoNormalization, bool bNormalizeWhitespace,
+                                   sal_Int8* pTarget, sal_uInt32& rPos)
 {
     bool bRet(true);
     sal_uInt32 nSurrogate = 0;
 
-    for( sal_Int32 i = 0 ; i < nStrLen ; i ++ )
+    for( sal_Int32 i = 0 ; i < nStrLen ; i++ )
     {
         sal_uInt16 c = pStr[i];
         if (IsInvalidChar(c))
             bRet = false;
-        else if( (c >= 0x0001) && (c <= 0x007F) )
+        else if( (c >= 0x0001) && (c <= 0x007F) ) // Deal with ascii
         {
             if( bDoNormalization )
             {
@@ -300,7 +333,7 @@ bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
                         }
                     }
                     break;
-                    case 39:                 // 39 == '''
+                    case '\'':
                     {
                         if ((rPos + 6) > SEQUENCESIZE)
                             AddBytes(pTarget, rPos, reinterpret_cast<sal_Int8 const *>("&apos;"), 6);
@@ -388,19 +421,56 @@ bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
                 rPos ++;
             }
         }
-        else if( c >= 0xd800 && c < 0xdc00  )
+        else
         {
-            // 1. surrogate: save (until 2. surrogate)
-            OSL_ENSURE( nSurrogate == 0, "left-over Unicode surrogate" );
-            nSurrogate = ( ( c & 0x03ff ) + 0x0040 );
-        }
-        else if( c >= 0xdc00 && c < 0xe000 )
-        {
-            // 2. surrogate: write as UTF-8
-            OSL_ENSURE( nSurrogate != 0, "lone 2nd Unicode surrogate" );
 
-            nSurrogate = ( nSurrogate << 10 ) | ( c & 0x03ff );
-            if( rtl::isUnicodeScalarValue(nSurrogate) && nSurrogate >= 0x00010000 )
+            // First step: deal with surrogates
+            if (c > 0xDBFF && c < 0xE000)
+                OSL_FAIL("lone 2nd Unicode surrogate");
+            else if (c > 0xD7FF && c < 0xDC00) // high surrogate
+            {
+                // 1. surrogate
+                nSurrogate = ((c & 0x03ff) + 0x0040);
+
+                // 2. surrogate
+                ++i;
+                OSL_ENSURE(i < nStrLen, "lone 1st Unicode surrogate");
+                c = pStr[i];
+                OSL_ENSURE(c > 0xDBFF && c < 0xE000, "lone 1st Unicode surrogate");
+                nSurrogate = (nSurrogate << 10) | (c & 0x03ff);
+
+                // Checkout unicode
+                OSL_ENSURE(rtl::isUnicodeScalarValue(nSurrogate) && nSurrogate >= 0x00010000, "illegal Unicode character");
+            }
+
+            // Second step: checkout if it in an entity and replace
+            if (bDoNormalization)
+            {
+                if (m_Replacements.size() != 0)
+                {
+                    sal_uInt32 nc = nSurrogate == 0 ? static_cast<sal_uInt32>(c) : nSurrogate;
+                    auto it = std::lower_bound(m_Replacements.begin(), m_Replacements.end(), nc);
+                    if (it != m_Replacements.end() && it->replacement == nc)
+                    {
+                        if ((rPos + it->name.getLength()) > SEQUENCESIZE)
+                            AddBytes(pTarget, rPos,
+                                     reinterpret_cast<sal_Int8 const*>(
+                                         ::rtl::OUStringToOString(it->name, RTL_TEXTENCODING_UTF8).getStr()),
+                                     it->name.getLength());
+                        else
+                        {
+                            memcpy(&(pTarget[rPos]),
+                                   ::rtl::OUStringToOString(it->name, RTL_TEXTENCODING_UTF8).getStr(),
+                                   it->name.getLength());
+                            rPos += it->name.getLength();
+                        }
+                        continue;
+                    }
+                }
+            }
+
+            // Write UTF-32
+            if (nSurrogate != 0)
             {
                 sal_Int8 aBytes[] = { sal_Int8(0xF0 | ((nSurrogate >> 18) & 0x0F)),
                                       sal_Int8(0x80 | ((nSurrogate >> 12) & 0x3F)),
@@ -419,57 +489,39 @@ bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
                     pTarget[rPos] = aBytes[3];
                     rPos ++;
                 }
+                nSurrogate = 0;
+            }
+            else if (c > 0x07FF)
+            {
+                sal_Int8 aBytes[]
+                    = { sal_Int8(0xE0 | ((c >> 12) & 0x0F)), sal_Int8(0x80 | ((c >> 6) & 0x3F)),
+                        sal_Int8(0x80 | ((c >> 0) & 0x3F)) };
+                if ((rPos + 3) > SEQUENCESIZE)
+                    AddBytes(pTarget, rPos, aBytes, 3);
+                else
+                {
+                    pTarget[rPos] = aBytes[0];
+                    rPos ++;
+                    pTarget[rPos] = aBytes[1];
+                    rPos ++;
+                    pTarget[rPos] = aBytes[2];
+                    rPos ++;
+                }
             }
             else
             {
-                OSL_FAIL( "illegal Unicode character" );
-                bRet = false;
+                sal_Int8 aBytes[]
+                    = { sal_Int8(0xC0 | ((c >> 6) & 0x1F)), sal_Int8(0x80 | ((c >> 0) & 0x3F)) };
+                if ((rPos + 2) > SEQUENCESIZE)
+                    AddBytes(pTarget, rPos, aBytes, 2);
+                else
+                {
+                    pTarget[rPos] = aBytes[0];
+                    rPos ++;
+                    pTarget[rPos] = aBytes[1];
+                    rPos ++;
+                }
             }
-
-            // reset surrogate
-            nSurrogate = 0;
-        }
-        else if( c > 0x07FF )
-        {
-            sal_Int8 aBytes[] = { sal_Int8(0xE0 | ((c >> 12) & 0x0F)),
-                                  sal_Int8(0x80 | ((c >>  6) & 0x3F)),
-                                  sal_Int8(0x80 | ((c >>  0) & 0x3F)) };
-            if ((rPos + 3) > SEQUENCESIZE)
-                AddBytes(pTarget, rPos, aBytes, 3);
-            else
-            {
-                pTarget[rPos] = aBytes[0];
-                rPos ++;
-                pTarget[rPos] = aBytes[1];
-                rPos ++;
-                pTarget[rPos] = aBytes[2];
-                rPos ++;
-            }
-        }
-        else
-        {
-            sal_Int8 aBytes[] = { sal_Int8(0xC0 | ((c >>  6) & 0x1F)),
-                                sal_Int8(0x80 | ((c >>  0) & 0x3F)) };
-            if ((rPos + 2) > SEQUENCESIZE)
-                AddBytes(pTarget, rPos, aBytes, 2);
-            else
-            {
-                pTarget[rPos] = aBytes[0];
-                rPos ++;
-                pTarget[rPos] = aBytes[1];
-                rPos ++;
-            }
-        }
-        OSL_ENSURE(rPos <= SEQUENCESIZE, "not reset current position");
-        if (rPos == SEQUENCESIZE)
-            rPos = writeSequence();
-
-        // reset left-over surrogate
-        if( ( nSurrogate != 0 ) && ( c < 0xd800 || c >= 0xdc00 ) )
-        {
-            OSL_ENSURE( nSurrogate != 0, "left-over Unicode surrogate" );
-            nSurrogate = 0;
-            bRet = false;
         }
     }
     return bRet;
@@ -839,7 +891,7 @@ sal_Int32 calcXMLByteLength( const OUString& rStr,
 
     const sal_Unicode *pStr = rStr.getStr();
     sal_Int32 nStrLen = rStr.getLength();
-    for( sal_Int32 i = 0 ; i < nStrLen ; i++ )
+    for( sal_Int32 i = 0 ; i < nStrLen ; i ++ )
     {
         sal_uInt16 c = pStr[i];
         if( !IsInvalidChar(c) && (c >= 0x0001) && (c <= 0x007F) )
@@ -988,6 +1040,9 @@ public: // XDocumentHandler
     virtual void SAL_CALL processingInstruction(const OUString& aTarget,
                                                 const OUString& aData) override;
     virtual void SAL_CALL setDocumentLocator(const Reference< XLocator > & xLocator) override;
+    virtual void setCustomEntityNames(
+        const ::css::uno::Sequence<::rtl::OUString>& names,
+        const ::css::uno::Sequence<sal_uInt32>& replacements) override;
 
 public: // XExtendedDocumentHandler
     virtual void SAL_CALL startCDATA() override;
@@ -1302,6 +1357,14 @@ void SAXWriter::processingInstruction(const OUString& aTarget, const OUString& a
 void SAXWriter::setDocumentLocator(const Reference< XLocator >&)
 {
 
+}
+
+void SAXWriter::setCustomEntityNames(
+    const ::css::uno::Sequence<::rtl::OUString>& names,
+    const ::css::uno::Sequence<sal_uInt32>& replacements)
+{
+    assert(names.size() == replacements.size());
+    m_pSaxWriterHelper->setCustomEntityNames(names, replacements);
 }
 
 void SAXWriter::startCDATA()
