@@ -1065,7 +1065,6 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
     if( pReadAcc )
     {
         const BitmapPalette& rPal = GetGreyPalette( nGreys );
-        sal_uLong nShift = ( ( nGreys == 16 ) ? 4UL : 0UL );
         bool bPalDiffers = !pReadAcc->HasPalette() || ( rPal.GetEntryCount() != pReadAcc->GetPaletteEntryCount() );
 
         if( !bPalDiffers )
@@ -1080,6 +1079,8 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
             {
                 const tools::Long nWidth = pWriteAcc->Width();
                 const tools::Long nHeight = pWriteAcc->Height();
+
+                sal_uLong nShift = ((nGreys == 16) ? 4UL : 0UL);
 
                 if( pReadAcc->HasPalette() )
                 {
@@ -1566,11 +1567,14 @@ static tools::Long* shiftColor(tools::Long* pColorArray, BitmapColor const& rCol
     *pColorArray++ = static_cast<tools::Long>(rColor.GetBlue()) << 12;
     *pColorArray++ = static_cast<tools::Long>(rColor.GetGreen()) << 12;
     *pColorArray++ = static_cast<tools::Long>(rColor.GetRed()) << 12;
+
     return pColorArray;
 }
+
 static BitmapColor getColor(BitmapReadAccess *pReadAcc, tools::Long nZ)
 {
     Scanline pScanlineRead = pReadAcc->GetScanline(0);
+
     if (pReadAcc->HasPalette())
         return pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, nZ));
     else
@@ -1580,13 +1584,16 @@ static BitmapColor getColor(BitmapReadAccess *pReadAcc, tools::Long nZ)
 bool Bitmap::Dither()
 {
     const Size aSize( GetSizePixel() );
+
     if( aSize.Width() == 1 || aSize.Height() == 1 )
         return true;
+
     if( ( aSize.Width() > 3 ) && ( aSize.Height() > 2 ) )
     {
         ScopedReadAccess pReadAcc(*this);
         Bitmap aNewBmp( GetSizePixel(), 8 );
         BitmapScopedWriteAccess pWriteAcc(aNewBmp);
+
         if( pReadAcc && pWriteAcc )
         {
             BitmapColor aColor;
@@ -1600,18 +1607,23 @@ bool Bitmap::Dither()
             tools::Long* p1T = p1.get();
             tools::Long* p2T = p2.get();
             tools::Long* pTmp;
+
             pTmp = p2T;
+
             for (tools::Long nZ = 0; nZ < nWidth; nZ++)
             {
                 pTmp = shiftColor(pTmp, getColor(pReadAcc.get(), nZ));
             }
+
             tools::Long nRErr, nGErr, nBErr;
             tools::Long nRC, nGC, nBC;
+
             for( tools::Long nY = 1, nYAcc = 0; nY <= nHeight; nY++, nYAcc++ )
             {
                 pTmp = p1T;
                 p1T = p2T;
                 p2T = pTmp;
+
                 if (nY < nHeight)
                 {
                     for (tools::Long nZ = 0; nZ < nWidth; nZ++)
@@ -1619,6 +1631,7 @@ bool Bitmap::Dither()
                         pTmp = shiftColor(pTmp, getColor(pReadAcc.get(), nZ));
                     }
                 }
+
                 // Examine first Pixel separately
                 tools::Long nX = 0;
                 tools::Long nTemp;
@@ -1628,6 +1641,7 @@ bool Bitmap::Dither()
                 CALC_TABLES5;
                 Scanline pScanline = pWriteAcc->GetScanline(nYAcc);
                 pWriteAcc->SetPixelOnData( pScanline, 0, BitmapColor(static_cast<sal_uInt8>(nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ])) );
+
                 // Get middle Pixels using a loop
                 tools::Long nXAcc;
                 for ( nX = 3, nXAcc = 1; nX < nW2; nXAcc++ )
@@ -1639,6 +1653,7 @@ bool Bitmap::Dither()
                     CALC_TABLES5;
                     pWriteAcc->SetPixelOnData( pScanline, nXAcc, BitmapColor(static_cast<sal_uInt8>(nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ])) );
                 }
+
                 // Treat last Pixel separately
                 CALC_ERRORS;
                 nX -= 5;
@@ -1646,18 +1661,25 @@ bool Bitmap::Dither()
                 CALC_TABLES5;
                 pWriteAcc->SetPixelOnData( pScanline, nWidth1, BitmapColor(static_cast<sal_uInt8>(nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ])) );
             }
+
             pReadAcc.reset();
             pWriteAcc.reset();
+
             const MapMode aMap( maPrefMapMode );
             const Size aPrefSize( maPrefSize );
+
             *this = aNewBmp;
+
             maPrefMapMode = aMap;
             maPrefSize = aPrefSize;
+
             return true;
         }
+
         pReadAcc.reset();
         pWriteAcc.reset();
     }
+
     return false;
 }
 
