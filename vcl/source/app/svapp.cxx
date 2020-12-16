@@ -479,7 +479,8 @@ void Scheduler::ProcessEventsToIdle()
         const ImplSchedulerData* pSchedulerData = pSVData->maSchedCtx.mpFirstSchedulerData[nTaskPriority];
         while (pSchedulerData)
         {
-            if (pSchedulerData->mpTask && !pSchedulerData->mbInScheduler)
+            assert(!pSchedulerData->mbInScheduler);
+            if (pSchedulerData->mpTask)
             {
                 Idle *pIdle = dynamic_cast<Idle*>(pSchedulerData->mpTask);
                 if (pIdle && pIdle->IsActive())
