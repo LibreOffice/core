@@ -49,20 +49,6 @@ class SimpleImpressTest(UITestCase):
 
         self.ui_test.close_doc()
 
-    def test_select_text(self):
-
-        self.ui_test.create_doc_in_start_center("impress")
-
-        xTemplateDlg = self.xUITest.getTopFocusWindow()
-        xCancelBtn = xTemplateDlg.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
-
-        xImpressDoc = self.xUITest.getTopFocusWindow()
-
-        xEditWin = xImpressDoc.getChild("impress_win")
-
-        self.ui_test.close_doc()
-
     def test_select_object(self):
 
         self.ui_test.create_doc_in_start_center("impress")
@@ -72,12 +58,19 @@ class SimpleImpressTest(UITestCase):
         self.ui_test.close_dialog_through_button(xCancelBtn)
 
         xImpressDoc = self.xUITest.getTopFocusWindow()
-        print(xImpressDoc.getChildren())
 
         xEditWin = xImpressDoc.getChild("impress_win")
 
+        document = self.ui_test.get_component()
+        self.assertIsNone(document.CurrentSelection)
+
         xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
+
+        self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
+
         xEditWin.executeAction("DESELECT", tuple())
+
+        self.assertIsNone(document.CurrentSelection)
 
         self.ui_test.close_doc()
 
