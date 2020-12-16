@@ -146,6 +146,7 @@ void VBATest::testMiscVBAFunctions()
         "win32compatb.vb" // same methods, different signatures.
     };
     OUString sMacroPathURL = m_directories.getURLFromSrc("/basic/qa/vba_tests/");
+    OUString sMacroUtilsURL = sMacroPathURL + "_test_asserts.vb";
     // Some test data expects the uk locale
     LanguageTag aLocale(LANGUAGE_ENGLISH_UK);
     SvtSysLocaleOptions aLocalOptions;
@@ -157,7 +158,8 @@ void VBATest::testMiscVBAFunctions()
                            + OUString::createFromAscii( macroSource[ i ] );
 
         MacroSnippet myMacro;
-        myMacro.LoadSourceFromFile( sMacroURL );
+        myMacro.LoadSourceFromFile("TestUtilModule", sMacroUtilsURL);
+        myMacro.LoadSourceFromFile("TestModule", sMacroURL);
         SbxVariableRef pReturn = myMacro.Run();
         CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn.is());
         fprintf(stderr, "macro result for %s\n", macroSource[i]);
@@ -234,7 +236,7 @@ void VBATest::testMiscOLEStuff()
         OUString sMacroURL = sMacroPathURL
                            + OUString::createFromAscii( macroSource[ i ] );
         MacroSnippet myMacro;
-        myMacro.LoadSourceFromFile( sMacroURL );
+        myMacro.LoadSourceFromFile("TestModule", sMacroURL);
         SbxVariableRef pReturn = myMacro.Run( aArgs );
         CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn.is());
         fprintf(stderr, "macro result for %s\n", macroSource[i]);
