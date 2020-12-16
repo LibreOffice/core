@@ -22,6 +22,8 @@ class SimpleWriterTest(UITestCase):
 
         xWriterEdit.executeAction("SET", mkPropertyValues({"ZOOM": "200"}))
 
+        self.assertEqual(get_state_as_dict(xWriterEdit)["Zoom"], "200")
+
         self.ui_test.close_doc()
 
     def test_goto_first_page(self):
@@ -36,7 +38,11 @@ class SimpleWriterTest(UITestCase):
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
             state = get_state_as_dict(xWriterEdit)
 
+        self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "2")
+
         xWriterEdit.executeAction("GOTO", mkPropertyValues({"PAGE": "1"}))
+
+        self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "1")
 
         self.ui_test.close_doc()
 
