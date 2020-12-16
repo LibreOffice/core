@@ -1590,7 +1590,9 @@ void ShapeExport::WriteTable( const Reference< XShape >& rXShape  )
     if ( xPropSet.is() && ( xPropSet->getPropertyValue( "Model" ) >>= xTable ) )
     {
         mpFS->startElementNS(XML_a, XML_tbl);
-        mpFS->singleElementNS(XML_a, XML_tblPr);
+        mpFS->startElementNS(XML_a, XML_tblPr);
+        WriteShapeEffects(xPropSet);
+        mpFS->endElementNS(XML_a, XML_tblPr);
 
         Reference< container::XIndexAccess > xColumns( xTable->getColumns(), UNO_QUERY_THROW );
         Reference< container::XIndexAccess > xRows( xTable->getRows(), UNO_QUERY_THROW );
