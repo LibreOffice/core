@@ -12,6 +12,7 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/graphicfilter.hxx>
 
 extern "C"
 {
@@ -35,13 +36,20 @@ public:
         const OUString &rURL, const OUString &,
         SfxFilterFlags, SotClipboardFormatId, unsigned int) override;
 
+    OUString getUrl()
+    {
+        return m_directories.getURLFromSrc("/filter/qa/cppunit/data/tiff/");
+    }
+
     /**
      * Ensure CVEs remain unbroken
      */
     void testCVEs();
+    void testTdf115863();
 
     CPPUNIT_TEST_SUITE(TiffFilterTest);
     CPPUNIT_TEST(testCVEs);
+    CPPUNIT_TEST(testTdf115863);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -57,7 +65,28 @@ bool TiffFilterTest::load(const OUString &,
 void TiffFilterTest::testCVEs()
 {
     testDir(OUString(),
-        m_directories.getURLFromSrc("/filter/qa/cppunit/data/tiff/"));
+        getUrl());
+}
+
+void TiffFilterTest::testTdf115863()
+{
+    OUString aURL = getUrl() + "tdf115863.tif";
+    SvFileStream aFileStream(aURL, StreamMode::READ);
+    Graphic aGraphic;
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+
+    ErrCode bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0x0(Error Area:Io Class:NONE Code:0)
+    // - Actual  : 0x8203(Error Area:Vcl Class:General Code:3)
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
+
+    Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
+    Size aSize = aBitmap.GetSizePixel();
+    CPPUNIT_ASSERT_EQUAL(tools::Long(528), aSize.Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(618), aSize.Height());
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TiffFilterTest);
