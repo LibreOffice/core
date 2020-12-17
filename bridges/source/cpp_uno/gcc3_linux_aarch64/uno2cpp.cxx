@@ -131,7 +131,7 @@ void call(
     typelib_MethodParameter * parameters, void * returnValue, void ** arguments,
     uno_Any ** exception)
 {
-    typelib_TypeDescription * rtd = 0;
+    typelib_TypeDescription * rtd = nullptr;
     TYPELIB_DANGER_GET(&rtd, returnType);
     abi_aarch64::ReturnKind retKind = abi_aarch64::getReturnKind(rtd);
     bool retConv = bridges::cpp_uno::shared::relatesToInterfaceType(rtd);
@@ -157,15 +157,15 @@ void call(
         if (!parameters[i].bOut &&
             bridges::cpp_uno::shared::isSimpleType(parameters[i].pTypeRef))
         {
-            cppArgs[i] = 0;
+            cppArgs[i] = nullptr;
             switch (parameters[i].pTypeRef->eTypeClass) {
             case typelib_TypeClass_BOOLEAN:
                 pushArgument(
 #ifdef MACOSX
                     parameters[i].pTypeRef->eTypeClass, &subsp,
 #endif
-                    *static_cast<sal_Bool *>(arguments[i]), stack, &sp, gpr,
-                    &ngpr);
+                    static_cast<unsigned long>(*static_cast<sal_Bool *>(arguments[i])), stack, &sp,
+                    gpr, &ngpr);
                 break;
             case typelib_TypeClass_BYTE:
                 pushArgument(
@@ -252,7 +252,7 @@ void call(
                 assert(false);
             }
         } else {
-            typelib_TypeDescription * ptd = 0;
+            typelib_TypeDescription * ptd = nullptr;
             TYPELIB_DANGER_GET(&ptd, parameters[i].pTypeRef);
             if (!parameters[i].bIn) {
                 cppArgs[i] = alloca(ptd->nSize);
@@ -277,7 +277,7 @@ void call(
                     reinterpret_cast<unsigned long>(cppArgs[i]), stack, &sp,
                     gpr, &ngpr);
             } else {
-                cppArgs[i] = 0;
+                cppArgs[i] = nullptr;
                 pushArgument(
 #ifdef MACOSX
                     typelib_TypeClass_HYPER, &subsp,
@@ -339,7 +339,7 @@ void call(
             __cxxabiv1::__cxa_current_exception_type(), *exception,
             proxy->getBridge()->getCpp2Uno());
         for (sal_Int32 i = 0; i != count; ++i) {
-            if (cppArgs[i] != 0) {
+            if (cppArgs[i] != nullptr) {
                 uno_destructData(
                     cppArgs[i], ptds[i],
                     reinterpret_cast<uno_ReleaseFunc>(css::uno::cpp_release));
@@ -349,12 +349,12 @@ void call(
         TYPELIB_DANGER_RELEASE(rtd);
         return;
     }
-    *exception = 0;
+    *exception = nullptr;
     for (sal_Int32 i = 0; i != count; ++i) {
-        if (cppArgs[i] != 0) {
+        if (cppArgs[i] != nullptr) {
             if (parameters[i].bOut) {
                 if (parameters[i].bIn) {
-                    uno_destructData(arguments[i], ptds[i], 0);
+                    uno_destructData(arguments[i], ptds[i], nullptr);
                 }
                 uno_copyAndConvertData(
                     arguments[i], cppArgs[i], ptds[i],
@@ -442,14 +442,14 @@ void unoInterfaceProxyDispatch(
                     typelib_InterfaceAttributeTypeDescription const *>(
                         pMemberDescr);
             VtableSlot slot(getVtableSlot(atd));
-            if (pReturn != 0) { // getter
+            if (pReturn != nullptr) { // getter
                 call(
-                    proxy, slot, atd->pAttributeTypeRef, 0, 0, pReturn, pArgs,
+                    proxy, slot, atd->pAttributeTypeRef, 0, nullptr, pReturn, pArgs,
                     ppException);
             } else { // setter
                 typelib_MethodParameter param = {
-                    0, atd->pAttributeTypeRef, true, false };
-                typelib_TypeDescriptionReference * rtd = 0;
+                    nullptr, atd->pAttributeTypeRef, true, false };
+                typelib_TypeDescriptionReference * rtd = nullptr;
                 typelib_typedescriptionreference_new(
                     &rtd, typelib_TypeClass_VOID, OUString("void").pData);
                 slot.index += 1;
@@ -468,33 +468,33 @@ void unoInterfaceProxyDispatch(
             switch (slot.index) {
             case 1:
                 pUnoI->acquire(pUnoI);
-                *ppException = 0;
+                *ppException = nullptr;
                 break;
             case 2:
                 pUnoI->release(pUnoI);
-                *ppException = 0;
+                *ppException = nullptr;
                 break;
             case 0:
                 {
-                    typelib_TypeDescription * td = 0;
+                    typelib_TypeDescription * td = nullptr;
                     TYPELIB_DANGER_GET(
                         &td,
-                        (reinterpret_cast<css::uno::Type *>(pArgs[0])
+                        (static_cast<css::uno::Type *>(pArgs[0])
                          ->getTypeLibType()));
-                    if (td != 0) {
-                        uno_Interface * ifc = 0;
+                    if (td != nullptr) {
+                        uno_Interface * ifc = nullptr;
                         proxy->pBridge->getUnoEnv()->getRegisteredInterface(
                             proxy->pBridge->getUnoEnv(),
                             reinterpret_cast<void **>(&ifc), proxy->oid.pData,
                             reinterpret_cast<
                                 typelib_InterfaceTypeDescription *>(td));
-                        if (ifc != 0) {
+                        if (ifc != nullptr) {
                             uno_any_construct(
-                                reinterpret_cast<uno_Any *>(pReturn), &ifc, td,
-                                0);
+                                static_cast<uno_Any *>(pReturn), &ifc, td,
+                                nullptr);
                             ifc->release(ifc);
                             TYPELIB_DANGER_RELEASE(td);
-                            *ppException = 0;
+                            *ppException = nullptr;
                             break;
                         }
                         TYPELIB_DANGER_RELEASE(td);
