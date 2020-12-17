@@ -4158,6 +4158,13 @@ bool SalInstanceTreeView::get_iter_first(weld::TreeIter& rIter) const
     return rVclIter.iter != nullptr;
 }
 
+bool SalInstanceTreeView::get_iter_abs_pos(weld::TreeIter& rIter, int nAbsPos) const
+{
+    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
+    rVclIter.iter = m_xTreeView->GetEntryAtAbsPos(nAbsPos);
+    return rVclIter.iter != nullptr;
+}
+
 bool SalInstanceTreeView::iter_next_sibling(weld::TreeIter& rIter) const
 {
     SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
