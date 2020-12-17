@@ -220,6 +220,8 @@ public:
     double getHeight();
 
     bool hasTransparency();
+
+    bool hasLinks();
 };
 
 /// Represents one digital signature, as exposed by PDFium.

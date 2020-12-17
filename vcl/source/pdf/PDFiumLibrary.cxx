@@ -458,6 +458,15 @@ std::unique_ptr<PDFiumTextPage> PDFiumPage::getTextPage()
     return pPDFiumTextPage;
 }
 
+bool PDFiumPage::hasLinks()
+{
+    // This could be a full iterator, but at the moment we just determine if the list is empty or
+    // not.
+    int nStartPos = 0;
+    FPDF_LINK pLinkAnnot = nullptr;
+    return FPDFLink_Enumerate(mpPage, &nStartPos, &pLinkAnnot);
+}
+
 PDFiumPageObject::PDFiumPageObject(FPDF_PAGEOBJECT pPageObject)
     : mpPageObject(pPageObject)
 {
