@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0203d8c0_03637ad8",
+        "filename": "filter/source/graphicfilter/itiff/itiff.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1698,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-17T17:23:15Z",
+      "side": 0,
+      "message": "And nMaxPos becomes effectively write-only now?",
+      "range": {
+        "startLine": 1698,
+        "startChar": 26,
+        "endLine": 1698,
+        "endChar": 33
+      },
+      "revId": "5e636ec653ce798935ed85aeef96a6fcff893729",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

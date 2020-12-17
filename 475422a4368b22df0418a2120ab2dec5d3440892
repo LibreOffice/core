@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e5ce31b_c1be3c19",
+        "filename": "filter/source/graphicfilter/itiff/itiff.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1374,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-17T17:23:15Z",
+      "side": 1,
+      "message": "Heh, what could this line mean after ln1372?",
+      "range": {
+        "startLine": 1374,
+        "startChar": 16,
+        "endLine": 1374,
+        "endChar": 61
+      },
+      "revId": "475422a4368b22df0418a2120ab2dec5d3440892",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
