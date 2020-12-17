@@ -3593,6 +3593,11 @@ public:
         gtk_widget_set_sensitive(GTK_WIDGET(m_aMap[rIdent]), bSensitive);
     }
 
+    bool get_item_sensitive(const OString& rIdent) const
+    {
+        return gtk_widget_get_sensitive(GTK_WIDGET(m_aMap.find(rIdent)->second));
+    }
+
     void set_item_active(const OString& rIdent, bool bActive)
     {
         disable_item_notify_events();
@@ -8197,6 +8202,11 @@ public:
     virtual void set_sensitive(const OString& rIdent, bool bSensitive) override
     {
         set_item_sensitive(rIdent, bSensitive);
+    }
+
+    virtual bool get_sensitive(const OString& rIdent) const override
+    {
+        return get_item_sensitive(rIdent);
     }
 
     virtual void set_active(const OString& rIdent, bool bActive) override
