@@ -1167,9 +1167,10 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
             // Determine how many decimals are representable in the precision.
             // Anything greater 2^52 and 0.0 was already ruled out above.
             // Theoretically 0.5, 0.25, 0.125, 0.0625, 0.03125, ...
-            const double fDec = 52 - log2(fValue) + 1;
-            if (fDec < nDecPlaces)
-                nDecPlaces = static_cast<sal_Int32>(fDec);
+            const sal_math_Double* pd = reinterpret_cast<const sal_math_Double*>(&fValue);
+            const sal_Int32 nDec = 52 - (pd->parts.exponent - 1023);
+            if (nDec < nDecPlaces)
+                nDecPlaces = nDec;
         }
 
         /* TODO: this was without the inverse factor and determining max
