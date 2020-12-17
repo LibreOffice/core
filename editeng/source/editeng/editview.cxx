@@ -880,33 +880,71 @@ static void LOKSendSpellPopupMenu(Menu* pMenu, LanguageType nGuessLangWord,
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
+    // Generate the menu structure and send it to the client code.
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (!pViewShell)
+        return;
+
+    boost::property_tree::ptree aMenu;
+
+    boost::property_tree::ptree aItemTree;
+    if (nSuggestions)
+    {
+        for(int i = 0; i < nSuggestions; ++i)
+        {
+            sal_uInt16 nItemId = MN_ALTSTART + i;
+            OUString sText = pMenu->GetItemText(nItemId);
+            aItemTree.put("text", sText.toUtf8().getStr());
+            aItemTree.put("type", "command");
+            OUString sCommandString = ".uno:SpellCheckApplySuggestion?ApplyRule:string=Spelling_" + sText;
+            aItemTree.put("command", sCommandString.toUtf8().getStr());
+            aItemTree.put("enabled", pMenu->IsItemEnabled(nItemId));
+            aMenu.push_back(std::make_pair("", aItemTree));
+            aItemTree.clear();
+        }
+
+        aItemTree.put("type", "separator");
+        aMenu.push_back(std::make_pair("", aItemTree));
+        aItemTree.clear();
+    }
+
     // First we need to set item commands for the context menu.
     OUString aTmpWord( SvtLanguageTable::GetLanguageString( nGuessLangWord ) );
     OUString aTmpPara( SvtLanguageTable::GetLanguageString( nGuessLangPara ) );
 
-    pMenu->SetItemCommand(pMenu->GetItemId("ignore"), ".uno:SpellCheckIgnoreAll?Type:string=Spelling");
-    pMenu->SetItemCommand(MN_WORDLANGUAGE, ".uno:LanguageStatus?Language:string=Current_" + aTmpWord);
-    pMenu->SetItemCommand(MN_PARALANGUAGE, ".uno:LanguageStatus?Language:string=Paragraph_" + aTmpPara);
+    aItemTree.put("text", pMenu->GetItemText(pMenu->GetItemId("ignore")).toUtf8().getStr());
+    aItemTree.put("type", "command");
+    aItemTree.put("command", ".uno:SpellCheckIgnoreAll?Type:string=Spelling");
+    aItemTree.put("enabled", pMenu->IsItemEnabled(pMenu->GetItemId("ignore")));
+    aMenu.push_back(std::make_pair("", aItemTree));
+    aItemTree.clear();
 
-    for(int i = 0; i < nSuggestions; ++i)
-    {
-        sal_uInt16 nItemId = MN_ALTSTART + i;
-        OUString sCommandString = ".uno:SpellCheckApplySuggestion?ApplyRule:string=Spelling_" + pMenu->GetItemText(nItemId);
-        pMenu->SetItemCommand(nItemId, sCommandString);
-    }
+    aItemTree.put("type", "separator");
+    aMenu.push_back(std::make_pair("", aItemTree));
+    aItemTree.clear();
 
-    // Then we generate the menu structure and send it to the client code.
-    if (SfxViewShell* pViewShell = SfxViewShell::Current())
-    {
-        boost::property_tree::ptree aMenu = SfxDispatcher::fillPopupMenu(pMenu);
-        boost::property_tree::ptree aRoot;
-        aRoot.add_child("menu", aMenu);
+    aItemTree.put("text", pMenu->GetItemText(MN_WORDLANGUAGE).toUtf8().getStr());
+    aItemTree.put("type", "command");
+    OUString sCommandString = ".uno:LanguageStatus?Language:string=Current_" + aTmpWord;
+    aItemTree.put("command", sCommandString.toUtf8().getStr());
+    aItemTree.put("enabled", pMenu->IsItemEnabled(MN_WORDLANGUAGE));
+    aMenu.push_back(std::make_pair("", aItemTree));
+    aItemTree.clear();
 
-        std::stringstream aStream;
-        boost::property_tree::write_json(aStream, aRoot, true);
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_MENU, aStream.str().c_str());
-        return;
-     }
+    aItemTree.put("text", pMenu->GetItemText(MN_PARALANGUAGE).toUtf8().getStr());
+    aItemTree.put("type", "command");
+    sCommandString = ".uno:LanguageStatus?Language:string=Paragraph_" + aTmpPara;
+    aItemTree.put("command", sCommandString.toUtf8().getStr());
+    aItemTree.put("enabled", pMenu->IsItemEnabled(MN_PARALANGUAGE));
+    aMenu.push_back(std::make_pair("", aItemTree));
+    aItemTree.clear();
+
+    boost::property_tree::ptree aRoot;
+    aRoot.add_child("menu", aMenu);
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aRoot, true);
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_MENU, aStream.str().c_str());
 }
 
 void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void> const * pCallBack )
