@@ -35,9 +35,6 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <tools/zcodec.hxx>
-#include <fpdf_edit.h>
-#include <fpdf_text.h>
-#include <fpdf_doc.h>
 #include <fpdf_annot.h>
 #include <fpdfview.h>
 #include <vcl/graphicfilter.hxx>
@@ -1803,11 +1800,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTocLink)
     CPPUNIT_ASSERT(pPdfPage);
 
     // Ensure there is a link on the first page (in the ToC).
-    int nStartPos = 0;
-    FPDF_LINK pLinkAnnot = nullptr;
-    // Without the accompanying fix in place, this test would have failed, as FPDFLink_Enumerate()
-    // returned false, as the page contained no links.
-    CPPUNIT_ASSERT(FPDFLink_Enumerate(pPdfPage->getPointer(), &nStartPos, &pLinkAnnot));
+    // Without the accompanying fix in place, this test would have failed, as the page contained no
+    // links.
+    CPPUNIT_ASSERT(pPdfPage->hasLinks());
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testReduceSmallImage)
@@ -1904,13 +1899,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReduceImage)
     CPPUNIT_ASSERT_EQUAL(160, nHeight);
 }
 
-bool HasLinksOnPage(std::unique_ptr<vcl::pdf::PDFiumPage>& pPdfPage)
-{
-    int nStartPos = 0;
-    FPDF_LINK pLinkAnnot = nullptr;
-    return FPDFLink_Enumerate(pPdfPage->getPointer(), &nStartPos, &pLinkAnnot);
-}
-
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkWrongPage)
 {
     // Import the bugdoc and export as PDF.
@@ -1928,12 +1916,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkWrongPage)
 
     // Without the accompanying fix in place, this test would have failed, as the link of the first
     // page went to the second page due to the hidden first slide.
-    CPPUNIT_ASSERT(HasLinksOnPage(pPdfPage));
+    CPPUNIT_ASSERT(pPdfPage->hasLinks());
 
     // Second page should have no links (3rd slide).
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage2 = pPdfDocument->openPage(/*nIndex=*/1);
     CPPUNIT_ASSERT(pPdfPage2);
-    CPPUNIT_ASSERT(!HasLinksOnPage(pPdfPage2));
+    CPPUNIT_ASSERT(!pPdfPage2->hasLinks());
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testLargePage)
