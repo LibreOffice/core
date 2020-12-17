@@ -1782,9 +1782,9 @@ cppuhelper::ServiceManager::findServiceImplementation(
             assert(!i->second.empty());
             SAL_INFO_IF(
                 i->second.size() > 1, "cppuhelper",
-                "Arbitrarily choosing " << i->second[0]->name
+                "Arbitrarily choosing " << i->second.back()->name
                     << " among multiple implementations for " << i->first);
-            impl = i->second[0];
+            impl = i->second.back();
         }
         assert(impl);
         loaded = impl->status == Data::Implementation::STATUS_LOADED;
