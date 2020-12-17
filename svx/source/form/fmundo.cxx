@@ -555,7 +555,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             {
                 try
                 {
-                    xSet->setPropertyValue(aValueProperties[i], evt.NewValue);
+                    xSet->setPropertyValue(OUString(aValueProperties[i]), evt.NewValue);
                 }
                 catch(const Exception&)
                 {

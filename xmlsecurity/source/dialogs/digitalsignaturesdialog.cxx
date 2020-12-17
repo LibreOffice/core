@@ -496,7 +496,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
 
     for ( auto const &rServer : aGUIServers )
     {
-        osl::FileBase::RC searchError = osl::File::searchFileURL(rServer, aPath, sFoundGUIServer );
+        osl::FileBase::RC searchError = osl::File::searchFileURL(OUString(rServer), aPath, sFoundGUIServer );
         if (searchError == osl::FileBase::E_None)
         {
             osl::File::getSystemPathFromFileURL( sFoundGUIServer, sExecutable );

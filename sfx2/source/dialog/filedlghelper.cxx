@@ -123,23 +123,21 @@ namespace
     }
 }
 
-static const std::u16string_view* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
+static std::optional<OUString> GetLastFilterConfigId( FileDialogHelper::Context _eContext )
 {
-    static const std::u16string_view aSD_EXPORT_IDENTIFIER(u"SdExportLastFilter");
-    static const std::u16string_view aSI_EXPORT_IDENTIFIER(u"SiExportLastFilter");
-    static const std::u16string_view aSW_EXPORT_IDENTIFIER(u"SwExportLastFilter");
-
-    const std::u16string_view* pRet = nullptr;
+    static const OUStringLiteral aSD_EXPORT_IDENTIFIER(u"SdExportLastFilter");
+    static const OUStringLiteral aSI_EXPORT_IDENTIFIER(u"SiExportLastFilter");
+    static const OUStringLiteral aSW_EXPORT_IDENTIFIER(u"SwExportLastFilter");
 
     switch( _eContext )
     {
-        case FileDialogHelper::SD_EXPORT: pRet = &aSD_EXPORT_IDENTIFIER; break;
-        case FileDialogHelper::SI_EXPORT: pRet = &aSI_EXPORT_IDENTIFIER; break;
-        case FileDialogHelper::SW_EXPORT: pRet = &aSW_EXPORT_IDENTIFIER; break;
+        case FileDialogHelper::SD_EXPORT: return aSD_EXPORT_IDENTIFIER;
+        case FileDialogHelper::SI_EXPORT: return aSI_EXPORT_IDENTIFIER;
+        case FileDialogHelper::SW_EXPORT: return aSW_EXPORT_IDENTIFIER;
         default: break;
     }
 
-    return pRet;
+    return {};
 }
 
 static OUString EncodeSpaces_Impl( const OUString& rSource );
@@ -346,7 +344,7 @@ void FileDialogHelper_Impl::LoadLastUsedFilter( const OUString& _rContextIdentif
 
 void FileDialogHelper_Impl::SaveLastUsedFilter()
 {
-    const std::u16string_view* pConfigId = GetLastFilterConfigId( meContext );
+    std::optional<OUString> pConfigId = GetLastFilterConfigId( meContext );
     if( pConfigId )
         SvtViewOptions( EViewType::Dialog, IODLG_CONFIGNAME ).SetUserItem( *pConfigId,
                             makeAny( getFilterWithExtension( getFilter() ) ) );
@@ -2250,7 +2248,7 @@ void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
 {
     meContext = _eNewContext;
 
-    const std::u16string_view* pConfigId = GetLastFilterConfigId( _eNewContext );
+    std::optional<OUString> pConfigId = GetLastFilterConfigId( _eNewContext );
     if( pConfigId )
         LoadLastUsedFilter( *pConfigId );
 }

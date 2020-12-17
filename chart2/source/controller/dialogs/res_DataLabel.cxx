@@ -290,7 +290,7 @@ void DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
         rOutAttrs->Put(SfxBoolItem( SCHATTR_DATADESCR_CUSTOM_LEADER_LINES, m_xCBCustomLeaderLines->get_active()) );
 
     auto const aSep = our_aLBEntryMap[m_xLB_Separator->get_active()];
-    rOutAttrs->Put( SfxStringItem( SCHATTR_DATADESCR_SEPARATOR, aSep) );
+    rOutAttrs->Put( SfxStringItem( SCHATTR_DATADESCR_SEPARATOR, OUString(aSep)) );
 
     std::map< sal_uInt16, sal_Int32 >::const_iterator aIt( m_aListBoxToPlacementMap.find(m_xLB_LabelPlacement->get_active()) );
     if(aIt!=m_aListBoxToPlacementMap.end())

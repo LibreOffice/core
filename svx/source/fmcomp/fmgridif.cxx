@@ -1561,11 +1561,11 @@ void FmXGridPeer::addColumnListeners(const Reference< XPropertySet >& xCol)
     Reference< XPropertySetInfo > xInfo = xCol->getPropertySetInfo();
     for (size_t i=0; i<SAL_N_ELEMENTS(aPropsListenedTo); ++i)
     {
-        if ( xInfo->hasPropertyByName( aPropsListenedTo[i] ) )
+        if ( xInfo->hasPropertyByName( OUString(aPropsListenedTo[i]) ) )
         {
-            Property aPropDesc = xInfo->getPropertyByName( aPropsListenedTo[i] );
+            Property aPropDesc = xInfo->getPropertyByName( OUString(aPropsListenedTo[i]) );
             if ( 0 != ( aPropDesc.Attributes & PropertyAttribute::BOUND ) )
-                xCol->addPropertyChangeListener( aPropsListenedTo[i], this );
+                xCol->addPropertyChangeListener( OUString(aPropsListenedTo[i]), this );
         }
     }
 }
@@ -1583,8 +1583,8 @@ void FmXGridPeer::removeColumnListeners(const Reference< XPropertySet >& xCol)
 
     Reference< XPropertySetInfo >  xInfo = xCol->getPropertySetInfo();
     for (const auto & i : aPropsListenedTo)
-        if (xInfo->hasPropertyByName(i))
-            xCol->removePropertyChangeListener(i, this);
+        if (xInfo->hasPropertyByName(OUString(i)))
+            xCol->removePropertyChangeListener(OUString(i), this);
 }
 
 
