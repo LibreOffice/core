@@ -4887,7 +4887,8 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                 {
                     if (bCopyCollFormat)
                     {
-                        pSttTextNd->CopyCollFormat( *pDestTextNd );
+                        // tdf#138897 no Undo for applying style, SwUndoInserts does it
+                        pSttTextNd->CopyCollFormat(*pDestTextNd, false);
                         POP_NUMRULE_STATE
                     }
 
@@ -4986,7 +4987,8 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
             // Also copy all format templates
             if( bCopyCollFormat && ( bOneNode || bEmptyDestNd ))
             {
-                pEndTextNd->CopyCollFormat( *pDestTextNd );
+                // tdf#138897 no Undo for applying style, SwUndoInserts does it
+                pEndTextNd->CopyCollFormat(*pDestTextNd, false);
                 if ( bOneNode )
                 {
                     POP_NUMRULE_STATE
