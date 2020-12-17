@@ -134,6 +134,13 @@ extern "C" void freeExec(
 #endif
 }
 
+#if defined MACOSX && defined __aarch64__
+struct JitMemoryProtectionGuard {
+    JitMemoryProtectionGuard() { pthread_jit_write_protect_np(0); }
+    ~JitMemoryProtectionGuard() { pthread_jit_write_protect_np(1); }
+};
+#endif
+
 }
 
 class VtableFactory::GuardedBlocks:
@@ -342,52 +349,50 @@ sal_Int32 VtableFactory::createVtables(
     typelib_InterfaceTypeDescription * type, sal_Int32 vtableNumber,
     typelib_InterfaceTypeDescription * mostDerived, bool includePrimary) const
 {
+    {
 #if defined MACOSX && defined __aarch64__
-    // TODO: Should we handle resetting this in a exception-throwing-safe way?
-    pthread_jit_write_protect_np(0);
+        JitMemoryProtectionGuard guard;
 #endif
-    if (includePrimary) {
-        sal_Int32 slotCount
-            = bridges::cpp_uno::shared::getPrimaryFunctions(type);
-        Block block;
-        if (!createBlock(block, slotCount)) {
-            throw std::bad_alloc();
-        }
-        try {
-            Slot * slots = initializeBlock(
-                block.start, slotCount, vtableNumber, mostDerived);
-            unsigned char * codeBegin =
-                reinterpret_cast< unsigned char * >(slots);
-            unsigned char * code = codeBegin;
-            sal_Int32 vtableOffset = blocks.size() * sizeof (Slot *);
-            for (typelib_InterfaceTypeDescription const * type2 = type;
-                 type2 != nullptr; type2 = type2->pBaseTypeDescription)
-            {
-                code = addLocalFunctions(
-                    &slots, code,
-#ifdef USE_DOUBLE_MMAP
-                    reinterpret_cast<sal_uIntPtr>(block.exec) - reinterpret_cast<sal_uIntPtr>(block.start),
-#endif
-                    type2,
-                    baseOffset.getFunctionOffset(type2->aBase.pTypeName),
-                    bridges::cpp_uno::shared::getLocalFunctions(type2),
-                    vtableOffset);
+        if (includePrimary) {
+            sal_Int32 slotCount
+                = bridges::cpp_uno::shared::getPrimaryFunctions(type);
+            Block block;
+            if (!createBlock(block, slotCount)) {
+                throw std::bad_alloc();
             }
-            flushCode(codeBegin, code);
+            try {
+                Slot * slots = initializeBlock(
+                    block.start, slotCount, vtableNumber, mostDerived);
+                unsigned char * codeBegin =
+                    reinterpret_cast< unsigned char * >(slots);
+                unsigned char * code = codeBegin;
+                sal_Int32 vtableOffset = blocks.size() * sizeof (Slot *);
+                for (typelib_InterfaceTypeDescription const * type2 = type;
+                     type2 != nullptr; type2 = type2->pBaseTypeDescription)
+                {
+                    code = addLocalFunctions(
+                        &slots, code,
 #ifdef USE_DOUBLE_MMAP
-        //Finished generating block, swap writable pointer with executable
-        //pointer
-            std::swap(block.start, block.exec);
+                        reinterpret_cast<sal_uIntPtr>(block.exec) - reinterpret_cast<sal_uIntPtr>(block.start),
 #endif
-            blocks.push_back(block);
-        } catch (...) {
-            freeBlock(block);
-            throw;
+                        type2,
+                        baseOffset.getFunctionOffset(type2->aBase.pTypeName),
+                        bridges::cpp_uno::shared::getLocalFunctions(type2),
+                        vtableOffset);
+                }
+                flushCode(codeBegin, code);
+#ifdef USE_DOUBLE_MMAP
+                //Finished generating block, swap writable pointer with executable
+                //pointer
+                std::swap(block.start, block.exec);
+#endif
+                blocks.push_back(block);
+            } catch (...) {
+                freeBlock(block);
+                throw;
+            }
         }
     }
-#if defined MACOSX && defined __aarch64__
-    pthread_jit_write_protect_np(1);
-#endif
     for (sal_Int32 i = 0; i < type->nBaseTypes; ++i) {
         vtableNumber = createVtables(
             blocks, baseOffset, type->ppBaseTypes[i],
