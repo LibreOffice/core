@@ -50,7 +50,7 @@ namespace rptxml
     using ::com::sun::star::uno::Reference;
     using namespace ::com::sun::star::xml::sax;
 
-    static sal_Int16 lcl_getForceNewPageOption(const OUString& _sValue)
+    static sal_Int16 lcl_getForceNewPageOption(std::u16string_view _sValue)
     {
         sal_Int16 nRet = report::ForceNewPage::NONE;
         const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetForceNewPageOptions();

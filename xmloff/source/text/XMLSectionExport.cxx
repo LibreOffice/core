@@ -329,7 +329,7 @@ SvXMLEnumStringMapEntry<SectionTypeEnum> const aIndexTypeMap[] =
 };
 
 enum SectionTypeEnum XMLSectionExport::MapSectionType(
-    const OUString& rServiceName)
+    std::u16string_view rServiceName)
 {
     enum SectionTypeEnum eType = TEXT_SECTION_TYPE_UNKNOWN;
 

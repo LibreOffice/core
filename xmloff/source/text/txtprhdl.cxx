@@ -631,7 +631,7 @@ XMLAnchorTypePropHdl::~XMLAnchorTypePropHdl()
 {
 }
 
-bool XMLAnchorTypePropHdl::convert( const OUString& rStrImpValue,
+bool XMLAnchorTypePropHdl::convert( std::u16string_view rStrImpValue,
                  TextContentAnchorType& rType )
 {
     TextContentAnchorType nAnchor;

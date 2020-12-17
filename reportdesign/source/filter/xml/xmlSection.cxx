@@ -36,7 +36,7 @@ namespace rptxml
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
 
-    static sal_Int16 lcl_getReportPrintOption(const OUString& _sValue)
+    static sal_Int16 lcl_getReportPrintOption(std::u16string_view _sValue)
     {
         sal_Int16 nRet = report::ReportPrintOption::ALL_PAGES;
         const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();

@@ -67,7 +67,7 @@ namespace SchXMLTools
         XML_CHART_CLASS_UNKNOWN
     };
 
-    SchXMLChartTypeEnum GetChartTypeEnum( const OUString& rClassName );
+    SchXMLChartTypeEnum GetChartTypeEnum( std::u16string_view rClassName );
 
     OUString GetChartTypeByClassName(
         const OUString & rClassName, bool bUseOldNames );

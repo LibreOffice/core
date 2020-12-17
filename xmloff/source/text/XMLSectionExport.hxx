@@ -195,7 +195,7 @@ private:
         css::uno::Reference < css::text::XDocumentIndex > & rIndex);
 
     /// map service name to section type
-    static enum SectionTypeEnum MapSectionType(const OUString& rSectionName);
+    static enum SectionTypeEnum MapSectionType(std::u16string_view rSectionName);
 
     /**
      * Export the index element start (for all index types).

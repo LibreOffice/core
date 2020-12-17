@@ -386,7 +386,7 @@ private:
                           const css::uno::Reference < css::beans::XPropertySet > & xPropSet);
 
     /// get field ID from XTextField service name (and it's PropertySet)
-    static enum FieldIdEnum MapFieldName(const OUString& sFieldName,
+    static enum FieldIdEnum MapFieldName(std::u16string_view sFieldName,
                             const css::uno::Reference < css::beans::XPropertySet> & xPropSet);
 
     /// determine, whether field has string or numeric content
