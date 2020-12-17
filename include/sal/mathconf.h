@@ -104,6 +104,13 @@ union sal_math_Double
         unsigned msw          :32;
         unsigned lsw          :32;
     } w32_parts;
+    struct
+    {
+        sal_uInt64 sign       : 1;
+        sal_uInt64 exponent   :11;
+        sal_uInt64 fraction   :52;
+    } parts;
+    sal_uInt64 intrep;
     double value;
 };
 
@@ -130,6 +137,13 @@ union sal_math_Double
         unsigned lsw          :32;
         unsigned msw          :32;
     } w32_parts;
+    struct
+    {
+        sal_uInt64 fraction   :52;
+        sal_uInt64 exponent   :11;
+        sal_uInt64 sign       : 1;
+    } parts;
+    sal_uInt64 intrep;
     double value;
 };
 
