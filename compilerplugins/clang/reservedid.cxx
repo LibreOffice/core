@@ -145,7 +145,7 @@ bool ReservedId::VisitNamedDecl(NamedDecl const * decl) {
     }
     auto filename = getFilenameOfLocation(spelLoc);
     if (loplugin::hasPathnamePrefix(filename, SRCDIR "/bridges/source/cpp_uno/")
-        && filename.endswith("share.hxx"))
+        && (filename.endswith("abi.hxx") || filename.endswith("share.hxx")))
     {
         return true;
     }
