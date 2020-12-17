@@ -1406,7 +1406,7 @@ IMPL_LINK(Dialog, ResponseHdl, Button*, pButton, void)
     if (nResponse == RET_HELP)
     {
         vcl::Window* pFocusWin = Application::GetFocusWindow();
-        if (!pFocusWin)
+        if (!pFocusWin || comphelper::LibreOfficeKit::isActive())
             pFocusWin = pButton;
         HelpEvent aEvt(pFocusWin->GetPointerPosPixel(), HelpEventMode::CONTEXT);
         pFocusWin->RequestHelp(aEvt);
