@@ -179,7 +179,7 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
         }
         else if (sControlType == "treeview")
         {
-            auto pTreeView = dynamic_cast<weld::TreeView*>(pWidget);
+            auto pTreeView = dynamic_cast<JSTreeView*>(pWidget);
             if (pTreeView)
             {
                 if (sAction == "change")
@@ -207,6 +207,16 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                     pTreeView->select(nRow);
                     LOKTrigger::trigger_changed(*pTreeView);
                     LOKTrigger::trigger_row_activated(*pTreeView);
+                    return true;
+                }
+                else if (sAction == "expand")
+                {
+                    OString nRowString
+                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                    int nAbsPos = std::atoi(nRowString.getStr());
+                    std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
+                    pTreeView->get_iter_abs_pos(*itEntry, nAbsPos);
+                    pTreeView->expand_row(*itEntry);
                     return true;
                 }
                 else if (sAction == "dragstart")
