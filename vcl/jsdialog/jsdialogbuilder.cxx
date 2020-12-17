@@ -91,6 +91,40 @@ boost::property_tree::ptree JSDialogNotifyIdle::dumpStatus() const
     return aTree;
 }
 
+void JSDialogNotifyIdle::updateStatus(VclPtr<vcl::Window> pWindow)
+{
+    if (!m_aNotifierWindow)
+        return;
+
+    if (m_aNotifierWindow->IsReallyVisible())
+    {
+        if (const vcl::ILibreOfficeKitNotifier* pNotifier = m_aNotifierWindow->GetLOKNotifier())
+        {
+            boost::property_tree::ptree aTree;
+
+            aTree.put("commandName", ".uno:jsdialog");
+            aTree.put("success", "true");
+            {
+                boost::property_tree::ptree aResult;
+                aResult.put("dialog_id", m_aNotifierWindow->GetLOKWindowId());
+                aResult.put("control_id", pWindow->get_id());
+                {
+                    boost::property_tree::ptree aControl;
+                    aControl = pWindow->DumpAsPropertyTree();
+                    aResult.add_child("control", aControl);
+                }
+                aTree.add_child("result", aResult);
+            }
+
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aTree);
+            const std::string message = aStream.str();
+            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT,
+                                                  message.c_str());
+        }
+    }
+}
+
 boost::property_tree::ptree JSDialogNotifyIdle::generateCloseMessage() const
 {
     boost::property_tree::ptree aTree;
@@ -119,6 +153,11 @@ void JSDialogSender::notifyDialogState(bool bForce)
 void JSDialogSender::sendClose() { mpIdleNotify->sendClose(); }
 
 void JSDialogSender::dumpStatus() { mpIdleNotify->Invoke(); }
+
+void JSDialogSender::sendUpdate(VclPtr<vcl::Window> pWindow)
+{
+    mpIdleNotify->updateStatus(pWindow);
+}
 
 // Drag and drop
 
@@ -935,6 +974,8 @@ JSTreeView::JSTreeView(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> 
     : JSWidget<SalInstanceTreeView, ::SvTabListBox>(aNotifierWindow, aContentWindow, pTreeView,
                                                     pBuilder, bTakeOwnership, sTypeOfJSON)
 {
+    if (aNotifierWindow && aNotifierWindow->IsDisableIdleNotify())
+        pTreeView->AddEventListener(LINK(this, JSTreeView, on_window_event));
 }
 
 void JSTreeView::set_toggle(int pos, TriState eState, int col)
@@ -1022,6 +1063,15 @@ void JSTreeView::set_text(const weld::TreeIter& rIter, const OUString& rStr, int
 {
     SalInstanceTreeView::set_text(rIter, rStr, col);
     notifyDialogState();
+}
+
+IMPL_LINK(JSTreeView, on_window_event, VclWindowEvent&, rEvent, void)
+{
+    if (rEvent.GetId() == VclEventId::WindowPaint && get_visible() && m_xTreeView->IsDirtyModel())
+    {
+        sendUpdate(m_xTreeView);
+        m_xTreeView->SetDirtyModel(false);
+    }
 }
 
 JSExpander::JSExpander(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
