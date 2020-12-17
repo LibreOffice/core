@@ -16,6 +16,24 @@
       "revId": "918637718def71f4487795945c41bf48da9469b9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d1d05c4_2004f968",
+        "filename": "scp2/source/ooo/file_ooo.scp",
+        "patchSetId": 1
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-12-17T13:26:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f8f8077_f779deda",
+      "revId": "918637718def71f4487795945c41bf48da9469b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
