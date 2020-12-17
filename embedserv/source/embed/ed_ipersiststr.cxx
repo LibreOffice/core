@@ -400,7 +400,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
         if ( m_xFactory.is() && pStg )
         {
             uno::Reference< frame::XModel > aDocument(
-                            m_xFactory->createInstance( getServiceNameFromGUID_Impl( &m_guid ) ),
+                            m_xFactory->createInstance( OUString(getServiceNameFromGUID_Impl( &m_guid )) ),
                             uno::UNO_QUERY );
             if ( aDocument.is() )
             {
@@ -535,7 +535,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
         if ( xTempIn.is() )
         {
             uno::Reference< frame::XModel > aDocument(
-                                                m_xFactory->createInstance( getServiceNameFromGUID_Impl( &m_guid ) ),
+                                                m_xFactory->createInstance( OUString(getServiceNameFromGUID_Impl( &m_guid )) ),
                                                 uno::UNO_QUERY );
             if ( aDocument.is() )
             {
@@ -768,7 +768,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileNam
 
 
     uno::Reference< frame::XModel > aDocument(
-                    m_xFactory->createInstance( getServiceNameFromGUID_Impl( &m_guid ) ),
+                    m_xFactory->createInstance( OUString(getServiceNameFromGUID_Impl( &m_guid )) ),
                     uno::UNO_QUERY );
     if ( aDocument.is() )
     {

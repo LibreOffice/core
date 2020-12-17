@@ -82,7 +82,7 @@ std::size_t const numEncodings = SAL_N_ELEMENTS(s_encodings);
 void insertEncodings(weld::ComboBox& box)
 {
     for (std::size_t i = 0; i < numEncodings; ++i)
-        box.append(s_encodings[i].first, s_encodings[i].second);
+        box.append(OUString(s_encodings[i].first), OUString(s_encodings[i].second));
 }
 
 void selectEncoding(weld::ComboBox& box, const OUString& encoding) { box.set_active_id(encoding); }

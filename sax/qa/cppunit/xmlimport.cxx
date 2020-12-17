@@ -368,7 +368,7 @@ void XMLImportTest::setUp()
     namespaceArgs[0] <<= OUString( "registerNamespaces" );
     for (sal_Int32 i = 1; i <= nNamespaceCount; i++ )
     {
-        css::beans::Pair<OUString, sal_Int32> rPair( DummyTokenHandler::namespaceURIs[i - 1], i << 16 );
+        css::beans::Pair<OUString, sal_Int32> rPair( OUString(DummyTokenHandler::namespaceURIs[i - 1]), i << 16 );
         namespaceArgs[i] <<= rPair;
     }
     xInit->initialize( namespaceArgs );

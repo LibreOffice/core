@@ -188,7 +188,7 @@ void ScContentTree::InitRoot( ScContentId nType )
     sal_uInt16 nPos = nRootType != ScContentId::ROOT ? 0 : pPosList[nType]-1;
     m_aRootNodes[nType] = m_xTreeView->make_iterator();
     m_xTreeView->insert(nullptr, nPos, &aName, nullptr, nullptr, nullptr, false, m_aRootNodes[nType].get());
-    m_xTreeView->set_image(*m_aRootNodes[nType], aImage);
+    m_xTreeView->set_image(*m_aRootNodes[nType], OUString(aImage));
 }
 
 void ScContentTree::ClearAll()

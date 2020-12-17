@@ -1140,7 +1140,7 @@ namespace xmloff
                     exportStringPropertyAttribute(
                         OAttributeMetaData::getSpecialAttributeNamespace( nStringPropertyAttributeIds[i] ),
                         OAttributeMetaData::getSpecialAttributeName( nStringPropertyAttributeIds[i] ),
-                        pStringPropertyNames[i]
+                        OUString(pStringPropertyNames[i])
                     );
             #if OSL_DEBUG_LEVEL > 0
                     //  reset the bit for later checking

@@ -681,7 +681,7 @@ NavElementBox_Base::NavElementBox_Base(
     m_xWidget->make_sorted();
     m_xWidget->freeze();
     for (sal_uInt16 i = 0; i < NID_COUNT; i++)
-         m_xWidget->append(OUString::number(aNavigationInsertIds[i]), SwResId(aNavigationStrIds[i]), aNavigationImgIds[i]);
+         m_xWidget->append(OUString::number(aNavigationInsertIds[i]), SwResId(aNavigationStrIds[i]), OUString(aNavigationImgIds[i]));
     m_xWidget->thaw();
 
     m_xWidget->connect_changed(LINK(this, NavElementBox_Base, SelectHdl));
