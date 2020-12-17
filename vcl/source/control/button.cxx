@@ -1753,7 +1753,7 @@ void HelpButton::Click()
     if ( !GetClickHdl() )
     {
         vcl::Window* pFocusWin = Application::GetFocusWindow();
-        if ( !pFocusWin )
+        if ( !pFocusWin || comphelper::LibreOfficeKit::isActive() )
             pFocusWin = this;
 
         HelpEvent aEvt( pFocusWin->GetPointerPosPixel(), HelpEventMode::CONTEXT );
