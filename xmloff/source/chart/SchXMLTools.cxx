@@ -145,7 +145,7 @@ const SvXMLEnumMapEntry<SchXMLChartTypeEnum> aXMLChartClassMap[] =
     { XML_TOKEN_INVALID, XML_CHART_CLASS_UNKNOWN }
 };
 
-SchXMLChartTypeEnum GetChartTypeEnum( const OUString& rClassName )
+SchXMLChartTypeEnum GetChartTypeEnum( std::u16string_view rClassName )
 {
     SchXMLChartTypeEnum nEnumVal = XML_CHART_CLASS_UNKNOWN;
     SvXMLUnitConverter::convertEnum( nEnumVal, rClassName, aXMLChartClassMap );

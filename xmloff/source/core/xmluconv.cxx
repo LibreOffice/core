@@ -210,12 +210,15 @@ OUString SvXMLUnitConverter::convertMeasureToXML( sal_Int32 nMeasure ) const
     not found in the map, this method will return false
 */
 bool SvXMLUnitConverter::convertEnumImpl( sal_uInt16& rEnum,
-                                      const OUString& rValue,
+                                      std::u16string_view rValue,
                                       const SvXMLEnumStringMapEntry<sal_uInt16> *pMap )
 {
     while( pMap->GetName() )
     {
-        if( rValue.equalsAsciiL( pMap->GetName(), pMap->GetNameLength() ) )
+        auto nameLength = pMap->GetNameLength();
+        if( static_cast<sal_Int32>(rValue.size()) == nameLength &&
+            rtl_ustr_asciil_reverseEquals_WithLength(
+                    rValue.data(), pMap->GetName(), nameLength ) )
         {
             rEnum = pMap->GetValue();
             return true;
@@ -230,7 +233,7 @@ bool SvXMLUnitConverter::convertEnumImpl( sal_uInt16& rEnum,
     not found in the map, this method will return false */
 bool SvXMLUnitConverter::convertEnumImpl(
     sal_uInt16& rEnum,
-    const OUString& rValue,
+    std::u16string_view rValue,
     const SvXMLEnumMapEntry<sal_uInt16> *pMap )
 {
     while( pMap->GetToken() != XML_TOKEN_INVALID )
@@ -546,7 +549,7 @@ static bool lcl_getPositions(std::string_view _sValue,OUString& _rContentX,OUStr
 }
 
 /** convert string to ::basegfx::B3DVector */
-bool SvXMLUnitConverter::convertB3DVector( ::basegfx::B3DVector& rVector, const OUString& rValue )
+bool SvXMLUnitConverter::convertB3DVector( ::basegfx::B3DVector& rVector, std::u16string_view rValue )
 {
     OUString aContentX,aContentY,aContentZ;
     if ( !lcl_getPositions(rValue,aContentX,aContentY,aContentZ) )
@@ -911,10 +914,9 @@ OUString SvXMLUnitConverter::encodeStyleName(
 }
 
 /** convert string (hex) to number (sal_uInt32) */
-bool SvXMLUnitConverter::convertHex( sal_uInt32& nVal,
-                                       const OUString& rValue )
+bool SvXMLUnitConverter::convertHex( sal_uInt32& nVal, std::u16string_view rValue )
 {
-    if( rValue.getLength() != 8 )
+    if( rValue.size() != 8 )
         return false;
 
     nVal = 0;

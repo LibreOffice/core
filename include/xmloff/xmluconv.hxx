@@ -136,7 +136,7 @@ public:
         not found in the map, this method will return false */
     template<typename EnumT>
     static bool convertEnum( EnumT& rEnum,
-                             const OUString& rValue,
+                             std::u16string_view rValue,
                              const SvXMLEnumMapEntry<EnumT> *pMap )
     {
         sal_uInt16 nTmp;
@@ -151,7 +151,7 @@ public:
         not found in the map, this method will return false */
     template<typename EnumT>
     static bool convertEnum( EnumT& rEnum,
-                             const OUString& rValue,
+                             std::u16string_view rValue,
                              const SvXMLEnumStringMapEntry<EnumT> *pMap )
     {
         sal_uInt16 nTmp;
@@ -213,7 +213,7 @@ public:
 
     /** convert string to ::basegfx::B3DVector */
     static bool convertB3DVector( ::basegfx::B3DVector& rVector,
-                              const OUString& rValue );
+                              std::u16string_view rValue );
 
     /** convert string to ::basegfx::B3DVector */
     static bool convertB3DVector( ::basegfx::B3DVector& rVector,
@@ -253,7 +253,7 @@ public:
                                      bool *pEncoded=nullptr ) const;
     /** convert string (hex) to number (sal_uInt32) */
     static bool convertHex( sal_uInt32& nVal,
-                              const OUString& rValue );
+                              std::u16string_view rValue );
 
     /** convert number (sal_uInt32) to string (hex) */
     static void convertHex( OUStringBuffer& rBuffer,
@@ -261,11 +261,11 @@ public:
 
 private:
     static bool convertEnumImpl( sal_uInt16& rEnum,
-                             const OUString& rValue,
+                             std::u16string_view rValue,
                              const SvXMLEnumMapEntry<sal_uInt16> *pMap );
 
     static bool convertEnumImpl( sal_uInt16& rEnum,
-                             const OUString& rValue,
+                             std::u16string_view rValue,
                              const SvXMLEnumStringMapEntry<sal_uInt16> *pMap );
 
     static bool convertEnumImpl( OUStringBuffer& rBuffer,

@@ -37,7 +37,7 @@ public:
             OUString& rStrExpValue,
             const css::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const override;
-    static bool convert( const OUString& rStrImpValue,
+    static bool convert( std::u16string_view rStrImpValue,
                  css::text::TextContentAnchorType& rType );
 };
 

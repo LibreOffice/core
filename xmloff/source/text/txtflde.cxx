@@ -435,7 +435,7 @@ enum FieldIdEnum XMLTextFieldExport::GetFieldID(
 }
 
 enum FieldIdEnum XMLTextFieldExport::MapFieldName(
-    const OUString& sFieldName,             // field (master) name
+    std::u16string_view sFieldName,             // field (master) name
     const Reference<XPropertySet> & xPropSet)   // for subtype
 {
     // we'll proceed in 2 steps:
@@ -447,9 +447,9 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
     // a) find prelim. FIELD_ID via aFieldServiceMapping
 
     // check for non-empty service name
-    DBG_ASSERT(!sFieldName.isEmpty(), "no valid service name!");
+    DBG_ASSERT(!sFieldName.empty(), "no valid service name!");
     enum FieldIdEnum nToken = FIELD_ID_UNKNOWN;
-    if (!sFieldName.isEmpty())
+    if (!sFieldName.empty())
     {
         // map name to prelim. ID
         bool bRet = SvXMLUnitConverter::convertEnum(
