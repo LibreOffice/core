@@ -35,7 +35,7 @@ BEGIN {
     # to match especially drive letters in allowlist case insensitive
     IGNORECASE = 1
     allowlist = \
-        "^(" ENVIRON["SRCDIR"] "|" ENVIRON["WORKDIR"] ")"
+        "^(" ENVIRON["SRCDIR"] "|" ENVIRON["BUILDDIR"] ")"
     firstline = 1
 }
 
