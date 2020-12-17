@@ -25,6 +25,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <comphelper/lok.hxx>
 
 GlyphCache::GlyphCache()
 :   mnBytesUsed(sizeof(GlyphCache)),
@@ -271,6 +272,13 @@ FreetypeFontFile* GlyphCache::FindFontFile(const OString& rNativeFileName)
     FreetypeFontFile* pFontFile = new FreetypeFontFile(rNativeFileName);
     pFileName = pFontFile->maNativeFileName.getStr();
     m_aFontFileList[pFileName].reset(pFontFile);
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // In LOK we want to cache the fonts on pre-init
+        // and we don't need the font files in the jails anymore.
+        pFontFile->Map();
+    }
+
     return pFontFile;
 }
 

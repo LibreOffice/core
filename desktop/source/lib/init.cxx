@@ -5988,9 +5988,8 @@ static void preloadData()
     SvtLanguageTable::HasLanguageType(LANGUAGE_SYSTEM);
     (void)LanguageTag::isValidBcp47("foo", nullptr);
 
-    std::cerr << "Preload fonts\n";
-
-    // Initialize fonts.
+    // Initialize the spellchecker and dictionaries.
+    std::cerr << "Preload spellchecker\n";
     css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
     if (xLangSrv.is())
     {
@@ -5999,6 +5998,8 @@ static void preloadData()
             aLocales = xSpell->getLocales();
     }
 
+    // Initialize fonts.
+    std::cerr << "Preload fonts\n";
     for (const auto& aLocale : std::as_const(aLocales))
     {
         //TODO: Add more types and cache more aggressively. For now this initializes the fontcache.
