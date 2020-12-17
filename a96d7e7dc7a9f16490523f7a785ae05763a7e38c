@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80787c42_cc07d7d7",
+        "filename": "basic/qa/cppunit/basictest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-17T08:12:51Z",
+      "side": 1,
+      "message": "rather use SAL_WARN or SAL_INFO than fprintf",
+      "revId": "a96d7e7dc7a9f16490523f7a785ae05763a7e38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e4e59c2_068a9eef",
+        "filename": "basic/qa/cppunit/basictest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-17T08:12:51Z",
+      "side": 1,
+      "message": "what drove the choice of \n    \u0027%%\nespecially the single quote, which is quite hard to see?\n\nCan we rather use a C/C++ style\n\n  #include \"something\"\n\n? which is more familiar?",
+      "revId": "a96d7e7dc7a9f16490523f7a785ae05763a7e38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4691946_49cf38d9",
+        "filename": "basic/qa/vba_tests/asc.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-17T08:12:51Z",
+      "side": 1,
+      "message": "I would say we should preferably have all the includes at the top of the file",
+      "revId": "a96d7e7dc7a9f16490523f7a785ae05763a7e38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
