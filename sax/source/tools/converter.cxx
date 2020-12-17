@@ -1335,12 +1335,12 @@ enum Result { R_NOTHING, R_OVERFLOW, R_SUCCESS };
 }
 
 static Result
-readUnsignedNumber(const OUString & rString,
-    sal_Int32 & io_rnPos, sal_Int32 & o_rNumber)
+readUnsignedNumber(std::u16string_view rString,
+    size_t & io_rnPos, sal_Int32 & o_rNumber)
 {
-    sal_Int32 nPos(io_rnPos);
+    size_t nPos(io_rnPos);
 
-    while (nPos < rString.getLength())
+    while (nPos < rString.size())
     {
         const sal_Unicode c = rString[nPos];
         if (('0' > c) || (c > '9'))
@@ -1354,7 +1354,7 @@ readUnsignedNumber(const OUString & rString,
         return R_NOTHING;
     }
 
-    const sal_Int64 nTemp = rtl_ustr_toInt64_WithLength(rString.getStr() + io_rnPos, 10, nPos - io_rnPos);
+    const sal_Int64 nTemp = rtl_ustr_toInt64_WithLength(rString.data() + io_rnPos, 10, nPos - io_rnPos);
 
     const bool bOverflow = (nTemp >= SAL_MAX_INT32);
 
@@ -1365,15 +1365,15 @@ readUnsignedNumber(const OUString & rString,
 
 static Result
 readUnsignedNumberMaxDigits(int maxDigits,
-                            const OUString & rString, sal_Int32 & io_rnPos,
+                            std::u16string_view rString, size_t & io_rnPos,
                             sal_Int32 & o_rNumber)
 {
     bool bOverflow(false);
     sal_Int64 nTemp(0);
-    sal_Int32 nPos(io_rnPos);
+    size_t nPos(io_rnPos);
     OSL_ENSURE(maxDigits >= 0, "negative amount of digits makes no sense");
 
-    while (nPos < rString.getLength())
+    while (nPos < rString.size())
     {
         const sal_Unicode c = rString[nPos];
         if (('0' <= c) && (c <= '9'))
@@ -1408,10 +1408,10 @@ readUnsignedNumberMaxDigits(int maxDigits,
 }
 
 static bool
-readDurationT(const OUString & rString, sal_Int32 & io_rnPos)
+readDurationT(std::u16string_view rString, size_t & io_rnPos)
 {
-    if ((io_rnPos < rString.getLength()) &&
-        (rString[io_rnPos] == 'T'))
+    if ((io_rnPos < rString.size()) &&
+        (rString[io_rnPos] == 'T' || rString[io_rnPos] == 't'))
     {
         ++io_rnPos;
         return true;
@@ -1420,11 +1420,11 @@ readDurationT(const OUString & rString, sal_Int32 & io_rnPos)
 }
 
 static bool
-readDurationComponent(const OUString & rString,
-    sal_Int32 & io_rnPos, sal_Int32 & io_rnTemp, bool & io_rbTimePart,
+readDurationComponent(std::u16string_view rString,
+    size_t & io_rnPos, sal_Int32 & io_rnTemp, bool & io_rbTimePart,
     sal_Int32 & o_rnTarget, const sal_Unicode cLower, const sal_Unicode cUpper)
 {
-    if (io_rnPos < rString.getLength())
+    if (io_rnPos < rString.size())
     {
         if (cLower == rString[io_rnPos] || cUpper == rString[io_rnPos])
         {
@@ -1454,7 +1454,7 @@ bool Converter::convertDuration(util::Duration& rDuration,
                                 std::u16string_view rString)
 {
     std::u16string_view string = trim(rString);
-    sal_Int32 nPos(0);
+    size_t nPos(0);
 
     bool bIsNegativeDuration(false);
     if (!string.empty() && ('-' == string[0]))
@@ -1463,7 +1463,7 @@ bool Converter::convertDuration(util::Duration& rDuration,
         ++nPos;
     }
 
-    if (nPos < static_cast<sal_Int32>(string.size())
+    if (nPos < string.size()
         && string[nPos] != 'P' && string[nPos] != 'p') // duration must start with "P"
     {
         return false;
@@ -1524,7 +1524,7 @@ bool Converter::convertDuration(util::Duration& rDuration,
         }
 
         // eeek! seconds are icky.
-        if ((nPos < static_cast<sal_Int32>(string.size())) && bSuccess)
+        if ((nPos < string.size()) && bSuccess)
         {
             if (string[nPos] == '.' ||
                 string[nPos] == ',')
@@ -1536,7 +1536,7 @@ bool Converter::convertDuration(util::Duration& rDuration,
                     nTemp = -1;
                     const sal_Int32 nStart(nPos);
                     bSuccess = readUnsignedNumberMaxDigits(9, string, nPos, nTemp) == R_SUCCESS;
-                    if ((nPos < static_cast<sal_Int32>(string.size())) && bSuccess)
+                    if ((nPos < string.size()) && bSuccess)
                     {
                         if (-1 != nTemp)
                         {
@@ -1584,7 +1584,7 @@ bool Converter::convertDuration(util::Duration& rDuration,
         }
     }
 
-    if (nPos != static_cast<sal_Int32>(string.size())) // string not processed completely?
+    if (nPos != string.size()) // string not processed completely?
     {
         bSuccess = false;
     }
@@ -1876,11 +1876,11 @@ static void lcl_ConvertToUTC(
 }
 
 static bool
-readDateTimeComponent(const OUString & rString,
-    sal_Int32 & io_rnPos, sal_Int32 & o_rnTarget,
+readDateTimeComponent(std::u16string_view rString,
+    size_t & io_rnPos, sal_Int32 & o_rnTarget,
     const sal_Int32 nMinLength, const bool bExactLength)
 {
-    const sal_Int32 nOldPos(io_rnPos);
+    const size_t nOldPos(io_rnPos);
     sal_Int32 nTemp(0);
     if (R_SUCCESS != readUnsignedNumber(rString, io_rnPos, nTemp))
     {
@@ -1901,13 +1901,13 @@ static bool lcl_parseDate(
                 bool & isNegative,
                 sal_Int32 & nYear, sal_Int32 & nMonth, sal_Int32 & nDay,
                 bool & bHaveTime,
-                sal_Int32 & nPos,
-                const OUString & string,
+                size_t & nPos,
+                std::u16string_view string,
                 bool const bIgnoreInvalidOrMissingDate)
 {
     bool bSuccess = true;
 
-    if (string.getLength() > nPos)
+    if (string.size() > nPos)
     {
         if ('-' == string[nPos])
         {
@@ -1925,7 +1925,7 @@ static bool lcl_parseDate(
         {
             bSuccess &= (0 < nYear);
         }
-        bSuccess &= (nPos < string.getLength()); // not last token
+        bSuccess &= (nPos < string.size()); // not last token
     }
     if (bSuccess && ('-' != string[nPos])) // separator
     {
@@ -1941,7 +1941,7 @@ static bool lcl_parseDate(
             bSuccess &= (0 < nMonth);
         }
         bSuccess &= (nMonth <= 12);
-        bSuccess &= (nPos < string.getLength()); // not last token
+        bSuccess &= (nPos < string.size()); // not last token
     }
     if (bSuccess && ('-' != string[nPos])) // separator
     {
@@ -1963,9 +1963,9 @@ static bool lcl_parseDate(
         else assert(bIgnoreInvalidOrMissingDate);
     }
 
-    if (bSuccess && (nPos < string.getLength()))
+    if (bSuccess && (nPos < string.size()))
     {
-        if ('T' == string[nPos]) // time separator
+        if ('T' == string[nPos] || 't' == string[nPos]) // time separator
         {
             bHaveTime = true;
             ++nPos;
@@ -1980,24 +1980,24 @@ static bool lcl_parseDateTime(
                 util::Date *const pDate, util::DateTime & rDateTime,
                 bool & rbDateTime,
                 std::optional<sal_Int16> *const pTimeZoneOffset,
-                const OUString & rString,
+                std::u16string_view string,
                 bool const bIgnoreInvalidOrMissingDate)
 {
     bool bSuccess = true;
 
-    const OUString string = rString.trim().toAsciiUpperCase();
+    string = trim(string);
 
     bool isNegative(false);
     sal_Int32 nYear(0);
     sal_Int32 nMonth(0);
     sal_Int32 nDay(0);
-    sal_Int32 nPos(0);
+    size_t nPos(0);
     bool bHaveTime(false);
 
     if (    !bIgnoreInvalidOrMissingDate
-        ||  string.indexOf(':') == -1  // no time?
-        ||  (string.indexOf('-') != -1
-             && string.indexOf('-') < string.indexOf(':')))
+        ||  string.find(':') == std::u16string_view::npos  // no time?
+        ||  (string.find('-') != std::u16string_view::npos
+             && string.find('-') < string.find(':')))
     {
         bSuccess &= lcl_parseDate(isNegative, nYear, nMonth, nDay,
                 bHaveTime, nPos, string, bIgnoreInvalidOrMissingDate);
@@ -2016,7 +2016,7 @@ static bool lcl_parseDateTime(
         {
             bSuccess = readDateTimeComponent(string, nPos, nHours, 2, true);
             bSuccess &= (0 <= nHours) && (nHours <= 24);
-            bSuccess &= (nPos < string.getLength()); // not last token
+            bSuccess &= (nPos < string.size()); // not last token
         }
         if (bSuccess && (':' != string[nPos])) // separator
         {
@@ -2028,7 +2028,7 @@ static bool lcl_parseDateTime(
 
             bSuccess = readDateTimeComponent(string, nPos, nMinutes, 2, true);
             bSuccess &= (0 <= nMinutes) && (nMinutes < 60);
-            bSuccess &= (nPos < string.getLength()); // not last token
+            bSuccess &= (nPos < string.size()); // not last token
         }
         if (bSuccess && (':' != string[nPos])) // separator
         {
@@ -2041,7 +2041,7 @@ static bool lcl_parseDateTime(
             bSuccess = readDateTimeComponent(string, nPos, nSeconds, 2, true);
             bSuccess &= (0 <= nSeconds) && (nSeconds < 60);
         }
-        if (bSuccess && (nPos < string.getLength()) &&
+        if (bSuccess && (nPos < string.size()) &&
             ('.' == string[nPos] || ',' == string[nPos])) // fraction separator
         {
             ++nPos;
@@ -2075,7 +2075,7 @@ static bool lcl_parseDateTime(
     bool bHaveTimezone(false);
     bool bHaveTimezonePlus(false);
     bool bHaveTimezoneMinus(false);
-    if (bSuccess && (nPos < string.getLength()))
+    if (bSuccess && (nPos < string.size()))
     {
         const sal_Unicode c(string[nPos]);
         if ('+' == c)
@@ -2090,7 +2090,7 @@ static bool lcl_parseDateTime(
             bHaveTimezoneMinus = true;
             ++nPos;
         }
-        else if ('Z' == c)
+        else if ('Z' == c || 'z' == c)
         {
             bHaveTimezone = true;
             ++nPos;
@@ -2107,7 +2107,7 @@ static bool lcl_parseDateTime(
         bSuccess = readDateTimeComponent(
                         string, nPos, nTimezoneHours, 2, true);
         bSuccess &= (0 <= nTimezoneHours) && (nTimezoneHours <= 14);
-        bSuccess &= (nPos < string.getLength()); // not last token
+        bSuccess &= (nPos < string.size()); // not last token
         if (bSuccess && (':' != string[nPos])) // separator
         {
             bSuccess = false;
@@ -2129,7 +2129,7 @@ static bool lcl_parseDateTime(
         }
     }
 
-    bSuccess &= (nPos == string.getLength()); // trailing junk?
+    bSuccess &= (nPos == string.size()); // trailing junk?
 
     if (bSuccess)
     {
