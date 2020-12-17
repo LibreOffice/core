@@ -209,6 +209,7 @@ class VCL_DLLPUBLIC SvListView
     std::unique_ptr<Impl> m_pImpl;
 
 protected:
+    bool                        m_bDirtyModel;
     std::unique_ptr<SvTreeList> pModel;
 
     void                ExpandListEntry( SvTreeListEntry* pParent );
@@ -226,6 +227,11 @@ public:
                             SvTreeListEntry* pEntry2,
                             sal_uLong nPos
                         );
+
+    bool                IsDirtyModel() const
+    { return m_bDirtyModel; }
+    void                SetDirtyModel(bool bValue)
+    { m_bDirtyModel = bValue; }
 
     sal_uLong           GetVisibleCount() const
     { return pModel->GetVisibleCount( const_cast<SvListView*>(this) ); }

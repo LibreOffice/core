@@ -417,6 +417,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     pImpl->SetModel( pModel.get() );
 
     SetSublistOpenWithLeftRight();
+    m_bDirtyModel = false;
 }
 
 void SvTreeListBox::Clear()
