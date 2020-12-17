@@ -70,6 +70,7 @@ public:
 
     void notifyDialogState(bool bForce = false);
     void sendClose();
+    void dumpStatus();
 };
 
 class JSDropTarget final
@@ -218,6 +219,11 @@ public:
 
 class JSDialog : public JSWidget<SalInstanceDialog, ::Dialog>
 {
+    DECL_LINK(on_dump_status, void*, void);
+    DECL_LINK(on_window_event, VclWindowEvent&, void);
+
+    bool m_bNotifyCreated;
+
 public:
     JSDialog(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
              ::Dialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
