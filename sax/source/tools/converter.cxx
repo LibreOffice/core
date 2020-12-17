@@ -899,27 +899,26 @@ void Converter::convertDouble( OUStringBuffer& rBuffer, double fNumber)
 bool Converter::convertDouble(double& rValue,
     std::u16string_view rString, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit)
 {
-    rtl_math_ConversionStatus eStatus;
-    rValue = ::rtl::math::stringToDouble( rString, '.', ',', &eStatus );
+    if (!convertDouble(rValue, rString))
+        return false;
 
-    if(eStatus == rtl_math_ConversionStatus_Ok)
-    {
-        OUStringBuffer sUnit;
-        // fdo#48969: switch source and target because factor is used to divide!
-        double const fFactor =
-            GetConversionFactor(sUnit, nTargetUnit, nSourceUnit);
-        if(fFactor != 1.0 && fFactor != 0.0)
-            rValue /= fFactor;
-    }
-
-    return ( eStatus == rtl_math_ConversionStatus_Ok );
+    OUStringBuffer sUnit;
+    // fdo#48969: switch source and target because factor is used to divide!
+    double const fFactor =
+        GetConversionFactor(sUnit, nTargetUnit, nSourceUnit);
+    if(fFactor != 1.0 && fFactor != 0.0)
+        rValue /= fFactor;
+    return true;
 }
 
 /** convert string to double number (using ::rtl::math) */
 bool Converter::convertDouble(double& rValue, std::u16string_view rString)
 {
     rtl_math_ConversionStatus eStatus;
-    rValue = ::rtl::math::stringToDouble( rString, '.', ',', &eStatus );
+    rValue = rtl_math_uStringToDouble(rString.data(),
+                                     rString.data() + rString.size(),
+                                     /*cDecSeparator*/'.', /*cGroupSeparator*/',',
+                                     &eStatus, nullptr);
     return ( eStatus == rtl_math_ConversionStatus_Ok );
 }
 
@@ -927,7 +926,10 @@ bool Converter::convertDouble(double& rValue, std::u16string_view rString)
 bool Converter::convertDouble(double& rValue, std::string_view rString)
 {
     rtl_math_ConversionStatus eStatus;
-    rValue = ::rtl::math::stringToDouble( rString, '.', ',', &eStatus );
+    rValue = rtl_math_stringToDouble(rString.data(),
+                                     rString.data() + rString.size(),
+                                     /*cDecSeparator*/'.', /*cGroupSeparator*/',',
+                                     &eStatus, nullptr);
     return ( eStatus == rtl_math_ConversionStatus_Ok );
 }
 

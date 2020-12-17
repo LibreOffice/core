@@ -119,7 +119,7 @@ OUString FindCoverImage(const OUString& rDocumentBaseURL, OUString& rMimeType,
             SvFileStream aStream(aRet, StreamMode::READ);
             if (aStream.IsOpen())
             {
-                rMimeType = GetMimeType(rExtension);
+                rMimeType = GetMimeType(OUString(rExtension));
                 // File exists.
                 return aRet;
             }

@@ -1492,7 +1492,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                                 // before merge.
                                 table::BorderLine2 aBorderValues[4];
                                 for (size_t i = 0; i < aBorderNames.size(); ++i)
-                                    xFirstCell->getPropertyValue(aBorderNames[i])
+                                    xFirstCell->getPropertyValue(OUString(aBorderNames[i]))
                                         >>= aBorderValues[i];
 
                                 uno::Reference<beans::XPropertySet> xLastCell(
@@ -1513,7 +1513,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                                 {
                                     if (aBorderValues[i].LineStyle != table::BorderLineStyle::NONE)
                                         xFirstCell->setPropertyValue(
-                                            aBorderNames[i], uno::makeAny(aBorderValues[i]));
+                                            OUString(aBorderNames[i]), uno::makeAny(aBorderValues[i]));
                                 }
                             }
                         }

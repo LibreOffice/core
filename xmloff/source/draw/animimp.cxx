@@ -325,12 +325,12 @@ namespace
     constexpr OUStringLiteral gsDimColor = u"DimColor";
     constexpr OUStringLiteral gsDimHide = u"DimHide";
     constexpr OUStringLiteral gsDimPrev = u"DimPrevious";
-    constexpr std::u16string_view gsEffect = u"Effect";
+    constexpr OUStringLiteral gsEffect = u"Effect";
     constexpr OUStringLiteral gsPlayFull = u"PlayFull";
     constexpr OUStringLiteral gsSound = u"Sound";
     constexpr OUStringLiteral gsSoundOn = u"SoundOn";
     constexpr OUStringLiteral gsSpeed = u"Speed";
-    constexpr std::u16string_view gsTextEffect = u"TextEffect";
+    constexpr OUStringLiteral gsTextEffect = u"TextEffect";
     constexpr OUStringLiteral gsPresShapeService = u"com.sun.star.presentation.Shape";
     constexpr OUStringLiteral gsAnimPath = u"AnimationPath";
     constexpr OUStringLiteral gsIsAnimation = u"IsAnimation";
@@ -546,8 +546,10 @@ void XMLAnimationsEffectContext::endFastElement(sal_Int32 )
                     {
                         const AnimationEffect eEffect = ImplSdXMLgetEffect( meEffect, meDirection, mnStartScale, meKind == XMLE_SHOW );
 
-                        auto const s = mbTextEffect ? gsTextEffect : gsEffect;
-                        xSet->setPropertyValue( s, makeAny( eEffect ) );
+                        if (mbTextEffect)
+                            xSet->setPropertyValue( gsTextEffect, makeAny( eEffect ) );
+                        else
+                            xSet->setPropertyValue( gsEffect, makeAny( eEffect ) );
                         xSet->setPropertyValue( gsSpeed, makeAny( meSpeed ) );
 
                         if( eEffect == AnimationEffect_PATH && !maPathShapeId.isEmpty() )

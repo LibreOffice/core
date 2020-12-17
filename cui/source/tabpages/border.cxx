@@ -362,7 +362,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     }
 
     for (auto const & rImageId : aBorderImageIds)
-        m_aBorderImgVec.emplace_back(StockImage::Yes, rImageId);
+        m_aBorderImgVec.emplace_back(StockImage::Yes, OUString(rImageId));
 
     static std::vector<std::u16string_view> aShadowImageIds;
     if (aShadowImageIds.empty())
@@ -390,7 +390,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     }
 
     for (auto const & rImageId : aShadowImageIds)
-        m_aShadowImgVec.emplace_back(StockImage::Yes, rImageId);
+        m_aShadowImgVec.emplace_back(StockImage::Yes, OUString(rImageId));
 
     assert(m_aShadowImgVec.size() == SVX_BORDER_SHADOW_COUNT);
 
