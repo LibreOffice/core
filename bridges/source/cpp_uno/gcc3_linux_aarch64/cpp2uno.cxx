@@ -41,8 +41,7 @@
 #include <vtablefactory.hxx>
 
 #include "abi.hxx"
-
-extern "C" void vtableSlotCall();
+#include "vtablecall.hxx"
 
 namespace {
 
@@ -53,16 +52,16 @@ void call(
     typelib_MethodParameter * parameters, unsigned long * gpr,
     unsigned long * fpr, unsigned long * stack, void * indirectRet)
 {
-    typelib_TypeDescription * rtd = 0;
-    if (returnType != 0) {
+    typelib_TypeDescription * rtd = nullptr;
+    if (returnType != nullptr) {
         TYPELIB_DANGER_GET(&rtd, returnType);
     }
-    abi_aarch64::ReturnKind retKind = rtd == 0
+    abi_aarch64::ReturnKind retKind = rtd == nullptr
         ? abi_aarch64::RETURN_KIND_REG : abi_aarch64::getReturnKind(rtd);
-    bool retConv = rtd != 0
+    bool retConv = rtd != nullptr
         && bridges::cpp_uno::shared::relatesToInterfaceType(rtd);
     void * retin = retKind == abi_aarch64::RETURN_KIND_INDIRECT && !retConv
-        ? indirectRet : rtd == 0 ? 0 : alloca(rtd->nSize);
+        ? indirectRet : rtd == nullptr ? nullptr : alloca(rtd->nSize);
     void ** args = static_cast< void ** >(alloca(count * sizeof (void *)));
     void ** cppArgs = static_cast< void ** >(alloca(count * sizeof (void *)));
     typelib_TypeDescription ** argtds = static_cast<typelib_TypeDescription **>(
@@ -88,7 +87,7 @@ void call(
                 }
                 else
                 {
-                    args[i] = reinterpret_cast<void **>(reinterpret_cast<uintptr_t>(stack + sp) + subsp);
+                    args[i] = reinterpret_cast<void *>(reinterpret_cast<uintptr_t>(stack + sp) + subsp);
                     subsp += 1;
                     if (subsp == 8)
                     {
@@ -113,7 +112,7 @@ void call(
                         sp++;
                         subsp = 0;
                     }
-                    args[i] = reinterpret_cast<void **>(reinterpret_cast<uintptr_t>(stack + sp) + subsp);
+                    args[i] = reinterpret_cast<void *>(reinterpret_cast<uintptr_t>(stack + sp) + subsp);
                     subsp += 2;
                     if (subsp == 8)
                     {
@@ -138,7 +137,7 @@ void call(
                         sp++;
                         subsp = 0;
                     }
-                    args[i] = reinterpret_cast<void **>(reinterpret_cast<uintptr_t>(stack + sp) + subsp);
+                    args[i] = reinterpret_cast<void *>(reinterpret_cast<uintptr_t>(stack + sp) + subsp);
                     subsp += 4;
                     if (subsp == 8)
                     {
@@ -179,7 +178,7 @@ void call(
                         sp++;
                         subsp = 0;
                     }
-                    args[i] = reinterpret_cast<void **>(reinterpret_cast<uintptr_t>(stack + sp) + subsp);
+                    args[i] = reinterpret_cast<void *>(reinterpret_cast<uintptr_t>(stack + sp) + subsp);
                     subsp += 4;
                     if (subsp == 8)
                     {
@@ -226,7 +225,7 @@ void call(
             default:
                 assert(false);
             }
-            argtds[i] = 0;
+            argtds[i] = nullptr;
         } else {
 #ifdef MACOSX
             if (subsp > 0)
@@ -237,7 +236,7 @@ void call(
 #endif
             cppArgs[i] = reinterpret_cast<void *>(
                 ngpr == 8 ? stack[sp++] : gpr[ngpr++]);
-            typelib_TypeDescription * ptd = 0;
+            typelib_TypeDescription * ptd = nullptr;
             TYPELIB_DANGER_GET(&ptd, parameters[i].pTypeRef);
             if (!parameters[i].bIn) {
                 args[i] = alloca(ptd->nSize);
@@ -249,7 +248,7 @@ void call(
                 argtds[i] = ptd;
             } else {
                 args[i] = cppArgs[i];
-                argtds[i] = 0;
+                argtds[i] = nullptr;
                 TYPELIB_DANGER_RELEASE(ptd);
             }
         }
@@ -258,22 +257,22 @@ void call(
     uno_Any * pexc = &exc;
     proxy->getUnoI()->pDispatcher(
         proxy->getUnoI(), description.get(), retin, args, &pexc);
-    if (pexc != 0) {
+    if (pexc != nullptr) {
         for (sal_Int32 i = 0; i != count; ++i) {
-            if (argtds[i] != 0) {
+            if (argtds[i] != nullptr) {
                 if (parameters[i].bIn) {
-                    uno_destructData(args[i], argtds[i], 0);
+                    uno_destructData(args[i], argtds[i], nullptr);
                 }
                 TYPELIB_DANGER_RELEASE(argtds[i]);
             }
         }
-        if (rtd != 0) {
+        if (rtd != nullptr) {
             TYPELIB_DANGER_RELEASE(rtd);
         }
         abi_aarch64::raiseException(&exc, proxy->getBridge()->getUno2Cpp());
     }
     for (sal_Int32 i = 0; i != count; ++i) {
-        if (argtds[i] != 0) {
+        if (argtds[i] != nullptr) {
             if (parameters[i].bOut) {
                 uno_destructData(
                     cppArgs[i], argtds[i],
@@ -282,14 +281,14 @@ void call(
                     cppArgs[i], args[i], argtds[i],
                     proxy->getBridge()->getUno2Cpp());
             }
-            uno_destructData(args[i], argtds[i], 0);
+            uno_destructData(args[i], argtds[i], nullptr);
             TYPELIB_DANGER_RELEASE(argtds[i]);
         }
     }
-    void * retout = 0; // avoid false -Werror=maybe-uninitialized
+    void * retout = nullptr; // avoid false -Werror=maybe-uninitialized
     switch (retKind) {
     case abi_aarch64::RETURN_KIND_REG:
-        switch (rtd == 0 ? typelib_TypeClass_VOID : rtd->eTypeClass) {
+        switch (rtd == nullptr ? typelib_TypeClass_VOID : rtd->eTypeClass) {
         case typelib_TypeClass_VOID:
             break;
         case typelib_TypeClass_BOOLEAN:
@@ -322,7 +321,7 @@ void call(
         }
         break;
     case abi_aarch64::RETURN_KIND_HFA_FLOAT:
-        assert(rtd != 0);
+        assert(rtd != nullptr);
         switch (rtd->nSize) {
         case 16:
             std::memcpy(fpr + 3, static_cast<char *>(retin) + 12, 4);
@@ -342,7 +341,7 @@ void call(
         assert(!retConv);
         break;
     case abi_aarch64::RETURN_KIND_HFA_DOUBLE:
-        assert(rtd != 0);
+        assert(rtd != nullptr);
         std::memcpy(fpr, retin, rtd->nSize);
         assert(!retConv);
         break;
@@ -353,14 +352,16 @@ void call(
     if (retConv) {
         uno_copyAndConvertData(
             retout, retin, rtd, proxy->getBridge()->getUno2Cpp());
-        uno_destructData(retin, rtd, 0);
+        uno_destructData(retin, rtd, nullptr);
     }
-    if (rtd != 0) {
+    if (rtd != nullptr) {
         TYPELIB_DANGER_RELEASE(rtd);
     }
 }
 
-extern "C" void vtableCall(
+}
+
+void vtableCall(
     sal_Int32 functionIndex, sal_Int32 vtableOffset,
     unsigned long * gpr, unsigned long * fpr, unsigned long  * stack,
     void * indirectRet)
@@ -380,15 +381,15 @@ extern "C" void vtableCall(
                 proxy, desc,
                 reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>(
                     desc.get())->pAttributeTypeRef,
-                0, 0, gpr, fpr, stack, indirectRet);
+                0, nullptr, gpr, fpr, stack, indirectRet);
         } else {
             // Setter:
             typelib_MethodParameter param = {
-                0,
+                nullptr,
                 reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>(
                     desc.get())->pAttributeTypeRef,
                 true, false };
-            call(proxy, desc, 0, 1, &param, gpr, fpr, stack, indirectRet);
+            call(proxy, desc, nullptr, 1, &param, gpr, fpr, stack, indirectRet);
         }
         break;
     case typelib_TypeClass_INTERFACE_METHOD:
@@ -401,21 +402,21 @@ extern "C" void vtableCall(
             break;
         case 0:
             {
-                typelib_TypeDescription * td = 0;
+                typelib_TypeDescription * td = nullptr;
                 TYPELIB_DANGER_GET(
                     &td,
                     (reinterpret_cast<css::uno::Type *>(gpr[1])
                      ->getTypeLibType()));
-                if (td != 0 && td->eTypeClass == typelib_TypeClass_INTERFACE) {
-                    css::uno::XInterface * ifc = 0;
+                if (td != nullptr && td->eTypeClass == typelib_TypeClass_INTERFACE) {
+                    css::uno::XInterface * ifc = nullptr;
                     proxy->getBridge()->getCppEnv()->getRegisteredInterface(
                         proxy->getBridge()->getCppEnv(),
                         reinterpret_cast<void **>(&ifc), proxy->getOid().pData,
                         reinterpret_cast<typelib_InterfaceTypeDescription *>(
                             td));
-                    if (ifc != 0) {
+                    if (ifc != nullptr) {
                         uno_any_construct(
-                            reinterpret_cast<uno_Any *>(indirectRet), &ifc, td,
+                            static_cast<uno_Any *>(indirectRet), &ifc, td,
                             reinterpret_cast<uno_AcquireFunc>(
                                 css::uno::cpp_acquire));
                         ifc->release();
@@ -442,6 +443,8 @@ extern "C" void vtableCall(
         assert(false);
     }
 }
+
+namespace {
 
 std::size_t const codeSnippetSize = 8 * 4;
 
@@ -490,8 +493,8 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
     typelib_InterfaceTypeDescription *)
 {
     Slot * slots = mapBlockToVtable(block);
-    slots[-2].fn = 0;
-    slots[-1].fn = 0;
+    slots[-2].fn = nullptr;
+    slots[-1].fn = nullptr;
     return slots + slotCount;
 }
 
@@ -509,9 +512,9 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     (*slots) -= functionCount;
     Slot * s = *slots;
     for (sal_Int32 i = 0; i != type->nMembers; ++i) {
-        typelib_TypeDescription * td = 0;
+        typelib_TypeDescription * td = nullptr;
         TYPELIB_DANGER_GET(&td, type->ppMembers[i]);
-        assert(td != 0);
+        assert(td != nullptr);
         switch (td->eTypeClass) {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
             {
@@ -551,7 +554,15 @@ void bridges::cpp_uno::shared::VtableFactory::flushCode(
            RTLD_DEFAULT, "__clear_cache");
    (*clear_cache)(begin, end);
 #else
-    __builtin___clear_cache((char*)begin, (char*)end);
+    // GCC clarified with
+    // <http://gcc.gnu.org/git/?p=gcc.git;a=commit;h=a90b0cdd444f6dde1084a439862cf507f6d3b2ae>
+    // "extend.texi (__clear_cache): Correct signature" that __builtin___clear_cache takes void*
+    // parameters, while Clang uses char* ever since
+    // <https://github.com/llvm/llvm-project/commit/c491a8d4577052bc6b3b4c72a7db6a7cfcbc2ed0> "Add
+    // support for __builtin___clear_cache in Clang":
+    __builtin___clear_cache(
+        reinterpret_cast<char *>(const_cast<unsigned char *>(begin)),
+        reinterpret_cast<char *>(const_cast<unsigned char *>(end)));
 #endif
 }
 
