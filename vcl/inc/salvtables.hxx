@@ -1566,6 +1566,8 @@ public:
 
     virtual bool get_iter_first(weld::TreeIter& rIter) const override;
 
+    virtual bool get_iter_abs_pos(weld::TreeIter& rIter, int nPos) const;
+
     virtual bool iter_next_sibling(weld::TreeIter& rIter) const override;
 
     virtual bool iter_previous_sibling(weld::TreeIter& rIter) const override;
