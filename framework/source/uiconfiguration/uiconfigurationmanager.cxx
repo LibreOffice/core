@@ -635,7 +635,7 @@ void UIConfigurationManager::impl_Initialize()
             Reference< XStorage > xElementTypeStorage;
             try
             {
-                xElementTypeStorage = m_xDocConfigStorage->openStorageElement( UIELEMENTTYPENAMES[i], nModes );
+                xElementTypeStorage = m_xDocConfigStorage->openStorageElement( OUString(UIELEMENTTYPENAMES[i]), nModes );
             }
             catch ( const css::container::NoSuchElementException& )
             {
@@ -1307,7 +1307,7 @@ void SAL_CALL UIConfigurationManager::storeToStorage( const Reference< XStorage 
         try
         {
             Reference< XStorage > xElementTypeStorage( Storage->openStorageElement(
-                                                        UIELEMENTTYPENAMES[i], ElementModes::READWRITE ));
+                                                        OUString(UIELEMENTTYPENAMES[i]), ElementModes::READWRITE ));
             UIElementType& rElementType = m_aUIElements[i];
 
             if ( rElementType.bModified && xElementTypeStorage.is() )

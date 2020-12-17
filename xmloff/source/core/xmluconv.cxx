@@ -504,34 +504,34 @@ bool SvXMLTokenEnumerator::getNextToken( OUString& rToken )
     return true;
 }
 
-static bool lcl_getPositions(const OUString& _sValue,OUString& _rContentX,OUString& _rContentY,OUString& _rContentZ)
+static bool lcl_getPositions(std::u16string_view _sValue, OUString& _rContentX, OUString& _rContentY, OUString& _rContentZ)
 {
-    if(_sValue.isEmpty() || _sValue[0] != '(')
+    if(_sValue.empty() || _sValue[0] != '(')
         return false;
 
-    sal_Int32 nPos(1);
-    sal_Int32 nFound = _sValue.indexOf(' ', nPos);
+    size_t nPos(1);
+    size_t nFound = _sValue.find(' ', nPos);
 
-    if(nFound == -1 || nFound <= nPos)
+    if(nFound == std::u16string_view::npos || nFound <= nPos)
         return false;
 
-    _rContentX = _sValue.copy(nPos, nFound - nPos);
+    _rContentX = _sValue.substr(nPos, nFound - nPos);
 
     nPos = nFound + 1;
-    nFound = _sValue.indexOf(' ', nPos);
+    nFound = _sValue.find(' ', nPos);
 
-    if(nFound == -1 || nFound <= nPos)
+    if(nFound == std::u16string_view::npos || nFound <= nPos)
         return false;
 
-    _rContentY = _sValue.copy(nPos, nFound - nPos);
+    _rContentY = _sValue.substr(nPos, nFound - nPos);
 
     nPos = nFound + 1;
-    nFound = _sValue.indexOf(')', nPos);
+    nFound = _sValue.find(')', nPos);
 
-    if(nFound == -1 || nFound <= nPos)
+    if(nFound == std::u16string_view::npos || nFound <= nPos)
         return false;
 
-    _rContentZ = _sValue.copy(nPos, nFound - nPos);
+    _rContentZ = _sValue.substr(nPos, nFound - nPos);
     return true;
 }
 
