@@ -2118,4 +2118,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf137964)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3090), xShape->getPosition().Y);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf138897)
+{
+    load(DATA_DIRECTORY, "tdf100018-1.odt");
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    // this was crashing
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
