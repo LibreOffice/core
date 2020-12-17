@@ -76,14 +76,15 @@ Private ServiceName			As String
 &apos;	Form location
 Private _Name				As String		&apos; Internal name of the form
 Private _DrawPage			As Long			&apos; Index in DrawPages collection
-Private _UsualName			As String		&apos; Name as known by user
+Private _SheetName			As String		&apos; Name as the sheet containing the form (Calc only)
+Private _FormDocumentName	As String		&apos; The hierarchical name of the containing form document (Base only)
 Private _FormType			As Integer		&apos; One of the ISxxxFORM constants
 
 &apos;	Form UNO references
 &apos;		The forms container found in a Base document
 &apos;		Vital for Base forms and subforms
 Private _MainForm			As Object		&apos; com.sun.star.comp.sdb.Content
-&apos;		The entry to the interactions with the form. Set by the _IsStillAlive() method
+&apos;		The entry to the interactions with the form. Validity checked by the _IsStillAlive() method
 &apos;		Each method or property requiring that the form is opened should first invoke that method
 Private _Form				As Object		&apos; com.sun.star.form.XForm or com.sun.star.comp.forms.ODatabaseForm
 Private _Database			As Object		&apos; Database class instance
@@ -110,6 +111,8 @@ Private Sub Class_Initialize()
 	ServiceName = &quot;SFDocuments.Form&quot;
 	_Name = &quot;&quot;
 	_DrawPage = -1
+	_SheetName = &quot;&quot;
+	_FormDocumentName = &quot;&quot;
 	_FormType = 0
 	Set _MainForm = Nothing
 	Set _Form = Nothing
@@ -124,6 +127,9 @@ End Sub		&apos;	SFDocuments.SF_Form Destructor
 
 REM -----------------------------------------------------------------------------
 Public Function Dispose() As Variant
+	If Not IsNull(_Database) And (_FormType = ISDOCFORM Or _FormType = ISCALCFORM) Then
+		Set _Database = _Database.Dispose()
+	End If
 	Call Class_Terminate()
 	Set Dispose = Nothing
 End Function	&apos;	SFDocuments.SF_Form Explicit Destructor
@@ -201,16 +207,19 @@ REM ===================================================================== METHOD
 REM -----------------------------------------------------------------------------
 Public Function Activate() As Boolean
 &apos;&apos;&apos;	Set the focus on the current Form instance
-&apos;&apos;&apos;	Probably called from after an event occurrence or to focus on an open fForm
+&apos;&apos;&apos;	Probably called from after an event occurrence or to focus on an open Base form document
+&apos;&apos;&apos;	If the parent document is ...
+&apos;&apos;&apos;		Calc		Activate the corresponding sheet
+&apos;&apos;&apos;		Writer		Activate the parent document
+&apos;&apos;&apos;		Base		Activate the parent form document
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		True if focusing is successful
 &apos;&apos;&apos;	Example:
-&apos;&apos;&apos;		Dim oDlg As Object
-&apos;&apos;&apos;			Set oDlg = CreateScriptService(,, &quot;myForm&quot;)	&apos;	Form stored in current document&apos;s standard library
-&apos;&apos;&apos;			oDlg.Activate()
+&apos;&apos;&apos;			myForm.Activate()
 
 Dim bActivate As Boolean		&apos;	Return value
+Dim oContainer As Object		&apos;	com.sun.star.awt.XWindow
 Const cstThisSub = &quot;SFDocuments.Form.Activate&quot;
 Const cstSubArgs = &quot;&quot;
 
@@ -222,6 +231,20 @@ Check:
 		If Not _IsStillAlive() Then GoTo Finally
 	End If
 Try:
+	Select Case _FormType
+		Case ISDOCFORM		:	bActivate = [_Parent].Activate()
+		Case ISCALCFORM		:	bActivate = [_Parent].Activate(_SheetName)
+		Case ISBASEFORM
+			Set oContainer = _MainForm.Component.CurrentController.Frame.ContainerWindow
+			With oContainer
+				If .isVisible() = False Then .setVisible(True)
+				.IsMinimized = False
+				.setFocus()
+				.toFront()				&apos;	Force window change in Linux
+				Wait 1					&apos;	Bypass desynchro issue in Linux
+			End With
+			bActivate = True
+	End Select
 
 Finally:
 	Activate = bActivate
@@ -520,12 +543,14 @@ End Function	&apos;	SFDocuments.SF_Form._GetListener
 REM -----------------------------------------------------------------------------
 Private Function _IsStillAlive(Optional ByVal pbError As Boolean) As Boolean
 &apos;&apos;&apos;	Return True if the Form is still open
-&apos;&apos;&apos;	If dead the actual instance is partially (part related to open forms) disposed
+&apos;&apos;&apos;	If dead the actual instance is disposed
 &apos;&apos;&apos;	and the execution is cancelled when pbError = True (default)
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		pbError: if True (default), raise a fatal error
 
 Dim bAlive As Boolean		&apos;	Return value
+Dim sName As String			&apos;	Alias of _Name
+Dim sId As String			&apos;	Alias of FileIdent
 
 Check:
 	On Local Error GoTo Catch		&apos;	Anticipate DisposedException errors or alike
@@ -551,12 +576,14 @@ Finally:
 Catch:
 	bAlive = False
 	On Error GoTo 0
-	&apos;	Dispose the properties related to *open* forms
-	Set _Form = Nothing
-	If Not IsNull(_Database) And _FormType = ISDOCFORM Then Set _Database = _Database.Dispose()
-	Set _ControlCache = Nothing
+	&apos;	Keep error message elements before disposing the instance
+	sName = _SheetName &amp; _FormDocumentName		&apos;	At least one of them is a zero-length string
+	sName = Iif(Len(sName) &gt; 0, &quot;[&quot; &amp; sName &amp; &quot;].&quot;, &quot;&quot;) &amp; _Name
+	sId = [_Parent]._FileIdent()
+	&apos;	Dispose the actual forms instance
+	Dispose()
 	&apos;	Display error message
-	If pbError Then ScriptForge.SF_Exception.RaiseFatal(FORMDEADERROR, _Name, [_Parent]._FileIdent())
+	If pbError Then ScriptForge.SF_Exception.RaiseFatal(FORMDEADERROR, sName, sId)
 	GoTo Finally
 End Function	&apos;	SFDocuments.SF_Form._IsStillAlive
 
@@ -644,7 +671,10 @@ Private Function _Repr() As String
 &apos;&apos;&apos;	Return:
 &apos;&apos;&apos;		&quot;[Form]: Name&quot;
 
-	_Repr = &quot;[Form]: &quot; &amp; _UsualName
+Dim sParent As String		&apos;	To recognize the parent
+
+	sParent = _SheetName &amp; _FormDocumentName		&apos;	At least one of them is a zero-length string
+	_Repr = &quot;[Form]: &quot; &amp; Iif(Len(sParent) &gt; 0, sParent &amp; &quot;...&quot;, &quot;&quot;) &amp; _Name
 
 End Function	&apos;	SFDocuments.SF_Form._Repr
 

@@ -869,8 +869,8 @@ Public Function Forms(Optional ByVal SheetName As Variant _
 &apos;&apos;&apos;		An instance of the SF_Form class if Form exists
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;			Dim myForm As Object, myList As Variant
-&apos;&apos;&apos;				myList = oDoc.Forms()
-&apos;&apos;&apos;				Set myForm = oDoc.Forms(&quot;myForm&quot;)
+&apos;&apos;&apos;				myList = oDoc.Forms(&quot;ThisSheet&quot;)
+&apos;&apos;&apos;				Set myForm = oDoc.Forms(&quot;ThisSheet&quot;, 0)
 
 Dim oForm As Object					&apos;	The new Form class instance
 Dim oMainForm As Object				&apos;	com.sun.star.comp.sdb.Content
@@ -914,7 +914,7 @@ Try:
 			Set .[Me] = oForm
 			Set .[_Parent] = [Me]
 			._DrawPage = cstDrawPage
-			._UsualName = SheetName &amp; &quot; : &quot; &amp; ._Name
+			._SheetName = SheetName
 			Set ._MainForm = Nothing
 			._FormType = ISCALCFORM
 			Set ._Form = oXForm
