@@ -413,7 +413,7 @@ public:
     /** Copy collection with all auto formats to dest-node.
         The latter might be in another document!
        (Method in ndcopy.cxx!!). */
-    void CopyCollFormat( SwTextNode& rDestNd );
+    void CopyCollFormat(SwTextNode& rDestNd, bool bUndoForChgFormatColl = true);
 
     // BEGIN OF BULLET/NUMBERING/OUTLINE STUFF:
 

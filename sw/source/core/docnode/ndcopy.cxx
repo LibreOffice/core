@@ -18,6 +18,7 @@
  */
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <node.hxx>
 #include <frmfmt.hxx>
 #include <swtable.hxx>
@@ -330,7 +331,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx ) const
     return pTableNd;
 }
 
-void SwTextNode::CopyCollFormat( SwTextNode& rDestNd )
+void SwTextNode::CopyCollFormat(SwTextNode& rDestNd, bool const bUndoForChgFormatColl)
 {
     // Copy the formats into the other document:
     // Special case for PageBreak/PageDesc/ColBrk
@@ -350,10 +351,23 @@ void SwTextNode::CopyCollFormat( SwTextNode& rDestNd )
             aPgBrkSet.Put( *pAttr );
     }
 
-    rDestNd.ChgFormatColl( rDestDoc.CopyTextColl( *GetTextColl() ));
+    // this may create undo action SwUndoFormatCreate
+    auto const pCopy( rDestDoc.CopyTextColl( *GetTextColl() ) );
+    if (bUndoForChgFormatColl)
+    {
+        rDestNd.ChgFormatColl(pCopy);
+    }
+    else // tdf#138897
+    {
+        ::sw::UndoGuard const ug(rDestDoc.GetIDocumentUndoRedo());
+        rDestNd.ChgFormatColl(pCopy);
+    }
     pSet = GetpSwAttrSet();
     if( nullptr != pSet )
+    {
+        // note: this may create undo actions but not for setting the items
         pSet->CopyToModify( rDestNd );
+    }
 
     if( aPgBrkSet.Count() )
         rDestNd.SetAttr( aPgBrkSet );
