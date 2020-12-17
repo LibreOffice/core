@@ -175,67 +175,6 @@ namespace vclcanvas
 
         ::basegfx::B2DHomMatrix aTransform( getTransformation() );
 
-        // check whether matrix is "easy" to handle - pure
-        // translations or scales are handled by OutputDevice
-        // alone
-        const bool bIdentityTransform( aTransform.isIdentity() );
-
-        // make transformation absolute (put sprite to final
-        // output position). Need to happen here, as we also have
-        // to translate the clip polygon
-        aTransform.translate( aOutPos.X(),
-                              aOutPos.Y() );
-
-        if( !bIdentityTransform )
-        {
-            if (!::basegfx::fTools::equalZero( aTransform.get(0,1) ) ||
-                !::basegfx::fTools::equalZero( aTransform.get(1,0) ))
-            {
-                // "complex" transformation, employ affine
-                // transformator
-
-                // modify output position, to account for the fact
-                // that transformBitmap() always normalizes its output
-                // bitmap into the smallest enclosing box.
-                ::basegfx::B2DRectangle aDestRect;
-                ::canvas::tools::calcTransformedRectBounds( aDestRect,
-                                                            ::basegfx::B2DRectangle(0,
-                                                                                    0,
-                                                                                    rOrigOutputSize.getX(),
-                                                                                    rOrigOutputSize.getY()),
-                                                            aTransform );
-
-                aOutPos.setX( ::basegfx::fround( aDestRect.getMinX() ) );
-                aOutPos.setY( ::basegfx::fround( aDestRect.getMinY() ) );
-
-                // TODO(P3): Use optimized bitmap transformation here.
-
-                // actually re-create the bitmap ONLY if necessary
-                if( bNeedBitmapUpdate )
-                    maContent = tools::transformBitmap( *maContent,
-                                                        aTransform );
-
-                aOutputSize = maContent->GetSizePixel();
-            }
-            else
-            {
-                // relatively 'simplistic' transformation -
-                // retrieve scale and translational offset
-                aOutputSize.setWidth (
-                    ::basegfx::fround( rOrigOutputSize.getX() * aTransform.get(0,0) ) );
-                aOutputSize.setHeight(
-                    ::basegfx::fround( rOrigOutputSize.getY() * aTransform.get(1,1) ) );
-
-                aOutPos.setX( ::basegfx::fround( aTransform.get(0,2) ) );
-                aOutPos.setY( ::basegfx::fround( aTransform.get(1,2) ) );
-            }
-        }
-
-        // transformBitmap() might return empty bitmaps, for tiny
-        // scales.
-        if( !(*maContent) )
-            return;
-
         rTargetSurface.Push( PushFlags::CLIPREGION );
 
         // apply clip (if any)
@@ -247,10 +186,10 @@ namespace vclcanvas
 
             if( aClipPoly.count() )
             {
-                // aTransform already contains the
-                // translational component, moving the clip to
-                // the final sprite output position.
-                aClipPoly.transform( aTransform );
+                // Move the clip to the final sprite output position.
+                ::basegfx::B2DHomMatrix aClipTransform( aTransform );
+                aClipTransform.translate( aOutPos.X(), aOutPos.Y() );
+                aClipPoly.transform( aClipTransform );
 
                 if( mbShowSpriteBounds )
                 {
@@ -266,13 +205,15 @@ namespace vclcanvas
             }
         }
 
+        ::basegfx::B2DHomMatrix aSizeTransform, aMoveTransform;
+        aSizeTransform.scale( aOutputSize.Width(), aOutputSize.Height() );
+        aMoveTransform.translate( aOutPos.X(), aOutPos.Y() );
+        aTransform = aMoveTransform * aTransform * aSizeTransform;
+
         if( ::rtl::math::approxEqual(fAlpha, 1.0) )
         {
             // no alpha modulation -> just copy to output
-            if( maContent->IsTransparent() )
-                rTargetSurface.DrawBitmapEx( aOutPos, aOutputSize, *maContent );
-            else
-                rTargetSurface.DrawBitmap( aOutPos, aOutputSize, maContent->GetBitmap() );
+            rTargetSurface.DrawTransformedBitmapEx( aTransform, *maContent );
         }
         else
         {
@@ -289,9 +230,7 @@ namespace vclcanvas
                 aAlpha.Replace( maContent->GetMask(), 255 );
 
             // alpha-blend to output
-            rTargetSurface.DrawBitmapEx( aOutPos, aOutputSize,
-                                         BitmapEx( maContent->GetBitmap(),
-                                                   aAlpha ) );
+            rTargetSurface.DrawTransformedBitmapEx( aTransform, BitmapEx( maContent->GetBitmap(), aAlpha ) );
         }
 
         rTargetSurface.Pop();
