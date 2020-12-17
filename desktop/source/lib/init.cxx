@@ -60,6 +60,7 @@
 #include <comphelper/threadpool.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
+#include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -2245,7 +2246,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         const OUString aDeviceFormFactor = extractParameter(aOptions, "DeviceFormFactor");
         SfxLokHelper::setDeviceFormFactor(aDeviceFormFactor);
 
-        uno::Sequence<css::beans::PropertyValue> aFilterOptions(2);
+        uno::Sequence<css::beans::PropertyValue> aFilterOptions(3);
         aFilterOptions[0] = css::beans::PropertyValue( "FilterOptions",
                                                        0,
                                                        uno::makeAny(aOptions),
@@ -2264,11 +2265,11 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         aFilterOptions[1].Name = "InteractionHandler";
         aFilterOptions[1].Value <<= xInteraction;
 
-        /* TODO
         sal_Int16 nMacroExecMode = document::MacroExecMode::USE_CONFIG;
         aFilterOptions[2].Name = "MacroExecutionMode";
         aFilterOptions[2].Value <<= nMacroExecMode;
 
+        /* TODO
         sal_Int16 nUpdateDoc = document::UpdateDocMode::ACCORDING_TO_CONFIG;
         aFilterOptions[3].Name = "UpdateDocMode";
         aFilterOptions[3].Value <<= nUpdateDoc;
