@@ -52,6 +52,7 @@ public:
     void ForceUpdate();
     void sendClose();
     VclPtr<vcl::Window> getNotifierWindow() { return m_aNotifierWindow; }
+    void updateStatus(VclPtr<vcl::Window> pWindow);
 
 private:
     void send(const boost::property_tree::ptree& rTree);
@@ -73,6 +74,7 @@ public:
     void notifyDialogState(bool bForce = false);
     void sendClose();
     void dumpStatus();
+    void sendUpdate(VclPtr<vcl::Window> pWindow);
 };
 
 class JSDropTarget final
@@ -380,6 +382,8 @@ public:
 
 class JSTreeView : public JSWidget<SalInstanceTreeView, ::SvTabListBox>
 {
+    DECL_LINK(on_window_event, VclWindowEvent&, void);
+
 public:
     JSTreeView(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
                ::SvTabListBox* pTextView, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
