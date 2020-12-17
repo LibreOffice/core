@@ -99,7 +99,8 @@
                   <object class="GtkLabel" id="create_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="saveastemplatedlg|create_label">Template _Name</property>
+                    <property name="label" translatable="yes" context="saveastemplatedlg|create_label">Enter Template _Name:</property>
+                    <property name="tooltip_text" translatable="yes" context="saveastemplatedlg|create_label">Enter a name for the template.</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">name_entry</property>
                     <property name="xalign">0</property>
@@ -149,7 +150,8 @@
                   <object class="GtkLabel" id="select_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="saveastemplatedlg|select_label">Template _Category</property>
+                    <property name="label" translatable="yes" context="saveastemplatedlg|select_label">Select Template _Category:</property>
+                    <property name="tooltip_text" translatable="yes" context="saveastemplatedlg|select_label">Save template in selected category.</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">categorylb</property>
                     <property name="xalign">0</property>
