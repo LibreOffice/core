@@ -101,7 +101,10 @@ std::unique_ptr<tools::JsonWriter> JSDialogNotifyIdle::generateCloseMessage() co
     return aJsonWriter;
 }
 
-void JSDialogNotifyIdle::Invoke() { send(dumpStatus()); }
+void JSDialogNotifyIdle::Invoke()
+{
+    send(dumpStatus());
+}
 
 void JSDialogNotifyIdle::sendClose() { send(generateCloseMessage()); }
 
@@ -116,6 +119,11 @@ void JSDialogSender::notifyDialogState(bool bForce)
 }
 
 void JSDialogSender::sendClose() { mpIdleNotify->sendClose(); }
+
+void JSDialogSender::dumpStatus()
+{
+    mpIdleNotify->Invoke();
+}
 
 namespace
 {
@@ -631,6 +639,8 @@ JSDialog::JSDialog(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aCon
     : JSWidget<SalInstanceDialog, ::Dialog>(aNotifierWindow, aContentWindow, pDialog, pBuilder,
                                             bTakeOwnership, sTypeOfJSON)
 {
+    pDialog->AddEventListener(LINK(this, JSDialog, on_window_event));
+    m_bNotifyCreated = false;
 }
 
 void JSDialog::collapse(weld::Widget* pEdit, weld::Widget* pButton)
@@ -649,6 +659,23 @@ void JSDialog::response(int response)
 {
     sendClose();
     SalInstanceDialog::response(response);
+}
+
+IMPL_LINK_NOARG(JSDialog, on_dump_status, void*, void)
+{
+    JSDialogSender::dumpStatus();
+}
+
+IMPL_LINK(JSDialog, on_window_event, VclWindowEvent&, rEvent, void)
+{
+    if (!getNotifierWindow()->IsDisableIdleNotify())
+        return;
+
+    if (rEvent.GetId() == VclEventId::WindowShow && !m_bNotifyCreated)
+    {
+        Application::PostUserEvent(LINK(this, JSDialog, on_dump_status));
+        m_bNotifyCreated = true;
+    }
 }
 
 JSLabel::JSLabel(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
