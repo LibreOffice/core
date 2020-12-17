@@ -69,6 +69,23 @@
       "revId": "f28c8085d14f65aa40da434c1d9d5ae60bfad862",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "266bedc7_30b788b7",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-12-17T11:46:35Z",
+      "side": 1,
+      "message": "oss-fuzz is reporting (ofz#28733) a Direct-leak from xmlNewEntity. Docs claim xmlNewEntity \"Create a new entity, this differs from xmlAddDocEntity() that if the document is NULL ... then an unlinked entity structure will be returned, it is then the responsability of the caller to link it to the document later or free it when not needed anymore\". Should FastSaxParserImpl keep track of the returns from xmlNewEntity and free them itself, maybe in its dtor ?",
+      "revId": "f28c8085d14f65aa40da434c1d9d5ae60bfad862",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
