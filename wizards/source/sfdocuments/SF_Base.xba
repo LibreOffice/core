@@ -67,7 +67,7 @@ Private _FormDocuments			As Object
 
 REM ============================================================ MODULE CONSTANTS
 
-Const ISBASEFORM = 2				&apos;	Form is stored in a Base document
+Const ISBASEFORM = 3				&apos;	Form is stored in a Base document
 Const cstToken = &quot;//&quot;				&apos;	Form names accept special characters but not slashes
 
 REM ====================================================== CONSTRUCTOR/DESTRUCTOR
@@ -238,7 +238,7 @@ Try:
 			Set .[Me] = oForm
 			Set .[_Parent] = [Me]
 			._DrawPage = cstDrawPage
-			._UsualName = FormDocument &amp; &quot; : &quot; &amp; ._Name
+			._FormDocumentName = FormDocument
 			Set ._MainForm = oMainForm
 			._FormType = ISBASEFORM
 			Set ._Form = oXForm
