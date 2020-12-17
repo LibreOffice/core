@@ -1095,6 +1095,8 @@ boost::property_tree::ptree FormattedField::DumpAsPropertyTree()
         rtl_math_StringFormat_F, GetDecimalDigits(), '.').getStr());
     aTree.put("value", rtl::math::doubleToString(GetValue(),
         rtl_math_StringFormat_F, GetDecimalDigits(), '.').getStr());
+    aTree.put("step", rtl::math::doubleToString(GetSpinSize(),
+        rtl_math_StringFormat_F, GetDecimalDigits(), '.').getStr());
 
     return aTree;
 }
