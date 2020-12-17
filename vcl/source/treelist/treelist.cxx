@@ -1032,6 +1032,7 @@ SvListView::SvListView()
 {
     pModel.reset(new SvTreeList(*this));
     m_pImpl->InitTable();
+    m_bDirtyModel = false;
 }
 
 void SvListView::dispose()
@@ -1248,15 +1249,18 @@ void SvListView::Impl::ActionClear()
 void SvListView::ModelNotification( SvListAction nActionId, SvTreeListEntry* pEntry1,
                         SvTreeListEntry* /*pEntry2*/, sal_uLong /*nPos*/ )
 {
+
     switch( nActionId )
     {
         case SvListAction::INSERTED:
             m_pImpl->ActionInserted( pEntry1 );
             ModelHasInserted( pEntry1 );
+            m_bDirtyModel = true;
             break;
         case SvListAction::INSERTED_TREE:
             m_pImpl->ActionInsertedTree( pEntry1 );
             ModelHasInsertedTree( pEntry1 );
+            m_bDirtyModel = true;
             break;
         case SvListAction::REMOVING:
             ModelIsRemoving( pEntry1 );
@@ -1264,6 +1268,7 @@ void SvListView::ModelNotification( SvListAction nActionId, SvTreeListEntry* pEn
             break;
         case SvListAction::REMOVED:
             ModelHasRemoved( pEntry1 );
+            m_bDirtyModel = true;
             break;
         case SvListAction::MOVING:
             ModelIsMoving( pEntry1 );
@@ -1272,12 +1277,14 @@ void SvListView::ModelNotification( SvListAction nActionId, SvTreeListEntry* pEn
         case SvListAction::MOVED:
             m_pImpl->ActionMoved();
             ModelHasMoved( pEntry1 );
+            m_bDirtyModel = true;
             break;
         case SvListAction::CLEARING:
             m_pImpl->ActionClear();
             ModelHasCleared(); // sic! for compatibility reasons!
             break;
         case SvListAction::CLEARED:
+            m_bDirtyModel = true;
             break;
         case SvListAction::INVALIDATE_ENTRY:
             // no action for the base class
@@ -1285,6 +1292,7 @@ void SvListView::ModelNotification( SvListAction nActionId, SvTreeListEntry* pEn
             break;
         case SvListAction::RESORTED:
             m_pImpl->m_bVisPositionsValid = false;
+            m_bDirtyModel = true;
             break;
         case SvListAction::RESORTING:
             break;
