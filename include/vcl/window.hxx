@@ -1176,6 +1176,9 @@ public:
     /// Find an existing Window based on the LOKWindowId.
     static VclPtr<vcl::Window>          FindLOKWindow(vcl::LOKWindowId nWindowId);
 
+    bool                                IsDisableIdleNotify();
+    void                                SetDisableIdleNotify(bool bValue);
+
     /// check if LOK Window container is empty
     static bool                         IsLOKWindowsEmpty();
 

@@ -49,6 +49,7 @@ public:
     void Invoke() override;
     void ForceUpdate();
     void sendClose();
+    VclPtr<vcl::Window> getNotifierWindow() { return m_aNotifierWindow; }
 
 private:
     void send(std::unique_ptr<tools::JsonWriter> aJsonWriter);
