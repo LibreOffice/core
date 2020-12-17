@@ -3410,6 +3410,11 @@ namespace xmloff::token {
         const OUString& rString,
         enum XMLTokenEnum eToken );
 
+    /// compare eToken to the string
+    XMLOFF_DLLPUBLIC bool IsXMLToken(
+        std::string_view rString,
+        enum XMLTokenEnum eToken );
+
     XMLOFF_DLLPUBLIC bool IsXMLToken(
         const sax_fastparser::FastAttributeList::FastAttributeIter& aIter,
         enum XMLTokenEnum eToken );

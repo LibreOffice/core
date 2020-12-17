@@ -87,7 +87,7 @@ void XMLHatchStyleImport::importXML(
                 break;
             case XML_ELEMENT(DRAW, XML_STYLE):
             case XML_ELEMENT(DRAW_OOO, XML_STYLE):
-                SvXMLUnitConverter::convertEnum( aHatch.Style, aIter.toString(), pXML_HatchStyle_Enum );
+                SvXMLUnitConverter::convertEnum( aHatch.Style, aIter.toView(), pXML_HatchStyle_Enum );
                 break;
             case XML_ELEMENT(DRAW, XML_COLOR):
             case XML_ELEMENT(DRAW_OOO, XML_COLOR):

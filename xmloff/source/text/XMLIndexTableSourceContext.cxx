@@ -93,7 +93,7 @@ void XMLIndexTableSourceContext::ProcessAttribute(const sax_fastparser::FastAttr
         case XML_ELEMENT(TEXT, XML_CAPTION_SEQUENCE_FORMAT):
         {
              sal_uInt16 nTmp;
-             if (SvXMLUnitConverter::convertEnum(nTmp, aIter.toString(),
+             if (SvXMLUnitConverter::convertEnum(nTmp, aIter.toView(),
                                                  lcl_aReferenceTypeTokenMap))
              {
                  nDisplayFormat = nTmp;
