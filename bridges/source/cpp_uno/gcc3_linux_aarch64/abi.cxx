@@ -45,7 +45,7 @@
 namespace {
 
 OUString toUnoName(char const * name) {
-    assert(name != 0);
+    assert(name != nullptr);
     OUStringBuffer b;
     bool scoped = *name == 'N';
     if (scoped) {
@@ -74,7 +74,7 @@ OUString toUnoName(char const * name) {
 
 class Rtti {
 public:
-    Rtti(): app_(dlopen(0, RTLD_LAZY)) {}
+    Rtti(): app_(dlopen(nullptr, RTLD_LAZY)) {}
 
     ~Rtti() { dlclose(app_); }
 
@@ -107,7 +107,7 @@ std::type_info * Rtti::getRtti(typelib_TypeDescription const & type) {
         OString sym(b.makeStringAndClear());
         std::type_info * rtti = static_cast<std::type_info *>(
             dlsym(app_, sym.getStr()));
-        if (rtti == 0) {
+        if (rtti == nullptr) {
             char const * rttiName = strdup(sym.getStr() + std::strlen("_ZTI"));
             if (rttiName == nullptr) {
                 throw std::bad_alloc();
@@ -123,7 +123,7 @@ std::type_info * Rtti::getRtti(typelib_TypeDescription const & type) {
             typelib_CompoundTypeDescription const & ctd
                 = reinterpret_cast<typelib_CompoundTypeDescription const &>(
                     type);
-            if (ctd.pBaseTypeDescription == 0) {
+            if (ctd.pBaseTypeDescription == nullptr) {
                 rtti = new __cxxabiv1::__class_type_info(rttiName);
             } else {
                 std::type_info * base = getRtti(
@@ -201,9 +201,9 @@ extern "C" void _GLIBCXX_CDTOR_CALLABI deleteException(void * exception) {
 #endif
     assert(header->exceptionDestructor == &deleteException);
     OUString unoName(toUnoName(header->exceptionType->name()));
-    typelib_TypeDescription * td = 0;
+    typelib_TypeDescription * td = nullptr;
     typelib_typedescription_getByName(&td, unoName.pData);
-    assert(td != 0);
+    assert(td != nullptr);
     uno_destructData(exception, td, &css::uno::cpp_release);
     typelib_typedescription_release(td);
 }
@@ -214,7 +214,7 @@ enum StructKind {
 };
 
 StructKind getStructKind(typelib_CompoundTypeDescription const * type) {
-    StructKind k = type->pBaseTypeDescription == 0
+    StructKind k = type->pBaseTypeDescription == nullptr
         ? STRUCT_KIND_EMPTY : getStructKind(type->pBaseTypeDescription);
     for (sal_Int32 i = 0; i != type->nMembers; ++i) {
         StructKind k2 = StructKind();
@@ -246,7 +246,7 @@ StructKind getStructKind(typelib_CompoundTypeDescription const * type) {
             break;
         case typelib_TypeClass_STRUCT:
             {
-                typelib_TypeDescription * td = 0;
+                typelib_TypeDescription * td = nullptr;
                 TYPELIB_DANGER_GET(&td, type->ppTypeRefs[i]);
                 k2 = getStructKind(
                     reinterpret_cast<typelib_CompoundTypeDescription const *>(
@@ -289,12 +289,12 @@ namespace abi_aarch64 {
 void mapException(
     __cxxabiv1::__cxa_exception * exception, std::type_info const * type, uno_Any * any, uno_Mapping * mapping)
 {
-    assert(exception != 0);
+    assert(exception != nullptr);
     assert(type != nullptr);
     OUString unoName(toUnoName(type->name()));
-    typelib_TypeDescription * td = 0;
+    typelib_TypeDescription * td = nullptr;
     typelib_typedescription_getByName(&td, unoName.pData);
-    if (td == 0) {
+    if (td == nullptr) {
         css::uno::RuntimeException e("exception type not found: " + unoName);
         uno_type_any_constructAndConvert(
             any, &e,
@@ -307,15 +307,15 @@ void mapException(
 }
 
 void raiseException(uno_Any * any, uno_Mapping * mapping) {
-    typelib_TypeDescription * td = 0;
+    typelib_TypeDescription * td = nullptr;
     TYPELIB_DANGER_GET(&td, any->pType);
-    if (td == 0) {
+    if (td == nullptr) {
         throw css::uno::RuntimeException(
-            "no typedescription for " + OUString(any->pType->pTypeName));
+            "no typedescription for " + OUString::unacquired(&any->pType->pTypeName));
     }
     void * exc = __cxxabiv1::__cxa_allocate_exception(td->nSize);
     uno_copyAndConvertData(exc, any->pData, td, mapping);
-    uno_any_destruct(any, 0);
+    uno_any_destruct(any, nullptr);
     std::type_info * rtti = getRtti(*td);
     TYPELIB_DANGER_RELEASE(td);
     __cxxabiv1::__cxa_throw(exc, rtti, deleteException);
