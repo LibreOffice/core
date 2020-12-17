@@ -36,7 +36,7 @@ namespace rptxml
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
 
-    static sal_Int16 lcl_getReportPrintOption(std::u16string_view _sValue)
+    static sal_Int16 lcl_getReportPrintOption(std::string_view _sValue)
     {
         sal_Int16 nRet = report::ReportPrintOption::ALL_PAGES;
         const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
@@ -63,9 +63,9 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
             {
                 case XML_ELEMENT(REPORT, XML_PAGE_PRINT_OPTION):
                     if ( _bPageHeader )
-                        m_xSection->getReportDefinition()->setPageHeaderOption(lcl_getReportPrintOption(aIter.toString()));
+                        m_xSection->getReportDefinition()->setPageHeaderOption(lcl_getReportPrintOption(aIter.toView()));
                     else
-                        m_xSection->getReportDefinition()->setPageFooterOption(lcl_getReportPrintOption(aIter.toString()));
+                        m_xSection->getReportDefinition()->setPageFooterOption(lcl_getReportPrintOption(aIter.toView()));
                     break;
                 case XML_ELEMENT(REPORT, XML_REPEAT_SECTION):
                     m_xSection->setRepeatSection(IsXMLToken(aIter, XML_TRUE));

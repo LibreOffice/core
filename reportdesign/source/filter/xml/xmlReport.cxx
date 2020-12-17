@@ -59,7 +59,7 @@ OXMLReport::OXMLReport( ORptFilter& rImport,
                     {
                         sal_Int32 nRet = sdb::CommandType::COMMAND;
                         const SvXMLEnumMapEntry<sal_Int32>* aXML_EnumMap = OXMLHelper::GetCommandTypeOptions();
-                        bool bConvertOk = SvXMLUnitConverter::convertEnum( nRet, aIter.toString(), aXML_EnumMap );
+                        bool bConvertOk = SvXMLUnitConverter::convertEnum( nRet, aIter.toView(), aXML_EnumMap );
                         SAL_WARN_IF(!bConvertOk, "reportdesign", "convertEnum failed");
                         m_xReportDefinition->setCommandType(nRet);
                     }

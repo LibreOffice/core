@@ -121,7 +121,7 @@ static void GetString( std::vector< css::beans::PropertyValue >& rDest,
 
 template<typename EnumT>
 static void GetEnum( std::vector< css::beans::PropertyValue >& rDest,
-                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp,
+                         std::string_view rValue, const EnhancedCustomShapeTokenEnum eDestProp,
                         const SvXMLEnumMapEntry<EnumT>& rMap )
 {
     EnumT eKind;
@@ -1070,7 +1070,7 @@ void XMLEnhancedCustomShapeContext::startFastElement(
             }
             break;
             case EAS_glue_point_type :
-                GetEnum( maPath, aIter.toString(), EAS_GluePointType, *aXML_GluePointEnumMap );
+                GetEnum( maPath, aIter.toView(), EAS_GluePointType, *aXML_GluePointEnumMap );
             break;
             case EAS_glue_point_leaving_directions :
                 GetDoubleSequence( maPath, aIter.toString(), EAS_GluePointLeavingDirections );

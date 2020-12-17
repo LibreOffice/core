@@ -72,7 +72,7 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
                     else
                     {
                         const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetImageScaleOptions();
-                        bool bConvertOk = SvXMLUnitConverter::convertEnum( nRet, aIter.toString(), aXML_EnumMap );
+                        bool bConvertOk = SvXMLUnitConverter::convertEnum( nRet, aIter.toView(), aXML_EnumMap );
                         SAL_WARN_IF(!bConvertOk, "reportdesign", "convertEnum failed");
                     }
                     _xComponent->setScaleMode( nRet );

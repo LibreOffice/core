@@ -93,7 +93,7 @@ void XMLIndexChapterInfoEntryContext::startFastElement(
             case XML_ELEMENT(TEXT, XML_DISPLAY): //i53420, always true, in TOC as well
             {
                 sal_uInt16 nTmp;
-                if (SvXMLUnitConverter::convertEnum(nTmp, aIter.toString(), aChapterDisplayMap))
+                if (SvXMLUnitConverter::convertEnum(nTmp, aIter.toView(), aChapterDisplayMap))
                 {
                     nChapterInfo = nTmp;
                     bChapterInfoOK = true;

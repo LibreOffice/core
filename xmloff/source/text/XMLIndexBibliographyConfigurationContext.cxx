@@ -127,7 +127,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexBibliographyCo
     // process children here and use default context!
     if ( nElement == XML_ELEMENT(TEXT, XML_SORT_KEY) )
     {
-        OUString sKey;
+        std::string_view sKey;
         bool bSort(true);
 
         for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
@@ -135,7 +135,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexBibliographyCo
             switch (aIter.getToken())
             {
                 case XML_ELEMENT(TEXT, XML_KEY):
-                    sKey = aIter.toString();
+                    sKey = aIter.toView();
                     break;
                 case XML_ELEMENT(TEXT, XML_SORT_ASCENDING):
                 {

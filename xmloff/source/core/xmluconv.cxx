@@ -248,6 +248,25 @@ bool SvXMLUnitConverter::convertEnumImpl(
     return false;
 }
 
+/** convert string to enum using given token map, if the enum is
+    not found in the map, this method will return false */
+bool SvXMLUnitConverter::convertEnumImpl(
+    sal_uInt16& rEnum,
+    std::string_view rValue,
+    const SvXMLEnumMapEntry<sal_uInt16> *pMap )
+{
+    while( pMap->GetToken() != XML_TOKEN_INVALID )
+    {
+        if( IsXMLToken( rValue, pMap->GetToken() ) )
+        {
+            rEnum = pMap->GetValue();
+            return true;
+        }
+        ++pMap;
+    }
+    return false;
+}
+
 /** convert enum to string using given token map with an optional
     default token. If the enum is not found in the map,
     this method will either use the given default or return

@@ -126,7 +126,7 @@ void XMLFootnoteSeparatorImport::startFastElement(
                 };
 
                 SvXMLUnitConverter::convertEnum(
-                            eLineAdjust, aIter.toString(), aXML_HorizontalAdjust_Enum);
+                            eLineAdjust, aIter.toView(), aXML_HorizontalAdjust_Enum);
                 break;
             }
             case XML_ELEMENT(STYLE, XML_REL_WIDTH ):
@@ -154,7 +154,7 @@ void XMLFootnoteSeparatorImport::startFastElement(
                     { XML_TOKEN_INVALID, 0 }
                 };
 
-                SvXMLUnitConverter::convertEnum(nLineStyle, aIter.toString(), aXML_LineStyle_Enum);
+                SvXMLUnitConverter::convertEnum(nLineStyle, aIter.toView(), aXML_LineStyle_Enum);
                 break;
             }
             default:
