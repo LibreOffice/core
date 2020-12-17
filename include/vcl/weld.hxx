@@ -2186,6 +2186,7 @@ public:
     void connect_activate(const Link<const OString&, void>& rLink) { m_aActivateHdl = rLink; }
 
     virtual void set_sensitive(const OString& rIdent, bool bSensitive) = 0;
+    virtual bool get_sensitive(const OString& rIdent) const = 0;
     virtual void set_label(const OString& rIdent, const OUString& rLabel) = 0;
     virtual OUString get_label(const OString& rIdent) const = 0;
     virtual void set_active(const OString& rIdent, bool bActive) = 0;
