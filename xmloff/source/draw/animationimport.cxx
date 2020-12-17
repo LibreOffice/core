@@ -585,7 +585,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(SMIL_COMPAT, XML_FILL):
             case XML_ELEMENT(SMIL_SO52, XML_FILL):
             {
-                if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toString(), aAnimations_EnumMap_Fill ) )
+                if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toView(), aAnimations_EnumMap_Fill ) )
                     mxNode->setFill( nEnum );
             }
             break;
@@ -593,7 +593,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(SMIL_COMPAT, XML_FILLDEFAULT):
             case XML_ELEMENT(SMIL_SO52, XML_FILLDEFAULT):
             {
-                if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toString(), aAnimations_EnumMap_FillDefault ) )
+                if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toView(), aAnimations_EnumMap_FillDefault ) )
                     mxNode->setFillDefault( nEnum );
             }
             break;
@@ -601,7 +601,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(SMIL_COMPAT, XML_RESTART):
             case XML_ELEMENT(SMIL_SO52, XML_RESTART):
             {
-                if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toString(), aAnimations_EnumMap_Restart ) )
+                if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toView(), aAnimations_EnumMap_Restart ) )
                     mxNode->setRestart( nEnum );
             }
             break;
@@ -609,7 +609,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(SMIL_COMPAT, XML_RESTARTDEFAULT):
             case XML_ELEMENT(SMIL_SO52, XML_RESTARTDEFAULT):
             {
-                if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toString(), aAnimations_EnumMap_RestartDefault ) )
+                if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toView(), aAnimations_EnumMap_RestartDefault ) )
                     mxNode->setRestartDefault( nEnum );
             }
             break;
@@ -656,7 +656,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(SMIL_COMPAT, XML_ENDSYNC):
             case XML_ELEMENT(SMIL_SO52, XML_ENDSYNC):
             {
-                if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toString(), aAnimations_EnumMap_Endsync ) )
+                if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toView(), aAnimations_EnumMap_Endsync ) )
                     mxNode->setEndSync( makeAny( nEnum ) );
             }
             break;
@@ -665,7 +665,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(PRESENTATION_OOO, XML_NODE_TYPE):
             case XML_ELEMENT(PRESENTATION_OASIS, XML_NODE_TYPE):
             {
-                if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toString(), aAnimations_EnumMap_EffectNodeType ) )
+                if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toView(), aAnimations_EnumMap_EffectNodeType ) )
                     aUserData.emplace_back( GetXMLToken( XML_NODE_TYPE ), makeAny( nEnum ) );
             }
             break;
@@ -690,7 +690,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(PRESENTATION_OOO, XML_PRESET_CLASS):
             case XML_ELEMENT(PRESENTATION_OASIS, XML_PRESET_CLASS):
             {
-                if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toString(), aAnimations_EnumMap_EffectPresetClass ) )
+                if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toView(), aAnimations_EnumMap_EffectPresetClass ) )
                     aUserData.emplace_back( GetXMLToken( XML_PRESET_CLASS ), makeAny( nEnum ) );
             }
             break;
@@ -760,7 +760,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(ANIMATION, XML_SUB_ITEM):
             case XML_ELEMENT(ANIMATION_OOO, XML_SUB_ITEM):
             {
-                if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toString(), aAnimations_EnumMap_SubItem ) )
+                if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toView(), aAnimations_EnumMap_SubItem ) )
                 {
                     if( xAnimate.is() )
                     {
@@ -868,7 +868,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             {
                 if( xAnimate.is() )
                 {
-                    if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toString(), aAnimations_EnumMap_CalcMode ) )
+                    if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toView(), aAnimations_EnumMap_CalcMode ) )
                         xAnimate->setCalcMode( nEnum );
                 }
             }
@@ -892,7 +892,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             {
                 if( xAnimate.is() )
                 {
-                    if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toString(), aAnimations_EnumMap_AdditiveMode ) )
+                    if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toView(), aAnimations_EnumMap_AdditiveMode ) )
                         xAnimate->setAdditive( nEnum );
                 }
             }
@@ -980,7 +980,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
                 Reference< XAnimateTransform > xTransform( mxNode, UNO_QUERY );
                 if( xTransform.is() )
                 {
-                    if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toString(), aAnimations_EnumMap_TransformType ) )
+                    if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toView(), aAnimations_EnumMap_TransformType ) )
                     {
                         xTransform->setTransformType( nEnum );
                         switch( nEnum )
@@ -1004,7 +1004,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             {
                 if( xTransitionFilter.is() )
                 {
-                    if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toString(), aAnimations_EnumMap_TransitionType ) )
+                    if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toView(), aAnimations_EnumMap_TransitionType ) )
                         xTransitionFilter->setTransition( nEnum );
                 }
             }
@@ -1016,7 +1016,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             {
                 if( xTransitionFilter.is() )
                 {
-                    if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toString(), aAnimations_EnumMap_TransitionSubType ) )
+                    if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toView(), aAnimations_EnumMap_TransitionSubType ) )
                         xTransitionFilter->setSubtype( nEnum );
                 }
             }
@@ -1056,7 +1056,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(ANIMATION, XML_ITERATE_TYPE):
             case XML_ELEMENT(ANIMATION_OOO, XML_ITERATE_TYPE):
             {
-                if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toString(), aAnimations_EnumMap_IterateType ) )
+                if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toView(), aAnimations_EnumMap_IterateType ) )
                 {
                     if( xIter.is() )
                         xIter->setIterateType( nEnum );
@@ -1104,7 +1104,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             {
                 if( xCommand.is() && nNodeType == AnimationNodeType::COMMAND )
                 {
-                    if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toString(), aAnimations_EnumMap_Command ) )
+                    if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toView(), aAnimations_EnumMap_Command ) )
                     {
                         xCommand->setCommand( nEnum );
                     }

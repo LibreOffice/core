@@ -147,13 +147,13 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(PRESENTATION, XML_ACTION):
-            SvXMLUnitConverter::convertEnum( maData.meClickAction, aIter.toString(), aXML_EventActions_EnumMap );
+            SvXMLUnitConverter::convertEnum( maData.meClickAction, aIter.toView(), aXML_EventActions_EnumMap );
             break;
         case XML_ELEMENT(PRESENTATION, XML_EFFECT):
-            SvXMLUnitConverter::convertEnum( maData.meEffect, aIter.toString(), aXML_AnimationEffect_EnumMap );
+            SvXMLUnitConverter::convertEnum( maData.meEffect, aIter.toView(), aXML_AnimationEffect_EnumMap );
             break;
         case XML_ELEMENT(PRESENTATION, XML_DIRECTION):
-            SvXMLUnitConverter::convertEnum( maData.meDirection, aIter.toString(), aXML_AnimationDirection_EnumMap );
+            SvXMLUnitConverter::convertEnum( maData.meDirection, aIter.toView(), aXML_AnimationDirection_EnumMap );
             break;
         case XML_ELEMENT(PRESENTATION, XML_START_SCALE):
             {
@@ -163,7 +163,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,
             }
             break;
         case XML_ELEMENT(PRESENTATION, XML_SPEED):
-            SvXMLUnitConverter::convertEnum( maData.meSpeed, aIter.toString(), aXML_AnimationSpeed_EnumMap );
+            SvXMLUnitConverter::convertEnum( maData.meSpeed, aIter.toView(), aXML_AnimationSpeed_EnumMap );
             break;
         case XML_ELEMENT(PRESENTATION, XML_VERB):
             ::sax::Converter::convertNumber( maData.mnVerb, aIter.toView() );

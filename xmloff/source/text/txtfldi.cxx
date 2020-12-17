@@ -2963,7 +2963,7 @@ void XMLBibliographyFieldImportContext::startFastElement(
             {
                 sal_uInt16 nTmp;
                 if (SvXMLUnitConverter::convertEnum(
-                    nTmp, aIter.toString(),
+                    nTmp, aIter.toView(),
                     aBibliographyDataTypeMap))
                 {
                     aAny <<= static_cast<sal_Int16>(nTmp);

@@ -94,7 +94,7 @@ void XMLTextShapeImportHelper::addShape(
             {
                 TextContentAnchorType eNew;
                 // OD 2004-06-01 #i26791# - allow all anchor types
-                if ( XMLAnchorTypePropHdl::convert( aIter.toString(), eNew ) )
+                if ( XMLAnchorTypePropHdl::convert( aIter.toView(), eNew ) )
                 {
                     eAnchorType = eNew;
                 }

@@ -240,7 +240,7 @@ void SchXMLAxisContext::startFastElement( sal_Int32 /*nElement*/,
             case XML_ELEMENT(CHART, XML_DIMENSION):
                 {
                     SchXMLAxisDimension nEnumVal;
-                    if( SvXMLUnitConverter::convertEnum( nEnumVal, aIter.toString(), aXMLAxisDimensionMap ))
+                    if( SvXMLUnitConverter::convertEnum( nEnumVal, aIter.toView(), aXMLAxisDimensionMap ))
                         m_aCurrentAxis.eDimension = nEnumVal;
                 }
                 break;
@@ -250,7 +250,7 @@ void SchXMLAxisContext::startFastElement( sal_Int32 /*nElement*/,
             case XML_ELEMENT(CHART, XML_AXIS_TYPE):
             case XML_ELEMENT(CHART_EXT, XML_AXIS_TYPE):
                 sal_uInt16 nEnumVal;
-                if( SvXMLUnitConverter::convertEnum( nEnumVal, aIter.toString(), aXMLAxisTypeMap ))
+                if( SvXMLUnitConverter::convertEnum( nEnumVal, aIter.toView(), aXMLAxisTypeMap ))
                 {
                     m_nAxisType = nEnumVal;
                     m_bAxisTypeImported = true;

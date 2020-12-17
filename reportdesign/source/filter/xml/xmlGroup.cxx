@@ -39,7 +39,7 @@ namespace rptxml
     using namespace ::com::sun::star::report;
     using namespace ::com::sun::star::xml::sax;
 
-    static sal_Int16 lcl_getKeepTogetherOption(std::u16string_view _sValue)
+    static sal_Int16 lcl_getKeepTogetherOption(std::string_view _sValue)
     {
         sal_Int16 nRet = report::KeepTogether::NO;
         const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetKeepTogetherOptions();
@@ -154,7 +154,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                     }
                     break;
                 case XML_ELEMENT(REPORT, XML_KEEP_TOGETHER):
-                    m_xGroup->setKeepTogether(lcl_getKeepTogetherOption(aIter.toString()));
+                    m_xGroup->setKeepTogether(lcl_getKeepTogetherOption(aIter.toView()));
                     break;
                 default:
                     XMLOFF_WARN_UNKNOWN("reportdesign", aIter);
