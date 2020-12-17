@@ -5988,9 +5988,6 @@ static void preloadData()
     SvtLanguageTable::HasLanguageType(LANGUAGE_SYSTEM);
     (void)LanguageTag::isValidBcp47("foo", nullptr);
 
-    std::cerr << "Preload fonts\n";
-
-    // Initialize fonts.
     css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
     if (xLangSrv.is())
     {
@@ -5999,9 +5996,12 @@ static void preloadData()
             aLocales = xSpell->getLocales();
     }
 
+    std::cerr << "Preload fonts\n";
+    vcl::lok::fontPreload();
+
+    // Initialize common fonts.
     for (const auto& aLocale : std::as_const(aLocales))
     {
-        //TODO: Add more types and cache more aggressively. For now this initializes the fontcache.
         using namespace ::com::sun::star::i18n::ScriptType;
         LanguageType nLang;
         nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType(aLocale, false), LATIN);

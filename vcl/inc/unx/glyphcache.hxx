@@ -106,6 +106,8 @@ public:
     void                    ClearFontCache();
     void                    ClearFontOptions();
 
+    FreetypeFontFile*       FindFontFile(const OString& rNativeFileName);
+
 private:
     // to access the constructor (can't use InitFreetypeManager function, because it's private?!)
     friend class GenericUnixSalData;
@@ -114,7 +116,6 @@ private:
     static void             InitFreetype();
     void                    GarbageCollect();
     FreetypeFont*           CreateFont(LogicalFontInstance* pLogicalFont);
-    FreetypeFontFile* FindFontFile(const OString& rNativeFileName);
 
     // the GlyphCache's FontList matches a font request to a serverfont instance
     // the FontList key's mpFontData member is reinterpreted as integer font id

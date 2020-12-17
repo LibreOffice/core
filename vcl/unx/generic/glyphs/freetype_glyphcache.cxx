@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/fontcharmap.hxx>
+#include <vcl/lok.hxx>
 
 #include <unx/freetype_glyphcache.hxx>
 
@@ -937,5 +937,23 @@ const unsigned char* FreetypeFont::GetTable(const char* pName, sal_uLong* pLengt
 {
     return mpFontInfo->GetTable( pName, pLength );
 }
+
+namespace vcl { namespace lok {
+void fontPreload()
+{
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    std::vector< psp::fontID > aFontIds;
+    rMgr.getFontList( aFontIds );
+
+    GlyphCache& rGC = GlyphCache::GetInstance();
+    for (auto const& nFontId : aFontIds)
+    {
+        auto aFileName = rMgr.getFontFileSysPath( nFontId );
+        auto *pFontFile = rGC.FindFontFile( aFileName );
+        if (pFontFile)
+            pFontFile->Map();
+    }
+}
+} } // namespace vcl::lok
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
