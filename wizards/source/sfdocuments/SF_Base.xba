@@ -603,11 +603,11 @@ REM ----------------------------------------------------------------------------
 Private Function _CollectFormDocuments(ByRef poContainer As Object) As String
 &apos;&apos;&apos;	Returns a token-separated string of all hierarchical formdocument names
 &apos;&apos;&apos;	depending on the formdocuments container in argument
-&apos;&apos;&apos;	The function traverses recursively the whle tree below the container
+&apos;&apos;&apos;	The function traverses recursively the whole tree below the container
 &apos;&apos;&apos;	The initial call starts from the container _Component.getFormDocuments
 &apos;&apos;&apos;	The list contains closed and open forms
 
-Dim sCollectNames As String			&apos;	Returno value
+Dim sCollectNames As String			&apos;	Return value
 Dim oSubItem As Object				&apos;	com.sun.star.container.XNameAccess (folder) or com.sun.star.ucb.XContent (form)
 Dim sFormName As String				&apos;	Single form name
 Dim i As Long

@@ -75,7 +75,7 @@ Private ServiceName			As String
 
 &apos;	Form location
 Private _Name				As String		&apos; Internal name of the form
-Private _DrawPage			As Long			&apos; Index in DrawOages collection
+Private _DrawPage			As Long			&apos; Index in DrawPages collection
 Private _UsualName			As String		&apos; Name as known by user
 Private _FormType			As Integer		&apos; One of the ISxxxFORM constants
 
@@ -333,7 +333,7 @@ Try:
 		ElseIf Len(_Form.DataSOurceName) = 0 Then	&apos;	There is no database linked with the form
 			&apos;	Return Nothing
 		Else
-			&apos;	Check if DataSourceName is a file or a registrered name and create database instance accordingly
+			&apos;	Check if DataSourceName is a file or a registered name and create database instance accordingly
 			Set FSO = ScriptForge.SF_FileSystem
 			If FSO.FileExists(FSO._ConvertFromUrl(_Form.DataSourceName)) Then
 				Set _Database = ScriptForge.SF_Services.CreateScriptService(&quot;SFDatabases.Database&quot; _
@@ -533,7 +533,7 @@ Check:
 
 Try:
 	&apos;	For usual documents, check that the parent document is still open
-	&apos;	For Base forms and subforms, check the openess of the main form
+	&apos;	For Base forms and subforms, check the openness of the main form
 	Select Case _FormType
 		Case ISDOCFORM, ISCALCFORM
 			bAlive = [_Parent]._IsStillAlive(pbError)
