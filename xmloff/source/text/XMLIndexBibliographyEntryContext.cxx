@@ -110,7 +110,7 @@ void XMLIndexBibliographyEntryContext::startFastElement(
             case XML_ELEMENT(TEXT, XML_BIBLIOGRAPHY_DATA_FIELD):
             {
                 sal_uInt16 nTmp;
-                if (SvXMLUnitConverter::convertEnum(nTmp, aIter.toString(), aBibliographyDataFieldMap))
+                if (SvXMLUnitConverter::convertEnum(nTmp, aIter.toView(), aBibliographyDataFieldMap))
                 {
                     nBibliographyInfo = nTmp;
                     bBibliographyInfoOK = true;

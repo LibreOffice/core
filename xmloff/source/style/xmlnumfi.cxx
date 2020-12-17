@@ -759,7 +759,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 aLanguageTagODF.maCountry = aIter.toString();
                 break;
             case XML_ELEMENT(NUMBER, XML_STYLE):
-                SvXMLUnitConverter::convertEnum( bLong, aIter.toString(), aStyleValueMap );
+                SvXMLUnitConverter::convertEnum( bLong, aIter.toView(), aStyleValueMap );
                 break;
             case XML_ELEMENT(NUMBER, XML_TEXTUAL):
                 if (::sax::Converter::convertBool( bAttrBool, aIter.toView() ))
@@ -1168,7 +1168,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                     bAutoOrder = bAttrBool;
                 break;
             case XML_ELEMENT(NUMBER, XML_FORMAT_SOURCE):
-                SvXMLUnitConverter::convertEnum( bFromSystem, aIter.toString(), aFormatSourceMap );
+                SvXMLUnitConverter::convertEnum( bFromSystem, aIter.toView(), aFormatSourceMap );
                 break;
             case XML_ELEMENT(NUMBER, XML_TRUNCATE_ON_OVERFLOW):
                 if (::sax::Converter::convertBool( bAttrBool, aIter.toView() ))

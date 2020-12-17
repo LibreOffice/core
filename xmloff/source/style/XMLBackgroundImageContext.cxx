@@ -145,12 +145,10 @@ void XMLBackgroundImageContext::ProcessAttrs(
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        const OUString sValue = aIter.toString();
-
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(XLINK, XML_HREF):
-            m_sURL = sValue;
+            m_sURL = aIter.toString();
             if( GraphicLocation_NONE == ePos )
                 ePos = GraphicLocation_TILED;
             break;
@@ -161,6 +159,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
         case XML_ELEMENT(STYLE, XML_POSITION):
             {
                 GraphicLocation eNewPos = GraphicLocation_NONE, eTmp;
+                OUString sValue = aIter.toString();
                 SvXMLTokenEnumerator aTokenEnum( sValue );
                 OUString aToken;
                 bool bHori = false, bVert = false;
@@ -255,7 +254,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                     { XML_STRETCH,              GraphicLocation_AREA    },
                     { XML_TOKEN_INVALID,        GraphicLocation(0)      }
                 };
-                if( SvXMLUnitConverter::convertEnum( nPos, sValue,
+                if( SvXMLUnitConverter::convertEnum( nPos, aIter.toView(),
                                                 psXML_BrushRepeat ) )
                 {
                     if( GraphicLocation_MIDDLE_MIDDLE != nPos ||
@@ -267,13 +266,13 @@ void XMLBackgroundImageContext::ProcessAttrs(
             }
             break;
         case XML_ELEMENT(STYLE, XML_FILTER_NAME):
-            sFilter = sValue;
+            sFilter = aIter.toString();
             break;
         case XML_ELEMENT(DRAW, XML_OPACITY):
             {
                 sal_Int32 nTmp;
                 // convert from percent and clip
-                if (::sax::Converter::convertPercent( nTmp, sValue ))
+                if (::sax::Converter::convertPercent( nTmp, aIter.toView() ))
                 {
                     if( (nTmp >= 0) && (nTmp <= 100) )
                         nTransparency = static_cast<sal_Int8>( 100-nTmp );

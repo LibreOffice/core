@@ -174,11 +174,11 @@ XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
             ::sax::Converter::convertColor( nColor, aIter.toView() );
             break;
         case XML_ELEMENT(STYLE, XML_VERTICAL_ALIGN):
-            SvXMLUnitConverter::convertEnum( eVertAlign, aIter.toString(),
+            SvXMLUnitConverter::convertEnum( eVertAlign, aIter.toView(),
                                              pXML_Sep_Align_Enum );
             break;
         case XML_ELEMENT(STYLE, XML_STYLE):
-            SvXMLUnitConverter::convertEnum( nStyle, aIter.toString(),
+            SvXMLUnitConverter::convertEnum( nStyle, aIter.toView(),
                                              pXML_Sep_Style_Enum );
             break;
         default:

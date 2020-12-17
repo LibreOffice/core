@@ -113,7 +113,7 @@ void XMLIndexTemplateContext::startFastElement(
             // we have an attr name! Then see if we have the attr, too.
             // outline level
             sal_uInt16 nTmp;
-            if (SvXMLUnitConverter::convertEnum(nTmp, aIter.toString(), pOutlineLevelNameMap))
+            if (SvXMLUnitConverter::convertEnum(nTmp, aIter.toView(), pOutlineLevelNameMap))
             {
                 nOutlineLevel = nTmp;
                 bOutlineLevelOK = true;

@@ -459,10 +459,10 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,
                 break;
 
             case XML_ELEMENT(PRESENTATION, XML_EFFECT):
-                SvXMLUnitConverter::convertEnum( meEffect, aIter.toString(), aXML_AnimationEffect_EnumMap );
+                SvXMLUnitConverter::convertEnum( meEffect, aIter.toView(), aXML_AnimationEffect_EnumMap );
                 break;
             case XML_ELEMENT(PRESENTATION, XML_DIRECTION):
-                SvXMLUnitConverter::convertEnum( meDirection, aIter.toString(), aXML_AnimationDirection_EnumMap );
+                SvXMLUnitConverter::convertEnum( meDirection, aIter.toView(), aXML_AnimationDirection_EnumMap );
                 break;
             case XML_ELEMENT(PRESENTATION, XML_START_SCALE):
             {
@@ -472,7 +472,7 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,
                 break;
             }
             case XML_ELEMENT(PRESENTATION, XML_SPEED):
-                SvXMLUnitConverter::convertEnum( meSpeed, aIter.toString(), aXML_AnimationSpeed_EnumMap );
+                SvXMLUnitConverter::convertEnum( meSpeed, aIter.toView(), aXML_AnimationSpeed_EnumMap );
                 break;
             case XML_ELEMENT(PRESENTATION, XML_PATH_ID):
                 maPathShapeId = aIter.toString();

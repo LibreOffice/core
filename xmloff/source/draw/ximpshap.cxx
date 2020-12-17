@@ -286,7 +286,7 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XFastAttri
             case XML_ELEMENT(DRAW, XML_ALIGN):
             {
                 drawing::Alignment eKind;
-                if( SvXMLUnitConverter::convertEnum( eKind, aIter.toString(), aXML_GlueAlignment_EnumMap ) )
+                if( SvXMLUnitConverter::convertEnum( eKind, aIter.toView(), aXML_GlueAlignment_EnumMap ) )
                 {
                     aGluePoint.PositionAlignment = eKind;
                     aGluePoint.IsRelative = false;
@@ -295,7 +295,7 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XFastAttri
             }
             case XML_ELEMENT(DRAW, XML_ESCAPE_DIRECTION):
             {
-                SvXMLUnitConverter::convertEnum( aGluePoint.Escape, aIter.toString(), aXML_GlueEscapeDirection_EnumMap );
+                SvXMLUnitConverter::convertEnum( aGluePoint.Escape, aIter.toView(), aXML_GlueEscapeDirection_EnumMap );
                 break;
             }
             default:
@@ -1132,7 +1132,7 @@ bool SdXMLEllipseShapeContext::processAttribute( const sax_fastparser::FastAttri
             mnRY = mnRX;
             break;
         case XML_ELEMENT(DRAW, XML_KIND):
-            SvXMLUnitConverter::convertEnum( meKind, aIter.toString(), aXML_CircleKind_EnumMap );
+            SvXMLUnitConverter::convertEnum( meKind, aIter.toView(), aXML_CircleKind_EnumMap );
             break;
         case XML_ELEMENT(DRAW, XML_START_ANGLE):
         {
@@ -1771,7 +1771,7 @@ bool SdXMLConnectorShapeContext::processAttribute( const sax_fastparser::FastAtt
         }
         case XML_ELEMENT(DRAW, XML_TYPE):
         {
-            (void)SvXMLUnitConverter::convertEnum( mnType, aIter.toString(), aXML_ConnectionKind_EnumMap );
+            (void)SvXMLUnitConverter::convertEnum( mnType, aIter.toView(), aXML_ConnectionKind_EnumMap );
             break;
         }
         // #121965# draw:transform may be used in ODF1.2, e.g. exports from MS seem to use these

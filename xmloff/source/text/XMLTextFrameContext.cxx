@@ -859,7 +859,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             {
 
                 TextContentAnchorType eNew;
-                if( XMLAnchorTypePropHdl::convert( aIter.toString(), eNew ) &&
+                if( XMLAnchorTypePropHdl::convert( aIter.toView(), eNew ) &&
                     ( TextContentAnchorType_AT_PARAGRAPH == eNew ||
                       TextContentAnchorType_AT_CHARACTER == eNew ||
                       TextContentAnchorType_AS_CHARACTER == eNew ||
@@ -1353,7 +1353,7 @@ XMLTextFrameContext::XMLTextFrameContext(
             case XML_ELEMENT(TEXT, XML_ANCHOR_TYPE):
             {
                 TextContentAnchorType eNew;
-                if( XMLAnchorTypePropHdl::convert( aIter.toString(), eNew ) &&
+                if( XMLAnchorTypePropHdl::convert( aIter.toView(), eNew ) &&
                     ( TextContentAnchorType_AT_PARAGRAPH == eNew ||
                       TextContentAnchorType_AT_CHARACTER == eNew ||
                       TextContentAnchorType_AS_CHARACTER == eNew ||

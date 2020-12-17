@@ -95,7 +95,7 @@ void XMLTransGradientStyleImport::importXML(
             break;
         case XML_ELEMENT(DRAW, XML_STYLE):
             {
-                SvXMLUnitConverter::convertEnum( aGradient.Style, aIter.toString(), pXML_GradientStyle_Enum );
+                SvXMLUnitConverter::convertEnum( aGradient.Style, aIter.toView(), pXML_GradientStyle_Enum );
             }
             break;
         case XML_ELEMENT(DRAW, XML_CX):

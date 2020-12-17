@@ -50,7 +50,7 @@ namespace rptxml
     using ::com::sun::star::uno::Reference;
     using namespace ::com::sun::star::xml::sax;
 
-    static sal_Int16 lcl_getForceNewPageOption(std::u16string_view _sValue)
+    static sal_Int16 lcl_getForceNewPageOption(std::string_view _sValue)
     {
         sal_Int16 nRet = report::ForceNewPage::NONE;
         const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetForceNewPageOptions();
@@ -82,10 +82,10 @@ OXMLTable::OXMLTable( ORptFilter& rImport
                     m_xSection->setVisible(IsXMLToken(aIter, XML_TRUE));
                     break;
                 case XML_ELEMENT(REPORT, XML_FORCE_NEW_PAGE):
-                    m_xSection->setForceNewPage(lcl_getForceNewPageOption(aIter.toString()));
+                    m_xSection->setForceNewPage(lcl_getForceNewPageOption(aIter.toView()));
                     break;
                 case XML_ELEMENT(REPORT, XML_FORCE_NEW_COLUMN):
-                    m_xSection->setNewRowOrCol(lcl_getForceNewPageOption(aIter.toString()));
+                    m_xSection->setNewRowOrCol(lcl_getForceNewPageOption(aIter.toView()));
                     break;
                 case XML_ELEMENT(REPORT, XML_KEEP_TOGETHER):
                     m_xSection->setKeepTogether(IsXMLToken(aIter, XML_TRUE));

@@ -95,7 +95,7 @@ void XMLDashStyleImport::importXML(
         case XML_ELEMENT(DRAW, XML_STYLE):
         case XML_ELEMENT(DRAW_OOO, XML_STYLE):
             {
-                SvXMLUnitConverter::convertEnum( aLineDash.Style, aIter.toString(), pXML_DashStyle_Enum );
+                SvXMLUnitConverter::convertEnum( aLineDash.Style, aIter.toView(), pXML_DashStyle_Enum );
             }
             break;
         case XML_ELEMENT(DRAW, XML_DOTS1):
