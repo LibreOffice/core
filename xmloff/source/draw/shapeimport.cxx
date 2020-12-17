@@ -112,10 +112,10 @@ struct XMLShapeImportHelperImpl
     bool                        mbIsPresentationShapesSupported;
 };
 
-const std::u16string_view gsStartShape(u"StartShape");
-const std::u16string_view gsEndShape(u"EndShape");
-const std::u16string_view gsStartGluePointIndex(u"StartGluePointIndex");
-const std::u16string_view gsEndGluePointIndex(u"EndGluePointIndex");
+const OUStringLiteral gsStartShape(u"StartShape");
+const OUStringLiteral gsEndShape(u"EndShape");
+const OUStringLiteral gsStartGluePointIndex(u"StartGluePointIndex");
+const OUStringLiteral gsEndGluePointIndex(u"EndGluePointIndex");
 
 XMLShapeImportHelper::XMLShapeImportHelper(
         SvXMLImport& rImporter,
@@ -819,10 +819,16 @@ void XMLShapeImportHelper::restoreConnections()
                 mrImporter.getInterfaceToIdentifierMapper().getReference( rHint.aDestShapeId ), uno::UNO_QUERY );
             if( xShape.is() )
             {
-                xConnector->setPropertyValue( rHint.bStart ? gsStartShape : gsEndShape, uno::Any(xShape) );
+                if (rHint.bStart)
+                    xConnector->setPropertyValue( gsStartShape, uno::Any(xShape) );
+                else
+                    xConnector->setPropertyValue( gsEndShape, uno::Any(xShape) );
 
                 sal_Int32 nGlueId = rHint.nDestGlueId < 4 ? rHint.nDestGlueId : getGluePointId( xShape, rHint.nDestGlueId );
-                xConnector->setPropertyValue( rHint.bStart ? gsStartGluePointIndex : gsEndGluePointIndex, uno::Any(nGlueId) );
+                if(rHint.bStart)
+                    xConnector->setPropertyValue( gsStartGluePointIndex, uno::Any(nGlueId) );
+                else
+                    xConnector->setPropertyValue( gsEndGluePointIndex, uno::Any(nGlueId) );
             }
 
             // #86637# restore line deltas

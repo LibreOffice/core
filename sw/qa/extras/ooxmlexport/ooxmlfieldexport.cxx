@@ -673,7 +673,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testConditionalText, "conditional-text.fodt"
     // - Expression: xmlXPathNodeSetGetLength(pXmlNodes) > 0
     // - In <...>, XPath '/w:document/w:body/w:p/w:r[2]/w:instrText' not found
     // i.e. the field was lost on export.
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", aExpected);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", OUString(aExpected));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

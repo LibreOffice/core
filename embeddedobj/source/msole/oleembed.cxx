@@ -718,7 +718,7 @@ namespace
             uno::Reference<io::XStream> xEmbeddedFile;
             try
             {
-                xNameContainer->getByName(aStreamNames[i]) >>= xEmbeddedFile;
+                xNameContainer->getByName(OUString(aStreamNames[i])) >>= xEmbeddedFile;
             }
             catch (const container::NoSuchElementException&)
             {

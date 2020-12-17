@@ -618,7 +618,7 @@ OUString GetApiNameForHelpId(sal_uLong nId)
 
     for (const auto& i : pApiNameMap)
         if (nId == i.mnHelpId)
-            return i.mpApiName;
+            return OUString(i.mpApiName);
 
     return OUString();
 }

@@ -1351,7 +1351,7 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                 BrowseMode nMode = pBasicBox->GetMode();
                 bool bDlgMode = ( nMode & BrowseMode::Dialogs ) && !( nMode & BrowseMode::Modules );
                 const auto sId = bDlgMode ? std::u16string_view(u"" RID_BMP_DLGLIB) : std::u16string_view(u"" RID_BMP_MODLIB);
-                pBasicBox->AddEntry(aLibName, sId, xRootEntry.get(), false, std::make_unique<Entry>(OBJ_TYPE_LIBRARY));
+                pBasicBox->AddEntry(aLibName, OUString(sId), xRootEntry.get(), false, std::make_unique<Entry>(OBJ_TYPE_LIBRARY));
                 pBasicBox->AddEntry(aModName, RID_BMP_MODULE, xRootEntry.get(), false, std::make_unique<Entry>(OBJ_TYPE_MODULE));
                 pBasicBox->set_cursor(*xRootEntry);
                 pBasicBox->select(*xRootEntry);

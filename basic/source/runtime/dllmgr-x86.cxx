@@ -710,13 +710,13 @@ ErrCode SbiDllMgr::Call(
     if (cdeclConvention) {
         return ERRCODE_BASIC_NOT_IMPLEMENTED;
     }
-    OUString dllName(fullDllName(library));
+    OUString dllName(fullDllName(OUString(library)));
     Dll * dll = impl_->getDll(dllName);
     if (dll == 0) {
         return ERRCODE_BASIC_BAD_DLL_LOAD;
     }
     ProcData proc;
-    ErrCode e = dll->getProc(function, &proc);
+    ErrCode e = dll->getProc(OUString(function), &proc);
     if (e != ERRCODE_NONE) {
         return e;
     }

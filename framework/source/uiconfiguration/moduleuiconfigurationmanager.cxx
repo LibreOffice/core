@@ -1579,7 +1579,7 @@ void SAL_CALL ModuleUIConfigurationManager::storeToStorage( const Reference< XSt
         try
         {
             Reference< XStorage > xElementTypeStorage( Storage->openStorageElement(
-                                                          UIELEMENTTYPENAMES[i], ElementModes::READWRITE ));
+                                                          OUString(UIELEMENTTYPENAMES[i]), ElementModes::READWRITE ));
             UIElementType&        rElementType = m_aUIElements[LAYER_USERDEFINED][i];
 
             if ( rElementType.bModified && xElementTypeStorage.is() )
