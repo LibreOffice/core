@@ -1322,7 +1322,7 @@ ErrCode SfxObjectShell::CallBasic( std::u16string_view rMacro,
     BasicManager *pMgr = GetBasicManager();
     if( pApp->GetName() == rBasic )
         pMgr = SfxApplication::GetBasicManager();
-    ErrCode nRet = SfxApplication::CallBasic( rMacro, pMgr, pArgs, pRet );
+    ErrCode nRet = SfxApplication::CallBasic( OUString(rMacro), pMgr, pArgs, pRet );
     return nRet;
 }
 

@@ -2075,8 +2075,8 @@ void OReportController::onLoadedMenu(const Reference< frame::XLayoutManager >& _
     };
     for (const auto & i : s_sMenu)
     {
-        _xLayoutManager->createElement( i );
-        _xLayoutManager->requestElement( i );
+        _xLayoutManager->createElement( OUString(i) );
+        _xLayoutManager->requestElement( OUString(i) );
     }
 }
 

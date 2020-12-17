@@ -947,9 +947,9 @@ sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (
 {
     OUString sRelationshipId;
     if (xParentRelation.is())
-        sRelationshipId = addRelation( xParentRelation, sRelationshipType, sRelativeStream );
+        sRelationshipId = addRelation( xParentRelation, OUString(sRelationshipType), sRelativeStream );
     else
-        sRelationshipId = addRelation( sRelationshipType, sRelativeStream );
+        sRelationshipId = addRelation( OUString(sRelationshipType), sRelativeStream );
 
     if( pRelationshipId )
         *pRelationshipId = sRelationshipId;

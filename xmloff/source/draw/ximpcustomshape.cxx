@@ -143,8 +143,9 @@ static void GetDoublePercentage( std::vector< css::beans::PropertyValue >& rDest
         return;
 
     rtl_math_ConversionStatus eStatus;
-    double fAttrDouble = ::rtl::math::stringToDouble( rValue,
-        '.', ',', &eStatus );
+    double fAttrDouble = rtl_math_stringToDouble(rValue.data(),
+                                             rValue.data() + rValue.size(),
+                                             '.', ',', &eStatus, nullptr);
     if ( eStatus == rtl_math_ConversionStatus_Ok )
     {
         beans::PropertyValue aProp;

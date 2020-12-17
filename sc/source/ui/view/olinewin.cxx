@@ -637,7 +637,7 @@ void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
     {
         tools::Long nEntryPos = GetHeaderEntryPos();
         for ( size_t nLevel = 0; nLevel < nLevelCount; ++nLevel )
-            DrawImageRel(GetLevelPos(nLevel), nEntryPos, aLevelBmps[nLevel]);
+            DrawImageRel(GetLevelPos(nLevel), nEntryPos, OUString(aLevelBmps[nLevel]));
 
         SetLineColor( maLineColor );
         tools::Long nLinePos = mnHeaderPos + (mbMirrorEntries ? 0 : (mnHeaderSize - 1));

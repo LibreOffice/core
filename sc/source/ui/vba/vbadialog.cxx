@@ -63,7 +63,7 @@ OUString
 ScVbaDialog::mapIndexToName( sal_Int32 nIndex )
 {
     if( nIndex < nDialogSize )
-        return aStringList[ nIndex ];
+        return OUString(aStringList[ nIndex ]);
     return OUString();
 }
 
