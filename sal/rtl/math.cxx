@@ -1191,75 +1191,81 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
             fValue *= fFac;
     }
 
-    switch ( eMode )
+    // Round only if not already in distance precision gaps of integers, where
+    // for [2^52,2^53) adding 0.5 would even yield the next representable
+    // integer.
+    if (fValue < (static_cast<sal_Int64>(1) << 52))
     {
-        case rtl_math_RoundingMode_Corrected :
-            fValue = rtl::math::approxFloor(fValue + 0.5);
-        break;
-        case rtl_math_RoundingMode_Down:
-            fValue = rtl::math::approxFloor(fValue);
-        break;
-        case rtl_math_RoundingMode_Up:
-            fValue = rtl::math::approxCeil(fValue);
-        break;
-        case rtl_math_RoundingMode_Floor:
-            fValue = bSign ? rtl::math::approxCeil(fValue)
-                : rtl::math::approxFloor( fValue );
-        break;
-        case rtl_math_RoundingMode_Ceiling:
-            fValue = bSign ? rtl::math::approxFloor(fValue)
-                : rtl::math::approxCeil(fValue);
-        break;
-        case rtl_math_RoundingMode_HalfDown :
+        switch ( eMode )
         {
-            double f = floor(fValue);
-            fValue = ((fValue - f) <= 0.5) ? f : ceil(fValue);
-        }
-        break;
-        case rtl_math_RoundingMode_HalfUp:
-        {
-            double f = floor(fValue);
-            fValue = ((fValue - f) < 0.5) ? f : ceil(fValue);
-        }
-        break;
-        case rtl_math_RoundingMode_HalfEven:
-#if defined FLT_ROUNDS
-/*
-    Use fast version. FLT_ROUNDS may be defined to a function by some compilers!
-
-    DBL_EPSILON is the smallest fractional number which can be represented,
-    its reciprocal is therefore the smallest number that cannot have a
-    fractional part. Once you add this reciprocal to `x', its fractional part
-    is stripped off. Simply subtracting the reciprocal back out returns `x'
-    without its fractional component.
-    Simple, clever, and elegant - thanks to Ross Cottrell, the original author,
-    who placed it into public domain.
-
-    volatile: prevent compiler from being too smart
-*/
-            if (FLT_ROUNDS == 1)
-            {
-                volatile double x = fValue + 1.0 / DBL_EPSILON;
-                fValue = x - 1.0 / DBL_EPSILON;
-            }
-            else
-#endif // FLT_ROUNDS
-            {
-                double f = floor(fValue);
-                if ((fValue - f) != 0.5)
+            case rtl_math_RoundingMode_Corrected :
+                fValue = rtl::math::approxFloor(fValue + 0.5);
+            break;
+            case rtl_math_RoundingMode_Down:
+                fValue = rtl::math::approxFloor(fValue);
+            break;
+            case rtl_math_RoundingMode_Up:
+                fValue = rtl::math::approxCeil(fValue);
+            break;
+            case rtl_math_RoundingMode_Floor:
+                fValue = bSign ? rtl::math::approxCeil(fValue)
+                    : rtl::math::approxFloor( fValue );
+            break;
+            case rtl_math_RoundingMode_Ceiling:
+                fValue = bSign ? rtl::math::approxFloor(fValue)
+                    : rtl::math::approxCeil(fValue);
+            break;
+            case rtl_math_RoundingMode_HalfDown :
                 {
-                    fValue = floor( fValue + 0.5 );
+                    double f = floor(fValue);
+                    fValue = ((fValue - f) <= 0.5) ? f : ceil(fValue);
+                }
+            break;
+            case rtl_math_RoundingMode_HalfUp:
+                {
+                    double f = floor(fValue);
+                    fValue = ((fValue - f) < 0.5) ? f : ceil(fValue);
+                }
+            break;
+            case rtl_math_RoundingMode_HalfEven:
+#if defined FLT_ROUNDS
+                /*
+                   Use fast version. FLT_ROUNDS may be defined to a function by some compilers!
+
+                   DBL_EPSILON is the smallest fractional number which can be represented,
+                   its reciprocal is therefore the smallest number that cannot have a
+                   fractional part. Once you add this reciprocal to `x', its fractional part
+                   is stripped off. Simply subtracting the reciprocal back out returns `x'
+                   without its fractional component.
+                   Simple, clever, and elegant - thanks to Ross Cottrell, the original author,
+                   who placed it into public domain.
+
+                   volatile: prevent compiler from being too smart
+                */
+                if (FLT_ROUNDS == 1)
+                {
+                    volatile double x = fValue + 1.0 / DBL_EPSILON;
+                    fValue = x - 1.0 / DBL_EPSILON;
                 }
                 else
+#endif // FLT_ROUNDS
                 {
-                    double g = f / 2.0;
-                    fValue = (g == floor( g )) ? f : (f + 1.0);
+                    double f = floor(fValue);
+                    if ((fValue - f) != 0.5)
+                    {
+                        fValue = floor( fValue + 0.5 );
+                    }
+                    else
+                    {
+                        double g = f / 2.0;
+                        fValue = (g == floor( g )) ? f : (f + 1.0);
+                    }
                 }
-            }
-        break;
-        default:
-            OSL_ASSERT(false);
-        break;
+            break;
+            default:
+                OSL_ASSERT(false);
+            break;
+        }
     }
 
     if (nDecPlaces != 0)
