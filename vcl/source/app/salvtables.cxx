@@ -737,6 +737,10 @@ void SalInstanceMenu::set_sensitive(const OString& rIdent, bool bSensitive)
 {
     m_xMenu->EnableItem(rIdent, bSensitive);
 }
+bool SalInstanceMenu::get_sensitive(const OString& rIdent) const
+{
+    return m_xMenu->IsItemEnabled(m_xMenu->GetItemId(rIdent));
+}
 void SalInstanceMenu::set_active(const OString& rIdent, bool bActive)
 {
     m_xMenu->CheckItem(rIdent, bActive);
