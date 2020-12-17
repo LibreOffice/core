@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b853ccf6_a3ba422b",
+        "filename": "filter/source/graphicfilter/itiff/itiff.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1698,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-17T08:29:26Z",
+      "side": 1,
+      "message": "I think what you\u0027re trying to do here is:\n\n    pTIFF-\u003eSeek(bStatus ? STREAM_SEEK_TO_END : nOrigPos);\n\nBut what I don\u0027t understand is why this helps with importing TIFF files?",
+      "revId": "9be8b2b83f073c8e98221661ec24f5e5b82a31c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
