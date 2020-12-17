@@ -1015,7 +1015,7 @@ void FmXFormShell::GetConversionMenu_Lock(weld::Menu& rNewMenu)
     for (size_t i = 0; i < SAL_N_ELEMENTS(aConvertSlots); ++i)
     {
         // the corresponding image at it
-        rNewMenu.append(OUString::createFromAscii(aConvertSlots[i]), SvxResId(RID_SVXSW_CONVERTMENU[i]), aImgIds[i]);
+        rNewMenu.append(OUString::createFromAscii(aConvertSlots[i]), SvxResId(RID_SVXSW_CONVERTMENU[i]), OUString(aImgIds[i]));
     }
 }
 

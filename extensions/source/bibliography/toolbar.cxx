@@ -593,9 +593,9 @@ void BibToolBar::RebuildToolbar()
 
 void BibToolBar::ApplyImageList()
 {
-    SetItemImage(nTBC_BT_AUTOFILTER, Image(StockImage::Yes, nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? std::u16string_view(u"" RID_EXTBMP_AUTOFILTER_SC) : std::u16string_view(u"" RID_EXTBMP_AUTOFILTER_LC)));
-    SetItemImage(nTBC_BT_FILTERCRIT, Image(StockImage::Yes, nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? std::u16string_view(u"" RID_EXTBMP_FILTERCRIT_SC) : std::u16string_view(u"" RID_EXTBMP_FILTERCRIT_LC)));
-    SetItemImage(nTBC_BT_REMOVEFILTER, Image(StockImage::Yes, nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? std::u16string_view(u"" RID_EXTBMP_REMOVE_FILTER_SORT_SC) : std::u16string_view(u"" RID_EXTBMP_REMOVE_FILTER_SORT_LC)));
+    SetItemImage(nTBC_BT_AUTOFILTER, Image(StockImage::Yes, nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? OUString(RID_EXTBMP_AUTOFILTER_SC) : OUString(RID_EXTBMP_AUTOFILTER_LC)));
+    SetItemImage(nTBC_BT_FILTERCRIT, Image(StockImage::Yes, nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? OUString(RID_EXTBMP_FILTERCRIT_SC) : OUString(RID_EXTBMP_FILTERCRIT_LC)));
+    SetItemImage(nTBC_BT_REMOVEFILTER, Image(StockImage::Yes, nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? OUString(RID_EXTBMP_REMOVE_FILTER_SORT_SC) : OUString(RID_EXTBMP_REMOVE_FILTER_SORT_LC)));
     AdjustToolBox();
 }
 

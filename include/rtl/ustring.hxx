@@ -468,7 +468,7 @@ public:
 #endif
 
 #if defined LIBO_INTERNAL_ONLY
-    OUString(std::u16string_view sv) {
+    explicit OUString(std::u16string_view sv) {
         if (sv.size() > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
             throw std::bad_alloc();
         }

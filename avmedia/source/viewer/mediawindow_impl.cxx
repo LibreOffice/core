@@ -191,7 +191,7 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
 
         for (const auto& rServiceName : aServiceManagers)
         {
-            xPlayer = createPlayer(rURL, rServiceName, xContext);
+            xPlayer = createPlayer(rURL, OUString(rServiceName), xContext);
             if (xPlayer)
                 break;
         }

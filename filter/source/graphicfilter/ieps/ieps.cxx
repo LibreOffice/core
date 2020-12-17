@@ -313,7 +313,7 @@ static bool RenderAsBMPThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
     oslProcessError eErr = osl_Process_E_Unknown;
     for (const auto& rProgName : aProgNames)
     {
-        eErr = runProcessWithPathSearch(rProgName, pArgs, nArgs, &aProcess, &pIn, &pOut, &pErr);
+        eErr = runProcessWithPathSearch(OUString(rProgName), pArgs, nArgs, &aProcess, &pIn, &pOut, &pErr);
         if (eErr == osl_Process_E_None)
             break;
     }

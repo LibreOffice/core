@@ -1437,7 +1437,7 @@ void GraphicFilter::preload()
         // Look at the library in each element inside the filter path.
         for (sal_Int32 i = 0; i < nTokenCount; ++i)
         {
-            pFilter = rCache.GetFilter(aFilterPath.getToken(i, ';'), SVLIBRARY("gie"), rFilterName);
+            pFilter = rCache.GetFilter(aFilterPath.getToken(i, ';'), SVLIBRARY("gie"), OUString(rFilterName));
             if (pFilter)
             {
                 break;
