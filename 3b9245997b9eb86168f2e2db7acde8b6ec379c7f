@@ -22,6 +22,30 @@
       "revId": "3b9245997b9eb86168f2e2db7acde8b6ec379c7f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00f350db_9e2d97f4",
+        "filename": "sd/qa/uitest/impress_tests/tdf137729.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2020-12-17T19:31:20Z",
+      "side": 1,
+      "message": "I think it\u0027s fine like this.\nIn the end, the code uses the hardcoded value \u0027aMigrateSet.Put( XFillHatchItem(\"hatch\", pTempHatchItem-\u003eGetHatchValue()) );, isn\u0027t it ?\nIf someone changes it later one, the test should be adapted as well",
+      "parentUuid": "4cc7fdd8_b4d0e14b",
+      "range": {
+        "startLine": 48,
+        "startChar": 32,
+        "endLine": 48,
+        "endChar": 38
+      },
+      "revId": "3b9245997b9eb86168f2e2db7acde8b6ec379c7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
