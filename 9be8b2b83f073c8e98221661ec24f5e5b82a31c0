@@ -16,6 +16,24 @@
       "revId": "9be8b2b83f073c8e98221661ec24f5e5b82a31c0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93f99237_67e50424",
+        "filename": "filter/source/graphicfilter/itiff/itiff.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1698,
+      "author": {
+        "id": 1002921
+      },
+      "writtenOn": "2020-12-17T08:54:01Z",
+      "side": 1,
+      "message": "Thanks!\nIf read file not to the end, then in odt saved truncated tif file, which could not be read by other tif readers without error. I am trying to fix this:\n https://bugs.documentfoundation.org/show_bug.cgi?id\u003d138818",
+      "parentUuid": "b853ccf6_a3ba422b",
+      "revId": "9be8b2b83f073c8e98221661ec24f5e5b82a31c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
