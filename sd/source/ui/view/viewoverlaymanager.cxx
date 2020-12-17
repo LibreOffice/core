@@ -99,8 +99,8 @@ static BitmapEx* getButtonImage( int index, bool large )
     {
         for (size_t i = 0; i < SAL_N_ELEMENTS(aSmallPlaceHolders); i++ )
         {
-            gSmallButtonImages[i].set(std::make_unique<BitmapEx>(aSmallPlaceHolders[i]));
-            gLargeButtonImages[i].set(std::make_unique<BitmapEx>(aBigPlaceHolders[i]));
+            gSmallButtonImages[i].set(std::make_unique<BitmapEx>(OUString(aSmallPlaceHolders[i])));
+            gLargeButtonImages[i].set(std::make_unique<BitmapEx>(OUString(aBigPlaceHolders[i])));
         }
     }
 

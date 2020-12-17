@@ -585,6 +585,15 @@ public:
         return append( c.buf, c.length );
     }
 
+    /**
+     @overload
+     @internal
+    */
+    OStringBuffer& append( std::string_view s )
+    {
+        return append( s.data(), s.size() );
+    }
+
 #endif
 
     /**

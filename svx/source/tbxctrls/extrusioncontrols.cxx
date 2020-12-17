@@ -126,7 +126,7 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
 
     for (sal_uInt16 i = DIRECTION_NW; i <= DIRECTION_SE; ++i)
     {
-        maImgDirection[i] = Image(StockImage::Yes, aDirectionBmps[i]);
+        maImgDirection[i] = Image(StockImage::Yes, OUString(aDirectionBmps[i]));
     }
 
     mxDirectionSet->SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectValueSetHdl ) );
@@ -582,10 +582,10 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(svt::PopupWindowController* pCo
     {
         if( i != FROM_FRONT )
         {
-            maImgLightingOff[i] = Image(StockImage::Yes, aLightOffBmps[i]);
-            maImgLightingOn[i] = Image(StockImage::Yes, aLightOnBmps[i]);
+            maImgLightingOff[i] = Image(StockImage::Yes, OUString(aLightOffBmps[i]));
+            maImgLightingOn[i] = Image(StockImage::Yes, OUString(aLightOnBmps[i]));
         }
-        maImgLightingPreview[i] = Image(StockImage::Yes, aLightPreviewBmps[i]);
+        maImgLightingPreview[i] = Image(StockImage::Yes, OUString(aLightPreviewBmps[i]));
     }
 
     mxLightingSet->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );
