@@ -1358,6 +1358,7 @@ void FormattedField::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     rJsonWriter.put("min", rFormatter.GetMinValue());
     rJsonWriter.put("max", rFormatter.GetMaxValue());
     rJsonWriter.put("value", rFormatter.GetValue());
+    rJsonWriter.put("step", rFormatter.GetSpinSize());
 }
 
 FactoryFunction FormattedField::GetUITestFactory() const
