@@ -108,6 +108,9 @@ void JSDialogNotifyIdle::sendClose() { send(generateCloseMessage()); }
 
 void JSDialogSender::notifyDialogState(bool bForce)
 {
+    if (mpIdleNotify->getNotifierWindow()->IsDisableIdleNotify())
+        return;
+
     if (bForce)
         mpIdleNotify->ForceUpdate();
     mpIdleNotify->Start();
@@ -395,6 +398,9 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id, 
                            : nullptr);
 
         RememberWidget("__DIALOG__", pRet.get());
+
+        if (id == "MacroSelectorDialog")
+            pDialog->SetDisableIdleNotify(true);
 
         const vcl::ILibreOfficeKitNotifier* pNotifier = pDialog->GetLOKNotifier();
         if (pNotifier && id != "MacroSelectorDialog")
