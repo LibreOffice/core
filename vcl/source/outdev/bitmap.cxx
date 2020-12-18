@@ -23,7 +23,6 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapFilterStackBlur.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>

@@ -30,7 +30,7 @@
 #include <sys/stat.h>
 
 #include <i18nlangtag/mslangid.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <jobdata.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
