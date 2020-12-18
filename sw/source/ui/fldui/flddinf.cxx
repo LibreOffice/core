@@ -63,7 +63,7 @@ SwFieldDokInfPage::SwFieldDokInfPage(weld::Container* pPage, weld::DialogControl
     FillFieldSelect(*m_xSelectionLB);
 
     auto nWidth = m_xTypeTLB->get_approximate_digit_width() * FIELD_COLUMN_WIDTH;
-    auto nHeight = m_xTypeTLB->get_height_rows(20);
+    auto nHeight = m_xTypeTLB->get_height_rows(1);
     m_xTypeTLB->set_size_request(nWidth, nHeight);
     m_xFormatLB->get_widget().set_size_request(nWidth, nHeight);
     m_xSelectionLB->set_size_request(nWidth, nHeight);
