@@ -52,7 +52,8 @@
 #include <vcl/menu.hxx>
 #include <vcl/ImageTree.hxx>
 #include <vcl/BitmapEmbossGreyFilter.hxx>
-#include <bitmapwriteaccess.hxx>
+
+#include <bitmap/BitmapWriteAccess.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

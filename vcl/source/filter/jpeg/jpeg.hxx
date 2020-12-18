@@ -22,8 +22,10 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
+
+#include <bitmap/BitmapWriteAccess.hxx>
+
 #include <com/sun/star/uno/Sequence.h>
-#include <bitmapwriteaccess.hxx>
 
 VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* ppAccess );
 

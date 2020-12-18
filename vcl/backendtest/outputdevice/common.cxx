@@ -9,7 +9,8 @@
  */
 
 #include <test/outputdevice.hxx>
-#include <bitmapwriteaccess.hxx>
+
+#include <bitmap/BitmapWriteAccess.hxx>
 #include <salgdi.hxx>
 
 namespace vcl::test {
