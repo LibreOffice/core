@@ -9218,10 +9218,6 @@ AC_SUBST(XMLLINT)
 # Optionally user can pass an option to configure, i. e.
 # ./configure PYTHON=/usr/bin/python
 # =====================================================================
-if test $_os = Darwin -a "$enable_python" != no -a "$enable_python" != fully-internal -a "$enable_python" != internal; then
-    # Only allowed choices for macOS are 'no', 'internal' (default), and 'fully-internal'
-    enable_python=internal
-fi
 if test "$build_os" != "cygwin" -a "$enable_python" != fully-internal; then
     if test -n "$PYTHON"; then
         PYTHON_FOR_BUILD=$PYTHON
@@ -9291,9 +9287,6 @@ fully-internal)
     ;;
 system)
     AC_MSG_RESULT([system])
-    if test "$_os" = Darwin; then
-        AC_MSG_ERROR([--enable-python=system doesn't work on macOS because the version provided is obsolete])
-    fi
     ;;
 *)
     AC_MSG_ERROR([Incorrect --enable-python option])
