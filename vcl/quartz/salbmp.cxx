@@ -35,7 +35,7 @@
 #include <vcl/ColorMask.hxx>
 #include <vcl/Scanline.hxx>
 
-#include <bmpfast.hxx>
+#include <bitmap/bmpfast.hxx>
 #include <quartz/salbmp.h>
 #include <quartz/utils.h>
 

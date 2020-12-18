@@ -42,7 +42,7 @@
 
 #include <canvasbitmap.hxx>
 #include <vcl/canvastools.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
 using namespace ::com::sun::star;
 
