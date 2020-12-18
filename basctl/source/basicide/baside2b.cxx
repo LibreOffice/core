@@ -46,10 +46,10 @@
 #include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/commandevent.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/txtattr.hxx>
@@ -1493,18 +1493,20 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
     if ( rCEvt.GetCommand() != CommandEventId::ContextMenu )
         return;
 
-    if (!mpUIBuilder)
-        mpUIBuilder.reset(new VclBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/BasicIDE/ui/breakpointmenus.ui", ""));
-
     Point aPos( rCEvt.IsMouseEvent() ? rCEvt.GetMousePosPixel() : Point(1,1) );
+    tools::Rectangle aRect(aPos, Size(1, 1));
+    weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
+
+    std::unique_ptr<weld::Builder> xUIBuilder(Application::CreateBuilder(pPopupParent, "modules/BasicIDE/ui/breakpointmenus.ui"));
+
     Point aEventPos( PixelToLogic( aPos ) );
     BreakPoint* pBrk = rCEvt.IsMouseEvent() ? FindBreakPoint( aEventPos ) : nullptr;
     if ( pBrk )
     {
         // test if break point is enabled...
-        VclPtr<PopupMenu> xBrkPropMenu = mpUIBuilder->get_menu("breakmenu");
-        xBrkPropMenu->CheckItem("active", pBrk->bEnabled);
-        OString sCommand = xBrkPropMenu->GetItemIdent(xBrkPropMenu->Execute(this, aPos));
+        std::unique_ptr<weld::Menu> xBrkPropMenu = xUIBuilder->weld_menu("breakmenu");
+        xBrkPropMenu->set_active("active", pBrk->bEnabled);
+        OString sCommand = xBrkPropMenu->popup_at_rect(pPopupParent, aRect);
         if (sCommand == "active")
         {
             pBrk->bEnabled = !pBrk->bEnabled;
@@ -1513,7 +1515,7 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
         }
         else if (sCommand == "properties")
         {
-            BreakPointDialog aBrkDlg(GetFrameWeld(), GetBreakPoints());
+            BreakPointDialog aBrkDlg(pPopupParent, GetBreakPoints());
             aBrkDlg.SetCurrentBreakPoint( *pBrk );
             aBrkDlg.run();
             Invalidate();
@@ -1521,11 +1523,11 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
     }
     else
     {
-        VclPtr<PopupMenu> xBrkListMenu = mpUIBuilder->get_menu("breaklistmenu");
-        OString sCommand = xBrkListMenu->GetItemIdent(xBrkListMenu->Execute(this, aPos));
+        std::unique_ptr<weld::Menu> xBrkListMenu = xUIBuilder->weld_menu("breaklistmenu");
+        OString sCommand = xBrkListMenu->popup_at_rect(pPopupParent, aRect);
         if (sCommand == "manage")
         {
-            BreakPointDialog aBrkDlg(GetFrameWeld(), GetBreakPoints());
+            BreakPointDialog aBrkDlg(pPopupParent, GetBreakPoints());
             aBrkDlg.run();
             Invalidate();
         }
@@ -1568,12 +1570,6 @@ void BreakPointWindow::DataChanged(DataChangedEvent const & rDCEvt)
 void BreakPointWindow::setBackgroundColor(Color aColor)
 {
     SetBackground(Wallpaper(aColor));
-}
-
-void BreakPointWindow::dispose()
-{
-    mpUIBuilder.reset();
-    Window::dispose();
 }
 
 namespace {
