@@ -17,9 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <bmpfast.hxx>
 #include <vcl/salgtype.hxx>
-#include <bitmapwriteaccess.hxx>
+
+#include <bitmap/BitmapWriteAccess.hxx>
+#include <bitmap/bmpfast.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
 #include <sal/log.hxx>
 
