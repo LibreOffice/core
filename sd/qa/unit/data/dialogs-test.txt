@@ -50,7 +50,7 @@ modules/simpress/ui/headerfooterdialog.ui
 
 #
 # Dialogs without a hard-coded representation. These will
-# be visualized using a fallback based on VclBuilder
+# be visualized using a fallback based on weld::Builder
 #
 
 modules/sdraw/ui/paranumberingtab.ui
