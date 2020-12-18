@@ -30,7 +30,7 @@
 #include <svdata.hxx>
 #include <salinst.hxx>
 #include <salbmp.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 #if HAVE_FEATURE_SKIA
 #include <vcl/skia/SkiaHelper.hxx>
 #endif
@@ -39,11 +39,11 @@
 #include <svdata.hxx>
 #include <salinst.hxx>
 #include <salbmp.hxx>
-#include <BitmapScaleSuperFilter.hxx>
-#include <BitmapScaleConvolutionFilter.hxx>
-#include <BitmapFastScaleFilter.hxx>
-#include <BitmapInterpolateScaleFilter.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapScaleSuperFilter.hxx>
+#include <bitmap/BitmapScaleConvolutionFilter.hxx>
+#include <bitmap/BitmapFastScaleFilter.hxx>
+#include <bitmap/BitmapInterpolateScaleFilter.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 #include <bitmap/impoctree.hxx>
 #include <bitmap/Octree.hxx>
 

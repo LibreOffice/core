@@ -10,14 +10,13 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
-
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapColorQuantizationFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
+#include <algorithm>
 #include <cstdlib>
 
 BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const

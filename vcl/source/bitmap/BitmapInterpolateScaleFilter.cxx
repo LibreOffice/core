@@ -22,9 +22,9 @@
 
 #include <vcl/bitmapex.hxx>
 
-#include <bitmapwriteaccess.hxx>
-#include <BitmapFastScaleFilter.hxx>
-#include <BitmapInterpolateScaleFilter.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
+#include <bitmap/BitmapFastScaleFilter.hxx>
+#include <bitmap/BitmapInterpolateScaleFilter.hxx>
 
 BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
 {
