@@ -27,7 +27,7 @@
 
 #
 # Dialogs without a hard-coded representation. These will
-# be visualized using a fallback based on VclBuilder
+# be visualized using a fallback based on weld::Builder
 #
 
 # currently deactivated, leads to problems and the test to not work
