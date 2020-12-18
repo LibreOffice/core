@@ -228,7 +228,7 @@ public:
     bool            MouseButtonDown( const MouseEvent& rMouseEvent );
     void            ReleaseMouse();
     bool            MouseMove( const MouseEvent& rMouseEvent );
-    void            Command( const CommandEvent& rCEvt );
+    bool            Command(const CommandEvent& rCEvt);
 
     void            Cut();
     void            Copy();

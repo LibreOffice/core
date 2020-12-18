@@ -143,7 +143,7 @@ public:
     bool                IsInSelection() const;
     void                Reset();
 
-    void                Command( const CommandEvent& rCEvt );
+    bool                Command(const CommandEvent& rCEvt);
 
     bool                HasAnchor() const;
     void                SetAnchor( bool bAnchor );

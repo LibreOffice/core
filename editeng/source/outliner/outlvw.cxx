@@ -773,12 +773,10 @@ void OutlinerView::ImpPasted( sal_Int32 nStart, sal_Int32 nPrevParaCount, sal_In
     pOwner->ImpTextPasted( nStart, nSize );
 }
 
-
-void OutlinerView::Command( const CommandEvent& rCEvt )
+bool OutlinerView::Command(const CommandEvent& rCEvt)
 {
-    pEditView->Command( rCEvt );
+    return pEditView->Command(rCEvt);
 }
-
 
 void OutlinerView::SelectRange( sal_Int32 nFirst, sal_Int32 nCount )
 {

@@ -1705,10 +1705,10 @@ bool ImpEditView::MouseMove( const MouseEvent& rMouseEvent )
     return pEditEngine->pImpEditEngine->MouseMove( rMouseEvent, GetEditViewPtr() );
 }
 
-void ImpEditView::Command( const CommandEvent& rCEvt )
+bool ImpEditView::Command(const CommandEvent& rCEvt)
 {
     pEditEngine->CheckIdleFormatter();  // If fast typing and mouse button down
-    pEditEngine->pImpEditEngine->Command( rCEvt, GetEditViewPtr() );
+    return pEditEngine->pImpEditEngine->Command(rCEvt, GetEditViewPtr());
 }
 
 
