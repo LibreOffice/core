@@ -276,7 +276,7 @@ public:
     EEAnchorMode    GetAnchorMode() const;
 
     PointerStyle    GetPointer( const Point& rPosPixel );
-    void        Command( const CommandEvent& rCEvt );
+    bool            Command(const CommandEvent& rCEvt);
 
     void            StartSpeller();
     EESpellState    StartThesaurus();

@@ -331,8 +331,10 @@ bool ImpEditEngine::MouseButtonDown( const MouseEvent& rMEvt, EditView* pView )
     return true;
 }
 
-void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
+bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
 {
+    bool bConsumed = true;
+
     GetSelEngine().SetCurView( pView );
     SetActiveView( pView );
     if ( rCEvt.GetCommand() == CommandEventId::StartExtTextInput )
@@ -555,8 +557,10 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
             }
         }
     }
+    else
+        bConsumed = false;
 
-    GetSelEngine().Command( rCEvt );
+    return GetSelEngine().Command(rCEvt) || bConsumed;
 }
 
 bool ImpEditEngine::MouseButtonUp( const MouseEvent& rMEvt, EditView* pView )
