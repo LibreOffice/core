@@ -554,8 +554,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf116371, "tdf116371.odt")
     auto xShape(getShape(1));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4700.0, getProperty<double>(xShape, "RotateAngle"), 10);
     auto frameRect = getProperty<awt::Rectangle>(xShape, "FrameRect");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(24070), frameRect.Height);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(24188), frameRect.Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(24063), frameRect.Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(24179), frameRect.Width);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFrameSizeExport, "floating-tables-anchor.docx")
