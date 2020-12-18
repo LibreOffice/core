@@ -36,6 +36,7 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/event.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
@@ -1124,7 +1125,7 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
     SfxTemplateCategoryDialog aDlg(m_xDialog.get());
     aDlg.SetCategoryLBEntries(mxLocalView->getFolderNames());
     aDlg.HideNewCategoryOption();
-    aDlg.set_title(SfxResId(STR_CATEGORY_DELETE));
+    aDlg.set_title(MnemonicGenerator::EraseAllMnemonicChars(SfxResId(STR_CATEGORY_DELETE)));
     aDlg.SetSelectLabelText(SfxResId(STR_CATEGORY_SELECT));
 
     if (aDlg.run() == RET_OK)
