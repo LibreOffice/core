@@ -8,16 +8,16 @@
  *
  */
 
-#ifndef VCL_INC_BITMAPINTERPOLATESCALEFILTER_HXX
-#define VCL_INC_BITMAPINTERPOLATESCALEFILTER_HXX
+#ifndef VCL_INC_BITMAP_BITMAPFASTSCALEFILTER_HXX
+#define VCL_INC_BITMAP_BITMAPFASTSCALEFILTER_HXX
 
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapFilter.hxx>
 
-class BitmapInterpolateScaleFilter final : public BitmapFilter
+class BitmapFastScaleFilter final : public BitmapFilter
 {
 public:
-    explicit BitmapInterpolateScaleFilter(double fScaleX, double fScaleY)
+    explicit BitmapFastScaleFilter(double fScaleX, double fScaleY)
         : mfScaleX(fScaleX)
         , mfScaleY(fScaleY)
     {
@@ -28,6 +28,7 @@ public:
 private:
     double mfScaleX;
     double mfScaleY;
+    Size maSize;
 };
 
 #endif

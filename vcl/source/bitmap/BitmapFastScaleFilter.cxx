@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
 #include <tools/helpers.hxx>
 
 #include <vcl/bitmapex.hxx>
 
-#include <bitmapwriteaccess.hxx>
-#include <BitmapFastScaleFilter.hxx>
-#include <sal/log.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
+#include <bitmap/BitmapFastScaleFilter.hxx>
 
 BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx) const
 {

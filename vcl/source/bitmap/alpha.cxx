@@ -19,7 +19,8 @@
 
 #include <tools/color.hxx>
 #include <vcl/alpha.hxx>
-#include <bitmapwriteaccess.hxx>
+
+#include <bitmap/BitmapWriteAccess.hxx>
 #include <salinst.hxx>
 #include <svdata.hxx>
 #include <salbmp.hxx>
