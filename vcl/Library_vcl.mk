@@ -267,17 +267,9 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/treelist/svimpbox \
     vcl/source/treelist/svlbitm \
     vcl/source/treelist/uiobject \
-    vcl/source/gdi/alpha \
-    vcl/source/gdi/bitmap3 \
-    vcl/source/gdi/bitmapex \
-    vcl/source/gdi/bmpacc2 \
-    vcl/source/gdi/bmpacc3 \
-    vcl/source/gdi/bmpacc \
-    vcl/source/gdi/bmpfast \
     vcl/source/gdi/configsettings \
     vcl/source/gdi/cvtgrf \
     vcl/source/gdi/svmconverter \
-    vcl/source/gdi/dibtools \
     vcl/source/gdi/embeddedfontshelper \
     vcl/source/gdi/FileDefinitionWidgetDraw \
     vcl/source/gdi/WidgetDefinitionReader \
@@ -294,7 +286,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/impanmvw \
     vcl/source/gdi/impglyphitem \
     vcl/source/gdi/impgraph \
-    vcl/source/gdi/impvect \
     vcl/source/gdi/jobset \
     vcl/source/gdi/lineinfo \
     vcl/source/gdi/mapmod \
@@ -343,7 +334,16 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/graphic/UnoGraphicProvider \
     vcl/source/graphic/UnoGraphicTransformer \
     vcl/source/graphic/VectorGraphicSearch \
+    vcl/source/bitmap/impvect \
     vcl/source/bitmap/bitmap \
+    vcl/source/bitmap/bitmap3 \
+    vcl/source/bitmap/BitmapEx \
+    vcl/source/bitmap/alpha \
+    vcl/source/bitmap/dibtools \
+    vcl/source/bitmap/bmpacc2 \
+    vcl/source/bitmap/bmpacc3 \
+    vcl/source/bitmap/bmpacc \
+    vcl/source/bitmap/bmpfast \
     vcl/source/bitmap/bitmapfilter \
     vcl/source/bitmap/BitmapAlphaClampFilter \
     vcl/source/bitmap/BitmapBasicMorphologyFilter \
