@@ -1121,7 +1121,7 @@ uno::Reference<container::XIndexReplace> ScStyleObj::CreateEmptyNumberingRules()
 
 // beans::XPropertyState
 
-const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const OUString& rPropName,
+const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( std::u16string_view rPropName,
                                                     const SfxItemPropertySimpleEntry*& rpResultEntry )
 {
     SfxStyleSheetBase* pStyle = GetStyle_Impl( true );
@@ -1155,7 +1155,7 @@ const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const OUString& rPropName,
     return nullptr;
 }
 
-beans::PropertyState ScStyleObj::getPropertyState_Impl( const OUString& aPropertyName )
+beans::PropertyState ScStyleObj::getPropertyState_Impl( std::u16string_view aPropertyName )
 {
     beans::PropertyState eRet = beans::PropertyState_DIRECT_VALUE;
 
@@ -1224,7 +1224,7 @@ void SAL_CALL ScStyleObj::setPropertyToDefault( const OUString& aPropertyName )
     setPropertyValue_Impl( aPropertyName, pEntry, nullptr );
 }
 
-uno::Any ScStyleObj::getPropertyDefault_Impl( const OUString& aPropertyName )
+uno::Any ScStyleObj::getPropertyDefault_Impl( std::u16string_view aPropertyName )
 {
     uno::Any aAny;
 
@@ -1273,7 +1273,7 @@ uno::Any ScStyleObj::getPropertyDefault_Impl( const OUString& aPropertyName )
                 case ATTR_PAGE_SCALETO:
                     {
                         const ScPageScaleToItem aItem(static_cast<const ScPageScaleToItem&>(pItemSet->Get(nWhich)));
-                        if ( aPropertyName == SC_UNO_PAGE_SCALETOX )
+                        if ( aPropertyName == u"" SC_UNO_PAGE_SCALETOX )
                             aAny <<= static_cast<sal_Int16>(aItem.GetWidth());
                         else
                             aAny <<= static_cast<sal_Int16>(aItem.GetHeight());
@@ -1461,7 +1461,7 @@ void SAL_CALL ScStyleObj::setPropertyValue( const OUString& aPropertyName, const
     setPropertyValue_Impl( aPropertyName, pEntry, &aValue );
 }
 
-void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const SfxItemPropertySimpleEntry* pEntry, const uno::Any* pValue )
+void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const SfxItemPropertySimpleEntry* pEntry, const uno::Any* pValue )
 {
     SfxStyleSheetBase* pStyle = GetStyle_Impl( true );
     if ( !(pStyle && pEntry) )
@@ -1652,7 +1652,7 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
                             if (*pValue >>= nPages)
                             {
                                 ScPageScaleToItem aItem = rSet.Get(ATTR_PAGE_SCALETO);
-                                if (rPropertyName == SC_UNO_PAGE_SCALETOX)
+                                if (rPropertyName == u"" SC_UNO_PAGE_SCALETOX)
                                     aItem.SetWidth(static_cast<sal_uInt16>(nPages));
                                 else
                                     aItem.SetHeight(static_cast<sal_uInt16>(nPages));
@@ -1769,12 +1769,12 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
     }
 }
 
-uno::Any ScStyleObj::getPropertyValue_Impl( const OUString& aPropertyName )
+uno::Any ScStyleObj::getPropertyValue_Impl( std::u16string_view aPropertyName )
 {
     uno::Any aAny;
     SfxStyleSheetBase* pStyle = GetStyle_Impl( true );
 
-    if ( aPropertyName == SC_UNONAME_DISPNAME )      // read-only
+    if ( aPropertyName == u"" SC_UNONAME_DISPNAME )      // read-only
     {
         //  core always has the display name
         if ( pStyle )
@@ -1847,7 +1847,7 @@ uno::Any ScStyleObj::getPropertyValue_Impl( const OUString& aPropertyName )
                     case ATTR_PAGE_SCALETO:
                         {
                             const ScPageScaleToItem& aItem(pItemSet->Get(ATTR_PAGE_SCALETO));
-                            if ( aPropertyName == SC_UNO_PAGE_SCALETOX )
+                            if ( aPropertyName == u"" SC_UNO_PAGE_SCALETOX )
                                 aAny <<= static_cast<sal_Int16>(aItem.GetWidth());
                             else
                                 aAny <<= static_cast<sal_Int16>(aItem.GetHeight());

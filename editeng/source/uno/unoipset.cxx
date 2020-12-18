@@ -246,7 +246,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
 }
 
 
-const SfxItemPropertySimpleEntry* SvxItemPropertySet::getPropertyMapEntry(const OUString &rName) const
+const SfxItemPropertySimpleEntry* SvxItemPropertySet::getPropertyMapEntry(std::u16string_view rName) const
 {
     return m_aPropertyMap.getByName( rName );
  }

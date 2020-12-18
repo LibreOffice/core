@@ -124,11 +124,11 @@ public:
     SfxItemPropertyMap( const SfxItemPropertyMap& rSource );
     ~SfxItemPropertyMap();
 
-    const SfxItemPropertySimpleEntry*  getByName( const OUString &rName ) const;
+    const SfxItemPropertySimpleEntry*  getByName( std::u16string_view rName ) const;
     css::uno::Sequence< css::beans::Property > const & getProperties() const;
     /// @throws css::beans::UnknownPropertyException
     css::beans::Property getPropertyByName( const OUString & rName ) const;
-    bool hasPropertyByName( const OUString& rName ) const;
+    bool hasPropertyByName( std::u16string_view rName ) const;
 
     void mergeProperties( const css::uno::Sequence< css::beans::Property >& rPropSeq );
     PropertyEntryVector_t getPropertyEntries() const;

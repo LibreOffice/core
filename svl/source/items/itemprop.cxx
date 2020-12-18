@@ -35,7 +35,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 
-typedef std::unordered_map< OUString,
+typedef std::unordered_map< std::u16string_view,
                             SfxItemPropertySimpleEntry > SfxItemPropertyHashMap_t;
 
 class SfxItemPropertyMap_Impl : public SfxItemPropertyHashMap_t
@@ -72,7 +72,7 @@ SfxItemPropertyMap::~SfxItemPropertyMap()
 {
 }
 
-const SfxItemPropertySimpleEntry* SfxItemPropertyMap::getByName( const OUString &rName ) const
+const SfxItemPropertySimpleEntry* SfxItemPropertyMap::getByName( std::u16string_view rName ) const
 {
     SfxItemPropertyHashMap_t::const_iterator aIter = m_pImpl->find(rName);
     if( aIter == m_pImpl->end() )
@@ -117,7 +117,7 @@ beans::Property SfxItemPropertyMap::getPropertyByName( const OUString & rName ) 
     return aProp;
 }
 
-bool SfxItemPropertyMap::hasPropertyByName( const OUString& rName ) const
+bool SfxItemPropertyMap::hasPropertyByName( std::u16string_view rName ) const
 {
     SfxItemPropertyHashMap_t::const_iterator aIter = m_pImpl->find(rName);
     return aIter != m_pImpl->end();
