@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0bd69c35_55830df1",
+        "filename": "extensions/source/abpilot/typeselectionpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-18T20:23:06Z",
+      "side": 1,
+      "message": "there will be some kind of radio_button element in a *.ui file that needs removing too",
+      "revId": "7ab7f42e7768d668a2896aa538ffcfeabc847e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
