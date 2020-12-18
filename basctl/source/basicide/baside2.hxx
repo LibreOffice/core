@@ -164,7 +164,6 @@ class BreakPointWindow final : public vcl::Window
     sal_uInt16      nMarkerPos;
     BreakPointList  aBreakPointList;
     bool            bErrorMarker;
-    std::unique_ptr<VclBuilder> mpUIBuilder;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt) override;
 
@@ -180,7 +179,6 @@ class BreakPointWindow final : public vcl::Window
 
 public:
                     BreakPointWindow (vcl::Window* pParent, ModulWindow*);
-    virtual void    dispose() override;
 
     void            SetMarkerPos( sal_uInt16 nLine, bool bErrorMarker = false );
     void            SetNoMarker ();
