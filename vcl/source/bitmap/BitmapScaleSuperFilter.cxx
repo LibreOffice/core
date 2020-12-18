@@ -20,7 +20,6 @@
 #include <comphelper/threadpool.hxx>
 
 #include <tools/helpers.hxx>
-#include <vcl/bitmapaccess.hxx>
 
 #include <bitmapwriteaccess.hxx>
 #include <BitmapScaleSuperFilter.hxx>

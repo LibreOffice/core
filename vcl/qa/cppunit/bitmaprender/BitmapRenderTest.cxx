@@ -10,7 +10,7 @@
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/virdev.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/svapp.hxx>
 
 #include <tools/stream.hxx>

@@ -25,7 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/region.hxx>
 #include <vcl/font.hxx>
 #include <vcl/virdev.hxx>

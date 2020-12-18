@@ -11,7 +11,7 @@
 #include <test/outputdevice.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 
 #include <list>
 

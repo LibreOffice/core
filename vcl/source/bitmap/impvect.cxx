@@ -18,7 +18,7 @@
  */
 
 #include <sal/log.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <tools/link.hxx>
 #include <tools/poly.hxx>
 #include <tools/helpers.hxx>

@@ -21,7 +21,6 @@
 #include <osl/diagnose.h>
 
 #include <vcl/bitmapex.hxx>
-#include <vcl/bitmapaccess.hxx>
 
 #include <bitmapwriteaccess.hxx>
 #include <BitmapFastScaleFilter.hxx>

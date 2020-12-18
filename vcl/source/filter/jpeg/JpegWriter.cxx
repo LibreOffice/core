@@ -25,7 +25,7 @@
 #include <jerror.h>
 
 #include "JpegWriter.hxx"
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
