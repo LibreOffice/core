@@ -264,7 +264,8 @@ std::unique_ptr< sal_uInt8[] > SalBitmap::convertDataBitCount( const sal_uInt8* 
     int width, int height, int bitCount, int bytesPerRow, const BitmapPalette& palette, BitConvert type )
 {
     assert( bitCount == 1 || bitCount == 4 || bitCount == 8 );
-    static const int bpp[] = { 1, 3, 3, 4, 4 };
+    static const int bpp[] = { 1, 4, 4 };
+    static_assert( SAL_N_ELEMENTS(bpp) == static_cast<int>(BitConvert::Last) + 1);
     std::unique_ptr< sal_uInt8[] > data( new sal_uInt8[width * height * bpp[ static_cast<int>(type) ]] );
 
     if(type == BitConvert::A8 && bitCount == 8 && palette.IsGreyPalette8Bit())
