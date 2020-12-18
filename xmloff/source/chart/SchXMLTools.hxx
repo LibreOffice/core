@@ -70,7 +70,7 @@ namespace SchXMLTools
     SchXMLChartTypeEnum GetChartTypeEnum( std::u16string_view rClassName );
 
     OUString GetChartTypeByClassName(
-        const OUString & rClassName, bool bUseOldNames );
+        std::u16string_view rClassName, bool bUseOldNames );
 
     ::xmloff::token::XMLTokenEnum getTokenByChartType(
         const OUString & rChartTypeService, bool bUseOldNames );

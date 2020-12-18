@@ -347,7 +347,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLConditionContext::
 }
 
 void ScXMLConditionContext::GetOperator(
-    const OUString& aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry)
+    std::u16string_view aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry)
 {
     rParam.eSearchType = utl::SearchParam::SearchType::Normal;
     if (IsXMLToken(aOpStr, XML_MATCH))
@@ -360,9 +360,9 @@ void ScXMLConditionContext::GetOperator(
         rParam.eSearchType = utl::SearchParam::SearchType::Regexp;
         rEntry.eOp = SC_NOT_EQUAL;
     }
-    else if (aOpStr == "=")
+    else if (aOpStr == u"=")
         rEntry.eOp = SC_EQUAL;
-    else if (aOpStr == "!=")
+    else if (aOpStr == u"!=")
         rEntry.eOp = SC_NOT_EQUAL;
     else if (IsXMLToken(aOpStr, XML_BOTTOM_PERCENT))
         rEntry.eOp = SC_BOTPERC;
@@ -370,13 +370,13 @@ void ScXMLConditionContext::GetOperator(
         rEntry.eOp = SC_BOTVAL;
     else if (IsXMLToken(aOpStr, XML_EMPTY))
         rEntry.SetQueryByEmpty();
-    else if (aOpStr == ">")
+    else if (aOpStr == u">")
         rEntry.eOp = SC_GREATER;
-    else if (aOpStr == ">=")
+    else if (aOpStr == u">=")
         rEntry.eOp = SC_GREATER_EQUAL;
-    else if (aOpStr == "<")
+    else if (aOpStr == u"<")
         rEntry.eOp = SC_LESS;
-    else if (aOpStr == "<=")
+    else if (aOpStr == u"<=")
         rEntry.eOp = SC_LESS_EQUAL;
     else if (IsXMLToken(aOpStr, XML_NOEMPTY))
         rEntry.SetQueryByNonEmpty();
@@ -695,7 +695,7 @@ ScXMLDPConditionContext::~ScXMLDPConditionContext()
 }
 
 void ScXMLDPConditionContext::getOperatorXML(
-    const OUString& sTempOperator, ScQueryOp& aFilterOperator, utl::SearchParam::SearchType& rSearchType)
+    std::u16string_view sTempOperator, ScQueryOp& aFilterOperator, utl::SearchParam::SearchType& rSearchType)
 {
     rSearchType = utl::SearchParam::SearchType::Normal;
     if (IsXMLToken(sTempOperator, XML_MATCH))
@@ -708,21 +708,21 @@ void ScXMLDPConditionContext::getOperatorXML(
         rSearchType = utl::SearchParam::SearchType::Regexp;
         aFilterOperator = SC_NOT_EQUAL;
     }
-    else if (sTempOperator == "=")
+    else if (sTempOperator == u"=")
         aFilterOperator = SC_EQUAL;
-    else if (sTempOperator == "!=")
+    else if (sTempOperator == u"!=")
         aFilterOperator = SC_NOT_EQUAL;
     else if (IsXMLToken(sTempOperator, XML_BOTTOM_PERCENT))
         aFilterOperator = SC_BOTPERC;
     else if (IsXMLToken(sTempOperator, XML_BOTTOM_VALUES))
         aFilterOperator = SC_BOTVAL;
-    else if (sTempOperator == ">")
+    else if (sTempOperator == u">")
         aFilterOperator = SC_GREATER;
-    else if (sTempOperator == ">=")
+    else if (sTempOperator == u">=")
         aFilterOperator = SC_GREATER_EQUAL;
-    else if (sTempOperator == "<")
+    else if (sTempOperator == u"<")
         aFilterOperator = SC_LESS;
-    else if (sTempOperator == "<=")
+    else if (sTempOperator == u"<=")
         aFilterOperator = SC_LESS_EQUAL;
     else if (IsXMLToken(sTempOperator, XML_TOP_PERCENT))
         aFilterOperator = SC_TOPPERC;

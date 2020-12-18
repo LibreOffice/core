@@ -83,7 +83,7 @@ public:
 
     virtual void Export() override;
 
-    static XMLPropType GetPropType( const OUString& rLocalName );
+    static XMLPropType GetPropType( std::u16string_view rLocalName );
 
     static OUString const & MergeUnderline( XMLTokenEnum eUnderline,
                                            bool bBold, bool bDouble );
@@ -598,7 +598,7 @@ void XMLPropertiesTContext_Impl::Export()
     GetTransformer().GetDocHandler()->endElement( GetExportQName() );
 }
 
-XMLPropType XMLPropertiesTContext_Impl::GetPropType( const OUString& rLocalName )
+XMLPropType XMLPropertiesTContext_Impl::GetPropType( std::u16string_view rLocalName )
 {
     XMLPropType eProp = XML_PROP_TYPE_END;
     if( IsXMLToken( rLocalName, XML_GRAPHIC_PROPERTIES )  )

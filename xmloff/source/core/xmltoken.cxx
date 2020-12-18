@@ -3459,14 +3459,16 @@ namespace xmloff::token {
 
     // does rString represent eToken?
     bool IsXMLToken(
-        const OUString& rString,
+        std::u16string_view rString,
         enum XMLTokenEnum eToken )
     {
         assert(XML_TOKEN_INVALID < eToken);
         assert(eToken < XML_TOKEN_END);
 
         const XMLTokenEntry* pToken = &aTokenList[static_cast<sal_uInt16>(eToken)];
-        return rString.equalsAsciiL( pToken->pChar, pToken->nLength );
+        return static_cast<sal_Int32>(rString.size()) == pToken->nLength &&
+               rtl_ustr_asciil_reverseEquals_WithLength(
+                    rString.data(), pToken->pChar, pToken->nLength );
     }
 
     bool IsXMLToken(
@@ -3480,6 +3482,7 @@ namespace xmloff::token {
         return aIter.isString( pToken->pChar );
     }
 
+    // does aStr represent eToken?
     bool IsXMLToken(
         std::string_view aStr,
         enum XMLTokenEnum eToken )
@@ -3488,7 +3491,7 @@ namespace xmloff::token {
         assert(eToken < XML_TOKEN_END);
 
         const XMLTokenEntry* pToken = &aTokenList[static_cast<sal_uInt16>(eToken)];
-        return aStr == pToken->pChar;
+        return aStr == std::string_view(pToken->pChar, pToken->nLength);
     }
 }
 

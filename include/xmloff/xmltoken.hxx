@@ -3407,7 +3407,7 @@ namespace xmloff::token {
 
     /// compare eToken to the string
     XMLOFF_DLLPUBLIC bool IsXMLToken(
-        const OUString& rString,
+        std::u16string_view rString,
         enum XMLTokenEnum eToken );
 
     /// compare eToken to the string

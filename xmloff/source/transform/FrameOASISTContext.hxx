@@ -31,7 +31,7 @@ class XMLFrameOASISTransformerContext : public XMLTransformerContext
     bool m_bIgnoreElement;
 
     bool IsLinkedEmbeddedObject(
-        const OUString& rLocalName,
+        std::u16string_view rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& rAttrList );
 
 public:

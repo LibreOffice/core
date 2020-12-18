@@ -84,7 +84,7 @@ bool lcl_convertEnum(
 
 bool lcl_convertEnum(
     sal_Int32 & rEnum,
-    const OUString & rValue,
+    std::u16string_view rValue,
     const SvXMLSignedEnumMapEntry *pMap )
 {
     while( pMap->eToken != XML_TOKEN_INVALID )

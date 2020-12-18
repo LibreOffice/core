@@ -47,13 +47,13 @@ public:
 // IMPORT: GeneralFunction / ScSubTotalFunc
     static css::sheet::GeneralFunction
                         GetFunctionFromString(
-                            const OUString& rString );
+                            std::u16string_view rString );
     static ScGeneralFunction
                         GetFunctionFromString2(
-                            const OUString& rString );
+                            std::u16string_view rString );
 
     static ScSubTotalFunc GetSubTotalFuncFromString(
-                            const OUString& rString );
+                            std::u16string_view rString );
 
 // EXPORT: GeneralFunctio2 / ScSubTotalFunc
     static void         GetStringFromFunction(
@@ -66,7 +66,7 @@ public:
 // IMPORT: DataPilotFieldOrientation
     static css::sheet::DataPilotFieldOrientation
                         GetOrientationFromString(
-                            const OUString& rString );
+                            std::u16string_view rString );
 
 // EXPORT: DataPilotFieldOrientation
     static void         GetStringFromOrientation(
@@ -76,10 +76,10 @@ public:
 // IMPORT: Detective
     static ScDetectiveObjType
                         GetDetObjTypeFromString(
-                            const OUString& rString );
+                            std::u16string_view rString );
     static bool         GetDetOpTypeFromString(
                             ScDetOpType& rDetOpType,
-                            const OUString& rString );
+                            std::u16string_view rString );
 
 // EXPORT: Detective
     static void         GetStringFromDetObjType(

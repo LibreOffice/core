@@ -117,7 +117,7 @@ bool XMLPMPropHdl_NumFormat::importXML(
 {
     sal_Int16 nSync = sal_Int16();
     sal_Int16 nNumType = NumberingType::NUMBER_NONE;
-    rUnitConverter.convertNumFormat( nNumType, rStrImpValue, OUString(), true );
+    rUnitConverter.convertNumFormat( nNumType, rStrImpValue, u"", true );
 
     if( !(rValue >>= nSync) )
         nSync = NumberingType::NUMBER_NONE;

@@ -666,7 +666,7 @@ void SvXMLUnitConverter::convertPosition3D( OUStringBuffer &rBuffer,
 bool SvXMLUnitConverter::convertNumFormat(
         sal_Int16& rType,
         const OUString& rNumFmt,
-        const OUString& rNumLetterSync,
+        std::u16string_view rNumLetterSync,
         bool bNumberNone ) const
 {
     bool bRet = true;
