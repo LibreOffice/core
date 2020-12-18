@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7548a5b_7c690a42",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2020-12-18T11:04:36Z",
+      "side": 1,
+      "message": "Mention: tdf#138987.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 43
+      },
+      "revId": "5975ebc132a5f0a2746b6d820301e90561dcf2e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91d7f3a0_3f06c4e0",
+        "filename": "pyuno/source/module/pyuno_module.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2020-12-18T11:04:36Z",
+      "side": 1,
+      "message": "This still leaves us without solution for: PyUnicode_FromUnicode and PyUnicode_FromUnicode.",
+      "range": {
+        "startLine": 886,
+        "startChar": 0,
+        "endLine": 888,
+        "endChar": 5
+      },
+      "revId": "5975ebc132a5f0a2746b6d820301e90561dcf2e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
