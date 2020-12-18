@@ -12,30 +12,37 @@ $(eval $(call gb_Executable_Executable,ui-previewer))
 $(eval $(call gb_Executable_use_externals,ui-previewer,\
     boost_headers \
     $(if $(filter TRUE,$(DISABLE_DYNLOADING)),\
-        dtoa \
-        icuuc \
-        icui18n \
-        icudata \
-        libpng \
-        libjpeg \
-        harfbuzz \
-        libxml2 \
-        graphite \
-        liblangtag \
-        qt5 \
-        cairo \
-        fontconfig \
-        lcms2 \
-        freetype \
-        openssl \
-        expat \
-        orcus-parser \
-        orcus \
-        qrcodegen \
         boost_filesystem \
         boost_iostreams \
         boost_system \
+        cairo \
+        dtoa \
+        expat \
+        fontconfig \
+        freetype \
+        graphite \
+        harfbuzz \
+        hunspell \
+        hyphen \
+        icudata \
+        icui18n \
+        icuuc \
+        lcms2 \
+        libexttextcat \
+        libjpeg \
+        liblangtag \
+        libnumbertext \
+        libpng \
+        librdf \
+        libxml2 \
+        libxslt \
         mdds_headers \
+        mythes \
+        openssl \
+        orcus \
+        orcus-parser \
+        qrcodegen \
+        qt5 \
     ) \
 ))
 
@@ -45,7 +52,10 @@ $(eval $(call gb_Executable_use_api,ui-previewer,\
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,ui-previewer,\
-    $(if $(filter TRUE,$(DISABLE_DYNLOADING)),boost_locale) \
+    $(if $(filter TRUE,$(DISABLE_DYNLOADING)),\
+        boost_locale \
+        ulingu \
+    ) \
     vclmain \
 ))
 
@@ -61,36 +71,112 @@ $(eval $(call gb_Executable_use_libraries,ui-previewer,\
         acc \
         avmedia \
         basegfx \
+        bib \
+        bootstrap \
+        cairocanvas \
+        canvasfactory \
+        canvastools \
+        chartcontroller \
+        chartcore \
+        collator_data \
+        configmgr \
+        cppcanvas \
+        ctl \
         cui \
+        dba \
         dbtools \
+        dict_ja \
+        dict_zh \
         drawinglayer \
         editeng \
+        embobj \
         emfio \
         epoxy \
+        evtatt \
+        expwrap \
+        filterconfig \
+        frm \
+        fsstorage \
         fwk \
-        gcc3_uno \
+        gie \
         gie \
         graphicfilter \
+        graphicfilter \
+        guesslang \
+        hyphen \
         i18nlangtag \
+        i18npool \
+        i18npool \
+        i18nsearch \
         i18nutil \
+        icg \
+        index_data \
+        introspection \
+        invocadapt \
+        invocation \
         lng \
+        lnth \
+        localebe1 \
+        localedata_en \
+        localedata_es \
+        localedata_euro \
+        localedata_others \
+        msfilter \
+        mtfrenderer \
+        namingservice \
+        numbertext \
+        odfflatxml \
+        oox \
+        package2 \
+        pdffilter \
+        proxyfac \
+        reflection \
         reg \
         salhelper \
         sax \
+        sax \
+        sb \
         sfx \
+        simplecanvas \
         sot \
+        spell \
+        srtrs1 \
+        stocservices \
+        storagefd \
         store \
+        svgfilter \
+        svgio \
         svl \
         svt \
         svx \
         svxcore \
+        t602filter \
+        textconv_dict \
+        textfd \
         tk \
+        ucb1 \
         ucbhelper \
+        ucpdav1 \
+        ucpfile1 \
+        ucphier1 \
+        ucppkg1 \
+        ucptdoc1 \
         unoidl \
+        unordf \
+        unoxml \
         utl \
+        uui \
+        vclcanvas \
+        xmlfa \
+        xmlfd \
         xmlreader \
+        xmlscript \
         xo \
         xof \
+        xsltdlg \
+        xsltfilter \
+        xsltfilter \
+        xstor \
         $(if $(filter EMSCRIPTEN,$(OS)),vclplug_qt5) \
     ) \
 ))

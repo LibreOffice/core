@@ -6119,6 +6119,8 @@ AC_SUBST(LD)
 AC_SUBST(NM)
 AC_SUBST(OBJDUMP)
 AC_SUBST(PKG_CONFIG)
+AC_SUBST(PKG_CONFIG_PATH)
+AC_SUBST(PKG_CONFIG_LIBDIR)
 AC_SUBST(RANLIB)
 AC_SUBST(READELF)
 AC_SUBST(STRIP)
@@ -12538,6 +12540,9 @@ then
     QT5_CFLAGS="-I$qt5_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT -DQT_NO_VERSION_TAGGING"
     QT5_CFLAGS=$(printf '%s' "$QT5_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     QT5_LIBS="-L$qt5_libdir -lQt5Core -lQt5Gui -lQt5Widgets -lQt5Network"
+    if test "$_os" = "Emscripten"; then
+        QT5_LIBS="$QT5_LIBS -lqtpcre2"
+    fi
 
     if test "$USING_X11" = TRUE; then
         PKG_CHECK_MODULES(QT5_XCB,[xcb],,[AC_MSG_ERROR([XCB not found, which is needed for correct app grouping in X11.])])
