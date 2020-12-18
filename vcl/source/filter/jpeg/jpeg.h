@@ -24,7 +24,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <basegfx/vector/b2dsize.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
 #include <jpeglib.h>
 

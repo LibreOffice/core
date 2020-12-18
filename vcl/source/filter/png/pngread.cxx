@@ -33,7 +33,8 @@
 #include <tools/stream.hxx>
 #include <vcl/alpha.hxx>
 #include <osl/endian.h>
-#include <bitmapwriteaccess.hxx>
+
+#include <bitmap/BitmapWriteAccess.hxx>
 
 namespace vcl
 {

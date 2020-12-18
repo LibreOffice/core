@@ -15,8 +15,8 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>
 
-#include <BitmapDisabledImageFilter.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapDisabledImageFilter.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
 namespace
 {

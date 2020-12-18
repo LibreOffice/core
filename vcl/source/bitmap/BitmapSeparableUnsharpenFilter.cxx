@@ -9,12 +9,13 @@
  */
 
 #include <tools/helpers.hxx>
+
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapGaussianSeparableBlurFilter.hxx>
 #include <vcl/BitmapSeparableUnsharpenFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
 BitmapEx BitmapSeparableUnsharpenFilter::execute(BitmapEx const& rBitmapEx) const
 {
