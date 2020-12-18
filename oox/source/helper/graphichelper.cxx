@@ -35,7 +35,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/gen.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/propertyset.hxx>
@@ -277,27 +276,6 @@ Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStrea
     return xGraphic;
 }
 
-std::vector< uno::Reference<graphic::XGraphic> > GraphicHelper::importGraphics(const std::vector< uno::Reference<io::XInputStream> >& rStreams) const
-{
-    std::vector< uno::Sequence<beans::PropertyValue> > aArgsVec;
-
-    for (const auto& rStream : rStreams)
-    {
-        uno::Sequence<beans::PropertyValue > aArgs = comphelper::InitPropertySequence(
-        {
-            {"InputStream", uno::makeAny(rStream)}
-        });
-        aArgsVec.push_back(aArgs);
-    }
-
-    std::vector< uno::Reference<graphic::XGraphic> > aRet;
-
-    if (mxGraphicProvider.is())
-        aRet = comphelper::sequenceToContainer< std::vector< uno::Reference<graphic::XGraphic> > >(mxGraphicProvider->queryGraphics(comphelper::containerToSequence(aArgsVec)));
-
-    return aRet;
-}
-
 Reference< XGraphic > GraphicHelper::importGraphic( const StreamDataSequence& rGraphicData ) const
 {
     Reference< XGraphic > xGraphic;
@@ -307,51 +285,6 @@ Reference< XGraphic > GraphicHelper::importGraphic( const StreamDataSequence& rG
         xGraphic = importGraphic( xInStrm );
     }
     return xGraphic;
-}
-
-void GraphicHelper::importEmbeddedGraphics(const std::vector<OUString>& rStreamNames) const
-{
-    // Don't actually return anything, just fill maEmbeddedGraphics.
-
-    // Stream names and streams to be imported.
-    std::vector<OUString> aMissingStreamNames;
-    std::vector< uno::Reference<io::XInputStream> > aMissingStreams;
-
-    initializeGraphicMapperIfNeeded();
-
-    SAL_WARN_IF(!mxGraphicMapper.is(), "oox", "GraphicHelper::importEmbeddedGraphic - graphic mapper not available");
-
-    for (const auto& rStreamName : rStreamNames)
-    {
-
-        if (rStreamName.isEmpty())
-        {
-            SAL_WARN("oox", "GraphicHelper::importEmbeddedGraphics - empty stream name");
-            continue;
-        }
-
-        Reference<XGraphic> xGraphic;
-
-        xGraphic = mxGraphicMapper->findGraphic(rStreamName);
-
-        if (!xGraphic.is())
-        {
-            aMissingStreamNames.push_back(rStreamName);
-            aMissingStreams.push_back(mxStorage->openInputStream(rStreamName));
-        }
-    }
-
-    std::vector< uno::Reference<graphic::XGraphic> > aGraphics = importGraphics(aMissingStreams);
-
-
-    assert(aGraphics.size() == aMissingStreamNames.size());
-    for (size_t i = 0; i < aGraphics.size(); ++i)
-    {
-        if (aGraphics[i].is())
-        {
-            mxGraphicMapper->putGraphic(aMissingStreamNames[i], aGraphics[i]);
-        }
-    }
 }
 
 Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStreamName, const WmfExternal* pExtHeader ) const
