@@ -18,11 +18,10 @@
  */
 
 #include <comphelper/threadpool.hxx>
-
 #include <tools/helpers.hxx>
 
-#include <bitmapwriteaccess.hxx>
-#include <BitmapScaleSuperFilter.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
+#include <bitmap/BitmapScaleSuperFilter.hxx>
 
 #include <algorithm>
 #include <memory>

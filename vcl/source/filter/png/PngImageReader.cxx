@@ -11,10 +11,11 @@
 #include <vcl/filter/PngImageReader.hxx>
 #include <png.h>
 #include <tools/stream.hxx>
-#include <bitmapwriteaccess.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/BitmapTools.hxx>
+
+#include <bitmap/BitmapWriteAccess.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
 

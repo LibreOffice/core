@@ -13,7 +13,7 @@
 
 #include <vcl/bitmapex.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
 

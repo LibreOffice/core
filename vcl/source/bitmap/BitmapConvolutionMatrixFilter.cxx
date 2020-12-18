@@ -9,12 +9,14 @@
  */
 
 #include <tools/helpers.hxx>
+
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapConvolutionMatrixFilter.hxx>
 #include <vcl/BitmapSharpenFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
+
 #include <array>
 
 BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
