@@ -332,7 +332,7 @@ public:
 
     void            NotifyLOKClient();
 
-    DECL_LINK( MenuHdl, Menu *, bool );
+    void MenuHdl(std::string_view command);
     DECL_LINK( DropdownClickHdl, ToolBox*, void );
 
     void            AutoSum( bool& bRangeFinder, bool& bSubTotal, OpCode eCode );
