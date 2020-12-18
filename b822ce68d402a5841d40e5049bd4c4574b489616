@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa1475a9_da6d15a2",
+        "filename": "vcl/source/bitmap/salbmp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-18T11:05:32Z",
+      "side": 1,
+      "message": "or we could use o3tl::enumarray, which would also enforce correctness",
+      "revId": "b822ce68d402a5841d40e5049bd4c4574b489616",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
