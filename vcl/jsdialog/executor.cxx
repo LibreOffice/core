@@ -208,7 +208,7 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                     pTreeView->select(nRow);
                     pTreeView->set_cursor(nRow);
                     LOKTrigger::trigger_changed(*pTreeView);
-                    LOKTrigger::trigger_row_activated(*pTreeView);
+                    //LOKTrigger::trigger_row_activated(*pTreeView);
                     return true;
                 }
                 else if (sAction == "expand")
