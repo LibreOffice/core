@@ -18,7 +18,7 @@
  */
 
 #include <vcl/vclenum.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/BitmapSimpleColorQuantizationFilter.hxx>
 #include <vcl/svapp.hxx>

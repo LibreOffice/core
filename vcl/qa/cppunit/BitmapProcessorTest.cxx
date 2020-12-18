@@ -13,7 +13,6 @@
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <vcl/bitmap.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/alpha.hxx>
 
 #include <BitmapDisabledImageFilter.hxx>

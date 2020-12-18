@@ -32,7 +32,6 @@
 #include <tools/GenericTypeSerializer.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/outdev.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <memory>
