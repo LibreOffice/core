@@ -53,7 +53,6 @@
 
 class AquaSalFrame;
 class FontAttributes;
-class CoreTextStyle;
 class XorEmulation;
 
 // CoreText-specific physically available font face
