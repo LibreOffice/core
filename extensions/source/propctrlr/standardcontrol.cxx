@@ -587,7 +587,10 @@ namespace pcr
     {
         OUString sText;
         _rValue >>= sText;
-        getTypedControlWindow()->set_entry_text( sText );
+        weld::ComboBox* pControlWindow = getTypedControlWindow();
+        // tdf#138701 leave current cursor valid if the contents won't change
+        if (pControlWindow->get_active_text() != sText)
+            pControlWindow->set_entry_text(sText);
     }
 
     Any SAL_CALL OComboboxControl::getValue()

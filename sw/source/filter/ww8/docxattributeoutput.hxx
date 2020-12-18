@@ -854,7 +854,7 @@ private:
     // This paragraph must end with page break
     bool m_bPageBreakAfter = false;
 
-    std::vector<ww8::Frame> m_aFramesOfParagraph;
+    std::stack< std::vector<ww8::Frame> > m_aFramesOfParagraph;
     o3tl::sorted_vector<const SwFrameFormat*> m_aFloatingTablesOfParagraph;
     sal_Int32 m_nTextFrameLevel;
 
@@ -1025,6 +1025,8 @@ public:
     virtual void WriteTextBox(css::uno::Reference<css::drawing::XShape> xShape) override;
     virtual OUString FindRelId(BitmapChecksum nChecksum) override;
     virtual void CacheRelId(BitmapChecksum nChecksum, const OUString& rRelId) override;
+    virtual css::uno::Reference<css::text::XTextFrame> GetUnoTextFrame(
+        css::uno::Reference<css::drawing::XShape> xShape) override;
     virtual oox::drawingml::DrawingML& GetDrawingML() override;
     virtual void MaybeOutputBrushItem(SfxItemSet const&) override;
 

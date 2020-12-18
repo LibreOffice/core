@@ -5027,6 +5027,10 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
             rDoc.SetDirty(aRange, true);
         }
 
+        bool bDone = ScDetectiveFunc(rDoc, nTab).DeleteAll( ScDetectiveDelete::Circles );
+        if(bDone)
+           DetectiveMarkInvalid(nTab);
+
         bNeedContentsUndo |= bNeedContents;
     }
 
@@ -5112,6 +5116,10 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, bool bRecord, Sc
 
         if ( !AdjustRowHeight( aExtended ) )
             rDocShell.PostPaint( aExtended, PaintPartFlags::Grid );
+
+        bool bDone = ScDetectiveFunc(rDoc, nTab).DeleteAll( ScDetectiveDelete::Circles );
+        if(bDone)
+           DetectiveMarkInvalid(nTab);
     }
 
     if (bRecord)

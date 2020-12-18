@@ -78,6 +78,7 @@
 #include <svx/xftshcit.hxx>
 #include <svx/xftshxy.hxx>
 #include <svx/xftadit.hxx>
+#include <svx/svddef.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
@@ -327,6 +328,21 @@ bool XColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
     SetColorValue( Color(nValue) );
 
     return true;
+}
+
+void XColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("XColorItem"));
+    if (Which() == SDRATTR_SHADOWCOLOR)
+    {
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWCOLOR"));
+    }
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aColor"),
+                                BAD_CAST(aColor.AsRGBHexString().toUtf8().getStr()));
+
+    NameOrIndex::dumpAsXml(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 // --- line attributes ---

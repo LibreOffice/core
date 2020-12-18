@@ -57,6 +57,10 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,svx,\
     JunitTest_svx_unoapi \
 ))
 
+$(eval $(call gb_Module_add_uicheck_targets,svx,\
+    UITest_svx_table \
+))
+
 #todo: noopt for EnhanceCustomShapesFunctionParser.cxx on Solaris Sparc and MacOSX
 #todo: -DUNICODE and -D_UNICODE on WNT for source/dialog
 #todo: component file

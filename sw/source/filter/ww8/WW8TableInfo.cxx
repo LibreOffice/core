@@ -998,15 +998,15 @@ std::string CellInfo::toString() const
     static char sBuffer[256];
 
     snprintf(sBuffer, sizeof(sBuffer),
-             "<cellinfo left=\"%ld\""
-             " right=\"%ld\""
-             " top=\"%ld\""
-             " bottom=\"%ld\""
+             "<cellinfo left=\"%" SAL_PRIdINT64 "\""
+             " right=\"%" SAL_PRIdINT64 "\""
+             " top=\"%" SAL_PRIdINT64 "\""
+             " bottom=\"%" SAL_PRIdINT64 "\""
              " node=\"%p\"/>",
-             left(),
-             right(),
-             top(),
-             bottom(),
+             sal_Int64(left()),
+             sal_Int64(right()),
+             sal_Int64(top()),
+             sal_Int64(bottom()),
              m_pNodeInfo);
 
     return sBuffer;

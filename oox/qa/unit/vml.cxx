@@ -55,25 +55,6 @@ void OoxVmlTest::load(const OUString& rFileName)
     mxComponent = loadFromDesktop(aURL);
 }
 
-CPPUNIT_TEST_FIXTURE(OoxVmlTest, testLayoutFlowAltAlone)
-{
-    // mso-layout-flow-alt:bottom-to-top without a matching layout-flow:vertical.
-    load("layout-flow-alt-alone.docx");
-
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                                 uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    sal_Int16 nWritingMode = 0;
-    xShape->getPropertyValue("WritingMode") >>= nWritingMode;
-
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 5 [ BTLR ]
-    // - Actual  : 4 [ PAGE ]
-    // i.e. in case layout-flow:vertical was missing, the text was not vertical.
-    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, nWritingMode);
-}
-
 CPPUNIT_TEST_FIXTURE(OoxVmlTest, testSpt202ShapeType)
 {
     // Load a document with a groupshape, 2nd child is a <v:shape>, its type has o:spt set to 202

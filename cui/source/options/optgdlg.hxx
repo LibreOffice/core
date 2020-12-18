@@ -28,10 +28,6 @@ namespace vcl {
     class IconThemeInfo;
 }
 
-namespace svt {
-    class SkiaCfg;
-}
-
 class OfaMiscTabPage : public SfxTabPage
 {
 private:
@@ -88,7 +84,6 @@ private:
     std::unique_ptr<SvtTabAppearanceCfg>    pAppearanceCfg;
     std::unique_ptr<CanvasSettings>         pCanvasSettings;
     std::unique_ptr<SvtOptionsDrawinglayer> mpDrawinglayerOpt;
-    std::unique_ptr<svt::SkiaCfg> mpSkiaConfig;
 
     std::vector<vcl::IconThemeInfo> mInstalledIconThemes;
 
@@ -125,6 +120,7 @@ private:
     DECL_STATIC_LINK(OfaViewTabPage, OnMoreIconsClick, weld::Button&, void);
     void UpdateSkiaStatus();
     void HideSkiaWidgets();
+    void UpdateHardwareAccelStatus();
 
 public:
     OfaViewTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

@@ -34,6 +34,8 @@
 #include <drawdoc.hxx>
 #include <dcontact.hxx>
 #include <svx/svdpage.hxx>
+#include <ndtxt.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 namespace
 {
@@ -217,6 +219,65 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132911)
     //Scheduler::ProcessEventsToIdle();
     //CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     //CPPUNIT_ASSERT_EQUAL(4, getShapes());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf61154)
+{
+    load(DATA_DIRECTORY, "tdf61154.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+
+    pWrtShell->GotoNextTOXBase();
+
+    // show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be off",
+                           !pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
+    pWrtShell->UpdateTableOf(*pTOXBase);
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    SwTextNode* pTitleNode = pShell->GetCursor()->GetNode().GetTextNode();
+    SwNodeIndex aIdx(*pTitleNode);
+
+    // table of contents node shouldn't contain tracked deletion
+    // This was "Text InsertedDeleted\t1"
+    SwTextNode* pNext = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext(&aIdx));
+    CPPUNIT_ASSERT_EQUAL(OUString("Text Inserted\t1"), pNext->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf100691)
+{
+    load(DATA_DIRECTORY, "tdf100691.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+
+    pWrtShell->GotoNextTOXBase();
+
+    const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
+    pWrtShell->UpdateTableOf(*pTOXBase);
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    SwTextNode* pTitleNode = pShell->GetCursor()->GetNode().GetTextNode();
+    SwNodeIndex aIdx(*pTitleNode);
+
+    // table of contents node shouldn't contain invisible text
+    // This was "Text Hidden\t1"
+    SwTextNode* pNext = static_cast<SwTextNode*>(pDoc->GetNodes().GoNext(&aIdx));
+    CPPUNIT_ASSERT_EQUAL(OUString("Text\t1"), pNext->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134404)
@@ -1597,6 +1658,36 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf117601)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTextTable->getColumns()->getCount());
 
     CPPUNIT_ASSERT(xCellB1->getString().endsWith("test1"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf138130)
+{
+    load(DATA_DIRECTORY, "tdf138130.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+
+    awt::Point aPos = xShape->getPosition();
+
+    //select shape and change the anchor
+    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:SetAnchorToPage", {});
+    Scheduler::ProcessEventsToIdle();
+
+    //position has changed
+    CPPUNIT_ASSERT(aPos.X < xShape->getPosition().X);
+    CPPUNIT_ASSERT(aPos.Y < xShape->getPosition().Y);
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(aPos.X, xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(aPos.Y, xShape->getPosition().Y);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf136385)

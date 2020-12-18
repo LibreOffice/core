@@ -138,6 +138,8 @@ public:
     // used only by OutputDevice::ImplLayout, TODO: make friend
     explicit        MultiSalLayout( std::unique_ptr<SalLayout> pBaseLayout );
     void            AddFallback(std::unique_ptr<SalLayout> pFallbackLayout, ImplLayoutRuns const &);
+    // give up ownership of the initial pBaseLayout taken by the ctor
+    std::unique_ptr<SalLayout>  ReleaseBaseLayout();
     bool            LayoutText(ImplLayoutArgs&, const SalLayoutGlyphs*) override;
     void            AdjustLayout(ImplLayoutArgs&) override;
     void            InitFont() const override;

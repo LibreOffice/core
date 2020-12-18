@@ -101,90 +101,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::utl;
 
-namespace svt {
-
-class SkiaCfg
-{
-private:
-    bool mbUseSkia;
-    bool mbForceSkiaRaster;
-    bool mbModified;
-
-public:
-    SkiaCfg();
-    ~SkiaCfg();
-
-    bool useSkia() const;
-    bool forceSkiaRaster() const;
-
-    void setUseSkia(bool bSkia);
-    void setForceSkiaRaster(bool bSkia);
-
-    void reset();
-};
-
-SkiaCfg::SkiaCfg():
-    mbModified(false)
-{
-    reset();
-}
-
-void SkiaCfg::reset()
-{
-    mbUseSkia = officecfg::Office::Common::VCL::UseSkia::get();
-    mbForceSkiaRaster = officecfg::Office::Common::VCL::ForceSkiaRaster::get();
-    mbModified = false;
-}
-
-SkiaCfg::~SkiaCfg()
-{
-    if (!mbModified)
-        return;
-
-    try
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-        if (!officecfg::Office::Common::VCL::UseSkia::isReadOnly())
-            officecfg::Office::Common::VCL::UseSkia::set(mbUseSkia, batch);
-        if (!officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly())
-            officecfg::Office::Common::VCL::ForceSkiaRaster::set(mbForceSkiaRaster, batch);
-        batch->commit();
-    }
-    catch (...)
-    {
-    }
-}
-
-bool SkiaCfg::useSkia() const
-{
-    return mbUseSkia;
-}
-
-bool SkiaCfg::forceSkiaRaster() const
-{
-    return mbForceSkiaRaster;
-}
-
-void SkiaCfg::setUseSkia(bool bSkia)
-{
-    if (bSkia != mbUseSkia)
-    {
-        mbUseSkia = bSkia;
-        mbModified = true;
-    }
-}
-
-void SkiaCfg::setForceSkiaRaster(bool bSkia)
-{
-    if (mbForceSkiaRaster != bSkia)
-    {
-        mbForceSkiaRaster = bSkia;
-        mbModified = true;
-    }
-}
-
-}
-
 // class OfaMiscTabPage --------------------------------------------------
 
 DeactivateRC OfaMiscTabPage::DeactivatePage( SfxItemSet* pSet_ )
@@ -551,11 +467,6 @@ CanvasSettings::CanvasSettings() :
 
 bool CanvasSettings::IsHardwareAccelerationAvailable() const
 {
-    if (SkiaHelper::isVCLSkiaEnabled() && Application::GetToolkitName() != "gtk3")
-    {
-        mbHWAccelAvailable = false;
-        return false;
-    }
 #if HAVE_FEATURE_OPENGL
     if (OpenGLWrapper::isVCLOpenGLEnabled() && Application::GetToolkitName() != "gtk3")
     {
@@ -661,7 +572,6 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , pAppearanceCfg(new SvtTabAppearanceCfg)
     , pCanvasSettings(new CanvasSettings)
     , mpDrawinglayerOpt(new SvtOptionsDrawinglayer)
-    , mpSkiaConfig(new svt::SkiaCfg)
     , m_xIconSizeLB(m_xBuilder->weld_combo_box("iconsize"))
     , m_xSidebarIconSizeLB(m_xBuilder->weld_combo_box("sidebariconsize"))
     , m_xNotebookbarIconSizeLB(m_xBuilder->weld_combo_box("notebookbariconsize"))
@@ -716,8 +626,6 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
 
     m_xMoreIcons->set_from_icon_name("cmd/sc_additionsdialog.png");
     m_xMoreIcons->connect_clicked(LINK(this, OfaViewTabPage, OnMoreIconsClick));
-
-    UpdateSkiaStatus();
 }
 
 OfaViewTabPage::~OfaViewTabPage()
@@ -779,6 +687,10 @@ void OfaViewTabPage::UpdateSkiaStatus()
     // FIXME: should really add code to show a 'lock' icon here.
     m_xUseSkia->set_sensitive(!officecfg::Office::Common::VCL::UseSkia::isReadOnly());
     m_xForceSkiaRaster->set_sensitive(m_xUseSkia->get_active() && !officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly());
+
+    // Technically the 'use hardware acceleration' option could be used to mean !forceSkiaRaster, but the implementation
+    // of the option is so tied to the implementation of the canvas module that it's simpler to ignore it.
+    UpdateHardwareAccelStatus();
 #else
     HideSkiaWidgets();
 #endif
@@ -944,8 +856,10 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     if (m_xUseSkia->get_state_changed_from_saved() ||
         m_xForceSkiaRaster->get_state_changed_from_saved())
     {
-        mpSkiaConfig->setUseSkia(m_xUseSkia->get_active());
-        mpSkiaConfig->setForceSkiaRaster(m_xForceSkiaRaster->get_active());
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::VCL::UseSkia::set(m_xUseSkia->get_active(), batch);
+        officecfg::Office::Common::VCL::ForceSkiaRaster::set(m_xForceSkiaRaster->get_active(), batch);
+        batch->commit();
         bModified = true;
     }
 
@@ -992,7 +906,6 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 void OfaViewTabPage::Reset( const SfxItemSet* )
 {
     SvtMiscOptions aMiscOptions;
-    mpSkiaConfig->reset();
 
     if (aMiscOptions.GetSymbolsSize() != SFX_SYMBOLS_SIZE_AUTO)
     {
@@ -1058,20 +971,8 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_xContextMenuShortcutsLB->set_active(bContextMenuShortcutsNonDefault ? eContextMenuShortcuts + 1 : 0);
     m_xContextMenuShortcutsLB->save_value();
 
-    { // #i95644# HW accel (unified to disable mechanism)
-        if(pCanvasSettings->IsHardwareAccelerationAvailable())
-        {
-            m_xUseHardwareAccell->set_active(pCanvasSettings->IsHardwareAccelerationEnabled());
-            m_xUseHardwareAccell->set_sensitive(!pCanvasSettings->IsHardwareAccelerationRO());
-        }
-        else
-        {
-            m_xUseHardwareAccell->set_active(false);
-            m_xUseHardwareAccell->set_sensitive(false);
-        }
-
-        m_xUseHardwareAccell->save_state();
-    }
+    UpdateHardwareAccelStatus();
+    m_xUseHardwareAccell->save_state();
 
     { // #i95644# AntiAliasing
         if(mpDrawinglayerOpt->IsAAPossibleOnThisSystem())
@@ -1086,17 +987,36 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
 
         m_xUseAntiAliase->save_state();
     }
-    m_xUseSkia->set_active(mpSkiaConfig->useSkia());
-    m_xForceSkiaRaster->set_active(mpSkiaConfig->forceSkiaRaster());
+
+    m_xUseSkia->set_active(officecfg::Office::Common::VCL::UseSkia::get());
+    m_xForceSkiaRaster->set_active(officecfg::Office::Common::VCL::ForceSkiaRaster::get());
+    m_xUseSkia->save_state();
+    m_xForceSkiaRaster->save_state();
 
     m_xFontAntiAliasing->save_state();
     m_xAAPointLimit->save_value();
     m_xFontShowCB->save_state();
 
-    m_xUseSkia->save_state();
-    m_xForceSkiaRaster->save_state();
-
     OnAntialiasingToggled(*m_xFontAntiAliasing);
+    UpdateSkiaStatus();
+}
+
+void OfaViewTabPage::UpdateHardwareAccelStatus()
+{
+    // #i95644# HW accel (unified to disable mechanism)
+    if(pCanvasSettings->IsHardwareAccelerationAvailable())
+    {
+        m_xUseHardwareAccell->set_active(pCanvasSettings->IsHardwareAccelerationEnabled());
+        m_xUseHardwareAccell->set_sensitive(!pCanvasSettings->IsHardwareAccelerationRO());
+    }
+    else
+    {
+        m_xUseHardwareAccell->set_active(false);
+        m_xUseHardwareAccell->set_sensitive(false);
+    }
+#if HAVE_FEATURE_SKIA
+    m_xUseHardwareAccell->set_sensitive(!m_xUseSkia->get_active());
+#endif
 }
 
 struct LanguageConfig_Impl

@@ -47,7 +47,7 @@ static void init_source (j_decompress_ptr cinfo)
      * This is correct behavior for reading a series of images from one source.
      */
     source->start_of_file = TRUE;
-    source->no_data_available = FALSE;
+    source->no_data_available_failures = 0;
 }
 
 }
@@ -86,7 +86,7 @@ static boolean fill_input_buffer (j_decompress_ptr cinfo)
 
     if (!nbytes)
     {
-        source->no_data_available = TRUE;
+        source->no_data_available_failures++;
         if (source->start_of_file)     /* Treat empty input file as fatal error */
         {
             ERREXIT(cinfo, JERR_INPUT_EMPTY);

@@ -91,37 +91,51 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
     SwPaM& rPam(AddUndoRedoPaM(rContext));
 
     // fix PaM for deletions shown in margin
-    SwRedlineTable::size_type nCurRedlinePos;
-    const SwRangeRedline * pRedline =
-            rDoc.getIDocumentRedlineAccess().GetRedline( *rPam.GetPoint(), &nCurRedlinePos );
-    if ( pRedline && !pRedline->IsVisible() )
+    bool bIsDeletion = dynamic_cast<SwUndoRedlineDelete*>(this);
+    const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
+    sal_uInt32 nMaxId = SAL_MAX_UINT32;
+    if ( bIsDeletion && rTable.size() > 0 )
     {
-        const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
-        // count invisible (DELETE) redlines in the same position
-        SwRedlineTable::size_type nPos = nCurRedlinePos + 1;
-        while ( nPos < rTable.size() && !rTable[nPos]->IsVisible() &&
-            *pRedline->GetPoint() == *rTable[nPos]->GetPoint() )
+        // Nodes of the deletion range are in the newest invisible redlines.
+        // Set all redlines visible and recover the original deletion range.
+        for (sal_uInt32 nNodes = 0; nNodes <  m_nEndNode - m_nSttNode + 1; ++nNodes)
         {
-            ++nPos;
-        }
-        SwRangeRedline * pHiddenRedline( rTable[nCurRedlinePos] );
-        pHiddenRedline->Show(0, rTable.GetPos(pHiddenRedline), /*bForced=*/true);
-        pHiddenRedline->Show(1, rTable.GetPos(pHiddenRedline), /*bForced=*/true);
-        rPam = *pHiddenRedline;
+            SwRedlineTable::size_type nCurRedlinePos = 0;
+            SwRangeRedline * pRedline(rTable[nCurRedlinePos]);
 
-        SwContentNode *pNd = rPam.GetContentNode();
-        const sal_Int32 nStart = rPam.Start()->nContent.GetIndex();
-        UndoRedlineImpl(rDoc, rPam);
+            // search last but nNodes redline by its nth biggest id
+            for( SwRedlineTable::size_type n = 1; n < rTable.size(); ++n )
+            {
+                SwRangeRedline *pRed(rTable[n]);
+                if ( !pRed->HasMark() && pRedline->GetId() < pRed->GetId() && pRed->GetId() < nMaxId )
+                {
+                    nCurRedlinePos = n;
+                    pRedline = pRed;
+                }
+            }
 
-        // restore redline ranges to the start of the hidden deletion
-        // TODO fix the other cases
-        for (SwRedlineTable::size_type nIdx = nCurRedlinePos; nIdx + 1 < nPos; ++nIdx) {
-            SwRangeRedline * pHiddenRedline2( rTable[nIdx] );
-            pHiddenRedline2->GetPoint()->nContent.Assign(pNd, nStart);
+            nMaxId = pRedline->GetId();
+
+            if ( !pRedline->IsVisible() && !pRedline->HasMark() )
+            {
+                // set it visible
+                pRedline->Show(0, rTable.GetPos(pRedline), /*bForced=*/true);
+                pRedline->Show(1, rTable.GetPos(pRedline), /*bForced=*/true);
+
+                // extend the range
+                if ( nNodes==0 )
+                    rPam = *pRedline;
+                else
+                {
+                    std::unique_ptr<SwPaM> pNewPam;
+                    pNewPam.reset(new SwPaM(*pRedline->GetMark(), *rPam.GetPoint()));
+                    rPam = *pNewPam;
+                }
+            }
         }
     }
-    else
-        UndoRedlineImpl(rDoc, rPam);
+
+    UndoRedlineImpl(rDoc, rPam);
 
     if( mpRedlSaveData )
     {
@@ -139,7 +153,7 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     // update frames after calling SetSaveData
-    if (dynamic_cast<SwUndoRedlineDelete*>(this))
+    if ( bIsDeletion )
     {
         sw::UpdateFramesForRemoveDeleteRedline(rDoc, rPam);
     }

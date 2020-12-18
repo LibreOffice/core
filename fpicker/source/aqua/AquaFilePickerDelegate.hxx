@@ -27,7 +27,7 @@
 class SalAquaFilePicker;
 class FilterHelper;
 
-@interface AquaFilePickerDelegate : NSObject
+@interface AquaFilePickerDelegate : NSObject <NSOpenSavePanelDelegate>
 {
     SalAquaFilePicker* filePicker;
     FilterHelper* filterHelper;

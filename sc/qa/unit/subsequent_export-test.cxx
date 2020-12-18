@@ -270,6 +270,8 @@ public:
     void testTdf137000_handle_upright();
     void testTdf126305_DataValidatyErrorAlert();
     void testTdf76047_externalLink();
+    void testTdf87973_externalLinkSkipUnuseds();
+    void testTdf138741_externalLinkSkipUnusedsCrash();
     void testTdf129969();
     void testTdf84874();
     void testTdf136721_paper_size();
@@ -441,6 +443,8 @@ public:
     CPPUNIT_TEST(testTdf137000_handle_upright);
     CPPUNIT_TEST(testTdf126305_DataValidatyErrorAlert);
     CPPUNIT_TEST(testTdf76047_externalLink);
+    CPPUNIT_TEST(testTdf87973_externalLinkSkipUnuseds);
+    CPPUNIT_TEST(testTdf138741_externalLinkSkipUnusedsCrash);
     CPPUNIT_TEST(testTdf129969);
     CPPUNIT_TEST(testTdf84874);
     CPPUNIT_TEST(testTdf136721_paper_size);
@@ -5405,8 +5409,9 @@ void ScExportTest::testHeaderFontStyleXLSX()
 
 void ScExportTest::testTdf135828_Shape_Rect()
 {
-    // tdf#135828 Check that the width and the height of rectangle of the shape
-    // is correct.
+    // tdf#135828 Check that the width and the height of rectangle of the shape is correct.
+    // tdf#123613 Check the positioning, and allow massive rounding errors because of the back and
+    // forth conversion between emu and hmm.
     ScDocShellRef xShell = loadDoc("tdf135828_Shape_Rect.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
@@ -5418,8 +5423,15 @@ void ScExportTest::testTdf135828_Shape_Rect()
     xmlDocUniquePtr pDrawing = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
     CPPUNIT_ASSERT(pDrawing);
 
-    assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:spPr/a:xfrm/a:ext", "cx", "294480"); // width
-    assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:spPr/a:xfrm/a:ext", "cy", "1990440"); // height
+    double nXPosOfTopleft = getXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:spPr/a:xfrm/a:off", "x" ).toDouble();
+    double nYPosOfTopleft = getXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:spPr/a:xfrm/a:off", "y" ).toDouble();
+    double nWidth         = getXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:spPr/a:xfrm/a:ext", "cx").toDouble();
+    double nHeight        = getXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:spPr/a:xfrm/a:ext", "cy").toDouble();
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(  854640, nXPosOfTopleft, 10000);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( -570600, nYPosOfTopleft, 10000);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(  294840,         nWidth, 10000);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL( 1988280,        nHeight, 10000);
 }
 
 void ScExportTest::testTdf123353()
@@ -5536,6 +5548,57 @@ void ScExportTest::testTdf76047_externalLink()
             CPPUNIT_ASSERT_EQUAL(aStr2, aStr3);
         }
     }
+}
+
+void ScExportTest::testTdf87973_externalLinkSkipUnuseds()
+{
+    ScDocShellRef pShell = loadDoc("tdf87973_externalLinkSkipUnuseds.", FORMAT_ODS);
+    CPPUNIT_ASSERT(pShell.is());
+
+    // try to load data from external link: tdf132105_external.ods
+    // that file has to be in the same directory as tdf87973_externalLinkSkipUnuseds.ods
+    pShell->ReloadAllLinks();
+    ScDocument& rDoc = pShell->GetDocument();
+
+    // change external link to: 87973_externalSource.ods
+    OUString aFormula, bFormula;
+    rDoc.GetFormula(3, 1, 0, aFormula);
+    auto nIdxOfFilename = aFormula.indexOf("tdf132105_external.ods");
+    aFormula = aFormula.replaceAt(nIdxOfFilename, 22, "87973_externalSource.ods");
+    auto nIdxOfFile = aFormula.indexOf("file");
+
+    // saveAndReload save the file to a temporary directory
+    // the link must be changed to point to that directory
+    utl::TempFile aTempFile;
+    auto aTempFilename = aTempFile.GetURL();
+    auto nIdxOfTmpFile = aTempFilename.lastIndexOf('/');
+    aTempFilename = aTempFilename.copy(0, nIdxOfTmpFile + 1);
+
+    aFormula = aFormula.replaceAt(nIdxOfFile, nIdxOfFilename - nIdxOfFile, aTempFilename);
+    rDoc.SetFormula(ScAddress(3, 1, 0), aFormula, formula::FormulaGrammar::GRAM_NATIVE_UI);
+
+    // save and load back
+    ScDocShellRef pDocSh = saveAndReload(&(*pShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDocSh.is());
+
+    // check if the the new filename is present in the link (and not replaced by '[2]')
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+    rDoc2.GetFormula(3, 1, 0, bFormula);
+    CPPUNIT_ASSERT(bFormula.indexOf("tdf132105_external.ods") < 0);
+    CPPUNIT_ASSERT(bFormula.indexOf("87973_externalSource.ods") > 0);
+
+    pDocSh->DoClose();
+}
+
+void ScExportTest::testTdf138741_externalLinkSkipUnusedsCrash()
+{
+    ScDocShellRef xShell = loadDoc("tdf138741_externalLinkSkipUnusedsCrash.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell);
+
+    //without the fix in place, it would have crashed at export time
+    ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+
+    xShell->DoClose();
 }
 
 void ScExportTest::testTdf129969()

@@ -76,6 +76,7 @@ public:
             std::unique_ptr<ThreadTask> pTask = mpPool->popWorkLocked( aGuard, true );
             if( pTask )
             {
+                std::shared_ptr<ThreadTaskTag> pTag(pTask->mpTag);
                 mpPool->incBusyWorker();
                 aGuard.unlock();
 
@@ -84,6 +85,7 @@ public:
 
                 aGuard.lock();
                 mpPool->decBusyWorker();
+                pTag->onTaskWorkerDone();
             }
         }
     }
@@ -162,12 +164,23 @@ void ThreadPool::shutdownLocked(std::unique_lock<std::mutex>& aGuard)
     { // no threads at all -> execute the work in-line
         std::unique_ptr<ThreadTask> pTask;
         while ( ( pTask = popWorkLocked(aGuard, false) ) )
+        {
+            std::shared_ptr<ThreadTaskTag> pTag(pTask->mpTag);
             pTask->exec();
+            pTag->onTaskWorkerDone();
+        }
     }
     else
     {
         while( !maTasks.empty() )
+        {
             maTasksChanged.wait( aGuard );
+            // In the (unlikely but possible?) case pushTask() gets called meanwhile,
+            // its notify_one() call is meant to wake a up a thread and process the task.
+            // But if this code gets woken up instead, it could lead to a deadlock.
+            // Pass on the notification.
+            maTasksChanged.notify_one();
+        }
     }
     assert( maTasks.empty() );
 
@@ -243,7 +256,7 @@ void ThreadPool::decBusyWorker()
     --mnBusyWorkers;
 }
 
-void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag, bool bJoinAll)
+void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag, bool bJoin)
 {
 #if defined DBG_UTIL && (defined LINUX || defined _WIN32)
     assert(!gbIsWorkerThread && "cannot wait for tasks from inside a task");
@@ -258,21 +271,23 @@ void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag, bool 
                 std::unique_ptr<ThreadTask> pTask = popWorkLocked(aGuard, false);
                 if (!pTask)
                     break;
+                std::shared_ptr<ThreadTaskTag> pTag(pTask->mpTag);
                 pTask->exec();
+                pTag->onTaskWorkerDone();
             }
         }
     }
 
     rTag->waitUntilDone();
 
-    if (bJoinAll)
-        joinAll();
+    if (bJoin)
+        joinThreadsIfIdle();
 }
 
-void ThreadPool::joinAll()
+void ThreadPool::joinThreadsIfIdle()
 {
     std::unique_lock< std::mutex > aGuard( maMutex );
-    if (maTasks.empty()) // check if there are still tasks from another tag
+    if (isIdle()) // check if there are still tasks from another tag
     {
         shutdownLocked(aGuard);
     }
@@ -295,7 +310,6 @@ ThreadTask::ThreadTask(const std::shared_ptr<ThreadTaskTag>& pTag)
 
 void ThreadTask::exec()
 {
-    std::shared_ptr<ThreadTaskTag> pTag(mpTag);
     try {
         doWork();
     }
@@ -311,8 +325,6 @@ void ThreadTask::exec()
     {
         SAL_WARN("comphelper", "unknown exception in thread worker while calling doWork()");
     }
-
-    pTag->onTaskWorkerDone();
 }
 
 ThreadTaskTag::ThreadTaskTag() : mnTasksWorking(0)

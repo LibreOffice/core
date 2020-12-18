@@ -3229,6 +3229,8 @@
                               <object class="sfxlo-NotebookbarToolBox" id="LineA7">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="valign">center</property>
+                                <property name="vexpand">True</property>
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
                                 <child>
@@ -3253,6 +3255,8 @@
                               <object class="sfxlo-NotebookbarToolBox" id="LineB8">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="valign">center</property>
+                                <property name="vexpand">True</property>
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
                                 <child>
@@ -3312,10 +3316,12 @@
                                   <object class="GtkBox" id="box76">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="vexpand">True</property>
                                     <child>
                                       <object class="sfxlo-NotebookbarToolBox" id="font1">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="valign">center</property>
                                         <property name="hexpand">True</property>
                                         <child>
                                           <object class="GtkToolButton" id="Home-CharFontName">
@@ -3340,6 +3346,7 @@
                                       <object class="sfxlo-NotebookbarToolBox" id="fontheight1">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="valign">center</property>
                                         <property name="margin_left">5</property>
                                         <property name="margin_right">5</property>
                                         <child>
@@ -3364,6 +3371,7 @@
                                       <object class="sfxlo-NotebookbarToolBox" id="ExtTop6">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="valign">center</property>
                                         <property name="toolbar_style">icons</property>
                                         <property name="show_arrow">False</property>
                                         <child>
@@ -3407,10 +3415,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="valign">center</property>
+                                    <property name="vexpand">True</property>
                                     <child>
                                       <object class="sfxlo-NotebookbarToolBox" id="ExtTop4">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="valign">center</property>
                                         <property name="toolbar_style">icons</property>
                                         <property name="show_arrow">False</property>
                                         <child>
@@ -3484,6 +3494,7 @@
                                       <object class="sfxlo-NotebookbarToolBox" id="ExtTop5">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="valign">center</property>
                                         <property name="toolbar_style">icons</property>
                                         <property name="show_arrow">False</property>
                                         <child>
@@ -3534,6 +3545,7 @@
                                       <object class="sfxlo-NotebookbarToolBox" id="ExtTop2">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="valign">center</property>
                                         <property name="toolbar_style">icons</property>
                                         <property name="show_arrow">False</property>
                                         <child>
@@ -3639,10 +3651,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
+                                <property name="vexpand">True</property>
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="first6">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="valign">center</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -3697,10 +3711,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
+                                <property name="vexpand">True</property>
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="second6">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="valign">center</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -3784,6 +3800,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
+                                <property name="vexpand">True</property>
                                 <child>
                                   <object class="GtkSeparator" id="separator74">
                                     <property name="visible">True</property>
@@ -3803,6 +3820,7 @@
                                   <object class="sfxlo-NotebookbarToolBox" id="first16">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="valign">center</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -3864,10 +3882,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
+                                <property name="vexpand">True</property>
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="second12">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="valign">center</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -3907,6 +3927,7 @@
                                   <object class="sfxlo-NotebookbarToolBox" id="second14">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="valign">center</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -3982,10 +4003,12 @@
                               <object class="GtkBox" id="box2">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="vexpand">True</property>
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="SectionBottom36">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="valign">center</property>
                                     <property name="hexpand">True</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
@@ -4019,10 +4042,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
+                                <property name="vexpand">True</property>
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="second9">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="valign">center</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -4088,6 +4113,7 @@
                                   <object class="sfxlo-NotebookbarToolBox" id="second2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="valign">center</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -4217,6 +4243,8 @@
                               <object class="sfxlo-NotebookbarToolBox" id="LineA10">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="valign">center</property>
+                                <property name="vexpand">True</property>
                                 <property name="toolbar_style">icons</property>
                                 <property name="show_arrow">False</property>
                                 <child>
@@ -4263,6 +4291,8 @@
                               <object class="sfxlo-NotebookbarToolBox" id="LineB11">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="valign">center</property>
+                                <property name="vexpand">True</property>
                                 <property name="toolbar_style">icons</property>
                                 <property name="show_arrow">False</property>
                                 <child>
@@ -4354,6 +4384,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
+                                <property name="vexpand">True</property>
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="SectionBottom5">
                                     <property name="visible">True</property>
@@ -11346,7 +11377,6 @@
                                 <property name="show_arrow">False</property>
                                 <child>
                                   <object class="GtkMenuToolButton" id="Image-GrafLuminance">
-                                    <property name="width_request">130</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="valign">center</property>
@@ -11371,12 +11401,12 @@
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkMenuToolButton" id="Image-GrafTransparence">
-                                    <property name="width_request">130</property>
+                                  <object class="GtkMenuToolButton" id="Image-GrafContrast">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="valign">center</property>
-                                    <property name="action_name">.uno:GrafTransparence</property>
+                                    <property name="margin_right">5</property>
+                                    <property name="action_name">.uno:GrafContrast</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -11427,12 +11457,11 @@
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkMenuToolButton" id="Image-GrafContrast">
-                                    <property name="width_request">130</property>
+                                  <object class="GtkMenuToolButton" id="Image-GrafTransparence">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="valign">center</property>
-                                    <property name="action_name">.uno:GrafContrast</property>
+                                    <property name="action_name">.uno:GrafTransparence</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -11454,10 +11483,10 @@
                                 <property name="show_arrow">False</property>
                                 <child>
                                   <object class="GtkMenuToolButton" id="Image-GrafGamma">
-                                    <property name="width_request">130</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="valign">center</property>
+                                    <property name="margin_right">5</property>
                                     <property name="action_name">.uno:GrafGamma</property>
                                   </object>
                                   <packing>
@@ -17404,5 +17433,31 @@
         <property name="top_attach">0</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="1stRow">
+    <property name="mode">vertical</property>
+    <property name="ignore_hidden">True</property>
+    <widgets>
+      <widget name="LineA7"/>
+      <widget name="box76"/>
+      <widget name="GroupB15"/>
+      <widget name="GroupB80"/>
+      <widget name="box2"/>
+      <widget name="LineA10"/>
+      <widget name="GroupB19"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="2ndRow">
+    <property name="mode">vertical</property>
+    <property name="ignore_hidden">True</property>
+    <widgets>
+      <widget name="LineB8"/>
+      <widget name="GroupB11"/>
+      <widget name="GroupB16"/>
+      <widget name="GroupB85"/>
+      <widget name="GroupB22"/>
+      <widget name="LineB11"/>
+      <widget name="StyleParagraphSection1"/>
+    </widgets>
   </object>
 </interface>

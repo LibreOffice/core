@@ -88,6 +88,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
@@ -2942,6 +2943,39 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             }
         }
     }
+    else
+    {
+        if (mpTextExport)
+        {
+            uno::Reference<drawing::XShape> xShape(rXIface, uno::UNO_QUERY);
+            if (xShape)
+            {
+                auto xTextFrame = mpTextExport->GetUnoTextFrame(xShape);
+                if (xTextFrame)
+                {
+                    uno::Reference<beans::XPropertySet> xPropSet(xTextFrame, uno::UNO_QUERY);
+                    auto aAny = xPropSet->getPropertyValue("WritingMode");
+                    sal_Int16 nWritingMode;
+                    if (aAny >>= nWritingMode)
+                    {
+                        switch (nWritingMode)
+                        {
+                        case WritingMode2::TB_RL:
+                            sWritingMode = "vert";
+                            bVertical = true;
+                            break;
+                        case WritingMode2::BT_LR:
+                            sWritingMode = "vert270";
+                            bVertical = true;
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
     OUString sPresetWarp(PresetGeometryTypeNames::GetMsoName(sShapeType));
     // ODF may have user defined TextPath, use "textPlain" as ersatz.
     if (sPresetWarp.isEmpty())
@@ -4014,7 +4048,8 @@ static sal_Int32 lcl_CalculateDir(const double dX, const double dY)
 void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
 {
     Sequence< PropertyValue > aGrabBag, aEffects, aOuterShdwProps;
-    if( GetProperty( rXPropSet, "InteropGrabBag" ) )
+    bool bHasInteropGrabBag = rXPropSet->getPropertySetInfo()->hasPropertyByName("InteropGrabBag");
+    if (bHasInteropGrabBag && GetProperty(rXPropSet, "InteropGrabBag"))
     {
         mAny >>= aGrabBag;
         auto pProp = std::find_if(std::cbegin(aGrabBag), std::cend(aGrabBag),
@@ -4164,6 +4199,11 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
 
 void DrawingML::WriteGlowEffect(const Reference< XPropertySet >& rXPropSet)
 {
+    if (!rXPropSet->getPropertySetInfo()->hasPropertyByName("GlowEffectRadius"))
+    {
+        return;
+    }
+
     sal_Int32 nRad = 0;
     rXPropSet->getPropertyValue("GlowEffectRadius") >>= nRad;
     if (!nRad)
@@ -4186,6 +4226,11 @@ void DrawingML::WriteGlowEffect(const Reference< XPropertySet >& rXPropSet)
 
 void DrawingML::WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet)
 {
+    if (!rXPropSet->getPropertySetInfo()->hasPropertyByName("SoftEdgeRadius"))
+    {
+        return;
+    }
+
     sal_Int32 nRad = 0;
     rXPropSet->getPropertyValue("SoftEdgeRadius") >>= nRad;
     if (!nRad)

@@ -216,6 +216,7 @@ struct ShapeModel
     OUString     maSignatureLineSigningInstructions;
     bool         mbSignatureLineShowSignDate;
     bool         mbSignatureLineCanAddComment;
+    bool         mbInGroup;
 
     explicit            ShapeModel();
                         ~ShapeModel();
@@ -275,6 +276,13 @@ protected:
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const css::awt::Rectangle& rShapeRect ) const = 0;
 
+    /** Always called after implConvertAndInsert for the same task.*/
+    virtual css::uno::Reference<css::drawing::XShape> finalImplConvertAndInsert(
+        const css::uno::Reference<css::drawing::XShape>& rxShape) const
+    {
+        return rxShape;
+    };
+
     /** Calculates the final shape rectangle according to the passed anchor,
         if present, otherwise according to the own anchor settings. */
     css::awt::Rectangle calcShapeRectangle(
@@ -304,6 +312,8 @@ protected:
                         implConvertAndInsert(
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const css::awt::Rectangle& rShapeRect ) const override;
+    virtual css::uno::Reference<css::drawing::XShape> finalImplConvertAndInsert(
+        const css::uno::Reference<css::drawing::XShape>& rxShape) const override;
     /** Used by both RectangleShape and ComplexShape. */
     css::uno::Reference<css::drawing::XShape>createEmbeddedPictureObject(
         const css::uno::Reference< css::drawing::XShapes >& rxShapes,

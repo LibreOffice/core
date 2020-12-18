@@ -80,6 +80,8 @@
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
                             <property name="title" translatable="yes" context="optpathspage|type">Type</property>
+                            <property name="clickable">True</property>
+                            <property name="sort-indicator">True</property>
                             <child>
                               <object class="GtkCellRendererPixbuf" id="cellrenderertext1"/>
                               <attributes>
@@ -100,7 +102,6 @@
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
                             <property name="title" translatable="yes" context="optpathspage|user_paths">User Paths</property>
-                            <property name="clickable">True</property>
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderer9"/>
                               <attributes>
@@ -115,7 +116,6 @@
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
                             <property name="title" translatable="yes" context="optpathspage|internal_paths">Internal Paths</property>
-                            <property name="clickable">True</property>
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderer1"/>
                               <attributes>

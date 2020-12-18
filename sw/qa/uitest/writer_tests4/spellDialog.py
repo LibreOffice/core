@@ -5,12 +5,17 @@
 #
 
 import re
+import org.libreoffice.unotest
+import pathlib
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 
 from libreoffice.linguistic.linguservice import get_spellchecker
 from com.sun.star.lang import Locale
+
+def get_url_for_data_file(file_name):
+    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 class SpellingAndGrammarDialog(UITestCase):
 
@@ -99,4 +104,30 @@ frog, dogg, catt"""
 
         output_text = document.Text.getString().replace('\r\n', '\n')
         self.assertTrue(re.match(self.TDF46852_REGEX, output_text))
-        
+
+    def test_tdf66043(self):
+        writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf66043.fodt"))
+        document = self.ui_test.get_component()
+        # Step 1: Initiate spellchecking, and make sure "Check grammar" is
+        # unchecked
+        spell_dialog = self.launch_dialog()
+        checkgrammar = spell_dialog.getChild('checkgrammar')
+        if get_state_as_dict(checkgrammar)['Selected'] == 'true':
+            checkgrammar.executeAction('CLICK', ())
+        self.assertTrue(get_state_as_dict(checkgrammar)['Selected'] == 'false')
+
+        # Step 2: Click on "Correct all" for each misspelling
+        #         prompt until end of document is reached.
+        changeall = spell_dialog.getChild('changeall')
+        changeall.executeAction("CLICK", ())
+
+        xCloseBtn = spell_dialog.getChild("close")
+        xCloseBtn.executeAction("CLICK", tuple())
+
+        output_text = document.Text.getString().replace('\r\n', '\n')
+        # This was "gooodgood baaad eeend" ("goood" is a deletion,
+        # "good" is an insertion by fixing the first misspelling),
+        # but now "goood" is not a misspelling because it is accepted
+        # correctly without the redline containing a deleted "o"
+        self.assertTrue(output_text == 'goood baaadbaaed eeend')
+

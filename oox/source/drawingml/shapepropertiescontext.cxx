@@ -24,7 +24,7 @@
 #include <drawingml/misccontexts.hxx>
 #include <drawingml/transform2dcontext.hxx>
 #include <drawingml/customshapegeometry.hxx>
-#include "effectpropertiescontext.hxx"
+#include <drawingml/effectpropertiescontext.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>

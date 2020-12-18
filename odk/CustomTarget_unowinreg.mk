@@ -19,7 +19,7 @@ $(call gb_CustomTarget_get_workdir,odk/unowinreg)/unowinreg.dll : \
 		$(if $(filter FREEBSD,$(OS)),-I$(JAVA_HOME)/include/freebsd \
 		-I$(JAVA_HOME)/include/bsd -I$(JAVA_HOME)/include/linux,\
 		$(if $(filter NETBSD,$(OS)),-I$(JAVA_HOME)/include/netbsd))) \
-		-shared -o $@ $< \
+		-shared -static-libgcc -o $@ $< \
 		-Wl,--kill-at -lkernel32 -ladvapi32 && \
 	$(MINGWSTRIP) $@
 

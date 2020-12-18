@@ -33,6 +33,7 @@ class GtkSalMenu : public SalMenu
 {
 private:
     std::vector< GtkSalMenuItem* >  maItems;
+    std::vector<std::pair<sal_uInt16, GtkWidget*>> maExtraButtons;
     Idle                            maUpdateMenuBarIdle;
 
     bool                            mbInActivateCallback;
@@ -62,6 +63,8 @@ private:
     void                        ActivateAllSubmenus(Menu* pMenuBar);
 
     DECL_LINK(MenuBarHierarchyChangeHandler, Timer*, void);
+
+    static GtkWidget* AddButton(GtkWidget *pImage);
 
 public:
     GtkSalMenu( bool bMenuBar );
@@ -112,7 +115,7 @@ public:
     bool                        PrepUpdate();
     virtual void                Update() override;  // Update this menu only.
     // Update full menu hierarchy from this menu.
-    void                        UpdateFull () { ActivateAllSubmenus(mpVCLMenu); Update(); }
+    void                        UpdateFull () { ActivateAllSubmenus(mpVCLMenu); }
     // Clear ActionGroup and MenuModel from full menu hierarchy
     void                        ClearActionGroupAndMenuModel();
     GtkSalMenu*                 GetTopLevel();
@@ -127,6 +130,9 @@ public:
 
     virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags) override;
     virtual void ShowCloseButton(bool bShow) override;
+    virtual bool AddMenuBarButton( const SalMenuButtonItem& rNewItem ) override;
+    virtual void RemoveMenuBarButton( sal_uInt16 nId ) override;
+    virtual tools::Rectangle GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame ) override;
     virtual bool CanGetFocus() const override;
     virtual bool TakeFocus() override;
     virtual int GetMenuBarHeight() const override;

@@ -78,7 +78,8 @@ OFieldDescControl::OFieldDescControl(weld::Container* pPage, OTableDesignHelpBar
     , m_nEditWidth(50)
     , pActFieldDescr(nullptr)
 {
-    m_pHelp->connect_focus_out(LINK(this, OFieldDescControl, HelpFocusOut));
+    if (m_pHelp)
+        m_pHelp->connect_focus_out(LINK(this, OFieldDescControl, HelpFocusOut));
 }
 
 OFieldDescControl::~OFieldDescControl()

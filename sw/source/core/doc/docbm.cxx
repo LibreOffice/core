@@ -1405,10 +1405,11 @@ namespace sw::mark
             return nullptr;
         auto pFieldmark(*itFieldmark);
         for ( ; itFieldmark != m_vFieldmarks.end()
-                && (**itFieldmark).IsCoveringPosition(rPos); ++itFieldmark)
+                && (**itFieldmark).GetMarkStart() <= rPos; ++itFieldmark)
         {   // find the innermost fieldmark
-            if (pFieldmark->GetMarkStart() < (**itFieldmark).GetMarkStart()
-                || (**itFieldmark).GetMarkEnd() < pFieldmark->GetMarkEnd())
+            if (rPos < (**itFieldmark).GetMarkEnd()
+                && (pFieldmark->GetMarkStart() < (**itFieldmark).GetMarkStart()
+                    || (**itFieldmark).GetMarkEnd() < pFieldmark->GetMarkEnd()))
             {
                 pFieldmark = *itFieldmark;
             }

@@ -81,6 +81,8 @@ namespace pcr
     {
         Formatter& rFieldFormatter = m_xSpinButton->GetFormatter();
         rFieldFormatter.TreatAsNumber(true);
+        rFieldFormatter.ClearMinValue();
+        rFieldFormatter.ClearMaxValue();
         m_xEntry->connect_key_press(LINK(this, OFormatSampleControl, KeyInputHdl));
     }
 

@@ -724,13 +724,18 @@ IMPL_LINK(OfaTreeOptionsDialog, ApplyHdl_Impl, weld::Button&, rButton, void)
         m_xDialog->response(RET_OK);
     else
     {
-        // tdf#137930 rebuild the in and out itemsets
-        // to reflect the current post-apply state
+        // tdf#137930 rebuild the in and out itemsets to reflect the current
+        // post-apply state
         if (pGroupInfo && pGroupInfo->m_pInItemSet)
         {
-            pGroupInfo->m_pInItemSet.reset();
-            pGroupInfo->m_pOutItemSet.reset();
-            InitItemSets(*pGroupInfo);
+            // tdf#138596 seeing as the SfxTabPages keep pointers to the m_pInItemSet
+            // we update the contents of the existing SfxItemSets to match
+            // the current settings, rather than create new ones
+            auto xInItemSet = pGroupInfo->m_pShell
+                ? pGroupInfo->m_pShell->CreateItemSet( pGroupInfo->m_nDialogId )
+                : CreateItemSet( pGroupInfo->m_nDialogId );
+            pGroupInfo->m_pInItemSet->Set(*xInItemSet, false);
+            pGroupInfo->m_pOutItemSet->ClearItem();
         }
 
         // for the Apply case, now that the settings are saved to config,

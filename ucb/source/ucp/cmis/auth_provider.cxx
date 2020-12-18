@@ -96,7 +96,7 @@ namespace cmis
                             "Open the following link in your browser and "
                             "paste the code from the URL you have been redirected to in the "
                             "box below. For example:\n"
-                            "https://login.live.com/oauth20_desktop.srf?code=YOUR_CODE&lc=1033",
+                            "http://localhost/LibreOffice?code=YOUR_CODE",
                             url_oustr );
 
                 xIH->handle( xRequest.get() );

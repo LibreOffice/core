@@ -99,6 +99,7 @@ public:
     void testTdf128345GradientRadial();
     void testTdf128345GradientAxial();
     void testTdf134969TransparencyOnColorGradient();
+    void testTdf136911();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -147,6 +148,7 @@ public:
     CPPUNIT_TEST(testTdf128345GradientRadial);
     CPPUNIT_TEST(testTdf128345GradientAxial);
     CPPUNIT_TEST(testTdf134969TransparencyOnColorGradient);
+    CPPUNIT_TEST(testTdf136911);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -642,6 +644,32 @@ void SdOOXMLExportTest1::testTextboxWithHyperlink()
     OUString aURL;
     xPropSet->getPropertyValue("URL") >>= aURL;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("URLs don't match", OUString("http://www.xkcd.com/"), aURL);
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest1::testTdf136911()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/ppt/tdf136911.ppt"), PPT);
+
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+
+    // Get second paragraph
+    uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
+
+    // first chunk of text
+    uno::Reference<text::XTextRange> xRun( getRunFromParagraph( 0, xParagraph ) );
+    uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
+
+    uno::Reference<text::XTextField> xField;
+    xPropSet->getPropertyValue("TextField") >>= xField;
+    CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
+
+    xPropSet.set(xField, uno::UNO_QUERY);
+    OUString aURL;
+    xPropSet->getPropertyValue("URL") >>= aURL;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("URLs don't match", OUString("http://google.com"), aURL);
 
     xDocShRef->DoClose();
 }

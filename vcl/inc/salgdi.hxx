@@ -275,7 +275,8 @@ public:
 
     bool                        DrawGradient(
                                     const tools::PolyPolygon& rPolyPoly,
-                                    const Gradient& rGradient );
+                                    const Gradient& rGradient,
+                                    const OutputDevice* pOutDev);
 
     bool DrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon,
                       SalGradient const & rGradient);
@@ -596,7 +597,9 @@ private:
 
     // for buffering the Mirror-Matrix, see ::getMirror
     basegfx::B2DHomMatrix       m_aLastMirror;
-    tools::Long                        m_aLastMirrorW;
+    tools::Long                 m_aLastMirrorW;
+    tools::Long                 m_nLastMirrorDeviceLTRButBiDiRtlTranslate;
+    bool                        m_bLastMirrorDeviceLTRButBiDiRtlSet;
 
 protected:
     /// flags which hold the SetAntialiasing() value from OutputDevice

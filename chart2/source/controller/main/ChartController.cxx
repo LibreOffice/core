@@ -1108,8 +1108,8 @@ void SAL_CALL ChartController::dispatch(
         if (rArgs.getLength() > 0)
         {
             sal_uInt32 nColor;
-            rArgs[0].Value >>= nColor;
-            this->executeDispatch_FillColor(nColor);
+            if (rArgs[0].Value >>= nColor)
+                this->executeDispatch_FillColor(nColor);
         }
     }
     else if(aCommand.startsWith("FillGradient"))

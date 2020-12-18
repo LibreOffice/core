@@ -181,16 +181,6 @@ void Theme::UpdateTheme()
             Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
 
         setPropertyValue(
-            maPropertyIdToNameMap[Int_TabMenuPadding],
-            Any(sal_Int32(3)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Color_TabMenuSeparator],
-            Any(sal_Int32(aBorderColor.GetRGBColor())));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_TabMenuSeparatorPadding],
-            Any(sal_Int32(3)));
-
-        setPropertyValue(
             maPropertyIdToNameMap[Color_DropDownBackground],
             Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
 
@@ -512,9 +502,6 @@ void Theme::SetupPropertyMaps()
     maPropertyNameToIdMap["Color_PanelTitleFont"]=Color_PanelTitleFont;
     maPropertyIdToNameMap[Color_PanelTitleFont]="Color_PanelTitleFont";
 
-    maPropertyNameToIdMap["Color_TabMenuSeparator"]=Color_TabMenuSeparator;
-    maPropertyIdToNameMap[Color_TabMenuSeparator]="Color_TabMenuSeparator";
-
     maPropertyNameToIdMap["Color_Highlight"]=Color_Highlight;
     maPropertyIdToNameMap[Color_Highlight]="Color_Highlight";
 
@@ -559,12 +546,6 @@ void Theme::SetupPropertyMaps()
     maPropertyNameToIdMap["Int_PanelTitleBarHeight"]=Int_PanelTitleBarHeight;
     maPropertyIdToNameMap[Int_PanelTitleBarHeight]="Int_PanelTitleBarHeight";
 
-    maPropertyNameToIdMap["Int_TabMenuPadding"]=Int_TabMenuPadding;
-    maPropertyIdToNameMap[Int_TabMenuPadding]="Int_TabMenuPadding";
-
-    maPropertyNameToIdMap["Int_TabMenuSeparatorPadding"]=Int_TabMenuSeparatorPadding;
-    maPropertyIdToNameMap[Int_TabMenuSeparatorPadding]="Int_TabMenuSeparatorPadding";
-
     maPropertyNameToIdMap["Int_DeckLeftPadding"]=Int_DeckLeftPadding;
     maPropertyIdToNameMap[Int_DeckLeftPadding]="Int_DeckLeftPadding";
 
@@ -596,7 +577,6 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
 
         case Color_DeckTitleFont:
         case Color_PanelTitleFont:
-        case Color_TabMenuSeparator:
         case Color_Highlight:
         case Color_HighlightText:
         case Color_DeckBackground:
@@ -613,8 +593,6 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
         case Int_DeckBorderSize:
         case Int_DeckSeparatorHeight:
         case Int_PanelTitleBarHeight:
-        case Int_TabMenuPadding:
-        case Int_TabMenuSeparatorPadding:
         case Int_DeckLeftPadding:
         case Int_DeckTopPadding:
         case Int_DeckRightPadding:

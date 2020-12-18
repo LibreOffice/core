@@ -109,13 +109,6 @@ void ScNameDlg::Init()
                                 xTreeView->get_height_rows(10));
     m_xRangeManagerTable.reset(new ScRangeManagerTable(std::move(xTreeView), m_RangeMap, maCursorPos));
 
-    if (m_xRangeManagerTable->n_children())
-    {
-        m_xRangeManagerTable->set_cursor(0);
-        m_xRangeManagerTable->CheckForFormulaString();
-        SelectionChanged();
-    }
-
     m_xRangeManagerTable->connect_changed( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
 
     m_xBtnOk->connect_clicked( LINK( this, ScNameDlg, OkBtnHdl ) );
@@ -143,6 +136,14 @@ void ScNameDlg::Init()
     }
 
     CheckForEmptyTable();
+
+    if (m_xRangeManagerTable->n_children())
+    {
+        m_xRangeManagerTable->set_cursor(0);
+        m_xRangeManagerTable->CheckForFormulaString();
+        SelectionChanged();
+    }
+
 }
 
 bool ScNameDlg::IsRefInputMode() const
@@ -459,6 +460,7 @@ IMPL_LINK_NOARG(ScNameDlg, OkBtnHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(ScNameDlg, CancelBtnHdl, weld::Button&, void)
 {
+    mbCloseWithoutUndo = true;
     response(RET_CANCEL);
 }
 

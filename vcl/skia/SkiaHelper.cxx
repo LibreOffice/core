@@ -485,7 +485,7 @@ struct ImageCacheItem
 {
     OString key;
     sk_sp<SkImage> image;
-    int size; // cost of the item
+    tools::Long size; // cost of the item
 };
 } //namespace
 
@@ -493,7 +493,7 @@ struct ImageCacheItem
 // to require a hash/map. Using o3tl::lru_cache would be simpler, but it doesn't support
 // calculating cost of each item.
 static std::list<ImageCacheItem>* imageCache = nullptr;
-static int imageCacheSize = 0; // sum of all ImageCacheItem.size
+static tools::Long imageCacheSize = 0; // sum of all ImageCacheItem.size
 
 void addCachedImage(const OString& key, sk_sp<SkImage> image)
 {
@@ -502,12 +502,13 @@ void addCachedImage(const OString& key, sk_sp<SkImage> image)
         return;
     if (imageCache == nullptr)
         imageCache = new std::list<ImageCacheItem>;
-    int size = image->width() * image->height()
-               * SkColorTypeBytesPerPixel(image->imageInfo().colorType());
+    tools::Long size = static_cast<tools::Long>(image->width()) * image->height()
+                       * SkColorTypeBytesPerPixel(image->imageInfo().colorType());
     imageCache->push_front({ key, image, size });
     imageCacheSize += size;
     SAL_INFO("vcl.skia.trace", "addcachedimage " << image << " :" << size << "/" << imageCacheSize);
-    while (imageCacheSize > MAX_CACHE_SIZE)
+    const tools::Long maxSize = maxImageCacheSize();
+    while (imageCacheSize > maxSize)
     {
         assert(!imageCache->empty());
         imageCacheSize -= imageCache->back().size;
@@ -552,6 +553,12 @@ void removeCachedImage(sk_sp<SkImage> image)
         else
             ++it;
     }
+}
+
+tools::Long maxImageCacheSize()
+{
+    // Defaults to 4x 2000px 32bpp images, 64MiB.
+    return officecfg::Office::Common::Cache::Skia::ImageCacheSize::get();
 }
 
 void cleanup()

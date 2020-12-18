@@ -1525,6 +1525,30 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
         {
         }
     }
+
+    // updating fObjectRotation
+    tools::Long nTextObjRotation = aGeo.nRotationAngle;
+    double fAngle = nTextObjRotation;
+    fAngle /= 100.0;
+    if (IsMirroredX())
+    {
+        if (IsMirroredY())
+            fObjectRotation = fAngle - 180.0;
+        else
+            fObjectRotation = -fAngle;
+    }
+    else
+    {
+        if (IsMirroredY())
+            fObjectRotation = 180.0 - fAngle;
+        else
+            fObjectRotation = fAngle;
+    }
+    while (fObjectRotation < 0)
+        fObjectRotation += 360.0;
+    while (fObjectRotation >= 360.0)
+        fObjectRotation -= 360.0;
+
     InvalidateRenderGeometry();
 }
 
@@ -2162,10 +2186,8 @@ void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
 
     DBG_ASSERT( pOutlinerParaObject, "SdrTextObj::SetVerticalWriting() without OutlinerParaObject!" );
 
-    if( !pOutlinerParaObject )
-        return;
-
-    if(pOutlinerParaObject->IsVertical() == bVertical)
+    if( !pOutlinerParaObject ||
+        (pOutlinerParaObject->IsVertical() == bVertical) )
         return;
 
     // get item settings

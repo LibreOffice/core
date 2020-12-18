@@ -445,6 +445,17 @@ Module gid_Module_Root_Extension_Dictionary_Kmr_Latn
     Styles = ();
 End
 
+Module gid_Module_Root_Extension_Dictionary_Ko
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_KO );
+    Files = (gid_File_Extension_Dictionary_Ko);
+    InstallOrder = "2000";
+    Sortkey = "623";
+    Spellcheckerlanguage = "ko";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Dictionaries;
+    Styles = ();
+End
+
 Module gid_Module_Root_Extension_Dictionary_Lt
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_LT );
     Files = (gid_File_Extension_Dictionary_Lt);

@@ -531,6 +531,31 @@ bool ImplSdPPTImport::Import()
                 if (!aHyperE.SeekToEndOfRecord(rStCtrl))
                     break;
             }
+
+            if (m_aHyperList.size() == 0)
+            {
+                while(true)
+                {
+
+                    DffRecordHeader aHyperE;
+                    if (!SeekToRec(rStCtrl, PPT_PST_ExHyperlink, nExObjHyperListLen, &aHyperE))
+                        break;
+                    if (!SeekToRec(rStCtrl, PPT_PST_ExHyperlinkAtom, nExObjHyperListLen))
+                        continue;
+
+                    SdHyperlinkEntry aHyperlink;
+
+                    OUString aURLText;
+                    OUString aURLLink;
+                    rStCtrl.SeekRel(8);
+                    rStCtrl.ReadUInt32(aHyperlink.nIndex);
+
+                    ReadString(aURLText);
+                    ReadString(aURLLink);
+                    aHyperlink.aTarget = aURLLink;
+                    m_aHyperList.push_back(aHyperlink);
+                }
+            }
         }
     }
 

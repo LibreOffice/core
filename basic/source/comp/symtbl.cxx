@@ -26,7 +26,6 @@
 #include <stdio.h>
 #include <rtl/character.hxx>
 #include <basic/sberrors.hxx>
-#include <tools/long.hxx>
 
 // All symbol names are laid down int the symbol-pool's stringpool, so that
 // all symbols are handled in the same case. On saving the code-image, the
@@ -70,7 +69,8 @@ short SbiStringPool::Add( double n, SbxDataType t )
         // tdf#131296 - store numeric value including its type character
         // See GetSuffixType in basic/source/comp/scanner.cxx for type characters
         case SbxINTEGER: snprintf( buf, sizeof(buf), "%d%%", static_cast<short>(n) ); break;
-        case SbxLONG:    snprintf( buf, sizeof(buf), "%ld&", static_cast<tools::Long>(n) ); break;
+        case SbxLONG:
+            snprintf( buf, sizeof(buf), "%" SAL_PRIdINT32 "&", static_cast<sal_Int32>(n) ); break;
         case SbxSINGLE:  snprintf( buf, sizeof(buf), "%.6g!", static_cast<float>(n) ); break;
         case SbxDOUBLE:  snprintf( buf, sizeof(buf), "%.16g", n ); break; // default processing in SbiRuntime::StepLOADNC - no type character
         case SbxCURRENCY: snprintf(buf, sizeof(buf), "%.16g@", n); break;

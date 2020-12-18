@@ -273,7 +273,7 @@ void SwAnnotationWin::SetCursorLogicPosition(const Point& rPosition, bool bPoint
 
 void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, DrawFlags nInFlags)
 {
-    Size aSz = pDev->PixelToLogic(GetSizePixel());
+    Size aSz = PixelToLogic(GetSizePixel());
 
     if (mpMetadataAuthor->IsVisible() )
     {
@@ -300,6 +300,7 @@ void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, DrawFlags nInFl
         aPos += rPt;
         vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetLabelFont() );
         mpMetadataDate->SetControlFont( aFont );
+        mpMetadataDate->Draw(pDev, aPos, nInFlags);
         mpMetadataDate->SetControlFont( aOrigFont );
     }
 
@@ -310,13 +311,11 @@ void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, DrawFlags nInFl
         aPos += rPt;
         vcl::Font aFont( mpMetadataResolved->GetSettings().GetStyleSettings().GetLabelFont() );
         mpMetadataResolved->SetControlFont( aFont );
+        mpMetadataResolved->Draw(pDev, aPos, nInFlags);
         mpMetadataResolved->SetControlFont( aOrigFont );
     }
 
-    Size aOrigSize(mpSidebarTextControl->GetSizePixel());
-    mpSidebarTextControl->SetSizePixel(aSz);
     mpSidebarTextControl->Draw(pDev, rPt, nInFlags);
-    mpSidebarTextControl->SetSizePixel(aOrigSize);
 
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
@@ -332,6 +331,8 @@ void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, DrawFlags nInFl
     if (!mpVScrollbar->IsVisible())
         return;
 
+    // if there is a scrollbar shown, draw "..." to indicate the comment isn't
+    // completely shown
     vcl::Font aOrigFont(mpMetadataDate->GetControlFont());
     Color aOrigBg( mpMetadataDate->GetControlBackground() );
     OUString sOrigText(mpMetadataDate->GetText());
@@ -343,7 +344,7 @@ void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, DrawFlags nInFl
     mpMetadataDate->SetControlFont( aFont );
     mpMetadataDate->SetControlBackground( Color(0xFFFFFF) );
     mpMetadataDate->SetText("...");
-    aOrigSize = mpMetadataDate->GetSizePixel();
+    Size aOrigSize = mpMetadataDate->GetSizePixel();
     mpMetadataDate->SetSizePixel(mpMenuButton->GetSizePixel());
     mpMetadataDate->Draw(pDev, aPos, nInFlags);
     mpMetadataDate->SetSizePixel(aOrigSize);

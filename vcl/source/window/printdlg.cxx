@@ -549,7 +549,6 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
     , mnCachedPages( 0 )
     , mbCollateAlwaysOff(false)
     , mbShowLayoutFrame( true )
-    , mbSingleJobs( false )
     , maUpdatePreviewIdle("Print Dialog Update Preview Idle")
     , maUpdatePreviewNoCacheIdle("Print Dialog Update Preview (no cache) Idle")
 {
@@ -656,6 +655,7 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
     // setup toggle hdl
     mxReverseOrderBox->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
     mxCollateBox->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
+    mxSingleJobsBox->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
     mxPagesBtn->connect_toggled( LINK( this, PrintDialog, ToggleHdl ) );
 
     // setup select hdl
@@ -739,8 +739,8 @@ void PrintDialog::storeToSettings()
 
     pItem->setValue( "PrintDialog",
                      "CollateSingleJobs",
-                     mbSingleJobs ? OUString("true") :
-                                    OUString("false") );
+                     mxSingleJobsBox->get_active() ? OUString("true") :
+                                                     OUString("false") );
 
     pItem->setValue( "PrintDialog",
                      "HasPreview",
@@ -794,10 +794,7 @@ void PrintDialog::readFromSettings()
     // collate single jobs
     aValue = pItem->getValue( "PrintDialog",
                               "CollateSingleJobs" );
-    if ( aValue.equalsIgnoreAsciiCase("true") )
-        mbSingleJobs = true;
-    else
-        mbSingleJobs = false;
+    mxSingleJobsBox->set_active(aValue.equalsIgnoreAsciiCase("true"));
 
     // preview box
     aValue = pItem->getValue( "PrintDialog",
@@ -1009,9 +1006,15 @@ void PrintDialog::setPaperOrientation( Orientation eOrientation )
 void PrintDialog::checkControlDependencies()
 {
     if (mxCopyCountField->get_value() > 1)
+    {
         mxCollateBox->set_sensitive( !mbCollateAlwaysOff );
+        mxSingleJobsBox->set_sensitive( mxCollateBox->get_active() );
+    }
     else
+    {
         mxCollateBox->set_sensitive( false );
+        mxSingleJobsBox->set_sensitive( false );
+    }
 
     OUString aImg(mxCollateBox->get_active() ? OUString(SV_PRINT_COLLATE_BMP) : OUString(SV_PRINT_NOCOLLATE_BMP));
 
@@ -1746,6 +1749,11 @@ bool PrintDialog::isCollate() const
     return mxCopyCountField->get_value() > 1 && mxCollateBox->get_active();
 }
 
+bool PrintDialog::isSingleJobs() const
+{
+    return mxSingleJobsBox->get_active();
+}
+
 bool PrintDialog::hasPreview() const
 {
     return mxPreviewBox->get_active();
@@ -1846,7 +1854,7 @@ IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
     }
     else if( &rButton == mxSingleJobsBox.get() )
     {
-        maPController->setValue( "SingleJob",
+        maPController->setValue( "SinglePrintJobs",
                                  makeAny( isSingleJobs() ) );
         checkControlDependencies();
     }

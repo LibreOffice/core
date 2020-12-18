@@ -274,6 +274,84 @@ void doubleToString(typename T::String ** pResult,
         return;
     }
 
+    // Unfortunately the old rounding below writes 1.79769313486232e+308 for
+    // DBL_MAX and 4 subsequent nextafter(...,0).
+    static const double fB1 = std::nextafter( DBL_MAX, 0);
+    static const double fB2 = std::nextafter( fB1, 0);
+    static const double fB3 = std::nextafter( fB2, 0);
+    static const double fB4 = std::nextafter( fB3, 0);
+    if ((fValue >= fB4) && eFormat != rtl_math_StringFormat_F)
+    {
+        // 1.7976931348623157e+308 instead of rounded 1.79769313486232e+308
+        // that can't be converted back as out of range. For rounded values if
+        // they exceed range they should not be written to exchange strings or
+        // file formats.
+
+        // Writing pDig up to decimals(-1,-2) then appending one digit from
+        // pRou xor one or two digits from pSlot[].
+        constexpr char pDig[] = "7976931348623157";
+        constexpr char pRou[] = "8087931359623267";     // the only up-carry is 80
+        static_assert(SAL_N_ELEMENTS(pDig) == SAL_N_ELEMENTS(pRou), "digit count mismatch");
+        constexpr sal_Int32 nDig2 = RTL_CONSTASCII_LENGTH(pRou) - 2;
+        sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH(pRou) + 8;  // + "-1.E+308"
+        const char pSlot[5][2][3] =
+        { // rounded, not
+            "67", "57",     // DBL_MAX
+            "65", "55",
+            "53", "53",
+            "51", "51",
+            "59", "49",
+        };
+
+        if (!pResultCapacity)
+        {
+            pResultCapacity = &nCapacity;
+            T::createBuffer(pResult, pResultCapacity);
+            nResultOffset = 0;
+        }
+
+        if (bSign)
+            T::appendAscii(pResult, pResultCapacity, &nResultOffset,
+                           RTL_CONSTASCII_STRINGPARAM("-"));
+
+        nDecPlaces = std::clamp<sal_Int32>( nDecPlaces, 0, RTL_CONSTASCII_LENGTH(pRou));
+        if (nDecPlaces == 0)
+        {
+            T::appendAscii(pResult, pResultCapacity, &nResultOffset,
+                           RTL_CONSTASCII_STRINGPARAM("2"));
+        }
+        else
+        {
+            T::appendAscii(pResult, pResultCapacity, &nResultOffset,
+                           RTL_CONSTASCII_STRINGPARAM("1"));
+            T::appendChars(pResult, pResultCapacity, &nResultOffset, &cDecSeparator, 1);
+            if (nDecPlaces <= 2)
+            {
+                T::appendAscii(pResult, pResultCapacity, &nResultOffset, pRou, nDecPlaces);
+            }
+            else if (nDecPlaces <= nDig2)
+            {
+                T::appendAscii(pResult, pResultCapacity, &nResultOffset, pDig, nDecPlaces - 1);
+                T::appendAscii(pResult, pResultCapacity, &nResultOffset, pRou + nDecPlaces - 1, 1);
+            }
+            else
+            {
+                const sal_Int32 nDec = nDecPlaces - nDig2;
+                nDecPlaces -= nDec;
+                // nDec-1 is also offset into slot, rounded(1-1=0) or not(2-1=1)
+                const size_t nSlot = ((fValue < fB3) ? 4 : ((fValue < fB2) ? 3
+                            : ((fValue < fB1) ? 2 : ((fValue < DBL_MAX) ? 1 : 0))));
+
+                T::appendAscii(pResult, pResultCapacity, &nResultOffset, pDig, nDecPlaces);
+                T::appendAscii(pResult, pResultCapacity, &nResultOffset, pSlot[nSlot][nDec-1], nDec);
+            }
+        }
+        T::appendAscii(pResult, pResultCapacity, &nResultOffset,
+                       RTL_CONSTASCII_STRINGPARAM("E+308"));
+
+        return;
+    }
+
     // Use integer representation for integer values that fit into the
     // mantissa (1.((2^53)-1)) with a precision of 1 for highest accuracy.
     const sal_Int64 kMaxInt = (static_cast< sal_Int64 >(1) << 53) - 1;
@@ -976,7 +1054,26 @@ double stringToDouble(CharT const * pBegin, CharT const * pEnd,
             errno = 0;
             fVal = strtod_nolocale(buf, &pCharParseEnd);
             if (errno == ERANGE)
-                eStatus = rtl_math_ConversionStatus_OutOfRange;
+            {
+                // Check for the dreaded rounded to 15 digits max value
+                // 1.79769313486232e+308 for 1.7976931348623157e+308 we wrote
+                // everywhere, accept with or without plus sign in exponent.
+                const char* b = buf;
+                if (b[0] == '-')
+                    ++b;
+                if (((pCharParseEnd - b == 21) || (pCharParseEnd - b == 20))
+                        && !strncmp( b, "1.79769313486232", 16)
+                        && (b[16] == 'e' || b[16] == 'E')
+                        && (((pCharParseEnd - b == 21) && !strncmp( b+17, "+308", 4))
+                         || ((pCharParseEnd - b == 20) && !strncmp( b+17, "308", 3))))
+                {
+                    fVal = (buf < b) ? -DBL_MAX : DBL_MAX;
+                }
+                else
+                {
+                    eStatus = rtl_math_ConversionStatus_OutOfRange;
+                }
+            }
             p = bufmap[pCharParseEnd - buf];
             bSign = false;
         }
@@ -1036,6 +1133,9 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
 {
     OSL_ASSERT(nDecPlaces >= -20 && nDecPlaces <= 20);
 
+    if (!std::isfinite(fValue))
+        return fValue;
+
     if (fValue == 0.0)
         return fValue;
 
@@ -1047,39 +1147,53 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
     if (bSign)
         fValue = -fValue;
 
+    // Rounding to decimals between integer distance precision (gaps) does not
+    // make sense, do not even try to multiply/divide and introduce inaccuracy.
+    // For same reasons, do not attempt to round integers to decimals.
+    if (nDecPlaces >= 0
+            && (fValue >= (static_cast<sal_Int64>(1) << 52)
+                || isRepresentableInteger(fValue)))
+        return bSign ? -fValue : fValue;
+
     double fFac = 0;
     if (nDecPlaces != 0)
     {
+        if (nDecPlaces > 1 && fValue > 4294967296.0)
+        {
+            // 4294967296 is 2^32 with room for at least 20 decimals, checking
+            // smaller values is not necessary. Lower the limit if more than 20
+            // decimals were to be allowed.
+
+            // Determine how many decimals are representable in the precision.
+            // Anything greater 2^52 and 0.0 was already ruled out above.
+            // Theoretically 0.5, 0.25, 0.125, 0.0625, 0.03125, ...
+            const double fDec = 52 - log2(fValue) + 1;
+            if (fDec < nDecPlaces)
+                nDecPlaces = static_cast<sal_Int32>(fDec);
+        }
+
+        /* TODO: this was without the inverse factor and determining max
+         * possible decimals, it could now be adjusted to be more lenient. */
         // max 20 decimals, we don't have unlimited precision
         // #38810# and no overflow on fValue*=fFac
         if (nDecPlaces < -20 || 20 < nDecPlaces || fValue > (DBL_MAX / 1e20))
             return bSign ? -fValue : fValue;
 
-        fFac = getN10Exp(nDecPlaces);
-        fValue *= fFac;
+        // Avoid 1e-5 (1.0000000000000001e-05) and such inaccurate fractional
+        // factors that later when dividing back spoil things. For negative
+        // decimals divide first with the inverse, then multiply the rounded
+        // value back.
+        fFac = getN10Exp(abs(nDecPlaces));
+        if (nDecPlaces < 0)
+            fValue /= fFac;
+        else
+            fValue *= fFac;
     }
 
     switch ( eMode )
     {
         case rtl_math_RoundingMode_Corrected :
-        {
-            int nExp;       // exponent for correction
-            if ( fValue > 0.0 )
-                nExp = static_cast<int>( floor( log10( fValue ) ) );
-            else
-                nExp = 0;
-
-            int nIndex;
-
-            if (nExp < 0)
-                nIndex = 15;
-            else if (nExp >= 14)
-                nIndex = 0;
-            else
-                nIndex = 15 - nExp;
-
-            fValue = floor(fValue + 0.5 + nCorrVal[nIndex]);
-        }
+            fValue = rtl::math::approxFloor(fValue + 0.5);
         break;
         case rtl_math_RoundingMode_Down:
             fValue = rtl::math::approxFloor(fValue);
@@ -1148,7 +1262,12 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
     }
 
     if (nDecPlaces != 0)
-        fValue /= fFac;
+    {
+        if (nDecPlaces < 0)
+            fValue *= fFac;
+        else
+            fValue /= fFac;
+    }
 
     return bSign ? -fValue : fValue;
 }
@@ -1180,16 +1299,24 @@ double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
 
     int nExp = static_cast< int >(floor(log10(fValue)));
     nExp = 14 - nExp;
-    double fExpValue = getN10Exp(nExp);
+    double fExpValue = getN10Exp(abs(nExp));
 
-    fValue *= fExpValue;
+    if (nExp < 0)
+        fValue /= fExpValue;
+    else
+        fValue *= fExpValue;
+
     // If the original value was near DBL_MIN we got an overflow. Restore and
     // bail out.
     if (!std::isfinite(fValue))
         return fOrigValue;
 
-    fValue = rtl_math_round(fValue, 0, rtl_math_RoundingMode_Corrected);
-    fValue /= fExpValue;
+    fValue = std::round(fValue);
+
+    if (nExp < 0)
+        fValue *= fExpValue;
+    else
+        fValue /= fExpValue;
 
     // If the original value was near DBL_MAX we got an overflow. Restore and
     // bail out.

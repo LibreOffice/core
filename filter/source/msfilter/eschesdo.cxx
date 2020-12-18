@@ -33,6 +33,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -263,15 +264,35 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             }
             else
             {
-                addShape(sal::static_int_cast< sal_uInt16 >(eShapeType),
-                         nMirrorFlags | ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor);
-                aPropOpt.CreateCustomShapeProperties( eShapeType, rObj.GetShapeRef() );
-                aPropOpt.CreateFillProperties( rObj.mXPropSet, true );
-                if ( rObj.ImplGetText() )
+                const Reference< XPropertySet > xPropSet = rObj.mXPropSet;
+                drawing::FillStyle eFS = drawing::FillStyle_NONE;
+                if(xPropSet.is())
                 {
-                    if ( !aPropOpt.IsFontWork() )
-                        aPropOpt.CreateTextProperties( rObj.mXPropSet, mpEscherEx->QueryTextID(
-                            rObj.GetShapeRef(), rObj.GetShapeId() ), true, false );
+                    uno::Reference< XPropertySetInfo > xPropInfo = xPropSet->getPropertySetInfo();
+                    if ( xPropInfo.is() && xPropInfo->hasPropertyByName("FillStyle"))
+                        xPropSet->getPropertyValue("FillStyle") >>= eFS;
+                }
+
+                if (eFS == drawing::FillStyle_BITMAP && eShapeType == mso_sptMax)
+                {
+                    // We can't map this custom shape to a DOC preset and it has a bitmap fill.
+                    // Make sure that at least the bitmap fill is not lost.
+                    addShape( ESCHER_ShpInst_PictureFrame, ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor );
+                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "Bitmap", false, true, true, bOOxmlExport ) )
+                        aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
+                }
+                else
+                {
+                    addShape(sal::static_int_cast< sal_uInt16 >(eShapeType),
+                             nMirrorFlags | ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor);
+                    aPropOpt.CreateCustomShapeProperties( eShapeType, rObj.GetShapeRef() );
+                    aPropOpt.CreateFillProperties( rObj.mXPropSet, true );
+                    if ( rObj.ImplGetText() )
+                    {
+                        if ( !aPropOpt.IsFontWork() )
+                            aPropOpt.CreateTextProperties( rObj.mXPropSet, mpEscherEx->QueryTextID(
+                                rObj.GetShapeRef(), rObj.GetShapeId() ), true, false );
+                    }
                 }
             }
         }

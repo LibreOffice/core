@@ -70,6 +70,7 @@ namespace style {
 namespace text {
     class XTextContent;
     class XTextRange;
+    class XTextFrame;
 }
 namespace io {
     class XOutputStream;
@@ -125,6 +126,9 @@ public:
     virtual OUString FindRelId(BitmapChecksum nChecksum) = 0;
     /// Store the RelId of a graphic based on its checksum.
     virtual void CacheRelId(BitmapChecksum nChecksum, const OUString& rRelId) = 0;
+    ///  Get textbox which belongs to the shape.
+    virtual css::uno::Reference<css::text::XTextFrame> GetUnoTextFrame(
+        css::uno::Reference<css::drawing::XShape> xShape) = 0;
 protected:
     DMLTextExport() {}
     virtual ~DMLTextExport() {}

@@ -1194,7 +1194,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         // result field may be filled with spaces
         sCharsetName = sCharsetName.trim();
         ColumnTypeInfo aInfo(aType, xRow->getShort(7), aScale,
-                xRow->getString(13));
+                sCharsetName);
 
         aCurrentRow[5] = new ORowSetValueDecorator(aInfo.getSdbcType());
         // 6. Typename (SQL_*)

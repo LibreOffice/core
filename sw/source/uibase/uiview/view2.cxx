@@ -673,13 +673,10 @@ void SwView::Execute(SfxRequest &rReq)
                     }
                 }
 
-                const RedlineFlags nOn = static_cast<const SfxBoolItem*>(pItem)->GetValue()
-                    ? RedlineFlags::On : RedlineFlags::NONE;
-                const RedlineFlags nMode = m_pWrtShell->GetRedlineFlags();
-                m_pWrtShell->SetRedlineFlagsAndCheckInsMode( (nMode & ~RedlineFlags::On) | nOn);
+                SwDocShell* pDocShell = GetDocShell();
+                pDocShell->SetChangeRecording( static_cast<const SfxBoolItem*>(pItem)->GetValue(), /*bLockAllViews=*/true );
 
                 // Notify all view shells of this document, as the track changes mode is document-global.
-                SwDocShell* pDocShell = GetDocShell();
                 for (SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst(pDocShell); pViewFrame; pViewFrame = SfxViewFrame::GetNext(*pViewFrame, pDocShell))
                 {
                     pViewFrame->GetBindings().Invalidate(FN_REDLINE_ON);

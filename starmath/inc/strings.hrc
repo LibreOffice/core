@@ -325,7 +325,7 @@
 #define RID_EXAMPLE_GAUSS_DISTRIBUTION_HELP NC_("RID_EXAMPLE_GAUSS_DISTRIBUTION_HELP", "Gauss distribution" )
 #define RID_EXAMPLE_EULER_LAGRANGE_HELP     NC_("RID_EXAMPLE_EULER_LAGRANGE_HELP", "Euler-Lagrange equation" )
 #define RID_EXAMPLE_FTC_HELP                NC_("RID_EXAMPLE_FTC_HELP", "Fundamental theorem of calculus" )
-#define RID_EXAMPLE_CAOS_HELP               NC_("RID_EXAMPLE_CAOS_HELP", "Chaos equation" )
+#define RID_EXAMPLE_CHAOS_HELP              NC_("RID_EXAMPLE_CHAOS_HELP", "Chaos equation" )
 #define RID_EXAMPLE_EULER_IDENTITY_HELP     NC_("RID_EXAMPLE_EULER_IDENTITY_HELP", "Euler's identity" )
 #define RID_EXAMPLE_2NEWTON                 NC_("RID_EXAMPLE_2NEWTON", "Newton's second law" )
 #define RID_EXAMPLE_GENERAL_RELATIVITY_HELP NC_("RID_EXAMPLE_GENERAL_RELATIVITY_HELP", "General relativity")

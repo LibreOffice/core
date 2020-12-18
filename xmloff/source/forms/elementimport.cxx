@@ -140,7 +140,7 @@ namespace xmloff
     {
         ENTER_LOG_CONTEXT( "xmloff::OElementImport - importing one element" );
 
-        const OUString sControlImplementation = _rxAttrList->getValue( XML_ELEMENT(FORM, XML_CONTROL_IMPLEMENTATION) );
+        const OUString sControlImplementation = _rxAttrList->getOptionalValue( XML_ELEMENT(FORM, XML_CONTROL_IMPLEMENTATION) );
 
         // retrieve the service name
         if ( !sControlImplementation.isEmpty() )

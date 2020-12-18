@@ -4223,7 +4223,7 @@
      <table:table-cell table:style-name="ce19" office:value-type="float" office:value="26.0545581424825" calcext:value-type="float">
       <text:p>26.0545581424825</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce25" table:formula="of:=ROUND([.A10];12)=ROUND([.B10];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce25" table:formula="of:=ROUND([.A10];11)=ROUND([.B10];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=STDEVP(P3:P12)" calcext:value-type="string">
@@ -4317,7 +4317,7 @@
      <table:table-cell office:value-type="float" office:value="14.6711451495785" calcext:value-type="float">
       <text:p>14.6711451495785</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce28" table:formula="of:=ROUND([.A12];12)=ROUND([.B12];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=ROUND([.A12];11)=ROUND([.B12];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=STDEVP(34.5, 2, 8.9, -4)" calcext:value-type="string">

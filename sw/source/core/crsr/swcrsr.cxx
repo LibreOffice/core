@@ -2092,9 +2092,15 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
         }
         else
         {
+            sal_Int32 nOffset = 0;
+
             // Jump to beginning or end of line when the cursor at first or last line.
-            SwNode& rNode = GetPoint()->nNode.GetNode();
-            const sal_Int32 nOffset = bUp ? 0 : rNode.GetTextNode()->GetText().getLength();
+            if(!bUp)
+            {
+                SwTextNode* pTextNd = GetPoint()->nNode.GetNode().GetTextNode();
+                if (pTextNd)
+                    nOffset = pTextNd->GetText().getLength();
+            }
             const SwPosition aPos(*GetContentNode(), nOffset);
 
             //if cursor has already been at start or end of file,

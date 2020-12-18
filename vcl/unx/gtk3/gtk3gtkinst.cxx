@@ -2546,6 +2546,39 @@ public:
         return pTopLevel && gtk_window_is_active(pTopLevel) && has_focus();
     }
 
+    // is the focus in a child of this widget, where a transient popup attached
+    // to a widget is considered a child of that widget
+    virtual bool has_child_focus() const override
+    {
+        bool bRet = false;
+
+        GList* pList = gtk_window_list_toplevels();
+
+        for (GList* pEntry = pList; pEntry; pEntry = pEntry->next)
+        {
+            if (!gtk_window_has_toplevel_focus(GTK_WINDOW(pEntry->data)))
+                continue;
+            GtkWidget* pFocus = gtk_window_get_focus(GTK_WINDOW(pEntry->data));
+            if (pFocus && gtk_widget_is_ancestor(pFocus, m_pWidget))
+            {
+                bRet = true;
+                break;
+            }
+            GtkWidget* pAttachedTo = gtk_window_get_attached_to(GTK_WINDOW(pEntry->data));
+            if (!pAttachedTo)
+                continue;
+            if (pAttachedTo == m_pWidget || gtk_widget_is_ancestor(pAttachedTo, m_pWidget))
+            {
+                bRet = true;
+                break;
+            }
+        }
+
+        g_list_free(pList);
+
+        return bRet;
+    }
+
     virtual void set_has_default(bool has_default) override
     {
         g_object_set(G_OBJECT(m_pWidget), "has-default", has_default, nullptr);
@@ -8572,10 +8605,21 @@ public:
 
     virtual void set_item_ident(int nIndex, const OString& rIdent) override
     {
-        m_aMap.erase(m_aMap.find(get_item_ident(nIndex)));
+        OString sOldIdent(get_item_ident(nIndex));
+        m_aMap.erase(m_aMap.find(sOldIdent));
 
         GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
         gtk_buildable_set_name(GTK_BUILDABLE(pItem), rIdent.getStr());
+
+        // to keep the ids unique, if the new id is already in use by an item,
+        // change the id of that item to the now unused old ident of this item
+        auto aFind = m_aMap.find(rIdent);
+        if (aFind != m_aMap.end())
+        {
+            GtkToolItem* pDupIdItem = aFind->second;
+            gtk_buildable_set_name(GTK_BUILDABLE(pDupIdItem), sOldIdent.getStr());
+            m_aMap[sOldIdent] = pDupIdItem;
+        }
 
         m_aMap[rIdent] = pItem;
     }
@@ -13008,6 +13052,18 @@ public:
         double fSpinSize = m_pFormatter->GetSpinSize();
         gtk_spin_button_set_increments(m_pButton, fSpinSize, fSpinSize * 10);
         enable_notify_events();
+    }
+
+    virtual void disable_notify_events() override
+    {
+        g_signal_handler_block(m_pButton, m_nValueChangedSignalId);
+        GtkInstanceEntry::disable_notify_events();
+    }
+
+    virtual void enable_notify_events() override
+    {
+        GtkInstanceEntry::enable_notify_events();
+        g_signal_handler_unblock(m_pButton, m_nValueChangedSignalId);
     }
 
     virtual ~GtkInstanceFormattedSpinButton() override

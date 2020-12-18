@@ -10,13 +10,16 @@
 #include <swmodeltestbase.hxx>
 
 #include <vcl/gdimtf.hxx>
+#include <svx/svdpage.hxx>
 
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
 #include <drawdoc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-#include <svx/svdpage.hxx>
+#include <IDocumentState.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/core/layout/data/";
 
@@ -180,6 +183,19 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxStaysInsideShape)
     assertXPath(pXmlDoc, "//fly/infos/bounds", "bottom", "7184");
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxNotModifiedOnOpen)
+{
+    // tdf#138050: a freshly opened document containing a shape with a text box
+    // should not appear to be modified
+    load(DATA_DIRECTORY, "textbox-phantom-change.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+
+    // Without the fix in place this test would have shown that the document
+    // was modified due to a fix to tdf#135198
+    CPPUNIT_ASSERT(!pDoc->getIDocumentState().IsModified());
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxAutoGrowVertical)
 {
     load(DATA_DIRECTORY, "textbox-autogrow-vertical.docx");
@@ -200,6 +216,30 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxAutoGrowVertical)
     // Without the accompanying fix in place, this test would have failed, as aFlyRect was too wide,
     // so it was not inside aShapeRect anymore.
     CPPUNIT_ASSERT(aShapeRect.IsInside(aFlyRect));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBtlrNestedCell)
+{
+    // Load a document with a nested table, the inner A1 cell has a btlr text direction.
+    load(DATA_DIRECTORY, "btlr-nested-cell.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pPage = pLayout->GetLower();
+    SwFrame* pBody = pPage->GetLower();
+    SwFrame* pOuterTable = pBody->GetLower()->GetNext();
+    SwFrame* pInnerTable = pOuterTable->GetLower()->GetLower()->GetLower();
+
+    // Check the paint area of the only text frame in the cell.
+    SwFrame* pTextFrame = pInnerTable->GetLower()->GetLower()->GetLower();
+    tools::Long nFrameBottom = pTextFrame->getFrameArea().Bottom();
+    SwRect aPaintArea = pTextFrame->GetPaintArea();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater or equal than: 2829
+    // - Actual  : 2080
+    // i.e. part of the text frame area was not painted, hiding the actual text.
+    CPPUNIT_ASSERT_GREATEREQUAL(nFrameBottom, aPaintArea.Bottom());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

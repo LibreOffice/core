@@ -46,6 +46,8 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
 
 #include <cstdio>
 
@@ -1470,15 +1472,49 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
 
     if (m_pTextExport && lcl_isTextBox(m_pSdrObject))
     {
-        uno::Reference<beans::XPropertySet> xPropertySet(const_cast<SdrObject*>(m_pSdrObject)->getUnoShape(), uno::UNO_QUERY);
-        comphelper::SequenceAsHashMap aCustomShapeProperties(xPropertySet->getPropertyValue("CustomShapeGeometry"));
-        sax_fastparser::FastAttributeList* pTextboxAttrList = FastSerializerHelper::createAttrList();
-        if (aCustomShapeProperties.find("TextPreRotateAngle") != aCustomShapeProperties.end())
+        uno::Reference<drawing::XShape> xShape {const_cast<SdrObject*>(m_pSdrObject)->getUnoShape(), uno::UNO_QUERY};
+        uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+        bool bBottomToTop = false;
+        if (xPropertySetInfo->hasPropertyByName("CustomShapeGeometry"))
         {
-            sal_Int32 nTextRotateAngle = aCustomShapeProperties["TextPreRotateAngle"].get<sal_Int32>();
-            if (nTextRotateAngle == -270)
-                pTextboxAttrList->add(XML_style, "mso-layout-flow-alt:bottom-to-top");
+            // In this case a DrawingML DOCX was imported.
+            comphelper::SequenceAsHashMap aCustomShapeProperties(
+                xPropertySet->getPropertyValue("CustomShapeGeometry"));
+            if (aCustomShapeProperties.find("TextPreRotateAngle") != aCustomShapeProperties.end())
+            {
+                sal_Int32 nTextRotateAngle = aCustomShapeProperties["TextPreRotateAngle"].get<sal_Int32>();
+                if (nTextRotateAngle == -270)
+                    bBottomToTop = true;
+            }
         }
+        else
+        {
+            // In this case a pure VML DOCX was imported, so there is no CustomShapeGeometry.
+            auto pTextExport = m_pTextExport->GetDrawingML().GetTextExport();
+            // FIXME: somewhy pTextExport is always nullptr, we should find its reason
+            if (pTextExport)
+            {
+                auto xTextFrame = pTextExport->GetUnoTextFrame(xShape);
+                uno::Reference<beans::XPropertySet> xPropSet(xTextFrame, uno::UNO_QUERY);
+                auto aAny = xPropSet->getPropertyValue("WritingMode");
+                sal_Int16 nWritingMode;
+                if (aAny >>= nWritingMode)
+                {
+                    switch (nWritingMode)
+                    {
+                        case text::WritingMode2::BT_LR:
+                            bBottomToTop = true;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+        sax_fastparser::FastAttributeList* pTextboxAttrList = FastSerializerHelper::createAttrList();
+        if (bBottomToTop)
+            pTextboxAttrList->add(XML_style, "mso-layout-flow-alt:bottom-to-top");
         sax_fastparser::XFastAttributeListRef xTextboxAttrList(pTextboxAttrList);
         pTextboxAttrList = nullptr;
         m_pSerializer->startElementNS(XML_v, XML_textbox, xTextboxAttrList);

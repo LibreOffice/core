@@ -50,6 +50,7 @@ public:
 
     const Color&    GetColorValue() const;
     void            SetColorValue(const Color& rNew) { aColor = rNew; Detach(); }
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 #endif

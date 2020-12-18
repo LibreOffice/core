@@ -73,6 +73,10 @@ REM    TestLog_ASSERT nr1 = nr2, "the return CInt is: " & nr1
     nr1 = CInt("&H754")
     TestLog_ASSERT nr1 = nr2, "the return CInt is: " & nr1
 
+    nr2 = 21
+    nr1 = CInt("+21")
+    TestLog_ASSERT nr1 = nr2, "the return CInt is:" & nr1
+
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
     verify_testCInt = result
 

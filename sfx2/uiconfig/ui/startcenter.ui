@@ -206,7 +206,7 @@
                         </child>
                         <child>
                           <object class="GtkMenuButton" id="open_recent">
-                            <property name="label" translatable="yes" context="startcenter|open_recent">_Recent Files</property>
+                            <property name="label" translatable="yes" context="startcenter|open_recent">_Recent Documents</property>
                             <property name="name">MenuToggleButton</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>

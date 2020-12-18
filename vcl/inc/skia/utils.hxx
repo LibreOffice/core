@@ -73,7 +73,7 @@ VCL_DLLPUBLIC void
 void addCachedImage(const OString& key, sk_sp<SkImage> image);
 sk_sp<SkImage> findCachedImage(const OString& key);
 void removeCachedImage(sk_sp<SkImage> image);
-constexpr int MAX_CACHE_SIZE = 4 * 2000 * 2000 * 4; // 4x 2000px 32bpp images, 64MiB
+tools::Long maxImageCacheSize();
 
 // SkSurfaceProps to be used by all Skia surfaces.
 VCL_DLLPUBLIC const SkSurfaceProps* surfaceProps();

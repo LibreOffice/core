@@ -1712,7 +1712,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             // We can't map this custom shape to a PPT preset and it has a bitmap
                             // fill. Make sure that at least the bitmap fill is not lost.
                             mType = "drawing.GraphicObject";
-                            aGraphicPropertyName = "FillBitmap";
+                            aGraphicPropertyName = "Bitmap";
                         }
                     }
                 }

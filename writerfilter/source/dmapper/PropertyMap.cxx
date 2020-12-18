@@ -1037,15 +1037,6 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     //now set the top/bottom margin for the follow page style
     Insert( PROP_TOP_MARGIN, uno::makeAny( std::max<sal_Int32>(nTopMargin, 0) ) );
     Insert( PROP_BOTTOM_MARGIN, uno::makeAny( std::max<sal_Int32>(nBottomMargin, 0) ) );
-
-    if (bCopyFirstToFollow)
-    {
-        if (HasHeader(/*bFirstPage=*/true))
-            m_aFollowPageStyle->setPropertyValue("TopMargin", getProperty(PROP_TOP_MARGIN)->second);
-        if (HasFooter(/*bFirstPage=*/true))
-            m_aFollowPageStyle->setPropertyValue("BottomMargin",
-                                                 getProperty(PROP_BOTTOM_MARGIN)->second);
-    }
 }
 
 static uno::Reference< beans::XPropertySet > lcl_GetRangeProperties( bool bIsFirstSection,
@@ -1836,12 +1827,16 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             {
                 // Avoid setting page style in case of autotext: so inserting the autotext at the
                 // end of the document does not introduce an unwanted page break.
-                if (!rDM_Impl.IsReadGlossaries() && !rDM_Impl.IsInFootOrEndnote())
+                // Also avoid setting the page style at the very beginning if it still is the default page style.
+                const OUString sPageStyle = m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName;
+                if (!rDM_Impl.IsReadGlossaries()
+                    && !rDM_Impl.IsInFootOrEndnote()
+                    && !(m_bIsFirstSection && sPageStyle == getPropertyName( PROP_STANDARD ) && m_nPageNumber < 0)
+                   )
                 {
                     xRangeProperties->setPropertyValue(
                         getPropertyName( PROP_PAGE_DESC_NAME ),
-                        uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName
-                            : m_sFollowPageStyleName ) );
+                        uno::makeAny(sPageStyle) );
                 }
 
                 if (0 <= m_nPageNumber)

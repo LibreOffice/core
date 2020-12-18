@@ -99,7 +99,7 @@ namespace vcl
 
         bool isPrintToFile() const;
         bool isCollate() const;
-        bool isSingleJobs() const { return mbSingleJobs; };
+        bool isSingleJobs() const;
         bool hasPreview() const;
 
         void setPaperSizes();
@@ -204,7 +204,6 @@ namespace vcl
         Size                                    maFirstPageSize;
 
         bool                                    mbShowLayoutFrame;
-        bool                                    mbSingleJobs;
 
         Paper                                   mePaper;
 

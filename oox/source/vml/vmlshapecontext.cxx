@@ -499,20 +499,26 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
                     nShapeType = pShapeType->getTypeModel().moShapeType.get();
                 }
             }
+            mrShapeModel.mbInGroup = (getParentElement() == VML_TOKEN(group));
 
-            if (getParentElement() != VML_TOKEN( group ))
+            // FIXME: the shape with textbox should be used for the next cases
+            if (getCurrentElement() == VML_TOKEN(rect) || nShapeType == ESCHER_ShpInst_TextBox)
             {
-                // Custom shape in Writer with a textbox are transformed into a frame
-                dynamic_cast<SimpleShape&>( mrShape ).setService(
-                        "com.sun.star.text.TextFrame");
+                if (mrShapeModel.mbInGroup)
+                    // FIXME: without this a text will be added into the group-shape instead of its
+                    // parent shape
+                    dynamic_cast<SimpleShape&>(mrShape).setService("com.sun.star.drawing.TextShape");
+                else
+                    // FIXME: without this we does not handle some properties like shadow
+                    dynamic_cast<SimpleShape&>(mrShape).setService("com.sun.star.text.TextFrame");
             }
-            else if (getCurrentElement() == VML_TOKEN(rect) || nShapeType == ESCHER_ShpInst_TextBox)
-                // Transform only rectangles into a TextShape inside a groupshape.
-                dynamic_cast<SimpleShape&>(mrShape).setService("com.sun.star.drawing.TextShape");
             return new TextBoxContext( *this, mrShapeModel.createTextBox(mrShape.getTypeModel()), rAttribs,
                 mrShape.getDrawing().getFilter().getGraphicHelper());
         }
         case VMLX_TOKEN( ClientData ):
+            // tdf#41466 ActiveX control shapes with a textbox are transformed into a frame
+            // (see unit test testActiveXOptionButtonGroup)
+            dynamic_cast<SimpleShape&>(mrShape).setService("com.sun.star.text.TextFrame");
             return new ClientDataContext( *this, mrShapeModel.createClientData(), rAttribs );
         case VMLPPT_TOKEN( textdata ):
             // Force RectangleShape, this is ugly :(

@@ -28,10 +28,10 @@
       <menu:menuitem menu:id=".uno:AutoPilotMenu" menu:style="text"/>
       <menu:menu menu:id=".uno:TemplateMenu">
           <menu:menupopup>
-              <menu:menuitem menu:id=".uno:OpenTemplate" menu:style="text"/>
-              <menu:menuitem menu:id=".uno:SaveAsTemplate" menu:style="text"/>
+              <menu:menuitem menu:id=".uno:OpenTemplate"/>
+              <menu:menuitem menu:id=".uno:SaveAsTemplate"/>
               <menu:menuseparator/>
-              <menu:menuitem menu:id=".uno:NewDoc" menu:style="text"/>
+              <menu:menuitem menu:id=".uno:NewDoc"/>
           </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>

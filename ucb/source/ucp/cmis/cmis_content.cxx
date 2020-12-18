@@ -346,11 +346,20 @@ namespace cmis
             string rUsername = OUSTR_TO_STDSTR( m_aURL.getUsername( ) );
             string rPassword = OUSTR_TO_STDSTR( m_aURL.getPassword( ) );
 
+            bool bSkipInitialPWAuth = false;
+            if ( m_aURL.getBindingUrl( ) == ONEDRIVE_BASE_URL ) {
+                // skip the initial username and pw-auth prompt, the only supported method is the
+                // auth-code-fallback one (login with your browser, copy code into the dialog)
+                // TODO: if LO were to listen on localhost for the request, it would be much nicer
+                // user experience
+                bSkipInitialPWAuth = true;
+            }
+
             bool bIsDone = false;
 
             while ( !bIsDone )
             {
-                if (aAuthProvider.authenticationQuery(rUsername, rPassword))
+                if (bSkipInitialPWAuth || aAuthProvider.authenticationQuery(rUsername, rPassword))
                 {
                     // Initiate a CMIS session and register it as we found nothing
                     libcmis::OAuth2DataPtr oauth2Data;
@@ -369,6 +378,8 @@ namespace cmis
                             ALFRESCO_CLOUD_CLIENT_ID, ALFRESCO_CLOUD_CLIENT_SECRET ) );
                     if ( m_aURL.getBindingUrl( ) == ONEDRIVE_BASE_URL )
                     {
+                        // reset the skip, so user gets a chance to cancel
+                        bSkipInitialPWAuth = false;
                         libcmis::SessionFactory::setOAuth2AuthCodeProvider(AuthProvider::onedriveAuthCodeFallback);
                         oauth2Data.reset( new libcmis::OAuth2Data(
                             ONEDRIVE_AUTH_URL, ONEDRIVE_TOKEN_URL,

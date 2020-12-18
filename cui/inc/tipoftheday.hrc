@@ -47,13 +47,13 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
 {
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME offers a variety of user interface options to make you feel at home"), ".uno:ToolbarModeUI", "toolbarmode.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Need to allow changes to parts of a read-only document in Writer? Insert frames or sections that can authorize changes."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/section_edit.html", "tipoftheday_w.png"}, //local help missing
-     { NC_("RID_CUI_TIPOFTHEDAY", "To print the notes of your slides go to File ▸ Print ▸ Impress tab and select Notes under Document ▸ Type."), "", "tipoftheday_i.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "To print the notes of your slides go to File ▸ Print ▸ Impress tab and select Notes under Document ▸ Type."), "", "printnote.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To start temporarily with a fresh user profile, or to restore a non-working %PRODUCTNAME, use Help ▸ Restart in Safe Mode."), "svx/ui/safemodedialog/SafeModeDialog", ""}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/01/profile_safe_mode.html
      { NC_("RID_CUI_TIPOFTHEDAY", "Writing a book? %PRODUCTNAME master document lets you manage large documents as a container for individual %PRODUCTNAME Writer files."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/globaldoc.html", "tipoftheday_w.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "Create editable Hybrid PDFs with %PRODUCTNAME."), "https://wiki.documentfoundation.org/Documentation/HowTo/CreateAHybridPDF", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Explore the ten different functions in the status bar (at the bottom of the document window). Place the cursor over each field for an explanation. If not visible, use View ▸ Status Bar."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to sum a cell through several sheets? Refer to the range of sheets e.g. =SUM(Sheet1.A1:Sheet3.A1)."), "", "tipoftheday_c.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Create fillable form documents (even PDFs) with %PRODUCTNAME."), "https://www.techrepublic.com/article/how-to-create-interactive-pdfs-with-libreoffice", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Create fillable form documents (even PDFs) with %PRODUCTNAME."), "https://www.techrepublic.com/article/how-to-create-interactive-pdfs-with-libreoffice", "formdocuments.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Cannot see all the text in a cell? Expand the input line in the formula bar and you can scroll."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Optimize your table layout with Table ▸ Size ▸ Distribute Rows / Columns Evenly."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Find all expressions in brackets per Edit ▸ Find and Replace ▸ Find ▸ \\([^)]+\\) (check “Regular expressions”)"), "", "tipoftheday_w.png"},
@@ -66,7 +66,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "You can restart the slide show after a pause specified at Slide Show ▸ Slide Show Settings ▸ Loop and repeat."), "", "tipoftheday_i.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To distribute some text in multi-columns select the text and apply Format ▸ Columns."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use View ▸ Value Highlighting to display cell contents in colors: Text/black, Formulas/green, Numbers/blue, Protected cells/grey background."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/03080000.html", "tipoftheday_c.png"}, //local help missing
-     { NC_("RID_CUI_TIPOFTHEDAY", "Create different master pages in a presentation template: View ▸ Master Slide and Slide ▸ New Master (or per toolbar or right click in slide pane)."), "", "tipoftheday_i.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Create different master pages in a presentation template: View ▸ Master Slide and Slide ▸ New Master (or per toolbar or right click in slide pane)."), "", "masterdocument.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to sort a pivot table? Click on drop-list’s arrow in the row/col header and select sort method: ascending, descending, or custom."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Display photos or images with different shapes in Writer. Insert and select shape, then Insert ▸ Image. To adjust image, right-click on selected shape and choose Area."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use Page/Slide ▸ Properties ▸ “Fit object to paper format” in Draw/Impress to resize the objects so that they fit on your chosen paper format."), "", "tipoftheday_d.png"},
@@ -76,7 +76,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "To automatically number table rows in Writer, select the relevant column, then apply a numbering style from List Styles."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME allows you to use assistive tools, such as external screen readers, Braille devices or speech recognition input devices."), "https://www.libreoffice.org/get-help/accessibility/", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to sort a series in %PRODUCTNAME Calc such as A1, A2, A3, A11, A15, not in alphabetical order but on the number? Enable natural sort in the Options tab."), "modules/scalc/ui/sortoptionspage/SortOptionsPage", "tipoftheday_c.png"}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/12030200.html
-     { NC_("RID_CUI_TIPOFTHEDAY", "You can change the default function in the status bar: right click on the area."), "", "tipoftheday_c.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "You can change the default function in the status bar: right click on the area."), "", "statusbar.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to add many of the same shapes in Draw/Impress? Double-click a tool in the drawing toolbar to use it for repeated tasks."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "%MOD1+Shift+F9 recalculates all formulas in all spreadsheets."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to keep a part of an editable document as read-only? Insert ▸ Section. Add text to the section, then right-click “Edit Section” and check “Protect”."), "", "tipoftheday_w.png"},

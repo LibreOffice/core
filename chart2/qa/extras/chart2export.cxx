@@ -184,6 +184,7 @@ public:
     void testTdf137917();
     void testTdf138204();
     void testTdf138181();
+    void testCustomShapeText();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -330,6 +331,7 @@ public:
     CPPUNIT_TEST(testTdf137917);
     CPPUNIT_TEST(testTdf138204);
     CPPUNIT_TEST(testTdf138181);
+    CPPUNIT_TEST(testCustomShapeText);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3016,7 +3018,7 @@ void Chart2ExportTest::testTdf138181()
 {
     load("/chart2/qa/extras/data/xlsx/", "piechart_deleted_legendentry.xlsx");
     Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
-                                               UNO_QUERY_THROW);
+        UNO_QUERY_THROW);
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
     Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
@@ -3036,6 +3038,22 @@ void Chart2ExportTest::testTdf138181()
     xLegendEntry3
         = getShapeByName(xShapes, "CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=2:LegendEntry=0");
     CPPUNIT_ASSERT(xLegendEntry3.is());
+}
+
+void Chart2ExportTest::testCustomShapeText()
+{
+    load("/chart2/qa/extras/data/ods/", "tdf72776.ods");
+    reload("calc8");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+        UNO_QUERY_THROW);
+    // test that the text of custom shape exists inside the chart
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShape> xCustomShape(xDrawPage->getByIndex(1), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xCustomShape.is());
+
+    Reference< text::XText > xRange(xCustomShape, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!xRange->getString().isEmpty());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);

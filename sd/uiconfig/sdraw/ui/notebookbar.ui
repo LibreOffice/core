@@ -11852,7 +11852,6 @@
                                 <property name="show_arrow">False</property>
                                 <child>
                                   <object class="GtkMenuToolButton" id="Image-GrafLuminance">
-                                    <property name="width_request">130</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="valign">center</property>
@@ -11877,12 +11876,11 @@
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkMenuToolButton" id="Image-GrafTransparence">
-                                    <property name="width_request">130</property>
+                                  <object class="GtkMenuToolButton" id="Image-GrafContrast">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="valign">center</property>
-                                    <property name="action_name">.uno:GrafTransparence</property>
+                                    <property name="action_name">.uno:GrafContrast</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -11933,12 +11931,11 @@
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkMenuToolButton" id="Image-GrafContrast">
-                                    <property name="width_request">130</property>
+                                  <object class="GtkMenuToolButton" id="Image-GrafTransparence">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="valign">center</property>
-                                    <property name="action_name">.uno:GrafContrast</property>
+                                    <property name="action_name">.uno:GrafTransparence</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -11960,7 +11957,6 @@
                                 <property name="show_arrow">False</property>
                                 <child>
                                   <object class="GtkMenuToolButton" id="Image-GrafGamma">
-                                    <property name="width_request">130</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="valign">center</property>

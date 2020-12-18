@@ -82,6 +82,7 @@
 #include <documentlinkmgr.hxx>
 #include <scopetools.hxx>
 #include <tokenarray.hxx>
+#include <recursionhelper.hxx>
 
 #include <memory>
 #include <utility>
@@ -408,22 +409,24 @@ void ScDocument::SetFormulaResults( const ScAddress& rTopPos, const double* pRes
     pTab->SetFormulaResults(rTopPos.Col(), rTopPos.Row(), pResults, nLen);
 }
 
-const ScDocumentThreadSpecific& ScDocument::CalculateInColumnInThread( ScInterpreterContext& rContext, const ScRange& rCalcRange, unsigned nThisThread, unsigned nThreadsTotal)
+void ScDocument::CalculateInColumnInThread( ScInterpreterContext& rContext, const ScRange& rCalcRange, unsigned nThisThread, unsigned nThreadsTotal)
 {
     ScTable* pTab = FetchTable(rCalcRange.aStart.Tab());
     if (!pTab)
-        return maNonThreaded;
+        return;
 
     assert(IsThreadedGroupCalcInProgress());
 
     maThreadSpecific.pContext = &rContext;
-    ScDocumentThreadSpecific::SetupFromNonThreadedData(maNonThreaded);
     pTab->CalculateInColumnInThread(rContext, rCalcRange.aStart.Col(), rCalcRange.aEnd.Col(), rCalcRange.aStart.Row(), rCalcRange.aEnd.Row(), nThisThread, nThreadsTotal);
 
     assert(IsThreadedGroupCalcInProgress());
     maThreadSpecific.pContext = nullptr;
-
-    return maThreadSpecific;
+    // If any of the thread_local data would cause problems if they stay around for too long
+    // (and e.g. outlive the ScDocument), clean them up here, they cannot be cleaned up
+    // later from the main thread.
+    if(maThreadSpecific.xRecursionHelper)
+        maThreadSpecific.xRecursionHelper->Clear();
 }
 
 void ScDocument::HandleStuffAfterParallelCalculation( SCCOL nColStart, SCCOL nColEnd, SCROW nRow, size_t nLen, SCTAB nTab, ScInterpreter* pInterpreter )

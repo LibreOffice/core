@@ -24,6 +24,7 @@
 #include <drawingml/table/tableproperties.hxx>
 #include <drawingml/table/tablestylecontext.hxx>
 #include <drawingml/table/tablerowcontext.hxx>
+#include <drawingml/effectpropertiescontext.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 
@@ -65,6 +66,10 @@ TableContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& r
             std::shared_ptr< TableStyle >& rTableStyle = mrTableProperties.getTableStyle();
             rTableStyle = std::make_shared<TableStyle>();
             return new TableStyleContext( *this, rAttribs, *rTableStyle );
+        }
+    case A_TOKEN( effectLst ):  // CT_EffectList
+        {
+            return new EffectPropertiesContext(*this, mpShapePtr->getEffectProperties());
         }
     case A_TOKEN( tableStyleId ):       // ST_Guid
         return new oox::drawingml::GuidContext( *this, mrTableProperties.getStyleId() );

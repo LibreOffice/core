@@ -95,16 +95,6 @@ void TabBar::dispose()
     InterimItemWindow::dispose();
 }
 
-void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rUpdateArea)
-{
-    InterimItemWindow::Paint(rRenderContext, rUpdateArea);
-
-    const sal_Int32 nHorizontalPadding(Theme::GetInteger(Theme::Int_TabMenuSeparatorPadding));
-    rRenderContext.SetLineColor(Theme::GetColor(Theme::Color_TabMenuSeparator));
-    rRenderContext.DrawLine(Point(nHorizontalPadding, mnMenuSeparatorY),
-                            Point(GetSizePixel().Width() - nHorizontalPadding, mnMenuSeparatorY));
-}
-
 sal_Int32 TabBar::GetDefaultWidth()
 {
     if (!gDefaultWidth)
@@ -233,6 +223,7 @@ void TabBar::CreateTabItem(weld::Toolbar& rItem, const DeckDescriptor& rDeckDesc
     rItem.set_accessible_name(rDeckDescriptor.msTitle);
     rItem.set_accessible_description(rDeckDescriptor.msHelpText);
     rItem.set_tooltip_text(rDeckDescriptor.msHelpText);
+    rItem.set_item_tooltip_text("toggle", rDeckDescriptor.msHelpText);
 }
 
 css::uno::Reference<css::graphic::XGraphic> TabBar::GetItemImage(const DeckDescriptor& rDeckDescriptor) const
@@ -247,6 +238,8 @@ TabBar::Item::Item(TabBar& rTabBar)
     : mrTabBar(rTabBar)
     , mxBuilder(Application::CreateBuilder(rTabBar.GetContainer(), "sfx/ui/tabbutton.ui"))
     , mxButton(mxBuilder->weld_toolbar("button"))
+    , mbIsHidden(false)
+    , mbIsHiddenByDefault(false)
 {
 }
 

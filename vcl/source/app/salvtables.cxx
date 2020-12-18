@@ -271,6 +271,8 @@ bool SalInstanceWidget::has_focus() const { return m_xWidget->HasFocus(); }
 
 bool SalInstanceWidget::is_active() const { return m_xWidget->IsActive(); }
 
+bool SalInstanceWidget::has_child_focus() const { return m_xWidget->HasChildPathFocus(true); }
+
 void SalInstanceWidget::set_has_default(bool has_default)
 {
     m_xWidget->set_property("has-default", OUString::boolean(has_default));
@@ -5776,10 +5778,7 @@ public:
         return m_xExpander->get_label_widget()->HasFocus() || SalInstanceContainer::has_focus();
     }
 
-    virtual void grab_focus() override
-    {
-        return m_xExpander->get_label_widget()->GrabFocus();
-    }
+    virtual void grab_focus() override { return m_xExpander->get_label_widget()->GrabFocus(); }
 
     virtual ~SalInstanceExpander() override
     {

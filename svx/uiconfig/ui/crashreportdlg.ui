@@ -5,7 +5,7 @@
   <object class="GtkTextBuffer" id="textbuffer1">
     <property name="text" translatable="yes" context="crashreportdlg|ed_post">The crash report was successfully uploaded.
 You can soon find the report at:
-crashreport.libreoffice.org/stats/crash_details/%CRASHID</property>
+https://crashreport.libreoffice.org/stats/crash_details/%CRASHID</property>
   </object>
   <object class="GtkTextBuffer" id="textbuffer2">
     <property name="text" translatable="yes" context="crashreportdlg|ed_bugreport">Please check the report and if no bug report is connected to the crash report yet, open a new bug report at bugs.documentfoundation.org.
@@ -47,7 +47,7 @@ Thank you for your help in improving %PRODUCTNAME.</property>
             </child>
             <child>
               <object class="GtkButton" id="btn_cancel">
-                <property name="label" translatable="yes" context="crashreportdlg|btn_cancel">Do_n’t Send</property>
+                <property name="label" translatable="yes" context="crashreportdlg|btn_cancel">Do _Not Send</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

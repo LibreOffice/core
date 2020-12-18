@@ -21,6 +21,8 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/unolingu.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <fmtanchr.hxx>
@@ -47,6 +49,7 @@
 #include <unoframe.hxx>
 #include <drawdoc.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdotext.hxx>
 #include <dcontact.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
@@ -451,6 +454,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf75659)
     assertXPathContent(
         pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[19]/text", "Series3");
     // These failed, if the legend names are empty strings.
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf136816)
+{
+    SwDoc* pDoc = createDoc("tdf136816.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Check number of legend entries
+    assertXPath(pXmlDoc, "//text[contains(text(),\"Column\")]", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf126425)
@@ -2561,8 +2579,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137185)
     auto xTextFrame = SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Align me!"), xTextFrame->getText()->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString(), xTxt->getText()->getString());
-    // Before the patch it failled, because the text appeared 2 times on each other.
+    SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObj);
+    CPPUNIT_ASSERT(pTextObj);
+    auto aOutStr = pTextObj->GetOutlinerParaObject()->GetTextObject();
+
+    CPPUNIT_ASSERT(aOutStr.GetText(0).isEmpty());
+    // Before the patch it failed, because the text appeared 2 times on each other.
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf135035)

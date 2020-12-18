@@ -61,7 +61,6 @@ public:
 
         Color_DeckTitleFont,
         Color_PanelTitleFont,
-        Color_TabMenuSeparator,
         Color_Highlight,
         Color_HighlightText,
         Color_DeckBackground,
@@ -79,8 +78,6 @@ public:
         Int_DeckBorderSize,
         Int_DeckSeparatorHeight,
         Int_PanelTitleBarHeight,
-        Int_TabMenuPadding,
-        Int_TabMenuSeparatorPadding,
         Int_DeckLeftPadding,
         Int_DeckTopPadding,
         Int_DeckRightPadding,

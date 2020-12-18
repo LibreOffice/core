@@ -1622,6 +1622,30 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAlignmentRelativeFromTopMarginVML, "tdf1
                        "center");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testVmlShapeWithTextbox, "tdf41466_testVmlShapeWithTextbox.docx")
+{
+    // Import as VML.
+    // tdf#41466: check whether VML DOCX shape with text is imported as shape with a text frame
+    // (text box). These kind of shapes were imported only as text frames previously, losing the
+    // preset shape geometry, in this case "wedgeRectCallout".
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // the wrong value was "rect" instead of "wedgeRectCallout"
+    assertXPath(pXmlDoc,
+        "/w:document/w:body/w:p/w:r/"
+        "mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+        "prst", "wedgeRectCallout");
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLayoutFlowAltAlone, "layout-flow-alt-alone.docx")
+{
+    // moved from oox/qa/unit/vml.cxx
+    // FIXME: now the DML part is checked, but we should check VML part in Fallback (too)
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/"
+        "a:graphic/a:graphicData/wps:wsp/wps:bodyPr", "vert", "vert270");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

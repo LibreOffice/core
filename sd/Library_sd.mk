@@ -99,7 +99,6 @@ $(eval $(call gb_Library_use_libraries,sd,\
 ))
 
 $(eval $(call gb_Library_use_externals,sd,\
-	bluez_bluetooth_headers \
 	boost_headers \
 	libxml2 \
 	dbus \
@@ -573,6 +572,10 @@ endif # OS!=MACOSX
 
 $(eval $(call gb_Library_add_defs,sd,\
 	-DENABLE_SDREMOTE_BLUETOOTH \
+))
+
+$(eval $(call gb_Library_use_externals,sd,\
+	bluez_bluetooth_headers \
 ))
 
 endif # ENABLE_SDREMOTE_BLUETOOTH=TRUE

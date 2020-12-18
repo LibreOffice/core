@@ -1092,7 +1092,7 @@ bool SfxObjectShell::HasChangeRecordProtection() const
 }
 
 
-void SfxObjectShell::SetChangeRecording( bool /*bActivate*/ )
+void SfxObjectShell::SetChangeRecording( bool /*bActivate*/, bool /*bLockAllViews*/ )
 {
     // currently this function needs to be overwritten by Writer and Calc only
     SAL_WARN( "sfx.doc", "function not implemented" );

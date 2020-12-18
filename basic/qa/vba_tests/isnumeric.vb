@@ -51,6 +51,10 @@ rem    TestLog_ASSERT date1 = date2, "the return IsNumeric is: " & date1
     date1 = IsNumeric("123")
     TestLog_ASSERT date1 = date2, "the return IsNumeric is: " & date1
 
+    date2 = True
+    date1 = IsNumeric("+123")
+    TestLog_ASSERT date1 = date2, "the return IsNumeric is: " & date1
+
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
     verify_testIsNumeric = result
 

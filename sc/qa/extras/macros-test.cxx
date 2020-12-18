@@ -51,6 +51,7 @@ public:
     void testTdf131296_new();
     void testTdf128218();
     void testTdf71271();
+    void testTdf43003();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -68,6 +69,7 @@ public:
     CPPUNIT_TEST(testTdf131296_new);
     CPPUNIT_TEST(testTdf128218);
     CPPUNIT_TEST(testTdf71271);
+    CPPUNIT_TEST(testTdf43003);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -833,6 +835,30 @@ void ScMacrosTest::testTdf71271()
         xProps->getPropertyValue("CodeName") >>= sCodeName;
         CPPUNIT_ASSERT_EQUAL(OUString("NewCodeName"), sCodeName);
     }
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+}
+
+void ScMacrosTest::testTdf43003()
+{
+    OUString aFileName;
+    createFileURL("tdf43003.ods", aFileName);
+    auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    CPPUNIT_ASSERT(xComponent);
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT(pFoundShell);
+
+    ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(xDocSh);
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix in place, the values of the specified cells won't be changed
+    rDoc.SetValue(ScAddress(0, 0, 0), 2);
+    CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, rDoc.GetValue(ScAddress(2, 0, 0)));
 
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);

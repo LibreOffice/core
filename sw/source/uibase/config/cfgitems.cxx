@@ -34,6 +34,7 @@ SwDocDisplayItem::SwDocDisplayItem() :
     m_bCharHiddenText     =
     m_bBookmarks          =
     m_bManualBreak        = true;
+    m_xDefaultAnchor      = 1; //FLY_TO_CHAR
 };
 
 // Item for the Settings dialog, page document view
@@ -48,6 +49,7 @@ SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt ) :
     m_bCharHiddenText     = rVOpt.IsShowHiddenChar(true);
     m_bBookmarks          = rVOpt.IsShowBookmarks(true);
     m_bManualBreak        = rVOpt.IsLineBreak(true);
+    m_xDefaultAnchor      = rVOpt.GetDefaultAnchor();
 }
 
 SwDocDisplayItem* SwDocDisplayItem::Clone( SfxItemPool*  ) const
@@ -66,9 +68,10 @@ bool SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
               m_bSpace                == rItem.m_bSpace              &&
               m_bNonbreakingSpace     == rItem.m_bNonbreakingSpace   &&
               m_bSoftHyphen           == rItem.m_bSoftHyphen         &&
-              m_bCharHiddenText       == rItem.m_bCharHiddenText         &&
+              m_bCharHiddenText       == rItem.m_bCharHiddenText     &&
               m_bBookmarks            == rItem.m_bBookmarks          &&
-              m_bManualBreak          == rItem.m_bManualBreak );
+              m_bManualBreak          == rItem.m_bManualBreak        &&
+              m_xDefaultAnchor        == rItem.m_xDefaultAnchor);
 }
 
 void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
@@ -81,6 +84,7 @@ void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetShowHiddenChar(m_bCharHiddenText );
     rVOpt.SetShowBookmarks(m_bBookmarks       );
     rVOpt.SetLineBreak  (m_bManualBreak       );
+    rVOpt.SetDefaultAnchor( m_xDefaultAnchor  );
 }
 
 SwElemItem::SwElemItem() :

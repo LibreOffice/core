@@ -633,7 +633,8 @@ SwRect SwFrame::GetPaintArea() const
             pTmp->IsCellFrame() || pTmp->IsRowFrame() || //nobody leaves a table!
             pTmp->IsRootFrame() )
         {
-            if( bLeft || aRectFnSet.XDiff(nTmpLeft, nLeft) > 0 )
+            // BTLR is OK to expand towards the physical down direction. Physical down is left.
+            if( bLeft || (aRectFnSet.XDiff(nTmpLeft, nLeft) > 0 && !IsVertLRBT()) )
                 nLeft = nTmpLeft;
             if( bRight || aRectFnSet.XDiff(nRight, nTmpRight) > 0 )
                 nRight = nTmpRight;

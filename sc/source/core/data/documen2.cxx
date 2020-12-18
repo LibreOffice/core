@@ -326,7 +326,7 @@ ScDocument::~ScDocument()
     OSL_PRECOND( !bInLinkUpdate, "bInLinkUpdate in dtor" );
 
     // Join any pending(recalc) threads in global threadpool
-    comphelper::ThreadPool::getSharedOptimalPool().joinAll();
+    comphelper::ThreadPool::getSharedOptimalPool().joinThreadsIfIdle();
 
     bInDtorClear = true;
 
@@ -388,7 +388,7 @@ ScDocument::~ScDocument()
 
     pScriptTypeData.reset();
     maNonThreaded.xRecursionHelper.reset();
-    maThreadSpecific.xRecursionHelper.reset();
+    assert(!maThreadSpecific.xRecursionHelper);
 
     pPreviewFont.reset();
     SAL_WARN_IF( pAutoNameCache, "sc.core", "AutoNameCache still set in dtor" );

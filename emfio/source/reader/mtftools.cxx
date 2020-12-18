@@ -320,10 +320,16 @@ namespace emfio
                     {
                         fX2 -= mnWinOrgX;
                         fY2  = mnWinOrgY-fY2;
-                        fX2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH*10;
-                        fY2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH*10;
-                        fX2 += mnDevOrgX;
-                        fY2 += mnDevOrgY;
+                        fX2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH * 10;
+                        fY2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH * 10;
+                        double nDevOrgX = mnDevOrgX;
+                        if (mnPixX)
+                            nDevOrgX *= static_cast<double>(mnMillX) * 100.0 / static_cast<double>(mnPixX);
+                        fX2 += nDevOrgX;
+                        double nDevOrgY = mnDevOrgY;
+                        if (mnPixY)
+                            nDevOrgY *= static_cast<double>(mnMillY) * 100.0 / static_cast<double>(mnPixY);
+                        fY2 += nDevOrgY;
                     }
                     break;
                     case MM_HIENGLISH :
@@ -332,18 +338,30 @@ namespace emfio
                         fY2  = mnWinOrgY-fY2;
                         fX2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH;
                         fY2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH;
-                        fX2 += mnDevOrgX;
-                        fY2 += mnDevOrgY;
+                        double nDevOrgX = mnDevOrgX;
+                        if (mnPixX)
+                            nDevOrgX *= static_cast<double>(mnMillX) * 100.0 / static_cast<double>(mnPixX);
+                        fX2 += nDevOrgX;
+                        double nDevOrgY = mnDevOrgY;
+                        if (mnPixY)
+                            nDevOrgY *= static_cast<double>(mnMillY) * 100.0 / static_cast<double>(mnPixY);
+                        fY2 += nDevOrgY;
                     }
                     break;
                     case MM_TWIPS:
                     {
                         fX2 -= mnWinOrgX;
                         fY2  = mnWinOrgY-fY2;
-                        fX2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH/MILLIINCH_PER_TWIPS;
-                        fY2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH/MILLIINCH_PER_TWIPS;
-                        fX2 += mnDevOrgX;
-                        fY2 += mnDevOrgY;
+                        fX2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH / MILLIINCH_PER_TWIPS;
+                        fY2 *= HUNDREDTH_MILLIMETERS_PER_MILLIINCH / MILLIINCH_PER_TWIPS;
+                        double nDevOrgX = mnDevOrgX;
+                        if (mnPixX)
+                            nDevOrgX *= static_cast<double>(mnMillX) * 100.0 / static_cast<double>(mnPixX);
+                        fX2 += nDevOrgX;
+                        double nDevOrgY = mnDevOrgY;
+                        if (mnPixY)
+                            nDevOrgY *= static_cast<double>(mnMillY) * 100.0 / static_cast<double>(mnPixY);
+                        fY2 += nDevOrgY;
                     }
                     break;
                     case MM_LOMETRIC :
@@ -352,16 +370,28 @@ namespace emfio
                         fY2  = mnWinOrgY-fY2;
                         fX2 *= 10;
                         fY2 *= 10;
-                        fX2 += mnDevOrgX;
-                        fY2 += mnDevOrgY;
+                        double nDevOrgX = mnDevOrgX;
+                        if (mnPixX)
+                            nDevOrgX *= static_cast<double>(mnMillX) * 100.0 / static_cast<double>(mnPixX);
+                        fX2 += nDevOrgX;
+                        double nDevOrgY = mnDevOrgY;
+                        if (mnPixY)
+                            nDevOrgY *= static_cast<double>(mnMillY) * 100.0 / static_cast<double>(mnPixY);
+                        fY2 += nDevOrgY;
                     }
                     break;
                     case MM_HIMETRIC : // in hundredth of a millimeter
                     {
                         fX2 -= mnWinOrgX;
                         fY2  = mnWinOrgY-fY2;
-                        fX2 += mnDevOrgX;
-                        fY2 += mnDevOrgY;
+                        double nDevOrgX = mnDevOrgX;
+                        if (mnPixX)
+                            nDevOrgX *= static_cast<double>(mnMillX) * 100.0 / static_cast<double>(mnPixX);
+                        fX2 += nDevOrgX;
+                        double nDevOrgY = mnDevOrgY;
+                        if (mnPixY)
+                            nDevOrgY *= static_cast<double>(mnMillY) * 100.0 / static_cast<double>(mnPixY);
+                        fY2 += nDevOrgY;
                     }
                     break;
                     default :

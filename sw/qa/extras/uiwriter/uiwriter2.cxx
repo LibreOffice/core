@@ -1924,6 +1924,69 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137684)
     CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137503)
+{
+    load(DATA_DIRECTORY, "tdf132160.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // switch on "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+
+    SwWrtShell* const pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+
+    // select and delete the first two paragraphs
+    pWrtShell->EndPara(/*bSelect=*/true);
+    pWrtShell->EndPara(/*bSelect=*/true);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("The"));
+
+    // this would crash due to bad redline range
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Encryption "));
+
+    // this would crash due to bad redline range
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("The"));
+
+    // switch off "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138605)
+{
+    SwDoc* const pDoc(createDoc());
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert
+                                                      | RedlineFlags::ShowDelete);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // insert a word, delete it with change tracking and try to undo it
+    pWrtShell->Insert("word");
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    // this crashed due to bad access to the empty redline table
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    // more Undo
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("word"));
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith(""));
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138135)
 {
     load(DATA_DIRECTORY, "tdf132160.odt");
@@ -1946,11 +2009,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138135)
     }
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("support"));
 
-    // single Undo undoes the deletion of the whole word
-    //
-    // This was only a 1-character Undo because of missing
-    // joining of the deleted characters
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    // TODO group redlines for managing tracked changes/showing in margin
+    for (int i = 0; i <= 10; ++i)
+        dispatchCommand(mxComponent, ".uno:Undo", {});
 
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Encryption"));
 
@@ -2008,11 +2069,108 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137771)
     assertXPath(pXmlDoc, "/metafile/push/push/push/line", 13);
 
     // This was the content of the next <text> (missing deletion on margin)
+    // or only the first character of the deleted character sequence
     assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[16]/text", " saved.");
 
     // this would crash due to bad redline range
-    dispatchCommand(mxComponent, ".uno:Undo", {});
+    for (int i = 0; i < 6; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:Undo", {});
+    }
     CPPUNIT_ASSERT(getParagraph(1)->getString().endsWith("to be saved."));
+
+    // switch off "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testJoinParaChangesInMargin)
+{
+    load(DATA_DIRECTORY, "tdf54819.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // switch on "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+
+    SwWrtShell* const pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+
+    // turn on red-lining and show changes
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert
+                                                      | RedlineFlags::ShowDelete);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // delete a character and the paragraph break at the end of the paragraph
+    dispatchCommand(mxComponent, ".uno:GotoEndOfPara", {});
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsudolor sit amet."), getParagraph(1)->getString());
+
+    // Undo
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    // this would crash due to bad redline range
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum"), getParagraph(1)->getString());
+
+    // switch off "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138479)
+{
+    SwDoc* const pDoc = createDoc();
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->Insert("Lorem");
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem"), getParagraph(1)->getString());
+
+    //turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE("redlines shouldn't be visible",
+                           !IDocumentRedlineAccess::IsShowChanges(
+                               pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // switch on "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+
+    // delete "r" in "Lorem"
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 3, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("Loem"), getParagraph(1)->getString());
+
+    // delete "oe" in "Loem"
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("Lm"), getParagraph(1)->getString());
+
+    // test embedded Undo in ChangesInMargin mode
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("Loem"), getParagraph(1)->getString());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem"), getParagraph(1)->getString());
+
+    // this would crash due to bad redline range
+    for (int i = 0; i < 5; ++i)
+        dispatchCommand(mxComponent, ".uno:Undo", {});
 
     // switch off "Show changes in margin" mode
     dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});

@@ -732,6 +732,23 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133455, "tdf133455.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[11]/w:tc[1]/w:tcPr/w:tcBorders/w:bottom[@w:val = 'nil']", 0);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf138612, "tdf138612.docx")
+{
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+
+    // Row 5 Col 1 - vertically merged cell
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[5]/w:tc[1]/w:tcPr/w:vMerge", "val", "restart");
+    // Row 5 Col 2 - split cell
+    // This was w:vMerge="restart"
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[5]/w:tc[2]/w:tcPr/w:vMerge", 0);
+
+    // Row 6 Col 1 - merged with cell in Row 5 Col 1
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[6]/w:tc[1]/w:tcPr/w:vMerge", "val", "continue");
+    // Row 6 Col 2 - split cell
+    // This was w:vMerge="continue" (merged with cell in Row 5 Col 2)
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[6]/w:tc[2]/w:tcPr/w:vMerge", 0);
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128646, "tdf128646.docx")
 {
     // The problem was that not hidden shapes anchored to empty hidden paragraphs were imported as hidden.

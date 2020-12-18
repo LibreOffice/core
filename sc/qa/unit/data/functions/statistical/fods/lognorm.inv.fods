@@ -3937,7 +3937,7 @@
      <table:table-cell table:style-name="ce15" office:value-type="float" office:value="98.1601932437975" calcext:value-type="float">
       <text:p>98.1601932437975000000</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A8];12)=ROUND([.B8];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A8];11)=ROUND([.B8];11)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce22" table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="{=LOGNORM.INV(K1:K8,L1:L8,M1:M8)}" calcext:value-type="string">

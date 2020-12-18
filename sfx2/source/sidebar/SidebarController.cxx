@@ -627,15 +627,18 @@ void SidebarController::OpenThenToggleDeck (
         }
     }
     RequestOpenDeck();
+    // before SwitchToDeck which may cause the rsDeckId string to be released
+    collectUIInformation(rsDeckId);
     SwitchToDeck(rsDeckId);
 
     // Make sure the sidebar is wide enough to fit the requested content
-    sal_Int32 nRequestedWidth = (mpCurrentDeck->GetMinimalWidth() + TabBar::GetDefaultWidth())
-                                * mpTabBar->GetDPIScaleFactor();
-    if (mnSavedSidebarWidth < nRequestedWidth)
-        SetChildWindowWidth(nRequestedWidth);
-
-    collectUIInformation(rsDeckId);
+    if (mpCurrentDeck && mpTabBar)
+    {
+        sal_Int32 nRequestedWidth = (mpCurrentDeck->GetMinimalWidth() + TabBar::GetDefaultWidth())
+                                    * mpTabBar->GetDPIScaleFactor();
+        if (mnSavedSidebarWidth < nRequestedWidth)
+            SetChildWindowWidth(nRequestedWidth);
+    }
 }
 
 void SidebarController::OpenThenSwitchToDeck (
@@ -1182,6 +1185,7 @@ IMPL_LINK(SidebarController, OnSubMenuItemSelected, const OString&, rCurItemId, 
                                             IsDocumentReadOnly(),
                                             mxFrame->getController());
                 // Notify the tab bar about the updated set of decks.
+                maFocusManager.Clear();
                 mpTabBar->SetDecks(aDecks);
                 mpTabBar->HighlightDeck(mpCurrentDeck->GetId());
                 mpTabBar->UpdateFocusManager(maFocusManager);

@@ -996,6 +996,11 @@ MultiSalLayout::MultiSalLayout( std::unique_ptr<SalLayout> pBaseLayout )
     mnUnitsPerPixel = mpLayouts[ 0 ]->GetUnitsPerPixel();
 }
 
+std::unique_ptr<SalLayout> MultiSalLayout::ReleaseBaseLayout()
+{
+    return std::move(mpLayouts[0]);
+}
+
 void MultiSalLayout::SetIncomplete(bool bIncomplete)
 {
     mbIncomplete = bIncomplete;

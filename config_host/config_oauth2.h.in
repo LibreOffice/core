@@ -35,13 +35,13 @@
 
 
 /* OneDrive */
-#define ONEDRIVE_BASE_URL "https://apis.live.net/v5.0"
+#define ONEDRIVE_BASE_URL "https://graph.microsoft.com/v1.0"
 #define ONEDRIVE_CLIENT_ID ""
 #define ONEDRIVE_CLIENT_SECRET ""
-#define ONEDRIVE_AUTH_URL "https://login.live.com/oauth20_authorize.srf"
-#define ONEDRIVE_TOKEN_URL "https://login.live.com/oauth20_token.srf"
-#define ONEDRIVE_REDIRECT_URI "https://login.live.com/oauth20_desktop.srf"
-#define ONEDRIVE_SCOPE "wl.skydrive_update wl.offline_access"
+#define ONEDRIVE_AUTH_URL "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"
+#define ONEDRIVE_TOKEN_URL "https://login.microsoftonline.com/common/oauth2/v2.0/token"
+#define ONEDRIVE_REDIRECT_URI "http://localhost/LibreOffice"
+#define ONEDRIVE_SCOPE "Files.ReadWrite offline_access"
 
 #endif
 

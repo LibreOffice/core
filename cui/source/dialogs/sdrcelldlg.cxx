@@ -27,6 +27,7 @@ SvxFormatCellsDialog::SvxFormatCellsDialog(weld::Window* pParent, const SfxItemS
     : SfxTabDialogController(pParent, "cui/ui/formatcellsdialog.ui", "FormatCellsDialog", pAttr)
     , mrOutAttrs(*pAttr)
     , mpColorTab(rModel.GetColorList())
+    , mnColorTabState ( ChangeType::NONE )
     , mpGradientList(rModel.GetGradientList())
     , mpHatchingList(rModel.GetHatchList())
     , mpBitmapList(rModel.GetBitmapList())
@@ -36,6 +37,7 @@ SvxFormatCellsDialog::SvxFormatCellsDialog(weld::Window* pParent, const SfxItemS
     AddTabPage("effects", RID_SVXPAGE_CHAR_EFFECTS);
     AddTabPage("border", RID_SVXPAGE_BORDER );
     AddTabPage("area", RID_SVXPAGE_AREA);
+    AddTabPage("shadow", SvxShadowTabPage::Create, nullptr);
 }
 
 void SvxFormatCellsDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
@@ -54,6 +56,11 @@ void SvxFormatCellsDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
     {
         SvxBorderTabPage& rBorderPage = static_cast<SvxBorderTabPage&>(rPage);
         rBorderPage.SetTableMode();
+    }
+    else if (rId == "shadow")
+    {
+        static_cast<SvxShadowTabPage&>(rPage).SetColorList( mpColorTab );
+        static_cast<SvxShadowTabPage&>(rPage).SetColorChgd( &mnColorTabState );
     }
     else
         SfxTabDialogController::PageCreated(rId, rPage);

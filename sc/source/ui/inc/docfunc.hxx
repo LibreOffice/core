@@ -195,7 +195,8 @@ public:
                     MergeCells( const ScCellMergeOption& rOption, bool bContents,
                                         bool bRecord, bool bApi, bool bEmptyMergedCells = false );
     bool            UnmergeCells( const ScRange& rRange, bool bRecord, ScUndoRemoveMerge* pUndoRemoveMerge );
-    bool            UnmergeCells( const ScCellMergeOption& rOption, bool bRecord, ScUndoRemoveMerge* pUndoRemoveMerge );
+    SC_DLLPUBLIC bool
+                    UnmergeCells( const ScCellMergeOption& rOption, bool bRecord, ScUndoRemoveMerge* pUndoRemoveMerge );
 
     // takes ownership of pNewRanges, nTab = -1 for local range names
     void            SetNewRangeNames( std::unique_ptr<ScRangeName> pNewRanges, bool bModifyDoc, SCTAB nTab );
