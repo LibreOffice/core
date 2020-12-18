@@ -30,6 +30,7 @@
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 #include "rtl/stringconcat.hxx"
+#include <string_view>
 #endif
 
 #ifdef RTL_STRING_UNITTEST
@@ -583,6 +584,15 @@ public:
     OStringBuffer& append( OStringNumber< T >&& c )
     {
         return append( c.buf, c.length );
+    }
+
+    /**
+     @overload
+     @internal
+     */
+    OStringBuffer& append( std::string_view s )
+    {
+        return append( s.data(), s.size() );
     }
 
 #endif
