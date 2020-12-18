@@ -63,6 +63,7 @@
 #include <cuitabarea.hxx>
 #include <svtools/unitconv.hxx>
 #include <comphelper/lok.hxx>
+#include <vector>
 
 #define MAX_BMP_WIDTH   16
 #define MAX_BMP_HEIGHT  16
@@ -783,7 +784,6 @@ void SvxLineTabPage::FillXLSet_Impl()
     m_aCtlPreview.SetLineAttributes(m_aXLineAttr.GetItemSet());
 }
 
-
 void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 {
     drawing::LineStyle  eXLS; // drawing::LineStyle_NONE, drawing::LineStyle_SOLID, drawing::LineStyle_DASH
@@ -930,10 +930,52 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
                 break;
 
             case drawing::LineStyle_DASH:
-                m_xLbLineStyle->set_active(-1);
-                m_xLbLineStyle->set_active_text(rAttrs->Get( XATTR_LINEDASH ).GetName());
-                break;
+            {
+                OUString aDashName;
 
+                // Find preset dash styles first.
+                XDash aDashVal = rAttrs->Get(XATTR_LINEDASH).GetDashValue();
+                std::vector<sal_uInt32> aDashedLine{ aDashVal.GetDots(), aDashVal.GetDashes(), aDashVal.GetDotLen(), aDashVal.GetDashLen(), aDashVal.GetDistance() };
+                std::vector<sal_uInt32> dashed           { 1, 0, 300, 0, 100 };
+                std::vector<sal_uInt32> dash             { 1, 0, 400, 0, 300 };
+                //std::vector<sal_uInt32> dashDot          { 1, 1, 400, 100, 300 }; TODO: add this to our standard dash table (strings.cxx 319)
+                std::vector<sal_uInt32> longDash         { 1, 0, 800, 0, 300 };
+                std::vector<sal_uInt32> longDashDot      { 1, 1, 800, 100, 300 };
+                //std::vector<sal_uInt32> longDashDotDot   { 1, 2, 800, 100, 300 }; TODO: add this to our standard dash table (strings.cxx 319)
+
+                std::vector<std::vector<sal_uInt32>> dashVect{ dashed, dash, longDash, longDashDot };
+
+                for (size_t i = 0; i < dashVect.size(); ++i)
+                {
+                    bool isDashFound = true;
+                    for (size_t j = 0; j < aDashedLine.size(); ++j)
+                    {
+                        if (dashVect[i][j] == aDashedLine[j] && isDashFound)
+                            isDashFound = true;
+                        else
+                            isDashFound = false;
+                    }
+                    if (isDashFound)
+                    {
+                        if (i == 0)
+                            aDashName = "Dashed";
+                        else if (i == 1)
+                            aDashName = "Dash";
+                        else if (i == 2)
+                            aDashName = "Long Dash";
+                        else if (i == 3)
+                            aDashName = "Long Dash Dot";
+                        break;
+                    }
+                }
+
+                if (aDashName.isEmpty())
+                    aDashName = rAttrs->Get(XATTR_LINEDASH).GetName();
+
+                m_xLbLineStyle->set_active(-1);
+                m_xLbLineStyle->set_active_text(aDashName);
+                break;
+            }
             default:
                 break;
         }
