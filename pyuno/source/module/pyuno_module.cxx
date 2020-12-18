@@ -883,7 +883,9 @@ PyObject* PyInit_pyuno()
     PyUNO_initType();
     PyUNOStruct_initType();
     // noop when called already, otherwise needed to allow multiple threads
+#if PY_VERSION_HEX < 0x03090000
     PyEval_InitThreads();
+#endif
     static struct PyModuleDef moduledef =
     {
         PyModuleDef_HEAD_INIT,
