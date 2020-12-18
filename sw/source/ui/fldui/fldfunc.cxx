@@ -68,7 +68,7 @@ SwFieldFuncPage::SwFieldFuncPage(weld::Container* pPage, weld::DialogController*
                                      m_xListItemsLB->get_height_rows(5));
 
     auto nWidth = m_xTypeLB->get_approximate_digit_width() * FIELD_COLUMN_WIDTH;
-    auto nHeight = m_xTypeLB->get_height_rows(20);
+    auto nHeight = m_xTypeLB->get_height_rows(10);
     m_xTypeLB->set_size_request(nWidth, nHeight);
     m_xFormatLB->set_size_request(nWidth, nHeight);
 
