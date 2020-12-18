@@ -17,25 +17,35 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OCTREE_HXX
-#define INCLUDED_VCL_INC_OCTREE_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/BitmapColor.hxx>
 
+class BitmapReadAccess;
+
 struct OctreeNode
 {
-    sal_uLong nCount = 0;
-    sal_uLong nRed = 0;
-    sal_uLong nGreen = 0;
-    sal_uLong nBlue = 0;
-    std::unique_ptr<OctreeNode> pChild[8];
-    OctreeNode* pNext = nullptr;
-    sal_uInt16 nPalIndex = 0;
-    bool bLeaf = false;
-};
+    OctreeNode()
+        : nCount(0)
+        , nRed(0)
+        , nGreen(0)
+        , nBlue(0)
+        , pNext(nullptr)
+        , nPalIndex(0)
+        , bLeaf(false)
+    {
+    }
 
-class BitmapReadAccess;
+    sal_uLong nCount;
+    sal_uLong nRed;
+    sal_uLong nGreen;
+    sal_uLong nBlue;
+    std::unique_ptr<OctreeNode> pChild[8];
+    OctreeNode* pNext;
+    sal_uInt16 nPalIndex;
+    bool bLeaf;
+};
 
 class VCL_PLUGIN_PUBLIC Octree
 {
@@ -76,7 +86,5 @@ public:
 
     sal_uInt16 GetBestPaletteIndex(const BitmapColor& rColor);
 };
-
-#endif // INCLUDED_VCL_INC_OCTREE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

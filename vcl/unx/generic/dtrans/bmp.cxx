@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/BitmapDitherFilter.hxx>
 #include <vcl/BitmapSimpleColorQuantizationFilter.hxx>
 
 #include <sal/log.hxx>
@@ -749,7 +750,9 @@ css::uno::Sequence<sal_Int8> x11::convertBitmapDepth(
     Bitmap bm;
     ReadDIB(bm, in, true);
     if (bm.GetBitCount() == 24 && depth <= 8) {
-        bm.Dither();
+        BitmapEx aBmpEx(bm);
+        BitmapFilter::Filter(aBmpEx, BitmapDitherFilter());
+        bm = aBmpEx.GetBitmap();
     }
     if (bm.GetBitCount() != depth) {
         switch (depth) {
