@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "b05a5b87_73d61a9e",
+        "filename": "offapi/com/sun/star/xml/sax/XWriter.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-18T12:01:25Z",
+      "side": 1,
+      "message": "But would we really want to backport it to libreoffice-7-1?  If it is not an urgent regression fix, then don\u0027t do that.",
+      "parentUuid": "fa948f3b_81544069",
+      "range": {
+        "startLine": 40,
+        "startChar": 27,
+        "endLine": 40,
+        "endChar": 30
+      },
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fb673a59_9a1a71d4",
         "filename": "offapi/com/sun/star/xml/sax/XWriter.idl",
         "patchSetId": 5
@@ -78,6 +102,24 @@
       "side": 1,
       "message": "First, this works with an IDL header, which is off limits of my abilities.\n -\u003e So I\u0027m gonna need the line and the corresponding type in c++.\n\nHowever, it seems deprecated:\nhttps://wiki.openoffice.org/wiki/Uno/API_Deprecation",
       "parentUuid": "fb673a59_9a1a71d4",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "260dbd9d_61d5d80b",
+        "filename": "offapi/com/sun/star/xml/sax/XWriter.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-18T12:01:25Z",
+      "side": 1,
+      "message": "\u003e First, this works with an IDL header, which is off limits of my abilities.\n\u003e  -\u003e So I\u0027m gonna need the line and the corresponding type in c++.\n\nI don\u0027t understand what you mean here?\n\nHere in the .idl file you would add\n\n  #include \u003ccom/sun/star/beans/StringPair\u003e\n\nand change the above to\n\n  void setCustomEntityNames( [in] sequence\u003ccom::sun::star::beans::StringPair\u003e replacements );\n\n\u003e However, it seems deprecated:\n\u003e https://wiki.openoffice.org/wiki/Uno/API_Deprecation\n\nWhat exactly seems deprecated?",
+      "parentUuid": "be54a48e_ff4abc32",
       "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -201,6 +243,24 @@
     },
     {
       "key": {
+        "uuid": "b2213e4c_9a0bcb05",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-18T12:01:25Z",
+      "side": 1,
+      "message": "OSL_FAIL suffers from the same unclear semantics as OSL_ENSURE.  If this is guaranteed to not happen (as the passed in string data is for some reason guaranteed to be valid UTF-16, not just a sequence of UTF-16 code units), use assert.",
+      "parentUuid": "b7ec6888_55cf61f7",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "67af419e_e7ce8f70",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 5
@@ -236,6 +296,24 @@
     },
     {
       "key": {
+        "uuid": "d10c3b01_53fc4cf8",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-18T12:01:25Z",
+      "side": 1,
+      "message": "Same as above: Depends on what the function\u0027s precondition is for the passed-in sal_Unicode sequence.",
+      "parentUuid": "77d84f51_d526d029",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a5e2b4eb_103d5918",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 5
@@ -265,6 +343,24 @@
       "side": 1,
       "message": "Line 455 of this version. If there was no surrogate, it has to be 0.",
       "parentUuid": "a5e2b4eb_103d5918",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d462b0a7_e318efe0",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-18T12:01:25Z",
+      "side": 1,
+      "message": "But as we now assemble the full nSurrogate in the loop iteration where we see the high surrogate (and which also eats the following low surrogate), we no longer have a case where we need to pass a high surrogate (via nSurrogate) from one loop iteration to the next (where it was then combined with a following low surrogate).",
+      "parentUuid": "fc9ba2e4_26c6195f",
       "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
