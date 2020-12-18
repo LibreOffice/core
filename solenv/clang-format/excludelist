@@ -14905,6 +14905,7 @@ vcl/source/bitmap/floyd.hxx
 vcl/source/bitmap/impvect.cxx
 vcl/source/bitmap/impvect.hxx
 vcl/source/bitmap/salbmp.cxx
+vcl/source/bitmap/floyd.hxx
 vcl/source/cnttype/mcnttfactory.cxx
 vcl/source/cnttype/mcnttfactory.hxx
 vcl/source/cnttype/mcnttype.cxx
