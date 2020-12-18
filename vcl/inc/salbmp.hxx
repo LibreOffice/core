@@ -121,7 +121,8 @@ protected:
     {
         A8,
         RGBA,
-        BGRA
+        BGRA,
+        LAST = BGRA
     };
     static std::unique_ptr< sal_uInt8[] > convertDataBitCount( const sal_uInt8* src,
         int width, int height, int bitCount, int bytesPerRow, const BitmapPalette& palette,
