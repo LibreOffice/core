@@ -14898,6 +14898,7 @@ vcl/source/bitmap/BitmapTools.cxx
 vcl/source/bitmap/bitmap.cxx
 vcl/source/bitmap/checksum.cxx
 vcl/source/bitmap/salbmp.cxx
+vcl/source/bitmap/floyd.hxx
 vcl/source/cnttype/mcnttfactory.cxx
 vcl/source/cnttype/mcnttfactory.hxx
 vcl/source/cnttype/mcnttype.cxx
@@ -15012,7 +15013,6 @@ vcl/source/gdi/configsettings.cxx
 vcl/source/gdi/cvtgrf.cxx
 vcl/source/gdi/dibtools.cxx
 vcl/source/gdi/embeddedfontshelper.cxx
-vcl/source/gdi/floyd.hxx
 vcl/source/gdi/gdimetafiletools.cxx
 vcl/source/gdi/gdimtf.cxx
 vcl/source/gdi/gfxlink.cxx
