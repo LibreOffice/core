@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_OCTREE_HXX
 #define INCLUDED_VCL_INC_OCTREE_HXX
 
+#pragma once
+
 #include <vcl/dllapi.h>
 #include <vcl/BitmapColor.hxx>
 
