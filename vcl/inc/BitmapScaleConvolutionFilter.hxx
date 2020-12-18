@@ -22,7 +22,7 @@
 
 #include <vcl/BitmapFilter.hxx>
 
-#include "ResampleKernel.hxx"
+#include <ResampleKernel.hxx>
 
 namespace vcl
 {
