@@ -368,7 +368,7 @@ public:
     bool            MouseButtonDown( const MouseEvent& rMouseEvent );
     void            ReleaseMouse();
     bool            MouseMove( const MouseEvent& rMouseEvent );
-    void            Command( const CommandEvent& rCEvt );
+    bool            Command(const CommandEvent& rCEvt);
 
     void            CutCopy( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard, bool bCut );
     void            Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard, bool bUseSpecial = false );
@@ -841,7 +841,7 @@ public:
     bool                MouseButtonDown( const MouseEvent& rMouseEvent, EditView* pView );
     void                ReleaseMouse();
     bool                MouseMove( const MouseEvent& rMouseEvent, EditView* pView );
-    void                    Command( const CommandEvent& rCEvt, EditView* pView );
+    bool                    Command(const CommandEvent& rCEvt, EditView* pView);
 
     EditSelectionEngine&    GetSelEngine() { return aSelEngine; }
     OUString                GetSelected( const EditSelection& rSel ) const;

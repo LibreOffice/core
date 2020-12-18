@@ -471,9 +471,9 @@ bool EditView::MouseMove( const MouseEvent& rMouseEvent )
     return pImpEditView->MouseMove( rMouseEvent );
 }
 
-void EditView::Command( const CommandEvent& rCEvt )
+bool EditView::Command(const CommandEvent& rCEvt)
 {
-    pImpEditView->Command( rCEvt );
+    return pImpEditView->Command(rCEvt);
 }
 
 void EditView::SetBroadcastLOKViewCursor(bool bSet)

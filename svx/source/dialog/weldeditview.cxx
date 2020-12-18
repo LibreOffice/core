@@ -232,8 +232,7 @@ bool WeldEditView::Command(const CommandEvent& rCEvt)
     EditView* pEditView = GetEditView();
     if (!pEditView)
         return false;
-    pEditView->Command(rCEvt);
-    return true;
+    return pEditView->Command(rCEvt);
 }
 
 class WeldEditAccessible;
