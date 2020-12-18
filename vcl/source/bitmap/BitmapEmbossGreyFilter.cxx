@@ -10,14 +10,15 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
-
 #include <tools/helpers.hxx>
+
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapEmbossGreyFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
+
+#include <algorithm>
 
 BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
 {
