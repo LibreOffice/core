@@ -559,7 +559,9 @@ void bridges::cpp_uno::shared::VtableFactory::flushCode(
     // "extend.texi (__clear_cache): Correct signature" that __builtin___clear_cache takes void*
     // parameters, while Clang uses char* ever since
     // <https://github.com/llvm/llvm-project/commit/c491a8d4577052bc6b3b4c72a7db6a7cfcbc2ed0> "Add
-    // support for __builtin___clear_cache in Clang":
+    // support for __builtin___clear_cache in Clang" (TODO: see
+    // <https://bugs.llvm.org/show_bug.cgi?id=48489> "__builtin___clear_cache() has a different
+    // prototype than GCC"; once fixed for our Clang baseline, we can drop the reinterpret_casts):
     __builtin___clear_cache(
         reinterpret_cast<char *>(const_cast<unsigned char *>(begin)),
         reinterpret_cast<char *>(const_cast<unsigned char *>(end)));
