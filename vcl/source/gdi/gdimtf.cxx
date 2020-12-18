@@ -49,8 +49,6 @@
 
 using namespace com::sun::star;
 
-#define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
-
 namespace {
 
 struct ImplColAdjustParam
