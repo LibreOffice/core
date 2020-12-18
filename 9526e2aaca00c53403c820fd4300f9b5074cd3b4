@@ -1,0 +1,175 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17779bb0_3b85b2f2",
+        "filename": "offapi/com/sun/star/xml/sax/XWriter.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-18T07:30:17Z",
+      "side": 1,
+      "message": "7.1 or 7.2?",
+      "range": {
+        "startLine": 40,
+        "startChar": 27,
+        "endLine": 40,
+        "endChar": 30
+      },
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb673a59_9a1a71d4",
+        "filename": "offapi/com/sun/star/xml/sax/XWriter.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-18T07:30:17Z",
+      "side": 1,
+      "message": "we have css.beans.StringPair, which would look like a good choice here? (avoiding the need to care about two sequences of different length)",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14028e78_071d578c",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-18T07:30:17Z",
+      "side": 1,
+      "message": "here and elsewhere: do not do random reformatting; it just needlessly encumers reviewing",
+      "range": {
+        "startLine": 286,
+        "startChar": 24,
+        "endLine": 286,
+        "endChar": 35
+      },
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e43427dc_25e4baac",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-18T07:30:17Z",
+      "side": 1,
+      "message": "please define variables only where they are needed, not upfront",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80638ef5_a4b3361c",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-18T07:30:17Z",
+      "side": 1,
+      "message": "this branch is always a lone 2nd surrogate now, irrespective of nSurrogate\u0027s value, right?",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67af419e_e7ce8f70",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-18T07:30:17Z",
+      "side": 1,
+      "message": "for one, what we want to ensure is `i \u003c\u003d nStrLen` (and even better is to ensure `i \u003c nStrLen` prior to ++i, which avoids potential overflow)\n\nfor another, if the ensured condition doesn\u0027t hold, we\u0027re illegally reading past pStr\u0027s end, so this is obviously something either to assert or to handle somehow (OSL_ESNURE is legacy crap with unclear semantics, see tdf#43157 for details)",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5e2b4eb_103d5918",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-18T07:30:17Z",
+      "side": 1,
+      "message": "we no longer need to track nSurrogate across loop iterations, right?",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45f9ac53_22d05649",
+        "filename": "starmath/source/xparsmlbase.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-18T07:30:17Z",
+      "side": 1,
+      "message": "better to use constexpr variables than to introduce new macros",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07d8ac29_abf54329",
+        "filename": "starmath/source/xparsmlbase.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-18T07:30:17Z",
+      "side": 1,
+      "message": "These",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 8
+      },
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
