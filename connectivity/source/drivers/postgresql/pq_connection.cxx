@@ -444,7 +444,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
         nColon = url.indexOf( ':' , 1+ nColon );
         if( nColon != -1 )
         {
-             o = OUStringToOString( url.subView(nColon+1), ConnectionSettings::encoding );
+             o = rtl::OUStringToOString( url.subView(nColon+1), ConnectionSettings::encoding );
         }
     }
     {
