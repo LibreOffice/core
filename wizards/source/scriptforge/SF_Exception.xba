@@ -268,7 +268,7 @@ Try:
 	With _SF_
 		bConsoleActive = False
 		If Not IsNull(.ConsoleDialog) Then bConsoleActive = .ConsoleDialog._IsStillAlive(False)		&apos;	False to not raise an error
-		If bConsoleActive Then
+		If bConsoleActive And Modal = False Then
 			&apos;	Bring to front
 			.ConsoleDialog.Activate()
 		Else
