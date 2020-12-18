@@ -336,7 +336,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/graphic/VectorGraphicSearch \
     vcl/source/bitmap/impvect \
     vcl/source/bitmap/bitmap \
-    vcl/source/bitmap/bitmap3 \
     vcl/source/bitmap/BitmapEx \
     vcl/source/bitmap/alpha \
     vcl/source/bitmap/dibtools \
