@@ -129,7 +129,7 @@ public:
 
 private:
     /// @throws css::uno::RuntimeException
-    static const SfxItemPropertySimpleEntry* getPropertyMapEntry( const OUString& rPropertyName );
+    static const SfxItemPropertySimpleEntry* getPropertyMapEntry( std::u16string_view rPropertyName );
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
     virtual             ~SdStyleSheet() override;

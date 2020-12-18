@@ -59,7 +59,7 @@ public:
 
     css::uno::Reference< css::beans::XPropertySetInfo > const & getPropertySetInfo() const;
     const SfxItemPropertyMap& getPropertyMap() const { return m_aPropertyMap;}
-    const SfxItemPropertySimpleEntry* getPropertyMapEntry(const OUString &rName) const;
+    const SfxItemPropertySimpleEntry* getPropertyMapEntry(std::u16string_view rName) const;
 };
 
 /** converts the given any with a metric to 100th/mm if needed */

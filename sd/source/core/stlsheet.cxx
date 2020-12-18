@@ -1303,7 +1303,7 @@ Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName )
 }
 
 /** this is used because our property map is not sorted yet */
-const SfxItemPropertySimpleEntry* SdStyleSheet::getPropertyMapEntry( const OUString& rPropertyName )
+const SfxItemPropertySimpleEntry* SdStyleSheet::getPropertyMapEntry( std::u16string_view rPropertyName )
 {
     return GetStylePropertySet().getPropertyMapEntry(rPropertyName);
 }

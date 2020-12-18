@@ -53,7 +53,7 @@ const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
 
 bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
                 const SfxItemPropertyMap& rPropMap,
-                const OUString& aPropertyName, const uno::Any& aValue )
+                std::u16string_view aPropertyName, const uno::Any& aValue )
 {
     //! use map (with new identifiers)
 
@@ -129,7 +129,7 @@ bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
 uno::Any ScDocOptionsHelper::getPropertyValue(
                 const ScDocOptions& rOptions,
                 const SfxItemPropertyMap& rPropMap,
-                const OUString& aPropertyName )
+                std::u16string_view aPropertyName )
 {
     uno::Any aRet;
     const SfxItemPropertySimpleEntry* pEntry = rPropMap.getByName( aPropertyName );

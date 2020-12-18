@@ -1017,7 +1017,7 @@ beans::PropertyState SvxUnoTextRangeBase::_getPropertyState(const SfxItemPropert
     throw beans::UnknownPropertyException();
 }
 
-beans::PropertyState SvxUnoTextRangeBase::_getPropertyState(const OUString& PropertyName, sal_Int32 nPara /* = -1 */)
+beans::PropertyState SvxUnoTextRangeBase::_getPropertyState(std::u16string_view PropertyName, sal_Int32 nPara /* = -1 */)
 {
     SolarMutexGuard aGuard;
 

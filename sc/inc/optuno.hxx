@@ -44,12 +44,12 @@ public:
 
     static bool setPropertyValue( ScDocOptions& rOptions,
                                     const SfxItemPropertyMap& rPropMap,
-                                    const OUString& aPropertyName,
+                                    std::u16string_view aPropertyName,
                                     const css::uno::Any& aValue );
     static css::uno::Any getPropertyValue(
                                     const ScDocOptions& rOptions,
                                     const SfxItemPropertyMap& rPropMap,
-                                    const OUString& PropertyName );
+                                    std::u16string_view PropertyName );
 };
 
 //  empty doc object to supply only doc options

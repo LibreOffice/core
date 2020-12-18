@@ -405,7 +405,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aProp
 }
 
 /** this is used because our property map is not sorted yet */
-const SfxItemPropertySimpleEntry* SdUnoPageBackground::getPropertyMapEntry( const OUString& rPropertyName ) const throw()
+const SfxItemPropertySimpleEntry* SdUnoPageBackground::getPropertyMapEntry( std::u16string_view rPropertyName ) const throw()
 {
     return mpPropSet->getPropertyMap().getByName(rPropertyName);
 }
