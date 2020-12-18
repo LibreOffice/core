@@ -4530,7 +4530,8 @@ void checkBounds(
         // No intersections.
         return;
 
-    if (aAbs.aStart.Row() <= rCheckRange.aStart.Row())
+    // rCheckRange may be a virtual non-existent row being shifted in.
+    if (aAbs.aStart.Row() <= rCheckRange.aStart.Row() && rCheckRange.aStart.Row() < rLimits.GetMaxRowCount())
     {
         //    +-+ <---- top
         //    | |
