@@ -45,10 +45,12 @@ public:
      * Ensure CVEs remain unbroken
      */
     void testCVEs();
+    void testTdf126460();
     void testTdf115863();
 
     CPPUNIT_TEST_SUITE(TiffFilterTest);
     CPPUNIT_TEST(testCVEs);
+    CPPUNIT_TEST(testTdf126460);
     CPPUNIT_TEST(testTdf115863);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -66,6 +68,22 @@ void TiffFilterTest::testCVEs()
 {
     testDir(OUString(),
         getUrl());
+}
+
+void TiffFilterTest::testTdf126460()
+{
+    OUString aURL = getUrl() + "tdf126460.tif";
+    SvFileStream aFileStream(aURL, StreamMode::READ);
+    Graphic aGraphic;
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+
+    ErrCode bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
+
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
+
+    // Without the fix in place, the following asserts would have failed
+    CPPUNIT_ASSERT(aGraphic.IsAlpha());
+    CPPUNIT_ASSERT(aGraphic.IsTransparent());
 }
 
 void TiffFilterTest::testTdf115863()
