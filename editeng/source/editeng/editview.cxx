@@ -348,6 +348,11 @@ vcl::Window* EditView::GetWindow() const
     return pImpEditView->pOutWin;
 }
 
+OutputDevice& EditView::GetOutputDevice() const
+{
+    return pImpEditView->GetOutputDevice();
+}
+
 bool EditView::HasOtherViewWindow( vcl::Window* pWin )
 {
     OutWindowSet& rOutWindowSet = pImpEditView->aOutWindowSet;
