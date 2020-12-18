@@ -41,7 +41,7 @@ ScDocument* ScXMLConverter::GetScDocument( const uno::Reference< frame::XModel >
     return nullptr;
 }
 
-sheet::GeneralFunction ScXMLConverter::GetFunctionFromString( const OUString& sFunction )
+sheet::GeneralFunction ScXMLConverter::GetFunctionFromString( std::u16string_view sFunction )
 {
     if( IsXMLToken(sFunction, XML_SUM ) )
         return sheet::GeneralFunction_SUM;
@@ -70,7 +70,7 @@ sheet::GeneralFunction ScXMLConverter::GetFunctionFromString( const OUString& sF
     return sheet::GeneralFunction_NONE;
 }
 
-ScGeneralFunction ScXMLConverter::GetFunctionFromString2( const OUString& sFunction )
+ScGeneralFunction ScXMLConverter::GetFunctionFromString2( std::u16string_view sFunction )
 {
     if( IsXMLToken(sFunction, XML_SUM ) )
         return ScGeneralFunction::SUM;
@@ -101,7 +101,7 @@ ScGeneralFunction ScXMLConverter::GetFunctionFromString2( const OUString& sFunct
     return ScGeneralFunction::NONE;
 }
 
-ScSubTotalFunc ScXMLConverter::GetSubTotalFuncFromString( const OUString& sFunction )
+ScSubTotalFunc ScXMLConverter::GetSubTotalFuncFromString( std::u16string_view sFunction )
 {
     if( IsXMLToken(sFunction, XML_SUM ) )
         return SUBTOTAL_FUNC_SUM;
@@ -187,7 +187,7 @@ void ScXMLConverter::GetStringFromFunction(
 }
 
 sheet::DataPilotFieldOrientation ScXMLConverter::GetOrientationFromString(
-    const OUString& rString )
+    std::u16string_view rString )
 {
     if( IsXMLToken(rString, XML_COLUMN ) )
         return sheet::DataPilotFieldOrientation_COLUMN;
@@ -230,7 +230,7 @@ void ScXMLConverter::GetStringFromOrientation(
     ScRangeStringConverter::AssignString( rString, sOrientStr, false );
 }
 
-ScDetectiveObjType ScXMLConverter::GetDetObjTypeFromString( const OUString& rString )
+ScDetectiveObjType ScXMLConverter::GetDetObjTypeFromString( std::u16string_view rString )
 {
     if( IsXMLToken(rString, XML_FROM_SAME_TABLE ) )
         return SC_DETOBJ_ARROW;
@@ -241,7 +241,7 @@ ScDetectiveObjType ScXMLConverter::GetDetObjTypeFromString( const OUString& rStr
     return SC_DETOBJ_NONE;
 }
 
-bool ScXMLConverter::GetDetOpTypeFromString( ScDetOpType& rDetOpType, const OUString& rString )
+bool ScXMLConverter::GetDetOpTypeFromString( ScDetOpType& rDetOpType, std::u16string_view rString )
 {
     if( IsXMLToken(rString, XML_TRACE_DEPENDENTS ) )
         rDetOpType = SCDETOP_ADDSUCC;

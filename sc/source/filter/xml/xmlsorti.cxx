@@ -162,7 +162,7 @@ void SAL_CALL ScXMLSortContext::endFastElement( sal_Int32 /*nElement*/ )
     pDatabaseRangeContext->SetSortSequence(aSortDescriptor);
 }
 
-void ScXMLSortContext::AddSortField(const OUString& sFieldNumber, const OUString& sDataType, const OUString& sOrder)
+void ScXMLSortContext::AddSortField(const OUString& sFieldNumber, const OUString& sDataType, std::u16string_view sOrder)
 {
     util::SortField aSortField;
     aSortField.Field = sFieldNumber.toInt32();

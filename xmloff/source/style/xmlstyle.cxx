@@ -449,7 +449,7 @@ bool SvXMLStylesContext::InsertStyleFamily( XmlStyleFamily ) const
     return true;
 }
 
-XmlStyleFamily SvXMLStylesContext::GetFamily( const OUString& rValue )
+XmlStyleFamily SvXMLStylesContext::GetFamily( std::u16string_view rValue )
 {
     XmlStyleFamily nFamily = XmlStyleFamily::DATA_STYLE;
     if( IsXMLToken( rValue, XML_PARAGRAPH ) )

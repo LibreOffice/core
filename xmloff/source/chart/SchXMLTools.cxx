@@ -195,7 +195,7 @@ OUString GetNewChartTypeName( const OUString & rOldChartTypeName )
 }
 
 OUString GetChartTypeByClassName(
-    const OUString & rClassName, bool bUseOldNames )
+    std::u16string_view rClassName, bool bUseOldNames )
 {
     OUStringBuffer aResultBuffer;
     bool bInternalType = false;

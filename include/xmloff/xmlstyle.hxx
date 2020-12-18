@@ -178,7 +178,7 @@ public:
                                       XmlStyleFamily nFamily,
                                       const OUString& rName,
                                       bool bCreateIndex = false ) const;
-    static XmlStyleFamily GetFamily( const OUString& rFamily );
+    static XmlStyleFamily GetFamily( std::u16string_view rFamily );
     virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
                         XmlStyleFamily nFamily ) const;
 

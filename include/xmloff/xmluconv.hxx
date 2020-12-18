@@ -265,7 +265,7 @@ public:
     /** convert num-format and num-letter-sync values to NumberingType */
     bool convertNumFormat( sal_Int16& rType,
                            const OUString& rNumFormat,
-                           const OUString& rNumLetterSync,
+                           std::u16string_view rNumLetterSync,
                            bool bNumberNone = false ) const;
 
     /** convert NumberingType to num-format and num-letter-sync values */

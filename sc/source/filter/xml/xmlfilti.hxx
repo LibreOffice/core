@@ -133,7 +133,7 @@ public:
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 
-    static void GetOperator(const OUString& aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry);
+    static void GetOperator(std::u16string_view aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry);
     void AddSetItem(const ScQueryEntry::Item& rItem);
 };
 
@@ -259,7 +259,7 @@ public:
     virtual ~ScXMLDPConditionContext() override;
 
     static void getOperatorXML(
-        const OUString& sTempOperator, ScQueryOp& aFilterOperator, utl::SearchParam::SearchType& rSearchType);
+        std::u16string_view sTempOperator, ScQueryOp& aFilterOperator, utl::SearchParam::SearchType& rSearchType);
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 

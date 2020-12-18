@@ -33,7 +33,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 bool XMLFrameOASISTransformerContext::IsLinkedEmbeddedObject(
-            const OUString& rLocalName,
+            std::u16string_view rLocalName,
             const Reference< XAttributeList >& rAttrList )
 {
     if( !(IsXMLToken( rLocalName, XML_OBJECT ) ||
