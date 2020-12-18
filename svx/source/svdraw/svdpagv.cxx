@@ -32,6 +32,7 @@
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 
 using namespace ::com::sun::star;
@@ -290,13 +291,13 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget,
                     else
                         aTemporaryPaintWindow.SetRedrawRegion(vcl::Region(rRect));
                     // patch the ExistingPageWindow
-                    pPreparedTarget->patchPaintWindow(aTemporaryPaintWindow);
-
+                    auto pPreviousWindow = pPreparedTarget->patchPaintWindow(aTemporaryPaintWindow);
+                    // unpatch window when leaving the scope
+                    const ::comphelper::ScopeGuard aGuard(
+                        [&pPreviousWindow, &pPreparedTarget]() { pPreparedTarget->unpatchPaintWindow(pPreviousWindow); } );
+                    
                     // redraw the layer
                     pPreparedTarget->RedrawLayer(&nID, pRedirector, pPageFrame);
-
-                    // restore the ExistingPageWindow
-                    pPreparedTarget->unpatchPaintWindow();
                 }
                 else
                 {
