@@ -85,7 +85,7 @@ SwFieldRefPage::SwFieldRefPage(weld::Container* pPage, weld::DialogController* p
     m_xTypeLB->set_size_request(nWidth, nHeight);
     m_xFormatLB->set_size_request(nWidth, nHeight);
     m_xSelection->set_size_request(nWidth * 2, nHeight);
-    nHeight = m_xTypeLB->get_height_rows(20);
+    nHeight = m_xTypeLB->get_height_rows(1);
     m_xSelectionToolTipLB->set_size_request(nHeight, nWidth*2);
 
     m_xTypeLB->clear();
