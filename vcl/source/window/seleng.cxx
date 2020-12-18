@@ -355,14 +355,14 @@ void SelectionEngine::Reset()
     nLockedMods = 0;
 }
 
-void SelectionEngine::Command( const CommandEvent& rCEvt )
+bool SelectionEngine::Command( const CommandEvent& rCEvt )
 {
     // Timer aWTimer is active during enlarging a selection
     if ( !pFunctionSet || aWTimer.IsActive() )
-        return;
+        return false;
     aWTimer.Stop();
     if ( rCEvt.GetCommand() != CommandEventId::StartDrag )
-        return;
+        return false;
 
     nFlags |= SelectionEngineFlags::CMDEVT;
     if ( nFlags & SelectionEngineFlags::DRG_ENAB )
@@ -382,6 +382,7 @@ void SelectionEngine::Command( const CommandEvent& rCEvt )
     }
     else
         nFlags &= ~SelectionEngineFlags::CMDEVT;
+    return true;
 }
 
 void SelectionEngine::SetUpdateInterval( sal_uLong nInterval )
