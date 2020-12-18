@@ -93,7 +93,7 @@
 #include <comphelper/graphicmimetype.hxx>
 #include <comphelper/lok.hxx>
 #include <vcl/pngread.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/dibtools.hxx>
 #include <svx/svdograf.hxx>
 
