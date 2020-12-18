@@ -5156,7 +5156,9 @@ if test "$cross_compiling" = "yes"; then
         hardened_runtime.xcent.in \
         instsetoo_native/util/openoffice.lst.in \
         config_host/*.in \
-        sysui/desktop/macosx/Info.plist.in) \
+        sysui/desktop/macosx/Info.plist.in \
+        .vscode/vs-code-template.code-workspace.in \
+        ) \
     | (cd CONF-FOR-BUILD && tar xf -)
     cp configure CONF-FOR-BUILD
     test -d config_build && cp -p config_build/*.h CONF-FOR-BUILD/config_host 2>/dev/null
