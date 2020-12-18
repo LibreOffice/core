@@ -930,10 +930,24 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
                 break;
 
             case drawing::LineStyle_DASH:
+            {
+                OUString aName = rAttrs->Get(XATTR_LINEDASH).GetName();
+                if (aName == "Dashed 2")
+                    aName = "Dash";
+                else if (aName == "Dashed 3")
+                    aName = "Long Dash";
+                else if (aName == "Dashed 4")
+                    aName = "Long Dash Dot";
+                else if (aName == "Dashed 5")
+                    aName = "Double Dash";
+                else if (aName == "Dashed 6")
+                    aName = "Double Dash Dot";
+                else if (aName == "Dashed 7")
+                    aName = "Double Dash Dot Dot";
                 m_xLbLineStyle->set_active(-1);
-                m_xLbLineStyle->set_active_text(rAttrs->Get( XATTR_LINEDASH ).GetName());
+                m_xLbLineStyle->set_active_text(aName);
                 break;
-
+            }
             default:
                 break;
         }
