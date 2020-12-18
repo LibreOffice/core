@@ -14498,9 +14498,9 @@ vcl/inc/PhysicalFontFace.hxx
 vcl/inc/PhysicalFontFamily.hxx
 vcl/inc/ResampleKernel.hxx
 vcl/inc/WidgetThemeLibraryTypes.hxx
+vcl/inc/bitmap/bmpfast.hxx
 vcl/inc/accel.h
 vcl/inc/accmgr.hxx
-vcl/inc/bmpfast.hxx
 vcl/inc/brdwin.hxx
 vcl/inc/calendar.hxx
 vcl/inc/canvasbitmap.hxx

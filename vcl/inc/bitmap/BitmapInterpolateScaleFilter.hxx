@@ -8,17 +8,26 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_BITMAPDISABLEDIMAGEFILTER_HXX
-#define INCLUDED_VCL_INC_BITMAPDISABLEDIMAGEFILTER_HXX
+#ifndef VCL_INC_BITMAP_BITMAPINTERPOLATESCALEFILTER_HXX
+#define VCL_INC_BITMAP_BITMAPINTERPOLATESCALEFILTER_HXX
 
+#include <vcl/bitmapex.hxx>
 #include <vcl/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapDisabledImageFilter final : public BitmapFilter
+class BitmapInterpolateScaleFilter final : public BitmapFilter
 {
 public:
-    BitmapDisabledImageFilter() {}
+    explicit BitmapInterpolateScaleFilter(double fScaleX, double fScaleY)
+        : mfScaleX(fScaleX)
+        , mfScaleY(fScaleY)
+    {
+    }
 
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
+
+private:
+    double mfScaleX;
+    double mfScaleY;
 };
 
 #endif
