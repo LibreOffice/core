@@ -48,7 +48,6 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/help.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/ImageTree.hxx>

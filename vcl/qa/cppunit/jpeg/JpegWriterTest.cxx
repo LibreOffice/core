@@ -10,7 +10,7 @@
 
 #include <unotest/bootstrapfixturebase.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <tools/stream.hxx>
 
 constexpr OUStringLiteral gaDataUrl(u"/vcl/qa/cppunit/jpeg/data/");

@@ -26,7 +26,7 @@
 
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 
 #include <memory>
 

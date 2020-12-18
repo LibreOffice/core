@@ -25,7 +25,6 @@
 
 #include <memory>
 
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
