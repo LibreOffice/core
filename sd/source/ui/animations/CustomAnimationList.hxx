@@ -31,7 +31,6 @@
 namespace com::sun::star::drawing { class XShape; }
 
 struct ImplSVEvent;
-class VclBuilder;
 
 namespace sd {
 
