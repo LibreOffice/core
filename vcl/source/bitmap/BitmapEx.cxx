@@ -29,7 +29,6 @@
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/BitmapMonochromeFilter.hxx>

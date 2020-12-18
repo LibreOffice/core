@@ -12,7 +12,6 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <vcl/bitmap.hxx>
-#include <vcl/bitmapaccess.hxx>
 
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>

@@ -22,7 +22,7 @@
 #include <algorithm>
 
 #include <texture/texture3d.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <primitive3d/hatchtextureprimitive3d.hxx>
 #include <sal/log.hxx>

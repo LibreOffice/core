@@ -18,9 +18,7 @@
  */
 
 #include <osl/diagnose.h>
-
 #include <tools/helpers.hxx>
-#include <vcl/bitmapaccess.hxx>
 
 #include <bitmapwriteaccess.hxx>
 #include <BitmapScaleConvolutionFilter.hxx>
