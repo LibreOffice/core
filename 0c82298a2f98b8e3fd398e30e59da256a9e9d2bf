@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "b79efc17_12ed0872",
+        "filename": "basic/qa/cppunit/basictest.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-18T07:03:23Z",
+      "side": 1,
+      "message": "Actually, I expect that we simply might call mpBasic-\u003eMakeModule(\"TestUtilModule\", \"data from _test_asserts.vb\"), and rely to its functions in test code.",
+      "range": {
+        "startLine": 26,
+        "startChar": 12,
+        "endLine": 26,
+        "endChar": 57
+      },
+      "revId": "0c82298a2f98b8e3fd398e30e59da256a9e9d2bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a5c1f7f1_23b68dd1",
         "filename": "basic/qa/cppunit/basictest.cxx",
         "patchSetId": 3
