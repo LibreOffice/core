@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad43681_fdae15ca",
+        "filename": "sw/source/ui/fldui/fldfunc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-18T18:53:47Z",
+      "side": 1,
+      "message": "from 20 to 1 looks wrong to me?",
+      "revId": "05373955888e93a29545ab5845528334ef30634a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
