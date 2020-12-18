@@ -14,7 +14,8 @@
 #include <vcl/window.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
-#include <bitmapwriteaccess.hxx>
+
+#include <bitmap/BitmapWriteAccess.hxx>
 #include <bufferdevice.hxx>
 #include <window.h>
 

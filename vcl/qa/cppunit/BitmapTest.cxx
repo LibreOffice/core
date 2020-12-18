@@ -21,7 +21,7 @@
 #include <vcl/skia/SkiaHelper.hxx>
 #include <vcl/BitmapMonochromeFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
 #include <svdata.hxx>
 #include <salinst.hxx>

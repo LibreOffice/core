@@ -68,7 +68,7 @@
 #include <vcl/filter/pdfdocument.hxx>
 #include <comphelper/hash.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 #include <fontsubset.hxx>
 #include <PhysicalFontFace.hxx>
 #include <salgdi.hxx>

@@ -11,7 +11,7 @@
 #include <test/outputdevice.hxx>
 #include <vcl/bitmapex.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
 namespace vcl::test {
 

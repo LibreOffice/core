@@ -33,7 +33,7 @@
 
 #include <outdata.hxx>
 #include <salgdi.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
 namespace
 {

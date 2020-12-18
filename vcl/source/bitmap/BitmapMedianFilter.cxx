@@ -12,7 +12,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapMedianFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
 #define S2(a, b)                                                                                   \
     {                                                                                              \
