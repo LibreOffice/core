@@ -208,6 +208,24 @@
     },
     {
       "key": {
+        "uuid": "46dd87a6_81911557",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-18T20:30:17Z",
+      "side": 1,
+      "message": "Compilers are so smart these days, we care more about nice clean easy to read to code, which means declaring variables close to where they are used.\n\nEspecially for simple types like bool/int/char, it doesn\u0027t matter where you declare it, the compiler will reduce it to an optimal form.",
+      "parentUuid": "3613aac8_165c1e86",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "80638ef5_a4b3361c",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 5
