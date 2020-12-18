@@ -847,8 +847,6 @@ bool Bitmap::Dither()
     if( aSize.Width() == 1 || aSize.Height() == 1 )
         return true;
 
-    bool bRet = false;
-
     if( ( aSize.Width() > 3 ) && ( aSize.Height() > 2 ) )
     {
         ScopedReadAccess pReadAcc(*this);
@@ -964,14 +962,9 @@ bool Bitmap::Dither()
                 pWriteAcc->SetPixelOnData( pScanline, nWidth1, BitmapColor(static_cast<sal_uInt8>(nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ])) );
             }
 
-            bRet = true;
-        }
+            pReadAcc.reset();
+            pWriteAcc.reset();
 
-        pReadAcc.reset();
-        pWriteAcc.reset();
-
-        if( bRet )
-        {
             const MapMode aMap( maPrefMapMode );
             const Size aPrefSize( maPrefSize );
 
@@ -979,10 +972,15 @@ bool Bitmap::Dither()
 
             maPrefMapMode = aMap;
             maPrefSize = aPrefSize;
+
+            return true;
         }
+
+        pReadAcc.reset();
+        pWriteAcc.reset();
     }
 
-    return bRet;
+    return false;
 }
 
 void Bitmap::Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce, const Link<tools::Long,void>* pProgress )
