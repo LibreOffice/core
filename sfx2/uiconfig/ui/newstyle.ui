@@ -13,7 +13,7 @@
   <object class="GtkDialog" id="CreateStyleDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="newstyle|CreateStyleDialog">Create Style</property>
+    <property name="title" translatable="yes" context="newstyle|CreateStyleDialog">New Style from Selection</property>
     <property name="modal">True</property>
     <property name="default_width">0</property>
     <property name="default_height">0</property>
@@ -174,7 +174,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="newstyle|label1">Style Name</property>
+                <property name="label" translatable="yes" context="newstyle|label1">Enter New Style Name:</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
