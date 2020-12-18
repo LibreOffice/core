@@ -28,7 +28,7 @@
 #include <scanlinewriter.hxx>
 #include <svdata.hxx>
 #include <bmpfast.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 
 #include <SkCanvas.h>
 #include <SkImage.h>

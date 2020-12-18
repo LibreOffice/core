@@ -11,7 +11,6 @@
 #include <tools/helpers.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapGaussianSeparableBlurFilter.hxx>
 
 #include <bitmapwriteaccess.hxx>

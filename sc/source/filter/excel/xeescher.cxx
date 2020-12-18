@@ -32,7 +32,7 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 
 #include <set>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdocapt.hxx>
 #include <editeng/outlobj.hxx>

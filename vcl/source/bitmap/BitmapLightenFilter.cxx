@@ -10,8 +10,6 @@
 
 #include <basegfx/color/bcolortools.hxx>
 
-#include <vcl/bitmapaccess.hxx>
-
 #include <bitmapwriteaccess.hxx>
 #include <BitmapLightenFilter.hxx>
 

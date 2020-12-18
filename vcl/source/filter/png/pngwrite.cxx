@@ -27,7 +27,7 @@
 #include <rtl/crc.h>
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/alpha.hxx>
 #include <osl/endian.h>
 #include <memory>

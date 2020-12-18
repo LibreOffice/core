@@ -39,7 +39,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/vclevent.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/ITiledRenderable.hxx>
 #include <tools/json_writer.hxx>
 #include <unotools/mediadescriptor.hxx>
