@@ -42,6 +42,7 @@
 #include <vcl/settings.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weldutils.hxx>
 #include <unotools/charclass.hxx>
 
 #include <inputwin.hxx>
@@ -986,38 +987,36 @@ void ScInputBarGroup::DecrementVerticalSize()
     }
 }
 
-IMPL_LINK( ScInputWindow, MenuHdl, Menu *, pMenu, bool )
+void ScInputWindow::MenuHdl(std::string_view command)
 {
-    OString aCommand = pMenu->GetCurItemIdent();
-    if (!aCommand.isEmpty())
+    if (!command.empty())
     {
         bool bSubTotal = false;
         bool bRangeFinder = false;
         OpCode eCode = ocSum;
-        if ( aCommand ==  "sum" )
+        if ( command ==  "sum" )
         {
             eCode = ocSum;
         }
-        else if ( aCommand == "average" )
+        else if ( command == "average" )
         {
             eCode = ocAverage;
         }
-        else if ( aCommand == "max" )
+        else if ( command == "max" )
         {
             eCode = ocMax;
         }
-        else if ( aCommand == "min" )
+        else if ( command == "min" )
         {
             eCode = ocMin;
         }
-        else if ( aCommand == "count" )
+        else if ( command == "count" )
         {
             eCode = ocCount;
         }
 
         AutoSum( bRangeFinder, bSubTotal, eCode );
     }
-    return false;
 }
 
 IMPL_LINK_NOARG(ScInputWindow, DropdownClickHdl, ToolBox *, void)
@@ -1026,10 +1025,11 @@ IMPL_LINK_NOARG(ScInputWindow, DropdownClickHdl, ToolBox *, void)
     EndSelection();
     if (nCurID == SID_INPUT_SUM)
     {
-        VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/scalc/ui/autosum.ui", "");
-        VclPtr<PopupMenu> aPopMenu(aBuilder.get_menu("menu"));
-        aPopMenu->SetSelectHdl(LINK(this, ScInputWindow, MenuHdl));
-        aPopMenu->Execute(this, GetItemRect(SID_INPUT_SUM), PopupMenuFlags::NoMouseUpClose);
+        tools::Rectangle aRect(GetItemRect(SID_INPUT_SUM));
+        weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "modules/scalc/ui/autosum.ui"));
+        std::unique_ptr<weld::Menu> xPopMenu(xBuilder->weld_menu("menu"));
+        MenuHdl(xPopMenu->popup_at_rect(pPopupParent, aRect));
     }
 }
 
