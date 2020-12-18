@@ -20,8 +20,8 @@
 #include <osl/diagnose.h>
 #include <tools/helpers.hxx>
 
-#include <bitmapwriteaccess.hxx>
-#include <BitmapScaleConvolutionFilter.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
+#include <bitmap/BitmapScaleConvolutionFilter.hxx>
 
 #include <algorithm>
 #include <memory>

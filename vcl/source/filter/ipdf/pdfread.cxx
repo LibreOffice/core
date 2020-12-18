@@ -18,7 +18,7 @@
 #endif
 
 #include <vcl/graph.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/datetime.hxx>
 

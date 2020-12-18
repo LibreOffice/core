@@ -25,7 +25,7 @@
 #include <vcl/bitmap.hxx>
 #include <tools/stream.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
 using namespace com::sun::star;
 

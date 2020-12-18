@@ -23,7 +23,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/ImageTree.hxx>
-#include <BitmapDisabledImageFilter.hxx>
+#include <bitmap/BitmapDisabledImageFilter.hxx>
 #include <comphelper/lok.hxx>
 
 #include <image.h>

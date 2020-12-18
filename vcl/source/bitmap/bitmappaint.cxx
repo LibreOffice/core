@@ -19,10 +19,11 @@
 
 #include <tools/poly.hxx>
 #include <tools/helpers.hxx>
+
 #include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 #include <salbmp.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>

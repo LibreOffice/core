@@ -8,8 +8,8 @@
  *
  */
 
-#include <bitmapwriteaccess.hxx>
-#include <BitmapDisabledImageFilter.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
+#include <bitmap/BitmapDisabledImageFilter.hxx>
 
 BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const& rBitmapEx) const
 {

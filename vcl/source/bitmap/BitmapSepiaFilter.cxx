@@ -10,13 +10,13 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
-
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapSepiaFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
+
+#include <algorithm>
 
 BitmapEx BitmapSepiaFilter::execute(BitmapEx const& rBitmapEx) const
 {
