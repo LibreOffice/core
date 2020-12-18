@@ -227,6 +227,7 @@ public:
 
 private:
     std::vector<ReplacementPair> m_Replacements;
+    std::vector<xmlEntityPtr> m_TemporalEntities;
 
 public:
     // XFastParser
@@ -673,6 +674,8 @@ FastSaxParserImpl::~FastSaxParserImpl()
 {
     if( mxDocumentLocator.is() )
         mxDocumentLocator->dispose();
+    for ( size_t i = 0; i < m_TemporalEntities.size(); ++i )
+        if (m_TemporalEntities[i] != nullptr) xmlFree(m_TemporalEntities[i]);
 }
 
 void FastSaxParserImpl::DefineNamespace( const OString& rPrefix, const OUString& namespaceURL )
@@ -1398,9 +1401,13 @@ xmlEntityPtr FastSaxParserImpl::callbackGetEntity( const xmlChar *name )
     {
         auto it = std::lower_bound(m_Replacements.begin(), m_Replacements.end(), dname);
         if (it != m_Replacements.end() && it->name.compareToAscii(dname) == 0)
-            return xmlNewEntity(
+        {
+            xmlEntityPtr entpt = xmlNewEntity(
                 nullptr, name, XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
                 BAD_CAST(OUStringToOString(it->replacement, RTL_TEXTENCODING_UTF8).getStr()));
+            m_TemporalEntities.push_back(entpt);
+            return entpt;
+        }
     }
     if( lname < 2 )
         return xmlGetPredefinedEntity(name);
@@ -1415,21 +1422,23 @@ xmlEntityPtr FastSaxParserImpl::callbackGetEntity( const xmlChar *name )
             if( cval == 0 )
                 return xmlGetPredefinedEntity(name);
             OUString vname( &cval, 1 );
-            return xmlNewEntity( nullptr,
-                name,
-                XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
-                BAD_CAST(OUStringToOString(vname,RTL_TEXTENCODING_UTF8).getStr()));
+            xmlEntityPtr entpt
+                = xmlNewEntity(nullptr, name, XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
+                               BAD_CAST(OUStringToOString(vname, RTL_TEXTENCODING_UTF8).getStr()));
+            m_TemporalEntities.push_back(entpt);
+            return entpt;
         }
         else
         {
             cval = static_cast<sal_uInt32>( strtoul( dname + 2, nullptr, 10 ) );
             if( cval == 0 )
                 return xmlGetPredefinedEntity(name);
-            OUString vname( &cval, 1 );
-            return xmlNewEntity( nullptr,
-                name,
-                XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
-                BAD_CAST(OUStringToOString(vname,RTL_TEXTENCODING_UTF8).getStr()));
+            OUString vname(&cval, 1);
+            xmlEntityPtr entpt
+                = xmlNewEntity(nullptr, name, XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
+                               BAD_CAST(OUStringToOString(vname, RTL_TEXTENCODING_UTF8).getStr()));
+            m_TemporalEntities.push_back(entpt);
+            return entpt;
         }
     }
     return xmlGetPredefinedEntity(name);
