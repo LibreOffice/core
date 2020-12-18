@@ -732,6 +732,13 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
     }
 }
 
+static void shiftColor(tools::Long* pColorArray, BitmapColor const& rColor)
+{
+    *pColorArray++ = static_cast<tools::Long>(rColor.GetBlue()) << 12;
+    *pColorArray++ = static_cast<tools::Long>(rColor.GetGreen()) << 12;
+    *pColorArray++ = static_cast<tools::Long>(rColor.GetRed()) << 12;
+}
+
 bool Bitmap::Dither()
 {
     const Size aSize( GetSizePixel() );
@@ -767,11 +774,7 @@ bool Bitmap::Dither()
                 Scanline pScanlineRead = pReadAcc->GetScanline(0);
                 for( tools::Long nZ = 0; nZ < nWidth; nZ++ )
                 {
-                    aColor = pReadAcc->GetPaletteColor( pReadAcc->GetIndexFromData( pScanlineRead, nZ ) );
-
-                    *pTmp++ = static_cast<tools::Long>(aColor.GetBlue()) << 12;
-                    *pTmp++ = static_cast<tools::Long>(aColor.GetGreen()) << 12;
-                    *pTmp++ = static_cast<tools::Long>(aColor.GetRed()) << 12;
+                    shiftColor(pTmp, pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, nZ)));
                 }
             }
             else
@@ -779,11 +782,7 @@ bool Bitmap::Dither()
                 Scanline pScanlineRead = pReadAcc->GetScanline(0);
                 for( tools::Long nZ = 0; nZ < nWidth; nZ++ )
                 {
-                    aColor = pReadAcc->GetPixelFromData( pScanlineRead, nZ );
-
-                    *pTmp++ = static_cast<tools::Long>(aColor.GetBlue()) << 12;
-                    *pTmp++ = static_cast<tools::Long>(aColor.GetGreen()) << 12;
-                    *pTmp++ = static_cast<tools::Long>(aColor.GetRed()) << 12;
+                    shiftColor(pTmp, pReadAcc->GetPixelFromData(pScanlineRead, nZ));
                 }
             }
 
@@ -803,11 +802,7 @@ bool Bitmap::Dither()
                         Scanline pScanlineRead = pReadAcc->GetScanline(nY);
                         for( tools::Long nZ = 0; nZ < nWidth; nZ++ )
                         {
-                            aColor = pReadAcc->GetPaletteColor( pReadAcc->GetIndexFromData( pScanlineRead, nZ ) );
-
-                            *pTmp++ = static_cast<tools::Long>(aColor.GetBlue()) << 12;
-                            *pTmp++ = static_cast<tools::Long>(aColor.GetGreen()) << 12;
-                            *pTmp++ = static_cast<tools::Long>(aColor.GetRed()) << 12;
+                            shiftColor(pTmp, pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, nZ)));
                         }
                     }
                     else
@@ -815,11 +810,7 @@ bool Bitmap::Dither()
                         Scanline pScanlineRead = pReadAcc->GetScanline(nY);
                         for( tools::Long nZ = 0; nZ < nWidth; nZ++ )
                         {
-                            aColor = pReadAcc->GetPixelFromData( pScanlineRead, nZ );
-
-                            *pTmp++ = static_cast<tools::Long>(aColor.GetBlue()) << 12;
-                            *pTmp++ = static_cast<tools::Long>(aColor.GetGreen()) << 12;
-                            *pTmp++ = static_cast<tools::Long>(aColor.GetRed()) << 12;
+                            shiftColor(pTmp, pReadAcc->GetPixelFromData(pScanlineRead, nZ));
                         }
                     }
                 }
