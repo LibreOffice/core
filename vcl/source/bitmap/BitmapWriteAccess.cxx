@@ -21,8 +21,8 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 
-#include <bitmapwriteaccess.hxx>
-#include <bmpfast.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
+#include <bitmap/bmpfast.hxx>
 
 BitmapWriteAccess::BitmapWriteAccess(Bitmap& rBitmap)
     : BitmapReadAccess(rBitmap, BitmapAccessMode::Write)

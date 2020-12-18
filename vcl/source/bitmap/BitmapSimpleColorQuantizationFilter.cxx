@@ -12,7 +12,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapSimpleColorQuantizationFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 #include <bitmap/Octree.hxx>
 
 BitmapEx BitmapSimpleColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const

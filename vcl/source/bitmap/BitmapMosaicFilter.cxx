@@ -12,7 +12,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapMosaicFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
 BitmapEx BitmapMosaicFilter::execute(BitmapEx const& rBitmapEx) const
 {

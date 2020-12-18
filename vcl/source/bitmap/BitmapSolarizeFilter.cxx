@@ -12,7 +12,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapSolarizeFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
 BitmapEx BitmapSolarizeFilter::execute(BitmapEx const& rBitmapEx) const
 {

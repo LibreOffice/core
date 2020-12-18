@@ -11,8 +11,8 @@
 #include <tools/color.hxx>
 #include <tools/helpers.hxx>
 
-#include <bitmapwriteaccess.hxx>
-#include <BitmapColorizeFilter.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
+#include <bitmap/BitmapColorizeFilter.hxx>
 
 BitmapEx BitmapColorizeFilter::execute(BitmapEx const& rBitmapEx) const
 {

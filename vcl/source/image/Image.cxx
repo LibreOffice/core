@@ -25,7 +25,7 @@
 #include <sal/types.h>
 #include <image.h>
 
-#include <BitmapColorizeFilter.hxx>
+#include <bitmap/BitmapColorizeFilter.hxx>
 
 using namespace css;
 
