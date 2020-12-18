@@ -123,8 +123,12 @@ void TemplateDlgLocalView::ContextMenuSelectHdl(std::string_view rIdent)
             return;
 
         maDeleteTemplateHdl.Call(maSelectedItem);
-        reload();
+        // this remove is probably redundant because reload would throw away
+        // the old contents anyway. Maybe there is an argument that removing it
+        // immediately means there is possibility to show it missing while the
+        // possibly slow reload is operating if a repaint could occur
         ListView::remove(OUString::number(maSelectedItem->mnId));
+        reload();
     }
     else if (rIdent == "default")
     {
