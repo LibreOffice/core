@@ -5226,7 +5226,9 @@ if test "$cross_compiling" = "yes"; then
         $sub_conf_opts \
         --srcdir=$srcdir \
         2>&1 | sed -e 's/^/    /'
-    test -f ./config_host.mk 2>/dev/null || exit
+    if test [${PIPESTATUS[0]}] -ne 0; then
+        AC_MSG_ERROR([Running the configure script for BUILD side failed, see CONF-FOR-BUILD/config.log])
+    fi
 
     # filter permitted build targets
     PERMITTED_BUILD_TARGETS="
@@ -5346,7 +5348,7 @@ if test "$cross_compiling" = "yes"; then
     done
 
     )
-    test -f CONF-FOR-BUILD/build-config || AC_MSG_ERROR([Running configure script for BUILD system failed, see CONF-FOR-BUILD/config.log])
+    test -f CONF-FOR-BUILD/build-config || AC_MSG_ERROR([setup/configure for BUILD side failed, see CONF-FOR-BUILD/config.log])
     test -f config_build.mk || AC_MSG_ERROR([A file called config_build.mk was supposed to have been copied here, but it isn't found])
     perl -pi -e 's,/(workdir|instdir)(/|$),/\1_for_build\2,g;' \
              -e 's,/CONF-FOR-BUILD,,g;' config_build.mk
