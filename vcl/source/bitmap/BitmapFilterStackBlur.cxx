@@ -9,7 +9,7 @@
  */
 
 #include <vcl/BitmapFilterStackBlur.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 #include <sal/log.hxx>
 
 #include <comphelper/threadpool.hxx>

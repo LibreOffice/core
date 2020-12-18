@@ -10,8 +10,8 @@
 
 #include <basegfx/color/bcolortools.hxx>
 
-#include <bitmapwriteaccess.hxx>
-#include <BitmapLightenFilter.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
+#include <bitmap/BitmapLightenFilter.hxx>
 
 BitmapEx BitmapLightenFilter::execute(BitmapEx const& rBitmapEx) const
 {
