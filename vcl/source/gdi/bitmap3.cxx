@@ -769,20 +769,22 @@ bool Bitmap::Dither()
             bool bPal = pReadAcc->HasPalette();
             pTmp = p2T;
 
-            if( bPal )
             {
                 Scanline pScanlineRead = pReadAcc->GetScanline(0);
-                for( tools::Long nZ = 0; nZ < nWidth; nZ++ )
+
+                if( bPal )
                 {
-                    shiftColor(pTmp, pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, nZ)));
+                    for (tools::Long nZ = 0; nZ < nWidth; nZ++)
+                    {
+                        shiftColor(pTmp, pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, nZ)));
+                    }
                 }
-            }
-            else
-            {
-                Scanline pScanlineRead = pReadAcc->GetScanline(0);
-                for( tools::Long nZ = 0; nZ < nWidth; nZ++ )
+                else
                 {
-                    shiftColor(pTmp, pReadAcc->GetPixelFromData(pScanlineRead, nZ));
+                    for (tools::Long nZ = 0; nZ < nWidth; nZ++)
+                    {
+                        shiftColor(pTmp, pReadAcc->GetPixelFromData(pScanlineRead, nZ));
+                    }
                 }
             }
 
@@ -795,11 +797,12 @@ bool Bitmap::Dither()
                 p1T = p2T;
                 p2T = pTmp;
 
-                if( nY < nHeight )
+                if (nY < nHeight)
                 {
+                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
+
                     if( bPal )
                     {
-                        Scanline pScanlineRead = pReadAcc->GetScanline(nY);
                         for( tools::Long nZ = 0; nZ < nWidth; nZ++ )
                         {
                             shiftColor(pTmp, pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, nZ)));
@@ -807,7 +810,6 @@ bool Bitmap::Dither()
                     }
                     else
                     {
-                        Scanline pScanlineRead = pReadAcc->GetScanline(nY);
                         for( tools::Long nZ = 0; nZ < nWidth; nZ++ )
                         {
                             shiftColor(pTmp, pReadAcc->GetPixelFromData(pScanlineRead, nZ));
