@@ -15012,6 +15012,7 @@ vcl/source/gdi/configsettings.cxx
 vcl/source/gdi/cvtgrf.cxx
 vcl/source/gdi/dibtools.cxx
 vcl/source/gdi/embeddedfontshelper.cxx
+vcl/source/gdi/floyd.hxx
 vcl/source/gdi/gdimetafiletools.cxx
 vcl/source/gdi/gdimtf.cxx
 vcl/source/gdi/gfxlink.cxx
