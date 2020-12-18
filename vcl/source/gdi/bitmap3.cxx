@@ -732,11 +732,23 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
     }
 }
 
-static void shiftColor(tools::Long* pColorArray, BitmapColor const& rColor)
+static tools::Long* shiftColor(tools::Long* pColorArray, BitmapColor const& rColor)
 {
     *pColorArray++ = static_cast<tools::Long>(rColor.GetBlue()) << 12;
     *pColorArray++ = static_cast<tools::Long>(rColor.GetGreen()) << 12;
     *pColorArray++ = static_cast<tools::Long>(rColor.GetRed()) << 12;
+
+    return pColorArray;
+}
+
+static BitmapColor getColor(BitmapReadAccess *pReadAcc, tools::Long nZ)
+{
+    Scanline pScanlineRead = pReadAcc->GetScanline(0);
+
+    if (pReadAcc->HasPalette())
+        return pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, nZ));
+    else
+        return pReadAcc->GetPixelFromData(pScanlineRead, nZ);
 }
 
 bool Bitmap::Dither()
@@ -766,26 +778,11 @@ bool Bitmap::Dither()
             tools::Long* p2T = p2.get();
             tools::Long* pTmp;
 
-            bool bPal = pReadAcc->HasPalette();
             pTmp = p2T;
 
+            for (tools::Long nZ = 0; nZ < nWidth; nZ++)
             {
-                Scanline pScanlineRead = pReadAcc->GetScanline(0);
-
-                if( bPal )
-                {
-                    for (tools::Long nZ = 0; nZ < nWidth; nZ++)
-                    {
-                        shiftColor(pTmp, pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, nZ)));
-                    }
-                }
-                else
-                {
-                    for (tools::Long nZ = 0; nZ < nWidth; nZ++)
-                    {
-                        shiftColor(pTmp, pReadAcc->GetPixelFromData(pScanlineRead, nZ));
-                    }
-                }
+                pTmp = shiftColor(pTmp, getColor(pReadAcc.get(), nZ));
             }
 
             tools::Long nRErr, nGErr, nBErr;
@@ -799,21 +796,9 @@ bool Bitmap::Dither()
 
                 if (nY < nHeight)
                 {
-                    Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-
-                    if( bPal )
+                    for (tools::Long nZ = 0; nZ < nWidth; nZ++)
                     {
-                        for( tools::Long nZ = 0; nZ < nWidth; nZ++ )
-                        {
-                            shiftColor(pTmp, pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, nZ)));
-                        }
-                    }
-                    else
-                    {
-                        for( tools::Long nZ = 0; nZ < nWidth; nZ++ )
-                        {
-                            shiftColor(pTmp, pReadAcc->GetPixelFromData(pScanlineRead, nZ));
-                        }
+                        pTmp = shiftColor(pTmp, getColor(pReadAcc.get(), nZ));
                     }
                 }
 
