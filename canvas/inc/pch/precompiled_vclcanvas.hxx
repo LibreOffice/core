@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-01 16:34:48 using:
+ Generated on 2020-12-23 06:21:15 using:
  ./bin/update_pch canvas vclcanvas --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -21,6 +21,7 @@
 */
 
 #if PCH_LEVEL >= 1
+#include <cstdlib>
 #include <memory>
 #include <tuple>
 #include <boost/cast.hpp>
@@ -33,9 +34,9 @@
 #include <sal/log.hxx>
 #include <vcl/BitmapAlphaClampFilter.hxx>
 #include <vcl/BitmapMonochromeFilter.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/alpha.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/dibtools.hxx>

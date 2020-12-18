@@ -13,7 +13,7 @@
 
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <optional>
 
 typedef vcl::ScopedBitmapAccess<BitmapWriteAccess, Bitmap, &Bitmap::AcquireWriteAccess>

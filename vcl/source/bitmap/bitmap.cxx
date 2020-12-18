@@ -25,7 +25,6 @@
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/outdev.hxx>
 
 #include <svdata.hxx>

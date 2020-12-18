@@ -91,7 +91,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/numitem.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <svx/svditer.hxx>
 #include <editeng/flditem.hxx>
 #include <tools/zcodec.hxx>
