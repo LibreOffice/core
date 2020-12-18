@@ -8,8 +8,6 @@
  *
  */
 
-#include <vcl/bitmapaccess.hxx>
-
 #include <bitmapwriteaccess.hxx>
 #include <BitmapDisabledImageFilter.hxx>
 

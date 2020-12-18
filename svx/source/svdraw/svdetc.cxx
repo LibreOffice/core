@@ -25,7 +25,7 @@
 #include <svx/svdedxv.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdoutl.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/whiter.hxx>

@@ -11,7 +11,6 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapMonochromeFilter.hxx>
-#include <vcl/bitmapaccess.hxx>
 
 #include <bitmapwriteaccess.hxx>
 
