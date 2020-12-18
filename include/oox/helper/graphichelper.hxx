@@ -113,10 +113,6 @@ public:
                             const css::uno::Reference< css::io::XInputStream >& rxInStrm,
                             const WmfExternal* pExtHeader = nullptr ) const;
 
-    /** Imports graphics from the passed input streams. */
-    std::vector< css::uno::Reference<css::graphic::XGraphic> >
-                        importGraphics(const std::vector< css::uno::Reference<css::io::XInputStream> >& rStreams) const;
-
     /** Imports a graphic from the passed binary memory block. */
     css::uno::Reference< css::graphic::XGraphic >
                         importGraphic( const StreamDataSequence& rGraphicData ) const;
@@ -126,9 +122,6 @@ public:
                         importEmbeddedGraphic(
                             const OUString& rStreamName,
                             const WmfExternal* pExtHeader = nullptr ) const;
-
-    /** Imports graphics from the storage with the passed stream names. */
-    void importEmbeddedGraphics(const std::vector<OUString>& rStreamNames) const;
 
     /** calculates the original size of a graphic which is necessary to be able to calculate cropping values
         @return The original Graphic size in 100thmm */
