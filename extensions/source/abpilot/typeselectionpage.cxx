@@ -36,14 +36,13 @@ namespace abp
       , m_xEvolution(m_xBuilder->weld_radio_button("evolution"))
       , m_xEvolutionGroupwise(m_xBuilder->weld_radio_button("groupwise"))
       , m_xEvolutionLdap(m_xBuilder->weld_radio_button("evoldap"))
-      , m_xMORK(m_xBuilder->weld_radio_button("firefox"))
       , m_xThunderbird(m_xBuilder->weld_radio_button("thunderbird"))
       , m_xKab(m_xBuilder->weld_radio_button("kde"))
       , m_xMacab(m_xBuilder->weld_radio_button("macosx"))
       , m_xOther(m_xBuilder->weld_radio_button("other"))
     {
         //TODO:  For now, try to keep offering the same choices like before the
-        // Mozilla/MORK cleanup, even if the status of what driver actually
+        // Mozilla cleanup, even if the status of what driver actually
         // provides which functionality is somewhat unclear, see the discussions
         // of fdo#57285 "Address Book Data Source Wizard lists 'macOS address
         // book' on Linux" and fdo#57322 "Moz-free LDAP Address Book driver."
@@ -59,7 +58,7 @@ namespace abp
         // - OTHER
         //
         // On Windows:
-        // - MORK, THUNDERBIRD
+        // - THUNDERBIRD
         // - OTHER
 
 #if !defined(_WIN32)

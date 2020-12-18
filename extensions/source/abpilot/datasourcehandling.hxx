@@ -58,9 +58,6 @@ namespace abp
         /// disambiguates the given name by appending successive numbers
         void disambiguate(OUString& _rDataSourceName);
 
-        /// creates a new MORK data source
-        ODataSource createNewMORK( const OUString& _rName );
-
         /// creates a new Thunderbird data source
         ODataSource createNewThunderbird( const OUString& _rName );
 

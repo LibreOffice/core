@@ -101,27 +101,6 @@ This wizard helps you create the data source.</property>
           </packing>
         </child>
         <child>
-          <object class="GtkRadioButton" id="firefox">
-            <property name="label" translatable="yes" context="selecttypepage|firefox">Firefox</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="use_underline">True</property>
-            <property name="xalign">0</property>
-            <property name="draw_indicator">True</property>
-            <property name="group">evolution</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="firefox-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="selecttypepage|extended_tip|firefox">Select this option if you already use an address book in Firefox or Iceweasel.</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">4</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkRadioButton" id="thunderbird">
             <property name="label" translatable="yes" context="selecttypepage|thunderbird">Thunderbird</property>
             <property name="visible">True</property>
