@@ -236,8 +236,6 @@ emfio/inc/mtftools.hxx:48
     enum emfio::BkMode Transparent
 emfio/inc/mtftools.hxx:82
     enum emfio::WMFRasterOp Nop
-extensions/source/abpilot/addresssettings.hxx:31
-    enum abp::AddressSourceType AST_MORK
 framework/inc/xml/imagesdocumenthandler.hxx:40
     enum framework::OReadImagesDocumentHandler::Image_XML_Entry IMG_ELEMENT_IMAGECONTAINER
 framework/inc/xml/imagesdocumenthandler.hxx:41

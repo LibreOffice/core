@@ -41,7 +41,6 @@ IndexerPreProcessor
 KeyListenerMultiplexer
 MetaAction
 MetaGradientExAction
-MorkParser
 MouseListenerMultiplexer
 MouseMotionListenerMultiplexer
 MyThes
