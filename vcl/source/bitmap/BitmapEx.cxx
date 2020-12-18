@@ -37,7 +37,7 @@
 #include <salbmp.hxx>
 #include <salinst.hxx>
 #include <svdata.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
 #include <o3tl/any.hxx>
 

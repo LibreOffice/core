@@ -55,7 +55,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/pngwrite.hxx>
 
-#include <BitmapLightenFilter.hxx>
+#include <bitmap/BitmapLightenFilter.hxx>
 
 using namespace css;
 

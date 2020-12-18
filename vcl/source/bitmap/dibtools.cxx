@@ -33,7 +33,7 @@
 #include <unotools/configmgr.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/outdev.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 #include <memory>
 
 #define DIBCOREHEADERSIZE       ( 12UL )

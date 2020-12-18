@@ -17,7 +17,7 @@
 #include <vcl/graphicfilter.hxx>
 
 #include <BitmapSymmetryCheck.hxx>
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
 namespace
 {

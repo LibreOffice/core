@@ -9,13 +9,15 @@
 
 #include <test/bootstrapfixture.hxx>
 
-#include <vcl/skia/SkiaHelper.hxx>
-#include <skia/salbmp.hxx>
-#include <bitmapwriteaccess.hxx>
-#include <vcl/virdev.hxx>
 #include <tools/stream.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+
+#include <vcl/graphicfilter.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
+
+#include <skia/salbmp.hxx>
+#include <bitmap/bitmapwriteaccess.hxx>
 
 // This tests backends that use Skia (i.e. intentionally not the svp one, which is the default.)
 // Note that you still may need to actually set for Skia to be used (see vcl/README.vars).

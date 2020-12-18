@@ -8,27 +8,15 @@
  *
  */
 
-#ifndef VCL_INC_BITMAPFASTSCALEFILTER_HXX
-#define VCL_INC_BITMAPFASTSCALEFILTER_HXX
+#ifndef INCLUDED_VCL_INC_BITMAP_BITMAPLIGHTENFILTER_HXX
+#define INCLUDED_VCL_INC_BITMAP_BITMAPLIGHTENFILTER_HXX
 
-#include <vcl/bitmapex.hxx>
 #include <vcl/BitmapFilter.hxx>
 
-class BitmapFastScaleFilter final : public BitmapFilter
+class BitmapLightenFilter final : public BitmapFilter
 {
 public:
-    explicit BitmapFastScaleFilter(double fScaleX, double fScaleY)
-        : mfScaleX(fScaleX)
-        , mfScaleY(fScaleY)
-    {
-    }
-
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
-
-private:
-    double mfScaleX;
-    double mfScaleY;
-    Size maSize;
 };
 
 #endif

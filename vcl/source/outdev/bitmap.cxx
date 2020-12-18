@@ -33,14 +33,14 @@
 #include <vcl/image.hxx>
 #include <vcl/BitmapMonochromeFilter.hxx>
 
-#include <bmpfast.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
+#include <bitmap/bmpfast.hxx>
 #include <salgdi.hxx>
 #include <salbmp.hxx>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <memory>
 #include <comphelper/lok.hxx>
-#include <bitmapwriteaccess.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/helpers.hxx>

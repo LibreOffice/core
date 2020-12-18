@@ -14,7 +14,7 @@
 #include <sal/log.hxx>
 #include <vcl/BitmapBasicMorphologyFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
 #include <algorithm>
 

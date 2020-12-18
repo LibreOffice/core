@@ -19,7 +19,7 @@
 
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/salgtype.hxx>
-#include <bmpfast.hxx>
+#include <bitmap/bmpfast.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
