@@ -11,7 +11,6 @@
 #include <tools/helpers.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapConvolutionMatrixFilter.hxx>
 #include <vcl/BitmapSharpenFilter.hxx>
 

@@ -30,7 +30,7 @@
 #include <tools/diagnose_ex.h>
 #include <canvasbitmap.hxx>
 #include <vcl/canvastools.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/svapp.hxx>
 
 #include <algorithm>

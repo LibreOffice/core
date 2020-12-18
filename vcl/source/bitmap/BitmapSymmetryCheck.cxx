@@ -8,6 +8,8 @@
  *
  */
 
+#include <vcl/BitmapReadAccess.hxx>
+
 #include <BitmapSymmetryCheck.hxx>
 
 BitmapSymmetryCheck::BitmapSymmetryCheck()

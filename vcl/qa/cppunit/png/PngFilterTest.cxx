@@ -20,7 +20,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <tools/stream.hxx>
 #include <vcl/filter/PngImageReader.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/alpha.hxx>
 
 using namespace css;

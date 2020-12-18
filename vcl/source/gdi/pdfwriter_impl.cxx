@@ -56,7 +56,6 @@
 #include <tools/zcodec.hxx>
 #include <svl/cryptosign.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/fontcharmap.hxx>
@@ -69,12 +68,12 @@
 #include <vcl/filter/pdfdocument.hxx>
 #include <comphelper/hash.hxx>
 
+#include <bitmapwriteaccess.hxx>
 #include <fontsubset.hxx>
 #include <PhysicalFontFace.hxx>
 #include <salgdi.hxx>
 #include <textlayout.hxx>
 #include <textlineinfo.hxx>
-#include <bitmapwriteaccess.hxx>
 #include <impglyphitem.hxx>
 #include <pdf/XmpMetadata.hxx>
 #include <pdf/objectcopier.hxx>
