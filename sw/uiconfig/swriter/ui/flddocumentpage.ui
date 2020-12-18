@@ -53,7 +53,7 @@
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="spacing">12</property>
-    <property name="homogeneous">True</property>
+    <property name="homogeneous">False</property>
     <child>
       <object class="GtkFrame" id="typeframe">
         <property name="visible">True</property>
