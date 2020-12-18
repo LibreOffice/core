@@ -44,7 +44,6 @@ class BitmapTest : public CppUnit::TestFixture
     void testBitmap32();
     void testOctree();
     void testEmptyAccess();
-    void testDitherSize();
 
     CPPUNIT_TEST_SUITE(BitmapTest);
     CPPUNIT_TEST(testCreation);
@@ -60,7 +59,6 @@ class BitmapTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testBitmap32);
     CPPUNIT_TEST(testOctree);
     CPPUNIT_TEST(testEmptyAccess);
-    CPPUNIT_TEST(testDitherSize);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -648,38 +646,6 @@ void BitmapTest::testEmptyAccess()
     BitmapInfoAccess access(empty);
     CPPUNIT_ASSERT_EQUAL(tools::Long(0), access.Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(0), access.Height());
-}
-
-void BitmapTest::testDitherSize()
-{
-    // no need to do anything for a 1x1 pixel bitmap
-    {
-        Bitmap aBitmap(Size(1, 1), 24);
-        CPPUNIT_ASSERT(aBitmap.Dither());
-    }
-
-    // cannot dither a bitmap with a width of 2 or 3 pixels
-    {
-        Bitmap aBitmap(Size(2, 4), 24);
-        CPPUNIT_ASSERT(!aBitmap.Dither());
-    }
-
-    {
-        Bitmap aBitmap(Size(3, 4), 24);
-        CPPUNIT_ASSERT(!aBitmap.Dither());
-    }
-
-    // cannot dither a bitmap with a height of 2 pixels
-    {
-        Bitmap aBitmap(Size(4, 2), 24);
-        CPPUNIT_ASSERT(!aBitmap.Dither());
-    }
-
-    // only dither bitmaps with a width > 3 pixels and height > 2 pixels
-    {
-        Bitmap aBitmap(Size(4, 3), 24);
-        CPPUNIT_ASSERT(aBitmap.Dither());
-    }
 }
 
 } // namespace
