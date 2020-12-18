@@ -85,7 +85,7 @@ for tarball in $tarballs ; do
     fi
 
     # create symlinks for module directories; ignore git-hooks directory
-    for dir in `find "$lo_src_dir/$tarname" -mindepth 1 -maxdepth 1 -type d -path $lo_src_dir/$tarname/git-hooks -o -printf "$tarname/%f\n"` ; do
-        ln -sf "src/$dir" "$start_dir"
-    done
+    while read -r dir; do
+        ln -sf "src/${tarname}/$(basename "$dir")" "$start_dir"
+    done < <(find "$lo_src_dir/$tarname" -mindepth 1 -maxdepth 1 -type d -path $lo_src_dir/$tarname/git-hooks)
 done
