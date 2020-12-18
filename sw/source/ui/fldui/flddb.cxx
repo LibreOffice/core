@@ -52,7 +52,7 @@ SwFieldDBPage::SwFieldDBPage(weld::Container* pPage, weld::DialogController* pCo
     m_xFormatLB->make_sorted();
 
     auto nWidth = m_xTypeLB->get_approximate_digit_width() * FIELD_COLUMN_WIDTH;
-    auto nHeight = m_xTypeLB->get_height_rows(14);
+    auto nHeight = m_xTypeLB->get_height_rows(10);
     m_xTypeLB->set_size_request(nWidth, nHeight);
     m_xDatabaseTLB->set_size_request(nWidth*2, nHeight);
 
