@@ -12,7 +12,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapPopArtFilter.hxx>
 
-#include <bitmapwriteaccess.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 
 BitmapEx BitmapPopArtFilter::execute(BitmapEx const& rBitmapEx) const
 {

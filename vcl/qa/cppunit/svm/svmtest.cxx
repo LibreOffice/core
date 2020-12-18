@@ -15,8 +15,9 @@
 #include <vcl/hatch.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/virdev.hxx>
-#include <bitmapwriteaccess.hxx>
 #include <vcl/pngwrite.hxx>
+
+#include <bitmap/BitmapWriteAccess.hxx>
 
 #include <config_features.h>
 #include <vcl/skia/SkiaHelper.hxx>
