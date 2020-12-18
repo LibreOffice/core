@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/bitmapaccess.hxx>
 #include <tools/color.hxx>
 #include <vcl/alpha.hxx>
 #include <bitmapwriteaccess.hxx>

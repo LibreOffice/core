@@ -34,7 +34,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <tools/fract.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <osl/thread.h>
 

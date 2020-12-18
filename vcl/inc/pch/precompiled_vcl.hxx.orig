@@ -13,7 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-22 23:59:32 using:
+<<<<<<< HEAD
+ Generated on 2020-12-22 23:57:30 using:
+=======
+ Generated on 2020-12-22 23:56:16 using:
+>>>>>>> ab9322849811... vcl: OutputDevice::GetDownsampledBitmap() to Bitmap::Downsample()
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -119,6 +123,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -248,7 +253,6 @@
 #include <PhysicalFontCollection.hxx>
 #include <PhysicalFontFace.hxx>
 #include <TypeSerializer.hxx>
-#include <bitmapwriteaccess.hxx>
 #include <brdwin.hxx>
 #include <configsettings.hxx>
 #include <controldata.hxx>
