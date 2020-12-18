@@ -951,7 +951,8 @@ static void LOKSendSpellPopupMenu(const weld::Menu& rMenu, LanguageType nGuessLa
 
 void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void> const * pCallBack )
 {
-    Point aPos(pImpEditView->GetOutputDevice().PixelToLogic(rPosPixel));
+    OutputDevice& rDevice = pImpEditView->GetOutputDevice();
+    Point aPos(rDevice.PixelToLogic(rPosPixel));
     aPos = pImpEditView->GetDocPos( aPos );
     EditPaM aPaM = pImpEditView->pEditEngine->GetPaM(aPos, false);
     Reference< linguistic2::XSpellChecker1 >  xSpeller( pImpEditView->pEditEngine->pImpEditEngine->GetSpeller() );
@@ -964,7 +965,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
     // GetWindowPos works in Logical units
     aTempRect = pImpEditView->GetWindowPos(aTempRect);
     // Convert to pixels
-    aTempRect = pImpEditView->GetWindow()->LogicToPixel(aTempRect);
+    aTempRect = rDevice.LogicToPixel(aTempRect);
 
     weld::Widget* pPopupParent = pImpEditView->GetPopupParent(aTempRect);
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "editeng/ui/spellmenu.ui"));
