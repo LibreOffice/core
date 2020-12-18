@@ -28,7 +28,7 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/BitmapTools.hxx>
 

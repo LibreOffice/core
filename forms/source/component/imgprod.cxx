@@ -21,7 +21,7 @@
 
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
