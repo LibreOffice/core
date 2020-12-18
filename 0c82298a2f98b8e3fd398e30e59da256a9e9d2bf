@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5c1f7f1_23b68dd1",
+        "filename": "basic/qa/cppunit/basictest.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-18T06:42:15Z",
+      "side": 1,
+      "message": "Lines 45 to 55 (and some other, like 96) are literally kept from the old code, without any modifications specific to this change, and only have whitespace edits. Although the whitespace edits make the code compliant with our clang-format rules, it\u0027s best to only re-format those lines that you otherwise change in your patch. So please revert the whitespace edits in these lines, so that they are reported unaffected by the patch in git blame.",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 38
+      },
+      "revId": "0c82298a2f98b8e3fd398e30e59da256a9e9d2bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c6c8a65_38ff8b19",
+        "filename": "basic/qa/cppunit/basictest.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-18T06:42:15Z",
+      "side": 1,
+      "message": "To clarify, the plugin wants to replace this with simple \"sMacroFileURL\".",
+      "range": {
+        "startLine": 71,
+        "startChar": 12,
+        "endLine": 71,
+        "endChar": 76
+      },
+      "revId": "0c82298a2f98b8e3fd398e30e59da256a9e9d2bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38c71fa8_00cf5f52",
+        "filename": "basic/qa/cppunit/basictest.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-18T06:42:15Z",
+      "side": 1,
+      "message": "It\u0027s good to follow the accepted notation.\n\nFor general object variables, we use \"a\" prefix, like \"aBuf\".\nWhen you have a string variable, you may either use \"s\" prefix, like \"sURL\", or the general object \"a\" prefix (for string classes); personally I prefer \"s\" for all string variables, be it char* or OUString.\nFor numeric variables, \"n\" prefix is used, like \"nOffset\".\n\nAlso we use \"r\" for references, \"p\" for pointers and pointer-like objects, \"x\" for UNO interface references.\n\nSince you will need to fix the plugin warning anyway, I suggest you to change the naming here together with that fix, to follow the rule :-)",
+      "range": {
+        "startLine": 34,
+        "startChar": 49,
+        "endLine": 34,
+        "endChar": 95
+      },
+      "revId": "0c82298a2f98b8e3fd398e30e59da256a9e9d2bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
