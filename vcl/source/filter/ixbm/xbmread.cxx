@@ -22,7 +22,8 @@
 #include <tools/stream.hxx>
 
 #include <rtl/character.hxx>
-#include <bitmapwriteaccess.hxx>
+
+#include <bitmap/BitmapWriteAccess.hxx>
 #include <graphic/GraphicReader.hxx>
 
 #include "xbmread.hxx"

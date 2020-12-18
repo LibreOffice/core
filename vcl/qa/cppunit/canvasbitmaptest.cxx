@@ -36,8 +36,9 @@
 #include <vcl/bitmapex.hxx>
 
 #include <canvasbitmap.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
+
 #include <algorithm>
-#include <bitmapwriteaccess.hxx>
 
 using namespace ::com::sun::star;
 using namespace vcl::unotools;
