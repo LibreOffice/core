@@ -491,7 +491,9 @@ void SwRootFrame::Init( SwFrameFormat* pFormat )
 
     // Create a page and put it in the layout
     // The first page is always a right-page and always a first-page
-    SwPageFrame *pPage = ::InsertNewPage(*pDesc, this, true, true, false, false, nullptr, true);
+    SwPageFrame* pPage = ::InsertNewPage(
+        *pDesc, /*pUpper=*/this, /*isRightPage=*/true, /*bFirst=*/true, /*bInsertEmpty=*/false,
+        /*bFootnote=*/false, /*pSibling=*/nullptr, /*bVeryFirstPage=*/true);
 
     // Find the first page in the Bodytext section.
     SwLayoutFrame *pLay = pPage->FindBodyCont();
