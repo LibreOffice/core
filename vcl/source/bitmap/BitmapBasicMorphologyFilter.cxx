@@ -12,7 +12,6 @@
 
 #include <comphelper/threadpool.hxx>
 #include <sal/log.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapBasicMorphologyFilter.hxx>
 
 #include <bitmapwriteaccess.hxx>

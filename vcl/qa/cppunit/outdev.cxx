@@ -12,7 +12,6 @@
 #include <vcl/print.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
-#include <vcl/bitmapaccess.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <bitmapwriteaccess.hxx>
