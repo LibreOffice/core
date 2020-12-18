@@ -16,6 +16,24 @@
       "revId": "7ab7f42e7768d668a2896aa538ffcfeabc847e03",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f586bb5_3aa7e726",
+        "filename": "extensions/source/abpilot/typeselectionpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-12-18T21:24:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bd69c35_55830df1",
+      "revId": "7ab7f42e7768d668a2896aa538ffcfeabc847e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
