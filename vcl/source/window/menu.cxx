@@ -1086,7 +1086,10 @@ OUString Menu::ImplGetHelpText( sal_uInt16 nItemId ) const
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
 
-    if ( pData && pData->aHelpText.isEmpty() &&
+    if (!pData)
+        return OUString();
+
+    if ( pData->aHelpText.isEmpty() &&
          (( !pData->aHelpId.isEmpty()  ) || ( !pData->aCommandStr.isEmpty() )))
     {
         Help* pHelp = Application::GetHelp();
@@ -1099,7 +1102,7 @@ OUString Menu::ImplGetHelpText( sal_uInt16 nItemId ) const
         }
     }
 
-    return OUString();
+    return pData->aHelpText;
 }
 
 OUString Menu::GetHelpText( sal_uInt16 nItemId ) const

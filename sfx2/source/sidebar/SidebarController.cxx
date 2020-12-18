@@ -608,15 +608,18 @@ void SidebarController::OpenThenToggleDeck (
         }
     }
     RequestOpenDeck();
+    // before SwitchToDeck which may cause the rsDeckId string to be released
+    collectUIInformation(rsDeckId);
     SwitchToDeck(rsDeckId);
 
     // Make sure the sidebar is wide enough to fit the requested content
-    sal_Int32 nRequestedWidth = (mpCurrentDeck->GetMinimalWidth() + TabBar::GetDefaultWidth())
-                                * mpTabBar->GetDPIScaleFactor();
-    if (mnSavedSidebarWidth < nRequestedWidth)
-        SetChildWindowWidth(nRequestedWidth);
-
-    collectUIInformation(rsDeckId);
+    if (mpCurrentDeck && mpTabBar)
+    {
+        sal_Int32 nRequestedWidth = (mpCurrentDeck->GetMinimalWidth() + TabBar::GetDefaultWidth())
+                                    * mpTabBar->GetDPIScaleFactor();
+        if (mnSavedSidebarWidth < nRequestedWidth)
+            SetChildWindowWidth(nRequestedWidth);
+    }
 }
 
 void SidebarController::OpenThenSwitchToDeck (

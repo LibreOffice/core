@@ -72,6 +72,11 @@ public:
     }
     virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override
     {
+        // tdf#137745, perhaps connectivity::OTableHelper::disposing() has been called
+        // which called OTableContainerListener::clear(), so m_pComponent may be null
+        if (m_pComponent == nullptr)
+            return;
+
         OUString sName;
         Event.Accessor  >>= sName;
         if ( m_aRefNames.find(sName) != m_aRefNames.end() )

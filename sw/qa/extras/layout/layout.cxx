@@ -4215,6 +4215,19 @@ static SwRect lcl_getVisibleFlyObjRect(SwWrtShell* pWrtShell)
     return aFlyRect;
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf136816)
+{
+    SwDoc* pDoc = createDoc("tdf136816.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Check number of legend entries
+    assertXPath(pXmlDoc, "//text[contains(text(),\"Column\")]", 2);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testStableAtPageAnchoredFlyPosition)
 {
     // this doc has two page-anchored frames: one tiny on page 3 and one large on page 4.

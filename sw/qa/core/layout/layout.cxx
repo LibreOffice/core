@@ -15,6 +15,8 @@
 #include <wrtsh.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/core/layout/data/";
 
@@ -169,6 +171,30 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxAutoGrowVertical)
     // Without the accompanying fix in place, this test would have failed, as aFlyRect was too wide,
     // so it was not inside aShapeRect anymore.
     CPPUNIT_ASSERT(aShapeRect.IsInside(aFlyRect));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBtlrNestedCell)
+{
+    // Load a document with a nested table, the inner A1 cell has a btlr text direction.
+    load(DATA_DIRECTORY, "btlr-nested-cell.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pPage = pLayout->GetLower();
+    SwFrame* pBody = pPage->GetLower();
+    SwFrame* pOuterTable = pBody->GetLower()->GetNext();
+    SwFrame* pInnerTable = pOuterTable->GetLower()->GetLower()->GetLower();
+
+    // Check the paint area of the only text frame in the cell.
+    SwFrame* pTextFrame = pInnerTable->GetLower()->GetLower()->GetLower();
+    long nFrameBottom = pTextFrame->getFrameArea().Bottom();
+    SwRect aPaintArea = pTextFrame->GetPaintArea();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater or equal than: 2829
+    // - Actual  : 2080
+    // i.e. part of the text frame area was not painted, hiding the actual text.
+    CPPUNIT_ASSERT_GREATEREQUAL(nFrameBottom, aPaintArea.Bottom());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
