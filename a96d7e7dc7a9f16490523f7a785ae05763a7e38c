@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "616d106a_fce19b3d",
+        "filename": "basic/qa/cppunit/basictest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1002704
+      },
+      "writtenOn": "2020-12-18T00:02:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80787c42_cc07d7d7",
+      "revId": "a96d7e7dc7a9f16490523f7a785ae05763a7e38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9e4e59c2_068a9eef",
         "filename": "basic/qa/cppunit/basictest.cxx",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "d2e2b113_f9d3267a",
+        "filename": "basic/qa/cppunit/basictest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1002704
+      },
+      "writtenOn": "2020-12-18T00:02:35Z",
+      "side": 1,
+      "message": "%%include filename.vb%% was the suggested filename from a comment on the original bug, and as mentioned below \u0027 is a comment. Happy to switch to #include instead.",
+      "parentUuid": "9e4e59c2_068a9eef",
+      "revId": "a96d7e7dc7a9f16490523f7a785ae05763a7e38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4691946_49cf38d9",
         "filename": "basic/qa/vba_tests/asc.vb",
         "patchSetId": 2
@@ -50,6 +86,24 @@
       "revId": "a96d7e7dc7a9f16490523f7a785ae05763a7e38c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92778d16_82f7abcb",
+        "filename": "basic/qa/vba_tests/asc.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1002704
+      },
+      "writtenOn": "2020-12-18T00:02:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4691946_49cf38d9",
+      "revId": "a96d7e7dc7a9f16490523f7a785ae05763a7e38c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
