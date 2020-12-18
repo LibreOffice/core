@@ -143,6 +143,20 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135973, "tdf135973.odt")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf138953, "croppedAndRotated.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    // Make sure the rotation is exported correctly, and size not distorted
+    auto xShape(getShape(1));
+    CPPUNIT_ASSERT_EQUAL(27000.0, getProperty<double>(xShape, "RotateAngle"));
+    auto frameRect = getProperty<css::awt::Rectangle>(xShape, "FrameRect");
+    // Before the fix, original object size (i.e., before cropping) was written to spPr in OOXML,
+    // and the resulting object size was much larger than should be.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(12961), frameRect.Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8664), frameRect.Width);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

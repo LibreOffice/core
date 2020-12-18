@@ -895,6 +895,14 @@ protected:
         return xCursor->getPage();
     }
 
+    /// Get shape count.
+    int getShapes() const
+    {
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
+        return xDraws->getCount();
+    }
+
     /**
      * Given that some problem doesn't affect the result in the importer, we
      * test the resulting file directly, by opening the zip file, parsing an
