@@ -1346,13 +1346,13 @@ cmd/sc_exportasgraphic.png cmd/sc_graphic.png
 
 # calc toolbar draw
 # ===============================================
-cmd/32/editshapehyperlink.png cmd/32/inserthyperlink.png
+cmd/32/editshapehyperlink.png cmd/32/edithyperlink.png
 cmd/32/deleteshapehyperlink.png cmd/32/removehyperlink.png
 
-cmd/lc_editshapehyperlink.png cmd/lc_inserthyperlink.png
+cmd/lc_editshapehyperlink.png cmd/lc_edithyperlink.png
 cmd/lc_deleteshapehyperlink.png cmd/lc_removehyperlink.png
 
-cmd/sc_editshapehyperlink.png cmd/sc_inserthyperlink.png
+cmd/sc_editshapehyperlink.png cmd/sc_edithyperlink.png
 cmd/sc_deleteshapehyperlink.png cmd/sc_removehyperlink.png
 
 # Calc menu entries
@@ -2473,7 +2473,7 @@ cmd/32/addtextbox.png cmd/32/insertfixedtext.png
 cmd/lc_addtextbox.png cmd/lc_insertfixedtext.png
 cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
 
-# Edit menu 
+# Edit menu
 # ===============================================
 cmd/32/authoritiesentrydialog.png cmd/32/dbviewaliases.png
 cmd/32/changesmenu.png cmd/32/accepttrackedchange.png
