@@ -13,12 +13,17 @@ else
 gb_UnoApiHeadersTarget_select_variant = $(2)
 endif
 
-gb_LinkTarget_LDFLAGS += -s TOTAL_MEMORY=1GB
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
-gb_CFLAGS += -pthread -s TOTAL_MEMORY=1GB -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=4
-gb_CXXFLAGS += -pthread -s TOTAL_MEMORY=1GB -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=4
-gb_CXX_LINKFLAGS += -pthread -s TOTAL_MEMORY=1GB -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=4
+emscripten_CPPFLAGS := -pthread -s TOTAL_MEMORY=1GB -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=4
+
+gb_Executable_EXT := .html
+
+gb_CFLAGS += $(emscripten_CPPFLAGS)
+gb_CXXFLAGS += $(emscripten_CPPFLAGS) -s DISABLE_EXCEPTION_CATCHING=0
+gb_LinkTarget_LDFLAGS += $(emscripten_CPPFLAGS) --bind
+
+#gb_CXX_LINKFLAGS += -pthread -s TOTAL_MEMORY=1GB -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=4
 
 # vim: set noet sw=4 ts=4

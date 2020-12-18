@@ -615,6 +615,10 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     $(vcl_headless_freetype_code) \
 ))
 
+$(eval $(call gb_Library_add_generated_exception_objects,vcl,\
+    CustomTarget/vcl/wasm/native-code \
+))
+
 $(eval $(call gb_Library_use_externals,vcl,\
     cairo \
     expat \

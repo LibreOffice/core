@@ -64,10 +64,11 @@ else
 $(call gb_ExternalProject_get_state_target,cairo,build) :
 	$(call gb_Trace_StartRange,cairo,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-	./configure \
+	env | sort && \
+	dash -x ./configure \
 		$(if $(debug),STRIP=" ") \
 		$(if $(filter ANDROID iOS,$(OS)),CFLAGS="$(if $(debug),-g) $(ZLIB_CFLAGS) $(gb_VISIBILITY_FLAGS)") \
-		$(if $(filter EMSCRIPTEN,$(OS)),CFLAGS=" $(ZLIB_CFLAGS) -pthread") \
+		$(if $(filter EMSCRIPTEN,$(OS)),CFLAGS=" $(ZLIB_CFLAGS)" --enable-pthread=yes PTHREAD_LIBS="" EMMAKEN_JUST_CONFIGURE=1) \
 		$(if $(filter-out EMSCRIPTEN ANDROID iOS,$(OS)),CFLAGS="$(if $(debug),-g) $(ZLIB_CFLAGS)" ) \
 		$(if $(filter ANDROID iOS,$(OS)),PKG_CONFIG=./dummy_pkg_config) \
 		LIBS="$(ZLIB_LIBS)" \

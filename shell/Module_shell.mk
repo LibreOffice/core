@@ -9,10 +9,12 @@
 
 $(eval $(call gb_Module_Module,shell))
 
+ifneq (EMSCRIPTEN,$(OS))
 ifeq ($(filter DESKTOP,$(BUILD_TYPE)),DESKTOP)
 $(eval $(call gb_Module_add_targets,shell,\
 	Executable_lngconvex \
 ))
+endif
 endif
 
 ifeq ($(gb_Side),host)

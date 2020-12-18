@@ -1,3 +1,11 @@
+= Status =
+
+$ make cross-toolset
+$ make vcl.all
+
+> instdir/program/ui-previewer.html
+
+
 = Setup for the LO WASM build (with Qt) =
 
 We're using Qt 5.15 with the officially supported emscripten v1.39.8.
@@ -18,6 +26,50 @@ Example bashrc scriptlet:
 
 EMSDK_ENV=$HOME/Development/libreoffice/git_emsdk/emsdk_env.sh
 [ -f "$EMSDK_ENV" ] && \. "$EMSDK_ENV" 1>/dev/null 2>&1
+
+
+== Setup Qt ==
+
+https://doc.qt.io/qt-5/wasm.html
+
+I originally build the Qt 5.15 branch, but probably better to build a tag like v5.15.2.
+
+./configure -xplatform wasm-emscripten -feature-thread -compile-examples -prefix $PWD/qtbase
+make -j<CORES> module-qtbase module-qtdeclarative
+
+Building with examples will break with some of them, but at that point Qt already works.
+
+If you get a configure failure for Qt:
+
+Checking for target architecture... Project ERROR: target architecture detection binary not found.
+
+Edit git_emsdk/upstream/emscripten/emcc.py:
+@@ -760,8 +760,8 @@
+     only_object = '-c' in cmd
+     for i in reversed(range(len(cmd) - 1)): # Last -o directive should take precedence, if multiple are specified
+       if cmd[i] == '-o':
+-        if not only_object:
+-          cmd[i + 1] += '.js'
++#        if not only_object:
++#          cmd[i + 1] += '.js'
+         target = cmd[i + 1]
+         break
+     if not target:
+
+The previous suggestion, which was to edit qtbase/config.tests/arch/write_info.pri
+-     ext = .wasm
++     ext = .js.wasm
+
+produces errors when loading the generated html, because it can't find the wasm now.
+
+Current Qt fails to start the demo webserver: https://bugreports.qt.io/browse/QTCREATORBUG-24072
+Use: emrun --serve_after_close to run Qt WASM demos
+
+Enabling multi-thread support in Firefox is a bit of work with older versions:
+- https://bugzilla.mozilla.org/show_bug.cgi?id=1477743#c7
+- https://wiki.qt.io/Qt_for_WebAssembly#Multithreading_Support
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer
+
 
 
 == Setup LO ==
@@ -42,6 +94,7 @@ QT5DIR=/dir/of/git_qt5/qtbase
 --disable-gio
 --disable-gstreamer-1-0
 --disable-gtk3
+--disable-ldap
 --disable-lpsolve
 --disable-mariadb-sdbc
 --disable-nss
@@ -64,29 +117,6 @@ QT5DIR=/dir/of/git_qt5/qtbase
 --with-theme=no
 
 Will also be encoded in configure.ac at some point, some already is.
-
-
-== Setup Qt ==
-
-https://doc.qt.io/qt-5/wasm.html
-
-I originally build the Qt 5.15 branch, but probably better to build a tag like v5.15.2.
-
-./configure -xplatform wasm-emscripten -feature-thread -compile-examples -prefix $PWD/qtbase
-make -j<CORES> module-qtbase module-qtdeclarative
-
-Building with examples will break with some of them, but at that point Qt already works.
-
-If you get a configure failure for Qt:
-
-Checking for target architecture... Project ERROR: target architecture detection binary not found.
-
-Edit qtbase/config.tests/arch/write_info.pri
--     ext = .wasm
-+     ext = .js.wasm
-
-Current Qt fails to start the demo webserver: https://bugreports.qt.io/browse/QTCREATORBUG-24072
-Use: emrun --serve_after_close to run Qt WASM demos
 
 
 = Mixed information, links, problems, TODO =
@@ -140,6 +170,10 @@ Generally https://emscripten.org/docs/porting:
 This will be interesting: https://emscripten.org/docs/getting_started/FAQ.html#how-do-i-run-an-event-loop
 
 This didn't help much yet: https://github.com/emscripten-ports
+
+Emscripten supports standalone WASI binaries: https://github.com/emscripten-core/emscripten/wiki/WebAssembly-Standalone
+WASM dynamic dispatch: https://fitzgeraldnick.com/2018/04/26/how-does-dynamic-dispatch-work-in-wasm.html
+WASM dlload: https://iandouglasscott.com/2019/07/18/experimenting-with-webassembly-dynamic-linking-with-clang/
 
 https://www.qt.io/qt-examples-for-webassembly
 http://qtandeverything.blogspot.com/2017/06/qt-for-web-assembly.html
