@@ -751,18 +751,15 @@ bool Bitmap::Dither()
             tools::Long nWidth = pReadAcc->Width();
             tools::Long nWidth1 = nWidth - 1;
             tools::Long nHeight = pReadAcc->Height();
-            tools::Long nX;
             tools::Long nW = nWidth * 3;
             tools::Long nW2 = nW - 3;
-            tools::Long nRErr, nGErr, nBErr;
-            tools::Long nRC, nGC, nBC;
             std::unique_ptr<tools::Long[]> p1(new tools::Long[ nW ]);
             std::unique_ptr<tools::Long[]> p2(new tools::Long[ nW ]);
             tools::Long* p1T = p1.get();
             tools::Long* p2T = p2.get();
             tools::Long* pTmp;
-            bool bPal = pReadAcc->HasPalette();
 
+            bool bPal = pReadAcc->HasPalette();
             pTmp = p2T;
 
             if( bPal )
@@ -789,6 +786,9 @@ bool Bitmap::Dither()
                     *pTmp++ = static_cast<tools::Long>(aColor.GetRed()) << 12;
                 }
             }
+
+            tools::Long nRErr, nGErr, nBErr;
+            tools::Long nRC, nGC, nBC;
 
             for( tools::Long nY = 1, nYAcc = 0; nY <= nHeight; nY++, nYAcc++ )
             {
@@ -825,7 +825,7 @@ bool Bitmap::Dither()
                 }
 
                 // Examine first Pixel separately
-                nX = 0;
+                tools::Long nX = 0;
                 tools::Long nTemp;
                 CALC_ERRORS;
                 CALC_TABLES7;
