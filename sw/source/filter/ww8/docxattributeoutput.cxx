@@ -4814,13 +4814,12 @@ void DocxAttributeOutput::DefaultStyle()
 /* Writes <a:srcRect> tag back to document.xml if a file contains a cropped image.
 *  NOTE : Tested on images of type JPEG,EMF/WMF,BMP, PNG and GIF.
 */
-void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj, const SwFrameFormat* pFrameFormat )
+void DocxAttributeOutput::WriteSrcRect(
+    const css::uno::Reference<css::beans::XPropertySet>& xShapePropSet,
+    const SwFrameFormat* pFrameFormat)
 {
-    uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY );
-    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-
     uno::Reference<graphic::XGraphic> xGraphic;
-    xPropSet->getPropertyValue("Graphic") >>= xGraphic;
+    xShapePropSet->getPropertyValue("Graphic") >>= xGraphic;
     const Graphic aGraphic(xGraphic);
 
     Size aOriginalSize(aGraphic.GetPrefSize());
@@ -4833,7 +4832,7 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj, const SwFrameFo
     }
 
     css::text::GraphicCrop aGraphicCropStruct;
-    xPropSet->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
+    xShapePropSet->getPropertyValue("GraphicCrop") >>= aGraphicCropStruct;
     sal_Int32 nCropL = aGraphicCropStruct.Left;
     sal_Int32 nCropR = aGraphicCropStruct.Right;
     sal_Int32 nCropT = aGraphicCropStruct.Top;
@@ -4985,7 +4984,6 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
 
     rtl::Reference<sax_fastparser::FastAttributeList> xFrameAttributes(
         FastSerializerHelper::createAttrList());
-    Size aSize = rSize;
     if (pGrfNode)
     {
         const SwAttrSet& rSet = pGrfNode->GetSwAttrSet();
@@ -4999,8 +4997,25 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
             // RES_GRFATR_ROTATION is in 10ths of degree; convert to 100ths for macro
             sal_uInt32 mOOXMLRot = OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRot*10);
             xFrameAttributes->add(XML_rot, OString::number(mOOXMLRot));
-            aSize = pGrfNode->GetTwipSize();
         }
+    }
+
+    css::uno::Reference<css::beans::XPropertySet> xShapePropSet;
+    if (pSdrObj)
+    {
+        css::uno::Reference<css::drawing::XShape> xShape(
+            const_cast<SdrObject*>(pSdrObj)->getUnoShape(), css::uno::UNO_QUERY);
+        xShapePropSet.set(xShape, css::uno::UNO_QUERY);
+        assert(xShapePropSet);
+    }
+
+    Size aSize = rSize;
+    // We need the original (cropped, but unrotated) size of object. So prefer the object data,
+    // and only use passed frame size as fallback.
+    if (xShapePropSet)
+    {
+        if (css::awt::Size val; xShapePropSet->getPropertyValue("Size") >>= val)
+            aSize = Size(convertMm100ToTwip(val.Width), convertMm100ToTwip(val.Height));
     }
 
     m_rExport.SdrExporter().startDMLAnchorInline(pFrameFormat, aSize);
@@ -5094,9 +5109,8 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     }
     m_pSerializer->endElementNS( XML_a, XML_blip );
 
-    if (pSdrObj){
-        WriteSrcRect(pSdrObj, pFrameFormat);
-    }
+    if (xShapePropSet)
+        WriteSrcRect(xShapePropSet, pFrameFormat);
 
     m_pSerializer->startElementNS( XML_a, XML_stretch,
             FSEND );
