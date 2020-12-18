@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa948f3b_81544069",
+        "filename": "offapi/com/sun/star/xml/sax/XWriter.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-18T11:42:40Z",
+      "side": 1,
+      "message": "I believe it is 7.1 or at least I don\u0027t have believe it has been frozen yet.",
+      "parentUuid": "17779bb0_3b85b2f2",
+      "range": {
+        "startLine": 40,
+        "startChar": 27,
+        "endLine": 40,
+        "endChar": 30
+      },
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fb673a59_9a1a71d4",
         "filename": "offapi/com/sun/star/xml/sax/XWriter.idl",
         "patchSetId": 5
@@ -36,6 +60,24 @@
       "writtenOn": "2020-12-18T07:30:17Z",
       "side": 1,
       "message": "we have css.beans.StringPair, which would look like a good choice here? (avoiding the need to care about two sequences of different length)",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be54a48e_ff4abc32",
+        "filename": "offapi/com/sun/star/xml/sax/XWriter.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-18T11:42:40Z",
+      "side": 1,
+      "message": "First, this works with an IDL header, which is off limits of my abilities.\n -\u003e So I\u0027m gonna need the line and the corresponding type in c++.\n\nHowever, it seems deprecated:\nhttps://wiki.openoffice.org/wiki/Uno/API_Deprecation",
+      "parentUuid": "fb673a59_9a1a71d4",
       "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "b6f9ba1f_2892f343",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-18T11:42:40Z",
+      "side": 1,
+      "message": "Sory for that. It seem clang overdid.\nI\u0027ll revert it back as much as I can.",
+      "parentUuid": "14028e78_071d578c",
+      "range": {
+        "startLine": 286,
+        "startChar": 24,
+        "endLine": 286,
+        "endChar": 35
+      },
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e43427dc_25e4baac",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 5
@@ -76,6 +142,24 @@
       "writtenOn": "2020-12-18T07:30:17Z",
       "side": 1,
       "message": "please define variables only where they are needed, not upfront",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3613aac8_165c1e86",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-18T11:42:40Z",
+      "side": 1,
+      "message": "I\u0027m moving them.\nHowever, I have a question about c++ compilers.\nDeclaring the variable inside a loop doesn\u0027t reinitialize all the process in each iteration? (I mean, look somewhere to store it, reserve memory, assign default value, and finally get rid of if)",
+      "parentUuid": "e43427dc_25e4baac",
       "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -99,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "b7ec6888_55cf61f7",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-18T11:42:40Z",
+      "side": 1,
+      "message": "Yes.\nI guess should use OSL_FAIL. The ensure was carried away from old code.",
+      "parentUuid": "80638ef5_a4b3361c",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "67af419e_e7ce8f70",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 5
@@ -110,6 +212,24 @@
       "writtenOn": "2020-12-18T07:30:17Z",
       "side": 1,
       "message": "for one, what we want to ensure is `i \u003c\u003d nStrLen` (and even better is to ensure `i \u003c nStrLen` prior to ++i, which avoids potential overflow)\n\nfor another, if the ensured condition doesn\u0027t hold, we\u0027re illegally reading past pStr\u0027s end, so this is obviously something either to assert or to handle somehow (OSL_ESNURE is legacy crap with unclear semantics, see tdf#43157 for details)",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77d84f51_d526d029",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-18T11:42:40Z",
+      "side": 1,
+      "message": "The idea was to avoid overflow but ended up writing the opposite.\nShould OSL_ENSURE be replaced by assert, or what should be done in that point?",
+      "parentUuid": "67af419e_e7ce8f70",
       "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -133,6 +253,24 @@
     },
     {
       "key": {
+        "uuid": "fc9ba2e4_26c6195f",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-18T11:42:40Z",
+      "side": 1,
+      "message": "Line 455 of this version. If there was no surrogate, it has to be 0.",
+      "parentUuid": "a5e2b4eb_103d5918",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45f9ac53_22d05649",
         "filename": "starmath/source/xparsmlbase.hxx",
         "patchSetId": 5
@@ -147,6 +285,24 @@
       "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad1a4185_c0878c8c",
+        "filename": "starmath/source/xparsmlbase.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-18T11:42:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45f9ac53_22d05649",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -170,6 +326,30 @@
       "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92f01809_4187fa56",
+        "filename": "starmath/source/xparsmlbase.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-18T11:42:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07d8ac29_abf54329",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 8
+      },
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
