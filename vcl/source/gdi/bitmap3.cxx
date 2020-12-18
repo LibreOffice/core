@@ -732,6 +732,16 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
     }
 }
 
+static BitmapColor getColor(BitmapReadAccess *pReadAcc, tools::Long nZ)
+{
+    Scanline pScanlineRead = pReadAcc->GetScanline(0);
+
+    if (pReadAcc->HasPalette())
+        return pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, nZ));
+    else
+        return pReadAcc->GetPixelFromData(pScanlineRead, nZ);
+}
+
 static tools::Long* shiftColor(tools::Long* pColorArray, BitmapColor const& rColor)
 {
     *pColorArray++ = static_cast<tools::Long>(rColor.GetBlue()) << 12;
@@ -741,14 +751,14 @@ static tools::Long* shiftColor(tools::Long* pColorArray, BitmapColor const& rCol
     return pColorArray;
 }
 
-static BitmapColor getColor(BitmapReadAccess *pReadAcc, tools::Long nZ)
+static tools::Long* shiftScanlineColors(BitmapReadAccess* pReadAcc, tools::Long nWidth, tools::Long* pColorArray)
 {
-    Scanline pScanlineRead = pReadAcc->GetScanline(0);
+    for (tools::Long nZ = 0; nZ < nWidth; nZ++)
+    {
+        pColorArray = shiftColor(pColorArray, getColor(pReadAcc, nZ));
+    }
 
-    if (pReadAcc->HasPalette())
-        return pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, nZ));
-    else
-        return pReadAcc->GetPixelFromData(pScanlineRead, nZ);
+    return pColorArray;
 }
 
 bool Bitmap::Dither()
@@ -779,28 +789,19 @@ bool Bitmap::Dither()
             tools::Long* pTmp;
 
             pTmp = p2T;
-
-            for (tools::Long nZ = 0; nZ < nWidth; nZ++)
-            {
-                pTmp = shiftColor(pTmp, getColor(pReadAcc.get(), nZ));
-            }
+            pTmp = shiftScanlineColors(pReadAcc.get(), nWidth, pTmp);
 
             tools::Long nRErr, nGErr, nBErr;
             tools::Long nRC, nGC, nBC;
 
-            for( tools::Long nY = 1, nYAcc = 0; nY <= nHeight; nY++, nYAcc++ )
+            for (tools::Long nY = 1, nYAcc = 0; nY <= nHeight; nY++, nYAcc++)
             {
                 pTmp = p1T;
                 p1T = p2T;
                 p2T = pTmp;
 
                 if (nY < nHeight)
-                {
-                    for (tools::Long nZ = 0; nZ < nWidth; nZ++)
-                    {
-                        pTmp = shiftColor(pTmp, getColor(pReadAcc.get(), nZ));
-                    }
-                }
+                    pTmp = shiftScanlineColors(pReadAcc.get(), nWidth, pTmp);
 
                 // Examine first Pixel separately
                 tools::Long nX = 0;
