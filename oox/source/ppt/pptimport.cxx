@@ -73,6 +73,7 @@ PowerPointImport::~PowerPointImport()
     maPPTShapes.clear();
 }
 
+<<<<<<< HEAD   (a8ca98 Fix handling of the OBJECTDESCRIPTOR clipboard (pasteboard) )
 /// Visits the relations from pRelations which are of type rType.
 static void visitRelations(PowerPointImport& rImport, const core::RelationsRef& pRelations, const OUString& rType, std::vector<OUString>& rImageFragments)
 {
@@ -103,6 +104,8 @@ static void visitRelations(PowerPointImport& rImport, const core::RelationsRef& 
     }
 }
 
+=======
+>>>>>>> CHANGE (afa3df do not preload all images in the pptx importer)
 bool PowerPointImport::importDocument()
 {
     /*  to activate the PPTX dumper, define the environment variable
@@ -130,16 +133,6 @@ bool PowerPointImport::importDocument()
     maTableStyleListPath = xPresentationFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc( "tableStyles" );
     const OUString sPresPropsPath
         = xPresentationFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc("presProps");
-
-    // importRelations() is cheap, it will do an actual import for the first time only.
-    if (core::RelationsRef pFragmentRelations = importRelations(aFragmentPath))
-    {
-        std::vector<OUString> aImageFragments;
-        visitRelations(*this, pFragmentRelations, "slide", aImageFragments);
-        visitRelations(*this, pFragmentRelations, "slideMaster", aImageFragments);
-
-        getGraphicHelper().importEmbeddedGraphics(aImageFragments);
-    }
 
     bool bRet = importFragment(xPresentationFragmentHandler);
     if (bRet && !sPresPropsPath.isEmpty())
