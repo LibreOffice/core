@@ -23,7 +23,6 @@ $(eval $(call gb_Module_add_targets,bridges,\
 	) \
 ))
 
-ifneq ($(OS), EMSCRIPTEN)
 ifeq (,$(filter build,$(gb_Module_SKIPTARGETS)))
 ifeq ($(strip $(bridges_SELECTED_BRIDGE)),)
 $(call gb_Output_error,no bridge selected for build: bailing out)

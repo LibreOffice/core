@@ -344,18 +344,6 @@ core_constructor_list = [
     "com_sun_star_comp_uri_UriReferenceFactory_get_implementation",
     "com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTexpand_get_implementation",
     "com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTscript_get_implementation",
-# starmath/util/sm.component
-    "Math_FormulaDocument_get_implementation",
-    "Math_XMLContentExporter_get_implementation",
-    "Math_XMLExporter_get_implementation",
-    "Math_XMLImporter_get_implementation",
-    "Math_XMLMetaExporter_get_implementation",
-    "Math_XMLOasisMetaExporter_get_implementation",
-    "Math_XMLOasisMetaImporter_get_implementation",
-    "Math_XMLOasisSettingsExporter_get_implementation",
-    "Math_XMLOasisSettingsImporter_get_implementation",
-    "Math_XMLSettingsExporter_get_implementation",
-    "com_sun_star_comp_Math_MathTypeFilter_get_implementation",
 # svl/source/fsstor/fsstorage.component
     "svl_FSStorageFactory_get_implementation",
 # vcl/vcl.android.component
@@ -592,6 +580,17 @@ math_constructor_list = [
 # starmath/util/sm.component
     "Math_XMLOasisMetaExporter_get_implementation",
     "Math_XMLOasisSettingsExporter_get_implementation",
+    "Math_FormulaDocument_get_implementation",
+    "Math_XMLContentExporter_get_implementation",
+    "Math_XMLExporter_get_implementation",
+    "Math_XMLImporter_get_implementation",
+    "Math_XMLMetaExporter_get_implementation",
+    "Math_XMLOasisMetaExporter_get_implementation",
+    "Math_XMLOasisMetaImporter_get_implementation",
+    "Math_XMLOasisSettingsExporter_get_implementation",
+    "Math_XMLOasisSettingsImporter_get_implementation",
+    "Math_XMLSettingsExporter_get_implementation",
+    "com_sun_star_comp_Math_MathTypeFilter_get_implementation",
     ]
 
 calc_factory_list = [
