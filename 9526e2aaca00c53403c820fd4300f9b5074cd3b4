@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "59b3e740_78078cf9",
+        "filename": "offapi/com/sun/star/xml/sax/XWriter.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-18T22:52:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b05a5b87_73d61a9e",
+      "range": {
+        "startLine": 40,
+        "startChar": 27,
+        "endLine": 40,
+        "endChar": 30
+      },
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fb673a59_9a1a71d4",
         "filename": "offapi/com/sun/star/xml/sax/XWriter.idl",
         "patchSetId": 5
@@ -126,6 +150,24 @@
     },
     {
       "key": {
+        "uuid": "5f790446_54944568",
+        "filename": "offapi/com/sun/star/xml/sax/XWriter.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-18T22:52:37Z",
+      "side": 1,
+      "message": "It does not apply to my case, uses two strings, but I need a string and an unicode32 codepoint.\nGetting it via iteratecodepoint from OUString would actually be less efficient than using a sal_uInt32. This function has only to be called once before writing the file, so it does not have grate impact. And even so, it would have to prepare the data. \n\nThe deprecated stuff:\nList of problematic API that should be considered for deprecation/change/removal:\n -   css::document::XDocumentInfo User:mst\n -   css::beans::StringPair - there\u0027s the generic beans::Pair\u003c\u003e type now User:thorsten\n -   css::util::Time and DateTime lack a timezone field. Just adding that would be less work than defining new structs. User:mst",
+      "parentUuid": "260dbd9d_61d5d80b",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "14028e78_071d578c",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 5
@@ -170,6 +212,30 @@
       "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b0057e7_92bd294c",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-18T22:52:37Z",
+      "side": 1,
+      "message": "It\u0027s almost reseted.",
+      "parentUuid": "b6f9ba1f_2892f343",
+      "range": {
+        "startLine": 286,
+        "startChar": 24,
+        "endLine": 286,
+        "endChar": 35
+      },
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -226,6 +292,24 @@
     },
     {
       "key": {
+        "uuid": "759441cf_ade82ec4",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-18T22:52:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "46dd87a6_81911557",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "80638ef5_a4b3361c",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 5
@@ -273,6 +357,24 @@
       "side": 1,
       "message": "OSL_FAIL suffers from the same unclear semantics as OSL_ENSURE.  If this is guaranteed to not happen (as the passed in string data is for some reason guaranteed to be valid UTF-16, not just a sequence of UTF-16 code units), use assert.",
       "parentUuid": "b7ec6888_55cf61f7",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "651706f5_0cfd0520",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-18T22:52:37Z",
+      "side": 1,
+      "message": "How can I assert() conservating the error message?",
+      "parentUuid": "b2213e4c_9a0bcb05",
       "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -379,6 +481,24 @@
       "side": 1,
       "message": "But as we now assemble the full nSurrogate in the loop iteration where we see the high surrogate (and which also eats the following low surrogate), we no longer have a case where we need to pass a high surrogate (via nSurrogate) from one loop iteration to the next (where it was then combined with a following low surrogate).",
       "parentUuid": "fc9ba2e4_26c6195f",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f964d46_c64167ad",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-18T22:52:37Z",
+      "side": 1,
+      "message": "I explain how I implemented it:\nnSurrogate is declared as 0.\nIf there is a surrogated pair it gets a value\nThen if nSurrogate has non null value, data is written as UTF32 and nSurrogate reseted a 0, so in next loop it won\u0027t be a false positive.",
+      "parentUuid": "d462b0a7_e318efe0",
       "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
