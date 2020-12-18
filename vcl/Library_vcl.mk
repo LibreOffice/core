@@ -337,11 +337,11 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/impvect \
     vcl/source/bitmap/bitmap \
     vcl/source/bitmap/BitmapEx \
+    vcl/source/bitmap/BitmapInfoAccess \
+    vcl/source/bitmap/BitmapReadAccess \
+    vcl/source/bitmap/BitmapWriteAccess \
     vcl/source/bitmap/alpha \
     vcl/source/bitmap/dibtools \
-    vcl/source/bitmap/bmpacc2 \
-    vcl/source/bitmap/bmpacc3 \
-    vcl/source/bitmap/bmpacc \
     vcl/source/bitmap/bmpfast \
     vcl/source/bitmap/bitmapfilter \
     vcl/source/bitmap/BitmapAlphaClampFilter \

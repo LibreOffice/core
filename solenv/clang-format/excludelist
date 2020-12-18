@@ -14898,8 +14898,6 @@ vcl/source/bitmap/BitmapTools.cxx
 vcl/source/bitmap/alpha.cxx
 vcl/source/bitmap/bitmap.cxx
 vcl/source/bitmap/BitmapEx.cxx
-vcl/source/bitmap/bmpacc.cxx
-vcl/source/bitmap/bmpacc2.cxx
 vcl/source/bitmap/bmpfast.cxx
 vcl/source/bitmap/checksum.cxx
 vcl/source/bitmap/dibtools.cxx

@@ -21,7 +21,7 @@
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 

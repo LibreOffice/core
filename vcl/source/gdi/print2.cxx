@@ -30,7 +30,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 
 #include "pdfwriter_impl.hxx"
 
