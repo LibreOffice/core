@@ -317,8 +317,8 @@ NavigationBar::NavigationBar(vcl::Window* pParent)
     , m_xNextBtn(m_xBuilder->weld_button("next"))
     , m_xLastBtn(m_xBuilder->weld_button("last"))
     , m_xNewBtn(m_xBuilder->weld_button("new"))
-    , m_aPrevRepeater(*m_xPrevBtn, LINK(this,NavigationBar,OnClick))
-    , m_aNextRepeater(*m_xNextBtn, LINK(this,NavigationBar,OnClick))
+    , m_xPrevRepeater(std::make_shared<weld::ButtonPressRepeater>(*m_xPrevBtn, LINK(this,NavigationBar,OnClick)))
+    , m_xNextRepeater(std::make_shared<weld::ButtonPressRepeater>(*m_xNextBtn, LINK(this,NavigationBar,OnClick)))
     , m_nCurrentPos(-1)
     , m_bPositioning(false)
 {
@@ -577,9 +577,9 @@ void NavigationBar::SetState(DbGridControlNavigationBarState nWhich)
     if (!bAvailable)
     {
         if (pWnd == m_xNextBtn.get())
-            m_aNextRepeater.Stop();
+            m_xNextRepeater->Stop();
         else if (pWnd == m_xPrevBtn.get())
-            m_aPrevRepeater.Stop();
+            m_xPrevRepeater->Stop();
     }
 }
 

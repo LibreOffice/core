@@ -190,8 +190,8 @@ class NavigationBar final : public InterimItemWindow
     std::unique_ptr<weld::Button> m_xLastBtn;         // Button for 'go to the last record'
     std::unique_ptr<weld::Button> m_xNewBtn;          // Button for 'go to a new record'
 
-    weld::ButtonPressRepeater m_aPrevRepeater;
-    weld::ButtonPressRepeater m_aNextRepeater;
+    std::shared_ptr<weld::ButtonPressRepeater> m_xPrevRepeater;
+    std::shared_ptr<weld::ButtonPressRepeater> m_xNextRepeater;
 
     sal_Int32            m_nCurrentPos;
 
