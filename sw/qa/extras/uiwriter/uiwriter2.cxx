@@ -3536,4 +3536,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf123218)
     aScaleData = xYAxis->getScaleData();
     CPPUNIT_ASSERT_EQUAL(chart2::AxisOrientation_REVERSE, aScaleData.Orientation);
 }
+
+CPPUNIT_PLUGIN_IMPLEMENT();
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
