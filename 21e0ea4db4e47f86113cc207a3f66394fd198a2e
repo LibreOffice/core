@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "faf5984d_81b88082",
+        "filename": "tools/source/generic/fract.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-19T11:27:07Z",
+      "side": 1,
+      "message": "ok, this needs fixing, I\u0027m going to push a separate change to use the builtin clz",
+      "revId": "21e0ea4db4e47f86113cc207a3f66394fd198a2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
