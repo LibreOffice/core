@@ -225,86 +225,66 @@ IMPL_LINK(SwPageBreakWin, SelectHdl, const OString&, rIdent, void)
 {
     SwFrameControlPtr pThis = GetEditWin()->GetFrameControlsManager( ).GetControl( FrameControlType::PageBreak, GetFrame() );
 
-    if (rIdent == "edit")
+    SwContentFrame *pCnt = const_cast<SwContentFrame*>(GetPageFrame()->FindFirstBodyContent());
+    if (pCnt && rIdent == "edit")
     {
-        const SwLayoutFrame* pBodyFrame = static_cast< const SwLayoutFrame* >( GetPageFrame()->Lower() );
-        while ( pBodyFrame && !pBodyFrame->IsBodyFrame() )
-            pBodyFrame = static_cast< const SwLayoutFrame* >( pBodyFrame->GetNext() );
-
         SwEditWin* pEditWin = GetEditWin();
 
-        if ( pBodyFrame )
+        SwWrtShell& rSh = pEditWin->GetView().GetWrtShell();
+        bool bOldLock = rSh.IsViewLocked();
+        rSh.LockView( true );
+
+        SwContentNode& rNd = pCnt->IsTextFrame()
+            ? *static_cast<SwTextFrame*>(pCnt)->GetTextNodeFirst()
+            : *static_cast<SwNoTextFrame*>(pCnt)->GetNode();
+
+        if ( pCnt->IsInTab() )
         {
-            SwWrtShell& rSh = pEditWin->GetView().GetWrtShell();
-            bool bOldLock = rSh.IsViewLocked();
-            rSh.LockView( true );
+            rSh.Push( );
+            rSh.ClearMark();
 
-            if ( pBodyFrame->Lower()->IsTabFrame() )
-            {
-                rSh.Push( );
-                rSh.ClearMark();
+            rSh.SetSelection( rNd );
 
-                SwContentFrame *pCnt = const_cast< SwContentFrame* >( pBodyFrame->ContainsContent() );
-                SwContentNode* pNd = pCnt->IsTextFrame()
-                    ? static_cast<SwTextFrame*>(pCnt)->GetTextNodeFirst()
-                    : static_cast<SwNoTextFrame*>(pCnt)->GetNode();
-                rSh.SetSelection( *pNd );
+            SfxStringItem aItem(pEditWin->GetView().GetPool().GetWhich(FN_FORMAT_TABLE_DLG), "textflow");
+            pEditWin->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
+                    FN_FORMAT_TABLE_DLG,
+                    SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                    { &aItem });
 
-                SfxStringItem aItem(pEditWin->GetView().GetPool().GetWhich(FN_FORMAT_TABLE_DLG), "textflow");
-                pEditWin->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
-                        FN_FORMAT_TABLE_DLG,
-                        SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-                        { &aItem });
-
-                rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
-            }
-            else
-            {
-                SwContentFrame *pCnt = const_cast< SwContentFrame* >( pBodyFrame->ContainsContent() );
-                SwContentNode* pNd = pCnt->IsTextFrame()
-                    ? static_cast<SwTextFrame*>(pCnt)->GetTextNodeFirst()
-                    : static_cast<SwNoTextFrame*>(pCnt)->GetNode();
-
-                SwPaM aPaM( *pNd );
-                SwPaMItem aPaMItem( pEditWin->GetView().GetPool( ).GetWhich( FN_PARAM_PAM ), &aPaM );
-                SfxStringItem aItem( pEditWin->GetView().GetPool( ).GetWhich( SID_PARA_DLG ), "textflow" );
-                pEditWin->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
-                        SID_PARA_DLG,
-                        SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-                        { &aItem, &aPaMItem });
-            }
-            rSh.LockView( bOldLock );
-            pEditWin->GrabFocus( );
+            rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
         }
+        else
+        {
+            SwPaM aPaM( rNd );
+            SwPaMItem aPaMItem( pEditWin->GetView().GetPool( ).GetWhich( FN_PARAM_PAM ), &aPaM );
+            SfxStringItem aItem( pEditWin->GetView().GetPool( ).GetWhich( SID_PARA_DLG ), "textflow" );
+            pEditWin->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(
+                    SID_PARA_DLG,
+                    SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                    { &aItem, &aPaMItem });
+        }
+        rSh.LockView( bOldLock );
+        pEditWin->GrabFocus( );
     }
-    else if (rIdent == "delete")
+    else if (pCnt && rIdent == "delete")
     {
-        const SwLayoutFrame* pBodyFrame = static_cast< const SwLayoutFrame* >( GetPageFrame()->Lower() );
-        while ( pBodyFrame && !pBodyFrame->IsBodyFrame() )
-            pBodyFrame = static_cast< const SwLayoutFrame* >( pBodyFrame->GetNext() );
+        SwContentNode& rNd = pCnt->IsTextFrame()
+            ? *static_cast<SwTextFrame*>(pCnt)->GetTextNodeFirst()
+            : *static_cast<SwNoTextFrame*>(pCnt)->GetNode();
 
-        if ( pBodyFrame )
-        {
+        rNd.GetDoc().GetIDocumentUndoRedo( ).StartUndo( SwUndoId::UI_DELETE_PAGE_BREAK, nullptr );
 
-            SwContentFrame *pCnt = const_cast< SwContentFrame* >( pBodyFrame->ContainsContent() );
-            SwContentNode* pNd = pCnt->IsTextFrame()
-                ? static_cast<SwTextFrame*>(pCnt)->GetTextNodeFirst()
-                : static_cast<SwNoTextFrame*>(pCnt)->GetNode();
+        SfxItemSet aSet(
+            GetEditWin()->GetView().GetWrtShell().GetAttrPool(),
+            svl::Items<RES_PAGEDESC, RES_BREAK>{});
+        aSet.Put( SvxFormatBreakItem( SvxBreak::NONE, RES_BREAK ) );
+        aSet.Put( SwFormatPageDesc( nullptr ) );
 
-            pNd->GetDoc().GetIDocumentUndoRedo( ).StartUndo( SwUndoId::UI_DELETE_PAGE_BREAK, nullptr );
+        SwPaM aPaM( rNd );
+        rNd.GetDoc().getIDocumentContentOperations().InsertItemSet(
+            aPaM, aSet, SetAttrMode::DEFAULT, GetPageFrame()->getRootFrame());
 
-            SfxItemSet aSet(
-                GetEditWin()->GetView().GetWrtShell().GetAttrPool(),
-                svl::Items<RES_PAGEDESC, RES_BREAK>{});
-            aSet.Put( SvxFormatBreakItem( SvxBreak::NONE, RES_BREAK ) );
-            aSet.Put( SwFormatPageDesc( nullptr ) );
-
-            SwPaM aPaM( *pNd );
-            pNd->GetDoc().getIDocumentContentOperations().InsertItemSet(
-                aPaM, aSet, SetAttrMode::DEFAULT, GetPageFrame()->getRootFrame());
-
-            pNd->GetDoc().GetIDocumentUndoRedo( ).EndUndo( SwUndoId::UI_DELETE_PAGE_BREAK, nullptr );
-        }
+        rNd.GetDoc().GetIDocumentUndoRedo( ).EndUndo( SwUndoId::UI_DELETE_PAGE_BREAK, nullptr );
     }
 
     // Only fade if there is more than this temporary shared pointer:
