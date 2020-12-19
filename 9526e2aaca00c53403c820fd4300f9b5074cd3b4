@@ -186,6 +186,24 @@
     },
     {
       "key": {
+        "uuid": "bcb67634_c9cc166c",
+        "filename": "offapi/com/sun/star/xml/sax/XWriter.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-19T20:28:01Z",
+      "side": 1,
+      "message": "OK, how do I use the Pair?\nIn this patch I try to use it in the parser:\nhttps://gerrit.libreoffice.org/c/core/+/108028\nBut it won\u0027t recognize the entities any more.\nThe files with the declarations are:\nstarmath/source/xparsmlbase.hxx\nstarmath/source/xparsmlbase.cxx",
+      "parentUuid": "5006326d_b2434f71",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "14028e78_071d578c",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 5
@@ -441,6 +459,24 @@
     },
     {
       "key": {
+        "uuid": "7fa162d8_cc01e08e",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-19T20:28:01Z",
+      "side": 1,
+      "message": "OK, thanks.",
+      "parentUuid": "eb6fe537_df879750",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67af419e_e7ce8f70",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 5
@@ -491,6 +527,24 @@
       "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f0257a2_b4e45bd3",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-19T20:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d10c3b01_53fc4cf8",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -580,6 +634,24 @@
       "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0f4af3f_f6075ac7",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-19T20:28:01Z",
+      "side": 1,
+      "message": "Sorry, I wasn\u0027t understanding. Now i get it.",
+      "parentUuid": "2b3175eb_2e3ef244",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
