@@ -43,7 +43,7 @@
 #include <bitmap/impoctree.hxx>
 #include <bitmap/Octree.hxx>
 
-#include "impvect.hxx"
+#include "Vectorizer.hxx"
 #include "floyd.hxx"
 
 #include <math.h>
@@ -1659,7 +1659,7 @@ bool Bitmap::Dither()
 
 void Bitmap::Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce, const Link<tools::Long,void>* pProgress )
 {
-    ImplVectorizer::ImplVectorize( *this, rMtf, cReduce, pProgress );
+    vcl::Vectorizer::Vectorize( *this, rMtf, cReduce, pProgress );
 }
 
 bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
