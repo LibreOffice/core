@@ -1164,7 +1164,7 @@ void ScTable::LimitChartArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol
     SCROW lastDataPos = 0;
     for (SCCOL i=rStartCol; i<=rEndCol; i++)
         lastDataPos = std::max(lastDataPos, aCol[i].GetLastDataPos());
-    rEndRow = std::clamp( rEndRow, rStartRow, lastDataPos );
+    rEndRow = std::clamp( lastDataPos, rStartRow, rEndRow );
 }
 
 SCCOL ScTable::FindNextVisibleCol( SCCOL nCol, bool bRight ) const
