@@ -25,6 +25,7 @@
 #include <PostItMgr.hxx>
 #include <FrameControlsManager.hxx>
 #include <strings.hrc>
+#include "tabfrm.hxx"
 #include <uiitems.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
@@ -221,11 +222,42 @@ void SwPageBreakWin::PaintButton()
     m_xMenuButton->set_custom_button(m_xVirDev.get());
 }
 
+SvxBreak lcl_GetBreakItem(const SwContentFrame* pCnt)
+{
+    SvxBreak eBreak = SvxBreak::NONE;
+    if ( pCnt )
+    {
+        if ( pCnt->IsInTab() )
+            eBreak =  pCnt->FindTabFrame()->GetBreakItem().GetBreak();
+        else
+            eBreak = pCnt->GetBreakItem().GetBreak();
+    }
+    return eBreak;
+}
+
 IMPL_LINK(SwPageBreakWin, SelectHdl, const OString&, rIdent, void)
 {
     SwFrameControlPtr pThis = GetEditWin()->GetFrameControlsManager( ).GetControl( FrameControlType::PageBreak, GetFrame() );
 
+    // Is there a PageBefore break on this page?
     SwContentFrame *pCnt = const_cast<SwContentFrame*>(GetPageFrame()->FindFirstBodyContent());
+    SvxBreak eBreak = lcl_GetBreakItem( pCnt );
+
+    // Also check the previous page - to see if there is a PageAfter break
+    // With Delete, always remove the PageAfter.
+    // With Edit, can only edit one at a time, so ignore PageAfter if PageBefore is set.
+    SwContentFrame *pPrevCnt = nullptr;
+    SvxBreak ePrevBreak = SvxBreak::NONE;
+    if ( rIdent == "delete" || eBreak != SvxBreak::PageBefore )
+    {
+        const SwPageFrame* pPrevPage = static_cast<const SwPageFrame*>(GetPageFrame()->GetPrev());
+        if ( pPrevPage )
+        {
+            pPrevCnt = const_cast<SwContentFrame*>(pPrevPage->FindLastBodyContent());
+            ePrevBreak = lcl_GetBreakItem( pPrevCnt );
+        }
+    }
+
     if (pCnt && rIdent == "edit")
     {
         SwEditWin* pEditWin = GetEditWin();
@@ -233,6 +265,10 @@ IMPL_LINK(SwPageBreakWin, SelectHdl, const OString&, rIdent, void)
         SwWrtShell& rSh = pEditWin->GetView().GetWrtShell();
         bool bOldLock = rSh.IsViewLocked();
         rSh.LockView( true );
+
+        // Order of edit detection: RES_BREAK PageBefore, RES_BREAK PageAfter, RES_PAGEDESC(assumed)
+        if ( pPrevCnt && ePrevBreak == SvxBreak::PageAfter )
+            pCnt = pPrevCnt;
 
         SwContentNode& rNd = pCnt->IsTextFrame()
             ? *static_cast<SwTextFrame*>(pCnt)->GetTextNodeFirst()
@@ -277,8 +313,24 @@ IMPL_LINK(SwPageBreakWin, SelectHdl, const OString&, rIdent, void)
         SfxItemSet aSet(
             GetEditWin()->GetView().GetWrtShell().GetAttrPool(),
             svl::Items<RES_PAGEDESC, RES_BREAK>{});
-        aSet.Put( SvxFormatBreakItem( SvxBreak::NONE, RES_BREAK ) );
+
+        // This break could be from the previous paragraph, if it has a PageAfter break.
+        if ( ePrevBreak == SvxBreak::PageAfter )
+        {
+            SwContentNode& rPrevNd = pPrevCnt->IsTextFrame()
+                ? *static_cast<SwTextFrame*>(pPrevCnt)->GetTextNodeFirst()
+                : *static_cast<SwNoTextFrame*>(pPrevCnt)->GetNode();
+            aSet.Put( SvxFormatBreakItem( SvxBreak::NONE, RES_BREAK ) );
+            SwPaM aPaM( rPrevNd );
+            rPrevNd.GetDoc().getIDocumentContentOperations().InsertItemSet(
+                aPaM, aSet, SetAttrMode::DEFAULT, GetPageFrame()->getRootFrame());
+            aSet.ClearItem();
+        }
+
         aSet.Put( SwFormatPageDesc( nullptr ) );
+        // This break could be from the current paragraph, if it has a PageBefore break.
+        if ( eBreak == SvxBreak::PageBefore )
+            aSet.Put( SvxFormatBreakItem( SvxBreak::NONE, RES_BREAK ) );
 
         SwPaM aPaM( rNd );
         rNd.GetDoc().getIDocumentContentOperations().InsertItemSet(
