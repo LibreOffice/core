@@ -1329,7 +1329,7 @@ End Function    &apos;   SFDocuments.SF_Calc.InsertSheet
 
 REM -----------------------------------------------------------------------------
 Public Function Methods() As Variant
-&apos;&apos;&apos;	Return the list of public methods of the Model service as an array
+&apos;&apos;&apos;	Return the list of public methods of the Calc service as an array
 
 	Methods = Array( _
 					&quot;Activate&quot; _
@@ -1548,7 +1548,7 @@ End Function	&apos;	SF_Documents.SF_Calc.Offset
 
 REM -----------------------------------------------------------------------------
 Public Function Properties() As Variant
-&apos;&apos;&apos;	Return the list or properties of the Timer class as an array
+&apos;&apos;&apos;	Return the list or properties of the Calc class as an array
 
 	Properties = Array( _
 					&quot;CurrentSelection&quot; _
