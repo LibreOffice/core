@@ -576,7 +576,10 @@ IMPL_LINK(ButtonPressRepeater, MousePressHdl, const MouseEvent&, rMouseEvent, bo
     m_bModKey = rMouseEvent.IsMod1();
     if (!m_rButton.get_sensitive())
         return false;
+    auto self = weak_from_this();
     RepeatTimerHdl(nullptr);
+    if (!self.lock())
+        return false;
     if (!m_rButton.get_sensitive())
         return false;
     m_aRepeat.SetTimeout(MouseSettings::GetButtonStartRepeat());

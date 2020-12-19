@@ -426,9 +426,9 @@ public:
     std::unique_ptr<weld::Button> m_xNextButton;
     std::unique_ptr<weld::Button> m_xLastButton;
     std::unique_ptr<weld::Button> m_xAddButton;
-    std::unique_ptr<weld::ButtonPressRepeater> m_xAddRepeater;
-    std::unique_ptr<weld::ButtonPressRepeater> m_xPrevRepeater;
-    std::unique_ptr<weld::ButtonPressRepeater> m_xNextRepeater;
+    std::shared_ptr<weld::ButtonPressRepeater> m_xAddRepeater;
+    std::shared_ptr<weld::ButtonPressRepeater> m_xPrevRepeater;
+    std::shared_ptr<weld::ButtonPressRepeater> m_xNextRepeater;
 
     TabButtons(TabBar* pParent)
         : InterimItemWindow(pParent,
@@ -780,8 +780,8 @@ void TabBar::ImplInitControls()
     if (mnWinStyle & WB_INSERTTAB)
     {
         Link<weld::Button&,void> aLink = LINK(this, TabBar, ImplAddClickHandler);
-        mpImpl->mxButtonBox->m_xAddRepeater.reset(new weld::ButtonPressRepeater(
-                    *mpImpl->mxButtonBox->m_xAddButton, aLink, aContextLink));
+        mpImpl->mxButtonBox->m_xAddRepeater = std::make_shared<weld::ButtonPressRepeater>(
+                    *mpImpl->mxButtonBox->m_xAddButton, aLink, aContextLink);
         mpImpl->mxButtonBox->m_xAddButton->show();
     }
 
@@ -789,11 +789,11 @@ void TabBar::ImplInitControls()
 
     if (mnWinStyle & (WB_MINSCROLL | WB_SCROLL))
     {
-        mpImpl->mxButtonBox->m_xPrevRepeater.reset(new weld::ButtonPressRepeater(
-                    *mpImpl->mxButtonBox->m_xPrevButton, aLink, aContextLink));
+        mpImpl->mxButtonBox->m_xPrevRepeater = std::make_shared<weld::ButtonPressRepeater>(
+                    *mpImpl->mxButtonBox->m_xPrevButton, aLink, aContextLink);
         mpImpl->mxButtonBox->m_xPrevButton->show();
-        mpImpl->mxButtonBox->m_xNextRepeater.reset(new weld::ButtonPressRepeater(
-                    *mpImpl->mxButtonBox->m_xNextButton, aLink, aContextLink));
+        mpImpl->mxButtonBox->m_xNextRepeater = std::make_shared<weld::ButtonPressRepeater>(
+                    *mpImpl->mxButtonBox->m_xNextButton, aLink, aContextLink);
         mpImpl->mxButtonBox->m_xNextButton->show();
     }
 

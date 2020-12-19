@@ -397,6 +397,7 @@ private:
 };
 
 class VCL_DLLPUBLIC ButtonPressRepeater final
+    : public std::enable_shared_from_this<ButtonPressRepeater>
 {
 private:
     weld::Button& m_rButton;
