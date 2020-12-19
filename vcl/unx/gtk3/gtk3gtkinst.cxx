@@ -25,6 +25,7 @@
 #include <headless/svpvd.hxx>
 #include <headless/svpbmp.hxx>
 #include <vcl/inputtypes.hxx>
+#include <vcl/transfer.hxx>
 #include <unx/genpspgraphics.h>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
@@ -1787,6 +1788,22 @@ namespace
     }
 }
 
+namespace {
+
+GdkDragAction VclToGdk(sal_Int8 dragOperation)
+{
+    GdkDragAction eRet(static_cast<GdkDragAction>(0));
+    if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_COPY)
+        eRet = static_cast<GdkDragAction>(eRet | GDK_ACTION_COPY);
+    if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_MOVE)
+        eRet = static_cast<GdkDragAction>(eRet | GDK_ACTION_MOVE);
+    if (dragOperation & css::datatransfer::dnd::DNDConstants::ACTION_LINK)
+        eRet = static_cast<GdkDragAction>(eRet | GDK_ACTION_LINK);
+    return eRet;
+}
+
+}
+
 class GtkInstanceWidget : public virtual weld::Widget
 {
 protected:
@@ -1889,6 +1906,25 @@ protected:
         return AllSettings::GetLayoutRTL();
     }
 
+    void do_enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants)
+    {
+        css::uno::Reference<css::datatransfer::XTransferable> xTrans(rHelper.get());
+        css::uno::Reference<css::datatransfer::dnd::XDragSourceListener> xListener(rHelper.get());
+
+        ensure_drag_source();
+
+        auto aFormats = xTrans->getTransferDataFlavors();
+        std::vector<GtkTargetEntry> aGtkTargets(m_xDragSource->FormatsToGtk(aFormats));
+
+        m_eDragAction = VclToGdk(eDNDConstants);
+        drag_source_set(aGtkTargets, m_eDragAction);
+
+        for (auto &a : aGtkTargets)
+            g_free(a.target);
+
+        m_xDragSource->set_datatransfer(xTrans, xListener);
+    }
+
     void localizeDecimalSeparator()
     {
         // tdf#128867 if localize decimal separator is active we will always
@@ -1903,9 +1939,13 @@ private:
     bool m_bDraggedOver;
     sal_uInt16 m_nLastMouseButton;
     sal_uInt16 m_nLastMouseClicks;
+    int m_nPressedButton;
+    int m_nPressStartX;
+    int m_nPressStartY;
     ImplSVEvent* m_pFocusInEvent;
     ImplSVEvent* m_pFocusOutEvent;
     GtkCssProvider* m_pBgCssProvider;
+    GdkDragAction m_eDragAction;
     gulong m_nFocusInSignalId;
     gulong m_nMnemonicActivateSignalId;
     gulong m_nFocusOutSignalId;
@@ -1921,9 +1961,15 @@ private:
     gulong m_nDragDropSignalId;
     gulong m_nDragDropReceivedSignalId;
     gulong m_nDragLeaveSignalId;
+    gulong m_nDragBeginSignalId;
+    gulong m_nDragEndSignalId;
+    gulong m_nDragFailedSignalId;
+    gulong m_nDragDataDeleteignalId;
+    gulong m_nDragGetSignalId;
 
     rtl::Reference<GtkDropTarget> m_xDropTarget;
     rtl::Reference<GtkDragSource> m_xDragSource;
+    std::vector<AtkRelation*> m_aExtraAtkRelations;
 
     static void signalSizeAllocate(GtkWidget*, GdkRectangle* allocation, gpointer widget)
     {
@@ -1959,6 +2005,8 @@ private:
 
     bool signal_button(GdkEventButton* pEvent)
     {
+        m_nPressedButton = -1;
+
         Point aPos(pEvent->x, pEvent->y);
         if (SwapForRTL())
             aPos.setX(gtk_widget_get_allocated_width(m_pWidget) - 1 - aPos.X());
@@ -2021,6 +2069,14 @@ private:
                 return false;
         }
 
+        /* Save press to possibly begin a drag */
+        if (pEvent->type != GDK_BUTTON_RELEASE)
+        {
+            m_nPressedButton = pEvent->button;
+            m_nPressStartX = pEvent->x;
+            m_nPressStartY = pEvent->y;
+        }
+
         sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(pEvent->state);
         sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
         MouseEvent aMEvt(aPos, m_nLastMouseClicks, ImplGetMouseButtonMode(m_nLastMouseButton, nModCode), nCode, nCode);
@@ -2046,6 +2102,19 @@ private:
 
     bool signal_motion(const GdkEventMotion* pEvent)
     {
+        GtkTargetList* pDragData = (m_eDragAction != 0 && m_nPressedButton != -1 && m_xDragSource.is()) ? gtk_drag_source_get_target_list(m_pWidget) : nullptr;
+        if (pDragData && gtk_drag_check_threshold(m_pWidget, m_nPressStartX, m_nPressStartY, pEvent->x, pEvent->y) && !do_signal_drag_begin())
+        {
+            gtk_drag_begin_with_coordinates(m_pWidget,
+                                            pDragData,
+                                            m_eDragAction,
+                                            m_nPressedButton,
+                                            const_cast<GdkEvent*>(reinterpret_cast<const GdkEvent*>(pEvent)),
+                                            m_nPressStartX, m_nPressStartY);
+            m_nPressedButton = -1;
+            return false;
+        }
+
         if (!m_aMouseMotionHdl.IsSet())
             return false;
 
@@ -2127,6 +2196,80 @@ private:
         }
     }
 
+    static void signalDragBegin(GtkWidget*, GdkDragContext* context, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        pThis->signal_drag_begin(context);
+    }
+
+    void ensure_drag_source()
+    {
+        if (!m_xDragSource)
+        {
+            m_xDragSource.set(new GtkDragSource);
+
+            m_nDragFailedSignalId = g_signal_connect(m_pWidget, "drag-failed", G_CALLBACK(signalDragFailed), this);
+            m_nDragDataDeleteignalId = g_signal_connect(m_pWidget, "drag-data-delete", G_CALLBACK(signalDragDelete), this);
+            m_nDragGetSignalId = g_signal_connect(m_pWidget, "drag-data-get", G_CALLBACK(signalDragDataGet), this);
+            m_nDragBeginSignalId = g_signal_connect(m_pWidget, "drag-begin", G_CALLBACK(signalDragBegin), this);
+            m_nDragEndSignalId = g_signal_connect(m_pWidget, "drag-end", G_CALLBACK(signalDragEnd), this);
+        }
+    }
+
+    virtual bool do_signal_drag_begin()
+    {
+        return false;
+    }
+
+    void signal_drag_begin(GdkDragContext* context)
+    {
+        if (do_signal_drag_begin())
+        {
+            gtk_drag_cancel(context);
+            return;
+        }
+        if (!m_xDragSource)
+            return;
+        m_xDragSource->setActiveDragSource();
+    }
+
+    virtual void do_signal_drag_end()
+    {
+    }
+
+    static void signalDragEnd(GtkWidget* /*widget*/, GdkDragContext* context, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        pThis->do_signal_drag_end();
+        if (pThis->m_xDragSource.is())
+            pThis->m_xDragSource->dragEnd(context);
+    }
+
+    static gboolean signalDragFailed(GtkWidget* /*widget*/, GdkDragContext* /*context*/, GtkDragResult /*result*/, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        pThis->m_xDragSource->dragFailed();
+        return false;
+    }
+
+    static void signalDragDelete(GtkWidget* /*widget*/, GdkDragContext* /*context*/, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        pThis->m_xDragSource->dragDelete();
+    }
+
+    static void signalDragDataGet(GtkWidget* /*widget*/, GdkDragContext* /*context*/, GtkSelectionData *data, guint info,
+                                  guint /*time*/, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        pThis->m_xDragSource->dragDataGet(data, info);
+    }
+
+    virtual void drag_source_set(const std::vector<GtkTargetEntry>& rGtkTargets, GdkDragAction eDragAction)
+    {
+        gtk_drag_source_set(m_pWidget, GDK_BUTTON1_MASK, rGtkTargets.data(), rGtkTargets.size(), eDragAction);
+    }
+
     void set_background(const OUString* pColor)
     {
         if (!pColor && !m_pBgCssProvider)
@@ -2157,9 +2300,13 @@ public:
         , m_bDraggedOver(false)
         , m_nLastMouseButton(0)
         , m_nLastMouseClicks(0)
+        , m_nPressedButton(-1)
+        , m_nPressStartX(-1)
+        , m_nPressStartY(-1)
         , m_pFocusInEvent(nullptr)
         , m_pFocusOutEvent(nullptr)
         , m_pBgCssProvider(nullptr)
+        , m_eDragAction(GdkDragAction(0))
         , m_nFocusInSignalId(0)
         , m_nMnemonicActivateSignalId(0)
         , m_nFocusOutSignalId(0)
@@ -2175,6 +2322,11 @@ public:
         , m_nDragDropSignalId(0)
         , m_nDragDropReceivedSignalId(0)
         , m_nDragLeaveSignalId(0)
+        , m_nDragBeginSignalId(0)
+        , m_nDragEndSignalId(0)
+        , m_nDragFailedSignalId(0)
+        , m_nDragDataDeleteignalId(0)
+        , m_nDragGetSignalId(0)
     {
         if (!bTakeOwnership)
             g_object_ref(m_pWidget);
@@ -2701,6 +2853,16 @@ public:
             g_signal_handler_disconnect(m_pWidget, m_nDragDropReceivedSignalId);
         if (m_nDragLeaveSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nDragLeaveSignalId);
+        if (m_nDragEndSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nDragEndSignalId);
+        if (m_nDragBeginSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nDragBeginSignalId);
+        if (m_nDragFailedSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nDragFailedSignalId);
+        if (m_nDragDataDeleteignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nDragDataDeleteignalId);
+        if (m_nDragGetSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nDragGetSignalId);
         if (m_nKeyPressSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nKeyPressSignalId);
         if (m_nKeyReleaseSignalId)
