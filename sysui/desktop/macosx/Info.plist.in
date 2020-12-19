@@ -1527,6 +1527,14 @@
         </dict>
         <dict>
             <key>CFBundleURLName</key>
+            <string>@PRODUCTNAME@ CMIS</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>vnd.libreoffice.command</string>
+            </array>
+        </dict>
+        <dict>
+            <key>CFBundleURLName</key>
             <string>@PRODUCTNAME@ WebDav</string>
             <key>CFBundleURLSchemes</key>
             <array>
