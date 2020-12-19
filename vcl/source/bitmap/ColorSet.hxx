@@ -17,19 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_GDI_IMPVECT_HXX
-#define INCLUDED_VCL_SOURCE_GDI_IMPVECT_HXX
+#pragma once
 
-#include <vcl/gdimtf.hxx>
+#include <sal/types.h>
 
-namespace tools { class PolyPolygon; }
+#include <vcl/BitmapColor.hxx>
 
-namespace ImplVectorizer
+namespace vcl::Vectorizer
 {
-    bool     ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
-                            sal_uInt8 cReduce, const Link<tools::Long,void>* pProgress );
+struct ColorSet
+{
+    BitmapColor maColor;
+    sal_uInt16 mnIndex = 0;
+    bool mbSet = false;
 };
 
-#endif
+bool ColorSetCmpFnc(const ColorSet& lhs, const ColorSet& rhs);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
