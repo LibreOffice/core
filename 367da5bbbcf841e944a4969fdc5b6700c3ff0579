@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69d7b11e_d6d461f9",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-12-19T03:25:22Z",
+      "side": 1,
+      "message": "that should be constexpr and inlined function. Maybe change in a follow-up patch..",
+      "revId": "367da5bbbcf841e944a4969fdc5b6700c3ff0579",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7a07036_59185995",
+        "filename": "vcl/source/gdi/bitmap3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-12-19T03:25:22Z",
+      "side": 1,
+      "message": "that should be constexpr and inlined function. Maybe change in a follow-up patch..",
+      "revId": "367da5bbbcf841e944a4969fdc5b6700c3ff0579",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
