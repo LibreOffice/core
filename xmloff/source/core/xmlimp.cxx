@@ -545,6 +545,13 @@ void SAL_CALL SvXMLImport::setNamespaceHandler( const uno::Reference< xml::sax::
     mxParser->setNamespaceHandler( Handler );
 }
 
+<<<<<<< HEAD   (e9c9e7 ofz#29113 short read)
+=======
+void SAL_CALL SvXMLImport::setCustomEntityNames( const ::css::uno::Sequence< ::css::beans::Pair<::rtl::OUString, ::rtl::OUString> >& replacements )
+{
+    mxParser->setCustomEntityNames( replacements );
+}
+>>>>>>> CHANGE (9f6dfd Improve handle of custom XML entities)
 
 void SAL_CALL SvXMLImport::startDocument()
 {

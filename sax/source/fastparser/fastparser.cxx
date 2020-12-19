@@ -230,6 +230,9 @@ public:
     void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler );
     /// @throws css::uno::RuntimeException
     void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler);
+    // Fake DTD file
+    void setCustomEntityNames(
+       const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements);
 
     // called by the C callbacks of the expat parser
     void callbackStartElement( const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
@@ -921,6 +924,19 @@ void FastSaxParserImpl::setNamespaceHandler( const Reference< XFastNamespaceHand
     maData.mxNamespaceHandler = Handler;
 }
 
+void FastSaxParserImpl::setCustomEntityNames(
+    const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements)
+{
+    m_Replacements.resize(replacements.size());
+    for (size_t i = 0; i < replacements.size(); ++i)
+    {
+        m_Replacements[i].name = replacements[i].First;
+        m_Replacements[i].replacement = replacements[i].Second;
+    }
+    if (m_Replacements.size() > 1)
+        std::sort(m_Replacements.begin(), m_Replacements.end());
+}
+
 void FastSaxParserImpl::deleteUsedEvents()
 {
     Entity& rEntity = getEntity();
@@ -1419,6 +1435,12 @@ void FastSaxParser::setNamespaceHandler( const uno::Reference< css::xml::sax::XF
 OUString FastSaxParser::getImplementationName()
 {
     return "com.sun.star.comp.extensions.xml.sax.FastParser";
+}
+
+void FastSaxParser::setCustomEntityNames(
+    const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements)
+{
+    mpImpl->setCustomEntityNames(replacements);
 }
 
 sal_Bool FastSaxParser::supportsService( const OUString& ServiceName )
