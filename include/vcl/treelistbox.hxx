@@ -227,8 +227,12 @@ class VCL_DLLPUBLIC SvTreeListBox
     SelectionMode   eSelMode;
     sal_Int32       nMinWidthInChars;
 
+    sal_Int8        mnDragAction;
+
     SvTreeListEntry*        pEdEntry;
     SvLBoxItem*             pEdItem;
+
+    rtl::Reference<TransferDataContainer> m_xTransferHelper;
 
 protected:
     std::unique_ptr<SvImpLBox>              pImpl;
@@ -736,6 +740,8 @@ public:
     void            SetForceMakeVisible(bool bEnable);
 
     virtual FactoryFunction GetUITestFactory() const override;
+
+    void            SetDragHelper(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants);
 };
 
 class SvInplaceEdit2

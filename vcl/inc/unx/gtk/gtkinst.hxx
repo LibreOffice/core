@@ -150,6 +150,13 @@ public:
     {
     }
 
+    void set_datatransfer(const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
+                          const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener);
+
+    std::vector<GtkTargetEntry> FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats);
+
+    void setActiveDragSource();
+
     virtual ~GtkDragSource() override;
 
     // XDragSource

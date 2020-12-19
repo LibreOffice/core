@@ -483,7 +483,7 @@ public:
 
 struct TransferDataContainer_Impl;
 
-class VCL_DLLPUBLIC TransferDataContainer final : public TransferableHelper
+class VCL_DLLPUBLIC TransferDataContainer : public TransferableHelper
 {
     std::unique_ptr<TransferDataContainer_Impl> pImpl;
 
