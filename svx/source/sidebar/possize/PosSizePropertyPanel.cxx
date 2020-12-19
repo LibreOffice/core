@@ -355,44 +355,12 @@ void PosSizePropertyPanel::HandleContextChange(
 
 IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl, Edit&, void )
 {
-    if( mpCbxScale->IsChecked() &&
-        mpCbxScale->IsEnabled() )
-    {
-        long nHeight = static_cast<long>( (static_cast<double>(mlOldHeight) * static_cast<double>(mpMtrWidth->GetValue())) / static_cast<double>(mlOldWidth) );
-        if( nHeight <= mpMtrHeight->GetMax( FieldUnit::NONE ) )
-        {
-            mpMtrHeight->SetUserValue( nHeight, FieldUnit::NONE );
-        }
-        else
-        {
-            nHeight = static_cast<long>(mpMtrHeight->GetMax( FieldUnit::NONE ));
-            mpMtrHeight->SetUserValue( nHeight );
-            const long nWidth = static_cast<long>( (static_cast<double>(mlOldWidth) * static_cast<double>(nHeight)) / static_cast<double>(mlOldHeight) );
-            mpMtrWidth->SetUserValue( nWidth, FieldUnit::NONE );
-        }
-    }
     executeSize();
 }
 
 
 IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightHdl, Edit&, void )
 {
-    if( mpCbxScale->IsChecked() &&
-        mpCbxScale->IsEnabled() )
-    {
-        long nWidth = static_cast<long>( (static_cast<double>(mlOldWidth) * static_cast<double>(mpMtrHeight->GetValue())) / static_cast<double>(mlOldHeight) );
-        if( nWidth <= mpMtrWidth->GetMax( FieldUnit::NONE ) )
-        {
-            mpMtrWidth->SetUserValue( nWidth, FieldUnit::NONE );
-        }
-        else
-        {
-            nWidth = static_cast<long>(mpMtrWidth->GetMax( FieldUnit::NONE ));
-            mpMtrWidth->SetUserValue( nWidth );
-            const long nHeight = static_cast<long>( (static_cast<double>(mlOldHeight) * static_cast<double>(nWidth)) / static_cast<double>(mlOldWidth) );
-            mpMtrHeight->SetUserValue( nHeight, FieldUnit::NONE );
-        }
-    }
     executeSize();
 }
 
