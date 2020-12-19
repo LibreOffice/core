@@ -168,6 +168,24 @@
     },
     {
       "key": {
+        "uuid": "5006326d_b2434f71",
+        "filename": "offapi/com/sun/star/xml/sax/XWriter.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-19T14:24:37Z",
+      "side": 1,
+      "message": "\u003e It does not apply to my case, uses two strings, but I need a string and an unicode32 codepoint.\n\nAh sorry, hadn\u0027t even noticed you wanted to encode the replacement text as a single Unicode scalar value via UNO `unsigned long`.  There\u0027s three thoughts on that:\n\n1  We have the generic css.beans.Pair for that.\n\n2  The unsigned UNO integer types are considered a historically bad idea (e.g., some language bindings like Java don\u0027t support them natively).  And to encode Unicode scalar values (fitting in the range 0-0x10FFFF), signed UNO `long` would work fine, so I would suggest changing that (if it were not for the next thought anyway).\n\n3  My understanding of XML is that the definitions of such entities (EntityValue) can contain arbitrary text, not just a single Unicode scalar value.  Wouldn\u0027t it make more sense to encode those replacements as UNO `string`?\n\n\u003e The deprecated stuff:\n\u003e List of problematic API that should be considered for deprecation/change/removal:\n\u003e  -   css::document::XDocumentInfo User:mst\n\u003e  -   css::beans::StringPair - there\u0027s the generic beans::Pair\u003c\u003e type now User:thorsten\n\u003e  -   css::util::Time and DateTime lack a timezone field. Just adding that would be less work than defining new structs. User:mst\n\nI see.  And yeah, probably better to chose Pair\u003cstring,string\u003e over StringPair.",
+      "parentUuid": "5f790446_54944568",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "14028e78_071d578c",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 5
@@ -227,6 +245,30 @@
       "side": 1,
       "message": "It\u0027s almost reseted.",
       "parentUuid": "b6f9ba1f_2892f343",
+      "range": {
+        "startLine": 286,
+        "startChar": 24,
+        "endLine": 286,
+        "endChar": 35
+      },
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "835a7811_6c77a0ce",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-19T14:24:37Z",
+      "side": 1,
+      "message": "thanks",
+      "parentUuid": "1b0057e7_92bd294c",
       "range": {
         "startLine": 286,
         "startChar": 24,
@@ -381,6 +423,24 @@
     },
     {
       "key": {
+        "uuid": "eb6fe537_df879750",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-19T14:24:37Z",
+      "side": 1,
+      "message": "a common idiom is\n\n  assert(p \u0026\u0026 \"...\")",
+      "parentUuid": "651706f5_0cfd0520",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "67af419e_e7ce8f70",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 5
@@ -499,6 +559,24 @@
       "side": 1,
       "message": "I explain how I implemented it:\nnSurrogate is declared as 0.\nIf there is a surrogated pair it gets a value\nThen if nSurrogate has non null value, data is written as UTF32 and nSurrogate reseted a 0, so in next loop it won\u0027t be a false positive.",
       "parentUuid": "d462b0a7_e318efe0",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b3175eb_2e3ef244",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-19T14:24:37Z",
+      "side": 1,
+      "message": "but then you don\u0027t need nSurrogate to be carried over to the next loop iteration/it can be defined inside the loop body",
+      "parentUuid": "4f964d46_c64167ad",
       "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
