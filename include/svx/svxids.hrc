@@ -442,6 +442,7 @@ class SvxSetItem;
 #define SID_BMPMASK                                     ( SID_SVX_START + 350 )
 #define SID_BMPMASK_PIPETTE                             ( SID_SVX_START + 351 )
 #define SID_BMPMASK_EXEC                                ( SID_SVX_START + 353 )
+#define SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW            ( SID_SVX_START + 354 )
 
 // CAUTION! Range <363 .. 363> used by EditEngine (!)
 

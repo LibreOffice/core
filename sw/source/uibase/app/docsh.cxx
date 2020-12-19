@@ -104,6 +104,8 @@
 
 #include <comphelper/processfactory.hxx>
 
+#include <svx/devtools/DevelopmentToolDockingWindow.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
@@ -1120,6 +1122,16 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 rSet.DisableItem(nWhich);
         }
         break;
+        case SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW:
+        {
+            SfxViewShell* pViewShell = GetView()? GetView(): SfxViewShell::Current();
+            if (pViewShell->GetViewFrame()->KnowsChildWindow(nWhich))
+                rSet.Put(SfxBoolItem(nWhich, GetViewShell()->GetViewFrame()->HasChildWindow(nWhich)));
+            else
+                rSet.DisableItem(nWhich);
+        }
+        break;
+
 
         default: OSL_ENSURE(false,"You cannot get here!");
 

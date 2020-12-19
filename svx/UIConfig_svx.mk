@@ -41,6 +41,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/deletefooterdialog \
 	svx/uiconfig/ui/depthwindow \
 	svx/uiconfig/ui/directionwindow \
+	svx/uiconfig/ui/developmenttool \
 	svx/uiconfig/ui/docking3deffects \
 	svx/uiconfig/ui/dockingcolorreplace \
 	svx/uiconfig/ui/dockingcolorwindow \

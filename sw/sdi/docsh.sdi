@@ -71,6 +71,12 @@ interface TextDocument : BaseTextDocument
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
+
+    SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
 }
 
 shell SwDocShell
