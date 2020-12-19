@@ -64,6 +64,10 @@ public:
     virtual void SAL_CALL setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) override;
     virtual void SAL_CALL setLocale( const css::lang::Locale& rLocale ) override;
     virtual void SAL_CALL setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) override;
+<<<<<<< HEAD   (e9c9e7 ofz#29113 short read)
+=======
+    virtual void SAL_CALL setCustomEntityNames( const ::css::uno::Sequence< ::css::beans::Pair<::rtl::OUString, ::rtl::OUString> >& replacements )  override;
+>>>>>>> CHANGE (9f6dfd Improve handle of custom XML entities)
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;

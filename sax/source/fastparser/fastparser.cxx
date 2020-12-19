@@ -230,6 +230,12 @@ public:
     void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler );
     /// @throws css::uno::RuntimeException
     void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler);
+<<<<<<< HEAD   (e9c9e7 ofz#29113 short read)
+=======
+    // Fake DTD file
+    void setCustomEntityNames(
+       const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements);
+>>>>>>> CHANGE (9f6dfd Improve handle of custom XML entities)
 
     // called by the C callbacks of the expat parser
     void callbackStartElement( const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
@@ -921,6 +927,22 @@ void FastSaxParserImpl::setNamespaceHandler( const Reference< XFastNamespaceHand
     maData.mxNamespaceHandler = Handler;
 }
 
+<<<<<<< HEAD   (e9c9e7 ofz#29113 short read)
+=======
+void FastSaxParserImpl::setCustomEntityNames(
+    const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements)
+{
+    m_Replacements.resize(replacements.size());
+    for (size_t i = 0; i < replacements.size(); ++i)
+    {
+        m_Replacements[i].name = replacements[i].First;
+        m_Replacements[i].replacement = replacements[i].Second;
+    }
+    if (m_Replacements.size() > 1)
+        std::sort(m_Replacements.begin(), m_Replacements.end());
+}
+
+>>>>>>> CHANGE (9f6dfd Improve handle of custom XML entities)
 void FastSaxParserImpl::deleteUsedEvents()
 {
     Entity& rEntity = getEntity();
@@ -1421,6 +1443,15 @@ OUString FastSaxParser::getImplementationName()
     return "com.sun.star.comp.extensions.xml.sax.FastParser";
 }
 
+<<<<<<< HEAD   (e9c9e7 ofz#29113 short read)
+=======
+void FastSaxParser::setCustomEntityNames(
+    const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements)
+{
+    mpImpl->setCustomEntityNames(replacements);
+}
+
+>>>>>>> CHANGE (9f6dfd Improve handle of custom XML entities)
 sal_Bool FastSaxParser::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);

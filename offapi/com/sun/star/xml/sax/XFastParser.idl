@@ -41,6 +41,8 @@
 
 #include <com/sum/star/xml/sax/XFastNamespaceHandler.idl>
 
+#include <com/sun/star/beans/Pair.idl>
+
 
 module com {  module sun {  module star {  module xml {  module sax {
 
@@ -157,6 +159,16 @@ interface XFastParser: com::sun::star::uno::XInterface
 
     /** @since LibreOffice 5.3 */
     void setNamespaceHandler( [in] XFastNamespaceHandler Handler);
+<<<<<<< HEAD   (e9c9e7 ofz#29113 short read)
+=======
+
+    /**
+      * Simulate a DTD file.
+      * Will allow to use customized entity references like &infin; .
+      * @since LibreOffice 7.1
+      */
+    void setCustomEntityNames( [in] sequence< beans::Pair<string,string> > replacements);
+>>>>>>> CHANGE (9f6dfd Improve handle of custom XML entities)
 };
 
 
