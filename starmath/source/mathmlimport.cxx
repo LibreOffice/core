@@ -270,16 +270,14 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(const Reference<io::XInputStrea
         Reference<css::xml::sax::XFastDocumentHandler> xFastDocHandler(xFilter, UNO_QUERY);
         if (xFastParser)
         {
-            xFastParser->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntitiesNames,
-                                              starmathdatabase::icustomMathmlHtmlEntitiesValues);
+            xFastParser->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntities);
             xFastParser->parseStream(aParserInput);
         }
         else if (xFastDocHandler)
         {
             Reference<css::xml::sax::XFastParser> xParser
                 = css::xml::sax::FastParser::create(rxContext);
-            xParser->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntitiesNames,
-                                          starmathdatabase::icustomMathmlHtmlEntitiesValues);
+            xParser->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntities);
             xParser->setFastDocumentHandler(xFastDocHandler);
             xParser->parseStream(aParserInput);
         }
