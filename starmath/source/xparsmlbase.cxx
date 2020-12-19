@@ -4284,4 +4284,13 @@ const ::css::uno::Sequence<::rtl::OUString>
 const ::css::uno::Sequence<::rtl::OUString>
     starmathdatabase::icustomMathmlHtmlEntitiesValues(icustomMathmlHtmlEntitiesValuesData, 2125);
 
+static const ::beans::Pair<::rtl::OUString, ::rtl::OUString> icustomMathmlHtmlEntitiesData[SM_CUSTOM_ENTITY_COUNT_IMPORT] = {
+    // clang-format off
+    {u"infin", u"\u212E"},
+    {u"sigma", u"\u03C3"}
+    // clang-format on
+}
+
+const extern ::css::uno::Sequence< ::beans::Pair<::rtl::OUString, ::rtl::OUString> > starmathdatabase::icustomMathmlHtmlEntities(icustomMathmlHtmlEntitiesData, SM_CUSTOM_ENTITY_COUNT_IMPORT);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
