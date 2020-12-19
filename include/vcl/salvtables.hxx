@@ -1138,7 +1138,7 @@ protected:
     DECL_LINK(HeaderBarClickedHdl, HeaderBar*, void);
     DECL_LINK(ToggleHdl, SvLBoxButtonData*, void);
     DECL_LINK(ModelChangedHdl, SvTreeListBox*, void);
-    DECL_LINK(StartDragHdl, SvTreeListBox*, void);
+    DECL_LINK(StartDragHdl, SvTreeListBox*, bool);
     DECL_STATIC_LINK(SalInstanceTreeView, FinishDragHdl, SvTreeListBox*, void);
     DECL_LINK(EditingEntryHdl, SvTreeListEntry*, bool);
     typedef std::pair<SvTreeListEntry*, OUString> IterString;
@@ -1372,6 +1372,9 @@ public:
     virtual OUString get_id(const weld::TreeIter& rIter) const override;
 
     virtual void set_id(const weld::TreeIter& rIter, const OUString& rId) override;
+
+    virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper,
+                                    sal_uInt8 eDNDConstants) override;
 
     virtual void set_selection_mode(SelectionMode eMode) override;
 

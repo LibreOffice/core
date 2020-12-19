@@ -4294,6 +4294,11 @@ void SalInstanceTreeView::set_id(const weld::TreeIter& rIter, const OUString& rI
     set_id(rVclIter.iter, rId);
 }
 
+void SalInstanceTreeView::enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants)
+{
+    m_xTreeView->SetDragHelper(rHelper, eDNDConstants);
+}
+
 void SalInstanceTreeView::set_selection_mode(SelectionMode eMode)
 {
     m_xTreeView->SetSelectionMode(eMode);
@@ -4538,7 +4543,7 @@ SalInstanceTreeView::~SalInstanceTreeView()
     else
     {
         static_cast<LclTabListBox&>(*m_xTreeView).SetEndDragHdl(Link<SvTreeListBox*, void>());
-        static_cast<LclTabListBox&>(*m_xTreeView).SetStartDragHdl(Link<SvTreeListBox*, void>());
+        static_cast<LclTabListBox&>(*m_xTreeView).SetStartDragHdl(Link<SvTreeListBox*, bool>());
         static_cast<LclTabListBox&>(*m_xTreeView).SetModelChangedHdl(Link<SvTreeListBox*, void>());
     }
     m_xTreeView->SetPopupMenuHdl(Link<const CommandEvent&, bool>());
@@ -4604,9 +4609,12 @@ IMPL_LINK_NOARG(SalInstanceTreeView, ModelChangedHdl, SvTreeListBox*, void)
     signal_model_changed();
 }
 
-IMPL_LINK_NOARG(SalInstanceTreeView, StartDragHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SalInstanceTreeView, StartDragHdl, SvTreeListBox*, bool)
 {
+    if (m_aDragBeginHdl.Call(*this))
+        return true;
     g_DragSource = this;
+    return false;
 }
 
 IMPL_STATIC_LINK_NOARG(SalInstanceTreeView, FinishDragHdl, SvTreeListBox*, void)
