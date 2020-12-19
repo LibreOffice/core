@@ -55,6 +55,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <sfx2/watermarkitem.hxx>
+#include <svx/devtools/DevelopmentToolDockingWindow.hxx>
 
 #include <svtools/htmlcfg.hxx>
 #include <svx/ofaitem.hxx>
@@ -1311,6 +1312,14 @@ void SwDocShell::Execute(SfxRequest& rReq)
             }
 
             Broadcast(SfxHint(SfxHintId::RedlineChanged));
+            rReq.Done();
+        }
+        break;
+        case SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW:
+        {
+            SfxViewShell* pViewShell = GetView() ? static_cast<SfxViewShell*>(GetView()) : SfxViewShell::Current();
+            SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
+            pViewFrame->ToggleChildWindow(nWhich);
             rReq.Done();
         }
         break;
