@@ -18,12 +18,12 @@
  */
 
 
-#include <vcl/status.hxx>
-#include <vcl/builder.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/image.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/image.hxx>
 #include <vcl/event.hxx>
+#include <vcl/status.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weldutils.hxx>
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/module.hxx>
 
@@ -101,9 +101,11 @@ void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
 {
     if( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
-        VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/xmlsecstatmenu.ui", "");
-        VclPtr<PopupMenu> aPopupMenu(aBuilder.get_menu("menu"));
-        if (aPopupMenu->Execute(&GetStatusBar(), rCEvt.GetMousePosPixel()))
+        tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(1, 1));
+        weld::Window* pPopupParent = weld::GetPopupParent(GetStatusBar(), aRect);
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "svx/ui/xmlsecstatmenu.ui"));
+        std::unique_ptr<weld::Menu> xPopMenu(xBuilder->weld_menu("menu"));
+        if (!xPopMenu->popup_at_rect(pPopupParent, aRect).isEmpty())
         {
             css::uno::Any a;
             SfxUInt16Item aState( GetSlotId(), 0 );
