@@ -146,6 +146,48 @@ XclExpExtCF::XclExpExtCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFor
 {
 }
 
+namespace {
+
+bool RequiresFixedFormula(ScConditionMode eMode)
+{
+    switch (eMode)
+    {
+    case ScConditionMode::BeginsWith:
+    case ScConditionMode::EndsWith:
+    case ScConditionMode::ContainsText:
+    case ScConditionMode::NotContainsText:
+        return true;
+    default:
+        break;
+    }
+
+    return false;
+}
+
+OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, const OString& rText)
+{
+    OStringBuffer aBuffer;
+    XclXmlUtils::ToOString(aBuffer, rAddress);
+    OString aPos = aBuffer.makeStringAndClear();
+    switch (eMode)
+    {
+    case ScConditionMode::BeginsWith:
+        return OString("LEFT(" + aPos + ",LEN(" + rText + "))=\"" + rText + "\"");
+    case ScConditionMode::EndsWith:
+        return OString("RIGHT(" + aPos + ",LEN(" + rText + "))=\"" + rText + "\"");
+    case ScConditionMode::ContainsText:
+        return OString("NOT(ISERROR(SEARCH(" + rText + "," + aPos + ")))");
+    case ScConditionMode::NotContainsText:
+        return OString("ISERROR(SEARCH(" + rText + "," + aPos + "))");
+    default:
+        break;
+    }
+
+    return "";
+}
+
+}
+
 void XclExpExtCF::SaveXml( XclExpXmlStream& rStrm )
 {
     OUString aStyleName = mrFormat.GetStyle();
@@ -194,10 +236,28 @@ void XclExpExtCF::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
 
-    rWorksheet->startElementNS( XML_xm, XML_f );
-    rWorksheet->writeEscaped( aFormula );
-    rWorksheet->endElementNS( XML_xm, XML_f );
-    rDxf.SaveXmlExt( rStrm );
+    ScConditionMode eOperation = mrFormat.GetOperation();
+    if (RequiresFixedFormula(eOperation))
+    {
+        ScAddress aFixedFormulaPos = mrFormat.GetValidSrcPos();
+        OString aFixedFormulaText = aFormula.toUtf8();
+        OString aFixedFormula = GetFixedFormula(eOperation, aFixedFormulaPos, aFixedFormulaText);
+        rWorksheet->startElementNS( XML_xm, XML_f );
+        rWorksheet->writeEscaped(aFixedFormula.getStr());
+        rWorksheet->endElementNS( XML_xm, XML_f );
+
+        rWorksheet->startElementNS( XML_xm, XML_f );
+        rWorksheet->writeEscaped( aFormula );
+        rWorksheet->endElementNS( XML_xm, XML_f );
+        rDxf.SaveXmlExt(rStrm);
+    }
+    else
+    {
+        rWorksheet->startElementNS(XML_xm, XML_f);
+        rWorksheet->writeEscaped(aFormula);
+        rWorksheet->endElementNS(XML_xm, XML_f);
+        rDxf.SaveXmlExt(rStrm);
+    }
 }
 
 XclExpExtDataBar::XclExpExtDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos ):
@@ -290,6 +350,25 @@ const char* GetOperatorString(ScConditionMode eMode)
     return pRet;
 }
 
+const char* GetTypeString(ScConditionMode eMode)
+{
+    switch(eMode)
+    {
+        case ScConditionMode::Direct:
+            return "expression";
+        case ScConditionMode::BeginsWith:
+            return "beginsWith";
+        case ScConditionMode::EndsWith:
+            return "endsWith";
+        case ScConditionMode::ContainsText:
+            return "containsText";
+        case ScConditionMode::NotContainsText:
+            return "notContainsText";
+        default:
+            return "cellIs";
+    }
+}
+
 }
 
 void XclExpExtDataBar::SaveXml( XclExpXmlStream& rStrm )
@@ -378,7 +457,7 @@ XclExpExtCfRule::XclExpExtCfRule( const XclExpRoot& rRoot, const ScFormatEntry& 
         {
             const ScCondFormatEntry& rCondFormat = static_cast<const ScCondFormatEntry&>(rFormat);
             mxEntry = new XclExpExtCF(*this, rCondFormat);
-            pType = "cellIs";
+            pType = GetTypeString(rCondFormat.GetOperation());
             mOperator = GetOperatorString( rCondFormat.GetOperation() );
         }
         break;

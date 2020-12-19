@@ -86,6 +86,7 @@ public:
     virtual void tearDown() override;
 
     void test();
+    void testExtCondFormatXLSX();
     void testTdf90104();
     void testTdf111876();
     void testPasswordExportODS();
@@ -275,6 +276,7 @@ public:
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
+    CPPUNIT_TEST(testExtCondFormatXLSX);
     CPPUNIT_TEST(testTdf90104);
     CPPUNIT_TEST(testTdf111876);
     CPPUNIT_TEST(testPasswordExportODS);
@@ -509,6 +511,40 @@ void ScExportTest::test()
     ScDocument& rLoadedDoc = xDocSh->GetDocument();
     double aVal = rLoadedDoc.GetValue(0,0,0);
     ASSERT_DOUBLES_EQUAL(aVal, 1.0);
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testExtCondFormatXLSX()
+{
+    ScDocShellRef xShell = loadDoc("tdf139021.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc,
+                "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[1]/"
+                "x14:cfRule", "type", "containsText");
+    assertXPathContent(pDoc,
+                "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[1]/"
+                "x14:cfRule/xm:f[1]", "NOT(ISERROR(SEARCH($B$1,A1)))");
+    assertXPathContent(pDoc,
+                "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[1]/"
+                "x14:cfRule/xm:f[2]", "$B$1");
+    assertXPath(pDoc,
+                "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[2]/"
+                "x14:cfRule", "type", "notContainsText");
+    assertXPathContent(pDoc,
+                "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[2]/"
+                "x14:cfRule/xm:f[1]", "ISERROR(SEARCH($B$2,A2))");
+    assertXPathContent(pDoc,
+                "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[2]/"
+                "x14:cfRule/xm:f[2]", "$B$2");
+
     xDocSh->DoClose();
 }
 
