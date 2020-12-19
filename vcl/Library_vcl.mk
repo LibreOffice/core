@@ -334,7 +334,11 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/graphic/UnoGraphicProvider \
     vcl/source/graphic/UnoGraphicTransformer \
     vcl/source/graphic/VectorGraphicSearch \
-    vcl/source/bitmap/impvect \
+    vcl/source/bitmap/Chain \
+    vcl/source/bitmap/ColorSet \
+    vcl/source/bitmap/PointArray \
+    vcl/source/bitmap/VectorMap \
+    vcl/source/bitmap/Vectorizer \
     vcl/source/bitmap/bitmap \
     vcl/source/bitmap/BitmapEx \
     vcl/source/bitmap/BitmapInfoAccess \
