@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "899f3dd7_6c93e635",
+        "filename": "basic/qa/cppunit/test_vba.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-19T21:01:50Z",
+      "side": 1,
+      "message": "The two seem exchanged :-)",
+      "range": {
+        "startLine": 161,
+        "startChar": 35,
+        "endLine": 162,
+        "endChar": 62
+      },
+      "revId": "b03067d4176c1497c59f0426dfc6c05121cfdb00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "861d253a_76bab11f",
+        "filename": "basic/qa/vba_tests/cvdate.vb",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-19T21:01:50Z",
+      "side": 1,
+      "message": "Great catch! Thank you!",
+      "range": {
+        "startLine": 6,
+        "startChar": 2,
+        "endLine": 6,
+        "endChar": 48
+      },
+      "revId": "b03067d4176c1497c59f0426dfc6c05121cfdb00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
