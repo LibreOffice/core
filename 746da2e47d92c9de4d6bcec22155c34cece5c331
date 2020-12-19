@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75f4bca1_fe3ea268",
+        "filename": "offapi/com/sun/star/sdb/ErrorCondition.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-19T17:53:12Z",
+      "side": 0,
+      "message": "I would even keep this comment, changing it to past tense (\"this error code was used\" etc.), as a hint why this otherwise now unused constant exists.",
+      "revId": "746da2e47d92c9de4d6bcec22155c34cece5c331",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

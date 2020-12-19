@@ -52,6 +52,24 @@
       "revId": "13584c230f550eba7a3141019babe0ba0c6844ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb537d98_a31d9132",
+        "filename": "offapi/com/sun/star/mozilla/MozillaProductType.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-19T17:53:12Z",
+      "side": 1,
+      "message": "...and which would nicely make this a non-[ABI CHANGE] overall",
+      "parentUuid": "aa55f07b_6d3be596",
+      "revId": "13584c230f550eba7a3141019babe0ba0c6844ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
