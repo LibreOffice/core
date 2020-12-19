@@ -4277,11 +4277,23 @@ static OUString icustomMathmlHtmlEntitiesValuesData[2125] = {
     u"\u200C"
     // clang-format on
 };
-
+/*
 const ::css::uno::Sequence<::rtl::OUString>
     starmathdatabase::icustomMathmlHtmlEntitiesNames(icustomMathmlHtmlEntitiesNamesData, 2125);
 
 const ::css::uno::Sequence<::rtl::OUString>
     starmathdatabase::icustomMathmlHtmlEntitiesValues(icustomMathmlHtmlEntitiesValuesData, 2125);
+*/
+
+static const com::sun::star::beans::Pair<::rtl::OUString, ::rtl::OUString>
+    icustomMathmlHtmlEntitiesData[2] = {
+        // clang-format off
+        { u"infin", u"\u221E" },
+        { u"sigma", u"\u03C3" }
+        // clang-format on
+    };
+
+const ::css::uno::Sequence<com::sun::star::beans::Pair<::rtl::OUString, ::rtl::OUString>>
+    starmathdatabase::icustomMathmlHtmlEntities(icustomMathmlHtmlEntitiesData, 2);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

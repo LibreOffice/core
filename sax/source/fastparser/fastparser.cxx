@@ -48,6 +48,7 @@
 #include <cstring>
 #include <libxml/parser.h>
 #include <cstdint>
+#include <iostream>
 
 // Inverse of libxml's BAD_CAST.
 #define XML_CAST( str ) reinterpret_cast< const char* >( str )
@@ -250,7 +251,8 @@ public:
     /// @throws css::uno::RuntimeException
     void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler);
     // Fake DTD file
-    void setCustomEntityNames( const ::css::uno::Sequence< ::rtl::OUString >& names, const ::css::uno::Sequence< ::rtl::OUString >& replacements );
+    void setCustomEntityNames(
+       const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements);
 
     // called by the C callbacks of the expat parser
     void callbackStartElement( const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
@@ -674,8 +676,8 @@ FastSaxParserImpl::~FastSaxParserImpl()
 {
     if( mxDocumentLocator.is() )
         mxDocumentLocator->dispose();
-    for ( size_t i = 0; i < m_TemporalEntities.size(); ++i )
-        if (m_TemporalEntities[i] != nullptr) xmlFree(m_TemporalEntities[i]);
+    //for ( size_t i = 0; i < m_TemporalEntities.size(); ++i )
+    //    if (m_TemporalEntities[i] != nullptr) xmlFree(m_TemporalEntities[i]);
 }
 
 void FastSaxParserImpl::DefineNamespace( const OString& rPrefix, const OUString& namespaceURL )
@@ -952,16 +954,15 @@ void FastSaxParserImpl::setNamespaceHandler( const Reference< XFastNamespaceHand
 }
 
 void FastSaxParserImpl::setCustomEntityNames(
-    const ::css::uno::Sequence<::rtl::OUString>& names,
-    const ::css::uno::Sequence<::rtl::OUString>& replacements)
+    const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements)
 {
-    m_Replacements.resize(names.size());
-    for (size_t i = 0; i < names.size(); ++i)
+    m_Replacements.resize(replacements.size());
+    for (size_t i = 0; i < replacements.size(); ++i)
     {
-        m_Replacements[i].name = names[i];
-        m_Replacements[i].replacement = replacements[i];
+        m_Replacements[i].name = replacements[i].First;
+        m_Replacements[i].replacement = replacements[i].Second;
     }
-    if (names.size() > 1)
+    if (m_Replacements.size() > 1)
         std::sort(m_Replacements.begin(), m_Replacements.end());
 }
 
@@ -1521,11 +1522,10 @@ OUString FastSaxParser::getImplementationName()
     return "com.sun.star.comp.extensions.xml.sax.FastParser";
 }
 
-void FastSaxParser::setCustomEntityNames(const ::css::uno::Sequence<::rtl::OUString>& names,
-                                         const ::css::uno::Sequence<::rtl::OUString>& replacements)
+void FastSaxParser::setCustomEntityNames(
+    const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements)
 {
-    assert(names.size() == replacements.size());
-    mpImpl->setCustomEntityNames(names, replacements);
+    mpImpl->setCustomEntityNames(replacements);
 }
 
 sal_Bool FastSaxParser::supportsService( const OUString& ServiceName )
