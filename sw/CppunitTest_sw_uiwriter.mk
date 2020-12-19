@@ -15,8 +15,6 @@ $(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_uiwriter))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_uiwriter, \
     sw/qa/extras/uiwriter/uiwriter \
-    sw/qa/extras/uiwriter/uiwriter2 \
-    sw/qa/extras/uiwriter/uiwriter3 \
 ))
 
 # note: this links msword only for the reason to have an order dependency,
