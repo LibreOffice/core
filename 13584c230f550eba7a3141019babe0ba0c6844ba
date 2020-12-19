@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "072b642e_0b8922c5",
+        "filename": "offapi/com/sun/star/mozilla/MozillaProductType.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-19T11:33:07Z",
+      "side": 1,
+      "message": "this we have to leave in, in case we ever add another one - we don\u0027t want to cause trouble where some old code passes in 3, and gets our new shiny SuperEmailPlus import facility.\n\nPlease just mark it as unused.",
+      "revId": "13584c230f550eba7a3141019babe0ba0c6844ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
