@@ -250,7 +250,8 @@ public:
     /// @throws css::uno::RuntimeException
     void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler);
     // Fake DTD file
-    void setCustomEntityNames( const ::css::uno::Sequence< ::rtl::OUString >& names, const ::css::uno::Sequence< ::rtl::OUString >& replacements );
+    void setCustomEntityNames(
+       const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements);
 
     // called by the C callbacks of the expat parser
     void callbackStartElement( const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
@@ -952,16 +953,15 @@ void FastSaxParserImpl::setNamespaceHandler( const Reference< XFastNamespaceHand
 }
 
 void FastSaxParserImpl::setCustomEntityNames(
-    const ::css::uno::Sequence<::rtl::OUString>& names,
-    const ::css::uno::Sequence<::rtl::OUString>& replacements)
+    const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements)
 {
-    m_Replacements.resize(names.size());
-    for (size_t i = 0; i < names.size(); ++i)
+    m_Replacements.resize(replacements.size());
+    for (size_t i = 0; i < replacements.size(); ++i)
     {
-        m_Replacements[i].name = names[i];
-        m_Replacements[i].replacement = replacements[i];
+        m_Replacements[i].name = replacements[i].First;
+        m_Replacements[i].replacement = replacements[i].Second;
     }
-    if (names.size() > 1)
+    if (m_Replacements.size() > 1)
         std::sort(m_Replacements.begin(), m_Replacements.end());
 }
 
@@ -1521,11 +1521,10 @@ OUString FastSaxParser::getImplementationName()
     return "com.sun.star.comp.extensions.xml.sax.FastParser";
 }
 
-void FastSaxParser::setCustomEntityNames(const ::css::uno::Sequence<::rtl::OUString>& names,
-                                         const ::css::uno::Sequence<::rtl::OUString>& replacements)
+void FastSaxParser::setCustomEntityNames(
+    const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements)
 {
-    assert(names.size() == replacements.size());
-    mpImpl->setCustomEntityNames(names, replacements);
+    mpImpl->setCustomEntityNames(replacements);
 }
 
 sal_Bool FastSaxParser::supportsService( const OUString& ServiceName )
