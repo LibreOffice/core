@@ -34,6 +34,24 @@
       "revId": "13584c230f550eba7a3141019babe0ba0c6844ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa55f07b_6d3be596",
+        "filename": "offapi/com/sun/star/mozilla/MozillaProductType.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-19T15:11:21Z",
+      "side": 1,
+      "message": "No, that was just a silly example. What I mean that we cannot remove this mention of Thunderbird, we have to leave the constant 3 \"blocked\" so we don\u0027t accidentally (in the future) create a problem",
+      "parentUuid": "03410d65_7d380c0f",
+      "revId": "13584c230f550eba7a3141019babe0ba0c6844ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
