@@ -16,6 +16,24 @@
       "revId": "13584c230f550eba7a3141019babe0ba0c6844ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03410d65_7d380c0f",
+        "filename": "offapi/com/sun/star/mozilla/MozillaProductType.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-12-19T11:39:11Z",
+      "side": 1,
+      "message": "I\u0027m not sure to understand, could you explain a bit? What\u0027s \"SuperEmailPlus\" import facility?\nDo you mean another unknown for the moment which would replace Thunderbird? If yes, do you mean I should put\n\"SuperEmailPlus \u003d 3\"?\nFor me the goal is to remove all Thunderbird locations which concern AB so it\u0027s clear for those who\u0027ll read interfaces/API.\n\nFor example, I let \"Thunderbird\" in shell/source/unix/misc/senddoc.sh",
+      "parentUuid": "072b642e_0b8922c5",
+      "revId": "13584c230f550eba7a3141019babe0ba0c6844ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
