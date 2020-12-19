@@ -28,8 +28,6 @@
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
-#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -43,11 +41,13 @@
 #include <queue>
 #include <memory>
 #include <stack>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 #include <cassert>
 #include <cstring>
 #include <libxml/parser.h>
+#include <cstdint>
 
 // Inverse of libxml's BAD_CAST.
 #define XML_CAST( str ) reinterpret_cast< const char* >( str )
@@ -118,7 +118,6 @@ struct SaxContext
         }
     }
 };
-
 
 struct ParserData
 {
@@ -201,6 +200,21 @@ struct Entity : public ParserData
     Event& getEvent( CallbackType aType );
 };
 
+// Stuff for custom entity names
+struct ReplacementPair
+{
+    OUString name;
+    OUString replacement;
+};
+inline bool operator<(const ReplacementPair& lhs, const ReplacementPair& rhs)
+{
+    return lhs.name < rhs.name;
+}
+inline bool operator<(const ReplacementPair& lhs, const char* rhs)
+{
+    return lhs.name.compareToAscii(rhs) < 0;
+}
+
 } // namespace
 
 namespace sax_fastparser {
@@ -211,6 +225,11 @@ public:
     explicit FastSaxParserImpl();
     ~FastSaxParserImpl();
 
+private:
+    std::vector<ReplacementPair> m_Replacements;
+    std::vector<xmlEntityPtr> m_TemporalEntities;
+
+public:
     // XFastParser
     /// @throws css::xml::sax::SAXException
     /// @throws css::io::IOException
@@ -225,11 +244,14 @@ public:
     void registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken );
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    OUString const & getNamespaceURL( const OUString& rPrefix );
+    OUString const & getNamespaceURL( std::u16string_view rPrefix );
     /// @throws css::uno::RuntimeException
     void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler );
     /// @throws css::uno::RuntimeException
     void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler);
+    // Fake DTD file
+    void setCustomEntityNames(
+       const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements);
 
     // called by the C callbacks of the expat parser
     void callbackStartElement( const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
@@ -237,6 +259,7 @@ public:
     void callbackEndElement();
     void callbackCharacters( const xmlChar* s, int nLen );
     void callbackProcessingInstruction( const xmlChar *target, const xmlChar *data );
+    xmlEntityPtr callbackGetEntity( const xmlChar *name );
 
     void pushEntity(const ParserData&, xml::sax::InputSource const&);
     void popEntity();
@@ -256,7 +279,7 @@ private:
     /// @throws css::xml::sax::SAXException
     sal_Int32 GetTokenWithPrefix( const xmlChar* pPrefix, int prefixLen, const xmlChar* pName, int nameLen );
     /// @throws css::xml::sax::SAXException
-    OUString const & GetNamespaceURL( const OString& rPrefix );
+    OUString const & GetNamespaceURL( std::string_view rPrefix );
     sal_Int32 GetNamespaceToken( const OUString& rNamespaceURL );
     sal_Int32 GetTokenWithContextNamespace( sal_Int32 nNamespaceToken, const xmlChar* pName, int nNameLen );
     void DefineNamespace( const OString& rPrefix, const OUString& namespaceURL );
@@ -323,6 +346,12 @@ static void call_callbackProcessingInstruction( void *userData, const xmlChar *t
 {
     FastSaxParserImpl* pFastParser = static_cast<FastSaxParserImpl*>( userData );
     pFastParser->callbackProcessingInstruction( target, data );
+}
+
+static xmlEntityPtr call_callbackGetEntity( void *userData, const xmlChar *name)
+{
+    FastSaxParserImpl* pFastParser = static_cast<FastSaxParserImpl*>( userData );
+    return pFastParser->callbackGetEntity( name );
 }
 
 }
@@ -646,6 +675,14 @@ FastSaxParserImpl::~FastSaxParserImpl()
 {
     if( mxDocumentLocator.is() )
         mxDocumentLocator->dispose();
+    for ( size_t i = 0; i < m_TemporalEntities.size(); ++i )
+    {
+        if (!m_TemporalEntities[i])
+            continue;
+        xmlNodePtr pPtr = reinterpret_cast<xmlNodePtr>(m_TemporalEntities[i]);
+        xmlUnlinkNode(pPtr);
+        xmlFreeNode(pPtr);
+    }
 }
 
 void FastSaxParserImpl::DefineNamespace( const OString& rPrefix, const OUString& namespaceURL )
@@ -710,7 +747,7 @@ sal_Int32 FastSaxParserImpl::GetNamespaceToken( const OUString& rNamespaceURL )
         return FastToken::DONTKNOW;
 }
 
-OUString const & FastSaxParserImpl::GetNamespaceURL( const OString& rPrefix )
+OUString const & FastSaxParserImpl::GetNamespaceURL( std::string_view rPrefix )
 {
     Entity& rEntity = getEntity();
     if( !rEntity.maNamespaceCount.empty() )
@@ -899,7 +936,7 @@ void FastSaxParserImpl::registerNamespace( const OUString& NamespaceURL, sal_Int
     throw IllegalArgumentException("namespace URL is already registered: " + NamespaceURL, css::uno::Reference<css::uno::XInterface >(), 0);
 }
 
-OUString const & FastSaxParserImpl::getNamespaceURL( const OUString& rPrefix )
+OUString const & FastSaxParserImpl::getNamespaceURL( std::u16string_view rPrefix )
 {
     try
     {
@@ -919,6 +956,19 @@ void FastSaxParserImpl::setErrorHandler(const Reference< XErrorHandler > & Handl
 void FastSaxParserImpl::setNamespaceHandler( const Reference< XFastNamespaceHandler >& Handler )
 {
     maData.mxNamespaceHandler = Handler;
+}
+
+void FastSaxParserImpl::setCustomEntityNames(
+    const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements)
+{
+    m_Replacements.resize(replacements.size());
+    for (size_t i = 0; i < replacements.size(); ++i)
+    {
+        m_Replacements[i].name = replacements[i].First;
+        m_Replacements[i].replacement = replacements[i].Second;
+    }
+    if (m_Replacements.size() > 1)
+        std::sort(m_Replacements.begin(), m_Replacements.end());
 }
 
 void FastSaxParserImpl::deleteUsedEvents()
@@ -1036,6 +1086,7 @@ void FastSaxParserImpl::parse()
     callbacks.endElementNs = call_callbackEndElement;
     callbacks.characters = call_callbackCharacters;
     callbacks.processingInstruction = call_callbackProcessingInstruction;
+    callbacks.getEntity = call_callbackGetEntity;
     callbacks.initialized = XML_SAX2_MAGIC;
     int nRead = 0;
     do
@@ -1344,6 +1395,61 @@ void FastSaxParserImpl::callbackProcessingInstruction( const xmlChar *target, co
         rEntity.processingInstruction( rEvent.msNamespace, rEvent.msElementName );
 }
 
+xmlEntityPtr FastSaxParserImpl::callbackGetEntity( const xmlChar *name )
+{
+    if( !name )
+        return xmlGetPredefinedEntity(name);
+    const char* dname = XML_CAST(name);
+    int lname = strlen(dname);
+    if( lname == 0 )
+        return xmlGetPredefinedEntity(name);
+    if (m_Replacements.size() > 0)
+    {
+        auto it = std::lower_bound(m_Replacements.begin(), m_Replacements.end(), dname);
+        if (it != m_Replacements.end() && it->name.compareToAscii(dname) == 0)
+        {
+            xmlEntityPtr entpt = xmlNewEntity(
+                nullptr, name, XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
+                BAD_CAST(OUStringToOString(it->replacement, RTL_TEXTENCODING_UTF8).getStr()));
+            m_TemporalEntities.push_back(entpt);
+            return entpt;
+        }
+    }
+    if( lname < 2 )
+        return xmlGetPredefinedEntity(name);
+    if ( dname[0] == '#' )
+    {
+        sal_uInt32 cval = 0;
+        if( dname[1] == 'x' ||  dname[1] == 'X' )
+        {
+            if( lname < 3 )
+                return xmlGetPredefinedEntity(name);
+            cval = static_cast<sal_uInt32>( strtoul( dname + 2, nullptr, 16 ) );
+            if( cval == 0 )
+                return xmlGetPredefinedEntity(name);
+            OUString vname( &cval, 1 );
+            xmlEntityPtr entpt
+                = xmlNewEntity(nullptr, name, XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
+                               BAD_CAST(OUStringToOString(vname, RTL_TEXTENCODING_UTF8).getStr()));
+            m_TemporalEntities.push_back(entpt);
+            return entpt;
+        }
+        else
+        {
+            cval = static_cast<sal_uInt32>( strtoul( dname + 2, nullptr, 10 ) );
+            if( cval == 0 )
+                return xmlGetPredefinedEntity(name);
+            OUString vname(&cval, 1);
+            xmlEntityPtr entpt
+                = xmlNewEntity(nullptr, name, XML_INTERNAL_GENERAL_ENTITY, nullptr, nullptr,
+                               BAD_CAST(OUStringToOString(vname, RTL_TEXTENCODING_UTF8).getStr()));
+            m_TemporalEntities.push_back(entpt);
+            return entpt;
+        }
+    }
+    return xmlGetPredefinedEntity(name);
+}
+
 FastSaxParser::FastSaxParser() : mpImpl(new FastSaxParserImpl) {}
 
 FastSaxParser::~FastSaxParser()
@@ -1421,6 +1527,12 @@ OUString FastSaxParser::getImplementationName()
     return "com.sun.star.comp.extensions.xml.sax.FastParser";
 }
 
+void FastSaxParser::setCustomEntityNames(
+    const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements)
+{
+    mpImpl->setCustomEntityNames(replacements);
+}
+
 sal_Bool FastSaxParser::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
@@ -1456,20 +1568,20 @@ static void NormalizeURI( OUString& rName )
         bSuccess = NormalizeW3URI( rName );
 }
 
-const OUStringLiteral XML_URI_W3_PREFIX(u"http://www.w3.org/");
-const OUStringLiteral XML_URI_XFORMS_SUFFIX(u"/xforms");
-const OUStringLiteral XML_N_XFORMS_1_0(u"http://www.w3.org/2002/xforms");
-const OUStringLiteral XML_N_SVG(u"http://www.w3.org/2000/svg");
-const OUStringLiteral XML_N_SVG_COMPAT(u"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
-const OUStringLiteral XML_N_FO(u"http://www.w3.org/1999/XSL/Format");
-const OUStringLiteral XML_N_FO_COMPAT(u"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
-const OUStringLiteral XML_N_SMIL(u"http://www.w3.org/2001/SMIL20/");
-const OUStringLiteral XML_N_SMIL_OLD(u"http://www.w3.org/2001/SMIL20");
-const OUStringLiteral XML_N_SMIL_COMPAT(u"urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0");
-const OUStringLiteral XML_URN_OASIS_NAMES_TC(u"urn:oasis:names:tc");
-const OUStringLiteral XML_XMLNS(u"xmlns");
-const OUStringLiteral XML_OPENDOCUMENT(u"opendocument");
-const OUStringLiteral XML_1_0(u"1.0");
+constexpr OUStringLiteral XML_URI_W3_PREFIX(u"http://www.w3.org/");
+constexpr OUStringLiteral XML_URI_XFORMS_SUFFIX(u"/xforms");
+constexpr OUStringLiteral XML_N_XFORMS_1_0(u"http://www.w3.org/2002/xforms");
+constexpr OUStringLiteral XML_N_SVG(u"http://www.w3.org/2000/svg");
+constexpr OUStringLiteral XML_N_SVG_COMPAT(u"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
+constexpr OUStringLiteral XML_N_FO(u"http://www.w3.org/1999/XSL/Format");
+constexpr OUStringLiteral XML_N_FO_COMPAT(u"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
+constexpr OUStringLiteral XML_N_SMIL(u"http://www.w3.org/2001/SMIL20/");
+constexpr OUStringLiteral XML_N_SMIL_OLD(u"http://www.w3.org/2001/SMIL20");
+constexpr OUStringLiteral XML_N_SMIL_COMPAT(u"urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0");
+constexpr OUStringLiteral XML_URN_OASIS_NAMES_TC(u"urn:oasis:names:tc");
+constexpr OUStringLiteral XML_XMLNS(u"xmlns");
+constexpr OUStringLiteral XML_OPENDOCUMENT(u"opendocument");
+constexpr OUStringLiteral XML_1_0(u"1.0");
 
 static bool NormalizeW3URI( OUString& rName )
 {
