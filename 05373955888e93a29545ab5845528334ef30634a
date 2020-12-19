@@ -16,6 +16,24 @@
       "revId": "05373955888e93a29545ab5845528334ef30634a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "258b5b96_4c093da7",
+        "filename": "sw/source/ui/fldui/fldfunc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2020-12-19T14:34:07Z",
+      "side": 1,
+      "message": "See Caolan\u0027s comment in https://bugs.documentfoundation.org/show_bug.cgi?id\u003d130275#c6. I have revised this to be 10 instead of 1. When use a larger number, we will encounter the issue as reported in tdf#130275.",
+      "parentUuid": "5ad43681_fdae15ca",
+      "revId": "05373955888e93a29545ab5845528334ef30634a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
