@@ -242,13 +242,8 @@ cmd/sc_zoommode.png cmd/sc_zoomoptimal.png
 cmd/sc_zoom100percent.png cmd/sc_view100.png
 
 # Save
-cmd/32/savebasicas.png cmd/32/saveas.png
 cmd/32/savegraphic.png cmd/32/save.png
-
-cmd/lc_savebasicas.png cmd/lc_saveas.png
 cmd/lc_savegraphic.png cmd/lc_save.png
-
-cmd/sc_savebasicas.png cmd/sc_saveas.png
 cmd/sc_savegraphic.png cmd/sc_save.png
 
 # Text
