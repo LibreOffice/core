@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2da8be1d_872a4be7",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4872,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-19T18:22:14Z",
+      "side": 1,
+      "message": "I thought that we had a plugin to simplify this kind of expression into\n\n  0 \u003d\u003d nCropL \u0026\u0026 0 \u003d\u003d nCropT \u0026\u0026 0 \u003d\u003d nCropR \u0026\u0026 0 \u003d\u003d nCropB",
+      "range": {
+        "startLine": 4872,
+        "startChar": 9,
+        "endLine": 4872,
+        "endChar": 76
+      },
+      "revId": "3dc2e629b247873bfbd3190c11152d8d2bab1a03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
