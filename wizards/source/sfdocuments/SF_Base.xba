@@ -349,9 +349,9 @@ Public Function IsLoaded(Optional ByVal FormDocument As Variant) As Boolean
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FormDocument: a valid document form name as a case-sensitive string
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		True if the form document is currently open, otherise False
+&apos;&apos;&apos;		True if the form document is currently open, otherwise False
 &apos;&apos;&apos;	Exceptions:
-&apos;&apos;&apos;		Form is invalid
+&apos;&apos;&apos;		Form name is invalid
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		MsgBox oDoc.IsLoaded(&quot;Folder1/myFormDocument&quot;)
 
@@ -374,7 +374,6 @@ Check:
 	End If
 
 Try:
-
 	Set oMainForm = _FormDocuments.getByHierarchicalName(FormDocument)
 	&apos;	A document form that has never been opened has no component
 	&apos;	If ever opened and closed afterwards, it keeps the Component but loses its Controller
@@ -391,7 +390,7 @@ End Function	&apos;	SFDocuments.SF_Base.IsLoaded
 
 REM -----------------------------------------------------------------------------
 Public Function Methods() As Variant
-&apos;&apos;&apos;	Return the list of public methods of the Model service as an array
+&apos;&apos;&apos;	Return the list of public methods of the Base class as an array
 
 	Methods = Array( _
 					&quot;Activate&quot; _
@@ -408,8 +407,67 @@ Public Function Methods() As Variant
 End Function	&apos;	SFDocuments.SF_Base.Methods
 
 REM -----------------------------------------------------------------------------
+Public Function OpenFormDocument(Optional ByVal FormDocument As Variant _
+									, Optional ByVal DesignMode As Variant _
+									) As Boolean
+&apos;&apos;&apos;	Open the FormDocument given by its hierarchical name either in normal or in design mode
+&apos;&apos;&apos;	If the form document is already open, the form document is made active without changing its mode
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		FormDocument: a valid document form name as a case-sensitive string
+&apos;&apos;&apos;		DesignMode: when True the form document is opened in design mode (Default = False)
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True if the form document could be opened, otherwise False
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		Form name is invalid
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		oDoc.OpenFormDocument(&quot;Folder1/myFormDocument&quot;)
+
+Dim bOpen As Boolean				&apos;	Return value
+Dim vFormNames As Variant			&apos;	Array of all document form names present in the document
+Dim oContainer As Object			&apos;	com.sun.star.awt.XWindow
+Const cstThisSub = &quot;SFDocuments.Base.OpenFormDocument&quot;
+Const cstSubArgs = &quot;FormDocument, [DesignMode=False]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bOpen = False
+
+Check:
+	If IsMissing(DesignMode) Or IsEmpty(DesignMode) Then DesignMode = False
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		&apos;	Build list of available FormDocuments recursively with _CollectFormDocuments
+		If IsNull(_FormDocuments) Then Set _FormDocuments = _Component.getFormDocuments()
+		vFormNames = Split(_CollectFormDocuments(_FormDocuments), cstToken)
+		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormNames) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(DesignMode, &quot;DesignMode&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	End If
+
+Try:
+	If IsLoaded(FormDocument) Then		&apos;	Activate
+		Set oContainer = _FormDocuments.getByHierarchicalName(FormDocument).Component.CurrentController.Frame.ContainerWindow
+		With oContainer
+			If .isVisible() = False Then .setVisible(True)
+			.IsMinimized = False
+			.setFocus()
+			.toFront()				&apos;	Force window change in Linux
+			Wait 1					&apos;	Bypass desynchro issue in Linux
+		End With
+	Else								&apos;	Open
+		_Component.CurrentController.loadComponent(com.sun.star.sdb.application.DatabaseObject.FORM, FormDocument, DesignMode)
+		bOpen = True
+	End If
+
+Finally:
+	OpenFormDocument = bOpen
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Base.OpenFormDocument
+
+REM -----------------------------------------------------------------------------
 Public Function Properties() As Variant
-&apos;&apos;&apos;	Return the list or properties of the Timer class as an array
+&apos;&apos;&apos;	Return the list or properties of the Base class as an array
 
 	Properties = Array( _
 					&quot;DocumentType&quot; _
