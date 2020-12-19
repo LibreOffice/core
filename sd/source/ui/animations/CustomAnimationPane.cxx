@@ -1815,14 +1815,14 @@ void CustomAnimationPane::onAdd()
     if (nEntryData)
         pDescriptor = *reinterpret_cast<CustomAnimationPresetPtr*>(nEntryData);
 
-    const double fDuration = pDescriptor->getDuration();
-    mxCBXDuration->set_value(fDuration*100.0, FieldUnit::NONE);
-    bool bHasSpeed = pDescriptor->getDuration() > 0.001;
-    mxCBXDuration->set_sensitive( bHasSpeed );
-    mxFTDuration->set_sensitive( bHasSpeed );
-
     if( pDescriptor )
     {
+        const double fDuration = pDescriptor->getDuration();
+        mxCBXDuration->set_value(fDuration*100.0, FieldUnit::NONE);
+        bool bHasSpeed = pDescriptor->getDuration() > 0.001;
+        mxCBXDuration->set_sensitive( bHasSpeed );
+        mxFTDuration->set_sensitive( bHasSpeed );
+
         mxCustomAnimationList->unselect_all();
 
         // gather shapes from the selection
@@ -1849,6 +1849,14 @@ void CustomAnimationPane::onAdd()
             if( pCreated )
                 mxCustomAnimationList->select( pCreated );
         }
+    }
+
+    PathKind ePathKind = getCreatePathKind();
+
+    if (ePathKind != PathKind::NONE)
+    {
+        createPath( ePathKind, aTargets, 0.0 );
+        updateMotionPathTags();
     }
 
     mrBase.GetDocShell()->SetModified();
