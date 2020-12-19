@@ -27,7 +27,7 @@
 
 
 
-/** is the interface used to list and get information for Mozilla/Thunderbird profiles
+/** is the interface used to list and get information for Mozilla profile
 
 
     @see com::sun::star::mozilla::XProfileManager
@@ -39,7 +39,7 @@ published interface XProfileDiscover: com::sun::star::uno::XInterface
     /** attempts to get the profiles count.
 
         @param product
-            is the product name to get profiles count.Currently support "Mozilla" and "Thunderbird".
+            is the product name to get profiles count.Currently support "Mozilla"
         @returns
             the profiles count of selected product.
 
@@ -49,7 +49,7 @@ published interface XProfileDiscover: com::sun::star::uno::XInterface
     /** attempts to get the profile list for the given product.
 
         @param product
-            is the product name to get profile list.Currently support "Mozilla" and "Thunderbird".
+            is the product name to get profile list.Currently support "Mozilla".
         @param list
             is a list of all profile of the given product.
         @returns
@@ -61,7 +61,7 @@ published interface XProfileDiscover: com::sun::star::uno::XInterface
     /** attempts to get the default profile name for the given product.
 
         @param product
-            is the product name to get default profile.Currently support "Mozilla" and "Thunderbird".
+            is the product name to get default profile.Currently support "Mozilla".
         @returns
             the default profile name for the given product.
 
@@ -72,7 +72,7 @@ published interface XProfileDiscover: com::sun::star::uno::XInterface
     /** attempts to get the full path for the given profile.
 
         @param product
-            is the product name to get profile path.Currently support "Mozilla" and "Thunderbird".
+            is the product name to get profile path.Currently support "Mozilla".
         @param profileName
             the profile name to get full path.
         @returns
@@ -84,7 +84,7 @@ published interface XProfileDiscover: com::sun::star::uno::XInterface
     /** attempts to get whether profile is locked by other applications.
 
         @param product
-            is the product name to get profile path.Currently support "Mozilla" and "Thunderbird".
+            is the product name to get profile path.Currently support "Mozilla".
         @param profileName
             the profile name to check.
         @returns
@@ -96,7 +96,7 @@ published interface XProfileDiscover: com::sun::star::uno::XInterface
     /** return true if the given profile exists
 
         @param product
-            is the product name to get profile path.Currently support "Mozilla" and "Thunderbird".
+            is the product name to get profile path.Currently support "Mozilla".
         @param profileName
             the profile name to check.
         @returns

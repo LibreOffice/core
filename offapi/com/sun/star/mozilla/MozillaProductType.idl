@@ -39,10 +39,7 @@ published enum  MozillaProductType
     Mozilla = 1,
     /** Mozilla's next generation web browser.
     */
-    Firefox = 2,
-    /** Mozilla's next generation e-mail client.
-    */
-    Thunderbird = 3
+    Firefox = 2
 };
 
 

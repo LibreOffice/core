@@ -276,7 +276,6 @@ namespace abp
         const char* pGuess = nullptr;
         switch ( getSettings().eType )
         {
-            case AST_THUNDERBIRD        : pGuess = "Personal Address book"; break;
             case AST_EVOLUTION          :
             case AST_EVOLUTION_GROUPWISE:
             case AST_EVOLUTION_LDAP     : pGuess = "Personal"; break;
@@ -313,10 +312,6 @@ namespace abp
 
         switch (m_aSettings.eType)
         {
-            case AST_THUNDERBIRD:
-                m_aNewDataSource = aContext.createNewThunderbird( m_aSettings.sDataSourceName );
-                break;
-
             case AST_EVOLUTION:
                 m_aNewDataSource = aContext.createNewEvolution( m_aSettings.sDataSourceName );
                 break;

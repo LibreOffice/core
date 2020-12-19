@@ -242,12 +242,6 @@ namespace abp
         _rNames = m_pImpl->aDataSourceNames;
     }
 
-    ODataSource ODataSourceContext::createNewThunderbird( const OUString& _rName )
-    {
-        return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:thunderbird" );
-    }
-
-
     ODataSource ODataSourceContext::createNewEvolutionLdap( const OUString& _rName)
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:evolution:ldap" );

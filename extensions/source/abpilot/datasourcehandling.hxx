@@ -58,9 +58,6 @@ namespace abp
         /// disambiguates the given name by appending successive numbers
         void disambiguate(OUString& _rDataSourceName);
 
-        /// creates a new Thunderbird data source
-        ODataSource createNewThunderbird( const OUString& _rName );
-
         /// creates a new Evolution local data source
         ODataSource createNewEvolution( const OUString& _rName );
 

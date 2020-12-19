@@ -283,11 +283,8 @@ namespace dbaui
             break;
 #endif
             case  ::dbaccess::DST_MOZILLA:
-            case  ::dbaccess::DST_THUNDERBIRD:
             {
                 MozillaProductType profileType = MozillaProductType_Mozilla;
-                if (eType ==  ::dbaccess::DST_THUNDERBIRD)
-                    profileType = MozillaProductType_Thunderbird;
 
                 Reference<XComponentContext> xContext = ::comphelper::getProcessComponentContext();
                 Reference<XMozillaBootstrap> xMozillaBootstrap = MozillaBootstrap::create(xContext);

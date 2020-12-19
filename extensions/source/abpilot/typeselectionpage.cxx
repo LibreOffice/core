@@ -36,7 +36,6 @@ namespace abp
       , m_xEvolution(m_xBuilder->weld_radio_button("evolution"))
       , m_xEvolutionGroupwise(m_xBuilder->weld_radio_button("groupwise"))
       , m_xEvolutionLdap(m_xBuilder->weld_radio_button("evoldap"))
-      , m_xThunderbird(m_xBuilder->weld_radio_button("thunderbird"))
       , m_xKab(m_xBuilder->weld_radio_button("kde"))
       , m_xMacab(m_xBuilder->weld_radio_button("macosx"))
       , m_xOther(m_xBuilder->weld_radio_button("other"))
@@ -58,7 +57,6 @@ namespace abp
         // - OTHER
         //
         // On Windows:
-        // - THUNDERBIRD
         // - OTHER
 
 #if !defined(_WIN32)
@@ -110,7 +108,6 @@ namespace abp
         m_aAllTypes.push_back( ButtonItem( m_xEvolution.get(), AST_EVOLUTION, bHaveEvolution ) );
         m_aAllTypes.push_back( ButtonItem( m_xEvolutionGroupwise.get(), AST_EVOLUTION_GROUPWISE, bHaveEvolution ) );
         m_aAllTypes.push_back( ButtonItem( m_xEvolutionLdap.get(), AST_EVOLUTION_LDAP, bHaveEvolution ) );
-        m_aAllTypes.push_back( ButtonItem( m_xThunderbird.get(), AST_THUNDERBIRD, true ) );
         m_aAllTypes.push_back( ButtonItem( m_xKab.get(), AST_KAB, bHaveKab ) );
         m_aAllTypes.push_back( ButtonItem( m_xMacab.get(), AST_MACAB, bHaveMacab ) );
         m_aAllTypes.push_back( ButtonItem( m_xOther.get(), AST_OTHER, true ) );

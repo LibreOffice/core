@@ -137,10 +137,6 @@ namespace dbaui
                 m_xFT_Connection->set_label(DBA_RES(STR_MOZILLA_PROFILE_NAME));
                 m_xConnectionURL->set_help_id( HID_DSADMIN_MOZILLA_PROFILE_NAME );
                 break;
-            case  ::dbaccess::DST_THUNDERBIRD:
-                m_xFT_Connection->set_label(DBA_RES(STR_THUNDERBIRD_PROFILE_NAME));
-                m_xConnectionURL->set_help_id( HID_DSADMIN_THUNDERBIRD_PROFILE_NAME );
-                break;
             case  ::dbaccess::DST_OUTLOOK:
             case  ::dbaccess::DST_OUTLOOKEXP:
             case  ::dbaccess::DST_EVOLUTION:

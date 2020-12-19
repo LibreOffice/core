@@ -52,11 +52,10 @@ void CertPathDialog::Init()
         auto aProductList = xCipherContextSupplier->getNSSProfiles();
 
         // these map to the integer values of mozilla::MozillaProductType
-        const char* const productNames[4] = {
+        const char* const productNames[3] = {
             "",
             "mozilla",
             "firefox",
-            "thunderbird"
         };
 
         for (const auto& rNSSProfile : std::as_const(aProductList))

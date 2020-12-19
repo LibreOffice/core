@@ -28,7 +28,6 @@ namespace abp
 
     enum AddressSourceType
     {
-        AST_THUNDERBIRD,
         AST_EVOLUTION,
         AST_EVOLUTION_GROUPWISE,
         AST_EVOLUTION_LDAP,

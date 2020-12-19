@@ -128,7 +128,6 @@ WizardState ODbTypeWizDialog::determineNextState( WizardState _nCurrentState ) c
             switch(m_pCollection->determineType(m_eType))
             {
                 case  ::dbaccess::DST_MOZILLA:
-                case  ::dbaccess::DST_THUNDERBIRD:
                 case  ::dbaccess::DST_OUTLOOK:
                 case  ::dbaccess::DST_OUTLOOKEXP:
                 case  ::dbaccess::DST_EVOLUTION:

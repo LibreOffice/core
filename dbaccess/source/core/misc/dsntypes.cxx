@@ -381,7 +381,6 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
         KnownPrefix( "sdbc:postgresql:",    DST_POSTGRES           ,false ),
 
         KnownPrefix( "sdbc:address:mozilla:",           DST_MOZILLA,            true ),
-        KnownPrefix( "sdbc:address:thunderbird:",       DST_THUNDERBIRD,        true ),
         KnownPrefix( "sdbc:address:ldap:",              DST_LDAP,               true ),
         KnownPrefix( "sdbc:address:outlook",            DST_OUTLOOK,            true ),
         KnownPrefix( "sdbc:address:outlookexp",         DST_OUTLOOKEXP,         true ),
@@ -452,7 +451,6 @@ void ODsnTypeCollection::fillPageIds(const OUString& _sURL,std::vector<sal_Int16
         case DST_OUTLOOKEXP:
         case DST_OUTLOOK:
         case DST_MOZILLA:
-        case DST_THUNDERBIRD:
         case DST_EVOLUTION:
         case DST_EVOLUTION_GROUPWISE:
         case DST_EVOLUTION_LDAP:

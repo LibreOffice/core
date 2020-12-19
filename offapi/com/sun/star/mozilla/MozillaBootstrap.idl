@@ -28,7 +28,7 @@
 
 
 
-/** Allow to discover Mozilla/Thunderbird profiles
+/** Allow to discover Mozilla profile
     Allow init Mozilla XPCOM using selected profile and switch profiles.
 
     @see XMozillaBootstrap

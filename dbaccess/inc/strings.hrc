@@ -337,7 +337,6 @@
 #define STR_COMMONURL                               NC_("STR_COMMONURL", "Datasource URL (e.g. host=$host:$port dbname=$database)" )
 #define STR_HOSTNAME                                NC_("STR_HOSTNAME", "~Host name")
 #define STR_MOZILLA_PROFILE_NAME                    NC_("STR_MOZILLA_PROFILE_NAME", "~Mozilla profile name")
-#define STR_THUNDERBIRD_PROFILE_NAME                NC_("STR_THUNDERBIRD_PROFILE_NAME", "~Thunderbird profile name")
 #define STR_ADD_TABLES                              NC_("STR_ADD_TABLES", "Add Tables")
 #define STR_ADD_TABLE_OR_QUERY                      NC_("STR_ADD_TABLE_OR_QUERY", "Add Table or Query" )
 

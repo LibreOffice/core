@@ -31,7 +31,6 @@ namespace abp
         std::unique_ptr<weld::RadioButton> m_xEvolution;
         std::unique_ptr<weld::RadioButton> m_xEvolutionGroupwise;
         std::unique_ptr<weld::RadioButton> m_xEvolutionLdap;
-        std::unique_ptr<weld::RadioButton> m_xThunderbird;
         std::unique_ptr<weld::RadioButton> m_xKab;
         std::unique_ptr<weld::RadioButton> m_xMacab;
         std::unique_ptr<weld::RadioButton> m_xOther;

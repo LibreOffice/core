@@ -209,8 +209,7 @@ OUString ONSSInitializer::getMozillaCurrentProfile(const css::uno::Reference< cs
     }
 
     // third, dig around to see if there's one default available
-    mozilla::MozillaProductType productTypes[3] = {
-        mozilla::MozillaProductType_Thunderbird,
+    mozilla::MozillaProductType productTypes[2] = {
         mozilla::MozillaProductType_Firefox,
         mozilla::MozillaProductType_Mozilla };
 
@@ -250,8 +249,7 @@ css::uno::Sequence<css::xml::crypto::NSSProfile> SAL_CALL ONSSInitializer::getNS
     std::vector<xml::crypto::NSSProfile> aProfileList;
     aProfileList.reserve(10);
 
-    mozilla::MozillaProductType productTypes[3] = {
-        mozilla::MozillaProductType_Thunderbird,
+    mozilla::MozillaProductType productTypes[2] = {
         mozilla::MozillaProductType_Firefox,
         mozilla::MozillaProductType_Mozilla };
 
@@ -318,7 +316,7 @@ ONSSInitializer::ONSSInitializer()
 namespace
 {
 
-//Older versions of Firefox (FF), for example FF2, and Thunderbird (TB) 2 write
+//Older versions of Firefox (FF), for example FF2 write
 //the roots certificate module (libnssckbi.so), which they use, into the
 //profile. This module will then already be loaded during NSS_Init (and the
 //other init functions). This fails in two cases. First, FF3 was used to create

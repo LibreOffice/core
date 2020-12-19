@@ -9100,8 +9100,7 @@ module com {
     published enum MozillaProductType {
      Default = 0,
      Mozilla = 1,
-     Firefox = 2,
-     Thunderbird = 3
+     Firefox = 2
     };
     published interface XProfileDiscover {
      interface ::com::sun::star::uno::XInterface;

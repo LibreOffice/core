@@ -28,7 +28,7 @@
 
 
 
-/** is the interface to boot up and switch Mozilla/Thunderbird profiles
+/** is the interface to boot up and switch Mozilla profiles
 
     @see com::sun::star::mozilla::MozillaProductType
     @see com::sun::star::mozilla::XProfileDiscover
