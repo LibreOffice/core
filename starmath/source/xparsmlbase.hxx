@@ -32,11 +32,13 @@ namespace starmathdatabase
   * On export only mathml entities are allowed.
   * Some documentation: https://www.w3.org/TR/MathML3/chapter7.html
   */
+
 /**
   * Entity names for mathml. Example: &infin;
   * Must be in sync with customMathmlHtmlEntitiesNames.
   */
 const extern ::css::uno::Sequence<::rtl::OUString> icustomMathmlHtmlEntitiesNames;
+
 /**
   * Entity values for mathml. Example: &infin; -> "\u8734";
   * Must be in sync with customMathmlHtmlEntitiesNames.
