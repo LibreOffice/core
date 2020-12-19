@@ -41,6 +41,8 @@
 
 #include <com/sum/star/xml/sax/XFastNamespaceHandler.idl>
 
+#include <com/sun/star/beans/Pair.idl>
+
 
 module com {  module sun {  module star {  module xml {  module sax {
 
@@ -163,7 +165,7 @@ interface XFastParser: com::sun::star::uno::XInterface
       * Will allow to use customized entity references like &infin; .
       * @since LibreOffice 7.1
       */
-    void setCustomEntityNames( [in] sequence<string> names, [in] sequence<string> replacements);
+    void setCustomEntityNames( [in] sequence< beans::Pair<string,string> > replacements);
 };
 
 
