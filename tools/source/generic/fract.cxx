@@ -35,6 +35,10 @@
 #endif
 #include <boost/rational.hpp>
 
+#ifdef _MSC_VER
+#include <intrin.h>
+#endif
+
 static boost::rational<sal_Int32> rational_FromDouble(double dVal);
 
 static void rational_ReduceInaccurate(boost::rational<sal_Int32>& rRational, unsigned nSignificantBits);
@@ -420,51 +424,20 @@ static boost::rational<sal_Int32> rational_FromDouble(double dVal)
     return boost::rational<sal_Int32>( sal_Int32(dVal), nDen );
 }
 
-// Similar to clz_table that can be googled
-const char nbits_table[32] =
-{
-    32,  1, 23,  2, 29, 24, 14,  3,
-    30, 27, 25, 18, 20, 15, 10,  4,
-    31, 22, 28, 13, 26, 17, 19,  9,
-    21, 12, 16,  8, 11,  7,  6,  5
-};
-
+/**
+ * Find the number of bits required to represent this number, using the CLZ intrinsic
+ */
 static int impl_NumberOfBits( sal_uInt32 nNum )
 {
-    // http://en.wikipedia.org/wiki/De_Bruijn_sequence
-    // background paper: Using de Bruijn Sequences to Index a 1 in a
-    // Computer Word (1998) Charles E. Leiserson,
-    // Harald Prokop, Keith H. Randall
-    // (e.g. http://citeseer.ist.psu.edu/leiserson98using.html)
-    const sal_uInt32 nDeBruijn = 0x7DCD629;
-
-    if ( nNum == 0 )
+    if (nNum == 0)
         return 0;
-
-    // Get it to form like 0000001111111111b
-    nNum |= ( nNum >>  1 );
-    nNum |= ( nNum >>  2 );
-    nNum |= ( nNum >>  4 );
-    nNum |= ( nNum >>  8 );
-    nNum |= ( nNum >> 16 );
-
-    sal_uInt32 nNumber;
-    int nBonus;
-
-    nNumber = nNum;
-    nBonus = 0;
-
-    // De facto shift left of nDeBruijn using multiplication (nNumber
-    // is all ones from topmost bit, thus nDeBruijn + (nDeBruijn *
-    // nNumber) => nDeBruijn * (nNumber+1) clears all those bits to
-    // zero, sets the next bit to one, and thus effectively shift-left
-    // nDeBruijn by lg2(nNumber+1). This generates a distinct 5bit
-    // sequence in the msb for each distinct position of the last
-    // leading 0 bit - that's the property of a de Bruijn number.
-    nNumber = nDeBruijn + ( nDeBruijn * nNumber );
-
-    // 5-bit window indexes the result
-    return ( nbits_table[nNumber >> 27] ) + nBonus;
+#ifdef _MSC_VER
+    unsigned long r = 0;
+    _BitScanReverse(&r, nNum);
+    return r + 1;
+#else
+    return 32 - __builtin_clz(nNum);
+#endif
 }
 
 /** Inaccurate cancellation for a fraction.
