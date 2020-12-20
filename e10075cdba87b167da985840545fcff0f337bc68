@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f27ed97_922e49d7",
+        "filename": "i18npool/source/localedata/data/ja_JP.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-12-20T17:37:38Z",
+      "side": 1,
+      "message": "This does not work. You can\u0027t have more than one Gregorian Calendar element in a locale, and naming it \"gregorian_en\" also doesn\u0027t help. In fact that name shouldn\u0027t be allowed at all and it seems we need to enforce such rule while compiling locale data.\n\nSee also https://opengrok.libreoffice.org/xref/core/i18npool/source/localedata/data/locale.dtd?r\u003d8453f6e5#325",
+      "revId": "e10075cdba87b167da985840545fcff0f337bc68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
