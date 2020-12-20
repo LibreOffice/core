@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <optional>
 #include <string_view>
 
 #include <sfx2/filedlghelper.hxx>
