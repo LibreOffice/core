@@ -2709,7 +2709,7 @@ SvStream& ReadGDIMetaFile(SvStream& rIStm, GDIMetaFile& rGDIMetaFile, ImplMetaRe
     }
     catch (...)
     {
-        SAL_WARN("vcl", "GDIMetaFile exception during load");
+        TOOLS_WARN_EXCEPTION("vcl", "GDIMetaFile exception during load");
         rIStm.SetError(SVSTREAM_FILEFORMAT_ERROR);
     };
 

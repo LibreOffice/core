@@ -39,13 +39,13 @@
 #include <intrin.h>
 #endif
 
-static boost::rational<sal_Int32> rational_FromDouble(double dVal);
+static boost::rational<sal_Int64> rational_FromDouble(double dVal);
 
-static void rational_ReduceInaccurate(boost::rational<sal_Int32>& rRational, unsigned nSignificantBits);
+static void rational_ReduceInaccurate(boost::rational<sal_Int64>& rRational, unsigned nSignificantBits);
 
-static boost::rational<sal_Int32> toRational(sal_Int32 n, sal_Int32 d)
+static boost::rational<sal_Int64> toRational(sal_Int64 n, sal_Int64 d)
 {
-    return boost::rational<sal_Int32>(n, d);
+    return boost::rational<sal_Int64>(n, d);
 }
 
 // Initialized by setting nNum as nominator and nDen as denominator
@@ -54,10 +54,10 @@ static boost::rational<sal_Int32> toRational(sal_Int32 n, sal_Int32 d)
 // in order to return the correct value.
 Fraction::Fraction( sal_Int64 nNum, sal_Int64 nDen ) : mnNumerator(nNum), mnDenominator(nDen)
 {
-    assert( nNum >= std::numeric_limits<sal_Int32>::min() );
-    assert( nNum <= std::numeric_limits<sal_Int32>::max( ));
-    assert( nDen >= std::numeric_limits<sal_Int32>::min() );
-    assert( nDen <= std::numeric_limits<sal_Int32>::max( ));
+    assert( nNum >= std::numeric_limits<sal_Int64>::min() );
+    assert( nNum <= std::numeric_limits<sal_Int64>::max( ));
+    assert( nDen >= std::numeric_limits<sal_Int64>::min() );
+    assert( nDen <= std::numeric_limits<sal_Int64>::max( ));
     if ( nDen == 0 )
     {
         mbValid = false;
@@ -73,10 +73,10 @@ Fraction::Fraction( double nNum, double nDen ) : mnNumerator(sal_Int64(nNum)), m
 {
     assert( !std::isnan(nNum) );
     assert( !std::isnan(nDen) );
-    assert( nNum >= std::numeric_limits<sal_Int32>::min() );
-    assert( nNum <= std::numeric_limits<sal_Int32>::max( ));
-    assert( nDen >= std::numeric_limits<sal_Int32>::min() );
-    assert( nDen <= std::numeric_limits<sal_Int32>::max( ));
+    assert( nNum >= std::numeric_limits<sal_Int64>::min() );
+    assert( nNum <= std::numeric_limits<sal_Int64>::max( ));
+    assert( nDen >= std::numeric_limits<sal_Int64>::min() );
+    assert( nDen <= std::numeric_limits<sal_Int64>::max( ));
     if ( nDen == 0 )
     {
         mbValid = false;
@@ -89,7 +89,7 @@ Fraction::Fraction( double dVal )
 {
     try
     {
-        boost::rational<sal_Int32> v = rational_FromDouble( dVal );
+        boost::rational<sal_Int64> v = rational_FromDouble( dVal );
         mnNumerator = v.numerator();
         mnDenominator = v.denominator();
     }
@@ -130,7 +130,7 @@ Fraction& Fraction::operator += ( const Fraction& rVal )
         return *this;
     }
 
-    boost::rational<sal_Int32> a = toRational(mnNumerator, mnDenominator);
+    boost::rational<sal_Int64> a = toRational(mnNumerator, mnDenominator);
     a += toRational(rVal.mnNumerator, rVal.mnDenominator);
     mnNumerator = a.numerator();
     mnDenominator = a.denominator();
@@ -149,7 +149,7 @@ Fraction& Fraction::operator -= ( const Fraction& rVal )
         return *this;
     }
 
-    boost::rational<sal_Int32> a = toRational(mnNumerator, mnDenominator);
+    boost::rational<sal_Int64> a = toRational(mnNumerator, mnDenominator);
     a -= toRational(rVal.mnNumerator, rVal.mnDenominator);
     mnNumerator = a.numerator();
     mnDenominator = a.denominator();
@@ -196,14 +196,15 @@ Fraction& Fraction::operator *= ( const Fraction& rVal )
         return *this;
     }
 
-    boost::rational<sal_Int32> a = toRational(mnNumerator, mnDenominator);
-    boost::rational<sal_Int32> b = toRational(rVal.mnNumerator, rVal.mnDenominator);
+    boost::rational<sal_Int64> a = toRational(mnNumerator, mnDenominator);
+    boost::rational<sal_Int64> b = toRational(rVal.mnNumerator, rVal.mnDenominator);
     bool bFail = checked_multiply_by(a, b);
     mnNumerator = a.numerator();
     mnDenominator = a.denominator();
 
     if (bFail)
     {
+        SAL_WARN( "tools.fraction", "'operator *=' generated invalid fraction" );
         mbValid = false;
     }
 
@@ -221,7 +222,7 @@ Fraction& Fraction::operator /= ( const Fraction& rVal )
         return *this;
     }
 
-    boost::rational<sal_Int32> a = toRational(mnNumerator, mnDenominator);
+    boost::rational<sal_Int64> a = toRational(mnNumerator, mnDenominator);
     a /= toRational(rVal.mnNumerator, rVal.mnDenominator);
     mnNumerator = a.numerator();
     mnDenominator = a.denominator();
@@ -264,7 +265,7 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
     mnDenominator = a.denominator();
 }
 
-sal_Int32 Fraction::GetNumerator() const
+sal_Int64 Fraction::GetNumerator() const
 {
     if ( !mbValid )
     {
@@ -274,7 +275,7 @@ sal_Int32 Fraction::GetNumerator() const
     return mnNumerator;
 }
 
-sal_Int32 Fraction::GetDenominator() const
+sal_Int64 Fraction::GetDenominator() const
 {
     if ( !mbValid )
     {
@@ -291,7 +292,20 @@ Fraction::operator sal_Int32() const
         SAL_WARN( "tools.fraction", "'operator sal_Int32()' on invalid fraction" );
         return 0;
     }
-    return boost::rational_cast<sal_Int32>(toRational(mnNumerator, mnDenominator));
+    sal_Int64 v = boost::rational_cast<sal_Int64>(toRational(mnNumerator, mnDenominator));
+    SAL_WARN_IF( v > std::numeric_limits<sal_Int32>::max() || v < std::numeric_limits<sal_Int32>::min(), "tools.fraction",
+        "value out of range for sal_Int32");
+    return static_cast<sal_Int32>(v);
+}
+
+Fraction::operator sal_Int64() const
+{
+    if ( !mbValid )
+    {
+        SAL_WARN( "tools.fraction", "'operator sal_Int32()' on invalid fraction" );
+        return 0;
+    }
+    return boost::rational_cast<sal_Int64>(toRational(mnNumerator, mnDenominator));
 }
 
 Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 )
@@ -372,6 +386,10 @@ bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
 
 SvStream& ReadFraction( SvStream& rIStream, Fraction & rFract )
 {
+// FIXME this function used by the SVM file format import/export ???
+//    sal_Int64 num(0), den(0);
+//    rIStream.ReadInt64( num );
+//    rIStream.ReadInt64( den );
     sal_Int32 num(0), den(0);
     rIStream.ReadInt32( num );
     rIStream.ReadInt32( den );
@@ -391,14 +409,19 @@ SvStream& ReadFraction( SvStream& rIStream, Fraction & rFract )
 
 SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract )
 {
+// FIXME this function used by the SVM file format import/export ???
     if ( !rFract.mbValid )
     {
         SAL_WARN( "tools.fraction", "'WriteFraction()' write an invalid fraction" );
         rOStream.WriteInt32( 0 );
         rOStream.WriteInt32( -1 );
+//        rOStream.WriteInt64( 0 );
+//        rOStream.WriteInt64( -1 );
     } else {
         rOStream.WriteInt32( rFract.mnNumerator );
         rOStream.WriteInt32( rFract.mnDenominator );
+//        rOStream.WriteInt64( rFract.mnNumerator );
+//        rOStream.WriteInt64( rFract.mnDenominator );
     }
     return rOStream;
 }
@@ -407,36 +430,36 @@ SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract )
 // Otherwise, dVal and denominator are multiplied by 8, until one of them
 // is larger than (LONG_MAX / 8).
 //
-// NOTE: here we use 'sal_Int32' due that only values in sal_Int32 range are valid.
-static boost::rational<sal_Int32> rational_FromDouble(double dVal)
+// NOTE: here we use 'sal_Int64' due that only values in sal_Int64 range are valid.
+static boost::rational<sal_Int64> rational_FromDouble(double dVal)
 {
-    if ( dVal > std::numeric_limits<sal_Int32>::max() ||
-         dVal < std::numeric_limits<sal_Int32>::min() ||
+    if ( dVal > std::numeric_limits<sal_Int64>::max() ||
+         dVal < std::numeric_limits<sal_Int64>::min() ||
          std::isnan(dVal) )
         throw boost::bad_rational();
 
-    const sal_Int32 nMAX = std::numeric_limits<sal_Int32>::max() / 8;
-    sal_Int32 nDen = 1;
+    const sal_Int64 nMAX = std::numeric_limits<sal_Int64>::max() / 8;
+    sal_Int64 nDen = 1;
     while ( std::abs( dVal ) < nMAX && nDen < nMAX ) {
         dVal *= 8;
         nDen *= 8;
     }
-    return boost::rational<sal_Int32>( sal_Int32(dVal), nDen );
+    return boost::rational<sal_Int64>( sal_Int64(dVal), nDen );
 }
 
 /**
  * Find the number of bits required to represent this number, using the CLZ intrinsic
  */
-static int impl_NumberOfBits( sal_uInt32 nNum )
+static int impl_NumberOfBits( sal_uInt64 nNum )
 {
     if (nNum == 0)
         return 0;
 #ifdef _MSC_VER
     unsigned long r = 0;
-    _BitScanReverse(&r, nNum);
+    _BitScanReverse64(&r, nNum);
     return r + 1;
 #else
-    return 32 - __builtin_clz(nNum);
+    return 64 - __builtin_clzl(nNum);
 #endif
 }
 
@@ -458,15 +481,15 @@ static int impl_NumberOfBits( sal_uInt32 nNum )
 
     A ReduceInaccurate(8) yields 1/1.
 */
-static void rational_ReduceInaccurate(boost::rational<sal_Int32>& rRational, unsigned nSignificantBits)
+static void rational_ReduceInaccurate(boost::rational<sal_Int64>& rRational, unsigned nSignificantBits)
 {
     if ( !rRational )
         return;
 
     // http://www.boost.org/doc/libs/release/libs/rational/rational.html#Internal%20representation
     const bool bNeg = ( rRational.numerator() < 0 );
-    sal_Int32 nMul = bNeg? -rRational.numerator(): rRational.numerator();
-    sal_Int32 nDiv = rRational.denominator();
+    sal_Int64 nMul = bNeg? -rRational.numerator(): rRational.numerator();
+    sal_Int64 nDiv = rRational.denominator();
 
     DBG_ASSERT(nSignificantBits<65, "More than 64 bit of significance is overkill!");
 
