@@ -610,6 +610,8 @@ private:
 
     bool m_bInRun;
 
+    bool m_bInRuby;
+
     /// Maps ID's to postit fields, used in atrfstart/end and atnref.
     std::map<sal_uInt16, const SwPostItField*> m_aPostitFields;
 
