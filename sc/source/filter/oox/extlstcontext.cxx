@@ -80,8 +80,26 @@ void ExtCfRuleContext::onStartElement( const AttributeList& rAttribs )
     }
 }
 
+namespace {
+    bool IsSpecificTextCondMode(ScConditionMode eMode)
+    {
+        switch (eMode)
+        {
+        case ScConditionMode::BeginsWith:
+        case ScConditionMode::EndsWith:
+        case ScConditionMode::ContainsText:
+        case ScConditionMode::NotContainsText:
+            return true;
+        default:
+            break;
+        }
+        return false;
+    }
+}
+
 ExtConditionalFormattingContext::ExtConditionalFormattingContext(WorksheetContextBase& rFragment)
     : WorksheetContextBase(rFragment)
+    , nFormulaCount(0)
     , nPriority(-1)
     , eOperator(ScConditionMode::NONE)
     , isPreviousElementF(false)
@@ -145,6 +163,16 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
             eOperator = ScConditionMode::NotContainsText;
             return this;
         }
+        else if(aType == "beginsWith")
+        {
+            eOperator = ScConditionMode::BeginsWith;
+            return this;
+        }
+        else if(aType == "endsWith")
+        {
+            eOperator = ScConditionMode::EndsWith;
+            return this;
+        }
         else
         {
             SAL_WARN("sc", "unhandled XLS14_TOKEN(cfRule) with type: " << aType);
@@ -156,6 +184,8 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
     }
     else if (nElement == XM_TOKEN( sqref ) || nElement == XM_TOKEN( f ))
     {
+        if(nElement == XM_TOKEN( f ))
+           nFormulaCount++;
         return this;
     }
 
@@ -191,13 +221,14 @@ void ExtConditionalFormattingContext::onEndElement()
     {
         case XM_TOKEN(f):
         {
-            if(!aChars.startsWith("ISERROR(SEARCH(") && !aChars.startsWith("NOT(ISERROR(SEARCH("))
+            if(!IsSpecificTextCondMode(eOperator) || nFormulaCount == 2)
                rFormulas.push_back(aChars);
         }
         break;
         case XLS14_TOKEN( cfRule ):
         {
             getStyles().getExtDxfs().forEachMem( &Dxf::finalizeImport );
+            nFormulaCount = 0;
         }
         break;
         case XM_TOKEN(sqref):
