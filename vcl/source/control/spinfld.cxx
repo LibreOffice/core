@@ -540,6 +540,10 @@ bool SpinField::EventNotify(NotifyEvent& rNEvt)
                         bDone = true;
                     }
                 }
+                case KEY_RETURN:
+                {
+                    GrabFocusToDocument();
+                }
                 break;
             }
         }
