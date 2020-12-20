@@ -134,8 +134,8 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     m_pVBox = gtk_vbox_new( false, 0 );
 
     // We don't want clickable items to have a huge hit-area
-    GtkWidget *pHBox = gtk_hbox_new( false, 0 );
-    GtkWidget *pThinVBox = gtk_vbox_new( false, 0 );
+    GtkWidget *pHBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    GtkWidget *pThinVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
     gtk_box_pack_end (GTK_BOX( m_pVBox ), pHBox, false, false, 0);
     gtk_box_pack_start (GTK_BOX( pHBox ), pThinVBox, false, false, 0);
