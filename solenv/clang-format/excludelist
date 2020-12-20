@@ -15294,7 +15294,6 @@ vcl/unx/gtk3/gtk3gtksalmenu.cxx
 vcl/unx/gtk3/gtk3gtksys.cxx
 vcl/unx/gtk3/gtk3hudawareness.cxx
 vcl/unx/gtk3/gtk3salnativewidgets-gtk.cxx
-vcl/unx/gtk3/gtk3salprn-gtk.cxx
 vcl/unx/x11/x11sys.cxx
 vcl/unx/x11/xlimits.cxx
 vcl/win/app/saldata.cxx
