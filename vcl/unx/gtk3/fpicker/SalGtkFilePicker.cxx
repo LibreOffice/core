@@ -119,8 +119,8 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
             OUStringToOString( aFilePickerTitle, RTL_TEXTENCODING_UTF8 ).getStr(),
             nullptr,
             GTK_FILE_CHOOSER_ACTION_OPEN,
-            GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-            GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+            getCancelText().getStr(), GTK_RESPONSE_CANCEL,
+            getOpenText().getStr(), GTK_RESPONSE_ACCEPT,
             nullptr );
 
     gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
@@ -1326,20 +1326,7 @@ void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const OUString& 
     }
 
     OString aTxt = OUStringToOString( rLabel.replace('~', '_'), RTL_TEXTENCODING_UTF8 );
-    if (nControlId == ExtendedFilePickerElementIds::PUSHBUTTON_PLAY)
-    {
-#ifdef GTK_STOCK_MEDIA_PLAY
-        if (msPlayLabel.isEmpty())
-            msPlayLabel = rLabel;
-        if (msPlayLabel == rLabel)
-            gtk_button_set_label(GTK_BUTTON(pWidget), GTK_STOCK_MEDIA_PLAY);
-        else
-            gtk_button_set_label(GTK_BUTTON(pWidget), GTK_STOCK_MEDIA_STOP);
-#else
-        gtk_button_set_label(GTK_BUTTON(pWidget), aTxt.getStr());
-#endif
-    }
-    else if( tType == GTK_TYPE_TOGGLE_BUTTON || tType == GTK_TYPE_BUTTON || tType == GTK_TYPE_LABEL )
+    if( tType == GTK_TYPE_TOGGLE_BUTTON || tType == GTK_TYPE_BUTTON || tType == GTK_TYPE_LABEL )
         g_object_set( pWidget, "label", aTxt.getStr(),
                       "use_underline", true, nullptr );
     else
@@ -1594,7 +1581,9 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     }
 
     GtkFileChooserAction eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
-    const gchar *first_button_text = GTK_STOCK_OPEN;
+    OString sOpen = getOpenText();
+    OString sSave = getSaveText();
+    const gchar *first_button_text = sOpen.getStr();
 
     SolarMutexGuard g;
 
@@ -1604,22 +1593,22 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     {
         case FILEOPEN_SIMPLE:
             eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
-            first_button_text = GTK_STOCK_OPEN;
+            first_button_text = sOpen.getStr();
             break;
         case FILESAVE_SIMPLE:
             eAction = GTK_FILE_CHOOSER_ACTION_SAVE;
-            first_button_text = GTK_STOCK_SAVE;
+            first_button_text = sSave.getStr();
                 break;
         case FILESAVE_AUTOEXTENSION_PASSWORD:
             eAction = GTK_FILE_CHOOSER_ACTION_SAVE;
-            first_button_text = GTK_STOCK_SAVE;
+            first_button_text = sSave.getStr();
             mbToggleVisibility[PASSWORD] = true;
             mbToggleVisibility[GPGENCRYPTION] = true;
             // TODO
             break;
         case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
             eAction = GTK_FILE_CHOOSER_ACTION_SAVE;
-            first_button_text = GTK_STOCK_SAVE;
+            first_button_text = sSave.getStr();
             mbToggleVisibility[PASSWORD] = true;
             mbToggleVisibility[GPGENCRYPTION] = true;
             mbToggleVisibility[FILTEROPTIONS] = true;
@@ -1627,19 +1616,19 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
                 break;
         case FILESAVE_AUTOEXTENSION_SELECTION:
             eAction = GTK_FILE_CHOOSER_ACTION_SAVE; // SELECT_FOLDER ?
-            first_button_text = GTK_STOCK_SAVE;
+            first_button_text = sSave.getStr();
             mbToggleVisibility[SELECTION] = true;
             // TODO
                 break;
         case FILESAVE_AUTOEXTENSION_TEMPLATE:
             eAction = GTK_FILE_CHOOSER_ACTION_SAVE;
-            first_button_text = GTK_STOCK_SAVE;
+            first_button_text = sSave.getStr();
             mbListVisibility[TEMPLATE] = true;
             // TODO
                 break;
         case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
             eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
-            first_button_text = GTK_STOCK_OPEN;
+            first_button_text = sOpen.getStr();
             mbToggleVisibility[LINK] = true;
             mbToggleVisibility[PREVIEW] = true;
             mbListVisibility[IMAGE_TEMPLATE] = true;
@@ -1647,7 +1636,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
                 break;
         case FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR:
             eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
-            first_button_text = GTK_STOCK_OPEN;
+            first_button_text = sOpen.getStr();
             mbToggleVisibility[LINK] = true;
             mbToggleVisibility[PREVIEW] = true;
             mbListVisibility[IMAGE_ANCHOR] = true;
@@ -1655,38 +1644,38 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
                 break;
         case FILEOPEN_PLAY:
             eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
-            first_button_text = GTK_STOCK_OPEN;
+            first_button_text = sOpen.getStr();
             mbButtonVisibility[PLAY] = true;
             // TODO
                 break;
         case FILEOPEN_LINK_PLAY:
             eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
-            first_button_text = GTK_STOCK_OPEN;
+            first_button_text = sOpen.getStr();
             mbToggleVisibility[LINK] = true;
             mbButtonVisibility[PLAY] = true;
             // TODO
                 break;
         case FILEOPEN_READONLY_VERSION:
             eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
-            first_button_text = GTK_STOCK_OPEN;
+            first_button_text = sOpen.getStr();
             mbToggleVisibility[READONLY] = true;
             mbListVisibility[VERSION] = true;
             break;
         case FILEOPEN_LINK_PREVIEW:
             eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
-            first_button_text = GTK_STOCK_OPEN;
+            first_button_text = sOpen.getStr();
             mbToggleVisibility[LINK] = true;
             mbToggleVisibility[PREVIEW] = true;
             // TODO
                 break;
         case FILESAVE_AUTOEXTENSION:
             eAction = GTK_FILE_CHOOSER_ACTION_SAVE;
-            first_button_text = GTK_STOCK_SAVE;
+            first_button_text = sSave.getStr();
             // TODO
                 break;
         case FILEOPEN_PREVIEW:
             eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
-            first_button_text = GTK_STOCK_OPEN;
+            first_button_text = sOpen.getStr();
             mbToggleVisibility[PREVIEW] = true;
             // TODO
                 break;
@@ -1706,17 +1695,15 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
 
     gtk_file_chooser_set_action( GTK_FILE_CHOOSER( m_pDialog ), eAction);
     dialog_remove_buttons( GTK_DIALOG( m_pDialog ) );
-    gtk_dialog_add_button( GTK_DIALOG( m_pDialog ), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL );
+    gtk_dialog_add_button(GTK_DIALOG( m_pDialog ),
+                          getCancelText().getStr(),
+                          GTK_RESPONSE_CANCEL);
     for( int nTVIndex = 0; nTVIndex < BUTTON_LAST; nTVIndex++ )
     {
         if( mbButtonVisibility[nTVIndex] )
         {
-#ifdef GTK_STOCK_MEDIA_PLAY
-            m_pButtons[ nTVIndex ] = gtk_dialog_add_button( GTK_DIALOG( m_pDialog ), GTK_STOCK_MEDIA_PLAY, 1 );
-#else
             OString aPlay = OUStringToOString( getResString( PUSHBUTTON_PLAY ), RTL_TEXTENCODING_UTF8 );
             m_pButtons[ nTVIndex ] = gtk_dialog_add_button( GTK_DIALOG( m_pDialog ), aPlay.getStr(), 1 );
-#endif
         }
     }
     gtk_dialog_add_button( GTK_DIALOG( m_pDialog ), first_button_text, GTK_RESPONSE_ACCEPT );
