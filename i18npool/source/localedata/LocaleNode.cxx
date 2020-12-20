@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <memory>
 #include <vector>
+#include <map>
 #include <o3tl/sorted_vector.hxx>
 
 #include <rtl/ustrbuf.hxx>
@@ -1559,6 +1560,23 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     std::unique_ptr<sal_Int16[]> nbOfGenitiveMonths( new sal_Int16[nbOfCalendars] );
     std::unique_ptr<sal_Int16[]> nbOfPartitiveMonths( new sal_Int16[nbOfCalendars] );
     std::unique_ptr<sal_Int16[]> nbOfEras( new sal_Int16[nbOfCalendars] );
+
+    // Known allowed calendar identifiers (unoid) and whether used or not.
+    // Of course there must be an implementation for new to be added
+    // identifiers.. see data/locale.dtd
+    std::map< OUString, bool > aCalendars;
+    aCalendars["buddhist"]   = false;
+    aCalendars["gengou"]     = false;
+    aCalendars["gregorian"]  = false;
+    aCalendars["hanja"]      = false;
+    aCalendars["hanja_yoil"] = false;
+    aCalendars["hijri"]      = false;
+    aCalendars["jewish"]     = false;
+    aCalendars["ROC"]        = false;
+    // Not in ODF:
+    aCalendars["dangi"]      = false;
+    aCalendars["persian"]    = false;
+
     sal_Int16 j;
     sal_Int16 i;
     bool bHasGregorian = false;
@@ -1571,6 +1589,13 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         bool bGregorian = calendarID == "gregorian";
         if (!bHasGregorian)
             bHasGregorian = bGregorian;
+        auto calIt = aCalendars.find(calendarID);
+        if (calIt == aCalendars.end())
+            incErrorStr( "Error: unknown Calendar unoid: %s\n", calendarID);
+        else if (calIt->second)
+            incErrorStr( "Error: duplicate Calendar unoid: %s\n", calendarID);
+        else
+            calIt->second = true;
         str = calNode -> getAttr().getValueByName("default");
         of.writeDefaultParameter("Calendar", str, i);
 
