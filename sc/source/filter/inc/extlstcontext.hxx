@@ -51,6 +51,7 @@ public:
     virtual void onEndElement() override;
 
 private:
+    sal_Int32 nFormulaCount;
     OUString aChars; // Characters of between xml elements.
     OUString rStyle; // Style of the corresponding condition
     sal_Int32 nPriority; // Priority of last cfRule element.
