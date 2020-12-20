@@ -107,7 +107,7 @@ Try:
 Finally:
 	_AddDialogToCache = lIndex
 	Exit Function
-End Function	&apos;	SFDialogs.SF_Dialog._AddDialogToCache
+End Function	&apos;	SFDialogs.SF_Register._AddDialogToCache
 
 REM -----------------------------------------------------------------------------
 Private Sub _CleanCacheEntry(ByVal plIndex As Long)
@@ -131,7 +131,7 @@ Dim vCache As New _DialogCache		&apos;	Cleaned entry
 	
 Finally:
 	Exit Sub
-End Sub	&apos;	SFDialogs.SF_Dialog._CleanCacheEntry
+End Sub			&apos;	SFDialogs.SF_Register._CleanCacheEntry
 
 REM -----------------------------------------------------------------------------
 Public Function _EventManager(Optional ByRef pvArgs As Variant) As Object
@@ -190,7 +190,7 @@ Try:
 Finally:
 	Set _EventManager = oSource
 	Exit Function
-End Function	&apos;	SFDialogs.SF_Documents._EventManager
+End Function	&apos;	SFDialogs.SF_Register._EventManager
 
 REM -----------------------------------------------------------------------------
 Private Function _FindDialogInCache(ByRef poDialog As Object) As Object
@@ -215,7 +215,7 @@ Try:
 Finally:
 	Set _FindDialogInCache = oBasicDialog
 	Exit Function
-End Function	&apos;	SFDialogs.SF_Documents._FindDialogInCache
+End Function	&apos;	SFDialogs.SF_Register._FindDialogInCache
 
 REM -----------------------------------------------------------------------------
 Public Function _NewDialog(Optional ByVal pvArgs As Variant) As Object

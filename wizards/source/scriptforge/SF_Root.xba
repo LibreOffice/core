@@ -72,6 +72,7 @@ Private PythonHelper		As String	&apos; File name of Python helper functions (sto
 Private Interface			As Object	&apos; ScriptForge own L10N service
 Private OSName				As String	&apos; WIN, LINUX, MACOS
 Private SFDialogs			As Variant	&apos; Persistent storage for the SFDialogs library
+Private SFForms				As Variant	&apos; Persistent storage for the SF_Form class in the SFDocuments library
 
 REM ====================================================== CONSTRUCTOR/DESTRUCTOR
 
@@ -118,6 +119,7 @@ Private Sub Class_Initialize()
 	Set TreeDataModel = Nothing
 	OSName = &quot;&quot;
 	SFDialogs = Empty
+	SFForms = Empty
 End Sub		&apos;	ScriptForge.SF_Root Constructor
 
 REM -----------------------------------------------------------------------------
