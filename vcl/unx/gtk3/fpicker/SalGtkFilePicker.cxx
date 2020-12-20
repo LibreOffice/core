@@ -108,7 +108,6 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     for( i = 0; i < LIST_LAST; i++ )
     {
         m_pHBoxs[i] = nullptr;
-        m_pAligns[i] = nullptr;
         m_pLists[i] = nullptr;
         m_pListLabels[i] = nullptr;
         mbListVisibility[i] = false;
@@ -175,8 +174,6 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     {
         m_pHBoxs[i] = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 
-        m_pAligns[i] = gtk_alignment_new(0, 0, 0, 1);
-
         GtkListStore *pListStores[ LIST_LAST ];
         pListStores[i] = gtk_list_store_new (1, G_TYPE_STRING);
         m_pLists[i] = gtk_combo_box_new_with_model(GTK_TREE_MODEL(pListStores[i]));
@@ -206,8 +203,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
                 break;
         }
 
-        gtk_container_add( GTK_CONTAINER( m_pAligns[i]), m_pLists[i] );
-        gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pAligns[i], false, false, 0 );
+        gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pLists[i], false, false, 0 );
         gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pListLabels[i], false, false, 0 );
         gtk_label_set_mnemonic_widget( GTK_LABEL(m_pListLabels[i]), m_pLists[i] );
         gtk_box_set_spacing( GTK_BOX( m_pHBoxs[i] ), 12 );
@@ -1741,7 +1737,6 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
             gtk_widget_set_sensitive( m_pLists[ nTVIndex ], false );
             gtk_widget_show( m_pLists[ nTVIndex ] );
             gtk_widget_show( m_pListLabels[ nTVIndex ] );
-            gtk_widget_show( m_pAligns[ nTVIndex ] );
             gtk_widget_show( m_pHBoxs[ nTVIndex ] );
         }
     }
@@ -1973,7 +1968,7 @@ SalGtkFilePicker::~SalGtkFilePicker()
     for( i = 0; i < LIST_LAST; i++ )
     {
         gtk_widget_destroy( m_pListLabels[i] );
-        gtk_widget_destroy( m_pAligns[i] ); //m_pAligns[i] owns m_pLists[i]
+        gtk_widget_destroy( m_pLists[i] );
         gtk_widget_destroy( m_pHBoxs[i] );
     }
 

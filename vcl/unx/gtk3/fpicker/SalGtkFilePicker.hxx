@@ -186,7 +186,6 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
               };
 
         GtkWidget *m_pHBoxs[ LIST_LAST ];
-        GtkWidget *m_pAligns[ LIST_LAST ];
         GtkWidget *m_pLists[ LIST_LAST ];
         GtkWidget *m_pListLabels[ LIST_LAST ];
         bool mbListVisibility[ LIST_LAST ];
