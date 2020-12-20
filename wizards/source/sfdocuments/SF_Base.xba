@@ -242,6 +242,7 @@ Try:
 			Set ._MainForm = oMainForm
 			._FormType = ISBASEFORM
 			Set ._Form = oXForm
+			._Initialize()
 		End With
 		Set Forms = oForm
 	End If
@@ -453,7 +454,10 @@ Try:
 			Wait 1					&apos;	Bypass desynchro issue in Linux
 		End With
 	Else								&apos;	Open
-		_Component.CurrentController.loadComponent(com.sun.star.sdb.application.DatabaseObject.FORM, FormDocument, DesignMode)
+		With _Component.CurrentController
+			If Not .IsConnected Then .connect()
+			.loadComponent(com.sun.star.sdb.application.DatabaseObject.FORM, FormDocument, DesignMode)
+		End With
 		bOpen = True
 	End If
 

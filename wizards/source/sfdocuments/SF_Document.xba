@@ -521,6 +521,7 @@ Try:
 			Set ._MainForm = Nothing
 			._FormType = ISDOCFORM
 			Set ._Form = oXForm
+			._Initialize()
 		End With
 		Set Forms = oForm
 	End If

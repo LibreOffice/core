@@ -79,6 +79,7 @@ Private _DrawPage			As Long			&apos; Index in DrawPages collection
 Private _SheetName			As String		&apos; Name as the sheet containing the form (Calc only)
 Private _FormDocumentName	As String		&apos; The hierarchical name of the containing form document (Base only)
 Private _FormType			As Integer		&apos; One of the ISxxxFORM constants
+Private _CacheIndex			As Long			&apos; Index in central cache storage
 
 &apos;	Form UNO references
 &apos;		The forms container found in a Base document
@@ -114,6 +115,7 @@ Private Sub Class_Initialize()
 	_SheetName = &quot;&quot;
 	_FormDocumentName = &quot;&quot;
 	_FormType = 0
+	_CacheIndex = -1
 	Set _MainForm = Nothing
 	Set _Form = Nothing
 	Set _Database = Nothing
@@ -130,6 +132,7 @@ Public Function Dispose() As Variant
 	If Not IsNull(_Database) And (_FormType = ISDOCFORM Or _FormType = ISCALCFORM) Then
 		Set _Database = _Database.Dispose()
 	End If
+	SF_Register._CleanCacheEntry(_CacheIndex)
 	Call Class_Terminate()
 	Set Dispose = Nothing
 End Function	&apos;	SFDocuments.SF_Form Explicit Destructor
@@ -539,6 +542,15 @@ Private Function _GetListener(ByVal psEventName As String) As String
 	End Select
 	
 End Function	&apos;	SFDocuments.SF_Form._GetListener
+
+REM -----------------------------------------------------------------------------
+Public Sub _Initialize()
+&apos;&apos;&apos;	Achieve the creation of a SF_Form instance
+&apos;&apos;&apos;		- store the new instance in the cache
+
+	_CacheIndex = SF_Register._AddFormToCache(_Form, [Me])
+
+End Sub			&apos;	SFDocuments.SF_Form._Initialize
 
 REM -----------------------------------------------------------------------------
 Private Function _IsStillAlive(Optional ByVal pbError As Boolean) As Boolean
