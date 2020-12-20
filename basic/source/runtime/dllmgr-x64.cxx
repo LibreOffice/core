@@ -770,7 +770,7 @@ ErrCode SbiDllMgr::Call(
     if (cdeclConvention) {
         return ERRCODE_BASIC_NOT_IMPLEMENTED;
     }
-    OUString dllName(fullDllName(library));
+    OUString dllName(fullDllName(OUString(library)));
     Dll * dll = impl_->getDll(dllName);
     if (dll == nullptr) {
         return ERRCODE_BASIC_BAD_DLL_LOAD;
