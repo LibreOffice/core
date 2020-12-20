@@ -23,6 +23,7 @@
 #include <tools/helpers.hxx>
 
 #include <vcl/BitmapReadAccess.hxx>
+#include <vcl/Vectorizer.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
@@ -32,7 +33,6 @@
 #include "ColorSet.hxx"
 #include "PointArray.hxx"
 #include "VectorMap.hxx"
-#include "Vectorizer.hxx"
 
 #include <array>
 #include <memory>
@@ -45,15 +45,15 @@ static bool GetChain(VectorMap* pMap, const Point& rStartPt, Chain& rChain);
 static bool IsUp(VectorMap const* pMap, tools::Long nY, tools::Long nX);
 static void LimitPolyPoly(tools::PolyPolygon& rPolyPoly);
 
-bool Vectorize(const Bitmap& rColorBmp, GDIMetaFile& rMtf, sal_uInt8 cReduce,
-               const Link<tools::Long, void>* pProgress)
+GDIMetaFile ProduceMetafile(const Bitmap& rColorBmp, sal_uInt8 cReduce,
+                            const Link<tools::Long, void>* pProgress)
 {
-    bool bRet = false;
-
     VECT_PROGRESS(pProgress, 0);
 
     std::unique_ptr<Bitmap> xBmp(new Bitmap(rColorBmp));
     Bitmap::ScopedReadAccess pRAcc(*xBmp);
+
+    GDIMetaFile aMtf;
 
     if (pRAcc)
     {
@@ -65,8 +65,6 @@ bool Vectorize(const Bitmap& rColorBmp, GDIMetaFile& rMtf, sal_uInt8 cReduce,
         const sal_uInt16 nColorCount = pRAcc->GetPaletteEntryCount();
         sal_uInt16 n;
         std::array<ColorSet, 256> aColorSet;
-
-        rMtf.Clear();
 
         // get used palette colors and sort them from light to dark colors
         for (n = 0; n < nColorCount; n++)
@@ -117,9 +115,9 @@ bool Vectorize(const Bitmap& rColorBmp, GDIMetaFile& rMtf, sal_uInt8 cReduce,
 
                     if (aPolyPoly.Count())
                     {
-                        rMtf.AddAction(new MetaLineColorAction(aFindColor, true));
-                        rMtf.AddAction(new MetaFillColorAction(aFindColor, true));
-                        rMtf.AddAction(new MetaPolyPolygonAction(aPolyPoly));
+                        aMtf.AddAction(new MetaLineColorAction(aFindColor, true));
+                        aMtf.AddAction(new MetaFillColorAction(aFindColor, true));
+                        aMtf.AddAction(new MetaPolyPolygonAction(aPolyPoly));
                     }
                 }
             }
@@ -128,17 +126,18 @@ bool Vectorize(const Bitmap& rColorBmp, GDIMetaFile& rMtf, sal_uInt8 cReduce,
             VECT_PROGRESS(pProgress, FRound(fPercent));
         }
 
-        if (rMtf.GetActionSize())
+        if (aMtf.GetActionSize())
         {
             MapMode aMap(MapUnit::Map100thMM);
             ScopedVclPtrInstance<VirtualDevice> aVDev;
             const Size aLogSize1(aVDev->PixelToLogic(Size(1, 1), aMap));
 
-            rMtf.SetPrefMapMode(aMap);
-            rMtf.SetPrefSize(Size(nWidth + 2, nHeight + 2));
-            rMtf.Move(1, 1);
-            rMtf.Scale(aLogSize1.Width(), aLogSize1.Height());
-            bRet = true;
+            aMtf.SetPrefMapMode(aMap);
+            aMtf.SetPrefSize(Size(nWidth + 2, nHeight + 2));
+            aMtf.Move(1, 1);
+            aMtf.Scale(aLogSize1.Width(), aLogSize1.Height());
+
+            return aMtf;
         }
     }
 
@@ -146,7 +145,7 @@ bool Vectorize(const Bitmap& rColorBmp, GDIMetaFile& rMtf, sal_uInt8 cReduce,
     xBmp.reset();
     VECT_PROGRESS(pProgress, 100);
 
-    return bRet;
+    return aMtf;
 }
 
 void LimitPolyPoly(tools::PolyPolygon& rPolyPoly)
