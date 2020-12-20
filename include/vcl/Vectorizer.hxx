@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_GDI_IMPVECT_HXX
-#define INCLUDED_VCL_SOURCE_GDI_IMPVECT_HXX
+#pragma once
 
 #include <vcl/gdimtf.hxx>
 
@@ -29,10 +28,27 @@ class PolyPolygon;
 
 namespace vcl::Vectorizer
 {
-bool Vectorize(const Bitmap& rColorBmp, GDIMetaFile& rMtf, sal_uInt8 cReduce,
-               const Link<tools::Long, void>* pProgress);
-};
+/** Produce a metafile from a bitmap
 
-#endif
+    This works by putting continuous areas of the same color into
+    polygons painted in this color, by tracing the area's bounding
+    line.
+
+    @returns GDIMetaFile
+    The resulting meta file
+
+    @param rColorBmp
+    The bitmap to convert to a metafile
+
+    @param cReduce
+    If non-null, minimal size of bound rects for individual polygons. Smaller ones are ignored.
+
+    @param pProgress
+    A callback for showing the progress of the vectorization
+ */
+
+GDIMetaFile VCL_DLLPUBLIC ProduceMetafile(const Bitmap& rColorBmp, sal_uInt8 cReduce,
+                                          const Link<tools::Long, void>* pProgress);
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
