@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55788062_b5296723",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 3394,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-12-20T20:24:37Z",
+      "side": 1,
+      "message": "is there a reason not to use AARCH64 like all other arm64 OSes?",
+      "revId": "03ce1e85428d4a273910bf7ca758ce050e95720c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a1a8b7a_84c046f5",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 3395,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-12-20T20:24:37Z",
+      "side": 1,
+      "message": "this is also unique among arm64 OSes",
+      "revId": "03ce1e85428d4a273910bf7ca758ce050e95720c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
