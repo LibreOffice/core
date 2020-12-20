@@ -17,12 +17,12 @@
 #include <osl/process.h>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
+#include <unx/genprn.h>
 #include <unx/salobj.h>
 #include <unx/gtk/gtkgdi.hxx>
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtkobject.hxx>
 #include <unx/gtk/atkbridge.hxx>
-#include <unx/gtk/gtkprn.hxx>
 #include <unx/gtk/gtksalmenu.hxx>
 #include <headless/svpvd.hxx>
 #include <headless/svpbmp.hxx>
@@ -293,7 +293,7 @@ SalInfoPrinter* GtkInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
     EnsureInit();
     mbPrinterInit = true;
     // create and initialize SalInfoPrinter
-    PspSalInfoPrinter* pPrinter = new GtkSalInfoPrinter;
+    PspSalInfoPrinter* pPrinter = new PspSalInfoPrinter;
     configurePspInfoPrinter(pPrinter, pQueueInfo, pSetupData);
     return pPrinter;
 }
@@ -302,7 +302,7 @@ std::unique_ptr<SalPrinter> GtkInstance::CreatePrinter( SalInfoPrinter* pInfoPri
 {
     EnsureInit();
     mbPrinterInit = true;
-    return std::unique_ptr<SalPrinter>(new GtkSalPrinter( pInfoPrinter ));
+    return std::unique_ptr<SalPrinter>(new PspSalPrinter(pInfoPrinter));
 }
 
 /*
