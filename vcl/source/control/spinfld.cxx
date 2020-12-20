@@ -367,6 +367,11 @@ void SpinField::Down()
     ImplCallEventListenersAndHandler( VclEventId::SpinfieldDown, [this] () { maDownHdlLink.Call(*this); } );
 }
 
+void SpinField::Enter()
+{
+    ImplCallEventListenersAndHandler( VclEventId::SpinfieldDown, [this] () { maEnterHdlLink.Call(*this); } );
+}
+
 void SpinField::First()
 {
     ImplCallEventListenersAndHandler(VclEventId::SpinfieldFirst, nullptr);
@@ -539,6 +544,11 @@ bool SpinField::EventNotify(NotifyEvent& rNEvt)
                         First();
                         bDone = true;
                     }
+                }
+                break;
+                case KEY_RETURN:
+                {
+                    Enter();
                 }
                 break;
             }
