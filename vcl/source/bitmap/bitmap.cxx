@@ -26,6 +26,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/Vectorizer.hxx>
 
 #include <svdata.hxx>
 #include <salinst.hxx>
@@ -47,7 +48,6 @@
 #include <bitmap/impoctree.hxx>
 #include <bitmap/Octree.hxx>
 
-#include "Vectorizer.hxx"
 #include "floyd.hxx"
 
 #include <math.h>
@@ -1559,11 +1559,6 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
             break;
         }
     }
-}
-
-void Bitmap::Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce, const Link<tools::Long,void>* pProgress )
-{
-    vcl::Vectorizer::Vectorize( *this, rMtf, cReduce, pProgress );
 }
 
 bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
