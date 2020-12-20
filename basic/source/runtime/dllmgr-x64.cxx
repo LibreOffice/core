@@ -776,7 +776,7 @@ ErrCode SbiDllMgr::Call(
         return ERRCODE_BASIC_BAD_DLL_LOAD;
     }
     ProcData proc;
-    ErrCode e = dll->getProc(function, &proc);
+    ErrCode e = dll->getProc(OUString(function), &proc);
     if (e != ERRCODE_NONE) {
         return e;
     }
