@@ -204,6 +204,24 @@
     },
     {
       "key": {
+        "uuid": "cb05b1f0_96c14453",
+        "filename": "offapi/com/sun/star/xml/sax/XWriter.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-20T18:46:18Z",
+      "side": 1,
+      "message": "\u003e OK, how do I use the Pair?\n\nYou\u0027d\n\n  #include \u003ccom/sun/star/beans/Pair.idl\u003e\n\nand change the above method to something like\n\n  void setCustomEntityNames( [in] sequence\u003ccom::sun::star::beans::Pair\u003cstring, unsigned long\u003e entities );\n\n(modulo the discussion about the appropriate type for the Pair\u0027s second component).",
+      "parentUuid": "bcb67634_c9cc166c",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "14028e78_071d578c",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 5
