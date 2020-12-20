@@ -131,7 +131,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
 #endif
     gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER( m_pDialog ), false );
 
-    m_pVBox = gtk_vbox_new( false, 0 );
+    m_pVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
     // We don't want clickable items to have a huge hit-area
     GtkWidget *pHBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
@@ -173,7 +173,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
 
     for( i = 0; i < LIST_LAST; i++ )
     {
-        m_pHBoxs[i] = gtk_hbox_new( false, 0 );
+        m_pHBoxs[i] = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 
         m_pAligns[i] = gtk_alignment_new(0, 0, 0, 1);
 
