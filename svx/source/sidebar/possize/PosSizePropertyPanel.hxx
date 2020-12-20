@@ -159,8 +159,8 @@ private:
 
     DECL_LINK( ChangePosXHdl, Edit&, void );
     DECL_LINK( ChangePosYHdl, Edit&, void );
-    DECL_LINK( ChangeWidthHdl, Edit&, void );
-    DECL_LINK( ChangeHeightHdl, Edit&, void );
+    DECL_LINK( ChangeWidthHdl, Control&, void );
+    DECL_LINK( ChangeHeightHdl, Control&, void );
     DECL_LINK( ClickAutoHdl, Button*, void );
     DECL_LINK( AngleModifiedHdl, Edit&, void );
     DECL_LINK( RotationHdl, svx::DialControl*, void );

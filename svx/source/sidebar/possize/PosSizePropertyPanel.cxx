@@ -194,8 +194,8 @@ void PosSizePropertyPanel::Initialize()
     mpMtrPosY->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangePosYHdl ) );
 
     //Size : Width / Height
-    mpMtrWidth->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangeWidthHdl ) );
-    mpMtrHeight->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangeHeightHdl ) );
+    mpMtrWidth->SetLoseFocusHdl( LINK( this, PosSizePropertyPanel, ChangeWidthHdl ) );
+    mpMtrHeight->SetLoseFocusHdl( LINK( this, PosSizePropertyPanel, ChangeHeightHdl ) );
 
     //Size : Keep ratio
     mpCbxScale->SetClickHdl( LINK( this, PosSizePropertyPanel, ClickAutoHdl ) );
@@ -353,7 +353,7 @@ void PosSizePropertyPanel::HandleContextChange(
 }
 
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl, Edit&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl, Control&, void )
 {
     if( mpCbxScale->IsChecked() &&
         mpCbxScale->IsEnabled() )
@@ -375,7 +375,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl, Edit&, void )
 }
 
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightHdl, Edit&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightHdl, Control&, void )
 {
     if( mpCbxScale->IsChecked() &&
         mpCbxScale->IsEnabled() )
