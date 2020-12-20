@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b0738a8_afdf6791",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-20T12:16:47Z",
+      "side": 1,
+      "message": "I don\u0027t understand why you put that question here.  Who but you would know the answer, given it is you who added this new \"DontEnableJava\" check in the middle of JavaVirtualMachine::getJavaVM here?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 33
+      },
+      "revId": "8c5c6b8993a52c40b9de231e778204bcdca16333",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
