@@ -37,7 +37,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -691,10 +690,13 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
                         bEnable = true;
                     nIndex = NextSelectedRow();
                 }
-                VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/dbreport/ui/groupsortmenu.ui", "");
-                VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
-                aContextMenu->EnableItem(aContextMenu->GetItemId("delete"), IsDeleteAllowed() && bEnable);
-                if (aContextMenu->Execute(this, rEvt.GetMousePosPixel()))
+
+                ::tools::Rectangle aRect(rEvt.GetMousePosPixel(), Size(1, 1));
+                weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "modules/dbreport/ui/groupsortmenu.ui"));
+                std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
+                xContextMenu->set_sensitive("delete", IsDeleteAllowed() && bEnable);
+                if (!xContextMenu->popup_at_rect(pPopupParent, aRect).isEmpty())
                 {
                     if( m_nDeleteEvent )
                         Application::RemoveUserEvent( m_nDeleteEvent );
