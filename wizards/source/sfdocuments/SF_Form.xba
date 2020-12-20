@@ -261,7 +261,7 @@ REM ----------------------------------------------------------------------------
 Public Function CloseFormDocument() As Boolean
 &apos;&apos;&apos;	Close the form document containing the actual form instance
 &apos;&apos;&apos;	The form instance is disposed
-&apos;&apos;&apos;	The method does nothong if the actual form is not located in a Base form document
+&apos;&apos;&apos;	The method does nothing if the actual form is not located in a Base form document
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		True if closure is successful
