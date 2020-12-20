@@ -23,7 +23,7 @@ else
 IOSKIT = $(IOSGEN)/Debug_arm64/libKit.dylib
 endif
 else
-ifeq ($(CPUNAME),ARM64)
+ifeq ($(CPUNAME),AARCH64)
 IOSKIT = $(IOSGEN)/Release_arm64/libKit.dylib
 endif
 endif
