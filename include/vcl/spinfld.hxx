@@ -36,6 +36,7 @@ public:
 
     virtual void    Up();
     virtual void    Down();
+    virtual void    Enter();
     virtual void    First();
     virtual void    Last();
 
@@ -51,6 +52,7 @@ public:
 
     void            SetUpHdl( const Link<SpinField&,void>& rLink ) { maUpHdlLink = rLink; }
     void            SetDownHdl( const Link<SpinField&,void>& rLink ) { maDownHdlLink = rLink; }
+    void            SetEnterHdl( const Link<Control&,void>& rLink ) { maEnterHdlLink = rLink; }
 
     virtual Size    CalcMinimumSize() const override;
     virtual Size    CalcMinimumSizeForText(const OUString &rString) const override;
@@ -83,6 +85,7 @@ private:
     AutoTimer       maRepeatTimer;
     Link<SpinField&,void>  maUpHdlLink;
     Link<SpinField&,void>  maDownHdlLink;
+    Link<Control&,void>  maEnterHdlLink;
     bool            mbRepeat:1,
                     mbSpin:1,
                     mbInitialUp:1,

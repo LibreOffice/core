@@ -190,12 +190,27 @@ namespace
 void PosSizePropertyPanel::Initialize()
 {
     //Position : Horizontal / Vertical
-    mpMtrPosX->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangePosXHdl ) );
-    mpMtrPosY->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangePosYHdl ) );
+    mpMtrPosX->SetLoseFocusHdl( LINK( this, PosSizePropertyPanel, ChangePosXHdl ) );
+    mpMtrPosX->SetEnterHdl(LINK( this, PosSizePropertyPanel, ChangePosXHdl ) );
+    mpMtrPosX->SetUpHdl( LINK( this, PosSizePropertyPanel, ChangePosXUpDownHdl ) );
+    mpMtrPosX->SetDownHdl( LINK( this, PosSizePropertyPanel, ChangePosXUpDownHdl ) );
+
+    mpMtrPosY->SetLoseFocusHdl( LINK( this, PosSizePropertyPanel, ChangePosYHdl ) );
+    mpMtrPosY->SetEnterHdl( LINK( this, PosSizePropertyPanel, ChangePosYHdl ) );
+    mpMtrPosY->SetUpHdl( LINK( this, PosSizePropertyPanel, ChangePosYUpDownHdl ) );
+    mpMtrPosY->SetDownHdl( LINK( this, PosSizePropertyPanel, ChangePosYUpDownHdl ) );
+
 
     //Size : Width / Height
-    mpMtrWidth->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangeWidthHdl ) );
-    mpMtrHeight->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangeHeightHdl ) );
+    mpMtrWidth->SetLoseFocusHdl( LINK( this, PosSizePropertyPanel, ChangeWidthHdl ) );
+    mpMtrWidth->SetEnterHdl( LINK( this, PosSizePropertyPanel, ChangeWidthHdl ) );
+    mpMtrWidth->SetUpHdl( LINK( this, PosSizePropertyPanel, ChangeWidthUpDownHdl ) );
+    mpMtrWidth->SetDownHdl( LINK( this, PosSizePropertyPanel, ChangeWidthUpDownHdl ) );
+
+    mpMtrHeight->SetLoseFocusHdl( LINK( this, PosSizePropertyPanel, ChangeHeightHdl ) );
+    mpMtrHeight->SetEnterHdl( LINK( this, PosSizePropertyPanel, ChangeHeightHdl ) );
+    mpMtrHeight->SetUpHdl( LINK( this, PosSizePropertyPanel, ChangeHeightUpDownHdl ) );
+    mpMtrHeight->SetDownHdl( LINK( this, PosSizePropertyPanel, ChangeHeightUpDownHdl ) );
 
     //Size : Keep ratio
     mpCbxScale->SetClickHdl( LINK( this, PosSizePropertyPanel, ClickAutoHdl ) );
@@ -353,7 +368,28 @@ void PosSizePropertyPanel::HandleContextChange(
 }
 
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl, Edit&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl, Control&, void )
+{
+    if( mpCbxScale->IsChecked() &&
+        mpCbxScale->IsEnabled() )
+    {
+        long nHeight = static_cast<long>( (static_cast<double>(mlOldHeight) * static_cast<double>(mpMtrWidth->GetValue())) / static_cast<double>(mlOldWidth) );
+        if( nHeight <= mpMtrHeight->GetMax( FieldUnit::NONE ) )
+        {
+            mpMtrHeight->SetUserValue( nHeight, FieldUnit::NONE );
+        }
+        else
+        {
+            nHeight = static_cast<long>(mpMtrHeight->GetMax( FieldUnit::NONE ));
+            mpMtrHeight->SetUserValue( nHeight );
+            const long nWidth = static_cast<long>( (static_cast<double>(mlOldWidth) * static_cast<double>(nHeight)) / static_cast<double>(mlOldHeight) );
+            mpMtrWidth->SetUserValue( nWidth, FieldUnit::NONE );
+        }
+    }
+    executeSize();
+}
+
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthUpDownHdl, SpinField&, void )
 {
     if( mpCbxScale->IsChecked() &&
         mpCbxScale->IsEnabled() )
@@ -375,7 +411,28 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl, Edit&, void )
 }
 
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightHdl, Edit&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightHdl, Control&, void )
+{
+    if( mpCbxScale->IsChecked() &&
+        mpCbxScale->IsEnabled() )
+    {
+        long nWidth = static_cast<long>( (static_cast<double>(mlOldWidth) * static_cast<double>(mpMtrHeight->GetValue())) / static_cast<double>(mlOldHeight) );
+        if( nWidth <= mpMtrWidth->GetMax( FieldUnit::NONE ) )
+        {
+            mpMtrWidth->SetUserValue( nWidth, FieldUnit::NONE );
+        }
+        else
+        {
+            nWidth = static_cast<long>(mpMtrWidth->GetMax( FieldUnit::NONE ));
+            mpMtrWidth->SetUserValue( nWidth );
+            const long nHeight = static_cast<long>( (static_cast<double>(mlOldHeight) * static_cast<double>(nWidth)) / static_cast<double>(mlOldWidth) );
+            mpMtrHeight->SetUserValue( nHeight, FieldUnit::NONE );
+        }
+    }
+    executeSize();
+}
+
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightUpDownHdl, SpinField&, void )
 {
     if( mpCbxScale->IsChecked() &&
         mpCbxScale->IsEnabled() )
@@ -397,7 +454,23 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightHdl, Edit&, void )
 }
 
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, Edit&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, Control&, void )
+{
+    if ( mpMtrPosX->IsValueModified())
+    {
+        long lX = GetCoreValue( *mpMtrPosX, mePoolUnit );
+
+        Fraction aUIScale = mpView->GetModel()->GetUIScale();
+        lX = long( lX * aUIScale );
+
+        SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,static_cast<sal_uInt32>(lX));
+
+        GetBindings()->GetDispatcher()->ExecuteList(
+            SID_ATTR_TRANSFORM, SfxCallMode::RECORD, { &aPosXItem });
+    }
+}
+
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXUpDownHdl, SpinField&, void )
 {
     if ( mpMtrPosX->IsValueModified())
     {
@@ -414,7 +487,23 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, Edit&, void )
 }
 
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, Edit&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, Control&, void )
+{
+    if ( mpMtrPosY->IsValueModified() )
+    {
+        long lY = GetCoreValue( *mpMtrPosY, mePoolUnit );
+
+        Fraction aUIScale = mpView->GetModel()->GetUIScale();
+        lY = long( lY * aUIScale );
+
+        SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,static_cast<sal_uInt32>(lY));
+
+        GetBindings()->GetDispatcher()->ExecuteList(
+            SID_ATTR_TRANSFORM, SfxCallMode::RECORD, { &aPosYItem });
+    }
+}
+
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYUpDownHdl, SpinField&, void )
 {
     if ( mpMtrPosY->IsValueModified() )
     {
