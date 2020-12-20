@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GTK_FPICKER_SALGTKPICKER_HXX
-#define INCLUDED_VCL_UNX_GTK_FPICKER_SALGTKPICKER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -33,6 +32,9 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+
+#include <strings.hrc>
+#include <svdata.hxx>
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
@@ -116,6 +118,24 @@ public:
     static GtkWindow* GetTransientFor();
 };
 
-#endif
+inline OString getCancelText()
+{
+    return VclResId(SV_BUTTONTEXT_CANCEL).replace('~', '_').toUtf8();
+}
+
+inline OString getOpenText()
+{
+    return VclResId(SV_BUTTONTEXT_OPEN).replace('~', '_').toUtf8();
+}
+
+inline OString getSaveText()
+{
+    return VclResId(SV_BUTTONTEXT_SAVE).replace('~', '_').toUtf8();
+}
+
+inline OString getOKText()
+{
+    return VclResId(SV_BUTTONTEXT_OK).replace('~', '_').toUtf8();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
