@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0212d99_597aaa12",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-20T16:38:50Z",
+      "side": 1,
+      "message": "the return type is void",
+      "range": {
+        "startLine": 67,
+        "startChar": 12,
+        "endLine": 67,
+        "endChar": 47
+      },
+      "revId": "be1093312d5f2a97c64ad14844c3015ccacd159c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe7318cd_3c8790b0",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-20T16:38:50Z",
+      "side": 1,
+      "message": "this change looks unmotivated?",
+      "range": {
+        "startLine": 78,
+        "startChar": 12,
+        "endLine": 78,
+        "endChar": 58
+      },
+      "revId": "be1093312d5f2a97c64ad14844c3015ccacd159c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d2748f4_8e00e3fe",
+        "filename": "include/osl/mutex.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-20T16:38:50Z",
+      "side": 1,
+      "message": "Cpp17BasicLockable requires this function not to throw",
+      "range": {
+        "startLine": 103,
+        "startChar": 16,
+        "endLine": 103,
+        "endChar": 21
+      },
+      "revId": "be1093312d5f2a97c64ad14844c3015ccacd159c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
