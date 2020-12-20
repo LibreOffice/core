@@ -26,6 +26,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/Vectorizer.hxx>
 
 #include <svdata.hxx>
 #include <salinst.hxx>
@@ -43,7 +44,6 @@
 #include <bitmap/impoctree.hxx>
 #include <bitmap/Octree.hxx>
 
-#include "Vectorizer.hxx"
 #include "floyd.hxx"
 
 #include <math.h>
@@ -1564,6 +1564,7 @@ static tools::Long* shiftColor(tools::Long* pColorArray, BitmapColor const& rCol
     *pColorArray++ = static_cast<tools::Long>(rColor.GetRed()) << 12;
     return pColorArray;
 }
+
 static BitmapColor getColor(BitmapReadAccess *pReadAcc, tools::Long nZ)
 {
     Scanline pScanlineRead = pReadAcc->GetScanline(0);
@@ -1655,11 +1656,6 @@ bool Bitmap::Dither()
         pWriteAcc.reset();
     }
     return false;
-}
-
-void Bitmap::Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce, const Link<tools::Long,void>* pProgress )
-{
-    vcl::Vectorizer::Vectorize( *this, rMtf, cReduce, pProgress );
 }
 
 bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
