@@ -73,6 +73,7 @@
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <memory>
+#include <string_view>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::view;
@@ -98,7 +99,7 @@ struct FmGridHeaderData
     Reference< XInterface > xDroppedResultSet;
 };
 
-static void SetMenuItem(const OUString& rImgID, const OString &rID, Menu& rMenu, bool bDesignMode)
+static void SetMenuItem(const OUString& rImgID, std::string_view rID, Menu& rMenu, bool bDesignMode)
 {
     Image aImage(StockImage::Yes, rImgID);
     sal_uInt16 nID = rMenu.GetItemId(rID);

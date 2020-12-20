@@ -100,7 +100,7 @@ void DXFBlocks::Read(DXFGroupReader & rDGR)
 }
 
 
-DXFBlock * DXFBlocks::Search(OString const& rName) const
+DXFBlock * DXFBlocks::Search(std::string_view rName) const
 {
     DXFBlock * pB;
     for (pB=pFirst; pB!=nullptr; pB=pB->pSucc) {

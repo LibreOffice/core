@@ -21,6 +21,8 @@
 #define INCLUDED_VCL_MENU_HXX
 
 #include <memory>
+#include <string_view>
+
 #include <vcl/vclenum.hxx>
 #include <tools/link.hxx>
 #include <tools/long.hxx>
@@ -257,7 +259,7 @@ public:
 
     sal_uInt16 GetItemCount() const;
     sal_uInt16 GetItemId(sal_uInt16 nPos) const;
-    sal_uInt16 GetItemId(const OString &rIdent) const;
+    sal_uInt16 GetItemId(std::string_view rIdent) const;
     sal_uInt16 GetItemPos( sal_uInt16 nItemId ) const;
     OString GetItemIdent(sal_uInt16 nItemId) const;
     MenuItemType GetItemType( sal_uInt16 nPos ) const;
@@ -276,13 +278,13 @@ public:
     vcl::KeyCode GetAccelKey( sal_uInt16 nItemId ) const;
 
     void CheckItem( sal_uInt16 nItemId, bool bCheck = true );
-    void CheckItem( const OString &rIdent, bool bCheck = true );
+    void CheckItem( std::string_view rIdent, bool bCheck = true );
     bool IsItemChecked( sal_uInt16 nItemId ) const;
 
     virtual void SelectItem(sal_uInt16 nItemId) = 0;
 
     void EnableItem( sal_uInt16 nItemId, bool bEnable = true );
-    void EnableItem(const OString &rIdent, bool bEnable = true)
+    void EnableItem(std::string_view rIdent, bool bEnable = true)
     {
         EnableItem(GetItemId(rIdent), bEnable);
     }

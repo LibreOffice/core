@@ -20,6 +20,10 @@
 #ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXF2MTF_HXX
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXF2MTF_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "dxfreprd.hxx"
 #include <vcl/font.hxx>
 #include <vcl/lineinfo.hxx>
@@ -55,7 +59,7 @@ private:
 
     tools::Long GetEntityColor(const DXFBasicEntity & rE);
 
-    DXFLineInfo LTypeToDXFLineInfo(OString const& rLineType);
+    DXFLineInfo LTypeToDXFLineInfo(std::string_view rLineType);
 
     DXFLineInfo GetEntityDXFLineInfo(const DXFBasicEntity & rE);
 

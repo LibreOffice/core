@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <string_view>
 
 #include <svx/hlnkitem.hxx>
 #include <sfx2/childwin.hxx>
@@ -88,7 +89,7 @@ private:
 
     DECL_LINK( ChosePageHdl_Impl, const OString&, void );
 
-    IconChoicePageData*     GetPageData ( const OString& rId );
+    IconChoicePageData*     GetPageData ( std::string_view rId );
 
     void                    SwitchPage( const OString& rId );
 
@@ -96,7 +97,7 @@ private:
     DECL_LINK (ClickOkHdl_Impl, weld::Button&, void );
     DECL_LINK (ClickApplyHdl_Impl, weld::Button&, void );
 
-    IconChoicePage*         GetTabPage( const OString& rPageId )
+    IconChoicePage*         GetTabPage( std::string_view rPageId )
                                 { return GetPageData(rPageId)->xPage.get(); }
 
     void                    ActivatePageImpl ();

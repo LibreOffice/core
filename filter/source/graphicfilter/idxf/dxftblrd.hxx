@@ -20,6 +20,10 @@
 #ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFTBLRD_HXX
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFTBLRD_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "dxfgrprd.hxx"
 #include "dxfvec.hxx"
 
@@ -159,9 +163,9 @@ public:
     void Clear();
 
     // look for table entries:
-    DXFLType * SearchLType(OString const& rName) const;
-    DXFLayer * SearchLayer(OString const& rName) const;
-    DXFVPort * SearchVPort(OString const& rName) const;
+    DXFLType * SearchLType(std::string_view rName) const;
+    DXFLayer * SearchLayer(std::string_view rName) const;
+    DXFVPort * SearchVPort(std::string_view rName) const;
 
 };
 

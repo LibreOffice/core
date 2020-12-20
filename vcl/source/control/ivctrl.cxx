@@ -505,7 +505,7 @@ VerticalTabPageData* VerticalTabControl::GetPageData(const SvxIconChoiceCtrlEntr
     return pRet;
 }
 
-VerticalTabPageData* VerticalTabControl::GetPageData(const OString& rId) const
+VerticalTabPageData* VerticalTabControl::GetPageData(std::string_view rId) const
 {
     VerticalTabPageData* pRet = nullptr;
     for (auto & pData : maPageList)
@@ -579,7 +579,7 @@ void VerticalTabControl::InsertPage(const rtl::OString &rIdent, const rtl::OUStr
     pNew->xPage->Hide();
 }
 
-void VerticalTabControl::RemovePage(const rtl::OString &rPageId)
+void VerticalTabControl::RemovePage(std::string_view rPageId)
 {
     for (auto it = maPageList.begin(), end = maPageList.end(); it != end; ++it)
     {
@@ -595,7 +595,7 @@ void VerticalTabControl::RemovePage(const rtl::OString &rPageId)
     }
 }
 
-sal_uInt16 VerticalTabControl::GetPagePos(const OString& rPageId) const
+sal_uInt16 VerticalTabControl::GetPagePos(std::string_view rPageId) const
 {
     VerticalTabPageData* pData = GetPageData(rPageId);
     if (!pData)
@@ -603,7 +603,7 @@ sal_uInt16 VerticalTabControl::GetPagePos(const OString& rPageId) const
     return m_xChooser->GetEntryListPos(pData->pEntry);
 }
 
-VclPtr<vcl::Window> VerticalTabControl::GetPage(const OString& rPageId)
+VclPtr<vcl::Window> VerticalTabControl::GetPage(std::string_view rPageId)
 {
     VerticalTabPageData* pData = GetPageData(rPageId);
     if (!pData)
@@ -611,7 +611,7 @@ VclPtr<vcl::Window> VerticalTabControl::GetPage(const OString& rPageId)
     return pData->xPage;
 }
 
-OUString VerticalTabControl::GetPageText(const OString& rPageId) const
+OUString VerticalTabControl::GetPageText(std::string_view rPageId) const
 {
     VerticalTabPageData* pData = GetPageData(rPageId);
     if (!pData)
@@ -619,7 +619,7 @@ OUString VerticalTabControl::GetPageText(const OString& rPageId) const
     return pData->pEntry->GetText();
 }
 
-void VerticalTabControl::SetPageText(const OString& rPageId, const OUString& rText)
+void VerticalTabControl::SetPageText(std::string_view rPageId, const OUString& rText)
 {
     VerticalTabPageData* pData = GetPageData(rPageId);
     if (!pData)

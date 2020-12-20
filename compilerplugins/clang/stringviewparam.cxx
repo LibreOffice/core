@@ -194,11 +194,10 @@ SmallVector<DeclRefExpr const*, 2> relevantCXXOperatorCallExpr(CXXOperatorCallEx
             return wrap(relevantDeclRefExpr(arg0));
         }
 
-        // TODO Can't currently convert rtl::OString because we end up with ambiguous operator==
-        // (one in string_view header and one in rtl/string.hxx header)
         auto st1 = relevantStringType(arg0->getType());
         auto st2 = relevantStringType(arg1->getType());
-        if (st1 == StringType::RtlOustring && st2 == StringType::RtlOustring)
+        if ((st1 == StringType::RtlOstring && st2 == StringType::RtlOstring)
+            || (st1 == StringType::RtlOustring && st2 == StringType::RtlOustring))
         {
             SmallVector<DeclRefExpr const*, 2> v;
             if (auto const e = relevantDeclRefExpr(arg0))
@@ -211,11 +210,11 @@ SmallVector<DeclRefExpr const*, 2> relevantCXXOperatorCallExpr(CXXOperatorCallEx
             }
             return v;
         }
-        if (st1 == StringType::RtlOustring && isStringView(arg1->getType()))
+        if (st1 != StringType::None && isStringView(arg1->getType()))
         {
             return wrap(relevantDeclRefExpr(arg0));
         }
-        if (st2 == StringType::RtlOustring && isStringView(arg0->getType()))
+        if (st2 != StringType::None && isStringView(arg0->getType()))
         {
             return wrap(relevantDeclRefExpr(arg1));
         }

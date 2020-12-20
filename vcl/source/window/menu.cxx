@@ -641,7 +641,7 @@ sal_uInt16 Menu::GetItemId(sal_uInt16 nPos) const
         return 0;
 }
 
-sal_uInt16 Menu::GetItemId(const OString &rIdent) const
+sal_uInt16 Menu::GetItemId(std::string_view rIdent) const
 {
     for (size_t n = 0; n < pItemList->size(); ++n)
     {
@@ -886,7 +886,7 @@ void Menu::CheckItem( sal_uInt16 nItemId, bool bCheck )
     ImplCallEventListeners( bCheck ? VclEventId::MenuItemChecked : VclEventId::MenuItemUnchecked, nPos );
 }
 
-void Menu::CheckItem( const OString &rIdent , bool bCheck )
+void Menu::CheckItem( std::string_view rIdent , bool bCheck )
 {
     CheckItem( GetItemId( rIdent ), bCheck );
 }

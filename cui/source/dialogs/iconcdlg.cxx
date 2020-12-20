@@ -283,7 +283,7 @@ void SvxHpLinkDlg::Start()
 |
 \**********************************************************************/
 
-IconChoicePageData* SvxHpLinkDlg::GetPageData ( const OString& rId )
+IconChoicePageData* SvxHpLinkDlg::GetPageData ( std::string_view rId )
 {
     IconChoicePageData *pRet = nullptr;
     for (const auto & pData : maPageList)

@@ -51,7 +51,7 @@ AstStruct::~AstStruct()
 {
 }
 
-AstDeclaration const * AstStruct::findTypeParameter(OString const & name)
+AstDeclaration const * AstStruct::findTypeParameter(std::string_view name)
     const
 {
     for (auto const& elem : m_typeParameters)

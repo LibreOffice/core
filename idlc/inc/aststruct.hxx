@@ -19,6 +19,10 @@
 #ifndef INCLUDED_IDLC_INC_ASTSTRUCT_HXX
 #define INCLUDED_IDLC_INC_ASTSTRUCT_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "asttype.hxx"
 #include "astscope.hxx"
 #include "idlctypes.hxx"
@@ -43,7 +47,7 @@ public:
     std::size_t getTypeParameterCount() const
     { return m_typeParameters.size(); }
 
-    AstDeclaration const * findTypeParameter(OString const & name) const;
+    AstDeclaration const * findTypeParameter(std::string_view name) const;
 
     virtual bool isType() const override;
 

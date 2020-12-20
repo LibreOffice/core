@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
@@ -1704,7 +1708,7 @@ private:
     std::vector<VclPtr<VclGrid>> m_aAddedGrids;
     Idle m_aUpdateRoadmapIdle;
 
-    int find_page(const OString& rIdent) const
+    int find_page(std::string_view rIdent) const
     {
         for (size_t i = 0; i < m_aAddedPages.size(); ++i)
         {

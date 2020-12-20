@@ -19,6 +19,10 @@
 #ifndef INCLUDED_IDLC_INC_ASTSCOPE_HXX
 #define INCLUDED_IDLC_INC_ASTSCOPE_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "idlc.hxx"
 
 class AstExpression;
@@ -43,7 +47,7 @@ public:
     // Name look up mechanism
     AstDeclaration* lookupByName(const OString& scopedName);
     // Look up the identifier 'name' specified only in the local scope
-    AstDeclaration* lookupByNameLocal(const OString& name) const;
+    AstDeclaration* lookupByNameLocal(std::string_view name) const;
 
     AstDeclaration* lookupInInherited(const OString& scopedName) const;
 

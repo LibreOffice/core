@@ -4188,7 +4188,7 @@ vcl::Window *VclBuilder::get_widget_root()
     return m_aChildren.empty() ? nullptr : m_aChildren[0].m_pWindow.get();
 }
 
-vcl::Window *VclBuilder::get_by_name(const OString& sID)
+vcl::Window *VclBuilder::get_by_name(std::string_view sID)
 {
     for (auto const& child : m_aChildren)
     {
@@ -4199,7 +4199,7 @@ vcl::Window *VclBuilder::get_by_name(const OString& sID)
     return nullptr;
 }
 
-PopupMenu *VclBuilder::get_menu(const OString& sID)
+PopupMenu *VclBuilder::get_menu(std::string_view sID)
 {
     for (auto const& menu : m_aMenus)
     {
@@ -4210,7 +4210,7 @@ PopupMenu *VclBuilder::get_menu(const OString& sID)
     return nullptr;
 }
 
-void VclBuilder::set_response(const OString& sID, short nResponse)
+void VclBuilder::set_response(std::string_view sID, short nResponse)
 {
     switch (nResponse)
     {
