@@ -258,6 +258,46 @@ Catch:
 End Function	&apos;	SFDocuments.SF_Form.Activate
 
 REM -----------------------------------------------------------------------------
+Public Function CloseFormDocument() As Boolean
+&apos;&apos;&apos;	Close the form document containing the actual form instance
+&apos;&apos;&apos;	The form instance is disposed
+&apos;&apos;&apos;	The method does nothong if the actual form is not located in a Base form document
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True if closure is successful
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;			myForm.CloseFormDocument()
+
+Dim bClose As Boolean			&apos;	Return value
+Dim oContainer As Object		&apos;	com.sun.star.awt.XWindow
+Const cstThisSub = &quot;SFDocuments.Form.CloseFormDocument&quot;
+Const cstSubArgs = &quot;&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bClose = False
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+	End If
+Try:
+	Select Case _FormType
+		Case ISDOCFORM, ISCALCFORM, ISSUBFORM
+		Case ISBASEFORM
+			_MainForm.close()
+			Dispose()
+			bClose = True
+	End Select
+
+Finally:
+	CloseFormDocument = bClose
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Form.CloseFormDocument
+
+REM -----------------------------------------------------------------------------
 Public Function Controls(Optional ByVal ControlName As Variant) As Variant
 &apos;&apos;&apos;	Return either
 &apos;&apos;&apos;		- the list of the controls contained in the Form
