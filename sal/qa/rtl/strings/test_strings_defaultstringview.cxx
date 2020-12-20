@@ -52,19 +52,19 @@ class Test : public CppUnit::TestFixture
                              OUString("foo").startsWithIgnoreAsciiCase(std::u16string_view()));
         CPPUNIT_ASSERT_EQUAL(true, OUString("foo").endsWith(std::u16string_view()));
         CPPUNIT_ASSERT_EQUAL(true, OUString("foo").endsWithIgnoreAsciiCase(std::u16string_view()));
-        OUString const foo("foo"); // avoid loplugin:stringconstant
+        OUString const foo("foo"); // avoid loplugin:stringconstant, loplugin:stringview
         CPPUNIT_ASSERT_EQUAL(false, foo == std::u16string_view());
         CPPUNIT_ASSERT_EQUAL(true, foo != std::u16string_view());
-        CPPUNIT_ASSERT_EQUAL(false, OUString("foo") < std::u16string_view());
-        CPPUNIT_ASSERT_EQUAL(false, OUString("foo") <= std::u16string_view());
-        CPPUNIT_ASSERT_EQUAL(true, OUString("foo") > std::u16string_view());
-        CPPUNIT_ASSERT_EQUAL(true, OUString("foo") >= std::u16string_view());
+        CPPUNIT_ASSERT_EQUAL(false, foo < std::u16string_view());
+        CPPUNIT_ASSERT_EQUAL(false, foo <= std::u16string_view());
+        CPPUNIT_ASSERT_EQUAL(true, foo > std::u16string_view());
+        CPPUNIT_ASSERT_EQUAL(true, foo >= std::u16string_view());
         CPPUNIT_ASSERT_EQUAL(false, std::u16string_view() == foo);
         CPPUNIT_ASSERT_EQUAL(true, std::u16string_view() != foo);
-        CPPUNIT_ASSERT_EQUAL(true, std::u16string_view() < OUString("foo"));
-        CPPUNIT_ASSERT_EQUAL(true, std::u16string_view() <= OUString("foo"));
-        CPPUNIT_ASSERT_EQUAL(false, std::u16string_view() > OUString("foo"));
-        CPPUNIT_ASSERT_EQUAL(false, std::u16string_view() >= OUString("foo"));
+        CPPUNIT_ASSERT_EQUAL(true, std::u16string_view() < foo);
+        CPPUNIT_ASSERT_EQUAL(true, std::u16string_view() <= foo);
+        CPPUNIT_ASSERT_EQUAL(false, std::u16string_view() > foo);
+        CPPUNIT_ASSERT_EQUAL(false, std::u16string_view() >= foo);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), OUString("foo").indexOf(std::u16string_view()));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), OUString("foo").lastIndexOf(std::u16string_view()));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), OUString("foo").lastIndexOf(std::u16string_view(), 3));
