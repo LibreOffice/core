@@ -107,7 +107,8 @@ ShowProgressUI()
     gtk_window_set_icon(GTK_WINDOW(sWin), pixbuf);
     g_object_unref(pixbuf);
 
-    GtkWidget *vbox = gtk_vbox_new(TRUE, 6);
+    GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
+    gtk_box_set_homogeneous(GTK_BOX(vbox), true);
     sLabel = gtk_label_new(strings.info);
     gtk_misc_set_alignment(GTK_MISC(sLabel), 0.0f, 0.0f);
     sProgressBar = gtk_progress_bar_new();
