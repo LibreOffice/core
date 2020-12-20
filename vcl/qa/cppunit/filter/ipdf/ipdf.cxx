@@ -74,6 +74,10 @@ void VclFilterIpdfTest::tearDown()
 
 CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
 {
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (!IsDefaultDPI())
+        return;
     // Given: copy the test document to a temporary file, as it'll be modified.
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
