@@ -2574,9 +2574,11 @@ void DbGridControl::Command(const CommandEvent& rEvt)
             }
             else if (canCopyCellText(nRow, nColId))
             {
-                VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/cellmenu.ui", "");
-                VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
-                if (aContextMenu->Execute(this, rEvt.GetMousePosPixel()))
+                ::tools::Rectangle aRect(rEvt.GetMousePosPixel(), Size(1, 1));
+                weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "svx/ui/cellmenu.ui"));
+                std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
+                if (!xContextMenu->popup_at_rect(pPopupParent, aRect).isEmpty())
                     copyCellText(nRow, nColId);
             }
             else
