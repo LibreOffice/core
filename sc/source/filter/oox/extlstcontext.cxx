@@ -30,6 +30,7 @@ using ::oox::core::ContextHandlerRef;
 using ::oox::xls::CondFormatBuffer;
 
 sal_Int32 rStyleIdx = 0;
+sal_Int32 nFormulaCount = 0;
 
 namespace oox::xls {
 
@@ -77,6 +78,31 @@ void ExtCfRuleContext::onStartElement( const AttributeList& rAttribs )
         }
         default:
             break;
+    }
+}
+
+namespace {
+    const char* GetOperatorString(ScConditionMode eMode)
+    {
+        const char* pRet = nullptr;
+        switch (eMode)
+        {
+        case ScConditionMode::BeginsWith:
+            pRet = "beginsWith";
+            break;
+        case ScConditionMode::EndsWith:
+            pRet = "endsWith";
+            break;
+        case ScConditionMode::ContainsText:
+            pRet = "containsText";
+            break;
+        case ScConditionMode::NotContainsText:
+            pRet = "notContains";
+            break;
+        default:
+            break;
+        }
+        return pRet;
     }
 }
 
@@ -145,6 +171,16 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
             eOperator = ScConditionMode::NotContainsText;
             return this;
         }
+        else if(aType == "beginsWith")
+        {
+            eOperator = ScConditionMode::BeginsWith;
+            return this;
+        }
+        else if(aType == "endsWith")
+        {
+            eOperator = ScConditionMode::EndsWith;
+            return this;
+        }
         else
         {
             SAL_WARN("sc", "unhandled XLS14_TOKEN(cfRule) with type: " << aType);
@@ -156,6 +192,8 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
     }
     else if (nElement == XM_TOKEN( sqref ) || nElement == XM_TOKEN( f ))
     {
+        if(nElement == XM_TOKEN( f ))
+           nFormulaCount++;
         return this;
     }
 
@@ -191,13 +229,14 @@ void ExtConditionalFormattingContext::onEndElement()
     {
         case XM_TOKEN(f):
         {
-            if(!aChars.startsWith("ISERROR(SEARCH(") && !aChars.startsWith("NOT(ISERROR(SEARCH("))
+            if(!GetOperatorString(eOperator) || nFormulaCount == 2)
                rFormulas.push_back(aChars);
         }
         break;
         case XLS14_TOKEN( cfRule ):
         {
             getStyles().getExtDxfs().forEachMem( &Dxf::finalizeImport );
+            nFormulaCount = 0;
         }
         break;
         case XM_TOKEN(sqref):
