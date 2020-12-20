@@ -31,6 +31,7 @@
 #include <sdresid.hxx>
 #include <unokywds.hxx>
 #include <bitmaps.hlst>
+#include <tools/gen.hxx>
 #include <tools/SlotStateListener.hxx>
 #include <DrawController.hxx>
 #include <DrawDocShell.hxx>
@@ -50,7 +51,7 @@
 #include <svl/intitem.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/image.hxx>
-#include <vcl/floatwin.hxx>
+#include <vcl/weldutils.hxx>
 #include <xmloff/autolayout.hxx>
 
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
@@ -600,13 +601,10 @@ void LayoutMenu::ShowContextMenu(const Point* pPos)
     }
 
     // Setup the menu.
-    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/simpress/ui/layoutmenu.ui", "");
-    VclPtr<PopupMenu> pMenu(aBuilder.get_menu("menu"));
-    FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
-    if (pMenuWindow != nullptr)
-        pMenuWindow->SetPopupModeFlags(
-            pMenuWindow->GetPopupModeFlags() | FloatWinPopupFlags::NoMouseUpClose);
-    pMenu->SetSelectHdl(LINK(this, LayoutMenu, OnMenuItemSelected));
+    ::tools::Rectangle aRect(aMenuPosition, Size(1, 1));
+    weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "modules/simpress/ui/layoutmenu.ui"));
+    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
 
     // Disable the SID_INSERTPAGE_LAYOUT_MENU item when
     // the document is read-only.
@@ -614,10 +612,10 @@ void LayoutMenu::ShowContextMenu(const Point* pPos)
     const SfxItemState aState (
         mrBase.GetViewFrame()->GetDispatcher()->QueryState(SID_INSERTPAGE, pItem));
     if (aState == SfxItemState::DISABLED)
-        pMenu->EnableItem(SID_INSERTPAGE_LAYOUT_MENU, false);
+        xMenu->set_sensitive("insert", false);
 
     // Show the menu.
-    pMenu->Execute(this, ::tools::Rectangle(aMenuPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
+    OnMenuItemSelected(xMenu->popup_at_rect(pPopupParent, aRect));
 }
 
 IMPL_LINK_NOARG(LayoutMenu, StateChangeHandler, const OUString&, void)
@@ -625,29 +623,21 @@ IMPL_LINK_NOARG(LayoutMenu, StateChangeHandler, const OUString&, void)
     InvalidateContent();
 }
 
-IMPL_LINK(LayoutMenu, OnMenuItemSelected, Menu*, pMenu, bool)
+void LayoutMenu::OnMenuItemSelected(std::string_view ident)
 {
-    if (pMenu == nullptr)
-    {
-        OSL_ENSURE(pMenu!=nullptr, "LayoutMenu::OnMenuItemSelected: illegal menu!");
-        return false;
-    }
+    if (ident.empty())
+        return;
 
-    pMenu->Deactivate();
-    OString sIdent = pMenu->GetCurItemIdent();
-
-    if (sIdent == "apply")
+    if (ident == "apply")
     {
         AssignLayoutToSelectedSlides(GetSelectedAutoLayout());
     }
-    else if (sIdent == "insert")
+    else if (ident == "insert")
     {
         // Add arguments to this slot and forward it to the main view
         // shell.
         InsertPageWithLayout(GetSelectedAutoLayout());
     }
-
-    return false;
 }
 
 // Selects an appropriate layout of the slide inside control.
