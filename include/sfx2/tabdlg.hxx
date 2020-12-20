@@ -20,6 +20,8 @@
 #define INCLUDED_SFX2_TABDLG_HXX
 
 #include <memory>
+#include <string_view>
+
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/basedlgs.hxx>
@@ -91,7 +93,7 @@ protected:
 
     std::unique_ptr<SfxItemSet> m_xExampleSet;
     SfxItemSet*     GetInputSetImpl();
-    SfxTabPage*     GetTabPage(const OString& rPageId) const;
+    SfxTabPage*     GetTabPage(std::string_view rPageId) const;
 
     /** prepare to leave the current page. Calls the DeactivatePage method of the current page, (if necessary),
         handles the item sets to copy.

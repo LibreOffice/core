@@ -89,7 +89,7 @@ public:
     vcl::Window*    get_widget_root();
 
     //sID may not exist
-    PopupMenu*      get_menu(const OString& sID);
+    PopupMenu*      get_menu(std::string_view sID);
 
     //release ownership of pWindow, i.e. don't delete it
     void            drop_ownership(const vcl::Window *pWindow);
@@ -307,7 +307,7 @@ private:
     bool        m_bLegacy;
     std::unique_ptr<ParserState> m_pParserState;
 
-    vcl::Window *get_by_name(const OString& sID);
+    vcl::Window *get_by_name(std::string_view sID);
     void        delete_by_name(const OString& sID);
 
     class sortIntoBestTabTraversalOrder
@@ -392,7 +392,7 @@ private:
     static vcl::Window* prepareWidgetOwnScrolling(vcl::Window *pParent, WinBits &rWinStyle);
     void        cleanupWidgetOwnScrolling(vcl::Window *pScrollParent, vcl::Window *pWindow, stringmap &rMap);
 
-    void        set_response(const OString& sID, short nResponse);
+    void        set_response(std::string_view sID, short nResponse);
 
     OString         get_by_window(const vcl::Window *pWindow) const;
     void            delete_by_window(vcl::Window *pWindow);

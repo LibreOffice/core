@@ -347,7 +347,7 @@ void DXFTables::Clear()
 }
 
 
-DXFLType * DXFTables::SearchLType(OString const& rName) const
+DXFLType * DXFTables::SearchLType(std::string_view rName) const
 {
     DXFLType * p;
     for (p=pLTypes; p!=nullptr; p=p->pSucc) {
@@ -357,7 +357,7 @@ DXFLType * DXFTables::SearchLType(OString const& rName) const
 }
 
 
-DXFLayer * DXFTables::SearchLayer(OString const& rName) const
+DXFLayer * DXFTables::SearchLayer(std::string_view rName) const
 {
     DXFLayer * p;
     for (p=pLayers; p!=nullptr; p=p->pSucc) {
@@ -367,7 +367,7 @@ DXFLayer * DXFTables::SearchLayer(OString const& rName) const
 }
 
 
-DXFVPort * DXFTables::SearchVPort(OString const& rName) const
+DXFVPort * DXFTables::SearchVPort(std::string_view rName) const
 {
     DXFVPort * p;
     for (p=pVPorts; p!=nullptr; p=p->pSucc) {

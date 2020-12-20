@@ -115,7 +115,7 @@ public:
     void                    InsertId( const OString& rIdName, sal_uLong nVal );
     bool                    ReadIdFile( std::string_view rFileName );
 
-    SvMetaType *            FindType( const OString& rName );
+    SvMetaType *            FindType( std::string_view rName );
     static SvMetaType *     FindType( const SvMetaType *, SvRefMemberList<SvMetaType *>& );
 
     SvMetaType *            ReadKnownType( SvTokenStream & rInStm );
@@ -123,7 +123,7 @@ public:
                                             SvMetaType * pType );
     SvMetaAttribute *       FindKnownAttr( const SvIdentifier& );
     SvMetaClass *           ReadKnownClass( SvTokenStream & rInStm );
-    SvMetaClass *           FindKnownClass( const OString& aName );
+    SvMetaClass *           FindKnownClass( std::string_view aName );
     void AddDepFile(OUString const& rFileName);
     void WriteDepFile(SvFileStream & rStream, std::u16string_view rTarget);
 };

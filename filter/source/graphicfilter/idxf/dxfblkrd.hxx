@@ -20,6 +20,10 @@
 #ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFBLKRD_HXX
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFBLKRD_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "dxfentrd.hxx"
 
 
@@ -65,7 +69,7 @@ public:
     void Read(DXFGroupReader & rDGR);
         // reads all block per rDGR until an ENDSEC or EOF.
 
-    DXFBlock * Search(OString const& rName) const;
+    DXFBlock * Search(std::string_view rName) const;
         // looks for a block with the name, return NULL if not successful
 
     void Clear();

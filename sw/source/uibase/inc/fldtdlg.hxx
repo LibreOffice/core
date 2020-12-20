@@ -18,6 +18,11 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_FLDTDLG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FLDTDLG_HXX
+
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <sfx2/tabdlg.hxx>
 
 class SfxBindings;
@@ -36,7 +41,7 @@ class SwFieldDlg : public SfxTabDialogController
     virtual SfxItemSet* CreateInputItemSet(const OString& rId) override;
     virtual void        PageCreated(const OString& rId, SfxTabPage& rPage) override;
 
-    void                ReInitTabPage(const OString& rPageId,
+    void                ReInitTabPage(std::string_view rPageId,
                                       bool bOnlyActivate = false);
 
 public:

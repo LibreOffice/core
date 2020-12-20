@@ -64,7 +64,7 @@ tools::Long DXF2GDIMetaFile::GetEntityColor(const DXFBasicEntity & rE)
     return nColor;
 }
 
-DXFLineInfo DXF2GDIMetaFile::LTypeToDXFLineInfo(OString const& rLineType)
+DXFLineInfo DXF2GDIMetaFile::LTypeToDXFLineInfo(std::string_view rLineType)
 {
     const DXFLType * pLT;
     DXFLineInfo aDXFLineInfo;

@@ -278,7 +278,7 @@ private:
     /// @throws css::xml::sax::SAXException
     sal_Int32 GetTokenWithPrefix( const xmlChar* pPrefix, int prefixLen, const xmlChar* pName, int nameLen );
     /// @throws css::xml::sax::SAXException
-    OUString const & GetNamespaceURL( const OString& rPrefix );
+    OUString const & GetNamespaceURL( std::string_view rPrefix );
     sal_Int32 GetNamespaceToken( const OUString& rNamespaceURL );
     sal_Int32 GetTokenWithContextNamespace( sal_Int32 nNamespaceToken, const xmlChar* pName, int nNameLen );
     void DefineNamespace( const OString& rPrefix, const OUString& namespaceURL );
@@ -740,7 +740,7 @@ sal_Int32 FastSaxParserImpl::GetNamespaceToken( const OUString& rNamespaceURL )
         return FastToken::DONTKNOW;
 }
 
-OUString const & FastSaxParserImpl::GetNamespaceURL( const OString& rPrefix )
+OUString const & FastSaxParserImpl::GetNamespaceURL( std::string_view rPrefix )
 {
     Entity& rEntity = getEntity();
     if( !rEntity.maNamespaceCount.empty() )

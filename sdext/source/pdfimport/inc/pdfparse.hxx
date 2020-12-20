@@ -24,6 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 #include <memory>
@@ -193,7 +194,7 @@ struct PDFDict : public PDFContainer
     // from the dictionary
     void insertValue( const OString& rName, std::unique_ptr<PDFEntry> pValue );
     // removes a name/value pair from the dict
-    void eraseValue( const OString& rName );
+    void eraseValue( std::string_view rName );
     // builds new map as of sub elements
     // returns NULL if successful, else the first offending element
     PDFEntry* buildMap();

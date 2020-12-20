@@ -550,7 +550,7 @@ void PDFDict::insertValue( const OString& rName, std::unique_ptr<PDFEntry> pValu
     m_aMap[ rName ] = pValueTmp;
 }
 
-void PDFDict::eraseValue( const OString& rName )
+void PDFDict::eraseValue( std::string_view rName )
 {
     unsigned int nEle = m_aSubElements.size();
     for( unsigned int i = 0; i < nEle; i++ )

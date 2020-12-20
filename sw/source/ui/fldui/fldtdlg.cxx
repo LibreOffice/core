@@ -194,7 +194,7 @@ void SwFieldDlg::ReInitDlg()
 }
 
 // newly initialise TabPage after Doc-Switch
-void SwFieldDlg::ReInitTabPage(const OString& rPageId, bool bOnlyActivate)
+void SwFieldDlg::ReInitTabPage(std::string_view rPageId, bool bOnlyActivate)
 {
     SwFieldPage* pPage = static_cast<SwFieldPage*>(GetTabPage(rPageId));
     if (pPage)

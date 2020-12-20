@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <vcl/builder.hxx>
 #include <vcl/event.hxx>
 #include <vcl/menu.hxx>
@@ -48,7 +52,8 @@ public:
     OUString GetItemTextForState(sal_uInt16 nState) { return m_xMenu->GetItemText(state_to_id(nState)); }
     sal_uInt16 GetState() const { return id_to_state(m_xMenu->GetCurItemIdent()); }
     sal_uInt16 Execute(vcl::Window* pWindow, const Point& rPopupPos) { return m_xMenu->Execute(pWindow, rPopupPos); }
-    void HideSelectionType(const OString& rIdent) { m_xMenu->HideItem(m_xMenu->GetItemId(rIdent)); }
+    void HideSelectionType(std::string_view rIdent)
+    { m_xMenu->HideItem(m_xMenu->GetItemId(rIdent)); }
 };
 
 }

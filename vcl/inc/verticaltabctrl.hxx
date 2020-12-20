@@ -20,6 +20,8 @@
 #pragma once
 
 #include <memory>
+#include <string_view>
+
 #include <vcl/dllapi.h>
 #include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/layout.hxx>
@@ -42,7 +44,7 @@ class VerticalTabControl final : public VclHBox
     void ActivatePage();
     bool DeactivatePage();
 
-    VerticalTabPageData* GetPageData(const OString& rId) const;
+    VerticalTabPageData* GetPageData(std::string_view rId) const;
     VerticalTabPageData* GetPageData(const SvxIconChoiceCtrlEntry* pEntry) const;
 
 public:
@@ -55,11 +57,11 @@ public:
     OString GetCurPageId() const { return m_sCurrentPageId; }
     void SetCurPageId(const OString& rId);
 
-    sal_uInt16 GetPagePos(const OString& rPageId) const;
+    sal_uInt16 GetPagePos(std::string_view rPageId) const;
     OString GetPageId(sal_uInt16 nIndex) const;
-    VclPtr<vcl::Window> GetPage(const OString& rPageId);
+    VclPtr<vcl::Window> GetPage(std::string_view rPageId);
 
-    void RemovePage(const OString& rPageId);
+    void RemovePage(std::string_view rPageId);
     void InsertPage(const OString& rPageId, const OUString& rLabel, const Image& rImage,
                     const OUString& rTooltip, VclPtr<vcl::Window> xPage, int nPos = -1);
 
@@ -72,8 +74,8 @@ public:
         m_aDeactivateHdl = rLink;
     }
 
-    OUString GetPageText(const OString& rPageId) const;
-    void SetPageText(const OString& rPageId, const OUString& rText);
+    OUString GetPageText(std::string_view rPageId) const;
+    void SetPageText(std::string_view rPageId, const OUString& rText);
 
     vcl::Window* GetPageParent() { return m_xBox.get(); }
 

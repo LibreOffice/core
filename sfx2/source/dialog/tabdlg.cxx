@@ -20,6 +20,7 @@
 
 #include <stdlib.h>
 #include <algorithm>
+#include <string_view>
 
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/app.hxx>
@@ -104,7 +105,7 @@ struct TabDlg_Impl
     }
 };
 
-static Data_Impl* Find( const SfxTabDlgData_Impl& rArr, const OString& rId, sal_uInt16* pPos = nullptr)
+static Data_Impl* Find( const SfxTabDlgData_Impl& rArr, std::string_view rId, sal_uInt16* pPos = nullptr)
 {
     const sal_uInt16 nCount = rArr.size();
 
@@ -1090,7 +1091,7 @@ void SfxTabDialogController::RemoveStandardButton()
     m_xBaseFmtBtn->hide();
 }
 
-SfxTabPage* SfxTabDialogController::GetTabPage(const OString& rPageId) const
+SfxTabPage* SfxTabDialogController::GetTabPage(std::string_view rPageId) const
 
 /*  [Description]
 

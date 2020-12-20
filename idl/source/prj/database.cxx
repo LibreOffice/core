@@ -271,7 +271,7 @@ SvMetaType * SvIdlDataBase::FindType( const SvMetaType * pPType,
     return nullptr;
 }
 
-SvMetaType * SvIdlDataBase::FindType( const OString& rName )
+SvMetaType * SvIdlDataBase::FindType( std::string_view rName )
 {
     for (auto const& elem : aTypeList)
         if( rName == elem->GetName() )
@@ -370,7 +370,7 @@ SvMetaClass * SvIdlDataBase::ReadKnownClass( SvTokenStream & rInStm )
     return nullptr;
 }
 
-SvMetaClass * SvIdlDataBase::FindKnownClass( const OString& aName )
+SvMetaClass * SvIdlDataBase::FindKnownClass( std::string_view aName )
 {
     for( sal_uLong n = 0; n < aClassList.size(); n++ )
     {

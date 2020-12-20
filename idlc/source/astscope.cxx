@@ -185,7 +185,7 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
     return pDecl;
 }
 
-AstDeclaration* AstScope::lookupByNameLocal(const OString& name) const
+AstDeclaration* AstScope::lookupByNameLocal(std::string_view name) const
 {
     for (auto const& declaration : m_declarations)
     {
