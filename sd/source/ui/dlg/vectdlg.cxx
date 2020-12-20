@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/vclenum.hxx>
 #include <vcl/BitmapReadAccess.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/BitmapSimpleColorQuantizationFilter.hxx>
+#include <vcl/Vectorizer.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/metaact.hxx>
 #include <vcl/svapp.hxx>
 
 #include <DrawDocShell.hxx>
@@ -138,7 +139,8 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
     if( !!aTmp )
     {
         const Link<::tools::Long,void> aPrgsHdl( LINK( this, SdVectorizeDlg, ProgressHdl ) );
-        aTmp.Vectorize( rMtf, static_cast<sal_uInt8>(m_xMtReduce->get_value(FieldUnit::NONE)), &aPrgsHdl );
+        rMtf.Clear();
+        rMtf = vcl::Vectorizer::ProduceMetafile( aTmp, static_cast<sal_uInt8>(m_xMtReduce->get_value(FieldUnit::NONE)), &aPrgsHdl );
 
         if (m_xCbFillHoles->get_active())
         {
