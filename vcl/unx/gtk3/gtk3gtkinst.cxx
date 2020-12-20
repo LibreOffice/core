@@ -6951,8 +6951,6 @@ protected:
     GtkWidget* get_label_widget()
     {
         GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pButton));
-        if (GTK_IS_ALIGNMENT(pChild))
-            pChild = gtk_bin_get_child(GTK_BIN(pChild));
 
         if (GTK_IS_CONTAINER(pChild))
             pChild = find_label_widget(GTK_CONTAINER(pChild));
