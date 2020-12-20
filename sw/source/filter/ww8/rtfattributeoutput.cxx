@@ -405,6 +405,13 @@ void RtfAttributeOutput::EndRun(const SwTextNode* /*pNode*/, sal_Int32 /*nPos*/,
 {
     m_aRun->append(SAL_NEWLINE_STRING);
     m_aRun.appendAndClear(m_aRunText);
+
+    if (m_bInRuby)
+    {
+        m_aRun->append(")}}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " {}}}");
+        m_bInRuby = false;
+    }
+
     if (!m_bSingleEmptyRun && m_bInRun)
         m_aRun->append('}');
     m_bInRun = false;
@@ -508,7 +515,7 @@ void RtfAttributeOutput::RawText(const OUString& rText, rtl_TextEncoding eCharSe
     m_aRunText->append(msfilter::rtfutil::OutString(rText, eCharSet));
 }
 
-void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 nPos,
+void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/,
                                    const SwFormatRuby& rRuby)
 {
     WW8Ruby aWW8Ruby(rNode, rRuby, GetExport());
@@ -521,18 +528,13 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 nPos,
         aStr += "\\a" + OUStringChar(aWW8Ruby.GetDirective());
     }
     aStr += "(\\s\\up " + OUString::number((aWW8Ruby.GetBaseHeight() + 10) / 20 - 1) + "(";
-    EndRun(&rNode, nPos);
     m_rExport.OutputField(nullptr, ww::eEQ, aStr, FieldFlags::Start | FieldFlags::CmdStart);
     aStr = rRuby.GetText() + "),";
     m_rExport.OutputField(nullptr, ww::eEQ, aStr, FieldFlags::NONE);
+    m_bInRuby = true;
 }
 
-void RtfAttributeOutput::EndRuby(const SwTextNode& rNode, sal_Int32 nPos)
-{
-    m_rExport.OutputField(nullptr, ww::eEQ, ")",
-                          FieldFlags::CmdEnd | FieldFlags::End | FieldFlags::Close);
-    EndRun(&rNode, nPos);
-}
+void RtfAttributeOutput::EndRuby(const SwTextNode& /*rNode*/, sal_Int32 /*nPos*/) {}
 
 bool RtfAttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget)
 {
@@ -3810,6 +3812,7 @@ RtfAttributeOutput::RtfAttributeOutput(RtfExport& rExport)
     , m_bIsBeforeFirstParagraph(true)
     , m_bSingleEmptyRun(false)
     , m_bInRun(false)
+    , m_bInRuby(false)
     , m_pFlyFrameSize(nullptr)
     , m_bParaBeforeAutoSpacing(false)
     , m_nParaBeforeSpacing(0)
