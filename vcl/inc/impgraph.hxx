@@ -209,8 +209,6 @@ private:
 
     bool ensureAvailable () const;
 
-    bool loadPrepared();
-
     sal_Int32 getPageNumber() const;
 
     // Set the pref size, but don't force swap-in
