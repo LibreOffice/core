@@ -155,7 +155,7 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
             SCROW nStartNo = rRow.mnStart;
             SCROW nEndNo = rRow.mnEnd;
             ScAddress aTopLeft(0, nStartNo, nTab);
-            rDoc.UpdateScriptTypes(aTopLeft, MAXCOLCOUNT, nEndNo-nStartNo+1);
+            rDoc.UpdateScriptTypes(aTopLeft, rDoc.GetSheetLimits().GetMaxColCount(), nEndNo-nStartNo+1);
             if (rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab))
             {
                 if (!bChanged)

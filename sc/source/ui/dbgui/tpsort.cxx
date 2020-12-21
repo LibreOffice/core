@@ -339,7 +339,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
         SCCOL   nMaxCol = rDoc.ClampToAllocatedColumns(nTab, aSortData.nCol2);
         SCCOL   col;
 
-        for ( col=nFirstSortCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
+        for ( col=nFirstSortCol; col<=nMaxCol && i<SC_MAXFIELDS(rDoc.GetSheetLimits()); col++ )
         {
             aFieldName = rDoc.GetString(col, nFirstSortRow, nTab);
             if ( !bHasHeader || aFieldName.isEmpty() )
@@ -360,7 +360,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
         SCROW   nMaxRow = aSortData.nRow2;
         SCROW   row;
 
-        for ( row=nFirstSortRow; row<=nMaxRow && i<SC_MAXFIELDS; row++ )
+        for ( row=nFirstSortRow; row<=nMaxRow && i<SC_MAXFIELDS(rDoc.GetSheetLimits()); row++ )
         {
             aFieldName = rDoc.GetString(nFirstSortCol, row, nTab);
             if ( !bHasHeader || aFieldName.isEmpty() )

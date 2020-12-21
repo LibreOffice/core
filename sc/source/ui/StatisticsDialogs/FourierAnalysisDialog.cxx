@@ -142,7 +142,7 @@ bool ScFourierAnalysisDialog::InputRangesValid()
     if (mbWithLabels)
         --nLastOutputRow;
 
-    if (nLastOutputRow > MAXROW)
+    if (nLastOutputRow > static_cast<SCSIZE>(mDocument.MaxRow()))
     {
         mxErrorMessage->set_label(ScResId(STR_MESSAGE_OUTPUT_TOO_LONG));
         return false;

@@ -2832,9 +2832,11 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
 OString ScTabView::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, bool bHidden,
                                         bool bFiltered, bool bGroups)
 {
+    ScDocument& rDoc = aViewData.GetDocument();
+
     boost::property_tree::ptree aTree;
     aTree.put("commandName", ".uno:SheetGeometryData");
-    aTree.put("maxtiledcolumn", MAXCOL);
+    aTree.put("maxtiledcolumn", rDoc.MaxCol());
     aTree.put("maxtiledrow", MAXTILEDROW);
 
     auto getJSONString = [](const boost::property_tree::ptree& rTree) {
@@ -2842,8 +2844,6 @@ OString ScTabView::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, 
         boost::property_tree::write_json(aStream, rTree);
         return aStream.str();
     };
-
-    ScDocument& rDoc = aViewData.GetDocument();
 
     if ((!bSizes && !bHidden && !bFiltered && !bGroups) ||
         (!bColumns && !bRows))

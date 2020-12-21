@@ -32,7 +32,7 @@ DataTransformation::~DataTransformation()
 
 SCROW DataTransformation::getLastRow(const ScDocument& rDoc, SCCOL nCol)
 {
-    SCROW nEndRow = MAXROW;
+    SCROW nEndRow = rDoc.MaxRow();
 
     return rDoc.GetLastDataRow(0, nCol, nCol, nEndRow);
 }
@@ -50,7 +50,7 @@ void ColumnRemoveTransformation::Transform(ScDocument& rDoc) const
 {
     for (auto& rCol : maColumns)
     {
-        rDoc.DeleteCol(0, 0, MAXROW, 0, rCol, 1);
+        rDoc.DeleteCol(0, 0, rDoc.MaxRow(), 0, rCol, 1);
     }
 }
 
@@ -72,7 +72,7 @@ SplitColumnTransformation::SplitColumnTransformation(SCCOL nCol, sal_Unicode cSe
 
 void SplitColumnTransformation::Transform(ScDocument& rDoc) const
 {
-    rDoc.InsertCol(0, 0, MAXROW, 0, mnCol + 1, 1);
+    rDoc.InsertCol(0, 0, rDoc.MaxRow(), 0, mnCol + 1, 1);
 
     SCROW nEndRow = getLastRow(rDoc, mnCol);
     for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
@@ -146,7 +146,7 @@ void MergeColumnTransformation::Transform(ScDocument& rDoc) const
         if (itr == nTargetCol)
             continue;
 
-        rDoc.DeleteCol(0, 0, MAXROW, 0, itr, 1);
+        rDoc.DeleteCol(0, 0, rDoc.MaxRow(), 0, itr, 1);
     }
 }
 

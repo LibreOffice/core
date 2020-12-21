@@ -169,7 +169,7 @@ void AddressWalkerWriter::writeFormulas(const std::vector<OUString>& rFormulas)
     if (!nLength)
         return;
 
-    const size_t nMaxLen = MAXROW - mCurrentAddress.Row() + 1;
+    const size_t nMaxLen = mpDocShell->GetDocument().MaxRow() - mCurrentAddress.Row() + 1;
     // If not done already, trim the length to fit.
     if (nLength > nMaxLen)
         nLength = nMaxLen;

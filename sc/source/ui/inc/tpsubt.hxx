@@ -22,9 +22,10 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <global.hxx>
+#include <sheetlimits.hxx>
 
 // +1 because one field is reserved for the "- none -" entry
-#define SC_MAXFIELDS    MAXCOLCOUNT+1
+constexpr SCCOL SC_MAXFIELDS(const ScSheetLimits& rLimits) { return rLimits.GetMaxColCount() + 1; }
 
 class ScViewData;
 class ScDocument;
@@ -51,7 +52,7 @@ protected:
 
     const sal_uInt16            nWhichSubTotals;
     const ScSubTotalParam&  rSubTotalData;
-    SCCOL                   nFieldArr[SC_MAXFIELDS];
+    std::vector<SCCOL>      mnFieldArr;
     sal_uInt16              nFieldCount;
 
     std::unique_ptr<weld::ComboBox> mxLbGroup;
