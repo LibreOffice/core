@@ -114,23 +114,12 @@ void OTableRowView::Command(const CommandEvent& rEvt)
                 sal_Int32 nSelectRowCount = GetSelectRowCount();
                 aContextMenu->EnableItem(aContextMenu->GetItemId("cut"), nSelectRowCount != 0);
                 aContextMenu->EnableItem(aContextMenu->GetItemId("copy"), nSelectRowCount  != 0);
-                aContextMenu->EnableItem(aContextMenu->GetItemId("paste"), false);
-                aContextMenu->EnableItem(aContextMenu->GetItemId("delete"), false);
                 aContextMenu->Execute(this, rEvt.GetMousePosPixel());
                 OString sIdent = aContextMenu->GetCurItemIdent();
                 if (sIdent == "cut")
                     cut();
                 else if (sIdent == "copy")
                     copy();
-                else if (sIdent == "paste")
-                {
-                    Paste( nRow );
-                    SetNoSelection();
-                    GoToRow( nRow );
-                    SeekRow( nRow );
-                }
-                else if (sIdent == "delete")
-                    DeleteRows();
                 else if (sIdent == "insert")
                 {
                     InsertNewRows( nRow );
