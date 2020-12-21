@@ -221,6 +221,8 @@ public:
         DrawRect(aBorderRect);
     }
 
+    css::awt::DeviceInfo GetDeviceInfo() const override;
+
 protected:
     virtual void                DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
                                     const Point& rDestPt, const Size& rDestSize,

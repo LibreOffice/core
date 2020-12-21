@@ -3944,6 +3944,13 @@ FactoryFunction Window::GetUITestFactory() const
     return WindowUIObject::create;
 }
 
+css::awt::DeviceInfo Window::GetDeviceInfo() const
+{
+    css::awt::DeviceInfo aInfo = GetCommonDeviceInfo(GetSizePixel());
+    GetBorder(aInfo.LeftInset, aInfo.TopInset, aInfo.RightInset, aInfo.BottomInset);
+    return aInfo;
+}
+
 } /* namespace vcl */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
