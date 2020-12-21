@@ -24,7 +24,7 @@ export MALLOC_CHECK_=2
 export MALLOC_PERTURB_=153
 export OOO_DISABLE_RECOVERY=1
 # recommended gtk3 to gtk4 migration 'Enable diagnostic warnings'
-G_ENABLE_DIAGNOSTIC=1
+export G_ENABLE_DIAGNOSTIC=1
 
 # macOS debugging assistance
 export MallocScribble=1
