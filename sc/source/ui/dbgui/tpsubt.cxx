@@ -31,6 +31,7 @@
 #include <subtotals.hrc>
 
 #include <tpsubt.hxx>
+#include <tpsort.hxx>
 #include <memory>
 
 #include <osl/diagnose.h>
@@ -83,7 +84,8 @@ void ScTpSubTotalGroup::Init()
     mxLbFunctions->connect_changed( LINK( this, ScTpSubTotalGroup, SelectTreeListBoxHdl) );
     mxLbSelectAllColumns->connect_clicked( LINK( this, ScTpSubTotalGroup, CheckBoxHdl ) );
 
-    nFieldArr[0] = 0;
+    mnFieldArr.resize(SC_MAXFIELDS(pDoc->GetSheetLimits()));
+    mnFieldArr[0] = 0;
     FillListBoxes();
 }
 
@@ -206,7 +208,7 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
     theSubTotalData.nRow2                   = rSubTotalData.nRow2;
     theSubTotalData.bGroupActive[nGroupIdx] = (nGroup != 0);
     theSubTotalData.nField[nGroupIdx]       = (nGroup != 0)
-                                                ? nFieldArr[nGroup-1]
+                                                ? mnFieldArr[nGroup-1]
                                                 : static_cast<SCCOL>(0);
 
     if ( nEntryCount>0 && nCheckCount>0 && nGroup!=0 )
@@ -223,7 +225,7 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
                 OSL_ENSURE( nCheck <= nCheckCount,
                             "Range error :-(" );
                 nFunction = mxLbColumns->get_id(i).toUInt32();
-                pSubTotals[nCheck] = nFieldArr[i];
+                pSubTotals[nCheck] = mnFieldArr[i];
                 pFunctions[nCheck] = LbPosToFunc( nFunction );
                 nCheck++;
             }
@@ -259,14 +261,14 @@ void ScTpSubTotalGroup::FillListBoxes()
     mxLbGroup->insert_text(0, aStrNone );
 
     sal_uInt16 i=0;
-    for ( col=nFirstCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
+    for ( col=nFirstCol; col<=nMaxCol && i<SC_MAXFIELDS(pDoc->GetSheetLimits()); col++ )
     {
         aFieldName = pDoc->GetString(col, nFirstRow, nTab);
         if ( aFieldName.isEmpty() )
         {
             aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, u"%1", ScColToAlpha( col ));
         }
-        nFieldArr[i] = col;
+        mnFieldArr[i] = col;
         mxLbGroup->insert_text(i+1, aFieldName);
         mxLbColumns->insert(i);
         mxLbColumns->set_toggle(i, TRISTATE_FALSE);
@@ -285,7 +287,7 @@ sal_uInt16 ScTpSubTotalGroup::GetFieldSelPos( SCCOL nField )
 
     for ( sal_uInt16 n=0; n<nFieldCount && !bFound; n++ )
     {
-        if ( nFieldArr[n] == nField )
+        if ( mnFieldArr[n] == nField )
         {
             nFieldPos = n;
             bFound = true;

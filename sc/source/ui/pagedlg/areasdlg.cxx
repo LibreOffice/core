@@ -653,7 +653,8 @@ static bool lcl_CheckOne_XL_R1C1( const ScDocument& rDoc, const OUString& rStr, 
     if (nNum <= 0)
         return false;
 
-    if ((bIsRow && nNum > rDoc.GetSheetLimits().GetMaxRowCount()) || (!bIsRow && nNum > MAXCOLCOUNT))
+    if ((bIsRow && nNum > rDoc.GetSheetLimits().GetMaxRowCount()) ||
+        (!bIsRow && nNum > rDoc.GetSheetLimits().GetMaxColCount()))
         return false;
 
     rVal = static_cast<SCCOLROW>(nNum-1);
