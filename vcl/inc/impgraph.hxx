@@ -213,6 +213,11 @@ private:
 
     sal_Int32 getPageNumber() const;
 
+    // Set the pref size, but don't force swap-in
+    void setValuesForPrefSize(const Size& rPrefSize);
+    // Set the pref map mode, but don't force swap-in
+    void setValuesForPrefMapMod(const MapMode& rPrefMapMode);
+
 public:
     void resetChecksum() { mnChecksum = 0; }
     bool swapIn();
