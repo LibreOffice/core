@@ -1946,12 +1946,14 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
 
                 if (!static_cast<OQueryController&>(getDesignView()->getController()).isReadOnly())
                 {
-                    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "dbaccess/ui/querycolmenu.ui", "");
-                    VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
-                    sal_uInt16 nItemId = aContextMenu->Execute(this, aMenuPos);
-                    if (nItemId == aContextMenu->GetItemId("delete"))
+                    ::tools::Rectangle aRect(aMenuPos, Size(1, 1));
+                    weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
+                    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "dbaccess/ui/querycolmenu.ui"));
+                    std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
+                    OString sIdent = xContextMenu->popup_at_rect(pPopupParent, aRect);
+                    if (sIdent == "delete")
                        RemoveField(nColId);
-                    else if (nItemId == aContextMenu->GetItemId("width"))
+                    else if (sIdent == "width")
                         adjustBrowseBoxColumnWidth( this, nColId );
                 }
             }
