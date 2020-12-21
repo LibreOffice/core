@@ -29,41 +29,6 @@
 
 #include <salgdi.hxx>
 
-static bool EnableNativeWidget( const OutputDevice& i_rDevice )
-{
-    const OutDevType eType( i_rDevice.GetOutDevType() );
-    switch ( eType )
-    {
-
-    case OUTDEV_WINDOW:
-        {
-            const vcl::Window* pWindow = dynamic_cast< const vcl::Window* >( &i_rDevice );
-            if (pWindow)
-            {
-                return pWindow->IsNativeWidgetEnabled();
-            }
-            else
-            {
-                SAL_WARN ("vcl.gdi", "Could not cast i_rDevice to Window");
-                assert (pWindow);
-                return false;
-            }
-        }
-
-    case OUTDEV_PDF:
-        [[fallthrough]];
-    case OUTDEV_VIRDEV:
-    {
-        const vcl::ExtOutDevData* pOutDevData( i_rDevice.GetExtOutDevData() );
-        const vcl::PDFExtOutDevData* pPDFData( dynamic_cast< const vcl::PDFExtOutDevData* >( pOutDevData ) );
-        return pPDFData == nullptr;
-    }
-
-    default:
-        return false;
-    }
-}
-
 ImplControlValue::~ImplControlValue()
 {
 }
@@ -167,7 +132,7 @@ PushButtonValue* PushButtonValue::clone() const
 
 bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPart ) const
 {
-    if( !EnableNativeWidget( *this ) )
+    if( !CanEnableNativeWidget() )
         return false;
 
     if ( !mpGraphics && !AcquireGraphics() )
@@ -182,7 +147,7 @@ bool OutputDevice::HitTestNativeScrollbar(
                               const Point& aPos,
                               bool& rIsInside ) const
 {
-    if( !EnableNativeWidget( *this ) )
+    if( !CanEnableNativeWidget() )
         return false;
 
     if ( !mpGraphics && !AcquireGraphics() )
@@ -294,7 +259,7 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
 {
     assert(!is_double_buffered_window());
 
-    if( !EnableNativeWidget( *this ) )
+    if( !CanEnableNativeWidget() )
         return false;
 
     // make sure the current clip region is initialized correctly
@@ -329,7 +294,7 @@ bool OutputDevice::GetNativeControlRegion(  ControlType nType,
                                 tools::Rectangle &rNativeBoundingRegion,
                                 tools::Rectangle &rNativeContentRegion ) const
 {
-    if( !EnableNativeWidget( *this ) )
+    if( !CanEnableNativeWidget() )
         return false;
 
     if ( !mpGraphics && !AcquireGraphics() )

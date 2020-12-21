@@ -17,17 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <salinst.hxx>
-#include <salgdi.hxx>
-#include <salvd.hxx>
-#include <outdev.h>
-#include <PhysicalFontCollection.hxx>
-#include <svdata.hxx>
-#include <vcl/virdev.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 
+#include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/virdev.hxx>
+
+#include <outdev.h>
+#include <PhysicalFontCollection.hxx>
+#include <salinst.hxx>
+#include <salgdi.hxx>
+#include <salvd.hxx>
+#include <svdata.hxx>
+
 using namespace ::com::sun::star::uno;
+
+bool VirtualDevice::CanEnableNativeWidget() const
+{
+    const vcl::ExtOutDevData* pOutDevData(GetExtOutDevData());
+    const vcl::PDFExtOutDevData* pPDFData(dynamic_cast<const vcl::PDFExtOutDevData*>(pOutDevData));
+    return pPDFData == nullptr;
+}
 
 bool VirtualDevice::AcquireGraphics() const
 {

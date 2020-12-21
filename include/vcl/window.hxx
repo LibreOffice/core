@@ -779,6 +779,8 @@ public:
     ::OutputDevice const*               GetOutDev() const;
     ::OutputDevice*                     GetOutDev();
 
+    bool                                CanEnableNativeWidget() const override { return IsNativeWidgetEnabled(); }
+
     Color                               GetBackgroundColor() const override;
 
     size_t                              GetSyncCount() const override { return 0x000000ff; }
