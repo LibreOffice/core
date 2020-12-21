@@ -260,7 +260,6 @@ class GtkSalFrame final : public SalFrame
     static gboolean     signalWindowState( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalScroll( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalCrossing( GtkWidget*, GdkEventCrossing*, gpointer );
-    static gboolean     signalVisibility( GtkWidget*, GdkEventVisibility*, gpointer );
     static void         signalDestroy( GtkWidget*, gpointer );
 
     void            Center();
