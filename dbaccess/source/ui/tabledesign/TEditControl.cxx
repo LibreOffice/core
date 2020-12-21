@@ -41,9 +41,7 @@
 #include <UITools.hxx>
 #include "TableFieldControl.hxx"
 #include <dsntypes.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::dbaui;
@@ -1399,19 +1397,24 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                 }
                 else
                 {
-                    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "dbaccess/ui/tabledesignrowmenu.ui", "");
-                    VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
+                    ::tools::Rectangle aRect(aMenuPos, Size(1, 1));
+                    weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
+                    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "dbaccess/ui/tabledesignrowmenu.ui"));
+                    std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
 
-                    aContextMenu->EnableItem(aContextMenu->GetItemId("cut"), IsCutAllowed());
-                    aContextMenu->EnableItem(aContextMenu->GetItemId("copy"), IsCopyAllowed());
-                    aContextMenu->EnableItem(aContextMenu->GetItemId("paste"), IsPasteAllowed());
-                    aContextMenu->EnableItem(aContextMenu->GetItemId("delete"), IsDeleteAllowed());
-                    aContextMenu->EnableItem(aContextMenu->GetItemId("primarykey"), IsPrimaryKeyAllowed());
-                    aContextMenu->EnableItem(aContextMenu->GetItemId("insert"), IsInsertNewAllowed(nRow));
-                    aContextMenu->CheckItem("primarykey", IsRowSelected(GetCurRow()) && IsPrimaryKey());
-
-                    // remove all the disable entries
-                    aContextMenu->RemoveDisabledEntries(true, true);
+                    if (!IsCutAllowed())
+                        xContextMenu->remove("cut");
+                    if (!IsCopyAllowed())
+                        xContextMenu->remove("copy");
+                    if (!IsPasteAllowed())
+                        xContextMenu->remove("paste");
+                    if (!IsDeleteAllowed())
+                        xContextMenu->remove("delete");
+                    if (!IsPrimaryKeyAllowed())
+                        xContextMenu->remove("primarykey");
+                    if (!IsInsertNewAllowed(nRow))
+                        xContextMenu->remove("insert");
+                    xContextMenu->set_active("primarykey", IsRowSelected(GetCurRow()) && IsPrimaryKey());
 
                     if( SetDataPtr(m_nDataPos) )
                         pDescrWin->SaveData( pActRow->GetActFieldDescr() );
@@ -1419,8 +1422,7 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                     // All actions which change the number of rows must be run asynchronously
                     // otherwise there may be problems between the Context menu and the Browser
                     m_nDataPos = GetCurRow();
-                    aContextMenu->Execute(this, aMenuPos);
-                    OString sIdent = aContextMenu->GetCurItemIdent();
+                    OString sIdent = xContextMenu->popup_at_rect(pPopupParent, aRect);
                     if (sIdent == "cut")
                         cut();
                     else if (sIdent == "copy")
