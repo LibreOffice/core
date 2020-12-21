@@ -801,10 +801,8 @@ Size ImpGraphic::ImplGetPrefSize() const
     return aSize;
 }
 
-void ImpGraphic::ImplSetPrefSize(const Size& rPrefSize)
+void ImpGraphic::setValuesForPrefSize(const Size& rPrefSize)
 {
-    ensureAvailable();
-
     switch (meType)
     {
         case GraphicType::Bitmap:
@@ -841,6 +839,12 @@ void ImpGraphic::ImplSetPrefSize(const Size& rPrefSize)
         case GraphicType::Default:
             break;
     }
+}
+
+void ImpGraphic::ImplSetPrefSize(const Size& rPrefSize)
+{
+    ensureAvailable();
+    setValuesForPrefSize(rPrefSize);
 }
 
 MapMode ImpGraphic::ImplGetPrefMapMode() const
@@ -887,10 +891,8 @@ MapMode ImpGraphic::ImplGetPrefMapMode() const
     return aMapMode;
 }
 
-void ImpGraphic::ImplSetPrefMapMode(const MapMode& rPrefMapMode)
+void ImpGraphic::setValuesForPrefMapMod(const MapMode& rPrefMapMode)
 {
-    ensureAvailable();
-
     switch (meType)
     {
         case GraphicType::Bitmap:
@@ -924,6 +926,12 @@ void ImpGraphic::ImplSetPrefMapMode(const MapMode& rPrefMapMode)
         case GraphicType::Default:
             break;
     }
+}
+
+void ImpGraphic::ImplSetPrefMapMode(const MapMode& rPrefMapMode)
+{
+    ensureAvailable();
+    setValuesForPrefMapMod(rPrefMapMode);
 }
 
 sal_uLong ImpGraphic::ImplGetSizeBytes() const
@@ -1368,29 +1376,11 @@ void ImpGraphic::updateFromLoadedGraphic(ImpGraphic* graphic)
 
 void ImpGraphic::restoreFromSwapInfo()
 {
-    // Reset the parameters
-    if (!maBitmapEx.IsEmpty())
-    {
-        maBitmapEx.SetPrefMapMode(maSwapInfo.maPrefMapMode);
-        maBitmapEx.SetPrefSize(maSwapInfo.maPrefSize);
-    }
-
-    if (meType == GraphicType::GdiMetafile)
-    {
-         maMetaFile.SetPrefMapMode(maSwapInfo.maPrefMapMode);
-         maMetaFile.SetPrefSize(maSwapInfo.maPrefSize);
-    }
-
-    if (ImplIsAnimated())
-    {
-        auto & rAnimationBitmap = const_cast<BitmapEx&>(mpAnimation->GetBitmapEx());
-        rAnimationBitmap.SetPrefMapMode(maSwapInfo.maPrefMapMode);
-        rAnimationBitmap.SetPrefSize(maSwapInfo.maPrefSize);
-    }
+    setValuesForPrefMapMod(maSwapInfo.maPrefMapMode);
+    setValuesForPrefSize(maSwapInfo.maPrefSize);
 
     if (maVectorGraphicData)
     {
-        maExPrefSize = maSwapInfo.maPrefSize;
         maVectorGraphicData->setPageIndex(maSwapInfo.mnPageIndex);
     }
 }
