@@ -1678,7 +1678,6 @@
                 <accessibility>
                   <relation type="label-for" target="texreplace"/>
                   <relation type="label-for" target="texmodulate"/>
-                  <relation type="label-for" target="texblend"/>
                 </accessibility>
               </object>
               <packing>
@@ -1823,24 +1822,6 @@
               </object>
               <packing>
                 <property name="left_attach">2</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToggleButton" id="texblend">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="docking3deffects|texblend|tooltip_text">Texture, Shadow and Color</property>
-                <property name="halign">start</property>
-                <property name="hexpand">True</property>
-                <property name="image">image42</property>
-                <accessibility>
-                  <relation type="labelled-by" target="label22"/>
-                </accessibility>
-              </object>
-              <packing>
-                <property name="left_attach">3</property>
                 <property name="top_attach">1</property>
               </packing>
             </child>
