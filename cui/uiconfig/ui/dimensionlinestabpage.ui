@@ -161,7 +161,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="margin_left">12</property>
+                        <property name="margin-start">12</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="inconsistent">True</property>
@@ -488,7 +488,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="margin_left">12</property>
+                        <property name="margin-start">12</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="LB_UNIT-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|LB_UNIT">Shows or hides the dimension measurement units. You can also select a measurement unit you want to display from the list.</property>

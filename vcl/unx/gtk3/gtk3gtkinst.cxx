@@ -2757,14 +2757,14 @@ public:
         gtk_widget_set_margin_bottom(m_pWidget, nMargin);
     }
 
-    virtual void set_margin_left(int nMargin) override
+    virtual void set_margin_start(int nMargin) override
     {
-        gtk_widget_set_margin_left(m_pWidget, nMargin);
+        gtk_widget_set_margin_start(m_pWidget, nMargin);
     }
 
-    virtual void set_margin_right(int nMargin) override
+    virtual void set_margin_end(int nMargin) override
     {
-        gtk_widget_set_margin_right(m_pWidget, nMargin);
+        gtk_widget_set_margin_end(m_pWidget, nMargin);
     }
 
     virtual int get_margin_top() const override
@@ -2777,14 +2777,14 @@ public:
         return gtk_widget_get_margin_bottom(m_pWidget);
     }
 
-    virtual int get_margin_left() const override
+    virtual int get_margin_start() const override
     {
-        return gtk_widget_get_margin_left(m_pWidget);
+        return gtk_widget_get_margin_start(m_pWidget);
     }
 
-    virtual int get_margin_right() const override
+    virtual int get_margin_end() const override
     {
-        return gtk_widget_get_margin_right(m_pWidget);
+        return gtk_widget_get_margin_end(m_pWidget);
     }
 
     virtual void set_accessible_name(const OUString& rName) override
@@ -7940,10 +7940,10 @@ public:
             gtk_widget_get_margin_top(GTK_WIDGET(pMenuButton)));
         gtk_widget_set_margin_bottom(GTK_WIDGET(m_pContainer),
             gtk_widget_get_margin_bottom(GTK_WIDGET(pMenuButton)));
-        gtk_widget_set_margin_left(GTK_WIDGET(m_pContainer),
-            gtk_widget_get_margin_left(GTK_WIDGET(pMenuButton)));
-        gtk_widget_set_margin_right(GTK_WIDGET(m_pContainer),
-            gtk_widget_get_margin_right(GTK_WIDGET(pMenuButton)));
+        gtk_widget_set_margin_start(GTK_WIDGET(m_pContainer),
+            gtk_widget_get_margin_start(GTK_WIDGET(pMenuButton)));
+        gtk_widget_set_margin_end(GTK_WIDGET(m_pContainer),
+            gtk_widget_get_margin_end(GTK_WIDGET(pMenuButton)));
 
         gtk_menu_detach(m_pMenu);
         gtk_menu_attach_to_widget(m_pMenu, GTK_WIDGET(m_pToggleButton), nullptr);

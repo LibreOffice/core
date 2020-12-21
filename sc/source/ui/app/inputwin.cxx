@@ -2031,8 +2031,8 @@ void ScTextWnd::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     SetDragDataTransferrable(xHelper, DND_ACTION_COPY);
 
     OutputDevice& rDevice = pDrawingArea->get_ref_device();
-    pDrawingArea->set_margin_left(gnBorderWidth);
-    pDrawingArea->set_margin_right(gnBorderWidth);
+    pDrawingArea->set_margin_start(gnBorderWidth);
+    pDrawingArea->set_margin_end(gnBorderWidth);
     // leave 1 for the width of the scrolledwindow border
     pDrawingArea->set_margin_top(gnBorderHeight - 1);
     pDrawingArea->set_margin_bottom(gnBorderHeight - 1);

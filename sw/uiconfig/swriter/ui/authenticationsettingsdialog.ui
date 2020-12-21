@@ -114,7 +114,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="margin_left">12</property>
+                <property name="margin-start">12</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="active">True</property>
@@ -135,7 +135,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">24</property>
+                <property name="margin-start">24</property>
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|label1">Outgoing mail server:</property>
                 <property name="xalign">0</property>
               </object>
@@ -167,7 +167,7 @@
               <object class="GtkLabel" id="username_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">24</property>
+                <property name="margin-start">24</property>
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|username_label">_User name:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">username</property>
@@ -202,7 +202,7 @@
               <object class="GtkLabel" id="outpassword_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">24</property>
+                <property name="margin-start">24</property>
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|outpassword_label">_Password:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">outpassword</property>
@@ -219,7 +219,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="margin_left">12</property>
+                <property name="margin-start">12</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="active">True</property>
@@ -241,7 +241,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">24</property>
+                <property name="margin-start">24</property>
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|label2">Incoming mail server:</property>
                 <property name="xalign">0</property>
               </object>
@@ -273,7 +273,7 @@
               <object class="GtkLabel" id="server_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">24</property>
+                <property name="margin-start">24</property>
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|server_label">Server _name:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">server</property>
@@ -320,7 +320,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">24</property>
+                <property name="margin-start">24</property>
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|label3">Type:</property>
                 <property name="xalign">1</property>
               </object>
@@ -414,7 +414,7 @@
               <object class="GtkLabel" id="inusername_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">24</property>
+                <property name="margin-start">24</property>
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|inusername_label">Us_er name:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">inusername</property>
@@ -429,7 +429,7 @@
               <object class="GtkLabel" id="inpassword_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">24</property>
+                <property name="margin-start">24</property>
                 <property name="label" translatable="yes" context="authenticationsettingsdialog|inpassword_label">Pass_word:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">inpassword</property>

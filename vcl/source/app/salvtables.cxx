@@ -357,17 +357,17 @@ void SalInstanceWidget::set_margin_top(int nMargin) { m_xWidget->set_margin_top(
 
 void SalInstanceWidget::set_margin_bottom(int nMargin) { m_xWidget->set_margin_bottom(nMargin); }
 
-void SalInstanceWidget::set_margin_left(int nMargin) { m_xWidget->set_margin_left(nMargin); }
+void SalInstanceWidget::set_margin_start(int nMargin) { m_xWidget->set_margin_start(nMargin); }
 
-void SalInstanceWidget::set_margin_right(int nMargin) { m_xWidget->set_margin_bottom(nMargin); }
+void SalInstanceWidget::set_margin_end(int nMargin) { m_xWidget->set_margin_bottom(nMargin); }
 
 int SalInstanceWidget::get_margin_top() const { return m_xWidget->get_margin_top(); }
 
 int SalInstanceWidget::get_margin_bottom() const { return m_xWidget->get_margin_bottom(); }
 
-int SalInstanceWidget::get_margin_left() const { return m_xWidget->get_margin_left(); }
+int SalInstanceWidget::get_margin_start() const { return m_xWidget->get_margin_start(); }
 
-int SalInstanceWidget::get_margin_right() const { return m_xWidget->get_margin_bottom(); }
+int SalInstanceWidget::get_margin_end() const { return m_xWidget->get_margin_bottom(); }
 
 void SalInstanceWidget::set_accessible_name(const OUString& rName)
 {

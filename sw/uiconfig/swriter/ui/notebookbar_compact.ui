@@ -3384,7 +3384,7 @@
                           <object class="sfxlo-NotebookbarToolBox" id="ExtTop8">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="margin_left">5</property>
+                            <property name="margin-start">5</property>
                             <property name="toolbar_style">icons</property>
                             <property name="show_arrow">False</property>
                             <child>
@@ -10835,7 +10835,7 @@
                           <object class="sfxlo-NotebookbarToolBox" id="Wrap11">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="margin_left">5</property>
+                            <property name="margin-start">5</property>
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Graphic-WrapLeft">
@@ -12271,7 +12271,7 @@
                           <object class="sfxlo-NotebookbarToolBox" id="Wrap4">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="margin_left">5</property>
+                            <property name="margin-start">5</property>
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Draw-WrapLeft">
@@ -13754,7 +13754,7 @@
                           <object class="sfxlo-NotebookbarToolBox" id="Wrap3">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="margin_left">5</property>
+                            <property name="margin-start">5</property>
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Object-WrapLeft">
@@ -14875,7 +14875,7 @@
                           <object class="sfxlo-NotebookbarToolBox" id="Wrap8">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="margin_left">5</property>
+                            <property name="margin-start">5</property>
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Media-WrapLeft">
@@ -16402,7 +16402,7 @@
                           <object class="sfxlo-NotebookbarToolBox" id="Wrap7">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="margin_left">5</property>
+                            <property name="margin-start">5</property>
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Media-WrapLeft4">

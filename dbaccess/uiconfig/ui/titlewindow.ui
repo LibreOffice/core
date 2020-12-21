@@ -32,8 +32,8 @@
                   <object class="GtkGrid" id="titleparent">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">1</property>
-                    <property name="margin_right">1</property>
+                    <property name="margin-start">1</property>
+                    <property name="margin-end">1</property>
                     <child>
                       <object class="GtkAlignment">
                         <property name="visible">True</property>

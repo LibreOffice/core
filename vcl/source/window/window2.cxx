@@ -1531,9 +1531,15 @@ bool Window::set_property(const OString &rKey, const OUString &rValue)
     else if (rKey == "border-width")
         set_border_width(rValue.toInt32());
     else if (rKey == "margin-start" || rKey == "margin-left")
-        set_margin_left(rValue.toInt32());
+    {
+        assert(rKey == "margin-start" && "margin-left deprecated in favor of margin-start");
+        set_margin_start(rValue.toInt32());
+    }
     else if (rKey == "margin-end" || rKey == "margin-right")
-        set_margin_right(rValue.toInt32());
+    {
+        assert(rKey == "margin-end" && "margin-right deprecated in favor of margin-end");
+        set_margin_end(rValue.toInt32());
+    }
     else if (rKey == "margin-top")
         set_margin_top(rValue.toInt32());
     else if (rKey == "margin-bottom")
@@ -1837,7 +1843,7 @@ sal_Int32 Window::get_border_width() const
     return pWindowImpl->mnBorderWidth;
 }
 
-void Window::set_margin_left(sal_Int32 nWidth)
+void Window::set_margin_start(sal_Int32 nWidth)
 {
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl.get() : mpWindowImpl.get();
     if (pWindowImpl->mnMarginLeft != nWidth)
@@ -1847,13 +1853,13 @@ void Window::set_margin_left(sal_Int32 nWidth)
     }
 }
 
-sal_Int32 Window::get_margin_left() const
+sal_Int32 Window::get_margin_start() const
 {
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl.get() : mpWindowImpl.get();
     return pWindowImpl->mnMarginLeft;
 }
 
-void Window::set_margin_right(sal_Int32 nWidth)
+void Window::set_margin_end(sal_Int32 nWidth)
 {
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl.get() : mpWindowImpl.get();
     if (pWindowImpl->mnMarginRight != nWidth)
@@ -1863,7 +1869,7 @@ void Window::set_margin_right(sal_Int32 nWidth)
     }
 }
 
-sal_Int32 Window::get_margin_right() const
+sal_Int32 Window::get_margin_end() const
 {
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl.get() : mpWindowImpl.get();
     return pWindowImpl->mnMarginRight;

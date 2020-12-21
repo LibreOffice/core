@@ -48,7 +48,7 @@
                   <object class="GtkGrid" id="grid2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">12</property>
+                    <property name="margin-start">12</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="row_spacing">6</property>
@@ -102,7 +102,7 @@
                           <object class="GtkLabel" id="ftnoffset_label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">12</property>
+                            <property name="margin-start">12</property>
                             <property name="label" translatable="yes" context="footnotesendnotestabpage|ftnoffset_label">_Start at:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">ftnoffset</property>
@@ -125,7 +125,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="margin_left">12</property>
+                        <property name="margin-start">12</property>
                         <property name="hexpand">True</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -213,7 +213,7 @@
                           <object class="GtkLabel" id="ftnprefix_label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">24</property>
+                            <property name="margin-start">24</property>
                             <property name="label" translatable="yes" context="footnotesendnotestabpage|ftnprefix_label">Be_fore:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">ftnprefix</property>
@@ -327,7 +327,7 @@
                   <object class="GtkGrid" id="grid6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">12</property>
+                    <property name="margin-start">12</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="row_spacing">6</property>
@@ -381,7 +381,7 @@
                           <object class="GtkLabel" id="endoffset_label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">12</property>
+                            <property name="margin-start">12</property>
                             <property name="label" translatable="yes" context="footnotesendnotestabpage|endoffset_label">_Start at:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">endoffset</property>
@@ -404,7 +404,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="margin_left">12</property>
+                        <property name="margin-start">12</property>
                         <property name="hexpand">True</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -497,7 +497,7 @@
                           <object class="GtkLabel" id="endprefix_label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">24</property>
+                            <property name="margin-start">24</property>
                             <property name="label" translatable="yes" context="footnotesendnotestabpage|endprefix_label">Be_fore:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">endprefix</property>

@@ -10,7 +10,7 @@
       <object class="GtkNotebook" id="tabcontrol">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
-        <property name="margin_left">5</property>
+        <property name="margin-start">5</property>
         <property name="margin_top">3</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>

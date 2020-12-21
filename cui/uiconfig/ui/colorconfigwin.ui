@@ -16,7 +16,7 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="use_underline">True</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
@@ -29,7 +29,7 @@
       <object class="GtkLabel" id="doccolor">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|doccolor">Document background</property>
       </object>
@@ -109,7 +109,7 @@
       <object class="GtkLabel" id="appback">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|appback">Application background</property>
       </object>
@@ -125,7 +125,7 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="use_underline">True</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
@@ -158,7 +158,7 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="use_underline">True</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
@@ -188,7 +188,7 @@
       <object class="GtkLabel" id="font">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|font">Font color</property>
       </object>
@@ -221,7 +221,7 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="use_underline">True</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
@@ -254,7 +254,7 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="use_underline">True</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
@@ -284,7 +284,7 @@
       <object class="GtkLabel" id="autospellcheck">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|autospellcheck">AutoSpellcheck</property>
       </object>
@@ -297,7 +297,7 @@
       <object class="GtkLabel" id="smarttags">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|smarttags">Smart Tags</property>
       </object>
@@ -394,7 +394,7 @@
       <object class="GtkLabel" id="writergrid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|writergrid">Grid</property>
       </object>
@@ -458,7 +458,7 @@
       <object class="GtkLabel" id="script">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|script">Script Indicator</property>
       </object>
@@ -474,7 +474,7 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="use_underline">True</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
@@ -490,7 +490,7 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="use_underline">True</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
@@ -506,7 +506,7 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="use_underline">True</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
@@ -553,7 +553,7 @@
       <object class="GtkLabel" id="hdft">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|hdft">Headers and Footer delimiter</property>
       </object>
@@ -583,7 +583,7 @@
       <object class="GtkLabel" id="pagebreak">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|pagebreak">Page and column breaks</property>
       </object>
@@ -613,7 +613,7 @@
       <object class="GtkLabel" id="direct">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|direct">Direct Cursor</property>
       </object>
@@ -659,7 +659,7 @@
       <object class="GtkLabel" id="sgml">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|sgml">SGML syntax highlighting</property>
       </object>
@@ -689,7 +689,7 @@
       <object class="GtkLabel" id="htmlcomment">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|htmlcomment">Comment highlighting</property>
       </object>
@@ -719,7 +719,7 @@
       <object class="GtkLabel" id="htmlkeyword">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|htmlkeyword">Keyword highlighting</property>
       </object>
@@ -749,7 +749,7 @@
       <object class="GtkLabel" id="unknown">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|unknown">Text</property>
       </object>
@@ -795,7 +795,7 @@
       <object class="GtkLabel" id="calcgrid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|calcgrid">Grid lines</property>
       </object>
@@ -825,7 +825,7 @@
       <object class="GtkLabel" id="brk">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|brk">Page breaks</property>
       </object>
@@ -855,7 +855,7 @@
       <object class="GtkLabel" id="brkmanual">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|brkmanual">Manual page breaks</property>
       </object>
@@ -885,7 +885,7 @@
       <object class="GtkLabel" id="brkauto">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|brkauto">Automatic page breaks</property>
       </object>
@@ -915,7 +915,7 @@
       <object class="GtkLabel" id="det">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|det">Detective</property>
       </object>
@@ -945,7 +945,7 @@
       <object class="GtkLabel" id="deterror">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|deterror">Detective error</property>
       </object>
@@ -975,7 +975,7 @@
       <object class="GtkLabel" id="ref">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|ref">References</property>
       </object>
@@ -1005,7 +1005,7 @@
       <object class="GtkLabel" id="notes">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|notes">Notes background</property>
       </object>
@@ -1035,7 +1035,7 @@
       <object class="GtkLabel" id="values">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|values">Values</property>
       </object>
@@ -1065,7 +1065,7 @@
       <object class="GtkLabel" id="formulas">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|formulas">Formulas</property>
       </object>
@@ -1095,7 +1095,7 @@
       <object class="GtkLabel" id="text">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|text">Text</property>
       </object>
@@ -1125,7 +1125,7 @@
       <object class="GtkLabel" id="protectedcells">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|protectedcells">Protected cells background</property>
       </object>
@@ -1171,7 +1171,7 @@
       <object class="GtkLabel" id="drawgrid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|drawgrid">Grid</property>
       </object>
@@ -1217,7 +1217,7 @@
       <object class="GtkLabel" id="basicid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|basicid">Identifier</property>
       </object>
@@ -1247,7 +1247,7 @@
       <object class="GtkLabel" id="basiccomment">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|basiccomment">Comment</property>
       </object>
@@ -1277,7 +1277,7 @@
       <object class="GtkLabel" id="basicnumber">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|basicnumber">Number</property>
       </object>
@@ -1307,7 +1307,7 @@
       <object class="GtkLabel" id="basicstring">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|basicstring">String</property>
       </object>
@@ -1337,7 +1337,7 @@
       <object class="GtkLabel" id="basicop">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|basicop">Operator</property>
       </object>
@@ -1367,7 +1367,7 @@
       <object class="GtkLabel" id="basickeyword">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|basickeyword">Reserved expression</property>
       </object>
@@ -1397,7 +1397,7 @@
       <object class="GtkLabel" id="error">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|error">Error</property>
       </object>
@@ -1443,7 +1443,7 @@
       <object class="GtkLabel" id="sqlid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|sqlid">Identifier</property>
       </object>
@@ -1473,7 +1473,7 @@
       <object class="GtkLabel" id="sqlnumber">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|sqlnumber">Number</property>
       </object>
@@ -1503,7 +1503,7 @@
       <object class="GtkLabel" id="sqlstring">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|sqlstring">String</property>
       </object>
@@ -1533,7 +1533,7 @@
       <object class="GtkLabel" id="sqlop">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|sqlop">Operator</property>
       </object>
@@ -1563,7 +1563,7 @@
       <object class="GtkLabel" id="sqlkeyword">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|sqlkeyword">Keyword</property>
       </object>
@@ -1593,7 +1593,7 @@
       <object class="GtkLabel" id="sqlparam">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|sqlparam">Parameter</property>
       </object>
@@ -1623,7 +1623,7 @@
       <object class="GtkLabel" id="sqlcomment">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes" context="colorconfigwin|sqlcomment">Comment</property>
       </object>
@@ -1639,7 +1639,7 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="use_underline">True</property>
-        <property name="margin_left">6</property>
+        <property name="margin-start">6</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>

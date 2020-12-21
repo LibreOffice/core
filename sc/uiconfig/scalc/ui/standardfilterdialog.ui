@@ -621,7 +621,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
                                     <property name="tooltip_text" translatable="yes" context="standardfilterdialog|remove1|tooltip_text">Remove</property>
-                                    <property name="margin_right">8</property>
+                                    <property name="margin-end">8</property>
                                     <property name="image">image1</property>
                                   </object>
                                   <packing>
@@ -635,7 +635,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
                                     <property name="tooltip_text" translatable="yes" context="standardfilterdialog|remove2|tooltip_text">Remove</property>
-                                    <property name="margin_right">8</property>
+                                    <property name="margin-end">8</property>
                                     <property name="image">image2</property>
                                   </object>
                                   <packing>
@@ -649,7 +649,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
                                     <property name="tooltip_text" translatable="yes" context="standardfilterdialog|remove3|tooltip_text">Remove</property>
-                                    <property name="margin_right">8</property>
+                                    <property name="margin-end">8</property>
                                     <property name="image">image3</property>
                                   </object>
                                   <packing>
@@ -663,7 +663,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
                                     <property name="tooltip_text" translatable="yes" context="standardfilterdialog|remove4|tooltip_text">Remove</property>
-                                    <property name="margin_right">8</property>
+                                    <property name="margin-end">8</property>
                                     <property name="image">image4</property>
                                   </object>
                                   <packing>
@@ -871,7 +871,7 @@
                   <object class="GtkGrid" id="grid4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">12</property>
+                    <property name="margin-start">12</property>
                     <property name="hexpand">True</property>
                     <property name="column_spacing">12</property>
                     <child>

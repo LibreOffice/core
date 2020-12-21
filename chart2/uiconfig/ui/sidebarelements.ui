@@ -163,7 +163,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
-                            <property name="margin_left">4</property>
+                            <property name="margin-start">4</property>
                             <property name="label" translatable="yes" context="sidebarelements|placement_label">_Placement:</property>
                             <property name="use_underline">True</property>
                             <property name="ellipsize">end</property>

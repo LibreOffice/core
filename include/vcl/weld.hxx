@@ -184,13 +184,13 @@ public:
 
     virtual void set_margin_top(int nMargin) = 0;
     virtual void set_margin_bottom(int nMargin) = 0;
-    virtual void set_margin_left(int nMargin) = 0;
-    virtual void set_margin_right(int nMargin) = 0;
+    virtual void set_margin_start(int nMargin) = 0;
+    virtual void set_margin_end(int nMargin) = 0;
 
     virtual int get_margin_top() const = 0;
     virtual int get_margin_bottom() const = 0;
-    virtual int get_margin_left() const = 0;
-    virtual int get_margin_right() const = 0;
+    virtual int get_margin_start() const = 0;
+    virtual int get_margin_end() const = 0;
 
     /*
      * Report the extents of this widget relative to the rRelative target widget.

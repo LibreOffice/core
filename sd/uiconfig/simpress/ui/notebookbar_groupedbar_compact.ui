@@ -3023,13 +3023,13 @@
           <object class="sfxlo-PriorityHBox" id="Toolbar">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">5</property>
-            <property name="margin_right">5</property>
+            <property name="margin-start">5</property>
+            <property name="margin-end">5</property>
             <child>
               <object class="sfxlo-DropdownBox" id="File">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">5</property>
+                <property name="margin-start">5</property>
                 <child>
                   <object class="GtkBox" id="Section">
                     <property name="visible">True</property>
@@ -4644,7 +4644,7 @@
                                   <object class="sfxlo-NotebookbarToolBox" id="SectionBottom10">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="margin_left">5</property>
+                                    <property name="margin-start">5</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -5488,7 +5488,7 @@
                                   <object class="sfxlo-NotebookbarToolBox" id="SectionBottom9">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="margin_left">5</property>
+                                    <property name="margin-start">5</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -9850,7 +9850,7 @@
                       <object class="VclOptionalBox" id="Image-Section-ColorSettings2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">5</property>
+                        <property name="margin-start">5</property>
                         <child>
                           <object class="GtkBox" id="GroupB90">
                             <property name="visible">True</property>
@@ -14385,7 +14385,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="margin_right">5</property>
+                <property name="margin-end">5</property>
                 <child>
                   <object class="GtkBox" id="Ext2">
                     <property name="visible">True</property>

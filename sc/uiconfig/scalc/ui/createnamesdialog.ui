@@ -58,7 +58,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="margin_right">6</property>
+                <property name="margin-end">6</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>

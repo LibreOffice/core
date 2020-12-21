@@ -409,7 +409,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="double_buffered">False</property>
-                    <property name="margin_right">3</property>
+                    <property name="margin-end">3</property>
                     <property name="label" translatable="yes" context="optimpressgeneralpage|label8">_Drawing scale:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">scaleBox</property>

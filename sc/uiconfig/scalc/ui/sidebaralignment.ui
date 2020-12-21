@@ -278,8 +278,8 @@
           <object class="GtkSeparator" id="separator1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">3</property>
-            <property name="margin_right">3</property>
+            <property name="margin-start">3</property>
+            <property name="margin-end">3</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
