@@ -30,60 +30,61 @@ GfxLink::GfxLink()
     : meType(GfxLinkType::NONE)
     , mnUserId(0)
     , maHash(0)
-    , mnSwapInDataSize(0)
     , mbPrefMapModeValid(false)
     , mbPrefSizeValid(false)
 {
 }
 
-
-
 GfxLink::GfxLink(std::unique_ptr<sal_uInt8[]> pBuf, sal_uInt32 nSize, GfxLinkType nType)
     : meType(nType)
     , mnUserId(0)
-    , mpSwapInData(std::shared_ptr<sal_uInt8>(pBuf.release(), pBuf.get_deleter())) // std::move(pBuf) does not compile on Jenkins MacOSX (24 May 2016)
+    , maDataContainer(pBuf.get(), nSize)
     , maHash(0)
-    , mnSwapInDataSize(nSize)
     , mbPrefMapModeValid(false)
     , mbPrefSizeValid(false)
 {
-    SAL_WARN_IF(mpSwapInData == nullptr || mnSwapInDataSize <= 0, "vcl",
-                "GfxLink::GfxLink(): empty/NULL buffer given");
+}
+
+GfxLink::GfxLink(BinaryDataContainer const & rDataConainer, GfxLinkType nType)
+    : meType(nType)
+    , mnUserId(0)
+    , maDataContainer(rDataConainer)
+    , maHash(0)
+    , mbPrefMapModeValid(false)
+    , mbPrefSizeValid(false)
+{
 }
 
 size_t GfxLink::GetHash() const
 {
     if (!maHash)
     {
-        std::size_t seed = 0;
-        boost::hash_combine(seed, mnSwapInDataSize);
+        std::size_t seed = maDataContainer.calculateHash();
         boost::hash_combine(seed, meType);
-        const sal_uInt8* pData = GetData();
-        if (pData)
-            seed += boost::hash_range(pData, pData + GetDataSize());
         maHash = seed;
-
     }
     return maHash;
 }
 
 bool GfxLink::operator==( const GfxLink& rGfxLink ) const
 {
-    if (GetHash() != rGfxLink.GetHash())
-        return false;
-
-    if ( mnSwapInDataSize != rGfxLink.mnSwapInDataSize ||
-         meType != rGfxLink.meType )
+    if (GetDataSize() != rGfxLink.GetDataSize()
+        || meType != rGfxLink.meType
+        || GetHash() != rGfxLink.GetHash())
         return false;
 
     const sal_uInt8* pSource = GetData();
-    const sal_uInt8* pDest = rGfxLink.GetData();
-    if ( pSource == pDest )
+    const sal_uInt8* pDestination = rGfxLink.GetData();
+
+    if (pSource == pDestination)
         return true;
+
     sal_uInt32 nSourceSize = GetDataSize();
     sal_uInt32 nDestSize = rGfxLink.GetDataSize();
-    if ( pSource && pDest && ( nSourceSize == nDestSize ) )
-        return (memcmp( pSource, pDest, nSourceSize ) == 0);
+
+    if (pSource && pDestination && (nSourceSize == nDestSize))
+        return memcmp(pSource, pDestination, nSourceSize) == 0;
+
     return false;
 }
 
@@ -92,12 +93,10 @@ bool GfxLink::IsNative() const
     return meType >= GfxLinkType::NativeFirst && meType <= GfxLinkType::NativeLast;
 }
 
-
 const sal_uInt8* GfxLink::GetData() const
 {
-    return mpSwapInData.get();
+    return maDataContainer.getData();
 }
-
 
 void GfxLink::SetPrefSize( const Size& rPrefSize )
 {
@@ -105,24 +104,22 @@ void GfxLink::SetPrefSize( const Size& rPrefSize )
     mbPrefSizeValid = true;
 }
 
-
 void GfxLink::SetPrefMapMode( const MapMode& rPrefMapMode )
 {
     maPrefMapMode = rPrefMapMode;
     mbPrefMapModeValid = true;
 }
 
-
 bool GfxLink::LoadNative( Graphic& rGraphic )
 {
     bool bRet = false;
 
-    if( IsNative() && mnSwapInDataSize )
+    if (IsNative() && !maDataContainer.isEmpty())
     {
         const sal_uInt8* pData = GetData();
         if (pData)
         {
-            SvMemoryStream aMemoryStream(const_cast<sal_uInt8*>(pData), mnSwapInDataSize, StreamMode::READ | StreamMode::WRITE);
+            SvMemoryStream aMemoryStream(const_cast<sal_uInt8*>(pData), GetDataSize(), StreamMode::READ | StreamMode::WRITE);
             OUString aShortName;
 
             switch (meType)
@@ -157,17 +154,12 @@ bool GfxLink::ExportNative( SvStream& rOStream ) const
 {
     if( GetDataSize() )
     {
-        auto pData = GetSwapInData();
+        auto pData = GetData();
         if (pData)
-            rOStream.WriteBytes( pData.get(), mnSwapInDataSize );
+            rOStream.WriteBytes(pData, GetDataSize());
     }
 
     return ( rOStream.GetError() == ERRCODE_NONE );
-}
-
-std::shared_ptr<sal_uInt8> GfxLink::GetSwapInData() const
-{
-    return mpSwapInData;
 }
 
 bool GfxLink::IsEMF() const
