@@ -108,38 +108,38 @@ XMLVarFieldImportContext::XMLVarFieldImportContext(
 
 void XMLVarFieldImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
         case XML_ELEMENT(TEXT, XML_NAME):
-            sName = sAttrValue;
+            sName = OUString::fromUtf8(sAttrValue);
             bValid = true;      // we assume: field with name is valid!
             break;
         case XML_ELEMENT(TEXT, XML_DESCRIPTION):
-            sDescription = sAttrValue;
+            sDescription = OUString::fromUtf8(sAttrValue);
             bDescriptionOK = true;
             break;
         case XML_ELEMENT(TEXT, XML_HELP):
-            sHelp = sAttrValue;
+            sHelp = OUString::fromUtf8(sAttrValue);
             bHelpOK = true;
             break;
         case XML_ELEMENT(TEXT, XML_HINT):
-            sHint = sAttrValue;
+            sHint = OUString::fromUtf8(sAttrValue);
             bHintOK = true;
             break;
         case XML_ELEMENT(TEXT, XML_FORMULA):
             {
                 OUString sTmp;
                 sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                        GetKeyByAttrValueQName(sAttrValue, &sTmp);
+                        GetKeyByAttrValueQName(OUString::fromUtf8(sAttrValue), &sTmp);
                 if( XML_NAMESPACE_OOOW == nPrefix )
                 {
                     sFormula = sTmp;
                     bFormulaOK = true;
                 }
                 else
-                    sFormula = sAttrValue;
+                    sFormula = OUString::fromUtf8(sAttrValue);
             }
             break;
         case XML_ELEMENT(TEXT, XML_DISPLAY):
@@ -343,18 +343,18 @@ XMLSequenceFieldImportContext::XMLSequenceFieldImportContext(
 }
 
 void XMLSequenceFieldImportContext::ProcessAttribute(
-    sal_Int32 nAttrToken, const OUString& sAttrValue )
+    sal_Int32 nAttrToken, std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
         case XML_ELEMENT(STYLE, XML_NUM_FORMAT):
-            sNumFormat = sAttrValue;
+            sNumFormat = OUString::fromUtf8(sAttrValue);
             break;
         case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
-            sNumFormatSync = sAttrValue;
+            sNumFormatSync = OUString::fromUtf8(sAttrValue);
             break;
         case XML_ELEMENT(TEXT, XML_REF_NAME):
-            sRefName = sAttrValue;
+            sRefName = OUString::fromUtf8(sAttrValue);
             bRefNameOK = true;
             break;
         default:
@@ -585,7 +585,7 @@ XMLTableFormulaImportContext::XMLTableFormulaImportContext(
 
 void XMLTableFormulaImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
@@ -731,7 +731,7 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
 
             default:
                 // delegate to value helper
-                aValueHelper.ProcessAttribute(aIter.getToken(), aIter.toString());
+                aValueHelper.ProcessAttribute(aIter.getToken(), aIter.toView());
                 break;
         }
     }
@@ -913,12 +913,12 @@ XMLDatabaseDisplayImportContext::XMLDatabaseDisplayImportContext(
 }
 
 void XMLDatabaseDisplayImportContext::ProcessAttribute(
-    sal_Int32 nAttrToken, const OUString& sAttrValue )
+    sal_Int32 nAttrToken, std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
         case XML_ELEMENT(TEXT, XML_COLUMN_NAME):
-            sColumnName = sAttrValue;
+            sColumnName = OUString::fromUtf8(sAttrValue);
             bColumnOK = true;
             break;
         case XML_ELEMENT(TEXT, XML_DISPLAY):
@@ -1079,7 +1079,7 @@ XMLValueImportHelper::XMLValueImportHelper(
 }
 
 void XMLValueImportHelper::ProcessAttribute(
-    sal_Int32 nAttrToken, const OUString& sAttrValue )
+    sal_Int32 nAttrToken, std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
@@ -1168,7 +1168,7 @@ void XMLValueImportHelper::ProcessAttribute(
 
         case XML_ELEMENT(TEXT, XML_STRING_VALUE):
         case XML_ELEMENT(OFFICE, XML_STRING_VALUE):
-            sValue = sAttrValue;
+            sValue = OUString::fromUtf8(sAttrValue);
             bStringValueOK = true;
             break;
 
@@ -1176,21 +1176,21 @@ void XMLValueImportHelper::ProcessAttribute(
             {
                 OUString sTmp;
                 sal_uInt16 nPrefix = rImport.GetNamespaceMap().
-                        GetKeyByAttrValueQName(sAttrValue, &sTmp);
+                        GetKeyByAttrValueQName(OUString::fromUtf8(sAttrValue), &sTmp);
                 if( XML_NAMESPACE_OOOW == nPrefix )
                 {
                     sFormula = sTmp;
                     bFormulaOK = true;
                 }
                 else
-                    sFormula = sAttrValue;
+                    sFormula = OUString::fromUtf8(sAttrValue);
             }
             break;
 
         case XML_ELEMENT(STYLE, XML_DATA_STYLE_NAME):
         {
             sal_Int32 nKey = rHelper.GetDataStyleKey(
-                                          sAttrValue, &bIsDefaultLanguage);
+                                          OUString::fromUtf8(sAttrValue), &bIsDefaultLanguage);
             if (-1 != nKey)
             {
                 nFormatKey = nKey;

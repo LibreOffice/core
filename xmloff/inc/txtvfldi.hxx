@@ -63,7 +63,7 @@ public:
 
     /// process attribute values
     void ProcessAttribute( sal_Int32 nAttrToken,
-                           const OUString& sAttrValue );
+                           std::string_view sAttrValue );
 
     /// prepare XTextField for insertion into document
     void PrepareField(
@@ -154,7 +154,7 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -343,7 +343,7 @@ private:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -414,7 +414,7 @@ private:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -444,7 +444,7 @@ private:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// create, prepare and insert database field master and database field
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;

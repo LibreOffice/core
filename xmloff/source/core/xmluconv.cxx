@@ -359,6 +359,13 @@ bool SvXMLUnitConverter::convertDateTime(double& fDateTime,
     return convertDateTime(fDateTime, rString, m_pImpl->m_aNullDate);
 }
 
+/** convert ISO Date Time String to double */
+bool SvXMLUnitConverter::convertDateTime(double& fDateTime,
+                     std::string_view rString)
+{
+    return convertDateTime(fDateTime, rString, m_pImpl->m_aNullDate);
+}
+
 /** convert double to ISO Date Time String */
 void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
         const double& fDateTime,
@@ -447,8 +454,9 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
 }
 
 /** convert ISO Date Time String to double */
-bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
-                            std::u16string_view rString, const css::util::Date& aTempNullDate)
+template<typename V>
+static bool lcl_convertDateTime( double& fDateTime,
+                            V rString, const css::util::Date& aTempNullDate)
 {
     css::util::DateTime aDateTime;
     bool bSuccess = ::sax::Converter::parseDateTime(aDateTime, rString);
@@ -470,6 +478,18 @@ bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
         fDateTime = fTempDateTime;
     }
     return bSuccess;
+}
+
+bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
+                            std::u16string_view rString, const css::util::Date& aTempNullDate)
+{
+    return lcl_convertDateTime(fDateTime, rString, aTempNullDate);
+}
+/** convert ISO Date Time String to double */
+bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
+                            std::string_view rString, const css::util::Date& aTempNullDate)
+{
+    return lcl_convertDateTime(fDateTime, rString, aTempNullDate);
 }
 
 

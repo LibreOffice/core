@@ -97,7 +97,7 @@ protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) = 0;
+                                   std::string_view sAttrValue ) = 0;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -139,7 +139,7 @@ protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -167,7 +167,7 @@ private:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -191,7 +191,7 @@ public:
 private:
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -226,7 +226,7 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -245,7 +245,7 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 };
 
 /** import page continuation fields (<text:page-continuation-string>) */
@@ -267,7 +267,7 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -297,7 +297,7 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -334,7 +334,7 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -356,7 +356,7 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 };
 
 /** import database next fields (<text:database-next>) */
@@ -380,7 +380,7 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -401,7 +401,7 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -426,7 +426,7 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -457,7 +457,7 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -488,7 +488,7 @@ public:
 private:
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -530,7 +530,7 @@ public:
 private:
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
     virtual void PrepareField(
         const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
@@ -552,7 +552,7 @@ public:
 private:
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -582,7 +582,7 @@ public:
 private:
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -611,7 +611,7 @@ public:
 private:
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -636,7 +636,7 @@ public:
 private:
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -658,7 +658,7 @@ public:
 private:
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -679,7 +679,7 @@ public:
 private:
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -705,7 +705,7 @@ public:
 private:
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -730,7 +730,7 @@ public:
 private:
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -751,7 +751,7 @@ public:
 private:
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -781,7 +781,7 @@ private:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -814,7 +814,7 @@ private:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -860,7 +860,7 @@ public:
 private:
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// create textfield, attach master, and insert into document
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
@@ -882,7 +882,7 @@ public:
 private:
     /// no attributes -> empty method
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// no attributes -> empty method
     virtual void PrepareField(
@@ -900,7 +900,7 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -922,7 +922,7 @@ public:
 private:
     /// no attributes -> empty method
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// no attributes -> empty method
     virtual void PrepareField(
@@ -947,7 +947,7 @@ private:
 
     /// empty method; all attributes are handled in StartElement
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// convert aValues into sequence and set property
     virtual void PrepareField(
@@ -981,7 +981,7 @@ public:
 private:
     /// process attributes
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// set properties
     virtual void PrepareField(
@@ -1009,7 +1009,7 @@ public:
 private:
     /// process attributes
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// set properties
     virtual void PrepareField(
@@ -1029,7 +1029,7 @@ public:
 private:
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -1059,7 +1059,7 @@ public:
 private:
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -1077,7 +1077,7 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -1095,7 +1095,7 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -1113,7 +1113,7 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue ) override;
+                                   std::string_view sAttrValue ) override;
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(

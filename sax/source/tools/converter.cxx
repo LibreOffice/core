@@ -282,7 +282,7 @@ bool Converter::convertMeasure( sal_Int32& rValue,
                                 sal_Int32 nMin /* = SAL_MIN_INT32 */,
                                 sal_Int32 nMax /* = SAL_MAX_INT32 */ )
 {
-    return lcl_convertMeasure<std::u16string_view>(rValue, rString, nTargetUnit, nMin, nMax);
+    return lcl_convertMeasure(rValue, rString, nTargetUnit, nMin, nMax);
 }
 
 /** convert string to measure using optional min and max values*/
@@ -292,7 +292,7 @@ bool Converter::convertMeasure( sal_Int32& rValue,
                                 sal_Int32 nMin /* = SAL_MIN_INT32 */,
                                 sal_Int32 nMax /* = SAL_MAX_INT32 */ )
 {
-    return lcl_convertMeasure<std::string_view>(rValue, rString, nTargetUnit, nMin, nMax);
+    return lcl_convertMeasure(rValue, rString, nTargetUnit, nMin, nMax);
 }
 
 
@@ -549,13 +549,13 @@ static bool lcl_convertColor( sal_Int32& rColor, V rValue )
 /** convert string to rgb color */
 bool Converter::convertColor( sal_Int32& rColor, std::u16string_view rValue )
 {
-    return lcl_convertColor<std::u16string_view>(rColor, rValue);
+    return lcl_convertColor(rColor, rValue);
 }
 
 /** convert string to rgb color */
 bool Converter::convertColor( sal_Int32& rColor, std::string_view rValue )
 {
-    return lcl_convertColor<std::string_view>(rColor, rValue);
+    return lcl_convertColor(rColor, rValue);
 }
 
 const char aHexTab[] = "0123456789abcdef";
@@ -647,7 +647,7 @@ bool Converter::convertNumber64( sal_Int64& rValue,
                                  std::u16string_view aString,
                                  sal_Int64 nMin, sal_Int64 nMax )
 {
-    return lcl_convertNumber64<std::u16string_view>(rValue, aString, nMin, nMax);
+    return lcl_convertNumber64(rValue, aString, nMin, nMax);
 }
 
 /** convert string to 64-bit number with optional min and max values */
@@ -655,7 +655,7 @@ bool Converter::convertNumber64( sal_Int64& rValue,
                                  std::string_view aString,
                                  sal_Int64 nMin, sal_Int64 nMax )
 {
-    return lcl_convertNumber64<std::string_view>(rValue, aString, nMin, nMax);
+    return lcl_convertNumber64(rValue, aString, nMin, nMax);
 }
 
 
@@ -930,12 +930,153 @@ static std::u16string_view trim(std::u16string_view in) {
   return std::u16string_view(&*left, std::distance(left, right) + 1);
 }
 
+static std::string_view trim(std::string_view in) {
+  auto left = in.begin();
+  for (;; ++left) {
+    if (left == in.end())
+      return std::string_view();
+    if (!isspace(*left))
+      break;
+  }
+  auto right = in.end() - 1;
+  for (; right > left && isspace(*right); --right);
+  return std::string_view(&*left, std::distance(left, right) + 1);
+}
+
 /** convert ISO "duration" string to double; negative durations allowed */
 bool Converter::convertDuration(double& rfTime,
                                 std::u16string_view rString)
 {
     std::u16string_view aTrimmed = trim(rString);
     const sal_Unicode* pStr = aTrimmed.data();
+
+    // negative time duration?
+    bool bIsNegativeDuration = false;
+    if ( '-' == (*pStr) )
+    {
+        bIsNegativeDuration = true;
+        pStr++;
+    }
+
+    if ( *pStr != 'P' && *pStr != 'p' )            // duration must start with "P"
+        return false;
+    pStr++;
+
+    OUStringBuffer sDoubleStr;
+    bool bSuccess = true;
+    bool bDone = false;
+    bool bTimePart = false;
+    bool bIsFraction = false;
+    sal_Int32 nDays  = 0;
+    sal_Int32 nHours = 0;
+    sal_Int32 nMins  = 0;
+    sal_Int32 nSecs  = 0;
+    sal_Int32 nTemp = 0;
+
+    while ( bSuccess && !bDone )
+    {
+        sal_Unicode c = *(pStr++);
+        if ( !c )                               // end
+            bDone = true;
+        else if ( '0' <= c && '9' >= c )
+        {
+            if ( nTemp >= SAL_MAX_INT32 / 10 )
+                bSuccess = false;
+            else
+            {
+                if ( !bIsFraction )
+                {
+                    nTemp *= 10;
+                    nTemp += (c - u'0');
+                }
+                else
+                {
+                    sDoubleStr.append(c);
+                }
+            }
+        }
+        else if ( bTimePart )
+        {
+            if ( c == 'H' || c == 'h' )
+            {
+                nHours = nTemp;
+                nTemp = 0;
+            }
+            else if ( c == 'M' || c == 'm')
+            {
+                nMins = nTemp;
+                nTemp = 0;
+            }
+            else if ( (c == ',') || (c == '.') )
+            {
+                nSecs = nTemp;
+                nTemp = 0;
+                bIsFraction = true;
+                sDoubleStr = "0.";
+            }
+            else if ( c == 'S' || c == 's' )
+            {
+                if ( !bIsFraction )
+                {
+                    nSecs = nTemp;
+                    nTemp = 0;
+                    sDoubleStr = "0.0";
+                }
+            }
+            else
+                bSuccess = false;               // invalid character
+        }
+        else
+        {
+            if ( c == 'T' || c == 't' )            // "T" starts time part
+                bTimePart = true;
+            else if ( c == 'D' || c == 'd')
+            {
+                nDays = nTemp;
+                nTemp = 0;
+            }
+            else if ( c == 'Y' || c == 'y' || c == 'M' || c == 'm' )
+            {
+                //! how many days is a year or month?
+
+                OSL_FAIL( "years or months in duration: not implemented");
+                bSuccess = false;
+            }
+            else
+                bSuccess = false;               // invalid character
+        }
+    }
+
+    if ( bSuccess )
+    {
+        if ( nDays )
+            nHours += nDays * 24;               // add the days to the hours part
+        double fHour = nHours;
+        double fMin = nMins;
+        double fSec = nSecs;
+        double fFraction = sDoubleStr.makeStringAndClear().toDouble();
+        double fTempTime = fHour / 24;
+        fTempTime += fMin / (24 * 60);
+        fTempTime += fSec / (24 * 60 * 60);
+        fTempTime += fFraction / (24 * 60 * 60);
+
+        // negative duration?
+        if ( bIsNegativeDuration )
+        {
+            fTempTime = -fTempTime;
+        }
+
+        rfTime = fTempTime;
+    }
+    return bSuccess;
+}
+
+/** convert ISO "duration" string to double; negative durations allowed */
+bool Converter::convertDuration(double& rfTime,
+                                std::string_view rString)
+{
+    std::string_view aTrimmed = trim(rString);
+    const char* pStr = aTrimmed.data();
 
     // negative time duration?
     bool bIsNegativeDuration = false;
@@ -1132,15 +1273,16 @@ enum Result { R_NOTHING, R_OVERFLOW, R_SUCCESS };
 
 }
 
+template <typename V>
 static Result
-readUnsignedNumber(std::u16string_view rString,
+readUnsignedNumber(V rString,
     size_t & io_rnPos, sal_Int32 & o_rNumber)
 {
     size_t nPos(io_rnPos);
 
     while (nPos < rString.size())
     {
-        const sal_Unicode c = rString[nPos];
+        const typename V::value_type c = rString[nPos];
         if (('0' > c) || (c > '9'))
             break;
         ++nPos;
@@ -1152,7 +1294,7 @@ readUnsignedNumber(std::u16string_view rString,
         return R_NOTHING;
     }
 
-    const sal_Int64 nTemp = rtl_ustr_toInt64_WithLength(rString.data() + io_rnPos, 10, nPos - io_rnPos);
+    const sal_Int64 nTemp = toInt64_WithLength(rString.data() + io_rnPos, 10, nPos - io_rnPos);
 
     const bool bOverflow = (nTemp >= SAL_MAX_INT32);
 
@@ -1161,9 +1303,10 @@ readUnsignedNumber(std::u16string_view rString,
     return bOverflow ? R_OVERFLOW : R_SUCCESS;
 }
 
+template<typename V>
 static Result
 readUnsignedNumberMaxDigits(int maxDigits,
-                            std::u16string_view rString, size_t & io_rnPos,
+                            V rString, size_t & io_rnPos,
                             sal_Int32 & o_rNumber)
 {
     bool bOverflow(false);
@@ -1570,6 +1713,15 @@ bool Converter::parseDateTime(   util::DateTime& rDateTime,
             rString);
 }
 
+/** convert ISO "date" or "dateTime" string to util::DateTime */
+bool Converter::parseDateTime(   util::DateTime& rDateTime,
+                                 std::string_view rString )
+{
+    bool isDateTime;
+    return parseDateOrDateTime(nullptr, rDateTime, isDateTime, nullptr,
+            rString);
+}
+
 static bool lcl_isLeapYear(const sal_uInt32 nYear)
 {
     return ((nYear % 4) == 0)
@@ -1673,14 +1825,15 @@ static void lcl_ConvertToUTC(
     }
 }
 
+template <typename V>
 static bool
-readDateTimeComponent(std::u16string_view rString,
+readDateTimeComponent(V rString,
     size_t & io_rnPos, sal_Int32 & o_rnTarget,
     const sal_Int32 nMinLength, const bool bExactLength)
 {
     const size_t nOldPos(io_rnPos);
     sal_Int32 nTemp(0);
-    if (R_SUCCESS != readUnsignedNumber(rString, io_rnPos, nTemp))
+    if (R_SUCCESS != readUnsignedNumber<V>(rString, io_rnPos, nTemp))
     {
         return false;
     }
@@ -1695,12 +1848,13 @@ readDateTimeComponent(std::u16string_view rString,
 }
 
 /** convert ISO "date" or "dateTime" string to util::DateTime or util::Date */
+template<typename V>
 static bool lcl_parseDate(
                 bool & isNegative,
                 sal_Int32 & nYear, sal_Int32 & nMonth, sal_Int32 & nDay,
                 bool & bHaveTime,
                 size_t & nPos,
-                std::u16string_view string,
+                V string,
                 bool const bIgnoreInvalidOrMissingDate)
 {
     bool bSuccess = true;
@@ -1718,7 +1872,7 @@ static bool lcl_parseDate(
         // While W3C XMLSchema specifies years with a minimum of 4 digits, be
         // lenient in what we accept for years < 1000. One digit is acceptable
         // if the remainders match.
-        bSuccess = readDateTimeComponent(string, nPos, nYear, 1, false);
+        bSuccess = readDateTimeComponent<V>(string, nPos, nYear, 1, false);
         if (!bIgnoreInvalidOrMissingDate)
         {
             bSuccess &= (0 < nYear);
@@ -1733,7 +1887,7 @@ static bool lcl_parseDate(
     {
         ++nPos;
 
-        bSuccess = readDateTimeComponent(string, nPos, nMonth, 2, true);
+        bSuccess = readDateTimeComponent<V>(string, nPos, nMonth, 2, true);
         if (!bIgnoreInvalidOrMissingDate)
         {
             bSuccess &= (0 < nMonth);
@@ -1774,11 +1928,12 @@ static bool lcl_parseDate(
 }
 
 /** convert ISO "date" or "dateTime" string to util::DateTime or util::Date */
+template <typename V>
 static bool lcl_parseDateTime(
                 util::Date *const pDate, util::DateTime & rDateTime,
                 bool & rbDateTime,
                 std::optional<sal_Int16> *const pTimeZoneOffset,
-                std::u16string_view string,
+                V string,
                 bool const bIgnoreInvalidOrMissingDate)
 {
     bool bSuccess = true;
@@ -1793,11 +1948,11 @@ static bool lcl_parseDateTime(
     bool bHaveTime(false);
 
     if (    !bIgnoreInvalidOrMissingDate
-        ||  string.find(':') == std::u16string_view::npos  // no time?
-        ||  (string.find('-') != std::u16string_view::npos
+        ||  string.find(':') == V::npos  // no time?
+        ||  (string.find('-') != V::npos
              && string.find('-') < string.find(':')))
     {
-        bSuccess &= lcl_parseDate(isNegative, nYear, nMonth, nDay,
+        bSuccess &= lcl_parseDate<V>(isNegative, nYear, nMonth, nDay,
                 bHaveTime, nPos, string, bIgnoreInvalidOrMissingDate);
     }
     else
@@ -1845,7 +2000,7 @@ static bool lcl_parseDateTime(
             ++nPos;
             const sal_Int32 nStart(nPos);
             sal_Int32 nTemp(0);
-            if (R_NOTHING == readUnsignedNumberMaxDigits(9, string, nPos, nTemp))
+            if (R_NOTHING == readUnsignedNumberMaxDigits<V>(9, string, nPos, nTemp))
             {
                 bSuccess = false;
             }
@@ -1902,7 +2057,7 @@ static bool lcl_parseDateTime(
     sal_Int32 nTimezoneMinutes(0);
     if (bSuccess && (bHaveTimezonePlus || bHaveTimezoneMinus))
     {
-        bSuccess = readDateTimeComponent(
+        bSuccess = readDateTimeComponent<V>(
                         string, nPos, nTimezoneHours, 2, true);
         bSuccess &= (0 <= nTimezoneHours) && (nTimezoneHours <= 14);
         bSuccess &= (nPos < string.size()); // not last token
@@ -1914,7 +2069,7 @@ static bool lcl_parseDateTime(
         {
             ++nPos;
 
-            bSuccess = readDateTimeComponent(
+            bSuccess = readDateTimeComponent<V>(
                         string, nPos, nTimezoneMinutes, 2, true);
             bSuccess &= (0 <= nTimezoneMinutes) && (nTimezoneMinutes < 60);
         }
@@ -2009,6 +2164,16 @@ bool Converter::parseTimeOrDateTime(
                 nullptr, rDateTime, dummy, nullptr, rString, true);
 }
 
+/** convert ISO "time" or "dateTime" string to util::DateTime */
+bool Converter::parseTimeOrDateTime(
+                util::DateTime & rDateTime,
+                std::string_view rString)
+{
+    bool dummy;
+    return lcl_parseDateTime(
+                nullptr, rDateTime, dummy, nullptr, rString, true);
+}
+
 /** convert ISO "date" or "dateTime" string to util::DateTime or util::Date */
 bool Converter::parseDateOrDateTime(
                 util::Date *const pDate, util::DateTime & rDateTime,
@@ -2020,6 +2185,16 @@ bool Converter::parseDateOrDateTime(
                 pDate, rDateTime, rbDateTime, pTimeZoneOffset, rString, false);
 }
 
+/** convert ISO "date" or "dateTime" string to util::DateTime or util::Date */
+bool Converter::parseDateOrDateTime(
+                util::Date *const pDate, util::DateTime & rDateTime,
+                bool & rbDateTime,
+                std::optional<sal_Int16> *const pTimeZoneOffset,
+                std::string_view rString )
+{
+    return lcl_parseDateTime(
+                pDate, rDateTime, rbDateTime, pTimeZoneOffset, rString, false);
+}
 
 /** gets the position of the first comma after npos in the string
     rStr. Commas inside '"' pairs are not matched */
@@ -2501,11 +2676,11 @@ static sal_Int16 lcl_GetUnitFromString(V rString, sal_Int16 nDefaultUnit)
 
 sal_Int16 Converter::GetUnitFromString(std::u16string_view rString, sal_Int16 nDefaultUnit)
 {
-    return lcl_GetUnitFromString<std::u16string_view>(rString, nDefaultUnit);
+    return lcl_GetUnitFromString(rString, nDefaultUnit);
 }
 sal_Int16 Converter::GetUnitFromString(std::string_view rString, sal_Int16 nDefaultUnit)
 {
-    return lcl_GetUnitFromString<std::string_view>(rString, nDefaultUnit);
+    return lcl_GetUnitFromString(rString, nDefaultUnit);
 }
 
 bool Converter::convertAny(OUStringBuffer&    rsValue,

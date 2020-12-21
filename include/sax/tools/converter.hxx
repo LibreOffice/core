@@ -206,6 +206,10 @@ public:
     static bool convertDuration(double & rfTime,
                                 std::u16string_view rString);
 
+    /** convert XMLSchema-2 "duration" string to double; negative durations allowed */
+    static bool convertDuration(double & rfTime,
+                                std::string_view rString);
+
     /** convert XMLSchema-2 "duration" string to util::Duration */
     static bool convertDuration(css::util::Duration& rDuration,
                         std::u16string_view rString);
@@ -229,9 +233,17 @@ public:
     static bool parseDateTime( css::util::DateTime& rDateTime,
                                std::u16string_view rString );
 
+    /** convert XMLSchema-2 "date" or "dateTime" string to util::DateTime */
+    static bool parseDateTime( css::util::DateTime& rDateTime,
+                               std::string_view rString );
+
     /** convert XMLSchema-2 "time" or "dateTime" string to util::DateTime */
     static bool parseTimeOrDateTime(css::util::DateTime& rDateTime,
                                  std::u16string_view rString);
+
+    /** convert XMLSchema-2 "time" or "dateTime" string to util::DateTime */
+    static bool parseTimeOrDateTime(css::util::DateTime& rDateTime,
+                                 std::string_view rString);
 
     /** convert XMLSchema-2 "date" or "dateTime" string to util::DateTime or
         util::Date */
@@ -241,6 +253,15 @@ public:
                     bool & rbDateTime,
                     std::optional<sal_Int16> * pTimeZoneOffset,
                     std::u16string_view rString );
+
+    /** convert XMLSchema-2 "date" or "dateTime" string to util::DateTime or
+        util::Date */
+    static bool parseDateOrDateTime(
+                    css::util::Date * pDate,
+                    css::util::DateTime & rDateTime,
+                    bool & rbDateTime,
+                    std::optional<sal_Int16> * pTimeZoneOffset,
+                    std::string_view rString );
 
     /** gets the position of the first comma after npos in the string
         rStr. Commas inside '"' pairs are not matched */
