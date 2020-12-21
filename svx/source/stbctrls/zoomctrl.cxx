@@ -18,12 +18,11 @@
  */
 
 #include <i18nutil/unicode.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/status.hxx>
-#include <vcl/menu.hxx>
+#include <vcl/weldutils.hxx>
 #include <vcl/settings.hxx>
 #include <tools/urlobj.hxx>
 #include <sal/log.hxx>
@@ -45,62 +44,64 @@ namespace {
 class ZoomPopup_Impl
 {
 public:
-    ZoomPopup_Impl( sal_uInt16 nZ, SvxZoomEnableFlags nValueSet );
+    ZoomPopup_Impl(weld::Window* pPopupParent, sal_uInt16 nZ, SvxZoomEnableFlags nValueSet);
 
-    sal_uInt16 GetZoom();
-    OString const & GetCurItemIdent() const { return m_xMenu->GetCurItemIdent(); }
+    sal_uInt16 GetZoom(std::string_view ident);
 
-    sal_uInt16 Execute(vcl::Window* pWindow, const Point& rPopupPos)
+    OString popup_at_rect(const tools::Rectangle& rRect)
     {
-        return m_xMenu->Execute(pWindow, rPopupPos);
+        return m_xMenu->popup_at_rect(m_pPopupParent, rRect);
     }
 
 private:
-    VclBuilder          m_aBuilder;
-    VclPtr<PopupMenu>   m_xMenu;
-    sal_uInt16          nZoom;
+    weld::Window* m_pPopupParent;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Menu> m_xMenu;
+    sal_uInt16 nZoom;
 };
 
 }
 
-ZoomPopup_Impl::ZoomPopup_Impl( sal_uInt16 nZ, SvxZoomEnableFlags nValueSet )
-    : m_aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/zoommenu.ui", "")
-    , m_xMenu(m_aBuilder.get_menu("menu"))
+ZoomPopup_Impl::ZoomPopup_Impl(weld::Window* pPopupParent, sal_uInt16 nZ, SvxZoomEnableFlags nValueSet)
+    : m_pPopupParent(pPopupParent)
+    , m_xBuilder(Application::CreateBuilder(m_pPopupParent, "svx/ui/zoommenu.ui"))
+    , m_xMenu(m_xBuilder->weld_menu("menu"))
     , nZoom(nZ)
 {
     if ( !(SvxZoomEnableFlags::N50 & nValueSet) )
-        m_xMenu->EnableItem("50", false);
+        m_xMenu->set_sensitive("50", false);
     if ( !(SvxZoomEnableFlags::N100 & nValueSet) )
-        m_xMenu->EnableItem("100", false);
+        m_xMenu->set_sensitive("100", false);
     if ( !(SvxZoomEnableFlags::N150 & nValueSet) )
-        m_xMenu->EnableItem("150", false);
+        m_xMenu->set_sensitive("150", false);
     if ( !(SvxZoomEnableFlags::N200 & nValueSet) )
-        m_xMenu->EnableItem("200", false);
+        m_xMenu->set_sensitive("200", false);
     if ( !(SvxZoomEnableFlags::OPTIMAL & nValueSet) )
-        m_xMenu->EnableItem("optimal", false);
+        m_xMenu->set_sensitive("optimal", false);
     if ( !(SvxZoomEnableFlags::WHOLEPAGE & nValueSet) )
-        m_xMenu->EnableItem("page", false);
+        m_xMenu->set_sensitive("page", false);
     if ( !(SvxZoomEnableFlags::PAGEWIDTH & nValueSet) )
-        m_xMenu->EnableItem("width", false);
+        m_xMenu->set_sensitive("width", false);
 }
 
-sal_uInt16 ZoomPopup_Impl::GetZoom()
+sal_uInt16 ZoomPopup_Impl::GetZoom(std::string_view ident)
 {
-    OString sIdent = GetCurItemIdent();
-    if (sIdent == "200")
-        nZoom = 200;
-    else if (sIdent == "150")
-        nZoom = 150;
-    else if (sIdent == "100")
-        nZoom = 100;
-    else if (sIdent == "75")
-        nZoom =  75;
-    else if (sIdent == "50")
-        nZoom =  50;
-    else if (sIdent == "optimal" || sIdent == "width" || sIdent == "page")
-        nZoom = 0;
+    sal_uInt16 nRet = nZoom;
 
-    return nZoom;
+    if (ident == "200")
+        nRet = 200;
+    else if (ident == "150")
+        nRet = 150;
+    else if (ident == "100")
+        nRet = 100;
+    else if (ident == "75")
+        nRet =  75;
+    else if (ident == "50")
+        nRet =  50;
+    else if (ident == "optimal" || ident == "width" || ident == "page")
+        nRet = 0;
+
+    return nRet;
 }
 
 SvxZoomStatusBarControl::SvxZoomStatusBarControl( sal_uInt16 _nSlotId,
@@ -158,16 +159,17 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
 {
     if ( CommandEventId::ContextMenu == rCEvt.GetCommand() && bool(nValueSet) )
     {
-        ZoomPopup_Impl aPop(nZoom, nValueSet);
-        StatusBar& rStatusbar = GetStatusBar();
+        ::tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(1, 1));
+        weld::Window* pPopupParent = weld::GetPopupParent(GetStatusBar(), aRect);
+        ZoomPopup_Impl aPop(pPopupParent, nZoom, nValueSet);
 
-        if (aPop.Execute(&rStatusbar, rCEvt.GetMousePosPixel()) && (nZoom != aPop.GetZoom() || !nZoom))
+        OString sIdent = aPop.popup_at_rect(aRect);
+        if (!sIdent.isEmpty() && (nZoom != aPop.GetZoom(sIdent) || !nZoom))
         {
-            nZoom = aPop.GetZoom();
+            nZoom = aPop.GetZoom(sIdent);
             ImplUpdateItemText();
             SvxZoomItem aZoom(SvxZoomType::PERCENT, nZoom, GetId());
 
-            OString sIdent = aPop.GetCurItemIdent();
             if (sIdent == "optimal")
                 aZoom.SetType(SvxZoomType::OPTIMAL);
             else if (sIdent == "width")
