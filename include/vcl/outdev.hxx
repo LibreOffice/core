@@ -1963,6 +1963,10 @@ public:
 
 public:
 
+    /** Determine if native widgets can be enabled
+     */
+    virtual bool                CanEnableNativeWidget() const { return false; }
+
     /** Query the platform layer for control support
      */
     bool                        IsNativeControlSupported( ControlType nType, ControlPart nPart ) const;
