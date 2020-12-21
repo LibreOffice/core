@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/awt/DeviceCapability.hpp>
-
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -87,47 +85,8 @@ css::awt::DeviceInfo VCLXDevice::getInfo()
 
     css::awt::DeviceInfo aInfo;
 
-    if( mpOutputDevice )
-    {
-        Size aDevSz;
-        OutDevType eDevType = mpOutputDevice->GetOutDevType();
-        if ( eDevType == OUTDEV_WINDOW )
-        {
-            aDevSz = static_cast<vcl::Window*>(mpOutputDevice.get())->GetSizePixel();
-            static_cast<vcl::Window*>(mpOutputDevice.get())->GetBorder( aInfo.LeftInset, aInfo.TopInset, aInfo.RightInset, aInfo.BottomInset );
-        }
-        else if ( eDevType == OUTDEV_PRINTER )
-        {
-            aDevSz = static_cast<Printer*>(mpOutputDevice.get())->GetPaperSizePixel();
-            Size aOutSz = mpOutputDevice->GetOutputSizePixel();
-            Point aOffset = static_cast<Printer*>(mpOutputDevice.get())->GetPageOffset();
-            aInfo.LeftInset = aOffset.X();
-            aInfo.TopInset = aOffset.Y();
-            aInfo.RightInset = aDevSz.Width() - aOutSz.Width() - aOffset.X();
-            aInfo.BottomInset = aDevSz.Height() - aOutSz.Height() - aOffset.Y();
-        }
-        else // VirtualDevice
-        {
-            aDevSz = mpOutputDevice->GetOutputSizePixel();
-            aInfo.LeftInset = 0;
-            aInfo.TopInset = 0;
-            aInfo.RightInset = 0;
-            aInfo.BottomInset = 0;
-        }
-
-        aInfo.Width = aDevSz.Width();
-        aInfo.Height = aDevSz.Height();
-
-        Size aTmpSz = mpOutputDevice->LogicToPixel( Size( 1000, 1000 ), MapMode( MapUnit::MapCM ) );
-        aInfo.PixelPerMeterX = aTmpSz.Width()/10;
-        aInfo.PixelPerMeterY = aTmpSz.Height()/10;
-
-        aInfo.BitsPerPixel = mpOutputDevice->GetBitCount();
-
-        aInfo.Capabilities = 0;
-        if ( mpOutputDevice->GetOutDevType() != OUTDEV_PRINTER )
-            aInfo.Capabilities = css::awt::DeviceCapability::RASTEROPERATIONS|css::awt::DeviceCapability::GETBITS;
-    }
+    if (mpOutputDevice)
+        aInfo = mpOutputDevice->GetDeviceInfo();
 
     return aInfo;
 }

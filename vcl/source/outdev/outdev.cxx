@@ -34,6 +34,8 @@
 #include <window.h>
 #include <outdev.h>
 
+#include <com/sun/star/awt/DeviceCapability.hpp>
+
 #ifdef DISABLE_DYNLOADING
 // Linking all needed LO code into one .so/executable, these already
 // exist in the tools library, so put them in the anonymous namespace
@@ -699,6 +701,36 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
         mpAlphaVDev->DrawEPS( rPoint, rSize, rGfxLink, pSubst );
 
     return bDrawn;
+}
+
+css::awt::DeviceInfo OutputDevice::GetCommonDeviceInfo(Size const& rDevSz) const
+{
+    css::awt::DeviceInfo aInfo;
+
+    aInfo.Width = rDevSz.Width();
+    aInfo.Height = rDevSz.Height();
+
+    Size aTmpSz = LogicToPixel(Size(1000, 1000), MapMode(MapUnit::MapCM));
+    aInfo.PixelPerMeterX = aTmpSz.Width() / 10;
+    aInfo.PixelPerMeterY = aTmpSz.Height() / 10;
+    aInfo.BitsPerPixel = GetBitCount();
+
+    aInfo.Capabilities = css::awt::DeviceCapability::RASTEROPERATIONS |
+        css::awt::DeviceCapability::GETBITS;
+
+    return aInfo;
+}
+
+css::awt::DeviceInfo OutputDevice::GetDeviceInfo() const
+{
+    css::awt::DeviceInfo aInfo = GetCommonDeviceInfo(GetOutputSizePixel());
+
+    aInfo.LeftInset = 0;
+    aInfo.TopInset = 0;
+    aInfo.RightInset = 0;
+    aInfo.BottomInset = 0;
+
+    return aInfo;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

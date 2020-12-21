@@ -1548,6 +1548,8 @@ public:
     void SetMnemonicActivateHdl(const Link<vcl::Window&, bool>& rLink);
     void SetModalHierarchyHdl(const Link<bool, void>& rLink);
     void SetDumpAsPropertyTreeHdl(const Link<tools::JsonWriter&, void>& rLink);
+
+    css::awt::DeviceInfo GetDeviceInfo() const override;
 };
 
 }
