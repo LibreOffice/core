@@ -183,6 +183,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/optimalcolwidthdialog \
 	sc/uiconfig/scalc/ui/optimalrowheightdialog \
 	sc/uiconfig/scalc/ui/optsortlists \
+	sc/uiconfig/scalc/ui/pagelistmenu \
 	sc/uiconfig/scalc/ui/pagetemplatedialog \
 	sc/uiconfig/scalc/ui/pastespecial \
 	sc/uiconfig/scalc/ui/paradialog \
