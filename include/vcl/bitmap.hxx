@@ -157,6 +157,7 @@ public:
                             GetGreyPalette( int nEntries );
 
 public:
+    void Downsample(Size const& rDstSz, Point const& rSrcPt, Size const& rSrcSz, tools::Long nMaxBmpDPIX, tools::Long nMaxBmpDPIY);
 
     /** Convert bitmap format
 

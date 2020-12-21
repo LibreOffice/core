@@ -1177,9 +1177,10 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                     // scale down bitmap, if requested
                                     if( bDownsampleBitmaps )
                                     {
-                                        aBandBmp = GetDownsampledBitmap( aDstSzPix,
-                                                                         Point(), aBandBmp.GetSizePixel(),
-                                                                         aBandBmp, nMaxBmpDPIX, nMaxBmpDPIY );
+                                        Size aDstSizeTwip(PixelToLogic(LogicToPixel(aDstSzPix), MapMode(MapUnit::MapTwip)));
+                                        aBandBmp.Downsample(aDstSizeTwip,
+                                                            Point(), aBandBmp.GetSizePixel(),
+                                                            nMaxBmpDPIX, nMaxBmpDPIY);
                                     }
 
                                     rOutMtf.AddAction( new MetaCommentAction( "PRNSPOOL_TRANSPARENTBITMAP_BEGIN" ) );
