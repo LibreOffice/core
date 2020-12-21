@@ -1263,19 +1263,6 @@ AC_ARG_ENABLE(ios-simulator,
         [build for iOS simulator])
 )
 
-AC_ARG_ENABLE(ios-libreofficelight-app,
-    AS_HELP_STRING([--enable-ios-libreofficelight-app],
-        [When building for iOS, build stuff relevant only for the 'LibreOfficeLight' app
-         (in ios/LibreOfficeLight). Note that this app is not known to work in any useful manner,
-         and also that its actual build (in Xcode) requires some obvious modifications to the project.])
-)
-
-ENABLE_IOS_LIBREOFFICELIGHT_APP=
-if test "$enable_ios_libreofficelight_app" = yes; then
-    ENABLE_IOS_LIBREOFFICELIGHT_APP=TRUE
-fi
-AC_SUBST(ENABLE_IOS_LIBREOFFICELIGHT_APP)
-
 ###############################################################################
 # Extensions switches --enable/--disable
 ###############################################################################
