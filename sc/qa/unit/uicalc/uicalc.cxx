@@ -93,6 +93,32 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf122232)
     checkCurrentCell(2, 6);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138710)
+{
+    ScModelObj* pModelObj = createDoc("tdf138710.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 1)));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Total"), pDoc->GetString(ScAddress(0, 0, 1)));
+
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 1)));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Total"), pDoc->GetString(ScAddress(0, 0, 1)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
 {
     ScModelObj* pModelObj = createDoc("tdf133326.ods");
