@@ -41,8 +41,6 @@
 #include <bitmaps.hlst>
 #include <TableWindowAccess.hxx>
 #include <connectivity/dbtools.hxx>
-#include <vcl/builder.hxx>
-#include <vcl/menu.hxx>
 
 using namespace dbaui;
 using namespace ::utl;
