@@ -146,6 +146,24 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testContinuousEndnotesMoveBackwards)
     assertXPath(pLayout, "/root/page[2]/ftncont", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testKeepwithnextFullheight)
+{
+    // The document has a heading (keep with next) and a full-page image in the next paragraph, i.e.
+    // conflicting requirements.
+    // Without the accompanying fix in place, this test would have failed with a layout loop in
+    // SwEditShell::CalcLayout().
+    load(DATA_DIRECTORY, "keepwithnext-fullheight.fodt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Make sure the document has 2 pages.
+    assertXPath(pXmlDoc, "//page", 2);
+    // Heading stays on page 1 to avoid a layout loop.
+    assertXPathContent(pXmlDoc, "//page[1]/body/txt[2]", "Heading");
+    // Image stays on page 2.
+    assertXPath(pXmlDoc, "//page[2]/body/txt/anchored/fly", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
