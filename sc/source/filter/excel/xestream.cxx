@@ -1035,8 +1035,9 @@ bool XclExpXmlStream::exportDocument()
     aData.mpCompileFormulaCxt = std::make_shared<sc::CompileFormulaContext>(rDoc);
     // set target path to get correct relative links to target document, not source
     INetURLObject aPath(getFileUrl());
-    aData.maBasePath = aPath.GetPath() + "\\";
-    aData.maBasePath = "file:///" + aData.maBasePath.replace('\\', '/');
+    aData.maBasePath = OUString("file:///" + aPath.GetPath() + "\\").replace('\\', '/')
+            // fix for Linux
+            .replaceFirst("file:////", "file:///");
 
     XclExpRoot aRoot( aData );
 
