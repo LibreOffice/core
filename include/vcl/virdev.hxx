@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
 #include <vcl/salgtype.hxx>
+
 #include <memory>
 
 class SalVirtualDevice;
