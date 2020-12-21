@@ -31,10 +31,11 @@
 #include "sortkeydlg.hxx"
 
 #include <address.hxx>
+#include <sheetlimits.hxx>
 #include <sortparam.hxx>
 
 // +1 because one field is reserved for the "- undefined -" entry
-#define SC_MAXFIELDS    MAXCOLCOUNT+1
+inline SCCOL SC_MAXFIELDS(const ScSheetLimits& rLimits) { return rLimits.GetMaxColCount() + 1; }
 
 class ScViewData;
 
