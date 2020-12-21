@@ -1,36 +1,36 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
+    TestUtil.TestInit
     verify_ByteArrayString
-    doUnitTest = TestUtilModule.GetResult()
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_ByteArrayString()
-    Dim testName As String
     Dim MyString As String
     Dim x() As Byte
-    Dim count As Integer
-    testName = "Test the conversion between bytearray and string"
 
     On Error GoTo errorHandler
 
     MyString = "abc"
     x = MyString ' string -> byte array
 
-    TestUtilModule.TestInit
-
-    count = UBound(x) ' 6 byte
-
     ' test bytes in string
-    TestUtilModule.AssertEqual((count), 5, "test1 numbytes ")
+    TestUtil.AssertEqual(UBound(x), 5, "UBound(x)")
 
     MyString = x 'byte array -> string
-    TestUtilModule.AssertEqual(MyString, "abc", "test assign byte array to string")
+    TestUtil.AssertEqual(MyString, "abc", "MyString")
 
-    TestUtilModule.TestEnd
     Exit Sub
 errorHandler:
-    TestUtilModule.AssertTrue(False, "ERROR", "#"& Str(Err.Number) &" at line"& Str(Erl) &" - "& Error$)
-    TestUtilModule.TestEnd
+    TestUtil.ReportErrorHandler("verify_ByteArrayString", Err, Error$, Erl)
 End Sub

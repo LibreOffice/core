@@ -1,72 +1,40 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
-Rem Option VBASupport 1    'unREM in .vb file
 Option Explicit
 
 Function doUnitTest() As String
-verify_testCBool
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testCBool
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testCBool()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim res2, res1 As Boolean
-    Dim a1, a2 As Integer
-    testName = "Test CBool function"
     On Error GoTo errorHandler
 
-    res2 = True
-    res1 = CBool(1)
-    TestUtilModule.AssertTrue(res1 = res2, "the return CBool is: " & res1)
+    TestUtil.AssertEqual(CBool(1),       True,  "CBool(1)")
+    TestUtil.AssertEqual(CBool(1 = 2),   False, "CBool(1 = 2)")
+    TestUtil.AssertEqual(CBool(0),       False, "CBool(0)")
+    TestUtil.AssertEqual(CBool(21),      True,  "CBool(21)")
+    TestUtil.AssertEqual(CBool("true"),  True,  "CBool(""true"")")
+    TestUtil.AssertEqual(CBool("false"), False, "CBool(""false"")")
+    TestUtil.AssertEqual(CBool("1"),     True,  "CBool(""1"")")
+    TestUtil.AssertEqual(CBool("-1"),    True,  "CBool(""-1"")")
+    TestUtil.AssertEqual(CBool("0"),     False, "CBool(""0"")")
 
-    res2 = False
-    res1 = CBool(1 = 2)
-    TestUtilModule.AssertTrue(res1 = res2, "the return CBool is: " & res1)
-
-    res2 = False
-    res1 = CBool(0)
-    TestUtilModule.AssertTrue(res1 = res2, "the return CBool is: " & res1)
-
-    res2 = True
-    res1 = CBool(21)
-    TestUtilModule.AssertTrue(res1 = res2, "the return CBool is: " & res1)
-
-    res2 = True
-    res1 = CBool("true")
-    TestUtilModule.AssertTrue(res1 = res2, "the return CBool is: " & res1)
-
-    res2 = False
-    res1 = CBool("false")
-    TestUtilModule.AssertTrue(res1 = res2, "the return CBool is: " & res1)
-
-    res2 = True
-    res1 = CBool("1")
-    TestUtilModule.AssertTrue(res1 = res2, "the return CBool is: " & res1)
-
-    res2 = True
-    res1 = CBool("-1")
-    TestUtilModule.AssertTrue(res1 = res2, "the return CBool is: " & res1)
-
-    res2 = False
-    res1 = CBool("0")
-    TestUtilModule.AssertTrue(res1 = res2, "the return CBool is: " & res1)
-
-    res2 = False
+    Dim a1, a2 As Integer
     a1 = 1: a2 = 10
-    res1 = CBool(a1 = a2)
-    TestUtilModule.AssertTrue(res1 = res2, "the return CBool is: " & res1)
-
-    res2 = True
+    TestUtil.AssertEqual(CBool(a1 = a2), False, "CBool(a1 = a2)")
     a1 = 10: a2 = 10
-    res1 = CBool(a1 = a2)
-    TestUtilModule.AssertTrue(res1 = res2, "the return CBool is: " & res1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(CBool(a1 = a2), True,  "CBool(a1 = a2)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testCBool", Err, Error$, Erl)
 End Sub
-

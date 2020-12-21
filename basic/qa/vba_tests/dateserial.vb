@@ -1,32 +1,28 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testDateSerial
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testDateSerial
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testDateSerial()
-    Dim testName As String
-    Dim date1, date2 As Date
-
-    TestUtilModule.TestInit
-
-    testName = "Test DateSerial function"
-    date2 = 36326
-
     On Error GoTo errorHandler
 
-    date1 = DateSerial(1999, 6, 15)   '6/15/1999
-    TestUtilModule.AssertTrue(date1 = date2, "the return date is: " & date1)
-    date1 = DateSerial(2000, 1 - 7, 15) '6/15/1999
-    TestUtilModule.AssertTrue(date1 = date2, "the return date is: " & date1)
-    date1 = DateSerial(1999, 1, 166)  '6/15/1999
-    TestUtilModule.AssertTrue(date1 = date2, "the return date is: " & date1)
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(DateSerial(1999, 6, 15),     36326, "DateSerial(1999, 6, 15)")
+    TestUtil.AssertEqual(DateSerial(2000, 1 - 7, 15), 36326, "DateSerial(2000, 1 - 7, 15)")
+    TestUtil.AssertEqual(DateSerial(1999, 1, 166),    36326, "DateSerial(1999, 1, 166)")
 
     Exit Sub
 errorHandler:
-    TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testDateSerial", Err, Error$, Erl)
 End Sub
-

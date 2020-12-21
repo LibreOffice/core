@@ -1,28 +1,26 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testExp
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testExp
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testExp()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    testName = "Test Exp function"
     On Error GoTo errorHandler
 
-    date2 = 2.7183
-    date1 = Exp(1)
-    TestUtilModule.AssertTrue(Round(date1, 4) = Round(date2, 4), "the return Exp is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqualApprox(Exp(1), 2.71828182845904, 1E-14, "Exp(1)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testExp", Err, Error$, Erl)
 End Sub
-

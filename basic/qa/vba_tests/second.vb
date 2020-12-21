@@ -1,32 +1,27 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testSecond
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testSecond
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testSecond()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    testName = "Test Second function"
     On Error GoTo errorHandler
 
-    date2 = 0
-    date1 = Second(37566.3)
-    TestUtilModule.AssertTrue(date1 = date2, "the return Second is: " & date1)
-
-    date2 = 17
-    date1 = Second("4:35:17")
-    TestUtilModule.AssertTrue(date1 = date2, "the return Second is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(Second(37566.3),    0, "Second(37566.3)")
+    TestUtil.AssertEqual(Second("4:35:17"), 17, "Second(""4:35:17"")")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testSecond", Err, Error$, Erl)
 End Sub
-

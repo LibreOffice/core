@@ -1,52 +1,32 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testWeekDayName
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testWeekDayName
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testWeekDayName()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    testName = "Test WeekDayName function"
     On Error GoTo errorHandler
 
-    date2 = "Sunday"
-    date1 = WeekdayName(1)
-    TestUtilModule.AssertTrue(date1 = date2, "the return WeekDayName is: " & date1)
-
-    date2 = "Sunday"
-    date1 = WeekdayName(1, , vbSunday)
-    TestUtilModule.AssertTrue(date1 = date2, "the return WeekDayName is: " & date1)
-
-    date2 = "Monday"
-    date1 = WeekdayName(1, , vbMonday)
-    TestUtilModule.AssertTrue(date1 = date2, "the return WeekDayName is: " & date1)
-
-    date2 = "Monday"
-    date1 = WeekdayName(2)
-    TestUtilModule.AssertTrue(date1 = date2, "the return WeekDayName is: " & date1)
-
-    date2 = "Tue"
-    date1 = WeekdayName(2, True, vbMonday)
-    TestUtilModule.AssertTrue(date1 = date2, "the return WeekDayName is: " & date1)
-
-    date2 = "Wed"
-    date1 = WeekdayName(2, True, vbTuesday)
-    TestUtilModule.AssertTrue(date1 = date2, "the return WeekDayName is: " & date1)
-
-    date2 = "Thu"
-    date1 = WeekdayName(2, True, vbWednesday)
-    TestUtilModule.AssertTrue(date1 = date2, "the return WeekDayName is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(WeekdayName(1),                    "Sunday", "WeekdayName(1)")
+    TestUtil.AssertEqual(WeekdayName(1, , vbSunday),        "Sunday", "WeekdayName(1, , vbSunday)")
+    TestUtil.AssertEqual(WeekdayName(1, , vbMonday),        "Monday", "WeekdayName(1, , vbMonday)")
+    TestUtil.AssertEqual(WeekdayName(2),                    "Monday", "WeekdayName(2)")
+    TestUtil.AssertEqual(WeekdayName(2, True, vbMonday),    "Tue",    "WeekdayName(2, True, vbMonday)")
+    TestUtil.AssertEqual(WeekdayName(2, True, vbTuesday),   "Wed",    "WeekdayName(2, True, vbTuesday)")
+    TestUtil.AssertEqual(WeekdayName(2, True, vbWednesday), "Thu",    "WeekdayName(2, True, vbWednesday)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testWeekDayName", Err, Error$, Erl)
 End Sub
-

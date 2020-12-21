@@ -1,36 +1,28 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testMid
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testMid
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testMid()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    testName = "Test Mid function"
     On Error GoTo errorHandler
 
-    date2 = "Mid"
-    date1 = Mid("Mid Function Demo", 1, 3)
-    TestUtilModule.AssertEqual(date1, date2, "the return Mid is: " & date1)
-
-    date2 = "Demo"
-    date1 = Mid("Mid Function Demo", 14, 4)
-    TestUtilModule.AssertEqual(date1, date2, "the return Mid is: " & date1)
-
-    date2 = "Function Demo"
-    date1 = Mid("Mid Function Demo", 5)
-    TestUtilModule.AssertEqual(date1, date2, "the return Mid is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(Mid("Mid Function Demo", 1, 3),  "Mid",           "Mid(""Mid Function Demo"", 1, 3)")
+    TestUtil.AssertEqual(Mid("Mid Function Demo", 14, 4), "Demo",          "Mid(""Mid Function Demo"", 14, 4)")
+    TestUtil.AssertEqual(Mid("Mid Function Demo", 5),     "Function Demo", "Mid(""Mid Function Demo"", 5)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testMid", Err, Error$, Erl)
 End Sub
-

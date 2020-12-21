@@ -1,51 +1,31 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
-Rem Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testRATE
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testRATE
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testRATE()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim TestDateTime As Date
-    Dim TestStr As String
-    Dim date1, date2
-    testName = "Test RATE function"
     On Error GoTo errorHandler
 
-    date2 = 0.07
-    date1 = Rate(3, -5, 0, 16)
-    TestUtilModule.AssertTrue(Round(date1, 2) = Round(date2, 2), "the return RATE is: " & date1)
-
-    date2 = 0
-    date1 = Rate(3, -5, 0, 15)
-    TestUtilModule.AssertTrue(Round(date1, 2) = Round(date2, 2), "the return RATE is: " & date1)
-    
-    date2 = 0.79
-    date1 = Rate(3, -5, 0, 30)
-    TestUtilModule.AssertTrue(Round(date1, 2) = Round(date2, 2), "the return RATE is: " & date1)
-
-    date2 = 1
-    date1 = Rate(3, -5, 0, 35)
-    TestUtilModule.AssertTrue(Round(date1, 2) = Round(date2, 2), "the return RATE is: " & date1)
-
-    date2 = 0.077
-    date1 = Rate(4, -300, 1000, 0, 0)
-    TestUtilModule.AssertTrue(Round(date1, 2) = Round(date2, 2), "the return RATE is: " & date1)
-
-    date2 = 0.14
-    date1 = Rate(4, -300, 1000, 0, 1)
-    TestUtilModule.AssertTrue(Round(date1, 2) = Round(date2, 2), "the return RATE is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqualApprox(Rate(3, -5, 0, 16),        0.07,  1E-5, "Rate(3, -5, 0, 16)")
+    TestUtil.AssertEqualApprox(Rate(3, -5, 0, 15),        0,     1E-5, "Rate(3, -5, 0, 15)")
+    TestUtil.AssertEqualApprox(Rate(3, -5, 0, 30),        0.79,  1E-5, "Rate(3, -5, 0, 30)")
+    TestUtil.AssertEqualApprox(Rate(3, -5, 0, 35),        1,     1E-5, "Rate(3, -5, 0, 35)")
+    TestUtil.AssertEqualApprox(Rate(4, -300, 1000, 0, 0), 0.077, 1E-5, "Rate(4, -300, 1000, 0, 0)")
+    TestUtil.AssertEqualApprox(Rate(4, -300, 1000, 0, 1), 0.14,  1E-5, "Rate(4, -300, 1000, 0, 1)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testRATE", Err, Error$, Erl)
 End Sub
-
