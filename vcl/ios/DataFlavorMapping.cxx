@@ -560,8 +560,11 @@ DataFlavorMapper::typesArrayToFlavorSequence(NSArray* types) const
         {
             flavors.realloc(flavors.getLength() + 1);
             flavors[flavors.getLength() - 1] = oOOFlavor;
+        }
+        else
+        {
             SAL_INFO("vcl.ios.clipboard",
-                     "Mapped " << [sysFormat UTF8String] << " to " << oOOFlavor.MimeType);
+                     "Was not able to map " << [sysFormat UTF8String] << " to an internal flavour");
         }
     }
 
