@@ -38,7 +38,6 @@
 #include <strings.hxx>
 #include <helpids.h>
 #include "QTableWindow.hxx"
-#include <vcl/menu.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include "QueryDesignFieldUndoAct.hxx"
@@ -1961,16 +1960,16 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
             {
                 if (!static_cast<OQueryController&>(getDesignView()->getController()).isReadOnly())
                 {
-                    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "dbaccess/ui/queryfuncmenu.ui", "");
-                    VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
-                    aContextMenu->CheckItem("functions", m_bVisibleRow[BROW_FUNCTION_ROW]);
-                    aContextMenu->CheckItem("tablename", m_bVisibleRow[BROW_TABLE_ROW]);
-                    aContextMenu->CheckItem("alias", m_bVisibleRow[BROW_COLUMNALIAS_ROW]);
-                    aContextMenu->CheckItem("distinct", static_cast<OQueryController&>(getDesignView()->getController()).isDistinct());
+                    ::tools::Rectangle aRect(aMenuPos, Size(1, 1));
+                    weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
+                    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "dbaccess/ui/queryfuncmenu.ui"));
+                    std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
+                    xContextMenu->set_active("functions", m_bVisibleRow[BROW_FUNCTION_ROW]);
+                    xContextMenu->set_active("tablename", m_bVisibleRow[BROW_TABLE_ROW]);
+                    xContextMenu->set_active("alias", m_bVisibleRow[BROW_COLUMNALIAS_ROW]);
+                    xContextMenu->set_active("distinct", static_cast<OQueryController&>(getDesignView()->getController()).isDistinct());
 
-                    aContextMenu->Execute(this, aMenuPos);
-
-                    OString sIdent = aContextMenu->GetCurItemIdent();
+                    OString sIdent = xContextMenu->popup_at_rect(pPopupParent, aRect);
                     if (sIdent == "functions")
                     {
                         SetRowVisible(BROW_FUNCTION_ROW, !IsRowVisible(BROW_FUNCTION_ROW));
