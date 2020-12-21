@@ -159,7 +159,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             ScAddress( nStartCol, nStartRow, GetViewData().GetTabNo() ) );
 
         OUString aStr;
-        tools::SvRef<SotStorageStream> xStream;
+        tools::SvRef<SotTempStream> xStream;
         if ( aDataHelper.GetSotStorageStream( SotClipboardFormatId::RTF, xStream ) && xStream.is() )
             // mba: clipboard always must contain absolute URLs (could be from alien source)
             aImpEx.ImportStream( *xStream, OUString(), SotClipboardFormatId::RTF );

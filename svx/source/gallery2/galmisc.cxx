@@ -396,7 +396,7 @@ void GalleryTransferable::InitData( bool bLazy )
 
                 if( !mxModelStream.is() )
                 {
-                    mxModelStream = new SotStorageStream( "" );
+                    mxModelStream = new SotTempStream( "" );
                     mxModelStream->SetBufferSize( 16348 );
 
                     if (!mpTheme || !mpTheme->GetModelStream(mnObjectPos, mxModelStream))
@@ -502,7 +502,7 @@ bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, cons
     return bRet;
 }
 
-bool GalleryTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject,
+bool GalleryTransferable::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUserObject,
                                            sal_uInt32, const datatransfer::DataFlavor& )
 {
     bool bRet = false;
