@@ -1036,7 +1036,12 @@ bool XclExpXmlStream::exportDocument()
     // set target path to get correct relative links to target document, not source
     INetURLObject aPath(getFileUrl());
     aData.maBasePath = aPath.GetPath() + "\\";
-    aData.maBasePath = "file:///" + aData.maBasePath.replace('\\', '/');
+    aData.maBasePath = aData.maBasePath.replace('\\', '/');
+    // In linux path may start with '/'
+    if (aData.maBasePath.getLength() > 0 && aData.maBasePath[0] == '/')
+        aData.maBasePath = "file://" + aData.maBasePath;
+    else
+        aData.maBasePath = "file:///" + aData.maBasePath;
 
     XclExpRoot aRoot( aData );
 
