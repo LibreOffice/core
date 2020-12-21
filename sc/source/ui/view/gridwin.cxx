@@ -3931,7 +3931,7 @@ static SotClipboardFormatId lcl_GetDropFormatId( const uno::Reference<datatransf
         //  If it's a Writer object, insert RTF instead of OLE
 
         bool bDoRtf = false;
-        tools::SvRef<SotStorageStream> xStm;
+        tools::SvRef<SotTempStream> xStm;
         TransferableObjectDescriptor aObjDesc;
         if( aDataHelper.GetTransferableObjectDescriptor( SotClipboardFormatId::OBJECTDESCRIPTOR, aObjDesc ) &&
             aDataHelper.GetSotStorageStream( SotClipboardFormatId::EMBED_SOURCE, xStm ) )

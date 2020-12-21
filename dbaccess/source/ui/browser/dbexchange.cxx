@@ -140,7 +140,7 @@ namespace dbaui
         osl_atomic_decrement( &m_refCount );
     }
 
-    bool ODataClipboard::WriteObject( ::tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const css::datatransfer::DataFlavor& /*rFlavor*/ )
+    bool ODataClipboard::WriteObject( ::tools::SvRef<SotTempStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const css::datatransfer::DataFlavor& /*rFlavor*/ )
     {
         if (nUserObjectId == FORMAT_OBJECT_ID_RTF || nUserObjectId == FORMAT_OBJECT_ID_HTML )
         {

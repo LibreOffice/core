@@ -105,7 +105,7 @@ bool ChartTransferable::GetData( const css::datatransfer::DataFlavor& rFlavor, c
     return bResult;
 }
 
-bool ChartTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
+bool ChartTransferable::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
     const datatransfer::DataFlavor& /* rFlavor */ )
 {
     // called from SetObject, put data into stream
@@ -141,10 +141,7 @@ bool ChartTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
                     }
 
                     Reference< io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
-                    if ( SvxDrawingLayerExport( pMarkedObjModel, xDocOut ) )
-                    {
-                        rxOStm->Commit();
-                    }
+                    SvxDrawingLayerExport( pMarkedObjModel, xDocOut );
 
                     bRet = ( rxOStm->GetError() == ERRCODE_NONE );
                 }

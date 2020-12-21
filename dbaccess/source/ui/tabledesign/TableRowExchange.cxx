@@ -32,7 +32,7 @@ namespace dbaui
         : m_vTableRow(_rvTableRow)
     {
     }
-    bool OTableRowExchange::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const css::datatransfer::DataFlavor& /*rFlavor*/ )
+    bool OTableRowExchange::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const css::datatransfer::DataFlavor& /*rFlavor*/ )
     {
         if(nUserObjectId == FORMAT_OBJECT_ID_SBA_TABED)
         {

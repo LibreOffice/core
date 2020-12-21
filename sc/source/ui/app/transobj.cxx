@@ -442,7 +442,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
     return bOK;
 }
 
-bool ScTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
+bool ScTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const datatransfer::DataFlavor& rFlavor )
 {
     // called from SetObject, put data into stream
@@ -530,7 +530,6 @@ bool ScTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* p
 
                 xWorkStore->dispose();
                 xWorkStore.clear();
-                rxOStm->Commit();
             }
             break;
 

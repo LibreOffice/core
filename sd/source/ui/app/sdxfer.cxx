@@ -559,7 +559,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
     return bOK;
 }
 
-bool SdTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pObject, sal_uInt32 nObjectType, const DataFlavor& )
+bool SdTransferable::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pObject, sal_uInt32 nObjectType, const DataFlavor& )
 {
     bool bRet = false;
 
@@ -580,8 +580,7 @@ bool SdTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* 
 
                 {
                     css::uno::Reference<css::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
-                    if( SvxDrawingLayerExport( pDoc, xDocOut, xComponent, (pDoc->GetDocumentType() == DocumentType::Impress) ? "com.sun.star.comp.Impress.XMLClipboardExporter" : "com.sun.star.comp.DrawingLayer.XMLExporter" ) )
-                        rxOStm->Commit();
+                    SvxDrawingLayerExport( pDoc, xDocOut, xComponent, (pDoc->GetDocumentType() == DocumentType::Impress) ? "com.sun.star.comp.Impress.XMLClipboardExporter" : "com.sun.star.comp.DrawingLayer.XMLExporter" );
                 }
 
                 xComponent->dispose();
@@ -626,7 +625,6 @@ bool SdTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* 
                 }
 
                 bRet = true;
-                rxOStm->Commit();
             }
             catch ( Exception& )
             {}

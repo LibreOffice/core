@@ -334,7 +334,7 @@ SgaObjectSvDraw GalleryBinaryEngine::insertModel(const FmFormModel& rModel,
 }
 
 bool GalleryBinaryEngine::readModelStream(const GalleryObject* pObject,
-                                          tools::SvRef<SotStorageStream> const& rxModelStream)
+                                          tools::SvRef<SotTempStream> const& rxModelStream)
 {
     const INetURLObject aURL(ImplGetURL(pObject));
     tools::SvRef<SotStorage> xSotStorage(GetSvDrawStorage());
@@ -366,8 +366,7 @@ bool GalleryBinaryEngine::readModelStream(const GalleryObject* pObject,
                             uno::Reference<io::XOutputStream> xDocOut(
                                 new utl::OOutputStreamWrapper(*rxModelStream));
 
-                            if (SvxDrawingLayerExport(aModel.GetModel(), xDocOut))
-                                rxModelStream->Commit();
+                            SvxDrawingLayerExport(aModel.GetModel(), xDocOut);
                         }
                     }
 
@@ -382,7 +381,7 @@ bool GalleryBinaryEngine::readModelStream(const GalleryObject* pObject,
 }
 
 SgaObjectSvDraw
-GalleryBinaryEngine::insertModelStream(const tools::SvRef<SotStorageStream>& rxModelStream,
+GalleryBinaryEngine::insertModelStream(const tools::SvRef<SotTempStream>& rxModelStream,
                                        const INetURLObject& rUserURL)
 {
     INetURLObject aURL(implCreateUniqueURL(SgaObjKind::SvDraw, rUserURL));

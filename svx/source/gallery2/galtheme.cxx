@@ -453,7 +453,7 @@ bool GalleryTheme::InsertModel(const FmFormModel& rModel, sal_uInt32 nInsertPos)
     return bRet;
 }
 
-bool GalleryTheme::GetModelStream(sal_uInt32 nPos, tools::SvRef<SotStorageStream> const & rxModelStream)
+bool GalleryTheme::GetModelStream(sal_uInt32 nPos, tools::SvRef<SotTempStream> const & rxModelStream)
 {
     const GalleryObject*    pObject = maGalleryObjectCollection.getForPosition( nPos );
     bool                    bRet = false;
@@ -466,7 +466,7 @@ bool GalleryTheme::GetModelStream(sal_uInt32 nPos, tools::SvRef<SotStorageStream
     return bRet;
 }
 
-bool GalleryTheme::InsertModelStream(const tools::SvRef<SotStorageStream>& rxModelStream, sal_uInt32 nInsertPos)
+bool GalleryTheme::InsertModelStream(const tools::SvRef<SotTempStream>& rxModelStream, sal_uInt32 nInsertPos)
 {
     bool            bRet = false;
 
@@ -539,7 +539,7 @@ bool GalleryTheme::InsertTransferable(const uno::Reference< datatransfer::XTrans
 
         if( aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) )
         {
-            tools::SvRef<SotStorageStream> xModelStm;
+            tools::SvRef<SotTempStream> xModelStm;
 
             if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING, xModelStm ) )
                 bRet = InsertModelStream( xModelStm, nInsertPos );

@@ -35,6 +35,17 @@ enum class SotClipboardFormatId : sal_uInt32;
 
 class BaseStorageStream;
 
+class SOT_DLLPUBLIC SotTempStream final : virtual public SotObject, public SvStream
+{
+friend class SotStorage;
+
+    virtual ~SotTempStream() override;
+public:
+    SotTempStream(OUString const & rString, StreamMode = StreamMode::STD_READWRITE);
+
+    void CopyTo(SotTempStream * pDestStm);
+};
+
 class SOT_DLLPUBLIC SotStorageStream final : virtual public SotObject, public SvStream
 {
 friend class SotStorage;
@@ -47,15 +58,12 @@ friend class SotStorage;
 
     virtual ~SotStorageStream() override;
 public:
-    SotStorageStream(OUString const & rString,
-                     StreamMode = StreamMode::STD_READWRITE);
     SotStorageStream(BaseStorageStream *pBaseStream);
 
     virtual void ResetError() override;
 
     virtual void SetSize(sal_uInt64 nNewSize) override;
     sal_uInt32 GetSize() const;
-    void CopyTo(SotStorageStream * pDestStm);
     bool Commit();
     bool SetProperty(OUString const & rName, css::uno::Any const & rValue);
     virtual sal_uInt64 TellEnd() override;
