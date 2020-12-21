@@ -99,7 +99,6 @@
             <child>
               <object class="GtkLabel" id="sign">
                 <property name="can_focus">False</property>
-                <property name="ypad">1</property>
                 <property name="label" translatable="yes" context="selectcertificatedialog|sign">Select the certificate you want to use for signing:</property>
                 <property name="xalign">0</property>
               </object>
@@ -111,7 +110,6 @@
             <child>
               <object class="GtkLabel" id="encrypt">
                 <property name="can_focus">False</property>
-                <property name="ypad">1</property>
                 <property name="label" translatable="yes" context="selectcertificatedialog|encrypt">Select the certificate you want to use for encryption:</property>
                 <property name="xalign">0</property>
               </object>

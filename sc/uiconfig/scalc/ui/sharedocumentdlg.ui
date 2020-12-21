@@ -126,7 +126,6 @@
                       <object class="GtkLabel" id="warning">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xpad">12</property>
                         <property name="label" translatable="yes" context="sharedocumentdlg|warning">Note: Changes to formatting attributes like fonts, colors, and number formats will not be saved and some functionalities like editing charts and drawing objects are not available in shared mode. Turn off shared mode to get exclusive access needed for those changes and functionalities.</property>
                         <property name="wrap">True</property>
                         <property name="width_chars">72</property>

@@ -143,7 +143,6 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xpad">1</property>
                 <property name="label" translatable="yes" context="movecopysheet|label1">Action</property>
                 <property name="justify">center</property>
                 <attributes>
@@ -437,7 +436,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_top">5</property>
-                <property name="xpad">2</property>
                 <property name="label" translatable="yes" context="movecopysheet|newNameLabel">New _name</property>
                 <property name="use_underline">True</property>
                 <attributes>

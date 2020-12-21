@@ -160,7 +160,6 @@
                           <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xpad">4</property>
                             <property name="label" translatable="yes" context="pivottablelayoutdialog|label3">Column Fields:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">listbox-column</property>
@@ -242,7 +241,6 @@
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xpad">4</property>
                             <property name="label" translatable="yes" context="pivottablelayoutdialog|label5">Data Fields:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">listbox-data</property>
@@ -324,7 +322,6 @@
                           <object class="GtkLabel" id="label4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xpad">4</property>
                             <property name="label" translatable="yes" context="pivottablelayoutdialog|label4">Row Fields:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">listbox-row</property>
@@ -404,7 +401,6 @@
                           <object class="GtkLabel" id="label2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xpad">4</property>
                             <property name="label" translatable="yes" context="pivottablelayoutdialog|label2">Filters:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">listbox-page</property>
@@ -492,7 +488,6 @@
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xpad">4</property>
                         <property name="label" translatable="yes" context="pivottablelayoutdialog|label1">Available Fields:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">listbox-fields</property>

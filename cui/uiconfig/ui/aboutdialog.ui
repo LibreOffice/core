@@ -153,7 +153,6 @@
                   <object class="GtkLabel" id="lbVersionString">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xpad">6</property>
                     <property name="label">7.0</property>
                     <property name="xalign">0</property>
                     <accessibility>
@@ -169,7 +168,6 @@
                   <object class="GtkLabel" id="lbEnvString">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xpad">6</property>
                     <property name="label">8 cores</property>
                     <property name="xalign">0</property>
                     <accessibility>
@@ -219,7 +217,6 @@
                   <object class="GtkLabel" id="lbMiscString">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xpad">6</property>
                     <property name="label">Calc</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">25</property>
@@ -253,7 +250,6 @@
                   <object class="GtkLabel" id="lbLocaleString">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xpad">6</property>
                     <property name="label">English</property>
                     <property name="xalign">0</property>
                     <accessibility>
@@ -284,7 +280,6 @@
                   <object class="GtkLabel" id="lbUIString">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xpad">6</property>
                     <property name="label">VCL: gtk</property>
                     <property name="xalign">0</property>
                     <accessibility>
