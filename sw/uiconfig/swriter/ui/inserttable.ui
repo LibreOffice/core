@@ -146,7 +146,6 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
-                            <property name="shadow_type">out</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="nameedit-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|nameedit">Enter a name for the table.</property>
@@ -192,7 +191,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
-                            <property name="shadow_type">none</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="value">2</property>
                             <child internal-child="accessible">
@@ -225,7 +223,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
-                            <property name="shadow_type">out</property>
                             <property name="adjustment">adjustment2</property>
                             <property name="value">2</property>
                             <child internal-child="accessible">

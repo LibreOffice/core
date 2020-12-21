@@ -557,7 +557,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
-                            <property name="shadow_type">none</property>
                             <property name="adjustment">adjustmentPage</property>
                             <accessibility>
                               <relation type="labelled-by" target="labelWP"/>
@@ -578,7 +577,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
-                            <property name="shadow_type">none</property>
                             <property name="adjustment">adjustmentPage1</property>
                             <accessibility>
                               <relation type="labelled-by" target="labelHP"/>
