@@ -14,6 +14,7 @@
 #include <FourierAnalysisDialog.hxx>
 #include <scresid.hxx>
 #include <strings.hrc>
+#include <o3tl/safeint.hxx>
 
 ScFourierAnalysisDialog::ScFourierAnalysisDialog(SfxBindings* pSfxBindings,
                                                  SfxChildWindow* pChildWindow,
@@ -142,7 +143,7 @@ bool ScFourierAnalysisDialog::InputRangesValid()
     if (mbWithLabels)
         --nLastOutputRow;
 
-    if (nLastOutputRow > MAXROW)
+    if (nLastOutputRow > o3tl::make_unsigned(mDocument.MaxRow()))
     {
         mxErrorMessage->set_label(ScResId(STR_MESSAGE_OUTPUT_TOO_LONG));
         return false;
