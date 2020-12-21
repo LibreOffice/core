@@ -29,6 +29,10 @@ $(eval $(call gb_Executable_use_external,gengal,boost_headers))
 
 $(eval $(call gb_Executable_use_sdk_api,gengal))
 
+ifneq (,$(filter-out MACOSX WNT,$(OS)))
+$(eval $(call gb_Executable_use_package,gengal,svx_gengal))
+endif
+
 $(eval $(call gb_Executable_use_libraries,gengal,\
     basegfx \
     sal \
