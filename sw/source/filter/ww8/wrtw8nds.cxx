@@ -149,6 +149,22 @@ static ww::eField lcl_getFieldId(const IFieldmark*const pFieldmark)
     return ww::eUNKNOWN;
 }
 
+static OUString
+lcl_getLinkChainName(const uno::Reference<beans::XPropertySet>& rPropertySet,
+                     const uno::Reference<beans::XPropertySetInfo>& rPropertySetInfo)
+{
+    OUString sLinkChainName;
+    if (rPropertySetInfo->hasPropertyByName("LinkDisplayName"))
+    {
+        rPropertySet->getPropertyValue("LinkDisplayName") >>= sLinkChainName;
+        if (!sLinkChainName.isEmpty())
+            return sLinkChainName;
+    }
+    if (rPropertySetInfo->hasPropertyByName("ChainName"))
+        rPropertySet->getPropertyValue("ChainName") >>= sLinkChainName;
+    return sLinkChainName;
+}
+
 MSWordAttrIter::MSWordAttrIter( MSWordExportBase& rExport )
     : pOld( rExport.m_pChpIter ), m_rExport( rExport )
 {
@@ -637,7 +653,6 @@ bool SwWW8AttrIter::HasFlysAt(sal_Int32 nSwPos) const
 FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
 {
     // collection point to first gather info about all of the potentially linked textboxes: to be analyzed later.
-    OUString sLinkChainName;
     ww8::FrameIter linkedTextboxesIter = maFlyIter;
     while ( linkedTextboxesIter != maFlyFrames.end() )
     {
@@ -654,10 +669,7 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
         {
             MSWordExportBase::LinkedTextboxInfo aLinkedTextboxInfo;
 
-            if( xPropertySetInfo->hasPropertyByName("LinkDisplayName") )
-                xPropertySet->getPropertyValue("LinkDisplayName") >>= sLinkChainName;
-            else if( xPropertySetInfo->hasPropertyByName("ChainName") )
-                xPropertySet->getPropertyValue("ChainName") >>= sLinkChainName;
+            const OUString sLinkChainName = lcl_getLinkChainName(xPropertySet, xPropertySetInfo);
 
             if( xPropertySetInfo->hasPropertyByName("ChainNextName") )
                 xPropertySet->getPropertyValue("ChainNextName") >>= aLinkedTextboxInfo.sNextChain;
