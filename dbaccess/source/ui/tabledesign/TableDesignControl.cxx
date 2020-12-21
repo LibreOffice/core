@@ -22,9 +22,9 @@
 #include <TableController.hxx>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/menu.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weldutils.hxx>
 #include <helpids.h>
 
 using namespace ::dbaui;
@@ -109,13 +109,14 @@ void OTableRowView::Command(const CommandEvent& rEvt)
 
             if ( nColId == HANDLE_ID )
             {
-                VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "dbaccess/ui/tabledesignrowmenu.ui", "");
-                VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
+                ::tools::Rectangle aRect(rEvt.GetMousePosPixel(), Size(1, 1));
+                weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "dbaccess/ui/tabledesignrowmenu.ui"));
+                std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
                 sal_Int32 nSelectRowCount = GetSelectRowCount();
-                aContextMenu->EnableItem(aContextMenu->GetItemId("cut"), nSelectRowCount != 0);
-                aContextMenu->EnableItem(aContextMenu->GetItemId("copy"), nSelectRowCount  != 0);
-                aContextMenu->Execute(this, rEvt.GetMousePosPixel());
-                OString sIdent = aContextMenu->GetCurItemIdent();
+                xContextMenu->set_sensitive("cut", nSelectRowCount != 0);
+                xContextMenu->set_sensitive("copy", nSelectRowCount  != 0);
+                OString sIdent = xContextMenu->popup_at_rect(pPopupParent, aRect);
                 if (sIdent == "cut")
                     cut();
                 else if (sIdent == "copy")
