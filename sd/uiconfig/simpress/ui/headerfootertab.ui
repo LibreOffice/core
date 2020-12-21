@@ -65,7 +65,7 @@
                           <object class="GtkBox" id="header_box">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">12</property>
+                            <property name="margin-start">12</property>
                             <property name="spacing">12</property>
                             <child>
                               <object class="GtkLabel" id="header_label">
@@ -141,7 +141,7 @@
                           <object class="GtkBox" id="datetimebox">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">12</property>
+                            <property name="margin-start">12</property>
                             <property name="orientation">vertical</property>
                             <property name="spacing">12</property>
                             <child>
@@ -366,7 +366,7 @@
                               <object class="GtkBox" id="footer_box">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="margin_left">12</property>
+                                <property name="margin-start">12</property>
                                 <property name="spacing">12</property>
                                 <child>
                                   <object class="GtkLabel" id="footer_label">

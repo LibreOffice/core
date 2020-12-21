@@ -98,7 +98,7 @@ public:
     bool HasFocus() const { return m_xControl->has_focus(); }
 
     void set_size_request(int nWidth, int nHeight) { m_xControl->set_size_request(nWidth, nHeight); }
-    void set_margin_left(int nLeft) { m_xControl->set_margin_left(nLeft); }
+    void set_margin_start(int nLeft) { m_xControl->set_margin_start(nLeft); }
 
     void SetModifyHdl(const Link<SeriesHeaderEdit&,void>& rLink) { m_aModifyHdl = rLink; }
     void SetGetFocusHdl(const Link<SeriesHeaderEdit&,void>& rLink) { m_aFocusInHdl = rLink; }
@@ -288,7 +288,7 @@ void SeriesHeader::SetPos()
     m_spSymbol->set_size_request(aSize.Width(), aSize.Height());
 
     // series name edit field
-    m_spSeriesName->set_margin_left(2);
+    m_spSeriesName->set_margin_start(2);
 
     aSize.setWidth(nSymbolHeight);
     aSize.setHeight(12);
@@ -1310,8 +1310,8 @@ void DataBrowser::ImplAdjustHeaderControls()
 
     weld::Container* pWin = m_pColumnsWin;
     weld::Container* pColorWin = m_pColorsWin;
-    pWin->set_margin_left(nCurrentPos);
-    pColorWin->set_margin_left(nCurrentPos);
+    pWin->set_margin_start(nCurrentPos);
+    pColorWin->set_margin_start(nCurrentPos);
 
     tSeriesHeaderContainer::iterator aIt( m_aSeriesHeaders.begin());
     sal_uInt16 i = GetFirstVisibleColNumber();
@@ -1336,8 +1336,8 @@ void DataBrowser::ImplAdjustHeaderControls()
 
                 if (pWin)
                 {
-                    pWin->set_margin_left(nStartPos);
-                    pColorWin->set_margin_left(nStartPos);
+                    pWin->set_margin_start(nStartPos);
+                    pColorWin->set_margin_start(nStartPos);
                     pWin = pColorWin = nullptr;
                 }
 

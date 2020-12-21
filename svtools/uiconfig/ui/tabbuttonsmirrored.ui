@@ -35,8 +35,8 @@
   <object class="GtkBox" id="TabButtons">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="margin-left">6</property>
-    <property name="margin-right">6</property>
+    <property name="margin-start">6</property>
+    <property name="margin-end">6</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <child>
@@ -45,7 +45,7 @@
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="no-show-all">True</property>
-        <property name="margin-right">6</property>
+        <property name="margin-end">6</property>
         <property name="image">image1</property>
         <property name="relief">none</property>
         <property name="always-show-image">True</property>

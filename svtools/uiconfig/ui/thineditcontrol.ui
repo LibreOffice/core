@@ -57,7 +57,7 @@
             <property name="no_show_all">True</property>
             <property name="halign">end</property>
             <property name="image">image7</property>
-            <property name="margin_left">1</property>
+            <property name="margin-start">1</property>
             <property name="always_show_image">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="button-atkobject">

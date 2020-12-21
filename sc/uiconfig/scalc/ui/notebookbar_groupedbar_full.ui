@@ -3167,8 +3167,8 @@
           <object class="sfxlo-PriorityHBox" id="DefaultBox1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">5</property>
-            <property name="margin_right">5</property>
+            <property name="margin-start">5</property>
+            <property name="margin-end">5</property>
             <property name="baseline_position">bottom</property>
             <child>
               <object class="sfxlo-DropdownBox" id="SectionTools">
@@ -3991,7 +3991,7 @@
                                               <object class="GtkToolButton" id="CharFontName">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="margin_right">5</property>
+                                                <property name="margin-end">5</property>
                                                 <property name="action_name">.uno:CharFontName</property>
                                               </object>
                                               <packing>
@@ -4003,7 +4003,7 @@
                                               <object class="GtkToolButton" id="FontHeight">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="margin_left">5</property>
+                                                <property name="margin-start">5</property>
                                                 <property name="action_name">.uno:FontHeight</property>
                                               </object>
                                               <packing>

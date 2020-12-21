@@ -270,17 +270,17 @@ public:
 
     virtual void set_margin_bottom(int nMargin) override;
 
-    virtual void set_margin_left(int nMargin) override;
+    virtual void set_margin_start(int nMargin) override;
 
-    virtual void set_margin_right(int nMargin) override;
+    virtual void set_margin_end(int nMargin) override;
 
     virtual int get_margin_top() const override;
 
     virtual int get_margin_bottom() const override;
 
-    virtual int get_margin_left() const override;
+    virtual int get_margin_start() const override;
 
-    virtual int get_margin_right() const override;
+    virtual int get_margin_end() const override;
 
     virtual void set_accessible_name(const OUString& rName) override;
 

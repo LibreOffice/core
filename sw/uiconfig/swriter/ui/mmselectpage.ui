@@ -138,7 +138,7 @@
                   <object class="GtkComboBoxText" id="recentdoclb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">18</property>
+                    <property name="margin-start">18</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="recentdoclb-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="mmselectpage|extended_tip|recentdoclb">Select the document.</property>
@@ -157,7 +157,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">18</property>
+                    <property name="margin-start">18</property>
                     <property name="use_underline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="browsedoc-atkobject">
@@ -177,7 +177,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">18</property>
+                    <property name="margin-start">18</property>
                     <property name="use_underline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="browsetemplate-atkobject">

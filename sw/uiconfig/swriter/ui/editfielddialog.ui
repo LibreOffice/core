@@ -96,7 +96,7 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="editfielddialog|prev_tip">Previous field of same type</property>
                 <property name="valign">center</property>
-                <property name="margin_left">8</property>
+                <property name="margin-start">8</property>
                 <property name="image">image3</property>
                 <property name="image_position">right</property>
                 <child internal-child="accessible">
@@ -137,7 +137,7 @@
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
                 <property name="tooltip_text" translatable="yes" context="editfielddialog|edit_tip">Edit variable field content</property>
-                <property name="margin_left">12</property>
+                <property name="margin-start">12</property>
                 <property name="use_underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="edit-atkobject">

@@ -118,7 +118,7 @@
                     <property name="width_request">400</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="margin_right">12</property>
+                    <property name="margin-end">12</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <child internal-child="accessible">
@@ -137,7 +137,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="margin_right">12</property>
+                    <property name="margin-end">12</property>
                     <property name="label" translatable="yes" context="insertfloatingframe|label6">Name:</property>
                   </object>
                   <packing>
@@ -150,7 +150,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="margin_right">12</property>
+                    <property name="margin-end">12</property>
                     <property name="label" translatable="yes" context="insertfloatingframe|label7">Contents:</property>
                   </object>
                   <packing>
@@ -402,7 +402,7 @@
                               <object class="GtkLabel" id="widthlabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="margin_right">12</property>
+                                <property name="margin-end">12</property>
                                 <property name="label" translatable="yes" context="insertfloatingframe|widthlabel">Width:</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -415,7 +415,7 @@
                               <object class="GtkLabel" id="heightlabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="margin_right">12</property>
+                                <property name="margin-end">12</property>
                                 <property name="label" translatable="yes" context="insertfloatingframe|heightlabel">Height:</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -428,7 +428,7 @@
                               <object class="GtkSpinButton" id="width">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="margin_right">12</property>
+                                <property name="margin-end">12</property>
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment1</property>
                                 <child internal-child="accessible">
@@ -446,7 +446,7 @@
                               <object class="GtkSpinButton" id="height">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="margin_right">12</property>
+                                <property name="margin-end">12</property>
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment2</property>
                                 <child internal-child="accessible">

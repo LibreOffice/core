@@ -132,7 +132,7 @@ You can make one or more of the following changes to your user profile to return
               <object class="GtkBox" id="group_restore">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">18</property>
+                <property name="margin-start">18</property>
                 <property name="margin_bottom">6</property>
                 <property name="orientation">vertical</property>
                 <child>
@@ -193,7 +193,7 @@ You can make one or more of the following changes to your user profile to return
               <object class="GtkBox" id="group_configure">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">18</property>
+                <property name="margin-start">18</property>
                 <property name="margin_bottom">6</property>
                 <property name="orientation">vertical</property>
                 <child>
@@ -253,7 +253,7 @@ You can make one or more of the following changes to your user profile to return
               <object class="GtkBox" id="group_deinstall">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">18</property>
+                <property name="margin-start">18</property>
                 <property name="margin_bottom">6</property>
                 <property name="orientation">vertical</property>
                 <child>
@@ -329,7 +329,7 @@ You can make one or more of the following changes to your user profile to return
               <object class="GtkBox" id="group_reset">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">18</property>
+                <property name="margin-start">18</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkCheckButton" id="check_reset_customizations">
@@ -384,7 +384,7 @@ You can make one or more of the following changes to your user profile to return
               <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">12</property>
+                <property name="margin-start">12</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>

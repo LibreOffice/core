@@ -201,7 +201,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="halign">end</property>
-                    <property name="margin_left">1</property>
+                    <property name="margin-start">1</property>
                     <property name="image">imageGear</property>
                     <property name="always_show_image">True</property>
                     <property name="popup">additionsmenu</property>

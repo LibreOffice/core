@@ -110,7 +110,7 @@
               <object class="GtkLabel" id="datelistbox_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">12</property>
+                <property name="margin-start">12</property>
                 <property name="label" translatable="yes" context="datetimedialog|datelistbox_label">_Format:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">datelistbox</property>
@@ -142,7 +142,7 @@
               <object class="GtkLabel" id="timelistbox_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">12</property>
+                <property name="margin-start">12</property>
                 <property name="label" translatable="yes" context="datetimedialog|timelistbox_label">Fo_rmat:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">timelistbox</property>

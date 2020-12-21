@@ -5,8 +5,8 @@
   <object class="GtkBox" id="ComboBox">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="margin_left">6</property>
-    <property name="margin_right">6</property>
+    <property name="margin-start">6</property>
+    <property name="margin-end">6</property>
     <property name="spacing">6</property>
     <child>
       <object class="GtkLabel" id="label">

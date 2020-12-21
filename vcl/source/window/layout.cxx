@@ -55,9 +55,9 @@ Size VclContainer::GetOptimalSize() const
 void VclContainer::setLayoutPosSize(vcl::Window &rWindow, const Point &rPos, const Size &rSize)
 {
     sal_Int32 nBorderWidth = rWindow.get_border_width();
-    sal_Int32 nLeft = rWindow.get_margin_left() + nBorderWidth;
+    sal_Int32 nLeft = rWindow.get_margin_start() + nBorderWidth;
     sal_Int32 nTop = rWindow.get_margin_top() + nBorderWidth;
-    sal_Int32 nRight = rWindow.get_margin_right() + nBorderWidth;
+    sal_Int32 nRight = rWindow.get_margin_end() + nBorderWidth;
     sal_Int32 nBottom = rWindow.get_margin_bottom() + nBorderWidth;
     Point aPos(rPos.X() + nLeft, rPos.Y() + nTop);
     Size aSize(rSize.Width() - nLeft - nRight, rSize.Height() - nTop - nBottom);
@@ -130,9 +130,9 @@ namespace
     Size subtractBorder(const vcl::Window &rWindow, const Size& rSize)
     {
         sal_Int32 nBorderWidth = rWindow.get_border_width();
-        sal_Int32 nLeft = rWindow.get_margin_left() + nBorderWidth;
+        sal_Int32 nLeft = rWindow.get_margin_start() + nBorderWidth;
         sal_Int32 nTop = rWindow.get_margin_top() + nBorderWidth;
-        sal_Int32 nRight = rWindow.get_margin_right() + nBorderWidth;
+        sal_Int32 nRight = rWindow.get_margin_end() + nBorderWidth;
         sal_Int32 nBottom = rWindow.get_margin_bottom() + nBorderWidth;
         Size aSize(rSize);
         return Size(aSize.Width() + nLeft + nRight, aSize.Height() + nTop + nBottom);
@@ -159,7 +159,7 @@ void VclContainer::SetPosPixel(const Point& rAllocPos)
 {
     Point aAllocPos = rAllocPos;
     sal_Int32 nBorderWidth = get_border_width();
-    aAllocPos.AdjustX(nBorderWidth + get_margin_left() );
+    aAllocPos.AdjustX(nBorderWidth + get_margin_start() );
     aAllocPos.AdjustY(nBorderWidth + get_margin_top() );
 
     if (aAllocPos != GetPosPixel())
@@ -170,7 +170,7 @@ void VclContainer::SetSizePixel(const Size& rAllocation)
 {
     Size aAllocation = rAllocation;
     sal_Int32 nBorderWidth = get_border_width();
-    aAllocation.AdjustWidth( -(nBorderWidth*2 + get_margin_left() + get_margin_right()) );
+    aAllocation.AdjustWidth( -(nBorderWidth*2 + get_margin_start() + get_margin_end()) );
     aAllocation.AdjustHeight( -(nBorderWidth*2 + get_margin_top() + get_margin_bottom()) );
     bool bSizeChanged = aAllocation != GetSizePixel();
     if (bSizeChanged)

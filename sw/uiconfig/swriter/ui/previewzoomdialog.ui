@@ -91,8 +91,8 @@
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">6</property>
-            <property name="margin_right">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="row_spacing">6</property>

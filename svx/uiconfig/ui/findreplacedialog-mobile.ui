@@ -94,7 +94,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
-                            <property name="margin_right">6</property>
+                            <property name="margin-end">6</property>
                             <property name="hexpand">True</property>
                             <child>
                               <object class="GtkComboBoxText" id="searchterm">
@@ -346,7 +346,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
-                            <property name="margin_right">6</property>
+                            <property name="margin-end">6</property>
                             <property name="hexpand">True</property>
                             <child>
                               <object class="GtkComboBoxText" id="replaceterm">
@@ -450,8 +450,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
-                <property name="margin_left">10</property>
-                <property name="margin_right">10</property>
+                <property name="margin-start">10</property>
+                <property name="margin-end">10</property>
                 <property name="margin_top">15</property>
                 <property name="spacing">12</property>
                 <property name="homogeneous">True</property>
@@ -644,7 +644,7 @@
                   <object class="GtkExpander" id="OptionsExpander">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="margin_left">6</property>
+                    <property name="margin-start">6</property>
                     <property name="margin_top">1</property>
                     <property name="margin_bottom">1</property>
                     <property name="hexpand">True</property>
@@ -1021,7 +1021,7 @@
                                   <object class="GtkBox" id="searchdirection_box">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="margin_left">4</property>
+                                    <property name="margin-start">4</property>
                                     <property name="spacing">15</property>
                                     <child>
                                       <object class="GtkLabel" id="searchdir">

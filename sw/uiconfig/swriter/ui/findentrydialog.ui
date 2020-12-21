@@ -160,7 +160,7 @@
                   <object class="GtkComboBoxText" id="area">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">12</property>
+                    <property name="margin-start">12</property>
                     <accessibility>
                       <relation type="labelled-by" target="findin"/>
                     </accessibility>

@@ -346,7 +346,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
-                        <property name="margin_right">5</property>
+                        <property name="margin-end">5</property>
                         <property name="margin_top">4</property>
                         <property name="label" translatable="yes" context="fourieranalysisdialog|label4">Minimum magnitude for polar form output (in dB)</property>
                         <property name="wrap">True</property>

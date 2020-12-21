@@ -295,7 +295,7 @@ ColorConfigWindow_Impl::Entry::Entry(weld::Window* pTopLevel, weld::Builder& rBu
 
     if (!bCheckBox)
     {
-        m_xText->set_margin_left(m_xText->get_margin_left() +
+        m_xText->set_margin_start(m_xText->get_margin_start() +
             nCheckBoxLabelOffset);
     }
 

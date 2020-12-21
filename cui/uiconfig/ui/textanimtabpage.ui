@@ -331,7 +331,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">12</property>
+                    <property name="margin-start">12</property>
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="TSB_ENDLESS">
@@ -402,7 +402,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">12</property>
+                    <property name="margin-start">12</property>
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="TSB_PIXEL">
@@ -473,7 +473,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">12</property>
+                    <property name="margin-start">12</property>
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="TSB_AUTO">
