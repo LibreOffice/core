@@ -33,13 +33,12 @@
 #include "QueryMoveTabWinUndoAct.hxx"
 #include "QuerySizeTabWinUndoAct.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/weldutils.hxx>
 #include <TableWindowData.hxx>
 #include <JAccess.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -1118,12 +1117,13 @@ bool OJoinTableView::IsAddAllowed()
     return true;
 }
 
-void OJoinTableView::executePopup(const Point& _aPos, VclPtr<OTableConnection>& rSelConnection)
+void OJoinTableView::executePopup(const Point& rPos, VclPtr<OTableConnection>& rSelConnection)
 {
-    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "dbaccess/ui/joinviewmenu.ui", "");
-    VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
-    aContextMenu->Execute(this, _aPos);
-    OString sIdent = aContextMenu->GetCurItemIdent();
+    ::tools::Rectangle aRect(rPos, Size(1, 1));
+    weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "dbaccess/ui/joinviewmenu.ui"));
+    std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
+    OString sIdent = xContextMenu->popup_at_rect(pPopupParent, aRect);
     if (sIdent == "delete")
         RemoveConnection(rSelConnection, true);
     else if (sIdent == "edit")
