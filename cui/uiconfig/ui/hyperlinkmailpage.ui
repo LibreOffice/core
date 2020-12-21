@@ -75,7 +75,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="ypad">1</property>
                     <property name="label" translatable="yes" context="hyperlinkmailpage|subject_label">_Subject:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">subject</property>

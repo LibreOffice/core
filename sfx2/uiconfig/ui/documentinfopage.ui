@@ -312,7 +312,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="xpad">1</property>
         <property name="label" translatable="yes" context="documentinfopage|label7">_Type:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">showtype</property>
