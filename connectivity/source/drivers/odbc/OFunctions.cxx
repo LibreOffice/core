@@ -112,6 +112,8 @@ bool LoadLibrary_ODBC3(OUString &_rPath)
 
     if ( !pODBCso )
         pODBCso = osl_loadModule( _rPath.pData,SAL_LOADMODULE_NOW );
+#else
+    (void)_rPath;
 #endif
     if( !pODBCso)
         return false;

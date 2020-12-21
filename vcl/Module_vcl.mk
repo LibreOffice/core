@@ -29,7 +29,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
         Package_opengl_denylist ) \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
         Package_skia_denylist ) \
-    $(if $(filter DESKTOP,$(BUILD_TYPE)), \
+    $(if $(filter DESKTOP,$(BUILD_TYPE))$(filter EMSCRIPTEN,$(OS)), \
         StaticLibrary_vclmain \
         $(if $(ENABLE_MACOSX_SANDBOX),, \
             $(if $(DISABLE_GUI),, \

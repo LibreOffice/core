@@ -10,15 +10,14 @@
 $(eval $(call gb_Module_Module,cpputools))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+ifneq ($(OS),EMSCRIPTEN)
 
 $(eval $(call gb_Module_add_targets,cpputools,\
     Executable_sp2bv \
-))
-
-$(eval $(call gb_Module_add_targets,cpputools,\
     Executable_uno \
 ))
 
+endif
 endif
 
 # vim:set noet sw=4 ts=4:

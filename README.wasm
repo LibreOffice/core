@@ -39,9 +39,11 @@ make -j<CORES> module-qtbase module-qtdeclarative
 
 Building with examples will break with some of them, but at that point Qt already works.
 
-If you get a configure failure for Qt:
+I used to get a configure failure for Qt:
 
 Checking for target architecture... Project ERROR: target architecture detection binary not found.
+
+Originally I tried two patches to "fix" these:
 
 Edit git_emsdk/upstream/emscripten/emcc.py:
 @@ -760,8 +760,8 @@
@@ -56,11 +58,13 @@ Edit git_emsdk/upstream/emscripten/emcc.py:
          break
      if not target:
 
-The previous suggestion, which was to edit qtbase/config.tests/arch/write_info.pri
+qtbase/config.tests/arch/write_info.pri:
 -     ext = .wasm
 +     ext = .js.wasm
 
-produces errors when loading the generated html, because it can't find the wasm now.
+Both break the build in different ways.
+
+What seems to have fixed it instead was to run "emsdk activate 1.39.8" again.
 
 Current Qt fails to start the demo webserver: https://bugreports.qt.io/browse/QTCREATORBUG-24072
 Use: emrun --serve_after_close to run Qt WASM demos
@@ -80,7 +84,6 @@ configure (a.out).
 QT5DIR=/dir/of/git_qt5/qtbase
 
 --host=wasm64-local-emscripten
---disable-ccache
 --disable-coinmp
 --disable-cups
 --disable-dbus

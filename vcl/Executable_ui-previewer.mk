@@ -153,6 +153,7 @@ $(eval $(call gb_Executable_use_libraries,ui-previewer,\
         t602filter \
         textconv_dict \
         textfd \
+        tl \
         tk \
         ucb1 \
         ucbhelper \
