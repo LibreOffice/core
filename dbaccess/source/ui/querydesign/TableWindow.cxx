@@ -26,11 +26,12 @@
 #include <JoinDesignView.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
-#include <vcl/wall.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/wall.hxx>
+#include <vcl/weldutils.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/container/XContainer.hpp>
@@ -560,9 +561,11 @@ void OTableWindow::Command(const CommandEvent& rEvt)
                         ptWhere = m_xTitle->GetPosPixel();
                 }
 
-                VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "dbaccess/ui/jointablemenu.ui", "");
-                VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
-                if (aContextMenu->Execute(this, ptWhere))
+                ::tools::Rectangle aRect(ptWhere, Size(1, 1));
+                weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "dbaccess/ui/jointablemenu.ui"));
+                std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
+                if (!xContextMenu->popup_at_rect(pPopupParent, aRect).isEmpty())
                     Remove();
             }
             break;
