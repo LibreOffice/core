@@ -2905,10 +2905,10 @@ AC_SUBST(SYSBASE)
 dnl ===================================================================
 dnl  Sort out various gallery compilation options
 dnl ===================================================================
+WITH_GALLERY_BUILD=TRUE
 AC_MSG_CHECKING([how to build and package galleries])
 if test -n "${with_galleries}"; then
     if test "$with_galleries" = "build"; then
-        WITH_GALLERY_BUILD=TRUE
         AC_MSG_RESULT([build from source images internally])
     elif test "$with_galleries" = "no"; then
         WITH_GALLERY_BUILD=
@@ -2918,7 +2918,6 @@ if test -n "${with_galleries}"; then
     fi
 else
     if test $_os != iOS -a $_os != Android; then
-        WITH_GALLERY_BUILD=TRUE
         AC_MSG_RESULT([internal src images for desktop])
     else
         WITH_GALLERY_BUILD=
@@ -5188,6 +5187,7 @@ if test "$cross_compiling" = "yes"; then
     fi
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
     test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
+    test "$with_galleries" = "no" -o -z "$WITH_GALLERY_BUILD" && sub_conf_opts="$sub_conf_opts --with-galleries=no"
     sub_conf_opts="$sub_conf_opts $with_build_platform_configure_options"
 
     # Don't bother having configure look for stuff not needed for the build platform anyway

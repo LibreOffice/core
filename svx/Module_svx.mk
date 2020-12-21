@@ -51,7 +51,13 @@ $(eval $(call gb_Module_add_targets,svx,\
     $(if $(filter-out MACOSX WNT,$(OS)), \
 		Package_gengal) \
 ))
+else # !DESKTOP
+ifeq ($(WITH_GALLERY_BUILD),TRUE)
+$(eval $(call gb_Module_add_targets_for_build,svx,\
+    Executable_gengal \
+))
 endif
+endif # !DESKTOP
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,svx,\
     JunitTest_svx_unoapi \
