@@ -153,7 +153,6 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     , m_xBtnTexColor(m_xBuilder->weld_toggle_button("texcolor"))
     , m_xBtnTexReplace(m_xBuilder->weld_toggle_button("texreplace"))
     , m_xBtnTexModulate(m_xBuilder->weld_toggle_button("texmodulate"))
-    , m_xBtnTexBlend(m_xBuilder->weld_toggle_button("texblend"))
     , m_xBtnTexObjectX(m_xBuilder->weld_toggle_button("texobjx"))
     , m_xBtnTexParallelX(m_xBuilder->weld_toggle_button("texparallelx"))
     , m_xBtnTexCircleX(m_xBuilder->weld_toggle_button("texcirclex"))
@@ -401,7 +400,6 @@ void Svx3DWin::dispose()
     m_xBtnTexColor.reset();
     m_xBtnTexReplace.reset();
     m_xBtnTexModulate.reset();
-    m_xBtnTexBlend.reset();
     m_xBtnTexObjectX.reset();
     m_xBtnTexParallelX.reset();
     m_xBtnTexCircleX.reset();
