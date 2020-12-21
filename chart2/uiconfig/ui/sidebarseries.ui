@@ -60,7 +60,7 @@
                           <object class="GtkBox" id="datalabel_box">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">12</property>
+                            <property name="margin-start">12</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkLabel" id="label_box">

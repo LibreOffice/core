@@ -1395,11 +1395,11 @@ public:
     void set_border_width(sal_Int32 nBorderWidth);
     sal_Int32 get_border_width() const;
 
-    void set_margin_left(sal_Int32 nWidth);
-    sal_Int32 get_margin_left() const;
+    void set_margin_start(sal_Int32 nWidth);
+    sal_Int32 get_margin_start() const;
 
-    void set_margin_right(sal_Int32 nWidth);
-    sal_Int32 get_margin_right() const;
+    void set_margin_end(sal_Int32 nWidth);
+    sal_Int32 get_margin_end() const;
 
     void set_margin_top(sal_Int32 nWidth);
     sal_Int32 get_margin_top() const;

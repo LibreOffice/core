@@ -51,7 +51,7 @@
                   <object class="sfxlo-NotebookbarToolBox" id="SectionBottom41">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">5</property>
+                    <property name="margin-start">5</property>
                     <property name="margin_top">4</property>
                     <property name="margin_bottom">4</property>
                     <property name="show_arrow">False</property>
@@ -1494,7 +1494,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
-                        <property name="margin_left">5</property>
+                        <property name="margin-start">5</property>
                         <child>
                           <object class="sfxlo-NotebookbarToolBox" id="ExtBottom9">
                             <property name="visible">True</property>
@@ -1539,7 +1539,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
-                            <property name="margin_right">5</property>
+                            <property name="margin-end">5</property>
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Table-Grow1">
@@ -2187,7 +2187,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
-                            <property name="margin_left">1</property>
+                            <property name="margin-start">1</property>
                             <property name="toolbar_style">icons</property>
                             <property name="show_arrow">False</property>
                             <child>
@@ -3068,7 +3068,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
-                            <property name="margin_left">5</property>
+                            <property name="margin-start">5</property>
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Graphic-LineWidth1">
@@ -3903,7 +3903,7 @@
                           <object class="GtkSeparator" id="separator20">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">1</property>
+                            <property name="margin-start">1</property>
                             <property name="margin_top">5</property>
                             <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
@@ -4437,7 +4437,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
-                            <property name="margin_left">5</property>
+                            <property name="margin-start">5</property>
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="MultiObject-LineWidth1">
@@ -5689,7 +5689,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
-                            <property name="margin_left">5</property>
+                            <property name="margin-start">5</property>
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Media-LineWidth1">
@@ -6737,7 +6737,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
-                            <property name="margin_left">5</property>
+                            <property name="margin-start">5</property>
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Object-LineWidth">
@@ -9027,7 +9027,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
-                            <property name="margin_left">5</property>
+                            <property name="margin-start">5</property>
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Default-LineWidth1">
@@ -9162,7 +9162,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
-                            <property name="margin_left">5</property>
+                            <property name="margin-start">5</property>
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="Text-FontHeight">
@@ -10442,7 +10442,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
-                            <property name="margin_left">5</property>
+                            <property name="margin-start">5</property>
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="3dObject-LineWidth1">

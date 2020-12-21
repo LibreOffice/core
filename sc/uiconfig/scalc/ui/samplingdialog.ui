@@ -245,7 +245,7 @@
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">12</property>
+                        <property name="margin-start">12</property>
                         <property name="hexpand">True</property>
                         <property name="xpad">12</property>
                         <property name="label" translatable="yes" context="samplingdialog|label1">Sample size:</property>
@@ -312,7 +312,7 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">12</property>
+                        <property name="margin-start">12</property>
                         <property name="hexpand">True</property>
                         <property name="xpad">12</property>
                         <property name="label" translatable="yes" context="samplingdialog|label3">Period:</property>

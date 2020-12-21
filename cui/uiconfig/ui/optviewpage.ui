@@ -601,7 +601,7 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="tooltip-text" translatable="yes" context="optviewpage|forceskia|tooltip_text">Requires restart. Enabling this will prevent the use of graphics drivers.</property>
-                        <property name="margin-left">12</property>
+                        <property name="margin-start">12</property>
                         <property name="use-underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw-indicator">True</property>
@@ -614,7 +614,7 @@
                     <child>
                       <object class="GtkLabel" id="skiaenabled">
                         <property name="can-focus">False</property>
-                        <property name="margin-left">12</property>
+                        <property name="margin-start">12</property>
                         <property name="label" translatable="yes" context="optviewpage|skiaenabled">Skia is currently enabled.</property>
                         <property name="xalign">0</property>
                       </object>
@@ -626,7 +626,7 @@
                     <child>
                       <object class="GtkLabel" id="skiadisabled">
                         <property name="can-focus">False</property>
-                        <property name="margin-left">12</property>
+                        <property name="margin-start">12</property>
                         <property name="label" translatable="yes" context="optviewpage|skiadisabled">Skia is currently disabled.</property>
                         <property name="xalign">0</property>
                       </object>
@@ -760,7 +760,7 @@
                       <object class="GtkGrid">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="margin-left">18</property>
+                        <property name="margin-start">18</property>
                         <property name="column-spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="aafrom">

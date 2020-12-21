@@ -165,7 +165,7 @@
                                   <object class="GtkLabel" id="label5">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="margin_left">12</property>
+                                    <property name="margin-start">12</property>
                                     <property name="label" translatable="yes" context="envformatpage|label5">from left</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">leftaddr</property>
@@ -192,7 +192,7 @@
                                   <object class="GtkLabel" id="label6">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="margin_left">12</property>
+                                    <property name="margin-start">12</property>
                                     <property name="label" translatable="yes" context="envformatpage|label6">from top</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">topaddr</property>
@@ -381,7 +381,7 @@
                                   <object class="GtkLabel" id="label8">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="margin_left">12</property>
+                                    <property name="margin-start">12</property>
                                     <property name="label" translatable="yes" context="envformatpage|label8">from left</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">leftsender</property>
@@ -408,7 +408,7 @@
                                   <object class="GtkLabel" id="label9">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="margin_left">12</property>
+                                    <property name="margin-start">12</property>
                                     <property name="label" translatable="yes" context="envformatpage|label9">from top</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">topsender</property>

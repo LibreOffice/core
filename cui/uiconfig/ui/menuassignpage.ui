@@ -443,7 +443,7 @@
               <object class="GtkComboBoxText" id="savein">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_right">5</property>
+                <property name="margin-end">5</property>
                 <property name="hexpand">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="savein-atkobject">
@@ -504,7 +504,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="halign">end</property>
-                <property name="margin_left">1</property>
+                <property name="margin-start">1</property>
                 <property name="image">image7</property>
                 <property name="always_show_image">True</property>
                 <property name="popup">menugearmenu</property>
@@ -526,7 +526,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="halign">end</property>
-                <property name="margin_left">1</property>
+                <property name="margin-start">1</property>
                 <property name="image">image8</property>
                 <property name="always_show_image">True</property>
                 <property name="popup">toolbargearmenu</property>
@@ -680,8 +680,8 @@
           <object class="GtkButtonBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">5</property>
-            <property name="margin_right">5</property>
+            <property name="margin-start">5</property>
+            <property name="margin-end">5</property>
             <property name="margin_top">5</property>
             <property name="margin_bottom">5</property>
             <property name="hexpand">True</property>
@@ -692,8 +692,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="margin_left">5</property>
-                <property name="margin_right">5</property>
+                <property name="margin-start">5</property>
+                <property name="margin-end">5</property>
                 <property name="margin_top">5</property>
                 <property name="margin_bottom">5</property>
                 <property name="use_underline">True</property>
@@ -716,8 +716,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="margin_left">5</property>
-                <property name="margin_right">5</property>
+                <property name="margin-start">5</property>
+                <property name="margin-end">5</property>
                 <property name="margin_top">5</property>
                 <property name="margin_bottom">5</property>
                 <property name="use_underline">True</property>
@@ -740,8 +740,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="margin_left">5</property>
-                <property name="margin_right">5</property>
+                <property name="margin-start">5</property>
+                <property name="margin-end">5</property>
                 <property name="margin_top">5</property>
                 <property name="margin_bottom">5</property>
                 <property name="use_underline">True</property>
@@ -769,8 +769,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="valign">center</property>
-            <property name="margin_left">6</property>
-            <property name="margin_right">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
             <property name="row_spacing">6</property>
             <child>
               <!-- n-columns=1 n-rows=1 -->

@@ -3347,8 +3347,8 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="valign">center</property>
-                                        <property name="margin_left">5</property>
-                                        <property name="margin_right">5</property>
+                                        <property name="margin-start">5</property>
+                                        <property name="margin-end">5</property>
                                         <child>
                                           <object class="GtkToolButton" id="Home-FontHeight">
                                             <property name="visible">True</property>
@@ -4992,7 +4992,7 @@
                               <object class="GtkToolButton" id="Insert-DataDataPilotRun">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="margin_left">5</property>
+                                <property name="margin-start">5</property>
                                 <property name="action_name">.uno:DataDataPilotRun</property>
                               </object>
                               <packing>
@@ -11174,7 +11174,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
-                        <property name="margin_left">5</property>
+                        <property name="margin-start">5</property>
                         <property name="vexpand">True</property>
                         <child>
                           <object class="GtkSeparator" id="separator123">
@@ -11405,7 +11405,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="valign">center</property>
-                                    <property name="margin_right">5</property>
+                                    <property name="margin-end">5</property>
                                     <property name="action_name">.uno:GrafContrast</property>
                                   </object>
                                   <packing>
@@ -11486,7 +11486,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="valign">center</property>
-                                    <property name="margin_right">5</property>
+                                    <property name="margin-end">5</property>
                                     <property name="action_name">.uno:GrafGamma</property>
                                   </object>
                                   <packing>

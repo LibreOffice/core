@@ -164,7 +164,7 @@
                   <object class="GtkComboBoxText" id="outarealb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">12</property>
+                    <property name="margin-start">12</property>
                     <accessibility>
                       <relation type="labelled-by" target="copyresult"/>
                       <relation type="label-for" target="outareaed"/>
@@ -229,7 +229,7 @@
                   <object class="GtkComboBoxText" id="sortuserlb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">12</property>
+                    <property name="margin-start">12</property>
                     <accessibility>
                       <relation type="labelled-by" target="sortuser"/>
                     </accessibility>

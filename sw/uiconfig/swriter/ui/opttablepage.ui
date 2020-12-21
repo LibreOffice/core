@@ -86,7 +86,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="margin_left">12</property>
+                        <property name="margin-start">12</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
@@ -210,7 +210,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="margin_left">12</property>
+                        <property name="margin-start">12</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
@@ -231,7 +231,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="margin_left">12</property>
+                        <property name="margin-start">12</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
@@ -324,7 +324,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="margin_left">12</property>
+                        <property name="margin-start">12</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
@@ -346,7 +346,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="margin_left">12</property>
+                        <property name="margin-start">12</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
@@ -369,7 +369,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="margin_left">12</property>
+                        <property name="margin-start">12</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
@@ -511,7 +511,7 @@
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">12</property>
+                            <property name="margin-start">12</property>
                             <property name="label" translatable="yes" context="opttablepage|label5">_Row:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">rowmove</property>
@@ -526,7 +526,7 @@
                           <object class="GtkLabel" id="label6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">12</property>
+                            <property name="margin-start">12</property>
                             <property name="label" translatable="yes" context="opttablepage|label6">_Column:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">colmove</property>
@@ -594,7 +594,7 @@
                           <object class="GtkLabel" id="label15">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">12</property>
+                            <property name="margin-start">12</property>
                             <property name="label" translatable="yes" context="opttablepage|label15">Ro_w:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">rowinsert</property>
@@ -609,7 +609,7 @@
                           <object class="GtkLabel" id="label16">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">12</property>
+                            <property name="margin-start">12</property>
                             <property name="label" translatable="yes" context="opttablepage|label16">Colu_mn:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">colinsert</property>

@@ -96,7 +96,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">25</property>
+                    <property name="margin-start">25</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment2</property>
                     <child internal-child="accessible">
@@ -115,7 +115,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">25</property>
+                    <property name="margin-start">25</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment4</property>
                     <child internal-child="accessible">
@@ -134,7 +134,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">25</property>
+                    <property name="margin-start">25</property>
                     <property name="activates_default">True</property>
                     <property name="input_purpose">number</property>
                     <property name="adjustment">adjustment1</property>

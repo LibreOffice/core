@@ -93,13 +93,21 @@ sub check_whitespaces($)
             {
                 bad_line("OOXMLEXPORT definition used in a ooxmlimport file", $_, "cxx");
             }
-            if (/<property name="use_markup">True<\/property>/)
+            if (/<property name="use[-_]markup">True<\/property>/)
             {
                 bad_line("use font attributes instead of use-markup", $_, "ui");
             }
-            if (/<property name="tooltip_markup"/ )
+            if (/<property name="tooltip[-_]markup"/ )
             {
-                bad_line("use tooltip_text instead of tooltip_markup", $_, "ui");
+                bad_line("use tooltip-text instead of tooltip_markup", $_, "ui");
+            }
+            if (/<property name="margin[-_]left"/ )
+            {
+                bad_line("use margin-start instead of margin-left", $_, "ui");
+            }
+            if (/<property name="margin[-_]right"/ )
+            {
+                bad_line("use margin-end instead of margin-right", $_, "ui");
             }
             if ((/translatable="yes"/) and not(/context=/))
             {

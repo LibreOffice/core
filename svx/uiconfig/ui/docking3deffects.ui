@@ -539,7 +539,7 @@
       <object class="GtkGrid" id="grid6">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_right">12</property>
+        <property name="margin-end">12</property>
         <property name="margin_bottom">12</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>

@@ -459,7 +459,7 @@
                                       <object class="GtkLabel" id="constraintlabel">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="margin_left">6</property>
+                                        <property name="margin-start">6</property>
                                         <property name="label" translatable="yes" context="solverdlg|constraintlabel">V_alue</property>
                                         <property name="use_underline">True</property>
                                         <property name="xalign">0</property>
@@ -678,7 +678,7 @@
                                       <object class="GtkEntry" id="val1edit">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="margin_left">6</property>
+                                        <property name="margin-start">6</property>
                                         <property name="hexpand">True</property>
                                         <property name="activates_default">True</property>
                                         <property name="width_chars">15</property>
@@ -697,7 +697,7 @@
                                       <object class="GtkEntry" id="val2edit">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="margin_left">6</property>
+                                        <property name="margin-start">6</property>
                                         <property name="hexpand">True</property>
                                         <property name="activates_default">True</property>
                                         <property name="width_chars">15</property>
@@ -716,7 +716,7 @@
                                       <object class="GtkEntry" id="val3edit">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="margin_left">6</property>
+                                        <property name="margin-start">6</property>
                                         <property name="hexpand">True</property>
                                         <property name="activates_default">True</property>
                                         <property name="width_chars">15</property>
@@ -735,7 +735,7 @@
                                       <object class="GtkEntry" id="val4edit">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="margin_left">6</property>
+                                        <property name="margin-start">6</property>
                                         <property name="hexpand">True</property>
                                         <property name="activates_default">True</property>
                                         <property name="width_chars">15</property>

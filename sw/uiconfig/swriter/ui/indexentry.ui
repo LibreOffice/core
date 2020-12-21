@@ -170,7 +170,7 @@
                           <object class="GtkLabel" id="typeft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_right">6</property>
+                            <property name="margin-end">6</property>
                             <property name="label" translatable="yes" context="indexentry|typeft">Index</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">typecb</property>
@@ -212,7 +212,7 @@
                           <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_right">6</property>
+                            <property name="margin-end">6</property>
                             <property name="label" translatable="yes" context="indexentry|label3">Entry</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">entryed</property>
@@ -228,7 +228,7 @@
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_right">6</property>
+                            <property name="margin-end">6</property>
                             <property name="label" translatable="yes" context="indexentry|key1ft">1st key</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">key1cb</property>
@@ -244,7 +244,7 @@
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_right">6</property>
+                            <property name="margin-end">6</property>
                             <property name="label" translatable="yes" context="indexentry|key2ft">2nd key</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">key2cb</property>
@@ -259,7 +259,7 @@
                           <object class="GtkLabel" id="levelft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_right">6</property>
+                            <property name="margin-end">6</property>
                             <property name="label" translatable="yes" context="indexentry|levelft">Level</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">levelnf</property>
@@ -288,8 +288,8 @@
                           <object class="GtkLabel" id="phonetic0ft">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
-                            <property name="margin_left">12</property>
-                            <property name="margin_right">6</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-end">6</property>
                             <property name="label" translatable="yes" context="indexentry|phonetic0ft">Phonetic reading</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">phonetic0ed</property>
@@ -304,8 +304,8 @@
                           <object class="GtkLabel" id="phonetic1ft">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
-                            <property name="margin_left">12</property>
-                            <property name="margin_right">6</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-end">6</property>
                             <property name="label" translatable="yes" context="indexentry|phonetic1ft">Phonetic reading</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">phonetic1ed</property>
@@ -320,8 +320,8 @@
                           <object class="GtkLabel" id="phonetic2ft">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
-                            <property name="margin_left">12</property>
-                            <property name="margin_right">6</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-end">6</property>
                             <property name="label" translatable="yes" context="indexentry|phonetic2ft">Phonetic reading</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">phonetic2ed</property>
@@ -488,7 +488,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="no_show_all">True</property>
-                            <property name="margin_left">12</property>
+                            <property name="margin-start">12</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
@@ -504,7 +504,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="no_show_all">True</property>
-                            <property name="margin_left">12</property>
+                            <property name="margin-start">12</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>

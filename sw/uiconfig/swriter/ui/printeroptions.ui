@@ -114,7 +114,7 @@
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">5</property>
+                        <property name="margin-start">5</property>
                         <property name="label" translatable="yes" context="printeroptions|formcontrols">Comments:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">writercomments</property>

@@ -24,8 +24,8 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">center</property>
-        <property name="margin_left">9</property>
-        <property name="margin_right">15</property>
+        <property name="margin-start">9</property>
+        <property name="margin-end">15</property>
         <property name="hexpand">True</property>
         <property name="border_width">6</property>
         <property name="row_spacing">3</property>

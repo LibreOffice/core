@@ -293,7 +293,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="remotefilesdialog|new_folder|tooltip_text">Create New Folder</property>
-                <property name="margin_left">6</property>
+                <property name="margin-start">6</property>
                 <property name="image">image3</property>
                 <property name="always_show_image">True</property>
               </object>

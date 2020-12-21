@@ -150,7 +150,7 @@
                   <object class="GtkSpinButton" id="copies">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="margin_left">12</property>
+                    <property name="margin-start">12</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>

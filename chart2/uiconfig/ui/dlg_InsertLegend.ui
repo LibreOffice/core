@@ -58,7 +58,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="margin_right">6</property>
+                <property name="margin-end">6</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -122,7 +122,7 @@
                           <object class="GtkGrid" id="grid1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">12</property>
+                            <property name="margin-start">12</property>
                             <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="left">

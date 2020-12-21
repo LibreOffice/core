@@ -137,7 +137,7 @@
               <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_right">6</property>
+                <property name="margin-end">6</property>
                 <property name="hexpand">True</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
@@ -152,7 +152,7 @@
                         <property name="can_focus">False</property>
                         <property name="events">GDK_STRUCTURE_MASK | GDK_SCROLL_MASK</property>
                         <property name="tooltip_text" translatable="yes" context="printdialog|printpreview">Print preview</property>
-                        <property name="margin_right">6</property>
+                        <property name="margin-end">6</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="preview-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|preview">The preview shows how each sheet of paper will look. You can browse through all sheets of paper with the buttons below the preview.</property>
@@ -345,7 +345,7 @@
               <object class="GtkNotebook" id="tabcontrol">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="margin_left">6</property>
+                <property name="margin-start">6</property>
                 <property name="vexpand">True</property>
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow">

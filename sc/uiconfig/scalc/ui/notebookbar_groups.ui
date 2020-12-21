@@ -352,8 +352,8 @@
       <object class="GtkBox" id="box">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
-        <property name="margin_left">6</property>
-        <property name="margin_right">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="spacing">6</property>

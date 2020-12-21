@@ -68,8 +68,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
-                    <property name="margin_left">24</property>
-                    <property name="margin_right">6</property>
+                    <property name="margin-start">24</property>
+                    <property name="margin-end">6</property>
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">6</property>
                     <child>

@@ -135,7 +135,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="halign">start</property>
-                        <property name="margin_left">12</property>
+                        <property name="margin-start">12</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
@@ -433,7 +433,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">12</property>
+                    <property name="margin-start">12</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -517,7 +517,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">12</property>
+                    <property name="margin-start">12</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>

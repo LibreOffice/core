@@ -265,7 +265,7 @@
                           <object class="GtkLabel" id="startquoteft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">12</property>
+                            <property name="margin-start">12</property>
                             <property name="label" translatable="yes" context="applylocalizedpage|startquoteft">_Start quote:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">startsingle</property>
@@ -342,7 +342,7 @@
                           <object class="GtkLabel" id="endquoteft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">12</property>
+                            <property name="margin-start">12</property>
                             <property name="label" translatable="yes" context="applylocalizedpage|endquoteft">_End quote:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">endsingle</property>
@@ -461,7 +461,7 @@
                           <object class="GtkLabel" id="label6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">12</property>
+                            <property name="margin-start">12</property>
                             <property name="label" translatable="yes" context="applylocalizedpage|label6">_Start quote:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">startdouble</property>
@@ -538,7 +538,7 @@
                           <object class="GtkLabel" id="label8">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">12</property>
+                            <property name="margin-start">12</property>
                             <property name="label" translatable="yes" context="applylocalizedpage|label8">_End quote:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">enddouble</property>

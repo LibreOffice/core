@@ -124,8 +124,8 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                                    <property name="margin_left">3</property>
-                                    <property name="margin_right">3</property>
+                                    <property name="margin-start">3</property>
+                                    <property name="margin-end">3</property>
                                     <property name="margin_top">3</property>
                                     <property name="margin_bottom">3</property>
                                     <property name="hexpand">True</property>
