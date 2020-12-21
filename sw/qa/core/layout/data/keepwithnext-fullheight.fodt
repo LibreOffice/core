@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" office:mimetype="application/vnd.oasis.opendocument.text" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
+  <office:styles>
+    <style:style style:name="OLE" style:family="graphic">
+      <style:graphic-properties text:anchor-type="paragraph" svg:x="0cm" svg:y="0cm" style:wrap="none" style:horizontal-pos="center" style:horizontal-rel="paragraph" style:flow-with-text="false"/>
+    </style:style>
+  </office:styles>
+  <office:automatic-styles>
+    <style:style style:name="P1" style:family="paragraph" style:master-page-name="Landscape"/>
+    <style:style style:name="fr1" style:family="graphic" style:parent-style-name="OLE">
+      <style:graphic-properties style:vertical-pos="top" style:vertical-rel="paragraph" draw:ole-draw-aspect="1"/>
+    </style:style>
+    <style:page-layout style:name="pm1">
+      <style:page-layout-properties fo:page-width="82.652cm" fo:page-height="57.683cm" style:num-format="1" style:print-orientation="landscape" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="20" style:layout-grid-base-height="0.706cm" style:layout-grid-ruby-height="0.353cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:footnote-max-height="0cm"/>
+    </style:page-layout>
+  </office:automatic-styles>
+  <office:master-styles>
+    <style:master-page style:name="Landscape" style:page-layout-name="pm1"/>
+  </office:master-styles>
+  <office:body>
+    <office:text>
+      <text:p text:style-name="P1">Landscape page</text:p>
+      <text:h>Heading</text:h>
+      <text:p><draw:frame draw:style-name="fr1" draw:name="Image1" text:anchor-type="paragraph" svg:width="58.644cm" style:rel-width="100%" svg:height="57.683cm" style:rel-height="scale" draw:z-index="0"><draw:image draw:mime-type="image/png"><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAAAFz
+       UkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAA
+       AAJiS0dEAACqjSMyAAAACW9GRnMAAAAGAAAAAAAMc1XTAAAACXBIWXMAAA3XAAAN1wFCKJt4
+       AAAACXZwQWcAAABMAAAAQACdMTgbAAABzUlEQVRo3u3ZPU/CQBjA8X+Jxs3ESUDj4iK+LA5+
+       BBfjqBE1cXB2MlFAEqMgxvhNNL4sLsK3UPQL6ObkoAETz+FKW2mxCPRYnucWUu76/OC59C49
+       cGOCKqrD9kHRc6ddPv7oW2WCwMh0nF63Myz7Tm8hPTNu0pgHMER3scepTbgK6enJNND83RLn
+       /878yRaPmgBZFDuMsNLeWB9gmFQHP77MIg9gsYciR50NFKvtjIy10yk84pSZA7DYpwR8scmF
+       QQCMuoQMpzbh0iAARrlnVn90CWHTsZcAiHPPdINQAuqsc2MQAAnKDUKWEhZ10twaBEDSJWQo
+       YlFj7S9CzwEegkXWIbQsRAQASFJhpplwbRAACS+hANRJBxMiAkDcJeQ4sQkBhYgMoJ+Ozlwo
+       2YQ7AJ6CRxyiUGnVy3hVKb0Af9v7hUG2Wy9TEQCUelFTDULB2S+YKYGOMcpM6UIccOQnRA6A
+       cSp6ibfI+wkGADBGpTEd8xz1AaAfTQ7huA8AvUw5hVjuA0D/C5OaMN8XACRZ8F0zCggKAQhA
+       AAIQgAAEIAABCEAAAhCAAAQgAAH4zg3feY4w3Xs44M5+oW0qvCWoGcvaIlM3x/f/ab+O738A
+       hOCNQr34oD4AAAAldEVYdGNyZWF0ZS1kYXRlADIwMTAtMTItMjBUMTc6MDg6MzYrMDE6MDB6
+       5RscAAAAJXRFWHRtb2RpZnktZGF0ZQAyMDEwLTEyLTIwVDE3OjA4OjM3KzAxOjAwgyNmnAAA
+       AABJRU5ErkJggg==
+      </office:binary-data></draw:image></draw:frame></text:p>
+    </office:text>
+  </office:body>
+</office:document>
