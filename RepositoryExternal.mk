@@ -1565,13 +1565,13 @@ endef
 
 endif # SYSTEM_HARFBUZZ
 
-ifeq ($(DISABLE_OPENSSL),TRUE)
+ifneq ($(ENABLE_OPENSSL),TRUE)
 
 gb_ExternalProject__use_openssl:=
 gb_LinkTarget__use_openssl_headers:=
 gb_LinkTarget__use_openssl:=
 
-else # !DISABLE_OPENSSL
+else # ENABLE_OPENSSL
 
 ifneq ($(SYSTEM_OPENSSL),)
 
@@ -1632,10 +1632,10 @@ endif
 endef
 
 endif # SYSTEM_OPENSSL
-endif # DISABLE_OPENSSL
+endif # ENABLE_OPENSSL
 
 
-ifeq ($(DISABLE_OPENSSL),TRUE)
+ifneq ($(ENABLE_OPENSSL),TRUE)
 
 define gb_LinkTarget__use_gnutls
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1661,12 +1661,12 @@ $(call gb_LinkTarget_add_libs,$(1),$(LIBGCRYPT_LIBS))
 
 endef
 
-else # !DISABLE_OPENSSL
+else # ENABLE_OPENSSL
 
 gb_LinkTarget__use_gnutls:=
 gb_LinkTarget__use_libgcrypt:=
 
-endif # DISABLE_OPENSSL
+endif # ENABLE_OPENSSL
 
 
 ifneq ($(SYSTEM_CDR),)

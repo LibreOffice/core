@@ -24,8 +24,8 @@ $(eval $(call gb_Module_add_targets,canvas,\
 	Library_canvastools \
 	Library_simplecanvas \
 	Library_vclcanvas \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)), \
-		$(if $(DISABLE_GUI),,Executable_canvasdemo)) \
+	$(if $(and $(filter DESKTOP,$(BUILD_TYPE)),$(call gb_not,$(filter $(OS),EMSCRIPTEN)),\
+		$(call gb_not,$(DISABLE_GUI))),Executable_canvasdemo) \
 ))
 
 ifeq ($(ENABLE_CAIRO_CANVAS),TRUE)

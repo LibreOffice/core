@@ -79,7 +79,7 @@ $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-cor
 	LO_lib/_elementtree.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/fcntl.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/grp.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	$(if $(DISABLE_OPENSSL),, \
+	$(if $(ENABLE_OPENSSL), \
 		LO_lib/_hashlib.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	) \
 	LO_lib/_heapq.$(python3_EXTENSION_MODULE_SUFFIX).so \
@@ -107,7 +107,7 @@ $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-cor
 	LO_lib/_sha512.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_socket.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/spwd.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	$(if $(DISABLE_OPENSSL),, \
+	$(if $(ENABLE_OPENSSL), \
 		LO_lib/_ssl.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	) \
 	LO_lib/_statistics.$(python3_EXTENSION_MODULE_SUFFIX).so \
