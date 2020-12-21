@@ -19,6 +19,7 @@ gb_BUILD_TOOLS = \
 		gencoll_rule \
 		genconv_dict \
 		gendict \
+		$(if $(WITH_GALLERY_BUILD),gengal) \
 		genindex_data \
 		helpex \
 		idxdict \
@@ -33,7 +34,6 @@ gb_BUILD_TOOLS = \
 		unoidl-write \
 		xrmex \
 		$(call gb_Helper_optional_for_host,DESKTOP, \
-			gengal \
 			HelpIndexer \
 			HelpLinker \
 			lngconvex \

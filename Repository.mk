@@ -904,7 +904,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	sfx2_emojiconfig \
 	$(call gb_Helper_optional,DESKTOP,\
 		$(if $(filter-out WNT,$(OS)),$(if $(ENABLE_MACOSX_SANDBOX),,shell_senddoc))) \
-	$(call gb_Helper_optional,DESKTOP,$(if $(filter-out MACOSX WNT,$(OS)),svx_gengal)) \
+	$(call gb_Helper_optional,DESKTOP,$(if $(filter-out EMSCRIPTEN MACOSX WNT,$(OS)),svx_gengal)) \
 	$(if $(USING_X11),vcl_fontunxppds) \
 	$(if $(filter $(OS),MACOSX),vcl_osxres) \
 	xmloff_dtd \
