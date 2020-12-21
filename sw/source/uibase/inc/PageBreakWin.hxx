@@ -39,6 +39,7 @@ public:
     virtual ~SwPageBreakWin() override;
     virtual void dispose() override;
 
+    void execute(const OString& rIdent);
     void UpdatePosition(const std::optional<Point>& xEvtPt = std::optional<Point>());
 
     virtual void ShowAll( bool bShow ) override;
@@ -47,6 +48,8 @@ public:
     void SetReadonly( bool bReadonly ) override;
 
     void Fade( bool bFadeIn );
+
+    virtual FactoryFunction GetUITestFactory() const override;
 
 private:
     DECL_LINK( FadeHandler, Timer *, void );
