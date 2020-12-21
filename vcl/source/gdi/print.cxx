@@ -42,6 +42,7 @@
 #include <PhysicalFontCollection.hxx>
 #include <print.h>
 
+#include <com/sun/star/awt/DeviceCapability.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -1644,4 +1645,30 @@ Bitmap Printer::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
     return OutputDevice::GetBitmap( rSrcPt, rSize );
 }
 
+css::awt::DeviceInfo Printer::GetDeviceInfo() const
+{
+    css::awt::DeviceInfo aInfo;
+
+    Size aDevSz;
+    aDevSz = GetPaperSizePixel();
+    Size aOutSz = GetOutputSizePixel();
+    Point aOffset = GetPageOffset();
+    aInfo.LeftInset = aOffset.X();
+    aInfo.TopInset = aOffset.Y();
+    aInfo.RightInset = aDevSz.Width() - aOutSz.Width() - aOffset.X();
+    aInfo.BottomInset = aDevSz.Height() - aOutSz.Height() - aOffset.Y();
+
+    aInfo.Width = aDevSz.Width();
+    aInfo.Height = aDevSz.Height();
+
+    Size aTmpSz = LogicToPixel(Size(1000, 1000), MapMode(MapUnit::MapCM));
+    aInfo.PixelPerMeterX = aTmpSz.Width()/10;
+    aInfo.PixelPerMeterY = aTmpSz.Height()/10;
+
+    aInfo.BitsPerPixel = GetBitCount();
+
+    aInfo.Capabilities = 0;
+
+    return aInfo;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

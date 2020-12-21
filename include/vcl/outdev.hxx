@@ -48,6 +48,7 @@
 
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/awt/DeviceInfo.hpp>
 
 #include <memory>
 #include <vector>
@@ -2013,6 +2014,9 @@ public:
                                     const Point& rPt, const Size& rSz,
                                     const GfxLink& rGfxLink, GDIMetaFile* pSubst = nullptr );
     ///@}
+
+public:
+    virtual css::awt::DeviceInfo GetDeviceInfo() const;
 };
 
 #endif // INCLUDED_VCL_OUTDEV_HXX

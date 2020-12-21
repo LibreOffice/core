@@ -31,6 +31,7 @@
 #include <vcl/PrinterSupport.hxx>
 #include <vcl/jobset.hxx>
 
+#include <com/sun/star/awt/DeviceCapability.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/view/PrintableState.hpp>
@@ -220,6 +221,8 @@ public:
         SetLineColor(COL_BLACK);
         DrawRect(aBorderRect);
     }
+
+    css::awt::DeviceInfo GetDeviceInfo() const override;
 
 protected:
     virtual void                DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,

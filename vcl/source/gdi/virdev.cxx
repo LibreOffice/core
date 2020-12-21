@@ -17,15 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
+#include <tools/debug.hxx>
+
+#include <vcl/virdev.hxx>
+
+#include <outdev.h>
+#include <PhysicalFontCollection.hxx>
 #include <salinst.hxx>
 #include <salgdi.hxx>
 #include <salvd.hxx>
-#include <outdev.h>
-#include <PhysicalFontCollection.hxx>
 #include <svdata.hxx>
-#include <vcl/virdev.hxx>
-#include <sal/log.hxx>
-#include <tools/debug.hxx>
 
 using namespace ::com::sun::star::uno;
 

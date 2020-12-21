@@ -56,6 +56,7 @@
 #include <brdwin.hxx>
 #include <helpwin.hxx>
 
+#include <com/sun/star/awt/DeviceCapability.hpp>
 #include <com/sun/star/accessibility/AccessibleRelation.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
@@ -3939,6 +3940,29 @@ const OUString& Window::get_id() const
 FactoryFunction Window::GetUITestFactory() const
 {
     return WindowUIObject::create;
+}
+
+css::awt::DeviceInfo Window::GetDeviceInfo() const
+{
+    css::awt::DeviceInfo aInfo;
+
+    Size aDevSz;
+    aDevSz = GetSizePixel();
+    GetBorder(aInfo.LeftInset, aInfo.TopInset, aInfo.RightInset, aInfo.BottomInset);
+
+    aInfo.Width = aDevSz.Width();
+    aInfo.Height = aDevSz.Height();
+
+    Size aTmpSz = LogicToPixel( Size( 1000, 1000 ), MapMode( MapUnit::MapCM ) );
+    aInfo.PixelPerMeterX = aTmpSz.Width()/10;
+    aInfo.PixelPerMeterY = aTmpSz.Height()/10;
+
+    aInfo.BitsPerPixel = GetBitCount();
+
+    aInfo.Capabilities = 0;
+    aInfo.Capabilities = css::awt::DeviceCapability::RASTEROPERATIONS|css::awt::DeviceCapability::GETBITS;
+
+    return aInfo;
 }
 
 } /* namespace vcl */
