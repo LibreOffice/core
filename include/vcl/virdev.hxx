@@ -156,6 +156,8 @@ public:
     virtual             ~VirtualDevice() override;
     virtual void        dispose() override;
 
+    bool                CanEnableNativeWidget() const override;
+
     virtual void        EnableRTL( bool bEnable = true ) override;
 
     bool                SetOutputSizePixel( const Size& rNewSize, bool bErase = true );

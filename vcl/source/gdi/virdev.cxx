@@ -29,6 +29,13 @@
 
 using namespace ::com::sun::star::uno;
 
+bool VirtualDevice::CanEnableNativeWidget() const
+{
+    const vcl::ExtOutDevData* pOutDevData(GetExtOutDevData());
+    const vcl::PDFExtOutDevData* pPDFData(dynamic_cast<const vcl::PDFExtOutDevData*>(pOutDevData));
+    return pPDFData == nullptr;
+}
+
 bool VirtualDevice::AcquireGraphics() const
 {
     DBG_TESTSOLARMUTEX();
