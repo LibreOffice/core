@@ -1125,6 +1125,8 @@ emscripten*)
     enable_mariadb_sdbc=no
     with_system_zlib=no
     _os=Emscripten
+
+    BUILD_TYPE="$BUILD_TYPE FONTCONFIG FREETYPE"
     ;;
 
 *)
@@ -4437,7 +4439,7 @@ fi
 AC_SUBST(USE_LD)
 
 HAVE_LD_BSYMBOLIC_FUNCTIONS=
-if test "$GCC" = "yes"; then
+if test "$GCC" = "yes" -a "$_os" != Emscripten ; then
     AC_MSG_CHECKING([for -Bsymbolic-functions linker support])
     bsymbolic_functions_ldflags_save=$LDFLAGS
     LDFLAGS="$LDFLAGS -Wl,-Bsymbolic-functions"
