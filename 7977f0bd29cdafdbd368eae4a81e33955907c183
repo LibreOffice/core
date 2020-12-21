@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88ecf49b_20c08f79",
+        "filename": "sw/source/uibase/docvw/PageBreakWin.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-12-21T18:11:27Z",
+      "side": 1,
+      "message": "So... documentation is really sparse here, and yet there seems to be so many \"special cases\" to consider. I wasn\u0027t completely comfortable with using pCnt-\u003eGetPrev() or anything similar to that. (I think that was failing when pCnt was in a table, IIRC.) So I\u0027m not sure if this is the best way to do it, but it worked in my testing, and seems to be sensible based on the name. (I was surprised to find NO examples of GetPageFrame()-\u003eGetPrev() though - so that shakes my confidence a bit.)",
+      "range": {
+        "startLine": 252,
+        "startChar": 47,
+        "endLine": 252,
+        "endChar": 77
+      },
+      "revId": "7977f0bd29cdafdbd368eae4a81e33955907c183",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
