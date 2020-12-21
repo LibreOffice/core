@@ -15,13 +15,13 @@ endif
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
-emscripten_CPPFLAGS := -pthread -s TOTAL_MEMORY=1GB -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=4
+gb_EMSCRIPTEN_CPPFLAGS := -pthread -s TOTAL_MEMORY=1GB -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=4 -s SAFE_HEAP=1
 
 gb_Executable_EXT := .html
 
-gb_CFLAGS += $(emscripten_CPPFLAGS)
-gb_CXXFLAGS += $(emscripten_CPPFLAGS) -s DISABLE_EXCEPTION_CATCHING=0
-gb_LinkTarget_LDFLAGS += $(emscripten_CPPFLAGS) --bind
+gb_CFLAGS += $(gb_EMSCRIPTEN_CPPFLAGS)
+gb_CXXFLAGS += $(gb_EMSCRIPTEN_CPPFLAGS) -s DISABLE_EXCEPTION_CATCHING=0
+gb_LinkTarget_LDFLAGS += $(gb_EMSCRIPTEN_CPPFLAGS) --bind
 
 define gb_Library_get_rpath
 endef

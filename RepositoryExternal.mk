@@ -1363,6 +1363,8 @@ $(call gb_LinkTarget_add_libs,$(1),$(FONTCONFIG_LIBS))
 
 endef
 
+gb_ExternalProject__use_fontconfig :=
+
 else
 
 define gb_LinkTarget__use_fontconfig
@@ -1375,6 +1377,11 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),\
     -L$(call gb_UnpackedTarball_get_dir,fontconfig)/src/.libs -lfontconfig \
 )
+
+endef
+
+define gb_ExternalProject__use_fontconfig
+$(call gb_ExternalProject_use_external_project,$(1),fontconfig)
 
 endef
 
