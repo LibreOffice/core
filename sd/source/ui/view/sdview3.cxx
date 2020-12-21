@@ -305,7 +305,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     // ImageMap?
     if( !pOwnData && aDataHelper.HasFormat( SotClipboardFormatId::SVIM ) )
     {
-        ::tools::SvRef<SotStorageStream> xStm;
+        ::tools::SvRef<SotTempStream> xStm;
 
         if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVIM, xStm ) )
         {
@@ -324,7 +324,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         if( ( bIsRTF || aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) )
             && ! aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) )
         {
-            ::tools::SvRef<SotStorageStream> xStm;
+            ::tools::SvRef<SotTempStream> xStm;
 
             if( aDataHelper.GetSotStorageStream( bIsRTF ? SotClipboardFormatId::RTF : SotClipboardFormatId::RICHTEXT, xStm ) )
             {
@@ -668,7 +668,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     if(!bReturn && CHECK_FORMAT_TRANS( SotClipboardFormatId::DRAWING ))
     {
-        ::tools::SvRef<SotStorageStream> xStm;
+        ::tools::SvRef<SotTempStream> xStm;
 
         if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING, xStm ) )
         {
@@ -1193,7 +1193,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     if(!bReturn && (!bLink || pPickObj) && CHECK_FORMAT_TRANS(SotClipboardFormatId::SVXB))
     {
-        ::tools::SvRef<SotStorageStream> xStm;
+        ::tools::SvRef<SotTempStream> xStm;
 
         if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB, xStm ) )
         {
@@ -1382,7 +1382,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     if(!bReturn && !bLink && CHECK_FORMAT_TRANS(SotClipboardFormatId::HTML))
     {
-        ::tools::SvRef<SotStorageStream> xStm;
+        ::tools::SvRef<SotTempStream> xStm;
 
         if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::HTML, xStm ) )
         {
@@ -1394,7 +1394,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     if(!bReturn && !bLink && CHECK_FORMAT_TRANS(SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT))
     {
-        ::tools::SvRef<SotStorageStream> xStm;
+        ::tools::SvRef<SotTempStream> xStm;
         if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT, xStm ) )
         {
             OutlinerView* pOLV = GetTextEditOutlinerView();
@@ -1425,7 +1425,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         bool bIsRTF = CHECK_FORMAT_TRANS(SotClipboardFormatId::RTF);
         if (bIsRTF || CHECK_FORMAT_TRANS(SotClipboardFormatId::RICHTEXT))
         {
-            ::tools::SvRef<SotStorageStream> xStm;
+            ::tools::SvRef<SotTempStream> xStm;
 
             if( aDataHelper.GetSotStorageStream( bIsRTF ? SotClipboardFormatId::RTF : SotClipboardFormatId::RICHTEXT, xStm ) )
             {
@@ -1523,7 +1523,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     return bReturn;
 }
 
-bool View::PasteRTFTable( const ::tools::SvRef<SotStorageStream>& xStm, SdrPage* pPage, SdrInsertFlags nPasteOptions )
+bool View::PasteRTFTable( const ::tools::SvRef<SotTempStream>& xStm, SdrPage* pPage, SdrInsertFlags nPasteOptions )
 {
     std::unique_ptr<SdDrawDocument> pModel(new SdDrawDocument( DocumentType::Impress, mpDocSh ));
     pModel->NewOrLoadCompleted(DocCreationMode::New);

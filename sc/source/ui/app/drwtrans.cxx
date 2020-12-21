@@ -428,7 +428,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
     return bOK;
 }
 
-bool ScDrawTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
+bool ScDrawTransferObj::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const css::datatransfer::DataFlavor& /* rFlavor */ )
 {
     // called from SetObject, put data into stream
@@ -468,8 +468,7 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
 
                 {
                     css::uno::Reference<css::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
-                    if( SvxDrawingLayerExport( pDrawModel, xDocOut ) )
-                        rxOStm->Commit();
+                    SvxDrawingLayerExport( pDrawModel, xDocOut );
                 }
 
                 bRet = ( rxOStm->GetError() == ERRCODE_NONE );
@@ -510,8 +509,6 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
                             if ( xTrans.is() )
                                 xTrans->commit();
                         }
-
-                        rxOStm->Commit();
                     }
                     catch ( uno::Exception& )
                     {
@@ -554,7 +551,6 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
 
                     xWorkStore->dispose();
                     xWorkStore.clear();
-                    rxOStm->Commit();
                 }
                 catch ( uno::Exception& )
                 {}
