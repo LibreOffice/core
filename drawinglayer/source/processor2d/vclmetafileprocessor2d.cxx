@@ -1576,16 +1576,7 @@ void VclMetafileProcessor2D::processPolygonStrokePrimitive2D(
             const attribute::StrokeAttribute& rStroke = rStrokePrimitive.getStrokeAttribute();
             basegfx::B2DPolyPolygon aHairLinePolyPolygon;
 
-            if (0.0 == rStroke.getFullDotDashLen())
-            {
-                aHairLinePolyPolygon.append(rBasePolygon);
-            }
-            else
-            {
-                basegfx::utils::applyLineDashing(rBasePolygon, rStroke.getDotDashArray(),
-                                                 &aHairLinePolyPolygon, nullptr,
-                                                 rStroke.getFullDotDashLen());
-            }
+            aHairLinePolyPolygon.append(rBasePolygon);
 
             const basegfx::BColor aHairlineColor(
                 maBColorModifierStack.getModifiedColor(rLine.getColor()));
@@ -1598,6 +1589,16 @@ void VclMetafileProcessor2D::processPolygonStrokePrimitive2D(
                                basegfx::fround(getTransformedLineWidth(rLine.getWidth())));
             aLineInfo.SetLineJoin(rLine.getLineJoin());
             aLineInfo.SetLineCap(rLine.getLineCap());
+
+            if (rStroke.getFullDotDashLen() != 0)
+            { // convert info from rStroke to aLineInfo
+                aLineInfo.SetStyle(LineStyle::Dash);
+                aLineInfo.SetDashLen(rLine.getLineDash().DashLen);
+                aLineInfo.SetDashCount(rLine.getLineDash().Dashes);
+                aLineInfo.SetDotLen(rLine.getLineDash().DotLen);
+                aLineInfo.SetDotCount(rLine.getLineDash().Dots);
+                aLineInfo.SetDistance(rLine.getLineDash().Distance);
+            }
 
             for (sal_uInt32 a(0); a < aHairLinePolyPolygon.count(); a++)
             {

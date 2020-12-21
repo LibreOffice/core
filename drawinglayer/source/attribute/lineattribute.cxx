@@ -32,6 +32,7 @@ namespace drawinglayer::attribute
             double                                  mfWidth;                // absolute line width
             basegfx::B2DLineJoin                    meLineJoin;             // type of LineJoin
             css::drawing::LineCap                   meLineCap;              // BUTT, ROUND, or SQUARE
+            css::drawing::LineDash                  meLineDash;             // DotLen DotCount DashLen DashCount Distance
             double                                  mfMiterMinimumAngle;     // as needed for createAreaGeometry
 
             ImpLineAttribute(
@@ -39,11 +40,13 @@ namespace drawinglayer::attribute
                 double fWidth,
                 basegfx::B2DLineJoin aB2DLineJoin,
                 css::drawing::LineCap aLineCap,
+                css::drawing::LineDash aLineDash,
                 double fMiterMinimumAngle)
             :   maColor(rColor),
                 mfWidth(fWidth),
                 meLineJoin(aB2DLineJoin),
                 meLineCap(aLineCap),
+                meLineDash(aLineDash),
                 mfMiterMinimumAngle(fMiterMinimumAngle)
             {
             }
@@ -53,6 +56,7 @@ namespace drawinglayer::attribute
                 mfWidth(0.0),
                 meLineJoin(basegfx::B2DLineJoin::Round),
                 meLineCap(css::drawing::LineCap_BUTT),
+                meLineDash,
                 mfMiterMinimumAngle(basegfx::deg2rad(15.0))
             {
             }
@@ -62,6 +66,7 @@ namespace drawinglayer::attribute
             double getWidth() const { return mfWidth; }
             basegfx::B2DLineJoin getLineJoin() const { return meLineJoin; }
             css::drawing::LineCap getLineCap() const { return meLineCap; }
+            css::drawing::LineDash getLineDash() const { return meLineDash; }
             double getMiterMinimumAngle() const { return mfMiterMinimumAngle; }
 
             bool operator==(const ImpLineAttribute& rCandidate) const
@@ -70,6 +75,7 @@ namespace drawinglayer::attribute
                     && getWidth() == rCandidate.getWidth()
                     && getLineJoin() == rCandidate.getLineJoin()
                     && getLineCap() == rCandidate.getLineCap()
+                    && getLineDash() == rCandidate.getLineDash()
                     && getMiterMinimumAngle() == rCandidate.getMiterMinimumAngle());
             }
         };
@@ -85,6 +91,7 @@ namespace drawinglayer::attribute
             double fWidth,
             basegfx::B2DLineJoin aB2DLineJoin,
             css::drawing::LineCap aLineCap,
+            css::drawing::LineDash aLineDash,
             double fMiterMinimumAngle)
         :   mpLineAttribute(
                 ImpLineAttribute(
@@ -92,6 +99,7 @@ namespace drawinglayer::attribute
                     fWidth,
                     aB2DLineJoin,
                     aLineCap,
+                    aLineDash,
                     fMiterMinimumAngle))
         {
         }
@@ -139,6 +147,11 @@ namespace drawinglayer::attribute
         css::drawing::LineCap LineAttribute::getLineCap() const
         {
             return mpLineAttribute->getLineCap();
+        }
+
+        css::drawing::LineDash LineAttribute::getLineDash() const
+        {
+            return mpLineAttribute->getLineDash();
         }
 
         double LineAttribute::getMiterMinimumAngle() const

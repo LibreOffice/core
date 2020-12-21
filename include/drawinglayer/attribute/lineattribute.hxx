@@ -24,6 +24,7 @@
 #include <basegfx/numeric/ftools.hxx> // for F_PI180
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/drawing/LineDash.hpp>
 #include <o3tl/cow_wrapper.hxx>
 
 namespace basegfx
@@ -51,6 +52,7 @@ public:
     explicit LineAttribute(const basegfx::BColor& rColor, double fWidth = 0.0,
                            basegfx::B2DLineJoin aB2DLineJoin = basegfx::B2DLineJoin::Round,
                            css::drawing::LineCap aLineCap = css::drawing::LineCap_BUTT,
+                           css::drawing::LineDash aLineDash = { 0, 0, 0, 0, 0 },
                            double fMiterMinimumAngle = basegfx::deg2rad(15.0));
     LineAttribute();
     LineAttribute(const LineAttribute&);
@@ -68,6 +70,7 @@ public:
     double getWidth() const;
     basegfx::B2DLineJoin getLineJoin() const;
     css::drawing::LineCap getLineCap() const;
+    css::drawing::LineDash getLineDash() const;
     double getMiterMinimumAngle() const;
 };
 } // end of namespace drawinglayer
