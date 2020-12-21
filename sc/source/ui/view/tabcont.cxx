@@ -22,8 +22,8 @@
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weldutils.hxx>
 #include <tabcont.hxx>
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
@@ -91,7 +91,10 @@ ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData* pData )
 
 IMPL_LINK(ScTabControl, ShowPageList, const CommandEvent &, rEvent, void)
 {
-    ScopedVclPtrInstance<PopupMenu> aPopup;
+    tools::Rectangle aRect(rEvent.GetMousePosPixel(), Size(1, 1));
+    weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "modules/scalc/ui/pagelistmenu.ui"));
+    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("menu"));
 
     sal_uInt16 nCurPageId = GetCurPageId();
 
@@ -99,21 +102,21 @@ IMPL_LINK(ScTabControl, ShowPageList, const CommandEvent &, rEvent, void)
     SCTAB nCount = rDoc.GetTableCount();
     for (SCTAB i=0; i<nCount; ++i)
     {
-        if (rDoc.IsVisible(i))
-        {
-            OUString aString;
-            if (rDoc.GetName(i, aString))
-            {
-                sal_uInt16 nId = static_cast<sal_uInt16>(i)+1;
-                aPopup->InsertItem(nId, aString, MenuItemBits::CHECKABLE);
-                if (nId == nCurPageId)
-                    aPopup->CheckItem(nId);
-            }
-        }
+        if (!rDoc.IsVisible(i))
+            continue;
+        OUString aString;
+        if (!rDoc.GetName(i, aString))
+            continue;
+        sal_uInt16 nId = static_cast<sal_uInt16>(i)+1;
+        OUString sId = OUString::number(nId);
+        xPopup->append_radio(sId, aString);
+        if (nId == nCurPageId)
+            xPopup->set_active(sId.toUtf8(), true);
     }
 
-    sal_uInt16 nItemId = aPopup->Execute( this, rEvent.GetMousePosPixel() );
-    SwitchToPageId(nItemId);
+    OString sIdent(xPopup->popup_at_rect(pPopupParent, aRect));
+    if (!sIdent.isEmpty())
+        SwitchToPageId(sIdent.toUInt32());
 }
 
 ScTabControl::~ScTabControl()
