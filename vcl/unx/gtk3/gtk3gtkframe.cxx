@@ -940,7 +940,7 @@ void GtkSalFrame::InitCommon()
     gtk_widget_add_events( m_pWindow,
                            GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
                            GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
-                           GDK_VISIBILITY_NOTIFY_MASK | GDK_SCROLL_MASK
+                           GDK_SCROLL_MASK
                            );
 
     // show the widgets
