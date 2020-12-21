@@ -1817,28 +1817,22 @@ namespace
         }
         g_list_free(pLabels);
 
-        gtk_container_add(GTK_CONTAINER(pParent), pReplacement);
 
         if (GTK_IS_GRID(pParent))
         {
-            gtk_container_child_set(GTK_CONTAINER(pParent), pReplacement,
-                    "left-attach", nTopAttach,
-                    "top-attach", nLeftAttach,
-                    "width", nWidth,
-                    "height", nHeight,
-                    nullptr);
+            gtk_grid_attach(GTK_GRID(pParent), pReplacement, nLeftAttach, nTopAttach, nWidth, nHeight);
         }
 
-        if (GTK_IS_BOX(pParent))
+        else if (GTK_IS_BOX(pParent))
         {
+            gtk_box_pack_start(GTK_BOX(pParent), pReplacement, bExpand, bFill, nPadding);
             gtk_container_child_set(GTK_CONTAINER(pParent), pReplacement,
-                    "expand", bExpand,
-                    "fill", bFill,
                     "pack-type", ePackType,
-                    "padding", nPadding,
                     "position", nPosition,
                     nullptr);
         }
+        else
+            gtk_container_add(GTK_CONTAINER(pParent), pReplacement);
 
         if (gtk_widget_get_hexpand_set(pWidget))
             gtk_widget_set_hexpand(pReplacement, gtk_widget_get_hexpand(pWidget));
@@ -3545,12 +3539,12 @@ public:
         GtkWidget *pItem;
         if (pImage)
         {
-            GtkWidget *pBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+            GtkBox *pBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6));
             GtkWidget *pLabel = gtk_label_new_with_mnemonic(MapToGtkAccelerator(rStr).getStr());
             pItem = eCheckRadioFalse != TRISTATE_INDET ? gtk_check_menu_item_new() : gtk_menu_item_new();
-            gtk_container_add(GTK_CONTAINER(pBox), pImage);
-            gtk_container_add(GTK_CONTAINER(pBox), pLabel);
-            gtk_container_add(GTK_CONTAINER(pItem), pBox);
+            gtk_box_pack_start(pBox, pImage, true, true, 0);
+            gtk_box_pack_start(pBox, pLabel, true, true, 0);
+            gtk_container_add(GTK_CONTAINER(pItem), GTK_WIDGET(pBox));
             gtk_widget_show_all(pItem);
         }
         else
@@ -8264,12 +8258,12 @@ public:
         GtkWidget *pItem;
         if (pImage)
         {
-            GtkWidget *pBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+            GtkBox *pBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6));
             GtkWidget *pLabel = gtk_label_new_with_mnemonic(MapToGtkAccelerator(rStr).getStr());
             pItem = eCheckRadioFalse != TRISTATE_INDET ? gtk_check_menu_item_new() : gtk_menu_item_new();
-            gtk_container_add(GTK_CONTAINER(pBox), pImage);
-            gtk_container_add(GTK_CONTAINER(pBox), pLabel);
-            gtk_container_add(GTK_CONTAINER(pItem), pBox);
+            gtk_box_pack_start(pBox, pImage, true, true, 0);
+            gtk_box_pack_start(pBox, pLabel, true, true, 0);
+            gtk_container_add(GTK_CONTAINER(pItem), GTK_WIDGET(pBox));
             gtk_widget_show_all(pItem);
         }
         else
