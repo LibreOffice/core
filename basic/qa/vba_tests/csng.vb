@@ -1,39 +1,36 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testCSng
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testCSng
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testCSng()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim nr1, nr2 As Single   'variables for test
-    Dim nr3 As Double
-
-    testName = "Test CSng function"
+    Dim nr1 As Single   'variables for test
+    Dim nr2 As Double
     On Error GoTo errorHandler
 
-    nr2 = 8.534535408
-    nr1 = CSng(8.534535408)
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return CSng is: " & nr1)
+    nr1 = 8.534535408
+    TestUtil.AssertEqual(CSng(8.534535408), nr1, "CSng(8.534535408)")
 
-    nr3 = 100.1234
     nr2 = 100.1234
-    nr1 = CSng(nr3)
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return CSng is: " & nr1)
+    nr1 = 100.1234
+    TestUtil.AssertEqual(CSng(nr2), nr1, "CSng(nr2)")
 
-    nr2 = 0
-    nr1 = CSng(0)
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return CSng is: " & nr1)
-
-    TestUtilModule.TestEnd
+    nr1 = 0
+    TestUtil.AssertEqual(CSng(0), nr1, "CSng(0)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testCSng", Err, Error$, Erl)
 End Sub
-

@@ -1,6 +1,3 @@
-Option VBASupport 1
-Option Explicit
-
 '
 ' This file is part of the LibreOffice project.
 '
@@ -15,6 +12,9 @@ Option Explicit
 ' This module tests different signatures for the same methods.
 '
 
+Option VBASupport 1
+Option Explicit
+
 Private Type LARGE_INTEGER
     lowpart As Long
     highpart As Long
@@ -24,8 +24,9 @@ Private Declare Function QueryPerformanceCounter Lib "kernel32" (lpPerformanceCo
 Private Declare Function QueryPerformanceFrequency Lib "kernel32" (lpFrequency As LARGE_INTEGER) As Long
 
 Function doUnitTest() As String
-    verify_win32compat
-    doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_win32compatb
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Function convertLarge(scratch As LARGE_INTEGER) As Double
@@ -36,9 +37,7 @@ Function convertLarge(scratch As LARGE_INTEGER) As Double
     convertLarge = ret
 End Function
 
-Sub verify_win32compat()
-    TestUtilModule.TestInit
-
+Sub verify_win32compatb()
     Dim scratch as LARGE_INTEGER
     Dim freq As Double
     Dim count_a As Double
@@ -48,21 +47,20 @@ Sub verify_win32compat()
     On Error GoTo errorHandler
 
     success = QueryPerformanceFrequency(scratch)
-    TestUtilModule.AssertTrue(success <> 0, "fetching perf. frequency")
+    TestUtil.Assert(success <> 0, "QueryPerformanceFrequency")
     freq = convertLarge(scratch)
-    TestUtilModule.AssertTrue(freq > 0, "perf. frequency is incorrect " & freq)
+    TestUtil.Assert(freq > 0, "QueryPerformanceFrequency", "perf. frequency is incorrect " & freq)
 
     success = QueryPerformanceCounter(scratch)
-    TestUtilModule.AssertTrue(success <> 0, "fetching performance count")
+    TestUtil.Assert(success <> 0, "QueryPerformanceCounter")
     count_a = convertLarge(scratch)
 
 '    success = QueryPerformanceCounter(scratch)
-'    TestUtilModule.AssertTrue(success <> 0, "fetching performance count")
+'    TestUtil.Assert(success <> 0, "fetching performance count")
 '    count_b = convertLarge(scratch)
-'    TestUtilModule.AssertTrue(count_a < count_b, "count mismatch " & count_a & " is > " & count_b)
+'    TestUtil.Assert(count_a < count_b, "count mismatch " & count_a & " is > " & count_b)
+
     Exit Sub
-
 errorHandler:
-    TestUtilModule.AssertTrue(False, "hit error handler - " & Err & ": " & Error$ & " (line : " & Erl & ")")
-
+    TestUtil.ReportErrorHandler("verify_win32compatb", Err, Error$, Erl)
 End Sub

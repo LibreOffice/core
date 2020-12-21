@@ -1,411 +1,186 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_format
-doUnitTest = TestUtilModule.GetResult()
-End Function
-
-Function verify_format() as String
-
-    TestUtilModule.TestInit
+    TestUtil.TestInit
 
     'Predefined_Datetime_Format_Sample
     Predefined_Number_Format_Sample
     'Custom_Datetime_Format_Sample
     Custom_Number_Format_Sample
     Custom_Text_Format_Sample
-    TestUtilModule.TestEnd
-End Sub
+    testFormat
+
+    doUnitTest = TestUtil.GetResult()
+End Function
 
 Sub Predefined_Datetime_Format_Sample()
-    Dim testName As String
-    Dim myDate, MyTime, TestStr As String
-    myDate = "01/06/98"
-    MyTime = "17:08:06"
-    testName = "Test Predefined_Datetime_Format_Sample function"
+    Dim TestStr As String
+    const myDate = "01/06/98"
+    const MyTime = "17:08:06"
 
     On Error GoTo errorHandler
+
+    ' These tests only apply to en_US locale
 
     ' The date/time format have a little different between ms office and OOo due to different locale and system...
     TestStr = Format(myDate, "General Date") ' 1/6/98
-
-    TestUtilModule.AssertTrue(IsDate(TestStr), "General Date: " & TestStr & " (Test only applies to en_US locale)")
-    'TestUtilModule.AssertTrue(TestStr = "1/6/98", "General Date: " & TestStr)
+    TestUtil.Assert(IsDate(TestStr), "IsDate(TestStr)", "General Date")
+    'TestUtil.AssertEqual(TestStr, "1/6/98", "General Date")
 
     TestStr = Format(myDate, "Long Date") ' Tuesday, January 06, 1998
-    TestUtilModule.AssertTrue(TestStr = "Tuesday, January 06, 1998", "Long Date: " & TestStr & " (Test only applies to en_US locale)")
-    'TestUtilModule.AssertTrue(IsDate(TestStr), "Long Date: " & TestStr)
+    TestUtil.AssertEqual(TestStr, "Tuesday, January 06, 1998", "Long Date")
+    'TestUtil.Assert(IsDate(TestStr), "IsDate(TestStr)", "Long Date")
 
     TestStr = Format(myDate, "Medium Date") ' 06-Jan-98
-    'TestUtilModule.AssertTrue(TestStr = "06-Jan-98", "Medium Date: " & TestStr)
-    TestUtilModule.AssertTrue(IsDate(TestStr), "Medium Date: " & TestStr & " (Test only applies to en_US locale)")
+    'TestUtil.AssertEqual(TestStr, "06-Jan-98", "Medium Date")
+    TestUtil.Assert(IsDate(TestStr), "IsDate(TestStr)", "Medium Date")
 
     TestStr = Format(myDate, "Short Date") ' 1/6/98
-    'TestUtilModule.AssertTrue(TestStr = "1/6/98", "Short Date: " & TestStr)
-    TestUtilModule.AssertTrue(IsDate(TestStr), "Short Date: " & TestStr & " (Test only applies to en_US locale)")
+    'TestUtil.AssertEqual(TestStr, "1/6/98", "Short Date")
+    TestUtil.Assert(IsDate(TestStr), "IsDate(TestStr)", "Short Date")
 
     TestStr = Format(MyTime, "Long Time") ' 5:08:06 PM
-    'TestUtilModule.AssertTrue(TestStr = "5:08:06 PM", "Long Time: " & TestStr)
-    TestUtilModule.AssertTrue(IsDate(TestStr), "Long Time: " & TestStr & " (Test only applies to en_US locale)")
+    'TestUtil.AssertEqual(TestStr, "5:08:06 PM", "Long Time")
+    TestUtil.Assert(IsDate(TestStr), "IsDate(TestStr)", "Long Time")
 
     TestStr = Format(MyTime, "Medium Time") ' 05:08 PM
-    'TestUtilModule.AssertTrue(TestStr = "05:08 PM", "Medium Time: " & TestStr)
-    TestUtilModule.AssertTrue(IsDate(TestStr), "Medium Time: " & TestStr & " (Test only applies to en_US locale)")
+    'TestUtil.AssertEqual(TestStr, "05:08 PM", "Medium Time")
+    TestUtil.Assert(IsDate(TestStr), "IsDate(TestStr)", "Medium Time")
 
     TestStr = Format(MyTime, "Short Time") ' 17:08
-    'TestUtilModule.AssertTrue(TestStr = "17:08", "Short Time: " & TestStr)
-    TestUtilModule.AssertTrue(IsDate(TestStr), "Short Time: " & TestStr & " (Test only applies to en_US locale)")
+    'TestUtil.AssertEqual(TestStr, "17:08", "Short Time")
+    TestUtil.Assert(IsDate(TestStr), "IsDate(TestStr)", "Short Time")
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("Predefined_Datetime_Format_Sample", Err, Error$, Erl)
 End Sub
 
 Sub Predefined_Number_Format_Sample()
-    Dim myNumber, TestStr As String
-    Dim testName As String
-    testName = "Test Predefined_Number_Format_Sample function"
-    myNumber = 562486.2356
+    On Error GoTo errorHandler
 
-     On Error GoTo errorHandler
-
-    TestStr = Format(myNumber, "General Number") '562486.2356
-    TestUtilModule.AssertTrue(TestStr = "562486.2356", "General Number: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(0.2, "Fixed") '0.20
-    TestUtilModule.AssertTrue(TestStr = "0.20", "Fixed: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(myNumber, "Standard") '562,486.24
-    TestUtilModule.AssertTrue(TestStr = "562,486.24", "Standard: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(0.7521, "Percent") '75.21%
-    TestUtilModule.AssertTrue(TestStr = "75.21%", "Percent: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(myNumber, "Scientific") '5.62E+05
-    TestUtilModule.AssertTrue(TestStr = "5.62E+05", "Scientific: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(-3456.789, "Scientific") '-3.46E+03
-    TestUtilModule.AssertTrue(TestStr = "-3.46E+03", "Scientific: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(0, "Yes/No") 'No
-    TestUtilModule.AssertTrue(TestStr = "No", "Yes/No: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(23, "Yes/No") 'Yes
-    TestUtilModule.AssertTrue(TestStr = "Yes", "Yes/No: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(0, "True/False") 'False
-    TestUtilModule.AssertTrue(TestStr = "False", "True/False: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(23, "True/False") 'True
-    TestUtilModule.AssertTrue(TestStr = "True", "True/False: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(0, "On/Off") 'Off
-    TestUtilModule.AssertTrue(TestStr = "Off", "On/Off: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(23, "On/Off") 'On
-    TestUtilModule.AssertTrue(TestStr = "On", "On/Off: " & TestStr)
-    'MsgBox TestStr
+    TestUtil.AssertEqual(Format(562486.2356, "General Number"), "562486.2356", "Format(562486.2356, ""General Number"")")
+    TestUtil.AssertEqual(Format(0.2, "Fixed"),                  "0.20",        "Format(0.2, ""Fixed"")")
+    TestUtil.AssertEqual(Format(562486.2356, "Standard"),       "562,486.24",  "Format(562486.2356, ""Standard"")")
+    TestUtil.AssertEqual(Format(0.7521, "Percent"),             "75.21%",      "Format(0.7521, ""Percent"")")
+    TestUtil.AssertEqual(Format(562486.2356, "Scientific"),     "5.62E+05",    "Format(562486.2356, ""Scientific"")")
+    TestUtil.AssertEqual(Format(-3456.789, "Scientific"),       "-3.46E+03",   "Format(-3456.789, ""Scientific"")")
+    TestUtil.AssertEqual(Format(0, "Yes/No"),                   "No",          "Format(0, ""Yes/No"")")
+    TestUtil.AssertEqual(Format(23, "Yes/No"),                  "Yes",         "Format(23, ""Yes/No"")")
+    TestUtil.AssertEqual(Format(0, "True/False"),               "False",       "Format(0, ""True/False"")")
+    TestUtil.AssertEqual(Format(23, "True/False"),              "True",        "Format(23, ""True/False"")")
+    TestUtil.AssertEqual(Format(0, "On/Off"),                   "Off",         "Format(0, ""On/Off"")")
+    TestUtil.AssertEqual(Format(23, "On/Off"),                  "On",          "Format(23, ""On/Off"")")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
-
+    TestUtil.ReportErrorHandler("Predefined_Number_Format_Sample", Err, Error$, Erl)
 End Sub
 
 Sub Custom_Datetime_Format_Sample()
-    Dim myDate, MyTime, TestStr As String
-    Dim testName As String
-
-    myDate = "01/06/98"
-    MyTime = "05:08:06"
-
-    testName = "Test Custom_Datetime_Format_Sample function"
-     On Error GoTo errorHandler
-
-    TestStr = Format("01/06/98 17:08:06", "c") ' 1/6/98 5:08:06 PM
-    TestUtilModule.AssertTrue(TestStr = "1/6/98 5:08:06 PM", "c: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(myDate, "dddddd") ' (Long Date), Tuesday, January 06, 1998
-    TestUtilModule.AssertTrue(TestStr = "Tuesday, January 06, 1998", "dddddd: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(myDate, "mm-dd-yyyy") ' 01-06-19s98
-    TestUtilModule.AssertTrue(TestStr = "01-06-1998", "mm-dd-yyyy: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(myDate, "d") ' 6
-    TestUtilModule.AssertTrue(TestStr = "6", "d: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(myDate, "dd") ' 06
-    TestUtilModule.AssertTrue(TestStr = "06", "dd: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(myDate, "ddd") ' Tue
-    TestUtilModule.AssertTrue(TestStr = "Tue", "ddd: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(myDate, "dddd") ' Tuesday
-    TestUtilModule.AssertTrue(TestStr = "Tuesday", "dddd: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(MyTime, "h") ' 5
-    TestUtilModule.AssertTrue(TestStr = "5", "h: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(MyTime, "hh") ' 05
-    TestUtilModule.AssertTrue(TestStr = "05", "hh: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(MyTime, "n") ' 8
-    TestUtilModule.AssertTrue(TestStr = "8", "n: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(MyTime, "nn") ' 08
-    TestUtilModule.AssertTrue(TestStr = "08", "nn: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(myDate, "m") ' 1
-    TestUtilModule.AssertTrue(TestStr = "1", "m: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(myDate, "mm") ' 01
-    TestUtilModule.AssertTrue(TestStr = "01", "mm: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(myDate, "mmm") ' Jan
-    TestUtilModule.AssertTrue(TestStr = "Jan", "mmm: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(myDate, "mmmm") ' January
-    TestUtilModule.AssertTrue(TestStr = "January", "mmmm: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(MyTime, "s") ' 6
-    TestUtilModule.AssertTrue(TestStr = "6", "s: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(MyTime, "ss") ' 06
-    TestUtilModule.AssertTrue(TestStr = "06", "ss: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    MyTime = "17:08:06"
-
-    TestStr = Format(MyTime, "hh:mm:ss AM/PM") ' 05:08:06 PM
-    TestUtilModule.AssertTrue(TestStr = "05:08:06 PM", "hh:mm:ss AM/PM: " & TestStr & " (Test only applies to en_US locale)")
-
-    TestStr = Format(MyTime, "hh:mm:ss") ' 17:08:06
-    TestUtilModule.AssertTrue(TestStr = "17:08:06", "hh:mm:ss: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(myDate, "ww") ' 2
-    TestUtilModule.AssertTrue(TestStr = "2", "ww: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(myDate, "w") ' 3
-    TestUtilModule.AssertTrue(TestStr = "3", "w: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(myDate, "y") ' 6
-    TestUtilModule.AssertTrue(TestStr = "6", "y: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(myDate, "yy") ' 98
-    TestUtilModule.AssertTrue(TestStr = "98", "yy: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    TestStr = Format(myDate, "yyyy") ' 1998
-    TestUtilModule.AssertTrue(TestStr = "1998", "yyyy: " & TestStr & " (Test only applies to en_US locale)")
-    'MsgBox TestStr
-
-    Exit Sub
-errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
-End Sub
-
-Sub Custom_Number_Format_Sample()
-    Dim TestStr As String
-    Dim testName As String
-
-    testName = "Test Custom_Number_Format_Sample function"
-     On Error GoTo errorHandler
-
-    TestStr = Format(23.675, "00.0000") ' 23.6750
-    TestUtilModule.AssertTrue(TestStr = "23.6750", "00.0000: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(23.675, "00.00") ' 23.68
-    TestUtilModule.AssertTrue(TestStr = "23.68", "00.00: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(2658, "00000") ' 02658
-    TestUtilModule.AssertTrue(TestStr = "02658", "00000: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(2658, "00.00") ' 2658.00
-    TestUtilModule.AssertTrue(TestStr = "2658.00", "00.00: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(23.675, "##.####") ' 23.675
-    TestUtilModule.AssertTrue(TestStr = "23.675", "##.####: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(23.675, "##.##") ' 23.68
-    TestUtilModule.AssertTrue(TestStr = "23.68", "##.##: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(12345.25, "#,###.##") '12,345.25
-    TestUtilModule.AssertTrue(TestStr = "12,345.25", "#,###.##: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(0.25, "##.00%") '25.00%
-    TestUtilModule.AssertTrue(TestStr = "25.00%", "##.00%: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(1000000, "#,###") '1,000,000
-    TestUtilModule.AssertTrue(TestStr = "1,000,000", "#,###: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(1.09837555, "#.#####E+###") '1.09838E+000
-    TestUtilModule.AssertTrue(TestStr = "1.09838E+000", "#.#####E+###: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(1.09837555, "###.####E#") '1.0984E0 with engineering notation
-    TestUtilModule.AssertTrue(TestStr = "1.0984E0", "###.####E#: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(1098.37555, "###.####E#") '1.0984E3 with engineering notation
-    TestUtilModule.AssertTrue(TestStr = "1.0984E3", "###.####E#: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(1098375.55, "###.####E#") '1.0984E6 with engineering notation
-    TestUtilModule.AssertTrue(TestStr = "1.0984E6", "###.####E#: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(1.09837555, "######E#") '1E0 with engineering notation
-    TestUtilModule.AssertTrue(TestStr = "1E0", "######E#: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(123456.789, "###E0") '123E3 with engineering notation
-    TestUtilModule.AssertTrue(TestStr = "123E3", "###E0: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(123567.89, "###E0") '124E3 with engineering notation
-    TestUtilModule.AssertTrue(TestStr = "124E3", "###E0: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(12, "###E0") '12E0 with engineering notation
-    TestUtilModule.AssertTrue(TestStr = "12E0", "###E0: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(12, "000E0") '012E0 with engineering notation
-    TestUtilModule.AssertTrue(TestStr = "012E0", "000E0: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(0.12345, "###E0") '123E-3 with engineering notation
-    TestUtilModule.AssertTrue(TestStr = "123E-3", "###E0: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(123456, "####E0") '12E4 with interval-4 notation
-    TestUtilModule.AssertTrue(TestStr = "12E4", "####E0: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(2345.25, "$#,###.##") '$2.345.25
-    TestUtilModule.AssertTrue(TestStr = "$2,345.25", "$#,###.##: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(0.25, "##.###\%") '.25%
-    TestUtilModule.AssertTrue(TestStr = ".25%", "##.###\%: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format(12.25, "0.???") '12.25_
-    TestUtilModule.AssertTrue(TestStr = "12.25 ", "0.???: " & TestStr)
-    'MsgBox TestStr
-
-    Exit Sub
-errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
-End Sub
-
-Sub Custom_Text_Format_Sample()
-    Dim myText, TestStr As String
-    myText = "VBA"
-
-    Dim testName As String
-
-    testName = "Test Custom_Text_Format_Sample function"
-     On Error GoTo errorHandler
-
-    TestStr = Format(myText, "<") 'vba
-     TestUtilModule.AssertTrue(TestStr = "vba", "<: " & TestStr)
-    'MsgBox TestStr
-
-    TestStr = Format("vba", ">") 'VBA
-     TestUtilModule.AssertTrue(TestStr = "VBA", ">: " & TestStr)
-    'MsgBox TestStr
-
-    Exit Sub
-errorHandler:
-        TestUtilModule.AssertTrue(False, testName & "hit error handler")
-End Sub
-
-Sub testFormat()
-    Dim testName As String
-    Dim TestDateTime As Date
-    Dim TestStr As String
-    testName = "Test Format function"
+    const myDate = "01/06/98"
+    const MyTime = "05:08:06"
+    const MyTimePM = "17:08:06"
 
     On Error GoTo errorHandler
 
-    TestDateTime = "1/27/2001 5:04:23 PM"
+    ' These tests only apply to en_US locale
+    TestUtil.AssertEqual(Format("01/06/98 17:08:06", "c"),   "1/6/98 5:08:06 PM",         "Format(""01/06/98 17:08:06"", ""c"")")
+    TestUtil.AssertEqual(Format(myDate, "dddddd"),           "Tuesday, January 06, 1998", "Format(myDate, ""dddddd"")")
+    TestUtil.AssertEqual(Format(myDate, "mm-dd-yyyy"),       "01-06-1998",                "Format(myDate, ""mm-dd-yyyy"")")
+    TestUtil.AssertEqual(Format(myDate, "d"),                "6",                         "Format(myDate, ""d"")")
+    TestUtil.AssertEqual(Format(myDate, "dd"),               "06",                        "Format(myDate, ""dd"")")
+    TestUtil.AssertEqual(Format(myDate, "ddd"),              "Tue",                       "Format(myDate, ""ddd"")")
+    TestUtil.AssertEqual(Format(myDate, "dddd"),             "Tuesday",                   "Format(myDate, ""dddd"")")
+    TestUtil.AssertEqual(Format(MyTime, "h"),                "5",                         "Format(MyTime, ""h"")")
+    TestUtil.AssertEqual(Format(MyTime, "hh"),               "05",                        "Format(MyTime, ""hh"")")
+    TestUtil.AssertEqual(Format(MyTime, "n"),                "8",                         "Format(MyTime, ""n"")")
+    TestUtil.AssertEqual(Format(MyTime, "nn"),               "08",                        "Format(MyTime, ""nn"")")
+    TestUtil.AssertEqual(Format(myDate, "m"),                "1",                         "Format(myDate, ""m"")")
+    TestUtil.AssertEqual(Format(myDate, "mm"),               "01",                        "Format(myDate, ""mm"")")
+    TestUtil.AssertEqual(Format(myDate, "mmm"),              "Jan",                       "Format(myDate, ""mmm"")")
+    TestUtil.AssertEqual(Format(myDate, "mmmm"),             "January",                   "Format(myDate, ""mmmm"")")
+    TestUtil.AssertEqual(Format(MyTime, "s"),                "6",                         "Format(MyTime, ""s"")")
+    TestUtil.AssertEqual(Format(MyTime, "ss"),               "06",                        "Format(MyTime, ""ss"")")
+    TestUtil.AssertEqual(Format(MyTimePM, "hh:mm:ss AM/PM"), "05:08:06 PM",               "Format(MyTimePM, ""hh:mm:ss AM/PM"")")
+    TestUtil.AssertEqual(Format(MyTimePM, "hh:mm:ss"),       "17:08:06",                  "Format(MyTimePM, ""hh:mm:ss"")")
+    TestUtil.AssertEqual(Format(myDate, "ww"),               "2",                         "Format(myDate, ""ww"")")
+    TestUtil.AssertEqual(Format(myDate, "w"),                "3",                         "Format(myDate, ""w"")")
+    TestUtil.AssertEqual(Format(myDate, "y"),                "6",                         "Format(myDate, ""y"")")
+    TestUtil.AssertEqual(Format(myDate, "yy"),               "98",                        "Format(myDate, ""yy"")")
+    TestUtil.AssertEqual(Format(myDate, "yyyy"),             "1998",                      "Format(myDate, ""yyyy"")")
 
-    ' Returns the value of TestDateTime in user-defined date/time formats.
-    ' Returns "17:4:23".
-    TestStr = Format(TestDateTime, "h:m:s")
-    TestUtilModule.AssertTrue(TestStr = "17:4:23", "the format of h:m:s: " & TestStr)
-
-    ' Returns "05:04:23 PM".
-    TestStr = Format(TestDateTime, "ttttt")
-    TestUtilModule.AssertTrue(TestStr = "5:04:23 PM", "the format of ttttt: " & TestStr)
-
-    ' Returns "Saturday, Jan 27 2001".
-    TestStr = Format(TestDateTime, "dddd, MMM d yyyy")
-    TestUtilModule.AssertTrue(TestStr = "Saturday, Jan 27 2001", "the format of dddd, MMM d yyyy: " & TestStr)
-
-    ' Returns "17:04:23".
-    TestStr = Format(TestDateTime, "HH:mm:ss")
-    TestUtilModule.AssertTrue(TestStr = "17:04:23", "the format of HH:mm:ss: " & TestStr)
-
-    ' Returns "23".
-    TestStr = Format(23)
-    TestUtilModule.AssertTrue(TestStr = "23", "no format:" & TestStr)
-
-    ' User-defined numeric formats.
-    ' Returns "5,459.40".
-    TestStr = Format(5459.4, "##,##0.00")
-    TestUtilModule.AssertTrue(TestStr = "5,459.40", "the format of ##,##0.00: " & TestStr)
-
-    ' Returns "334.90".
-    TestStr = Format(334.9, "###0.00")
-    TestUtilModule.AssertTrue(TestStr = "334.90", "the format of ###0.00: " & TestStr)
-
-    ' Returns "500.00%".
-    TestStr = Format(5, "0.00%")
-    TestUtilModule.AssertTrue(TestStr = "500.00%", "the format of 0.00%: " & TestStr)
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("Custom_Datetime_Format_Sample", Err, Error$, Erl)
 End Sub
 
+Sub Custom_Number_Format_Sample()
+    On Error GoTo errorHandler
+
+    TestUtil.AssertEqual(Format(23.675, "00.0000"),          "23.6750",      "Format(23.675, ""00.0000"")")
+    TestUtil.AssertEqual(Format(23.675, "00.00"),            "23.68",        "Format(23.675, ""00.00"")")
+    TestUtil.AssertEqual(Format(2658, "00000"),              "02658",        "Format(2658, ""00000"")")
+    TestUtil.AssertEqual(Format(2658, "00.00"),              "2658.00",      "Format(2658, ""00.00"")")
+    TestUtil.AssertEqual(Format(23.675, "##.####"),          "23.675",       "Format(23.675, ""##.####"")")
+    TestUtil.AssertEqual(Format(23.675, "##.##"),            "23.68",        "Format(23.675, ""##.##"")")
+    TestUtil.AssertEqual(Format(12345.25, "#,###.##"),       "12,345.25",    "Format(12345.25, ""#,###.##"")")
+    TestUtil.AssertEqual(Format(0.25, "##.00%"),             "25.00%",       "Format(0.25, ""##.00%"")")
+    TestUtil.AssertEqual(Format(1000000, "#,###"),           "1,000,000",    "Format(1000000, ""#,###"")")
+    TestUtil.AssertEqual(Format(1.09837555, "#.#####E+###"), "1.09838E+000", "Format(1.09837555, ""#.#####E+###"")")
+    TestUtil.AssertEqual(Format(1.09837555, "###.####E#"),   "1.0984E0",     "Format(1.09837555, ""###.####E#"")")
+    TestUtil.AssertEqual(Format(1098.37555, "###.####E#"),   "1.0984E3",     "Format(1098.37555, ""###.####E#"")")
+    TestUtil.AssertEqual(Format(1098375.55, "###.####E#"),   "1.0984E6",     "Format(1098375.55, ""###.####E#"")")
+    TestUtil.AssertEqual(Format(1.09837555, "######E#"),     "1E0",          "Format(1.09837555, ""######E#"")")
+    TestUtil.AssertEqual(Format(123456.789, "###E0"),        "123E3",        "Format(123456.789, ""###E0"")")
+    TestUtil.AssertEqual(Format(123567.89, "###E0"),         "124E3",        "Format(123567.89, ""###E0"")")
+    TestUtil.AssertEqual(Format(12, "###E0"),                "12E0",         "Format(12, ""###E0"")")
+    TestUtil.AssertEqual(Format(12, "000E0"),                "012E0",        "Format(12, ""000E0"")")
+    TestUtil.AssertEqual(Format(0.12345, "###E0"),           "123E-3",       "Format(0.12345, ""###E0"")")
+    TestUtil.AssertEqual(Format(123456, "####E0"),           "12E4",         "Format(123456, ""####E0"")")
+    TestUtil.AssertEqual(Format(2345.25, "$#,###.##"),       "$2,345.25",    "Format(2345.25, ""$#,###.##"")")
+    TestUtil.AssertEqual(Format(0.25, "##.###\%"),           ".25%",         "Format(0.25, ""##.###\%"")")
+    TestUtil.AssertEqual(Format(12.25, "0.???"),             "12.25 ",       "Format(12.25, ""0.???"")")
+
+    Exit Sub
+errorHandler:
+    TestUtil.ReportErrorHandler("Custom_Number_Format_Sample", Err, Error$, Erl)
+End Sub
+
+Sub Custom_Text_Format_Sample()
+    On Error GoTo errorHandler
+
+    TestUtil.AssertEqual(Format("VBA", "<"), "vba", "Format(""VBA"", ""<"")")
+    TestUtil.AssertEqual(Format("vba", ">"), "VBA", "Format(""vba"", "">"")")
+
+    Exit Sub
+errorHandler:
+    TestUtil.ReportErrorHandler("Custom_Text_Format_Sample", Err, Error$, Erl)
+End Sub
+
+Sub testFormat()
+    On Error GoTo errorHandler
+
+    const TestDateTime = #2001-1-27T17:04:23#
+    TestUtil.AssertEqual(Format(TestDateTime, "h:m:s"),            "17:4:23",               "Format(TestDateTime, ""h:m:s"")")
+    TestUtil.AssertEqual(Format(TestDateTime, "ttttt"),            "5:04:23 PM",            "Format(TestDateTime, ""ttttt"")")
+    TestUtil.AssertEqual(Format(TestDateTime, "dddd, MMM d yyyy"), "Saturday, Jan 27 2001", "Format(TestDateTime, ""dddd, MMM d yyyy"")")
+    TestUtil.AssertEqual(Format(TestDateTime, "HH:mm:ss"),         "17:04:23",              "Format(TestDateTime, ""HH:mm:ss"")")
+
+    TestUtil.AssertEqual(Format(23),                               "23",                    "Format(23)")
+    TestUtil.AssertEqual(Format(5459.4, "##,##0.00"),              "5,459.40",              "Format(5459.4, ""##,##0.00"")")
+    TestUtil.AssertEqual(Format(334.9, "###0.00"),                 "334.90",                "Format(334.9, ""###0.00"")")
+    TestUtil.AssertEqual(Format(5, "0.00%"),                       "500.00%",               "Format(5, ""0.00%"")")
+
+    Exit Sub
+errorHandler:
+    TestUtil.ReportErrorHandler("testFormat", Err, Error$, Erl)
+End Sub

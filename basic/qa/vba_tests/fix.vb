@@ -1,36 +1,28 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testFix
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testFix
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testFix()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    testName = "Test Fix function"
     On Error GoTo errorHandler
 
-    date2 = 12
-    date1 = Fix(12.34)
-    TestUtilModule.AssertTrue(date1 = date2, "the return Fix is: " & date1)
-
-    date2 = 12
-    date1 = Fix(12.99)
-    TestUtilModule.AssertTrue(date1 = date2, "the return Fix is: " & date1)
-
-    date2 = -8
-    date1 = Fix(-8.4)
-    TestUtilModule.AssertTrue(date1 = date2, "the return Fix is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(Fix(12.34), 12, "Fix(12.34)")
+    TestUtil.AssertEqual(Fix(12.99), 12, "Fix(12.99)")
+    TestUtil.AssertEqual(Fix(-8.4),  -8, "Fix(-8.4)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testFix", Err, Error$, Erl)
 End Sub
-

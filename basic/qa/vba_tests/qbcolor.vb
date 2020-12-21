@@ -1,60 +1,34 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testQBcolor
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testQBcolor
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testQBcolor()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2 As Long
-    testName = "Test QBcolor function"
     On Error GoTo errorHandler
 
-    date2 = 0
-    date1 = QBColor(0)
-    TestUtilModule.AssertTrue(date1 = date2, "the return QBcolor is: " & date1)
-
-    date2 = 8388608
-    date1 = QBColor(1)
-    TestUtilModule.AssertTrue(date1 = date2, "the return QBcolor is: " & date1)
-
-    date2 = 32768
-    date1 = QBColor(2)
-    TestUtilModule.AssertTrue(date1 = date2, "the return QBcolor is: " & date1)
-
-    date2 = 8421376
-    date1 = QBColor(3)
-    TestUtilModule.AssertTrue(date1 = date2, "the return QBcolor is: " & date1)
-
-    date2 = 128
-    date1 = QBColor(4)
-    TestUtilModule.AssertTrue(date1 = date2, "the return QBcolor is: " & date1)
-
-    date2 = 8388736
-    date1 = QBColor(5)
-    TestUtilModule.AssertTrue(date1 = date2, "the return QBcolor is: " & date1)
-
-    date2 = 32896
-    date1 = QBColor(6)
-    TestUtilModule.AssertTrue(date1 = date2, "the return QBcolor is: " & date1)
-
-    date2 = 12632256
-    date1 = QBColor(7)
-    TestUtilModule.AssertTrue(date1 = date2, "the return QBcolor is: " & date1)
-
-    date2 = 8421504
-    date1 = QBColor(8)
-    TestUtilModule.AssertTrue(date1 = date2, "the return QBcolor is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(QBColor(0), 0,        "QBColor(0)")
+    TestUtil.AssertEqual(QBColor(1), 8388608,  "QBColor(1)")
+    TestUtil.AssertEqual(QBColor(2), 32768,    "QBColor(2)")
+    TestUtil.AssertEqual(QBColor(3), 8421376,  "QBColor(3)")
+    TestUtil.AssertEqual(QBColor(4), 128,      "QBColor(4)")
+    TestUtil.AssertEqual(QBColor(5), 8388736,  "QBColor(5)")
+    TestUtil.AssertEqual(QBColor(6), 32896,    "QBColor(6)")
+    TestUtil.AssertEqual(QBColor(7), 12632256, "QBColor(7)")
+    TestUtil.AssertEqual(QBColor(8), 8421504,  "QBColor(8)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testQBcolor", Err, Error$, Erl)
 End Sub
-

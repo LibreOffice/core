@@ -1,40 +1,29 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testCdbl
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testCdbl
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testCdbl()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim nr1, nr2 As Double   'variables for test
-    testName = "Test Cdbl function"
     On Error GoTo errorHandler
 
-    nr2 = 0
-    nr1 = CDbl(0)
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return Cdbl is: " & nr1)
-
-    nr2 = 10.1234567890123
-    nr1 = CDbl(10.1234567890123)
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return Cdbl is: " & nr1)
-
-    nr2 = 0.00005
-    nr1 = CDbl(0.005 * 0.01)
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return Cdbl is: " & nr1)
-
-    nr2 = 20
-    nr1 = CDbl("20")
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return Cdbl is: " & nr1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(CDbl(0),                 0,               "CDbl(0)")
+    TestUtil.AssertEqual(CDbl(10.1234567890123), 10.1234567890123, "CDbl(10.1234567890123)")
+    TestUtil.AssertEqual(CDbl(0.005 * 0.01),      0.00005,         "CDbl(0.005 * 0.01)")
+    TestUtil.AssertEqual(CDbl("20"),             20,               "CDbl(""20"")")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testCdbl", Err, Error$, Erl)
 End Sub
-

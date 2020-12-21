@@ -1,28 +1,27 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testError
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testError
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testError()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    testName = "Test Error function"
     On Error GoTo errorHandler
 
-    date2 = Error(11)   'https://help.libreoffice.org/Basic/Error_Sub_Runtime
-    date1 = "Division by zero."
-    TestUtilModule.AssertTrue(date1 = date2, "the return Error is: " & date2)
-
-    TestUtilModule.TestEnd
+    ' https://help.libreoffice.org/Basic/Error_Sub_Runtime
+    TestUtil.AssertEqual(Error(11), "Division by zero.", "Error(11)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testError", Err, Error$, Erl)
 End Sub
-
