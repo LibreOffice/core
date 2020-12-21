@@ -134,7 +134,7 @@ void XMLTextFieldImportContext::startFastElement(
 {
     // process attributes
     for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
-        ProcessAttribute(aIter.getToken(), aIter.toString() );
+        ProcessAttribute(aIter.getToken(), aIter.toView() );
 }
 
 OUString const & XMLTextFieldImportContext::GetContent()
@@ -552,7 +552,7 @@ void XMLSenderFieldImportContext::startFastElement(
 
 void XMLSenderFieldImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue)
+    std::string_view sAttrValue)
 {
     if (XML_ELEMENT(TEXT, XML_FIXED) == nAttrToken) {
 
@@ -621,7 +621,7 @@ void XMLAuthorFieldImportContext::startFastElement(
     XMLTextFieldImportContext::startFastElement(nElement, xAttrList);
 }
 
-void XMLAuthorFieldImportContext::ProcessAttribute(sal_Int32 nAttrToken, const OUString& sAttrValue)
+void XMLAuthorFieldImportContext::ProcessAttribute(sal_Int32 nAttrToken, std::string_view sAttrValue)
 {
     if(nAttrToken == XML_ELEMENT(TEXT, XML_FIXED))
     {
@@ -685,7 +685,7 @@ XMLPageContinuationImportContext::XMLPageContinuationImportContext(
 }
 
 void XMLPageContinuationImportContext::ProcessAttribute(
-    sal_Int32 nAttrToken, const OUString& sAttrValue )
+    sal_Int32 nAttrToken, std::string_view sAttrValue )
 {
     switch(nAttrToken)
     {
@@ -702,7 +702,7 @@ void XMLPageContinuationImportContext::ProcessAttribute(
         }
         case XML_ELEMENT(TEXT, XML_STRING_VALUE):
         case XML_ELEMENT(OFFICE, XML_STRING_VALUE):
-            sString = sAttrValue;
+            sString = OUString::fromUtf8(sAttrValue);
             sStringOK = true;
             break;
         default:
@@ -744,16 +744,16 @@ XMLPageNumberImportContext::XMLPageNumberImportContext(
 
 void XMLPageNumberImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
         case XML_ELEMENT(STYLE, XML_NUM_FORMAT):
-            sNumberFormat = sAttrValue;
+            sNumberFormat = OUString::fromUtf8(sAttrValue);
             sNumberFormatOK = true;
             break;
         case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
-            sNumberSync = sAttrValue;
+            sNumberSync = OUString::fromUtf8(sAttrValue);
             break;
         case XML_ELEMENT(TEXT, XML_SELECT_PAGE):
             SvXMLUnitConverter::convertEnum(eSelectPage, sAttrValue,
@@ -838,11 +838,11 @@ XMLPlaceholderFieldImportContext::XMLPlaceholderFieldImportContext(
 
 /// process attribute values
 void XMLPlaceholderFieldImportContext::ProcessAttribute(
-    sal_Int32 nAttrToken, const OUString& sAttrValue )
+    sal_Int32 nAttrToken, std::string_view sAttrValue )
 {
     switch (nAttrToken) {
     case XML_ELEMENT(TEXT, XML_DESCRIPTION):
-        sDescription = sAttrValue;
+        sDescription = OUString::fromUtf8(sAttrValue);
         break;
 
     case XML_ELEMENT(TEXT, XML_PLACEHOLDER_TYPE):
@@ -930,7 +930,7 @@ XMLTimeFieldImportContext::XMLTimeFieldImportContext(
 }
 
 void XMLTimeFieldImportContext::ProcessAttribute(
-    sal_Int32 nAttrToken, const OUString& sAttrValue )
+    sal_Int32 nAttrToken, std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
@@ -955,7 +955,7 @@ void XMLTimeFieldImportContext::ProcessAttribute(
         case XML_ELEMENT(STYLE, XML_DATA_STYLE_NAME):
         {
             sal_Int32 nKey = GetImportHelper().GetDataStyleKey(
-                                               sAttrValue, &bIsDefaultLanguage);
+                                               OUString::fromUtf8(sAttrValue), &bIsDefaultLanguage);
             if (-1 != nKey)
             {
                 nFormatKey = nKey;
@@ -1050,7 +1050,7 @@ XMLDateFieldImportContext::XMLDateFieldImportContext(
 
 void XMLDateFieldImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
@@ -1109,17 +1109,17 @@ XMLDatabaseFieldImportContext::XMLDatabaseFieldImportContext(
 }
 
 void XMLDatabaseFieldImportContext::ProcessAttribute(
-    sal_Int32 nAttrToken, const OUString& sAttrValue )
+    sal_Int32 nAttrToken, std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
         case XML_ELEMENT(TEXT, XML_DATABASE_NAME):
-            m_sDatabaseName = sAttrValue;
+            m_sDatabaseName = OUString::fromUtf8(sAttrValue);
             m_bDatabaseOK = true;
             m_bDatabaseNameOK = true;
             break;
         case XML_ELEMENT(TEXT, XML_TABLE_NAME):
-            m_sTableName = sAttrValue;
+            m_sTableName = OUString::fromUtf8(sAttrValue);
             m_bTableOK = true;
             break;
         case  XML_ELEMENT(TEXT, XML_TABLE_TYPE):
@@ -1178,7 +1178,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLDatabaseFieldImport
         }
 
         // we call ProcessAttribute in order to set bValid appropriately
-        ProcessAttribute( XML_TOKEN_INVALID, OUString() );
+        ProcessAttribute( XML_TOKEN_INVALID, "" );
     }
     else
         XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
@@ -1225,7 +1225,7 @@ XMLDatabaseNameImportContext::XMLDatabaseNameImportContext(
 }
 
 void XMLDatabaseNameImportContext::ProcessAttribute(
-    sal_Int32 nAttrToken, const OUString& sAttrValue )
+    sal_Int32 nAttrToken, std::string_view sAttrValue )
 {
     // delegate to superclass and check for success
     XMLDatabaseFieldImportContext::ProcessAttribute(nAttrToken, sAttrValue);
@@ -1257,20 +1257,20 @@ XMLDatabaseNextImportContext::XMLDatabaseNextImportContext(
 }
 
 void XMLDatabaseNextImportContext::ProcessAttribute(
-    sal_Int32 nAttrToken, const OUString& sAttrValue )
+    sal_Int32 nAttrToken, std::string_view sAttrValue )
 {
     if (XML_ELEMENT(TEXT, XML_CONDITION) == nAttrToken)
     {
         OUString sTmp;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrValueQName(
-                                    sAttrValue, &sTmp );
+                                    OUString::fromUtf8(sAttrValue), &sTmp );
         if( XML_NAMESPACE_OOOW == nPrefix )
         {
             sCondition = sTmp;
             bConditionOK = true;
         }
         else
-            sCondition = sAttrValue;
+            sCondition = OUString::fromUtf8(sAttrValue);
     }
     else
     {
@@ -1307,7 +1307,7 @@ XMLDatabaseSelectImportContext::XMLDatabaseSelectImportContext(
 
 void XMLDatabaseSelectImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     if (XML_ELEMENT(TEXT, XML_ROW_NUMBER) == nAttrToken)
     {
@@ -1354,15 +1354,15 @@ XMLDatabaseNumberImportContext::XMLDatabaseNumberImportContext(
 
 void XMLDatabaseNumberImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
         case XML_ELEMENT(STYLE, XML_NUM_FORMAT):
-            sNumberFormat = sAttrValue;
+            sNumberFormat = OUString::fromUtf8(sAttrValue);
             break;
         case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
-            sNumberSync = sAttrValue;
+            sNumberSync = OUString::fromUtf8(sAttrValue);
             break;
         case XML_ELEMENT(TEXT, XML_VALUE_TYPE):
         case XML_ELEMENT(OFFICE, XML_VALUE_TYPE):
@@ -1423,7 +1423,7 @@ XMLSimpleDocInfoImportContext::XMLSimpleDocInfoImportContext(
 
 void XMLSimpleDocInfoImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     if (XML_ELEMENT(TEXT, XML_FIXED) == nAttrToken)
     {
@@ -1629,14 +1629,14 @@ XMLDateTimeDocInfoImportContext::XMLDateTimeDocInfoImportContext(
 
 void XMLDateTimeDocInfoImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
         case XML_ELEMENT(STYLE, XML_DATA_STYLE_NAME):
         {
             sal_Int32 nKey = GetImportHelper().GetDataStyleKey(
-                                               sAttrValue, &bIsDefaultLanguage);
+                                               OUString::fromUtf8(sAttrValue), &bIsDefaultLanguage);
             if (-1 != nKey)
             {
                 nFormat = nKey;
@@ -1700,14 +1700,14 @@ XMLUserDocInfoImportContext::XMLUserDocInfoImportContext(
 
 void XMLUserDocInfoImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
         case XML_ELEMENT(STYLE, XML_DATA_STYLE_NAME):
         {
             sal_Int32 nKey = GetImportHelper().GetDataStyleKey(
-                                               sAttrValue, &bIsDefaultLanguage);
+                                               OUString::fromUtf8(sAttrValue), &bIsDefaultLanguage);
             if (-1 != nKey)
             {
                 nFormat = nKey;
@@ -1720,7 +1720,7 @@ void XMLUserDocInfoImportContext::ProcessAttribute(
             if (!bValid)
             {
                 SetServiceName(sAPI_docinfo_custom );
-                aName = sAttrValue;
+                aName = OUString::fromUtf8(sAttrValue);
                 bValid = true;
             }
             break;
@@ -1774,20 +1774,20 @@ XMLHiddenParagraphImportContext::XMLHiddenParagraphImportContext(
 
 void XMLHiddenParagraphImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     if ( XML_ELEMENT(TEXT, XML_CONDITION) == nAttrToken)
     {
         OUString sTmp;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrValueQName(
-                                    sAttrValue, &sTmp );
+                                    OUString::fromUtf8(sAttrValue), &sTmp );
         if( XML_NAMESPACE_OOOW == nPrefix )
         {
             sCondition = sTmp;
             bValid = true;
         }
         else
-            sCondition = sAttrValue;
+            sCondition = OUString::fromUtf8(sAttrValue);
     }
     else if ( XML_ELEMENT(TEXT, XML_IS_HIDDEN) == nAttrToken)
     {
@@ -1829,7 +1829,7 @@ XMLConditionalTextImportContext::XMLConditionalTextImportContext(
 
 void XMLConditionalTextImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
@@ -1837,22 +1837,22 @@ void XMLConditionalTextImportContext::ProcessAttribute(
             {
                 OUString sTmp;
                 sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                        GetKeyByAttrValueQName(sAttrValue, &sTmp);
+                        GetKeyByAttrValueQName(OUString::fromUtf8(sAttrValue), &sTmp);
                 if( XML_NAMESPACE_OOOW == nPrefix )
                 {
                     sCondition = sTmp;
                     bConditionOK = true;
                 }
                 else
-                    sCondition = sAttrValue;
+                    sCondition = OUString::fromUtf8(sAttrValue);
             }
             break;
         case XML_ELEMENT(TEXT, XML_STRING_VALUE_IF_FALSE):
-            sFalseContent = sAttrValue;
+            sFalseContent = OUString::fromUtf8(sAttrValue);
             bFalseOK = true;
             break;
         case XML_ELEMENT(TEXT, XML_STRING_VALUE_IF_TRUE):
-            sTrueContent = sAttrValue;
+            sTrueContent = OUString::fromUtf8(sAttrValue);
             bTrueOK = true;
             break;
         case XML_ELEMENT(TEXT, XML_CURRENT_VALUE):
@@ -1899,7 +1899,7 @@ XMLHiddenTextImportContext::XMLHiddenTextImportContext(
 
 void XMLHiddenTextImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
@@ -1907,19 +1907,19 @@ void XMLHiddenTextImportContext::ProcessAttribute(
             {
                 OUString sTmp;
                 sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                            GetKeyByAttrValueQName(sAttrValue, &sTmp);
+                            GetKeyByAttrValueQName(OUString::fromUtf8(sAttrValue), &sTmp);
                 if( XML_NAMESPACE_OOOW == nPrefix )
                 {
                     sCondition = sTmp;
                     bConditionOK = true;
                 }
                 else
-                    sCondition = sAttrValue;
+                    sCondition = OUString::fromUtf8(sAttrValue);
             }
             break;
         case XML_ELEMENT(TEXT, XML_STRING_VALUE):
         case XML_ELEMENT(OFFICE, XML_STRING_VALUE):
-            sString = sAttrValue;
+            sString = OUString::fromUtf8(sAttrValue);
             bStringOK = true;
             break;
         case XML_ELEMENT(TEXT, XML_IS_HIDDEN):
@@ -1974,7 +1974,7 @@ XMLFileNameImportContext::XMLFileNameImportContext(
 
 void XMLFileNameImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
@@ -2054,7 +2054,7 @@ XMLTemplateNameImportContext::XMLTemplateNameImportContext(
 
 void XMLTemplateNameImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
@@ -2109,7 +2109,7 @@ XMLChapterImportContext::XMLChapterImportContext(
 
 void XMLChapterImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
@@ -2170,16 +2170,16 @@ XMLCountFieldImportContext::XMLCountFieldImportContext(
 
 void XMLCountFieldImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
         case XML_ELEMENT(STYLE, XML_NUM_FORMAT):
-            sNumberFormat = sAttrValue;
+            sNumberFormat = OUString::fromUtf8(sAttrValue);
             bNumberFormatOK = true;
             break;
         case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
-            sLetterSync = sAttrValue;
+            sLetterSync = OUString::fromUtf8(sAttrValue);
             break;
         default:
             XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
@@ -2263,16 +2263,16 @@ XMLPageVarGetFieldImportContext::XMLPageVarGetFieldImportContext(
 
 void XMLPageVarGetFieldImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
         case XML_ELEMENT(STYLE, XML_NUM_FORMAT):
-            sNumberFormat = sAttrValue;
+            sNumberFormat = OUString::fromUtf8(sAttrValue);
             bNumberFormatOK = true;
             break;
         case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
-            sLetterSync = sAttrValue;
+            sLetterSync = OUString::fromUtf8(sAttrValue);
             break;
         default:
             XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
@@ -2313,7 +2313,7 @@ XMLPageVarSetFieldImportContext::XMLPageVarSetFieldImportContext(
 
 void XMLPageVarSetFieldImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
@@ -2377,16 +2377,16 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLMacroFieldImportCon
 
 void XMLMacroFieldImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
         case XML_ELEMENT(TEXT, XML_DESCRIPTION):
-            sDescription = sAttrValue;
+            sDescription = OUString::fromUtf8(sAttrValue);
             bDescriptionOK = true;
             break;
         case XML_ELEMENT(TEXT, XML_NAME):
-            sMacro = sAttrValue;
+            sMacro = OUString::fromUtf8(sAttrValue);
             bValid = true;
             break;
         default:
@@ -2525,7 +2525,7 @@ void XMLReferenceFieldImportContext::startFastElement(
 
 void XMLReferenceFieldImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
@@ -2534,7 +2534,7 @@ void XMLReferenceFieldImportContext::ProcessAttribute(
                 nSource = ReferenceFieldSource::ENDNOTE;
             break;
         case XML_ELEMENT(TEXT, XML_REF_NAME):
-            sName = sAttrValue;
+            sName = OUString::fromUtf8(sAttrValue);
             bNameOK = true;
             break;
         case  XML_ELEMENT(TEXT, XML_REFERENCE_FORMAT):
@@ -2559,7 +2559,7 @@ void XMLReferenceFieldImportContext::ProcessAttribute(
         }
         case XML_ELEMENT(LO_EXT, XML_REFERENCE_LANGUAGE):
         case XML_ELEMENT(TEXT, XML_REFERENCE_LANGUAGE):
-            sLanguage = sAttrValue;
+            sLanguage = OUString::fromUtf8(sAttrValue);
             break;
         default:
             XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
@@ -2742,11 +2742,11 @@ XMLDdeFieldImportContext::XMLDdeFieldImportContext(
 
 void XMLDdeFieldImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     if ( XML_ELEMENT(TEXT, XML_CONNECTION_NAME) == nAttrToken)
     {
-        sName = sAttrValue;
+        sName = OUString::fromUtf8(sAttrValue);
         bValid = true;
     }
     else
@@ -2818,7 +2818,7 @@ XMLSheetNameImportContext::XMLSheetNameImportContext(
 
 void XMLSheetNameImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue)
+    std::string_view sAttrValue)
 {
     // no attributes -> nothing to be done
     XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
@@ -2842,7 +2842,7 @@ XMLPageNameFieldImportContext::XMLPageNameFieldImportContext(
 
 /// process attribute values
 void XMLPageNameFieldImportContext::ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue )
+                                   std::string_view sAttrValue )
 {
     XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
@@ -2867,16 +2867,16 @@ XMLUrlFieldImportContext::XMLUrlFieldImportContext(
 
 void XMLUrlFieldImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
         case XML_ELEMENT(XLINK, XML_HREF):
-            sURL = GetImport().GetAbsoluteReference( sAttrValue );
+            sURL = GetImport().GetAbsoluteReference( OUString::fromUtf8(sAttrValue) );
             bValid = true;
             break;
         case XML_ELEMENT(OFFICE, XML_TARGET_FRAME_NAME):
-            sFrame = sAttrValue;
+            sFrame = OUString::fromUtf8(sAttrValue);
             bFrameOK = true;
             break;
         default:
@@ -2986,7 +2986,7 @@ void XMLBibliographyFieldImportContext::startFastElement(
 
 void XMLBibliographyFieldImportContext::ProcessAttribute(
     sal_Int32 ,
-    const OUString& )
+    std::string_view )
 {
     // attributes are handled in StartElement
     assert(false && "This should not have happened.");
@@ -3137,12 +3137,12 @@ XMLAnnotationImportContext::XMLAnnotationImportContext(
 
 void XMLAnnotationImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     if (nAttrToken == XML_ELEMENT(OFFICE, XML_NAME))
-        aName = sAttrValue;
+        aName = OUString::fromUtf8(sAttrValue);
     else if (nAttrToken == XML_ELEMENT(LO_EXT, XML_RESOLVED))
-        aResolved = sAttrValue;
+        aResolved = OUString::fromUtf8(sAttrValue);
     else
         XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
@@ -3337,17 +3337,17 @@ XMLScriptImportContext::XMLScriptImportContext(
 
 void XMLScriptImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
         case XML_ELEMENT(XLINK, XML_HREF):
-            sContent = GetImport().GetAbsoluteReference( sAttrValue );
+            sContent = GetImport().GetAbsoluteReference( OUString::fromUtf8(sAttrValue) );
             bContentOK = true;
             break;
 
         case XML_ELEMENT(SCRIPT, XML_LANGUAGE):
-            sScriptType = sAttrValue;
+            sScriptType = OUString::fromUtf8(sAttrValue);
             break;
 
         default:
@@ -3390,7 +3390,7 @@ XMLMeasureFieldImportContext::XMLMeasureFieldImportContext(
 
 void XMLMeasureFieldImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     switch (nAttrToken)
     {
@@ -3486,21 +3486,21 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLDropDownFieldImport
 
 void XMLDropDownFieldImportContext::ProcessAttribute(
     sal_Int32 nAttrToken,
-    const OUString& sAttrValue )
+    std::string_view sAttrValue )
 {
     if( nAttrToken == XML_ELEMENT(TEXT, XML_NAME))
     {
-        sName = sAttrValue;
+        sName = OUString::fromUtf8(sAttrValue);
         bNameOK = true;
     }
     else if (nAttrToken ==  XML_ELEMENT(TEXT, XML_HELP))
     {
-        sHelp = sAttrValue;
+        sHelp = OUString::fromUtf8(sAttrValue);
         bHelpOK = true;
     }
     else if (nAttrToken ==  XML_ELEMENT(TEXT, XML_HINT))
     {
-        sHint = sAttrValue;
+        sHint = OUString::fromUtf8(sAttrValue);
         bHintOK = true;
     }
     else
@@ -3556,7 +3556,7 @@ XMLHeaderFieldImportContext::XMLHeaderFieldImportContext(
 }
 
 /// process attribute values
-void XMLHeaderFieldImportContext::ProcessAttribute( sal_Int32 nAttrToken, const OUString& sAttrValue )
+void XMLHeaderFieldImportContext::ProcessAttribute( sal_Int32 nAttrToken, std::string_view sAttrValue )
 {
     XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
@@ -3578,7 +3578,7 @@ XMLFooterFieldImportContext::XMLFooterFieldImportContext(
 }
 
 /// process attribute values
-void XMLFooterFieldImportContext::ProcessAttribute( sal_Int32 nAttrToken, const OUString& sAttrValue)
+void XMLFooterFieldImportContext::ProcessAttribute( sal_Int32 nAttrToken, std::string_view sAttrValue)
 {
     XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
@@ -3602,7 +3602,7 @@ XMLDateTimeFieldImportContext::XMLDateTimeFieldImportContext(
 
 /// process attribute values
 void XMLDateTimeFieldImportContext::ProcessAttribute( sal_Int32 nAttrToken,
-                                   const OUString& sAttrValue )
+                                   std::string_view sAttrValue )
 {
     XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }

@@ -228,6 +228,10 @@ public:
     bool convertDateTime(double& fDateTime,
                          std::u16string_view rString);
 
+    /** convert ISO Date Time String to double */
+    bool convertDateTime(double& fDateTime,
+                         std::string_view rString);
+
     /// these 2 functions use tools Date, so they're not yet moved to sax
 
     /** convert double to ISO Date Time String */
@@ -238,6 +242,10 @@ public:
     /** convert ISO Date Time String to double */
     static bool convertDateTime( double& fDateTime,
                                 std::u16string_view rString,
+                                const css::util::Date& aNullDate);
+    /** convert ISO Date Time String to double */
+    static bool convertDateTime( double& fDateTime,
+                                std::string_view rString,
                                 const css::util::Date& aNullDate);
 
 
