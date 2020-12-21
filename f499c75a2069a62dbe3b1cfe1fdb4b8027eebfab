@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9e85f2eb_5d94ae4f",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1829,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-12-21T09:30:45Z",
+      "side": 1,
+      "message": "hah!, indeed they are wrong. We must get away with it because they are both generally zero or something. We should fix that for 7-1 separately to this conversion.",
+      "parentUuid": "ca061038_66c7252a",
+      "revId": "f499c75a2069a62dbe3b1cfe1fdb4b8027eebfab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4c6f8ba5_51d56727",
         "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
         "patchSetId": 1
