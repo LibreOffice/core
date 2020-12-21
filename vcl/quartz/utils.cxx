@@ -85,6 +85,32 @@ NSString* CreateNSString( const OUString& rStr )
     return [[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(rStr.getStr()) length: rStr.getLength()];
 }
 
+OUString NSStringArrayToOUString(NSArray* array)
+{
+    OUString result = "[";
+    OUString sep;
+    for (unsigned i = 0; i < [array count]; i++)
+    {
+        result = result + sep + OUString::fromUtf8([[array objectAtIndex:i] UTF8String]);
+        sep = ",";
+    }
+    result = result + "]";
+    return result;
+}
+
+OUString NSDictionaryKeysToOUString(NSDictionary* dict)
+{
+    OUString result = "{";
+    OUString sep;
+    for (NSString *key in dict)
+    {
+        result = result + sep + OUString::fromUtf8([key UTF8String]);
+        sep = ",";
+    }
+    result = result + "}";
+    return result;
+}
+
 std::ostream &operator <<(std::ostream& s, const CGRect &rRect)
 {
 #ifndef SAL_LOG_INFO
