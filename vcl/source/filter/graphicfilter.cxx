@@ -1403,10 +1403,15 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
         if( nStatus == ERRCODE_NONE )
         {
             bool bAnimated = false;
+            Size aLogicSize;
             if (eLinkType == GfxLinkType::NativeGif)
             {
                 SvMemoryStream aMemoryStream(pGraphicContent.get(), nGraphicContentSize, StreamMode::READ);
-                bAnimated = IsGIFAnimated(aMemoryStream);
+                bAnimated = IsGIFAnimated(aMemoryStream, aLogicSize);
+                if (!pSizeHint && aLogicSize.getWidth() && aLogicSize.getHeight())
+                {
+                    pSizeHint = &aLogicSize;
+                }
             }
             aGraphic.SetGfxLink(std::make_shared<GfxLink>(std::move(pGraphicContent), nGraphicContentSize, eLinkType));
             aGraphic.ImplGetImpGraphic()->ImplSetPrepared(bAnimated, pSizeHint);
