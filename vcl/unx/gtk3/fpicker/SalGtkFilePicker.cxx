@@ -229,7 +229,6 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
         G_TYPE_STRING, G_TYPE_STRING);
     m_pFilterView = gtk_tree_view_new_with_model (GTK_TREE_MODEL(m_pFilterStore));
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(m_pFilterView), false);
-    gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(m_pFilterView), true);
 
     GtkCellRenderer *cell = nullptr;
 
