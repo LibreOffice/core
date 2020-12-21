@@ -1644,4 +1644,19 @@ Bitmap Printer::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
     return OutputDevice::GetBitmap( rSrcPt, rSize );
 }
 
+css::awt::DeviceInfo Printer::GetDeviceInfo() const
+{
+    Size aDevSz = GetPaperSizePixel();
+    css::awt::DeviceInfo aInfo = GetCommonDeviceInfo(aDevSz);
+    Size aOutSz = GetOutputSizePixel();
+    Point aOffset = GetPageOffset();
+    aInfo.LeftInset = aOffset.X();
+    aInfo.TopInset = aOffset.Y();
+    aInfo.RightInset = aDevSz.Width() - aOutSz.Width() - aOffset.X();
+    aInfo.BottomInset = aDevSz.Height() - aOutSz.Height() - aOffset.Y();
+    aInfo.Capabilities = 0;
+
+    return aInfo;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
