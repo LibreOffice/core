@@ -247,21 +247,18 @@ cmd/lc_savegraphic.png cmd/lc_save.png
 cmd/sc_savegraphic.png cmd/sc_save.png
 
 # Text
-cmd/32/textfittosizetool.png cmd/32/text_marquee.png
 cmd/32/texttoolbox.png cmd/32/text.png
 cmd/32/drawtext.png cmd/32/text.png
 cmd/32/fontworkcharacterspacingfloater.png cmd/32/spacing.png
 cmd/32/fontheight.png cmd/32/scaletext.png
 cmd/32/pickthrough.png cmd/32/doubleclicktextedit.png
 
-cmd/lc_textfittosizetool.png cmd/lc_text_marquee.png
 cmd/lc_texttoolbox.png cmd/lc_text.png
 cmd/lc_drawtext.png cmd/lc_text.png
 cmd/lc_fontworkcharacterspacingfloater.png cmd/lc_spacing.png
 cmd/lc_fontheight.png cmd/lc_scaletext.png
 cmd/lc_pickthrough.png cmd/lc_doubleclicktextedit.png
 
-cmd/sc_textfittosizetool.png cmd/sc_text_marquee.png
 cmd/sc_texttoolbox.png cmd/sc_text.png
 cmd/sc_drawtext.png cmd/sc_text.png
 cmd/sc_fontworkcharacterspacingfloater.png cmd/sc_spacing.png
@@ -2203,7 +2200,7 @@ sfx2/res/styfam1.png cmd/sc_charfontname.png
 sfx2/res/styfam2.png cmd/sc_controlcodes.png
 sfx2/res/styfam3.png cmd/sc_linestyle.png
 sfx2/res/styfam4.png cmd/sc_showsinglepage.png
-sfx2/res/symphony/open_more.png cmd/lc_controlproperties.png
+sfx2/res/symphony/open_more.png cmd/sc_controlproperties.png
 sfx2/res/symphony/sidebar-3d-large.png cmd/lc_cube.png
 sfx2/res/symphony/sidebar-3d-small.png cmd/sc_cube.png
 sfx2/res/symphony/sidebar-animation-large.png cmd/lc_customanimation.png
