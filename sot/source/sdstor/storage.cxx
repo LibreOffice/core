@@ -58,9 +58,8 @@ static SvLockBytesRef MakeLockBytes_Impl( const OUString & rName, StreamMode nMo
     return xLB;
 }
 
-SotStorageStream::SotStorageStream( const OUString & rName, StreamMode nMode )
+SotTempStream::SotTempStream( const OUString & rName, StreamMode nMode )
     : SvStream( MakeLockBytes_Impl( rName, nMode ).get() )
-    , pOwnStm( nullptr )
 {
     if( nMode & StreamMode::WRITE )
         m_isWritable = true;
@@ -68,105 +67,94 @@ SotStorageStream::SotStorageStream( const OUString & rName, StreamMode nMode )
         m_isWritable = false;
 }
 
-SotStorageStream::SotStorageStream( BaseStorageStream * pStm )
+SotTempStream::~SotTempStream()
 {
-    if( pStm )
-    {
-        if( StreamMode::WRITE & pStm->GetMode() )
-            m_isWritable = true;
-        else
-            m_isWritable = false;
+    Flush();
+}
 
-        pOwnStm = pStm;
-        SetError( pStm->GetError() );
-        pStm->ResetError();
-    }
-    else
+void SotTempStream::CopyTo( SotTempStream * pDestStm )
+{
+    Flush(); // write all data
+
+    sal_uInt64 nPos = Tell();    // save position
+    Seek( 0 );
+    pDestStm->SetSize( 0 ); // empty target stream
+
+    constexpr int BUFSIZE = 64 * 1024;
+    std::unique_ptr<sal_uInt8[]> pMem(new sal_uInt8[ BUFSIZE ]);
+    sal_uLong  nRead;
+    while (0 != (nRead = ReadBytes(pMem.get(), BUFSIZE)))
     {
-        pOwnStm = nullptr;
-        m_isWritable = true;
-        SetError( SVSTREAM_INVALID_PARAMETER );
+        if (nRead != pDestStm->WriteBytes(pMem.get(), nRead))
+        {
+            SetError( SVSTREAM_GENERALERROR );
+            break;
+        }
     }
+    pMem.reset();
+
+    // set position
+    pDestStm->Seek( nPos );
+    Seek( nPos );
+}
+
+SotStorageStream::SotStorageStream( BaseStorageStream * pStm )
+    : pOwnStm(pStm)
+{
+    assert( pStm );
+    if( StreamMode::WRITE & pStm->GetMode() )
+        m_isWritable = true;
+    else
+        m_isWritable = false;
+
+    SetError( pStm->GetError() );
+    pStm->ResetError();
 }
 
 SotStorageStream::~SotStorageStream()
 {
-    Flush(); //SetBufferSize(0);
+    Flush();
     delete pOwnStm;
 }
 
 void SotStorageStream::ResetError()
 {
     SvStream::ResetError();
-    if( pOwnStm )
-         pOwnStm->ResetError();
+    pOwnStm->ResetError();
 }
 
 std::size_t SotStorageStream::GetData(void* pData, std::size_t const nSize)
 {
-    std::size_t nRet = 0;
-
-    if( pOwnStm )
-    {
-        nRet = pOwnStm->Read( pData, nSize );
-        SetError( pOwnStm->GetError() );
-    }
-    else
-        nRet = SvStream::GetData( pData, nSize );
-
+    std::size_t nRet = pOwnStm->Read( pData, nSize );
+    SetError( pOwnStm->GetError() );
     return nRet;
 }
 
 std::size_t SotStorageStream::PutData(const void* pData, std::size_t const nSize)
 {
-    std::size_t nRet = 0;
-
-    if( pOwnStm )
-    {
-        nRet = pOwnStm->Write( pData, nSize );
-        SetError( pOwnStm->GetError() );
-    }
-    else
-        nRet = SvStream::PutData( pData, nSize );
+    std::size_t nRet = pOwnStm->Write( pData, nSize );
+    SetError( pOwnStm->GetError() );
     return nRet;
 }
 
 sal_uInt64 SotStorageStream::SeekPos(sal_uInt64 nPos)
 {
-    sal_uLong nRet = 0;
-
-    if( pOwnStm )
-    {
-        nRet = pOwnStm->Seek( nPos );
-        SetError( pOwnStm->GetError() );
-    }
-    else
-        nRet = SvStream::SeekPos( nPos );
-
+    sal_uLong nRet = pOwnStm->Seek( nPos );
+    SetError( pOwnStm->GetError() );
     return nRet;
 }
 
 void SotStorageStream::FlushData()
 {
-    if( pOwnStm )
-    {
-        pOwnStm->Flush();
-        SetError( pOwnStm->GetError() );
-    }
-    else
-        SvStream::FlushData();
+    pOwnStm->Flush();
+    SetError( pOwnStm->GetError() );
 }
 
 void SotStorageStream::SetSize(sal_uInt64 const nNewSize)
 {
     sal_uInt64 const nPos = Tell();
-    if( pOwnStm )
-    {
-        pOwnStm->SetSize( nNewSize );
-        SetError( pOwnStm->GetError() );
-    }
-    else
-        SvStream::SetSize( nNewSize );
+    pOwnStm->SetSize( nNewSize );
+    SetError( pOwnStm->GetError() );
 
     if( nNewSize < nPos )
         // jump to the end
@@ -185,54 +173,15 @@ sal_uInt64 SotStorageStream::TellEnd()
     // otherwise we return a 0 value from StgEntry::GetSize
     FlushBuffer();
 
-    if (pOwnStm)
-        return pOwnStm->GetSize();
-
-    return SvStream::TellEnd();
-}
-
-void SotStorageStream::CopyTo( SotStorageStream * pDestStm )
-{
-    Flush(); // write all data
-    pDestStm->ClearBuffer();
-    if( !pOwnStm || !pDestStm->pOwnStm )
-    {
-        // If Ole2 or not only own StorageStreams
-        sal_uInt64 nPos = Tell();    // save position
-        Seek( 0 );
-        pDestStm->SetSize( 0 ); // empty target stream
-
-        std::unique_ptr<sal_uInt8[]> pMem(new sal_uInt8[ 8192 ]);
-        sal_uLong  nRead;
-        while (0 != (nRead = ReadBytes(pMem.get(), 8192)))
-        {
-            if (nRead != pDestStm->WriteBytes(pMem.get(), nRead))
-            {
-                SetError( SVSTREAM_GENERALERROR );
-                break;
-            }
-        }
-        pMem.reset();
-        // set position
-        pDestStm->Seek( nPos );
-        Seek( nPos );
-    }
-    else
-    {
-        pOwnStm->CopyTo( pDestStm->pOwnStm );
-        SetError( pOwnStm->GetError() );
-    }
+    return pOwnStm->GetSize();
 }
 
 bool SotStorageStream::Commit()
 {
-    if( pOwnStm )
-    {
-        pOwnStm->Flush();
-        if( pOwnStm->GetError() == ERRCODE_NONE )
-            pOwnStm->Commit();
-        SetError( pOwnStm->GetError() );
-    }
+    pOwnStm->Flush();
+    if( pOwnStm->GetError() == ERRCODE_NONE )
+        pOwnStm->Commit();
+    SetError( pOwnStm->GetError() );
     return GetError() == ERRCODE_NONE;
 }
 

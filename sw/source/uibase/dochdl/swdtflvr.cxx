@@ -677,7 +677,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
     return bOK;
 }
 
-bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
+bool SwTransferable::WriteObject( tools::SvRef<SotTempStream>& xStream,
                                     void* pObject, sal_uInt32 nObjectType,
                                     const DataFlavor& /*rFlavor*/ )
 {
@@ -719,8 +719,7 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
 
             {
                 uno::Reference<io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *xStream ) );
-                if( SvxDrawingLayerExport( pModel, xDocOut ) )
-                    xStream->Commit();
+                SvxDrawingLayerExport( pModel, xDocOut );
             }
 
             bRet = ERRCODE_NONE == xStream->GetError();
@@ -758,7 +757,6 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
 
                 xWorkStore->dispose();
                 xWorkStore.clear();
-                xStream->Commit();
             }
             catch (const uno::Exception&)
             {
@@ -774,7 +772,6 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
             SwTransferDdeLink* pDdeLnk = static_cast<SwTransferDdeLink*>(pObject);
             if( pDdeLnk->WriteData( *xStream ) )
             {
-                xStream->Commit();
                 bRet = ERRCODE_NONE == xStream->GetError();
             }
         }
@@ -825,7 +822,6 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
         if( ! aWrt.Write( xWrt ).IsError() )
         {
             xStream->WriteChar( '\0' );               // terminate with a zero
-            xStream->Commit();
             bRet = true;
         }
     }
@@ -2102,7 +2098,7 @@ bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
 
     MSE40HTMLClipFormatObj aMSE40ClpObj;
 
-    tools::SvRef<SotStorageStream> xStrm;
+    tools::SvRef<SotTempStream> xStrm;
     SvStream* pStream = nullptr;
     Reader* pRead = nullptr;
     OUString sData;
@@ -2561,7 +2557,7 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
     OUString aApp, aTopic, aItem;
 
     {
-        tools::SvRef<SotStorageStream> xStrm;
+        tools::SvRef<SotTempStream> xStrm;
         if( !rData.GetSotStorageStream( SotClipboardFormatId::LINK, xStrm ))
         {
             OSL_ENSURE( false, "DDE Data not found." );
@@ -2729,7 +2725,7 @@ bool SwTransferable::PasteSdrFormat(  TransferableDataHelper& rData,
                                     const Point* pPt, SotExchangeActionFlags nActionFlags, bool bNeedToSelectBeforePaste)
 {
     bool bRet = false;
-    tools::SvRef<SotStorageStream> xStrm;
+    tools::SvRef<SotTempStream> xStrm;
     if( rData.GetSotStorageStream( SotClipboardFormatId::DRAWING, xStrm ))
     {
         xStrm->SetVersion( SOFFICE_FILEFORMAT_50 );
@@ -2770,7 +2766,7 @@ bool SwTransferable::PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
 
     case SotClipboardFormatId::SVXB:
     {
-        tools::SvRef<SotStorageStream> xStm;
+        tools::SvRef<SotTempStream> xStm;
 
         if(rData.GetSotStorageStream(SotClipboardFormatId::SVXB, xStm))
         {

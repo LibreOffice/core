@@ -57,6 +57,7 @@ class INetBookmark;
 class INetImage;
 class FileList;
 class SotStorageStream;
+class SotTempStream;
 namespace vcl { class Window; }
 
 // Drag&Drop defines
@@ -244,7 +245,7 @@ protected:
 
     virtual void        AddSupportedFormats() = 0;
     virtual bool        GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) = 0;
-    virtual bool        WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const css::datatransfer::DataFlavor& rFlavor );
+    virtual bool        WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const css::datatransfer::DataFlavor& rFlavor );
     virtual void        DragFinished( sal_Int8 nDropAction );
     virtual void        ObjectReleased();
 
@@ -357,8 +358,8 @@ public:
     css::uno::Sequence<sal_Int8> GetSequence( SotClipboardFormatId nFormat, const OUString& rDestDoc );
     css::uno::Sequence<sal_Int8> GetSequence( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
 
-    bool                        GetSotStorageStream( SotClipboardFormatId nFormat, tools::SvRef<SotStorageStream>& rStreamRef );
-    bool                        GetSotStorageStream( const css::datatransfer::DataFlavor& rFlavor, tools::SvRef<SotStorageStream>& rStreamRef );
+    bool                        GetSotStorageStream( SotClipboardFormatId nFormat, tools::SvRef<SotTempStream>& rStreamRef );
+    bool                        GetSotStorageStream( const css::datatransfer::DataFlavor& rFlavor, tools::SvRef<SotTempStream>& rStreamRef );
 
     css::uno::Reference<css::io::XInputStream> GetInputStream( SotClipboardFormatId nFormat, const OUString& rDestDoc );
     css::uno::Reference<css::io::XInputStream> GetInputStream( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );

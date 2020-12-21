@@ -167,7 +167,7 @@ public:
     SdrMediaObj*            InsertMediaObj( const OUString& rURL, const OUString& rMimeType, sal_Int8& rAction,
                                             const Point& rPos, const Size& rSize );
 
-    bool PasteRTFTable( const ::tools::SvRef<SotStorageStream>& xStm, SdrPage* pPage, SdrInsertFlags nPasteOptions );
+    bool PasteRTFTable( const ::tools::SvRef<SotTempStream>& xStm, SdrPage* pPage, SdrInsertFlags nPasteOptions );
 
     bool                    IsPresObjSelected(bool bOnPage = true, bool bOnMasterPage = true, bool bCheckPresObjListOnly = false, bool bCheckLayoutOnly = false) const;
 
