@@ -5636,8 +5636,8 @@ void ScExportTest::testTdf138824_linkToParentDirectory()
         pXPathFile, m_xSFactory, "xl/externalLinks/_rels/externalLink1.xml.rels");
     CPPUNIT_ASSERT(pDoc);
 
-    // it should be "../tdf138824_externalSource.ods" but because of an other bug,
-    // on linux some other directory names may added into the middle
+    // it should be "../tdf138824_externalSource.ods" but because of another bug,
+    // on linux some other directory names may be added into the middle
     OUString aValue = getXPath(pDoc, "/r:Relationships/r:Relationship", "Target");
     CPPUNIT_ASSERT_EQUAL(0, static_cast<int>(aValue.indexOf("../")));
     CPPUNIT_ASSERT(aValue.indexOf("/tdf138824_externalSource.ods") > 0);
