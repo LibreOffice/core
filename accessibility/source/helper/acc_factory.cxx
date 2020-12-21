@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 #include <config_feature_desktop.h>
 
 #include <toolkit/awt/vclxwindows.hxx>
@@ -381,6 +382,7 @@ Reference< XAccessible > AccessibleFactory::createAccessibleTabBar( TabBar& _rTa
 #if HAVE_FEATURE_SCRIPTING
     return new AccessibleTabBar( &_rTabBar );
 #else
+    (void)_rTabBar;
     return nullptr;
 #endif
 }

@@ -1069,7 +1069,6 @@ linux-android*)
     build_gstreamer_1_0=no
     enable_lotuswordpro=no
     enable_mpl_subset=yes
-    enable_coinmp=yes
     enable_lpsolve=no
     enable_mariadb_sdbc=no
     enable_report_builder=no
