@@ -153,7 +153,6 @@ private:
     std::unique_ptr<weld::ToggleButton> m_xBtnTexColor;
     std::unique_ptr<weld::ToggleButton> m_xBtnTexReplace;
     std::unique_ptr<weld::ToggleButton> m_xBtnTexModulate;
-    std::unique_ptr<weld::ToggleButton> m_xBtnTexBlend;
     std::unique_ptr<weld::ToggleButton> m_xBtnTexObjectX;
     std::unique_ptr<weld::ToggleButton> m_xBtnTexParallelX;
     std::unique_ptr<weld::ToggleButton> m_xBtnTexCircleX;
