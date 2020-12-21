@@ -81,6 +81,7 @@
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
 #include <sdr/attribute/sdrfilltextattribute.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/drawing/LineDash.hpp>
 
 using namespace com::sun::star;
 
@@ -254,6 +255,7 @@ namespace drawinglayer::primitive2d
                     const Color aColor(rSet.Get(XATTR_LINECOLOR).GetColorValue());
                     const css::drawing::LineJoint eJoint(rSet.Get(XATTR_LINEJOINT).GetValue());
                     const css::drawing::LineCap eCap(rSet.Get(XATTR_LINECAP).GetValue());
+                    css::drawing::LineDash eDash = css::drawing::LineDash();
                     ::std::vector< double > aDotDashArray;
                     double fFullDotDashLen(0.0);
 
@@ -264,6 +266,12 @@ namespace drawinglayer::primitive2d
                         if(rDash.GetDots() || rDash.GetDashes())
                         {
                             fFullDotDashLen = rDash.CreateDotDashArray(aDotDashArray, static_cast<double>(nWidth));
+                            eDash = css::drawing::LineDash(rDash.GetDashStyle(),
+                                                           rDash.GetDots(),
+                                                           rDash.GetDotLen()-3,
+                                                           rDash.GetDashes(),
+                                                           rDash.GetDashLen(),
+                                                           40/*rDash.GetDistance()*/);
                         }
                     }
 
@@ -274,7 +282,8 @@ namespace drawinglayer::primitive2d
                         aColor.getBColor(),
                         eCap,
                         aDotDashArray,
-                        fFullDotDashLen);
+                        fFullDotDashLen,
+                        eDash);
                 }
             }
 

@@ -35,6 +35,7 @@ namespace drawinglayer::attribute
             css::drawing::LineCap                   meCap;              // BUTT, ROUND, or SQUARE
             std::vector< double >                 maDotDashArray;     // array of double which defines the dot-dash pattern
             double                                  mfFullDotDashLen;   // sum of maDotDashArray (for convenience)
+            css::drawing::LineDash                  meDash;              // BUTT, ROUND, or SQUARE
 
             ImpSdrLineAttribute(
                 basegfx::B2DLineJoin eJoin,
@@ -43,14 +44,16 @@ namespace drawinglayer::attribute
                 const basegfx::BColor& rColor,
                 css::drawing::LineCap eCap,
                 const std::vector< double >& rDotDashArray,
-                double fFullDotDashLen)
+                double fFullDotDashLen,
+                css::drawing::LineDash eDash)
             :   meJoin(eJoin),
                 mfWidth(fWidth),
                 mfTransparence(fTransparence),
                 maColor(rColor),
                 meCap(eCap),
                 maDotDashArray(rDotDashArray),
-                mfFullDotDashLen(fFullDotDashLen)
+                mfFullDotDashLen(fFullDotDashLen),
+                meDash(eDash)
             {
             }
 
@@ -61,7 +64,8 @@ namespace drawinglayer::attribute
                 maColor(basegfx::BColor()),
                 meCap(css::drawing::LineCap_BUTT),
                 maDotDashArray(std::vector< double >()),
-                mfFullDotDashLen(0.0)
+                mfFullDotDashLen(0.0),
+                meDash()
             {
             }
 
@@ -73,6 +77,7 @@ namespace drawinglayer::attribute
             css::drawing::LineCap getCap() const { return meCap; }
             const std::vector< double >& getDotDashArray() const { return maDotDashArray; }
             double getFullDotDashLen() const { return mfFullDotDashLen; }
+            css::drawing::LineDash getDash() const { return meDash; }
 
             bool operator==(const ImpSdrLineAttribute& rCandidate) const
             {
@@ -81,6 +86,7 @@ namespace drawinglayer::attribute
                     && getTransparence() == rCandidate.getTransparence()
                     && getColor() == rCandidate.getColor()
                     && getCap() == rCandidate.getCap()
+                    && getDash() == rCandidate.getDash()
                     && getDotDashArray() == rCandidate.getDotDashArray());
             }
         };
@@ -98,7 +104,8 @@ namespace drawinglayer::attribute
             const basegfx::BColor& rColor,
             css::drawing::LineCap eCap,
             const std::vector< double >& rDotDashArray,
-            double fFullDotDashLen)
+            double fFullDotDashLen,
+            css::drawing::LineDash eDash)
         :   mpSdrLineAttribute(
                 ImpSdrLineAttribute(
                     eJoin,
@@ -107,7 +114,8 @@ namespace drawinglayer::attribute
                     rColor,
                     eCap,
                     rDotDashArray,
-                    fFullDotDashLen))
+                    fFullDotDashLen,
+                    eDash))
 
         {
         }
@@ -174,6 +182,11 @@ namespace drawinglayer::attribute
         css::drawing::LineCap SdrLineAttribute::getCap() const
         {
             return mpSdrLineAttribute->getCap();
+        }
+
+        css::drawing::LineDash SdrLineAttribute::getDash() const
+        {
+            return mpSdrLineAttribute->getDash();
         }
 
 } // end of namespace

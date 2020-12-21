@@ -157,7 +157,12 @@ namespace drawinglayer::primitive2d
             const attribute::SdrLineStartEndAttribute& rStroke)
         {
             // create line and stroke attribute
-            const attribute::LineAttribute aLineAttribute(rLine.getColor(), rLine.getWidth(), rLine.getJoin(), rLine.getCap());
+            const attribute::LineAttribute aLineAttribute(rLine.getColor(),
+                                                          rLine.getWidth(),
+                                                          rLine.getJoin(),
+                                                          rLine.getCap(),
+                                                          basegfx::deg2rad(15.0),
+                                                          rLine.getDash());
             const attribute::StrokeAttribute aStrokeAttribute(rLine.getDotDashArray(), rLine.getFullDotDashLen());
             BasePrimitive2D* pNewLinePrimitive = nullptr;
 

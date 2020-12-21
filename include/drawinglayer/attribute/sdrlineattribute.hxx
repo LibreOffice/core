@@ -23,6 +23,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/drawing/LineDash.hpp>
 #include <o3tl/cow_wrapper.hxx>
 #include <vector>
 
@@ -57,7 +58,8 @@ namespace drawinglayer::attribute
                 const basegfx::BColor& rColor,
                 css::drawing::LineCap eCap,
                 const ::std::vector< double >& rDotDashArray,
-                double fFullDotDashLen);
+                double fFullDotDashLen,
+                css::drawing::LineDash eDash);
             SdrLineAttribute();
             SdrLineAttribute(const SdrLineAttribute&);
             SdrLineAttribute(SdrLineAttribute&&);
@@ -79,6 +81,7 @@ namespace drawinglayer::attribute
             const ::std::vector< double >& getDotDashArray() const;
             double getFullDotDashLen() const;
             css::drawing::LineCap getCap() const;
+            css::drawing::LineDash getDash() const;
         };
 
 } // end of namespace drawinglayer::attribute
