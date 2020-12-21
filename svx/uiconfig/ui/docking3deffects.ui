@@ -1655,6 +1655,7 @@
               <object class="GtkLabel" id="label20">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+<<<<<<< HEAD
                 <property name="label" translatable="yes" context="docking3deffects|label20">_Type</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
@@ -1752,6 +1753,134 @@
                 <child internal-child="accessible">
                   <object class="AtkObject" id="textype-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|textype">Converts the texture to black and white.</property>
+=======
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkLabel" id="label20">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="docking3deffects|label20">_Type</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="textype"/>
+                      <relation type="label-for" target="texcolor"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label22">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="docking3deffects|label22">_Mode</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="texreplace"/>
+                      <relation type="label-for" target="texmodulate"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label23">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="docking3deffects|label23">_Projection X</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="texobjx"/>
+                      <relation type="label-for" target="texparallelx"/>
+                      <relation type="label-for" target="texcirclex"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label24">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="docking3deffects|label24">P_rojection Y</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="texobjy"/>
+                      <relation type="label-for" target="texparallely"/>
+                      <relation type="label-for" target="texcircley"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label25">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="docking3deffects|label25">_Filtering</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="texfilter"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToggleButton" id="textype">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes" context="docking3deffects|textype|tooltip_text">Black &amp; White</property>
+                    <property name="halign">center</property>
+                    <property name="image">image28</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="label20"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="textype-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|textype">Converts the texture to black and white.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToggleButton" id="texcolor">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes" context="docking3deffects|texcolor|tooltip_text">Color</property>
+                    <property name="halign">center</property>
+                    <property name="image">image29</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="label20"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="texcolor-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|texcolor">Converts the texture to color.</property>
+                      </object>
+                    </child>
+>>>>>>> tdf#131427 Remove button "Texture, Shadow and Color" in 3D Effects dialog
                   </object>
                 </child>
               </object>
@@ -1798,6 +1927,7 @@
                     <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|texreplace">Applies the texture without shading.</property>
                   </object>
                 </child>
+<<<<<<< HEAD
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -1858,6 +1988,24 @@
                 <child internal-child="accessible">
                   <object class="AtkObject" id="texobjx-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|texobjx">Automatically adjusts the texture based on the shape and size of the object.</property>
+=======
+                <child>
+                  <object class="GtkToggleButton" id="texobjx">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes" context="docking3deffects|texobjx|tooltip_text">Object-Specific</property>
+                    <property name="halign">center</property>
+                    <property name="image">image32</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="label23"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="texobjx-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|texobjx">Automatically adjusts the texture based on the shape and size of the object.</property>
+                      </object>
+                    </child>
+>>>>>>> tdf#131427 Remove button "Texture, Shadow and Color" in 3D Effects dialog
                   </object>
                 </child>
               </object>
