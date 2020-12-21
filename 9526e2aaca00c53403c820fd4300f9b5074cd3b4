@@ -222,6 +222,24 @@
     },
     {
       "key": {
+        "uuid": "d0eb908c_a3c747f4",
+        "filename": "offapi/com/sun/star/xml/sax/XWriter.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-21T17:05:40Z",
+      "side": 1,
+      "message": "The include gives problems with another class of same name.\nWill take a while.\n\nDownloads/libreoffice/include/editeng/editview.hxx:180:5: error: reference to ‘Pair’ is ambiguous\n  180 |     Pair            Scroll( tools::Long nHorzScroll, tools::Long nVertScroll, ScrollRangeCheck nRangeCheck \u003d ScrollRangeCheck::NoNegative );",
+      "parentUuid": "cb05b1f0_96c14453",
+      "revId": "9526e2aaca00c53403c820fd4300f9b5074cd3b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "14028e78_071d578c",
         "filename": "sax/source/expatwrap/saxwriter.cxx",
         "patchSetId": 5
