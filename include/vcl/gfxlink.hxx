@@ -23,6 +23,7 @@
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
+#include <vcl/BinaryDataContainer.hxx>
 #include <memory>
 
 class SvStream;
@@ -61,20 +62,17 @@ class VCL_DLLPUBLIC GfxLink
 private:
     GfxLinkType     meType;
     sal_uInt32      mnUserId;
-    mutable std::shared_ptr<sal_uInt8> mpSwapInData;
+    BinaryDataContainer maDataContainer;
     mutable size_t  maHash;
-    sal_uInt32      mnSwapInDataSize;
     MapMode         maPrefMapMode;
     Size            maPrefSize;
     bool            mbPrefMapModeValid;
     bool            mbPrefSizeValid;
 
-    SAL_DLLPRIVATE std::shared_ptr<sal_uInt8> GetSwapInData() const;
 public:
-                        GfxLink();
-
-                        // pBuff = The Graphic data. This class takes ownership of this
-                        GfxLink( std::unique_ptr<sal_uInt8[]> pBuf, sal_uInt32 nBufSize, GfxLinkType nType );
+    GfxLink();
+    explicit GfxLink(std::unique_ptr<sal_uInt8[]> pBuf, sal_uInt32 nBufSize, GfxLinkType nType);
+    explicit GfxLink(BinaryDataContainer const & rDataConainer, GfxLinkType nType);
 
     bool                operator==( const GfxLink& ) const;
 
@@ -85,7 +83,7 @@ public:
     void                SetUserId( sal_uInt32 nUserId ) { mnUserId = nUserId; }
     sal_uInt32          GetUserId() const { return mnUserId; }
 
-    sal_uInt32          GetDataSize() const { return mnSwapInDataSize;}
+    sal_uInt32          GetDataSize() const { return maDataContainer.getSize(); }
     const sal_uInt8*    GetData() const;
 
     const Size&         GetPrefSize() const { return maPrefSize;}
