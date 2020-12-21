@@ -425,14 +425,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf98000_changePageStyle, "tdf98000_changePageStyle
     CPPUNIT_ASSERT_MESSAGE("Different page1/page2 styles", sPageOneStyle != sPageTwoStyle);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf138739, "tdf138739.docx")
-{
-    uno::Reference<beans::XPropertySet> xParaProps(getParagraph(1), uno::UNO_QUERY);
-
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Font type name does not match!", OUString("Comic Sans MS"),
-                                 xParaProps->getPropertyValue("CharFontName").get<OUString>());
-}
-
 DECLARE_OOXMLEXPORT_TEST(testTdf135216_evenOddFooter, "tdf135216_evenOddFooter.odt")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
