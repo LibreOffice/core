@@ -115,6 +115,7 @@ public:
 
     ReadState           ReadGIF( Graphic& rGraphic );
     bool                ReadIsAnimated();
+    void GetLogicSize(Size& rLogicSize);
     Graphic             GetIntermediateGraphic();
 
     explicit            GIFReader( SvStream& rStm );
@@ -910,6 +911,12 @@ bool GIFReader::ReadIsAnimated()
     return false;
 }
 
+void GIFReader::GetLogicSize(Size& rLogicSize)
+{
+    rLogicSize.setWidth(nLogWidth100);
+    rLogicSize.setHeight(nLogHeight100);
+}
+
 ReadState GIFReader::ReadGIF( Graphic& rGraphic )
 {
     ReadState eReadState;
@@ -946,13 +953,14 @@ ReadState GIFReader::ReadGIF( Graphic& rGraphic )
     return eReadState;
 }
 
-bool IsGIFAnimated(SvStream & rStm)
+bool IsGIFAnimated(SvStream & rStm, Size& rLogicSize)
 {
     GIFReader aReader(rStm);
 
     SvStreamEndian nOldFormat = rStm.GetEndian();
     rStm.SetEndian(SvStreamEndian::LITTLE);
     bool bResult = aReader.ReadIsAnimated();
+    aReader.GetLogicSize(rLogicSize);
     rStm.SetEndian(nOldFormat);
 
     return bResult;
