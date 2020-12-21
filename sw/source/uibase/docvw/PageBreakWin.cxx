@@ -27,6 +27,7 @@
 #include <strings.hrc>
 #include <tabfrm.hxx>
 #include <uiitems.hxx>
+#include <uiobject.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
@@ -105,6 +106,8 @@ SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwFrame *pFrame ) :
     m_nDelayAppearing( 0 ),
     m_bDestroyed( false )
 {
+    set_id("PageBreak"); // for uitest
+
     m_xMenuButton->connect_toggled(LINK(this, SwPageBreakWin, ToggleHdl));
     m_xMenuButton->connect_selected(LINK(this, SwPageBreakWin, SelectHdl));
     m_xMenuButton->set_accessible_name(SwResId(STR_PAGE_BREAK_BUTTON));
@@ -239,6 +242,16 @@ IMPL_LINK(SwPageBreakWin, SelectHdl, const OString&, rIdent, void)
 {
     SwFrameControlPtr pThis = GetEditWin()->GetFrameControlsManager( ).GetControl( FrameControlType::PageBreak, GetFrame() );
 
+    execute(rIdent);
+
+    // Only fade if there is more than this temporary shared pointer:
+    // The main reference has been deleted due to a page break removal
+    if ( pThis.use_count() > 1 )
+        Fade( false );
+}
+
+void SwPageBreakWin::execute(const OString& rIdent)
+{
     // Is there a PageBefore break on this page?
     SwContentFrame *pCnt = const_cast<SwContentFrame*>(GetPageFrame()->FindFirstBodyContent());
     SvxBreak eBreak = lcl_GetBreakItem( pCnt );
@@ -319,7 +332,7 @@ IMPL_LINK(SwPageBreakWin, SelectHdl, const OString&, rIdent, void)
             aPaM, aSet, SetAttrMode::DEFAULT, GetPageFrame()->getRootFrame());
 
         // This break could be from the previous paragraph, if it has a PageAfter break.
-        if ( ePrevBreak == SvxBreak::PageAfter )
+        if ( false && ePrevBreak == SvxBreak::PageAfter )
         {
             SwContentNode& rPrevNd = pPrevCnt->IsTextFrame()
                 ? *static_cast<SwTextFrame*>(pPrevCnt)->GetTextNodeFirst()
@@ -333,11 +346,6 @@ IMPL_LINK(SwPageBreakWin, SelectHdl, const OString&, rIdent, void)
 
         rNd.GetDoc().GetIDocumentUndoRedo( ).EndUndo( SwUndoId::UI_DELETE_PAGE_BREAK, nullptr );
     }
-
-    // Only fade if there is more than this temporary shared pointer:
-    // The main reference has been deleted due to a page break removal
-    if ( pThis.use_count() > 1 )
-        Fade( false );
 }
 
 void SwPageBreakWin::UpdatePosition(const std::optional<Point>& xEvtPt)
@@ -477,6 +485,11 @@ IMPL_LINK_NOARG(SwPageBreakWin, FadeHandler, Timer *, void)
 
     if (IsVisible( ) && m_nFadeRate > 0 && m_nFadeRate < 100)
         m_aFadeTimer.Start();
+}
+
+FactoryFunction SwPageBreakWin::GetUITestFactory() const
+{
+    return PageBreakUIObject::create;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
