@@ -247,7 +247,6 @@
                         <property name="can_focus">False</property>
                         <property name="margin-start">12</property>
                         <property name="hexpand">True</property>
-                        <property name="xpad">12</property>
                         <property name="label" translatable="yes" context="samplingdialog|label1">Sample size:</property>
                         <property name="use_underline">True</property>
                         <property name="justify">center</property>
@@ -314,7 +313,6 @@
                         <property name="can_focus">False</property>
                         <property name="margin-start">12</property>
                         <property name="hexpand">True</property>
-                        <property name="xpad">12</property>
                         <property name="label" translatable="yes" context="samplingdialog|label3">Period:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">period-spin</property>

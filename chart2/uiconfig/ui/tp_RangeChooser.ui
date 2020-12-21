@@ -242,7 +242,6 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xpad">4</property>
                 <property name="label" translatable="yes" context="tp_RangeChooser|label1">Start Table Index</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">ED_TIME_BASED_START</property>
@@ -256,7 +255,6 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xpad">8</property>
                 <property name="label" translatable="yes" context="tp_RangeChooser|label2">End Table Index</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">ED_TIME_BASED_END</property>

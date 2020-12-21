@@ -199,7 +199,6 @@
                         <child>
                           <object class="GtkLabel" id="labelST_LEFTALIGN_ASIAN">
                             <property name="can_focus">False</property>
-                            <property name="xpad">5</property>
                             <property name="label" translatable="yes" context="paragalignpage|labelST_LEFTALIGN_ASIAN">_Left/Top</property>
                             <property name="use_underline">True</property>
                           </object>
