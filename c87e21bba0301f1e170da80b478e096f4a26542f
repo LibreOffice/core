@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b196d531_8736187d",
+        "filename": "sw/source/uibase/docvw/PageBreakWin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-12-21T12:22:30Z",
+      "side": 1,
+      "message": "First - pulled pCnt into an earlier context since every area uses the same thing.\nThis eliminates pBodyFrame and its loop altogether.",
+      "range": {
+        "startLine": 228,
+        "startChar": 71,
+        "endLine": 228,
+        "endChar": 91
+      },
+      "revId": "c87e21bba0301f1e170da80b478e096f4a26542f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b67d23fd_654122ec",
+        "filename": "sw/source/uibase/docvw/PageBreakWin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-12-21T12:22:30Z",
+      "side": 1,
+      "message": "I considered adding a function to ssfrm.cxx for this, but in general it looks too scary to ALWAYS state that pCnt is not zero, or that a node ALWAYS exists. Obviously in this context it must be true or else the prior code would have dumped.",
+      "range": {
+        "startLine": 237,
+        "startChar": 8,
+        "endLine": 237,
+        "endChar": 26
+      },
+      "revId": "c87e21bba0301f1e170da80b478e096f4a26542f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
