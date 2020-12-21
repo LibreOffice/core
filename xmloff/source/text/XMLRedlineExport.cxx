@@ -605,20 +605,20 @@ void XMLRedlineExport::ExportStartOrEndRedline(
     }
 }
 
-void XMLRedlineExport::WriteComment(const OUString& rComment)
+void XMLRedlineExport::WriteComment(std::u16string_view rComment)
 {
-    if (rComment.isEmpty())
+    if (rComment.empty())
         return;
 
     // iterate over all string-pieces separated by return (0x0a) and
     // put each inside a paragraph element.
     SvXMLTokenEnumerator aEnumerator(rComment, char(0x0a));
-    OUString aSubString;
+    std::u16string_view aSubString;
     while (aEnumerator.getNextToken(aSubString))
     {
         SvXMLElementExport aParagraph(
             rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
-        rExport.Characters(aSubString);
+        rExport.Characters(OUString(aSubString));
     }
 }
 

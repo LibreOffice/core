@@ -43,7 +43,7 @@ bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
 
     SvXMLTokenEnumerator aTokens( rStrImpValue );
 
-    OUString aToken;
+    std::u16string_view aToken;
     if( ! aTokens.getNextToken( aToken ) )
         return false;
 
@@ -108,7 +108,7 @@ bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, uno::A
 
     SvXMLTokenEnumerator aTokens( rStrImpValue );
 
-    OUString aToken;
+    std::u16string_view aToken;
     if( ! aTokens.getNextToken( aToken ) )
         return false;
 

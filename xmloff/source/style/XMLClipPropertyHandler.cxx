@@ -73,7 +73,7 @@ bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::Any& 
         SvXMLTokenEnumerator aTokenEnum( sTmp, bHasComma ? ',' : ' ' );
 
         sal_uInt16 nPos = 0;
-        OUString aToken;
+        std::u16string_view aToken;
         while( aTokenEnum.getNextToken( aToken ) )
         {
             sal_Int32 nVal = 0;
@@ -84,7 +84,7 @@ bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::Any& 
             // fdo#80009 such nonsense could be written via WW8 import fdo#77454
             if (abs(nVal) > 400000)
             {
-                SAL_INFO("xmloff.style", "ignoring excessive clip " << aToken);
+                SAL_INFO("xmloff.style", "ignoring excessive clip " << OUString(aToken));
                 nVal = 0;
             }
 

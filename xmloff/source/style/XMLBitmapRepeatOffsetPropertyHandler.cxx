@@ -50,7 +50,7 @@ bool XMLBitmapRepeatOffsetPropertyHandler::importXML(
     const SvXMLUnitConverter& ) const
 {
     SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
-    OUString aToken;
+    std::u16string_view aToken;
     if( aTokenEnum.getNextToken( aToken ) )
     {
         sal_Int32 nValue;

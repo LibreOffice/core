@@ -471,7 +471,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                         // Adapts attribute values (#i49139#)
                         OUStringBuffer aNewAttrValue;
                         SvXMLTokenEnumerator aTokenEnum( rAttrValue );
-                        OUString aToken;
+                        std::u16string_view aToken;
                         while( aTokenEnum.getNextToken( aToken ) )
                         {
                             if ( !aNewAttrValue.isEmpty() )

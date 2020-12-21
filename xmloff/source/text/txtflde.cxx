@@ -2535,17 +2535,17 @@ void XMLTextFieldExport::ProcessString(
 
 /// export a string as a sequence of paragraphs
 void XMLTextFieldExport::ProcessParagraphSequence(
-    const OUString& sParagraphSequence)
+    std::u16string_view sParagraphSequence)
 {
     // iterate over all string-pieces separated by return (0x0a) and
     // put each inside a paragraph element.
     SvXMLTokenEnumerator aEnumerator(sParagraphSequence, char(0x0a));
-    OUString aSubString;
+    std::u16string_view aSubString;
     while (aEnumerator.getNextToken(aSubString))
     {
         SvXMLElementExport aParagraph(
             GetExport(), XML_NAMESPACE_TEXT, XML_P, true, false);
-        GetExport().Characters(aSubString);
+        GetExport().Characters(OUString(aSubString));
     }
 }
 

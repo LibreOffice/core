@@ -98,7 +98,7 @@ bool XMLBorderWidthHdl::importXML( const OUString& rStrImpValue, uno::Any& rValu
 
     sal_Int32 nInWidth, nDistance, nOutWidth;
 
-    OUString aToken;
+    std::u16string_view aToken;
     if( !aTokenEnum.getNextToken( aToken ) )
         return false;
 
@@ -177,7 +177,7 @@ XMLBorderHdl::~XMLBorderHdl()
 
 bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
-    OUString aToken;
+    std::u16string_view aToken;
     SvXMLTokenEnumerator aTokens( rStrImpValue );
 
     bool bHasStyle = false;
@@ -190,7 +190,7 @@ bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, co
     sal_Int32 nColor = 0;
 
     sal_Int32 nTemp;
-    while( aTokens.getNextToken( aToken ) && !aToken.isEmpty() )
+    while( aTokens.getNextToken( aToken ) && !aToken.empty() )
     {
         if( !bHasWidth &&
             SvXMLUnitConverter::convertEnum( nNamedWidth, aToken,

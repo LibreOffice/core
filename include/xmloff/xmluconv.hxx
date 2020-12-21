@@ -54,17 +54,17 @@ template <typename EnumT> struct SvXMLEnumStringMapEntry;
 class XMLOFF_DLLPUBLIC SvXMLTokenEnumerator
 {
 private:
-    const OUString&  maTokenString;
-    sal_Int32               mnNextTokenPos;
+    std::u16string_view     maTokenString;
+    size_t                  mnNextTokenPos;
     sal_Unicode             mcSeparator;
 
 public:
-    SvXMLTokenEnumerator( const OUString& rString, sal_Unicode cSeparator = u' ' );
+    SvXMLTokenEnumerator( std::u16string_view rString, sal_Unicode cSeparator = u' ' );
     /** just so no-one accidentally passes a temporary to this, and ends up with this class
      * accessing the temporary after the temporary has been deleted. */
     SvXMLTokenEnumerator( OUString&& , sal_Unicode cSeparator = u' ' ) = delete;
 
-    bool getNextToken( OUString& rToken );
+    bool getNextToken( std::u16string_view& rToken );
 };
 
 /** the SvXMLTypeConverter converts values of various types from
