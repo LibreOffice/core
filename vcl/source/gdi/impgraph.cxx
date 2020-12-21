@@ -1350,15 +1350,6 @@ bool ImpGraphic::ensureAvailable() const
     return bResult;
 }
 
-bool ImpGraphic::loadPrepared()
-{
-    Graphic aGraphic;
-    if (!mpGfxLink->LoadNative(aGraphic))
-        return false;
-    updateFromLoadedGraphic(aGraphic.ImplGetImpGraphic());
-    return true;
-}
-
 void ImpGraphic::updateFromLoadedGraphic(ImpGraphic* graphic)
 {
     GraphicExternalLink aLink = maGraphicExternalLink;
@@ -1394,7 +1385,14 @@ bool ImpGraphic::swapIn()
 
     if (mbPrepared)
     {
-        bReturn = loadPrepared();
+        Graphic aGraphic;
+        if (!mpGfxLink->LoadNative(aGraphic))
+            return false;
+
+        updateFromLoadedGraphic(aGraphic.ImplGetImpGraphic());
+
+        maLastUsed = std::chrono::high_resolution_clock::now();
+        bReturn = true;
     }
     else if (mpGfxLink && mpGfxLink->IsNative())
     {
