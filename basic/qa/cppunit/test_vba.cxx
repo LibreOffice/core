@@ -158,7 +158,7 @@ void VBATest::testMiscVBAFunctions()
                            + OUString::createFromAscii( macroSource[ i ] );
 
         MacroSnippet myMacro;
-        myMacro.LoadSourceFromFile("TestUtilModule", sMacroUtilsURL);
+        myMacro.LoadSourceFromFile("TestUtil", sMacroUtilsURL);
         myMacro.LoadSourceFromFile("TestModule", sMacroURL);
         SbxVariableRef pReturn = myMacro.Run();
         CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn.is());

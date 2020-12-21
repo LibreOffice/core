@@ -1,36 +1,28 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testLen
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testLen
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testLen()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    testName = "Test Len function"
     On Error GoTo errorHandler
 
-    date2 = 8
-    date1 = Len("sometext")
-    TestUtilModule.AssertTrue(date1 = date2, "the return Len is: " & date1)
-
-    date2 = 9
-    date1 = Len("some text")
-    TestUtilModule.AssertTrue(date1 = date2, "the return Len is: " & date1)
-
-    date2 = 0
-    date1 = Len("")
-    TestUtilModule.AssertTrue(date1 = date2, "the return Len is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(Len("sometext"),  8, "Len(""sometext"")")
+    TestUtil.AssertEqual(Len("some text"), 9, "Len(""some text"")")
+    TestUtil.AssertEqual(Len(""),          0, "Len("""")")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testLen", Err, Error$, Erl)
 End Sub
-

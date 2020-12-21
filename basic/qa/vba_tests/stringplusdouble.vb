@@ -1,253 +1,203 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_stringplusdouble
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    DSD ' double = string + double
+    SSD ' string = string + double
+    DSS ' double = string + string
+    doUnitTest = TestUtil.GetResult()
 End Function
 
-Sub verify_stringplusdouble()
-
-    TestUtilModule.TestInit
-
-    DSD
-    SSD
-    DSS
-    TestUtilModule.TestEnd
-End Sub
-
 Sub DSD()
-    Dim testName As String
-    testName = "double = string + double"
-    Dim testCompute As String
-
     Dim s As String
     Dim d As Double
     Dim r As Double
 
     On Error GoTo ErrorHandler
 
-    testCompute = "s = null, d = null, r = s + d"
     r = s + d
-    TestUtilModule.AssertTrue(r = -1, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, -1, "s = null, d = null, r = s + d")
 
-    testCompute = "s = null, d = null, r = s & d"
     r = s & d
-    TestUtilModule.AssertTrue(r = 0, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, 0, "s = null, d = null, r = s & d")
 
-    testCompute = "s = null, d = 20, r = s + d"
     d = 20
     r = s + d
-    TestUtilModule.AssertTrue(r = -1, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, -1, "s = null, d = 20, r = s + d")
 
-    testCompute = "s = null, d = 20, r = s & d"
     d = 20
     r = s & d
-    TestUtilModule.AssertTrue(r = 20, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, 20, "s = null, d = 20, r = s & d")
 
     ''''''''''''''
     s = "10"
     Dim d2 As Double
-    testCompute = "s = '10', d = null, r = s + d"
     r = s + d2
-    TestUtilModule.AssertTrue(r = 10, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, 10, "s = '10', d = null, r = s + d")
 
-    testCompute = "s = '10', d = null, r = s & d"
     r = s & d2
-    TestUtilModule.AssertTrue(r = 100, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, 100, "s = '10', d = null, r = s & d")
 
-    testCompute = "s = '10', d = 20, r = s + d"
     d2 = 20
     r = s + d2
-    TestUtilModule.AssertTrue(r = 30, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, 30, "s = '10', d = 20, r = s + d")
 
-    testCompute = "s = '10', d = 20, r = s & d"
     d2 = 20
     r = s & d2
-    TestUtilModule.AssertTrue(r = 1020, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, 1020, "s = '10', d = 20, r = s & d")
 
      ''''''''''''''
     s = "abc"
     Dim d3 As Double
-    testCompute = "s = 'abc', d = null, r = s + d"
     r = s + d3
-    TestUtilModule.AssertTrue(r = -1, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, -1, "s = 'abc', d = null, r = s + d")
 
-    testCompute = "s = 'abc', d = null, r = s & d"
     r = s & d3
-    TestUtilModule.AssertTrue(r = -1, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, -1, "s = 'abc', d = null, r = s & d")
 
-    testCompute = "s = 'abc', d = 20, r = s + d"
     d3 = 20
     r = s + d3
-    TestUtilModule.AssertTrue(r = -1, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, -1, "s = 'abc', d = 20, r = s + d")
 
-    testCompute = "s = 'abc', d = 20, r = s & d"
     d3 = 20
     r = s & d3
-    TestUtilModule.AssertTrue(r = -1, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, -1, "s = 'abc', d = 20, r = s & d")
 
     Exit Sub
 
 ErrorHandler:
     r = -1
-'    TestLog_Comment "The next compute raises error: " & testCompute
     Resume Next
 End Sub
 
 Sub SSD()
-    Dim testName As String
-    testName = "string = string + double"
-    Dim testCompute As String
-
     Dim s As String
     Dim d As Double
     Dim r As String
 
     On Error GoTo ErrorHandler
 
-    testCompute = "s = null, d = null, r = s + d"
     r = s + d
-    TestUtilModule.AssertTrue(r = "-1", testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, "-1", "s = null, d = null, r = s + d")
 
-    testCompute = "s = null, d = null, r = s & d"
     r = s & d
-    TestUtilModule.AssertTrue(r = "0", testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, "0", "s = null, d = null, r = s & d")
 
-    testCompute = "s = null, d = 20, r = s + d"
     d = 20
     r = s + d
-    TestUtilModule.AssertTrue(r = "-1", testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, "-1", "s = null, d = 20, r = s + d")
 
-    testCompute = "s = null, d = 20, r = s & d"
     d = 20
     r = s & d
-    TestUtilModule.AssertTrue(r = "20", testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, "20", "s = null, d = 20, r = s & d")
 
     ''''''''''''''
     s = "10"
     Dim d2 As Double
-    testCompute = "s = '10', d = null, r = s + d"
     r = s + d2
-    TestUtilModule.AssertTrue(r = "10", testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, "10", "s = '10', d = null, r = s + d")
 
-    testCompute = "s = '10', d = null, r = s & d"
     r = s & d2
-    TestUtilModule.AssertTrue(r = "100", testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, "100", "s = '10', d = null, r = s & d")
 
-    testCompute = "s = '10', d = 20, r = s + d"
     d2 = 20
     r = s + d2
-    TestUtilModule.AssertTrue(r = "30", testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, "30", "s = '10', d = 20, r = s + d")
 
-    testCompute = "s = '10', d = 20, r = s & d"
     d2 = 20
     r = s & d2
-    TestUtilModule.AssertTrue(r = "1020", testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, "1020", "s = '10', d = 20, r = s & d")
 
      ''''''''''''''
     s = "abc"
     Dim d3 As Double
-    testCompute = "s = 'abc', d = null, r = s + d"
     r = s + d3
-    TestUtilModule.AssertTrue(r = "-1", testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, "-1", "s = 'abc', d = null, r = s + d")
 
-    testCompute = "s = 'abc', d = null, r = s & d"
     r = s & d3
-    TestUtilModule.AssertTrue(r = "abc0", testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, "abc0", "s = 'abc', d = null, r = s & d")
 
-    testCompute = "s = 'abc', d = 20, r = s + d"
     d3 = 20
     r = s + d3
-    TestUtilModule.AssertTrue(r = "-1", testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, "-1", "s = 'abc', d = 20, r = s + d")
 
-    testCompute = "s = 'abc', d = 20, r = s & d"
     d3 = 20
     r = s & d3
-    TestUtilModule.AssertTrue(r = "abc20", testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, "abc20", "s = 'abc', d = 20, r = s & d")
     Exit Sub
 
 ErrorHandler:
     r = "-1"
-'    TestLog_Comment "The next compute raises error: " & testCompute
     Resume Next
 End Sub
 
 Sub DSS()
-    Dim testName As String
-    testName = "double = string + string"
-    Dim testCompute As String
-
     Dim s As String
     Dim d As String
     Dim r As Double
 
     On Error GoTo ErrorHandler
 
-    testCompute = "s = null, d = null, r = s + d"
     r = s + d
-    TestUtilModule.AssertTrue(r = -1, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, -1, "s = null, d = null, r = s + d")
 
-    testCompute = "s = null, d = null, r = s & d"
     r = s & d
-    TestUtilModule.AssertTrue(r = -1, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, -1, "s = null, d = null, r = s & d")
 
-    testCompute = "s = null, d = 20, r = s + d"
     d = "20"
     r = s + d
-    TestUtilModule.AssertTrue(r = 20, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, 20, "s = null, d = 20, r = s + d")
 
-    testCompute = "s = null, d = 20, r = s & d"
     d = "20"
     r = s & d
-    TestUtilModule.AssertTrue(r = 20, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, 20, "s = null, d = 20, r = s & d")
 
     ''''''''''''''
     s = "10"
     Dim d2 As String
-    testCompute = "s = '10', d = null, r = s + d"
     r = s + d2
-    TestUtilModule.AssertTrue(r = 10, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, 10, "s = '10', d = null, r = s + d")
 
-    testCompute = "s = '10', d = null, r = s & d"
     r = s & d2
-    TestUtilModule.AssertTrue(r = 10, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, 10, "s = '10', d = null, r = s & d")
 
-    testCompute = "s = '10', d = 20, r = s + d"
     d2 = "20"
     r = s + d2
-    TestUtilModule.AssertTrue(r = 1020, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, 1020, "s = '10', d = 20, r = s + d")
 
-    testCompute = "s = '10', d = 20, r = s & d"
     d2 = "20"
     r = s & d2
-    TestUtilModule.AssertTrue(r = 1020, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, 1020, "s = '10', d = 20, r = s & d")
 
      ''''''''''''''
     s = "abc"
     Dim d3 As String
-    testCompute = "s = 'abc', d = null, r = s + d"
     r = s + d3
-    TestUtilModule.AssertTrue(r = -1, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, -1, "s = 'abc', d = null, r = s + d")
 
-    testCompute = "s = 'abc', d = null, r = s & d"
     r = s & d3
-    TestUtilModule.AssertTrue(r = -1, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, -1, "s = 'abc', d = null, r = s & d")
 
-    testCompute = "s = 'abc', d = 20, r = s + d"
     d3 = "20"
     r = s + d3
-    TestUtilModule.AssertTrue(r = -1, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, -1, "s = 'abc', d = 20, r = s + d")
 
-    testCompute = "s = 'abc', d = 20, r = s & d"
     d3 = "20"
     r = s & d3
-    TestUtilModule.AssertTrue(r = -1, testCompute & " .The result is: " & r)
+    TestUtil.AssertEqual(r, -1, "s = 'abc', d = 20, r = s & d")
     Exit Sub
 
 ErrorHandler:
     r = -1
-'    TestLog_Comment "The next compute raises error: " & testCompute
     Resume Next
 End Sub
 
@@ -291,4 +241,3 @@ Sub testCurrency()
     MsgBox d
 
 End Sub
-

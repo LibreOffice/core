@@ -1,46 +1,32 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testMonth
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testMonth
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testMonth()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    Dim ldate As Date
-    testName = "Test Month function"
     On Error GoTo errorHandler
+
+    Dim ldate As Date
     ldate = 32616
-
-    date2 = 4
-    date1 = Month(ldate)
-    TestUtilModule.AssertTrue(date1 = date2, "the return Month is: " & date1)
-
-    date2 = 2
-    date1 = Month("01/02/2007")
-    TestUtilModule.AssertTrue(date1 = date2, "the return Month is: " & date1)
-
-    date2 = 12
-    date1 = Month(1)
-    TestUtilModule.AssertTrue(date1 = date2, "the return Month is: " & date1)
-
-    date2 = 2
-    date1 = Month(60)
-    TestUtilModule.AssertTrue(date1 = date2, "the return Month is: " & date1)
-
-    date2 = 6
-    date1 = Month(2000)
-    TestUtilModule.AssertTrue(date1 = date2, "the return Month is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(Month(ldate),         4, "Month(ldate)")
+    TestUtil.AssertEqual(Month("01/02/2007"),  2, "Month(""01/02/2007"")")
+    TestUtil.AssertEqual(Month(1),            12, "Month(1)")
+    TestUtil.AssertEqual(Month(60),            2, "Month(60)")
+    TestUtil.AssertEqual(Month(2000),          6, "Month(2000)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testMonth", Err, Error$, Erl)
 End Sub
-

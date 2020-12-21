@@ -1,39 +1,28 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
-Rem Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testRGB
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testRGB
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testRGB()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim TestDateTime As Date
-    Dim TestStr As String
-    Dim date1, date2
-    testName = "Test RGB function"
     On Error GoTo errorHandler
 
-    date2 = 255
-    date1 = RGB(255, 0, 0)
-    TestUtilModule.AssertTrue(date1 = date2, "the return RGB is: " & date1)
-
-    date2 = 13339467
-    date1 = RGB(75, 139, 203)
-    TestUtilModule.AssertTrue(date1 = date2, "the return RGB is: " & date1)
-
-    date2 = 16777215
-    date1 = RGB(255, 255, 255)
-    TestUtilModule.AssertTrue(date1 = date2, "the return RGB is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(RGB(255, 0, 0),     255,      "RGB(255, 0, 0)")
+    TestUtil.AssertEqual(RGB(75, 139, 203),  13339467, "RGB(75, 139, 203)")
+    TestUtil.AssertEqual(RGB(255, 255, 255), 16777215, "RGB(255, 255, 255)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testRGB", Err, Error$, Erl)
 End Sub
-

@@ -1,28 +1,26 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testday
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testday
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testday()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2   'variables for test
-    testName = "Test day function"
     On Error GoTo errorHandler
 
-    date2 = 12
-    date1 = Day("1969-02-12") '2/12/1969
-    TestUtilModule.AssertTrue(date1 = date2, "the return day is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(Day("1969-02-12"), 12, "Day(""1969-02-12"")")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testday", Err, Error$, Erl)
 End Sub
-

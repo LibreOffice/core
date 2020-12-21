@@ -1,33 +1,27 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testDateValue
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testDateValue
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Function verify_testDateValue() as String
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2 As Date
-    testName = "Test DateValue function"
-    date2 = 25246
-
     On Error GoTo errorHandler
 
-    date1 = DateValue("February 12, 1969") '2/12/1969
-    TestUtilModule.AssertTrue(date1 = date2, "the return date is: " & date1)
-
-    date2 = 39468
-    date1 = DateValue("21/01/2008") '1/21/2008
-    TestUtilModule.AssertTrue(date1 = date2, "the return date is: " & date1)
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(DateValue("February 12, 1969"), 25246, "DateValue(""February 12, 1969"")")
+    TestUtil.AssertEqual(DateValue("21/01/2008"),        39468, "DateValue(""21/01/2008"")")
 
     Exit Function
 errorHandler:
-    TestUtilModule.AssertTrue(False, "ERROR", "#" & Str(Err.Number) &" at line"& Str(Erl) &" - "& Error$)
-    TestUtilModule.TestEnd
+    TestUtil.ReportErrorHandler("verify_testFix", Err, Error$, Erl)
 End Sub
-

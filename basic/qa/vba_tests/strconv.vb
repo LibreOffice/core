@@ -1,62 +1,45 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testStrConv
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testStrConv
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testStrConv()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim srcStr, retStr As String
-    Dim x() As Byte
-    srcStr = "abc EFG hij"
-    testName = "Test StrConv function"
     On Error GoTo errorHandler
 
-    retStr = StrConv(srcStr, vbUpperCase)
-    'MsgBox retStr
-    TestUtilModule.AssertTrue(retStr = "ABC EFG HIJ", "Converts the string to uppercase characters:" & retStr)
+    TestUtil.AssertEqual(StrConv("abc EFG hij", vbUpperCase),  "ABC EFG HIJ", "StrConv(""abc EFG hij"", vbUpperCase)")
+    TestUtil.AssertEqual(StrConv("abc EFG hij", vbLowerCase),  "abc efg hij", "StrConv(""abc EFG hij"", vbLowerCase)")
+    TestUtil.AssertEqual(StrConv("abc EFG hij", vbProperCase), "Abc Efg Hij", "StrConv(""abc EFG hij"", vbProperCase)")
 
-    retStr = StrConv(srcStr, vbLowerCase)
-    'MsgBox retStr
-    TestUtilModule.AssertTrue(retStr = "abc efg hij", "Converts the string to lowercase characters:" & retStr)
+    ' Converts narrow (single-byte) characters in string to wide
+    'TestUtil.AssertEqual(StrConv("ABCDEVB¥ì¥¹¥­¥å©`", vbWide), "£Á£Â£Ã£Ä£ÅVB¥ì¥¹¥­¥å©`", "StrConv(""ABCDEVB¥ì¥¹¥­¥å©`"", vbWide)")
 
-    retStr = StrConv(srcStr, vbProperCase)
-    'MsgBox retStr
-    TestUtilModule.AssertTrue(retStr = "Abc Efg Hij", "Converts the first letter of every word in string to uppercase:" & retStr)
+    ' Converts wide (double-byte) characters in string to narrow (single-byte) characters
+    'TestUtil.AssertEqual(StrConv("£Á£Â£Ã£Ä£ÅVB¥ì¥¹¥­¥å©`", vbNarrow), "ABCDEVB¥ì¥¹¥­¥å©`", "StrConv(""£Á£Â£Ã£Ä£ÅVB¥ì¥¹¥­¥å©`"", vbNarrow)")
 
-    'retStr = StrConv("ABCDEVB¥ì¥¹¥­¥å©`", vbWide)
-    'MsgBox retStr
-    'TestUtilModule.AssertTrue(retStr = "£Á£Â£Ã£Ä£ÅVB¥ì¥¹¥­¥å©`", "Converts narrow (single-byte) characters in string to wide")
+    ' Converts Hiragana characters in string to Katakana characters
+    'TestUtil.AssertEqual(StrConv("¤Ï¤Ê¤Á¤ã¤ó", vbKatakana), "¥Ï¥Ê¥Á¥ã¥ó", "StrConv(""¤Ï¤Ê¤Á¤ã¤ó"", vbKatakana)")
 
-    'retStr = StrConv("£Á£Â£Ã£Ä£ÅVB¥ì¥¹¥­¥å©`", vbNarrow)
-    'MsgBox retStr
-    'TestUtilModule.AssertTrue(retStr = "ABCDEVB¥ì¥¹¥­¥å©`", "Converts wide (double-byte) characters in string to narrow (single-byte) characters." & retStr)
+    ' Converts Katakana characters in string to Hiragana characters
+    'TestUtil.AssertEqual(StrConv("¥Ï¥Ê¥Á¥ã¥ó", vbHiragana), "¤Ï¤Ê¤Á¤ã¤ó", "StrConv(""¥Ï¥Ê¥Á¥ã¥ó"", vbHiragana)")
 
-    'retStr = StrConv("¤Ï¤Ê¤Á¤ã¤ó", vbKatakana)
-    'MsgBox retStr
-    'TestUtilModule.AssertTrue(retStr = "¥Ï¥Ê¥Á¥ã¥ó", "Converts Hiragana characters in string to Katakana characters.." & retStr)
-
-   ' retStr = StrConv("¥Ï¥Ê¥Á¥ã¥ó", vbHiragana)
-    'MsgBox retStr
-   ' TestUtilModule.AssertTrue(retStr = "¤Ï¤Ê¤Á¤ã¤ó", "Converts Katakana characters in string to Hiragana characters.." & retStr)
-
+    'Dim x() As Byte
     'x = StrConv("ÉÏº£ÊÐABC", vbFromUnicode)
-    'MsgBox retStr
-    'TestUtilModule.AssertTrue(UBound(x) = 8, "Converts the string from Unicode, the length is : " & UBound(x) + 1)
-
-   ' retStr = StrConv(x, vbUnicode)
-    'MsgBox retStr
-   ' TestUtilModule.AssertTrue(retStr = "ÉÏº£ÊÐABC", "Converts the string to Unicode: " & retStr)
-
-    TestUtilModule.TestEnd
+    'TestUtil.AssertEqual(UBound(x), 8, "UBound(x)")
+    'TestUtil.AssertEqual(StrConv(x, vbUnicode), "ÉÏº£ÊÐABC", "StrConv(x, vbUnicode)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testStrConv", Err, Error$, Erl)
 End Sub
-

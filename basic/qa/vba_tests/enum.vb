@@ -20,34 +20,33 @@ End Enum ' CountDown
 
 Function doUnitTest()
     ''' test_vba.cxx main entry point '''
+    TestUtil.TestInit
     Call ENUM_TestCases
-    doUnitTest = TestUtilModule.GetResult()
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub ENUM_TestCases()
-    TestUtilModule.TestInit
 try:
     On Error Goto catch
 
     With CountDown
 
-a:      TestUtilModule.AssertTrue(.ONE = 3, "case a", "CountDown.ONE equals " & Str(.ONE))
+a:      TestUtil.AssertEqual(.ONE, 3, ".ONE")
 
-b:      TestUtilModule.AssertTrue(.TWO = -3, "case b", "CountDown.TWO equals " & Str(.TWO))
+b:      TestUtil.AssertEqual(.TWO, -3, ".TWO")
 
-c:      TestUtilModule.AssertTrue(TypeName(.FOUR) = "Long", "case c", "CountDown.FOUR type is: " & TypeName(.FOUR))
+c:      TestUtil.AssertEqual(TypeName(.FOUR), "Long", "TypeName(.FOUR)")
 
 d:      Dim sum As Double
         sum = .FIVE + .FOUR + .THREE + .TWO + .ONE + .LIFT_OFF
-        TestUtilModule.AssertTrue(sum = 12, "case d", "SUM of CountDown values is: " & Str(sum))
+        TestUtil.AssertEqual(sum, 12, "sum")
 
     End With
 
 finally:
-    TestUtilModule.TestEnd
     Exit Sub
 
 catch:
-    TestUtilModule.AssertTrue(False, "ERROR", "#"& Str(Err.Number) &" in 'ENUM_TestCases' at line"& Str(Erl) &" - "& Error$)
+    TestUtil.ReportErrorHandler("ENUM_TestCases", Err, Error$, Erl)
     Resume Next
 End Sub

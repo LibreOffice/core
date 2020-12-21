@@ -1,36 +1,28 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testMonthName
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testMonthName
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testMonthName()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2 
-    testName = "Test MonthName function"
     On Error GoTo errorHandler
 
-    date2 = "February"
-    date1 = MonthName(2)
-    TestUtilModule.AssertTrue(date1 = date2, "the return MonthName is: " & date1)
-
-    date2 = "Feb"
-    date1 = MonthName(2, True)
-    TestUtilModule.AssertTrue(date1 = date2, "the return MonthName is: " & date1)
-
-    date2 = "February"
-    date1 = MonthName(2, False)
-    TestUtilModule.AssertTrue(date1 = date2, "the return MonthName is: " & date1)
-    
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(MonthName(2),        "February", "MonthName(2)")
+    TestUtil.AssertEqual(MonthName(2, True),  "Feb",      "MonthName(2, True)")
+    TestUtil.AssertEqual(MonthName(2, False), "February", "MonthName(2, False)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testMonthName", Err, Error$, Erl)
 End Sub
-

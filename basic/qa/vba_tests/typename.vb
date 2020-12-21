@@ -1,18 +1,21 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testTypeName
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testTypeName
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testTypeName()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    testName = "Test TypeName function"
     On Error GoTo errorHandler
     Dim b1 As Boolean
     Dim c1 As Byte
@@ -20,45 +23,23 @@ Sub verify_testTypeName()
     Dim d2 As Double
     Dim i1 As Integer
     Dim l1 As Long
+    Dim s1 As String
 
-    date2 = "String"
-    date1 = TypeName(testName)
-    TestUtilModule.AssertTrue(date1 = date2, "the return TypeName is: " & date1)
-
-    date2 = "Boolean"
-    date1 = TypeName(b1)
-    TestUtilModule.AssertTrue(date1 = date2, "the return TypeName is: " & date1)
-
-    date2 = "Byte"
-    date1 = TypeName(c1)
-    TestUtilModule.AssertTrue(date1 = date2, "the return TypeName is: " & date1)
-
-    date2 = "Date"
-    date1 = TypeName(d1)
-    TestUtilModule.AssertTrue(date1 = date2, "the return TypeName is: " & date1)
-
-    date2 = "Double"
-    date1 = TypeName(d2)
-    TestUtilModule.AssertTrue(date1 = date2, "the return TypeName is: " & date1)
-
-    date2 = "Integer"
-    date1 = TypeName(i1)
-    TestUtilModule.AssertTrue(date1 = date2, "the return TypeName is: " & date1)
-
-    date2 = "Long"
-    date1 = TypeName(l1)
-    TestUtilModule.AssertTrue(date1 = date2, "the return TypeName is: " & date1)
+    TestUtil.AssertEqual(TypeName(s1), "String",  "TypeName(s1)")
+    TestUtil.AssertEqual(TypeName(b1), "Boolean", "TypeName(b1)")
+    TestUtil.AssertEqual(TypeName(c1), "Byte",    "TypeName(c1)")
+    TestUtil.AssertEqual(TypeName(d1), "Date",    "TypeName(d1)")
+    TestUtil.AssertEqual(TypeName(d2), "Double",  "TypeName(d2)")
+    TestUtil.AssertEqual(TypeName(i1), "Integer", "TypeName(i1)")
+    TestUtil.AssertEqual(TypeName(l1), "Long",    "TypeName(l1)")
 
     ' tdf#129596 - Types of constant values
-    TestUtilModule.AssertTrue(TypeName(32767) = "Integer", "the return TypeName(32767) is: " & TypeName(32767))
-    TestUtilModule.AssertTrue(TypeName(-32767) = "Integer", "the return TypeName(-32767) is: " & TypeName(-32767))
-    TestUtilModule.AssertTrue(TypeName(1048575) = "Long", "the return TypeName(1048575) is: " & TypeName(1048575))
-    TestUtilModule.AssertTrue(TypeName(-1048575) = "Long", "the return TypeName(-1048575) is: " & TypeName(-1048575))
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(TypeName(32767),    "Integer", "TypeName(32767)")
+    TestUtil.AssertEqual(TypeName(-32767),   "Integer", "TypeName(-32767)")
+    TestUtil.AssertEqual(TypeName(1048575),  "Long",    "TypeName(1048575)")
+    TestUtil.AssertEqual(TypeName(-1048575), "Long",    "TypeName(-1048575)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testTypeName", Err, Error$, Erl)
 End Sub
-

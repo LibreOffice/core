@@ -1,8 +1,17 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 
 Function doUnitTest() As String
+    TestUtil.TestInit
     verify_testOptionalsVba
-    doUnitTest = TestUtilModule.GetResult()
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 ' tdf#36737 - Test optionals with different datatypes. In LO Basic
@@ -11,58 +20,55 @@ End Function
 ' which don't have explicit default values, will be initialized to their
 ' respective default value of its datatype
 Sub verify_testOptionalsVba()
-
-    TestUtilModule.TestInit
-    testName = "Test optionals (VBA)"
     On Error GoTo errorHandler
 
     ' optionals with variant datatypes
-    TestUtilModule.AssertEqual(TestOptVariant(), 123, "TestOptVariant()")
-    TestUtilModule.AssertEqual(TestOptVariant(123), 246, "TestOptVariant(123)")
-    TestUtilModule.AssertEqual(TestOptVariant(, 456), 456, "TestOptVariant(, 456)")
-    TestUtilModule.AssertEqual(TestOptVariant(123, 456), 579, "TestOptVariant(123, 456)")
+    TestUtil.AssertEqual(TestOptVariant(), 123, "TestOptVariant()")
+    TestUtil.AssertEqual(TestOptVariant(123), 246, "TestOptVariant(123)")
+    TestUtil.AssertEqual(TestOptVariant(, 456), 456, "TestOptVariant(, 456)")
+    TestUtil.AssertEqual(TestOptVariant(123, 456), 579, "TestOptVariant(123, 456)")
 
     ' optionals with variant datatypes (ByRef and ByVal)
-    TestUtilModule.AssertEqual(TestOptVariantByRefByVal(), 123, "TestOptVariantByRefByVal()")
-    TestUtilModule.AssertEqual(TestOptVariantByRefByVal(123), 246, "TestOptVariantByRefByVal(123)")
-    TestUtilModule.AssertEqual(TestOptVariantByRefByVal(, 456), 456, "TestOptVariantByRefByVal(, 456)")
-    TestUtilModule.AssertEqual(TestOptVariantByRefByVal(123, 456), 579, "TestOptVariantByRefByVal(123, 456)")
+    TestUtil.AssertEqual(TestOptVariantByRefByVal(), 123, "TestOptVariantByRefByVal()")
+    TestUtil.AssertEqual(TestOptVariantByRefByVal(123), 246, "TestOptVariantByRefByVal(123)")
+    TestUtil.AssertEqual(TestOptVariantByRefByVal(, 456), 456, "TestOptVariantByRefByVal(, 456)")
+    TestUtil.AssertEqual(TestOptVariantByRefByVal(123, 456), 579, "TestOptVariantByRefByVal(123, 456)")
 
     ' optionals with double datatypes
-    TestUtilModule.AssertEqual(TestOptDouble(), 123.4, "TestOptDouble()")
-    TestUtilModule.AssertEqual(TestOptDouble(123.4), 246.8, "TestOptDouble(123.4)")
-    TestUtilModule.AssertEqual(TestOptDouble(, 567.8), 567.8, "TestOptDouble(, 567.8)")
-    TestUtilModule.AssertEqual(Format(TestOptDouble(123.4, 567.8), "0.0"), 691.2, "TestOptDouble(123.4, 567.8)")
+    TestUtil.AssertEqual(TestOptDouble(), 123.4, "TestOptDouble()")
+    TestUtil.AssertEqual(TestOptDouble(123.4), 246.8, "TestOptDouble(123.4)")
+    TestUtil.AssertEqual(TestOptDouble(, 567.8), 567.8, "TestOptDouble(, 567.8)")
+    TestUtil.AssertEqual(Format(TestOptDouble(123.4, 567.8), "0.0"), 691.2, "TestOptDouble(123.4, 567.8)")
 
     ' optionals with double datatypes (ByRef and ByVal)
-    TestUtilModule.AssertEqual(TestOptDoubleByRefByVal(), 123.4, "TestOptDouble()")
-    TestUtilModule.AssertEqual(TestOptDoubleByRefByVal(123.4), 246.8, "TestOptDouble(123.4)")
-    TestUtilModule.AssertEqual(TestOptDoubleByRefByVal(, 567.8), 567.8, "TestOptDoubleByRefByVal(, 567.8)")
-    TestUtilModule.AssertEqual(Format(TestOptDoubleByRefByVal(123.4, 567.8), "0.0"), 691.2, "TestOptDoubleByRefByVal(123.4, 567.8)")
+    TestUtil.AssertEqual(TestOptDoubleByRefByVal(), 123.4, "TestOptDouble()")
+    TestUtil.AssertEqual(TestOptDoubleByRefByVal(123.4), 246.8, "TestOptDouble(123.4)")
+    TestUtil.AssertEqual(TestOptDoubleByRefByVal(, 567.8), 567.8, "TestOptDoubleByRefByVal(, 567.8)")
+    TestUtil.AssertEqual(Format(TestOptDoubleByRefByVal(123.4, 567.8), "0.0"), 691.2, "TestOptDoubleByRefByVal(123.4, 567.8)")
 
     ' optionals with integer datatypes
-    TestUtilModule.AssertEqual(TestOptInteger(), 123, "TestOptInteger()")
-    TestUtilModule.AssertEqual(TestOptInteger(123), 246, "TestOptInteger(123)")
-    TestUtilModule.AssertEqual(TestOptInteger(, 456), 456, "TestOptInteger(, 456)")
-    TestUtilModule.AssertEqual(TestOptInteger(123, 456), 579, "TestOptInteger(123, 456)")
+    TestUtil.AssertEqual(TestOptInteger(), 123, "TestOptInteger()")
+    TestUtil.AssertEqual(TestOptInteger(123), 246, "TestOptInteger(123)")
+    TestUtil.AssertEqual(TestOptInteger(, 456), 456, "TestOptInteger(, 456)")
+    TestUtil.AssertEqual(TestOptInteger(123, 456), 579, "TestOptInteger(123, 456)")
 
     ' optionals with integer datatypes (ByRef and ByVal)
-    TestUtilModule.AssertEqual(TestOptIntegerByRefByVal(), 123, "TestOptIntegerByRefByVal()")
-    TestUtilModule.AssertEqual(TestOptIntegerByRefByVal(123), 246, "TestOptIntegerByRefByVal(123)")
-    TestUtilModule.AssertEqual(TestOptIntegerByRefByVal(, 456), 456, "TestOptIntegerByRefByVal(, 456)")
-    TestUtilModule.AssertEqual(TestOptIntegerByRefByVal(123, 456), 579, "TestOptIntegerByRefByVal(123, 456)")
+    TestUtil.AssertEqual(TestOptIntegerByRefByVal(), 123, "TestOptIntegerByRefByVal()")
+    TestUtil.AssertEqual(TestOptIntegerByRefByVal(123), 246, "TestOptIntegerByRefByVal(123)")
+    TestUtil.AssertEqual(TestOptIntegerByRefByVal(, 456), 456, "TestOptIntegerByRefByVal(, 456)")
+    TestUtil.AssertEqual(TestOptIntegerByRefByVal(123, 456), 579, "TestOptIntegerByRefByVal(123, 456)")
 
     ' optionals with string datatypes
-    TestUtilModule.AssertEqual(TestOptString(), "123", "TestOptString()")
-    TestUtilModule.AssertEqual(TestOptString("123"), "123123", "TestOptString(""123"")")
-    TestUtilModule.AssertEqual(TestOptString(, "456"), "456", "TestOptString(, ""456"")")
-    TestUtilModule.AssertEqual(TestOptString("123", "456"), "123456", "TestOptString(""123"", ""456"")")
+    TestUtil.AssertEqual(TestOptString(), "123", "TestOptString()")
+    TestUtil.AssertEqual(TestOptString("123"), "123123", "TestOptString(""123"")")
+    TestUtil.AssertEqual(TestOptString(, "456"), "456", "TestOptString(, ""456"")")
+    TestUtil.AssertEqual(TestOptString("123", "456"), "123456", "TestOptString(""123"", ""456"")")
 
     ' optionals with string datatypes (ByRef and ByVal)
-    TestUtilModule.AssertEqual(TestOptStringByRefByVal(), "123", "TestOptStringByRefByVal()")
-    TestUtilModule.AssertEqual(TestOptStringByRefByVal("123"), "123123", "TestOptStringByRefByVal(""123"")")
-    TestUtilModule.AssertEqual(TestOptStringByRefByVal(, "456"), "456", "TestOptStringByRefByVal(, ""456"")")
-    TestUtilModule.AssertEqual(TestOptStringByRefByVal("123", "456"), "123456", "TestOptStringByRefByVal(""123"", ""456"")")
+    TestUtil.AssertEqual(TestOptStringByRefByVal(), "123", "TestOptStringByRefByVal()")
+    TestUtil.AssertEqual(TestOptStringByRefByVal("123"), "123123", "TestOptStringByRefByVal(""123"")")
+    TestUtil.AssertEqual(TestOptStringByRefByVal(, "456"), "456", "TestOptStringByRefByVal(, ""456"")")
+    TestUtil.AssertEqual(TestOptStringByRefByVal("123", "456"), "123456", "TestOptStringByRefByVal(""123"", ""456"")")
 
     ' optionals with object datatypes
     Dim cA As New Collection
@@ -71,16 +77,16 @@ Sub verify_testOptionalsVba()
     Dim cB As New Collection
     cB.Add (123.4)
     cB.Add (567.8)
-    TestUtilModule.AssertEqual(TestOptObject(), 0, "TestOptObject()")
-    TestUtilModule.AssertEqual(TestOptObject(cA), 579, "TestOptObject(A)")
-    TestUtilModule.AssertEqual(Format(TestOptObject(, cB), "0.0"), 691.2, "TestOptObject(, B)")
-    TestUtilModule.AssertEqual(Format(TestOptObject(cA, cB), "0.0"), 1270.2, "TestOptObject(A, B)")
+    TestUtil.AssertEqual(TestOptObject(), 0, "TestOptObject()")
+    TestUtil.AssertEqual(TestOptObject(cA), 579, "TestOptObject(A)")
+    TestUtil.AssertEqual(Format(TestOptObject(, cB), "0.0"), 691.2, "TestOptObject(, B)")
+    TestUtil.AssertEqual(Format(TestOptObject(cA, cB), "0.0"), 1270.2, "TestOptObject(A, B)")
 
     ' optionals with object datatypes (ByRef and ByVal)
-    TestUtilModule.AssertEqual(TestOptObjectByRefByVal(), 0, "TestOptObjectByRefByVal()")
-    TestUtilModule.AssertEqual(TestOptObjectByRefByVal(cA), 579, "TestOptObjectByRefByVal(A)")
-    TestUtilModule.AssertEqual(Format(TestOptObjectByRefByVal(, cB), "0.0"), 691.2, "TestOptObjectByRefByVal(, B)")
-    TestUtilModule.AssertEqual(Format(TestOptObjectByRefByVal(cA, cB), "0.0"), 1270.2, "TestOptObjectByRefByVal(A, B)")
+    TestUtil.AssertEqual(TestOptObjectByRefByVal(), 0, "TestOptObjectByRefByVal()")
+    TestUtil.AssertEqual(TestOptObjectByRefByVal(cA), 579, "TestOptObjectByRefByVal(A)")
+    TestUtil.AssertEqual(Format(TestOptObjectByRefByVal(, cB), "0.0"), 691.2, "TestOptObjectByRefByVal(, B)")
+    TestUtil.AssertEqual(Format(TestOptObjectByRefByVal(cA, cB), "0.0"), 1270.2, "TestOptObjectByRefByVal(A, B)")
 
     ' optionals with array datatypes
     Dim aA(0 To 1) As Integer
@@ -90,23 +96,21 @@ Sub verify_testOptionalsVba()
     aB(0) = 123.4
     aB(1) = 567.8
     ' TODO - New bug report? Scanner initializes variable not as an array
-    ' TestUtilModule.AssertEqual(TestOptArray(), 0, "TestOptArray()")
-    ' TestUtilModule.AssertEqual(TestOptArray(aA), 579, "TestOptArray(A)")
-    ' TestUtilModule.AssertEqual(Format(TestOptArray(, aB), "0.0"), 691.2, "TestOptArray(, B)")
-    TestUtilModule.AssertEqual(Format(TestOptArray(aA, aB), "0.0"), 1270.2, "TestOptArray(A, B)")
+    ' TestUtil.AssertEqual(TestOptArray(), 0, "TestOptArray()")
+    ' TestUtil.AssertEqual(TestOptArray(aA), 579, "TestOptArray(A)")
+    ' TestUtil.AssertEqual(Format(TestOptArray(, aB), "0.0"), 691.2, "TestOptArray(, B)")
+    TestUtil.AssertEqual(Format(TestOptArray(aA, aB), "0.0"), 1270.2, "TestOptArray(A, B)")
 
     ' optionals with array datatypes (ByRef and ByVal)
     ' TODO - New bug report? Scanner initializes variable not as an array
-    ' TestUtilModule.AssertEqual(TestOptArrayByRefByVal(), 0, "TestOptArrayByRefByVal()")
-    ' TestUtilModule.AssertEqual(TestOptArrayByRefByVal(aA), 579, "TestOptArrayByRefByVal(A)")
-    ' TestUtilModule.AssertEqual(Format(TestOptArrayByRefByVal(, aB), "0.0"), 691.2, "TestOptArrayByRefByVal(, B)")
-    TestUtilModule.AssertEqual(Format(TestOptArrayByRefByVal(aA, aB), "0.0"), 1270.2, "TestOptArrayByRefByVal(A, B)")
-
-    TestUtilModule.TestEnd
+    ' TestUtil.AssertEqual(TestOptArrayByRefByVal(), 0, "TestOptArrayByRefByVal()")
+    ' TestUtil.AssertEqual(TestOptArrayByRefByVal(aA), 579, "TestOptArrayByRefByVal(A)")
+    ' TestUtil.AssertEqual(Format(TestOptArrayByRefByVal(, aB), "0.0"), 691.2, "TestOptArrayByRefByVal(, B)")
+    TestUtil.AssertEqual(Format(TestOptArrayByRefByVal(aA, aB), "0.0"), 1270.2, "TestOptArrayByRefByVal(A, B)")
 
     Exit Sub
 errorHandler:
-    TestUtilModule.AssertEqual(False, True, Err.Description)
+    TestUtil.ReportErrorHandler("verify_testOptionalsVba", Err, Error$, Erl)
 End Sub
 
 Function TestOptVariant(Optional A, Optional B As Variant = 123)
@@ -192,4 +196,3 @@ Function ArraySum(is_missingC As Boolean, C)
         Next idx
     End If
 End Function
-

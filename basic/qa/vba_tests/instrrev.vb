@@ -1,54 +1,36 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testInStrRev
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testInStrRev
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testInStrRev()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2, SearchString, SearchChar
-    testName = "Test InStrRev function"
     On Error GoTo errorHandler
 
-    date2 = 5
-    date1 = InStrRev("somemoretext", "more", -1)
-    TestUtilModule.AssertTrue(date1 = date2, "the return InStrRev is: " & date1)
+    TestUtil.AssertEqual(InStrRev("somemoretext", "more", -1),     5, "InStrRev(""somemoretext"", ""more"", -1)")
+    TestUtil.AssertEqual(InStrRev("somemoretext", "more"),         5, "InStrRev(""somemoretext"", ""more"")")
+    TestUtil.AssertEqual(InStrRev("somemoretext", "somemoretext"), 1, "InStrRev(""somemoretext"", ""somemoretext"")")
+    TestUtil.AssertEqual(InStrRev("somemoretext", "nothing"),      0, "InStrRev(""somemoretext"", ""nothing"")")
 
-    date2 = 5
-    date1 = InStrRev("somemoretext", "more")
-    TestUtilModule.AssertTrue(date1 = date2, "the return InStrRev is: " & date1)
-
-    date2 = 1
-    date1 = InStrRev("somemoretext", "somemoretext")
-    TestUtilModule.AssertTrue(date1 = date2, "the return InStrRev is: " & date1)
-
-    date2 = 0
-    date1 = InStrRev("somemoretext", "nothing")
-    TestUtilModule.AssertTrue(date1 = date2, "the return InStrRev is: " & date1)
-
+    Dim SearchString, SearchChar
     SearchString = "XXpXXpXXPXXP"   ' String to search in.
     SearchChar = "P"    ' Search for "P".
-    date2 = 3
-    date1 = InStrRev(SearchString, SearchChar, 4, 1)
-    TestUtilModule.AssertTrue(date1 = date2, "the return InStrRev is: " & date1)
-
-    date2 = 12
-    date1 = InStrRev(SearchString, SearchChar, -1, 0)
-    TestUtilModule.AssertTrue(date1 = date2, "the return InStrRev is: " & date1)
-    
-    date2 = 0
-    date1 = InStrRev(SearchString, "W", 1)
-    TestUtilModule.AssertTrue(date1 = date2, "the return InStrRev is: " & date1)
-    
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(InStrRev(SearchString, SearchChar, 4, 1),   3, "InStrRev(SearchString, SearchChar, 4, 1)")
+    TestUtil.AssertEqual(InStrRev(SearchString, SearchChar, -1, 0), 12, "InStrRev(SearchString, SearchChar, -1, 0)")
+    TestUtil.AssertEqual(InStrRev(SearchString, "W", 1),             0, "InStrRev(SearchString, ""W"", 1)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testInStrRev", Err, Error$, Erl)
 End Sub
-

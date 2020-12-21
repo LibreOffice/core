@@ -1,29 +1,31 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testConstants
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testConstants
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testConstants()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    testName = "Test Constants"
     On Error GoTo errorHandler
 
+    ' vbNewLine is the same as vbCrLf on Windows, and the same as vbLf on other OSes
     If GetGuiType() = 1 Then
-        TestUtilModule.AssertTrue(vbNewline = vbCrLf, "vbNewLine is the same as vbCrLf on Windows")
+        TestUtil.AssertEqual(vbNewline, vbCrLf, "vbNewline")
     Else
-        TestUtilModule.AssertTrue(vbNewLine = vbLf, "vbNewLine is the same as vbLf on others than Windows")
+        TestUtil.AssertEqual(vbNewLine, vbLf, "vbNewline")
     End If
-
-    TestUtilModule.TestEnd
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testConstants", Err, Error$, Erl)
 End Sub
-

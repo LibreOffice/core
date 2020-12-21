@@ -1,49 +1,37 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testReplace
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testReplace
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testReplace()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim srcStr, destStr, repStr, start, count, retStr
-    testName = "Test Replace function"
     On Error GoTo errorHandler
-    srcStr = "abcbcdBc"
-    destStr = "bc"
-    repStr = "ef"
-    retStr = Replace(srcStr, destStr, repStr)
-    TestUtilModule.AssertTrue(retStr = "aefefdBc", "common string:" & retStr)
-    retStr = Replace("abcbcdbc", destStr, repStr)
-    TestUtilModule.AssertTrue(retStr = "aefefdef", "expression string:" & retStr)
-    retStr = Replace(srcStr, destStr, repStr, 1, -1, vbBinaryCompare)
-    TestUtilModule.AssertTrue(retStr = "aefefdBc", "binary compare:" & retStr)
-    retStr = Replace(srcStr, destStr, repStr, 1, -1, vbTextCompare)
-    TestUtilModule.AssertTrue(retStr = "aefefdef", "text compare:" & retStr)
-    retStr = Replace(srcStr, destStr, repStr, compare:=vbTextCompare)
-    TestUtilModule.AssertTrue(retStr = "aefefdef", "text compare:" & retStr)
-    retStr = Replace(srcStr, destStr, repStr, 3, -1, vbBinaryCompare)
-    TestUtilModule.AssertTrue(retStr = "cefdBc", "start = 3:" & retStr)
-    retStr = Replace(srcStr, destStr, repStr, 1, 2, vbBinaryCompare)
-    TestUtilModule.AssertTrue(retStr = "aefefdBc", "count = 2: " & retStr)
-    retStr = Replace(srcStr, destStr, repStr, 1, 0, vbBinaryCompare)
-    TestUtilModule.AssertTrue(retStr = "abcbcdBc", "start = 1, count = 0, not support in Unix: " & retStr)
+
+    TestUtil.AssertEqual(Replace("abcbcdBc", "bc", "ef"),                         "aefefdBc", "Replace(""abcbcdBc"", ""bc"", ""ef"")")
+    TestUtil.AssertEqual(Replace("abcbcdbc", "bc", "ef"),                         "aefefdef", "Replace(""abcbcdbc"", ""bc"", ""ef"")")
+    TestUtil.AssertEqual(Replace("abcbcdBc", "bc", "ef", 1, -1, vbBinaryCompare), "aefefdBc", "Replace(""abcbcdBc"", ""bc"", ""ef"", 1, -1, vbBinaryCompare)")
+    TestUtil.AssertEqual(Replace("abcbcdBc", "bc", "ef", 1, -1, vbTextCompare),   "aefefdef", "Replace(""abcbcdBc"", ""bc"", ""ef"", 1, -1, vbTextCompare)")
+    TestUtil.AssertEqual(Replace("abcbcdBc", "bc", "ef", compare:=vbTextCompare), "aefefdef", "Replace(""abcbcdBc"", ""bc"", ""ef"", compare:=vbTextCompare)")
+    TestUtil.AssertEqual(Replace("abcbcdBc", "bc", "ef", 3, -1, vbBinaryCompare), "cefdBc",   "Replace(""abcbcdBc"", ""bc"", ""ef"", 3, -1, vbBinaryCompare)")
+    TestUtil.AssertEqual(Replace("abcbcdBc", "bc", "ef", 1, 2, vbBinaryCompare),  "aefefdBc", "Replace(""abcbcdBc"", ""bc"", ""ef"", 1, 2, vbBinaryCompare)")
+    TestUtil.AssertEqual(Replace("abcbcdBc", "bc", "ef", 1, 0, vbBinaryCompare),  "abcbcdBc", "Replace(""abcbcdBc"", ""bc"", ""ef"", 1, 0, vbBinaryCompare)") ' not support in Unix
 
     ' tdf#132389 - case-insensitive operation for non-ASCII characters
-    retStr = Replace("ABCabc", "b", "*", 1, 2, vbTextCompare)
-    TestUtilModule.AssertTrue(retStr = "A*Ca*c", "case-insensitive ASCII: " & retStr)
-    retStr = Replace("АБВабв", "б", "*", 1, 2, vbTextCompare)
-    TestUtilModule.AssertTrue(retStr = "А*Ва*в", "case-insensitive non-ASCII: " & retStr)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(Replace("ABCabc", "b", "*", 1, 2, vbTextCompare), "A*Ca*c", "Replace(""ABCabc"", ""b"", ""*"", 1, 2, vbTextCompare)")
+    TestUtil.AssertEqual(Replace("АБВабв", "б", "*", 1, 2, vbTextCompare), "А*Ва*в", "Replace(""АБВабв"", ""б"", ""*"", 1, 2, vbTextCompare)")
 
     Exit Sub
 errorHandler:
-    TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testReplace", Err, Error$, Erl)
 End Sub
-

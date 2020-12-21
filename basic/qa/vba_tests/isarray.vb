@@ -1,38 +1,32 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testIsArray
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testIsArray
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testIsArray()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    Dim MyArray(1 To 5) As Integer, YourArray    ' Declare array variables.
-    testName = "Test IsArray function"
     On Error GoTo errorHandler
+    Dim MyArray(1 To 5) As Integer, YourArray    ' Declare array variables.
+    Dim AVar
     YourArray = Array(1, 2, 3)    ' Use Array function.
+    AVar = False
 
-    date2 = True
-    date1 = IsArray(MyArray)
-    TestUtilModule.AssertTrue(date1 = date2, "the return IsArray is: " & date1)
-
-    date2 = True
-    date1 = IsArray(YourArray)
-    TestUtilModule.AssertTrue(date1 = date2, "the return IsArray is: " & date1)
-
-    date2 = False
-    date1 = IsArray(date2)
-    TestUtilModule.AssertTrue(date1 = date2, "the return IsArray is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.Assert(IsArray(MyArray),   "IsArray(MyArray)")
+    TestUtil.Assert(IsArray(YourArray), "IsArray(YourArray)")
+    TestUtil.Assert(Not IsArray(AVar),  "Not IsArray(AVar)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testIsArray", Err, Error$, Erl)
 End Sub
-

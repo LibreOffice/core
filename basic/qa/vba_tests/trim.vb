@@ -1,28 +1,26 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testTrim
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testTrim
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testTrim()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    testName = "Test Trim function"
     On Error GoTo errorHandler
 
-    date2 = "some text"
-    date1 = Trim("   some text  ")
-    TestUtilModule.AssertTrue(date1 = date2, "the return Trim is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(Trim("   some text  "), "some text", "Trim(""   some text  "")")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testTrim", Err, Error$, Erl)
 End Sub
-

@@ -1,63 +1,34 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testSTRcomp
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testSTRcomp
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testSTRcomp()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim TestStr, TestStr1, TestStr2 As String
-    Dim date1, date2
-    testName = "Test STRcomp function"
     On Error GoTo errorHandler
-    TestStr1 = "ABCD"
-    TestStr2 = "abcd"
 
-    date2 = 0
-    date1 = StrComp(TestStr1, TestStr2, vbTextCompare)
-    TestUtilModule.AssertTrue(date1 = date2, "the return STRcomp is: " & date1)
-
-    date2 = -1
-    date1 = StrComp(TestStr1, TestStr2, vbBinaryCompare)
-    TestUtilModule.AssertTrue(date1 = date2, "the return STRcomp is: " & date1)
-
-    date2 = -1
-    date1 = StrComp(TestStr1, TestStr2)
-    TestUtilModule.AssertTrue(date1 = date2, "the return STRcomp is: " & date1)
-
-    date2 = 0
-    date1 = StrComp("text", "text", vbBinaryCompare)
-    TestUtilModule.AssertTrue(date1 = date2, "the return STRcomp is: " & date1)
-
-    date2 = 1
-    date1 = StrComp("text  ", "text", vbBinaryCompare)
-    TestUtilModule.AssertTrue(date1 = date2, "the return STRcomp is: " & date1)
-
-    date2 = -1
-    date1 = StrComp("Text", "text", vbBinaryCompare)
-    TestUtilModule.AssertTrue(date1 = date2, "the return STRcomp is: " & date1)
-
-    date2 = 0
-    date1 = StrComp("text", "text", vbTextCompare)
-    TestUtilModule.AssertTrue(date1 = date2, "the return STRcomp is: " & date1)
-
-    date2 = 1
-    date1 = StrComp("text  ", "text", vbTextCompare)
-    TestUtilModule.AssertTrue(date1 = date2, "the return STRcomp is: " & date1)
-
-    date2 = 0
-    date1 = StrComp("Text", "text", vbTextCompare)
-    TestUtilModule.AssertTrue(date1 = date2, "the return STRcomp is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(StrComp("ABCD",   "abcd", vbTextCompare),    0, "StrComp(""ABCD"", ""abcd"", vbTextCompare)")
+    TestUtil.AssertEqual(StrComp("ABCD",   "abcd", vbBinaryCompare), -1, "StrComp(""ABCD"", ""abcd"", vbBinaryCompare)")
+    TestUtil.AssertEqual(StrComp("ABCD",   "abcd"),                  -1, "StrComp(""ABCD"", ""abcd"")")
+    TestUtil.AssertEqual(StrComp("text",   "text", vbBinaryCompare),  0, "StrComp(""text"", ""text"", vbBinaryCompare)")
+    TestUtil.AssertEqual(StrComp("text  ", "text", vbBinaryCompare),  1, "StrComp(""text  "", ""text"", vbBinaryCompare)")
+    TestUtil.AssertEqual(StrComp("Text",   "text", vbBinaryCompare), -1, "StrComp(""Text"", ""text"", vbBinaryCompare)")
+    TestUtil.AssertEqual(StrComp("text",   "text", vbTextCompare),    0, "StrComp(""text"", ""text"", vbTextCompare)")
+    TestUtil.AssertEqual(StrComp("text  ", "text", vbTextCompare),    1, "StrComp(""text  "", ""text"", vbTextCompare)")
+    TestUtil.AssertEqual(StrComp("Text",   "text", vbTextCompare),    0, "StrComp(""Text"", ""text"", vbTextCompare)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testSTRcomp", Err, Error$, Erl)
 End Sub
-

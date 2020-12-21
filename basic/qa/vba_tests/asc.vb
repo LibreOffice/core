@@ -1,38 +1,29 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Rem Attribute VBA_ModuleType=VBAModule
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testASC
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testASC
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testASC()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim nr1, nr2 As Double
-
-    testName = "Test ASC function"
     On Error GoTo errorHandler
 
-    nr2 = 65
-    nr1 = Asc("A")
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return ASC is: " & nr1)
-
-    nr2 = 97
-    nr1 = Asc("a")
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return ASC is: " & nr1)
-
-    nr2 = 65
-    nr1 = Asc("Apple")
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return ASC is: " & nr1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(Asc("A"),     65, "Asc(""A"")")
+    TestUtil.AssertEqual(Asc("a"),     97, "Asc(""a"")")
+    TestUtil.AssertEqual(Asc("Apple"), 65, "Asc(""Apple"")")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testASC", Err, Error$, Erl)
 End Sub
-

@@ -1,39 +1,28 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testHour
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testHour
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testHour()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2, myTime
-    testName = "Test Hour function"
     On Error GoTo errorHandler
     
-    myTime = "6:25:39 AM"
-    date2 = 6
-    date1 = Hour(myTime)
-    TestUtilModule.AssertTrue(date1 = date2, "the return Hour is: " & date1)
-
-    myTime = "6:25:39 PM"
-    date2 = 18
-    date1 = Hour(myTime)
-    TestUtilModule.AssertTrue(date1 = date2, "the return Hour is: " & date1)
-
-    myTime = "06:25:39 AM"
-    date2 = 6
-    date1 = Hour(myTime)
-    TestUtilModule.AssertTrue(date1 = date2, "the return Hour is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(Hour("6:25:39 AM"),  6, "Hour(""6:25:39 AM"")")
+    TestUtil.AssertEqual(Hour("6:25:39 PM"), 18, "Hour(""6:25:39 PM"")")
+    TestUtil.AssertEqual(Hour("06:25:39 AM"), 6, "Hour(""06:25:39 AM"")")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testHour", Err, Error$, Erl)
 End Sub
-

@@ -1,36 +1,28 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testCHR
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testCHR
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testCHR()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim str1, str2 As String
-    testName = "Test CHR function"
     On Error GoTo errorHandler
 
-    str2 = "W"
-    str1 = Chr(87)
-    TestUtilModule.AssertTrue(str1 = str2, "the return CHR is: " & str1)
-
-    str2 = "i"
-    str1 = Chr(105)
-    TestUtilModule.AssertTrue(str1 = str2, "the return CHR is: " & str1)
-
-    str2 = "#"
-    str1 = Chr(35)
-    TestUtilModule.AssertTrue(str1 = str2, "the return CHR is: " & str1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(Chr(87),  "W", "Chr(87)")
+    TestUtil.AssertEqual(Chr(105), "i", "Chr(105)")
+    TestUtil.AssertEqual(Chr(35),  "#", "Chr(35)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testCHR", Err, Error$, Erl)
 End Sub
-

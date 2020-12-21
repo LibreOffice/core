@@ -1,60 +1,37 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testCLng
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testCLng
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testCLng()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim nr1, nr2 As Long   'variables for test
-    testName = "Test CLng function"
-
     On Error GoTo errorHandler
 
-    nr2 = -1
-    nr1 = CLng(-1.1)
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return CLng is: " & nr1)
+    TestUtil.AssertEqual(CLng(-1.1), -1, "CLng(-1.1)")
+    TestUtil.AssertEqual(CLng(-1.9), -2, "CLng(-1.9)")
+    TestUtil.AssertEqual(CLng(0.2),   0, "CLng(0.2)")
 
-    nr2 = -1
-    nr1 = CLng(-1.1)
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return CLng is: " & nr1)
-
-    nr2 = -2
-    nr1 = CLng(-1.9)
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return CLng is: " & nr1)
-
-    nr2 = 0
-    nr1 = CLng(0.2)
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return CLng is: " & nr1)
-
-REM    nr2 = 0
-REM    nr1 = CLng(0.5)
-REM    TestUtilModule.AssertTrue(nr1 = nr2, "the return CLng is: " & nr1)
+REM    TestUtil.AssertEqual(CLng(0.5), 0, "CLng(0.5)")
 
 REM    If the fraction is less than or equal to .5, the result will round down.
 REM    If the fraction is greater than .5, the result will round up.
 
-    nr2 = 11
-    nr1 = CLng(10.51)
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return CLng is: " & nr1)
-
-    nr2 = 30207
-    nr1 = CLng("&H75FF")
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return CLng is: " & nr1)
-
-    nr2 = 1876
-    nr1 = CLng("&H754")
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return CLng is: " & nr1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(CLng(10.51),       11, "CLng(10.51)")
+    TestUtil.AssertEqual(CLng("&H75FF"), 30207, "CLng(""&H75FF"")")
+    TestUtil.AssertEqual(CLng("&H754"),   1876, "CLng(""&H754"")")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testCLng", Err, Error$, Erl)
 End Sub
-

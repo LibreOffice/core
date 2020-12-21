@@ -1,28 +1,26 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testSQR
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testSQR
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testSQR()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    testName = "Test SQR function"
     On Error GoTo errorHandler
 
-    date2 = 3
-    date1 = Sqr(9)
-    TestUtilModule.AssertTrue(date1 = date2, "the return SQR is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(Sqr(9), 3, "Sqr(9)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testSQR", Err, Error$, Erl)
 End Sub
-

@@ -1,34 +1,29 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testCStr
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testCStr
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testCStr()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim str2, str3
-    Dim str1 As String   'variables for test
-    testName = "Test CStr function"
     On Error GoTo errorHandler
 
-    str3 = 437.324
-    str2 = "437.324"
-    str1 = CStr(str3)
-    TestUtilModule.AssertTrue(str1 = str2, "the return CStr is: " & str1)
-
-    str2 = "500"
-    str1 = CStr(500)
-    TestUtilModule.AssertTrue(str1 = str2, "the return CStr is: " & str1)
-
-    TestUtilModule.TestEnd
+    Dim n
+    n = 437.324
+    TestUtil.AssertEqual(CStr(n),   "437.324", "CStr(n)")
+    TestUtil.AssertEqual(CStr(500), "500",     "CStr(500)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testCStr", Err, Error$, Erl)
 End Sub
-

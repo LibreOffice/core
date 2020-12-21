@@ -1,36 +1,28 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testLeft
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testLeft
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testLeft()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    testName = "Test Left function"
     On Error GoTo errorHandler
 
-    date2 = "some"
-    date1 = Left("sometext", 4)
-    TestUtilModule.AssertTrue(date1 = date2, "the return Left is: " & date1)
-
-    date2 = "sometext"
-    date1 = Left("sometext", 48)
-    TestUtilModule.AssertTrue(date1 = date2, "the return Left is: " & date1)
-
-    date2 = ""
-    date1 = Left("", 4)
-    TestUtilModule.AssertTrue(date1 = date2, "the return Left is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(Left("sometext", 4),  "some",     "Left(""sometext"", 4)")
+    TestUtil.AssertEqual(Left("sometext", 48), "sometext", "Left(""sometext"", 48)")
+    TestUtil.AssertEqual(Left("", 4),          "",         "Left("""", 4)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testLeft", Err, Error$, Erl)
 End Sub
-

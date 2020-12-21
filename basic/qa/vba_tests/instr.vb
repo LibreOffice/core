@@ -1,54 +1,36 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testInStr
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testInStr
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testInStr()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2, SearchString, SearchChar
-    testName = "Test InStr function"
     On Error GoTo errorHandler
 
-    date2 = 5
-    date1 = InStr(1, "somemoretext", "more")
-    TestUtilModule.AssertTrue(date1 = date2, "the return InStr is: " & date1)
+    TestUtil.AssertEqual(InStr(1, "somemoretext", "more"),      5, "InStr(1, ""somemoretext"", ""more"")")
+    TestUtil.AssertEqual(InStr("somemoretext", "more"),         5, "InStr(""somemoretext"", ""more"")")
+    TestUtil.AssertEqual(InStr("somemoretext", "somemoretext"), 1, "InStr(""somemoretext"", ""somemoretext"")")
+    TestUtil.AssertEqual(InStr("somemoretext", "nothing"),      0, "InStr(""somemoretext"", ""nothing"")")
 
-    date2 = 5
-    date1 = InStr("somemoretext", "more")
-    TestUtilModule.AssertTrue(date1 = date2, "the return InStr is: " & date1)
-
-    date2 = 1
-    date1 = InStr("somemoretext", "somemoretext")
-    TestUtilModule.AssertTrue(date1 = date2, "the return InStr is: " & date1)
-
-    date2 = 0
-    date1 = InStr("somemoretext", "nothing")
-    TestUtilModule.AssertTrue(date1 = date2, "the return InStr is: " & date1)
-
+    Dim SearchString, SearchChar
     SearchString = "XXpXXpXXPXXP"   ' String to search in.
     SearchChar = "P"    ' Search for "P".
-    date2 = 6
-    date1 = InStr(4, SearchString, SearchChar, 1)
-    TestUtilModule.AssertTrue(date1 = date2, "the return InStr is: " & date1)
-
-    date2 = 9
-    date1 = InStr(1, SearchString, SearchChar, 0)
-    TestUtilModule.AssertTrue(date1 = date2, "the return InStr is: " & date1)
-    
-    date2 = 0
-    date1 = InStr(1, SearchString, "W")
-    TestUtilModule.AssertTrue(date1 = date2, "the return InStr is: " & date1)
-    
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(InStr(4, SearchString, SearchChar, 1), 6, "InStr(4, SearchString, SearchChar, 1)")
+    TestUtil.AssertEqual(InStr(1, SearchString, SearchChar, 0), 9, "InStr(1, SearchString, SearchChar, 0)")
+    TestUtil.AssertEqual(InStr(1, SearchString, "W"),           0, "InStr(1, SearchString, ""W"")")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testInStr", Err, Error$, Erl)
 End Sub
-

@@ -1,37 +1,28 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testString
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testString
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testString()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim TestStr As String
-    Dim date1, date2
-    testName = "Test String function"
     On Error GoTo errorHandler
 
-    date2 = "PPPPP"
-    date1 = String(5, "P")
-    TestUtilModule.AssertTrue(date1 = date2, "the return String is: " & date1)
-
-    date2 = "aaaaa"
-    date1 = String(5, "a")
-    TestUtilModule.AssertTrue(date1 = date2, "the return String is: " & date1)
-
-    date2 = ""
-    date1 = String(0, "P")
-    TestUtilModule.AssertTrue(date1 = date2, "the return String is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(String(5, "P"), "PPPPP", "String(5, ""P"")")
+    TestUtil.AssertEqual(String(5, "a"), "aaaaa", "String(5, ""a"")")
+    TestUtil.AssertEqual(String(0, "P"), "",      "String(0, ""P"")")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testString", Err, Error$, Erl)
 End Sub
-

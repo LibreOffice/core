@@ -1,37 +1,31 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testIIf
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testIIf
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testIIf()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2, testnr
-    testName = "Test IIf function"
     On Error GoTo errorHandler
 
-    date2 = "it is true"
-    date1 = IIf(True, "it is true", "it is false")
-    TestUtilModule.AssertTrue(date1 = date2, "the return IIf is: " & date1)
+    TestUtil.AssertEqual(IIf(True, "it is true", "it is false"),  "it is true",  "IIf(True, ""it is true"", ""it is false"")")
+    TestUtil.AssertEqual(IIf(False, "It is true", "it is false"), "it is false", "IIf(False, ""It is true"", ""it is false"")")
 
-    date2 = "it is false"
-    date1 = IIf(False, "It is true", "it is false")
-    TestUtilModule.AssertTrue(date1 = date2, "the return IIf is: " & date1)
-
+    Dim testnr
     testnr = 1001
-    date2 = "Large"
-    date1 = IIf(testnr > 1000, "Large", "Small")
-    TestUtilModule.AssertTrue(date1 = date2, "the return IIf is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(IIf(testnr > 1000, "Large", "Small"), "Large", "IIf(testnr > 1000, ""Large"", ""Small"")")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testIIf", Err, Error$, Erl)
 End Sub
-

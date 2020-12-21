@@ -1,33 +1,32 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testSwitch
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testSwitch
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testSwitch()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    testName = "Test Switch function"
     On Error GoTo errorHandler
 
-    date2 = "French"
-    date1 = MatchUp("Paris")
-    TestUtilModule.AssertTrue(date1 = date2, "the return Switch is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(MatchUp("Paris"), "French", "MatchUp(""Paris"")")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testSwitch", Err, Error$, Erl)
 End Sub
 
 Function MatchUp(CityName As String)
-    MatchUp = Switch(CityName = "London", "English", CityName _
-                    = "Rome", "Italian", CityName = "Paris", "French")
+    MatchUp = Switch(CityName = "London", "English", _
+                     CityName = "Rome", "Italian", _
+                     CityName = "Paris", "French")
 End Function
-

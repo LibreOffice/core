@@ -1,38 +1,33 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testIsEmpty
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testIsEmpty
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testIsEmpty()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2, MyVar
-    testName = "Test IsEmpty function"
     On Error GoTo errorHandler
 
-    date2 = True
-    date1 = IsEmpty(MyVar)
-    TestUtilModule.AssertTrue(date1 = date2, "the return IsEmpty is: " & date1)
+    Dim MyVar
+    TestUtil.Assert(IsEmpty(MyVar),     "IsEmpty(MyVar)")
 
     MyVar = Null    ' Assign Null.
-    date2 = False
-    date1 = IsEmpty(MyVar)
-    TestUtilModule.AssertTrue(date1 = date2, "the return IsEmpty is: " & date1)
+    TestUtil.Assert(Not IsEmpty(MyVar), "Not IsEmpty(MyVar)")
 
     MyVar = Empty    ' Assign Empty.
-    date2 = True
-    date1 = IsEmpty(MyVar)
-    TestUtilModule.AssertTrue(date1 = date2, "the return IsEmpty is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.Assert(IsEmpty(MyVar),     "IsEmpty(MyVar)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testIsEmpty", Err, Error$, Erl)
 End Sub
-

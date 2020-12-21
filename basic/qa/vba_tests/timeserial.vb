@@ -1,37 +1,35 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testTimeSerial
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testTimeSerial
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testTimeSerial()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2 As Date
-    testName = "Test TimeSerial function"
+    Dim timeVal As Date
     On Error GoTo errorHandler
 
 rem    bug 114229
-rem    date2 = "5:45:00"
-rem    date1 = (TimeSerial(12 - 6, -15, 0))
-rem    TestUtilModule.AssertTrue(date1 = date2, "the return TimeSerial is: " & date1)
+rem    timeVal = "5:45:00"
+rem    TestUtil.AssertEqual(TimeSerial(12 - 6, -15, 0), timeVal, "TimeSerial(12 - 6, -15, 0)")
 
-    date2 = "12:30:00"
-    date1 = TimeSerial(12, 30, 0)
-    TestUtilModule.AssertTrue(date1 = date2, "the return TimeSerial is: " & date1)
+    timeVal = "12:30:00"
+    TestUtil.AssertEqual(TimeSerial(12, 30, 0), timeVal, "TimeSerial(12, 30, 0)")
 
-rem    date2 = "11:30:00"
-rem    date1 = TimeSerial(10, 90, 0)
-rem    TestUtilModule.AssertTrue(date1 = date2, "the return TimeSerial is: " & date1)
-
-    TestUtilModule.TestEnd
+rem    timeVal = "11:30:00"
+rem    TestUtil.AssertEqual(TimeSerial(10, 90, 0), timeVal, "TimeSerial(10, 90, 0)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testTimeSerial", Err, Error$, Erl)
 End Sub
-

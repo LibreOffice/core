@@ -1,105 +1,45 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testDateDiff
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testDateDiff
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testDateDiff()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1
-    Dim date2
-    testName = "Test DateDiff function"
     On Error GoTo errorHandler
 
-    date2 = 10
-    date1 = DateDiff("yyyy", "22/11/2003", "22/11/2013")
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 40
-    date1 = DateDiff("q", "22/11/2003", "22/11/2013")
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 120
-    date1 = DateDiff("m", "22/11/2003", "22/11/2013")
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 3653
-    date1 = DateDiff("y", "22/11/2003", "22/11/2013")
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 3653
-    date1 = DateDiff("d", "22/11/2003", "22/11/2013")
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 521
-    date1 = DateDiff("w", "22/11/2003", "22/11/2013")
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 522
-    date1 = DateDiff("ww", "22/11/2003", "22/11/2013")
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 87672
-    date1 = DateDiff("h", "22/11/2003", "22/11/2013")
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 525600
-    date1 = DateDiff("n", "22/11/2012", "22/11/2013")
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 2678400
-    date1 = DateDiff("s", "22/10/2013", "22/11/2013")
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 3653
-    date1 = DateDiff("d", "22/11/2003", "22/11/2013", vbFriday)
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 3653
-    date1 = DateDiff("d", "22/11/2003", "22/11/2013", vbMonday)
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 3623
-    date1 = DateDiff("d", "22/12/2003", "22/11/2013", vbSaturday)
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 3684
-    date1 = DateDiff("d", "22/10/2003", "22/11/2013", vbSunday)
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 3653
-    date1 = DateDiff("d", "22/11/2003", "22/11/2013", vbThursday)
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 3653
-    date1 = DateDiff("d", "22/11/2003", "22/11/2013", vbTuesday)
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 3653
-    date1 = DateDiff("d", "22/11/2003", "22/11/2013", vbFriday, vbFirstJan1)
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 3653
-    date1 = DateDiff("d", "22/11/2003", "22/11/2013", vbThursday, vbFirstFourDays)
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 3653
-    date1 = DateDiff("d", "22/11/2003", "22/11/2013", vbSunday, vbFirstFullWeek)
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    date2 = 3653
-    date1 = DateDiff("d", "22/11/2003", "22/11/2013", vbSaturday, vbFirstFullWeek)
-    TestUtilModule.AssertTrue(date1 = date2, "the return DateDiff is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(DateDiff("yyyy", "22/11/2003", "22/11/2013"),                             10, "DateDiff(""yyyy"", ""22/11/2003"", ""22/11/2013"")")
+    TestUtil.AssertEqual(DateDiff("q", "22/11/2003", "22/11/2013"),                                40, "DateDiff(""q"", ""22/11/2003"", ""22/11/2013"")")
+    TestUtil.AssertEqual(DateDiff("m", "22/11/2003", "22/11/2013"),                               120, "DateDiff(""m"", ""22/11/2003"", ""22/11/2013"")")
+    TestUtil.AssertEqual(DateDiff("y", "22/11/2003", "22/11/2013"),                              3653, "DateDiff(""y"", ""22/11/2003"", ""22/11/2013"")")
+    TestUtil.AssertEqual(DateDiff("d", "22/11/2003", "22/11/2013"),                              3653, "DateDiff(""d"", ""22/11/2003"", ""22/11/2013"")")
+    TestUtil.AssertEqual(DateDiff("w", "22/11/2003", "22/11/2013"),                               521, "DateDiff(""w"", ""22/11/2003"", ""22/11/2013"")")
+    TestUtil.AssertEqual(DateDiff("ww", "22/11/2003", "22/11/2013"),                              522, "DateDiff(""ww"", ""22/11/2003"", ""22/11/2013"")")
+    TestUtil.AssertEqual(DateDiff("h", "22/11/2003", "22/11/2013"),                             87672, "DateDiff(""h"", ""22/11/2003"", ""22/11/2013"")")
+    TestUtil.AssertEqual(DateDiff("n", "22/11/2012", "22/11/2013"),                            525600, "DateDiff(""n"", ""22/11/2012"", ""22/11/2013"")")
+    TestUtil.AssertEqual(DateDiff("s", "22/10/2013", "22/11/2013"),                           2678400, "DateDiff(""s"", ""22/10/2013"", ""22/11/2013"")")
+    TestUtil.AssertEqual(DateDiff("d", "22/11/2003", "22/11/2013", vbFriday),                    3653, "DateDiff(""d"", ""22/11/2003"", ""22/11/2013"", vbFriday)")
+    TestUtil.AssertEqual(DateDiff("d", "22/11/2003", "22/11/2013", vbMonday),                    3653, "DateDiff(""d"", ""22/11/2003"", ""22/11/2013"", vbMonday)")
+    TestUtil.AssertEqual(DateDiff("d", "22/12/2003", "22/11/2013", vbSaturday),                  3623, "DateDiff(""d"", ""22/12/2003"", ""22/11/2013"", vbSaturday)")
+    TestUtil.AssertEqual(DateDiff("d", "22/10/2003", "22/11/2013", vbSunday),                    3684, "DateDiff(""d"", ""22/10/2003"", ""22/11/2013"", vbSunday)")
+    TestUtil.AssertEqual(DateDiff("d", "22/11/2003", "22/11/2013", vbThursday),                  3653, "DateDiff(""d"", ""22/11/2003"", ""22/11/2013"", vbThursday)")
+    TestUtil.AssertEqual(DateDiff("d", "22/11/2003", "22/11/2013", vbTuesday),                   3653, "DateDiff(""d"", ""22/11/2003"", ""22/11/2013"", vbTuesday)")
+    TestUtil.AssertEqual(DateDiff("d", "22/11/2003", "22/11/2013", vbFriday, vbFirstJan1),       3653, "DateDiff(""d"", ""22/11/2003"", ""22/11/2013"", vbFriday, vbFirstJan1)")
+    TestUtil.AssertEqual(DateDiff("d", "22/11/2003", "22/11/2013", vbThursday, vbFirstFourDays), 3653, "DateDiff(""d"", ""22/11/2003"", ""22/11/2013"", vbThursday, vbFirstFourDays)")
+    TestUtil.AssertEqual(DateDiff("d", "22/11/2003", "22/11/2013", vbSunday, vbFirstFullWeek),   3653, "DateDiff(""d"", ""22/11/2003"", ""22/11/2013"", vbSunday, vbFirstFullWeek)")
+    TestUtil.AssertEqual(DateDiff("d", "22/11/2003", "22/11/2013", vbSaturday, vbFirstFullWeek), 3653, "DateDiff(""d"", ""22/11/2003"", ""22/11/2013"", vbSaturday, vbFirstFullWeek)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testDateDiff", Err, Error$, Erl)
 End Sub
-

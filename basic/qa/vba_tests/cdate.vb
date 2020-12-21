@@ -1,36 +1,28 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testCDate
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testCDate
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testCDate()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2 As Date   'variables for test
-    testName = "Test CDate function"
     On Error GoTo errorHandler
 
-    date2 = 25246
-    date1 = CDate("12/02/1969") '02/12/1969
-    TestUtilModule.AssertTrue(date1 = date2, "the return CDate is: " & date1)
-
-    date2 = 28313
-    date1 = CDate("07/07/1977")
-    TestUtilModule.AssertTrue(date1 = date2, "the return CDate is: " & date1)
-
-    date2 = 28313
-    date1 = CDate(#7/7/1977#)
-    TestUtilModule.AssertTrue(date1 = date2, "the return CDate is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(CDate("12/02/1969"), 25246, "CDate(""12/02/1969"")")
+    TestUtil.AssertEqual(CDate("07/07/1977"), 28313, "CDate(""07/07/1977"")")
+    TestUtil.AssertEqual(CDate(#7/7/1977#),   28313, "CDate(#7/7/1977#)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testCDate", Err, Error$, Erl)
 End Sub
-

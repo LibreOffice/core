@@ -1,52 +1,32 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testIsNumeric
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testIsNumeric
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testIsNumeric()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    testName = "Test IsNumeric function"
     On Error GoTo errorHandler
 
-    date2 = True
-    date1 = IsNumeric(123)
-    TestUtilModule.AssertTrue(date1 = date2, "the return IsNumeric is: " & date1)
-
-    date2 = True
-    date1 = IsNumeric(-123)
-    TestUtilModule.AssertTrue(date1 = date2, "the return IsNumeric is: " & date1)
-
-    date2 = True
-    date1 = IsNumeric(123.8)
-    TestUtilModule.AssertTrue(date1 = date2, "the return IsNumeric is: " & date1)
-
-    date2 = False
-    date1 = IsNumeric("a")
-    TestUtilModule.AssertTrue(date1 = date2, "the return IsNumeric is: " & date1)
-
-rem    date2 = True
-rem    date1 = IsNumeric(True)
-rem    TestUtilModule.AssertTrue(date1 = date2, "the return IsNumeric is: " & date1)
-
-    date2 = True
-    date1 = IsNumeric("123")
-    TestUtilModule.AssertTrue(date1 = date2, "the return IsNumeric is: " & date1)
-
-    date2 = True
-    date1 = IsNumeric("+123")
-    TestUtilModule.AssertTrue(date1 = date2, "the return IsNumeric is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.Assert(IsNumeric(123),     "IsNumeric(123)")
+    TestUtil.Assert(IsNumeric(-123),    "IsNumeric(-123)")
+    TestUtil.Assert(IsNumeric(123.8),   "IsNumeric(123.8)")
+    TestUtil.Assert(Not IsNumeric("a"), "Not IsNumeric(""a"")")
+rem    TestUtil.Assert(IsNumeric(True), "IsNumeric(True)")
+    TestUtil.Assert(IsNumeric("123"),   "IsNumeric(""123"")")
+    TestUtil.Assert(IsNumeric("+123"),  "IsNumeric(""+123"")")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testIsNumeric", Err, Error$, Erl)
 End Sub
-

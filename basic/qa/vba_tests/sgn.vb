@@ -1,44 +1,30 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_SGN
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_SGN
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_SGN()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    testName = "Test SGN function"
     On Error GoTo errorHandler
 
-    date2 = 0
-    date1 = sgn(0)
-    TestUtilModule.AssertTrue(date1 = date2, "the return SGN is: " & date1)
-
-    date2 = -1
-    date1 = sgn(-1)
-    TestUtilModule.AssertTrue(date1 = date2, "the return SGN is: " & date1)
-
-    date2 = 1
-    date1 = sgn(1)
-    TestUtilModule.AssertTrue(date1 = date2, "the return SGN is: " & date1)
-
-    date2 = 1
-    date1 = sgn(50)
-    TestUtilModule.AssertTrue(date1 = date2, "the return SGN is: " & date1)
-
-    date2 = -1
-    date1 = sgn(-50)
-    TestUtilModule.AssertTrue(date1 = date2, "the return SGN is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(sgn(0),    0, "sgn(0)")
+    TestUtil.AssertEqual(sgn(-1),  -1, "sgn(-1)")
+    TestUtil.AssertEqual(sgn(1),    1, "sgn(1)")
+    TestUtil.AssertEqual(sgn(50),   1, "sgn(50)")
+    TestUtil.AssertEqual(sgn(-50), -1, "sgn(-50)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_SGN", Err, Error$, Erl)
 End Sub
-

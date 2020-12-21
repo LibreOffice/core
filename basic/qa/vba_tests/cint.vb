@@ -1,73 +1,42 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testCInt
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testCInt
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testCInt()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim nr1, nr2 As Integer   'variables for test
-    testName = "Test CInt function"
-
     On Error GoTo errorHandler
 
-    nr2 = -1
-    nr1 = CInt(-1.1)
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return CInt is: " & nr1)
-
-    nr2 = -1
-    nr1 = CInt(-1.1)
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return CInt is: " & nr1)
-
-    nr2 = -2
-    nr1 = CInt(-1.9)
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return CInt is: " & nr1)
-
-    nr2 = 0
-    nr1 = CInt(0.2)
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return CInt is: " & nr1)
+    TestUtil.AssertEqual(CInt(-1.1), -1, "CInt(-1.1)")
+    TestUtil.AssertEqual(CInt(-1.1), -1, "CInt(-1.1)")
+    TestUtil.AssertEqual(CInt(-1.9), -2, "CInt(-1.9)")
+    TestUtil.AssertEqual(CInt(0.2),   0, "CInt(0.2)")
 
 REM In excel:
 REM    If the fraction is less than or equal to .5, the result will round down.
 REM    If the fraction is greater than .5, the result will round up.
 
-REM    nr2 = 0
-REM    nr1 = CInt(0.5)
-REM    TestUtilModule.AssertTrue(nr1 = nr2, "the return CInt is: " & nr1)
+REM    TestUtil.AssertEqual(CInt(0.5), 0, "CInt(0.5)")
+REM    TestUtil.AssertEqual(CInt(1.5), 2, "CInt(1.5)")
+REM    TestUtil.AssertEqual(CInt(2.5), 2, "CInt(2.5)")
 
-REM    nr2 = 2
-REM    nr1 = CInt(1.5)
-REM    TestUtilModule.AssertTrue(nr1 = nr2, "the return CInt is: " & nr1)
-
-REM    nr2 = 2
-REM    nr1 = CInt(2.5)
-REM    TestUtilModule.AssertTrue(nr1 = nr2, "the return CInt is: " & nr1)
-
-    nr2 = 11
-    nr1 = CInt(10.51)
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return CInt is: " & nr1)
-
-    nr2 = 30207
-    nr1 = CInt("&H75FF")
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return CInt is: " & nr1)
-
-    nr2 = 1876
-    nr1 = CInt("&H754")
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return CInt is: " & nr1)
-
-    nr2 = 21
-    nr1 = CInt("+21")
-    TestUtilModule.AssertTrue(nr1 = nr2, "the return CInt is:" & nr1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(CInt(10.51),       11, "CInt(10.51)")
+    TestUtil.AssertEqual(CInt("&H75FF"), 30207, "CInt(""&H75FF"")")
+    TestUtil.AssertEqual(CInt("&H754"),   1876, "CInt(""&H754"")")
+    TestUtil.AssertEqual(CInt("+21"),       21, "CInt(""+21"")")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testCInt", Err, Error$, Erl)
 End Sub
-

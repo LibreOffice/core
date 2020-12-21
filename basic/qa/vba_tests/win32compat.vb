@@ -1,6 +1,3 @@
-Option VBASupport 1
-Option Explicit
-
 '
 ' This file is part of the LibreOffice project.
 '
@@ -13,17 +10,19 @@ Option Explicit
 ' the system.
 '
 
+Option VBASupport 1
+Option Explicit
+
 Private Declare Function QueryPerformanceCounter Lib "kernel32" (ByRef lpPerformanceCount As Currency) As Long
 Private Declare Function QueryPerformanceFrequency Lib "kernel32" (ByRef lpFrequency As Currency) As Long
 
 Function doUnitTest() As String
+    TestUtil.TestInit()
     verify_win32compat
-    doUnitTest = TestUtilModule.GetResult()
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_win32compat()
-    TestUtilModule.TestInit()
-
     Dim freq As Currency
     Dim count_a As Currency
     Dim count_b As Currency
@@ -32,18 +31,17 @@ Sub verify_win32compat()
     On Error GoTo errorHandler
 
     success = QueryPerformanceFrequency(freq)
-    TestUtilModule.AssertTrue(success <> 0, "fetching perf. frequency")
-    TestUtilModule.AssertTrue(freq > 0, "perf. frequency is incorrect " & freq)
+    TestUtil.Assert(success <> 0, "QueryPerformanceFrequency")
+    TestUtil.Assert(freq > 0, "QueryPerformanceFrequency", "perf. frequency is incorrect " & freq)
 
     success = QueryPerformanceCounter(count_a)
-    TestUtilModule.AssertTrue(success <> 0, "fetching performance count")
+    TestUtil.Assert(success <> 0, "QueryPerformanceCounter(count_a)")
 
     success = QueryPerformanceCounter(count_b)
-    TestUtilModule.AssertTrue(success <> 0, "fetching performance count")
-    TestUtilModule.AssertTrue(count_a < count_b, "count mismatch " & count_a & " is > " & count_b)
+    TestUtil.Assert(success <> 0, "QueryPerformanceCounter(count_b)")
+    TestUtil.Assert(count_a < count_b, "count mismatch " & count_a & " is > " & count_b)
+
     Exit Sub
-
 errorHandler:
-    TestUtilModule.AssertTrue(False, "hit error handler - " & Err & ": " & Error$ & " (line : " & Erl & ")")
-
+    TestUtil.ReportErrorHandler("verify_win32compat", Err, Error$, Erl)
 End Sub

@@ -1,3 +1,11 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 
 Const IsMissingNone = -1
@@ -6,8 +14,9 @@ Const IsMissingB = 1
 Const IsMissingAB = 2
 
 Function doUnitTest() As String
+    TestUtil.TestInit
     verify_testIsMissingVba
-    doUnitTest = TestUtilModule.GetResult()
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 ' tdf#36737 - Test isMissing function with different datatypes. In LO Basic
@@ -17,57 +26,56 @@ End Function
 ' respective default value of its datatype.
 Sub verify_testIsMissingVba()
 
-    TestUtilModule.TestInit
     testName = "Test missing (VBA)"
     On Error GoTo errorHandler
 
     ' optionals with variant datatypes
-    TestUtilModule.AssertEqual(TestOptVariant(), IsMissingA, "TestOptVariant()")
-    TestUtilModule.AssertEqual(TestOptVariant(123), IsMissingNone, "TestOptVariant(123)")
-    TestUtilModule.AssertEqual(TestOptVariant(, 456), IsMissingA, "TestOptVariant(, 456)")
-    TestUtilModule.AssertEqual(TestOptVariant(123, 456), IsMissingNone, "TestOptVariant(123, 456)")
+    TestUtil.AssertEqual(TestOptVariant(), IsMissingA, "TestOptVariant()")
+    TestUtil.AssertEqual(TestOptVariant(123), IsMissingNone, "TestOptVariant(123)")
+    TestUtil.AssertEqual(TestOptVariant(, 456), IsMissingA, "TestOptVariant(, 456)")
+    TestUtil.AssertEqual(TestOptVariant(123, 456), IsMissingNone, "TestOptVariant(123, 456)")
 
     ' optionals with variant datatypes (ByRef and ByVal)
-    TestUtilModule.AssertEqual(TestOptVariantByRefByVal(), IsMissingA, "TestOptVariantByRefByVal()")
-    TestUtilModule.AssertEqual(TestOptVariantByRefByVal(123),IsMissingNone, "TestOptVariantByRefByVal(123)")
-    TestUtilModule.AssertEqual(TestOptVariantByRefByVal(, 456), IsMissingA, "TestOptVariantByRefByVal(, 456)")
-    TestUtilModule.AssertEqual(TestOptVariantByRefByVal(123, 456), IsMissingNone, "TestOptVariantByRefByVal(123, 456)")
+    TestUtil.AssertEqual(TestOptVariantByRefByVal(), IsMissingA, "TestOptVariantByRefByVal()")
+    TestUtil.AssertEqual(TestOptVariantByRefByVal(123),IsMissingNone, "TestOptVariantByRefByVal(123)")
+    TestUtil.AssertEqual(TestOptVariantByRefByVal(, 456), IsMissingA, "TestOptVariantByRefByVal(, 456)")
+    TestUtil.AssertEqual(TestOptVariantByRefByVal(123, 456), IsMissingNone, "TestOptVariantByRefByVal(123, 456)")
 
     ' optionals with double datatypes
-    TestUtilModule.AssertEqual(TestOptDouble(), IsMissingNone, "TestOptDouble()")
-    TestUtilModule.AssertEqual(TestOptDouble(123.4), IsMissingNone, "TestOptDouble(123.4)")
-    TestUtilModule.AssertEqual(TestOptDouble(, 567.8), IsMissingNone, "TestOptDouble(, 567.8)")
-    TestUtilModule.AssertEqual(TestOptDouble(123.4, 567.8), IsMissingNone, "TestOptDouble(123.4, 567.8)")
+    TestUtil.AssertEqual(TestOptDouble(), IsMissingNone, "TestOptDouble()")
+    TestUtil.AssertEqual(TestOptDouble(123.4), IsMissingNone, "TestOptDouble(123.4)")
+    TestUtil.AssertEqual(TestOptDouble(, 567.8), IsMissingNone, "TestOptDouble(, 567.8)")
+    TestUtil.AssertEqual(TestOptDouble(123.4, 567.8), IsMissingNone, "TestOptDouble(123.4, 567.8)")
 
     ' optionals with double datatypes (ByRef and ByVal)
-    TestUtilModule.AssertEqual(TestOptDoubleByRefByVal(), IsMissingNone, "TestOptDouble()")
-    TestUtilModule.AssertEqual(TestOptDoubleByRefByVal(123.4), IsMissingNone, "TestOptDouble(123.4)")
-    TestUtilModule.AssertEqual(TestOptDoubleByRefByVal(, 567.8), IsMissingNone, "TestOptDoubleByRefByVal(, 567.8)")
-    TestUtilModule.AssertEqual(TestOptDoubleByRefByVal(123.4, 567.8), IsMissingNone, "TestOptDoubleByRefByVal(123.4, 567.8)")
+    TestUtil.AssertEqual(TestOptDoubleByRefByVal(), IsMissingNone, "TestOptDouble()")
+    TestUtil.AssertEqual(TestOptDoubleByRefByVal(123.4), IsMissingNone, "TestOptDouble(123.4)")
+    TestUtil.AssertEqual(TestOptDoubleByRefByVal(, 567.8), IsMissingNone, "TestOptDoubleByRefByVal(, 567.8)")
+    TestUtil.AssertEqual(TestOptDoubleByRefByVal(123.4, 567.8), IsMissingNone, "TestOptDoubleByRefByVal(123.4, 567.8)")
 
     ' optionals with integer datatypes
-    TestUtilModule.AssertEqual(TestOptInteger(), IsMissingNone, "TestOptInteger()")
-    TestUtilModule.AssertEqual(TestOptInteger(123), IsMissingNone, "TestOptInteger(123)")
-    TestUtilModule.AssertEqual(TestOptInteger(, 456), IsMissingNone, "TestOptInteger(, 456)")
-    TestUtilModule.AssertEqual(TestOptInteger(123, 456), IsMissingNone, "TestOptInteger(123, 456)")
+    TestUtil.AssertEqual(TestOptInteger(), IsMissingNone, "TestOptInteger()")
+    TestUtil.AssertEqual(TestOptInteger(123), IsMissingNone, "TestOptInteger(123)")
+    TestUtil.AssertEqual(TestOptInteger(, 456), IsMissingNone, "TestOptInteger(, 456)")
+    TestUtil.AssertEqual(TestOptInteger(123, 456), IsMissingNone, "TestOptInteger(123, 456)")
 
     ' optionals with integer datatypes (ByRef and ByVal)
-    TestUtilModule.AssertEqual(TestOptIntegerByRefByVal(), IsMissingNone, "TestOptIntegerByRefByVal()")
-    TestUtilModule.AssertEqual(TestOptIntegerByRefByVal(123), IsMissingNone, "TestOptIntegerByRefByVal(123)")
-    TestUtilModule.AssertEqual(TestOptIntegerByRefByVal(, 456), IsMissingNone, "TestOptIntegerByRefByVal(, 456)")
-    TestUtilModule.AssertEqual(TestOptIntegerByRefByVal(123, 456), IsMissingNone, "TestOptIntegerByRefByVal(123, 456)")
+    TestUtil.AssertEqual(TestOptIntegerByRefByVal(), IsMissingNone, "TestOptIntegerByRefByVal()")
+    TestUtil.AssertEqual(TestOptIntegerByRefByVal(123), IsMissingNone, "TestOptIntegerByRefByVal(123)")
+    TestUtil.AssertEqual(TestOptIntegerByRefByVal(, 456), IsMissingNone, "TestOptIntegerByRefByVal(, 456)")
+    TestUtil.AssertEqual(TestOptIntegerByRefByVal(123, 456), IsMissingNone, "TestOptIntegerByRefByVal(123, 456)")
 
     ' optionals with string datatypes
-    TestUtilModule.AssertEqual(TestOptString(), IsMissingNone, "TestOptString()")
-    TestUtilModule.AssertEqual(TestOptString("123"), IsMissingNone, "TestOptString(""123"")")
-    TestUtilModule.AssertEqual(TestOptString(, "456"), IsMissingNone, "TestOptString(, ""456"")")
-    TestUtilModule.AssertEqual(TestOptString("123", "456"), IsMissingNone, "TestOptString(""123"", ""456"")")
+    TestUtil.AssertEqual(TestOptString(), IsMissingNone, "TestOptString()")
+    TestUtil.AssertEqual(TestOptString("123"), IsMissingNone, "TestOptString(""123"")")
+    TestUtil.AssertEqual(TestOptString(, "456"), IsMissingNone, "TestOptString(, ""456"")")
+    TestUtil.AssertEqual(TestOptString("123", "456"), IsMissingNone, "TestOptString(""123"", ""456"")")
 
     ' optionals with string datatypes (ByRef and ByVal)
-    TestUtilModule.AssertEqual(TestOptStringByRefByVal(), IsMissingNone, "TestOptStringByRefByVal()")
-    TestUtilModule.AssertEqual(TestOptStringByRefByVal("123"), IsMissingNone, "TestOptStringByRefByVal(""123"")")
-    TestUtilModule.AssertEqual(TestOptStringByRefByVal(, "456"), IsMissingNone, "TestOptStringByRefByVal(, ""456"")")
-    TestUtilModule.AssertEqual(TestOptStringByRefByVal("123", "456"), IsMissingNone, "TestOptStringByRefByVal(""123"", ""456"")")
+    TestUtil.AssertEqual(TestOptStringByRefByVal(), IsMissingNone, "TestOptStringByRefByVal()")
+    TestUtil.AssertEqual(TestOptStringByRefByVal("123"), IsMissingNone, "TestOptStringByRefByVal(""123"")")
+    TestUtil.AssertEqual(TestOptStringByRefByVal(, "456"), IsMissingNone, "TestOptStringByRefByVal(, ""456"")")
+    TestUtil.AssertEqual(TestOptStringByRefByVal("123", "456"), IsMissingNone, "TestOptStringByRefByVal(""123"", ""456"")")
 
     ' optionals with object datatypes
     Dim cA As New Collection
@@ -76,16 +84,16 @@ Sub verify_testIsMissingVba()
     Dim cB As New Collection
     cB.Add (123.4)
     cB.Add (567.8)
-    TestUtilModule.AssertEqual(TestOptObject(), IsMissingAB, "TestOptObject()")
-    TestUtilModule.AssertEqual(TestOptObject(cA), IsMissingB, "TestOptObject(A)")
-    TestUtilModule.AssertEqual(TestOptObject(, cB), IsMissingA, "TestOptObject(, B)")
-    TestUtilModule.AssertEqual(TestOptObject(cA, cB), IsMissingNone, "TestOptObject(A, B)")
+    TestUtil.AssertEqual(TestOptObject(), IsMissingAB, "TestOptObject()")
+    TestUtil.AssertEqual(TestOptObject(cA), IsMissingB, "TestOptObject(A)")
+    TestUtil.AssertEqual(TestOptObject(, cB), IsMissingA, "TestOptObject(, B)")
+    TestUtil.AssertEqual(TestOptObject(cA, cB), IsMissingNone, "TestOptObject(A, B)")
 
     ' optionals with object datatypes (ByRef and ByVal)
-    TestUtilModule.AssertEqual(TestOptObjectByRefByVal(), IsMissingAB, "TestOptObjectByRefByVal()")
-    TestUtilModule.AssertEqual(TestOptObjectByRefByVal(cA), IsMissingB, "TestOptObjectByRefByVal(A)")
-    TestUtilModule.AssertEqual(TestOptObjectByRefByVal(, cB), IsMissingA, "TestOptObjectByRefByVal(, B)")
-    TestUtilModule.AssertEqual(TestOptObjectByRefByVal(cA, cB), IsMissingNone, "TestOptObjectByRefByVal(A, B)")
+    TestUtil.AssertEqual(TestOptObjectByRefByVal(), IsMissingAB, "TestOptObjectByRefByVal()")
+    TestUtil.AssertEqual(TestOptObjectByRefByVal(cA), IsMissingB, "TestOptObjectByRefByVal(A)")
+    TestUtil.AssertEqual(TestOptObjectByRefByVal(, cB), IsMissingA, "TestOptObjectByRefByVal(, B)")
+    TestUtil.AssertEqual(TestOptObjectByRefByVal(cA, cB), IsMissingNone, "TestOptObjectByRefByVal(A, B)")
 
     ' optionals with array datatypes
     Dim aA(0 To 1) As Integer
@@ -95,23 +103,21 @@ Sub verify_testIsMissingVba()
     aB(0) = 123.4
     aB(1) = 567.8
     ' TODO - New bug report? Scanner initializes variable not as an array
-    ' TestUtilModule.AssertEqual(TestOptArray(), IsMissingAB, "TestOptArray()")
-    ' TestUtilModule.AssertEqual(TestOptArray(aA), IsMissingB, "TestOptArray(A)")
-    ' TestUtilModule.AssertEqual(TestOptArray(, aB), IsMissingA, "TestOptArray(, B)")
-    TestUtilModule.AssertEqual(TestOptArray(aA, aB), IsMissingNone, "TestOptArray(A, B)")
+    ' TestUtil.AssertEqual(TestOptArray(), IsMissingAB, "TestOptArray()")
+    ' TestUtil.AssertEqual(TestOptArray(aA), IsMissingB, "TestOptArray(A)")
+    ' TestUtil.AssertEqual(TestOptArray(, aB), IsMissingA, "TestOptArray(, B)")
+    TestUtil.AssertEqual(TestOptArray(aA, aB), IsMissingNone, "TestOptArray(A, B)")
 
     ' optionals with array datatypes (ByRef and ByVal)
     ' TODO - New bug report? Scanner initializes variable not as an array
-    ' TestUtilModule.AssertEqual(TestOptArrayByRefByVal(), IsMissingAB, "TestOptArrayByRefByVal()")
-    ' TestUtilModule.AssertEqual(TestOptArrayByRefByVal(aA), IsMissingB, "TestOptArrayByRefByVal(A)")
-    ' TestUtilModule.AssertEqual(TestOptArrayByRefByVal(, aB), IsMissingA, "TestOptArrayByRefByVal(, B)")
-    TestUtilModule.AssertEqual(TestOptArrayByRefByVal(aA, aB), IsMissingNone, "TestOptArrayByRefByVal(A, B)")
-
-    TestUtilModule.TestEnd
+    ' TestUtil.AssertEqual(TestOptArrayByRefByVal(), IsMissingAB, "TestOptArrayByRefByVal()")
+    ' TestUtil.AssertEqual(TestOptArrayByRefByVal(aA), IsMissingB, "TestOptArrayByRefByVal(A)")
+    ' TestUtil.AssertEqual(TestOptArrayByRefByVal(, aB), IsMissingA, "TestOptArrayByRefByVal(, B)")
+    TestUtil.AssertEqual(TestOptArrayByRefByVal(aA, aB), IsMissingNone, "TestOptArrayByRefByVal(A, B)")
 
     Exit Sub
 errorHandler:
-    TestUtilModule.AssertEqual(False, True, Err.Description)
+    TestUtil.ReportErrorHandler("verify_testIsMissingVba", Err, Error$, Erl)
 End Sub
 
 Function TestOptVariant(Optional A, Optional B As Variant = 123)
@@ -173,4 +179,3 @@ Function WhatIsMissing(is_missingA, is_missingB)
         WhatIsMissing = IsMissingNone
     End If
 End Function
-

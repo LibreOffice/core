@@ -1,28 +1,26 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testSIN
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testSIN
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testSIN()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    testName = "Test SIN function"
     On Error GoTo errorHandler
 
-    date2 = 0.43
-    date1 = Sin(0.45)
-    TestUtilModule.AssertTrue(Round(date1, 2) = Round(date2, 2), "the return SIN is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqualApprox(Sin(0.45), 0.43496553411123, 1E-14, "Sin(0.45)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testSIN", Err, Error$, Erl)
 End Sub
-

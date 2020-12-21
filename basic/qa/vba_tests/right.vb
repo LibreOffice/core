@@ -1,36 +1,28 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testRight
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testRight
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testRight()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    testName = "Test Right function"
     On Error GoTo errorHandler
 
-    date2 = "text"
-    date1 = Right("sometext", 4)
-    TestUtilModule.AssertTrue(date1 = date2, "the return Right is: " & date1)
-
-    date2 = "sometext"
-    date1 = Right("sometext", 48)
-    TestUtilModule.AssertTrue(date1 = date2, "the return Right is: " & date1)
-
-    date2 = ""
-    date1 = Right("", 4)
-    TestUtilModule.AssertTrue(date1 = date2, "the return Right is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(Right("sometext", 4),  "text",     "Right(""sometext"", 4)")
+    TestUtil.AssertEqual(Right("sometext", 48), "sometext", "Right(""sometext"", 48)")
+    TestUtil.AssertEqual(Right("", 4),          "",         "Right("""", 4)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testRight", Err, Error$, Erl)
 End Sub
-

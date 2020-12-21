@@ -1,29 +1,28 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testTimeValue
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testTimeValue
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testTimeValue()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-
-    Dim date1, date2 As Date   'variables for test
-    testName = "Test TimeValue function"
+    Dim timeVal As Date
     On Error GoTo errorHandler
 
-    date2 = "16:35:17"
-    date1 = TimeValue("4:35:17 PM")
-    TestUtilModule.AssertTrue(date1 = date2, "the return TimeValue is: " & date1)
-
-    TestUtilModule.TestEnd
+    timeVal = "16:35:17"
+    TestUtil.AssertEqual(TimeValue("4:35:17 PM"), timeVal, "TimeValue(""4:35:17 PM"")")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testTimeValue", Err, Error$, Erl)
 End Sub
-

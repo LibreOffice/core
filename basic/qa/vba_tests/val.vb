@@ -1,60 +1,35 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testVal
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testVal
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testVal()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
-    Dim date1, date2
-    testName = "Test Val function"
     On Error GoTo errorHandler
 
-    date2 = 2
-    date1 = Val("02/04/2010")
-    TestUtilModule.AssertTrue(date1 = date2, "the return Val is: " & date1)
-
-    date2 = 1050
-    date1 = Val("1050")
-    TestUtilModule.AssertTrue(date1 = date2, "the return Val is: " & date1)
-
-    date2 = 130.75
-    date1 = Val("130.75")
-    TestUtilModule.AssertTrue(date1 = date2, "the return Val is: " & date1)
-
-    date2 = 50
-    date1 = Val("50 Park Lane")
-    TestUtilModule.AssertTrue(date1 = date2, "the return Val is: " & date1)
-
-    date2 = 1320
-    date1 = Val("1320 then some text")
-    TestUtilModule.AssertTrue(date1 = date2, "the return Val is: " & date1)
-
-    date2 = 0
-    date1 = Val("L13.5")
-    TestUtilModule.AssertTrue(date1 = date2, "the return Val is: " & date1)
-
-    date2 = 0
-    date1 = Val("sometext")
-    TestUtilModule.AssertTrue(date1 = date2, "the return Val is: " & date1)
-
-REM    date2 = 1
-REM    date1 = Val("1, 2")
-REM    TestUtilModule.AssertTrue(date1 = date2, "the return Val is: " & date1)
-REM		tdf#111999
-
-    date2 = -1
-    date1 = Val("&HFFFF")
-    TestUtilModule.AssertTrue(date1 = date2, "the return Val is: " & date1)
-    TestUtilModule.TestEnd
+    TestUtil.AssertEqual(Val("02/04/2010"),             2,    "Val(""02/04/2010"")")
+    TestUtil.AssertEqual(Val("1050"),                1050,    "Val(""1050"")")
+    TestUtil.AssertEqual(Val("130.75"),               130.75, "Val(""130.75"")")
+    TestUtil.AssertEqual(Val("50 Park Lane"),          50,    "Val(""50 Park Lane"")")
+    TestUtil.AssertEqual(Val("1320 then some text"), 1320,    "Val(""1320 then some text"")")
+    TestUtil.AssertEqual(Val("L13.5"),                  0,    "Val(""L13.5"")")
+    TestUtil.AssertEqual(Val("sometext"),               0,    "Val(""sometext"")")
+REM    tdf#111999
+REM    TestUtil.AssertEqual(Val("1, 2"),                   1,    "Val(""1, 2"")")
+    TestUtil.AssertEqual(Val("&HFFFF"),                -1,    "Val(""&HFFFF"")")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testVal", Err, Error$, Erl)
 End Sub
-

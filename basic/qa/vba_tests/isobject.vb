@@ -1,35 +1,31 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+
 Option VBASupport 1
 Option Explicit
 
 Function doUnitTest() As String
-verify_testIsObject
-doUnitTest = TestUtilModule.GetResult()
+    TestUtil.TestInit
+    verify_testIsObject
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 Sub verify_testIsObject()
-
-    TestUtilModule.TestInit
-
-    Dim testName As String
+    On Error GoTo errorHandler
     Dim TestStr As String
     Dim MyObject As Object
-    Dim date1, date2, YourObject
-    testName = "Test IsObject function"
-    On Error GoTo errorHandler
+    Dim YourObject
 
     Set YourObject = MyObject    ' Assign an object reference.
-    date2 = True
-    date1 = IsObject(YourObject)
-    TestUtilModule.AssertTrue(date1 = date2, "the return IsObject is: " & date1)
-
-    date2 = False
-    date1 = IsObject(TestStr)
-    TestUtilModule.AssertTrue(date1 = date2, "the return IsObject is: " & date1)
-
-    TestUtilModule.TestEnd
+    TestUtil.Assert(IsObject(YourObject),  "IsObject(YourObject)")
+    TestUtil.Assert(Not IsObject(TestStr), "Not IsObject(TestStr)")
 
     Exit Sub
 errorHandler:
-        TestUtilModule.AssertTrue(False, testName & ": hit error handler")
+    TestUtil.ReportErrorHandler("verify_testIsObject", Err, Error$, Erl)
 End Sub
-
