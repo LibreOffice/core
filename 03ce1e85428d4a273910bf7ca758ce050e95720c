@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8abf73ff_5a994812",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 3394,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-12-21T01:42:30Z",
+      "side": 1,
+      "message": "MS uses Arm64 everywhere, so I choose to do the same. But feel free to rename it to be more consistent with other OSs. Just be sure that the compiler flags are still correct.",
+      "parentUuid": "55788062_b5296723",
+      "revId": "03ce1e85428d4a273910bf7ca758ce050e95720c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8a1a8b7a_84c046f5",
         "filename": "configure.ac",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2020-12-20T20:24:37Z",
       "side": 1,
       "message": "this is also unique among arm64 OSes",
+      "revId": "03ce1e85428d4a273910bf7ca758ce050e95720c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5bcb524_811224de",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 3395,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-12-21T01:42:30Z",
+      "side": 1,
+      "message": "Don\u0027t know where it\u0027s actually used.",
+      "parentUuid": "8a1a8b7a_84c046f5",
       "revId": "03ce1e85428d4a273910bf7ca758ce050e95720c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
