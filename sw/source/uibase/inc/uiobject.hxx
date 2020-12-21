@@ -14,6 +14,7 @@
 #include <vcl/uitest/uiobject.hxx>
 
 #include "edtwin.hxx"
+#include "PageBreakWin.hxx"
 #include "navipi.hxx"
 
 #include <AnnotationWin.hxx>
@@ -80,6 +81,27 @@ public:
 protected:
 
     OUString get_name() const override;
+
+};
+
+class PageBreakUIObject : public WindowUIObject
+{
+public:
+
+    PageBreakUIObject(const VclPtr<SwPageBreakWin>& xEditWin);
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+protected:
+
+    virtual OUString get_name() const override;
+
+private:
+
+    VclPtr<SwPageBreakWin> mxPageBreakUIObject;
 
 };
 
