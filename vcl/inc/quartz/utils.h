@@ -38,6 +38,8 @@ OUString GetOUString( CFStringRef );
 OUString GetOUString( const NSString* );
 CFStringRef CreateCFString( const OUString& );
 NSString* CreateNSString( const OUString& );
+OUString NSStringArrayToOUString(NSArray* array);
+OUString NSDictionaryKeysToOUString(NSDictionary* dict);
 
 std::ostream &operator <<(std::ostream& s, const CGRect &rRect);
 std::ostream &operator <<(std::ostream& s, const CGPoint &rPoint);
