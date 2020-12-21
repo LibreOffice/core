@@ -51,9 +51,20 @@ const char* const gpsPC = "pc";
 
 const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 14;
 
+static sal_Int64 toInt64_WithLength(const sal_Unicode * str, sal_Int16 radix, sal_Int32 nStrLength )
+{
+    return rtl_ustr_toInt64_WithLength(str, radix, nStrLength);
+}
+static sal_Int64 toInt64_WithLength(const char * str, sal_Int16 radix, sal_Int32 nStrLength )
+{
+    return rtl_str_toInt64_WithLength(str, radix, nStrLength);
+}
+
+
 /** convert string to measure using optional min and max values*/
-bool Converter::convertMeasure( sal_Int32& rValue,
-                                std::u16string_view rString,
+template<typename V>
+static bool lcl_convertMeasure( sal_Int32& rValue,
+                                V rString,
                                 sal_Int16 nTargetUnit /* = MeasureUnit::MM_100TH */,
                                 sal_Int32 nMin /* = SAL_MIN_INT32 */,
                                 sal_Int32 nMax /* = SAL_MAX_INT32 */ )
@@ -262,6 +273,16 @@ bool Converter::convertMeasure( sal_Int32& rValue,
         rValue = static_cast<sal_Int32>(nVal);
 
     return true;
+}
+
+/** convert string to measure using optional min and max values*/
+bool Converter::convertMeasure( sal_Int32& rValue,
+                                std::u16string_view rString,
+                                sal_Int16 nTargetUnit /* = MeasureUnit::MM_100TH */,
+                                sal_Int32 nMin /* = SAL_MIN_INT32 */,
+                                sal_Int32 nMax /* = SAL_MAX_INT32 */ )
+{
+    return lcl_convertMeasure<std::u16string_view>(rValue, rString, nTargetUnit, nMin, nMax);
 }
 
 /** convert string to measure using optional min and max values*/
@@ -271,211 +292,9 @@ bool Converter::convertMeasure( sal_Int32& rValue,
                                 sal_Int32 nMin /* = SAL_MIN_INT32 */,
                                 sal_Int32 nMax /* = SAL_MAX_INT32 */ )
 {
-    bool bNeg = false;
-    double nVal = 0;
-
-    sal_Int32 nPos = 0;
-    sal_Int32 const nLen = rString.size();
-
-    // skip white space
-    while( (nPos < nLen) && (rString[nPos] <= ' ') )
-        nPos++;
-
-    if( nPos < nLen && '-' == rString[nPos] )
-    {
-        bNeg = true;
-        nPos++;
-    }
-
-    // get number
-    while( nPos < nLen &&
-           '0' <= rString[nPos] &&
-           '9' >= rString[nPos] )
-    {
-        // TODO: check overflow!
-        nVal *= 10;
-        nVal += (rString[nPos] - '0');
-        nPos++;
-    }
-    if( nPos < nLen && '.' == rString[nPos] )
-    {
-        nPos++;
-        double nDiv = 1.;
-
-        while( nPos < nLen &&
-               '0' <= rString[nPos] &&
-               '9' >= rString[nPos] )
-        {
-            // TODO: check overflow!
-            nDiv *= 10;
-            nVal += ( static_cast<double>(rString[nPos] - '0') / nDiv );
-            nPos++;
-        }
-    }
-
-    // skip white space
-    while( (nPos < nLen) && (rString[nPos] <= ' ') )
-        nPos++;
-
-    if( nPos < nLen )
-    {
-
-        if( MeasureUnit::PERCENT == nTargetUnit )
-        {
-            if( '%' != rString[nPos] )
-                return false;
-        }
-        else if( MeasureUnit::PIXEL == nTargetUnit )
-        {
-            if( nPos + 1 >= nLen ||
-                ('p' != rString[nPos] &&
-                 'P' != rString[nPos])||
-                ('x' != rString[nPos+1] &&
-                 'X' != rString[nPos+1]) )
-                return false;
-        }
-        else
-        {
-            OSL_ENSURE( MeasureUnit::TWIP == nTargetUnit || MeasureUnit::POINT == nTargetUnit ||
-                        MeasureUnit::MM_100TH == nTargetUnit || MeasureUnit::MM_10TH == nTargetUnit ||
-                        MeasureUnit::PIXEL == nTargetUnit, "unit is not supported");
-            const char *aCmpsL[3] = { nullptr, nullptr, nullptr };
-            const char *aCmpsU[3] = { nullptr, nullptr, nullptr };
-            double aScales[3] = { 1., 1., 1. };
-
-            if( MeasureUnit::TWIP == nTargetUnit )
-            {
-                switch( rString[nPos] )
-                {
-                case u'c':
-                case u'C':
-                    aCmpsL[0] = "cm";
-                    aCmpsU[0] = "CM";
-                    aScales[0] = (72.*20.)/2.54; // twip
-                    break;
-                case u'i':
-                case u'I':
-                    aCmpsL[0] = "in";
-                    aCmpsU[0] = "IN";
-                    aScales[0] = 72.*20.; // twip
-                    break;
-                case u'm':
-                case u'M':
-                    aCmpsL[0] = "mm";
-                    aCmpsU[0] = "MM";
-                    aScales[0] = (72.*20.)/25.4; // twip
-                    break;
-                case u'p':
-                case u'P':
-                    aCmpsL[0] = "pt";
-                    aCmpsU[0] = "PT";
-                    aScales[0] = 20.; // twip
-
-                    aCmpsL[1] = "pc";
-                    aCmpsU[1] = "PC";
-                    aScales[1] = 12.*20.; // twip
-                    break;
-                }
-            }
-            else if( MeasureUnit::MM_100TH == nTargetUnit || MeasureUnit::MM_10TH == nTargetUnit )
-            {
-                double nScaleFactor = (MeasureUnit::MM_100TH == nTargetUnit) ? 100.0 : 10.0;
-                switch( rString[nPos] )
-                {
-                case u'c':
-                case u'C':
-                    aCmpsL[0] = "cm";
-                    aCmpsU[0] = "CM";
-                    aScales[0] = 10.0 * nScaleFactor; // mm/100
-                    break;
-                case u'i':
-                case u'I':
-                    aCmpsL[0] = "in";
-                    aCmpsU[0] = "IN";
-                    aScales[0] = 1000.*2.54; // mm/100
-                    break;
-                case u'm':
-                case u'M':
-                    aCmpsL[0] = "mm";
-                    aCmpsU[0] = "MM";
-                    aScales[0] = 1.0 * nScaleFactor; // mm/100
-                    break;
-                case u'p':
-                case u'P':
-                    aCmpsL[0] = "pt";
-                    aCmpsU[0] = "PT";
-                    aScales[0] = (10.0 * nScaleFactor*2.54)/72.; // mm/100
-
-                    aCmpsL[1] = "pc";
-                    aCmpsU[1] = "PC";
-                    aScales[1] = (10.0 * nScaleFactor*2.54)/12.; // mm/100
-
-                    aCmpsL[2] = "px";
-                    aCmpsU[2] = "PX";
-                    aScales[2] = 0.28 * nScaleFactor; // mm/100
-                    break;
-                }
-            }
-            else if( MeasureUnit::POINT == nTargetUnit )
-            {
-                if( rString[nPos] == 'p' || rString[nPos] == 'P' )
-                {
-                    aCmpsL[0] = "pt";
-                    aCmpsU[0] = "PT";
-                    aScales[0] = 1;
-                }
-            }
-
-            if( aCmpsL[0] == nullptr )
-                return false;
-
-            double nScale = 0.;
-            for( sal_uInt16 i= 0; i < 3; i++ )
-            {
-                sal_Int32 nTmp = nPos; // come back to the initial position before each iteration
-                const char *pL = aCmpsL[i];
-                if( pL )
-                {
-                    const char *pU = aCmpsU[i];
-                    while( nTmp < nLen && *pL )
-                    {
-                        sal_Unicode c = rString[nTmp];
-                        if( c != *pL && c != *pU )
-                            break;
-                        pL++;
-                        pU++;
-                        nTmp++;
-                    }
-                    if( !*pL && (nTmp == nLen || ' ' == rString[nTmp]) )
-                    {
-                        nScale = aScales[i];
-                        break;
-                    }
-                }
-            }
-
-            if( 0. == nScale )
-                return false;
-
-            // TODO: check overflow
-            if( nScale != 1. )
-                nVal *= nScale;
-        }
-    }
-
-    nVal += .5;
-    if( bNeg )
-        nVal = -nVal;
-
-    if( nVal <= static_cast<double>(nMin) )
-        rValue = nMin;
-    else if( nVal >= static_cast<double>(nMax) )
-        rValue = nMax;
-    else
-        rValue = static_cast<sal_Int32>(nVal);
-
-    return true;
+    return lcl_convertMeasure<std::string_view>(rValue, rString, nTargetUnit, nMin, nMax);
 }
+
 
 /** convert measure in given unit to string with given unit */
 void Converter::convertMeasure( OUStringBuffer& rBuffer,
@@ -710,7 +529,8 @@ static int lcl_gethex( int nChar )
 }
 
 /** convert string to rgb color */
-bool Converter::convertColor( sal_Int32& rColor, std::u16string_view rValue )
+template<typename V>
+static bool lcl_convertColor( sal_Int32& rColor, V rValue )
 {
     if( rValue.size() != 7 || rValue[0] != '#' )
         return false;
@@ -718,29 +538,24 @@ bool Converter::convertColor( sal_Int32& rColor, std::u16string_view rValue )
     rColor = lcl_gethex( rValue[1] ) * 16 + lcl_gethex( rValue[2] );
     rColor <<= 8;
 
-    rColor |= ( lcl_gethex( rValue[3] ) * 16 + lcl_gethex( rValue[4] ) );
+    rColor |= lcl_gethex( rValue[3] ) * 16 + lcl_gethex( rValue[4] );
     rColor <<= 8;
 
-    rColor |= ( lcl_gethex( rValue[5] ) * 16 + lcl_gethex( rValue[6] ) );
+    rColor |= lcl_gethex( rValue[5] ) * 16 + lcl_gethex( rValue[6] );
 
     return true;
 }
 
 /** convert string to rgb color */
+bool Converter::convertColor( sal_Int32& rColor, std::u16string_view rValue )
+{
+    return lcl_convertColor<std::u16string_view>(rColor, rValue);
+}
+
+/** convert string to rgb color */
 bool Converter::convertColor( sal_Int32& rColor, std::string_view rValue )
 {
-    if( rValue.size() != 7 || rValue[0] != '#' )
-        return false;
-
-    rColor = lcl_gethex( rValue[1] ) * 16 + lcl_gethex( rValue[2] );
-    rColor <<= 8;
-
-    rColor |= ( lcl_gethex( rValue[3] ) * 16 + lcl_gethex( rValue[4] ) );
-    rColor <<= 8;
-
-    rColor |= ( lcl_gethex( rValue[5] ) * 16 + lcl_gethex( rValue[6] ) );
-
-    return true;
+    return lcl_convertColor<std::string_view>(rColor, rValue);
 }
 
 const char aHexTab[] = "0123456789abcdef";
@@ -790,8 +605,9 @@ bool Converter::convertNumber(  sal_Int32& rValue,
 }
 
 /** convert string to 64-bit number with optional min and max values */
-bool Converter::convertNumber64( sal_Int64& rValue,
-                                 std::u16string_view aString,
+template<typename V>
+static bool lcl_convertNumber64( sal_Int64& rValue,
+                                 V aString,
                                  sal_Int64 nMin, sal_Int64 nMax )
 {
     sal_Int32 nPos = 0;
@@ -816,7 +632,7 @@ bool Converter::convertNumber64( sal_Int64& rValue,
         nPos++;
     }
 
-    rValue = rtl_ustr_toInt64_WithLength(aString.data() + nNumberStartPos, 10, nPos - nNumberStartPos);
+    rValue = toInt64_WithLength(aString.data() + nNumberStartPos, 10, nPos - nNumberStartPos);
 
     if( rValue < nMin )
         rValue = nMin;
@@ -828,40 +644,20 @@ bool Converter::convertNumber64( sal_Int64& rValue,
 
 /** convert string to 64-bit number with optional min and max values */
 bool Converter::convertNumber64( sal_Int64& rValue,
+                                 std::u16string_view aString,
+                                 sal_Int64 nMin, sal_Int64 nMax )
+{
+    return lcl_convertNumber64<std::u16string_view>(rValue, aString, nMin, nMax);
+}
+
+/** convert string to 64-bit number with optional min and max values */
+bool Converter::convertNumber64( sal_Int64& rValue,
                                  std::string_view aString,
                                  sal_Int64 nMin, sal_Int64 nMax )
 {
-    sal_Int32 nPos = 0;
-    sal_Int32 const nLen = aString.size();
-
-    // skip white space
-    while( (nPos < nLen) && (aString[nPos] <= ' ') )
-        nPos++;
-
-    sal_Int32 nNumberStartPos = nPos;
-
-    if( nPos < nLen && '-' == aString[nPos] )
-    {
-        nPos++;
-    }
-
-    // get number
-    while( nPos < nLen &&
-           '0' <= aString[nPos] &&
-           '9' >= aString[nPos] )
-    {
-        nPos++;
-    }
-
-    rValue = rtl_str_toInt64_WithLength(aString.data() + nNumberStartPos, 10, nPos - nNumberStartPos);
-
-    if( rValue < nMin )
-        rValue = nMin;
-    else if( rValue > nMax )
-        rValue = nMax;
-
-    return ( nPos == nLen && rValue >= nMin && rValue <= nMax );
+    return lcl_convertNumber64<std::string_view>(rValue, aString, nMin, nMax);
 }
+
 
 /** convert double number to string (using ::rtl::math) */
 void Converter::convertDouble(  OUStringBuffer& rBuffer,
@@ -2617,7 +2413,8 @@ double Converter::GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUn
     return fRetval;
 }
 
-sal_Int16 Converter::GetUnitFromString(std::u16string_view rString, sal_Int16 nDefaultUnit)
+template<typename V>
+static sal_Int16 lcl_GetUnitFromString(V rString, sal_Int16 nDefaultUnit)
 {
     sal_Int32 nPos = 0;
     sal_Int32 nLen = rString.size();
@@ -2650,43 +2447,43 @@ sal_Int16 Converter::GetUnitFromString(std::u16string_view rString, sal_Int16 nD
     {
         switch(rString[nPos])
         {
-            case u'%' :
+            case '%' :
             {
                 nRetUnit = MeasureUnit::PERCENT;
                 break;
             }
-            case u'c':
-            case u'C':
+            case 'c':
+            case 'C':
             {
                 if(nPos+1 < nLen && (rString[nPos+1] == 'm'
                     || rString[nPos+1] == 'M'))
                     nRetUnit = MeasureUnit::CM;
                 break;
             }
-            case u'e':
-            case u'E':
+            case 'e':
+            case 'E':
             {
                 // CSS1_EMS or CSS1_EMX later
                 break;
             }
-            case u'i':
-            case u'I':
+            case 'i':
+            case 'I':
             {
                 if(nPos+1 < nLen && (rString[nPos+1] == 'n'
                     || rString[nPos+1] == 'N'))
                     nRetUnit = MeasureUnit::INCH;
                 break;
             }
-            case u'm':
-            case u'M':
+            case 'm':
+            case 'M':
             {
                 if(nPos+1 < nLen && (rString[nPos+1] == 'm'
                     || rString[nPos+1] == 'M'))
                     nRetUnit = MeasureUnit::MM;
                 break;
             }
-            case u'p':
-            case u'P':
+            case 'p':
+            case 'P':
             {
                 if(nPos+1 < nLen && (rString[nPos+1] == 't'
                     || rString[nPos+1] == 'T'))
@@ -2702,89 +2499,13 @@ sal_Int16 Converter::GetUnitFromString(std::u16string_view rString, sal_Int16 nD
     return nRetUnit;
 }
 
+sal_Int16 Converter::GetUnitFromString(std::u16string_view rString, sal_Int16 nDefaultUnit)
+{
+    return lcl_GetUnitFromString<std::u16string_view>(rString, nDefaultUnit);
+}
 sal_Int16 Converter::GetUnitFromString(std::string_view rString, sal_Int16 nDefaultUnit)
 {
-    sal_Int32 nPos = 0;
-    sal_Int32 nLen = rString.size();
-    sal_Int16 nRetUnit = nDefaultUnit;
-
-    // skip white space
-    while( nPos < nLen && ' ' == rString[nPos] )
-        nPos++;
-
-    // skip negative
-    if( nPos < nLen && '-' == rString[nPos] )
-        nPos++;
-
-    // skip number
-    while( nPos < nLen && '0' <= rString[nPos] && '9' >= rString[nPos] )
-        nPos++;
-
-    if( nPos < nLen && '.' == rString[nPos] )
-    {
-        nPos++;
-        while( nPos < nLen && '0' <= rString[nPos] && '9' >= rString[nPos] )
-            nPos++;
-    }
-
-    // skip white space
-    while( nPos < nLen && ' ' == rString[nPos] )
-        nPos++;
-
-    if( nPos < nLen )
-    {
-        switch(rString[nPos])
-        {
-            case u'%' :
-            {
-                nRetUnit = MeasureUnit::PERCENT;
-                break;
-            }
-            case u'c':
-            case u'C':
-            {
-                if(nPos+1 < nLen && (rString[nPos+1] == 'm'
-                    || rString[nPos+1] == 'M'))
-                    nRetUnit = MeasureUnit::CM;
-                break;
-            }
-            case u'e':
-            case u'E':
-            {
-                // CSS1_EMS or CSS1_EMX later
-                break;
-            }
-            case u'i':
-            case u'I':
-            {
-                if(nPos+1 < nLen && (rString[nPos+1] == 'n'
-                    || rString[nPos+1] == 'N'))
-                    nRetUnit = MeasureUnit::INCH;
-                break;
-            }
-            case u'm':
-            case u'M':
-            {
-                if(nPos+1 < nLen && (rString[nPos+1] == 'm'
-                    || rString[nPos+1] == 'M'))
-                    nRetUnit = MeasureUnit::MM;
-                break;
-            }
-            case u'p':
-            case u'P':
-            {
-                if(nPos+1 < nLen && (rString[nPos+1] == 't'
-                    || rString[nPos+1] == 'T'))
-                    nRetUnit = MeasureUnit::POINT;
-                if(nPos+1 < nLen && (rString[nPos+1] == 'c'
-                    || rString[nPos+1] == 'C'))
-                    nRetUnit = MeasureUnit::TWIP;
-                break;
-            }
-        }
-    }
-
-    return nRetUnit;
+    return lcl_GetUnitFromString<std::string_view>(rString, nDefaultUnit);
 }
 
 bool Converter::convertAny(OUStringBuffer&    rsValue,
