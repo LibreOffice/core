@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "577c875c_1ecc1827",
+        "filename": "basic/qa/vba_tests/_test_asserts.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-12-21T18:55:04Z",
+      "side": 1,
+      "message": "Just a small thing: I would remove this new line in order to be consistent in the entire file.",
+      "revId": "fc012c6a9d1b83003a5028ffb06160c458899746",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
