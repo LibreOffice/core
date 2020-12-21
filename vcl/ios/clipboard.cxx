@@ -74,6 +74,7 @@ void SAL_CALL iOSClipboard::setContents(
             dict[types[i]] = pBoardData;
         }
     }
+    SAL_INFO("vcl.ios.clipboard", "Setting pasteboard items: " << NSDictionaryKeysToOUString(dict));
     [mPasteboard setItems:array options:@{}];
 
     // We don't keep a copy of the clipboard contents around in-process, so fire the lost clipboard
