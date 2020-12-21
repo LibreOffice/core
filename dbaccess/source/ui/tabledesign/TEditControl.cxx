@@ -1386,11 +1386,13 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                             if ( !IsColumnSelected( nColId ) )
                                 SelectColumnId( nColId );
 
-                            VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "dbaccess/ui/querycolmenu.ui", "");
-                            VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
-                            aContextMenu->EnableItem(aContextMenu->GetItemId("delete"), false);
-                            aContextMenu->RemoveDisabledEntries(true, true);
-                            if (aContextMenu->Execute(this, aMenuPos) == aContextMenu->GetItemId("width"))
+                            ::tools::Rectangle aRect(aMenuPos, Size(1, 1));
+                            weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
+                            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "dbaccess/ui/querycolmenu.ui"));
+                            std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
+                            xContextMenu->remove("delete");
+                            xContextMenu->remove("separator");
+                            if (xContextMenu->popup_at_rect(pPopupParent, aRect) == "width")
                                 adjustBrowseBoxColumnWidth( this, nColId );
                         }
                     }
