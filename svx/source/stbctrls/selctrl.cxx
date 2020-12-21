@@ -21,10 +21,10 @@
 
 #include <string_view>
 
-#include <vcl/builder.hxx>
 #include <vcl/event.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/status.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weldutils.hxx>
 #include <svl/intitem.hxx>
 #include <tools/urlobj.hxx>
 
@@ -43,50 +43,56 @@ namespace {
 /// Popup menu to select the selection type
 class SelectionTypePopup
 {
-    VclBuilder        m_aBuilder;
-    VclPtr<PopupMenu> m_xMenu;
-    static sal_uInt16 id_to_state(std::string_view rIdent);
-    sal_uInt16 state_to_id(sal_uInt16 nState) const;
+    weld::Window* m_pPopupParent;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Menu> m_xMenu;
+    static OString state_to_id(sal_uInt16 nState);
 public:
-    explicit SelectionTypePopup(sal_uInt16 nCurrent);
-    OUString GetItemTextForState(sal_uInt16 nState) { return m_xMenu->GetItemText(state_to_id(nState)); }
-    sal_uInt16 GetState() const { return id_to_state(m_xMenu->GetCurItemIdent()); }
-    sal_uInt16 Execute(vcl::Window* pWindow, const Point& rPopupPos) { return m_xMenu->Execute(pWindow, rPopupPos); }
-    void HideSelectionType(std::string_view rIdent)
-    { m_xMenu->HideItem(m_xMenu->GetItemId(rIdent)); }
+    SelectionTypePopup(weld::Window* pPopupParent, sal_uInt16 nCurrent);
+    OUString GetItemTextForState(sal_uInt16 nState) { return m_xMenu->get_label(state_to_id(nState)); }
+    OString popup_at_rect(const tools::Rectangle& rRect)
+    {
+        return m_xMenu->popup_at_rect(m_pPopupParent, rRect);
+    }
+    void HideSelectionType(const OString& rIdent)
+    {
+        m_xMenu->remove(rIdent);
+    }
+    static sal_uInt16 id_to_state(std::string_view ident);
 };
 
 }
 
-sal_uInt16 SelectionTypePopup::id_to_state(std::string_view rIdent)
+sal_uInt16 SelectionTypePopup::id_to_state(std::string_view ident)
 {
-    if (rIdent == "block")
+    if (ident == "block")
         return 3;
-    else if (rIdent == "adding")
+    else if (ident == "adding")
         return 2;
-    else if (rIdent == "extending")
+    else if (ident == "extending")
         return 1;
     else // fall through
         return 0;
 }
 
-sal_uInt16 SelectionTypePopup::state_to_id(sal_uInt16 nState) const
+OString SelectionTypePopup::state_to_id(sal_uInt16 nState)
 {
     switch (nState)
     {
         default: // fall through
-        case 0: return m_xMenu->GetItemId("standard");
-        case 1: return m_xMenu->GetItemId("extending");
-        case 2: return m_xMenu->GetItemId("adding");
-        case 3: return m_xMenu->GetItemId("block");
+        case 0: return "standard";
+        case 1: return "extending";
+        case 2: return "adding";
+        case 3: return "block";
     }
 }
 
-SelectionTypePopup::SelectionTypePopup(sal_uInt16 nCurrent)
-    : m_aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/selectionmenu.ui", "")
-    , m_xMenu(m_aBuilder.get_menu("menu"))
+SelectionTypePopup::SelectionTypePopup(weld::Window* pPopupParent, sal_uInt16 nCurrent)
+    : m_pPopupParent(pPopupParent)
+    , m_xBuilder(Application::CreateBuilder(m_pPopupParent, "svx/ui/selectionmenu.ui"))
+    , m_xMenu(m_xBuilder->weld_menu("menu"))
 {
-    m_xMenu->CheckItem(state_to_id(nCurrent));
+    m_xMenu->set_active(state_to_id(nCurrent), true);
 }
 
 SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,
@@ -108,15 +114,19 @@ void SvxSelectionModeControl::StateChanged( sal_uInt16, SfxItemState eState,
         const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pState);
         mnState = pItem->GetValue();
 
-        SelectionTypePopup aPop(mnState);
+        SelectionTypePopup aPop(GetStatusBar().GetFrameWeld(), mnState);
         GetStatusBar().SetQuickHelpText(GetId(), aPop.GetItemTextForState(mnState));
     }
 }
 
 bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
 {
-    SelectionTypePopup aPop(mnState);
-    StatusBar& rStatusbar = GetStatusBar();
+    if (!rEvt.IsMiddle())
+        return false;
+
+    ::tools::Rectangle aRect(rEvt.GetPosPixel(), Size(1, 1));
+    weld::Window* pPopupParent = weld::GetPopupParent(GetStatusBar(), aRect);
+    SelectionTypePopup aPop(pPopupParent, mnState);
 
     // Check if Calc is opened; if true, hide block selection mode tdf#122280
     const css::uno::Reference < css::frame::XModel > xModel = m_xFrame->getController()->getModel();
@@ -128,9 +138,10 @@ bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
             aPop.HideSelectionType("block");
     }
 
-    if (rEvt.IsMiddle() && aPop.Execute(&rStatusbar, rEvt.GetPosPixel()))
+    OString sIdent = aPop.popup_at_rect(aRect);
+    if (!sIdent.isEmpty())
     {
-        sal_uInt16 nNewState = aPop.GetState();
+        sal_uInt16 nNewState = SelectionTypePopup::id_to_state(sIdent);
         if ( nNewState != mnState )
         {
             mnState = nNewState;
