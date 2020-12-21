@@ -1575,7 +1575,7 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
         {
             rSrcDoc.FillMatrix(*xMat, nTab, nCol1, nRow1, nCol2, nRow2, &rHostDoc.GetSharedStringPool());
         }
-        else if ((nCol1 == 0 && nCol2 == MAXCOL) || (nRow1 == 0 && nRow2 == MAXROW))
+        else if ((nCol1 == 0 && nCol2 == rSrcDoc.MaxCol()) || (nRow1 == 0 && nRow2 == rSrcDoc.MaxRow()))
         {
             if ((o3tl::make_unsigned(nDataCol2-nDataCol1+1) < nMatrixColumns) ||
                 (o3tl::make_unsigned(nDataRow2-nDataRow1+1) < nMatrixRows))
@@ -1947,8 +1947,8 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     if (pTab)
         *pTab = nTab;
 
-    SCCOL nDataCol1 = 0, nDataCol2 = MAXCOL;
-    SCROW nDataRow1 = 0, nDataRow2 = MAXROW;
+    SCCOL nDataCol1 = 0, nDataCol2 = pSrcDoc->MaxCol();
+    SCROW nDataRow1 = 0, nDataRow2 = pSrcDoc->MaxRow();
     bool bData = pSrcDoc->ShrinkToDataArea(nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2);
     if (!bData || rCell.Col() < nDataCol1 || nDataCol2 < rCell.Col() || rCell.Row() < nDataRow1 || nDataRow2 < rCell.Row())
     {
