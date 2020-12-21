@@ -417,7 +417,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
             Color aColor( 128,128, 128 );
             rShadow.SetLocation( SvxShadowLocation::BottomRight );
 
-            OUString aToken;
+            std::u16string_view aToken;
             while( aTokenEnum.getNextToken( aToken ) )
             {
                 if( IsXMLToken( aToken, XML_NONE ) )
@@ -425,7 +425,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                     rShadow.SetLocation( SvxShadowLocation::NONE );
                     bOk = true;
                 }
-                else if( !bColorFound && aToken.startsWith("#") )
+                else if( !bColorFound && aToken.substr(0,1) == u"#" )
                 {
                     bOk = ::sax::Converter::convertColor( aColor, aToken );
                     if( !bOk )
@@ -576,7 +576,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
                     sal_Int32 nInWidth, nDistance, nOutWidth;
 
-                    OUString aToken;
+                    std::u16string_view aToken;
                     if( !aTokenEnum.getNextToken( aToken ) )
                         return false;
 
@@ -732,7 +732,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                     SvxGraphicPosition ePos = GPOS_NONE, eTmp;
                     SvxGraphicPosition nTmp;
                     SvXMLTokenEnumerator aTokenEnum( rValue );
-                    OUString aToken;
+                    std::u16string_view aToken;
                     bool bHori = false, bVert = false;
                     bOk = true;
                     while( bOk && aTokenEnum.getNextToken( aToken ) )
@@ -741,7 +741,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         {
                             bOk = false;
                         }
-                        else if( -1 != aToken.indexOf( '%' ) )
+                        else if( std::u16string_view::npos != aToken.find( '%' ) )
                         {
                             sal_Int32 nPrc = 50;
                             if (::sax::Converter::convertPercent(nPrc, aToken))

@@ -208,10 +208,11 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShowsContext::cre
             if( xShow.is() )
             {
                 SvXMLTokenEnumerator aPageNames( aPages, ',' );
-                OUString sPageName;
+                std::u16string_view sPageNameView;
 
-                while( aPageNames.getNextToken( sPageName ) )
+                while( aPageNames.getNextToken( sPageNameView ) )
                 {
+                    OUString sPageName(sPageNameView);
                     if( !mxPages->hasByName( sPageName ) )
                         continue;
 

@@ -473,32 +473,32 @@ bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
 }
 
 
-SvXMLTokenEnumerator::SvXMLTokenEnumerator( const OUString& rString, sal_Unicode cSeparator /* = ' ' */ )
+SvXMLTokenEnumerator::SvXMLTokenEnumerator( std::u16string_view rString, sal_Unicode cSeparator /* = ' ' */ )
 : maTokenString( rString ), mnNextTokenPos(0), mcSeparator( cSeparator )
 {
 }
 
-bool SvXMLTokenEnumerator::getNextToken( OUString& rToken )
+bool SvXMLTokenEnumerator::getNextToken( std::u16string_view& rToken )
 {
-    if( -1 == mnNextTokenPos )
+    if( std::u16string_view::npos == mnNextTokenPos )
         return false;
 
-    int nTokenEndPos = maTokenString.indexOf( mcSeparator, mnNextTokenPos );
-    if( nTokenEndPos != -1 )
+    size_t nTokenEndPos = maTokenString.find( mcSeparator, mnNextTokenPos );
+    if( nTokenEndPos != std::u16string_view::npos )
     {
-        rToken = maTokenString.copy( mnNextTokenPos,
+        rToken = maTokenString.substr( mnNextTokenPos,
                                      nTokenEndPos - mnNextTokenPos );
         mnNextTokenPos = nTokenEndPos + 1;
 
         // if the mnNextTokenPos is at the end of the string, we have
         // to deliver an empty token
-        if( mnNextTokenPos > maTokenString.getLength() )
-            mnNextTokenPos = -1;
+        if( mnNextTokenPos > maTokenString.size() )
+            mnNextTokenPos = std::u16string_view::npos;
     }
     else
     {
-        rToken = maTokenString.copy( mnNextTokenPos );
-        mnNextTokenPos = -1;
+        rToken = maTokenString.substr( mnNextTokenPos );
+        mnNextTokenPos = std::u16string_view::npos;
     }
 
     return true;

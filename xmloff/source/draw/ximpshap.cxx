@@ -1751,7 +1751,7 @@ bool SdXMLConnectorShapeContext::processAttribute( const sax_fastparser::FastAtt
         {
             OUString sValue = aIter.toString();
             SvXMLTokenEnumerator aTokenEnum( sValue );
-            OUString aToken;
+            std::u16string_view aToken;
             if( aTokenEnum.getNextToken( aToken ) )
             {
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(

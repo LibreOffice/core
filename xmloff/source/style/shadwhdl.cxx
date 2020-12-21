@@ -50,7 +50,7 @@ bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
     bool bOffsetFound = false;
     SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
     Color aColor( 128,128, 128 );
-    OUString aToken;
+    std::u16string_view aToken;
 
     while( aTokenEnum.getNextToken( aToken ) )
     {
@@ -60,7 +60,7 @@ bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
             bRet = true;
             break;
         }
-        else if( !bColorFound && aToken.startsWith("#") )
+        else if( !bColorFound && aToken.substr(0,1) == u"#" )
         {
             bRet = ::sax::Converter::convertColor( aColor, aToken );
             if( !bRet )

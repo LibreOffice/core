@@ -877,7 +877,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         case XML_ATACTION_STYLE_MIRROR_OOO:   // adapts style:mirror values
             {
                 SvXMLTokenEnumerator aTokenEnum( sAttrValue );
-                OUString aToken;
+                std::u16string_view aToken;
                 while( aTokenEnum.getNextToken( aToken ) )
                 {
                     if ( !aStyleMirrorAttrValue.isEmpty() )

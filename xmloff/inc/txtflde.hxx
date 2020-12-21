@@ -298,7 +298,7 @@ private:
     /// export a string as a sequence of paragraphs
     void ProcessParagraphSequence(
         /// string containing the paragraphs
-        const OUString& sParagraphSequence);
+        std::u16string_view sParagraphSequence);
 
     /// export a numbering format (numeric, roman, alphabetic, etc.)
     void ProcessNumberingType(
