@@ -255,6 +255,31 @@ OUString CommentUIObject::get_name() const
     return "CommentUIObject";
 }
 
+PageBreakUIObject::PageBreakUIObject(const VclPtr<SwPageBreakWin>& xPageBreakUIObject):
+    WindowUIObject(xPageBreakUIObject),
+    mxPageBreakUIObject(xPageBreakUIObject)
+{
+}
 
+void PageBreakUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "DELETE" || rAction == "EDIT")
+        mxPageBreakUIObject->execute(rAction.toAsciiLowerCase().toUtf8());
+    else
+        WindowUIObject::execute(rAction, rParameters);
+}
+
+std::unique_ptr<UIObject> PageBreakUIObject::create(vcl::Window* pWindow)
+{
+    SwPageBreakWin* pPageBreakWin = dynamic_cast<SwPageBreakWin*>(pWindow);
+    assert(pPageBreakWin);
+    return std::unique_ptr<UIObject>(new PageBreakUIObject(pPageBreakWin));
+}
+
+OUString PageBreakUIObject::get_name() const
+{
+    return "PageBreakUIObject";
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
