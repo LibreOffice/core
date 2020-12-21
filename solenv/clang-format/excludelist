@@ -14868,11 +14868,11 @@ vcl/source/app/timer.cxx
 vcl/source/app/unohelp.cxx
 vcl/source/app/unohelp2.cxx
 vcl/source/app/vclevent.cxx
+vcl/source/bitmap/AlphaMask.cxx
 vcl/source/bitmap/BitmapScaleConvolutionFilter.cxx
 vcl/source/bitmap/BitmapScaleSuperFilter.cxx
 vcl/source/bitmap/BitmapSymmetryCheck.cxx
 vcl/source/bitmap/BitmapTools.cxx
-vcl/source/bitmap/alpha.cxx
 vcl/source/bitmap/bitmap.cxx
 vcl/source/bitmap/BitmapEx.cxx
 vcl/source/bitmap/bmpfast.cxx

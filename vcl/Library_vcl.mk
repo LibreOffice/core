@@ -339,12 +339,12 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/PointArray \
     vcl/source/bitmap/VectorMap \
     vcl/source/bitmap/Vectorizer \
+    vcl/source/bitmap/AlphaMask \
     vcl/source/bitmap/bitmap \
     vcl/source/bitmap/BitmapEx \
     vcl/source/bitmap/BitmapInfoAccess \
     vcl/source/bitmap/BitmapReadAccess \
     vcl/source/bitmap/BitmapWriteAccess \
-    vcl/source/bitmap/alpha \
     vcl/source/bitmap/dibtools \
     vcl/source/bitmap/bmpfast \
     vcl/source/bitmap/bitmapfilter \
