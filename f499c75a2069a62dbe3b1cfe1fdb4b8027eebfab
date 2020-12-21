@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f244995c_837d40fe",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1829,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-12-21T08:59:21Z",
+      "side": 1,
+      "message": "the four arguments to gtk_grid_attach are left-attach, top-attach, width and height so we can combine the two lines here into one by moving the variables in the second line into the args of the first line and then drop the second line",
+      "revId": "f499c75a2069a62dbe3b1cfe1fdb4b8027eebfab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c6f8ba5_51d56727",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1841,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-12-21T08:59:21Z",
+      "side": 1,
+      "message": "likewise the \"expand\", \"fill\" and \"padding\" lines from the second statement could be plugged straight into the first statement and those dropped from the second one, leaving just \"pack-typ\" and \"position\"",
+      "revId": "f499c75a2069a62dbe3b1cfe1fdb4b8027eebfab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
