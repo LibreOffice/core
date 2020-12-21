@@ -208,6 +208,7 @@ ScTransferObj* ScTransferObj::GetOwnClipboard(const uno::Reference<datatransfer:
 
 void ScTransferObj::AddSupportedFormats()
 {
+    //  same formats as in ScSelectionTransferObj::AddSupportedFormats
     AddFormat( SotClipboardFormatId::EMBED_SOURCE );
     AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
     AddFormat( SotClipboardFormatId::GDIMETAFILE );
