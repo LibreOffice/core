@@ -149,7 +149,7 @@ namespace xmloff
         bool bBelow = false;
         bool bHasPos = false, bHasType = false;
 
-        OUString sToken;
+        std::u16string_view sToken;
         SvXMLTokenEnumerator aTokenEnum(_rStrImpValue);
         while (aTokenEnum.getNextToken(sToken))
         {
@@ -197,13 +197,13 @@ namespace xmloff
 
     bool OControlBorderHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
-        OUString sToken;
+        std::u16string_view sToken;
         SvXMLTokenEnumerator aTokens(_rStrImpValue);
 
         sal_uInt16 nStyle = 1;
 
         while   (   aTokens.getNextToken(sToken)    // have a new token
-                &&  (!sToken.isEmpty())       // really have a new token
+                &&  (!sToken.empty())       // really have a new token
                 )
         {
             // try interpreting the token as border style

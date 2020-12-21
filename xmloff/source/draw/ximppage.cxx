@@ -568,13 +568,13 @@ void SdXMLGenericPageContext::SetNavigationOrder()
 
         ::comphelper::UnoInterfaceToUniqueIdentifierMapper& rIdMapper = GetSdImport().getInterfaceToIdentifierMapper();
         SvXMLTokenEnumerator aEnumerator( msNavOrder );
-        OUString sId;
+        std::u16string_view sId;
         for( nIndex = 0; nIndex < nCount; ++nIndex )
         {
             if( !aEnumerator.getNextToken(sId) )
                 break;
 
-            aShapes[nIndex].set( rIdMapper.getReference( sId ), UNO_QUERY );
+            aShapes[nIndex].set( rIdMapper.getReference( OUString(sId) ), UNO_QUERY );
         }
 
         for( nIndex = 0; nIndex < nCount; ++nIndex )

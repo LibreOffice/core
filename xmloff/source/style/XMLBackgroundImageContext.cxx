@@ -161,7 +161,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                 GraphicLocation eNewPos = GraphicLocation_NONE, eTmp;
                 OUString sValue = aIter.toString();
                 SvXMLTokenEnumerator aTokenEnum( sValue );
-                OUString aToken;
+                std::u16string_view aToken;
                 bool bHori = false, bVert = false;
                 bool bOK = true;
                 while( bOK && aTokenEnum.getNextToken( aToken ) )
@@ -171,7 +171,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                     {
                         bOK = false;
                     }
-                    else if( -1 != aToken.indexOf( '%' ) )
+                    else if( std::u16string_view::npos != aToken.find( '%' ) )
                     {
                         sal_Int32 nPrc = 50;
                         if (::sax::Converter::convertPercent( nPrc, aToken ))

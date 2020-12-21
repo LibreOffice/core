@@ -542,7 +542,7 @@ bool XMLFrameProtectPropHdl_Impl::importXML(
     {
         bRet = false;
         SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
-        OUString aToken;
+        std::u16string_view aToken;
         while( aTokenEnum.getNextToken( aToken ) )
         {
             bRet = true;
@@ -768,7 +768,7 @@ bool XMLGrfMirrorPropHdl_Impl::importXML(
     {
         bRet = false;
         SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
-        OUString aToken;
+        std::u16string_view aToken;
         while( aTokenEnum.getNextToken( aToken ) )
         {
             bRet = true;
@@ -860,7 +860,7 @@ bool XMLTextEmphasizePropHdl_Impl::importXML(
     sal_uInt16 nVal = FontEmphasis::NONE;
     bool bBelow = false;
     bool bHasPos = false, bHasType = false;
-    OUString aToken;
+    std::u16string_view aToken;
 
     SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
     while( aTokenEnum.getNextToken( aToken ) )

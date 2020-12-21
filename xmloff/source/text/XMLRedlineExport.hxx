@@ -158,7 +158,7 @@ private:
         const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     /// write a comment string as sequence of <text:p> elements
-    void WriteComment(const OUString& rComment);
+    void WriteComment(std::u16string_view rComment);
 };
 
 #endif

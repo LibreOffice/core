@@ -57,7 +57,7 @@ bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue, uno
     style::GraphicLocation ePos = style::GraphicLocation_NONE, eTmp;
     style::GraphicLocation nTmpGraphicLocation;
     SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
-    OUString aToken;
+    std::u16string_view aToken;
     bool bHori = false, bVert = false;
 
     while( bRet && aTokenEnum.getNextToken( aToken ) )
@@ -66,7 +66,7 @@ bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue, uno
         {
             bRet = false;
         }
-        else if( -1 != aToken.indexOf( '%' ) )
+        else if( std::u16string_view::npos != aToken.find( '%' ) )
         {
             sal_Int32 nPrc = 50;
             if (::sax::Converter::convertPercent( nPrc, aToken ))
