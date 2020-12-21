@@ -190,6 +190,9 @@
                     <accessibility>
                       <relation type="labelled-by" target="lbBuild"/>
                     </accessibility>
+                    <style>
+                      <class name="small-button"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
