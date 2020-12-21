@@ -33,7 +33,7 @@ class SwXMLTextBlocks;
 class SwXMLBlockListImport : public SvXMLImport
 {
 private:
-    SwXMLTextBlocks &rBlockList;
+    SwXMLTextBlocks &m_rBlockList;
 
 protected:
     // This method is called after the namespace map has been updated, but
@@ -48,7 +48,7 @@ public:
 
     SwXMLTextBlocks& getBlockList()
     {
-        return rBlockList;
+        return m_rBlockList;
     }
     virtual ~SwXMLBlockListImport()
         throw() override;
@@ -63,7 +63,7 @@ protected:
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
 public:
-    bool bTextOnly;
+    bool m_bTextOnly;
     OUString &m_rText;
     SwXMLTextBlockImport(
         const css::uno::Reference< css::uno::XComponentContext >& rContext,

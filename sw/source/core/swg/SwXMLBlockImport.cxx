@@ -92,7 +92,7 @@ public:
 class SwXMLTextBlockTextContext : public SvXMLImportContext
 {
 private:
-    SwXMLTextBlockImport & rLocalRef;
+    SwXMLTextBlockImport& m_rLocalRef;
 
 public:
     SwXMLTextBlockTextContext( SwXMLTextBlockImport& rImport );
@@ -105,7 +105,7 @@ public:
 class SwXMLTextBlockParContext : public SvXMLImportContext
 {
 private:
-    SwXMLTextBlockImport & rLocalRef;
+    SwXMLTextBlockImport& m_rLocalRef;
 
 public:
     SwXMLTextBlockParContext( SwXMLTextBlockImport & rImport );
@@ -230,10 +230,9 @@ SwXMLTextBlockDocumentContext::createFastChildContext( sal_Int32 Element,
     return nullptr;
 }
 
-SwXMLTextBlockTextContext::SwXMLTextBlockTextContext(
-    SwXMLTextBlockImport& rImport) :
-    SvXMLImportContext ( rImport ),
-    rLocalRef( rImport )
+SwXMLTextBlockTextContext::SwXMLTextBlockTextContext(SwXMLTextBlockImport& rImport)
+    : SvXMLImportContext(rImport)
+    , m_rLocalRef(rImport)
 {
 }
 
@@ -242,7 +241,7 @@ SwXMLTextBlockTextContext::createFastChildContext( sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
     if ( Element == SwXMLTextBlockToken::TEXT_P )
-        return new SwXMLTextBlockParContext( rLocalRef );
+        return new SwXMLTextBlockParContext(m_rLocalRef);
     return nullptr;
 }
 
@@ -263,26 +262,25 @@ SwXMLTextBlockBodyContext::createFastChildContext( sal_Int32 Element,
     return nullptr;
 }
 
-SwXMLTextBlockParContext::SwXMLTextBlockParContext(
-    SwXMLTextBlockImport& rImport ) :
-    SvXMLImportContext( rImport ),
-    rLocalRef( rImport )
+SwXMLTextBlockParContext::SwXMLTextBlockParContext(SwXMLTextBlockImport& rImport)
+    : SvXMLImportContext(rImport)
+    , m_rLocalRef(rImport)
 {
 }
 
 void SAL_CALL SwXMLTextBlockParContext::characters( const OUString & aChars )
 {
-    rLocalRef.m_rText += aChars;
+    m_rLocalRef.m_rText += aChars;
 }
 
 SwXMLTextBlockParContext::~SwXMLTextBlockParContext()
 {
-    if (rLocalRef.bTextOnly)
-        rLocalRef.m_rText += "\015";
+    if (m_rLocalRef.m_bTextOnly)
+        m_rLocalRef.m_rText += "\015";
     else
     {
-        if (!rLocalRef.m_rText.endsWith( " " ))
-            rLocalRef.m_rText += " ";
+        if (!m_rLocalRef.m_rText.endsWith(" "))
+            m_rLocalRef.m_rText += " ";
     }
 }
 
@@ -291,7 +289,7 @@ SwXMLBlockListImport::SwXMLBlockListImport(
     const uno::Reference< uno::XComponentContext >& rContext,
     SwXMLTextBlocks &rBlocks )
 :   SvXMLImport( rContext, "", SvXMLImportFlags::NONE ),
-    rBlockList (rBlocks)
+    m_rBlockList (rBlocks)
 {
 }
 
@@ -313,7 +311,7 @@ SwXMLTextBlockImport::SwXMLTextBlockImport(
     OUString & rNewText,
     bool bNewTextOnly )
 :   SvXMLImport(rContext, "", SvXMLImportFlags::ALL ),
-    bTextOnly ( bNewTextOnly ),
+    m_bTextOnly ( bNewTextOnly ),
     m_rText ( rNewText )
 {
 }
