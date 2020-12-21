@@ -2489,6 +2489,15 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
             break;
 
         case SwComparePosition::CollideEnd:
+            // remove (not hidden) empty redlines created for fixing tdf#119571
+            // (Note: hidden redlines are all empty, i.e. start and end are equal.)
+            if ( pRedl->HasMark() && *pRedl->GetMark() == *pRedl->GetPoint() )
+            {
+                mpRedlineTable->Remove( n );
+                delete pRedl;
+            }
+            [[fallthrough]];
+
         case SwComparePosition::Before:
             n = mpRedlineTable->size();
             break;
