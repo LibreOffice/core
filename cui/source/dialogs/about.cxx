@@ -122,9 +122,10 @@ AboutDialog::AboutDialog(weld::Window *pParent)
   localizeWebserviceURI(sURL);
   m_pWebsiteButton->set_uri(sURL);
 
+  // See also SID_WHATSNEW in sfx2/source/appl/appserv.cxx
   sURL = officecfg::Office::Common::Menus::ReleaseNotesURL::get() +
          "?LOvers=" + utl::ConfigManager::getProductVersion() + "&LOlocale=" +
-         LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
+         LanguageTag(utl::ConfigManager::getUILocale()).getBcp47();
   m_pReleaseNotesButton->set_uri(sURL);
 
   // Handler
