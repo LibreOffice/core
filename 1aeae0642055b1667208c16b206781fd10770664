@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec55b4e8_4044936b",
+        "filename": "svx/source/sdr/contact/viewcontactofgraphic.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-12-22T12:38:25Z",
+      "side": 1,
+      "message": "Are you sure? The original version results in 0.0 for fShearX in case nShearAngle\u003d\u003d0, but your version results in -1.1331077795296e-15. If a matrix is build from that, you get the unit matrix in the original version and some different matrix in the new version.",
+      "revId": "1aeae0642055b1667208c16b206781fd10770664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
