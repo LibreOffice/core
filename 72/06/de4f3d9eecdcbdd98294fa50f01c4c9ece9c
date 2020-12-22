@@ -1,0 +1,8 @@
+Verified+1: Jenkins
+Code-Review+2: Thorsten Behrens <Thorsten.Behrens@CIB.de>
+Code-Review+1: Heiko Tietze <heiko.tietze@documentfoundation.org>
+Submitted-by: Thorsten Behrens <Thorsten.Behrens@CIB.de>
+Submitted-at: Wed, 23 Dec 2020 00:19:13 +0100
+Reviewed-on: https://gerrit.libreoffice.org/c/core/+/105758
+Project: core
+Branch: refs/heads/master
