@@ -1266,7 +1266,6 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nF
 
     vcl::Font aFont = pImpVclMEdit->GetTextWindow()->GetDrawPixelFont(pDev);
     aFont.SetTransparent( true );
-    OutDevType eOutDevType = pDev->GetOutDevType();
 
     pDev->Push();
     pDev->SetMapMode();
@@ -1294,8 +1293,10 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nF
     }
 
     // contents
-    if ( ( nFlags & DrawFlags::Mono ) || ( eOutDevType == OUTDEV_PRINTER ) )
-        pDev->SetTextColor( COL_BLACK );
+    if (nFlags & DrawFlags::Mono)
+    {
+        pDev->SetTextColor(COL_BLACK);
+    }
     else
     {
         if ( !IsEnabled() )
