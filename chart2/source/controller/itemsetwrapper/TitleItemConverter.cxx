@@ -169,7 +169,7 @@ bool TitleItemConverter::ApplySpecialItem(
             // convert int to double (divided by 100)
             double fVal = static_cast< double >(
                 static_cast< const SdrAngleItem & >(
-                    rItemSet.Get( nWhichId )).GetValue()) / 100.0;
+                    rItemSet.Get( nWhichId )).GetValue().get()) / 100.0;
             double fOldVal = 0.0;
             bool bPropExisted =
                 ( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fOldVal );
@@ -198,8 +198,8 @@ void TitleItemConverter::FillSpecialItem(
 
             if( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fVal )
             {
-                rOutItemSet.Put( SdrAngleItem( nWhichId, static_cast< sal_Int32 >(
-                                                   ::rtl::math::round( fVal * 100.0 ) ) ));
+                rOutItemSet.Put( SdrAngleItem( nWhichId, Degree100(static_cast< sal_Int32 >(
+                                                   ::rtl::math::round( fVal * 100.0 ) ) )));
             }
         }
         break;

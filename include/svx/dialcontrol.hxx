@@ -24,6 +24,7 @@
 #include <vcl/customweld.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/svdtrans.hxx>
 
 class Edit;
 
@@ -40,7 +41,7 @@ public:
     void                CopyBackground( const DialControlBmp& rSrc );
     void                DrawBackground( const Size& rSize, bool bEnabled );
     void                DrawBackground();
-    void                DrawElements( const OUString& rText, sal_Int32 nAngle );
+    void                DrawElements( const OUString& rText, Degree100 nAngle );
     Color               GetBackgroundColor() const override;
 
 private:
@@ -90,9 +91,9 @@ public:
     virtual void        Resize() override;
 
     /** Returns the current rotation angle in 1/100 degrees. */
-    sal_Int32           GetRotation() const;
+    Degree100           GetRotation() const;
     /** Sets the rotation to the passed value (in 1/100 degrees). */
-    void                SetRotation( sal_Int32 nAngle );
+    void                SetRotation( Degree100 nAngle );
     /** Returns true, if the control is not in "don't care" state. */
     bool                HasRotation() const;
     /** Sets the control to "don't care" state. */
@@ -138,9 +139,9 @@ private:
         sal_Int32           mnLinkedFieldValueMultiplyer;
         Size                maWinSize;
         vcl::Font           maWinFont;
-        sal_Int32           mnAngle;
-        sal_Int32           mnInitialAngle;
-        sal_Int32           mnOldAngle;
+        Degree100           mnAngle;
+        Degree100           mnInitialAngle;
+        Degree100           mnOldAngle;
         tools::Long                mnCenterX;
         tools::Long                mnCenterY;
         bool                mbNoRot;
@@ -154,7 +155,7 @@ private:
     void                HandleMouseEvent( const Point& rPos, bool bInitial );
     void                HandleEscapeEvent();
 
-    void                SetRotation( sal_Int32 nAngle, bool bBroadcast );
+    void                SetRotation( Degree100 nAngle, bool bBroadcast );
 
     void                Init( const Size& rWinSize, const vcl::Font& rWinFont );
 

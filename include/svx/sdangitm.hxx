@@ -21,12 +21,13 @@
 
 #include <svl/intitem.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/degree.hxx>
 
 
 
 class SVXCORE_DLLPUBLIC SdrAngleItem: public SfxInt32Item {
 public:
-    SdrAngleItem(sal_uInt16 nId, sal_Int32 nAngle): SfxInt32Item(nId,nAngle) {}
+    SdrAngleItem(sal_uInt16 nId, Degree100 nAngle): SfxInt32Item(nId,nAngle.get()) {}
     virtual SdrAngleItem* Clone(SfxItemPool* pPool=nullptr) const override;
 
     virtual bool GetPresentation(SfxItemPresentation ePres,
@@ -34,6 +35,9 @@ public:
                                  MapUnit ePresMetric,
                                  OUString& rText,
                                  const IntlWrapper& rIntlWrapper) const override;
+
+    Degree100 GetValue() const { return Degree100(SfxInt32Item::GetValue()); }
+    void SetValue(Degree100 nTheValue) { SfxInt32Item::SetValue(nTheValue.get()); }
 };
 
 

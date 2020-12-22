@@ -118,16 +118,16 @@ double ConversionHelper::decodePercent( const OUString& rValue, double fDefValue
     return fDefValue;
 }
 
-sal_Int32 ConversionHelper::decodeRotation( const OUString& rValue )
+Degree100 ConversionHelper::decodeRotation( const OUString& rValue )
 {
     if( rValue.isEmpty() )
-        return 0;
+        return 0_deg100;
 
     double fValue = 0.0;
     double fRotation = 0.0;
     sal_Int32 nEndPos = 0;
     if( !lclExtractDouble(fValue, nEndPos, rValue) )
-        return 0;
+        return 0_deg100;
 
     if( nEndPos == rValue.getLength() )
         fRotation = fValue;
@@ -136,10 +136,10 @@ sal_Int32 ConversionHelper::decodeRotation( const OUString& rValue )
     else
     {
         OSL_FAIL("ConversionHelper::decodeRotation - unknown measure unit");
-        return 0;
+        return 0_deg100;
     }
 
-    return NormAngle36000(fRotation * -100);
+    return NormAngle36000(Degree100(static_cast<sal_Int32>(fRotation * -100)));
 }
 
 sal_Int64 ConversionHelper::decodeMeasureToEmu( const GraphicHelper& rGraphicHelper,

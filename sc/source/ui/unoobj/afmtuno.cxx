@@ -594,11 +594,11 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
                             break;
                             case table::CellOrientation_TOPBOTTOM:
                                 pData->PutItem( nFieldIndex, ScVerticalStackCell( false ) );
-                                pData->PutItem( nFieldIndex, ScRotateValueItem( 27000 ) );
+                                pData->PutItem( nFieldIndex, ScRotateValueItem( 27000_deg100 ) );
                             break;
                             case table::CellOrientation_BOTTOMTOP:
                                 pData->PutItem( nFieldIndex, ScVerticalStackCell( false ) );
-                                pData->PutItem( nFieldIndex, ScRotateValueItem( 9000 ) );
+                                pData->PutItem( nFieldIndex, ScRotateValueItem( 9000_deg100 ) );
                             break;
                             case table::CellOrientation_STACKED:
                                 pData->PutItem( nFieldIndex, ScVerticalStackCell( true ) );
@@ -684,7 +684,7 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const OUString& aPrope
                     case ATTR_STACKED:
                     {
                         const ScRotateValueItem* pRotItem = pData->GetItem( nFieldIndex, ATTR_ROTATE_VALUE );
-                        sal_Int32 nRot = pRotItem ? pRotItem->GetValue() : 0;
+                        Degree100 nRot = pRotItem ? pRotItem->GetValue() : 0_deg100;
                         bool bStacked = static_cast<const ScVerticalStackCell*>(pItem)->GetValue();
                         SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( aVal );
                     }

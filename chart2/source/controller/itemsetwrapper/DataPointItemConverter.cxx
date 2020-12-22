@@ -550,7 +550,7 @@ bool DataPointItemConverter::ApplySpecialItem(
         {
             double fValue = static_cast< double >(
                 static_cast< const SdrAngleItem & >(
-                    rItemSet.Get( nWhichId )).GetValue()) / 100.0;
+                    rItemSet.Get( nWhichId )).GetValue().get()) / 100.0;
             double fOldValue = 0.0;
             bool bPropExisted =
                 ( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fOldValue );
@@ -800,8 +800,8 @@ void DataPointItemConverter::FillSpecialItem(
 
             if( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fValue )
             {
-                rOutItemSet.Put( SdrAngleItem( nWhichId, static_cast< sal_Int32 >(
-                                                   ::rtl::math::round( fValue * 100.0 ) ) ));
+                rOutItemSet.Put( SdrAngleItem( nWhichId, Degree100(static_cast< sal_Int32 >(
+                                                   ::rtl::math::round( fValue * 100.0 ) ) )));
             }
         }
         break;

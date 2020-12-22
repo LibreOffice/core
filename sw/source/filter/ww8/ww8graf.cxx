@@ -415,8 +415,8 @@ SdrObject* SwWW8ImplReader::ReadArc(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet)
         *m_pDrawModel,
         SdrCircKind::Section,
         tools::Rectangle(aP0, aP1),
-        nW * 9000,
-        ( ( nW + 1 ) & 3 ) * 9000);
+        Degree100(nW * 9000),
+        Degree100(( ( nW + 1 ) & 3 ) * 9000));
 
     SetStdAttr( rSet, aArc.aLnt, aArc.aShd );
     SetFill( rSet, aArc.aFill );

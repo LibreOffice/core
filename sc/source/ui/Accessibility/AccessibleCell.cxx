@@ -190,7 +190,7 @@ tools::Rectangle ScAccessibleCell::GetBoundingBox() const
         if (mpDoc)
         {
             const ScRotateValueItem* pItem = mpDoc->GetAttr( maCellAddress, ATTR_ROTATE_VALUE );
-            if( pItem && (pItem->GetValue() != 0) )
+            if( pItem && (pItem->GetValue() != 0_deg100) )
             {
                 tools::Rectangle aParaRect = GetParagraphBoundingBox();
                 if( !aParaRect.IsEmpty() && (aCellRect.GetWidth() < aParaRect.GetWidth()) )

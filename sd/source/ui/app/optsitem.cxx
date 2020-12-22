@@ -799,8 +799,8 @@ bool SdOptionsSnap::ReadData( const Any* pValues )
     if( pValues[5].hasValue() ) SetBigOrtho( *o3tl::doAccess<bool>(pValues[ 5 ]) );
     if( pValues[6].hasValue() ) SetRotate( *o3tl::doAccess<bool>(pValues[ 6 ]) );
     if( pValues[7].hasValue() ) SetSnapArea( static_cast<sal_Int16>(*o3tl::doAccess<sal_Int32>(pValues[ 7 ])) );
-    if( pValues[8].hasValue() ) SetAngle( Degree10(*o3tl::doAccess<sal_Int32>(pValues[ 8 ])) );
-    if( pValues[9].hasValue() ) SetEliminatePolyPointLimitAngle( Degree10(*o3tl::doAccess<sal_Int32>(pValues[ 9 ])) );
+    if( pValues[8].hasValue() ) SetAngle( Degree100(*o3tl::doAccess<sal_Int32>(pValues[ 8 ])) );
+    if( pValues[9].hasValue() ) SetEliminatePolyPointLimitAngle( Degree100(*o3tl::doAccess<sal_Int32>(pValues[ 9 ])) );
 
     return true;
 }
@@ -847,8 +847,8 @@ SdOptionsSnapItem::SdOptionsSnapItem( SdOptions const * pOpts, ::sd::FrameView c
         maOptionsSnap.SetBigOrtho( pView->IsBigOrtho() );
         maOptionsSnap.SetRotate( pView->IsAngleSnapEnabled() );
         maOptionsSnap.SetSnapArea( pView->GetSnapMagneticPixel() );
-        maOptionsSnap.SetAngle( Degree10(pView->GetSnapAngle() / 10) );
-        maOptionsSnap.SetEliminatePolyPointLimitAngle( Degree10(pView->GetEliminatePolyPointLimitAngle() / 10) );
+        maOptionsSnap.SetAngle( pView->GetSnapAngle() );
+        maOptionsSnap.SetEliminatePolyPointLimitAngle( pView->GetEliminatePolyPointLimitAngle() );
     }
     else if( pOpts )
     {

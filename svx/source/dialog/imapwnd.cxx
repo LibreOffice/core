@@ -210,8 +210,8 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
                     *pModel,
                     SdrCircKind::Full,
                     aCircle,
-                    0,
-                    36000);
+                    0_deg100,
+                    36000_deg100);
             pCloneIMapObj.reset(static_cast<IMapObject*>(new IMapCircleObject( *pIMapCircleObj )));
         }
         break;
@@ -232,8 +232,8 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
                         *pModel,
                         SdrCircKind::Full,
                         aDrawRect,
-                        0,
-                        36000);
+                        0_deg100,
+                        36000_deg100);
             }
             else
             {

@@ -94,7 +94,7 @@ bool SchAlignmentTabPage::FillItemSet(SfxItemSet* rOutAttrs)
     bool bStacked = m_xCbStacked->get_active();
     rOutAttrs->Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bStacked ) );
 
-    sal_Int32 nDegrees = bStacked ? 0 : m_xCtrlDial->GetRotation();
+    Degree100 nDegrees = bStacked ? 0_deg100 : m_xCtrlDial->GetRotation();
     rOutAttrs->Put( SdrAngleItem( SCHATTR_TEXT_DEGREES, nDegrees ) );
 
     SvxFrameDirection aDirection( m_xLbTextDirection->get_active_id() );
@@ -107,7 +107,7 @@ void SchAlignmentTabPage::Reset(const SfxItemSet* rInAttrs)
 {
     const SfxPoolItem* pItem = GetItem( *rInAttrs, SCHATTR_TEXT_DEGREES );
 
-    sal_Int32 nDegrees = pItem ? static_cast<const SdrAngleItem*>(pItem)->GetValue() : 0;
+    Degree100 nDegrees = pItem ? static_cast<const SdrAngleItem*>(pItem)->GetValue() : 0_deg100;
     m_xCtrlDial->SetRotation( nDegrees );
 
     pItem = GetItem( *rInAttrs, SCHATTR_TEXT_STACKED );

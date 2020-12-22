@@ -211,7 +211,7 @@ tools::Long ScColumn::GetNeededSize(
     if ( bWidth && bBreak )     // after determining bAsianVertical (bBreak may be reset)
         return 0;
 
-    tools::Long nRotate = 0;
+    Degree100 nRotate(0);
     SvxRotateMode eRotMode = SVX_ROTATE_MODE_STANDARD;
     if ( eOrient == SvxCellOrientation::Standard )
     {
@@ -228,7 +228,7 @@ tools::Long ScColumn::GetNeededSize(
             else
                 eRotMode = pPattern->GetItem(ATTR_ROTATE_MODE).GetValue();
 
-            if ( nRotate == 18000 )
+            if ( nRotate == 18000_deg100 )
                 eRotMode = SVX_ROTATE_MODE_STANDARD;    // no overflow
         }
     }
@@ -237,7 +237,7 @@ tools::Long ScColumn::GetNeededSize(
     {
         // ignore orientation/rotation if "repeat" is active
         eOrient = SvxCellOrientation::Standard;
-        nRotate = 0;
+        nRotate = 0_deg100;
         bAsianVertical = false;
     }
 
@@ -301,7 +301,7 @@ tools::Long ScColumn::GetNeededSize(
             {
                 //TODO: take different X/Y scaling into consideration
 
-                double nRealOrient = nRotate * F_PI18000;   // nRotate is in 1/100 Grad
+                double nRealOrient = nRotate.get() * F_PI18000;   // nRotate is in 1/100 Grad
                 double nCosAbs = fabs( cos( nRealOrient ) );
                 double nSinAbs = fabs( sin( nRealOrient ) );
                 tools::Long nHeight = static_cast<tools::Long>( aSize.Height() * nCosAbs + aSize.Width() * nSinAbs );
@@ -482,7 +482,7 @@ tools::Long ScColumn::GetNeededSize(
             //TODO: take different X/Y scaling into consideration
 
             Size aSize( pEngine->CalcTextWidth(), pEngine->GetTextHeight() );
-            double nRealOrient = nRotate * F_PI18000;   // nRotate is in 1/100 Grad
+            double nRealOrient = nRotate.get() * F_PI18000;   // nRotate is in 1/100 Grad
             double nCosAbs = fabs( cos( nRealOrient ) );
             double nSinAbs = fabs( sin( nRealOrient ) );
             tools::Long nHeight = static_cast<tools::Long>( aSize.Height() * nCosAbs + aSize.Width() * nSinAbs );

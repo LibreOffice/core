@@ -288,7 +288,7 @@ private:
 class SC_DLLPUBLIC ScRotateValueItem final : public SdrAngleItem
 {
 public:
-    ScRotateValueItem(sal_Int32 nAngle);
+    ScRotateValueItem(Degree100 nAngle);
     virtual ScRotateValueItem* Clone(SfxItemPool* pPool=nullptr) const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePresentation,
