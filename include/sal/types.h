@@ -387,6 +387,19 @@ namespace css = ::com::sun::star;
 #define SAL_OVERRIDE
 #endif
 
+/** C++11 "constexpr" feature.
+
+    For LIBO_INTERNAL_ONLY, declare that it's possible to evaluate the value
+    at compile time.
+
+    @since LibreOffice 7.2
+*/
+#if defined LIBO_INTERNAL_ONLY
+#define SAL_CONSTEXPR constexpr
+#else
+#define SAL_CONSTEXPR
+#endif
+
 #endif /* __cplusplus */
 
 #ifdef __cplusplus
