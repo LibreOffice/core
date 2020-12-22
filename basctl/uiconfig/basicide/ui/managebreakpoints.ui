@@ -129,31 +129,74 @@
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
-              <object class="GtkAlignment" id="alignment1">
+              <!-- n-columns=1 n-rows=1 -->
+              <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="top_padding">6</property>
-                <property name="left_padding">12</property>
+                <property name="row_spacing">6</property>
+                <property name="margin-start">12</property>
+                <property name="margin-top">6</property>
+                <child>
+                  <object class="GtkCheckButton" id="active">
+                    <property name="label" translatable="yes" context="managebreakpoints|active">Active</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="active-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="managebreakpoints|extended_tip|active">Activates or deactivates the current breakpoint.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
                 <child>
                   <!-- n-columns=1 n-rows=1 -->
-                  <object class="GtkGrid" id="grid1">
+                  <object class="GtkGrid" id="entriesgrid">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="row_spacing">3</property>
                     <child>
-                      <object class="GtkCheckButton" id="active">
-                        <property name="label" translatable="yes" context="managebreakpoints|active">Active</property>
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="active-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="managebreakpoints|extended_tip|active">Activates or deactivates the current breakpoint.</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkTreeView" id="entrieslist">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="model">liststore1</property>
+                            <property name="headers_visible">False</property>
+                            <property name="headers_clickable">False</property>
+                            <property name="search_column">0</property>
+                            <property name="show_expanders">False</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="treeview-selection1"/>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -163,68 +206,15 @@
                       </packing>
                     </child>
                     <child>
-                      <!-- n-columns=1 n-rows=1 -->
-                      <object class="GtkGrid" id="entriesgrid">
+                      <object class="GtkEntry" id="entries">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="row_spacing">3</property>
-                        <child>
-                          <object class="GtkScrolledWindow">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
-                            <property name="shadow_type">in</property>
-                            <child>
-                              <object class="GtkTreeView" id="entrieslist">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
-                                <property name="model">liststore1</property>
-                                <property name="headers_visible">False</property>
-                                <property name="headers_clickable">False</property>
-                                <property name="search_column">0</property>
-                                <property name="show_expanders">False</property>
-                                <child internal-child="selection">
-                                  <object class="GtkTreeSelection" id="treeview-selection1"/>
-                                </child>
-                                <child>
-                                  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                                    <child>
-                                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                                      <attributes>
-                                        <attribute name="text">0</attribute>
-                                      </attributes>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
+                        <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="entries-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="managebreakpoints|extended_tip|entries">Enter the line number for a new breakpoint, then click New.</property>
                           </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="entries">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="activates_default">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="entries-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="managebreakpoints|extended_tip|entries">Enter the line number for a new breakpoint, then click New.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
                         </child>
                       </object>
                       <packing>
@@ -232,48 +222,52 @@
                         <property name="top_attach">0</property>
                       </packing>
                     </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <!-- n-columns=1 n-rows=1 -->
+                  <object class="GtkGrid" id="grid2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="column_spacing">12</property>
                     <child>
-                      <!-- n-columns=1 n-rows=1 -->
-                      <object class="GtkGrid" id="grid2">
+                      <object class="GtkSpinButton" id="pass">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="column_spacing">12</property>
-                        <child>
-                          <object class="GtkSpinButton" id="pass">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="activates_default">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="pass-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="managebreakpoints|extended_tip|pass">Specify the number of loops to perform before the breakpoint takes effect.</property>
-                              </object>
-                            </child>
+                        <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="pass-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="managebreakpoints|extended_tip|pass">Specify the number of loops to perform before the breakpoint takes effect.</property>
                           </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label2">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="managebreakpoints|label2">Pass count:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">pass</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
                         </child>
                       </object>
                       <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="managebreakpoints|label2">Pass count:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">pass</property>
+                      </object>
+                      <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
+                        <property name="top_attach">0</property>
                       </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
                 </child>
               </object>
             </child>
