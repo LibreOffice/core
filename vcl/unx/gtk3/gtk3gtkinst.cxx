@@ -1765,8 +1765,8 @@ namespace
         if (GTK_IS_GRID(pParent))
         {
             gtk_container_child_get(GTK_CONTAINER(pParent), pWidget,
-                    "left-attach", &nTopAttach,
-                    "top-attach", &nLeftAttach,
+                    "left-attach", &nLeftAttach,
+                    "top-attach", &nTopAttach,
                     "width", &nWidth,
                     "height", &nHeight,
                     nullptr);
