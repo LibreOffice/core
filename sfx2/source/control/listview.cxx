@@ -11,7 +11,7 @@
 
 #include <sfx2/sfxresid.hxx>
 #include <tools/urlobj.hxx>
-
+#include <tools/datetime.hxx>
 #include <sfx2/strings.hrc>
 #include <osl/file.hxx>
 #include <osl/time.h>
@@ -55,7 +55,6 @@ ListView::ListView(std::unique_ptr<weld::TreeView> xTreeView)
     aWidths.push_back(static_cast<int>(nDigitWidth * 22)); /* Category Column */
     aWidths.push_back(static_cast<int>(nDigitWidth * 15)); /* Application Column */
     aWidths.push_back(static_cast<int>(nDigitWidth * 18)); /* Modify Column */
-    aWidths.push_back(static_cast<int>(nDigitWidth * 10)); /* Size Column */
 
     mxTreeView->set_column_fixed_widths(aWidths);
     mxTreeView->set_selection_mode(SelectionMode::Multiple);
@@ -346,23 +345,13 @@ static OUString getDisplayFileModifyTime(const OUString& rURL)
     if (systemTimeValue.Seconds == 0)
         return OUString();
     TimeValue localTimeValue;
-    oslDateTime dateTime;
     osl_getLocalTimeFromSystemTime(&systemTimeValue, &localTimeValue);
-    osl_getDateTimeFromTimeValue(&localTimeValue, &dateTime);
-
-    struct tm tm;
-    tm.tm_sec = dateTime.Seconds;
-    tm.tm_min = dateTime.Minutes;
-    tm.tm_hour = dateTime.Hours;
-    tm.tm_mday = dateTime.Day;
-    tm.tm_mon = dateTime.Month - 1;
-    tm.tm_year = dateTime.Year - 1900;
-    char ts[50];
-    for (char& c : ts)
-        c = ' ';
-    strftime(ts, sizeof(ts), "%x %X", &tm);
-    OUString sModifyTime(ts, sizeof(ts), RTL_TEXTENCODING_UTF8);
-    return sModifyTime.trim();
+    const SvtSysLocale aSysLocale;
+    const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
+    DateTime aDateTime = DateTime::CreateFromUnixTime(localTimeValue.Seconds);
+    OUString aDisplayDateTime
+        = rLocaleWrapper.getDate(aDateTime) + ", " + rLocaleWrapper.getTime(aDateTime, false);
+    return aDisplayDateTime;
 }
 
 static OUString getDisplayFileSize(const OUString& rURL)
