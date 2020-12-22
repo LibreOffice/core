@@ -73,7 +73,7 @@ namespace sdr::contact
 
                     if(rGeoStat.nRotationAngle)
                     {
-                        aRotMatrix.rotate((36000 - rGeoStat.nRotationAngle) * F_PI18000);
+                        aRotMatrix.rotate((36000 - rGeoStat.nRotationAngle.get()) * F_PI18000);
                     }
 
                     aRotMatrix.translate(aObjectRange.getMinimum().getX(), aObjectRange.getMinimum().getY());
@@ -202,7 +202,7 @@ namespace sdr::contact
 
                         if(rGeoStat.nRotationAngle)
                         {
-                            aTextBoxMatrix.rotate((36000 - rGeoStat.nRotationAngle) * F_PI18000);
+                            aTextBoxMatrix.rotate((36000 - rGeoStat.nRotationAngle.get()) * F_PI18000);
                         }
 
                         // give text it's target position

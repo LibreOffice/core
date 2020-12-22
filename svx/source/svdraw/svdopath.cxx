@@ -239,8 +239,8 @@ struct ImpPathCreateUser  : public SdrDragStatUserData
     Point                   aRectP2;
     Point                   aRectP3;
     tools::Long                    nCircRadius;
-    tools::Long                    nCircStAngle;
-    tools::Long                    nCircRelAngle;
+    Degree100               nCircStAngle;
+    Degree100               nCircRelAngle;
     bool                    bBezier;
     bool                    bBezHasCtrl0;
     bool                    bCircle;
@@ -308,40 +308,40 @@ XPolygon ImpPathCreateUser::GetBezierPoly() const
 
 void ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Point& rDir, SdrView const * pView)
 {
-    tools::Long nTangAngle=GetAngle(rDir);
+    Degree100 nTangAngle=GetAngle(rDir);
     aCircStart=rP1;
     aCircEnd=rP2;
     aCircCenter=rP1;
     tools::Long dx=rP2.X()-rP1.X();
     tools::Long dy=rP2.Y()-rP1.Y();
-    tools::Long dAngle=GetAngle(Point(dx,dy))-nTangAngle;
+    Degree100 dAngle=GetAngle(Point(dx,dy))-nTangAngle;
     dAngle=NormAngle36000(dAngle);
-    tools::Long nTmpAngle=NormAngle36000(9000-dAngle);
-    bool bRet=nTmpAngle!=9000 && nTmpAngle!=27000;
+    Degree100 nTmpAngle=NormAngle36000(9000_deg100-dAngle);
+    bool bRet=nTmpAngle!=9000_deg100 && nTmpAngle!=27000_deg100;
     tools::Long nRad=0;
     if (bRet) {
-        double cs = cos(nTmpAngle * F_PI18000);
+        double cs = cos(nTmpAngle.get() * F_PI18000);
         double nR=static_cast<double>(GetLen(Point(dx,dy)))/cs/2;
         nRad=std::abs(FRound(nR));
     }
-    if (dAngle<18000) {
-        nCircStAngle=NormAngle36000(nTangAngle-9000);
-        nCircRelAngle=NormAngle36000(2*dAngle);
-        aCircCenter.AdjustX(FRound(nRad * cos((nTangAngle + 9000) * F_PI18000)));
-        aCircCenter.AdjustY(-(FRound(nRad * sin((nTangAngle + 9000) * F_PI18000))));
+    if (dAngle<18000_deg100) {
+        nCircStAngle=NormAngle36000(nTangAngle-9000_deg100);
+        nCircRelAngle=NormAngle36000(2_deg100*dAngle);
+        aCircCenter.AdjustX(FRound(nRad * cos((nTangAngle.get() + 9000) * F_PI18000)));
+        aCircCenter.AdjustY(-(FRound(nRad * sin((nTangAngle.get() + 9000) * F_PI18000))));
     } else {
-        nCircStAngle=NormAngle36000(nTangAngle+9000);
-        nCircRelAngle=-NormAngle36000(36000-2*dAngle);
-        aCircCenter.AdjustX(FRound(nRad * cos((nTangAngle - 9000) * F_PI18000)));
-        aCircCenter.AdjustY(-(FRound(nRad * sin((nTangAngle - 9000) * F_PI18000))));
+        nCircStAngle=NormAngle36000(nTangAngle+9000_deg100);
+        nCircRelAngle=-NormAngle36000(36000_deg100-2_deg100*dAngle);
+        aCircCenter.AdjustX(FRound(nRad * cos((nTangAngle.get() - 9000) * F_PI18000)));
+        aCircCenter.AdjustY(-(FRound(nRad * sin((nTangAngle.get() - 9000) * F_PI18000))));
     }
     bAngleSnap=pView!=nullptr && pView->IsAngleSnapEnabled();
     if (bAngleSnap) {
-        tools::Long nSA=pView->GetSnapAngle();
-        if (nSA!=0) { // angle snapping
-            bool bNeg=nCircRelAngle<0;
+        Degree100 nSA=pView->GetSnapAngle();
+        if (nSA) { // angle snapping
+            bool bNeg=nCircRelAngle<0_deg100;
             if (bNeg) nCircRelAngle=-nCircRelAngle;
-            nCircRelAngle+=nSA/2;
+            nCircRelAngle+=nSA/2_deg100;
             nCircRelAngle/=nSA;
             nCircRelAngle*=nSA;
             nCircRelAngle=NormAngle36000(nCircRelAngle);
@@ -349,21 +349,21 @@ void ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Poi
         }
     }
     nCircRadius=nRad;
-    if (nRad==0 || std::abs(nCircRelAngle)<5) bRet=false;
+    if (nRad==0 || abs(nCircRelAngle).get()<5) bRet=false;
     bCircle=bRet;
 }
 
 XPolygon ImpPathCreateUser::GetCirclePoly() const
 {
-    if (nCircRelAngle>=0) {
+    if (nCircRelAngle>=0_deg100) {
         XPolygon aXP(aCircCenter,nCircRadius,nCircRadius,
-                     sal_uInt16((nCircStAngle+5)/10),sal_uInt16((nCircStAngle+nCircRelAngle+5)/10),false);
+                     sal_uInt16((nCircStAngle.get()+5)/10),sal_uInt16((nCircStAngle+nCircRelAngle+5_deg100).get()/10),false);
         aXP[0]=aCircStart; aXP.SetFlags(0,PolyFlags::Smooth);
         if (!bAngleSnap) aXP[aXP.GetPointCount()-1]=aCircEnd;
         return aXP;
     } else {
         XPolygon aXP(aCircCenter,nCircRadius,nCircRadius,
-                     sal_uInt16(NormAngle36000(nCircStAngle+nCircRelAngle+5)/10),sal_uInt16((nCircStAngle+5)/10),false);
+                     sal_uInt16(NormAngle36000(nCircStAngle+nCircRelAngle+5_deg100).get()/10),sal_uInt16((nCircStAngle.get()+5)/10),false);
         sal_uInt16 nCount=aXP.GetPointCount();
         for (sal_uInt16 nNum=nCount/2; nNum>0;) {
             nNum--; // reverse XPoly's order of points
@@ -449,9 +449,9 @@ void ImpPathCreateUser::CalcRect(const Point& rP1, const Point& rP2, const Point
     else {
         y=BigMulDiv(x,nDirY,nDirX);
         tools::Long nHypLen=aTmpPt.Y()-y;
-        tools::Long nTangAngle=-GetAngle(rDir);
+        Degree100 nTangAngle=-GetAngle(rDir);
         // sin=g/h, g=h*sin
-        double a = nTangAngle * F_PI18000;
+        double a = nTangAngle.get() * F_PI18000;
         double sn=sin(a);
         double cs=cos(a);
         double nGKathLen=nHypLen*sn;
@@ -736,12 +736,12 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
         {
             Point aPt(mpSdrPathDragData->aXP[nNextPnt]);
             aPt-=rDrag.GetNow();
-            tools::Long nAngle1=GetAngle(aPt);
+            Degree100 nAngle1=GetAngle(aPt);
             aPt=rDrag.GetNow();
             aPt-=mpSdrPathDragData->aXP[nPrevPnt];
-            tools::Long nAngle2=GetAngle(aPt);
-            tools::Long nDiff=nAngle1-nAngle2;
-            nDiff=std::abs(nDiff);
+            Degree100 nAngle2=GetAngle(aPt);
+            Degree100 nDiff=nAngle1-nAngle2;
+            nDiff=abs(nDiff);
             mpSdrPathDragData->bEliminate=nDiff<=rDrag.GetView()->GetEliminatePolyPointLimitAngle();
             if (mpSdrPathDragData->bEliminate) { // adapt position, Smooth is true for the ends
                 aPt=mpSdrPathDragData->aXP[nNextPnt];
@@ -932,7 +932,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
 
         if(pU->bCircle)
         {
-            aStr += SdrModel::GetAngleString(std::abs(pU->nCircRelAngle))
+            aStr += SdrModel::GetAngleString(abs(pU->nCircRelAngle))
                     + " r="
                     + mrSdrPathObject.getSdrModelFromSdrObject().GetMetricString(pU->nCircRadius, true);
         }
@@ -945,7 +945,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
         if(!IsFreeHand(meObjectKind))
         {
             sal_Int32 nLen(GetLen(aNow));
-            sal_Int32 nAngle(GetAngle(aNow));
+            Degree100 nAngle(GetAngle(aNow));
             aStr += "  l="
                     + mrSdrPathObject.getSdrModelFromSdrObject().GetMetricString(nLen, true)
                     + " "
@@ -1027,7 +1027,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
                 aNow -= rXPoly[nRef];
 
                 sal_Int32 nLen(GetLen(aNow));
-                sal_Int32 nAngle(GetAngle(aNow));
+                Degree100 nAngle(GetAngle(aNow));
                 aStr += "  l="
                         + mrSdrPathObject.getSdrModelFromSdrObject().GetMetricString(nLen, true)
                         + " "
@@ -1070,7 +1070,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
                     aPt -= rXPoly[nPt1];
 
                     sal_Int32 nLen(GetLen(aPt));
-                    sal_Int32 nAngle(GetAngle(aPt));
+                    Degree100 nAngle(GetAngle(aPt));
                     aStr += "  l="
                             + mrSdrPathObject.getSdrModelFromSdrObject().GetMetricString(nLen, true)
                             + " "
@@ -1088,7 +1088,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
                     aPt -= rXPoly[nPt2];
 
                     sal_Int32 nLen(GetLen(aPt));
-                    sal_Int32 nAngle(GetAngle(aPt));
+                    Degree100 nAngle(GetAngle(aPt));
                     aStr += "l="
                             + mrSdrPathObject.getSdrModelFromSdrObject().GetMetricString(nLen, true)
                             + " "
@@ -1670,7 +1670,7 @@ void SdrPathObj::ImpForceLineAngle()
     const Point aDelt(FRound(aB2DDelt.getX()), FRound(aB2DDelt.getY()));
 
     aGeo.nRotationAngle=GetAngle(aDelt);
-    aGeo.nShearAngle=0;
+    aGeo.nShearAngle=0_deg100;
     aGeo.RecalcSinCos();
     aGeo.RecalcTan();
 
@@ -2293,18 +2293,18 @@ void SdrPathObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     SdrTextObj::NbcResize(rRef,xFact,yFact);
 }
 
-void SdrPathObj::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
+void SdrPathObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
     // Thank JOE, the angles are defined mirrored to the mathematical meanings
     const basegfx::B2DHomMatrix aTrans(
-        basegfx::utils::createRotateAroundPoint(rRef.X(), rRef.Y(), -nAngle * F_PI18000));
+        basegfx::utils::createRotateAroundPoint(rRef.X(), rRef.Y(), -nAngle.get() * F_PI18000));
     maPathPolygon.transform(aTrans);
 
     // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
     SdrTextObj::NbcRotate(rRef,nAngle,sn,cs);
 }
 
-void SdrPathObj::NbcShear(const Point& rRefPnt, tools::Long nAngle, double fTan, bool bVShear)
+void SdrPathObj::NbcShear(const Point& rRefPnt, Degree100 nAngle, double fTan, bool bVShear)
 {
     basegfx::B2DHomMatrix aTrans(basegfx::utils::createTranslateB2DHomMatrix(-rRefPnt.X(), -rRefPnt.Y()));
 
@@ -2811,14 +2811,14 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
             if(aGeo.nShearAngle || aGeo.nRotationAngle)
             {
                 // get rotate and shear in drawingLayer notation
-                fRotate = aGeo.nRotationAngle * F_PI18000;
-                fShearX = aGeo.nShearAngle * F_PI18000;
+                fRotate = aGeo.nRotationAngle.get() * F_PI18000;
+                fShearX = aGeo.nShearAngle.get() * F_PI18000;
 
                 // build mathematically correct (negative shear and rotate) object transform
                 // containing shear and rotate to extract unsheared, unrotated polygon
                 basegfx::B2DHomMatrix aObjectMatrix;
                 aObjectMatrix.shearX(-aGeo.mfTanShearAngle);
-                aObjectMatrix.rotate((36000 - aGeo.nRotationAngle) * F_PI18000);
+                aObjectMatrix.rotate((36000 - aGeo.nRotationAngle.get()) * F_PI18000);
 
                 // create inverse from it and back-transform polygon
                 basegfx::B2DHomMatrix aInvObjectMatrix(aObjectMatrix);
@@ -2901,9 +2901,9 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     basegfx::B2DPolyPolygon aNewPolyPolygon(rPolyPolygon);
 
     // reset object shear and rotations
-    aGeo.nRotationAngle = 0;
+    aGeo.nRotationAngle = 0_deg100;
     aGeo.RecalcSinCos();
-    aGeo.nShearAngle = 0;
+    aGeo.nShearAngle = 0_deg100;
     aGeo.RecalcTan();
 
     if( getSdrModelFromSdrObject().IsWriter() )
@@ -2949,7 +2949,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     if(!basegfx::fTools::equalZero(fShearX))
     {
         aTransform.shearX(tan(-atan(fShearX)));
-        aGeo.nShearAngle = FRound(atan(fShearX) / F_PI18000);
+        aGeo.nShearAngle = Degree100(FRound(atan(fShearX) / F_PI18000));
         aGeo.RecalcTan();
     }
 
@@ -2963,7 +2963,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         // #i78696#
         // fRotate is mathematically correct, but aGeoStat.nRotationAngle is
         // mirrored -> mirror value here
-        aGeo.nRotationAngle = NormAngle36000(FRound(-fRotate / F_PI18000));
+        aGeo.nRotationAngle = NormAngle36000(Degree100(FRound(-fRotate / F_PI18000)));
         aGeo.RecalcSinCos();
     }
 

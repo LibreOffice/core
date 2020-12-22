@@ -106,7 +106,7 @@ namespace sdr::properties
                     mpItemSet->Put(makeSdrCircStartAngleItem(rObj.GetStartAngle()));
                 }
 
-                if(rObj.GetEndAngle() != 36000)
+                if(rObj.GetEndAngle() != 36000_deg100)
                 {
                     mpItemSet->Put(makeSdrCircEndAngleItem(rObj.GetEndAngle()));
                 }

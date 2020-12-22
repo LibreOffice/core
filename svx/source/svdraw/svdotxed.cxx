@@ -134,7 +134,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Recta
     Size aPaperMin,aPaperMax;
     tools::Rectangle aViewInit;
     TakeTextAnchorRect(aViewInit);
-    if (aGeo.nRotationAngle!=0) {
+    if (aGeo.nRotationAngle) {
         Point aCenter(aViewInit.Center());
         aCenter-=aViewInit.TopLeft();
         Point aCenter0(aCenter);
