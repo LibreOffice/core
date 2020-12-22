@@ -213,12 +213,12 @@ void OutputDevice::SetSettings( const AllSettings& rSettings )
         mpAlphaVDev->SetSettings( rSettings );
 }
 
-SystemGraphicsData OutputDevice::GetSystemGfxData() const
+SystemGraphicsData* OutputDevice::GetSystemGfxData() const
 {
     if (!mpGraphics && !AcquireGraphics())
-        return SystemGraphicsData();
+        return new SystemGraphicsData();
 
-    return mpGraphics->GetGraphicsData();
+    return new SystemGraphicsData(mpGraphics->GetGraphicsData());
 }
 
 #if ENABLE_CAIRO_CANVAS
@@ -263,9 +263,12 @@ css::uno::Any OutputDevice::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSur
 
 css::uno::Any OutputDevice::GetSystemGfxDataAny() const
 {
-    const SystemGraphicsData aSysData = GetSystemGfxData();
-    css::uno::Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(&aSysData),
-                                                      aSysData.nSize );
+    const SystemGraphicsData *pSysData(GetSystemGfxData());
+
+    css::uno::Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(pSysData),
+                                                      pSysData->nSize );
+
+    delete pSysData;
 
     return css::uno::makeAny(aSeq);
 }

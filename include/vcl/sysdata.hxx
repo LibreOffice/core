@@ -45,7 +45,9 @@ typedef struct CGContext *CGContextRef;
 #include <postwin.h>
 #endif
 
-struct SystemEnvData
+struct SystemData {};
+
+struct SystemEnvData : SystemData
 {
 #if defined(_WIN32)
     HWND                hWnd;           // the window hwnd
@@ -123,7 +125,7 @@ struct SystemMenuData
 #endif
 };
 
-struct SystemGraphicsData
+struct SystemGraphicsData : SystemData
 {
     sal_uInt32      nSize;          // size in bytes of this structure
 #if defined(_WIN32)

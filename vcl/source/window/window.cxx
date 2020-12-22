@@ -3868,7 +3868,7 @@ void Window::ApplySettings(vcl::RenderContext& /*rRenderContext*/)
 {
 }
 
-const SystemEnvData* Window::GetSystemData() const
+const SystemEnvData* Window::GetWindowSystemData() const
 {
 
     return mpWindowImpl->mpFrame ? mpWindowImpl->mpFrame->GetSystemData() : nullptr;

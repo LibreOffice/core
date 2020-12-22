@@ -90,7 +90,7 @@ void SystemChildWindow::ImplInitSysChild( vcl::Window* pParent, WinBits nStyle, 
     Window::ImplInit( pParent, nStyle, nullptr );
 
     // we do not paint if it is the right SysChild
-    if ( GetSystemData() )
+    if ( GetWindowSystemData() )
     {
         mpWindowImpl->mpSysObj->SetCallback( this, ImplSysChildProc );
         SetParentClipMode( ParentClipMode::Clip );
@@ -126,7 +126,7 @@ void SystemChildWindow::dispose()
     Window::dispose();
 }
 
-const SystemEnvData* SystemChildWindow::GetSystemData() const
+const SystemEnvData* SystemChildWindow::GetWindowSystemData() const
 {
     if ( mpWindowImpl->mpSysObj )
         return mpWindowImpl->mpSysObj->GetSystemData();
@@ -164,16 +164,16 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle() const
     sal_IntPtr nRet = 0;
 
 #if defined(_WIN32)
-    nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->hWnd );
+    nRet = reinterpret_cast< sal_IntPtr >( GetWindowSystemData()->hWnd );
 #elif defined MACOSX
     // FIXME: this is wrong
-    nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->mpNSView );
+    nRet = reinterpret_cast< sal_IntPtr >( GetWindowSystemData()->mpNSView );
 #elif defined ANDROID
     // Nothing
 #elif defined IOS
     // Nothing
 #elif defined UNX
-    nRet = GetSystemData()->aWindow;
+    nRet = GetWindowSystemData()->aWindow;
 #endif
 
     return nRet;

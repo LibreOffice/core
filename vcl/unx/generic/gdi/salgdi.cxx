@@ -508,33 +508,22 @@ cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface(const cairo::CairoSurfaceS
     return std::make_shared<cairo::X11Surface>(rSurface);
 }
 
-namespace
+static cairo::X11SysData getSysData( const vcl::OutputDevice& rOutDev )
 {
-    cairo::X11SysData getSysData( const vcl::Window& rWindow )
-    {
-        const SystemEnvData* pSysData = rWindow.GetSystemData();
+    const SystemEnvData* pSysData = rOutDev.GetSystemData();
 
-        if( !pSysData )
-            return cairo::X11SysData();
-        else
-            return cairo::X11SysData(*pSysData);
-    }
-
-    cairo::X11SysData getSysData( const VirtualDevice& rVirDev )
-    {
-        return cairo::X11SysData( rVirDev.GetSystemGfxData() );
-    }
+    if( !pSysData )
+        return cairo::X11SysData();
+    else
+        return cairo::X11SysData(*pSysData);
 }
 
 cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface( const OutputDevice& rRefDevice,
                                 int x, int y, int width, int height ) const
 {
-    if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
-        return std::make_shared<cairo::X11Surface>(getSysData(static_cast<const vcl::Window&>(rRefDevice)),
-                                               x,y,width,height);
-    if( rRefDevice.IsVirtual() )
-        return std::make_shared<cairo::X11Surface>(getSysData(static_cast<const VirtualDevice&>(rRefDevice)),
-                                               x,y,width,height);
+    if (rRefDevice.HasSystemData())
+        return std::make_shared<cairo::X11Surface>(getSysData(rRefDevice), x, y, width, height);
+
     return cairo::SurfaceSharedPtr();
 }
 
@@ -545,13 +534,8 @@ cairo::SurfaceSharedPtr X11SalGraphics::CreateBitmapSurface( const OutputDevice&
     SAL_INFO("vcl", "requested size: " << rSize.Width() << " x " << rSize.Height()
               << " available size: " << rData.mnWidth << " x "
               << rData.mnHeight);
-    if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
-    {
-        if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
-            return std::make_shared<cairo::X11Surface>(getSysData(static_cast<const vcl::Window&>(rRefDevice)), rData );
-        else if( rRefDevice.IsVirtual() )
-            return std::make_shared<cairo::X11Surface>(getSysData(static_cast<const VirtualDevice&>(rRefDevice)), rData );
-    }
+    if (rRefDevice.HasSystemdata() && rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height())
+        return std::make_shared<cairo::X11Surface>(getSysData(rRefDevice), x, y, width, height);
 
     return cairo::SurfaceSharedPtr();
 }

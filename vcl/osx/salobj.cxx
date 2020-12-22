@@ -431,7 +431,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
         // "'NSOpenGLView' is deprecated: first deprecated in macOS 10.14 - Please use MTKView
         // instead."
-    return reinterpret_cast<NSOpenGLView*>(m_pChildWindow->GetSystemData()->mpNSView);
+    return reinterpret_cast<NSOpenGLView*>(m_pChildWindow->GetWindowSystemData()->mpNSView);
 SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 

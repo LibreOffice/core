@@ -39,6 +39,7 @@
 #include <vcl/outdevstate.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/vclreferencebase.hxx>
+#include <vcl/sysdata.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/vector/b2enums.hxx>
@@ -416,7 +417,9 @@ public:
     virtual void                SetSettings( const AllSettings& rSettings );
     const AllSettings&          GetSettings() const { return *mxSettings; }
 
-    SystemGraphicsData          GetSystemGfxData() const;
+    virtual const SystemData*   GetSystemData() const { return GetSystemGfxData(); }
+    virtual bool                HasSystemData() const { return true; }
+    SystemGraphicsData*         GetSystemGfxData() const;
     bool                        SupportsCairo() const;
     /// Create Surface from given cairo surface
     cairo::SurfaceSharedPtr     CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const;
