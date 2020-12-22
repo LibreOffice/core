@@ -21,8 +21,6 @@
 
 #include <basic/sbstar.hxx>
 
-#define RTLNAME( name ) &SbRtl_##name
-
 typedef void( *RtlCall ) ( StarBASIC* p, SbxArray& rArgs, bool bWrite );
 
 // Properties
