@@ -1131,7 +1131,7 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
                                 m_pOutlineNodes->Seek_Entry( pNd, &nIdxPos ))
                         {
                             // remove outline indices
-                            m_pOutlineNodes->erase(nIdxPos);
+                            m_pOutlineNodes->erase_at(nIdxPos);
                             bUpdateOutline = true;
                         }
                         pTextNode->InvalidateNumRule();
@@ -1359,7 +1359,7 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, sal_uLong nCnt )
                 SwOutlineNodes::size_type nIdxPos;
                 if( m_pOutlineNodes->Seek_Entry( pNd, &nIdxPos ))
                 {
-                    m_pOutlineNodes->erase(nIdxPos);
+                    m_pOutlineNodes->erase_at(nIdxPos);
                     bUpdateNum = 1;
                 }
             }
