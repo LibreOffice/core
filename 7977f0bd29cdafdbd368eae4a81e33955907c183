@@ -22,6 +22,30 @@
       "revId": "7977f0bd29cdafdbd368eae4a81e33955907c183",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cff4096_23a688a1",
+        "filename": "sw/source/uibase/docvw/PageBreakWin.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-12-22T15:56:04Z",
+      "side": 1,
+      "message": "pCnt-\u003eGetPrev() would be wrong, since the first text frame on a page has no prev. You could use GetIndPrev() to get the \"indirect previous frame\". But seeming that the page already has a \"find last child\" function and you use it, this looks good to me.",
+      "parentUuid": "88ecf49b_20c08f79",
+      "range": {
+        "startLine": 252,
+        "startChar": 47,
+        "endLine": 252,
+        "endChar": 77
+      },
+      "revId": "7977f0bd29cdafdbd368eae4a81e33955907c183",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
