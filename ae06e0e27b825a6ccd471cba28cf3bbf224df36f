@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c2e3409_5d894879",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3868,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-22T08:28:21Z",
+      "side": 1,
+      "message": "The opening brace should be on an own line according to our clang-format rules",
+      "range": {
+        "startLine": 3868,
+        "startChar": 22,
+        "endLine": 3868,
+        "endChar": 24
+      },
+      "revId": "ae06e0e27b825a6ccd471cba28cf3bbf224df36f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "936fa8e1_b3588231",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3869,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-22T08:28:21Z",
+      "side": 1,
+      "message": "... and the line limit is 100 characters, so please break the comment to fit.",
+      "range": {
+        "startLine": 3869,
+        "startChar": 16,
+        "endLine": 3869,
+        "endChar": 120
+      },
+      "revId": "ae06e0e27b825a6ccd471cba28cf3bbf224df36f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
