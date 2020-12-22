@@ -2226,10 +2226,10 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
         return;
 
     // check if this is the default 'page1234' name
-    if(aName.startsWith( sEmptyPageName ))
+    OUString aNumber;
+    if(aName.startsWith( sEmptyPageName, &aNumber ))
     {
-        // ok, it maybe is, first get the number part after 'page'
-        OUString aNumber( aName.copy( sizeof( sEmptyPageName ) - 1 ) );
+        // ok, it maybe is, aNumber is the number part after 'page'
 
         // create the page number
         sal_Int32 nPageNumber = aNumber.toInt32();
