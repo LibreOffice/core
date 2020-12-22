@@ -115,8 +115,8 @@ XPolygon SdrRectObj::ImpCalcXPoly(const tools::Rectangle& rRect1, tools::Long nR
     aXPoly=aNewPoly;
 
     // these angles always relate to the top left corner of aRect
-    if (aGeo.nShearAngle!=0) ShearXPoly(aXPoly,maRect.TopLeft(),aGeo.mfTanShearAngle);
-    if (aGeo.nRotationAngle!=0) RotateXPoly(aXPoly,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+    if (aGeo.nShearAngle) ShearXPoly(aXPoly,maRect.TopLeft(),aGeo.mfTanShearAngle);
+    if (aGeo.nRotationAngle) RotateXPoly(aXPoly,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
     return aXPoly;
 }
 
@@ -138,7 +138,7 @@ const XPolygon& SdrRectObj::GetXPoly() const
 void SdrRectObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     bool bNoTextFrame=!IsTextFrame();
-    rInfo.bResizeFreeAllowed=bNoTextFrame || aGeo.nRotationAngle%9000==0;
+    rInfo.bResizeFreeAllowed=bNoTextFrame || ((aGeo.nRotationAngle.get() % 9000) == 0);
     rInfo.bResizePropAllowed=true;
     rInfo.bRotateFreeAllowed=true;
     rInfo.bRotate90Allowed  =true;
@@ -170,11 +170,11 @@ SdrObjKind SdrRectObj::GetObjIdentifier() const
 void SdrRectObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 {
     rRect = maRect;
-    if (aGeo.nShearAngle==0)
+    if (aGeo.nShearAngle==0_deg100)
         return;
 
     tools::Long nDst=FRound((maRect.Bottom()-maRect.Top())*aGeo.mfTanShearAngle);
-    if (aGeo.nShearAngle>0)
+    if (aGeo.nShearAngle>0_deg100)
     {
         Point aRef(rRect.TopLeft());
         rRect.AdjustLeft( -nDst );
@@ -200,7 +200,7 @@ OUString SdrRectObj::TakeObjNameSingul() const
 
     bool bRounded = GetEckenradius() != 0; // rounded down
     const char* pResId = bRounded ? STR_ObjNameSingulRECTRND : STR_ObjNameSingulRECT;
-    if (aGeo.nShearAngle!=0)
+    if (aGeo.nShearAngle)
     {
         pResId = bRounded ? STR_ObjNameSingulPARALRND : STR_ObjNameSingulPARAL;  // parallelogram or, maybe, rhombus
     }
@@ -231,7 +231,7 @@ OUString SdrRectObj::TakeObjNamePlural() const
 
     bool bRounded = GetEckenradius() != 0; // rounded down
     const char* pResId = bRounded ? STR_ObjNamePluralRECTRND : STR_ObjNamePluralRECT;
-    if (aGeo.nShearAngle!=0)
+    if (aGeo.nShearAngle)
     {
         pResId = bRounded ? STR_ObjNamePluralPARALRND : STR_ObjNamePluralPARAL;  // parallelogram or rhombus
     }
@@ -273,7 +273,7 @@ basegfx::B2DPolyPolygon SdrRectObj::TakeXorPoly() const
 void SdrRectObj::RecalcSnapRect()
 {
     tools::Long nEckRad=GetEckenradius();
-    if ((aGeo.nRotationAngle!=0 || aGeo.nShearAngle!=0) && nEckRad!=0) {
+    if ((aGeo.nRotationAngle || aGeo.nShearAngle) && nEckRad!=0) {
         maSnapRect=GetXPoly().GetBoundRect();
     } else {
         SdrTextObj::RecalcSnapRect();
@@ -470,13 +470,13 @@ void SdrRectObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     SetXPolyDirty();
 }
 
-void SdrRectObj::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
+void SdrRectObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
     SdrTextObj::NbcRotate(rRef,nAngle,sn,cs);
     SetXPolyDirty();
 }
 
-void SdrRectObj::NbcShear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear)
+void SdrRectObj::NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear)
 {
     SdrTextObj::NbcShear(rRef,nAngle,tn,bVShear);
     SetXPolyDirty();
@@ -506,8 +506,8 @@ SdrGluePoint SdrRectObj::GetVertexGluePoint(sal_uInt16 nPosNum) const
         case 2: aPt=maRect.BottomCenter(); aPt.AdjustY(nWdt ); break;
         case 3: aPt=maRect.LeftCenter();   aPt.AdjustX( -nWdt ); break;
     }
-    if (aGeo.nShearAngle!=0) ShearPoint(aPt,maRect.TopLeft(),aGeo.mfTanShearAngle);
-    if (aGeo.nRotationAngle!=0) RotatePoint(aPt,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+    if (aGeo.nShearAngle) ShearPoint(aPt,maRect.TopLeft(),aGeo.mfTanShearAngle);
+    if (aGeo.nRotationAngle) RotatePoint(aPt,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
     aGP.SetPercent(false);
@@ -532,8 +532,8 @@ SdrGluePoint SdrRectObj::GetCornerGluePoint(sal_uInt16 nPosNum) const
         case 2: aPt=maRect.BottomRight(); aPt.AdjustX(nWdt ); aPt.AdjustY(nWdt ); break;
         case 3: aPt=maRect.BottomLeft();  aPt.AdjustX( -nWdt ); aPt.AdjustY(nWdt ); break;
     }
-    if (aGeo.nShearAngle!=0) ShearPoint(aPt,maRect.TopLeft(),aGeo.mfTanShearAngle);
-    if (aGeo.nRotationAngle!=0) RotatePoint(aPt,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+    if (aGeo.nShearAngle) ShearPoint(aPt,maRect.TopLeft(),aGeo.mfTanShearAngle);
+    if (aGeo.nRotationAngle) RotatePoint(aPt,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
     aGP.SetPercent(false);

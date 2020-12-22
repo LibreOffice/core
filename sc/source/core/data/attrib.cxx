@@ -729,7 +729,7 @@ void ScCondFormatItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-ScRotateValueItem::ScRotateValueItem(sal_Int32 nAngle)
+ScRotateValueItem::ScRotateValueItem(Degree100 nAngle)
     : SdrAngleItem(ATTR_ROTATE_VALUE, nAngle)
 {
 }

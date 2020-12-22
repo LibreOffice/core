@@ -165,10 +165,10 @@ SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet& rItemSet
     }
     else
     {
-        sal_Int32 nAngle = GetItem( ATTR_ROTATE_VALUE, rItemSet, pCondSet ).GetValue();
-        if( nAngle == 9000 )
+        Degree100 nAngle = GetItem( ATTR_ROTATE_VALUE, rItemSet, pCondSet ).GetValue();
+        if( nAngle == 9000_deg100 )
             eOrient = SvxCellOrientation::BottomUp;
-        else if( nAngle == 27000 )
+        else if( nAngle == 27000_deg100 )
             eOrient = SvxCellOrientation::TopBottom;
     }
 
@@ -1312,9 +1312,9 @@ const SfxPoolItem& ScPatternAttr::GetItem( sal_uInt16 nSubWhich, const SfxItemSe
 
 //  GetRotateVal is tested before ATTR_ORIENTATION
 
-tools::Long ScPatternAttr::GetRotateVal( const SfxItemSet* pCondSet ) const
+Degree100 ScPatternAttr::GetRotateVal( const SfxItemSet* pCondSet ) const
 {
-    tools::Long nAttrRotate = 0;
+    Degree100 nAttrRotate(0);
     if ( GetCellOrientation() == SvxCellOrientation::Standard )
     {
         bool bRepeat = ( GetItem(ATTR_HOR_JUSTIFY, pCondSet).
@@ -1330,22 +1330,22 @@ ScRotateDir ScPatternAttr::GetRotateDir( const SfxItemSet* pCondSet ) const
 {
     ScRotateDir nRet = ScRotateDir::NONE;
 
-    tools::Long nAttrRotate = GetRotateVal( pCondSet );
+    Degree100 nAttrRotate = GetRotateVal( pCondSet );
     if ( nAttrRotate )
     {
         SvxRotateMode eRotMode = GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue();
 
-        if ( eRotMode == SVX_ROTATE_MODE_STANDARD || nAttrRotate == 18000 )
+        if ( eRotMode == SVX_ROTATE_MODE_STANDARD || nAttrRotate == 18000_deg100 )
             nRet = ScRotateDir::Standard;
         else if ( eRotMode == SVX_ROTATE_MODE_CENTER )
             nRet = ScRotateDir::Center;
         else if ( eRotMode == SVX_ROTATE_MODE_TOP || eRotMode == SVX_ROTATE_MODE_BOTTOM )
         {
-            tools::Long nRot180 = nAttrRotate % 18000;     // 1/100 degrees
-            if ( nRot180 == 9000 )
+            Degree100 nRot180 = nAttrRotate % 18000_deg100;     // 1/100 degrees
+            if ( nRot180 == 9000_deg100 )
                 nRet = ScRotateDir::Center;
-            else if ( ( eRotMode == SVX_ROTATE_MODE_TOP && nRot180 < 9000 ) ||
-                      ( eRotMode == SVX_ROTATE_MODE_BOTTOM && nRot180 > 9000 ) )
+            else if ( ( eRotMode == SVX_ROTATE_MODE_TOP && nRot180 < 9000_deg100 ) ||
+                      ( eRotMode == SVX_ROTATE_MODE_BOTTOM && nRot180 > 9000_deg100 ) )
                 nRet = ScRotateDir::Left;
             else
                 nRet = ScRotateDir::Right;

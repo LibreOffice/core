@@ -20,6 +20,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/dialcontrol.hxx>
+#include <tools/degree.hxx>
 
 namespace chart { class TextDirectionListBox; }
 namespace weld {
@@ -39,7 +40,7 @@ class SchAxisLabelTabPage : public SfxTabPage
 private:
     bool                m_bShowStaggeringControls;
 
-    sal_Int32           m_nInitialDegrees;
+    Degree100           m_nInitialDegrees;
     bool                m_bHasInitialDegrees;       /// false = DialControl in tristate
     bool                m_bInitialStacking;
     bool                m_bHasInitialStacking;      /// false = checkbox in tristate
