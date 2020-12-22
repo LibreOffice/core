@@ -387,6 +387,19 @@ namespace css = ::com::sun::star;
 #define SAL_OVERRIDE
 #endif
 
+/** C++11 "constexpr" feature.
+
+    For LIBO_INTERNAL_ONLY, declare that it's possible to evaluate the value
+    at compile time.
+
+    @since LibreOffice 7.2
+*/
+#if defined LIBO_INTERNAL_ONLY
+#define SAL_CONSTEXPR constexpr
+#else
+#define SAL_CONSTEXPR
+#endif
+
 #endif /* __cplusplus */
 
 #ifdef __cplusplus
@@ -404,7 +417,7 @@ namespace sal {
 
    Both template arguments T1 and T2 must be integral types.
 */
-template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
+template< typename T1, typename T2 > SAL_INTERNAL_CONSTEXPR inline T1 static_int_cast(T2 n) {
     return static_cast< T1 >(n);
 }
 
