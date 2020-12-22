@@ -228,11 +228,16 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mnStreamSize = mrPNGStream.TellEnd();
 
     // check the PNG header magic
-    sal_uInt32 nDummy = 0;
-    mrPNGStream.ReadUInt32( nDummy );
-    mbStatus = (nDummy == 0x89504e47);
-    mrPNGStream.ReadUInt32( nDummy );
-    mbStatus = (nDummy == 0x0d0a1a0a) && mbStatus;
+    if (mnStreamSize < 8)
+        mbStatus = false;
+    else
+    {
+        sal_uInt32 nDummy = 0;
+        mrPNGStream.ReadUInt32( nDummy );
+        mbStatus = (nDummy == 0x89504e47);
+        mrPNGStream.ReadUInt32( nDummy );
+        mbStatus = (nDummy == 0x0d0a1a0a) && mbStatus;
+    }
 
     mnPreviewShift = 0;
     mnPreviewMask = (1 << mnPreviewShift) - 1;
