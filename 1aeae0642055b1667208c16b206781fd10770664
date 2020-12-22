@@ -16,6 +16,24 @@
       "revId": "1aeae0642055b1667208c16b206781fd10770664",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1e68372_b45d188f",
+        "filename": "svx/source/sdr/contact/viewcontactofgraphic.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-22T12:40:49Z",
+      "side": 1,
+      "message": "the mfTanShearAngle is specialised cased for zero, see calculation here:\n\nhttps://opengrok.libreoffice.org/xref/core/svx/source/svdraw/svdtrans.cxx?r\u003dd55e0fbd\u0026fi\u003dRecalcTan#RecalcTan",
+      "parentUuid": "ec55b4e8_4044936b",
+      "revId": "1aeae0642055b1667208c16b206781fd10770664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
