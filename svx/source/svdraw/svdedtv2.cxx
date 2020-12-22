@@ -1697,7 +1697,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                     {
                         pTextObj->NbcRotate(
                             pCustomShape->GetSnapRect().Center(), rSourceGeo.nRotationAngle,
-                            rSourceGeo.nSin, rSourceGeo.nCos);
+                            rSourceGeo.mfSinRotationAngle, rSourceGeo.mfCosRotationAngle);
                     }
 
                     // set modified ItemSet at text object
@@ -2156,10 +2156,10 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
 
                 // apply original transformation
                 if (aGeoStat.nShearAngle)
-                    pCandidate->NbcShear(aLogicRect.TopLeft(), aGeoStat.nShearAngle, aGeoStat.nTan, false);
+                    pCandidate->NbcShear(aLogicRect.TopLeft(), aGeoStat.nShearAngle, aGeoStat.mfTanShearAngle, false);
 
                 if (aGeoStat.nRotationAngle)
-                    pCandidate->NbcRotate(aLogicRect.TopLeft(), aGeoStat.nRotationAngle, aGeoStat.nSin, aGeoStat.nCos);
+                    pCandidate->NbcRotate(aLogicRect.TopLeft(), aGeoStat.nRotationAngle, aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle);
 
                 SdrMark aNewMark(pCandidate, pPV);
                 aNewMarked.InsertEntry(aNewMark);

@@ -138,7 +138,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Recta
         Point aCenter(aViewInit.Center());
         aCenter-=aViewInit.TopLeft();
         Point aCenter0(aCenter);
-        RotatePoint(aCenter,Point(),aGeo.nSin,aGeo.nCos);
+        RotatePoint(aCenter,Point(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
         aCenter-=aCenter0;
         aViewInit.Move(aCenter.X(),aCenter.Y());
     }

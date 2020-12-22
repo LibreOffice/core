@@ -483,12 +483,12 @@ void SdrCircObj::AddToHdlList(SdrHdlList& rHdlList) const
 
         if (aGeo.nShearAngle)
         {
-            ShearPoint(aPnt,maRect.TopLeft(),aGeo.nTan);
+            ShearPoint(aPnt,maRect.TopLeft(),aGeo.mfTanShearAngle);
         }
 
         if (aGeo.nRotationAngle)
         {
-            RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+            RotatePoint(aPnt,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
         }
 
         std::unique_ptr<SdrHdl> pH(new SdrHdl(aPnt,eLocalKind));
@@ -531,10 +531,10 @@ bool SdrCircObj::applySpecialDrag(SdrDragStat& rDrag)
         Point aPt(rDrag.GetNow());
 
         if (aGeo.nRotationAngle!=0)
-            RotatePoint(aPt,maRect.TopLeft(),-aGeo.nSin,aGeo.nCos);
+            RotatePoint(aPt,maRect.TopLeft(),-aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
 
         if (aGeo.nShearAngle!=0)
-            ShearPoint(aPt,maRect.TopLeft(),-aGeo.nTan);
+            ShearPoint(aPt,maRect.TopLeft(),-aGeo.mfTanShearAngle);
 
         aPt -= maRect.Center();
 
@@ -911,12 +911,12 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         if (nHgt==0) aTmpPt2.setY(0 );
         aTmpPt2+=aCenter;
         if (aGeo.nRotationAngle!=0) {
-            RotatePoint(aTmpPt1,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-            RotatePoint(aTmpPt2,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+            RotatePoint(aTmpPt1,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+            RotatePoint(aTmpPt2,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
         }
         if (aGeo.nShearAngle!=0) {
-            ShearPoint(aTmpPt1,maRect.TopLeft(),aGeo.nTan);
-            ShearPoint(aTmpPt2,maRect.TopLeft(),aGeo.nTan);
+            ShearPoint(aTmpPt1,maRect.TopLeft(),aGeo.mfTanShearAngle);
+            ShearPoint(aTmpPt2,maRect.TopLeft(),aGeo.mfTanShearAngle);
         }
     }
     SdrTextObj::NbcMirror(rRef1,rRef2);
@@ -925,13 +925,13 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         MirrorPoint(aTmpPt2,rRef1,rRef2);
         // unrotate:
         if (aGeo.nRotationAngle!=0) {
-            RotatePoint(aTmpPt1,maRect.TopLeft(),-aGeo.nSin,aGeo.nCos); // -sin for reversion
-            RotatePoint(aTmpPt2,maRect.TopLeft(),-aGeo.nSin,aGeo.nCos); // -sin for reversion
+            RotatePoint(aTmpPt1,maRect.TopLeft(),-aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle); // -sin for reversion
+            RotatePoint(aTmpPt2,maRect.TopLeft(),-aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle); // -sin for reversion
         }
         // unshear:
         if (aGeo.nShearAngle!=0) {
-            ShearPoint(aTmpPt1,maRect.TopLeft(),-aGeo.nTan); // -tan for reversion
-            ShearPoint(aTmpPt2,maRect.TopLeft(),-aGeo.nTan); // -tan for reversion
+            ShearPoint(aTmpPt1,maRect.TopLeft(),-aGeo.mfTanShearAngle); // -tan for reversion
+            ShearPoint(aTmpPt2,maRect.TopLeft(),-aGeo.mfTanShearAngle); // -tan for reversion
         }
         Point aCenter(maRect.Center());
         aTmpPt1-=aCenter;
@@ -1012,7 +1012,7 @@ void SdrCircObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
             Point aDst(rRect.TopLeft());
             aDst-=maRect.TopLeft();
             Point aDst0(aDst);
-            RotatePoint(aDst,Point(),aGeo.nSin,aGeo.nCos);
+            RotatePoint(aDst,Point(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
             aDst-=aDst0;
             rRect.Move(aDst.X(),aDst.Y());
         }
@@ -1020,12 +1020,12 @@ void SdrCircObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
     if (aGeo.nShearAngle==0)
         return;
 
-    tools::Long nDst=FRound((rRect.Bottom()-rRect.Top())*aGeo.nTan);
+    tools::Long nDst=FRound((rRect.Bottom()-rRect.Top())*aGeo.mfTanShearAngle);
     if (aGeo.nShearAngle>0) {
         Point aRef(rRect.TopLeft());
         rRect.AdjustLeft( -nDst );
         Point aTmpPt(rRect.TopLeft());
-        RotatePoint(aTmpPt,aRef,aGeo.nSin,aGeo.nCos);
+        RotatePoint(aTmpPt,aRef,aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
         aTmpPt-=rRect.TopLeft();
         rRect.Move(aTmpPt.X(),aTmpPt.Y());
     } else {

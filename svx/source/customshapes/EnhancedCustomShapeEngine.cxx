@@ -215,8 +215,8 @@ std::unique_ptr<SdrObject, SdrObjectFreeOp> EnhancedCustomShapeEngine::ImplForce
                 pTextObj->NbcRotate(
                     rSdrObjCustomShape.GetSnapRect().Center(),
                     rSourceGeo.nRotationAngle,
-                    rSourceGeo.nSin,
-                    rSourceGeo.nCos);
+                    rSourceGeo.mfSinRotationAngle,
+                    rSourceGeo.mfCosRotationAngle);
             }
 
             // set modified ItemSet at text object
@@ -317,7 +317,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
         if ( rGeoStat.nShearAngle )
         {
             tools::Long nShearAngle = rGeoStat.nShearAngle;
-            double nTan = rGeoStat.nTan;
+            double nTan = rGeoStat.mfTanShearAngle;
             if (bFlipV != bFlipH)
             {
                 nShearAngle = -nShearAngle;
@@ -418,7 +418,7 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
             if ( rGeoStat.nShearAngle )
             {
                 tools::Long nShearAngle = rGeoStat.nShearAngle;
-                double nTan = rGeoStat.nTan;
+                double nTan = rGeoStat.mfTanShearAngle;
                 if (bFlipV != bFlipH)
                 {
                     nShearAngle = -nShearAngle;

@@ -2353,10 +2353,10 @@ void SdrPathObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
     else
     {
         XPolyPolygon aXPP(GetPathPoly());
-        RotateXPoly(aXPP,Point(),-aGeo.nSin,aGeo.nCos);
+        RotateXPoly(aXPP,Point(),-aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
         rRect=aXPP.GetBoundRect();
         Point aTmp(rRect.TopLeft());
-        RotatePoint(aTmp,Point(),aGeo.nSin,aGeo.nCos);
+        RotatePoint(aTmp,Point(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
         aTmp-=rRect.TopLeft();
         rRect.Move(aTmp.X(),aTmp.Y());
     }

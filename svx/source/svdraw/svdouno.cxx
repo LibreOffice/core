@@ -308,9 +308,9 @@ void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
 
     aGeo.nRotationAngle  = 0;
     aGeo.nShearAngle = 0;
-    aGeo.nSin       = 0.0;
-    aGeo.nCos       = 1.0;
-    aGeo.nTan       = 0.0;
+    aGeo.mfSinRotationAngle       = 0.0;
+    aGeo.mfCosRotationAngle       = 1.0;
+    aGeo.mfTanShearAngle       = 0.0;
     SetRectsDirty();
 }
 

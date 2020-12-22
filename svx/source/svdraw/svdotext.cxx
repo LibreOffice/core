@@ -384,7 +384,7 @@ void SdrTextObj::ImpCheckShear()
 {
     if (bNoShear && aGeo.nShearAngle!=0) {
         aGeo.nShearAngle=0;
-        aGeo.nTan=0;
+        aGeo.mfTanShearAngle=0;
     }
 }
 
@@ -611,7 +611,7 @@ void SdrTextObj::TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const
     }
     if (aGeo.nRotationAngle!=0) {
         Point aTmpPt(aAnkRect.TopLeft());
-        RotatePoint(aTmpPt,aRotateRef,aGeo.nSin,aGeo.nCos);
+        RotatePoint(aTmpPt,aRotateRef,aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
         aTmpPt-=aAnkRect.TopLeft();
         aAnkRect.Move(aTmpPt.X(),aTmpPt.Y());
     }
@@ -777,7 +777,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
             aTextPos.AdjustY(nFreeHgt );
     }
     if (aGeo.nRotationAngle!=0)
-        RotatePoint(aTextPos,aAnkRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+        RotatePoint(aTextPos,aAnkRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
 
     if (pAnchorRect)
         *pAnchorRect=aAnkRect;
@@ -1053,8 +1053,8 @@ SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)
 basegfx::B2DPolyPolygon SdrTextObj::TakeXorPoly() const
 {
     tools::Polygon aPol(maRect);
-    if (aGeo.nShearAngle!=0) ShearPoly(aPol,maRect.TopLeft(),aGeo.nTan);
-    if (aGeo.nRotationAngle!=0) RotatePoly(aPol,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+    if (aGeo.nShearAngle!=0) ShearPoly(aPol,maRect.TopLeft(),aGeo.mfTanShearAngle);
+    if (aGeo.nRotationAngle!=0) RotatePoly(aPol,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
 
     basegfx::B2DPolyPolygon aRetval;
     aRetval.append(aPol.getB2DPolygon());
@@ -1080,7 +1080,7 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeContour() const
         bool bFitToSize(IsFitToSize());
         if (bFitToSize) aR=aAnchor2;
         tools::Polygon aPol(aR);
-        if (aGeo.nRotationAngle!=0) RotatePoly(aPol,aR.TopLeft(),aGeo.nSin,aGeo.nCos);
+        if (aGeo.nRotationAngle!=0) RotatePoly(aPol,aR.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
 
         aRetval.append(aPol.getB2DPolygon());
     }
@@ -1093,8 +1093,8 @@ void SdrTextObj::RecalcSnapRect()
     if (aGeo.nRotationAngle!=0 || aGeo.nShearAngle!=0)
     {
         tools::Polygon aPol(maRect);
-        if (aGeo.nShearAngle!=0) ShearPoly(aPol,maRect.TopLeft(),aGeo.nTan);
-        if (aGeo.nRotationAngle!=0) RotatePoly(aPol,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+        if (aGeo.nShearAngle!=0) ShearPoly(aPol,maRect.TopLeft(),aGeo.mfTanShearAngle);
+        if (aGeo.nRotationAngle!=0) RotatePoly(aPol,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
         maSnapRect=aPol.GetBoundRect();
     } else {
         maSnapRect = maRect;
@@ -1116,8 +1116,8 @@ Point SdrTextObj::GetSnapPoint(sal_uInt32 i) const
         case 3: aP=maRect.BottomRight(); break;
         default: aP=maRect.Center(); break;
     }
-    if (aGeo.nShearAngle!=0) ShearPoint(aP,maRect.TopLeft(),aGeo.nTan);
-    if (aGeo.nRotationAngle!=0) RotatePoint(aP,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+    if (aGeo.nShearAngle!=0) ShearPoint(aP,maRect.TopLeft(),aGeo.mfTanShearAngle);
+    if (aGeo.nRotationAngle!=0) RotatePoint(aP,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
     return aP;
 }
 
@@ -1674,7 +1674,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         GeoStat aGeoStat;
         aGeoStat.nShearAngle = FRound(basegfx::rad2deg(atan(fShearX)) * 100.0);
         aGeoStat.RecalcTan();
-        Shear(Point(), aGeoStat.nShearAngle, aGeoStat.nTan, false);
+        Shear(Point(), aGeoStat.nShearAngle, aGeoStat.mfTanShearAngle, false);
     }
 
     // rotation?
@@ -1687,7 +1687,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         // mirrored -> mirror value here
         aGeoStat.nRotationAngle = NormAngle36000(FRound(-fRotate / F_PI18000));
         aGeoStat.RecalcSinCos();
-        Rotate(Point(), aGeoStat.nRotationAngle, aGeoStat.nSin, aGeoStat.nCos);
+        Rotate(Point(), aGeoStat.nRotationAngle, aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle);
     }
 
     // translate?

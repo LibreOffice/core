@@ -228,7 +228,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
         Point aD1(rR.TopLeft());
         aD1 -= aOldRect.TopLeft();
         Point aD2(aD1);
-        RotatePoint(aD2, Point(), aGeo.nSin, aGeo.nCos);
+        RotatePoint(aD2, Point(), aGeo.mfSinRotationAngle, aGeo.mfCosRotationAngle);
         aD2 -= aD1;
         rR.Move(aD2.X(), aD2.Y());
     }

@@ -920,13 +920,13 @@ SdrObjectUniquePtr SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) 
                     if(aGeoStat.nShearAngle)
                     {
                         aGeoStat.RecalcTan();
-                        pGrp->NbcShear(maRect.TopLeft(), aGeoStat.nShearAngle, aGeoStat.nTan, false);
+                        pGrp->NbcShear(maRect.TopLeft(), aGeoStat.nShearAngle, aGeoStat.mfTanShearAngle, false);
                     }
 
                     if(aGeoStat.nRotationAngle)
                     {
                         aGeoStat.RecalcSinCos();
-                        pGrp->NbcRotate(maRect.TopLeft(), aGeoStat.nRotationAngle, aGeoStat.nSin, aGeoStat.nCos);
+                        pGrp->NbcRotate(maRect.TopLeft(), aGeoStat.nRotationAngle, aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle);
                     }
                 }
 

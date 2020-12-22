@@ -451,22 +451,22 @@ tools::Long GetLen(const Point& rPnt)
 void GeoStat::RecalcSinCos()
 {
     if (nRotationAngle==0) {
-        nSin=0.0;
-        nCos=1.0;
+        mfSinRotationAngle=0.0;
+        mfCosRotationAngle=1.0;
     } else {
         double a = nRotationAngle * F_PI18000;
-        nSin=sin(a);
-        nCos=cos(a);
+        mfSinRotationAngle=sin(a);
+        mfCosRotationAngle=cos(a);
     }
 }
 
 void GeoStat::RecalcTan()
 {
     if (nShearAngle==0) {
-        nTan=0.0;
+        mfTanShearAngle=0.0;
     } else {
         double a = nShearAngle * F_PI18000;
-        nTan=tan(a);
+        mfTanShearAngle=tan(a);
     }
 }
 
@@ -479,8 +479,8 @@ tools::Polygon Rect2Poly(const tools::Rectangle& rRect, const GeoStat& rGeo)
     aPol[2]=rRect.BottomRight();
     aPol[3]=rRect.BottomLeft();
     aPol[4]=rRect.TopLeft();
-    if (rGeo.nShearAngle!=0) ShearPoly(aPol,rRect.TopLeft(),rGeo.nTan);
-    if (rGeo.nRotationAngle!=0) RotatePoly(aPol,rRect.TopLeft(),rGeo.nSin,rGeo.nCos);
+    if (rGeo.nShearAngle!=0) ShearPoly(aPol,rRect.TopLeft(),rGeo.mfTanShearAngle);
+    if (rGeo.nRotationAngle!=0) RotatePoly(aPol,rRect.TopLeft(),rGeo.mfSinRotationAngle,rGeo.mfCosRotationAngle);
     return aPol;
 }
 
@@ -492,12 +492,12 @@ void Poly2Rect(const tools::Polygon& rPol, tools::Rectangle& rRect, GeoStat& rGe
     rGeo.RecalcSinCos();
 
     Point aPt1(rPol[1]-rPol[0]);
-    if (rGeo.nRotationAngle!=0) RotatePoint(aPt1,Point(0,0),-rGeo.nSin,rGeo.nCos); // -Sin to reverse rotation
+    if (rGeo.nRotationAngle!=0) RotatePoint(aPt1,Point(0,0),-rGeo.mfSinRotationAngle,rGeo.mfCosRotationAngle); // -Sin to reverse rotation
     tools::Long nWdt=aPt1.X();
 
     Point aPt0(rPol[0]);
     Point aPt3(rPol[3]-rPol[0]);
-    if (rGeo.nRotationAngle!=0) RotatePoint(aPt3,Point(0,0),-rGeo.nSin,rGeo.nCos); // -Sin to reverse rotation
+    if (rGeo.nRotationAngle!=0) RotatePoint(aPt3,Point(0,0),-rGeo.mfSinRotationAngle,rGeo.mfCosRotationAngle); // -Sin to reverse rotation
     tools::Long nHgt=aPt3.Y();
 
 

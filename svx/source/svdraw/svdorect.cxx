@@ -115,8 +115,8 @@ XPolygon SdrRectObj::ImpCalcXPoly(const tools::Rectangle& rRect1, tools::Long nR
     aXPoly=aNewPoly;
 
     // these angles always relate to the top left corner of aRect
-    if (aGeo.nShearAngle!=0) ShearXPoly(aXPoly,maRect.TopLeft(),aGeo.nTan);
-    if (aGeo.nRotationAngle!=0) RotateXPoly(aXPoly,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+    if (aGeo.nShearAngle!=0) ShearXPoly(aXPoly,maRect.TopLeft(),aGeo.mfTanShearAngle);
+    if (aGeo.nRotationAngle!=0) RotateXPoly(aXPoly,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
     return aXPoly;
 }
 
@@ -173,13 +173,13 @@ void SdrRectObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
     if (aGeo.nShearAngle==0)
         return;
 
-    tools::Long nDst=FRound((maRect.Bottom()-maRect.Top())*aGeo.nTan);
+    tools::Long nDst=FRound((maRect.Bottom()-maRect.Top())*aGeo.mfTanShearAngle);
     if (aGeo.nShearAngle>0)
     {
         Point aRef(rRect.TopLeft());
         rRect.AdjustLeft( -nDst );
         Point aTmpPt(rRect.TopLeft());
-        RotatePoint(aTmpPt,aRef,aGeo.nSin,aGeo.nCos);
+        RotatePoint(aTmpPt,aRef,aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
         aTmpPt-=rRect.TopLeft();
         rRect.Move(aTmpPt.X(),aTmpPt.Y());
     }
@@ -339,11 +339,11 @@ void SdrRectObj::AddToHdlList(SdrHdlList& rHdlList) const
 
         if(aGeo.nShearAngle)
         {
-            ShearPoint(aPnt,maRect.TopLeft(),aGeo.nTan);
+            ShearPoint(aPnt,maRect.TopLeft(),aGeo.mfTanShearAngle);
         }
         if(aGeo.nRotationAngle)
         {
-            RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+            RotatePoint(aPnt,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
         }
 
         std::unique_ptr<SdrHdl> pH(new SdrHdl(aPnt,eKind));
@@ -381,7 +381,7 @@ bool SdrRectObj::applySpecialDrag(SdrDragStat& rDrag)
         Point aPt(rDrag.GetNow());
 
         if(aGeo.nRotationAngle)
-            RotatePoint(aPt,maRect.TopLeft(),-aGeo.nSin,aGeo.nCos);
+            RotatePoint(aPt,maRect.TopLeft(),-aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
 
         sal_Int32 nRad(aPt.X() - maRect.Left());
 
@@ -419,7 +419,7 @@ OUString SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 
             // -sin for reversal
             if(aGeo.nRotationAngle)
-                RotatePoint(aPt, maRect.TopLeft(), -aGeo.nSin, aGeo.nCos);
+                RotatePoint(aPt, maRect.TopLeft(), -aGeo.mfSinRotationAngle, aGeo.mfCosRotationAngle);
 
             sal_Int32 nRad(aPt.X() - maRect.Left());
 
@@ -506,8 +506,8 @@ SdrGluePoint SdrRectObj::GetVertexGluePoint(sal_uInt16 nPosNum) const
         case 2: aPt=maRect.BottomCenter(); aPt.AdjustY(nWdt ); break;
         case 3: aPt=maRect.LeftCenter();   aPt.AdjustX( -nWdt ); break;
     }
-    if (aGeo.nShearAngle!=0) ShearPoint(aPt,maRect.TopLeft(),aGeo.nTan);
-    if (aGeo.nRotationAngle!=0) RotatePoint(aPt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+    if (aGeo.nShearAngle!=0) ShearPoint(aPt,maRect.TopLeft(),aGeo.mfTanShearAngle);
+    if (aGeo.nRotationAngle!=0) RotatePoint(aPt,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
     aGP.SetPercent(false);
@@ -532,8 +532,8 @@ SdrGluePoint SdrRectObj::GetCornerGluePoint(sal_uInt16 nPosNum) const
         case 2: aPt=maRect.BottomRight(); aPt.AdjustX(nWdt ); aPt.AdjustY(nWdt ); break;
         case 3: aPt=maRect.BottomLeft();  aPt.AdjustX( -nWdt ); aPt.AdjustY(nWdt ); break;
     }
-    if (aGeo.nShearAngle!=0) ShearPoint(aPt,maRect.TopLeft(),aGeo.nTan);
-    if (aGeo.nRotationAngle!=0) RotatePoint(aPt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+    if (aGeo.nShearAngle!=0) ShearPoint(aPt,maRect.TopLeft(),aGeo.mfTanShearAngle);
+    if (aGeo.nRotationAngle!=0) RotatePoint(aPt,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
     aGP.SetPercent(false);

@@ -703,15 +703,15 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                                     {
                                         ShearPoly(aPol,
                                                 aNewRect.TopLeft(),
-                                                aGeo.nTan);
-                                        ShearPoint(aOffset, Point(0,0), aGeo.nTan);
+                                                aGeo.mfTanShearAngle);
+                                        ShearPoint(aOffset, Point(0,0), aGeo.mfTanShearAngle);
                                     }
                                     if (aGeo.nRotationAngle!=0)
                                     {
                                         RotatePoly(aPol,
                                                 aNewRect.TopLeft(),
-                                                aGeo.nSin,aGeo.nCos);
-                                        RotatePoint(aOffset, Point(0,0), aGeo.nSin,aGeo.nCos);
+                                                aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+                                        RotatePoint(aOffset, Point(0,0), aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
                                     }
 
                                     // apply offset
