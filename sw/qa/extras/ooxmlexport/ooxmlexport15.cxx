@@ -238,6 +238,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf136404, "tdf136404.fodt")
     CPPUNIT_ASSERT_EQUAL(OUString("8"), xEnumerationAccess7->getPresentation(false).trim());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf138739, "tdf138739.docx")
+{
+    uno::Reference<beans::XPropertySet> xParaProps(getParagraph(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Font type name does not match!", OUString("Comic Sans MS"),
+                                 xParaProps->getPropertyValue("CharFontName").get<OUString>());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf123390, "tdf123390.fodt")
 {
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);

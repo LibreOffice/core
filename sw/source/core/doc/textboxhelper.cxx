@@ -93,12 +93,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
     }
     catch (uno::Exception&)
     {
-        // Before the textframe was appended now it is inserted to the begin of the doc in order
-        // to prevent crash when someone removes the para where the textframe anchored:
-        uno::Reference<text::XTextCursor> xCursor = xTextDocument->getText()->createTextCursor();
-        xCursor->gotoStart(false);
-        xTextContentAppend->insertTextContentWithProperties(
-            xTextFrame, uno::Sequence<beans::PropertyValue>(), xCursor->getStart());
+        xTextContentAppend->appendTextContent(xTextFrame, uno::Sequence<beans::PropertyValue>());
     }
     // Link FLY and DRAW formats, so it becomes a text box (needed for syncProperty calls).
     uno::Reference<text::XTextFrame> xRealTextFrame(xTextFrame, uno::UNO_QUERY);
