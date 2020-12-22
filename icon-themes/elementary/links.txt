@@ -1013,15 +1013,12 @@ cmd/sc_removetableof.png cmd/sc_delete.png
 # Print
 cmd/32/printpagepreview.png cmd/32/printpreview.png
 cmd/32/previewprintoptions.png cmd/32/printpreview.png
-cmd/32/sendfax.png cmd/32/print.png
 
 cmd/lc_printpagepreview.png cmd/lc_printpreview.png
 cmd/lc_previewprintoptions.png cmd/lc_printpreview.png
-cmd/lc_sendfax.png cmd/lc_print.png
 
 cmd/sc_printpagepreview.png cmd/sc_printpreview.png
 cmd/sc_previewprintoptions.png cmd/sc_printpreview.png
-cmd/sc_sendfax.png cmd/sc_print.png
 
 # Folder
 cmd/32/dbtableopen.png cmd/32/open.png
@@ -1539,16 +1536,19 @@ cmd/sc_flowchartshapes.flowchart-process.png cmd/sc_basicshapes.quadrat.png
 
 # Sort
 cmd/32/ordercrit.png cmd/32/datasort.png
+cmd/32/sortdialog.png cmd/32/datasort.png
 cmd/32/sortdown.png cmd/32/sortdescending.png
 cmd/32/sortup.png cmd/32/sortascending.png
 cmd/32/tablesort.png cmd/32/datasort.png
 
 cmd/lc_ordercrit.png cmd/lc_datasort.png
+cmd/lc_sortdialog.png cmd/lc_datasort.png
 cmd/lc_sortdown.png cmd/lc_sortdescending.png
 cmd/lc_sortup.png cmd/lc_sortascending.png
 cmd/lc_tablesort.png cmd/lc_datasort.png
 
 cmd/sc_ordercrit.png cmd/sc_datasort.png
+cmd/sc_sortdialog.png cmd/sc_datasort.png
 cmd/sc_sortdown.png cmd/sc_sortdescending.png
 cmd/sc_sortup.png cmd/sc_sortascending.png
 cmd/sc_tablesort.png cmd/sc_datasort.png
@@ -1617,12 +1617,15 @@ cmd/sc_viewsidebarstyles.png cmd/sc_designerdialog.png
 
 # Macro
 cmd/32/macrodialog.png cmd/32/scriptorganizer.png
+cmd/32/macroorganizer.png cmd/32/scriptorganizer.png
 cmd/32/macrosmenu.png cmd/32/choosemacro.png
 
 cmd/lc_macrodialog.png cmd/lc_scriptorganizer.png
+cmd/lc_macroorganizer.png cmd/lc_scriptorganizer.png
 cmd/lc_macrosmenu.png cmd/lc_choosemacro.png
 
 cmd/sc_macrodialog.png cmd/sc_scriptorganizer.png
+cmd/sc_macroorganizer.png cmd/sc_scriptorganizer.png
 cmd/sc_macrosmenu.png cmd/sc_choosemacro.png
 
 # Mirror
@@ -1945,6 +1948,7 @@ res/folderop.png cmd/sc_open.png
 res/fp010.png cmd/sc_upsearch.png
 res/grafikei.png cmd/sc_graphic.png
 res/im30820.png cmd/sc_scriptorganizer.png
+res/im30821.png cmd/sc_moduledialog.png
 res/im30827.png cmd/sc_scriptorganizer.png
 res/info.png cmd/lc_helpindex.png
 res/info_16.png cmd/sc_helpindex.png
@@ -2200,7 +2204,7 @@ sfx2/res/styfam1.png cmd/sc_charfontname.png
 sfx2/res/styfam2.png cmd/sc_controlcodes.png
 sfx2/res/styfam3.png cmd/sc_linestyle.png
 sfx2/res/styfam4.png cmd/sc_showsinglepage.png
-sfx2/res/symphony/open_more.png cmd/sc_controlproperties.png
+sfx2/res/symphony/open_more.png cmd/lc_controlproperties.png
 sfx2/res/symphony/sidebar-3d-large.png cmd/lc_cube.png
 sfx2/res/symphony/sidebar-3d-small.png cmd/sc_cube.png
 sfx2/res/symphony/sidebar-animation-large.png cmd/lc_customanimation.png
@@ -2465,7 +2469,7 @@ cmd/32/addtextbox.png cmd/32/insertfixedtext.png
 cmd/lc_addtextbox.png cmd/lc_insertfixedtext.png
 cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
 
-# Edit menu
+# Edit menu 
 # ===============================================
 cmd/32/authoritiesentrydialog.png cmd/32/dbviewaliases.png
 cmd/32/changesmenu.png cmd/32/accepttrackedchange.png
@@ -2478,6 +2482,7 @@ cmd/32/editpastespecialmenu.png cmd/32/pastespecial.png
 cmd/32/fielddialog.png cmd/32/fields.png
 cmd/32/focustofindbar.png cmd/32/recsearch.png
 cmd/32/indexentrydialog.png cmd/32/insertindexesentry.png
+cmd/32/insertcontents.png cmd/32/pastespecial.png
 cmd/32/managelinks.png cmd/32/linkdialog.png
 cmd/32/modifyfield.png cmd/32/fields.png
 cmd/32/pastespecialmenu.png cmd/32/pastespecial.png
@@ -2493,6 +2498,7 @@ cmd/lc_editpastespecialmenu.png cmd/lc_pastespecial.png
 cmd/lc_fielddialog.png cmd/lc_fields.png
 cmd/lc_focustofindbar.png cmd/lc_recsearch.png
 cmd/lc_indexentrydialog.png cmd/lc_insertindexesentry.png
+cmd/lc_insertcontents.png cmd/lc_pastespecial.png
 cmd/lc_managelinks.png cmd/lc_linkdialog.png
 cmd/lc_modifyfield.png cmd/lc_fields.png
 cmd/lc_pastespecialmenu.png cmd/lc_pastespecial.png
@@ -2508,6 +2514,7 @@ cmd/sc_editpastespecialmenu.png cmd/sc_pastespecial.png
 cmd/sc_fielddialog.png cmd/sc_fields.png
 cmd/sc_focustofindbar.png cmd/sc_recsearch.png
 cmd/sc_indexentrydialog.png cmd/sc_insertindexesentry.png
+cmd/sc_insertcontents.png cmd/sc_pastespecial.png
 cmd/sc_managelinks.png cmd/sc_linkdialog.png
 cmd/sc_modifyfield.png cmd/sc_fields.png
 cmd/sc_pastespecialmenu.png cmd/sc_pastespecial.png
