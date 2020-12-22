@@ -51,6 +51,7 @@
 
 #include <memory>
 #include <set>
+#include <string_view>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -598,7 +599,7 @@ Reference < XAutoStyleFamily > SvXMLStylesContext::GetAutoStyles( XmlStyleFamily
             xAutoStyles = mxParaAutoStyles;
         else
         {
-            OUStringLiteral sName = bPara ? OUStringLiteral( u"ParagraphStyles" ): OUStringLiteral( u"CharacterStyles" );
+            OUString sName(bPara ? std::u16string_view( u"ParagraphStyles" ): std::u16string_view( u"CharacterStyles" ));
             Reference< XAutoStylesSupplier > xAutoStylesSupp(   GetImport().GetModel(), UNO_QUERY );
             Reference< XAutoStyles > xAutoStyleFamilies = xAutoStylesSupp->getAutoStyles();
             if (xAutoStyleFamilies->hasByName(sName))
