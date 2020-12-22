@@ -254,7 +254,6 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="tooltip-text" translatable="yes" context="templatedlg|filter_application|tooltip_text">Filter by Application</property>
-                            <property name="resize-mode">queue</property>
                             <items>
                               <item id="0" translatable="yes" context="templatedlg|applist">All Applications</item>
                               <item id="0" translatable="yes" context="templatedlg|applist">Text Documents</item>
