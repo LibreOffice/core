@@ -903,12 +903,12 @@ void SwColumnPage::SetLabels( sal_uInt16 nVis )
  * the column number overwrites potential user's width settings; all columns
  * are equally wide.
  */
-IMPL_LINK(SwColumnPage, ColModify, weld::SpinButton&, rEdit, void)
+IMPL_LINK_NOARG(SwColumnPage, ColModify, weld::SpinButton&, void)
 {
-    ColModify(&rEdit);
+    ColModify(/*bForceColReset=*/false);
 }
 
-void SwColumnPage::ColModify(const weld::SpinButton* pNF)
+void SwColumnPage::ColModify(bool bForceColReset)
 {
     m_nCols = static_cast<sal_uInt16>(m_xCLNrEdt->get_value());
     //#107890# the handler is also called from LoseFocus()
@@ -916,10 +916,10 @@ void SwColumnPage::ColModify(const weld::SpinButton* pNF)
     // #i17816# changing the displayed types within the ValueSet
     //from two columns to two columns with different settings doesn't invalidate the
     // example windows in ::ColModify()
-    if (pNF && m_xColMgr->GetCount() == m_nCols)
+    if (!bForceColReset && m_xColMgr->GetCount() == m_nCols)
         return;
 
-    if (pNF)
+    if (!bForceColReset)
         m_aDefaultVS.SetNoSelection();
     tools::Long nDist = static_cast< tools::Long >(m_xDistEd1->DenormalizePercent(m_xDistEd1->get_value(FieldUnit::TWIP)));
     m_xColMgr->SetCount(m_nCols, static_cast<sal_uInt16>(nDist));
@@ -1191,7 +1191,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
             if( m_xColMgr->GetActualSize() != nActWidth)
             {
                 m_xColMgr->SetActualWidth(nActWidth);
-                ColModify( nullptr );
+                ColModify(/*bForceColReset=*/false);
                 UpdateColMgr( *m_xLineWidthEdit );
             }
         }
@@ -1270,7 +1270,7 @@ IMPL_LINK(SwColumnPage, SetDefaultsHdl, ValueSet *, pVS, void)
         m_xCLNrEdt->set_value(nItem);
         m_xAutoWidthBox->set_active(true);
         m_xDistEd1->set_value(50, FieldUnit::CM);
-        ColModify(nullptr);
+        ColModify(/*bForceColReset=*/true);
     }
     else
     {
@@ -1278,7 +1278,7 @@ IMPL_LINK(SwColumnPage, SetDefaultsHdl, ValueSet *, pVS, void)
         m_xCLNrEdt->set_value(2);
         m_xAutoWidthBox->set_active(false);
         m_xDistEd1->set_value(50, FieldUnit::CM);
-        ColModify(nullptr);
+        ColModify(/*bForceColReset=*/true);
         // now set the width ratio to 2 : 1 or 1 : 2 respectively
         const tools::Long nSmall = static_cast< tools::Long >(m_xColMgr->GetActualSize() / 3);
         if(nItem == 4)

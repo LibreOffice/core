@@ -136,7 +136,7 @@ class SwColumnPage : public SfxTabPage
 
     // Handler
     DECL_LINK(ColModify, weld::SpinButton&, void);
-    void ColModify(const weld::SpinButton*);
+    void ColModify(bool bForceColReset);
     DECL_LINK(GapModify, weld::MetricSpinButton&, void);
     DECL_LINK(EdModify, weld::MetricSpinButton&, void);
     DECL_LINK(AutoWidthHdl, weld::ToggleButton&, void );
