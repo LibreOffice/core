@@ -2817,7 +2817,7 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
                 // build mathematically correct (negative shear and rotate) object transform
                 // containing shear and rotate to extract unsheared, unrotated polygon
                 basegfx::B2DHomMatrix aObjectMatrix;
-                aObjectMatrix.shearX(tan((36000 - aGeo.nShearAngle) * F_PI18000));
+                aObjectMatrix.shearX(-aGeo.mfTanShearAngle);
                 aObjectMatrix.rotate((36000 - aGeo.nRotationAngle) * F_PI18000);
 
                 // create inverse from it and back-transform polygon

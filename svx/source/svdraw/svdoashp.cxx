@@ -1564,8 +1564,8 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, tools::Long nAngle, double
     // the rotation angle for ashapes is stored in fObjectRotation, this rotation
     // has to be applied to the text object (which is internally using aGeo.nAngle).
     SdrTextObj::NbcRotate( maRect.TopLeft(), -aGeo.nRotationAngle,        // retrieving the unrotated text object
-                            sin( (-aGeo.nRotationAngle) * F_PI18000 ),
-                            cos( (-aGeo.nRotationAngle) * F_PI18000 ) );
+                            -aGeo.mfSinRotationAngle,
+                            aGeo.mfCosRotationAngle );
     aGeo.nRotationAngle = 0;                                             // resetting aGeo data
     aGeo.RecalcSinCos();
 

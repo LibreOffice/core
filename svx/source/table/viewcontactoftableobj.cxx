@@ -357,7 +357,7 @@ namespace sdr::contact
 
                         // create object matrix
                         const GeoStat& rGeoStat(rTableObj.GetGeoStat());
-                        const double fShearX(rGeoStat.nShearAngle ? tan((36000 - rGeoStat.nShearAngle) * F_PI18000) : 0.0);
+                        const double fShearX(-rGeoStat.mfTanShearAngle);
                         const double fRotate(rGeoStat.nRotationAngle ? (36000 - rGeoStat.nRotationAngle) * F_PI18000 : 0.0);
                         const basegfx::B2DHomMatrix aObjectMatrix(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                             aObjectRange.getWidth(), aObjectRange.getHeight(), fShearX, fRotate,
@@ -421,7 +421,7 @@ namespace sdr::contact
 
                 // create object matrix
                 const GeoStat& rGeoStat(rTableObj.GetGeoStat());
-                const double fShearX(rGeoStat.nShearAngle ? tan((36000 - rGeoStat.nShearAngle) * F_PI18000) : 0.0);
+                const double fShearX(-rGeoStat.mfTanShearAngle);
                 const double fRotate(rGeoStat.nRotationAngle ? (36000 - rGeoStat.nRotationAngle) * F_PI18000 : 0.0);
                 const basegfx::B2DHomMatrix aObjectMatrix(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                     aObjectRange.getWidth(), aObjectRange.getHeight(), fShearX, fRotate,
