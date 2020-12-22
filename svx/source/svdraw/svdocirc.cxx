@@ -292,7 +292,7 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrCircKind eCircleKind, 
 
         // shear, rotate and back to top left (if needed)
         aMatrix = basegfx::utils::createShearXRotateTranslateB2DHomMatrix(
-            aGeo.nShearAngle ? tan((36000 - aGeo.nShearAngle) * F_PI18000) : 0.0,
+            -aGeo.mfTanShearAngle,
             aGeo.nRotationAngle ? (36000 - aGeo.nRotationAngle) * F_PI18000 : 0.0,
             aTopLeft) * aMatrix;
 

@@ -62,7 +62,7 @@ basegfx::B2DHomMatrix ViewContactOfSdrOle2Obj::createObjectTransform() const
 
     // create object matrix
     const GeoStat& rGeoStat(GetOle2Obj().GetGeoStat());
-    const double fShearX(rGeoStat.nShearAngle ? tan((36000 - rGeoStat.nShearAngle) * F_PI18000) : 0.0);
+    const double fShearX(-rGeoStat.mfTanShearAngle);
     const double fRotate(rGeoStat.nRotationAngle ? (36000 - rGeoStat.nRotationAngle) * F_PI18000 : 0.0);
 
     return basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(

@@ -157,7 +157,7 @@ namespace sdr::contact
 
                 aObjectMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                     fScaleX, fScaleY,
-                    rGeoStat.nShearAngle ? tan((36000 - rGeoStat.nShearAngle) * F_PI18000) : 0.0,
+                    -rGeoStat.mfTanShearAngle,
                     rGeoStat.nRotationAngle ? (36000 - rGeoStat.nRotationAngle) * F_PI18000 : 0.0,
                     aObjectRange.getMinX(), aObjectRange.getMinY());
 

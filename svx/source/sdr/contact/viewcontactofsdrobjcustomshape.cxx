@@ -68,7 +68,7 @@ namespace sdr::contact
 
                     if(rGeoStat.nShearAngle)
                     {
-                        aRotMatrix.shearX(tan((36000 - rGeoStat.nShearAngle) * F_PI18000));
+                        aRotMatrix.shearX(-rGeoStat.mfTanShearAngle);
                     }
 
                     if(rGeoStat.nRotationAngle)
@@ -197,7 +197,7 @@ namespace sdr::contact
 
                         if(rGeoStat.nShearAngle)
                         {
-                            aTextBoxMatrix.shearX(tan((36000 - rGeoStat.nShearAngle) * F_PI18000));
+                            aTextBoxMatrix.shearX(-rGeoStat.mfTanShearAngle);
                         }
 
                         if(rGeoStat.nRotationAngle)
