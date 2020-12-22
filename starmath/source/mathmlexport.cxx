@@ -646,8 +646,7 @@ void SmXMLExport::ExportBinaryDiagonal(const SmNode* pNode, int nLevel)
 
         { // Scoping for <mo> creation
             SvXMLElementExport aMo(*this, XML_NAMESPACE_MATH, XML_MO, true, true);
-            sal_Unicode const nArse[2] = { MS_BACKSLASH, 0x00 };
-            GetDocHandler()->characters(nArse);
+            GetDocHandler()->characters(OUStringChar(MS_BACKSLASH));
         }
 
         ExportNodes(pNode->GetSubNode(1), nLevel);
