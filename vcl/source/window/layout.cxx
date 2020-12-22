@@ -1441,9 +1441,9 @@ void VclFrame::designate_label(vcl::Window *pWindow)
 
 const vcl::Window *VclFrame::get_label_widget() const
 {
-    assert(GetChildCount() == 2);
     if (m_pLabel)
         return m_pLabel;
+    assert(GetChildCount() == 2);
     //The label widget is normally the first (of two) children
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
     if (pWindowImpl->mpFirstChild == pWindowImpl->mpLastChild) //no label exists
