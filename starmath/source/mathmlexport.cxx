@@ -1042,7 +1042,7 @@ void SmXMLExport::ExportAttributes(const SmNode* pNode, int nLevel)
         {
             //proper entity support required
             SvXMLElementExport aMath(*this, XML_NAMESPACE_MATH, XML_MO, true, true);
-            sal_Unicode const nArse[2] = { 0xAF, 0x00 };
+            sal_Unicode const nArse[2] = u"\u00AF";
             GetDocHandler()->characters(nArse);
         }
         break;
@@ -1050,7 +1050,7 @@ void SmXMLExport::ExportAttributes(const SmNode* pNode, int nLevel)
         {
             //proper entity support required
             SvXMLElementExport aMath(*this, XML_NAMESPACE_MATH, XML_MO, true, true);
-            sal_Unicode const nArse[2] = { 0x0332, 0x00 };
+            sal_Unicode const nArse[2] = u"\u0332";
             GetDocHandler()->characters(nArse);
         }
         break;
