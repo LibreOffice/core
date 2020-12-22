@@ -1649,22 +1649,29 @@ bool ImplReadDIB(
     bool bMSOFormat=false)
 {
     const SvStreamEndian nOldFormat(rIStm.GetEndian());
-    const sal_uLong nOldPos(rIStm.Tell());
+    const auto nOldPos(rIStm.Tell());
     sal_uLong nOffset(0);
     bool bRet(false);
 
     rIStm.SetEndian(SvStreamEndian::LITTLE);
 
-    if(bFileHeader)
+    try
     {
-        if(ImplReadDIBFileHeader(rIStm, nOffset))
+        if(bFileHeader)
         {
-            bRet = ImplReadDIBBody(rIStm, rTarget, nOffset >= DIBV5HEADERSIZE ? pTargetAlpha : nullptr, nOffset, bIsMask, bMSOFormat);
+            if(ImplReadDIBFileHeader(rIStm, nOffset))
+            {
+                bRet = ImplReadDIBBody(rIStm, rTarget, nOffset >= DIBV5HEADERSIZE ? pTargetAlpha : nullptr, nOffset, bIsMask, bMSOFormat);
+            }
+        }
+        else
+        {
+            bRet = ImplReadDIBBody(rIStm, rTarget, nullptr, nOffset, bIsMask, bMSOFormat);
         }
     }
-    else
+    catch (const SvStreamEOFException&)
     {
-        bRet = ImplReadDIBBody(rIStm, rTarget, nullptr, nOffset, bIsMask, bMSOFormat);
+        SAL_WARN("vcl", "EOF");
     }
 
     if(!bRet)
