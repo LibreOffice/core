@@ -1,22 +1,20 @@
 = Status =
 
-$ make cross-toolset
-$ make vcl.all
+$ make
 
 > instdir/program/ui-previewer.html
 
-Plain make vcl.all may still have dependency problems. But a general
-make currently fails with a template problem in sc. The ui-previewer
-"binary" will "crash" with memory alignment problems.
+The ui-previewer "binary" will "crash" with memory alignment problems.
 
 
 = Setup for the LO WASM build (with Qt) =
 
 We're using Qt 5.15 with the officially supported emscripten v1.39.8.
 But there are several potential problems with threads and exceptions, so this will likely
-change later zo a newer emscripten.
+change later to a newer emscripten.
 
 Qt WASM is not yet used with LO, just if you're wondering!
+
 
 == Setup emscripten ==
 
@@ -30,19 +28,6 @@ Example bashrc scriptlet:
 
 EMSDK_ENV=$HOME/Development/libreoffice/git_emsdk/emsdk_env.sh
 [ -f "$EMSDK_ENV" ] && \. "$EMSDK_ENV" 1>/dev/null 2>&1
-
-Before cleaning up all configure calls, I patched git_emsdk/upstream/emscripten/emcc.py for cpp:
-
-+++ git_emsdk/upstream/emscripten/emcc.py
-@@ -707,7 +707,7 @@ There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR P
- 
-   # If this is a configure-type thing, do not compile to JavaScript, instead use clang
-   # to compile to a native binary (using our headers, so things make sense later)
--  CONFIGURE_CONFIG = (os.environ.get('EMMAKEN_JUST_CONFIGURE') or 'conftest.c' in args) and not os.environ.get('EMMAKEN_JUST_CONFIGURE_RECURSE')
-+  CONFIGURE_CONFIG = (os.environ.get('EMMAKEN_JUST_CONFIGURE') or ('conftest.' + ext in args for ext in ['c', 'cpp'])) and not os.environ.get('EMMAKEN_JUST_CONFIGURE_RECURSE')
-   CMAKE_CONFIG = 'CMakeFiles/cmTryCompileExec.dir' in ' '.join(args)# or 'CMakeCCompilerId' in ' '.join(args)
-   if CONFIGURE_CONFIG or CMAKE_CONFIG:
-     # XXX use this to debug configure stuff. ./configure's generally hide our
 
 
 == Setup Qt ==
@@ -138,6 +123,24 @@ C++, which is probably largely boilerplate code, but the function call in WAT
 conventions in WASM_EmscriptenInvoke. I didn't get a reply to that question for
 hours. Maybe I'll open an Emscripten issue, if we really have to implement
 this.
+
+
+= Workaround for eventual clang WASM compiler bug =
+
+sc/source/core/data/attarray.cxx:378:44: error: call to member function 'erase' is ambiguous
+                        aNewCondFormatData.erase(nIndex);
+                        ~~~~~~~~~~~~~~~~~~~^~~~~
+include/o3tl/sorted_vector.hxx:86:15: note: candidate function
+    size_type erase( const Value& x )
+              ^
+include/o3tl/sorted_vector.hxx:97:10: note: candidate function
+    void erase( size_t index )
+
+This is currently patched by using x.erase(x.begin() + nIndex).
+
+There shouldn't be an ambiguity, because of "[WebAssembly] Change size_t to `unsigned long`."
+(https://reviews.llvm.org/rGdf07a35912d78781ed6a62a7c032bfef5085a4f5#change-IrS9f6jH6PFq),
+from "Jul 23 2018" which pre-dates the emscripten tag 1.39.8 from 02/14/2020 by ~1.5y.
 
 
 = Tools for problem diagnosis =

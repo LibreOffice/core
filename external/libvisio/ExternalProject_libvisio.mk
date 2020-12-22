@@ -26,7 +26,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 	$(call gb_Trace_StartRange,libvisio,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
-		&& MAKE=$(MAKE) ./configure \
+		&& MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
 			--with-pic \
 			--enable-static \
 			--disable-shared \

@@ -27,7 +27,7 @@ $(call gb_ExternalProject_get_state_target,libffi,build):
 	$(call gb_Trace_StartRange,libffi,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		export LIB="$(ILIB)" && \
-		MAKE=$(MAKE) ./configure \
+		MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
 			--enable-option-checking=fatal \
 			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 			$(if $(filter LINUX,$(OS)), \

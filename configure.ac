@@ -1106,7 +1106,7 @@ haiku*)
     _os=Haiku
     ;;
 
-emscripten*)
+emscripten)
     build_gstreamer_1_0=no
     enable_lpsolve=no
     enable_report_builder=no
@@ -1279,10 +1279,24 @@ if test $_os != "WINNT"; then
 fi
 AC_SUBST(DLOPEN_LIBS)
 
-AC_ARG_ENABLE(ios-simulator,
-    AS_HELP_STRING([--enable-ios-simulator],
-        [build for iOS simulator])
-)
+dnl ===================================================================
+dnl Sanity checks for Emscripten SDK setup
+dnl ===================================================================
+
+if test "$_os" = "Emscripten"; then
+    EMSCRIPTEN_ERROR=0
+    if ! which emconfigure >/dev/null 2>&1; then
+        AC_MSG_WARN([emconfigure must be in your \$PATH])
+        EMSCRIPTEN_ERROR=1
+    fi
+    if test -z "$EMMAKEN_JUST_CONFIGURE"; then
+	AC_MSG_WARN(["\$EMMAKEN_JUST_CONFIGURE wasn't set by emconfigure. Prefix configure or use autogen.sh])
+        EMSCRIPTEN_ERROR=1
+    fi
+    if test $EMSCRIPTEN_ERROR -ne 0; then
+        AC_MSG_ERROR(["Please fix your EMSDK setup to build with Emscripten!"])
+    fi
+fi
 
 ###############################################################################
 # Extensions switches --enable/--disable
@@ -1296,6 +1310,11 @@ AC_ARG_ENABLE(ios-simulator,
 # extensions are built anyway, just not integrated in the installer,
 # if you use --disable-extension-integration. Is that really the
 # case?
+
+AC_ARG_ENABLE(ios-simulator,
+    AS_HELP_STRING([--enable-ios-simulator],
+        [build for iOS simulator])
+)
 
 libo_FUZZ_ARG_ENABLE(extension-integration,
     AS_HELP_STRING([--disable-extension-integration],
@@ -2611,6 +2630,8 @@ AC_ARG_WITH(onedrive-client-secret,
         authentication on OneDrive. If either this or
         --with-onedrive-client-id is empty, the feature will be disabled]),
 )
+
+
 dnl ===================================================================
 dnl Do we want to use pre-build binary tarball for recompile
 dnl ===================================================================

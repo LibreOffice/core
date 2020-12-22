@@ -40,7 +40,7 @@ endif
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_Trace_StartRange,curl,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		./configure \
+		$(gb_RUN_CONFIGURE) ./configure \
 			$(if $(filter iOS MACOSX,$(OS)),\
 				--with-darwinssl,\
 				$(if $(ENABLE_NSS),--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out"),--without-nss)) \

@@ -18,7 +18,7 @@ $(eval $(call gb_ExternalProject_register_targets,hyphen,\
 $(call gb_ExternalProject_get_state_target,hyphen,build):
 	$(call gb_Trace_StartRange,hyphen,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		./configure --disable-shared \
+		$(gb_RUN_CONFIGURE) ./configure --disable-shared \
 			$(if $(filter-out iOS,$(OS)),--with-pic) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff=no) \
 		&& $(MAKE) \
