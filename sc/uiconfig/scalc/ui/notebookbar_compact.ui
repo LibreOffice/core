@@ -3044,7 +3044,6 @@
                         <property name="receives_default">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
-                        <property name="resize_mode">immediate</property>
                         <property name="relief">none</property>
                         <property name="use_underline">True</property>
                       </object>
