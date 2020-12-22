@@ -22,6 +22,7 @@
 #include <algorithm>
 
 #include <svx/EnhancedCustomShape2d.hxx>
+#include <svx/sdangitm.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
@@ -295,7 +296,7 @@ void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
     }
     else
     {
-        m_xCtlAngle->SetRotation(0);
+        m_xCtlAngle->SetRotation(0_deg100);
     }
     m_xCtlAngle->SaveValue();
     m_xMtrPosX->save_value();

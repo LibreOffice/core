@@ -242,9 +242,9 @@ public:
     virtual void NbcResize(const Point& rRefPnt, const Fraction& aXFact, const Fraction& aYFact) override;
 
     // #i54102# added rotate, mirror and shear support
-    virtual void NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs) override;
+    virtual void NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs) override;
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
-    virtual void NbcShear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear) override;
+    virtual void NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear) override;
 
     // #102344# Added missing implementation
     virtual void NbcSetAnchorPos(const Point& rPnt) override;

@@ -63,7 +63,7 @@ ChartItemPool::ChartItemPool():
     rPoolDefaults[SCHATTR_LEGEND_NO_OVERLAY        - SCHATTR_START] = new SfxBoolItem(SCHATTR_LEGEND_NO_OVERLAY, true);
 
     //text
-    rPoolDefaults[SCHATTR_TEXT_DEGREES             - SCHATTR_START] = new SdrAngleItem(SCHATTR_TEXT_DEGREES, 0);
+    rPoolDefaults[SCHATTR_TEXT_DEGREES             - SCHATTR_START] = new SdrAngleItem(SCHATTR_TEXT_DEGREES, 0_deg100);
     rPoolDefaults[SCHATTR_TEXT_STACKED             - SCHATTR_START] = new SfxBoolItem(SCHATTR_TEXT_STACKED,false);
 
     //statistic
@@ -142,7 +142,7 @@ ChartItemPool::ChartItemPool():
     rPoolDefaults[SCHATTR_SPLINE_ORDER         - SCHATTR_START] = new SfxInt32Item( SCHATTR_SPLINE_ORDER, 3 );
     rPoolDefaults[SCHATTR_SPLINE_RESOLUTION    - SCHATTR_START] = new SfxInt32Item( SCHATTR_SPLINE_RESOLUTION, 20 );
     rPoolDefaults[SCHATTR_GROUP_BARS_PER_AXIS  - SCHATTR_START] = new SfxBoolItem(SCHATTR_GROUP_BARS_PER_AXIS, false);
-    rPoolDefaults[SCHATTR_STARTING_ANGLE       - SCHATTR_START] = new SdrAngleItem( SCHATTR_STARTING_ANGLE, 9000 );
+    rPoolDefaults[SCHATTR_STARTING_ANGLE       - SCHATTR_START] = new SdrAngleItem( SCHATTR_STARTING_ANGLE, 9000_deg100 );
     rPoolDefaults[SCHATTR_CLOCKWISE            - SCHATTR_START] = new SfxBoolItem( SCHATTR_CLOCKWISE, false );
 
     rPoolDefaults[SCHATTR_MISSING_VALUE_TREATMENT    - SCHATTR_START] = new SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT, 0);

@@ -125,68 +125,68 @@ void SdrGluePoint::SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj)
     aPos=aPt;
 }
 
-tools::Long SdrGluePoint::GetAlignAngle() const
+Degree100 SdrGluePoint::GetAlignAngle() const
 {
     if (nAlign == (SdrAlign::HORZ_CENTER|SdrAlign::VERT_CENTER))
-        return 0; // Invalid!
+        return 0_deg100; // Invalid!
     else if (nAlign == (SdrAlign::HORZ_RIGHT |SdrAlign::VERT_CENTER))
-        return 0;
+        return 0_deg100;
     else if (nAlign == (SdrAlign::HORZ_RIGHT |SdrAlign::VERT_TOP))
-        return 4500;
+        return 4500_deg100;
     else if (nAlign == (SdrAlign::HORZ_CENTER|SdrAlign::VERT_TOP))
-        return 9000;
+        return 9000_deg100;
     else if (nAlign == (SdrAlign::HORZ_LEFT  |SdrAlign::VERT_TOP))
-        return 13500;
+        return 13500_deg100;
     else if (nAlign == (SdrAlign::HORZ_LEFT  |SdrAlign::VERT_CENTER))
-        return 18000;
+        return 18000_deg100;
     else if (nAlign == (SdrAlign::HORZ_LEFT  |SdrAlign::VERT_BOTTOM))
-        return 22500;
+        return 22500_deg100;
     else if (nAlign == (SdrAlign::HORZ_CENTER|SdrAlign::VERT_BOTTOM))
-        return 27000;
+        return 27000_deg100;
     else if (nAlign == (SdrAlign::HORZ_RIGHT |SdrAlign::VERT_BOTTOM))
-        return 31500;
-    return 0;
+        return 31500_deg100;
+    return 0_deg100;
 }
 
-void SdrGluePoint::SetAlignAngle(tools::Long nAngle)
+void SdrGluePoint::SetAlignAngle(Degree100 nAngle)
 {
     nAngle=NormAngle36000(nAngle);
-    if (nAngle>=33750 || nAngle<2250) nAlign=SdrAlign::HORZ_RIGHT |SdrAlign::VERT_CENTER;
-    else if (nAngle< 6750) nAlign=SdrAlign::HORZ_RIGHT |SdrAlign::VERT_TOP   ;
-    else if (nAngle<11250) nAlign=SdrAlign::HORZ_CENTER|SdrAlign::VERT_TOP   ;
-    else if (nAngle<15750) nAlign=SdrAlign::HORZ_LEFT  |SdrAlign::VERT_TOP   ;
-    else if (nAngle<20250) nAlign=SdrAlign::HORZ_LEFT  |SdrAlign::VERT_CENTER;
-    else if (nAngle<24750) nAlign=SdrAlign::HORZ_LEFT  |SdrAlign::VERT_BOTTOM;
-    else if (nAngle<29250) nAlign=SdrAlign::HORZ_CENTER|SdrAlign::VERT_BOTTOM;
-    else if (nAngle<33750) nAlign=SdrAlign::HORZ_RIGHT |SdrAlign::VERT_BOTTOM;
+    if (nAngle>=33750_deg100 || nAngle<2250_deg100) nAlign=SdrAlign::HORZ_RIGHT |SdrAlign::VERT_CENTER;
+    else if (nAngle< 6750_deg100) nAlign=SdrAlign::HORZ_RIGHT |SdrAlign::VERT_TOP   ;
+    else if (nAngle<11250_deg100) nAlign=SdrAlign::HORZ_CENTER|SdrAlign::VERT_TOP   ;
+    else if (nAngle<15750_deg100) nAlign=SdrAlign::HORZ_LEFT  |SdrAlign::VERT_TOP   ;
+    else if (nAngle<20250_deg100) nAlign=SdrAlign::HORZ_LEFT  |SdrAlign::VERT_CENTER;
+    else if (nAngle<24750_deg100) nAlign=SdrAlign::HORZ_LEFT  |SdrAlign::VERT_BOTTOM;
+    else if (nAngle<29250_deg100) nAlign=SdrAlign::HORZ_CENTER|SdrAlign::VERT_BOTTOM;
+    else if (nAngle<33750_deg100) nAlign=SdrAlign::HORZ_RIGHT |SdrAlign::VERT_BOTTOM;
 }
 
-tools::Long SdrGluePoint::EscDirToAngle(SdrEscapeDirection nEsc)
+Degree100 SdrGluePoint::EscDirToAngle(SdrEscapeDirection nEsc)
 {
     switch (nEsc) {
-        case SdrEscapeDirection::RIGHT : return 0;
-        case SdrEscapeDirection::TOP   : return 9000;
-        case SdrEscapeDirection::LEFT  : return 18000;
-        case SdrEscapeDirection::BOTTOM: return 27000;
+        case SdrEscapeDirection::RIGHT : return 0_deg100;
+        case SdrEscapeDirection::TOP   : return 9000_deg100;
+        case SdrEscapeDirection::LEFT  : return 18000_deg100;
+        case SdrEscapeDirection::BOTTOM: return 27000_deg100;
         default: break;
     } // switch
-    return 0;
+    return 0_deg100;
 }
 
-SdrEscapeDirection SdrGluePoint::EscAngleToDir(tools::Long nAngle)
+SdrEscapeDirection SdrGluePoint::EscAngleToDir(Degree100 nAngle)
 {
     nAngle=NormAngle36000(nAngle);
-    if (nAngle>=31500 || nAngle<4500)
+    if (nAngle>=31500_deg100 || nAngle<4500_deg100)
         return SdrEscapeDirection::RIGHT;
-    if (nAngle<13500)
+    if (nAngle<13500_deg100)
         return SdrEscapeDirection::TOP;
-    if (nAngle<22500)
+    if (nAngle<22500_deg100)
         return SdrEscapeDirection::LEFT;
     /* (nAngle<31500)*/
     return SdrEscapeDirection::BOTTOM;
 }
 
-void SdrGluePoint::Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs, const SdrObject* pObj)
+void SdrGluePoint::Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs, const SdrObject* pObj)
 {
     Point aPt(pObj!=nullptr ? GetAbsolutePos(*pObj) : GetPos());
     RotatePoint(aPt,rRef,sn,cs);
@@ -206,38 +206,38 @@ void SdrGluePoint::Rotate(const Point& rRef, tools::Long nAngle, double sn, doub
     if (pObj!=nullptr) SetAbsolutePos(aPt,*pObj); else SetPos(aPt);
 }
 
-void SdrGluePoint::Mirror(const Point& rRef1, const Point& rRef2, tools::Long nAngle, const SdrObject* pObj)
+void SdrGluePoint::Mirror(const Point& rRef1, const Point& rRef2, Degree100 nAngle, const SdrObject* pObj)
 {
     Point aPt(pObj!=nullptr ? GetAbsolutePos(*pObj) : GetPos());
     MirrorPoint(aPt,rRef1,rRef2);
     // mirror reference edge
     if(nAlign != (SdrAlign::HORZ_CENTER|SdrAlign::VERT_CENTER))
     {
-        tools::Long nAW=GetAlignAngle();
-        nAW+=2*(nAngle-nAW);
+        Degree100 nAW=GetAlignAngle();
+        nAW+=2_deg100*(nAngle-nAW);
         SetAlignAngle(nAW);
     }
     // mirror exit directions
     SdrEscapeDirection nEscDir0=nEscDir;
     SdrEscapeDirection nEscDir1=SdrEscapeDirection::SMART;
     if (nEscDir0&SdrEscapeDirection::LEFT) {
-        tools::Long nEW=EscDirToAngle(SdrEscapeDirection::LEFT);
-        nEW+=2*(nAngle-nEW);
+        Degree100 nEW=EscDirToAngle(SdrEscapeDirection::LEFT);
+        nEW+=2_deg100*(nAngle-nEW);
         nEscDir1|=EscAngleToDir(nEW);
     }
     if (nEscDir0&SdrEscapeDirection::TOP) {
-        tools::Long nEW=EscDirToAngle(SdrEscapeDirection::TOP);
-        nEW+=2*(nAngle-nEW);
+        Degree100 nEW=EscDirToAngle(SdrEscapeDirection::TOP);
+        nEW+=2_deg100*(nAngle-nEW);
         nEscDir1|=EscAngleToDir(nEW);
     }
     if (nEscDir0&SdrEscapeDirection::RIGHT) {
-        tools::Long nEW=EscDirToAngle(SdrEscapeDirection::RIGHT);
-        nEW+=2*(nAngle-nEW);
+        Degree100 nEW=EscDirToAngle(SdrEscapeDirection::RIGHT);
+        nEW+=2_deg100*(nAngle-nEW);
         nEscDir1|=EscAngleToDir(nEW);
     }
     if (nEscDir0&SdrEscapeDirection::BOTTOM) {
-        tools::Long nEW=EscDirToAngle(SdrEscapeDirection::BOTTOM);
-        nEW+=2*(nAngle-nEW);
+        Degree100 nEW=EscDirToAngle(SdrEscapeDirection::BOTTOM);
+        nEW+=2_deg100*(nAngle-nEW);
         nEscDir1|=EscAngleToDir(nEW);
     }
     nEscDir=nEscDir1;
@@ -361,7 +361,7 @@ void SdrGluePointList::SetReallyAbsolute(bool bOn, const SdrObject& rObj)
         xGP->SetReallyAbsolute(bOn,rObj);
 }
 
-void SdrGluePointList::Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs, const SdrObject* pObj)
+void SdrGluePointList::Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs, const SdrObject* pObj)
 {
     for (auto& xGP : aList)
         xGP->Rotate(rRef,nAngle,sn,cs,pObj);
@@ -370,11 +370,11 @@ void SdrGluePointList::Rotate(const Point& rRef, tools::Long nAngle, double sn, 
 void SdrGluePointList::Mirror(const Point& rRef1, const Point& rRef2, const SdrObject* pObj)
 {
     Point aPt(rRef2); aPt-=rRef1;
-    tools::Long nAngle=GetAngle(aPt);
+    Degree100 nAngle=GetAngle(aPt);
     Mirror(rRef1,rRef2,nAngle,pObj);
 }
 
-void SdrGluePointList::Mirror(const Point& rRef1, const Point& rRef2, tools::Long nAngle, const SdrObject* pObj)
+void SdrGluePointList::Mirror(const Point& rRef1, const Point& rRef2, Degree100 nAngle, const SdrObject* pObj)
 {
     for (auto& xGP : aList)
         xGP->Mirror(rRef1,rRef2,nAngle,pObj);
