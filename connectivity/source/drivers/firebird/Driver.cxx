@@ -49,7 +49,7 @@ const OUStringLiteral our_sFirebirdTmpVar = u"FIREBIRD_TMP";
 const OUStringLiteral our_sFirebirdLockVar = u"FIREBIRD_LOCK";
 const OUStringLiteral our_sFirebirdMsgVar = u"FIREBIRD_MSG";
 #ifdef MACOSX
-const char our_sFirebirdLibVar[] = "LIBREOFFICE_FIREBIRD_LIB";
+const OUStringLiteral our_sFirebirdLibVar = u"LIBREOFFICE_FIREBIRD_LIB";
 #endif
 };
 
