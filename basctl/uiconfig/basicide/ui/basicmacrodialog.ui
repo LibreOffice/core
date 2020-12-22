@@ -321,7 +321,6 @@
                   <object class="GtkButtonBox" id="buttonbox1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="resize_mode">immediate</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">5</property>
                     <property name="homogeneous">True</property>

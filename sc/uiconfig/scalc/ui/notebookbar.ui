@@ -3008,7 +3008,6 @@
                             <property name="halign">end</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
-                            <property name="resize_mode">immediate</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
                           </object>
@@ -3028,7 +3027,6 @@
                             <property name="halign">end</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
-                            <property name="resize_mode">immediate</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
                           </object>
@@ -14596,7 +14594,6 @@
                             <property name="can_focus">True</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
-                            <property name="resize_mode">immediate</property>
                             <property name="toolbar_style">both</property>
                             <property name="show_arrow">False</property>
                             <property name="icon_size">3</property>
@@ -14629,7 +14626,6 @@
                               <object class="sfxlo-NotebookbarToolBox" id="first27">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="resize_mode">immediate</property>
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
                                 <child>
@@ -14654,7 +14650,6 @@
                               <object class="sfxlo-NotebookbarToolBox" id="second11">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="resize_mode">immediate</property>
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
                                 <child>
@@ -14724,7 +14719,6 @@
                               <object class="sfxlo-NotebookbarToolBox" id="first29">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="resize_mode">immediate</property>
                                 <property name="toolbar_style">icons</property>
                                 <property name="show_arrow">False</property>
                                 <child>
@@ -14788,7 +14782,6 @@
                                   <object class="sfxlo-NotebookbarToolBox" id="second13">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="resize_mode">immediate</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -14813,7 +14806,6 @@
                                   <object class="sfxlo-NotebookbarToolBox" id="second10">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="resize_mode">immediate</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -14883,7 +14875,6 @@
                             <property name="can_focus">True</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
-                            <property name="resize_mode">immediate</property>
                             <property name="toolbar_style">both</property>
                             <property name="show_arrow">False</property>
                             <property name="icon_size">3</property>
@@ -14912,7 +14903,6 @@
                             <property name="can_focus">True</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
-                            <property name="resize_mode">immediate</property>
                             <property name="toolbar_style">both</property>
                             <property name="show_arrow">False</property>
                             <property name="icon_size">3</property>
