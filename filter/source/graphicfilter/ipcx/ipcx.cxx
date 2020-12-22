@@ -19,6 +19,7 @@
 
 
 #include <memory>
+#include <sal/log.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <tools/stream.hxx>
@@ -402,7 +403,16 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool
 ipxGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     PCXReader aPCXReader(rStream);
-    bool bRetValue = aPCXReader.ReadPCX(rGraphic);
+    bool bRetValue;
+    try
+    {
+        bRetValue = aPCXReader.ReadPCX(rGraphic);
+    }
+    catch (const SvStreamEOFException&)
+    {
+        SAL_WARN("filter.pcx", "EOF");
+        bRetValue = false;
+    }
     if ( !bRetValue )
         rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
     return bRetValue;
