@@ -885,15 +885,15 @@ OUString PDFiumAnnotation::getString(OString const& rKey)
 std::vector<std::vector<basegfx::B2DPoint>> PDFiumAnnotation::getInkStrokes()
 {
     std::vector<std::vector<basegfx::B2DPoint>> aB2DPointList;
-    int nInkStrokes = FPDFAnnot_GetInkStrokeCount(mpAnnotation);
+    int nInkStrokes = FPDFAnnot_GetInkListCount(mpAnnotation);
     for (int i = 0; i < nInkStrokes; i++)
     {
         std::vector<basegfx::B2DPoint> aB2DPoints;
-        int nPoints = FPDFAnnot_GetInkStrokePointCount(mpAnnotation, i);
+        int nPoints = FPDFAnnot_GetInkListPath(mpAnnotation, i, nullptr, 0);
         if (nPoints)
         {
             std::vector<FS_POINTF> aPoints(nPoints);
-            if (FPDFAnnot_GetInkStrokePoints(mpAnnotation, i, aPoints.data()))
+            if (FPDFAnnot_GetInkListPath(mpAnnotation, i, aPoints.data(), aPoints.size()))
             {
                 for (auto const& rPoint : aPoints)
                 {
@@ -909,11 +909,11 @@ std::vector<std::vector<basegfx::B2DPoint>> PDFiumAnnotation::getInkStrokes()
 std::vector<basegfx::B2DPoint> PDFiumAnnotation::getVertices()
 {
     std::vector<basegfx::B2DPoint> aB2DPoints;
-    int nPoints = FPDFAnnot_GetVerticesCount(mpAnnotation);
+    int nPoints = FPDFAnnot_GetVertices(mpAnnotation, nullptr, 0);
     if (nPoints)
     {
         std::vector<FS_POINTF> aPoints(nPoints);
-        if (FPDFAnnot_GetVertices(mpAnnotation, aPoints.data()))
+        if (FPDFAnnot_GetVertices(mpAnnotation, aPoints.data(), aPoints.size()))
         {
             for (auto const& rPoint : aPoints)
                 aB2DPoints.emplace_back(rPoint.x, rPoint.y);

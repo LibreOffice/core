@@ -1,155 +1,260 @@
+From 09ecef60e8292457d9e78a2242f5efec953c2c25 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Tue, 10 Nov 2020 21:50:38 +0000
+Subject: [PATCH] Add FPDFAnnot_GetVertices() API
+
+This follows the same pattern as FPDF_GetTrailerEnds(), so the client
+has to call this function twice, but allocation of the buffer happens
+outside pdfium.
+
+Change-Id: Ic733083eba0b110310d6bbdc48f874bac4c7f2d6
+Reviewed-on: https://pdfium-review.googlesource.com/c/pdfium/+/76050
+Commit-Queue: Miklos V <vmiklos@collabora.co.uk>
+Commit-Queue: Tom Sepez <tsepez@chromium.org>
+Reviewed-by: Tom Sepez <tsepez@chromium.org>
+---
+ constants/annotation_common.h       |  3 ++
+ fpdfsdk/fpdf_annot.cpp              | 28 ++++++++++++
+ fpdfsdk/fpdf_annot_embeddertest.cpp | 67 +++++++++++++++++++++++++++++
+ fpdfsdk/fpdf_view_c_api_test.c      |  1 +
+ public/fpdf_annot.h                 | 16 +++++++
+ testing/resources/polygon_annot.in  | 48 +++++++++++++++++++++
+ testing/resources/polygon_annot.pdf | 60 ++++++++++++++++++++++++++
+ 7 files changed, 223 insertions(+)
+ create mode 100644 testing/resources/polygon_annot.in
+ create mode 100644 testing/resources/polygon_annot.pdf
+
+diff --git a/constants/annotation_common.h b/constants/annotation_common.h
+index 471d24407..6f96e623a 100644
+--- a/constants/annotation_common.h
++++ b/constants/annotation_common.h
+@@ -26,6 +26,9 @@ constexpr char kC[] = "C";
+ constexpr char kStructParent[] = "StructParent";
+ constexpr char kOC[] = "OC";
+ 
++// Entries for polygon and polyline annotations.
++constexpr char kVertices[] = "Vertices";
++
+ }  // namespace annotation
+ }  // namespace pdfium
+ 
 diff --git a/fpdfsdk/fpdf_annot.cpp b/fpdfsdk/fpdf_annot.cpp
-index 98b3e4f0a..c1471220b 100644
+index 28dbe145d..13c73f6aa 100644
 --- a/fpdfsdk/fpdf_annot.cpp
 +++ b/fpdfsdk/fpdf_annot.cpp
-@@ -493,6 +493,65 @@ FPDFAnnot_RemoveInkList(FPDF_ANNOTATION annot) {
+@@ -809,6 +809,34 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_GetRect(FPDF_ANNOTATION annot,
    return true;
  }
-
-+FPDF_EXPORT int FPDF_CALLCONV
-+FPDFAnnot_GetInkStrokeCount(FPDF_ANNOTATION annot)
-+{
-+  if (FPDFAnnot_GetSubtype(annot) != FPDF_ANNOT_INK)
-+    return -1;
-+
-+  CPDF_Dictionary* pAnnotDict = GetAnnotDictFromFPDFAnnotation(annot);
-+
-+  CPDF_Array* inklist = pAnnotDict->GetArrayFor("InkList");
-+  if (!inklist)
+ 
++FPDF_EXPORT unsigned long FPDF_CALLCONV
++FPDFAnnot_GetVertices(FPDF_ANNOTATION annot,
++                      FS_POINTF* buffer,
++                      unsigned long length) {
++  FPDF_ANNOTATION_SUBTYPE subtype = FPDFAnnot_GetSubtype(annot);
++  if (subtype != FPDF_ANNOT_POLYGON && subtype != FPDF_ANNOT_POLYLINE)
 +    return 0;
 +
-+  return static_cast<int>(inklist->size());
-+}
-+
-+FPDF_EXPORT int FPDF_CALLCONV
-+FPDFAnnot_GetInkStrokePointCount(FPDF_ANNOTATION annot, int index)
-+{
-+  if (FPDFAnnot_GetSubtype(annot) != FPDF_ANNOT_INK)
-+    return -1;
-+
-+  CPDF_Dictionary* pAnnotDict = GetAnnotDictFromFPDFAnnotation(annot);
-+
-+  CPDF_Array* pInkList = pAnnotDict->GetArrayFor("InkList");
-+  if (!pInkList)
++  CPDF_Dictionary* annot_dict = GetAnnotDictFromFPDFAnnotation(annot);
++  if (!annot_dict)
 +    return 0;
 +
-+  CPDF_Array* pInkPoints = pInkList->GetArrayAt(index);
-+  if (!pInkPoints)
++  CPDF_Array* vertices = annot_dict->GetArrayFor(pdfium::annotation::kVertices);
++  if (!vertices)
 +    return 0;
 +
-+  return static_cast<int>(pInkPoints->size() / 2);
-+}
-+
-+FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
-+FPDFAnnot_GetInkStrokePoints(FPDF_ANNOTATION annot, int index,
-+                             FS_POINTF* points)
-+{
-+  if (FPDFAnnot_GetSubtype(annot) != FPDF_ANNOT_INK)
-+    return false;
-+
-+  CPDF_Dictionary* pAnnotDict = GetAnnotDictFromFPDFAnnotation(annot);
-+
-+  CPDF_Array* pInkList = pAnnotDict->GetArrayFor("InkList");
-+  if (!pInkList)
-+    return false;
-+  CPDF_Array* pInkPoints = pInkList->GetArrayAt(index);
-+  if (!pInkPoints)
-+    return false;
-+
-+  for (int i = 0; i < pInkPoints->size(); i += 2) {
-+      int pointIndex = i / 2;
-+      points[pointIndex].x = pInkPoints->GetNumberAt(i);
-+      points[pointIndex].y = pInkPoints->GetNumberAt(i + 1);
++  // Truncate to an even number.
++  unsigned long points_len = vertices->size() / 2;
++  if (buffer && length >= points_len) {
++    for (unsigned long i = 0; i < points_len; ++i) {
++      buffer[i].x = vertices->GetNumberAt(i * 2);
++      buffer[i].y = vertices->GetNumberAt(i * 2 + 1);
++    }
 +  }
 +
-+  return true;
-+}
-+
- FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
- FPDFAnnot_AppendObject(FPDF_ANNOTATION annot, FPDF_PAGEOBJECT obj) {
-   CPDF_AnnotContext* pAnnot = CPDFAnnotContextFromFPDFAnnotation(annot);
-@@ -806,6 +865,48 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_GetRect(FPDF_ANNOTATION annot,
-   return true;
- }
-
-+FPDF_EXPORT int FPDF_CALLCONV
-+FPDFAnnot_GetVerticesCount(FPDF_ANNOTATION annot)
-+{
-+  if (FPDFAnnot_GetSubtype(annot) != FPDF_ANNOT_POLYGON &&
-+      FPDFAnnot_GetSubtype(annot) != FPDF_ANNOT_POLYLINE) {
-+    return -1;
-+  }
-+
-+  CPDF_Dictionary* pAnnotDict = GetAnnotDictFromFPDFAnnotation(annot);
-+
-+  CPDF_Array* pVertices = pAnnotDict->GetArrayFor("Vertices");
-+
-+  if (!pVertices)
-+    return 0;
-+
-+  return static_cast<int>(pVertices->size() / 2);
-+}
-+
-+FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
-+FPDFAnnot_GetVertices(FPDF_ANNOTATION annot, FS_POINTF* points)
-+{
-+  if (FPDFAnnot_GetSubtype(annot) != FPDF_ANNOT_POLYGON &&
-+      FPDFAnnot_GetSubtype(annot) != FPDF_ANNOT_POLYLINE) {
-+    return false;
-+  }
-+
-+  CPDF_Dictionary* pAnnotDict = GetAnnotDictFromFPDFAnnotation(annot);
-+
-+  CPDF_Array* pVertices = pAnnotDict->GetArrayFor("Vertices");
-+
-+  if (!pVertices)
-+    return false;
-+
-+  for (int i = 0; i < pVertices->size(); i += 2) {
-+      int pointIndex = i / 2;
-+      points[pointIndex].x = pVertices->GetNumberAt(i);
-+      points[pointIndex].y = pVertices->GetNumberAt(i + 1);
-+  }
-+
-+  return true;
++  return points_len;
 +}
 +
  FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_HasKey(FPDF_ANNOTATION annot,
                                                       FPDF_BYTESTRING key) {
    CPDF_Dictionary* pAnnotDict = GetAnnotDictFromFPDFAnnotation(annot);
 diff --git a/public/fpdf_annot.h b/public/fpdf_annot.h
-index 9561d8416..2176450c8 100644
+index 93064561b..7159602db 100644
 --- a/public/fpdf_annot.h
 +++ b/public/fpdf_annot.h
-@@ -222,6 +222,16 @@ FPDF_EXPORT int FPDF_CALLCONV FPDFAnnot_AddInkStroke(FPDF_ANNOTATION annot,
- FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
- FPDFAnnot_RemoveInkList(FPDF_ANNOTATION annot);
-
-+FPDF_EXPORT int FPDF_CALLCONV
-+FPDFAnnot_GetInkStrokeCount(FPDF_ANNOTATION annot);
-+
-+FPDF_EXPORT int FPDF_CALLCONV
-+FPDFAnnot_GetInkStrokePointCount(FPDF_ANNOTATION annot, int index);
-+
-+FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
-+FPDFAnnot_GetInkStrokePoints(FPDF_ANNOTATION annot, int index,
-+                             FS_POINTF* points);
-+
- // Experimental API.
- // Add |obj| to |annot|. |obj| must have been created by
- // FPDFPageObj_CreateNew{Path|Rect}() or FPDFPageObj_New{Text|Image}Obj(), and
-@@ -394,6 +404,12 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_SetRect(FPDF_ANNOTATION annot,
+@@ -395,6 +395,22 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_SetRect(FPDF_ANNOTATION annot,
  FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_GetRect(FPDF_ANNOTATION annot,
                                                        FS_RECTF* rect);
-
-+FPDF_EXPORT int FPDF_CALLCONV
-+FPDFAnnot_GetVerticesCount(FPDF_ANNOTATION annot);
-+
-+FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
-+FPDFAnnot_GetVertices(FPDF_ANNOTATION annot, FS_POINTF* points);
+ 
++// Experimental API.
++// Get the vertices of a polygon or polyline annotation. |buffer| is an array of
++// points of the annotation. If |length| is less than the returned length, or
++// |annot| or |buffer| is NULL, |buffer| will not be modified.
++//
++//   annot  - handle to an annotation, as returned by e.g. FPDFPage_GetAnnot()
++//   buffer - buffer for holding the points.
++//   length - length of the buffer in points.
++//
++// Returns the number of points if the annotation is of type polygon or
++// polyline, 0 otherwise.
++FPDF_EXPORT unsigned long FPDF_CALLCONV
++FPDFAnnot_GetVertices(FPDF_ANNOTATION annot,
++                      FS_POINTF* buffer,
++                      unsigned long length);
 +
  // Experimental API.
  // Check if |annot|'s dictionary has |key| as a key.
  //
---
+-- 
 2.26.2
+
+From 8f7b1aed53e31eda9870146cb97602f03a8f23c4 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Tue, 17 Nov 2020 16:53:14 +0000
+Subject: [PATCH] Add FPDFAnnot_GetInkListPath() API
+
+This is somewhat similar to FPDFAnnot_GetVertices(), but this is for ink
+annotations and here the value is an array of paths.
+
+So first add an FPDFAnnot_GetInkListCount() to get the number of paths,
+then FPDFAnnot_GetInkListPath() can be used to get the individual paths.
+
+Change-Id: I204a5a53e949fdbb7b264711c27107fe62c9f2be
+Reviewed-on: https://pdfium-review.googlesource.com/c/pdfium/+/76350
+Commit-Queue: Tom Sepez <tsepez@chromium.org>
+Reviewed-by: Tom Sepez <tsepez@chromium.org>
+---
+ constants/annotation_common.h       |  3 +
+ fpdfsdk/fpdf_annot.cpp              | 50 ++++++++++++++++
+ fpdfsdk/fpdf_annot_embeddertest.cpp | 91 ++++++++++++++++++++++++++++-
+ fpdfsdk/fpdf_view_c_api_test.c      |  2 +
+ public/fpdf_annot.h                 | 28 +++++++++
+ testing/resources/ink_annot.in      | 48 +++++++++++++++
+ testing/resources/ink_annot.pdf     | 60 +++++++++++++++++++
+ 7 files changed, 281 insertions(+), 1 deletion(-)
+ create mode 100644 testing/resources/ink_annot.in
+ create mode 100644 testing/resources/ink_annot.pdf
+
+diff --git a/constants/annotation_common.h b/constants/annotation_common.h
+index 6f96e623a..be6420651 100644
+--- a/constants/annotation_common.h
++++ b/constants/annotation_common.h
+@@ -29,6 +29,9 @@ constexpr char kOC[] = "OC";
+ // Entries for polygon and polyline annotations.
+ constexpr char kVertices[] = "Vertices";
+ 
++// Entries for ink annotations
++constexpr char kInkList[] = "InkList";
++
+ }  // namespace annotation
+ }  // namespace pdfium
+ 
+diff --git a/fpdfsdk/fpdf_annot.cpp b/fpdfsdk/fpdf_annot.cpp
+index 13c73f6aa..51b4332c2 100644
+--- a/fpdfsdk/fpdf_annot.cpp
++++ b/fpdfsdk/fpdf_annot.cpp
+@@ -296,6 +296,18 @@ CPDFSDK_Widget* GetRadioButtonOrCheckBoxWidget(FPDF_FORMHANDLE hHandle,
+   return pFormControl ? pForm->GetWidget(pFormControl) : nullptr;
+ }
+ 
++CPDF_Array* GetInkList(FPDF_ANNOTATION annot) {
++  FPDF_ANNOTATION_SUBTYPE subtype = FPDFAnnot_GetSubtype(annot);
++  if (subtype != FPDF_ANNOT_INK)
++    return 0;
++
++  CPDF_Dictionary* annot_dict = GetAnnotDictFromFPDFAnnotation(annot);
++  if (!annot_dict)
++    return 0;
++
++  return annot_dict->GetArrayFor(pdfium::annotation::kInkList);
++}
++
+ }  // namespace
+ 
+ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
+@@ -837,6 +849,44 @@ FPDFAnnot_GetVertices(FPDF_ANNOTATION annot,
+   return points_len;
+ }
+ 
++FPDF_EXPORT unsigned long FPDF_CALLCONV
++FPDFAnnot_GetInkListCount(FPDF_ANNOTATION annot) {
++  CPDF_Array* ink_list = GetInkList(annot);
++  if (!ink_list)
++    return 0;
++
++  return ink_list->size();
++}
++
++FPDF_EXPORT unsigned long FPDF_CALLCONV
++FPDFAnnot_GetInkListPath(FPDF_ANNOTATION annot,
++                         unsigned long path_index,
++                         FS_POINTF* buffer,
++                         unsigned long length) {
++  unsigned long path_count = FPDFAnnot_GetInkListCount(annot);
++  if (path_index >= path_count)
++    return 0;
++
++  CPDF_Array* ink_list = GetInkList(annot);
++  if (!ink_list)
++    return 0;
++
++  CPDF_Array* path = ink_list->GetArrayAt(path_index);
++  if (!path)
++    return 0;
++
++  // Truncate to an even number.
++  unsigned long points_len = path->size() / 2;
++  if (buffer && length >= points_len) {
++    for (unsigned long i = 0; i < points_len; ++i) {
++      buffer[i].x = path->GetNumberAt(i * 2);
++      buffer[i].y = path->GetNumberAt(i * 2 + 1);
++    }
++  }
++
++  return points_len;
++}
++
+ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_HasKey(FPDF_ANNOTATION annot,
+                                                      FPDF_BYTESTRING key) {
+   CPDF_Dictionary* pAnnotDict = GetAnnotDictFromFPDFAnnotation(annot);
+diff --git a/public/fpdf_annot.h b/public/fpdf_annot.h
+index 7159602db..d121344f7 100644
+--- a/public/fpdf_annot.h
++++ b/public/fpdf_annot.h
+@@ -411,6 +411,34 @@ FPDFAnnot_GetVertices(FPDF_ANNOTATION annot,
+                       FS_POINTF* buffer,
+                       unsigned long length);
+ 
++// Experimental API.
++// Get the number of paths in the ink list of an ink annotation.
++//
++//   annot  - handle to an annotation, as returned by e.g. FPDFPage_GetAnnot()
++//
++// Returns the number of paths in the ink list if the annotation is of type ink,
++// 0 otherwise.
++FPDF_EXPORT unsigned long FPDF_CALLCONV
++FPDFAnnot_GetInkListCount(FPDF_ANNOTATION annot);
++
++// Experimental API.
++// Get a path in the ink list of an ink annotation. |buffer| is an array of
++// points of the path. If |length| is less than the returned length, or |annot|
++// or |buffer| is NULL, |buffer| will not be modified.
++//
++//   annot  - handle to an annotation, as returned by e.g. FPDFPage_GetAnnot()
++//   path_index - index of the path
++//   buffer - buffer for holding the points.
++//   length - length of the buffer in points.
++//
++// Returns the number of points of the path if the annotation is of type ink, 0
++// otherwise.
++FPDF_EXPORT unsigned long FPDF_CALLCONV
++FPDFAnnot_GetInkListPath(FPDF_ANNOTATION annot,
++                         unsigned long path_index,
++                         FS_POINTF* buffer,
++                         unsigned long length);
++
+ // Experimental API.
+ // Check if |annot|'s dictionary has |key| as a key.
+ //
+-- 
+2.26.2
+
