@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "a8356109_89769aa2",
+        "filename": "sw/qa/uitest/writer_tests4/tdf136578.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-12-22T09:49:54Z",
+      "side": 1,
+      "message": "So why didn\u0027t this fail in Gerrit? The patch hasn\u0027t been implemented yet. Or are these tests only running in gerrit_linux_clang?",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 46
+      },
+      "revId": "ceae34e50047885788d2a19d6f7b9cb2e8f258e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b51148b1_23a8381d",
         "filename": "sw/source/uibase/docvw/PageBreakWin.cxx",
         "patchSetId": 1
