@@ -77,14 +77,14 @@ OUString lclGetAnchorIdFromGrabBag(const SdrObject* pObj)
     return aResult;
 }
 
-void lclMovePositionWithRotation(awt::Point& aPos, const Size& rSize, sal_Int64 nRotation)
+void lclMovePositionWithRotation(awt::Point& aPos, const Size& rSize, Degree100 nRotation100)
 {
     // code from ImplEESdrWriter::ImplFlipBoundingBox (filter/source/msfilter/eschesdo.cxx)
     // TODO: refactor
 
-    if (nRotation == 0)
+    if (nRotation100 == 0_deg100)
         return;
-
+    sal_Int64 nRotation = nRotation100.get();
     if (nRotation < 0)
         nRotation = (36000 + nRotation) % 36000;
     if (nRotation % 18000 == 0)
@@ -426,7 +426,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         awt::Point aPos(pFrameFormat->GetHoriOrient().GetPos(),
                         pFrameFormat->GetVertOrient().GetPos());
         const SdrObject* pObj = pFrameFormat->FindRealSdrObject();
-        tools::Long nRotation = 0;
+        Degree100 nRotation(0);
         if (pObj != nullptr)
         {
             // SdrObjects know their layer, consider that instead of the frame format.
@@ -1287,8 +1287,8 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
                 aRotation = pProp->Value;
         }
         aRotation >>= m_pImpl->getDMLandVMLTextFrameRotation();
-        OString sRotation(OString::number(
-            oox::drawingml::ExportRotateClockwisify(m_pImpl->getDMLandVMLTextFrameRotation())));
+        OString sRotation(OString::number(oox::drawingml::ExportRotateClockwisify(
+            Degree100(m_pImpl->getDMLandVMLTextFrameRotation()))));
         // Shape properties
         pFS->startElementNS(XML_wps, XML_spPr);
         if (m_pImpl->getDMLandVMLTextFrameRotation())

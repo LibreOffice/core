@@ -2292,7 +2292,7 @@ void SdrEdgeObj::NbcResize(const Point& rRefPnt, const Fraction& aXFact, const F
 }
 
 // #i54102# added rotation support
-void SdrEdgeObj::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
+void SdrEdgeObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
     if(bEdgeTrackUserDefined)
     {
@@ -2354,7 +2354,7 @@ void SdrEdgeObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 }
 
 // #i54102# added shear support
-void SdrEdgeObj::NbcShear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear)
+void SdrEdgeObj::NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear)
 {
     if(bEdgeTrackUserDefined)
     {

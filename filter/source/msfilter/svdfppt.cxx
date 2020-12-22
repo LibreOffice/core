@@ -814,14 +814,14 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                 bool bVerticalText = false;
                 // and if the text object is not empty, it must be applied to pRet, the object we
                 // initially got from our escher import
-                sal_Int32 nTextRotationAngle = 0;
+                Degree100 nTextRotationAngle(0);
                 if ( IsProperty( DFF_Prop_txflTextFlow ) )
                 {
                     auto eTextFlow = GetPropertyValue(DFF_Prop_txflTextFlow, 0) & 0xFFFF;
                     switch( eTextFlow )
                     {
                         case mso_txflBtoT :                     // Bottom to Top non-@
-                            nTextRotationAngle += 9000;
+                            nTextRotationAngle += 9000_deg100;
                         break;
                         case mso_txflTtoBA :    /* #68110# */   // Top to Bottom @-font
                         case mso_txflTtoBN :                    // Top to Bottom non-@
@@ -840,7 +840,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                 }
                 const bool bFail = o3tl::checked_multiply<sal_Int32>(nFontDirection, 9000, nFontDirection);
                 if (!bFail)
-                    nTextRotationAngle -= nFontDirection;
+                    nTextRotationAngle -= Degree100(nFontDirection);
                 else
                     SAL_WARN("filter.ms", "Parsing error: bad fontdirection: " << nFontDirection);
                 aTextObj.SetVertical( bVerticalText );
@@ -1174,7 +1174,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                         }
                     }
                     // rotate text with shape?
-                    sal_Int32 nAngle = ( rObjData.nSpFlags & ShapeFlag::FlipV ) ? -mnFix16Angle : mnFix16Angle; // #72116# vertical flip -> rotate by using the other way
+                    Degree100 nAngle = ( rObjData.nSpFlags & ShapeFlag::FlipV ) ? -mnFix16Angle : mnFix16Angle; // #72116# vertical flip -> rotate by using the other way
                     nAngle += nTextRotationAngle;
 
                     if ( dynamic_cast< const SdrObjCustomShape* >(pTObj) ==  nullptr )
@@ -1182,10 +1182,10 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                         if ( rObjData.nSpFlags & ShapeFlag::FlipV )
                         {
                             double a = 18000 * F_PI18000;
-                            pTObj->Rotate( rTextRect.Center(), 18000, sin( a ), cos( a ) );
+                            pTObj->Rotate( rTextRect.Center(), 18000_deg100, sin( a ), cos( a ) );
                         }
                         if ( rObjData.nSpFlags & ShapeFlag::FlipH )
-                            nAngle = 36000 - nAngle;
+                            nAngle = 36000_deg100 - nAngle;
                         if ( nAngle )
                             pTObj->NbcRotate( rObjData.aBoundRect.Center(), nAngle );
                     }

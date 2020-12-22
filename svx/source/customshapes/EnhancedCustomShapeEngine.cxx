@@ -282,7 +282,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
         *pAny >>= bTextPathOn;
 
     EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
-    sal_Int32 nRotateAngle = aCustomShape2d.GetRotateAngle();
+    Degree100 nRotateAngle = aCustomShape2d.GetRotateAngle();
 
     bool bFlipV = aCustomShape2d.IsFlipVert();
     bool bFlipH = aCustomShape2d.IsFlipHorz();
@@ -307,7 +307,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
         if (xRenderedShape3d)
         {
             bFlipV = bFlipH = false;
-            nRotateAngle = 0;
+            nRotateAngle = 0_deg100;
             xRenderedShape = std::move(xRenderedShape3d);
         }
 
@@ -316,7 +316,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
 
         if ( rGeoStat.nShearAngle )
         {
-            tools::Long nShearAngle = rGeoStat.nShearAngle;
+            Degree100 nShearAngle = rGeoStat.nShearAngle;
             double nTan = rGeoStat.mfTanShearAngle;
             if (bFlipV != bFlipH)
             {
@@ -413,7 +413,7 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
 
             if ( rGeoStat.nShearAngle )
             {
-                tools::Long nShearAngle = rGeoStat.nShearAngle;
+                Degree100 nShearAngle = rGeoStat.nShearAngle;
                 double nTan = rGeoStat.mfTanShearAngle;
                 if (bFlipV != bFlipH)
                 {
@@ -422,7 +422,7 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
                 }
                 pObj->Shear( aRect.Center(), nShearAngle, nTan, false);
             }
-            sal_Int32 nRotateAngle = aCustomShape2d.GetRotateAngle();
+            Degree100 nRotateAngle = aCustomShape2d.GetRotateAngle();
             if( nRotateAngle )
                 pObj->NbcRotate( aRect.Center(), nRotateAngle );
             if ( bFlipH )

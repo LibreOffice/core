@@ -489,7 +489,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
         {
             double fValue = static_cast<double>(
                 static_cast<const SdrAngleItem&>(
-                    rItemSet.Get(nWhichId)).GetValue()) / 100.0;
+                    rItemSet.Get(nWhichId)).GetValue().get()) / 100.0;
             double fOldValue = 0.0;
             bool bPropExisted =
                 (GetPropertySet()->getPropertyValue("TextRotation") >>= fOldValue);
@@ -705,7 +705,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
             if (GetPropertySet()->getPropertyValue("TextRotation") >>= fValue)
             {
                 rOutItemSet.Put(
-                    SdrAngleItem(nWhichId, static_cast<sal_Int32>(rtl::math::round(fValue * 100.0))));
+                    SdrAngleItem(nWhichId, Degree100(static_cast<sal_Int32>(rtl::math::round(fValue * 100.0)))));
             }
         }
         break;

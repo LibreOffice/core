@@ -834,7 +834,7 @@ void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFo
     bool bStacked = (nXclRot == EXC_ROT_STACKED);
     ScfTools::PutItem( rItemSet, ScVerticalStackCell( bStacked ), bSkipPoolDefs );
     // set an angle in the range from -90 to 90 degrees
-    sal_Int32 nAngle = XclTools::GetScRotation( nXclRot, 0 );
+    Degree100 nAngle = XclTools::GetScRotation( nXclRot, 0_deg100 );
     ScfTools::PutItem( rItemSet, ScRotateValueItem( nAngle ), bSkipPoolDefs );
     // set "Use asian vertical layout", if cell is stacked and font contains CKJ characters
     bool bAsianVert = bStacked && pFont && pFont->HasAsianChars();
