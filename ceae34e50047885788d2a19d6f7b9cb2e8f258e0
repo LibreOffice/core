@@ -68,6 +68,30 @@
       "revId": "ceae34e50047885788d2a19d6f7b9cb2e8f258e0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f542797_96138c7a",
+        "filename": "sw/source/uibase/docvw/PageBreakWin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2020-12-22T11:48:50Z",
+      "side": 1,
+      "message": "execute doesn\u0027t work here. could you please help me with it ?\n\nThis is what I got in IRC:\n\u003cx1sc0\u003e how can I call a method like IMPL_LINK(SwPageBreakWin, SelectHdl, const OString\u0026, rIdent, void) ?\n\u003cnoel_grandin\u003e x1sc0, you can\u0027t, you\u0027re supposed to hook it up to a callback function",
+      "parentUuid": "b51148b1_23a8381d",
+      "range": {
+        "startLine": 231,
+        "startChar": 4,
+        "endLine": 231,
+        "endChar": 25
+      },
+      "revId": "ceae34e50047885788d2a19d6f7b9cb2e8f258e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
