@@ -19,6 +19,8 @@
 
 #include <svl/style.hxx>
 
+#include <sfx2/app.hxx>
+#include <sfx2/module.hxx>
 #include <sfx2/newstyle.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
@@ -65,12 +67,24 @@ SfxNewStyleDlg::SfxNewStyleDlg(weld::Widget* pParent, SfxStyleSheetBasePool& rIn
     , m_rPool(rInPool)
     , m_eSearchFamily(eFam)
     , m_xColBox(m_xBuilder->weld_entry_tree_view("stylegrid", "stylename", "styles"))
+    , m_xLabel(m_xBuilder->weld_label("categorylabel"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
     , m_xQueryOverwriteBox(Application::CreateMessageDialog(m_xDialog.get(), VclMessageType::Question, VclButtonsType::YesNo,
                                                                            SfxResId(STR_QUERY_OVERWRITE)))
 {
     m_xColBox->set_entry_width_chars(20);
     m_xColBox->set_height_request_by_rows(8);
+
+    auto xFamilies = SfxApplication::GetModule_Impl()->CreateStyleFamilies();
+    for (size_t i = 0, nCount = xFamilies->size(); i < nCount; ++i)
+    {
+        if (eFam == (*xFamilies)[i].GetFamily())
+        {
+            m_xLabel->set_label((*xFamilies)[i].GetText());
+            m_xLabel->show();
+            break;
+        }
+    }
 
     m_xOKBtn->connect_clicked(LINK(this, SfxNewStyleDlg, OKClickHdl));
     m_xColBox->connect_changed(LINK(this, SfxNewStyleDlg, ModifyHdl));

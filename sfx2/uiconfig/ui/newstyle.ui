@@ -145,16 +145,16 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="stylename">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="activates_default">True</property>
+                        <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="activates-default">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="stylename-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="newstyle|stylename-atkobject">Style Name</property>
@@ -162,8 +162,21 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="categorylabel">
+                        <property name="can-focus">False</property>
+                        <property name="no-show-all">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">styles</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                   </object>
