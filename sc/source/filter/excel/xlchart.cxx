@@ -897,7 +897,7 @@ sal_uInt16 XclChPropSetHelper::ReadRotationProperties( const ScfPropertySet& rPr
     rPropSet.GetProperty( fAngle, EXC_CHPROP_TEXTROTATION );
     bool bStacked = bSupportsStacked && rPropSet.GetBoolProperty( EXC_CHPROP_STACKCHARACTERS );
     return bStacked ? EXC_ROT_STACKED :
-        XclTools::GetXclRotation( static_cast< sal_Int32 >( fAngle * 100.0 + 0.5 ) );
+        XclTools::GetXclRotation( Degree100(static_cast< sal_Int32 >( fAngle * 100.0 + 0.5 )) );
 }
 
 // write properties -----------------------------------------------------------
@@ -1097,7 +1097,7 @@ void XclChPropSetHelper::WriteRotationProperties(
     if( nRotation != EXC_CHART_AUTOROTATION )
     {
         // chart2 handles rotation as double in the range [0,360)
-        double fAngle = XclTools::GetScRotation( nRotation, 0 ) / 100.0;
+        double fAngle = XclTools::GetScRotation( nRotation, 0_deg100 ).get() / 100.0;
         rPropSet.SetProperty( EXC_CHPROP_TEXTROTATION, fAngle );
         if( bSupportsStacked )
             rPropSet.SetProperty( EXC_CHPROP_STACKCHARACTERS, nRotation == EXC_ROT_STACKED );

@@ -360,7 +360,7 @@ void ScDrawStringsVars::SetPattern(
     {
         case SvxCellOrientation::Standard:
             nRot = 0;
-            bRotated = pPattern->GetItem( ATTR_ROTATE_VALUE, pCondSet ).GetValue() != 0 &&
+            bRotated = pPattern->GetItem( ATTR_ROTATE_VALUE, pCondSet ).GetValue() != 0_deg100 &&
                        !bRepeat;
             break;
         case SvxCellOrientation::Stacked:
@@ -2209,7 +2209,7 @@ static void lcl_ScaleFonts( EditEngine& rEngine, tools::Long nPercent )
         rEngine.SetUpdateMode( true );
 }
 
-static tools::Long lcl_GetEditSize( EditEngine& rEngine, bool bWidth, bool bSwap, tools::Long nAttrRotate )
+static tools::Long lcl_GetEditSize( EditEngine& rEngine, bool bWidth, bool bSwap, Degree100 nAttrRotate )
 {
     if ( bSwap )
         bWidth = !bWidth;
@@ -2221,7 +2221,7 @@ static tools::Long lcl_GetEditSize( EditEngine& rEngine, bool bWidth, bool bSwap
 
         // assuming standard mode, otherwise width isn't used
 
-        double nRealOrient = nAttrRotate * F_PI18000;   // 1/100th degrees
+        double nRealOrient = nAttrRotate.get() * F_PI18000;   // 1/100th degrees
         double nAbsCos = fabs( cos( nRealOrient ) );
         double nAbsSin = fabs( sin( nRealOrient ) );
         if ( bWidth )
@@ -2237,7 +2237,7 @@ static tools::Long lcl_GetEditSize( EditEngine& rEngine, bool bWidth, bool bSwap
 
 void ScOutputData::ShrinkEditEngine( EditEngine& rEngine, const tools::Rectangle& rAlignRect,
             tools::Long nLeftM, tools::Long nTopM, tools::Long nRightM, tools::Long nBottomM,
-            bool bWidth, SvxCellOrientation nOrient, tools::Long nAttrRotate, bool bPixelToLogic,
+            bool bWidth, SvxCellOrientation nOrient, Degree100 nAttrRotate, bool bPixelToLogic,
             tools::Long& rEngineWidth, tools::Long& rEngineHeight, tools::Long& rNeededPixel, bool& rLeftClip, bool& rRightClip )
 {
     if ( !bWidth )
@@ -2815,13 +2815,13 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
     bool bRepeat = (rParam.meHorJustAttr == SvxCellHorJustify::Repeat && !rParam.mbBreak);
     bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
-    tools::Long nAttrRotate = lcl_GetValue<ScRotateValueItem, long>(*rParam.mpPattern, ATTR_ROTATE_VALUE, rParam.mpCondSet);
+    Degree100 nAttrRotate = lcl_GetValue<ScRotateValueItem, Degree100>(*rParam.mpPattern, ATTR_ROTATE_VALUE, rParam.mpCondSet);
 
     if ( rParam.meHorJustAttr == SvxCellHorJustify::Repeat )
     {
         // ignore orientation/rotation if "repeat" is active
         rParam.meOrient = SvxCellOrientation::Standard;
-        nAttrRotate = 0;
+        nAttrRotate = 0_deg100;
 
         // #i31843# "repeat" with "line breaks" is treated as default alignment
         // (but rotation is still disabled).
@@ -2937,7 +2937,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         {
             ShrinkEditEngine( *rParam.mpEngine, aAreaParam.maAlignRect,
                 nLeftM, nTopM, nRightM, nBottomM, true,
-                rParam.meOrient, 0, rParam.mbPixelToLogic,
+                rParam.meOrient, 0_deg100, rParam.mbPixelToLogic,
                 nEngineWidth, nEngineHeight, nNeededPixel,
                 aAreaParam.mbLeftClip, aAreaParam.mbRightClip );
         }
@@ -3307,7 +3307,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         {
             ShrinkEditEngine( *rParam.mpEngine, aAreaParam.maAlignRect,
                 nLeftM, nTopM, nRightM, nBottomM, false,
-                (rParam.meOrient), 0, rParam.mbPixelToLogic,
+                (rParam.meOrient), 0_deg100, rParam.mbPixelToLogic,
                 nEngineWidth, nEngineHeight, nNeededPixel,
                 aAreaParam.mbLeftClip, aAreaParam.mbRightClip );
         }
@@ -3550,7 +3550,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
         {
             ShrinkEditEngine( *rParam.mpEngine, aAreaParam.maAlignRect,
                 nLeftM, nTopM, nRightM, nBottomM, false,
-                rParam.meOrient, 0, rParam.mbPixelToLogic,
+                rParam.meOrient, 0_deg100, rParam.mbPixelToLogic,
                 nEngineWidth, nEngineHeight, nNeededPixel,
                 aAreaParam.mbLeftClip, aAreaParam.mbRightClip );
         }
@@ -3805,7 +3805,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
 
         ShrinkEditEngine( *rParam.mpEngine, aAreaParam.maAlignRect,
             nLeftM, nTopM, nRightM, nBottomM, true,
-            rParam.meOrient, 0, rParam.mbPixelToLogic,
+            rParam.meOrient, 0_deg100, rParam.mbPixelToLogic,
             nEngineWidth, nEngineHeight, nNeededPixel,
             aAreaParam.mbLeftClip, aAreaParam.mbRightClip );
 
@@ -3990,7 +3990,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
     bool bHidden = false;
     bool bShrink = !rParam.mbBreak && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
-    tools::Long nAttrRotate = lcl_GetValue<ScRotateValueItem, long>(*rParam.mpPattern, ATTR_ROTATE_VALUE, rParam.mpCondSet);
+    Degree100 nAttrRotate = lcl_GetValue<ScRotateValueItem, Degree100>(*rParam.mpPattern, ATTR_ROTATE_VALUE, rParam.mpCondSet);
 
     if (nAttrRotate)
     {
@@ -4104,7 +4104,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
     {
         ShrinkEditEngine( *rParam.mpEngine, aAreaParam.maAlignRect,
             nLeftM, nTopM, nRightM, nBottomM, false,
-            rParam.meOrient, 0, rParam.mbPixelToLogic,
+            rParam.meOrient, 0_deg100, rParam.mbPixelToLogic,
             nEngineWidth, nEngineHeight, nNeededPixel,
             aAreaParam.mbLeftClip, aAreaParam.mbRightClip );
     }
@@ -4633,7 +4633,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             nOutHeight -= nTopM + nBottomM;
 
                             // rotate here already, to adjust paper size for page breaks
-                            tools::Long nAttrRotate = 0;
+                            Degree100 nAttrRotate;
                             double nSin = 0.0;
                             double nCos = 1.0;
                             SvxRotateMode eRotMode = SVX_ROTATE_MODE_STANDARD;
@@ -4645,13 +4645,13 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 {
                                     eRotMode = pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue();
 
-                                    if ( nAttrRotate == 18000 )
+                                    if ( nAttrRotate == 18000_deg100 )
                                         eRotMode = SVX_ROTATE_MODE_STANDARD;    // no overflow
 
                                     if ( bLayoutRTL )
                                         nAttrRotate = -nAttrRotate;
 
-                                    double nRealOrient = nAttrRotate * F_PI18000;   // 1/100 degree
+                                    double nRealOrient = nAttrRotate.get() * F_PI18000;   // 1/100 degree
                                     nCos = cos( nRealOrient );
                                     nSin = sin( nRealOrient );
                                 }
@@ -5002,7 +5002,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 if ( nAttrRotate )
                                 {
                                     // attribute is 1/100, Font 1/10 degrees
-                                    nOriVal = nAttrRotate / 10;
+                                    nOriVal = nAttrRotate.get() / 10;
 
                                     double nAddX = 0.0;
                                     double nAddY = 0.0;

@@ -280,7 +280,7 @@ void FrameView::Update(SdOptions const * pOptions)
 
     mbRuler = pOptions->IsRulerVisible();
     SetGridVisible( pOptions->IsGridVisible() );
-    SetSnapAngle( pOptions->GetAngle().get() * 10 ); // convert to hundredths of a degree
+    SetSnapAngle( pOptions->GetAngle() );
     SetGridSnap( pOptions->IsUseGridSnap() );
     SetBordSnap( pOptions->IsSnapBorder()  );
     SetHlplSnap( pOptions->IsSnapHelplines() );
@@ -298,7 +298,7 @@ void FrameView::Update(SdOptions const * pOptions)
     SetAngleSnapEnabled( pOptions->IsRotate() );
     SetBigOrtho( pOptions->IsBigOrtho() );
     SetOrtho( pOptions->IsOrtho() );
-    SetEliminatePolyPointLimitAngle( pOptions->GetEliminatePolyPointLimitAngle().get() * 10 ); // convert to degree100
+    SetEliminatePolyPointLimitAngle( pOptions->GetEliminatePolyPointLimitAngle() );
     GetModel()->SetPickThroughTransparentTextFrames( pOptions->IsPickThrough() );
 
     SetSolidDragging( pOptions->IsSolidDragging() );
@@ -770,7 +770,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
         {
             if( rValue.Value >>= nInt32 )
             {
-                SetEliminatePolyPointLimitAngle( nInt32 );
+                SetEliminatePolyPointLimitAngle( Degree100(nInt32) );
             }
         }
         else if ( rValue.Name == sUNO_View_IsEliminatePolyPoints )
@@ -844,7 +844,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
         {
             if( rValue.Value >>= nInt32 )
             {
-                SetSnapAngle( nInt32 );
+                SetSnapAngle( Degree100(nInt32) );
             }
         }
         else if ( rValue.Name == sUNO_View_GridSnapWidthXNumerator )

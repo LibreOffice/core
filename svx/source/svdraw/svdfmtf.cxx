@@ -742,8 +742,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaEllipseAction const & rAct)
 void ImpSdrGDIMetaFileImport::DoAction(MetaArcAction const & rAct)
 {
     Point aCenter(rAct.GetRect().Center());
-    tools::Long nStart=GetAngle(rAct.GetStartPoint()-aCenter);
-    tools::Long nEnd=GetAngle(rAct.GetEndPoint()-aCenter);
+    Degree100 nStart=GetAngle(rAct.GetStartPoint()-aCenter);
+    Degree100 nEnd=GetAngle(rAct.GetEndPoint()-aCenter);
     SdrCircObj* pCirc = new SdrCircObj(
         *mpModel,
         SdrCircKind::Arc,
@@ -755,8 +755,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaArcAction const & rAct)
 void ImpSdrGDIMetaFileImport::DoAction(MetaPieAction const & rAct)
 {
     Point aCenter(rAct.GetRect().Center());
-    tools::Long nStart=GetAngle(rAct.GetStartPoint()-aCenter);
-    tools::Long nEnd=GetAngle(rAct.GetEndPoint()-aCenter);
+    Degree100 nStart=GetAngle(rAct.GetStartPoint()-aCenter);
+    Degree100 nEnd=GetAngle(rAct.GetEndPoint()-aCenter);
     SdrCircObj* pCirc = new SdrCircObj(
         *mpModel,
         SdrCircKind::Section,
@@ -770,8 +770,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaPieAction const & rAct)
 void ImpSdrGDIMetaFileImport::DoAction(MetaChordAction const & rAct)
 {
     Point aCenter(rAct.GetRect().Center());
-    tools::Long nStart=GetAngle(rAct.GetStartPoint()-aCenter);
-    tools::Long nEnd=GetAngle(rAct.GetEndPoint()-aCenter);
+    Degree100 nStart=GetAngle(rAct.GetStartPoint()-aCenter);
+    Degree100 nEnd=GetAngle(rAct.GetEndPoint()-aCenter);
     SdrCircObj* pCirc = new SdrCircObj(
         *mpModel,
         SdrCircKind::Cut,
@@ -1053,15 +1053,9 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
         aAttr.Put(XFillColorItem(OUString(), aFnt.GetFillColor()));
         pText->SetMergedItemSet(aAttr);
     }
-    sal_Int32 nAngle = aFnt.GetOrientation().get();
+    Degree100 nAngle = toDegree100(aFnt.GetOrientation());
     if ( nAngle )
-    {
-        nAngle*=10;
-        double a = nAngle * F_PI18000;
-        double nSin=sin(a);
-        double nCos=cos(a);
-        pText->NbcRotate(aPos,nAngle,nSin,nCos);
-    }
+        pText->SdrAttrObj::NbcRotate(aPos,nAngle);
     InsertObj( pText, false );
 }
 

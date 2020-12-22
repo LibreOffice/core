@@ -189,7 +189,7 @@ ScAutoFormatDataField::ScAutoFormatDataField()
     m_aStacked = std::make_unique<ScVerticalStackCell>();
     m_aMargin = std::make_unique<SvxMarginItem>(ATTR_MARGIN);
     m_aLinebreak = std::make_unique<ScLineBreakCell>();
-    m_aRotateAngle = std::make_unique<ScRotateValueItem>(0);
+    m_aRotateAngle = std::make_unique<ScRotateValueItem>(0_deg100);
     m_aRotateMode = std::make_unique<SvxRotateModeItem>(SVX_ROTATE_MODE_STANDARD, ATTR_ROTATE_MODE);
 }
 

@@ -23,6 +23,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
+#include <tools/degree.hxx>
 #include <editeng/svxenum.hxx>
 #include "scdllapi.h"
 #include "fonthelper.hxx"
@@ -139,7 +140,7 @@ public:
     sal_uInt32              GetNumberFormat( SvNumberFormatter* pFormatter,
                                              const SfxItemSet* pCondSet ) const;
 
-    tools::Long                    GetRotateVal( const SfxItemSet* pCondSet ) const;
+    Degree100               GetRotateVal( const SfxItemSet* pCondSet ) const;
     ScRotateDir             GetRotateDir( const SfxItemSet* pCondSet ) const;
 
     void                    SetKey(sal_uInt64 nKey);

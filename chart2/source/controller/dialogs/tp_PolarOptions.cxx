@@ -56,7 +56,7 @@ bool PolarOptionsTabPage::FillItemSet( SfxItemSet* rOutAttrs )
     if (m_xAngleDialWin->get_visible())
     {
         rOutAttrs->Put(SfxInt32Item(SCHATTR_STARTING_ANGLE,
-            static_cast< sal_Int32 >(m_xAngleDial->GetRotation()/100)));
+            static_cast< sal_Int32 >(m_xAngleDial->GetRotation().get()/100)));
     }
 
     if( m_xCB_Clockwise->get_visible() )
@@ -75,7 +75,7 @@ void PolarOptionsTabPage::Reset(const SfxItemSet* rInAttrs)
     if (rInAttrs->GetItemState(SCHATTR_STARTING_ANGLE, true, &pPoolItem) == SfxItemState::SET)
     {
         tools::Long nTmp = static_cast<tools::Long>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
-        m_xAngleDial->SetRotation( nTmp*100 );
+        m_xAngleDial->SetRotation( Degree100(nTmp*100) );
     }
     else
     {

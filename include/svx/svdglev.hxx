@@ -77,7 +77,7 @@ public:
 
     void MoveMarkedGluePoints  (const Size& rSiz, bool bCopy);
     void ResizeMarkedGluePoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy);
-    void RotateMarkedGluePoints(const Point& rRef, tools::Long nAngle, bool bCopy);
+    void RotateMarkedGluePoints(const Point& rRef, Degree100 nAngle, bool bCopy);
 };
 
 #endif // INCLUDED_SVX_SVDGLEV_HXX

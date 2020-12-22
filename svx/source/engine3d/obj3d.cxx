@@ -432,13 +432,13 @@ void E3dObject::RestGeoData(const SdrObjGeoData& rGeo)
 // This is however a correct implementation, because everything that has
 // happened is a rotation around the axis perpendicular to the screen and that
 // is regardless of how the scene has been rotated up until now.
-void E3dObject::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
+void E3dObject::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
     // So currently the glue points are defined relative to the scene aOutRect.
     // Before turning the glue points are defined relative to the page. They
     // take no part in the rotation of the scene. To ensure this, there is the
     // SetGlueReallyAbsolute(sal_True);
-    double fAngleInRad = basegfx::deg2rad(nAngle/100.0);
+    double fAngleInRad = toRadians(nAngle);
 
     basegfx::B3DHomMatrix aRotateZ;
     aRotateZ.rotate(0.0, 0.0, fAngleInRad);

@@ -22,6 +22,7 @@
 
 #include <svx/msdffdef.hxx>
 #include <svx/sdasitm.hxx>
+#include <tools/degree.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -122,7 +123,7 @@ class SVXCORE_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
 
         bool                    bFlipH;
         bool                    bFlipV;
-        sal_Int32               nRotateAngle;
+        Degree100               nRotateAngle;
 
         SAL_DLLPRIVATE bool     SetAdjustValueAsDouble( const double& rValue, const sal_Int32 nIndex );
         SAL_DLLPRIVATE sal_Int32 GetLuminanceChange( sal_uInt32 nIndex ) const;
@@ -183,7 +184,7 @@ class SVXCORE_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
 
         SAL_DLLPRIVATE bool     IsFlipVert() const { return bFlipV; };
         SAL_DLLPRIVATE bool     IsFlipHorz() const { return bFlipH; };
-        SAL_DLLPRIVATE sal_Int32 GetRotateAngle() const { return nRotateAngle; };
+        SAL_DLLPRIVATE Degree100 GetRotateAngle() const { return nRotateAngle; };
 
         SdrObject*              CreateLineGeometry();
         SdrObject*              CreateObject( bool bLineGeometryNeededOnly );

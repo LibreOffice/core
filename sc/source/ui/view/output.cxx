@@ -650,9 +650,9 @@ void ScOutputData::SetCellRotations()
                         if(nTargetX >= 0 && nTargetY >= 0)
                         {
                             // add rotation info to Array information
-                            const tools::Long nAttrRotate(pPattern->GetRotateVal(pCondSet));
+                            const Degree100 nAttrRotate(pPattern->GetRotateVal(pCondSet));
                             const SvxRotateMode eRotMode(pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue());
-                            const double fOrient((bLayoutRTL ? -1.0 : 1.0) * nAttrRotate * F_PI18000); // 1/100th degrees -> [0..2PI]
+                            const double fOrient((bLayoutRTL ? -1.0 : 1.0) * nAttrRotate.get() * F_PI18000); // 1/100th degrees -> [0..2PI]
                             svx::frame::Array& rArray = mrTabInfo.maArray;
 
                             rArray.SetCellRotation(nTargetX, nTargetY, eRotMode, fOrient);
@@ -671,7 +671,7 @@ static ScRotateDir lcl_GetRotateDir( const ScDocument* pDoc, SCCOL nCol, SCROW n
 
     ScRotateDir nRet = ScRotateDir::NONE;
 
-    tools::Long nAttrRotate = pPattern->GetRotateVal( pCondSet );
+    Degree100 nAttrRotate = pPattern->GetRotateVal( pCondSet );
     if ( nAttrRotate )
     {
         SvxRotateMode eRotMode =
@@ -683,7 +683,7 @@ static ScRotateDir lcl_GetRotateDir( const ScDocument* pDoc, SCCOL nCol, SCROW n
             nRet = ScRotateDir::Center;
         else if ( eRotMode == SVX_ROTATE_MODE_TOP || eRotMode == SVX_ROTATE_MODE_BOTTOM )
         {
-            tools::Long nRot180 = nAttrRotate % 18000;     // 1/100 degree
+            tools::Long nRot180 = nAttrRotate.get() % 18000;     // 1/100 degree
             if ( nRot180 == 9000 )
                 nRet = ScRotateDir::Center;
             else if ( ( eRotMode == SVX_ROTATE_MODE_TOP && nRot180 < 9000 ) ||
@@ -1549,7 +1549,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
 
                     //! LastPattern etc.
 
-                    tools::Long nAttrRotate = pPattern->GetRotateVal( pCondSet );
+                    Degree100 nAttrRotate = pPattern->GetRotateVal( pCondSet );
                     SvxRotateMode eRotMode =
                                     pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue();
 
@@ -1578,7 +1578,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
 
                         // inclusion of the sign here hasn't been decided yet
                         // (if not, the extension of the non-rotated background must also be changed)
-                        double nRealOrient = nLayoutSign * nAttrRotate * F_PI18000;     // 1/100th degrees
+                        double nRealOrient = nLayoutSign * nAttrRotate.get() * F_PI18000;     // 1/100th degrees
                         double nCos = cos(nRealOrient);
                         double nSin = sin(nRealOrient);
                         //! restrict !!!
