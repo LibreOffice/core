@@ -44,7 +44,7 @@ public:
     virtual Size            GetOptimalSize() const override;
     virtual void            dispose() override;
 
-    virtual const SystemEnvData* GetSystemData() const override;
+    virtual const SystemEnvData* GetWindowSystemData() const override;
 
     //  per default systemchildwindows erase their background for better plugin support
     //  however, this might not always be required

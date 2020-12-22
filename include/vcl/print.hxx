@@ -249,6 +249,9 @@ public:
     virtual                     ~Printer() override;
     virtual void                dispose() override;
 
+    bool                        HasSystemData() const override { return false; }
+    const SystemData*           GetSystemData() const override { return nullptr; }
+
     virtual void SetMetafileMapMode(const MapMode& rNewMapMode, bool) override { SetMapMode(rNewMapMode); }
 
     static const std::vector< OUString >&

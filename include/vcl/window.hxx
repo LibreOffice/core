@@ -779,6 +779,8 @@ public:
     ::OutputDevice const*               GetOutDev() const;
     ::OutputDevice*                     GetOutDev();
 
+    const SystemData*                   GetSystemData() const override { return GetWindowSystemData(); }
+
     Color                               GetBackgroundColor() const override;
 
     size_t                              GetSyncCount() const override { return 0x000000ff; }
@@ -1154,7 +1156,7 @@ public:
     void                                SaveBackground(VirtualDevice& rSaveDevice,
                                                        const Point& rPos, const Size& rSize, const Size&) const override;
 
-    virtual const SystemEnvData*        GetSystemData() const;
+    virtual const SystemEnvData*        GetWindowSystemData() const;
 
     // API to set/query the component interfaces
     virtual css::uno::Reference< css::awt::XWindowPeer >

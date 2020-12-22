@@ -1378,7 +1378,10 @@ OString SalInstanceWindow::get_window_state(WindowStateMask nMask) const
     return pSysWin->GetWindowState(nMask);
 }
 
-SystemEnvData SalInstanceWindow::get_system_data() const { return *m_xWindow->GetSystemData(); }
+SystemEnvData SalInstanceWindow::get_system_data() const
+{
+    return *m_xWindow->GetWindowSystemData();
+}
 
 void SalInstanceWindow::connect_toplevel_focus_changed(const Link<weld::Widget&, void>& rLink)
 {
