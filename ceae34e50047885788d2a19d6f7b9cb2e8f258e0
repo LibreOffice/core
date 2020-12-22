@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5ebca72_227926c5",
+        "filename": "sw/qa/uitest/writer_tests4/tdf136578.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-12-22T09:38:56Z",
+      "side": 1,
+      "message": "duplicate call.",
+      "range": {
+        "startLine": 29,
+        "startChar": 8,
+        "endLine": 29,
+        "endChar": 32
+      },
+      "revId": "ceae34e50047885788d2a19d6f7b9cb2e8f258e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b51148b1_23a8381d",
+        "filename": "sw/source/uibase/docvw/PageBreakWin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-12-22T09:38:56Z",
+      "side": 1,
+      "message": "after my commit, there is a lot of shared code - so that would end up in being a lot of copy/paste. Probably better to have\nexecute(rIdent);\ninstead of separate functions.",
+      "range": {
+        "startLine": 231,
+        "startChar": 4,
+        "endLine": 231,
+        "endChar": 25
+      },
+      "revId": "ceae34e50047885788d2a19d6f7b9cb2e8f258e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
