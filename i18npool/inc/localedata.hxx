@@ -31,6 +31,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <vector>
+#include <string_view>
 #include <memory>
 #include <osl/module.hxx>
 
@@ -79,7 +80,7 @@ public:
     virtual css::uno::Sequence< css::i18n::FormatElement > SAL_CALL getAllFormats( const css::lang::Locale& rLocale ) override;
     virtual css::uno::Sequence< css::i18n::Implementation > SAL_CALL getCollatorImplementations( const css::lang::Locale& rLocale ) override;
     /// @throws css::uno::RuntimeException
-    OUString getCollatorRuleByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm );
+    OUString getCollatorRuleByAlgorithm( const css::lang::Locale& rLocale, std::u16string_view algorithm );
     virtual css::uno::Sequence< OUString > SAL_CALL getTransliterations( const css::lang::Locale& rLocale ) override;
     virtual css::i18n::ForbiddenCharacters SAL_CALL getForbiddenCharacters( const css::lang::Locale& rLocale ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getReservedWord( const css::lang::Locale& rLocale ) override ;
@@ -106,9 +107,10 @@ public:
     /// @throws css::uno::RuntimeException
     OUString getDefaultIndexAlgorithm( const css::lang::Locale& rLocale );
     /// @throws css::uno::RuntimeException
-    OUString getIndexKeysByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm );
+    OUString getIndexKeysByAlgorithm(
+        const css::lang::Locale& rLocale, std::u16string_view algorithm );
     /// @throws css::uno::RuntimeException
-    OUString getIndexModuleByAlgorithm( const css::lang::Locale& rLocale, const OUString& algorithm );
+    OUString getIndexModuleByAlgorithm( const css::lang::Locale& rLocale, std::u16string_view algorithm );
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::i18n::UnicodeScript > getUnicodeScripts( const css::lang::Locale& rLocale );
     /// @throws css::uno::RuntimeException
@@ -116,7 +118,7 @@ public:
     /// @throws css::uno::RuntimeException
     bool hasPhonetic( const css::lang::Locale& rLocale );
     /// @throws css::uno::RuntimeException
-    bool isPhonetic( const css::lang::Locale& rLocale, const OUString& algorithm );
+    bool isPhonetic( const css::lang::Locale& rLocale, std::u16string_view algorithm );
     /// @throws css::uno::RuntimeException
     OUString getHangingCharacters( const css::lang::Locale& rLocale );
 
@@ -133,7 +135,7 @@ private:
     /// @throws css::uno::RuntimeException
     oslGenericFunction getFunctionSymbol( const css::lang::Locale& rLocale, const char* pFunction );
     sal_Unicode ** getIndexArray(const css::lang::Locale& rLocale, sal_Int16& indexCount);
-    sal_Unicode ** getIndexArrayForAlgorithm(const css::lang::Locale& rLocale, const OUString& rAlgorithm);
+    sal_Unicode ** getIndexArrayForAlgorithm(const css::lang::Locale& rLocale, std::u16string_view rAlgorithm);
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::i18n::CalendarItem2 > &
         getCalendarItemByName(const OUString& name,

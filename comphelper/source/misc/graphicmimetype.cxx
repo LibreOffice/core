@@ -36,7 +36,7 @@ using namespace css::uno;
 
 namespace comphelper
 {
-OUString GraphicMimeTypeHelper::GetMimeTypeForExtension(const OString& rExt)
+OUString GraphicMimeTypeHelper::GetMimeTypeForExtension(std::string_view rExt)
 {
     struct XMLGraphicMimeTypeMapper
     {

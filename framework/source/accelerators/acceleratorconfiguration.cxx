@@ -1206,7 +1206,7 @@ void XCUBasedAcceleratorConfiguration::removeKeyFromConfiguration( const css::aw
     xContainer->removeByName(sKey);
 }
 
-void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySecondary, const OUString& sGlobalModules, const OUString& sModule, const OUString& sKey )
+void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySecondary, std::u16string_view sGlobalModules, const OUString& sModule, const OUString& sKey )
 {
     css::uno::Reference< css::container::XNameAccess > xAccess;
     css::uno::Reference< css::container::XNameContainer > xContainer;

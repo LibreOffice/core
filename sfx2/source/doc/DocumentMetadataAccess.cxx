@@ -56,6 +56,7 @@
 
 #include <vector>
 #include <set>
+#include <string_view>
 
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
@@ -90,26 +91,26 @@ const OUStringLiteral s_manifest = u"manifest.rdf";
 const char s_odfmime [] = "application/vnd.oasis.opendocument.";
 
 
-static bool isContentFile(OUString const & i_rPath)
+static bool isContentFile(std::u16string_view i_rPath)
 {
     return i_rPath == s_content;
 }
 
-static bool isStylesFile (OUString const & i_rPath)
+static bool isStylesFile (std::u16string_view i_rPath)
 {
     return i_rPath == s_styles;
 }
 
-bool isValidXmlId(OUString const & i_rStreamName,
+bool isValidXmlId(std::u16string_view i_rStreamName,
     std::u16string_view i_rIdref)
 {
     return isValidNCName(i_rIdref)
         && (isContentFile(i_rStreamName) || isStylesFile(i_rStreamName));
 }
 
-static bool isReservedFile(OUString const & i_rPath)
+static bool isReservedFile(std::u16string_view i_rPath)
 {
-    return isContentFile(i_rPath) || isStylesFile(i_rPath) || i_rPath == "meta.xml" || i_rPath == "settings.xml";
+    return isContentFile(i_rPath) || isStylesFile(i_rPath) || i_rPath == u"meta.xml" || i_rPath == u"settings.xml";
 }
 
 
@@ -555,18 +556,16 @@ static void
 collectFilesFromStorage(uno::Reference<embed::XStorage> const& i_xStorage,
     std::set< OUString > & o_rFiles)
 {
-    static OUString content(s_content);
-    static OUString styles(s_styles );
     try {
-        if (i_xStorage->hasByName(content) &&
-            i_xStorage->isStreamElement(content))
+        if (i_xStorage->hasByName(s_content) &&
+            i_xStorage->isStreamElement(s_content))
         {
-            o_rFiles.insert(content);
+            o_rFiles.insert(s_content);
         }
-        if (i_xStorage->hasByName(styles) &&
-            i_xStorage->isStreamElement(styles))
+        if (i_xStorage->hasByName(s_styles) &&
+            i_xStorage->isStreamElement(s_styles))
         {
-            o_rFiles.insert(styles);
+            o_rFiles.insert(s_styles);
         }
     } catch (const uno::Exception &) {
         TOOLS_WARN_EXCEPTION("sfx", "collectFilesFromStorage");

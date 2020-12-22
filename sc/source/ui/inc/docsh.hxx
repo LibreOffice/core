@@ -34,6 +34,7 @@
 #include <docuno.hxx>
 
 #include <memory>
+#include <string_view>
 #include <unordered_map>
 #include <map>
 
@@ -397,7 +398,7 @@ public:
     static OUString   GetLotusFilterName();
     static OUString   GetDBaseFilterName();
     static OUString   GetDifFilterName();
-    static bool       HasAutomaticTableName( const OUString& rFilter );
+    static bool       HasAutomaticTableName( std::u16string_view rFilter );
     static void       LOKCommentNotify(LOKCommentNotificationType nType, const ScDocument* pDocument, const ScAddress& rPos, const ScPostIt* pNote);
 
     DECL_LINK( RefreshDBDataHdl, Timer*, void );

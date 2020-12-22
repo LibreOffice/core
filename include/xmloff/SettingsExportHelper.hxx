@@ -20,6 +20,10 @@
 #ifndef INCLUDED_XMLOFF_SETTINGSEXPORTHELPER_HXX
 #define INCLUDED_XMLOFF_SETTINGSEXPORTHELPER_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <xmloff/dllapi.h>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -47,7 +51,7 @@ class XMLOFF_DLLPUBLIC XMLSettingsExportHelper
 
     css::uno::Reference< css::util::XStringSubstitution > mxStringSubstitution;
 
-    void ManipulateSetting( css::uno::Any& rAny, const OUString& rName ) const;
+    void ManipulateSetting( css::uno::Any& rAny, std::u16string_view rName ) const;
 
     void CallTypeFunction(const css::uno::Any& rAny,
                         const OUString& rName) const;

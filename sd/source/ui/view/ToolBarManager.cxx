@@ -45,6 +45,7 @@
 #include <map>
 #include <utility>
 #include <memory>
+#include <string_view>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -319,7 +320,7 @@ private:
     ToolBarRules maToolBarRules;
 
     static OUString GetToolBarResourceName (const OUString& rsBaseName);
-    bool CheckPlugInMode (const OUString& rsName) const;
+    bool CheckPlugInMode (std::u16string_view rsName) const;
 
     DECL_LINK(UpdateCallback, void *, void);
     DECL_LINK(EventMultiplexerCallback, sd::tools::EventMultiplexerEvent&, void);
@@ -863,7 +864,7 @@ OUString ToolBarManager::Implementation::GetToolBarResourceName (
     return "private:resource/toolbar/" + rsBaseName;
 }
 
-bool ToolBarManager::Implementation::CheckPlugInMode (const OUString& rsName) const
+bool ToolBarManager::Implementation::CheckPlugInMode (std::u16string_view rsName) const
 {
     bool bValid (false);
 

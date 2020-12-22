@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SW_INC_UNOSETT_HXX
 #define INCLUDED_SW_INC_UNOSETT_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "swtypes.hxx"
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -204,7 +208,7 @@ public:
     const OUString*         GetBulletFontNames() const {return m_sNewBulletFontNames;}
     const SwNumRule*        GetNumRule() const {return m_pNumRule;}
 
-    static bool             isInvalidStyle(const OUString &rName);
+    static bool             isInvalidStyle(std::u16string_view rName);
     void    Invalidate()    {m_pDocShell = nullptr;}
     const OUString&   GetCreatedNumRuleName() const {return m_sCreatedNumRuleName;}
 

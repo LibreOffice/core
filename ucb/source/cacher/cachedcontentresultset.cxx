@@ -33,6 +33,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/macros.hxx>
 #include <memory>
+#include <string_view>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -380,7 +381,7 @@ private:
     impl_getPos( std::u16string_view rName ) const;
 
     static bool
-    impl_isMyPropertyName( const OUString& rName );
+    impl_isMyPropertyName( std::u16string_view rName );
 
 public:
     explicit CCRS_PropertySetInfo(   Reference<
@@ -409,8 +410,8 @@ public:
 };
 
 //some helping variables ( names for my special properties )
-const char g_sPropertyNameForCount[] = "RowCount";
-const char g_sPropertyNameForFinalCount[] = "IsRowCountFinal";
+const char16_t g_sPropertyNameForCount[] = u"RowCount";
+const char16_t g_sPropertyNameForFinalCount[] = u"IsRowCountFinal";
 constexpr OUStringLiteral g_sPropertyNameForFetchSize(u"FetchSize");
 constexpr OUStringLiteral g_sPropertyNameForFetchDirection(u"FetchDirection");
 
@@ -574,7 +575,7 @@ bool CCRS_PropertySetInfo
 
 //static
 bool CCRS_PropertySetInfo
-        ::impl_isMyPropertyName( const OUString& rPropertyName )
+        ::impl_isMyPropertyName( std::u16string_view rPropertyName )
 {
     return ( rPropertyName == g_sPropertyNameForCount
     || rPropertyName == g_sPropertyNameForFinalCount

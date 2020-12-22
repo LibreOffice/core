@@ -25,10 +25,10 @@ namespace framework
 {
 namespace {
 
-const char MERGECOMMAND_ADDAFTER[]       = "AddAfter";
-const char MERGECOMMAND_ADDBEFORE[]      = "AddBefore";
-const char MERGECOMMAND_REPLACE[]        = "Replace";
-const char MERGECOMMAND_REMOVE[]         = "Remove";
+const char16_t MERGECOMMAND_ADDAFTER[]   = u"AddAfter";
+const char16_t MERGECOMMAND_ADDBEFORE[]  = u"AddBefore";
+const char16_t MERGECOMMAND_REPLACE[]    = u"Replace";
+const char16_t MERGECOMMAND_REMOVE[]     = u"Remove";
 
 void lcl_ConvertSequenceToValues(
     const Sequence< PropertyValue > &rSequence,
@@ -189,7 +189,7 @@ bool StatusbarMerger::ProcessMergeOperation(
     StatusBar* pStatusbar,
     sal_uInt16 nPos,
     sal_uInt16& rItemId,
-    const OUString& rMergeCommand,
+    std::u16string_view rMergeCommand,
     const OUString& rMergeCommandParameter,
     const AddonStatusbarItemContainer& rItems )
 {
@@ -208,7 +208,7 @@ bool StatusbarMerger::ProcessMergeOperation(
 bool StatusbarMerger::ProcessMergeFallback(
     StatusBar* pStatusbar,
     sal_uInt16& rItemId,
-    const OUString& rMergeCommand,
+    std::u16string_view rMergeCommand,
     std::u16string_view rMergeFallback,
     const AddonStatusbarItemContainer& rItems )
 {

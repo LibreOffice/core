@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
 #include <vector>
+#include <string_view>
 #include <memory>
 
 namespace com::sun::star::beans { struct PropertyValue; }
@@ -59,7 +60,7 @@ private:
     static SaveResult   ShowFilterOptionsDialog( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR,
                                                  const css::uno::Reference< css::frame::XModel >& xModel,
                                                  const OUString& rFilterName,
-                                                 const OUString& rType,
+                                                 std::u16string_view rType,
                                                  bool bModified,
                                                  sal_Int32& rNumArgs,
                                                  css::uno::Sequence< css::beans::PropertyValue >& rArgs );

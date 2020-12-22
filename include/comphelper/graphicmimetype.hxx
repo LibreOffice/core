@@ -10,6 +10,10 @@
 #ifndef INCLUDED_COMPHELPER_GMH_HXX
 #define INCLUDED_COMPHELPER_GMH_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
 #include <vcl/salctype.hxx>
@@ -30,7 +34,7 @@ namespace comphelper
 class COMPHELPER_DLLPUBLIC GraphicMimeTypeHelper
 {
 public:
-    static OUString GetMimeTypeForExtension(const OString& rExt);
+    static OUString GetMimeTypeForExtension(std::string_view rExt);
     static OUString
     GetMimeTypeForXGraphic(const css::uno::Reference<css::graphic::XGraphic>& xGraphic);
     static OUString

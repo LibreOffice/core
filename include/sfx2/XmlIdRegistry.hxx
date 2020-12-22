@@ -41,7 +41,7 @@ namespace sfx2 {
 /** is i_rIdref a valid NCName ? */
 bool SFX2_DLLPUBLIC isValidNCName(std::u16string_view i_rIdref);
 
-bool SFX2_DLLPUBLIC isValidXmlId(OUString const & i_rStreamName,
+bool SFX2_DLLPUBLIC isValidXmlId(std::u16string_view i_rStreamName,
     std::u16string_view i_rIdref);
 
 // XML ID handling ---------------------------------------------------

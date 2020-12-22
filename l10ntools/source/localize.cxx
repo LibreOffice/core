@@ -260,7 +260,7 @@ void handleFilesOfDir(
         handleFile(rProject, elem, rPotDir);
 }
 
-bool includeProject(const OString& rProject) {
+bool includeProject(std::string_view rProject) {
     static const char *projects[] = {
         "include",
         "accessibility",

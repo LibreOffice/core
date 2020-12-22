@@ -25,13 +25,13 @@ using namespace ::com::sun::star;
 
 const char SEPARATOR_STRING[]               = "private:separator";
 
-const char MERGECOMMAND_ADDAFTER[]          = "AddAfter";
-const char MERGECOMMAND_ADDBEFORE[]         = "AddBefore";
-const char MERGECOMMAND_REPLACE[]           = "Replace";
-const char MERGECOMMAND_REMOVE[]            = "Remove";
+const char16_t MERGECOMMAND_ADDAFTER[]      = u"AddAfter";
+const char16_t MERGECOMMAND_ADDBEFORE[]     = u"AddBefore";
+const char16_t MERGECOMMAND_REPLACE[]       = u"Replace";
+const char16_t MERGECOMMAND_REMOVE[]        = u"Remove";
 
-const char MERGEFALLBACK_ADDPATH[]           = "AddPath";
-const char MERGEFALLBACK_IGNORE[]            = "Ignore";
+const char16_t MERGEFALLBACK_ADDPATH[]       = u"AddPath";
+const char16_t MERGEFALLBACK_IGNORE[]        = u"Ignore";
 
 namespace framework
 {
@@ -275,7 +275,7 @@ bool MenuBarMerger::ProcessMergeOperation(
     Menu*                     pMenu,
     sal_uInt16                nPos,
     sal_uInt16&               nItemId,
-    const OUString&    rMergeCommand,
+    std::u16string_view rMergeCommand,
     const OUString&    rMergeCommandParameter,
     const OUString&    rModuleIdentifier,
     const AddonMenuContainer& rAddonMenuItems )
@@ -307,8 +307,8 @@ bool MenuBarMerger::ProcessMergeOperation(
 bool MenuBarMerger::ProcessFallbackOperation(
     const ReferencePathInfo&                aRefPathInfo,
     sal_uInt16&                             rItemId,
-    const OUString&                  rMergeCommand,
-    const OUString&                  rMergeFallback,
+    std::u16string_view              rMergeCommand,
+    std::u16string_view              rMergeFallback,
     const ::std::vector< OUString >& rReferencePath,
     const std::u16string_view        rModuleIdentifier,
     const AddonMenuContainer&               rAddonMenuItems )

@@ -20,6 +20,10 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_TOOLBARMERGER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_TOOLBARMERGER_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <uielement/commandinfo.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -80,7 +84,7 @@ class ToolBarMerger
                                                  sal_uInt16&               rItemId,
                                                  CommandToInfoMap&         rCommandMap,
                                                  std::u16string_view       rModuleIdentifier,
-                                                 const OUString&           rMergeCommand,
+                                                 std::u16string_view       rMergeCommand,
                                                  const OUString&           rMergeCommandParameter,
                                                  const AddonToolbarItemContainer& rItems );
 
@@ -88,8 +92,8 @@ class ToolBarMerger
                                                 sal_uInt16&                      rItemId,
                                                 CommandToInfoMap&                rCommandMap,
                                                 std::u16string_view       rModuleIdentifier,
-                                                const OUString&           rMergeCommand,
-                                                const OUString&           rMergeFallback,
+                                                std::u16string_view       rMergeCommand,
+                                                std::u16string_view       rMergeFallback,
                                                 const AddonToolbarItemContainer& rItems );
 
         static void       MergeItems( ToolBox*                  pToolbar,
@@ -118,7 +122,7 @@ class ToolBarMerger
             const OUString& rCommandURL,
             sal_uInt16      nId,
             sal_uInt16      nWidth,
-            const OUString& rControlType );
+            std::u16string_view rControlType );
 
         static void CreateToolbarItem( ToolBox* pToolbox,
                                        ToolBox::ImplToolItems::size_type nPos,

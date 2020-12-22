@@ -60,13 +60,13 @@ namespace StatusbarMerger
     bool ProcessMergeOperation( StatusBar* pStatusbar,
                                        sal_uInt16 nPos,
                                        sal_uInt16& rItemId,
-                                       const OUString& rMergeCommand,
+                                       std::u16string_view rMergeCommand,
                                        const OUString& rMergeCommandParameter,
                                        const AddonStatusbarItemContainer& rItems );
 
     bool ProcessMergeFallback( StatusBar* pStatusbar,
                                       sal_uInt16& rItemId,
-                                      const OUString& rMergeCommand,
+                                      std::u16string_view rMergeCommand,
                                       std::u16string_view rMergeFallback,
                                       const AddonStatusbarItemContainer& rItems );
 }

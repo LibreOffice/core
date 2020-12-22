@@ -145,8 +145,8 @@ const char pFilterXML[]      = "StarOffice XML (Calc)";
 const OUStringLiteral pFilterAscii = u"" SC_TEXT_CSV_FILTER_NAME;
 const OUStringLiteral pFilterLotus = u"Lotus";
 const char pFilterQPro6[]    = "Quattro Pro 6.0";
-const char pFilterExcel4[]   = "MS Excel 4.0";
-const char pFilterEx4Temp[]  = "MS Excel 4.0 Vorlage/Template";
+const char16_t pFilterExcel4[] = u"MS Excel 4.0";
+const char16_t pFilterEx4Temp[] = u"MS Excel 4.0 Vorlage/Template";
 const char pFilterExcel5[]   = "MS Excel 5.0/95";
 const char pFilterEx5Temp[]  = "MS Excel 5.0/95 Vorlage/Template";
 const char pFilterExcel95[]  = "MS Excel 95";
@@ -155,10 +155,10 @@ const char pFilterExcel97[]  = "MS Excel 97";
 const char pFilterEx97Temp[] = "MS Excel 97 Vorlage/Template";
 const OUStringLiteral pFilterDBase = u"dBase";
 const OUStringLiteral pFilterDif = u"DIF";
-const char pFilterSylk[]     = "SYLK";
+const char16_t pFilterSylk[] = u"SYLK";
 const OUStringLiteral pFilterHtml = u"HTML (StarCalc)";
 const OUStringLiteral pFilterHtmlWebQ = u"calc_HTML_WebQuery";
-const char pFilterRtf[]      = "Rich Text Format (StarCalc)";
+const char16_t pFilterRtf[]  = u"Rich Text Format (StarCalc)";
 
 #define ShellClass_ScDocShell
 #include <scslots.hxx>
@@ -2710,7 +2710,7 @@ OUString ScDocShell::GetDifFilterName()
     return pFilterDif;
 }
 
-bool ScDocShell::HasAutomaticTableName( const OUString& rFilter )
+bool ScDocShell::HasAutomaticTableName( std::u16string_view rFilter )
 {
     //  sal_True for those filters that keep the default table name
     //  (which is language specific)

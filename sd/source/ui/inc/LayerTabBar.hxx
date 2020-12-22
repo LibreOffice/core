@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_LAYERTABBAR_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_LAYERTABBAR_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <svtools/tabbar.hxx>
 #include <vcl/transfer.hxx>
 #include <sddllapi.h>
@@ -66,7 +70,7 @@ public:
     OUString            GetLayerName(sal_uInt16 nPageId) const;
 
     // Used e.g. in DeleteActualLayer() to test whether deleting is allowed.
-    static bool IsRealNameOfStandardLayer(const OUString& rName);
+    static bool IsRealNameOfStandardLayer(std::u16string_view rName);
 
     // Used e.g. in validity test of user entered names
     static bool IsLocalizedNameOfStandardLayer(std::u16string_view rName);
