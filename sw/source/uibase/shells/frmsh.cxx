@@ -400,7 +400,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_TRANSFORM_DELTA_ANGLE, false, &pItem))
                 {
-                    const Degree10 nDeltaRot(static_cast<const SdrAngleItem*>(pItem)->GetValue() / 10);
+                    const Degree10 nDeltaRot = toDegree10(static_cast<const SdrAngleItem*>(pItem)->GetValue());
                     aMgr.SetRotation(nOldRot, nOldRot + nDeltaRot, rRotation.GetUnrotatedSize());
                 }
 
@@ -410,7 +410,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 // 100th degrees in SID_ATTR_TRANSFORM_ANGLE to 10th degrees in RES_GRFATR_ROTATION
                 if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_TRANSFORM_ANGLE, false, &pItem))
                 {
-                    const Degree10 nNewRot(static_cast<const SdrAngleItem*>(pItem)->GetValue() / 10);
+                    const Degree10 nNewRot = toDegree10(static_cast<const SdrAngleItem*>(pItem)->GetValue());
 
                     // RotGrfFlyFrame: Rotation change here, SwFlyFrameAttrMgr aMgr is available
                     aMgr.SetRotation(nOldRot, nNewRot, rRotation.GetUnrotatedSize());

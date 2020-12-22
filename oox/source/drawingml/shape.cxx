@@ -1048,7 +1048,7 @@ Reference< XShape > const & Shape::createAndInsert(
         aShapeProps.assignUsed( getShapeProperties() );
         aShapeProps.assignUsed( maDefaultShapeProperties );
         if(mnRotation != 0 && bIsCustomShape)
-            aShapeProps.setProperty( PROP_RotateAngle, sal_Int32( NormAngle36000( mnRotation / -600 ) ));
+            aShapeProps.setProperty( PROP_RotateAngle, sal_Int32( NormAngle36000( Degree100(mnRotation / -600) ) ));
         if ( bIsEmbMedia || aServiceName == "com.sun.star.drawing.GraphicObjectShape" || aServiceName == "com.sun.star.drawing.OLE2Shape" || bIsCustomShape )
             mpGraphicPropertiesPtr->pushToPropMap( aShapeProps, rGraphicHelper );
         if ( mpTablePropertiesPtr && aServiceName == "com.sun.star.drawing.TableShape" )
@@ -1486,7 +1486,8 @@ Reference< XShape > const & Shape::createAndInsert(
         if ( !bUseRotationTransform && (mnRotation != 0 || nCameraRotation != 0) )
         {
             // use the same logic for rotation from VML exporter (SimpleShape::implConvertAndInsert at vmlshape.cxx)
-            aPropertySet.setAnyProperty( PROP_RotateAngle, makeAny( sal_Int32( NormAngle36000( (mnRotation - nCameraRotation) / -600 ) ) ) );
+            Degree100 nAngle = NormAngle36000( Degree100((mnRotation - nCameraRotation) / -600) );
+            aPropertySet.setAnyProperty( PROP_RotateAngle, makeAny( sal_Int32( nAngle.get() ) ) );
             aPropertySet.setAnyProperty( PROP_HoriOrientPosition, makeAny( maPosition.X ) );
             aPropertySet.setAnyProperty( PROP_VertOrientPosition, makeAny( maPosition.Y ) );
         }

@@ -1202,9 +1202,9 @@ OUString SdrModel::GetMetricString(tools::Long nVal, bool bNoUnitChars, sal_Int3
     return aBuf.makeStringAndClear();
 }
 
-OUString SdrModel::GetAngleString(tools::Long nAngle)
+OUString SdrModel::GetAngleString(Degree100 nAngle)
 {
-    bool bNeg = nAngle < 0;
+    bool bNeg = nAngle < 0_deg100;
 
     if(bNeg)
         nAngle = -nAngle;
