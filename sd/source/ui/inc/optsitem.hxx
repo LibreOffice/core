@@ -23,6 +23,7 @@
 #include <unotools/configitem.hxx>
 #include <sfx2/module.hxx>
 #include <svx/optgrid.hxx>
+#include <tools/degree.hxx>
 #include <sddllapi.h>
 #include <memory>
 

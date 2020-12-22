@@ -1401,16 +1401,16 @@ void SdrObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
     SetRectsDirty();
 }
 
-void SdrObject::NbcRotate(const Point& rRef, tools::Long nAngle)
+void SdrObject::NbcRotate(const Point& rRef, Degree100 nAngle)
 {
     if (nAngle)
     {
-        double a = nAngle * F_PI18000;
+        double a = nAngle.get() * F_PI18000;
         NbcRotate( rRef, nAngle, sin( a ), cos( a ) );
     }
 }
 
-void SdrObject::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
+void SdrObject::NbcRotate(const Point& rRef,  Degree100 nAngle, double sn, double cs)
 {
     SetGlueReallyAbsolute(true);
     aOutRect.Move(-rRef.X(),-rRef.Y());
@@ -1469,7 +1469,7 @@ void SdrObject::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetGlueReallyAbsolute(false);
 }
 
-void SdrObject::NbcShear(const Point& rRef, tools::Long /*nAngle*/, double tn, bool bVShear)
+void SdrObject::NbcShear(const Point& rRef, Degree100 /*nAngle*/, double tn, bool bVShear)
 {
     SetGlueReallyAbsolute(true);
     NbcShearGluePoints(rRef,tn,bVShear);
@@ -1521,9 +1521,9 @@ void SdrObject::Crop(const basegfx::B2DPoint& rRef, double fxFact, double fyFact
     SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
-void SdrObject::Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
+void SdrObject::Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
-    if (nAngle!=0) {
+    if (nAngle) {
         tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcRotate(rRef,nAngle,sn,cs);
         SetChanged();
@@ -1541,9 +1541,9 @@ void SdrObject::Mirror(const Point& rRef1, const Point& rRef2)
     SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
-void SdrObject::Shear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear)
+void SdrObject::Shear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear)
 {
-    if (nAngle!=0) {
+    if (nAngle) {
         tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         NbcShear(rRef,nAngle,tn,bVShear);
         SetChanged();
@@ -1650,14 +1650,14 @@ void SdrObject::SetLogicRect(const tools::Rectangle& rRect)
     SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
-tools::Long SdrObject::GetRotateAngle() const
+Degree100 SdrObject::GetRotateAngle() const
 {
-    return 0;
+    return 0_deg100;
 }
 
-tools::Long SdrObject::GetShearAngle(bool /*bVertical*/) const
+Degree100 SdrObject::GetShearAngle(bool /*bVertical*/) const
 {
-    return 0;
+    return 0_deg100;
 }
 
 sal_uInt32 SdrObject::GetSnapPointCount() const
@@ -2000,32 +2000,32 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     }
 
     if (rAttr.GetItemState(SDRATTR_SHEARANGLE,true,&pPoolItem)==SfxItemState::SET) {
-        tools::Long n=static_cast<const SdrShearAngleItem*>(pPoolItem)->GetValue();
+        Degree100 n=static_cast<const SdrShearAngleItem*>(pPoolItem)->GetValue();
         n-=GetShearAngle();
-        if (n!=0) {
-            double nTan = tan(n * F_PI18000);
+        if (n) {
+            double nTan = tan(n.get() * F_PI18000);
             NbcShear(aRef1,n,nTan,false);
         }
     }
     if (rAttr.GetItemState(SDRATTR_ROTATEANGLE,true,&pPoolItem)==SfxItemState::SET) {
-        tools::Long n=static_cast<const SdrAngleItem*>(pPoolItem)->GetValue();
+        Degree100 n=static_cast<const SdrAngleItem*>(pPoolItem)->GetValue();
         n-=GetRotateAngle();
-        if (n!=0) {
+        if (n) {
             NbcRotate(aRef1,n);
         }
     }
     if (rAttr.GetItemState(SDRATTR_ROTATEONE,true,&pPoolItem)==SfxItemState::SET) {
-        tools::Long n=static_cast<const SdrRotateOneItem*>(pPoolItem)->GetValue();
+        Degree100 n=static_cast<const SdrRotateOneItem*>(pPoolItem)->GetValue();
         NbcRotate(aRef1,n);
     }
     if (rAttr.GetItemState(SDRATTR_HORZSHEARONE,true,&pPoolItem)==SfxItemState::SET) {
-        tools::Long n=static_cast<const SdrHorzShearOneItem*>(pPoolItem)->GetValue();
-        double nTan = tan(n * F_PI18000);
+        Degree100 n=static_cast<const SdrHorzShearOneItem*>(pPoolItem)->GetValue();
+        double nTan = tan(n.get() * F_PI18000);
         NbcShear(aRef1,n,nTan,false);
     }
     if (rAttr.GetItemState(SDRATTR_VERTSHEARONE,true,&pPoolItem)==SfxItemState::SET) {
-        tools::Long n=static_cast<const SdrVertShearOneItem*>(pPoolItem)->GetValue();
-        double nTan = tan(n * F_PI18000);
+        Degree100 n=static_cast<const SdrVertShearOneItem*>(pPoolItem)->GetValue();
+        double nTan = tan(n.get() * F_PI18000);
         NbcShear(aRef1,n,nTan,true);
     }
 
@@ -2235,7 +2235,7 @@ void SdrObject::SetGlueReallyAbsolute(bool bOn)
     }
 }
 
-void SdrObject::NbcRotateGluePoints(const Point& rRef, tools::Long nAngle, double sn, double cs)
+void SdrObject::NbcRotateGluePoints(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
     // First a const call to see whether there are any glue points.
     // Force const call!

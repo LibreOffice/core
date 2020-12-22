@@ -120,7 +120,8 @@ void FuCopy::DoExecute( SfxRequest& rReq )
     }
 
     ::tools::Rectangle           aRect;
-    sal_Int32               lWidth = 0, lHeight = 0, lSizeX = 0, lSizeY = 0, lAngle = 0;
+    sal_Int32               lWidth = 0, lHeight = 0, lSizeX = 0, lSizeY = 0;
+    Degree100           lAngle(0);
     sal_uInt16              nNumber = 0;
     Color               aStartColor, aEndColor;
     bool                bColor = false;

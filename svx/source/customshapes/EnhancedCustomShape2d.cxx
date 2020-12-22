@@ -749,7 +749,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d(SdrObjCustomShape& rSdrObjCustomSha
     if ( pAny )
         *pAny >>= bFlipV;
 
-    nRotateAngle = static_cast<sal_Int32>(mrSdrObjCustomShape.GetObjectRotation() * 100.0);
+    nRotateAngle = Degree100(static_cast<sal_Int32>(mrSdrObjCustomShape.GetObjectRotation() * 100.0));
 
     /*const sal_Int32* pDefData =*/ ApplyShapeAttributes( rGeometryItem );
     SetPathSize();
@@ -1174,7 +1174,7 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
             }
             if ( nRotateAngle )
             {
-                double a = nRotateAngle * F_PI18000;
+                double a = toRadians(nRotateAngle);
                 RotatePoint( rReturnPosition, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), sin( a ), cos( a ) );
             }
             if ( bFlipH )
@@ -1488,7 +1488,7 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                 aP.setY( aLogicRect.GetHeight() - aP.Y() );
             if ( nRotateAngle )
             {
-                double a = -nRotateAngle * F_PI18000;
+                double a = -toRadians(nRotateAngle);
                 RotatePoint( aP, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), sin( a ), cos( a ) );
             }
             const GeoStat aGeoStat(mrSdrObjCustomShape.GetGeoStat());

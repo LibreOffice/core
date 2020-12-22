@@ -132,7 +132,7 @@ void CopyDlg::Reset()
         SetMetricValue( *m_xMtrFldMoveY, tools::Long(nMoveY / maUIScale), MapUnit::Map100thMM);
 
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_ANGLE, true, &pPoolItem ) )
-            m_xMtrFldAngle->set_value(static_cast<const SdrAngleItem*>( pPoolItem )->GetValue(), FieldUnit::NONE);
+            m_xMtrFldAngle->set_value(static_cast<const SdrAngleItem*>( pPoolItem )->GetValue().get(), FieldUnit::NONE);
         else
             m_xMtrFldAngle->set_value(0, FieldUnit::NONE);
 
@@ -188,7 +188,7 @@ void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
     rOutAttrs.Put( SfxUInt16Item( ATTR_COPY_NUMBER, static_cast<sal_uInt16>(m_xNumFldCopies->get_value()) ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_MOVE_X, nMoveX ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_MOVE_Y, nMoveY ) );
-    rOutAttrs.Put( SdrAngleItem( ATTR_COPY_ANGLE, static_cast<sal_Int32>(m_xMtrFldAngle->get_value(FieldUnit::DEGREE)) ) );
+    rOutAttrs.Put( SdrAngleItem( ATTR_COPY_ANGLE, Degree100(static_cast<sal_Int32>(m_xMtrFldAngle->get_value(FieldUnit::DEGREE))) ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_WIDTH, nWidth ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_HEIGHT, nHeight ) );
 
