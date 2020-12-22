@@ -1925,11 +1925,14 @@ void StarBASIC::DetachAllDocBasicItems()
 // #118116 Implementation Collection object
 
 
-const char pCountStr[]   = "Count";
-const char pAddStr[]     = "Add";
-const char pItemStr[]    = "Item";
-const char pRemoveStr[]  = "Remove";
-static sal_uInt16 nCountHash = 0, nAddHash, nItemHash, nRemoveHash;
+static constexpr OUStringLiteral pCountStr = u"Count";
+static constexpr OUStringLiteral pAddStr = u"Add";
+static constexpr OUStringLiteral pItemStr = u"Item";
+static constexpr OUStringLiteral pRemoveStr = u"Remove";
+static constexpr sal_uInt16 nCountHash = SbxVariable::MakeHashCode(pCountStr);
+static constexpr sal_uInt16 nAddHash = SbxVariable::MakeHashCode(pAddStr);
+static constexpr sal_uInt16 nItemHash = SbxVariable::MakeHashCode(pItemStr);
+static constexpr sal_uInt16 nRemoveHash = SbxVariable::MakeHashCode(pRemoveStr);
 
 SbxInfoRef BasicCollection::xAddInfo;
 SbxInfoRef BasicCollection::xItemInfo;
@@ -1937,15 +1940,7 @@ SbxInfoRef BasicCollection::xItemInfo;
 BasicCollection::BasicCollection( const OUString& rClass )
              : SbxObject( rClass )
 {
-    if( !nCountHash )
-    {
-        nCountHash  = MakeHashCode( pCountStr );
-        nAddHash    = MakeHashCode( pAddStr );
-        nItemHash   = MakeHashCode( pItemStr );
-        nRemoveHash = MakeHashCode( pRemoveStr );
-    }
     Initialize();
-
 }
 
 BasicCollection::~BasicCollection()
