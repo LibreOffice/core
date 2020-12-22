@@ -4328,9 +4328,16 @@
                         <xsl:attribute name="uof:locID">u0061</xsl:attribute>
                         <xsl:attribute name="uof:attrList">类型 宽度 边距 颜色 阴影</xsl:attribute>
                         <xsl:variable name="border-width">
-                            <xsl:call-template name="convert2cm">
-                                <xsl:with-param name="value" select="substring-before($styleProperties/@style:diagonal-bl-tr, ' ')"/>
-                            </xsl:call-template>
+                            <xsl:choose>
+                                <xsl:when test="$styleProperties/@style:diagonal-bl-tr !='none'">
+                                    <xsl:call-template name="convert2cm">
+                                        <xsl:with-param name="value" select="substring-before($styleProperties/@style:diagonal-bl-tr, ' ')"/>
+                                    </xsl:call-template>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="$styleProperties/@style:diagonal-bl-tr" />
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </xsl:variable>
                         <xsl:variable name="border-style" select="substring-before(substring-after($styleProperties/@style:diagonal-bl-tr, ' '), ' ')"/>
                         <xsl:variable name="border-color" select="substring-after(substring-after($styleProperties/@style:diagonal-bl-tr, ' '), ' ')"/>
@@ -4346,9 +4353,16 @@
                         <xsl:attribute name="uof:locID">u0062</xsl:attribute>
                         <xsl:attribute name="uof:attrList">类型 宽度 边距 颜色 阴影</xsl:attribute>
                         <xsl:variable name="border-width">
-                            <xsl:call-template name="convert2cm">
-                                <xsl:with-param name="value" select="substring-before($styleProperties/@style:diagonal-tl-br, ' ')"/>
-                            </xsl:call-template>
+                            <xsl:choose>
+                                <xsl:when test="$styleProperties/@style:diagonal-tl-br !='none'">
+                                    <xsl:call-template name="convert2cm">
+                                        <xsl:with-param name="value" select="substring-before($styleProperties/@style:diagonal-tl-br, ' ')"/>
+                                    </xsl:call-template>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="$styleProperties/@style:diagonal-tl-br" />
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </xsl:variable>
                         <xsl:variable name="border-style" select="substring-before(substring-after($styleProperties/@style:diagonal-tl-br, ' '), ' ')"/>
                         <xsl:variable name="border-color" select="substring-after(substring-after($styleProperties/@style:diagonal-tl-br, ' '), ' ')"/>
@@ -4441,9 +4455,16 @@
                         <xsl:attribute name="uof:locID">u0061</xsl:attribute>
                         <xsl:attribute name="attrList">类型 宽度 边距 颜色 阴影</xsl:attribute>
                         <xsl:variable name="border-width">
-                            <xsl:call-template name="convert2cm">
-                                <xsl:with-param name="value" select="substring-before($styleProperties/@style:diagonal-bl-tr, ' ')"/>
-                            </xsl:call-template>
+                            <xsl:choose>
+                                <xsl:when test="$styleProperties/@style:diagonal-bl-tr !='none'">
+                                    <xsl:call-template name="convert2cm">
+                                        <xsl:with-param name="value" select="substring-before($styleProperties/@style:diagonal-bl-tr, ' ')"/>
+                                    </xsl:call-template>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="$styleProperties/@style:diagonal-bl-tr" />
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </xsl:variable>
                         <xsl:variable name="border-style" select="substring-before(substring-after($styleProperties/@style:diagonal-bl-tr, ' '), ' ')"/>
                         <xsl:variable name="border-color" select="substring-after(substring-after($styleProperties/@style:diagonal-bl-tr, ' '), ' ')"/>
@@ -4458,9 +4479,16 @@
                         <xsl:attribute name="uof:locID">u0062</xsl:attribute>
                         <xsl:attribute name="uof:attrList">类型 宽度 边距 颜色 阴影</xsl:attribute>
                         <xsl:variable name="border-width">
-                            <xsl:call-template name="convert2cm">
-                                <xsl:with-param name="value" select="substring-before($styleProperties/@style:diagonal-tl-br, ' ')"/>
-                            </xsl:call-template>
+                            <xsl:choose>
+                                <xsl:when test="$styleProperties/@style:diagonal-tl-br !='none'">
+                                    <xsl:call-template name="convert2cm">
+                                        <xsl:with-param name="value" select="substring-before($styleProperties/@style:diagonal-tl-br, ' ')"/>
+                                    </xsl:call-template>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="$styleProperties/@style:diagonal-tl-br" />
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </xsl:variable>
                         <xsl:variable name="border-style" select="substring-before(substring-after($styleProperties/@style:diagonal-tl-br, ' '), ' ')"/>
                         <xsl:variable name="border-color" select="substring-after(substring-after($styleProperties/@style:diagonal-tl-br, ' '), ' ')"/>
@@ -4479,9 +4507,16 @@
         <xsl:param name="border_properties"/>
         <xsl:attribute name="attrList">类型 宽度 边距 颜色 阴影</xsl:attribute>
         <xsl:variable name="border-width">
-            <xsl:call-template name="convert2cm">
-                <xsl:with-param name="value" select="substring-before($border_properties, ' ')"/>
-            </xsl:call-template>
+            <xsl:choose>
+                <xsl:when test="$border_properties !='none'">
+                    <xsl:call-template name="convert2cm">
+                        <xsl:with-param name="value" select="substring-before($border_properties, ' ')"/>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$border_properties" />
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>
         <xsl:variable name="border-style" select="substring-before(substring-after($border_properties, ' '), ' ')"/>
         <xsl:variable name="border-color" select="substring-after(substring-after($border_properties, ' '), ' ')"/>
