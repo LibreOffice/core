@@ -94,6 +94,30 @@
       "revId": "847a8bd08beb20a1f70260700f02bfe1c4ec4acb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12e348f8_8d188f4f",
+        "filename": "include/drawinglayer/attribute/lineattribute.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-12-22T09:28:57Z",
+      "side": 1,
+      "message": "https://pastebin.com/raw/s8mLv5Wz can you apply this and see if it\u0027s better? It worked for me with gcc 7.5",
+      "parentUuid": "7ee32c62_254d3e74",
+      "range": {
+        "startLine": 55,
+        "startChar": 27,
+        "endLine": 55,
+        "endChar": 80
+      },
+      "revId": "847a8bd08beb20a1f70260700f02bfe1c4ec4acb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
