@@ -12523,6 +12523,7 @@ then
 
     qt5_incdirs="`$QMAKE5 -query QT_INSTALL_HEADERS` $qt5_incdirs"
     qt5_libdirs="`$QMAKE5 -query QT_INSTALL_LIBS` $qt5_libdirs"
+    qt5_platformsdir="`$QMAKE5 -query QT_INSTALL_PLUGINS`/platforms"
 
     AC_MSG_CHECKING([for Qt5 headers])
     qt5_incdir="no"
@@ -12558,11 +12559,15 @@ then
         AC_MSG_ERROR([Qt5 libraries not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
     fi
 
+    if test "$_os" = "Emscripten" -a ! -f "${qt5_platformsdir}"/libqwasm.a; then
+        AC_MSG_ERROR([No Qt5 WASM QPA plugin found in ${qt5_platformsdir}])
+    fi
+
     QT5_CFLAGS="-I$qt5_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT -DQT_NO_VERSION_TAGGING"
     QT5_CFLAGS=$(printf '%s' "$QT5_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     QT5_LIBS="-L$qt5_libdir -lQt5Core -lQt5Gui -lQt5Widgets -lQt5Network"
     if test "$_os" = "Emscripten"; then
-        QT5_LIBS="$QT5_LIBS -lqtpcre2"
+        QT5_LIBS="$QT5_LIBS -lqtpcre2 -lQt5EventDispatcherSupport -lQt5FontDatabaseSupport -L${qt5_platformsdir} -lqwasm"
     fi
 
     if test "$USING_X11" = TRUE; then

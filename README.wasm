@@ -5,6 +5,13 @@ $ emrun --serve_after_close instdir/program/ui-previewer.html
 
 The ui-previewer "binary" will "crash" with memory alignment problems.
 
+You can run the WASM mandelbrot Qt example, if you copy it's HTML
+and the qtloader.js from the Qt's example folder after build with:
+
+$ emrun --serve_after_close workdir/LinkTarget/Executable/mandelbrot.html
+
+REMINDER: always start new tabs in the browser, reload might fail / cache!
+
 
 = Setup for the LO WASM build (with Qt) =
 
