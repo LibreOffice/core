@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ba5cb064_e3666752",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3868,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-12-22T08:31:09Z",
+      "side": 1,
+      "message": "Since I added only the parenthesis, I thought that I should not touch it.",
+      "parentUuid": "2c2e3409_5d894879",
+      "range": {
+        "startLine": 3868,
+        "startChar": 22,
+        "endLine": 3868,
+        "endChar": 24
+      },
+      "revId": "ae06e0e27b825a6ccd471cba28cf3bbf224df36f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "936fa8e1_b3588231",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "ae06e0e27b825a6ccd471cba28cf3bbf224df36f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47d1337b_7c4b03e7",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3869,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-12-22T08:31:09Z",
+      "side": 1,
+      "message": "Done, clang here had no effects before.",
+      "parentUuid": "936fa8e1_b3588231",
+      "range": {
+        "startLine": 3869,
+        "startChar": 16,
+        "endLine": 3869,
+        "endChar": 120
+      },
+      "revId": "ae06e0e27b825a6ccd471cba28cf3bbf224df36f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
