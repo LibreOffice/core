@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9dca77e3_baee8ffe",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-12-22T23:18:09Z",
+      "side": 1,
+      "message": "But this also overwrites the quick help text, if it was set to something legitimate?\n\nI believe the logic needs to be a bit more involved here.",
+      "revId": "8140558d6a7ed9c5a63d57e27371ac8f0bb87068",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
