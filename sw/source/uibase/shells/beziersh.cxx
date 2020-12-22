@@ -54,7 +54,7 @@ SwBezierShell::SwBezierShell(SwView &_rView):
 
     SwWrtShell *pSh = &GetShell();
     SdrView*    pSdrView = pSh->GetDrawView();
-    pSdrView->SetEliminatePolyPointLimitAngle(1500);
+    pSdrView->SetEliminatePolyPointLimitAngle(1500_deg100);
 
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Draw));
 }

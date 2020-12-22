@@ -84,8 +84,8 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
 
                     // If the text is not rotated the way the shape wants it already, set the angle.
                     const sal_Int32 nRotation = nVert == XML_vert270 ? -270 : -90;
-                    if (static_cast<tools::Long>(basegfx::rad2deg(fRotate))
-                        != NormAngle36000(static_cast<tools::Long>(nRotation) * 100) / 100)
+                    if (static_cast<sal_Int32>(basegfx::rad2deg(fRotate))
+                        != NormAngle36000(Degree100(nRotation * 100)).get() / 100)
                     {
                         comphelper::SequenceAsHashMap aCustomShapeGeometry(
                             xPropertySet->getPropertyValue("CustomShapeGeometry"));

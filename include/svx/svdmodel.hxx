@@ -27,6 +27,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/weakbase.h>
 #include <svl/SfxBroadcaster.hxx>
+#include <tools/degree.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fract.hxx>
 #include <svl/hint.hxx>
@@ -385,7 +386,7 @@ public:
 
     static OUString  GetUnitString(FieldUnit eUnit);
     OUString         GetMetricString(tools::Long nVal, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
-    static OUString  GetAngleString(tools::Long nAngle);
+    static OUString  GetAngleString(Degree100 nAngle);
     static OUString  GetPercentString(const Fraction& rVal);
 
     // RecalcPageNums is ordinarily only called by the Page.

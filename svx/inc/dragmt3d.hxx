@@ -36,8 +36,8 @@ public:
     basegfx::B3DHomMatrix           maInvDisplayTransform;
     basegfx::B3DHomMatrix           maInitTransform;
     basegfx::B3DHomMatrix           maTransform;
-    sal_Int32                       mnStartAngle;
-    sal_Int32                       mnLastAngle;
+    Degree100                       mnStartAngle;
+    Degree100                       mnLastAngle;
 
     E3dDragMethodUnit(E3dObject& r3DObj)
     :   mr3DObj(r3DObj),
