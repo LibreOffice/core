@@ -2109,7 +2109,7 @@ static void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const
                 if ( nRotVal < 0 )
                     nRotVal += 36000;
 
-                rSet.Put( ScRotateValueItem( nRotVal ) );
+                rSet.Put( ScRotateValueItem( Degree100(nRotVal) ) );
 
             }
             break;
@@ -2125,12 +2125,12 @@ static void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const
                         break;
                         case table::CellOrientation_TOPBOTTOM:
                             rSet.Put( ScVerticalStackCell( false ) );
-                            rSet.Put( ScRotateValueItem( 27000 ) );
+                            rSet.Put( ScRotateValueItem( 27000_deg100 ) );
                             rSecondItemId = ATTR_ROTATE_VALUE;
                         break;
                         case table::CellOrientation_BOTTOMTOP:
                             rSet.Put( ScVerticalStackCell( false ) );
-                            rSet.Put( ScRotateValueItem( 9000 ) );
+                            rSet.Put( ScRotateValueItem( 9000_deg100 ) );
                             rSecondItemId = ATTR_ROTATE_VALUE;
                         break;
                         case table::CellOrientation_STACKED:
@@ -2412,7 +2412,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                     break;
                 case ATTR_STACKED:
                     {
-                        sal_Int32 nRot = pDataSet->Get(ATTR_ROTATE_VALUE).GetValue();
+                        Degree100 nRot = pDataSet->Get(ATTR_ROTATE_VALUE).GetValue();
                         bool bStacked = static_cast<const ScVerticalStackCell&>(pDataSet->Get(pEntry->nWID)).GetValue();
                         SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( rAny );
                     }

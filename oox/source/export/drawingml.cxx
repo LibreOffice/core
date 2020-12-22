@@ -1717,8 +1717,8 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
 {
     SAL_INFO("oox.shape",  "write shape transformation");
 
-    sal_Int32 nRotation = 0;
-    sal_Int32 nCameraRotation = 0;
+    Degree100 nRotation;
+    Degree100 nCameraRotation;
     awt::Point aPos = rXShape->getPosition();
     awt::Size aSize = rXShape->getSize();
 
@@ -1741,22 +1741,26 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
     if (!bSuppressRotation)
     {
         SdrObject* pShape = GetSdrObjectFromXShape( rXShape );
-        nRotation = pShape ? pShape->GetRotateAngle() : 0;
+        nRotation = pShape ? pShape->GetRotateAngle() : 0_deg100;
         if ( GetDocumentType() != DOCUMENT_DOCX )
         {
             int faccos=bFlipV ? -1 : 1;
             int facsin=bFlipH ? -1 : 1;
-            aPos.X-=(1-faccos*cos(nRotation*F_PI18000))*aSize.Width/2-facsin*sin(nRotation*F_PI18000)*aSize.Height/2;
-            aPos.Y-=(1-faccos*cos(nRotation*F_PI18000))*aSize.Height/2+facsin*sin(nRotation*F_PI18000)*aSize.Width/2;
+            aPos.X-=(1-faccos*cos(nRotation.get()*F_PI18000))*aSize.Width/2-facsin*sin(nRotation.get()*F_PI18000)*aSize.Height/2;
+            aPos.Y-=(1-faccos*cos(nRotation.get()*F_PI18000))*aSize.Height/2+facsin*sin(nRotation.get()*F_PI18000)*aSize.Width/2;
         }
 
         // The RotateAngle property's value is independent from any flipping, and that's exactly what we need here.
         uno::Reference<beans::XPropertySet> xPropertySet(rXShape, uno::UNO_QUERY);
         uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
         if (xPropertySetInfo->hasPropertyByName("RotateAngle"))
-            xPropertySet->getPropertyValue("RotateAngle") >>= nRotation;
+        {
+            sal_Int32 nTmp;
+            if (xPropertySet->getPropertyValue("RotateAngle") >>= nTmp)
+                nRotation = Degree100(nTmp);
+        }
         // tdf#133037: restore original rotate angle before output
-        if (nRotation != 0 && xPropertySetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
+        if (nRotation && xPropertySetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
         {
             uno::Sequence<beans::PropertyValue> aGrabBagProps;
             xPropertySet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= aGrabBagProps;
@@ -1776,8 +1780,9 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
                         [](const PropertyValue& rProp) { return rProp.Name == "rotRev"; });
                     if (pZRotationProp != std::cend(aCameraProps))
                     {
-                        pZRotationProp->Value >>= nCameraRotation;
-                        nCameraRotation = NormAngle36000(nCameraRotation / -600);
+                        sal_Int32 nTmp;
+                        pZRotationProp->Value >>= nTmp;
+                        nCameraRotation = NormAngle36000(Degree100(nTmp / -600));
                     }
                 }
             }
@@ -1786,7 +1791,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
 
     // OOXML flips shapes before rotating them.
     if(bFlipH != bFlipV)
-        nRotation = nRotation * -1 + 36000;
+        nRotation = Degree100(nRotation.get() * -1 + 36000);
 
     WriteTransformation(tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)), nXmlNamespace,
             bFlipHWrite, bFlipVWrite, ExportRotateClockwisify(nRotation + nCameraRotation), IsGroupShape( rXShape ));
@@ -4981,8 +4986,8 @@ void DrawingML::WriteFromTo(const uno::Reference<css::drawing::XShape>& rXShape,
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rXShape.get());
     if (pObj)
     {
-        sal_Int32 nRotation = pObj->GetRotateAngle();
-        if (nRotation != 0)
+        Degree100 nRotation = pObj->GetRotateAngle();
+        if (nRotation)
         {
             sal_Int16 nHalfWidth = aSize.Width / 2;
             sal_Int16 nHalfHeight = aSize.Height / 2;
@@ -4997,7 +5002,7 @@ void DrawingML::WriteFromTo(const uno::Reference<css::drawing::XShape>& rXShape,
             // MSO changes the anchor positions at these angles and that does an extra 90 degrees
             // rotation on our shapes, so we output it in such position that MSO
             // can draw this shape correctly.
-            if ((nRotation >= 45 * 100 && nRotation < 135 * 100) || (nRotation >= 225 * 100 && nRotation < 315 * 100))
+            if ((nRotation >= 4500_deg100 && nRotation < 13500_deg100) || (nRotation >= 22500_deg100 && nRotation < 31500_deg100))
             {
                 aTopLeft.X = aTopLeft.X - nHalfHeight + nHalfWidth;
                 aTopLeft.Y = aTopLeft.Y - nHalfWidth + nHalfHeight;

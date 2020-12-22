@@ -136,8 +136,8 @@ SdrObjectUniquePtr FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const t
             pObj->SetLogicRect(aRect);
 
             SfxItemSet aAttr(pDrDoc->GetItemPool());
-            aAttr.Put(makeSdrCircStartAngleItem(9000));
-            aAttr.Put(makeSdrCircEndAngleItem(0));
+            aAttr.Put(makeSdrCircStartAngleItem(9000_deg100));
+            aAttr.Put(makeSdrCircEndAngleItem(0_deg100));
 
             pObj->SetMergedItemSet(aAttr);
         }

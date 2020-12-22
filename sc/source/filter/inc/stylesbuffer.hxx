@@ -290,7 +290,7 @@ struct ApiAlignmentData
     sal_Int32                    mnVerJustify;       /// Vertical alignment.
     sal_Int32                    mnVerJustifyMethod;
     css::table::CellOrientation  meOrientation;      /// Normal or stacked text.
-    sal_Int32                    mnRotation;         /// Text rotation angle.
+    Degree100                    mnRotation;         /// Text rotation angle.
     sal_Int16                    mnWritingMode;      /// CTL text direction.
     sal_Int16                    mnIndent;           /// Indentation.
     bool                         mbWrapText;         /// True = multi-line text.

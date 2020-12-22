@@ -24,6 +24,7 @@
 #include "ftools.hxx"
 
 #include <tools/long.hxx>
+#include <tools/degree.hxx>
 
 class SfxObjectShell;
 enum class FormulaError : sal_uInt16;
@@ -108,9 +109,9 @@ public:
 
     /** Calculates an angle (in 1/100 of degrees) from an Excel angle value.
         @param nRotForStacked  This value will be returned, if nXclRot contains 'stacked'. */
-    static sal_Int32    GetScRotation( sal_uInt16 nXclRot, sal_Int32 nRotForStacked );
+    static Degree100    GetScRotation( sal_uInt16 nXclRot, Degree100 nRotForStacked );
     /** Calculates the Excel angle value from an angle in 1/100 of degrees. */
-    static sal_uInt8    GetXclRotation( sal_Int32 nScRot );
+    static sal_uInt8    GetXclRotation( Degree100 nScRot );
 
     /** Calculates BIFF8 rotation angle from BIFF2-BIFF5 text orientation. */
     static sal_uInt8    GetXclRotFromOrient( sal_uInt8 nXclOrient );

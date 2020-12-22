@@ -1551,7 +1551,7 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
                                 nRotVal %= 36000;
                                 if (nRotVal < 0)
                                     nRotVal += 36000;
-                                rSet.Put(ScRotateValueItem(nRotVal));
+                                rSet.Put(ScRotateValueItem(Degree100(nRotVal)));
                             }
                         }
                         break;
@@ -1567,11 +1567,11 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
                                     break;
                                     case table::CellOrientation_TOPBOTTOM:
                                         rSet.Put(ScVerticalStackCell(false));
-                                        rSet.Put(ScRotateValueItem(27000));
+                                        rSet.Put(ScRotateValueItem(27000_deg100));
                                     break;
                                     case table::CellOrientation_BOTTOMTOP:
                                         rSet.Put(ScVerticalStackCell(false));
-                                        rSet.Put(ScRotateValueItem(9000));
+                                        rSet.Put(ScRotateValueItem(9000_deg100));
                                     break;
                                     case table::CellOrientation_STACKED:
                                         rSet.Put(ScVerticalStackCell(true));
@@ -1811,7 +1811,7 @@ uno::Any ScStyleObj::getPropertyValue_Impl( std::u16string_view aPropertyName )
                         break;
                     case ATTR_STACKED:
                         {
-                            sal_Int32 nRot = pItemSet->Get(ATTR_ROTATE_VALUE).GetValue();
+                            Degree100 nRot = pItemSet->Get(ATTR_ROTATE_VALUE).GetValue();
                             bool bStacked = static_cast<const ScVerticalStackCell&>(pItemSet->Get(nWhich)).GetValue();
                             SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( aAny );
                         }

@@ -383,12 +383,12 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, SvxMSDffClientData* pClientD
 }
 
 
-sal_Int32 DffPropertyReader::Fix16ToAngle( sal_Int32 nContent )
+Degree100 DffPropertyReader::Fix16ToAngle( sal_Int32 nContent )
 {
-    sal_Int32 nAngle = 0;
+    Degree100 nAngle(0);
     if ( nContent )
     {
-        nAngle = ( static_cast<sal_Int16>( nContent >> 16) * 100L ) + ( ( ( nContent & 0x0000ffff) * 100L ) >> 16 );
+        nAngle = Degree100(( static_cast<sal_Int16>( nContent >> 16) * 100L ) + ( ( ( nContent & 0x0000ffff) * 100L ) >> 16 ));
         nAngle = NormAngle36000( -nAngle );
     }
     return nAngle;
@@ -1150,7 +1150,7 @@ static void GetShadeColors( const SvxMSDffManager& rManager, const DffPropertyRe
     rIn.Seek( nPos );
 }
 
-static void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream& rIn, SfxItemSet& rSet, const std::vector< ShadeColor >& rShadeColors, const DffObjData& rObjData, sal_Int32 nFix16Angle )
+static void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream& rIn, SfxItemSet& rSet, const std::vector< ShadeColor >& rShadeColors, const DffObjData& rObjData, Degree100 nFix16Angle )
 {
     Size aBitmapSizePixel( static_cast< sal_Int32 >( ( rObjData.aBoundRect.GetWidth() / 2540.0 ) * 90.0 ),      // we will create a bitmap with 90 dpi
                            static_cast< sal_Int32 >( ( rObjData.aBoundRect.GetHeight() / 2540.0 ) * 90.0 ) );
@@ -1293,7 +1293,7 @@ static void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, S
         if ( bRotateWithShape )
         {
             // convert from 100th to 10th degrees
-            aBitmapEx.Rotate( Degree10(nFix16Angle * 10), rShadeColors[ 0 ].aColor );
+            aBitmapEx.Rotate( toDegree10(nFix16Angle), rShadeColors[ 0 ].aColor );
 
             BmpMirrorFlags nMirrorFlags = BmpMirrorFlags::NONE;
             if ( rObjData.nSpFlags & ShapeFlag::FlipV )
@@ -2770,7 +2770,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
         *pAny >>= fExtraTextRotateAngle;
 
     if ( rManager.mnFix16Angle )
-        fExtraTextRotateAngle += mnFix16Angle / 100.0;
+        fExtraTextRotateAngle += mnFix16Angle.get() / 100.0;
     if ( rObjData.nSpFlags & ShapeFlag::FlipV )
         fExtraTextRotateAngle -= 180.0;
 
@@ -2788,15 +2788,15 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet, sal_uInt32 eMSO_F
     //support this prop. So need some swap for the two color to keep fidelity with AOO and MS shape.
     //So below var is defined.
     sal_Int32 nChgColors = 0;
-    sal_Int32 nAngle = GetPropertyValue( DFF_Prop_fillAngle, 0 );
-    if(nAngle >= 0)
+    sal_Int32 nAngleFix16 = GetPropertyValue( DFF_Prop_fillAngle, 0 );
+    if(nAngleFix16 >= 0)
         nChgColors ^= 1;
 
     //Translate a MS clockwise(+) or count clockwise angle(-) into an AOO count clock wise angle
-    nAngle=3600 - ( ( Fix16ToAngle(nAngle) + 5 ) / 10 );
+    Degree10 nAngle( 3600 - ( ( Fix16ToAngle(nAngleFix16).get() + 5 ) / 10 ) );
     //Make sure this angle belongs to 0~3600
-    while ( nAngle >= 3600 ) nAngle -= 3600;
-    while ( nAngle < 0 ) nAngle += 3600;
+    while ( nAngle >= Degree10(3600) ) nAngle -= Degree10(3600);
+    while ( nAngle < Degree10(0) ) nAngle += Degree10(3600);
 
     //Rotate angle
     if ( mbRotateGranientFillWithAngle )
@@ -2807,10 +2807,10 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet, sal_uInt32 eMSO_F
         nRotateAngle = ( nRotateAngle + 5 ) / 10 ;//round up
         //nAngle is a clockwise angle. If nRotateAngle is a clockwise angle, then gradient needs to be rotated a little less
         //or it needs to be rotated a little more
-        nAngle -=  nRotateAngle;
+        nAngle -=  Degree10(nRotateAngle);
     }
-    while ( nAngle >= 3600 ) nAngle -= 3600;
-    while ( nAngle < 0 ) nAngle += 3600;
+    while ( nAngle >= Degree10(3600) ) nAngle -= Degree10(3600);
+    while ( nAngle < Degree10(0) ) nAngle += Degree10(3600);
 
     css::awt::GradientStyle eGrad = css::awt::GradientStyle_LINEAR;
 
@@ -2870,7 +2870,7 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet, sal_uInt32 eMSO_F
     }
 
     //Construct gradient item
-    XGradient aGrad( aCol2, aCol1, eGrad, Degree10(nAngle), nFocusX, nFocusY );
+    XGradient aGrad( aCol2, aCol1, eGrad, nAngle, nFocusX, nFocusY );
     //Intensity has been merged into color. So here just set is as 100
     aGrad.SetStartIntens( 100 );
     aGrad.SetEndIntens( 100 );
@@ -2883,7 +2883,7 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet, sal_uInt32 eMSO_F
         aCol1 = Color(nStartCol, nStartCol, nStartCol);
         aCol2 = Color(nEndCol, nEndCol, nEndCol);
 
-        XGradient aGrad2( aCol2 ,  aCol1 , eGrad, Degree10(nAngle), nFocusX, nFocusY );
+        XGradient aGrad2( aCol2 ,  aCol1 , eGrad, nAngle, nFocusX, nFocusY );
         aSet.Put( XFillFloatTransparenceItem( OUString(), aGrad2 ) );
     }
 }
@@ -4054,13 +4054,13 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
     bool bOk = ReadDffRecordHeader(rSt, aRecHd);
     if (bOk && aRecHd.nRecType == DFF_msofbtSpContainer)
     {
-        mnFix16Angle = 0;
+        mnFix16Angle = 0_deg100;
         if (!aRecHd.SeekToBegOfRecord(rSt))
             return pRet;
         pRet = ImportObj( rSt, rClientData, rClientRect, rGlobalChildRect, nCalledByGroup + 1, pShapeId );
         if ( pRet )
         {
-            sal_Int32 nGroupRotateAngle = 0;
+            Degree100 nGroupRotateAngle(0);
             ShapeFlag nSpFlags = nGroupShapeFlags;
             nGroupRotateAngle = mnFix16Angle;
 
@@ -4072,8 +4072,8 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
             else
                 aGlobalChildRect = rGlobalChildRect;
 
-            if ( ( nGroupRotateAngle > 4500 && nGroupRotateAngle <= 13500 )
-                || ( nGroupRotateAngle > 22500 && nGroupRotateAngle <= 31500 ) )
+            if ( ( nGroupRotateAngle > 4500_deg100 && nGroupRotateAngle <= 13500_deg100 )
+                || ( nGroupRotateAngle > 22500_deg100 && nGroupRotateAngle <= 31500_deg100 ) )
             {
                 sal_Int32 nHalfWidth = ( aClientRect.GetWidth() + 1 ) >> 1;
                 sal_Int32 nHalfHeight = ( aClientRect.GetHeight() + 1 ) >> 1;
@@ -4237,7 +4237,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     else
     {
         InitializePropSet( DFF_msofbtOPT ); // get the default PropSet
-        static_cast<DffPropertyReader*>(this)->mnFix16Angle = 0;
+        static_cast<DffPropertyReader*>(this)->mnFix16Angle = 0_deg100;
     }
 
     aObjData.bOpt2 = maShapeRecords.SeekToContent( rSt, DFF_msofbtUDefProp, SEEK_FROM_CURRENT_AND_RESTART );
@@ -4287,8 +4287,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     {   // apply rotation to the BoundingBox BEFORE an object has been generated
         if( mnFix16Angle )
         {
-            tools::Long nAngle = mnFix16Angle;
-            if ( ( nAngle > 4500 && nAngle <= 13500 ) || ( nAngle > 22500 && nAngle <= 31500 ) )
+            Degree100 nAngle = mnFix16Angle;
+            if ( ( nAngle > 4500_deg100 && nAngle <= 13500_deg100 ) || ( nAngle > 22500_deg100 && nAngle <= 31500_deg100 ) )
             {
                 sal_Int32 nHalfWidth = ( aObjData.aBoundRect.GetWidth() + 1 ) >> 1;
                 sal_Int32 nHalfHeight = ( aObjData.aBoundRect.GetHeight() + 1 ) >> 1;
@@ -4320,7 +4320,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             SfxItemSet  aSet( pSdrModel->GetItemPool() );
 
             bool    bIsConnector = ( ( aObjData.eShapeType >= mso_sptStraightConnector1 ) && ( aObjData.eShapeType <= mso_sptCurvedConnector5 ) );
-            sal_Int32   nObjectRotation = mnFix16Angle;
+            Degree100   nObjectRotation = mnFix16Angle;
             ShapeFlag   nSpFlags = aObjData.nSpFlags;
 
             if ( bGraphic )
@@ -4679,12 +4679,12 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         // sj: taking care of the different rotation points, since the new arc is having a bigger snaprect
                         if ( mnFix16Angle )
                         {
-                            sal_Int32 nAngle = mnFix16Angle;
+                            Degree100 nAngle = mnFix16Angle;
                             if ( nSpFlags & ShapeFlag::FlipH )
-                                nAngle = 36000 - nAngle;
+                                nAngle = 36000_deg100 - nAngle;
                             if ( nSpFlags & ShapeFlag::FlipV )
                                 nAngle = -nAngle;
-                            double a = nAngle * F_PI18000;
+                            double a = nAngle.get() * F_PI18000;
                             double ss = sin( a );
                             double cc = cos( a );
                             Point aP1( aOldBoundRect.TopLeft() );
@@ -4759,7 +4759,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         // pay attention to the rotations
                         if ( nObjectRotation )
                         {
-                            double a = nObjectRotation * F_PI18000;
+                            double a = nObjectRotation.get() * F_PI18000;
                             Point aCenter( aObjData.aBoundRect.Center() );
                             double ss = sin(a);
                             double cc = cos(a);
@@ -4768,7 +4768,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             RotatePoint(aPoint2, aCenter, ss, cc);
 
                             // #i120437# reset rotation, it is part of the path and shall not be applied again
-                            nObjectRotation = 0;
+                            nObjectRotation = 0_deg100;
                         }
 
                         // rotate/mirror line within the area as we need it
@@ -5220,7 +5220,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             ScaleEmu( nTextTop );
             ScaleEmu( nTextBottom );
 
-            sal_Int32 nTextRotationAngle=0;
+            Degree100 nTextRotationAngle(0);
             bool bVerticalText = false;
             if ( IsProperty( DFF_Prop_txflTextFlow ) )
             {
@@ -5228,18 +5228,18 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 switch( eTextFlow )
                 {
                     case mso_txflBtoT:
-                        nTextRotationAngle = 9000;
+                        nTextRotationAngle = 9000_deg100;
                     break;
                     case mso_txflVertN:
                     case mso_txflTtoBN:
-                        nTextRotationAngle = 27000;
+                        nTextRotationAngle = 27000_deg100;
                         break;
                     case mso_txflTtoBA:
                         bVerticalText = true;
                     break;
                     case mso_txflHorzA:
                         bVerticalText = true;
-                        nTextRotationAngle = 9000;
+                        nTextRotationAngle = 9000_deg100;
                     break;
                     case mso_txflHorzN:
                     default :
@@ -5249,7 +5249,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
             if (nTextRotationAngle)
             {
-                switch (nTextRotationAngle)
+                switch (nTextRotationAngle.get())
                 {
                     case 9000:
                         {
@@ -5436,7 +5436,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             // rotate text with shape?
             if ( mnFix16Angle )
             {
-                double a = mnFix16Angle * F_PI18000;
+                double a = mnFix16Angle.get() * F_PI18000;
                 pTextObj->NbcRotate( rObjData.aBoundRect.Center(), mnFix16Angle,
                     sin( a ), cos( a ) );
             }

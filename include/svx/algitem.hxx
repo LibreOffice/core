@@ -25,6 +25,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/degree.hxx>
 
 class IntlWrapper;
 class SfxItemPool;
@@ -37,7 +38,7 @@ public:
         const sal_uInt16 nId );
 
     SvxOrientationItem(
-        sal_Int32 nRotation, bool bStacked,
+        Degree100 nRotation, bool bStacked,
         const sal_uInt16 nId );
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -55,7 +56,7 @@ public:
     /** Returns sal_True, if the item represents STACKED state. */
     bool                    IsStacked() const;
     /** Returns the rotation this item represents (returns nStdAngle for STANDARD and STACKED state). */
-    sal_Int32               GetRotation( sal_Int32 nStdAngle ) const;
+    Degree100               GetRotation( Degree100 nStdAngle ) const;
 };
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxMarginItem final : public SfxPoolItem
