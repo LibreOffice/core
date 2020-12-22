@@ -35,7 +35,7 @@ enum class SotClipboardFormatId : sal_uInt32;
 
 class BaseStorageStream;
 
-class SOT_DLLPUBLIC SotTempStream final : virtual public SotObject, public SvStream
+class SOT_DLLPUBLIC SotTempStream final : virtual public SvRefBase, public SvStream
 {
 friend class SotStorage;
 
