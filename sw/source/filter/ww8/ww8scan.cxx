@@ -6005,7 +6005,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset):
         // Read cswNew to find out if nFib should be ignored.
         sal_uInt32 nPos = rSt.Tell();
         rSt.SeekRel(m_cfclcb * 8);
-        if (rSt.good())
+        if (rSt.good() && rSt.remainingSize() >= 2)
         {
             rSt.ReadUInt16(m_cswNew);
         }
