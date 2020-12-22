@@ -107,13 +107,13 @@ void PrepareListener_Impl::disposing(const css::lang::EventObject& /*rEvent*/)
 
 // class SfxMailModel -----------------------------------------------
 
-const char       PDF_DOCUMENT_TYPE[]   = "pdf_Portable_Document_Format";
+const char16_t   PDF_DOCUMENT_TYPE[]   = u"pdf_Portable_Document_Format";
 
 SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
     const uno::Reference< lang::XMultiServiceFactory >& xSMGR,
     const uno::Reference< frame::XModel >& xModel,
     const OUString& rFilterName,
-    const OUString& rType,
+    std::u16string_view rType,
     bool bModified,
     sal_Int32& rNumArgs,
     css::uno::Sequence< css::beans::PropertyValue >& rArgs )

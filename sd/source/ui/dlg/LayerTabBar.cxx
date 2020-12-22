@@ -122,7 +122,7 @@ bool LayerTabBar::IsLocalizedNameOfStandardLayer(std::u16string_view rName)
             || rName == SdResId(STR_LAYER_BCKGRNDOBJ) );
 }
 
-bool LayerTabBar::IsRealNameOfStandardLayer(const OUString& rName)
+bool LayerTabBar::IsRealNameOfStandardLayer(std::u16string_view rName)
 {
     return (   rName == sUNO_LayerName_layout
             || rName == sUNO_LayerName_controls

@@ -20,6 +20,10 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_ACCELERATORCONFIGURATION_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_ACCELERATORCONFIGURATION_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <accelerators/presethandler.hxx>
 #include <accelerators/acceleratorcache.hxx>
 
@@ -299,7 +303,7 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
         void insertKeyToConfiguration(const css::awt::KeyEvent& aKeyEvent, const OUString& sCommand, const bool bPreferred);
         void removeKeyFromConfiguration(const css::awt::KeyEvent& aKeyEvent, const bool bPreferred);
 
-        void reloadChanged(const OUString& sPrimarySecondary, const OUString& sGlobalModules, const OUString& sModule, const OUString& sKey);
+        void reloadChanged(const OUString& sPrimarySecondary, std::u16string_view sGlobalModules, const OUString& sModule, const OUString& sKey);
         AcceleratorCache& impl_getCFG(bool bPreferred, bool bWriteAccessRequested = false);
 
 };

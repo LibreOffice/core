@@ -32,6 +32,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <string_view>
 #include <unordered_map>
 #if OSL_DEBUG_LEVEL > 0
 #include <typeinfo>
@@ -111,15 +112,15 @@ using ::sfx2::isValidXmlId;
 
 namespace sfx2 {
 
-const char s_content [] = "content.xml";
-const char s_styles  [] = "styles.xml";
+const OUStringLiteral s_content = u"content.xml";
+const OUStringLiteral s_styles  = u"styles.xml";
 
-static bool isContentFile(OUString const & i_rPath)
+static bool isContentFile(std::u16string_view i_rPath)
 {
     return i_rPath == s_content;
 }
 
-static bool isStylesFile (OUString const & i_rPath)
+static bool isStylesFile (std::u16string_view i_rPath)
 {
     return i_rPath == s_styles;
 }
@@ -453,20 +454,20 @@ struct XmlIdRegistryDocument::XmlIdRegistry_Impl
         : m_XmlIdMap(), m_XmlIdReverseMap() { }
 
     bool TryInsertMetadatable(Metadatable& i_xObject,
-        const OUString & i_rStream, const OUString & i_rIdref);
+        std::u16string_view i_rStream, const OUString & i_rIdref);
 
     bool LookupXmlId(const Metadatable& i_xObject,
         OUString & o_rStream, OUString & o_rIdref) const;
 
-    Metadatable* LookupElement(const OUString & i_rStreamName,
+    Metadatable* LookupElement(std::u16string_view i_rStreamName,
         const OUString & i_rIdref) const;
 
     const XmlIdVector_t * LookupElementVector(
-        const OUString & i_rStreamName,
+        std::u16string_view i_rStreamName,
         const OUString & i_rIdref) const;
 
           XmlIdVector_t * LookupElementVector(
-        const OUString & i_rStreamName,
+        std::u16string_view i_rStreamName,
         const OUString & i_rIdref)
     {
         return const_cast<XmlIdVector_t*>(
@@ -481,7 +482,7 @@ struct XmlIdRegistryDocument::XmlIdRegistry_Impl
 
 static void
 rmIter(XmlIdMap_t & i_rXmlIdMap, XmlIdMap_t::iterator const& i_rIter,
-    OUString const & i_rStream, Metadatable const& i_rObject)
+    std::u16string_view i_rStream, Metadatable const& i_rObject)
 {
     if (i_rIter != i_rXmlIdMap.end())
     {
@@ -498,7 +499,7 @@ rmIter(XmlIdMap_t & i_rXmlIdMap, XmlIdMap_t::iterator const& i_rIter,
 
 const XmlIdVector_t *
 XmlIdRegistryDocument::XmlIdRegistry_Impl::LookupElementVector(
-    const OUString & i_rStreamName,
+    std::u16string_view i_rStreamName,
     const OUString & i_rIdref) const
 {
     const XmlIdMap_t::const_iterator iter( m_XmlIdMap.find(i_rIdref) );
@@ -518,7 +519,7 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::LookupElementVector(
 
 Metadatable*
 XmlIdRegistryDocument::XmlIdRegistry_Impl::LookupElement(
-    const OUString & i_rStreamName,
+    std::u16string_view i_rStreamName,
     const OUString & i_rIdref) const
 {
     if (!isValidXmlId(i_rStreamName, i_rIdref))
@@ -568,7 +569,7 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::LookupXmlId(
 bool
 XmlIdRegistryDocument::XmlIdRegistry_Impl::TryInsertMetadatable(
     Metadatable & i_rObject,
-    const OUString & i_rStreamName, const OUString & i_rIdref)
+    std::u16string_view i_rStreamName, const OUString & i_rIdref)
 {
     const bool bContent( isContentFile(i_rStreamName) );
     OSL_ENSURE(isContentFile(i_rStreamName) || isStylesFile(i_rStreamName),
@@ -722,8 +723,8 @@ XmlIdRegistryDocument::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
         "RegisterMetadatableAndCreateID called for MetadatableClipboard?");
 
     const bool isInContent( i_rObject.IsInContent() );
-    const OUString stream( OUString::createFromAscii(
-        isInContent ? s_content : s_styles ) );
+    const OUString stream(
+        isInContent ? OUString(s_content) : OUString(s_styles) );
     // check if we have a latent xmlid, and if yes, remove it
     OUString old_path;
     OUString old_idref;
@@ -923,16 +924,16 @@ struct XmlIdRegistryClipboard::XmlIdRegistry_Impl
         : m_XmlIdMap(), m_XmlIdReverseMap() { }
 
     bool TryInsertMetadatable(Metadatable& i_xObject,
-        const OUString & i_rStream, const OUString & i_rIdref);
+        std::u16string_view i_rStream, const OUString & i_rIdref);
 
     bool LookupXmlId(const Metadatable& i_xObject,
         OUString & o_rStream, OUString & o_rIdref,
         MetadatableClipboard const* &o_rpLink) const;
 
-    Metadatable* LookupElement(const OUString & i_rStreamName,
+    Metadatable* LookupElement(std::u16string_view i_rStreamName,
         const OUString & i_rIdref) const;
 
-    Metadatable* const* LookupEntry(const OUString & i_rStreamName,
+    Metadatable* const* LookupEntry(std::u16string_view i_rStreamName,
         const OUString & i_rIdref) const;
 
     ClipboardXmlIdMap_t m_XmlIdMap;
@@ -943,7 +944,7 @@ struct XmlIdRegistryClipboard::XmlIdRegistry_Impl
 static void
 rmIter(ClipboardXmlIdMap_t & i_rXmlIdMap,
     ClipboardXmlIdMap_t::iterator const& i_rIter,
-    OUString const & i_rStream, Metadatable const& i_rObject)
+    std::u16string_view i_rStream, Metadatable const& i_rObject)
 {
     if (i_rIter == i_rXmlIdMap.end())
         return;
@@ -963,7 +964,7 @@ rmIter(ClipboardXmlIdMap_t & i_rXmlIdMap,
 
 Metadatable* const*
 XmlIdRegistryClipboard::XmlIdRegistry_Impl::LookupEntry(
-    const OUString & i_rStreamName,
+    std::u16string_view i_rStreamName,
     const OUString & i_rIdref) const
 {
     if (!isValidXmlId(i_rStreamName, i_rIdref))
@@ -988,7 +989,7 @@ XmlIdRegistryClipboard::XmlIdRegistry_Impl::LookupEntry(
 
 Metadatable*
 XmlIdRegistryClipboard::XmlIdRegistry_Impl::LookupElement(
-    const OUString & i_rStreamName,
+    std::u16string_view i_rStreamName,
     const OUString & i_rIdref) const
 {
     Metadatable * const * ppEntry = LookupEntry(i_rStreamName, i_rIdref);
@@ -1023,7 +1024,7 @@ XmlIdRegistryClipboard::XmlIdRegistry_Impl::LookupXmlId(
 bool
 XmlIdRegistryClipboard::XmlIdRegistry_Impl::TryInsertMetadatable(
     Metadatable & i_rObject,
-    const OUString & i_rStreamName, const OUString & i_rIdref)
+    std::u16string_view i_rStreamName, const OUString & i_rIdref)
 {
     bool bContent( isContentFile(i_rStreamName) );
     OSL_ENSURE(isContentFile(i_rStreamName) || isStylesFile(i_rStreamName),
@@ -1137,8 +1138,8 @@ XmlIdRegistryClipboard::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
         "RegisterMetadatableAndCreateID called for MetadatableClipboard?");
 
     bool isInContent( i_rObject.IsInContent() );
-    OUString stream( OUString::createFromAscii(
-        isInContent ? s_content : s_styles ) );
+    OUString stream(
+        isInContent ? OUString(s_content) : OUString(s_styles) );
 
     OUString old_path;
     OUString old_idref;
@@ -1296,8 +1297,7 @@ void Metadatable::SetMetadataReference( const css::beans::StringPair & i_rRefere
         {
             // handle empty stream name as auto-detect.
             // necessary for importing flat file format.
-            streamName = OUString::createFromAscii(
-                            IsInContent() ? s_content : s_styles );
+            streamName = IsInContent() ? OUString(s_content) : OUString(s_styles);
         }
         XmlIdRegistry & rReg( dynamic_cast<XmlIdRegistry&>( GetRegistry() ) );
         if (!rReg.TryRegisterMetadatable(*this, streamName, i_rReference.Second))

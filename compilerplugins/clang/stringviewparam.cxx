@@ -181,43 +181,18 @@ SmallVector<DeclRefExpr const*, 2> relevantCXXOperatorCallExpr(CXXOperatorCallEx
         }
         return wrap(relevantDeclRefExpr(e));
     }
-    else if (compat::isComparisonOp(expr))
+    if (compat::isComparisonOp(expr))
     {
-        auto arg0 = compat::IgnoreImplicit(expr->getArg(0));
-        if (isa<clang::StringLiteral>(arg0))
+        SmallVector<DeclRefExpr const*, 2> v;
+        if (auto const e = relevantDeclRefExpr(expr->getArg(0)))
         {
-            return wrap(relevantDeclRefExpr(expr->getArg(1)));
+            v.push_back(e);
         }
-        auto arg1 = compat::IgnoreImplicit(expr->getArg(1));
-        if (isa<clang::StringLiteral>(arg1))
+        if (auto const e = relevantDeclRefExpr(expr->getArg(1)))
         {
-            return wrap(relevantDeclRefExpr(arg0));
+            v.push_back(e);
         }
-
-        auto st1 = relevantStringType(arg0->getType());
-        auto st2 = relevantStringType(arg1->getType());
-        if ((st1 == StringType::RtlOstring && st2 == StringType::RtlOstring)
-            || (st1 == StringType::RtlOustring && st2 == StringType::RtlOustring))
-        {
-            SmallVector<DeclRefExpr const*, 2> v;
-            if (auto const e = relevantDeclRefExpr(arg0))
-            {
-                v.push_back(e);
-            }
-            if (auto const e = relevantDeclRefExpr(arg1))
-            {
-                v.push_back(e);
-            }
-            return v;
-        }
-        if (st1 != StringType::None && isStringView(arg1->getType()))
-        {
-            return wrap(relevantDeclRefExpr(arg0));
-        }
-        if (st2 != StringType::None && isStringView(arg0->getType()))
-        {
-            return wrap(relevantDeclRefExpr(arg1));
-        }
+        return v;
     }
     return {};
 }

@@ -473,7 +473,7 @@ void XMLSettingsExportHelper::exportAllSettings(
  * from their XML settings representation. This is your chance to do
  * so!
  */
-void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, const OUString& rName ) const
+void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, std::u16string_view rName ) const
 {
     if( rName == gsPrinterIndependentLayout )
     {

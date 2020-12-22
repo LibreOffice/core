@@ -1032,7 +1032,7 @@ OString FmXFormShell::SlotToIdent(sal_uInt16 nSlot)
     return OString();
 }
 
-bool FmXFormShell::isControlConversionSlot(const OString& rIdent)
+bool FmXFormShell::isControlConversionSlot(std::string_view rIdent)
 {
     for (const auto& rConvertSlot : aConvertSlots)
         if (rIdent == rConvertSlot)
@@ -1040,7 +1040,7 @@ bool FmXFormShell::isControlConversionSlot(const OString& rIdent)
     return false;
 }
 
-void FmXFormShell::executeControlConversionSlot_Lock(const OString &rIdent)
+void FmXFormShell::executeControlConversionSlot_Lock(std::string_view rIdent)
 {
     OSL_PRECOND( canConvertCurrentSelectionToControl_Lock(rIdent), "FmXFormShell::executeControlConversionSlot: illegal call!" );
     InterfaceBag::const_iterator aSelectedElement = m_aCurrentSelection.begin();
@@ -1050,7 +1050,7 @@ void FmXFormShell::executeControlConversionSlot_Lock(const OString &rIdent)
     executeControlConversionSlot_Lock(Reference<XFormComponent>(*aSelectedElement, UNO_QUERY), rIdent);
 }
 
-bool FmXFormShell::executeControlConversionSlot_Lock(const Reference<XFormComponent>& _rxObject, const OString& rIdent)
+bool FmXFormShell::executeControlConversionSlot_Lock(const Reference<XFormComponent>& _rxObject, std::string_view rIdent)
 {
     if (impl_checkDisposed_Lock())
         return false;
@@ -1249,7 +1249,7 @@ bool FmXFormShell::executeControlConversionSlot_Lock(const Reference<XFormCompon
     return false;
 }
 
-bool FmXFormShell::canConvertCurrentSelectionToControl_Lock(const OString& rIdent)
+bool FmXFormShell::canConvertCurrentSelectionToControl_Lock(std::string_view rIdent)
 {
     if ( m_aCurrentSelection.empty() )
         return false;

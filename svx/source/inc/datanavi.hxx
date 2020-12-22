@@ -45,6 +45,7 @@
 #include "datalistener.hxx"
 
 #include <memory>
+#include <string_view>
 #include <vector>
 
 class FmFormShell;
@@ -98,7 +99,7 @@ namespace svxform
 
         /** convert submission replace string from API value to UI value.
             Use 'none' as default. */
-        OUString const & toUI( const OUString& rStr ) const
+        OUString const & toUI( std::u16string_view rStr ) const
         {
             if( rStr == m_sDoc_API )
                 return m_sDoc_UI;
@@ -143,7 +144,7 @@ namespace svxform
         }
 
         /** convert from API to UI; put is default. */
-        OUString const & toUI( const OUString& rStr ) const
+        OUString const & toUI( std::u16string_view rStr ) const
         {
             if( rStr == m_sGet_API )
                 return m_sGet_UI;

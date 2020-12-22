@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <memory>
+#include <string_view>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -53,7 +54,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // ____ ConfigItemListener ____
-    void notify( const OUString & rPropertyName );
+    void notify( std::u16string_view rPropertyName );
 
 protected:
     // ____ XColorScheme ____

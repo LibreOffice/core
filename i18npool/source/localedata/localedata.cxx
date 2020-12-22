@@ -922,7 +922,7 @@ LocaleDataImpl::getDateAcceptancePatterns( const Locale& rLocale )
 #define COLLATOR_ELEMENTS       3
 
 OUString
-LocaleDataImpl::getCollatorRuleByAlgorithm( const Locale& rLocale, const OUString& algorithm )
+LocaleDataImpl::getCollatorRuleByAlgorithm( const Locale& rLocale, std::u16string_view algorithm )
 {
     MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getCollatorImplementation" ));
     if ( func ) {
@@ -1059,7 +1059,7 @@ LocaleDataImpl::hasPhonetic( const Locale& rLocale )
 }
 
 sal_Unicode **
-LocaleDataImpl::getIndexArrayForAlgorithm(const Locale& rLocale, const OUString& algorithm)
+LocaleDataImpl::getIndexArrayForAlgorithm(const Locale& rLocale, std::u16string_view algorithm)
 {
     sal_Int16 indexCount = 0;
     sal_Unicode **indexArray = getIndexArray(rLocale, indexCount);
@@ -1073,21 +1073,21 @@ LocaleDataImpl::getIndexArrayForAlgorithm(const Locale& rLocale, const OUString&
 }
 
 bool
-LocaleDataImpl::isPhonetic( const Locale& rLocale, const OUString& algorithm )
+LocaleDataImpl::isPhonetic( const Locale& rLocale, std::u16string_view algorithm )
 {
     sal_Unicode **indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
     return indexArray && indexArray[4][0];
 }
 
 OUString
-LocaleDataImpl::getIndexKeysByAlgorithm( const Locale& rLocale, const OUString& algorithm )
+LocaleDataImpl::getIndexKeysByAlgorithm( const Locale& rLocale, std::u16string_view algorithm )
 {
     sal_Unicode **indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
     return indexArray ? (OUString::Concat(u"0-9") + indexArray[2]) : OUString();
 }
 
 OUString
-LocaleDataImpl::getIndexModuleByAlgorithm( const Locale& rLocale, const OUString& algorithm )
+LocaleDataImpl::getIndexModuleByAlgorithm( const Locale& rLocale, std::u16string_view algorithm )
 {
     sal_Unicode **indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
     return indexArray ? OUString(indexArray[1]) : OUString();

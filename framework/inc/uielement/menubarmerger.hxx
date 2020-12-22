@@ -75,14 +75,14 @@ namespace MenuBarMerger
         bool       ProcessMergeOperation( Menu*                     pMenu,
                                                  sal_uInt16                nPos,
                                                  sal_uInt16&               rItemId,
-                                                 const OUString&    rMergeCommand,
+                                                 std::u16string_view rMergeCommand,
                                                  const OUString&    rMergeCommandParameter,
                                                  const OUString&    rModuleIdentifier,
                                                  const AddonMenuContainer& rAddonMenuItems );
         bool       ProcessFallbackOperation( const ReferencePathInfo&                aRefPathInfo,
                                                     sal_uInt16&                             rItemId,
-                                                    const OUString&                  rMergeCommand,
-                                                    const OUString&                  rMergeFallback,
+                                                    std::u16string_view              rMergeCommand,
+                                                    std::u16string_view              rMergeFallback,
                                                     const ::std::vector< OUString >& rReferencePath,
                                                     std::u16string_view              rModuleIdentifier,
                                                     const AddonMenuContainer&               rAddonMenuItems );

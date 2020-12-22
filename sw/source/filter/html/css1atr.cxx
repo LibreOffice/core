@@ -188,7 +188,7 @@ OString lclConvToHex(sal_uInt16 nHex)
 }
 }
 
-bool IgnorePropertyForReqIF(bool bReqIF, const OString& rProperty, std::string_view rValue)
+bool IgnorePropertyForReqIF(bool bReqIF, std::string_view rProperty, std::string_view rValue)
 {
     if (!bReqIF)
         return false;

@@ -22,6 +22,7 @@
 #include "indexentrysupplier_common.hxx"
 
 #include <memory>
+#include <string_view>
 
 namespace i18npool {
 
@@ -85,7 +86,7 @@ public:
     void init(const css::lang::Locale& rLocale, const OUString& algorithm);
 
     /// @throws css::uno::RuntimeException
-    void makeIndexKeys(const css::lang::Locale &rLocale, const OUString &algorithm);
+    void makeIndexKeys(const css::lang::Locale &rLocale, std::u16string_view algorithm);
     sal_Int16 getIndexWeight(const OUString& rIndexEntry);
     OUString getIndexDescription(const OUString& rIndexEntry);
 

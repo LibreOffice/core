@@ -157,7 +157,7 @@ void ConfigColorScheme::retrieveConfigColors()
     return nDefaultColors[ nIndex % nMaxDefaultColors ];
 }
 
-void ConfigColorScheme::notify( const OUString & rPropertyName )
+void ConfigColorScheme::notify( std::u16string_view rPropertyName )
 {
     if( rPropertyName == aSeriesPropName )
         m_bNeedsUpdate = true;

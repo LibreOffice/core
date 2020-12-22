@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <uielement/toolbarmerger.hxx>
 #include <framework/generictoolbarcontroller.hxx>
 
@@ -40,25 +44,25 @@ const char MERGE_TOOLBAR_TARGET[]          = "Target";
 const char MERGE_TOOLBAR_CONTROLTYPE[]     = "ControlType";
 const char MERGE_TOOLBAR_WIDTH[]           = "Width";
 
-const char MERGECOMMAND_ADDAFTER[]         = "AddAfter";
-const char MERGECOMMAND_ADDBEFORE[]        = "AddBefore";
-const char MERGECOMMAND_REPLACE[]          = "Replace";
-const char MERGECOMMAND_REMOVE[]           = "Remove";
+const char16_t MERGECOMMAND_ADDAFTER[]     = u"AddAfter";
+const char16_t MERGECOMMAND_ADDBEFORE[]    = u"AddBefore";
+const char16_t MERGECOMMAND_REPLACE[]      = u"Replace";
+const char16_t MERGECOMMAND_REMOVE[]       = u"Remove";
 
-const char MERGEFALLBACK_ADDLAST[]         = "AddLast";
-const char MERGEFALLBACK_ADDFIRST[]        = "AddFirst";
-const char MERGEFALLBACK_IGNORE[]          = "Ignore";
+const char16_t MERGEFALLBACK_ADDLAST[]     = u"AddLast";
+const char16_t MERGEFALLBACK_ADDFIRST[]    = u"AddFirst";
+const char16_t MERGEFALLBACK_IGNORE[]      = u"Ignore";
 
-const char TOOLBARCONTROLLER_BUTTON[]      = "Button";
-const char TOOLBARCONTROLLER_COMBOBOX[]    = "Combobox";
-const char TOOLBARCONTROLLER_EDIT[]        = "Editfield";
-const char TOOLBARCONTROLLER_SPINFIELD[]   = "Spinfield";
-const char TOOLBARCONTROLLER_IMGBUTTON[]   = "ImageButton";
-const char TOOLBARCONTROLLER_DROPDOWNBOX[] = "Dropdownbox";
-const char TOOLBARCONTROLLER_DROPDOWNBTN[] = "DropdownButton";
-const char TOOLBARCONTROLLER_TOGGLEDDBTN[] = "ToggleDropdownButton";
-const char TOOLBARCONTROLLER_FIXEDIMAGE[]  = "FixedImage";
-const char TOOLBARCONTROLLER_FIXEDTEXT[]   = "FixedText";
+const char16_t TOOLBARCONTROLLER_BUTTON[]  = u"Button";
+const char16_t TOOLBARCONTROLLER_COMBOBOX[] = u"Combobox";
+const char16_t TOOLBARCONTROLLER_EDIT[]    = u"Editfield";
+const char16_t TOOLBARCONTROLLER_SPINFIELD[] = u"Spinfield";
+const char16_t TOOLBARCONTROLLER_IMGBUTTON[] = u"ImageButton";
+const char16_t TOOLBARCONTROLLER_DROPDOWNBOX[] = u"Dropdownbox";
+const char16_t TOOLBARCONTROLLER_DROPDOWNBTN[] = u"DropdownButton";
+const char16_t TOOLBARCONTROLLER_TOGGLEDDBTN[] = u"ToggleDropdownButton";
+const char16_t TOOLBARCONTROLLER_FIXEDIMAGE[] = u"FixedImage";
+const char16_t TOOLBARCONTROLLER_FIXEDTEXT[] = u"FixedText";
 
 const char   TOOLBOXITEM_SEPARATOR_STR[]   = "private:separator";
 
@@ -302,7 +306,7 @@ bool ToolBarMerger::ProcessMergeOperation(
     sal_uInt16&                            rItemId,
     CommandToInfoMap&                      rCommandMap,
     std::u16string_view                    rModuleIdentifier,
-    const OUString&                        rMergeCommand,
+    std::u16string_view                    rMergeCommand,
     const OUString&                        rMergeCommandParameter,
     const AddonToolbarItemContainer&       rItems )
 {
@@ -365,8 +369,8 @@ bool ToolBarMerger::ProcessMergeFallback(
     sal_uInt16&                      rItemId,
     CommandToInfoMap&                rCommandMap,
     std::u16string_view       rModuleIdentifier,
-    const OUString&           rMergeCommand,
-    const OUString&           rMergeFallback,
+    std::u16string_view       rMergeCommand,
+    std::u16string_view       rMergeFallback,
     const AddonToolbarItemContainer& rItems )
 {
     if (( rMergeFallback == MERGEFALLBACK_IGNORE ) ||
@@ -585,7 +589,7 @@ void ToolBarMerger::RemoveItems(
     const OUString& rCommandURL,
     sal_uInt16             nId,
     sal_uInt16             nWidth,
-    const OUString& rControlType )
+    std::u16string_view rControlType )
 {
     ::cppu::OWeakObject* pResult( nullptr );
 
