@@ -27,7 +27,7 @@ $(call gb_ExternalProject_get_state_target,libjpeg-turbo,build) : $(call gb_Exte
 $(call gb_ExternalProject_get_state_target,libjpeg-turbo,configure) :
 	$(call gb_Trace_StartRange,libjpeg-turbo,EXTERNAL)
 	$(call gb_ExternalProject_run,configure,\
-		MAKE=$(MAKE) ./configure \
+		MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
 			--build=$(BUILD_PLATFORM) \
 			--host=$(HOST_PLATFORM) \
 			--with-pic \

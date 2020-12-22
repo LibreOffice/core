@@ -24,7 +24,7 @@ endif
 $(call gb_ExternalProject_get_state_target,hunspell,build):
 	$(call gb_Trace_StartRange,hunspell,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		./configure --disable-shared --disable-nls --with-pic \
+		$(gb_RUN_CONFIGURE) ./configure --disable-shared --disable-nls --with-pic \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\
 			$(if $(filter AIX,$(OS)),CFLAGS="-D_LINUX_SOURCE_COMPAT") \
 			$(if $(hunspell_CPPFLAGS),CPPFLAGS='$(hunspell_CPPFLAGS)') \

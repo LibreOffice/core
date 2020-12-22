@@ -43,7 +43,7 @@ endif
 $(call gb_ExternalProject_get_state_target,cppunit,build) :
 	$(call gb_Trace_StartRange,cppunit,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		./configure \
+		$(gb_RUN_CONFIGURE) ./configure \
 			--disable-dependency-tracking \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 			--disable-doxygen \

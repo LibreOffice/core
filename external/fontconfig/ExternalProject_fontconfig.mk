@@ -22,7 +22,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 	$(call gb_Trace_StartRange,fontconfig,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		CFLAGS="$(if $(debug),-g) $(gb_VISIBILITY_FLAGS) $(if $(filter EMSCRIPTEN,$(OS)),-pthread)" $(if $(filter ANDROID,$(OS)),LIBS="-lm") \
-		./configure \
+		$(gb_RUN_CONFIGURE) ./configure \
 			--disable-shared \
 			--disable-silent-rules \
 			$(if $(filter ANDROID,$(OS)),--with-arch=arm) \

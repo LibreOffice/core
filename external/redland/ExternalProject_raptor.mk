@@ -25,7 +25,7 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 			$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN") \
 			$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
 		CPPFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include)" \
-		./configure --disable-gtk-doc \
+		$(gb_RUN_CONFIGURE) ./configure --disable-gtk-doc \
 			 --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" \
 			--with-www=xml \
 			--without-xslt-config \

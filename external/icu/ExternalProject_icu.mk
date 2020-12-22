@@ -25,7 +25,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			gb_ICU_XFLAGS="-FS $(SOLARINC) $(gb_DEBUGINFO_FLAGS) $(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD -Gy)" \
 		&& CFLAGS="$${gb_ICU_XFLAGS}" CPPFLAGS="$(SOLARINC)" CXXFLAGS="$${gb_ICU_XFLAGS}" \
 			INSTALL=`cygpath -m /usr/bin/install` $(if $(MSVC_USE_DEBUG_RUNTIME),LDFLAGS="-DEBUG") \
-			./configure \
+			$(gb_RUN_CONFIGURE) ./configure \
 				$(if $(MSVC_USE_DEBUG_RUNTIME),--enable-debug --disable-release) \
 				$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 					--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source \
@@ -70,7 +70,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 		CPPFLAGS=$(icu_CPPFLAGS) CFLAGS=$(icu_CFLAGS) \
 		CXXFLAGS=$(icu_CXXFLAGS) LDFLAGS=$(icu_LDFLAGS) \
 		PYTHONWARNINGS="default" \
-		./configure \
+		$(gb_RUN_CONFIGURE) ./configure \
 			--disable-layout --disable-samples \
 			$(if $(filter FUZZERS,$(BUILD_TYPE)),--disable-release) \
 			$(if $(filter EMSCRIPTEN ANDROID,$(OS)),--disable-strict ac_cv_c_bigendian=no) \

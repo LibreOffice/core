@@ -32,7 +32,7 @@ else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,libxslt,build):
 	$(call gb_Trace_StartRange,libxslt,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		./configure --without-crypto --without-python \
+		$(gb_RUN_CONFIGURE) ./configure --without-crypto --without-python \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			LDFLAGS="$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN" -Wl$(COMMA)-noinhibit-exec) \

@@ -15,6 +15,7 @@ endif
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
+gb_RUN_CONFIGURE := $(SRCDIR)/solenv/bin/run-configure
 gb_EMSCRIPTEN_CPPFLAGS := -pthread -s TOTAL_MEMORY=1GB -s USE_PTHREADS=1 -s PTHREAD_POOL_SIZE=4 -s SAFE_HEAP=1
 
 gb_Executable_EXT := .html

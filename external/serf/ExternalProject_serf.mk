@@ -37,7 +37,7 @@ else
 $(call gb_ExternalProject_get_state_target,serf,build):
 	$(call gb_Trace_StartRange,serf,EXTERNAL)
 	+$(call gb_ExternalProject_run,build,\
-		./configure SERF_LIBS= \
+		$(gb_RUN_CONFIGURE) ./configure SERF_LIBS= \
 			--enable-option-checking=fatal \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\
 			$(if $(SYSTEM_APR),,--with-apr=$(call gb_UnpackedTarball_get_dir,apr)/apr-1-config) \

@@ -30,7 +30,7 @@ $(call gb_ExternalProject_get_state_target,apr,build):
 	$(call gb_Trace_StartRange,apr,EXTERNAL)
 	+$(call gb_ExternalProject_run,build,\
 		 $(if $(ENABLE_MACOSX_SANDBOX),ac_cv_func_fdatasync=no) \
-		./configure \
+		$(gb_RUN_CONFIGURE) ./configure \
 			--enable-static --disable-shared \
 			--with-pic \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\

@@ -30,7 +30,7 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 		PKG_CONFIG="" \
 		RAPTOR2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,raptor)/src" \
 		RAPTOR2_LIBS="-L$(call gb_UnpackedTarball_get_dir,raptor)/src/.libs -lraptor2" \
-		./configure --disable-gtk-doc \
+		$(gb_RUN_CONFIGURE) ./configure --disable-gtk-doc \
 			--with-regex-library=posix \
 			--with-decimal=none \
 			--with-uuid-library=internal \

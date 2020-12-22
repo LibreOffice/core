@@ -23,7 +23,7 @@ $(eval $(call gb_ExternalProject_register_targets,liblangtag,\
 $(call gb_ExternalProject_get_state_target,liblangtag,build):
 	$(call gb_Trace_StartRange,liblangtrag,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		MAKE=$(MAKE) ./configure --disable-modules --disable-test --disable-introspection --with-pic \
+		MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure --disable-modules --disable-test --disable-introspection --with-pic \
 		$(if $(or $(DISABLE_DYNLOADING),$(filter MSC,$(COM))), \
 			--disable-shared --enable-static, \
 			--enable-shared --disable-static) \
