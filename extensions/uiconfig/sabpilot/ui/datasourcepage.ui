@@ -142,56 +142,28 @@ Now, just enter the name under which you want to register the data source in %PR
           </packing>
         </child>
         <child>
-          <object class="GtkAlignment" id="alignment1">
+          <!-- n-columns=1 n-rows=1 -->
+          <object class="GtkGrid" id="grid5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="left_padding">12</property>
+            <property name="row_spacing">6</property>
+            <property name="margin-start">12</property>
             <child>
               <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid" id="grid5">
+              <object class="GtkGrid" id="grid6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
                 <child>
-                  <!-- n-columns=1 n-rows=1 -->
-                  <object class="GtkGrid" id="grid6">
+                  <object class="GtkLabel" id="nameft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="column_spacing">12</property>
-                    <child>
-                      <object class="GtkLabel" id="nameft">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="datasourcepage|nameft">Address book name</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">name</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="name">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="activates_default">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="name-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="datasourcepage|extended_tip|name">Specifies the data source name.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
+                    <property name="label" translatable="yes" context="datasourcepage|nameft">Address book name</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">name</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -199,27 +171,48 @@ Now, just enter the name under which you want to register the data source in %PR
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="warning">
-                    <property name="can_focus">False</property>
-                    <property name="no_show_all">True</property>
-                    <property name="label" translatable="yes" context="datasourcepage|warning">Another data source already has this name. As data sources have to have globally unique names, you need to choose another one.</property>
-                    <property name="wrap">True</property>
-                    <property name="width_chars">70</property>
-                    <property name="max_width_chars">70</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">0</property>
+                  <object class="GtkEntry" id="name">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="warning-atkobject">
-                        <property name="AtkObject::accessible-role" translatable="no">static</property>
+                      <object class="AtkObject" id="name-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="datasourcepage|extended_tip|name">Specifies the data source name.</property>
                       </object>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
                   </packing>
                 </child>
               </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="warning">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes" context="datasourcepage|warning">Another data source already has this name. As data sources have to have globally unique names, you need to choose another one.</property>
+                <property name="wrap">True</property>
+                <property name="width_chars">70</property>
+                <property name="max_width_chars">70</property>
+                <property name="xalign">0</property>
+                <property name="yalign">0</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="warning-atkobject">
+                    <property name="AtkObject::accessible-role" translatable="no">static</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
             </child>
           </object>
           <packing>
