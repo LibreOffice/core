@@ -1270,7 +1270,7 @@ bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet*  )
 
                     if( !lcl_FindInArray(rArrays.aDoubleCapsStrings, aString))
                     {
-                      pWrdList->erase(i);
+                      pWrdList->erase_at(i);
                     }
                 }
 
@@ -1292,7 +1292,7 @@ bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet*  )
                     OUString aString = (*pCplList)[ --i ];
                     if( !lcl_FindInArray(rArrays.aAbbrevStrings, aString))
                     {
-                        pCplList->erase(i);
+                        pCplList->erase_at(i);
                     }
                 }
 
@@ -1318,7 +1318,7 @@ bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet*  )
             OUString aString = (*pWrdList)[ --i ];
             if (m_xDoubleCapsLB->find_text(aString) == -1)
             {
-                pWrdList->erase(i);
+                pWrdList->erase_at(i);
             }
         }
         nCount = m_xDoubleCapsLB->n_children();
@@ -1339,7 +1339,7 @@ bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet*  )
             OUString aString = (*pCplList)[ --i ];
             if (m_xAbbrevLB->find_text(aString) == -1)
             {
-                pCplList->erase(i);
+                pCplList->erase_at(i);
             }
         }
         sal_Int32 nAbbrevCount = m_xAbbrevLB->n_children();
