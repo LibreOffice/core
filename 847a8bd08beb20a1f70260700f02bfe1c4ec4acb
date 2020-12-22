@@ -70,6 +70,30 @@
       "revId": "847a8bd08beb20a1f70260700f02bfe1c4ec4acb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ee32c62_254d3e74",
+        "filename": "include/drawinglayer/attribute/lineattribute.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-12-22T09:18:23Z",
+      "side": 1,
+      "message": "Didn\u0027t worked. It fails like: error: expected primary-expression before ‘\u003d’ token",
+      "parentUuid": "4d5f2c51_904cacf5",
+      "range": {
+        "startLine": 55,
+        "startChar": 27,
+        "endLine": 55,
+        "endChar": 80
+      },
+      "revId": "847a8bd08beb20a1f70260700f02bfe1c4ec4acb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
