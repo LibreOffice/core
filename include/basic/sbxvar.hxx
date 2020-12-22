@@ -20,10 +20,12 @@
 #ifndef INCLUDED_BASIC_SBXVAR_HXX
 #define INCLUDED_BASIC_SBXVAR_HXX
 
+#include <rtl/character.hxx>
 #include <rtl/ustring.hxx>
 #include <basic/sbxcore.hxx>
 #include <basic/basicdllapi.h>
 
+#include <algorithm>
 #include <cstddef>
 #include <cstring>
 #include <memory>
@@ -299,7 +301,23 @@ public:
                          StarBASIC* pParentBasic );
     void ClearComListener();
 
-    static sal_uInt16 MakeHashCode( const OUString& rName );
+    // Create a simple hashcode: the first six characters are evaluated.
+    static constexpr sal_uInt16 MakeHashCode(std::u16string_view aName)
+    {
+        sal_uInt16 n = 0;
+        const size_t nLen = std::min(aName.length(), size_t(6));
+        for (size_t i = 0; i < nLen; ++i)
+        {
+            sal_uInt8 c = static_cast<sal_uInt8>(aName[i]);
+            // If we have a comment sign break!!
+            if (c >= 0x80)
+            {
+                return 0;
+            }
+            n = static_cast<sal_uInt16>((n << 3) + rtl::toAsciiUpperCase(c));
+        }
+        return n;
+    }
 };
 
 typedef tools::SvRef<SbxObject> SbxObjectRef;
