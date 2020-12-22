@@ -327,7 +327,7 @@ void SdrHdl::SetMoveOutside( bool bMoveOutside )
     }
 }
 
-void SdrHdl::SetRotationAngle(tools::Long n)
+void SdrHdl::SetRotationAngle(Degree100 n)
 {
     if(nRotationAngle != n)
     {
@@ -965,24 +965,24 @@ PointerStyle SdrHdl::GetPointer() const
         }
     } else {
         // When resizing rotated rectangles, rotate the mouse cursor slightly, too
-        if (bSize && nRotationAngle!=0) {
-            tools::Long nHdlAngle=0;
+        if (bSize && nRotationAngle!=0_deg100) {
+            Degree100 nHdlAngle(0);
             switch (eKind) {
-                case SdrHdlKind::LowerRight: nHdlAngle=31500; break;
-                case SdrHdlKind::Lower: nHdlAngle=27000; break;
-                case SdrHdlKind::LowerLeft: nHdlAngle=22500; break;
-                case SdrHdlKind::Left : nHdlAngle=18000; break;
-                case SdrHdlKind::UpperLeft: nHdlAngle=13500; break;
-                case SdrHdlKind::Upper: nHdlAngle=9000;  break;
-                case SdrHdlKind::UpperRight: nHdlAngle=4500;  break;
-                case SdrHdlKind::Right: nHdlAngle=0;     break;
+                case SdrHdlKind::LowerRight: nHdlAngle=31500_deg100; break;
+                case SdrHdlKind::Lower: nHdlAngle=27000_deg100; break;
+                case SdrHdlKind::LowerLeft: nHdlAngle=22500_deg100; break;
+                case SdrHdlKind::Left : nHdlAngle=18000_deg100; break;
+                case SdrHdlKind::UpperLeft: nHdlAngle=13500_deg100; break;
+                case SdrHdlKind::Upper: nHdlAngle=9000_deg100;  break;
+                case SdrHdlKind::UpperRight: nHdlAngle=4500_deg100;  break;
+                case SdrHdlKind::Right: nHdlAngle=0_deg100;     break;
                 default:
                     break;
             }
             // a little bit more (for rounding)
-            nHdlAngle = NormAngle36000(nHdlAngle + nRotationAngle + 2249);
-            nHdlAngle/=4500;
-            switch (static_cast<sal_uInt8>(nHdlAngle)) {
+            nHdlAngle = NormAngle36000(nHdlAngle + nRotationAngle + 2249_deg100);
+            nHdlAngle/=4500_deg100;
+            switch (static_cast<sal_uInt8>(nHdlAngle.get())) {
                 case 0: ePtr=PointerStyle::ESize;  break;
                 case 1: ePtr=PointerStyle::NESize; break;
                 case 2: ePtr=PointerStyle::NSize;  break;
@@ -1831,7 +1831,7 @@ void ImpTextframeHdl::CreateB2dIAObject()
                     fTransparence,
                     3.0,
                     3.0,
-                    nRotationAngle * -F_PI18000,
+                    nRotationAngle.get() * -F_PI18000,
                     true)); // allow animation; the Handle is not shown at text edit time
 
                 pNewOverlayObject->setHittable(false);

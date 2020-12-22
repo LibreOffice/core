@@ -1196,9 +1196,9 @@ void Alignment::finalizeImport()
 
     // rotation: 0-90 means 0 to 90 degrees ccw, 91-180 means 1 to 90 degrees cw, 255 means stacked
     sal_Int32 nOoxRot = maModel.mnRotation;
-    maApiData.mnRotation = ((0 <= nOoxRot) && (nOoxRot <= 90)) ?
+    maApiData.mnRotation = Degree100(((0 <= nOoxRot) && (nOoxRot <= 90)) ?
         (100 * nOoxRot) :
-        (((91 <= nOoxRot) && (nOoxRot <= 180)) ? (100 * (450 - nOoxRot)) : 0);
+        (((91 <= nOoxRot) && (nOoxRot <= 180)) ? (100 * (450 - nOoxRot)) : 0));
 
     // "Orientation" property used for character stacking
     maApiData.meOrientation = (nOoxRot == OOX_XF_ROTATION_STACKED) ?
@@ -2203,7 +2203,7 @@ Xf::createPattern( bool bSkipPoolDefs )
         sal_Int32 nBorderId = maModel.mbBorderUsed ? maModel.mnBorderId : (pStyleXf ? pStyleXf->maModel.mnBorderId : -1);
         if( const Border* pBorder = rStyles.getBorder( nBorderId ).get() )
         {
-            if( (pAlignment->getApiData().mnRotation != 0) && pBorder->getApiData().hasAnyOuterBorder() )
+            if( (pAlignment->getApiData().mnRotation) && pBorder->getApiData().hasAnyOuterBorder() )
             {
                 meRotationRef = css::table::CellVertJustify2::BOTTOM;
                 eRotateMode = SVX_ROTATE_MODE_BOTTOM;

@@ -1355,8 +1355,8 @@ bool ScAttrArray::HasAttrib_Impl(const ScPatternAttr* pPattern, HasAttrFlags nMa
         const ScRotateValueItem* pRotate = &pPattern->GetItem( ATTR_ROTATE_VALUE );
         // 90 or 270 degrees is former SvxOrientationItem - only look for other values
         // (see ScPatternAttr::GetCellOrientation)
-        sal_Int32 nAngle = pRotate->GetValue();
-        if ( nAngle != 0 && nAngle != 9000 && nAngle != 27000 )
+        Degree100 nAngle = pRotate->GetValue();
+        if ( nAngle && nAngle != 9000_deg100 && nAngle != 27000_deg100 )
             bFound = true;
     }
     if ( nMask & HasAttrFlags::NeedHeight )

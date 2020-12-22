@@ -669,7 +669,7 @@ sal_Int32 RtfSdrExport::StartShape()
                 // RTF angle: 0-360 * 2^16  clockwise
                 // LO  angle: 0-360 * 100   counter-clockwise
                 sal_Int32 nRotation
-                    = -1 * pTextObj->GetGeoStat().nRotationAngle * RTF_MULTIPLIER / 100;
+                    = -1 * pTextObj->GetGeoStat().nRotationAngle.get() * RTF_MULTIPLIER / 100;
                 lcl_AppendSP(m_rAttrOutput.RunText(), "rotation",
                              msfilter::rtfutil::OutString(OUString::number(nRotation),
                                                           m_rExport.GetCurrentEncoding()));

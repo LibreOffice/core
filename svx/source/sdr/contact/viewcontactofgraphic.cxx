@@ -315,8 +315,8 @@ namespace sdr::contact
 
             // look for mirroring
             const GeoStat& rGeoStat(GetGrafObject().GetGeoStat());
-            const sal_Int32 nRotationAngle(rGeoStat.nRotationAngle);
-            const bool bRota180(18000 == nRotationAngle);
+            const Degree100 nRotationAngle(rGeoStat.nRotationAngle);
+            const bool bRota180(18000_deg100 == nRotationAngle);
             const bool bMirrored(GetGrafObject().IsMirrored());
             const sal_uInt16 nMirrorCase(bRota180 ? (bMirrored ? 3 : 4) : (bMirrored ? 2 : 1));
             bool bHMirr((2 == nMirrorCase ) || (4 == nMirrorCase));
@@ -341,7 +341,7 @@ namespace sdr::contact
 
             // fill object matrix
             const double fShearX(-rGeoStat.mfTanShearAngle);
-            const double fRotate(nRotationAngle ? (36000 - nRotationAngle) * F_PI18000 : 0.0);
+            const double fRotate(nRotationAngle ? (36000 - nRotationAngle.get()) * F_PI18000 : 0.0);
             const basegfx::B2DHomMatrix aObjectMatrix(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                 aObjectRange.getWidth(), aObjectRange.getHeight(),
                 fShearX, fRotate,
