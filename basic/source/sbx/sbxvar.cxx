@@ -305,29 +305,6 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
     return aToolString;
 }
 
-// Create a simple hashcode: the first six characters are evaluated.
-
-sal_uInt16 SbxVariable::MakeHashCode( const OUString& rName )
-{
-    sal_uInt16 n = 0;
-    sal_Int32 nLen = rName.getLength();
-    if( nLen > 6 )
-    {
-        nLen = 6;
-    }
-    for( sal_Int32 i=0; i<nLen; ++i )
-    {
-        sal_uInt8 c = static_cast<sal_uInt8>(rName[i]);
-        // If we have a comment sign break!!
-        if( c >= 0x80 )
-        {
-            return 0;
-        }
-        n = sal::static_int_cast< sal_uInt16 >( ( n << 3 ) + rtl::toAsciiUpperCase( c ) );
-    }
-    return n;
-}
-
 // Operators
 
 SbxVariable& SbxVariable::operator=( const SbxVariable& r )
