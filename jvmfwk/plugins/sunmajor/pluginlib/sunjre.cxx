@@ -59,7 +59,7 @@ char const* const* SunInfo::getRuntimePaths(int * size)
         "/bin/jrockit/jvm.dll",
         // The 64-bit JRE has the jvm in bin/server
         "/bin/server/jvm.dll"
-#elif defined MACOSX && defined X86_64
+#elif defined MACOSX
         // Oracle Java 7, under /Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home
         "/lib/server/libjvm.dylib",
         "/lib/jli/libjli.dylib"
