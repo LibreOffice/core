@@ -27,6 +27,7 @@
 #include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/typedwhich.hxx>
+#include <tools/degree.hxx>
 #include <svx/DiagramDataInterface.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svdobjkind.hxx>
@@ -536,18 +537,18 @@ public:
     virtual void NbcMove  (const Size& rSiz);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcCrop  (const basegfx::B2DPoint& rRef, double fxFact, double fyFact);
-    virtual void NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs);
+    virtual void NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs);
     // Utility for call sites that don't have sin and cos handy
-    void NbcRotate(const Point& rRef, tools::Long nAngle);
+    void NbcRotate(const Point& rRef, Degree100 nAngle);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void NbcShear (const Point& rRef, tools::Long nAngle, double tn, bool bVShear);
+    virtual void NbcShear (const Point& rRef, Degree100 nAngle, double tn, bool bVShear);
 
     virtual void Move  (const Size& rSiz);
     virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative = true);
     virtual void Crop  (const basegfx::B2DPoint& rRef, double fxFact, double fyFact);
-    virtual void Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs);
+    virtual void Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs);
     virtual void Mirror(const Point& rRef1, const Point& rRef2);
-    virtual void Shear (const Point& rRef, tools::Long nAngle, double tn, bool bVShear);
+    virtual void Shear (const Point& rRef, Degree100 nAngle, double tn, bool bVShear);
 
     /// The relative position of a SdrObject is the distance of the upper
     /// left corner of the logic bounding rectangle (SnapRect) to the anchor.
@@ -580,8 +581,8 @@ public:
     virtual void AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly = false );
 
     // rotation and shear angle
-    virtual tools::Long GetRotateAngle() const;
-    virtual tools::Long GetShearAngle(bool bVertical = false) const;
+    virtual Degree100 GetRotateAngle() const;
+    virtual Degree100 GetShearAngle(bool bVertical = false) const;
 
     /// snap to special points of an Object (polygon points, center of circle)
     virtual sal_uInt32 GetSnapPointCount() const;
@@ -678,7 +679,7 @@ public:
 
     // to be set temporarily when transforming related object(?)
     void SetGlueReallyAbsolute(bool bOn);
-    void NbcRotateGluePoints(const Point& rRef, tools::Long nAngle, double sn, double cs);
+    void NbcRotateGluePoints(const Point& rRef, Degree100 nAngle, double sn, double cs);
     void NbcMirrorGluePoints(const Point& rRef1, const Point& rRef2);
     void NbcShearGluePoints (const Point& rRef, double tn, bool bVShear);
 

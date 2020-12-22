@@ -1202,18 +1202,18 @@ void XclImpChText::ConvertTitlePosition( const XclChTextKey& rTitleKey ) const
         // the call to XShape.getSize() may recalc the chart view
         css::awt::Size aTitleSize = xTitleShape->getSize();
         // rotated titles need special handling...
-        sal_Int32 nScRot = XclTools::GetScRotation( GetRotation(), 0 );
-        double fRad = nScRot * F_PI18000;
+        Degree100 nScRot = XclTools::GetScRotation( GetRotation(), 0_deg100 );
+        double fRad = nScRot.get() * F_PI18000;
         double fSin = fabs( sin( fRad ) );
         // calculate the title position from the values in the CHTEXT record
         css::awt::Point aTitlePos(
             CalcHmmFromChartX( maData.maRect.mnX ),
             CalcHmmFromChartY( maData.maRect.mnY ) );
         // add part of height to X direction, if title is rotated down (clockwise)
-        if( nScRot > 18000 )
+        if( nScRot > 18000_deg100 )
             aTitlePos.X += static_cast< sal_Int32 >( fSin * aTitleSize.Height + 0.5 );
         // add part of width to Y direction, if title is rotated up (counterclockwise)
-        else if( nScRot > 0 )
+        else if( nScRot > 0_deg100 )
             aTitlePos.Y += static_cast< sal_Int32 >( fSin * aTitleSize.Width + 0.5 );
         // set the resulting position at the title shape
         xTitleShape->setPosition( aTitlePos );

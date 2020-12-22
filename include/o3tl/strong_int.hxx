@@ -113,10 +113,16 @@ public:
     strong_int& operator+=(strong_int const & other) { m_value += other.m_value; return *this; }
     strong_int& operator-=(strong_int const & other) { m_value -= other.m_value; return *this; }
     strong_int& operator%=(strong_int const & other) { m_value %= other.m_value; return *this; }
+    strong_int& operator*=(strong_int const & other) { m_value *= other.m_value; return *this; }
+    strong_int& operator/=(strong_int const & other) { m_value /= other.m_value; return *this; }
     [[nodiscard]]
     strong_int operator%(strong_int const & other) const { return strong_int(m_value % other.m_value); }
     [[nodiscard]]
     strong_int operator-() const { return strong_int(-m_value); }
+    [[nodiscard]]
+    strong_int operator*(strong_int const & other) const { return strong_int(m_value * other.m_value); }
+    [[nodiscard]]
+    strong_int operator/(strong_int const & other) const { return strong_int(m_value / other.m_value); }
 
     bool anyOf(strong_int v) const {
       return *this == v;

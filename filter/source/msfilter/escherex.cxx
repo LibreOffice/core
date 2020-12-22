@@ -2102,12 +2102,12 @@ static sal_Int32 lcl_GetConnectorAdjustValue ( const XPolygon& rPoly, sal_uInt16
 }
 
 
-static void lcl_Rotate(sal_Int32 nAngle, Point center, Point& pt)
+static void lcl_Rotate(Degree100 nAngle, Point center, Point& pt)
 {
     nAngle = NormAngle36000(nAngle);
 
     int cs, sn;
-    switch (nAngle)
+    switch (nAngle.get())
     {
     case 0:
         cs =1;
@@ -2149,8 +2149,8 @@ static bool lcl_GetAngle(tools::Polygon &rPoly, ShapeFlag& rShapeFlags,sal_Int32
     if ( nAngle )
     {
         Point center((aEnd.X()+aStart.X())>>1,(aEnd.Y()+aStart.Y())>>1);
-        lcl_Rotate(-nAngle, center,p1);
-        lcl_Rotate(-nAngle, center,p2);
+        lcl_Rotate(Degree100(-nAngle), center,p1);
+        lcl_Rotate(Degree100(-nAngle), center,p2);
     }
     if (  p1.X() > p2.X() )
     {

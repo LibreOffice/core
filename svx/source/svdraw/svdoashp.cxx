@@ -1527,9 +1527,8 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
     }
 
     // updating fObjectRotation
-    tools::Long nTextObjRotation = aGeo.nRotationAngle;
-    double fAngle = nTextObjRotation;
-    fAngle /= 100.0;
+    Degree100 nTextObjRotation = aGeo.nRotationAngle;
+    double fAngle = nTextObjRotation.get() / 100.0;
     if (IsMirroredX())
     {
         if (IsMirroredY())
@@ -1552,7 +1551,7 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
     InvalidateRenderGeometry();
 }
 
-void SdrObjCustomShape::NbcRotate( const Point& rRef, tools::Long nAngle, double sn, double cs )
+void SdrObjCustomShape::NbcRotate( const Point& rRef, Degree100 nAngle, double sn, double cs )
 {
     bool bMirroredX = IsMirroredX();
     bool bMirroredY = IsMirroredY();
@@ -1566,7 +1565,7 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, tools::Long nAngle, double
     SdrTextObj::NbcRotate( maRect.TopLeft(), -aGeo.nRotationAngle,        // retrieving the unrotated text object
                             -aGeo.mfSinRotationAngle,
                             aGeo.mfCosRotationAngle );
-    aGeo.nRotationAngle = 0;                                             // resetting aGeo data
+    aGeo.nRotationAngle = 0_deg100;                                             // resetting aGeo data
     aGeo.RecalcSinCos();
 
     tools::Long nW = static_cast<tools::Long>( fObjectRotation * 100 );                      // applying our object rotation
@@ -1577,7 +1576,7 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, tools::Long nAngle, double
     nW = nW % 36000;
     if ( nW < 0 )
         nW = 36000 + nW;
-    SdrTextObj::NbcRotate( maRect.TopLeft(), nW,                     // applying text rotation
+    SdrTextObj::NbcRotate( maRect.TopLeft(), Degree100(nW),                     // applying text rotation
                             sin( nW * F_PI18000 ),
                             cos( nW * F_PI18000 ) );
 
@@ -1587,8 +1586,7 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, tools::Long nAngle, double
     if ( bMirroredY )
         nSwap ^= 1;
 
-    double fAngle = nAngle;                                                   // updating to our new object rotation
-    fAngle /= 100.0;
+    double fAngle = nAngle.get() / 100.0;     // updating to our new object rotation
     fObjectRotation = fmod( nSwap ? fObjectRotation - fAngle : fObjectRotation + fAngle, 360.0 );
     if ( fObjectRotation < 0 )
         fObjectRotation = 360 + fObjectRotation;
@@ -1625,10 +1623,8 @@ void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
             SdrTextObj::NbcMirror( rRef1, rRef2 );
 
             // update fObjectRotation
-            tools::Long nTextObjRotation = aGeo.nRotationAngle;
-            double fAngle = nTextObjRotation;
-
-            fAngle /= 100.0;
+            Degree100 nTextObjRotation = aGeo.nRotationAngle;
+            double fAngle = nTextObjRotation.get() / 100.0;
 
             bool bSingleFlip = (IsMirroredX()!= IsMirroredY());
 
@@ -1644,20 +1640,19 @@ void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
     InvalidateRenderGeometry();
 }
 
-void SdrObjCustomShape::Shear( const Point& rRef, tools::Long nAngle, double tn, bool bVShear )
+void SdrObjCustomShape::Shear( const Point& rRef, Degree100 nAngle, double tn, bool bVShear )
 {
     SdrTextObj::Shear( rRef, nAngle, tn, bVShear );
     InvalidateRenderGeometry();
 }
-void SdrObjCustomShape::NbcShear( const Point& rRef, tools::Long nAngle, double tn, bool bVShear )
+void SdrObjCustomShape::NbcShear( const Point& rRef, Degree100 nAngle, double tn, bool bVShear )
 {
     // TTTT: Fix for old mirroring, can be removed again in aw080
     SdrTextObj::NbcShear(rRef,nAngle,tn,bVShear);
 
     // updating fObjectRotation
-    tools::Long nTextObjRotation = aGeo.nRotationAngle;
-    double fAngle = nTextObjRotation;
-    fAngle /= 100.0;
+    Degree100 nTextObjRotation = aGeo.nRotationAngle;
+    double fAngle = nTextObjRotation.get() / 100.0;
     if (IsMirroredX())
     {
         if (IsMirroredY())
@@ -1698,8 +1693,8 @@ SdrGluePoint SdrObjCustomShape::GetVertexGluePoint(sal_uInt16 nPosNum) const
         case 2: aPt=maRect.BottomCenter(); aPt.AdjustY(nWdt ); break;
         case 3: aPt=maRect.LeftCenter();   aPt.AdjustX( -nWdt ); break;
     }
-    if (aGeo.nShearAngle!=0) ShearPoint(aPt,maRect.TopLeft(),aGeo.mfTanShearAngle);
-    if (aGeo.nRotationAngle!=0) RotatePoint(aPt,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
+    if (aGeo.nShearAngle!=0_deg100) ShearPoint(aPt,maRect.TopLeft(),aGeo.mfTanShearAngle);
+    if (aGeo.nRotationAngle!=0_deg100) RotatePoint(aPt,maRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
     aGP.SetPercent(false);
@@ -1743,7 +1738,7 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
     bool bMirroredX = IsMirroredX();
     bool bMirroredY = IsMirroredY();
 
-    tools::Long nShearAngle = aGeo.nShearAngle;
+    Degree100 nShearAngle = aGeo.nShearAngle;
     double fTan = aGeo.mfTanShearAngle;
 
     if ( aGeo.nRotationAngle || nShearAngle || bMirroredX || bMirroredY )
@@ -1756,7 +1751,7 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                 ShearPoint(aPoly[i],maRect.Center(), fTan );
         }
         if ( aGeo.nRotationAngle )
-            aPoly.Rotate( maRect.Center(), Degree10(aGeo.nRotationAngle / 10) );
+            aPoly.Rotate( maRect.Center(), toDegree10(aGeo.nRotationAngle) );
 
         tools::Rectangle aBoundRect( aPoly.GetBoundRect() );
         sal_Int32 nXDiff = aBoundRect.Left() - maRect.Left();
@@ -2744,7 +2739,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& 
         if (eVAdj==SDRTEXTVERTADJUST_BOTTOM)
             aTextPos.AdjustY(nFreeHgt );
     }
-    if (aGeo.nRotationAngle!=0)
+    if (aGeo.nRotationAngle!=0_deg100)
         RotatePoint(aTextPos,aAnkRect.TopLeft(),aGeo.mfSinRotationAngle,aGeo.mfCosRotationAngle);
 
     if (pAnchorRect)
@@ -3003,9 +2998,9 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
 
     // reset object shear and rotations
     fObjectRotation = 0.0;
-    aGeo.nRotationAngle = 0;
+    aGeo.nRotationAngle = 0_deg100;
     aGeo.RecalcSinCos();
-    aGeo.nShearAngle = 0;
+    aGeo.nShearAngle = 0_deg100;
     aGeo.RecalcTan();
 
     // if anchor is used, make position relative to it
@@ -3038,7 +3033,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
         // #i123181# The fix for #121932# here was wrong, the trunk version does not correct the
         // mirrored shear values, neither at the object level, nor on the API or XML level. Taking
         // back the mirroring of the shear angle
-        aGeoStat.nShearAngle = FRound(basegfx::rad2deg(atan(fShearX)) * 100.0);
+        aGeoStat.nShearAngle = Degree100(FRound(basegfx::rad2deg(atan(fShearX)) * 100.0));
         aGeoStat.RecalcTan();
         Shear(Point(), aGeoStat.nShearAngle, aGeoStat.mfTanShearAngle, false);
     }
@@ -3051,7 +3046,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
         // #i78696#
         // fRotate is mathematically correct, but aGeoStat.nRotationAngle is
         // mirrored -> mirror value here
-        aGeoStat.nRotationAngle = NormAngle36000(FRound(-fRotate / F_PI18000));
+        aGeoStat.nRotationAngle = NormAngle36000(Degree100(FRound(-fRotate / F_PI18000)));
         aGeoStat.RecalcSinCos();
         Rotate(Point(), aGeoStat.nRotationAngle, aGeoStat.mfSinRotationAngle, aGeoStat.mfCosRotationAngle);
     }
@@ -3092,7 +3087,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
 {
     // get turn and shear
     double fRotate = basegfx::deg2rad(fObjectRotation);
-    double fShearX = basegfx::deg2rad(aGeo.nShearAngle / 100.0);
+    double fShearX = basegfx::deg2rad(aGeo.nShearAngle.get() / 100.0);
 
     // get aRect, this is the unrotated snaprect
     tools::Rectangle aRectangle(maRect);

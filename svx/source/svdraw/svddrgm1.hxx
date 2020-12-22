@@ -49,8 +49,8 @@ class SdrDragRotate : public SdrDragMethod
 private:
     double                      nSin;
     double                      nCos;
-    tools::Long                        nAngle0;
-    tools::Long                        nAngle;
+    Degree100                   nAngle0;
+    Degree100                   nAngle;
     bool                        bRight;
 
 public:
@@ -70,8 +70,8 @@ class SdrDragShear : public SdrDragMethod
 {
 private:
     Fraction                    aFact;
-    tools::Long                        nAngle0;
-    tools::Long                        nAngle;
+    Degree100                   nAngle0;
+    Degree100                   nAngle;
     double                      nTan;
     bool                        bVertical;   // contort vertically
     bool                        bResize;     // shear and resize
@@ -95,7 +95,7 @@ class SdrDragMirror : public SdrDragMethod
 {
 private:
     Point                       aDif;
-    tools::Long                        nAngle;
+    Degree100                   nAngle;
     bool                        bMirrored;
     bool                        bSide0;
 
@@ -159,7 +159,7 @@ private:
     bool                        bUpr;
     bool                        bLwr;
     bool                        bAtCenter;
-    tools::Long                        nAngle;
+    Degree100                   nAngle;
     tools::Long                        nMarkSize;
     SdrCrookMode                eMode;
 

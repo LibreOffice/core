@@ -24,6 +24,7 @@
 #include "PosSizePropertyPanel.hxx"
 #include <sal/log.hxx>
 #include <svx/svxids.hrc>
+#include <svx/sdangitm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/module.hxx>
@@ -448,11 +449,11 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ClickAutoHdl, weld::ToggleButton&, void )
 
 IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl, DialControl&, void )
 {
-    sal_Int32 nTmp = mxCtrlDial->GetRotation();
+    Degree100 nTmp = mxCtrlDial->GetRotation();
 
     // #i123993# Need to take UIScale into account when executing rotations
     const double fUIScale(mpView && mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
-    SfxInt32Item aAngleItem( SID_ATTR_TRANSFORM_ANGLE,static_cast<sal_uInt32>(nTmp));
+    SdrAngleItem aAngleItem( SID_ATTR_TRANSFORM_ANGLE, nTmp);
     SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
     SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
 
@@ -675,14 +676,13 @@ void PosSizePropertyPanel::NotifyItemUpdate(
         case SID_ATTR_TRANSFORM_ANGLE:
             if (eState >= SfxItemState::DEFAULT)
             {
-                const SfxInt32Item* pItem = dynamic_cast< const SfxInt32Item* >(pState);
+                const SdrAngleItem* pItem = dynamic_cast< const SdrAngleItem* >(pState);
 
                 if(pItem)
                 {
-                    tools::Long nTmp = pItem->GetValue();
-                    nTmp = nTmp < 0 ? 36000+nTmp : nTmp;
+                    Degree100 nTmp = NormAngle36000(pItem->GetValue());
 
-                    mxMtrAngle->set_value(nTmp, FieldUnit::DEGREE);
+                    mxMtrAngle->set_value(nTmp.get(), FieldUnit::DEGREE);
                     mxCtrlDial->SetRotation(nTmp);
 
                     break;
@@ -690,7 +690,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
             }
 
             mxMtrAngle->set_text( "" );
-            mxCtrlDial->SetRotation( 0 );
+            mxCtrlDial->SetRotation( 0_deg100 );
             break;
 
         case SID_ATTR_METRIC:

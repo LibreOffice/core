@@ -150,17 +150,17 @@ bool XclTools::GetRKFromDouble( sal_Int32& rnRKValue, double fValue )
     return false;
 }
 
-sal_Int32 XclTools::GetScRotation( sal_uInt16 nXclRot, sal_Int32 nRotForStacked )
+Degree100 XclTools::GetScRotation( sal_uInt16 nXclRot, Degree100 nRotForStacked )
 {
     if( nXclRot == EXC_ROT_STACKED )
         return nRotForStacked;
     OSL_ENSURE( nXclRot <= 180, "XclTools::GetScRotation - illegal rotation angle" );
-    return static_cast< sal_Int32 >( (nXclRot <= 180) ? (100 * ((nXclRot > 90) ? (450 - nXclRot) : nXclRot)) : 0 );
+    return Degree100(static_cast< sal_Int32 >( (nXclRot <= 180) ? (100 * ((nXclRot > 90) ? (450 - nXclRot) : nXclRot)) : 0 ));
 }
 
-sal_uInt8 XclTools::GetXclRotation( sal_Int32 nScRot )
+sal_uInt8 XclTools::GetXclRotation( Degree100 nScRot )
 {
-    sal_Int32 nXclRot = nScRot / 100;
+    sal_Int32 nXclRot = nScRot.get() / 100;
     if( (0 <= nXclRot) && (nXclRot <= 90) )
         return static_cast< sal_uInt8 >( nXclRot );
     if( nXclRot < 180 )

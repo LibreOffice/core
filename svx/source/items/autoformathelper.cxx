@@ -361,7 +361,7 @@ bool AutoFormatBase::LoadBlockB( SvStream& rStream, const AutoFormatVersions& rV
     }
 
     m_aStacked->SetValue( aOrientation.IsStacked() );
-    m_aRotateAngle->SetValue( aOrientation.GetRotation( m_aRotateAngle->GetValue() ) );
+    m_aRotateAngle->SetValue( aOrientation.GetRotation( Degree100(m_aRotateAngle->GetValue()) ).get() );
 
     return ERRCODE_NONE == rStream.GetError();
 }
@@ -407,7 +407,7 @@ bool AutoFormatBase::SaveBlockB( SvStream& rStream, sal_uInt16 fileVersion ) con
 {
     legacy::SvxHorJustify::Store(*m_aHorJustify, rStream, legacy::SvxHorJustify::GetVersion(fileVersion));
     legacy::SvxVerJustify::Store(*m_aVerJustify, rStream, legacy::SvxVerJustify::GetVersion(fileVersion));
-    SvxOrientationItem aOrientation( m_aRotateAngle->GetValue(), m_aStacked->GetValue(), 0 );
+    SvxOrientationItem aOrientation( Degree100(m_aRotateAngle->GetValue()), m_aStacked->GetValue(), 0 );
     legacy::SvxOrientation::Store(aOrientation, rStream, legacy::SvxOrientation::GetVersion(fileVersion));
     legacy::SvxMargin::Store(*m_aMargin, rStream, legacy::SvxMargin::GetVersion(fileVersion));
     legacy::SfxBool::Store(*m_aLinebreak, rStream, legacy::SfxBool::GetVersion(fileVersion));

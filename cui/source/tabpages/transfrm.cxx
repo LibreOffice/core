@@ -22,6 +22,7 @@
 #include <algorithm>
 
 #include <svx/EnhancedCustomShape2d.hxx>
+#include <svx/sdangitm.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
@@ -250,7 +251,7 @@ bool SvxAngleTabPage::FillItemSet(SfxItemSet* rSet)
         const double fTmpX((GetCoreValue(*m_xMtrPosX, ePoolUnit) + maAnchor.getX()) * fUIScale);
         const double fTmpY((GetCoreValue(*m_xMtrPosY, ePoolUnit) + maAnchor.getY()) * fUIScale);
 
-        rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ANGLE), m_xCtlAngle->GetRotation()));
+        rSet->Put(SdrAngleItem(GetWhich(SID_ATTR_TRANSFORM_ANGLE), m_xCtlAngle->GetRotation()));
         rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_X), basegfx::fround(fTmpX)));
         rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_Y), basegfx::fround(fTmpY)));
 
@@ -290,11 +291,11 @@ void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
     pItem = GetItem( *rAttrs, SID_ATTR_TRANSFORM_ANGLE );
     if(pItem)
     {
-        m_xCtlAngle->SetRotation(static_cast<const SfxInt32Item*>(pItem)->GetValue());
+        m_xCtlAngle->SetRotation(static_cast<const SdrAngleItem*>(pItem)->GetValue());
     }
     else
     {
-        m_xCtlAngle->SetRotation(0);
+        m_xCtlAngle->SetRotation(0_deg100);
     }
     m_xCtlAngle->SaveValue();
     m_xMtrPosX->save_value();
