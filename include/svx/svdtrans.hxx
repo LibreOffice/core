@@ -215,11 +215,11 @@ class GeoStat { // Geometric state for a rect
 public:
     tools::Long     nRotationAngle;
     tools::Long     nShearAngle;
-    double   nTan;      // tan(nShearAngle)
-    double   nSin;      // sin(nRotationAngle)
-    double   nCos;      // cos(nRotationAngle)
+    double   mfTanShearAngle;      // tan(nShearAngle)
+    double   mfSinRotationAngle;   // sin(nRotationAngle)
+    double   mfCosRotationAngle;   // cos(nRotationAngle)
 
-    GeoStat(): nRotationAngle(0),nShearAngle(0),nTan(0.0),nSin(0.0),nCos(1.0) {}
+    GeoStat(): nRotationAngle(0),nShearAngle(0),mfTanShearAngle(0.0),mfSinRotationAngle(0.0),mfCosRotationAngle(1.0) {}
     void RecalcSinCos();
     void RecalcTan();
 };

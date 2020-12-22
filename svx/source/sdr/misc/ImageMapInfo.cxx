@@ -78,7 +78,8 @@ IMapObject* SvxIMapInfo::GetHitIMapObject(const SdrObject* pObj, const Point& rW
 
             // Undo rotation
             if (rGeo.nRotationAngle)
-                RotatePoint(aRelPoint, rRect.TopLeft(), -rGeo.nSin, rGeo.nCos);
+                RotatePoint(aRelPoint, rRect.TopLeft(), -rGeo.mfSinRotationAngle,
+                            rGeo.mfCosRotationAngle);
 
             // Undo mirroring
             if (pGeoData->bMirrored)
@@ -86,7 +87,7 @@ IMapObject* SvxIMapInfo::GetHitIMapObject(const SdrObject* pObj, const Point& rW
 
             // Undo shearing
             if (rGeo.nShearAngle)
-                ShearPoint(aRelPoint, rRect.TopLeft(), -rGeo.nTan);
+                ShearPoint(aRelPoint, rRect.TopLeft(), -rGeo.mfTanShearAngle);
 
             if (pGrafObj->GetGrafPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
                 aGraphSize = Application::GetDefaultDevice()->PixelToLogic(

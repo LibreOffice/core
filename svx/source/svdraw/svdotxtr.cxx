@@ -196,8 +196,8 @@ void SdrTextObj::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, dou
     maRect.SetBottom(maRect.Top()+dy );
     if (aGeo.nRotationAngle==0) {
         aGeo.nRotationAngle=NormAngle36000(nAngle);
-        aGeo.nSin=sn;
-        aGeo.nCos=cs;
+        aGeo.mfSinRotationAngle=sn;
+        aGeo.mfCosRotationAngle=cs;
     } else {
         aGeo.nRotationAngle=NormAngle36000(aGeo.nRotationAngle+nAngle);
         aGeo.RecalcSinCos();
