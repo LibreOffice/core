@@ -299,9 +299,9 @@ bool SdrObjGroup::BegCreate(SdrDragStat& /*rStat*/)
 }
 
 
-tools::Long SdrObjGroup::GetRotateAngle() const
+Degree100 SdrObjGroup::GetRotateAngle() const
 {
-    tools::Long nRetval(0);
+    Degree100 nRetval(0);
 
     if(0 != GetObjCount())
     {
@@ -314,9 +314,9 @@ tools::Long SdrObjGroup::GetRotateAngle() const
 }
 
 
-tools::Long SdrObjGroup::GetShearAngle(bool /*bVertical*/) const
+Degree100 SdrObjGroup::GetShearAngle(bool /*bVertical*/) const
 {
-    tools::Long nRetval(0);
+    Degree100 nRetval(0);
 
     if(0 != GetObjCount())
     {
@@ -413,7 +413,7 @@ void SdrObjGroup::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
 }
 
 
-void SdrObjGroup::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
+void SdrObjGroup::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
     SetGlueReallyAbsolute(true);
     RotatePoint(aRefPoint,rRef,sn,cs);
@@ -447,7 +447,7 @@ void SdrObjGroup::NbcMirror(const Point& rRef1, const Point& rRef2)
 }
 
 
-void SdrObjGroup::NbcShear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear)
+void SdrObjGroup::NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear)
 {
     SetGlueReallyAbsolute(true);
     ShearPoint(aRefPoint,rRef,tn);
@@ -610,9 +610,9 @@ void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fractio
 }
 
 
-void SdrObjGroup::Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
+void SdrObjGroup::Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
-    if (nAngle==0)
+    if (nAngle==0_deg100)
         return;
 
     SetGlueReallyAbsolute(true);
@@ -673,9 +673,9 @@ void SdrObjGroup::Mirror(const Point& rRef1, const Point& rRef2)
 }
 
 
-void SdrObjGroup::Shear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear)
+void SdrObjGroup::Shear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear)
 {
-    if (nAngle==0)
+    if (nAngle==0_deg100)
         return;
 
     SetGlueReallyAbsolute(true);

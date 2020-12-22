@@ -228,16 +228,17 @@ void ScShapeTest::testTdf137033_RotShear_ResizeHide()
 
     // Verify hiding has changed shape geometry as expected
     tools::Rectangle aSnapRect(pObj->GetSnapRect());
-    tools::Long aRotateAngle(pObj->GetRotateAngle());
-    tools::Long aShearAngle(pObj->GetShearAngle());
+    Degree100 aRotateAngle(pObj->GetRotateAngle());
+    Degree100 aShearAngle(pObj->GetShearAngle());
     // mathematical exact would be Point(3868, 4795), Size(9763, 1909)
     // current values as of LO 7.2
     const tools::Rectangle aExpectRect(Point(3871, 4796), Size(9764, 1910));
-    const tools::Long aExpectRotateAngle(20923);
-    const tools::Long aExpectShearAngle(-6572);
-    CPPUNIT_ASSERT_MESSAGE("Hide rows, shear angle: ", abs(aShearAngle - aExpectShearAngle) <= 1);
+    const Degree100 aExpectRotateAngle(20923_deg100);
+    const Degree100 aExpectShearAngle(-6572_deg100);
+    CPPUNIT_ASSERT_MESSAGE("Hide rows, shear angle: ",
+                           abs(aShearAngle - aExpectShearAngle) <= 1_deg100);
     CPPUNIT_ASSERT_MESSAGE("Hide rows, rotate angle: ",
-                           abs(aRotateAngle - aExpectRotateAngle) <= 1);
+                           abs(aRotateAngle - aExpectRotateAngle) <= 1_deg100);
     lcl_AssertRectEqualWithTolerance("Reload: wrong pos or size", aExpectRect, aSnapRect, 1);
 
     // Save and reload.
@@ -263,8 +264,10 @@ void ScShapeTest::testTdf137033_RotShear_ResizeHide()
     aSnapRect = pObj->GetSnapRect();
     aRotateAngle = pObj->GetRotateAngle();
     aShearAngle = pObj->GetShearAngle();
-    CPPUNIT_ASSERT_MESSAGE("Reload, shear angle: ", abs(aShearAngle - aExpectShearAngle) <= 3);
-    CPPUNIT_ASSERT_MESSAGE("Reload, rotate angle: ", abs(aRotateAngle - aExpectRotateAngle) <= 3);
+    CPPUNIT_ASSERT_MESSAGE("Reload, shear angle: ",
+                           abs(aShearAngle - aExpectShearAngle) <= 3_deg100);
+    CPPUNIT_ASSERT_MESSAGE("Reload, rotate angle: ",
+                           abs(aRotateAngle - aExpectRotateAngle) <= 3_deg100);
     lcl_AssertRectEqualWithTolerance("Reload: wrong pos or size", aExpectRect, aSnapRect, 4);
 
     pDocSh->DoClose();

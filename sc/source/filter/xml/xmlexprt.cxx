@@ -3511,7 +3511,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
             if (pObj)
             {
                 pObjData = ScDrawLayer::GetObjData(pObj);
-                bIsShapeTransformed = pObj->GetRotateAngle() != 0 || pObj->GetShearAngle() != 0;
+                bIsShapeTransformed = pObj->GetRotateAngle() != 0_deg100 || pObj->GetShearAngle() != 0_deg100;
             }
             if (bIsShapeTransformed && pObjData)
                 aSnapStartAddress = pObjData->maStart;

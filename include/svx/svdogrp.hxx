@@ -80,15 +80,15 @@ public:
 
     virtual bool BegCreate(SdrDragStat& rStat) override;
 
-    virtual tools::Long GetRotateAngle() const override;
-    virtual tools::Long GetShearAngle(bool bVertical = false) const override;
+    virtual Degree100 GetRotateAngle() const override;
+    virtual Degree100 GetShearAngle(bool bVertical = false) const override;
 
     virtual void Move(const Size& rSiz) override;
     virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact,
                         bool bUnsetRelative = true) override;
-    virtual void Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs) override;
+    virtual void Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs) override;
     virtual void Mirror(const Point& rRef1, const Point& rRef2) override;
-    virtual void Shear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear) override;
+    virtual void Shear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear) override;
     virtual void SetAnchorPos(const Point& rPnt) override;
     virtual void SetRelativePos(const Point& rPnt) override;
     virtual void SetSnapRect(const tools::Rectangle& rRect) override;
@@ -97,9 +97,9 @@ public:
     virtual void NbcMove(const Size& rSiz) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact,
                            const Fraction& yFact) override;
-    virtual void NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs) override;
+    virtual void NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs) override;
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
-    virtual void NbcShear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear) override;
+    virtual void NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear) override;
     virtual void NbcSetAnchorPos(const Point& rPnt) override;
     virtual void NbcSetRelativePos(const Point& rPnt) override;
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;

@@ -38,7 +38,7 @@ public:
 // Angle in 1/100deg from viewpoint of the user.
 class SdrMeasureTextAutoAngleViewItem final : public SdrAngleItem {
 public:
-    SdrMeasureTextAutoAngleViewItem(tools::Long nVal=31500): SdrAngleItem(SDRATTR_MEASURETEXTAUTOANGLEVIEW,nVal)  {}
+    SdrMeasureTextAutoAngleViewItem(Degree100 nVal=31500_deg100): SdrAngleItem(SDRATTR_MEASURETEXTAUTOANGLEVIEW,nVal)  {}
     virtual SdrMeasureTextAutoAngleViewItem* Clone(SfxItemPool*) const override
     {
         return new SdrMeasureTextAutoAngleViewItem(*this);

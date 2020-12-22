@@ -94,8 +94,8 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
             mpView->getSdrModelFromSdrView(),
             ToSdrCircKind(mpView->GetCurrentObjIdentifier()),
             aNewRectangle,
-            static_cast<::tools::Long>(pPhiStart->GetValue () * 10.0),
-            static_cast<::tools::Long>(pPhiEnd->GetValue () * 10.0));
+            Degree100(pPhiStart->GetValue () * 10),
+            Degree100(pPhiEnd->GetValue () * 10));
     SdrPageView *pPV = mpView->GetSdrPageView();
 
     mpView->InsertObjectAtView(pNewCircle, *pPV, SdrInsertFlags::SETDEFLAYER);
@@ -226,8 +226,8 @@ SdrObjectUniquePtr FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, con
             pObj->SetLogicRect(aRect);
 
             SfxItemSet aAttr(mpDoc->GetPool());
-            aAttr.Put(makeSdrCircStartAngleItem(9000));
-            aAttr.Put(makeSdrCircEndAngleItem(0));
+            aAttr.Put(makeSdrCircStartAngleItem(9000_deg100));
+            aAttr.Put(makeSdrCircEndAngleItem(0_deg100));
 
             if(SID_DRAW_PIE_NOFILL == nID ||
                 SID_DRAW_CIRCLEPIE_NOFILL == nID ||

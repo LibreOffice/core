@@ -1927,8 +1927,8 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet const & aSet, const SfxItemProperty
         const SfxPoolItem* pPoolItem=nullptr;
         if(aSet.GetItemState(SDRATTR_CIRCSTARTANGLE,false,&pPoolItem)==SfxItemState::SET)
         {
-            sal_Int32 nAngle = static_cast<const SdrAngleItem*>(pPoolItem)->GetValue();
-            aAny <<= nAngle;
+            Degree100 nAngle = static_cast<const SdrAngleItem*>(pPoolItem)->GetValue();
+            aAny <<= nAngle.get();
         }
         break;
     }
@@ -1938,8 +1938,8 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet const & aSet, const SfxItemProperty
         const SfxPoolItem* pPoolItem=nullptr;
         if (aSet.GetItemState(SDRATTR_CIRCENDANGLE,false,&pPoolItem)==SfxItemState::SET)
         {
-            sal_Int32 nAngle = static_cast<const SdrAngleItem*>(pPoolItem)->GetValue();
-            aAny <<= nAngle;
+            Degree100 nAngle = static_cast<const SdrAngleItem*>(pPoolItem)->GetValue();
+            aAny <<= nAngle.get();
         }
         break;
     }
@@ -2353,15 +2353,16 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     }
     case SDRATTR_ROTATEANGLE:
     {
-        sal_Int32 nAngle = 0;
-        if( rValue >>= nAngle )
+        sal_Int32 nTmp = 0;
+        if( rValue >>= nTmp )
         {
+            Degree100 nAngle(nTmp);
             Point aRef1(GetSdrObject()->GetSnapRect().Center());
             nAngle -= GetSdrObject()->GetRotateAngle();
-            if (nAngle!=0)
+            if (nAngle)
             {
-                double nSin = sin(nAngle * F_PI18000);
-                double nCos = cos(nAngle * F_PI18000);
+                double nSin = sin(nAngle.get() * F_PI18000);
+                double nCos = cos(nAngle.get() * F_PI18000);
                 GetSdrObject()->Rotate(aRef1,nAngle,nSin,nCos);
             }
             return true;
@@ -2372,14 +2373,15 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 
     case SDRATTR_SHEARANGLE:
     {
-        sal_Int32 nShear = 0;
-        if( rValue >>= nShear )
+        sal_Int32 nTmp = 0;
+        if( rValue >>= nTmp )
         {
+            Degree100 nShear(nTmp);
             nShear -= GetSdrObject()->GetShearAngle();
-            if(nShear != 0 )
+            if(nShear)
             {
                 Point aRef1(GetSdrObject()->GetSnapRect().Center());
-                double nTan = tan(nShear * F_PI18000);
+                double nTan = tan(nShear.get() * F_PI18000);
                 GetSdrObject()->Shear(aRef1,nShear,nTan,false);
                 return true;
             }

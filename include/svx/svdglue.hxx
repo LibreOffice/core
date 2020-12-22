@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SVDGLUE_HXX
 
 #include <tools/gen.hxx>
+#include <tools/degree.hxx>
 #include <svx/svxdllapi.h>
 #include <memory>
 #include <vector>
@@ -104,12 +105,12 @@ public:
     void         Invalidate(vcl::Window& rWin, const SdrObject* pObj) const;
     Point        GetAbsolutePos(const SdrObject& rObj) const;
     void         SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj);
-    tools::Long         GetAlignAngle() const;
-    void         SetAlignAngle(tools::Long nAngle);
-    static tools::Long  EscDirToAngle(SdrEscapeDirection nEsc);
-    static SdrEscapeDirection EscAngleToDir(tools::Long nAngle);
-    void         Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs, const SdrObject* pObj);
-    void         Mirror(const Point& rRef1, const Point& rRef2, tools::Long nAngle, const SdrObject* pObj);
+    Degree100    GetAlignAngle() const;
+    void         SetAlignAngle(Degree100 nAngle);
+    static Degree100  EscDirToAngle(SdrEscapeDirection nEsc);
+    static SdrEscapeDirection EscAngleToDir(Degree100 nAngle);
+    void         Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs, const SdrObject* pObj);
+    void         Mirror(const Point& rRef1, const Point& rRef2, Degree100 nAngle, const SdrObject* pObj);
     void         Shear (const Point& rRef, double tn, bool bVShear, const SdrObject* pObj);
 };
 
@@ -137,9 +138,9 @@ public:
     void                Invalidate(vcl::Window& rWin, const SdrObject* pObj) const;
     // temp for transformations on the reference object
     void                SetReallyAbsolute(bool bOn, const SdrObject& rObj);
-    void                Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs, const SdrObject* pObj);
+    void                Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs, const SdrObject* pObj);
     void                Mirror(const Point& rRef1, const Point& rRef2, const SdrObject* pObj);
-    void                Mirror(const Point& rRef1, const Point& rRef2, tools::Long nAngle, const SdrObject* pObj);
+    void                Mirror(const Point& rRef1, const Point& rRef2, Degree100 nAngle, const SdrObject* pObj);
     void                Shear (const Point& rRef, double tn, bool bVShear, const SdrObject* pObj);
 };
 

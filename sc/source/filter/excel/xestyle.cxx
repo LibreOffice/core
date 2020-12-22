@@ -1489,7 +1489,7 @@ bool XclExpCellAlign::FillFromItemSet(
             else
             {
                 // rotation
-                sal_Int32 nScRot = rItemSet.Get( ATTR_ROTATE_VALUE ).GetValue();
+                Degree100 nScRot = rItemSet.Get( ATTR_ROTATE_VALUE ).GetValue();
                 mnRotation = XclTools::GetXclRotation( nScRot );
                 bUsed |= ScfTools::CheckItem( rItemSet, ATTR_ROTATE_VALUE, bStyle );
             }

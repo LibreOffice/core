@@ -271,10 +271,10 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
         bool bIsMirroredX(rSdrObjCustomShape.IsMirroredX());
         bool bIsMirroredY(rSdrObjCustomShape.IsMirroredY());
         tools::Rectangle aSnapRect(rSdrObjCustomShape.GetLogicRect());
-        tools::Long nObjectRotation(rSdrObjCustomShape.GetRotateAngle());
+        Degree100 nObjectRotation(rSdrObjCustomShape.GetRotateAngle());
         if ( nObjectRotation )
         {
-            double a = (36000 - nObjectRotation) * F_PI18000;
+            double a = (36000 - nObjectRotation.get()) * F_PI18000;
             tools::Long dx = aSnapRect.Right() - aSnapRect.Left();
             tools::Long dy = aSnapRect.Bottom()- aSnapRect.Top();
             Point aP( aSnapRect.TopLeft() );
