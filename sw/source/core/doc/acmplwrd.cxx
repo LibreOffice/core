@@ -291,11 +291,10 @@ void SwAutoCompleteWord::SetMaxCount(
         SwAutoCompleteStringPtrDeque::size_type nLRUIndex = nNewMax-1;
         while (nNewMax < m_WordList.size() && nLRUIndex < m_aLRUList.size())
         {
-            editeng::SortedAutoCompleteStrings::const_iterator it =
-                m_WordList.find(m_aLRUList[ nLRUIndex++ ]);
+            auto it = m_WordList.find(m_aLRUList[nLRUIndex++]);
             OSL_ENSURE( m_WordList.end() != it, "String not found" );
             editeng::IAutoCompleteString *const pDel = *it;
-            m_WordList.erase(it - m_WordList.begin());
+            m_WordList.erase(it);
             delete pDel;
         }
         m_aLRUList.erase( m_aLRUList.begin() + nNewMax - 1, m_aLRUList.end() );
@@ -313,7 +312,7 @@ void SwAutoCompleteWord::SetMinWordLen( sal_uInt16 n )
             {
                 SwAutoCompleteString *const pDel =
                     dynamic_cast<SwAutoCompleteString*>(m_WordList[nPos]);
-                m_WordList.erase(nPos);
+                m_WordList.erase_at(nPos);
 
                 SwAutoCompleteStringPtrDeque::iterator it = std::find( m_aLRUList.begin(), m_aLRUList.end(), pDel );
                 OSL_ENSURE( m_aLRUList.end() != it, "String not found" );
@@ -351,7 +350,7 @@ void SwAutoCompleteWord::CheckChangedList(
         {
             SwAutoCompleteString *const pDel =
                 dynamic_cast<SwAutoCompleteString*>(m_WordList[nMyPos]);
-            m_WordList.erase(nMyPos);
+            m_WordList.erase_at(nMyPos);
             SwAutoCompleteStringPtrDeque::iterator it = std::find( m_aLRUList.begin(), m_aLRUList.end(), pDel );
             OSL_ENSURE( m_aLRUList.end() != it, "String not found" );
             m_aLRUList.erase( it );
@@ -390,7 +389,7 @@ void SwAutoCompleteWord::DocumentDying(const SwDoc& rDoc)
         SwAutoCompleteString *const pCurrent = dynamic_cast<SwAutoCompleteString*>(m_WordList[nPos - 1]);
         if(pCurrent && pCurrent->RemoveDocument(rDoc) && bDelete)
         {
-            m_WordList.erase(nPos - 1);
+            m_WordList.erase_at(nPos - 1);
             SwAutoCompleteStringPtrDeque::iterator it = std::find( m_aLRUList.begin(), m_aLRUList.end(), pCurrent );
             OSL_ENSURE( m_aLRUList.end() != it, "word not found in LRU list" );
             m_aLRUList.erase( it );

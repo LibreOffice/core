@@ -375,7 +375,7 @@ void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 n
                     if(itr != rCondFormatData.end())
                     {
                         ScCondFormatIndexes aNewCondFormatData(rCondFormatData);
-                        aNewCondFormatData.erase(nIndex);
+                        aNewCondFormatData.erase_at(std::distance(rCondFormatData.begin(), itr));
                         ScCondFormatItem aItem( std::move(aNewCondFormatData) );
                         pPatternAttr->GetItemSet().Put( aItem );
                         SetPatternArea( nTempStartRow, nTempEndRow, std::move(pPatternAttr), true );

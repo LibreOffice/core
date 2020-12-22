@@ -784,7 +784,7 @@ void SwDocUpdateField::InsDelFieldInFieldLst( bool bIns, const SwTextField& rFie
         {
             if (&rField == (*m_pFieldSortList)[n]->GetPointer())
             {
-                m_pFieldSortList->erase(n);
+                m_pFieldSortList->erase_at(n);
                 n--; // one field can occur multiple times
             }
         }
