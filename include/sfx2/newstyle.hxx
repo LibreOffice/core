@@ -32,6 +32,7 @@ private:
     SfxStyleFamily m_eSearchFamily;
 
     std::unique_ptr<weld::EntryTreeView> m_xColBox;
+    std::unique_ptr<weld::Label> m_xLabel;
     std::unique_ptr<weld::Button> m_xOKBtn;
 
     std::unique_ptr<weld::MessageDialog> m_xQueryOverwriteBox;

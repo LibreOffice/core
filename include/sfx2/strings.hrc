@@ -351,6 +351,9 @@
 #define STR_RECENT                              NC_("STR_RECENT", "Recently used")
 #define STR_NORECENT                            NC_("STR_NORECENT", "No recent characters")
 
+// To translators: %STYLECATEGORY is replaces by, eg. "List Styles" or "Paragraph Styles", etc.
+#define STR_CUSTOM_STYLES                       NC_("STR_CUSTOM_STYLES", "Custom %STYLECATEGORY for current document")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
