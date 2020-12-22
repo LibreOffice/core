@@ -37,7 +37,7 @@ namespace rtl
 
     @since LibreOffice 5.2
 */
-inline bool isUnicodeCodePoint(sal_uInt32 code) { return code <= 0x10FFFF; }
+inline SAL_CONSTEXPR bool isUnicodeCodePoint(sal_uInt32 code) { return code <= 0x10FFFF; }
 
 /** Check for ASCII character.
 
@@ -47,7 +47,7 @@ inline bool isUnicodeCodePoint(sal_uInt32 code) { return code <= 0x10FFFF; }
 
     @since LibreOffice 4.1
  */
-inline bool isAscii(sal_uInt32 code)
+inline SAL_CONSTEXPR bool isAscii(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
     return code <= 0x7F;
@@ -56,7 +56,7 @@ inline bool isAscii(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAscii(char) = delete;
 bool isAscii(signed char) = delete;
-template <typename T> inline bool isAscii(T code) { return isAscii(sal_uInt32(code)); }
+template <typename T> inline constexpr bool isAscii(T code) { return isAscii(sal_uInt32(code)); }
 #endif
 
 /** Check for ASCII lower case character.
@@ -68,7 +68,7 @@ template <typename T> inline bool isAscii(T code) { return isAscii(sal_uInt32(co
 
     @since LibreOffice 4.1
  */
-inline bool isAsciiLowerCase(sal_uInt32 code)
+inline SAL_CONSTEXPR bool isAsciiLowerCase(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
     return code >= 'a' && code <= 'z';
@@ -77,7 +77,7 @@ inline bool isAsciiLowerCase(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiLowerCase(char) = delete;
 bool isAsciiLowerCase(signed char) = delete;
-template <typename T> inline bool isAsciiLowerCase(T code)
+template <typename T> inline constexpr bool isAsciiLowerCase(T code)
 {
     return isAsciiLowerCase(sal_uInt32(code));
 }
@@ -92,7 +92,7 @@ template <typename T> inline bool isAsciiLowerCase(T code)
 
     @since LibreOffice 4.1
  */
-inline bool isAsciiUpperCase(sal_uInt32 code)
+inline SAL_CONSTEXPR bool isAsciiUpperCase(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
     return code >= 'A' && code <= 'Z';
@@ -101,7 +101,7 @@ inline bool isAsciiUpperCase(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiUpperCase(char) = delete;
 bool isAsciiUpperCase(signed char) = delete;
-template <typename T> inline bool isAsciiUpperCase(T code)
+template <typename T> inline constexpr bool isAsciiUpperCase(T code)
 {
     return isAsciiUpperCase(sal_uInt32(code));
 }
@@ -116,7 +116,7 @@ template <typename T> inline bool isAsciiUpperCase(T code)
 
     @since LibreOffice 4.1
  */
-inline bool isAsciiAlpha(sal_uInt32 code)
+inline SAL_CONSTEXPR bool isAsciiAlpha(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
     return isAsciiLowerCase(code) || isAsciiUpperCase(code);
@@ -125,7 +125,10 @@ inline bool isAsciiAlpha(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiAlpha(char) = delete;
 bool isAsciiAlpha(signed char) = delete;
-template <typename T> inline bool isAsciiAlpha(T code) { return isAsciiAlpha(sal_uInt32(code)); }
+template <typename T> inline constexpr bool isAsciiAlpha(T code)
+{
+    return isAsciiAlpha(sal_uInt32(code));
+}
 #endif
 
 /** Check for ASCII digit character.
@@ -137,7 +140,7 @@ template <typename T> inline bool isAsciiAlpha(T code) { return isAsciiAlpha(sal
 
     @since LibreOffice 4.1
  */
-inline bool isAsciiDigit(sal_uInt32 code)
+inline SAL_CONSTEXPR bool isAsciiDigit(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
     return code >= '0' && code <= '9';
@@ -146,7 +149,10 @@ inline bool isAsciiDigit(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiDigit(char) = delete;
 bool isAsciiDigit(signed char) = delete;
-template <typename T> inline bool isAsciiDigit(T code) { return isAsciiDigit(sal_uInt32(code)); }
+template <typename T> inline constexpr bool isAsciiDigit(T code)
+{
+    return isAsciiDigit(sal_uInt32(code));
+}
 #endif
 
 /** Check for ASCII alphanumeric character.
@@ -158,7 +164,7 @@ template <typename T> inline bool isAsciiDigit(T code) { return isAsciiDigit(sal
 
     @since LibreOffice 4.1
  */
-inline bool isAsciiAlphanumeric(sal_uInt32 code)
+inline SAL_CONSTEXPR bool isAsciiAlphanumeric(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
     return isAsciiDigit(code) || isAsciiAlpha(code);
@@ -167,7 +173,7 @@ inline bool isAsciiAlphanumeric(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiAlphanumeric(char) = delete;
 bool isAsciiAlphanumeric(signed char) = delete;
-template <typename T> inline bool isAsciiAlphanumeric(T code)
+template <typename T> inline constexpr bool isAsciiAlphanumeric(T code)
 {
     return isAsciiAlphanumeric(sal_uInt32(code));
 }
@@ -182,7 +188,7 @@ template <typename T> inline bool isAsciiAlphanumeric(T code)
 
     @since LibreOffice 4.1
  */
-inline bool isAsciiCanonicHexDigit(sal_uInt32 code)
+inline SAL_CONSTEXPR bool isAsciiCanonicHexDigit(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
     return isAsciiDigit(code) || (code >= 'A' && code <= 'F');
@@ -191,7 +197,7 @@ inline bool isAsciiCanonicHexDigit(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiCanonicHexDigit(char) = delete;
 bool isAsciiCanonicHexDigit(signed char) = delete;
-template <typename T> inline bool isAsciiCanonicHexDigit(T code)
+template <typename T> inline constexpr bool isAsciiCanonicHexDigit(T code)
 {
     return isAsciiCanonicHexDigit(sal_uInt32(code));
 }
@@ -206,7 +212,7 @@ template <typename T> inline bool isAsciiCanonicHexDigit(T code)
 
     @since LibreOffice 4.1
  */
-inline bool isAsciiHexDigit(sal_uInt32 code)
+inline SAL_CONSTEXPR bool isAsciiHexDigit(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
     return isAsciiCanonicHexDigit(code) || (code >= 'a' && code <= 'f');
@@ -215,7 +221,7 @@ inline bool isAsciiHexDigit(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiHexDigit(char) = delete;
 bool isAsciiHexDigit(signed char) = delete;
-template <typename T> inline bool isAsciiHexDigit(T code)
+template <typename T> inline constexpr bool isAsciiHexDigit(T code)
 {
     return isAsciiHexDigit(sal_uInt32(code));
 }
@@ -229,7 +235,7 @@ template <typename T> inline bool isAsciiHexDigit(T code)
 
     @since LibreOffice 5.0
  */
-inline bool isAsciiOctalDigit(sal_uInt32 code)
+inline SAL_CONSTEXPR bool isAsciiOctalDigit(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
     return code >= '0' && code <= '7';
@@ -238,7 +244,7 @@ inline bool isAsciiOctalDigit(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiOctalDigit(char) = delete;
 bool isAsciiOctalDigit(signed char) = delete;
-template <typename T> inline bool isAsciiOctalDigit(T code)
+template <typename T> inline constexpr bool isAsciiOctalDigit(T code)
 {
     return isAsciiOctalDigit(sal_uInt32(code));
 }
@@ -253,7 +259,7 @@ template <typename T> inline bool isAsciiOctalDigit(T code)
 
     @since LibreOffice 5.4
 */
-inline bool isAsciiWhiteSpace(sal_uInt32 code)
+inline SAL_CONSTEXPR bool isAsciiWhiteSpace(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
     return code == ' ' || code == '\f' || code == '\n' || code == '\r' || code == '\t'
@@ -263,7 +269,7 @@ inline bool isAsciiWhiteSpace(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiWhiteSpace(char) = delete;
 bool isAsciiWhiteSpace(signed char) = delete;
-template <typename T> inline bool isAsciiWhiteSpace(T code)
+template <typename T> inline constexpr bool isAsciiWhiteSpace(T code)
 {
     return isAsciiWhiteSpace(sal_uInt32(code));
 }
@@ -277,7 +283,7 @@ template <typename T> inline bool isAsciiWhiteSpace(T code)
 
     @since LibreOffice 4.2
 */
-inline sal_uInt32 toAsciiUpperCase(sal_uInt32 code)
+inline SAL_CONSTEXPR sal_uInt32 toAsciiUpperCase(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
     return isAsciiLowerCase(code) ? code - 32 : code;
@@ -286,7 +292,7 @@ inline sal_uInt32 toAsciiUpperCase(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 sal_uInt32 toAsciiUpperCase(char) = delete;
 sal_uInt32 toAsciiUpperCase(signed char) = delete;
-template <typename T> inline sal_uInt32 toAsciiUpperCase(T code)
+template <typename T> inline constexpr sal_uInt32 toAsciiUpperCase(T code)
 {
     return toAsciiUpperCase(sal_uInt32(code));
 }
@@ -300,7 +306,7 @@ template <typename T> inline sal_uInt32 toAsciiUpperCase(T code)
 
     @since LibreOffice 4.2
 */
-inline sal_uInt32 toAsciiLowerCase(sal_uInt32 code)
+inline SAL_CONSTEXPR sal_uInt32 toAsciiLowerCase(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
     return isAsciiUpperCase(code) ? code + 32 : code;
@@ -309,7 +315,7 @@ inline sal_uInt32 toAsciiLowerCase(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 sal_uInt32 toAsciiLowerCase(char) = delete;
 sal_uInt32 toAsciiLowerCase(signed char) = delete;
-template <typename T> inline sal_uInt32 toAsciiLowerCase(T code)
+template <typename T> inline constexpr sal_uInt32 toAsciiLowerCase(T code)
 {
     return toAsciiLowerCase(sal_uInt32(code));
 }
@@ -327,7 +333,7 @@ template <typename T> inline sal_uInt32 toAsciiLowerCase(T code)
 
     @since LibreOffice 4.2
  */
-inline sal_Int32 compareIgnoreAsciiCase(sal_uInt32 code1, sal_uInt32 code2)
+inline SAL_CONSTEXPR sal_Int32 compareIgnoreAsciiCase(sal_uInt32 code1, sal_uInt32 code2)
 {
     assert(isUnicodeCodePoint(code1));
     assert(isUnicodeCodePoint(code2));
@@ -353,7 +359,7 @@ sal_uInt32 const surrogatesLowLast = 0xDFFF;
 
     @since LibreOffice 6.0
 */
-inline bool isSurrogate(sal_uInt32 code)
+inline SAL_CONSTEXPR bool isSurrogate(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
     return code >= detail::surrogatesHighFirst && code <= detail::surrogatesLowLast;
@@ -367,7 +373,7 @@ inline bool isSurrogate(sal_uInt32 code)
 
     @since LibreOffice 5.0
 */
-inline bool isHighSurrogate(sal_uInt32 code)
+inline SAL_CONSTEXPR bool isHighSurrogate(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
     return code >= detail::surrogatesHighFirst && code <= detail::surrogatesHighLast;
@@ -381,7 +387,7 @@ inline bool isHighSurrogate(sal_uInt32 code)
 
     @since LibreOffice 5.0
 */
-inline bool isLowSurrogate(sal_uInt32 code)
+inline SAL_CONSTEXPR bool isLowSurrogate(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
     return code >= detail::surrogatesLowFirst && code <= detail::surrogatesLowLast;
@@ -395,7 +401,7 @@ inline bool isLowSurrogate(sal_uInt32 code)
 
     @since LibreOffice 5.0
  */
-inline sal_Unicode getHighSurrogate(sal_uInt32 code)
+inline SAL_CONSTEXPR sal_Unicode getHighSurrogate(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
     assert(code >= 0x10000);
@@ -410,7 +416,7 @@ inline sal_Unicode getHighSurrogate(sal_uInt32 code)
 
     @since LibreOffice 5.0
  */
-inline sal_Unicode getLowSurrogate(sal_uInt32 code)
+inline SAL_CONSTEXPR sal_Unicode getLowSurrogate(sal_uInt32 code)
 {
     assert(isUnicodeCodePoint(code));
     assert(code >= 0x10000);
@@ -427,7 +433,7 @@ inline sal_Unicode getLowSurrogate(sal_uInt32 code)
 
     @since LibreOffice 5.0
 */
-inline sal_uInt32 combineSurrogates(sal_uInt32 high, sal_uInt32 low)
+inline SAL_CONSTEXPR sal_uInt32 combineSurrogates(sal_uInt32 high, sal_uInt32 low)
 {
     assert(isHighSurrogate(high));
     assert(isLowSurrogate(low));
@@ -447,7 +453,7 @@ inline sal_uInt32 combineSurrogates(sal_uInt32 high, sal_uInt32 low)
 
     @since LibreOffice 5.3
 */
-inline std::size_t splitSurrogates(sal_uInt32 code, sal_Unicode* output)
+inline SAL_CONSTEXPR std::size_t splitSurrogates(sal_uInt32 code, sal_Unicode* output)
 {
     assert(isUnicodeCodePoint(code));
     assert(output != NULL);
@@ -472,7 +478,7 @@ inline std::size_t splitSurrogates(sal_uInt32 code, sal_Unicode* output)
 
     @since LibreOffice 6.0
 */
-inline bool isUnicodeScalarValue(sal_uInt32 code)
+inline SAL_CONSTEXPR bool isUnicodeScalarValue(sal_uInt32 code)
 {
     return isUnicodeCodePoint(code) && !isSurrogate(code);
 }
