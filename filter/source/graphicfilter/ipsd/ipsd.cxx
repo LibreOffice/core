@@ -325,7 +325,7 @@ namespace
         if (nIndex >= rvPalette.size())
         {
             auto nSanitizedIndex = nIndex % rvPalette.size();
-            SAL_WARN_IF(nIndex != nSanitizedIndex, "filter.tga", "invalid colormap index: "
+            SAL_WARN_IF(nIndex != nSanitizedIndex, "filter.psd", "invalid colormap index: "
                         << static_cast<unsigned int>(nIndex) << ", colormap len is: "
                         << rvPalette.size());
             nIndex = nSanitizedIndex;
@@ -764,8 +764,17 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool
 ipdGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     PSDReader aPSDReader(rStream);
-
-    return aPSDReader.ReadPSD(rGraphic);
+    bool bRet;
+    try
+    {
+        bRet = aPSDReader.ReadPSD(rGraphic);
+    }
+    catch (const SvStreamEOFException&)
+    {
+        SAL_WARN("filter.psd", "EOF");
+        bRet = false;
+    }
+    return bRet;
 }
 
 
