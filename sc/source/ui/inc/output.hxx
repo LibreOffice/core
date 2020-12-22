@@ -27,6 +27,7 @@
 #include <tools/gen.hxx>
 #include <editeng/svxenum.hxx>
 #include <vcl/outdev.hxx>
+#include <tools/degree.hxx>
 #include <o3tl/deleter.hxx>
 #include <optional>
 
@@ -256,7 +257,7 @@ private:
 
     void            ShrinkEditEngine( EditEngine& rEngine, const tools::Rectangle& rAlignRect,
                                     tools::Long nLeftM, tools::Long nTopM, tools::Long nRightM, tools::Long nBottomM,
-                                    bool bWidth, SvxCellOrientation nOrient, tools::Long nAttrRotate, bool bPixelToLogic,
+                                    bool bWidth, SvxCellOrientation nOrient, Degree100 nAttrRotate, bool bPixelToLogic,
                                     tools::Long& rEngineWidth, tools::Long& rEngineHeight, tools::Long& rNeededPixel,
                                     bool& rLeftClip, bool& rRightClip );
 

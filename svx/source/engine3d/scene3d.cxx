@@ -614,7 +614,7 @@ void E3dScene::SetTransform(const basegfx::B3DHomMatrix& rMatrix)
     }
 }
 
-void E3dScene::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
+void E3dScene::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
     // So currently the glue points are defined relative to the scene aOutRect.
     // Before turning the glue points are defined relative to the page. They
@@ -628,7 +628,7 @@ void E3dScene::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, doubl
     // through the enter of aOutRect's (Steiner's theorem), so RotateZ
 
     RotateScene (rRef, sn, cs);  // Rotates the scene
-    double fAngleInRad = basegfx::deg2rad(nAngle/100.0);
+    double fAngleInRad = basegfx::deg2rad(nAngle.get()/100.0);
 
     basegfx::B3DHomMatrix aRotation;
     aRotation.rotate(0.0, 0.0, fAngleInRad);

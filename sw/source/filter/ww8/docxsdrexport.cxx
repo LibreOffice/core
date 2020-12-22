@@ -426,7 +426,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         awt::Point aPos(pFrameFormat->GetHoriOrient().GetPos(),
                         pFrameFormat->GetVertOrient().GetPos());
         const SdrObject* pObj = pFrameFormat->FindRealSdrObject();
-        tools::Long nRotation = 0;
+        Degree100 nRotation(0);
         if (pObj != nullptr)
         {
             // SdrObjects know their layer, consider that instead of the frame format.
@@ -441,7 +441,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             if (pObj->GetObjIdentifier() != OBJ_LINE)
             {
                 nRotation = pObj->GetRotateAngle();
-                lclMovePositionWithRotation(aPos, rSize, nRotation);
+                lclMovePositionWithRotation(aPos, rSize, nRotation.get());
             }
         }
         attrList->add(XML_behindDoc, bOpaque ? "0" : "1");
@@ -1288,7 +1288,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
         }
         aRotation >>= m_pImpl->getDMLandVMLTextFrameRotation();
         OString sRotation(OString::number(
-            oox::drawingml::ExportRotateClockwisify(m_pImpl->getDMLandVMLTextFrameRotation())));
+            oox::drawingml::ExportRotateClockwisify(Degree100(m_pImpl->getDMLandVMLTextFrameRotation()))));
         // Shape properties
         pFS->startElementNS(XML_wps, XML_spPr);
         if (m_pImpl->getDMLandVMLTextFrameRotation())

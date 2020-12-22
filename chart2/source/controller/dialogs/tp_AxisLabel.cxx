@@ -93,7 +93,7 @@ bool SchAxisLabelTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 
     if( m_xCtrlDial->HasRotation() )
     {
-        sal_Int32 nDegrees = bStacked ? 0 : m_xCtrlDial->GetRotation();
+        Degree100 nDegrees = bStacked ? 0_deg100 : m_xCtrlDial->GetRotation();
         if( !m_bHasInitialDegrees || (nDegrees != m_nInitialDegrees) )
             rOutAttrs->Put( SdrAngleItem( SCHATTR_TEXT_DEGREES, nDegrees ) );
     }
@@ -155,7 +155,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
     // Rotation as orient item or in degrees ----------
 
     // check new degree item
-    m_nInitialDegrees = 0;
+    m_nInitialDegrees = 0_deg100;
     aState = rInAttrs->GetItemState( SCHATTR_TEXT_DEGREES, false, &pPoolItem );
     if( aState == SfxItemState::SET )
         m_nInitialDegrees = static_cast< const SdrAngleItem * >( pPoolItem )->GetValue();

@@ -1521,7 +1521,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
 
             pTEObj->EndTextEdit(*pTEOutliner);
 
-            if ((pTEObj->GetRotateAngle() != 0)
+            if ((pTEObj->GetRotateAngle() != 0_deg100)
                 || (dynamic_cast<const SdrTextObj*>(pTEObj) != nullptr && pTEObj->IsFontwork()))
             {
                 pTEObj->ActionChanged();

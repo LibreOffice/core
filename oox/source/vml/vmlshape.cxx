@@ -405,7 +405,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                     }
 
                     if(!maTypeModel.maRotation.isEmpty())
-                        aGrabBag.push_back(comphelper::makePropertyValue("mso-rotation-angle", ConversionHelper::decodeRotation(maTypeModel.maRotation)));
+                        aGrabBag.push_back(comphelper::makePropertyValue("mso-rotation-angle", ConversionHelper::decodeRotation(maTypeModel.maRotation).get()));
                     propertySet->setPropertyValue("FrameInteropGrabBag", uno::makeAny(comphelper::containerToSequence(aGrabBag)));
                     sal_Int32 backColorTransparency = 0;
                     propertySet->getPropertyValue("BackColorTransparency")
@@ -685,7 +685,7 @@ static void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rType
 Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
     awt::Rectangle aShapeRect(rShapeRect);
-    std::optional<sal_Int32> oRotation;
+    std::optional<Degree100> oRotation;
     bool bFlipX = false, bFlipY = false;
     // tdf#137765: skip this rotation for line shapes
     if (!maTypeModel.maRotation.isEmpty() && maService != "com.sun.star.drawing.LineShape")
@@ -840,7 +840,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     {
         if (oRotation)
         {
-            aPropertySet.setAnyProperty(PROP_RotateAngle, makeAny(*oRotation));
+            aPropertySet.setAnyProperty(PROP_RotateAngle, makeAny((*oRotation).get()));
             uno::Reference<lang::XServiceInfo> xServiceInfo(rxShapes, uno::UNO_QUERY);
             if (!xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
             {
@@ -947,7 +947,7 @@ Reference< XShape > SimpleShape::createPictureObject(const Reference< XShapes >&
         }
         // fdo#70457: preserve rotation information
         if ( !maTypeModel.maRotation.isEmpty() )
-            aPropSet.setAnyProperty(PROP_RotateAngle, makeAny(ConversionHelper::decodeRotation(maTypeModel.maRotation)));
+            aPropSet.setAnyProperty(PROP_RotateAngle, makeAny(ConversionHelper::decodeRotation(maTypeModel.maRotation).get()));
 
         const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
         lcl_SetAnchorType(aPropSet, maTypeModel, rGraphicHelper);
@@ -1082,7 +1082,7 @@ namespace
                 // -1 is required because the direction of MSO rotation is the opposite of ours
                 // 100 is required because in this part of the code the angle is in a hundredth of
                 // degrees.
-                auto nAngle = -1 * 100.0 * rTypeModel.maRotation.toDouble();
+                Degree100 nAngle( static_cast<sal_Int32>(-1 * 100.0 * rTypeModel.maRotation.toDouble()) );
                 pShape->NbcRotate(pShape->GetSnapRect().Center(), nAngle);
             }
         }
@@ -1535,7 +1535,7 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
     lcl_SetAnchorType(aPropertySet, maTypeModel, rGraphicHelper);
     if (!maTypeModel.maRotation.isEmpty())
-        aPropertySet.setAnyProperty(PROP_RotateAngle, makeAny(ConversionHelper::decodeRotation(maTypeModel.maRotation)));
+        aPropertySet.setAnyProperty(PROP_RotateAngle, makeAny(ConversionHelper::decodeRotation(maTypeModel.maRotation).get()));
     return xGroupShape;
 }
 

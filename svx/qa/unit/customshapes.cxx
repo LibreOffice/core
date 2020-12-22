@@ -860,7 +860,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf136176)
             static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
         // apply shearing 20deg
         const Point aCenter = rSdrObjCustomShape.GetSnapRect().Center();
-        rSdrObjCustomShape.Shear(aCenter, 2000, tan(basegfx::deg2rad(20.0)), false);
+        rSdrObjCustomShape.Shear(aCenter, 2000_deg100, tan(basegfx::deg2rad(20.0)), false);
     }
 
     // Save and reload

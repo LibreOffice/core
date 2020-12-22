@@ -144,7 +144,7 @@ void SdrUIObject::execute(const OUString& rAction, const StringMap& rParameters)
             throw css::uno::RuntimeException("missing parameter ANGLE");
 
         double nAngle = itrAngle->second.toDouble();
-        pObj->Rotate(aPos, nAngle, 0, 0);
+        pObj->Rotate(aPos, Degree100(sal_Int32(nAngle)), 0, 0);
     }
     else if (rAction == "Mirror")
     {
@@ -152,7 +152,7 @@ void SdrUIObject::execute(const OUString& rAction, const StringMap& rParameters)
     }
     else if (rAction == "SHEAR")
     {
-        pObj->Shear(Point(), 0.0 /*nAngle*/, 0, false);
+        pObj->Shear(Point(), 0_deg100 /*nAngle*/, 0, false);
     }
 }
 

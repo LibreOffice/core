@@ -738,14 +738,14 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
         {
             SdrMark* pM = GetSdrMarkByIndex(0);
             SdrObject* pO = pM->GetMarkedSdrObj();
-            tools::Long nRotAngle = pO->GetRotateAngle();
+            Degree100 nRotAngle = pO->GetRotateAngle();
             // true if we are dealing with a RotGrfFlyFrame
             // (SwVirtFlyDrawObj with a SwGrfNode)
             bool bWriterGraphic = pO->HasLimitedRotation();
 
             if (bWriterGraphic)
             {
-                nRotAngle *= 10;
+                nRotAngle *= 10_deg100;
             }
 
             OStringBuffer aExtraInfo;
@@ -888,7 +888,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             aExtraInfo.append("}");
 
             sSelectionText = aSelection.toString() +
-                ", " + OString::number(nRotAngle);
+                ", " + OString::number(nRotAngle.get());
             if (!aExtraInfo.isEmpty())
             {
                 sSelectionText += ", " + aExtraInfo.makeStringAndClear();

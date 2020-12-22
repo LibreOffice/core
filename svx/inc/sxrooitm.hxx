@@ -24,7 +24,7 @@
 
 class SdrRotateOneItem: public SdrAngleItem {
 public:
-    SdrRotateOneItem(): SdrAngleItem(SDRATTR_ROTATEONE,0) {}
+    SdrRotateOneItem(): SdrAngleItem(SDRATTR_ROTATEONE,0_deg100) {}
     SdrRotateOneItem* Clone(SfxItemPool*) const override
     {
         return new SdrRotateOneItem(*this);
