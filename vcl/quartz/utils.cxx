@@ -89,7 +89,7 @@ OUString NSStringArrayToOUString(NSArray* array)
 {
     OUString result = "[";
     OUString sep;
-    for (unsigned i = 0; i < [array count]; i++)
+    for (NSUInteger i = 0; i < [array count]; i++)
     {
         result = result + sep + OUString::fromUtf8([[array objectAtIndex:i] UTF8String]);
         sep = ",";
