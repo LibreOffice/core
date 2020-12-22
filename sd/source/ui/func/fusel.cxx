@@ -169,10 +169,10 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         mpWindow->CaptureMouse();
         pHdl = mpView->PickHandle(aMDPos);
 
-        ::tools::Long nAngle0  = GetAngle(aMDPos - mpView->GetRef1());
-        nAngle0 -= 27000;
+        Degree100 nAngle0  = GetAngle(aMDPos - mpView->GetRef1());
+        nAngle0 -= 27000_deg100;
         nAngle0 = NormAngle36000(nAngle0);
-        bMirrorSide0 = nAngle0 < 18000;
+        bMirrorSide0 = nAngle0 < 18000_deg100;
 
         if (!pHdl && mpView->Is3DRotationCreationActive())
         {
@@ -742,10 +742,10 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     * If 3D-rotation bodies are about to be created,
                     * end creation now
                     **********************************************************/
-                     ::tools::Long nAngle1  = GetAngle(aPnt - mpView->GetRef1());
-                     nAngle1 -= 27000;
+                     Degree100 nAngle1  = GetAngle(aPnt - mpView->GetRef1());
+                     nAngle1 -= 27000_deg100;
                      nAngle1 = NormAngle36000(nAngle1);
-                     bool bMirrorSide1 = nAngle1 < 18000;
+                     bool bMirrorSide1 = nAngle1 < 18000_deg100;
 
                      if (bMirrorSide0 != bMirrorSide1)
                      {

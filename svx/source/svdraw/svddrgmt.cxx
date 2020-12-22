@@ -1042,21 +1042,21 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
     else
     {
         if (!DragStat().IsNoSnap()) SnapPos(aPnt);
-        tools::Long nSA=0;
+        Degree100 nSA(0);
 
         if (getSdrDragView().IsAngleSnapEnabled())
             nSA=getSdrDragView().GetSnapAngle();
 
         if (getSdrDragView().IsMirrorAllowed(true,true))
         { // limited
-            if (!getSdrDragView().IsMirrorAllowed()) nSA=4500;
-            if (!getSdrDragView().IsMirrorAllowed(true)) nSA=9000;
+            if (!getSdrDragView().IsMirrorAllowed()) nSA=4500_deg100;
+            if (!getSdrDragView().IsMirrorAllowed(true)) nSA=9000_deg100;
         }
 
-        if (getSdrDragView().IsOrtho() && nSA!=9000)
-            nSA=4500;
+        if (getSdrDragView().IsOrtho() && nSA!=9000_deg100)
+            nSA=4500_deg100;
 
-        if (nSA!=0)
+        if (nSA!=0_deg100)
         { // angle snapping
             SdrHdlKind eRef=SdrHdlKind::Ref1;
 
@@ -1068,25 +1068,25 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
             if (pH!=nullptr)
             {
                 Point aRef(pH->GetPos());
-                tools::Long nAngle=NormAngle36000(GetAngle(aPnt-aRef));
-                tools::Long nNewAngle=nAngle;
-                nNewAngle+=nSA/2;
+                Degree100 nAngle=NormAngle36000(GetAngle(aPnt-aRef));
+                Degree100 nNewAngle=nAngle;
+                nNewAngle+=nSA/2_deg100;
                 nNewAngle/=nSA;
                 nNewAngle*=nSA;
                 nNewAngle=NormAngle36000(nNewAngle);
-                double a=(nNewAngle-nAngle)*F_PI18000;
+                double a=(nNewAngle-nAngle).get()*F_PI18000;
                 double nSin=sin(a);
                 double nCos=cos(a);
                 RotatePoint(aPnt,aRef,nSin,nCos);
 
                 // eliminate rounding errors for certain values
-                if (nSA==9000)
+                if (nSA==9000_deg100)
                 {
-                    if (nNewAngle==0    || nNewAngle==18000) aPnt.setY(aRef.Y() );
-                    if (nNewAngle==9000 || nNewAngle==27000) aPnt.setX(aRef.X() );
+                    if (nNewAngle==0_deg100    || nNewAngle==18000_deg100) aPnt.setY(aRef.Y() );
+                    if (nNewAngle==9000_deg100 || nNewAngle==27000_deg100) aPnt.setX(aRef.X() );
                 }
 
-                if (nSA==4500)
+                if (nSA==4500_deg100)
                     OrthoDistance8(aRef,aPnt,true);
             }
         }
@@ -2062,11 +2062,11 @@ OUString SdrDragRotate::GetSdrDragComment() const
 {
     OUString aStr = ImpGetDescriptionStr(STR_DragMethRotate) +
         " (";
-    sal_Int32 nTmpAngle(NormAngle36000(nAngle));
+    Degree100 nTmpAngle(NormAngle36000(nAngle));
 
     if(bRight && nAngle)
     {
-        nTmpAngle -= 36000;
+        nTmpAngle -= 36000_deg100;
     }
 
     aStr += SdrModel::GetAngleString(nTmpAngle) + ")";
@@ -2117,20 +2117,20 @@ void SdrDragRotate::MoveSdrDrag(const Point& rPnt_)
     if (!DragStat().CheckMinMoved(aPnt))
         return;
 
-    tools::Long nNewAngle=NormAngle36000(GetAngle(aPnt-DragStat().GetRef1())-nAngle0);
-    tools::Long nSA=0;
+    Degree100 nNewAngle=NormAngle36000(GetAngle(aPnt-DragStat().GetRef1())-nAngle0);
+    Degree100 nSA(0);
 
     if (getSdrDragView().IsAngleSnapEnabled())
         nSA=getSdrDragView().GetSnapAngle();
 
     if (!getSdrDragView().IsRotateAllowed())
-        nSA=9000;
+        nSA=9000_deg100;
 
-    if (nSA!=0)
+    if (nSA!=0_deg100)
     { // angle snapping
-        nNewAngle+=nSA/2;
-        nNewAngle/=nSA;
-        nNewAngle*=nSA;
+        nNewAngle += nSA / 2_deg100;
+        nNewAngle /= nSA;
+        nNewAngle *= nSA;
     }
 
     nNewAngle=NormAngle18000(nNewAngle);
@@ -2148,7 +2148,7 @@ void SdrDragRotate::MoveSdrDrag(const Point& rPnt_)
         bRight=false;
 
     nAngle=nNewAngle;
-    double a = nAngle * F_PI18000;
+    double a = nAngle.get() * F_PI18000;
     double nSin1=sin(a); // calculate now, so as little time as possible
     double nCos1=cos(a); // passes between Hide() and Show()
     Hide();
@@ -2162,7 +2162,7 @@ bool SdrDragRotate::EndSdrDrag(bool bCopy)
 {
     Hide();
 
-    if (nAngle!=0)
+    if (nAngle!=0_deg100)
     {
         if (IsDraggingPoints())
         {
@@ -2204,10 +2204,10 @@ OUString SdrDragShear::GetSdrDragComment() const
     OUString aStr = ImpGetDescriptionStr(STR_DragMethShear) +
         " (";
 
-    sal_Int32 nTmpAngle(nAngle);
+    Degree100 nTmpAngle(nAngle);
 
     if(bUpSideDown)
-        nTmpAngle += 18000;
+        nTmpAngle += 18000_deg100;
 
     nTmpAngle = NormAngle18000(nTmpAngle);
 
@@ -2280,7 +2280,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
         return;
 
     bResize=!getSdrDragView().IsOrtho();
-    tools::Long nSA=0;
+    Degree100 nSA(0);
 
     if (getSdrDragView().IsAngleSnapEnabled())
         nSA=getSdrDragView().GetSnapAngle();
@@ -2290,7 +2290,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
     Fraction aNewFract(1,1);
 
     // if angle snapping not activated, snap to raster (except when using slant)
-    if (nSA==0 && !bSlant)
+    if (nSA==0_deg100 && !bSlant)
         aPnt=GetSnapPos(aPnt);
 
     if (!bSlant && !bResize)
@@ -2304,7 +2304,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
     Point aRef(DragStat().GetRef1());
     Point aDif(aPnt-aRef);
 
-    tools::Long nNewAngle=0;
+    Degree100 nNewAngle(0);
 
     if (bSlant)
     {
@@ -2318,16 +2318,16 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
         if (bVertical)
             nNewAngle=NormAngle18000(GetAngle(aDif));
         else
-            nNewAngle=NormAngle18000(-(GetAngle(aDif)-9000));
+            nNewAngle=NormAngle18000(-(GetAngle(aDif)-9000_deg100));
 
-        if (nNewAngle<-9000 || nNewAngle>9000)
-            nNewAngle=NormAngle18000(nNewAngle+18000);
+        if (nNewAngle<Degree100(-9000) || nNewAngle>9000_deg100)
+            nNewAngle=NormAngle18000(nNewAngle+18000_deg100);
 
         if (bResize)
         {
             Point aPt2(aPnt);
 
-            if (nSA!=0)
+            if (nSA!=0_deg100)
                 aPt2=GetSnapPos(aPnt); // snap this one in any case
 
             if (bVertical)
@@ -2341,34 +2341,34 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
         }
     }
 
-    bool bNeg=nNewAngle<0;
+    bool bNeg=nNewAngle<0_deg100;
 
     if (bNeg)
         nNewAngle=-nNewAngle;
 
-    if (nSA!=0)
+    if (nSA!=0_deg100)
     { // angle snapping
-        nNewAngle+=nSA/2;
-        nNewAngle/=nSA;
-        nNewAngle*=nSA;
+        nNewAngle += nSA / 2_deg100;
+        nNewAngle /= nSA;
+        nNewAngle *= nSA;
     }
 
     nNewAngle=NormAngle36000(nNewAngle);
-    bUpSideDown=nNewAngle>9000 && nNewAngle<27000;
+    bUpSideDown=nNewAngle>9000_deg100 && nNewAngle<27000_deg100;
 
     if (bSlant)
     { // calculate resize for slant
         // when angle snapping is activated, disable 89 degree limit
-        tools::Long nTmpAngle=nNewAngle;
-        if (bUpSideDown) nNewAngle-=18000;
+        Degree100 nTmpAngle=nNewAngle;
+        if (bUpSideDown) nNewAngle -= 18000_deg100;
         if (bNeg) nTmpAngle=-nTmpAngle;
         bResize=true;
-        aNewFract = cos(nTmpAngle * F_PI18000);
+        aNewFract = cos(nTmpAngle.get() * F_PI18000);
         aFact.ReduceInaccurate(10); // three decimals should be enough
     }
 
-    if (nNewAngle>8900)
-        nNewAngle=8900;
+    if (nNewAngle > 8900_deg100)
+        nNewAngle = 8900_deg100;
 
     if (bNeg)
         nNewAngle=-nNewAngle;
@@ -2377,7 +2377,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
     {
         nAngle=nNewAngle;
         aFact=aNewFract;
-        double a = nAngle * F_PI18000;
+        double a = nAngle.get() * F_PI18000;
         double nTan1=tan(a); // calculate now, so as little time as possible passes between Hide() and Show()
         Hide();
         nTan=nTan1;
@@ -2400,7 +2400,7 @@ void SdrDragShear::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
         }
     }
 
-    if (nAngle!=0)
+    if (nAngle)
     {
         rTarget.Shear(DragStat().GetRef1(), nAngle, nTan, bVertical);
     }
@@ -2413,9 +2413,9 @@ bool SdrDragShear::EndSdrDrag(bool bCopy)
     if (bResize && aFact==Fraction(1,1))
         bResize=false;
 
-    if (nAngle!=0 || bResize)
+    if (nAngle || bResize)
     {
-        if (nAngle!=0 && bResize)
+        if (nAngle && bResize)
         {
             OUString aStr = ImpGetDescriptionStr(STR_EditShear);
 
@@ -2439,12 +2439,12 @@ bool SdrDragShear::EndSdrDrag(bool bCopy)
             bCopy=false;
         }
 
-        if (nAngle!=0)
+        if (nAngle)
         {
             getSdrDragView().ShearMarkedObj(DragStat().GetRef1(),nAngle,bVertical,bCopy);
         }
 
-        if (nAngle!=0 && bResize)
+        if (nAngle && bResize)
             getSdrDragView().EndUndo();
 
         return true;
@@ -2480,11 +2480,11 @@ SdrDragMirror::SdrDragMirror(SdrDragView& rNewView)
 
 bool SdrDragMirror::ImpCheckSide(const Point& rPnt) const
 {
-    tools::Long nAngle1=GetAngle(rPnt-DragStat().GetRef1());
+    Degree100 nAngle1=GetAngle(rPnt-DragStat().GetRef1());
     nAngle1-=nAngle;
     nAngle1=NormAngle36000(nAngle1);
 
-    return nAngle1<18000;
+    return nAngle1<18000_deg100;
 }
 
 OUString SdrDragMirror::GetSdrDragComment() const
@@ -2787,7 +2787,7 @@ OUString SdrDragCrook::GetSdrDragComment() const
             nVal *= 2;
 
         nVal = std::abs(nVal);
-        aStr += SdrModel::GetAngleString(nVal) + ")";
+        aStr += SdrModel::GetAngleString(Degree100(nVal)) + ")";
     }
 
     if(getSdrDragView().IsDragWithCopy())
@@ -3131,12 +3131,12 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
     }
 
     tools::Long nNewRad=0;
-    nAngle=0;
+    nAngle=0_deg100;
 
     if (bValid)
     {
         double a=0; // slope of the radius
-        tools::Long nPntWink=0;
+        Degree100 nPntWink(0);
 
         if (bVertical)
         {
@@ -3150,39 +3150,39 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
             a=static_cast<double>(dx1)/static_cast<double>(dy1); // slope of the radius
             nNewRad=(static_cast<tools::Long>(dx1*a)+dy1) /2;
             aNewCenter.AdjustY(nNewRad );
-            nPntWink=GetAngle(aPnt-aNewCenter)-9000;
+            nPntWink=GetAngle(aPnt-aNewCenter)-9000_deg100;
         }
 
         if (!bAtCenter)
         {
             if (nNewRad<0)
             {
-                if (bRgt) nPntWink+=18000;
-                if (bLft) nPntWink=18000-nPntWink;
-                if (bLwr) nPntWink=-nPntWink;
+                if (bRgt) nPntWink += 18000_deg100;
+                if (bLft) nPntWink = 18000_deg100 - nPntWink;
+                if (bLwr) nPntWink =- nPntWink;
             }
             else
             {
-                if (bRgt) nPntWink=-nPntWink;
-                if (bUpr) nPntWink=18000-nPntWink;
-                if (bLwr) nPntWink+=18000;
+                if (bRgt) nPntWink = -nPntWink;
+                if (bUpr) nPntWink = 18000_deg100 - nPntWink;
+                if (bLwr) nPntWink += 18000_deg100;
             }
 
             nPntWink=NormAngle36000(nPntWink);
         }
         else
         {
-            if (nNewRad<0) nPntWink+=18000;
-            if (bVertical) nPntWink=18000-nPntWink;
-            nPntWink=NormAngle18000(nPntWink);
-            nPntWink = std::abs(nPntWink);
+            if (nNewRad<0) nPntWink += 18000_deg100;
+            if (bVertical) nPntWink = 18000_deg100 - nPntWink;
+            nPntWink = NormAngle18000(nPntWink);
+            nPntWink = abs(nPntWink);
         }
 
-        double nUmfang = 2 * std::abs(nNewRad) * M_PI;
+        double nCircumference = 2 * std::abs(nNewRad) * M_PI;
 
         if (bResize)
         {
-            tools::Long nMul=static_cast<tools::Long>(nUmfang*NormAngle36000(nPntWink)/36000);
+            tools::Long nMul=static_cast<tools::Long>(nCircumference * NormAngle36000(nPntWink).get() / 36000.0);
 
             if (bAtCenter)
                 nMul*=2;
@@ -3192,14 +3192,14 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
         }
         else
         {
-            nAngle=static_cast<tools::Long>((nMarkSize*360/nUmfang)*100)/2;
+            nAngle = Degree100(static_cast<tools::Long>((nMarkSize*360/nCircumference)*100)/2);
 
-            if (nAngle==0)
+            if (nAngle==0_deg100)
                 bValid=false;
         }
     }
 
-    if (nAngle==0 || nNewRad==0)
+    if (nAngle==0_deg100 || nNewRad==0)
         bValid=false;
 
     if (!bValid)

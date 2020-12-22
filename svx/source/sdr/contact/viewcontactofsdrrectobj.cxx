@@ -57,7 +57,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrRectObj::createV
     basegfx::B2DHomMatrix aObjectMatrix(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
         aObjectRange.getWidth(), aObjectRange.getHeight(),
         -rGeoStat.mfTanShearAngle,
-        rGeoStat.nRotationAngle ? (36000 - rGeoStat.nRotationAngle) * F_PI18000 : 0.0,
+        rGeoStat.nRotationAngle ? (36000 - rGeoStat.nRotationAngle.get()) * F_PI18000 : 0.0,
         aObjectRange.getMinX(), aObjectRange.getMinY()));
 
     // calculate corner radius

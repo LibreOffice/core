@@ -97,7 +97,7 @@ public:
     // we treat the size calculation completely on ourself here
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;
     virtual const tools::Rectangle& GetLastBoundRect() const override;
-    virtual       tools::Long       GetRotateAngle() const override;
+    virtual       Degree100  GetRotateAngle() const override;
     virtual       void       RecalcBoundRect() override;
     virtual       void       RecalcSnapRect() override;
     virtual const tools::Rectangle& GetSnapRect()  const override;
@@ -116,7 +116,7 @@ public:
                                     const Fraction& yFact, bool bUnsetRelative = true) override;
     virtual       void       Crop(const basegfx::B2DPoint& rRef, double fxFact, double fyFact) override;
     virtual       void       addCropHandles(SdrHdlList& rTarget) const override;
-    virtual       void       Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs) override;
+    virtual       void       Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs) override;
 
     // FullDrag support
     virtual SdrObjectUniquePtr getFullDragClone() const override;

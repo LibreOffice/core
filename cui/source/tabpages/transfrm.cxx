@@ -22,6 +22,7 @@
 #include <algorithm>
 
 #include <svx/EnhancedCustomShape2d.hxx>
+#include <svx/sdangitm.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
@@ -295,7 +296,7 @@ void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
     }
     else
     {
-        m_xCtlAngle->SetRotation(0);
+        m_xCtlAngle->SetRotation(0_deg100);
     }
     m_xCtlAngle->SaveValue();
     m_xMtrPosX->save_value();
@@ -461,7 +462,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
     if (m_xMtrAngle->get_value_changed_from_saved())
     {
         sal_Int32 nValue = static_cast<sal_Int32>(m_xMtrAngle->get_value(FieldUnit::NONE));
-        rAttrs->Put( SdrAngleItem( SID_ATTR_TRANSFORM_SHEAR, nValue ) );
+        rAttrs->Put( SdrAngleItem( SID_ATTR_TRANSFORM_SHEAR, Degree100(nValue) ) );
         bModified = true;
     }
 
@@ -606,7 +607,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
 
         if( pItem )
         {
-            m_xMtrAngle->set_value(static_cast<const SdrAngleItem*>(pItem)->GetValue(), FieldUnit::NONE);
+            m_xMtrAngle->set_value(static_cast<const SdrAngleItem*>(pItem)->GetValue().get(), FieldUnit::NONE);
         }
         else
         {
