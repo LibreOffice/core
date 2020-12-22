@@ -371,26 +371,42 @@
                                 <property name="label_xalign">0</property>
                                 <property name="shadow_type">none</property>
                                 <child>
-                                  <object class="GtkAlignment" id="alignment">
+                                  <object class="GtkBox" id="box5">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="top_padding">6</property>
-                                    <property name="left_padding">12</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="spacing">6</property>
+                                    <property name="margin-start">12</property>
+                                    <property name="margin-top">6</property>
                                     <child>
-                                      <object class="GtkBox" id="box5">
+                                      <object class="GtkComboBoxText" id="printersbox">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="orientation">vertical</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="printersbox-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|printersbox">The list box shows the installed printers. Click the printer to use for the current print job. Click the Properties button to change some of the printer properties.</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox" id="box6">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
                                         <property name="spacing">6</property>
                                         <child>
-                                          <object class="GtkComboBoxText" id="printersbox">
+                                          <object class="GtkLabel" id="labelstatus">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <child internal-child="accessible">
-                                              <object class="AtkObject" id="printersbox-atkobject">
-                                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|printersbox">The list box shows the installed printers. Click the printer to use for the current print job. Click the Properties button to change some of the printer properties.</property>
-                                              </object>
-                                            </child>
+                                            <property name="label" translatable="yes" context="printdialog|labelstatus">Status:</property>
+                                            <accessibility>
+                                              <relation type="label-for" target="status"/>
+                                            </accessibility>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -399,64 +415,17 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkBox" id="box6">
+                                          <object class="GtkLabel" id="status">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="spacing">6</property>
-                                            <child>
-                                              <object class="GtkLabel" id="labelstatus">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="label" translatable="yes" context="printdialog|labelstatus">Status:</property>
-                                                <accessibility>
-                                                  <relation type="label-for" target="status"/>
-                                                </accessibility>
+                                            <property name="label" translatable="yes" context="printdialog|status">Default Printer</property>
+                                            <accessibility>
+                                              <relation type="labelled-by" target="labelstatus"/>
+                                            </accessibility>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="status-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|status">Shows the availability of the selected printer.</property>
                                               </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel" id="status">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="label" translatable="yes" context="printdialog|status">Default Printer</property>
-                                                <accessibility>
-                                                  <relation type="labelled-by" target="labelstatus"/>
-                                                </accessibility>
-                                                <child internal-child="accessible">
-                                                  <object class="AtkObject" id="status-atkobject">
-                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|status">Shows the availability of the selected printer.</property>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">1</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="setup">
-                                                <property name="label" translatable="yes" context="printdialog|setup">Properties...</property>
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="receives_default">True</property>
-                                                <property name="halign">end</property>
-                                                <child internal-child="accessible">
-                                                  <object class="AtkObject" id="setup-atkobject">
-                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|setup">Opens the Printer Properties dialog. The printer properties vary according to the printer that you select.</property>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">True</property>
-                                                <property name="pack_type">end</property>
-                                                <property name="position">2</property>
-                                              </packing>
                                             </child>
                                           </object>
                                           <packing>
@@ -465,7 +434,32 @@
                                             <property name="position">1</property>
                                           </packing>
                                         </child>
+                                        <child>
+                                          <object class="GtkButton" id="setup">
+                                            <property name="label" translatable="yes" context="printdialog|setup">Properties...</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">True</property>
+                                            <property name="halign">end</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="setup-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|setup">Opens the Printer Properties dialog. The printer properties vary according to the printer that you select.</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="pack_type">end</property>
+                                            <property name="position">2</property>
+                                          </packing>
+                                        </child>
                                       </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
                                     </child>
                                   </object>
                                 </child>
@@ -495,364 +489,58 @@
                                 <property name="label_xalign">0</property>
                                 <property name="shadow_type">none</property>
                                 <child>
-                                  <object class="GtkAlignment" id="alPrintRange">
+                                  <!-- n-columns=1 n-rows=1 -->
+                                  <object class="GtkGrid">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="top_padding">6</property>
-                                    <property name="left_padding">12</property>
+                                    <property name="row_spacing">6</property>
+                                    <property name="margin-start">12</property>
+                                    <property name="margin-top">6</property>
                                     <child>
                                       <!-- n-columns=1 n-rows=1 -->
-                                      <object class="GtkGrid">
+                                      <object class="GtkGrid" id="rangegrid">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="row_spacing">6</property>
+                                        <property name="row_spacing">3</property>
+                                        <property name="column_spacing">6</property>
                                         <child>
-                                          <!-- n-columns=1 n-rows=1 -->
-                                          <object class="GtkGrid" id="rangegrid">
+                                          <object class="GtkRadioButton" id="rbAllPages">
+                                            <property name="label" translatable="yes" context="printdialog|rbAllPages">_All pages</property>
                                             <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="row_spacing">3</property>
-                                            <property name="column_spacing">6</property>
-                                            <child>
-                                              <object class="GtkRadioButton" id="rbAllPages">
-                                                <property name="label" translatable="yes" context="printdialog|rbAllPages">_All pages</property>
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="receives_default">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="margin_bottom">2</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="active">True</property>
-                                                <property name="draw_indicator">True</property>
-                                                <child internal-child="accessible">
-                                                  <object class="AtkObject" id="rbAllPages-atkobject">
-                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|rbAllPages">Prints the entire document.</property>
-                                                  </object>
-                                                </child>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="margin_bottom">2</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="active">True</property>
+                                            <property name="draw_indicator">True</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="rbAllPages-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|rbAllPages">Prints the entire document.</property>
                                               </object>
-                                              <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">0</property>
-                                                <property name="width">2</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkRadioButton" id="rbRangePages">
-                                                <property name="label" translatable="yes" context="printdialog|rbPageRange">_Pages:</property>
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="receives_default">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="margin_top">2</property>
-                                                <property name="margin_bottom">2</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="draw_indicator">True</property>
-                                                <property name="group">rbAllPages</property>
-                                                <child internal-child="accessible">
-                                                  <object class="AtkObject" id="rbRangePages-atkobject">
-                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|rbRangePages">Prints only the pages or slides that you specify in the Pages box.</property>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">1</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkEntry" id="pagerange">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="hexpand">True</property>
-                                                <property name="activates_default">True</property>
-                                                <property name="placeholder_text" translatable="yes" context="printdialog|pagerange">e.g.: 1, 3-5, 7, 9</property>
-                                                <child internal-child="accessible">
-                                                  <object class="AtkObject" id="pagerange-atkobject">
-                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pagerange">To print a range of pages, use a format like 3-6. To print single pages, use a format like 7;9;11. You can print a combination of page ranges and single pages, by using a format like 3-6;8;10;12.</property>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="top_attach">1</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkRadioButton" id="rbRangeSelection">
-                                                <property name="label" translatable="yes" context="printdialog|rbRangeSelection">_Selection</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="receives_default">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="margin_top">2</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="draw_indicator">True</property>
-                                                <property name="group">rbAllPages</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">2</property>
-                                                <property name="width">2</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel" id="includeevenodd">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes" context="printdialog|includeevenodd">Include:</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic_widget">evenoddbox</property>
-                                                <property name="xalign">0</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">3</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkComboBoxText" id="evenoddbox">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="hexpand">True</property>
-                                                <property name="active">0</property>
-                                                <items>
-                                                  <item translatable="yes" context="printdialog|liststore3">Odd and Even Pages</item>
-                                                  <item translatable="yes" context="printdialog|liststore3">Odd Pages</item>
-                                                  <item translatable="yes" context="printdialog|liststore3">Even Pages</item>
-                                                </items>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="top_attach">3</property>
-                                              </packing>
                                             </child>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
                                             <property name="top_attach">0</property>
+                                            <property name="width">2</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkExpander" id="exRangeExpander">
+                                          <object class="GtkRadioButton" id="rbRangePages">
+                                            <property name="label" translatable="yes" context="printdialog|rbPageRange">_Pages:</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="hexpand">True</property>
-                                            <child>
-                                              <!-- n-columns=1 n-rows=1 -->
-                                              <object class="GtkGrid" id="gdCopiesExtra">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="row_spacing">2</property>
-                                                <property name="column_spacing">6</property>
-                                                <child>
-                                                  <object class="GtkLabel" id="fromwhich">
-                                                    <property name="can_focus">False</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="label" translatable="yes" context="printdialog|fromwhich">_From which print:</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="mnemonic_widget">printextrabox</property>
-                                                    <property name="xalign">1</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">0</property>
-                                                    <property name="top_attach">0</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkComboBoxText" id="printextrabox">
-                                                    <property name="can_focus">False</property>
-                                                    <property name="hexpand">True</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="top_attach">0</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="labelpapersides">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="label" translatable="yes" context="printdialog|labelpapersides">Paper _sides:</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="mnemonic_widget">sidesbox</property>
-                                                    <property name="xalign">1</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">0</property>
-                                                    <property name="top_attach">1</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkComboBoxText" id="sidesbox">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="hexpand">True</property>
-                                                    <items>
-                                                      <item translatable="yes" context="printdialog|liststore4">Print on one side (simplex)</item>
-                                                      <item translatable="yes" context="printdialog|liststore4">Print on both sides (duplex long edge)</item>
-                                                      <item translatable="yes" context="printdialog|liststore4">Print on both sides (duplex short edge)</item>
-                                                    </items>
-                                                    <child internal-child="accessible">
-                                                      <object class="AtkObject" id="sidesbox-atkobject">
-                                                        <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|sidesbox">If the printer is capable of duplex printing it's possible to choose between using only one side of the paper or both.</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="top_attach">1</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="labelcopies">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="label" translatable="yes" context="printdialog|labelcopies">_Number of copies:</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="mnemonic_widget">copycount</property>
-                                                    <property name="xalign">1</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">0</property>
-                                                    <property name="top_attach">2</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkSpinButton" id="copycount">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">True</property>
-                                                    <property name="valign">center</property>
-                                                    <property name="hexpand">True</property>
-                                                    <property name="activates_default">True</property>
-                                                    <property name="text">1</property>
-                                                    <property name="adjustment">adjustment2</property>
-                                                    <property name="value">1</property>
-                                                    <child internal-child="accessible">
-                                                      <object class="AtkObject" id="copycount-atkobject">
-                                                        <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|copycount">Enter the number of copies that you want to print.</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="top_attach">2</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="cbPrintOrder">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="label" translatable="yes" context="printdialog|cbPrintOrder">Order:</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="mnemonic_widget">reverseorder</property>
-                                                    <property name="xalign">1</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">0</property>
-                                                    <property name="top_attach">4</property>
-                                                    <property name="width">2</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCheckButton" id="reverseorder">
-                                                    <property name="label" translatable="yes" context="printdialog|reverseorder">Print in _reverse order</property>
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">True</property>
-                                                    <property name="receives_default">False</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="draw_indicator">True</property>
-                                                    <child internal-child="accessible">
-                                                      <object class="AtkObject" id="reverseorder-atkobject">
-                                                        <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|reverseorder">Check to print pages in reverse order.</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="top_attach">5</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkBox" id="box9">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="spacing">4</property>
-                                                    <child>
-                                                      <object class="GtkCheckButton" id="collate">
-                                                        <property name="label" translatable="yes" context="printdialog|collate">_Collate</property>
-                                                        <property name="visible">True</property>
-                                                        <property name="can_focus">True</property>
-                                                        <property name="receives_default">False</property>
-                                                        <property name="use_underline">True</property>
-                                                        <property name="draw_indicator">True</property>
-                                                        <child internal-child="accessible">
-                                                          <object class="AtkObject" id="collate-atkobject">
-                                                            <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|collate">Preserves the page order of the original document.</property>
-                                                          </object>
-                                                        </child>
-                                                      </object>
-                                                      <packing>
-                                                        <property name="expand">False</property>
-                                                        <property name="fill">True</property>
-                                                        <property name="position">0</property>
-                                                      </packing>
-                                                    </child>
-                                                    <child>
-                                                      <object class="GtkImage" id="collateimage">
-                                                        <property name="visible">True</property>
-                                                        <property name="can_focus">False</property>
-                                                        <property name="stock">gtk-missing-image</property>
-                                                      </object>
-                                                      <packing>
-                                                        <property name="expand">False</property>
-                                                        <property name="fill">True</property>
-                                                        <property name="position">1</property>
-                                                      </packing>
-                                                    </child>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="top_attach">3</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCheckButton" id="singlejobs">
-                                                    <property name="label" translatable="yes" context="printdialog|singlejobs">Create separate print jobs for collated output</property>
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">True</property>
-                                                    <property name="receives_default">False</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="draw_indicator">True</property>
-                                                    <child internal-child="accessible">
-                                                      <object class="AtkObject" id="singlejobs-atkobject">
-                                                        <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|collate">Check to not rely on the printer to create collated copies but create a print job for each copy instead.</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="top_attach">4</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                              </object>
-                                            </child>
-                                            <child type="label">
-                                              <object class="GtkLabel" id="lbRangeExpander">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="label" translatable="yes" context="printdialog|rangeexpander">_More</property>
-                                                <property name="use_underline">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="margin_top">2</property>
+                                            <property name="margin_bottom">2</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="draw_indicator">True</property>
+                                            <property name="group">rbAllPages</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="rbRangePages-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|rbRangePages">Prints only the pages or slides that you specify in the Pages box.</property>
                                               </object>
                                             </child>
                                           </object>
@@ -861,7 +549,307 @@
                                             <property name="top_attach">1</property>
                                           </packing>
                                         </child>
+                                        <child>
+                                          <object class="GtkEntry" id="pagerange">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="hexpand">True</property>
+                                            <property name="activates_default">True</property>
+                                            <property name="placeholder_text" translatable="yes" context="printdialog|pagerange">e.g.: 1, 3-5, 7, 9</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="pagerange-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pagerange">To print a range of pages, use a format like 3-6. To print single pages, use a format like 7;9;11. You can print a combination of page ranges and single pages, by using a format like 3-6;8;10;12.</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="top_attach">1</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkRadioButton" id="rbRangeSelection">
+                                            <property name="label" translatable="yes" context="printdialog|rbRangeSelection">_Selection</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="margin_top">2</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="draw_indicator">True</property>
+                                            <property name="group">rbAllPages</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="top_attach">2</property>
+                                            <property name="width">2</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="includeevenodd">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="label" translatable="yes" context="printdialog|includeevenodd">Include:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">evenoddbox</property>
+                                            <property name="xalign">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="top_attach">3</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkComboBoxText" id="evenoddbox">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="hexpand">True</property>
+                                            <property name="active">0</property>
+                                            <items>
+                                              <item translatable="yes" context="printdialog|liststore3">Odd and Even Pages</item>
+                                              <item translatable="yes" context="printdialog|liststore3">Odd Pages</item>
+                                              <item translatable="yes" context="printdialog|liststore3">Even Pages</item>
+                                            </items>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="top_attach">3</property>
+                                          </packing>
+                                        </child>
                                       </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkExpander" id="exRangeExpander">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="hexpand">True</property>
+                                        <child>
+                                          <!-- n-columns=1 n-rows=1 -->
+                                          <object class="GtkGrid" id="gdCopiesExtra">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="row_spacing">2</property>
+                                            <property name="column_spacing">6</property>
+                                            <child>
+                                              <object class="GtkLabel" id="fromwhich">
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes" context="printdialog|fromwhich">_From which print:</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic_widget">printextrabox</property>
+                                                <property name="xalign">1</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkComboBoxText" id="printextrabox">
+                                                <property name="can_focus">False</property>
+                                                <property name="hexpand">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="labelpapersides">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes" context="printdialog|labelpapersides">Paper _sides:</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic_widget">sidesbox</property>
+                                                <property name="xalign">1</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkComboBoxText" id="sidesbox">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="hexpand">True</property>
+                                                <items>
+                                                  <item translatable="yes" context="printdialog|liststore4">Print on one side (simplex)</item>
+                                                  <item translatable="yes" context="printdialog|liststore4">Print on both sides (duplex long edge)</item>
+                                                  <item translatable="yes" context="printdialog|liststore4">Print on both sides (duplex short edge)</item>
+                                                </items>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="sidesbox-atkobject">
+                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|sidesbox">If the printer is capable of duplex printing it's possible to choose between using only one side of the paper or both.</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="labelcopies">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes" context="printdialog|labelcopies">_Number of copies:</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic_widget">copycount</property>
+                                                <property name="xalign">1</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSpinButton" id="copycount">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="valign">center</property>
+                                                <property name="hexpand">True</property>
+                                                <property name="activates_default">True</property>
+                                                <property name="text">1</property>
+                                                <property name="adjustment">adjustment2</property>
+                                                <property name="value">1</property>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="copycount-atkobject">
+                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|copycount">Enter the number of copies that you want to print.</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="cbPrintOrder">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes" context="printdialog|cbPrintOrder">Order:</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic_widget">reverseorder</property>
+                                                <property name="xalign">1</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">4</property>
+                                                <property name="width">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkCheckButton" id="reverseorder">
+                                                <property name="label" translatable="yes" context="printdialog|reverseorder">Print in _reverse order</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="draw_indicator">True</property>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="reverseorder-atkobject">
+                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|reverseorder">Check to print pages in reverse order.</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">5</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkBox" id="box9">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="spacing">4</property>
+                                                <child>
+                                                  <object class="GtkCheckButton" id="collate">
+                                                    <property name="label" translatable="yes" context="printdialog|collate">_Collate</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">False</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="draw_indicator">True</property>
+                                                    <child internal-child="accessible">
+                                                      <object class="AtkObject" id="collate-atkobject">
+                                                        <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|collate">Preserves the page order of the original document.</property>
+                                                      </object>
+                                                    </child>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkImage" id="collateimage">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="stock">gtk-missing-image</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">3</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkCheckButton" id="singlejobs">
+                                                <property name="label" translatable="yes" context="printdialog|singlejobs">Create separate print jobs for collated output</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="draw_indicator">True</property>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="singlejobs-atkobject">
+                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|collate">Check to not rely on the printer to create collated copies but create a print job for each copy instead.</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">4</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                          </object>
+                                        </child>
+                                        <child type="label">
+                                          <object class="GtkLabel" id="lbRangeExpander">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="label" translatable="yes" context="printdialog|rangeexpander">_More</property>
+                                            <property name="use_underline">True</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">1</property>
+                                      </packing>
                                     </child>
                                   </object>
                                 </child>
@@ -889,92 +877,44 @@
                                 <property name="label_xalign">0</property>
                                 <property name="shadow_type">none</property>
                                 <child>
-                                  <object class="GtkAlignment" id="alignment3">
+                                  <!-- n-columns=1 n-rows=1 -->
+                                  <object class="GtkGrid">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="top_padding">6</property>
-                                    <property name="left_padding">12</property>
+                                    <property name="row_spacing">6</property>
+                                    <property name="margin-start">12</property>
+                                    <property name="margin-top">6</property>
                                     <child>
                                       <!-- n-columns=1 n-rows=1 -->
-                                      <object class="GtkGrid">
+                                      <object class="GtkGrid" id="pagegrid">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="row_spacing">6</property>
+                                        <property name="column_spacing">6</property>
                                         <child>
-                                          <!-- n-columns=1 n-rows=1 -->
-                                          <object class="GtkGrid" id="pagegrid">
+                                          <object class="GtkLabel" id="labelorientation">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="row_spacing">6</property>
-                                            <property name="column_spacing">6</property>
-                                            <child>
-                                              <object class="GtkLabel" id="labelorientation">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes" context="printdialog|labelorientation">Orientation:</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic_widget">pageorientationbox</property>
-                                                <property name="xalign">0</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">1</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel" id="labelsize">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes" context="printdialog|labelsize">Paper size:</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic_widget">papersizebox</property>
-                                                <property name="xalign">0</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkComboBoxText" id="pageorientationbox">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="hexpand">True</property>
-                                                <property name="active">0</property>
-                                                <items>
-                                                  <item translatable="yes" context="printdialog|liststore3">Automatic</item>
-                                                  <item translatable="yes" context="printdialog|liststore3">Portrait</item>
-                                                  <item translatable="yes" context="printdialog|liststore3">Landscape</item>
-                                                </items>
-                                                <child internal-child="accessible">
-                                                  <object class="AtkObject" id="pageorientationbox-atkobject">
-                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pageorientationbox">Select the orientation of the paper.</property>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="top_attach">1</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkComboBoxText" id="papersizebox">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="hexpand">True</property>
-                                                <child internal-child="accessible">
-                                                  <object class="AtkObject" id="papersizebox-atkobject">
-                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|papersizebox">Set the paper size you would like to use. The preview will show how the document would look on a paper of the given size.</property>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="top_attach">0</property>
-                                              </packing>
-                                            </child>
+                                            <property name="halign">start</property>
+                                            <property name="label" translatable="yes" context="printdialog|labelorientation">Orientation:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">pageorientationbox</property>
+                                            <property name="xalign">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="top_attach">1</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="labelsize">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="label" translatable="yes" context="printdialog|labelsize">Paper size:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">papersizebox</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -982,370 +922,412 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkExpander" id="exLayoutExpander">
+                                          <object class="GtkComboBoxText" id="pageorientationbox">
                                             <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
+                                            <property name="can_focus">False</property>
                                             <property name="hexpand">True</property>
-                                            <child>
-                                              <!-- n-columns=1 n-rows=1 -->
-                                              <object class="GtkGrid" id="expandpagegrid">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="row_spacing">6</property>
-                                                <property name="column_spacing">6</property>
-                                                <child>
-                                                  <object class="GtkBox" id="box12">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="valign">center</property>
-                                                    <property name="spacing">3</property>
-                                                    <child>
-                                                      <object class="GtkRadioButton" id="pagespersheetbtn">
-                                                        <property name="label" translatable="yes" context="printdialog|pagespersheetbtn">Pages per sheet:</property>
-                                                        <property name="visible">True</property>
-                                                        <property name="can_focus">True</property>
-                                                        <property name="receives_default">False</property>
-                                                        <property name="halign">start</property>
-                                                        <property name="valign">center</property>
-                                                        <property name="use_underline">True</property>
-                                                        <property name="active">True</property>
-                                                        <property name="draw_indicator">True</property>
-                                                        <accessibility>
-                                                          <relation type="label-for" target="pagespersheetbox"/>
-                                                        </accessibility>
-                                                        <child internal-child="accessible">
-                                                          <object class="AtkObject" id="pagespersheetbtn-atkobject">
-                                                            <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pagespersheetbtn">Print multiple pages per sheet of paper.</property>
-                                                          </object>
-                                                        </child>
-                                                      </object>
-                                                      <packing>
-                                                        <property name="expand">False</property>
-                                                        <property name="fill">True</property>
-                                                        <property name="position">0</property>
-                                                      </packing>
-                                                    </child>
-                                                    <child>
-                                                      <object class="GtkLabel" id="pagespersheettxt">
-                                                        <property name="visible">True</property>
-                                                        <property name="can_focus">False</property>
-                                                      </object>
-                                                      <packing>
-                                                        <property name="expand">False</property>
-                                                        <property name="fill">True</property>
-                                                        <property name="position">1</property>
-                                                      </packing>
-                                                    </child>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">0</property>
-                                                    <property name="top_attach">0</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkComboBoxText" id="pagespersheetbox">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="valign">center</property>
-                                                    <property name="hexpand">True</property>
-                                                    <property name="active">0</property>
-                                                    <items>
-                                                      <item id="1" context="printdialog|liststore1">1</item>
-                                                      <item id="2" context="printdialog|liststore1">2</item>
-                                                      <item id="4" context="printdialog|liststore1">4</item>
-                                                      <item id="6" context="printdialog|liststore1">6</item>
-                                                      <item id="9" context="printdialog|liststore1">9</item>
-                                                      <item id="16" context="printdialog|liststore1">16</item>
-                                                      <item id="65535" translatable="yes" context="printdialog|liststore1">Custom</item>
-                                                    </items>
-                                                    <accessibility>
-                                                      <relation type="labelled-by" target="pagespersheetbtn"/>
-                                                    </accessibility>
-                                                    <child internal-child="accessible">
-                                                      <object class="AtkObject" id="pagespersheetbox-atkobject">
-                                                        <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pagespersheetbox">Select how many pages to print per sheet of paper.</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="top_attach">0</property>
-                                                    <property name="width">3</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="pagestxt">
-                                                    <property name="can_focus">False</property>
-                                                    <property name="label" translatable="yes" context="printdialog|pagespersheettxt">Pages:</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="mnemonic_widget">pagerows</property>
-                                                    <property name="xalign">1</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">0</property>
-                                                    <property name="top_attach">1</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkSpinButton" id="pagerows">
-                                                    <property name="can_focus">True</property>
-                                                    <property name="activates_default">True</property>
-                                                    <property name="text">1</property>
-                                                    <property name="adjustment">adjustment3</property>
-                                                    <property name="value">1</property>
-                                                    <child internal-child="accessible">
-                                                      <object class="AtkObject" id="pagerows-atkobject">
-                                                        <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pagerows">Select number of rows.</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="top_attach">1</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="by">
-                                                    <property name="can_focus">False</property>
-                                                    <property name="label" translatable="yes" context="printdialog|by">by</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="mnemonic_widget">pagecols</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">2</property>
-                                                    <property name="top_attach">1</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkSpinButton" id="pagecols">
-                                                    <property name="can_focus">True</property>
-                                                    <property name="activates_default">True</property>
-                                                    <property name="text">1</property>
-                                                    <property name="adjustment">adjustment4</property>
-                                                    <property name="value">1</property>
-                                                    <child internal-child="accessible">
-                                                      <object class="AtkObject" id="pagecols-atkobject">
-                                                        <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pagecols">Select number of columns.</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">3</property>
-                                                    <property name="top_attach">1</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="pagemargintxt1">
-                                                    <property name="can_focus">False</property>
-                                                    <property name="label" translatable="yes" context="printdialog|pagemargintxt1">Margin:</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="mnemonic_widget">pagemarginsb</property>
-                                                    <property name="xalign">1</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">0</property>
-                                                    <property name="top_attach">2</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkSpinButton" id="pagemarginsb">
-                                                    <property name="can_focus">True</property>
-                                                    <property name="activates_default">True</property>
-                                                    <property name="text">0</property>
-                                                    <property name="adjustment">adjustment5</property>
-                                                    <child internal-child="accessible">
-                                                      <object class="AtkObject" id="pagemarginsb-atkobject">
-                                                        <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pagemarginsb">Select margin between individual pages on each sheet of paper.</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="top_attach">2</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="pagemargintxt2">
-                                                    <property name="can_focus">False</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="label" translatable="yes" context="printdialog|pagemargintxt2">between pages</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">2</property>
-                                                    <property name="top_attach">2</property>
-                                                    <property name="width">2</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="sheetmargintxt1">
-                                                    <property name="can_focus">False</property>
-                                                    <property name="label" translatable="yes" context="printdialog|sheetmargintxt1">Distance:</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="mnemonic_widget">sheetmarginsb</property>
-                                                    <property name="xalign">1</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">0</property>
-                                                    <property name="top_attach">3</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkSpinButton" id="sheetmarginsb">
-                                                    <property name="can_focus">True</property>
-                                                    <property name="activates_default">True</property>
-                                                    <property name="text">0</property>
-                                                    <property name="adjustment">adjustment6</property>
-                                                    <child internal-child="accessible">
-                                                      <object class="AtkObject" id="sheetmarginsb-atkobject">
-                                                        <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|sheetmarginsb">Select margin between the printed pages and paper edge.</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="top_attach">3</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="sheetmargintxt2">
-                                                    <property name="can_focus">False</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="label" translatable="yes" context="printdialog|sheetmargintxt2">to sheet border</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">2</property>
-                                                    <property name="top_attach">3</property>
-                                                    <property name="width">2</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="labelorder">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="valign">center</property>
-                                                    <property name="label" translatable="yes" context="printdialog|labelorder">Order:</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="mnemonic_widget">orderbox</property>
-                                                    <property name="xalign">1</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">0</property>
-                                                    <property name="top_attach">4</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkComboBoxText" id="orderbox">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="valign">center</property>
-                                                    <property name="hexpand">True</property>
-                                                    <items>
-                                                      <item translatable="yes" context="printdialog|liststore2">Left to right, then down</item>
-                                                      <item translatable="yes" context="printdialog|liststore2">Top to bottom, then right</item>
-                                                      <item translatable="yes" context="printdialog|liststore2">Top to bottom, then left</item>
-                                                      <item translatable="yes" context="printdialog|liststore2">Right to left, then down</item>
-                                                    </items>
-                                                    <child internal-child="accessible">
-                                                      <object class="AtkObject" id="orderbox-atkobject">
-                                                        <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|orderbox">Select order in which pages are to be printed.</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="top_attach">4</property>
-                                                    <property name="width">3</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCheckButton" id="bordercb">
-                                                    <property name="label" translatable="yes" context="printdialog|bordercb">Draw a border around each page</property>
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">True</property>
-                                                    <property name="receives_default">False</property>
-                                                    <property name="halign">end</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="draw_indicator">True</property>
-                                                    <child internal-child="accessible">
-                                                      <object class="AtkObject" id="bordercb-atkobject">
-                                                        <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|bordercb">Check to draw a border around each page.</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">0</property>
-                                                    <property name="top_attach">5</property>
-                                                    <property name="width">4</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkRadioButton" id="brochure">
-                                                    <property name="label" translatable="yes" context="printdialog|brochure">Brochure</property>
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">True</property>
-                                                    <property name="receives_default">False</property>
-                                                    <property name="halign">start</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="draw_indicator">True</property>
-                                                    <property name="group">pagespersheetbtn</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">0</property>
-                                                    <property name="top_attach">6</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkComboBoxText" id="scriptdirection">
-                                                    <property name="can_focus">False</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="top_attach">6</property>
-                                                    <property name="width">3</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkDrawingArea" id="orderpreview">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="tooltip_text" translatable="yes" context="printdialog|collationpreview">Collation preview</property>
-                                                    <property name="halign">center</property>
-                                                    <property name="valign">start</property>
-                                                    <child internal-child="accessible">
-                                                      <object class="AtkObject" id="orderpreview-atkobject">
-                                                        <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|orderpreview">Change the arrangement of pages to be printed on every sheet of paper. The preview shows how every final sheet of paper will look.</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">4</property>
-                                                    <property name="top_attach">0</property>
-                                                    <property name="height">5</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                              </object>
-                                            </child>
-                                            <child type="label">
-                                              <object class="GtkLabel" id="lbLayoutExpander">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="label" translatable="yes" context="printdialog|layoutexpander">M_ore</property>
-                                                <property name="use_underline">True</property>
+                                            <property name="active">0</property>
+                                            <items>
+                                              <item translatable="yes" context="printdialog|liststore3">Automatic</item>
+                                              <item translatable="yes" context="printdialog|liststore3">Portrait</item>
+                                              <item translatable="yes" context="printdialog|liststore3">Landscape</item>
+                                            </items>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="pageorientationbox-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pageorientationbox">Select the orientation of the paper.</property>
                                               </object>
                                             </child>
                                           </object>
                                           <packing>
-                                            <property name="left_attach">0</property>
+                                            <property name="left_attach">1</property>
                                             <property name="top_attach">1</property>
                                           </packing>
                                         </child>
+                                        <child>
+                                          <object class="GtkComboBoxText" id="papersizebox">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="hexpand">True</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="papersizebox-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|papersizebox">Set the paper size you would like to use. The preview will show how the document would look on a paper of the given size.</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="top_attach">0</property>
+                                          </packing>
+                                        </child>
                                       </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkExpander" id="exLayoutExpander">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="hexpand">True</property>
+                                        <child>
+                                          <!-- n-columns=1 n-rows=1 -->
+                                          <object class="GtkGrid" id="expandpagegrid">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="row_spacing">6</property>
+                                            <property name="column_spacing">6</property>
+                                            <child>
+                                              <object class="GtkBox" id="box12">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="valign">center</property>
+                                                <property name="spacing">3</property>
+                                                <child>
+                                                  <object class="GtkRadioButton" id="pagespersheetbtn">
+                                                    <property name="label" translatable="yes" context="printdialog|pagespersheetbtn">Pages per sheet:</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">False</property>
+                                                    <property name="halign">start</property>
+                                                    <property name="valign">center</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="active">True</property>
+                                                    <property name="draw_indicator">True</property>
+                                                    <accessibility>
+                                                      <relation type="label-for" target="pagespersheetbox"/>
+                                                    </accessibility>
+                                                    <child internal-child="accessible">
+                                                      <object class="AtkObject" id="pagespersheetbtn-atkobject">
+                                                        <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pagespersheetbtn">Print multiple pages per sheet of paper.</property>
+                                                      </object>
+                                                    </child>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLabel" id="pagespersheettxt">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkComboBoxText" id="pagespersheetbox">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="valign">center</property>
+                                                <property name="hexpand">True</property>
+                                                <property name="active">0</property>
+                                                <items>
+                                                  <item id="1" context="printdialog|liststore1">1</item>
+                                                  <item id="2" context="printdialog|liststore1">2</item>
+                                                  <item id="4" context="printdialog|liststore1">4</item>
+                                                  <item id="6" context="printdialog|liststore1">6</item>
+                                                  <item id="9" context="printdialog|liststore1">9</item>
+                                                  <item id="16" context="printdialog|liststore1">16</item>
+                                                  <item id="65535" translatable="yes" context="printdialog|liststore1">Custom</item>
+                                                </items>
+                                                <accessibility>
+                                                  <relation type="labelled-by" target="pagespersheetbtn"/>
+                                                </accessibility>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="pagespersheetbox-atkobject">
+                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pagespersheetbox">Select how many pages to print per sheet of paper.</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">0</property>
+                                                <property name="width">3</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="pagestxt">
+                                                <property name="can_focus">False</property>
+                                                <property name="label" translatable="yes" context="printdialog|pagespersheettxt">Pages:</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic_widget">pagerows</property>
+                                                <property name="xalign">1</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSpinButton" id="pagerows">
+                                                <property name="can_focus">True</property>
+                                                <property name="activates_default">True</property>
+                                                <property name="text">1</property>
+                                                <property name="adjustment">adjustment3</property>
+                                                <property name="value">1</property>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="pagerows-atkobject">
+                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pagerows">Select number of rows.</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="by">
+                                                <property name="can_focus">False</property>
+                                                <property name="label" translatable="yes" context="printdialog|by">by</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic_widget">pagecols</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">2</property>
+                                                <property name="top_attach">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSpinButton" id="pagecols">
+                                                <property name="can_focus">True</property>
+                                                <property name="activates_default">True</property>
+                                                <property name="text">1</property>
+                                                <property name="adjustment">adjustment4</property>
+                                                <property name="value">1</property>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="pagecols-atkobject">
+                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pagecols">Select number of columns.</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">3</property>
+                                                <property name="top_attach">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="pagemargintxt1">
+                                                <property name="can_focus">False</property>
+                                                <property name="label" translatable="yes" context="printdialog|pagemargintxt1">Margin:</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic_widget">pagemarginsb</property>
+                                                <property name="xalign">1</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSpinButton" id="pagemarginsb">
+                                                <property name="can_focus">True</property>
+                                                <property name="activates_default">True</property>
+                                                <property name="text">0</property>
+                                                <property name="adjustment">adjustment5</property>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="pagemarginsb-atkobject">
+                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pagemarginsb">Select margin between individual pages on each sheet of paper.</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="pagemargintxt2">
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes" context="printdialog|pagemargintxt2">between pages</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">2</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="width">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="sheetmargintxt1">
+                                                <property name="can_focus">False</property>
+                                                <property name="label" translatable="yes" context="printdialog|sheetmargintxt1">Distance:</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic_widget">sheetmarginsb</property>
+                                                <property name="xalign">1</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">3</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSpinButton" id="sheetmarginsb">
+                                                <property name="can_focus">True</property>
+                                                <property name="activates_default">True</property>
+                                                <property name="text">0</property>
+                                                <property name="adjustment">adjustment6</property>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="sheetmarginsb-atkobject">
+                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|sheetmarginsb">Select margin between the printed pages and paper edge.</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">3</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="sheetmargintxt2">
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="label" translatable="yes" context="printdialog|sheetmargintxt2">to sheet border</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">2</property>
+                                                <property name="top_attach">3</property>
+                                                <property name="width">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="labelorder">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="valign">center</property>
+                                                <property name="label" translatable="yes" context="printdialog|labelorder">Order:</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic_widget">orderbox</property>
+                                                <property name="xalign">1</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">4</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkComboBoxText" id="orderbox">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="valign">center</property>
+                                                <property name="hexpand">True</property>
+                                                <items>
+                                                  <item translatable="yes" context="printdialog|liststore2">Left to right, then down</item>
+                                                  <item translatable="yes" context="printdialog|liststore2">Top to bottom, then right</item>
+                                                  <item translatable="yes" context="printdialog|liststore2">Top to bottom, then left</item>
+                                                  <item translatable="yes" context="printdialog|liststore2">Right to left, then down</item>
+                                                </items>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="orderbox-atkobject">
+                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|orderbox">Select order in which pages are to be printed.</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">4</property>
+                                                <property name="width">3</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkCheckButton" id="bordercb">
+                                                <property name="label" translatable="yes" context="printdialog|bordercb">Draw a border around each page</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="halign">end</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="draw_indicator">True</property>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="bordercb-atkobject">
+                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|bordercb">Check to draw a border around each page.</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">5</property>
+                                                <property name="width">4</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkRadioButton" id="brochure">
+                                                <property name="label" translatable="yes" context="printdialog|brochure">Brochure</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="draw_indicator">True</property>
+                                                <property name="group">pagespersheetbtn</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">6</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkComboBoxText" id="scriptdirection">
+                                                <property name="can_focus">False</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">6</property>
+                                                <property name="width">3</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkDrawingArea" id="orderpreview">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="tooltip_text" translatable="yes" context="printdialog|collationpreview">Collation preview</property>
+                                                <property name="halign">center</property>
+                                                <property name="valign">start</property>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="orderpreview-atkobject">
+                                                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|orderpreview">Change the arrangement of pages to be printed on every sheet of paper. The preview shows how every final sheet of paper will look.</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">4</property>
+                                                <property name="top_attach">0</property>
+                                                <property name="height">5</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                          </object>
+                                        </child>
+                                        <child type="label">
+                                          <object class="GtkLabel" id="lbLayoutExpander">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="label" translatable="yes" context="printdialog|layoutexpander">M_ore</property>
+                                            <property name="use_underline">True</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">1</property>
+                                      </packing>
                                     </child>
                                   </object>
                                 </child>
