@@ -34,6 +34,24 @@
       "revId": "1aeae0642055b1667208c16b206781fd10770664",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2c410164_73a597d9",
+        "filename": "svx/source/sdr/contact/viewcontactofgraphic.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-22T12:48:09Z",
+      "side": 1,
+      "message": "Also noting that if you care about this, there are lots of places that calculate tan/sin/cos themselves before calling Rotate and are __not__ currently special casing the zero case.",
+      "parentUuid": "e1e68372_b45d188f",
+      "revId": "1aeae0642055b1667208c16b206781fd10770664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
