@@ -117,8 +117,8 @@ sal_Bool SAL_CALL SdHtmlOptionsDialog::supportsService( const OUString& rService
 
 Sequence< OUString > SAL_CALL SdHtmlOptionsDialog::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet { "com.sun.star.ui.dialog.FilterOptionsDialog" };
-    return aRet;
+  Sequence< OUString > aRet { "com.sun.star.ui.dialog.FilterOptionsDialog" };
+  return aRet;
 }
 
 // XPropertyAccess
