@@ -118,6 +118,30 @@
       "revId": "847a8bd08beb20a1f70260700f02bfe1c4ec4acb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "724cf1ad_874d6565",
+        "filename": "include/drawinglayer/attribute/lineattribute.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-12-22T10:10:58Z",
+      "side": 1,
+      "message": "Miklos, it worked now. Thank you. There was typo. Thank you.",
+      "parentUuid": "12e348f8_8d188f4f",
+      "range": {
+        "startLine": 55,
+        "startChar": 27,
+        "endLine": 55,
+        "endChar": 80
+      },
+      "revId": "847a8bd08beb20a1f70260700f02bfe1c4ec4acb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
