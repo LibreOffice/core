@@ -139,12 +139,8 @@ def check_frames(root):
     frames = [element for element in root.findall('.//object') if element.attrib['class'] == 'GtkFrame']
     for frame in frames:
         frame_alignments = frame.findall("./child/object[@class='GtkAlignment']")
-        assert len(frame_alignments) <= 1
-        if len(frame_alignments) < 1:
-            lint_assert(False, "No GtkAlignment in GtkFrame with id = '" + frame.attrib['id'] + "'", frame)
-        if len(frame_alignments) == 1:
-            alignment = frame_alignments[0]
-            check_alignment_top_padding(alignment)
+        if len(frame_alignments) > 0:
+            lint_assert(False, "Deprecated GtkAlignment in GtkFrame with id = '" + frame.attrib['id'] + "'", frame)
 
 def check_alignment_top_padding(alignment):
     top_padding_properties = alignment.findall("./property[@name='top_padding']")
