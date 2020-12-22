@@ -1,8 +1,7 @@
 = Status =
 
 $ make
-
-> instdir/program/ui-previewer.html
+$ emrun --serve_after_close instdir/program/ui-previewer.html
 
 The ui-previewer "binary" will "crash" with memory alignment problems.
 
