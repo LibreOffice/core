@@ -410,13 +410,12 @@ OUString SAL_CALL SdLayerManager::getImplementationName()
 
 sal_Bool SAL_CALL SdLayerManager::supportsService( const OUString& ServiceName )
 {
-    return cppu::supportsService( this, ServiceName );
+ return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence< OUString > SAL_CALL SdLayerManager::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSeq { "com.sun.star.drawing.LayerManager" };
-    return aSeq;
+    return {"com.sun.star.drawing.LayerManager"};
 }
 
 // XLayerManager

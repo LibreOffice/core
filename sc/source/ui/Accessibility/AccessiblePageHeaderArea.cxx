@@ -31,6 +31,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <comphelper/sequence.hxx>
 #include <editeng/editobj.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
@@ -174,13 +175,8 @@ OUString SAL_CALL
 uno::Sequence< OUString> SAL_CALL
        ScAccessiblePageHeaderArea::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
-    sal_Int32 nOldSize(aSequence.getLength());
-    aSequence.realloc(nOldSize + 1);
-
-    aSequence[nOldSize] = "com.sun.star.sheet.AccessiblePageHeaderFooterAreasView";
-
-    return aSequence;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.sheet.AccessiblePageHeaderFooterAreasView" };
+    return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
 }
 
 //=====  XTypeProvider  =======================================================
