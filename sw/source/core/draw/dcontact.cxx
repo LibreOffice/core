@@ -2393,7 +2393,7 @@ void SwDrawVirtObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fr
     SetRectsDirty();
 }
 
-void SwDrawVirtObj::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
+void SwDrawVirtObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
     rRefObj.NbcRotate(rRef - GetOffset(), nAngle, sn, cs);
     SetRectsDirty();
@@ -2405,7 +2405,7 @@ void SwDrawVirtObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetRectsDirty();
 }
 
-void SwDrawVirtObj::NbcShear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear)
+void SwDrawVirtObj::NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear)
 {
     rRefObj.NbcShear(rRef - GetOffset(), nAngle, tn, bVShear);
     SetRectsDirty();
@@ -2427,7 +2427,7 @@ void SwDrawVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fract
     }
 }
 
-void SwDrawVirtObj::Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
+void SwDrawVirtObj::Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
     if(nAngle)
     {
@@ -2446,7 +2446,7 @@ void SwDrawVirtObj::Mirror(const Point& rRef1, const Point& rRef2)
     SendUserCall(SdrUserCallType::Resize, aBoundRect0);
 }
 
-void SwDrawVirtObj::Shear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear)
+void SwDrawVirtObj::Shear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear)
 {
     if(nAngle)
     {

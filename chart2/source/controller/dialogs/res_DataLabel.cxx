@@ -305,7 +305,7 @@ void DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
 
     if( m_xDC_Dial->IsVisible() )
     {
-        sal_Int32 nDegrees = m_xDC_Dial->GetRotation();
+        Degree100 nDegrees = m_xDC_Dial->GetRotation();
         rOutAttrs->Put(SdrAngleItem( SCHATTR_TEXT_DEGREES, nDegrees ) );
     }
 }
@@ -355,11 +355,11 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
 
     if( rInAttrs.GetItemState( SCHATTR_TEXT_DEGREES, true, &pPoolItem ) == SfxItemState::SET )
     {
-        sal_Int32 nDegrees = static_cast< const SdrAngleItem * >( pPoolItem )->GetValue();
+        Degree100 nDegrees = static_cast< const SdrAngleItem * >( pPoolItem )->GetValue();
         m_xDC_Dial->SetRotation( nDegrees );
     }
     else
-        m_xDC_Dial->SetRotation( 0 );
+        m_xDC_Dial->SetRotation( 0_deg100 );
 
     EnableControls();
 }

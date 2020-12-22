@@ -42,14 +42,14 @@ SvxOrientationItem::SvxOrientationItem( const SvxCellOrientation eOrientation,
 {
 }
 
-SvxOrientationItem::SvxOrientationItem( sal_Int32 nRotation, bool bStacked, const sal_uInt16 nId ) :
+SvxOrientationItem::SvxOrientationItem( Degree100 nRotation, bool bStacked, const sal_uInt16 nId ) :
     SfxEnumItem( nId, SvxCellOrientation::Standard )
 {
     if( bStacked )
     {
         SetValue( SvxCellOrientation::Stacked );
     }
-    else switch( nRotation )
+    else switch( nRotation.get() )
     {
         case 9000:  SetValue( SvxCellOrientation::BottomUp );  break;
         case 27000: SetValue( SvxCellOrientation::TopBottom );  break;
@@ -128,13 +128,13 @@ bool SvxOrientationItem::IsStacked() const
     return GetValue() == SvxCellOrientation::Stacked;
 }
 
-sal_Int32 SvxOrientationItem::GetRotation( sal_Int32 nStdAngle ) const
+Degree100 SvxOrientationItem::GetRotation( Degree100 nStdAngle ) const
 {
-    sal_Int32 nAngle = nStdAngle;
+    Degree100 nAngle = nStdAngle;
     switch( GetValue() )
     {
-        case SvxCellOrientation::BottomUp: nAngle = 9000;break;
-        case SvxCellOrientation::TopBottom: nAngle = 27000;break;
+        case SvxCellOrientation::BottomUp: nAngle = 9000_deg100; break;
+        case SvxCellOrientation::TopBottom: nAngle = 27000_deg100; break;
         default: ; //prevent warning
     }
     return nAngle;

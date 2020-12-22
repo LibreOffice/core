@@ -32,6 +32,7 @@
 #include <oox/helper/helper.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <tools/degree.hxx>
 
 namespace com::sun::star {
     namespace awt { struct Point; }
@@ -87,7 +88,7 @@ namespace ConversionHelper
             point value will be returned unmodified. If the 'fd' suffix is
             present, the value will be divided by 65536.
     */
-    OOX_DLLPUBLIC sal_Int32    decodeRotation( const OUString& rValue );
+    OOX_DLLPUBLIC Degree100 decodeRotation( const OUString& rValue );
 
     /** Converts the passed VML measure string to EMU (English Metric Units).
 

@@ -866,10 +866,10 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const SdrTextObj& rTextObj ) :
     SetVerAlign( lcl_GetVerAlignFromItemSet( rItemSet ) );
 
     // rotation
-    tools::Long nAngle = rTextObj.GetRotateAngle();
-    if( (4500 < nAngle) && (nAngle < 13500) )
+    Degree100 nAngle = rTextObj.GetRotateAngle();
+    if( (4500_deg100 < nAngle) && (nAngle < 13500_deg100) )
         mnRotation = EXC_OBJ_ORIENT_90CCW;
-    else if( (22500 < nAngle) && (nAngle < 31500) )
+    else if( (22500_deg100 < nAngle) && (nAngle < 31500_deg100) )
         mnRotation = EXC_OBJ_ORIENT_90CW;
     else
         mnRotation = EXC_OBJ_ORIENT_NONE;
@@ -1095,8 +1095,8 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rShape.get());
     if (pObj)
     {
-        sal_Int32 nRotation = pObj->GetRotateAngle();
-        if (nRotation != 0)
+        Degree100 nRotation = pObj->GetRotateAngle();
+        if (nRotation)
         {
             sal_Int16 nHalfWidth = aSize.Width / 2;
             sal_Int16 nHalfHeight = aSize.Height / 2;
@@ -1111,7 +1111,7 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
             // MSO changes the anchor positions at these angles and that does an extra 90 degrees
             // rotation on our shapes, so we output it in such position that MSO
             // can draw this shape correctly.
-            if ((nRotation >= 45 * 100 && nRotation < 135 * 100) || (nRotation >= 225 * 100 && nRotation < 315 * 100))
+            if ((nRotation >= 4500_deg100 && nRotation < 13500_deg100) || (nRotation >= 22500_deg100 && nRotation < 31500_deg100))
             {
                 aTopLeft.X = aTopLeft.X - nHalfHeight + nHalfWidth;
                 aTopLeft.Y = aTopLeft.Y - nHalfWidth + nHalfHeight;

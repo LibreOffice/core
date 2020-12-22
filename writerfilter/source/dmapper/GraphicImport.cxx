@@ -792,7 +792,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         if (m_pImpl->isYSizeValis())
                             aSize.Height = m_pImpl->getYSize();
 
-                        sal_Int32 nRotation = 0;
+                        Degree100 nRotation;
                         if (bKeepRotation)
                         {
                             // Use internal API, getPropertyValue(RotateAngle)
@@ -804,8 +804,8 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         m_xShape->setSize(aSize);
                         if (bKeepRotation)
                         {
-                            xShapeProps->setPropertyValue("RotateAngle", uno::makeAny(nRotation));
-                            if (nRotation == 0)
+                            xShapeProps->setPropertyValue("RotateAngle", uno::makeAny(nRotation.get()));
+                            if (nRotation == 0_deg100)
                             {
                                 // Include effect extent in the margin to bring Writer layout closer
                                 // to Word. But do this for non-rotated shapes only, where effect

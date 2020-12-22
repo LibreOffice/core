@@ -536,7 +536,7 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
             the cell bounding box in ScAccessibleCell::GetBoundingBox()
             (see sc/source/ui/Accessibility/AccessibleCell.cxx). */
         const ScRotateValueItem* pItem = rDoc.GetAttr( aCellPos, ATTR_ROTATE_VALUE );
-        if( pItem && (pItem->GetValue() != 0) )
+        if( pItem && (pItem->GetValue() != 0_deg100) )
         {
             pEditEngine->SetPaperSize( Size( LONG_MAX, aSize.getHeight() ) );
             tools::Long nTxtWidth = static_cast< tools::Long >( pEditEngine->CalcTextWidth() );

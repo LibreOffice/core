@@ -155,7 +155,7 @@ IMPL_LINK(AlignmentPropertyPanel, ReferenceEdgeHdl, weld::ToggleButton&, rToggle
 
 IMPL_LINK_NOARG( AlignmentPropertyPanel, AngleModifiedHdl, weld::MetricSpinButton&, void )
 {
-    sal_uInt32 nAngle = mxMtrAngle->get_value(FieldUnit::DEGREE) * 100;
+    Degree100 nAngle(mxMtrAngle->get_value(FieldUnit::DEGREE) * 100);
     ScRotateValueItem aAngleItem(nAngle);
 
     GetBindings()->GetDispatcher()->ExecuteList(
@@ -345,8 +345,8 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
     case SID_ATTR_ALIGN_DEGREES:
         if (eState >= SfxItemState::DEFAULT)
         {
-            tools::Long nTmp = static_cast<const ScRotateValueItem*>(pState)->GetValue();
-            mxMtrAngle->set_value(nTmp / 100, FieldUnit::DEGREE);
+            Degree100 nTmp = static_cast<const ScRotateValueItem*>(pState)->GetValue();
+            mxMtrAngle->set_value(nTmp.get() / 100, FieldUnit::DEGREE);
         }
         else
         {

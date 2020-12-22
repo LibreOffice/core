@@ -33,6 +33,7 @@
 #include <svx/xflclit.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
+#include <svx/sdangitm.hxx>
 #include <sfx2/request.hxx>
 #include <sdabstdlg.hxx>
 #include <memory>
@@ -119,7 +120,8 @@ void FuCopy::DoExecute( SfxRequest& rReq )
     }
 
     ::tools::Rectangle           aRect;
-    sal_Int32               lWidth = 0, lHeight = 0, lSizeX = 0, lSizeY = 0, lAngle = 0;
+    sal_Int32               lWidth = 0, lHeight = 0, lSizeX = 0, lSizeY = 0;
+    Degree100           lAngle(0);
     sal_uInt16              nNumber = 0;
     Color               aStartColor, aEndColor;
     bool                bColor = false;
@@ -135,7 +137,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
     if( pArgs && SfxItemState::SET == pArgs->GetItemState( ATTR_COPY_MOVE_Y, true, &pPoolItem ) )
         lSizeY = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
     if( pArgs && SfxItemState::SET == pArgs->GetItemState( ATTR_COPY_ANGLE, true, &pPoolItem ) )
-        lAngle = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
+        lAngle = static_cast<const SdrAngleItem*>( pPoolItem )->GetValue();
 
     // scale
     if( pArgs && SfxItemState::SET == pArgs->GetItemState( ATTR_COPY_WIDTH, true, &pPoolItem ) )

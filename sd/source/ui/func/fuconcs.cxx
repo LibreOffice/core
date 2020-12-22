@@ -183,7 +183,7 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
                                         EE_ITEMS_START, EE_ITEMS_END>{});
                                 aDest.Set( rSource );
                                 pObj->SetMergedItemSet( aDest );
-                                sal_Int32 nAngle = pSourceObj->GetRotateAngle();
+                                Degree100 nAngle = pSourceObj->GetRotateAngle();
                                 if ( nAngle )
                                     pObj->NbcRotate( pObj->GetSnapRect().Center(), nAngle );
                                 bAttributesAppliedFromGallery = true;

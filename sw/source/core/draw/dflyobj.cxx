@@ -378,20 +378,20 @@ bool SwVirtFlyDrawObj::HasLimitedRotation() const
     return ContainsSwGrfNode();
 }
 
-void SwVirtFlyDrawObj::Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
+void SwVirtFlyDrawObj::Rotate(const Point& rRef, Degree100 nAngle100, double sn, double cs)
 {
     if(ContainsSwGrfNode())
     {
         // RotGrfFlyFrame: Here is where the positively completed rotate interaction is executed.
         // Rotation is in 1/100th degree and may be signed (!)
-        nAngle /= 10;
+        Degree10 nAngle10 = toDegree10(nAngle100);
 
-        while(nAngle < 0)
+        while(nAngle10 < 0_deg10)
         {
-            nAngle += 3600;
+            nAngle10 += 3600_deg10;
         }
 
-        SwWrtShell *pShForAngle = nAngle ? dynamic_cast<SwWrtShell*>(GetFlyFrame()->getRootFrame()->GetCurrShell()) : nullptr;
+        SwWrtShell *pShForAngle = nAngle10 ? dynamic_cast<SwWrtShell*>(GetFlyFrame()->getRootFrame()->GetCurrShell()) : nullptr;
         if (pShForAngle)
         {
             // RotGrfFlyFrame: Add transformation to placeholder object
@@ -399,13 +399,13 @@ void SwVirtFlyDrawObj::Rotate(const Point& rRef, tools::Long nAngle, double sn, 
             const Degree10 nOldRot(SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame(aSize));
             SwFlyFrameAttrMgr aMgr(false, pShForAngle, Frmmgr_Type::NONE, nullptr);
 
-            aMgr.SetRotation(nOldRot, (nOldRot + Degree10(nAngle)) % 3600_deg10, aSize);
+            aMgr.SetRotation(nOldRot, (nOldRot + nAngle10) % 3600_deg10, aSize);
         }
     }
     else
     {
         // call parent
-        SdrVirtObj::Rotate(rRef, nAngle, sn, cs);
+        SdrVirtObj::Rotate(rRef, nAngle100, sn, cs);
     }
 }
 
@@ -1167,7 +1167,7 @@ Degree10 SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame(Size& rSize) cons
     return nRetval;
 }
 
-tools::Long SwVirtFlyDrawObj::GetRotateAngle() const
+Degree100 SwVirtFlyDrawObj::GetRotateAngle() const
 {
     if(ContainsSwGrfNode())
     {

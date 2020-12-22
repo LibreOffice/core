@@ -2358,7 +2358,7 @@ void SwGrfExtPage::Reset(const SfxItemSet *rSet)
     }
     else
     {
-        m_xCtlAngle->SetRotation(0);
+        m_xCtlAngle->SetRotation(0_deg100);
     }
     m_xCtlAngle->SaveValue();
 

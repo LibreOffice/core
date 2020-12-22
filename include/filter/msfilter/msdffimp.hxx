@@ -40,6 +40,7 @@
 #include <sal/types.h>
 #include <svx/msdffdef.hxx>
 #include <vcl/errcode.hxx>
+#include <tools/degree.hxx>
 #include <tools/gen.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
@@ -93,7 +94,7 @@ class MSFILTER_DLLPUBLIC DffPropertyReader : public DffPropSet
     void ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, const DffObjData& rObjData ) const;
 
 public:
-    sal_Int32 mnFix16Angle;
+    Degree100 mnFix16Angle;
     bool      mbRotateGranientFillWithAngle;
 
     explicit DffPropertyReader( const SvxMSDffManager& rManager );
@@ -102,7 +103,7 @@ public:
     DffPropertyReader& operator=( DffPropertyReader const & ) = delete; // MSVC2015 workaround
     DffPropertyReader( DffPropertyReader const & ) = delete; // MSVC2015 workaround
 
-    static sal_Int32 Fix16ToAngle( sal_Int32 nAngle );
+    static Degree100 Fix16ToAngle( sal_Int32 nAngle );
 
 #ifdef DBG_CUSTOMSHAPE
     void ReadPropSet( SvStream& rIn, SvxMSDffClientData* pClientData, sal_uInt32 nShapeType = 0 ) const;

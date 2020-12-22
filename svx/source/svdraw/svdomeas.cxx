@@ -263,7 +263,7 @@ struct ImpMeasureRec : public SdrDragStatUserData
     bool                        bTextRota90;
     bool                        bTextUpsideDown;
     bool                        bTextAutoAngle;
-    tools::Long                        nTextAutoAngleView;
+    Degree100                   nTextAutoAngleView;
 };
 
 namespace {
@@ -285,9 +285,9 @@ struct ImpMeasurePoly
     ImpLineRec                  aHelpline2;
     Size                        aTextSize;
     tools::Long                        nLineLen;
-    tools::Long                        nLineAngle;
-    tools::Long                        nTextAngle;
-    tools::Long                        nHlpAngle;
+    Degree100                   nLineAngle;
+    Degree100                   nTextAngle;
+    Degree100                   nHlpAngle;
     double                      nLineSin;
     double                      nLineCos;
     sal_uInt16                      nMainlineCnt;
@@ -417,28 +417,28 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     rPol.nArrow2Len=nArrow2Len;
 
     rPol.nLineAngle=GetAngle(aDelt);
-    double a = rPol.nLineAngle * F_PI18000;
+    double a = rPol.nLineAngle.get() * F_PI18000;
     double nLineSin=sin(a);
     double nLineCos=cos(a);
     rPol.nLineSin=nLineSin;
     rPol.nLineCos=nLineCos;
 
     rPol.nTextAngle=rPol.nLineAngle;
-    if (rRec.bTextRota90) rPol.nTextAngle+=9000;
+    if (rRec.bTextRota90) rPol.nTextAngle+=9000_deg100;
 
     rPol.bAutoUpsideDown=false;
     if (rRec.bTextAutoAngle) {
-        tools::Long nTmpAngle=NormAngle36000(rPol.nTextAngle-rRec.nTextAutoAngleView);
-        if (nTmpAngle>=18000) {
-            rPol.nTextAngle+=18000;
+        Degree100 nTmpAngle=NormAngle36000(rPol.nTextAngle-rRec.nTextAutoAngleView);
+        if (nTmpAngle>=18000_deg100) {
+            rPol.nTextAngle+=18000_deg100;
             rPol.bAutoUpsideDown=true;
         }
     }
 
-    if (rRec.bTextUpsideDown) rPol.nTextAngle+=18000;
+    if (rRec.bTextUpsideDown) rPol.nTextAngle+=18000_deg100;
     rPol.nTextAngle=NormAngle36000(rPol.nTextAngle);
-    rPol.nHlpAngle=rPol.nLineAngle+9000;
-    if (rRec.bBelowRefEdge) rPol.nHlpAngle+=18000;
+    rPol.nHlpAngle=rPol.nLineAngle+9000_deg100;
+    if (rRec.bBelowRefEdge) rPol.nHlpAngle+=18000_deg100;
     rPol.nHlpAngle=NormAngle36000(rPol.nHlpAngle);
     double nHlpSin=nLineCos;
     double nHlpCos=-nLineSin;
@@ -878,8 +878,8 @@ OUString SdrMeasureObj::getSpecialDragComment(const SdrDragStat& /*rDrag*/) cons
 
 void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) const
 {
-    tools::Long nLineAngle=GetAngle(rRec.aPt2-rRec.aPt1);
-    double a = nLineAngle * F_PI18000;
+    Degree100 nLineAngle=GetAngle(rRec.aPt2-rRec.aPt1);
+    double a = nLineAngle.get() * F_PI18000;
     double nSin=sin(a);
     double nCos=cos(a);
 
@@ -1016,7 +1016,7 @@ void SdrMeasureObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fr
     SetTextDirty();
 }
 
-void SdrMeasureObj::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
+void SdrMeasureObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
     SdrTextObj::NbcRotate(rRef,nAngle,sn,cs);
     tools::Long nLen0=GetLen(aPt2-aPt1);
@@ -1047,7 +1047,7 @@ void SdrMeasureObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetRectsDirty();
 }
 
-void SdrMeasureObj::NbcShear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear)
+void SdrMeasureObj::NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear)
 {
     SdrTextObj::NbcShear(rRef,nAngle,tn,bVShear);
     ShearPoint(aPt1,rRef,tn,bVShear);
@@ -1056,7 +1056,7 @@ void SdrMeasureObj::NbcShear(const Point& rRef, tools::Long nAngle, double tn, b
     SetTextDirty();
 }
 
-tools::Long SdrMeasureObj::GetRotateAngle() const
+Degree100 SdrMeasureObj::GetRotateAngle() const
 {
     return GetAngle(aPt2-aPt1);
 }

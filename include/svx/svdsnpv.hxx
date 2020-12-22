@@ -23,6 +23,7 @@
 #include <svx/svdpntv.hxx>
 #include <svx/svdhlpln.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/degree.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 /**
@@ -104,8 +105,8 @@ protected:
     Fraction                    aSnapWdtY;
 
     sal_uInt16                  nMagnSizPix;
-    tools::Long                        nSnapAngle;
-    tools::Long                        nEliminatePolyPointLimitAngle;
+    Degree100                   nSnapAngle;
+    Degree100                   nEliminatePolyPointLimitAngle;
 
     SdrCrookMode                eCrookMode;
 
@@ -220,8 +221,8 @@ public:
     // persistent.
     void SetAngleSnapEnabled(bool bOn) { bAngleSnapEnab=bOn; }
     bool IsAngleSnapEnabled() const { return bAngleSnapEnab; }
-    void SetSnapAngle(tools::Long nAngle) { nSnapAngle=nAngle; }
-    tools::Long GetSnapAngle() const { return nSnapAngle; }
+    void SetSnapAngle(Degree100 nAngle) { nSnapAngle=nAngle; }
+    Degree100 GetSnapAngle() const { return nSnapAngle; }
 
     // different effects from Ortho (depending on the context):
     // - Create
@@ -280,8 +281,8 @@ public:
     // if its adjacent lines are almost a solid line.
     void SetEliminatePolyPoints(bool bOn) { bEliminatePolyPoints=bOn; }
     bool IsEliminatePolyPoints() const { return bEliminatePolyPoints; }
-    void SetEliminatePolyPointLimitAngle(tools::Long nAngle) { nEliminatePolyPointLimitAngle=nAngle; }
-    tools::Long GetEliminatePolyPointLimitAngle() const { return nEliminatePolyPointLimitAngle; }
+    void SetEliminatePolyPointLimitAngle(Degree100 nAngle) { nEliminatePolyPointLimitAngle=nAngle; }
+    Degree100 GetEliminatePolyPointLimitAngle() const { return nEliminatePolyPointLimitAngle; }
 };
 
 #endif // INCLUDED_SVX_SVDSNPV_HXX
