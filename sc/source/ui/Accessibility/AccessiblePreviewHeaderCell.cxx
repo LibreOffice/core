@@ -30,6 +30,7 @@
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <comphelper/sequence.hxx>
 
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
@@ -258,13 +259,8 @@ OUString SAL_CALL ScAccessiblePreviewHeaderCell::getImplementationName()
 
 uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewHeaderCell::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
-    sal_Int32 nOldSize(aSequence.getLength());
-    aSequence.realloc(nOldSize + 1);
-
-    aSequence[nOldSize] = "com.sun.star.table.AccessibleCellView";
-
-    return aSequence;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.table.AccessibleCellView" };
+    return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
 }
 
 //=====  XTypeProvider  =======================================================
