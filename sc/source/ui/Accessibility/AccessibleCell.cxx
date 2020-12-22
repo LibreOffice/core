@@ -297,13 +297,8 @@ OUString SAL_CALL ScAccessibleCell::getImplementationName()
 uno::Sequence< OUString> SAL_CALL
     ScAccessibleCell::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
-    sal_Int32 nOldSize(aSequence.getLength());
-    aSequence.realloc(nOldSize + 1);
-
-    aSequence[nOldSize] = "com.sun.star.sheet.AccessibleCell";
-
-    return aSequence;
+    const css::uno::Sequence<OUString> vals { "com.sun.star.sheet.AccessibleCell" };
+    return comphelper::concatSequences(ScAccessibleContextBase::getSupportedServiceNames(), vals);
 }
 
     //====  internal  =========================================================

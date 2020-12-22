@@ -2009,8 +2009,8 @@ sal_Bool SAL_CALL SdPageLinkTargets::supportsService( const OUString& ServiceNam
 
 Sequence< OUString > SAL_CALL SdPageLinkTargets::getSupportedServiceNames()
 {
-    Sequence< OUString > aSeq { "com.sun.star.document.LinkTargets" };
-    return aSeq;
+  Sequence< OUString > aSeq { "com.sun.star.document.LinkTargets" };
+  return aSeq;
 }
 
 // SdDrawPage
