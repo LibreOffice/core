@@ -350,7 +350,7 @@ class BasicCollection : public SbxObject
     virtual ~BasicCollection() override;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     sal_Int32 implGetIndex( SbxVariable const * pIndexVar );
-    sal_Int32 implGetIndexForName( const OUString& rName );
+    sal_Int32 implGetIndexForName(std::u16string_view rName);
     void CollAdd( SbxArray* pPar_ );
     void CollItem( SbxArray* pPar_ );
     void CollRemove( SbxArray* pPar_ );
