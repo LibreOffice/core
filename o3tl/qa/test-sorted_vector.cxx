@@ -98,7 +98,7 @@ public:
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(1), aVec.erase(p1) );
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(2), aVec.size() );
 
-        aVec.erase(1);
+        aVec.erase_at(1);
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(1), aVec.size() );
 
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(0), aVec.erase(p4.get()) );
@@ -222,7 +222,7 @@ public:
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(1), aVec.erase(p1.get()) );
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(2), aVec.size() );
 
-        aVec.erase(1);
+        aVec.erase_at(1);
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(1), aVec.size() );
 
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(0), aVec.erase(p4.get()) );

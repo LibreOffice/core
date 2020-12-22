@@ -94,7 +94,7 @@ public:
         return 0;
     }
 
-    void erase( size_t index )
+    void erase_at(size_t index)
     {
         m_vector.erase(m_vector.begin() + index);
     }

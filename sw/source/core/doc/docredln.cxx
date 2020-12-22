@@ -635,7 +635,7 @@ void SwRedlineTable::DeleteAndDestroyAll()
     while (!maVector.empty())
     {
         auto const pRedline = maVector.back();
-        maVector.erase(maVector.size() - 1);
+        maVector.erase_at(maVector.size() - 1);
         LOKRedlineNotification(RedlineNotification::Remove, pRedline);
         delete pRedline;
     }
