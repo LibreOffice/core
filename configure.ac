@@ -2647,6 +2647,8 @@ AC_ARG_WITH(onedrive-client-secret,
         authentication on OneDrive. If either this or
         --with-onedrive-client-id is empty, the feature will be disabled]),
 )
+
+
 dnl ===================================================================
 dnl Do we want to use pre-build binary tarball for recompile
 dnl ===================================================================
