@@ -22,6 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/degree.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
@@ -43,7 +44,7 @@
 // To convert it back, we use division.
 
 // That maximum shear angle
-#define SDRMAXSHEAR 8900
+constexpr Degree100 SDRMAXSHEAR(8900);
 
 class XPolygon;
 class XPolyPolygon;
@@ -159,13 +160,13 @@ inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad
  * @return the returned value is in the range of -180.00..179.99 deg
  * and is in 1/100 deg units
  */
-SVXCORE_DLLPUBLIC tools::Long GetAngle(const Point& rPnt);
+SVXCORE_DLLPUBLIC Degree100 GetAngle(const Point& rPnt);
 
-tools::Long NormAngle18000(tools::Long a); /// Normalize angle to -180.00..179.99
+Degree100 NormAngle18000(Degree100 a); /// Normalize angle to -180.00..179.99
 
-SVXCORE_DLLPUBLIC tools::Long NormAngle36000(tools::Long a); /// Normalize angle to 0.00..359.99
+SVXCORE_DLLPUBLIC Degree100 NormAngle36000(Degree100 a); /// Normalize angle to 0.00..359.99
 
-sal_uInt16 GetAngleSector(tools::Long nAngle); /// Determine sector within the cartesian coordinate system
+sal_uInt16 GetAngleSector(Degree100 nAngle); /// Determine sector within the cartesian coordinate system
 
 /**
  * Calculates the length of (0,0) via a^2 + b^2 = c^2
@@ -213,8 +214,8 @@ tools::Long GetLen(const Point& rPnt);
 
 class GeoStat { // Geometric state for a rect
 public:
-    tools::Long     nRotationAngle;
-    tools::Long     nShearAngle;
+    Degree100 nRotationAngle;
+    Degree100 nShearAngle;
     double   mfTanShearAngle;      // tan(nShearAngle)
     double   mfSinRotationAngle;   // sin(nRotationAngle)
     double   mfCosRotationAngle;   // cos(nRotationAngle)

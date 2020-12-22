@@ -122,7 +122,7 @@ bool E3dDragMethod::BeginSdrDrag()
         {
             E3dDragMethodUnit& rCandidate = maGrp[nOb];
             rCandidate.mnStartAngle = GetAngle(DragStat().GetStart() - DragStat().GetRef1());
-            rCandidate.mnLastAngle = 0;
+            rCandidate.mnLastAngle = 0_deg100;
         }
     }
     else
@@ -355,10 +355,10 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
 
         if(E3dDragConstraint::Z == meConstraint)
         {
-            fWAngle = NormAngle36000(GetAngle(rPnt - DragStat().GetRef1()) -
+            Degree100 lastAngle = NormAngle36000(GetAngle(rPnt - DragStat().GetRef1()) -
                 rCandidate.mnStartAngle) - rCandidate.mnLastAngle;
-            rCandidate.mnLastAngle = static_cast<tools::Long>(fWAngle) + rCandidate.mnLastAngle;
-            fWAngle /= 100.0;
+            rCandidate.mnLastAngle = lastAngle + rCandidate.mnLastAngle;
+            fWAngle = toDegrees(lastAngle);
             fHAngle = 0.0;
         }
         else

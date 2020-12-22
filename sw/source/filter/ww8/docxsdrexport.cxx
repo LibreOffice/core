@@ -77,14 +77,14 @@ OUString lclGetAnchorIdFromGrabBag(const SdrObject* pObj)
     return aResult;
 }
 
-void lclMovePositionWithRotation(awt::Point& aPos, const Size& rSize, sal_Int64 nRotation)
+void lclMovePositionWithRotation(awt::Point& aPos, const Size& rSize, Degree100 nRotation100)
 {
     // code from ImplEESdrWriter::ImplFlipBoundingBox (filter/source/msfilter/eschesdo.cxx)
     // TODO: refactor
 
-    if (nRotation == 0)
+    if (nRotation100 == 0_deg100)
         return;
-
+    sal_Int64 nRotation = nRotation100.get();
     if (nRotation < 0)
         nRotation = (36000 + nRotation) % 36000;
     if (nRotation % 18000 == 0)
@@ -147,7 +147,7 @@ private:
     bool m_bDMLAndVMLDrawingOpen;
     /// List of TextBoxes in this document: they are exported as part of their shape, never alone.
     /// Preserved rotation for TextFrames.
-    sal_Int32 m_nDMLandVMLTextFrameRotation;
+    Degree100 m_nDMLandVMLTextFrameRotation;
 
 public:
     bool m_bFlyFrameGraphic = false;
@@ -166,7 +166,6 @@ public:
         , m_pFlyWrapAttrList(nullptr)
         , m_pBodyPrAttrList(nullptr)
         , m_bDMLAndVMLDrawingOpen(false)
-        , m_nDMLandVMLTextFrameRotation(0)
     {
     }
 
@@ -269,12 +268,12 @@ public:
 
     DocxExport& getExport() const { return m_rExport; }
 
-    void setDMLandVMLTextFrameRotation(sal_Int32 nDMLandVMLTextFrameRotation)
+    void setDMLandVMLTextFrameRotation(Degree100 nDMLandVMLTextFrameRotation)
     {
         m_nDMLandVMLTextFrameRotation = nDMLandVMLTextFrameRotation;
     }
 
-    sal_Int32& getDMLandVMLTextFrameRotation() { return m_nDMLandVMLTextFrameRotation; }
+    Degree100& getDMLandVMLTextFrameRotation() { return m_nDMLandVMLTextFrameRotation; }
 };
 
 DocxSdrExport::DocxSdrExport(DocxExport& rExport, const sax_fastparser::FSHelperPtr& pSerializer,
@@ -426,7 +425,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         awt::Point aPos(pFrameFormat->GetHoriOrient().GetPos(),
                         pFrameFormat->GetVertOrient().GetPos());
         const SdrObject* pObj = pFrameFormat->FindRealSdrObject();
-        tools::Long nRotation = 0;
+        Degree100 nRotation(0);
         if (pObj != nullptr)
         {
             // SdrObjects know their layer, consider that instead of the frame format.
@@ -1274,7 +1273,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
         pFS->singleElementNS(XML_wps, XML_cNvSpPr, XML_txBox, "1");
 
         uno::Any aRotation;
-        m_pImpl->setDMLandVMLTextFrameRotation(0);
+        m_pImpl->setDMLandVMLTextFrameRotation(0_deg100);
         if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
         {
             uno::Sequence<beans::PropertyValue> propList;
@@ -1286,7 +1285,9 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
             if (pProp != propList.end())
                 aRotation = pProp->Value;
         }
-        aRotation >>= m_pImpl->getDMLandVMLTextFrameRotation();
+        sal_Int32 nTmp;
+        if (aRotation >>= nTmp)
+            m_pImpl->getDMLandVMLTextFrameRotation() = Degree100(nTmp);
         OString sRotation(OString::number(
             oox::drawingml::ExportRotateClockwisify(m_pImpl->getDMLandVMLTextFrameRotation())));
         // Shape properties
@@ -1526,7 +1527,7 @@ void DocxSdrExport::writeVMLTextFrame(ww8::Frame const* pParentFrame, bool bText
     m_pImpl->getTextFrameStyle() = "position:absolute";
     if (!bTextBoxOnly)
     {
-        OString sRotation(OString::number(m_pImpl->getDMLandVMLTextFrameRotation() / -100));
+        OString sRotation(OString::number(m_pImpl->getDMLandVMLTextFrameRotation().get() / -100));
         m_pImpl->getExport()
             .SdrExporter()
             .getTextFrameStyle()

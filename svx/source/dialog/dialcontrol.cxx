@@ -63,9 +63,9 @@ void DialControlBmp::DrawBackground( const Size& rSize, bool bEnabled )
     DrawBackground();
 }
 
-void DialControlBmp::DrawElements( const OUString& rText, sal_Int32 nAngle )
+void DialControlBmp::DrawElements( const OUString& rText, Degree100 nAngle )
 {
-    double fAngle = basegfx::deg2rad(nAngle) / 100.0;
+    double fAngle = toRadians(nAngle);
     double fSin = sin( fAngle );
     double fCos = cos( fAngle );
     double fWidth = GetTextWidth( rText ) / 2.0;
@@ -76,7 +76,7 @@ void DialControlBmp::DrawElements( const OUString& rText, sal_Int32 nAngle )
         // rotated text
         vcl::Font aFont( GetFont() );
         aFont.SetColor( GetTextColor() );
-        aFont.SetOrientation( Degree10(static_cast< sal_Int16 >( (nAngle + 5) / 10 )) );  // Font uses 1/10 degrees
+        aFont.SetOrientation( toDegree10(nAngle) );  // Font uses 1/10 degrees
         aFont.SetWeight( WEIGHT_BOLD );
         SetFont( aFont );
 
@@ -99,7 +99,7 @@ void DialControlBmp::DrawElements( const OUString& rText, sal_Int32 nAngle )
 
     // *** drag button ***
 
-    bool bMain = (nAngle % 4500) != 0;
+    bool bMain = (nAngle % 4500_deg100) != 0_deg100;
     SetLineColor( GetButtonLineColor() );
     SetFillColor( GetButtonFillColor( bMain ) );
 
@@ -348,12 +348,12 @@ void DialControl::SetNoRotation()
     }
 }
 
-sal_Int32 DialControl::GetRotation() const
+Degree100 DialControl::GetRotation() const
 {
     return mpImpl->mnAngle;
 }
 
-void DialControl::SetRotation(sal_Int32 nAngle)
+void DialControl::SetRotation(Degree100 nAngle)
 {
     SetRotation(nAngle, false);
 }
@@ -380,7 +380,7 @@ void DialControl::SetLinkedField(weld::MetricSpinButton* pField, sal_Int32 nDeci
 
 IMPL_LINK_NOARG(DialControl, LinkedFieldModifyHdl, weld::MetricSpinButton&, void)
 {
-    SetRotation(mpImpl->mpLinkField->get_value(FieldUnit::DEGREE) * mpImpl->mnLinkedFieldValueMultiplyer, true);
+    SetRotation(Degree100(mpImpl->mpLinkField->get_value(FieldUnit::DEGREE) * mpImpl->mnLinkedFieldValueMultiplyer), true);
 }
 
 void DialControl::SaveValue()
@@ -420,20 +420,19 @@ void DialControl::InvalidateControl()
     Invalidate();
 }
 
-void DialControl::SetRotation(sal_Int32 nAngle, bool bBroadcast)
+void DialControl::SetRotation(Degree100 nAngle, bool bBroadcast)
 {
     bool bOldSel = mpImpl->mbNoRot;
     mpImpl->mbNoRot = false;
 
-    while (nAngle < 0)
-        nAngle += 36000;
+    nAngle = NormAngle36000(nAngle);
 
     if (!bOldSel || (mpImpl->mnAngle != nAngle))
     {
         mpImpl->mnAngle = nAngle;
         InvalidateControl();
         if( mpImpl->mpLinkField )
-            mpImpl->mpLinkField->set_value(GetRotation() / mpImpl->mnLinkedFieldValueMultiplyer, FieldUnit::DEGREE);
+            mpImpl->mpLinkField->set_value(GetRotation().get() / mpImpl->mnLinkedFieldValueMultiplyer, FieldUnit::DEGREE);
         if( bBroadcast )
             mpImpl->maModifyHdl.Call(*this);
     }
@@ -459,7 +458,7 @@ void DialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
             nAngle = ((nAngle + 750) / 1500) * 1500;
         // Round up to 1 degree
         nAngle = (((nAngle + 50) / 100) * 100) % 36000;
-        SetRotation(nAngle, true);
+        SetRotation(Degree100(nAngle), true);
     }
 }
 

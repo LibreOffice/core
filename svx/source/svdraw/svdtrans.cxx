@@ -123,11 +123,11 @@ void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2)
         rPnt.setY(rRef1.Y()-dx1 );
     } else { // arbitrary axis
         // TODO: Optimize this! Raise perpendicular on the mirroring axis..?
-        tools::Long nRefWink=GetAngle(rRef2-rRef1);
+        Degree100 nRefWink=GetAngle(rRef2-rRef1);
         rPnt-=rRef1;
-        tools::Long nPntWink=GetAngle(rPnt);
-        tools::Long nAngle=2*(nRefWink-nPntWink);
-        double a = nAngle * F_PI18000;
+        Degree100 nPntWink=GetAngle(rPnt);
+        Degree100 nAngle=2_deg100*(nRefWink-nPntWink);
+        double a = nAngle.get() * F_PI18000;
         double nSin=sin(a);
         double nCos=cos(a);
         RotatePoint(rPnt,Point(),nSin,nCos);
@@ -383,42 +383,43 @@ void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rR
 }
 
 
-tools::Long GetAngle(const Point& rPnt)
+Degree100 GetAngle(const Point& rPnt)
 {
-    tools::Long a=0;
+    Degree100 a;
     if (rPnt.Y()==0) {
-        if (rPnt.X()<0) a=-18000;
+        if (rPnt.X()<0) a=-18000_deg100;
     } else if (rPnt.X()==0) {
-        if (rPnt.Y()>0) a=-9000;
-        else a=9000;
+        if (rPnt.Y()>0) a=-9000_deg100;
+        else a=9000_deg100;
     } else {
-        a = FRound(atan2(static_cast<double>(-rPnt.Y()), static_cast<double>(rPnt.X()))
-                   / F_PI18000);
+        a = Degree100(FRound(atan2(static_cast<double>(-rPnt.Y()), static_cast<double>(rPnt.X()))
+                   / F_PI18000));
     }
     return a;
 }
 
-tools::Long NormAngle18000(tools::Long a)
+Degree100 NormAngle18000(Degree100 a)
 {
-    while (a<-18000) a+=36000;
-    while (a>=18000) a-=36000;
+    while (a<-18000_deg100) a+=36000_deg100;
+    while (a>=18000_deg100) a-=36000_deg100;
     return a;
 }
 
-tools::Long NormAngle36000(tools::Long a)
+Degree100 NormAngle36000(Degree100 deg100)
 {
-    while (a<0) a+=36000;
-    while (a>=36000) a-=36000;
-    return a;
+    // do an add because we want -90 to end up as 270
+    int a = 36000 + deg100.get();
+    a %= 36000;
+    a = std::abs(a);
+    return Degree100(a);
 }
 
-sal_uInt16 GetAngleSector(tools::Long nAngle)
+sal_uInt16 GetAngleSector(Degree100 nAngle)
 {
-    while (nAngle<0) nAngle+=36000;
-    while (nAngle>=36000) nAngle-=36000;
-    if (nAngle< 9000) return 0;
-    if (nAngle<18000) return 1;
-    if (nAngle<27000) return 2;
+    nAngle = NormAngle36000(nAngle);
+    if (nAngle< 9000_deg100) return 0;
+    if (nAngle<18000_deg100) return 1;
+    if (nAngle<27000_deg100) return 2;
     return 3;
 }
 
@@ -450,11 +451,11 @@ tools::Long GetLen(const Point& rPnt)
 
 void GeoStat::RecalcSinCos()
 {
-    if (nRotationAngle==0) {
+    if (nRotationAngle==0_deg100) {
         mfSinRotationAngle=0.0;
         mfCosRotationAngle=1.0;
     } else {
-        double a = nRotationAngle * F_PI18000;
+        double a = nRotationAngle.get() * F_PI18000;
         mfSinRotationAngle=sin(a);
         mfCosRotationAngle=cos(a);
     }
@@ -462,10 +463,10 @@ void GeoStat::RecalcSinCos()
 
 void GeoStat::RecalcTan()
 {
-    if (nShearAngle==0) {
+    if (nShearAngle==0_deg100) {
         mfTanShearAngle=0.0;
     } else {
-        double a = nShearAngle * F_PI18000;
+        double a = nShearAngle.get() * F_PI18000;
         mfTanShearAngle=tan(a);
     }
 }
@@ -479,8 +480,8 @@ tools::Polygon Rect2Poly(const tools::Rectangle& rRect, const GeoStat& rGeo)
     aPol[2]=rRect.BottomRight();
     aPol[3]=rRect.BottomLeft();
     aPol[4]=rRect.TopLeft();
-    if (rGeo.nShearAngle!=0) ShearPoly(aPol,rRect.TopLeft(),rGeo.mfTanShearAngle);
-    if (rGeo.nRotationAngle!=0) RotatePoly(aPol,rRect.TopLeft(),rGeo.mfSinRotationAngle,rGeo.mfCosRotationAngle);
+    if (rGeo.nShearAngle) ShearPoly(aPol,rRect.TopLeft(),rGeo.mfTanShearAngle);
+    if (rGeo.nRotationAngle) RotatePoly(aPol,rRect.TopLeft(),rGeo.mfSinRotationAngle,rGeo.mfCosRotationAngle);
     return aPol;
 }
 
@@ -492,28 +493,28 @@ void Poly2Rect(const tools::Polygon& rPol, tools::Rectangle& rRect, GeoStat& rGe
     rGeo.RecalcSinCos();
 
     Point aPt1(rPol[1]-rPol[0]);
-    if (rGeo.nRotationAngle!=0) RotatePoint(aPt1,Point(0,0),-rGeo.mfSinRotationAngle,rGeo.mfCosRotationAngle); // -Sin to reverse rotation
+    if (rGeo.nRotationAngle) RotatePoint(aPt1,Point(0,0),-rGeo.mfSinRotationAngle,rGeo.mfCosRotationAngle); // -Sin to reverse rotation
     tools::Long nWdt=aPt1.X();
 
     Point aPt0(rPol[0]);
     Point aPt3(rPol[3]-rPol[0]);
-    if (rGeo.nRotationAngle!=0) RotatePoint(aPt3,Point(0,0),-rGeo.mfSinRotationAngle,rGeo.mfCosRotationAngle); // -Sin to reverse rotation
+    if (rGeo.nRotationAngle) RotatePoint(aPt3,Point(0,0),-rGeo.mfSinRotationAngle,rGeo.mfCosRotationAngle); // -Sin to reverse rotation
     tools::Long nHgt=aPt3.Y();
 
 
-    tools::Long nShW=GetAngle(aPt3);
-    nShW-=27000; // ShearWink is measured against a vertical line
+    Degree100 nShW=GetAngle(aPt3);
+    nShW-=27000_deg100; // ShearWink is measured against a vertical line
     nShW=-nShW;  // negating, because '+' is shearing clock-wise
 
     bool bMirr=aPt3.Y()<0;
     if (bMirr) { // "exchange of points" when mirroring
         nHgt=-nHgt;
-        nShW+=18000;
+        nShW+=18000_deg100;
         aPt0=rPol[3];
     }
     nShW=NormAngle18000(nShW);
-    if (nShW<-9000 || nShW>9000) {
-        nShW=NormAngle18000(nShW+18000);
+    if (nShW<-9000_deg100 || nShW>9000_deg100) {
+        nShW=NormAngle18000(nShW+18000_deg100);
     }
     if (nShW<-SDRMAXSHEAR) nShW=-SDRMAXSHEAR; // limit ShearWinkel (shear angle) to +/- 89.00 deg
     if (nShW>SDRMAXSHEAR)  nShW=SDRMAXSHEAR;

@@ -2975,8 +2975,8 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
         if(dynamic_cast<const SdrCircObj*>( pObj) !=  nullptr)
         {
             SfxItemSet aAttr(pDrawModel->GetItemPool());
-            aAttr.Put(makeSdrCircStartAngleItem(9000));
-            aAttr.Put(makeSdrCircEndAngleItem(0));
+            aAttr.Put(makeSdrCircStartAngleItem(9000_deg100));
+            aAttr.Put(makeSdrCircEndAngleItem(0_deg100));
             pObj->SetMergedItemSet(aAttr);
         }
         else if(dynamic_cast<const SdrPathObj*>( pObj) !=  nullptr)
