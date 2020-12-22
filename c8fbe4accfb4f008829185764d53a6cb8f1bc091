@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0930ec43_b0c8b172",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 3868,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-22T08:38:41Z",
+      "side": 1,
+      "message": "Ah, so I suppose there *was* a misunderstanding. As mentioned, what I suggested was not to format this line, but to move the brace below. What you did is *both* moved the brace below, *and* re-formatted this line, which *in this case* is wrong, since *this line* is only reformatted, and not changed otherwise in your patch.",
+      "range": {
+        "startLine": 3868,
+        "startChar": 12,
+        "endLine": 3868,
+        "endChar": 21
+      },
+      "revId": "c8fbe4accfb4f008829185764d53a6cb8f1bc091",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
