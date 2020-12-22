@@ -1289,32 +1289,32 @@ void XclImpArcObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uIn
 SdrObjectUniquePtr XclImpArcObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const
 {
     tools::Rectangle aNewRect = rAnchorRect;
-    tools::Long nStartAngle = 0;
-    tools::Long nEndAngle = 0;
+    Degree100 nStartAngle;
+    Degree100 nEndAngle;
     switch( mnQuadrant )
     {
         default:
         case EXC_OBJ_ARC_TR:
-            nStartAngle = 0;
-            nEndAngle = 9000;
+            nStartAngle = 0_deg100;
+            nEndAngle = 9000_deg100;
             aNewRect.AdjustLeft( -(rAnchorRect.GetWidth()) );
             aNewRect.AdjustBottom(rAnchorRect.GetHeight() );
         break;
         case EXC_OBJ_ARC_TL:
-            nStartAngle = 9000;
-            nEndAngle = 18000;
+            nStartAngle = 9000_deg100;
+            nEndAngle = 18000_deg100;
             aNewRect.AdjustRight(rAnchorRect.GetWidth() );
             aNewRect.AdjustBottom(rAnchorRect.GetHeight() );
         break;
         case EXC_OBJ_ARC_BL:
-            nStartAngle = 18000;
-            nEndAngle = 27000;
+            nStartAngle = 18000_deg100;
+            nEndAngle = 27000_deg100;
             aNewRect.AdjustRight(rAnchorRect.GetWidth() );
             aNewRect.AdjustTop( -(rAnchorRect.GetHeight()) );
         break;
         case EXC_OBJ_ARC_BR:
-            nStartAngle = 27000;
-            nEndAngle = 0;
+            nStartAngle = 27000_deg100;
+            nEndAngle = 0_deg100;
             aNewRect.AdjustLeft( -(rAnchorRect.GetWidth()) );
             aNewRect.AdjustTop( -(rAnchorRect.GetHeight()) );
         break;

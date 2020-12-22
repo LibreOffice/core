@@ -25,7 +25,7 @@
 class SdrShearAngleItem : public SdrAngleItem
 {
 public:
-    SdrShearAngleItem(tools::Long nAngle = 0)
+    SdrShearAngleItem(Degree100 nAngle = 0_deg100)
         : SdrAngleItem(SDRATTR_SHEARANGLE, nAngle)
     {
     }

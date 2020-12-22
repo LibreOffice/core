@@ -847,8 +847,8 @@ SdOptionsSnapItem::SdOptionsSnapItem( SdOptions const * pOpts, ::sd::FrameView c
         maOptionsSnap.SetBigOrtho( pView->IsBigOrtho() );
         maOptionsSnap.SetRotate( pView->IsAngleSnapEnabled() );
         maOptionsSnap.SetSnapArea( pView->GetSnapMagneticPixel() );
-        maOptionsSnap.SetAngle( Degree10(pView->GetSnapAngle() / 10) );
-        maOptionsSnap.SetEliminatePolyPointLimitAngle( Degree10(pView->GetEliminatePolyPointLimitAngle() / 10) );
+        maOptionsSnap.SetAngle( toDegree10(pView->GetSnapAngle()) );
+        maOptionsSnap.SetEliminatePolyPointLimitAngle( toDegree10(pView->GetEliminatePolyPointLimitAngle()) );
     }
     else if( pOpts )
     {

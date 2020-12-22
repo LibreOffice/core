@@ -719,7 +719,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             ScaleEmu( nTextTop );
             ScaleEmu( nTextBottom );
 
-            sal_Int32 nTextRotationAngle=0;
+            Degree100 nTextRotationAngle;
             bool bVerticalText = false;
             if ( IsProperty( DFF_Prop_txflTextFlow ) )
             {
@@ -728,18 +728,18 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 switch( eTextFlow )
                 {
                     case mso_txflBtoT:
-                        nTextRotationAngle = 9000;
+                        nTextRotationAngle = 9000_deg100;
                     break;
                     case mso_txflVertN:
                     case mso_txflTtoBN:
-                        nTextRotationAngle = 27000;
+                        nTextRotationAngle = 27000_deg100;
                         break;
                     case mso_txflTtoBA:
                         bVerticalText = true;
                     break;
                     case mso_txflHorzA:
                         bVerticalText = true;
-                        nTextRotationAngle = 9000;
+                        nTextRotationAngle = 9000_deg100;
                     break;
                     case mso_txflHorzN:
                     default :
@@ -749,7 +749,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
             if (nTextRotationAngle)
             {
-                if (nTextRotationAngle == 9000)
+                if (nTextRotationAngle == 9000_deg100)
                 {
                     tools::Long nWidth = rTextRect.GetWidth();
                     rTextRect.SetRight( rTextRect.Left() + rTextRect.GetHeight() );
@@ -765,7 +765,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                     nTextTop = nOldTextLeft;
                     nTextBottom = nOldTextRight;
                 }
-                else if (nTextRotationAngle == 27000)
+                else if (nTextRotationAngle == 27000_deg100)
                 {
                     tools::Long nWidth = rTextRect.GetWidth();
                     rTextRect.SetRight( rTextRect.Left() + rTextRect.GetHeight() );
@@ -942,13 +942,13 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                         double fExtraTextRotation = 0.0;
                         if ( mnFix16Angle && !( GetPropertyValue( DFF_Prop_FitTextToShape, 0 ) & 4 ) )
                         {   // text is already rotated, we have to take back the object rotation if DFF_Prop_RotateText is false
-                            fExtraTextRotation = -mnFix16Angle;
+                            fExtraTextRotation = -mnFix16Angle.get();
                         }
                         if ( rObjData.nSpFlags & ShapeFlag::FlipV )    // sj: in ppt the text is flipped, whereas in word the text
                         {                                       // remains unchanged, so we have to take back the flipping here
                             fExtraTextRotation += 18000.0;      // because our core will flip text if the shape is flipped.
                         }
-                        fExtraTextRotation += nTextRotationAngle;
+                        fExtraTextRotation += nTextRotationAngle.get();
                         if ( !::basegfx::fTools::equalZero( fExtraTextRotation ) )
                         {
                             fExtraTextRotation /= 100.0;
@@ -964,9 +964,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 else if ( mnFix16Angle )
                 {
                     // rotate text with shape ?
-                    double a = mnFix16Angle * F_PI18000;
-                    pObj->NbcRotate( rObjData.aBoundRect.Center(), mnFix16Angle,
-                                     sin( a ), cos( a ) );
+                    pObj->NbcRotate( rObjData.aBoundRect.Center(), mnFix16Angle );
                 }
             }
         }
