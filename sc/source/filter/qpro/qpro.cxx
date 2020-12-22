@@ -254,7 +254,16 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportQPW(SvStream &rStream)
     aDocument.SetHardRecalcState(ScDocument::HardRecalcState::ETERNAL);
 
     ScQProReader aReader(&rStream);
-    ErrCode eRet = aReader.parse(aDocument);
+
+    ErrCode eRet;
+    try
+    {
+        eRet = aReader.parse(aDocument);
+    }
+    catch (SvStreamEOFException&)
+    {
+        eRet = SCERR_IMPORT_OPEN;
+    }
     return eRet == ERRCODE_NONE;
 }
 
