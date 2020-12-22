@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "6cc089e2_5d977716",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3868,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-22T08:36:19Z",
+      "side": 1,
+      "message": "I suppose there might be some misunderstanding.\n\nWhat *I* proposed was to put the brace to a new line below; and that would make this line 3868 *totally untouched*.\n\nOn the other hand, whenever I *do* touch any line in the code with something related to the change (even minimally), i try to make sure that it becomes clang-format-compliant: it will have a new entry in the gerrit log anyway, so why not making it formatted, so that in case the file will be formatted at some point, this line will not get yet another unnecessary log entry. So if you wanted to keep brace on this line, then I would suggest to reformat the spaces around parentheses.",
+      "parentUuid": "ba5cb064_e3666752",
+      "range": {
+        "startLine": 3868,
+        "startChar": 22,
+        "endLine": 3868,
+        "endChar": 24
+      },
+      "revId": "ae06e0e27b825a6ccd471cba28cf3bbf224df36f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "936fa8e1_b3588231",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 5
