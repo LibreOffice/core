@@ -55,7 +55,17 @@ bool StgIo::Load()
 {
     if( GetStrm() )
     {
-        if( m_aHdr.Load( *this ) )
+        bool bLoaded;
+        try
+        {
+            bLoaded = m_aHdr.Load(*this);
+        }
+        catch (const SvStreamEOFException&)
+        {
+            SAL_WARN("sot", "EOF");
+            bLoaded = false;
+        }
+        if (bLoaded)
         {
             if( m_aHdr.Check() )
                 SetupStreams();
