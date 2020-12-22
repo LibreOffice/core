@@ -52,6 +52,24 @@
       "revId": "1aeae0642055b1667208c16b206781fd10770664",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c5c400d_1cc1aca6",
+        "filename": "svx/source/sdr/contact/viewcontactofgraphic.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-12-22T13:20:03Z",
+      "side": 1,
+      "message": "OK. I have only found one direct write access to nTan (now mfTanShearAngle). That is in SdrTextObj::ImpCheckShear() and that is nTan\u003d0, so no problem.\n\n\u003eAlso noting that if you care about this, there are lots of places that calculate tan/sin/cos themselves before calling Rotate and are __not__ currently special casing the zero case.\n\nYes, unfortunately. Resulting in transformation where no should be.\n\nIt is nice to have a better identifier now.",
+      "parentUuid": "e1e68372_b45d188f",
+      "revId": "1aeae0642055b1667208c16b206781fd10770664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
