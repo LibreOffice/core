@@ -606,10 +606,7 @@ void OReportSection::createDefault(const OUString& _sType,SdrObject* _pObj)
                         _pObj->SetMergedItemSet( aDest );
                         sal_Int32 nAngle = pSourceObj->GetRotateAngle();
                         if ( nAngle )
-                        {
-                            double a = nAngle * F_PI18000;
-                            _pObj->NbcRotate( _pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
-                        }
+                            _pObj->NbcRotate( _pObj->GetSnapRect().Center(), nAngle );
                         bAttributesAppliedFromGallery = true;
                     }
                 }

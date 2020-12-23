@@ -537,6 +537,8 @@ public:
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcCrop  (const basegfx::B2DPoint& rRef, double fxFact, double fyFact);
     virtual void NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs);
+    // Utility for call sites that don't have sin and cos handy
+    void NbcRotate(const Point& rRef, tools::Long nAngle);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
     virtual void NbcShear (const Point& rRef, tools::Long nAngle, double tn, bool bVShear);
 
