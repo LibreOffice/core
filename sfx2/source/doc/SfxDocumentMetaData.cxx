@@ -437,14 +437,14 @@ getQualifier(const char* i_name) {
 OUString getNameSpace(const char* i_qname) throw ()
 {
     assert(i_qname);
-    const char * ns = "";
+    OUString ns;
     OUString n = getQualifier(i_qname).first;
     if ( n == "xlink" ) ns = s_nsXLink;
     if ( n == "dc" ) ns = s_nsDC;
     if ( n == "office" ) ns = s_nsODF;
     if ( n == "meta" ) ns = s_nsODFMeta;
-    assert(*ns);
-    return OUString::createFromAscii(ns);
+    assert(!ns.isEmpty());
+    return ns;
 }
 
 bool
