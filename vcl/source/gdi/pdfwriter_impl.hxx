@@ -51,7 +51,6 @@
 #include <comphelper/hash.hxx>
 #include <tools/stream.hxx>
 
-#include <outdata.hxx>
 #include <vcl/filter/pdfobjectcontainer.hxx>
 #include <pdf/ExternalPDFStreams.hxx>
 #include "pdffontcache.hxx"
@@ -1094,13 +1093,13 @@ public:
 
     void setLineColor( const Color& rColor )
     {
-        m_aGraphicsStack.front().m_aLineColor = ImplIsColorTransparent(rColor) ? COL_TRANSPARENT : rColor;
+        m_aGraphicsStack.front().m_aLineColor = rColor.IsTransparent() ? COL_TRANSPARENT : rColor;
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::LineColor;
     }
 
     void setFillColor( const Color& rColor )
     {
-        m_aGraphicsStack.front().m_aFillColor = ImplIsColorTransparent(rColor) ? COL_TRANSPARENT : rColor;
+        m_aGraphicsStack.front().m_aFillColor = rColor.IsTransparent() ? COL_TRANSPARENT : rColor;
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::FillColor;
     }
 
@@ -1127,7 +1126,7 @@ public:
     void setTextFillColor( const Color& rColor )
     {
         m_aGraphicsStack.front().m_aFont.SetFillColor( rColor );
-        m_aGraphicsStack.front().m_aFont.SetTransparent( ImplIsColorTransparent( rColor ) );
+        m_aGraphicsStack.front().m_aFont.SetTransparent( rColor.IsTransparent() );
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::Font;
     }
     void setTextFillColor()

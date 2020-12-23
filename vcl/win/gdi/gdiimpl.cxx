@@ -46,7 +46,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
 
-#include <outdata.hxx>
 #include <win/salids.hrc>
 #include <ControlCacheKey.hxx>
 

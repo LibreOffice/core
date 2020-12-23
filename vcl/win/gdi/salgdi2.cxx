@@ -35,7 +35,6 @@
 #include <vcl/BitmapPalette.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/Scanline.hxx>
-#include <outdata.hxx>
 #include <salgdiimpl.hxx>
 
 #include <config_features.h>

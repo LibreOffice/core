@@ -31,7 +31,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 
-#include <outdata.hxx>
 #include <salgdi.hxx>
 #include <bitmapwriteaccess.hxx>
 
@@ -84,7 +83,7 @@ Color OutputDevice::ImplDrawModeToColor( const Color& rColor ) const
                       DrawModeFlags::GrayLine |
                       DrawModeFlags::SettingsLine ) )
     {
-        if( !ImplIsColorTransparent( aColor ) )
+        if( !aColor.IsTransparent() )
         {
             if( nDrawMode & DrawModeFlags::BlackLine )
             {
