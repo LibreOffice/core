@@ -358,7 +358,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
     // #95477# Rotated tab stops get the width of one blank
     const Degree10 nDir = rInf.GetFont()->GetOrientation( rInf.GetTextFrame()->IsVertical() );
 
-    if( ! bFull && Degree10(0) == nDir )
+    if( ! bFull && 0_deg10 == nDir )
     {
         const PortionType nWhich = GetWhichPor();
         switch( nWhich )

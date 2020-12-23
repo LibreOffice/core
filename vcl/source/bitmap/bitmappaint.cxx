@@ -212,12 +212,12 @@ bool Bitmap::Rotate(Degree10 nAngle10, const Color& rFillColor)
 {
     bool bRet = false;
 
-    nAngle10 %= Degree10(3600);
-    nAngle10 = (nAngle10 < Degree10(0)) ? (Degree10(3599) + nAngle10) : nAngle10;
+    nAngle10 %= 3600_deg10;
+    nAngle10 = (nAngle10 < 0_deg10) ? (Degree10(3599) + nAngle10) : nAngle10;
 
     if (!nAngle10)
         bRet = true;
-    else if (nAngle10 == Degree10(1800))
+    else if (nAngle10 == 1800_deg10)
         bRet = Mirror(BmpMirrorFlags::Horizontal | BmpMirrorFlags::Vertical);
     else
     {
@@ -228,7 +228,7 @@ bool Bitmap::Rotate(Degree10 nAngle10, const Color& rFillColor)
         {
             const Size aSizePix(GetSizePixel());
 
-            if (nAngle10 == Degree10(900) || nAngle10 == Degree10(2700))
+            if (nAngle10 == 900_deg10 || nAngle10 == 2700_deg10)
             {
                 const Size aNewSizePix(aSizePix.Height(), aSizePix.Width());
                 Bitmap aNewBmp(aNewSizePix, GetBitCount(), &pReadAcc->GetPalette());
@@ -243,7 +243,7 @@ bool Bitmap::Rotate(Degree10 nAngle10, const Color& rFillColor)
                     const tools::Long nNewWidth = aNewSizePix.Width();
                     const tools::Long nNewHeight = aNewSizePix.Height();
 
-                    if (nAngle10 == Degree10(900))
+                    if (nAngle10 == 900_deg10)
                     {
                         for (tools::Long nY = 0, nOtherX = nWidth1; nY < nNewHeight;
                              nY++, nOtherX--)
@@ -256,7 +256,7 @@ bool Bitmap::Rotate(Degree10 nAngle10, const Color& rFillColor)
                             }
                         }
                     }
-                    else if (nAngle10 == Degree10(2700))
+                    else if (nAngle10 == 2700_deg10)
                     {
                         for (tools::Long nY = 0, nOtherX = 0; nY < nNewHeight; nY++, nOtherX++)
                         {

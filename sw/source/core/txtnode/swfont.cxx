@@ -311,9 +311,9 @@ sal_uInt16 SwFont::CalcShadowSpace(const SvxShadowItemSide nShadow, const bool b
         case SvxShadowItemSide::TOP:
             if(( aLoc == SvxShadowLocation::TopLeft ||
                aLoc == SvxShadowLocation::TopRight ) &&
-               ( nOrient == Degree10(0) || nOrient == Degree10(1800) ||
-               ( nOrient == Degree10(900) && !bSkipRight ) ||
-               ( nOrient == Degree10(2700) && !bSkipLeft )))
+               ( nOrient == 0_deg10 || nOrient == 1800_deg10 ||
+               ( nOrient == 900_deg10 && !bSkipRight ) ||
+               ( nOrient == 2700_deg10 && !bSkipLeft )))
             {
                 nSpace = m_nShadowWidth;
             }
@@ -322,9 +322,9 @@ sal_uInt16 SwFont::CalcShadowSpace(const SvxShadowItemSide nShadow, const bool b
         case SvxShadowItemSide::BOTTOM:
             if(( aLoc == SvxShadowLocation::BottomLeft ||
                aLoc == SvxShadowLocation::BottomRight ) &&
-               ( nOrient == Degree10(0) || nOrient == Degree10(1800) ||
-               ( nOrient == Degree10(900) && !bSkipLeft ) ||
-               ( nOrient == Degree10(2700) && !bSkipRight )))
+               ( nOrient == 0_deg10 || nOrient == 1800_deg10 ||
+               ( nOrient == 900_deg10 && !bSkipLeft ) ||
+               ( nOrient == 2700_deg10 && !bSkipRight )))
             {
                 nSpace = m_nShadowWidth;
             }
@@ -333,9 +333,9 @@ sal_uInt16 SwFont::CalcShadowSpace(const SvxShadowItemSide nShadow, const bool b
         case SvxShadowItemSide::LEFT:
             if(( aLoc == SvxShadowLocation::TopLeft ||
                aLoc == SvxShadowLocation::BottomLeft ) &&
-               ( nOrient == Degree10(900) || nOrient == Degree10(2700) ||
-               ( nOrient == Degree10(0) && !bSkipLeft ) ||
-               ( nOrient == Degree10(1800) && !bSkipRight )))
+               ( nOrient == 900_deg10 || nOrient == 2700_deg10 ||
+               ( nOrient == 0_deg10 && !bSkipLeft ) ||
+               ( nOrient == 1800_deg10 && !bSkipRight )))
             {
                 nSpace = m_nShadowWidth;
             }
@@ -344,9 +344,9 @@ sal_uInt16 SwFont::CalcShadowSpace(const SvxShadowItemSide nShadow, const bool b
          case SvxShadowItemSide::RIGHT:
             if(( aLoc == SvxShadowLocation::TopRight ||
                aLoc == SvxShadowLocation::BottomRight ) &&
-               ( nOrient == Degree10(900) || nOrient == Degree10(2700) ||
-               ( nOrient == Degree10(0) && !bSkipRight ) ||
-               ( nOrient == Degree10(1800) && !bSkipLeft )))
+               ( nOrient == 900_deg10 || nOrient == 2700_deg10 ||
+               ( nOrient == 0_deg10 && !bSkipRight ) ||
+               ( nOrient == 1800_deg10 && !bSkipLeft )))
             {
                 nSpace = m_nShadowWidth;
             }
@@ -368,15 +368,15 @@ static Degree10 MapDirection(Degree10 nDir, const bool bVertFormat, const bool b
         {
         case 0 :
             if (bVertFormatLRBT)
-                nDir = Degree10(900);
+                nDir = 900_deg10;
             else
-                nDir = Degree10(2700);
+                nDir = 2700_deg10;
             break;
         case 900 :
-            nDir = Degree10(0);
+            nDir = 0_deg10;
             break;
         case 2700 :
-            nDir = Degree10(1800);
+            nDir = 1800_deg10;
             break;
 #if OSL_DEBUG_LEVEL > 0
         default :
@@ -397,7 +397,7 @@ Degree10 UnMapDirection(Degree10 nDir, const bool bVertFormat, const bool bVertF
         switch (nDir.get())
         {
             case 900:
-                nDir = Degree10(0);
+                nDir = 0_deg10;
                 break;
             default:
                 SAL_WARN("sw.core", "unsupported direction for VertLRBT");
@@ -411,13 +411,13 @@ Degree10 UnMapDirection(Degree10 nDir, const bool bVertFormat, const bool bVertF
         switch ( nDir.get() )
         {
         case 0 :
-            nDir = Degree10(900);
+            nDir = 900_deg10;
             break;
         case 1800 :
-            nDir = Degree10(2700);
+            nDir = 2700_deg10;
             break;
         case 2700 :
-            nDir = Degree10(0);
+            nDir = 0_deg10;
             break;
 #if OSL_DEBUG_LEVEL > 0
         default :
@@ -695,7 +695,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         if( SfxItemState::SET ==
                 pAttrSet->GetItemState( RES_CHRATR_TWO_LINES, true, &pTwoLinesItem ))
             if ( static_cast<const SvxTwoLinesItem*>(pTwoLinesItem)->GetValue() )
-                SetVertical( Degree10(0) );
+                SetVertical( 0_deg10 );
     }
     else
     {
@@ -882,7 +882,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     if ( ! rTwoLinesItem.GetValue() )
         SetVertical( pAttrSet->GetCharRotate().GetValue() );
     else
-        SetVertical( Degree10(0) );
+        SetVertical( 0_deg10 );
     if( pIDocumentSettingAccess && pIDocumentSettingAccess->get( DocumentSettingId::SMALL_CAPS_PERCENTAGE_66 ))
     {
         m_aSub[ SwFontScript::Latin ].m_bSmallCapsPercentage66 = true;
@@ -1473,7 +1473,7 @@ void SwDrawTextInfo::Shift( Degree10 nDir )
         bVert = GetFrame()->IsVertical();
         bVertLRBT = GetFrame()->IsVertLRBT();
     }
-    nDir = bBidiPor ? Degree10(1800) : UnMapDirection(nDir, bVert, bVertLRBT);
+    nDir = bBidiPor ? 1800_deg10 : UnMapDirection(nDir, bVert, bVertLRBT);
 
     switch ( nDir.get() )
     {

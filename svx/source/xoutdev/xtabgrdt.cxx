@@ -69,17 +69,17 @@ bool XGradientList::Create()
     OUStringBuffer aStr(SvxResId(RID_SVXSTR_GRADIENT));
     aStr.append(" 1");
     sal_Int32 nLen = aStr.getLength() - 1;
-    Insert(std::make_unique<XGradientEntry>(XGradient(COL_BLACK,   COL_WHITE, css::awt::GradientStyle_LINEAR    ,    Degree10(0),10,10, 0,100,100),aStr.toString()));
+    Insert(std::make_unique<XGradientEntry>(XGradient(COL_BLACK,   COL_WHITE, css::awt::GradientStyle_LINEAR    ,    0_deg10,10,10, 0,100,100),aStr.toString()));
     aStr[nLen] = '2';
-    Insert(std::make_unique<XGradientEntry>(XGradient(COL_BLUE,    COL_RED,   css::awt::GradientStyle_AXIAL     ,  Degree10(300),20,20,10,100,100),aStr.toString()));
+    Insert(std::make_unique<XGradientEntry>(XGradient(COL_BLUE,    COL_RED,   css::awt::GradientStyle_AXIAL     ,  300_deg10,20,20,10,100,100),aStr.toString()));
     aStr[nLen] = '3';
-    Insert(std::make_unique<XGradientEntry>(XGradient(COL_RED,     COL_YELLOW,css::awt::GradientStyle_RADIAL    ,  Degree10(600),30,30,20,100,100),aStr.toString()));
+    Insert(std::make_unique<XGradientEntry>(XGradient(COL_RED,     COL_YELLOW,css::awt::GradientStyle_RADIAL    ,  600_deg10,30,30,20,100,100),aStr.toString()));
     aStr[nLen] = '4';
-    Insert(std::make_unique<XGradientEntry>(XGradient(COL_YELLOW , COL_GREEN, css::awt::GradientStyle_ELLIPTICAL,  Degree10(900),40,40,30,100,100),aStr.toString()));
+    Insert(std::make_unique<XGradientEntry>(XGradient(COL_YELLOW , COL_GREEN, css::awt::GradientStyle_ELLIPTICAL,  900_deg10,40,40,30,100,100),aStr.toString()));
     aStr[nLen] = '5';
-    Insert(std::make_unique<XGradientEntry>(XGradient(COL_GREEN  , COL_MAGENTA,css::awt::GradientStyle_SQUARE    , Degree10(1200),50,50,40,100,100),aStr.toString()));
+    Insert(std::make_unique<XGradientEntry>(XGradient(COL_GREEN  , COL_MAGENTA,css::awt::GradientStyle_SQUARE    , 1200_deg10,50,50,40,100,100),aStr.toString()));
     aStr[nLen] = '6';
-    Insert(std::make_unique<XGradientEntry>(XGradient(COL_MAGENTA, COL_YELLOW ,css::awt::GradientStyle_RECT      , Degree10(1900),60,60,50,100,100),aStr.toString()));
+    Insert(std::make_unique<XGradientEntry>(XGradient(COL_MAGENTA, COL_YELLOW ,css::awt::GradientStyle_RECT      , 1900_deg10,60,60,50,100,100),aStr.toString()));
 
     return true;
 }

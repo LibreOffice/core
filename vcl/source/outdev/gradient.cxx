@@ -265,7 +265,7 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
     // get BoundRect of rotated rectangle
     tools::Rectangle aRect;
     Point     aCenter;
-    Degree10  nAngle = rGradient.GetAngle() % Degree10(3600);
+    Degree10  nAngle = rGradient.GetAngle() % 3600_deg10;
 
     rGradient.GetBoundRect( rRect, aRect, aCenter );
 
@@ -470,7 +470,7 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
     tools::Long            nRedSteps = nEndRed - nStartRed;
     tools::Long            nGreenSteps = nEndGreen - nStartGreen;
     tools::Long            nBlueSteps = nEndBlue   - nStartBlue;
-    Degree10       nAngle = rGradient.GetAngle() % Degree10(3600);
+    Degree10       nAngle = rGradient.GetAngle() % 3600_deg10;
 
     rGradient.GetBoundRect( rRect, aRect, aCenter );
 
@@ -623,7 +623,7 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
     // get BoundRect of rotated rectangle
     tools::Rectangle aRect;
     Point     aCenter;
-    Degree10  nAngle = rGradient.GetAngle() % Degree10(3600);
+    Degree10  nAngle = rGradient.GetAngle() % 3600_deg10;
 
     rGradient.GetBoundRect( rRect, aRect, aCenter );
 
@@ -820,7 +820,7 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
     tools::Long            nRedSteps = nEndRed - nStartRed;
     tools::Long            nGreenSteps = nEndGreen - nStartGreen;
     tools::Long            nBlueSteps = nEndBlue   - nStartBlue;
-    Degree10       nAngle = rGradient.GetAngle() % Degree10(3600);
+    Degree10       nAngle = rGradient.GetAngle() % 3600_deg10;
 
     rGradient.GetBoundRect( rRect, aRect, aCenter );
 

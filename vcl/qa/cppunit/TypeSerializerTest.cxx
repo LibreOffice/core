@@ -87,7 +87,7 @@ TypeSerializerTest::~TypeSerializerTest()
 void TypeSerializerTest::testGradient()
 {
     Gradient aGradient(GradientStyle::Radial, Color(0xFF, 0x00, 0x00), Color(0x00, 0xFF, 0x00));
-    aGradient.SetAngle(Degree10(900));
+    aGradient.SetAngle(900_deg10);
     aGradient.SetBorder(5);
     aGradient.SetOfsX(11);
     aGradient.SetOfsY(12);

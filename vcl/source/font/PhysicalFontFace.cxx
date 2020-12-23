@@ -161,7 +161,7 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
     int nHeightMatch = 0;
     int nWidthMatch = 0;
 
-    if( rFSD.mnOrientation != Degree10(0) )
+    if( rFSD.mnOrientation != 0_deg10 )
         nMatch += 80;
     else if( rFSD.mnWidth != 0 )
         nMatch += 25;

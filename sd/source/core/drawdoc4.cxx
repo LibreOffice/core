@@ -397,7 +397,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         pISet = &pSheet->GetItemSet();
         pISet->Put(XFillStyleItem(drawing::FillStyle_GRADIENT));           // fill with gradient
         aGradient.SetGradientStyle( ::awt::GradientStyle_RECT);            // square type
-        aGradient.SetAngle( Degree10(0) );                                 // 0° angle
+        aGradient.SetAngle( 0_deg10 );                                 // 0° angle
         aGradient.SetStartColor( Color(0xcccccc) );                        // white
         aGradient.SetEndColor( COL_WHITE );                                // light gray 3
         aFillGradient.SetName( aShapesName );
@@ -417,7 +417,7 @@ void SdDrawDocument::CreateLayoutTemplates()
         pISet = &pSheet->GetItemSet();
 
         aGradient.SetGradientStyle( ::awt::GradientStyle_LINEAR );
-        aGradient.SetAngle( Degree10(300) );
+        aGradient.SetAngle( 300_deg10 );
         aGradient.SetStartColor( COL_WHITE );                              // white
         aGradient.SetEndColor( Color(0xcccccc) );                          // light gray 3
         aFillGradient.SetName( aName );

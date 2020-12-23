@@ -562,7 +562,7 @@ Point SalLayout::GetDrawPosition( const Point& rRelative ) const
     Point aPos = maDrawBase;
     Point aOfs = rRelative + maDrawOffset;
 
-    if( mnOrientation == Degree10(0) )
+    if( mnOrientation == 0_deg10 )
         aPos += aOfs;
     else
     {

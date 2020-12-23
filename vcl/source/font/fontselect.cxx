@@ -46,12 +46,12 @@ FontSelectPattern::FontSelectPattern( const vcl::Font& rFont,
     rFont.GetFontAttributes( *this );
 
     // normalize orientation between 0 and 3600
-    if( mnOrientation < Degree10(0) || mnOrientation >= Degree10(3600) )
+    if( mnOrientation < 0_deg10 || mnOrientation >= 3600_deg10 )
     {
-        if( mnOrientation >= Degree10(0) )
-            mnOrientation %= Degree10(3600);
+        if( mnOrientation >= 0_deg10 )
+            mnOrientation %= 3600_deg10;
         else
-            mnOrientation = Degree10(3600) - (-mnOrientation % Degree10(3600));
+            mnOrientation = 3600_deg10 - (-mnOrientation % 3600_deg10);
     }
 
     // normalize width and height

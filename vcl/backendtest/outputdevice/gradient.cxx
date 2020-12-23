@@ -18,7 +18,7 @@ Bitmap OutputDeviceTestGradient::setupLinearGradient()
     initialSetup(12, 12, constBackgroundColor);
 
     Gradient aGradient(GradientStyle::Linear, Color(0xFF, 0xFF, 0xFF), Color(0x00, 0x00, 0x00));
-    aGradient.SetAngle(Degree10(900));
+    aGradient.SetAngle(900_deg10);
     tools::Rectangle aDrawRect(maVDRectangle.Left() + 1, maVDRectangle.Top() + 1,
                                maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
     mpVirtualDevice->DrawGradient(aDrawRect, aGradient);
@@ -31,7 +31,7 @@ Bitmap OutputDeviceTestGradient::setupLinearGradientAngled()
     initialSetup(12, 12, constBackgroundColor);
 
     Gradient aGradient(GradientStyle::Linear, Color(0xFF, 0xFF, 0xFF), Color(0x00, 0x00, 0x00));
-    aGradient.SetAngle(Degree10(450));
+    aGradient.SetAngle(450_deg10);
     tools::Rectangle aDrawRect(maVDRectangle.Left() + 1, maVDRectangle.Top() + 1,
                                maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
     mpVirtualDevice->DrawGradient(aDrawRect, aGradient);
@@ -70,7 +70,7 @@ Bitmap OutputDeviceTestGradient::setupLinearGradientSteps()
     initialSetup(12, 12, constBackgroundColor);
 
     Gradient aGradient(GradientStyle::Linear, Color(0xFF, 0xFF, 0xFF), Color(0x00, 0x00, 0x00));
-    aGradient.SetAngle(Degree10(900));
+    aGradient.SetAngle(900_deg10);
     aGradient.SetSteps(4);
     tools::Rectangle aDrawRect(maVDRectangle.Left() + 1, maVDRectangle.Top() + 1,
                                maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
@@ -84,7 +84,7 @@ Bitmap OutputDeviceTestGradient::setupAxialGradient()
     initialSetup(13, 13, constBackgroundColor);
 
     Gradient aGradient(GradientStyle::Axial, Color(0xFF, 0xFF, 0xFF), Color(0x00, 0x00, 0x00));
-    aGradient.SetAngle(Degree10(900));
+    aGradient.SetAngle(900_deg10);
     tools::Rectangle aDrawRect(maVDRectangle.Left() + 1, maVDRectangle.Top() + 1,
                                maVDRectangle.Right() - 1, maVDRectangle.Bottom() - 1);
     mpVirtualDevice->DrawGradient(aDrawRect, aGradient);

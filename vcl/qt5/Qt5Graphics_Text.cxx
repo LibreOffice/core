@@ -305,7 +305,7 @@ void Qt5Graphics::DrawTextLayout(const GenericSalLayout& rLayout)
         = static_cast<Qt5CommonSalLayout*>(const_cast<GenericSalLayout*>(&rLayout));
     Degree10 nOrientation = rLayout.GetOrientation();
     if (nOrientation)
-        pQt5Layout->SetOrientation(Degree10(0));
+        pQt5Layout->SetOrientation(0_deg10);
 
     Point aPos;
     const GlyphItem* pGlyph;

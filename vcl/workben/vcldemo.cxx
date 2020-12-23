@@ -463,7 +463,7 @@ public:
                     aFontRect.AdjustTop(nHeight/2 );
                     aFontRect.AdjustBottom(nHeight );
 
-                    aFont.SetOrientation(Degree10(450)); // 45 degrees
+                    aFont.SetOrientation(450_deg10); // 45 degrees
 
                     rDev.SetFont(aFont);
                     rDev.DrawText(aFontRect, aText);
@@ -679,7 +679,7 @@ public:
                     case 2:
                     {
                         tools::Polygon aPoly(aSub);
-                        aPoly.Rotate(aSub.Center(), Degree10(450));
+                        aPoly.Rotate(aSub.Center(), 450_deg10);
                         aPoly.Clip(aSmaller);
                         aRegion = vcl::Region(aPoly);
                         break;
@@ -1035,7 +1035,7 @@ public:
                         case 3:
                         case 0: // 45degree rectangle.
                             aPoly = tools::Polygon(aPieces[i]);
-                            aPoly.Rotate(aPieces[i].Center(), Degree10(450));
+                            aPoly.Rotate(aPieces[i].Center(), 450_deg10);
                             break;
                         case 1: // arc
                             aPoly = tools::Polygon(aPieces[i],
@@ -1046,7 +1046,7 @@ public:
                             aPoly = tools::Polygon(aPieces[i],
                                                    aPieces[i].GetWidth()/5,
                                                    aPieces[i].GetHeight()/5);
-                            aPoly.Rotate(aPieces[i].Center(), Degree10(450));
+                            aPoly.Rotate(aPieces[i].Center(), 450_deg10);
                             break;
                         }
                         aClipRegion = vcl::Region(aPoly);

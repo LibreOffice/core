@@ -3452,7 +3452,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
             }
         }
 
-        rParam.mpEngine->Draw(mpDev, aLogicStart, Degree10(900));
+        rParam.mpEngine->Draw(mpDev, aLogicStart, 900_deg10);
     }
 
     rParam.adjustForHyperlinkInPDF(aURLStart, mpDev);
@@ -3689,7 +3689,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
         // bMoveClipped handling has been replaced by complete alignment
         // handling (also extending to the left).
 
-        rParam.mpEngine->Draw(mpDev, aLogicStart, Degree10(2700));
+        rParam.mpEngine->Draw(mpDev, aLogicStart, 2700_deg10);
     }
 
     rParam.adjustForHyperlinkInPDF(aURLStart, mpDev);

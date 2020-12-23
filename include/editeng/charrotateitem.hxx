@@ -52,10 +52,10 @@ public:
     void SetValue(Degree10 val) { SfxUInt16Item::SetValue(val.get()); }
 
     // our currently only degree values
-    void SetTopToBottom() { SetValue(Degree10(2700)); }
-    void SetBottomToTop() { SetValue(Degree10(900)); }
-    bool IsTopToBottom() const { return Degree10(2700) == GetValue(); }
-    bool IsBottomToTop() const { return  Degree10(900) == GetValue(); }
+    void SetTopToBottom() { SetValue(2700_deg10); }
+    void SetBottomToTop() { SetValue(900_deg10); }
+    bool IsTopToBottom() const { return 2700_deg10 == GetValue(); }
+    bool IsBottomToTop() const { return  900_deg10 == GetValue(); }
     bool IsVertical() const     { return IsTopToBottom() || IsBottomToTop(); }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;

@@ -786,7 +786,7 @@ static bool lcl_CheckRotation(const SfxPoolItem *const pItem,
 {
     if ( pItem )
     {
-        rValue = static_cast<const SvxCharRotateItem*>(pItem)->GetValue() != Degree10(0);
+        rValue = static_cast<const SvxCharRotateItem*>(pItem)->GetValue() != 0_deg10;
         if( !rpRef )
             rpRef = static_cast<const SvxCharRotateItem*>(pItem);
         else if( static_cast<const SvxCharRotateItem*>(pItem)->GetValue() !=
@@ -1731,7 +1731,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
         {
             // we do not allow any rotation inside a bidi portion
             SwFont* pTmpFont = GetInfo().GetFont();
-            pTmpFont->SetVertical( Degree10(0), GetInfo().GetTextFrame()->IsVertical() );
+            pTmpFont->SetVertical( 0_deg10, GetInfo().GetTextFrame()->IsVertical() );
         }
 
         if( pPor->IsMultiPortion() && static_cast<SwMultiPortion*>(pPor)->IsBidi() )

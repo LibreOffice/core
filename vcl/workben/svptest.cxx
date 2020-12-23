@@ -264,7 +264,7 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rR
     Color const aDarkGreen(0, 0x40, 0);
 
     Gradient aGradient(GradientStyle::Linear, aBlack, aWhite);
-    aGradient.SetAngle(Degree10(900));
+    aGradient.SetAngle(900_deg10);
     rRenderContext.DrawGradient(tools::Rectangle(Point(1000, 4500),
                                 Size(aPaperSize.Width() - 2000, 500)),
                                 aGradient);

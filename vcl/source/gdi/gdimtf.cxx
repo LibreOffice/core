@@ -819,8 +819,8 @@ void GDIMetaFile::ImplAddGradientEx( GDIMetaFile&         rMtf,
 
 void GDIMetaFile::Rotate( Degree10 nAngle10 )
 {
-    nAngle10 %= Degree10(3600);
-    nAngle10 = ( nAngle10 < Degree10(0) ) ? ( Degree10(3599) + nAngle10 ) : nAngle10;
+    nAngle10 %= 3600_deg10;
+    nAngle10 = ( nAngle10 < 0_deg10 ) ? ( Degree10(3599) + nAngle10 ) : nAngle10;
 
     if( !nAngle10 )
         return;

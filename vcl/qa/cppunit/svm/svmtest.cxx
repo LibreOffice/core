@@ -1287,7 +1287,7 @@ void SvmTest::testHatch()
     tools::PolyPolygon aPolyPolygon(1);
     aPolyPolygon.Insert(aPolygon);
 
-    Hatch aHatch(HatchStyle::Single, COL_YELLOW, 15, Degree10(900));
+    Hatch aHatch(HatchStyle::Single, COL_YELLOW, 15, 900_deg10);
 
     pVirtualDev->DrawHatch(aPolyPolygon, aHatch);
 

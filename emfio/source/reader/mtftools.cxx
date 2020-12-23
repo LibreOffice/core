@@ -541,7 +541,7 @@ namespace emfio
         sal_Int32 nResult;
         const bool bFail = o3tl::checked_multiply(mnWinExtX, mnWinExtY, nResult);
         if (!bFail && nResult < 0)
-            rFont.SetOrientation( Degree10(3600) - rFont.GetOrientation() );
+            rFont.SetOrientation( 3600_deg10 - rFont.GetOrientation() );
     }
 
     tools::Polygon& MtfTools::ImplMap( tools::Polygon& rPolygon )

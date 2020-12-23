@@ -607,7 +607,7 @@ SwTransparentTextGuard::~SwTransparentTextGuard()
     aVCLGradient.SetStyle(GradientStyle::Linear);
     aVCLGradient.SetStartColor(aTransColor);
     aVCLGradient.SetEndColor(aTransColor);
-    aVCLGradient.SetAngle(Degree10(0));
+    aVCLGradient.SetAngle(0_deg10);
     aVCLGradient.SetBorder(0);
     aVCLGradient.SetOfsX(0);
     aVCLGradient.SetOfsY(0);
@@ -880,7 +880,7 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rTextPaintInfo, const SwLine
 
     // Some of the current values are set at the font:
     if ( ! bRotate )
-        s_aFnt.SetVertical( Degree10(0), rTextPaintInfo.GetTextFrame()->IsVertical() );
+        s_aFnt.SetVertical( 0_deg10, rTextPaintInfo.GetTextFrame()->IsVertical() );
     else
         s_aFnt.SetVertical( pOldFnt->GetOrientation() );
 
@@ -896,11 +896,11 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rTextPaintInfo, const SwLine
     // The maximum width depends on the current orientation
     const Degree10 nDir = s_aFnt.GetOrientation( rTextPaintInfo.GetTextFrame()->IsVertical() );
     SwTwips nMaxWidth;
-    if (nDir == Degree10(900) || nDir == Degree10(2700))
+    if (nDir == 900_deg10 || nDir == 2700_deg10)
         nMaxWidth = rRect.Height();
     else
     {
-        assert(nDir == Degree10(0)); //Unknown direction set at font
+        assert(nDir == 0_deg10); //Unknown direction set at font
         nMaxWidth = rRect.Width();
     }
 

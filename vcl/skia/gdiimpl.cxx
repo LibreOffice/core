@@ -1880,7 +1880,7 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
     Gradient aGradient(rGradient);
     tools::Rectangle aBoundRect;
     Point aCenter;
-    aGradient.SetAngle(aGradient.GetAngle() + Degree10(2700));
+    aGradient.SetAngle(aGradient.GetAngle() + 2700_deg10);
     aGradient.GetBoundRect(boundRect, aBoundRect, aCenter);
 
     SkColor startColor
@@ -1891,7 +1891,7 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
     if (rGradient.GetStyle() == GradientStyle::Linear)
     {
         tools::Polygon aPoly(aBoundRect);
-        aPoly.Rotate(aCenter, aGradient.GetAngle() % Degree10(3600));
+        aPoly.Rotate(aCenter, aGradient.GetAngle() % 3600_deg10);
         SkPoint points[2] = { SkPoint::Make(toSkX(aPoly[0].X()), toSkY(aPoly[0].Y())),
                               SkPoint::Make(toSkX(aPoly[1].X()), toSkY(aPoly[1].Y())) };
         SkColor colors[2] = { startColor, endColor };
@@ -1901,7 +1901,7 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
     else if (rGradient.GetStyle() == GradientStyle::Axial)
     {
         tools::Polygon aPoly(aBoundRect);
-        aPoly.Rotate(aCenter, aGradient.GetAngle() % Degree10(3600));
+        aPoly.Rotate(aCenter, aGradient.GetAngle() % 3600_deg10);
         SkPoint points[2] = { SkPoint::Make(toSkX(aPoly[0].X()), toSkY(aPoly[0].Y())),
                               SkPoint::Make(toSkX(aPoly[1].X()), toSkY(aPoly[1].Y())) };
         SkColor colors[3] = { endColor, startColor, endColor };
@@ -1985,7 +1985,7 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
         {
             angle = layout.GetOrientation();
             if (pGlyph->IsVertical())
-                angle += Degree10(900); // 90 degree
+                angle += 900_deg10; // 90 degree
         }
         SkRSXform form = SkRSXform::Make(toCos(angle), toSin(angle), aPos.X(), aPos.Y());
         glyphForms.emplace_back(std::move(form));

@@ -332,7 +332,7 @@ vcl::Cursor::Cursor()
 {
     mpData          = nullptr;
     mpWindow        = nullptr;
-    mnOrientation   = Degree10(0);
+    mnOrientation   = 0_deg10;
     mnDirection     = CursorDirection::NONE;
     mnStyle         = 0;
     mbVisible       = false;

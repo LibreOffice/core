@@ -2076,11 +2076,11 @@ static sal_uInt16 lcl_TCFlags(SwDoc &rDoc, const SwTableBox * pBox, sal_Int32 nR
                 if ( SfxItemState::SET == aCoreSet.GetItemState(RES_CHRATR_ROTATE, true, &pRotItem))
                 {
                     const SvxCharRotateItem * pRotate = static_cast<const SvxCharRotateItem*>(pRotItem);
-                    if(pRotate && pRotate->GetValue() == Degree10(900))
+                    if(pRotate && pRotate->GetValue() == 900_deg10)
                     {
                         nFlags = nFlags | 0x0004 | 0x0008;
                     }
-                    else if(pRotate && pRotate->GetValue() == Degree10(2700) )
+                    else if(pRotate && pRotate->GetValue() == 2700_deg10 )
                     {
                         nFlags = nFlags | 0x0004 | 0x0010;
                     }

@@ -4698,7 +4698,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             break;
 
         case RES_CHRATR_ROTATE:
-            bMustWrite = static_cast< const SvxCharRotateItem& >(rHt).GetValue() != Degree10(0);
+            bMustWrite = static_cast< const SvxCharRotateItem& >(rHt).GetValue() != 0_deg10;
             break;
         case RES_CHRATR_EMPHASIS_MARK:
             bMustWrite = static_cast< const SvxEmphasisMarkItem& >(rHt).GetEmphasisMark() != FontEmphasisMark::NONE;
@@ -9149,7 +9149,7 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
         //     /oox/source/vml/vmlformatting.cxx :: FillModel::pushToPropMap
         // and also in
         //     /oox/source/drawingml/fillproperties.cxx :: FillProperties::pushToPropMap
-        sal_Int32 nReverseAngle = (Degree10(4500) - rGradient.GetAngle()).get();
+        sal_Int32 nReverseAngle = (4500_deg10 - rGradient.GetAngle()).get();
         nReverseAngle = nReverseAngle / 10;
         nReverseAngle = (270 - nReverseAngle) % 360;
         if (nReverseAngle != 0)

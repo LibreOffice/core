@@ -374,7 +374,7 @@ public:
     void            Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect );
     void            Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos );
     void            Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bClip );
-    void            Draw( OutputDevice* pOutDev, const Point& rStartPos, Degree10 nOrientation = Degree10(0) );
+    void            Draw( OutputDevice* pOutDev, const Point& rStartPos, Degree10 nOrientation = 0_deg10 );
 
     ErrCode         Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
     void            Write( SvStream& rOutput, EETextFormat );

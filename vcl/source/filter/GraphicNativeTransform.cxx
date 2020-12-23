@@ -38,14 +38,13 @@ GraphicNativeTransform::~GraphicNativeTransform() {}
 void GraphicNativeTransform::rotate(Degree10 aInputRotation)
 {
     // Rotation can be between 0 and 3600
-    Degree10 aRotation = aInputRotation % Degree10(3600);
+    Degree10 aRotation = aInputRotation % 3600_deg10;
 
-    if (aRotation == Degree10(0))
+    if (aRotation == 0_deg10)
     {
         return; // No rotation is needed
     }
-    else if (aRotation != Degree10(900) && aRotation != Degree10(1800)
-             && aRotation != Degree10(2700))
+    else if (aRotation != 900_deg10 && aRotation != 1800_deg10 && aRotation != 2700_deg10)
     {
         return;
     }

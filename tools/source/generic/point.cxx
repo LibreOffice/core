@@ -36,23 +36,23 @@ void Point::RotateAround( tools::Long& rX, tools::Long& rY,
     const tools::Long nOriginX = X();
     const tools::Long nOriginY = Y();
 
-    if ( (nOrientation >= Degree10(0)) && !(nOrientation % Degree10(900)) )
+    if ( (nOrientation >= 0_deg10) && !(nOrientation % 900_deg10) )
     {
-        if ( nOrientation >= Degree10(3600) )
-            nOrientation %= Degree10(3600);
+        if ( nOrientation >= 3600_deg10 )
+            nOrientation %= 3600_deg10;
 
         if ( nOrientation )
         {
             rX -= nOriginX;
             rY -= nOriginY;
 
-            if ( nOrientation == Degree10(900) )
+            if ( nOrientation == 900_deg10 )
             {
                 tools::Long nTemp = rX;
                 rX = rY;
                 rY = -nTemp;
             }
-            else if ( nOrientation == Degree10(1800) )
+            else if ( nOrientation == 1800_deg10 )
             {
                 rX = -rX;
                 rY = -rY;

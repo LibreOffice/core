@@ -2002,7 +2002,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const to
     if ( mnTextMode == 0 )  // using glyph outlines
     {
         vcl::Font    aNotRotatedFont( maFont );
-        aNotRotatedFont.SetOrientation( Degree10(0) );
+        aNotRotatedFont.SetOrientation( 0_deg10 );
 
         ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::BITMASK);
         pVirDev->SetMapMode( rVDev.GetMapMode() );

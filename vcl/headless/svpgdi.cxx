@@ -1947,7 +1947,7 @@ bool SvpSalGraphics::drawGradient(const tools::PolyPolygon& rPolyPolygon, const 
     tools::Rectangle aBoundRect;
     Point aCenter;
 
-    aGradient.SetAngle(aGradient.GetAngle() + Degree10(2700));
+    aGradient.SetAngle(aGradient.GetAngle() + 2700_deg10);
     aGradient.GetBoundRect(aInputRect, aBoundRect, aCenter);
     Color aStartColor = aGradient.GetStartColor();
     Color aEndColor = aGradient.GetEndColor();
@@ -1956,7 +1956,7 @@ bool SvpSalGraphics::drawGradient(const tools::PolyPolygon& rPolyPolygon, const 
     if (rGradient.GetStyle() == GradientStyle::Linear)
     {
         tools::Polygon aPoly(aBoundRect);
-        aPoly.Rotate(aCenter, aGradient.GetAngle() % Degree10(3600));
+        aPoly.Rotate(aCenter, aGradient.GetAngle() % 3600_deg10);
         pattern = cairo_pattern_create_linear(aPoly[0].X(), aPoly[0].Y(), aPoly[1].X(), aPoly[1].Y());
     }
     else

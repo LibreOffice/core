@@ -53,17 +53,17 @@ Degree10 Exif::getRotation() const
 {
     switch(maOrientation) {
         case exif::TOP_LEFT:
-            return Degree10(0);
+            return 0_deg10;
         case exif::BOTTOM_RIGHT:
-            return Degree10(1800);
+            return 1800_deg10;
         case exif::RIGHT_TOP:
-            return Degree10(2700);
+            return 2700_deg10;
         case exif::LEFT_BOTTOM:
-            return Degree10(900);
+            return 900_deg10;
         default:
             break;
     }
-    return Degree10(0);
+    return 0_deg10;
 }
 
 bool Exif::read(SvStream& rStream)

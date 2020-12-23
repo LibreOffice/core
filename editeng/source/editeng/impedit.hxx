@@ -835,7 +835,7 @@ public:
     void                    FormatFullDoc();
     void                    UpdateViews( EditView* pCurView = nullptr );
     void                    Paint( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice );
-    void                    Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Point aStartPos, bool bStripOnly = false, Degree10 nOrientation = Degree10(0) );
+    void                    Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Point aStartPos, bool bStripOnly = false, Degree10 nOrientation = 0_deg10 );
 
     bool                MouseButtonUp( const MouseEvent& rMouseEvent, EditView* pView );
     bool                MouseButtonDown( const MouseEvent& rMouseEvent, EditView* pView );

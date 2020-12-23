@@ -39,7 +39,7 @@ class SVXCORE_DLLPUBLIC XHatch final
 public:
                     XHatch() : eStyle(css::drawing::HatchStyle_SINGLE), nDistance(0), nAngle(0) {}
                     XHatch(const Color& rCol, css::drawing::HatchStyle eStyle = css::drawing::HatchStyle_SINGLE,
-                           tools::Long nDistance = 20, Degree10 nAngle = Degree10(0));
+                           tools::Long nDistance = 20, Degree10 nAngle = 0_deg10);
 
     bool operator==(const XHatch& rHatch) const;
 

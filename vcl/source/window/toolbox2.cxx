@@ -94,7 +94,7 @@ void ImplToolItem::init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits,
     mbBreak         = false;
     mnSepSize       = TB_SEP_SIZE;
     mnDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
-    mnImageAngle    = Degree10(0);
+    mnImageAngle    = 0_deg10;
     mbMirrorMode    = false;
     mbVisibleText   = false;
     mbExpand        = false;
@@ -978,9 +978,9 @@ void ToolBox::SetItemImageAngle( sal_uInt16 nItemId, Degree10 nAngle10 )
     ImplToolItem* pItem = &mpData->m_aItems[nPos];
     Size aOldSize = pItem->maImage.GetSizePixel();
 
-    Degree10 nDeltaAngle = (nAngle10 - pItem->mnImageAngle) % Degree10(3600);
-    while( nDeltaAngle < Degree10(0) )
-        nDeltaAngle += Degree10(3600);
+    Degree10 nDeltaAngle = (nAngle10 - pItem->mnImageAngle) % 3600_deg10;
+    while( nDeltaAngle < 0_deg10 )
+        nDeltaAngle += 3600_deg10;
 
     pItem->mnImageAngle = nAngle10;
     if( nDeltaAngle && !!pItem->maImage )

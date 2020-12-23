@@ -1039,7 +1039,7 @@ ATTR_SETEMPHASIS:
                 if( aPlainMap.nHorzVert )
                 {
                     // RTF knows only 90deg
-                    pSet->Put( SvxCharRotateItem( Degree10(900), 1 == nTokenValue,
+                    pSet->Put( SvxCharRotateItem( 900_deg10, 1 == nTokenValue,
                                                        aPlainMap.nHorzVert ));
                 }
                 break;

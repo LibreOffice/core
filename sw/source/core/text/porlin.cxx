@@ -97,7 +97,7 @@ void SwLinePortion::PrePaint( const SwTextPaintInfo& rInf,
                           bool( ComplexTextLayoutFlags::BiDiRtl & rInf.GetOut()->GetLayoutMode() );
 
     Degree10 nDir = bBidiPor ?
-                  Degree10(1800) :
+                  1800_deg10 :
                   rInf.GetFont()->GetOrientation( rInf.GetTextFrame()->IsVertical() );
 
     // pLast == this *only* for the 1st portion in the line so nLastWidth is 0;
