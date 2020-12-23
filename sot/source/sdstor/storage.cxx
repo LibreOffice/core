@@ -530,10 +530,10 @@ bool SotStorage::Commit()
     return ERRCODE_NONE == GetError();
 }
 
-SotStorageStream * SotStorage::OpenSotStream( const OUString & rEleName,
+tools::SvRef<SotStorageStream> SotStorage::OpenSotStream( const OUString & rEleName,
                                               StreamMode nMode )
 {
-    SotStorageStream * pStm = nullptr;
+    tools::SvRef<SotStorageStream> pStm;
     if( m_pOwnStg )
     {
         // enable full Ole patches,
