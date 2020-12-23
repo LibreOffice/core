@@ -1083,8 +1083,7 @@ namespace
                 // 100 is required because in this part of the code the angle is in a hundredth of
                 // degrees.
                 auto nAngle = -1 * 100.0 * rTypeModel.maRotation.toDouble();
-                double nHRad = nAngle * F_PI18000;
-                pShape->NbcRotate(pShape->GetSnapRect().Center(), nAngle, sin(nHRad), cos(nHRad));
+                pShape->NbcRotate(pShape->GetSnapRect().Center(), nAngle);
             }
         }
     }

@@ -4137,10 +4137,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
             }
 
             if ( nGroupRotateAngle )
-            {
-                double a = nGroupRotateAngle * F_PI18000;
-                pRet->NbcRotate( aClientRect.Center(), nGroupRotateAngle, sin( a ), cos( a ) );
-            }
+                pRet->NbcRotate( aClientRect.Center(), nGroupRotateAngle );
             if ( nSpFlags & ShapeFlag::FlipV )
             {   // BoundRect in aBoundRect
                 Point aLeft( aClientRect.Left(), ( aClientRect.Top() + aClientRect.Bottom() ) >> 1 );
@@ -4720,10 +4717,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     if( bIsConnector )
                     {
                         if( nObjectRotation )
-                        {
-                            double a = nObjectRotation * F_PI18000;
-                            pRet->NbcRotate( aObjData.aBoundRect.Center(), nObjectRotation, sin( a ), cos( a ) );
-                        }
+                            pRet->NbcRotate( aObjData.aBoundRect.Center(), nObjectRotation );
                         // mirrored horizontally?
                         if ( nSpFlags & ShapeFlag::FlipH )
                         {
@@ -4831,10 +4825,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             if ( pRet )
             {
                 if( nObjectRotation )
-                {
-                    double a = nObjectRotation * F_PI18000;
-                    pRet->NbcRotate( aObjData.aBoundRect.Center(), nObjectRotation, sin( a ), cos( a ) );
-                }
+                    pRet->NbcRotate( aObjData.aBoundRect.Center(), nObjectRotation );
                 // mirrored horizontally?
                 if ( nSpFlags & ShapeFlag::FlipH )
                 {
