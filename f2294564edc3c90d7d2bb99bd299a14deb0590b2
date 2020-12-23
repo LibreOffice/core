@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "494369a0_f5a67442",
+        "filename": "include/sfx2/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-12-23T09:38:35Z",
+      "side": 1,
+      "message": "This label uses title style capitalization while the other is sentence which is the correct form for labels (guess the label is for the rename dialog either template or dialog). See also https://wiki.documentfoundation.org/Design/Guidelines/UIWriting",
+      "range": {
+        "startLine": 37,
+        "startChar": 82,
+        "endLine": 37,
+        "endChar": 84
+      },
+      "revId": "f2294564edc3c90d7d2bb99bd299a14deb0590b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
