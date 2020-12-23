@@ -16,6 +16,24 @@
       "revId": "d4ca06605e810cab822530ef4439eab65b3e299d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2a8cc46_bafd16b4",
+        "filename": "basic/source/runtime/stdobj.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-23T11:32:20Z",
+      "side": 1,
+      "message": "Why? I assume that it will be always satisfied in release builds (with NDEBUG), but in any other case, they should still call something non-constexpr? But I don\u0027t know the details of --with-assert-always-abort.\n\nAnyway, the assert is very useful here. With the assert, compilation not only reports that static_assert is failed, but also the line where the assert was failing. At least with MSVC:\n\n  C:/lo/src/core/basic/source/runtime/stdobj.cxx(913): error C2131: expression did not evaluate to a constant\n  C:/lo/src/core/basic/source/runtime/stdobj.cxx(96): note: failure was caused by call of undefined function or one not declared \u0027constexpr\u0027\n  C:/lo/src/core/basic/source/runtime/stdobj.cxx(96): note: see usage of \u0027_wassert\u0027\n\nso the 96 means \"wrong arg count\".\n\nGiven that even if some configurations might make this falsely pass, I imagine that it\u0027s unlikely that something is pushed without at least one normal debug build.\n\nHowever, if you think it\u0027s necessary, I will re-introduce the \"return false\" *after* the asserts (to keep the benefit of knowing the reason for the fail).",
+      "parentUuid": "43ad3fa2_af170956",
+      "revId": "d4ca06605e810cab822530ef4439eab65b3e299d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
