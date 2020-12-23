@@ -50,7 +50,7 @@ ForbiddenCharacters SvxUnoForbiddenCharsTable::getForbiddenCharacters( const lan
     SolarMutexGuard aGuard;
 
     if (!mxForbiddenChars)
-        throw RuntimeException();
+        throw RuntimeException("No Forbidden Characters present");
 
     const LanguageType eLang = LanguageTag::convertToLanguageType( rLocale );
     const ForbiddenCharacters* pForbidden = mxForbiddenChars->GetForbiddenCharacters( eLang, false );
@@ -78,7 +78,7 @@ void SvxUnoForbiddenCharsTable::setForbiddenCharacters(const lang::Locale& rLoca
     SolarMutexGuard aGuard;
 
     if (!mxForbiddenChars)
-        throw RuntimeException();
+        throw RuntimeException("No Forbidden Characters present");
 
     const LanguageType eLang = LanguageTag::convertToLanguageType( rLocale );
     mxForbiddenChars->SetForbiddenCharacters( eLang, rForbiddenCharacters );
@@ -91,7 +91,7 @@ void SvxUnoForbiddenCharsTable::removeForbiddenCharacters( const lang::Locale& r
     SolarMutexGuard aGuard;
 
     if (!mxForbiddenChars)
-        throw RuntimeException();
+        throw RuntimeException("No Forbidden Characters present");
 
     const LanguageType eLang = LanguageTag::convertToLanguageType( rLocale );
     mxForbiddenChars->ClearForbiddenCharacters( eLang );
