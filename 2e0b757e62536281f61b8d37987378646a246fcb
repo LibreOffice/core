@@ -39,6 +39,24 @@
       "revId": "2e0b757e62536281f61b8d37987378646a246fcb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "414b324a_52918d95",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-23T13:29:06Z",
+      "side": 1,
+      "message": "ah, so that\u0027s why you also changed the argument of the call\n\n(too much unrelated stuff combined into a single commit for my brain to get it :)",
+      "parentUuid": "8dc8a12a_53eb17dc",
+      "revId": "2e0b757e62536281f61b8d37987378646a246fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
