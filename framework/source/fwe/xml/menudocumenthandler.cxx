@@ -72,12 +72,12 @@
 #define ATTRIBUTE_ITEMSTYLE_RADIO    "radio"
 
 // Property names of a menu/menu item ItemDescriptor
-const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
-const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
-const char ITEM_DESCRIPTOR_CONTAINER[]   = "ItemDescriptorContainer";
-const char ITEM_DESCRIPTOR_LABEL[]       = "Label";
-const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
-const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
+const OUStringLiteral ITEM_DESCRIPTOR_COMMANDURL = u"CommandURL";
+const OUStringLiteral ITEM_DESCRIPTOR_HELPURL = u"HelpURL";
+const OUStringLiteral ITEM_DESCRIPTOR_CONTAINER = u"ItemDescriptorContainer";
+const OUStringLiteral ITEM_DESCRIPTOR_LABEL = u"Label";
+const OUStringLiteral ITEM_DESCRIPTOR_TYPE = u"Type";
+const OUStringLiteral ITEM_DESCRIPTOR_STYLE = u"Style";
 
 //  using namespaces
 

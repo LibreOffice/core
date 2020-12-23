@@ -264,7 +264,7 @@ namespace
     {
         OUString sComposedName;
 
-        static const char s_sWildcard[] = "%" ;
+        static const OUStringLiteral s_sWildcard = u"%" ;
 
         // we want all catalogues, all schemas, all tables
         Sequence< OUString > sTableTypes(3);

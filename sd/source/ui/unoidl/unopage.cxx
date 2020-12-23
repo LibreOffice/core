@@ -102,7 +102,7 @@ enum WID_PAGE
 
 }
 
-char const sEmptyPageName[sizeof("page")] = "page";
+OUStringLiteral const sEmptyPageName = u"page";
 
 // this function stores the property maps for draw pages in impress and draw
 static const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, PageKind ePageKind )

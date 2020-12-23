@@ -644,7 +644,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
         if (bNeedMigration)
         {
             // back up content xml file if migration was successful
-            constexpr char BACKUP_XML_NAME[] = "content_before_migration.xml";
+            static constexpr OUStringLiteral BACKUP_XML_NAME = u"content_before_migration.xml";
             try
             {
                 if(xRootStorage->isStreamElement(BACKUP_XML_NAME))

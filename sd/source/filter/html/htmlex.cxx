@@ -2222,8 +2222,8 @@ OUString const & HtmlExport::getDocumentTitle()
     return mDocTitle;
 }
 
-const char JS_NavigateAbs[] =
-    "function NavigateAbs( nPage )\r\n"
+const OUStringLiteral JS_NavigateAbs =
+    u"function NavigateAbs( nPage )\r\n"
     "{\r\n"
     "  frames[\"show\"].location.href = \"img\" + nPage + \".$EXT\";\r\n"
     "  //frames[\"notes\"].location.href = \"note\" + nPage + \".$EXT\";\r\n"

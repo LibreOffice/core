@@ -21,7 +21,7 @@
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 
-char const DATA_DIRECTORY[] = "/sw/qa/extras/ooxmlexport/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
 
 class Test : public SwModelTestBase
 {

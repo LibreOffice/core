@@ -84,12 +84,12 @@ typedef WeakImplHelper< script::XStarBasicAccess > StarBasicAccessHelper;
 // Version 2
 //  + bool      bReference
 
-const char szStdLibName[] = "Standard";
-const char szBasicStorage[] = "StarBASIC";
-const char szOldManagerStream[] = "BasicManager";
-const char szManagerStream[] = "BasicManager2";
-const char szImbedded[] = "LIBIMBEDDED";
-const char szCryptingKey[] = "CryptedBasic";
+const OUStringLiteral szStdLibName = u"Standard";
+const OUStringLiteral szBasicStorage = u"StarBASIC";
+const OUStringLiteral szOldManagerStream = u"BasicManager";
+const OUStringLiteral szManagerStream = u"BasicManager2";
+const OUStringLiteral szImbedded = u"LIBIMBEDDED";
+const OStringLiteral szCryptingKey = "CryptedBasic";
 
 
 const StreamMode eStreamReadMode = StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL;

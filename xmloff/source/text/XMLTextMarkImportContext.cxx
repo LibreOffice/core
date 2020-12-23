@@ -241,7 +241,7 @@ static auto PopFieldmark(XMLTextImportHelper & rHelper) -> void
 
 void XMLTextMarkImportContext::endFastElement(sal_Int32 nElement)
 {
-    static const char sAPI_bookmark[] = "com.sun.star.text.Bookmark";
+    static const OUStringLiteral sAPI_bookmark = u"com.sun.star.text.Bookmark";
 
     lcl_MarkType nTmp{};
     if (!SvXMLUnitConverter::convertEnum(nTmp, SvXMLImport::getNameFromToken(nElement), lcl_aMarkTypeMap))

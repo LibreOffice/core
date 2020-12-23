@@ -47,6 +47,18 @@ using namespace framework;
 
 namespace {
 
+/// [Rectangle] Place the new created frame on this place and resize the container window.
+const OUStringLiteral ARGUMENT_POSSIZE = u"PosSize"; // Rectangle
+
+/// [XWindow] an outside created window, used as container window of the new created frame.
+const OUStringLiteral ARGUMENT_CONTAINERWINDOW = u"ContainerWindow"; // XWindow
+
+/** [sal_Bool] enable/disable special mode, where the title bar of our
+               the new created frame will be updated automatically.
+               Default = ON !
+ */
+const OUStringLiteral ARGUMENT_ENABLE_TITLEBARUPDATE = u"EnableTitleBarUpdate"; // sal_Bool
+
 typedef ::cppu::WeakComponentImplHelper<
     css::lang::XServiceInfo,
     css::lang::XSingleServiceFactory> TaskCreatorService_BASE;

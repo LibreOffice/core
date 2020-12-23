@@ -150,14 +150,14 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice const &rD
 {
     if (rDevice.GetFont().GetFamilyName() == "Symbol")
     {
-        static const sal_Unicode aImplAppleSymbolText[] =
+        static const OUStringLiteral aImplAppleSymbolText =
             u"\u03BC\u2202\u2211\u220F\u03C0\u222B\u03A9\u221A";
         bool bHasSampleTextGlyphs
             = (-1 == rDevice.HasGlyphs(rDevice.GetFont(), aImplAppleSymbolText));
         //It's the Apple version
         if (bHasSampleTextGlyphs)
             return aImplAppleSymbolText;
-        static const sal_Unicode aImplAdobeSymbolText[] =
+        static const OUStringLiteral aImplAdobeSymbolText =
             u"\uF06D\uF0B6\uF0E5\uF0D5\uF070\uF0F2\uF057\uF0D6";
         return aImplAdobeSymbolText;
     }

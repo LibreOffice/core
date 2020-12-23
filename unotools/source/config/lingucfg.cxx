@@ -803,7 +803,7 @@ bool SvtLinguConfigItem::IsReadOnly( sal_Int32 nPropertyHandle ) const
 static SvtLinguConfigItem *pCfgItem = nullptr;
 static sal_Int32           nCfgItemRefCount = 0;
 
-const char aG_Dictionaries[] = "Dictionaries";
+const OUStringLiteral aG_Dictionaries = u"Dictionaries";
 
 SvtLinguConfig::SvtLinguConfig()
 {

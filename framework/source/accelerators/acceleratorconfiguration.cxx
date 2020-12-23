@@ -57,8 +57,9 @@
 
 namespace framework
 {
-    const char CFG_ENTRY_SECONDARY[] = "SecondaryKeys";
-    const char CFG_PROP_COMMAND[] = "Command";
+    const OUStringLiteral CFG_ENTRY_PRIMARY = u"PrimaryKeys";
+    const OUStringLiteral CFG_ENTRY_SECONDARY = u"SecondaryKeys";
+    const OUStringLiteral CFG_PROP_COMMAND = u"Command";
 
     static OUString lcl_getKeyString(const css::awt::KeyEvent& aKeyEvent)
     {
@@ -870,14 +871,14 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reset()
     if ( sConfig == "Global" )
     {
         m_xCfg.set(
-            ::comphelper::ConfigurationHelper::openConfig( m_xContext, CFG_ENTRY_GLOBAL, ::comphelper::EConfigurationModes::AllLocales ),
+            ::comphelper::ConfigurationHelper::openConfig( m_xContext, CFG_ENTRY::GLOBAL, ::comphelper::EConfigurationModes::AllLocales ),
             css::uno::UNO_QUERY );
         XCUBasedAcceleratorConfiguration::reload();
     }
     else if ( sConfig == "Modules" )
     {
         m_xCfg.set(
-            ::comphelper::ConfigurationHelper::openConfig( m_xContext, CFG_ENTRY_MODULES, ::comphelper::EConfigurationModes::AllLocales ),
+            ::comphelper::ConfigurationHelper::openConfig( m_xContext, CFG_ENTRY::MODULES, ::comphelper::EConfigurationModes::AllLocales ),
             css::uno::UNO_QUERY );
         XCUBasedAcceleratorConfiguration::reload();
     }
@@ -922,13 +923,13 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
         OUString sPrimarySecondary = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
         OUString sGlobalModules = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
 
-        if ( sGlobalModules == CFG_ENTRY_GLOBAL )
+        if ( sGlobalModules == CFG_ENTRY::GLOBAL )
         {
             sKey = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
             if ( !sKey.isEmpty() && !sPath.isEmpty() )
                 reloadChanged(sPrimarySecondary, sGlobalModules, OUString(), sKey);
         }
-        else if ( sGlobalModules == CFG_ENTRY_MODULES )
+        else if ( sGlobalModules == CFG_ENTRY::MODULES )
         {
             OUString sModule = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
             sKey = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
@@ -950,11 +951,11 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
     AcceleratorCache aReadCache;
     css::uno::Reference< css::container::XNameAccess > xAccess;
     if ( m_sGlobalOrModules == "Global" )
-        xCfg->getByName(CFG_ENTRY_GLOBAL) >>= xAccess;
+        xCfg->getByName(CFG_ENTRY::GLOBAL) >>= xAccess;
     else if ( m_sGlobalOrModules == "Modules" )
     {
         css::uno::Reference< css::container::XNameAccess > xModules;
-        xCfg->getByName(CFG_ENTRY_MODULES) >>= xModules;
+        xCfg->getByName(CFG_ENTRY::MODULES) >>= xModules;
         xModules->getByName(m_sModuleCFG) >>= xAccess;
     }
 
@@ -1147,12 +1148,12 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
     else
         m_xCfg->getByName(CFG_ENTRY_SECONDARY) >>= xAccess;
 
-    if ( m_sGlobalOrModules == CFG_ENTRY_GLOBAL )
-        xAccess->getByName(CFG_ENTRY_GLOBAL) >>= xContainer;
-    else if ( m_sGlobalOrModules == CFG_ENTRY_MODULES )
+    if ( m_sGlobalOrModules == CFG_ENTRY::GLOBAL )
+        xAccess->getByName(CFG_ENTRY::GLOBAL) >>= xContainer;
+    else if ( m_sGlobalOrModules == CFG_ENTRY::MODULES )
     {
         css::uno::Reference< css::container::XNameContainer > xModules;
-        xAccess->getByName(CFG_ENTRY_MODULES) >>= xModules;
+        xAccess->getByName(CFG_ENTRY::MODULES) >>= xModules;
         if ( !xModules->hasByName(m_sModuleCFG) )
         {
             xFac.set(xModules, css::uno::UNO_QUERY);
@@ -1191,12 +1192,12 @@ void XCUBasedAcceleratorConfiguration::removeKeyFromConfiguration( const css::aw
     else
         m_xCfg->getByName(CFG_ENTRY_SECONDARY) >>= xAccess;
 
-    if ( m_sGlobalOrModules == CFG_ENTRY_GLOBAL )
-        xAccess->getByName(CFG_ENTRY_GLOBAL) >>= xContainer;
-    else if ( m_sGlobalOrModules == CFG_ENTRY_MODULES )
+    if ( m_sGlobalOrModules == CFG_ENTRY::GLOBAL )
+        xAccess->getByName(CFG_ENTRY::GLOBAL) >>= xContainer;
+    else if ( m_sGlobalOrModules == CFG_ENTRY::MODULES )
     {
         css::uno::Reference< css::container::XNameAccess > xModules;
-        xAccess->getByName(CFG_ENTRY_MODULES) >>= xModules;
+        xAccess->getByName(CFG_ENTRY::MODULES) >>= xModules;
         if ( !xModules->hasByName(m_sModuleCFG) )
             return;
         xModules->getByName(m_sModuleCFG) >>= xContainer;
@@ -1212,12 +1213,12 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySe
     css::uno::Reference< css::container::XNameContainer > xContainer;
 
     m_xCfg->getByName(sPrimarySecondary) >>= xAccess;
-    if ( sGlobalModules == CFG_ENTRY_GLOBAL )
-        xAccess->getByName(CFG_ENTRY_GLOBAL) >>= xContainer;
+    if ( sGlobalModules == CFG_ENTRY::GLOBAL )
+        xAccess->getByName(CFG_ENTRY::GLOBAL) >>= xContainer;
     else
     {
         css::uno::Reference< css::container::XNameAccess > xModules;
-        xAccess->getByName(CFG_ENTRY_MODULES) >>= xModules;
+        xAccess->getByName(CFG_ENTRY::MODULES) >>= xModules;
         if ( !xModules->hasByName(sModule) )
             return;
         xModules->getByName(sModule) >>= xContainer;

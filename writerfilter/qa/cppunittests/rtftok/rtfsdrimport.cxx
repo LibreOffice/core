@@ -46,7 +46,7 @@ void Test::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-char const DATA_DIRECTORY[] = "/writerfilter/qa/cppunittests/rtftok/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/writerfilter/qa/cppunittests/rtftok/data/";
 
 CPPUNIT_TEST_FIXTURE(Test, testPictureInTextframe)
 {

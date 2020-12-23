@@ -126,7 +126,7 @@ void ModuleAcceleratorConfiguration::fillCache()
     // accelerator config? Handle it gracefully :-)
     try
     {
-        m_sGlobalOrModules = CFG_ENTRY_MODULES;
+        m_sGlobalOrModules = CFG_ENTRY::MODULES;
         XCUBasedAcceleratorConfiguration::reload();
 
         css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfg, css::uno::UNO_QUERY_THROW);

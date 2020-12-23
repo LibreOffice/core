@@ -405,7 +405,7 @@ XMLTextImportHelper::XMLTextImportHelper(
                     bProgress, bBlockMode, bOrganizerMode) )
     , m_xBackpatcherImpl( MakeBackpatcherImpl() )
 {
-    static const char s_PropNameDefaultListId[] = "DefaultListId";
+    static const OUStringLiteral s_PropNameDefaultListId = u"DefaultListId";
 
     Reference< XChapterNumberingSupplier > xCNSupplier( rModel, UNO_QUERY );
 
@@ -1013,14 +1013,14 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         bool bSetListAttrs,
         bool bOutlineContentVisible)
 {
-    static const char s_NumberingRules[] = "NumberingRules";
-    static const char s_NumberingIsNumber[] = "NumberingIsNumber";
-    static const char s_NumberingLevel[] = "NumberingLevel";
-    static const char s_ParaIsNumberingRestart[] = "ParaIsNumberingRestart";
-    static const char s_NumberingStartValue[] = "NumberingStartValue";
-    static const char s_PropNameListId[] = "ListId";
-    static const char s_PageDescName[] = "PageDescName";
-    static const char s_OutlineLevel[] = "OutlineLevel";
+    static const OUStringLiteral s_NumberingRules = u"NumberingRules";
+    static const OUStringLiteral s_NumberingIsNumber = u"NumberingIsNumber";
+    static const OUStringLiteral s_NumberingLevel = u"NumberingLevel";
+    static const OUStringLiteral s_ParaIsNumberingRestart = u"ParaIsNumberingRestart";
+    static const OUStringLiteral s_NumberingStartValue = u"NumberingStartValue";
+    static const OUStringLiteral s_PropNameListId = u"ListId";
+    static const OUStringLiteral s_PageDescName = u"PageDescName";
+    static const OUStringLiteral s_OutlineLevel = u"OutlineLevel";
 
     const XmlStyleFamily nFamily = bPara ? XmlStyleFamily::TEXT_PARAGRAPH
                                          : XmlStyleFamily::TEXT_TEXT;
@@ -1619,12 +1619,12 @@ void XMLTextImportHelper::SetHyperlink(
     const OUString& rVisitedStyleName,
     XMLEventsImportContext* pEvents)
 {
-    static const char s_HyperLinkURL[] = "HyperLinkURL";
-    static const char s_HyperLinkName[] = "HyperLinkName";
-    static const char s_HyperLinkTarget[] = "HyperLinkTarget";
-    static const char s_UnvisitedCharStyleName[] = "UnvisitedCharStyleName";
-    static const char s_VisitedCharStyleName[] = "VisitedCharStyleName";
-    static const char s_HyperLinkEvents[] = "HyperLinkEvents";
+    static const OUStringLiteral s_HyperLinkURL = u"HyperLinkURL";
+    static const OUStringLiteral s_HyperLinkName = u"HyperLinkName";
+    static const OUStringLiteral s_HyperLinkTarget = u"HyperLinkTarget";
+    static const OUStringLiteral s_UnvisitedCharStyleName = u"UnvisitedCharStyleName";
+    static const OUStringLiteral s_VisitedCharStyleName = u"VisitedCharStyleName";
+    static const OUStringLiteral s_HyperLinkEvents = u"HyperLinkEvents";
 
     Reference < XPropertySet > xPropSet( rCursor, UNO_QUERY );
     Reference < XPropertySetInfo > xPropSetInfo(
@@ -2212,7 +2212,7 @@ void XMLTextImportHelper::ConnectFrameChains(
 
 bool XMLTextImportHelper::IsInFrame() const
 {
-    static const char s_TextFrame[] = "TextFrame";
+    static const OUStringLiteral s_TextFrame = u"TextFrame";
 
     bool bIsInFrame = false;
 

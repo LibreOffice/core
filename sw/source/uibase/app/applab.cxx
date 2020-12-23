@@ -61,7 +61,7 @@
 
 using namespace ::com::sun::star;
 
-const char MASTER_LABEL[] = "MasterLabel";
+const OUStringLiteral MASTER_LABEL = u"MasterLabel";
 
 static const SwFrameFormat *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem,
                         SwFrameFormat &rFormat,

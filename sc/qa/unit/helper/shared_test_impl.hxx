@@ -278,11 +278,11 @@ void testCeilingFloor_Impl( ScDocument& rDoc )
 {
     // Original test case document is ceiling-floor.xlsx
     // Sheet1.K1 has =AND(K3:K81) to evaluate all results.
-    const char pORef[] = "Sheet1.K1";
+    static const OUStringLiteral pORef = u"Sheet1.K1";
     ScAddress aPos;
     aPos.Parse(pORef, rDoc);
     ASSERT_FORMULA_EQUAL(rDoc, aPos, "AND(K3:K81)", "Wrong formula.");
-    CPPUNIT_ASSERT_MESSAGE( OString( pORef + OStringLiteral(" result is error.")).getStr(),
+    CPPUNIT_ASSERT_MESSAGE( OUString( pORef + " result is error.").toUtf8().getStr(),
             isFormulaWithoutError( rDoc, aPos));
     CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(aPos));
 }

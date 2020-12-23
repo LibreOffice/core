@@ -210,7 +210,7 @@ bool checkForSelectedFontWork( SdrView const * pSdrView, sal_uInt32& nCheckStatu
     if ( nCheckStatus & 2 )
         return ( nCheckStatus & 1 ) != 0;
 
-    static const char sTextPath[] = "TextPath";
+    static const OUStringLiteral sTextPath = u"TextPath";
 
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();

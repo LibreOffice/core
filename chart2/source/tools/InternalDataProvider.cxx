@@ -57,12 +57,12 @@ namespace chart
 namespace
 {
 
-const char lcl_aCategoriesRangeName[] = "categories";
+const OUStringLiteral lcl_aCategoriesRangeName = u"categories";
 const char lcl_aCategoriesLevelRangeNamePrefix[] = "categoriesL "; //L <-> level
 const char lcl_aCategoriesPointRangeNamePrefix[] = "categoriesP "; //P <-> point
-const char lcl_aCategoriesRoleName[] = "categories";
+const OUStringLiteral lcl_aCategoriesRoleName = u"categories";
 const char lcl_aLabelRangePrefix[] = "label ";
-const char lcl_aCompleteRange[] = "all";
+const OUStringLiteral lcl_aCompleteRange = u"all";
 
 typedef std::multimap< OUString, uno::WeakReference< chart2::data::XDataSequence > >
     lcl_tSequenceMap;

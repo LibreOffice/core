@@ -74,7 +74,7 @@ bool LocalizationMgr::isLibraryLocalized ()
 
 void LocalizationMgr::handleTranslationbar ()
 {
-    static const char aToolBarResName[] = "private:resource/toolbar/translationbar";
+    static const OUStringLiteral aToolBarResName = u"private:resource/toolbar/translationbar";
 
     Reference< beans::XPropertySet > xFrameProps
         ( m_pShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );

@@ -83,7 +83,7 @@ using namespace ::xmloff::token;
 #define SVG_PROP_POSITIONED_CHARACTERS      "UsePositionedCharacters"
 
 // ooo xml elements
-constexpr char16_t aOOOElemTextField[] = u"" NSPREFIX "text_field";
+constexpr OUStringLiteral aOOOElemTextField = u"" NSPREFIX "text_field";
 
 
 // ooo xml attributes for meta_slide
@@ -93,13 +93,13 @@ const char    aOOOAttrBackgroundVisibility[] = NSPREFIX "background-visibility";
 const char    aOOOAttrMasterObjectsVisibility[] = NSPREFIX "master-objects-visibility";
 const char    aOOOAttrSlideDuration[] = NSPREFIX "slide-duration";
 const OUString aOOOAttrDateTimeField = NSPREFIX "date-time-field";
-const char    aOOOAttrFooterField[] = NSPREFIX "footer-field";
+const OUStringLiteral aOOOAttrFooterField = u"" NSPREFIX "footer-field";
 const char    aOOOAttrHasTransition[] = NSPREFIX "has-transition";
 
 // ooo xml attributes for pages and shapes
 const char    aOOOAttrName[] = NSPREFIX "name";
 
-const char    constSvgNamespace[] = "http://www.w3.org/2000/svg";
+const OUStringLiteral constSvgNamespace = u"http://www.w3.org/2000/svg";
 
 
 /** Text Field Class Hierarchy
