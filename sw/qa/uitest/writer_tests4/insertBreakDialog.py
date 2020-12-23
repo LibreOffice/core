@@ -22,10 +22,7 @@ class WriterInsertBreakDialog(UITestCase):
     def getPages(self, total):
         document = self.ui_test.get_component()
 
-        xCursor = document.getCurrentController().getViewCursor()
-        xCursor.jumpToLastPage()
-
-        self.assertEqual(xCursor.getPage(), total)
+        self.assertEqual(document.CurrentController.PageCount, total)
 
     def test_insert_line_break(self):
 
