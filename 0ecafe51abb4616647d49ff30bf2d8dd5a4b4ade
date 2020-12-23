@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "08ea7ee3_f7acea4b",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-23T10:42:36Z",
+      "side": 1,
+      "message": "good point.\nthen this is fine.",
+      "parentUuid": "84b687ec_88870896",
+      "revId": "0ecafe51abb4616647d49ff30bf2d8dd5a4b4ade",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "49010823_f614e20d",
         "filename": "sw/source/core/doc/acmplwrd.cxx",
         "patchSetId": 3
