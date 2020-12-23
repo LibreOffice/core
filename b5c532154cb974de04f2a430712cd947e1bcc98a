@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb40ec5c_4ca42ca7",
+        "filename": "vcl/source/gdi/gdimtf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1492,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-12-23T09:08:38Z",
+      "side": 1,
+      "message": "Is this meant to be u\"\\uc467\" instead?",
+      "revId": "b5c532154cb974de04f2a430712cd947e1bcc98a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
