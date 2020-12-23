@@ -66,7 +66,7 @@ public:
     XMLTextFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
-        const char* pService);                  /// name of SO API service
+        const OUString& pService);              /// name of SO API service
 
     /// process character data: will be collected in member sContentBuffer
     virtual void SAL_CALL characters( const OUString& sContent ) override;
@@ -327,7 +327,7 @@ protected:
     /// protected constructor: only for subclasses
     XMLDatabaseFieldImportContext(SvXMLImport& rImport,
                                   XMLTextImportHelper& rHlp,
-                                  const char* pServiceName,
+                                  const OUString& pServiceName,
                                   bool bUseDisplay );
 
 public:
@@ -371,7 +371,7 @@ protected:
     // for use in child classes
     XMLDatabaseNextImportContext(SvXMLImport& rImport,
                                  XMLTextImportHelper& rHlp,
-                                 const char* pServiceName);
+                                 const OUString& pServiceName);
 
 public:
 
@@ -463,7 +463,7 @@ protected:
     virtual void PrepareField(
         const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
 
-    static const char* MapTokenToServiceName(sal_Int32 nElementToken);
+    static OUString MapTokenToServiceName(sal_Int32 nElementToken);
 };
 
 /** import docinfo fields with date or time attributes and numberformats */
@@ -711,7 +711,7 @@ private:
     virtual void PrepareField(
         const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 
-    static const char* MapTokenToServiceName(sal_Int32 nElement);
+    static OUString MapTokenToServiceName(sal_Int32 nElement);
 };
 
 /** import page variable fields (<text:get-page-variable>) */

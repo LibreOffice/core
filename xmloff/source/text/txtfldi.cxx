@@ -23,6 +23,11 @@
  *  Import of all text fields except those from txtvfldi.cxx
  *  (variable related text fields and database display fields)
  */
+
+#include <sal/config.h>
+
+#include <cassert>
+
 #include <txtfldi.hxx>
 #include <txtvfldi.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -118,14 +123,13 @@ const char sAPI_true[] = "TRUE";
 
 XMLTextFieldImportContext::XMLTextFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
-    const char* pService)
+    const OUString& pService)
 :   SvXMLImportContext( rImport )
+,   sServiceName(pService)
 ,   rTextImportHelper(rHlp)
 ,   sServicePrefix(sAPI_textfield_prefix)
 ,   bValid(false)
 {
-    assert(nullptr != pService && "Need service name!");
-    sServiceName = OUString::createFromAscii(pService);
 }
 
 void XMLTextFieldImportContext::startFastElement(
@@ -1094,7 +1098,7 @@ constexpr OUStringLiteral gsPropertyIsVisible(u"IsVisible");
 
 XMLDatabaseFieldImportContext::XMLDatabaseFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
-    const char* pServiceName, bool bUseDisplay)
+    const OUString& pServiceName, bool bUseDisplay)
 :   XMLTextFieldImportContext(rImport, rHlp, pServiceName)
 ,   m_nCommandType( sdb::CommandType::TABLE )
 ,   m_bCommandTypeOK(false)
@@ -1238,7 +1242,7 @@ void XMLDatabaseNameImportContext::ProcessAttribute(
 
 XMLDatabaseNextImportContext::XMLDatabaseNextImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
-    const char* pServiceName) :
+    const OUString& pServiceName) :
         XMLDatabaseFieldImportContext(rImport, rHlp, pServiceName, false),
         sPropertyCondition(sAPI_condition),
         sTrue(sAPI_true),
@@ -1478,10 +1482,10 @@ void XMLSimpleDocInfoImportContext::PrepareField(
     }
 }
 
-const char* XMLSimpleDocInfoImportContext::MapTokenToServiceName(
+OUString XMLSimpleDocInfoImportContext::MapTokenToServiceName(
     sal_Int32 nElementToken)
 {
-    const char* pServiceName = nullptr;
+    OUString pServiceName;
 
     switch(nElementToken)
     {
@@ -1536,8 +1540,7 @@ const char* XMLSimpleDocInfoImportContext::MapTokenToServiceName(
 
         default:
             XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElementToken);
-            pServiceName = nullptr;
-            break;
+            assert(false);
     }
 
     return pServiceName;
@@ -2209,10 +2212,10 @@ void XMLCountFieldImportContext::PrepareField(
     xPropertySet->setPropertyValue(sPropertyNumberingType, Any(nNumType));
 }
 
-const char* XMLCountFieldImportContext::MapTokenToServiceName(
+OUString XMLCountFieldImportContext::MapTokenToServiceName(
     sal_Int32 nElement)
 {
-    const char* pServiceName = nullptr;
+    OUString pServiceName;
 
     switch (nElement)
     {
@@ -2239,9 +2242,7 @@ const char* XMLCountFieldImportContext::MapTokenToServiceName(
             break;
         default:
             XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
-            pServiceName = nullptr;
-            OSL_FAIL("unknown count field!");
-            break;
+            assert(false);
     }
 
     return pServiceName;

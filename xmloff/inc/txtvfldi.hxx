@@ -137,7 +137,7 @@ public:
         // for XMLTextFieldImportContext:
         SvXMLImport& rImport,           /// XML Import
         XMLTextImportHelper& rHlp,      /// text import helper
-        const char* pServiceName,   /// name of SO API service
+        const OUString& pServiceName, /// name of SO API service
         // config variables for PrepareField behavior:
         bool bFormula,              /// set Formula property
         bool bFormulaDefault,       /// use content as default for formula
@@ -232,7 +232,7 @@ public:
         // for XMLTextFieldImportContext:
         SvXMLImport& rImport,           /// see XMLTextFieldImportContext
         XMLTextImportHelper& rHlp,      /// see XMLTextFieldImportContext
-        const char* pServiceName,   /// see XMLTextFieldImportContext
+        const OUString& pServiceName, /// see XMLTextFieldImportContext
         // for finding appropriate field master (see endFastElement())
         VarType eVarType,               /// variable type
         // config variables:

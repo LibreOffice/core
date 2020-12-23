@@ -80,7 +80,7 @@ using namespace ::xmloff::token;
 
 XMLVarFieldImportContext::XMLVarFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
-    const char* pServiceName,
+    const OUString& pServiceName,
     bool bFormula, bool bFormulaDefault,
     bool bDescription, bool bHelp, bool bHint, bool bVisible,
     bool bIsDisplayFormula,
@@ -246,7 +246,7 @@ void XMLVarFieldImportContext::PrepareField(
 
 XMLSetVarFieldImportContext::XMLSetVarFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
-    const char* pServiceName, VarType eVarType,
+    const OUString& pServiceName, VarType eVarType,
     bool bFormula, bool bFormulaDefault,
     bool bDescription, bool bHelp, bool bHint, bool bVisible, bool bIsDisplayFormula,
     bool bType, bool bStyle, bool bValue, bool bPresentation) :
