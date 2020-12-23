@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2af67c57_c79cc752",
+        "filename": "include/sal/types.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-23T06:43:56Z",
+      "side": 1,
+      "message": "static_int_cast is mostly a failed experiment these days; is it really worth it to mark it?  (i.e., I\u0027d just use a plain cast at \u003chttps://gerrit.libreoffice.org/c/core/+/108220/3/include/basic/sbxvar.hxx#317\u003e)",
+      "revId": "a218e20c5a9906ef7433d85fcddbca8c7edaed78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
