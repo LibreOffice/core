@@ -757,7 +757,7 @@
           <value>false</value>
         </prop>
         <prop oor:name="ContextSensitive" oor:type="xs:boolean">
-          <value>true</value>
+          <value>false</value>
         </prop>
       </node>
       <node oor:name="private:resource/toolbar/changes" oor:op="replace">

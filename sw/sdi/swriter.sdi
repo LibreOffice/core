@@ -5107,7 +5107,7 @@ SfxVoidItem ScrollToPrevious FN_SCROLL_PREV
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    AccelConfig = FALSE,
+    AccelConfig = TRUE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Navigator;
@@ -5124,7 +5124,7 @@ SfxVoidItem ScrollToNext FN_SCROLL_NEXT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    AccelConfig = FALSE,
+    AccelConfig = TRUE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Navigator;
