@@ -133,10 +133,8 @@ LanguageType EditView::CheckLanguage(
         lang::Locale a3( LanguageTag::convertToLocale( aLangList[3] ) );
 #endif
 
-        sal_Int32 const nCount = SAL_N_ELEMENTS(aLangList);
-        for (sal_Int32 i = 0;  i < nCount;  i++)
+        for (const LanguageType& nTmpLang : aLangList)
         {
-            LanguageType nTmpLang = aLangList[i];
             if (nTmpLang != LANGUAGE_NONE  &&  nTmpLang != LANGUAGE_DONTKNOW)
             {
                 if (xSpell->hasLanguage( static_cast<sal_uInt16>(nTmpLang) ) &&
