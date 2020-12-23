@@ -71,6 +71,7 @@
 #define RID_BMP_RIBBAR_ENTRY                    "sw/res/sr20017.png"
 #define RID_BMP_RIBBAR_FORMULA                  "sw/res/sr20018.png"
 #define RID_BMP_RIBBAR_ERROR                    "sw/res/sr20019.png"
+#define RID_BMP_RIBBAR_RECENCY                  "sw/res/sc20244.png"
 
 #define RID_BMP_NAVI_OUTLINE                    "sw/res/nc20000.png"
 #define RID_BMP_NAVI_TABLE                      "sw/res/nc20001.png"

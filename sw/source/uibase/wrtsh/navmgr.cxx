@@ -216,31 +216,6 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
     if (bForwardWasEnabled)
         m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_FORWARD);
 
-    // show the Navigation toolbar
-    css::uno::Reference< css::frame::XFrame > xFrame =
-        m_rMyShell.GetView().GetViewFrame()->GetFrame().GetFrameInterface();
-    if (xFrame.is())
-    {
-        css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
-        if (xPropSet.is())
-        {
-            css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-            css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
-
-            aValue >>= xLayoutManager;
-            if (xLayoutManager.is())
-            {
-                const OUString sResourceURL( "private:resource/toolbar/navigationobjectbar" );
-                css::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
-                if (!xUIElement.is())
-                {
-                    xLayoutManager->createElement( sResourceURL );
-                    xLayoutManager->showElement( sResourceURL );
-                }
-            }
-        }
-    }
-
     return bRet;
 }
 
