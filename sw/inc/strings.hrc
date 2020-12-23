@@ -1163,6 +1163,7 @@
 #define ST_INDEX_ENTRY                          NC_("ST_INDEX_ENTRY", "Index entry")
 #define ST_TABLE_FORMULA                        NC_("ST_TABLE_FORMULA", "Table formula")
 #define ST_TABLE_FORMULA_ERROR                  NC_("ST_TABLE_FORMULA_ERROR", "Wrong table formula")
+#define ST_RECENCY                              NC_("ST_RECENCY", "Recency")
 // Strings for the quickhelp of the View-PgUp/Down-Buttons
 #define STR_IMGBTN_TBL_DOWN                     NC_("STR_IMGBTN_TBL_DOWN", "Next table")
 #define STR_IMGBTN_FRM_DOWN                     NC_("STR_IMGBTN_FRM_DOWN", "Next text frame")
@@ -1200,6 +1201,8 @@
 #define STR_IMGBTN_TBLFML_DOWN                  NC_("STR_IMGBTN_TBLFML_DOWN", "Next table formula")
 #define STR_IMGBTN_TBLFML_ERR_UP                NC_("STR_IMGBTN_TBLFML_ERR_UP", "Previous faulty table formula")
 #define STR_IMGBTN_TBLFML_ERR_DOWN              NC_("STR_IMGBTN_TBLFML_ERR_DOWN", "Next faulty table formula")
+#define STR_IMGBTN_RECENCY_UP                   NC_("STR_IMGBTN_RECENCY_UP", "Go back")
+#define STR_IMGBTN_RECENCY_DOWN                 NC_("STR_IMGBTN_RECENCY_DOWN", "Go forward")
 
 #define STR_REDLINE_INSERT                      NC_("STR_REDLINE_INSERT", "Inserted")
 #define STR_REDLINE_DELETE                      NC_("STR_REDLINE_DELETE", "Deleted")
