@@ -14582,7 +14582,6 @@ vcl/inc/osx/salprn.h
 vcl/inc/osx/salsys.h
 vcl/inc/osx/saltimer.h
 vcl/inc/osx/vclnsapp.h
-vcl/inc/outdata.hxx
 vcl/inc/outdev.h
 vcl/inc/ppdparser.hxx
 vcl/inc/print.h

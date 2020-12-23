@@ -142,6 +142,14 @@ public:
         return A;
     }
 
+    /** Is the color transparent?
+     * @returns true or false
+     */
+    bool IsTransparent() const
+    {
+        return (GetTransparency() != 0);
+    }
+
     /** Sets the red value.
       * @param nRed
       */
