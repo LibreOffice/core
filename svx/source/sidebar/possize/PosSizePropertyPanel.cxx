@@ -48,7 +48,7 @@
 using namespace css;
 using namespace css::uno;
 
-const char USERITEM_NAME[] = "FitItem";
+const OUStringLiteral USERITEM_NAME = u"FitItem";
 
 namespace svx::sidebar {
 

@@ -48,7 +48,7 @@ struct RescheduleLock: public rtl::Static<osl::Mutex, RescheduleLock> {}; ///< m
 
 }
 
-const char PROGRESS_RESOURCE[] = "private:resource/progressbar/progressbar";
+const OUStringLiteral PROGRESS_RESOURCE = u"private:resource/progressbar/progressbar";
 
 StatusIndicatorFactory::StatusIndicatorFactory(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext          (xContext )

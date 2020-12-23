@@ -16,7 +16,7 @@
 #include <drawdoc.hxx>
 #include <wrtsh.hxx>
 
-char const DATA_DIRECTORY[] = "/sw/qa/core/draw/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/core/draw/data/";
 
 /// Covers sw/source/core/draw/ fixes.
 class SwCoreDrawTest : public SwModelTestBase

@@ -61,7 +61,7 @@ using namespace css;
 
 namespace
 {
-    char const DATA_DIRECTORY[] = "/sd/qa/unit/tiledrendering/data/";
+    OUStringLiteral const DATA_DIRECTORY = u"/sd/qa/unit/tiledrendering/data/";
 }
 
 static std::ostream& operator<<(std::ostream& os, ViewShellId id)

@@ -48,11 +48,11 @@ namespace framework
 {
 
 // Property names of a menu/menu item ItemDescriptor
-const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
-const char ITEM_DESCRIPTOR_LABEL[]       = "Label";
-const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
-const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
-const char ITEM_DESCRIPTOR_VISIBLE[]     = "IsVisible";
+const OUStringLiteral ITEM_DESCRIPTOR_COMMANDURL = u"CommandURL";
+const OUStringLiteral ITEM_DESCRIPTOR_LABEL = u"Label";
+const OUStringLiteral ITEM_DESCRIPTOR_TYPE = u"Type";
+const OUStringLiteral ITEM_DESCRIPTOR_STYLE = u"Style";
+const OUStringLiteral ITEM_DESCRIPTOR_VISIBLE = u"IsVisible";
 
 static void ExtractToolbarParameters( const Sequence< PropertyValue >& rProp,
                                       OUString&                        rCommandURL,

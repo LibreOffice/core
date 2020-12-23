@@ -419,7 +419,7 @@ static
 void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
 {
     OUStringBuffer aTemp(64);
-    static const sal_Unicode asPersianWord_conjunction_data[] = u" \u0648 ";
+    static const OUStringLiteral asPersianWord_conjunction_data = u" \u0648 ";
     OUString asPersianWord_conjunction( asPersianWord_conjunction_data );
     unsigned char nSection = 0;
 

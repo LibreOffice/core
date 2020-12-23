@@ -282,19 +282,19 @@ OUString LwpSilverBullet::GetNumCharByStyleID(LwpFribParaNumber const * pParaNum
         break;
     case NUMCHAR_Chinese1:
         {
-        sal_Unicode const sBuf[13] = u"\u58f9\u002c\u0020\u8d30, \u53c1, ...";
+        static OUStringLiteral const sBuf = u"\u58f9\u002c\u0020\u8d30, \u53c1, ...";
         strNumChar = OUString(sBuf);
         }
         break;
     case NUMCHAR_Chinese2:
         {
-        sal_Unicode const sBuf[13] = u"\u4e00, \u4e8c, \u4e09, ...";
+        static OUStringLiteral const sBuf = u"\u4e00, \u4e8c, \u4e09, ...";
         strNumChar = OUString(sBuf);
         }
         break;
     case NUMCHAR_Chinese3:
         {
-        sal_Unicode const sBuf[13] = u"\u7532, \u4e59, \u4e19, ...";
+        static OUStringLiteral const sBuf = u"\u7532, \u4e59, \u4e19, ...";
         strNumChar = OUString(sBuf);
         }
         break;

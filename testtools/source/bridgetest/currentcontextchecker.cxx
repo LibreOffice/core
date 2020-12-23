@@ -38,8 +38,8 @@
 
 namespace {
 
-char const KEY[] = "testtools.bridgetest.Key";
-char const VALUE[] = "good";
+OUStringLiteral const KEY = u"testtools.bridgetest.Key";
+OUStringLiteral const VALUE = u"good";
 
 class CurrentContext:
     public ::osl::DebugBase< CurrentContext >,

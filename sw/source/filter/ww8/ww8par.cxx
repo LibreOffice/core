@@ -4971,7 +4971,7 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( std::u16string_view sCreatedFr
         refMainStream->SetEndian(SvStreamEndian::LITTLE);
         WW8Fib aWwFib( *refMainStream, 8 );
         tools::SvRef<SotStorageStream> xTableStream =
-                rRoot->OpenSotStream(aWwFib.m_fWhichTableStm ? SL::a1Table : SL::a0Table, StreamMode::STD_READ);
+                rRoot->OpenSotStream(aWwFib.m_fWhichTableStm ? OUString(SL::a1Table) : OUString(SL::a0Table), StreamMode::STD_READ);
 
         if (xTableStream.is() && ERRCODE_NONE == xTableStream->GetError())
         {
@@ -5506,7 +5506,7 @@ ErrCode SwWW8ImplReader::SetSubStreams(tools::SvRef<SotStorageStream> &rTableStr
             }
 
             rTableStream = m_pStg->OpenSotStream(
-                m_xWwFib->m_fWhichTableStm ? SL::a1Table : SL::a0Table,
+                m_xWwFib->m_fWhichTableStm ? OUString(SL::a1Table) : OUString(SL::a0Table),
                 StreamMode::STD_READ);
 
             m_pTableStream = rTableStream.get();

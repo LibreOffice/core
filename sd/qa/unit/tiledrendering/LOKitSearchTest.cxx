@@ -36,7 +36,7 @@ using namespace css;
 class LOKitSearchTest : public SdModelTestBase, public XmlTestTools
 {
 private:
-    static constexpr char DATA_DIRECTORY[] = "/sd/qa/unit/tiledrendering/data/";
+    static constexpr OUStringLiteral DATA_DIRECTORY = u"/sd/qa/unit/tiledrendering/data/";
 
 public:
     LOKitSearchTest() = default;

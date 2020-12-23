@@ -48,7 +48,7 @@ void Test::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-char const DATA_DIRECTORY[] = "/writerfilter/qa/cppunittests/dmapper/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/writerfilter/qa/cppunittests/dmapper/data/";
 
 CPPUNIT_TEST_FIXTURE(Test, test1cellInsidevRightborder)
 {
