@@ -70,6 +70,30 @@
       "revId": "415a0c97e2d0b8ffc4965d8df09a9ff930675a57",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3eb91c0_cc310319",
+        "filename": "include/basic/sbxvar.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-23T07:35:03Z",
+      "side": 1,
+      "message": "Heh, but it works with\n\n        const auto first6 \u003d aName.substr(0, 6);\n        for (const auto\u0026 c : first6)",
+      "parentUuid": "ad421e09_8231c334",
+      "range": {
+        "startLine": 308,
+        "startChar": 8,
+        "endLine": 311,
+        "endChar": 59
+      },
+      "revId": "415a0c97e2d0b8ffc4965d8df09a9ff930675a57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
