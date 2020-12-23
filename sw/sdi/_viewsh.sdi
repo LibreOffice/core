@@ -107,10 +107,12 @@ interface BaseTextEditView
     FN_SCROLL_PREV
     [
         ExecMethod = Execute;
+        StateMethod = GetState;
     ]
     FN_SCROLL_NEXT
     [
         ExecMethod = Execute;
+        StateMethod = GetState;
     ]
     FN_SET_PAGE_STYLE // status(final|play)
     [

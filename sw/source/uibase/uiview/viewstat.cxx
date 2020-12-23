@@ -54,6 +54,7 @@
 #include <IDocumentRedlineAccess.hxx>
 
 #include <doc.hxx>
+#include <workctrl.hxx>
 
 using namespace ::com::sun::star;
 
@@ -96,6 +97,18 @@ void SwView::GetState(SfxItemSet &rSet)
             case FN_NAV_ELEMENT:
                 // used to update all instances of this control
                 rSet.InvalidateItem( nWhich );
+            break;
+            case FN_SCROLL_PREV:
+            case FN_SCROLL_NEXT:
+            {
+                if (m_nMoveType == NID_RECENCY)
+                {
+                    if (!m_pWrtShell->GetNavigationMgr().forwardEnabled())
+                        rSet.DisableItem(FN_SCROLL_NEXT);
+                    if (!m_pWrtShell->GetNavigationMgr().backEnabled())
+                        rSet.DisableItem(FN_SCROLL_PREV);
+                }
+            }
             break;
             case FN_EDIT_LINK_DLG:
                 if( m_pWrtShell->GetLinkManager().GetLinks().empty() )
