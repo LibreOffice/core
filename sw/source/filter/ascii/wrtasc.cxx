@@ -85,6 +85,7 @@ SwASCWriter::~SwASCWriter() {}
 ErrCode SwASCWriter::WriteStream()
 {
     bool bIncludeBOM = GetAsciiOptions().GetIncludeBOM();
+    bool bIncludeHidden = GetAsciiOptions().GetIncludeHidden();
 
     if( m_bASCII_ParaAsCR )           // If predefined
         m_sLineEnd = "\015";
@@ -147,7 +148,7 @@ ErrCode SwASCWriter::WriteStream()
                         continue;       // reset while loop!
                     }
                 }
-                else
+                else if (!pNd->IsHidden() || bIncludeHidden)
                 {
                     if (bWriteSttTag)
                     {
