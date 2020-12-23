@@ -46,6 +46,30 @@
       "revId": "ca7d0835008b2333eaebe88030f94b5e072d0eb6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17c183d3_3318cc08",
+        "filename": "xmloff/source/style/xmlstyle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-23T08:47:40Z",
+      "side": 1,
+      "message": "My idea was that consteval ctor would make a notation \"OUStringLiteral(u\"Foo\")\" behave like using plain string literal \"Foo\", where we easily may write:\n\n  char* c \u003d b ? \"Foo\" : \"Bar\";\n\nand the two strings used there are in no way some automatic memory blocks, but guaranteed to be static, and so it\u0027s OK to return the pointer from the function etc.\n\nIn this line, I hoped that the consteval OUStringLiteral ctor would make this:\n\n  OUString sName \u003d bPara ? OUStringLiteral( u\"ParagraphStyles\" ): OUStringLiteral( u\"CharacterStyles\" );\n\nto make sName to be constructed from one of the two *static* objects created at compile time.",
+      "parentUuid": "fefce521_1b7c23f1",
+      "range": {
+        "startLine": 602,
+        "startChar": 12,
+        "endLine": 602,
+        "endChar": 121
+      },
+      "revId": "ca7d0835008b2333eaebe88030f94b5e072d0eb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
