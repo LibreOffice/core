@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "946045e8_91c59eca",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-23T06:50:19Z",
+      "side": 1,
+      "message": "no, this one should stay as-is since we are storing a vector of indices\n\nOr, for more efficiency, it should be:\n\n    aNewCondFormatData.erase(aNewCondFormatData.begin() + std::distance(rCondFormatData.begin(), itr));",
+      "revId": "0ecafe51abb4616647d49ff30bf2d8dd5a4b4ade",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49010823_f614e20d",
+        "filename": "sw/source/core/doc/acmplwrd.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-23T06:50:19Z",
+      "side": 1,
+      "message": "the change is not wrong, but this should really be:\n    m_WordList.erase(it)",
+      "revId": "0ecafe51abb4616647d49ff30bf2d8dd5a4b4ade",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
