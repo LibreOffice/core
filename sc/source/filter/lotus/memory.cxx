@@ -29,26 +29,27 @@
 
 bool MemNew(LotusContext& rContext)
 {
-    rContext.pValueFormCache = new FormCache(&rContext.rDoc);
+    rContext.xValueFormCache.reset(new FormCache(&rContext.rDoc));
 
     // for tool.cxx::PutFormString()
-    rContext.pAttrRight = new SvxHorJustifyItem(SvxCellHorJustify::Right, ATTR_HOR_JUSTIFY);
-    rContext.pAttrLeft = new SvxHorJustifyItem(SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY);
-    rContext.pAttrCenter = new SvxHorJustifyItem(SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY);
-    rContext.pAttrRepeat = new SvxHorJustifyItem(SvxCellHorJustify::Repeat, ATTR_HOR_JUSTIFY);
-    rContext.pAttrStandard = new SvxHorJustifyItem(SvxCellHorJustify::Standard, ATTR_HOR_JUSTIFY);
+    rContext.xAttrRight.reset(new SvxHorJustifyItem(SvxCellHorJustify::Right, ATTR_HOR_JUSTIFY));
+    rContext.xAttrLeft.reset(new SvxHorJustifyItem(SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY));
+    rContext.xAttrCenter.reset(new SvxHorJustifyItem(SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY));
+    rContext.xAttrRepeat.reset(new SvxHorJustifyItem(SvxCellHorJustify::Repeat, ATTR_HOR_JUSTIFY));
+    rContext.xAttrStandard.reset(
+        new SvxHorJustifyItem(SvxCellHorJustify::Standard, ATTR_HOR_JUSTIFY));
 
     return true;
 }
 
 void MemDelete(LotusContext& rContext)
 {
-    delete rContext.pValueFormCache;
-    delete rContext.pAttrRight;
-    delete rContext.pAttrLeft;
-    delete rContext.pAttrCenter;
-    delete rContext.pAttrRepeat;
-    delete rContext.pAttrStandard;
+    rContext.xValueFormCache.reset();
+    rContext.xAttrRight.reset();
+    rContext.xAttrLeft.reset();
+    rContext.xAttrCenter.reset();
+    rContext.xAttrRepeat.reset();
+    rContext.xAttrStandard.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
