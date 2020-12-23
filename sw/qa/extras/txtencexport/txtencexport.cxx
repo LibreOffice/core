@@ -15,12 +15,13 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 
-class TxtEncExportTest : public SwModelTestBase
+class TxtEncExportTestBase : public SwModelTestBase
 {
 public:
-    TxtEncExportTest()
+    TxtEncExportTestBase(const OUString & rFilterOptions)
         : SwModelTestBase("/sw/qa/extras/txtencexport/data/", "Text (encoded)")
     {
+        setFilterOptions(rFilterOptions);
     }
 
 protected:
@@ -41,12 +42,19 @@ protected:
     }
 };
 
-#define DECLARE_TXTENCEXPORT_TEST(TestName, filename)                                                 \
+class TxtEncExportTest : public TxtEncExportTestBase {
+public:
+    TxtEncExportTest()
+        : TxtEncExportTestBase("UTF8,,,,")
+    {
+    }
+};
+
+#define DECLARE_TXTENCEXPORT_TEST(TestName, filename) \
     DECLARE_SW_EXPORT_TEST(TestName, filename, nullptr, TxtEncExportTest)
 
 DECLARE_TXTENCEXPORT_TEST(testBullets, "bullets.odt")
 {
-    setFilterOptions("UTF8,,,,");
     OUString aData = readExportedFile();
 
     OUString aExpected =
@@ -67,9 +75,19 @@ DECLARE_TXTENCEXPORT_TEST(testBullets, "bullets.odt")
     CPPUNIT_ASSERT_EQUAL(aExpected, aData);
 }
 
-DECLARE_TXTENCEXPORT_TEST(testBulletsHidden, "bullets.odt")
+class TxtEncExportHiddenTest : public TxtEncExportTestBase {
+public:
+    TxtEncExportHiddenTest()
+        : TxtEncExportTestBase("UTF8,,,,,false")
+    {
+    }
+};
+
+#define DECLARE_TXTENCEXPORT_HIDDEN_TEST(TestName, filename) \
+    DECLARE_SW_EXPORT_TEST(TestName, filename, nullptr, TxtEncExportHiddenTest)
+
+DECLARE_TXTENCEXPORT_HIDDEN_TEST(testBulletsHidden, "bullets.odt")
 {
-    setFilterOptions("UTF8,,,,,false");
     OUString aData = readExportedFile();
 
     OUString aExpected =
@@ -84,7 +102,7 @@ DECLARE_TXTENCEXPORT_TEST(testBulletsHidden, "bullets.odt")
         "    2. Second" SAL_NEWLINE_STRING "        1. Second-first" SAL_NEWLINE_STRING
         "       Third, but deleted" SAL_NEWLINE_STRING "    3. Actual third" SAL_NEWLINE_STRING
         "" SAL_NEWLINE_STRING "Paragraph after numbering" SAL_NEWLINE_STRING
-        "Next paragraph" SAL_NEWLINE_STRING "Hidden paragraph" SAL_NEWLINE_STRING
+        "Next paragraph" SAL_NEWLINE_STRING
         "Final paragraph" SAL_NEWLINE_STRING;
 
     CPPUNIT_ASSERT_EQUAL(aExpected, aData);
