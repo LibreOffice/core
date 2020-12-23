@@ -1159,11 +1159,10 @@ void SwView::Execute(SfxRequest &rReq)
         case FN_SCROLL_PREV:
         case FN_SCROLL_NEXT:
         {
-            bool *pbNext = new bool(true); // FN_SCROLL_NEXT
+            bool *pbNext = new bool(true);
             if (nSlot == FN_SCROLL_PREV)
                 *pbNext = false;
-            // #i75416# move the execution of the search to an asynchronously called static link
-            Application::PostUserEvent( LINK(this, SwView, MoveNavigationHdl), pbNext );
+            MoveNavigationHdl(pbNext);
         }
         break;
         case SID_JUMPTOMARK:
