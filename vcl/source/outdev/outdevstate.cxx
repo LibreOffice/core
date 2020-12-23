@@ -28,7 +28,6 @@
 #include <vcl/settings.hxx>
 
 #include <outdev.h>
-#include <outdata.hxx>
 #include <salgdi.hxx>
 
 OutDevState::OutDevState()
@@ -334,7 +333,7 @@ void OutputDevice::SetFillColor( const Color& rColor )
                        DrawModeFlags::GrayFill | DrawModeFlags::NoFill |
                        DrawModeFlags::SettingsFill ) )
     {
-        if( !ImplIsColorTransparent( aColor ) )
+        if( !aColor.IsTransparent() )
         {
             if( mnDrawMode & DrawModeFlags::BlackFill )
             {
@@ -363,7 +362,7 @@ void OutputDevice::SetFillColor( const Color& rColor )
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaFillColorAction( aColor, true ) );
 
-    if ( ImplIsColorTransparent( aColor ) )
+    if ( aColor.IsTransparent() )
     {
         if ( mbFillColor )
         {
@@ -411,7 +410,7 @@ void OutputDevice::SetLineColor( const Color& rColor )
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaLineColorAction( aColor, true ) );
 
-    if( ImplIsColorTransparent( aColor ) )
+    if( aColor.IsTransparent() )
     {
         if ( mbLineColor )
         {

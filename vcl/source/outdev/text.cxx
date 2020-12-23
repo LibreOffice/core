@@ -40,7 +40,6 @@
 #include <vcl/toolkit/controllayout.hxx>
 
 #include <config_fuzzers.h>
-#include <outdata.hxx>
 #include <outdev.h>
 #include <salgdi.hxx>
 #include <svdata.hxx>
@@ -714,7 +713,7 @@ void OutputDevice::SetTextFillColor()
 void OutputDevice::SetTextFillColor( const Color& rColor )
 {
     Color aColor( rColor );
-    bool bTransFill = ImplIsColorTransparent( aColor );
+    bool bTransFill = aColor.IsTransparent();
 
     if ( !bTransFill )
     {
