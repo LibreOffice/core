@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "187ffcd6_9d33dee5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-23T13:25:32Z",
+      "side": 1,
+      "message": "rather, it looks like an environment where size_t and sal_uInt32 have the same underlying type?",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 32
+      },
+      "revId": "2e0b757e62536281f61b8d37987378646a246fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8dc8a12a_53eb17dc",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-23T13:25:32Z",
+      "side": 1,
+      "message": "are you sure this should be a call to the erase_at function?  nIndex is of type sal_uInt32, and aNewCondFormatData is of type ScCondFormatIndexes \u003d o3tl::sorted_vector\u003csal_uInt32\u003e, so the original code called the other erase overload (or failed to compile due to the ambiguity discussed in the commit message)",
+      "revId": "2e0b757e62536281f61b8d37987378646a246fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
