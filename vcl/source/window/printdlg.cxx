@@ -158,7 +158,7 @@ void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, 
     {
         rRenderContext.Push(PushFlags::FONT);
         vcl::Font aFont(rRenderContext.GetFont());
-        aFont.SetOrientation(Degree10(900));
+        aFont.SetOrientation(900_deg10);
         rRenderContext.SetFont(aFont);
 
         auto nLeft = aOffset.X() - nTextHeight;

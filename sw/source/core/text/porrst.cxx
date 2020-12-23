@@ -293,7 +293,7 @@ SwTwips SwTextFrame::EmptyHeight() const
     }
 
     if ( IsVertical() )
-        pFnt->SetVertical( Degree10(2700) );
+        pFnt->SetVertical( 2700_deg10 );
 
     OutputDevice* pOut = pSh ? pSh->GetOut() : nullptr;
     if ( !pOut || !pSh->GetViewOptions()->getBrowseMode() ||

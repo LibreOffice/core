@@ -405,7 +405,7 @@ void SwDropPortion::Paint( const SwTextPaintInfo &rInf ) const
     if ( rInf.GetFont()->GetOrientation( rInf.GetTextFrame()->IsVertical() ) )
     {
         pTmpFont.reset(new SwFont( *rInf.GetFont() ));
-        pTmpFont->SetVertical( Degree10(0), rInf.GetTextFrame()->IsVertical() );
+        pTmpFont->SetVertical( 0_deg10, rInf.GetTextFrame()->IsVertical() );
     }
 
     SwFontSave aFontSave( rInf, pTmpFont.get() );
@@ -620,7 +620,7 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
         }
 
         // we do not allow a vertical font for the drop portion
-        pTmpFnt->SetVertical( Degree10(0), rInf.GetTextFrame()->IsVertical() );
+        pTmpFnt->SetVertical( 0_deg10, rInf.GetTextFrame()->IsVertical() );
 
         // find next attribute change / script change
         const TextFrameIndex nTmpIdx = nNextChg;

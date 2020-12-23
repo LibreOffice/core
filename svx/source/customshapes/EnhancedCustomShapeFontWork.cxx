@@ -189,7 +189,7 @@ static void CalculateHorizontalScalingFactor(
 
     const SvxWeightItem& rWeightItem = rSdrObjCustomShape.GetMergedItem( EE_CHAR_WEIGHT );
     aFont.SetWeight( rWeightItem.GetWeight() );
-    aFont.SetOrientation( Degree10(0) );
+    aFont.SetOrientation( 0_deg10 );
     // initializing virtual device
 
     ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::BITMASK);
@@ -294,7 +294,7 @@ static void GetTextAreaOutline(
             aFont.SetFamilyName( rFontItem.GetFamilyName() );
             aFont.SetFamily( rFontItem.GetFamily() );
             aFont.SetStyleName( rFontItem.GetStyleName() );
-            aFont.SetOrientation( Degree10(0) );
+            aFont.SetOrientation( 0_deg10 );
 
             const SvxPostureItem& rPostureItem = rSdrObjCustomShape.GetMergedItem( EE_CHAR_ITALIC );
             aFont.SetItalic( rPostureItem.GetPosture() );
@@ -338,7 +338,7 @@ static void GetTextAreaOutline(
                             for ( auto& rOutline : aCharacterData.vOutlines )
                             {
                                 // rotating
-                                rOutline.Rotate( Point( nTextWidth / 2, rFWData.nSingleLineHeight / 2 ), Degree10(900) );
+                                rOutline.Rotate( Point( nTextWidth / 2, rFWData.nSingleLineHeight / 2 ), 900_deg10 );
                                 aCharacterData.aBoundRect.Union( rOutline.GetBoundRect() );
                             }
                             for ( auto& rOutline : aCharacterData.vOutlines )

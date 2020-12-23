@@ -723,7 +723,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         new SvxBlinkItem(false,ITEMID_BLINK),
         new SvxEmphasisMarkItem(FontEmphasisMark::NONE,ITEMID_EMPHASISMARK),
         new SvxTwoLinesItem(true,0,0,ITEMID_TWOLINES),
-        new SvxCharRotateItem(Degree10(0),false,ITEMID_CHARROTATE),
+        new SvxCharRotateItem(0_deg10,false,ITEMID_CHARROTATE),
         new SvxCharScaleWidthItem(100,ITEMID_CHARSCALE_W),
         new SvxCharReliefItem(FontRelief::NONE,ITEMID_CHARRELIEF),
         new SvxCharHiddenItem(false,ITEMID_CHARHIDDEN),

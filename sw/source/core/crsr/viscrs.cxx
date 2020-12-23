@@ -133,7 +133,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
     if( 0 > nTmpY )
     {
         nTmpY = -nTmpY;
-        m_aTextCursor.SetOrientation( Degree10(900) );
+        m_aTextCursor.SetOrientation( 900_deg10 );
         aRect = SwRect( m_pCursorShell->m_aCharRect.Pos(),
            Size( m_pCursorShell->m_aCharRect.Height(), nTmpY ) );
         aRect.Pos().setX(aRect.Pos().getX() + m_pCursorShell->m_aCursorHeight.getX());

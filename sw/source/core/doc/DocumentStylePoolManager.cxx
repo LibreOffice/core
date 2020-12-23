@@ -1604,7 +1604,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         }
         break;
     case RES_POOLCHR_VERT_NUM:
-            aSet.Put( SvxCharRotateItem( Degree10(900), false, RES_CHRATR_ROTATE ) );
+            aSet.Put( SvxCharRotateItem( 900_deg10, false, RES_CHRATR_ROTATE ) );
     break;
 
     case RES_POOLFRM_FRAME:

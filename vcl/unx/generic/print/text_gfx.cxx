@@ -90,7 +90,7 @@ void PrinterGfx::DrawGlyph(const Point& rPoint,
         PSGSave ();
         PSTranslate (rPoint);
         PSRotate (nCurrentTextAngle);
-        mnTextAngle = Degree10(0);
+        mnTextAngle = 0_deg10;
         aPoint = Point( 0, 0 );
     }
 
@@ -114,7 +114,7 @@ void PrinterGfx::DrawGlyph(const Point& rPoint,
         maVirtualStatus.mnTextHeight = nTextWidth;
         if( aPoint.X() || aPoint.Y() )
             PSTranslate( aPoint );
-        PSRotate (Degree10(900));
+        PSRotate (900_deg10);
         // draw the rotated glyph
         drawGlyph(aRotPoint, rGlyph.glyphId());
 

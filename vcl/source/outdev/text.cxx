@@ -90,9 +90,9 @@ void OutputDevice::ImplDrawTextRect( tools::Long nBaseX, tools::Long nBaseY,
     if ( nOrientation )
     {
         // Rotate rect without rounding problems for 90 degree rotations
-        if ( !(nOrientation % Degree10(900)) )
+        if ( !(nOrientation % 900_deg10) )
         {
-            if ( nOrientation == Degree10(900) )
+            if ( nOrientation == 900_deg10 )
             {
                 tools::Long nTemp = nX;
                 nX = nY;
@@ -102,7 +102,7 @@ void OutputDevice::ImplDrawTextRect( tools::Long nBaseX, tools::Long nBaseY,
                 nHeight = nTemp;
                 nY -= nHeight;
             }
-            else if ( nOrientation == Degree10(1800) )
+            else if ( nOrientation == 1800_deg10 )
             {
                 nX = -nX;
                 nY = -nY;
@@ -173,7 +173,7 @@ tools::Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout
     if ( mpFontInstance->mnOrientation )
     {
         tools::Long nBaseX = nX, nBaseY = nY;
-        if ( !(mpFontInstance->mnOrientation % Degree10(900)) )
+        if ( !(mpFontInstance->mnOrientation % 900_deg10) )
         {
             tools::Long nX2 = nX+nWidth;
             tools::Long nY2 = nY+nHeight;
@@ -225,7 +225,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 
     const FontSelectPattern& rPattern = mpFontInstance->GetFontSelectPattern();
     vcl::Font aFont( GetFont() );
-    aFont.SetOrientation( Degree10(0) );
+    aFont.SetOrientation( 0_deg10 );
     aFont.SetFontSize( Size( rPattern.mnWidth, rPattern.mnHeight ) );
     pVDev->SetFont( aFont );
     pVDev->SetTextColor( COL_BLACK );
@@ -1230,7 +1230,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     // set layout options
     ImplLayoutArgs aLayoutArgs(rStr, nMinIndex, nEndIndex, nLayoutFlags, maFont.GetLanguageTag(), pLayoutCache);
 
-    Degree10 nOrientation = mpFontInstance ? mpFontInstance->mnOrientation : Degree10(0);
+    Degree10 nOrientation = mpFontInstance ? mpFontInstance->mnOrientation : 0_deg10;
     aLayoutArgs.SetOrientation( nOrientation );
 
     aLayoutArgs.SetLayoutWidth( nPixelWidth );

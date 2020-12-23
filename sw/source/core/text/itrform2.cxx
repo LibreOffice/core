@@ -1504,7 +1504,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                 {
                     delete pPor;
                     pPor = new SwRotatedPortion(rInf.GetIdx() + TextFrameIndex(1),
-                                                Degree10(900) == nDir
+                                                900_deg10 == nDir
                                                     ? DIR_BOTTOM2TOP
                                                     : DIR_TOP2BOTTOM );
                 }
@@ -1520,7 +1520,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                 if ( nDir )
                 {
                     delete pPor;
-                    pPor = new SwRotatedPortion(TextFrameIndex(0), Degree10(900) == nDir
+                    pPor = new SwRotatedPortion(TextFrameIndex(0), 900_deg10 == nDir
                                                     ? DIR_BOTTOM2TOP
                                                     : DIR_TOP2BOTTOM );
 

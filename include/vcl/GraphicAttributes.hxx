@@ -108,7 +108,7 @@ public:
     {
         return (mnLeftCrop != 0 || mnTopCrop != 0 || mnRightCrop != 0 || mnBottomCrop != 0);
     }
-    bool IsRotated() const { return ((mnRotate10 % Degree10(3600)) != Degree10(0)); }
+    bool IsRotated() const { return ((mnRotate10 % 3600_deg10) != 0_deg10); }
     bool IsTransparent() const { return (mcTransparency > 0); }
     bool IsAdjusted() const
     {

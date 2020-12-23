@@ -2118,7 +2118,7 @@ void VclMetafileProcessor2D::processUnifiedTransparencePrimitive2D(
                 aVCLGradient.SetStyle(GradientStyle::Linear);
                 aVCLGradient.SetStartColor(aTransColor);
                 aVCLGradient.SetEndColor(aTransColor);
-                aVCLGradient.SetAngle(Degree10(0));
+                aVCLGradient.SetAngle(0_deg10);
                 aVCLGradient.SetBorder(0);
                 aVCLGradient.SetOfsX(0);
                 aVCLGradient.SetOfsY(0);

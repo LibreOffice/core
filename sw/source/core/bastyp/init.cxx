@@ -493,7 +493,7 @@ void InitCore()
     aAttrTab[ RES_CHRATR_CTL_POSTURE - POOLATTR_BEGIN ] =   new SvxPostureItem(ITALIC_NONE, RES_CHRATR_CTL_POSTURE );
     aAttrTab[ RES_CHRATR_CTL_WEIGHT - POOLATTR_BEGIN ] =    new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_CTL_WEIGHT );
 
-    aAttrTab[ RES_CHRATR_ROTATE - POOLATTR_BEGIN ] =        new SvxCharRotateItem( Degree10(0), false, RES_CHRATR_ROTATE );
+    aAttrTab[ RES_CHRATR_ROTATE - POOLATTR_BEGIN ] =        new SvxCharRotateItem( 0_deg10, false, RES_CHRATR_ROTATE );
     aAttrTab[ RES_CHRATR_EMPHASIS_MARK - POOLATTR_BEGIN ] = new SvxEmphasisMarkItem( FontEmphasisMark::NONE, RES_CHRATR_EMPHASIS_MARK );
     aAttrTab[ RES_CHRATR_TWO_LINES - POOLATTR_BEGIN ] =     new SvxTwoLinesItem( false, 0, 0, RES_CHRATR_TWO_LINES );
     aAttrTab[ RES_CHRATR_SCALEW - POOLATTR_BEGIN ] =        new SvxCharScaleWidthItem( 100, RES_CHRATR_SCALEW );

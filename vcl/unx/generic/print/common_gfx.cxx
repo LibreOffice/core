@@ -125,7 +125,7 @@ PrinterGfx::Clear()
     mnDepth                         = 24;
     mnPSLevel                       = 2;
     mbColor                         = true;
-    mnTextAngle                     = Degree10(0);
+    mnTextAngle                     = 0_deg10;
 
     maClipRegion.clear();
     maGraphicsStack.clear();

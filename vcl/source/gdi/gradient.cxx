@@ -198,7 +198,7 @@ void Gradient::SetSteps( sal_uInt16 nSteps )
 void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rBoundRect, Point& rCenter ) const
 {
     tools::Rectangle aRect( rRect );
-    Degree10 nAngle = GetAngle() % Degree10(3600);
+    Degree10 nAngle = GetAngle() % 3600_deg10;
 
     if( GetStyle() == GradientStyle::Linear || GetStyle() == GradientStyle::Axial )
     {

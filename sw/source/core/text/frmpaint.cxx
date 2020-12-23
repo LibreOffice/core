@@ -132,7 +132,7 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         m_pFnt.reset( new SwFont(&pFormat->GetAttrSet(), &pFrame->GetDoc().getIDocumentSettingAccess()) );
         m_pFnt->Invalidate();
         m_pFnt->ChgPhysFnt( m_pSh, *m_pSh->GetOut() );
-        m_pFnt->SetVertical( Degree10(0), pFrame->IsVertical() );
+        m_pFnt->SetVertical( 0_deg10, pFrame->IsVertical() );
     }
 
     if( bLineNum )
@@ -550,7 +550,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                     pFnt->SetStyleName(OUString(), SwFontScript::Latin);
                     pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, SwFontScript::Latin );
                 }
-                pFnt->SetVertical( Degree10(0), IsVertical() );
+                pFnt->SetVertical( 0_deg10, IsVertical() );
                 SwFrameSwapper aSwapper( this, true );
                 SwLayoutModeModifier aLayoutModeModifier( *pSh->GetOut() );
                 aLayoutModeModifier.Modify( IsRightToLeft() );

@@ -1398,7 +1398,7 @@ void Polygon::Scale( double fScaleX, double fScaleY )
 
 void Polygon::Rotate( const Point& rCenter, Degree10 nAngle10 )
 {
-    nAngle10 %= Degree10(3600);
+    nAngle10 %= 3600_deg10;
 
     if( nAngle10 )
     {

@@ -1117,7 +1117,7 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     if( rPageSize.Width() < rPageSize.Height() )
     {
         nTextWidth = rPageSize.Height();
-        aFont.SetOrientation( Degree10(2700) );
+        aFont.SetOrientation( 2700_deg10 );
     }
 
     // adjust font height for text to fit
@@ -1185,7 +1185,7 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
     aFont.SetWeight( WEIGHT_NORMAL );
     aFont.SetAlignment( ALIGN_BOTTOM );
     aFont.SetFontHeight(40);
-    aFont.SetOrientation(Degree10(450));
+    aFont.SetOrientation(450_deg10);
 
     OutputDevice* pDev = rWriter.GetReferenceDevice();
     pDev->SetFont(aFont);

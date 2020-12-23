@@ -87,7 +87,7 @@ public:
     tools::Long            GetWidth() const { return maSize.Width(); }
     tools::Long            GetHeight() const { return maSize.Height(); }
 
-    void            SetOrientation( Degree10 nOrientation = Degree10(0) );
+    void            SetOrientation( Degree10 nOrientation = 0_deg10 );
 
     void            SetDirection( CursorDirection nDirection = CursorDirection::NONE );
 

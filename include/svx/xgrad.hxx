@@ -47,7 +47,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC XGradient final
 public:
     XGradient();
     XGradient( const Color& rStart, const Color& rEnd,
-               css::awt::GradientStyle eStyle = css::awt::GradientStyle_LINEAR, Degree10 nAngle = Degree10(0),
+               css::awt::GradientStyle eStyle = css::awt::GradientStyle_LINEAR, Degree10 nAngle = 0_deg10,
                sal_uInt16 nXOfs = 50, sal_uInt16 nYOfs = 50, sal_uInt16 nBorder = 0,
                sal_uInt16 nStartIntens = 100, sal_uInt16 nEndIntens = 100,
                sal_uInt16 nSteps = 0 );

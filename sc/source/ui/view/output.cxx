@@ -861,9 +861,9 @@ void drawDataBars(vcl::RenderContext& rRenderContext, const ScDataBarInfo* pOldD
         aGradient.SetSteps(255);
 
         if(pOldDataBarInfo->mnLength < 0)
-            aGradient.SetAngle(Degree10(2700));
+            aGradient.SetAngle(2700_deg10);
         else
-            aGradient.SetAngle(Degree10(900));
+            aGradient.SetAngle(900_deg10);
 
         rRenderContext.DrawGradient(aPaintRect, aGradient);
 

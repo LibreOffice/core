@@ -68,7 +68,7 @@ void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
     GraphicAttr aSuppressGraphicAttr(getGraphicAttr());
 
     aSuppressGraphicAttr.SetCrop(0, 0, 0, 0);
-    aSuppressGraphicAttr.SetRotation(Degree10(0));
+    aSuppressGraphicAttr.SetRotation(0_deg10);
     aSuppressGraphicAttr.SetMirrorFlags(BmpMirrorFlags::NONE);
     aSuppressGraphicAttr.SetTransparency(0);
 

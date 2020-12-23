@@ -760,7 +760,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         bRubyStretch = true;
 
         aRubyFont.SetVertical(true);
-        aRubyFont.SetOrientation(Degree10(2700));
+        aRubyFont.SetOrientation(2700_deg10);
     }
 
     tools::Long nYOutput;

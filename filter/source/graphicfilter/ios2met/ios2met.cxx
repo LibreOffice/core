@@ -2037,11 +2037,11 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdSChAng: {
             sal_Int32 nX = ReadCoord(bCoord32);
             sal_Int32 nY = ReadCoord(bCoord32);
-            if (nX>=0 && nY==0) aAttr.nChrAng=Degree10(0);
+            if (nX>=0 && nY==0) aAttr.nChrAng=0_deg10;
             else {
                 aAttr.nChrAng = Degree10(static_cast<short>(atan2(static_cast<double>(nY),static_cast<double>(nX))/3.1415926539*1800.0));
-                while (aAttr.nChrAng < Degree10(0)) aAttr.nChrAng += Degree10(3600);
-                aAttr.nChrAng %= Degree10(3600);
+                while (aAttr.nChrAng < 0_deg10) aAttr.nChrAng += 3600_deg10;
+                aAttr.nChrAng %= 3600_deg10;
             }
             break;
         }
@@ -2689,7 +2689,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     aDefAttr.nArcQ       =1;
     aDefAttr.nArcR       =0;
     aDefAttr.nArcS       =0;
-    aDefAttr.nChrAng     =Degree10(0);
+    aDefAttr.nChrAng     =0_deg10;
     aDefAttr.aChrCellSize=Size(12,12);
     aDefAttr.nChrSet     =0;
     aDefAttr.aCurPos     =Point(0,0);

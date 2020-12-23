@@ -220,7 +220,7 @@ void SVGAttributeWriter::AddGradientDef( const tools::Rectangle& rObjRect, const
     {
         SvXMLElementExport aDesc( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, true, true );
         Color aStartColor( rGradient.GetStartColor() ), aEndColor( rGradient.GetEndColor() );
-        Degree10 nAngle = rGradient.GetAngle() % Degree10(3600);
+        Degree10 nAngle = rGradient.GetAngle() % 3600_deg10;
         Point aObjRectCenter( rObjRect.Center() );
         tools::Polygon aPoly( rObjRect );
         static sal_Int32 nCurGradientId = 1;
@@ -2259,7 +2259,7 @@ void SVGActionWriter::ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPo
             rGradient.GetBoundRect( rPolyPoly.GetBoundRect(), aTmpRect, aTmpCenter );
             ImplMap( aTmpRect, aRect );
             ImplMap( aTmpCenter, aCenter );
-            const Degree10 nAngle = rGradient.GetAngle() % Degree10(3600);
+            const Degree10 nAngle = rGradient.GetAngle() % 3600_deg10;
 
             tools::Polygon aPoly( 2 );
             // Setting x value of a gradient vector to rotation center to

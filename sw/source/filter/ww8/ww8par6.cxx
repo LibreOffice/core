@@ -3566,7 +3566,7 @@ void SwWW8ImplReader::Read_DoubleLine_Rotate( sal_uInt16, const sal_uInt8* pData
         case 1:                         // rotated characters
             {
                 bool bFitToLine = 0 != *(pData+1);
-                NewAttr( SvxCharRotateItem( Degree10(900), bFitToLine, RES_CHRATR_ROTATE ));
+                NewAttr( SvxCharRotateItem( 900_deg10, bFitToLine, RES_CHRATR_ROTATE ));
             }
             break;
         }
