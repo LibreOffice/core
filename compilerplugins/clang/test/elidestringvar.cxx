@@ -11,8 +11,9 @@
 
 #include "rtl/ustring.hxx"
 
-OUString f(sal_Unicode c, int n)
+template <sal_Unicode C> OUString f(sal_Unicode c, int n)
 {
+    OUString s0(C);
     OUString s1(c);
     // expected-note@+1 {{literal 'rtl::OUString' variable defined here [loplugin:elidestringvar]}}
     OUString s2('a');
@@ -23,6 +24,8 @@ OUString f(sal_Unicode c, int n)
     OUString s4 = s4lit;
     switch (n)
     {
+        case 0:
+            return s0;
         case 1:
             return s1;
         case 2:

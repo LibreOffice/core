@@ -131,7 +131,7 @@ public:
                 {
                     break;
                 }
-                if (e2->isIntegerConstantExpr(compiler.getASTContext()))
+                if (!e2->isValueDependent() && e2->isIntegerConstantExpr(compiler.getASTContext()))
                 {
                     break;
                 }
