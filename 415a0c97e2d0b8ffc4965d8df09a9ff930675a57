@@ -94,6 +94,30 @@
       "revId": "415a0c97e2d0b8ffc4965d8df09a9ff930675a57",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "212e420b_43e3a7c1",
+        "filename": "include/basic/sbxvar.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-23T08:19:20Z",
+      "side": 1,
+      "message": "https://developercommunity.visualstudio.com/content/problem/1295044/range-based-for-in-a-constexpr-function-cannot-use.html",
+      "parentUuid": "e3eb91c0_cc310319",
+      "range": {
+        "startLine": 308,
+        "startChar": 8,
+        "endLine": 311,
+        "endChar": 59
+      },
+      "revId": "415a0c97e2d0b8ffc4965d8df09a9ff930675a57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
