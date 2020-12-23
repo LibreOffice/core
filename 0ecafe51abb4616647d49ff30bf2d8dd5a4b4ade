@@ -69,6 +69,24 @@
       "revId": "0ecafe51abb4616647d49ff30bf2d8dd5a4b4ade",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "370dbd55_f8d4237c",
+        "filename": "sw/source/core/doc/acmplwrd.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-12-23T09:20:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "564374b6_e74b0b65",
+      "revId": "0ecafe51abb4616647d49ff30bf2d8dd5a4b4ade",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
