@@ -594,6 +594,83 @@ BigInt::BigInt( sal_Int64 nValue )
     }
 }
 
+BigInt::BigInt( sal_uInt64 nValue )
+    : nVal(0)
+{
+    bIsNeg = false;
+    nLen = 0;
+
+    if (nValue <= SAL_MAX_INT32)
+    {
+        bIsBig = false;
+        nVal   = static_cast<sal_Int32>(nValue);
+    }
+    else
+    {
+        bIsBig  = true;
+        for (int i = 0; (i != sizeof(sal_uInt64) / 2) && (nValue != 0); ++i)
+        {
+            nNum[i] = static_cast<sal_uInt16>(nValue & 0xffffUL);
+            nValue = nValue >> 16;
+            ++nLen;
+        }
+    }
+}
+
+BigInt::operator sal_uInt32() const
+{
+    if ( !bIsBig )
+    {
+        assert(nVal >= 0 && "out of range");
+        return static_cast<sal_uInt32>(nVal);
+    }
+    else
+    {
+        assert(nLen <= 2 && "out of range");
+        assert(!bIsNeg && "out of range");
+
+        int     i = nLen-1;
+        sal_uInt32 nRet = nNum[i];
+
+        while ( i )
+        {
+            nRet = nRet << 16;
+            i--;
+            nRet |= nNum[i];
+        }
+
+        return nRet;
+    }
+}
+
+BigInt::operator sal_Int64() const
+{
+    if ( !bIsBig )
+    {
+        return nVal;
+    }
+    else
+    {
+        assert(nLen <= 4 && "out of range");
+        assert((nLen < 4 || nNum[4] <= SAL_MAX_INT16) && "out of range");
+
+        int     i = nLen-1;
+        sal_Int64 nRet = nNum[i];
+
+        while ( i )
+        {
+            nRet = nRet << 16;
+            i--;
+            nRet |= nNum[i];
+        }
+
+        if ( bIsNeg )
+            nRet *= -1;
+
+        return nRet;
+    }
+}
+
 BigInt::operator double() const
 {
     if ( !bIsBig )
