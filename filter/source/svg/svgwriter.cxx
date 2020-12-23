@@ -220,7 +220,7 @@ void SVGAttributeWriter::AddGradientDef( const tools::Rectangle& rObjRect, const
     {
         SvXMLElementExport aDesc( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, true, true );
         Color aStartColor( rGradient.GetStartColor() ), aEndColor( rGradient.GetEndColor() );
-        Degree10 nAngle = rGradient.GetAngle() % Degree10(3600);
+        Degree10 nAngle = rGradient.GetAngle() % 3600_deg10;
         Point aObjRectCenter( rObjRect.Center() );
         tools::Polygon aPoly( rObjRect );
         static sal_Int32 nCurGradientId = 1;
