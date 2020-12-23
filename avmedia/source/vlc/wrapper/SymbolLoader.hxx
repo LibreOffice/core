@@ -32,7 +32,7 @@ struct ApiMap
 };
 
 #if defined( LINUX )
-    const char LibName[] = "libvlc.so.5";
+    const OUStringLiteral LibName = u"libvlc.so.5";
 #elif defined( MACOSX )
     const char LibName[] = "/Applications/VLC.app/Contents/MacOS/lib/libvlc.dylib";
 #elif defined( _WIN32 )

@@ -74,7 +74,7 @@ const char CMDURL_STYLEPROT_ONLY[] = ".uno:StyleApply?";
 const char CMDURL_SPART_ONLY    [] = "Style:string=";
 const char CMDURL_FPART_ONLY    [] = "FamilyName:string=";
 
-const char STYLEPROP_UINAME[] = "DisplayName";
+const OUStringLiteral STYLEPROP_UINAME = u"DisplayName";
 
 OUString SfxStylesInfo_Impl::generateCommand(const OUString& sFamily, const OUString& sStyle)
 {

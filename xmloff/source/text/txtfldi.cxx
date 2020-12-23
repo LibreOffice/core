@@ -86,39 +86,39 @@ using namespace ::xmloff::token;
 
 
 // service prefix and service names
-constexpr char16_t sAPI_textfield_prefix[]  = u"com.sun.star.text.TextField.";
+constexpr OUStringLiteral sAPI_textfield_prefix = u"com.sun.star.text.TextField.";
 constexpr char16_t sAPI_fieldmaster_prefix[] = u"com.sun.star.text.FieldMaster.";
 const char sAPI_presentation_prefix[] = "com.sun.star.presentation.TextField.";
 
-const char sAPI_date_time[]                 = "DateTime";
-const char sAPI_page_number[]               = "PageNumber";
-const char sAPI_docinfo_change_date_time[]  = "DocInfo.ChangeDateTime";
-const char sAPI_docinfo_create_date_time[]  = "DocInfo.CreateDateTime";
-const char sAPI_docinfo_custom[]            = "DocInfo.Custom";
-const char sAPI_docinfo_print_date_time[]   = "DocInfo.PrintDateTime";
-const char sAPI_dde[]                       = "DDE";
-const char sAPI_url[]                       = "URL";
+const OUStringLiteral sAPI_date_time        = u"DateTime";
+const OUStringLiteral sAPI_page_number      = u"PageNumber";
+const OUStringLiteral sAPI_docinfo_change_date_time = u"DocInfo.ChangeDateTime";
+const OUStringLiteral sAPI_docinfo_create_date_time = u"DocInfo.CreateDateTime";
+const OUStringLiteral sAPI_docinfo_custom   = u"DocInfo.Custom";
+const OUStringLiteral sAPI_docinfo_print_date_time = u"DocInfo.PrintDateTime";
+const OUStringLiteral sAPI_dde              = u"DDE";
+const OUStringLiteral sAPI_url              = u"URL";
 
 // property names
-const char sAPI_is_fixed[]          = "IsFixed";
-const char sAPI_content[]           = "Content";
-const char sAPI_author[]            = "Author";
-const char sAPI_hint[]              = "Hint";
-const char sAPI_name[]              = "Name";
-const char sAPI_sub_type[]          = "SubType";
-const char sAPI_date_time_value[]   = "DateTimeValue";
-const char sAPI_number_format[]     = "NumberFormat";
-const char sAPI_numbering_type[]    = "NumberingType";
-const char sAPI_offset[]            = "Offset";
-const char sAPI_condition[]         = "Condition";
-const char sAPI_set_number[]        = "SetNumber";
-const char sAPI_file_format[]       = "FileFormat";
-const char sAPI_is_date[]           = "IsDate";
-const char sAPI_current_presentation[] = "CurrentPresentation";
-const char sAPI_is_hidden[]         = "IsHidden";
-const char sAPI_is_fixed_language[] = "IsFixedLanguage";
+const OUStringLiteral sAPI_is_fixed = u"IsFixed";
+const OUStringLiteral sAPI_content  = u"Content";
+const OUStringLiteral sAPI_author   = u"Author";
+const OUStringLiteral sAPI_hint     = u"Hint";
+const OUStringLiteral sAPI_name     = u"Name";
+const OUStringLiteral sAPI_sub_type = u"SubType";
+const OUStringLiteral sAPI_date_time_value = u"DateTimeValue";
+const OUStringLiteral sAPI_number_format = u"NumberFormat";
+const OUStringLiteral sAPI_numbering_type = u"NumberingType";
+const OUStringLiteral sAPI_offset   = u"Offset";
+const OUStringLiteral sAPI_condition = u"Condition";
+const OUStringLiteral sAPI_set_number = u"SetNumber";
+const OUStringLiteral sAPI_file_format = u"FileFormat";
+const OUStringLiteral sAPI_is_date  = u"IsDate";
+const OUStringLiteral sAPI_current_presentation = u"CurrentPresentation";
+const OUStringLiteral sAPI_is_hidden = u"IsHidden";
+const OUStringLiteral sAPI_is_fixed_language = u"IsFixedLanguage";
 
-const char sAPI_true[] = "TRUE";
+const OUStringLiteral sAPI_true = u"TRUE";
 
 
 XMLTextFieldImportContext::XMLTextFieldImportContext(
@@ -1537,7 +1537,6 @@ OUString XMLSimpleDocInfoImportContext::MapTokenToServiceName(
         case XML_ELEMENT(TEXT, XML_TITLE):
             pServiceName = "DocInfo.Title";
             break;
-
         default:
             XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElementToken);
             assert(false);

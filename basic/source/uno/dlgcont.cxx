@@ -342,8 +342,8 @@ SfxLibraryContainer* SfxDialogLibraryContainer::createInstanceImpl()
     return new SfxDialogLibraryContainer();
 }
 
-const char aResourceFileNameBase[] = "DialogStrings";
-const char aResourceFileCommentBase[] = "# Strings for Dialog Library ";
+const OUStringLiteral aResourceFileNameBase = u"DialogStrings";
+const OUStringLiteral aResourceFileCommentBase = u"# Strings for Dialog Library ";
 
 // Resource handling
 Reference< css::resource::XStringResourcePersistence >

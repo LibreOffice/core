@@ -27,10 +27,10 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace
 {
 
-const char lcl_aServiceName_Logarithmic[] = "com.sun.star.chart2.LogarithmicScaling";
-const char lcl_aServiceName_Exponential[] = "com.sun.star.chart2.ExponentialScaling";
-const char lcl_aServiceName_Linear[] = "com.sun.star.chart2.LinearScaling";
-const char lcl_aServiceName_Power[] = "com.sun.star.chart2.PowerScaling";
+const OUStringLiteral lcl_aServiceName_Logarithmic = u"com.sun.star.chart2.LogarithmicScaling";
+const OUStringLiteral lcl_aServiceName_Exponential = u"com.sun.star.chart2.ExponentialScaling";
+const OUStringLiteral lcl_aServiceName_Linear = u"com.sun.star.chart2.LinearScaling";
+const OUStringLiteral lcl_aServiceName_Power = u"com.sun.star.chart2.PowerScaling";
 
 }
 

@@ -60,10 +60,10 @@ namespace configmgr::configuration_provider {
 
 namespace {
 
-char const accessServiceName[] =
-    "com.sun.star.configuration.ConfigurationAccess";
-char const updateAccessServiceName[] =
-    "com.sun.star.configuration.ConfigurationUpdateAccess";
+OUStringLiteral const accessServiceName =
+    u"com.sun.star.configuration.ConfigurationAccess";
+OUStringLiteral const updateAccessServiceName =
+    u"com.sun.star.configuration.ConfigurationUpdateAccess";
 
 void badNodePath() {
     throw css::uno::Exception(

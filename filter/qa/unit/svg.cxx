@@ -20,7 +20,7 @@
 
 using namespace ::com::sun::star;
 
-char const DATA_DIRECTORY[] = "/filter/qa/unit/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/filter/qa/unit/data/";
 
 /// SVG filter tests.
 class SvgFilterTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools

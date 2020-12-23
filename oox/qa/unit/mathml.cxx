@@ -42,7 +42,7 @@ void OoxMathmlTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-char const DATA_DIRECTORY[] = "/oox/qa/unit/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/oox/qa/unit/data/";
 
 CPPUNIT_TEST_FIXTURE(OoxMathmlTest, testImportCharacters)
 {

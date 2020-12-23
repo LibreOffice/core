@@ -140,10 +140,10 @@ using ::std::vector;
 
 //  Filter names (like in sclib.cxx)
 
-const char pFilterSc50[]     = "StarCalc 5.0";
+const OUStringLiteral pFilterSc50 = u"StarCalc 5.0";
 const char pFilterXML[]      = "StarOffice XML (Calc)";
-const char pFilterAscii[]    = SC_TEXT_CSV_FILTER_NAME;
-const char pFilterLotus[]    = "Lotus";
+const OUStringLiteral pFilterAscii = u"" SC_TEXT_CSV_FILTER_NAME;
+const OUStringLiteral pFilterLotus = u"Lotus";
 const char pFilterQPro6[]    = "Quattro Pro 6.0";
 const char pFilterExcel4[]   = "MS Excel 4.0";
 const char pFilterEx4Temp[]  = "MS Excel 4.0 Vorlage/Template";
@@ -153,11 +153,11 @@ const char pFilterExcel95[]  = "MS Excel 95";
 const char pFilterEx95Temp[] = "MS Excel 95 Vorlage/Template";
 const char pFilterExcel97[]  = "MS Excel 97";
 const char pFilterEx97Temp[] = "MS Excel 97 Vorlage/Template";
-const char pFilterDBase[]    = "dBase";
-const char pFilterDif[]      = "DIF";
+const OUStringLiteral pFilterDBase = u"dBase";
+const OUStringLiteral pFilterDif = u"DIF";
 const char pFilterSylk[]     = "SYLK";
-const char pFilterHtml[]     = "HTML (StarCalc)";
-const char pFilterHtmlWebQ[] = "calc_HTML_WebQuery";
+const OUStringLiteral pFilterHtml = u"HTML (StarCalc)";
+const OUStringLiteral pFilterHtmlWebQ = u"calc_HTML_WebQuery";
 const char pFilterRtf[]      = "Rich Text Format (StarCalc)";
 
 #define ShellClass_ScDocShell

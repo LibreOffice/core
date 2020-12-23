@@ -442,7 +442,7 @@ namespace xmloff
     {
         // no optimization here. If this method gets called, the XML stream did not contain a name for the
         // element, which is a heavy error. So in this case we don't care for performance
-        static const char sUnnamedName[] = "unnamed";
+        static const OUStringLiteral sUnnamedName = u"unnamed";
         OSL_ENSURE(m_xParentContainer.is(), "OElementImport::implGetDefaultName: no parent container!");
         if (!m_xParentContainer.is())
             return sUnnamedName;
