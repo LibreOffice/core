@@ -167,7 +167,7 @@ uno::Reference< XScaling > SAL_CALL
 {
     // ToDo: ApproxEqual ?
     if( m_fSlope == 0 )
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("Divide by zero exception");
 
     return new LinearScaling( 1.0 / m_fSlope, m_fOffset / m_fSlope );
 }
@@ -218,7 +218,7 @@ uno::Reference< XScaling > SAL_CALL
 {
     // ToDo: ApproxEqual ?
     if( m_fExponent == 0 )
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("Divide by zero exception");
 
     return new PowerScaling( 1.0 / m_fExponent );
 }
