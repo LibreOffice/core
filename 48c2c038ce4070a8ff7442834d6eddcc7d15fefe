@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3511714c_7d96d4f8",
+        "filename": "tools/source/generic/bigint.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-23T13:50:31Z",
+      "side": 1,
+      "message": "This seems redundant for an unsigned value",
+      "range": {
+        "startLine": 603,
+        "startChar": 19,
+        "endLine": 603,
+        "endChar": 32
+      },
+      "revId": "48c2c038ce4070a8ff7442834d6eddcc7d15fefe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
