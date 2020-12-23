@@ -63,30 +63,21 @@ public:
     {
     }
 
-#if SAL_TYPES_SIZEOFLONG == 4
-    BigInt(int nValue)
-        : nVal(nValue)
-        , nLen(0)
-        , bIsNeg(false)
-        , bIsBig(false)
-    {
-    }
-#endif
-
     BigInt( double nVal );
     BigInt( sal_uInt32 nVal );
     BigInt( sal_Int64 nVal );
+    BigInt( sal_uInt64 nVal );
     BigInt( const BigInt& rBigInt );
     BigInt( const OUString& rString );
+    BigInt( int nVal ) : BigInt(static_cast<sal_Int64>(nVal)) {}
 
-    operator        sal_Int16() const;
-    operator        sal_uInt16() const;
-    operator        sal_Int32() const;
+    inline operator sal_Int16() const;
+    inline operator sal_uInt16() const;
+    inline operator sal_Int32() const;
     operator        sal_uInt32() const;
+    operator        sal_Int64() const;
+    operator        sal_uInt64() const;
     operator        double() const;
-#if SAL_TYPES_SIZEOFPOINTER == 8
-    operator        tools::Long() const;
-#endif
 
     bool            IsNeg() const;
     bool            IsZero() const;
@@ -101,7 +92,10 @@ public:
     BigInt&         operator /=( const BigInt& rVal );
     BigInt&         operator %=( const BigInt& rVal );
 
-    BigInt&         operator  =( sal_Int32 nValue );
+    inline BigInt&  operator  =( int nValue ) { return operator=(static_cast<sal_Int64>(nValue)); }
+    inline BigInt&  operator  =( sal_Int32 nValue );
+    inline BigInt&  operator  =( sal_Int64 nValue ) { return *this = BigInt(nValue); }
+    inline BigInt&  operator  =( sal_uInt64 nValue ) { return *this = BigInt(nValue); }
 
     friend inline   BigInt operator +( const BigInt& rVal1, const BigInt& rVal2 );
     friend inline   BigInt operator -( const BigInt& rVal1, const BigInt& rVal2 );
@@ -142,25 +136,6 @@ inline BigInt::operator sal_Int32() const
     assert(false && "out of range");
     return 0;
 }
-
-inline BigInt::operator sal_uInt32() const
-{
-    if ( !bIsBig && nVal >= 0 )
-        return static_cast<sal_uInt32>(nVal);
-    assert(false && "out of range");
-    return 0;
-}
-
-#if SAL_TYPES_SIZEOFPOINTER == 8
-inline BigInt::operator tools::Long() const
-{
-    // Clamp to int32 since long is int32 on Windows.
-    if (!bIsBig)
-        return nVal;
-    assert(false && "out of range");
-    return 0;
-}
-#endif
 
 inline BigInt& BigInt::operator =( sal_Int32 nValue )
 {
