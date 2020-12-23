@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "84b687ec_88870896",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-12-23T09:09:13Z",
+      "side": 1,
+      "message": "But that is exactly what erase_at does?\n\n    void erase_at(size_t index)\n    {\n        m_vector.erase(m_vector.begin() + index);\n    }",
+      "parentUuid": "946045e8_91c59eca",
+      "revId": "0ecafe51abb4616647d49ff30bf2d8dd5a4b4ade",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "49010823_f614e20d",
         "filename": "sw/source/core/doc/acmplwrd.cxx",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "0ecafe51abb4616647d49ff30bf2d8dd5a4b4ade",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "564374b6_e74b0b65",
+        "filename": "sw/source/core/doc/acmplwrd.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-12-23T09:09:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "49010823_f614e20d",
+      "revId": "0ecafe51abb4616647d49ff30bf2d8dd5a4b4ade",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
