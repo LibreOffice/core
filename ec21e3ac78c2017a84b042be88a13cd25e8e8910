@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fdec987d_abf2ebd5",
+        "filename": "sw/CppunitTest_sw_txtencexport.mk",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-23T14:53:05Z",
+      "side": 1,
+      "message": "this still starts with tab",
+      "revId": "ec21e3ac78c2017a84b042be88a13cd25e8e8910",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
