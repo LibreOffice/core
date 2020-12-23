@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "531e99b7_bbc57e51",
+        "filename": "include/tools/degree.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-23T12:15:12Z",
+      "side": 1,
+      "message": "Nice!\n\nAnd we could also have\n\n  operator\"\"_deg(unsigned long long n) { return Degree10{ n * 10 }; }\n\nand\n\n  operator\"\"_rad(... n) { return Degree10{ n * DEG_FROM_RAD }; }\n\n... and use them like\n\n  Degree10 nAngle \u003d rGradient.GetAngle() % 360_deg;",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 83
+      },
+      "revId": "00c14e7f87d4d51ecf8a31e37e3b3f38f341c7e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
