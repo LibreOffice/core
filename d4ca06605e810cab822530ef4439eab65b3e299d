@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43ad3fa2_af170956",
+        "filename": "basic/source/runtime/stdobj.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-23T11:25:46Z",
+      "side": 1,
+      "message": "in --disable-assert-always-abort builds, this will now trivially always be satisfied with the changes to MethodsTableValid in patch set 8",
+      "revId": "d4ca06605e810cab822530ef4439eab65b3e299d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
