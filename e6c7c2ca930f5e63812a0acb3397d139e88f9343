@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b9e1bd6_43eba578",
+        "filename": "sw/qa/extras/txtencexport/txtencexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-23T09:56:50Z",
+      "side": 1,
+      "message": "I suppose it\u0027s unnecessary to introduce such a define for each test kind. Just pass the wanted filter options as the common template argument:\n\n  class TxtEncExportTest : public SwModelTestBase\n  {\n  public:\n      TxtEncExportTestBase(const OUString \u0026 rFilterOptions)\n          : SwModelTestBase(\"/sw/qa/extras/txtencexport/data/\", \"Text (encoded)\")\n      {\n          setFilterOptions(rFilterOptions);\n      }\n  \n  protected:\n      OString readExportedFile()\n      {\n          SvMemoryStream aMemoryStream;\n          SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);\n          aStream.ReadStream(aMemoryStream);\n          const char* pData \u003d static_cast\u003cconst char*\u003e(aMemoryStream.GetData());\n  \n          int offset \u003d 0;\n          if (aMemoryStream.GetSize() \u003e 2 \u0026\u0026 pData[0] \u003d\u003d \u0027\\xEF\u0027 \u0026\u0026 pData[1] \u003d\u003d \u0027\\xBB\u0027\n              \u0026\u0026 pData[2] \u003d\u003d \u0027\\xBF\u0027)\n              offset \u003d 3;\n  \n          return OString(pData + offset, aMemoryStream.GetSize() - offset);\n      }\n  };\n  \n  #define DECLARE_TXTENCEXPORT_TEST(TestName, filename, filterOptions)       \\\n      class TestName ## Class : public TxtEncExportTest {                    \\\n      public:                                                                \\\n          TestName ## Class() : TxtEncExportTest(filterOptions) {}           \\\n      };                                                                     \\\n      DECLARE_SW_EXPORT_TEST(TestName, filename, nullptr, TestName ## Class)\n  \n  DECLARE_TXTENCEXPORT_TEST(testBullets, \"bullets.odt\", \"UTF8,,,,\")\n  {\n       ...\n  }\n  \n  DECLARE_TXTENCEXPORT_TEST(testBulletsHidden, \"bullets.odt\", \"UTF8,,,,,false\")\n  {\n     ...\n  }",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 60
+      },
+      "revId": "e6c7c2ca930f5e63812a0acb3397d139e88f9343",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
