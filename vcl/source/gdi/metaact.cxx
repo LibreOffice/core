@@ -192,9 +192,9 @@ void MetaAction::Read( SvStream&, ImplMetaReadData* )
     // DO NOT read mnType - ReadMetaAction already did that!
 }
 
-MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData )
+rtl::Reference<MetaAction> MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData )
 {
-    MetaAction* pAction = nullptr;
+    rtl::Reference<MetaAction> pAction;
     sal_uInt16 nTmp = 0;
     rIStm.ReadUInt16( nTmp );
     MetaActionType nType = static_cast<MetaActionType>(nTmp);
