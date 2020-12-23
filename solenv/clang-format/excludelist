@@ -12425,6 +12425,7 @@ sw/qa/extras/ooxmlexport/ooxmlfieldexport.cxx
 sw/qa/extras/ooxmlexport/ooxmlw14export.cxx
 sw/qa/extras/ooxmlimport/ooxmlimport.cxx
 sw/qa/extras/tiledrendering/tiledrendering.cxx
+sw/qa/extras/txtencexport/txtencexport.cxx
 sw/qa/extras/uiwriter/uiwriter.cxx
 sw/qa/extras/ww8export/ww8export.cxx
 sw/qa/extras/ww8export/ww8export2.cxx
