@@ -106,12 +106,12 @@ void PPTWriter::exportPPTPre( const std::vector< css::beans::PropertyValue >& rM
     if ( !ImplCreateCurrentUserStream() )
         return;
 
-    mpStrm.reset( mrStg->OpenSotStream( "PowerPoint Document" ) );
+    mpStrm = mrStg->OpenSotStream( "PowerPoint Document" );
     if ( !mpStrm )
         return;
 
     if ( !mpPicStrm )
-        mpPicStrm.reset( mrStg->OpenSotStream( "Pictures" ) );
+        mpPicStrm = mrStg->OpenSotStream( "Pictures" );
 
     auto aIter = std::find_if(rMediaData.begin(), rMediaData.end(),
         [](const css::beans::PropertyValue& rProp) { return rProp.Name == "BaseURI"; });
@@ -448,9 +448,9 @@ PPTWriter::~PPTWriter()
 {
     mpExEmbed.reset();
     mpPptEscherEx.reset();
-    mpCurUserStrm.reset();
-    mpPicStrm.reset();
-    mpStrm.reset();
+    mpCurUserStrm.clear();
+    mpPicStrm.clear();
+    mpStrm.clear();
     maStyleSheetList.clear();
     maExOleObj.clear();
     if ( mbStatusIndicator )
@@ -459,7 +459,7 @@ PPTWriter::~PPTWriter()
 
 bool PPTWriter::ImplCreateCurrentUserStream()
 {
-    mpCurUserStrm.reset( mrStg->OpenSotStream( "Current User" ) );
+    mpCurUserStrm = mrStg->OpenSotStream( "Current User" );
     if ( !mpCurUserStrm )
         return false;
     char pUserName[] = "Current User";
