@@ -508,19 +508,26 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
         {
             if ( m_pPostItMgr->HasNotes() )
             {
+                SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::Empty);
                 rSh.EnterStdMode();
                 sw::annotation::SwAnnotationWin* pPostIt = GetPostItMgr()->GetActiveSidebarWin();
                 if (pPostIt)
                     GetPostItMgr()->SetActiveSidebarWin(nullptr);
                 SwFieldType* pFieldType = rSh.GetFieldType(0, SwFieldIds::Postit);
-                if ( !rSh.MoveFieldType( pFieldType, bNext ) )
+                if (!rSh.MoveFieldType( pFieldType, bNext))
                 {
-                    bNext ? (*(m_pPostItMgr->begin()))->mpPostIt->GotoPos() :
-                        (*(m_pPostItMgr->end()-1))->mpPostIt->GotoPos();
-                    SvxSearchDialogWrapper::SetSearchLabel( bNext ? SearchLabel::EndWrapped : SearchLabel::StartWrapped );
+                    VclPtr<sw::annotation::SwAnnotationWin> pWin;
+                    pWin = bNext ? m_pPostItMgr->begin()->get()->mpPostIt :
+                                   (m_pPostItMgr->end()-1)->get()->mpPostIt;
+                    if (pWin)
+                    {
+                        pWin->GotoPos();
+                        SvxSearchDialogWrapper::SetSearchLabel(bNext ? SearchLabel::EndWrapped :
+                                                                       SearchLabel::StartWrapped);
+                    }
+                    else
+                        break;
                 }
-                else
-                    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
                 GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
             }
             else
@@ -550,6 +557,11 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
 
         case NID_TABLE_FORMULA_ERROR:
             rSh.GotoNxtPrvTableFormula( bNext, true );
+            break;
+
+        case NID_RECENCY :
+            rSh.EnterStdMode();
+            bNext ? rSh.GetNavigationMgr().goForward() : rSh.GetNavigationMgr().goBack();
             break;
     }
     m_pEditWin->GrabFocus();

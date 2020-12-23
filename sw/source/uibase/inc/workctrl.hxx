@@ -46,7 +46,8 @@ class SwView;
 #define NID_INDEX_ENTRY  20015
 #define NID_TABLE_FORMULA   20016
 #define NID_TABLE_FORMULA_ERROR     20017
-#define NID_COUNT  18
+#define NID_RECENCY 20018
+#define NID_COUNT  19
 
 class SwTbxAutoTextCtrl : public SfxToolBoxControl
 {

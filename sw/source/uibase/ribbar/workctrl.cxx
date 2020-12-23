@@ -57,7 +57,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 // Size check
-#define NAVI_ENTRIES 18
+#define NAVI_ENTRIES 19
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -176,7 +176,8 @@ static sal_uInt16 aNavigationInsertIds[ NAVI_ENTRIES ] =
     NID_SRCH_REP,
     NID_INDEX_ENTRY,
     NID_TABLE_FORMULA,
-    NID_TABLE_FORMULA_ERROR
+    NID_TABLE_FORMULA_ERROR,
+    NID_RECENCY
 };
 
 std::u16string_view const aNavigationImgIds[ NAVI_ENTRIES ] =
@@ -198,7 +199,8 @@ std::u16string_view const aNavigationImgIds[ NAVI_ENTRIES ] =
     u"" RID_BMP_RIBBAR_REP,
     u"" RID_BMP_RIBBAR_ENTRY,
     u"" RID_BMP_RIBBAR_FORMULA,
-    u"" RID_BMP_RIBBAR_ERROR
+    u"" RID_BMP_RIBBAR_ERROR,
+    u"" RID_BMP_RIBBAR_RECENCY
 };
 
 static const char* aNavigationStrIds[ NAVI_ENTRIES ] =
@@ -220,7 +222,8 @@ static const char* aNavigationStrIds[ NAVI_ENTRIES ] =
     ST_SRCH_REP,
     ST_INDEX_ENTRY,
     ST_TABLE_FORMULA,
-    ST_TABLE_FORMULA_ERROR
+    ST_TABLE_FORMULA_ERROR,
+    ST_RECENCY
 };
 
 // these are global strings
@@ -244,6 +247,7 @@ static const char* STR_IMGBTN_ARY[] =
     STR_IMGBTN_INDEX_ENTRY_DOWN,
     STR_IMGBTN_TBLFML_DOWN,
     STR_IMGBTN_TBLFML_ERR_DOWN,
+    STR_IMGBTN_RECENCY_DOWN,
     STR_IMGBTN_TBL_UP,
     STR_IMGBTN_FRM_UP,
     STR_IMGBTN_PGE_UP,
@@ -261,7 +265,8 @@ static const char* STR_IMGBTN_ARY[] =
     STR_IMGBTN_SRCH_REP_UP,
     STR_IMGBTN_INDEX_ENTRY_UP,
     STR_IMGBTN_TBLFML_UP,
-    STR_IMGBTN_TBLFML_ERR_UP
+    STR_IMGBTN_TBLFML_ERR_UP,
+    STR_IMGBTN_RECENCY_UP
 };
 
 static OUString lcl_GetScrollToolTip(bool bNext)
