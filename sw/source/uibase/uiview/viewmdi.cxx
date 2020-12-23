@@ -551,6 +551,11 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
         case NID_TABLE_FORMULA_ERROR:
             rSh.GotoNxtPrvTableFormula( bNext, true );
             break;
+
+        case NID_RECENCY :
+            rSh.EnterStdMode();
+            bNext ? rSh.GetNavigationMgr().goForward() : rSh.GetNavigationMgr().goBack();
+            break;
     }
     m_pEditWin->GrabFocus();
     delete pbNext;
