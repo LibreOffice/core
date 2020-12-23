@@ -184,6 +184,11 @@ private:
     static VCL_DLLPRIVATE ErrCode
                                 ImplSalPrinterErrorCodeToVCL( SalPrinterError nError );
 
+    SAL_DLLPRIVATE void         ImplPrintTransparent (
+                                    const Bitmap& rBmp, const Bitmap& rMask,
+                                    const Point& rDestPt, const Size& rDestSize,
+                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel );
+
 private:
     VCL_DLLPRIVATE void         EndJob();
                                 Printer( const Printer& rPrinter )    = delete;
