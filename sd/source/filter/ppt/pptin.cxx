@@ -125,8 +125,8 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SotSt
     pSummaryInformation.reset();
 #endif
 
-    if (auto pCurrentUserStream
-        = std::unique_ptr<SvStream>(rStorage.OpenSotStream("Current User", StreamMode::STD_READ)))
+    tools::SvRef<SotStorageStream> pCurrentUserStream(rStorage.OpenSotStream("Current User", StreamMode::STD_READ));
+    if (pCurrentUserStream)
     {
         ReadPptCurrentUserAtom(*pCurrentUserStream, maParam.aCurrentUserAtom);
     }
@@ -182,7 +182,8 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SotStorage& rStorag
     {
         sal_uLong nOldPos = rStCtrl.Tell();
 
-        pStData = rStorage_.OpenSotStream( "Pictures", StreamMode::STD_READ );
+        mxPicturesStream = rStorage_.OpenSotStream( "Pictures", StreamMode::STD_READ );
+        pStData = mxPicturesStream.get();
 
         rStCtrl.Seek( maDocHd.GetRecBegFilePos() + 8 );
         sal_uLong nDocLen = maDocHd.GetRecEndFilePos();
@@ -218,7 +219,8 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SotStorage& rStorag
 // Dtor
 ImplSdPPTImport::~ImplSdPPTImport()
 {
-    delete pStData;
+    pStData = nullptr;
+    mxPicturesStream.clear();
 }
 
 // Import

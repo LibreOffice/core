@@ -186,7 +186,7 @@ bool SdPPTFilter::Import()
             // Document is DRM encrypted
             pStorage = lcl_DRMDecrypt(mrMedium, pStorage, aDecryptedStorageStrm);
         }
-        std::unique_ptr<SvStream> pDocStream(pStorage->OpenSotStream( "PowerPoint Document" , StreamMode::STD_READ ));
+        tools::SvRef<SotStorageStream> pDocStream(pStorage->OpenSotStream( "PowerPoint Document" , StreamMode::STD_READ ));
         if( pDocStream )
         {
             pDocStream->SetVersion( pStorage->GetVersion() );

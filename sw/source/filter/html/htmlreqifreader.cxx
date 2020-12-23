@@ -69,7 +69,7 @@ OString ExtractOLEClassName(const tools::SvRef<SotStorage>& xStorage)
 {
     OString aRet;
 
-    SotStorageStream* pCompObj = xStorage->OpenSotStream("\1CompObj");
+    tools::SvRef<SotStorageStream> pCompObj = xStorage->OpenSotStream("\1CompObj");
     if (!pCompObj)
         return aRet;
 
