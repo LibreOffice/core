@@ -2181,7 +2181,7 @@ bool SvxAutoCorrectLanguageLists::IsFileChanged_Imp()
 
 void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
                                         std::unique_ptr<SvStringsISortDtor>& rpLst,
-                                        const char* pStrmName,
+                                        const OUString& sStrmName,
                                         tools::SvRef<SotStorage>& rStg)
 {
     if( rpLst )
@@ -2190,8 +2190,6 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
         rpLst.reset( new SvStringsISortDtor );
 
     {
-        const OUString sStrmName( pStrmName, strlen(pStrmName), RTL_TEXTENCODING_MS_1252 );
-
         if( rStg.is() && rStg->IsStream( sStrmName ) )
         {
             tools::SvRef<SotStorageStream> xStrm = rStg->OpenSotStream( sStrmName,
@@ -2254,14 +2252,13 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
 
 void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                             const SvStringsISortDtor& rLst,
-                            const char* pStrmName,
+                            const OUString& sStrmName,
                             tools::SvRef<SotStorage> const &rStg,
                             bool bConvert )
 {
     if( !rStg.is() )
         return;
 
-    OUString sStrmName( pStrmName, strlen(pStrmName), RTL_TEXTENCODING_MS_1252 );
     if( rLst.empty() )
     {
         rStg->Remove( sStrmName );

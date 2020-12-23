@@ -196,10 +196,10 @@ class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists
 
     bool IsFileChanged_Imp();
     void LoadXMLExceptList_Imp( std::unique_ptr<SvStringsISortDtor>& rpLst,
-                                const char* pStrmName,
+                                const OUString& sStrmName,
                                 tools::SvRef<SotStorage>& rStg);
     static void SaveExceptList_Imp( const SvStringsISortDtor& rLst,
-                                const char* pStrmName,
+                                const OUString& sStrmName,
                                 tools::SvRef<SotStorage> const & rStg,
                                 bool bConvert = false);
 
