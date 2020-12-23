@@ -86,6 +86,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/stringconcatauto \
     compilerplugins/clang/test/stringconcatliterals \
     compilerplugins/clang/test/stringconstant \
+    compilerplugins/clang/test/stringliteralvar \
     compilerplugins/clang/test/stringloop \
     compilerplugins/clang/test/stringstatic \
     compilerplugins/clang/test/stringview \

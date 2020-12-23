@@ -99,9 +99,9 @@ using namespace cppu;
 
 
 // Identifiers for creating the strings for dbg_Properties
-char16_t constexpr ID_DBG_SUPPORTEDINTERFACES[] = u"Dbg_SupportedInterfaces";
-char const ID_DBG_PROPERTIES[] = "Dbg_Properties";
-char const ID_DBG_METHODS[] = "Dbg_Methods";
+OUStringLiteral constexpr ID_DBG_SUPPORTEDINTERFACES = u"Dbg_SupportedInterfaces";
+OUStringLiteral const ID_DBG_PROPERTIES = u"Dbg_Properties";
+OUStringLiteral const ID_DBG_METHODS = u"Dbg_Methods";
 
 char const aSeqLevelStr[] = "[]";
 

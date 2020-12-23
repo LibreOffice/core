@@ -93,7 +93,7 @@ short const ValidWindow = 0x1234;
 #if defined(OW) || defined(MTF)
 char const FilterMask_All[] = "*";
 #else
-char const FilterMask_All[] = "*.*";
+OUStringLiteral const FilterMask_All = u"*.*";
 #endif
 
 } // end anonymous namespace

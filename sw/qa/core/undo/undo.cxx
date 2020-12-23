@@ -22,7 +22,7 @@
 #include <view.hxx>
 #include <cmdid.h>
 
-char const DATA_DIRECTORY[] = "/sw/qa/core/undo/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/core/undo/data/";
 
 /// Covers sw/source/core/undo/ fixes.
 class SwCoreUndoTest : public SwModelTestBase

@@ -160,8 +160,8 @@ namespace dbaccess
             return xCommandProcessor;
         }
 
-        const char sSettingsStreamName[] = "settings.xml";
-        const char sCurrentQueryDesignName[] = "ooo:current-query-design";
+        const OUStringLiteral sSettingsStreamName = u"settings.xml";
+        const OUStringLiteral sCurrentQueryDesignName = u"ooo:current-query-design";
     }
 
     namespace {

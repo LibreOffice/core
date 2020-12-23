@@ -31,7 +31,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace
 {
 
-const char CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME[] = "com.sun.star.chart2.CoordinateSystems.Cartesian";
+const OUStringLiteral CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME = u"com.sun.star.chart2.CoordinateSystems.Cartesian";
 
 }
 

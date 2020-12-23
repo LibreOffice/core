@@ -40,11 +40,11 @@ class SvMemoryStream;
 
 namespace vcl::pdf
 {
-constexpr char constDictionaryKeyTitle[] = "T";
-constexpr char constDictionaryKeyContents[] = "Contents";
-constexpr char constDictionaryKeyPopup[] = "Popup";
-constexpr char constDictionaryKeyModificationDate[] = "M";
-constexpr char constDictionaryKeyInteriorColor[] = "IC";
+constexpr OStringLiteral constDictionaryKeyTitle = "T";
+constexpr OStringLiteral constDictionaryKeyContents = "Contents";
+constexpr OStringLiteral constDictionaryKeyPopup = "Popup";
+constexpr OStringLiteral constDictionaryKeyModificationDate = "M";
+constexpr OStringLiteral constDictionaryKeyInteriorColor = "IC";
 
 class PDFiumBitmap;
 class PDFiumDocument;

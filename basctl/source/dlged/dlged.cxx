@@ -57,8 +57,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 
-const char aResourceResolverPropName[] = "ResourceResolver";
-const char aDecorationPropName[] = "Decoration";
+const OUStringLiteral aResourceResolverPropName = u"ResourceResolver";
+const OUStringLiteral aDecorationPropName = u"Decoration";
 
 
 // DlgEdHint

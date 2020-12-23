@@ -58,7 +58,7 @@ namespace toolkitform
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
 
-    const char FM_PROP_NAME[] = "Name";
+    const OUStringLiteral FM_PROP_NAME = u"Name";
 
     namespace
     {
@@ -67,7 +67,7 @@ namespace toolkitform
         */
         sal_Int16 classifyFormControl( const Reference< XPropertySet >& _rxModel )
         {
-            static const char FM_PROP_CLASSID[] = "ClassId";
+            static const OUStringLiteral FM_PROP_CLASSID = u"ClassId";
             sal_Int16 nControlType = FormComponentType::CONTROL;
 
             Reference< XPropertySetInfo > xPSI;
@@ -312,8 +312,8 @@ namespace toolkitform
                 SAL_INFO("toolkit.helper", "describePDFControl: unable to get property HelpText");
             }
             Any aText;
-            static const char FM_PROP_TEXT[] = "Text";
-            static const char FM_PROP_LABEL[] = "Label";
+            static const OUStringLiteral FM_PROP_TEXT = u"Text";
+            static const OUStringLiteral FM_PROP_LABEL = u"Label";
             if ( xPSI->hasPropertyByName( FM_PROP_TEXT ) )
                 aText = xModelProps->getPropertyValue( FM_PROP_TEXT );
             else if ( xPSI->hasPropertyByName( FM_PROP_LABEL ) )
@@ -326,7 +326,7 @@ namespace toolkitform
 
 
             // readonly
-            static const char FM_PROP_READONLY[] = "ReadOnly";
+            static const OUStringLiteral FM_PROP_READONLY = u"ReadOnly";
             if ( xPSI->hasPropertyByName( FM_PROP_READONLY ) )
                 if( ! (xModelProps->getPropertyValue( FM_PROP_READONLY ) >>= Descriptor->ReadOnly) )
                     SAL_WARN("toolkit.helper", "describePDFControl: unable to get property " << FM_PROP_READONLY);
@@ -334,7 +334,7 @@ namespace toolkitform
 
             // border
             {
-                static const char FM_PROP_BORDER[] = "Border";
+                static const OUStringLiteral FM_PROP_BORDER = u"Border";
                 if ( xPSI->hasPropertyByName( FM_PROP_BORDER ) )
                 {
                     sal_Int16 nBorderType = 0;
@@ -356,7 +356,7 @@ namespace toolkitform
 
 
             // background color
-            static const char FM_PROP_BACKGROUNDCOLOR[] = "BackgroundColor";
+            static const OUStringLiteral FM_PROP_BACKGROUNDCOLOR = u"BackgroundColor";
             if ( xPSI->hasPropertyByName( FM_PROP_BACKGROUNDCOLOR ) )
             {
                 Color nBackColor = COL_TRANSPARENT;
@@ -367,7 +367,7 @@ namespace toolkitform
 
 
             // text color
-            static const char FM_PROP_TEXTCOLOR[] = "TextColor";
+            static const OUStringLiteral FM_PROP_TEXTCOLOR = u"TextColor";
             if ( xPSI->hasPropertyByName( FM_PROP_TEXTCOLOR ) )
             {
                 Color nTextColor = COL_TRANSPARENT;
@@ -382,7 +382,7 @@ namespace toolkitform
             // multi line and word break
             // The MultiLine property of the control is mapped to both the "MULTILINE" and
             // "WORDBREAK" style flags
-            static const char FM_PROP_MULTILINE[] = "MultiLine";
+            static const OUStringLiteral FM_PROP_MULTILINE = u"MultiLine";
             if ( xPSI->hasPropertyByName( FM_PROP_MULTILINE ) )
             {
                 bool bMultiLine = false;
@@ -393,7 +393,7 @@ namespace toolkitform
             }
 
             // horizontal alignment
-            static const char FM_PROP_ALIGN[] = "Align";
+            static const OUStringLiteral FM_PROP_ALIGN = u"Align";
             if ( xPSI->hasPropertyByName( FM_PROP_ALIGN ) )
             {
                 sal_Int16 nAlign = awt::TextAlign::LEFT;
@@ -429,7 +429,7 @@ namespace toolkitform
             }
 
             // font
-            static const char FM_PROP_FONT[] = "FontDescriptor";
+            static const OUStringLiteral FM_PROP_FONT = u"FontDescriptor";
             if ( xPSI->hasPropertyByName( FM_PROP_FONT ) )
             {
                 FontDescriptor aUNOFont;
@@ -473,7 +473,7 @@ namespace toolkitform
                     pEditWidget->FileSelect = true;
 
                 // maximum text length
-                static const char FM_PROP_MAXTEXTLEN[] = "MaxTextLen";
+                static const OUStringLiteral FM_PROP_MAXTEXTLEN = u"MaxTextLen";
                 if ( xPSI->hasPropertyByName( FM_PROP_MAXTEXTLEN ) )
                 {
                     sal_Int16 nMaxTextLength = 0;
@@ -494,7 +494,7 @@ namespace toolkitform
                 FormButtonType eButtonType = FormButtonType_PUSH;
                 if( ! (xModelProps->getPropertyValue("ButtonType") >>= eButtonType) )
                     SAL_WARN("toolkit.helper", "describePDFControl: unable to get property ButtonType");
-                static const char FM_PROP_TARGET_URL[] = "TargetURL";
+                static const OUStringLiteral FM_PROP_TARGET_URL = u"TargetURL";
                 if ( eButtonType == FormButtonType_SUBMIT )
                 {
                     // if a button is a submit button, then it uses the URL at its parent form
@@ -556,7 +556,7 @@ namespace toolkitform
 
 
             // check boxes
-            static const char FM_PROP_STATE[] = "State";
+            static const OUStringLiteral FM_PROP_STATE = u"State";
             if ( Descriptor->getType() == vcl::PDFWriter::CheckBox )
             {
                 vcl::PDFWriter::CheckBoxWidget* pCheckBoxWidget = static_cast< vcl::PDFWriter::CheckBoxWidget* >( Descriptor.get() );

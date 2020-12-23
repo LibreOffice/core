@@ -31,12 +31,12 @@ using namespace ::com::sun::star;
 
 const sal_Int32 LIST_LEVEL_COUNT = 9;
 
-const char UNO_NAME_PARENT_NUMBERING[] = "ParentNumbering";
-const char UNO_NAME_PREFIX[] = "Prefix";
-const char UNO_NAME_SUFFIX[] = "Suffix";
-const char UNO_NAME_CHAR_STYLE_NAME[] = "CharStyleName";
-const char UNO_NAME_NUMBERING_TYPE[] = "NumberingType";
-const char UNO_NAME_BULLET_CHAR[] = "BulletChar";
+const OUStringLiteral UNO_NAME_PARENT_NUMBERING = u"ParentNumbering";
+const OUStringLiteral UNO_NAME_PREFIX = u"Prefix";
+const OUStringLiteral UNO_NAME_SUFFIX = u"Suffix";
+const OUStringLiteral UNO_NAME_CHAR_STYLE_NAME = u"CharStyleName";
+const OUStringLiteral UNO_NAME_NUMBERING_TYPE = u"NumberingType";
+const OUStringLiteral UNO_NAME_BULLET_CHAR = u"BulletChar";
 
 const sal_Unicode CHAR_CLOSED_DOT[] = u"\u2022";
 const char CHAR_EMPTY_DOT[] = "o";

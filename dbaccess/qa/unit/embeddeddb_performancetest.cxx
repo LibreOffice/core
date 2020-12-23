@@ -82,7 +82,8 @@ class EmbeddedDBPerformanceTest
     : public DBTestBase
 {
 private:
-    static const char our_sEnableTestEnvVar[];
+    static constexpr OUStringLiteral our_sEnableTestEnvVar = u"DBA_PERFTEST";
+
 
     // We store the results and print them at the end due to the amount of warning
     // noise present which otherwise obscures the results.
@@ -139,8 +140,6 @@ void EmbeddedDBPerformanceTest::printTimes(
         .append(getPrintableTimeValue(pTime3)).append("\t")
         .append("\n");
 }
-
-const char EmbeddedDBPerformanceTest::our_sEnableTestEnvVar[] = "DBA_PERFTEST";
 
 // TODO: we probably should create a document from scratch instead?
 

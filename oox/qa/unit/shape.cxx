@@ -18,7 +18,7 @@
 
 using namespace ::com::sun::star;
 
-char const DATA_DIRECTORY[] = "/oox/qa/unit/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/oox/qa/unit/data/";
 
 /// oox shape tests.
 class OoxShapeTest : public test::BootstrapFixture, public unotest::MacrosTest

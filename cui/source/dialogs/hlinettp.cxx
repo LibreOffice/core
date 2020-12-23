@@ -23,7 +23,7 @@
 #include <hlinettp.hxx>
 #include <hlmarkwn_def.hxx>
 
-char const sAnonymous[]    = "anonymous";
+OUStringLiteral const sAnonymous = u"anonymous";
 char const sFTPScheme[]    = INET_FTP_SCHEME;
 
 /*************************************************************************
