@@ -2688,12 +2688,12 @@ SvStream& ReadGDIMetaFile(SvStream& rIStm, GDIMetaFile& rGDIMetaFile, ImplMetaRe
 
             for( sal_uInt32 nAction = 0; ( nAction < nCount ) && !rIStm.eof(); nAction++ )
             {
-                MetaAction* pAction = MetaAction::ReadMetaAction(rIStm, pData);
+                rtl::Reference<MetaAction> pAction = MetaAction::ReadMetaAction(rIStm, pData);
                 if( pAction )
                 {
                     if (pAction->GetType() == MetaActionType::COMMENT)
                     {
-                        MetaCommentAction* pCommentAct = static_cast<MetaCommentAction*>(pAction);
+                        MetaCommentAction* pCommentAct = static_cast<MetaCommentAction*>(pAction.get());
                         if ( pCommentAct->GetComment() == "EMF_PLUS" )
                             rGDIMetaFile.UseCanvas( true );
                     }
