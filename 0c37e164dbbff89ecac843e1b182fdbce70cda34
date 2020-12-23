@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f3ec02d_7cca67ef",
+        "filename": "sw/source/ui/frmdlg/column.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-12-23T06:48:41Z",
+      "side": 0,
+      "message": "pNF was the spinbutton control that selects the number of columns.",
+      "range": {
+        "startLine": 919,
+        "startChar": 8,
+        "endLine": 919,
+        "endChar": 11
+      },
+      "revId": "0c37e164dbbff89ecac843e1b182fdbce70cda34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
