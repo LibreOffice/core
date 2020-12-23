@@ -15,7 +15,7 @@
 #include <unotxdoc.hxx>
 #include <wrtsh.hxx>
 
-char const DATA_DIRECTORY[] = "/sw/qa/core/text/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/core/text/data/";
 
 /// Covers sw/source/core/text/ fixes.
 class SwCoreTextTest : public SwModelTestBase

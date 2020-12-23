@@ -72,7 +72,7 @@ ChapterCollator::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int
     return res1.Value == res2.Value ? 0 : res1.Value > res2.Value ? 1 : -1;
 }
 
-const char cChapCollator[] = "com.sun.star.i18n.ChapterCollator";
+const OUStringLiteral cChapCollator = u"com.sun.star.i18n.ChapterCollator";
 
 OUString SAL_CALL
 ChapterCollator::getImplementationName()

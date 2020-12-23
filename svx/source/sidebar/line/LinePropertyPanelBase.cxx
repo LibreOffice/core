@@ -31,7 +31,7 @@
 using namespace css;
 using namespace css::uno;
 
-const char SELECTWIDTH[] = "SelectWidth";
+const OStringLiteral SELECTWIDTH = "SelectWidth";
 
 namespace svx::sidebar {
 

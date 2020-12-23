@@ -1489,7 +1489,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaTextLineAction* pAct = static_cast<MetaTextLineAction*>(pAction);
             // measure a test string to get ascend and descent right
-            static const sal_Unicode pStr[] = u"\u00c4g";
+            static const OUStringLiteral pStr = u"\u00c4g";
             OUString aStr( pStr );
 
             tools::Rectangle aRect;

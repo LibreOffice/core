@@ -42,7 +42,7 @@ using ::chart::impl::CachedDataSequence_Base;
 
 namespace
 {
-const char lcl_aServiceName[] = "com.sun.star.comp.chart.CachedDataSequence";
+const OUStringLiteral lcl_aServiceName = u"com.sun.star.comp.chart.CachedDataSequence";
 
 enum
 {

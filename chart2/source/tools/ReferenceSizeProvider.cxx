@@ -131,7 +131,7 @@ void ReferenceSizeProvider::setValuesAtPropertySet(
     if( ! xProp.is())
         return;
 
-    static const char aRefSizeName[] = "ReferencePageSize";
+    static const OUStringLiteral aRefSizeName = u"ReferencePageSize";
 
     try
     {

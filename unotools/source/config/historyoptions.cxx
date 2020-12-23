@@ -50,13 +50,13 @@ namespace {
     const ::sal_Int32 s_nOffsetPassword          = 3;
     const ::sal_Int32 s_nOffsetThumbnail         = 4;
 
-    const char s_sItemList[] = "ItemList";
-    const char s_sOrderList[] = "OrderList";
-    const char s_sHistoryItemRef[] = "HistoryItemRef";
-    const char s_sFilter[] = "Filter";
-    const char s_sTitle[] = "Title";
-    const char s_sPassword[] = "Password";
-    const char s_sThumbnail[] = "Thumbnail";
+    const OUStringLiteral s_sItemList = u"ItemList";
+    const OUStringLiteral s_sOrderList = u"OrderList";
+    const OUStringLiteral s_sHistoryItemRef = u"HistoryItemRef";
+    const OUStringLiteral s_sFilter = u"Filter";
+    const OUStringLiteral s_sTitle = u"Title";
+    const OUStringLiteral s_sPassword = u"Password";
+    const OUStringLiteral s_sThumbnail = u"Thumbnail";
 
     class theHistoryOptionsMutex : public rtl::Static<osl::Mutex, theHistoryOptionsMutex>{};
 }

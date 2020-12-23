@@ -11,7 +11,7 @@
 
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 
-char const DATA_DIRECTORY[] = "/sw/qa/uibase/frmdlg/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/uibase/frmdlg/data/";
 
 /// Covers sw/source/uibase/frmdlg/ fixes.
 class SwUibaseFrmdlgTest : public SwModelTestBase

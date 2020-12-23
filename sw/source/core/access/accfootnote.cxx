@@ -33,8 +33,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
-const char sImplementationNameFootnote[] = "com.sun.star.comp.Writer.SwAccessibleFootnoteView";
-const char sImplementationNameEndnote[] = "com.sun.star.comp.Writer.SwAccessibleEndnoteView";
+const OUStringLiteral sImplementationNameFootnote
+    = u"com.sun.star.comp.Writer.SwAccessibleFootnoteView";
+const OUStringLiteral sImplementationNameEndnote
+    = u"com.sun.star.comp.Writer.SwAccessibleEndnoteView";
 
 SwAccessibleFootnote::SwAccessibleFootnote(
         std::shared_ptr<SwAccessibleMap> const& pInitMap,

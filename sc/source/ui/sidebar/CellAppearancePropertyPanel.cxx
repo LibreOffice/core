@@ -36,8 +36,8 @@
 using namespace css;
 using namespace css::uno;
 
-const char SETBORDERSTYLE[] = "SetBorderStyle";
-const char LINESTYLE[] = "LineStyle";
+const OStringLiteral SETBORDERSTYLE = "SetBorderStyle";
+const OStringLiteral LINESTYLE = "LineStyle";
 
 // namespace open
 

@@ -33,10 +33,11 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-const char WRONG_TYPE_EXCEPTION[] = "Type must be css::uno::Sequence< css::beans::PropertyValue >";
+const OUStringLiteral WRONG_TYPE_EXCEPTION
+    = u"Type must be css::uno::Sequence< css::beans::PropertyValue >";
 
 const int PROPHANDLE_UINAME     = 1;
-const char PROPNAME_UINAME[]    = "UIName";
+const OUStringLiteral PROPNAME_UINAME = u"UIName";
 
 namespace framework
 {

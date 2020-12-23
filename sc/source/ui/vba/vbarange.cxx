@@ -670,7 +670,7 @@ public:
 
 }
 
-const char ISVISIBLE[] = "IsVisible";
+const OUStringLiteral ISVISIBLE = u"IsVisible";
 const char EQUALS[] = "=";
 const char NOTEQUALS[] = "<>";
 const char GREATERTHAN[] = ">";
@@ -678,7 +678,7 @@ const char GREATERTHANEQUALS[] = ">=";
 const char LESSTHAN[] = "<";
 const char LESSTHANEQUALS[] = "<=";
 constexpr OUStringLiteral STR_ERRORMESSAGE_APPLIESTOSINGLERANGEONLY(u"The command you chose cannot be performed with multiple selections.\nSelect a single range and click the command again");
-const char CELLSTYLE[] = "CellStyle";
+const OUStringLiteral CELLSTYLE = u"CellStyle";
 
 namespace {
 
@@ -967,7 +967,7 @@ public:
 
 }
 
-const char sNA[] = "#N/A";
+const OUStringLiteral sNA = u"#N/A";
 
 namespace {
 
