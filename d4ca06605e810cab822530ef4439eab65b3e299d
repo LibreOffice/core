@@ -34,6 +34,24 @@
       "revId": "d4ca06605e810cab822530ef4439eab65b3e299d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1e96e46_12f7407d",
+        "filename": "basic/source/runtime/stdobj.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-23T11:41:46Z",
+      "side": 1,
+      "message": "\u003e Why? I assume that it will be always satisfied in release builds (with NDEBUG),\n\n...which is exactly what I said (--disable-assert-always-abort \u003d\u003d -DNDEBUG).\n\n\u003e Anyway, the assert is very useful here. With the assert, compilation not only reports that static_assert is failed, but also the line where the assert was failing. At least with MSVC:\n\nI see\n\n\u003e However, if you think it\u0027s necessary, I will re-introduce the \"return false\" *after* the asserts (to keep the benefit of knowing the reason for the fail).\n\nYeah, I\u0027d just keep MethodsTableValid returning false if any of the asserts fails, so that the static_assert also works (though without your helpful compiler output for failed asserts) in --disable-assert-always-abort builds.",
+      "parentUuid": "e2a8cc46_bafd16b4",
+      "revId": "d4ca06605e810cab822530ef4439eab65b3e299d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
