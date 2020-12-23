@@ -1605,11 +1605,6 @@ public:
                                     bool bDownsampleBitmaps,
                                     const Color& rBackground = COL_TRANSPARENT );
 
-    SAL_DLLPRIVATE void         ImplPrintTransparent (
-                                    const Bitmap& rBmp, const Bitmap& rMask,
-                                    const Point& rDestPt, const Size& rDestSize,
-                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel );
-
     SAL_DLLPRIVATE Color        ImplDrawModeToColor  ( const Color& rColor ) const;
 
 
