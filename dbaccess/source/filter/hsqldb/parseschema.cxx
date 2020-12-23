@@ -111,7 +111,7 @@ void SchemaParser::parseSchema()
 {
     assert(m_rStorage);
 
-    constexpr char SCHEMA_FILENAME[] = "script";
+    static constexpr OUStringLiteral SCHEMA_FILENAME = u"script";
     if (!m_rStorage->hasByName(SCHEMA_FILENAME))
     {
         SAL_WARN("dbaccess", "script file does not exist in storage during hsqldb import");
@@ -175,7 +175,8 @@ std::vector<ColumnDefinition> SchemaParser::getTableColumnTypes(const OUString& 
 {
     if (m_ColumnTypes.count(sTableName) < 1)
     {
-        constexpr char NOT_EXIST[] = "Internal error while getting column information of table";
+        static constexpr OUStringLiteral NOT_EXIST
+            = u"Internal error while getting column information of table";
         SAL_WARN("dbaccess", NOT_EXIST << ". Table name is: " << sTableName);
         dbtools::throwGenericSQLException(NOT_EXIST, ::comphelper::getProcessComponentContext());
     }

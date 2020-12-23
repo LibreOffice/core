@@ -226,7 +226,7 @@ namespace
                 CPPUNIT_ASSERT_MESSAGE( "Line width is 0",
                                         rtl::math::approxEqual(rContext.LineWidth, 28.3) );
 
-                const char sExportString[] = "m53570 7650-35430 24100";
+                static const OUStringLiteral sExportString = u"m53570 7650-35430 24100";
                 CPPUNIT_ASSERT_EQUAL_MESSAGE( "Stroke is m535.7 518.5-354.3-241",
                                         OUString(sExportString), basegfx::utils::exportToSvgD( aPath, true, true, false ) );
 
@@ -248,7 +248,7 @@ namespace
                 CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line width is 0",
                                         0, rContext.LineWidth, 0.0000001 );
 
-                const char sExportString[] = "m49890 5670.00000000001-35430 24090";
+                static const OUStringLiteral sExportString = u"m49890 5670.00000000001-35430 24090";
                 CPPUNIT_ASSERT_EQUAL_MESSAGE( "Stroke is m49890 5670.00000000001-35430 24090",
                                         OUString(sExportString), basegfx::utils::exportToSvgD( aPath, true, true, false ) );
 
@@ -305,7 +305,8 @@ namespace
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font id is 0",
                                     sal_Int32(0), rContext.FontId );
 
-            const char sExportString[] = "m12050 49610c-4310 0-7800-3490-7800-7800 0-4300 "
+            static const OUStringLiteral sExportString
+                = u"m12050 49610c-4310 0-7800-3490-7800-7800 0-4300 "
                 "3490-7790 7800-7790 4300 0 7790 3490 7790 7790 0 4310-3490 7800-7790 7800z";
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Stroke is a 4-bezier circle",
                                     OUString(sExportString), basegfx::utils::exportToSvgD( aPath, true, true, false ) );

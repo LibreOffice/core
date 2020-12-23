@@ -35,11 +35,11 @@
 
 namespace desktop
 {
-    const char aCmdLineHelp_version[] =
-        "%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION %BUILDID\n"
+    const OUStringLiteral aCmdLineHelp_version =
+        u"%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION %BUILDID\n"
         "\n";
-    const char aCmdLineHelp[] =
-        "Usage: %CMDNAME [argument...]\n"
+    const OUStringLiteral aCmdLineHelp =
+        u"Usage: %CMDNAME [argument...]\n"
         "       argument - switches, switch parameters and document URIs (filenames).   \n\n"
         "Using without special arguments:                                               \n"
         "Opens the start center, if it is used without any arguments.                   \n"

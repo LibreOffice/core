@@ -82,8 +82,8 @@ using namespace ::dbtools;
 
 using ::com::sun::star::util::XNumberFormatter;
 
-const char INVALIDTEXT[] = "###";
-const char OBJECTTEXT[] = "<OBJECT>";
+const OUStringLiteral INVALIDTEXT = u"###";
+const OUStringLiteral OBJECTTEXT = u"<OBJECT>";
 
 
 //= helper

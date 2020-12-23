@@ -345,7 +345,7 @@ void ExportDocumentHandler::exportTableRows()
     const OUString sRElement(lcl_createAttribute(XML_NP_RPT,XML_REPORT_ELEMENT) );
     const OUString sRComponent( lcl_createAttribute(XML_NP_RPT,XML_REPORT_COMPONENT) ) ;
     const OUString sFormulaAttrib( lcl_createAttribute(XML_NP_RPT,XML_FORMULA) );
-    static const char s_sFloat[] = "float";
+    static const OUStringLiteral s_sFloat = u"float";
 
     SvXMLAttributeList* pCellAtt = new SvXMLAttributeList();
     uno::Reference< xml::sax::XAttributeList > xCellAtt = pCellAtt;

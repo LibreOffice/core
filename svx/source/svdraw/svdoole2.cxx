@@ -407,7 +407,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::deactivatedUI()
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager(getLayoutManager());
     if ( xLayoutManager.is() )
     {
-        static const char aMenuBarURL[] = "private:resource/menubar/menubar";
+        static const OUStringLiteral aMenuBarURL = u"private:resource/menubar/menubar";
         if ( !xLayoutManager->isElementVisible( aMenuBarURL ) )
             xLayoutManager->createElement( aMenuBarURL );
     }

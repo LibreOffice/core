@@ -40,9 +40,9 @@ using namespace com::sun::star::util;
 
 namespace {
 
-const char CMD_CLEAR_LIST[]   = ".uno:ClearRecentFileList";
-const char CMD_OPEN_AS_TEMPLATE[] = ".uno:OpenTemplate";
-const char CMD_OPEN_REMOTE[]  = ".uno:OpenRemote";
+const OUStringLiteral CMD_CLEAR_LIST = u".uno:ClearRecentFileList";
+const OUStringLiteral CMD_OPEN_AS_TEMPLATE = u".uno:OpenTemplate";
+const OUStringLiteral CMD_OPEN_REMOTE = u".uno:OpenRemote";
 
 class RecentFilesMenuController :  public svt::PopupMenuControllerBase
 {

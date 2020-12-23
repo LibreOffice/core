@@ -89,7 +89,7 @@ uno::Reference<form::XForm> const & FormControlHelper::FormControlHelper_Impl::g
         if (xFormsSupplier.is())
         {
             uno::Reference<container::XNameContainer> xFormsNamedContainer(xFormsSupplier->getForms());
-            static const char sDOCXForm[] = "DOCX-Standard";
+            static const OUStringLiteral sDOCXForm = u"DOCX-Standard";
 
             OUString sFormName(sDOCXForm);
             sal_uInt16 nUnique = 0;

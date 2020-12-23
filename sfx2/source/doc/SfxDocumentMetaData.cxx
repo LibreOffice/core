@@ -403,13 +403,13 @@ const char* s_stdMetaList[] = {
     nullptr
 };
 
-const char s_nsXLink[] = "http://www.w3.org/1999/xlink";
-const char s_nsDC[] = "http://purl.org/dc/elements/1.1/";
-const char s_nsODF[] = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
-const char s_nsODFMeta[] = "urn:oasis:names:tc:opendocument:xmlns:meta:1.0";
+const OUStringLiteral s_nsXLink = u"http://www.w3.org/1999/xlink";
+const OUStringLiteral s_nsDC = u"http://purl.org/dc/elements/1.1/";
+const OUStringLiteral s_nsODF = u"urn:oasis:names:tc:opendocument:xmlns:office:1.0";
+const OUStringLiteral s_nsODFMeta = u"urn:oasis:names:tc:opendocument:xmlns:meta:1.0";
 // const char* s_nsOOo     = "http://openoffice.org/2004/office"; // not used (yet?)
 
-const char s_meta    [] = "meta.xml";
+const OUStringLiteral s_meta = u"meta.xml";
 
 bool isValidDate(const css::util::Date & i_rDate)
 {
