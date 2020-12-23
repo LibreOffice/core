@@ -22,6 +22,7 @@
 
 #include <filter/msfilter/svdfppt.hxx>
 #include <diadef.h>
+#include <sot/storage.hxx>
 #include <svx/svdtypes.hxx>
 #include <memory>
 
@@ -43,6 +44,7 @@ typedef ::std::map < SdrObject*, Ppt97AnimationPtr > tAnimationMap;
 
 class ImplSdPPTImport : public SdrPowerPointImport
 {
+    tools::SvRef<SotStorageStream> mxPicturesStream;
     SfxMedium&      mrMed;
     SotStorage&      mrStorage;
     DffRecordHeader maDocHd;

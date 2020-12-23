@@ -23,6 +23,7 @@
 #include <vector>
 #include "escherex.hxx"
 #include <sal/types.h>
+#include <sot/storage.hxx>
 #include "pptexsoundcollection.hxx"
 
 #include "text.hxx"
@@ -127,9 +128,9 @@ class PPTWriter final : public PPTWriterBase, public PPTExBulletProvider
         sal_uInt32          mnTextSize;
 
         tools::SvRef<SotStorage>        mrStg;
-        std::unique_ptr<SvStream>       mpCurUserStrm;
-        std::unique_ptr<SvStream>       mpStrm;
-        std::unique_ptr<SvStream>       mpPicStrm;
+        tools::SvRef<SotStorageStream>  mpCurUserStrm;
+        tools::SvRef<SotStorageStream>  mpStrm;
+        tools::SvRef<SotStorageStream>  mpPicStrm;
         std::unique_ptr<PptEscherEx>    mpPptEscherEx;
 
         std::vector<std::unique_ptr<PPTExOleObjEntry>> maExOleObj;
