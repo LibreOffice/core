@@ -49,26 +49,26 @@ void PutFormString(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, c
     switch( cForm )
     {
         case '"':   // align-right
-            pJustify = rContext.pAttrRight;
+            pJustify = rContext.xAttrRight.get();
             pString++;
             break;
         case '\'':  // align-left
-            pJustify = rContext.pAttrLeft;
+            pJustify = rContext.xAttrLeft.get();
             pString++;
             break;
         case '^':   // centered
-            pJustify = rContext.pAttrCenter;
+            pJustify = rContext.xAttrCenter.get();
             pString++;
             break;
         case '|':   // printer command
             pString = nullptr;
             break;
         case '\\':  // repetition
-            pJustify = rContext.pAttrRepeat;
+            pJustify = rContext.xAttrRepeat.get();
             pString++;
             break;
         default:    // undefined case!
-            pJustify = rContext.pAttrStandard;
+            pJustify = rContext.xAttrStandard.get();
     }
 
     if (!pString)
@@ -91,7 +91,7 @@ void SetFormat(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, sal_u
     nTab = SanitizeTab(nTab);
 
     //  PREC:   nSt = default number of decimal places
-    rContext.rDoc.ApplyAttr(nCol, nRow, nTab, *(rContext.pValueFormCache->GetAttr(nFormat, nSt)));
+    rContext.rDoc.ApplyAttr(nCol, nRow, nTab, *(rContext.xValueFormCache->GetAttr(nFormat, nSt)));
 
     ScProtectionAttr aAttr;
 

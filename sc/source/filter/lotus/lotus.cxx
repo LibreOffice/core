@@ -20,12 +20,13 @@
 #include "lotfilter.hxx"
 #include <lotimpop.hxx>
 
+#include <editeng/justifyitem.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
-
 #include <scerrors.hxx>
 #include <filtopt.hxx>
 #include <ftools.hxx>
+#include <tool.h>
 
 ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocument& rDocument, rtl_TextEncoding eSrc )
 {
@@ -85,12 +86,6 @@ LotusContext::LotusContext(ScDocument& rDocP, rtl_TextEncoding eQ)
     , bEOF(false)
     , eCharset(eQ)
     , rDoc(rDocP)
-    , pAttrRight(nullptr)
-    , pAttrLeft(nullptr)
-    , pAttrCenter(nullptr)
-    , pAttrRepeat(nullptr)
-    , pAttrStandard(nullptr)
-    , pValueFormCache(nullptr)
     , maRangeNames()
     , eFirstType( Lotus123Typ::X)
     , eActType( Lotus123Typ::X)
@@ -99,5 +94,8 @@ LotusContext::LotusContext(ScDocument& rDocP, rtl_TextEncoding eQ)
 {
 }
 
+LotusContext::~LotusContext()
+{
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -45,9 +45,9 @@ struct LotusContext
     ScDocument&      rDoc;          // reference to access document
     std::map<sal_uInt16, ScPatternAttr> aLotusPatternPool;
 
-    SvxHorJustifyItem *pAttrRight, *pAttrLeft, *pAttrCenter, *pAttrRepeat, *pAttrStandard;
+    std::unique_ptr<SvxHorJustifyItem> xAttrRight, xAttrLeft, xAttrCenter, xAttrRepeat, xAttrStandard;
 
-    FormCache*       pValueFormCache; // -> initialized in memory.cxx
+    std::unique_ptr<FormCache> xValueFormCache; // -> initialized in memory.cxx
 
     LotusRangeList      maRangeNames;
     Lotus123Typ         eFirstType;
@@ -58,6 +58,7 @@ struct LotusContext
     LotAttrTable        maAttrTable;
 
     LotusContext(ScDocument& rDocP, rtl_TextEncoding eQ);
+    ~LotusContext();
 };
 
 #endif
