@@ -69,9 +69,9 @@ using namespace com::sun::star;
 namespace desktop
 {
 
-const char ITEM_DESCRIPTOR_COMMANDURL[] = "CommandURL";
-const char ITEM_DESCRIPTOR_CONTAINER[] = "ItemDescriptorContainer";
-const char ITEM_DESCRIPTOR_LABEL[] = "Label";
+const OUStringLiteral ITEM_DESCRIPTOR_COMMANDURL = u"CommandURL";
+const OUStringLiteral ITEM_DESCRIPTOR_CONTAINER = u"ItemDescriptorContainer";
+const OUStringLiteral ITEM_DESCRIPTOR_LABEL = u"Label";
 
 static OUString mapModuleShortNameToIdentifier(std::u16string_view sShortName)
 {

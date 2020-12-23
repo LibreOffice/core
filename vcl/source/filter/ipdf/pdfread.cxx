@@ -285,8 +285,8 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                 || eSubtype == vcl::pdf::PDFAnnotationSubType::Highlight
                 || eSubtype == vcl::pdf::PDFAnnotationSubType::Line)
             {
-                OUString sAuthor = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
-                OUString sText = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
+                OUString sAuthor = pAnnotation->getString(vcl::pdf::constDictionaryKey::Title);
+                OUString sText = pAnnotation->getString(vcl::pdf::constDictionaryKey::Contents);
 
                 basegfx::B2DRectangle rRectangle = pAnnotation->getRectangle();
                 basegfx::B2DRectangle rRectangleHMM(
@@ -296,7 +296,7 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                     convertPointToMm100(aPageSize.getY() - rRectangle.getMaxY()));
 
                 OUString sDateTimeString
-                    = pAnnotation->getString(vcl::pdf::constDictionaryKeyModificationDate);
+                    = pAnnotation->getString(vcl::pdf::constDictionaryKey::ModificationDate);
                 OUString sISO8601String = vcl::pdf::convertPdfDateToISO8601(sDateTimeString);
 
                 css::util::DateTime aDateTime;
@@ -331,7 +331,7 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                         }
                         pMarker->maPolygon.setClosed(true);
                         pMarker->mnWidth = convertPointToMm100(pAnnotation->getBorderWidth());
-                        if (pAnnotation->hasKey(vcl::pdf::constDictionaryKeyInteriorColor))
+                        if (pAnnotation->hasKey(vcl::pdf::constDictionaryKey::InteriorColor))
                             pMarker->maFillColor = pAnnotation->getInteriorColor();
                     }
                 }
@@ -340,7 +340,7 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                     auto pMarker = std::make_shared<vcl::pdf::PDFAnnotationMarkerSquare>();
                     rPDFGraphicAnnotation.mpMarker = pMarker;
                     pMarker->mnWidth = convertPointToMm100(pAnnotation->getBorderWidth());
-                    if (pAnnotation->hasKey(vcl::pdf::constDictionaryKeyInteriorColor))
+                    if (pAnnotation->hasKey(vcl::pdf::constDictionaryKey::InteriorColor))
                         pMarker->maFillColor = pAnnotation->getInteriorColor();
                 }
                 else if (eSubtype == vcl::pdf::PDFAnnotationSubType::Circle)
@@ -348,7 +348,7 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                     auto pMarker = std::make_shared<vcl::pdf::PDFAnnotationMarkerCircle>();
                     rPDFGraphicAnnotation.mpMarker = pMarker;
                     pMarker->mnWidth = convertPointToMm100(pAnnotation->getBorderWidth());
-                    if (pAnnotation->hasKey(vcl::pdf::constDictionaryKeyInteriorColor))
+                    if (pAnnotation->hasKey(vcl::pdf::constDictionaryKey::InteriorColor))
                         pMarker->maFillColor = pAnnotation->getInteriorColor();
                 }
                 else if (eSubtype == vcl::pdf::PDFAnnotationSubType::Ink)
@@ -370,7 +370,7 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                         }
                         float fWidth = pAnnotation->getBorderWidth();
                         pMarker->mnWidth = convertPointToMm100(fWidth);
-                        if (pAnnotation->hasKey(vcl::pdf::constDictionaryKeyInteriorColor))
+                        if (pAnnotation->hasKey(vcl::pdf::constDictionaryKey::InteriorColor))
                             pMarker->maFillColor = pAnnotation->getInteriorColor();
                     }
                 }

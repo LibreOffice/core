@@ -71,8 +71,9 @@
 
 namespace
 {
-char const DATA_DIRECTORY[] = "/sw/qa/extras/uiwriter/data2/";
-char const FLOATING_TABLE_DATA_DIRECTORY[] = "/sw/qa/extras/uiwriter/data/floating_table/";
+OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/extras/uiwriter/data2/";
+OUStringLiteral const FLOATING_TABLE_DATA_DIRECTORY
+    = u"/sw/qa/extras/uiwriter/data/floating_table/";
 } // namespace
 
 /// Second set of tests asserting the behavior of Writer user interface shells.

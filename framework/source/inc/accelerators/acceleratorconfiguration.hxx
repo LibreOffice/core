@@ -40,9 +40,9 @@
 namespace framework
 {
 
-const char CFG_ENTRY_PRIMARY[] = "PrimaryKeys";
-const char CFG_ENTRY_GLOBAL[] = "Global";
-const char CFG_ENTRY_MODULES[] = "Modules";
+const OUStringLiteral CFG_ENTRY_PRIMARY = u"PrimaryKeys";
+const OUStringLiteral CFG_ENTRY_GLOBAL = u"Global";
+const OUStringLiteral CFG_ENTRY_MODULES = u"Modules";
 
 /**
     implements a read/write access to the accelerator configuration.

@@ -129,9 +129,10 @@ void utils::ensureFirebirdTableLength(const OUString& sName)
 {
     if (sName.getLength() > 30) // Firebird limitation
     {
-        constexpr char NAME_TOO_LONG[] = "Firebird 3 doesn't support object (table, field) names "
-                                         "of  more than 30 characters; please shorten your object "
-                                         "names in the original file and try again.";
+        static constexpr OUStringLiteral NAME_TOO_LONG
+            = u"Firebird 3 doesn't support object (table, field) names "
+              "of  more than 30 characters; please shorten your object "
+              "names in the original file and try again.";
         dbtools::throwGenericSQLException(NAME_TOO_LONG,
                                           ::comphelper::getProcessComponentContext());
     }

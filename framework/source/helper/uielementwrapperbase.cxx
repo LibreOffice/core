@@ -28,9 +28,9 @@
 const int UIELEMENT_PROPHANDLE_RESOURCEURL  = 1;
 const int UIELEMENT_PROPHANDLE_TYPE         = 2;
 const int UIELEMENT_PROPHANDLE_FRAME        = 3;
-const char UIELEMENT_PROPNAME_RESOURCEURL[] = "ResourceURL";
-const char UIELEMENT_PROPNAME_TYPE[] = "Type";
-const char UIELEMENT_PROPNAME_FRAME[] = "Frame";
+const OUStringLiteral UIELEMENT_PROPNAME_RESOURCEURL = u"ResourceURL";
+const OUStringLiteral UIELEMENT_PROPNAME_TYPE = u"Type";
+const OUStringLiteral UIELEMENT_PROPNAME_FRAME = u"Frame";
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

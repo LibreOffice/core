@@ -65,9 +65,9 @@
 
 using namespace css;
 
-const char FOLDERNAME_UICONFIG[] = "Configurations2";
+const OUStringLiteral FOLDERNAME_UICONFIG = u"Configurations2";
 
-const char MEDIATYPE_PROPNAME[] = "MediaType";
+const OUStringLiteral MEDIATYPE_PROPNAME = u"MediaType";
 
 const sal_uInt16 KEYCODE_ARRAY[] = { KEY_F1,
                                      KEY_F2,

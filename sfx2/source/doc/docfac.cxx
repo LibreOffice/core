@@ -133,7 +133,8 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
     static const int nMaxPathSize = 16000;
 
     const OUString sConfPath = "Office/Factories/" + rServiceName;
-    static const char PROP_DEF_TEMPL_CHANGED[] = "ooSetupFactorySystemDefaultTemplateChanged";
+    static const OUStringLiteral PROP_DEF_TEMPL_CHANGED
+        = u"ooSetupFactorySystemDefaultTemplateChanged";
 
     static const char DEF_TPL_STR[] = "/soffice.";
 

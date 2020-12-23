@@ -56,7 +56,7 @@ static std::ostream& operator<<(std::ostream& os, ViewShellId const & id)
 namespace
 {
 
-char const DATA_DIRECTORY[] = "/sc/qa/unit/tiledrendering/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/sc/qa/unit/tiledrendering/data/";
 
 class ScTiledRenderingTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {

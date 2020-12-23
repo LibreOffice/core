@@ -29,8 +29,8 @@ using namespace com::sun::star;
 namespace xmlscript
 {
 
-const char aTrueStr[] = "true";
-const char aFalseStr[] = "false";
+const OUStringLiteral aTrueStr = u"true";
+const OUStringLiteral aFalseStr = u"false";
 
 void
 exportLibraryContainer(

@@ -51,7 +51,7 @@ void LotusWordProTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-char const DATA_DIRECTORY[] = "/lotuswordpro/qa/cppunit/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/lotuswordpro/qa/cppunit/data/";
 
 CPPUNIT_TEST_FIXTURE(LotusWordProTest, testTdf129993)
 {

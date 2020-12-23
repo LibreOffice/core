@@ -45,9 +45,9 @@ using namespace connectivity::firebird;
 
 // Static const variables
 namespace {
-const char our_sFirebirdTmpVar[] = "FIREBIRD_TMP";
-const char our_sFirebirdLockVar[] = "FIREBIRD_LOCK";
-const char our_sFirebirdMsgVar[] = "FIREBIRD_MSG";
+const OUStringLiteral our_sFirebirdTmpVar = u"FIREBIRD_TMP";
+const OUStringLiteral our_sFirebirdLockVar = u"FIREBIRD_LOCK";
+const OUStringLiteral our_sFirebirdMsgVar = u"FIREBIRD_MSG";
 #ifdef MACOSX
 const char our_sFirebirdLibVar[] = "LIBREOFFICE_FIREBIRD_LIB";
 #endif

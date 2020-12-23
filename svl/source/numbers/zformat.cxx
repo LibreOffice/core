@@ -51,7 +51,7 @@ using namespace svt;
 
 namespace {
 
-char const GREGORIAN[] = "gregorian";
+OUStringLiteral const GREGORIAN = u"gregorian";
 
 const sal_uInt16 UPPER_PRECISION = 300; // entirely arbitrary...
 const double EXP_LOWER_BOUND = 1.0E-4; // prefer scientific notation below this value.

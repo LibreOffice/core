@@ -404,7 +404,7 @@ class SwHtmlOptionsImportTest : public SwModelTestBase
 {
 };
 
-char const DATA_DIRECTORY[] = "/sw/qa/extras/htmlimport/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/extras/htmlimport/data/";
 
 CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testAllowedRTFOLEMimeTypes)
 {
