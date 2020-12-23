@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b7770cf_2d7a92e7",
+        "filename": "sw/CppunitTest_sw_txtencexport.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-23T09:38:04Z",
+      "side": 1,
+      "message": "This line (and also lines 51-53) starts with tab instead of four spaces. This is inconsistent - please make it consistent with the rest",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 1
+      },
+      "revId": "d74d57e3e3aca2e457bcf6de47cae31a8184f36b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6745ff4_45b33d7d",
+        "filename": "sw/qa/extras/txtencexport/txtencexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-23T09:38:04Z",
+      "side": 1,
+      "message": "Why use this conversion? Just use\n\n  OUString s \u003d u\"Foo\" SAL_NEWLINE_STRING \"Bar\" SAL_NEWLINE_STRING \"Baz\";\n\nand the \"u\" in front of the literal will do the necessary magic :-)\n\nhttps://en.cppreference.com/w/cpp/language/string_literal",
+      "range": {
+        "startLine": 51,
+        "startChar": 23,
+        "endLine": 51,
+        "endChar": 40
+      },
+      "revId": "d74d57e3e3aca2e457bcf6de47cae31a8184f36b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eec8dd5f_627b7578",
+        "filename": "sw/qa/extras/txtencexport/txtencexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-23T09:38:04Z",
+      "side": 1,
+      "message": "... but now you convert it back to OString. What is the intention? You import the file as UTF-8, but when you exported it, you didn\u0027t define any options, so what will be the encoding? and is it OK to expect that it will be UTF-8, given that it contains non-ASCII characters (what for)?",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 79
+      },
+      "revId": "d74d57e3e3aca2e457bcf6de47cae31a8184f36b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
