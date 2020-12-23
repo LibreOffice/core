@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01121cc5_debf77ef",
+        "filename": "xmloff/source/style/xmlstyle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-23T06:45:20Z",
+      "side": 1,
+      "message": "Do I understand it correctly that in c++20, this is better re-written as\n\n  OUString sName \u003d bPara ? OUStringLiteral( u\"ParagraphStyles\" ): OUStringLiteral( u\"CharacterStyles\" );\n\nwith OUStringLiterals being always not automatic? Or consteval will not turn them to pre-compiled literals?",
+      "range": {
+        "startLine": 602,
+        "startChar": 12,
+        "endLine": 602,
+        "endChar": 121
+      },
+      "revId": "ca7d0835008b2333eaebe88030f94b5e072d0eb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
