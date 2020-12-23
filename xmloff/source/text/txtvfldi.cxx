@@ -54,17 +54,17 @@
 
 // service names
 constexpr char16_t sAPI_fieldmaster_prefix[] = u"com.sun.star.text.FieldMaster.";
-const char sAPI_get_expression[]     = "GetExpression";
-const char sAPI_set_expression[]     = "SetExpression";
-const char sAPI_user[]               = "User";
-const char sAPI_database[]           = "com.sun.star.text.TextField.Database";
+const OUStringLiteral sAPI_get_expression = u"GetExpression";
+const OUStringLiteral sAPI_set_expression = u"SetExpression";
+const OUStringLiteral sAPI_user      = u"User";
+const OUStringLiteral sAPI_database  = u"com.sun.star.text.TextField.Database";
 
 // property names
-const char sAPI_content[]            = "Content";
-const char sAPI_sub_type[]           = "SubType";
-const char sAPI_number_format[]      = "NumberFormat";
-const char sAPI_is_visible[]         = "IsVisible";
-const char sAPI_current_presentation[]   = "CurrentPresentation";
+const OUStringLiteral sAPI_content   = u"Content";
+const OUStringLiteral sAPI_sub_type  = u"SubType";
+const OUStringLiteral sAPI_number_format = u"NumberFormat";
+const OUStringLiteral sAPI_is_visible = u"IsVisible";
+const OUStringLiteral sAPI_current_presentation = u"CurrentPresentation";
 
 
 using namespace ::com::sun::star;
@@ -866,8 +866,8 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
 
             OUStringBuffer sService;
             sService.append(sAPI_fieldmaster_prefix);
-            sService.appendAscii((eVarType==VarTypeUserField) ?
-                                 sAPI_user : sAPI_set_expression);
+            sService.append((eVarType==VarTypeUserField) ?
+                                 OUString(sAPI_user) : OUString(sAPI_set_expression));
             Reference<XInterface> xIfc =
                 xFactory->createInstance( sService.makeStringAndClear() );
             if (xIfc.is()) {

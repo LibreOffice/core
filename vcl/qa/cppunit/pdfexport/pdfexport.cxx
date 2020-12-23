@@ -115,7 +115,7 @@ void PdfExportTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-char const DATA_DIRECTORY[] = "/vcl/qa/cppunit/pdfexport/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/vcl/qa/cppunit/pdfexport/data/";
 
 void PdfExportTest::saveAsPDF(const OUString& rFile)
 {

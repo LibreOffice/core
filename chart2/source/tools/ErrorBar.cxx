@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 namespace
 {
 
-const char lcl_aServiceName[] = "com.sun.star.comp.chart2.ErrorBar";
+const OUStringLiteral lcl_aServiceName = u"com.sun.star.comp.chart2.ErrorBar";
 
 bool lcl_isInternalData( const uno::Reference< chart2::data::XLabeledDataSequence > & xLSeq )
 {

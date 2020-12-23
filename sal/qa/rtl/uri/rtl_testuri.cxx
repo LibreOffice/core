@@ -358,7 +358,7 @@ void Test::test_Uri() {
     // Check encode with unusual text encodings:
 
     {
-        sal_Unicode const aText1U[] = u" !\u0401\u045F";
+        static OUStringLiteral const aText1U = u" !\u0401\u045F";
         aText1 = OUString(aText1U);
         aText2 = "%20!%A1%FF";
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -374,9 +374,9 @@ void Test::test_Uri() {
                 aText2, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ISO_8859_5));
     }
     {
-        sal_Unicode const aText1U[] = u" !\u0401\u0700\u045F";
+        static OUStringLiteral const aText1U = u" !\u0401\u0700\u045F";
         aText1 = OUString(aText1U);
-        sal_Unicode const aText2U[] =
+        static OUStringLiteral const aText2U =
             u"%20!%A1\u0700%FF";
         aText2 = OUString(aText2U);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -393,7 +393,7 @@ void Test::test_Uri() {
     }
 #if WITH_LOCALE_ALL || WITH_LOCALE_zh
     {
-        sal_Unicode const aText1U[] = u" !\u028A\U00022513";
+        static OUStringLiteral const aText1U = u" !\u028A\U00022513";
         aText1 = OUString(aText1U);
         aText2 = "%20!%81%30%B1%33%95%39%C5%37";
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -412,7 +412,7 @@ void Test::test_Uri() {
     // Check strict mode:
 
     {
-        sal_Unicode const aText1U[] = u" !\u0401\u0700\u045F";
+        static OUStringLiteral const aText1U = u" !\u0401\u0700\u045F";
         aText1 = OUString(aText1U);
         aText2 = OUString();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -452,7 +452,7 @@ void Test::test_Uri() {
     }
     {
         aText1 = "%81%30%B1%33";
-        sal_Unicode const aText2U[] = u"\u028A";
+        static OUStringLiteral const aText2U = u"\u028A";
         aText2 = OUString(aText2U);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 27",
@@ -462,7 +462,7 @@ void Test::test_Uri() {
     }
     {
         aText1 = "%810%B13";
-        sal_Unicode const aText2U[] = u"\u028A";
+        static OUStringLiteral const aText2U = u"\u028A";
         aText2 = OUString(aText2U);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             "failure 28",
@@ -484,7 +484,7 @@ void Test::test_Uri() {
                 RTL_TEXTENCODING_UTF8));
     }
     {
-        sal_Unicode const aText1U[] = u"\u00EA";
+        static OUStringLiteral const aText1U = u"\u00EA";
         aText1 = OUString(aText1U);
         aText2 = "%C3%AA";
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -495,7 +495,7 @@ void Test::test_Uri() {
                 RTL_TEXTENCODING_UTF8));
     }
     {
-        sal_Unicode const aText1U[] = u" !\u0401\u0700\u045F";
+        static OUStringLiteral const aText1U = u" !\u0401\u0700\u045F";
         aText1 = OUString(aText1U);
         aText2 = OUString();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(

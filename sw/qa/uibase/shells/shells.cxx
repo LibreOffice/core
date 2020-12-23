@@ -31,7 +31,7 @@
 #include <drawdoc.hxx>
 #include <docsh.hxx>
 
-char const DATA_DIRECTORY[] = "/sw/qa/uibase/shells/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/uibase/shells/data/";
 
 /// Covers sw/source/uibase/shells/ fixes.
 class SwUibaseShellsTest : public SwModelTestBase

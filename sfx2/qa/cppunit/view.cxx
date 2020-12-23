@@ -24,7 +24,7 @@
 
 using namespace com::sun::star;
 
-char const DATA_DIRECTORY[] = "/sfx2/qa/cppunit/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/sfx2/qa/cppunit/data/";
 
 /// Covers sfx2/source/view/ fixes.
 class Sfx2ViewTest : public test::BootstrapFixture, public unotest::MacrosTest

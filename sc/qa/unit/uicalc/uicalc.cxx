@@ -59,7 +59,7 @@ void ScUiCalcTest::checkCurrentCell(SCCOL nCol, SCROW nRow)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(nRow), ScDocShell::GetViewData()->GetCurY());
 }
 
-char const DATA_DIRECTORY[] = "/sc/qa/unit/uicalc/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/sc/qa/unit/uicalc/data/";
 
 ScModelObj* ScUiCalcTest::createDoc(const char* pName)
 {

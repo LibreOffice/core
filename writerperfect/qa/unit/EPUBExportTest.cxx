@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-char const DATA_DIRECTORY[] = "/writerperfect/qa/unit/data/writer/epubexport/";
+OUStringLiteral const DATA_DIRECTORY = u"/writerperfect/qa/unit/data/writer/epubexport/";
 
 /// Tests the EPUB export filter.
 class EPUBExportTest : public test::BootstrapFixture,

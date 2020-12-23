@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <xmloff/autolayout.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/namespacemap.hxx>
@@ -1313,7 +1317,7 @@ void SdXMLExport::ImpPrepDrawPageInfos()
     }
 }
 
-static OUString findOrAppendImpl( std::vector< OUString >& rVector, const OUString& rText, const char* pPrefix )
+static OUString findOrAppendImpl( std::vector< OUString >& rVector, const OUString& rText, std::u16string_view pPrefix )
 {
     // search rVector if there is already a string that equals rText
     auto aIter = std::find(rVector.begin(), rVector.end(), rText);
@@ -1325,10 +1329,10 @@ static OUString findOrAppendImpl( std::vector< OUString >& rVector, const OUStri
 
     // create a reference string with pPrefix and the index of the
     // found or created rText
-    return OUString::createFromAscii( pPrefix ) + OUString::number( nIndex );
+    return pPrefix + OUString::number( nIndex );
 }
 
-static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, const OUString& rText, bool bFixed, sal_Int32 nFormat, const char* pPrefix )
+static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, const OUString& rText, bool bFixed, sal_Int32 nFormat, std::u16string_view pPrefix )
 {
     // search rVector if there is already a DateTimeDeclImpl with rText,bFixed and nFormat
     auto aIter = std::find_if(rVector.begin(), rVector.end(),
@@ -1351,12 +1355,12 @@ static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, cons
 
     // create a reference string with pPrefix and the index of the
     // found or created DateTimeDeclImpl
-    return OUString::createFromAscii( pPrefix ) + OUString::number( nIndex );
+    return pPrefix + OUString::number( nIndex );
 }
 
-const char gpStrHeaderTextPrefix[] = "hdr";
-const char gpStrFooterTextPrefix[] = "ftr";
-const char gpStrDateTimeTextPrefix[] = "dtd";
+const OUStringLiteral gpStrHeaderTextPrefix = u"hdr";
+const OUStringLiteral gpStrFooterTextPrefix = u"ftr";
+const OUStringLiteral gpStrDateTimeTextPrefix = u"dtd";
 
 HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( const Reference<XDrawPage>& xDrawPage )
 {
