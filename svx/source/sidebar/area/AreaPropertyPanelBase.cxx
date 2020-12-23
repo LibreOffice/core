@@ -35,7 +35,7 @@
 using namespace css;
 using namespace css::uno;
 
-const char SIDEBARGRADIENT[] = "sidebargradient";
+const OStringLiteral SIDEBARGRADIENT = "sidebargradient";
 
 namespace svx::sidebar {
 

@@ -55,7 +55,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
 ,   msListId()
 ,   msContinueListId()
 {
-    static const char s_PropNameDefaultListId[] = "DefaultListId";
+    static const OUStringLiteral s_PropNameDefaultListId = u"DefaultListId";
     {
         // get the parent list block context (if any); this is a bit ugly...
         XMLTextListBlockContext * pLB(nullptr);

@@ -58,9 +58,9 @@ using ::osl::MutexGuard;
 
 namespace
 {
-char const sXML_metaStreamName[] = "meta.xml";
-char const sXML_styleStreamName[] = "styles.xml";
-char const sXML_contentStreamName[] = "content.xml";
+OUStringLiteral const sXML_metaStreamName = u"meta.xml";
+OUStringLiteral const sXML_styleStreamName = u"styles.xml";
+OUStringLiteral const sXML_contentStreamName = u"content.xml";
 
 
 uno::Reference< embed::XStorage > lcl_getWriteStorage(

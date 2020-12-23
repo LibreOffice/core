@@ -709,7 +709,7 @@ void TPGalleryThemeProperties::FillFilterList()
 
 #if HAVE_FEATURE_AVMEDIA
     // media filters
-    static const char aWildcard[] = "*.";
+    static const OUStringLiteral aWildcard = u"*.";
     ::avmedia::FilterNameVector     aFilters= ::avmedia::MediaWindow::getMediaFilters();
 
     for(const std::pair<OUString,OUString> & aFilter : aFilters)

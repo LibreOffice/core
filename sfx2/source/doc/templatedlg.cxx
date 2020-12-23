@@ -54,10 +54,10 @@
 
 #include <sfx2/strings.hrc>
 
-const char TM_SETTING_MANAGER[] = "TemplateManager";
-const char TM_SETTING_LASTFOLDER[] = "LastFolder";
-const char TM_SETTING_LASTAPPLICATION[] = "LastApplication";
-const char TM_SETTING_VIEWMODE[] = "ViewMode";
+const OUStringLiteral TM_SETTING_MANAGER = u"TemplateManager";
+const OUStringLiteral TM_SETTING_LASTFOLDER = u"LastFolder";
+const OUStringLiteral TM_SETTING_LASTAPPLICATION = u"LastApplication";
+const OUStringLiteral TM_SETTING_VIEWMODE = u"ViewMode";
 
 #define MNI_ACTION_NEW_FOLDER "new"
 #define MNI_ACTION_RENAME_FOLDER "rename"

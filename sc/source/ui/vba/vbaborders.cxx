@@ -42,7 +42,7 @@ typedef InheritedHelperInterfaceWeakImpl<excel::XBorder > ScVbaBorder_Base;
 // borders, the enumeration will match the order in this list
 const sal_Int16 supportedIndexTable[] = {  XlBordersIndex::xlEdgeLeft, XlBordersIndex::xlEdgeTop, XlBordersIndex::xlEdgeBottom, XlBordersIndex::xlEdgeRight, XlBordersIndex::xlDiagonalDown, XlBordersIndex::xlDiagonalUp, XlBordersIndex::xlInsideVertical, XlBordersIndex::xlInsideHorizontal };
 
-const char sTableBorder[] = "TableBorder";
+const OUStringLiteral sTableBorder = u"TableBorder";
 
 //  Equiv widths in 1/100 mm
 const sal_Int32 OOLineThin = 35;

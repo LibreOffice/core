@@ -65,7 +65,7 @@ using namespace css::uno;
 
 namespace
 {
-    const char gsReadOnlyCommandName[] = ".uno:EditDoc";
+    const OUStringLiteral gsReadOnlyCommandName = u".uno:EditDoc";
     const sal_Int32 gnWidthCloseThreshold (70);
     const sal_Int32 gnWidthOpenThreshold (40);
 

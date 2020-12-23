@@ -304,10 +304,10 @@ bool DlgFilterCrit::getCondition(const weld::ComboBox& _rField,const weld::Combo
                     }
                 }
                 xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= _rFilter.Name;
-                static const char sAgg[] = "AggregateFunction";
+                static const OUStringLiteral sAgg = u"AggregateFunction";
                 if ( xInfo->hasPropertyByName(sAgg) )
                     xColumn->getPropertyValue(sAgg) >>= bHaving;
-                static const char sFunction[] = "Function";
+                static const OUStringLiteral sFunction = u"Function";
                 if ( xInfo->hasPropertyByName(sFunction) )
                     xColumn->getPropertyValue(sFunction) >>= bFunction;
             }

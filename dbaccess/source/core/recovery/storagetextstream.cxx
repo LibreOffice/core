@@ -36,7 +36,7 @@ namespace dbaccess
         Reference< XTextOutputStream2 >  xTextOutput;
     };
 
-    const char sLineFeed[] = "\n";
+    const OUStringLiteral sLineFeed = u"\n";
 
     // StorageTextOutputStream
     StorageTextOutputStream::StorageTextOutputStream(   const Reference<XComponentContext>& i_rContext,

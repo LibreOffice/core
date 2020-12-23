@@ -41,14 +41,14 @@ class SvStream;
 //Commonly used string literals for stream and storage names in word docs
 namespace SL
 {
-    const char aObjectPool[]    = "ObjectPool";
-    const char a1Table[]        = "1Table";
-    const char a0Table[]        = "0Table";
-    const char aData[]          = "Data";
-    const char aCheckBox[]      = "CheckBox";
-    const char aListBox[]       = "ListBox";
-    const char aTextField[]     = "TextField";
-    const char aMSMacroCmds[]   = "MSMacroCmds";
+    inline const OUStringLiteral aObjectPool = u"ObjectPool";
+    inline const OUStringLiteral a1Table = u"1Table";
+    inline const OUStringLiteral a0Table = u"0Table";
+    inline const OUStringLiteral aData = u"Data";
+    inline const OUStringLiteral aCheckBox = u"CheckBox";
+    inline const OUStringLiteral aListBox = u"ListBox";
+    inline const OUStringLiteral aTextField = u"TextField";
+    inline const OUStringLiteral aMSMacroCmds = u"MSMacroCmds";
 }
 
 struct SprmInfo

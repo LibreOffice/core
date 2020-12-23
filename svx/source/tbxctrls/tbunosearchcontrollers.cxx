@@ -66,12 +66,12 @@ using namespace css;
 
 namespace {
 
-const char COMMAND_FINDTEXT[] = ".uno:FindText";
-const char COMMAND_DOWNSEARCH[] = ".uno:DownSearch";
-const char COMMAND_UPSEARCH[] = ".uno:UpSearch";
-const char COMMAND_FINDALL[] = ".uno:FindAll";
-const char COMMAND_MATCHCASE[] = ".uno:MatchCase";
-const char COMMAND_SEARCHFORMATTED[] = ".uno:SearchFormattedDisplayString";
+const OUStringLiteral COMMAND_FINDTEXT = u".uno:FindText";
+const OUStringLiteral COMMAND_DOWNSEARCH = u".uno:DownSearch";
+const OUStringLiteral COMMAND_UPSEARCH = u".uno:UpSearch";
+const OUStringLiteral COMMAND_FINDALL = u".uno:FindAll";
+const OUStringLiteral COMMAND_MATCHCASE = u".uno:MatchCase";
+const OUStringLiteral COMMAND_SEARCHFORMATTED = u".uno:SearchFormattedDisplayString";
 
 const sal_Int32       REMEMBER_SIZE = 10;
 

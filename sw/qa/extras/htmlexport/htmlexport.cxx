@@ -246,7 +246,7 @@ void SwHtmlDomExportTest::ParseOle1FromRtfUrl(const OUString& rRtfUrl, SvMemoryS
     CPPUNIT_ASSERT(rOle1.Tell());
 }
 
-char const DATA_DIRECTORY[] = "/sw/qa/extras/htmlexport/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/extras/htmlexport/data/";
 
 DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testFdo81276, "fdo81276.html")
 {

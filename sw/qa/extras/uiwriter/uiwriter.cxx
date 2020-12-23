@@ -137,7 +137,7 @@
 
 namespace
 {
-char const DATA_DIRECTORY[] = "/sw/qa/extras/uiwriter/data/";
+OUStringLiteral const DATA_DIRECTORY = u"/sw/qa/extras/uiwriter/data/";
 
 int CountFilesInDirectory(const OUString &rURL)
 {

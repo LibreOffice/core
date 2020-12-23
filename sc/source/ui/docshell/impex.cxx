@@ -1119,7 +1119,7 @@ static bool lcl_PutString(
             sal_Int16 nMonth = static_cast<sal_Int16>(aMStr.toInt32());
             if (!nMonth)
             {
-                static const char aSepShortened[] = "SEP";
+                static const OUStringLiteral aSepShortened = u"SEP";
                 uno::Sequence< i18n::CalendarItem2 > xMonths;
                 sal_Int32 i, nMonthCount;
                 //  first test all month names from local international
