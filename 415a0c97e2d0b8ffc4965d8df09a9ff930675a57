@@ -22,6 +22,30 @@
       "revId": "415a0c97e2d0b8ffc4965d8df09a9ff930675a57",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76cb570f_bfb2ed15",
+        "filename": "include/basic/sbxvar.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-23T06:53:45Z",
+      "side": 1,
+      "message": "possibly\n    for(const auto \u0026 c : ....\n?",
+      "parentUuid": "04bdc933_7c2ada48",
+      "range": {
+        "startLine": 308,
+        "startChar": 8,
+        "endLine": 311,
+        "endChar": 59
+      },
+      "revId": "415a0c97e2d0b8ffc4965d8df09a9ff930675a57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
