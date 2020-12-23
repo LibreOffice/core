@@ -33,6 +33,10 @@ class tdf136578(UITestCase):
         # AssertionError: 1 != 2
         self.assertEqual(document.CurrentController.PageCount, 1)
 
+        self.xUITest.executeCommand(".uno:Undo")
+
+        self.assertEqual(document.CurrentController.PageCount, 2)
+
         self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
