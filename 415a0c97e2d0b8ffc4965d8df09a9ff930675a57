@@ -46,6 +46,30 @@
       "revId": "415a0c97e2d0b8ffc4965d8df09a9ff930675a57",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad421e09_8231c334",
+        "filename": "include/basic/sbxvar.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-23T07:25:48Z",
+      "side": 1,
+      "message": "Sigh, that also didn\u0027t help: the same\n\n\u003e C:/lo/src/core/basic/source/classes/sb.cxx(1932): error C2131: expression did not evaluate to a constant\n\u003e C:\\PROGRA~2\\MICROS~1\\2019\\COMMUN~1\\VC\\Tools\\MSVC\\1428~1.293\\Include\\xstring(1241): note: failure was caused by a read of a variable outside its\n\u003e lifetime",
+      "parentUuid": "76cb570f_bfb2ed15",
+      "range": {
+        "startLine": 308,
+        "startChar": 8,
+        "endLine": 311,
+        "endChar": 59
+      },
+      "revId": "415a0c97e2d0b8ffc4965d8df09a9ff930675a57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
