@@ -280,7 +280,7 @@ void FrameView::Update(SdOptions const * pOptions)
 
     mbRuler = pOptions->IsRulerVisible();
     SetGridVisible( pOptions->IsGridVisible() );
-    SetSnapAngle( pOptions->GetAngle() );
+    SetSnapAngle( pOptions->GetAngle().get() * 10 ); // convert to hundredths of a degree
     SetGridSnap( pOptions->IsUseGridSnap() );
     SetBordSnap( pOptions->IsSnapBorder()  );
     SetHlplSnap( pOptions->IsSnapHelplines() );
@@ -298,7 +298,7 @@ void FrameView::Update(SdOptions const * pOptions)
     SetAngleSnapEnabled( pOptions->IsRotate() );
     SetBigOrtho( pOptions->IsBigOrtho() );
     SetOrtho( pOptions->IsOrtho() );
-    SetEliminatePolyPointLimitAngle( pOptions->GetEliminatePolyPointLimitAngle() );
+    SetEliminatePolyPointLimitAngle( pOptions->GetEliminatePolyPointLimitAngle().get() * 10 ); // convert to degree100
     GetModel()->SetPickThroughTransparentTextFrames( pOptions->IsPickThrough() );
 
     SetSolidDragging( pOptions->IsSolidDragging() );

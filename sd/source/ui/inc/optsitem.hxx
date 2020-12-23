@@ -340,8 +340,8 @@ private:
     bool    bBigOrtho       : 1;    // Snap/Position/ExtendEdges
     bool    bRotate         : 1;    // Snap/Position/Rotating
     sal_Int16   nSnapArea;              // Snap/Object/Range
-    sal_Int16   nAngle;                 // Snap/Position/RotatingValue
-    sal_Int16   nBezAngle;              // Snap/Position/PointReduction
+    Degree10   nAngle;                 // Snap/Position/RotatingValue
+    Degree10   nBezAngle;              // Snap/Position/PointReduction
 
 protected:
 
@@ -363,8 +363,8 @@ public:
     bool    IsBigOrtho() const { Init(); return bBigOrtho; }
     bool    IsRotate() const { Init(); return bRotate; }
     sal_Int16   GetSnapArea() const { Init(); return nSnapArea; }
-    sal_Int16   GetAngle() const { Init(); return nAngle; }
-    sal_Int16   GetEliminatePolyPointLimitAngle() const { Init(); return nBezAngle; }
+    Degree10   GetAngle() const { Init(); return nAngle; }
+    Degree10   GetEliminatePolyPointLimitAngle() const { Init(); return nBezAngle; }
 
     void    SetSnapHelplines( bool bOn ) { if( bSnapHelplines != bOn ) { OptionsChanged(); bSnapHelplines = bOn; } }
     void    SetSnapBorder( bool bOn ) { if( bSnapBorder != bOn ) { OptionsChanged(); bSnapBorder = bOn; } }
@@ -374,8 +374,8 @@ public:
     void    SetBigOrtho( bool bOn ) { if( bBigOrtho != bOn ) { OptionsChanged(); bBigOrtho = bOn; } }
     void    SetRotate( bool bOn ) { if( bRotate != bOn ) { OptionsChanged(); bRotate = bOn; } }
     void    SetSnapArea( sal_Int16 nIn ) { if( nSnapArea != nIn ) { OptionsChanged(); nSnapArea = nIn; } }
-    void    SetAngle( sal_Int16 nIn ) { if( nAngle != nIn ) { OptionsChanged(); nAngle = nIn; } }
-    void    SetEliminatePolyPointLimitAngle( sal_Int16 nIn ) { if( nBezAngle != nIn ) { OptionsChanged(); nBezAngle = nIn; } }
+    void    SetAngle( Degree10 nIn ) { if( nAngle != nIn ) { OptionsChanged(); nAngle = nIn; } }
+    void    SetEliminatePolyPointLimitAngle( Degree10 nIn ) { if( nBezAngle != nIn ) { OptionsChanged(); nBezAngle = nIn; } }
 };
 
 class SD_DLLPUBLIC SdOptionsSnapItem : public SfxPoolItem
