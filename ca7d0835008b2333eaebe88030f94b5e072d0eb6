@@ -22,6 +22,30 @@
       "revId": "ca7d0835008b2333eaebe88030f94b5e072d0eb6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fefce521_1b7c23f1",
+        "filename": "xmloff/source/style/xmlstyle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-23T08:42:36Z",
+      "side": 1,
+      "message": "No (and that wouldn\u0027t even compile, as the OUString(OUStringLiteral\u0026\u0026) ctor is deliberately deleted).  The issue is that constructing an OUString from an OUStringLiteral stores the address of the OUStringLiteral, which means the OUStringLiteral instance must outlive the OUString\u0027s refcounted rtl_uString instance.  The only generally safe use of OUStringLiteral is with static storage duration, and there\u0027s an upcoming loplugin that will check that (which found this place, which I submitted ahead of the plugin).",
+      "parentUuid": "01121cc5_debf77ef",
+      "range": {
+        "startLine": 602,
+        "startChar": 12,
+        "endLine": 602,
+        "endChar": 121
+      },
+      "revId": "ca7d0835008b2333eaebe88030f94b5e072d0eb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
