@@ -70,6 +70,30 @@
       "revId": "ca7d0835008b2333eaebe88030f94b5e072d0eb6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46c47abd_18853e1e",
+        "filename": "xmloff/source/style/xmlstyle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-23T10:12:01Z",
+      "side": 1,
+      "message": "consteval vs. constexpr doesn\u0027t make any difference here.  The created objects would still be temporaries with automatic storage duration (and a program could take their addresses and compare them, so an implementation must not \"cheat\" by re-using the same static storage in, say, a function-call expression\n\n  f(b ? OUStringLiteral(u\"foo\") : OUStringLiteral(u\"foo\"))\n\n).  What is still missing from C++20 is a way to create a kind of user-defined literal with semantics similar to string literals: static storage duration, and potentially even no unique-addresss guarantee.",
+      "parentUuid": "17c183d3_3318cc08",
+      "range": {
+        "startLine": 602,
+        "startChar": 12,
+        "endLine": 602,
+        "endChar": 121
+      },
+      "revId": "ca7d0835008b2333eaebe88030f94b5e072d0eb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
