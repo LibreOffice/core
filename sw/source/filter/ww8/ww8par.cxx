@@ -930,8 +930,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                         Point aPivot(rTextRect.TopLeft());
                         aPivot.AdjustX(nMinWH );
                         aPivot.AdjustY(nMinWH );
-                        double a = nTextRotationAngle * F_PI18000;
-                        pObj->NbcRotate(aPivot, nTextRotationAngle, sin(a), cos(a));
+                        pObj->NbcRotate(aPivot, nTextRotationAngle);
                     }
                 }
 

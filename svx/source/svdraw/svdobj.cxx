@@ -1401,6 +1401,17 @@ void SdrObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
     SetRectsDirty();
 }
 
+void SdrObject::NbcRotate(const Point& rRef, tools::Long nAngle)
+{
+    if (nAngle == 0)
+        NbcRotate( rRef, nAngle, 0.0, 1.0 );
+    else
+    {
+        double a = nAngle * F_PI18000;
+        NbcRotate( rRef, nAngle, sin( a ), cos( a ) );
+    }
+}
+
 void SdrObject::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
 {
     SetGlueReallyAbsolute(true);

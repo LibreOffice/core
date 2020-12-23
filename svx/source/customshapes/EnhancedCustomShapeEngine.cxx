@@ -327,11 +327,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
             xRenderedShape->Shear(rSdrObjCustomShape.GetSnapRect().Center(), nShearAngle, nTan, false);
         }
         if(nRotateAngle )
-        {
-            double a = nRotateAngle * F_PI18000;
-
-            xRenderedShape->NbcRotate(rSdrObjCustomShape.GetSnapRect().Center(), nRotateAngle, sin( a ), cos( a ));
-        }
+            xRenderedShape->NbcRotate(rSdrObjCustomShape.GetSnapRect().Center(), nRotateAngle);
         if ( bFlipV )
         {
             Point aLeft( aRect.Left(), ( aRect.Top() + aRect.Bottom() ) >> 1 );
@@ -428,10 +424,7 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
             }
             sal_Int32 nRotateAngle = aCustomShape2d.GetRotateAngle();
             if( nRotateAngle )
-            {
-                double a = nRotateAngle * F_PI18000;
-                pObj->NbcRotate( aRect.Center(), nRotateAngle, sin( a ), cos( a ) );
-            }
+                pObj->NbcRotate( aRect.Center(), nRotateAngle );
             if ( bFlipH )
             {
                 Point aTop( ( aRect.Left() + aRect.Right() ) >> 1, aRect.Top() );
