@@ -20,14 +20,18 @@
 #define INCLUDED_EXTENSIONS_SOURCE_OLE_UNOCONVERSIONUTILITIES_HXX
 
 #include <memory>
+#include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory2.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/FailReason.hpp>
+#include <com/sun/star/bridge/ModelDependent.hpp>
+#include <com/sun/star/bridge/XBridgeSupplier2.hpp>
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
 #include <com/sun/star/bridge/oleautomation/Currency.hpp>
 #include <com/sun/star/bridge/oleautomation/SCode.hpp>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <typelib/typedescription.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
@@ -76,6 +80,41 @@ extern std::unordered_map<sal_uIntPtr, WeakReference<XInterface> > ComPtrToWrapp
 // UNO interface is mapped again to COM then the IDispach of the first mapped instance
 // must be returned.
 extern std::unordered_map<sal_uIntPtr, WeakReference<XInterface> > UnoObjToWrapperMap;
+
+// This function tries to the change the type of a value (contained in the Any)
+// to the smallest possible that can hold the value. This is actually done only
+// for types of VT_I4 (see o2u_variantToAny). The reason is the following:
+// JavaScript passes integer values always as VT_I4. If there is a parameter or
+// property of type any then the bridge converts the any's content according
+// to "o2u_variantToAny". Because the VARTYPE is VT_I4 the value would be converted
+// to TypeClass_LONG. Say the method XPropertySet::setPropertyValue( string name, any value)
+// would be called on an object and the property actually is of TypeClass_SHORT.
+// After conversion of the VARIANT parameter the Any would contain type
+// TypeClass_LONG. Because the corereflection does not cast from long to short
+// the "setPropertValue" would fail as the value has not the right type.
+
+// The corereflection does convert small integer types to bigger types.
+// Therefore we can reduce the type if possible and avoid the above mentioned
+// problem.
+
+// The function is not used when elements are to be converted for Sequences.
+
+inline void reduceRange( Any& any)
+{
+    OSL_ASSERT( any.getValueTypeClass() == TypeClass_LONG);
+
+    sal_Int32 value= *o3tl::doAccess<sal_Int32>(any);
+    if( value <= 0x7f &&  value >= -0x80)
+    {// -128 bis 127
+        sal_Int8 charVal= static_cast<sal_Int8>( value);
+        any.setValue( &charVal, cppu::UnoType<sal_Int8>::get());
+    }
+    else if( value <= 0x7fff && value >= -0x8000)
+    {// -32768 bis 32767
+        sal_Int16 shortVal= static_cast<sal_Int16>( value);
+        any.setValue( &shortVal, cppu::UnoType<sal_Int16>::get());
+    }
+}
 
 // createUnoObjectWrapper gets a wrapper instance by calling createUnoWrapperInstance
     // and initializes it via XInitialization. The wrapper object is required to implement
@@ -224,7 +263,7 @@ bool convertSelfToCom( T& unoInterface, VARIANT * pVar)
     Reference< XInterface > xInt( unoInterface, UNO_QUERY);
     if( xInt.is())
     {
-        Reference< XBridgeSupplier2 > xSupplier( xInt, UNO_QUERY);
+        Reference< css::bridge::XBridgeSupplier2 > xSupplier( xInt, UNO_QUERY);
         if( xSupplier.is())
         {
             sal_Int8 arId[16];
@@ -232,7 +271,9 @@ bool convertSelfToCom( T& unoInterface, VARIANT * pVar)
             Sequence<sal_Int8> seqId( arId, 16);
             Any anySource;
             anySource <<= xInt;
-            Any anyDisp = xSupplier->createBridge(anySource, seqId, UNO, OLE);
+            Any anyDisp = xSupplier->createBridge(
+                anySource, seqId, css::bridge::ModelDependent::UNO,
+                css::bridge::ModelDependent::OLE);
 
             // due to global-process-id check this must be in-process pointer
             if (auto v = o3tl::tryAccess<sal_uIntPtr>(anyDisp))
@@ -1407,7 +1448,7 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const Any & rObj, VARIANT
     if (xInv.is())
     {
         Reference<XInterface> xNewWrapper = createUnoWrapperInstance();
-        Reference<XInitialization> xInitWrapper(xNewWrapper, UNO_QUERY);
+        Reference<css::lang::XInitialization> xInitWrapper(xNewWrapper, UNO_QUERY);
         if (xInitWrapper.is())
         {
             VARTYPE vartype= getVarType( rObj);
@@ -2318,41 +2359,6 @@ Reference<XTypeConverter> UnoConversionUtilities<T>::getTypeConverter()
         }
     }
     return m_typeConverter;
-}
-
-// This function tries to the change the type of a value (contained in the Any)
-// to the smallest possible that can hold the value. This is actually done only
-// for types of VT_I4 (see o2u_variantToAny). The reason is the following:
-// JavaScript passes integer values always as VT_I4. If there is a parameter or
-// property of type any then the bridge converts the any's content according
-// to "o2u_variantToAny". Because the VARTYPE is VT_I4 the value would be converted
-// to TypeClass_LONG. Say the method XPropertySet::setPropertyValue( string name, any value)
-// would be called on an object and the property actually is of TypeClass_SHORT.
-// After conversion of the VARIANT parameter the Any would contain type
-// TypeClass_LONG. Because the corereflection does not cast from long to short
-// the "setPropertValue" would fail as the value has not the right type.
-
-// The corereflection does convert small integer types to bigger types.
-// Therefore we can reduce the type if possible and avoid the above mentioned
-// problem.
-
-// The function is not used when elements are to be converted for Sequences.
-
-inline void reduceRange( Any& any)
-{
-    OSL_ASSERT( any.getValueTypeClass() == TypeClass_LONG);
-
-    sal_Int32 value= *o3tl::doAccess<sal_Int32>(any);
-    if( value <= 0x7f &&  value >= -0x80)
-    {// -128 bis 127
-        sal_Int8 charVal= static_cast<sal_Int8>( value);
-        any.setValue( &charVal, cppu::UnoType<sal_Int8>::get());
-    }
-    else if( value <= 0x7fff && value >= -0x8000)
-    {// -32768 bis 32767
-        sal_Int16 shortVal= static_cast<sal_Int16>( value);
-        any.setValue( &shortVal, cppu::UnoType<sal_Int16>::get());
-    }
 }
 
 #endif
