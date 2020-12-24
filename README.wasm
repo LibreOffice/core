@@ -47,12 +47,13 @@ make -j<CORES> module-qtbase module-qtdeclarative
 
 Building with examples will break with some of them, but at that point Qt already works.
 
-Checking for target architecture... Project ERROR: target architecture detection binary not found.
+At some point Qt configure failed for me with:
+"Checking for target architecture... Project ERROR: target architecture detection binary not found."
 
 What seems to have fixed this was to run "emsdk activate 1.39.8" again.
 
 Current Qt fails to start the demo webserver: https://bugreports.qt.io/browse/QTCREATORBUG-24072
-Use: emrun --serve_after_close to run Qt WASM demos
+Use "emrun --serve_after_close" to run Qt WASM demos
 
 Enabling multi-thread support in Firefox is a bit of work with older versions:
 - https://bugzilla.mozilla.org/show_bug.cgi?id=1477743#c7
@@ -62,7 +63,7 @@ Enabling multi-thread support in Firefox is a bit of work with older versions:
 
 == Setup LO ==
 
-Currently autogen.sh is patched to use emconfigure. That basically sets various environment vars,
+autogen.sh is patched to use emconfigure. That basically sets various environment vars,
 especially EMMAKEN_JUST_CONFIGURE, which will create the correct output file names, checked by
 configure (a.out).
 
@@ -80,7 +81,6 @@ QT5DIR=/dir/of/git_qt5/qtbase
 --disable-firebird-sdbc
 --disable-gio
 --disable-gstreamer-1-0
---disable-gtk3
 --disable-ldap
 --disable-lpsolve
 --disable-mariadb-sdbc
@@ -96,15 +96,14 @@ QT5DIR=/dir/of/git_qt5/qtbase
 --disable-scripting
 --disable-sdremote-bluetooth
 --enable-ccache
---enable-qt5
---without-fonts
 --without-helppack-integration
 --without-java
 --without-junit
 --without-system-dicts
+--with-fonts
 --with-theme=no
 
-Will also be encoded in configure.ac at some point, some already is.
+Many will also be encoded in configure.ac at some point, some already is.
 
 
 = Ideas for an UNO bridge implementation =
@@ -185,9 +184,6 @@ But with the know problems with exceptions and threads, this might change:
 We're also using emconfigure at the moment. Originally I patched emscripten, because it
 woulden't create the correct a.out file for C++ configure tests. Later I found that
 the emconfigure sets EMMAKEN_JUST_CONFIGURE to work around the problem.
-
-But it sets many more environment variables with "em<tool>" variants. This can all be moved
-into LO configure later.
 
 ICU bug: https://github.com/emscripten-core/emscripten/issues/10129
 Alternative, probably: https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Intl
