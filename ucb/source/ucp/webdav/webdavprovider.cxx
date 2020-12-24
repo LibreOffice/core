@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/macros.hxx>
 #include "webdavprovider.hxx"
@@ -106,7 +107,7 @@ static css::uno::Reference< css::uno::XInterface >
 ContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
 {
     css::lang::XServiceInfo* pX =
-                static_cast<css::lang::XServiceInfo*>(new ContentProvider( ucbhelper::getComponentContext(rSMgr) ));
+                static_cast<css::lang::XServiceInfo*>(new ContentProvider( comphelper::getComponentContext(rSMgr) ));
     return css::uno::Reference< css::uno::XInterface >::query( pX );
 }
 
