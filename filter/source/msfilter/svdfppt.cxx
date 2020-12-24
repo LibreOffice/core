@@ -1627,7 +1627,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                                 if ( aTxSIStyle.bValid && !aTxSIStyle.aList.empty() )
                                     aTxSI = aTxSIStyle.aList[ 0 ];
 
-                                rE2.xStyleSheet.reset(new PPTStyleSheet(aSlideHd, rStCtrl, *this, aTxPFStyle, aTxSI));
+                                rE2.xStyleSheet = std::make_unique<PPTStyleSheet>(aSlideHd, rStCtrl, *this, aTxPFStyle, aTxSI);
                                 m_pDefaultSheet = rE2.xStyleSheet.get();
                             }
                             if ( SeekToRec( rStCtrl, PPT_PST_ColorSchemeAtom, aSlideHd.GetRecEndFilePos() ) )
@@ -4091,18 +4091,18 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
     sal_uInt32 nOldFilePos = rIn.Tell();
 
     // default stylesheets
-    mpCharSheet[ TSS_Type::PageTitle ] = new PPTCharSheet( TSS_Type::PageTitle );
-    mpCharSheet[ TSS_Type::Body ] = new PPTCharSheet( TSS_Type::Body );
-    mpCharSheet[ TSS_Type::Notes ] = new PPTCharSheet(  TSS_Type::Notes );
-    mpCharSheet[ TSS_Type::Unused ] = new PPTCharSheet( TSS_Type::Unused );   // this entry is not used by ppt
-    mpCharSheet[ TSS_Type::TextInShape ] = new PPTCharSheet( TSS_Type::TextInShape );
-    mpParaSheet[ TSS_Type::PageTitle ] = new PPTParaSheet( TSS_Type::PageTitle );
-    mpParaSheet[ TSS_Type::Body ] = new PPTParaSheet( TSS_Type::Body );
-    mpParaSheet[ TSS_Type::Notes ] = new PPTParaSheet( TSS_Type::Notes );
-    mpParaSheet[ TSS_Type::Unused ] = new PPTParaSheet( TSS_Type::Unused );
-    mpParaSheet[ TSS_Type::TextInShape ] = new PPTParaSheet( TSS_Type::TextInShape );
-    mpCharSheet[ TSS_Type::QuarterBody ] = mpCharSheet[ TSS_Type::HalfBody ] = mpCharSheet[ TSS_Type::Title ] = mpCharSheet[ TSS_Type::Subtitle ] = nullptr;
-    mpParaSheet[ TSS_Type::QuarterBody ] = mpParaSheet[ TSS_Type::HalfBody ] = mpParaSheet[ TSS_Type::Title ] = mpParaSheet[ TSS_Type::Subtitle ] = nullptr;
+    mpCharSheet[ TSS_Type::PageTitle ] = std::make_unique<PPTCharSheet>( TSS_Type::PageTitle );
+    mpCharSheet[ TSS_Type::Body ] = std::make_unique<PPTCharSheet>( TSS_Type::Body );
+    mpCharSheet[ TSS_Type::Notes ] = std::make_unique<PPTCharSheet>(  TSS_Type::Notes );
+    mpCharSheet[ TSS_Type::Unused ] = std::make_unique<PPTCharSheet>( TSS_Type::Unused );   // this entry is not used by ppt
+    mpCharSheet[ TSS_Type::TextInShape ] = std::make_unique<PPTCharSheet>( TSS_Type::TextInShape );
+    mpParaSheet[ TSS_Type::PageTitle ] = std::make_unique<PPTParaSheet>( TSS_Type::PageTitle );
+    mpParaSheet[ TSS_Type::Body ] = std::make_unique<PPTParaSheet>( TSS_Type::Body );
+    mpParaSheet[ TSS_Type::Notes ] = std::make_unique<PPTParaSheet>( TSS_Type::Notes );
+    mpParaSheet[ TSS_Type::Unused ] = std::make_unique<PPTParaSheet>( TSS_Type::Unused );
+    mpParaSheet[ TSS_Type::TextInShape ] = std::make_unique<PPTParaSheet>( TSS_Type::TextInShape );
+    // mpCharSheet[ TSS_Type::QuarterBody ], mpCharSheet[ TSS_Type::HalfBody ], mpCharSheet[ TSS_Type::Title ], mpCharSheet[ TSS_Type::Subtitle ] intentionally null
+    // mpParaSheet[ TSS_Type::QuarterBody ], mpParaSheet[ TSS_Type::HalfBody ], mpParaSheet[ TSS_Type::Title ], mpParaSheet[ TSS_Type::Subtitle ] intentionally null
 
     /* SJ: try to locate the txMasterStyleAtom in the Environment
 
@@ -4189,34 +4189,34 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
         {
             if ( nInstance > TSS_Type::TextInShape )
             {
-                delete mpCharSheet[ nInstance ];    // be sure to delete the old one if this instance comes twice
-                delete mpParaSheet[ nInstance ];
+                mpCharSheet[ nInstance ].reset();    // be sure to delete the old one if this instance comes twice
+                mpParaSheet[ nInstance ].reset();
 
                 switch ( nInstance )
                 {
                     case TSS_Type::Subtitle :
                     {
-                        mpCharSheet[ TSS_Type::Subtitle ] = new PPTCharSheet( *( mpCharSheet[ TSS_Type::Body ] ) );
-                        mpParaSheet[ TSS_Type::Subtitle ] = new PPTParaSheet( *( mpParaSheet[ TSS_Type::Body ] ) );
+                        mpCharSheet[ TSS_Type::Subtitle ] = std::make_unique<PPTCharSheet>( *( mpCharSheet[ TSS_Type::Body ] ) );
+                        mpParaSheet[ TSS_Type::Subtitle ] = std::make_unique<PPTParaSheet>( *( mpParaSheet[ TSS_Type::Body ] ) );
                     }
                     break;
                     case TSS_Type::Title :
                     {
-                        mpCharSheet[ TSS_Type::Title ] = new PPTCharSheet( *( mpCharSheet[ TSS_Type::PageTitle ] ) );
-                        mpParaSheet[ TSS_Type::Title ] = new PPTParaSheet( *( mpParaSheet[ TSS_Type::PageTitle ] ) );
+                        mpCharSheet[ TSS_Type::Title ] = std::make_unique<PPTCharSheet>( *( mpCharSheet[ TSS_Type::PageTitle ] ) );
+                        mpParaSheet[ TSS_Type::Title ] = std::make_unique<PPTParaSheet>( *( mpParaSheet[ TSS_Type::PageTitle ] ) );
                     }
                     break;
                     case TSS_Type::HalfBody :
                     {
-                        mpCharSheet[ TSS_Type::HalfBody ] = new PPTCharSheet( *( mpCharSheet[ TSS_Type::Body ] ) );
-                        mpParaSheet[ TSS_Type::HalfBody ] = new PPTParaSheet( *( mpParaSheet[ TSS_Type::Body ] ) );
+                        mpCharSheet[ TSS_Type::HalfBody ] = std::make_unique<PPTCharSheet>( *( mpCharSheet[ TSS_Type::Body ] ) );
+                        mpParaSheet[ TSS_Type::HalfBody ] = std::make_unique<PPTParaSheet>( *( mpParaSheet[ TSS_Type::Body ] ) );
                     }
                     break;
 
                     case TSS_Type::QuarterBody :
                     {
-                        mpCharSheet[ TSS_Type::QuarterBody ] = new PPTCharSheet( *( mpCharSheet[ TSS_Type::Body ] ) );
-                        mpParaSheet[ TSS_Type::QuarterBody ] = new PPTParaSheet( *( mpParaSheet[ TSS_Type::Body ] ) );
+                        mpCharSheet[ TSS_Type::QuarterBody ] = std::make_unique<PPTCharSheet>( *( mpCharSheet[ TSS_Type::Body ] ) );
+                        mpParaSheet[ TSS_Type::QuarterBody ] = std::make_unique<PPTParaSheet>( *( mpParaSheet[ TSS_Type::Body ] ) );
                     }
                     break;
                     default: break;
@@ -4288,23 +4288,23 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
     }
     if ( !mpCharSheet[ TSS_Type::Subtitle ] )
     {
-        mpCharSheet[ TSS_Type::Subtitle ] = new PPTCharSheet( *( mpCharSheet[ TSS_Type::Body ] ) );
-        mpParaSheet[ TSS_Type::Subtitle ] = new PPTParaSheet( *( mpParaSheet[ TSS_Type::Body ] ) );
+        mpCharSheet[ TSS_Type::Subtitle ] = std::make_unique<PPTCharSheet>( *( mpCharSheet[ TSS_Type::Body ] ) );
+        mpParaSheet[ TSS_Type::Subtitle ] = std::make_unique<PPTParaSheet>( *( mpParaSheet[ TSS_Type::Body ] ) );
     }
     if ( !mpCharSheet[ TSS_Type::Title ] )
     {
-        mpCharSheet[ TSS_Type::Title ] = new PPTCharSheet( *( mpCharSheet[ TSS_Type::PageTitle ] ) );
-        mpParaSheet[ TSS_Type::Title ] = new PPTParaSheet( *( mpParaSheet[ TSS_Type::PageTitle ] ) );
+        mpCharSheet[ TSS_Type::Title ] = std::make_unique<PPTCharSheet>( *( mpCharSheet[ TSS_Type::PageTitle ] ) );
+        mpParaSheet[ TSS_Type::Title ] = std::make_unique<PPTParaSheet>( *( mpParaSheet[ TSS_Type::PageTitle ] ) );
     }
     if ( !mpCharSheet[ TSS_Type::HalfBody ] )
     {
-        mpCharSheet[ TSS_Type::HalfBody ] = new PPTCharSheet( *( mpCharSheet[ TSS_Type::Body ] ) );
-        mpParaSheet[ TSS_Type::HalfBody ] = new PPTParaSheet( *( mpParaSheet[ TSS_Type::Body ] ) );
+        mpCharSheet[ TSS_Type::HalfBody ] = std::make_unique<PPTCharSheet>( *( mpCharSheet[ TSS_Type::Body ] ) );
+        mpParaSheet[ TSS_Type::HalfBody ] = std::make_unique<PPTParaSheet>( *( mpParaSheet[ TSS_Type::Body ] ) );
     }
     if ( !mpCharSheet[ TSS_Type::QuarterBody ] )
     {
-        mpCharSheet[ TSS_Type::QuarterBody ] = new PPTCharSheet( *( mpCharSheet[ TSS_Type::Body ] ) );
-        mpParaSheet[ TSS_Type::QuarterBody ] = new PPTParaSheet( *( mpParaSheet[ TSS_Type::Body ] ) );
+        mpCharSheet[ TSS_Type::QuarterBody ] = std::make_unique<PPTCharSheet>( *( mpCharSheet[ TSS_Type::Body ] ) );
+        mpParaSheet[ TSS_Type::QuarterBody ] = std::make_unique<PPTParaSheet>( *( mpParaSheet[ TSS_Type::Body ] ) );
     }
     if ( !bFoundTxMasterStyleAtom04 )
     {   // try to locate the txMasterStyleAtom in the Environment
@@ -4412,7 +4412,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                     aRule.SetLevel( nDepth, aNumberFormat );
             }
         }
-        mpNumBulletItem[ i ] = new SvxNumBulletItem( aRule, EE_PARA_NUMBULLET );
+        mpNumBulletItem[ i ] = std::make_unique<SvxNumBulletItem>( aRule, EE_PARA_NUMBULLET );
     }
 }
 
@@ -4420,9 +4420,9 @@ PPTStyleSheet::~PPTStyleSheet()
 {
     for ( auto i : o3tl::enumrange<TSS_Type>() )
     {
-        delete mpCharSheet[ i ];
-        delete mpParaSheet[ i ];
-        delete mpNumBulletItem[ i ];
+        mpCharSheet[i].reset();
+        mpParaSheet[i].reset();
+        mpNumBulletItem[i].reset();
     }
 }
 
@@ -6161,7 +6161,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  std::optional< sal_Int16 >& rS
 
     if ( ( nDestinationInstance != TSS_Type::Unknown ) || ( mxParaSet->mnDepth <= 1 ) )
     {
-        SvxNumBulletItem* pNumBulletItem = mrStyleSheet.mpNumBulletItem[ nInstance ];
+        SvxNumBulletItem* pNumBulletItem = mrStyleSheet.mpNumBulletItem[ nInstance ].get();
         if ( pNumBulletItem )
         {
             SvxNumberFormat aNumberFormat( SVX_NUM_NUMBER_NONE );

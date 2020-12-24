@@ -849,9 +849,9 @@ class SvxNumBulletItem;
 struct PPTStyleSheet : public PPTNumberFormatCreator
 {
     PPTTextSpecInfo     maTxSI;
-    o3tl::enumarray<TSS_Type, PPTCharSheet*>     mpCharSheet;
-    o3tl::enumarray<TSS_Type, PPTParaSheet*>     mpParaSheet;
-    o3tl::enumarray<TSS_Type, SvxNumBulletItem*> mpNumBulletItem;
+    o3tl::enumarray<TSS_Type, std::unique_ptr<PPTCharSheet>>     mpCharSheet;
+    o3tl::enumarray<TSS_Type, std::unique_ptr<PPTParaSheet>>     mpParaSheet;
+    o3tl::enumarray<TSS_Type, std::unique_ptr<SvxNumBulletItem>> mpNumBulletItem;
 
                         PPTStyleSheet(
                             const DffRecordHeader& rSlideHd,
