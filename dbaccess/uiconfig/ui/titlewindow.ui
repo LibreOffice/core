@@ -35,22 +35,16 @@
                     <property name="margin-start">1</property>
                     <property name="margin-end">1</property>
                     <child>
-                      <object class="GtkAlignment">
+                      <object class="GtkLabel" id="title">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="top_padding">6</property>
-                        <property name="bottom_padding">6</property>
-                        <property name="left_padding">12</property>
-                        <child>
-                          <object class="GtkLabel" id="title">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
-                          </object>
-                        </child>
+                        <property name="xalign">0</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-top">6</property>
+                        <property name="margin-bottom">6</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
