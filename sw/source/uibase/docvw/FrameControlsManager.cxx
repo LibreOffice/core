@@ -284,7 +284,7 @@ void SwFrameControlsManager::SetOutlineContentVisibilityButton(const SwTextNode*
         {
             SwNodeIndex aIdx(*pTextNd, +1);
             // there shouldn't be a layout frame
-            // if there is then force visiblity false
+            // if there is then force visibility false
             if (!m_pEditWin->GetView().GetWrtShell().GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
             {
                 if (!(aIdx.GetNode().IsEndNode() ||

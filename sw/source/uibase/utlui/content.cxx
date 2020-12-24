@@ -2867,7 +2867,7 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
                 if (pShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
                 {
                     // make all outline nodes content visible before move
-                    // restore outline nodes content visibile state after move
+                    // restore outline nodes content visible state after move
                     SwOutlineNodes rOutlineNds = pShell->GetDoc()->GetNodes().GetOutLineNds();
                     for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
                     {
@@ -3403,7 +3403,7 @@ void SwContentTree::MoveOutline(SwOutlineNodes::size_type nTargetPos)
     if (pShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
     {
         // make all outline nodes content visible before move
-        // restore outline nodes content visibile state after move
+        // restore outline nodes content visible state after move
         SwOutlineNodes rOutlineNds = pShell->GetDoc()->GetNodes().GetOutLineNds();
         for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
         {

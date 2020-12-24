@@ -439,7 +439,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         {
             // outline mode remained active
             // sub level treatment might have changed
-            // ToggleOutlineContentVisiblity only knows sub level treatment after ApplyUserPref
+            // ToggleOutlineContentVisibility only knows sub level treatment after ApplyUserPref
             for (SwNode* pNd : aFoldedOutlineNdsArray)
                 GetActiveWrtShell()->ToggleOutlineContentVisibility(pNd, true);
         }
