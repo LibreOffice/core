@@ -170,15 +170,14 @@ void TypeSerializer::readGraphic(Graphic& rGraphic)
     const sal_uLong nInitialStreamPosition = mrStream.Tell();
     sal_uInt32 nType;
 
-    // read Id
-    mrStream.ReadUInt32(nType);
-
     // if there is no more data, avoid further expensive
     // reading which will create VDevs and other stuff, just to
-    // read nothing. CAUTION: Eof is only true AFTER reading another
-    // byte, a speciality of SvMemoryStream (!)
-    if (!mrStream.good())
+    // read nothing.
+    if (mrStream.remainingSize() < 4)
         return;
+
+    // read Id
+    mrStream.ReadUInt32(nType);
 
     if (NATIVE_FORMAT_50 == nType)
     {
