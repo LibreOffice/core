@@ -7884,16 +7884,16 @@ AC_SUBST([JITC_PROCESSOR_TYPE])
 AC_ARG_WITH(ucrt-dir,
     AS_HELP_STRING([--with-ucrt-dir],
         [path to the directory with the arch-specific MSU packages of the Windows Universal CRT redistributables
-        (MS KB 2999226) for packaging into the installsets (without those the target system needs to install
+        (MS KB 3118401) for packaging into the installsets (without those the target system needs to install
         the UCRT or Visual C++ Runtimes manually). The directory must contain the following 6 files:
-            Windows6.1-KB2999226-x64.msu
-            Windows6.1-KB2999226-x86.msu
-            Windows8.1-KB2999226-x64.msu
-            Windows8.1-KB2999226-x86.msu
-            Windows8-RT-KB2999226-x64.msu
-            Windows8-RT-KB2999226-x86.msu
+            Windows6.1-KB3118401-x64.msu
+            Windows6.1-KB3118401-x86.msu
+            Windows8.1-KB3118401-x64.msu
+            Windows8.1-KB3118401-x86.msu
+            Windows8-RT-KB3118401-x64.msu
+            Windows8-RT-KB3118401-x86.msu
         A zip archive including those files is available from Microsoft site:
-        https://www.microsoft.com/en-us/download/details.aspx?id=48234]),
+        https://www.microsoft.com/en-us/download/details.aspx?id=50410]),
 ,)
 
 UCRT_REDISTDIR="$with_ucrt_dir"
@@ -7921,12 +7921,12 @@ if test $_os = "WINNT"; then
         dnl explicitly disabled
         UCRT_REDISTDIR=""
     else
-        if ! test -f "$UCRT_REDISTDIR/Windows6.1-KB2999226-x64.msu" -a \
-                  -f "$UCRT_REDISTDIR/Windows6.1-KB2999226-x86.msu" -a \
-                  -f "$UCRT_REDISTDIR/Windows8.1-KB2999226-x64.msu" -a \
-                  -f "$UCRT_REDISTDIR/Windows8.1-KB2999226-x86.msu" -a \
-                  -f "$UCRT_REDISTDIR/Windows8-RT-KB2999226-x64.msu" -a \
-                  -f "$UCRT_REDISTDIR/Windows8-RT-KB2999226-x86.msu"; then
+        if ! test -f "$UCRT_REDISTDIR/Windows6.1-KB3118401-x64.msu" -a \
+                  -f "$UCRT_REDISTDIR/Windows6.1-KB3118401-x86.msu" -a \
+                  -f "$UCRT_REDISTDIR/Windows8.1-KB3118401-x64.msu" -a \
+                  -f "$UCRT_REDISTDIR/Windows8.1-KB3118401-x86.msu" -a \
+                  -f "$UCRT_REDISTDIR/Windows8-RT-KB3118401-x64.msu" -a \
+                  -f "$UCRT_REDISTDIR/Windows8-RT-KB3118401-x86.msu"; then
             UCRT_REDISTDIR=""
             if test -n "$PKGFORMAT"; then
                for i in $PKGFORMAT; do

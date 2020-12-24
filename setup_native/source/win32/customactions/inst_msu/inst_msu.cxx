@@ -452,11 +452,11 @@ extern "C" __declspec(dllexport) UINT __stdcall UnpackMSUForInstall(MSIHANDLE hI
         CheckWin32Error("MsiGetPropertyW",
                         MsiGetPropertyW(hInstall, L"InstMSUBinary", sInstMSUBinary, &nCCh));
         WriteLog(hInstall, "Got InstMSUBinary value:",
-                 sInstMSUBinary); // KB2999226|Windows61-KB2999226-x64msu
+                 sInstMSUBinary); // KB3118401|Windows61-KB3118401-x64msu
         const wchar_t* sBinaryName = wcschr(sInstMSUBinary, L'|');
         if (!sBinaryName)
             throw std::exception("No KB number in InstMSUBinary!");
-        // "KB2999226"
+        // "KB3118401"
         const std::wstring sKBNo(sInstMSUBinary, sBinaryName - sInstMSUBinary);
         ++sBinaryName;
 
@@ -534,14 +534,14 @@ extern "C" __declspec(dllexport) UINT __stdcall UnpackMSUForInstall(MSIHANDLE hI
 // "CustomActionData" property, and runs wusa.exe to install it. Waits for it and checks exit code.
 extern "C" __declspec(dllexport) UINT __stdcall InstallMSU(MSIHANDLE hInstall)
 {
-    std::wstring sKBNo; // "KB2999226"
+    std::wstring sKBNo; // "KB3118401"
     try
     {
         sLogPrefix = "InstallMSU:";
         WriteLog(hInstall, "started");
 
         WriteLog(hInstall, "Checking value of CustomActionData");
-        wchar_t sCustomActionData[MAX_PATH + 10]; // "KB2999226|C:\Temp\binary.tmp"
+        wchar_t sCustomActionData[MAX_PATH + 10]; // "KB3118401|C:\Temp\binary.tmp"
         DWORD nCCh = sizeof(sCustomActionData) / sizeof(*sCustomActionData);
         CheckWin32Error("MsiGetPropertyW",
                         MsiGetPropertyW(hInstall, L"CustomActionData", sCustomActionData, &nCCh));
