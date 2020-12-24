@@ -2444,7 +2444,7 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
     }
 
     Color aBackCol = mpPattern->GetItem( ATTR_BACKGROUND, mpCondSet ).GetColor();
-    if ( bUseStyleColor && ( aBackCol.GetTransparency() > 0 || bCellContrast ) )
+    if ( bUseStyleColor && ( aBackCol.IsTransparent() || bCellContrast ) )
         aBackCol = nConfBackColor;
     mpEngine->SetBackgroundColor( aBackCol );
 }
@@ -4604,7 +4604,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                                 Color aBackCol =
                                     pPattern->GetItem( ATTR_BACKGROUND, pCondSet ).GetColor();
-                                if ( mbUseStyleColor && ( aBackCol.GetTransparency() > 0 || bCellContrast ) )
+                                if ( mbUseStyleColor && ( aBackCol.IsTransparent() || bCellContrast ) )
                                     aBackCol = nConfBackColor;
                                 pEngine->SetBackgroundColor( aBackCol );
                             }

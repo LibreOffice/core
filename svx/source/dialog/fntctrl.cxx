@@ -996,7 +996,7 @@ void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBack
     {
          const SvxBrushItem& rBrush = static_cast<const SvxBrushItem&>( rSet.Get( nWhich ) );
          const Color& rColor = rBrush.GetColor();
-         bTransparent = rColor.GetTransparency() > 0;
+         bTransparent = rColor.IsTransparent();
          rFont.SetFillColor( rColor );
          rCJKFont.SetFillColor( rColor );
          rCTLFont.SetFillColor( rColor );

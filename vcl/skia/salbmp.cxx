@@ -674,7 +674,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
     {
         SkiaZone zone;
         sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(
-            mSize, mEraseColor.GetTransparency() != 0 ? kPremul_SkAlphaType : kOpaque_SkAlphaType);
+            mSize, mEraseColor.IsTransparent() ? kPremul_SkAlphaType : kOpaque_SkAlphaType);
         assert(surface);
         surface->getCanvas()->clear(toSkColor(mEraseColor));
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
@@ -921,7 +921,7 @@ bool SkiaSalBitmap::IsFullyOpaqueAsAlpha() const
 SkAlphaType SkiaSalBitmap::alphaType() const
 {
     if (mEraseColorSet)
-        return mEraseColor.GetTransparency() != 0 ? kPremul_SkAlphaType : kOpaque_SkAlphaType;
+        return mEraseColor.IsTransparent() ? kPremul_SkAlphaType : kOpaque_SkAlphaType;
 #if SKIA_USE_BITMAP32
     // The bitmap's alpha matters only if SKIA_USE_BITMAP32 is set, otherwise
     // the alpha is in a separate bitmap.
