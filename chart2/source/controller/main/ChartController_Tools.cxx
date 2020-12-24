@@ -57,6 +57,7 @@
 #include <vcl/transfer.hxx>
 #include <sot/storage.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/TypeSerializer.hxx>
 #include <svx/unomodel.hxx>
 #include <svx/svdmodel.hxx>
 #include <unotools/streamwrap.hxx>
@@ -290,7 +291,10 @@ void ChartController::executeDispatch_Paste()
             // graphic exchange format (graphic manager bitmap format?)
             tools::SvRef<SotTempStream> xStm;
             if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB, xStm ))
-                ReadGraphic( *xStm, aGraphic );
+            {
+                TypeSerializer aSerializer(*xStm);
+                aSerializer.readGraphic(aGraphic);
+            }
         }
         else if( aDataHelper.HasFormat( SotClipboardFormatId::GDIMETAFILE ))
         {
