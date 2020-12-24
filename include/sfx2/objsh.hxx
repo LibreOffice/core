@@ -91,6 +91,7 @@ namespace sfx2
 namespace vcl { class Window; }
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::document { struct CmisVersion; }
+namespace com::sun::star::document { class XDocumentProperties; }
 namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::graphic { class XGraphic; }
@@ -100,18 +101,8 @@ namespace com::sun::star::security { class XCertificate; }
 namespace com::sun::star::security { class XDocumentDigitalSignatures; }
 namespace com::sun::star::security { struct DocumentSignatureInformation; }
 namespace com::sun::star::task { class XInteractionHandler; }
-
-namespace com::sun::star {
-    namespace document {
-        class XDocumentProperties;
-    }
-    namespace lang {
-        class XComponent;
-    }
-    namespace text {
-        class XTextRange;
-    }
-}
+namespace com::sun::star::lang { class XComponent; }
+namespace com::sun::star::text { class XTextRange; }
 
 namespace sfx2 { class IXmlIdRegistry; }
 
