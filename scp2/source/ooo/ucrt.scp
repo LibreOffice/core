@@ -8,40 +8,40 @@
 
 #include "macros.inc"
 
-File gid_File_Windows6_1_KB2999226_x64_msu
-    Name = "Windows6.1-KB2999226-x64.msu";
+File gid_File_Windows6_1_KB3118401_x64_msu
+    Name = "Windows6.1-KB3118401-x64.msu";
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
 End
 
-File gid_File_Windows8_RT_KB2999226_x64_msu
-    Name = "Windows8-RT-KB2999226-x64.msu";
+File gid_File_Windows8_RT_KB3118401_x64_msu
+    Name = "Windows8-RT-KB3118401-x64.msu";
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
 End
 
-File gid_File_Windows8_1_KB2999226_x64_msu
-    Name = "Windows8.1-KB2999226-x64.msu";
+File gid_File_Windows8_1_KB3118401_x64_msu
+    Name = "Windows8.1-KB3118401-x64.msu";
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
 End
 
 #ifndef WINDOWS_X64
 
-File gid_File_Windows6_1_KB2999226_x86_msu
-    Name = "Windows6.1-KB2999226-x86.msu";
+File gid_File_Windows6_1_KB3118401_x86_msu
+    Name = "Windows6.1-KB3118401-x86.msu";
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
 End
 
-File gid_File_Windows8_RT_KB2999226_x86_msu
-    Name = "Windows8-RT-KB2999226-x86.msu";
+File gid_File_Windows8_RT_KB3118401_x86_msu
+    Name = "Windows8-RT-KB3118401-x86.msu";
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
 End
 
-File gid_File_Windows8_1_KB2999226_x86_msu
-    Name = "Windows8.1-KB2999226-x86.msu";
+File gid_File_Windows8_1_KB3118401_x86_msu
+    Name = "Windows8.1-KB3118401-x86.msu";
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
 End
@@ -92,7 +92,7 @@ WindowsCustomAction gid_Customaction_check_win7x64_ucrt
 	Name = "check_win7x64_ucrt";
 	Typ = "51";
 	Source = "InstMSUBinary";
-	Target = "KB2999226|Windows61-KB2999226-x64msu";
+	Target = "KB3118401|Windows61-KB3118401-x64msu";
 	Inbinarytable = 0;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 601 And VersionNT64", "FileCost");
 	Styles = "NO_FILE";
@@ -102,7 +102,7 @@ WindowsCustomAction gid_Customaction_check_win8x64_ucrt
 	Name = "check_win8x64_ucrt";
 	Typ = "51";
 	Source = "InstMSUBinary";
-	Target = "KB2999226|Windows8-RT-KB2999226-x64msu";
+	Target = "KB3118401|Windows8-RT-KB3118401-x64msu";
 	Inbinarytable = 0;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 602 And VersionNT64", "check_win7x64_ucrt");
 	Styles = "NO_FILE";
@@ -112,7 +112,7 @@ WindowsCustomAction gid_Customaction_check_win81x64_ucrt
 	Name = "check_win81x64_ucrt";
 	Typ = "51";
 	Source = "InstMSUBinary";
-	Target = "KB2999226|Windows81-KB2999226-x64msu";
+	Target = "KB3118401|Windows81-KB3118401-x64msu";
 	Inbinarytable = 0;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 603 And (Not WINMAJORVER Or WINMAJORVER = \"#6\") And VersionNT64", "check_win8x64_ucrt");
 	Styles = "NO_FILE";
@@ -128,7 +128,7 @@ WindowsCustomAction gid_Customaction_check_win7x32_ucrt
 	Name = "check_win7x32_ucrt";
 	Typ = "51";
 	Source = "InstMSUBinary";
-	Target = "KB2999226|Windows61-KB2999226-x86msu";
+	Target = "KB3118401|Windows61-KB3118401-x86msu";
 	Inbinarytable = 0;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 601 And Not VersionNT64", "check_win81x64_ucrt");
 	Styles = "NO_FILE";
@@ -138,7 +138,7 @@ WindowsCustomAction gid_Customaction_check_win8x32_ucrt
 	Name = "check_win8x32_ucrt";
 	Typ = "51";
 	Source = "InstMSUBinary";
-	Target = "KB2999226|Windows8-RT-KB2999226-x86msu";
+	Target = "KB3118401|Windows8-RT-KB3118401-x86msu";
 	Inbinarytable = 0;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 602 And Not VersionNT64", "check_win7x32_ucrt");
 	Styles = "NO_FILE";
@@ -148,7 +148,7 @@ WindowsCustomAction gid_Customaction_check_win81x32_ucrt
 	Name = "check_win81x32_ucrt";
 	Typ = "51";
 	Source = "InstMSUBinary";
-	Target = "KB2999226|Windows81-KB2999226-x86msu";
+	Target = "KB3118401|Windows81-KB3118401-x86msu";
 	Inbinarytable = 0;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 603 And (Not WINMAJORVER Or WINMAJORVER = \"#6\") And Not VersionNT64", "check_win8x32_ucrt");
 	Styles = "NO_FILE";
