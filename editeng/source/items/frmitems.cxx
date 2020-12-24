@@ -1032,7 +1032,7 @@ bool SvxShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     }
     aShadow.Location = eSet;
     aShadow.ShadowWidth =   bConvert ? convertTwipToMm100(nWidth) : nWidth;
-    aShadow.IsTransparent = aShadowColor.GetTransparency() > 0;
+    aShadow.IsTransparent = aShadowColor.IsTransparent();
     aShadow.Color = sal_Int32(aShadowColor);
 
     sal_Int8 nTransparence = rtl::math::round(float(aShadowColor.GetTransparency() * 100) / 255);

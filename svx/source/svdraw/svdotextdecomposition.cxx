@@ -358,7 +358,7 @@ namespace
                 aTextFillColor);
         }
 
-        if (aFontColor.GetTransparency() != 0)
+        if (aFontColor.IsTransparent())
         {
             // Handle semi-transparent text for both the decorated and simple case here.
             pNewPrimitive = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(

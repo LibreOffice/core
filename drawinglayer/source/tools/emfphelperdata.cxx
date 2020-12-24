@@ -1666,7 +1666,7 @@ namespace emfplushelper
                                                 color.getBColor());
                                 }
                                 drawinglayer::primitive2d::Primitive2DReference aPrimitiveText(pBaseText);
-                                if (color.GetTransparency() != 0)
+                                if (color.IsTransparent())
                                 {
                                     aPrimitiveText = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                                                 drawinglayer::primitive2d::Primitive2DContainer { aPrimitiveText },
@@ -2151,7 +2151,7 @@ namespace emfplushelper
                                                     color.getBColor());
                                     }
                                     drawinglayer::primitive2d::Primitive2DReference aPrimitiveText(pBaseText);
-                                    if (color.GetTransparency() != 0)
+                                    if (color.IsTransparent())
                                     {
                                         aPrimitiveText = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                                                     drawinglayer::primitive2d::Primitive2DContainer { aPrimitiveText },

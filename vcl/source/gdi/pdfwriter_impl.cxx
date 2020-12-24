@@ -7163,7 +7163,7 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, tools::Long nWidth, FontStr
     m_aPages.back().appendMatrix3(aMat, aLine);
     aLine.append( " cm\n" );
 
-    if ( aUnderlineColor.GetTransparency() != 0 )
+    if ( aUnderlineColor.IsTransparent() )
         aUnderlineColor = aStrikeoutColor;
 
     if ( (eUnderline == LINESTYLE_SMALLWAVE) ||
