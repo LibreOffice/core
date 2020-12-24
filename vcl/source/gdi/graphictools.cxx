@@ -19,8 +19,7 @@
 
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
-#include <tools/GenericTypeSerializer.hxx>
-
+#include <vcl/TypeSerializer.hxx>
 #include <vcl/graphictools.hxx>
 
 SvtGraphicFill::Transform::Transform()
@@ -237,7 +236,7 @@ SvStream& WriteSvtGraphicFill( SvStream& rOStm, const SvtGraphicFill& rClass )
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
 
     rClass.maPath.Write( rOStm );
-    tools::GenericTypeSerializer aSerializer(rOStm);
+    TypeSerializer aSerializer(rOStm);
     aSerializer.writeColor(rClass.maFillColor);
     rOStm.WriteDouble( rClass.mfTransparency );
     sal_uInt16 nTmp = sal::static_int_cast<sal_uInt16>( rClass.maFillRule );
@@ -257,7 +256,7 @@ SvStream& WriteSvtGraphicFill( SvStream& rOStm, const SvtGraphicFill& rClass )
     aSerializer.writeColor(rClass.maGradient1stColor);
     aSerializer.writeColor(rClass.maGradient2ndColor);
     rOStm.WriteInt32( rClass.maGradientStepCount );
-    WriteGraphic( rOStm, rClass.maFillGraphic );
+    aSerializer.writeGraphic(rClass.maFillGraphic);
 
     return rOStm;
 }
@@ -268,7 +267,7 @@ SvStream& ReadSvtGraphicFill( SvStream& rIStm, SvtGraphicFill& rClass )
 
     rClass.maPath.Read( rIStm );
 
-    tools::GenericTypeSerializer aSerializer(rIStm);
+    TypeSerializer aSerializer(rIStm);
     aSerializer.readColor(rClass.maFillColor);
     rIStm.ReadDouble( rClass.mfTransparency );
     sal_uInt16 nTmp;
@@ -288,7 +287,7 @@ SvStream& ReadSvtGraphicFill( SvStream& rIStm, SvtGraphicFill& rClass )
     aSerializer.readColor(rClass.maGradient1stColor);
     aSerializer.readColor(rClass.maGradient2ndColor);
     rIStm.ReadInt32( rClass.maGradientStepCount );
-    ReadGraphic( rIStm, rClass.maFillGraphic );
+    aSerializer.readGraphic(rClass.maFillGraphic);
 
     return rIStm;
 }

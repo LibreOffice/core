@@ -65,6 +65,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <memory>
 #include <utility>
+#include <vcl/TypeSerializer.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -735,7 +736,10 @@ bool TransferableHelper::SetGraphic( const Graphic& rGraphic )
 
         aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
         aMemStm.SetCompressMode( SvStreamCompressFlags::NATIVE );
-        WriteGraphic( aMemStm, rGraphic );
+
+        TypeSerializer aSerializer(aMemStm);
+        aSerializer.writeGraphic(rGraphic);
+
         maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
     }
 
@@ -1797,7 +1801,8 @@ bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rF
 
         if( GetSotStorageStream( rFlavor, xStm ) )
         {
-            ReadGraphic( *xStm, rGraphic );
+            TypeSerializer aSerializer(*xStm);
+            aSerializer.readGraphic(rGraphic);
             bRet = ( xStm->GetError() == ERRCODE_NONE );
         }
     }

@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
+#include <vcl/TypeSerializer.hxx>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <IDocumentDrawModelAccess.hxx>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -2084,7 +2085,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133477)
 
     // Read it back and check the color of the first pixel.
     Graphic aGraphic;
-    ReadGraphic(aStream, aGraphic);
+    TypeSerializer aSerializer(aStream);
+    aSerializer.readGraphic(aGraphic);
+
     BitmapEx aBitmap = aGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_EQUAL(Color(0, 102, 204), aBitmap.GetPixelColor(0, 0));
 }

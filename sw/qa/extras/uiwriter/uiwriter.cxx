@@ -46,6 +46,7 @@
 #include <AnnotationWin.hxx>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
+#include <vcl/TypeSerializer.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -2151,7 +2152,8 @@ void SwUiWriterTest::testFdo87448()
 
     // Read it back and dump it as an XML file.
     Graphic aGraphic;
-    ReadGraphic(aStream, aGraphic);
+    TypeSerializer aSerializer(aStream);
+    aSerializer.readGraphic(aGraphic);
     const GDIMetaFile& rMetaFile = aGraphic.GetGDIMetaFile();
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, rMetaFile);
