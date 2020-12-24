@@ -1522,7 +1522,7 @@ protected:
 
 private:
 
-    SAL_DLLPRIVATE void         DrawDeviceAlphaBitmap(
+    SAL_DLLPRIVATE void         DrawTransparentAlphaBitmap(
                                     const Bitmap& rBmp,
                                     const AlphaMask& rAlpha,
                                     const Point& rDestPt,
@@ -1530,10 +1530,10 @@ private:
                                     const Point& rSrcPtPixel,
                                     const Size& rSrcSizePixel );
 
-    SAL_DLLPRIVATE void DrawDeviceAlphaBitmapSlowPath(
-                                const Bitmap& rBitmap, const AlphaMask& rAlpha,
-                                tools::Rectangle aDstRect, tools::Rectangle aBmpRect,
-                                Size const & aOutSz, Point const & aOutPt);
+    SAL_DLLPRIVATE void         DrawTransparentAlphaBitmapSlowPath(
+                                    const Bitmap& rBitmap, const AlphaMask& rAlpha,
+                                    tools::Rectangle aDstRect, tools::Rectangle aBmpRect,
+                                    Size const & aOutSz, Point const & aOutPt);
 
 
     SAL_DLLPRIVATE void         BlendBitmap(

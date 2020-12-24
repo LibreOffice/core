@@ -498,7 +498,7 @@ void OutputDevice::DrawTransparentBitmap( const Point& rDestPt, const Size& rDes
 
     if (rBitmapEx.IsAlpha())
     {
-        DrawDeviceAlphaBitmap(rBitmapEx.GetBitmap(), rBitmapEx.GetAlpha(), rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel);
+        DrawTransparentAlphaBitmap(rBitmapEx.GetBitmap(), rBitmapEx.GetAlpha(), rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel);
     }
     else if (!!rBitmapEx)
     {
@@ -617,7 +617,7 @@ void OutputDevice::DrawTransparentBitmap( const Point& rDestPt, const Size& rDes
     }
 }
 
-void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& rAlpha,
+void OutputDevice::DrawTransparentAlphaBitmap( const Bitmap& rBmp, const AlphaMask& rAlpha,
                                     const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel )
 {
@@ -714,7 +714,7 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
             auxOutPt = aOutPt;
             auxOutSz = aOutSz;
         }
-        DrawDeviceAlphaBitmapSlowPath(bitmap, alpha, aDstRect, aBmpRect, auxOutSz, auxOutPt);
+        DrawTransparentAlphaBitmapSlowPath(bitmap, alpha, aDstRect, aBmpRect, auxOutSz, auxOutPt);
     }
 }
 
@@ -936,7 +936,7 @@ private:
 
 } // end anonymous namespace
 
-void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
+void OutputDevice::DrawTransparentAlphaBitmapSlowPath(const Bitmap& rBitmap,
     const AlphaMask& rAlpha, tools::Rectangle aDstRect, tools::Rectangle aBmpRect, Size const & aOutSize, Point const & aOutPoint)
 {
     assert(!is_double_buffered_window());
@@ -1176,7 +1176,7 @@ bool OutputDevice::TransformAndReduceBitmapExToTargetRange(
         aVisibleRange.transform(aMakeVisibleRangeRelative);
     }
 
-    // for pixel devices, do *not* limit size, else OutputDevice::DrawDeviceAlphaBitmap
+    // for pixel devices, do *not* limit size, else OutputDevice::DrawTransparentAlphaBitmap
     // will create another, badly scaled bitmap to do the job. Nonetheless, do a
     // maximum clipping of something big (1600x1280x2). Add 1.0 to avoid rounding
     // errors in rough estimations
