@@ -1167,7 +1167,7 @@ Dim sProductName As String
 				sTarget = UCase(psFunction) &amp; &quot;(&quot; &amp; psExpr &amp; &quot;)&quot;
 			End If
 			sSql = &quot;SELECT &quot; &amp; sTarget &amp; &quot; AS &quot; &amp; sTempField &amp; &quot; FROM &quot; &amp; psDomain &amp;  sWhere &amp; sOrderBy &amp; sLimit
-		Case &quot;FIREBIRD&quot;
+		Case &quot;FIREBIRD&quot;, &quot;FIREBIRD (ENGINE12)&quot;
 			If psFunction = &quot;&quot; Then sTarget = &quot;FIRST 1 &quot; &amp; psExpr Else sTarget = UCase(psFunction) &amp; &quot;(&quot; &amp; psExpr &amp; &quot;)&quot;
 			sSql = &quot;SELECT &quot; &amp; sTarget &amp; &quot; AS &quot; &amp; sTempField &amp; &quot; FROM &quot; &amp; psDomain &amp; sWhere &amp; sOrderBy
 		Case Else		&apos;	Standard syntax - Includes HSQLDB
