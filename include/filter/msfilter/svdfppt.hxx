@@ -853,13 +853,15 @@ struct PPTStyleSheet : public PPTNumberFormatCreator
     o3tl::enumarray<TSS_Type, PPTParaSheet*>     mpParaSheet;
     o3tl::enumarray<TSS_Type, SvxNumBulletItem*> mpNumBulletItem;
 
-                        PPTStyleSheet(
-                            const DffRecordHeader& rSlideHd,
-                            SvStream& rSt, SdrPowerPointImport&,
-                            const PPTTextParagraphStyleAtomInterpreter&,
-                            const PPTTextSpecInfo&
-                        );
-                        ~PPTStyleSheet();
+    PPTStyleSheet(
+        const DffRecordHeader& rSlideHd,
+        SvStream& rSt, SdrPowerPointImport&,
+        const PPTTextSpecInfo&
+    );
+    void Read(const DffRecordHeader& rSlideHd, SvStream& rIn,
+              SdrPowerPointImport& rManager,
+              const PPTTextParagraphStyleAtomInterpreter& rTxPFStyle);
+    ~PPTStyleSheet();
 };
 
 struct ImplPPTParaPropSet final : public salhelper::SimpleReferenceObject
