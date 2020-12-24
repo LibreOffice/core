@@ -2359,34 +2359,19 @@ EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, sal_uInt8 n
         else if ( nDelMode == DeleteMode::RestOfWord )
         {
             aDelEnd = EndOfWord( aCurPos );
-
             if (aDelEnd.GetIndex() == aCurPos.GetIndex())
             {
                 const sal_Int32 nLen(aCurPos.GetNode()->Len());
-
-                // #i120020# when 0 == nLen, aDelStart needs to be adapted, not
-                // aDelEnd. This would (and did) lead to a wrong order in the
-                // ImpConnectParagraphs call later.
-                if(nLen)
+                // end of para?
+                if (aDelEnd.GetIndex() == nLen)
                 {
-                    // end of para?
-                    if (aDelEnd.GetIndex() == nLen)
-                    {
-                        aDelEnd = WordLeft( aCurPos );
-                    }
-                    else // there's still sth to delete on the right
-                    {
-                        aDelEnd = EndOfWord( WordRight( aCurPos ) );
-                        // if there'n no next word...
-                        if (aDelEnd.GetIndex() == nLen )
-                        {
-                            aDelEnd.SetIndex( nLen );
-                        }
-                    }
+                    ContentNode* pNext = GetNextVisNode( aCurPos.GetNode() );
+                    if ( pNext )
+                        aDelEnd = EditPaM( pNext, 0 );
                 }
-                else
+                else // there's still something to delete on the right
                 {
-                    aDelStart = WordLeft(aCurPos);
+                    aDelEnd = EndOfWord( WordRight( aCurPos ) );
                 }
             }
         }
