@@ -25,6 +25,47 @@
     },
     {
       "key": {
+        "uuid": "11f14bd0_cfabb3cb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-12-24T04:05:04Z",
+      "side": 1,
+      "message": "True, I didn\u0027t check after seeing \"[WebAssembly] Change size_t to `unsigned long`.\", Jul 23 2018, https://reviews.llvm.org/rGdf07a35912d78781ed6a62a7c032bfef5085a4f5#change-IrS9f6jH6PFq, while my Emscripten is from is from 02/14/2020 (tag 1.39.8), but in the end the rest of the sentence also matters.",
+      "parentUuid": "187ffcd6_9d33dee5",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 32
+      },
+      "revId": "2e0b757e62536281f61b8d37987378646a246fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebe92272_5f32881b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-12-24T04:05:04Z",
+      "side": 1,
+      "message": "I found it confusing, that the value was called nIndex, but it\u0027s actually the value. This way it\u0027s more obvious and eventually faster, if that matters.",
+      "revId": "2e0b757e62536281f61b8d37987378646a246fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8dc8a12a_53eb17dc",
         "filename": "sc/source/core/data/attarray.cxx",
         "patchSetId": 5
@@ -54,6 +95,24 @@
       "side": 1,
       "message": "ah, so that\u0027s why you also changed the argument of the call\n\n(too much unrelated stuff combined into a single commit for my brain to get it :)",
       "parentUuid": "8dc8a12a_53eb17dc",
+      "revId": "2e0b757e62536281f61b8d37987378646a246fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9bb0415_df22769b",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-12-24T04:05:04Z",
+      "side": 1,
+      "message": "I actually fixed it the wrong way originally, assuming an index to the vector, but then there is the find(nIndex).",
+      "parentUuid": "414b324a_52918d95",
       "revId": "2e0b757e62536281f61b8d37987378646a246fcb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
