@@ -18,6 +18,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -37,6 +38,7 @@ char const DATA_DIRECTORY[] = "/xmlsecurity/qa/unit/signing/data/";
 class SigningTest2 : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
 protected:
+    uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
     uno::Reference<xml::crypto::XSEInitializer> mxSEInitializer;
     uno::Reference<xml::crypto::XXMLSecurityContext> mxSecurityContext;
@@ -55,6 +57,7 @@ void SigningTest2::setUp()
     test::BootstrapFixture::setUp();
 
     // Initialize crypto after setting up the environment variables.
+    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
 }
 
@@ -105,7 +108,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPreserveMacroSignatureODB)
         xMetaInf->openStreamElement("macrosignatures.xml", embed::ElementModes::READ),
         uno::UNO_QUERY);
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    xmlDocPtr pXmlDoc = parseXmlStream(pStream.get());
 
     // Make sure the signature is still there
     assertXPath(pXmlDoc, "//dsig:Signature", "Id",
