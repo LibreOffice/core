@@ -15,6 +15,9 @@
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+
 class SAL_WARN_UNUSED SVX_DLLPUBLIC DevelopmentToolChildWindow final : public SfxChildWindow
 {
     SFX_DECL_CHILDWINDOW_WITHID(DevelopmentToolChildWindow);
