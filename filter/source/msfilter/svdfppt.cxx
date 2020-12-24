@@ -1627,7 +1627,8 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                                 if ( aTxSIStyle.bValid && !aTxSIStyle.aList.empty() )
                                     aTxSI = aTxSIStyle.aList[ 0 ];
 
-                                rE2.xStyleSheet.reset(new PPTStyleSheet(aSlideHd, rStCtrl, *this, aTxPFStyle, aTxSI));
+                                rE2.xStyleSheet.reset(new PPTStyleSheet(aSlideHd, rStCtrl, *this, aTxSI));
+                                rE2.xStyleSheet->Read(aSlideHd, rStCtrl, *this, aTxPFStyle);
                                 m_pDefaultSheet = rE2.xStyleSheet.get();
                             }
                             if ( SeekToRec( rStCtrl, PPT_PST_ColorSchemeAtom, aSlideHd.GetRecEndFilePos() ) )
@@ -4082,11 +4083,22 @@ void PPTParaSheet::UpdateBulletRelSize(  sal_uInt32 nLevel, sal_uInt16 nFontHeig
 }
 
 PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, SdrPowerPointImport& rManager,
-                              const PPTTextParagraphStyleAtomInterpreter& rTxPFStyle,
                               const PPTTextSpecInfo& rTextSpecInfo ) :
 
     PPTNumberFormatCreator  ( std::make_unique<PPTExtParaProv>( rManager, rIn, &rSlideHd ) ),
     maTxSI                  ( rTextSpecInfo )
+{
+    for (auto i : o3tl::enumrange<TSS_Type>())
+    {
+        mpCharSheet[i] = nullptr;
+        mpParaSheet[i] = nullptr;
+        mpNumBulletItem[i] = nullptr;
+    }
+}
+
+void PPTStyleSheet::Read(const DffRecordHeader& rSlideHd, SvStream& rIn,
+                         SdrPowerPointImport& rManager,
+                         const PPTTextParagraphStyleAtomInterpreter& rTxPFStyle)
 {
     sal_uInt32 nOldFilePos = rIn.Tell();
 
