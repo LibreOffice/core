@@ -1082,7 +1082,7 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj,
 // Converts ARGB transparency (0..255) to drawingml alpha (opposite, and 0..100000)
 static OString lcl_ConvertTransparency(const Color& rColor)
 {
-    if (rColor.GetTransparency() > 0)
+    if (rColor.IsTransparent())
     {
         sal_Int32 nTransparencyPercent = 100 - float(rColor.GetTransparency()) / 2.55;
         return OString::number(nTransparencyPercent * oox::drawingml::PER_PERCENT);

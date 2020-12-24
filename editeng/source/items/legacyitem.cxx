@@ -595,7 +595,7 @@ namespace legacy
             tools::GenericTypeSerializer aSerializer(rStrm);
             aSerializer.writeColor(rItem.GetColor());
             aSerializer.writeColor(rItem.GetColor());
-            rStrm.WriteSChar( rItem.GetColor().GetTransparency() > 0 ? 0 : 1 ); //BRUSH_NULL : BRUSH_SOLID
+            rStrm.WriteSChar( rItem.GetColor().IsTransparent() ? 0 : 1 ); //BRUSH_NULL : BRUSH_SOLID
 
             sal_uInt16 nDoLoad = 0;
             const GraphicObject* pGraphicObject(rItem.GetGraphicObject());
@@ -811,11 +811,11 @@ namespace legacy
         {
             rStrm.WriteSChar( static_cast<sal_uInt8>(rItem.GetLocation()) )
                 .WriteUInt16( rItem.GetWidth() )
-                .WriteBool( rItem.GetColor().GetTransparency() > 0 );
+                .WriteBool( rItem.GetColor().IsTransparent() );
             tools::GenericTypeSerializer aSerializer(rStrm);
             aSerializer.writeColor(rItem.GetColor());
             aSerializer.writeColor(rItem.GetColor());
-            rStrm.WriteSChar( rItem.GetColor().GetTransparency() > 0 ? 0 : 1 ); //BRUSH_NULL : BRUSH_SOLID
+            rStrm.WriteSChar( rItem.GetColor().IsTransparent() ? 0 : 1 ); //BRUSH_NULL : BRUSH_SOLID
             return rStrm;
         }
     }

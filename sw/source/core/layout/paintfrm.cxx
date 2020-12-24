@@ -1567,13 +1567,13 @@ static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
     /// and calculate transparency percent value
     sal_Int8 nTransparencyPercent = 0;
     bool bDrawTransparent = false;
-    if ( aColor.GetTransparency() != 0 )
+    if ( aColor.IsTransparent() )
     ///     background color is transparent --> draw transparent.
     {
         bDrawTransparent = true;
         nTransparencyPercent = (aColor.GetTransparency()*100 + 0x7F)/0xFF;
     }
-    else if ( (_rGraphicObj.GetAttr().GetTransparency() != 0) &&
+    else if ( (_rGraphicObj.GetAttr().IsTransparent()) &&
                 (_rBackgrdBrush.GetColor() == COL_TRANSPARENT) )
     ///     graphic is drawn transparent and background color is
     ///     "no fill"/"auto fill" --> draw transparent
@@ -2003,7 +2003,7 @@ void DrawGraphic(
             if ( bConsiderBackgroundTransparency )
             {
                 GraphicAttr aGrfAttr = pGrf->GetAttr();
-                if ( (aGrfAttr.GetTransparency() != 0) &&
+                if ( (aGrfAttr.IsTransparent()) &&
                      (pBrush->GetColor() == COL_TRANSPARENT)
                    )
                 {
@@ -2040,7 +2040,7 @@ void DrawGraphic(
         } eDrawStyle = Default;
 
         if (bConsiderBackgroundTransparency &&
-                ( ( aColor.GetTransparency() != 0) ||
+                ( ( aColor.IsTransparent()) ||
                 bTransparentGrfWithNoFillBackgrd ) )
         {
             eDrawStyle = Transparent;
@@ -3765,7 +3765,7 @@ bool SwFlyFrame::IsBackgroundTransparent() const
         if ( GetBackgroundBrush( aFillAttributes, pBackgrdBrush, xSectionTOXColor, aDummyRect, false, /*bConsiderTextBox=*/false) )
         {
             if ( xSectionTOXColor &&
-                 (xSectionTOXColor->GetTransparency() != 0) &&
+                 (xSectionTOXColor->IsTransparent()) &&
                  (xSectionTOXColor != COL_TRANSPARENT) )
             {
                 bBackgroundTransparent = true;
@@ -3776,7 +3776,7 @@ bool SwFlyFrame::IsBackgroundTransparent() const
             }
             else if ( pBackgrdBrush )
             {
-                if ( (pBackgrdBrush->GetColor().GetTransparency() != 0) &&
+                if ( (pBackgrdBrush->GetColor().IsTransparent()) &&
                      (pBackgrdBrush->GetColor() != COL_TRANSPARENT) )
                 {
                     bBackgroundTransparent = true;
@@ -3786,7 +3786,7 @@ bool SwFlyFrame::IsBackgroundTransparent() const
                     const GraphicObject *pTmpGrf =
                             pBackgrdBrush->GetGraphicObject();
                     if ( pTmpGrf &&
-                         (pTmpGrf->GetAttr().GetTransparency() != 0)
+                         (pTmpGrf->GetAttr().IsTransparent())
                        )
                     {
                         bBackgroundTransparent = true;

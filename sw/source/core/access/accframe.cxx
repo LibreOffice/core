@@ -381,8 +381,8 @@ bool SwAccessibleFrame::IsOpaque( SwViewShell const *pVSh ) const
         // If a fly frame has a transparent background color, we have to consider the background.
         // But a background color "no fill"/"auto fill" should *not* be considered.
         if( pFrame->IsFlyFrame() &&
-            (rBack.GetColor().GetTransparency() != 0) &&
-            (rBack.GetColor() != COL_TRANSPARENT)
+            rBack.GetColor().IsTransparent() &&
+            rBack.GetColor() != COL_TRANSPARENT
           )
             return true;
 

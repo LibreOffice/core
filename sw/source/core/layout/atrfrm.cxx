@@ -3205,8 +3205,8 @@ bool SwFlyFrameFormat::IsBackgroundTransparent() const
     //     from its anchor.
     std::unique_ptr<SvxBrushItem> aBackground(makeBackgroundBrushItem());
     if ( aBackground &&
-         (aBackground->GetColor().GetTransparency() != 0) &&
-         (aBackground->GetColor() != COL_TRANSPARENT)
+         aBackground->GetColor().IsTransparent() &&
+         aBackground->GetColor() != COL_TRANSPARENT
        )
     {
         return true;
@@ -3215,7 +3215,7 @@ bool SwFlyFrameFormat::IsBackgroundTransparent() const
     {
         const GraphicObject *pTmpGrf = aBackground->GetGraphicObject();
         if ( pTmpGrf &&
-             (pTmpGrf->GetAttr().GetTransparency() != 0)
+             pTmpGrf->GetAttr().IsTransparent()
            )
         {
             return true;

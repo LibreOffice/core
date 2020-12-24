@@ -1748,7 +1748,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     Color aBackCol = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
 
     ScModule* pScMod = SC_MOD();
-    if ( aBackCol.GetTransparency() > 0 )
+    if ( aBackCol.IsTransparent() )
     {
         aBackCol = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
     }
