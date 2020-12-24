@@ -36,14 +36,10 @@
 #endif
 #include <vcl/BitmapMonochromeFilter.hxx>
 
-#include <svdata.hxx>
-#include <salinst.hxx>
-#include <salbmp.hxx>
 #include <BitmapScaleSuperFilter.hxx>
 #include <BitmapScaleConvolutionFilter.hxx>
 #include <BitmapFastScaleFilter.hxx>
 #include <BitmapInterpolateScaleFilter.hxx>
-#include <bitmapwriteaccess.hxx>
 #include <bitmap/impoctree.hxx>
 #include <bitmap/Octree.hxx>
 
