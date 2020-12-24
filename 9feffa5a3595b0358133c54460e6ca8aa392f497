@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7784a1d7_5734e0f8",
+        "filename": "sd/source/filter/html/HtmlOptionsDialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-12-24T09:27:47Z",
+      "side": 1,
+      "message": "You can directly put:\nreturn { \"com.sun.star.ui.dialog.FilterOptionsDialog\" };",
+      "range": {
+        "startLine": 120,
+        "startChar": 0,
+        "endLine": 121,
+        "endChar": 14
+      },
+      "revId": "9feffa5a3595b0358133c54460e6ca8aa392f497",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "594340ae_594eeb28",
+        "filename": "sd/source/ui/unoidl/unopage.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2013,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-12-24T09:27:47Z",
+      "side": 1,
+      "message": "You can directly put:\nreturn { \"com.sun.star.document.LinkTargets\" };",
+      "range": {
+        "startLine": 2012,
+        "startChar": 0,
+        "endLine": 2013,
+        "endChar": 14
+      },
+      "revId": "9feffa5a3595b0358133c54460e6ca8aa392f497",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
