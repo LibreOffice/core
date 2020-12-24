@@ -2425,7 +2425,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
 
                 Color aBackCol = pPattern->GetItem( ATTR_BACKGROUND ).GetColor();
                 ScModule* pScMod = SC_MOD();
-                if ( aBackCol.GetTransparency() > 0 ||
+                if ( aBackCol.IsTransparent() ||
                         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
                     aBackCol = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
                 mpEditEngine->SetBackgroundColor( aBackCol );
