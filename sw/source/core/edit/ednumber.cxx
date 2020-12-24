@@ -438,7 +438,7 @@ public:
 
 bool SwEditShell::MoveParagraph( tools::Long nOffset )
 {
-    // make all outline nodes content temporarily visibile for paragraph move
+    // make all outline nodes content temporarily visible for paragraph move
     MakeAllOutlineContentTemporarilyVisibile a(dynamic_cast<SwWrtShell*>(this));
 
     StartAllAction();
