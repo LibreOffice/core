@@ -101,6 +101,7 @@ using namespace com::sun::star::uno;
 
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <vcl/unohelp.hxx>
+#include <vcl/TypeSerializer.hxx>
 
 #if HAVE_FEATURE_SCRIPTING
 
@@ -4332,7 +4333,8 @@ void SbRtl_SavePicture(StarBASIC *, SbxArray & rPar, bool)
     {
         SvFileStream aOStream( rPar.Get32(2)->GetOUString(), StreamMode::WRITE | StreamMode::TRUNC );
         const Graphic& aGraphic = pPicture->GetGraphic();
-        WriteGraphic( aOStream, aGraphic );
+        TypeSerializer aSerializer(aOStream);
+        aSerializer.writeGraphic(aGraphic);
     }
 }
 

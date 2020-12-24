@@ -26,8 +26,7 @@
 #include <wall2.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/settings.hxx>
-
-#include <TypeSerializer.hxx>
+#include <vcl/TypeSerializer.hxx>
 
 ImplWallpaper::ImplWallpaper() :
     maColor( COL_TRANSPARENT ), meStyle( WallpaperStyle::NONE )

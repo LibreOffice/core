@@ -64,6 +64,8 @@
 #include <comphelper/propertysequence.hxx>
 #include <osl/time.h>
 #include <comphelper/processfactory.hxx>
+#include <vcl/TypeSerializer.hxx>
+
 
 class Test : public SwModelTestBase
 {
@@ -1554,7 +1556,8 @@ DECLARE_OOXMLIMPORT_TEST(testTdf100072, "tdf100072.docx")
 
     // Read it back and dump it as an XML file.
     Graphic aGraphic;
-    ReadGraphic(aStream, aGraphic);
+    TypeSerializer aSerializer(aStream);
+    aSerializer.readGraphic(aGraphic);
     const GDIMetaFile& rMetaFile = aGraphic.GetGDIMetaFile();
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, rMetaFile);

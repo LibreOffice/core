@@ -39,7 +39,7 @@
 #include <vcl/mtfxmldump.hxx>
 
 #include <svmconverter.hxx>
-#include <TypeSerializer.hxx>
+#include <vcl/TypeSerializer.hxx>
 
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/rendering/MtfRenderer.hpp>

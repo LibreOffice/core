@@ -29,7 +29,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/graphictools.hxx>
 #include <unotools/fontdefs.hxx>
-#include <TypeSerializer.hxx>
+#include <vcl/TypeSerializer.hxx>
 
 namespace
 {

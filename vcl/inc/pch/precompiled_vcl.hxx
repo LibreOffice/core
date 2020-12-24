@@ -247,7 +247,6 @@
 #if PCH_LEVEL >= 4
 #include <PhysicalFontCollection.hxx>
 #include <PhysicalFontFace.hxx>
-#include <TypeSerializer.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <brdwin.hxx>
 #include <configsettings.hxx>
@@ -274,6 +273,7 @@
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/TypeSerializer.hxx>
 #include <vcl/QueueInfo.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>

@@ -31,6 +31,7 @@
 #include <memory>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
+#include <vcl/TypeSerializer.hxx>
 
 #include <attrib.hxx>
 #include <patattr.hxx>
@@ -783,8 +784,8 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
         if( pScDrawView && aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB, xStm ) )
         {
             Graphic aGraphic;
-
-            ReadGraphic( *xStm, aGraphic );
+            TypeSerializer aSerializer(*xStm);
+            aSerializer.readGraphic(aGraphic);
 
             const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
 
