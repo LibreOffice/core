@@ -31,7 +31,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
-#include <TypeSerializer.hxx>
+#include <vcl/TypeSerializer.hxx>
 #include <svmconverter.hxx>
 #include <memory>
 #include <stack>

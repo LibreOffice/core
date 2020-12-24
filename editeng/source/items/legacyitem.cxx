@@ -24,6 +24,7 @@
 #include <comphelper/fileformat.h>
 #include <vcl/graph.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/TypeSerializer.hxx>
 #include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <editeng/fontitem.hxx>
@@ -493,7 +494,7 @@ namespace legacy
             sal_Int8 nStyle;
 
             rStrm.ReadCharAsBool( bTrans );
-            tools::GenericTypeSerializer aSerializer(rStrm);
+            TypeSerializer aSerializer(rStrm);
             aSerializer.readColor(aTempColor);
             aSerializer.readColor(aTempFillColor);
             rStrm.ReadSChar( nStyle );
@@ -555,8 +556,7 @@ namespace legacy
             if ( nDoLoad & LOAD_GRAPHIC )
             {
                 Graphic aGraphic;
-
-                ReadGraphic( rStrm, aGraphic );
+                aSerializer.readGraphic(aGraphic);
                 rItem.SetGraphicObject(GraphicObject(aGraphic));
 
                 if( SVSTREAM_FILEFORMAT_ERROR == rStrm.GetError() )
@@ -592,7 +592,7 @@ namespace legacy
         SvStream& Store(const SvxBrushItem& rItem, SvStream& rStrm, sal_uInt16)
         {
             rStrm.WriteBool( false );
-            tools::GenericTypeSerializer aSerializer(rStrm);
+            TypeSerializer aSerializer(rStrm);
             aSerializer.writeColor(rItem.GetColor());
             aSerializer.writeColor(rItem.GetColor());
             rStrm.WriteSChar( rItem.GetColor().IsTransparent() ? 0 : 1 ); //BRUSH_NULL : BRUSH_SOLID
@@ -609,7 +609,9 @@ namespace legacy
             rStrm.WriteUInt16( nDoLoad );
 
             if (nullptr != pGraphicObject && rItem.GetGraphicLink().isEmpty())
-                WriteGraphic(rStrm, pGraphicObject->GetGraphic());
+            {
+                aSerializer.writeGraphic(pGraphicObject->GetGraphic());
+            }
             if ( !rItem.GetGraphicLink().isEmpty() )
             {
                 OSL_FAIL("No BaseURL!");

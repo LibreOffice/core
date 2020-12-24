@@ -24,7 +24,7 @@
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <rtl/instance.hxx>
-#include <TypeSerializer.hxx>
+#include <vcl/TypeSerializer.hxx>
 
 struct MapMode::ImplMapMode
 {
