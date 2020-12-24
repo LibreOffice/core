@@ -20,6 +20,7 @@
 #define INCLUDED_SVL_HINT_HXX
 
 #include <ostream>
+#include <string>
 
 #include <sal/types.h>
 #include <svl/svldllapi.h>
