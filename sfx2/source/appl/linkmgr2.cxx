@@ -42,6 +42,7 @@
 #include <unotools/charclass.hxx>
 #include <unotools/securityoptions.hxx>
 #include <vcl/GraphicLoader.hxx>
+#include <vcl/TypeSerializer.hxx>
 
 #include "fileobj.hxx"
 #include "impldde.hxx"
@@ -543,7 +544,8 @@ bool LinkManager::GetGraphicFromAny(const OUString& rMimeType,
         {
         case SotClipboardFormatId::SVXB:
             {
-                ReadGraphic( aMemStm, rGraphic );
+                TypeSerializer aSerializer(aMemStm);
+                aSerializer.readGraphic(rGraphic);
                 bRet = true;
             }
             break;
