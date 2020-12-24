@@ -373,7 +373,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
         if ( mbOutputClipped )
             return;
 
-        DrawDeviceBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmpEx );
+        DrawTransparentBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmpEx );
     }
 }
 
@@ -490,7 +490,7 @@ BitmapEx OutputDevice::GetBitmapEx( const Point& rSrcPt, const Size& rSize ) con
         return BitmapEx(GetBitmap( rSrcPt, rSize ));
 }
 
-void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
+void OutputDevice::DrawTransparentBitmap( const Point& rDestPt, const Size& rDestSize,
                                      const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                      BitmapEx& rBitmapEx )
 {

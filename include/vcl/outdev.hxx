@@ -1486,7 +1486,7 @@ public:
                                     ::Color aShadowColor);
 protected:
 
-    virtual void                DrawDeviceBitmap(
+    virtual void                DrawTransparentBitmap(
                                     const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                     BitmapEx& rBitmapEx );
