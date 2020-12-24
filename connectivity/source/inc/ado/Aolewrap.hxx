@@ -24,6 +24,8 @@
 #include <map>
 #include <vector>
 
+#include "Aolevariant.hxx"
+
 namespace rtl
 {
     class OUString;
