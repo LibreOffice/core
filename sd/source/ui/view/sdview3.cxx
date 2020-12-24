@@ -41,6 +41,7 @@
 #include <svx/ImageMapInfo.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/TypeSerializer.hxx>
 #include <svx/svxids.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/embedhlp.hxx>
@@ -1200,7 +1201,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             Point   aInsertPos( rPos );
             Graphic aGraphic;
 
-            ReadGraphic( *xStm, aGraphic );
+            TypeSerializer aSerializer(*xStm);
+            aSerializer.readGraphic(aGraphic);
 
             if( pOwnData && pOwnData->GetWorkDocument() )
             {

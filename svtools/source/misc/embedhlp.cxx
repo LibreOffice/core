@@ -22,6 +22,8 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/gfxlink.hxx>
+#include <vcl/TypeSerializer.hxx>
 #include <bitmaps.hlst>
 
 #include <sal/log.hxx>
@@ -770,15 +772,32 @@ void EmbeddedObjectRef::SetGraphicToContainer( const Graphic& rGraphic,
 {
     SvMemoryStream aStream;
     aStream.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-    if ( rGraphic.ExportNative( aStream ) )
-    {
-        aStream.Seek( 0 );
 
-        uno::Reference < io::XInputStream > xStream = new ::utl::OSeekableInputStreamWrapper( aStream );
-        aContainer.InsertGraphicStream( xStream, aName, aMediaType );
+    auto pGfxLink = rGraphic.GetSharedGfxLink();
+    if (pGfxLink && pGfxLink->IsNative())
+    {
+        if (pGfxLink->ExportNative(aStream))
+        {
+            aStream.Seek(0);
+            uno::Reference <io::XInputStream> xStream = new ::utl::OSeekableInputStreamWrapper(aStream);
+            aContainer.InsertGraphicStream(xStream, aName, aMediaType);
+        }
+        else
+            OSL_FAIL("Export of graphic is failed!");
     }
     else
-        OSL_FAIL( "Export of graphic is failed!" );
+    {
+        TypeSerializer aSerializer(aStream);
+        aSerializer.writeGraphic(rGraphic);
+        if (aStream.GetError() == ERRCODE_NONE)
+        {
+            aStream.Seek(0);
+            uno::Reference <io::XInputStream> xStream = new ::utl::OSeekableInputStreamWrapper(aStream);
+            aContainer.InsertGraphicStream(xStream, aName, aMediaType);
+        }
+        else
+            OSL_FAIL("Export of graphic is failed!");
+    }
 }
 
 uno::Reference< io::XInputStream > EmbeddedObjectRef::GetGraphicReplacementStream(

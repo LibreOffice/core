@@ -515,22 +515,6 @@ BitmapChecksum Graphic::GetChecksum() const
     return mxImpGraphic->ImplGetChecksum();
 }
 
-bool Graphic::ExportNative( SvStream& rOStream ) const
-{
-    return mxImpGraphic->ImplExportNative( rOStream );
-}
-
-void ReadGraphic(SvStream& rIStream, Graphic& rGraphic)
-{
-    rGraphic.ImplTestRefCount();
-    ReadImpGraphic(rIStream, *rGraphic.mxImpGraphic);
-}
-
-void WriteGraphic( SvStream& rOStream, const Graphic& rGraphic )
-{
-    WriteImpGraphic(rOStream, *rGraphic.mxImpGraphic);
-}
-
 const std::shared_ptr<VectorGraphicData>& Graphic::getVectorGraphicData() const
 {
     return mxImpGraphic->getVectorGraphicData();

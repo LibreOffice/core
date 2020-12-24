@@ -65,6 +65,7 @@
 #include <vector>
 #include <memory>
 #include <string_view>
+#include <vcl/TypeSerializer.hxx>
 
 #include "FilterConfigCache.hxx"
 #include "graphicfilter_internal.hxx"
@@ -1662,7 +1663,9 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                     aFilterName.equalsIgnoreAsciiCase( IMP_SVMETAFILE ) )
         {
             // SV internal filters for import bitmaps and MetaFiles
-            ReadGraphic( rIStream, rGraphic );
+            TypeSerializer aSerializer(rIStream);
+            aSerializer.readGraphic(rGraphic);
+
             if( rIStream.GetError() )
             {
                 nStatus = ERRCODE_GRFILTER_FORMATERROR;
@@ -1675,7 +1678,9 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_MOV ) )
         {
-            ReadGraphic( rIStream, rGraphic );
+            TypeSerializer aSerializer(rIStream);
+            aSerializer.readGraphic(rGraphic);
+
             if( rIStream.GetError() )
                 nStatus = ERRCODE_GRFILTER_FORMATERROR;
             else

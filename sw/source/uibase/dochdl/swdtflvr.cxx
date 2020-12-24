@@ -124,6 +124,7 @@
 
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>
+#include <vcl/TypeSerializer.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <sfx2/sfxdlg.hxx>
@@ -2768,7 +2769,8 @@ bool SwTransferable::PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
 
         if(rData.GetSotStorageStream(SotClipboardFormatId::SVXB, xStm))
         {
-            ReadGraphic( *xStm, aGraphic );
+            TypeSerializer aSerializer(*xStm);
+            aSerializer.readGraphic(aGraphic);
             bRet = (GraphicType::NONE != aGraphic.GetType() && GraphicType::Default != aGraphic.GetType());
         }
 
