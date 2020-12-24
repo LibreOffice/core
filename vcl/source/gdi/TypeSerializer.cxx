@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <TypeSerializer.hxx>
+#include <vcl/TypeSerializer.hxx>
 #include <tools/vcompat.hxx>
 #include <sal/log.hxx>
 #include <comphelper/fileformat.h>

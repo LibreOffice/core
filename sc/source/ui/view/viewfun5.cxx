@@ -40,6 +40,7 @@
 #include <svl/stritem.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/TypeSerializer.hxx>
 #include <osl/thread.h>
 
 #include <comphelper/automationinvokedzone.hxx>
@@ -501,7 +502,8 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
         if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB, xStm ) )
         {
             Graphic aGraphic;
-            ReadGraphic( *xStm, aGraphic );
+            TypeSerializer aSerializer(*xStm);
+            aSerializer.readGraphic(aGraphic);
             bRet = PasteGraphic( aPos, aGraphic, EMPTY_OUSTRING );
         }
     }
