@@ -143,11 +143,10 @@ public:
     }
 
     /** Is the color transparent?
-     * @returns true or false
      */
     bool IsTransparent() const
     {
-        return (GetTransparency() != 0);
+        return GetTransparency() != 0;
     }
 
     /** Sets the red value.
