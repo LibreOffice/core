@@ -33,7 +33,7 @@
 #include <string_view>
 
 #include <rtl/instance.hxx>
-#include <TypeSerializer.hxx>
+#include <vcl/TypeSerializer.hxx>
 
 using namespace vcl;
 

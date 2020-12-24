@@ -185,11 +185,6 @@ public:
     GfxLink         GetGfxLink() const;
     bool            IsGfxLink() const;
 
-    bool            ExportNative( SvStream& rOStream ) const;
-
-    friend VCL_DLLPUBLIC void WriteGraphic(SvStream& rOStream, const Graphic& rGraphic);
-    friend VCL_DLLPUBLIC void ReadGraphic(SvStream& rIStream, Graphic& rGraphic);
-
     const std::shared_ptr<VectorGraphicData>& getVectorGraphicData() const;
 
     /// Get the page number of the multi-page source this Graphic is rendered from.

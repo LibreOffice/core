@@ -197,11 +197,6 @@ private:
 
     BitmapChecksum      ImplGetChecksum() const;
 
-    bool                ImplExportNative( SvStream& rOStm ) const;
-
-    friend void         WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic);
-    friend void         ReadImpGraphic(SvStream& rIStm, ImpGraphic& rImpGraphic);
-
     const std::shared_ptr<VectorGraphicData>& getVectorGraphicData() const;
 
     /// Gets the bitmap replacement for a vector graphic.
