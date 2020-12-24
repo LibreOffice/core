@@ -46,6 +46,8 @@
 #include <comphelper/sequence.hxx>
 #include <memory>
 
+#include <vcl/TypeSerializer.hxx>
+
 using namespace com::sun::star;
 
 namespace {
@@ -812,7 +814,10 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
             SvMemoryStream aMemStrm;
             aMemStrm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
             if( 0 == strcmp( pFilterShortName, MIMETYPE_VCLGRAPHIC ) )
-                WriteGraphic( aMemStrm, aGraphic );
+            {
+                TypeSerializer aSerializer(aMemStrm);
+                aSerializer.writeGraphic(aGraphic);
+            }
             else
             {
                 rFilter.ExportGraphic( aGraphic, aPath, aMemStrm,
