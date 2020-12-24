@@ -2921,7 +2921,7 @@ fi
 if test -z "$enable_scripting"; then
     # Disable scripting for iOS unless specifically overridden
     # with --enable-scripting.
-    if test $_os != iOS; then
+    if test $_os != iOS -o $_os = Emscripten; then
         enable_scripting=yes
     fi
 fi
@@ -2935,7 +2935,7 @@ else
     SCPDEFS="$SCPDEFS -DDISABLE_SCRIPTING"
 fi
 
-if test $_os = iOS -o $_os = Android; then
+if test $_os = iOS -o $_os = Android -o $_os = Emscripten; then
     # Disable dynamic_loading always for iOS and Android
     enable_dynamic_loading=no
 elif test -z "$enable_dynamic_loading"; then
@@ -5259,6 +5259,7 @@ if test "$cross_compiling" = "yes"; then
     test -n "$PKG_CONFIG_FOR_BUILD" && export PKG_CONFIG="$PKG_CONFIG_FOR_BUILD"
     cd CONF-FOR-BUILD
 
+    # Handle host configuration, which affects the cross-toolset too
     sub_conf_opts=""
     test -n "$enable_ccache" && sub_conf_opts="$sub_conf_opts --enable-ccache=$enable_ccache"
     test -n "$with_ant_home" && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
@@ -5544,8 +5545,9 @@ if test "$USING_X11" != TRUE; then
 fi
 
 if test "$OS" = "EMSCRIPTEN"; then
-    enable_cairo_canvas=yes
     test_qt5=yes
+    enable_cairo_canvas=yes
+    enable_qt5=yes
 fi
 
 if test "$OS" = "HAIKU"; then
