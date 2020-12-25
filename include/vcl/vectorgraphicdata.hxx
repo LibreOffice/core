@@ -51,6 +51,11 @@ enum class VectorGraphicDataType
     Pdf = 3
 };
 
+namespace vcl
+{
+VCL_DLLPUBLIC VectorGraphicDataArray loadSvgDataFromFile(OUString const & rPath);
+}
+
 class VCL_DLLPUBLIC VectorGraphicData
 {
 private:
@@ -93,7 +98,6 @@ public:
         const OUString& rPath,
         VectorGraphicDataType eVectorDataType,
         sal_Int32 nPageIndex = -1);
-    VectorGraphicData(const OUString& rPath, VectorGraphicDataType eVectorDataType);
     ~VectorGraphicData();
 
     /// compare op

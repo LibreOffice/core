@@ -137,7 +137,9 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
     if ( !FileExists(aObj) )
         return false;
 
-    VectorGraphicData aVectorGraphicData(aObj.PathToFileName(), VectorGraphicDataType::Svg);
+    OUString aPath = aObj.PathToFileName();
+    VectorGraphicDataArray aVectorGraphicDataArray = vcl::loadSvgDataFromFile(aPath);
+    VectorGraphicData aVectorGraphicData(aVectorGraphicDataArray, aPath, VectorGraphicDataType::Svg);
 
     // transform into [0,0,width,width*aspect] std dimensions
 
