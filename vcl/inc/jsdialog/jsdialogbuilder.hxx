@@ -149,6 +149,7 @@ public:
                                                             const OUString& rUIFile);
 
     virtual ~JSInstanceBuilder() override;
+    virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OString& id) override;
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString& id) override;
     virtual std::unique_ptr<weld::Label> weld_label(const OString& id) override;
     virtual std::unique_ptr<weld::Button> weld_button(const OString& id) override;
