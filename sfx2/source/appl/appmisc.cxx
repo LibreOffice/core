@@ -31,6 +31,7 @@
 #include <rtl/bootstrap.hxx>
 #include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/stream.hxx>
 
 #include <sfx2/app.hxx>
 #include <appdata.hxx>
@@ -124,6 +125,32 @@ static bool FileExists( const INetURLObject& rURL )
     return bRet;
 }
 
+namespace
+{
+
+bool loadDataFromFile(OUString const & rPath, std::vector<sal_uInt8> & rBinaryData)
+{
+    SvFileStream rStream(rPath, StreamMode::STD_READ);
+    if (rStream.GetError())
+        return false;
+
+    const sal_uInt32 nStreamLength(rStream.remainingSize());
+
+    if (nStreamLength)
+    {
+        rBinaryData.clear();
+        rBinaryData.resize(nStreamLength);
+        rStream.ReadBytes(rBinaryData.data(), nStreamLength);
+
+        if (!rStream.GetError())
+        {
+            return true;
+        }
+    }
+    return false;
+}
+} // end anonymous namespace
+
 bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWidth)
 {
     // Load from disk
@@ -137,7 +164,15 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
     if ( !FileExists(aObj) )
         return false;
 
-    VectorGraphicData aVectorGraphicData(aObj.PathToFileName(), VectorGraphicDataType::Svg);
+    std::vector<sal_uInt8> aBinaryData;
+    OUString aPath = aObj.PathToFileName();
+    if (!loadDataFromFile(aObj.PathToFileName(), aBinaryData))
+        return false;
+
+    VectorGraphicDataArray aVectorGraphicDataArray;
+    std::copy(aBinaryData.cbegin(), aBinaryData.cend(), aVectorGraphicDataArray.begin());
+
+    VectorGraphicData aVectorGraphicData(aVectorGraphicDataArray, aPath, VectorGraphicDataType::Svg);
 
     // transform into [0,0,width,width*aspect] std dimensions
 
