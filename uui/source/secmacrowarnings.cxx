@@ -20,6 +20,7 @@
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <comphelper/processfactory.hxx>
+#include <vcl/svapp.hxx>
 #include <osl/file.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
@@ -74,6 +75,12 @@ MacroWarning::MacroWarning(weld::Window* pParent, bool _bWithSignatures)
 
     mxEnableBtn->connect_clicked(LINK(this, MacroWarning, EnableBtnHdl));
     mxDisableBtn->grab_focus(); // Default button, but focus is on view button
+    m_xDialog->SetInstallLOKNotifierHdl(LINK(this, MacroWarning, InstallLOKNotifierHdl));
+}
+
+IMPL_LINK_NOARG(MacroWarning, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
+{
+    return GetpApp();
 }
 
 void MacroWarning::SetDocumentURL( const OUString& rDocURL )
