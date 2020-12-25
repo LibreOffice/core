@@ -22,11 +22,14 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <rtl/ref.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionPassword2.hpp>
+#include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkOffLineException.hpp>
 
@@ -341,6 +344,19 @@ sal_Bool SAL_CALL LOKInteractionHandler::handleInteractionRequest(
 
     if (handlePasswordRequest(rContinuations, request))
         return true;
+
+    task::DocumentMacroConfirmationRequest aConfirmRequest;
+    if (request >>= aConfirmRequest)
+    {
+        uno::Reference< task::XInteractionHandler2 > xInteraction(
+            task::InteractionHandler::createWithParent(
+                ::comphelper::getProcessComponentContext(), nullptr));
+
+        if (xInteraction.is())
+            xInteraction->handleInteractionRequest(xRequest);
+
+        return true;
+    }
 
     // TODO: perform more interactions 'for real' like the above
     selectApproved(rContinuations);
