@@ -22,7 +22,7 @@
 #include <osl/conditn.hxx>
 #include <osl/file.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/pngread.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <unotools/tempfile.hxx>
