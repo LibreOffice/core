@@ -1056,6 +1056,7 @@ void SlideShowImpl::displaySlide(
         return;
 
     maEffectRewinder.setRootAnimationNode(xRootNode);
+    maEffectRewinder.setCurrentSlide(xSlide);
 
     // precondition: must only be called from the main thread!
     DBG_TESTSOLARMUTEX();
