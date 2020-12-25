@@ -26,8 +26,6 @@
 
 #include <officecfg/Office/Common.hxx>
 
-#define HDL(hdl) LINK(this,ScTabBgColorDlg,hdl)
-
 ScTabBgColorDlg::ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle,
     const OUString& rTabBgColorNoColorText, const Color& rDefaultColor)
     : GenericDialogController(pParent, "modules/scalc/ui/tabcolordialog.ui", "TabColorDialog")
@@ -55,8 +53,8 @@ ScTabBgColorDlg::ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle,
     FillPaletteLB();
 
     m_xSelectPalette->connect_changed(LINK(this, ScTabBgColorDlg, SelectPaletteLBHdl));
-    m_xTabBgColorSet->SetDoubleClickHdl(HDL(TabBgColorDblClickHdl_Impl));
-    m_xBtnOk->connect_clicked(HDL(TabBgColorOKHdl_Impl));
+    m_xTabBgColorSet->SetDoubleClickHdl(LINK(this, ScTabBgColorDlg, TabBgColorDblClickHdl_Impl));
+    m_xBtnOk->connect_clicked(LINK(this, ScTabBgColorDlg, TabBgColorOKHdl_Impl));
 }
 
 ScTabBgColorDlg::~ScTabBgColorDlg()

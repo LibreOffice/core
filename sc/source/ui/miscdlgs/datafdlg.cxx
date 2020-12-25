@@ -16,8 +16,6 @@
 
 #include <vcl/svapp.hxx>
 
-#define HDL(hdl)            LINK( this, ScDataFormDlg, hdl )
-
 ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShellOri)
     : GenericDialogController(pParent, "modules/scalc/ui/dataform.ui", "DataFormDialog")
     , pTabViewShell(pTabViewShellOri)
@@ -165,7 +163,7 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShel
             }
             if (m_aEntries[nIndex] != nullptr)
             {
-                m_aEntries[nIndex]->m_xEdit->connect_changed(HDL(Impl_DataModifyHdl));
+                m_aEntries[nIndex]->m_xEdit->connect_changed(LINK( this, ScDataFormDlg, Impl_DataModifyHdl));
                 m_aEntries[nIndex]->m_xEdit->save_value();
             }
         }
@@ -175,15 +173,15 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShel
 
     m_xSlider->vadjustment_configure(0, 0, nEndRow - nStartRow + 1, 1, 10, 1);
 
-    m_xBtnNew->connect_clicked(HDL(Impl_NewHdl));
-    m_xBtnPrev->connect_clicked(HDL(Impl_PrevHdl));
-    m_xBtnNext->connect_clicked(HDL(Impl_NextHdl));
+    m_xBtnNew->connect_clicked(LINK( this, ScDataFormDlg, Impl_NewHdl));
+    m_xBtnPrev->connect_clicked(LINK( this, ScDataFormDlg, Impl_PrevHdl));
+    m_xBtnNext->connect_clicked(LINK( this, ScDataFormDlg, Impl_NextHdl));
 
-    m_xBtnRestore->connect_clicked(HDL(Impl_RestoreHdl));
-    m_xBtnDelete->connect_clicked(HDL(Impl_DeleteHdl));
-    m_xBtnClose->connect_clicked(HDL(Impl_CloseHdl));
+    m_xBtnRestore->connect_clicked(LINK( this, ScDataFormDlg, Impl_RestoreHdl));
+    m_xBtnDelete->connect_clicked(LINK( this, ScDataFormDlg, Impl_DeleteHdl));
+    m_xBtnClose->connect_clicked(LINK( this, ScDataFormDlg, Impl_CloseHdl));
 
-    m_xSlider->connect_vadjustment_changed(HDL(Impl_ScrollHdl));
+    m_xSlider->connect_vadjustment_changed(LINK( this, ScDataFormDlg, Impl_ScrollHdl));
 
     SetButtonState();
 }
