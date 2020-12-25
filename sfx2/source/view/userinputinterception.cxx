@@ -73,8 +73,8 @@ namespace sfx2
 
     namespace
     {
-        template< class VLCEVENT >
-        void lcl_initModifiers( InputEvent& _rEvent, const VLCEVENT& _rVclEvent )
+        template< class VCLEVENT >
+        void lcl_initModifiers( InputEvent& _rEvent, const VCLEVENT& _rVclEvent )
         {
             _rEvent.Modifiers = 0;
 

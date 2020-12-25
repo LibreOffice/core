@@ -119,7 +119,7 @@ namespace frm
 
         mbCreatingPeer = true;
 
-        // determine the VLC window for the parent
+        // determine the VCL window for the parent
         vcl::Window* pParentWin = nullptr;
         if ( _rParentPeer.is() )
         {
