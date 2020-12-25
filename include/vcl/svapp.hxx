@@ -27,6 +27,7 @@
 #include <vector>
 
 #include <comphelper/solarmutex.hxx>
+#include <LibreOfficeKit/LibreOfficeKitTypes.h>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/thread.h>
@@ -34,6 +35,7 @@
 #include <tools/link.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
+#include <vcl/IDialogRenderable.hxx>
 #include <vcl/inputtypes.hxx>
 #include <vcl/exceptiontypes.hxx>
 #include <vcl/vclevent.hxx>
@@ -235,7 +237,7 @@ enum class DialogCancelMode {
 
  @see   Desktop, ImplSVData
  */
-class VCL_DLLPUBLIC Application
+class VCL_DLLPUBLIC Application : public vcl::ILibreOfficeKitNotifier
 {
 public:
     /** @name Initialization
@@ -1347,6 +1349,16 @@ public:
                                                     bool bMobile = false);
 
     static weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow);
+
+    // ILibreOfficeKitNotifier
+    void* m_pCallbackData;
+    LibreOfficeKitCallback m_pCallback;
+
+    virtual void notifyWindow(vcl::LOKWindowId nLOKWindowId,
+                              const OUString& rAction,
+                              const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) const override;
+    virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) const override;
+
 private:
     DECL_STATIC_LINK( Application, PostEventHandler, void*, void );
 };
