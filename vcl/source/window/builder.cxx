@@ -204,7 +204,8 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
             || rUIFile == "modules/scalc/ui/ttestdialog.ui"
             || rUIFile == "modules/scalc/ui/ztestdialog.ui"
             || rUIFile == "modules/scalc/ui/chisquaretestdialog.ui"
-            || rUIFile == "modules/scalc/ui/fourieranalysisdialog.ui")
+            || rUIFile == "modules/scalc/ui/fourieranalysisdialog.ui"
+            || rUIFile == "uui/ui/macrowarnmedium.ui")
         {
             bUseJSBuilder = true;
         }
