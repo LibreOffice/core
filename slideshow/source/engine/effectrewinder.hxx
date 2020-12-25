@@ -25,6 +25,7 @@
 #include <animationeventhandler.hxx>
 #include <event.hxx>
 #include <screenupdater.hxx>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 
 #include <functional>
 #include <memory>
@@ -66,6 +67,11 @@ public:
     */
     void setRootAnimationNode (
         const css::uno::Reference<css::animations::XAnimationNode>& xRootNode);
+
+    /** Store the XDrawPage to reach specific slide properties.
+    */
+    void setCurrentSlide (
+        const css::uno::Reference<css::drawing::XDrawPage>& xSlide);
 
     /** Rewind one effect of the main effect sequence.  When the current
         slide has not effects or no main sequence effect has yet been played
@@ -120,6 +126,7 @@ private:
     EventSharedPtr mpAsynchronousRewindEvent;
 
     css::uno::Reference<css::animations::XAnimationNode> mxCurrentAnimationRootNode;
+    css::uno::Reference<css::drawing::XDrawPage> mxCurrentSlide;
     ::std::shared_ptr<ScreenUpdater::UpdateLock> mpPaintLock;
 
     bool mbNonUserTriggeredMainSequenceEffectSeen;
