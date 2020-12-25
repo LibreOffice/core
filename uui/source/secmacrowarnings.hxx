@@ -49,6 +49,7 @@ private:
     DECL_LINK(ViewSignsBtnHdl, weld::Button&, void);
     DECL_LINK(EnableBtnHdl, weld::Button&, void);
     DECL_LINK(AlwaysTrustCheckHdl, weld::Button&, void);
+    DECL_LINK(InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
 
     void                InitControls();
 
