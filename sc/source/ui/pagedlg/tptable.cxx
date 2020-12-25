@@ -73,9 +73,6 @@ static bool lcl_PutBoolItem( sal_uInt16 nWhich,
                       bool              bIsChecked,
                       bool              bSavedValue );
 
-#define PAGENO_HDL          LINK(this,ScTablePage,PageNoHdl)
-#define PAGEDIR_HDL         LINK(this,ScTablePage,PageDirHdl)
-
 namespace {
 
 bool WAS_DEFAULT(sal_uInt16 w, SfxItemSet const & s)
@@ -122,9 +119,9 @@ ScTablePage::ScTablePage(weld::Container* pPage, weld::DialogController* pContro
 {
     SetExchangeSupport();
 
-    m_xBtnPageNo->connect_toggled(PAGENO_HDL);
-    m_xBtnTopDown->connect_toggled(PAGEDIR_HDL);
-    m_xBtnLeftRight->connect_toggled(PAGEDIR_HDL);
+    m_xBtnPageNo->connect_toggled(LINK(this,ScTablePage,PageNoHdl));
+    m_xBtnTopDown->connect_toggled(LINK(this,ScTablePage,PageDirHdl));
+    m_xBtnLeftRight->connect_toggled(LINK(this,ScTablePage,PageDirHdl));
     m_xLbScaleMode->connect_changed(LINK(this,ScTablePage,ScaleHdl));
     m_xCbScalePageWidth->connect_toggled(LINK(this, ScTablePage, ToggleHdl));
     m_xCbScalePageHeight->connect_toggled(LINK(this, ScTablePage, ToggleHdl));

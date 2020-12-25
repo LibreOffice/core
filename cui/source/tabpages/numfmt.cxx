@@ -190,8 +190,6 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
         m_xLbLanguage->set_active_id(pNumFmtShell->GetCurLanguage()); \
     }
 
-#define HDL(hdl) LINK( this, SvxNumberFormatTabPage, hdl )
-
 SvxNumberFormatTabPage::SvxNumberFormatTabPage(weld::Container* pPage, weld::DialogController* pController,
     const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pPage, pController, "cui/ui/numberingformatpage.ui", "NumberingFormatPage", &rCoreAttrs)
@@ -297,14 +295,14 @@ void SvxNumberFormatTabPage::Init_Impl()
     m_xBtnThousand->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
     m_xBtnEngineering->connect_clicked(LINK(this, SvxNumberFormatTabPage, OptClickHdl_Impl));
     m_xBtnEngineering->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
-    m_xLbFormat->connect_row_activated(HDL(DoubleClickHdl_Impl));
-    m_xEdFormat->connect_changed(HDL(EditModifyHdl_Impl));
+    m_xLbFormat->connect_row_activated(LINK(this, SvxNumberFormatTabPage, DoubleClickHdl_Impl));
+    m_xEdFormat->connect_changed(LINK(this, SvxNumberFormatTabPage, EditModifyHdl_Impl));
     m_xEdFormat->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
-    m_xIbAdd->connect_clicked(HDL(ClickHdl_Impl));
+    m_xIbAdd->connect_clicked(LINK(this, SvxNumberFormatTabPage, ClickHdl_Impl));
     m_xIbAdd->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
-    m_xIbRemove->connect_clicked(HDL(ClickHdl_Impl));
+    m_xIbRemove->connect_clicked(LINK(this, SvxNumberFormatTabPage, ClickHdl_Impl));
     m_xIbRemove->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
-    m_xIbInfo->connect_clicked(HDL(ClickHdl_Impl));
+    m_xIbInfo->connect_clicked(LINK(this, SvxNumberFormatTabPage, ClickHdl_Impl));
     UpdateThousandEngineeringCheckBox();
     UpdateDecimalsDenominatorEditBox();
 
