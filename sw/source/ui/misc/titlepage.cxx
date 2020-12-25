@@ -205,10 +205,10 @@ SwTitlePageDlg::SwTitlePageDlg(weld::Window *pParent)
     m_xDocumentStartRB->connect_toggled(aStartPageHdl);
     m_xPageStartRB->connect_toggled(aStartPageHdl);
 
+    m_xRestartNumberingNF->set_value(nResetPage);
     if (bMaybeResetNumbering && nResetPage > 0)
     {
         m_xRestartNumberingCB->set_active(true);
-        m_xRestartNumberingNF->set_value(nResetPage);
     }
     m_xRestartNumberingNF->set_sensitive(m_xRestartNumberingCB->get_active());
 
