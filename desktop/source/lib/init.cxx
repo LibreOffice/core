@@ -2068,6 +2068,10 @@ static void lo_runLoop(LibreOfficeKit* pThis,
                        LibreOfficeKitWakeCallback pWakeCallback,
                        void* pData);
 
+static void lo_sendDialogEvent(LibreOfficeKit* pThis,
+                               unsigned long long int nLOKWindowId,
+                               const char* pArguments);
+
 LibLibreOffice_Impl::LibLibreOffice_Impl()
     : m_pOfficeClass( gOfficeClass.lock() )
     , maThread(nullptr)
@@ -2092,6 +2096,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->runMacro = lo_runMacro;
         m_pOfficeClass->signDocument = lo_signDocument;
         m_pOfficeClass->runLoop = lo_runLoop;
+        m_pOfficeClass->sendDialogEvent = lo_sendDialogEvent;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -3695,7 +3700,8 @@ public:
 
 } // anonymous namespace
 
-static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long long int nWindowId, const char* pArguments)
+
+static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pArguments)
 {
     SolarMutexGuard aGuard;
 
@@ -3776,6 +3782,17 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long
     // force resend
     if (!bIsWeldedDialog)
         pWindow->Resize();
+}
+
+
+static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long long int nWindowId, const char* pArguments)
+{
+    lcl_sendDialogEvent(nWindowId, pArguments);
+}
+
+static void lo_sendDialogEvent(LibreOfficeKit* /*pThis*/, unsigned long long int nWindowId, const char* pArguments)
+{
+    lcl_sendDialogEvent(nWindowId, pArguments);
 }
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)

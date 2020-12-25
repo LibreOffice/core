@@ -110,6 +110,11 @@ struct _LibreOfficeKitClass
                      LibreOfficeKitPollCallback pPollCallback,
                      LibreOfficeKitWakeCallback pWakeCallback,
                      void* pData);
+
+    /// @see lok::Office::sendDialogEvent
+    void (*sendDialogEvent) (LibreOfficeKit* pThis,
+                            unsigned long long int nLOKWindowId,
+                            const char* pArguments);
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
