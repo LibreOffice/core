@@ -42,6 +42,32 @@
 
 using namespace ::com::sun::star;
 
+namespace vcl
+{
+
+VectorGraphicDataArray loadSvgDataFromFile(OUString const & rPath)
+{
+    VectorGraphicDataArray aDataArray;
+
+    SvFileStream rStream(rPath, StreamMode::STD_READ);
+
+    if (rStream.GetError())
+        return aDataArray;
+
+    const sal_uInt32 nStreamLength(rStream.remainingSize());
+
+
+    if (nStreamLength)
+    {
+        aDataArray.realloc(nStreamLength);
+        rStream.ReadBytes(aDataArray.begin(), nStreamLength);
+    }
+
+    return aDataArray;
+}
+
+} // end vcl namespace
+
 BitmapEx convertPrimitive2DSequenceToBitmapEx(
     const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
     const basegfx::B2DRange& rTargetRange,
@@ -198,7 +224,7 @@ void VectorGraphicData::ensureSequenceAndRange()
             const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(maVectorGraphicDataArray));
 
             if (myInputStream.is())
-                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(myInputStream, maPath));
+                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(myInputStream, OUString()));
 
             break;
         }
@@ -232,7 +258,7 @@ void VectorGraphicData::ensureSequenceAndRange()
                     aSequence = comphelper::containerToSequence(aVector);
                 }
 
-                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(myInputStream, maPath, aSequence));
+                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(myInputStream, OUString(), aSequence));
             }
 
             break;
@@ -292,11 +318,9 @@ std::pair<VectorGraphicData::State, size_t> VectorGraphicData::getSizeBytes() co
 
 VectorGraphicData::VectorGraphicData(
     const VectorGraphicDataArray& rVectorGraphicDataArray,
-    const OUString& rPath,
     VectorGraphicDataType eVectorDataType,
     sal_Int32 nPageIndex)
 :   maVectorGraphicDataArray(rVectorGraphicDataArray),
-    maPath(rPath),
     mbSequenceCreated(false),
     maRange(),
     maSequence(),
@@ -305,35 +329,6 @@ VectorGraphicData::VectorGraphicData(
     meVectorGraphicDataType(eVectorDataType),
     mnPageIndex(nPageIndex)
 {
-}
-
-VectorGraphicData::VectorGraphicData(
-    const OUString& rPath,
-    VectorGraphicDataType eVectorDataType)
-:   maVectorGraphicDataArray(),
-    maPath(rPath),
-    mbSequenceCreated(false),
-    maRange(),
-    maSequence(),
-    maReplacement(),
-    mNestedBitmapSize(0),
-    meVectorGraphicDataType(eVectorDataType),
-    mnPageIndex(-1)
-{
-    SvFileStream rIStm(rPath, StreamMode::STD_READ);
-    if(rIStm.GetError())
-        return;
-    const sal_uInt32 nStmLen(rIStm.remainingSize());
-    if (nStmLen)
-    {
-        maVectorGraphicDataArray.realloc(nStmLen);
-        rIStm.ReadBytes(maVectorGraphicDataArray.begin(), nStmLen);
-
-        if (rIStm.GetError())
-        {
-            maVectorGraphicDataArray = VectorGraphicDataArray();
-        }
-    }
 }
 
 VectorGraphicData::~VectorGraphicData()

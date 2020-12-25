@@ -31,6 +31,7 @@
 #include <rtl/bootstrap.hxx>
 #include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/stream.hxx>
 
 #include <sfx2/app.hxx>
 #include <appdata.hxx>
@@ -137,7 +138,9 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
     if ( !FileExists(aObj) )
         return false;
 
-    VectorGraphicData aVectorGraphicData(aObj.PathToFileName(), VectorGraphicDataType::Svg);
+    OUString aPath = aObj.PathToFileName();
+    VectorGraphicDataArray aVectorGraphicDataArray = loadSvgDataFromFile(aPath);
+    VectorGraphicData aVectorGraphicData(aVectorGraphicDataArray, VectorGraphicDataType::Svg);
 
     // transform into [0,0,width,width*aspect] std dimensions
 

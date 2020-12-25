@@ -51,14 +51,18 @@ enum class VectorGraphicDataType
     Pdf = 3
 };
 
+namespace vcl
+{
+
+VCL_DLLPUBLIC VectorGraphicDataArray loadSvgDataFromFile(OUString const & rPath);
+
+}
+
 class VCL_DLLPUBLIC VectorGraphicData
 {
 private:
     // the file and length
     VectorGraphicDataArray      maVectorGraphicDataArray;
-
-    // The absolute Path if available
-    OUString                    maPath;
 
     // on demand created content
     bool                        mbSequenceCreated;
@@ -90,10 +94,8 @@ private:
 public:
     VectorGraphicData(
         const VectorGraphicDataArray& rVectorGraphicDataArray,
-        const OUString& rPath,
         VectorGraphicDataType eVectorDataType,
         sal_Int32 nPageIndex = -1);
-    VectorGraphicData(const OUString& rPath, VectorGraphicDataType eVectorDataType);
     ~VectorGraphicData();
 
     /// compare op
@@ -107,7 +109,7 @@ public:
     sal_uInt32 getVectorGraphicDataArrayLength() const { return maVectorGraphicDataArray.getLength(); }
     enum class State { UNPARSED, PARSED };
     std::pair<State, size_t> getSizeBytes() const;
-    const OUString& getPath() const { return maPath; }
+
     const VectorGraphicDataType& getVectorGraphicDataType() const { return meVectorGraphicDataType; }
 
     /// data read and evtl. on demand creation
