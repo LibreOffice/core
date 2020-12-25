@@ -72,7 +72,7 @@ public:
     sal_Int32 SAL_CALL getAccessibleChildCount() final override;
     /** For drop down list boxes the text field is a not editable
         VCLXAccessibleTextField, for combo boxes it is an
-        editable VLCAccessibleEdit.
+        editable VCLXAccessibleEdit.
     */
     css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 i) override;
