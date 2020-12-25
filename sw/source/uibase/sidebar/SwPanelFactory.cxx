@@ -74,7 +74,7 @@ public:
     { return cppu::supportsService(this, ServiceName); }
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
-    { return css::uno::Sequence<OUString>{"com.sun.star.ui.UIElementFactory"}; }
+    { return {"com.sun.star.ui.UIElementFactory"}; }
 };
 
 SwPanelFactory::SwPanelFactory()
