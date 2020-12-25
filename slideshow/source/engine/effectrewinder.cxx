@@ -30,6 +30,7 @@
 #include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <officecfg/Office/Canvas.hxx>
 
@@ -84,6 +85,7 @@ EffectRewinder::EffectRewinder (
       mnMainSequenceEffectCount(0),
       mpAsynchronousRewindEvent(),
       mxCurrentAnimationRootNode(),
+      mxCurrentSlide(),
       mbNonUserTriggeredMainSequenceEffectSeen(false)
 {
     initialize();
@@ -156,6 +158,11 @@ void EffectRewinder::setRootAnimationNode (
     mxCurrentAnimationRootNode = xRootNode;
 }
 
+void EffectRewinder::setCurrentSlide (
+    const uno::Reference<drawing::XDrawPage>& xSlide)
+{
+    mxCurrentSlide = xSlide;
+}
 
 bool EffectRewinder::rewind (
     const ::std::shared_ptr<ScreenUpdater::UpdateLock>& rpPaintLock,
@@ -411,6 +418,15 @@ void EffectRewinder::asynchronousRewind (
         // Process initial events and skip any animations that are started
         // when the slide is shown.
         mbNonUserTriggeredMainSequenceEffectSeen = false;
+
+        uno::Reference< beans::XPropertySet > xPropSet( mxCurrentSlide, uno::UNO_QUERY );
+        sal_Int32 nChange(0);
+
+        if( xPropSet.is())
+            getPropertyValue( nChange, xPropSet, "Change");
+
+        if (!nChange)
+            mrEventQueue.forceEmpty();
 
         if (mbNonUserTriggeredMainSequenceEffectSeen)
         {
