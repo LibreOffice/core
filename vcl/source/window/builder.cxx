@@ -191,7 +191,8 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
             || rUIFile == "modules/scalc/ui/selectsource.ui"
             || rUIFile == "modules/scalc/ui/managenamesdialog.ui"
             || rUIFile == "modules/scalc/ui/definename.ui"
-            || rUIFile == "cui/ui/macroselectordialog.ui")
+            || rUIFile == "cui/ui/macroselectordialog.ui"
+            || rUIFile == "uui/ui/macrowarnmedium.ui")
         {
             bUseJSBuilder = true;
         }
