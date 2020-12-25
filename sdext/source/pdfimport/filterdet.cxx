@@ -396,7 +396,7 @@ sal_Bool PDFDetector::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> PDFDetector::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>{"com.sun.star.document.ImportFilter"};
+    return {"com.sun.star.document.ImportFilter"};
 }
 
 bool checkDocChecksum( const OUString& rInPDFFileURL,

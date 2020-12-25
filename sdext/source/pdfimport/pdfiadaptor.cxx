@@ -201,7 +201,7 @@ sal_Bool PDFIHybridAdaptor::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> PDFIHybridAdaptor::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>{"com.sun.star.document.ImportFilter"};
+    return {"com.sun.star.document.ImportFilter"};
 }
 
 PDFIRawAdaptor::PDFIRawAdaptor( OUString const & implementationName, const uno::Reference< uno::XComponentContext >& xContext ) :
@@ -323,7 +323,7 @@ sal_Bool PDFIRawAdaptor::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> PDFIRawAdaptor::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>{"com.sun.star.document.ImportFilter"};
+    return {"com.sun.star.document.ImportFilter"};
 }
 
 

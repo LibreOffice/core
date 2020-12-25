@@ -43,7 +43,7 @@ class Implementation:
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return css::uno::Sequence<OUString>{"com.sun.star.xforms.XForms"};
+        return {"com.sun.star.xforms.XForms"};
     }
 };
 

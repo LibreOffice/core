@@ -70,7 +70,7 @@ sal_Bool SlideRenderer::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> SlideRenderer::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>{"com.sun.star.drawing.SlideRenderer"};
+    return {"com.sun.star.drawing.SlideRenderer"};
 }
 
 //----- XSlideRenderer --------------------------------------------------------

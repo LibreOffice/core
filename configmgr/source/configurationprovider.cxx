@@ -124,7 +124,7 @@ private:
     {
         return default_
             ? default_provider::getSupportedServiceNames()
-            : css::uno::Sequence<OUString> { "com.sun.star.configuration.ConfigurationProvider" };
+            : { "com.sun.star.configuration.ConfigurationProvider" };
     }
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(

@@ -610,7 +610,7 @@ sal_Bool Model::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence<OUString> Model::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>{"com.sun.star.xforms.Model"};
+    return {"com.sun.star.xforms.Model"};
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
