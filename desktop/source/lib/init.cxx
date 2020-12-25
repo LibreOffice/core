@@ -2472,11 +2472,14 @@ static void lo_registerCallback (LibreOfficeKit* pThis,
 {
     SolarMutexGuard aGuard;
 
+    Application* pApp = GetpApp();
+    assert(pApp);
+
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     pLib->maLastExceptionMsg.clear();
 
-    pLib->mpCallback = pCallback;
-    pLib->mpCallbackData = pData;
+    pApp->m_pCallback = pLib->mpCallback = pCallback;
+    pApp->m_pCallbackData = pLib->mpCallbackData = pData;
 }
 
 static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
