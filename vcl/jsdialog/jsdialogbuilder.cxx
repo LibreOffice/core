@@ -887,6 +887,11 @@ JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, VclPtr<vcl::Window> a
     : SalInstanceMessageDialog(pDialog, pBuilder, bTakeOwnership)
     , JSDialogSender(m_xMessageDialog, aContentWindow, "dialog")
 {
+    if (aContentWindow && aContentWindow->IsDisableIdleNotify())
+    {
+        pDialog->AddEventListener(LINK(this, JSMessageDialog, on_window_event));
+        m_bNotifyCreated = false;
+    }
 }
 
 void JSMessageDialog::set_primary_text(const OUString& rText)
@@ -899,6 +904,21 @@ void JSMessageDialog::set_secondary_text(const OUString& rText)
 {
     SalInstanceMessageDialog::set_secondary_text(rText);
     notifyDialogState();
+}
+
+IMPL_LINK_NOARG(JSMessageDialog, on_dump_status, void*, void) { JSDialogSender::dumpStatus(); }
+
+IMPL_LINK(JSMessageDialog, on_window_event, VclWindowEvent&, rEvent, void)
+{
+    if (rEvent.GetId() == VclEventId::WindowShow && !m_bNotifyCreated)
+    {
+        Application::PostUserEvent(LINK(this, JSMessageDialog, on_dump_status));
+        m_bNotifyCreated = true;
+    }
+    else if (rEvent.GetId() == VclEventId::WindowHide || rEvent.GetId() == VclEventId::WindowClose)
+    {
+        sendClose();
+    }
 }
 
 JSCheckButton::JSCheckButton(VclPtr<vcl::Window> aNotifierWindow,
