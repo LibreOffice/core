@@ -42,6 +42,32 @@
 
 using namespace ::com::sun::star;
 
+namespace vcl
+{
+
+VectorGraphicDataArray loadSvgDataFromFile(OUString const & rPath)
+{
+    VectorGraphicDataArray aDataArray;
+
+    SvFileStream rStream(rPath, StreamMode::STD_READ);
+
+    if (rStream.GetError())
+        return aDataArray;
+
+    const sal_uInt32 nStreamLength(rStream.remainingSize());
+
+
+    if (nStreamLength)
+    {
+        aDataArray.realloc(nStreamLength);
+        rStream.ReadBytes(aDataArray.begin(), nStreamLength);
+    }
+
+    return aDataArray;
+}
+
+} // end vcl namespace
+
 BitmapEx convertPrimitive2DSequenceToBitmapEx(
     const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
     const basegfx::B2DRange& rTargetRange,
@@ -305,35 +331,6 @@ VectorGraphicData::VectorGraphicData(
     meVectorGraphicDataType(eVectorDataType),
     mnPageIndex(nPageIndex)
 {
-}
-
-VectorGraphicData::VectorGraphicData(
-    const OUString& rPath,
-    VectorGraphicDataType eVectorDataType)
-:   maVectorGraphicDataArray(),
-    maPath(rPath),
-    mbSequenceCreated(false),
-    maRange(),
-    maSequence(),
-    maReplacement(),
-    mNestedBitmapSize(0),
-    meVectorGraphicDataType(eVectorDataType),
-    mnPageIndex(-1)
-{
-    SvFileStream rIStm(rPath, StreamMode::STD_READ);
-    if(rIStm.GetError())
-        return;
-    const sal_uInt32 nStmLen(rIStm.remainingSize());
-    if (nStmLen)
-    {
-        maVectorGraphicDataArray.realloc(nStmLen);
-        rIStm.ReadBytes(maVectorGraphicDataArray.begin(), nStmLen);
-
-        if (rIStm.GetError())
-        {
-            maVectorGraphicDataArray = VectorGraphicDataArray();
-        }
-    }
 }
 
 VectorGraphicData::~VectorGraphicData()
