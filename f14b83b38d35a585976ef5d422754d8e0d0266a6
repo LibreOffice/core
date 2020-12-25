@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b2e532f_f449bffa",
+        "filename": "comphelper/source/processfactory/processfactory.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-25T07:15:48Z",
+      "side": 1,
+      "message": "Interesting, I supposed that some plugin (or deleted overload?) should have caught this unnecessary UNO_QUERY explicit ctor?",
+      "range": {
+        "startLine": 96,
+        "startChar": 16,
+        "endLine": 96,
+        "endChar": 57
+      },
+      "revId": "f14b83b38d35a585976ef5d422754d8e0d0266a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
