@@ -467,6 +467,32 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id)
     return pRet;
 }
 
+std::unique_ptr<weld::MessageDialog> JSInstanceBuilder::weld_message_dialog(const OString& id)
+{
+    std::unique_ptr<weld::MessageDialog> pRet;
+    ::MessageDialog* pMessageDialog = m_xBuilder->get<::MessageDialog>(id);
+
+    if (pMessageDialog)
+    {
+        m_nWindowId = pMessageDialog->GetLOKWindowId();
+        pMessageDialog->SetLOKTunnelingState(false);
+
+        InsertWindowToMap(m_nWindowId);
+
+        assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
+        m_aOwnedToplevel.set(pMessageDialog);
+        m_xBuilder->drop_ownership(pMessageDialog);
+
+        if (id == "MacroWarnMedium")
+            pMessageDialog->SetDisableIdleNotify(true);
+    }
+
+    pRet.reset(pMessageDialog ? new JSMessageDialog(pMessageDialog, m_aOwnedToplevel, this, false)
+                              : nullptr);
+
+    return pRet;
+}
+
 std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OString& id)
 {
     ::FixedText* pLabel = m_xBuilder->get<FixedText>(id);
