@@ -140,6 +140,27 @@ void JsonWriter::writeEscapedOUString(const OUString& rPropVal)
             *mPos = static_cast<char>(ch);
             ++mPos;
         }
+        else if (ch == '\n')
+        {
+            *mPos = '\\';
+            ++mPos;
+            *mPos = 'n';
+            ++mPos;
+        }
+        else if (ch == '\r')
+        {
+            *mPos = '\\';
+            ++mPos;
+            *mPos = 'r';
+            ++mPos;
+        }
+        else if (ch == '\f')
+        {
+            *mPos = '\\';
+            ++mPos;
+            *mPos = 'f';
+            ++mPos;
+        }
         else if (ch <= 0x7F)
         {
             *mPos = static_cast<char>(ch);
