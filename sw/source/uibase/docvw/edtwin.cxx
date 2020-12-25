@@ -557,36 +557,11 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                     IsAttrAtPos::ClickField |
                     IsAttrAtPos::InetAttr |
                     IsAttrAtPos::Ftn |
-                            IsAttrAtPos::SmartTag |
-                            IsAttrAtPos::Outline);
+                    IsAttrAtPos::SmartTag);
                 if( rSh.GetContentAtPos( rLPt, aSwContentAtPos) )
                 {
-                    if (IsAttrAtPos::Outline == aSwContentAtPos.eContentAtPos)
-                    {
-                        if (nModifier == KEY_MOD1
-                                && GetView().GetWrtShell().GetViewOptions()->IsShowOutlineContentVisibilityButton())
-                        {
-                            eStyle = PointerStyle::RefHand;
-                            // set quick help
-                            if(aSwContentAtPos.aFnd.pNode && aSwContentAtPos.aFnd.pNode->IsTextNode())
-                            {
-                                const SwNodes& rNds = GetView().GetWrtShell().GetDoc()->GetNodes();
-                                SwOutlineNodes::size_type nPos;
-                                rNds.GetOutLineNds().Seek_Entry(aSwContentAtPos.aFnd.pNode->GetTextNode(), &nPos);
-                                SwOutlineNodes::size_type nOutlineNodesCount
-                                        = rSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
-                                int nLevel = rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos);
-                                OUString sQuickHelp(SwResId(STR_CLICK_OUTLINE_CONTENT_TOGGLE_VISIBILITY));
-                                if (!rSh.GetViewOptions()->IsTreatSubOutlineLevelsAsContent()
-                                        && nPos + 1 < nOutlineNodesCount
-                                        && rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos + 1) > nLevel)
-                                    sQuickHelp += " (" + SwResId(STR_CLICK_OUTLINE_CONTENT_TOGGLE_VISIBILITY_EXT) + ")";
-                                SetQuickHelpText(sQuickHelp);
-                            }
-                        }
-                    }
                     // Is edit inline input field
-                    else if (IsAttrAtPos::Field == aSwContentAtPos.eContentAtPos
+                    if (IsAttrAtPos::Field == aSwContentAtPos.eContentAtPos
                              && aSwContentAtPos.pFndTextAttr != nullptr
                              && aSwContentAtPos.pFndTextAttr->Which() == RES_TXTATR_INPUTFIELD)
                     {
@@ -602,6 +577,36 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                             (IsAttrAtPos::InetAttr == aSwContentAtPos.eContentAtPos && bExecHyperlinks) ||
                             (IsAttrAtPos::SmartTag == aSwContentAtPos.eContentAtPos && bExecSmarttags) )
                             eStyle = PointerStyle::RefHand;
+                    }
+                }
+                else if (GetView().GetWrtShell().GetViewOptions()->IsShowOutlineContentVisibilityButton())
+                {
+                    aSwContentAtPos.eContentAtPos = IsAttrAtPos::Outline;
+                    if (rSh.GetContentAtPos(rLPt, aSwContentAtPos))
+                    {
+                        if (IsAttrAtPos::Outline == aSwContentAtPos.eContentAtPos)
+                        {
+                            if (nModifier == KEY_MOD1)
+                            {
+                                eStyle = PointerStyle::RefHand;
+                                // set quick help
+                                if(aSwContentAtPos.aFnd.pNode && aSwContentAtPos.aFnd.pNode->IsTextNode())
+                                {
+                                    const SwNodes& rNds = GetView().GetWrtShell().GetDoc()->GetNodes();
+                                    SwOutlineNodes::size_type nPos;
+                                    rNds.GetOutLineNds().Seek_Entry(aSwContentAtPos.aFnd.pNode->GetTextNode(), &nPos);
+                                    SwOutlineNodes::size_type nOutlineNodesCount
+                                            = rSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
+                                    int nLevel = rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos);
+                                    OUString sQuickHelp(SwResId(STR_CLICK_OUTLINE_CONTENT_TOGGLE_VISIBILITY));
+                                    if (!rSh.GetViewOptions()->IsTreatSubOutlineLevelsAsContent()
+                                            && nPos + 1 < nOutlineNodesCount
+                                            && rSh.getIDocumentOutlineNodesAccess()->getOutlineLevel(nPos + 1) > nLevel)
+                                        sQuickHelp += " (" + SwResId(STR_CLICK_OUTLINE_CONTENT_TOGGLE_VISIBILITY_EXT) + ")";
+                                    SetQuickHelpText(sQuickHelp);
+                                }
+                            }
+                        }
                     }
                 }
             }
