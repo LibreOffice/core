@@ -151,6 +151,8 @@ public:
                                                             const OUString& rUIFile);
 
     virtual ~JSInstanceBuilder() override;
+    virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OString& id,
+                                                                     bool bTakeOwnership = true) override;
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString& id,
                                                       bool bTakeOwnership = true) override;
     virtual std::unique_ptr<weld::Label> weld_label(const OString& id,
