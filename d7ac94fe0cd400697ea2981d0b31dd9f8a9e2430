@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f06ccb7_6e3c6540",
+        "filename": "include/include",
+        "patchSetId": 10
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-25T20:21:21Z",
+      "side": 1,
+      "message": "this file should not be here",
+      "revId": "d7ac94fe0cd400697ea2981d0b31dd9f8a9e2430",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9606338b_96f2312e",
+        "filename": "starmath/source/xparsmlbase.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 4281,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-25T20:21:21Z",
+      "side": 1,
+      "message": "why is this commented out?",
+      "revId": "d7ac94fe0cd400697ea2981d0b31dd9f8a9e2430",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87a4f8e6_680e8231",
+        "filename": "starmath/source/xparsmlbase.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 4283,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-25T20:21:21Z",
+      "side": 1,
+      "message": "we prefer the css:: prefix to spelling out com::sun::star for most of our code",
+      "revId": "d7ac94fe0cd400697ea2981d0b31dd9f8a9e2430",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "209023d5_6f4513d2",
+        "filename": "starmath/source/xparsmlbase.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 4291,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-25T20:21:21Z",
+      "side": 1,
+      "message": "no need to use rtl::OUString, just plain OUString is fine",
+      "revId": "d7ac94fe0cd400697ea2981d0b31dd9f8a9e2430",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
