@@ -581,7 +581,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PRIVATELIBS_URE,ure, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
-	$(if $(ENABLE_VLC),avmediavlc) \
 	$(if $(ENABLE_GSTREAMER_1_0),avmediagst) \
 	$(if $(filter WNT,$(OS)),avmediawin) \
 	cached1 \

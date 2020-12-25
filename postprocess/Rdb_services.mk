@@ -203,9 +203,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(ENABLE_GSTREAMER_1_0), \
 		avmedia/source/gstreamer/avmediagstreamer \
 	) \
-	$(if $(ENABLE_VLC), \
-		avmedia/source/vlc/avmediavlc \
-	) \
 	$(if $(ENABLE_KF5), \
 		shell/source/backends/kf5be/kf5be1 \
 	) \

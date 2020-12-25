@@ -1099,7 +1099,6 @@ haiku*)
     test_freetype=yes
     enable_odk=no
     enable_gstreamer_1_0=no
-    enable_vlc=no
     enable_coinmp=no
     enable_pdfium=no
     enable_sdremote=no
@@ -1602,11 +1601,6 @@ libo_FUZZ_ARG_ENABLE(gstreamer-1-0,
     AS_HELP_STRING([--disable-gstreamer-1-0],
         [Disable building with the gstreamer 1.0 avmedia backend.]),
 ,test "${enable_gstreamer_1_0+set}" = set || enable_gstreamer_1_0=yes)
-
-libo_FUZZ_ARG_ENABLE(vlc,
-    AS_HELP_STRING([--enable-vlc],
-        [Enable building with the (experimental) VLC avmedia backend.]),
-,test "${enable_vlc+set}" = set || enable_vlc=no)
 
 libo_FUZZ_ARG_ENABLE(neon,
     AS_HELP_STRING([--disable-neon],
@@ -11450,21 +11444,6 @@ fi
 AC_SUBST(GSTREAMER_1_0_CFLAGS)
 AC_SUBST(GSTREAMER_1_0_LIBS)
 AC_SUBST(ENABLE_GSTREAMER_1_0)
-
-dnl ===================================================================
-dnl Check whether to build the VLC avmedia backend
-dnl ===================================================================
-
-ENABLE_VLC=""
-
-AC_MSG_CHECKING([whether to enable the VLC avmedia backend])
-if test "$enable_avmedia" = yes -a $_os != iOS -a $_os != Android -a "$enable_vlc" = yes; then
-    ENABLE_VLC="TRUE"
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_VLC)
 
 ENABLE_OPENGL_TRANSITIONS=
 ENABLE_OPENGL_CANVAS=
