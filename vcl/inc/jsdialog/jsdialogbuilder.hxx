@@ -315,6 +315,10 @@ public:
 
 class JSMessageDialog : public SalInstanceMessageDialog, public JSDialogSender
 {
+    DECL_LINK(on_dump_status, void*, void);
+    DECL_LINK(on_window_event, VclWindowEvent&, void);
+
+    bool m_bNotifyCreated;
 public:
     JSMessageDialog(::MessageDialog* pDialog, VclPtr<vcl::Window> aContentWindow,
                     SalInstanceBuilder* pBuilder, bool bTakeOwnership);
