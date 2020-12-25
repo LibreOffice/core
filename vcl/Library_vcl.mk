@@ -321,6 +321,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/pdf/PDFiumLibrary \
     vcl/source/pdf/ExternalPDFStreams \
     vcl/source/graphic/BinaryDataContainer \
+    vcl/source/graphic/BinaryDataContainerTools \
     vcl/source/graphic/GraphicID \
     vcl/source/graphic/GraphicLoader \
     vcl/source/graphic/GraphicObject \
@@ -328,6 +329,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/graphic/GraphicReader \
     vcl/source/graphic/grfattr \
     vcl/source/graphic/Manager \
+    vcl/source/graphic/UnoBinaryDataContainer \
     vcl/source/graphic/UnoGraphic \
     vcl/source/graphic/UnoGraphicMapper \
     vcl/source/graphic/UnoGraphicDescriptor \
