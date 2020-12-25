@@ -21,7 +21,7 @@
 
 #include <unotools/resmgr.hxx>
 
-#define AVMEDIA_MANAGER_SERVICE_PREFERRED "com.sun.star.comp.avmedia.Manager_VLC"
+#define AVMEDIA_MANAGER_SERVICE_PREFERRED "com.sun.star.comp.avmedia.Manager_GStreamer"
 #ifdef _WIN32
 #define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_DirectX"
 #else
