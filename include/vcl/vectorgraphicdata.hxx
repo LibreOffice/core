@@ -93,7 +93,6 @@ public:
         const OUString& rPath,
         VectorGraphicDataType eVectorDataType,
         sal_Int32 nPageIndex = -1);
-    VectorGraphicData(const OUString& rPath, VectorGraphicDataType eVectorDataType);
     ~VectorGraphicData();
 
     /// compare op

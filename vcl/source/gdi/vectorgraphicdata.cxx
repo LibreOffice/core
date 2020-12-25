@@ -307,35 +307,6 @@ VectorGraphicData::VectorGraphicData(
 {
 }
 
-VectorGraphicData::VectorGraphicData(
-    const OUString& rPath,
-    VectorGraphicDataType eVectorDataType)
-:   maVectorGraphicDataArray(),
-    maPath(rPath),
-    mbSequenceCreated(false),
-    maRange(),
-    maSequence(),
-    maReplacement(),
-    mNestedBitmapSize(0),
-    meVectorGraphicDataType(eVectorDataType),
-    mnPageIndex(-1)
-{
-    SvFileStream rIStm(rPath, StreamMode::STD_READ);
-    if(rIStm.GetError())
-        return;
-    const sal_uInt32 nStmLen(rIStm.remainingSize());
-    if (nStmLen)
-    {
-        maVectorGraphicDataArray.realloc(nStmLen);
-        rIStm.ReadBytes(maVectorGraphicDataArray.begin(), nStmLen);
-
-        if (rIStm.GetError())
-        {
-            maVectorGraphicDataArray = VectorGraphicDataArray();
-        }
-    }
-}
-
 VectorGraphicData::~VectorGraphicData()
 {
 }
