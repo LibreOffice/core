@@ -161,6 +161,8 @@ Application::Application()
     osl_setEnvironment(aVar.pData, aValue.pData);
 
     ImplGetSVData()->mpApp = this;
+    m_pCallbackData = nullptr;
+    m_pCallback = nullptr;
 }
 
 Application::~Application()
@@ -308,6 +310,23 @@ void Application::EndAllDialogs()
 void Application::EndAllPopups()
 {
     Application::PostUserEvent( LINK( nullptr, ImplSVAppData, ImplEndAllPopupsMsg ) );
+}
+
+void Application::notifyWindow(vcl::LOKWindowId /*nLOKWindowId*/,
+                               const OUString& /*rAction*/,
+                               const std::vector<vcl::LOKPayloadItem>& /*rPayload = std::vector<LOKPayloadItem>()*/) const
+{
+}
+
+void Application::libreOfficeKitViewCallback(int nType, const char* pPayload) const
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    if (m_pCallback)
+    {
+        m_pCallback(nType, pPayload, m_pCallbackData);
+    }
 }
 
 
