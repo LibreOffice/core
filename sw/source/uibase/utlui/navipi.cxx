@@ -204,10 +204,7 @@ IMPL_LINK(SwNavigationPI, ToolBoxSelectHdl, const OString&, rCommand, void)
         bool *pbNext = new bool(true);
         if (rCommand == ".uno:ScrollToPrevious")
             *pbNext = false;
-        const bool bEnabled = pView->GetEditWin().IsEnabled();
-        pView->GetEditWin().Enable(false); // prevent edit window from grabbing focus
         pView->MoveNavigationHdl(pbNext);
-        pView->GetEditWin().Enable(bEnabled);
     }
     else if (rCommand == "root")
     {
