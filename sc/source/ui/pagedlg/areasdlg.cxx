@@ -49,7 +49,6 @@ enum {
     SC_AREASDLG_RR_OFFSET  = 2
 };
 
-#define HDL(hdl)            LINK( this, ScPrintAreasDlg, hdl )
 namespace
 {
     void ERRORBOX(weld::Window* pParent, const char* rId)
@@ -238,20 +237,20 @@ void ScPrintAreasDlg::Impl_Reset()
     const ScRange*  pRepeatColRange = pDoc->GetRepeatColRange( nCurTab );
     const ScRange*  pRepeatRowRange = pDoc->GetRepeatRowRange( nCurTab );
 
-    m_xEdPrintArea->SetModifyHdl   ( HDL(Impl_ModifyHdl) );
-    m_xEdRepeatRow->SetModifyHdl   ( HDL(Impl_ModifyHdl) );
-    m_xEdRepeatCol->SetModifyHdl   ( HDL(Impl_ModifyHdl) );
-    m_xEdPrintArea->SetGetFocusHdl( HDL(Impl_GetEditFocusHdl) );
-    m_xEdRepeatRow->SetGetFocusHdl( HDL(Impl_GetEditFocusHdl) );
-    m_xEdRepeatCol->SetGetFocusHdl( HDL(Impl_GetEditFocusHdl) );
-    m_xLbPrintArea->connect_focus_in( HDL(Impl_GetFocusHdl) );
-    m_xLbRepeatRow->connect_focus_in( HDL(Impl_GetFocusHdl) );
-    m_xLbRepeatCol->connect_focus_in( HDL(Impl_GetFocusHdl) );
-    m_xLbPrintArea->connect_changed( HDL(Impl_SelectHdl) );
-    m_xLbRepeatRow->connect_changed( HDL(Impl_SelectHdl) );
-    m_xLbRepeatCol->connect_changed( HDL(Impl_SelectHdl) );
-    m_xBtnOk->connect_clicked( HDL(Impl_BtnHdl)    );
-    m_xBtnCancel->connect_clicked( HDL(Impl_BtnHdl)    );
+    m_xEdPrintArea->SetModifyHdl   (LINK( this, ScPrintAreasDlg, Impl_ModifyHdl));
+    m_xEdRepeatRow->SetModifyHdl   (LINK( this, ScPrintAreasDlg, Impl_ModifyHdl));
+    m_xEdRepeatCol->SetModifyHdl   (LINK( this, ScPrintAreasDlg, Impl_ModifyHdl));
+    m_xEdPrintArea->SetGetFocusHdl(LINK( this, ScPrintAreasDlg, Impl_GetEditFocusHdl));
+    m_xEdRepeatRow->SetGetFocusHdl(LINK( this, ScPrintAreasDlg, Impl_GetEditFocusHdl));
+    m_xEdRepeatCol->SetGetFocusHdl(LINK( this, ScPrintAreasDlg, Impl_GetEditFocusHdl));
+    m_xLbPrintArea->connect_focus_in(LINK( this, ScPrintAreasDlg, Impl_GetFocusHdl));
+    m_xLbRepeatRow->connect_focus_in(LINK( this, ScPrintAreasDlg, Impl_GetFocusHdl));
+    m_xLbRepeatCol->connect_focus_in(LINK( this, ScPrintAreasDlg, Impl_GetFocusHdl));
+    m_xLbPrintArea->connect_changed(LINK( this, ScPrintAreasDlg, Impl_SelectHdl));
+    m_xLbRepeatRow->connect_changed(LINK( this, ScPrintAreasDlg, Impl_SelectHdl));
+    m_xLbRepeatCol->connect_changed(LINK( this, ScPrintAreasDlg, Impl_SelectHdl));
+    m_xBtnOk->connect_clicked(LINK( this, ScPrintAreasDlg, Impl_BtnHdl));
+    m_xBtnCancel->connect_clicked(LINK( this, ScPrintAreasDlg, Impl_BtnHdl));
 
     Impl_FillLists();
 
