@@ -786,8 +786,7 @@ Size ImpGraphic::ImplGetPrefSize() const
 
             case GraphicType::GdiMetafile:
             {
-                if (ImplIsSupportedGraphic())
-                  aSize = maMetaFile.GetPrefSize();
+                aSize = maMetaFile.GetPrefSize();
             }
             break;
 
