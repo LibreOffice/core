@@ -79,7 +79,7 @@ Private _CustomProperties		As Object		&apos;	Dictionary of custom properties
 
 REM ============================================================ MODULE CONSTANTS
 
-Const ISDOCFORM = 1				&apos;	Form is stored in a Calc, Writer, ... document
+Const ISDOCFORM = 1				&apos;	Form is stored in a Writer document
 
 REM ====================================================== CONSTRUCTOR/DESTRUCTOR
 
@@ -511,16 +511,11 @@ Try:
 			Set oXForm = oForms.getByIndex(Form)
 		End If
 		&apos;	Create the new Form class instance
-		Set oForm = New SF_Form
+		Set oForm = SF_Register._NewForm(oXForm)
 		With oForm
-			._Name = oXForm.Name
-			Set .[Me] = oForm
 			Set .[_Parent] = [Me]
-			._DrawPage = cstDrawPage
-			._UsualName = ._Name
-			Set ._MainForm = Nothing
 			._FormType = ISDOCFORM
-			Set ._Form = oXForm
+			Set ._Component = _Component
 			._Initialize()
 		End With
 		Set Forms = oForm

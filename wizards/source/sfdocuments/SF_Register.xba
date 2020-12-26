@@ -26,9 +26,20 @@ REM ================================================================== EXCEPTION
 
 REM ================================================================= DEFINITIONS
 
-&apos;&apos;&apos;	Event management of forms requires to being able to rebuild a Form object
-&apos;&apos;&apos;	from its com.sun.star.form.XForm or com.sun.star.comp.forms.ODatabaseForm UNO instance
-&apos;&apos;&apos;	For that purpose, the active forms are buffered in a global array of _FormCache types
+&apos;&apos;&apos;	Strategy for management of Form and FormControl events:
+&apos;&apos;&apos;	------------------------------------------------------
+&apos;&apos;&apos;	At the contrary of Dialogs and DialogControls, which are always started from some code,
+&apos;&apos;&apos;	Forms and FormControls will be initiated most often by the user, even if the SFDocuments library
+&apos;&apos;&apos;	allows to start forms programmatically
+&apos;&apos;&apos;
+&apos;&apos;&apos;	For Forms started programmatically, the corresponding objects are built top-down
+&apos;&apos;&apos;	Event management of forms and their controls requires to being able to rebuild Form
+&apos;&apos;&apos;	and FormControl objects bottom-up
+&apos;&apos;&apos;
+&apos;&apos;&apos;	To avoid multiple rebuilds requested by multiple events,
+&apos;&apos;&apos;		1. The active form objects are cached in a global array of _FormCache types
+&apos;&apos;&apos;		2. FormControl objects are cached in Form objects
+&apos;&apos;&apos;		3. The bottom-up rebuild is executed only once, at instance creation
 
 Type _FormCache
 	Terminated				As Boolean
@@ -58,7 +69,7 @@ Public Sub RegisterScriptServices() As Variant
 		.RegisterService(&quot;Calc&quot;,				&quot;SFDocuments.SF_Register._NewDocument&quot;)		&apos;	Same references, distinction is made inside the function
 		.RegisterService(&quot;Base&quot;,				&quot;SFDocuments.SF_Register._NewDocument&quot;)		&apos;	Same references, distinction is made inside the function
 		.RegisterEventManager(&quot;DocumentEvent&quot;,	&quot;SFDocuments.SF_Register._EventManager&quot;)	&apos;	Reference to the events manager
-		&apos;TODO
+		.RegisterEventManager(&quot;FormEvent&quot;,		&quot;SFDocuments.SF_Register._FormEventManager&quot;)&apos;	Reference to the form and controls events manager
 	End With
 
 End Sub			&apos;	SFDocuments.SF_Register.RegisterScriptServices
@@ -135,7 +146,7 @@ End Sub	&apos;	SFDocuments.SF_Register._CleanCacheEntry
 
 REM -----------------------------------------------------------------------------
 Public Function _EventManager(Optional ByRef pvArgs As Variant) As Object
-&apos;&apos;&apos;	Returns a Document or Calc object corresponding with the active component
+&apos;&apos;&apos;	Returns a Document, Calc or Base object corresponding with the active component
 &apos;&apos;&apos;	which triggered the event in argument
 &apos;&apos;&apos;	This method should be triggered only thru the invocation of CreateScriptService
 &apos;&apos;&apos;	Args:
@@ -164,9 +175,7 @@ Check:
 
 Try:
 	If ScriptForge.SF_Session.UnoObjectType(vEvent) = &quot;com.sun.star.document.DocumentEvent&quot; Then
-		If ScriptForge.SF_Session.UnoObjectType(vEvent.Source) = &quot;SwXTextDocument&quot; Then
-			Set oSource = SF_Register._NewDocument(vEvent.Source)
-		End If
+		Set oSource = SF_Register._NewDocument(vEvent.Source)
 	End If
 
 Finally:
@@ -187,17 +196,64 @@ Dim oCache As _FormCache		&apos;	Entry in the cache
 	Set oBasicForm = Nothing
 
 Try:
-	For Each oCache In _SF_.SFForms
-		If EqualUnoObjects(poForm, oCache.XUnoForm) And Not oCache.Terminated Then
-			Set oBasicForm = oCache.BasicForm
-			Exit For
+	With _SF_
+		If Not IsEmpty(.SFForms) Then
+			For Each oCache In .SFForms
+				If EqualUnoObjects(poForm, oCache.XUnoForm) And Not oCache.Terminated Then
+					Set oBasicForm = oCache.BasicForm
+					Exit For
+				End If
+			Next oCache
 		End If
-	Next oCache
+	End With
 
 Finally:
 	Set _FindFormInCache = oBasicForm
 	Exit Function
 End Function	&apos;	SFDocuments.SF_Register._FindFormInCache
+
+REM -----------------------------------------------------------------------------
+Public Function _FormEventManager(Optional ByRef pvArgs As Variant) As Object
+&apos;&apos;&apos;	Returns a Form or FormControl object corresponding with the form or control
+&apos;&apos;&apos;	which triggered the event in argument
+&apos;&apos;&apos;	This method should be triggered only thru the invocation of CreateScriptService
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		pvEvent: com.sun.star.lang.EventObject
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		the output of a Form, FormControl service or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Sub TriggeredByEvent(ByRef poEvent As Object)
+&apos;&apos;&apos;			Dim oForm As Object
+&apos;&apos;&apos;			Set oForm = CreateScriptService(&quot;SFDocuments.FormEvent&quot;, poEvent)
+&apos;&apos;&apos;			If Not IsNull(oForm) Then
+&apos;&apos;&apos;				&apos; ... (a valid form or subform has been identified)
+&apos;&apos;&apos;		End Sub
+
+Dim oSource As Object			&apos;	Return value
+Dim vEvent As Variant			&apos;	Alias of pvArgs(0)
+Dim oSession As Object			:	Set oSession = ScriptForge.SF_Session
+
+	&apos;	Never abort while an event is processed
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Finally
+	Set oSource = Nothing
+
+Check:
+	If IsMissing(pvArgs) Or IsEmpty(pvArgs) Then pvArgs = Array()
+	If UBound(pvArgs) &gt;= 0 Then vEvent = pvArgs(0) Else Set vEvent = Empty
+	If VarType(vEvent) &lt;&gt; ScriptForge.V_OBJECT Then GoTo Finally
+
+Try:
+	If oSession.UnoObjectType(vEvent) = &quot;com.sun.star.lang.EventObject&quot; Then
+		If oSession.UnoObjectType(vEvent.Source) = &quot;com.sun.star.comp.forms.ODatabaseForm&quot; Then
+			Set oSource = SF_Register._NewForm(vEvent.Source)
+		Else		&apos;	Add for controls
+		End If
+	End If
+
+Finally:
+	Set _FormEventManager = oSource
+	Exit Function
+End Function	&apos;	SFDocuments.SF_Register._FormEventManager
 
 REM -----------------------------------------------------------------------------
 Public Function _NewDocument(Optional ByVal pvArgs As Variant) As Object
@@ -300,6 +356,33 @@ Finally:
 Catch:
 	GoTo Finally
 End Function	&apos;	SFDocuments.SF_Register._NewDocument
+
+REM -----------------------------------------------------------------------------
+Public Function _NewForm(Optional ByRef poForm As Object) As Object
+&apos;&apos;&apos;	Returns an existing or a new SF_Form instance based on the argument
+&apos;&apos;&apos;	If the instance is new (not found in cache), the minimal members are initialized
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		poForm: com.sun.star.form.XForm or com.sun.star.comp.forms.ODatabaseForm
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A SF_Form instance
+
+Dim oForm As Object				&apos;	Return value
+
+Try:
+	Set oForm = SF_Register._FindFormInCache(poForm)
+	If IsNull(oForm) Then		&apos;	Not found
+		Set oForm = New SF_Form
+		With oForm
+			._Name = poForm.Name
+			Set .[Me] = oForm
+			Set ._Form = poForm
+		End With
+	End If
+
+Finally:
+	Set _NewForm = oForm
+	Exit Function
+End Function	&apos;	SFDocuments.SF_Register._NewForm
 
 REM ============================================== END OF SFDOCUMENTS.SF_REGISTER
 </script:module>
