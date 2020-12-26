@@ -54,7 +54,6 @@ bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF )
         auto aVectorGraphicDataPtr =
             std::make_shared<VectorGraphicData>(
                 aNewData,
-                OUString(),
                 VectorGraphicDataType::Emf);
 
         // create a Graphic and grep Metafile from it
@@ -97,7 +96,7 @@ bool ConvertGraphicToWMF(const Graphic& rGraphic, SvStream& rTargetStream,
         uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aLink.GetData()),
                                       aLink.GetDataSize());
         auto aVectorGraphicData
-            = std::make_shared<VectorGraphicData>(aData, OUString(), VectorGraphicDataType::Emf);
+            = std::make_shared<VectorGraphicData>(aData, VectorGraphicDataType::Emf);
         aVectorGraphicData->setEnableEMFPlus(false);
         Graphic aGraphic(aVectorGraphicData);
         bool bRet = ConvertGDIMetaFileToWMF(aGraphic.GetGDIMetaFile(), rTargetStream, pConfigItem,
