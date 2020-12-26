@@ -78,7 +78,7 @@ namespace
         // If we want a new descriptor then set it, otherwise reuse the existing one
         if (!pNewDesc)
         {
-            SwFormatPageDesc aPageFormatDesc(pPageFormatDesc ? *pPageFormatDesc : &rCurrentDesc);
+            SwFormatPageDesc aPageFormatDesc(&rCurrentDesc);
             if (nPgNo) aPageFormatDesc.SetNumOffset(nPgNo);
             pSh->SetAttrItem(aPageFormatDesc);
         }
@@ -133,6 +133,8 @@ void SwTitlePageDlg::FillList()
 sal_uInt16 SwTitlePageDlg::GetInsertPosition() const
 {
     sal_uInt16 nPage = 1;
+    // FIXME: If GetInsertPosition is greater than the current number of pages,
+    // it needs to be reduced to page-count + 1.
     if (m_xPageStartNF->get_sensitive())
         nPage = m_xPageStartNF->get_value();
     return nPage;
@@ -255,6 +257,8 @@ IMPL_LINK_NOARG(SwTitlePageDlg, EditHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, weld::Button&, void)
 {
+    // FIXME: This wizard is almost completely non-functional for inserting new pages.
+
     lcl_PushCursor(mpSh);
 
     mpSh->StartUndo();
@@ -269,12 +273,16 @@ IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, weld::Button&, void)
     sal_uInt16 nNoPages = m_xPageCountNF->get_value();
     if (!m_xUseExistingPagesRB->get_active())
     {
+        // FIXME: If the starting page number is larger than the last page,
+        // probably should add pages AFTER the last page, not before it.
         mpSh->GotoPage(GetInsertPosition(), false);
+        // FIXME: These new pages cannot be accessed currently with GotoPage. It doesn't know they exist.
         for (sal_uInt16 nI=0; nI < nNoPages; ++nI)
             mpSh->InsertPageBreak();
     }
 
     mpSh->GotoPage(GetInsertPosition(), false);
+    // FIXME: GotoPage is pointing to a page after the newly created index pages, so the wrong pages are getting Index style.
     for (sal_uInt16 nI=1; nI < nNoPages; ++nI)
     {
         if (mpSh->SttNxtPg())
@@ -286,6 +294,7 @@ IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, weld::Button&, void)
 
     if (nNoPages > 1 && mpSh->GotoPage(GetInsertPosition() + nNoPages, false))
     {
+        // FIXME: By definition, GotoPage(x,bRecord=false) returns false. This is dead code.
         SwFormatPageDesc aPageFormatDesc(mpNormalDesc);
         mpSh->SetAttrItem(aPageFormatDesc);
     }
@@ -294,7 +303,9 @@ IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, weld::Button&, void)
     {
         sal_uInt16 nPgNo = m_xRestartNumberingCB->get_active() ? m_xRestartNumberingNF->get_value() : 0;
         const SwPageDesc *pNewDesc = nNoPages > 1 ? mpNormalDesc : nullptr;
-        mpSh->GotoPage(GetInsertPosition() + nNoPages, false);
+        mpSh->GotoPage(GetInsertPosition() + nNoPages - 1, false);
+        // SttNxtPg can handle the invisible pages added to handle two odd, or two even pages - GotoPage can't.
+        mpSh->SttNxtPg();
         lcl_ChangePage(mpSh, nPgNo, pNewDesc);
     }
 
