@@ -35,7 +35,7 @@ Option Explicit
 &apos;&apos;&apos;
 &apos;&apos;&apos;			Form: WHERE IT IS ABOUT IN THE CURRENT &quot;Form&quot; SERVICE
 &apos;&apos;&apos;				Is an abstract set of Controls in an OPEN FormDocument
-&apos;&apos;&apos;				Each form is (often) linked to a dataset (table, query or Select statement),
+&apos;&apos;&apos;				Each form is usually linked to one single dataset (table, query or Select statement),
 &apos;&apos;&apos;				located in any database (provided the user may access it)
 &apos;&apos;&apos;					A usual document may contain several forms. Each of which may have its own data source (database + dataset)
 &apos;&apos;&apos;					A Base form document may contain several forms. Each of which may address its own dataset. The database however is unique
@@ -75,16 +75,18 @@ Private ServiceName			As String
 
 &apos;	Form location
 Private _Name				As String		&apos; Internal name of the form
-Private _DrawPage			As Long			&apos; Index in DrawPages collection
+Private _FormType			As Integer		&apos; One of the ISxxxFORM constants
 Private _SheetName			As String		&apos; Name as the sheet containing the form (Calc only)
 Private _FormDocumentName	As String		&apos; The hierarchical name of the containing form document (Base only)
-Private _FormType			As Integer		&apos; One of the ISxxxFORM constants
+Private _FormDocument		As Object		&apos; com.sun.star.comp.sdb.Content - the containing form document
+	&apos;	The form topmost container
+Private _Component			As Object		&apos; com.sun.star.lang.XComponent or com.sun.star.comp.dba.ODatabaseDocument
+
+&apos;	EVents management
 Private _CacheIndex			As Long			&apos; Index in central cache storage
+Private _IssuedFromEvent	As Boolean		&apos; When True instance is always presumed alive
 
 &apos;	Form UNO references
-&apos;		The forms container found in a Base document
-&apos;		Vital for Base forms and subforms
-Private _MainForm			As Object		&apos; com.sun.star.comp.sdb.Content
 &apos;		The entry to the interactions with the form. Validity checked by the _IsStillAlive() method
 &apos;		Each method or property requiring that the form is opened should first invoke that method
 Private _Form				As Object		&apos; com.sun.star.form.XForm or com.sun.star.comp.forms.ODatabaseForm
@@ -100,7 +102,8 @@ REM ============================================================ MODULE CONSTANT
 Const ISDOCFORM				=	1			&apos; Form is stored in a Writer document
 Const ISCALCFORM			=	2			&apos; Form is stored in a Calc document
 Const ISBASEFORM			=	3			&apos; Form is stored in a Base document
-Const ISSUBFORM				=	4			&apos; Form is a subform of a form stored in a Base document or of another subform
+Const ISSUBFORM				=	4			&apos; Form is a subform of a form or of another subform
+Const ISUNDEFINED			=	-1			&apos; Undefined form type
 
 REM ====================================================== CONSTRUCTOR/DESTRUCTOR
 
@@ -111,12 +114,12 @@ Private Sub Class_Initialize()
 	ObjectType = &quot;Form&quot;
 	ServiceName = &quot;SFDocuments.Form&quot;
 	_Name = &quot;&quot;
-	_DrawPage = -1
 	_SheetName = &quot;&quot;
 	_FormDocumentName = &quot;&quot;
-	_FormType = 0
+	Set _FormDocument = Nothing
+	_FormType = ISUNDEFINED
 	_CacheIndex = -1
-	Set _MainForm = Nothing
+	_IssuedFromEvent = False
 	Set _Form = Nothing
 	Set _Database = Nothing
 	_ControlCache = Array()
@@ -194,16 +197,10 @@ Property Let Width(Optional ByVal pvWidth As Variant)
 End Property	&apos;	SFDocuments.SF_Form.Width (let)
 
 REM -----------------------------------------------------------------------------
-Property Get XFormModel() As Object
-&apos;&apos;&apos;	The XFormModel property returns the model UNO object of the Form
-	XFormModel = _PropertyGet(&quot;XFormModel&quot;)
-End Property	&apos;	SFDocuments.SF_Form.XFormModel (get)
-
-REM -----------------------------------------------------------------------------
-Property Get XFormView() As Object
-&apos;&apos;&apos;	The XFormView property returns the view UNO object of the Form
-	XFormView = _PropertyGet(&quot;XFormView&quot;)
-End Property	&apos;	SFDocuments.SF_Form.XFormView (get)
+Property Get XForm() As Object
+&apos;&apos;&apos;	The XForm property returns the XForm UNO object of the Form
+	XForm = _PropertyGet(&quot;XForm&quot;)
+End Property	&apos;	SFDocuments.SF_Form.XForm (get)
 
 REM ===================================================================== METHODS
 
@@ -238,7 +235,7 @@ Try:
 		Case ISDOCFORM		:	bActivate = [_Parent].Activate()
 		Case ISCALCFORM		:	bActivate = [_Parent].Activate(_SheetName)
 		Case ISBASEFORM
-			Set oContainer = _MainForm.Component.CurrentController.Frame.ContainerWindow
+			Set oContainer = _FormDocument.Component.CurrentController.Frame.ContainerWindow
 			With oContainer
 				If .isVisible() = False Then .setVisible(True)
 				.IsMinimized = False
@@ -284,7 +281,7 @@ Try:
 	Select Case _FormType
 		Case ISDOCFORM, ISCALCFORM, ISSUBFORM
 		Case ISBASEFORM
-			_MainForm.close()
+			_FormDocument.close()
 			Dispose()
 			bClose = True
 	End Select
@@ -514,9 +511,11 @@ Public Function Properties() As Variant
 					, &quot;OnUnloading&quot; _
 					, &quot;OrderBy&quot; _
 					, &quot;OrderByOn&quot; _
+					, &quot;Parent&quot; _
 					, &quot;RecordSource&quot; _
 					, &quot;Visible&quot; _
 					, &quot;Width&quot; _
+					, &quot;XForm&quot; _
 					)
 
 End Function	&apos;	SFDocuments.SF_Form.Properties
@@ -545,6 +544,7 @@ Check:
 
 Try:
 	SetProperty = _PropertySet(PropertyName, Value)
+				Set UI = ScriptForge.SF_Services.CreateScriptService(&quot;ScriptForge.UI&quot;)
 
 Finally:
 	SF_Utils._ExitFunction(cstThisSub)
@@ -584,10 +584,91 @@ Private Function _GetListener(ByVal psEventName As String) As String
 End Function	&apos;	SFDocuments.SF_Form._GetListener
 
 REM -----------------------------------------------------------------------------
+Private Sub _GetParents()
+&apos;&apos;&apos;	When the current instance is created top-down, the parents are completely defined
+&apos;&apos;&apos;	and nothing should be done in this method
+&apos;&apos;&apos;	When the a class instance is created in a (form/control) event, it is the opposite
+&apos;&apos;&apos;	The current method rebuilds the missing members in the instance from the bottom
+&apos;&apos;&apos;	Members potentially to collect are:
+&apos;&apos;&apos;		- _FormType
+&apos;&apos;&apos;		- [_Parent], the immediate parent: a form or a document instance
+&apos;&apos;&apos;		+ Only when the _FormType is a main form
+&apos;&apos;&apos;			- _SheetName (Calc only)
+&apos;&apos;&apos;			- _FormDocumentName (Base only)
+&apos;&apos;&apos;			- _FormDocument, the topmost form collection
+&apos;&apos;&apos;			- _Component, the containing document
+&apos;&apos;&apos;	They must be identified only starting from the _Form UNO object
+&apos;&apos;&apos;
+&apos;&apos;&apos;	The method is called from the _Initialize() method at instance creation
+
+Dim oParent As Object				&apos;	Successive bottom-up parents
+Dim sType As String					&apos;	UNO object type
+Dim sPersistentName As String		&apos;	The Obj... name of a Base form
+Dim iLevel As Integer				&apos;	When = 1 =&gt; first parent
+Dim oSession As Object				:	Set oSession = ScriptForge.SF_Session
+
+	On Local Error GoTo Finally		&apos;	Being probably called from events, this method should avoid failures
+	&apos;	When the form type is known, the upper part of the branch is not scanned
+	If _FormType &lt;&gt; ISUNDEFINED Then GoTo Finally
+
+Try:
+	&apos;	The whole branch is scanned bottom-up
+	If oSession.HasUnoProperty(_Form, &quot;Parent&quot;) Then Set oParent = _Form.Parent Else Set oParent = Nothing
+	_FormType = ISUNDEFINED
+	iLevel = 1
+
+	Do While Not IsNull(oParent)
+		sType = SF_Session.UnoObjectType(oParent)
+		Select Case sType
+			&apos;	Collect at each level the needed info
+			Case &quot;com.sun.star.comp.forms.ODatabaseForm&quot;	&apos;	The parent _Form of a subform
+				If iLevel = 1 Then
+					_FormType = ISSUBFORM
+					Set [_Parent] = SF_Register._NewForm(oParent)
+					&apos;	The parent form could be a main form
+					[_Parent]._Initialize()
+					&apos;	Everything is in the parent, stop scan
+					Exit Sub
+				End If
+			Case &quot;com.sun.star.form.OFormsCollection&quot;		&apos;	The collection of forms inside a drawpage
+			Case &quot;SwXTextDocument&quot;							&apos;	The parent document: a Writer document or a Base form document
+				If oParent.Identifier = &quot;com.sun.star.sdb.FormDesign&quot; Then
+					sPersistentName = ScriptForge._GetPropertyValue(oParent.Args, &quot;HierarchicalDocumentName&quot;)
+				ElseIf oParent.Identifier = &quot;com.sun.star.text.TextDocument&quot; Then
+					_FormType = ISDOCFORM
+					Set [_Parent] = ScriptForge.SF_Services.CreateScriptService(&quot;SFDocuments.Document&quot;, oParent)
+					Set _Component = [_Parent]._Component
+				End If
+			Case &quot;ScModelObj&quot;								&apos;	The parent document: a Calc document
+				_FormType = ISCALCFORM
+				Set [_Parent] = ScriptForge.SF_Services.CreateScriptService(&quot;SFDocuments.Document&quot;, oParent)
+				Set _Component = oParent
+				&apos;	The triggered form event is presumed to be located in the (drawpage of the) active sheet
+				_SheetName = [_Parent].XSpreadsheet(&quot;~&quot;)
+			Case &quot;com.sun.star.comp.dba.ODatabaseDocument&quot;	&apos;	The Base document
+				_FormType = ISBASEFORM
+				Set [_Parent] = ScriptForge.SF_Services.CreateScriptService(&quot;SFDocuments.Document&quot;, oParent)
+				Set _Component = oParent
+				If IsNull([_Parent]._FormDocuments) Then Set [_Parent]._FormDocuments = _Component.getFormDocuments()
+				Set _FormDocument = [_Parent]._FindByPersistentName([_Parent]._FormDocuments, sPersistentName)
+			Case Else
+		End Select
+		If oSession.HasUnoProperty(oParent, &quot;Parent&quot;) Then Set oParent = oParent.Parent Else Set oParent = Nothing
+		iLevel = iLevel + 1
+	Loop
+
+Finally:
+	Exit Sub
+End Sub	&apos;	SFDocuments.SF_Form._GetParents
+
+REM -----------------------------------------------------------------------------
 Public Sub _Initialize()
 &apos;&apos;&apos;	Achieve the creation of a SF_Form instance
+&apos;&apos;&apos;		- complete the missing private members
 &apos;&apos;&apos;		- store the new instance in the cache
 
+	
+	_GetParents()
 	_CacheIndex = SF_Register._AddFormToCache(_Form, [Me])
 
 End Sub			&apos;	SFDocuments.SF_Form._Initialize
@@ -609,18 +690,22 @@ Check:
 	If IsMissing(pbError) Then pbError = True
 
 Try:
-	&apos;	For usual documents, check that the parent document is still open
-	&apos;	For Base forms and subforms, check the openness of the main form
-	Select Case _FormType
-		Case ISDOCFORM, ISCALCFORM
-			bAlive = [_Parent]._IsStillAlive(pbError)
-		Case ISBASEFORM, ISSUBFORM
-			&apos;	A form that has never been opened has no component
-			&apos;	If ever opened and closed afterwards, it keeps the Component but loses its Controller
-			bAlive = Not IsNull(_MainForm.Component)
-			If bAlive Then bAlive = Not IsNull(_MainForm.Component.CurrentController)
-	End Select
-	If Not bAlive Then GoTo Catch
+	If _IssuedFromEvent Then		&apos;	Instance is presumed alive when issued from an event
+		bAlive = True
+	Else
+		&apos;	For usual documents, check that the parent document is still open
+		&apos;	For Base forms and subforms, check the openness of the main form
+		Select Case _FormType
+			Case ISDOCFORM, ISCALCFORM
+				bAlive = [_Parent]._IsStillAlive(pbError)
+			Case ISBASEFORM, ISSUBFORM
+				&apos;	A form that has never been opened has no component
+				&apos;	If ever opened and closed afterwards, it keeps the Component but loses its Controller
+				bAlive = Not IsNull(_FormDocument.Component)
+				If bAlive Then bAlive = Not IsNull(_FormDocument.Component.CurrentController)
+		End Select
+		If Not bAlive Then GoTo Catch
+	End If
 
 Finally:
 	_IsStillAlive = bAlive
@@ -645,7 +730,7 @@ Private Function _PropertyGet(Optional ByVal psProperty As String) As Variant
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		psProperty: the name of the property
 
-Static oSession As Object					&apos;	Alias of SF_Session
+Static oSession As Object		&apos;	Alias of SF_Session
 Dim cstThisSub As String
 Const cstSubArgs = &quot;&quot;
 
@@ -653,7 +738,6 @@ Const cstSubArgs = &quot;&quot;
 	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 
 	ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
-	&apos;	All the properties except one require an open form
 	If Not _IsStillAlive() Then GoTo Finally
 
 	If IsNull(oSession) Then Set oSession = ScriptForge.SF_Services.CreateScriptService(&quot;Session&quot;)
@@ -661,8 +745,12 @@ Const cstSubArgs = &quot;&quot;
 		Case UCase(&quot;Caption&quot;)
 		Case UCase(&quot;Height&quot;)
 		Case UCase(&quot;Name&quot;)
+		Case UCase(&quot;Parent&quot;)
+			_PropertyGet = [_Parent]
 		Case UCase(&quot;Visible&quot;)
 		Case UCase(&quot;Width&quot;)
+		Case UCase(&quot;XForm&quot;)
+			Set _PropertyGet = _Form
 		Case Else
 			_PropertyGet = Null
 	End Select

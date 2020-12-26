@@ -191,7 +191,7 @@ Public Function Forms(Optional ByVal FormDocument As Variant _
 &apos;&apos;&apos;				Set myForm = oDoc.Forms(&quot;Folder1/myFormDocument&quot;, 0)
 
 Dim oForm As Object					&apos;	The new Form class instance
-Dim oMainForm As Object				&apos;	com.sun.star.comp.sdb.Content
+Dim oFormDocument As Object				&apos;	com.sun.star.comp.sdb.Content
 Dim oXForm As Object				&apos;	com.sun.star.form.XForm
 Dim vFormDocuments As Variant		&apos;	Array of form documents
 Dim vFormNames As Variant			&apos;	Array of form names
@@ -217,8 +217,8 @@ Check:
 
 Try:
 	&apos;	Start from the form document and go down to forms
-	Set oMainForm = _FormDocuments.getByHierarchicalName(FormDocument)
-	Set oForms = oMainForm.Component.DrawPages(cstDrawPage).Forms
+	Set oFormDocument = _FormDocuments.getByHierarchicalName(FormDocument)
+	Set oForms = oFormDocument.Component.DrawPages(cstDrawPage).Forms
 	vFormNames = oForms.getElementNames()
 
 	If Len(Form) = 0 Then	&apos;	Return the list of valid form names
@@ -237,9 +237,9 @@ Try:
 			._Name = oXForm.Name
 			Set .[Me] = oForm
 			Set .[_Parent] = [Me]
-			._DrawPage = cstDrawPage
+			Set ._Component = _Component
 			._FormDocumentName = FormDocument
-			Set ._MainForm = oMainForm
+			Set ._FormDocument = oFormDocument
 			._FormType = ISBASEFORM
 			Set ._Form = oXForm
 			._Initialize()
@@ -671,7 +671,6 @@ Private Function _CollectFormDocuments(ByRef poContainer As Object) As String
 
 Dim sCollectNames As String			&apos;	Return value
 Dim oSubItem As Object				&apos;	com.sun.star.container.XNameAccess (folder) or com.sun.star.ucb.XContent (form)
-Dim sFormName As String				&apos;	Single form name
 Dim i As Long
 Const cstFormType = &quot;application/vnd.oasis.opendocument.text&quot;
 									&apos;	Identifies forms. Folders have a zero-length content type
@@ -704,6 +703,53 @@ Private Function _FileIdent() As String
 	_FileIdent = [_Super]._FileIdent()
 
 End Function	&apos;	SFDocuments.SF_Base._FileIdent
+
+REM -----------------------------------------------------------------------------
+Private Function _FindByPersistentName(ByRef poContainer As Object _
+										, psPersistent As String _
+										) As Object
+&apos;&apos;&apos;	The FormDocuments property of a Base component has strangely
+&apos;&apos;&apos;	a getByHierarchical() method but no access to the same com.sun.star.comp.sdb.Content
+&apos;&apos;&apos;	object via its persistent/ODF name
+&apos;&apos;&apos;	This method returns the object having the given persistent name
+&apos;&apos;&apos;	The function traverses recursively the whole tree below the container until found
+&apos;&apos;&apos;	The initial call starts from the container _Component.getFormDocuments
+&apos;&apos;&apos;	The list contains closed and open forms
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		poContainer: the actual top of the free, initially _FormDocuments
+&apos;&apos;&apos;		psPersistent: a name like &quot;Obj...&quot;
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A com.sun.star.comp.sdb.Content object (object found, the process stops)
+&apos;&apos;&apos;		or Nothing (object not found, the process continues)
+
+Dim oMainForm As Object				&apos;	Return value
+Dim oSubItem As Object				&apos;	com.sun.star.container.XNameAccess (folder) or com.sun.star.ucb.XContent (form)
+Dim i As Long
+Const cstFormType = &quot;application/vnd.oasis.opendocument.text&quot;
+									&apos;	Identifies forms. Folders have a zero-length content type
+
+	On Local Error GoTo Finally
+
+Try:
+	Set oMainForm = Nothing
+	With poContainer
+		For i = 0 To .Count - 1
+			Set oSubItem = .getByIndex(i)
+			If oSubItem.ContentType = cstFormType Then		&apos;	Examine its persistent name
+				If oSubItem.PersistentName = psPersistent Then
+					Set oMainForm = oSubItem
+					Exit For
+				End If
+			Else
+				Set oMainForm = _FindByPersistentName(oSubItem, psPersistent)
+			End If
+		Next i
+	End With
+
+Finally:
+	Set _FindByPersistentName = oMainForm
+	Exit Function
+End Function	&apos;	SFDocuments.SF_Base.FindByPersistentName
 
 REM -----------------------------------------------------------------------------
 Private Function _IsStillAlive(Optional ByVal pbForUpdate As Boolean _
