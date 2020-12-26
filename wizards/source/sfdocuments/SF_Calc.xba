@@ -908,16 +908,12 @@ Try:
 			Set oXForm = oForms.getByIndex(Form)
 		End If
 		&apos;	Create the new Form class instance
-		Set oForm = New SF_Form
+		Set oForm = SF_Register._NewForm(oXForm)
 		With oForm
-			._Name = oXForm.Name
-			Set .[Me] = oForm
 			Set .[_Parent] = [Me]
-			._DrawPage = cstDrawPage
 			._SheetName = SheetName
-			Set ._MainForm = Nothing
 			._FormType = ISCALCFORM
-			Set ._Form = oXForm
+			Set ._Component = _Component
 			._Initialize()
 		End With
 		Set Forms = oForm
