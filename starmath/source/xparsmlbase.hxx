@@ -34,6 +34,8 @@ namespace starmathdatabase
   * Some documentation: https://www.w3.org/TR/MathML3/chapter7.html
   */
 
+constexpr sal_Int32 STARMATH_MATHMLHTML_ENTITY_NUMBER = 2125;
+
 /**
   * Entity names for mathml. Example: &infin;
   * These ones are to be used on import.
