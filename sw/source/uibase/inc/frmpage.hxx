@@ -27,9 +27,11 @@
 #include <swtypes.hxx>
 #include "bmpwin.hxx"
 #include "prcntfld.hxx"
+#include <vcl/graph.hxx>
 
 namespace sfx2{class FileDialogHelper;}
 class SwWrtShell;
+class SdrGrafObj;
 struct FrameMap;
 // OD 12.11.2003 #i22341#
 struct SwPosition;
@@ -221,6 +223,9 @@ class SwGrfExtPage : public SfxTabPage
     std::unique_ptr<weld::CustomWeld> m_xCtlAngleWin;
     std::unique_ptr<weld::CustomWeld> m_xBmpWin;
 
+    // Tdf:138843 label and graphic object for image file type
+    std::unique_ptr<weld::Label> m_xLabelGraphicType;
+    Graphic m_aGraphic;
 
     // handler for mirroring
     DECL_LINK(MirrorHdl, weld::ToggleButton&, void);
@@ -230,7 +235,9 @@ class SwGrfExtPage : public SfxTabPage
 
 public:
     SwGrfExtPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet);
+    SwGrfExtPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet, SdrGrafObj* pGraphicObj);
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet);
+    static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet, SdrGrafObj* pGraphicObj);
     virtual ~SwGrfExtPage() override;
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;
