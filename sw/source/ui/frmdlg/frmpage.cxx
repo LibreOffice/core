@@ -26,6 +26,7 @@
 #include <bitmaps.hlst>
 #include <o3tl/safeint.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/graph.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <editeng/sizeitem.hxx>
@@ -38,6 +39,7 @@
 #include <svx/swframeposstrings.hxx>
 #include <svx/swframevalidation.hxx>
 #include <svx/sdangitm.hxx>
+#include <svx/svdograf.hxx>
 #include <comphelper/classids.hxx>
 #include <tools/globname.hxx>
 #include <tools/urlobj.hxx>
@@ -2314,6 +2316,8 @@ SwGrfExtPage::SwGrfExtPage(weld::Container* pPage, weld::DialogController* pCont
     , m_xCtlAngle(new svx::DialControl)
     , m_xCtlAngleWin(new weld::CustomWeld(*m_xBuilder, "CTL_ANGLE", *m_xCtlAngle))
     , m_xBmpWin(new weld::CustomWeld(*m_xBuilder, "preview", m_aBmpWin))
+    // Tdf:138843 label for image properties dialog
+    , m_xLabelGraphicType(m_xBuilder->weld_label("label-graphic-type"))
 {
     m_aBmpWin.SetBitmapEx(BitmapEx(RID_BMP_PREVIEW_FALLBACK));
 
@@ -2369,6 +2373,12 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
 {
     const SvxProtectItem& rProt = rSet.Get(RES_PROTECT);
     bool bProtContent = rProt.IsContentProtected();
+
+    Graphic aGraphic;
+    SdrGrafObj* pGraphicObj;
+    aGraphic = pGraphicObj->GetGraphicObject().GetGraphic();
+    OUString aGraphicTypeString = GraphicHelper::GetImageType( aGraphic );
+    m_xLabelGraphicType->set_label(aGraphicTypeString);
 
     const SfxPoolItem* pItem = nullptr;
     bool bEnable = false;
