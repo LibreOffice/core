@@ -243,6 +243,7 @@ gb_CXXCLRFLAGS := \
 	-wd4339 \
 	-Wv:18 \
 	-wd4267 \
+	-Zc:twoPhase- \
 
 ifeq ($(COM_IS_CLANG),TRUE)
 
