@@ -325,6 +325,10 @@ void GraphicTest::testUnloadedGraphicSizeUnit()
     Size aMtfSize100(42, 42);
     SvFileStream aStream(aURL, StreamMode::READ);
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream, 0, &aMtfSize100);
+
+    CPPUNIT_ASSERT_EQUAL(Size(42, 42), aGraphic.GetPrefSize());
+
+    // Force it to swap in
     aGraphic.makeAvailable();
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -753,10 +757,10 @@ void GraphicTest::testSwappingVectorGraphic_SVG_WithoutGfxLink()
         CPPUNIT_ASSERT_EQUAL(true, bool(xStream));
 
         // Check size of the stream
-        CPPUNIT_ASSERT_EQUAL(sal_uInt64(249), xStream->remainingSize());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(247), xStream->remainingSize());
 
         std::vector<unsigned char> aHash = calculateHash(xStream);
-        CPPUNIT_ASSERT_EQUAL(std::string("322da9ea0683f03ce35cf8a71e59b686b9be28e8"),
+        CPPUNIT_ASSERT_EQUAL(std::string("666820973fd95e6cd9e7bc5f1c53732acbc99326"),
                              toHexString(aHash));
     }
 
