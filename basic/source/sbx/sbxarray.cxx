@@ -26,8 +26,6 @@
 
 #include <optional>
 
-using namespace std;
-
 struct SbxVarEntry
 {
     SbxVariableRef mpVar;
