@@ -208,9 +208,9 @@ class SbiRuntime
     typedef void( SbiRuntime::*pStep0 )();
     typedef void( SbiRuntime::*pStep1 )( sal_uInt32 nOp1 );
     typedef void( SbiRuntime::*pStep2 )( sal_uInt32 nOp1, sal_uInt32 nOp2 );
-    static pStep0 aStep0[];         // opcode-table group 0
-    static pStep1 aStep1[];
-    static pStep2 aStep2[];
+    static const pStep0 aStep0[];         // opcode-table group 0
+    static const pStep1 aStep1[];
+    static const pStep2 aStep2[];
 
     StarBASIC&         rBasic;           // StarBASIC instance
     SbiInstance*       pInst;            // current thread
