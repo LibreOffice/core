@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_SOURCE_CALC_STAROFFICECALCIMPORTFILTER_HXX
-#define INCLUDED_WRITERPERFECT_SOURCE_CALC_STAROFFICECALCIMPORTFILTER_HXX
+#pragma once
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -39,6 +38,6 @@ private:
     virtual void doRegisterHandlers(OdsGenerator& rGenerator) override;
 };
 
-#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
