@@ -26,13 +26,11 @@
 #include <expr.hxx>
 
 SbiExpression::SbiExpression( SbiParser* p, SbiExprType t,
-    SbiExprMode eMode, const KeywordSymbolInfo* pKeywordSymbolInfo )
+    SbiExprMode eMode, const KeywordSymbolInfo* pKeywordSymbolInfo ) :
+    pParser(p),
+    eCurExpr(t),
+    m_eMode(eMode)
 {
-    pParser = p;
-    bBased = bError = bByVal = bBracket = false;
-    nParenLevel = 0;
-    eCurExpr = t;
-    m_eMode = eMode;
     pExpr = (t != SbSTDEXPR ) ? Term( pKeywordSymbolInfo ) : Boolean();
     if( t != SbSYMBOL )
     {
@@ -48,24 +46,20 @@ SbiExpression::SbiExpression( SbiParser* p, SbiExprType t,
     }
 }
 
-SbiExpression::SbiExpression( SbiParser* p, double n, SbxDataType t )
+SbiExpression::SbiExpression( SbiParser* p, double n, SbxDataType t ) :
+    pParser(p),
+    eCurExpr(SbOPERAND),
+    m_eMode(EXPRMODE_STANDARD)
 {
-    pParser = p;
-    bBased = bError = bByVal = bBracket = false;
-    nParenLevel = 0;
-    eCurExpr = SbOPERAND;
-    m_eMode = EXPRMODE_STANDARD;
     pExpr = std::make_unique<SbiExprNode>( n, t );
     pExpr->Optimize(pParser);
 }
 
-SbiExpression::SbiExpression( SbiParser* p, const SbiSymDef& r, SbiExprListPtr pPar )
+SbiExpression::SbiExpression( SbiParser* p, const SbiSymDef& r, SbiExprListPtr pPar ) :
+    pParser(p),
+    eCurExpr(SbOPERAND),
+    m_eMode(EXPRMODE_STANDARD)
 {
-    pParser = p;
-    bBased = bError = bByVal = bBracket = false;
-    nParenLevel = 0;
-    eCurExpr = SbOPERAND;
-    m_eMode = EXPRMODE_STANDARD;
     pExpr = std::make_unique<SbiExprNode>( r, SbxVARIANT, std::move(pPar) );
 }
 
