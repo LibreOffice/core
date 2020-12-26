@@ -49,7 +49,7 @@ excludelist:
     - vector
     vcl/source/filter/jpeg/JpegWriter.hxx:
     # Needed for direct member access
-    - vcl/bitmapaccess.hxx
+    - vcl/BitmapReadAccess.hxx
     vcl/source/filter/png/pngwrite.cxx:
     # Actually these are used
     - com/sun/star/beans/PropertyValue.hpp
