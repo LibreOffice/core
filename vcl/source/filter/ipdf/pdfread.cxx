@@ -240,8 +240,8 @@ bool importPdfVectorGraphicData(SvStream& rStream,
         return false;
     }
 
-    rVectorGraphicData = std::make_shared<VectorGraphicData>(aPdfDataArray, OUString(),
-                                                             VectorGraphicDataType::Pdf);
+    rVectorGraphicData
+        = std::make_shared<VectorGraphicData>(aPdfDataArray, VectorGraphicDataType::Pdf);
 
     return true;
 }
@@ -481,7 +481,7 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
         tools::Long nPageHeight = convertTwipToMm100(aPageSize.getY() * pointToTwipconversionRatio);
 
         auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(
-            aPdfDataArray, OUString(), VectorGraphicDataType::Pdf, nPageIndex);
+            aPdfDataArray, VectorGraphicDataType::Pdf, nPageIndex);
 
         // Create the Graphic with the VectorGraphicDataPtr and link the original PDF stream.
         // We swap out this Graphic as soon as possible, and a later swap in

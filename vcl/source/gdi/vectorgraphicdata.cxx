@@ -198,7 +198,7 @@ void VectorGraphicData::ensureSequenceAndRange()
             const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(maVectorGraphicDataArray));
 
             if (myInputStream.is())
-                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(myInputStream, maPath));
+                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(myInputStream, OUString()));
 
             break;
         }
@@ -232,7 +232,7 @@ void VectorGraphicData::ensureSequenceAndRange()
                     aSequence = comphelper::containerToSequence(aVector);
                 }
 
-                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(myInputStream, maPath, aSequence));
+                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(myInputStream, OUString(), aSequence));
             }
 
             break;
@@ -292,11 +292,9 @@ std::pair<VectorGraphicData::State, size_t> VectorGraphicData::getSizeBytes() co
 
 VectorGraphicData::VectorGraphicData(
     const VectorGraphicDataArray& rVectorGraphicDataArray,
-    const OUString& rPath,
     VectorGraphicDataType eVectorDataType,
     sal_Int32 nPageIndex)
 :   maVectorGraphicDataArray(rVectorGraphicDataArray),
-    maPath(rPath),
     mbSequenceCreated(false),
     maRange(),
     maSequence(),
