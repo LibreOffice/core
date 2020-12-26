@@ -19,11 +19,11 @@
 
 namespace
 {
-    bool lcl_GetPageDesc(SwWrtShell *pSh, sal_uInt16 &rPageNo, std::unique_ptr<const SwFormatPageDesc>* ppPageFormatDesc)
+    bool lcl_GetPageDesc(SwWrtShell& rSh, sal_uInt16 &rPageNo, std::unique_ptr<const SwFormatPageDesc>* ppPageFormatDesc)
     {
         bool bRet = false;
-        SfxItemSet aSet( pSh->GetAttrPool(), svl::Items<RES_PAGEDESC, RES_PAGEDESC>{} );
-        if (pSh->GetCurAttr( aSet ))
+        SfxItemSet aSet(rSh.GetAttrPool(), svl::Items<RES_PAGEDESC, RES_PAGEDESC>{});
+        if (rSh.GetCurAttr(aSet))
         {
             const SfxPoolItem* pItem(nullptr);
             if (SfxItemState::SET == aSet.GetItemState( RES_PAGEDESC, true, &pItem ) && pItem)
@@ -39,40 +39,26 @@ namespace
         return bRet;
     }
 
-    void lcl_ChangePage(SwWrtShell *pSh, sal_uInt16 nNewNumber,
-        const SwPageDesc *pNewDesc)
+    void lcl_ChangePage(SwWrtShell& rSh, sal_uInt16 nNewNumber, const SwPageDesc *pNewDesc)
     {
-        const size_t nCurIdx = pSh->GetCurPageDesc();
-        const SwPageDesc &rCurrentDesc = pSh->GetPageDesc( nCurIdx );
+        const size_t nCurIdx = rSh.GetCurPageDesc();
+        const SwPageDesc &rCurrentDesc = rSh.GetPageDesc(nCurIdx);
 
         std::unique_ptr<const SwFormatPageDesc> pPageFormatDesc;
         sal_uInt16 nDontCare;
-        lcl_GetPageDesc(pSh, nDontCare, &pPageFormatDesc);
+        lcl_GetPageDesc(rSh, nDontCare, &pPageFormatDesc);
 
         // If we want a new number then set it, otherwise reuse the existing one
-        sal_uInt16 nPgNo;
+        sal_uInt16 nPgNo = 0;
         if (nNewNumber)
         {
             nPgNo = nNewNumber;
         }
-        else
+        else if (pPageFormatDesc)
         {
-            if (pPageFormatDesc)
-            {
-                ::std::optional<sal_uInt16> oNumOffset = pPageFormatDesc->GetNumOffset();
-                if (oNumOffset)
-                {
-                    nPgNo = *oNumOffset;
-                }
-                else
-                {
-                    nPgNo = 0;
-                }
-            }
-            else
-            {
-                nPgNo = 0;
-            }
+            ::std::optional<sal_uInt16> oNumOffset = pPageFormatDesc->GetNumOffset();
+            if (oNumOffset)
+                nPgNo = *oNumOffset;
         }
 
         // If we want a new descriptor then set it, otherwise reuse the existing one
@@ -80,29 +66,29 @@ namespace
         {
             SwFormatPageDesc aPageFormatDesc(pNewDesc ? pNewDesc : &rCurrentDesc);
             if (nPgNo) aPageFormatDesc.SetNumOffset(nPgNo);
-            pSh->SetAttrItem(aPageFormatDesc);
+            rSh.SetAttrItem(aPageFormatDesc);
         }
     }
 
-    void lcl_PushCursor(SwWrtShell *pSh)
+    void lcl_PushCursor(SwWrtShell& rSh)
     {
-        pSh->LockView( true );
-        pSh->StartAllAction();
-        pSh->SwCursorShell::Push();
+        rSh.LockView(true);
+        rSh.StartAllAction();
+        rSh.SwCursorShell::Push();
     }
 
-    void lcl_PopCursor(SwWrtShell *pSh)
+    void lcl_PopCursor(SwWrtShell& rSh)
     {
-        pSh->SwCursorShell::Pop(SwCursorShell::PopMode::DeleteCurrent);
-        pSh->EndAllAction();
-        pSh->LockView( false );
+        rSh.SwCursorShell::Pop(SwCursorShell::PopMode::DeleteCurrent);
+        rSh.EndAllAction();
+        rSh.LockView(false);
     }
 
-    sal_uInt16 lcl_GetCurrentPage(SwWrtShell const *pSh)
+    sal_uInt16 lcl_GetCurrentPage(const SwWrtShell& rSh)
     {
         OUString sDummy;
         sal_uInt16 nPhyNum=1, nVirtNum=1;
-        pSh->GetPageNumber(0, true, nPhyNum, nVirtNum, sDummy);
+        rSh.GetPageNumber(0, true, nPhyNum, nVirtNum, sDummy);
         return nPhyNum;
     }
 }
@@ -136,6 +122,7 @@ sal_uInt16 SwTitlePageDlg::GetInsertPosition() const
 
 SwTitlePageDlg::SwTitlePageDlg(weld::Window *pParent)
     : SfxDialogController(pParent, "modules/swriter/ui/titlepage.ui", "DLG_TITLEPAGE")
+    , mrSh(*::GetActiveView()->GetWrtShellPtr())
     , m_xUseExistingPagesRB(m_xBuilder->weld_radio_button("RB_USE_EXISTING_PAGES"))
     , m_xPageCountNF(m_xBuilder->weld_spin_button("NF_PAGE_COUNT"))
     , m_xDocumentStartRB(m_xBuilder->weld_radio_button("RB_DOCUMENT_START"))
@@ -156,39 +143,38 @@ SwTitlePageDlg::SwTitlePageDlg(weld::Window *pParent)
     sal_uInt16 nSetPage = 1;
     sal_uInt16 nResetPage = 1;
     sal_uInt16 nTitlePages = 1;
-    mpSh = ::GetActiveView()->GetWrtShellPtr();
-    lcl_PushCursor(mpSh);
+    lcl_PushCursor(mrSh);
 
-    SwView& rView = mpSh->GetView();
+    SwView& rView = mrSh.GetView();
     rView.InvalidateRulerPos();
 
     bool bMaybeResetNumbering = false;
 
-    mpTitleDesc = mpSh->GetPageDescFromPool(RES_POOLPAGE_FIRST);
-    mpIndexDesc = mpSh->GetPageDescFromPool(RES_POOLPAGE_REGISTER);
-    mpNormalDesc = mpSh->GetPageDescFromPool(RES_POOLPAGE_STANDARD);
+    mpTitleDesc = mrSh.GetPageDescFromPool(RES_POOLPAGE_FIRST);
+    mpIndexDesc = mrSh.GetPageDescFromPool(RES_POOLPAGE_REGISTER);
+    mpNormalDesc = mrSh.GetPageDescFromPool(RES_POOLPAGE_STANDARD);
 
-    mpSh->StartOfSection();
-    if (lcl_GetPageDesc( mpSh, nSetPage, &mpPageFormatDesc ))
+    mrSh.StartOfSection();
+    if (lcl_GetPageDesc(mrSh, nSetPage, &mpPageFormatDesc))
     {
         if (mpPageFormatDesc->GetPageDesc() == mpTitleDesc)
         {
-            while (mpSh->SttNxtPg())
+            while (mrSh.SttNxtPg())
             {
-                const size_t nCurIdx = mpSh->GetCurPageDesc();
-                const SwPageDesc &rPageDesc = mpSh->GetPageDesc( nCurIdx );
+                const size_t nCurIdx = mrSh.GetCurPageDesc();
+                const SwPageDesc& rPageDesc = mrSh.GetPageDesc(nCurIdx);
 
                 if (mpIndexDesc != &rPageDesc)
                 {
                     mpNormalDesc = &rPageDesc;
-                    bMaybeResetNumbering = lcl_GetPageDesc(mpSh, nResetPage, nullptr);
+                    bMaybeResetNumbering = lcl_GetPageDesc(mrSh, nResetPage, nullptr);
                     break;
                 }
                 ++nTitlePages;
             }
         }
     }
-    lcl_PopCursor(mpSh);
+    lcl_PopCursor(mrSh);
 
     m_xUseExistingPagesRB->set_active(true);
     m_xPageCountNF->set_value(nTitlePages);
@@ -196,7 +182,7 @@ SwTitlePageDlg::SwTitlePageDlg(weld::Window *pParent)
 
     m_xDocumentStartRB->set_active(true);
     m_xPageStartNF->set_sensitive(false);
-    m_xPageStartNF->set_value(lcl_GetCurrentPage(mpSh));
+    m_xPageStartNF->set_value(lcl_GetCurrentPage(mrSh));
     Link<weld::ToggleButton&,void> aStartPageHdl = LINK(this, SwTitlePageDlg, StartPageHdl);
     m_xDocumentStartRB->connect_toggled(aStartPageHdl);
     m_xPageStartRB->connect_toggled(aStartPageHdl);
@@ -244,8 +230,8 @@ SwTitlePageDlg::~SwTitlePageDlg()
 
 IMPL_LINK_NOARG(SwTitlePageDlg, EditHdl, weld::Button&, void)
 {
-    SwView& rView = mpSh->GetView();
-    rView.GetDocShell()->FormatPage(m_xPagePropertiesLB->get_active_text(), "page", *mpSh);
+    SwView& rView = mrSh.GetView();
+    rView.GetDocShell()->FormatPage(m_xPagePropertiesLB->get_active_text(), "page", mrSh);
     rView.InvalidateRulerPos();
 }
 
@@ -253,9 +239,9 @@ IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, weld::Button&, void)
 {
     // FIXME: This wizard is almost completely non-functional for inserting new pages.
 
-    lcl_PushCursor(mpSh);
+    lcl_PushCursor(mrSh);
 
-    mpSh->StartUndo();
+    mrSh.StartUndo();
 
     SwFormatPageDesc aTitleDesc(mpTitleDesc);
 
@@ -264,47 +250,45 @@ IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, weld::Button&, void)
     else if (mpPageFormatDesc)
         aTitleDesc.SetNumOffset(mpPageFormatDesc->GetNumOffset());
 
-    sal_uInt16 nNoPages = m_xPageCountNF->get_value();
+    sal_uInt16 nNumTitlePages = m_xPageCountNF->get_value();
     if (!m_xUseExistingPagesRB->get_active())
     {
         // FIXME: If the starting page number is larger than the last page,
         // probably should add pages AFTER the last page, not before it.
-        mpSh->GotoPage(GetInsertPosition(), false);
+        mrSh.GotoPage(GetInsertPosition(), false);
         // FIXME: These new pages cannot be accessed currently with GotoPage. It doesn't know they exist.
-        for (sal_uInt16 nI=0; nI < nNoPages; ++nI)
-            mpSh->InsertPageBreak();
+        for (sal_uInt16 nI = 0; nI < nNumTitlePages; ++nI)
+            mrSh.InsertPageBreak();
     }
 
-    mpSh->GotoPage(GetInsertPosition(), false);
+    mrSh.GotoPage(GetInsertPosition(), false);
+    mrSh.SetAttrItem(aTitleDesc);
     // FIXME: GotoPage is pointing to a page after the newly created index pages, so the wrong pages are getting Index style.
-    for (sal_uInt16 nI=1; nI < nNoPages; ++nI)
+    for (sal_uInt16 nI = 1; nI < nNumTitlePages; ++nI)
     {
-        if (mpSh->SttNxtPg())
-            lcl_ChangePage(mpSh, 0, mpIndexDesc);
+        if (mrSh.SttNxtPg())
+            lcl_ChangePage(mrSh, 0, mpIndexDesc);
     }
 
-    mpSh->GotoPage(GetInsertPosition(), false);
-    mpSh->SetAttrItem(aTitleDesc);
-
-    if (nNoPages > 1 && mpSh->GotoPage(GetInsertPosition() + nNoPages, false))
+    if (nNumTitlePages > 1 && mrSh.GotoPage(GetInsertPosition() + nNumTitlePages, false))
     {
         // FIXME: By definition, GotoPage(x,bRecord=false) returns false. This is dead code.
         SwFormatPageDesc aPageFormatDesc(mpNormalDesc);
-        mpSh->SetAttrItem(aPageFormatDesc);
+        mrSh.SetAttrItem(aPageFormatDesc);
     }
 
-    if (m_xRestartNumberingCB->get_active() || nNoPages > 1)
+    if (m_xRestartNumberingCB->get_active() || nNumTitlePages > 1)
     {
         sal_uInt16 nPgNo = m_xRestartNumberingCB->get_active() ? m_xRestartNumberingNF->get_value() : 0;
-        const SwPageDesc *pNewDesc = nNoPages > 1 ? mpNormalDesc : nullptr;
-        mpSh->GotoPage(GetInsertPosition() + nNoPages, false);
-        lcl_ChangePage(mpSh, nPgNo, pNewDesc);
+        const SwPageDesc* pNewDesc = nNumTitlePages > 1 ? mpNormalDesc : nullptr;
+        mrSh.GotoPage(GetInsertPosition() + nNumTitlePages, false);
+        lcl_ChangePage(mrSh, nPgNo, pNewDesc);
     }
 
-    mpSh->EndUndo();
-    lcl_PopCursor(mpSh);
+    mrSh.EndUndo();
+    lcl_PopCursor(mrSh);
     if (!m_xUseExistingPagesRB->get_active())
-        mpSh->GotoPage(GetInsertPosition(), false);
+        mrSh.GotoPage(GetInsertPosition(), false);
     m_xDialog->response(RET_OK);
 }
 
