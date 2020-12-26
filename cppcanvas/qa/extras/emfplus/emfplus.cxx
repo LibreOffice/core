@@ -14,7 +14,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <test/unoapi_test.hxx>
-#include <vcl/bitmapaccess.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/gdimtf.hxx>
 #include <tools/stream.hxx>

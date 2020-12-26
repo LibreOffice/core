@@ -216,7 +216,7 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
     if (loplugin::isSamePathname(fn, SRCDIR "/include/vcl/svmain.hxx"))
          return true;
     // passing pointer to function
-    if (loplugin::isSamePathname(fn, SRCDIR "/include/vcl/bitmapaccess.hxx"))
+    if (loplugin::isSamePathname(fn, SRCDIR "/include/vcl/BitmapReadAccess.hxx"))
          return true;
     if (loplugin::isSamePathname(fn, SRCDIR "/vcl/inc/unx/gtk/gtkobject.hxx"))
          return true;
