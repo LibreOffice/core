@@ -121,6 +121,7 @@ Filters::~Filters()
             rEntry.pReader = nullptr;
         }
     }
+    msword_.release();
 }
 
 #ifndef DISABLE_DYNLOADING
