@@ -22,6 +22,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/Pair.hpp>
+
 namespace starmathdatabase
 {
 /**
@@ -35,12 +36,20 @@ namespace starmathdatabase
   */
 
 /**
-  * Entity names for mathml. Example: &infin;
+  * Entity names for mathml. Example: &infin -> \u221E;
   * These ones are to be used on import.
-  * Must be in sync with customMathmlHtmlEntitiesNames.
   */
 const extern ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>
     icustomMathmlHtmlEntities;
 };
+
+/**
+  * Entity names for mathml. Example: "\u221E"; -> &infin;
+  * These ones are to be used on file export.
+  */
+const extern ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>
+    icustomMathmlHtmlEntitiesExport;
+}
+;
 
 #endif /*XPARSEMLBASE*/
