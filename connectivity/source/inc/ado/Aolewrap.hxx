@@ -32,7 +32,6 @@ namespace rtl
 }
 namespace connectivity::ado
 {
-        class OLEVariant;
         class WpBase
         {
         protected:
