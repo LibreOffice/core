@@ -26,6 +26,7 @@
 #include <bitmaps.hlst>
 #include <o3tl/safeint.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/graph.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <editeng/sizeitem.hxx>
@@ -38,6 +39,7 @@
 #include <svx/swframeposstrings.hxx>
 #include <svx/swframevalidation.hxx>
 #include <svx/sdangitm.hxx>
+#include <svx/svdograf.hxx>
 #include <comphelper/classids.hxx>
 #include <tools/globname.hxx>
 #include <tools/urlobj.hxx>
@@ -2305,6 +2307,8 @@ SwGrfExtPage::SwGrfExtPage(weld::Container* pPage, weld::DialogController* pCont
     , m_xAllPagesRB(m_xBuilder->weld_radio_button("allpages"))
     , m_xLeftPagesRB(m_xBuilder->weld_radio_button("leftpages"))
     , m_xRightPagesRB(m_xBuilder->weld_radio_button("rightpages"))
+    // Tdf:138843 label for image properties dialog
+    , m_xLabelGraphicType(m_xBuilder->weld_label("label-graphic-type"))
     , m_xConnectED(m_xBuilder->weld_entry("entry"))
     , m_xBrowseBT(m_xBuilder->weld_button("browse"))
     , m_xLinkFrame(m_xBuilder->weld_frame("linkframe"))
@@ -2369,6 +2373,48 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
 {
     const SvxProtectItem& rProt = rSet.Get(RES_PROTECT);
     bool bProtContent = rProt.IsContentProtected();
+
+    OUString aGraphicTypeString = SvxResId(STR_IMAGE_UNKNOWN);
+    Graphic m_aGraphic;
+    SdrGrafObj* pGraphicObj;
+    m_aGraphic = pGraphicObj->GetGraphicObject().GetGraphic();
+    auto pGfxLink = m_aGraphic.GetSharedGfxLink();
+    if (pGfxLink)
+    {
+        switch (pGfxLink->GetType())
+        {
+            case GfxLinkType::NativeGif:
+                aGraphicTypeString = SvxResId(STR_IMAGE_GIF);
+                break;
+            case GfxLinkType::NativeJpg:
+                aGraphicTypeString = SvxResId(STR_IMAGE_JPEG);
+                break;
+            case GfxLinkType::NativePng:
+                aGraphicTypeString = SvxResId(STR_IMAGE_PNG);
+                break;
+            case GfxLinkType::NativeTif:
+                aGraphicTypeString = SvxResId(STR_IMAGE_TIFF);
+                break;
+            case GfxLinkType::NativeWmf:
+                aGraphicTypeString = SvxResId(STR_IMAGE_WMF);
+                break;
+            case GfxLinkType::NativeMet:
+                aGraphicTypeString = SvxResId(STR_IMAGE_MET);
+                break;
+            case GfxLinkType::NativePct:
+                aGraphicTypeString = SvxResId(STR_IMAGE_PCT);
+                break;
+            case GfxLinkType::NativeSvg:
+                aGraphicTypeString = SvxResId(STR_IMAGE_SVG);
+                break;
+            case GfxLinkType::NativeBmp:
+                aGraphicTypeString = SvxResId(STR_IMAGE_BMP);
+                break;
+            default:
+                break;
+        }
+    }
+    m_xLabelGraphicType->set_label(aGraphicTypeString);
 
     const SfxPoolItem* pItem = nullptr;
     bool bEnable = false;
