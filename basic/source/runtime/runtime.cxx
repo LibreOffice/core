@@ -157,7 +157,7 @@ struct SbiGosub {              // GOSUB-Stack:
         nStartForLvl(nStartForLvl_) {}
 };
 
-SbiRuntime::pStep0 SbiRuntime::aStep0[] = { // all opcodes without operands
+const SbiRuntime::pStep0 SbiRuntime::aStep0[] = { // all opcodes without operands
     &SbiRuntime::StepNOP,
     &SbiRuntime::StepEXP,
     &SbiRuntime::StepMUL,
@@ -226,7 +226,7 @@ SbiRuntime::pStep0 SbiRuntime::aStep0[] = { // all opcodes without operands
     &SbiRuntime::StepBYVAL,     // access TOS as array
 };
 
-SbiRuntime::pStep1 SbiRuntime::aStep1[] = { // all opcodes with one operand
+const SbiRuntime::pStep1 SbiRuntime::aStep1[] = { // all opcodes with one operand
     &SbiRuntime::StepLOADNC,        // loading a numeric constant (+ID)
     &SbiRuntime::StepLOADSC,        // loading a string constant (+ID)
     &SbiRuntime::StepLOADI,     // Immediate Load (+value)
@@ -255,7 +255,7 @@ SbiRuntime::pStep1 SbiRuntime::aStep1[] = { // all opcodes with one operand
     &SbiRuntime::StepVBASETCLASS,// vba-like set statement
 };
 
-SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// all opcodes with two operands
+const SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// all opcodes with two operands
     &SbiRuntime::StepRTL,       // load from RTL (+StringID+Typ)
     &SbiRuntime::StepFIND,      // load (+StringID+Typ)
     &SbiRuntime::StepELEM,          // load element (+StringID+Typ)
