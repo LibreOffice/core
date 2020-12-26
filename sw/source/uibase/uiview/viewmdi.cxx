@@ -343,32 +343,26 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
     switch( m_nMoveType )
     {
         case NID_PGE:
-            if ( bNext )
+        {
+            if (USHRT_MAX == rSh.GetNextPrevPageNum(bNext))
             {
-                if ( USHRT_MAX == rSh.GetNextPrevPageNum( true ) )
-                {
-                    rSh.GotoPage( 1, true );
-                    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
-                }
-                else
-                {
-                    PhyPageDown();
-                    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
-                }
+                const Point aPt(GetVisArea().Left(),
+                                rSh.GetPagePos(bNext ? 1 : rSh.GetPageCnt()).Y());
+                Point aAlPt(AlignToPixel(aPt) );
+                // If there is a difference, has been truncated --> then add one pixel,
+                // so that no residue of the previous page is visible.
+                if(aPt.Y() != aAlPt.Y())
+                    aAlPt.AdjustY(3 * GetEditWin().PixelToLogic(Size(0, 1)).Height());
+                SetVisArea(aAlPt);
+                SvxSearchDialogWrapper::SetSearchLabel(bNext ? SearchLabel::EndWrapped :
+                                                               SearchLabel::StartWrapped);
             }
             else
             {
-                if ( USHRT_MAX == rSh.GetNextPrevPageNum( false ) )
-                {
-                    rSh.GotoPage( rSh.GetPageCnt(), true );
-                    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::StartWrapped );
-                }
-                else
-                {
-                    PhyPageUp();
-                    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
-                }
+                bNext ? PhyPageDown() : PhyPageUp();
+                SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::Empty);
             }
+        }
         break;
         case NID_TBL :
             rSh.EnterStdMode();
