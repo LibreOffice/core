@@ -1482,9 +1482,6 @@ public:
                                     const basegfx::B2DHomMatrix& rTransformation,
                                     const BitmapEx& rBitmapEx);
 
-    void                        DrawShadowBitmapEx(
-                                    const BitmapEx& rBitmapEx,
-                                    ::Color aShadowColor);
 protected:
 
     virtual void                DrawDeviceBitmap(

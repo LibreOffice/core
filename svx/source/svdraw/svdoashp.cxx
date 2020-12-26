@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/BitmapShadowFilter.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/unoapi.hxx>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
@@ -346,13 +347,14 @@ static SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const S
         if(bBitmapFillUsed)
         {
             GraphicObject aGraphicObject(rOriginalSet.Get(XATTR_FILLBITMAP).GetGraphicObject());
-            const BitmapEx aBitmapEx(aGraphicObject.GetGraphic().GetBitmapEx());
+            BitmapEx aBitmapEx(aGraphicObject.GetGraphic().GetBitmapEx());
 
             if(!aBitmapEx.IsEmpty())
             {
                 ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
                 pVirDev->SetOutputSizePixel(aBitmapEx.GetSizePixel());
-                pVirDev->DrawShadowBitmapEx(aBitmapEx, aShadowColor);
+                BitmapFilter::Filter(aBitmapEx, BitmapShadowFilter(aShadowColor));
+                pVirDev->DrawBitmapEx(Point(), aBitmapEx);
                 aGraphicObject.SetGraphic(Graphic(pVirDev->GetBitmapEx(Point(0,0), aBitmapEx.GetSizePixel())));
             }
 
