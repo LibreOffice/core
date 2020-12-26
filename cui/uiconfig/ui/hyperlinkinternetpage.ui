@@ -320,7 +320,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes" context="hyperlinkinternetpage|name_label">Na_me:</property>
+                    <property name="label" translatable="yes" context="hyperlinkinternetpage|name_label">N_ame:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">name</property>
                     <property name="xalign">0</property>

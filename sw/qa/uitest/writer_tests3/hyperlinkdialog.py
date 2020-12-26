@@ -29,19 +29,19 @@ class HyperlinkDialog(UITestCase):
         self.assertEqual(get_state_as_dict(xtab)["PageCount"], "4")
 
         xtab.executeAction("SELECT", mkPropertyValues({"POS": "0"}))
-        self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "Internet")
+        self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "_Internet")
         self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "0")
 
         xtab.executeAction("SELECT", mkPropertyValues({"POS": "1"}))
-        self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "Mail")
+        self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "_Mail")
         self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "1")
 
         xtab.executeAction("SELECT", mkPropertyValues({"POS": "2"}))
-        self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "Document")
+        self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "_Document")
         self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "2")
 
         xtab.executeAction("SELECT", mkPropertyValues({"POS": "3"}))
-        self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "New Document")
+        self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "_New Document")
         self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "3")
 
         xcancel = xDialog.getChild("cancel")
