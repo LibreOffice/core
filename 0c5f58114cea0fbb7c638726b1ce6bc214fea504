@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aedf12f1_ade9ff7b",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 3934,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-26T07:23:06Z",
+      "side": 0,
+      "message": "Look at the sequence here (case Protect):\n\n1. rDoc.SetTabProtection\n2. *now* that the new protection is set, if Undo is needed:\n2.1. get the *resulting* protection;\n2.2. do an unnecessary \"p-\u003esetProtected(true)\" \"just in case\" (ignore this step);\n2.3. add this as a new undo action.",
+      "range": {
+        "startLine": 3934,
+        "startChar": 16,
+        "endLine": 3934,
+        "endChar": 28
+      },
+      "revId": "0c5f58114cea0fbb7c638726b1ce6bc214fea504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff9f2a69_468ccfc5",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 3985,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-26T07:23:06Z",
+      "side": 0,
+      "message": "Look at the sequence here (case Protect):\n\n0. Get old protection (or create new) and modify it to set protection to true (this allows to keep old protection settings).\n1. rDoc.SetTabProtection\n2. *now* that the new protection is set, if Undo is needed:\n2.1. get the *resulting* protection;\n2.2. do an unnecessary \"p-\u003esetProtected(true)\" \"just in case\" (ignore this step);\n2.3. add this as a new undo action.",
+      "range": {
+        "startLine": 3985,
+        "startChar": 8,
+        "endLine": 3985,
+        "endChar": 27
+      },
+      "revId": "0c5f58114cea0fbb7c638726b1ce6bc214fea504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17ccc883_7fc32ff7",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 4053,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-26T07:23:06Z",
+      "side": 0,
+      "message": "Look at the sequence here (case Unprotect):\n\n0. Get a copy of old protection and check if provided password is OK, and then set protection to false.\n0.1. Get another copy of old protection\n1. rDoc.SetTabProtection\n2. *now* that the new protection is set, if Undo is needed:\n2.1. get the copy from 0.1;\n2.2. pProtectCopy-\u003esetProtected(false) (note how 0 and (0.1 + 2.2) are the same, and one of them is redundant);\n2.3. add this as a new undo action.",
+      "range": {
+        "startLine": 4053,
+        "startChar": 8,
+        "endLine": 4053,
+        "endChar": 27
+      },
+      "revId": "0c5f58114cea0fbb7c638726b1ce6bc214fea504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

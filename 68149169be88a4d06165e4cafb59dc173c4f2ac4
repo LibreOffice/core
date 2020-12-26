@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3539a888_21e4fe0f",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 3935,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-26T07:23:06Z",
+      "side": 1,
+      "message": "Look how you do something very different from the three cases I discussed to the left",
+      "range": {
+        "startLine": 3935,
+        "startChar": 16,
+        "endLine": 3935,
+        "endChar": 28
+      },
+      "revId": "68149169be88a4d06165e4cafb59dc173c4f2ac4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
