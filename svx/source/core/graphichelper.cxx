@@ -123,6 +123,47 @@ void GraphicHelper::GetPreferredExtension( OUString& rExtension, const Graphic& 
     rExtension = aExtension;
 }
 
+OUString GraphicHelper::GetImageType(const Graphic& rGraphic)
+{
+    OUString aGraphicTypeString = SvxResId(STR_IMAGE_UNKNOWN);
+    auto pGfxLink = rGraphic.GetSharedGfxLink();
+    if (pGfxLink)
+    {
+        switch (pGfxLink->GetType())
+        {
+            case GfxLinkType::NativeGif:
+                aGraphicTypeString = SvxResId(STR_IMAGE_GIF);
+                break;
+            case GfxLinkType::NativeJpg:
+                aGraphicTypeString = SvxResId(STR_IMAGE_JPEG);
+                break;
+            case GfxLinkType::NativePng:
+                aGraphicTypeString = SvxResId(STR_IMAGE_PNG);
+                break;
+            case GfxLinkType::NativeTif:
+                aGraphicTypeString = SvxResId(STR_IMAGE_TIFF);
+                break;
+            case GfxLinkType::NativeWmf:
+                aGraphicTypeString = SvxResId(STR_IMAGE_WMF);
+                break;
+            case GfxLinkType::NativeMet:
+                aGraphicTypeString = SvxResId(STR_IMAGE_MET);
+                break;
+            case GfxLinkType::NativePct:
+                aGraphicTypeString = SvxResId(STR_IMAGE_PCT);
+                break;
+            case GfxLinkType::NativeSvg:
+                aGraphicTypeString = SvxResId(STR_IMAGE_SVG);
+                break;
+            case GfxLinkType::NativeBmp:
+                aGraphicTypeString = SvxResId(STR_IMAGE_BMP);
+                break;
+            default:
+                break;
+        }
+    }
+    return aGraphicTypeString;
+}
 namespace {
 
 
