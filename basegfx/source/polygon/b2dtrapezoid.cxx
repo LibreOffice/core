@@ -252,7 +252,6 @@ namespace basegfx::trapezoidhelper
         {
         private:
             // local data
-            sal_uInt32                  mnInitialEdgeEntryCount;
             TrDeEdgeEntries             maTrDeEdgeEntries;
             std::vector< B2DPoint >   maPoints;
             /// new points allocated for cuts
@@ -483,8 +482,7 @@ namespace basegfx::trapezoidhelper
         public:
             explicit TrapezoidSubdivider(
                 const B2DPolyPolygon& rSourcePolyPolygon)
-            :   mnInitialEdgeEntryCount(0),
-                maTrDeEdgeEntries(),
+            :   maTrDeEdgeEntries(),
                 maPoints(),
                 maNewPoints()
             {
@@ -567,7 +565,6 @@ namespace basegfx::trapezoidhelper
                                     // vertical edge. Positive Y-direction is guaranteed by the
                                     // TrDeEdgeEntry constructor
                                     maTrDeEdgeEntries.emplace_back(pPrev, pCurr, 0);
-                                    mnInitialEdgeEntryCount++;
                                 }
 
                                 // prepare next step
@@ -617,11 +614,8 @@ namespace basegfx::trapezoidhelper
                 if(!maTrDeEdgeEntries.empty())
                 {
                     // measuring shows that the relation between edges and created trapezoids is
-                    // mostly in the 1:1 range, thus reserve as much trapezoids as edges exist. Do
-                    // not use maTrDeEdgeEntries.size() since that may be a non-constant time
-                    // operation for Lists. Instead, use mnInitialEdgeEntryCount which will contain
-                    // the roughly counted adds to the List
-                    ro_Result.reserve(ro_Result.size() + mnInitialEdgeEntryCount);
+                    // mostly in the 1:1 range, thus reserve as much trapezoids as edges exist.
+                    ro_Result.reserve(ro_Result.size() + maTrDeEdgeEntries.size());
                 }
 
                 while(!maTrDeEdgeEntries.empty())
