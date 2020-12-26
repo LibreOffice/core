@@ -2153,4 +2153,14 @@ const ::css::uno::Sequence<::css::beans::Pair<OUString, OUString>>
     starmathdatabase::icustomMathmlHtmlEntities(
         icustomMathmlHtmlEntitiesData, starmathdatabase::STARMATH_MATHMLHTML_ENTITY_NUMBER);
 
+static ::css::beans::Pair<::rtl::OUString, ::rtl::OUString>
+    icustomMathmlHtmlEntitiesNamesExportData[2] = {
+        // clang-format off
+        { u"&sigma;", u"\u03C3"},
+        { u"&infin;", u"\u221E"}
+        // clang-format on
+    };
+const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>
+    starmathdatabase::icustomMathmlHtmlEntitiesExport(icustomMathmlHtmlEntitiesNamesExportData, 2);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
