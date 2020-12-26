@@ -27,6 +27,8 @@
 #include <o3tl/safeint.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/graph.hxx>
+#include <svx/svdograf.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/opaqitem.hxx>
@@ -63,6 +65,7 @@
 #include <strings.hrc>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/graphichelper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
@@ -2314,6 +2317,8 @@ SwGrfExtPage::SwGrfExtPage(weld::Container* pPage, weld::DialogController* pCont
     , m_xCtlAngle(new svx::DialControl)
     , m_xCtlAngleWin(new weld::CustomWeld(*m_xBuilder, "CTL_ANGLE", *m_xCtlAngle))
     , m_xBmpWin(new weld::CustomWeld(*m_xBuilder, "preview", m_aBmpWin))
+    // tdf#138843 place holder for the graphic type
+    , m_xLabelGraphicType(m_xBuilder->weld_label("label-graphic-type"))
 {
     m_aBmpWin.SetBitmapEx(BitmapEx(RID_BMP_PREVIEW_FALLBACK));
 
@@ -2417,10 +2422,13 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
                 break;
         }
     }
+    const SvxBrushItem& rBrush = *static_cast<const SvxBrushItem*>(pItem);
+
+    Graphic aGraphic = *rBrush.GetGraphic();
+    m_xLabelGraphicType->set_label(GraphicHelper::GetImageType( aGraphic ));
 
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, false, &pItem ) )
     {
-        const SvxBrushItem& rBrush = *static_cast<const SvxBrushItem*>(pItem);
         if( !rBrush.GetGraphicLink().isEmpty() )
         {
             aGrfName = aNewGrfName = rBrush.GetGraphicLink();
