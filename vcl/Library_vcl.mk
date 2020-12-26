@@ -344,6 +344,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/dibtools \
     vcl/source/bitmap/bmpfast \
     vcl/source/bitmap/bitmapfilter \
+    vcl/source/bitmap/bitmappaint \
+    vcl/source/bitmap/BitmapShadowFilter \
     vcl/source/bitmap/BitmapAlphaClampFilter \
     vcl/source/bitmap/BitmapBasicMorphologyFilter \
     vcl/source/bitmap/BitmapMonochromeFilter \
@@ -351,7 +353,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/BitmapLightenFilter \
     vcl/source/bitmap/BitmapDisabledImageFilter \
     vcl/source/bitmap/BitmapColorizeFilter \
-    vcl/source/bitmap/bitmappaint \
     vcl/source/bitmap/BitmapGaussianSeparableBlurFilter \
     vcl/source/bitmap/BitmapSobelGreyFilter \
     vcl/source/bitmap/BitmapSolarizeFilter \
