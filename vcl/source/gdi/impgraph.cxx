@@ -1202,8 +1202,6 @@ bool ImpGraphic::swapOutGraphic(SvStream& rStream)
                 rStream.WriteBytes(
                     maVectorGraphicData->getVectorGraphicDataArray().getConstArray(),
                     maVectorGraphicData->getVectorGraphicDataArrayLength());
-
-                rStream.WriteUniOrByteString(maVectorGraphicData->getPath(), rStream.GetStreamCharSet());
             }
             else if (ImplIsAnimated())
             {
@@ -1565,8 +1563,6 @@ bool ImpGraphic::swapInGraphic(SvStream& rStream)
 
                         rStream.ReadBytes(aNewData.getArray(), nVectorGraphicDataArrayLength);
 
-                        OUString aPath = rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
-
                         if (rStream.GetError())
                             return false;
 
@@ -1590,7 +1586,7 @@ bool ImpGraphic::swapInGraphic(SvStream& rStream)
                                 return false;
                         }
 
-                        auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aNewData, aPath, aDataType);
+                        auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aNewData, aDataType);
 
                         if (!rStream.GetError())
                         {

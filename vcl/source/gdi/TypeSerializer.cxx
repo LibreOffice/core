@@ -281,7 +281,6 @@ void TypeSerializer::readGraphic(Graphic& rGraphic)
                         VectorGraphicDataArray aData(nLength);
 
                         mrStream.ReadBytes(aData.getArray(), nLength);
-                        OUString aPath = mrStream.ReadUniOrByteString(mrStream.GetStreamCharSet());
 
                         if (!mrStream.GetError())
                         {
@@ -301,7 +300,7 @@ void TypeSerializer::readGraphic(Graphic& rGraphic)
                             }
 
                             auto aVectorGraphicDataPtr
-                                = std::make_shared<VectorGraphicData>(aData, aPath, aDataType);
+                                = std::make_shared<VectorGraphicData>(aData, aDataType);
                             rGraphic = Graphic(aVectorGraphicDataPtr);
                         }
                     }
@@ -391,8 +390,8 @@ void TypeSerializer::writeGraphic(const Graphic& rGraphic)
                     mrStream.WriteUInt32(nSize);
                     mrStream.WriteBytes(
                         pVectorGraphicData->getVectorGraphicDataArray().getConstArray(), nSize);
-                    mrStream.WriteUniOrByteString(pVectorGraphicData->getPath(),
-                                                  mrStream.GetStreamCharSet());
+                    // For backwards compatibility, used to serialize path
+                    mrStream.WriteUniOrByteString(OUString(), mrStream.GetStreamCharSet());
                 }
                 else if (aGraphic.IsAnimated())
                 {
