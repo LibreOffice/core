@@ -63,6 +63,7 @@
 #include <strings.hrc>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/graphichelper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
@@ -2314,6 +2315,8 @@ SwGrfExtPage::SwGrfExtPage(weld::Container* pPage, weld::DialogController* pCont
     , m_xCtlAngle(new svx::DialControl)
     , m_xCtlAngleWin(new weld::CustomWeld(*m_xBuilder, "CTL_ANGLE", *m_xCtlAngle))
     , m_xBmpWin(new weld::CustomWeld(*m_xBuilder, "preview", m_aBmpWin))
+    // tdf#:138843 label for image properties dialog
+    , m_xLabelGraphicType(m_xBuilder->weld_label("label-graphic-type"))
 {
     m_aBmpWin.SetBitmapEx(BitmapEx(RID_BMP_PREVIEW_FALLBACK));
 
@@ -2369,6 +2372,11 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
 {
     const SvxProtectItem& rProt = rSet.Get(RES_PROTECT);
     bool bProtContent = rProt.IsContentProtected();
+
+    Graphic aGraphic;
+    SdrGrafObj* pGraphicObj;
+    aGraphic = pGraphicObj->GetGraphicObject().GetGraphic();
+    m_xLabelGraphicType->set_label(GraphicHelper::GetImageType( aGraphic ));
 
     const SfxPoolItem* pItem = nullptr;
     bool bEnable = false;
