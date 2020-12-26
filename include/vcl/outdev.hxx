@@ -1491,7 +1491,7 @@ protected:
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                     BitmapEx& rBitmapEx );
 
-    virtual void                ScaleBitmap ( Bitmap &rBmp, SalTwoRect &rPosAry );
+    virtual bool                CanSubsampleBitmap() const { return true; }
 
     /** Transform and draw a bitmap directly
 
