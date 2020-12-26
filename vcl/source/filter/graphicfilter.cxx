@@ -1620,7 +1620,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
 
                         if(!aMemStream.GetError() )
                         {
-                            auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aNewData, rPath, VectorGraphicDataType::Svg);
+                            auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aNewData, VectorGraphicDataType::Svg);
                             rGraphic = Graphic(aVectorGraphicDataPtr);
                             bOkay = true;
                         }
@@ -1633,7 +1633,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
 
                     if(!rIStream.GetError())
                     {
-                        auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aNewData, rPath, VectorGraphicDataType::Svg);
+                        auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aNewData, VectorGraphicDataType::Svg);
                         rGraphic = Graphic(aVectorGraphicDataPtr);
                         bOkay = true;
                     }
@@ -1710,7 +1710,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                 auto aVectorGraphicDataPtr =
                     std::make_shared<VectorGraphicData>(
                         aNewData,
-                        rPath,
                         aDataType);
 
                 if (pExtHeader)
