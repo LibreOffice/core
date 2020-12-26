@@ -29,6 +29,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/sdgcpitm.hxx>
 #include <svx/dialmgr.hxx>
+#include <svx/graphichelper.hxx>
 #include <svx/compressgraphicdialog.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
@@ -121,45 +122,9 @@ void CompressGraphicsDialog::Initialize()
 
 void CompressGraphicsDialog::Update()
 {
-    OUString aGraphicTypeString = SvxResId(STR_IMAGE_UNKNOWN);
-
     auto pGfxLink = m_aGraphic.GetSharedGfxLink();
-    if (pGfxLink)
-    {
-        switch (pGfxLink->GetType())
-        {
-            case GfxLinkType::NativeGif:
-                aGraphicTypeString = SvxResId(STR_IMAGE_GIF);
-                break;
-            case GfxLinkType::NativeJpg:
-                aGraphicTypeString = SvxResId(STR_IMAGE_JPEG);
-                break;
-            case GfxLinkType::NativePng:
-                aGraphicTypeString = SvxResId(STR_IMAGE_PNG);
-                break;
-            case GfxLinkType::NativeTif:
-                aGraphicTypeString = SvxResId(STR_IMAGE_TIFF);
-                break;
-            case GfxLinkType::NativeWmf:
-                aGraphicTypeString = SvxResId(STR_IMAGE_WMF);
-                break;
-            case GfxLinkType::NativeMet:
-                aGraphicTypeString = SvxResId(STR_IMAGE_MET);
-                break;
-            case GfxLinkType::NativePct:
-                aGraphicTypeString = SvxResId(STR_IMAGE_PCT);
-                break;
-            case GfxLinkType::NativeSvg:
-                aGraphicTypeString = SvxResId(STR_IMAGE_SVG);
-                break;
-            case GfxLinkType::NativeBmp:
-                aGraphicTypeString = SvxResId(STR_IMAGE_BMP);
-                break;
-            default:
-                break;
-        }
-    }
-    m_xLabelGraphicType->set_label(aGraphicTypeString);
+
+    m_xLabelGraphicType->set_label(GraphicHelper::GetImageType(m_aGraphic));
 
     const FieldUnit eFieldUnit = m_rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );

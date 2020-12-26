@@ -63,6 +63,7 @@
 #include <strings.hrc>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/graphichelper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
@@ -2314,6 +2315,8 @@ SwGrfExtPage::SwGrfExtPage(weld::Container* pPage, weld::DialogController* pCont
     , m_xCtlAngle(new svx::DialControl)
     , m_xCtlAngleWin(new weld::CustomWeld(*m_xBuilder, "CTL_ANGLE", *m_xCtlAngle))
     , m_xBmpWin(new weld::CustomWeld(*m_xBuilder, "preview", m_aBmpWin))
+    // tdf#138843 place holder for the graphic type
+    , m_xLabelGraphicType(m_xBuilder->weld_label("label-graphic-type"))
 {
     m_aBmpWin.SetBitmapEx(BitmapEx(RID_BMP_PREVIEW_FALLBACK));
 
@@ -2434,7 +2437,10 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
         }
         const Graphic* pGrf = rBrush.GetGraphic(referer);
         if( pGrf )
+        {
             m_aBmpWin.SetGraphic( *pGrf );
+            m_xLabelGraphicType->set_label(GraphicHelper::GetImageType(*pGrf));
+        }
     }
 
     m_xConnectED->save_value();
@@ -2544,6 +2550,7 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl, weld::Button&, void)
     Graphic aGraphic;
     (void)GraphicFilter::LoadGraphic(m_xGrfDlg->GetPath(), OUString(), aGraphic);
     m_aBmpWin.SetGraphic(aGraphic);
+    m_xLabelGraphicType->set_label(GraphicHelper::GetImageType(aGraphic));
 
     bool bEnable = GraphicType::Bitmap      == aGraphic.GetType() ||
                         GraphicType::GdiMetafile == aGraphic.GetType();
