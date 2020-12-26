@@ -221,6 +221,8 @@ class SwGrfExtPage : public SfxTabPage
     std::unique_ptr<weld::CustomWeld> m_xCtlAngleWin;
     std::unique_ptr<weld::CustomWeld> m_xBmpWin;
 
+    // Tdf:138843 add label for image file type
+    std::unique_ptr<weld::Label> m_xLabelGraphicType;
 
     // handler for mirroring
     DECL_LINK(MirrorHdl, weld::ToggleButton&, void);
