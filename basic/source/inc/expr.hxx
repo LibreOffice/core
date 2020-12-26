@@ -152,11 +152,11 @@ protected:
     std::unique_ptr<SbiExprNode>   pExpr; // expression tree
     SbiExprType   eCurExpr;         // type of expression
     SbiExprMode   m_eMode;          // expression context
-    bool          bBased;           // true: easy DIM-part (+BASE)
-    bool          bError;
-    bool          bByVal;           // true: ByVal-Parameter
-    bool          bBracket;         // true: Parameter list with brackets
-    sal_uInt16        nParenLevel;
+    bool          bBased = false;   // true: easy DIM-part (+BASE)
+    bool          bError = false;
+    bool          bByVal = false;   // true: ByVal-Parameter
+    bool          bBracket = false; // true: Parameter list with brackets
+    sal_uInt16        nParenLevel = 0;
     std::unique_ptr<SbiExprNode> Term( const KeywordSymbolInfo* pKeywordSymbolInfo = nullptr );
     std::unique_ptr<SbiExprNode> ObjTerm( SbiSymDef& );
     std::unique_ptr<SbiExprNode> Operand( bool bUsedForTypeOf = false );
