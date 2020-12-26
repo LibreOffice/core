@@ -250,12 +250,27 @@ IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, weld::Button&, void)
     else if (mpPageFormatDesc)
         aTitleDesc.SetNumOffset(mpPageFormatDesc->GetNumOffset());
 
+    // Starting page can at MOST be one page greater than the current document size.
+    if (m_xPageStartNF->get_sensitive())
+    {
+        while (mrSh.SttNxtPg())
+        {
+            // Go to the end of the document
+        }
+
+        const sal_uInt16 nMaxStartPage = 1 + lcl_GetCurrentPage(mrSh);
+        if (nMaxStartPage < m_xPageStartNF->get_value())
+            m_xPageStartNF->set_value(nMaxStartPage);
+    }
+
     sal_uInt16 nNumTitlePages = m_xPageCountNF->get_value();
     if (!m_xUseExistingPagesRB->get_active())
     {
-        // FIXME: If the starting page number is larger than the last page,
-        // probably should add pages AFTER the last page, not before it.
+        // Insert new pages at the end of the document, if startAt page is greater than last page
         mrSh.GotoPage(GetInsertPosition(), false);
+        if (lcl_GetCurrentPage(mrSh) < GetInsertPosition())
+            mrSh.EndPg();
+
         // FIXME: These new pages cannot be accessed currently with GotoPage. It doesn't know they exist.
         for (sal_uInt16 nI = 0; nI < nNumTitlePages; ++nI)
             mrSh.InsertPageBreak();
