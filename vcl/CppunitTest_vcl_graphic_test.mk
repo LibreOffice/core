@@ -15,6 +15,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_graphic_test, \
     vcl/qa/cppunit/GraphicFormatDetectorTest \
     vcl/qa/cppunit/GraphicNativeMetadataTest \
     vcl/qa/cppunit/VectorGraphicSearchTest \
+    vcl/qa/cppunit/BinaryDataContainerTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_graphic_test, \
