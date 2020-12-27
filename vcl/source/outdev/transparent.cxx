@@ -126,7 +126,7 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
     if( aMask.GetBitCount() > 1 )
         aMask.Convert( BmpConversion::N1BitThreshold );
 
-    // mirrored horizontically
+    // mirrored horizontally
     if( aDestSz.Width() < 0 )
     {
         aDestSz.setWidth( -aDestSz.Width() );
