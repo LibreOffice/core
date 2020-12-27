@@ -572,6 +572,7 @@ bool SwWrtShell::PageCursor(SwTwips lOffset, bool bSelect)
 
 bool SwWrtShell::GotoPage(sal_uInt16 nPage, bool bRecord)
 {
+    addCurrentPosition();
     ShellMoveCursor aTmp( this, false);
     if( SwCursorShell::GotoPage(nPage) && bRecord)
     {

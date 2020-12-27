@@ -20,9 +20,12 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <edtwin.hxx>
+
 // This method positions the cursor to the position rPos.
 
 void SwNavigationMgr::GotoSwPosition(const SwPosition &rPos) {
+    m_rMyShell.GetView().GetEditWin().GrabFocus();
     // EnterStdMode() prevents the cursor to 'block' the current
     // shell when it should move from the image back to the normal shell
     m_rMyShell.EnterStdMode();
@@ -168,6 +171,11 @@ void SwNavigationMgr::goForward() {
 // rPos is usually the current position of the cursor in the document
 
 bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
+
+    // For additions other than to the end, check here if the cursor position has changed
+    if (m_nCurrent < m_entries.size() && (rPos == *m_entries[m_nCurrent]->GetPoint()))
+        return false;
+
     // Flags that will be used for refreshing the buttons
     bool bBackWasDisabled = !backEnabled();
     bool bForwardWasEnabled = forwardEnabled();
