@@ -340,6 +340,8 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
         if (pActiveSidebarWin)
             pActiveSidebarWin->SwitchToFieldPos();
     }
+    if (NID_RECENCY != m_nMoveType && NID_PGE != m_nMoveType && NID_SRCH_REP != m_nMoveType)
+        rSh.addCurrentPosition();
     switch( m_nMoveType )
     {
         case NID_PGE:

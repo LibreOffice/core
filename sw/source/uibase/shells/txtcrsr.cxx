@@ -117,6 +117,7 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
 void SwTextShell::ExecMove(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
+    rSh.addCurrentPosition();
     SwEditWin& rTmpEditWin = GetView().GetEditWin();
     rTmpEditWin.FlushInBuffer();
 
@@ -175,6 +176,7 @@ void SwTextShell::ExecMove(SfxRequest &rReq)
 void SwTextShell::ExecMovePage(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
+    rSh.addCurrentPosition();
     GetView().GetEditWin().FlushInBuffer();
 
     switch( rReq.GetSlot() )
@@ -225,6 +227,7 @@ void SwTextShell::ExecMovePage(SfxRequest &rReq)
 void SwTextShell::ExecMoveCol(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
+    rSh.addCurrentPosition();
     switch ( rReq.GetSlot() )
     {
         case FN_START_OF_COLUMN:
@@ -255,6 +258,7 @@ void SwTextShell::ExecMoveCol(SfxRequest &rReq)
 void SwTextShell::ExecMoveLingu(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
+    rSh.addCurrentPosition();
     GetView().GetEditWin().FlushInBuffer();
 
     switch ( rReq.GetSlot() )
@@ -311,6 +315,7 @@ void SwTextShell::ExecMoveLingu(SfxRequest &rReq)
 void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
+    rSh.addCurrentPosition();
     const sal_uInt16 nSlot = rReq.GetSlot();
     bool bSetRetVal = true, bRet = true;
     switch ( nSlot )
