@@ -1554,9 +1554,9 @@ SvStream& ReadRegion(SvStream& rIStrm, vcl::Region& rRegion)
 
         default:
         {
-            RegionBand* pNewRegionBand = new RegionBand();
-            bool bSuccess = pNewRegionBand->load(rIStrm);
-            rRegion.mpRegionBand.reset(pNewRegionBand);
+            std::shared_ptr<RegionBand> xNewRegionBand(new RegionBand());
+            bool bSuccess = xNewRegionBand->load(rIStrm);
+            rRegion.mpRegionBand = xNewRegionBand;
 
             bool bHasPolyPolygon(false);
             if (aCompat.GetVersion() >= 2)
