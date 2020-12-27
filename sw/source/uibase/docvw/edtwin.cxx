@@ -2831,6 +2831,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     m_rView.GetPostItMgr()->SetActiveSidebarWin(nullptr);
 
     GrabFocus();
+    rSh.addCurrentPosition();
 
     //ignore key modifiers for format paintbrush
     {
