@@ -37,6 +37,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <svx/swframeposstrings.hxx>
 #include <svx/swframevalidation.hxx>
+#include <svx/sdangitm.hxx>
 #include <comphelper/classids.hxx>
 #include <tools/globname.hxx>
 #include <tools/urlobj.hxx>
@@ -2353,7 +2354,7 @@ void SwGrfExtPage::Reset(const SfxItemSet *rSet)
     // RotGrfFlyFrame: Get RotationAngle and set at control
     if(SfxItemState::SET == rSet->GetItemState( SID_ATTR_TRANSFORM_ANGLE, false, &pItem))
     {
-        m_xCtlAngle->SetRotation(static_cast<const SfxInt32Item*>(pItem)->GetValue());
+        m_xCtlAngle->SetRotation(static_cast<const SdrAngleItem*>(pItem)->GetValue());
     }
     else
     {
@@ -2494,7 +2495,7 @@ bool SwGrfExtPage::FillItemSet( SfxItemSet *rSet )
     // RotGrfFlyFrame: Safe rotation if modified
     if(m_xCtlAngle->IsValueModified())
     {
-        rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ANGLE), m_xCtlAngle->GetRotation()));
+        rSet->Put(SdrAngleItem(GetWhich(SID_ATTR_TRANSFORM_ANGLE), m_xCtlAngle->GetRotation()));
         bModified = true;
     }
 

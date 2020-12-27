@@ -1385,7 +1385,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
             nRotateRefX=aRotateAxe.X();
             nRotateRefY=aRotateAxe.Y();
         }
-        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ANGLE,GetMarkedObjRotate()));
+        aRetSet.Put(SdrAngleItem(SID_ATTR_TRANSFORM_ANGLE,GetMarkedObjRotate()));
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ROT_X,nRotateRefX));
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ROT_Y,nRotateRefY));
 
@@ -1606,7 +1606,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     // rotation
     if (SfxItemState::SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_ANGLE, true, &pPoolItem)) {
-        nRotateAngle = static_cast<const SfxInt32Item*>(pPoolItem)->GetValue() - nOldRotateAngle;
+        nRotateAngle = static_cast<const SdrAngleItem*>(pPoolItem)->GetValue() - nOldRotateAngle;
         bRotate = (nRotateAngle != 0);
     }
 

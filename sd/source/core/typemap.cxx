@@ -93,6 +93,7 @@
 #include <svx/xflftrit.hxx>
 #include <svx/xlinjoit.hxx>
 #include <svx/galleryitem.hxx>
+#include <svx/sdangitm.hxx>
 
 #define SFX_TYPEMAP
 #include <sdslots.hxx>

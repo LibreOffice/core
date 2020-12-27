@@ -193,6 +193,7 @@ item SvxCellHorJustifyEnum  SvxHorJustifyItem;
 item SvxCellVerJustifyEnum  SvxVerJustifyItem;
 item SvxCellOrientationEnum SvxOrientationItem;
 item BOOL                   SdrOnOffItem;
+item INT32                  SdrAngleItem; // derived from SfxInt32Item
 item INT16                  SdrTextFitToSizeTypeItem;  // enum
 item String                 SfxStringListItem;  // serialized into one concatenated string
 item double                 SvxDoubleItem;

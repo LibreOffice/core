@@ -33,6 +33,7 @@
 #include <sfx2/weldutils.hxx>
 #include <svx/dialcontrol.hxx>
 #include <svx/rectenum.hxx>
+#include <svx/sdangitm.hxx>
 #include <unotools/viewoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/canvastools.hxx>
@@ -452,7 +453,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl, DialControl&, void )
 
     // #i123993# Need to take UIScale into account when executing rotations
     const double fUIScale(mpView && mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
-    SfxInt32Item aAngleItem( SID_ATTR_TRANSFORM_ANGLE,static_cast<sal_uInt32>(nTmp));
+    SdrAngleItem aAngleItem( SID_ATTR_TRANSFORM_ANGLE,static_cast<sal_uInt32>(nTmp));
     SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
     SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
 
@@ -675,7 +676,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
         case SID_ATTR_TRANSFORM_ANGLE:
             if (eState >= SfxItemState::DEFAULT)
             {
-                const SfxInt32Item* pItem = dynamic_cast< const SfxInt32Item* >(pState);
+                const SdrAngleItem* pItem = dynamic_cast< const SdrAngleItem* >(pState);
 
                 if(pItem)
                 {
