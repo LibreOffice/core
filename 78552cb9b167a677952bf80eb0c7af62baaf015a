@@ -16,6 +16,24 @@
       "revId": "78552cb9b167a677952bf80eb0c7af62baaf015a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0706bfd8_51ef7ecc",
+        "filename": "starmath/source/xparsmlbase.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2160,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2020-12-27T15:57:04Z",
+      "side": 1,
+      "message": "Those in particular yes.\nThis changes are for allowing to use customized entities.\nOn xml standar they don\u0027t need to be characters, but whatever you want.\n\nIn particular this case is for mathml and I\u0027m using those two for debugging (check if it works).\nTrue is most of them can be used without problem. But you are imposing on the user: You must use unicode. However mathml standar does not specify wich encoding you must use. So using this allows the user to easily change the encoding to whatever based on basic ASCII.\n\nAnd there is another reason. I-m working on tdf#122151 and need a non printable char to work: \u0026ap; (apply function). For this specific case and others such as \u0026it; or \u0026ic; it\u0027s a must use. So need it to work.\n\nBy the way, this change only affects starmath module. If you do not provide list will work as always.",
+      "parentUuid": "3f8c3836_88bfeeba",
+      "revId": "78552cb9b167a677952bf80eb0c7af62baaf015a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
