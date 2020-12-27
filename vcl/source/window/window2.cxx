@@ -1532,7 +1532,7 @@ bool Window::set_property(const OString &rKey, const OUString &rValue)
         set_border_width(rValue.toInt32());
     else if (rKey == "margin-start" || rKey == "margin-left")
     {
-        //TODO: assert(rKey == "margin-start" && "margin-left deprecated in favor of margin-start");
+        assert(rKey == "margin-start" && "margin-left deprecated in favor of margin-start");
         set_margin_start(rValue.toInt32());
     }
     else if (rKey == "margin-end" || rKey == "margin-right")
