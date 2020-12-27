@@ -38,6 +38,7 @@ TemplateSearchView::TemplateSearchView(std::unique_ptr<weld::ScrolledWindow> xWi
     mxTreeView->connect_column_clicked(LINK(this, ListView, ColumnClickedHdl));
     mxTreeView->connect_changed(LINK(this, TemplateSearchView, ListViewChangedHdl));
     mxTreeView->connect_popup_menu(LINK(this, TemplateSearchView, PopupMenuHdl));
+    mxTreeView->connect_key_press(LINK(this, TemplateSearchView, KeyPressHdl));
 }
 
 bool TemplateSearchView::MouseButtonDown( const MouseEvent& rMEvt )
@@ -80,8 +81,8 @@ bool TemplateSearchView::KeyInput( const KeyEvent& rKEvt )
             if (pItem->isSelected())
             {
                 maDeleteTemplateHdl.Call(pItem);
-                RemoveItem(pItem->mnId);
-
+                ListView::remove(OUString::number(pItem->mnId));
+                ThumbnailView::RemoveItem(pItem->mnId);
                 CalculateItemPositions();
             }
         }
@@ -175,7 +176,7 @@ void TemplateSearchView::ContextMenuSelectHdl(std::string_view rIdent)
 
         maDeleteTemplateHdl.Call(maSelectedItem);
         ListView::remove(OUString::number(maSelectedItem->mnId));
-        RemoveItem(maSelectedItem->mnId);
+        ThumbnailView::RemoveItem(maSelectedItem->mnId);
 
         CalculateItemPositions();
     }
@@ -427,5 +428,35 @@ void TemplateSearchView::RemoveDefaultTemplateIcon(std::u16string_view rPath)
             return;
         }
     }
+}
+
+IMPL_LINK(TemplateSearchView, KeyPressHdl, const KeyEvent&, rKEvt, bool)
+{
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
+
+    if( aKeyCode == KEY_DELETE && !mFilteredItemList.empty() && !ListView::get_selected_rows().empty())
+    {
+        std::unique_ptr<weld::MessageDialog> xQueryDlg(Application::CreateMessageDialog(mxTreeView.get(), VclMessageType::Question, VclButtonsType::YesNo,
+                                                       SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE)));
+        if (xQueryDlg->run() != RET_YES)
+            return true;
+
+        //copy to avoid changing filtered item list during deletion
+        ThumbnailValueItemList mFilteredItemListCopy = mFilteredItemList;
+
+        for (ThumbnailViewItem* pItem : mFilteredItemListCopy)
+        {
+            if (pItem->isSelected())
+            {
+                maDeleteTemplateHdl.Call(pItem);
+                ListView::remove(OUString::number(pItem->mnId));
+                ThumbnailView::RemoveItem(pItem->mnId);
+
+                CalculateItemPositions();
+            }
+        }
+    }
+
+    return false;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
