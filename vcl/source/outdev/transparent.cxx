@@ -330,11 +330,7 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
 
     bool bDrawn = false;
 
-    // debug helper:
-    static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
-
-    if( !pDisableNative &&
-        mpGraphics->supportsOperation( OutDevSupportType::B2DDraw )
+    if (mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
 #if defined UNX && ! defined MACOSX && ! defined IOS
         && GetBitCount() > 8
 #endif
@@ -436,14 +432,11 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
     {
         bool bDrawn = false;
 
-        // debug helper:
-        static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA" );
-
         // #i66849# Added fast path for exactly rectangular
         // polygons
         // #i83087# Naturally, system alpha blending cannot
         // work with separate alpha VDev
-        if( !mpAlphaVDev && !pDisableNative && aPolyPoly.IsRect() )
+        if( !mpAlphaVDev && aPolyPoly.IsRect() )
         {
             // setup Graphics only here (other cases delegate
             // to basic OutDev methods)
