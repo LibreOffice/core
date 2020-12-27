@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f8c3836_88bfeeba",
+        "filename": "starmath/source/xparsmlbase.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2160,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-12-27T09:29:22Z",
+      "side": 1,
+      "message": "surely we can just continue to write these unicode characters instead? what problems does this solve?\n\nboth of these exist since Unicode 1.1 from 1993!\n\nplease revert this.",
+      "revId": "78552cb9b167a677952bf80eb0c7af62baaf015a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
