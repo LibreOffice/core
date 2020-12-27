@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec7e29e5_c0e82b00",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 4061,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2020-12-27T01:21:28Z",
+      "side": 1,
+      "message": "This line and the line 3963 are redundant..\nWhen I tried to remove redundancy in Patch 13 it gave errors and the build only succeeded for Windows..\n\nCould you please suggest some idea to remove this redundancy?",
+      "revId": "958e246fb1bece6fb5efd9b7a8286b1ba34631d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
