@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "7ab474ff_196a7003",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 3940,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-27T13:33:27Z",
+      "side": 1,
+      "message": "It doesn\u0027t matter if document is protected or not. What matters is what we are *trying* to do, i.e. what is passed to the function as \"rProtect\".",
+      "range": {
+        "startLine": 3940,
+        "startChar": 4,
+        "endLine": 3940,
+        "endChar": 31
+      },
+      "revId": "958e246fb1bece6fb5efd9b7a8286b1ba34631d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40962c4e_c6473f83",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 3961,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-27T13:33:27Z",
+      "side": 1,
+      "message": "The two branches in your code should be joined. The difference between protecting and unprotecting is only in the preparation of undo information.",
+      "range": {
+        "startLine": 3961,
+        "startChar": 4,
+        "endLine": 3961,
+        "endChar": 8
+      },
+      "revId": "958e246fb1bece6fb5efd9b7a8286b1ba34631d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ec7e29e5_c0e82b00",
         "filename": "sc/source/ui/docshell/docfunc.cxx",
         "patchSetId": 16
