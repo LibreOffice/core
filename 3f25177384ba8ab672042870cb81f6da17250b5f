@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "88c09f31_439b7482",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 3942,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2020-12-27T15:37:17Z",
+      "side": 1,
+      "message": "rProtect.isProtected() can be replaced by pProtect..\nLet me know your thoughts about it..",
+      "range": {
+        "startLine": 3942,
+        "startChar": 56,
+        "endLine": 3942,
+        "endChar": 78
+      },
+      "revId": "3f25177384ba8ab672042870cb81f6da17250b5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a30420e3_29f19bd7",
         "filename": "sc/source/ui/docshell/docfunc.cxx",
         "patchSetId": 17
