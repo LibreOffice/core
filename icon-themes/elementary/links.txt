@@ -1,14 +1,14 @@
 # avmedia
 # ==============================================
 avmedia/res/av02048.png cmd/sc_open.png
-avmedia/res/av02049.png cmd/sc_runbasic.png
+avmedia/res/av02049.png cmd/sc_datastreamsplay.png
 avmedia/res/av02050.png cmd/sc_mediapause.png
 avmedia/res/av02051.png cmd/sc_basicstop.png
 avmedia/res/av02052.png cmd/sc_mediarepeat.png
 avmedia/res/av02053.png cmd/sc_ok.png
 avmedia/res/av02054.png cmd/sc_mediamute.png
 avmedia/res/avl02048.png cmd/lc_open.png
-avmedia/res/avl02049.png cmd/lc_runbasic.png
+avmedia/res/avl02049.png cmd/lc_datastreamsplay.png
 avmedia/res/avl02050.png cmd/lc_mediapause.png
 avmedia/res/avl02051.png cmd/lc_basicstop.png
 avmedia/res/avl02052.png cmd/lc_mediarepeat.png
@@ -320,13 +320,8 @@ cmd/sc_vscroll.png cmd/sc_scrollbar.png
 cmd/sc_vscrollbar.png cmd/sc_scrollbar.png
 
 # Media
-cmd/32/datastreamsplay.png cmd/32/runbasic.png
 cmd/32/datastreamsstop.png cmd/32/basicstop.png
-
-cmd/lc_datastreamsplay.png cmd/lc_runbasic.png
 cmd/lc_datastreamsstop.png cmd/lc_basicstop.png
-
-cmd/sc_datastreamsplay.png cmd/sc_runbasic.png
 cmd/sc_datastreamsstop.png cmd/sc_basicstop.png
 
 # Alignment
@@ -2174,7 +2169,6 @@ sd/res/objects.png cmd/sc_choosepolygon.png
 sd/res/ole.png sc/res/nc05.png
 sd/res/page.png cmd/sc_showsinglepage.png
 sd/res/pipette.png cmd/sc_bmpmask.png
-sd/res/playblue_16.png cmd/sc_runbasic.png
 sd/res/stopplayingblue_16.png cmd/sc_basicstop.png
 sd/res/time_16.png cmd/sc_timefield.png
 sd/res/waiticon.png cmd/sc_mediapause.png
@@ -2296,22 +2290,7 @@ svx/res/id08.png cmd/sc_freeline.png
 svx/res/legtyp1.png cmd/sc_calloutshapes.line-callout-3.png
 svx/res/legtyp2.png cmd/sc_calloutshapes.line-callout-1.png
 svx/res/legtyp3.png cmd/sc_calloutshapes.line-callout-2.png
-svx/res/lightofffrombottomleft_22.png svx/res/lightofffrombottom_22.png
-svx/res/lightofffrombottomright_22.png svx/res/lightofffrombottom_22.png
-svx/res/lightofffromleft_22.png svx/res/lightofffrombottom_22.png
-svx/res/lightofffromright_22.png svx/res/lightofffrombottom_22.png
-svx/res/lightofffromtop_22.png svx/res/lightofffrombottom_22.png
-svx/res/lightofffromtopleft_22.png svx/res/lightofffrombottom_22.png
-svx/res/lightofffromtopright_22.png svx/res/lightofffrombottom_22.png
 svx/res/lighton.png cmd/sc_extrusionlightingfloater.png
-svx/res/lightonfrombottom_22.png cmd/lc_extrusionlightingfloater.png
-svx/res/lightonfrombottomleft_22.png cmd/lc_extrusionlightingfloater.png
-svx/res/lightonfrombottomright_22.png cmd/lc_extrusionlightingfloater.png
-svx/res/lightonfromleft_22.png cmd/lc_extrusionlightingfloater.png
-svx/res/lightonfromright_22.png cmd/lc_extrusionlightingfloater.png
-svx/res/lightonfromtop_22.png cmd/lc_extrusionlightingfloater.png
-svx/res/lightonfromtopleft_22.png cmd/lc_extrusionlightingfloater.png
-svx/res/lightonfromtopright_22.png cmd/lc_extrusionlightingfloater.png
 svx/res/lngcheck.png cmd/sc_spelling.png
 svx/res/luminanc.png cmd/sc_graphicfilterinvert.png
 svx/res/matte_16.png cmd/sc_extrusionsurfacefloater.png
@@ -2333,7 +2312,6 @@ svx/res/symphony/rotate_left.png cmd/sc_rotateleft.png
 svx/res/symphony/rotate_right.png cmd/sc_rotateright.png
 svx/res/symphony/sch_backgroundcolor.png cmd/sc_backgroundcolor.png
 svx/res/symphony/spacing3.png cmd/sc_spacepara1.png
-svx/res/zoom_page_statusbar.png cmd/sc_zoompanning.png
 
 # sw
 # ==============================================
@@ -2469,7 +2447,7 @@ cmd/32/addtextbox.png cmd/32/insertfixedtext.png
 cmd/lc_addtextbox.png cmd/lc_insertfixedtext.png
 cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
 
-# Edit menu 
+# Edit menu
 # ===============================================
 cmd/32/authoritiesentrydialog.png cmd/32/dbviewaliases.png
 cmd/32/changesmenu.png cmd/32/accepttrackedchange.png
