@@ -26,6 +26,10 @@ public:
 
     void showRegion(std::u16string_view rName);
 
+    void reload();
+
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
+
     void createContextMenu(const bool bIsDefault, const bool bIsBuiltIn);
 
     virtual void Show() override;
@@ -55,6 +59,8 @@ private:
     DECL_LINK(ListViewChangedHdl, weld::TreeView&, void);
 
     DECL_LINK(PopupMenuHdl, const CommandEvent&, bool);
+
+    DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
 
     TemplateViewMode mViewMode;
 };

@@ -17,6 +17,8 @@
 #include <sfx2/strings.hrc>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/event.hxx>
+#include <sfx2/doctempl.hxx>
 
 TemplateDlgLocalView::TemplateDlgLocalView(std::unique_ptr<weld::ScrolledWindow> xWindow,
                                            std::unique_ptr<weld::Menu> xMenu,
@@ -29,6 +31,7 @@ TemplateDlgLocalView::TemplateDlgLocalView(std::unique_ptr<weld::ScrolledWindow>
     mxTreeView->connect_column_clicked(LINK(this, ListView, ColumnClickedHdl));
     mxTreeView->connect_changed(LINK(this, TemplateDlgLocalView, ListViewChangedHdl));
     mxTreeView->connect_popup_menu(LINK(this, TemplateDlgLocalView, PopupMenuHdl));
+    mxTreeView->connect_key_press(LINK(this, TemplateDlgLocalView, KeyPressHdl));
 }
 
 void TemplateDlgLocalView::showAllTemplates()
@@ -61,6 +64,34 @@ void TemplateDlgLocalView::showRegion(std::u16string_view rName)
             break;
         }
     }
+}
+
+void TemplateDlgLocalView::reload()
+{
+    mpDocTemplates->Update();
+
+    Populate();
+
+    // Check if we are currently browsing a region or root folder
+    if (mnCurRegionId)
+    {
+        sal_uInt16 nRegionId = mnCurRegionId - 1; //Is offset by 1
+
+        for (auto const& pRegion : maRegions)
+        {
+            if (pRegion->mnRegionId == nRegionId)
+            {
+                showRegion(pRegion.get());
+                break;
+            }
+        }
+    }
+    else
+        showAllTemplates();
+
+    //No items should be selected by default
+    ThumbnailView::deselectItems();
+    ListView::unselect_all();
 }
 
 void TemplateDlgLocalView::createContextMenu(const bool bIsDefault, const bool bIsBuiltIn)
@@ -129,11 +160,6 @@ void TemplateDlgLocalView::ContextMenuSelectHdl(std::string_view rIdent)
             return;
 
         maDeleteTemplateHdl.Call(maSelectedItem);
-        // this remove is probably redundant because reload would throw away
-        // the old contents anyway. Maybe there is an argument that removing it
-        // immediately means there is possibility to show it missing while the
-        // possibly slow reload is operating if a repaint could occur
-        ListView::remove(OUString::number(maSelectedItem->mnId));
         reload();
     }
     else if (rIdent == "default")
@@ -300,4 +326,75 @@ IMPL_LINK_NOARG(TemplateDlgLocalView, ListViewChangedHdl, weld::TreeView&, void)
     updateSelection();
 }
 
+bool TemplateDlgLocalView::KeyInput(const KeyEvent& rKEvt)
+{
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
+
+    if (aKeyCode == (KEY_MOD1 | KEY_A))
+    {
+        for (ThumbnailViewItem* pItem : mFilteredItemList)
+        {
+            if (!pItem->isSelected())
+            {
+                pItem->setSelection(true);
+                maItemStateHdl.Call(pItem);
+            }
+        }
+
+        if (IsReallyVisible() && IsUpdateMode())
+            Invalidate();
+        return true;
+    }
+    else if (aKeyCode == KEY_DELETE && !mFilteredItemList.empty())
+    {
+        std::unique_ptr<weld::MessageDialog> xQueryDlg(Application::CreateMessageDialog(
+            GetDrawingArea(), VclMessageType::Question, VclButtonsType::YesNo,
+            SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE)));
+        if (xQueryDlg->run() != RET_YES)
+            return true;
+
+        //copy to avoid changing filtered item list during deletion
+        ThumbnailValueItemList mFilteredItemListCopy = mFilteredItemList;
+
+        for (ThumbnailViewItem* pItem : mFilteredItemListCopy)
+        {
+            if (pItem->isSelected())
+            {
+                maDeleteTemplateHdl.Call(pItem);
+            }
+        }
+        reload();
+    }
+
+    return ThumbnailView::KeyInput(rKEvt);
+}
+
+IMPL_LINK(TemplateDlgLocalView, KeyPressHdl, const KeyEvent&, rKEvt, bool)
+{
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
+
+    if (aKeyCode == KEY_DELETE && !mFilteredItemList.empty()
+        && !ListView::get_selected_rows().empty())
+    {
+        std::unique_ptr<weld::MessageDialog> xQueryDlg(Application::CreateMessageDialog(
+            mxTreeView.get(), VclMessageType::Question, VclButtonsType::YesNo,
+            SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE)));
+        if (xQueryDlg->run() != RET_YES)
+            return true;
+
+        //copy to avoid changing filtered item list during deletion
+        ThumbnailValueItemList mFilteredItemListCopy = mFilteredItemList;
+
+        for (ThumbnailViewItem* pItem : mFilteredItemListCopy)
+        {
+            if (pItem->isSelected())
+            {
+                maDeleteTemplateHdl.Call(pItem);
+            }
+        }
+
+        reload();
+    }
+    return false;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

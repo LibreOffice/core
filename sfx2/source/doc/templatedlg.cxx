@@ -822,12 +822,22 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, LoseFocusHdl, weld::Widget&, void)
 IMPL_LINK_NOARG ( SfxTemplateManagerDlg, ListViewHdl, weld::Button&, void )
 {
     setTemplateViewMode(TemplateViewMode::eListView);
+
+    if (mxSearchFilter->get_text().isEmpty())
+        mxLocalView->ListView::grab_focus();
+    else
+        mxSearchView->ListView::grab_focus();
 }
 
 IMPL_LINK_NOARG ( SfxTemplateManagerDlg, ThumbnailViewHdl, weld::Button&, void )
 {
     setTemplateViewMode(TemplateViewMode::eThumbnailView);
     bMakeSelItemVisible = true;
+
+    if (mxSearchFilter->get_text().isEmpty())
+        mxLocalView->ThumbnailView::GrabFocus();
+    else
+        mxSearchView->ThumbnailView::GrabFocus();
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, FocusRectLocalHdl, weld::Widget&, tools::Rectangle)
