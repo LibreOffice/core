@@ -135,284 +135,31 @@
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
-              <object class="GtkAlignment" id="alignment1">
+              <object class="GtkBox" id="all_buttons_box">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkBox" id="all_buttons_box">
+                  <object class="GtkBox" id="buttons_box">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="vexpand">True</property>
                     <property name="orientation">vertical</property>
+                    <property name="spacing">3</property>
                     <child>
-                      <object class="GtkBox" id="buttons_box">
+                      <object class="GtkButton" id="open_all">
+                        <property name="label" translatable="yes" context="startcenter|open_all">_Open File</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="vexpand">True</property>
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">3</property>
-                        <child>
-                          <object class="GtkButton" id="open_all">
-                            <property name="label" translatable="yes" context="startcenter|open_all">_Open File</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="margin-start">6</property>
-                            <property name="margin-end">6</property>
-                            <property name="margin_top">6</property>
-                            <property name="image">open_all_image</property>
-                            <property name="relief">none</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="open_remote">
-                            <property name="label" translatable="yes" context="startcenter|open_remote">Remote File_s</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="margin-start">6</property>
-                            <property name="margin-end">6</property>
-                            <property name="image">open_all_image2</property>
-                            <property name="relief">none</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSeparator" id="separator3">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="margin-start">6</property>
-                            <property name="margin-end">6</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkMenuButton" id="open_recent">
-                            <property name="label" translatable="yes" context="startcenter|open_recent">_Recent Documents</property>
-                            <property name="name">MenuToggleButton</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="margin-start">6</property>
-                            <property name="margin-end">6</property>
-                            <property name="image">open_all_image1</property>
-                            <property name="relief">none</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="popup">clearmenu</property>
-                            <property name="use_popover">False</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkMenuButton" id="templates_all">
-                            <property name="label" translatable="yes" context="startcenter|templates_all">T_emplates</property>
-                            <property name="name">MenuToggleButton</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="margin-start">6</property>
-                            <property name="margin-end">6</property>
-                            <property name="image">templates_all_image</property>
-                            <property name="relief">none</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="popup">filtermenu</property>
-                            <property name="use_popover">False</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">4</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSeparator" id="separator1">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="margin-start">6</property>
-                            <property name="margin-end">6</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">5</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="create_label">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="margin-start">12</property>
-                            <property name="margin_bottom">6</property>
-                            <property name="label" translatable="yes" context="startcenter|create_label">Create:</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">6</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="writer_all">
-                            <property name="label" translatable="yes" context="startcenter|writer_all">_Writer Document</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="margin-start">6</property>
-                            <property name="margin-end">6</property>
-                            <property name="image">writer_all_image</property>
-                            <property name="relief">none</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">7</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="calc_all">
-                            <property name="label" translatable="yes" context="startcenter|calc_all">_Calc Spreadsheet</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="margin-start">6</property>
-                            <property name="margin-end">6</property>
-                            <property name="image">calc_all_image</property>
-                            <property name="relief">none</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">8</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="impress_all">
-                            <property name="label" translatable="yes" context="startcenter|impress_all">_Impress Presentation</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="margin-start">6</property>
-                            <property name="margin-end">6</property>
-                            <property name="image">impress_all_image</property>
-                            <property name="relief">none</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">9</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="draw_all">
-                            <property name="label" translatable="yes" context="startcenter|draw_all">_Draw Drawing</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="margin-start">6</property>
-                            <property name="margin-end">6</property>
-                            <property name="image">draw_all_image</property>
-                            <property name="relief">none</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">10</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="math_all">
-                            <property name="label" translatable="yes" context="startcenter|math_all">_Math Formula</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="margin-start">6</property>
-                            <property name="margin-end">6</property>
-                            <property name="image">math_all_image</property>
-                            <property name="relief">none</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">11</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="database_all">
-                            <property name="label" translatable="yes" context="startcenter|database_all">_Base Database</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="margin-start">6</property>
-                            <property name="margin-end">6</property>
-                            <property name="image">database_all_image</property>
-                            <property name="relief">none</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">12</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="althelplabel">
-                            <property name="can_focus">False</property>
-                            <property name="no_show_all">True</property>
-                            <property name="label" translatable="yes" context="startcenter|althelplabel">He_lp</property>
-                            <property name="use_underline">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">13</property>
-                          </packing>
-                        </child>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">6</property>
+                        <property name="margin_top">6</property>
+                        <property name="image">open_all_image</property>
+                        <property name="relief">none</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -421,10 +168,18 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSeparator" id="separator2">
-                        <property name="height_request">2</property>
+                      <object class="GtkButton" id="open_remote">
+                        <property name="label" translatable="yes" context="startcenter|open_remote">Remote File_s</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">6</property>
+                        <property name="image">open_all_image2</property>
+                        <property name="relief">none</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -433,46 +188,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="small_buttons_box">
+                      <object class="GtkSeparator" id="separator3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin-start">6</property>
                         <property name="margin-end">6</property>
-                        <property name="margin_top">6</property>
-                        <property name="margin_bottom">6</property>
-                        <property name="spacing">6</property>
-                        <property name="homogeneous">True</property>
-                        <child>
-                          <object class="GtkButton" id="help">
-                            <property name="label">gtk-help</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="relief">none</property>
-                            <property name="use_underline">True</property>
-                            <property name="use_stock">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="extensions">
-                            <property name="label" translatable="yes" context="startcenter|extensions">E_xtensions</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="relief">none</property>
-                            <property name="use_underline">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -480,7 +200,281 @@
                         <property name="position">2</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkMenuButton" id="open_recent">
+                        <property name="label" translatable="yes" context="startcenter|open_recent">_Recent Documents</property>
+                        <property name="name">MenuToggleButton</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">6</property>
+                        <property name="image">open_all_image1</property>
+                        <property name="relief">none</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="popup">clearmenu</property>
+                        <property name="use_popover">False</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton" id="templates_all">
+                        <property name="label" translatable="yes" context="startcenter|templates_all">T_emplates</property>
+                        <property name="name">MenuToggleButton</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">6</property>
+                        <property name="image">templates_all_image</property>
+                        <property name="relief">none</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="popup">filtermenu</property>
+                        <property name="use_popover">False</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSeparator" id="separator1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">6</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="create_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin_bottom">6</property>
+                        <property name="label" translatable="yes" context="startcenter|create_label">Create:</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">6</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="writer_all">
+                        <property name="label" translatable="yes" context="startcenter|writer_all">_Writer Document</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">6</property>
+                        <property name="image">writer_all_image</property>
+                        <property name="relief">none</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">7</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="calc_all">
+                        <property name="label" translatable="yes" context="startcenter|calc_all">_Calc Spreadsheet</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">6</property>
+                        <property name="image">calc_all_image</property>
+                        <property name="relief">none</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">8</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="impress_all">
+                        <property name="label" translatable="yes" context="startcenter|impress_all">_Impress Presentation</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">6</property>
+                        <property name="image">impress_all_image</property>
+                        <property name="relief">none</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">9</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="draw_all">
+                        <property name="label" translatable="yes" context="startcenter|draw_all">_Draw Drawing</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">6</property>
+                        <property name="image">draw_all_image</property>
+                        <property name="relief">none</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">10</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="math_all">
+                        <property name="label" translatable="yes" context="startcenter|math_all">_Math Formula</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">6</property>
+                        <property name="image">math_all_image</property>
+                        <property name="relief">none</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">11</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="database_all">
+                        <property name="label" translatable="yes" context="startcenter|database_all">_Base Database</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">6</property>
+                        <property name="image">database_all_image</property>
+                        <property name="relief">none</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">12</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="althelplabel">
+                        <property name="can_focus">False</property>
+                        <property name="no_show_all">True</property>
+                        <property name="label" translatable="yes" context="startcenter|althelplabel">He_lp</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">13</property>
+                      </packing>
+                    </child>
                   </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparator" id="separator2">
+                    <property name="height_request">2</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="small_buttons_box">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">6</property>
+                    <property name="margin_top">6</property>
+                    <property name="margin_bottom">6</property>
+                    <property name="spacing">6</property>
+                    <property name="homogeneous">True</property>
+                    <child>
+                      <object class="GtkButton" id="help">
+                        <property name="label">gtk-help</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="relief">none</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="extensions">
+                        <property name="label" translatable="yes" context="startcenter|extensions">E_xtensions</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="relief">none</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
                 </child>
               </object>
             </child>
