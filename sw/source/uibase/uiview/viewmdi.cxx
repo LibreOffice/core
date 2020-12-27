@@ -502,25 +502,43 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
 
         case NID_POSTIT:
         {
-            if ( m_pPostItMgr->HasNotes() )
+            if (m_pPostItMgr->HasNotes())
             {
                 rSh.EnterStdMode();
-                sw::annotation::SwAnnotationWin* pPostIt = GetPostItMgr()->GetActiveSidebarWin();
+                sw::annotation::SwAnnotationWin* pPostIt = m_pPostItMgr->GetActiveSidebarWin();
                 if (pPostIt)
-                    GetPostItMgr()->SetActiveSidebarWin(nullptr);
+                    m_pPostItMgr->SetActiveSidebarWin(nullptr);
                 SwFieldType* pFieldType = rSh.GetFieldType(0, SwFieldIds::Postit);
-                if ( !rSh.MoveFieldType( pFieldType, bNext ) )
+                rSh.StartAction();
+                if (!rSh.MoveFieldType(pFieldType, bNext))
                 {
-                    bNext ? (*(m_pPostItMgr->begin()))->mpPostIt->GotoPos() :
-                        (*(m_pPostItMgr->end()-1))->mpPostIt->GotoPos();
-                    SvxSearchDialogWrapper::SetSearchLabel( bNext ? SearchLabel::EndWrapped : SearchLabel::StartWrapped );
+                    // no postits found in the move direction
+                    // wrap and try again
+                    SwShellCursor* pCursor = rSh.GetCursor_();
+                    SwCursorSaveState aSaveState(*pCursor);
+                    rSh.SttEndDoc(bNext);
+                    if (rSh.MoveFieldType(pFieldType, bNext))
+                    {
+                        GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
+                        SvxSearchDialogWrapper::SetSearchLabel(bNext ? SearchLabel::EndWrapped :
+                                                                       SearchLabel::StartWrapped);
+                    }
+                    else
+                    {
+                        // no visible postits
+                        pCursor->RestoreSavePos();
+                        SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::NavElementNotFound);
+                    }
                 }
                 else
+                {
+                    GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
                     SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
-                GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
+                }
+                rSh.EndAction();
             }
             else
-                SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
+                SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::NavElementNotFound);
         }
         break;
 
