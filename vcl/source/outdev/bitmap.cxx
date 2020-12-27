@@ -645,10 +645,6 @@ void OutputDevice::DrawTransparentAlphaBitmap( const Bitmap& rBmp, const AlphaMa
     if (aDstRect.Intersection(tools::Rectangle(aOutPt, aOutSz)).IsEmpty())
         return;
 
-    static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
-    bool bTryDirectPaint = !pDisableNative;
-
-    if (bTryDirectPaint)
     {
         Point aRelPt = aOutPt + Point(mnOutOffX, mnOutOffY);
         SalTwoRect aTR(
