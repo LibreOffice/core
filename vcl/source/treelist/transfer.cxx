@@ -266,7 +266,7 @@ sal_Bool SAL_CALL TransferableHelper::TerminateListener::supportsService(const O
 
 css::uno::Sequence<OUString> TransferableHelper::TerminateListener::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>();
+    return {""};
 }
 
 TransferableHelper::~TransferableHelper()
