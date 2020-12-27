@@ -199,7 +199,7 @@ bool Printer::TransformAndReduceBitmapExToTargetRange(
     return true;
 }
 
-void Printer::DrawTransparentBitmap( const Point& rDestPt, const Size& rDestSize,
+void Printer::DrawTransparentBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                 BitmapEx& rBmpEx )
 {
