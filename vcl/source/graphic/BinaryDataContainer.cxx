@@ -13,11 +13,6 @@
 
 BinaryDataContainer::BinaryDataContainer() = default;
 
-BinaryDataContainer::BinaryDataContainer(size_t nSize)
-    : mpData(std::make_shared<std::vector<sal_uInt8>>(nSize))
-{
-}
-
 BinaryDataContainer::BinaryDataContainer(const sal_uInt8* pData, size_t nSize)
     : mpData(std::make_shared<std::vector<sal_uInt8>>(nSize))
 {
