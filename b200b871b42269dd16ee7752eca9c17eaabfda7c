@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b944bef_0d5c76de",
+        "filename": "svx/source/svdraw/svdocirc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-12-27T14:27:34Z",
+      "side": 1,
+      "message": "Meaning is \"half of nSA\". \"nSA/2_def100\" makes no sense.",
+      "revId": "b200b871b42269dd16ee7752eca9c17eaabfda7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "936bd479_3aeca737",
+        "filename": "svx/source/svdraw/svdtrans.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-12-27T14:27:34Z",
+      "side": 1,
+      "message": "? Original meaning is \"two times the difference\". 2_deg100 makes no sense here.",
+      "revId": "b200b871b42269dd16ee7752eca9c17eaabfda7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c8e2512_81a5765a",
+        "filename": "svx/source/svdraw/svdtrans.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-12-27T14:27:34Z",
+      "side": 1,
+      "message": "? -90deg input should result in 270deg. -9000 % 36000 gives -9000. abs(-9000) gives 9000.",
+      "revId": "b200b871b42269dd16ee7752eca9c17eaabfda7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
