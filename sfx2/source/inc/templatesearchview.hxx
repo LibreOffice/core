@@ -80,6 +80,8 @@ private:
 
     virtual bool KeyInput( const KeyEvent& rKEvt ) override;
 
+    DECL_LINK(KeyPressHdl, const KeyEvent&, bool);
+
     TemplateViewItem *maSelectedItem;
 
     Point maPosition;

@@ -53,6 +53,8 @@ public:
 
     void unselect_all() { mxTreeView->unselect_all(); }
 
+    void grab_focus() { mxTreeView->grab_focus(); }
+
     void remove(const OUString& rId);
 
     void rename(const OUString& rId, const OUString& rTitle);
