@@ -79,12 +79,14 @@ short SbiStringPool::Add( double n, SbxDataType t )
     return Add( OUString::createFromAscii( buf ) );
 }
 
-SbiSymPool::SbiSymPool( SbiStringPool& r, SbiSymScope s, SbiParser* pP ) : rStrings( r ), pParser( pP )
+SbiSymPool::SbiSymPool( SbiStringPool& r, SbiSymScope s, SbiParser* pP ) :
+    rStrings(r),
+    pParent(nullptr),
+    pParser(pP),
+    eScope(s),
+    nProcId(0),
+    nCur(0)
 {
-    eScope   = s;
-    pParent  = nullptr;
-    nCur     =
-    nProcId  = 0;
 }
 
 SbiSymPool::~SbiSymPool()
@@ -247,29 +249,30 @@ void SbiSymPool::CheckRefs()
     }
 }
 
-SbiSymDef::SbiSymDef( const OUString& rName ) : aName( rName )
+SbiSymDef::SbiSymDef( const OUString& rName ) :
+    aName(rName),
+    eType(SbxEMPTY),
+    pIn(nullptr),
+    nLen(0),
+    nDims(0),
+    nId(0),
+    nTypeId(0),
+    nProcId(0),
+    nPos(0),
+    nChain(0),
+    bNew(false),
+    bChained(false),
+    bByVal(false),
+    bOpt(false),
+    bStatic(false),
+    bAs(false),
+    bGlobal(false),
+    bParamArray(false),
+    bWithEvents(false),
+    bWithBrackets(false),
+    nDefaultId(0),
+    nFixedStringLength(-1)
 {
-    eType    = SbxEMPTY;
-    nDims    = 0;
-    nTypeId  = 0;
-    nProcId  = 0;
-    nId      = 0;
-    nPos     = 0;
-    nLen     = 0;
-    nChain   = 0;
-    bAs      =
-    bNew     =
-    bStatic  =
-    bOpt     =
-    bParamArray =
-    bWithEvents =
-    bWithBrackets =
-    bByVal   =
-    bChained =
-    bGlobal  = false;
-    pIn      = nullptr;
-    nDefaultId = 0;
-    nFixedStringLength = -1;
 }
 
 SbiSymDef::~SbiSymDef()
