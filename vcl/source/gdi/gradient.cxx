@@ -273,6 +273,20 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
     }
 }
 
+void Gradient::MakeGrayscale()
+{
+    Color aStartCol(GetStartColor());
+    Color aEndCol(GetEndColor());
+    sal_uInt8 cStartLum = aStartCol.GetLuminance();
+    sal_uInt8 cEndLum = aEndCol.GetLuminance();
+
+    aStartCol = Color(cStartLum, cStartLum, cStartLum);
+    aEndCol = Color(cEndLum, cEndLum, cEndLum);
+
+    SetStartColor(aStartCol);
+    SetEndColor(aEndCol);
+}
+
 Gradient& Gradient::operator=( const Gradient& ) = default;
 
 Gradient& Gradient::operator=( Gradient&& ) = default;
