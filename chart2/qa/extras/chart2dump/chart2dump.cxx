@@ -84,13 +84,6 @@
         } \
     }
 
-#define CPPUNIT_DUMP_ASSERT_NOTE(Note) \
-    if(isInDumpMode()) \
-        writeNote(Note); \
-    else \
-        readNote(Note);\
-
-
 class Chart2DumpTest : public ChartTest, public XmlTestTools
 {
 protected:
@@ -101,6 +94,13 @@ protected:
 
     virtual ~Chart2DumpTest() override
     {
+    }
+
+    void CPPUNIT_DUMP_ASSERT_NOTE(OUString const & Note) {
+        if(isInDumpMode())
+            writeNote(Note);
+        else
+            readNote(Note);
     }
 
     bool isInDumpMode () const {return m_bDumpMode;}
