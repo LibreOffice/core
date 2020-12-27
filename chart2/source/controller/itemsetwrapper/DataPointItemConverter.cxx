@@ -45,6 +45,7 @@
 #include <svl/stritem.hxx>
 #include <editeng/brushitem.hxx>
 #include <svl/ilstitem.hxx>
+#include <svx/sdangitm.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/graph.hxx>
 #include <oox/helper/containerhelper.hxx>
@@ -548,7 +549,7 @@ bool DataPointItemConverter::ApplySpecialItem(
         case SCHATTR_TEXT_DEGREES:
         {
             double fValue = static_cast< double >(
-                static_cast< const SfxInt32Item & >(
+                static_cast< const SdrAngleItem & >(
                     rItemSet.Get( nWhichId )).GetValue()) / 100.0;
             double fOldValue = 0.0;
             bool bPropExisted =
@@ -799,7 +800,7 @@ void DataPointItemConverter::FillSpecialItem(
 
             if( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fValue )
             {
-                rOutItemSet.Put( SfxInt32Item( nWhichId, static_cast< sal_Int32 >(
+                rOutItemSet.Put( SdrAngleItem( nWhichId, static_cast< sal_Int32 >(
                                                    ::rtl::math::round( fValue * 100.0 ) ) ));
             }
         }
