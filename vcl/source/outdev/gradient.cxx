@@ -71,9 +71,7 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
         Gradient aGradient( rGradient );
 
         if ( mnDrawMode & DrawModeFlags::GrayGradient )
-        {
-            SetGrayscaleColors( aGradient );
-        }
+            aGradient.MakeGrayscale();
 
         DrawGradientToMetafile( rPolyPoly, rGradient );
 
@@ -187,10 +185,8 @@ void OutputDevice::DrawGradientToMetafile ( const tools::PolyPolygon& rPolyPoly,
 
     Gradient aGradient( rGradient );
 
-    if ( mnDrawMode & DrawModeFlags::GrayGradient )
-    {
-        SetGrayscaleColors( aGradient );
-    }
+    if (mnDrawMode & DrawModeFlags::GrayGradient)
+        aGradient.MakeGrayscale();
 
     const tools::Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
 
@@ -986,25 +982,6 @@ Color OutputDevice::GetSingleColorGradientFill()
         aColor = GetSettings().GetStyleSettings().GetWindowColor();
 
     return aColor;
-}
-
-void OutputDevice::SetGrayscaleColors( Gradient &rGradient )
-{
-    // this should only be called with the drawing mode is for grayscale gradients
-    assert ( mnDrawMode & DrawModeFlags::GrayGradient );
-
-    Color aStartCol( rGradient.GetStartColor() );
-    Color aEndCol( rGradient.GetEndColor() );
-
-    if ( mnDrawMode & DrawModeFlags::GrayGradient )
-    {
-        sal_uInt8 cStartLum = aStartCol.GetLuminance(), cEndLum = aEndCol.GetLuminance();
-        aStartCol = Color( cStartLum, cStartLum, cStartLum );
-        aEndCol = Color( cEndLum, cEndLum, cEndLum );
-    }
-
-    rGradient.SetStartColor( aStartCol );
-    rGradient.SetEndColor( aEndCol );
 }
 
 void OutputDevice::AddGradientActions( const tools::Rectangle& rRect, const Gradient& rGradient,

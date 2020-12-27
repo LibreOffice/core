@@ -56,24 +56,25 @@ public:
     const Color&    GetStartColor() const;
     void            SetEndColor( const Color& rColor );
     const Color&    GetEndColor() const;
+    void            MakeGrayscale();
 
     void            SetAngle( Degree10 nAngle );
     Degree10        GetAngle() const;
 
     void            SetBorder( sal_uInt16 nBorder );
-    sal_uInt16          GetBorder() const;
+    sal_uInt16      GetBorder() const;
     void            SetOfsX( sal_uInt16 nOfsX );
-    sal_uInt16          GetOfsX() const;
+    sal_uInt16      GetOfsX() const;
     void            SetOfsY( sal_uInt16 nOfsY );
-    sal_uInt16          GetOfsY() const;
+    sal_uInt16      GetOfsY() const;
 
     void            SetStartIntensity( sal_uInt16 nIntens );
-    sal_uInt16          GetStartIntensity() const;
+    sal_uInt16      GetStartIntensity() const;
     void            SetEndIntensity( sal_uInt16 nIntens );
-    sal_uInt16          GetEndIntensity() const;
+    sal_uInt16      GetEndIntensity() const;
 
     void            SetSteps( sal_uInt16 nSteps );
-    sal_uInt16          GetSteps() const;
+    sal_uInt16      GetSteps() const;
 
     void            GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle &rBoundRect, Point& rCenter ) const;
 

@@ -933,7 +933,6 @@ private:
     SAL_DLLPRIVATE tools::Long         GetGradientSteps( const Gradient& rGradient, const tools::Rectangle& rRect, bool bMtf, bool bComplex=false );
 
     SAL_DLLPRIVATE Color        GetSingleColorGradientFill();
-    SAL_DLLPRIVATE void         SetGrayscaleColors( Gradient &rGradient );
     ///@}
 
 
