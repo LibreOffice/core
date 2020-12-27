@@ -23,6 +23,7 @@
 #include <TextDirectionListBox.hxx>
 
 #include <svx/chrtitem.hxx>
+#include <svx/sdangitm.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -94,7 +95,7 @@ bool SchAxisLabelTabPage::FillItemSet( SfxItemSet* rOutAttrs )
     {
         sal_Int32 nDegrees = bStacked ? 0 : m_xCtrlDial->GetRotation();
         if( !m_bHasInitialDegrees || (nDegrees != m_nInitialDegrees) )
-            rOutAttrs->Put( SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
+            rOutAttrs->Put( SdrAngleItem( SCHATTR_TEXT_DEGREES, nDegrees ) );
     }
 
     if( m_bShowStaggeringControls )
@@ -157,7 +158,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
     m_nInitialDegrees = 0;
     aState = rInAttrs->GetItemState( SCHATTR_TEXT_DEGREES, false, &pPoolItem );
     if( aState == SfxItemState::SET )
-        m_nInitialDegrees = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
+        m_nInitialDegrees = static_cast< const SdrAngleItem * >( pPoolItem )->GetValue();
 
     m_bHasInitialDegrees = aState != SfxItemState::DONTCARE;
     if( m_bHasInitialDegrees )
