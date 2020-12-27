@@ -46,6 +46,7 @@
 #include <o3tl/any.hxx>
 #include <svl/eitem.hxx>
 #include <svx/chrtitem.hxx>
+#include <svx/sdangitm.hxx>
 #include <svl/intitem.hxx>
 #include <rtl/math.hxx>
 
@@ -391,7 +392,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
             if( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fVal )
             {
-                rOutItemSet.Put( SfxInt32Item( nWhichId, static_cast< sal_Int32 >(
+                rOutItemSet.Put( SdrAngleItem( nWhichId, static_cast< sal_Int32 >(
                                                    ::rtl::math::round( fVal * 100.0 ) ) ));
             }
         }
@@ -879,7 +880,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
         {
             // convert int to double (divided by 100)
             double fVal = static_cast< double >(
-                static_cast< const SfxInt32Item & >(
+                static_cast< const SdrAngleItem & >(
                     rItemSet.Get( nWhichId )).GetValue()) / 100.0;
             double fOldVal = 0.0;
             bool bPropExisted =

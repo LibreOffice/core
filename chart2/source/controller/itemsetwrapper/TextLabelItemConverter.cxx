@@ -34,6 +34,7 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svx/tabline.hxx>
+#include <svx/sdangitm.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/graph.hxx>
 #include <rtl/math.hxx>
@@ -487,7 +488,7 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
         case SCHATTR_TEXT_DEGREES:
         {
             double fValue = static_cast<double>(
-                static_cast<const SfxInt32Item&>(
+                static_cast<const SdrAngleItem&>(
                     rItemSet.Get(nWhichId)).GetValue()) / 100.0;
             double fOldValue = 0.0;
             bool bPropExisted =
@@ -704,7 +705,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
             if (GetPropertySet()->getPropertyValue("TextRotation") >>= fValue)
             {
                 rOutItemSet.Put(
-                    SfxInt32Item(nWhichId, static_cast<sal_Int32>(rtl::math::round(fValue * 100.0))));
+                    SdrAngleItem(nWhichId, static_cast<sal_Int32>(rtl::math::round(fValue * 100.0))));
             }
         }
         break;

@@ -20,6 +20,7 @@
 #include "ChartItemPool.hxx"
 #include <chartview/ChartSfxItemIds.hxx>
 #include <svx/chrtitem.hxx>
+#include <svx/sdangitm.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/sizeitem.hxx>
@@ -62,7 +63,7 @@ ChartItemPool::ChartItemPool():
     rPoolDefaults[SCHATTR_LEGEND_NO_OVERLAY        - SCHATTR_START] = new SfxBoolItem(SCHATTR_LEGEND_NO_OVERLAY, true);
 
     //text
-    rPoolDefaults[SCHATTR_TEXT_DEGREES             - SCHATTR_START] = new SfxInt32Item(SCHATTR_TEXT_DEGREES, 0);
+    rPoolDefaults[SCHATTR_TEXT_DEGREES             - SCHATTR_START] = new SdrAngleItem(SCHATTR_TEXT_DEGREES, 0);
     rPoolDefaults[SCHATTR_TEXT_STACKED             - SCHATTR_START] = new SfxBoolItem(SCHATTR_TEXT_STACKED,false);
 
     //statistic
