@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a30420e3_29f19bd7",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 3945,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2020-12-27T15:32:56Z",
+      "side": 1,
+      "message": "If we use if(pProtect) instead of this statement, we can omit lines 3949 and 3950.\nLet me know your thoughts about it..",
+      "revId": "3f25177384ba8ab672042870cb81f6da17250b5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

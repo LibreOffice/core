@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "24eb7001_5f32c73c",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 3940,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2020-12-27T15:32:56Z",
+      "side": 1,
+      "message": "This line indicates if it is a protecting or unprotecting case. \nShould I put some other condition in if statement to differentiate protecting and unprotecting case?",
+      "parentUuid": "7ab474ff_196a7003",
+      "range": {
+        "startLine": 3940,
+        "startChar": 4,
+        "endLine": 3940,
+        "endChar": 31
+      },
+      "revId": "958e246fb1bece6fb5efd9b7a8286b1ba34631d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "40962c4e_c6473f83",
         "filename": "sc/source/ui/docshell/docfunc.cxx",
         "patchSetId": 16
