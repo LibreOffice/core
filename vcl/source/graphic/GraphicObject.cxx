@@ -468,7 +468,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
 
     pOut->SetDrawMode( nOldDrawMode & ~DrawModeFlags( DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient ) );
 
-    // mirrored horizontically
+    // mirrored horizontally
     if( aSz.Width() < 0 )
     {
         aPt.AdjustX(aSz.Width() + 1 );
