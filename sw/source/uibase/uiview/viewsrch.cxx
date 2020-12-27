@@ -124,6 +124,8 @@ static void lcl_emitSearchResultCallbacks(SvxSearchItem const * pSearchItem, SwW
 
 void SwView::ExecSearch(SfxRequest& rReq)
 {
+    GetWrtShell().addCurrentPosition();
+
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = nullptr;
     bool bQuiet = false;
