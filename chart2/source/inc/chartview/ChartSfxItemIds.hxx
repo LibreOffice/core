@@ -32,6 +32,7 @@ class SvxBrushItem;
 class SvxChartKindErrorItem;
 class SvxChartTextOrderItem;
 class SvxChartRegressItem;
+class SdrAngleItem;
 
 // SCHATTR
 
@@ -62,7 +63,7 @@ constexpr sal_uInt16                 SCHATTR_LEGEND_END        (SCHATTR_LEGEND_N
 
 //text
 constexpr sal_uInt16                 SCHATTR_TEXT_START   (SCHATTR_LEGEND_END + 1);
-constexpr TypedWhichId<SfxInt32Item> SCHATTR_TEXT_DEGREES (SCHATTR_TEXT_START);
+constexpr TypedWhichId<SdrAngleItem> SCHATTR_TEXT_DEGREES (SCHATTR_TEXT_START);
 constexpr TypedWhichId<SfxBoolItem>  SCHATTR_TEXT_STACKED (SCHATTR_TEXT_START + 1);
 constexpr sal_uInt16                 SCHATTR_TEXT_END     (SCHATTR_TEXT_STACKED);
 

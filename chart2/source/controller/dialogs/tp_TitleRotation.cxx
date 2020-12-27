@@ -25,6 +25,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svl/intitem.hxx>
+#include <svx/sdangitm.hxx>
 
 namespace chart
 {
@@ -94,7 +95,7 @@ bool SchAlignmentTabPage::FillItemSet(SfxItemSet* rOutAttrs)
     rOutAttrs->Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bStacked ) );
 
     sal_Int32 nDegrees = bStacked ? 0 : m_xCtrlDial->GetRotation();
-    rOutAttrs->Put( SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
+    rOutAttrs->Put( SdrAngleItem( SCHATTR_TEXT_DEGREES, nDegrees ) );
 
     SvxFrameDirection aDirection( m_xLbTextDirection->get_active_id() );
     rOutAttrs->Put( SvxFrameDirectionItem( aDirection, EE_PARA_WRITINGDIR ) );
@@ -106,7 +107,7 @@ void SchAlignmentTabPage::Reset(const SfxItemSet* rInAttrs)
 {
     const SfxPoolItem* pItem = GetItem( *rInAttrs, SCHATTR_TEXT_DEGREES );
 
-    sal_Int32 nDegrees = pItem ? static_cast<const SfxInt32Item*>(pItem)->GetValue() : 0;
+    sal_Int32 nDegrees = pItem ? static_cast<const SdrAngleItem*>(pItem)->GetValue() : 0;
     m_xCtrlDial->SetRotation( nDegrees );
 
     pItem = GetItem( *rInAttrs, SCHATTR_TEXT_STACKED );
