@@ -125,8 +125,8 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
 
     // Load the buffer using pdfium.
     auto const& rVectorGraphicData = rGraphic.getVectorGraphicData();
-    auto* pData = rVectorGraphicData->getVectorGraphicDataArray().getConstArray();
-    sal_Int32 nSize = rVectorGraphicData->getVectorGraphicDataArrayLength();
+    auto* pData = rVectorGraphicData->getBinaryDataContainer().getData();
+    sal_Int32 nSize = rVectorGraphicData->getBinaryDataContainer().getSize();
     mpPdfDocument = mpPDFium->openDocument(pData, nSize);
     if (!mpPdfDocument)
         return;

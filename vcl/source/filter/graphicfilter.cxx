@@ -2004,7 +2004,8 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                            == rVectorGraphicDataPtr->getVectorGraphicDataType()
                     && !bIsEMF)
                 {
-                    rOStm.WriteBytes(rVectorGraphicDataPtr->getVectorGraphicDataArray().getConstArray(), rVectorGraphicDataPtr->getVectorGraphicDataArrayLength());
+                    auto & aDataContainer = rVectorGraphicDataPtr->getBinaryDataContainer();
+                    rOStm.WriteBytes(aDataContainer.getData(), aDataContainer.getSize());
 
                     if (rOStm.GetError())
                     {
@@ -2037,7 +2038,8 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                     && rVectorGraphicDataPtr->getVectorGraphicDataArrayLength()
                     && VectorGraphicDataType::Emf == rVectorGraphicDataPtr->getVectorGraphicDataType())
                 {
-                    rOStm.WriteBytes(rVectorGraphicDataPtr->getVectorGraphicDataArray().getConstArray(), rVectorGraphicDataPtr->getVectorGraphicDataArrayLength());
+                    auto & aDataContainer = rVectorGraphicDataPtr->getBinaryDataContainer();
+                    rOStm.WriteBytes(aDataContainer.getData(), aDataContainer.getSize());
 
                     if (rOStm.GetError())
                     {
@@ -2131,7 +2133,8 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                     && rVectorGraphicDataPtr->getVectorGraphicDataArrayLength()
                     && VectorGraphicDataType::Svg == rVectorGraphicDataPtr->getVectorGraphicDataType())
                 {
-                    rOStm.WriteBytes(rVectorGraphicDataPtr->getVectorGraphicDataArray().getConstArray(), rVectorGraphicDataPtr->getVectorGraphicDataArrayLength());
+                    auto & aDataContainer = rVectorGraphicDataPtr->getBinaryDataContainer();
+                    rOStm.WriteBytes(aDataContainer.getData(), aDataContainer.getSize());
 
                     if( rOStm.GetError() )
                     {
