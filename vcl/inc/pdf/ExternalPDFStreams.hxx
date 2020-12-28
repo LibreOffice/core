@@ -18,6 +18,7 @@
 #include <memory>
 
 #include <vcl/filter/pdfdocument.hxx>
+#include <vcl/BinaryDataContainer.hxx>
 
 namespace vcl
 {
@@ -27,7 +28,7 @@ namespace vcl
 // reused to avoid unnecessary parsing.
 struct VCL_DLLPUBLIC ExternalPDFStream
 {
-    std::vector<sal_uInt8> maData;
+    BinaryDataContainer maDataContainer;
     std::shared_ptr<filter::PDFDocument> mpPDFDocument;
     std::map<sal_Int32, sal_Int32> maCopiedResources;
 
@@ -38,7 +39,7 @@ struct VCL_DLLPUBLIC ExternalPDFStream
         if (!mpPDFDocument)
         {
             SvMemoryStream aPDFStream;
-            aPDFStream.WriteBytes(maData.data(), maData.size());
+            aPDFStream.WriteBytes(maDataContainer.getData(), maDataContainer.getSize());
             aPDFStream.Seek(0);
             mpPDFDocument = std::make_shared<filter::PDFDocument>();
             if (!mpPDFDocument->Read(aPDFStream))
@@ -61,7 +62,7 @@ private:
 public:
     ExternalPDFStreams() {}
 
-    sal_Int32 store(const sal_uInt8* pData, sal_uInt32 nLength);
+    sal_Int32 store(BinaryDataContainer const& rDataContainer);
 
     ExternalPDFStream& get(sal_uInt32 nIndex);
 };

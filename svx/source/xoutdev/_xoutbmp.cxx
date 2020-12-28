@@ -149,7 +149,8 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
 
                 if (pOStm)
                 {
-                    pOStm->WriteBytes(rVectorGraphicDataPtr->getVectorGraphicDataArray().getConstArray(), rVectorGraphicDataPtr->getVectorGraphicDataArrayLength());
+                    auto & rDataContainer = rVectorGraphicDataPtr->getBinaryDataContainer();
+                    pOStm->WriteBytes(rDataContainer.getData(), rDataContainer.getSize());
                     aMedium.Commit();
 
                     if (!aMedium.GetError())
