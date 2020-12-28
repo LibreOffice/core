@@ -278,9 +278,9 @@ void TypeSerializer::readGraphic(Graphic& rGraphic)
 
                     if (nLength)
                     {
-                        VectorGraphicDataArray aData(nLength);
-
-                        mrStream.ReadBytes(aData.getArray(), nLength);
+                        auto rData = std::make_unique<std::vector<sal_uInt8>>(nLength);
+                        mrStream.ReadBytes(rData->data(), rData->size());
+                        BinaryDataContainer aDataContainer(std::move(rData));
 
                         if (!mrStream.GetError())
                         {
@@ -300,7 +300,7 @@ void TypeSerializer::readGraphic(Graphic& rGraphic)
                             }
 
                             auto aVectorGraphicDataPtr
-                                = std::make_shared<VectorGraphicData>(aData, aDataType);
+                                = std::make_shared<VectorGraphicData>(aDataContainer, aDataType);
                             rGraphic = Graphic(aVectorGraphicDataPtr);
                         }
                     }

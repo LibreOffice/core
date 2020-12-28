@@ -107,23 +107,23 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
 }
 #endif // HAVE_FEATURE_PDFIUM
 
-VectorGraphicDataArray createVectorGraphicDataArray(SvStream& rStream)
+BinaryDataContainer createBinaryDataContainer(SvStream& rStream)
 {
     // Save the original PDF stream for later use.
     SvMemoryStream aMemoryStream;
     if (!getCompatibleStream(rStream, aMemoryStream))
-        return VectorGraphicDataArray();
+        return BinaryDataContainer();
 
     const sal_uInt32 nStreamLength = aMemoryStream.TellEnd();
 
-    VectorGraphicDataArray aPdfData(nStreamLength);
+    auto aPdfData = std::make_unique<std::vector<sal_uInt8>>(nStreamLength);
 
     aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
-    aMemoryStream.ReadBytes(aPdfData.begin(), nStreamLength);
+    aMemoryStream.ReadBytes(aPdfData->data(), aPdfData->size());
     if (aMemoryStream.GetError())
-        return VectorGraphicDataArray();
+        return BinaryDataContainer();
 
-    return aPdfData;
+    return BinaryDataContainer(std::move(aPdfData));
 }
 
 } // end anonymous namespace
@@ -233,15 +233,15 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
 bool importPdfVectorGraphicData(SvStream& rStream,
                                 std::shared_ptr<VectorGraphicData>& rVectorGraphicData)
 {
-    VectorGraphicDataArray aPdfDataArray = createVectorGraphicDataArray(rStream);
-    if (!aPdfDataArray.hasElements())
+    BinaryDataContainer aDataContainer = createBinaryDataContainer(rStream);
+    if (aDataContainer.isEmpty())
     {
         SAL_WARN("vcl.filter", "ImportPDF: empty PDF data array");
         return false;
     }
 
     rVectorGraphicData
-        = std::make_shared<VectorGraphicData>(aPdfDataArray, VectorGraphicDataType::Pdf);
+        = std::make_shared<VectorGraphicData>(aDataContainer, VectorGraphicDataType::Pdf);
 
     return true;
 }
@@ -442,17 +442,12 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
         ::utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ | StreamMode::SHARE_DENYNONE));
 
     // Save the original PDF stream for later use.
-    BinaryDataContainer aBinaryDataContainer;
-    {
-        VectorGraphicDataArray aPdfDataArray = createVectorGraphicDataArray(*xStream);
-        if (!aPdfDataArray.hasElements())
-            return 0;
-        const sal_uInt8* pData = reinterpret_cast<const sal_uInt8*>(aPdfDataArray.getConstArray());
-        aBinaryDataContainer = BinaryDataContainer(pData, aPdfDataArray.getLength());
-    }
+    BinaryDataContainer aDataContainer = createBinaryDataContainer(*xStream);
+    if (aDataContainer.isEmpty())
+        return 0;
 
     // Prepare the link with the PDF stream.
-    auto pGfxLink = std::make_shared<GfxLink>(aBinaryDataContainer, GfxLinkType::NativePdf);
+    auto pGfxLink = std::make_shared<GfxLink>(aDataContainer, GfxLinkType::NativePdf);
 
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
 
@@ -480,7 +475,7 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
         tools::Long nPageHeight = convertTwipToMm100(aPageSize.getY() * pointToTwipconversionRatio);
 
         auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(
-            aBinaryDataContainer, VectorGraphicDataType::Pdf, nPageIndex);
+            aDataContainer, VectorGraphicDataType::Pdf, nPageIndex);
 
         // Create the Graphic with the VectorGraphicDataPtr and link the original PDF stream.
         // We swap out this Graphic as soon as possible, and a later swap in
