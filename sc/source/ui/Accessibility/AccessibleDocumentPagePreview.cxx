@@ -1453,13 +1453,7 @@ OUString SAL_CALL ScAccessibleDocumentPagePreview::getImplementationName()
 
 uno::Sequence< OUString> SAL_CALL ScAccessibleDocumentPagePreview::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
-    sal_Int32 nOldSize(aSequence.getLength());
-    aSequence.realloc(nOldSize + 1);
-
-    aSequence[nOldSize] = "com.sun.star.AccessibleSpreadsheetPageView";
-
-    return aSequence;
+    return {"com.sun.star.AccessibleSpreadsheetPageView"};
 }
 
 //=====  XTypeProvider  =======================================================

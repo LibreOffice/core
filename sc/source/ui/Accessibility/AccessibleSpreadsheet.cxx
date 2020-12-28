@@ -1268,13 +1268,7 @@ OUString SAL_CALL ScAccessibleSpreadsheet::getImplementationName()
 uno::Sequence< OUString> SAL_CALL
     ScAccessibleSpreadsheet::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSequence = ScAccessibleTableBase::getSupportedServiceNames();
-    sal_Int32 nOldSize(aSequence.getLength());
-    aSequence.realloc(nOldSize + 1);
-
-    aSequence[nOldSize] = "com.sun.star.AccessibleSpreadsheet";
-
-    return aSequence;
+    return {"com.sun.star.AccessibleSpreadsheet"};
 }
 
 //=====  XTypeProvider  =======================================================

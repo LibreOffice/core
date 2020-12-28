@@ -281,13 +281,7 @@ OUString SAL_CALL ScAccessiblePageHeader::getImplementationName()
 
 uno::Sequence<OUString> SAL_CALL ScAccessiblePageHeader::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
-    sal_Int32 nOldSize(aSequence.getLength());
-    aSequence.realloc(nOldSize + 1);
-
-    aSequence[nOldSize] = "com.sun.star.text.AccessibleHeaderFooterView";
-
-    return aSequence;
+    return {"com.sun.star.text.AccessibleHeaderFooterView"};
 }
 
 //====  internal  =========================================================

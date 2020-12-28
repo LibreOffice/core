@@ -532,13 +532,7 @@ OUString SAL_CALL ScAccessiblePreviewTable::getImplementationName()
 
 uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewTable::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
-    sal_Int32 nOldSize(aSequence.getLength());
-    aSequence.realloc(nOldSize + 1);
-
-    aSequence[nOldSize] = "com.sun.star.table.AccessibleTableView";
-
-    return aSequence;
+    return {"com.sun.star.table.AccessibleTableView"};
 }
 
 //=====  XTypeProvider  ===================================================

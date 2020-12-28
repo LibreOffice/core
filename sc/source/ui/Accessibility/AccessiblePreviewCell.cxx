@@ -177,13 +177,7 @@ OUString SAL_CALL ScAccessiblePreviewCell::getImplementationName()
 
 uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewCell::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
-    sal_Int32 nOldSize(aSequence.getLength());
-    aSequence.realloc(nOldSize + 1);
-
-    aSequence[nOldSize] = "com.sun.star.table.AccessibleCellView";
-
-    return aSequence;
+    return {"com.sun.star.table.AccessibleCellView"};
 }
 
 //=====  XTypeProvider  =======================================================
