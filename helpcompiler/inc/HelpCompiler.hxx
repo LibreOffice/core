@@ -59,21 +59,19 @@ namespace fs
         {
             OUString sWorkingDir;
             osl_getProcessWorkingDir(&sWorkingDir.pData);
-            OString tmp(in.c_str());
-            OUString ustrSystemPath(OStringToOUString(tmp, osl_getThreadTextEncoding()));
+            OUString ustrSystemPath(OStringToOUString(in, FileNameEnc()));
             osl::File::getFileURLFromSystemPath(ustrSystemPath, data);
             (void)osl::File::getAbsoluteFileURL(sWorkingDir, data, data);
         }
         path(const std::string &FileURL)
         {
-            OString tmp(FileURL.c_str());
-            data = OStringToOUString(tmp, osl_getThreadTextEncoding());
+            data = OStringToOUString(FileURL, FileNameEnc());
         }
         std::string native_file_string() const
         {
             OUString ustrSystemPath;
             osl::File::getSystemPathFromFileURL(data, ustrSystemPath);
-            OString tmp(OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding()));
+            OString tmp(OUStringToOString(ustrSystemPath, FileNameEnc()));
             HCDBG(std::cerr << "native_file_string is " << tmp.getStr() << std::endl);
             return std::string(tmp.getStr());
         }
@@ -96,8 +94,7 @@ namespace fs
             path ret(*this);
             HCDBG(std::cerr << "orig was " <<
                 OUStringToOString(ret.data, RTL_TEXTENCODING_UTF8).getStr() << std::endl);
-            OString tmp(in.c_str());
-            OUString ustrSystemPath(OStringToOUString(tmp, osl_getThreadTextEncoding()));
+            OUString ustrSystemPath(OStringToOUString(in, FileNameEnc()));
             ret.data += "/" + ustrSystemPath;
             HCDBG(std::cerr << "final is " <<
                 OUStringToOString(ret.data, RTL_TEXTENCODING_UTF8).getStr() << std::endl);
@@ -105,11 +102,19 @@ namespace fs
         }
         void append(const char *in)
         {
-            OString tmp(in);
-            OUString ustrSystemPath(OStringToOUString(tmp, osl_getThreadTextEncoding()));
+            OUString ustrSystemPath(OStringToOUString(in, FileNameEnc()));
             data += ustrSystemPath;
         }
         void append(const std::string &in) { append(in.c_str()); }
+
+    private:
+#ifdef _WIN32
+        // On Windows, libxslt and libxml use UTF-8 path strings
+        static constexpr rtl_TextEncoding FileNameEnc() { return RTL_TEXTENCODING_UTF8; }
+#else
+        static rtl_TextEncoding FileNameEnc() { return osl_getThreadTextEncoding(); }
+#endif
+
     };
 
     void create_directory(const fs::path& indexDirName);
