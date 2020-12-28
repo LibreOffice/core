@@ -42,8 +42,9 @@ bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF )
 
     // Read binary data to mem array
     const sal_uInt32 nStreamLength(nStreamEnd - nStreamStart);
-    VectorGraphicDataArray aNewData(nStreamLength);
-    rStream.ReadBytes(aNewData.begin(), nStreamLength);
+    auto rData = std::make_unique<std::vector<sal_uInt8>>(nStreamLength);
+    rStream.ReadBytes(rData->data(), rData->size());
+    BinaryDataContainer aDataContainer(std::move(rData));
     rStream.Seek(nStreamStart);
 
     if (rStream.good())
@@ -52,9 +53,7 @@ bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF )
         // too much for type, this will be checked there. Also no path
         // needed, it is a temporary object
         auto aVectorGraphicDataPtr =
-            std::make_shared<VectorGraphicData>(
-                aNewData,
-                VectorGraphicDataType::Emf);
+            std::make_shared<VectorGraphicData>(aDataContainer, VectorGraphicDataType::Emf);
 
         // create a Graphic and grep Metafile from it
         const Graphic aGraphic(aVectorGraphicDataPtr);
@@ -93,10 +92,9 @@ bool ConvertGraphicToWMF(const Graphic& rGraphic, SvStream& rTargetStream,
     {
         // This may be an EMF+ file, converting that to WMF is better done by re-parsing EMF+ as EMF
         // and converting that to WMF.
-        uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aLink.GetData()),
-                                      aLink.GetDataSize());
+        auto & rDataContainer = aLink.getDataContainer();
         auto aVectorGraphicData
-            = std::make_shared<VectorGraphicData>(aData, VectorGraphicDataType::Emf);
+            = std::make_shared<VectorGraphicData>(rDataContainer, VectorGraphicDataType::Emf);
         aVectorGraphicData->setEnableEMFPlus(false);
         Graphic aGraphic(aVectorGraphicData);
         bool bRet = ConvertGDIMetaFileToWMF(aGraphic.GetGDIMetaFile(), rTargetStream, pConfigItem,

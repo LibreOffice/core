@@ -1561,14 +1561,14 @@ bool ImpGraphic::swapInGraphic(SvStream& rStream)
 
                 if (constSvgMagic == nMagic || constWmfMagic == nMagic || constEmfMagic == nMagic || constPdfMagic == nMagic)
                 {
-                    sal_uInt32 nVectorGraphicDataArrayLength(0);
-                    rStream.ReadUInt32(nVectorGraphicDataArrayLength);
+                    sal_uInt32 nVectorGraphicDataSize(0);
+                    rStream.ReadUInt32(nVectorGraphicDataSize);
 
-                    if (nVectorGraphicDataArrayLength)
+                    if (nVectorGraphicDataSize)
                     {
-                        VectorGraphicDataArray aNewData(nVectorGraphicDataArrayLength);
-
-                        rStream.ReadBytes(aNewData.getArray(), nVectorGraphicDataArrayLength);
+                        auto rData = std::make_unique<std::vector<sal_uInt8>>(nVectorGraphicDataSize);
+                        rStream.ReadBytes(rData->data(), nVectorGraphicDataSize);
+                        BinaryDataContainer aDataContainer(std::move(rData));
 
                         if (rStream.GetError())
                             return false;
@@ -1593,7 +1593,7 @@ bool ImpGraphic::swapInGraphic(SvStream& rStream)
                                 return false;
                         }
 
-                        auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aNewData, aDataType);
+                        auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aDataContainer, aDataType);
 
                         if (!rStream.GetError())
                         {

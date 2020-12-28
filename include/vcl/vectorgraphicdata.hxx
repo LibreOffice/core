@@ -86,10 +86,6 @@ private:
     VectorGraphicData& operator=(const VectorGraphicData&) = delete;
 
 public:
-    VectorGraphicData(
-        const VectorGraphicDataArray& rVectorGraphicDataArray,
-        VectorGraphicDataType eVectorDataType,
-        sal_Int32 nPageIndex = -1);
     VectorGraphicData(const OUString& rPath, VectorGraphicDataType eVectorDataType);
     VectorGraphicData(
         const BinaryDataContainer& rDataContainer,
