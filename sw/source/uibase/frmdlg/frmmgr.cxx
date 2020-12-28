@@ -584,7 +584,7 @@ void SwFlyFrameAttrMgr::SetHeightSizeType( SwFrameSize eType )
     m_aSet.Put( aSize );
 }
 
-void SwFlyFrameAttrMgr::SetRotation(sal_uInt16 nOld, sal_uInt16 nNew, const Size& rUnrotatedSize)
+void SwFlyFrameAttrMgr::SetRotation(Degree10 nOld, Degree10 nNew, const Size& rUnrotatedSize)
 {
     // RotGrfFlyFrame: Central handling of real change of rotation here, all adaptations use this.
     // Adaptation of pos/size may be wanted in the future. Already tried to keep last Size in

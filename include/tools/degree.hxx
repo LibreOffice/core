@@ -17,4 +17,9 @@ typedef o3tl::strong_int<sal_Int16, struct Degree10Tag> Degree10;
 /** custom literal */
 constexpr Degree10 operator""_deg10(unsigned long long n) { return Degree10{ n }; }
 
+/** conversion functions */
+
+inline sal_Int32 toDegree100(Degree10 x) { return x.get() * 10; }
+inline double toDegree(Degree10 x) { return x.get() * M_PI / 1800.0; }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
