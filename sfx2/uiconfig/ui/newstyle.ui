@@ -135,23 +135,28 @@
                             </child>
                           </object>
                         </child>
+                        <child internal-child="accessible">
+                           <object class="AtkObject" id="styles-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="newstyle|styles-atkobject">Custom styles for selected category</property>
+                      </object>
+                    </child>
                       </object>
                     </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="top_attach">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkEntry" id="stylename">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="activates_default">True</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="stylename-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="newstyle|stylename-atkobject">Style Name</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="newstyle|stylename-atkobject">Style name</property>
                       </object>
                     </child>
                   </object>
@@ -160,13 +165,28 @@
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkLabel" id="categorylabel">
+                    <property name="can_focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes" context="newstyle|categorylabel">Custom styles for current document</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
               </object>
             </child>
             <child type="label">
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="newstyle|label1">Enter New Style Name:</property>
+                <property name="label" translatable="yes" context="newstyle|label1">Enter new style name:</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
