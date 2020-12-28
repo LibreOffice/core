@@ -164,7 +164,7 @@ void GenDocumentLockFile::RemoveFileDirectly()
 
 
 DocumentLockFile::DocumentLockFile( const OUString& aOrigURL )
-    : GenDocumentLockFile(GenerateOwnLockFileURL(aOrigURL, ".~lock."))
+    : GenDocumentLockFile(GenerateOwnLockFileURL(aOrigURL, u".~lock."))
 {
 }
 

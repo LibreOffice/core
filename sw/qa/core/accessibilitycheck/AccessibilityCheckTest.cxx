@@ -17,7 +17,7 @@ class AccessibilityCheckTest : public SwModelTestBase
 public:
     SwDoc* createDoc(const char* pName = nullptr)
     {
-        load("/sw/qa/core/accessibilitycheck/data/", pName);
+        load(u"/sw/qa/core/accessibilitycheck/data/", pName);
         SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
         CPPUNIT_ASSERT(pTextDoc);
         return pTextDoc->GetDocShell()->GetDoc();

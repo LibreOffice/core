@@ -67,22 +67,22 @@ void ComponentBackendDb::addEntry(OUString const & url, Data const & data)
         if (!activateEntry(url))
         {
             Reference<css::xml::dom::XNode> componentNode = writeKeyElement(url);
-            writeSimpleElement("java-type-library",
+            writeSimpleElement(u"java-type-library",
                                OUString::boolean(data.javaTypeLibrary),
                                componentNode);
 
             writeSimpleList(
                 data.implementationNames,
-                "implementation-names",
-                "name",
+                u"implementation-names",
+                u"name",
                 componentNode);
 
             writeVectorOfPair(
                 data.singletons,
-                "singletons",
-                "item",
-                "key",
-                "value",
+                u"singletons",
+                u"item",
+                u"key",
+                u"value",
                 componentNode);
 
             save();
@@ -97,7 +97,7 @@ void ComponentBackendDb::addEntry(OUString const & url, Data const & data)
     }
 }
 
-ComponentBackendDb::Data ComponentBackendDb::getEntry(OUString const & url)
+ComponentBackendDb::Data ComponentBackendDb::getEntry(std::u16string_view url)
 {
     try
     {
@@ -105,14 +105,14 @@ ComponentBackendDb::Data ComponentBackendDb::getEntry(OUString const & url)
         Reference<css::xml::dom::XNode> aNode = getKeyElement(url);
         if (aNode.is())
         {
-            bool bJava = readSimpleElement("java-type-library", aNode) == "true";
+            bool bJava = readSimpleElement(u"java-type-library", aNode) == "true";
             retData.javaTypeLibrary = bJava;
 
             retData.implementationNames =
-                readList( aNode, "implementation-names", "name");
+                readList( aNode, u"implementation-names", u"name");
 
             retData.singletons =
-                readVectorOfPair( aNode, "singletons", "item", "key", "value");
+                readVectorOfPair( aNode, u"singletons", u"item", u"key", u"value");
         }
         return retData;
     }

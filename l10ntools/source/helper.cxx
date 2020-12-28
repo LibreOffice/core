@@ -122,12 +122,12 @@ OString UnQuotHTML( const OString& rString )
     return sReturn.makeStringAndClear();
 }
 
-bool isWellFormedXML( OString const & text )
+bool isWellFormedXML( std::string_view text )
 {
     xmlDocPtr doc;
     bool result = true;
 
-    OString content = "<root>" + text + "</root>";
+    OString content = OString::Concat("<root>") + text + "</root>";
     doc = xmlParseMemory(content.getStr(),static_cast<int>(content.getLength()));
     if (doc == nullptr) {
         result = false;

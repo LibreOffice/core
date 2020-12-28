@@ -27,7 +27,7 @@ public:
 void SdLayoutTest::testTdf104722()
 {
     sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf104722.pptx"), PPTX);
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf104722.pptx"), PPTX);
 
     std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
     MetafileXmlDump dumper;
@@ -48,7 +48,7 @@ void SdLayoutTest::testTdf104722()
 void SdLayoutTest::testTdf136949()
 {
     sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf136949.odp"), ODP);
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf136949.odp"), ODP);
 
     std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
     MetafileXmlDump dumper;
@@ -68,7 +68,7 @@ void SdLayoutTest::testTdf136949()
 void SdLayoutTest::testTdf128212()
 {
     sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf128212.pptx"), PPTX);
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf128212.pptx"), PPTX);
 
     std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
     MetafileXmlDump dumper;

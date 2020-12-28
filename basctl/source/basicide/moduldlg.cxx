@@ -133,7 +133,7 @@ void Shell::CopyDialogResources(
     OUString const& rSourceLibName,
     ScriptDocument const& rDestDoc,
     OUString const& rDestLibName,
-    OUString const& rDlgName
+    std::u16string_view rDlgName
 )
 {
     if ( !io_xISP.is() )
@@ -906,7 +906,7 @@ LibDialog::~LibDialog()
 {
 }
 
-void LibDialog::SetStorageName( const OUString& rName )
+void LibDialog::SetStorageName( std::u16string_view rName )
 {
     OUString aName = IDEResId(RID_STR_FILENAME) + rName;
     m_xStorageFrame->set_label(aName);

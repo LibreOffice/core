@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <cstdlib>
+#include <string_view>
 
 #include <postit.hxx>
 #include <validat.hxx>
@@ -86,44 +87,48 @@ private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
-static void lcl_AssertRectEqualWithTolerance(const OString& sInfo,
+static void lcl_AssertRectEqualWithTolerance(std::string_view sInfo,
                                              const tools::Rectangle& rExpected,
                                              const tools::Rectangle& rActual,
                                              const sal_Int32 nTolerance)
 {
     // Left
-    OString sMsg = sInfo + " Left expected " + OString::number(rExpected.Left()) + " actual "
+    OString sMsg = OString::Concat(sInfo) + " Left expected " + OString::number(rExpected.Left())
+                   + " actual "
                    + OString::number(rActual.Left()) + " Tolerance " + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(
         sMsg.getStr(), std::abs(rExpected.Left() - rActual.Left()) <= nTolerance);
 
     // Top
-    sMsg = sInfo + " Top expected " + OString::number(rExpected.Top()) + " actual "
+    sMsg = OString::Concat(sInfo) + " Top expected " + OString::number(rExpected.Top()) + " actual "
            + OString::number(rActual.Top()) + " Tolerance " + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.Top() - rActual.Top()) <= nTolerance);
 
     // Width
-    sMsg = sInfo + " Width expected " + OString::number(rExpected.GetWidth()) + " actual "
+    sMsg = OString::Concat(sInfo) + " Width expected " + OString::number(rExpected.GetWidth())
+           + " actual "
            + OString::number(rActual.GetWidth()) + " Tolerance " + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
                            std::abs(rExpected.GetWidth() - rActual.GetWidth()) <= nTolerance);
 
     // Height
-    sMsg = sInfo + " Height expected " + OString::number(rExpected.GetHeight()) + " actual "
+    sMsg = OString::Concat(sInfo) + " Height expected " + OString::number(rExpected.GetHeight())
+           + " actual "
            + OString::number(rActual.GetHeight()) + " Tolerance " + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
                            std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
 }
 
-static void lcl_AssertPointEqualWithTolerance(const OString& sInfo, const Point rExpected,
+static void lcl_AssertPointEqualWithTolerance(std::string_view sInfo, const Point rExpected,
                                               const Point rActual, const sal_Int32 nTolerance)
 {
     // X
-    OString sMsg = sInfo + " X expected " + OString::number(rExpected.X()) + " actual "
+    OString sMsg = OString::Concat(sInfo) + " X expected " + OString::number(rExpected.X())
+                   + " actual "
                    + OString::number(rActual.X()) + " Tolerance " + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.X() - rActual.X()) <= nTolerance);
     // Y
-    sMsg = sInfo + " Y expected " + OString::number(rExpected.Y()) + " actual "
+    sMsg = OString::Concat(sInfo) + " Y expected " + OString::number(rExpected.Y()) + " actual "
            + OString::number(rActual.Y()) + " Tolerance " + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.Y() - rActual.Y()) <= nTolerance);
 }
@@ -134,7 +139,7 @@ void ScFiltersTest::testTdf137576_Measureline()
     // length 37mm. Save and reload had resulted in a line of 0mm length.
 
     // Get document
-    ScDocShellRef xDocSh = loadDoc("tdf137576_Measureline.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"tdf137576_Measureline.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load tdf137576_Measureline.ods", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -179,7 +184,7 @@ void ScFiltersTest::testTdf137216_HideCol()
     // Error was, that hiding column C did not make the shape invisible.
 
     // Get document
-    ScDocShellRef xDocSh = loadDoc("tdf137216_HideCol.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"tdf137216_HideCol.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load tdf137216_HideCol.ods", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -204,7 +209,7 @@ void ScFiltersTest::testTdf137044_CoverHiddenRows()
     // in a wrong end cell offset and thus a wrong height of the shape.
 
     // Get document
-    ScDocShellRef xDocSh = loadDoc("tdf137044_CoverHiddenRows.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"tdf137044_CoverHiddenRows.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load tdf137044_CoverHiddenRows.ods", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -251,7 +256,7 @@ void ScFiltersTest::testTdf137044_CoverHiddenRows()
 void ScFiltersTest::testTdf137020_FlipVertical()
 {
     // Get document
-    ScDocShellRef xDocSh = loadDoc("tdf137020_FlipVertical.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"tdf137020_FlipVertical.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load tdf137020_FlipVertical.ods", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -291,7 +296,7 @@ void ScFiltersTest::testTdf137020_FlipVertical()
 
 void ScFiltersTest::testTdf64229()
 {
-    ScDocShellRef xDocSh = loadDoc("fdo64229b.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"fdo64229b.", FORMAT_ODS);
 
     xDocSh->DoHardRecalc();
 
@@ -309,7 +314,7 @@ void ScFiltersTest::testTdf64229()
 
 void ScFiltersTest::testTdf36933()
 {
-    ScDocShellRef xDocSh = loadDoc("fdo36933test.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"fdo36933test.", FORMAT_ODS);
 
     xDocSh->DoHardRecalc();
 
@@ -327,7 +332,7 @@ void ScFiltersTest::testTdf36933()
 
 void ScFiltersTest::testTdf43700()
 {
-    ScDocShellRef xDocSh = loadDoc("fdo43700test.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"fdo43700test.", FORMAT_ODS);
 
     xDocSh->DoHardRecalc();
 
@@ -345,7 +350,7 @@ void ScFiltersTest::testTdf43700()
 
 void ScFiltersTest::testTdf43534()
 {
-    ScDocShellRef xDocSh = loadDoc("fdo43534test.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"fdo43534test.", FORMAT_ODS);
 
     xDocSh->DoHardRecalc();
 
@@ -420,7 +425,7 @@ void ScFiltersTest::testTdf40110()
 
 void ScFiltersTest::testTdf98657()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf98657.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"tdf98657.", FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     xDocSh->DoHardRecalc();
@@ -433,7 +438,7 @@ void ScFiltersTest::testTdf98657()
 
 void ScFiltersTest::testTdf88821()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf88821.", FORMAT_HTML);
+    ScDocShellRef xDocSh = loadDoc(u"tdf88821.", FORMAT_HTML);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // B2 should be 'Périmètre', not 'PÃ©rimÃ¨tre'
@@ -444,7 +449,7 @@ void ScFiltersTest::testTdf88821()
 
 void ScFiltersTest::testTdf88821_2()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf88821-2.", FORMAT_HTML);
+    ScDocShellRef xDocSh = loadDoc(u"tdf88821-2.", FORMAT_HTML);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // A2 should be 'ABCabcČŠŽčšž', not 'ABCabcÄŒÅ Å½ÄﾍÅ¡Å¾'
@@ -455,7 +460,7 @@ void ScFiltersTest::testTdf88821_2()
 
 void ScFiltersTest::testTdf103960()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf103960.", FORMAT_HTML);
+    ScDocShellRef xDocSh = loadDoc(u"tdf103960.", FORMAT_HTML);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // A1 should be 'Data', not the entire content of the file
@@ -466,7 +471,7 @@ void ScFiltersTest::testTdf103960()
 
 void ScFiltersTest::testRhbz1390776()
 {
-    ScDocShellRef xDocSh = loadDoc("rhbz1390776.", FORMAT_XLS_XML);
+    ScDocShellRef xDocSh = loadDoc(u"rhbz1390776.", FORMAT_XLS_XML);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     ASSERT_FORMULA_EQUAL(rDoc, ScAddress(0, 27, 0), "SUM(A18:A23)", "Wrong range");
@@ -478,7 +483,7 @@ void ScFiltersTest::testTdf104310()
 {
     // 1. Test x14 extension
     {
-        ScDocShellRef xDocSh = loadDoc("tdf104310.", FORMAT_XLSX);
+        ScDocShellRef xDocSh = loadDoc(u"tdf104310.", FORMAT_XLSX);
         ScDocument& rDoc = xDocSh->GetDocument();
 
         const ScValidationData* pData = rDoc.GetValidationEntry(1);
@@ -496,7 +501,7 @@ void ScFiltersTest::testTdf104310()
 
     // 2. Test x12ac extension
     {
-        ScDocShellRef xDocSh = loadDoc("tdf104310-2.", FORMAT_XLSX);
+        ScDocShellRef xDocSh = loadDoc(u"tdf104310-2.", FORMAT_XLSX);
         ScDocument& rDoc = xDocSh->GetDocument();
 
         const ScValidationData* pData = rDoc.GetValidationEntry(1);
@@ -517,7 +522,7 @@ void ScFiltersTest::testTdf104310()
 void ScFiltersTest::testTdf31231()
 {
     // We must open it read-write to allow setting modified flag
-    ScDocShellRef xDocSh = loadDoc("tdf31231.", FORMAT_ODS, true);
+    ScDocShellRef xDocSh = loadDoc(u"tdf31231.", FORMAT_ODS, true);
     xDocSh->DoHardRecalc();
 
     CPPUNIT_ASSERT_MESSAGE("The spreadsheet must be allowed to set modified state", xDocSh->IsEnableSetModified());
@@ -574,7 +579,7 @@ SdrCaptionObj* checkCaption( ScDocument& rDoc, const ScAddress& rAddress, bool b
 void ScFiltersTest::testTdf129789()
 {
 
-    ScDocShellRef xDocSh = loadDoc("tdf129789.", FORMAT_ODS, true);
+    ScDocShellRef xDocSh = loadDoc(u"tdf129789.", FORMAT_ODS, true);
     CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 

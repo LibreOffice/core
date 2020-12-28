@@ -198,16 +198,16 @@ bool GraphicHelper::getThumbnailFormatFromGDI_Impl(GDIMetaFile const * pMetaFile
 }
 
 // static
-bool GraphicHelper::getThumbnailReplacement_Impl(const OUString& rResID, const uno::Reference< io::XStream >& xStream )
+bool GraphicHelper::getThumbnailReplacement_Impl(std::u16string_view rResID, const uno::Reference< io::XStream >& xStream )
 {
     bool bResult = false;
-    if (!rResID.isEmpty() && xStream.is())
+    if (!rResID.empty() && xStream.is())
     {
         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         try
         {
             uno::Reference< graphic::XGraphicProvider > xGraphProvider(graphic::GraphicProvider::create(xContext));
-            const OUString aURL{"private:graphicrepository/" + rResID};
+            const OUString aURL{OUString::Concat("private:graphicrepository/") + rResID};
 
             uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
             aMediaProps[0].Name = "URL";

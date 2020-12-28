@@ -100,9 +100,9 @@ using namespace ::com::sun::star;
 
 namespace{
 
-OUString lcl_getQuotedFunctionName(const OUString& _sFunction)
+OUString lcl_getQuotedFunctionName(std::u16string_view _sFunction)
 {
-    return "[" + _sFunction + "]";
+    return OUString::Concat("[") + _sFunction + "]";
 }
 
 OUString lcl_getQuotedFunctionName(const uno::Reference< report::XFunction>& _xFunction)
@@ -1914,7 +1914,7 @@ void GeometryHandler::loadDefaultFunctions()
     m_aDefaultFunctions.push_back(aDefault);
 }
 
-void GeometryHandler::createDefaultFunction(::osl::ResettableMutexGuard& _aGuard ,const OUString& _sFunction,const OUString& _sDataField)
+void GeometryHandler::createDefaultFunction(::osl::ResettableMutexGuard& _aGuard ,const OUString& _sFunction,std::u16string_view _sDataField)
 {
     try
     {

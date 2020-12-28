@@ -71,7 +71,7 @@ OString translateUnoToJavaType(
 }
 
 OString translateUnoToJavaIdentifier(
-    OString const & identifier, OString const & prefix)
+    OString const & identifier, std::string_view prefix)
 {
     if (identifier == "abstract"
         || identifier == "assert" // since Java 1.4
@@ -124,7 +124,7 @@ OString translateUnoToJavaIdentifier(
         || identifier == "volatile"
         || identifier == "while")
     {
-        return prefix + "_" + identifier;
+        return OString::Concat(prefix) + "_" + identifier;
     } else {
         return identifier;
     }

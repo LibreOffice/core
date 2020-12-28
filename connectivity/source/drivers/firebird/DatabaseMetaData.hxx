@@ -20,6 +20,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_DATABASEMETADATA_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_DATABASEMETADATA_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "Connection.hxx"
 
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -38,7 +42,7 @@ namespace connectivity::firebird
         {
             ::rtl::Reference<Connection> m_pConnection;
         private:
-            css::uno::Reference< css::sdbc::XResultSet > lcl_getKeys( const bool& bIsImport, const OUString& table );
+            css::uno::Reference< css::sdbc::XResultSet > lcl_getKeys( const bool& bIsImport, std::u16string_view table );
         public:
 
             explicit ODatabaseMetaData(Connection* _pCon);

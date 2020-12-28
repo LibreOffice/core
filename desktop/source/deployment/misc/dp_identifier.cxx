@@ -33,7 +33,7 @@ namespace dp_misc {
 
 OUString generateIdentifier(
     ::std::optional< OUString > const & optional,
-    OUString const & fileName)
+    std::u16string_view fileName)
 {
     return optional ? *optional : generateLegacyIdentifier(fileName);
 }
@@ -47,8 +47,8 @@ OUString getIdentifier(
         ? id.Value : generateLegacyIdentifier(package->getName());
 }
 
-OUString generateLegacyIdentifier(OUString const & fileName) {
-    return "org.openoffice.legacy." + fileName;
+OUString generateLegacyIdentifier(std::u16string_view fileName) {
+    return OUString::Concat("org.openoffice.legacy.") + fileName;
 }
 
 }

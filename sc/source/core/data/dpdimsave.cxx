@@ -151,7 +151,7 @@ void ScDPSaveGroupDimension::AddGroupItem( const ScDPSaveGroupItem& rItem )
     aGroups.push_back( rItem );
 }
 
-OUString ScDPSaveGroupDimension::CreateGroupName(const OUString& rPrefix)
+OUString ScDPSaveGroupDimension::CreateGroupName(std::u16string_view rPrefix)
 {
     // create a name for a new group, using "Group1", "Group2" etc. (translated prefix in rPrefix)
 

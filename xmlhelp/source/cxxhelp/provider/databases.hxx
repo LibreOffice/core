@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <string_view>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -147,14 +148,14 @@ namespace chelp {
 
         const std::vector< OUString >& getModuleList( const OUString& Language );
 
-        StaticModuleInformation* getStaticInformationForModule( const OUString& Module,
+        StaticModuleInformation* getStaticInformationForModule( std::u16string_view Module,
                                                                 const OUString& Language );
 
         bool checkModuleMatchForExtension( std::u16string_view Database, const OUString& doclist );
         KeywordInfo* getKeyword( const OUString& Module,
                                  const OUString& Language );
 
-        helpdatafileproxy::Hdf* getHelpDataFile( const OUString& Module,
+        helpdatafileproxy::Hdf* getHelpDataFile( std::u16string_view Module,
                          const OUString& Language, bool helpText = false,
                          const OUString* pExtensionPath = nullptr );
 
@@ -322,7 +323,7 @@ namespace chelp {
             ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
         css::uno::Reference< css::deployment::XPackage > implGetNextBundledHelpPackage
         ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
-        OUString implGetFileFromPackage( const OUString& rFileExtension,
+        OUString implGetFileFromPackage( std::u16string_view rFileExtension,
             const css::uno::Reference< css::deployment::XPackage >& xPackage );
         void implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
             const css::uno::Reference< css::deployment::XPackage >& xPackage );

@@ -172,7 +172,8 @@ SmallVector<DeclRefExpr const*, 2> wrap(DeclRefExpr const* expr)
 
 SmallVector<DeclRefExpr const*, 2> relevantCXXOperatorCallExpr(CXXOperatorCallExpr const* expr)
 {
-    if (expr->getOperator() == OO_Subscript)
+    auto const op = expr->getOperator();
+    if (op == OO_Subscript)
     {
         auto const e = expr->getArg(0);
         if (relevantStringType(e->getType()) == StringType::None)
@@ -181,7 +182,7 @@ SmallVector<DeclRefExpr const*, 2> relevantCXXOperatorCallExpr(CXXOperatorCallEx
         }
         return wrap(relevantDeclRefExpr(e));
     }
-    if (compat::isComparisonOp(expr))
+    if (compat::isComparisonOp(expr) || (op == OO_Plus && expr->getNumArgs() == 2))
     {
         SmallVector<DeclRefExpr const*, 2> v;
         if (auto const e = relevantDeclRefExpr(expr->getArg(0)))

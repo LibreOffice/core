@@ -79,9 +79,9 @@ AppendPS (FILE* pDst, osl::File* pSrc, unsigned char* pBuffer)
  */
 
 std::unique_ptr<osl::File>
-PrinterJob::CreateSpoolFile (const OUString& rName, const OUString& rExtension)
+PrinterJob::CreateSpoolFile (std::u16string_view rName, std::u16string_view rExtension)
 {
-    OUString aFile = rName + rExtension;
+    OUString aFile = OUString::Concat(rName) + rExtension;
     OUString aFileURL;
     osl::File::RC nError = osl::File::getFileURLFromSystemPath( aFile, aFileURL );
     if (nError != osl::File::E_None)
@@ -296,8 +296,8 @@ PrinterJob::StartJob (
     maJobTitle = rJobName;
 
     OUString aExt(".ps");
-    mpJobHeader  = CreateSpoolFile ("psp_head", aExt);
-    mpJobTrailer = CreateSpoolFile ("psp_tail", aExt);
+    mpJobHeader  = CreateSpoolFile (u"psp_head", aExt);
+    mpJobTrailer = CreateSpoolFile (u"psp_tail", aExt);
     if( ! (mpJobHeader && mpJobTrailer) ) // existing files are removed in destructor
         return false;
 
@@ -551,8 +551,8 @@ PrinterJob::StartPage (const JobData& rJobSetup)
     OUString aPageNo = OUString::number (static_cast<sal_Int32>(maPageVector.size())+1); // sequential page number must start with 1
     OUString aExt    = aPageNo + ".ps";
 
-    maHeaderVector.push_back( CreateSpoolFile ( "psp_pghead", aExt) );
-    maPageVector.push_back( CreateSpoolFile ( "psp_pgbody", aExt) );
+    maHeaderVector.push_back( CreateSpoolFile ( u"psp_pghead", aExt) );
+    maPageVector.push_back( CreateSpoolFile ( u"psp_pgbody", aExt) );
 
     osl::File* pPageHeader = maHeaderVector.back().get();
     osl::File* pPageBody   = maPageVector.back().get();

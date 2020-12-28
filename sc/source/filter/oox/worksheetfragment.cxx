@@ -339,12 +339,12 @@ WorksheetFragment::WorksheetFragment( const WorksheetHelper& rHelper, const OUSt
     WorksheetFragmentBase( rHelper, rFragmentPath )
 {
     // import data tables related to this worksheet
-    RelationsRef xTableRels = getRelations().getRelationsFromTypeFromOfficeDoc( "table" );
+    RelationsRef xTableRels = getRelations().getRelationsFromTypeFromOfficeDoc( u"table" );
     for( const auto& rEntry : *xTableRels )
         importOoxFragment( new TableFragment( *this, getFragmentPathFromRelation( rEntry.second ) ) );
 
     // import comments related to this worksheet
-    OUString aCommentsFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "comments" );
+    OUString aCommentsFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"comments" );
     if( !aCommentsFragmentPath.isEmpty() )
         importOoxFragment( new CommentsFragment( *this, aCommentsFragmentPath ) );
 }
@@ -618,12 +618,12 @@ void WorksheetFragment::initializeImport()
     initializeWorksheetImport();
 
     // import query table fragments related to this worksheet
-    RelationsRef xQueryRels = getRelations().getRelationsFromTypeFromOfficeDoc( "queryTable" );
+    RelationsRef xQueryRels = getRelations().getRelationsFromTypeFromOfficeDoc( u"queryTable" );
     for( const auto& rEntry : *xQueryRels )
         importOoxFragment( new QueryTableFragment( *this, getFragmentPathFromRelation( rEntry.second ) ) );
 
     // import pivot table fragments related to this worksheet
-    RelationsRef xPivotRels = getRelations().getRelationsFromTypeFromOfficeDoc( "pivotTable" );
+    RelationsRef xPivotRels = getRelations().getRelationsFromTypeFromOfficeDoc( u"pivotTable" );
     for( const auto& rEntry : *xPivotRels )
         importOoxFragment( new PivotTableFragment( *this, getFragmentPathFromRelation( rEntry.second ) ) );
 }

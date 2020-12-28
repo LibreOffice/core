@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <comphelper/propertystatecontainer.hxx>
 
 
@@ -30,13 +34,13 @@ namespace comphelper
 
     namespace
     {
-        OUString lcl_getUnknownPropertyErrorMessage( const OUString& _rPropertyName )
+        OUString lcl_getUnknownPropertyErrorMessage( std::u16string_view _rPropertyName )
         {
             // TODO: perhaps it's time to think about resources in the comphelper module?
             // Would be nice to have localized exception strings (a simply resource file containing
             // strings only would suffice, and could be realized with a UNO service, so we do not
             // need the dependency to the Tools project)
-            return "The property \"" + _rPropertyName + "\" is unknown.";
+            return OUString::Concat("The property \"") + _rPropertyName + "\" is unknown.";
         }
     }
 

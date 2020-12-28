@@ -22,6 +22,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <fstream>
+#include <string_view>
 
 #if defined(X86)
 #define INT_EPS     2.1
@@ -50,7 +51,7 @@
     else \
         { \
             OString sTestFileName = OUStringToOString(getTestFileName(), RTL_TEXTENCODING_UTF8); \
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("Failing test file is: " + sTestFileName).getStr(), readExpected(#aActual), OUString(OUString::number(aActual))); \
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("Failing test file is: " + sTestFileName).getStr(), readExpected(u ## #aActual), OUString(OUString::number(aActual))); \
         }
 
 #define CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aActual, EPS_) \
@@ -59,7 +60,7 @@
         else \
         { \
             OString sTestFileName = OUStringToOString(getTestFileName(), RTL_TEXTENCODING_UTF8); \
-            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(OString("Failing test file is: " + sTestFileName).getStr(), readExpectedDouble(#aActual), aActual, EPS_); \
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(OString("Failing test file is: " + sTestFileName).getStr(), readExpectedDouble(u ## #aActual), aActual, EPS_); \
         }
 
 #define CPPUNIT_DUMP_ASSERT_STRINGS_EQUAL(aActual) \
@@ -68,7 +69,7 @@
     else \
     { \
         OString sTestFileName = OUStringToOString(getTestFileName(), RTL_TEXTENCODING_UTF8); \
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("Failing test file is: " + sTestFileName).getStr(), readExpected(#aActual), aActual.trim()); \
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("Failing test file is: " + sTestFileName).getStr(), readExpected(u ## #aActual), aActual.trim()); \
     }
 
 #define CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aActual, EPS_) \
@@ -77,7 +78,7 @@
     else \
     { \
         OUString expectedTransform; \
-        if (!readAndCheckTransformation (aActual, #aActual, EPS_, expectedTransform)) \
+        if (!readAndCheckTransformation (aActual, u ## #aActual, EPS_, expectedTransform)) \
         { \
             OString sTestFileName = OUStringToOString(getTestFileName(), RTL_TEXTENCODING_UTF8); \
             CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("Failing test file is: " + sTestFileName).getStr(), expectedTransform, transformationToOneLineString(aActual)); \
@@ -143,7 +144,7 @@ protected:
         CPPUNIT_FAIL("verify method must be overridden");
     }
 
-    OUString readExpected(const OUString& sCheck)
+    OUString readExpected(std::u16string_view sCheck)
     {
         assert(!m_bDumpMode);
         assert(m_aReferenceFile.is_open());
@@ -152,7 +153,7 @@ protected:
         OString sAssertMessage =
             "The reference file does not contain the right content. Maybe it needs an update:"
             + OUStringToOString(m_sTestFileName, RTL_TEXTENCODING_UTF8);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sAssertMessage.getStr(), OUString("// " + sCheck), OUString(sTemp.data(), sTemp.length(), RTL_TEXTENCODING_UTF8));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sAssertMessage.getStr(), OUString(OUString::Concat("// ") + sCheck), OUString(sTemp.data(), sTemp.length(), RTL_TEXTENCODING_UTF8));
         getline(m_aReferenceFile, sTemp);
         return OUString(sTemp.data(), sTemp.length(), RTL_TEXTENCODING_UTF8);
     }
@@ -165,7 +166,7 @@ protected:
         m_aDumpFile << sActualValue.trim() << "\n";      // Write out the checked value, will be used as reference later
     }
 
-    void readNote(const OUString& sNote)
+    void readNote(std::u16string_view sNote)
     {
         assert(!m_bDumpMode);
         assert(m_aReferenceFile.is_open());
@@ -174,7 +175,7 @@ protected:
         OString sAssertMessage =
             "The reference file does not contain the right content. Maybe it needs an update:"
             + OUStringToOString(m_sTestFileName, RTL_TEXTENCODING_UTF8);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sAssertMessage.getStr(), OUString("/// " + sNote), OUString(sTemp.data(), sTemp.length(), RTL_TEXTENCODING_UTF8));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sAssertMessage.getStr(), OUString(OUString::Concat("/// ") + sNote), OUString(sTemp.data(), sTemp.length(), RTL_TEXTENCODING_UTF8));
     }
 
     void writeNote(const OUString& sNote)
@@ -184,7 +185,7 @@ protected:
         m_aDumpFile << "/// " << sNote << "\n";
     }
 
-    double readExpectedDouble(const OUString& sCheck)
+    double readExpectedDouble(std::u16string_view sCheck)
     {
         OUString sExpected = readExpected(sCheck);
         return sExpected.toDouble();
@@ -195,7 +196,7 @@ protected:
         writeActual(transformationToOneLineString(rTransform), sCheck);
     }
 
-    bool readAndCheckTransformation(const drawing::HomogenMatrix3& rTransform, const OUString& sCheck, const double fEPS, OUString& rExpectedTransform)
+    bool readAndCheckTransformation(const drawing::HomogenMatrix3& rTransform, std::u16string_view sCheck, const double fEPS, OUString& rExpectedTransform)
     {
         rExpectedTransform = readExpected(sCheck); // Reference transformation string
 

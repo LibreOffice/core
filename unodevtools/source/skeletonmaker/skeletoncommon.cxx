@@ -30,6 +30,7 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <string_view>
 
 using namespace ::codemaker::cpp;
 
@@ -402,7 +403,7 @@ checkAdditionalPropertyFlags(
 // types are allowed add-in types, for more info see the com.sun.star.sheet.AddIn
 // service description
 static bool checkAddinType(rtl::Reference< TypeManager > const & manager,
-                    OUString const & type, bool & bLastAny,
+                    std::u16string_view type, bool & bLastAny,
                     bool & bHasXPropertySet, bool bIsReturn)
 {
     assert(manager.is());
@@ -431,11 +432,11 @@ static bool checkAddinType(rtl::Reference< TypeManager > const & manager,
     }
     if ( sort == codemaker::UnoType::Sort::Interface )
     {
-        if ( bIsReturn && type == "com.sun.star.sheet.XVolatileResult" )
+        if ( bIsReturn && type == u"com.sun.star.sheet.XVolatileResult" )
             return true;
-        if ( !bIsReturn && type == "com.sun.star.table.XCellRange" )
+        if ( !bIsReturn && type == u"com.sun.star.table.XCellRange" )
             return true;
-        if ( !bIsReturn && type == "com.sun.star.beans.XPropertySet" )
+        if ( !bIsReturn && type == u"com.sun.star.beans.XPropertySet" )
         {
             if ( bHasXPropertySet ) {
                 return false;
@@ -449,7 +450,7 @@ static bool checkAddinType(rtl::Reference< TypeManager > const & manager,
 }
 
 static void checkAddInTypes(
-    rtl::Reference< TypeManager > const & manager, OUString const & name,
+    rtl::Reference< TypeManager > const & manager, std::u16string_view name,
     rtl::Reference< unoidl::InterfaceTypeEntity > const & entity)
 {
     assert(entity.is());
@@ -461,7 +462,7 @@ static void checkAddInTypes(
                  manager, rMethod.returnType, bLastAny, bHasXPropertySet, true) )
         {
             throw CannotDumpException(
-                "the return type of the calc add-in function '" + name
+                OUString::Concat("the return type of the calc add-in function '") + name
                 + ":" + rMethod.name
                 + "' is invalid. Please check your IDL definition.");
         }

@@ -41,12 +41,12 @@ namespace dp_manager {
 
 //Reading the file
 ExtensionProperties::ExtensionProperties(
-    OUString const & urlExtension,
+    std::u16string_view urlExtension,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv,
     Reference<uno::XComponentContext> const & xContext) :
     m_xCmdEnv(xCmdEnv), m_xContext(xContext)
 {
-    m_propFileUrl = urlExtension + "properties";
+    m_propFileUrl = OUString::Concat(urlExtension) + "properties";
 
     std::vector< std::pair< OUString, OUString> > props;
     if (! dp_misc::create_ucb_content(nullptr, m_propFileUrl, nullptr, false))
@@ -64,13 +64,13 @@ ExtensionProperties::ExtensionProperties(
 
 //Writing the file
 ExtensionProperties::ExtensionProperties(
-    OUString const & urlExtension,
+    std::u16string_view urlExtension,
     uno::Sequence<css::beans::NamedValue> const & properties,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv,
     Reference<uno::XComponentContext> const & xContext) :
     m_xCmdEnv(xCmdEnv), m_xContext(xContext)
 {
-    m_propFileUrl = urlExtension + "properties";
+    m_propFileUrl = OUString::Concat(urlExtension) + "properties";
 
     for (css::beans::NamedValue const & v : properties)
     {

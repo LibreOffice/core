@@ -110,9 +110,9 @@ SvxPostItDialog::~SvxPostItDialog()
 {
 }
 
-void SvxPostItDialog::ShowLastAuthor(const OUString& rAuthor, const OUString& rDate)
+void SvxPostItDialog::ShowLastAuthor(std::u16string_view rAuthor, std::u16string_view rDate)
 {
-    OUString sTxt = rAuthor + ", " + rDate;
+    OUString sTxt = OUString::Concat(rAuthor) + ", " + rDate;
     m_xLastEditFT->set_label( sTxt );
 }
 

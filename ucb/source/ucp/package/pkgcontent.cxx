@@ -219,9 +219,9 @@ Content* Content::create(
 
 // static
 OUString Content::getContentType(
-    const OUString& aScheme, bool bFolder )
+    std::u16string_view aScheme, bool bFolder )
 {
-    return ( "application/"
+    return ( OUString::Concat("application/")
              + aScheme
              + ( bFolder
                  ? OUStringLiteral(u"-folder")

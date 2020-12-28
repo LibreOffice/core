@@ -30,12 +30,12 @@ const sal_Unicode cDelim = 0x01;        // delimiter between From and To
 
 // ScUnitConverterData
 ScUnitConverterData::ScUnitConverterData(
-    const OUString& rFromUnit, const OUString& rToUnit, double fValue ) :
+    std::u16string_view rFromUnit, std::u16string_view rToUnit, double fValue ) :
     maIndexString(BuildIndexString(rFromUnit, rToUnit)),
     mfValue(fValue) {}
 
 OUString ScUnitConverterData::BuildIndexString(
-    const OUString& rFromUnit, const OUString& rToUnit )
+    std::u16string_view rFromUnit, std::u16string_view rToUnit )
 {
     return rFromUnit + OUStringChar(cDelim) + rToUnit;
 }
@@ -101,7 +101,7 @@ ScUnitConverter::ScUnitConverter()
 ScUnitConverter::~ScUnitConverter() {}
 
 bool ScUnitConverter::GetValue(
-    double& fValue, const OUString& rFromUnit, const OUString& rToUnit ) const
+    double& fValue, std::u16string_view rFromUnit, std::u16string_view rToUnit ) const
 {
     OUString aIndex = ScUnitConverterData::BuildIndexString(rFromUnit, rToUnit);
     MapType::const_iterator it = maData.find(aIndex);

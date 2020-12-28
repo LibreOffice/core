@@ -21,6 +21,7 @@
 
 #include <cassert>
 #include <cstdlib>
+#include <string_view>
 
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/registry/CannotRegisterImplementationException.hpp>
@@ -112,8 +113,8 @@ extern "C" void getFactory(va_list * args) {
 
 css::uno::Reference<css::uno::XInterface> invokeComponentFactory(
     css::uno::Environment const & source, css::uno::Environment const & target,
-    component_getFactoryFunc function, OUString const & uri,
-    OUString const & implementation,
+    component_getFactoryFunc function, std::u16string_view uri,
+    std::u16string_view implementation,
     css::uno::Reference<css::lang::XMultiServiceFactory> const & serviceManager)
 {
     if (!(source.is() && target.is())) {
@@ -147,7 +148,7 @@ css::uno::Reference<css::uno::XInterface> invokeComponentFactory(
     }
     if (factory == nullptr) {
         throw css::loader::CannotActivateFactoryException(
-            ("calling factory function for \"" + implementation + "\" in <"
+            (OUString::Concat("calling factory function for \"") + implementation + "\" in <"
              + uri + "> returned null"),
             css::uno::Reference<css::uno::XInterface>());
     }

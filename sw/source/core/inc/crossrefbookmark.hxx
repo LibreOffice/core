@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_CROSSREFBOOKMARK_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_CROSSREFBOOKMARK_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "bookmrk.hxx"
 #include <rtl/ustring.hxx>
 #include <vcl/keycod.hxx>
@@ -32,7 +36,7 @@ namespace sw::mark {
             CrossRefBookmark(const SwPaM& rPaM,
                 const vcl::KeyCode& rCode,
                 const OUString& rName,
-                const OUString& rPrefix);
+                std::u16string_view rPrefix);
 
             // getters
             virtual SwPosition& GetOtherMarkPos() const override;

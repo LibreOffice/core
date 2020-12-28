@@ -40,6 +40,7 @@
 #include <scmatrix.hxx>
 #include <documentlinkmgr.hxx>
 
+#include <string_view>
 #include <vector>
 
 using namespace com::sun::star;
@@ -1028,10 +1029,10 @@ void ScDDELinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XNamed
 
-static OUString lcl_BuildDDEName( const OUString& rAppl, const OUString& rTopic, const OUString& rItem )
+static OUString lcl_BuildDDEName( std::u16string_view rAppl, std::u16string_view rTopic, std::u16string_view rItem )
 {
     //  Appl|Topic!Item (like Excel)
-    OUString aRet = rAppl + "|" + rTopic + "!" + rItem;
+    OUString aRet = OUString::Concat(rAppl) + "|" + rTopic + "!" + rItem;
     return aRet;
 }
 

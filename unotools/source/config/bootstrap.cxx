@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <config_folders.h>
 
 #include <unotools/bootstrap.hxx>
@@ -45,7 +49,7 @@
 
 #define BOOTSTRAP_DEFAULT_BASEINSTALL       "$SYSBINDIR/.."
 
-#define BOOTSTRAP_DIRNAME_USERDIR           "user"
+#define BOOTSTRAP_DIRNAME_USERDIR           u"user"
 
 typedef char const * AsciiString;
 
@@ -303,13 +307,13 @@ static PathStatus checkStatusAndNormalizeURL(OUString & _sURL)
 static PathStatus getDerivedPath(
               OUString& _rURL,
               OUString const& _aBaseURL, PathStatus _aBaseStatus,
-              OUString const& _sRelativeURL,
+              std::u16string_view _sRelativeURL,
               rtl::Bootstrap const & _rData, OUString const& _sBootstrapParameter
           )
 {
     OUString sDerivedURL;
     OSL_PRECOND(!_rData.getFrom(_sBootstrapParameter,sDerivedURL),"Setting for derived path is already defined");
-    OSL_PRECOND(!_sRelativeURL.isEmpty() && _sRelativeURL[0] != cURLSeparator,"Invalid Relative URL");
+    OSL_PRECOND(!_sRelativeURL.empty() && _sRelativeURL[0] != cURLSeparator,"Invalid Relative URL");
 
     PathStatus aStatus = _aBaseStatus;
 
@@ -349,7 +353,7 @@ static PathStatus getDerivedPath(
 static PathStatus getDerivedPath(
                       OUString& _rURL,
                       Bootstrap::Impl::PathData const& _aBaseData,
-                      OUString const& _sRelativeURL,
+                      std::u16string_view _sRelativeURL,
                       rtl::Bootstrap const & _rData, OUString const& _sBootstrapParameter
               )
 {

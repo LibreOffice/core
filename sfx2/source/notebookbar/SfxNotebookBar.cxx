@@ -314,7 +314,7 @@ void SfxNotebookBar::ExecMethod(SfxBindings& rBindings, const OUString& rUIName)
     rBindings.Update();
 }
 
-bool SfxNotebookBar::StateMethod(SfxBindings& rBindings, const OUString& rUIFile,
+bool SfxNotebookBar::StateMethod(SfxBindings& rBindings, std::u16string_view rUIFile,
                                  bool bReloadNotebookbar)
 {
     SfxFrame& rFrame = rBindings.GetDispatcher_Impl()->GetFrame()->GetFrame();
@@ -324,7 +324,7 @@ bool SfxNotebookBar::StateMethod(SfxBindings& rBindings, const OUString& rUIFile
 
 bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                                  const Reference<css::frame::XFrame>& xFrame,
-                                 const OUString& rUIFile, bool bReloadNotebookbar)
+                                 std::u16string_view rUIFile, bool bReloadNotebookbar)
 {
     if (!pSysWindow)
     {
@@ -553,7 +553,7 @@ void SfxNotebookBar::ToggleMenubar()
     }
 }
 
-void SfxNotebookBar::ReloadNotebookBar(const OUString& sUIPath)
+void SfxNotebookBar::ReloadNotebookBar(std::u16string_view sUIPath)
 {
     if (SfxNotebookBar::IsActive())
     {

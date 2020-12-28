@@ -76,6 +76,8 @@
 #include <o3tl/any.hxx>
 
 #include <memory>
+#include <string_view>
+
 #include <swuiexp.hxx>
 
 using namespace ::dbtools;
@@ -1420,34 +1422,34 @@ void SwInsertDBColAutoPilot::SetTabSet()
     rSh.MoveTable( GotoCurrTable, fnTableStart );
 }
 
-static Sequence<OUString> lcl_createSourceNames(const OUString& rNodeName)
+static Sequence<OUString> lcl_createSourceNames(std::u16string_view rNodeName)
 {
     Sequence<OUString> aSourceNames(11);
     OUString* pNames = aSourceNames.getArray();
-    pNames[0] = rNodeName + "/DataSource";
-    pNames[1] = rNodeName + "/Command";
-    pNames[2] = rNodeName + "/CommandType";
-    pNames[3] = rNodeName + "/ColumnsToText";
-    pNames[4] = rNodeName + "/ColumnsToTable";
-    pNames[5] = rNodeName + "/ParaStyle";
-    pNames[6] = rNodeName + "/TableAutoFormat";
-    pNames[7] = rNodeName + "/IsTable";
-    pNames[8] = rNodeName + "/IsField";
-    pNames[9] = rNodeName + "/IsHeadlineOn";
-    pNames[10] = rNodeName + "/IsEmptyHeadline";
+    pNames[0] = OUString::Concat(rNodeName) + "/DataSource";
+    pNames[1] = OUString::Concat(rNodeName) + "/Command";
+    pNames[2] = OUString::Concat(rNodeName) + "/CommandType";
+    pNames[3] = OUString::Concat(rNodeName) + "/ColumnsToText";
+    pNames[4] = OUString::Concat(rNodeName) + "/ColumnsToTable";
+    pNames[5] = OUString::Concat(rNodeName) + "/ParaStyle";
+    pNames[6] = OUString::Concat(rNodeName) + "/TableAutoFormat";
+    pNames[7] = OUString::Concat(rNodeName) + "/IsTable";
+    pNames[8] = OUString::Concat(rNodeName) + "/IsField";
+    pNames[9] = OUString::Concat(rNodeName) + "/IsHeadlineOn";
+    pNames[10] = OUString::Concat(rNodeName) + "/IsEmptyHeadline";
     return aSourceNames;
 }
 
-static Sequence<OUString> lcl_CreateSubNames(const OUString& rSubNodeName)
+static Sequence<OUString> lcl_CreateSubNames(std::u16string_view rSubNodeName)
 {
     Sequence<OUString> aSubSourceNames(6);
     OUString* pNames = aSubSourceNames.getArray();
-    pNames[0] = rSubNodeName + "/ColumnName";
-    pNames[1] = rSubNodeName + "/ColumnIndex";
-    pNames[2] = rSubNodeName + "/IsNumberFormat";
-    pNames[3] = rSubNodeName + "/IsNumberFormatFromDataBase";
-    pNames[4] = rSubNodeName + "/NumberFormat";
-    pNames[5] = rSubNodeName + "/NumberFormatLocale";
+    pNames[0] = OUString::Concat(rSubNodeName) + "/ColumnName";
+    pNames[1] = OUString::Concat(rSubNodeName) + "/ColumnIndex";
+    pNames[2] = OUString::Concat(rSubNodeName) + "/IsNumberFormat";
+    pNames[3] = OUString::Concat(rSubNodeName) + "/IsNumberFormatFromDataBase";
+    pNames[4] = OUString::Concat(rSubNodeName) + "/NumberFormat";
+    pNames[5] = OUString::Concat(rSubNodeName) + "/NumberFormatLocale";
     return aSubSourceNames;
 }
 
@@ -1614,7 +1616,7 @@ void SwInsertDBColAutoPilot::Load()
             for(const OUString& rSubName : aSubNames)
             {
                 Sequence <OUString> aSubNodeNames =
-                    lcl_CreateSubNames(sSubNodeName + rSubName);
+                    lcl_CreateSubNames(OUString(sSubNodeName + rSubName));
                 Sequence< Any> aSubProps = GetProperties(aSubNodeNames);
                 const Any* pSubProps = aSubProps.getConstArray();
 

@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <test/xmltesttools.hxx>
@@ -33,7 +37,7 @@ public:
     void tearDown() override;
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
-    void load(const OUString& rURL);
+    void load(std::u16string_view rURL);
 };
 
 void SvgFilterTest::setUp()
@@ -51,7 +55,7 @@ void SvgFilterTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-void SvgFilterTest::load(const OUString& rFileName)
+void SvgFilterTest::load(std::u16string_view rFileName)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFileName;
     mxComponent = loadFromDesktop(aURL);
@@ -66,7 +70,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreserveJpg)
 {
 #if !defined(MACOSX)
     // Load a document with a jpeg image in it.
-    load("preserve-jpg.odt");
+    load(u"preserve-jpg.odt");
 
     // Select the image.
     dispatchCommand(getComponent(), ".uno:JumpToNextFrame", {});
@@ -97,7 +101,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreserveJpg)
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentLine)
 {
     // Load a document with a semi-transparent line shape.
-    load("semi-transparent-line.odg");
+    load(u"semi-transparent-line.odg");
 
     // Export it to SVG.
     uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY_THROW);
@@ -129,7 +133,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentText)
     // correct transparency factor applied for the first shape.
 
     // Load draw document with transparent text in one box
-    load("TransparentText.odg");
+    load(u"TransparentText.odg");
 
     // Export to SVG.
     uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY_THROW);
@@ -163,7 +167,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentText)
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testShapeNographic)
 {
     // Load a document containing a 3D shape.
-    load("shape-nographic.odp");
+    load(u"shape-nographic.odp");
 
     // Export to SVG.
     uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY_THROW);

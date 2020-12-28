@@ -63,7 +63,7 @@ namespace pq_sdbc_driver
 {
 bool isWhitespace( sal_Unicode c );
 
-OUString concatQualified( const OUString & a, const OUString &b);
+OUString concatQualified( std::u16string_view a, std::u16string_view b);
 
 OString OUStringToOString( std::u16string_view str, ConnectionSettings const *settings);
 

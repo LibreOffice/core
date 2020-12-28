@@ -143,7 +143,7 @@ void appendPointer(OUStringBuffer & buffer, void * pointer) {
 }
 
 void logException( RuntimeCargo *cargo, const char *intro,
-                   void * ptr, const OUString &aFunctionName,
+                   void * ptr, std::u16string_view aFunctionName,
                    const void * data, const css::uno::Type & type )
 {
     if( isLog( cargo, LogLevel::CALL ) )
@@ -151,7 +151,7 @@ void logException( RuntimeCargo *cargo, const char *intro,
         OUStringBuffer buf( 128 );
         buf.appendAscii( intro );
         appendPointer(buf, ptr);
-        buf.append( "]." + aFunctionName + " = " );
+        buf.append( OUString::Concat("].") + aFunctionName + " = " );
         buf.append(
             val2str( data, type.getTypeLibType(), VAL2STR_MODE_SHALLOW ) );
         log( cargo,LogLevel::CALL, buf.makeStringAndClear() );
@@ -163,14 +163,14 @@ void logReply(
     RuntimeCargo *cargo,
     const char *intro,
     void * ptr,
-    const OUString & aFunctionName,
+    std::u16string_view aFunctionName,
     const Any &returnValue,
     const Sequence< Any > & aParams )
 {
     OUStringBuffer buf( 128 );
     buf.appendAscii( intro );
     appendPointer(buf, ptr);
-    buf.append( "]." + aFunctionName + "()=" );
+    buf.append( OUString::Concat("].") + aFunctionName + "()=" );
     if( isLog( cargo, LogLevel::ARGS ) )
     {
         buf.append(
@@ -186,13 +186,13 @@ void logReply(
 }
 
 void logCall( RuntimeCargo *cargo, const char *intro,
-              void * ptr, const OUString & aFunctionName,
+              void * ptr, std::u16string_view aFunctionName,
               const Sequence< Any > & aParams )
 {
     OUStringBuffer buf( 128 );
     buf.appendAscii( intro );
     appendPointer(buf, ptr);
-    buf.append( "]." + aFunctionName + "(" );
+    buf.append( OUString::Concat("].") + aFunctionName + "(" );
     if( isLog( cargo, LogLevel::ARGS ) )
     {
         for( int i = 0; i < aParams.getLength() ; i ++ )

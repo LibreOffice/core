@@ -78,7 +78,7 @@ ScSolverNoSolutionDialog::~ScSolverNoSolutionDialog()
 {
 }
 
-ScSolverSuccessDialog::ScSolverSuccessDialog(weld::Window* pParent, const OUString& rSolution)
+ScSolverSuccessDialog::ScSolverSuccessDialog(weld::Window* pParent, std::u16string_view rSolution)
     : GenericDialogController(pParent, "modules/scalc/ui/solversuccessdialog.ui", "SolverSuccessDialog")
     , m_xFtResult(m_xBuilder->weld_label("result"))
     , m_xBtnOk(m_xBuilder->weld_button("ok"))

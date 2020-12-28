@@ -57,7 +57,7 @@ bool DxfFilterTest::load(const OUString &,
 void DxfFilterTest::testCVEs()
 {
     testDir(OUString(),
-        m_directories.getURLFromSrc("/filter/qa/cppunit/data/dxf/"));
+        m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/dxf/"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DxfFilterTest);

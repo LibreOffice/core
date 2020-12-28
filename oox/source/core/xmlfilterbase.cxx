@@ -302,19 +302,20 @@ FastParser* XmlFilterBase::createParser()
 
 namespace {
 
-OUString getTransitionalRelationshipOfficeDocType(const OUString& rPart)
+OUString getTransitionalRelationshipOfficeDocType(std::u16string_view rPart)
 {
-    return "http://schemas.openxmlformats.org/officeDocument/2006/relationships/" + rPart;
+    return OUString::Concat("http://schemas.openxmlformats.org/officeDocument/2006/relationships/")
+        + rPart;
 }
 
-OUString getStrictRelationshipOfficeDocType(const OUString& rPart)
+OUString getStrictRelationshipOfficeDocType(std::u16string_view rPart)
 {
-    return "http://purl.oclc.org/ooxml/officeDocument/relationships/" + rPart;
+    return OUString::Concat("http://purl.oclc.org/ooxml/officeDocument/relationships/") + rPart;
 }
 
 }
 
-OUString XmlFilterBase::getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rPart )
+OUString XmlFilterBase::getFragmentPathFromFirstTypeFromOfficeDoc( std::u16string_view rPart )
 {
     // importRelations() caches the relations map for subsequence calls
     const OUString aTransitionalRelationshipType = getTransitionalRelationshipOfficeDocType(rPart);

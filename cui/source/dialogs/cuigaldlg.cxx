@@ -645,12 +645,12 @@ std::unique_ptr<SfxTabPage> TPGalleryThemeProperties::Create(weld::Container* pP
     return std::make_unique<TPGalleryThemeProperties>(pPage, pController, *rSet);
 }
 
-OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, const OUString& _rExtension )
+OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, std::u16string_view _rExtension )
 {
     OUString sRet = _rDisplayText;
     if ( sRet.indexOf( "(*.*)" ) == -1 )
     {
-        sRet += " (" + _rExtension + ")";
+        sRet += OUString::Concat(" (") + _rExtension + ")";
     }
     return sRet;
 }

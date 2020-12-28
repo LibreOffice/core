@@ -13,6 +13,8 @@
 #include <sal/config.h>
 
 #include <optional>
+#include <string_view>
+
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
@@ -102,7 +104,7 @@ public:
         OUString const & path, css::uno::Any const & value);
 
     css::uno::Any getLocalizedPropertyValue(
-        OUString const & path) const;
+        std::u16string_view path) const;
 
     static void setLocalizedPropertyValue(
         std::shared_ptr< ConfigurationChanges > const & batch,

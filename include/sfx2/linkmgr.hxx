@@ -25,6 +25,8 @@
 #include <sfx2/linksrc.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <o3tl/sorted_vector.hxx>
+
+#include <string_view>
 #include <vector>
 
 class SfxObjectShell;
@@ -95,7 +97,7 @@ public:
     void        InsertDDELink( SvBaseLink*,
                         const OUString& rServer,
                         const OUString& rTopic,
-                        const OUString& rItem );
+                        std::u16string_view rItem );
 
     // if everything is already set at the link!
     void        InsertDDELink( SvBaseLink* );
@@ -175,7 +177,7 @@ const sal_Unicode cTokenSeparator = 0xFFFF;
 SFX2_DLLPUBLIC void MakeLnkName( OUString& rName,
                  const OUString* pType,       // Can also be null!!
                  const OUString& rFile,
-                 const OUString& rLink,
+                 std::u16string_view rLink,
                  const OUString* pFilter = nullptr );
 
 }

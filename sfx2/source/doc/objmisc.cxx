@@ -1841,7 +1841,7 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature( bool bAllowUIToAddAuthor
     return bResult;
 }
 
-bool SfxObjectShell::IsContinueImportOnFilterExceptions(const OUString& aErrMessage)
+bool SfxObjectShell::IsContinueImportOnFilterExceptions(std::u16string_view aErrMessage)
 {
     if (mbContinueImportOnFilterExceptions == undefined)
     {
@@ -1849,7 +1849,7 @@ bool SfxObjectShell::IsContinueImportOnFilterExceptions(const OUString& aErrMess
         {
             // Ask the user to try to continue or abort loading
             OUString aMessage = SfxResId(STR_QMSG_ERROR_OPENING_FILE);
-            if (!aErrMessage.isEmpty())
+            if (!aErrMessage.empty())
                 aMessage += SfxResId(STR_QMSG_ERROR_OPENING_FILE_DETAILS) + aErrMessage;
             aMessage += SfxResId(STR_QMSG_ERROR_OPENING_FILE_CONTINUE);
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,

@@ -84,7 +84,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
             unsetenv("LO_IMPORT_USE_PDFIUM");
     });
 
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc("sd/qa/unit/data/SimplePDF.pdf"));
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"sd/qa/unit/data/SimplePDF.pdf"));
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
@@ -170,7 +170,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
     auto pPdfiumLibrary = vcl::pdf::PDFiumLibrary::get();
 
     mxComponent
-        = loadFromDesktop(m_directories.getURLFromSrc("sd/qa/unit/data/PdfWithAnnotation.pdf"));
+        = loadFromDesktop(m_directories.getURLFromSrc(u"sd/qa/unit/data/PdfWithAnnotation.pdf"));
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);

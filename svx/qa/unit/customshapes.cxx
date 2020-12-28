@@ -90,29 +90,32 @@ sal_uInt8 CustomshapesTest::countShapes()
     return xDrawPage->getCount();
 }
 
-void lcl_AssertRectEqualWithTolerance(const OString& sInfo, const tools::Rectangle& rExpected,
+void lcl_AssertRectEqualWithTolerance(std::string_view sInfo, const tools::Rectangle& rExpected,
                                       const tools::Rectangle& rActual, const sal_Int32 nTolerance)
 {
     // Left
-    OString sMsg = sInfo + " Left expected " + OString::number(rExpected.Left()) + " actual "
-                   + OString::number(rActual.Left()) + " Tolerance " + OString::number(nTolerance);
+    OString sMsg = OString::Concat(sInfo) + " Left expected " + OString::number(rExpected.Left())
+                   + " actual " + OString::number(rActual.Left()) + " Tolerance "
+                   + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
                            std::abs(rExpected.Left() - rActual.Left()) <= nTolerance);
 
     // Top
-    sMsg = sInfo + " Top expected " + OString::number(rExpected.Top()) + " actual "
+    sMsg = OString::Concat(sInfo) + " Top expected " + OString::number(rExpected.Top()) + " actual "
            + OString::number(rActual.Top()) + " Tolerance " + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.Top() - rActual.Top()) <= nTolerance);
 
     // Width
-    sMsg = sInfo + " Width expected " + OString::number(rExpected.GetWidth()) + " actual "
-           + OString::number(rActual.GetWidth()) + " Tolerance " + OString::number(nTolerance);
+    sMsg = OString::Concat(sInfo) + " Width expected " + OString::number(rExpected.GetWidth())
+           + " actual " + OString::number(rActual.GetWidth()) + " Tolerance "
+           + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
                            std::abs(rExpected.GetWidth() - rActual.GetWidth()) <= nTolerance);
 
     // Height
-    sMsg = sInfo + " Height expected " + OString::number(rExpected.GetHeight()) + " actual "
-           + OString::number(rActual.GetHeight()) + " Tolerance " + OString::number(nTolerance);
+    sMsg = OString::Concat(sInfo) + " Height expected " + OString::number(rExpected.GetHeight())
+           + " actual " + OString::number(rActual.GetHeight()) + " Tolerance "
+           + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
                            std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
 }

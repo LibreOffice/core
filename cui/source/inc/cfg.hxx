@@ -34,6 +34,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <memory>
+#include <string_view>
 #include <vector>
 
 #include "cfgutil.hxx"
@@ -446,7 +447,7 @@ protected:
     int                 AppendEntry(SvxConfigEntry* pNewEntryData,
                                     int nTarget);
 
-    void                AddSubMenusToUI(    const OUString& rBaseTitle,
+    void                AddSubMenusToUI(    std::u16string_view rBaseTitle,
                                         SvxConfigEntry const * pParentData );
 
     void                InsertEntryIntoUI(SvxConfigEntry* pNewEntryData,

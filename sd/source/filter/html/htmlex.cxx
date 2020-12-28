@@ -2752,7 +2752,7 @@ OUString HtmlExport::ColorToHTMLString( Color aColor )
 OUString HtmlExport::CreateHTMLCircleArea( sal_uLong nRadius,
                                          sal_uLong nCenterX,
                                          sal_uLong nCenterY,
-                                         const OUString& rHRef )
+                                         std::u16string_view rHRef )
 {
     OUString aStr(
         "<area shape=\"circle\" alt=\"\" coords=\"" +
@@ -2801,7 +2801,7 @@ OUString HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPo
 
 // create area for a rectangle; we expect pixel coordinates
 OUString HtmlExport::CreateHTMLRectArea( const ::tools::Rectangle& rRect,
-                                       const OUString& rHRef )
+                                       std::u16string_view rHRef )
 {
     OUString aStr(
         "<area shape=\"rect\" alt=\"\" coords=\"" +
@@ -2836,7 +2836,7 @@ OUString HtmlExport::CreatePageURL( sal_uInt16 nPgNum )
         return maHTMLFiles[nPgNum];
 }
 
-bool HtmlExport::CopyScript( const OUString& rPath, const OUString& rSource, const OUString& rDest, bool bUnix /* = false */ )
+bool HtmlExport::CopyScript( std::u16string_view rPath, const OUString& rSource, const OUString& rDest, bool bUnix /* = false */ )
 {
     INetURLObject   aURL( SvtPathOptions().GetConfigPath() );
     OUStringBuffer aScriptBuf;
@@ -3026,7 +3026,7 @@ bool HtmlExport::CopyFile( const OUString& rSourceFile, const OUString& rDestFil
     }
 }
 
-bool HtmlExport::checkFileExists( Reference< css::ucb::XSimpleFileAccess3 > const & xFileAccess, OUString const & aFileName )
+bool HtmlExport::checkFileExists( Reference< css::ucb::XSimpleFileAccess3 > const & xFileAccess, std::u16string_view aFileName )
 {
     try
     {

@@ -37,6 +37,7 @@
 #include <vcl/svapp.hxx>
 
 #include <algorithm>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -289,18 +290,18 @@ class AddonsOptions_Impl : public ConfigItem
         void                 ReadNotebookBarMergeInstructions( NotebookBarMergingInstructions& rNotebookBarMergeMap );
         void                 ReadStatusbarMergeInstructions( MergeStatusbarInstructionContainer& rContainer );
 
-        void                 ReadMergeMenuData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu );
-        bool                 ReadMergeToolbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems );
-        bool                 ReadMergeNotebookBarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeNotebookBarItems );
-        bool                 ReadMergeStatusbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeStatusbar );
-        bool                 ReadMenuItem( const OUString& aMenuItemNodeName, Sequence< PropertyValue >& aMenuItem, bool bIgnoreSubMenu = false );
-        bool                 ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu );
+        void                 ReadMergeMenuData( std::u16string_view aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu );
+        bool                 ReadMergeToolbarData( std::u16string_view aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems );
+        bool                 ReadMergeNotebookBarData( std::u16string_view aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeNotebookBarItems );
+        bool                 ReadMergeStatusbarData( std::u16string_view aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeStatusbar );
+        bool                 ReadMenuItem( std::u16string_view aMenuItemNodeName, Sequence< PropertyValue >& aMenuItem, bool bIgnoreSubMenu = false );
+        bool                 ReadPopupMenu( std::u16string_view aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu );
         void                 AppendPopupMenu( Sequence< PropertyValue >& aTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu );
-        bool                 ReadToolBarItem( const OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem );
-        bool                 ReadNotebookBarItem( const OUString& aNotebookBarItemNodeName, Sequence< PropertyValue >& aNotebookBarItem );
+        bool                 ReadToolBarItem( std::u16string_view aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem );
+        bool                 ReadNotebookBarItem( std::u16string_view aNotebookBarItemNodeName, Sequence< PropertyValue >& aNotebookBarItem );
 
-        bool                 ReadStatusBarItem( const OUString& aStatusbarItemNodeName, Sequence< PropertyValue >& aStatusbarItem );
-        std::unique_ptr<ImageEntry> ReadImageData( const OUString& aImagesNodeName );
+        bool                 ReadStatusBarItem( std::u16string_view aStatusbarItemNodeName, Sequence< PropertyValue >& aStatusbarItem );
+        std::unique_ptr<ImageEntry> ReadImageData( std::u16string_view aImagesNodeName );
         void                 ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId );
         BitmapEx             ReadImageFromURL( const OUString& aURL );
         bool                 HasAssociatedImages( const OUString& aURL );
@@ -309,13 +310,16 @@ class AddonsOptions_Impl : public ConfigItem
         void                 ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenu );
         OUString             GeneratePrefixURL();
 
-        Sequence< OUString > GetPropertyNamesMenuItem( const OUString& aPropertyRootNode ) const;
-        Sequence< OUString > GetPropertyNamesPopupMenu( const OUString& aPropertyRootNode ) const;
-        Sequence< OUString > GetPropertyNamesToolBarItem( const OUString& aPropertyRootNode ) const;
-        Sequence< OUString > GetPropertyNamesNotebookBarItem( const OUString& aPropertyRootNode ) const;
+        Sequence< OUString > GetPropertyNamesMenuItem( std::u16string_view aPropertyRootNode )
+            const;
+        Sequence< OUString > GetPropertyNamesPopupMenu( std::u16string_view aPropertyRootNode )
+            const;
+        Sequence< OUString > GetPropertyNamesToolBarItem( std::u16string_view aPropertyRootNode )
+            const;
+        Sequence< OUString > GetPropertyNamesNotebookBarItem( std::u16string_view aPropertyRootNode ) const;
 
-        Sequence< OUString > GetPropertyNamesStatusbarItem( const OUString& aPropertyRootNode ) const;
-        Sequence< OUString > GetPropertyNamesImages( const OUString& aPropertyRootNode ) const;
+        Sequence< OUString > GetPropertyNamesStatusbarItem( std::u16string_view aPropertyRootNode ) const;
+        Sequence< OUString > GetPropertyNamesImages( std::u16string_view aPropertyRootNode ) const;
         bool                 CreateImageFromSequence( BitmapEx& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const;
 
         DECL_LINK(NotifyEvent, void*, void);
@@ -991,7 +995,7 @@ void AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContaine
     }
 }
 
-void AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu )
+void AddonsOptions_Impl::ReadMergeMenuData( std::u16string_view aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu )
 {
     OUString aMergeMenuBaseNode( aMergeAddonInstructionBase+m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MENUITEMS ] );
 
@@ -1073,7 +1077,7 @@ void AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstruction
     }
 }
 
-bool AddonsOptions_Impl::ReadMergeToolbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems )
+bool AddonsOptions_Impl::ReadMergeToolbarData( std::u16string_view aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems )
 {
     OUString aMergeToolbarBaseNode = aMergeAddonInstructionBase +
         m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBARITEMS ];
@@ -1154,7 +1158,7 @@ void AddonsOptions_Impl::ReadNotebookBarMergeInstructions(
 }
 
 bool AddonsOptions_Impl::ReadMergeNotebookBarData(
-    const OUString& aMergeAddonInstructionBase,
+    std::u16string_view aMergeAddonInstructionBase,
     Sequence<Sequence<PropertyValue>>& rMergeNotebookBarItems)
 {
     OUString aMergeNotebookBarBaseNode = aMergeAddonInstructionBase +
@@ -1225,7 +1229,7 @@ void AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstructi
 }
 
 bool AddonsOptions_Impl::ReadMergeStatusbarData(
-    const OUString& aMergeAddonInstructionBase,
+    std::u16string_view aMergeAddonInstructionBase,
     Sequence< Sequence< PropertyValue > >& rMergeStatusbarItems )
 {
     sal_uInt32 nStatusbarItemCount = rMergeStatusbarItems.getLength();
@@ -1263,7 +1267,7 @@ bool AddonsOptions_Impl::ReadMergeStatusbarData(
 }
 
 bool AddonsOptions_Impl::ReadStatusBarItem(
-    const OUString& aStatusarItemNodeName,
+    std::u16string_view aStatusarItemNodeName,
     Sequence< PropertyValue >& aStatusbarItem )
 {
     bool bResult( false );
@@ -1294,7 +1298,7 @@ bool AddonsOptions_Impl::ReadStatusBarItem(
     return bResult;
 }
 
-bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< PropertyValue >& aMenuItem, bool bIgnoreSubMenu )
+bool AddonsOptions_Impl::ReadMenuItem( std::u16string_view aMenuNodeName, Sequence< PropertyValue >& aMenuItem, bool bIgnoreSubMenu )
 {
     bool             bResult = false;
     OUString         aStrValue;
@@ -1364,7 +1368,7 @@ bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< 
     return bResult;
 }
 
-bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu )
+bool AddonsOptions_Impl::ReadPopupMenu( std::u16string_view aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu )
 {
     bool             bResult = false;
     OUString         aStrValue;
@@ -1417,7 +1421,7 @@ void AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTargetPopu
     }
 }
 
-bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem )
+bool AddonsOptions_Impl::ReadToolBarItem( std::u16string_view aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem )
 {
     bool             bResult = false;
     OUString         aURL;
@@ -1470,7 +1474,7 @@ bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, 
     return bResult;
 }
 
-bool AddonsOptions_Impl::ReadNotebookBarItem( const OUString& aNotebookBarItemNodeName, Sequence< PropertyValue >& aNotebookBarItem )
+bool AddonsOptions_Impl::ReadNotebookBarItem( std::u16string_view aNotebookBarItemNodeName, Sequence< PropertyValue >& aNotebookBarItem )
 {
     bool             bResult = false;
     OUString         aURL;
@@ -1616,7 +1620,7 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUS
     m_aImageManager.emplace( aURL, aImageEntry );
 }
 
-std::unique_ptr<AddonsOptions_Impl::ImageEntry> AddonsOptions_Impl::ReadImageData( const OUString& aImagesNodeName )
+std::unique_ptr<AddonsOptions_Impl::ImageEntry> AddonsOptions_Impl::ReadImageData( std::u16string_view aImagesNodeName )
 {
     Sequence< OUString > aImageDataNodeNames = GetPropertyNamesImages( aImagesNodeName );
     Sequence< Any >      aPropertyData;
@@ -1683,7 +1687,7 @@ bool AddonsOptions_Impl::CreateImageFromSequence( BitmapEx& rImage, Sequence< sa
     return bResult;
 }
 
-Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesMenuItem( const OUString& aPropertyRootNode ) const
+Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesMenuItem( std::u16string_view aPropertyRootNode ) const
 {
     Sequence< OUString > lResult( PROPERTYCOUNT_MENUITEM );
 
@@ -1698,7 +1702,7 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesMenuItem( const OUStrin
     return lResult;
 }
 
-Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesPopupMenu( const OUString& aPropertyRootNode ) const
+Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesPopupMenu( std::u16string_view aPropertyRootNode ) const
 {
     // The URL is automatically set and not read from the configuration.
     Sequence< OUString > lResult( PROPERTYCOUNT_POPUPMENU-1 );
@@ -1711,7 +1715,7 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesPopupMenu( const OUStri
     return lResult;
 }
 
-Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesToolBarItem( const OUString& aPropertyRootNode ) const
+Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesToolBarItem( std::u16string_view aPropertyRootNode ) const
 {
     Sequence< OUString > lResult( PROPERTYCOUNT_TOOLBARITEM );
 
@@ -1727,7 +1731,7 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesToolBarItem( const OUSt
     return lResult;
 }
 
-Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesNotebookBarItem( const OUString& aPropertyRootNode ) const
+Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesNotebookBarItem( std::u16string_view aPropertyRootNode ) const
 {
     Sequence< OUString > lResult( PROPERTYCOUNT_NOTEBOOKBARITEM );
 
@@ -1745,7 +1749,7 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesNotebookBarItem( const 
 }
 
 Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesStatusbarItem(
-    const OUString& aPropertyRootNode ) const
+    std::u16string_view aPropertyRootNode ) const
 {
     Sequence< OUString > lResult( PROPERTYCOUNT_STATUSBARITEM );
 
@@ -1761,7 +1765,7 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesStatusbarItem(
     return lResult;
 }
 
-Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesImages( const OUString& aPropertyRootNode ) const
+Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesImages( std::u16string_view aPropertyRootNode ) const
 {
     Sequence< OUString > lResult( PROPERTYCOUNT_IMAGES );
 

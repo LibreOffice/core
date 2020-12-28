@@ -946,12 +946,12 @@ VclPtr<Window> getSidebarWindow()
 
 // Could be anonymous in principle, but for the unit testing purposes, we
 // declare it in init.hxx.
-OUString desktop::extractParameter(OUString& rOptions, const OUString& rName)
+OUString desktop::extractParameter(OUString& rOptions, std::u16string_view rName)
 {
     OUString aValue;
 
-    OUString aNameEquals(rName + "=");
-    OUString aCommaNameEquals("," + rName + "=");
+    OUString aNameEquals(OUString::Concat(rName) + "=");
+    OUString aCommaNameEquals(OUString::Concat(",") + rName + "=");
 
     int nIndex = -1;
     if (rOptions.startsWith(aNameEquals))
@@ -2212,7 +2212,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         // 'Language=...' is an option that LOK consumes by itself, and does
         // not pass it as a parameter to the filter
         OUString aOptions = getUString(pOptions);
-        const OUString aLanguage = extractParameter(aOptions, "Language");
+        const OUString aLanguage = extractParameter(aOptions, u"Language");
         bool isValidLangTag = LanguageTag::isValidBcp47(aLanguage, nullptr);
 
         if (!aLanguage.isEmpty() && isValidLangTag)
@@ -2230,7 +2230,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             SvNumberFormatter::resetTheCurrencyTable();
         }
 
-        const OUString aDeviceFormFactor = extractParameter(aOptions, "DeviceFormFactor");
+        const OUString aDeviceFormFactor = extractParameter(aOptions, u"DeviceFormFactor");
         SfxLokHelper::setDeviceFormFactor(aDeviceFormFactor);
 
         uno::Sequence<css::beans::PropertyValue> aFilterOptions(3);
@@ -5128,7 +5128,7 @@ static int doc_createViewWithOptions(LibreOfficeKitDocument* pThis,
     SetLastExceptionMsg();
 
     OUString aOptions = getUString(pOptions);
-    const OUString aLanguage = extractParameter(aOptions, "Language");
+    const OUString aLanguage = extractParameter(aOptions, u"Language");
 
     if (!aLanguage.isEmpty())
     {
@@ -5137,7 +5137,7 @@ static int doc_createViewWithOptions(LibreOfficeKitDocument* pThis,
         comphelper::LibreOfficeKit::setLocale(LanguageTag(aLanguage));
     }
 
-    const OUString aDeviceFormFactor = extractParameter(aOptions, "DeviceFormFactor");
+    const OUString aDeviceFormFactor = extractParameter(aOptions, u"DeviceFormFactor");
     SfxLokHelper::setDeviceFormFactor(aDeviceFormFactor);
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
@@ -6028,9 +6028,9 @@ public:
     }
 };
 
-static void activateNotebookbar(const OUString& rApp)
+static void activateNotebookbar(std::u16string_view rApp)
 {
-    OUString aPath = "org.openoffice.Office.UI.ToolbarMode/Applications/" + rApp;
+    OUString aPath = OUString::Concat("org.openoffice.Office.UI.ToolbarMode/Applications/") + rApp;
 
     const utl::OConfigurationTreeRoot aAppNode(xContext, aPath, true);
 
@@ -6354,9 +6354,9 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
     if (bNotebookbar)
     {
-        activateNotebookbar("Writer");
-        activateNotebookbar("Calc");
-        activateNotebookbar("Impress");
+        activateNotebookbar(u"Writer");
+        activateNotebookbar(u"Calc");
+        activateNotebookbar(u"Impress");
     }
 
     return bInitialized;

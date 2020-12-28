@@ -613,7 +613,7 @@ ScDocShellRef ScBootstrapFixture::load(
 }
 
 ScDocShellRef ScBootstrapFixture::loadDoc(
-    const OUString& rFileName, sal_Int32 nFormat, bool bReadWrite )
+    std::u16string_view rFileName, sal_Int32 nFormat, bool bReadWrite )
 {
     OUString aFileExtension(aFileFormats[nFormat].pName, strlen(aFileFormats[nFormat].pName), RTL_TEXTENCODING_UTF8 );
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
@@ -641,7 +641,7 @@ OUString EnsureSeparator(const OUStringBuffer& rFilePath)
 }
 
 void ScBootstrapFixture::createFileURL(
-    const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
+    std::u16string_view aFileBase, const OUString& aFileExtension, OUString& rFilePath)
 {
     // m_aBaseString and aFileBase may contain multiple segments, so use
     // GetNewAbsURL instead of insertName for them:

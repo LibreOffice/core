@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <uifactory/factoryconfiguration.hxx>
 #include <services.h>
 
@@ -41,9 +45,10 @@ using namespace com::sun::star::container;
 
 namespace framework
 {
-static OUString getHashKeyFromStrings( const OUString& aCommandURL, const OUString& aModuleName )
+static OUString getHashKeyFromStrings(
+    std::u16string_view aCommandURL, std::u16string_view aModuleName )
 {
-    return aCommandURL + "-" + aModuleName;
+    return OUString::Concat(aCommandURL) + "-" + aModuleName;
 }
 
 //  XInterface, XTypeProvider
@@ -68,17 +73,18 @@ ConfigurationAccess_ControllerFactory::~ConfigurationAccess_ControllerFactory()
         xContainer->removeContainerListener(m_xConfigAccessListener);
 }
 
-OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule( const OUString& rCommandURL, const OUString& rModule ) const
+OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule( std::u16string_view rCommandURL, std::u16string_view rModule ) const
 {
     osl::MutexGuard g(m_mutex);
     MenuControllerMap::const_iterator pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, rModule ));
 
     if ( pIter != m_aMenuControllerMap.end() )
         return pIter->second.m_aImplementationName;
-    else if ( !rModule.isEmpty() )
+    else if ( !rModule.empty() )
     {
         // Try to detect if we have a generic popup menu controller
-        pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, OUString() ));
+        pIter = m_aMenuControllerMap.find(
+            getHashKeyFromStrings( rCommandURL, std::u16string_view() ));
 
         if ( pIter != m_aMenuControllerMap.end() )
             return pIter->second.m_aImplementationName;
@@ -86,7 +92,7 @@ OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule( con
 
     return OUString();
 }
-OUString ConfigurationAccess_ControllerFactory::getValueFromCommandModule( const OUString& rCommandURL, const OUString& rModule ) const
+OUString ConfigurationAccess_ControllerFactory::getValueFromCommandModule( std::u16string_view rCommandURL, std::u16string_view rModule ) const
 {
     osl::MutexGuard g(m_mutex);
 
@@ -94,10 +100,11 @@ OUString ConfigurationAccess_ControllerFactory::getValueFromCommandModule( const
 
     if ( pIter != m_aMenuControllerMap.end() )
         return pIter->second.m_aValue;
-    else if ( !rModule.isEmpty() )
+    else if ( !rModule.empty() )
     {
         // Try to detect if we have a generic popup menu controller
-        pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, OUString() ));
+        pIter = m_aMenuControllerMap.find(
+            getHashKeyFromStrings( rCommandURL, std::u16string_view() ));
 
         if ( pIter != m_aMenuControllerMap.end() )
             return pIter->second.m_aValue;
@@ -107,8 +114,8 @@ OUString ConfigurationAccess_ControllerFactory::getValueFromCommandModule( const
 }
 
 void ConfigurationAccess_ControllerFactory::addServiceToCommandModule(
-    const OUString& rCommandURL,
-    const OUString& rModule,
+    std::u16string_view rCommandURL,
+    std::u16string_view rModule,
     const OUString& rServiceSpecifier )
 {
     osl::MutexGuard g(m_mutex);
@@ -118,8 +125,8 @@ void ConfigurationAccess_ControllerFactory::addServiceToCommandModule(
 }
 
 void ConfigurationAccess_ControllerFactory::removeServiceFromCommandModule(
-    const OUString& rCommandURL,
-    const OUString& rModule )
+    std::u16string_view rCommandURL,
+    std::u16string_view rModule )
 {
     osl::MutexGuard g(m_mutex);
 

@@ -15,6 +15,8 @@
 #include <rtl/ustring.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/long.hxx>
+
+#include <string_view>
 #include <vector>
 
 namespace com::sun::star::io { class XInputStream; }
@@ -49,7 +51,8 @@ public:
     /**
       Returns URL for a font file for the given font, or empty if it does not exist.
     */
-    static OUString fontFileUrl( const OUString& familyName, FontFamily family, FontItalic italic,
+    static OUString fontFileUrl(
+        std::u16string_view familyName, FontFamily family, FontItalic italic,
         FontWeight weight, FontPitch pitch, FontRights rights );
 
     /**

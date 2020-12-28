@@ -25,6 +25,7 @@
 #include <vcl/settings.hxx>
 #include <map>
 #include <memory>
+#include <string_view>
 
 class SvNumberFormatter;
 
@@ -64,7 +65,7 @@ namespace validation
     public:
         NumberValidator( const sal_Unicode _cThSep, const sal_Unicode _cDecSep );
 
-        bool isValidNumericFragment( const OUString& _rText );
+        bool isValidNumericFragment( std::u16string_view _rText );
 
     private:
         bool implValidateNormalized( const OUString& _rText );

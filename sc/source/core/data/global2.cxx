@@ -318,10 +318,10 @@ OUString ScGlobal::GetAbsDocName( const OUString& rFileName,
     return aAbsName;
 }
 
-OUString ScGlobal::GetDocTabName( const OUString& rFileName,
-                                const OUString& rTabName )
+OUString ScGlobal::GetDocTabName( std::u16string_view rFileName,
+                                std::u16string_view rTabName )
 {
-    OUString  aDocTab = "'" + rFileName;
+    OUString  aDocTab = OUString::Concat("'") + rFileName;
     sal_Int32 nPos = 1;
     while( (nPos = aDocTab.indexOf( '\'', nPos )) != -1 )
     {   // escape Quotes

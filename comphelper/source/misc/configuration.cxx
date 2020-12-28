@@ -11,6 +11,7 @@
 
 #include <cassert>
 #include <memory>
+#include <string_view>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/configuration/ReadOnlyAccess.hpp>
@@ -53,14 +54,14 @@ OUString getDefaultLocale(
         getLocale()).getBcp47(false);
 }
 
-OUString extendLocalizedPath(OUString const & path, OUString const & locale) {
+OUString extendLocalizedPath(std::u16string_view path, OUString const & locale) {
     SAL_WARN_IF(
         locale.match("*"), "comphelper",
         "Locale \"" << locale << "\" starts with \"*\"");
     assert(locale.indexOf('&') == -1);
     assert(locale.indexOf('"') == -1);
     assert(locale.indexOf('\'') == -1);
-    return path + "/['*" + locale + "']";
+    return OUString::Concat(path) + "/['*" + locale + "']";
 }
 
 }
@@ -145,7 +146,7 @@ void comphelper::detail::ConfigurationWrapper::setPropertyValue(
 
 css::uno::Any
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(
-    OUString const & path) const
+    std::u16string_view path) const
 {
     return access_->getByHierarchicalName(
         extendLocalizedPath(path, getDefaultLocale(context_)));

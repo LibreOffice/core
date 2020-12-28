@@ -58,6 +58,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
 #include <memory>
+#include <string_view>
 
 using namespace ::com::sun::star;
 
@@ -171,8 +172,8 @@ public:
     OUString            GetFile() const;
     OUString            GetSubRegion() const;
     void                SetFile(OUString const& rFile);
-    void                SetFilter(OUString const& rFilter);
-    void                SetSubRegion(OUString const& rSubRegion);
+    void                SetFilter(std::u16string_view rFilter);
+    void                SetSubRegion(std::u16string_view rSubRegion);
 
     bool                IsContent() const { return m_bContent; }
     void                SetContent(bool const bValue) { m_bContent = bValue; }
@@ -235,7 +236,7 @@ void SectRepr::SetFile( const OUString& rFile )
     }
 }
 
-void SectRepr::SetFilter( const OUString& rFilter )
+void SectRepr::SetFilter( std::u16string_view rFilter )
 {
     OUString sNewFile;
     const OUString sOldFileName( m_SectionData.GetLinkFileName() );
@@ -257,7 +258,7 @@ void SectRepr::SetFilter( const OUString& rFilter )
     }
 }
 
-void SectRepr::SetSubRegion(const OUString& rSubRegion)
+void SectRepr::SetSubRegion(std::u16string_view rSubRegion)
 {
     OUString sNewFile;
     sal_Int32 n(0);
@@ -265,13 +266,13 @@ void SectRepr::SetSubRegion(const OUString& rSubRegion)
     const OUString sOldFileName( sLinkFileName.getToken( 0, sfx2::cTokenSeparator, n ) );
     const OUString sFilter( sLinkFileName.getToken( 0, sfx2::cTokenSeparator, n ) );
 
-    if( !rSubRegion.isEmpty() || !sOldFileName.isEmpty() )
+    if( !rSubRegion.empty() || !sOldFileName.isEmpty() )
         sNewFile = sOldFileName + OUStringChar(sfx2::cTokenSeparator) +
                    sFilter + OUStringChar(sfx2::cTokenSeparator) + rSubRegion;
 
     m_SectionData.SetLinkFileName( sNewFile );
 
-    if( !rSubRegion.isEmpty() || !sOldFileName.isEmpty() )
+    if( !rSubRegion.empty() || !sOldFileName.isEmpty() )
     {
         m_SectionData.SetType( SectionType::FileLink );
     }
@@ -942,7 +943,7 @@ IMPL_LINK(SwEditRegionDlg, UseFileHdl, weld::ToggleButton&, rButton, void)
             else
             {
                 pSectRepr->SetFile(OUString());
-                pSectRepr->SetSubRegion(OUString());
+                pSectRepr->SetSubRegion(std::u16string_view());
                 pSectRepr->GetSectionData().SetLinkFilePassword(OUString());
             }
             return false;

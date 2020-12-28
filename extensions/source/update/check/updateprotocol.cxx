@@ -101,10 +101,10 @@ checkForUpdates(
     const uno::Reference< uno::XComponentContext > & rxContext,
     const uno::Reference< task::XInteractionHandler > & rxInteractionHandler,
     const uno::Reference< deployment::XUpdateInformationProvider >& rUpdateInfoProvider,
-    const OUString &rOS,
-    const OUString &rArch,
+    std::u16string_view rOS,
+    std::u16string_view rArch,
     const uno::Sequence< OUString > &rRepositoryList,
-    const OUString &rGitID,
+    std::u16string_view rGitID,
     const OUString &rInstallSetID )
 {
     if( !rxContext.is() )
@@ -129,7 +129,7 @@ checkForUpdates(
             return false; // something went wrong ..
 
         OUString aXPathExpression =
-            "/child::inst:description[inst:os=\'"+
+            OUString::Concat("/child::inst:description[inst:os=\'")+
              rOS +
             "\' and inst:arch=\'"+
              rArch +

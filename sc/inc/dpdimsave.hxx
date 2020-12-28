@@ -24,6 +24,8 @@
 
 #include <vector>
 #include <map>
+#include <string_view>
+
 #include "dpitemdata.hxx"
 #include "dpnumgroupinfo.hxx"
 #include "scdllapi.h"
@@ -109,7 +111,7 @@ public:
     sal_Int32   GetDatePart() const             { return nDatePart; }
     const ScDPNumGroupInfo& GetDateInfo() const { return aDateInfo; }
 
-    OUString CreateGroupName( const OUString& rPrefix );
+    OUString CreateGroupName( std::u16string_view rPrefix );
     const ScDPSaveGroupItem* GetNamedGroup( const OUString& rGroupName ) const;
     ScDPSaveGroupItem* GetNamedGroupAcc( const OUString& rGroupName );
     void    RemoveFromGroups( const OUString& rItemName );

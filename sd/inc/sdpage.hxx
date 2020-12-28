@@ -25,6 +25,7 @@
 #include <com/sun/star/office/XAnnotation.hpp>
 
 #include <memory>
+#include <string_view>
 #include <vector>
 #include <editeng/flditem.hxx>
 #include <svx/svdobj.hxx>
@@ -268,7 +269,7 @@ public:
     const OUString& GetName() const;
     OUString const & GetRealName() const { return FmFormPage::GetName(); };
 
-    void            SetPresentationLayout(const OUString& rLayoutName,
+    void            SetPresentationLayout(std::u16string_view rLayoutName,
                                   bool bReplaceStyleSheets = true,
                                   bool bSetMasterPage = true,
                                   bool bReverseOrder = false);

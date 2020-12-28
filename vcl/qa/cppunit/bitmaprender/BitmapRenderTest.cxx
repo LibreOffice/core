@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/virdev.hxx>
@@ -25,7 +29,7 @@ constexpr OUStringLiteral gaDataUrl = u"/vcl/qa/cppunit/bitmaprender/data/";
 
 class BitmapRenderTest : public test::BootstrapFixture
 {
-    OUString getFullUrl(const OUString& sFileName)
+    OUString getFullUrl(std::u16string_view sFileName)
     {
         return m_directories.getURLFromSrc(gaDataUrl) + sFileName;
     }
@@ -62,7 +66,7 @@ void BitmapRenderTest::testTdf104141()
     // Load animated GIF and draw it on green background
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic;
-    const OUString aURL(getFullUrl("tdf104141.gif"));
+    const OUString aURL(getFullUrl(u"tdf104141.gif"));
     SvFileStream aFileStream(aURL, StreamMode::READ);
     ErrCode bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
@@ -85,7 +89,7 @@ void BitmapRenderTest::testTdf113918()
 
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic;
-    const OUString aURL(getFullUrl("tdf113918.png"));
+    const OUString aURL(getFullUrl(u"tdf113918.png"));
     SvFileStream aFileStream(aURL, StreamMode::READ);
     ErrCode bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
@@ -128,7 +132,7 @@ void BitmapRenderTest::testDrawAlphaBitmapEx()
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(1, 1)));
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(2, 2)));
 
-    SvFileStream aFileStream(getFullUrl("ImageRGBA.png"), StreamMode::READ);
+    SvFileStream aFileStream(getFullUrl(u"ImageRGBA.png"), StreamMode::READ);
 
     vcl::PngImageReader aPngReader(aFileStream);
     BitmapEx aBitmapEx;
@@ -238,7 +242,7 @@ void BitmapRenderTest::testTdf116888()
     // didn't properly release mpUserBuffer after ReadTexture() failure.
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic;
-    const OUString aURL(getFullUrl("tdf116888.gif"));
+    const OUString aURL(getFullUrl(u"tdf116888.gif"));
     SvFileStream aFileStream(aURL, StreamMode::READ);
     ErrCode bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);

@@ -28,6 +28,7 @@
 
 #include <unordered_map>
 #include <memory>
+#include <string_view>
 #include <vector>
 
 class SwDoc;
@@ -152,12 +153,12 @@ class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
         void rehash();
     public:
         SwPoolFormatList() {}
-        void Append( char cChar, const OUString& rStr );
+        void Append( char cChar, std::u16string_view rStr );
         void clear() { maImpl.clear(); maUnique.clear(); }
         size_t size() { return maImpl.size(); }
         bool empty() { return maImpl.empty(); }
-        sal_uInt32 FindName(SfxStyleFamily eFam, const OUString &rName);
-        void RemoveName(SfxStyleFamily eFam, const OUString &rName);
+        sal_uInt32 FindName(SfxStyleFamily eFam, std::u16string_view rName);
+        void RemoveName(SfxStyleFamily eFam, std::u16string_view rName);
         const OUString &operator[](sal_uInt32 nIdx) { return maImpl[ nIdx ]; }
     };
 

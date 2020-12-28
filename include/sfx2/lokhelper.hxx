@@ -81,14 +81,14 @@ public:
     static void forEachOtherView(ViewShellType* pThisViewShell, FunctionType f);
 
     /// Invoke the LOK callback of all other views showing the same document as pThisView, with a payload of rKey-rPayload.
-    static void notifyOtherViews(const SfxViewShell* pThisView, int nType, const OString& rKey,
+    static void notifyOtherViews(const SfxViewShell* pThisView, int nType, std::string_view rKey,
                                  const OString& rPayload);
     /// Invoke the LOK callback of all views except pThisView, with a JSON payload created from the given property tree.
     static void notifyOtherViews(const SfxViewShell* pThisView, int nType,
                                  const boost::property_tree::ptree& rTree);
     /// Same as notifyOtherViews(), but works on a selected "other" view, not on all of them.
     static void notifyOtherView(const SfxViewShell* pThisView, SfxViewShell const* pOtherView,
-                                int nType, const OString& rKey, const OString& rPayload);
+                                int nType, std::string_view rKey, const OString& rPayload);
     /// Same as notifyOtherViews(), the property-tree version, but works on a selected "other" view, not on all of them.
     static void notifyOtherView(const SfxViewShell* pThisView, SfxViewShell const* pOtherView,
                                 int nType, const boost::property_tree::ptree& rTree);

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "fileview.hxx"
 #include "iodlgimp.hxx"
 #include <tools/debug.hxx>
@@ -136,9 +140,9 @@ void SvtExpFileDlg_Impl::SetStandardDir( const OUString& _rDir )
 }
 
 namespace {
-    OUString lcl_DecoratedFilter( const OUString& _rOriginalFilter )
+    OUString lcl_DecoratedFilter( std::u16string_view _rOriginalFilter )
     {
-        return "<" + _rOriginalFilter + ">";
+        return "<" + OUString::Concat(_rOriginalFilter) + ">";
     }
 }
 

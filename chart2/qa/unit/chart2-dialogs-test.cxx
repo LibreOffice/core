@@ -51,7 +51,7 @@ VclPtr<VclAbstractDialog> Chart2DialogsTest::createDialogByID(sal_uInt32 /*nID*/
 void Chart2DialogsTest::openAnyDialog()
 {
     /// process input file containing the UXMLDescriptions of the dialogs to dump
-    processDialogBatchFile("chart2/qa/unit/data/chart2-dialogs-test.txt");
+    processDialogBatchFile(u"chart2/qa/unit/data/chart2-dialogs-test.txt");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2DialogsTest);

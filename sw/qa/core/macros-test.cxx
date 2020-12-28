@@ -8,6 +8,9 @@
  */
 
 #include <sal/config.h>
+
+#include <string_view>
+
 #include <unotest/macros_test.hxx>
 #include <test/bootstrapfixture.hxx>
 
@@ -61,7 +64,7 @@ class SwMacrosTest : public test::BootstrapFixture, public unotest::MacrosTest
 public:
     SwMacrosTest();
 
-    void createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath);
+    void createFileURL(std::u16string_view aFileBase, std::u16string_view aFileExtension, OUString& rFilePath);
 
     virtual void setUp() override;
     virtual void tearDown() override;
@@ -91,7 +94,7 @@ private:
     OUString m_aBaseString;
 };
 
-void SwMacrosTest::createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
+void SwMacrosTest::createFileURL(std::u16string_view aFileBase, std::u16string_view aFileExtension, OUString& rFilePath)
 {
     rFilePath = m_directories.getSrcRootURL() + m_aBaseString + "/" + aFileExtension + "/"
         + aFileBase + aFileExtension;
@@ -108,7 +111,7 @@ void SwMacrosTest::testVba()
     for ( size_t  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
     {
         OUString aFileName;
-        createFileURL(testInfo[i].sFileBaseName, "doc", aFileName);
+        createFileURL(testInfo[i].sFileBaseName, u"doc", aFileName);
         uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
         OUString sMsg = "Failed to load " + aFileName;
         CPPUNIT_ASSERT_MESSAGE( OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
@@ -203,7 +206,7 @@ void SwMacrosTest::testBookmarkDeleteTdf90816()
 void SwMacrosTest::testControlShapeGrouping()
 {
     OUString aFileName;
-    createFileURL("testControlShapeGrouping.", "odt", aFileName);
+    createFileURL(u"testControlShapeGrouping.", u"odt", aFileName);
     Reference< css::lang::XComponent > xComponent(
         loadFromDesktop(aFileName, "com.sun.star.text.TextDocument"));
     CPPUNIT_ASSERT(xComponent.is());
@@ -343,7 +346,7 @@ void SwMacrosTest::testFdo55289()
 void SwMacrosTest::testFdo68983()
 {
     OUString aFileName;
-    createFileURL("fdo68983.", "odt", aFileName);
+    createFileURL(u"fdo68983.", u"odt", aFileName);
     Reference< css::lang::XComponent > xComponent =
         loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
 

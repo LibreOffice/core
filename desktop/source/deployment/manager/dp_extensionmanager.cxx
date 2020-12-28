@@ -54,6 +54,7 @@
 #include <vector>
 #include <algorithm>
 #include <set>
+#include <string_view>
 
 namespace lang  = com::sun::star::lang;
 namespace task = com::sun::star::task;
@@ -566,7 +567,7 @@ bool ExtensionManager::doChecksForAddExtension(
         }
         //Prevent showing the license if requested.
         Reference<ucb::XCommandEnvironment> _xCmdEnv(xCmdEnv);
-        ExtensionProperties props(OUString(), properties, Reference<ucb::XCommandEnvironment>(), m_xContext);
+        ExtensionProperties props(std::u16string_view(), properties, Reference<ucb::XCommandEnvironment>(), m_xContext);
 
         dp_misc::DescriptionInfoset info(dp_misc::getDescriptionInfoset(xTmpExtension->getURL()));
         const ::std::optional<dp_misc::SimpleLicenseAttributes> licenseAttributes =

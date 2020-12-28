@@ -23,6 +23,7 @@
 #include <svtools/svparser.hxx>
 #include <svtools/htmltokn.h>
 
+#include <string_view>
 #include <vector>
 
 namespace com :: sun :: star :: uno { template <class interface_type> class Reference; }
@@ -184,7 +185,7 @@ protected:
 
     void FinishHeader() { bIsInHeader = false; }
 
-    void SetNamespace(const OUString& rNamespace);
+    void SetNamespace(std::u16string_view rNamespace);
 
 public:
     HTMLParser( SvStream& rIn, bool bReadNewDoc = true );

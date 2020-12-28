@@ -501,13 +501,13 @@ private:
     css::uno::Sequence<sal_Int8>   GetDataMultiPartEncoded(const css::uno::Reference< css::awt::XControl>& SubmitButton, const css::awt::MouseEvent& MouseEvt,
                                              OUString& rContentType);
 
-    void AppendComponent(HtmlSuccessfulObjList& rList, const css::uno::Reference< css::beans::XPropertySet>& xComponentSet, const OUString& rNamePrefix,
+    void AppendComponent(HtmlSuccessfulObjList& rList, const css::uno::Reference< css::beans::XPropertySet>& xComponentSet, std::u16string_view rNamePrefix,
                      const css::uno::Reference< css::awt::XControl>& rxSubmitButton, const css::awt::MouseEvent& MouseEvt);
 
     void FillSuccessfulList(HtmlSuccessfulObjList& rList, const css::uno::Reference< css::awt::XControl>& rxSubmitButton, const css::awt::MouseEvent& MouseEvt);
 
-    static void InsertTextPart(INetMIMEMessage& rParent, const OUString& rName, std::u16string_view rData);
-    static void InsertFilePart(INetMIMEMessage& rParent, const OUString& rName, const OUString& rFileName);
+    static void InsertTextPart(INetMIMEMessage& rParent, std::u16string_view rName, std::u16string_view rData);
+    static void InsertFilePart(INetMIMEMessage& rParent, std::u16string_view rName, const OUString& rFileName);
     static void Encode(OUString& rString);
 
     css::uno::Reference< css::sdbc::XConnection > getConnection();

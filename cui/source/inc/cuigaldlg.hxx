@@ -30,6 +30,8 @@
 #include <com/sun/star/media/XPlayer.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <svtools/dialogclosedlistener.hxx>
+
+#include <string_view>
 #include <vector>
 
 class GalleryTheme;
@@ -241,7 +243,7 @@ class TPGalleryThemeProperties : public SfxTabPage
 
     virtual void        Reset( const SfxItemSet* /*rSet*/ ) override {}
     virtual bool        FillItemSet( SfxItemSet* /*rSet*/ ) override { return true; }
-    static OUString     addExtension( const OUString&, const OUString& );
+    static OUString     addExtension( const OUString&, std::u16string_view );
     void                FillFilterList();
 
     void                SearchFiles();

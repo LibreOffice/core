@@ -38,7 +38,7 @@ public:
 
         // repositories that we will be checking
         m_aRepositoryList.realloc( 1 );
-        m_aRepositoryList[0] = m_directories.getURLFromSrc( "/extensions/qa/update/simple.xml" );
+        m_aRepositoryList[0] = m_directories.getURLFromSrc( u"/extensions/qa/update/simple.xml" );
     }
 
     virtual void tearDown() override
@@ -102,10 +102,10 @@ protected:
         rtl::Reference< UpdateCheck > aController( UpdateCheck::get() );
 
         if ( checkForUpdates( aInfo, m_xContext, aController->getInteractionHandler(), m_xProvider,
-                    "Linux",
-                    "x86",
+                    u"Linux",
+                    u"x86",
                     m_aRepositoryList,
-                    "111111-222222-333333-444444",
+                    u"111111-222222-333333-444444",
                     "InstallSetID" ) )
         {
             CPPUNIT_ASSERT_EQUAL( std::size_t(1), aInfo.Sources.size() );
@@ -122,10 +122,10 @@ protected:
         rtl::Reference< UpdateCheck > aController( UpdateCheck::get() );
 
         if ( checkForUpdates( aInfo, m_xContext, aController->getInteractionHandler(), m_xProvider,
-                    "Linux",
-                    "x86",
+                    u"Linux",
+                    u"x86",
                     m_aRepositoryList,
-                    "123456-abcdef-1a2b3c-4d5e6f",
+                    u"123456-abcdef-1a2b3c-4d5e6f",
                     "InstallSetID" ) )
         {
             CPPUNIT_ASSERT( aInfo.Sources.empty() );

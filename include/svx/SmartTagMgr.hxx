@@ -30,6 +30,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <string_view>
 
 namespace com::sun::star::uno {
     class XComponentContext;
@@ -103,7 +104,7 @@ private:
 
     /** Prepare configuration access.
     */
-    void PrepareConfiguration( const OUString& rConfigurationGroupName );
+    void PrepareConfiguration( std::u16string_view rConfigurationGroupName );
 
     /** Reads the configuration data.
     */
@@ -125,7 +126,7 @@ public:
     /** Triggers configuration reading, library loading and listener registration
         NOTE: MUST BE CALLED AFTER CONSTRUCTION!
     */
-    void Init( const OUString& rConfigurationGroupName );
+    void Init( std::u16string_view rConfigurationGroupName );
 
     /** Dispatches the recognize call to all installed smart tag recognizers
 

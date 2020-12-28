@@ -258,9 +258,9 @@ void XRMResParser::Execute( int nToken, char * pToken )
     }
 }
 
-OString XRMResParser::GetAttribute( const OString &rToken, const OString &rAttribute )
+OString XRMResParser::GetAttribute( const OString &rToken, std::string_view rAttribute )
 {
-    const OString sSearch{ " " + rAttribute + "=" };
+    const OString sSearch{ OString::Concat(" ") + rAttribute + "=" };
     OString sTmp{ rToken.replace('\t', ' ') };
     sal_Int32 nPos = sTmp.indexOf( sSearch );
 

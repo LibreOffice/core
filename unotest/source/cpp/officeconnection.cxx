@@ -49,7 +49,7 @@ void OfficeConnection::setUp() {
     OUString argSoffice;
     CPPUNIT_ASSERT(
         detail::getArgument(
-            "soffice",
+            u"soffice",
             &argSoffice));
     if (argSoffice.match("path:")) {
         desc = "pipe,name=" + osl::test::uniquePipeName("oootest");
@@ -62,7 +62,7 @@ void OfficeConnection::setUp() {
         OUString acceptArg("--accept=" + desc + ";urp");
         OUString argUser;
         CPPUNIT_ASSERT(
-            detail::getArgument("user", &argUser));
+            detail::getArgument(u"user", &argUser));
         OUString userArg("-env:UserInstallation=" + toAbsoluteFileUrl(argUser));
         OUString jreArg(
             "-env:UNO_JAVA_JFW_ENV_JREHOME=true");
@@ -72,7 +72,7 @@ void OfficeConnection::setUp() {
             jreArg.pData };
         rtl_uString ** envs = nullptr;
         OUString argEnv;
-        if (detail::getArgument("env", &argEnv))
+        if (detail::getArgument(u"env", &argEnv))
         {
             envs = &argEnv.pData;
         }

@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 
@@ -27,7 +31,7 @@ public:
     void setUp() override;
     void tearDown() override;
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
-    void load(const OUString& rURL);
+    void load(std::u16string_view rURL);
 };
 
 void XmloffStyleTest::setUp()
@@ -45,7 +49,7 @@ void XmloffStyleTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-void XmloffStyleTest::load(const OUString& rFileName)
+void XmloffStyleTest::load(std::u16string_view rFileName)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFileName;
     mxComponent = loadFromDesktop(aURL);
@@ -54,7 +58,7 @@ void XmloffStyleTest::load(const OUString& rFileName)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFillImageBase64)
 {
     // Load a flat ODG that has base64-encoded bitmap as a fill style.
-    load("fill-image-base64.fodg");
+    load(u"fill-image-base64.fodg");
     uno::Reference<lang::XMultiServiceFactory> xFactory(getComponent(), uno::UNO_QUERY);
     uno::Reference<container::XNameContainer> xBitmaps(
         xFactory->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY);

@@ -33,7 +33,7 @@ SwSmartTagMgr& SwSmartTagMgr::Get()
     if (!spTheSwSmartTagMgr)
     {
         spTheSwSmartTagMgr = new SwSmartTagMgr(SwDocShell::Factory().GetModuleName());
-        spTheSwSmartTagMgr->Init("Writer");
+        spTheSwSmartTagMgr->Init(u"Writer");
     }
     return *spTheSwSmartTagMgr;
 }

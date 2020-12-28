@@ -23,6 +23,7 @@
 #include "scqahelperdllapi.h"
 
 #include <string>
+#include <string_view>
 #include <sstream>
 
 #include <sal/types.h>
@@ -177,7 +178,8 @@ protected:
         const OUString& rTypeName, SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
         sal_uIntPtr nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = nullptr );
 
-    ScDocShellRef loadDoc(const OUString& rFileName, sal_Int32 nFormat, bool bReadWrite = false );
+    ScDocShellRef loadDoc(
+        std::u16string_view rFileName, sal_Int32 nFormat, bool bReadWrite = false );
 
 public:
     static const FileFormat* getFileFormats() { return aFileFormats; }
@@ -185,7 +187,7 @@ public:
     explicit ScBootstrapFixture( const OUString& rsBaseString );
     virtual ~ScBootstrapFixture() override;
 
-    void createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath);
+    void createFileURL(std::u16string_view aFileBase, const OUString& aFileExtension, OUString& rFilePath);
 
     void createCSVPath(const OUString& aFileBase, OUString& rCSVPath);
 

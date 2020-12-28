@@ -25,6 +25,7 @@
 #include <rtl/string.hxx>
 #include <vcl/glyphitem.hxx>
 
+#include <string_view>
 #include <vector>
 #include <unordered_map>
 
@@ -65,7 +66,7 @@ public:
     sal_Int32       GetFontID () const { return mnFontID;}
     static OString
     GetReencodedFontName (rtl_TextEncoding nEnc,
-                          const OString &rFontName);
+                          std::string_view rFontName);
 
     bool            IsVertical () const { return mbVertical;}
 

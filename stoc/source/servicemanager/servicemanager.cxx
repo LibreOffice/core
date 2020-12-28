@@ -51,6 +51,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <iterator>
+#include <string_view>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -1175,9 +1176,9 @@ private:
     Reference<XRegistryKey >        getRootKey();
     Reference<XInterface > loadWithImplementationName(
         const OUString & rImplName, Reference< XComponentContext > const & xContext );
-    Sequence<OUString>          getFromServiceName(const OUString& serviceName) const;
+    Sequence<OUString>          getFromServiceName(std::u16string_view serviceName) const;
     Reference<XInterface > loadWithServiceName(
-        const OUString & rImplName, Reference< XComponentContext > const & xContext );
+        std::u16string_view rImplName, Reference< XComponentContext > const & xContext );
     void                        fillAllNamesFromRegistry( HashSet_OWString & );
 
     bool                    m_searchedRegistry;
@@ -1287,9 +1288,9 @@ Reference<XInterface > ORegistryServiceManager::loadWithImplementationName(
  * Return all implementation out of the registry.
  */
 Sequence<OUString> ORegistryServiceManager::getFromServiceName(
-    const OUString& serviceName ) const
+    std::u16string_view serviceName ) const
 {
-    OUString buf = "/SERVICES/" + serviceName;
+    OUString buf = OUString::Concat("/SERVICES/") + serviceName;
     return retrieveAsciiValueList( m_xRegistry, buf );
 }
 
@@ -1297,7 +1298,7 @@ Sequence<OUString> ORegistryServiceManager::getFromServiceName(
  * Create a service provider from the registry
  */
 Reference<XInterface > ORegistryServiceManager::loadWithServiceName(
-    const OUString& serviceName, Reference< XComponentContext > const & xContext )
+    std::u16string_view serviceName, Reference< XComponentContext > const & xContext )
 {
     const Sequence<OUString> implEntries = getFromServiceName( serviceName );
     for (const auto& rEntry : implEntries)

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include "optsave.hxx"
@@ -44,7 +48,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace comphelper;
 
-#define CFG_PAGE_AND_GROUP          "General", "LoadSave"
+#define CFG_PAGE_AND_GROUP          u"General", u"LoadSave"
 
 
 struct SvxSaveTabPage_Impl
@@ -191,13 +195,13 @@ void SvxSaveTabPage::DetectHiddenControls()
 {
     SvtOptionsDialogOptions aOptionsDlgOpt;
 
-    if ( aOptionsDlgOpt.IsOptionHidden( "Backup", CFG_PAGE_AND_GROUP ) )
+    if ( aOptionsDlgOpt.IsOptionHidden( u"Backup", CFG_PAGE_AND_GROUP ) )
     {
         // hide controls of "Backup"
         m_xBackupCB->hide();
     }
 
-    if ( aOptionsDlgOpt.IsOptionHidden( "AutoSave", CFG_PAGE_AND_GROUP ) )
+    if ( aOptionsDlgOpt.IsOptionHidden( u"AutoSave", CFG_PAGE_AND_GROUP ) )
     {
         // hide controls of "AutoSave"
         m_xAutoSaveCB->hide();
@@ -205,7 +209,7 @@ void SvxSaveTabPage::DetectHiddenControls()
         m_xMinuteFT->hide();
     }
 
-    if ( aOptionsDlgOpt.IsOptionHidden( "UserAutoSave", CFG_PAGE_AND_GROUP ) )
+    if ( aOptionsDlgOpt.IsOptionHidden( u"UserAutoSave", CFG_PAGE_AND_GROUP ) )
     {
         // hide controls of "UserAutoSave"
         m_xUserAutoSaveCB->hide();
@@ -485,7 +489,7 @@ IMPL_LINK(SvxSaveTabPage, AutoClickHdl_Impl, weld::Button&, rBox, void)
     }
 }
 
-static OUString lcl_ExtracUIName(const Sequence<PropertyValue> &rProperties, const OUString& rExtension)
+static OUString lcl_ExtracUIName(const Sequence<PropertyValue> &rProperties, std::u16string_view rExtension)
 {
     OUString sName;
     const PropertyValue* pPropVal = rProperties.getConstArray();
@@ -498,7 +502,7 @@ static OUString lcl_ExtracUIName(const Sequence<PropertyValue> &rProperties, con
             OUString sUIName;
             if ( ( pPropVal->Value >>= sUIName ) && sUIName.getLength() )
             {
-                if (!rExtension.isEmpty())
+                if (!rExtension.empty())
                 {
                     return sUIName + " (" + rExtension + ")";
                 }

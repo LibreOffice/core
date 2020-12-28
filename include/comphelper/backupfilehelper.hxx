@@ -15,6 +15,7 @@
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
 #include <set>
+#include <string_view>
 #include <vector>
 
 namespace comphelper
@@ -189,21 +190,21 @@ namespace comphelper
         static const std::vector< OUString >& getCustomizationFileNames();
 
         // file push helpers
-        bool tryPush_Files(const std::set< OUString >& rDirs, const std::set< std::pair< OUString, OUString > >& rFiles, const OUString& rSourceURL, const OUString& rTargetURL);
-        bool tryPush_file(const OUString& rSourceURL, const OUString& rTargetURL, const OUString& rName, const OUString& rExt);
+        bool tryPush_Files(const std::set< OUString >& rDirs, const std::set< std::pair< OUString, OUString > >& rFiles, std::u16string_view rSourceURL, const OUString& rTargetURL);
+        bool tryPush_file(std::u16string_view rSourceURL, std::u16string_view rTargetURL, std::u16string_view rName, std::u16string_view rExt);
 
         // file pop possibilities helper
-        bool isPopPossible_files(const std::set< OUString >& rDirs, const std::set< std::pair< OUString, OUString > >& rFiles, const OUString& rSourceURL, const OUString& rTargetURL);
-        static bool isPopPossible_file(const OUString& rSourceURL, const OUString& rTargetURL, const OUString& rName, const OUString& rExt);
+        bool isPopPossible_files(const std::set< OUString >& rDirs, const std::set< std::pair< OUString, OUString > >& rFiles, std::u16string_view rSourceURL, std::u16string_view rTargetURL);
+        static bool isPopPossible_file(std::u16string_view rSourceURL, std::u16string_view rTargetURL, std::u16string_view rName, std::u16string_view rExt);
 
         // file pop helpers
-        bool tryPop_files(const std::set< OUString >& rDirs, const std::set< std::pair< OUString, OUString > >& rFiles, const OUString& rSourceURL, const OUString& rTargetURL);
-        bool tryPop_file(const OUString& rSourceURL, const OUString& rTargetURL, const OUString& rName, const OUString& rExt);
+        bool tryPop_files(const std::set< OUString >& rDirs, const std::set< std::pair< OUString, OUString > >& rFiles, std::u16string_view rSourceURL, const OUString& rTargetURL);
+        bool tryPop_file(std::u16string_view rSourceURL, std::u16string_view rTargetURL, std::u16string_view rName, std::u16string_view rExt);
 
         // ExtensionInfo helpers
-        bool tryPush_extensionInfo(const OUString& rTargetURL);
-        static bool isPopPossible_extensionInfo(const OUString& rTargetURL);
-        bool tryPop_extensionInfo(const OUString& rTargetURL);
+        bool tryPush_extensionInfo(std::u16string_view rTargetURL);
+        static bool isPopPossible_extensionInfo(std::u16string_view rTargetURL);
+        bool tryPop_extensionInfo(std::u16string_view rTargetURL);
 
         // FileDirInfo helpers
         void fillDirFileInfo();

@@ -83,6 +83,7 @@
 #include <algorithm>
 #include <math.h>
 #include <memory>
+#include <string_view>
 #include <unordered_map>
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
 #include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
@@ -4179,7 +4180,7 @@ class ModuleInvocationProxy : public WeakImplHelper< XInvocation, XComponent >
     ::comphelper::OInterfaceContainerHelper2 m_aListeners;
 
 public:
-    ModuleInvocationProxy( OUString const & aPrefix, SbxObjectRef const & xScopeObj );
+    ModuleInvocationProxy( std::u16string_view aPrefix, SbxObjectRef const & xScopeObj );
 
     // XInvocation
     virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() override;
@@ -4201,9 +4202,9 @@ public:
 
 }
 
-ModuleInvocationProxy::ModuleInvocationProxy( OUString const & aPrefix, SbxObjectRef const & xScopeObj )
+ModuleInvocationProxy::ModuleInvocationProxy( std::u16string_view  aPrefix, SbxObjectRef const & xScopeObj )
     : m_aMutex()
-    , m_aPrefix( aPrefix + "_" )
+    , m_aPrefix( OUString::Concat(aPrefix) + "_" )
     , m_xScopeObj( xScopeObj )
     , m_aListeners( m_aMutex )
 {
@@ -4381,7 +4382,8 @@ void SAL_CALL ModuleInvocationProxy::removeEventListener( const Reference< XEven
 
 
 Reference< XInterface > createComListener( const Any& aControlAny, const OUString& aVBAType,
-                                           const OUString& aPrefix, const SbxObjectRef& xScopeObj )
+                                           std::u16string_view aPrefix,
+                                           const SbxObjectRef& xScopeObj )
 {
     Reference< XInterface > xRet;
 

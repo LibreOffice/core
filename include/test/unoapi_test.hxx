@@ -11,6 +11,9 @@
 #define INCLUDED_TEST_UNOAPI_TEST_HXX
 
 #include <sal/config.h>
+
+#include <string_view>
+
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -23,7 +26,7 @@ class OOO_DLLPUBLIC_TEST UnoApiTest : public test::BootstrapFixture, public unot
 public:
     UnoApiTest(const OUString& path);
 
-    void createFileURL(const OUString& aFileBase, OUString& rFilePath);
+    void createFileURL(std::u16string_view aFileBase, OUString& rFilePath);
 
     virtual void setUp() override;
 

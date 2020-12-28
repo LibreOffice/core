@@ -71,8 +71,8 @@ void ConfigurationBackendDb::addEntry(OUString const & url, Data const & data)
             Reference<css::xml::dom::XNode> helpNode
                 = writeKeyElement(url);
 
-            writeSimpleElement("data-url", data.dataUrl, helpNode);
-            writeSimpleElement("ini-entry", data.iniEntry, helpNode);
+            writeSimpleElement(u"data-url", data.dataUrl, helpNode);
+            writeSimpleElement(u"ini-entry", data.iniEntry, helpNode);
             save();
         }
     }
@@ -91,7 +91,7 @@ void ConfigurationBackendDb::addEntry(OUString const & url, Data const & data)
 
 
 ::std::optional<ConfigurationBackendDb::Data>
-ConfigurationBackendDb::getEntry(OUString const & url)
+ConfigurationBackendDb::getEntry(std::u16string_view url)
 {
     try
     {
@@ -99,8 +99,8 @@ ConfigurationBackendDb::getEntry(OUString const & url)
         Reference<css::xml::dom::XNode> aNode = getKeyElement(url);
         if (aNode.is())
         {
-            retData.dataUrl = readSimpleElement("data-url", aNode);
-            retData.iniEntry = readSimpleElement("ini-entry", aNode);
+            retData.dataUrl = readSimpleElement(u"data-url", aNode);
+            retData.iniEntry = readSimpleElement(u"ini-entry", aNode);
         }
         else
         {

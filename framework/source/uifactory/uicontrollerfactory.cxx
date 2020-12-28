@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <uifactory/factoryconfiguration.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -58,7 +62,7 @@ public:
     virtual void SAL_CALL deregisterController( const OUString& aCommandURL, const OUString& aModuleName ) override;
 
 protected:
-    UIControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext, const OUString &rUINode  );
+    UIControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext, std::u16string_view rUINode  );
     bool                                                    m_bConfigRead;
     css::uno::Reference< css::uno::XComponentContext >       m_xContext;
     rtl::Reference<ConfigurationAccess_ControllerFactory>    m_pConfigAccess;
@@ -69,14 +73,15 @@ private:
 
 UIControllerFactory::UIControllerFactory(
     const Reference< XComponentContext >& xContext,
-    const OUString &rConfigurationNode )
+    std::u16string_view rConfigurationNode )
     : UIControllerFactory_BASE(m_aMutex)
     , m_bConfigRead( false )
     , m_xContext( xContext )
     , m_pConfigAccess()
 {
     m_pConfigAccess = new ConfigurationAccess_ControllerFactory(m_xContext,
-            "/org.openoffice.Office.UI.Controller/Registered/" + rConfigurationNode);
+            OUString::Concat("/org.openoffice.Office.UI.Controller/Registered/")
+                + rConfigurationNode);
 }
 
 UIControllerFactory::~UIControllerFactory()
@@ -104,7 +109,7 @@ Reference< XInterface > SAL_CALL UIControllerFactory::createInstanceWithContext(
         m_pConfigAccess->readConfigurationData();
     }
 
-    OUString aServiceName = m_pConfigAccess->getServiceFromCommandModule( aServiceSpecifier, OUString() );
+    OUString aServiceName = m_pConfigAccess->getServiceFromCommandModule( aServiceSpecifier, std::u16string_view() );
     if ( !aServiceName.isEmpty() )
         return m_xContext->getServiceManager()->createInstanceWithContext( aServiceName, m_xContext );
     else
@@ -252,7 +257,7 @@ public:
 };
 
 PopupMenuControllerFactory::PopupMenuControllerFactory( const Reference< XComponentContext >& xContext ) :
-    UIControllerFactory( xContext, "PopupMenu" )
+    UIControllerFactory( xContext, u"PopupMenu" )
 {
 }
 
@@ -297,7 +302,7 @@ public:
 };
 
 ToolbarControllerFactory::ToolbarControllerFactory( const Reference< XComponentContext >& xContext ) :
-    UIControllerFactory( xContext, "ToolBar" )
+    UIControllerFactory( xContext, u"ToolBar" )
 {
 }
 
@@ -342,7 +347,7 @@ public:
 };
 
 StatusbarControllerFactory::StatusbarControllerFactory( const Reference< XComponentContext >& xContext ) :
-    UIControllerFactory( xContext, "StatusBar" )
+    UIControllerFactory( xContext, u"StatusBar" )
 {
 }
 

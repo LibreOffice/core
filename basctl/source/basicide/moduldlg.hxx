@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <bastype2.hxx>
 #include <tools/solar.h>
 #include <vcl/weld.hxx>
@@ -94,7 +98,7 @@ public:
     explicit LibDialog(weld::Window* pParent);
     virtual ~LibDialog() override;
 
-    void            SetStorageName( const OUString& rName );
+    void            SetStorageName( std::u16string_view rName );
 
     weld::TreeView& GetLibBox()                 { return *m_xLibBox; }
     bool            IsReference() const         { return m_xReferenceBox->get_active(); }

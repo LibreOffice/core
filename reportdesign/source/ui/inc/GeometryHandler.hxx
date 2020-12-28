@@ -35,6 +35,8 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <map>
 #include <memory>
+#include <string_view>
+
 #include <comphelper/stl_types.hxx>
 #include <comphelper/listenernotification.hxx>
 
@@ -218,7 +220,7 @@ namespace rptui
         * \param _sFunction     The name of the function.
         * \param _sDataField    The name of the data field.
         */
-        void createDefaultFunction(::osl::ResettableMutexGuard& _aGuard ,const OUString& _sFunction,const OUString& _sDataField);
+        void createDefaultFunction(::osl::ResettableMutexGuard& _aGuard ,const OUString& _sFunction,std::u16string_view _sDataField);
 
         void removeFunction();
 

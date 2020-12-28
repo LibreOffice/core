@@ -287,8 +287,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     std::unique_ptr<ComponentBackendDb> m_backendDb;
 
     void addDataToDb(OUString const & url, ComponentBackendDb::Data const & data);
-    ComponentBackendDb::Data readDataFromDb(OUString const & url);
-    void revokeEntryFromDb(OUString const & url);
+    ComponentBackendDb::Data readDataFromDb(std::u16string_view url);
+    void revokeEntryFromDb(std::u16string_view url);
 
     Reference<registry::XSimpleRegistry> m_xCommonRDB;
     Reference<registry::XSimpleRegistry> m_xNativeRDB;
@@ -576,7 +576,7 @@ void BackendImpl::addDataToDb(
         m_backendDb->addEntry(url, data);
 }
 
-ComponentBackendDb::Data BackendImpl::readDataFromDb(OUString const & url)
+ComponentBackendDb::Data BackendImpl::readDataFromDb(std::u16string_view url)
 {
     ComponentBackendDb::Data data;
     if (m_backendDb)
@@ -584,7 +584,7 @@ ComponentBackendDb::Data BackendImpl::readDataFromDb(OUString const & url)
     return data;
 }
 
-void BackendImpl::revokeEntryFromDb(OUString const & url)
+void BackendImpl::revokeEntryFromDb(std::u16string_view url)
 {
     if (m_backendDb)
         m_backendDb->revokeEntry(url);

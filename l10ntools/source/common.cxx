@@ -107,7 +107,7 @@ void writeUsage(const OString& rName, const OString& rFileType)
 
 void writePoEntry(
     const OString& rExecutable, PoOfstream& rPoStream, const OString& rSourceFile,
-    const OString& rResType, const OString& rGroupId, const OString& rLocalId,
+    std::string_view rResType, const OString& rGroupId, const OString& rLocalId,
     const OString& rHelpText, const OString& rText, const PoEntry::TYPE eType )
 {
     try

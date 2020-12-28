@@ -25,6 +25,7 @@
 #include "docsh.hxx"
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <string_view>
 #include <vector>
 
 namespace com::sun::star {
@@ -239,7 +240,7 @@ class ScSolverSuccessDialog : public weld::GenericDialogController
     DECL_LINK(ClickHdl, weld::Button&, void);
 
 public:
-    ScSolverSuccessDialog(weld::Window* pParent, const OUString& rSolution);
+    ScSolverSuccessDialog(weld::Window* pParent, std::u16string_view rSolution);
     virtual ~ScSolverSuccessDialog() override;
 };
 

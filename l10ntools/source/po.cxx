@@ -245,16 +245,16 @@ PoEntry::PoEntry()
 }
 
 PoEntry::PoEntry(
-    const OString& rSourceFile, const OString& rResType, const OString& rGroupId,
-    const OString& rLocalId, const OString& rHelpText,
+    const OString& rSourceFile, std::string_view rResType, std::string_view rGroupId,
+    std::string_view rLocalId, const OString& rHelpText,
     const OString& rText, const TYPE eType )
     : m_bIsInitialized( false )
 {
     if( rSourceFile.isEmpty() )
         throw NOSOURCFILE;
-    else if ( rResType.isEmpty() )
+    else if ( rResType.empty() )
         throw NORESTYPE;
-    else if ( rGroupId.isEmpty() )
+    else if ( rGroupId.empty() )
         throw NOGROUPID;
     else if ( rText.isEmpty() )
         throw NOSTRING;
@@ -268,7 +268,7 @@ PoEntry::PoEntry(
     OString sMsgCtxt =
         sReference + "\n" +
         rGroupId + "\n" +
-        (rLocalId.isEmpty() ? OString() : rLocalId + "\n") +
+        (rLocalId.empty() ? OString() : OString::Concat(rLocalId) + "\n") +
         rResType;
     switch(eType){
     case TTEXT:
@@ -444,20 +444,20 @@ namespace
 }
 
 // when updating existing files (pocheck), reuse provided po-header
-PoHeader::PoHeader( const OString& rExtSrc, const OString& rPoHeaderMsgStr )
+PoHeader::PoHeader( std::string_view rExtSrc, const OString& rPoHeaderMsgStr )
     : m_pGenPo( new GenPoEntry() )
     , m_bIsInitialized( false )
 {
-    m_pGenPo->setExtractCom("extracted from " + rExtSrc);
+    m_pGenPo->setExtractCom(OString::Concat("extracted from ") + rExtSrc);
     m_pGenPo->setMsgStr(rPoHeaderMsgStr);
     m_bIsInitialized = true;
 }
 
-PoHeader::PoHeader( const OString& rExtSrc )
+PoHeader::PoHeader( std::string_view rExtSrc )
     : m_pGenPo( new GenPoEntry() )
     , m_bIsInitialized( false )
 {
-    m_pGenPo->setExtractCom("extracted from " + rExtSrc);
+    m_pGenPo->setExtractCom(OString::Concat("extracted from ") + rExtSrc);
     m_pGenPo->setMsgStr(
         "Project-Id-Version: PACKAGE VERSION\n"
         "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?"

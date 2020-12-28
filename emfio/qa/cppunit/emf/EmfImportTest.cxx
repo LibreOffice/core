@@ -29,6 +29,7 @@
 #include <vcl/BitmapReadAccess.hxx>
 
 #include <memory>
+#include <string_view>
 
 namespace
 {
@@ -54,7 +55,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestCreatePen();
     void TestPdfInEmf();
 
-    Primitive2DSequence parseEmf(const OUString& aSource);
+    Primitive2DSequence parseEmf(std::u16string_view aSource);
 
 public:
     void setUp() override;
@@ -89,7 +90,7 @@ void Test::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-Primitive2DSequence Test::parseEmf(const OUString& aSource)
+Primitive2DSequence Test::parseEmf(std::u16string_view aSource)
 {
     const Reference<XEmfParser> xEmfParser = EmfTools::create(m_xContext);
 
@@ -111,7 +112,7 @@ Primitive2DSequence Test::parseEmf(const OUString& aSource)
 
 void Test::testPolyPolygon()
 {
-    Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/fdo79679-2.emf");
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/fdo79679-2.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
@@ -151,7 +152,7 @@ void Test::TestDrawString()
     // Since the text is undecorated the optimal choice is a simpletextportion primitive
 
     // first, get the sequence of primitives and dump it
-    Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestDrawString.emf");
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawString.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
@@ -173,7 +174,7 @@ void Test::TestDrawStringTransparent()
     // This unit checks for a correct import of an EMF+ file with one DrawString Record with transparency
 
     // first, get the sequence of primitives and dump it
-    Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestDrawStringTransparent.emf");
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawStringTransparent.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
@@ -196,7 +197,7 @@ void Test::TestDrawLine()
     // The line is colored and has a specified width, therefore a polypolygonstroke primitive is the optimal choice
 
     // first, get the sequence of primitives and dump it
-    Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestDrawLine.emf");
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawLine.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
@@ -210,7 +211,7 @@ void Test::TestDrawLine()
 void Test::TestLinearGradient()
 {
     // This unit checks for a correct import of an EMF+ file with LinearGradient brush
-    Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestLinearGradient.emf");
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestLinearGradient.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
@@ -244,7 +245,7 @@ void Test::TestTextMapMode()
 {
     // Check import of EMF image with records: SETMAPMODE with MM_TEXT MapMode, POLYLINE16, EXTCREATEPEN, EXTTEXTOUTW
     // MM_TEXT is mapped to one device pixel. Positive x is to the right; positive y is down.
-    Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TextMapMode.emf");
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TextMapMode.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
@@ -278,7 +279,7 @@ void Test::TestEnglishMapMode()
 {
     // Check import of EMF image with records: SETMAPMODE with MM_ENGLISH MapMode, STROKEANDFILLPATH, EXTTEXTOUTW, SETTEXTALIGN, STRETCHDIBITS
     // MM_LOENGLISH is mapped to 0.01 inch. Positive x is to the right; positive y is up.M
-    Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/test_mm_hienglish_ref.emf");
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/test_mm_hienglish_ref.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
@@ -313,7 +314,7 @@ void Test::TestCreatePen()
 {
     // Check import of EMF image with records: RESTOREDC, SAVEDC, MOVETOEX, LINETO, POLYLINE16, EXTTEXTOUTW with DxBuffer
     // The CREATEPEN record is used with PS_COSMETIC line style, which will be displayed as solid hairline
-    Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestCreatePen.emf");
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestCreatePen.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
@@ -362,7 +363,7 @@ void Test::TestCreatePen()
 void Test::TestPdfInEmf()
 {
     // Load a PPTX file, which has a shape, with a bitmap fill, which is an EMF, containing a PDF.
-    OUString aURL = m_directories.getURLFromSrc("emfio/qa/cppunit/emf/data/pdf-in-emf.pptx");
+    OUString aURL = m_directories.getURLFromSrc(u"emfio/qa/cppunit/emf/data/pdf-in-emf.pptx");
     getComponent() = loadFromDesktop(aURL);
 
     // Get the EMF.

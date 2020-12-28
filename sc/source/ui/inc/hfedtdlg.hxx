@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_HFEDTDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_HFEDTDLG_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <sfx2/tabdlg.hxx>
 #include <editeng/svxenum.hxx>
 
@@ -28,7 +32,7 @@ class ScHFEditDlg : public SfxTabDialogController
     SvxNumType eNumType;
 protected:
     ScHFEditDlg(weld::Window* pParent,
-        const SfxItemSet& rCoreSet, const OUString& rPageStyle,
+        const SfxItemSet& rCoreSet, std::u16string_view rPageStyle,
         const OUString& rUIXMLDescription, const OString& rID);
 public:
     virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
@@ -38,70 +42,70 @@ class ScHFEditHeaderDlg : public ScHFEditDlg
 {
 public:
     ScHFEditHeaderDlg(weld::Window* pParent,
-        const SfxItemSet& rCoreSet, const OUString& rPageStyle);
+        const SfxItemSet& rCoreSet, std::u16string_view rPageStyle);
 };
 
 class ScHFEditFooterDlg : public ScHFEditDlg
 {
 public:
     ScHFEditFooterDlg(weld::Window* pParent,
-        const SfxItemSet& rCoreSet, const OUString& rPageStyle);
+        const SfxItemSet& rCoreSet, std::u16string_view rPageStyle);
 };
 
 class ScHFEditLeftHeaderDlg : public ScHFEditDlg
 {
 public:
     ScHFEditLeftHeaderDlg(weld::Window* pParent,
-        const SfxItemSet& rCoreSet, const OUString& rPageStyle);
+        const SfxItemSet& rCoreSet, std::u16string_view rPageStyle);
 };
 
 class ScHFEditRightHeaderDlg : public ScHFEditDlg
 {
 public:
     ScHFEditRightHeaderDlg(weld::Window* pParent,
-        const SfxItemSet& rCoreSet, const OUString& rPageStyle);
+        const SfxItemSet& rCoreSet, std::u16string_view rPageStyle);
 };
 
 class ScHFEditLeftFooterDlg : public ScHFEditDlg
 {
 public:
     ScHFEditLeftFooterDlg(weld::Window* pParent,
-        const SfxItemSet& rCoreSet, const OUString& rPageStyle);
+        const SfxItemSet& rCoreSet, std::u16string_view rPageStyle);
 };
 
 class ScHFEditRightFooterDlg : public ScHFEditDlg
 {
 public:
     ScHFEditRightFooterDlg(weld::Window* pParent,
-        const SfxItemSet& rCoreSet, const OUString& rPageStyle);
+        const SfxItemSet& rCoreSet, std::u16string_view rPageStyle);
 };
 
 class ScHFEditSharedHeaderDlg : public ScHFEditDlg
 {
 public:
     ScHFEditSharedHeaderDlg(weld::Window* pParent,
-        const SfxItemSet& rCoreSet, const OUString& rPageStyle);
+        const SfxItemSet& rCoreSet, std::u16string_view rPageStyle);
 };
 
 class ScHFEditSharedFooterDlg : public ScHFEditDlg
 {
 public:
     ScHFEditSharedFooterDlg(weld::Window* pParent,
-        const SfxItemSet& rCoreSet, const OUString& rPageStyle);
+        const SfxItemSet& rCoreSet, std::u16string_view rPageStyle);
 };
 
 class ScHFEditAllDlg : public ScHFEditDlg
 {
 public:
     ScHFEditAllDlg(weld::Window* pParent,
-        const SfxItemSet& rCoreSet, const OUString& rPageStyle);
+        const SfxItemSet& rCoreSet, std::u16string_view rPageStyle);
 };
 
 class ScHFEditActiveDlg : public ScHFEditDlg
 {
 public:
     ScHFEditActiveDlg(weld::Window* pParent,
-        const SfxItemSet& rCoreSet, const OUString& rPageStyle);
+        const SfxItemSet& rCoreSet, std::u16string_view rPageStyle);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_HFEDTDLG_HXX

@@ -390,7 +390,7 @@ SdPage* DocumentHelper::AddMasterPage (
 */
 void DocumentHelper::AssignMasterPageToPage (
     SdPage const * pMasterPage,
-    const OUString& rsBaseLayoutName,
+    std::u16string_view rsBaseLayoutName,
     SdPage* pPage)
 {
     // Leave early when the parameters are invalid.

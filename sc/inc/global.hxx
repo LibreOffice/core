@@ -36,6 +36,7 @@
 #undef bool
 
 #include <memory>
+#include <string_view>
 
 namespace com::sun::star::uno { template <typename > class Reference; }
 
@@ -568,8 +569,8 @@ public:
     static bool                 ShouldOpenURL();
     SC_DLLPUBLIC static OUString            GetAbsDocName( const OUString& rFileName,
                                                 const SfxObjectShell* pShell );
-    SC_DLLPUBLIC static OUString            GetDocTabName( const OUString& rFileName,
-                                                const OUString& rTabName );
+    SC_DLLPUBLIC static OUString            GetDocTabName( std::u16string_view rFileName,
+                                                std::u16string_view rTabName );
     SC_DLLPUBLIC static sal_uInt32 GetStandardFormat( SvNumberFormatter&, sal_uInt32 nFormat, SvNumFormatType nType );
 
     SC_DLLPUBLIC static sal_uInt16 GetStandardRowHeight();

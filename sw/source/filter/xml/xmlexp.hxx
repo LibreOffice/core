@@ -23,6 +23,8 @@
 #include <xmloff/xmlexp.hxx>
 #include "xmlitmap.hxx"
 #include <xmloff/xmltoken.hxx>
+
+#include <string_view>
 #include <vector>
 
 class SwDoc;
@@ -66,7 +68,7 @@ class SwXMLExport : public SvXMLExport
     void ExportTableLinesAutoStyles( const SwTableLines& rLines,
                                  sal_uInt32 nAbsWidth,
                                  sal_uInt32 nBaseWidth,
-                                 const OUString& rNamePrefix,
+                                 std::u16string_view rNamePrefix,
                                  SwXMLTableColumnsSortByWidth_Impl& rExpCols,
                                  SwXMLTableFrameFormatsSort_Impl& rExpRows,
                                  SwXMLTableFrameFormatsSort_Impl& rExpCells,

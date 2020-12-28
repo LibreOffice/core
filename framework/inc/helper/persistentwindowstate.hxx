@@ -117,7 +117,7 @@ class PersistentWindowState final : public  ::cppu::WeakImplHelper<
                     contains the information about position and size.
          */
         static OUString implst_getWindowStateFromConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext      ,
-                                                               const OUString&                                    sModuleName);
+                                                               std::u16string_view                                sModuleName);
 
         /** @short  retrieve the window state from the container window.
 
@@ -144,7 +144,7 @@ class PersistentWindowState final : public  ::cppu::WeakImplHelper<
                     contains the information about position and size.
          */
         static void implst_setWindowStateOnConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                                  const OUString&                                    sModuleName   ,
+                                                  std::u16string_view                                sModuleName   ,
                                                   const OUString&                                    sWindowState  );
 
         /** @short  restore the position and size on the container window.

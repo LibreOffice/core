@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/debug.hxx>
@@ -73,7 +77,7 @@ bool FileExists( const OUString &rMainURL )
 }
 
 static std::vector< OUString > GetMultiPaths_Impl(
-    const OUString &rPathPrefix,
+    std::u16string_view rPathPrefix,
     DictionaryPathFlags nPathFlags )
 {
     std::vector< OUString >     aRes;
@@ -85,9 +89,9 @@ static std::vector< OUString > GetMultiPaths_Impl(
     uno::Reference< uno::XComponentContext >  xContext( comphelper::getProcessComponentContext() );
     try
     {
-        OUString aInternal( rPathPrefix + "_internal" );
-        OUString aUser( rPathPrefix + "_user" );
-        OUString aWriteable( rPathPrefix + "_writable" );
+        OUString aInternal( OUString::Concat(rPathPrefix) + "_internal" );
+        OUString aUser( OUString::Concat(rPathPrefix) + "_user" );
+        OUString aWriteable( OUString::Concat(rPathPrefix) + "_writable" );
 
         uno::Reference< util::XPathSettings > xPathSettings =
             util::thePathSettings::get( xContext );
@@ -126,7 +130,8 @@ static std::vector< OUString > GetMultiPaths_Impl(
 
 OUString GetDictionaryWriteablePath()
 {
-    std::vector< OUString > aPaths( GetMultiPaths_Impl( "Dictionary", DictionaryPathFlags::NONE ) );
+    std::vector< OUString > aPaths(
+        GetMultiPaths_Impl( u"Dictionary", DictionaryPathFlags::NONE ) );
     DBG_ASSERT( aPaths.size() == 1, "Dictionary_writable path corrupted?" );
     OUString aRes;
     if (!aPaths.empty())
@@ -136,7 +141,7 @@ OUString GetDictionaryWriteablePath()
 
 std::vector< OUString > GetDictionaryPaths()
 {
-    return GetMultiPaths_Impl( "Dictionary", PATH_FLAG_ALL );
+    return GetMultiPaths_Impl( u"Dictionary", PATH_FLAG_ALL );
 }
 
 OUString  GetWritableDictionaryURL( const OUString &rDicName )

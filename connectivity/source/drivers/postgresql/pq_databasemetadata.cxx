@@ -65,6 +65,8 @@
  ************************************************************************/
 
 #include <algorithm>
+#include <string_view>
+
 #include <sal/log.hxx>
 #include "pq_databasemetadata.hxx"
 #include "pq_driver.hxx"
@@ -2162,12 +2164,12 @@ namespace
         return ret;
     }
 
-    OUString construct_full_typename(const OUString &ns, const OUString &tn)
+    OUString construct_full_typename(std::u16string_view ns, const OUString &tn)
     {
-        if(ns.isEmpty() || ns == "pg_catalog")
+        if(ns.empty() || ns == u"pg_catalog")
             return tn;
         else
-            return ns + "." + tn;
+            return OUString::Concat(ns) + "." + tn;
     }
 
     void pgTypeInfo2ResultSet(

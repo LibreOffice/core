@@ -19,6 +19,8 @@
 
 
 #include <memory>
+#include <string_view>
+
 #include <dp_misc.h>
 #include <dp_backend.h>
 #include <dp_ucb.h>
@@ -77,8 +79,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv ) override;
 
     void addDataToDb(OUString const & url);
-    bool hasActiveEntry(OUString const & url);
-    void revokeEntryFromDb(OUString const & url);
+    bool hasActiveEntry(std::u16string_view url);
+    void revokeEntryFromDb(std::u16string_view url);
 
     Reference<deployment::XPackageTypeInfo> m_xExecutableTypeInfo;
     std::unique_ptr<ExecutableBackendDb> m_backendDb;
@@ -137,13 +139,13 @@ void BackendImpl::addDataToDb(OUString const & url)
         m_backendDb->addEntry(url);
 }
 
-void BackendImpl::revokeEntryFromDb(OUString const & url)
+void BackendImpl::revokeEntryFromDb(std::u16string_view url)
 {
     if (m_backendDb)
         m_backendDb->revokeEntry(url);
 }
 
-bool BackendImpl::hasActiveEntry(OUString const & url)
+bool BackendImpl::hasActiveEntry(std::u16string_view url)
 {
     if (m_backendDb)
         return m_backendDb->hasActiveEntry(url);

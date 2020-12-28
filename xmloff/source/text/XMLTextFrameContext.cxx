@@ -61,6 +61,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <map>
+#include <string_view>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -434,7 +435,7 @@ void XMLTextFrameContext_Impl::Create()
             else if( !sHRef.isEmpty() )
             {
                 OUString sURL( GetImport().ResolveEmbeddedObjectURL( sHRef,
-                                                                OUString() ) );
+                                                                std::u16string_view() ) );
 
                 if( GetImport().IsPackageURL( sHRef ) )
                 {

@@ -48,6 +48,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <string_view>
 #include <utility>
 
 using namespace com::sun::star;
@@ -608,11 +609,11 @@ OUString SAL_CALL SvXMLGraphicHelper::saveGraphicByName(css::uno::Reference<css:
 OUString SAL_CALL SvXMLGraphicHelper::saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic)
 {
     OUString aOutMimeType;
-    return implSaveGraphic(rxGraphic, aOutMimeType, OUString());
+    return implSaveGraphic(rxGraphic, aOutMimeType, std::u16string_view());
 }
 
 OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
-                                             OUString & rOutSavedMimeType, OUString const & rRequestName)
+                                             OUString & rOutSavedMimeType, std::u16string_view rRequestName)
 {
     Graphic aGraphic(rxGraphic);
 
@@ -697,7 +698,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
         }
 
         OUString rPictureStreamName;
-        if (!rRequestName.isEmpty())
+        if (!rRequestName.empty())
         {
             rPictureStreamName = rRequestName + aExtension;
         }

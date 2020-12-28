@@ -12,6 +12,8 @@
 
 #include <fstream>
 #include <memory>
+#include <string_view>
+
 #include <rtl/string.hxx>
 
 class PoOfstream;
@@ -44,8 +46,8 @@ public:
     enum Exception { NOSOURCFILE, NORESTYPE, NOGROUPID, NOSTRING, WRONGHELPTEXT };
 
                     PoEntry();
-                    PoEntry( const OString& rSourceFile, const OString& rResType, const OString& rGroupId,
-                             const OString& rLocalId, const OString& rHelpText, const OString& rText,
+                    PoEntry( const OString& rSourceFile, std::string_view rResType, std::string_view rGroupId,
+                             std::string_view rLocalId, const OString& rHelpText, const OString& rText,
                              const TYPE eType );
                     ~PoEntry();
 
@@ -87,8 +89,8 @@ public:
     friend class PoOfstream;
     friend class PoIfstream;
 
-                    PoHeader( const OString& rExtSrc ); ///< Template Constructor
-                    PoHeader( const OString& rExtSrc, const OString& rPoHeaderMsgStr );
+                    PoHeader( std::string_view rExtSrc ); ///< Template Constructor
+                    PoHeader( std::string_view rExtSrc, const OString& rPoHeaderMsgStr );
                     ~PoHeader();
                     PoHeader(const PoHeader&) = delete;
     PoHeader&       operator=(const PoHeader&) = delete;

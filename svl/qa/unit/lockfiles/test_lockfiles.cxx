@@ -9,6 +9,8 @@
 
 #include <sal/config.h>
 
+#include <string_view>
+
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <test/bootstrapfixture.hxx>
@@ -29,7 +31,7 @@ namespace
 {
 class LockfileTest : public test::BootstrapFixture
 {
-    OUString generateTestURL(const OUString& sFileName) const;
+    OUString generateTestURL(std::u16string_view sFileName) const;
 
 public:
     void testLOLockFileURL();
@@ -94,15 +96,15 @@ OUString GetLockFileName(const svt::GenDocumentLockFile& rLockFile)
     return aDocURL.GetLastName();
 }
 
-OUString LockfileTest::generateTestURL(const OUString& sFileName) const
+OUString LockfileTest::generateTestURL(std::u16string_view sFileName) const
 {
-    return m_directories.getURLFromWorkdir("/CppunitTest/svl_lockfiles.test.user/") + sFileName;
+    return m_directories.getURLFromWorkdir(u"/CppunitTest/svl_lockfiles.test.user/") + sFileName;
 }
 
 void LockfileTest::testLOLockFileURL()
 {
     // Test the generated file name for LibreOffice lock files
-    OUString aTestODT = generateTestURL("testLOLockFileURL.odt");
+    OUString aTestODT = generateTestURL(u"testLOLockFileURL.odt");
 
     svt::DocumentLockFile aLockFile(aTestODT);
     CPPUNIT_ASSERT_EQUAL(OUString(".~lock.testLOLockFileURL.odt%23"), GetLockFileName(aLockFile));
@@ -111,7 +113,7 @@ void LockfileTest::testLOLockFileURL()
 void LockfileTest::testLOLockFileContent()
 {
     // Test the lockfile generated for the specified ODT document
-    OUString aTestODT = generateTestURL("testLOLockFileContent.odt");
+    OUString aTestODT = generateTestURL(u"testLOLockFileContent.odt");
 
     // Set user name
     SvtUserOptions aUserOpt;
@@ -162,7 +164,7 @@ void LockfileTest::testLOLockFileContent()
 void LockfileTest::testLOLockFileRT()
 {
     // Test the lockfile generated for the specified ODT document
-    OUString aTestODT = generateTestURL("testLOLockFileRT.odt");
+    OUString aTestODT = generateTestURL(u"testLOLockFileRT.odt");
 
     // Set user name
     SvtUserOptions aUserOpt;
@@ -192,7 +194,7 @@ void LockfileTest::testLOLockFileRT()
 void LockfileTest::testLOLockFileUnicodeUsername()
 {
     // Test the lockfile generated for the specified ODT document
-    OUString aTestODT = generateTestURL("testLOLockFileUnicodeUsername.odt");
+    OUString aTestODT = generateTestURL(u"testLOLockFileUnicodeUsername.odt");
 
     // Set user name
     SvtUserOptions aUserOpt;
@@ -218,7 +220,7 @@ void LockfileTest::testLOLockFileUnicodeUsername()
 
 void LockfileTest::testLOLockFileOverwrite()
 {
-    OUString aTestODT = generateTestURL("testLOLockFileOverwrite.odt");
+    OUString aTestODT = generateTestURL(u"testLOLockFileOverwrite.odt");
 
     // Set user name
     SvtUserOptions aUserOpt;
@@ -259,56 +261,56 @@ void LockfileTest::testWordLockFileURL()
 
     // Word specific file format
     {
-        OUString aTestFile = generateTestURL("testWordLockFileURL.docx");
+        OUString aTestFile = generateTestURL(u"testWordLockFileURL.docx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
         CPPUNIT_ASSERT_EQUAL(OUString("~$stWordLockFileURL.docx"), GetLockFileName(aLockFile));
     }
 
     // Eight character file name (cuts two characters)
     {
-        OUString aTestFile = generateTestURL("12345678.docx");
+        OUString aTestFile = generateTestURL(u"12345678.docx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
         CPPUNIT_ASSERT_EQUAL(OUString("~$345678.docx"), GetLockFileName(aLockFile));
     }
 
     // Seven character file name (cuts one character)
     {
-        OUString aTestFile = generateTestURL("1234567.docx");
+        OUString aTestFile = generateTestURL(u"1234567.docx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
         CPPUNIT_ASSERT_EQUAL(OUString("~$234567.docx"), GetLockFileName(aLockFile));
     }
 
     // Six character file name (cuts no character)
     {
-        OUString aTestFile = generateTestURL("123456.docx");
+        OUString aTestFile = generateTestURL(u"123456.docx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
         CPPUNIT_ASSERT_EQUAL(OUString("~$123456.docx"), GetLockFileName(aLockFile));
     }
 
     // One character file name
     {
-        OUString aTestFile = generateTestURL("1.docx");
+        OUString aTestFile = generateTestURL(u"1.docx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
         CPPUNIT_ASSERT_EQUAL(OUString("~$1.docx"), GetLockFileName(aLockFile));
     }
 
     // Test for ODT format
     {
-        OUString aTestFile = generateTestURL("12345678.odt");
+        OUString aTestFile = generateTestURL(u"12345678.odt");
         svt::MSODocumentLockFile aLockFile(aTestFile);
         CPPUNIT_ASSERT_EQUAL(OUString("~$345678.odt"), GetLockFileName(aLockFile));
     }
 
     // Test for DOC format
     {
-        OUString aTestFile = generateTestURL("12345678.doc");
+        OUString aTestFile = generateTestURL(u"12345678.doc");
         svt::MSODocumentLockFile aLockFile(aTestFile);
         CPPUNIT_ASSERT_EQUAL(OUString("~$345678.doc"), GetLockFileName(aLockFile));
     }
 
     // Test for RTF format
     {
-        OUString aTestFile = generateTestURL("12345678.rtf");
+        OUString aTestFile = generateTestURL(u"12345678.rtf");
         svt::MSODocumentLockFile aLockFile(aTestFile);
         CPPUNIT_ASSERT_EQUAL(OUString("~$345678.rtf"), GetLockFileName(aLockFile));
     }
@@ -318,28 +320,28 @@ void LockfileTest::testExcelLockFileURL()
 {
     // Test the generated file name for Excel lock files
     {
-        OUString aTestFile = generateTestURL("testExcelLockFileURL.xlsx");
+        OUString aTestFile = generateTestURL(u"testExcelLockFileURL.xlsx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
         CPPUNIT_ASSERT_EQUAL(OUString("~$testExcelLockFileURL.xlsx"), GetLockFileName(aLockFile));
     }
 
     // Eight character file name
     {
-        OUString aTestFile = generateTestURL("12345678.xlsx");
+        OUString aTestFile = generateTestURL(u"12345678.xlsx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
         CPPUNIT_ASSERT_EQUAL(OUString("~$12345678.xlsx"), GetLockFileName(aLockFile));
     }
 
     // One character file name
     {
-        OUString aTestFile = generateTestURL("1.xlsx");
+        OUString aTestFile = generateTestURL(u"1.xlsx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
         CPPUNIT_ASSERT_EQUAL(OUString("~$1.xlsx"), GetLockFileName(aLockFile));
     }
 
     // Test for ODS format
     {
-        OUString aTestFile = generateTestURL("12345678.ods");
+        OUString aTestFile = generateTestURL(u"12345678.ods");
         svt::MSODocumentLockFile aLockFile(aTestFile);
         CPPUNIT_ASSERT_EQUAL(OUString("~$12345678.ods"), GetLockFileName(aLockFile));
     }
@@ -349,7 +351,7 @@ void LockfileTest::testPowerPointLockFileURL()
 {
     // Test the generated file name for PowerPoint lock files
     {
-        OUString aTestFile = generateTestURL("testPowerPointLockFileURL.pptx");
+        OUString aTestFile = generateTestURL(u"testPowerPointLockFileURL.pptx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
         CPPUNIT_ASSERT_EQUAL(OUString("~$testPowerPointLockFileURL.pptx"),
                              GetLockFileName(aLockFile));
@@ -357,28 +359,28 @@ void LockfileTest::testPowerPointLockFileURL()
 
     // Eight character file name
     {
-        OUString aTestFile = generateTestURL("12345678.pptx");
+        OUString aTestFile = generateTestURL(u"12345678.pptx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
         CPPUNIT_ASSERT_EQUAL(OUString("~$12345678.pptx"), GetLockFileName(aLockFile));
     }
 
     // One character file name
     {
-        OUString aTestFile = generateTestURL("1.pptx");
+        OUString aTestFile = generateTestURL(u"1.pptx");
         svt::MSODocumentLockFile aLockFile(aTestFile);
         CPPUNIT_ASSERT_EQUAL(OUString("~$1.pptx"), GetLockFileName(aLockFile));
     }
 
     // Test for PPT format
     {
-        OUString aTestFile = generateTestURL("12345678.ppt");
+        OUString aTestFile = generateTestURL(u"12345678.ppt");
         svt::MSODocumentLockFile aLockFile(aTestFile);
         CPPUNIT_ASSERT_EQUAL(OUString("~$12345678.ppt"), GetLockFileName(aLockFile));
     }
 
     // Test for ODP format
     {
-        OUString aTestFile = generateTestURL("/12345678.odp");
+        OUString aTestFile = generateTestURL(u"/12345678.odp");
         svt::MSODocumentLockFile aLockFile(aTestFile);
         CPPUNIT_ASSERT_EQUAL(OUString("~$12345678.odp"), GetLockFileName(aLockFile));
     }
@@ -387,7 +389,7 @@ void LockfileTest::testPowerPointLockFileURL()
 void LockfileTest::testWordLockFileContent()
 {
     // Test the lockfile generated for the specified DOCX document
-    OUString aTestFile = generateTestURL("testWordLockFileContent.docx");
+    OUString aTestFile = generateTestURL(u"testWordLockFileContent.docx");
 
     // Set user name
     SvtUserOptions aUserOpt;
@@ -441,7 +443,7 @@ void LockfileTest::testWordLockFileContent()
 void LockfileTest::testExcelLockFileContent()
 {
     // Test the lockfile generated for the specified XLSX document
-    OUString aTestFile = generateTestURL("testExcelLockFileContent.xlsx");
+    OUString aTestFile = generateTestURL(u"testExcelLockFileContent.xlsx");
 
     // Set user name
     SvtUserOptions aUserOpt;
@@ -500,7 +502,7 @@ void LockfileTest::testExcelLockFileContent()
 void LockfileTest::testPowerPointLockFileContent()
 {
     // Test the lockfile generated for the specified PPTX document
-    OUString aTestFile = generateTestURL("testPowerPointLockFileContent.pptx");
+    OUString aTestFile = generateTestURL(u"testPowerPointLockFileContent.pptx");
 
     // Set user name
     SvtUserOptions aUserOpt;
@@ -560,7 +562,7 @@ void LockfileTest::testPowerPointLockFileContent()
 
 void LockfileTest::testWordLockFileRT()
 {
-    OUString aTestODT = generateTestURL("testWordLockFileRT.docx");
+    OUString aTestODT = generateTestURL(u"testWordLockFileRT.docx");
 
     // Set user name
     SvtUserOptions aUserOpt;
@@ -581,7 +583,7 @@ void LockfileTest::testWordLockFileRT()
 
 void LockfileTest::testExcelLockFileRT()
 {
-    OUString aTestODT = generateTestURL("testExcelLockFileRT.xlsx");
+    OUString aTestODT = generateTestURL(u"testExcelLockFileRT.xlsx");
 
     // Set user name
     SvtUserOptions aUserOpt;
@@ -602,7 +604,7 @@ void LockfileTest::testExcelLockFileRT()
 
 void LockfileTest::testPowerPointLockFileRT()
 {
-    OUString aTestODT = generateTestURL("testPowerPointLockFileRT.pptx");
+    OUString aTestODT = generateTestURL(u"testPowerPointLockFileRT.pptx");
 
     // Set user name
     SvtUserOptions aUserOpt;
@@ -623,7 +625,7 @@ void LockfileTest::testPowerPointLockFileRT()
 
 void LockfileTest::testMSOLockFileLongUserName()
 {
-    OUString aTestODT = generateTestURL("testMSOLockFileLongUserName.docx");
+    OUString aTestODT = generateTestURL(u"testMSOLockFileLongUserName.docx");
 
     // Set user name
     SvtUserOptions aUserOpt;
@@ -649,7 +651,7 @@ void LockfileTest::testMSOLockFileLongUserName()
 void LockfileTest::testMSOLockFileUnicodeUsername()
 {
     // Test the lockfile generated for the specified ODT document
-    OUString aTestODT = generateTestURL("testMSOLockFileUnicodeUsername.docx");
+    OUString aTestODT = generateTestURL(u"testMSOLockFileUnicodeUsername.docx");
 
     // Set user name
     SvtUserOptions aUserOpt;
@@ -675,7 +677,7 @@ void LockfileTest::testMSOLockFileUnicodeUsername()
 
 void LockfileTest::testMSOLockFileOverwrite()
 {
-    OUString aTestODT = generateTestURL("testMSOLockFileOverwrite.docx");
+    OUString aTestODT = generateTestURL(u"testMSOLockFileOverwrite.docx");
 
     // Set user name
     SvtUserOptions aUserOpt;

@@ -13,6 +13,7 @@
 #include <unordered_map>
 #include <memory>
 #include <mutex>
+#include <string_view>
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/variant.hpp>
@@ -177,7 +178,7 @@ namespace desktop {
     /// Helper function to extract the value from parameters delimited by
     /// comma, like: Name1=Value1,Name2=Value2,Name3=Value3.
     /// @param rOptions When extracted, the Param=Value is removed from it.
-    DESKTOP_DLLPUBLIC OUString extractParameter(OUString& aOptions, const OUString& rName);
+    DESKTOP_DLLPUBLIC OUString extractParameter(OUString& aOptions, std::u16string_view rName);
 
     /// Helper function to convert JSON to a vector of PropertyValues.
     /// Public to be unit-test-able.

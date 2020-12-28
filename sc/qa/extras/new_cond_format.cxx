@@ -445,7 +445,7 @@ void ScConditionalFormatTest::setUp()
     CalcUnoApiTest::setUp();
     // get the test file
     OUString aFileURL;
-    createFileURL("new_cond_format_api.ods", aFileURL);
+    createFileURL(u"new_cond_format_api.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL);
 }
 

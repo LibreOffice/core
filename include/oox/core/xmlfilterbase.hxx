@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_CORE_XMLFILTERBASE_HXX
 
 #include <memory>
+#include <string_view>
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -113,7 +114,7 @@ public:
     virtual ::oox::drawingml::table::TableStyleListPtr getTableStyles() = 0;
 
 
-    OUString getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rPart );
+    OUString getFragmentPathFromFirstTypeFromOfficeDoc( std::u16string_view rPart );
 
     /** Imports a fragment using the passed fragment handler, which contains
         the full path to the fragment stream.

@@ -179,7 +179,7 @@ bool OwnView_Impl::CreateModel( bool bUseNative )
 
 OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
                                                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                                                    const OUString& aNameWithExtention,
+                                                    std::u16string_view aNameWithExtention,
                                                     const uno::Reference< io::XInputStream >& xInputStream )
 {
     if ( !xInputStream.is() )
@@ -191,9 +191,9 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
 
     OUString aTypeName;
 
-    if ( !aNameWithExtention.isEmpty() )
+    if ( !aNameWithExtention.empty() )
     {
-        OUString aURLToAnalyze = "file:///" + aNameWithExtention;
+        OUString aURLToAnalyze = OUString::Concat("file:///") + aNameWithExtention;
         aTypeName = xTypeDetection->queryTypeByURL( aURLToAnalyze );
     }
 

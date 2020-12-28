@@ -87,11 +87,11 @@ OUString lcl_normalizeSubStreamPath(const OUString& rPath)
 
 namespace
 {
-OUString concatPath(const OUString& lhs, const OUString& rhs)
+OUString concatPath(std::u16string_view lhs, const OUString& rhs)
 {
-    if (lhs.isEmpty())
+    if (lhs.empty())
         return rhs;
-    return lhs + "/" + rhs;
+    return OUString::Concat(lhs) + "/" + rhs;
 }
 
 struct OLEStreamData
@@ -143,7 +143,7 @@ struct OLEStorageImpl
     tools::SvRef<SotStorageStream> const& getStream(std::size_t nId);
 
 private:
-    void traverse(const tools::SvRef<SotStorage>& rStorage, const OUString& rPath);
+    void traverse(const tools::SvRef<SotStorage>& rStorage, std::u16string_view rPath);
 
     tools::SvRef<SotStorageStream> createStream(const OUString& rPath);
 
@@ -178,7 +178,7 @@ void OLEStorageImpl::initialize(std::unique_ptr<SvStream> pStream)
 
     mxRootStorage = new SotStorage(pStream.release(), true);
 
-    traverse(mxRootStorage, "");
+    traverse(mxRootStorage, u"");
 
     mbInitialized = true;
 }
@@ -210,7 +210,7 @@ tools::SvRef<SotStorageStream> const& OLEStorageImpl::getStream(const std::size_
     return maStreams[nId].stream;
 }
 
-void OLEStorageImpl::traverse(const tools::SvRef<SotStorage>& rStorage, const OUString& rPath)
+void OLEStorageImpl::traverse(const tools::SvRef<SotStorage>& rStorage, std::u16string_view rPath)
 {
     SvStorageInfoList infos;
 

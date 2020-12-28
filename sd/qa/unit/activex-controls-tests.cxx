@@ -63,7 +63,7 @@ public:
 void SdActiveXControlsTest::testBackgroundColor()
 {
     // Check whether all system colors are imported correctly
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/control_background_color.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/control_background_color.pptx"), PPTX);
 
     const std::vector<sal_Int32> vBackgroundColors =
     {
@@ -111,7 +111,7 @@ void SdActiveXControlsTest::testBackgroundColor()
 
 void SdActiveXControlsTest::testLabelProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/activex_label.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_label.pptx"), PPTX);
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
@@ -191,7 +191,7 @@ void SdActiveXControlsTest::testLabelProperties()
 
 void SdActiveXControlsTest::testTextBoxProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/activex_textbox.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_textbox.pptx"), PPTX);
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
@@ -328,7 +328,7 @@ void SdActiveXControlsTest::testTextBoxProperties()
 
 void SdActiveXControlsTest::testSpinButtonProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/activex_spinbutton.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_spinbutton.pptx"), PPTX);
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
@@ -420,7 +420,7 @@ void SdActiveXControlsTest::testSpinButtonProperties()
 
 void SdActiveXControlsTest::testCommandButtonProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/activex_commandbutton.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_commandbutton.pptx"), PPTX);
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
@@ -491,7 +491,7 @@ void SdActiveXControlsTest::testCommandButtonProperties()
 
 void SdActiveXControlsTest::testScrollBarProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/activex_scrollbar.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_scrollbar.pptx"), PPTX);
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
@@ -599,7 +599,7 @@ void SdActiveXControlsTest::testScrollBarProperties()
 
 void SdActiveXControlsTest::testCheckBoxProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/activex_checkbox.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_checkbox.pptx"), PPTX);
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
@@ -692,7 +692,7 @@ void SdActiveXControlsTest::testCheckBoxProperties()
 
 void SdActiveXControlsTest::testOptionButtonProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/activex_optionbutton.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_optionbutton.pptx"), PPTX);
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
@@ -775,7 +775,7 @@ void SdActiveXControlsTest::testOptionButtonProperties()
 
 void SdActiveXControlsTest::testComboBoxProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/activex_combobox.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_combobox.pptx"), PPTX);
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
@@ -889,7 +889,7 @@ void SdActiveXControlsTest::testComboBoxProperties()
 
 void SdActiveXControlsTest::testListBoxProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/activex_listbox.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_listbox.pptx"), PPTX);
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
@@ -977,7 +977,7 @@ void SdActiveXControlsTest::testListBoxProperties()
 
 void SdActiveXControlsTest::testToggleButtonProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/activex_togglebutton.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_togglebutton.pptx"), PPTX);
 
     // First control has default properties
     uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
@@ -1061,7 +1061,7 @@ void SdActiveXControlsTest::testToggleButtonProperties()
 
 void SdActiveXControlsTest::testPictureProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/activex_picture.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_picture.pptx"), PPTX);
 
     // Different controls has different image positioning
 
@@ -1131,7 +1131,7 @@ void SdActiveXControlsTest::testPictureProperties()
 
 void SdActiveXControlsTest::testFontProperties()
 {
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/activex_fontproperties.pptx"), PPTX);
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/activex_fontproperties.pptx"), PPTX);
 
     // Different controls has different font properties
 

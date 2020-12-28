@@ -163,7 +163,7 @@ class HtmlExport final
     bool    CreateImageNumberFile();
 
     bool    checkForExistingFiles();
-    bool    checkFileExists( css::uno::Reference< css::ucb::XSimpleFileAccess3 > const & xFileAccess, OUString const & aFileName );
+    bool    checkFileExists( css::uno::Reference< css::ucb::XSimpleFileAccess3 > const & xFileAccess, std::u16string_view aFileName );
 
     OUString const & getDocumentTitle();
     bool    SavePresentation();
@@ -182,16 +182,16 @@ class HtmlExport final
     OUString CreateTextForNotesPage( SdrOutliner* pOutliner, SdPage* pPage, const Color& rBackgroundColor );
 
     static OUString CreateHTMLCircleArea( sal_uLong nRadius, sal_uLong nCenterX,
-                                  sal_uLong nCenterY, const OUString& rHRef );
+                                  sal_uLong nCenterY, std::u16string_view rHRef );
     static OUString CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPolyPoly, Size aShift, double fFactor, const OUString& rHRef );
     static OUString CreateHTMLRectArea( const ::tools::Rectangle& rRect,
-                                const OUString& rHRef );
+                                std::u16string_view rHRef );
 
     OUString CreatePageURL( sal_uInt16 nPgNum );
 
     OUString InsertSound( const OUString& rSoundFile );
     bool CopyFile( const OUString& rSourceFile, const OUString& rDestFile );
-    bool CopyScript( const OUString& rPath, const OUString& rSource, const OUString& rDest, bool bUnix = false );
+    bool CopyScript( std::u16string_view rPath, const OUString& rSource, const OUString& rDest, bool bUnix = false );
 
     void InitProgress( sal_uInt16 nProgrCount );
     void ResetProgress();

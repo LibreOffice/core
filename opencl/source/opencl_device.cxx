@@ -10,6 +10,7 @@
 #include <float.h>
 #include <iostream>
 #include <memory>
+#include <string_view>
 #include <vector>
 #include <algorithm>
 
@@ -454,9 +455,9 @@ public:
 };
 
 
-void writeDevicesLog(std::unique_ptr<ds_profile> const & rProfile, OUString const & sProfilePath, int nSelectedIndex)
+void writeDevicesLog(std::unique_ptr<ds_profile> const & rProfile, std::u16string_view sProfilePath, int nSelectedIndex)
 {
-    OUString aCacheFile(sProfilePath + "opencl_devices.log");
+    OUString aCacheFile(OUString::Concat(sProfilePath) + "opencl_devices.log");
     LogWriter aWriter(aCacheFile);
 
     int nIndex = 0;
@@ -493,7 +494,7 @@ void writeDevicesLog(std::unique_ptr<ds_profile> const & rProfile, OUString cons
 } // end anonymous namespace
 
 ds_device const & getDeviceSelection(
-    OUString const & sProfilePath, bool bForceSelection)
+    std::u16string_view sProfilePath, bool bForceSelection)
 {
     /* Run only if device is not yet selected */
     if (!bIsDeviceSelected || bForceSelection)
@@ -511,7 +512,7 @@ ds_device const & getDeviceSelection(
         }
 
         /* Try reading scores from file */
-        OUString sFilePath = sProfilePath + "opencl_profile.xml";
+        OUString sFilePath = OUString::Concat(sProfilePath) + "opencl_profile.xml";
 
         if (!bForceSelection)
         {

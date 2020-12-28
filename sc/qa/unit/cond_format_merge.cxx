@@ -42,7 +42,7 @@ ScCondFormatMergeTest::ScCondFormatMergeTest()
 void ScCondFormatMergeTest::testCondFormatMerge()
 {
     OUString aFileURL;
-    createFileURL("cond_format_merge.ods", aFileURL);
+    createFileURL(u"cond_format_merge.ods", aFileURL);
     uno::Reference<lang::XComponent> mxComponent = loadFromDesktop(aFileURL);
 
     CPPUNIT_ASSERT_MESSAGE("Component not loaded", mxComponent.is());

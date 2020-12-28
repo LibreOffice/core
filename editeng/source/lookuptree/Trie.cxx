@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <editeng/Trie.hxx>
 
 namespace editeng
@@ -31,8 +35,8 @@ struct TrieNode final
     TrieNode* findChild(sal_Unicode aCharacter);
     TrieNode* traversePath(const OUString& sPath);
     void      addNewChild(TrieNode* pChild);
-    void      collectSuggestions(const OUString& sPath, std::vector<OUString>& rSuggestionList);
-    static void  collectSuggestionsForCurrentNode(TrieNode* pCurrent, const OUString& sPath, vector<OUString>& rSuggestionList);
+    void      collectSuggestions(std::u16string_view sPath, std::vector<OUString>& rSuggestionList);
+    static void  collectSuggestionsForCurrentNode(TrieNode* pCurrent, std::u16string_view sPath, vector<OUString>& rSuggestionList);
 };
 
 TrieNode::TrieNode(sal_Unicode aCharacter) :
@@ -80,7 +84,7 @@ TrieNode* TrieNode::findChild(sal_Unicode aInputCharacter)
     return nullptr;
 }
 
-void TrieNode::collectSuggestions(const OUString& sPath, vector<OUString>& rSuggestionList)
+void TrieNode::collectSuggestions(std::u16string_view sPath, vector<OUString>& rSuggestionList)
 {
     // first traverse nodes for alphabet characters
     for (auto const & pCurrent : mLatinArray)
@@ -97,7 +101,7 @@ void TrieNode::collectSuggestions(const OUString& sPath, vector<OUString>& rSugg
     }
 }
 
-void TrieNode::collectSuggestionsForCurrentNode(TrieNode* pCurrent, const OUString& sPath, vector<OUString>& rSuggestionList)
+void TrieNode::collectSuggestionsForCurrentNode(TrieNode* pCurrent, std::u16string_view sPath, vector<OUString>& rSuggestionList)
 {
     OUString aStringPath = sPath + OUStringChar(pCurrent->mCharacter);
     if(pCurrent->mMarker)
@@ -179,7 +183,7 @@ size_t Trie::size() const
     if (!mRoot)
         return 0;
     std::vector<OUString> entries;
-    mRoot->collectSuggestions(OUString(), entries);
+    mRoot->collectSuggestions(std::u16string_view(), entries);
     return entries.size();
 }
 

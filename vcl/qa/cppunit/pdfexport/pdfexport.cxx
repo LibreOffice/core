@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <string_view>
 #include <type_traits>
 
 #include <config_features.h>
@@ -72,8 +73,8 @@ public:
     PdfExportTest();
     virtual void setUp() override;
     virtual void tearDown() override;
-    void saveAsPDF(const OUString& rFile);
-    void load(const OUString& rFile, vcl::filter::PDFDocument& rDocument);
+    void saveAsPDF(std::u16string_view rFile);
+    void load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument);
 };
 
 PdfExportTest::PdfExportTest() { maTempFile.EnableKillingFile(); }
@@ -117,7 +118,7 @@ void PdfExportTest::tearDown()
 
 OUStringLiteral const DATA_DIRECTORY = u"/vcl/qa/cppunit/pdfexport/data/";
 
-void PdfExportTest::saveAsPDF(const OUString& rFile)
+void PdfExportTest::saveAsPDF(std::u16string_view rFile)
 {
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFile;
@@ -130,7 +131,7 @@ void PdfExportTest::saveAsPDF(const OUString& rFile)
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 }
 
-void PdfExportTest::load(const OUString& rFile, vcl::filter::PDFDocument& rDocument)
+void PdfExportTest::load(std::u16string_view rFile, vcl::filter::PDFDocument& rDocument)
 {
     saveAsPDF(rFile);
 
@@ -184,7 +185,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106059)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106693)
 {
     vcl::filter::PDFDocument aDocument;
-    load("tdf106693.odt", aDocument);
+    load(u"tdf106693.odt", aDocument);
 
     // Assert that the XObject in the page resources dictionary is a form XObject.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -328,7 +329,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107868)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105093)
 {
     vcl::filter::PDFDocument aDocument;
-    load("tdf105093.odp", aDocument);
+    load(u"tdf105093.odp", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -602,7 +603,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testSofthyphenPos)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107013)
 {
     vcl::filter::PDFDocument aDocument;
-    load("tdf107013.odt", aDocument);
+    load(u"tdf107013.odt", aDocument);
 
     // Get access to the only image on the only page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -622,7 +623,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107013)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107018)
 {
     vcl::filter::PDFDocument aDocument;
-    load("tdf107018.odt", aDocument);
+    load(u"tdf107018.odt", aDocument);
 
     // Get access to the only image on the only page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -677,7 +678,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107018)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107089)
 {
     vcl::filter::PDFDocument aDocument;
-    load("tdf107089.odt", aDocument);
+    load(u"tdf107089.odt", aDocument);
 
     // Get access to the only image on the only page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -724,7 +725,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107089)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf99680)
 {
     vcl::filter::PDFDocument aDocument;
-    load("tdf99680.odt", aDocument);
+    load(u"tdf99680.odt", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -765,7 +766,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf99680)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf99680_2)
 {
     vcl::filter::PDFDocument aDocument;
-    load("tdf99680-2.odt", aDocument);
+    load(u"tdf99680-2.odt", aDocument);
 
     // For each document page
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -901,7 +902,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf108963)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf118244_radioButtonGroup)
 {
     vcl::filter::PDFDocument aDocument;
-    load("tdf118244_radioButtonGroup.odt", aDocument);
+    load(u"tdf118244_radioButtonGroup.odt", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
@@ -943,7 +944,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_1)
 {
 #if HAVE_MORE_FONTS
     vcl::filter::PDFDocument aDocument;
-    load("tdf115117-1.odt", aDocument);
+    load(u"tdf115117-1.odt", aDocument);
 
     vcl::filter::PDFObjectElement* pToUnicode = nullptr;
 
@@ -1010,7 +1011,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_2)
     // See the comments in testTdf115117_1() for explanation.
 
     vcl::filter::PDFDocument aDocument;
-    load("tdf115117-2.odt", aDocument);
+    load(u"tdf115117-2.odt", aDocument);
 
     vcl::filter::PDFObjectElement* pToUnicode = nullptr;
 
@@ -1152,7 +1153,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_1)
 #if HAVE_MORE_FONTS
     // This requires Amiri font, if it is missing the test will fail.
     vcl::filter::PDFDocument aDocument;
-    load("tdf66597-1.odt", aDocument);
+    load(u"tdf66597-1.odt", aDocument);
 
     {
         // Get access to ToUnicode of the first font
@@ -1249,7 +1250,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_2)
 {
 #if HAVE_MORE_FONTS
     vcl::filter::PDFDocument aDocument;
-    load("tdf66597-2.odt", aDocument);
+    load(u"tdf66597-2.odt", aDocument);
 
     {
         // Get access to ToUnicode of the first font
@@ -1352,7 +1353,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_3)
 {
 #if HAVE_MORE_FONTS
     vcl::filter::PDFDocument aDocument;
-    load("tdf66597-3.odt", aDocument);
+    load(u"tdf66597-3.odt", aDocument);
 
     {
         // Get access to ToUnicode of the first font
@@ -1620,7 +1621,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf113143)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testForcePoint71)
 {
     // I just care it doesn't crash
-    saveAsPDF("forcepoint71.key");
+    saveAsPDF(u"forcepoint71.key");
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115262)
@@ -1719,7 +1720,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115967)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf121615)
 {
     vcl::filter::PDFDocument aDocument;
-    load("tdf121615.odt", aDocument);
+    load(u"tdf121615.odt", aDocument);
 
     // The document has one page.
     std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();

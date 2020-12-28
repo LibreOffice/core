@@ -174,7 +174,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFAdd)
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
     OUString aInURL = aSourceDir + "no.pdf";
     OUString aTargetDir
-        = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_pdfsigning.test.user/");
+        = m_directories.getURLFromWorkdir(u"/CppunitTest/xmlsecurity_pdfsigning.test.user/");
     OUString aOutURL = aTargetDir + "add.pdf";
     bool bHadCertificates = sign(aInURL, aOutURL, 0);
 
@@ -200,7 +200,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFAdd2)
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
     OUString aInURL = aSourceDir + "no.pdf";
     OUString aTargetDir
-        = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_pdfsigning.test.user/");
+        = m_directories.getURLFromWorkdir(u"/CppunitTest/xmlsecurity_pdfsigning.test.user/");
     OUString aOutURL = aTargetDir + "add.pdf";
     bool bHadCertificates = sign(aInURL, aOutURL, 0);
 
@@ -234,7 +234,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFRemove)
 
     // Remove the signature and write out the result as remove.pdf.
     OUString aTargetDir
-        = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_pdfsigning.test.user/");
+        = m_directories.getURLFromWorkdir(u"/CppunitTest/xmlsecurity_pdfsigning.test.user/");
     OUString aOutURL = aTargetDir + "remove.pdf";
     osl::File::copy(aInURL, aOutURL);
     {
@@ -265,7 +265,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFRemoveAll)
 
     // Copy the test document to a temporary file, as it'll be modified.
     OUString aTargetDir
-        = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_pdfsigning.test.user/");
+        = m_directories.getURLFromWorkdir(u"/CppunitTest/xmlsecurity_pdfsigning.test.user/");
     OUString aOutURL = aTargetDir + "remove-all.pdf";
     CPPUNIT_ASSERT_EQUAL(
         osl::File::RC::E_None,
@@ -348,7 +348,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDF16Add)
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
     OUString aInURL = aSourceDir + "pdf16adobe.pdf";
     OUString aTargetDir
-        = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_pdfsigning.test.user/");
+        = m_directories.getURLFromWorkdir(u"/CppunitTest/xmlsecurity_pdfsigning.test.user/");
     OUString aOutURL = aTargetDir + "add.pdf";
     // This failed: verification broke as incorrect xref stream was written as
     // part of the new signature.
@@ -438,7 +438,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testSigningCertificateAttribute)
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
     OUString aInURL = aSourceDir + "no.pdf";
     OUString aTargetDir
-        = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_pdfsigning.test.user/");
+        = m_directories.getURLFromWorkdir(u"/CppunitTest/xmlsecurity_pdfsigning.test.user/");
     OUString aOutURL = aTargetDir + "signing-certificate-attribute.pdf";
     bool bHadCertificates = sign(aInURL, aOutURL, 0);
     if (!bHadCertificates)

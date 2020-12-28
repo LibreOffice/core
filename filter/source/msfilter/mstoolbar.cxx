@@ -92,11 +92,12 @@ CustomToolBarImportHelper::getCfgManager()
 
 
 uno::Any
-CustomToolBarImportHelper::createCommandFromMacro( const OUString& sCmd )
+CustomToolBarImportHelper::createCommandFromMacro( std::u16string_view sCmd )
 {
     //"vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document"
     // create script url
-    OUString scriptURL = "vnd.sun.star.script:" + sCmd + "?language=Basic&location=document";
+    OUString scriptURL
+        = OUString::Concat("vnd.sun.star.script:") + sCmd + "?language=Basic&location=document";
     return uno::makeAny( scriptURL );
 }
 

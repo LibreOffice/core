@@ -96,7 +96,7 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory > const & rXCfgP
     return bAvailable;
 }
 
-void FilterConfigItem::ImpInitTree( const OUString& rSubTree )
+void FilterConfigItem::ImpInitTree( std::u16string_view rSubTree )
 {
     bModified = false;
 
@@ -104,7 +104,7 @@ void FilterConfigItem::ImpInitTree( const OUString& rSubTree )
 
     Reference< XMultiServiceFactory > xCfgProv = theDefaultProvider::get( xContext );
 
-    OUString sTree = "/org.openoffice." + rSubTree;
+    OUString sTree = OUString::Concat("/org.openoffice.") + rSubTree;
     if ( !ImpIsTreeAvailable(xCfgProv, sTree) )
         return;
 
@@ -130,7 +130,7 @@ void FilterConfigItem::ImpInitTree( const OUString& rSubTree )
     }
 }
 
-FilterConfigItem::FilterConfigItem( const OUString& rSubTree )
+FilterConfigItem::FilterConfigItem( std::u16string_view rSubTree )
 {
     ImpInitTree( rSubTree );
 }
@@ -142,7 +142,7 @@ FilterConfigItem::FilterConfigItem( css::uno::Sequence< css::beans::PropertyValu
         aFilterData = *pFilterData;
 }
 
-FilterConfigItem::FilterConfigItem( const OUString& rSubTree,
+FilterConfigItem::FilterConfigItem( std::u16string_view rSubTree,
     css::uno::Sequence< css::beans::PropertyValue > const * pFilterData )
 {
     ImpInitTree( rSubTree );

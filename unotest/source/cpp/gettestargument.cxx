@@ -26,9 +26,9 @@
 
 namespace test
 {
-bool getTestArgument(OUString const& name, OUString* value)
+bool getTestArgument(std::u16string_view name, OUString* value)
 {
-    return detail::getArgument("testarg." + name, value);
+    return detail::getArgument(OUString(OUString::Concat("testarg.") + name), value);
 }
 }
 

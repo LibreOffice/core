@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/fieldvalues.hxx>
 
@@ -31,7 +35,7 @@
 #include <tabview.hxx>
 #include <columnspanset.hxx>
 
-static OUString lcl_MetricString( tools::Long nTwips, const OUString& rText )
+static OUString lcl_MetricString( tools::Long nTwips, std::u16string_view rText )
 {
     if ( nTwips <= 0 )
         return ScResId(STR_TIP_HIDE);
@@ -41,7 +45,7 @@ static OUString lcl_MetricString( tools::Long nTwips, const OUString& rText )
 
         sal_Int64 nUserVal = vcl::ConvertValue( nTwips*100, 1, 2, FieldUnit::TWIP, eUserMet );
 
-        OUString aStr = rText + " "
+        OUString aStr = OUString::Concat(rText) + " "
                         + ScGlobal::getLocaleDataPtr()->getNum( nUserVal, 2 )
                         + " " + SdrFormatter::GetUnitStr(eUserMet);
         return aStr;
