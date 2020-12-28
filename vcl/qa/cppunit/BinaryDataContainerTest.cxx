@@ -19,14 +19,14 @@ namespace
 {
 class BinaryDataContainerTest : public CppUnit::TestFixture
 {
-    void test();
+    void testConstruct();
 
     CPPUNIT_TEST_SUITE(BinaryDataContainerTest);
-    CPPUNIT_TEST(test);
+    CPPUNIT_TEST(testConstruct);
     CPPUNIT_TEST_SUITE_END();
 };
 
-void BinaryDataContainerTest::test()
+void BinaryDataContainerTest::testConstruct()
 {
     {
         BinaryDataContainer aContainer;
@@ -53,6 +53,21 @@ void BinaryDataContainerTest::test()
 
         CPPUNIT_ASSERT_EQUAL(true, bool(aCopyOfContainer.isEmpty()));
         CPPUNIT_ASSERT_EQUAL(size_t(0), aCopyOfContainer.getSize());
+    }
+    {
+        // construct a unique_ptr data array
+        std::vector<sal_uInt8> aTestByteArray = { 1, 2, 3, 4 };
+        auto aConstructionByteArray = std::make_unique<std::vector<sal_uInt8>>(aTestByteArray);
+
+        // remember for later to compare
+        const sal_uInt8* pInternal = aConstructionByteArray->data();
+
+        BinaryDataContainer aContainer(aConstructionByteArray);
+
+        // make sure the unique_ptr was moved into BinaryDataContainer
+        CPPUNIT_ASSERT_EQUAL(false, bool(aConstructionByteArray));
+        // make sure we didn't copy data into BinaryDataContainer (pointers match)
+        CPPUNIT_ASSERT_EQUAL(pInternal, aContainer.getData());
     }
 }
 
