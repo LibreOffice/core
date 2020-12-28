@@ -16,6 +16,11 @@
 
 #include <curl/curl.h>
 
+#ifdef _WIN32
+#include <memory>
+#include <windows.h>
+#endif
+
 const char kUserAgent[] = "Breakpad/1.0 (Linux)";
 
 static std::map<std::string, std::string> readStrings(std::istream& file)
@@ -192,7 +197,17 @@ namespace crashreport {
 
 bool readConfig(const std::string& iniPath, std::string * response)
 {
+#if defined _WIN32
+    std::wstring iniPathW;
+    const int nChars = MultiByteToWideChar(CP_UTF8, 0, iniPath.c_str(), -1, nullptr, 0);
+    auto buf = std::make_unique<wchar_t[]>(nChars);
+    if (MultiByteToWideChar(CP_UTF8, 0, iniPath.c_str(), -1, buf.get(), nChars) != 0)
+        iniPathW = buf.get();
+
+    std::ifstream file = iniPathW.empty() ? std::ifstream(iniPath) : std::ifstream(iniPathW);
+#else
     std::ifstream file(iniPath);
+#endif
     std::map<std::string, std::string> parameters = readStrings(file);
 
     // make sure that at least the mandatory parameters are in there
