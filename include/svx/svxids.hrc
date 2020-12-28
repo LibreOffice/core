@@ -251,7 +251,7 @@ class SdrAngleItem;
 #define SID_ATTR_TRANSFORM_ROT_X                        TypedWhichId<SfxInt32Item>( SID_SVX_START + 93 )
 #define SID_ATTR_TRANSFORM_ROT_Y                        TypedWhichId<SfxInt32Item>( SID_SVX_START + 94 )
 #define SID_ATTR_TRANSFORM_ANGLE                        TypedWhichId<SdrAngleItem>( SID_SVX_START + 95 )
-#define SID_ATTR_TRANSFORM_DELTA_ANGLE                  TypedWhichId<SfxInt32Item>( SID_SVX_START + 96 )
+#define SID_ATTR_TRANSFORM_DELTA_ANGLE                  TypedWhichId<SdrAngleItem>( SID_SVX_START + 96 )
 // CAUTION! Range <96..100> used by SFX2 (!)
 #define SID_SIZE_ALL                                    ( SID_SVX_START + 101 )
 #define SID_DRAW_LINE                                   ( SID_SVX_START + 102 )

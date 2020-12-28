@@ -400,7 +400,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_TRANSFORM_DELTA_ANGLE, false, &pItem))
                 {
-                    const Degree10 nDeltaRot(static_cast<const SfxUInt32Item*>(pItem)->GetValue() / 10);
+                    const Degree10 nDeltaRot(static_cast<const SdrAngleItem*>(pItem)->GetValue() / 10);
                     aMgr.SetRotation(nOldRot, nOldRot + nDeltaRot, rRotation.GetUnrotatedSize());
                 }
 
