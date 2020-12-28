@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/lok.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <svtools/javacontext.hxx>
@@ -63,6 +64,7 @@ Any SAL_CALL JavaContext::getValueByName( const OUString& Name)
 
     if ( Name == JAVA_INTERACTION_HANDLER_NAME )
     {
+        if ( !comphelper::LibreOfficeKit::isActive() )
         {
             osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
             if (!m_xHandler.is())
