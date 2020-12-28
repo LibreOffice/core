@@ -912,7 +912,11 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
                 PyRef args( PyTuple_New( 1), SAL_NO_ACQUIRE, NOT_NULL );
                 PyTuple_SetItem( args.get(), 0, excTraceback.getAcquired() );
                 PyRef pyStr( PyObject_CallObject( extractTraceback.get(),args.get() ), SAL_NO_ACQUIRE);
+<<<<<<< HEAD   (7d4f92 lok: add lo_sendDialogEvent to post dialog events)
                 str = OUString::createFromAscii( PyStr_AsString(pyStr.get()) );
+=======
+                str = OUString::fromUtf8(PyUnicode_AsUTF8(pyStr.get()));
+>>>>>>> CHANGE (279be7 UTF8 is not ASCII)
             }
             else
             {
