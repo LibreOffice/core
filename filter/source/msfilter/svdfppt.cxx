@@ -4768,58 +4768,66 @@ bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn, const DffRecordHeader&
     rRecHd.SeekToContent( rIn );
 
     auto nEndRecPos = DffPropSet::SanitizeEndPos(rIn, rRecHd.GetRecEndFilePos());
-    while (rIn.Tell() < nEndRecPos && rIn.good())
+    try
     {
-        if ( nRecordType == PPT_PST_TextSpecInfoAtom )
+        while (rIn.Tell() < nEndRecPos && rIn.good())
         {
-            sal_uInt32 nCharCount(0);
-            rIn.ReadUInt32( nCharCount );
-            nCharIdx += nCharCount;
-        }
-
-        sal_uInt32 nFlags(0);
-        rIn.ReadUInt32(nFlags);
-
-        PPTTextSpecInfo aEntry( nCharIdx );
-        if ( pTextSpecDefault )
-        {
-            aEntry.nDontKnow = pTextSpecDefault->nDontKnow;
-            aEntry.nLanguage[ 0 ] = pTextSpecDefault->nLanguage[ 0 ];
-            aEntry.nLanguage[ 1 ] = pTextSpecDefault->nLanguage[ 1 ];
-            aEntry.nLanguage[ 2 ] = pTextSpecDefault->nLanguage[ 2 ];
-        }
-        for (sal_uInt32 i = 1; nFlags && i ; i <<= 1)
-        {
-            sal_uInt16 nLang = 0;
-            switch( nFlags & i )
+            if ( nRecordType == PPT_PST_TextSpecInfoAtom )
             {
-                case 0 : break;
-                case 1 : rIn.ReadUInt16( aEntry.nDontKnow ); break;
-                case 2 : rIn.ReadUInt16( nLang ); break;
-                case 4 : rIn.ReadUInt16( nLang ); break;
-                default :
-                {
-                    rIn.SeekRel( 2 );
-                }
+                sal_uInt32 nCharCount(0);
+                rIn.ReadUInt32( nCharCount );
+                nCharIdx += nCharCount;
             }
-            if ( nLang )
+
+            sal_uInt32 nFlags(0);
+            rIn.ReadUInt32(nFlags);
+
+            PPTTextSpecInfo aEntry( nCharIdx );
+            if ( pTextSpecDefault )
             {
-                // #i119985#, we could probably handle this better if we have a
-                // place to override the final language for weak
-                // characters/fields to fallback to, rather than the current
-                // application locale. Assuming that we can determine what the
-                // default fallback language for a given .ppt, etc is during
-                // load time.
-                if (i == 2)
-                {
-                    aEntry.nLanguage[ 0 ] = aEntry.nLanguage[ 1 ] = aEntry.nLanguage[ 2 ] = LanguageType(nLang);
-                }
+                aEntry.nDontKnow = pTextSpecDefault->nDontKnow;
+                aEntry.nLanguage[ 0 ] = pTextSpecDefault->nLanguage[ 0 ];
+                aEntry.nLanguage[ 1 ] = pTextSpecDefault->nLanguage[ 1 ];
+                aEntry.nLanguage[ 2 ] = pTextSpecDefault->nLanguage[ 2 ];
             }
-            nFlags &= ~i;
+            for (sal_uInt32 i = 1; nFlags && i ; i <<= 1)
+            {
+                sal_uInt16 nLang = 0;
+                switch( nFlags & i )
+                {
+                    case 0 : break;
+                    case 1 : rIn.ReadUInt16( aEntry.nDontKnow ); break;
+                    case 2 : rIn.ReadUInt16( nLang ); break;
+                    case 4 : rIn.ReadUInt16( nLang ); break;
+                    default :
+                    {
+                        rIn.SeekRel( 2 );
+                    }
+                }
+                if ( nLang )
+                {
+                    // #i119985#, we could probably handle this better if we have a
+                    // place to override the final language for weak
+                    // characters/fields to fallback to, rather than the current
+                    // application locale. Assuming that we can determine what the
+                    // default fallback language for a given .ppt, etc is during
+                    // load time.
+                    if (i == 2)
+                    {
+                        aEntry.nLanguage[ 0 ] = aEntry.nLanguage[ 1 ] = aEntry.nLanguage[ 2 ] = LanguageType(nLang);
+                    }
+                }
+                nFlags &= ~i;
+            }
+            aList.push_back( aEntry );
         }
-        aList.push_back( aEntry );
+        bValid = rIn.Tell() == rRecHd.GetRecEndFilePos();
     }
-    bValid = rIn.Tell() == rRecHd.GetRecEndFilePos();
+    catch (const SvStreamEOFException&)
+    {
+        SAL_WARN("filter.ms", "EOF");
+        bValid = false;
+    }
     return bValid;
 }
 
