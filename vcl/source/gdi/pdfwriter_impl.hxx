@@ -50,6 +50,7 @@
 #include <o3tl/lru_map.hxx>
 #include <comphelper/hash.hxx>
 #include <tools/stream.hxx>
+#include <vcl/BinaryDataContainer.hxx>
 
 #include <vcl/filter/pdfobjectcontainer.hxx>
 #include <pdf/ExternalPDFStreams.hxx>
@@ -402,7 +403,7 @@ struct PDFEmbeddedFile
     /// ID of the file.
     sal_Int32 m_nObject;
     /// Contents of the file.
-    std::shared_ptr<std::vector<sal_Int8>> m_pData;
+    BinaryDataContainer m_aDataContainer;
 
     PDFEmbeddedFile()
         : m_nObject(0)
