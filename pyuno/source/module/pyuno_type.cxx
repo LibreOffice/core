@@ -138,7 +138,9 @@ sal_Unicode PyChar2Unicode( PyObject *obj )
             "uno.Char contains an empty unicode string");
     }
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     sal_Unicode c = static_cast<sal_Unicode>(PyUnicode_AsUnicode( value.get() )[0]);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     return c;
 }
 
@@ -269,7 +271,9 @@ PyObject* PyUNO_char_new ( sal_Unicode val , const Runtime &r )
     Py_UNICODE u[2];
     u[0] = val;
     u[1] = 0;
-    PyTuple_SetItem( args.get() , 0 , PyUnicode_FromUnicode( u ,1) );
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    PyTuple_SetItem( args.get() , 0 , PyUnicode_FromUnicode(u, 1) );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     return callCtor( r, "Char" , args );
 }
