@@ -13,19 +13,18 @@
 
 namespace vcl
 {
-sal_Int32 ExternalPDFStreams::store(const sal_uInt8* pData, sal_uInt32 nLength)
+sal_Int32 ExternalPDFStreams::store(BinaryDataContainer const& rDataContainer)
 {
     sal_Int32 nIndex = -1;
 
-    std::vector<sal_uInt8> aHash
-        = comphelper::Hash::calculateHash(pData, nLength, comphelper::HashType::SHA1);
+    std::vector<sal_uInt8> aHash = comphelper::Hash::calculateHash(
+        rDataContainer.getData(), rDataContainer.getSize(), comphelper::HashType::SHA1);
 
     auto it = maStreamIndexMap.find(aHash);
     if (it == maStreamIndexMap.end())
     {
         auto& rExternalStream = maStreamList.emplace_back();
-        rExternalStream.maData.resize(nLength);
-        std::copy(pData, pData + nLength, rExternalStream.maData.begin());
+        rExternalStream.maDataContainer = rDataContainer;
         nIndex = maStreamList.size() - 1;
         maStreamIndexMap.emplace(aHash, nIndex);
     }

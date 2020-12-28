@@ -65,12 +65,11 @@ void PDFiumLibraryTest::testDocument()
     CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
                          pVectorGraphicData->getVectorGraphicDataType());
 
-    const void* pData = pVectorGraphicData->getVectorGraphicDataArray().getConstArray();
-    int nLength = pVectorGraphicData->getVectorGraphicDataArrayLength();
+    auto& rDataContainer = pVectorGraphicData->getBinaryDataContainer();
 
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     CPPUNIT_ASSERT(pPdfium);
-    auto pDocument = pPdfium->openDocument(pData, nLength);
+    auto pDocument = pPdfium->openDocument(rDataContainer.getData(), rDataContainer.getSize());
     CPPUNIT_ASSERT(pDocument);
 
     CPPUNIT_ASSERT_EQUAL(1, pDocument->getPageCount());
@@ -93,11 +92,10 @@ void PDFiumLibraryTest::testPages()
     CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
                          pVectorGraphicData->getVectorGraphicDataType());
 
-    const void* pData = pVectorGraphicData->getVectorGraphicDataArray().getConstArray();
-    int nLength = pVectorGraphicData->getVectorGraphicDataArrayLength();
+    auto& rDataContainer = pVectorGraphicData->getBinaryDataContainer();
 
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
-    auto pDocument = pPdfium->openDocument(pData, nLength);
+    auto pDocument = pPdfium->openDocument(rDataContainer.getData(), rDataContainer.getSize());
     CPPUNIT_ASSERT(pDocument);
 
     CPPUNIT_ASSERT_EQUAL(1, pDocument->getPageCount());
@@ -119,11 +117,10 @@ void PDFiumLibraryTest::testPageObjects()
     CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
                          pVectorGraphicData->getVectorGraphicDataType());
 
-    const void* pData = pVectorGraphicData->getVectorGraphicDataArray().getConstArray();
-    int nLength = pVectorGraphicData->getVectorGraphicDataArrayLength();
+    auto& rDataContainer = pVectorGraphicData->getBinaryDataContainer();
 
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
-    auto pDocument = pPdfium->openDocument(pData, nLength);
+    auto pDocument = pPdfium->openDocument(rDataContainer.getData(), rDataContainer.getSize());
     CPPUNIT_ASSERT(pDocument);
 
     CPPUNIT_ASSERT_EQUAL(1, pDocument->getPageCount());
@@ -169,11 +166,10 @@ void PDFiumLibraryTest::testAnnotationsMadeInEvince()
     CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
                          pVectorGraphicData->getVectorGraphicDataType());
 
-    const void* pData = pVectorGraphicData->getVectorGraphicDataArray().getConstArray();
-    int nLength = pVectorGraphicData->getVectorGraphicDataArrayLength();
+    auto& rDataContainer = pVectorGraphicData->getBinaryDataContainer();
 
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
-    auto pDocument = pPdfium->openDocument(pData, nLength);
+    auto pDocument = pPdfium->openDocument(rDataContainer.getData(), rDataContainer.getSize());
     CPPUNIT_ASSERT(pDocument);
 
     CPPUNIT_ASSERT_EQUAL(1, pDocument->getPageCount());
@@ -226,11 +222,10 @@ void PDFiumLibraryTest::testAnnotationsMadeInAcrobat()
     CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
                          pVectorGraphicData->getVectorGraphicDataType());
 
-    const void* pData = pVectorGraphicData->getVectorGraphicDataArray().getConstArray();
-    int nLength = pVectorGraphicData->getVectorGraphicDataArrayLength();
+    auto& rDataContainer = pVectorGraphicData->getBinaryDataContainer();
 
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
-    auto pDocument = pPdfium->openDocument(pData, nLength);
+    auto pDocument = pPdfium->openDocument(rDataContainer.getData(), rDataContainer.getSize());
     CPPUNIT_ASSERT(pDocument);
 
     CPPUNIT_ASSERT_EQUAL(1, pDocument->getPageCount());
@@ -304,11 +299,10 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
     CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
                          pVectorGraphicData->getVectorGraphicDataType());
 
-    const void* pData = pVectorGraphicData->getVectorGraphicDataArray().getConstArray();
-    int nLength = pVectorGraphicData->getVectorGraphicDataArrayLength();
+    auto& rDataContainer = pVectorGraphicData->getBinaryDataContainer();
 
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
-    auto pDocument = pPdfium->openDocument(pData, nLength);
+    auto pDocument = pPdfium->openDocument(rDataContainer.getData(), rDataContainer.getSize());
     CPPUNIT_ASSERT(pDocument);
 
     CPPUNIT_ASSERT_EQUAL(1, pDocument->getPageCount());
