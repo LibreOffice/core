@@ -323,6 +323,76 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, weld::Button&, void)
     m_xTargetsBox->setRowData(nSelectedRow, pTarget);
 }
 
+IMPL_LINK_NOARG(SfxAutoRedactDialog, DoubleClickEditHdl, weld::TreeView&, bool)
+{
+    sal_Int32 nSelectedRow = m_xTargetsBox->get_selected_index();
+
+    // No selection, nothing to edit
+    if (nSelectedRow < 0)
+        return false;
+
+    // Only one entry should be selected for editing
+    if (m_xTargetsBox->get_selected_rows().size() > 1)
+    {
+        //Warn the user about multiple selections
+        std::unique_ptr<weld::MessageDialog> xBox(
+            Application::CreateMessageDialog(getDialog(), VclMessageType::Error, VclButtonsType::Ok,
+                                             SfxResId(STR_REDACTION_MULTI_EDIT)));
+        xBox->run();
+        return false;
+    }
+
+    // Get the redaction target to be edited
+    RedactionTarget* pTarget
+        = reinterpret_cast<RedactionTarget*>(m_xTargetsBox->get_id(nSelectedRow).toInt64());
+
+    // Construct and run the edit target dialog
+    SfxAddTargetDialog aEditTargetDialog(getDialog(), pTarget->sName, pTarget->sType,
+                                         pTarget->sContent, pTarget->bCaseSensitive,
+                                         pTarget->bWholeWords);
+
+    bool bIncomplete;
+    do
+    {
+        bIncomplete = false;
+
+        if (aEditTargetDialog.run() != RET_OK)
+            return false;
+
+        if (aEditTargetDialog.getName().isEmpty()
+            || aEditTargetDialog.getType() == RedactionTargetType::REDACTION_TARGET_UNKNOWN
+            || aEditTargetDialog.getContent().isEmpty())
+        {
+            bIncomplete = true;
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
+                SfxResId(STR_REDACTION_FIELDS_REQUIRED)));
+            xBox->run();
+        }
+        else if (aEditTargetDialog.getName() != pTarget->sName
+                 && m_xTargetsBox->GetTargetByName(aEditTargetDialog.getName()))
+        {
+            bIncomplete = true;
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
+                SfxResId(STR_REDACTION_TARGET_NAME_CLASH)));
+            xBox->run();
+        }
+
+    } while (bIncomplete);
+
+    // Update the redaction target
+    pTarget->sName = aEditTargetDialog.getName();
+    pTarget->sType = aEditTargetDialog.getType();
+    pTarget->sContent = aEditTargetDialog.getContent();
+    pTarget->bCaseSensitive = aEditTargetDialog.isCaseSensitive();
+    pTarget->bWholeWords = aEditTargetDialog.isWholeWords();
+
+    // And sync the targets box row with the actual target data
+    m_xTargetsBox->setRowData(nSelectedRow, pTarget);
+    return true;
+}
+
 IMPL_LINK_NOARG(SfxAutoRedactDialog, DeleteHdl, weld::Button&, void)
 {
     std::vector<int> aSelectedRows = m_xTargetsBox->get_selected_rows();
@@ -587,6 +657,7 @@ SfxAutoRedactDialog::SfxAutoRedactDialog(weld::Window* pParent)
     m_xAddBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, AddHdl));
     m_xEditBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, EditHdl));
     m_xDeleteBtn->connect_clicked(LINK(this, SfxAutoRedactDialog, DeleteHdl));
+    m_xTargetsBox->connect_row_activated(LINK(this, SfxAutoRedactDialog, DoubleClickEditHdl));
 }
 
 SfxAutoRedactDialog::~SfxAutoRedactDialog()
