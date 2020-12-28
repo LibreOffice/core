@@ -23,6 +23,7 @@
 #include <pyuno.hxx>
 
 #include <o3tl/any.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <osl/process.h>
 #include <osl/file.hxx>
@@ -109,16 +110,22 @@ static void setPythonHome ( const OUString & pythonHome )
 {
     OUString systemPythonHome;
     osl_getSystemPathFromFileURL( pythonHome.pData, &(systemPythonHome.pData) );
-    OString o = OUStringToOString( systemPythonHome, osl_getThreadTextEncoding() );
     // static because Py_SetPythonHome just copies the "wide" pointer
     static wchar_t wide[PATH_MAX + 1];
+#if defined _WIN32
+    const size_t len = systemPythonHome.getLength();
+    if (len < SAL_N_ELEMENTS(wide))
+        wcsncpy(wide, o3tl::toW(systemPythonHome.getStr()), len + 1);
+#else
+    OString o = OUStringToOString(systemPythonHome, osl_getThreadTextEncoding());
     size_t len = mbstowcs(wide, o.pData->buffer, PATH_MAX + 1);
+#endif
     if(len == size_t(-1))
     {
         PyErr_SetString(PyExc_SystemError, "invalid multibyte sequence in python home path");
         return;
     }
-    if(len == PATH_MAX + 1)
+    if(len >= PATH_MAX + 1)
     {
         PyErr_SetString(PyExc_SystemError, "python home path is too long");
         return;
