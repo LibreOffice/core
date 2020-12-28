@@ -676,7 +676,13 @@ FastSaxParserImpl::~FastSaxParserImpl()
     if( mxDocumentLocator.is() )
         mxDocumentLocator->dispose();
     for ( size_t i = 0; i < m_TemporalEntities.size(); ++i )
-        if (m_TemporalEntities[i] != nullptr) xmlFree(m_TemporalEntities[i]);
+    {
+        if (!m_TemporalEntities[i])
+            continue;
+        xmlNodePtr pPtr = reinterpret_cast<xmlNodePtr>(m_TemporalEntities[i]);
+        xmlUnlinkNode(pPtr);
+        xmlFreeNode(pPtr);
+    }
 }
 
 void FastSaxParserImpl::DefineNamespace( const OString& rPrefix, const OUString& namespaceURL )
