@@ -5027,10 +5027,10 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
             // Mirror on the vertical axis is a horizontal flip.
             xFrameAttributes->add(XML_flipH, "1");
         // RES_GRFATR_ROTATION is sal_uInt16; use sal_uInt32 for multiplication later
-        if (sal_uInt32 nRot = rSet.Get(RES_GRFATR_ROTATION).GetValue())
+        if (Degree10 nRot = rSet.Get(RES_GRFATR_ROTATION).GetValue())
         {
             // RES_GRFATR_ROTATION is in 10ths of degree; convert to 100ths for macro
-            sal_uInt32 mOOXMLRot = oox::drawingml::ExportRotateClockwisify(nRot*10);
+            sal_uInt32 mOOXMLRot = oox::drawingml::ExportRotateClockwisify(nRot.get()*10);
             xFrameAttributes->add(XML_rot, OString::number(mOOXMLRot));
         }
     }

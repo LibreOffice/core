@@ -702,7 +702,7 @@ bool SwRotationGrf::GetPresentation(
         rText = SwResId( STR_ROTATION );
     else if( rText.getLength() )
         rText.clear();
-    rText += OUString::number( GetValue() ) + "\xB0";
+    rText += OUString::number( toDegrees(GetValue()) ) + "\xB0";
     return true;
 }
 

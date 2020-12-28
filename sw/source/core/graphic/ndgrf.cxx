@@ -776,7 +776,7 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
                  convertTwipToMm100( rCrop.GetBottom() ));
 
     const SwRotationGrf& rRotation = rSet.GetRotationGrf();
-    rGA.SetRotation( Degree10(rRotation.GetValue()) );
+    rGA.SetRotation( rRotation.GetValue() );
 
     rGA.SetLuminance( rSet.GetLuminanceGrf().GetValue() );
     rGA.SetContrast( rSet.GetContrastGrf().GetValue() );
