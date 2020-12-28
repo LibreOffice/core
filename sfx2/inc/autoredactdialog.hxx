@@ -77,7 +77,10 @@ public:
     // Sync data on the targets box with the data on the target
     void setRowData(int nRowIndex, const RedactionTarget* pTarget);
 
-    void connect_row_activated(const Link<weld::TreeView&, bool>& rLink) { m_xControl->connect_row_activated(rLink);};
+    void connect_row_activated(const Link<weld::TreeView&, bool>& rLink)
+    {
+        m_xControl->connect_row_activated(rLink);
+    };
 };
 
 namespace sfx2
