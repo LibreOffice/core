@@ -2134,6 +2134,7 @@ sc/res/na010.png sw/res/sc20234.png
 sc/res/na011.png cmd/sc_ok.png
 sc/res/na05.png cmd/sc_upsearch.png
 sc/res/na06.png cmd/sc_downsearch.png
+sc/res/nc01.png cmd/sc_show.png
 sc/res/nc02.png cmd/sc_label.png
 sc/res/nc03.png cmd/sc_viewdatasourcebrowser.png
 sc/res/nc04.png cmd/sc_gallery.png
