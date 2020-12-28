@@ -91,7 +91,30 @@ namespace
         rSh.GetPageNumber(0, true, nPhyNum, nVirtNum, sDummy);
         return nPhyNum;
     }
+
+bool lcl_GotoPage(SwWrtShell& rSh, const sal_uInt16 nStartingPage, sal_uInt16 nOffset = 0)
+{
+    if (!nStartingPage) // Physical page zero is not valid.
+        return false;
+
+    rSh.GotoPage(nStartingPage, /*bRecord=*/false);
+
+    if (lcl_GetCurrentPage(rSh) != nStartingPage)
+    {
+        assert(nStartingPage != 1 && "Physical page 1 couldn't be found/moved to?");
+        // Either we are past the end of the document,
+        // or there is an auto-inserted blank page to handle odd/even.
+        // Try to handle the blank page problem that GotoPage doesn't understand
+        rSh.GotoPage(nStartingPage + 1, /*bRecord=*/false);
+        if (lcl_GetCurrentPage(rSh) != nStartingPage + 1)
+            return false; // Likely we are at the end of the document,
+    }
+    // Now that we have the correct starting point, move to the correct offset.
+    while (nOffset--)
+        rSh.SttNxtPg();
+    return true;
 }
+} // namespace
 
 /*
  * Only include the Index page in the list if the page count implies one
@@ -237,8 +260,6 @@ IMPL_LINK_NOARG(SwTitlePageDlg, EditHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, weld::Button&, void)
 {
-    // FIXME: This wizard is almost completely non-functional for inserting new pages.
-
     lcl_PushCursor(mrSh);
 
     mrSh.StartUndo();
@@ -253,17 +274,17 @@ IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, weld::Button&, void)
     sal_uInt16 nNumTitlePages = m_xPageCountNF->get_value();
     if (!m_xUseExistingPagesRB->get_active())
     {
-        // FIXME: If the starting page number is larger than the last page,
-        // probably should add pages AFTER the last page, not before it.
-        mrSh.GotoPage(GetInsertPosition(), false);
+        // Assuming that a failure to GotoPage means the end of the document,
+        // insert new pages after the last page.
+        if (!lcl_GotoPage(mrSh, GetInsertPosition()))
+            mrSh.EndPg();
         // FIXME: These new pages cannot be accessed currently with GotoPage. It doesn't know they exist.
         for (sal_uInt16 nI = 0; nI < nNumTitlePages; ++nI)
             mrSh.InsertPageBreak();
     }
 
-    mrSh.GotoPage(GetInsertPosition(), false);
-    mrSh.SetAttrItem(aTitleDesc);
-    // FIXME: GotoPage is pointing to a page after the newly created index pages, so the wrong pages are getting Index style.
+    if (lcl_GotoPage(mrSh, GetInsertPosition()))
+        mrSh.SetAttrItem(aTitleDesc);
     for (sal_uInt16 nI = 1; nI < nNumTitlePages; ++nI)
     {
         if (mrSh.SttNxtPg())
@@ -281,16 +302,14 @@ IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, weld::Button&, void)
     {
         sal_uInt16 nPgNo = m_xRestartNumberingCB->get_active() ? m_xRestartNumberingNF->get_value() : 0;
         const SwPageDesc* pNewDesc = nNumTitlePages > 1 ? mpNormalDesc : nullptr;
-        mrSh.GotoPage(GetInsertPosition() + nNumTitlePages - 1, false);
-        // SttNxtPg can handle the invisible pages added to handle two odd, or two even pages - GotoPage can't.
-        mrSh.SttNxtPg();
+        lcl_GotoPage(mrSh, GetInsertPosition(), nNumTitlePages);
         lcl_ChangePage(mrSh, nPgNo, pNewDesc);
     }
 
     mrSh.EndUndo();
     lcl_PopCursor(mrSh);
     if (!m_xUseExistingPagesRB->get_active())
-        mrSh.GotoPage(GetInsertPosition(), false);
+        lcl_GotoPage(mrSh, GetInsertPosition());
     m_xDialog->response(RET_OK);
 }
 
