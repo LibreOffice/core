@@ -19,7 +19,7 @@ namespace crashreport
 // when response = nullptr only make test
 /** Read+Send, Test and send info from the Dump.ini .
 
-        @param [in] iniPath Path-file to the read/test ini-file
+        @param [in] iniPath Path-file to the read/test ini-file (UTF-8 on Windows)
         @param [in] response=nullptr in this case made the Test only
         @param [in] response!=nullptr in this case made the Read+Send
 

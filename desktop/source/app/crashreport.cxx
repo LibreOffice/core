@@ -76,7 +76,19 @@ static bool dumpCallback(const wchar_t* path, const wchar_t* id,
 
 void CrashReporter::writeToFile(std::ios_base::openmode Openmode)
 {
+#if defined _WIN32
+    const std::string iniPath = getIniFileName();
+    std::wstring iniPathW;
+    const int nChars = MultiByteToWideChar(CP_UTF8, 0, iniPath.c_str(), -1, nullptr, 0);
+    auto buf = std::make_unique<wchar_t[]>(nChars);
+    if (MultiByteToWideChar(CP_UTF8, 0, iniPath.c_str(), -1, buf.get(), nChars) != 0)
+        iniPathW = buf.get();
+
+    std::ofstream ini_file
+        = iniPathW.empty() ? std::ofstream(iniPath, Openmode) : std::ofstream(iniPathW, Openmode);
+#else
     std::ofstream ini_file(getIniFileName(), Openmode);
+#endif
 
     for (auto& keyValue : maKeyValues)
     {
