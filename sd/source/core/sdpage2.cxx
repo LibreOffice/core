@@ -72,7 +72,7 @@ using namespace ::com::sun::star::office;
 |*
 \************************************************************************/
 
-void SdPage::SetPresentationLayout(const OUString& rLayoutName,
+void SdPage::SetPresentationLayout(std::u16string_view rLayoutName,
                                    bool bReplaceStyleSheets,
                                    bool bSetMasterPage,
                                    bool bReverseOrder)
@@ -81,7 +81,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
     |* Name of the layout of the page
     \********************************************************************/
     OUString aOldLayoutName(maLayoutName);    // memorize
-    maLayoutName = rLayoutName + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
+    maLayoutName = OUString::Concat(rLayoutName) + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
 
     /*********************************************************************
     |* search and replace master page if necessary

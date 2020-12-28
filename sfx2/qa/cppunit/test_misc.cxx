@@ -74,7 +74,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testODFCustomMetadata)
     uno::Reference<document::XDocumentProperties> const xProps(
         ::com::sun::star::document::DocumentProperties::create(m_xContext));
 
-    OUString const url(m_directories.getURLFromSrc("/sfx2/qa/complex/sfx2/testdocuments/CUSTOM.odt"));
+    OUString const url(m_directories.getURLFromSrc(u"/sfx2/qa/complex/sfx2/testdocuments/CUSTOM.odt"));
     xProps->loadFromMedium(url, uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT_EQUAL(OUString(""), xProps->getAuthor());
     uno::Sequence<beans::PropertyValue> mimeArgs({
@@ -101,7 +101,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testODFCustomMetadata)
 CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
 {
     // Load a document.
-    const OUString aURL(m_directories.getURLFromSrc("/sfx2/qa/cppunit/misc/hello.odt"));
+    const OUString aURL(m_directories.getURLFromSrc(u"/sfx2/qa/cppunit/misc/hello.odt"));
     uno::Reference<lang::XComponent> xComponent
         = loadFromDesktop(aURL, "com.sun.star.text.TextDocument");
     CPPUNIT_ASSERT(xComponent.is());
@@ -152,8 +152,8 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
 CPPUNIT_TEST_FIXTURE(MiscTest, testHardLinks)
 {
 #ifndef _WIN32
-    OUString aSourceDir = m_directories.getURLFromSrc("/sfx2/qa/cppunit/misc/");
-    OUString aTargetDir = m_directories.getURLFromWorkdir("/CppunitTest/sfx2_misc.test.user/");
+    OUString aSourceDir = m_directories.getURLFromSrc(u"/sfx2/qa/cppunit/misc/");
+    OUString aTargetDir = m_directories.getURLFromWorkdir(u"/CppunitTest/sfx2_misc.test.user/");
     const OUString aURL(aTargetDir + "hello.odt");
     osl::File::copy(aSourceDir + "hello.odt", aURL);
     OUString aTargetPath;

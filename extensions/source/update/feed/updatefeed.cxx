@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <config_folders.h>
 
 #include <cppuhelper/exc_hlp.hxx>
@@ -120,7 +124,7 @@ class UpdateInformationProvider :
     bool isUserAgentExtended() const;
 public:
     uno::Reference< xml::dom::XElement > getDocumentRoot(const uno::Reference< xml::dom::XNode >& rxNode);
-    uno::Reference< xml::dom::XNode > getChildNode(const uno::Reference< xml::dom::XNode >& rxNode, const OUString& rName);
+    uno::Reference< xml::dom::XNode > getChildNode(const uno::Reference< xml::dom::XNode >& rxNode, std::u16string_view rName);
 
 
     // XUpdateInformationService
@@ -220,14 +224,14 @@ public:
             uno::Reference< xml::dom::XNode > xAtomEntryNode( m_xNodeList->item(m_nCount++) );
 
             uno::Reference< xml::dom::XNode > xSummaryNode(
-                m_xUpdateInformationProvider->getChildNode( xAtomEntryNode, "summary/text()" )
+                m_xUpdateInformationProvider->getChildNode( xAtomEntryNode, u"summary/text()" )
             );
 
             if( xSummaryNode.is() )
                 aEntry.Description = xSummaryNode->getNodeValue();
 
             uno::Reference< xml::dom::XNode > xContentNode(
-                m_xUpdateInformationProvider->getChildNode( xAtomEntryNode, "content" ) );
+                m_xUpdateInformationProvider->getChildNode( xAtomEntryNode, u"content" ) );
 
             if( xContentNode.is() )
                 aEntry.UpdateDocument = m_xUpdateInformationProvider->getDocumentRoot(xContentNode);
@@ -532,11 +536,11 @@ UpdateInformationProvider::getDocumentRoot(const uno::Reference< xml::dom::XNode
 
 uno::Reference< xml::dom::XNode >
 UpdateInformationProvider::getChildNode(const uno::Reference< xml::dom::XNode >& rxNode,
-                                        const OUString& rName)
+                                        std::u16string_view rName)
 {
     OSL_ASSERT(m_xXPathAPI.is());
     try {
-        return m_xXPathAPI->selectSingleNode(rxNode, "./atom:" + rName);
+        return m_xXPathAPI->selectSingleNode(rxNode, OUString::Concat("./atom:") + rName);
     } catch (const xml::xpath::XPathException &) {
         // ignore
         return nullptr;

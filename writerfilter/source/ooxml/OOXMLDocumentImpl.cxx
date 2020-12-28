@@ -499,7 +499,9 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         // and the domain mapper is likely in an inconsistent state
         // In case user chooses to try to continue loading, don't ask again for this file
         SfxObjectShell* rShell = SfxObjectShell::GetShellFromComponent(mxModel);
-        if (!rShell || !rShell->IsContinueImportOnFilterExceptions("SAXException: " + rErr.Message))
+        if (!rShell
+            || !rShell->IsContinueImportOnFilterExceptions(
+                OUString("SAXException: " + rErr.Message)))
             throw;
     }
     catch (uno::RuntimeException const&)

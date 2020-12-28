@@ -8,6 +8,10 @@
  */
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -24,7 +28,7 @@ public:
 protected:
     css::uno::Reference<css::frame::XModel> m_xModel;
     virtual void Apply() = 0;
-    static OUString getCDataString(const OUString& rString);
+    static OUString getCDataString(std::u16string_view rString);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

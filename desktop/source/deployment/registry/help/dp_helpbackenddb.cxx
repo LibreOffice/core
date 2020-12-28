@@ -70,7 +70,7 @@ void HelpBackendDb::addEntry(OUString const & url, Data const & data)
             Reference<css::xml::dom::XNode> helpNode
                 = writeKeyElement(url);
 
-            writeSimpleElement("data-url", data.dataUrl, helpNode);
+            writeSimpleElement(u"data-url", data.dataUrl, helpNode);
             save();
         }
     }
@@ -88,7 +88,7 @@ void HelpBackendDb::addEntry(OUString const & url, Data const & data)
 
 
 ::std::optional<HelpBackendDb::Data>
-HelpBackendDb::getEntry(OUString const & url)
+HelpBackendDb::getEntry(std::u16string_view url)
 {
     try
     {
@@ -96,7 +96,7 @@ HelpBackendDb::getEntry(OUString const & url)
         Reference<css::xml::dom::XNode> aNode = getKeyElement(url);
         if (aNode.is())
         {
-            retData.dataUrl = readSimpleElement("data-url", aNode);
+            retData.dataUrl = readSimpleElement(u"data-url", aNode);
         }
         else
         {
@@ -118,7 +118,7 @@ HelpBackendDb::getEntry(OUString const & url)
 
 std::vector<OUString> HelpBackendDb::getAllDataUrls()
 {
-    return getOneChildFromAllEntries("data-url");
+    return getOneChildFromAllEntries(u"data-url");
 }
 
 } // namespace dp_registry::backend::help

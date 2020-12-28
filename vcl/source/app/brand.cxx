@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <config_folders.h>
 
 #include <rtl/ustring.hxx>
@@ -41,9 +45,9 @@ namespace {
         else
             return false;
     }
-    bool tryLoadPng( const OUString& rBaseDir, const OUString& rName, BitmapEx& rBitmap )
+    bool tryLoadPng( std::u16string_view rBaseDir, std::u16string_view rName, BitmapEx& rBitmap )
     {
-        return loadPng( rBaseDir + "/" LIBO_ETC_FOLDER + rName, rBitmap);
+        return loadPng( OUString::Concat(rBaseDir) + "/" LIBO_ETC_FOLDER + rName, rBitmap);
     }
 }
 
@@ -63,11 +67,11 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
     ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings( true));
     for (const OUString & aFallback : aFallbacks)
     {
-        if (tryLoadPng( aBaseDir, aBaseName + "-" + aFallback + aPng, rBitmap))
+        if (tryLoadPng( aBaseDir, OUString(aBaseName + "-" + aFallback + aPng), rBitmap))
             return true;
     }
 
-    return tryLoadPng( aBaseDir, aBaseName + aPng, rBitmap);
+    return tryLoadPng( aBaseDir, OUString(aBaseName + aPng), rBitmap);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
 
@@ -181,13 +185,13 @@ class SwXMLTableFrameFormatsSort_Impl
 private:
     SwXMLFrameFormats_Impl aFormatList;
 public:
-    bool AddRow( SwFrameFormat& rFrameFormat, const OUString& rNamePrefix, sal_uInt32 nLine );
-    bool AddCell( SwFrameFormat& rFrameFormat, const OUString& rNamePrefix,
+    bool AddRow( SwFrameFormat& rFrameFormat, std::u16string_view rNamePrefix, sal_uInt32 nLine );
+    bool AddCell( SwFrameFormat& rFrameFormat, std::u16string_view rNamePrefix,
                   sal_uInt32 nCol, sal_uInt32 nRow, bool bTop );
 };
 
 bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
-                                         const OUString& rNamePrefix,
+                                         std::u16string_view rNamePrefix,
                                             sal_uInt32 nLine )
 {
     const SwFormatFrameSize *pFrameSize = nullptr;
@@ -280,7 +284,7 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
 
     if( bInsert )
     {
-        rFrameFormat.SetName( rNamePrefix + "." + OUString::number(nLine+1) );
+        rFrameFormat.SetName( OUString::Concat(rNamePrefix) + "." + OUString::number(nLine+1) );
         if ( i != aFormatList.end() ) ++i;
         aFormatList.insert( i, &rFrameFormat );
     }
@@ -288,22 +292,22 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
     return bInsert;
 }
 
-static OUString lcl_xmltble_appendBoxPrefix(const OUString& rNamePrefix,
+static OUString lcl_xmltble_appendBoxPrefix(std::u16string_view rNamePrefix,
                                   sal_uInt32 nCol, sal_uInt32 nRow, bool bTop )
 {
     if( bTop )
     {
         OUString sTmp;
         sw_GetTableBoxColStr( static_cast<sal_uInt16>(nCol), sTmp );
-        return rNamePrefix + "." + sTmp + OUString::number(nRow + 1);
+        return OUString::Concat(rNamePrefix) + "." + sTmp + OUString::number(nRow + 1);
     }
-    return rNamePrefix
+    return OUString::Concat(rNamePrefix)
         + "." + OUString::number(nCol + 1)
         + "." + OUString::number(nRow + 1);
 }
 
 bool SwXMLTableFrameFormatsSort_Impl::AddCell( SwFrameFormat& rFrameFormat,
-                                         const OUString& rNamePrefix,
+                                         std::u16string_view rNamePrefix,
                                             sal_uInt32 nCol, sal_uInt32 nRow, bool bTop )
 {
     const SwFormatVertOrient *pVertOrient = nullptr;
@@ -557,7 +561,7 @@ void SwXMLExport::ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol )
 
 void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                                     sal_uInt32 nAbsWidth, sal_uInt32 nBaseWidth,
-                                    const OUString& rNamePrefix,
+                                    std::u16string_view rNamePrefix,
                                     SwXMLTableColumnsSortByWidth_Impl& rExpCols,
                                     SwXMLTableFrameFormatsSort_Impl& rExpRows,
                                     SwXMLTableFrameFormatsSort_Impl& rExpCells,
@@ -620,11 +624,12 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                 {
                     OUString sTmp;
                     sw_GetTableBoxColStr( nColumn, sTmp );
-                    pColumn->SetStyleName( rNamePrefix + "." + sTmp );
+                    pColumn->SetStyleName( OUString::Concat(rNamePrefix) + "." + sTmp );
                 }
                 else
                 {
-                    pColumn->SetStyleName( rNamePrefix + "." + OUString::number(nColumn + 1U) );
+                    pColumn->SetStyleName(
+                        OUString::Concat(rNamePrefix) + "." + OUString::number(nColumn + 1U) );
                 }
                 ExportTableColumnStyle( *pColumn );
                 rExpCols.insert( pColumn );

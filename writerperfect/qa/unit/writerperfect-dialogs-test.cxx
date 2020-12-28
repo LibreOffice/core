@@ -48,7 +48,7 @@ VclPtr<VclAbstractDialog> WpfDialogsTest::createDialogByID(sal_uInt32 /*nID*/) {
 void WpfDialogsTest::openAnyDialog()
 {
     /// process input file containing the UXMLDescriptions of the dialogs to dump
-    processDialogBatchFile("writerperfect/qa/unit/data/writerperfect-dialogs-test.txt");
+    processDialogBatchFile(u"writerperfect/qa/unit/data/writerperfect-dialogs-test.txt");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WpfDialogsTest);

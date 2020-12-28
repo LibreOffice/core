@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/Reference.h>
 
 #include <memory>
+#include <string_view>
 #include <thread>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -135,7 +136,7 @@ class Desktop final : public Application
         static void             FlushConfiguration();
         static bool             InitializeQuickstartMode( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-        static void             HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const OUString& aMsg );
+        static void             HandleBootstrapPathErrors( ::utl::Bootstrap::Status, std::u16string_view aMsg );
 
         // Create an error message depending on bootstrap failure code and an optional file url
         static OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,

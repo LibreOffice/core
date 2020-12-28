@@ -20,6 +20,10 @@
 #ifndef INCLUDED_OOX_EXPORT_VMLEXPORT_HXX
 #define INCLUDED_OOX_EXPORT_VMLEXPORT_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/uno/Reference.hxx>
 #include <editeng/outlobj.hxx>
 #include <filter/msfilter/escherex.hxx>
@@ -148,7 +152,7 @@ public:
     void    SetHashMarkForType(bool bUseHashMarkForType) { m_bUseHashMarkForType = bUseHashMarkForType; }
     void    OverrideShapeIDGen(bool bOverrideShapeIdGeneration,
                             const OString& sShapeIDPrefix = OString());
-    static OString GetVMLShapeTypeDefinition(const OString& sShapeID, const bool bIsPictureFrame);
+    static OString GetVMLShapeTypeDefinition(std::string_view sShapeID, const bool bIsPictureFrame);
 
 protected:
     /// Add an attribute to the generated <v:shape/> element.

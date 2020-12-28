@@ -264,7 +264,7 @@ public:
     /** Creates an EXTERNSHEET record containing a special code (i.e. own document or sheet). */
     explicit            XclExpExternSheet( const XclExpRoot& rRoot, sal_Unicode cCode );
     /** Creates an EXTERNSHEET record referring to an internal sheet. */
-    explicit            XclExpExternSheet( const XclExpRoot& rRoot, const OUString& rTabName );
+    explicit            XclExpExternSheet( const XclExpRoot& rRoot, std::u16string_view rTabName );
 
     /** Finds or inserts an EXTERNNAME record for add-ins.
         @return  The 1-based EXTERNNAME record index; or 0, if the record list is full. */
@@ -1461,7 +1461,7 @@ XclExpExternSheet::XclExpExternSheet( const XclExpRoot& rRoot, sal_Unicode cCode
     Init( OUStringChar(cCode) );
 }
 
-XclExpExternSheet::XclExpExternSheet( const XclExpRoot& rRoot, const OUString& rTabName ) :
+XclExpExternSheet::XclExpExternSheet( const XclExpRoot& rRoot, std::u16string_view rTabName ) :
     XclExpExternSheetBase( rRoot, EXC_ID_EXTERNSHEET )
 {
     // reference to own sheet: \03<sheetname>

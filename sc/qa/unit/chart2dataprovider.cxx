@@ -82,7 +82,7 @@ static void lcl_createAndCheckDataProvider(ScDocument& rDoc, const OUString& cel
 
 void ScChart2DataProviderTest::testHeaderExpansion()
 {
-    ScDocShellRef xDocSh = loadDoc("chart2dataprovider.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"chart2dataprovider.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load ch.ods.", xDocSh.is());
 
     ScDocument& rDoc = xDocSh->GetDocument();

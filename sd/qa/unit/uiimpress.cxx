@@ -85,7 +85,7 @@ void SdUiImpressTest::checkCurrentPageNumber(sal_uInt16 nNum)
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)
 {
     // Load the document and create two new windows.
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc("sd/qa/unit/data/tdf111522.odp"));
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf111522.odp"));
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
     pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_NEWWINDOW, SfxCallMode::SYNCHRON);
@@ -148,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126197)
 {
     // Load the document and create two new windows.
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc("sd/qa/unit/data/tdf126197.odp"));
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf126197.odp"));
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
     pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_NEWWINDOW, SfxCallMode::SYNCHRON);
@@ -183,7 +183,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf128651)
     // extrusion on/off, shadow on/off, changes on line or fill attributes.
     // All these actions do not change the snap rectangle.
     mxComponent = loadFromDesktop(
-        m_directories.getURLFromSrc("sd/qa/unit/data/tdf128651_CustomShapeUndo.odp"));
+        m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf128651_CustomShapeUndo.odp"));
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -292,7 +292,7 @@ void dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const O
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillColor)
 {
     // Load the document and create two new windows.
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc("sd/qa/unit/data/tdf126197.odp"));
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf126197.odp"));
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
 
@@ -318,7 +318,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillColor)
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillGradient)
 {
     // Load the document and create two new windows.
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc("sd/qa/unit/data/tdf126197.odp"));
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf126197.odp"));
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
 
@@ -350,7 +350,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf134053)
 {
     // Error was, that dashes and dots were longer than in MS Office.
     mxComponent = loadFromDesktop(
-        m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf134053_dashdot.pptx"));
+        m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf134053_dashdot.pptx"));
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -392,7 +392,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf134053)
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSpellOnlineParameter)
 {
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc("sd/qa/unit/data/empty.fodp"));
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"sd/qa/unit/data/empty.fodp"));
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     bool bSet = pImpressDocument->GetDoc()->GetOnlineSpell();
 

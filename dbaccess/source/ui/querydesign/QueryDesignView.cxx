@@ -49,6 +49,7 @@
 #include <unotools/syslocale.hxx>
 #include <memory>
 #include <set>
+#include <string_view>
 
 using namespace ::dbaui;
 using namespace ::utl;
@@ -368,7 +369,7 @@ namespace
     }
     OUString BuildJoin(  const Reference< XConnection>& _xConnection,
                                 const OUString& rLh,
-                                const OUString& rRh,
+                                std::u16string_view rRh,
                                 const OQueryTableConnectionData* pData)
     {
 
@@ -395,7 +396,7 @@ namespace
                 aErg += " FULL OUTER ";
                 break;
         }
-        aErg += "JOIN " + rRh;
+        aErg += OUString::Concat("JOIN ") + rRh;
         if ( CROSS_JOIN != pData->GetJoinType() && !pData->isNatural() )
         {
             aErg += " ON " + BuildJoinCriteria(_xConnection,&pData->GetConnLineDataList(),pData);

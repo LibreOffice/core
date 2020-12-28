@@ -416,7 +416,7 @@ bool ScChartListenerCollection::hasListeners() const
     return !m_Listeners.empty();
 }
 
-OUString ScChartListenerCollection::getUniqueName(const OUString& rPrefix) const
+OUString ScChartListenerCollection::getUniqueName(std::u16string_view rPrefix) const
 {
     for (sal_Int32 nNum = 1; nNum < 10000; ++nNum) // arbitrary limit to prevent infinite loop.
     {

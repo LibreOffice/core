@@ -51,23 +51,24 @@ void WpftDrawFilterTest::test()
         { "Draw_3.1.sda", REQUIRE_STAROFFICE_VERSION(0, 0, 1) },
     };
 
-    doTest("com.sun.star.comp.Draw.CDRImportFilter", "/writerperfect/qa/unit/data/draw/libcdr/");
+    doTest("com.sun.star.comp.Draw.CDRImportFilter", u"/writerperfect/qa/unit/data/draw/libcdr/");
     doTest("com.sun.star.comp.Draw.CMXImportFilter",
-           "/writerperfect/qa/unit/data/draw/libcdr-cmx/");
+           u"/writerperfect/qa/unit/data/draw/libcdr-cmx/");
     doTest("com.sun.star.comp.Draw.FreehandImportFilter",
-           "/writerperfect/qa/unit/data/draw/libfreehand/");
+           u"/writerperfect/qa/unit/data/draw/libfreehand/");
     doTest("com.sun.star.comp.Draw.MSPUBImportFilter",
-           "/writerperfect/qa/unit/data/draw/libmspub/");
+           u"/writerperfect/qa/unit/data/draw/libmspub/");
     doTest("com.sun.star.comp.Draw.MWAWDrawImportFilter",
-           "/writerperfect/qa/unit/data/draw/libmwaw/", aMWAWOptional);
+           u"/writerperfect/qa/unit/data/draw/libmwaw/", aMWAWOptional);
     doTest("com.sun.star.comp.Draw.VisioImportFilter",
-           "/writerperfect/qa/unit/data/draw/libvisio/");
-    doTest("com.sun.star.comp.Draw.WPGImportFilter", "/writerperfect/qa/unit/data/draw/libwpg/");
+           u"/writerperfect/qa/unit/data/draw/libvisio/");
+    doTest("com.sun.star.comp.Draw.WPGImportFilter", u"/writerperfect/qa/unit/data/draw/libwpg/");
     doTest("org.libreoffice.comp.Draw.PageMakerImportFilter",
-           "/writerperfect/qa/unit/data/draw/libpagemaker/");
+           u"/writerperfect/qa/unit/data/draw/libpagemaker/");
     doTest("org.libreoffice.comp.Draw.StarOfficeDrawImportFilter",
-           "/writerperfect/qa/unit/data/draw/libstaroffice/", aStarOfficeOptional);
-    doTest("org.libreoffice.comp.Draw.ZMFImportFilter", "/writerperfect/qa/unit/data/draw/libzmf/");
+           u"/writerperfect/qa/unit/data/draw/libstaroffice/", aStarOfficeOptional);
+    doTest("org.libreoffice.comp.Draw.ZMFImportFilter",
+           u"/writerperfect/qa/unit/data/draw/libzmf/");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WpftDrawFilterTest);

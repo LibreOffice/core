@@ -26,6 +26,7 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/weld.hxx>
 
+#include <string_view>
 #include <unordered_map>
 
 class SbModule;
@@ -288,14 +289,14 @@ private:
 };
 
 void            CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines );
-OUString CreateMgrAndLibStr( const OUString& rMgrName, const OUString& rLibName );
+OUString CreateMgrAndLibStr( std::u16string_view rMgrName, std::u16string_view rLibName );
 sal_uInt32           CalcLineCount( SvStream& rStream );
 
-bool QueryReplaceMacro( const OUString& rName, weld::Widget* pParent );
-bool QueryDelMacro( const OUString& rName, weld::Widget* pParent );
-bool QueryDelDialog( const OUString& rName, weld::Widget* pParent );
-bool QueryDelModule( const OUString& rName, weld::Widget* pParent );
-bool QueryDelLib( const OUString& rName, bool bRef, weld::Widget* pParent );
+bool QueryReplaceMacro( std::u16string_view rName, weld::Widget* pParent );
+bool QueryDelMacro( std::u16string_view rName, weld::Widget* pParent );
+bool QueryDelDialog( std::u16string_view rName, weld::Widget* pParent );
+bool QueryDelModule( std::u16string_view rName, weld::Widget* pParent );
+bool QueryDelLib( std::u16string_view rName, bool bRef, weld::Widget* pParent );
 bool QueryPassword(weld::Widget* pDialogParent, const css::uno::Reference< css::script::XLibraryContainer >& xLibContainer, const OUString& rLibName, OUString& rPassword, bool bRepeat = false, bool bNewTitle = false);
 
 class ModuleInfoHelper

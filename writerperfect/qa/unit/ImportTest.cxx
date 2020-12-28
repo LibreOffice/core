@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -48,11 +52,11 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    WpftLoader createCalcLoader(const OUString& rFile) const;
+    WpftLoader createCalcLoader(std::u16string_view rFile) const;
 
     WpftLoader createLoader(const OUString& rUrl, const OUString& rFactoryUrl) const;
 
-    OUString makeUrl(const OUString& rFile) const;
+    OUString makeUrl(std::u16string_view rFile) const;
 
 private:
     uno::Reference<lang::XMultiServiceFactory> m_xFilterFactory;
@@ -70,7 +74,7 @@ void ImportTest::setUp()
 
 void ImportTest::testWK3WithFM3()
 {
-    WpftLoader aLoader(createCalcLoader("SOLVE.WK3"));
+    WpftLoader aLoader(createCalcLoader(u"SOLVE.WK3"));
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(aLoader.getDocument(), UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
     uno::Reference<container::XIndexAccess> xSheets(xDoc->getSheets(), UNO_QUERY);
@@ -84,7 +88,7 @@ void ImportTest::testWK3WithFM3()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff), nCharColor); // blue text
 }
 
-WpftLoader ImportTest::createCalcLoader(const OUString& rFile) const
+WpftLoader ImportTest::createCalcLoader(std::u16string_view rFile) const
 {
     return createLoader(makeUrl(rFile), "private:factory/scalc");
 }
@@ -106,9 +110,10 @@ WpftLoader ImportTest::createLoader(const OUString& rUrl, const OUString& rFacto
     return WpftLoader(rUrl, xFilter, rFactoryUrl, m_xDesktop, m_xTypeMap, m_xContext);
 }
 
-OUString ImportTest::makeUrl(const OUString& rFile) const
+OUString ImportTest::makeUrl(std::u16string_view rFile) const
 {
-    return const_cast<ImportTest*>(this)->m_directories.getURLFromSrc("/" TEST_DIR "/" + rFile);
+    return const_cast<ImportTest*>(this)->m_directories.getURLFromSrc(
+        OUString(OUString::Concat("/" TEST_DIR "/") + rFile));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ImportTest);

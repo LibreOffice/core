@@ -401,7 +401,7 @@ struct PairEntrySorter
 
 void writeModifications(
     Components & components, TempFile &handle,
-    OUString const & parentPathRepresentation,
+    std::u16string_view parentPathRepresentation,
     rtl::Reference< Node > const & parent, OUString const & nodeName,
     rtl::Reference< Node > const & node,
     Modifications::Node const & modifications)
@@ -448,7 +448,7 @@ void writeModifications(
     } else {
         assert(node.is());
         OUString pathRep(
-            parentPathRepresentation + "/" +
+            OUString::Concat(parentPathRepresentation) + "/" +
             Data::createSegment(node->getTemplateName(), nodeName));
 
         // copy configmgr::Modifications::Node's to a sortable list. Use pointers
@@ -627,7 +627,7 @@ void writeModFile(
     for (const auto& j : ModNodePairEntryVector)
     {
         writeModifications(
-            components, tmp, "", rtl::Reference< Node >(), j->first,
+            components, tmp, u"", rtl::Reference< Node >(), j->first,
             data.getComponents().findNode(Data::NO_LAYER, j->first),
             j->second);
     }

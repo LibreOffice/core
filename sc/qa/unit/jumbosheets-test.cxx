@@ -70,7 +70,7 @@ bool ScFiltersTest::load(const OUString& rFilter, const OUString& rURL, const OU
 void ScFiltersTest::testTdf134392()
 {
     // Without the fix in place, the file would have crashed
-    ScDocShellRef xDocSh = loadDoc("tdf134392.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"tdf134392.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     ScDocument& rDoc = xDocSh->GetDocument();

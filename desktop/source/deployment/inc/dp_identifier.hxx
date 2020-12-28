@@ -22,6 +22,8 @@
 #include <sal/config.h>
 
 #include <optional>
+#include <string_view>
+
 #include <com/sun/star/uno/Reference.hxx>
 
 #include "dp_misc_api.hxx"
@@ -47,7 +49,7 @@ namespace dp_misc {
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString generateIdentifier(
     ::std::optional< OUString > const & optional,
-    OUString const & fileName);
+    std::u16string_view fileName);
 
 /**
    Gets the identifier of a package.
@@ -75,7 +77,7 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString getIdentifier(
    a legacy identifier based on the given file name
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString generateLegacyIdentifier(
-    OUString const & fileName);
+    std::u16string_view fileName);
 
 }
 

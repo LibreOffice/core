@@ -98,7 +98,7 @@ struct PluginMutex: public ::rtl::Static<osl::Mutex, PluginMutex> {};
 #if defined(UNX) && !defined(ANDROID)
 OString getPluginJarPath(
     std::u16string_view sVendor,
-    const OUString& sLocation,
+    std::u16string_view sLocation,
     std::u16string_view sVersion)
 {
     OString ret;
@@ -124,7 +124,7 @@ OString getPluginJarPath(
         }
         if (!sName.isEmpty())
         {
-            sName = sLocation + "/lib/" + sName;
+            sName = OUString::Concat(sLocation) + "/lib/" + sName;
             OSL_VERIFY(
                 osl_getSystemPathFromFileURL(sName.pData, & sPath.pData)
                 == osl_File_E_None);
@@ -132,13 +132,13 @@ OString getPluginJarPath(
     }
     else
     {
-        OUString sName(sLocation + "/lib/" + sName1);
+        OUString sName(OUString::Concat(sLocation) + "/lib/" + sName1);
         OUString sPath1;
         OUString sPath2;
         if (osl_getSystemPathFromFileURL(sName.pData, & sPath1.pData)
             == osl_File_E_None)
         {
-            sName = sLocation + "/lib/" + sName2;
+            sName = OUString::Concat(sLocation) + "/lib/" + sName2;
             if (osl_getSystemPathFromFileURL(sName.pData, & sPath2.pData)
                 == osl_File_E_None)
             {

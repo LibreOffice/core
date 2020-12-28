@@ -9,6 +9,8 @@
 
 #include <sal/config.h>
 
+#include <string_view>
+
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -31,7 +33,7 @@ class ScHTMLExportTest : public test::BootstrapFixture, public unotest::MacrosTe
     Reference<XComponent> mxComponent;
     OUString              maFilterOptions;
 
-    void load(const OUString& pDir, const char* pName)
+    void load(std::u16string_view pDir, const char* pName)
     {
         if (mxComponent.is())
             mxComponent->dispose();
@@ -75,7 +77,7 @@ public:
 
         htmlDocUniquePtr pDoc;
 
-        load("/sc/qa/extras/testdocuments/", "BaseForHTMLExport.ods");
+        load(u"/sc/qa/extras/testdocuments/", "BaseForHTMLExport.ods");
         save("HTML (StarCalc)", aTempFile);
         pDoc = parseHtml(aTempFile);
         CPPUNIT_ASSERT (pDoc);
@@ -83,7 +85,7 @@ public:
         assertXPath(pDoc, "/html/body", 1);
         assertXPath(pDoc, "/html/body/table/tr/td/img", 1);
 
-        load("/sc/qa/extras/testdocuments/", "BaseForHTMLExport.ods");
+        load(u"/sc/qa/extras/testdocuments/", "BaseForHTMLExport.ods");
         maFilterOptions = "SkipImages";
         save("HTML (StarCalc)", aTempFile);
 

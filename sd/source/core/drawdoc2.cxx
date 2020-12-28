@@ -264,9 +264,9 @@ void SdDrawDocument::UpdatePageObjectsInNotes(sal_uInt16 nStartPos)
     }
 }
 
-void SdDrawDocument::UpdatePageRelativeURLs(const OUString& rOldName, const OUString& rNewName)
+void SdDrawDocument::UpdatePageRelativeURLs(const OUString& rOldName, std::u16string_view rNewName)
 {
-    if (rNewName.isEmpty())
+    if (rNewName.empty())
         return;
 
     SfxItemPool& rPool(GetPool());

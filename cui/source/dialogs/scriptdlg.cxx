@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <string_view>
 #include <utility>
 
 #include <sfx2/objsh.hxx>
@@ -1106,8 +1107,8 @@ OUString FormatErrorString(
     const OUString& language,
     const OUString& script,
     const OUString& line,
-    const OUString& type,
-    const OUString& message )
+    std::u16string_view type,
+    std::u16string_view message )
 {
     OUString result = unformatted.copy( 0 );
 
@@ -1115,12 +1116,12 @@ OUString FormatErrorString(
     result = ReplaceString(result, "%SCRIPTNAME", script );
     result = ReplaceString(result, "%LINENUMBER", line );
 
-    if ( !type.isEmpty() )
+    if ( !type.empty() )
     {
         result += "\n\n" + CuiResId(RID_SVXSTR_ERROR_TYPE_LABEL) + " " + type;
     }
 
-    if ( !message.isEmpty() )
+    if ( !message.empty() )
     {
         result += "\n\n" + CuiResId(RID_SVXSTR_ERROR_MESSAGE_LABEL) + " " + message;
     }
@@ -1164,7 +1165,7 @@ OUString GetErrorMessage(
     }
 
     return FormatErrorString(
-        unformatted, language, script, line, "", message );
+        unformatted, language, script, line, u"", message );
 }
 
 OUString GetErrorMessage(
@@ -1243,7 +1244,7 @@ OUString GetErrorMessage(
         message = sError.Message;
     }
     return FormatErrorString(
-        unformatted, language, script, OUString(), OUString(), message );
+        unformatted, language, script, OUString(), std::u16string_view(), message );
 }
 
 OUString GetErrorMessage( const css::uno::Any& aException )

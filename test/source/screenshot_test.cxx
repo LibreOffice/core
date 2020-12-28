@@ -242,7 +242,7 @@ void ScreenshotTest::processAllKnownDialogs()
     }
 }
 
-void ScreenshotTest::processDialogBatchFile(const OUString& rFile)
+void ScreenshotTest::processDialogBatchFile(std::u16string_view rFile)
 {
     test::Directories aDirectories;
     const OUString aURL(aDirectories.getURLFromSrc(rFile));

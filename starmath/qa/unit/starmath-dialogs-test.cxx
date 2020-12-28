@@ -51,7 +51,7 @@ VclPtr<VclAbstractDialog> StarmathDialogsTest::createDialogByID(sal_uInt32 /*nID
 void StarmathDialogsTest::openAnyDialog()
 {
     /// process input file containing the UXMLDescriptions of the dialogs to dump
-    processDialogBatchFile("starmath/qa/unit/data/starmath-dialogs-test.txt");
+    processDialogBatchFile(u"starmath/qa/unit/data/starmath-dialogs-test.txt");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(StarmathDialogsTest);

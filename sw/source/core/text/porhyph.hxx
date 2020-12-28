@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_PORHYPH_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_PORHYPH_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "porexp.hxx"
 
 class SwHyphPortion : public SwExpandPortion
@@ -39,8 +43,8 @@ class SwHyphStrPortion : public SwHyphPortion
 {
     OUString aExpand;
 public:
-    explicit SwHyphStrPortion(const OUString &rStr)
-        : aExpand(rStr + "-")
+    explicit SwHyphStrPortion(std::u16string_view rStr)
+        : aExpand(OUString::Concat(rStr) + "-")
     {
         SetWhichPor( PortionType::HyphenStr );
     }
@@ -75,7 +79,7 @@ public:
 class SwSoftHyphStrPortion : public SwHyphStrPortion
 {
 public:
-    explicit SwSoftHyphStrPortion( const OUString &rStr );
+    explicit SwSoftHyphStrPortion( std::u16string_view rStr );
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 };
 

@@ -373,7 +373,7 @@ void XMLImportTest::setUp()
     }
     xInit->initialize( namespaceArgs );
 
-    m_sDirPath = m_directories.getPathFromSrc( "/sax/qa/data/" );
+    m_sDirPath = m_directories.getPathFromSrc( u"/sax/qa/data/" );
 }
 
 void XMLImportTest::parse()

@@ -35,7 +35,7 @@ namespace sw::mark
     CrossRefBookmark::CrossRefBookmark(const SwPaM& rPaM,
         const vcl::KeyCode& rCode,
         const OUString& rName,
-        const OUString& rPrefix)
+        std::u16string_view rPrefix)
         : Bookmark(
                 // ensure that m_pPos2 is null by only passing start to super
                 SwPaM(*rPaM.Start()), rCode, rName)
@@ -70,7 +70,7 @@ namespace sw::mark
     CrossRefHeadingBookmark::CrossRefHeadingBookmark(const SwPaM& rPaM,
         const vcl::KeyCode& rCode,
         const OUString& rName)
-        : CrossRefBookmark(rPaM, rCode, rName, IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()+"_Toc")
+        : CrossRefBookmark(rPaM, rCode, rName, OUString(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()+"_Toc"))
     { }
 
     bool CrossRefHeadingBookmark::IsLegalName(const OUString& rName)

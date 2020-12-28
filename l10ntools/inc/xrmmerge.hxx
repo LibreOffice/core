@@ -24,7 +24,7 @@
 #include <sal/config.h>
 
 #include <fstream>
-
+#include <string_view>
 
 /// Parser for *.xrm and description.xml files
 class XRMResParser
@@ -39,7 +39,7 @@ private:
     OString sCurrentCloseTag;
     OString sCurrentText;
 protected:
-    static OString GetAttribute( const OString &rToken, const OString &rAttribute );
+    static OString GetAttribute( const OString &rToken, std::string_view rAttribute );
     static void Error( const OString &rError );
 
     virtual void Output( const OString& rOutput )=0;

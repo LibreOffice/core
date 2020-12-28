@@ -254,7 +254,7 @@ uno::Sequence< Type > SAL_CALL Table::getTypes()
     return OTableHelper::getTypes();
 }
 
-OUString Table::getAlterTableColumn(const OUString& rColumn)
+OUString Table::getAlterTableColumn(std::u16string_view rColumn)
 {
     return ("ALTER TABLE \"" + getName() + "\" ALTER COLUMN \"" + rColumn + "\" ");
 }

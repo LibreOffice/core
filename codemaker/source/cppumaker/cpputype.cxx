@@ -165,7 +165,7 @@ public:
     void dump(CppuOptions const & options);
 
     void dumpFile(
-        std::u16string_view uri, OUString const & name, bool hpp,
+        std::u16string_view uri, std::u16string_view name, bool hpp,
         CppuOptions const & options);
 
     void dumpDependedTypes(
@@ -178,7 +178,7 @@ public:
 
     virtual void dumpHppFile(FileStream& o, codemaker::cppumaker::Includes & includes) = 0;
 
-    OUString dumpHeaderDefine(FileStream& o, OUString const & extension) const;
+    OUString dumpHeaderDefine(FileStream& o, std::u16string_view extension) const;
 
     void dumpGetCppuType(FileStream & out);
 
@@ -193,14 +193,14 @@ public:
     }
 
     void dumpType(
-        FileStream & out, OUString const & name, bool isConst = false,
+        FileStream & out, std::u16string_view name, bool isConst = false,
         bool isRef = false, bool native = false, bool cppuUnoType = false)
     const;
 
     OUString getTypeClass(OUString const & name, bool cStyle = false);
 
     void dumpCppuGetType(
-        FileStream & out, OUString const & name, OUString const * ownName = nullptr) const;
+        FileStream & out, std::u16string_view name, OUString const * ownName = nullptr) const;
 
     sal_uInt32 getInheritedMemberCount();
 
@@ -253,7 +253,7 @@ protected:
     void addDefaultHxxIncludes(codemaker::cppumaker::Includes & includes) const;
 
     void dumpInitializer(
-        FileStream & out, bool parameterized, OUString const & name) const;
+        FileStream & out, bool parameterized, std::u16string_view name) const;
 
     void dumpHFileContent(
         FileStream & out, codemaker::cppumaker::Includes & includes);
@@ -413,14 +413,14 @@ void CppuType::dump(CppuOptions const & options)
 }
 
 void CppuType::dumpFile(
-    std::u16string_view uri, OUString const & name, bool hpp,
+    std::u16string_view uri, std::u16string_view name, bool hpp,
     CppuOptions const & options)
 {
     OUString fileUri(
         b2u(createFileNameFromType(
                 u2b(uri), u2b(name), hpp ? ".hpp" : ".hdl")));
     if (fileUri.isEmpty()) {
-        throw CannotDumpException("empty target URI for entity " + name);
+        throw CannotDumpException(OUString::Concat("empty target URI for entity ") + name);
     }
     bool exists = fileExists(u2b(fileUri));
     if (exists && options.isValid("-G")) {
@@ -468,7 +468,7 @@ void CppuType::dumpDependedTypes(
 }
 
 OUString CppuType::dumpHeaderDefine(
-    FileStream & out, OUString const & extension) const
+    FileStream & out, std::u16string_view extension) const
 {
     OUString def(
         "INCLUDED_" + name_.replace('.', '_').toAsciiUpperCase() + "_"
@@ -500,7 +500,7 @@ const
 }
 
 void CppuType::dumpInitializer(
-    FileStream & out, bool parameterized, OUString const & name) const
+    FileStream & out, bool parameterized, std::u16string_view name) const
 {
     out << "(";
     if (!parameterized) {
@@ -541,7 +541,7 @@ void CppuType::dumpInitializer(
                 break;
             default:
                 throw CannotDumpException(
-                    "unexpected entity \"" + name
+                    OUString::Concat("unexpected entity \"") + name
                     + "\" in call to CppuType::dumpInitializer");
             }
         }
@@ -553,7 +553,7 @@ void CppuType::dumpHFileContent(
     FileStream & out, codemaker::cppumaker::Includes & includes)
 {
     addDefaultHIncludes(includes);
-    dumpHeaderDefine(out, "HDL");
+    dumpHeaderDefine(out, u"HDL");
     out << "\n";
     includes.dump(out, nullptr, false);
         // 'exceptions = false' would be wrong for services/singletons, but
@@ -746,7 +746,7 @@ OUString CppuType::getTypeClass(OUString const & name, bool cStyle)
 }
 
 void CppuType::dumpType(
-    FileStream & out, OUString const & name, bool isConst, bool isRef,
+    FileStream & out, std::u16string_view name, bool isConst, bool isRef,
     bool native, bool cppuUnoType) const
 {
     sal_Int32 k;
@@ -838,7 +838,7 @@ void CppuType::dumpType(
         break;
     default:
         throw CannotDumpException(
-            "unexpected entity \"" + name + "\" in call to CppuType::dumpType");
+            OUString::Concat("unexpected entity \"") + name + "\" in call to CppuType::dumpType");
     }
     for (sal_Int32 i = 0; i != k; ++i) {
         out << " >";
@@ -849,7 +849,7 @@ void CppuType::dumpType(
 }
 
 void CppuType::dumpCppuGetType(
-    FileStream & out, OUString const & name, OUString const * ownName) const
+    FileStream & out, std::u16string_view name, OUString const * ownName) const
 {
     //TODO: What are these calls good for?
     OUString nucleus;
@@ -890,7 +890,7 @@ void CppuType::dumpCppuGetType(
         for (;;) std::abort(); // this cannot happen
     default:
         throw CannotDumpException(
-            "unexpected entity \"" + name
+            OUString::Concat("unexpected entity \"") + name
             + "\" in call to CppuType::dumpCppuGetType");
     }
 }
@@ -1182,7 +1182,7 @@ void InterfaceType::dumpDeclaration(FileStream & out)
 void InterfaceType::dumpHppFile(
     FileStream & out, codemaker::cppumaker::Includes & includes)
 {
-    OUString headerDefine(dumpHeaderDefine(out, "HPP"));
+    OUString headerDefine(dumpHeaderDefine(out, u"HPP"));
     out << "\n";
     addDefaultHxxIncludes(includes);
     includes.dump(out, &name_, !(m_cppuTypeLeak || m_cppuTypeDynamic));
@@ -1376,7 +1376,7 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream & out)
     std::set< OUString > seen;
     // Type for RuntimeException is always needed:
     seen.insert("com.sun.star.uno.RuntimeException");
-    dumpCppuGetType(out, "com.sun.star.uno.RuntimeException");
+    dumpCppuGetType(out, u"com.sun.star.uno.RuntimeException");
     dumpAttributesCppuDecl(out, &seen);
     dumpMethodsCppuDecl(out, &seen);
     if (count != 0) {
@@ -1651,7 +1651,7 @@ private:
 void ConstantGroup::dumpHdlFile(
     FileStream & out, codemaker::cppumaker::Includes & includes)
 {
-    OUString headerDefine(dumpHeaderDefine(out, "HDL"));
+    OUString headerDefine(dumpHeaderDefine(out, u"HDL"));
     out << "\n";
     addDefaultHIncludes(includes);
     includes.dump(out, nullptr, true);
@@ -1671,7 +1671,7 @@ void ConstantGroup::dumpHdlFile(
 void ConstantGroup::dumpHppFile(
     FileStream & out, codemaker::cppumaker::Includes &)
 {
-    OUString headerDefine(dumpHeaderDefine(out, "HPP"));
+    OUString headerDefine(dumpHeaderDefine(out, u"HPP"));
     out << "\n";
     codemaker::cppumaker::Includes::dumpInclude(out, u2b(name_), false);
     out << "\n#endif // "<< headerDefine << "\n";
@@ -1867,7 +1867,7 @@ void PlainStructType::dumpDeclaration(FileStream & out)
 void PlainStructType::dumpHppFile(
     FileStream & out, codemaker::cppumaker::Includes & includes)
 {
-    OUString headerDefine(dumpHeaderDefine(out, "HPP"));
+    OUString headerDefine(dumpHeaderDefine(out, u"HPP"));
     out << "\n";
     includes.dump(out, &name_, true);
     out << "\n";
@@ -2259,7 +2259,7 @@ void PolyStructType::dumpDeclaration(FileStream & out)
 void PolyStructType::dumpHppFile(
     FileStream & out, codemaker::cppumaker::Includes & includes)
 {
-    OUString headerDefine(dumpHeaderDefine(out, "HPP"));
+    OUString headerDefine(dumpHeaderDefine(out, u"HPP"));
     out << "\n";
     includes.dump(out, &name_, true);
     out << "\n";
@@ -2811,7 +2811,7 @@ void ExceptionType::addComprehensiveGetCppuTypeIncludes(
 void ExceptionType::dumpHppFile(
     FileStream & out, codemaker::cppumaker::Includes & includes)
 {
-    OUString headerDefine(dumpHeaderDefine(out, "HPP"));
+    OUString headerDefine(dumpHeaderDefine(out, u"HPP"));
     out << "\n";
     addDefaultHxxIncludes(includes);
     includes.dump(out, &name_, true);
@@ -3321,7 +3321,7 @@ void EnumType::dumpDeclaration(FileStream& o)
 void EnumType::dumpHppFile(
     FileStream& o, codemaker::cppumaker::Includes & includes)
 {
-    OUString headerDefine(dumpHeaderDefine(o, "HPP"));
+    OUString headerDefine(dumpHeaderDefine(o, u"HPP"));
     o << "\n";
 
     addDefaultHxxIncludes(includes);
@@ -3455,7 +3455,7 @@ private:
 void Typedef::dumpHdlFile(
     FileStream& o, codemaker::cppumaker::Includes & includes)
 {
-    OUString headerDefine(dumpHeaderDefine(o, "HDL"));
+    OUString headerDefine(dumpHeaderDefine(o, u"HDL"));
     o << "\n";
 
     addDefaultHIncludes(includes);
@@ -3485,7 +3485,7 @@ void Typedef::dumpDeclaration(FileStream& o)
 void Typedef::dumpHppFile(
     FileStream& o, codemaker::cppumaker::Includes & includes)
 {
-    OUString headerDefine(dumpHeaderDefine(o, "HPP"));
+    OUString headerDefine(dumpHeaderDefine(o, u"HPP"));
     o << "\n";
 
     addDefaultHxxIncludes(includes);
@@ -3607,7 +3607,7 @@ void ServiceType::dumpHppFile(
     OString cppName(
         codemaker::cpp::translateUnoToCppIdentifier(
             u2b(id_), "service", isGlobal()));
-    OUString headerDefine(dumpHeaderDefine(o, "HPP"));
+    OUString headerDefine(dumpHeaderDefine(o, u"HPP"));
     o << "\n";
     includes.dump(o, nullptr, true);
     if (!entity_->getConstructors().empty()) {
@@ -3903,7 +3903,7 @@ void SingletonType::dumpHppFile(
             u2b(id_), "singleton", isGlobal()));
     OString baseName(u2b(entity_->getBase()));
     OString scopedBaseName(codemaker::cpp::scopedCppName(baseName));
-    OUString headerDefine(dumpHeaderDefine(o, "HPP"));
+    OUString headerDefine(dumpHeaderDefine(o, u"HPP"));
     o << "\n";
     //TODO: Decide whether the types added to includes should rather be added to
     // m_dependencies (and thus be generated during dumpDependedTypes):

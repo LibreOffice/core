@@ -1355,13 +1355,13 @@ void SvxConfigPage::ReloadTopLevelListBox( SvxConfigEntry const * pToSelect )
 }
 
 void SvxConfigPage::AddSubMenusToUI(
-    const OUString& rBaseTitle, SvxConfigEntry const * pParentData )
+    std::u16string_view rBaseTitle, SvxConfigEntry const * pParentData )
 {
     for (auto const& entryData : *pParentData->GetEntries())
     {
         if (entryData->IsPopup())
         {
-            OUString subMenuTitle = rBaseTitle + aMenuSeparatorStr + SvxConfigPageHelper::stripHotKey(entryData->GetName());
+            OUString subMenuTitle = OUString::Concat(rBaseTitle) + aMenuSeparatorStr + SvxConfigPageHelper::stripHotKey(entryData->GetName());
 
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(entryData)));
             m_xTopLevelListBox->append(sId, subMenuTitle);

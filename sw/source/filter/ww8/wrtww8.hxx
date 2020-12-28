@@ -1062,8 +1062,8 @@ public:
     virtual void OutputField( const SwField* pField, ww::eField eFieldType,
             const OUString& rFieldCmd, FieldFlags nMode = FieldFlags::All ) override;
 
-    void StartCommentOutput( const OUString& rName );
-    void EndCommentOutput(   const OUString& rName );
+    void StartCommentOutput( std::u16string_view rName );
+    void EndCommentOutput(   std::u16string_view rName );
     void OutGrf(const ww8::Frame &rFrame);
     bool TestOleNeedsGraphic(const SwAttrSet& rSet, tools::SvRef<SotStorage> const& xOleStg,
                              const tools::SvRef<SotStorage>& xObjStg, OUString const& rStorageName,

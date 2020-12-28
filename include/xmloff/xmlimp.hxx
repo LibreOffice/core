@@ -24,6 +24,7 @@
 
 #include <set>
 #include <stack>
+#include <string_view>
 
 #include <o3tl/deleter.hxx>
 #include <xmloff/dllapi.h>
@@ -416,7 +417,7 @@ public:
 
     bool IsPackageURL( const OUString& rURL ) const;
     OUString ResolveEmbeddedObjectURL( const OUString& rURL,
-                                       const OUString& rClassId );
+                                       std::u16string_view rClassId );
     css::uno::Reference< css::io::XOutputStream >
         GetStreamForEmbeddedObjectURLFromBase64() const;
     OUString ResolveEmbeddedObjectURLFromBase64();

@@ -18,6 +18,8 @@
  */
 
 #include <memory>
+#include <string_view>
+
 #include "KeySet.hxx"
 #include <sal/log.hxx>
 #include <core_resource.hxx>
@@ -209,13 +211,13 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
 
 namespace
 {
-    void appendOneKeyColumnClause( const OUString &tblName, const OUString &colName, const connectivity::ORowSetValue &_rValue, OUStringBuffer &o_buf )
+    void appendOneKeyColumnClause( std::u16string_view tblName, const OUString &colName, const connectivity::ORowSetValue &_rValue, OUStringBuffer &o_buf )
     {
         OUString fullName;
-        if (tblName.isEmpty())
+        if (tblName.empty())
             fullName = colName;
         else
-            fullName = tblName + "." + colName;
+            fullName = OUString::Concat(tblName) + "." + colName;
         if ( _rValue.isNull() )
         {
             o_buf.append(fullName).append(" IS NULL ");

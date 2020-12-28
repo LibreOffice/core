@@ -651,7 +651,7 @@ void XcuParser::handleUnknownGroupProp(
 
 void XcuParser::handlePlainGroupProp(
     xmlreader::XmlReader const & reader, GroupNode * group,
-    NodeMap::iterator const & propertyIndex, OUString const & name,
+    NodeMap::iterator const & propertyIndex, std::u16string_view name,
     Type type, Operation operation, bool finalized)
 {
     PropertyNode * property = static_cast< PropertyNode * >(
@@ -672,7 +672,7 @@ void XcuParser::handlePlainGroupProp(
         type != property->getStaticType())
     {
         throw css::uno::RuntimeException(
-            "invalid type for prop " + name + " in " + reader.getUrl());
+            OUString::Concat("invalid type for prop ") + name + " in " + reader.getUrl());
     }
     valueParser_.type_ = type == TYPE_ERROR ? property->getStaticType() : type;
     switch (operation) {
@@ -685,7 +685,7 @@ void XcuParser::handlePlainGroupProp(
     case OPERATION_REMOVE:
         if (!property->isExtension()) {
             throw css::uno::RuntimeException(
-                "invalid remove of non-extension prop " + name + " in " +
+                OUString::Concat("invalid remove of non-extension prop ") + name + " in " +
                 reader.getUrl());
         }
         group->getMembers().erase(propertyIndex);

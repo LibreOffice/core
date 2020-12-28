@@ -232,10 +232,10 @@ void printf_space( sal_Int32 space )
 
 
 void printf_line(
-    OUString const & name, OUString const & value, sal_Int32 level )
+    std::u16string_view name, std::u16string_view value, sal_Int32 level )
 {
     printf_space( level );
-    dp_misc::writeConsole(OUString(name + ": " + value + "\n"));
+    dp_misc::writeConsole(OUString(OUString::Concat(name) + ": " + value + "\n"));
 }
 
 
@@ -249,11 +249,11 @@ void printf_package(
             true, dp_misc::getIdentifier( xPackage ) )
         : xPackage->getIdentifier() );
     if (id.IsPresent)
-        printf_line( "Identifier", id.Value, level );
+        printf_line( u"Identifier", id.Value, level );
     OUString version(xPackage->getVersion());
     if (!version.isEmpty())
-        printf_line( "Version", version, level + 1 );
-    printf_line( "URL", xPackage->getURL(), level + 1 );
+        printf_line( u"Version", version, level + 1 );
+    printf_line( u"URL", xPackage->getURL(), level + 1 );
 
     beans::Optional< beans::Ambiguous<sal_Bool> > option(
         xPackage->isRegistered( Reference<task::XAbortChannel>(), xCmdEnv ) );
@@ -267,15 +267,15 @@ void printf_package(
     }
     else
         value = "n/a";
-    printf_line( "is registered", value, level + 1 );
+    printf_line( u"is registered", value, level + 1 );
 
     const Reference<deployment::XPackageTypeInfo> xPackageType(
         xPackage->getPackageType() );
     OSL_ASSERT( xPackageType.is() );
     if (xPackageType.is()) {
-        printf_line( "Media-Type", xPackageType->getMediaType(), level + 1 );
+        printf_line( u"Media-Type", xPackageType->getMediaType(), level + 1 );
     }
-    printf_line( "Description", xPackage->getDescription(), level + 1 );
+    printf_line( u"Description", xPackage->getDescription(), level + 1 );
     if (!xPackage->isBundle())
         return;
 
@@ -298,7 +298,7 @@ static void printf_unaccepted_licenses(
 {
         OUString id(
             dp_misc::getIdentifier(ext) );
-        printf_line( "Identifier", id, 0 );
+        printf_line( u"Identifier", id, 0 );
         printf_space(1);
         dp_misc::writeConsole(u"License not accepted\n\n");
 }

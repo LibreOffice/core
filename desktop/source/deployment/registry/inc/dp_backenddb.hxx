@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 #include <deque>
+#include <string_view>
 #include <vector>
 
 namespace com::sun::star {
@@ -66,50 +67,50 @@ protected:
     void removeElement(OUString const & sXPathExpression);
 
     css::uno::Reference<css::xml::dom::XNode> getKeyElement(
-        OUString const & url);
+        std::u16string_view url);
 
     void writeSimpleList(
         std::deque< OUString> const & list,
-        OUString const & sListTagName,
-        OUString const & sMemberTagName,
+        std::u16string_view sListTagName,
+        std::u16string_view sMemberTagName,
         css::uno::Reference<css::xml::dom::XNode> const & xParent);
 
     void writeVectorOfPair(
         std::vector< std::pair< OUString, OUString > > const & vecPairs,
-        OUString const & sVectorTagName,
-        OUString const & sPairTagName,
-        OUString const & sFirstTagName,
-        OUString const & sSecondTagName,
+        std::u16string_view sVectorTagName,
+        std::u16string_view sPairTagName,
+        std::u16string_view sFirstTagName,
+        std::u16string_view sSecondTagName,
         css::uno::Reference<css::xml::dom::XNode> const & xParent);
 
     void writeSimpleElement(
-        OUString const & sElementName, OUString const & value,
+        std::u16string_view sElementName, OUString const & value,
         css::uno::Reference<css::xml::dom::XNode> const & xParent);
 
     css::uno::Reference<css::xml::dom::XNode> writeKeyElement(
         OUString const & url);
 
     OUString readSimpleElement(
-        OUString const & sElementName,
+        std::u16string_view sElementName,
         css::uno::Reference<css::xml::dom::XNode> const & xParent);
 
     std::vector< std::pair< OUString, OUString > >
     readVectorOfPair(
         css::uno::Reference<css::xml::dom::XNode> const & parent,
-        OUString const & sListTagName,
-        OUString const & sPairTagName,
-        OUString const & sFirstTagName,
-        OUString const & sSecondTagName);
+        std::u16string_view sListTagName,
+        std::u16string_view sPairTagName,
+        std::u16string_view sFirstTagName,
+        std::u16string_view sSecondTagName);
 
     std::deque< OUString> readList(
         css::uno::Reference<css::xml::dom::XNode> const & parent,
-        OUString const & sListTagName,
-        OUString const & sMemberTagName);
+        std::u16string_view sListTagName,
+        std::u16string_view sMemberTagName);
 
     /* returns the values of one particularly child element of all key elements.
      */
     std::vector< OUString> getOneChildFromAllEntries(
-        OUString const & sElementName);
+        std::u16string_view sElementName);
 
 
     /*  returns the namespace which is to be written as xmlns attribute
@@ -133,18 +134,18 @@ public:
               OUString const & url);
     virtual ~BackendDb() {};
 
-    void removeEntry(OUString const & url);
+    void removeEntry(std::u16string_view url);
 
     /* This is called to write the "revoked" attribute to the entry.
        This is done when XPackage::revokePackage is called.
     */
-    void revokeEntry(OUString const & url);
+    void revokeEntry(std::u16string_view url);
 
     /* returns false if the entry does not exist yet.
      */
-    bool activateEntry(OUString const & url);
+    bool activateEntry(std::u16string_view url);
 
-    bool hasActiveEntry(OUString const & url);
+    bool hasActiveEntry(std::u16string_view url);
 
 };
 

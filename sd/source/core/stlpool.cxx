@@ -134,9 +134,9 @@ SfxStyleSheetBase* SdStyleSheetPool::Create(const OUString& rName, SfxStyleFamil
     return new SdStyleSheet(rName, *this, eFamily, _nMask);
 }
 
-SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(const OUString& rLayoutName)
+SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(std::u16string_view rLayoutName)
 {
-    OUString aName = rLayoutName + SD_LT_SEPARATOR STR_LAYOUT_TITLE;
+    OUString aName = OUString::Concat(rLayoutName) + SD_LT_SEPARATOR STR_LAYOUT_TITLE;
     SfxStyleSheetBase* pResult = Find(aName, SfxStyleFamily::Page);
     return pResult;
 }
@@ -148,9 +148,9 @@ SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(const OUString& rLayoutName)
 |*
 \************************************************************************/
 
-void SdStyleSheetPool::CreateOutlineSheetList (const OUString& rLayoutName, std::vector<SfxStyleSheetBase*> &rOutlineStyles)
+void SdStyleSheetPool::CreateOutlineSheetList (std::u16string_view rLayoutName, std::vector<SfxStyleSheetBase*> &rOutlineStyles)
 {
-    OUString aName = rLayoutName + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
+    OUString aName = OUString::Concat(rLayoutName) + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
 
     for (sal_Int32 nSheet = 1; nSheet < 10; nSheet++)
     {
@@ -168,7 +168,7 @@ void SdStyleSheetPool::CreateOutlineSheetList (const OUString& rLayoutName, std:
 |*
 \************************************************************************/
 
-void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool bCheck /*= sal_False*/ )
+void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, bool bCheck /*= sal_False*/ )
 {
     const SfxStyleSearchBits nUsedMask = SfxStyleSearchBits::All & ~SfxStyleSearchBits::UserDefined;
 
@@ -176,7 +176,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
 
     SfxStyleSheetBase* pSheet = nullptr;
 
-    OUString aPrefix(rLayoutName + SD_LT_SEPARATOR);
+    OUString aPrefix(OUString::Concat(rLayoutName) + SD_LT_SEPARATOR);
 
     vcl::Font aLatinFont, aCJKFont, aCTLFont;
 
@@ -578,7 +578,7 @@ void SdStyleSheetPool::CopyCellSheets(SdStyleSheetPool& rSourcePool, StyleSheetC
     CopySheets( rSourcePool, SfxStyleFamily::Frame, rCreatedSheets );
 }
 
-void SdStyleSheetPool::RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, StyleSheetCopyResultVector& rCreatedSheets, OUString const &rRenameSuffix)
+void SdStyleSheetPool::RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, StyleSheetCopyResultVector& rCreatedSheets, std::u16string_view rRenameSuffix)
 {
     CopySheets( rSourcePool, SfxStyleFamily::Para, rCreatedSheets, rRenameSuffix );
 }
@@ -591,7 +591,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
 
 void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, StyleSheetCopyResultVector& rCreatedSheets)
 {
-    CopySheets(rSourcePool, eFamily, rCreatedSheets, "");
+    CopySheets(rSourcePool, eFamily, rCreatedSheets, u"");
 }
 
 namespace
@@ -611,7 +611,7 @@ struct HasFamilyPredicate : svl::StyleSheetPredicate
 
 }
 
-void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, StyleSheetCopyResultVector& rCreatedSheets, const OUString& rRenameSuffix)
+void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, StyleSheetCopyResultVector& rCreatedSheets, std::u16string_view rRenameSuffix)
 {
     std::vector< std::pair< rtl::Reference< SfxStyleSheetBase >, OUString > > aNewStyles;
     std::vector< std::pair< OUString, OUString > > aRenamedList;
@@ -636,7 +636,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
             // if we have a rename suffix, try to find a new name
             pExistingSheet =
                 GetStyleSheetByPositionInIndex(aSheetsWithName.front());
-            if (!rRenameSuffix.isEmpty() &&
+            if (!rRenameSuffix.empty() &&
                 !pExistingSheet->GetItemSet().Equals(pSheet->GetItemSet(), false))
             {
                 // we have found a sheet with the same name, but different contents. Try to find a new name.
@@ -689,7 +689,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
     // set parents on newly added stylesheets
     for( auto& rStyle : aNewStyles )
     {
-        if( !rRenameSuffix.isEmpty() )
+        if( !rRenameSuffix.empty() )
         {
             SfxStyleSheet *pParent = lcl_findStyle(rCreatedSheets, lcl_findRenamedStyleName(aRenamedList, rStyle.second));
             if( pParent )
@@ -716,7 +716,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
 |*
 \************************************************************************/
 
-void SdStyleSheetPool::CopyLayoutSheets(const OUString& rLayoutName, SdStyleSheetPool& rSourcePool, StyleSheetCopyResultVector& rCreatedSheets)
+void SdStyleSheetPool::CopyLayoutSheets(std::u16string_view rLayoutName, SdStyleSheetPool& rSourcePool, StyleSheetCopyResultVector& rCreatedSheets)
 {
     SfxStyleSheetBase* pSheet = nullptr;
 
@@ -776,9 +776,9 @@ void SdStyleSheetPool::CopyLayoutSheets(const OUString& rLayoutName, SdStyleShee
 |*
 \************************************************************************/
 
-void SdStyleSheetPool::CreateLayoutSheetNames(const OUString& rLayoutName, std::vector<OUString> &aNameList)
+void SdStyleSheetPool::CreateLayoutSheetNames(std::u16string_view rLayoutName, std::vector<OUString> &aNameList)
 {
-    OUString aPrefix(rLayoutName + SD_LT_SEPARATOR);
+    OUString aPrefix(OUString::Concat(rLayoutName) + SD_LT_SEPARATOR);
 
     for (sal_Int32 nLevel = 1; nLevel < 10; nLevel++)
         aNameList.emplace_back(aPrefix + STR_LAYOUT_OUTLINE " " + OUString::number( nLevel ) );
@@ -797,9 +797,9 @@ void SdStyleSheetPool::CreateLayoutSheetNames(const OUString& rLayoutName, std::
 |*
 \************************************************************************/
 
-void SdStyleSheetPool::CreateLayoutSheetList(const OUString& rLayoutName, SdStyleSheetVector& rLayoutSheets )
+void SdStyleSheetPool::CreateLayoutSheetList(std::u16string_view rLayoutName, SdStyleSheetVector& rLayoutSheets )
 {
-    OUString aLayoutNameWithSep(rLayoutName + SD_LT_SEPARATOR);
+    OUString aLayoutNameWithSep(OUString::Concat(rLayoutName) + SD_LT_SEPARATOR);
 
     SfxStyleSheetIterator aIter(this, SfxStyleFamily::Page);
     SfxStyleSheetBase* pSheet = aIter.First();

@@ -1219,10 +1219,10 @@ void SwHTMLWriter::OutPointFieldmarks( const SwPosition& rPos )
     // TODO : Handle other single-point fieldmark types here (if any).
 }
 
-void SwHTMLWriter::OutImplicitMark( const OUString& rMark,
+void SwHTMLWriter::OutImplicitMark( std::u16string_view rMark,
                                     const char *pMarkType )
 {
-    if( !rMark.isEmpty() && !m_aImplicitMarks.empty() )
+    if( !rMark.empty() && !m_aImplicitMarks.empty() )
     {
         OUString sMark(rMark + OUStringChar(cMarkSeparator) + OUString::createFromAscii(pMarkType));
         if( 0 != m_aImplicitMarks.erase( sMark ) )

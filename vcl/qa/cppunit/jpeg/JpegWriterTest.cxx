@@ -8,6 +8,10 @@
  *
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <unotest/bootstrapfixturebase.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/BitmapReadAccess.hxx>
@@ -17,7 +21,7 @@ constexpr OUStringLiteral gaDataUrl(u"/vcl/qa/cppunit/jpeg/data/");
 
 class JpegWriterTest : public test::BootstrapFixtureBase
 {
-    OUString getFullUrl(const OUString& sFileName)
+    OUString getFullUrl(std::u16string_view sFileName)
     {
         return m_directories.getURLFromSrc(gaDataUrl) + sFileName;
     }
@@ -66,7 +70,7 @@ BitmapEx JpegWriterTest::roundtripJPG(const BitmapEx& bitmap)
 
 void JpegWriterTest::testWrite8BitGrayscale()
 {
-    Bitmap bitmap = roundtripJPG(getFullUrl("8BitGrayscale.jpg")).GetBitmap();
+    Bitmap bitmap = roundtripJPG(getFullUrl(u"8BitGrayscale.jpg")).GetBitmap();
     Bitmap::ScopedReadAccess access(bitmap);
     const ScanlineFormat format = access->GetScanlineFormat();
     // Check that it's still 8bit grayscale.
@@ -82,7 +86,7 @@ void JpegWriterTest::testWrite8BitGrayscale()
 
 void JpegWriterTest::testWrite8BitNonGrayscale()
 {
-    Bitmap bitmap = roundtripJPG(getFullUrl("8BitNonGrayscale.gif")).GetBitmap();
+    Bitmap bitmap = roundtripJPG(getFullUrl(u"8BitNonGrayscale.gif")).GetBitmap();
     Bitmap::ScopedReadAccess access(bitmap);
     const ScanlineFormat format = access->GetScanlineFormat();
     // Check that it's still 8bit grayscale.

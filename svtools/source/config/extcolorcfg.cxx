@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <map>
+#include <string_view>
 
 #include <svtools/extcolorcfg.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -85,7 +86,7 @@ public:
     void                            CommitCurrentSchemeName();
     //changes the name of the current scheme but doesn't load it!
     void                            SetCurrentSchemeName(const OUString& rSchemeName) {m_sLoadedScheme = rSchemeName;}
-    bool                            ExistsScheme(const OUString& _sSchemeName);
+    bool                            ExistsScheme(std::u16string_view _sSchemeName);
     virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames) override;
 
     sal_Int32                       GetComponentCount() const;
@@ -290,7 +291,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
 
     if ( sScheme != "default" )
     {
-        if ( ExistsScheme("default") )
+        if ( ExistsScheme(u"default") )
         {
             aComponentNames = GetPropertyNames("ExtendedColorScheme/ColorSchemes/default");
             FillComponentColors(aComponentNames,aDisplayNameMap);
@@ -426,12 +427,12 @@ void ExtendedColorConfig_Impl::CommitCurrentSchemeName()
     PutProperties(aCurrent, aCurrentVal);
 }
 
-bool ExtendedColorConfig_Impl::ExistsScheme(const OUString& _sSchemeName)
+bool ExtendedColorConfig_Impl::ExistsScheme(std::u16string_view _sSchemeName)
 {
     OUString sBase("ExtendedColorScheme/ColorSchemes");
 
     uno::Sequence < OUString > aComponentNames = GetPropertyNames(sBase);
-    sBase += "/" + _sSchemeName;
+    sBase += OUString::Concat("/") + _sSchemeName;
     return comphelper::findValue(aComponentNames, sBase) != -1;
 }
 

@@ -22,6 +22,8 @@
 #include <sal/config.h>
 
 #include <optional>
+#include <string_view>
+
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sal/types.h>
@@ -225,7 +227,7 @@ private:
     SAL_DLLPRIVATE  css::uno::Reference< css::xml::dom::XNode>
         matchLanguageTag(
         css::uno::Reference< css::xml::dom::XNode > const & xParent,
-        OUString const & rTag) const;
+        std::u16string_view rTag) const;
 
     /** If there is no child element with a locale matching the office locale, then we use
         the first child. In the case of the simple-license we also use the former default locale, which
@@ -279,7 +281,7 @@ inline  bool DescriptionInfoset::hasDescription() const
     the description.xml.
  */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-DescriptionInfoset getDescriptionInfoset(OUString const & sExtensionFolderURL);
+DescriptionInfoset getDescriptionInfoset(std::u16string_view sExtensionFolderURL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

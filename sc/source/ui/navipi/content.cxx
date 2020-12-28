@@ -772,9 +772,9 @@ void ScContentTree::GetTableNames()
 
 namespace {
 
-OUString createLocalRangeName(const OUString& rName, const OUString& rTableName)
+OUString createLocalRangeName(std::u16string_view rName, std::u16string_view rTableName)
 {
-    return rName + " (" + rTableName + ")";
+    return OUString::Concat(rName) + " (" + rTableName + ")";
 }
 }
 

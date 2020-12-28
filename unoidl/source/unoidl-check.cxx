@@ -13,6 +13,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
+#include <string_view>
 #include <vector>
 
 #include <osl/file.hxx>
@@ -159,7 +160,7 @@ private:
 };
 
 void checkMap(
-    rtl::Reference<unoidl::Provider> const & providerB, OUString const & prefix,
+    rtl::Reference<unoidl::Provider> const & providerB, std::u16string_view prefix,
     rtl::Reference<unoidl::MapCursor> const & cursor, bool ignoreUnpublished)
 {
     assert(providerB.is());
@@ -173,7 +174,7 @@ void checkMap(
         OUString name(prefix + id);
         if (entA->getSort() == unoidl::Entity::SORT_MODULE) {
             checkMap(
-                providerB, name + ".",
+                providerB, OUString(name + "."),
                 (static_cast<unoidl::ModuleEntity *>(entA.get())
                  ->createCursor()),
                 ignoreUnpublished);
@@ -898,7 +899,7 @@ bool valid(OUString const & identifier) {
 }
 
 void checkIds(
-    rtl::Reference<unoidl::Provider> const & providerA, OUString const & prefix,
+    rtl::Reference<unoidl::Provider> const & providerA, std::u16string_view prefix,
     rtl::Reference<unoidl::MapCursor> const & cursor)
 {
     assert(cursor.is());
@@ -919,7 +920,7 @@ void checkIds(
         switch (entB->getSort()) {
         case unoidl::Entity::SORT_MODULE:
             checkIds(
-                providerA, name + ".",
+                providerA, OUString(name + "."),
                 (static_cast<unoidl::ModuleEntity *>(entB.get())
                  ->createCursor()));
             break;
@@ -1148,8 +1149,8 @@ SAL_IMPLEMENT_MAIN() {
         if (side == 0 || !(prov[0].is() && prov[1].is())) {
             badUsage();
         }
-        checkMap(prov[1], "", prov[0]->createRootCursor(), ignoreUnpublished);
-        checkIds(prov[0], "", prov[1]->createRootCursor());
+        checkMap(prov[1], u"", prov[0]->createRootCursor(), ignoreUnpublished);
+        checkIds(prov[0], u"", prov[1]->createRootCursor());
         return EXIT_SUCCESS;
     } catch (unoidl::FileFormatException & e1) {
         std::cerr

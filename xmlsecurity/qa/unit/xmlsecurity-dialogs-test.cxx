@@ -51,7 +51,7 @@ VclPtr<VclAbstractDialog> XmlsecurityDialogsTest::createDialogByID(sal_uInt32 /*
 void XmlsecurityDialogsTest::openAnyDialog()
 {
     /// process input file containing the UXMLDescriptions of the dialogs to dump
-    processDialogBatchFile("xmlsecurity/qa/unit/data/xmlsecurity-dialogs-test.txt");
+    processDialogBatchFile(u"xmlsecurity/qa/unit/data/xmlsecurity-dialogs-test.txt");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(XmlsecurityDialogsTest);

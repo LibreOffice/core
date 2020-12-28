@@ -13,6 +13,7 @@
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <map>
+#include <string_view>
 
 namespace com::sun::star::frame
 {
@@ -45,11 +46,11 @@ public:
     static void ExecMethod(SfxBindings& rBindings, const OUString& rUIName);
 
     /// Function to be called from the sdi's StateMethod.
-    static bool StateMethod(SfxBindings& rBindings, const OUString& rUIFile,
+    static bool StateMethod(SfxBindings& rBindings, std::u16string_view rUIFile,
                             bool bReloadNotebookbar = false);
     static bool StateMethod(SystemWindow* pSysWindow,
                             const css::uno::Reference<css::frame::XFrame>& xFrame,
-                            const OUString& rUIFile, bool bReloadNotebookbar = false);
+                            std::u16string_view rUIFile, bool bReloadNotebookbar = false);
 
     /// Method temporarily blocks showing of the NotebookBar
     static void LockNotebookBar();
@@ -63,7 +64,7 @@ public:
     /** Show menu bar only in current frame */
     static void ShowMenubar(SfxViewFrame const* pViewFrame, bool bShow);
     static void ToggleMenubar();
-    static void ReloadNotebookBar(const OUString& sUIPath);
+    static void ReloadNotebookBar(std::u16string_view sUIPath);
 
 private:
     static bool m_bLock;

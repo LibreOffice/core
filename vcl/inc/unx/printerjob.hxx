@@ -23,6 +23,7 @@
 #include <jobdata.hxx>
 #include <osl/file.hxx>
 
+#include <string_view>
 #include <vector>
 
 namespace psp {
@@ -68,8 +69,8 @@ private:
     bool            m_bQuickJob;
 
 private:
-    std::unique_ptr<osl::File> CreateSpoolFile (const OUString& rName,
-                                     const OUString& rExtension);
+    std::unique_ptr<osl::File> CreateSpoolFile (std::u16string_view rName,
+                                     std::u16string_view rExtension);
     void            InitPaperSize (const JobData& rJobSetup);
 
     bool            writeFeatureList( osl::File* pFile, const JobData&, bool bDocumentSetup );

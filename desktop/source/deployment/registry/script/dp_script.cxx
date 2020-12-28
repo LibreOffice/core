@@ -28,6 +28,8 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/script/XLibraryContainer3.hpp>
 #include <memory>
+#include <string_view>
+
 #include "dp_scriptbackenddb.hxx"
 #include <cppuhelper/supportsservice.hxx>
 
@@ -81,8 +83,8 @@ class BackendImpl : public t_helper
         Reference<XCommandEnvironment> const & xCmdEnv ) override;
 
     void addDataToDb(OUString const & url);
-    bool hasActiveEntry(OUString const & url);
-    void revokeEntryFromDb(OUString const & url);
+    bool hasActiveEntry(std::u16string_view url);
+    void revokeEntryFromDb(std::u16string_view url);
 
     const Reference<deployment::XPackageTypeInfo> m_xBasicLibTypeInfo;
     const Reference<deployment::XPackageTypeInfo> m_xDialogLibTypeInfo;
@@ -189,7 +191,7 @@ void BackendImpl::addDataToDb(OUString const & url)
         m_backendDb->addEntry(url);
 }
 
-bool BackendImpl::hasActiveEntry(OUString const & url)
+bool BackendImpl::hasActiveEntry(std::u16string_view url)
 {
     if (m_backendDb)
         return m_backendDb->hasActiveEntry(url);
@@ -210,7 +212,7 @@ BackendImpl::getSupportedPackageTypes()
 {
     return m_typeInfos;
 }
-void BackendImpl::revokeEntryFromDb(OUString const & url)
+void BackendImpl::revokeEntryFromDb(std::u16string_view url)
 {
     if (m_backendDb)
         m_backendDb->revokeEntry(url);

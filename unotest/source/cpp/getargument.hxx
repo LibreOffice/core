@@ -22,6 +22,8 @@
 
 #include <sal/config.h>
 
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 
 namespace test {
@@ -31,7 +33,7 @@ namespace detail {
 // Obtain the value of an argument tunneled in via an "arg-<name>" bootstrap
 // variable:
 bool getArgument(
-    OUString const & name, OUString * value);
+    std::u16string_view name, OUString * value);
 
 }
 

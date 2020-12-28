@@ -17,6 +17,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sstream>
+#include <string_view>
 
 /// Helper to do a SAL_INFO as well as a GL log.
 #define VCL_GL_INFO(stream) \
@@ -47,10 +48,10 @@ struct VCL_DLLPUBLIC OpenGLHelper
 
 public:
 
-    static OString GetDigest(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const OString& preamble );
+    static OString GetDigest(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, std::string_view preamble );
 
-    static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const OUString& rGeometryShaderName, const OString& preamble, const OString& rDigest );
-    static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const OString& preamble, const OString& rDigest );
+    static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const OUString& rGeometryShaderName, std::string_view preamble, std::string_view rDigest );
+    static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, std::string_view preamble, std::string_view rDigest );
     static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const OUString& rGeometryShaderName);
     static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName);
 

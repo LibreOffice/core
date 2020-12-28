@@ -29,11 +29,11 @@ uno::Reference<drawing::XControlShape>
                                            const sal_Int32 nX, const sal_Int32 nY,
                                            const sal_Int32 nHeight, const sal_Int32 nWidth)
 {
-    return createControlShape(r_xComponent, "CommandButton", nX, nY, nHeight, nWidth);
+    return createControlShape(r_xComponent, u"CommandButton", nX, nY, nHeight, nWidth);
 }
 
 uno::Reference<drawing::XControlShape> OOO_DLLPUBLIC_TEST createControlShape(
-    const uno::Reference<lang::XComponent>& r_xComponent, const OUString& r_aKind,
+    const uno::Reference<lang::XComponent>& r_xComponent, std::u16string_view r_aKind,
     const sal_Int32 nX, const sal_Int32 nY, const sal_Int32 nHeight, const sal_Int32 nWidth)
 {
     uno::Reference<lang::XMultiServiceFactory> xMSF(r_xComponent, uno::UNO_QUERY_THROW);
@@ -42,10 +42,11 @@ uno::Reference<drawing::XControlShape> OOO_DLLPUBLIC_TEST createControlShape(
         xMSF->createInstance("com.sun.star.drawing.ControlShape"), uno::UNO_QUERY_THROW);
 
     uno::Reference<uno::XInterface> aComponent(
-        xMSF->createInstance("com.sun.star.form.component." + r_aKind), uno::UNO_SET_THROW);
+        xMSF->createInstance(OUString::Concat("com.sun.star.form.component.") + r_aKind),
+        uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(aComponent, uno::UNO_QUERY_THROW);
-    xPropertySet->setPropertyValue("DefaultControl",
-                                   uno::makeAny("com.sun.star.form.control." + r_aKind));
+    xPropertySet->setPropertyValue(
+        "DefaultControl", uno::makeAny(OUString::Concat("com.sun.star.form.control.") + r_aKind));
     uno::Reference<awt::XControlModel> xControlModel(aComponent, uno::UNO_QUERY_THROW);
 
     xControlShape->setSize(awt::Size(nHeight, nWidth));

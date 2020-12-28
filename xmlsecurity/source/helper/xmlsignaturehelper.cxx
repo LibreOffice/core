@@ -325,7 +325,7 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embe
 
     uno::Reference<embed::XStorage> xSubStorage = xStorage->openStorageElement("_rels", nOpenMode);
     uno::Reference<io::XInputStream> xRelStream(xSubStorage->openStreamElement("origin.sigs.rels", nOpenMode), uno::UNO_QUERY);
-    uno::Sequence< uno::Sequence<beans::StringPair> > aRelationsInfo = comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(xRelStream, "origin.sigs.rels", mxCtx);
+    uno::Sequence< uno::Sequence<beans::StringPair> > aRelationsInfo = comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(xRelStream, u"origin.sigs.rels", mxCtx);
 
     for (sal_Int32 i = 0; i < aRelationsInfo.getLength(); ++i)
     {
@@ -414,7 +414,7 @@ void XMLSignatureHelper::EnsureSignaturesRelation(const css::uno::Reference<css:
     sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
     uno::Reference<embed::XStorage> xSubStorage = xStorage->openStorageElement("_rels", nOpenMode);
     uno::Reference<io::XInputStream> xRelStream(xSubStorage->openStreamElement(".rels", nOpenMode), uno::UNO_QUERY);
-    std::vector< uno::Sequence<beans::StringPair> > aRelationsInfo = comphelper::sequenceToContainer< std::vector< uno::Sequence<beans::StringPair> > >(comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(xRelStream, ".rels", mxCtx));
+    std::vector< uno::Sequence<beans::StringPair> > aRelationsInfo = comphelper::sequenceToContainer< std::vector< uno::Sequence<beans::StringPair> > >(comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(xRelStream, u".rels", mxCtx));
 
     // Do we have a relation already?
     bool bHaveRelation = false;

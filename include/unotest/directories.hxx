@@ -12,6 +12,8 @@
 
 #include <sal/config.h>
 
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 #include <unotest/detail/unotestdllapi.hxx>
 
@@ -32,16 +34,16 @@ public:
     const OUString& getSrcRootPath() const { return m_aSrcRootPath; }
 
     // return a URL to a given path from the source directory
-    OUString getURLFromSrc(const OUString& rPath) const;
+    OUString getURLFromSrc(std::u16string_view rPath) const;
 
     // return a Path to a given path from the source directory
-    OUString getPathFromSrc(const OUString& rPath) const;
+    OUString getPathFromSrc(std::u16string_view rPath) const;
 
     // return a URL to a given path from the workdir directory
-    OUString getURLFromWorkdir(const OUString& rPath) const;
+    OUString getURLFromWorkdir(std::u16string_view rPath) const;
 
     // return a Path to a given path from the workdir directory
-    OUString getPathFromWorkdir(const OUString& rPath) const;
+    OUString getPathFromWorkdir(std::u16string_view rPath) const;
 };
 }
 

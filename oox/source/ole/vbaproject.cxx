@@ -79,13 +79,13 @@ bool lclReadConfigItem( const Reference< XInterface >& rxConfigAccess, const OUS
 
 } // namespace
 
-VbaFilterConfig::VbaFilterConfig( const Reference< XComponentContext >& rxContext, const OUString& rConfigCompName )
+VbaFilterConfig::VbaFilterConfig( const Reference< XComponentContext >& rxContext, std::u16string_view rConfigCompName )
 {
     OSL_ENSURE( rxContext.is(), "VbaFilterConfig::VbaFilterConfig - missing component context" );
     if( rxContext.is() ) try
     {
-        OSL_ENSURE( !rConfigCompName.isEmpty(), "VbaFilterConfig::VbaFilterConfig - invalid configuration component name" );
-        OUString aConfigPackage = "org.openoffice.Office." + rConfigCompName;
+        OSL_ENSURE( !rConfigCompName.empty(), "VbaFilterConfig::VbaFilterConfig - invalid configuration component name" );
+        OUString aConfigPackage = OUString::Concat("org.openoffice.Office.") + rConfigCompName;
         mxConfigAccess = ConfigurationHelper::openConfig( rxContext, aConfigPackage, comphelper::EConfigurationModes::ReadOnly );
     }
     catch(const Exception& )
@@ -135,7 +135,7 @@ void VbaMacroAttacherBase::resolveAndAttachMacro( const Reference< XVBAMacroReso
 }
 
 VbaProject::VbaProject( const Reference< XComponentContext >& rxContext,
-        const Reference< XModel >& rxDocModel, const OUString& rConfigCompName ) :
+        const Reference< XModel >& rxDocModel, std::u16string_view rConfigCompName ) :
     VbaFilterConfig( rxContext, rConfigCompName ),
     mxContext( rxContext ),
     mxDocModel( rxDocModel ),

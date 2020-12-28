@@ -1201,7 +1201,7 @@ const application_info_impl* getApplicationInfo( std::u16string_view rServiceNam
     return nullptr;
 }
 
-OUString getApplicationUIName( const OUString& rServiceName )
+OUString getApplicationUIName( std::u16string_view rServiceName )
 {
     const application_info_impl* pInfo = getApplicationInfo( rServiceName );
     if( pInfo )
@@ -1211,9 +1211,9 @@ OUString getApplicationUIName( const OUString& rServiceName )
     else
     {
         OUString aRet = XsltResId(STR_UNKNOWN_APPLICATION);
-        if( !rServiceName.isEmpty() )
+        if( !rServiceName.empty() )
         {
-            aRet += " (" + rServiceName + ")";
+            aRet += OUString::Concat(" (") + rServiceName + ")";
         }
         return aRet;
     }

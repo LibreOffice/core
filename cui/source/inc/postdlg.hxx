@@ -18,6 +18,10 @@
  */
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <sfx2/basedlgs.hxx>
 
 // class SvxPostItDialog -------------------------------------------------
@@ -57,7 +61,7 @@ public:
     {
         m_xEditED->set_text(rTxt);
     }
-    void ShowLastAuthor(const OUString& rAuthor, const OUString& rDate);
+    void ShowLastAuthor(std::u16string_view rAuthor, std::u16string_view rDate);
     void DontChangeAuthor()
     {
         m_xAuthorBtn->set_sensitive(false);

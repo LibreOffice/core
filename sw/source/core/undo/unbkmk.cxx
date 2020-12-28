@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <UndoBookmark.hxx>
 
 #include <strings.hrc>
@@ -111,7 +115,7 @@ SwUndoRenameBookmark::~SwUndoRenameBookmark()
 {
 }
 
-static OUString lcl_QuoteName(const OUString& rName)
+static OUString lcl_QuoteName(std::u16string_view rName)
 {
     static const OUString sStart = SwResId(STR_START_QUOTE);
     static const OUString sEnd = SwResId(STR_END_QUOTE);

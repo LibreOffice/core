@@ -93,7 +93,7 @@ private:
 
 ScDDELinkObj::ScDDELinkObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
-    , TempFileBase(m_directories.getURLFromSrc("/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods"))
+    , TempFileBase(m_directories.getURLFromSrc(u"/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods"))
     , XDDELink(m_TempFile.GetURL())
     , XNamed("soffice|" + m_TempFile.GetURL() + "!Sheet1.A1")
 {

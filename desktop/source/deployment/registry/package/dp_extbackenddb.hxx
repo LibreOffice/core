@@ -19,6 +19,9 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -59,7 +62,7 @@ public:
 
     void addEntry(OUString const& url, Data const& data);
 
-    Data getEntry(OUString const& url);
+    Data getEntry(std::u16string_view url);
 };
 }
 

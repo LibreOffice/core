@@ -25,6 +25,7 @@
 #include <map>
 #include <memory>
 #include <set>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -107,7 +108,7 @@ bool isSpecialType(SpecialType special) {
 }
 
 OString translateUnoidlEntityNameToJavaFullyQualifiedName(
-    OUString const & name, OString const & prefix)
+    OUString const & name, std::string_view prefix)
 {
     assert(!name.startsWith("[]"));
     assert(name.indexOf('<') == -1);
@@ -126,7 +127,7 @@ struct PolymorphicUnoType {
 };
 
 SpecialType translateUnoTypeToDescriptor(
-    rtl::Reference< TypeManager > const & manager, OUString const & type,
+    rtl::Reference< TypeManager > const & manager, std::u16string_view type,
     bool array, bool classType, std::set<OUString> * dependencies,
     OStringBuffer * descriptor, OStringBuffer * signature,
     bool * needsSignature, PolymorphicUnoType * polymorphicUnoType);
@@ -272,7 +273,7 @@ SpecialType translateUnoTypeToDescriptor(
 }
 
 SpecialType translateUnoTypeToDescriptor(
-    rtl::Reference< TypeManager > const & manager, OUString const & type,
+    rtl::Reference< TypeManager > const & manager, std::u16string_view type,
     bool array, bool classType, std::set<OUString> * dependencies,
     OStringBuffer * descriptor, OStringBuffer * signature,
     bool * needsSignature, PolymorphicUnoType * polymorphicUnoType)
@@ -290,7 +291,7 @@ SpecialType translateUnoTypeToDescriptor(
 
 SpecialType getFieldDescriptor(
     rtl::Reference< TypeManager > const & manager, std::set<OUString> * dependencies,
-    OUString const & type, OString * descriptor, OString * signature,
+    std::u16string_view type, OString * descriptor, OString * signature,
     PolymorphicUnoType * polymorphicUnoType)
 {
     assert(descriptor != nullptr);
@@ -315,12 +316,12 @@ class MethodDescriptor {
 public:
     MethodDescriptor(
         rtl::Reference< TypeManager > const & manager,
-        std::set<OUString> * dependencies, OUString const & returnType,
+        std::set<OUString> * dependencies, std::u16string_view returnType,
         SpecialType * specialReturnType,
         PolymorphicUnoType * polymorphicUnoType);
 
     SpecialType addParameter(
-        OUString const & type, bool array, bool dependency,
+        std::u16string_view type, bool array, bool dependency,
         PolymorphicUnoType * polymorphicUnoType);
 
     void addTypeParameter(OUString const & name);
@@ -341,7 +342,7 @@ private:
 
 MethodDescriptor::MethodDescriptor(
     rtl::Reference< TypeManager > const & manager, std::set<OUString> * dependencies,
-    OUString const & returnType, SpecialType * specialReturnType,
+    std::u16string_view returnType, SpecialType * specialReturnType,
     PolymorphicUnoType * polymorphicUnoType):
     m_manager(manager), m_dependencies(dependencies), m_needsSignature(false)
 {
@@ -363,7 +364,7 @@ MethodDescriptor::MethodDescriptor(
 }
 
 SpecialType MethodDescriptor::addParameter(
-    OUString const & type, bool array, bool dependency,
+    std::u16string_view type, bool array, bool dependency,
     PolymorphicUnoType * polymorphicUnoType)
 {
     return translateUnoTypeToDescriptor(
@@ -845,7 +846,7 @@ void addField(
 
 sal_uInt16 addFieldInit(
     rtl::Reference< TypeManager > const & manager, OString const & className,
-    OUString const & fieldName, bool typeParameter, OUString const & fieldType,
+    OUString const & fieldName, bool typeParameter, std::u16string_view fieldType,
     std::set<OUString> * dependencies, ClassFile::Code * code)
 {
     assert(manager.is());
@@ -931,7 +932,7 @@ sal_uInt16 addFieldInit(
             for (;;) std::abort(); // this cannot happen
         default:
             throw CannotDumpException(
-                "unexpected entity \"" + fieldType
+                OUString::Concat("unexpected entity \"") + fieldType
                 + "\" in call to addFieldInit");
         }
     }
@@ -965,7 +966,7 @@ sal_uInt16 addFieldInit(
 
 sal_uInt16 addLoadLocal(
     rtl::Reference< TypeManager > const & manager, ClassFile::Code * code,
-    sal_uInt16 * index, bool typeParameter, OUString const & type, bool any,
+    sal_uInt16 * index, bool typeParameter, std::u16string_view type, bool any,
     std::set<OUString> * dependencies)
 {
     assert(manager.is());
@@ -1234,7 +1235,7 @@ sal_uInt16 addLoadLocal(
                 for (;;) std::abort(); // this cannot happen
             default:
                 throw CannotDumpException(
-                    "unexpected entity \"" + type
+                    OUString::Concat("unexpected entity \"") + type
                     + "\" in call to addLoadLocal");
             }
         } else {
@@ -1272,7 +1273,7 @@ sal_uInt16 addLoadLocal(
                     for (;;) std::abort(); // this cannot happen
                 default:
                     throw CannotDumpException(
-                        "unexpected entity \"" + type
+                        OUString::Concat("unexpected entity \"") + type
                         + "\" in call to addLoadLocal");
                 }
             }
@@ -1404,7 +1405,7 @@ void handlePlainStructType(
     cf->addMethod(
         ClassFile::ACC_PUBLIC, "<init>", "()V", code.get(),
         std::vector< OString >(), "");
-    MethodDescriptor desc(manager, dependencies, "void", nullptr, nullptr);
+    MethodDescriptor desc(manager, dependencies, u"void", nullptr, nullptr);
     code = cf->newCode();
     code->loadLocalReference(0);
     sal_uInt16 index2 = 1;
@@ -1495,7 +1496,7 @@ void handlePolyStructType(
     cf->addMethod(
         ClassFile::ACC_PUBLIC, "<init>", "()V", code.get(),
         std::vector< OString >(), "");
-    MethodDescriptor desc(manager, dependencies, "void", nullptr, nullptr);
+    MethodDescriptor desc(manager, dependencies, u"void", nullptr, nullptr);
     code = cf->newCode();
     code->loadLocalReference(0);
     sal_uInt16 index2 = 1;
@@ -1611,7 +1612,7 @@ void handleExceptionType(
             stack,
             addFieldInit(
                 manager, className, "Context", false,
-                "com.sun.star.uno.XInterface", dependencies, code.get()));
+                u"com.sun.star.uno.XInterface", dependencies, code.get()));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1643,7 +1644,7 @@ void handleExceptionType(
             stack,
             addFieldInit(
                 manager, className, "Context", false,
-                "com.sun.star.uno.XInterface", dependencies, code.get()));
+                u"com.sun.star.uno.XInterface", dependencies, code.get()));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1681,7 +1682,7 @@ void handleExceptionType(
             stack,
             addFieldInit(
                 manager, className, "Context", false,
-                "com.sun.star.uno.XInterface", dependencies, code.get()));
+                u"com.sun.star.uno.XInterface", dependencies, code.get()));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1712,7 +1713,7 @@ void handleExceptionType(
             stack,
             addFieldInit(
                 manager, className, "Context", false,
-                "com.sun.star.uno.XInterface", dependencies, code.get()));
+                u"com.sun.star.uno.XInterface", dependencies, code.get()));
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity->getDirectMembers().begin());
@@ -1734,12 +1735,12 @@ void handleExceptionType(
 
 
     // create (String Message, Object Context, T1 m1, ..., Tn mn) constructor
-    MethodDescriptor desc1(manager, dependencies, "void", nullptr, nullptr);
+    MethodDescriptor desc1(manager, dependencies, u"void", nullptr, nullptr);
     code = cf->newCode();
     code->loadLocalReference(0);
     sal_uInt16 index2 = 1;
     code->loadLocalReference(index2++);
-    desc1.addParameter("string", false, true, nullptr);
+    desc1.addParameter(u"string", false, true, nullptr);
     if (!(baseException || baseRuntimeException)) {
         addExceptionBaseArguments(
             manager, dependencies, &desc1, code.get(), entity->getDirectBase(),
@@ -1774,13 +1775,13 @@ void handleExceptionType(
         std::vector< OString >(), desc1.getSignature());
 
     // create (Throwable Cause, String Message, Object Context, T1 m1, ..., Tn mn) constructor
-    MethodDescriptor desc2(manager, dependencies, "void", nullptr, nullptr);
+    MethodDescriptor desc2(manager, dependencies, u"void", nullptr, nullptr);
     code = cf->newCode();
     code->loadLocalReference(0);
     sal_uInt16 index3 = 3;
     // Note that we hack in the java.lang.Throwable parameter further down,
     // because MethodDescriptor does not know how to handle it.
-    desc2.addParameter("string", false, true, nullptr);
+    desc2.addParameter(u"string", false, true, nullptr);
     if (baseException || baseRuntimeException) {
         code->loadLocalReference(2);
         code->loadLocalReference(1);
@@ -1888,7 +1889,7 @@ void handleInterfaceType(
                 "get" + attrName, gdesc.getDescriptor(), nullptr, exc,
                 gdesc.getSignature());
             if (!attr.readOnly) {
-                MethodDescriptor sdesc(manager, dependencies, "void", nullptr, nullptr);
+                MethodDescriptor sdesc(manager, dependencies, u"void", nullptr, nullptr);
                 sdesc.addParameter(attr.type, false, true, nullptr);
                 std::vector< OString > exc2;
                 createExceptionsAttribute(
@@ -2079,7 +2080,7 @@ void addExceptionHandlers(
 
 void addConstructor(
     rtl::Reference< TypeManager > const & manager,
-    OString const & realJavaBaseName, OString const & unoName,
+    std::string_view realJavaBaseName, OString const & unoName,
     OString const & className,
     unoidl::SingleInterfaceBasedServiceEntity::Constructor const & constructor,
     OUString const & returnType, std::set<OUString> * dependencies,
@@ -2088,7 +2089,7 @@ void addConstructor(
     assert(dependencies != nullptr);
     assert(classFile != nullptr);
     MethodDescriptor desc(manager, dependencies, returnType, nullptr, nullptr);
-    desc.addParameter("com.sun.star.uno.XComponentContext", false, false, nullptr);
+    desc.addParameter(u"com.sun.star.uno.XComponentContext", false, false, nullptr);
     std::unique_ptr< ClassFile::Code > code(classFile->newCode());
     code->loadLocalReference(0);
     // stack: context
@@ -2123,7 +2124,7 @@ void addConstructor(
         if (constructor.parameters.size() == 1
             && constructor.parameters[0].rest)
         {
-            desc.addParameter("any", true, true, nullptr);
+            desc.addParameter(u"any", true, true, nullptr);
             code->loadLocalReference(localIndex++);
             // stack: factory serviceName args
             stack = 4;
@@ -2345,7 +2346,7 @@ void handleSingleton(
                 | ClassFile::ACC_SUPER),
             className, "java/lang/Object", ""));
     MethodDescriptor desc(manager, dependencies, entity->getBase(), nullptr, nullptr);
-    desc.addParameter("com.sun.star.uno.XComponentContext", false, false, nullptr);
+    desc.addParameter(u"com.sun.star.uno.XComponentContext", false, false, nullptr);
     std::unique_ptr< ClassFile::Code > code(cf->newCode());
     code->loadLocalReference(0);
     // stack: context

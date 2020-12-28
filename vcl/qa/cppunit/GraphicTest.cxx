@@ -338,7 +338,7 @@ void GraphicTest::testWMFRoundtrip()
 {
     // Load a WMF file.
     test::Directories aDirectories;
-    OUString aURL = aDirectories.getURLFromSrc("vcl/qa/cppunit/data/roundtrip.wmf");
+    OUString aURL = aDirectories.getURLFromSrc(u"vcl/qa/cppunit/data/roundtrip.wmf");
     SvFileStream aStream(aURL, StreamMode::READ);
     sal_uInt64 nExpectedSize = aStream.TellEnd();
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();

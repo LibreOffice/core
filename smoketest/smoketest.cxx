@@ -139,7 +139,7 @@ void Test::test() {
     OUString doc;
     CPPUNIT_ASSERT(
         test::getTestArgument(
-            "smoketest.doc", &doc));
+            u"smoketest.doc", &doc));
     css::uno::Sequence< css::beans::PropertyValue > args(2);
     args[0].Name = "MacroExecutionMode";
     args[0].Handle = -1;

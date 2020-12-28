@@ -87,7 +87,7 @@ OString translateUnoToCppType(
 }
 
 OString translateUnoToCppIdentifier(
-    OString const & unoIdentifier, OString const & prefix,
+    OString const & unoIdentifier, std::string_view prefix,
     IdentifierTranslationMode transmode, OString const * forbidden)
 {
     if (// Keywords:
@@ -287,7 +287,7 @@ OString translateUnoToCppIdentifier(
             || unoIdentifier == "NDEBUG"
             || (forbidden != nullptr && unoIdentifier == *forbidden) )
     {
-        return prefix + "_" + unoIdentifier;
+        return OString::Concat(prefix) + "_" + unoIdentifier;
     } else {
         return unoIdentifier;
     }

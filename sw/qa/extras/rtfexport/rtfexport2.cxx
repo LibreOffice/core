@@ -599,7 +599,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyPastePageStyle)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste("rtfexport/data/copypaste-pagestyle-paste.rtf", xEnd);
+    paste(u"rtfexport/data/copypaste-pagestyle-paste.rtf", xEnd);
 
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Standard"),
                                                      uno::UNO_QUERY);
@@ -614,7 +614,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyPasteFootnote)
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
-    paste("rtfexport/data/copypaste-footnote-paste.rtf", xTextRange);
+    paste(u"rtfexport/data/copypaste-footnote-paste.rtf", xTextRange);
 
     CPPUNIT_ASSERT_EQUAL(OUString("bbb"), xTextRange->getString());
 }
@@ -626,7 +626,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo63428)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste("rtfexport/data/fdo63428.rtf", xEnd);
+    paste(u"rtfexport/data/fdo63428.rtf", xEnd);
 
     // Additionally, commented range was imported as a normal comment.
     CPPUNIT_ASSERT_EQUAL(OUString("Annotation"),
@@ -651,7 +651,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69384Inserted)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste("rtfexport/data/fdo69384-paste.rtf", xEnd);
+    paste(u"rtfexport/data/fdo69384-paste.rtf", xEnd);
 
     // During insert of the RTF document we do not change pre-existing styles
     // vs testFdo69384 where it is
@@ -667,7 +667,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo61193)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste("rtfexport/data/fdo61193.rtf", xEnd);
+    paste(u"rtfexport/data/fdo61193.rtf", xEnd);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf108123)
@@ -678,7 +678,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108123)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
-    paste("rtfexport/data/tdf108123.rtf", xEnd);
+    paste(u"rtfexport/data/tdf108123.rtf", xEnd);
 }
 
 DECLARE_RTFEXPORT_TEST(testShptxtPard, "shptxt-pard.rtf")

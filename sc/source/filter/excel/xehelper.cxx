@@ -980,7 +980,7 @@ OUString XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, const OUString& rA
     return lclEncodeDosUrl(rRoot.GetBiff(), aDosUrl, aDosBase, pTableName);
 }
 
-OUString XclExpUrlHelper::EncodeDde( const OUString& rApplic, const OUString& rTopic )
+OUString XclExpUrlHelper::EncodeDde( std::u16string_view rApplic, std::u16string_view rTopic )
 {
     return rApplic + OUStringChar(EXC_DDE_DELIM) + rTopic;
 }

@@ -22,6 +22,7 @@
 
 #include <functional>
 #include <map>
+#include <string_view>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/dllapi.h>
@@ -54,7 +55,7 @@ class VbaFilterConfig
 public:
     explicit            VbaFilterConfig(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                            const OUString& rConfigCompName );
+                            std::u16string_view rConfigCompName );
                         ~VbaFilterConfig();
 
     /** Returns true, if the VBA source code and forms should be imported. */
@@ -116,7 +117,7 @@ public:
     explicit            VbaProject(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::frame::XModel >& rxDocModel,
-                            const OUString& rConfigCompName );
+                            std::u16string_view rConfigCompName );
     virtual             ~VbaProject();
 
     /** Imports the entire VBA project from the passed storage.

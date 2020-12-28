@@ -269,7 +269,7 @@ void OHSQLTable::alterColumnType(sal_Int32 nNewType,const OUString& _rColName, c
     executeStatement(sSql);
 }
 
-void OHSQLTable::alterDefaultValue(const OUString& _sNewDefault,const OUString& _rColName)
+void OHSQLTable::alterDefaultValue(std::u16string_view _sNewDefault,const OUString& _rColName)
 {
     const OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
     OUString sSql = getAlterTableColumnPart() +

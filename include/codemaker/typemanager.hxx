@@ -52,7 +52,7 @@ public:
         rtl::Reference< unoidl::MapCursor > * cursor = nullptr) const;
 
     codemaker::UnoType::Sort decompose(
-        OUString const & name, bool resolveTypedefs, OUString * nucleus,
+        std::u16string_view name, bool resolveTypedefs, OUString * nucleus,
         sal_Int32 * rank, std::vector< OUString > * arguments,
         rtl::Reference< unoidl::Entity > * entity) const;
 

@@ -478,7 +478,7 @@ bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
 }
 
 bool CreateMediaTempFile(uno::Reference<io::XInputStream> const& xInStream,
-        OUString& o_rTempFileURL, const OUString& rDesiredExtension)
+        OUString& o_rTempFileURL, std::u16string_view rDesiredExtension)
 {
     OUString tempFileURL;
     ::osl::FileBase::RC const err =
@@ -489,7 +489,7 @@ bool CreateMediaTempFile(uno::Reference<io::XInputStream> const& xInStream,
         return false;
     }
 
-    if (!rDesiredExtension.isEmpty())
+    if (!rDesiredExtension.empty())
     {
         OUString newTempFileURL = tempFileURL + rDesiredExtension;
         if (osl::File::move(tempFileURL, newTempFileURL) != osl::FileBase::E_None)

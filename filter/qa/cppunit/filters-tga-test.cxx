@@ -57,7 +57,7 @@ bool TgaFilterTest::load(const OUString &,
 void TgaFilterTest::testCVEs()
 {
     testDir(OUString(),
-        m_directories.getURLFromSrc("/filter/qa/cppunit/data/tga/"));
+        m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/tga/"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TgaFilterTest);

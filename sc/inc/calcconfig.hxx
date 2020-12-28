@@ -13,6 +13,7 @@
 #include "scdllapi.h"
 
 #include <memory>
+#include <string_view>
 
 #include <o3tl/sorted_vector.hxx>
 #include <formula/grammar.hxx>
@@ -81,7 +82,7 @@ struct SC_DLLPUBLIC ScCalcConfig
 };
 
 OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes);
-ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes);
+ScCalcConfig::OpCodeSet ScStringToOpCodeSet(std::u16string_view rOpCodes);
 
 #endif
 

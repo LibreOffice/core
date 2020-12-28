@@ -10,6 +10,7 @@
 #define INCLUDED_FILTER_MSFILTER_MSTOOLBAR_HXX
 
 #include <memory>
+#include <string_view>
 #include <vector>
 
 #include <com/sun/star/uno/Any.hxx>
@@ -61,7 +62,7 @@ public:
     const css::uno::Reference< css::ui::XUIConfigurationManager >& getAppCfgManager() const { return m_xAppCfgMgr;}
 
 
-    static css::uno::Any createCommandFromMacro( const OUString& sCmd );
+    static css::uno::Any createCommandFromMacro( std::u16string_view sCmd );
 
     void addIcon( const css::uno::Reference< css::graphic::XGraphic >& xImage, const OUString& sString );
     void applyIcons();

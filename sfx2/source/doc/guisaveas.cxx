@@ -76,6 +76,7 @@
 #include <alienwarn.hxx>
 
 #include <memory>
+#include <string_view>
 
 #include <officecfg/Office/Common.hxx>
 
@@ -147,28 +148,28 @@ sal_uInt16 getSlotIDFromMode( sal_Int16 nStoreMode )
 }
 
 
-sal_Int16 getStoreModeFromSlotName( const OUString& aSlotName )
+sal_Int16 getStoreModeFromSlotName( std::u16string_view aSlotName )
 {
     sal_Int16 nResult = 0;
-    if ( aSlotName == "ExportTo" )
+    if ( aSlotName == u"ExportTo" )
         nResult = EXPORT_REQUESTED;
-    else if ( aSlotName == "ExportToPDF" )
+    else if ( aSlotName == u"ExportToPDF" )
         nResult = EXPORT_REQUESTED | PDFEXPORT_REQUESTED;
-    else if ( aSlotName == "ExportDirectToPDF" )
+    else if ( aSlotName == u"ExportDirectToPDF" )
         nResult = EXPORT_REQUESTED | PDFEXPORT_REQUESTED | PDFDIRECTEXPORT_REQUESTED;
-    else if ( aSlotName == "ExportToEPUB" )
+    else if ( aSlotName == u"ExportToEPUB" )
         nResult = EXPORT_REQUESTED | EPUBEXPORT_REQUESTED;
-    else if ( aSlotName == "ExportDirectToEPUB" )
+    else if ( aSlotName == u"ExportDirectToEPUB" )
         nResult = EXPORT_REQUESTED | EPUBEXPORT_REQUESTED | EPUBDIRECTEXPORT_REQUESTED;
-    else if ( aSlotName == "Save" )
+    else if ( aSlotName == u"Save" )
         nResult = SAVE_REQUESTED;
-    else if ( aSlotName == "SaveAs" )
+    else if ( aSlotName == u"SaveAs" )
         nResult = SAVEAS_REQUESTED;
-    else if ( aSlotName == "SaveAsRemote" )
+    else if ( aSlotName == u"SaveAsRemote" )
         nResult = SAVEASREMOTE_REQUESTED;
     else
         throw task::ErrorCodeIOException(
-            ("getStoreModeFromSlotName(\"" + aSlotName
+            (OUString::Concat("getStoreModeFromSlotName(\"") + aSlotName
              + "): ERRCODE_IO_INVALIDPARAMETER"),
             uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_INVALIDPARAMETER) );
 
@@ -1293,7 +1294,7 @@ namespace
     void LaunchPDFViewer(const INetURLObject& rURL)
     {
         // Launch PDF viewer
-        FilterConfigItem aItem( "Office.Common/Filter/PDF/Export/" );
+        FilterConfigItem aItem( u"Office.Common/Filter/PDF/Export/" );
         bool aViewPDF = aItem.ReadBool( "ViewPDFAfterExport", false );
 
         if ( aViewPDF )
@@ -1305,7 +1306,7 @@ namespace
 }
 
 bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xModel,
-                                            const OUString& aSlotName,
+                                            std::u16string_view aSlotName,
                                             uno::Sequence< beans::PropertyValue >& aArgsSequence,
                                             bool bPreselectPassword,
                                             SignatureState nDocumentSignatureState )

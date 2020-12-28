@@ -61,7 +61,7 @@ SmartTagMgr::~SmartTagMgr()
 {
 }
 
-void SmartTagMgr::Init( const OUString& rConfigurationGroupName )
+void SmartTagMgr::Init( std::u16string_view rConfigurationGroupName )
 {
     PrepareConfiguration( rConfigurationGroupName );
     ReadConfiguration( true, true );
@@ -372,9 +372,10 @@ void SmartTagMgr::LoadLibraries()
 
 }
 
-void SmartTagMgr::PrepareConfiguration( const OUString& rConfigurationGroupName )
+void SmartTagMgr::PrepareConfiguration( std::u16string_view rConfigurationGroupName )
 {
-    Any aAny = makeAny( "/org.openoffice.Office.Common/SmartTags/" + rConfigurationGroupName );
+    Any aAny = makeAny(
+        OUString::Concat("/org.openoffice.Office.Common/SmartTags/") + rConfigurationGroupName );
     beans::PropertyValue aPathArgument;
     aPathArgument.Name = "nodepath";
     aPathArgument.Value = aAny;

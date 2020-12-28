@@ -202,7 +202,7 @@ OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes)
     return result.toString();
 }
 
-ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes)
+ScCalcConfig::OpCodeSet ScStringToOpCodeSet(std::u16string_view rOpCodes)
 {
     ScCalcConfig::OpCodeSet result = std::make_shared<o3tl::sorted_vector< OpCode >>();
     formula::FormulaCompiler aCompiler;
@@ -212,7 +212,7 @@ ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes)
 
     sal_Int32 fromIndex(0);
     sal_Int32 semicolon;
-    OUString s(rOpCodes + ";");
+    OUString s(OUString::Concat(rOpCodes) + ";");
 
     while ((semicolon = s.indexOf(';', fromIndex)) >= 0)
     {

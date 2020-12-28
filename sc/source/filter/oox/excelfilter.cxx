@@ -84,7 +84,7 @@ bool ExcelFilter::importDocument()
         this variable (nonpro only). */
     //OOX_DUMP_FILE( ::oox::dump::xlsb::Dumper );
 
-    OUString aWorkbookPath = getFragmentPathFromFirstTypeFromOfficeDoc( "officeDocument" );
+    OUString aWorkbookPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"officeDocument" );
     if( aWorkbookPath.isEmpty() )
         return false;
 

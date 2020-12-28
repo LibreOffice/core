@@ -26,6 +26,8 @@
 #include "HashMaps.hxx"
 #include "ZipPackageEntry.hxx"
 #include <cppuhelper/implbase.hxx>
+
+#include <string_view>
 #include <vector>
 
 class ZipOutputStream;
@@ -52,7 +54,7 @@ public:
     const OUString& GetVersion() const { return m_sVersion; }
     void SetVersion( const OUString& aVersion ) { m_sVersion = aVersion; }
 
-    bool LookForUnexpectedODF12Streams( const OUString& aPath );
+    bool LookForUnexpectedODF12Streams( std::u16string_view aPath );
 
     void setChildStreamsTypeByExtension( const css::beans::StringPair& aPair );
 

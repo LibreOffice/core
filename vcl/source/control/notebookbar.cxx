@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <vcl/layout.hxx>
 #include <vcl/notebookbar/notebookbar.hxx>
 #include <vcl/syswin.hxx>
@@ -29,9 +33,9 @@ static OUString getCustomizedUIRootDir()
     return sShareLayer;
 }
 
-static bool doesFileExist(const OUString& sUIDir, const OUString& sUIFile)
+static bool doesFileExist(std::u16string_view sUIDir, std::u16string_view sUIFile)
 {
-    OUString sUri = sUIDir + sUIFile;
+    OUString sUri = OUString::Concat(sUIDir) + sUIFile;
     osl::File file(sUri);
     return( file.open(0) == osl::FileBase::E_None );
 }

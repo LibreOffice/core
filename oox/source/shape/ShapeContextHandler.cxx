@@ -274,12 +274,12 @@ void SAL_CALL ShapeContextHandler::startFastElement
             // Get Target for Type = "officeDocument" from _rels/.rels file
             // aOfficeDocumentFragmentPath is pointing to "word/document.xml" for docx & to "ppt/presentation.xml" for pptx
             FragmentHandlerRef rFragmentHandlerRef(new ShapeFragmentHandler(*mxFilterBase, "/"));
-            OUString aOfficeDocumentFragmentPath = rFragmentHandlerRef->getFragmentPathFromFirstTypeFromOfficeDoc( "officeDocument" );
+            OUString aOfficeDocumentFragmentPath = rFragmentHandlerRef->getFragmentPathFromFirstTypeFromOfficeDoc( u"officeDocument" );
 
             // Get the theme DO NOT  use msRelationFragmentPath for getting theme as for a document there is a single theme in document.xml.rels
             // and the same is used by header and footer as well.
             FragmentHandlerRef rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, aOfficeDocumentFragmentPath));
-            OUString aThemeFragmentPath = rFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc( "theme" );
+            OUString aThemeFragmentPath = rFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc( u"theme" );
 
             if(!aThemeFragmentPath.isEmpty())
             {

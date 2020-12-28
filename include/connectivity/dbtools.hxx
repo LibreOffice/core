@@ -752,8 +752,8 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS
     void collectColumnInformation(  const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
-                                    const OUString& _sComposedTableName,
-                                    const OUString& _rName,
+                                    std::u16string_view _sComposedTableName,
+                                    std::u16string_view _rName,
                                     ColumnInformationMap& _rInfo);
 
 

@@ -91,7 +91,7 @@ void CuiDialogsTest::openAnyDialog()
     initialize();
 
     /// process input file containing the UXMLDescriptions of the dialogs to dump
-    processDialogBatchFile("cui/qa/unit/data/cui-dialogs-test.txt");
+    processDialogBatchFile(u"cui/qa/unit/data/cui-dialogs-test.txt");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CuiDialogsTest);

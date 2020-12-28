@@ -223,7 +223,7 @@ ScVbaShapes::AddRectangle(sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWid
     uno::Reference< drawing::XShape > xShape( createShape( "com.sun.star.drawing.RectangleShape" ), uno::UNO_SET_THROW );
     m_xShapes->add( xShape );
 
-    OUString sName(createName( "Rectangle" ));
+    OUString sName(createName( u"Rectangle" ));
     setDefaultShapeProperties( xShape );
     setShape_NameProperty( xShape, sName );
 
@@ -266,7 +266,7 @@ ScVbaShapes::AddEllipse(sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth
 
     setShape_AnchorTypeAndRangeProperty(xShape, _aRange);
     */
-    OUString name(createName( "Oval" ));
+    OUString name(createName( u"Oval" ));
     setDefaultShapeProperties(xShape);
     setShape_NameProperty(xShape, name);
 
@@ -301,7 +301,7 @@ ScVbaShapes::AddLine( sal_Int32 StartX, sal_Int32 StartY, sal_Int32 endX, sal_In
 
     awt::Point aMovePositionIfRange( 0, 0 );
 
-    OUString name(createName( "Line" ));
+    OUString name(createName( u"Line" ));
     setDefaultShapeProperties(xShape);
     setShape_NameProperty(xShape, name);
 
@@ -357,7 +357,7 @@ ScVbaShapes::AddTextboxInWriter( sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _n
 
     setDefaultShapeProperties(xShape);
 
-    OUString sName(createName( "Text Box" ));
+    OUString sName(createName( u"Text Box" ));
     setShape_NameProperty( xShape, sName );
 
     awt::Size size;
@@ -411,7 +411,7 @@ ScVbaShapes::setShape_NameProperty( const uno::Reference< css::drawing::XShape >
 }
 
 OUString
-ScVbaShapes::createName( const OUString& sName )
+ScVbaShapes::createName( std::u16string_view sName )
 {
     sal_Int32 nActNumber = 1 + m_nNewShapeCount;
     m_nNewShapeCount++;

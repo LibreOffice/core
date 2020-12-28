@@ -454,7 +454,7 @@ bool PowerPointExport::exportDocument()
 
 ::oox::ole::VbaProject* PowerPointExport::implCreateVbaProject() const
 {
-    return new ::oox::ole::VbaProject(getComponentContext(), getModel(), "Impress");
+    return new ::oox::ole::VbaProject(getComponentContext(), getModel(), u"Impress");
 }
 
 void PowerPointExport::ImplWriteBackground(const FSHelperPtr& pFS, const Reference< XPropertySet >& rXPropSet)

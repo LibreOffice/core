@@ -18,6 +18,7 @@
  */
 
 #include <string.h>
+#include <string_view>
 #include <vector>
 
 #include <cppuhelper/exc_hlp.hxx>
@@ -210,7 +211,7 @@ void prepareLink( const Reference < XSimpleRegistry > & xDest,
 
 OUString searchImplForLink(
     const Reference < XRegistryKey > & xRootKey,
-    const OUString& linkName,
+    std::u16string_view linkName,
     std::u16string_view implName )
     // throw ( InvalidRegistryException, RuntimeException )
 {
@@ -246,7 +247,7 @@ OUString searchImplForLink(
 //  static searchLinkTargetForImpl
 
 OUString searchLinkTargetForImpl(const Reference < XRegistryKey >& xRootKey,
-                                        const OUString& linkName,
+                                        std::u16string_view linkName,
                                         const OUString& implName)
 {
     Reference < XRegistryKey > xKey = xRootKey->openKey( slash_IMPLEMENTATIONS );

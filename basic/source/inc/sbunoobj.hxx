@@ -379,7 +379,7 @@ SbxVariable* getDefaultProp( SbxVariable* pRef );
 
 css::uno::Reference< css::uno::XInterface > createComListener( const css::uno::Any& aControlAny,
                                                                const OUString& aVBAType,
-                                                               const OUString& aPrefix,
+                                                               std::u16string_view aPrefix,
                                                                const SbxObjectRef& xScopeObj );
 
 bool checkUnoObjectType(SbUnoObject& refVal, const OUString& aClass);

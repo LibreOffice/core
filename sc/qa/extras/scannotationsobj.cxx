@@ -105,7 +105,7 @@ void ScAnnontationsObj::setUp()
 
     // get the test file
     OUString aFileURL;
-    createFileURL("ScAnnotationObj.ods", aFileURL);
+    createFileURL(u"ScAnnotationObj.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL);
 }
 

@@ -57,6 +57,8 @@
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
 #include <com/sun/star/sheet/XMembersAccess.hpp>
 #include <com/sun/star/sheet/XMembersSupplier.hpp>
+
+#include <string_view>
 #include <vector>
 
 using namespace com::sun::star;
@@ -1480,7 +1482,7 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
 
 namespace {
 
-OUString lcl_GetDataFieldName( const OUString& rSourceName, sal_Int16 eFunc )
+OUString lcl_GetDataFieldName( std::u16string_view rSourceName, sal_Int16 eFunc )
 {
     const char* pStrId = nullptr;
     switch ( eFunc )

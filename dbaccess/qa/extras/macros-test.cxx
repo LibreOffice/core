@@ -35,7 +35,7 @@ DBAccessTest::DBAccessTest()
 void DBAccessTest::test()
 {
     OUString aFileName;
-    createFileURL("testdb.odb", aFileName);
+    createFileURL(u"testdb.odb", aFileName);
     uno::Reference<lang::XComponent> xComponent = loadFromDesktop(aFileName);
     CPPUNIT_ASSERT(xComponent.is());
     xComponent->dispose();

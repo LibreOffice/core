@@ -102,7 +102,7 @@ Dependencies::Dependencies(
             if (!(ent2->getDirectAttributes().empty()
                   && ent2->getDirectMethods().empty()))
             {
-                insert("com.sun.star.uno.RuntimeException", KIND_EXCEPTION);
+                insert(u"com.sun.star.uno.RuntimeException", KIND_EXCEPTION);
             }
             for (const unoidl::InterfaceTypeEntity::Attribute& attr : ent2->getDirectAttributes())
             {
@@ -212,7 +212,7 @@ Dependencies::Dependencies(
 
 Dependencies::~Dependencies() {}
 
-void Dependencies::insert(OUString const & name, Kind kind) {
+void Dependencies::insert(std::u16string_view name, Kind kind) {
     sal_Int32 k;
     std::vector< OString > args;
     OUString n(b2u(UnoType::decompose(u2b(name), &k, &args)));
@@ -286,7 +286,7 @@ void Dependencies::insert(OUString const & name, Kind kind) {
         }
     default:
         throw CannotDumpException(
-            "unexpected type \"" + name
+            OUString::Concat("unexpected type \"") + name
             + "\" in call to codemaker::cppumaker::Dependencies::Dependencies");
     }
 }

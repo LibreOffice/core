@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_HTML_SWCSS1_HXX
 #define INCLUDED_SW_SOURCE_FILTER_HTML_SWCSS1_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <svtools/htmltokn.h>
 #include <tools/solar.h>
 
@@ -128,7 +132,7 @@ public:
     bool SetFormatBreak( SfxItemSet& rItemSet,
                       const SvxCSS1PropertyInfo& rPropInfo );
 
-    static void AddClassName( OUString& rFormatName, const OUString& rClass );
+    static void AddClassName( OUString& rFormatName, std::u16string_view rClass );
 
     static bool MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
                                  bool bAutoWidth=false );

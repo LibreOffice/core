@@ -76,7 +76,7 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
        to pdf, but we have to use the last user settings (especially for the CompressMode) */
     if ( !aFilterData.hasElements() )
     {
-        FilterConfigItem aCfgItem( "Office.Common/Filter/PDF/Export/" );
+        FilterConfigItem aCfgItem( u"Office.Common/Filter/PDF/Export/" );
         aCfgItem.ReadBool(  "UseLosslessCompression", false );
         aCfgItem.ReadInt32( "Quality", 90 );
         aCfgItem.ReadBool(  "ReduceImageResolution", false );

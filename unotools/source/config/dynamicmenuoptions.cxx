@@ -204,7 +204,7 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
 
         static void impl_SortAndExpandPropertyNames( const Sequence< OUString >& lSource      ,
                                                      Sequence< OUString >& lDestination ,
-                                                     const OUString&             sSetNode     );
+                                                     std::u16string_view         sSetNode     );
 
     //  private member
 
@@ -414,8 +414,8 @@ Sequence< OUString > SvtDynamicMenuOptions_Impl::impl_GetPropertyNames( sal_uInt
 
     // Sort and expand all three list to result list ...
     Sequence< OUString > lProperties;
-    impl_SortAndExpandPropertyNames( lNewItems          , lProperties, SETNODE_NEWMENU       );
-    impl_SortAndExpandPropertyNames( lWizardItems       , lProperties, SETNODE_WIZARDMENU    );
+    impl_SortAndExpandPropertyNames( lNewItems          , lProperties, u"" SETNODE_NEWMENU   );
+    impl_SortAndExpandPropertyNames( lWizardItems       , lProperties, u"" SETNODE_WIZARDMENU );
 
     // Return result.
     return lProperties;
@@ -458,7 +458,7 @@ class SelectByPrefix
 
 void SvtDynamicMenuOptions_Impl::impl_SortAndExpandPropertyNames( const Sequence< OUString >& lSource      ,
                                                                         Sequence< OUString >& lDestination ,
-                                                                  const OUString&             sSetNode     )
+                                                                  std::u16string_view         sSetNode     )
 {
     vector< OUString >  lTemp;
     sal_Int32           nSourceCount     = lSource.getLength();
@@ -478,7 +478,7 @@ void SvtDynamicMenuOptions_Impl::impl_SortAndExpandPropertyNames( const Sequence
     // 4 supported sub properties.
     for( const auto& rItem : lTemp )
     {
-        OUString sFixPath(sSetNode + PATHDELIMITER + rItem + PATHDELIMITER);
+        OUString sFixPath(OUString::Concat(sSetNode) + PATHDELIMITER + rItem + PATHDELIMITER);
         lDestination[nDestinationStep++] = sFixPath + PROPERTYNAME_URL;
         lDestination[nDestinationStep++] = sFixPath + PROPERTYNAME_TITLE;
         lDestination[nDestinationStep++] = sFixPath + PROPERTYNAME_IMAGEIDENTIFIER;

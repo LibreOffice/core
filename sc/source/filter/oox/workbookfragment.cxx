@@ -347,26 +347,26 @@ void WorkbookFragment::finalizeImport()
     ISegmentProgressBarRef xGlobalSegment = getProgressBar().createSegment( PROGRESS_LENGTH_GLOBALS );
 
     // read the theme substream
-    OUString aThemeFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "theme" );
+    OUString aThemeFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"theme" );
     if( !aThemeFragmentPath.isEmpty() )
         importOoxFragment( new ThemeFragmentHandler( getFilter(), aThemeFragmentPath, getTheme() ) );
     xGlobalSegment->setPosition( 0.25 );
 
     // read the styles substream (requires finalized theme buffer)
-    OUString aStylesFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "styles" );
+    OUString aStylesFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"styles" );
     if( !aStylesFragmentPath.isEmpty() )
         importOoxFragment( new StylesFragment( *this, aStylesFragmentPath ) );
     xGlobalSegment->setPosition( 0.5 );
 
     // read the shared string table substream (requires finalized styles buffer)
-    OUString aSstFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "sharedStrings" );
+    OUString aSstFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"sharedStrings" );
     if( !aSstFragmentPath.isEmpty() )
         if (!importOoxFragment( new SharedStringsFragment( *this, aSstFragmentPath ) ))
             importOoxFragment(new SharedStringsFragment(*this, aSstFragmentPath.replaceFirst("sharedStrings","SharedStrings")));
     xGlobalSegment->setPosition( 0.75 );
 
     // read the connections substream
-    OUString aConnFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "connections" );
+    OUString aConnFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"connections" );
     if( !aConnFragmentPath.isEmpty() )
         importOoxFragment( new ConnectionsFragment( *this, aConnFragmentPath ) );
     xGlobalSegment->setPosition( 1.0 );

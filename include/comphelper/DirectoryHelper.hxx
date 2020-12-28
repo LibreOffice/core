@@ -14,6 +14,7 @@
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
 #include <set>
+#include <string_view>
 
 namespace comphelper
 {
@@ -26,7 +27,7 @@ public:
     static void scanDirsAndFiles(const OUString& rDirURL, std::set<OUString>& rDirs,
                                  std::set<std::pair<OUString, OUString>>& rFiles);
     static bool deleteDirRecursively(const OUString& rDirURL);
-    static bool moveDirContent(const OUString& rSourceDirURL, const OUString& rTargetDirURL,
+    static bool moveDirContent(const OUString& rSourceDirURL, std::u16string_view rTargetDirURL,
                                const std::set<OUString>& rExcludeList);
 };
 }

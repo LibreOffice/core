@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <string_view>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/LabelOrigin.hpp>
@@ -249,21 +250,21 @@ static OUString GetCellRangeName( SwFrameFormat &rTableFormat, SwUnoCursor &rTab
     return aRes;
 }
 
-static OUString GetRangeRepFromTableAndCells( const OUString &rTableName,
-        const OUString &rStartCell, const OUString &rEndCell,
+static OUString GetRangeRepFromTableAndCells( std::u16string_view rTableName,
+        std::u16string_view rStartCell, std::u16string_view rEndCell,
         bool bForceEndCellName )
 {
-    OSL_ENSURE( !rTableName.isEmpty(), "table name missing" );
-    OSL_ENSURE( !rStartCell.isEmpty(), "cell name missing" );
-    OUString aRes = rTableName + "." + rStartCell;
+    OSL_ENSURE( !rTableName.empty(), "table name missing" );
+    OSL_ENSURE( !rStartCell.empty(), "cell name missing" );
+    OUString aRes = OUString::Concat(rTableName) + "." + rStartCell;
 
-    if (!rEndCell.isEmpty())
+    if (!rEndCell.empty())
     {
-        aRes += ":" + rEndCell;
+        aRes += OUString::Concat(":") + rEndCell;
     }
     else if (bForceEndCellName)
     {
-        aRes += ":" + rStartCell;
+        aRes += OUString::Concat(":") + rStartCell;
     }
 
     return aRes;

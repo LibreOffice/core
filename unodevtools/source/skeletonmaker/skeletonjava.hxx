@@ -20,6 +20,7 @@
 #define INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONJAVA_HXX
 
 #include <fstream>
+#include <string_view>
 
 #include <codemaker/generatedtypeset.hxx>
 #include "skeletoncommon.hxx"
@@ -28,7 +29,7 @@ namespace skeletonmaker::java {
 
 void printType(
     std::ostream & o, ProgramOptions const & options,
-    rtl::Reference< TypeManager > const & manager, OUString const & name,
+    rtl::Reference< TypeManager > const & manager, std::u16string_view name,
     bool referenceType, bool defaultvalue = false);
 
 void printMethods(std::ostream & o,

@@ -194,7 +194,8 @@ namespace dbaui
                         display(xRS);
                 }
                 else
-                    addOutputText(OUString::number(xMR->getUpdateCount()) + " rows updated\n");
+                    addOutputText(
+                        OUString(OUString::number(xMR->getUpdateCount()) + " rows updated\n"));
                 for (;;)
                 {
                     hasRS = xMR->getMoreResults();
@@ -219,7 +220,7 @@ namespace dbaui
                 else
                 {
                     sal_Int32 resultCount = xStatement->executeUpdate(_rStatement);
-                    addOutputText(OUString::number(resultCount) + " rows updated\n");
+                    addOutputText(OUString(OUString::number(resultCount) + " rows updated\n"));
                 }
             }
             // successful
@@ -270,7 +271,7 @@ namespace dbaui
         }
     }
 
-    void DirectSQLDialog::addStatusText(const OUString& _rMessage)
+    void DirectSQLDialog::addStatusText(std::u16string_view _rMessage)
     {
         OUString sAppendMessage = OUString::number(m_nStatusCount++) + ": " + _rMessage + "\n\n";
 
@@ -280,9 +281,9 @@ namespace dbaui
         m_xStatus->select_region(sCompleteMessage.getLength(), sCompleteMessage.getLength());
     }
 
-    void DirectSQLDialog::addOutputText(const OUString& _rMessage)
+    void DirectSQLDialog::addOutputText(std::u16string_view _rMessage)
     {
-        OUString sAppendMessage = _rMessage + "\n";
+        OUString sAppendMessage = OUString::Concat(_rMessage) + "\n";
 
         OUString sCompleteMessage = m_xOutput->get_text() + sAppendMessage;
         m_xOutput->set_text(sCompleteMessage);

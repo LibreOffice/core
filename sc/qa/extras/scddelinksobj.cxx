@@ -85,11 +85,11 @@ private:
 
 ScDDELinksObj::ScDDELinksObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
-    , XDDELinks(m_directories.getURLFromSrc("/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods"))
+    , XDDELinks(m_directories.getURLFromSrc(u"/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods"))
     , XElementAccess(cppu::UnoType<sheet::XDDELink>::get())
     , XIndexAccess(1)
     , XNameAccess("soffice|"
-                  + m_directories.getURLFromSrc("/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods")
+                  + m_directories.getURLFromSrc(u"/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods")
                   + "!Sheet1.A1")
     , XServiceInfo("ScDDELinksObj", "com.sun.star.sheet.DDELinks")
 {
@@ -104,7 +104,7 @@ uno::Reference<uno::XInterface> ScDDELinksObj::init()
     uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
 
     const OUString testdoc
-        = m_directories.getURLFromSrc("/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods");
+        = m_directories.getURLFromSrc(u"/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods");
 
     xSheet->getCellByPosition(5, 5)->setFormula("=DDE(\"soffice\";\"" + testdoc
                                                 + "\";\"Sheet1.A1\")");

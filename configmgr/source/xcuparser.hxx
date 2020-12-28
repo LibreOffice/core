@@ -23,6 +23,7 @@
 
 #include <set>
 #include <stack>
+#include <string_view>
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
@@ -89,7 +90,7 @@ private:
 
     void handlePlainGroupProp(
         xmlreader::XmlReader const & reader, GroupNode * group,
-        NodeMap::iterator const & propertyIndex, OUString const & name,
+        NodeMap::iterator const & propertyIndex, std::u16string_view name,
         Type type, Operation operation, bool finalized);
 
     void handleLocalizedGroupProp(

@@ -52,7 +52,7 @@ namespace
     void HwpFilterTest::test()
     {
         testDir(OUString(),
-            m_directories.getURLFromSrc("/hwpfilter/qa/cppunit/data/"));
+            m_directories.getURLFromSrc(u"/hwpfilter/qa/cppunit/data/"));
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(HwpFilterTest);

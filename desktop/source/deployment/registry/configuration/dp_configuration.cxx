@@ -42,6 +42,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <deque>
 #include <memory>
+#include <string_view>
 #include <utility>
 
 #include "dp_configurationbackenddb.hxx"
@@ -129,10 +130,10 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
                           Reference<XCommandEnvironment> const & xCmdEnv );
 #endif
     void addDataToDb(OUString const & url, ConfigurationBackendDb::Data const & data);
-    ::std::optional<ConfigurationBackendDb::Data> readDataFromDb(OUString const & url);
-    void revokeEntryFromDb(OUString const & url);
-    bool hasActiveEntry(OUString const & url);
-    bool activateEntry(OUString const & url);
+    ::std::optional<ConfigurationBackendDb::Data> readDataFromDb(std::u16string_view url);
+    void revokeEntryFromDb(std::u16string_view url);
+    bool hasActiveEntry(std::u16string_view url);
+    bool activateEntry(std::u16string_view url);
 
 public:
     BackendImpl( Sequence<Any> const & args,
@@ -261,7 +262,7 @@ void BackendImpl::addDataToDb(
 }
 
 ::std::optional<ConfigurationBackendDb::Data> BackendImpl::readDataFromDb(
-    OUString const & url)
+    std::u16string_view url)
 {
     ::std::optional<ConfigurationBackendDb::Data> data;
     if (m_backendDb)
@@ -269,20 +270,20 @@ void BackendImpl::addDataToDb(
     return data;
 }
 
-void BackendImpl::revokeEntryFromDb(OUString const & url)
+void BackendImpl::revokeEntryFromDb(std::u16string_view url)
 {
     if (m_backendDb)
         m_backendDb->revokeEntry(url);
 }
 
-bool BackendImpl::hasActiveEntry(OUString const & url)
+bool BackendImpl::hasActiveEntry(std::u16string_view url)
 {
     if (m_backendDb)
         return m_backendDb->hasActiveEntry(url);
     return false;
 }
 
-bool BackendImpl::activateEntry(OUString const & url)
+bool BackendImpl::activateEntry(std::u16string_view url)
 {
     if (m_backendDb)
         return m_backendDb->activateEntry(url);
@@ -600,7 +601,7 @@ OUString encodeForXml( OUString const & text )
 
 
 OUString replaceOrigin(
-    OUString const & url, OUString const & destFolder, Reference< XCommandEnvironment > const & xCmdEnv, Reference< XComponentContext > const & xContext, bool & out_replaced)
+    OUString const & url, std::u16string_view destFolder, Reference< XCommandEnvironment > const & xCmdEnv, Reference< XComponentContext > const & xContext, bool & out_replaced)
 {
     // looking for %origin%:
     ::ucbhelper::Content ucb_content( url, xCmdEnv, xContext );
@@ -671,11 +672,11 @@ OUString replaceOrigin(
     if (write_pos < filtered.size())
         filtered.resize( write_pos );
     OUString newUrl(url);
-    if (!destFolder.isEmpty())
+    if (!destFolder.empty())
     {
         //get the file name of the xcu and add it to the url of the temporary folder
         sal_Int32 i = url.lastIndexOf('/');
-        newUrl = destFolder + url.subView(i);
+        newUrl = OUString::Concat(destFolder) + url.subView(i);
     }
 
     ucbhelper::Content(newUrl, xCmdEnv, xContext).writeStream(

@@ -26,7 +26,7 @@ uno::Reference<drawing::XShape>
                                      const sal_Int32 nX, const sal_Int32 nY, const sal_Int32 nWidth,
                                      const sal_Int32 nHeight)
 {
-    return createShape(r_xComponent, "Ellipse", nX, nY, nWidth, nHeight);
+    return createShape(r_xComponent, u"Ellipse", nX, nY, nWidth, nHeight);
 }
 
 uno::Reference<drawing::XShape>
@@ -34,7 +34,7 @@ uno::Reference<drawing::XShape>
                                   const sal_Int32 nX, const sal_Int32 nY, const sal_Int32 nWidth,
                                   const sal_Int32 nHeight)
 {
-    return createShape(r_xComponent, "Line", nX, nY, nWidth, nHeight);
+    return createShape(r_xComponent, u"Line", nX, nY, nWidth, nHeight);
 }
 
 uno::Reference<drawing::XShape>
@@ -42,17 +42,17 @@ uno::Reference<drawing::XShape>
                                        const sal_Int32 nX, const sal_Int32 nY,
                                        const sal_Int32 nWidth, const sal_Int32 nHeight)
 {
-    return createShape(r_xComponent, "Rectangle", nX, nY, nWidth, nHeight);
+    return createShape(r_xComponent, u"Rectangle", nX, nY, nWidth, nHeight);
 }
 
-uno::Reference<drawing::XShape>
-    OOO_DLLPUBLIC_TEST createShape(const uno::Reference<lang::XComponent>& r_xComponent,
-                                   const OUString& r_aKind, const sal_Int32 nX, const sal_Int32 nY,
-                                   const sal_Int32 nWidth, const sal_Int32 nHeight)
+uno::Reference<drawing::XShape> OOO_DLLPUBLIC_TEST
+createShape(const uno::Reference<lang::XComponent>& r_xComponent, std::u16string_view r_aKind,
+            const sal_Int32 nX, const sal_Int32 nY, const sal_Int32 nWidth, const sal_Int32 nHeight)
 {
     uno::Reference<lang::XMultiServiceFactory> xMSF(r_xComponent, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape(
-        xMSF->createInstance("com.sun.star.drawing." + r_aKind + "Shape"), uno::UNO_QUERY_THROW);
+        xMSF->createInstance(OUString::Concat("com.sun.star.drawing.") + r_aKind + "Shape"),
+        uno::UNO_QUERY_THROW);
 
     try
     {

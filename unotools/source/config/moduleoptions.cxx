@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/configitem.hxx>
@@ -116,7 +120,7 @@ struct FactoryInfo
         // returns list of properties, which has changed only!
         // We use given value of sNodeBase to build full qualified paths ...
         // Last sign of it must be "/". because we use it directly, without any additional things!
-        css::uno::Sequence< css::beans::PropertyValue > getChangedProperties( const OUString& sNodeBase )
+        css::uno::Sequence< css::beans::PropertyValue > getChangedProperties( std::u16string_view sNodeBase )
         {
             // a) reserve memory for max. count of changed properties
             // b) add names and values of changed ones only and count it
@@ -126,7 +130,8 @@ struct FactoryInfo
 
             if( bChangedTemplateFile )
             {
-                lProperties[nRealyChanged].Name = sNodeBase + PROPERTYNAME_TEMPLATEFILE;
+                lProperties[nRealyChanged].Name
+                    = OUString::Concat(sNodeBase) + PROPERTYNAME_TEMPLATEFILE;
 
                 if ( !sTemplateFile.isEmpty() )
                 {
@@ -143,7 +148,8 @@ struct FactoryInfo
             }
             if( bChangedDefaultFilter )
             {
-                lProperties[nRealyChanged].Name    = sNodeBase + PROPERTYNAME_DEFAULTFILTER;
+                lProperties[nRealyChanged].Name
+                    = OUString::Concat(sNodeBase) + PROPERTYNAME_DEFAULTFILTER;
                 lProperties[nRealyChanged].Value <<= sDefaultFilter;
                 ++nRealyChanged;
             }

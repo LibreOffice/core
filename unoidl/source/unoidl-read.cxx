@@ -14,6 +14,7 @@
 #include <iostream>
 #include <map>
 #include <set>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -214,7 +215,7 @@ void insertTypeDependency(
 void scanMap(
     rtl::Reference<unoidl::Manager> const & manager,
     rtl::Reference<unoidl::MapCursor> const & cursor, bool published,
-    OUString const & prefix, std::map<OUString, Entity> & entities)
+    std::u16string_view prefix, std::map<OUString, Entity> & entities)
 {
     assert(cursor.is());
     for (;;) {
@@ -228,7 +229,7 @@ void scanMap(
             scanMap(
                 manager,
                 static_cast<unoidl::ModuleEntity *>(ent.get())->createCursor(),
-                published, name + ".", entities);
+                published, OUString(name + "."), entities);
         } else {
             std::map<OUString, Entity>::iterator i(
                 entities.insert(
@@ -1040,7 +1041,7 @@ SAL_IMPLEMENT_MAIN() {
             }
         }
         std::map<OUString, Entity> ents;
-        scanMap(mgr, prov->createRootCursor(), published, "", ents);
+        scanMap(mgr, prov->createRootCursor(), published, u"", ents);
         std::vector<OUString> sorted(sort(ents));
         std::vector<OUString> mods;
         for (const auto & i: sorted) {

@@ -79,7 +79,7 @@ ScSheetLinksObj::ScSheetLinksObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<beans::XPropertySet>::get())
     , XIndexAccess(1)
-    , XNameAccess(m_directories.getURLFromSrc("/sc/qa/extras/testdocuments/ScSheetLinksObj.ods"))
+    , XNameAccess(m_directories.getURLFromSrc(u"/sc/qa/extras/testdocuments/ScSheetLinksObj.ods"))
     , XServiceInfo("ScSheetLinksObj", "com.sun.star.sheet.SheetLinks")
 {
 }
@@ -93,7 +93,7 @@ uno::Reference<uno::XInterface> ScSheetLinksObj::init()
 
     uno::Reference<sheet::XSheetLinkable> xSL(xSheet0, uno::UNO_QUERY_THROW);
     OUString aFileURL;
-    createFileURL("ScSheetLinksObj.ods", aFileURL);
+    createFileURL(u"ScSheetLinksObj.ods", aFileURL);
     xSL->link(aFileURL, "Sheet1", "", "", sheet::SheetLinkMode_VALUE);
 
     uno::Reference<beans::XPropertySet> xPropertySet(xDoc, uno::UNO_QUERY_THROW);

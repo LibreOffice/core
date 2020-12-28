@@ -798,11 +798,11 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
 
 // we need some more information about the column
 void collectColumnInformation(const Reference< XConnection>& _xConnection,
-                              const OUString& _sComposedName,
-                              const OUString& _rName,
+                              std::u16string_view _sComposedName,
+                              std::u16string_view _rName,
                               ColumnInformationMap& _rInfo)
 {
-    OUString sSelect = "SELECT " + _rName +
+    OUString sSelect = OUString::Concat("SELECT ") + _rName +
         " FROM " + _sComposedName +
         " WHERE 0 = 1";
 

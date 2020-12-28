@@ -10,6 +10,10 @@
 #ifndef INCLUDED_OPENCL_INC_OPENCL_DEVICE_HXX
 #define INCLUDED_OPENCL_INC_OPENCL_DEVICE_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 
 namespace openclwrapper
@@ -18,7 +22,7 @@ struct GPUEnv;
 }
 struct ds_device;
 
-ds_device const& getDeviceSelection(OUString const& pFileName, bool bForceSelection);
+ds_device const& getDeviceSelection(std::u16string_view pFileName, bool bForceSelection);
 
 void releaseOpenCLEnv(openclwrapper::GPUEnv* gpuInfo);
 

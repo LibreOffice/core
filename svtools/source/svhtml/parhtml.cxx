@@ -238,10 +238,10 @@ HTMLParser::~HTMLParser()
 {
 }
 
-void HTMLParser::SetNamespace(const OUString& rNamespace)
+void HTMLParser::SetNamespace(std::u16string_view rNamespace)
 {
     // Convert namespace alias to a prefix.
-    maNamespace = rNamespace + ":";
+    maNamespace = OUString::Concat(rNamespace) + ":";
 }
 
 namespace

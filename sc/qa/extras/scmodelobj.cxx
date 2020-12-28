@@ -113,7 +113,7 @@ void ScModelObj::setUp()
     UnoApiTest::setUp();
     // create a calc document
     OUString aFileURL;
-    createFileURL("ScModelObj.ods", aFileURL);
+    createFileURL(u"ScModelObj.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
 }
 

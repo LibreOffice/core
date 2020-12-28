@@ -259,7 +259,7 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
             m_xContext, pVBAProjectStream->getDocumentStream(), false);
         if (xVbaPrjStrg && xVbaPrjStrg->isStorage())
         {
-            ::oox::ole::VbaProject aVbaProject(m_xContext, xModel, "Writer");
+            ::oox::ole::VbaProject aVbaProject(m_xContext, xModel, u"Writer");
             uno::Reference<frame::XFrame> xFrame = aMediaDesc.getUnpackedValueOrDefault(
                 utl::MediaDescriptor::PROP_FRAME(), uno::Reference<frame::XFrame>());
 

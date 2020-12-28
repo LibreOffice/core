@@ -38,7 +38,7 @@ public:
 
     OUString getUrl()
     {
-        return m_directories.getURLFromSrc("/filter/qa/cppunit/data/tiff/");
+        return m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/tiff/");
     }
 
     /**

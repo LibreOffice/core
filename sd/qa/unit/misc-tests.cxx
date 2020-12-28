@@ -200,7 +200,7 @@ void SdMiscTest::testTdf96206()
 {
     // Copying/pasting slide referring to a non-default master with a text duplicated the master
 
-    sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf96206.odp"), ODP);
+    sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf96206.odp"), ODP);
     sd::ViewShell *pViewShell = xDocSh->GetViewShell();
     auto pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
     auto& rSSController = pSSVS->GetSlideSorter().GetController();
@@ -217,7 +217,7 @@ void SdMiscTest::testTdf96206()
 
 void SdMiscTest::testTdf96708()
 {
-    sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf96708.odp"), ODP);
+    sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf96708.odp"), ODP);
     sd::ViewShell *pViewShell = xDocSh->GetViewShell();
     auto pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
     auto& rSSController = pSSVS->GetSlideSorter().GetController();
@@ -242,7 +242,7 @@ void SdMiscTest::testTdf96708()
 void SdMiscTest::testTdf99396()
 {
     // Load the document and select the table.
-    sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf99396.odp"), ODP);
+    sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf99396.odp"), ODP);
     sd::ViewShell *pViewShell = xDocSh->GetViewShell();
     SdPage* pPage = pViewShell->GetActualPage();
     SdrObject* pObject = pPage->GetObj(0);
@@ -266,7 +266,7 @@ void SdMiscTest::testTdf99396()
 void SdMiscTest::testTdf99396TextEdit()
 {
     // Load the document and select the table.
-    sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf99396.odp"), ODP);
+    sd::DrawDocShellRef xDocSh = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf99396.odp"), ODP);
     sd::ViewShell* pViewShell = xDocSh->GetViewShell();
     SdPage* pPage = pViewShell->GetActualPage();
     auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
@@ -458,7 +458,7 @@ void SdMiscTest::testTdf120527()
     uno::Reference<container::XNameContainer> xBitmaps(
         xFactory->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xBitmaps.is());
-    OUString aGraphicURL = m_directories.getURLFromSrc("/sd/qa/unit/data/tdf120527.jpg");
+    OUString aGraphicURL = m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf120527.jpg");
     xBitmaps->insertByName("test", uno::makeAny(aGraphicURL));
 
     // Create a graphic.
@@ -505,7 +505,7 @@ void SdMiscTest::testTdf101242_ODF_add_settings()
     // only in the ODF attributes draw:display and draw:protected. The resaved document
     // should still have the ODF attributes and in addition the config items in settings.xml.
     // "Load" is needed for to handle layers, simple "loadURL" does not work.
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf101242_ODF.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf101242_ODF.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
 
     // Saving including items in settings.xml
@@ -555,7 +555,7 @@ void SdMiscTest::testTdf101242_ODF_no_settings()
     // Loads a document, which has the visible/printable/locked information for layers
     // only in the ODF attributes draw:display and draw:protected. The resave document
     // should have only the ODF attributes and no config items in settings.xml.
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf101242_ODF.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf101242_ODF.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
 
     // Saving without items in settings.xml
@@ -597,7 +597,7 @@ void SdMiscTest::testTdf101242_settings_keep()
     // only in the config items in settings.xml. That is the case for all old documents.
     // The resaved document should have the ODF attributes draw:display and draw:protected
     // and should still have these config items in settings.xml.
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf101242_settings.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf101242_settings.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
 
     // Saving including items in settings.xml
@@ -648,7 +648,7 @@ void SdMiscTest::testTdf101242_settings_remove()
     // only in the config items in settings.xml. That is the case for all old documents.
     // The resaved document should have only the ODF attributes draw:display and draw:protected
     // and should have no config items in settings.xml.
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf101242_settings.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf101242_settings.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
 
     // Saving without config items in settings.xml
@@ -693,7 +693,7 @@ void SdMiscTest::testTdf119392()
     officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, batch);
     batch->commit();
 
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("sd/qa/unit/data/tdf119392_InsertLayer.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf119392_InsertLayer.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
     // Insert layer "-P-", not visible, printable, not locked
     SdrView* pView = xDocShRef -> GetViewShell()->GetView();
@@ -738,7 +738,7 @@ void SdMiscTest::testTdf67248()
     // The document tdf67248.odg has been created with a German UI. It has a user layer named "Background".
     // On opening the user layer must still exists. The error was, that it was merged into the standard
     // layer "background".
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("sd/qa/unit/data/tdf67248.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf67248.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
     SdrLayerAdmin& rLayerAdmin = xDocShRef->GetDoc()->GetLayerAdmin();
     CPPUNIT_ASSERT_EQUAL( sal_uInt16(6), rLayerAdmin.GetLayerCount());
@@ -748,7 +748,7 @@ void SdMiscTest::testTdf67248()
 
 void SdMiscTest::testTdf119956()
 {
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("sd/qa/unit/data/tdf119956.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf119956.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
     sd::GraphicViewShell* pGraphicViewShell = static_cast<sd::GraphicViewShell*>(xDocShRef -> GetViewShell());
     CPPUNIT_ASSERT(pGraphicViewShell);
@@ -787,7 +787,7 @@ void SdMiscTest::testTdf119956()
 void SdMiscTest::testTdf98839_ShearVFlipH()
 {
     // Loads a document with a sheared shape and mirrors it
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("sd/qa/unit/data/tdf98839_ShearVFlipH.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf98839_ShearVFlipH.odg"), ODG);
     sd::GraphicViewShell* pViewShell = static_cast<sd::GraphicViewShell*>(xDocShRef->GetViewShell());
     SdPage* pPage = pViewShell->GetActualPage();
     SdrObjCustomShape* pShape = static_cast<SdrObjCustomShape*>(pPage->GetObj(0));
@@ -811,7 +811,7 @@ void SdMiscTest::testTdf98839_ShearVFlipH()
 
 void SdMiscTest::testTdf130988()
 {
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("sd/qa/unit/data/tdf130988_3D_create_lathe.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf130988_3D_create_lathe.odg"), ODG);
 
     //emulate command .uno:ConvertInto3DLathe
     sd::ViewShell* pViewShell = xDocShRef->GetViewShell();
@@ -832,7 +832,7 @@ void SdMiscTest::testTdf130988()
 
 void SdMiscTest::testTdf131033()
 {
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("sd/qa/unit/data/tdf131033_3D_SceneSizeIn2d.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf131033_3D_SceneSizeIn2d.odg"), ODG);
 
     // The document contains a polygon, so that emulate command .uno:ConvertInto3DLathe
     // by direct call of ConvertMarkedObjTo3D works.
@@ -857,7 +857,7 @@ void SdMiscTest::testTdf129898LayerDrawnInSlideshow()
 {
     // Versions LO 6.2 to 6.4 have produced files, where the layer DrawnInSlideshow has
     // got visible=false and printable=false attributes. Those files should be repaired now.
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("sd/qa/unit/data/tdf129898_faulty_DrawnInSlideshow.odp"), ODP);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf129898_faulty_DrawnInSlideshow.odp"), ODP);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
 
     // Verify model

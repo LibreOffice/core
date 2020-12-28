@@ -32,7 +32,7 @@ private:
     OString maNamespace;
 
 public:
-    HtmlWriter(SvStream& rStream, const OString& rNamespace = OString());
+    HtmlWriter(SvStream& rStream, std::string_view rNamespace = std::string_view());
     ~HtmlWriter();
 
     void prettyPrint(bool b);

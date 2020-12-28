@@ -149,18 +149,18 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
 }
 
 void FiltersTest::testDir(const OUString &rFilter,
-    const OUString &rURL, const OUString &rUserData,
+    std::u16string_view rURL, const OUString &rUserData,
     SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
     unsigned int nFilterVersion, bool bExport)
 {
     recursiveScan(test::pass, rFilter,
-        rURL + "pass",
+        OUString::Concat(rURL) + "pass",
         rUserData, nFilterFlags, nClipboardID, nFilterVersion, bExport);
     recursiveScan(test::fail, rFilter,
-        rURL + "fail",
+        OUString::Concat(rURL) + "fail",
         rUserData, nFilterFlags, nClipboardID, nFilterVersion, bExport);
     recursiveScan(test::indeterminate, rFilter,
-        rURL + "indeterminate",
+        OUString::Concat(rURL) + "indeterminate",
         rUserData, nFilterFlags, nClipboardID, nFilterVersion, bExport);
 }
 

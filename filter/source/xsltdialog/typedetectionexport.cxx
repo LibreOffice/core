@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
@@ -40,7 +43,7 @@ TypeDetectionExporter::TypeDetectionExporter( Reference< XComponentContext > con
 {
 }
 
-static OUString createRelativeURL( const OUString& rFilterName, const OUString& rURL )
+static OUString createRelativeURL( std::u16string_view rFilterName, const OUString& rURL )
 {
     if( !rURL.isEmpty() &&
         !rURL.startsWith("http:") &&
@@ -63,7 +66,7 @@ static OUString createRelativeURL( const OUString& rFilterName, const OUString& 
             }
         }
 
-        return OUString( "vnd.sun.star.Package:" + rFilterName + "/" + aName );
+        return OUString( OUString::Concat("vnd.sun.star.Package:") + rFilterName + "/" + aName );
     }
     else
     {

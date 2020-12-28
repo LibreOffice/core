@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SFX2_SOURCE_DOC_GRAPHHELP_HXX
 #define INCLUDED_SFX2_SOURCE_DOC_GRAPHHELP_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/XStream.hpp>
 #include <rtl/ustring.hxx>
@@ -56,7 +60,7 @@ public:
     static OUString getThumbnailReplacementIDByFactoryName_Impl(const OUString& aFactoryShortName);
 
     static bool getThumbnailReplacement_Impl(
-            const OUString& rResID,
+            std::u16string_view rResID,
             const css::uno::Reference< css::io::XStream >& xStream );
 
 };

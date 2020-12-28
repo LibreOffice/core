@@ -35,6 +35,7 @@
 #include <com/sun/star/connection/SocketPermission.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <string_view>
 #include <unordered_map>
 
 #define IMPL_NAME "com.sun.star.security.comp.stoc.FilePolicy"
@@ -157,7 +158,7 @@ public:
     PolicyReader( OUString const & file, AccessControl & ac );
     ~PolicyReader();
 
-    void error( OUString const & msg );
+    void error( std::u16string_view msg );
 
     OUString getToken();
     OUString assureToken();
@@ -180,7 +181,7 @@ OUString PolicyReader::assureQuotedToken()
 {
     OUString token( getQuotedToken() );
     if (token.isEmpty())
-        error( "unexpected end of file!" );
+        error( u"unexpected end of file!" );
     return token;
 }
 
@@ -190,7 +191,7 @@ OUString PolicyReader::getQuotedToken()
     OUStringBuffer buf( 32 );
     sal_Unicode c = get();
     if ('\"' != c)
-        error( "expected quoting >\"< character!" );
+        error( u"expected quoting >\"< character!" );
     c = get();
     while ('\0' != c && '\"' != c)
     {
@@ -204,7 +205,7 @@ OUString PolicyReader::assureToken()
 {
     OUString token( getToken() );
     if ( token.isEmpty())
-        error( "unexpected end of file!" );
+        error( u"unexpected end of file!" );
     return token;
 }
 
@@ -266,7 +267,7 @@ void PolicyReader::skipWhiteSpace()
         }
         else
         {
-            error( "expected C/C++ like comment!" );
+            error( u"expected C/C++ like comment!" );
         }
     }
     else if ('#' == c) // script like comment
@@ -303,13 +304,13 @@ sal_Unicode PolicyReader::get()
         sal_Bool eof;
         oslFileError rc = ::osl_isEndOfFile( m_file, &eof );
         if (osl_File_E_None != rc)
-            error( "checking eof failed!" );
+            error( u"checking eof failed!" );
         if (eof)
             return '\0';
 
         rc = ::osl_readLine( m_file, reinterpret_cast< sal_Sequence ** >( &m_line ) );
         if (osl_File_E_None != rc)
-            error( "read line failed!" );
+            error( u"read line failed!" );
         ++m_linepos;
         if (! m_line.getLength()) // empty line read
         {
@@ -321,7 +322,7 @@ sal_Unicode PolicyReader::get()
     return (m_line.getConstArray()[ m_pos++ ]);
 }
 
-void PolicyReader::error( OUString const & msg )
+void PolicyReader::error( std::u16string_view msg )
 {
     throw RuntimeException(
         "error processing file \"" + m_fileName +
@@ -388,7 +389,7 @@ void FilePolicy::refresh()
     while (!token.isEmpty())
     {
         if ( token != s_grant )
-            reader.error( "expected >grant< token!" );
+            reader.error( u"expected >grant< token!" );
         OUString userId;
         token = reader.assureToken();
         if ( token == s_user ) // next token is user-id
@@ -397,13 +398,13 @@ void FilePolicy::refresh()
             token = reader.assureToken();
         }
         if ( token != s_openBrace )
-            reader.error( "expected opening brace >{<!" );
+            reader.error( u"expected opening brace >{<!" );
         token = reader.assureToken();
         // permissions list
         while ( token != s_closingBrace )
         {
             if ( token != s_permission )
-                reader.error( "expected >permission< or closing brace >}<!" );
+                reader.error( u"expected >permission< or closing brace >}<!" );
 
             token = reader.assureToken(); // permission type
             Any perm;
@@ -432,7 +433,7 @@ void FilePolicy::refresh()
             }
             else
             {
-                reader.error( "expected permission type!" );
+                reader.error( u"expected permission type!" );
             }
 
             reader.assureToken( ';' );

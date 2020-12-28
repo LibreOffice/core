@@ -357,7 +357,7 @@ struct SignatureDescr
 
 SignatureDescr lcl_getSignatureDescr(const uno::Reference<frame::XModel>& xModel,
                                      const uno::Reference<css::text::XTextContent>& xParagraph,
-                                     const OUString& sFieldId)
+                                     std::u16string_view sFieldId)
 {
     SignatureDescr aDescr;
 

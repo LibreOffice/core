@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <algorithm>
+#include <string_view>
 
 #include <editeng/eeitem.hxx>
 
@@ -2176,9 +2177,9 @@ void ScPosWnd::SetPos( const OUString& rPosStr )
 
 namespace {
 
-OUString createLocalRangeName(const OUString& rName, const OUString& rTableName)
+OUString createLocalRangeName(std::u16string_view rName, std::u16string_view rTableName)
 {
-    return rName + " (" + rTableName + ")";
+    return OUString::Concat(rName) + " (" + rTableName + ")";
 }
 
 }

@@ -501,10 +501,10 @@ IMPL_LINK_NOARG(InputEdit, ActivateHdl, weld::Entry&, bool)
     return true;
 }
 
-void InputEdit::UpdateRange(const OUString& rBoxes,
+void InputEdit::UpdateRange(std::u16string_view rBoxes,
                                     const OUString& rName )
 {
-    if( rBoxes.isEmpty() )
+    if( rBoxes.empty() )
     {
         GrabFocus();
         return;

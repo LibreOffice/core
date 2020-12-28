@@ -101,7 +101,7 @@ void ScDatabaseRangeObj::setUp()
     CalcUnoApiTest::setUp();
 
     OUString aFileURL;
-    createFileURL("ScDatabaseRangeObj.ods", aFileURL);
+    createFileURL(u"ScDatabaseRangeObj.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
 
 }

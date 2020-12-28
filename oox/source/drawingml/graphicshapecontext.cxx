@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <oox/drawingml/graphicshapecontext.hxx>
 
 #include <osl/diagnose.h>
@@ -54,9 +58,9 @@ lcl_GetMediaStream(const OUString& rStream, const oox::core::XmlFilterBase& rFil
     return xInStrm;
 }
 
-static OUString lcl_GetMediaReference(const OUString& rStream)
+static OUString lcl_GetMediaReference(std::u16string_view rStream)
 {
-    return rStream.isEmpty() ? OUString() : "vnd.sun.star.Package:" + rStream;
+    return rStream.empty() ? OUString() : OUString::Concat("vnd.sun.star.Package:") + rStream;
 }
 
 namespace oox::drawingml {
