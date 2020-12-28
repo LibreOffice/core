@@ -438,6 +438,22 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133342)
     CPPUNIT_ASSERT_EQUAL(OUString("12 %"), pDoc->GetString(ScAddress(0, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf71339)
+{
+    ScModelObj* pModelObj = createDoc("tdf71339.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    pDoc->SetString(ScAddress(0, 1, 0), "1");
+    pDoc->SetString(ScAddress(0, 2, 0), "1");
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:AutoSum", {});
+
+    CPPUNIT_ASSERT_EQUAL(2, pDoc->GetValue(ScAddress(0, 3, 0)));
+
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
