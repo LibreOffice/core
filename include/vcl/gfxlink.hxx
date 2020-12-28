@@ -86,6 +86,11 @@ public:
     sal_uInt32          GetDataSize() const { return maDataContainer.getSize(); }
     const sal_uInt8*    GetData() const;
 
+    const BinaryDataContainer& getDataContainer()
+    {
+        return maDataContainer;
+    }
+
     const Size&         GetPrefSize() const { return maPrefSize;}
     void                SetPrefSize( const Size& rPrefSize );
     bool                IsPrefSizeValid() const { return mbPrefSizeValid;}
