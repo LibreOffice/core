@@ -192,151 +192,145 @@
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment1">
+                  <!-- n-columns=1 n-rows=1 -->
+                  <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="top_padding">6</property>
-                    <property name="left_padding">12</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
                     <child>
-                      <!-- n-columns=1 n-rows=1 -->
-                      <object class="GtkGrid" id="grid1">
+                      <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="row_spacing">6</property>
-                        <property name="column_spacing">12</property>
-                        <child>
-                          <object class="GtkLabel" id="label1">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="fonttypedialog|label1">_Variables:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">variableCB</property>
-                            <property name="xalign">0</property>
-                            <attributes>
-                              <attribute name="weight" value="normal"/>
-                            </attributes>
+                        <property name="label" translatable="yes" context="fonttypedialog|label1">_Variables:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">variableCB</property>
+                        <property name="xalign">0</property>
+                        <attributes>
+                          <attribute name="weight" value="normal"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="fonttypedialog|label2">_Functions:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">functionCB</property>
+                        <property name="xalign">0</property>
+                        <attributes>
+                          <attribute name="weight" value="normal"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label3">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="fonttypedialog|label3">_Numbers:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">numberCB</property>
+                        <property name="xalign">0</property>
+                        <attributes>
+                          <attribute name="weight" value="normal"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label4">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="fonttypedialog|label4">_Text:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">textCB</property>
+                        <property name="xalign">0</property>
+                        <attributes>
+                          <attribute name="weight" value="normal"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="variableCB">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="variableCB-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|variableCB">You can select the fonts for the variables in your formula.</property>
                           </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label2">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="fonttypedialog|label2">_Functions:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">functionCB</property>
-                            <property name="xalign">0</property>
-                            <attributes>
-                              <attribute name="weight" value="normal"/>
-                            </attributes>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label3">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="fonttypedialog|label3">_Numbers:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">numberCB</property>
-                            <property name="xalign">0</property>
-                            <attributes>
-                              <attribute name="weight" value="normal"/>
-                            </attributes>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label4">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="fonttypedialog|label4">_Text:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">textCB</property>
-                            <property name="xalign">0</property>
-                            <attributes>
-                              <attribute name="weight" value="normal"/>
-                            </attributes>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="variableCB">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="variableCB-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|variableCB">You can select the fonts for the variables in your formula.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="functionCB">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="functionCB-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|functionCB">Select the fonts for names and properties of functions.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="numberCB">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="numberCB-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|numberCB">You can select the fonts for the numbers in your formula.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="textCB">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="textCB-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|textCB">Define the fonts for the text in your formula here.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">3</property>
-                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="functionCB">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="functionCB-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|functionCB">Select the fonts for names and properties of functions.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="numberCB">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="numberCB-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|numberCB">You can select the fonts for the numbers in your formula.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="textCB">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="textCB-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|textCB">Define the fonts for the text in your formula here.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">3</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
@@ -366,118 +360,112 @@
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment2">
+                  <!-- n-columns=1 n-rows=1 -->
+                  <object class="GtkGrid" id="grid2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="top_padding">6</property>
-                    <property name="left_padding">12</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
                     <child>
-                      <!-- n-columns=1 n-rows=1 -->
-                      <object class="GtkGrid" id="grid2">
+                      <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="row_spacing">6</property>
-                        <property name="column_spacing">12</property>
-                        <child>
-                          <object class="GtkLabel" id="label5">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="fonttypedialog|label5">_Serif:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">serifCB</property>
-                            <property name="xalign">0</property>
-                            <attributes>
-                              <attribute name="weight" value="normal"/>
-                            </attributes>
+                        <property name="label" translatable="yes" context="fonttypedialog|label5">_Serif:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">serifCB</property>
+                        <property name="xalign">0</property>
+                        <attributes>
+                          <attribute name="weight" value="normal"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label6">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="fonttypedialog|label6">S_ans-serif:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">sansCB</property>
+                        <property name="xalign">0</property>
+                        <attributes>
+                          <attribute name="weight" value="normal"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label7">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="fonttypedialog|label7">F_ixed-width:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">fixedCB</property>
+                        <property name="xalign">0</property>
+                        <attributes>
+                          <attribute name="weight" value="normal"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="serifCB">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="serifCB-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|serifCB">You can specify the font to be used for the font serif format.</property>
                           </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label6">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="fonttypedialog|label6">S_ans-serif:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">sansCB</property>
-                            <property name="xalign">0</property>
-                            <attributes>
-                              <attribute name="weight" value="normal"/>
-                            </attributes>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label7">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="fonttypedialog|label7">F_ixed-width:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">fixedCB</property>
-                            <property name="xalign">0</property>
-                            <attributes>
-                              <attribute name="weight" value="normal"/>
-                            </attributes>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="serifCB">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="serifCB-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|serifCB">You can specify the font to be used for the font serif format.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="sansCB">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="sansCB-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|sansCB">You can specify the font to be used for sans font formatting.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="fixedCB">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="fixedCB-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|fixedCB">You can specify the font to be used for fixed font formatting.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">2</property>
-                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="sansCB">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="sansCB-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|sansCB">You can specify the font to be used for sans font formatting.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="fixedCB">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="fixedCB-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|fixedCB">You can specify the font to be used for fixed font formatting.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">2</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
