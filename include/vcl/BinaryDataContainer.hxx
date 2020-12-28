@@ -26,8 +26,9 @@ private:
     std::shared_ptr<std::vector<sal_uInt8>> mpData;
 
 public:
-    explicit BinaryDataContainer();
-    explicit BinaryDataContainer(const sal_uInt8* pData, size_t nSize);
+    BinaryDataContainer();
+    BinaryDataContainer(const sal_uInt8* pData, size_t nSize);
+    BinaryDataContainer(std::unique_ptr<std::vector<sal_uInt8>> rData);
 
     BinaryDataContainer(const BinaryDataContainer& rBinaryDataContainer)
         : mpData(rBinaryDataContainer.mpData)

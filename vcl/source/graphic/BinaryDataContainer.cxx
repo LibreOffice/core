@@ -19,6 +19,11 @@ BinaryDataContainer::BinaryDataContainer(const sal_uInt8* pData, size_t nSize)
     std::copy(pData, pData + nSize, mpData->data());
 }
 
+BinaryDataContainer::BinaryDataContainer(std::unique_ptr<std::vector<sal_uInt8>> aData)
+    : mpData(std::shared_ptr<std::vector<sal_uInt8>>(aData.release(), aData.get_deleter()))
+{
+}
+
 size_t BinaryDataContainer::calculateHash() const
 {
     size_t nSeed = 0;
