@@ -1837,7 +1837,8 @@ void StorageObjectBase::addPreferredStorage( const String& rStrgPath )
         maPreferred.emplace_back( rStrgPath, true );
 }
 
-OUString StorageObjectBase::getSysFileName( const OUString& rStrmName, const OUString& rSysOutPath )
+OUString StorageObjectBase::getSysFileName(
+    const OUString& rStrmName, std::u16string_view rSysOutPath )
 {
     // encode all characters < 0x20
     OUStringBuffer aBuffer;
@@ -1850,7 +1851,7 @@ OUString StorageObjectBase::getSysFileName( const OUString& rStrmName, const OUS
         aFileName = aFileName.replace(cChar, '_');
 
     // build full path
-    return rSysOutPath + "/" + aFileName;
+    return OUString::Concat(rSysOutPath) + "/" + aFileName;
 }
 
 void StorageObjectBase::extractStream( StorageBase& rStrg, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
@@ -1901,7 +1902,7 @@ void StorageObjectBase::extractStorage( const StorageRef& rxStrg, const OUString
     }
 }
 
-void StorageObjectBase::extractItem( const StorageRef& rxStrg, const OUString& rStrgPath, const OUString& rItemName, const OUString& rSysPath, bool bIsStrg, bool bIsStrm )
+void StorageObjectBase::extractItem( const StorageRef& rxStrg, const OUString& rStrgPath, const OUString& rItemName, std::u16string_view rSysPath, bool bIsStrg, bool bIsStrm )
 {
     OUString aSysFileName = getSysFileName( rItemName, rSysPath );
     if( bIsStrg )

@@ -3241,7 +3241,7 @@ void SAL_CALL ScCellRangesBase::addChartDataChangeEventListener( const uno::Refe
     ScDocument& rDoc = pDocShell->GetDocument();
     ScRangeListRef aRangesRef( new ScRangeList(aRanges) );
     ScChartListenerCollection* pColl = rDoc.GetChartListenerCollection();
-    OUString aName = pColl->getUniqueName("__Uno");
+    OUString aName = pColl->getUniqueName(u"__Uno");
     if (aName.isEmpty())
         // failed to create unique name.
         return;

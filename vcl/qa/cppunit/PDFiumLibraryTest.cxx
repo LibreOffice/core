@@ -11,6 +11,8 @@
 
 #if HAVE_FEATURE_PDFIUM
 
+#include <string_view>
+
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -28,9 +30,9 @@
 
 class PDFiumLibraryTest : public test::BootstrapFixtureBase
 {
-    OUString getFullUrl(const OUString& sFileName)
+    OUString getFullUrl(std::u16string_view sFileName)
     {
-        return m_directories.getURLFromSrc("/vcl/qa/cppunit/data/") + sFileName;
+        return m_directories.getURLFromSrc(u"/vcl/qa/cppunit/data/") + sFileName;
     }
 
     void testDocument();
@@ -54,7 +56,7 @@ class PDFiumLibraryTest : public test::BootstrapFixtureBase
 
 void PDFiumLibraryTest::testDocument()
 {
-    OUString aURL = getFullUrl("Pangram.pdf");
+    OUString aURL = getFullUrl(u"Pangram.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
@@ -82,7 +84,7 @@ void PDFiumLibraryTest::testDocument()
 
 void PDFiumLibraryTest::testPages()
 {
-    OUString aURL = getFullUrl("Pangram.pdf");
+    OUString aURL = getFullUrl(u"Pangram.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
@@ -108,7 +110,7 @@ void PDFiumLibraryTest::testPages()
 
 void PDFiumLibraryTest::testPageObjects()
 {
-    OUString aURL = getFullUrl("Pangram.pdf");
+    OUString aURL = getFullUrl(u"Pangram.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
@@ -158,7 +160,7 @@ void PDFiumLibraryTest::testPageObjects()
 
 void PDFiumLibraryTest::testAnnotationsMadeInEvince()
 {
-    OUString aURL = getFullUrl("PangramWithAnnotations.pdf");
+    OUString aURL = getFullUrl(u"PangramWithAnnotations.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
@@ -215,7 +217,7 @@ void PDFiumLibraryTest::testAnnotationsMadeInEvince()
 
 void PDFiumLibraryTest::testAnnotationsMadeInAcrobat()
 {
-    OUString aURL = getFullUrl("PangramAcrobatAnnotations.pdf");
+    OUString aURL = getFullUrl(u"PangramAcrobatAnnotations.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
@@ -293,7 +295,7 @@ void PDFiumLibraryTest::testAnnotationsMadeInAcrobat()
 
 void PDFiumLibraryTest::testAnnotationsDifferentTypes()
 {
-    OUString aURL = getFullUrl("PangramWithMultipleTypeOfAnnotations.pdf");
+    OUString aURL = getFullUrl(u"PangramWithMultipleTypeOfAnnotations.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);

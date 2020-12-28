@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "vbaworksheet.hxx"
 #include "vbanames.hxx"
 
@@ -80,17 +84,17 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-static void getNewSpreadsheetName (OUString &aNewName, const OUString& aOldName, const uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc )
+static void getNewSpreadsheetName (OUString &aNewName, std::u16string_view aOldName, const uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc )
 {
     if (!xSpreadDoc.is())
         throw lang::IllegalArgumentException( "getNewSpreadsheetName() xSpreadDoc is null", uno::Reference< uno::XInterface  >(), 1 );
     static const char aUnderScore[] =  "_";
     int currentNum =2;
-    aNewName = aOldName + aUnderScore + OUString::number(currentNum) ;
+    aNewName = OUString::Concat(aOldName) + aUnderScore + OUString::number(currentNum) ;
     SCTAB nTab = 0;
     while ( ScVbaWorksheets::nameExists(xSpreadDoc,aNewName, nTab ) )
     {
-        aNewName = aOldName + aUnderScore + OUString::number(++currentNum);
+        aNewName = OUString::Concat(aOldName) + aUnderScore + OUString::number(++currentNum);
     }
 }
 

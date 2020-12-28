@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <test/bootstrapfixture.hxx>
 
 #include <sal/macros.h>
@@ -35,7 +39,7 @@ protected:
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("svg"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"));
     }
 
-    void load(const OUString& pDir, const char* pName)
+    void load(std::u16string_view pDir, const char* pName)
     {
         return loadURL(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName), pName);
     }
@@ -82,7 +86,7 @@ public:
 
     void executeExport(const char* pName)
     {
-        load( "/sd/qa/unit/data/odp/", pName );
+        load( u"/sd/qa/unit/data/odp/", pName );
         save();
     }
 

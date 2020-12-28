@@ -28,6 +28,7 @@
 #include <sal/config.h>
 
 #include <iostream>
+#include <string_view>
 
 #include <app.hxx>
 #include <dp_shared.hxx>
@@ -335,7 +336,7 @@ void RemoveIconCacheDirectory()
 namespace {
 
 
-OUString MakeStartupErrorMessage(OUString const & aErrorMessage)
+OUString MakeStartupErrorMessage(std::u16string_view aErrorMessage)
 {
     return DpResId(STR_BOOTSTRAP_ERR_CANNOT_START) + "\n" + aErrorMessage;
 }
@@ -597,7 +598,7 @@ void Desktop::Shutdown()
     framework::getDesktop(::comphelper::getProcessComponentContext())->shutdown();
 }
 
-void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStatus, const OUString& aDiagnosticMessage )
+void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStatus, std::u16string_view aDiagnosticMessage )
 {
     if ( aBootstrapStatus == ::utl::Bootstrap::DATA_OK )
         return;
@@ -614,7 +615,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
     if ( !aTemp.isEmpty() )
         aProductKey = aTemp;
 
-    OUString const aMessage(aDiagnosticMessage + "\n");
+    OUString const aMessage(OUString::Concat(aDiagnosticMessage) + "\n");
 
     std::unique_ptr<weld::MessageDialog> xBootstrapFailedBox(Application::CreateMessageDialog(nullptr,
                                                              VclMessageType::Warning, VclButtonsType::Ok, aMessage));

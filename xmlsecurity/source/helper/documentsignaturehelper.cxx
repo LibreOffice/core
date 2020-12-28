@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <string_view>
 
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -82,7 +83,7 @@ int compareVersions(
 
 static void ImplFillElementList(
     std::vector< OUString >& rList, const Reference < css::embed::XStorage >& rxStore,
-    const OUString& rRootStorageName, const bool bRecursive,
+    std::u16string_view rRootStorageName, const bool bRecursive,
     const DocumentSignatureAlgorithm mode)
 {
     const Sequence< OUString > aElements = rxStore->getElementNames();
@@ -190,14 +191,15 @@ DocumentSignatureHelper::CreateElementList(
             if (mode == DocumentSignatureAlgorithm::OOo2) //that is, ODF 1.0, 1.1
             {
                 // 1) Main content
-                ImplFillElementList(aElements, rxStore, OUString(), false, mode);
+                ImplFillElementList(aElements, rxStore, std::u16string_view(), false, mode);
 
                 // 2) Pictures...
                 OUString aSubStorageName( "Pictures" );
                 try
                 {
                     Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
-                    ImplFillElementList(aElements, xSubStore, aSubStorageName+aSep, true, mode);
+                    ImplFillElementList(
+                        aElements, xSubStore, OUString(aSubStorageName+aSep), true, mode);
                 }
                 catch(css::io::IOException& )
                 {
@@ -208,7 +210,8 @@ DocumentSignatureHelper::CreateElementList(
                 try
                 {
                     Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
-                    ImplFillElementList(aElements, xSubStore, aSubStorageName+aSep, true, mode);
+                    ImplFillElementList(
+                        aElements, xSubStore, OUString(aSubStorageName+aSep), true, mode);
                     xSubStore.clear();
 
                     // Object folders...
@@ -218,7 +221,8 @@ DocumentSignatureHelper::CreateElementList(
                         if ( ( rName.match( "Object " ) ) && rxStore->isStorageElement( rName ) )
                         {
                             Reference < css::embed::XStorage > xTmpSubStore = rxStore->openStorageElement( rName, css::embed::ElementModes::READ );
-                            ImplFillElementList(aElements, xTmpSubStore, rName+aSep, true, mode);
+                            ImplFillElementList(
+                                aElements, xTmpSubStore, OUString(rName+aSep), true, mode);
                         }
                     }
                 }
@@ -230,7 +234,7 @@ DocumentSignatureHelper::CreateElementList(
             else
             {
                 // Everything except META-INF
-                ImplFillElementList(aElements, rxStore, OUString(), true, mode);
+                ImplFillElementList(aElements, rxStore, std::u16string_view(), true, mode);
             }
         }
         break;
@@ -241,7 +245,8 @@ DocumentSignatureHelper::CreateElementList(
             try
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
-                ImplFillElementList(aElements, xSubStore, aSubStorageName+aSep, true, mode);
+                ImplFillElementList(
+                    aElements, xSubStore, OUString(aSubStorageName+aSep), true, mode);
             }
             catch( css::io::IOException& )
             {
@@ -253,7 +258,8 @@ DocumentSignatureHelper::CreateElementList(
             try
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
-                ImplFillElementList(aElements, xSubStore, aSubStorageName+aSep, true, mode);
+                ImplFillElementList(
+                    aElements, xSubStore, OUString(aSubStorageName+aSep), true, mode);
             }
             catch( css::io::IOException& )
             {
@@ -264,7 +270,8 @@ DocumentSignatureHelper::CreateElementList(
             try
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
-                ImplFillElementList(aElements, xSubStore, aSubStorageName+aSep, true, mode);
+                ImplFillElementList(
+                    aElements, xSubStore, OUString(aSubStorageName+aSep), true, mode);
             }
             catch( css::io::IOException& )
             {
@@ -275,7 +282,7 @@ DocumentSignatureHelper::CreateElementList(
         case DocumentSignatureMode::Package:
         {
             // Everything except META-INF
-            ImplFillElementList(aElements, rxStore, OUString(), true, mode);
+            ImplFillElementList(aElements, rxStore, std::u16string_view(), true, mode);
         }
         break;
     }

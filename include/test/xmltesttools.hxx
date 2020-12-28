@@ -27,6 +27,7 @@
 
 #include <cppunit/TestAssert.h>
 
+#include <string_view>
 #include <vector>
 
 class OOO_DLLPUBLIC_TEST XmlTestTools
@@ -59,7 +60,7 @@ protected:
      * Get the position of the child named rName of the parent node specified by rXPath.
      * Useful for checking relative order of elements.
      */
-    int           getXPathPosition(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OString& rChildName);
+    int           getXPathPosition(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, std::string_view rChildName);
     /**
      * Assert that rXPath exists, and returns exactly one node.
      */

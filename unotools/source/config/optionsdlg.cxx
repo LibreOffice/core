@@ -25,6 +25,7 @@
 
 #include "itemholder1.hxx"
 
+#include <string_view>
 #include <unordered_map>
 
 using namespace utl;
@@ -48,7 +49,7 @@ private:
     OptionNodeList  m_aOptionNodeList;
 
     enum NodeType{ NT_Group, NT_Page, NT_Option };
-    void            ReadNode( const OUString& _rNode, NodeType _eType );
+    void            ReadNode( std::u16string_view _rNode, NodeType _eType );
     bool        IsHidden( const OUString& _rPath ) const;
 
     virtual void    ImplCommit() override;
@@ -60,12 +61,12 @@ public:
 
     static ::osl::Mutex & getInitMutex();
 
-    bool        IsGroupHidden   (   const OUString& _rGroup ) const;
-    bool        IsPageHidden    (   const OUString& _rPage,
-                                        const OUString& _rGroup ) const;
-    bool        IsOptionHidden  (   const OUString& _rOption,
-                                        const OUString& _rPage,
-                                        const OUString& _rGroup ) const;
+    bool        IsGroupHidden   (   std::u16string_view _rGroup ) const;
+    bool        IsPageHidden    (   std::u16string_view _rPage,
+                                        std::u16string_view _rGroup ) const;
+    bool        IsOptionHidden  (   std::u16string_view _rOption,
+                                        std::u16string_view _rPage,
+                                        std::u16string_view _rGroup ) const;
 };
 
 namespace
@@ -102,7 +103,7 @@ void SvtOptionsDlgOptions_Impl::Notify( const Sequence< OUString >& )
     // nothing to notify
 }
 
-void SvtOptionsDlgOptions_Impl::ReadNode( const OUString& _rNode, NodeType _eType )
+void SvtOptionsDlgOptions_Impl::ReadNode( std::u16string_view _rNode, NodeType _eType )
 {
     OUString sNode( _rNode + g_sPathDelimiter );
     OUString sSet;
@@ -152,17 +153,17 @@ void SvtOptionsDlgOptions_Impl::ReadNode( const OUString& _rNode, NodeType _eTyp
     }
 }
 
-static OUString getGroupPath( const OUString& _rGroup )
+static OUString getGroupPath( std::u16string_view _rGroup )
 {
-    return OUString( ROOT_NODE "/" + _rGroup + "/" );
+    return OUString( OUString::Concat(ROOT_NODE "/") + _rGroup + "/" );
 }
-static OUString getPagePath( const OUString& _rPage )
+static OUString getPagePath( std::u16string_view _rPage )
 {
-    return OUString( PAGES_NODE "/" + _rPage + "/" );
+    return OUString( OUString::Concat(PAGES_NODE "/") + _rPage + "/" );
 }
-static OUString getOptionPath( const OUString& _rOption )
+static OUString getOptionPath( std::u16string_view _rOption )
 {
-    return OUString( OPTIONS_NODE "/" + _rOption + "/" );
+    return OUString( OUString::Concat(OPTIONS_NODE "/") + _rOption + "/" );
 }
 
 bool SvtOptionsDlgOptions_Impl::IsHidden( const OUString& _rPath ) const
@@ -174,18 +175,18 @@ bool SvtOptionsDlgOptions_Impl::IsHidden( const OUString& _rPath ) const
     return bRet;
 }
 
-bool SvtOptionsDlgOptions_Impl::IsGroupHidden( const OUString& _rGroup ) const
+bool SvtOptionsDlgOptions_Impl::IsGroupHidden( std::u16string_view _rGroup ) const
 {
     return IsHidden( getGroupPath( _rGroup ) );
 }
 
-bool SvtOptionsDlgOptions_Impl::IsPageHidden( const OUString& _rPage, const OUString& _rGroup ) const
+bool SvtOptionsDlgOptions_Impl::IsPageHidden( std::u16string_view _rPage, std::u16string_view _rGroup ) const
 {
     return IsHidden( getGroupPath( _rGroup  ) + getPagePath( _rPage ) );
 }
 
 bool SvtOptionsDlgOptions_Impl::IsOptionHidden(
-    const OUString& _rOption, const OUString& _rPage, const OUString& _rGroup ) const
+    std::u16string_view _rOption, std::u16string_view _rPage, std::u16string_view _rGroup ) const
 {
     return IsHidden( getGroupPath( _rGroup  ) + getPagePath( _rPage ) + getOptionPath( _rOption ) );
 }
@@ -217,18 +218,19 @@ SvtOptionsDialogOptions::~SvtOptionsDialogOptions()
     }
 }
 
-bool SvtOptionsDialogOptions::IsGroupHidden( const OUString& _rGroup ) const
+bool SvtOptionsDialogOptions::IsGroupHidden( std::u16string_view _rGroup ) const
 {
     return m_pImp->IsGroupHidden( _rGroup );
 }
 
-bool SvtOptionsDialogOptions::IsPageHidden( const OUString& _rPage, const OUString& _rGroup ) const
+bool SvtOptionsDialogOptions::IsPageHidden(
+    std::u16string_view _rPage, std::u16string_view _rGroup ) const
 {
     return m_pImp->IsPageHidden( _rPage, _rGroup );
 }
 
 bool SvtOptionsDialogOptions::IsOptionHidden(
-    const OUString& _rOption, const OUString& _rPage, const OUString& _rGroup ) const
+    std::u16string_view _rOption, std::u16string_view _rPage, std::u16string_view _rGroup ) const
 {
     return m_pImp->IsOptionHidden( _rOption, _rPage, _rGroup );
 }

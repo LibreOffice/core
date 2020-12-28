@@ -27,6 +27,7 @@
 #include "skeletoncpp.hxx"
 
 #include <algorithm>
+#include <string_view>
 
 using namespace ::codemaker::cpp;
 
@@ -123,7 +124,7 @@ static void printType(
 
 void printType(
     std::ostream & o, ProgramOptions const & options,
-    rtl::Reference< TypeManager > const & manager, OUString const & name,
+    rtl::Reference< TypeManager > const & manager, std::u16string_view name,
     short referenceType, bool defaultvalue)
 {
     OUString nucleus;
@@ -141,7 +142,7 @@ static bool printConstructorParameters(
     std::ostream & o, ProgramOptions const & options,
     rtl::Reference< TypeManager > const & manager,
     codemaker::UnoType::Sort sort,
-    rtl::Reference< unoidl::Entity > const & entity, OUString const & name,
+    rtl::Reference< unoidl::Entity > const & entity, std::u16string_view name,
     std::vector< OUString > const & arguments)
 {
     bool previous = false;
@@ -250,7 +251,7 @@ static bool printConstructorParameters(
         }
     default:
         throw CannotDumpException(
-            "unexpected entity \"" + name
+            OUString::Concat("unexpected entity \"") + name
             + "\" in call to skeletonmaker::cpp::printConstructorParameters");
     }
     return previous;

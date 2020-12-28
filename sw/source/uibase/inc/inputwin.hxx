@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_INPUTWIN_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_INPUTWIN_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
@@ -49,7 +53,7 @@ public:
         SetSizePixel(m_xWidget->get_preferred_size());
     }
 
-    void UpdateRange(const OUString& rSel, const OUString& rTableName);
+    void UpdateRange(std::u16string_view rSel, const OUString& rTableName);
 
     virtual void dispose() override
     {

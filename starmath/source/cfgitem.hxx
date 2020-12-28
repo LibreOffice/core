@@ -22,6 +22,7 @@
 
 #include <utility.hxx>
 
+#include <string_view>
 #include <vector>
 
 #include <rtl/ustring.hxx>
@@ -111,10 +112,10 @@ class SmMathConfig final : public utl::ConfigItem, public SfxBroadcaster
 
     void    ReadSymbol( SmSym &rSymbol,
                         const OUString &rSymbolName,
-                        const OUString &rBaseNode ) const;
+                        std::u16string_view rBaseNode ) const;
     void    ReadFontFormat( SmFontFormat &rFontFormat,
-                        const OUString &rSymbolName,
-                        const OUString &rBaseNode ) const;
+                        std::u16string_view rSymbolName,
+                        std::u16string_view rBaseNode ) const;
 
     void    SetOtherIfNotEqual( bool &rbItem, bool bNewVal );
 

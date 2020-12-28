@@ -11,6 +11,8 @@
 #define INCLUDED_SW_QA_INC_SWMODELTESTBASE_HXX
 
 #include <memory>
+#include <string_view>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -145,7 +147,7 @@ protected:
     virtual OUString getTestName() { return OUString(); }
 
     /// Copy&paste helper.
-    void paste(const OUString& aFilename, css::uno::Reference<css::text::XTextRange> const& xTextRange);
+    void paste(std::u16string_view aFilename, css::uno::Reference<css::text::XTextRange> const& xTextRange);
 
 public:
     void setFilterOptions(const OUString &rFilterOptions)
@@ -340,7 +342,7 @@ protected:
 
     void header();
 
-    void load(const OUString& pDir, const char* pName, const char* pPassword = nullptr)
+    void load(std::u16string_view pDir, const char* pName, const char* pPassword = nullptr)
     {
         return loadURL(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName), pName, pPassword);
     }
@@ -393,7 +395,8 @@ protected:
      * SwDoc* pDoc = createSwDoc();
      * SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "test.fodt");
      */
-    SwDoc* createSwDoc(const OUString& rDataDirectory = OUString(), const char* pName = nullptr);
+    SwDoc* createSwDoc(
+        std::u16string_view rDataDirectory = std::u16string_view(), const char* pName = nullptr);
 };
 
 /**

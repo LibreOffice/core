@@ -848,7 +848,7 @@ bool compileExtensionHelp
 (
     const OUString& aOfficeHelpPath,
     std::u16string_view aExtensionName,
-    const OUString& aExtensionLanguageRoot,
+    std::u16string_view aExtensionLanguageRoot,
     sal_Int32 nXhpFileCount, const OUString* pXhpFiles,
     std::u16string_view aDestination,
     HelpProcessingErrorInfo& o_rHelpProcessingErrorInfo
@@ -905,7 +905,7 @@ bool compileExtensionHelp
     // The following basically checks if the help.tree is well formed XML.
     // Apparently there have been cases when translations contained
     // non-well-formed XML in the past.
-    OUString aTreeFileURL = aExtensionLanguageRoot + "/help.tree";
+    OUString aTreeFileURL = OUString::Concat(aExtensionLanguageRoot) + "/help.tree";
     osl::DirectoryItem aTreeFileItem;
     osl::FileBase::RC rcGet = osl::DirectoryItem::get( aTreeFileURL, aTreeFileItem );
     osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );

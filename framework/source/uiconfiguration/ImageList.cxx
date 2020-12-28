@@ -177,12 +177,12 @@ void ImageList::GetImageNames( std::vector< OUString >& rNames ) const
     }
 }
 
-void ImageList::ImplAddImage( const OUString &aPrefix, const OUString &aName,
+void ImageList::ImplAddImage( std::u16string_view aPrefix, const OUString &aName,
                               sal_uInt16 nId, const Image &aImage )
 {
     Image aInsert = aImage;
     if (!aInsert)
-        aInsert = Image( "private:graphicrepository/" + aPrefix + aName );
+        aInsert = Image( OUString::Concat("private:graphicrepository/") + aPrefix + aName );
 
     ImageAryData *pImg = new ImageAryData{ aName, nId, aInsert };
     maImages.emplace_back( pImg );

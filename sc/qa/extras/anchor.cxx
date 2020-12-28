@@ -65,7 +65,7 @@ ScAnchorTest::ScAnchorTest()
 void ScAnchorTest::testUndoAnchor()
 {
     OUString aFileURL;
-    createFileURL("document_with_linked_graphic.ods", aFileURL);
+    createFileURL(u"document_with_linked_graphic.ods", aFileURL);
     // open the document with graphic included
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
@@ -197,7 +197,7 @@ void ScAnchorTest::testTdf76183()
 void ScAnchorTest::testODFAnchorTypes()
 {
     OUString aFileURL;
-    createFileURL("3AnchorTypes.ods", aFileURL);
+    createFileURL(u"3AnchorTypes.ods", aFileURL);
     // open the document with graphic included
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
@@ -242,7 +242,7 @@ void ScAnchorTest::testODFAnchorTypes()
 void ScAnchorTest::testCopyColumnWithImages()
 {
     OUString aFileURL;
-    createFileURL("3AnchorTypes.ods", aFileURL);
+    createFileURL(u"3AnchorTypes.ods", aFileURL);
     // open the document with graphic included
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
@@ -314,7 +314,7 @@ void ScAnchorTest::testCopyColumnWithImages()
 void ScAnchorTest::testCutWithImages()
 {
     OUString aFileURL;
-    createFileURL("3AnchorTypes.ods", aFileURL);
+    createFileURL(u"3AnchorTypes.ods", aFileURL);
     // open the document with graphic included
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
@@ -373,7 +373,7 @@ void ScAnchorTest::testCutWithImages()
 void ScAnchorTest::testTdf121963()
 {
     OUString aFileURL;
-    createFileURL("tdf121963.ods", aFileURL);
+    createFileURL(u"tdf121963.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
@@ -387,7 +387,7 @@ void ScAnchorTest::testTdf121963()
 void ScAnchorTest::testTdf129552()
 {
     OUString aFileURL;
-    createFileURL("tdf129552.fods", aFileURL);
+    createFileURL(u"tdf129552.fods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
@@ -401,7 +401,7 @@ void ScAnchorTest::testTdf129552()
 void ScAnchorTest::testTdf130556()
 {
     OUString aFileURL;
-    createFileURL("tdf130556.ods", aFileURL);
+    createFileURL(u"tdf130556.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
@@ -415,7 +415,7 @@ void ScAnchorTest::testTdf130556()
 void ScAnchorTest::testTdf134161()
 {
     OUString aFileURL;
-    createFileURL("tdf134161.ods", aFileURL);
+    createFileURL(u"tdf134161.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 

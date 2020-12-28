@@ -611,7 +611,7 @@ void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const OUString& _r
 namespace
 {
     OUString getComposedClause( const OUString& _rElementaryClause, const OUString& _rAdditionalClause,
-        TokenComposer& _rComposer, const OUString& _rKeyword )
+        TokenComposer& _rComposer, std::u16string_view _rKeyword )
     {
         _rComposer.clear();
         _rComposer.append( _rElementaryClause );

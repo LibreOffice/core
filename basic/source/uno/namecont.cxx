@@ -66,6 +66,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <memory>
+#include <string_view>
 
 namespace basic
 {
@@ -571,8 +572,8 @@ static void checkAndCopyFileImpl( const INetURLObject& rSourceFolderInetObj,
     }
 }
 
-static void createVariableURL( OUString& rStr, const OUString& rLibName,
-                               const OUString& rInfoFileName, bool bUser )
+static void createVariableURL( OUString& rStr, std::u16string_view rLibName,
+                               std::u16string_view rInfoFileName, bool bUser )
 {
     if( bUser )
     {
@@ -582,7 +583,7 @@ static void createVariableURL( OUString& rStr, const OUString& rLibName,
     {
         rStr = "$(INST)/" LIBO_SHARE_FOLDER "/basic/";
     }
-    rStr += rLibName + "/" + rInfoFileName + ".xlb/";
+    rStr += OUString::Concat(rLibName) + "/" + rInfoFileName + ".xlb/";
 }
 
 void SfxLibraryContainer::init( const OUString& rInitialDocumentURL, const uno::Reference< embed::XStorage >& rxInitialStorage )

@@ -555,7 +555,7 @@ void FmFormView::createControlLabelPair( OutputDevice const * _pOutDev, sal_Int3
     FmXFormView::createControlLabelPair(
         *_pOutDev, _nXOffsetMM, _nYOffsetMM,
         _rxField, _rxNumberFormats,
-        _nControlObjectID, "", _nInventor, _nLabelObjectID,
+        _nControlObjectID, u"", _nInventor, _nLabelObjectID,
         _rModel,
         _rpLabel, _rpControl
     );

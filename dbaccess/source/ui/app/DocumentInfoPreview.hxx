@@ -20,6 +20,9 @@
 #pragma once
 
 #include <sal/config.h>
+
+#include <string_view>
+
 #include <svx/weldeditview.hxx>
 
 namespace com :: sun :: star :: uno { template <typename > class Reference; }
@@ -44,7 +47,7 @@ public:
     void fill(css::uno::Reference< css::document::XDocumentProperties > const & xDocProps);
 
 private:
-    void insertEntry(OUString const & title, OUString const & value);
+    void insertEntry(std::u16string_view title, OUString const & value);
 
     void insertNonempty(tools::Long id, OUString const & value);
 

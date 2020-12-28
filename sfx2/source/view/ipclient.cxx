@@ -901,7 +901,7 @@ ErrCode SfxInPlaceClient::DoVerb( tools::Long nVerb )
                     aDispatchArgs[0].Value <<= true;
 
                     aHelper.GUIStoreModel( xEmbModel,
-                                            "SaveAs",
+                                            u"SaveAs",
                                             aDispatchArgs,
                                             false,
                                             SignatureState::NOSIGNATURES );

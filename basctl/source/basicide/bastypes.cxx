@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <strings.hrc>
 #include <helpids.h>
 #include <iderid.hxx>
@@ -692,36 +696,36 @@ LibInfo::Item::Item (
     m_eCurrentType(eCurrentType)
 { }
 
-static bool QueryDel(const OUString& rName, const OUString &rStr, weld::Widget* pParent)
+static bool QueryDel(std::u16string_view rName, const OUString &rStr, weld::Widget* pParent)
 {
-    OUString aName = "\'" + rName + "\'";
+    OUString aName = OUString::Concat("\'") + rName + "\'";
     OUString aQuery = rStr.replaceAll("XX", aName);
     std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pParent,
                                                    VclMessageType::Question, VclButtonsType::YesNo, aQuery));
     return (xQueryBox->run() == RET_YES);
 }
 
-bool QueryDelMacro( const OUString& rName, weld::Widget* pParent )
+bool QueryDelMacro( std::u16string_view rName, weld::Widget* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMACRO ), pParent );
 }
 
-bool QueryReplaceMacro( const OUString& rName, weld::Widget* pParent )
+bool QueryReplaceMacro( std::u16string_view rName, weld::Widget* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYREPLACEMACRO ), pParent );
 }
 
-bool QueryDelDialog( const OUString& rName, weld::Widget* pParent )
+bool QueryDelDialog( std::u16string_view rName, weld::Widget* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELDIALOG ), pParent );
 }
 
-bool QueryDelLib( const OUString& rName, bool bRef, weld::Widget* pParent )
+bool QueryDelLib( std::u16string_view rName, bool bRef, weld::Widget* pParent )
 {
     return QueryDel( rName, IDEResId( bRef ? RID_STR_QUERYDELLIBREF : RID_STR_QUERYDELLIB ), pParent );
 }
 
-bool QueryDelModule( const OUString& rName, weld::Widget* pParent )
+bool QueryDelModule( std::u16string_view rName, weld::Widget* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMODULE ), pParent );
 }

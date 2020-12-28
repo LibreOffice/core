@@ -49,7 +49,7 @@ using namespace com::sun::star;
 
 namespace
 {
-    OUString lcl_genRandom( const OUString &rId )
+    OUString lcl_genRandom( std::u16string_view rId )
     {
         //FIXME: plus timestamp
         unsigned int nRand = comphelper::rng::uniform_uint_distribution(0, 0xFFFF);
@@ -62,7 +62,7 @@ namespace
         OUString aTempl("<alt id=\"%1\">"
                         " " //FIXME real dialog title or something
                         "</alt>");
-        aTempl = aTempl.replaceFirst( "%1", lcl_genRandom("alt_id") );
+        aTempl = aTempl.replaceFirst( "%1", lcl_genRandom(u"alt_id") );
 
         return aTempl;
     }
@@ -73,7 +73,7 @@ namespace
                            " width=\"%3cm\"  height=\"%4cm\">"
                            "%5"
                         "</image>");
-        aTempl = aTempl.replaceFirst( "%1", lcl_genRandom("img_id") );
+        aTempl = aTempl.replaceFirst( "%1", lcl_genRandom(u"img_id") );
         aTempl = aTempl.replaceFirst( "%2", rScreenshotId );
         aTempl = aTempl.replaceFirst( "%3", OUString::number( rSize.Width() ) );
         aTempl = aTempl.replaceFirst( "%4", OUString::number( rSize.Height() ) );
@@ -86,7 +86,7 @@ namespace
     {
         OUString aTempl( "<paragraph id=\"%1\" role=\"paragraph\">%2"
                          "</paragraph>"  SAL_NEWLINE_STRING );
-        aTempl = aTempl.replaceFirst( "%1", lcl_genRandom("par_id") );
+        aTempl = aTempl.replaceFirst( "%1", lcl_genRandom(u"par_id") );
         aTempl = aTempl.replaceFirst( "%2", lcl_Image(rScreenshotId, rSize) );
 
         return aTempl;
@@ -98,7 +98,7 @@ namespace
                           "<bookmark branch=\"hid/%2\" id=\"%3\" localize=\"false\"/>" SAL_NEWLINE_STRING;
         aTempl = aTempl.replaceFirst( "%1", rWidgetId );
         aTempl = aTempl.replaceFirst( "%2", rWidgetId );
-        aTempl = aTempl.replaceFirst( "%3", lcl_genRandom("bm_id") );
+        aTempl = aTempl.replaceFirst( "%3", lcl_genRandom(u"bm_id") );
 
         return aTempl;
     }

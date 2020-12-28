@@ -51,7 +51,7 @@ VclPtr<VclAbstractDialog> BasctlDialogsTest::createDialogByID(sal_uInt32 /*nID*/
 void BasctlDialogsTest::openAnyDialog()
 {
     /// process input file containing the UXMLDescriptions of the dialogs to dump
-    processDialogBatchFile("basctl/qa/unit/data/basctl-dialogs-test.txt");
+    processDialogBatchFile(u"basctl/qa/unit/data/basctl-dialogs-test.txt");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BasctlDialogsTest);

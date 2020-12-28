@@ -633,7 +633,7 @@ void PresenterScreen::SetupConfiguration (
 
 void PresenterScreen::ProcessLayout (
     PresenterConfigurationAccess& rConfiguration,
-    const OUString& rsLayoutName,
+    std::u16string_view rsLayoutName,
     const Reference<XComponentContext>& rxContext,
     const Reference<XResourceId>& rxAnchorId)
 {
@@ -641,7 +641,7 @@ void PresenterScreen::ProcessLayout (
     {
         Reference<container::XHierarchicalNameAccess> xLayoutNode (
             rConfiguration.GetConfigurationNode(
-                "Presenter/Layouts/"+rsLayoutName),
+                OUString::Concat("Presenter/Layouts/")+rsLayoutName),
             UNO_QUERY_THROW);
 
         // Read the parent layout first, if one is referenced.

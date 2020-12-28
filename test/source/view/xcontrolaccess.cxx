@@ -39,7 +39,7 @@ void XControlAccess::testGetControl()
 
     uno::Reference<drawing::XShapes> xShapes(xDP, uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape(
-        helper::form::createControlShape(xComponent, "CommandButton", 10000, 50000, 100, 100),
+        helper::form::createControlShape(xComponent, u"CommandButton", 10000, 50000, 100, 100),
         uno::UNO_QUERY_THROW);
 
     xShapes->add(xShape);

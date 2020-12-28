@@ -24,6 +24,7 @@
 #include <map>
 #include <memory>
 #include <set>
+#include <string_view>
 
 #include <svx/svdmark.hxx>
 #include <svx/svdobj.hxx>
@@ -249,7 +250,7 @@ private:
         const css::uno::Reference< css::beans::XPropertySet >& _rxField,
         const css::uno::Reference< css::util::XNumberFormats >& _rxNumberFormats,
         SdrObjKind _nControlObjectID,
-        const OUString& _rFieldPostfix,
+        std::u16string_view _rFieldPostfix,
         SdrInventor _nInventor,
         SdrObjKind _nLabelObjectID,
 
@@ -268,7 +269,7 @@ private:
         const css::uno::Reference< css::beans::XPropertySet >& _rxField,
         const css::uno::Reference< css::util::XNumberFormats >& _rxNumberFormats,
         SdrObjKind _nControlObjectID,
-        const OUString& _rFieldPostfix,
+        std::u16string_view _rFieldPostfix,
         std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpLabel,
         std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpControl,
         const css::uno::Reference< css::sdbc::XDataSource >& _rxDataSource,

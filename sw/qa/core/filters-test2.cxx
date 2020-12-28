@@ -122,7 +122,7 @@ bool SwFiltersTest2::filter(const OUString& rFilter, const OUString& rURL,
 
 void SwFiltersTest2::testCVEs()
 {
-    testDir("MS WinWord 6.0", m_directories.getURLFromSrc("/sw/qa/core/data/ww6/"), sWW6);
+    testDir("MS WinWord 6.0", m_directories.getURLFromSrc(u"/sw/qa/core/data/ww6/"), sWW6);
 }
 
 void SwFiltersTest2::setUp()

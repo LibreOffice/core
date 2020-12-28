@@ -38,6 +38,8 @@
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <memory>
 #include <set>
+#include <string_view>
+
 #include <o3tl/typed_flags_set.hxx>
 #include <functional>
 #include <sfx2/AccessibilityIssue.hxx>
@@ -467,7 +469,7 @@ public:
     void                        AvoidRecentDocs(bool bAvoid) { mbAvoidRecentDocs = bAvoid; }
 
     /// On first error ask user if import should continue; return saved answer.
-    bool                        IsContinueImportOnFilterExceptions(const OUString& aErrMessage);
+    bool                        IsContinueImportOnFilterExceptions(std::u16string_view aErrMessage);
 
     // Transfer IFace
     bool                        IsAbortingImport() const;

@@ -40,6 +40,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <optional>
+#include <string_view>
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
@@ -94,9 +95,9 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     void implCollectXhpFiles( const OUString& aDir,
         std::vector< OUString >& o_rXhpFileVector );
 
-    ::std::optional<HelpBackendDb::Data> readDataFromDb(OUString const & url);
-    bool hasActiveEntry(OUString const & url);
-    bool activateEntry(OUString const & url);
+    ::std::optional<HelpBackendDb::Data> readDataFromDb(std::u16string_view url);
+    bool hasActiveEntry(std::u16string_view url);
+    bool activateEntry(std::u16string_view url);
 
     Reference< ucb::XSimpleFileAccess3 > const & getFileAccess();
     Reference< ucb::XSimpleFileAccess3 > m_xSFA;
@@ -221,7 +222,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 }
 
 ::std::optional<HelpBackendDb::Data> BackendImpl::readDataFromDb(
-    OUString const & url)
+    std::u16string_view url)
 {
     ::std::optional<HelpBackendDb::Data> data;
     if (m_backendDb)
@@ -229,14 +230,14 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     return data;
 }
 
-bool BackendImpl::hasActiveEntry(OUString const & url)
+bool BackendImpl::hasActiveEntry(std::u16string_view url)
 {
     if (m_backendDb)
         return m_backendDb->hasActiveEntry(url);
     return false;
 }
 
-bool BackendImpl::activateEntry(OUString const & url)
+bool BackendImpl::activateEntry(std::u16string_view url)
 {
     if (m_backendDb)
         return m_backendDb->activateEntry(url);

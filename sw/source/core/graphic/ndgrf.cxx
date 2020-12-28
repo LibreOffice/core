@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <hintids.hxx>
 #include <tools/helpers.hxx>
 #include <tools/urlobj.hxx>
@@ -168,7 +172,7 @@ bool SwGrfNode::ReRead(
                     nNewType = sfx2::SvBaseLinkObjectType::ClientDde;
                 else
                 {
-                    sfx2::MakeLnkName( sCmd, nullptr, sURLLink, OUString(), &rFltName );
+                    sfx2::MakeLnkName( sCmd, nullptr, sURLLink, std::u16string_view(), &rFltName );
                     nNewType = sfx2::SvBaseLinkObjectType::ClientGraphic;
                 }
 

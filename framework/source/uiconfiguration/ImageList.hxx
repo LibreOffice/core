@@ -21,6 +21,8 @@
 #define FRAMEWORK_SOURCE_UICONFIGURATION_IMAGELIST_HXX
 
 #include <vcl/image.hxx>
+
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -67,7 +69,7 @@ private:
     OUString               maPrefix;
 
     sal_uInt16  ImplGetImageId( const OUString& rImageName ) const;
-    void ImplAddImage( const OUString &aPrefix, const OUString &aName, sal_uInt16 nId, const Image &aImage );
+    void ImplAddImage( std::u16string_view aPrefix, const OUString &aName, sal_uInt16 nId, const Image &aImage );
     void ImplRemoveImage( sal_uInt16 nPos );
 };
 

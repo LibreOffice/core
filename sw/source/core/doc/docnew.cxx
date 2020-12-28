@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <mutex>
+#include <string_view>
 
 #include <config_features.h>
 
@@ -932,7 +933,7 @@ SfxObjectShell* SwDoc::CreateCopy( bool bCallInitNew, bool bEmpty ) const
 }
 
 // save bulk letters as single documents
-static OUString lcl_FindUniqueName(SwWrtShell* pTargetShell, const OUString& rStartingPageDesc, sal_uLong nDocNo )
+static OUString lcl_FindUniqueName(SwWrtShell* pTargetShell, std::u16string_view rStartingPageDesc, sal_uLong nDocNo )
 {
     do
     {

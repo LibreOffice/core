@@ -28,6 +28,7 @@
 
 #include <vector>
 #include <memory>
+#include <string_view>
 
 #include "sddllapi.h"
 #include "pres.hxx"
@@ -267,7 +268,7 @@ public:
     SAL_DLLPRIVATE virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum) override;
 
     SAL_DLLPRIVATE void                RemoveUnnecessaryMasterPages( SdPage* pMaster=nullptr, bool bOnlyDuplicatePages=false, bool bUndo=true );
-    void   SetMasterPage(sal_uInt16 nSdPageNum, const OUString& rLayoutName,
+    void   SetMasterPage(sal_uInt16 nSdPageNum, std::u16string_view rLayoutName,
                                       SdDrawDocument* pSourceDoc, bool bMaster, bool bCheckMasters);
 
     SdDrawDocument* OpenBookmarkDoc(const OUString& rBookmarkFile);
@@ -594,7 +595,8 @@ public:
      */
     SdStyleSheetPool* GetSdStyleSheetPool() const;
 
-    SAL_DLLPRIVATE void UpdatePageRelativeURLs(const OUString& rOldName, const OUString& rNewName);
+    SAL_DLLPRIVATE void UpdatePageRelativeURLs(
+        const OUString& rOldName, std::u16string_view rNewName);
 
     SAL_DLLPRIVATE static void SetCalcFieldValueHdl( ::Outliner* pOutliner);
 

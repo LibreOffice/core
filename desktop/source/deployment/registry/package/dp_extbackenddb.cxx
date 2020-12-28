@@ -68,8 +68,8 @@ void ExtensionBackendDb::addEntry(OUString const & url, Data const & data)
         if (!activateEntry(url))
         {
             Reference<css::xml::dom::XNode> extensionNodeNode = writeKeyElement(url);
-            writeVectorOfPair( data.items, "extension-items", "item",
-                "url", "media-type", extensionNodeNode);
+            writeVectorOfPair( data.items, u"extension-items", u"item",
+                u"url", u"media-type", extensionNodeNode);
             save();
         }
     }
@@ -82,7 +82,7 @@ void ExtensionBackendDb::addEntry(OUString const & url, Data const & data)
     }
 }
 
-ExtensionBackendDb::Data ExtensionBackendDb::getEntry(OUString const & url)
+ExtensionBackendDb::Data ExtensionBackendDb::getEntry(std::u16string_view url)
 {
     try
     {
@@ -92,8 +92,8 @@ ExtensionBackendDb::Data ExtensionBackendDb::getEntry(OUString const & url)
         if (aNode.is())
         {
             retData.items =
-                readVectorOfPair( aNode, "extension-items", "item",
-                    "url", "media-type");
+                readVectorOfPair( aNode, u"extension-items", u"item",
+                    u"url", u"media-type");
         }
         return retData;
     }

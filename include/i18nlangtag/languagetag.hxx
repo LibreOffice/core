@@ -18,6 +18,7 @@
 #include <i18nlangtag/lang.h>
 
 #include <memory>
+#include <string_view>
 #include <vector>
 
 /** The ISO 639-2 code reserved for local use used to indicate that a
@@ -99,7 +100,7 @@ public:
         distinct attributes.
      */
     explicit LanguageTag( const OUString& rBcp47, const OUString& rLanguage,
-                          const OUString& rScript, const OUString& rCountry );
+                          std::u16string_view rScript, const OUString& rCountry );
 
     /** Init LanguageTag with rtl_Locale.
 

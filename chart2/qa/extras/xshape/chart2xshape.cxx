@@ -43,7 +43,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    void compareAgainstReference(const OUString& rReferenceFile, bool bCreateReference = false);
+    void compareAgainstReference(std::u16string_view rReferenceFile, bool bCreateReference = false);
     OUString getXShapeDumpString();
     xmlDocUniquePtr getXShapeDumpXmlDoc();
 };
@@ -76,13 +76,13 @@ xmlDocUniquePtr Chart2XShapeTest::getXShapeDumpXmlDoc()
     return xmlDocUniquePtr(xmlParseDoc(reinterpret_cast<const xmlChar*>(aXmlDump.getStr())));
 }
 
-void Chart2XShapeTest::compareAgainstReference(const OUString& rReferenceFile,
+void Chart2XShapeTest::compareAgainstReference(std::u16string_view rReferenceFile,
                                                bool bCreateReference)
 {
     OUString aDump = getXShapeDumpString();
 
-    OUString aReference
-        = m_directories.getPathFromSrc("/chart2/qa/extras/xshape/data/reference/") + rReferenceFile;
+    OUString aReference = m_directories.getPathFromSrc(u"/chart2/qa/extras/xshape/data/reference/")
+                          + rReferenceFile;
     if (bCreateReference)
     {
         OString aOFile = OUStringToOString(aReference, RTL_TEXTENCODING_UTF8);
@@ -120,8 +120,8 @@ void Chart2XShapeTest::testPieChartLabels1()
         return;
 
     // inside placement for the best fit case
-    load("chart2/qa/extras/xshape/data/xlsx/", "tdf90839-1.xlsx");
-    compareAgainstReference("tdf90839-1.xml");
+    load(u"chart2/qa/extras/xshape/data/xlsx/", "tdf90839-1.xlsx");
+    compareAgainstReference(u"tdf90839-1.xml");
 }
 
 void Chart2XShapeTest::testPieChartLabels2()
@@ -132,8 +132,8 @@ void Chart2XShapeTest::testPieChartLabels2()
         return;
 
     // text wrap: wrap all text labels except one
-    load("chart2/qa/extras/xshape/data/xlsx/", "tdf90839-2.xlsx");
-    compareAgainstReference("tdf90839-2.xml");
+    load(u"chart2/qa/extras/xshape/data/xlsx/", "tdf90839-2.xlsx");
+    compareAgainstReference(u"tdf90839-2.xml");
 }
 
 void Chart2XShapeTest::testPieChartLabels3()
@@ -144,8 +144,8 @@ void Chart2XShapeTest::testPieChartLabels3()
         return;
 
     // text wrap: wrap no text label except one
-    load("chart2/qa/extras/xshape/data/xlsx/", "tdf90839-3.xlsx");
-    compareAgainstReference("tdf90839-3.xml");
+    load(u"chart2/qa/extras/xshape/data/xlsx/", "tdf90839-3.xlsx");
+    compareAgainstReference(u"tdf90839-3.xml");
 }
 
 void Chart2XShapeTest::testPieChartLabels4()
@@ -156,8 +156,8 @@ void Chart2XShapeTest::testPieChartLabels4()
         return;
 
     // data value and percent value are centered horizontally
-    load("chart2/qa/extras/xshape/data/ods/", "tdf90839-4.ods");
-    compareAgainstReference("tdf90839-4.xml");
+    load(u"chart2/qa/extras/xshape/data/ods/", "tdf90839-4.ods");
+    compareAgainstReference(u"tdf90839-4.xml");
 }
 
 void Chart2XShapeTest::testTdf76649TrendLineBug()
@@ -165,7 +165,7 @@ void Chart2XShapeTest::testTdf76649TrendLineBug()
     // This bug prevents that the trendline (regression curve) is drawn
     // if the first cell is empty. See tdf#76649 for details.
 
-    load("chart2/qa/extras/xshape/data/ods/", "tdf76649_TrendLineBug.ods");
+    load(u"chart2/qa/extras/xshape/data/ods/", "tdf76649_TrendLineBug.ods");
 
     xmlDocUniquePtr pXmlDoc = getXShapeDumpXmlDoc();
 
@@ -176,7 +176,7 @@ void Chart2XShapeTest::testTdf76649TrendLineBug()
 
 void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
 {
-    load("chart2/qa/extras/xshape/data/pptx/", "tdf88154_LabelRotatedLayout.pptx");
+    load(u"chart2/qa/extras/xshape/data/pptx/", "tdf88154_LabelRotatedLayout.pptx");
     uno::Reference<chart::XChartDocument> xChartDoc = getChartDocFromDrawImpress(0, 6);
     uno::Reference<qa::XDumper> xDumper(xChartDoc, UNO_QUERY_THROW);
     OUString rDump = xDumper->dump();

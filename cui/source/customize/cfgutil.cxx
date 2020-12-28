@@ -76,9 +76,10 @@ const char CMDURL_FPART_ONLY    [] = "FamilyName:string=";
 
 const OUStringLiteral STYLEPROP_UINAME = u"DisplayName";
 
-OUString SfxStylesInfo_Impl::generateCommand(const OUString& sFamily, const OUString& sStyle)
+OUString SfxStylesInfo_Impl::generateCommand(
+    std::u16string_view sFamily, std::u16string_view sStyle)
 {
-    return ".uno:StyleApply?Style:string="
+    return OUString::Concat(".uno:StyleApply?Style:string=")
            + sStyle
            + "&FamilyName:string="
            + sFamily;
@@ -999,10 +1000,10 @@ void CuiConfigGroupListBox::SelectMacro( const SfxMacroInfoItem *pItem )
                  pItem->GetQualifiedName() );
 }
 
-void CuiConfigGroupListBox::SelectMacro( const OUString& rBasic,
+void CuiConfigGroupListBox::SelectMacro( std::u16string_view rBasic,
          const OUString& rMacro )
 {
-    const OUString aBasicName(rBasic + " " + xImp->m_sMacros);
+    const OUString aBasicName(OUString::Concat(rBasic) + " " + xImp->m_sMacros);
     sal_Int32 nIdx {rMacro.lastIndexOf('.')};
     const OUString aMethod( rMacro.copy(nIdx+1) );
     OUString aLib;

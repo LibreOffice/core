@@ -139,7 +139,7 @@ void ScNamedRangesObj::setUp()
     CalcUnoApiTest::setUp();
     // create a calc document
     OUString aFileURL;
-    createFileURL("ScNamedRangeObj.ods", aFileURL);
+    createFileURL(u"ScNamedRangeObj.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
 }
 

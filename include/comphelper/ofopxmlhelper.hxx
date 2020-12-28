@@ -20,6 +20,10 @@
 #ifndef INCLUDED_COMPHELPER_OFOPXMLHELPER_HXX
 #define INCLUDED_COMPHELPER_OFOPXMLHELPER_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/uno/Sequence.h>
 
 #include <comphelper/comphelperdllapi.h>
@@ -40,7 +44,7 @@ namespace comphelper::OFOPXMLHelper {
     css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >
     ReadRelationsInfoSequence(
         const css::uno::Reference< css::io::XInputStream >& xInStream,
-        const OUString & aStreamName,
+        std::u16string_view aStreamName,
         const css::uno::Reference< css::uno::XComponentContext >& rContext );
 
     // returns sequence containing two entries of type sequence<StringPair>

@@ -10,6 +10,10 @@
 #ifndef INCLUDED_UNOTEST_FILTERS_TEST_HXX
 #define INCLUDED_UNOTEST_FILTERS_TEST_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <comphelper/documentconstants.hxx>
 #include <rtl/ustring.hxx>
 #include <unotest/detail/unotestdllapi.hxx>
@@ -39,7 +43,7 @@ public:
         //filter name
         const OUString &rFilter,
         //root dir of test files, must contain pass, fail, indeterminate
-        const OUString &rURL,
+        std::u16string_view rURL,
         //additional filter data for SfxFilter
         const OUString &rUserData = OUString(),
         //SfxFilterFlags for SfxFilter

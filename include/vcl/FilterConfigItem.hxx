@@ -21,6 +21,10 @@
 #ifndef INCLUDED_VCL_FILTERCONFIGITEM_HXX
 #define INCLUDED_VCL_FILTERCONFIGITEM_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <vcl/dllapi.h>
 
 #include <rtl/ustring.hxx>
@@ -45,7 +49,7 @@ class VCL_DLLPUBLIC FilterConfigItem
                             const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
                             const OUString& rPropName );
 
-    void     ImpInitTree( const OUString& rTree );
+    void     ImpInitTree( std::u16string_view rTree );
 
 
     static css::beans::PropertyValue* GetPropertyValue(
@@ -57,9 +61,9 @@ class VCL_DLLPUBLIC FilterConfigItem
 
 public:
 
-    FilterConfigItem( const OUString& rSubTree );
+    FilterConfigItem( std::u16string_view rSubTree );
     FilterConfigItem( css::uno::Sequence< css::beans::PropertyValue > const * pFilterData );
-    FilterConfigItem( const OUString& rSubTree, css::uno::Sequence< css::beans::PropertyValue > const * pFilterData );
+    FilterConfigItem( std::u16string_view rSubTree, css::uno::Sequence< css::beans::PropertyValue > const * pFilterData );
     /// Writes config in destructor
     ~FilterConfigItem();
     /// Writes config and sets unmodified state again.

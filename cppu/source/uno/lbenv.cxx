@@ -118,7 +118,7 @@ struct EnvironmentsData
     ~EnvironmentsData();
 
     void getEnvironment(
-        uno_Environment ** ppEnv, const OUString & rEnvDcp, void * pContext );
+        uno_Environment ** ppEnv, std::u16string_view rEnvDcp, void * pContext );
     void registerEnvironment( uno_Environment ** ppEnv );
     void getRegisteredEnvironments(
         uno_Environment *** pppEnvs, sal_Int32 * pnLen,
@@ -908,7 +908,7 @@ EnvironmentsData::~EnvironmentsData()
 
 
 void EnvironmentsData::getEnvironment(
-    uno_Environment ** ppEnv, const OUString & rEnvDcp, void * pContext )
+    uno_Environment ** ppEnv, std::u16string_view rEnvDcp, void * pContext )
 {
     if (*ppEnv)
     {

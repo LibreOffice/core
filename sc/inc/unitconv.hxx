@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 
 #include <map>
+#include <string_view>
 
 class ScUnitConverterData
 {
@@ -30,14 +31,14 @@ class ScUnitConverterData
     double mfValue;
 
 public:
-    ScUnitConverterData(const OUString& rFromUnit, const OUString& rToUnit, double fValue);
+    ScUnitConverterData(std::u16string_view rFromUnit, std::u16string_view rToUnit, double fValue);
     ScUnitConverterData(const ScUnitConverterData&) = default;
     ScUnitConverterData& operator=(const ScUnitConverterData&) = delete;
 
     double GetValue() const { return mfValue; }
     const OUString& GetIndexString() const { return maIndexString; }
 
-    static OUString BuildIndexString(const OUString& rFromUnit, const OUString& rToUnit);
+    static OUString BuildIndexString(std::u16string_view rFromUnit, std::u16string_view rToUnit);
 };
 
 class ScUnitConverter
@@ -51,7 +52,7 @@ public:
     const ScUnitConverter& operator=(const ScUnitConverter&) = delete;
     ~ScUnitConverter();
 
-    bool GetValue(double& fValue, const OUString& rFromUnit, const OUString& rToUnit) const;
+    bool GetValue(double& fValue, std::u16string_view rFromUnit, std::u16string_view rToUnit) const;
 };
 
 #endif

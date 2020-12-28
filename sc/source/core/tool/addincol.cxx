@@ -941,7 +941,7 @@ static const ScAddInArgDesc* lcl_FindArgDesc( const ScUnoAddInFuncData& rFuncDat
 }
 
 void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface>& xInterface,
-                                            const OUString& rServiceName )
+                                            std::u16string_view rServiceName )
 {
     uno::Reference<lang::XLocalizable> xLoc( xInterface, uno::UNO_QUERY );
     if ( xLoc.is() )        // optional in new add-ins
@@ -980,7 +980,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
             OUString aFuncU = xFunc->getName();
 
             // stored function name: (service name).(function)
-            OUString aFuncName = rServiceName + "." + aFuncU;
+            OUString aFuncName = OUString::Concat(rServiceName) + "." + aFuncU;
 
             // internal names are skipped because no FuncData exists
             ScUnoAddInFuncData* pOldData = const_cast<ScUnoAddInFuncData*>( GetFuncData( aFuncName ) );

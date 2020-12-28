@@ -29,6 +29,7 @@
 #include "license_dialog.hxx"
 
 #include <functional>
+#include <string_view>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -64,7 +65,7 @@ struct LicenseDialogImpl : public weld::GenericDialogController
     DECL_LINK(SizeAllocHdl, const Size&, void);
 
     LicenseDialogImpl(weld::Window * pParent,
-                      const OUString & sExtensionName,
+                      std::u16string_view sExtensionName,
                       const OUString & sLicenseText);
 
     bool IsEndReached() const;
@@ -74,7 +75,7 @@ struct LicenseDialogImpl : public weld::GenericDialogController
 
 LicenseDialogImpl::LicenseDialogImpl(
     weld::Window * pParent,
-    const OUString & sExtensionName,
+    std::u16string_view sExtensionName,
     const OUString & sLicenseText)
     : GenericDialogController(pParent, "desktop/ui/licensedialog.ui", "LicenseDialog")
     , m_bLicenseRead(false)

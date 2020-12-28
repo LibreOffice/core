@@ -69,6 +69,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <string_view>
 #include <vector>
 
 #include "dp_extbackenddb.hxx"
@@ -214,8 +215,8 @@ class BackendImpl : public ImplBaseT
     std::unique_ptr<ExtensionBackendDb> m_backendDb;
 
     void addDataToDb(OUString const & url, ExtensionBackendDb::Data const & data);
-    ExtensionBackendDb::Data readDataFromDb(OUString const & url);
-    void revokeEntryFromDb(OUString const & url);
+    ExtensionBackendDb::Data readDataFromDb(std::u16string_view url);
+    void revokeEntryFromDb(std::u16string_view url);
 
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
@@ -419,7 +420,7 @@ void BackendImpl::addDataToDb(
 }
 
 ExtensionBackendDb::Data BackendImpl::readDataFromDb(
-    OUString const & url)
+    std::u16string_view url)
 {
     ExtensionBackendDb::Data data;
     if (m_backendDb)
@@ -427,7 +428,7 @@ ExtensionBackendDb::Data BackendImpl::readDataFromDb(
     return data;
 }
 
-void BackendImpl::revokeEntryFromDb(OUString const & url)
+void BackendImpl::revokeEntryFromDb(std::u16string_view url)
 {
     if (m_backendDb)
         m_backendDb->revokeEntry(url);

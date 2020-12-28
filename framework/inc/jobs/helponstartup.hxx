@@ -20,6 +20,10 @@
 #ifndef INCLUDED_FRAMEWORK_INC_JOBS_HELPONSTARTUP_HXX
 #define INCLUDED_FRAMEWORK_INC_JOBS_HELPONSTARTUP_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/task/XJob.hpp>
@@ -175,9 +179,9 @@ class HelpOnStartup final : public ::cppu::WeakImplHelper< css::lang::XServiceIn
                     e.g. "vnd.sun.star.help://swriter/?Language=en-US&System=WIN"
                     or   "vnd.sun.star.help://swriter/67351?Language=en-US&System=WIN"
          */
-        static OUString ist_createHelpURL(const OUString& sBaseURL,
-                                                 const OUString& sLocale ,
-                                                 const OUString& sSystem );
+        static OUString ist_createHelpURL(std::u16string_view sBaseURL,
+                                                 std::u16string_view sLocale ,
+                                                 std::u16string_view sSystem );
 };
 
 } // namespace framework

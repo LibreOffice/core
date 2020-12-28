@@ -20,6 +20,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_MYSQL_YTABLE_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_MYSQL_YTABLE_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <connectivity/TTableHelper.hxx>
 #include <comphelper/IdPropArrayHelper.hxx>
 
@@ -101,7 +105,7 @@ namespace connectivity::mysql
 
             // some methods to alter table structures
             void alterColumnType(sal_Int32 nNewType,const OUString& _rColName,const css::uno::Reference< css::beans::XPropertySet >& _xDescriptor);
-            void alterDefaultValue(const OUString& _sNewDefault,const OUString& _rColName);
+            void alterDefaultValue(std::u16string_view _sNewDefault,const OUString& _rColName);
             void dropDefaultValue(const OUString& _sNewDefault);
 
             virtual OUString getTypeCreatePattern() const override;

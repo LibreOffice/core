@@ -33,6 +33,7 @@
 
 #include "acceptor.hxx"
 #include <memory>
+#include <string_view>
 
 #define IMPLEMENTATION_NAME "com.sun.star.comp.io.Acceptor"
 #define SERVICE_NAME "com.sun.star.connection.Acceptor"
@@ -89,11 +90,11 @@ namespace {
 struct BeingInAccept
 {
     /// @throws AlreadyAcceptingException
-    BeingInAccept( bool *pFlag,const OUString & sConnectionDescription  )
+    BeingInAccept( bool *pFlag,std::u16string_view sConnectionDescription  )
         : m_pFlag( pFlag )
         {
               if( *m_pFlag )
-                  throw AlreadyAcceptingException( "AlreadyAcceptingException :" + sConnectionDescription );
+                  throw AlreadyAcceptingException( OUString::Concat("AlreadyAcceptingException :") + sConnectionDescription );
               *m_pFlag = true;
         }
     ~BeingInAccept()

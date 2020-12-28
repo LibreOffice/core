@@ -70,7 +70,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLineBreak)
     aStream.Seek(0);
 
     tools::SvRef<TestHTMLParser> xParser = new TestHTMLParser(aStream);
-    xParser->SetNamespace("reqif-xhtml");
+    xParser->SetNamespace(u"reqif-xhtml");
     xParser->CallParser();
 
     // This was 2, <br></br> was interpreted as 2 line breaks in XHTML mode.

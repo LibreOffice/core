@@ -12,6 +12,7 @@
 
 #include "wpftqahelperdllapi.h"
 
+#include <string_view>
 #include <unordered_map>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -49,8 +50,8 @@ public:
     explicit WpftFilterTestBase(const OUString& rFactoryURL);
 
 protected:
-    void doTest(const OUString& rFilter, const OUString& rPath);
-    void doTest(const OUString& rFilter, const OUString& rPath,
+    void doTest(const OUString& rFilter, std::u16string_view rPath);
+    void doTest(const OUString& rFilter, std::u16string_view rPath,
                 const WpftOptionalMap_t& rOptionalMap);
 
 private:

@@ -23,6 +23,8 @@
 #include <algorithm>
 #include <vector>
 #include <limits>
+#include <string_view>
+
 #include <tools/ref.hxx>
 #include <filter.hxx>
 
@@ -228,7 +230,7 @@ public:
     /** Returns the built-in range name for an HTML table, specified by table index. */
     static OUString       GetNameFromHTMLIndex( sal_uInt32 nIndex );
     /** Returns the built-in range name for an HTML table, specified by table name. */
-    static OUString       GetNameFromHTMLName( const OUString& rTabName );
+    static OUString       GetNameFromHTMLName( std::u16string_view rTabName );
 
     /** Returns true, if rSource is the built-in range name for an HTML document. */
     static bool         IsHTMLDocName( const OUString& rSource );

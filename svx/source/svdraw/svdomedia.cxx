@@ -268,7 +268,7 @@ void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream
         ::avmedia::CreateMediaTempFile(
             xStream,
             tempFileURL,
-            ""));
+            u""));
 
     if (bSuccess)
     {

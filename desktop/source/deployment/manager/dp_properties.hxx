@@ -23,6 +23,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <optional>
+#include <string_view>
 
 namespace dp_manager
 {
@@ -37,11 +38,11 @@ class ExtensionProperties final
     static OUString getPropertyValue(css::beans::NamedValue const& v);
 
 public:
-    ExtensionProperties(OUString const& urlExtension,
+    ExtensionProperties(std::u16string_view urlExtension,
                         css::uno::Reference<css::ucb::XCommandEnvironment> const& xCmdEnv,
                         css::uno::Reference<css::uno::XComponentContext> const& xContext);
 
-    ExtensionProperties(OUString const& urlExtension,
+    ExtensionProperties(std::u16string_view urlExtension,
                         css::uno::Sequence<css::beans::NamedValue> const& properties,
                         css::uno::Reference<css::ucb::XCommandEnvironment> const& xCmdEnv,
                         css::uno::Reference<css::uno::XComponentContext> const& xContext);

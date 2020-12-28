@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <string_view>
 
 #include <com/sun/star/container/XNamed.hpp>
 #include <comphelper/servicehelper.hxx>
@@ -47,9 +48,9 @@ using namespace ::com::sun::star::uno;
 namespace
 {
 
-OUString lcl_FullPathName(const OUString& sPath, const OUString& sName)
+OUString lcl_FullPathName(std::u16string_view sPath, std::u16string_view sName)
 {
-    return sPath + "/" + sName + SwGlossaries::GetExtension();
+    return OUString::Concat(sPath) + "/" + sName + SwGlossaries::GetExtension();
 }
 
 OUString lcl_CheckFileName( const OUString& rNewFilePath,

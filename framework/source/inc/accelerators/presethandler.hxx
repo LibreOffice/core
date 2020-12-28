@@ -20,6 +20,10 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_PRESETHANDLER_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_PRESETHANDLER_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <accelerators/storageholder.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>
@@ -229,8 +233,8 @@ class PresetHandler
             @throw  css::io::IOException
                     if copying failed.
          */
-        void copyPresetToTarget(const OUString& sPreset,
-                                const OUString& sTarget);
+        void copyPresetToTarget(std::u16string_view sPreset,
+                                std::u16string_view sTarget);
 
         /** @short  open the specified preset as stream object
                     and return it.
@@ -245,7 +249,7 @@ class PresetHandler
 
             @return The opened preset stream ... or NULL if the preset does not exists.
          */
-        css::uno::Reference< css::io::XStream > openPreset(const OUString& sPreset);
+        css::uno::Reference< css::io::XStream > openPreset(std::u16string_view sPreset);
 
         /** @short  open the specified target as stream object
                     and return it.
@@ -262,7 +266,7 @@ class PresetHandler
                     or couldn't be created as new one.
          */
         css::uno::Reference< css::io::XStream > openTarget(
-                const OUString& sTarget, sal_Int32 nMode);
+                std::u16string_view sTarget, sal_Int32 nMode);
 
         /** @short  do anything which is necessary to flush all changes
                     back to disk.

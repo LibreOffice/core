@@ -93,10 +93,10 @@ OUString SAL_CALL IndexEntrySupplier::getIndexCharacter( const OUString& rIndexE
         getIndexCharacter( rIndexEntry, rLocale, rSortAlgorithm );
 }
 
-bool IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(const OUString& name)
+bool IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(std::u16string_view name)
 {
     Reference < XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.i18n.IndexEntrySupplier_" + name, m_xContext);
+            OUString::Concat("com.sun.star.i18n.IndexEntrySupplier_") + name, m_xContext);
 
     if ( xI.is() ) {
         xIES.set( xI, UNO_QUERY );
@@ -129,13 +129,15 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
             // Load service with name <base>_<lang>_<country>_<algorithm>
             // or <base>_<bcp47>_<algorithm> and fallbacks.
             bLoaded = createLocaleSpecificIndexEntrySupplier(
-                    LocaleDataImpl::getFirstLocaleServiceName( rLocale) + "_" + aSortAlgorithm);
+                    OUString(
+                        LocaleDataImpl::getFirstLocaleServiceName( rLocale) + "_"
+                        + aSortAlgorithm));
             if (!bLoaded)
             {
                 ::std::vector< OUString > aFallbacks( LocaleDataImpl::getFallbackLocaleServiceNames( rLocale));
                 for (auto const& fallback : aFallbacks)
                 {
-                    bLoaded = createLocaleSpecificIndexEntrySupplier(fallback + "_" + aSortAlgorithm);
+                    bLoaded = createLocaleSpecificIndexEntrySupplier(OUString(fallback + "_" + aSortAlgorithm));
                     if (bLoaded)
                         break;
                 }
@@ -149,7 +151,7 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
         if (!bLoaded)
         {
             // load default service with name <base>_Unicode
-            bLoaded = createLocaleSpecificIndexEntrySupplier( "Unicode");
+            bLoaded = createLocaleSpecificIndexEntrySupplier( u"Unicode");
             if (!bLoaded)
             {
                 throw RuntimeException();   // could not load any service

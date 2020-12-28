@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <svtools/prnsetup.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
@@ -121,7 +125,7 @@ void ImplPrnDlgUpdateQueueInfo( const weld::ComboBox* pBox, QueueInfo& rInfo )
 }
 
 
-static OUString ImplPrnDlgAddString(const OUString& rStr, const OUString& rAddStr)
+static OUString ImplPrnDlgAddString(const OUString& rStr, std::u16string_view rAddStr)
 {
     OUString aStr(rStr);
     if (!aStr.isEmpty())

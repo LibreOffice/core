@@ -27,6 +27,7 @@
 
 #include <memory>
 #include <map>
+#include <string_view>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -169,7 +170,7 @@ public:
      * Create a unique name that's not taken by any existing chart listener
      * objects.  The name consists of a prefix given followed by a number.
      */
-    OUString getUniqueName(const OUString& rPrefix) const;
+    OUString getUniqueName(std::u16string_view rPrefix) const;
 
     void            ChangeListening( const OUString& rName,
                                     const ScRangeListRef& rRangeListRef );

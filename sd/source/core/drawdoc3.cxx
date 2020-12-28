@@ -1367,7 +1367,7 @@ static OUString createNewMasterPageLayoutName(const SdDrawDocument& rDoc)
 }
 
 void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
-                                   const OUString& rLayoutName,
+                                   std::u16string_view rLayoutName,
                                    SdDrawDocument* pSourceDoc,
                                    bool bMaster,
                                    bool bCheckMasters)
@@ -1408,7 +1408,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         bool bLayoutReloaded = false;   // Was ex. layout reloaded?
 
         // LayoutName, Page and Notes page
-        if (rLayoutName.isEmpty())
+        if (rLayoutName.empty())
         {
             // No LayoutName: take first MasterPage
             pMaster = pSourceDoc->GetMasterSdPage(0, PageKind::Standard);
@@ -1416,7 +1416,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         }
         else
         {
-            OUString aSearchFor = rLayoutName + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
+            OUString aSearchFor
+                = OUString::Concat(rLayoutName) + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE;
 
             for (sal_uInt16 nMP = 0; nMP < pSourceDoc->GetMasterPageCount(); ++nMP)
             {

@@ -159,14 +159,14 @@ OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference<
 
 OUString PersistentWindowState::implst_getWindowStateFromConfig(
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-        const OUString& sModuleName)
+        std::u16string_view sModuleName)
 {
     OUString sWindowState;
     try
     {
         ::comphelper::ConfigurationHelper::readDirectKey(rxContext,
             "org.openoffice.Setup/",
-            "Office/Factories/*[\"" + sModuleName + "\"]",
+            OUString::Concat("Office/Factories/*[\"") + sModuleName + "\"]",
             "ooSetupFactoryWindowAttributes",
             ::comphelper::EConfigurationModes::ReadOnly) >>= sWindowState;
     }
@@ -180,13 +180,13 @@ OUString PersistentWindowState::implst_getWindowStateFromConfig(
 
 void PersistentWindowState::implst_setWindowStateOnConfig(
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-        const OUString& sModuleName, const OUString& sWindowState)
+        std::u16string_view sModuleName, const OUString& sWindowState)
 {
     try
     {
         ::comphelper::ConfigurationHelper::writeDirectKey(rxContext,
             "org.openoffice.Setup/",
-            "Office/Factories/*[\"" + sModuleName + "\"]",
+            OUString::Concat("Office/Factories/*[\"") + sModuleName + "\"]",
             "ooSetupFactoryWindowAttributes",
             css::uno::makeAny(sWindowState),
             ::comphelper::EConfigurationModes::Standard);

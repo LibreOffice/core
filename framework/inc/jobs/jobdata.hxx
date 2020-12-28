@@ -25,6 +25,7 @@
 
 #include <rtl/ustring.hxx>
 
+#include <string_view>
 #include <vector>
 
 namespace framework{
@@ -190,7 +191,7 @@ class JobData final
         void                                         disableJob     (                                                                  );
 
         static std::vector< OUString > getEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                                                const OUString&                                    sEvent );
+                                                                std::u16string_view                                sEvent );
 
         static void appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >&              rxContext,
                                                const OUString&                                                 sEvent ,

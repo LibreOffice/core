@@ -405,7 +405,7 @@ private:
 
     /// make reference name for a sequence field
     static OUString MakeSequenceRefName(sal_Int16 nSeqNo,
-                                              const OUString& rSeqName);
+                                              std::u16string_view rSeqName);
 
     std::unique_ptr<XMLPropertyState> pCombinedCharactersPropertyState;
 

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <test/xmltesttools.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <vcl/gdimtf.hxx>
@@ -29,7 +33,7 @@ class WmfTest : public test::BootstrapFixture, public XmlTestTools
 {
     OUString maDataUrl;
 
-    OUString getFullUrl(const OUString& sFileName)
+    OUString getFullUrl(std::u16string_view sFileName)
     {
         return m_directories.getURLFromSrc(maDataUrl) + sFileName;
     }
@@ -66,7 +70,7 @@ public:
 
 void WmfTest::testNonPlaceableWmf()
 {
-    SvFileStream aFileStream(getFullUrl("visio_import_source.wmf"), StreamMode::READ);
+    SvFileStream aFileStream(getFullUrl(u"visio_import_source.wmf"), StreamMode::READ);
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
@@ -95,7 +99,7 @@ void WmfTest::testNonPlaceableWmf()
 
 void WmfTest::testSine()
 {
-    SvFileStream aFileStream(getFullUrl("sine_wave.emf"), StreamMode::READ);
+    SvFileStream aFileStream(getFullUrl(u"sine_wave.emf"), StreamMode::READ);
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
@@ -111,7 +115,7 @@ void WmfTest::testSine()
 
 void WmfTest::testEmfProblem()
 {
-    SvFileStream aFileStream(getFullUrl("computer_mail.emf"), StreamMode::READ);
+    SvFileStream aFileStream(getFullUrl(u"computer_mail.emf"), StreamMode::READ);
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
@@ -130,7 +134,7 @@ void WmfTest::testEmfProblem()
 
 void WmfTest::testEmfLineStyles()
 {
-    SvFileStream aFileStream(getFullUrl("line_styles.emf"), StreamMode::READ);
+    SvFileStream aFileStream(getFullUrl(u"line_styles.emf"), StreamMode::READ);
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
@@ -190,7 +194,7 @@ void WmfTest::testEmfLineStyles()
 
 void WmfTest::testWorldTransformFontSize()
 {
-    SvFileStream aFileStream(getFullUrl("image1.emf"), StreamMode::READ);
+    SvFileStream aFileStream(getFullUrl(u"image1.emf"), StreamMode::READ);
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
@@ -220,7 +224,7 @@ void WmfTest::testWorldTransformFontSize()
 
 void WmfTest::testTdf93750()
 {
-    SvFileStream aFileStream(getFullUrl("tdf93750.emf"), StreamMode::READ);
+    SvFileStream aFileStream(getFullUrl(u"tdf93750.emf"), StreamMode::READ);
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 

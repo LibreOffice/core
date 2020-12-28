@@ -57,7 +57,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
 {
     // Load a document containing a custom shape.
     test::Directories aDirectories;
-    OUString aURL = aDirectories.getURLFromSrc("svx/qa/unit/data/shadow-scale-origin.pptx");
+    OUString aURL = aDirectories.getURLFromSrc(u"svx/qa/unit/data/shadow-scale-origin.pptx");
     getComponent() = loadFromDesktop(aURL);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),

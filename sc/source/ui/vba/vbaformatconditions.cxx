@@ -238,7 +238,7 @@ ScVbaFormatConditions::getStyleName()
     if ( !pStyles )
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     uno::Sequence< OUString > sCellStyleNames = pStyles->getStyleNames();
-    return ContainerUtilities::getUniqueName(sCellStyleNames, "Excel_CondFormat", "_");
+    return ContainerUtilities::getUniqueName(sCellStyleNames, "Excel_CondFormat", u"_");
 }
 
 void

@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <sfx2/lokhelper.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -331,7 +335,7 @@ static OString lcl_generateJSON(const SfxViewShell* pView, const boost::property
     return OString(aString.c_str(), aString.size()).trim();
 }
 
-static inline OString lcl_generateJSON(const SfxViewShell* pView, const OString& rKey,
+static inline OString lcl_generateJSON(const SfxViewShell* pView, std::string_view rKey,
                                        const OString& rPayload)
 {
     assert(pView != nullptr && "pView must be valid");
@@ -341,7 +345,7 @@ static inline OString lcl_generateJSON(const SfxViewShell* pView, const OString&
 }
 
 void SfxLokHelper::notifyOtherView(const SfxViewShell* pThisView, SfxViewShell const* pOtherView,
-                                   int nType, const OString& rKey, const OString& rPayload)
+                                   int nType, std::string_view rKey, const OString& rPayload)
 {
     assert(pThisView != nullptr && "pThisView must be valid");
     if (DisableCallbacks::disabled())
@@ -361,7 +365,7 @@ void SfxLokHelper::notifyOtherView(const SfxViewShell* pThisView, SfxViewShell c
     pOtherView->libreOfficeKitViewCallback(nType, lcl_generateJSON(pThisView, rTree).getStr());
 }
 
-void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, const OString& rKey,
+void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, std::string_view rKey,
                                     const OString& rPayload)
 {
     assert(pThisView != nullptr && "pThisView must be valid");

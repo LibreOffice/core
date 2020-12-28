@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <uielement/uicommanddescription.hxx>
 
 #include <properties.h>
@@ -68,7 +72,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
 {
     osl::Mutex m_aMutex;
     public:
-                                  ConfigurationAccess_UICommand( const OUString& aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XComponentContext >& rxContext );
+                                  ConfigurationAccess_UICommand( std::u16string_view aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XComponentContext >& rxContext );
         virtual                   ~ConfigurationAccess_UICommand() override;
 
         // XNameAccess
@@ -153,10 +157,12 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
 
 //  XInterface, XTypeProvider
 
-ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const OUString& aModuleName, const Reference< XNameAccess >& rGenericUICommands, const Reference< XComponentContext>& rxContext ) :
+ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( std::u16string_view aModuleName, const Reference< XNameAccess >& rGenericUICommands, const Reference< XComponentContext>& rxContext ) :
     // Create configuration hierarchical access name
-    m_aConfigCmdAccess( CONFIGURATION_ROOT_ACCESS + aModuleName + "/UserInterface/Commands"),
-    m_aConfigPopupAccess( CONFIGURATION_ROOT_ACCESS + aModuleName + "/UserInterface/Popups"),
+    m_aConfigCmdAccess(
+        OUString::Concat(CONFIGURATION_ROOT_ACCESS) + aModuleName + "/UserInterface/Commands"),
+    m_aConfigPopupAccess(
+        OUString::Concat(CONFIGURATION_ROOT_ACCESS) + aModuleName + "/UserInterface/Popups"),
     m_aPropProperties( "Properties" ),
     m_xGenericUICommands( rGenericUICommands ),
     m_xConfigProvider( theDefaultProvider::get( rxContext ) ),
@@ -559,7 +565,7 @@ void UICommandDescription::ensureGenericUICommandsForLanguage(const LanguageTag&
     if (xGenericUICommands == m_xGenericUICommands.end())
     {
         Reference< XNameAccess > xEmpty;
-        m_xGenericUICommands[rLanguage] = new ConfigurationAccess_UICommand( "GenericCommands", xEmpty, m_xContext );
+        m_xGenericUICommands[rLanguage] = new ConfigurationAccess_UICommand( u"GenericCommands", xEmpty, m_xContext );
     }
 }
 

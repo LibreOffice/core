@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <hintids.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/string.hxx>
@@ -818,7 +822,7 @@ static bool lcl_html_setEvents(
     return true;
 }
 
-static void lcl_html_getEvents( const OUString& rOption, const OUString& rValue,
+static void lcl_html_getEvents( const OUString& rOption, std::u16string_view rValue,
                                 std::vector<OUString>& rUnoMacroTable,
                                 std::vector<OUString>& rUnoMacroParamTable )
 {

@@ -449,8 +449,8 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     }
 }
 
-void PresetHandler::copyPresetToTarget(const OUString& sPreset,
-                                       const OUString& sTarget)
+void PresetHandler::copyPresetToTarget(std::u16string_view sPreset,
+                                       std::u16string_view sTarget)
 {
     // don't check our preset list, if element exists
     // We try to open it and forward all errors to the user!
@@ -474,8 +474,8 @@ void PresetHandler::copyPresetToTarget(const OUString& sPreset,
        return;
     }
 
-    OUString sPresetFile = sPreset + ".xml";
-    OUString sTargetFile = sTarget + ".xml";
+    OUString sPresetFile = OUString::Concat(sPreset) + ".xml";
+    OUString sTargetFile = OUString::Concat(sTarget) + ".xml";
 
     // remove existing elements before you try to copy the preset to that location ...
     // Otherwise w will get an ElementExistException inside copyElementTo()!
@@ -490,7 +490,7 @@ void PresetHandler::copyPresetToTarget(const OUString& sPreset,
     commitUserChanges();
 }
 
-css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString& sPreset)
+css::uno::Reference< css::io::XStream > PresetHandler::openPreset(std::u16string_view sPreset)
 {
     css::uno::Reference< css::embed::XStorage > xFolder;
     {
@@ -502,7 +502,7 @@ css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString
     if (!xFolder.is())
        return css::uno::Reference< css::io::XStream >();
 
-    OUString sFile = sPreset + ".xml";
+    OUString sFile = OUString::Concat(sPreset) + ".xml";
 
     // inform user about errors (use original exceptions!)
     css::uno::Reference< css::io::XStream > xStream = xFolder->openStreamElement(sFile, css::embed::ElementModes::READ);
@@ -510,7 +510,7 @@ css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString
 }
 
 css::uno::Reference< css::io::XStream > PresetHandler::openTarget(
-        const OUString& sTarget, sal_Int32 const nMode)
+        std::u16string_view sTarget, sal_Int32 const nMode)
 {
     css::uno::Reference< css::embed::XStorage > xFolder;
     {
@@ -522,7 +522,7 @@ css::uno::Reference< css::io::XStream > PresetHandler::openTarget(
     if (!xFolder.is())
        return css::uno::Reference< css::io::XStream >();
 
-    OUString const sFile(sTarget + ".xml");
+    OUString const sFile(OUString::Concat(sTarget) + ".xml");
 
     return xFolder->openStreamElement(sFile, nMode);
 }

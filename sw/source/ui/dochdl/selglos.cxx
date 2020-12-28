@@ -19,7 +19,7 @@
 
 #include <selglos.hxx>
 
-SwSelGlossaryDlg::SwSelGlossaryDlg(weld::Window * pParent, const OUString &rShortName)
+SwSelGlossaryDlg::SwSelGlossaryDlg(weld::Window * pParent, std::u16string_view rShortName)
     : GenericDialogController(pParent, "modules/swriter/ui/insertautotextdialog.ui", "InsertAutoTextDialog")
     , m_xFrame(m_xBuilder->weld_frame("frame"))
     , m_xGlosBox(m_xBuilder->weld_tree_view("treeview"))

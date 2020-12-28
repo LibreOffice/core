@@ -64,6 +64,7 @@
 #include <comphelper/lok.hxx>
 
 #include <memory>
+#include <string_view>
 #include <unordered_set>
 #include <unordered_map>
 #include <vector>
@@ -609,7 +610,7 @@ void ScDBFunc::Consolidate( const ScConsolidateParam& rParam )
 
 // pivot
 
-static OUString lcl_MakePivotTabName( const OUString& rPrefix, SCTAB nNumber )
+static OUString lcl_MakePivotTabName( std::u16string_view rPrefix, SCTAB nNumber )
 {
     OUString aName = rPrefix + OUString::number( nNumber );
     return aName;

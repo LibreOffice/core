@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -152,7 +156,7 @@ OUString ApplyLreOrRleEmbedding( const OUString &rText )
     return aRes;
 }
 
-static OUString lcl_getDescription( const OUString& rBcp47 )
+static OUString lcl_getDescription( std::u16string_view rBcp47 )
 {
     // Place in curly brackets, so all on-the-fly tags are grouped together at
     // the top of a listbox (but behind the "[None]" entry), and not sprinkled
@@ -161,7 +165,7 @@ static OUString lcl_getDescription( const OUString& rBcp47 )
     /* TODO: pulling descriptive names (language, script, country, subtags)
      * from liblangtag or ISO databases might be nice, but those are English
      * only. Maybe ICU, that has translations for language and country. */
-    return "{" + rBcp47 + "}";
+    return OUString::Concat("{") + rBcp47 + "}";
 }
 
 SvtLanguageTableImpl::SvtLanguageTableImpl()

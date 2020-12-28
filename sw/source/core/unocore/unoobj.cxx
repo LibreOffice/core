@@ -1723,7 +1723,7 @@ SwXTextCursor::setString(const OUString& aString)
 
 uno::Any SwUnoCursorHelper::GetPropertyValue(
     SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
-    const OUString& rPropertyName)
+    std::u16string_view rPropertyName)
 {
     uno::Any aAny;
     SfxItemPropertySimpleEntry const*const pEntry =
@@ -1732,7 +1732,7 @@ uno::Any SwUnoCursorHelper::GetPropertyValue(
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            "Unknown property: " + rPropertyName,
+            OUString::Concat("Unknown property: ") + rPropertyName,
             static_cast<cppu::OWeakObject *>(nullptr));
     }
 
@@ -2004,7 +2004,7 @@ lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
 
 void SwUnoCursorHelper::SetPropertyToDefault(
     SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
-    const OUString& rPropertyName)
+    std::u16string_view rPropertyName)
 {
     SwDoc& rDoc = rPaM.GetDoc();
     SfxItemPropertySimpleEntry const*const pEntry =
@@ -2012,14 +2012,14 @@ void SwUnoCursorHelper::SetPropertyToDefault(
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            "Unknown property: " + rPropertyName,
+            OUString::Concat("Unknown property: ") + rPropertyName,
             static_cast<cppu::OWeakObject *>(nullptr));
     }
 
     if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
     {
         throw uno::RuntimeException(
-                "setPropertyToDefault: property is read-only: "
+                OUString::Concat("setPropertyToDefault: property is read-only: ")
                 + rPropertyName, nullptr);
     }
 
@@ -2043,14 +2043,15 @@ void SwUnoCursorHelper::SetPropertyToDefault(
 
 uno::Any SwUnoCursorHelper::GetPropertyDefault(
     SwPaM const & rPaM, const SfxItemPropertySet& rPropSet,
-    const OUString& rPropertyName)
+    std::u16string_view rPropertyName)
 {
     SfxItemPropertySimpleEntry const*const pEntry =
         rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            "Unknown property: " + rPropertyName, static_cast<cppu::OWeakObject *>(nullptr));
+            OUString::Concat("Unknown property: ") + rPropertyName,
+            static_cast<cppu::OWeakObject *>(nullptr));
     }
 
     uno::Any aRet;

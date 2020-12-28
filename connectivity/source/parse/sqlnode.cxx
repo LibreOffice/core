@@ -55,6 +55,8 @@
 #include <algorithm>
 #include <functional>
 #include <memory>
+#include <string_view>
+
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
@@ -104,7 +106,7 @@ namespace
         @return
             The quoted string.
     */
-    OUString SetQuotation(const OUString& rValue, const OUString& rQuot, const OUString& rQuotToReplace)
+    OUString SetQuotation(std::u16string_view rValue, const OUString& rQuot, const OUString& rQuotToReplace)
     {
         OUString rNewValue = rQuot + rValue;
         sal_Int32 nIndex = sal_Int32(-1);   // Replace quotes with double quotes or the parser gets into problems

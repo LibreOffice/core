@@ -13,6 +13,9 @@
 #define INCLUDED_L10NTOOLS_INC_HELPER_HXX
 
 #include <sal/config.h>
+
+#include <string_view>
+
 #include <sal/types.h>
 
 #include <libxml/parser.h>
@@ -36,7 +39,7 @@ OString QuotHTML( const OString &rString );
 OString UnQuotHTML( const OString& rString );
 
 /// Check whether text is a valid XML expression
-bool isWellFormedXML( OString const & text );
+bool isWellFormedXML( std::string_view text );
 
 /// Convert xmlChar* to OString
 OString xmlStrToOString( const xmlChar* pString );

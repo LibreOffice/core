@@ -830,7 +830,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     UpdateDocument_Impl();
 
                     if (vcl::CommandInfoProvider::GetModuleIdentifier(GetFrame().GetFrameInterface()) == "com.sun.star.text.TextDocument")
-                        sfx2::SfxNotebookBar::ReloadNotebookBar("modules/swriter/ui/");
+                        sfx2::SfxNotebookBar::ReloadNotebookBar(u"modules/swriter/ui/");
 
                     try
                     {
@@ -1424,7 +1424,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 }
 
                 if (vcl::CommandInfoProvider::GetModuleIdentifier(GetFrame().GetFrameInterface()) == "com.sun.star.text.TextDocument")
-                    sfx2::SfxNotebookBar::ReloadNotebookBar("modules/swriter/ui/");
+                    sfx2::SfxNotebookBar::ReloadNotebookBar(u"modules/swriter/ui/");
 
                 if (SfxClassificationHelper::IsClassified(m_xObjSh->getDocProperties()))
                 {

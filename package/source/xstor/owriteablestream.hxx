@@ -47,6 +47,7 @@
 
 #include <vector>
 #include <memory>
+#include <string_view>
 
 #include "ocompinstream.hxx"
 
@@ -214,8 +215,8 @@ public:
 
     void CommitStreamRelInfo(
                     const css::uno::Reference< css::embed::XStorage >& xRelStorage,
-                    const OUString& aOrigStreamName,
-                    const OUString& aNewStreamName );
+                    std::u16string_view aOrigStreamName,
+                    std::u16string_view aNewStreamName );
 
     void ReadRelInfoIfNecessary();
 

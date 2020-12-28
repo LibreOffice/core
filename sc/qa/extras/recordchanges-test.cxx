@@ -65,7 +65,7 @@ void ScRecordChangesTest::testCheckRecordChangesProtection()
 {
     // test with protected changes
     OUString aFileName;
-    createFileURL("RecordChangesProtected.ods", aFileName);
+    createFileURL(u"RecordChangesProtected.ods", aFileName);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileName);
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(xComponent, UNO_QUERY_THROW);

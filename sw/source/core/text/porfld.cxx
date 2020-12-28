@@ -738,7 +738,7 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
 }
 
 SwBulletPortion::SwBulletPortion( const sal_UCS4 cBullet,
-                                  const OUString& rBulletFollowedBy,
+                                  std::u16string_view rBulletFollowedBy,
                                   std::unique_ptr<SwFont> pFont,
                                   const bool bLft,
                                   const bool bCntr,

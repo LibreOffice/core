@@ -4868,7 +4868,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
                           uno::Sequence<beans::StringPair>());
 
     // write the associated Images and rels for data file
-    writeDiagramRels(xDataRelSeq, xDataOutputStream, "OOXDiagramDataRels", nDiagramId);
+    writeDiagramRels(xDataRelSeq, xDataOutputStream, u"OOXDiagramDataRels", nDiagramId);
 
     // write layout file
     serializer.set(layoutDom, uno::UNO_QUERY);
@@ -4909,12 +4909,12 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     // write the associated Images and rels for drawing file
     uno::Sequence<uno::Sequence<uno::Any>> xDrawingRelSeq;
     diagramDrawing[1] >>= xDrawingRelSeq;
-    writeDiagramRels(xDrawingRelSeq, xDrawingOutputStream, "OOXDiagramDrawingRels", nDiagramId);
+    writeDiagramRels(xDrawingRelSeq, xDrawingOutputStream, u"OOXDiagramDrawingRels", nDiagramId);
 }
 
 void DrawingML::writeDiagramRels(const uno::Sequence<uno::Sequence<uno::Any>>& xRelSeq,
                                  const uno::Reference<io::XOutputStream>& xOutStream,
-                                 const OUString& sGrabBagProperyName, int nDiagramId)
+                                 std::u16string_view sGrabBagProperyName, int nDiagramId)
 {
     // add image relationships of OOXData, OOXDiagram
     OUString sType(oox::getRelationship(Relationship::IMAGE));
@@ -4947,7 +4947,8 @@ void DrawingML::writeDiagramRels(const uno::Sequence<uno::Sequence<uno::Any>>& x
             new ::comphelper::SequenceInputStream(dataSeq));
 
         //nDiagramId is used to make the name unique irrespective of the number of smart arts.
-        OUString sFragment = "media/" + sGrabBagProperyName + OUString::number(nDiagramId) + "_"
+        OUString sFragment = OUString::Concat("media/") + sGrabBagProperyName
+                             + OUString::number(nDiagramId) + "_"
                              + OUString::number(j) + sExtension;
 
         PropertySet aProps(xOutStream);

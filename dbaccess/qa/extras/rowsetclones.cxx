@@ -48,7 +48,7 @@ RowSetClones::RowSetClones()
 
 void RowSetClones::test()
 {
-    const OUString sFilePath(m_directories.getURLFromWorkdir("CppunitTest/RowSetClones.odb"));
+    const OUString sFilePath(m_directories.getURLFromWorkdir(u"CppunitTest/RowSetClones.odb"));
 
     uno::Reference< lang::XComponent > xComponent (loadFromDesktop(sFilePath));
     CPPUNIT_ASSERT(xComponent.is());

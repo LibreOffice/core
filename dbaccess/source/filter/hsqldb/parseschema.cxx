@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "parseschema.hxx"
 #include "fbcreateparser.hxx"
 #include "fbalterparser.hxx"
@@ -89,9 +93,9 @@ public:
     }
 };
 
-OUString lcl_createAlterForeign(const OUString& sForeignPart, const OUString& sTableName)
+OUString lcl_createAlterForeign(std::u16string_view sForeignPart, std::u16string_view sTableName)
 {
-    return "ALTER TABLE " + sTableName + " ADD " + sForeignPart;
+    return OUString::Concat("ALTER TABLE ") + sTableName + " ADD " + sForeignPart;
 }
 
 } // anonymous namespace

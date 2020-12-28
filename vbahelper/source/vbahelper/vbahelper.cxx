@@ -499,13 +499,13 @@ OUString getAnyAsString( const uno::Any& pvargItem )
 
 
 OUString
-ContainerUtilities::getUniqueName( const uno::Sequence< OUString >&  _slist, const OUString& _sElementName, const OUString& _sSuffixSeparator)
+ContainerUtilities::getUniqueName( const uno::Sequence< OUString >&  _slist, const OUString& _sElementName, std::u16string_view _sSuffixSeparator)
 {
     return getUniqueName(_slist, _sElementName, _sSuffixSeparator, sal_Int32(2));
 }
 
 OUString
-ContainerUtilities::getUniqueName( const uno::Sequence< OUString >& _slist, const OUString& _sElementName, const OUString& _sSuffixSeparator, sal_Int32 _nStartSuffix)
+ContainerUtilities::getUniqueName( const uno::Sequence< OUString >& _slist, const OUString& _sElementName, std::u16string_view _sSuffixSeparator, sal_Int32 _nStartSuffix)
 {
     if ( !_slist.hasElements() )
         return _sElementName;

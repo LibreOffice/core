@@ -1466,7 +1466,7 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(OUString const & uri) {
 }
 
 OUString cppuhelper::ServiceManager::readLegacyRdbString(
-    OUString const & uri, RegistryKey & key, OUString const & path)
+    std::u16string_view uri, RegistryKey & key, OUString const & path)
 {
     RegistryKey subkey;
     RegValueType t;
@@ -1477,7 +1477,7 @@ OUString cppuhelper::ServiceManager::readLegacyRdbString(
         || s == 0 || s > o3tl::make_unsigned(SAL_MAX_INT32))
     {
         throw css::uno::DeploymentException(
-            "Failure reading legacy rdb file " + uri,
+            OUString::Concat("Failure reading legacy rdb file ") + uri,
             static_cast< cppu::OWeakObject * >(this));
     }
     OUString val;
@@ -1492,14 +1492,14 @@ OUString cppuhelper::ServiceManager::readLegacyRdbString(
              | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
     {
         throw css::uno::DeploymentException(
-            "Failure reading legacy rdb file " + uri,
+            OUString::Concat("Failure reading legacy rdb file ") + uri,
             static_cast< cppu::OWeakObject * >(this));
     }
     return val;
 }
 
 void cppuhelper::ServiceManager::readLegacyRdbStrings(
-    OUString const & uri, RegistryKey & key, OUString const & path,
+    std::u16string_view uri, RegistryKey & key, OUString const & path,
     std::vector< OUString > * strings)
 {
     assert(strings != nullptr);
@@ -1511,14 +1511,14 @@ void cppuhelper::ServiceManager::readLegacyRdbStrings(
         return;
     default:
         throw css::uno::DeploymentException(
-            "Failure reading legacy rdb file " + uri,
+            OUString::Concat("Failure reading legacy rdb file ") + uri,
             static_cast< cppu::OWeakObject * >(this));
     }
     OUString prefix(subkey.getName() + "/");
     RegistryKeyNames names;
     if (subkey.getKeyNames(OUString(), names) != RegError::NO_ERROR) {
         throw css::uno::DeploymentException(
-            "Failure reading legacy rdb file " + uri,
+            OUString::Concat("Failure reading legacy rdb file ") + uri,
             static_cast< cppu::OWeakObject * >(this));
     }
     for (sal_uInt32 i = 0; i != names.getLength(); ++i) {

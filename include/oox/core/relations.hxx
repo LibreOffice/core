@@ -23,6 +23,7 @@
 #include <cstddef>
 #include <map>
 #include <memory>
+#include <string_view>
 
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -91,7 +92,7 @@ public:
     /** Returns the first relation with the passed type. */
     const Relation*     getRelationFromFirstType( std::u16string_view rType ) const;
     /** Finds all relations associated with the passed type. */
-    RelationsRef        getRelationsFromTypeFromOfficeDoc( const OUString& rType ) const;
+    RelationsRef        getRelationsFromTypeFromOfficeDoc( std::u16string_view rType ) const;
 
     /** Returns the external target of the relation with the passed relation identifier. */
     OUString     getExternalTargetFromRelId( const OUString& rRelId ) const;
@@ -104,7 +105,7 @@ public:
     OUString     getFragmentPathFromRelId( const OUString& rRelId ) const;
     /** Returns the full fragment path for the first relation of the passed type. */
     OUString     getFragmentPathFromFirstType( std::u16string_view rType ) const;
-    OUString     getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rType ) const;
+    OUString     getFragmentPathFromFirstTypeFromOfficeDoc( std::u16string_view rType ) const;
 
 private:
     ::std::map< OUString, Relation > maMap;

@@ -855,8 +855,8 @@ void Components::parseXcsXcuIniLayer(
     }
 }
 
-void Components::parseResLayer(int layer, OUString const & url) {
-    OUString resUrl(url + "/res");
+void Components::parseResLayer(int layer, std::u16string_view url) {
+    OUString resUrl(OUString::Concat(url) + "/res");
     parseXcdFiles(layer, resUrl);
     parseFiles(layer, ".xcu", &parseXcuFile, resUrl, false);
 }

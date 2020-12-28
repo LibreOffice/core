@@ -29,6 +29,7 @@
 #include <vcl/scrbar.hxx>
 #include <map>
 #include <memory>
+#include <string_view>
 
 class SfxViewFactory;
 class SdrView;
@@ -197,7 +198,7 @@ public:
     static void CopyDialogResources(
         css::uno::Reference< css::io::XInputStreamProvider >& io_xISP,
         const ScriptDocument& rSourceDoc, const OUString& rSourceLibName, const ScriptDocument& rDestDoc,
-        const OUString& rDestLibName, const OUString& rDlgName );
+        const OUString& rDestLibName, std::u16string_view rDlgName );
 
     static void InvalidateControlSlots();
 

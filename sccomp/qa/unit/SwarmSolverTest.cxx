@@ -57,7 +57,7 @@ void SwarmSolverTest::testUnconstrained()
     CPPUNIT_ASSERT(!mxComponent.is());
 
     OUString aFileURL;
-    createFileURL("Simple.ods", aFileURL);
+    createFileURL(u"Simple.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL);
 
     CPPUNIT_ASSERT_MESSAGE("Component not loaded", mxComponent.is());
@@ -107,7 +107,7 @@ void SwarmSolverTest::testVariableBounded()
     CPPUNIT_ASSERT(!mxComponent.is());
 
     OUString aFileURL;
-    createFileURL("Simple.ods", aFileURL);
+    createFileURL(u"Simple.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL);
 
     CPPUNIT_ASSERT_MESSAGE("Component not loaded", mxComponent.is());
@@ -159,7 +159,7 @@ void SwarmSolverTest::testVariableConstrained()
     CPPUNIT_ASSERT(!mxComponent.is());
 
     OUString aFileURL;
-    createFileURL("Simple.ods", aFileURL);
+    createFileURL(u"Simple.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL);
 
     CPPUNIT_ASSERT_MESSAGE("Component not loaded", mxComponent.is());
@@ -215,7 +215,7 @@ void SwarmSolverTest::testTwoVariables()
     CPPUNIT_ASSERT(!mxComponent.is());
 
     OUString aFileURL;
-    createFileURL("TwoVariables.ods", aFileURL);
+    createFileURL(u"TwoVariables.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL);
 
     CPPUNIT_ASSERT_MESSAGE("Component not loaded", mxComponent.is());
@@ -278,7 +278,7 @@ void SwarmSolverTest::testMultipleVariables()
     CPPUNIT_ASSERT(!mxComponent.is());
 
     OUString aFileURL;
-    createFileURL("MultiVariable.ods", aFileURL);
+    createFileURL(u"MultiVariable.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL);
 
     CPPUNIT_ASSERT_MESSAGE("Component not loaded", mxComponent.is());

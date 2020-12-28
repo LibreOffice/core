@@ -20,6 +20,9 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_PACKAGE_PKGCONTENT_HXX
 #define INCLUDED_UCB_SOURCE_UCP_PACKAGE_PKGCONTENT_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
 #include <vector>
 #include <rtl/ref.hxx>
 
@@ -266,7 +269,7 @@ public:
     getIterator();
 
     static OUString
-    getContentType( const OUString& aScheme,  bool bFolder );
+    getContentType( std::u16string_view aScheme,  bool bFolder );
 };
 
 }

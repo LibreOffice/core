@@ -7010,7 +7010,7 @@ void DocxAttributeOutput::FontPitchType( FontPitch ePitch ) const
     m_pSerializer->singleElementNS(XML_w, XML_pitch, FSNS(XML_w, XML_val), pPitch);
 }
 
-void DocxAttributeOutput::EmbedFont( const OUString& name, FontFamily family, FontPitch pitch )
+void DocxAttributeOutput::EmbedFont( std::u16string_view name, FontFamily family, FontPitch pitch )
 {
     if( !m_rExport.m_rDoc.getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS ))
         return; // no font embedding with this document
@@ -7025,7 +7025,7 @@ static char toHexChar( int value )
     return value >= 10 ? value + 'A' - 10 : value + '0';
 }
 
-void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, FontFamily family, FontItalic italic,
+void DocxAttributeOutput::EmbedFontStyle( std::u16string_view name, int tag, FontFamily family, FontItalic italic,
     FontWeight weight, FontPitch pitch )
 {
     // Embed font if at least viewing is allowed (in which case the opening app must check

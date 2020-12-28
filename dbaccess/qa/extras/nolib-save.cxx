@@ -53,7 +53,7 @@ void DialogSaveTest::test()
     // be locked anyway:
     SolarMutexReleaser rel;
 
-    const OUString aFileName(m_directories.getURLFromWorkdir("CppunitTest/testNolibSave.odb"));
+    const OUString aFileName(m_directories.getURLFromWorkdir(u"CppunitTest/testNolibSave.odb"));
     {
         uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFileName);
         CPPUNIT_ASSERT(xComponent.is());

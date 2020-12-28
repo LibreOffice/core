@@ -1,6 +1,9 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 #include <sal/config.h>
+
+#include <string_view>
+
 #include <test/bootstrapfixture.hxx>
 
 #include "helper/qahelper.hxx"
@@ -503,11 +506,11 @@ private:
     // Test env variables and methods
     ScDocShellRef xDocSh;
     ScDocShellRef xDocShRes;
-    bool initTestEnv(const OUString& fileName, sal_Int32 nFormat,
+    bool initTestEnv(std::u16string_view fileName, sal_Int32 nFormat,
               bool bReadWrite);
 };
 
-bool ScOpenCLTest::initTestEnv(const OUString& fileName, sal_Int32 nFormat,
+bool ScOpenCLTest::initTestEnv(std::u16string_view fileName, sal_Int32 nFormat,
     bool bReadWrite)
 {
     if(!detectOpenCLDevice())
@@ -536,7 +539,7 @@ void ScOpenCLTest::enableOpenCL()
 
 void ScOpenCLTest::testCompilerHorizontal()
 {
-    if(!initTestEnv("opencl/compiler/horizontal.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/compiler/horizontal.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -559,7 +562,7 @@ void ScOpenCLTest::testCompilerHorizontal()
 
 void ScOpenCLTest::testCompilerNested()
 {
-    if(!initTestEnv("opencl/compiler/nested.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/compiler/nested.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -576,7 +579,7 @@ void ScOpenCLTest::testCompilerNested()
 
 void ScOpenCLTest::testCompilerString()
 {
-    if(!initTestEnv("opencl/compiler/string.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/compiler/string.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -597,7 +600,7 @@ void ScOpenCLTest::testCompilerString()
 
 void ScOpenCLTest::testCompilerInEq()
 {
-    if(!initTestEnv("opencl/compiler/ineq.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/compiler/ineq.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -659,7 +662,7 @@ void ScOpenCLTest::testSharedFormulaXLSGroundWater()
 
 void ScOpenCLTest::testSystematic()
 {
-    if(!initTestEnv("systematic.", FORMAT_XLS, false))
+    if(!initTestEnv(u"systematic.", FORMAT_XLS, false))
         return;
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -751,7 +754,7 @@ void ScOpenCLTest::testSystematic()
 
 void ScOpenCLTest::testSharedFormulaXLS()
 {
-    if(!initTestEnv("sum_ex.", FORMAT_XLS, false))
+    if(!initTestEnv(u"sum_ex.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -840,7 +843,7 @@ void ScOpenCLTest::testSharedFormulaXLS()
 
 void ScOpenCLTest::testMathFormulaCos()
 {
-    if(!initTestEnv("opencl/math/cos.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/cos.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -856,7 +859,7 @@ void ScOpenCLTest::testMathFormulaCos()
 
 void ScOpenCLTest::testMathFormulaSinh()
 {
-    if(!initTestEnv("opencl/math/sinh.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/sinh.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -872,7 +875,7 @@ void ScOpenCLTest::testMathFormulaSinh()
 
 void ScOpenCLTest::testMathFormulaPi()
 {
-    if(!initTestEnv("opencl/math/pi.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/pi.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -888,7 +891,7 @@ void ScOpenCLTest::testMathFormulaPi()
 
 void ScOpenCLTest::testMathFormulaRandom()
 {
-    if(!initTestEnv("opencl/math/random.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/random.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -904,7 +907,7 @@ void ScOpenCLTest::testMathFormulaRandom()
 }
 void ScOpenCLTest::testFinacialFormula()
 {
-    if(!initTestEnv("opencl/financial/general.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/general.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1054,7 +1057,7 @@ void ScOpenCLTest::testFinacialFormula()
 
 void ScOpenCLTest::testStatisticalFormulaCorrel()
 {
-    if(!initTestEnv("opencl/statistical/Correl.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/statistical/Correl.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1070,7 +1073,7 @@ void ScOpenCLTest::testStatisticalFormulaCorrel()
 }
 void ScOpenCLTest::testStatisticalFormulaFisher()
 {
-    if(!initTestEnv("opencl/statistical/Fisher.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Fisher.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1087,7 +1090,7 @@ void ScOpenCLTest::testStatisticalFormulaFisher()
 
 void ScOpenCLTest::testStatisticalFormulaFisherInv()
 {
-    if(!initTestEnv("opencl/statistical/FisherInv.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/FisherInv.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1104,7 +1107,7 @@ void ScOpenCLTest::testStatisticalFormulaFisherInv()
 
 void ScOpenCLTest::testStatisticalFormulaGamma()
 {
-    if(!initTestEnv("opencl/statistical/Gamma.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Gamma.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1121,7 +1124,7 @@ void ScOpenCLTest::testStatisticalFormulaGamma()
 
 void ScOpenCLTest::testFinacialFvscheduleFormula()
 {
-    if(!initTestEnv("opencl/financial/Fvschedule.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Fvschedule.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1137,7 +1140,7 @@ void ScOpenCLTest::testFinacialFvscheduleFormula()
 
 void ScOpenCLTest::testMathFormulaAbs()
 {
-    if(!initTestEnv("opencl/math/Abs.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/Abs.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1154,7 +1157,7 @@ void ScOpenCLTest::testMathFormulaAbs()
 
 void ScOpenCLTest::testFinacialSYDFormula()
 {
-    if(!initTestEnv("opencl/financial/SYD.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/SYD.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1172,7 +1175,7 @@ void ScOpenCLTest::testFinacialSYDFormula()
 #if !defined MACOSX
 void ScOpenCLTest::testFinacialIRRFormula()
 {
-    if(!initTestEnv("opencl/financial/IRR.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/IRR.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1189,7 +1192,7 @@ void ScOpenCLTest::testFinacialIRRFormula()
 
 void ScOpenCLTest::testStatisticalFormulaGammaLn()
 {
-    if(!initTestEnv("opencl/statistical/GammaLn.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/GammaLn.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1206,7 +1209,7 @@ void ScOpenCLTest::testStatisticalFormulaGammaLn()
 
 void ScOpenCLTest::testStatisticalFormulaGauss()
 {
-    if(!initTestEnv("opencl/statistical/Gauss.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Gauss.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1223,7 +1226,7 @@ void ScOpenCLTest::testStatisticalFormulaGauss()
 
 void ScOpenCLTest::testStatisticalFormulaGeoMean()
 {
-    if(!initTestEnv("opencl/statistical/GeoMean.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/GeoMean.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1240,7 +1243,7 @@ void ScOpenCLTest::testStatisticalFormulaGeoMean()
 
 void ScOpenCLTest::testStatisticalFormulaHarMean()
 {
-    if(!initTestEnv("opencl/statistical/HarMean.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/HarMean.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1257,7 +1260,7 @@ void ScOpenCLTest::testStatisticalFormulaHarMean()
 
 void ScOpenCLTest::testFinacialSLNFormula()
 {
-    if(!initTestEnv("opencl/financial/SLN.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/SLN.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1273,7 +1276,7 @@ void ScOpenCLTest::testFinacialSLNFormula()
 
 void ScOpenCLTest::testFinacialMIRRFormula()
 {
-    if(!initTestEnv("opencl/financial/MIRR.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/MIRR.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1289,7 +1292,7 @@ void ScOpenCLTest::testFinacialMIRRFormula()
 
 void ScOpenCLTest::testFinancialCoupdaybsFormula()
 {
-    if(!initTestEnv("opencl/financial/Coupdaybs.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Coupdaybs.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1305,7 +1308,7 @@ void ScOpenCLTest::testFinancialCoupdaybsFormula()
 
 void ScOpenCLTest::testFinacialDollardeFormula()
 {
-    if(!initTestEnv("opencl/financial/Dollarde.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Dollarde.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1321,7 +1324,7 @@ void ScOpenCLTest::testFinacialDollardeFormula()
 
 void ScOpenCLTest::testFinancialCoupdaysFormula()
 {
-    if(!initTestEnv("opencl/financial/Coupdays.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Coupdays.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1338,7 +1341,7 @@ void ScOpenCLTest::testFinancialCoupdaysFormula()
 
 void ScOpenCLTest::testFinancialCoupdaysncFormula()
 {
-    if(!initTestEnv("opencl/financial/Coupdaysnc.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Coupdaysnc.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1353,7 +1356,7 @@ void ScOpenCLTest::testFinancialCoupdaysncFormula()
 }
 void ScOpenCLTest::testFinacialRateFormula()
 {
-    if(!initTestEnv("opencl/financial/RATE.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/RATE.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1369,7 +1372,7 @@ void ScOpenCLTest::testFinacialRateFormula()
 
 void ScOpenCLTest::testFinancialAccrintmFormula()
 {
-    if(!initTestEnv("opencl/financial/Accrintm.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Accrintm.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1385,7 +1388,7 @@ void ScOpenCLTest::testFinancialAccrintmFormula()
 
 void ScOpenCLTest::testFinancialCoupnumFormula()
 {
-    if(!initTestEnv("opencl/financial/Coupnum.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Coupnum.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1401,7 +1404,7 @@ void ScOpenCLTest::testFinancialCoupnumFormula()
 
 void ScOpenCLTest::testStatisticalFormulaNegbinomdist()
 {
-    if(!initTestEnv("opencl/statistical/Negbinomdist.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Negbinomdist.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1418,7 +1421,7 @@ void ScOpenCLTest::testStatisticalFormulaNegbinomdist()
 
 void ScOpenCLTest::testMathFormulaSin()
 {
-    if(!initTestEnv("opencl/math/sin.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/sin.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1434,7 +1437,7 @@ void ScOpenCLTest::testMathFormulaSin()
 
 void ScOpenCLTest::testMathFormulaSumSQ()
 {
-    if(!initTestEnv("opencl/math/sumsq.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/sumsq.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1450,7 +1453,7 @@ void ScOpenCLTest::testMathFormulaSumSQ()
 
 void ScOpenCLTest::testMathFormulaTan()
 {
-    if(!initTestEnv("opencl/math/tan.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/tan.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1466,7 +1469,7 @@ void ScOpenCLTest::testMathFormulaTan()
 
 void ScOpenCLTest::testMathFormulaTanH()
 {
-    if(!initTestEnv("opencl/math/tanh.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/tanh.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1482,7 +1485,7 @@ void ScOpenCLTest::testMathFormulaTanH()
 
 void ScOpenCLTest::testMathFormulaSqrt()
 {
-    if(!initTestEnv("opencl/math/sqrt.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/sqrt.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1498,7 +1501,7 @@ void ScOpenCLTest::testMathFormulaSqrt()
 
 void ScOpenCLTest::testFinacialPriceFormula()
 {
-    if(!initTestEnv("opencl/financial/Price.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Price.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1514,7 +1517,7 @@ void ScOpenCLTest::testFinacialPriceFormula()
 
 void ScOpenCLTest::testFinacialDollarfrFormula()
 {
-    if(!initTestEnv("opencl/financial/Dollarfr.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Dollarfr.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1530,7 +1533,7 @@ void ScOpenCLTest::testFinacialDollarfrFormula()
 
 void ScOpenCLTest::testFinacialPriceDiscFormula()
 {
-    if(!initTestEnv("opencl/financial/PriceDisc.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/PriceDisc.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1546,7 +1549,7 @@ void ScOpenCLTest::testFinacialPriceDiscFormula()
 
 void ScOpenCLTest::testFinacialODDLPRICEFormula()
 {
-    if(!initTestEnv("opencl/financial/Oddlprice.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Oddlprice.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1562,7 +1565,7 @@ void ScOpenCLTest::testFinacialODDLPRICEFormula()
 
 void ScOpenCLTest:: testFinacialOddlyieldFormula()
 {
-    if(!initTestEnv("opencl/financial/Oddlyield.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Oddlyield.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1578,7 +1581,7 @@ void ScOpenCLTest:: testFinacialOddlyieldFormula()
 
 void ScOpenCLTest::testFinacialDISCFormula()
 {
-    if(!initTestEnv("opencl/financial/DISC.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/DISC.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1594,7 +1597,7 @@ void ScOpenCLTest::testFinacialDISCFormula()
 
 void ScOpenCLTest:: testFinacialPVFormula()
 {
-    if(!initTestEnv("opencl/financial/PV.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/PV.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1610,7 +1613,7 @@ void ScOpenCLTest:: testFinacialPVFormula()
 
 void ScOpenCLTest::testFinacialINTRATEFormula()
 {
-    if(!initTestEnv("opencl/financial/INTRATE.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/INTRATE.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1626,7 +1629,7 @@ void ScOpenCLTest::testFinacialINTRATEFormula()
 
 void ScOpenCLTest::testStatisticalFormulaStandard()
 {
-    if(!initTestEnv("opencl/statistical/Standard.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Standard.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1643,7 +1646,7 @@ void ScOpenCLTest::testStatisticalFormulaStandard()
 
 void ScOpenCLTest::testStatisticalFormulaWeibull()
 {
-    if(!initTestEnv("opencl/statistical/Weibull.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Weibull.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1661,7 +1664,7 @@ void ScOpenCLTest::testStatisticalFormulaWeibull()
 
 void ScOpenCLTest::testStatisticalFormulaVar()
 {
-    if(!initTestEnv("opencl/statistical/Var.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Var.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1678,7 +1681,7 @@ void ScOpenCLTest::testStatisticalFormulaVar()
 
 void ScOpenCLTest::testStatisticalFormulaSkew()
 {
-    if(!initTestEnv("opencl/statistical/Skew.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Skew.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1695,7 +1698,7 @@ void ScOpenCLTest::testStatisticalFormulaSkew()
 
 void ScOpenCLTest::testStatisticalFormulaSkewp()
 {
-    if(!initTestEnv("opencl/statistical/Skewp.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Skewp.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1712,7 +1715,7 @@ void ScOpenCLTest::testStatisticalFormulaSkewp()
 
 void ScOpenCLTest::testStatisticalFormulaPearson()
 {
-    if(!initTestEnv("opencl/statistical/Pearson.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Pearson.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1729,7 +1732,7 @@ void ScOpenCLTest::testStatisticalFormulaPearson()
 
 void ScOpenCLTest::testStatisticalFormulaRsq()
 {
-    if(!initTestEnv("opencl/statistical/Rsq.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Rsq.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1746,7 +1749,7 @@ void ScOpenCLTest::testStatisticalFormulaRsq()
 
 void ScOpenCLTest::testMathFormulaTrunc()
 {
-    if(!initTestEnv("opencl/math/trunc.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/trunc.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1762,7 +1765,7 @@ void ScOpenCLTest::testMathFormulaTrunc()
 
 void ScOpenCLTest::testMathFormulaCosh()
 {
-    if(!initTestEnv("opencl/math/cosh.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/cosh.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1777,7 +1780,7 @@ void ScOpenCLTest::testMathFormulaCosh()
 }
 void ScOpenCLTest::testStatisticalFormulaCovar()
 {
-    if(!initTestEnv("opencl/statistical/Covar.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Covar.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1794,7 +1797,7 @@ void ScOpenCLTest::testStatisticalFormulaCovar()
 
 void ScOpenCLTest::testStatisticalFormulaKurt()
 {
-    if(!initTestEnv("opencl/statistical/Kurt.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Kurt.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1811,7 +1814,7 @@ void ScOpenCLTest::testStatisticalFormulaKurt()
 
 void ScOpenCLTest::testMathFormulaCot()
 {
-    if(!initTestEnv("opencl/math/cot.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/cot.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1827,7 +1830,7 @@ void ScOpenCLTest::testMathFormulaCot()
 
 void ScOpenCLTest::testStatisticalFormulaDevSq()
 {
-    if(!initTestEnv("opencl/statistical/DevSq.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/DevSq.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1844,7 +1847,7 @@ void ScOpenCLTest::testStatisticalFormulaDevSq()
 
 void ScOpenCLTest::testMathFormulaCsc()
 {
-    if(!initTestEnv("opencl/math/csc.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/csc.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1860,7 +1863,7 @@ void ScOpenCLTest::testMathFormulaCsc()
 
 void ScOpenCLTest::testMathFormulaCoth()
 {
-    if(!initTestEnv("opencl/math/coth.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/coth.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1876,7 +1879,7 @@ void ScOpenCLTest::testMathFormulaCoth()
 
 void ScOpenCLTest::testFinacialXNPVFormula()
 {
-    if(!initTestEnv("opencl/financial/XNPV.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/XNPV.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1899,7 +1902,7 @@ void ScOpenCLTest::testFinacialXNPVFormula()
 
 void ScOpenCLTest::testStatisticalFormulaIntercept()
 {
-    if(!initTestEnv("opencl/statistical/Intercept.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Intercept.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1915,7 +1918,7 @@ void ScOpenCLTest::testStatisticalFormulaIntercept()
 
 void ScOpenCLTest::testFinancialAmordegrcFormula()
 {
-    if(!initTestEnv("opencl/financial/Amordegrc.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Amordegrc.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1931,7 +1934,7 @@ void ScOpenCLTest::testFinancialAmordegrcFormula()
 
 void ScOpenCLTest:: testFinancialISPMTFormula()
 {
-    if(!initTestEnv("opencl/financial/ISPMT.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/ISPMT.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1947,7 +1950,7 @@ void ScOpenCLTest:: testFinancialISPMTFormula()
 
 void ScOpenCLTest::testStatisticalFormulaMedian()
 {
-    if(!initTestEnv("opencl/statistical/Median.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Median.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1964,7 +1967,7 @@ void ScOpenCLTest::testStatisticalFormulaMedian()
 
 void ScOpenCLTest::testStatisticalFormulaNormdist()
 {
-    if(!initTestEnv("opencl/statistical/Normdist.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Normdist.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1981,7 +1984,7 @@ void ScOpenCLTest::testStatisticalFormulaNormdist()
 
 void ScOpenCLTest::testStatisticalFormulaNormsdist()
 {
-    if(!initTestEnv("opencl/statistical/Normsdist.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Normsdist.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -1998,7 +2001,7 @@ void ScOpenCLTest::testStatisticalFormulaNormsdist()
 
 void ScOpenCLTest::testStatisticalFormulaPermut()
 {
-    if(!initTestEnv("opencl/statistical/Permut.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Permut.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2015,7 +2018,7 @@ void ScOpenCLTest::testStatisticalFormulaPermut()
 
 void ScOpenCLTest::testStatisticalFormulaPermutation()
 {
-    if(!initTestEnv("opencl/statistical/Permutation.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Permutation.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2032,7 +2035,7 @@ void ScOpenCLTest::testStatisticalFormulaPermutation()
 
 void ScOpenCLTest::testStatisticalFormulaPhi()
 {
-    if(!initTestEnv("opencl/statistical/Phi.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Phi.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2049,7 +2052,7 @@ void ScOpenCLTest::testStatisticalFormulaPhi()
 
 void ScOpenCLTest::testMathFormulaCscH()
 {
-    if(!initTestEnv("opencl/math/csch.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/csch.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2065,7 +2068,7 @@ void ScOpenCLTest::testMathFormulaCscH()
 
 void ScOpenCLTest::testStatisticalFormulaLogInv()
 {
-    if(!initTestEnv("opencl/statistical/LogInv.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/LogInv.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2082,7 +2085,7 @@ void ScOpenCLTest::testStatisticalFormulaLogInv()
 
 void ScOpenCLTest::testFinacialNPERFormula()
 {
-    if(!initTestEnv("opencl/financial/NPER.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/NPER.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2098,7 +2101,7 @@ void ScOpenCLTest::testFinacialNPERFormula()
 
 void ScOpenCLTest::testStatisticalFormulaForecast()
 {
-    if(!initTestEnv("opencl/statistical/Forecast.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Forecast.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2115,7 +2118,7 @@ void ScOpenCLTest::testStatisticalFormulaForecast()
 
 void ScOpenCLTest::testFinancialAmorlincFormula()
 {
-    if(!initTestEnv("opencl/financial/Amorlinc.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Amorlinc.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2131,7 +2134,7 @@ void ScOpenCLTest::testFinancialAmorlincFormula()
 
 void ScOpenCLTest::testFinancialDDBFormula()
 {
-    if(!initTestEnv("opencl/financial/ddb.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/ddb.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2146,7 +2149,7 @@ void ScOpenCLTest::testFinancialDDBFormula()
 }
 void ScOpenCLTest::testFinacialPriceMatFormula()
 {
-    if(!initTestEnv("opencl/financial/PriceMat.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/PriceMat.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2161,7 +2164,7 @@ void ScOpenCLTest::testFinacialPriceMatFormula()
 }
 void ScOpenCLTest::testFinacialFormulaReceived()
 {
-    if(!initTestEnv("opencl/financial/Received.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Received.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2177,7 +2180,7 @@ void ScOpenCLTest::testFinacialFormulaReceived()
 }
 void ScOpenCLTest::testFinancialFormulaCumipmt()
 {
-    if(!initTestEnv("opencl/financial/Cumipmt.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Cumipmt.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2193,7 +2196,7 @@ void ScOpenCLTest::testFinancialFormulaCumipmt()
 }
 void ScOpenCLTest::testFinancialFormulaCumprinc()
 {
-    if(!initTestEnv("opencl/financial/Cumprinc.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Cumprinc.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2209,7 +2212,7 @@ void ScOpenCLTest::testFinancialFormulaCumprinc()
 }
 void ScOpenCLTest::testFinacialRRIFormula()
 {
-    if(!initTestEnv("opencl/financial/RRI.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/RRI.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2224,7 +2227,7 @@ void ScOpenCLTest::testFinacialRRIFormula()
 }
 void ScOpenCLTest::testFinacialEFFECT_ADDFormula()
 {
-    if(!initTestEnv("opencl/financial/EFFECT_ADD.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/EFFECT_ADD.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2239,7 +2242,7 @@ void ScOpenCLTest::testFinacialEFFECT_ADDFormula()
 }
 void ScOpenCLTest::testFinacialNominalFormula()
 {
-    if(!initTestEnv("opencl/financial/Nominal.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Nominal.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2256,7 +2259,7 @@ void ScOpenCLTest::testFinacialNominalFormula()
 }
 void ScOpenCLTest::testFinacialTBILLEQFormula()
 {
-    if(!initTestEnv("opencl/financial/TBILLEQ.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/TBILLEQ.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2271,7 +2274,7 @@ void ScOpenCLTest::testFinacialTBILLEQFormula()
 }
 void ScOpenCLTest::testFinacialTBILLPRICEFormula()
 {
-    if(!initTestEnv("opencl/financial/TBILLPRICE.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/TBILLPRICE.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2286,7 +2289,7 @@ void ScOpenCLTest::testFinacialTBILLPRICEFormula()
 }
 void ScOpenCLTest::testFinacialTBILLYIELDFormula()
 {
-    if(!initTestEnv("opencl/financial/TBILLYIELD.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/TBILLYIELD.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2301,7 +2304,7 @@ void ScOpenCLTest::testFinacialTBILLYIELDFormula()
 }
 void ScOpenCLTest::testFinacialYIELDFormula()
 {
-    if(!initTestEnv("opencl/financial/YIELD.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/YIELD.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2317,7 +2320,7 @@ void ScOpenCLTest::testFinacialYIELDFormula()
 
 void ScOpenCLTest::testFinacialYIELDDISCFormula()
 {
-    if(!initTestEnv("opencl/financial/YIELDDISC.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/YIELDDISC.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2333,7 +2336,7 @@ void ScOpenCLTest::testFinacialYIELDDISCFormula()
 
 void ScOpenCLTest::testFinacialYIELDMATFormula()
 {
-    if(!initTestEnv("opencl/financial/YIELDMAT.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/YIELDMAT.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2348,7 +2351,7 @@ void ScOpenCLTest::testFinacialYIELDMATFormula()
 }
 void ScOpenCLTest:: testFinacialPMTFormula()
 {
-    if(!initTestEnv("opencl/financial/PMT.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/PMT.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2364,7 +2367,7 @@ void ScOpenCLTest:: testFinacialPMTFormula()
 
 void ScOpenCLTest:: testFinancialDurationFormula()
 {
-    if(!initTestEnv("opencl/financial/Duration.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/financial/Duration.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2380,7 +2383,7 @@ void ScOpenCLTest:: testFinancialDurationFormula()
 
 void ScOpenCLTest::testStatisticalFormulaLogNormDist()
 {
-    if(!initTestEnv("opencl/statistical/LogNormDist.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/statistical/LogNormDist.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2397,7 +2400,7 @@ void ScOpenCLTest::testStatisticalFormulaLogNormDist()
 
 void ScOpenCLTest::testMathFormulaArcCos()
 {
-    if(!initTestEnv("opencl/math/ArcCos.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/ArcCos.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2414,7 +2417,7 @@ void ScOpenCLTest::testMathFormulaArcCos()
 
 void ScOpenCLTest::testMathFormulaPower()
 {
-    if(!initTestEnv("opencl/math/power.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/power.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2430,7 +2433,7 @@ void ScOpenCLTest::testMathFormulaPower()
 
 void ScOpenCLTest:: testFinacialPPMTFormula()
 {
-    if(!initTestEnv("opencl/financial/PPMT.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/PPMT.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2446,7 +2449,7 @@ void ScOpenCLTest:: testFinacialPPMTFormula()
 
 void ScOpenCLTest:: testFinacialNPVFormula()
 {
-    if(!initTestEnv("opencl/financial/NPV.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/NPV.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2462,7 +2465,7 @@ void ScOpenCLTest:: testFinacialNPVFormula()
 
 void ScOpenCLTest:: testFinancialDuration_ADDFormula()
 {
-    if(!initTestEnv("opencl/financial/Duration_ADD.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Duration_ADD.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2478,7 +2481,7 @@ void ScOpenCLTest:: testFinancialDuration_ADDFormula()
 
 void ScOpenCLTest::testStatisticalFormulaNorminv()
 {
-    if(!initTestEnv("opencl/statistical/Norminv.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Norminv.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2495,7 +2498,7 @@ void ScOpenCLTest::testStatisticalFormulaNorminv()
 
 void ScOpenCLTest::testStatisticalFormulaNormsinv()
 {
-    if(!initTestEnv("opencl/statistical/Normsinv.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Normsinv.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2512,7 +2515,7 @@ void ScOpenCLTest::testStatisticalFormulaNormsinv()
 
 void ScOpenCLTest::testMathFormulaArcCosHyp()
 {
-    if(!initTestEnv("opencl/math/ArcCosHyp.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/ArcCosHyp.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2529,7 +2532,7 @@ void ScOpenCLTest::testMathFormulaArcCosHyp()
 
 void ScOpenCLTest:: testFinancialMDurationFormula()
 {
-    if(!initTestEnv("opencl/financial/MDuration.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/MDuration.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2545,7 +2548,7 @@ void ScOpenCLTest:: testFinancialMDurationFormula()
 
 void ScOpenCLTest::testMathFormulaArcCot()
 {
-    if(!initTestEnv("opencl/math/ArcCot.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/ArcCot.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2562,7 +2565,7 @@ void ScOpenCLTest::testMathFormulaArcCot()
 
 void ScOpenCLTest:: testFinancialFVFormula()
 {
-    if(!initTestEnv("opencl/financial/FV.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/FV.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2578,7 +2581,7 @@ void ScOpenCLTest:: testFinancialFVFormula()
 
 void ScOpenCLTest::testFinancialDBFormula()
 {
-    if(!initTestEnv("opencl/financial/db.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/db.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2594,7 +2597,7 @@ void ScOpenCLTest::testFinancialDBFormula()
 
 void ScOpenCLTest::testFinancialCouppcdFormula()
 {
-    if(!initTestEnv("opencl/financial/Couppcd.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Couppcd.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2610,7 +2613,7 @@ void ScOpenCLTest::testFinancialCouppcdFormula()
 
 void ScOpenCLTest::testMathSumIfsFormula()
 {
-    if(!initTestEnv("opencl/math/sumifs.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/sumifs.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2644,7 +2647,7 @@ void ScOpenCLTest::testMathSumIfsFormula()
 
 void ScOpenCLTest::testMathFormulaArcCotHyp()
 {
-    if(!initTestEnv("opencl/math/ArcCotHyp.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/ArcCotHyp.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2661,7 +2664,7 @@ void ScOpenCLTest::testMathFormulaArcCotHyp()
 
 void ScOpenCLTest::testMathFormulaArcSin()
 {
-    if(!initTestEnv("opencl/math/ArcSin.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/ArcSin.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2678,7 +2681,7 @@ void ScOpenCLTest::testMathFormulaArcSin()
 
 void ScOpenCLTest:: testFinancialVDBFormula()
 {
-    if(!initTestEnv("opencl/financial/VDB.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/VDB.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2706,7 +2709,7 @@ void ScOpenCLTest:: testFinancialVDBFormula()
 
 void ScOpenCLTest:: testFinancialIPMTFormula()
 {
-    if(!initTestEnv("opencl/financial/IPMT.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/IPMT.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2722,7 +2725,7 @@ void ScOpenCLTest:: testFinancialIPMTFormula()
 
 void ScOpenCLTest::testStatisticalFormulaChiSqDist()
 {
-    if(!initTestEnv("opencl/statistical/CHISQDIST.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/statistical/CHISQDIST.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2745,7 +2748,7 @@ void ScOpenCLTest::testStatisticalFormulaChiSqDist()
 
 void ScOpenCLTest::testStatisticalFormulaConfidence()
 {
-    if(!initTestEnv("opencl/statistical/Confidence.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Confidence.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2762,7 +2765,7 @@ void ScOpenCLTest::testStatisticalFormulaConfidence()
 
 void ScOpenCLTest::testStatisticalFormulaFDist()
 {
-    if(!initTestEnv("opencl/statistical/Fdist.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Fdist.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2779,7 +2782,7 @@ void ScOpenCLTest::testStatisticalFormulaFDist()
 
 void ScOpenCLTest::testFinancialCoupncdFormula()
 {
-    if(!initTestEnv("opencl/financial/Coupncd.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Coupncd.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2795,7 +2798,7 @@ void ScOpenCLTest::testFinancialCoupncdFormula()
 
 void ScOpenCLTest::testFinancialAccrintFormula()
 {
-    if(!initTestEnv("opencl/financial/Accrint.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/Accrint.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2811,7 +2814,7 @@ void ScOpenCLTest::testFinancialAccrintFormula()
 
 void ScOpenCLTest::testStatisticalFormulaCritBinom()
 {
-    if(!initTestEnv("opencl/statistical/CritBinom.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/CritBinom.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2828,7 +2831,7 @@ void ScOpenCLTest::testStatisticalFormulaCritBinom()
 
 void ScOpenCLTest::testMathFormulaArcSinHyp()
 {
-    if(!initTestEnv("opencl/math/ArcSinHyp.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/ArcSinHyp.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2845,7 +2848,7 @@ void ScOpenCLTest::testMathFormulaArcSinHyp()
 
 void ScOpenCLTest::testMathFormulaArcTan()
 {
-    if(!initTestEnv("opencl/math/ArcTan.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/ArcTan.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2862,7 +2865,7 @@ void ScOpenCLTest::testMathFormulaArcTan()
 
 void ScOpenCLTest::testMathFormulaArcTanHyp()
 {
-    if(!initTestEnv("opencl/math/ArcTanHyp.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/ArcTanHyp.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2879,7 +2882,7 @@ void ScOpenCLTest::testMathFormulaArcTanHyp()
 
 void ScOpenCLTest:: testFinacialNPER1Formula()
 {
-    if(!initTestEnv("opencl/financial/NPER1.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/NPER1.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2895,7 +2898,7 @@ void ScOpenCLTest:: testFinacialNPER1Formula()
 
 void ScOpenCLTest::testMathFormulaArcTan2()
 {
-    if(!initTestEnv("opencl/math/ArcTan2.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/ArcTan2.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2912,7 +2915,7 @@ void ScOpenCLTest::testMathFormulaArcTan2()
 
 void ScOpenCLTest::testStatisticalFormulaChiSqInv()
 {
-    if(!initTestEnv("opencl/statistical/CHISQINV.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/statistical/CHISQINV.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2929,7 +2932,7 @@ void ScOpenCLTest::testStatisticalFormulaChiSqInv()
 
 void ScOpenCLTest::testMathFormulaBitAnd()
 {
-    if(!initTestEnv("opencl/math/BitAnd.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/BitAnd.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2946,7 +2949,7 @@ void ScOpenCLTest::testMathFormulaBitAnd()
 
 void ScOpenCLTest::testStatisticalFormulaPoisson()
 {
-    if(!initTestEnv("opencl/statistical/Poisson.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Poisson.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2963,7 +2966,7 @@ void ScOpenCLTest::testStatisticalFormulaPoisson()
 
 void ScOpenCLTest::testStatisticalFormulaExpondist()
 {
-    if(!initTestEnv("opencl/statistical/Expondist.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Expondist.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2980,7 +2983,7 @@ void ScOpenCLTest::testStatisticalFormulaExpondist()
 
 void ScOpenCLTest::testMathFormulaBitOr()
 {
-    if(!initTestEnv("opencl/math/BitOr.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/BitOr.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -2997,7 +3000,7 @@ void ScOpenCLTest::testMathFormulaBitOr()
 
 void ScOpenCLTest::testMathFormulaOdd()
 {
-    if(!initTestEnv("opencl/math/odd.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/odd.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3013,7 +3016,7 @@ void ScOpenCLTest::testMathFormulaOdd()
 
 void ScOpenCLTest::testMathFormulaLN()
 {
-    if(!initTestEnv("opencl/math/LN.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/LN.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3030,7 +3033,7 @@ void ScOpenCLTest::testMathFormulaLN()
 
 void ScOpenCLTest::testMathFormulaMod()
 {
-    if(!initTestEnv("opencl/math/mod.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/mod.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3049,7 +3052,7 @@ void ScOpenCLTest::testMathFormulaMod()
 
 void ScOpenCLTest::testMathFormulaRound()
 {
-    if(!initTestEnv("opencl/math/ROUND.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/ROUND.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3072,7 +3075,7 @@ void ScOpenCLTest::testMathFormulaRound()
 
 void ScOpenCLTest::testStatisticalFormulaGammaDist()
 {
-    if(!initTestEnv("opencl/statistical/GammaDist.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/GammaDist.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3089,7 +3092,7 @@ void ScOpenCLTest::testStatisticalFormulaGammaDist()
 
 void ScOpenCLTest::testStatisticalFormulaGammaInv()
 {
-    if(!initTestEnv("opencl/statistical/GammaInv.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/GammaInv.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3109,7 +3112,7 @@ void ScOpenCLTest::testStatisticalFormulaGammaInv()
 
 void ScOpenCLTest::testStatisticalFormulaFInv()
 {
-    if(!initTestEnv("opencl/statistical/FInv.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/FInv.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3129,7 +3132,7 @@ void ScOpenCLTest::testStatisticalFormulaFInv()
 
 void ScOpenCLTest::testStatisticalFormulaFTest()
 {
-    if(!initTestEnv("opencl/statistical/FTest.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/FTest.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3146,7 +3149,7 @@ void ScOpenCLTest::testStatisticalFormulaFTest()
 
 void ScOpenCLTest::testStatisticalFormulaB()
 {
-    if(!initTestEnv("opencl/statistical/B.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/B.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3166,7 +3169,7 @@ void ScOpenCLTest::testStatisticalFormulaB()
 
 void ScOpenCLTest::testStatisticalFormulaBetaDist()
 {
-    if(!initTestEnv("opencl/statistical/BetaDist.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/statistical/BetaDist.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3186,7 +3189,7 @@ void ScOpenCLTest::testStatisticalFormulaBetaDist()
 
 void ScOpenCLTest::testMathFormulaEven()
 {
-    if(!initTestEnv("opencl/math/even.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/even.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3202,7 +3205,7 @@ void ScOpenCLTest::testMathFormulaEven()
 
 void ScOpenCLTest::testMathFormulaExp()
 {
-    if(!initTestEnv("opencl/math/exp.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/exp.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3218,7 +3221,7 @@ void ScOpenCLTest::testMathFormulaExp()
 
 void ScOpenCLTest::testStatisticalFormulaChiDist()
 {
-    if(!initTestEnv("opencl/statistical/ChiDist.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/ChiDist.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3235,7 +3238,7 @@ void ScOpenCLTest::testStatisticalFormulaChiDist()
 
 void ScOpenCLTest::testMathFormulaBitLshift()
 {
-    if(!initTestEnv("opencl/math/BitLshift.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/BitLshift.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3252,7 +3255,7 @@ void ScOpenCLTest::testMathFormulaBitLshift()
 
 void ScOpenCLTest::testMathFormulaBitRshift()
 {
-    if(!initTestEnv("opencl/math/BitRshift.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/BitRshift.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3269,7 +3272,7 @@ void ScOpenCLTest::testMathFormulaBitRshift()
 
 void ScOpenCLTest::testMathFormulaFloor()
 {
-    if(!initTestEnv("opencl/math/floor.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/floor.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3285,7 +3288,7 @@ void ScOpenCLTest::testMathFormulaFloor()
 
 void ScOpenCLTest::testMathFormulaLog()
 {
-    if(!initTestEnv("opencl/math/log.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/log.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3301,7 +3304,7 @@ void ScOpenCLTest::testMathFormulaLog()
 
 void ScOpenCLTest::testSpreadSheetFormulaVLookup()
 {
-    if(!initTestEnv("opencl/spreadsheet/VLookup.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/spreadsheet/VLookup.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3324,7 +3327,7 @@ void ScOpenCLTest::testSpreadSheetFormulaVLookup()
 
 void ScOpenCLTest::testStatisticalFormulaChiInv()
 {
-    if(!initTestEnv("opencl/statistical/ChiInv.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/ChiInv.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3341,7 +3344,7 @@ void ScOpenCLTest::testStatisticalFormulaChiInv()
 
 void ScOpenCLTest::testMathFormulaConvert()
 {
-    if(!initTestEnv("opencl/math/convert.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/convert.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3357,7 +3360,7 @@ void ScOpenCLTest::testMathFormulaConvert()
 
 void ScOpenCLTest::testMathCountIfsFormula()
 {
-    if(!initTestEnv("opencl/math/countifs.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/countifs.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3373,7 +3376,7 @@ void ScOpenCLTest::testMathCountIfsFormula()
 
 void ScOpenCLTest::testMathFormulaBitXor()
 {
-    if(!initTestEnv("opencl/math/BitXor.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/BitXor.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3390,7 +3393,7 @@ void ScOpenCLTest::testMathFormulaBitXor()
 
 void ScOpenCLTest::testMathAverageIfsFormula()
 {
-    if(!initTestEnv("opencl/math/averageifs.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/averageifs.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3407,7 +3410,7 @@ void ScOpenCLTest::testMathAverageIfsFormula()
 
 void ScOpenCLTest::testMathFormulaLog10()
 {
-    if(!initTestEnv("opencl/math/log10.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/log10.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3423,7 +3426,7 @@ void ScOpenCLTest::testMathFormulaLog10()
 
 void ScOpenCLTest::testMathFormulaCombina()
 {
-    if(!initTestEnv("opencl/math/combina.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/combina.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3439,7 +3442,7 @@ void ScOpenCLTest::testMathFormulaCombina()
 
 void ScOpenCLTest::testMathFormulaCeil()
 {
-    if(!initTestEnv("opencl/math/Ceil.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/Ceil.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3456,7 +3459,7 @@ void ScOpenCLTest::testMathFormulaCeil()
 
 void ScOpenCLTest::testMathFormulaSqrtPi()
 {
-    if(!initTestEnv("opencl/math/sqrtpi.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/sqrtpi.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3472,7 +3475,7 @@ void ScOpenCLTest::testMathFormulaSqrtPi()
 
 void ScOpenCLTest::testStatisticalFormulaVarP()
 {
-    if(!initTestEnv("opencl/statistical/VarP.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/VarP.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3489,7 +3492,7 @@ void ScOpenCLTest::testStatisticalFormulaVarP()
 
 void ScOpenCLTest::testStatisticalFormulaStDev()
 {
-    if(!initTestEnv("opencl/statistical/StDev.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/StDev.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3506,7 +3509,7 @@ void ScOpenCLTest::testStatisticalFormulaStDev()
 
 void ScOpenCLTest::testStatisticalFormulaStDevP()
 {
-    if(!initTestEnv("opencl/statistical/StDevP.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/StDevP.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3523,7 +3526,7 @@ void ScOpenCLTest::testStatisticalFormulaStDevP()
 
 void ScOpenCLTest::testStatisticalFormulaSlope()
 {
-    if(!initTestEnv("opencl/statistical/Slope.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Slope.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3540,7 +3543,7 @@ void ScOpenCLTest::testStatisticalFormulaSlope()
 
 void ScOpenCLTest::testStatisticalFormulaSTEYX()
 {
-    if(!initTestEnv("opencl/statistical/STEYX.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/STEYX.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3557,7 +3560,7 @@ void ScOpenCLTest::testStatisticalFormulaSTEYX()
 
 void ScOpenCLTest::testStatisticalFormulaZTest()
 {
-    if(!initTestEnv("opencl/statistical/ZTest.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/ZTest.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3574,7 +3577,7 @@ void ScOpenCLTest::testStatisticalFormulaZTest()
 
 void ScOpenCLTest::testStatisticalFormulaTTest()
 {
-    if(!initTestEnv("opencl/statistical/TTest.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/TTest.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3591,7 +3594,7 @@ void ScOpenCLTest::testStatisticalFormulaTTest()
 
 void ScOpenCLTest::testStatisticalFormulaTDist()
 {
-    if(!initTestEnv("opencl/statistical/TDist.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/TDist.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3608,7 +3611,7 @@ void ScOpenCLTest::testStatisticalFormulaTDist()
 
 void ScOpenCLTest::testStatisticalFormulaTInv()
 {
-    if(!initTestEnv("opencl/statistical/TInv.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/TInv.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3625,7 +3628,7 @@ void ScOpenCLTest::testStatisticalFormulaTInv()
 
 void ScOpenCLTest::testStatisticalFormulaBinomDist()
 {
-    if(!initTestEnv("opencl/statistical/BinomDist.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/BinomDist.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3642,7 +3645,7 @@ void ScOpenCLTest::testStatisticalFormulaBinomDist()
 
 void ScOpenCLTest::testMathFormulaProduct()
 {
-    if(!initTestEnv("opencl/math/product.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/product.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3677,7 +3680,7 @@ void ScOpenCLTest::testMathFormulaKombin()
 
 void ScOpenCLTest:: testArrayFormulaSumX2MY2()
 {
-    if(!initTestEnv("opencl/array/SUMX2MY2.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/array/SUMX2MY2.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3699,7 +3702,7 @@ void ScOpenCLTest:: testArrayFormulaSumX2MY2()
 
 void ScOpenCLTest::testStatisticalFormulaHypGeomDist()
 {
-    if(!initTestEnv("opencl/statistical/HypGeomDist.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/HypGeomDist.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3716,7 +3719,7 @@ void ScOpenCLTest::testStatisticalFormulaHypGeomDist()
 
 void ScOpenCLTest:: testArrayFormulaSumX2PY2()
 {
-    if(!initTestEnv("opencl/array/SUMX2PY2.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/array/SUMX2PY2.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3738,7 +3741,7 @@ void ScOpenCLTest:: testArrayFormulaSumX2PY2()
 
 void ScOpenCLTest::testStatisticalFormulaBetainv()
 {
-    if(!initTestEnv("opencl/statistical/Betainv.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Betainv.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3755,7 +3758,7 @@ void ScOpenCLTest::testStatisticalFormulaBetainv()
 
 void ScOpenCLTest::testStatisticalFormulaMina()
 {
-    if(!initTestEnv("opencl/statistical/Mina.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Mina.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3771,7 +3774,7 @@ void ScOpenCLTest::testStatisticalFormulaMina()
 
 void ScOpenCLTest:: testArrayFormulaSumXMY2()
 {
-    if(!initTestEnv("opencl/array/SUMXMY2.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/array/SUMXMY2.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3793,7 +3796,7 @@ void ScOpenCLTest:: testArrayFormulaSumXMY2()
 
 void ScOpenCLTest::testStatisticalFormulaCountA()
 {
-    if(!initTestEnv("opencl/statistical/counta.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/counta.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3809,7 +3812,7 @@ void ScOpenCLTest::testStatisticalFormulaCountA()
 
 void ScOpenCLTest::testStatisticalFormulaMaxa()
 {
-    if(!initTestEnv("opencl/statistical/Maxa.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Maxa.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3825,7 +3828,7 @@ void ScOpenCLTest::testStatisticalFormulaMaxa()
 
 void ScOpenCLTest::testMathFormulaSumProduct()
 {
-    if(!initTestEnv("opencl/math/sumproduct_mixSliding.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/sumproduct_mixSliding.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3855,7 +3858,7 @@ void ScOpenCLTest::testMathFormulaSumProduct()
 
 void ScOpenCLTest::testMathFormulaAverageIf()
 {
-    if(!initTestEnv("opencl/math/averageif.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/averageif.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3871,7 +3874,7 @@ void ScOpenCLTest::testMathFormulaAverageIf()
 
 void ScOpenCLTest::testStatisticalFormulaAverageA()
 {
-    if(!initTestEnv("opencl/statistical/AverageA.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/AverageA.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3887,7 +3890,7 @@ void ScOpenCLTest::testStatisticalFormulaAverageA()
 
 void ScOpenCLTest:: testLogicalFormulaAnd()
 {
-    if(!initTestEnv("opencl/logical/and.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/logical/and.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3909,7 +3912,7 @@ void ScOpenCLTest:: testLogicalFormulaAnd()
 
 void ScOpenCLTest::testStatisticalFormulaVarA()
 {
-    if(!initTestEnv("opencl/statistical/VarA.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/VarA.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3926,7 +3929,7 @@ void ScOpenCLTest::testStatisticalFormulaVarA()
 
 void ScOpenCLTest::testStatisticalFormulaVarPA()
 {
-    if(!initTestEnv("opencl/statistical/VarPA.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/VarPA.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3942,7 +3945,7 @@ void ScOpenCLTest::testStatisticalFormulaVarPA()
 
 void ScOpenCLTest::testStatisticalFormulaStDevA()
 {
-    if(!initTestEnv("opencl/statistical/StDevA.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/StDevA.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3959,7 +3962,7 @@ void ScOpenCLTest::testStatisticalFormulaStDevA()
 
 void ScOpenCLTest::testStatisticalFormulaStDevPA()
 {
-    if(!initTestEnv("opencl/statistical/StDevPA.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/StDevPA.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3976,7 +3979,7 @@ void ScOpenCLTest::testStatisticalFormulaStDevPA()
 
 void ScOpenCLTest:: testFinancialMDurationFormula1()
 {
-    if(!initTestEnv("opencl/financial/MDuration1.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/financial/MDuration1.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3992,7 +3995,7 @@ void ScOpenCLTest:: testFinancialMDurationFormula1()
 
 void ScOpenCLTest::testMathFormulaSumProduct2()
 {
-    if(!initTestEnv("opencl/math/sumproductTest.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/sumproductTest.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4009,7 +4012,7 @@ void ScOpenCLTest::testMathFormulaSumProduct2()
 
 void ScOpenCLTest:: testStatisticalParallelCountBug()
 {
-    if(!initTestEnv("opencl/statistical/parallel_count_bug_243.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/statistical/parallel_count_bug_243.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4025,7 +4028,7 @@ void ScOpenCLTest:: testStatisticalParallelCountBug()
 
 void ScOpenCLTest:: testLogicalFormulaOr()
 {
-    if(!initTestEnv("opencl/logical/or.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/logical/or.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4041,7 +4044,7 @@ void ScOpenCLTest:: testLogicalFormulaOr()
 
 void ScOpenCLTest:: testLogicalFormulaNot()
 {
-    if(!initTestEnv("opencl/logical/not.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/logical/not.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4057,7 +4060,7 @@ void ScOpenCLTest:: testLogicalFormulaNot()
 
 void ScOpenCLTest:: testLogicalFormulaXor()
 {
-    if(!initTestEnv("opencl/logical/xor.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/logical/xor.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4073,7 +4076,7 @@ void ScOpenCLTest:: testLogicalFormulaXor()
 
 void ScOpenCLTest::testDatabaseFormulaDcount()
 {
-    if(!initTestEnv("opencl/database/dcount.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/database/dcount.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4090,7 +4093,7 @@ void ScOpenCLTest::testDatabaseFormulaDcount()
 
 void ScOpenCLTest::testDatabaseFormulaDcountA()
 {
-    if(!initTestEnv("opencl/database/dcountA.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/database/dcountA.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4107,7 +4110,7 @@ void ScOpenCLTest::testDatabaseFormulaDcountA()
 
 void ScOpenCLTest::testDatabaseFormulaDmax()
 {
-    if(!initTestEnv("opencl/database/dmax.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/database/dmax.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4124,7 +4127,7 @@ void ScOpenCLTest::testDatabaseFormulaDmax()
 
 void ScOpenCLTest::testDatabaseFormulaDmin()
 {
-    if(!initTestEnv("opencl/database/dmin.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/database/dmin.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4141,7 +4144,7 @@ void ScOpenCLTest::testDatabaseFormulaDmin()
 
 void ScOpenCLTest::testDatabaseFormulaDproduct()
 {
-    if(!initTestEnv("opencl/database/dproduct.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/database/dproduct.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4158,7 +4161,7 @@ void ScOpenCLTest::testDatabaseFormulaDproduct()
 
 void ScOpenCLTest::testDatabaseFormulaDaverage()
 {
-    if(!initTestEnv("opencl/database/daverage.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/database/daverage.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4176,7 +4179,7 @@ void ScOpenCLTest::testDatabaseFormulaDaverage()
 
 void ScOpenCLTest::testDatabaseFormulaDstdev()
 {
-    if(!initTestEnv("opencl/database/dstdev.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/database/dstdev.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4194,7 +4197,7 @@ void ScOpenCLTest::testDatabaseFormulaDstdev()
 
 void ScOpenCLTest::testDatabaseFormulaDstdevp()
 {
-    if(!initTestEnv("opencl/database/dstdevp.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/database/dstdevp.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4212,7 +4215,7 @@ void ScOpenCLTest::testDatabaseFormulaDstdevp()
 
 void ScOpenCLTest::testDatabaseFormulaDsum()
 {
-    if(!initTestEnv("opencl/database/dsum.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/database/dsum.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4230,7 +4233,7 @@ void ScOpenCLTest::testDatabaseFormulaDsum()
 
 void ScOpenCLTest::testDatabaseFormulaDvar()
 {
-    if(!initTestEnv("opencl/database/dvar.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/database/dvar.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4248,7 +4251,7 @@ void ScOpenCLTest::testDatabaseFormulaDvar()
 
 void ScOpenCLTest::testDatabaseFormulaDvarp()
 {
-    if(!initTestEnv("opencl/database/dvarp.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/database/dvarp.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4265,7 +4268,7 @@ void ScOpenCLTest::testDatabaseFormulaDvarp()
 
 void ScOpenCLTest::testMathFormulaRoundUp()
 {
-    if(!initTestEnv("opencl/math/roundup.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/roundup.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4282,7 +4285,7 @@ void ScOpenCLTest::testMathFormulaRoundUp()
 
 void ScOpenCLTest::testMathFormulaRoundDown()
 {
-    if(!initTestEnv("opencl/math/rounddown.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/rounddown.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4299,7 +4302,7 @@ void ScOpenCLTest::testMathFormulaRoundDown()
 
 void ScOpenCLTest::testMathFormulaInt()
 {
-    if(!initTestEnv("opencl/math/int.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/int.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4316,7 +4319,7 @@ void ScOpenCLTest::testMathFormulaInt()
 
 void ScOpenCLTest::testMathFormulaRadians()
 {
-    if(!initTestEnv("opencl/math/radians.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/radians.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4333,7 +4336,7 @@ void ScOpenCLTest::testMathFormulaRadians()
 
 void ScOpenCLTest::testMathFormulaDegrees()
 {
-    if(!initTestEnv("opencl/math/degrees.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/degrees.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4349,7 +4352,7 @@ void ScOpenCLTest::testMathFormulaDegrees()
 
 void ScOpenCLTest::testMathFormulaIsEven()
 {
-    if(!initTestEnv("opencl/math/iseven.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/iseven.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4366,7 +4369,7 @@ void ScOpenCLTest::testMathFormulaIsEven()
 
 void ScOpenCLTest::testMathFormulaCountIf()
 {
-    if(!initTestEnv("opencl/math/countif.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/countif.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4382,7 +4385,7 @@ void ScOpenCLTest::testMathFormulaCountIf()
 
 void ScOpenCLTest::testMathFormulaIsOdd()
 {
-    if(!initTestEnv("opencl/math/isodd.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/isodd.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4399,7 +4402,7 @@ void ScOpenCLTest::testMathFormulaIsOdd()
 
 void ScOpenCLTest::testMathFormulaFact()
 {
-    if(!initTestEnv("opencl/math/fact.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/fact.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4415,7 +4418,7 @@ void ScOpenCLTest::testMathFormulaFact()
 
 void ScOpenCLTest::testMathFormulaSEC()
 {
-    if(!initTestEnv("opencl/math/sec.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/sec.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4431,7 +4434,7 @@ void ScOpenCLTest::testMathFormulaSEC()
 
 void ScOpenCLTest::testMathFormulaSECH()
 {
-    if(!initTestEnv("opencl/math/sech.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/sech.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4447,7 +4450,7 @@ void ScOpenCLTest::testMathFormulaSECH()
 
 void ScOpenCLTest::testMathFormulaMROUND()
 {
-    if(!initTestEnv("opencl/math/MROUND.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/MROUND.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4463,7 +4466,7 @@ void ScOpenCLTest::testMathFormulaMROUND()
 
 void ScOpenCLTest::testMathFormulaQuotient()
 {
-    if(!initTestEnv("opencl/math/Quotient.", FORMAT_ODS, false))
+    if(!initTestEnv(u"opencl/math/Quotient.", FORMAT_ODS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4480,7 +4483,7 @@ void ScOpenCLTest::testMathFormulaQuotient()
 
 void ScOpenCLTest::testMathFormulaSeriesSum()
 {
-    if(!initTestEnv("opencl/math/seriessum.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/seriessum.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4496,7 +4499,7 @@ void ScOpenCLTest::testMathFormulaSeriesSum()
 
 void ScOpenCLTest::testMathFormulaSumIf()
 {
-    if(!initTestEnv("opencl/math/sumif.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/sumif.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4512,7 +4515,7 @@ void ScOpenCLTest::testMathFormulaSumIf()
 
 void ScOpenCLTest::testAddInFormulaBesseLJ()
 {
-    if(!initTestEnv("opencl/addin/besselj.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/addin/besselj.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4529,7 +4532,7 @@ void ScOpenCLTest::testAddInFormulaBesseLJ()
 
 void ScOpenCLTest::testStatisticalFormulaAvedev()
 {
-    if(!initTestEnv("opencl/statistical/Avedev.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Avedev.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4546,7 +4549,7 @@ void ScOpenCLTest::testStatisticalFormulaAvedev()
 
 void ScOpenCLTest::testNegSub()
 {
-    if(!initTestEnv("opencl/math/NegSub.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/NegSub.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4563,7 +4566,7 @@ void ScOpenCLTest::testNegSub()
 
 void ScOpenCLTest::testMathFormulaAverageIf_Mix()
 {
-    if(!initTestEnv("opencl/math/averageif_mix.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/math/averageif_mix.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4579,7 +4582,7 @@ void ScOpenCLTest::testMathFormulaAverageIf_Mix()
 
 void ScOpenCLTest::testStatisticalFormulaKurt1()
 {
-    if(!initTestEnv("opencl/statistical/Kurt1.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/Kurt1.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4596,7 +4599,7 @@ void ScOpenCLTest::testStatisticalFormulaKurt1()
 
 void ScOpenCLTest::testStatisticalFormulaHarMean1()
 {
-    if(!initTestEnv("opencl/statistical/HarMean1.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/HarMean1.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4613,7 +4616,7 @@ void ScOpenCLTest::testStatisticalFormulaHarMean1()
 
 void ScOpenCLTest::testStatisticalFormulaVarA1()
 {
-    if(!initTestEnv("opencl/statistical/VarA1.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/VarA1.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4630,7 +4633,7 @@ void ScOpenCLTest::testStatisticalFormulaVarA1()
 
 void ScOpenCLTest::testStatisticalFormulaVarPA1()
 {
-    if(!initTestEnv("opencl/statistical/VarPA1.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/VarPA1.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4647,7 +4650,7 @@ void ScOpenCLTest::testStatisticalFormulaVarPA1()
 
 void ScOpenCLTest::testStatisticalFormulaStDevA1()
 {
-    if(!initTestEnv("opencl/statistical/StDevA1.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/StDevA1.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4664,7 +4667,7 @@ void ScOpenCLTest::testStatisticalFormulaStDevA1()
 
 void ScOpenCLTest::testStatisticalFormulaStDevPA1()
 {
-    if(!initTestEnv("opencl/statistical/StDevPA1.", FORMAT_XLS, false))
+    if(!initTestEnv(u"opencl/statistical/StDevPA1.", FORMAT_XLS, false))
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();

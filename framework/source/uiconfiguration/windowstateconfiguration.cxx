@@ -44,6 +44,7 @@
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -104,7 +105,7 @@ const char* CONFIGURATION_PROPERTIES[]           =
 class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameContainer, XContainerListener >
 {
     public:
-                                  ConfigurationAccess_WindowState( const OUString& aWindowStateConfigFile, const Reference< XComponentContext >& rxContext );
+                                  ConfigurationAccess_WindowState( std::u16string_view aWindowStateConfigFile, const Reference< XComponentContext >& rxContext );
         virtual                   ~ConfigurationAccess_WindowState() override;
 
         // XNameAccess
@@ -213,9 +214,10 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameCon
         std::vector< OUString >           m_aPropArray;
 };
 
-ConfigurationAccess_WindowState::ConfigurationAccess_WindowState( const OUString& aModuleName, const Reference< XComponentContext >& rxContext ) :
+ConfigurationAccess_WindowState::ConfigurationAccess_WindowState( std::u16string_view aModuleName, const Reference< XComponentContext >& rxContext ) :
     // Create configuration hierarchical access name
-    m_aConfigWindowAccess( "/org.openoffice.Office.UI." + aModuleName + "/UIElements/States"),
+    m_aConfigWindowAccess(
+        OUString::Concat("/org.openoffice.Office.UI.") + aModuleName + "/UIElements/States"),
     m_xConfigProvider(theDefaultProvider::get( rxContext )),
     m_bConfigAccessInitialized( false ),
     m_bModified( false )

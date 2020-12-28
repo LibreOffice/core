@@ -21,6 +21,7 @@
 #include <cassert>
 #include <memory>
 #include <utility>
+#include <string_view>
 #include <vector>
 
 
@@ -540,7 +541,7 @@ css::uno::Sequence< OUString > SaxExpatParser::getSupportedServiceNames()
 *
 *
 *-------------------------------------------*/
-OUString getErrorMessage( XML_Error xmlE, const OUString& sSystemId , sal_Int32 nLine )
+OUString getErrorMessage( XML_Error xmlE, std::u16string_view sSystemId , sal_Int32 nLine )
 {
     OUString Message;
     if( XML_ERROR_NONE == xmlE ) {
@@ -613,7 +614,7 @@ OUString getErrorMessage( XML_Error xmlE, const OUString& sSystemId , sal_Int32 
         Message = "not standalone";
     }
 
-    OUString str = "[" +
+    OUString str = OUString::Concat("[") +
         sSystemId +
         " line " +
         OUString::number( nLine ) +

@@ -80,14 +80,14 @@ bool isLog( RuntimeCargo const *cargo, sal_Int32 loglevel );
 void log( RuntimeCargo *cargo, sal_Int32 level, std::u16string_view logString );
 void log( RuntimeCargo *cargo, sal_Int32 level, const char *str );
 void logCall( RuntimeCargo *cargo, const char *intro,
-              void * ptr, const OUString & aFunctionName,
+              void * ptr, std::u16string_view aFunctionName,
               const css::uno::Sequence< css::uno::Any > & args );
 void logReply( RuntimeCargo *cargo, const char *intro,
-              void * ptr, const OUString & aFunctionName,
+              void * ptr, std::u16string_view aFunctionName,
               const css::uno::Any &returnValue,
               const css::uno::Sequence< css::uno::Any > & args );
 void logException( RuntimeCargo *cargo, const char *intro,
-                   void * ptr, const OUString &aFunctionName,
+                   void * ptr, std::u16string_view aFunctionName,
                    const void * data, const css::uno::Type & type );
 const sal_Int32 VAL2STR_MODE_DEEP = 0;
 const sal_Int32 VAL2STR_MODE_SHALLOW = 1;

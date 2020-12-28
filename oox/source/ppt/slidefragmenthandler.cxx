@@ -57,7 +57,7 @@ SlideFragmentHandler::SlideFragmentHandler( XmlFilterBase& rFilter, const OUStri
 , mpSlidePersistPtr( pPersistPtr )
 , meShapeLocation( eShapeLocation )
 {
-    OUString aVMLDrawingFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "vmlDrawing" );
+    OUString aVMLDrawingFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"vmlDrawing" );
     if( !aVMLDrawingFragmentPath.isEmpty() )
         getFilter().importFragment( new oox::vml::DrawingFragment(
             getFilter(), aVMLDrawingFragmentPath, *pPersistPtr->getDrawing() ) );
@@ -90,7 +90,7 @@ SlideFragmentHandler::~SlideFragmentHandler()
     {
         // Import notesMaster
         PowerPointImport& rFilter = dynamic_cast< PowerPointImport& >( getFilter() );
-        OUString aNotesFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "notesMaster" );
+        OUString aNotesFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"notesMaster" );
 
         std::vector< SlidePersistPtr >& rMasterPages( rFilter.getMasterPages() );
         bool bNotesFragmentPathFound = false;

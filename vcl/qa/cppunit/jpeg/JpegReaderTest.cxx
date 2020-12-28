@@ -8,6 +8,10 @@
  *
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <unotest/bootstrapfixturebase.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <bitmapwriteaccess.hxx>
@@ -17,7 +21,7 @@ constexpr OUStringLiteral gaDataUrl(u"/vcl/qa/cppunit/jpeg/data/");
 
 class JpegReaderTest : public test::BootstrapFixtureBase
 {
-    OUString getFullUrl(const OUString& sFileName)
+    OUString getFullUrl(std::u16string_view sFileName)
     {
         return m_directories.getURLFromSrc(gaDataUrl) + sFileName;
     }
@@ -112,7 +116,7 @@ Graphic JpegReaderTest::loadJPG(const OUString& aURL)
 
 void JpegReaderTest::testReadRGB()
 {
-    Graphic aGraphic = loadJPG(getFullUrl("JPEGTestRGB.jpeg"));
+    Graphic aGraphic = loadJPG(getFullUrl(u"JPEGTestRGB.jpeg"));
     Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
     Size aSize = aBitmap.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(tools::Long(12), aSize.Width());
@@ -129,7 +133,7 @@ void JpegReaderTest::testReadRGB()
 
 void JpegReaderTest::testReadGray()
 {
-    Graphic aGraphic = loadJPG(getFullUrl("JPEGTestGray.jpeg"));
+    Graphic aGraphic = loadJPG(getFullUrl(u"JPEGTestGray.jpeg"));
     Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
     Size aSize = aBitmap.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(tools::Long(12), aSize.Width());
@@ -149,7 +153,7 @@ void JpegReaderTest::testReadGray()
 
 void JpegReaderTest::testReadCMYK()
 {
-    Graphic aGraphic = loadJPG(getFullUrl("JPEGTestCMYK.jpeg"));
+    Graphic aGraphic = loadJPG(getFullUrl(u"JPEGTestCMYK.jpeg"));
     Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
     Size aSize = aBitmap.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(tools::Long(12), aSize.Width());
@@ -166,7 +170,7 @@ void JpegReaderTest::testReadCMYK()
 
 void JpegReaderTest::testTdf138950()
 {
-    Graphic aGraphic = loadJPG(getFullUrl("tdf138950.jpeg"));
+    Graphic aGraphic = loadJPG(getFullUrl(u"tdf138950.jpeg"));
     Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
     Size aSize = aBitmap.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(tools::Long(720), aSize.Width());

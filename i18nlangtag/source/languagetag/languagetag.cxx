@@ -528,7 +528,7 @@ LanguageTag::LanguageTag( LanguageType nLanguage )
 
 
 LanguageTag::LanguageTag( const OUString& rBcp47, const OUString& rLanguage,
-                          const OUString& rScript, const OUString& rCountry )
+                          std::u16string_view rScript, const OUString& rCountry )
     :
         maBcp47( rBcp47),
         mnLangID( LANGUAGE_DONTKNOW),
@@ -541,7 +541,7 @@ LanguageTag::LanguageTag( const OUString& rBcp47, const OUString& rLanguage,
     if (mbSystemLocale || mbInitializedBcp47)
         return;
 
-    if (rScript.isEmpty())
+    if (rScript.empty())
     {
         maBcp47 = rLanguage + "-" + rCountry;
         mbInitializedBcp47 = true;

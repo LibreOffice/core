@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <swtypes.hxx>
 #include <swfont.hxx>
 #include "porexp.hxx"
@@ -148,7 +152,7 @@ class SwBulletPortion : public SwNumberPortion
 {
 public:
     SwBulletPortion( const sal_UCS4 cCh,
-                     const OUString& rBulletFollowedBy,
+                     std::u16string_view rBulletFollowedBy,
                      std::unique_ptr<SwFont> pFnt,
                      const bool bLeft,
                      const bool bCenter,

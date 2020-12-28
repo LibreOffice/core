@@ -263,7 +263,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
         // the stream must be seekable
         uno::Reference< io::XSeekable > xSeekable( xStream, uno::UNO_QUERY_THROW );
         xSeekable->seek( 0 );
-        m_aFilterName = OwnView_Impl::GetFilterNameFromExtentionAndInStream( m_xContext, OUString(), xStream->getInputStream() );
+        m_aFilterName = OwnView_Impl::GetFilterNameFromExtentionAndInStream( m_xContext, std::u16string_view(), xStream->getInputStream() );
 
         if ( !m_aFilterName.isEmpty()
           && ( m_aFilterName == "Calc MS Excel 2007 XML" || m_aFilterName == "Impress MS PowerPoint 2007 XML" || m_aFilterName == "MS Word 2007 XML"

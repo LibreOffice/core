@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <vcl/weld.hxx>
 
 class SwSelGlossaryDlg final : public weld::GenericDialogController
@@ -28,12 +32,12 @@ class SwSelGlossaryDlg final : public weld::GenericDialogController
 
     DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
 public:
-    SwSelGlossaryDlg(weld::Window * pParent, const OUString &rShortName);
+    SwSelGlossaryDlg(weld::Window * pParent, std::u16string_view rShortName);
     virtual ~SwSelGlossaryDlg() override;
 
-    void InsertGlos(const OUString &rRegion, const OUString &rGlosName)
+    void InsertGlos(std::u16string_view rRegion, std::u16string_view rGlosName)
     {
-        const OUString aTmp = rRegion + ":" + rGlosName;
+        const OUString aTmp = OUString::Concat(rRegion) + ":" + rGlosName;
         m_xGlosBox->append_text(aTmp);
     }
     sal_Int32 GetSelectedIdx() const

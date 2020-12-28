@@ -159,9 +159,9 @@ static Color WW8TransCol(SVBT32 nWC)
     return Color(nWC[0], nWC[1], nWC[2]);
 }
 
-void wwFrameNamer::SetUniqueGraphName(SwFrameFormat *pFrameFormat, const OUString &rFixed)
+void wwFrameNamer::SetUniqueGraphName(SwFrameFormat *pFrameFormat, std::u16string_view rFixed)
 {
-    if (mbIsDisabled || rFixed.isEmpty())
+    if (mbIsDisabled || rFixed.empty())
         return;
 
     pFrameFormat->SetName(msSeed+OUString::number(++mnImportedGraphicsCount) + ": " + rFixed);

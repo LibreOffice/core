@@ -63,6 +63,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <memory>
+#include <string_view>
 
 using namespace css::animations;
 using namespace css::presentation;
@@ -1023,7 +1024,7 @@ void SVGFilter::implExportDocumentHeaderWriterOrCalc(sal_Int32 nDocX, sal_Int32 
 template< typename TextFieldType >
 static OUString implGenerateFieldId( std::vector< std::unique_ptr<TextField> > & aFieldSet,
                               const TextFieldType & aField,
-                              const OUString & sOOOElemField,
+                              std::u16string_view sOOOElemField,
                               const Reference< css::drawing::XDrawPage >& xMasterPage )
 {
     bool bFound = false;
@@ -1037,7 +1038,7 @@ static OUString implGenerateFieldId( std::vector< std::unique_ptr<TextField> > &
             break;
         }
     }
-    OUString sFieldId(sOOOElemField + "_");
+    OUString sFieldId(OUString::Concat(sOOOElemField) + "_");
     if( !bFound )
     {
         aFieldSet.emplace_back( new TextFieldType( aField ) );
@@ -1708,7 +1709,7 @@ void SVGFilter::implExportDrawPages( const std::vector< Reference< css::drawing:
 }
 
 
-bool SVGFilter::implExportPage( const OUString & sPageId,
+bool SVGFilter::implExportPage( std::u16string_view sPageId,
                                     const Reference< css::drawing::XDrawPage > & rxPage,
                                     const Reference< css::drawing::XShapes > & xShapes,
                                     bool bMaster )
@@ -1746,7 +1747,7 @@ bool SVGFilter::implExportPage( const OUString & sPageId,
             if( rMtf.GetActionSize() )
             {
                 // background id = "bg-" + page id
-                OUString sBackgroundId = "bg-" + sPageId;
+                OUString sBackgroundId = OUString::Concat("bg-") + sPageId;
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sBackgroundId );
 
                 // At present (LibreOffice 3.4.0) the 'IsBackgroundVisible' property is not handled
@@ -1780,7 +1781,7 @@ bool SVGFilter::implExportPage( const OUString & sPageId,
         if( bMaster )
         {
             // background objects id = "bo-" + page id
-            OUString sBackgroundObjectsId = "bo-" + sPageId;
+            OUString sBackgroundObjectsId = OUString::Concat("bo-") + sPageId;
             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sBackgroundObjectsId );
             if( !mbPresentation )
             {

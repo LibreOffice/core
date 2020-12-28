@@ -16751,7 +16751,7 @@ private:
     }
 
 public:
-    GtkInstanceBuilder(GtkWidget* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+    GtkInstanceBuilder(GtkWidget* pParent, std::u16string_view rUIRoot, const OUString& rUIFile,
                        SystemChildWindow* pInterimGlue, bool bAllowCycleFocusOut)
         : weld::Builder()
         , m_pStringReplace(Translate::GetReadStringHook())

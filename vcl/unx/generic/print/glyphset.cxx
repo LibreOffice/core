@@ -141,17 +141,17 @@ GlyphSet::GetGlyphSetName (sal_Int32 nGlyphSetID)
 }
 
 OString
-GlyphSet::GetReencodedFontName (rtl_TextEncoding nEnc, const OString &rFontName)
+GlyphSet::GetReencodedFontName (rtl_TextEncoding nEnc, std::string_view rFontName)
 {
     if (   nEnc == RTL_TEXTENCODING_MS_1252
         || nEnc == RTL_TEXTENCODING_ISO_8859_1)
     {
-        return rFontName + "-iso1252";
+        return OString::Concat(rFontName) + "-iso1252";
     }
     else
     if (nEnc >= RTL_TEXTENCODING_USER_START && nEnc <= RTL_TEXTENCODING_USER_END)
     {
-        return rFontName
+        return OString::Concat(rFontName)
                + "-enc"
                + OString::number ((nEnc - RTL_TEXTENCODING_USER_START));
     }

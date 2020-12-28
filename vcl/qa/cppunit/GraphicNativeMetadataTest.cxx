@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <unotest/bootstrapfixturebase.hxx>
@@ -21,9 +25,9 @@ namespace
 {
 class GraphicNativeMetadataTest : public test::BootstrapFixtureBase
 {
-    OUString getFullUrl(const OUString& sFileName)
+    OUString getFullUrl(std::u16string_view sFileName)
     {
-        return m_directories.getURLFromSrc("/vcl/qa/cppunit/data/") + sFileName;
+        return m_directories.getURLFromSrc(u"/vcl/qa/cppunit/data/") + sFileName;
     }
 
     void testReadFromGraphic();
@@ -37,7 +41,7 @@ class GraphicNativeMetadataTest : public test::BootstrapFixtureBase
 
 void GraphicNativeMetadataTest::testReadFromGraphic()
 {
-    SvFileStream aFileStream(getFullUrl("Exif1_180.jpg"), StreamMode::READ);
+    SvFileStream aFileStream(getFullUrl(u"Exif1_180.jpg"), StreamMode::READ);
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
 
     // don't load the graphic, but try to get the metadata
@@ -66,28 +70,28 @@ void GraphicNativeMetadataTest::testExifRotationJpeg()
 {
     {
         // No rotation in metadata
-        SvFileStream aFileStream(getFullUrl("Exif1.jpg"), StreamMode::READ);
+        SvFileStream aFileStream(getFullUrl(u"Exif1.jpg"), StreamMode::READ);
         GraphicNativeMetadata aMetadata;
         aMetadata.read(aFileStream);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aMetadata.getRotation().get());
     }
     {
         // Rotation 90 degree clock-wise = 270 degree counter-clock-wise
-        SvFileStream aFileStream(getFullUrl("Exif1_090CW.jpg"), StreamMode::READ);
+        SvFileStream aFileStream(getFullUrl(u"Exif1_090CW.jpg"), StreamMode::READ);
         GraphicNativeMetadata aMetadata;
         aMetadata.read(aFileStream);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(2700), aMetadata.getRotation().get());
     }
     {
         // Rotation 180 degree
-        SvFileStream aFileStream(getFullUrl("Exif1_180.jpg"), StreamMode::READ);
+        SvFileStream aFileStream(getFullUrl(u"Exif1_180.jpg"), StreamMode::READ);
         GraphicNativeMetadata aMetadata;
         aMetadata.read(aFileStream);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(1800), aMetadata.getRotation().get());
     }
     {
         // Rotation 270 degree clock-wise = 90 degree counter-clock-wise
-        SvFileStream aFileStream(getFullUrl("Exif1_270CW.jpg"), StreamMode::READ);
+        SvFileStream aFileStream(getFullUrl(u"Exif1_270CW.jpg"), StreamMode::READ);
         GraphicNativeMetadata aMetadata;
         aMetadata.read(aFileStream);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(900), aMetadata.getRotation().get());

@@ -32,6 +32,7 @@
 
 #include "types.hxx"
 
+#include <string_view>
 #include <vector>
 #include <unordered_map>
 
@@ -146,7 +147,7 @@ private:
     void        ReadConfiguration();
     void        ReadFromAddIn( const css::uno::Reference< css::uno::XInterface>& xInterface );
     void        UpdateFromAddIn( const css::uno::Reference< css::uno::XInterface>& xInterface,
-                                const OUString& rServiceName );
+                                std::u16string_view rServiceName );
     void        LoadComponent( const ScUnoAddInFuncData& rFuncData );
 
 public:

@@ -36,6 +36,7 @@
 #include <vector>
 #include <queue>
 #include <string>
+#include <string_view>
 
 #ifdef _WIN32
 #include <direct.h>
@@ -112,7 +113,7 @@ public:
       Generate QTZ string with ResData
       For executable which works one language and without PO files.
     */
-    static OString GetQTZText(const ResData& rResData, const OString& rOrigText);
+    static OString GetQTZText(const ResData& rResData, std::string_view rOrigText);
 
 };
 
@@ -126,8 +127,8 @@ class MergeDataFile
         std::set<OString> aLanguageSet;
 
         MergeEntrys *GetMergeData( ResData *pResData , bool bCaseSensitive = false );
-        void InsertEntry(const OString &rTYP, const OString &rGID,
-            const OString &rLID, const OString &nLang,
+        void InsertEntry(std::string_view rTYP, std::string_view rGID,
+            std::string_view rLID, const OString &nLang,
             const OString &rTEXT, const OString &rQHTEXT,
             const OString &rTITLE, const OString &sFilename,
             bool bFirstLang, bool bCaseSensitive);
@@ -143,8 +144,8 @@ class MergeDataFile
         MergeEntrys *GetMergeEntrys( ResData *pResData );
         MergeEntrys *GetMergeEntrysCaseSensitive( ResData *pResData );
 
-        static OString CreateKey(const OString& rTYP, const OString& rGID,
-            const OString& rLID, const OString& rFilename, bool bCaseSensitive);
+        static OString CreateKey(std::string_view rTYP, std::string_view rGID,
+            std::string_view rLID, const OString& rFilename, bool bCaseSensitive);
 };
 
 

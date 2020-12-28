@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <dp_descriptioninfoset.hxx>
 
 #include <dp_resource.h>
@@ -118,7 +122,7 @@ public:
      */
     ExtensionDescription(
         const css::uno::Reference<css::uno::XComponentContext>& xContext,
-        const OUString& installDir,
+        std::u16string_view installDir,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv);
 
     const css::uno::Reference<css::xml::dom::XNode>& getRootElement() const
@@ -160,7 +164,7 @@ public:
 
 ExtensionDescription::ExtensionDescription(
     const Reference<css::uno::XComponentContext>& xContext,
-    const OUString& installDir,
+    std::u16string_view installDir,
     const Reference< css::ucb::XCommandEnvironment >& xCmdEnv)
 {
     try {
@@ -168,7 +172,7 @@ ExtensionDescription::ExtensionDescription(
         //If there is no description.xml then ucb will start an interaction which
         //brings up a dialog.We want to prevent this. Therefore we wrap the xCmdEnv
         //and filter the respective exception out.
-        OUString sDescriptionUri(installDir + "/description.xml");
+        OUString sDescriptionUri(OUString::Concat(installDir) + "/description.xml");
         Reference<css::ucb::XCommandEnvironment> xFilter = new FileDoesNotExistFilter(xCmdEnv);
         ::ucbhelper::Content descContent(sDescriptionUri, xFilter, xContext);
 
@@ -289,7 +293,7 @@ void  FileDoesNotExistFilter::handle(
 
 namespace dp_misc {
 
-DescriptionInfoset getDescriptionInfoset(OUString const & sExtensionFolderURL)
+DescriptionInfoset getDescriptionInfoset(std::u16string_view sExtensionFolderURL)
 {
     Reference< css::xml::dom::XNode > root;
     Reference<css::uno::XComponentContext> context(
@@ -706,13 +710,13 @@ DescriptionInfoset::getLocalizedChild( const OUString & sParent) const
 
 css::uno::Reference<css::xml::dom::XNode>
 DescriptionInfoset::matchLanguageTag(
-    css::uno::Reference< css::xml::dom::XNode > const & xParent, OUString const & rTag) const
+    css::uno::Reference< css::xml::dom::XNode > const & xParent, std::u16string_view rTag) const
 {
     OSL_ASSERT(xParent.is());
     css::uno::Reference<css::xml::dom::XNode> nodeMatch;
 
     //first try exact match for lang
-    const OUString exp1("*[@lang=\"" + rTag + "\"]");
+    const OUString exp1(OUString::Concat("*[@lang=\"") + rTag + "\"]");
     try {
         nodeMatch = m_xpath->selectSingleNode(xParent, exp1);
     } catch (const css::xml::xpath::XPathException &) {
@@ -724,7 +728,7 @@ DescriptionInfoset::matchLanguageTag(
     if (!nodeMatch.is())
     {
         const OUString exp2(
-            "*[starts-with(@lang,\"" + rTag + "-\")]");
+            OUString::Concat("*[starts-with(@lang,\"") + rTag + "-\")]");
         try {
             nodeMatch = m_xpath->selectSingleNode(xParent, exp2);
         } catch (const css::xml::xpath::XPathException &) {

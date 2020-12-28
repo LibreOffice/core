@@ -125,7 +125,7 @@ public:
 SvFileStream* EmbeddedDBPerformanceTest::getWordListStream()
 {
     OUString wlPath;
-    createFileURL("wordlist", wlPath);
+    createFileURL(u"wordlist", wlPath);
     return new SvFileStream(wlPath, StreamMode::READ);
 }
 

@@ -1124,7 +1124,7 @@ OUString ObjectIdentifier::createSeriesSubObjectStub( ObjectType eSubObjectType
           , rDragMethodServiceName, rDragParameterString );
 }
 
-OUString ObjectIdentifier::createPointCID( const OUString& rPointCID_Stub, sal_Int32 nIndex  )
+OUString ObjectIdentifier::createPointCID( std::u16string_view rPointCID_Stub, sal_Int32 nIndex  )
 {
     return rPointCID_Stub + OUString::number( nIndex );
 }

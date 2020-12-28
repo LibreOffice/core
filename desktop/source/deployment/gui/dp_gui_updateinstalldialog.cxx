@@ -52,6 +52,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <comphelper/anytostring.hxx>
 
+#include <string_view>
 #include <vector>
 
 using dp_misc::StrTitle;
@@ -233,7 +234,7 @@ void UpdateInstallDialog::updateDone()
 // make sure the solar mutex is locked before calling
 //sets an error message in the text area
 void UpdateInstallDialog::setError(INSTALL_ERROR err, std::u16string_view sExtension,
-    OUString const & exceptionMessage)
+    std::u16string_view exceptionMessage)
 {
     OUString sError;
     m_bError = true;
@@ -264,7 +265,7 @@ void UpdateInstallDialog::setError(INSTALL_ERROR err, std::u16string_view sExten
         sMsg += "\n";
     sMsg += sError;
     //Insert more information about the error
-    if (!exceptionMessage.isEmpty())
+    if (!exceptionMessage.empty())
         sMsg += m_sThisErrorOccurred + exceptionMessage + "\n";
 
     sMsg += m_sNoInstall + "\n";
@@ -272,7 +273,7 @@ void UpdateInstallDialog::setError(INSTALL_ERROR err, std::u16string_view sExten
     m_xMle_info->set_text(sMsg);
 }
 
-void UpdateInstallDialog::setError(OUString const & exceptionMessage)
+void UpdateInstallDialog::setError(std::u16string_view exceptionMessage)
 {
     m_bError = true;
     m_xMle_info->set_text(m_xMle_info->get_text() + exceptionMessage + "\n");
@@ -493,7 +494,7 @@ void UpdateInstallDialog::Thread::installExtensions()
                 return;
             }
             m_dialog.setError(UpdateInstallDialog::ERROR_LICENSE_DECLINED,
-                updateData.aInstalledPackage->getDisplayName(), OUString());
+                updateData.aInstalledPackage->getDisplayName(), std::u16string_view());
         }
         else if (!xExtension.is() || bError)
         {

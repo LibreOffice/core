@@ -33,6 +33,7 @@
 #include <rtl/ref.hxx>
 
 #include <map>
+#include <string_view>
 
 namespace sdext::presenter {
 
@@ -172,7 +173,7 @@ private:
     */
     void ProcessLayout (
         PresenterConfigurationAccess& rConfiguration,
-        const OUString& rsLayoutName,
+        std::u16string_view rsLayoutName,
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxAnchorId);
 

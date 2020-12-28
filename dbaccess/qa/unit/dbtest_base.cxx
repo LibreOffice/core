@@ -9,6 +9,8 @@
 
 #include <sal/config.h>
 
+#include <string_view>
+
 #include <cppunit/TestAssert.h>
 
 #include <test/unoapi_test.hxx>
@@ -28,10 +30,10 @@ class DBTestBase
 public:
     DBTestBase() : UnoApiTest("dbaccess/qa/unit/data") {};
 
-    utl::TempFile createTempCopy(OUString const & pathname);
+    utl::TempFile createTempCopy(std::u16string_view pathname);
 
     uno::Reference< XOfficeDatabaseDocument >
-        getDocumentForFileName(const OUString &sFileName);
+        getDocumentForFileName(std::u16string_view sFileName);
 
     uno::Reference<XOfficeDatabaseDocument> getDocumentForUrl(OUString const & url);
 
@@ -40,7 +42,7 @@ public:
             uno::Reference< XOfficeDatabaseDocument > const & xDocument);
 };
 
-utl::TempFile DBTestBase::createTempCopy(OUString const & pathname) {
+utl::TempFile DBTestBase::createTempCopy(std::u16string_view pathname) {
     OUString url;
     createFileURL(pathname, url);
     utl::TempFile tmp;
@@ -56,7 +58,7 @@ utl::TempFile DBTestBase::createTempCopy(OUString const & pathname) {
 }
 
 uno::Reference< XOfficeDatabaseDocument >
-    DBTestBase::getDocumentForFileName(const OUString &sFileName)
+    DBTestBase::getDocumentForFileName(std::u16string_view sFileName)
 {
     OUString sFilePath;
     createFileURL(sFileName, sFilePath);

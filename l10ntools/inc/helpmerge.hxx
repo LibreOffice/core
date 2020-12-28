@@ -20,6 +20,10 @@
 #ifndef INCLUDED_L10NTOOLS_INC_HELPMERGE_HXX
 #define INCLUDED_L10NTOOLS_INC_HELPMERGE_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "xmlparse.hxx"
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -45,7 +49,7 @@ public:
 /// Method append a PO file with the content of a parsed XML file
 /// @PRECOND rHelpFile is valid
     static bool CreatePO( const OString &rPOFile_in, const OString &sHelpFile,
-                          XMLFile *pXmlFile, const OString &rGsi1 );
+                          XMLFile *pXmlFile, std::string_view rGsi1 );
 
 /// Method merges the String into XMLfile, which must point to an existing file.
     bool Merge( const OString &rDestinationFile_in ,

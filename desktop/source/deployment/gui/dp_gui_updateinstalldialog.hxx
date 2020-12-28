@@ -22,6 +22,8 @@
 #include <sal/config.h>
 #include <vcl/weld.hxx>
 #include <rtl/ref.hxx>
+
+#include <string_view>
 #include <vector>
 
 /// @HTML
@@ -78,8 +80,8 @@ private:
         ERROR_INSTALLATION,
         ERROR_LICENSE_DECLINED
     };
-    void setError(INSTALL_ERROR err, std::u16string_view sExtension, OUString const & exceptionMessage);
-    void setError(OUString const & exceptionMessage);
+    void setError(INSTALL_ERROR err, std::u16string_view sExtension, std::u16string_view exceptionMessage);
+    void setError(std::u16string_view exceptionMessage);
     const css::uno::Reference< css::deployment::XExtensionManager >& getExtensionManager() const
             { return m_xExtensionManager; }
 

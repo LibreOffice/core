@@ -23,6 +23,8 @@
 #include <rtl/string.hxx>
 #include <vector>
 #include <deque>
+#include <string_view>
+
 #include <dp_backenddb.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -81,7 +83,7 @@ public:
 
     void addEntry(OUString const & url, Data const & data);
 
-    Data getEntry(OUString const & url);
+    Data getEntry(std::u16string_view url);
 
 
 };

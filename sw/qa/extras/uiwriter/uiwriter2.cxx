@@ -3396,7 +3396,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf128603)
 // only care that it doesn't assert/crash
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testOfz18563)
 {
-    OUString sURL(m_directories.getURLFromSrc("/sw/qa/extras/uiwriter/data2/ofz18563.docx"));
+    OUString sURL(m_directories.getURLFromSrc(u"/sw/qa/extras/uiwriter/data2/ofz18563.docx"));
     SvFileStream aFileStream(sURL, StreamMode::READ);
     TestImportDOCX(aFileStream);
 }

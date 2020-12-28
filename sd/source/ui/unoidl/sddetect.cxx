@@ -117,7 +117,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                     nBase = 1;
                 else if ( aTypeName == "pcd_Photo_CD_Base16" )
                     nBase = 0;
-                FilterConfigItem aFilterConfigItem( "Office.Common/Filter/Graphic/Import/PCD" );
+                FilterConfigItem aFilterConfigItem( u"Office.Common/Filter/Graphic/Import/PCD" );
                 aFilterConfigItem.WriteInt32( "Resolution" , nBase );
             }
 

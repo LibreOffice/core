@@ -15,6 +15,8 @@
 #include <sal/config.h>
 
 #include <iostream>
+#include <string_view>
+
 #include <rtl/string.hxx>
 #include "po.hxx"
 
@@ -48,7 +50,7 @@ void writeUsage(const OString& rName, const OString& rFileType);
 /// Write out a PoEntry with attention to exceptions
 void writePoEntry(
     const OString& rExecutable, PoOfstream& rPoStream, const OString& rSourceFile,
-    const OString& rResType, const OString& rGroupId, const OString& rLocalId,
+    std::string_view rResType, const OString& rGroupId, const OString& rLocalId,
     const OString& rHelpText, const OString& rText, const PoEntry::TYPE eType = PoEntry::TTEXT );
 
 }

@@ -23,6 +23,8 @@
 #include <rtl/string.hxx>
 #include <vector>
 #include <optional>
+#include <string_view>
+
 #include <dp_backenddb.hxx>
 
 namespace com::sun::star::uno
@@ -64,7 +66,7 @@ public:
 
     void addEntry(OUString const& url, Data const& data);
 
-    ::std::optional<Data> getEntry(OUString const& url);
+    ::std::optional<Data> getEntry(std::u16string_view url);
     std::vector<OUString> getAllDataUrls();
 };
 }

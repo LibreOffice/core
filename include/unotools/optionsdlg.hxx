@@ -19,6 +19,10 @@
 #ifndef INCLUDED_UNOTOOLS_OPTIONSDLG_HXX
 #define INCLUDED_UNOTOOLS_OPTIONSDLG_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
@@ -34,12 +38,12 @@ public:
                     SvtOptionsDialogOptions();
                     virtual ~SvtOptionsDialogOptions() override;
 
-    bool        IsGroupHidden   (   const OUString& _rGroup ) const;
-    bool        IsPageHidden    (   const OUString& _rPage,
-                                        const OUString& _rGroup ) const;
-    bool        IsOptionHidden  (   const OUString& _rOption,
-                                        const OUString& _rPage,
-                                        const OUString& _rGroup ) const;
+    bool        IsGroupHidden   (   std::u16string_view _rGroup ) const;
+    bool        IsPageHidden    (   std::u16string_view _rPage,
+                                        std::u16string_view _rGroup ) const;
+    bool        IsOptionHidden  (   std::u16string_view _rOption,
+                                        std::u16string_view _rPage,
+                                        std::u16string_view _rGroup ) const;
 };
 
 #endif

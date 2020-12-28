@@ -419,7 +419,7 @@ public:
     void OutAnchor( const OUString& rName );
     void OutBookmarks();
     void OutPointFieldmarks( const SwPosition& rPos );
-    void OutImplicitMark( const OUString& rMark, const char *pMarkType );
+    void OutImplicitMark( std::u16string_view rMark, const char *pMarkType );
 
     OUString convertHyperlinkHRefValue(const OUString& rURL);
 

@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <string_view>
+
 #include <propertysethelper.hxx>
 #include <com/sun/star/beans/PropertyVetoException.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
@@ -29,18 +31,18 @@ namespace canvas
 {
     namespace
     {
-        void throwUnknown( const OUString& aPropertyName )
+        void throwUnknown( std::u16string_view aPropertyName )
         {
             throw beans::UnknownPropertyException(
-                "PropertySetHelper: property " +
+                OUString::Concat("PropertySetHelper: property ") +
                 aPropertyName + " not found."
                 );
         }
 
-        void throwVeto( const OUString& aPropertyName )
+        void throwVeto( std::u16string_view aPropertyName )
         {
             throw beans::PropertyVetoException(
-                "PropertySetHelper: property " +
+                OUString::Concat("PropertySetHelper: property ") +
                 aPropertyName + " access was vetoed." );
         }
 

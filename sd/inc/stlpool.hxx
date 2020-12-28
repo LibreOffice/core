@@ -27,6 +27,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <vcl/font.hxx>
 #include <map>
+#include <string_view>
 #include <vector>
 
 #include "stlfamily.hxx"
@@ -55,10 +56,10 @@ public:
     void                SetActualStyleSheet(SfxStyleSheetBase* pActStyleSheet)  { mpActualStyleSheet = pActStyleSheet; }
     SfxStyleSheetBase*  GetActualStyleSheet()                                   { return mpActualStyleSheet; }
 
-    SfxStyleSheetBase*  GetTitleSheet(const OUString& rLayoutName);
+    SfxStyleSheetBase*  GetTitleSheet(std::u16string_view rLayoutName);
 
                         // Caller has to delete the list
-    void                CreateOutlineSheetList(const OUString& rLayoutName, std::vector<SfxStyleSheetBase*> &rOutlineStyles);
+    void                CreateOutlineSheetList(std::u16string_view rLayoutName, std::vector<SfxStyleSheetBase*> &rOutlineStyles);
 
     /** creates all layout style sheets for the given layout name if they
         don't exist yet.
@@ -68,15 +69,15 @@ public:
                             had to be created. This is used to assert errors in documents
                             when styles are missing.
     */
-    SD_DLLPUBLIC void                CreateLayoutStyleSheets(const OUString& rLayoutName, bool bCheck = false );
-    static void         CreateLayoutSheetNames(const OUString& rLayoutName, std::vector<OUString> &aNameList);
-    void                CreateLayoutSheetList(const OUString& rLayoutName, SdStyleSheetVector& rLayoutSheets);
-    void                CopyLayoutSheets(const OUString& rLayoutName, SdStyleSheetPool& rSourcePool, StyleSheetCopyResultVector& rCreatedSheets);
+    SD_DLLPUBLIC void                CreateLayoutStyleSheets(std::u16string_view rLayoutName, bool bCheck = false );
+    static void         CreateLayoutSheetNames(std::u16string_view rLayoutName, std::vector<OUString> &aNameList);
+    void                CreateLayoutSheetList(std::u16string_view rLayoutName, SdStyleSheetVector& rLayoutSheets);
+    void                CopyLayoutSheets(std::u16string_view rLayoutName, SdStyleSheetPool& rSourcePool, StyleSheetCopyResultVector& rCreatedSheets);
     void                CopyGraphicSheets(SdStyleSheetPool& rSourcePool);
     void                CopyCellSheets(SdStyleSheetPool& rSourcePool);
     void                CopyTableStyles(SdStyleSheetPool const & rSourcePool);
     void                CopyCellSheets(SdStyleSheetPool& rSourcePool, StyleSheetCopyResultVector& rCreatedSheets);
-    void                RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, StyleSheetCopyResultVector& rCreatedSheets, OUString const &rRenameSuffix);
+    void                RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, StyleSheetCopyResultVector& rCreatedSheets, std::u16string_view rRenameSuffix);
 
     void                CreatePseudosIfNecessary();
     void                UpdateStdNames();
@@ -119,7 +120,7 @@ public:
 private:
     void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily );
     void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, StyleSheetCopyResultVector& rCreatedSheets );
-    void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, StyleSheetCopyResultVector& rCreatedSheets, const OUString &rRenameSuffix );
+    void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, StyleSheetCopyResultVector& rCreatedSheets, std::u16string_view rRenameSuffix );
 
     virtual SfxStyleSheetBase* Create(const OUString& rName, SfxStyleFamily eFamily, SfxStyleSearchBits nMask) override;
 

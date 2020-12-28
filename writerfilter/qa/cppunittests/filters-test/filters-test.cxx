@@ -70,7 +70,7 @@ CPPUNIT_TEST_FIXTURE(RtfTest, testFilter)
 {
 #ifndef DISABLE_CVE_TESTS
     testDir(OUString(),
-            m_directories.getURLFromSrc("/writerfilter/qa/cppunittests/filters-test/data/"));
+            m_directories.getURLFromSrc(u"/writerfilter/qa/cppunittests/filters-test/data/"));
 #endif
 }
 

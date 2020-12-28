@@ -23,12 +23,12 @@
 using namespace lucene::document;
 
 HelpIndexer::HelpIndexer(OUString const &lang, OUString const &module,
-    OUString const &srcDir, OUString const &outDir)
+    std::u16string_view srcDir, std::u16string_view outDir)
     : d_lang(lang), d_module(module)
 {
     d_indexDir = outDir + OUStringChar('/') + module + ".idxl";
-    d_captionDir = srcDir + "/caption";
-    d_contentDir = srcDir + "/content";
+    d_captionDir = OUString::Concat(srcDir) + "/caption";
+    d_contentDir = OUString::Concat(srcDir) + "/content";
 }
 
 bool HelpIndexer::indexDocuments()

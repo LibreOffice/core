@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <test/bootstrapfixture.hxx>
 #include <tools/stream.hxx>
 #include <vcl/filter/PngImageReader.hxx>
@@ -29,7 +33,7 @@ class PngFilterTest : public test::BootstrapFixture
 {
     OUString maDataUrl;
 
-    OUString getFullUrl(const OUString& sFileName)
+    OUString getFullUrl(std::u16string_view sFileName)
     {
         return m_directories.getURLFromSrc(maDataUrl) + sFileName;
     }

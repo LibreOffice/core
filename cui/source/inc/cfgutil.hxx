@@ -20,6 +20,8 @@
 
 #include <vector>
 #include <memory>
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/frame/DispatchInformation.hpp>
@@ -70,7 +72,7 @@ public:
         std::vector< SfxStyleInfo_Impl > getStyleFamilies() const;
         std::vector< SfxStyleInfo_Impl > getStyles(const OUString& sFamily);
 
-        static OUString generateCommand(const OUString& sFamily, const OUString& sStyle);
+        static OUString generateCommand(std::u16string_view sFamily, std::u16string_view sStyle);
 };
 
 enum class SfxCfgKind
@@ -223,7 +225,7 @@ public:
                         { m_pFunctionListBox = pBox; }
     void                GroupSelected();
     void                SelectMacro(const SfxMacroInfoItem*);
-    void                SelectMacro(const OUString&, const OUString&);
+    void                SelectMacro(std::u16string_view, const OUString&);
     void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 

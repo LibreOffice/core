@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 
 #include <strings.hrc>
 #include <dp_misc.h>
@@ -64,7 +67,7 @@ class CommandEnvironmentImpl
 
     /// @throws RuntimeException
     void update_( Any const & Status );
-    void printLicense(std::u16string_view sName,const OUString& sLicense,
+    void printLicense(std::u16string_view sName,std::u16string_view sLicense,
                       bool & accept, bool & decline);
 
 public:
@@ -125,7 +128,7 @@ CommandEnvironmentImpl::~CommandEnvironmentImpl()
 
 //May throw exceptions
 void CommandEnvironmentImpl::printLicense(
-    std::u16string_view sName, const OUString& sLicense, bool & accept, bool &decline)
+    std::u16string_view sName, std::u16string_view sLicense, bool & accept, bool &decline)
 {
     OUString s1tmp(DpResId(RID_STR_UNOPKG_ACCEPT_LIC_1));
     OUString s1(s1tmp.replaceAll("$NAME", sName));

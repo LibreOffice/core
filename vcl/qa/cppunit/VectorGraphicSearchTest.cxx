@@ -11,6 +11,8 @@
 
 #if HAVE_FEATURE_PDFIUM
 
+#include <string_view>
+
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -24,9 +26,9 @@
 
 class VectorGraphicSearchTest : public test::BootstrapFixtureBase
 {
-    OUString getFullUrl(const OUString& sFileName)
+    OUString getFullUrl(std::u16string_view sFileName)
     {
-        return m_directories.getURLFromSrc("/vcl/qa/cppunit/data/") + sFileName;
+        return m_directories.getURLFromSrc(u"/vcl/qa/cppunit/data/") + sFileName;
     }
 
     void test();
@@ -46,7 +48,7 @@ class VectorGraphicSearchTest : public test::BootstrapFixtureBase
 
 void VectorGraphicSearchTest::test()
 {
-    OUString aURL = getFullUrl("Pangram.pdf");
+    OUString aURL = getFullUrl(u"Pangram.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
@@ -97,7 +99,7 @@ void VectorGraphicSearchTest::test()
 // between search matches.
 void VectorGraphicSearchTest::testNextPrevious()
 {
-    OUString aURL = getFullUrl("Pangram.pdf");
+    OUString aURL = getFullUrl(u"Pangram.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
@@ -173,7 +175,7 @@ void VectorGraphicSearchTest::testNextPrevious()
 
 void VectorGraphicSearchTest::testSearchStringChange()
 {
-    OUString aURL = getFullUrl("Pangram.pdf");
+    OUString aURL = getFullUrl(u"Pangram.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
@@ -204,7 +206,7 @@ void VectorGraphicSearchTest::testSearchStringChange()
 
 void VectorGraphicSearchTest::testSearchMatchWholeWord()
 {
-    OUString aURL = getFullUrl("Pangram.pdf");
+    OUString aURL = getFullUrl(u"Pangram.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
@@ -243,7 +245,7 @@ void VectorGraphicSearchTest::testSearchMatchWholeWord()
 
 void VectorGraphicSearchTest::testSearchMatchCase()
 {
-    OUString aURL = getFullUrl("Pangram.pdf");
+    OUString aURL = getFullUrl(u"Pangram.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);

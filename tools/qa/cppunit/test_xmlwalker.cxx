@@ -25,7 +25,7 @@ public:
     {
     }
 
-    virtual void setUp() override { maBasePath = m_directories.getURLFromSrc("/tools/qa/data/"); }
+    virtual void setUp() override { maBasePath = m_directories.getURLFromSrc(u"/tools/qa/data/"); }
 
     void testReadXML();
 

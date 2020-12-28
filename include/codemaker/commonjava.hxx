@@ -22,6 +22,8 @@
 
 #include <sal/config.h>
 
+#include <string_view>
+
 #include <codemaker/unotype.hxx>
 
 namespace rtl { class OString; }
@@ -33,7 +35,7 @@ rtl::OString translateUnoToJavaType(
     bool referenceType);
 
 rtl::OString translateUnoToJavaIdentifier(
-    rtl::OString const & identifier, rtl::OString const & prefix);
+    rtl::OString const & identifier, std::string_view prefix);
 
 }
 

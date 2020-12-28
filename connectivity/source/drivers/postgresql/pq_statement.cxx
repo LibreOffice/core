@@ -210,7 +210,7 @@ void Statement::close(  )
 }
 
 void Statement::raiseSQLException(
-    const OUString & sql, const char * errorMsg )
+    std::u16string_view sql, const char * errorMsg )
 {
     OUString error = "pq_driver: "
         + OUString( errorMsg, strlen(errorMsg), ConnectionSettings::encoding )

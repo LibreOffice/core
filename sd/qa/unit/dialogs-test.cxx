@@ -591,7 +591,7 @@ void SdDialogsTest::openAnyDialog()
     /// to dump
     if (true)
     {
-        processDialogBatchFile("sd/qa/unit/data/dialogs-test.txt");
+        processDialogBatchFile(u"sd/qa/unit/data/dialogs-test.txt");
     }
 
     /// example how to dump all known dialogs

@@ -46,7 +46,7 @@ namespace fileaccess {
 
 
     // Changes the prefix in name
-    extern OUString newName( const OUString& aNewPrefix,
+    extern OUString newName( std::u16string_view aNewPrefix,
                                            const OUString& aOldPrefix,
                                            std::u16string_view old_Name );
 

@@ -22,6 +22,7 @@
 
 #include <map>
 #include <memory>
+#include <string_view>
 #include <vector>
 
 #include <com/sun/star/awt/Point.hpp>
@@ -209,7 +210,7 @@ public:
     void                setDiagramDoms(const css::uno::Sequence<css::beans::PropertyValue>& rDiagramDoms) { maDiagramDoms = rDiagramDoms; }
     void                setDiagramData(const DiagramDataPtr& pDiagramData) { mpDiagramData = pDiagramData; }
     css::uno::Sequence< css::uno::Sequence< css::uno::Any > >resolveRelationshipsOfTypeFromOfficeDoc(
-                                                                          core::XmlFilterBase& rFilter, const OUString& sFragment, const OUString& sType );
+                                                                          core::XmlFilterBase& rFilter, const OUString& sFragment, std::u16string_view sType );
     void                setLinkedTxbxAttributes(const LinkedTxbxAttr& rhs){ maLinkedTxbxAttr = rhs; };
     void                setTxbxHasLinkedTxtBox( const bool rhs){ mbHasLinkedTxbx = rhs; };
     const LinkedTxbxAttr&     getLinkedTxbxAttributes() const { return maLinkedTxbxAttr; };

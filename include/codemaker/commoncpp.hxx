@@ -53,7 +53,7 @@ enum class IdentifierTranslationMode {
 };
 
 rtl::OString translateUnoToCppIdentifier(
-    rtl::OString const & identifier, rtl::OString const & prefix,
+    rtl::OString const & identifier, std::string_view prefix,
     IdentifierTranslationMode transmode = IdentifierTranslationMode::Global,
     rtl::OString const * forbidden = nullptr);
 

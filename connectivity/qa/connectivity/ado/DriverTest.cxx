@@ -62,7 +62,7 @@ void AdoDriverTest::setUp()
     CPPUNIT_ASSERT_MESSAGE("no ado component!", m_xAdoComponent.is());
 
     OUString url = "sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=" +
-        m_directories.getPathFromWorkdir("/CppunitTest/TS001018407.mdb");
+        m_directories.getPathFromWorkdir(u"/CppunitTest/TS001018407.mdb");
 
     Sequence< PropertyValue > info;
     Reference< XDriver> xDriver(m_xAdoComponent, UNO_QUERY);

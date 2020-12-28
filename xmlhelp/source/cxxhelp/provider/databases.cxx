@@ -32,6 +32,7 @@
 #include <algorithm>
 #include <cassert>
 #include <string.h>
+#include <string_view>
 
 #include <helpcompiler/HelpIndexer.hxx>
 
@@ -306,7 +307,7 @@ const std::vector< OUString >& Databases::getModuleList( const OUString& Languag
     return m_avModules;
 }
 
-StaticModuleInformation* Databases::getStaticInformationForModule( const OUString& Module,
+StaticModuleInformation* Databases::getStaticInformationForModule( std::u16string_view Module,
                                                                    const OUString& Language )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -417,17 +418,17 @@ OUString Databases::processLang( const OUString& Language )
     return ret;
 }
 
-helpdatafileproxy::Hdf* Databases::getHelpDataFile( const OUString& Database,
+helpdatafileproxy::Hdf* Databases::getHelpDataFile( std::u16string_view Database,
                             const OUString& Language, bool helpText,
                             const OUString* pExtensionPath )
 {
-    if( Database.isEmpty() || Language.isEmpty() )
+    if( Database.empty() || Language.isEmpty() )
         return nullptr;
 
     osl::MutexGuard aGuard( m_aMutex );
 
     OUString aFileExt( helpText ? OUString(".ht") : OUString(".db") );
-    OUString dbFileName = "/" + Database + aFileExt;
+    OUString dbFileName = OUString::Concat("/") + Database + aFileExt;
     OUString key;
     if( pExtensionPath == nullptr )
         key = processLang( Language ) + dbFileName;
@@ -1270,10 +1271,10 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
 }
 
 OUString ExtensionIteratorBase::implGetFileFromPackage(
-    const OUString& rFileExtension, const Reference< deployment::XPackage >& xPackage )
+    std::u16string_view rFileExtension, const Reference< deployment::XPackage >& xPackage )
 {
     // No extension -> search for pure language folder
-    bool bLangFolderOnly = rFileExtension.isEmpty();
+    bool bLangFolderOnly = rFileExtension.empty();
 
     OUString aFile;
     OUString aLanguage = m_aLanguage;
@@ -1282,7 +1283,7 @@ OUString ExtensionIteratorBase::implGetFileFromPackage(
         OUString aStr = xPackage->getRegistrationDataURL().Value + "/" + aLanguage;
         if( !bLangFolderOnly )
         {
-            aStr += "/help" + rFileExtension;
+            aStr += OUString::Concat("/help") + rFileExtension;
         }
 
         aFile = m_rDatabases.expandURL( aStr );
@@ -1517,7 +1518,7 @@ OUString KeyDataBaseFileIterator::implGetDbFileFromPackage
     ( const Reference< deployment::XPackage >& xPackage )
 {
     OUString aExpandedURL =
-        implGetFileFromPackage( ".key", xPackage );
+        implGetFileFromPackage( u".key", xPackage );
 
     return aExpandedURL;
 }
@@ -1587,7 +1588,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
     Reference< XHierarchicalNameAccess > xNA;
 
     OUString zipFile =
-        implGetFileFromPackage( ".jar", xPackage );
+        implGetFileFromPackage( u".jar", xPackage );
 
     try
     {
@@ -1712,13 +1713,13 @@ OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o_rbTe
 OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary, const Reference< deployment::XPackage >& xPackage )
 {
     OUString aIndexFolder =
-        implGetFileFromPackage( ".idxl", xPackage );
+        implGetFileFromPackage( u".idxl", xPackage );
 
     o_rbTemporary = false;
     if( !m_xSFA->isFolder( aIndexFolder ) )
     {
         // i98680: Missing index? Try to generate now
-        OUString aLangURL = implGetFileFromPackage( OUString(), xPackage );
+        OUString aLangURL = implGetFileFromPackage( std::u16string_view(), xPackage );
         if( m_xSFA->isFolder( aLangURL ) )
         {
             // Test write access (shared extension may be read only)
@@ -1773,7 +1774,7 @@ OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary
                 aIndexer.indexDocuments();
 
                 if( bIsWriteAccess )
-                    aIndexFolder = implGetFileFromPackage( ".idxl", xPackage );
+                    aIndexFolder = implGetFileFromPackage( u".idxl", xPackage );
                 else
                     aIndexFolder = aZipDir + "/help.idxl";
             }

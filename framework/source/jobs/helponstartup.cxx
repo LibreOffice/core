@@ -316,11 +316,11 @@ OUString HelpOnStartup::its_checkIfHelpEnabledAndGetURL(const OUString& sModule)
     return sHelpURL;
 }
 
-OUString HelpOnStartup::ist_createHelpURL(const OUString& sBaseURL,
-                                                 const OUString& sLocale ,
-                                                 const OUString& sSystem )
+OUString HelpOnStartup::ist_createHelpURL(std::u16string_view sBaseURL,
+                                                 std::u16string_view sLocale ,
+                                                 std::u16string_view sSystem )
 {
-    return sBaseURL + "?Language=" + sLocale + "&System=" + sSystem;
+    return OUString::Concat(sBaseURL) + "?Language=" + sLocale + "&System=" + sSystem;
 }
 
 } // namespace framework

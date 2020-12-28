@@ -69,7 +69,7 @@ void ShapeFilterBase::setCurrentTheme(const ::oox::drawingml::ThemePtr& pTheme)
 
 ::oox::ole::VbaProject* ShapeFilterBase::implCreateVbaProject() const
 {
-    return new ::oox::ole::VbaProject( getComponentContext(), getModel(), "Writer" );
+    return new ::oox::ole::VbaProject( getComponentContext(), getModel(), u"Writer" );
 }
 
 OUString ShapeFilterBase::getImplementationName()

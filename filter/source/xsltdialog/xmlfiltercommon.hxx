@@ -22,6 +22,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
+#include <string_view>
 #include <vector>
 
 
@@ -75,7 +76,7 @@ struct application_info_impl
 
 
 extern std::vector< application_info_impl > const & getApplicationInfos();
-extern OUString getApplicationUIName( const OUString& rServiceName );
+extern OUString getApplicationUIName( std::u16string_view rServiceName );
 extern const application_info_impl* getApplicationInfo( std::u16string_view rServiceName );
 OUString XsltResId(const char* pId);
 

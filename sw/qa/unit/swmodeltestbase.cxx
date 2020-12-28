@@ -34,7 +34,7 @@
 
 using namespace css;
 
-void SwModelTestBase::paste(const OUString& aFilename,
+void SwModelTestBase::paste(std::u16string_view aFilename,
                             uno::Reference<text::XTextRange> const& xTextRange)
 {
     uno::Reference<document::XFilter> xFilter(
@@ -44,7 +44,7 @@ void SwModelTestBase::paste(const OUString& aFilename,
     uno::Sequence<beans::PropertyValue> aDescriptor(3);
     aDescriptor[0].Name = "InputStream";
     std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(
-        m_directories.getURLFromSrc("/sw/qa/extras/") + aFilename, StreamMode::STD_READ);
+        m_directories.getURLFromSrc(u"/sw/qa/extras/") + aFilename, StreamMode::STD_READ);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, pStream->GetError());
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
     aDescriptor[0].Value <<= xStream;
@@ -825,9 +825,9 @@ void SwModelTestBase::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("http://www.w3.org/1999/xhtml"));
 }
 
-SwDoc* SwModelTestBase::createSwDoc(const OUString& rDataDirectory, const char* pName)
+SwDoc* SwModelTestBase::createSwDoc(std::u16string_view rDataDirectory, const char* pName)
 {
-    if (rDataDirectory.isEmpty() || !pName)
+    if (rDataDirectory.empty() || !pName)
         loadURL("private:factory/swriter", nullptr);
     else
         load(rDataDirectory, pName);
