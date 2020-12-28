@@ -74,14 +74,18 @@ struct ToStringHelper
 inline
 char* addDataHelper( char* buffer, const char* data, std::size_t length )
     {
-    memcpy( buffer, data, length );
+    if (length != 0) {
+        memcpy( buffer, data, length );
+    }
     return buffer + length;
     }
 
 inline
 sal_Unicode* addDataHelper( sal_Unicode* buffer, const sal_Unicode* data, std::size_t length )
     {
-    memcpy( buffer, data, length * sizeof( sal_Unicode ));
+    if (length != 0) {
+        memcpy( buffer, data, length * sizeof( sal_Unicode ));
+    }
     return buffer + length;
     }
 
