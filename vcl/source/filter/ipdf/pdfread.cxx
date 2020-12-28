@@ -442,18 +442,17 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
         ::utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ | StreamMode::SHARE_DENYNONE));
 
     // Save the original PDF stream for later use.
-    VectorGraphicDataArray aPdfDataArray = createVectorGraphicDataArray(*xStream);
-    if (!aPdfDataArray.hasElements())
-        return 0;
+    BinaryDataContainer aBinaryDataContainer;
+    {
+        VectorGraphicDataArray aPdfDataArray = createVectorGraphicDataArray(*xStream);
+        if (!aPdfDataArray.hasElements())
+            return 0;
+        const sal_uInt8* pData = reinterpret_cast<const sal_uInt8*>(aPdfDataArray.getConstArray());
+        aBinaryDataContainer = BinaryDataContainer(pData, aPdfDataArray.getLength());
+    }
 
     // Prepare the link with the PDF stream.
-    const size_t nGraphicContentSize = aPdfDataArray.getLength();
-    std::unique_ptr<sal_uInt8[]> pGraphicContent(new sal_uInt8[nGraphicContentSize]);
-
-    std::copy(aPdfDataArray.begin(), aPdfDataArray.end(), pGraphicContent.get());
-
-    auto pGfxLink = std::make_shared<GfxLink>(std::move(pGraphicContent), nGraphicContentSize,
-                                              GfxLinkType::NativePdf);
+    auto pGfxLink = std::make_shared<GfxLink>(aBinaryDataContainer, GfxLinkType::NativePdf);
 
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
 
@@ -481,7 +480,7 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
         tools::Long nPageHeight = convertTwipToMm100(aPageSize.getY() * pointToTwipconversionRatio);
 
         auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(
-            aPdfDataArray, VectorGraphicDataType::Pdf, nPageIndex);
+            aBinaryDataContainer, VectorGraphicDataType::Pdf, nPageIndex);
 
         // Create the Graphic with the VectorGraphicDataPtr and link the original PDF stream.
         // We swap out this Graphic as soon as possible, and a later swap in
