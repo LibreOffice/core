@@ -23,6 +23,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/BinaryDataContainer.hxx>
 #include <rtl/ustring.hxx>
 #include <deque>
 #include <memory>
@@ -55,7 +56,7 @@ class VCL_DLLPUBLIC VectorGraphicData
 {
 private:
     // the file and length
-    VectorGraphicDataArray      maVectorGraphicDataArray;
+    BinaryDataContainer maDataContainer;
 
     // on demand created content
     bool                        mbSequenceCreated;
@@ -90,6 +91,10 @@ public:
         VectorGraphicDataType eVectorDataType,
         sal_Int32 nPageIndex = -1);
     VectorGraphicData(const OUString& rPath, VectorGraphicDataType eVectorDataType);
+    VectorGraphicData(
+        const BinaryDataContainer& rDataContainer,
+        VectorGraphicDataType eVectorDataType,
+        sal_Int32 nPageIndex = -1);
     ~VectorGraphicData();
 
     /// compare op
@@ -99,8 +104,16 @@ public:
     void setWmfExternalHeader(const WmfExternal& aExtHeader);
 
     /// data read
-    const VectorGraphicDataArray& getVectorGraphicDataArray() const { return maVectorGraphicDataArray; }
-    sal_uInt32 getVectorGraphicDataArrayLength() const { return maVectorGraphicDataArray.getLength(); }
+    const BinaryDataContainer& getBinaryDataContainer() const
+    {
+        return maDataContainer;
+    }
+
+    sal_uInt32 getVectorGraphicDataArrayLength() const
+    {
+        return maDataContainer.getSize();
+    }
+
     enum class State { UNPARSED, PARSED };
     std::pair<State, size_t> getSizeBytes() const;
 
