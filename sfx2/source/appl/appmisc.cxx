@@ -164,15 +164,13 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
     if ( !FileExists(aObj) )
         return false;
 
-    std::vector<sal_uInt8> aBinaryData;
+    auto aBinaryData = std::make_unique<std::vector<sal_uInt8>>();
     OUString aPath = aObj.PathToFileName();
-    if (!loadDataFromFile(aPath, aBinaryData))
+    if (!loadDataFromFile(aPath, *aBinaryData))
         return false;
 
-    VectorGraphicDataArray aVectorGraphicDataArray;
-    std::copy(aBinaryData.cbegin(), aBinaryData.cend(), aVectorGraphicDataArray.begin());
-
-    VectorGraphicData aVectorGraphicData(aVectorGraphicDataArray, VectorGraphicDataType::Svg);
+    BinaryDataContainer aDataContainer(aBinaryData);
+    VectorGraphicData aVectorGraphicData(aDataContainer, VectorGraphicDataType::Svg);
 
     // transform into [0,0,width,width*aspect] std dimensions
 
