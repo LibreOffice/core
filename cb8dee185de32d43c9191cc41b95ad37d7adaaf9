@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ea9ec91_e39be9cc",
+        "filename": "include/tools/degree.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-12-28T13:54:48Z",
+      "side": 1,
+      "message": "x.get() * M_PI / 1800.0 is an angle in radians. For me \u0027toDegree\u0027 is misleading. I would expect \u0027toRadians\u0027.",
+      "revId": "cb8dee185de32d43c9191cc41b95ad37d7adaaf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
