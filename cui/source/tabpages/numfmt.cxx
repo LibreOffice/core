@@ -141,13 +141,12 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
     rRenderContext.Push(PushFlags::ALL);
 
     svtools::ColorConfig aColorConfig;
-    rRenderContext.SetTextColor(aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor);
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    rRenderContext.SetBackground(rStyleSettings.GetWindowColor());
+    rRenderContext.SetTextColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
+    rRenderContext.SetBackground(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
 
     vcl::Font aDrawFont = rRenderContext.GetFont();
     Size aSzWnd(GetOutputSizePixel());
-    OUString aTmpStr( aPrevStr );
+    OUString aTmpStr(aPrevStr);
     tools::Long nLeadSpace = (aSzWnd.Width() - rRenderContext.GetTextWidth(aTmpStr)) / 2;
 
     aDrawFont.SetTransparent(true);
