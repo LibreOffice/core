@@ -76,6 +76,11 @@ public:
 
     // Sync data on the targets box with the data on the target
     void setRowData(int nRowIndex, const RedactionTarget* pTarget);
+
+    void connect_row_activated(const Link<weld::TreeView&, bool>& rLink)
+    {
+        m_xControl->connect_row_activated(rLink);
+    };
 };
 
 namespace sfx2
@@ -110,6 +115,7 @@ class SfxAutoRedactDialog final : public SfxDialogController
     DECL_LINK(AddHdl, weld::Button&, void);
     DECL_LINK(EditHdl, weld::Button&, void);
     DECL_LINK(DeleteHdl, weld::Button&, void);
+    DECL_LINK(DoubleClickEditHdl, weld::TreeView&, bool);
 
     DECL_LINK(LoadHdl, sfx2::FileDialogHelper*, void);
     DECL_LINK(SaveHdl, sfx2::FileDialogHelper*, void);
