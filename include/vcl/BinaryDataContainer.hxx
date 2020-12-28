@@ -14,7 +14,7 @@
 #include <vector>
 #include <memory>
 
-/** Container for the binary data, which responsiility is to manage the
+/** Container for the binary data, which responsability is to manage the
  *  make it as simple as possible to manage the binary data. The binary
  *  data can be anything, but typically it is a in-memory data from
  *  files (i.e. files of graphic formats).
