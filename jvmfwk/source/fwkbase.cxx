@@ -45,6 +45,13 @@ static bool  g_bJavaSet = false;
 
 namespace {
 
+#if defined _WIN32
+    // The paths are used in libxml. On Windows, it takes UTF-8 paths.
+constexpr rtl_TextEncoding PathEncoding() { return RTL_TEXTENCODING_UTF8; }
+#else
+rtl_TextEncoding PathEncoding() { return osl_getThreadTextEncoding(); }
+#endif
+
 OString getVendorSettingsPath(OUString const & sURL)
 {
     if (sURL.isEmpty())
@@ -55,8 +62,7 @@ OString getVendorSettingsPath(OUString const & sURL)
         throw FrameworkException(
             JFW_E_ERROR,
             "[Java framework] Error in function getVendorSettingsPath (fwkbase.cxx) ");
-    OString osSystemPathSettings =
-        OUStringToOString(sSystemPathSettings,osl_getThreadTextEncoding());
+    OString osSystemPathSettings = OUStringToOString(sSystemPathSettings, PathEncoding());
     return osSystemPathSettings;
 }
 
@@ -239,7 +245,7 @@ OString BootParams::getClasspath()
     OUString sCP;
     if (Bootstrap::get()->getFrom( UNO_JAVA_JFW_CLASSPATH, sCP ))
     {
-        sClassPath = OUStringToOString(sCP, osl_getThreadTextEncoding());
+        sClassPath = OUStringToOString(sCP, PathEncoding());
         SAL_INFO(
             "jfw.level2",
             "Using bootstrap parameter " UNO_JAVA_JFW_CLASSPATH " = "
@@ -456,8 +462,7 @@ OString makeClassPathOption(OUString const & sUserClassPath)
         sBufCP.append(sAppCP);
     }
 
-    sPaths = OUStringToOString(
-        sBufCP.makeStringAndClear(), osl_getThreadTextEncoding());
+    sPaths = OUStringToOString(sBufCP.makeStringAndClear(), PathEncoding());
 
     OString sOptionClassPath = "-Djava.class.path=" + sPaths;
     return sOptionClassPath;
@@ -483,7 +488,7 @@ OString getSettingsPath( const OUString & sURL)
         throw FrameworkException(
             JFW_E_ERROR,
             "[Java framework] Error in function ::getSettingsPath (fwkbase.cxx).");
-    return OUStringToOString(sPath,osl_getThreadTextEncoding());
+    return OUStringToOString(sPath, PathEncoding());
 }
 
 OString getVendorSettingsPath()
