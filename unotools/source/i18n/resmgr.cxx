@@ -134,7 +134,14 @@ namespace Translate
         rtl::Bootstrap::expandMacros(uri);
         OUString path;
         osl::File::getSystemPathFromFileURL(uri, path);
-        OString sPath(OUStringToOString(path, osl_getThreadTextEncoding()));
+#if defined _WIN32
+        // add_messages_path is documented to treat path string in the *created* locale's encoding
+        // on Windows; creating an UTF-8 encoding, we're lucky to have Unicode path support here.
+        constexpr rtl_TextEncoding eEncoding = RTL_TEXTENCODING_UTF8;
+#else
+        const rtl_TextEncoding eEncoding = osl_getThreadTextEncoding();
+#endif
+        OString sPath(OUStringToOString(path, eEncoding));
 #endif
         gen.add_messages_path(sPath.getStr());
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
