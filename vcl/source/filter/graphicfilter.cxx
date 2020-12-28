@@ -1620,7 +1620,8 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
 
                         if(!aMemStream.GetError() )
                         {
-                            auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aNewData, VectorGraphicDataType::Svg);
+                            BinaryDataContainer aDataContainer(reinterpret_cast<const sal_uInt8*>(aNewData.getConstArray()), aNewData.getLength());
+                            auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aDataContainer, VectorGraphicDataType::Svg);
                             rGraphic = Graphic(aVectorGraphicDataPtr);
                             bOkay = true;
                         }
@@ -1633,7 +1634,8 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
 
                     if(!rIStream.GetError())
                     {
-                        auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aNewData, VectorGraphicDataType::Svg);
+                        BinaryDataContainer aDataContainer(reinterpret_cast<const sal_uInt8*>(aNewData.getConstArray()), aNewData.getLength());
+                        auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aDataContainer, VectorGraphicDataType::Svg);
                         rGraphic = Graphic(aVectorGraphicDataPtr);
                         bOkay = true;
                     }
@@ -1707,10 +1709,11 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
             {
                 const bool bIsWmf(aFilterName.equalsIgnoreAsciiCase(IMP_WMF));
                 const VectorGraphicDataType aDataType(bIsWmf ? VectorGraphicDataType::Wmf : VectorGraphicDataType::Emf);
+
+                BinaryDataContainer aDataContainer(reinterpret_cast<const sal_uInt8*>(aNewData.getConstArray()), aNewData.getLength());
+
                 auto aVectorGraphicDataPtr =
-                    std::make_shared<VectorGraphicData>(
-                        aNewData,
-                        aDataType);
+                    std::make_shared<VectorGraphicData>(aDataContainer, aDataType);
 
                 if (pExtHeader)
                 {

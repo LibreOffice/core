@@ -87,10 +87,6 @@ private:
 
 public:
     VectorGraphicData(
-        const VectorGraphicDataArray& rVectorGraphicDataArray,
-        VectorGraphicDataType eVectorDataType,
-        sal_Int32 nPageIndex = -1);
-    VectorGraphicData(
         const BinaryDataContainer& rDataContainer,
         VectorGraphicDataType eVectorDataType,
         sal_Int32 nPageIndex = -1);
