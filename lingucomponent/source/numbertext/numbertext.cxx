@@ -100,10 +100,12 @@ void NumberText_Impl::EnsureInitialized()
     osl::FileBase::getSystemPathFromFileURL(aURL, aPhysPath);
 #ifdef _WIN32
     aPhysPath += "\\";
+    const rtl_TextEncoding eEnc = RTL_TEXTENCODING_UTF8;
 #else
     aPhysPath += "/";
+    const rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
 #endif
-    OString path = OUStringToOString(aPhysPath, osl_getThreadTextEncoding());
+    OString path = OUStringToOString(aPhysPath, eEnc);
     m_aNumberText.set_prefix(path.getStr());
 }
 
