@@ -16,6 +16,24 @@
       "revId": "cb8dee185de32d43c9191cc41b95ad37d7adaaf9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acb0518c_43888853",
+        "filename": "include/tools/degree.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-28T16:06:29Z",
+      "side": 1,
+      "message": "Thanks! fixed.",
+      "parentUuid": "9ea9ec91_e39be9cc",
+      "revId": "cb8dee185de32d43c9191cc41b95ad37d7adaaf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
