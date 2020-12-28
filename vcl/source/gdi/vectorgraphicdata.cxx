@@ -39,6 +39,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <vcl/pdfread.hxx>
+#include <unotools/streamwrap.hxx>
 
 using namespace ::com::sun::star;
 
@@ -117,9 +118,9 @@ bool VectorGraphicData::operator==(const VectorGraphicData& rCandidate) const
         if (getVectorGraphicDataArrayLength() == rCandidate.getVectorGraphicDataArrayLength())
         {
             if (0 == memcmp(
-                getVectorGraphicDataArray().getConstArray(),
-                rCandidate.getVectorGraphicDataArray().getConstArray(),
-                getVectorGraphicDataArrayLength()))
+                maDataContainer.getData(),
+                rCandidate.maDataContainer.getData(),
+                maDataContainer.getSize()))
             {
                 return true;
             }
@@ -151,8 +152,8 @@ void VectorGraphicData::ensurePdfReplacement()
     sal_Int32 nUsePageIndex = 0;
     if (mnPageIndex >= 0)
         nUsePageIndex = mnPageIndex;
-    vcl::RenderPDFBitmaps(maVectorGraphicDataArray.getConstArray(),
-                          maVectorGraphicDataArray.getLength(), aBitmaps, nUsePageIndex, 1,
+    vcl::RenderPDFBitmaps(maDataContainer.getData(),
+                          maDataContainer.getSize(), aBitmaps, nUsePageIndex, 1,
                           &maSizeHint);
     if (!aBitmaps.empty())
         maReplacement = aBitmaps[0];
@@ -181,7 +182,9 @@ void VectorGraphicData::ensureReplacement()
 
 void VectorGraphicData::ensureSequenceAndRange()
 {
-    if (mbSequenceCreated || !maVectorGraphicDataArray.hasElements())
+    printf ("VectorGraphicData::ensureSequenceAndRange\n");
+
+    if (mbSequenceCreated || maDataContainer.isEmpty())
         return;
 
     // import SVG to maSequence, also set maRange
@@ -194,11 +197,15 @@ void VectorGraphicData::ensureSequenceAndRange()
     {
         case VectorGraphicDataType::Svg:
         {
-            const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
-            const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(maVectorGraphicDataArray));
+            css::uno::Sequence<sal_Int8> aDataSequence(maDataContainer.getSize());
+            std::copy(maDataContainer.cbegin(), maDataContainer.cend(), aDataSequence.begin());
+            const uno::Reference<io::XInputStream> xInputStream(new comphelper::SequenceInputStream(aDataSequence));
 
-            if (myInputStream.is())
-                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(myInputStream, OUString()));
+
+            const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
+
+            if (xInputStream.is())
+                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(xInputStream, OUString()));
 
             break;
         }
@@ -206,7 +213,11 @@ void VectorGraphicData::ensureSequenceAndRange()
         case VectorGraphicDataType::Wmf:
         {
             const uno::Reference< graphic::XEmfParser > xEmfParser = graphic::EmfTools::create(xContext);
-            const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(maVectorGraphicDataArray));
+
+            css::uno::Sequence<sal_Int8> aDataSequence(maDataContainer.getSize());
+            std::copy(maDataContainer.cbegin(), maDataContainer.cend(), aDataSequence.begin());
+            const uno::Reference<io::XInputStream> xInputStream(new comphelper::SequenceInputStream(aDataSequence));
+
             uno::Sequence< ::beans::PropertyValue > aSequence;
 
             if (mpExternalHeader)
@@ -214,7 +225,7 @@ void VectorGraphicData::ensureSequenceAndRange()
                 aSequence = mpExternalHeader->getSequence();
             }
 
-            if (myInputStream.is())
+            if (xInputStream.is())
             {
                 // Pass the size hint of the graphic to the EMF parser.
                 geometry::RealPoint2D aSizeHint;
@@ -224,15 +235,12 @@ void VectorGraphicData::ensureSequenceAndRange()
 
                 if (!mbEnableEMFPlus)
                 {
-                    auto aVector
-                        = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(
-                            aSequence);
-                    aVector.push_back(
-                        comphelper::makePropertyValue("EMFPlusEnable", uno::makeAny(false)));
+                    auto aVector = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aSequence);
+                    aVector.push_back(comphelper::makePropertyValue("EMFPlusEnable", uno::makeAny(false)));
                     aSequence = comphelper::containerToSequence(aVector);
                 }
 
-                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(myInputStream, OUString(), aSequence));
+                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(xInputStream, OUString(), aSequence));
             }
 
             break;
@@ -243,7 +251,10 @@ void VectorGraphicData::ensureSequenceAndRange()
             uno::Sequence<beans::PropertyValue> aDecompositionParameters = comphelper::InitPropertySequence({
                 {"PageIndex", uno::makeAny<sal_Int32>(mnPageIndex)},
             });
-            auto xPrimitive2D = xPdfDecomposer->getDecomposition(maVectorGraphicDataArray, aDecompositionParameters);
+            // TODO: change xPdfDecomposer to use BinaryDataContainer directly
+            VectorGraphicDataArray aVectorGraphicDataArray(maDataContainer.getSize());
+            std::copy(maDataContainer.cbegin(), maDataContainer.cend(), aVectorGraphicDataArray.begin());
+            auto xPrimitive2D = xPdfDecomposer->getDecomposition(aVectorGraphicDataArray, aDecompositionParameters);
             maSequence = comphelper::sequenceToContainer<std::deque<uno::Reference<graphic::XPrimitive2D>>>(xPrimitive2D);
 
             break;
@@ -280,13 +291,13 @@ void VectorGraphicData::ensureSequenceAndRange()
 
 std::pair<VectorGraphicData::State, size_t> VectorGraphicData::getSizeBytes() const
 {
-    if (!maSequence.empty() && maVectorGraphicDataArray.hasElements())
+    if (!maSequence.empty() && !maDataContainer.isEmpty())
     {
-        return std::make_pair(State::PARSED, maVectorGraphicDataArray.getLength() + mNestedBitmapSize);
+        return std::make_pair(State::PARSED, maDataContainer.getSize() + mNestedBitmapSize);
     }
     else
     {
-        return std::make_pair(State::UNPARSED, maVectorGraphicDataArray.getLength());
+        return std::make_pair(State::UNPARSED, maDataContainer.getSize());
     }
 }
 
@@ -294,7 +305,22 @@ VectorGraphicData::VectorGraphicData(
     const VectorGraphicDataArray& rVectorGraphicDataArray,
     VectorGraphicDataType eVectorDataType,
     sal_Int32 nPageIndex)
-:   maVectorGraphicDataArray(rVectorGraphicDataArray),
+:   maDataContainer(reinterpret_cast<const sal_uInt8*>(rVectorGraphicDataArray.begin()), rVectorGraphicDataArray.getLength()),
+    mbSequenceCreated(false),
+    maRange(),
+    maSequence(),
+    maReplacement(),
+    mNestedBitmapSize(0),
+    meVectorGraphicDataType(eVectorDataType),
+    mnPageIndex(nPageIndex)
+{
+}
+
+VectorGraphicData::VectorGraphicData(
+    const BinaryDataContainer& rDataContainer,
+    VectorGraphicDataType eVectorDataType,
+    sal_Int32 nPageIndex)
+:   maDataContainer(rDataContainer),
     mbSequenceCreated(false),
     maRange(),
     maSequence(),
@@ -332,7 +358,7 @@ const BitmapEx& VectorGraphicData::getReplacement() const
 
 BitmapChecksum VectorGraphicData::GetChecksum() const
 {
-    return vcl_get_checksum(0, maVectorGraphicDataArray.getConstArray(), maVectorGraphicDataArray.getLength());
+    return vcl_get_checksum(0, maDataContainer.getData(), maDataContainer.getSize());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
