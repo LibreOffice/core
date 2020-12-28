@@ -252,9 +252,9 @@ void VectorGraphicData::ensureSequenceAndRange()
                 {"PageIndex", uno::makeAny<sal_Int32>(mnPageIndex)},
             });
             // TODO: change xPdfDecomposer to use BinaryDataContainer directly
-            VectorGraphicDataArray aVectorGraphicDataArray(maDataContainer.getSize());
-            std::copy(maDataContainer.cbegin(), maDataContainer.cend(), aVectorGraphicDataArray.begin());
-            auto xPrimitive2D = xPdfDecomposer->getDecomposition(aVectorGraphicDataArray, aDecompositionParameters);
+            css::uno::Sequence<sal_Int8> aDataSequence(maDataContainer.getSize());
+            std::copy(maDataContainer.cbegin(), maDataContainer.cend(), aDataSequence.begin());
+            auto xPrimitive2D = xPdfDecomposer->getDecomposition(aDataSequence, aDecompositionParameters);
             maSequence = comphelper::sequenceToContainer<std::deque<uno::Reference<graphic::XPrimitive2D>>>(xPrimitive2D);
 
             break;
@@ -299,21 +299,6 @@ std::pair<VectorGraphicData::State, size_t> VectorGraphicData::getSizeBytes() co
     {
         return std::make_pair(State::UNPARSED, maDataContainer.getSize());
     }
-}
-
-VectorGraphicData::VectorGraphicData(
-    const VectorGraphicDataArray& rVectorGraphicDataArray,
-    VectorGraphicDataType eVectorDataType,
-    sal_Int32 nPageIndex)
-:   maDataContainer(reinterpret_cast<const sal_uInt8*>(rVectorGraphicDataArray.begin()), rVectorGraphicDataArray.getLength()),
-    mbSequenceCreated(false),
-    maRange(),
-    maSequence(),
-    maReplacement(),
-    mNestedBitmapSize(0),
-    meVectorGraphicDataType(eVectorDataType),
-    mnPageIndex(nPageIndex)
-{
 }
 
 VectorGraphicData::VectorGraphicData(
