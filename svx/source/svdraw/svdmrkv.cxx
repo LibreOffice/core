@@ -743,11 +743,6 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             // (SwVirtFlyDrawObj with a SwGrfNode)
             bool bWriterGraphic = pO->HasLimitedRotation();
 
-            if (bWriterGraphic)
-            {
-                nRotAngle *= 10;
-            }
-
             OStringBuffer aExtraInfo;
 
             aExtraInfo.append("{\"id\":\"");

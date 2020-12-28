@@ -4256,13 +4256,13 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
 
         if (pAttrSet)
         {
-            if (sal_Int32 nRot = pAttrSet->Get(RES_GRFATR_ROTATION).GetValue())
+            if (Degree10 nRot10 = pAttrSet->Get(RES_GRFATR_ROTATION).GetValue())
             {
                 // See writerfilter::rtftok::RTFSdrImport::applyProperty(),
                 // positive rotation angles are clockwise in RTF, we have them
                 // as counter-clockwise.
                 // Additionally, RTF type is 0..360*2^16, our is 0..360*10.
-                nRot = nRot * -1 * RTF_MULTIPLIER / 10;
+                sal_Int32 nRot = nRot10.get() * -1 * RTF_MULTIPLIER / 10;
                 aFlyProperties.emplace_back("rotation", OString::number(nRot));
             }
         }

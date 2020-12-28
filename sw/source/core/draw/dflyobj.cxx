@@ -396,10 +396,10 @@ void SwVirtFlyDrawObj::Rotate(const Point& rRef, tools::Long nAngle, double sn, 
         {
             // RotGrfFlyFrame: Add transformation to placeholder object
             Size aSize;
-            const sal_uInt16 nOldRot(SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame(aSize));
+            const Degree10 nOldRot(SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame(aSize));
             SwFlyFrameAttrMgr aMgr(false, pShForAngle, Frmmgr_Type::NONE, nullptr);
 
-            aMgr.SetRotation(nOldRot, (nOldRot + static_cast<sal_uInt16>(nAngle)) % 3600, aSize);
+            aMgr.SetRotation(nOldRot, (nOldRot + Degree10(nAngle)) % 3600_deg10, aSize);
         }
     }
     else
@@ -1144,9 +1144,9 @@ void SwVirtFlyDrawObj::Crop(const basegfx::B2DPoint& rRef, double fxFact, double
 }
 
 // RotGrfFlyFrame: Helper to access possible rotation of Graphic contained in FlyFrame
-sal_uInt16 SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame(Size& rSize) const
+Degree10 SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame(Size& rSize) const
 {
-    sal_uInt16 nRetval(0);
+    Degree10 nRetval;
     const SwNoTextFrame* pNoTx = dynamic_cast< const SwNoTextFrame* >(GetFlyFrame()->Lower());
 
     if(pNoTx)
@@ -1172,7 +1172,7 @@ tools::Long SwVirtFlyDrawObj::GetRotateAngle() const
     if(ContainsSwGrfNode())
     {
         Size aSize;
-        return getPossibleRotationFromFraphicFrame(aSize);
+        return toDegree100(getPossibleRotationFromFraphicFrame(aSize));
     }
     else
     {

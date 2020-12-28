@@ -84,13 +84,13 @@ private:
 
     // tdf#115529 check and evtl. correct value, it is in 10th
     // degrees and *has* to be in the range [0 .. 3600[
-    static sal_Int16 checkAndCorrectValue(sal_Int16 nValue);
+    static Degree10 checkAndCorrectValue(Degree10 nValue);
 
 public:
     SwRotationGrf()
         : SfxUInt16Item( RES_GRFATR_ROTATION, 0 )
     {}
-    SwRotationGrf( sal_Int16 nVal, const Size& rSz );
+    SwRotationGrf( Degree10 nVal, const Size& rSz );
 
     // pure virtual methods from SfxInt16Item
     virtual SwRotationGrf* Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -105,7 +105,9 @@ public:
     virtual bool             PutValue( const css::uno::Any& rVal,
                                             sal_uInt8 nMemberId ) override;
 
-    const Size& GetUnrotatedSize() const            { return m_aUnrotatedSize; }
+    const Size& GetUnrotatedSize() const { return m_aUnrotatedSize; }
+    Degree10 GetValue() const { return Degree10(SfxUInt16Item::GetValue()); }
+    void SetValue(Degree10 d) { SfxUInt16Item::SetValue(d.get()); }
 };
 
 class SW_DLLPUBLIC SwLuminanceGrf : public SfxInt16Item
