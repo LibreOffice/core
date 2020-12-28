@@ -4484,12 +4484,12 @@ bool PDFWriterImpl::emitEmbeddedFiles()
         aLine.append(rEmbeddedFile.m_nObject);
         aLine.append(" 0 obj\n");
         aLine.append("<< /Type /EmbeddedFile /Length ");
-        aLine.append(static_cast<sal_Int64>(rEmbeddedFile.m_pData->size()));
+        aLine.append(static_cast<sal_Int64>(rEmbeddedFile.m_aDataContainer.getSize()));
         aLine.append(" >>\nstream\n");
         CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
         aLine.setLength(0);
 
-        CHECK_RETURN(writeBuffer(rEmbeddedFile.m_pData->data(), rEmbeddedFile.m_pData->size()));
+        CHECK_RETURN(writeBuffer(rEmbeddedFile.m_aDataContainer.getData(), rEmbeddedFile.m_aDataContainer.getSize()));
 
         aLine.append("\nendstream\nendobj\n\n");
         CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
@@ -9003,22 +9003,19 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
     if (!rGraphic.getVectorGraphicData() || rGraphic.getVectorGraphicData()->getVectorGraphicDataType() != VectorGraphicDataType::Pdf)
         return;
 
-    sal_uInt32 nLength = rGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength();
-    auto const & rArray = rGraphic.getVectorGraphicData()->getVectorGraphicDataArray();
+    BinaryDataContainer const & rDataContainer = rGraphic.getVectorGraphicData()->getBinaryDataContainer();
 
     if (m_aContext.UseReferenceXObject)
     {
-        auto pPDFData = std::make_shared<std::vector<sal_Int8>>(rArray.getConstArray(), rArray.getConstArray() + nLength);
-
         // Store the original PDF data as an embedded file.
         m_aEmbeddedFiles.emplace_back();
         m_aEmbeddedFiles.back().m_nObject = createObject();
-        m_aEmbeddedFiles.back().m_pData = pPDFData;
+        m_aEmbeddedFiles.back().m_aDataContainer = rDataContainer;
         rEmit.m_nEmbeddedObject = m_aEmbeddedFiles.back().m_nObject;
     }
     else
     {
-        sal_Int32 aIndex = m_aExternalPDFStreams.store(reinterpret_cast<const sal_uInt8*>(rArray.getConstArray()), nLength);
+        sal_Int32 aIndex = m_aExternalPDFStreams.store(rDataContainer);
         rEmit.m_nExternalPDFPageIndex = rGraphic.getVectorGraphicData()->getPageIndex();
         rEmit.m_nExternalPDFDataIndex = aIndex;
     }

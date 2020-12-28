@@ -386,10 +386,10 @@ void TypeSerializer::writeGraphic(const Graphic& rGraphic)
                         }
                     }
 
-                    sal_uInt32 nSize = pVectorGraphicData->getVectorGraphicDataArrayLength();
+                    sal_uInt32 nSize = pVectorGraphicData->getBinaryDataContainer().getSize();
                     mrStream.WriteUInt32(nSize);
-                    mrStream.WriteBytes(
-                        pVectorGraphicData->getVectorGraphicDataArray().getConstArray(), nSize);
+                    mrStream.WriteBytes(pVectorGraphicData->getBinaryDataContainer().getData(),
+                                        nSize);
                     // For backwards compatibility, used to serialize path
                     mrStream.WriteUniOrByteString(OUString(), mrStream.GetStreamCharSet());
                 }

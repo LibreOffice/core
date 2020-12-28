@@ -1380,8 +1380,8 @@ void SdImportTest::testPDFImportShared()
     {
         Graphic const & rGraphic = aGraphics[i];
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected all PDF streams to be identical.",
-                                     rFirstGraphic.getVectorGraphicData()->getVectorGraphicDataArray().getConstArray(),
-                                     rGraphic.getVectorGraphicData()->getVectorGraphicDataArray().getConstArray());
+                                     rFirstGraphic.getVectorGraphicData()->getBinaryDataContainer().getData(),
+                                     rGraphic.getVectorGraphicData()->getBinaryDataContainer().getData());
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected all GfxLinks to be identical.",
                                      rFirstGraphic.GetSharedGfxLink().get(),

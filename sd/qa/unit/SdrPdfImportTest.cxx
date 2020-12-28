@@ -175,8 +175,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
 
-    const void* pData = nullptr;
-    int nLength = 0;
+    BinaryDataContainer aContainer;
 
     {
         // Get the first page - there should be only one.
@@ -202,13 +201,15 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
                              pVectorGraphicData->getVectorGraphicDataType());
 
         // Write the PDF
-        pData = pVectorGraphicData->getVectorGraphicDataArray().getConstArray();
-        nLength = pVectorGraphicData->getVectorGraphicDataArrayLength();
+        aContainer = pVectorGraphicData->getBinaryDataContainer();
     }
 
     { // check graphic PDF has annotations
 
-        auto pPDFDocument = pPdfiumLibrary->openDocument(pData, nLength);
+        CPPUNIT_ASSERT_EQUAL(false, aContainer.isEmpty());
+
+        auto pPDFDocument
+            = pPdfiumLibrary->openDocument(aContainer.getData(), aContainer.getSize());
         auto pPDFPage = pPDFDocument->openPage(0);
 
         CPPUNIT_ASSERT_EQUAL(2, pPDFPage->getAnnotationCount());
