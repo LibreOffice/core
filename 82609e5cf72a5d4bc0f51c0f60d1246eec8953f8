@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "769c022c_ea6c981f",
+        "filename": "vcl/source/treelist/transfer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-28T09:38:46Z",
+      "side": 1,
+      "message": "This doesn\u0027t look right.  The original was a zero-element sequence, while this now is a one-element one.",
+      "revId": "82609e5cf72a5d4bc0f51c0f60d1246eec8953f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
