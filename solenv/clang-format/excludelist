@@ -13222,7 +13222,6 @@ sw/source/ui/misc/pgfnote.cxx
 sw/source/ui/misc/pggrid.cxx
 sw/source/ui/misc/srtdlg.cxx
 sw/source/ui/misc/swmodalredlineacceptdlg.cxx
-sw/source/ui/misc/titlepage.cxx
 sw/source/ui/table/colwd.cxx
 sw/source/ui/table/instable.cxx
 sw/source/ui/table/rowht.cxx
