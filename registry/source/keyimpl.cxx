@@ -215,7 +215,7 @@ RegError ORegKey::deleteKey(const OUString& keyName)
 
 //  getValueType
 
-RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueType, sal_uInt32* pValueSize) const
+RegError ORegKey::getValueInfo(std::u16string_view valueName, RegValueType* pValueType, sal_uInt32* pValueSize) const
 {
     OStoreStream    rValue;
     std::unique_ptr<sal_uInt8[]> pBuffer;
@@ -226,7 +226,7 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
         accessMode = storeAccessMode::ReadOnly;
     }
 
-    OUString sImplValueName = VALUE_PREFIX + valueName;
+    OUString sImplValueName = OUString::Concat(VALUE_PREFIX) + valueName;
 
     REG_GUARD(m_pRegistry->m_mutex);
 
@@ -270,7 +270,7 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
 
 //  setValue
 
-RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegValue value, sal_uInt32 vSize)
+RegError ORegKey::setValue(std::u16string_view valueName, RegValueType vType, RegValue value, sal_uInt32 vSize)
 {
     OStoreStream    rValue;
     std::unique_ptr<sal_uInt8[]> pBuffer;
@@ -285,7 +285,7 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
         return RegError::INVALID_VALUE;
     }
 
-    OUString sImplValueName = VALUE_PREFIX + valueName;
+    OUString sImplValueName = OUString::Concat(VALUE_PREFIX) + valueName;
 
     REG_GUARD(m_pRegistry->m_mutex);
 
@@ -341,7 +341,7 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
 
 //  setLongListValue
 
-RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32 const * pValueList, sal_uInt32 len)
+RegError ORegKey::setLongListValue(std::u16string_view valueName, sal_Int32 const * pValueList, sal_uInt32 len)
 {
     OStoreStream    rValue;
     std::unique_ptr<sal_uInt8[]> pBuffer;
@@ -351,7 +351,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32 const * 
         return RegError::REGISTRY_READONLY;
     }
 
-    OUString sImplValueName = VALUE_PREFIX + valueName;
+    OUString sImplValueName = OUString::Concat(VALUE_PREFIX) + valueName;
 
     REG_GUARD(m_pRegistry->m_mutex);
 
@@ -396,7 +396,8 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32 const * 
 
 //  setStringListValue
 
-RegError ORegKey::setStringListValue(const OUString& valueName, char** pValueList, sal_uInt32 len)
+RegError ORegKey::setStringListValue(
+    std::u16string_view valueName, char** pValueList, sal_uInt32 len)
 {
     OStoreStream    rValue;
     std::unique_ptr<sal_uInt8[]> pBuffer;
@@ -406,7 +407,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, char** pValueLis
         return RegError::REGISTRY_READONLY;
     }
 
-    OUString sImplValueName = VALUE_PREFIX + valueName;
+    OUString sImplValueName = OUString::Concat(VALUE_PREFIX) + valueName;
 
     REG_GUARD(m_pRegistry->m_mutex);
 
@@ -460,7 +461,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, char** pValueLis
 
 //  setUnicodeListValue
 
-RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** pValueList, sal_uInt32 len)
+RegError ORegKey::setUnicodeListValue(std::u16string_view valueName, sal_Unicode** pValueList, sal_uInt32 len)
 {
     OStoreStream    rValue;
     std::unique_ptr<sal_uInt8[]> pBuffer;
@@ -470,7 +471,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
         return RegError::REGISTRY_READONLY;
     }
 
-    OUString sImplValueName = VALUE_PREFIX + valueName;
+    OUString sImplValueName = OUString::Concat(VALUE_PREFIX) + valueName;
 
     REG_GUARD(m_pRegistry->m_mutex);
 
@@ -524,7 +525,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
 
 //  getValue
 
-RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
+RegError ORegKey::getValue(std::u16string_view valueName, RegValue value) const
 {
     OStoreStream    rValue;
     std::unique_ptr<sal_uInt8[]> pBuffer;
@@ -537,7 +538,7 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
         accessMode = storeAccessMode::ReadOnly;
     }
 
-    OUString sImplValueName = VALUE_PREFIX + valueName;
+    OUString sImplValueName = OUString::Concat(VALUE_PREFIX) + valueName;
 
     REG_GUARD(m_pRegistry->m_mutex);
 
@@ -609,7 +610,7 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
 
 //  getLongListValue
 
-RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValueList, sal_uInt32* pLen) const
+RegError ORegKey::getLongListValue(std::u16string_view valueName, sal_Int32** pValueList, sal_uInt32* pLen) const
 {
     OStoreStream    rValue;
     std::unique_ptr<sal_uInt8[]> pBuffer;
@@ -622,7 +623,7 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
         accessMode = storeAccessMode::ReadOnly;
     }
 
-    OUString sImplValueName = VALUE_PREFIX + valueName;
+    OUString sImplValueName = OUString::Concat(VALUE_PREFIX) + valueName;
 
     REG_GUARD(m_pRegistry->m_mutex);
 
@@ -712,7 +713,7 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
 
 //  getStringListValue
 
-RegError ORegKey::getStringListValue(const OUString& valueName, char*** pValueList, sal_uInt32* pLen) const
+RegError ORegKey::getStringListValue(std::u16string_view valueName, char*** pValueList, sal_uInt32* pLen) const
 {
     OStoreStream    rValue;
     std::unique_ptr<sal_uInt8[]> pBuffer;
@@ -725,7 +726,7 @@ RegError ORegKey::getStringListValue(const OUString& valueName, char*** pValueLi
         accessMode = storeAccessMode::ReadOnly;
     }
 
-    OUString sImplValueName = VALUE_PREFIX + valueName;
+    OUString sImplValueName = OUString::Concat(VALUE_PREFIX) + valueName;
 
     REG_GUARD(m_pRegistry->m_mutex);
 
@@ -809,7 +810,7 @@ RegError ORegKey::getStringListValue(const OUString& valueName, char*** pValueLi
 
 //  getUnicodeListValue
 
-RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** pValueList, sal_uInt32* pLen) const
+RegError ORegKey::getUnicodeListValue(std::u16string_view valueName, sal_Unicode*** pValueList, sal_uInt32* pLen) const
 {
     OStoreStream    rValue;
     std::unique_ptr<sal_uInt8[]> pBuffer;
@@ -822,7 +823,7 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
         accessMode = storeAccessMode::ReadOnly;
     }
 
-    OUString sImplValueName = VALUE_PREFIX + valueName;
+    OUString sImplValueName = OUString::Concat(VALUE_PREFIX) + valueName;
 
     REG_GUARD(m_pRegistry->m_mutex);
 

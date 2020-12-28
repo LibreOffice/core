@@ -3457,10 +3457,10 @@ OUString XMLTextFieldExport::MakeFootnoteRefName(
 
 OUString XMLTextFieldExport::MakeSequenceRefName(
     sal_Int16 nSeqNo,
-    const OUString& rSeqName)
+    std::u16string_view rSeqName)
 {
     // generate foot-/endnote ID
-    return "ref" +rSeqName + OUString::number(static_cast<sal_Int32>(nSeqNo));
+    return OUString::Concat("ref") +rSeqName + OUString::number(static_cast<sal_Int32>(nSeqNo));
 }
 
 

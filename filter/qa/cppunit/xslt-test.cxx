@@ -96,14 +96,14 @@ void XsltFilterTest::testXsltCopyNew()
     osl_closeFile(tempFile); // close it so xSFA can open it on WNT
 
     OUString source(
-            m_directories.getURLFromSrc("/filter/source/xsltfilter/xsltfilter.component"));
+            m_directories.getURLFromSrc(u"/filter/source/xsltfilter/xsltfilter.component"));
     uno::Sequence<uno::Any> args(7);
     args[0] <<= beans::NamedValue("StylesheetURL",
-        uno::makeAny(m_directories.getURLFromSrc("/filter/qa/cppunit/data/xslt/copy.xslt")));
+        uno::makeAny(m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/xslt/copy.xslt")));
     args[1] <<= beans::NamedValue("SourceURL", uno::makeAny(source));
     args[2] <<= beans::NamedValue("TargetURL", uno::makeAny(tempURL));
     args[3] <<= beans::NamedValue("SourceBaseURL",
-        uno::makeAny(m_directories.getURLFromSrc("/filter/source/xsltfilter/")));
+        uno::makeAny(m_directories.getURLFromSrc(u"/filter/source/xsltfilter/")));
     args[4] <<= beans::NamedValue("TargetBaseURL", uno::makeAny(tempDirURL));
     args[5] <<= beans::NamedValue("SystemType", uno::makeAny(OUString()));
     args[6] <<= beans::NamedValue("PublicType", uno::makeAny(OUString()));
@@ -150,14 +150,14 @@ void XsltFilterTest::testXsltCopyOld()
     osl_closeFile(tempFile); // close it so xSFA can open it on WNT
 
     OUString source(
-            m_directories.getURLFromSrc("/filter/source/xsltfilter/xsltfilter.component"));
+            m_directories.getURLFromSrc(u"/filter/source/xsltfilter/xsltfilter.component"));
     uno::Sequence<uno::Any> args(7);
     args[0] <<= beans::NamedValue("StylesheetURL",
-        uno::makeAny(m_directories.getURLFromSrc("/filter/qa/cppunit/data/xslt/copy.xslt")));
+        uno::makeAny(m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/xslt/copy.xslt")));
     args[1] <<= beans::NamedValue("SourceURL", uno::makeAny(source));
     args[2] <<= beans::NamedValue("TargetURL", uno::makeAny(tempURL));
     args[3] <<= beans::NamedValue("SourceBaseURL",
-        uno::makeAny(m_directories.getURLFromSrc("/filter/source/xsltfilter/")));
+        uno::makeAny(m_directories.getURLFromSrc(u"/filter/source/xsltfilter/")));
     args[4] <<= beans::NamedValue("TargetBaseURL", uno::makeAny(tempDirURL));
     args[5] <<= beans::NamedValue("SystemType", uno::makeAny(OUString()));
     args[6] <<= beans::NamedValue("PublicType", uno::makeAny(OUString()));

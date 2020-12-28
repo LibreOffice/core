@@ -316,7 +316,7 @@ void GalleryObjTest::TestInsertGalleryObject()
     for (sal_uInt32 i = 0; i < static_cast<sal_uInt32>(imageList.size()); i++)
     {
         OUString imageNameFromList(imageList[i]);
-        OUString aURL(m_directories.getURLFromSrc("/svx/qa/unit/gallery/data/")
+        OUString aURL(m_directories.getURLFromSrc(u"/svx/qa/unit/gallery/data/")
                       + imageNameFromList);
         CPPUNIT_ASSERT_MESSAGE("Could not insert object into theme",
                                pGalleryTheme->InsertURL(INetURLObject(aURL)));
@@ -361,7 +361,7 @@ void GalleryObjTest::TestRemoveGalleryObject()
     for (sal_uInt32 i = 0; i < static_cast<sal_uInt32>(imageList.size()); i++)
     {
         OUString imageNameFromList(imageList[i]);
-        OUString aURL(m_directories.getURLFromSrc("/svx/qa/unit/gallery/data/")
+        OUString aURL(m_directories.getURLFromSrc(u"/svx/qa/unit/gallery/data/")
                       + imageNameFromList);
         CPPUNIT_ASSERT_MESSAGE("Could not insert object into theme",
                                pGalleryTheme->InsertURL(INetURLObject(aURL)));
@@ -416,7 +416,7 @@ void GalleryObjTest::TestChangePositionGalleryObject()
     for (sal_uInt32 i = 0; i < (sizeof(imageList) / sizeof(imageList[0])); i++)
     {
         OUString imageNameFromList(imageList[i]);
-        OUString aURL(m_directories.getURLFromSrc("/svx/qa/unit/gallery/data/")
+        OUString aURL(m_directories.getURLFromSrc(u"/svx/qa/unit/gallery/data/")
                       + imageNameFromList);
         CPPUNIT_ASSERT_MESSAGE("Could not insert object into theme",
                                pGalleryTheme->InsertURL(INetURLObject(aURL)));

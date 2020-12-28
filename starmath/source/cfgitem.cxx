@@ -367,7 +367,7 @@ void SmMathConfig::SetFormatModified( bool bVal )
 
 void SmMathConfig::ReadSymbol( SmSym &rSymbol,
                         const OUString &rSymbolName,
-                        const OUString &rBaseNode ) const
+                        std::u16string_view rBaseNode ) const
 {
     Sequence< OUString > aNames = lcl_GetSymbolPropertyNames();
     sal_Int32 nProps = aNames.getLength();
@@ -480,7 +480,7 @@ void SmMathConfig::GetSymbols( std::vector< SmSym > &rSymbols ) const
     rSymbols.resize( nNodes );
     for (auto& rSymbol : rSymbols)
     {
-        ReadSymbol( rSymbol, *pNode++, SYMBOL_LIST );
+        ReadSymbol( rSymbol, *pNode++, u"" SYMBOL_LIST );
     }
 }
 
@@ -564,7 +564,7 @@ void SmMathConfig::LoadFontFormatList()
     for (const OUString& rNode : aNodes)
     {
         SmFontFormat aFntFmt;
-        ReadFontFormat( aFntFmt, rNode, FONT_FORMAT_LIST );
+        ReadFontFormat( aFntFmt, rNode, u"" FONT_FORMAT_LIST );
         if (!pFontFormatList->GetFontFormat( rNode ))
             pFontFormatList->AddFontFormat( rNode, aFntFmt );
     }
@@ -573,7 +573,7 @@ void SmMathConfig::LoadFontFormatList()
 
 
 void SmMathConfig::ReadFontFormat( SmFontFormat &rFontFormat,
-        const OUString &rSymbolName, const OUString &rBaseNode ) const
+        std::u16string_view rSymbolName, std::u16string_view rBaseNode ) const
 {
     Sequence< OUString > aNames = lcl_GetFontPropertyNames();
     sal_Int32 nProps = aNames.getLength();

@@ -1454,11 +1454,11 @@ bool SwCSS1Parser::MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
              SVX_CSS1_LTYPE_PERCENTAGE   == rPropInfo.m_eWidthType );
 }
 
-void SwCSS1Parser::AddClassName( OUString& rFormatName, const OUString& rClass )
+void SwCSS1Parser::AddClassName( OUString& rFormatName, std::u16string_view rClass )
 {
-    OSL_ENSURE( !rClass.isEmpty(), "Style class without length?" );
+    OSL_ENSURE( !rClass.empty(), "Style class without length?" );
 
-    rFormatName += "." + rClass;
+    rFormatName += OUString::Concat(".") + rClass;
 }
 
 void SwCSS1Parser::FillDropCap( SwFormatDrop& rDrop,

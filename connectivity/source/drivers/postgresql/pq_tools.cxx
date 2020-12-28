@@ -87,9 +87,9 @@ using com::sun::star::container::XEnumerationAccess;
 namespace pq_sdbc_driver
 {
 
-OUString concatQualified( const OUString & a, const OUString &b)
+OUString concatQualified( std::u16string_view a, std::u16string_view b)
 {
-    return a + "." + b;
+    return OUString::Concat(a) + "." + b;
 }
 
 static OString iOUStringToOString( std::u16string_view str, ConnectionSettings const *settings) {

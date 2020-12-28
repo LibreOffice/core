@@ -26,6 +26,7 @@
 #include "skeletoncpp.hxx"
 
 #include <iostream>
+#include <string_view>
 
 using namespace ::codemaker::cpp;
 
@@ -856,11 +857,11 @@ static void generateMethodBodies(std::ostream& o,
         ProgramOptions const & options,
         rtl::Reference< TypeManager > const & manager,
         std::set< OUString > const & interfaces,
-        OString const & classname,
+        std::string_view classname,
         OString const & comphelpernamespace,
         OUString const & propertyhelper)
 {
-    OString name = classname + "::";
+    OString name = OString::Concat(classname) + "::";
     codemaker::GeneratedTypeSet generated;
     for (const auto& rIface : interfaces) {
         if ( rIface == "com.sun.star.lang.XServiceInfo" ) {
@@ -879,16 +880,16 @@ static void generateQueryInterface(std::ostream& o,
                             const std::set< OUString >& interfaces,
                             OString const & parentname,
                             OString const & classname,
-                            OUString const & propertyhelper)
+                            std::u16string_view propertyhelper)
 {
-    if (propertyhelper.isEmpty())
+    if (propertyhelper.empty())
         return;
 
     o << "css::uno::Any " << classname
       << "::queryInterface(css::uno::Type const & type) throw ("
         "css::uno::RuntimeException)\n{\n    ";
 
-    if (!propertyhelper.isEmpty())
+    if (!propertyhelper.empty())
         o << "return ";
     else
         o << "css::uno::Any a(";
@@ -905,12 +906,12 @@ static void generateQueryInterface(std::ostream& o,
             o << ">";
     }
 
-    if (!propertyhelper.isEmpty()) {
+    if (!propertyhelper.empty()) {
         o << "::queryInterface(type);\n";
     } else {
         o << "::queryInterface(type));\n";
         o << "    return a.hasValue() ? a\n        : (";
-        if (propertyhelper == "_") {
+        if (propertyhelper == u"_") {
             o << "::cppu::OPropertySetHelper::queryInterface(type));\n";
         } else {
             o << "::cppu::PropertySetMixin<\n            ";

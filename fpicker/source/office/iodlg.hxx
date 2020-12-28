@@ -33,7 +33,7 @@
 #include <vcl/timer.hxx>
 
 #include <set>
-
+#include <string_view>
 
 class SvtFileView;
 class SvtFileDialogFilter_Impl;
@@ -256,7 +256,7 @@ private:
      */
     static void                 appendDefaultExtension(
                                         OUString& _rFileName,
-                                        const OUString& _rFilterDefaultExtension,
+                                        std::u16string_view _rFilterDefaultExtension,
                                         const OUString& _rFilterExtensions);
 
     void                        initDefaultPlaces( );

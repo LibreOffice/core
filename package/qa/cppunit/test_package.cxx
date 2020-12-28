@@ -51,7 +51,7 @@ namespace
     void PackageTest::setUp()
     {
         BootstrapFixtureBase::setUp();
-        OUString aURL = m_directories.getURLFromSrc("/package/qa/cppunit/data/a2z.zip");
+        OUString aURL = m_directories.getURLFromSrc(u"/package/qa/cppunit/data/a2z.zip");
 
         uno::Sequence<beans::NamedValue> aNVs(1);
         aNVs[0].Name = "URL";
@@ -93,7 +93,7 @@ namespace
     void PackageTest::test()
     {
         testDir(OUString(),
-            m_directories.getURLFromSrc("/package/qa/cppunit/data/"));
+            m_directories.getURLFromSrc(u"/package/qa/cppunit/data/"));
     }
 
     void PackageTest::verifyStreams( std::vector<std::vector<char>> &aBuffers )

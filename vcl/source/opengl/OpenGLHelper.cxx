@@ -60,7 +60,7 @@ OUString getShaderFolder()
     return aUrl + "/opengl/";
 }
 
-OString loadShader(const OUString& rFilename)
+OString loadShader(std::u16string_view rFilename)
 {
     OUString aFileURL = getShaderFolder() + rFilename +".glsl";
     osl::File aFile(aFileURL);
@@ -137,16 +137,16 @@ namespace {
     }
 }
 
-static void addPreamble(OString& rShaderSource, const OString& rPreamble)
+static void addPreamble(OString& rShaderSource, std::string_view rPreamble)
 {
-    if (rPreamble.isEmpty())
+    if (rPreamble.empty())
         return;
 
     int nVersionStrStartPos = rShaderSource.indexOf("#version");
 
     if (nVersionStrStartPos == -1)
     {
-        rShaderSource = rPreamble + "\n" + rShaderSource;
+        rShaderSource = OString::Concat(rPreamble) + "\n" + rShaderSource;
     }
     else
     {
@@ -222,7 +222,7 @@ namespace
 
     OString getStringDigest( const OUString& rVertexShaderName,
                              const OUString& rFragmentShaderName,
-                             const OString& rPreamble )
+                             std::string_view rPreamble )
     {
         // read shaders source
         OString aVertexShaderSource = getShaderSource( rVertexShaderName );
@@ -305,14 +305,14 @@ namespace
     OString createFileName( std::u16string_view rVertexShaderName,
                             std::u16string_view rFragmentShaderName,
                             std::u16string_view rGeometryShaderName,
-                            const OString& rDigest )
+                            std::string_view rDigest )
     {
         OString aFileName = getCacheFolder() +
             OUStringToOString( rVertexShaderName, RTL_TEXTENCODING_UTF8 ) + "-" +
             OUStringToOString( rFragmentShaderName, RTL_TEXTENCODING_UTF8 ) + "-";
         if (!rGeometryShaderName.empty())
             aFileName += OUStringToOString( rGeometryShaderName, RTL_TEXTENCODING_UTF8 ) + "-";
-        aFileName += rDigest + ".bin";
+        aFileName += OString::Concat(rDigest) + ".bin";
         return aFileName;
     }
 
@@ -373,7 +373,7 @@ namespace
 
 OString OpenGLHelper::GetDigest( const OUString& rVertexShaderName,
                                       const OUString& rFragmentShaderName,
-                                      const OString& rPreamble )
+                                      std::string_view rPreamble )
 {
     return getStringDigest(rVertexShaderName, rFragmentShaderName, rPreamble);
 }
@@ -381,8 +381,8 @@ OString OpenGLHelper::GetDigest( const OUString& rVertexShaderName,
 GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
                                 const OUString& rFragmentShaderName,
                                 const OUString& rGeometryShaderName,
-                                const OString& preamble,
-                                const OString& rDigest)
+                                std::string_view preamble,
+                                std::string_view rDigest)
 {
     OpenGLZone aZone;
 
@@ -401,7 +401,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
         aGeometryShaderSource = getShaderSource(rGeometryShaderName);
 
     GLint bBinaryResult = GL_FALSE;
-    if (epoxy_has_gl_extension("GL_ARB_get_program_binary") && !rDigest.isEmpty())
+    if (epoxy_has_gl_extension("GL_ARB_get_program_binary") && !rDigest.empty())
     {
         OString aFileName =
                 createFileName(rVertexShaderName, rFragmentShaderName, rGeometryShaderName, rDigest);
@@ -426,7 +426,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
     GLint Result = GL_FALSE;
 
     // Compile Vertex Shader
-    if( !preamble.isEmpty())
+    if( !preamble.empty())
         addPreamble( aVertexShaderSource, preamble );
     char const * VertexSourcePointer = aVertexShaderSource.getStr();
     glShaderSource(VertexShaderID, 1, &VertexSourcePointer , nullptr);
@@ -439,7 +439,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
                                 rVertexShaderName, true);
 
     // Compile Fragment Shader
-    if( !preamble.isEmpty())
+    if( !preamble.empty())
         addPreamble( aFragmentShaderSource, preamble );
     char const * FragmentSourcePointer = aFragmentShaderSource.getStr();
     glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer , nullptr);
@@ -454,7 +454,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
     if (bHasGeometryShader)
     {
         // Compile Geometry Shader
-        if( !preamble.isEmpty())
+        if( !preamble.empty())
             addPreamble( aGeometryShaderSource, preamble );
         char const * GeometrySourcePointer = aGeometryShaderSource.getStr();
         glShaderSource(GeometryShaderID, 1, &GeometrySourcePointer , nullptr);
@@ -473,7 +473,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
     if (bHasGeometryShader)
         glAttachShader(ProgramID, GeometryShaderID);
 
-    if (epoxy_has_gl_extension("GL_ARB_get_program_binary") && !rDigest.isEmpty())
+    if (epoxy_has_gl_extension("GL_ARB_get_program_binary") && !rDigest.empty())
     {
         glProgramParameteri(ProgramID, GL_PROGRAM_BINARY_RETRIEVABLE_HINT, GL_TRUE);
         glLinkProgram(ProgramID);
@@ -513,8 +513,8 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
 
 GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
                                 const OUString& rFragmentShaderName,
-                                const OString& preamble,
-                                const OString& rDigest)
+                                std::string_view preamble,
+                                std::string_view rDigest)
 {
     return LoadShaders(rVertexShaderName, rFragmentShaderName, OUString(), preamble, rDigest);
 }
@@ -523,7 +523,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
                                 const OUString& rFragmentShaderName,
                                 const OUString& rGeometryShaderName)
 {
-    return LoadShaders(rVertexShaderName, rFragmentShaderName, rGeometryShaderName, OString(), OString());
+    return LoadShaders(rVertexShaderName, rFragmentShaderName, rGeometryShaderName, std::string_view(), std::string_view());
 }
 
 GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,

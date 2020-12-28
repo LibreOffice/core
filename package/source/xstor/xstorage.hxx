@@ -53,6 +53,7 @@
 
 #include <vector>
 #include <memory>
+#include <string_view>
 
 namespace com::sun::star::uno {
     class XComponentContext;
@@ -249,10 +250,11 @@ struct OStorage_Impl
                     const ::comphelper::SequenceAsHashMap& aEncryptionData,
                     css::uno::Reference< css::io::XStream >& xTargetStream );
 
-    void RemoveStreamRelInfo( const OUString& aOriginalName );
+    void RemoveStreamRelInfo( std::u16string_view aOriginalName );
     void CreateRelStorage();
-    void CommitStreamRelInfo( const OUString& rName, SotElement_Impl const * pStreamElement );
-    css::uno::Reference< css::io::XInputStream > GetRelInfoStreamForName( const OUString& aName );
+    void CommitStreamRelInfo( std::u16string_view rName, SotElement_Impl const * pStreamElement );
+    css::uno::Reference< css::io::XInputStream > GetRelInfoStreamForName(
+        std::u16string_view aName );
     void CommitRelInfo( const css::uno::Reference< css::container::XNameContainer >& xNewPackageFolder );
 
     static void completeStorageStreamCopy_Impl(

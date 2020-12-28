@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <string_view>
 #include <utility>
 #include <unordered_map>
 
@@ -402,9 +403,9 @@ private:
 
     void impl_storePath(const PathSettings::PathInfo& aPath);
 
-    css::uno::Sequence< sal_Int32 > impl_mapPathName2IDList(const OUString& sPath);
+    css::uno::Sequence< sal_Int32 > impl_mapPathName2IDList(std::u16string_view sPath);
 
-    void impl_notifyPropListener( const OUString&        sPath   ,
+    void impl_notifyPropListener( std::u16string_view    sPath   ,
                                   const PathSettings::PathInfo* pPathOld,
                                   const PathSettings::PathInfo* pPathNew);
 
@@ -793,11 +794,11 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath     
     return eOp;
 }
 
-css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(const OUString& sPath)
+css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(std::u16string_view sPath)
 {
-    OUString sInternalProp = sPath+POSTFIX_INTERNAL_PATHS;
-    OUString sUserProp     = sPath+POSTFIX_USER_PATHS;
-    OUString sWriteProp    = sPath+POSTFIX_WRITE_PATH;
+    OUString sInternalProp = OUString::Concat(sPath)+POSTFIX_INTERNAL_PATHS;
+    OUString sUserProp     = OUString::Concat(sPath)+POSTFIX_USER_PATHS;
+    OUString sWriteProp    = OUString::Concat(sPath)+POSTFIX_WRITE_PATH;
 
     // Attention: The default set of IDs is fix and must follow these schema.
     // Otherwise the outside code ant work for new added properties.
@@ -835,7 +836,7 @@ css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(const OUSt
     return lIDs;
 }
 
-void PathSettings::impl_notifyPropListener( const OUString&               sPath,
+void PathSettings::impl_notifyPropListener( std::u16string_view           sPath,
                                             const PathSettings::PathInfo* pPathOld,
                                             const PathSettings::PathInfo* pPathNew)
 {

@@ -27,6 +27,8 @@
 #include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
 #include <o3tl/enumarray.hxx>
+
+#include <string_view>
 #include <vector>
 
 enum class LockFileComponent
@@ -48,7 +50,7 @@ protected:
     ::osl::Mutex m_aMutex;
 
     /// This method generates the URL of the lock file based on the document URL and the specified prefix.
-    static OUString GenerateOwnLockFileURL(const OUString& aOrigURL, const OUString& aPrefix);
+    static OUString GenerateOwnLockFileURL(const OUString& aOrigURL, std::u16string_view aPrefix);
 
 public:
     LockFileCommon(const OUString& aLockFileURL);

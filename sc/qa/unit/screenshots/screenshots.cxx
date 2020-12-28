@@ -265,7 +265,7 @@ void ScScreenshotTest::testOpeningModalDialogs()
     initialize();
 
     /// process input file containing the UXMLDescriptions of the dialogs to dump
-    processDialogBatchFile("sc/qa/unit/screenshots/data/screenshots.txt");
+    processDialogBatchFile(u"sc/qa/unit/screenshots/data/screenshots.txt");
 
     mxComponent->dispose();
     mxComponent.clear();

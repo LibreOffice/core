@@ -152,7 +152,7 @@ SdPublishingDesign::SdPublishingDesign()
     , m_bUseAttribs(true)
     , m_bUseColor(true)
 {
-    FilterConfigItem aFilterConfigItem("Office.Common/Filter/Graphic/Export/JPG");
+    FilterConfigItem aFilterConfigItem(u"Office.Common/Filter/Graphic/Export/JPG");
     sal_Int32 nCompression = aFilterConfigItem.ReadInt32( KEY_QUALITY, 75 );
     m_aCompression = OUString::number(nCompression) + "%";
 

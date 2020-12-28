@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -57,7 +61,7 @@ private:
 public:
     static OUString GetFilterNameFromExtentionAndInStream(
                                 const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                                const OUString& aNameWithExtention,
+                                std::u16string_view aNameWithExtention,
                                 const css::uno::Reference< css::io::XInputStream >& xInputStream );
 
     OwnView_Impl( const css::uno::Reference< css::uno::XComponentContext >& xContext,

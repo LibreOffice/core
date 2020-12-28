@@ -39,6 +39,7 @@
 #include <svx/unoapi.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <cstdio>
+#include <string_view>
 #include <unordered_set>
 #include <unordered_map>
 
@@ -241,7 +242,7 @@ private:
                                                                sal_Int32 nFirstPage, sal_Int32 nLastPage );
     void                            implExportDrawPages( const std::vector< Reference< css::drawing::XDrawPage > >& rxPages,
                                                              sal_Int32 nFirstPage, sal_Int32 nLastPage );
-    bool                            implExportPage( const OUString & sPageId,
+    bool                            implExportPage( std::u16string_view sPageId,
                                                         const Reference< css::drawing::XDrawPage > & rxPage,
                                                         const Reference< css::drawing::XShapes > & xShapes,
                                                         bool bMaster );

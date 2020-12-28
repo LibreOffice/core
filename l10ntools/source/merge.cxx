@@ -98,7 +98,7 @@ namespace
     }
 }
 
-OString MergeEntrys::GetQTZText(const ResData& rResData, const OString& rOrigText)
+OString MergeEntrys::GetQTZText(const ResData& rResData, std::string_view rOrigText)
 {
     const OString sFilename = rResData.sFilename.copy(rResData.sFilename.lastIndexOf('/')+1);
     const OString sKey =
@@ -276,8 +276,8 @@ MergeEntrys *MergeDataFile::GetMergeEntrysCaseSensitive( ResData *pResData )
 }
 
 void MergeDataFile::InsertEntry(
-    const OString &rTYP, const OString &rGID,
-    const OString &rLID, const OString &nLANG,
+    std::string_view rTYP, std::string_view rGID,
+    std::string_view rLID, const OString &nLANG,
     const OString &rTEXT, const OString &rQHTEXT,
     const OString &rTITLE, const OString &rInFilename,
     bool bFirstLang, bool bCaseSensitive )
@@ -318,11 +318,11 @@ void MergeDataFile::InsertEntry(
     }
 }
 
-OString MergeDataFile::CreateKey(const OString& rTYP, const OString& rGID,
-    const OString& rLID, const OString& rFilename, bool bCaseSensitive)
+OString MergeDataFile::CreateKey(std::string_view rTYP, std::string_view rGID,
+    std::string_view rLID, const OString& rFilename, bool bCaseSensitive)
 {
     static const char sStroke[] = "-";
-    OString sKey = rTYP + sStroke + rGID + sStroke + rLID + sStroke +
+    OString sKey = OString::Concat(rTYP) + sStroke + rGID + sStroke + rLID + sStroke +
         lcl_NormalizeFilename(rFilename);
     if(bCaseSensitive)
         return sKey;         // officecfg case sensitive identifier

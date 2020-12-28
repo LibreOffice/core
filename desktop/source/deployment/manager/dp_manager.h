@@ -27,7 +27,7 @@
 #include <com/sun/star/deployment/XPackageRegistry.hpp>
 #include <com/sun/star/deployment/XPackageManager.hpp>
 #include <memory>
-
+#include <string_view>
 
 namespace dp_manager {
 
@@ -173,7 +173,7 @@ public:
         OUString const & id, OUString const & fileName,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
     css::uno::Reference<css::deployment::XPackage> getDeployedPackage_(
-        OUString const & id, ActivePackages::Data const & data,
+        std::u16string_view id, ActivePackages::Data const & data,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
         bool ignoreAlienPlatforms = false );
     virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL

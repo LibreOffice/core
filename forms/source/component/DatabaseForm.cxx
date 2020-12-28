@@ -518,7 +518,7 @@ namespace
 }
 
 
-void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Reference<XPropertySet>& xComponentSet, const OUString& rNamePrefix,
+void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Reference<XPropertySet>& xComponentSet, std::u16string_view rNamePrefix,
                      const Reference<XControl>& rxSubmitButton, const css::awt::MouseEvent& MouseEvt)
 {
     if (!xComponentSet.is())
@@ -857,7 +857,7 @@ void ODatabaseForm::FillSuccessfulList( HtmlSuccessfulObjList& rList,
     for( sal_Int32 nIndex=0; nIndex < getCount(); nIndex++ )
     {
         getByIndex( nIndex ) >>= xComponentSet;
-        AppendComponent(rList, xComponentSet, OUString(), rxSubmitButton, MouseEvt);
+        AppendComponent(rList, xComponentSet, std::u16string_view(), rxSubmitButton, MouseEvt);
     }
 }
 
@@ -918,7 +918,7 @@ void ODatabaseForm::Encode( OUString& rString )
 }
 
 
-void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const OUString& rName,
+void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, std::u16string_view rName,
     std::u16string_view rData )
 {
     // Create part as MessageChild
@@ -927,7 +927,7 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const OUString& rN
     // Header
     //TODO: Encode rName into a properly formatted Content-Disposition header
     // field as per RFC 2231:
-    OUString aContentDisp = "form-data; name=\"" + rName + "\"";
+    OUString aContentDisp = OUString::Concat("form-data; name=\"") + rName + "\"";
     pChild->SetContentDisposition(aContentDisp);
 
     rtl_TextEncoding eSystemEncoding = osl_getThreadTextEncoding();
@@ -947,7 +947,7 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const OUString& rN
 }
 
 
-void ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rName,
+void ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, std::u16string_view rName,
     const OUString& rFileName )
 {
     OUString aFileName(rFileName);
@@ -989,7 +989,7 @@ void ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rN
     //TODO: Encode rName and aFileName into a properly formatted
     // Content-Disposition header field as per RFC 2231:
     OUString aContentDisp =
-        "form-data; name=\"" +
+        OUString::Concat("form-data; name=\"") +
         rName +
         "\""
         "; filename=\"" +

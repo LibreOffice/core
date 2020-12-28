@@ -20,6 +20,7 @@
 #define INCLUDED_VBAHELPER_VBASHAPES_HXX
 
 #include <exception>
+#include <string_view>
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -71,7 +72,7 @@ private:
     css::uno::Any AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight );
     /// @throws css::uno::RuntimeException
     css::uno::Any AddTextboxInWriter( sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight );
-    OUString createName( const OUString& sName );
+    OUString createName( std::u16string_view sName );
     //TODO helperapi using a writer document
     //css::awt::Point calculateTopLeftMargin( css::uno::Reference< ov::XHelperInterface > xDocument );
 

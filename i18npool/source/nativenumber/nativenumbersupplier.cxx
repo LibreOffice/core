@@ -565,7 +565,7 @@ Separators getLocaleSeparators(const Locale& rLocale, const OUString& rLocStr)
 }
 
 OUString getNumberText(const Locale& rLocale, const OUString& rNumberString,
-                       const OUString& sNumberTextParams)
+                       std::u16string_view sNumberTextParams)
 {
     sal_Int32 i, count = 0;
     const sal_Int32 len = rNumberString.getLength();
@@ -605,8 +605,8 @@ OUString getNumberText(const Locale& rLocale, const OUString& rNumberString,
         = css::linguistic2::NumberText::create(comphelper::getProcessComponentContext());
     OUString numbertext_prefix;
     // default "cardinal" gets empty prefix
-    if (!sNumberTextParams.isEmpty() && sNumberTextParams != "cardinal")
-        numbertext_prefix = sNumberTextParams + " ";
+    if (!sNumberTextParams.empty() && sNumberTextParams != u"cardinal")
+        numbertext_prefix = OUString::Concat(sNumberTextParams) + " ";
     // Several hundreds of headings could result typing lags because
     // of the continuous update of the multiple number names during typing.
     // We fix this by buffering the result of the conversion.
@@ -673,7 +673,7 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
         if (nStripCase > 0 && (rNativeNumberParams.getLength() == nStripCase ||
                     rNativeNumberParams[nStripCase++] == ' '))
         {
-            OUString aStr = getNumberText(rLocale, aNumberString, rNativeNumberParams.copy(nStripCase));
+            OUString aStr = getNumberText(rLocale, aNumberString, rNativeNumberParams.subView(nStripCase));
 
             if (!xCharClass.is())
                 xCharClass = CharacterClassification::create(comphelper::getProcessComponentContext());

@@ -18,6 +18,8 @@
  */
 
 #include <memory>
+#include <string_view>
+
 #include "eformshelper.hxx"
 #include "formstrings.hxx"
 #include <strings.hrc>
@@ -54,9 +56,9 @@ namespace pcr
     namespace
     {
 
-        OUString composeModelElementUIName( const OUString& _rModelName, const OUString& _rElementName )
+        OUString composeModelElementUIName( std::u16string_view _rModelName, std::u16string_view _rElementName )
         {
-            OUString a = "["
+            OUString a = OUString::Concat("[")
                        + _rModelName + "] "
                        + _rElementName;
             return a;

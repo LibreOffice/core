@@ -20,6 +20,10 @@
 #ifndef INCLUDED_UNOTEST_GETTESTARGUMENT_HXX
 #define INCLUDED_UNOTEST_GETTESTARGUMENT_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 #include <unotest/detail/unotestdllapi.hxx>
 
@@ -29,7 +33,7 @@ namespace test {
 // Obtain the value of a test argument (tunneled in via an "arg-testarg.<name>"
 // bootstrap variable):
 OOO_DLLPUBLIC_UNOTEST bool getTestArgument(
-    OUString const & name, OUString * value);
+    std::u16string_view name, OUString * value);
 
 }
 

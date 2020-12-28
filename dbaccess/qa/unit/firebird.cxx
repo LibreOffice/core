@@ -40,7 +40,7 @@ public:
  */
 void FirebirdTest::testEmptyDBConnection()
 {
-    auto const tmp = createTempCopy("firebird_empty.odb");
+    auto const tmp = createTempCopy(u"firebird_empty.odb");
     uno::Reference< XOfficeDatabaseDocument > xDocument =
         getDocumentForUrl(tmp.GetURL());
 
@@ -56,7 +56,7 @@ void FirebirdTest::testEmptyDBConnection()
 void FirebirdTest::testIntegerDatabase()
 {
     uno::Reference< XOfficeDatabaseDocument > xDocument =
-        getDocumentForFileName("firebird_integer_ods12.odb");
+        getDocumentForFileName(u"firebird_integer_ods12.odb");
 
     uno::Reference< XConnection > xConnection =
         getConnectionForDocument(xDocument);

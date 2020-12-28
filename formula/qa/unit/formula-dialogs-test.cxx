@@ -51,7 +51,7 @@ VclPtr<VclAbstractDialog> FormulaDialogsTest::createDialogByID(sal_uInt32 /*nID*
 void FormulaDialogsTest::openAnyDialog()
 {
     /// process input file containing the UXMLDescriptions of the dialogs to dump
-    processDialogBatchFile("formula/qa/unit/data/formula-dialogs-test.txt");
+    processDialogBatchFile(u"formula/qa/unit/data/formula-dialogs-test.txt");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FormulaDialogsTest);

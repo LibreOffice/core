@@ -20,6 +20,7 @@
 #include <BitmapSymmetryCheck.hxx>
 
 #include <chrono>
+#include <string_view>
 
 namespace
 {
@@ -47,12 +48,12 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    OUString getFullUrl(const OUString& sFileName)
+    OUString getFullUrl(std::u16string_view sFileName)
     {
-        return m_directories.getURLFromSrc("vcl/qa/cppunit/data/") + sFileName;
+        return m_directories.getURLFromSrc(u"vcl/qa/cppunit/data/") + sFileName;
     }
 
-    BitmapEx loadBitmap(const OUString& sFileName)
+    BitmapEx loadBitmap(std::u16string_view sFileName)
     {
         Graphic aGraphic;
         const OUString aURL(getFullUrl(sFileName));
@@ -136,11 +137,13 @@ void BitmapFilterTest::testBlurCorrectness()
 
 void BitmapFilterTest::testBasicMorphology()
 {
-    const BitmapEx aOrigBitmap = loadBitmap("testBasicMorphology.png");
-    const BitmapEx aRefBitmapDilated1 = loadBitmap("testBasicMorphologyDilated1.png");
-    const BitmapEx aRefBitmapDilated1Eroded1 = loadBitmap("testBasicMorphologyDilated1Eroded1.png");
-    const BitmapEx aRefBitmapDilated2 = loadBitmap("testBasicMorphologyDilated2.png");
-    const BitmapEx aRefBitmapDilated2Eroded1 = loadBitmap("testBasicMorphologyDilated2Eroded1.png");
+    const BitmapEx aOrigBitmap = loadBitmap(u"testBasicMorphology.png");
+    const BitmapEx aRefBitmapDilated1 = loadBitmap(u"testBasicMorphologyDilated1.png");
+    const BitmapEx aRefBitmapDilated1Eroded1
+        = loadBitmap(u"testBasicMorphologyDilated1Eroded1.png");
+    const BitmapEx aRefBitmapDilated2 = loadBitmap(u"testBasicMorphologyDilated2.png");
+    const BitmapEx aRefBitmapDilated2Eroded1
+        = loadBitmap(u"testBasicMorphologyDilated2Eroded1.png");
 
     BitmapEx aTransformBitmap = aOrigBitmap;
     BitmapFilter::Filter(aTransformBitmap, BitmapDilateFilter(1));

@@ -429,9 +429,9 @@ bool SbTreeListBox::FindRootEntry( const ScriptDocument& rDocument, LibraryLocat
     return false;
 }
 
-OUString CreateMgrAndLibStr( const OUString& rMgrName, const OUString& rLibName )
+OUString CreateMgrAndLibStr( std::u16string_view rMgrName, std::u16string_view rLibName )
 {
-    return "[" + rMgrName + "]." + rLibName;
+    return OUString::Concat("[") + rMgrName + "]." + rLibName;
 }
 
 

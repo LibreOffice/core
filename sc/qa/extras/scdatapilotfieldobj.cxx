@@ -115,7 +115,7 @@ void ScDataPilotFieldObj::setUp()
     CalcUnoApiTest::setUp();
 
     OUString aFileURL;
-    createFileURL("scdatapilotfieldobj.ods", aFileURL);
+    createFileURL(u"scdatapilotfieldobj.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
 }
 

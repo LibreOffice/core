@@ -67,7 +67,7 @@ void ScOutlineObj::setUp()
     CalcUnoApiTest::setUp();
     // create a calc document
     OUString aFileURL;
-    createFileURL("ScOutlineObj.ods", aFileURL);
+    createFileURL(u"ScOutlineObj.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL);
 }
 

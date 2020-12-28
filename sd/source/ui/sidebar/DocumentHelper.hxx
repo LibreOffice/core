@@ -22,6 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <memory>
+#include <string_view>
 #include <vector>
 
 class SdDrawDocument;
@@ -97,7 +98,7 @@ private:
     */
     static void AssignMasterPageToPage (
         SdPage const * pMasterPage,
-        const OUString& rsBaseLayoutName,
+        std::u16string_view rsBaseLayoutName,
         SdPage* pPage);
 };
 

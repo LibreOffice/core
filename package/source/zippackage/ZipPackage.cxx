@@ -70,6 +70,7 @@
 
 #include <cstring>
 #include <memory>
+#include <string_view>
 #include <vector>
 
 #include <comphelper/processfactory.hxx>
@@ -427,7 +428,7 @@ void ZipPackage::parseManifest()
         m_xRootFolder->removeByName( sMimetype );
     }
 
-    m_bInconsistent = m_xRootFolder->LookForUnexpectedODF12Streams( OUString() );
+    m_bInconsistent = m_xRootFolder->LookForUnexpectedODF12Streams( std::u16string_view() );
 
     bool bODF12AndNewer = ( m_xRootFolder->GetVersion().compareTo( u"" ODFVER_012_TEXT ) >= 0 );
     if ( !m_bForceRecovery && bODF12AndNewer )

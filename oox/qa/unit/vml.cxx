@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 
@@ -31,7 +35,7 @@ public:
     void setUp() override;
     void tearDown() override;
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
-    void load(const OUString& rURL);
+    void load(std::u16string_view rURL);
 };
 
 void OoxVmlTest::setUp()
@@ -49,7 +53,7 @@ void OoxVmlTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-void OoxVmlTest::load(const OUString& rFileName)
+void OoxVmlTest::load(std::u16string_view rFileName)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFileName;
     mxComponent = loadFromDesktop(aURL);
@@ -59,7 +63,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testSpt202ShapeType)
 {
     // Load a document with a groupshape, 2nd child is a <v:shape>, its type has o:spt set to 202
     // (TextBox).
-    load("group-spt202.docx");
+    load(u"group-spt202.docx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
@@ -79,7 +83,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testShapeNonAutosizeWithText)
     // Load a document which has a group shape, containing a single child.
     // 17.78 cm is the full group shape width, 19431/64008 is the child shape's relative width inside
     // that, so 5.3975 cm should be the shape width.
-    load("shape-non-autosize-with-text.docx");
+    load(u"shape-non-autosize-with-text.docx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
@@ -94,7 +98,7 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testShapeNonAutosizeWithText)
 
 CPPUNIT_TEST_FIXTURE(OoxVmlTest, testGraphicStroke)
 {
-    load("graphic-stroke.pptx");
+    load(u"graphic-stroke.pptx");
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);

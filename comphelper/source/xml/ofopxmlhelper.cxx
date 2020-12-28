@@ -79,10 +79,10 @@ static uno::Sequence<uno::Sequence< beans::StringPair>> ReadSequence_Impl(
 
 uno::Sequence< uno::Sequence< beans::StringPair > > ReadRelationsInfoSequence(
         const uno::Reference< io::XInputStream >& xInStream,
-        const OUString & aStreamName,
+        std::u16string_view aStreamName,
         const uno::Reference< uno::XComponentContext >& rContext )
 {
-    OUString aStringID = "_rels/" + aStreamName;
+    OUString aStringID = OUString::Concat("_rels/") + aStreamName;
     return ReadSequence_Impl( xInStream, aStringID, RELATIONINFO_FORMAT, rContext );
 }
 

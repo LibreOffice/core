@@ -974,7 +974,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
 
 
 Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
-    OUString const & id, ActivePackages::Data const & data,
+    std::u16string_view id, ActivePackages::Data const & data,
     Reference<XCommandEnvironment> const & xCmdEnv, bool ignoreAlienPlatforms )
 {
     if (ignoreAlienPlatforms)

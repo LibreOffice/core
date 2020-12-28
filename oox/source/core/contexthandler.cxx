@@ -71,7 +71,8 @@ OUString ContextHandler::getFragmentPathFromFirstType( std::u16string_view rType
     return mxBaseData->mxRelations->getFragmentPathFromFirstType( rType );
 }
 
-OUString ContextHandler::getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rType ) const
+OUString ContextHandler::getFragmentPathFromFirstTypeFromOfficeDoc( std::u16string_view rType )
+    const
 {
     return mxBaseData->mxRelations->getFragmentPathFromFirstTypeFromOfficeDoc( rType );
 }

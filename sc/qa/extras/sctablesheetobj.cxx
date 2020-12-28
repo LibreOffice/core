@@ -354,7 +354,7 @@ OUString ScTableSheetObj::getFileURL()
 void ScTableSheetObj::setUp()
 {
     CalcUnoApiTest::setUp();
-    createFileURL("ScTableSheetObj.ods", maFileURL);
+    createFileURL(u"ScTableSheetObj.ods", maFileURL);
     mxComponent = loadFromDesktop(maFileURL, "com.sun.star.sheet.SpreadsheetDocument");
 }
 

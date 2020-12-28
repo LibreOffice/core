@@ -31,7 +31,7 @@
 
 ScHFEditDlg::ScHFEditDlg(weld::Window* pParent,
                          const SfxItemSet& rCoreSet,
-                         const OUString& rPageStyle,
+                         std::u16string_view rPageStyle,
                          const OUString& rUIXMLDescription,
                          const OString& rID)
     :   SfxTabDialogController(pParent, rUIXMLDescription, rID, &rCoreSet)
@@ -47,7 +47,7 @@ ScHFEditDlg::ScHFEditDlg(weld::Window* pParent,
 ScHFEditHeaderDlg::ScHFEditHeaderDlg(
                           weld::Window* pParent,
                           const SfxItemSet& rCoreSet,
-                          const OUString&   rPageStyle)
+                          std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "modules/scalc/ui/headerdialog.ui", "HeaderDialog")
 {
@@ -58,7 +58,7 @@ ScHFEditHeaderDlg::ScHFEditHeaderDlg(
 ScHFEditFooterDlg::ScHFEditFooterDlg(
                           weld::Window*           pParent,
                           const SfxItemSet& rCoreSet,
-                          const OUString&   rPageStyle)
+                          std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "modules/scalc/ui/footerdialog.ui", "FooterDialog" )
 {
@@ -69,7 +69,7 @@ ScHFEditFooterDlg::ScHFEditFooterDlg(
 ScHFEditLeftHeaderDlg::ScHFEditLeftHeaderDlg(
                           weld::Window*           pParent,
                           const SfxItemSet& rCoreSet,
-                          const OUString&   rPageStyle)
+                          std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "modules/scalc/ui/leftheaderdialog.ui", "LeftHeaderDialog" )
 {
@@ -79,7 +79,7 @@ ScHFEditLeftHeaderDlg::ScHFEditLeftHeaderDlg(
 ScHFEditRightHeaderDlg::ScHFEditRightHeaderDlg(
                           weld::Window*           pParent,
                           const SfxItemSet& rCoreSet,
-                          const OUString&   rPageStyle)
+                          std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "modules/scalc/ui/rightheaderdialog.ui", "RightHeaderDialog" )
 {
@@ -89,7 +89,7 @@ ScHFEditRightHeaderDlg::ScHFEditRightHeaderDlg(
 ScHFEditLeftFooterDlg::ScHFEditLeftFooterDlg(
                           weld::Window*           pParent,
                           const SfxItemSet& rCoreSet,
-                          const OUString&   rPageStyle)
+                          std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "modules/scalc/ui/leftfooterdialog.ui", "LeftFooterDialog" )
 {
@@ -99,7 +99,7 @@ ScHFEditLeftFooterDlg::ScHFEditLeftFooterDlg(
 ScHFEditRightFooterDlg::ScHFEditRightFooterDlg(
                           weld::Window*           pParent,
                           const SfxItemSet& rCoreSet,
-                          const OUString&   rPageStyle)
+                          std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "modules/scalc/ui/rightfooterdialog.ui", "RightFooterDialog" )
 {
@@ -109,7 +109,7 @@ ScHFEditRightFooterDlg::ScHFEditRightFooterDlg(
 ScHFEditSharedHeaderDlg::ScHFEditSharedHeaderDlg(
                           weld::Window*           pParent,
                           const SfxItemSet& rCoreSet,
-                          const OUString&   rPageStyle)
+                          std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "modules/scalc/ui/sharedheaderdialog.ui", "SharedHeaderDialog" )
 {
@@ -121,7 +121,7 @@ ScHFEditSharedHeaderDlg::ScHFEditSharedHeaderDlg(
 ScHFEditSharedFooterDlg::ScHFEditSharedFooterDlg(
                           weld::Window*           pParent,
                           const SfxItemSet& rCoreSet,
-                          const OUString&   rPageStyle)
+                          std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "modules/scalc/ui/sharedfooterdialog.ui", "SharedFooterDialog" )
 {
@@ -133,7 +133,7 @@ ScHFEditSharedFooterDlg::ScHFEditSharedFooterDlg(
 ScHFEditAllDlg::ScHFEditAllDlg(
                           weld::Window*           pParent,
                           const SfxItemSet& rCoreSet,
-                          const OUString&   rPageStyle)
+                          std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "modules/scalc/ui/allheaderfooterdialog.ui", "AllHeaderFooterDialog" )
 {
@@ -146,7 +146,7 @@ ScHFEditAllDlg::ScHFEditAllDlg(
 ScHFEditActiveDlg::ScHFEditActiveDlg(
                           weld::Window*           pParent,
                           const SfxItemSet& rCoreSet,
-                          const OUString&   rPageStyle)
+                          std::u16string_view rPageStyle)
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "modules/scalc/ui/headerfooterdialog.ui", "HeaderFooterDialog" )
 {

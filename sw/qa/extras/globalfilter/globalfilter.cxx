@@ -106,7 +106,7 @@ void Test::testEmbeddedGraphicRoundtrip()
         if (mxComponent.is())
             mxComponent->dispose();
 
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/document_with_two_images.odt"), "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/document_with_two_images.odt"), "com.sun.star.text.TextDocument");
 
         // Export the document and import again for a check
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -172,7 +172,7 @@ void Test::testLinkedGraphicRT()
     {
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/document_with_linked_graphic.odt"), "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/document_with_linked_graphic.odt"), "com.sun.star.text.TextDocument");
 
         const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
 
@@ -240,7 +240,7 @@ void Test::testImageWithSpecialID()
     {
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/images_with_special_IDs.odt"), "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/images_with_special_IDs.odt"), "com.sun.star.text.TextDocument");
 
         // Export the document and import again for a check
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -335,7 +335,7 @@ void Test::testGraphicShape()
     {
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/graphic_shape.odt"), "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/graphic_shape.odt"), "com.sun.star.text.TextDocument");
 
         // Export the document and import again for a check
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -443,7 +443,7 @@ void Test::testMultipleIdenticalGraphics()
         if (mxComponent.is())
             mxComponent->dispose();
 
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/multiple_identical_graphics.odt"), "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/multiple_identical_graphics.odt"), "com.sun.star.text.TextDocument");
 
         // Export the document and import again for a check
         utl::MediaDescriptor aMediaDescriptor;
@@ -494,7 +494,7 @@ void Test::testCharHighlightBody()
     {
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/char_highlight.docx"),
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/char_highlight.docx"),
                                       "com.sun.star.text.TextDocument");
 
         const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
@@ -590,7 +590,7 @@ void Test::testCharStyleHighlight()
     {
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/tdf138345_charstyle_highlight.odt"),
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/tdf138345_charstyle_highlight.odt"),
                                       "com.sun.star.text.TextDocument");
 
         const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
@@ -634,7 +634,7 @@ void Test::testCharHighlight()
 
 void Test::testCharHighlightODF()
 {
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/char_background_editing.docx"),
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/char_background_editing.docx"),
                                       "com.sun.star.text.TextDocument");
 
     // don't check import, testMSCharBackgroundEditing already does that
@@ -727,7 +727,7 @@ void Test::testMSCharBackgroundEditing()
         if (mxComponent.is())
             mxComponent->dispose();
 
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/char_background_editing.docx"),
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/char_background_editing.docx"),
                                       "com.sun.star.text.TextDocument");
 
         const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
@@ -839,7 +839,7 @@ void Test::testCharBackgroundToHighlighting()
     {
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/char_background.odt"),
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/char_background.odt"),
                                       "com.sun.star.text.TextDocument");
 
         OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
@@ -1053,7 +1053,7 @@ void Test::testNestedFieldmark()
         }
 
         mxComponent = loadFromDesktop(m_directories.getURLFromSrc(
-                "/sw/qa/extras/globalfilter/data/" + rFilterName.second),
+                OUString("/sw/qa/extras/globalfilter/data/" + rFilterName.second)),
             "com.sun.star.text.TextDocument");
 
         verifyNestedFieldmark(rFilterName.first + ", load", mxComponent);
@@ -1109,7 +1109,7 @@ void Test::testODF13()
 {
     // import
     mxComponent = loadFromDesktop(m_directories.getURLFromSrc(
-            "/sw/qa/extras/globalfilter/data/text13e.odt"),
+            u"/sw/qa/extras/globalfilter/data/text13e.odt"),
         "com.sun.star.text.TextDocument");
 
     // check model
@@ -1295,7 +1295,7 @@ void Test::testBulletAsImage()
         if (mxComponent.is())
             mxComponent->dispose();
 
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/BulletAsImage.odt"), "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/BulletAsImage.odt"), "com.sun.star.text.TextDocument");
 
         // Check if import was successful
         {
@@ -1431,7 +1431,7 @@ void Test::testTextFormField()
     {
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/text_form_field.odt"), "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/text_form_field.odt"), "com.sun.star.text.TextDocument");
 
         const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
 
@@ -1486,7 +1486,7 @@ void Test::testCheckBoxFormField()
     {
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/checkbox_form_field.odt"), "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/checkbox_form_field.odt"), "com.sun.star.text.TextDocument");
 
         const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
 
@@ -1549,7 +1549,7 @@ void Test::testDropDownFormField()
     {
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/dropdown_form_field.odt"), "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/dropdown_form_field.odt"), "com.sun.star.text.TextDocument");
 
         const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
 
@@ -1634,7 +1634,7 @@ void Test::testDateFormField()
     {
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/date_form_field.odt"), "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/date_form_field.odt"), "com.sun.star.text.TextDocument");
 
         const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
 
@@ -1750,7 +1750,7 @@ void Test::testDateFormFieldCharacterFormatting()
     {
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/date_form_field_char_formatting.odt"), "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/date_form_field_char_formatting.odt"), "com.sun.star.text.TextDocument");
 
         const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
 

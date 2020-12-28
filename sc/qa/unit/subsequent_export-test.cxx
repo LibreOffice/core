@@ -7,8 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <officecfg/Office/Common.hxx>
 #include <sal/config.h>
+
+#include <string_view>
+
+#include <officecfg/Office/Common.hxx>
 #include <config_features.h>
 
 #include <sfx2/sfxmodelfactory.hxx>
@@ -201,7 +204,7 @@ public:
     void testTdf129985();
     void testTdf73063();
 
-    xmlDocUniquePtr testTdf95640(const OUString& rFileName, sal_Int32 nSourceFormat,
+    xmlDocUniquePtr testTdf95640(std::u16string_view rFileName, sal_Int32 nSourceFormat,
                                  sal_Int32 nDestFormat);
     void testTdf95640_ods_to_xlsx();
     void testTdf95640_ods_to_xlsx_with_standard_list();
@@ -552,7 +555,7 @@ void ScExportTest::testExtCondFormatXLSX()
 
 void ScExportTest::testTdf90104()
 {
-    ScDocShellRef xShell = loadDoc("tdf90104.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"tdf90104.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
@@ -575,7 +578,7 @@ void ScExportTest::testTdf111876()
  {
     // Document with relative path hyperlink
 
-    ScDocShellRef xShell = loadDoc("tdf111876.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"tdf111876.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
@@ -615,7 +618,7 @@ void ScExportTest::testPasswordExportODS()
 
 void ScExportTest::testTdf134332()
 {
-    ScDocShellRef xShell = loadDoc("tdf134332.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"tdf134332.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocument& rDoc = xShell->GetDocument();
@@ -638,7 +641,7 @@ void ScExportTest::testTdf134332()
 
 void ScExportTest::testConditionalFormatExportODS()
 {
-    ScDocShellRef xShell = loadDoc("new_cond_format_test_export.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"new_cond_format_test_export.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_ODS);
@@ -653,7 +656,7 @@ void ScExportTest::testConditionalFormatExportODS()
 
 void ScExportTest::testCondFormatExportCellIs()
 {
-    ScDocShellRef xShell = loadDoc("condFormat_cellis.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"condFormat_cellis.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
@@ -689,7 +692,7 @@ void ScExportTest::testCondFormatExportCellIs()
 
 void ScExportTest::testConditionalFormatExportXLSX()
 {
-    ScDocShellRef xShell = loadDoc("new_cond_format_test_export.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"new_cond_format_test_export.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
@@ -711,7 +714,7 @@ void ScExportTest::testConditionalFormatExportXLSX()
 
 void ScExportTest::testTdf99856_dataValidationTest()
 {
-    ScDocShellRef xShell = loadDoc("tdf99856_dataValidationTest.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"tdf99856_dataValidationTest.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load doc", xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload( xShell.get(), FORMAT_XLSX);
@@ -734,7 +737,7 @@ void ScExportTest::testProtectionKeyODS_UTF16LErtlSHA1()
 {
     OUString const password("1012345678901234567890123456789012345678901234567890");
 
-    ScDocShellRef xShell = loadDoc("protection-key1.", FORMAT_FODS);
+    ScDocShellRef xShell = loadDoc(u"protection-key1.", FORMAT_FODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load doc", xShell.is());
 
     ScDocument& rDoc = xShell->GetDocument();
@@ -757,7 +760,7 @@ void ScExportTest::testProtectionKeyODS_UTF8SHA1()
 {
     OUString const password("1012345678901234567890123456789012345678901234567890");
 
-    ScDocShellRef xShell = loadDoc("protection-key2.", FORMAT_FODS);
+    ScDocShellRef xShell = loadDoc(u"protection-key2.", FORMAT_FODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load doc", xShell.is());
 
     ScDocument& rDoc = xShell->GetDocument();
@@ -780,7 +783,7 @@ void ScExportTest::testProtectionKeyODS_UTF8SHA256ODF12()
 {
     OUString const password("1012345678901234567890123456789012345678901234567890");
 
-    ScDocShellRef xShell = loadDoc("protection-key3.", FORMAT_FODS);
+    ScDocShellRef xShell = loadDoc(u"protection-key3.", FORMAT_FODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load doc", xShell.is());
 
     ScDocument& rDoc = xShell->GetDocument();
@@ -803,7 +806,7 @@ void ScExportTest::testProtectionKeyODS_UTF8SHA256W3C()
 {
     OUString const password("1012345678901234567890123456789012345678901234567890");
 
-    ScDocShellRef xShell = loadDoc("protection-key4.", FORMAT_FODS);
+    ScDocShellRef xShell = loadDoc(u"protection-key4.", FORMAT_FODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load doc", xShell.is());
 
     ScDocument& rDoc = xShell->GetDocument();
@@ -826,7 +829,7 @@ void ScExportTest::testProtectionKeyODS_XL_SHA1()
 {
     OUString const password("1012345678901234567890123456789012345678901234567890");
 
-    ScDocShellRef xShell = loadDoc("protection-key5.", FORMAT_FODS);
+    ScDocShellRef xShell = loadDoc(u"protection-key5.", FORMAT_FODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load doc", xShell.is());
 
     ScDocument& rDoc = xShell->GetDocument();
@@ -847,7 +850,7 @@ void ScExportTest::testProtectionKeyODS_XL_SHA1()
 
 void ScExportTest::testColorScaleExportODS()
 {
-    ScDocShellRef xShell = loadDoc("colorscale.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"colorscale.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_ODS);
@@ -863,7 +866,7 @@ void ScExportTest::testColorScaleExportODS()
 
 void ScExportTest::testColorScaleExportXLSX()
 {
-    ScDocShellRef xShell = loadDoc("colorscale.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"colorscale.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
@@ -879,7 +882,7 @@ void ScExportTest::testColorScaleExportXLSX()
 
 void ScExportTest::testDataBarExportODS()
 {
-    ScDocShellRef xShell = loadDoc("databar.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"databar.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_ODS);
@@ -894,7 +897,7 @@ void ScExportTest::testDataBarExportODS()
 
 void ScExportTest::testFormatExportODS()
 {
-    ScDocShellRef xShell = loadDoc("formats.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"formats.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_ODS);
@@ -910,7 +913,7 @@ void ScExportTest::testFormatExportODS()
 void ScExportTest::testCommentExportXLSX()
 {
     //tdf#104729 FILESAVE OpenOffice do not save author of the comment during export to .xlsx
-    ScDocShellRef xShell = loadDoc("comment.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"comment.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile
@@ -948,7 +951,7 @@ void ScExportTest::testCommentExportXLSX()
 void ScExportTest::testCommentExportXLSX_2_XLSX()
 {
     //tdf#117287 FILESAVE XLSX: Comments always disappear after opening the exported XLSX file with Excel
-    ScDocShellRef xShell = loadDoc("tdf117287_comment.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"tdf117287_comment.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
 
@@ -983,7 +986,7 @@ void ScExportTest::testCommentExportXLSX_2_XLSX()
 void ScExportTest::testCustomColumnWidthExportXLSX()
 {
     //tdf#100946 FILESAVE Excel on macOS ignored column widths in XLSX last saved by LO
-    ScDocShellRef xShell = loadDoc("custom_column_width.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"custom_column_width.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
@@ -1058,7 +1061,7 @@ void ScExportTest::testCustomColumnWidthExportXLSX()
 void ScExportTest::testXfDefaultValuesXLSX()
 {
     //tdf#70565 FORMATTING: User Defined Custom Formatting is not applied during importing XLSX documents
-    ScDocShellRef xShell = loadDoc("xf_default_values.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"xf_default_values.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
@@ -1130,7 +1133,7 @@ static auto verifySpreadsheet13(char const*const pTestName, ScDocShellRef& pShel
 void ScExportTest::testODF13()
 {
     // import
-    ScDocShellRef pShell = loadDoc("spreadsheet13e.", FORMAT_ODS);
+    ScDocShellRef pShell = loadDoc(u"spreadsheet13e.", FORMAT_ODS);
 
     // check model
     verifySpreadsheet13("import", pShell);
@@ -1212,7 +1215,7 @@ void ScExportTest::testColumnWidthResaveXLSX()
 {
     // tdf#91475 FILESAVE: Column width is not preserved in XLSX / after round trip.
     // Test if after resave .xlsx file, columns width is identical with previous one
-    ScDocShellRef xShell = loadDoc("different-column-width-excel2010.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"different-column-width-excel2010.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
@@ -1251,7 +1254,7 @@ void ScExportTest::testColumnWidthExportFromODStoXLSX()
     // Test if after export .ods to .xlsx format, displayed columns width
     // is identical with previous (.ods) one
 
-    ScDocShellRef xShell = loadDoc("different-column-width.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"different-column-width.", FORMAT_ODS);
 
     CPPUNIT_ASSERT( xShell.is() );
 
@@ -1314,7 +1317,7 @@ void ScExportTest::testOutlineExportXLSX()
 {
     //tdf#100347 FILESAVE FILEOPEN after exporting to .xlsx format grouping are lost
     //tdf#51524  FILESAVE .xlsx and.xls looses width information for hidden/collapsed grouped columns
-    ScDocShellRef xShell = loadDoc("outline.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"outline.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
@@ -1461,7 +1464,7 @@ void ScExportTest::testOutlineExportXLSX()
 
 void ScExportTest::testAllRowsHiddenXLSX()
 {
-    ScDocShellRef xOrigDocSh = loadDoc("tdf105840_allRowsHidden.", FORMAT_XLSX);
+    ScDocShellRef xOrigDocSh = loadDoc(u"tdf105840_allRowsHidden.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xOrigDocSh.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xOrigDocSh), FORMAT_XLSX);
@@ -1476,7 +1479,7 @@ void ScExportTest::testAllRowsHiddenXLSX()
 void ScExportTest::testHiddenEmptyRowsXLSX()
 {
     //tdf#98106 FILESAVE: Hidden and empty rows became visible when export to .XLSX
-    ScDocShellRef xShell = loadDoc("hidden-empty-rows.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"hidden-empty-rows.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
@@ -1495,7 +1498,7 @@ void ScExportTest::testHiddenEmptyRowsXLSX()
 void ScExportTest::testLandscapeOrientationXLSX()
 {
     //tdf#48767 - Landscape page orientation is not loaded from .xlsx format with MS Excel, after export with Libre Office
-    ScDocShellRef xShell = loadDoc("hidden-empty-rows.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"hidden-empty-rows.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
@@ -1511,7 +1514,7 @@ void ScExportTest::testLandscapeOrientationXLSX()
 
 void ScExportTest::testDataBarExportXLSX()
 {
-    ScDocShellRef xShell = loadDoc("databar.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"databar.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
@@ -1653,7 +1656,7 @@ void setEscapement( ScFieldEditEngine& rEE, sal_Int32 nPara, sal_Int32 nStart, s
 
 void ScExportTest::testNamedRangeBugfdo62729()
 {
-    ScDocShellRef xShell = loadDoc("fdo62729.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"fdo62729.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
     ScDocument& rDoc = xShell->GetDocument();
 
@@ -1678,7 +1681,7 @@ void ScExportTest::testNamedRangeBugfdo62729()
 
 void ScExportTest::testBuiltinRangesXLSX()
 {
-    ScDocShellRef xShell = loadDoc("built-in_ranges.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"built-in_ranges.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
@@ -2023,7 +2026,7 @@ void ScExportTest::testRichTextExportODS()
 
     // Start with an empty document, put one edit text cell, and make sure it
     // survives the save and reload.
-    ScDocShellRef xOrigDocSh = loadDoc("empty.", FORMAT_ODS, true);
+    ScDocShellRef xOrigDocSh = loadDoc(u"empty.", FORMAT_ODS, true);
     const EditTextObject* pEditText;
     {
         ScDocument& rDoc = xOrigDocSh->GetDocument();
@@ -2157,7 +2160,7 @@ void ScExportTest::testRichTextExportODS()
 
 void ScExportTest::testRichTextCellFormatXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("cellformat.", FORMAT_XLS);
+    ScDocShellRef xDocSh = loadDoc(u"cellformat.", FORMAT_XLS);
     CPPUNIT_ASSERT(xDocSh.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
@@ -2190,7 +2193,7 @@ void ScExportTest::testRichTextCellFormatXLSX()
 
 void ScExportTest::testFormulaRefSheetNameODS()
 {
-    ScDocShellRef xDocSh = loadDoc("formula-quote-in-sheet-name.", FORMAT_ODS, true);
+    ScDocShellRef xDocSh = loadDoc(u"formula-quote-in-sheet-name.", FORMAT_ODS, true);
     {
         ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -2214,7 +2217,7 @@ void ScExportTest::testFormulaRefSheetNameODS()
 void ScExportTest::testCellValuesExportODS()
 {
     // Start with an empty document
-    ScDocShellRef xOrigDocSh = loadDoc("empty.", FORMAT_ODS);
+    ScDocShellRef xOrigDocSh = loadDoc(u"empty.", FORMAT_ODS);
     {
         ScDocument& rDoc = xOrigDocSh->GetDocument();
         CPPUNIT_ASSERT_MESSAGE("This document should at least have one sheet.", rDoc.GetTableCount() > 0);
@@ -2284,7 +2287,7 @@ void ScExportTest::testCellValuesExportODS()
 
 void ScExportTest::testCellNoteExportODS()
 {
-    ScDocShellRef xOrigDocSh = loadDoc("single-note.", FORMAT_ODS);
+    ScDocShellRef xOrigDocSh = loadDoc(u"single-note.", FORMAT_ODS);
     ScAddress aPos(0,0,0); // Start with A1.
     {
         ScDocument& rDoc = xOrigDocSh->GetDocument();
@@ -2314,7 +2317,7 @@ void ScExportTest::testCellNoteExportODS()
 void ScExportTest::testCellNoteExportXLS()
 {
     // Start with an empty document.s
-    ScDocShellRef xOrigDocSh = loadDoc("notes-on-3-sheets.", FORMAT_ODS);
+    ScDocShellRef xOrigDocSh = loadDoc(u"notes-on-3-sheets.", FORMAT_ODS);
     {
         ScDocument& rDoc = xOrigDocSh->GetDocument();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("This document should have 3 sheets.", SCTAB(3), rDoc.GetTableCount());
@@ -2385,7 +2388,7 @@ void checkMatrixRange(ScDocument& rDoc, const ScRange& rRange)
 
 void ScExportTest::testInlineArrayXLS()
 {
-    ScDocShellRef xShell = loadDoc("inline-array.", FORMAT_XLS);
+    ScDocShellRef xShell = loadDoc(u"inline-array.", FORMAT_XLS);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLS);
@@ -2408,7 +2411,7 @@ void ScExportTest::testInlineArrayXLS()
 
 void ScExportTest::testEmbeddedChartODS()
 {
-    ScDocShellRef xShell = loadDoc("embedded-chart.", FORMAT_XLS);
+    ScDocShellRef xShell = loadDoc(u"embedded-chart.", FORMAT_XLS);
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pTempFile(
@@ -2426,7 +2429,7 @@ void ScExportTest::testEmbeddedChartODS()
 
 void ScExportTest::testEmbeddedChartXLS()
 {
-    ScDocShellRef xShell = loadDoc("embedded-chart.", FORMAT_XLS);
+    ScDocShellRef xShell = loadDoc(u"embedded-chart.", FORMAT_XLS);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLS);
@@ -2453,7 +2456,7 @@ void ScExportTest::testEmbeddedChartXLS()
 
 void ScExportTest::testCellAnchoredGroupXLS()
 {
-    ScDocShellRef xDocSh_in = loadDoc("cell-anchored-group.", FORMAT_XLS);
+    ScDocShellRef xDocSh_in = loadDoc(u"cell-anchored-group.", FORMAT_XLS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load cell-anchored-group.xls", xDocSh_in.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xDocSh_in), FORMAT_ODS);
@@ -2480,7 +2483,7 @@ void ScExportTest::testCellAnchoredGroupXLS()
 
 void ScExportTest::testFormulaReferenceXLS()
 {
-    ScDocShellRef xShell = loadDoc("formula-reference.", FORMAT_XLS);
+    ScDocShellRef xShell = loadDoc(u"formula-reference.", FORMAT_XLS);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLS);
@@ -2503,7 +2506,7 @@ void ScExportTest::testFormulaReferenceXLS()
 
 void ScExportTest::testSheetProtectionXLSX()
 {
-    ScDocShellRef xShell = loadDoc("ProtecteSheet1234Pass.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"ProtecteSheet1234Pass.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
@@ -2527,7 +2530,7 @@ void ScExportTest::testSheetProtectionXLSX()
 
 void ScExportTest::testSheetProtectionXLSB()
 {
-    ScDocShellRef xShell = loadDoc("tdf108017_calcProtection.", FORMAT_XLSB);
+    ScDocShellRef xShell = loadDoc(u"tdf108017_calcProtection.", FORMAT_XLSB);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
@@ -2585,7 +2588,7 @@ void ScExportTest::testExcelCellBorders( sal_uLong nFormatType )
         { 25, SvxBorderLineStyle::DOUBLE_THIN,  -1 }, // double (don't check width)
     };
 
-    ScDocShellRef xDocSh = loadDoc("cell-borders.", nFormatType);
+    ScDocShellRef xDocSh = loadDoc(u"cell-borders.", nFormatType);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
     {
         ScDocument& rDoc = xDocSh->GetDocument();
@@ -2675,7 +2678,7 @@ void ScExportTest::testBordersExchangeXLSX()
 /* 9,00 */   {{Solid   , Solid   , 50, 50}, {FineDash, FineDash, 35, 35}, {Dashed  , Dashed  , 35, 35}, {FineDash, FineDash, 35, 35}, {DashDot , DashDot , 35, 35}, {DashDoDo, DashDoDo, 35, 35}, {DoubThin, DoubThin, 35, 35}}
     };
 
-    ScDocShellRef xShell    = loadDoc("test_borders_export.", FORMAT_ODS);  // load the ods with our Borders
+    ScDocShellRef xShell    = loadDoc(u"test_borders_export.", FORMAT_ODS); // load the ods with our Borders
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);          // save the ods to xlsx and load xlsx
@@ -2916,7 +2919,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
 
     // First, test the xls variant.
 
-    ScDocShellRef xDocSh = loadDoc("track-changes/simple-cell-changes.", FORMAT_XLS);
+    ScDocShellRef xDocSh = loadDoc(u"track-changes/simple-cell-changes.", FORMAT_XLS);
     CPPUNIT_ASSERT(xDocSh.is());
     ScDocument* pDoc = &xDocSh->GetDocument();
     bool bGood = aTest.check(*pDoc);
@@ -2944,7 +2947,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
 
     // Now, test the xlsx variant the same way.
 
-    xDocSh = loadDoc("track-changes/simple-cell-changes.", FORMAT_XLSX);
+    xDocSh = loadDoc(u"track-changes/simple-cell-changes.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
     pDoc = &xDocSh->GetDocument();
     aTest.check(*pDoc);
@@ -3011,7 +3014,7 @@ void ScExportTest::testSheetTabColorsXLSX()
 
     } aTest;
 
-    ScDocShellRef xDocSh = loadDoc("sheet-tab-color.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"sheet-tab-color.", FORMAT_XLSX);
     {
         CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.is());
         ScDocument& rDoc = xDocSh->GetDocument();
@@ -3098,7 +3101,7 @@ void ScExportTest::testSharedFormulaExportXLS()
 
     } aTest;
 
-    ScDocShellRef xDocSh = loadDoc("shared-formula/3d-reference.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"shared-formula/3d-reference.", FORMAT_ODS);
     {
         CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.is());
         ScDocument& rDoc = xDocSh->GetDocument();
@@ -3189,7 +3192,7 @@ void ScExportTest::testSharedFormulaExportXLSX()
 
     } aTest;
 
-    ScDocShellRef xDocSh = loadDoc("shared-formula/3d-reference.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"shared-formula/3d-reference.", FORMAT_XLSX);
     {
         CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.is());
         ScDocument& rDoc = xDocSh->GetDocument();
@@ -3259,7 +3262,7 @@ void ScExportTest::testSharedFormulaStringResultExportXLSX()
 
     } aTest;
 
-    ScDocShellRef xDocSh = loadDoc("shared-formula/text-results.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"shared-formula/text-results.", FORMAT_XLSX);
     {
         CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.is());
         ScDocument& rDoc = xDocSh->GetDocument();
@@ -3287,7 +3290,7 @@ void ScExportTest::testSharedFormulaStringResultExportXLSX()
 
 void ScExportTest::testFunctionsExcel2010( sal_uLong nFormatType )
 {
-    ScDocShellRef xShell = loadDoc("functions-excel-2010.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"functions-excel-2010.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), nFormatType);
@@ -3311,7 +3314,7 @@ void ScExportTest::testFunctionsExcel2010XLS()
 
 void ScExportTest::testCeilingFloor( sal_uLong nFormatType )
 {
-    ScDocShellRef xShell = loadDoc("ceiling-floor.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"ceiling-floor.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), nFormatType);
@@ -3331,7 +3334,7 @@ void ScExportTest::testCeilingFloorXLSX()
 void ScExportTest::testCeilingFloorODSToXLSX()
 {
     // tdf#100011 - Cannot open sheet containing FLOOR/CEILING functions by MS Excel, after export to .xlsx
-    ScDocShellRef xShell = loadDoc("ceiling-floor.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"ceiling-floor.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
@@ -3357,7 +3360,7 @@ void ScExportTest::testCeilingFloorODS()
 void ScExportTest::testCustomXml()
 {
     // Load document and export it to a temporary file
-    ScDocShellRef xShell = loadDoc("customxml.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"customxml.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
@@ -3389,7 +3392,7 @@ static sal_Unicode lcl_getWindowsDrive(const OUString& aURL)
 
 void ScExportTest::testRelativePathsODS()
 {
-    ScDocShellRef xDocSh = loadDoc("fdo79305.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"fdo79305.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
     std::shared_ptr<utl::TempFile> pTempFile = exportTo(xDocSh.get(), FORMAT_ODS);
@@ -3430,7 +3433,7 @@ void testSheetProtection_Impl(const ScDocument& rDoc)
 
 void ScExportTest::testSheetProtectionODS()
 {
-    ScDocShellRef xDocSh = loadDoc("sheet-protection.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"sheet-protection.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
     {
@@ -3469,7 +3472,7 @@ void ScExportTest::testSwappedOutImageExport()
     for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
     {
         // Check whether the export code swaps in the image which was swapped out before.
-        ScDocShellRef xDocSh = loadDoc("document_with_two_images.", FORMAT_ODS);
+        ScDocShellRef xDocSh = loadDoc(u"document_with_two_images.", FORMAT_ODS);
 
         const OString sFailedMessage = OStringLiteral("Failed on filter: ") + aFilterNames[nFilter];
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xDocSh.is());
@@ -3543,7 +3546,7 @@ void ScExportTest::tearDown()
 
 void ScExportTest::testSupBookVirtualPathXLS()
 {
-    ScDocShellRef xShell = loadDoc("external-ref.", FORMAT_XLS);
+    ScDocShellRef xShell = loadDoc(u"external-ref.", FORMAT_XLS);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLS);
@@ -3585,7 +3588,7 @@ void ScExportTest::testLinkedGraphicRT()
     for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
     {
         // Load the original file with one image
-        ScDocShellRef xDocSh = loadDoc("document_with_linked_graphic.", FORMAT_ODS);
+        ScDocShellRef xDocSh = loadDoc(u"document_with_linked_graphic.", FORMAT_ODS);
         const OString sFailedMessage = OStringLiteral("Failed on filter: ") + aFilterNames[nFilter];
 
         // Export the document and import again for a check
@@ -3626,7 +3629,7 @@ void ScExportTest::testImageWithSpecialID()
 
     for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
     {
-        ScDocShellRef xDocSh = loadDoc("images_with_special_IDs.", FORMAT_ODS);
+        ScDocShellRef xDocSh = loadDoc(u"images_with_special_IDs.", FORMAT_ODS);
 
         const OString sFailedMessage = OStringLiteral("Failed on filter: ") + aFilterNames[nFilter];
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xDocSh.is());
@@ -3678,7 +3681,7 @@ void ScExportTest::testImageWithSpecialID()
 
 void ScExportTest::testAbsNamedRangeHTML()
 {
-    ScDocShellRef xDocSh = loadDoc("numberformat.", FORMAT_HTML);
+    ScDocShellRef xDocSh = loadDoc(u"numberformat.", FORMAT_HTML);
     xDocSh->DoHardRecalc();
     ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_ODS);
     xDocSh->DoClose();
@@ -3695,7 +3698,7 @@ void ScExportTest::testAbsNamedRangeHTML()
 
 void ScExportTest::testSheetLocalRangeNameXLS()
 {
-    ScDocShellRef xDocSh = loadDoc("named-ranges-local.", FORMAT_XLS);
+    ScDocShellRef xDocSh = loadDoc(u"named-ranges-local.", FORMAT_XLS);
     xDocSh->DoHardRecalc();
     ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_XLS);
     xDocSh->DoClose();
@@ -3719,7 +3722,7 @@ void ScExportTest::testSheetLocalRangeNameXLS()
 
 void ScExportTest::testRelativeNamedExpressionsXLS()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf113991_relativeNamedRanges.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"tdf113991_relativeNamedRanges.", FORMAT_ODS);
     xDocSh->DoHardRecalc();
     ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_XLS);
     xDocSh->DoClose();
@@ -3747,7 +3750,7 @@ void ScExportTest::testRelativeNamedExpressionsXLS()
 
 void ScExportTest::testSheetTextBoxHyperlinkXLSX()
 {
-    ScDocShellRef xShell = loadDoc("textbox-hyperlink.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"textbox-hyperlink.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
@@ -3763,7 +3766,7 @@ void ScExportTest::testSheetTextBoxHyperlinkXLSX()
 
 void ScExportTest::testFontSizeXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("fontSize.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"fontSize.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
@@ -3778,7 +3781,7 @@ void ScExportTest::testFontSizeXLSX()
 
 void ScExportTest::testSheetCharacterKerningSpaceXLSX()
 {
-    ScDocShellRef xShell = loadDoc("textbox-CharKerningSpace.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"textbox-CharKerningSpace.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
@@ -3798,7 +3801,7 @@ void ScExportTest::testSheetCharacterKerningSpaceXLSX()
 
 void ScExportTest::testSheetCondensedCharacterSpaceXLSX()
 {
-    ScDocShellRef xShell = loadDoc("textbox-CondensedCharacterSpace.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"textbox-CondensedCharacterSpace.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
@@ -3818,7 +3821,7 @@ void ScExportTest::testSheetCondensedCharacterSpaceXLSX()
 
 void ScExportTest::testTextUnderlineColorXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("underlineColor.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"underlineColor.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
@@ -3842,7 +3845,7 @@ void ScExportTest::testTextUnderlineColorXLSX()
 
 void ScExportTest::testSheetRunParagraphPropertyXLSX()
 {
-    ScDocShellRef xShell = loadDoc("TextColor.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"TextColor.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
@@ -3859,7 +3862,7 @@ void ScExportTest::testSheetRunParagraphPropertyXLSX()
 
 void ScExportTest::testPreserveTextWhitespaceXLSX()
 {
-    ScDocShellRef xShell = loadDoc("preserve-whitespace.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"preserve-whitespace.", FORMAT_XLSX);
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
@@ -3871,7 +3874,7 @@ void ScExportTest::testPreserveTextWhitespaceXLSX()
 
 void ScExportTest::testPreserveTextWhitespace2XLSX()
 {
-    ScDocShellRef xShell = loadDoc("preserve_space.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"preserve_space.", FORMAT_XLSX);
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
@@ -3885,7 +3888,7 @@ void ScExportTest::testPreserveTextWhitespace2XLSX()
 
 void ScExportTest::testHiddenShapeXLS()
 {
-    ScDocShellRef xDocSh = loadDoc("hiddenShape.", FORMAT_XLS);
+    ScDocShellRef xDocSh = loadDoc(u"hiddenShape.", FORMAT_XLS);
     CPPUNIT_ASSERT(xDocSh.is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -3902,7 +3905,7 @@ void ScExportTest::testHiddenShapeXLS()
 
 void ScExportTest::testHiddenShapeXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("hiddenShape.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"hiddenShape.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -3923,7 +3926,7 @@ void ScExportTest::testHiddenShapeXLSX()
 
 void ScExportTest::testShapeAutofitXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("testShapeAutofit.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"testShapeAutofit.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
@@ -3939,7 +3942,7 @@ void ScExportTest::testShapeAutofitXLSX()
 
 void ScExportTest::testHyperlinkXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("hyperlink.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"hyperlink.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels", FORMAT_XLSX);
@@ -3951,7 +3954,7 @@ void ScExportTest::testHyperlinkXLSX()
 
 void ScExportTest::testMoveCellAnchoredShapesODS()
 {
-    ScDocShellRef xDocSh = loadDoc("move-cell-anchored-shapes.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"move-cell-anchored-shapes.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load move-cell-anchored-shapes.ods", xDocSh.is());
 
     // There are two cell-anchored objects on the first sheet.
@@ -4114,7 +4117,7 @@ void ScExportTest::testMoveCellAnchoredShapesODS()
 
 void ScExportTest::testMatrixMultiplicationXLSX()
 {
-    ScDocShellRef xShell = loadDoc("matrix-multiplication.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"matrix-multiplication.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
@@ -4140,7 +4143,7 @@ void ScExportTest::testMatrixMultiplicationXLSX()
 
 void ScExportTest::testRefStringXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("ref_string.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"ref_string.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
 
     //make sure ref syntax gets saved for MSO-produced docs
@@ -4157,7 +4160,7 @@ void ScExportTest::testRefStringXLSX()
 void ScExportTest::testRefStringConfigXLSX()
 {
     // this doc is configured with CalcA1 ref syntax
-    ScDocShellRef xDocSh = loadDoc("empty.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"empty.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
 
     xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLSX);
@@ -4171,7 +4174,7 @@ void ScExportTest::testRefStringConfigXLSX()
     xDocSh->DoClose();
 
     // this doc has no entry for ref syntax
-    xDocSh = loadDoc("empty-noconf.", FORMAT_XLSX);
+    xDocSh = loadDoc(u"empty-noconf.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to open 2nd doc", xDocSh.is());
 
     ScDocument& rDoc2 = xDocSh->GetDocument();
@@ -4228,7 +4231,7 @@ void ScExportTest::testRefStringUnspecified()
 void ScExportTest::testHeaderImageODS()
 {
     // Graphic as header background was lost on export.
-    ScDocShellRef xShell = loadDoc("header-image.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"header-image.", FORMAT_ODS);
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_ODS);
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocSh->GetModel(), uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
@@ -4243,7 +4246,7 @@ void ScExportTest::testHeaderImageODS()
 
 void ScExportTest::testTextDirectionXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("writingMode.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"writingMode.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
@@ -4258,7 +4261,7 @@ void ScExportTest::testTextDirectionXLSX()
 void ScExportTest::testTdf66668()
 {
     // Would hang on exporting without the fix in place
-    ScDocShellRef xDocSh = loadDoc("tdf66668.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"tdf66668.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
@@ -4268,7 +4271,7 @@ void ScExportTest::testTdf66668()
 
 void ScExportTest::testTdf130108()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf130108.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"tdf130108.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
@@ -4285,7 +4288,7 @@ void ScExportTest::testTdf130108()
 
 void ScExportTest::testTdf76949()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf76949.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"tdf76949.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pSheet = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
@@ -4298,7 +4301,7 @@ void ScExportTest::testTdf76949()
 
 void ScExportTest::testTdf55417()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf55417.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"tdf55417.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
@@ -4311,7 +4314,7 @@ void ScExportTest::testTdf55417()
 
 void ScExportTest::testTdf129985()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf129985.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"tdf129985.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
@@ -4324,7 +4327,7 @@ void ScExportTest::testTdf129985()
 
 void ScExportTest::testTdf73063()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf73063.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"tdf73063.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
@@ -4335,7 +4338,7 @@ void ScExportTest::testTdf73063()
     xDocSh->DoClose();
 }
 
-xmlDocUniquePtr ScExportTest::testTdf95640(const OUString& rFileName, sal_Int32 nSourceFormat,
+xmlDocUniquePtr ScExportTest::testTdf95640(std::u16string_view rFileName, sal_Int32 nSourceFormat,
                                            sal_Int32 nDestFormat)
 {
     ScDocShellRef xShell = loadDoc(rFileName, nSourceFormat);
@@ -4350,7 +4353,7 @@ xmlDocUniquePtr ScExportTest::testTdf95640(const OUString& rFileName, sal_Int32 
 void ScExportTest::testTdf95640_ods_to_xlsx()
 {
     // Roundtripping sort options with user defined list to XLSX
-    xmlDocUniquePtr pDoc = testTdf95640("tdf95640.", FORMAT_ODS, FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = testTdf95640(u"tdf95640.", FORMAT_ODS, FORMAT_XLSX);
 
     assertXPath(pDoc, "//x:worksheet/x:autoFilter", "ref", "A1:B4");
 
@@ -4363,7 +4366,7 @@ void ScExportTest::testTdf95640_ods_to_xlsx()
 void ScExportTest::testTdf95640_ods_to_xlsx_with_standard_list()
 {
     // Roundtripping sort options with user defined list to XLSX
-    xmlDocUniquePtr pDoc = testTdf95640("tdf95640_standard_list.", FORMAT_ODS, FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = testTdf95640(u"tdf95640_standard_list.", FORMAT_ODS, FORMAT_XLSX);
 
     assertXPath(pDoc, "//x:worksheet/x:autoFilter", "ref", "A1:B4");
 
@@ -4379,7 +4382,7 @@ void ScExportTest::testTdf95640_xlsx_to_xlsx()
     // that compared to ODS source documents above, here we _actually_
     // can use custom lists (beyond the global user defines), like
     // low, medium, high
-    xmlDocUniquePtr pDoc = testTdf95640("tdf95640.", FORMAT_XLSX, FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = testTdf95640(u"tdf95640.", FORMAT_XLSX, FORMAT_XLSX);
 
     assertXPath(pDoc, "//x:worksheet/x:autoFilter", "ref", "A1:B4");
 
@@ -4391,7 +4394,7 @@ void ScExportTest::testTdf95640_xlsx_to_xlsx()
 
 void ScExportTest::testTdf88657ODS()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf88657.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"tdf88657.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "styles.xml", FORMAT_ODS);
@@ -4404,7 +4407,7 @@ void ScExportTest::testTdf88657ODS()
 
 void ScExportTest::testConditionalFormatRangeListXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("conditionalformat_rangelist.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"conditionalformat_rangelist.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
@@ -4417,7 +4420,7 @@ void ScExportTest::testConditionalFormatRangeListXLSX()
 
 void ScExportTest::testConditionalFormatContainsTextXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("conditionalformat_containstext.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"conditionalformat_containstext.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
@@ -4430,7 +4433,7 @@ void ScExportTest::testConditionalFormatContainsTextXLSX()
 
 void ScExportTest::testConditionalFormatPriorityCheckXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("conditional_fmt_checkpriority.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"conditional_fmt_checkpriority.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
@@ -4476,7 +4479,7 @@ void ScExportTest::testConditionalFormatPriorityCheckXLSX()
 
 void ScExportTest::testConditionalFormatOriginXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("conditional_fmt_origin.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"conditional_fmt_origin.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
@@ -4491,7 +4494,7 @@ void ScExportTest::testConditionalFormatOriginXLSX()
 
 void ScExportTest::testTdf41722()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf41722.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"tdf41722.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
@@ -4506,7 +4509,7 @@ void ScExportTest::testTdf41722()
 
 void ScExportTest::testTdf113621()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf113621.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"tdf113621.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
@@ -4519,7 +4522,7 @@ void ScExportTest::testTdf113621()
 
 void ScExportTest::testEscapeCharInNumberFormatXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf81939.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"tdf81939.", FORMAT_XLSX);
     CPPUNIT_ASSERT( xDocSh.is() );
     xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLSX);
     CPPUNIT_ASSERT( xDocSh.is() );
@@ -4546,7 +4549,7 @@ void ScExportTest::testEscapeCharInNumberFormatXLSX()
 
 void ScExportTest::testNatNumInNumberFormatXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf79398_NatNum5.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"tdf79398_NatNum5.", FORMAT_ODS);
     CPPUNIT_ASSERT( xDocSh.is() );
     xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLSX);  // Convert [NatNum5] to [DBNum2] in Chinese
     CPPUNIT_ASSERT( xDocSh.is() );
@@ -4561,7 +4564,7 @@ void ScExportTest::testNatNumInNumberFormatXLSX()
 
 void ScExportTest::testExponentWithoutSignFormatXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf102370_ExponentWithoutSign.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"tdf102370_ExponentWithoutSign.", FORMAT_ODS);
     CPPUNIT_ASSERT( xDocSh.is() );
     xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLSX);
     CPPUNIT_ASSERT( xDocSh.is() );
@@ -4582,7 +4585,7 @@ void ScExportTest::testExponentWithoutSignFormatXLSX()
 
 void ScExportTest::testExtendedLCIDXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf36038_ExtendedLCID.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"tdf36038_ExtendedLCID.", FORMAT_ODS);
     CPPUNIT_ASSERT( xDocSh.is() );
     xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLSX);
     CPPUNIT_ASSERT( xDocSh.is() );
@@ -4623,7 +4626,7 @@ void ScExportTest::testExtendedLCIDXLSX()
 
 void ScExportTest::testHiddenRepeatedRowsODS()
 {
-    ScDocShellRef xDocSh = loadDoc("empty.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"empty.", FORMAT_ODS);
     CPPUNIT_ASSERT( xDocSh.is() );
 
     {
@@ -4644,7 +4647,7 @@ void ScExportTest::testHiddenRepeatedRowsODS()
 
 void ScExportTest::testHyperlinkTargetFrameODS()
 {
-    ScDocShellRef xDocSh = loadDoc("hyperlink_frame.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"hyperlink_frame.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -4669,7 +4672,7 @@ void ScExportTest::testHyperlinkTargetFrameODS()
 
 void ScExportTest::testOpenDocumentAsReadOnly()
 {
-    ScDocShellRef xDocSh = loadDoc("open-as-read-only.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"open-as-read-only.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh->IsSecurityOptOpenReadOnly());
     ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh2->IsSecurityOptOpenReadOnly());
@@ -4679,7 +4682,7 @@ void ScExportTest::testOpenDocumentAsReadOnly()
 
 void ScExportTest::testKeepSettingsOfBlankRows()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf41425.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"tdf41425.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
@@ -4694,7 +4697,7 @@ void ScExportTest::testKeepSettingsOfBlankRows()
 
 void ScExportTest::testTdf133595()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf133595.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"tdf133595.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
@@ -4709,7 +4712,7 @@ void ScExportTest::testTdf133595()
 
 void ScExportTest::testTdf134769()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf134769.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"tdf134769.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
@@ -4728,7 +4731,7 @@ void ScExportTest::testTdf134769()
 
 void ScExportTest::testTdf106181()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf106181.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"tdf106181.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
@@ -4750,7 +4753,7 @@ void ScExportTest::testTdf106181()
 
 void ScExportTest::testTdf105272()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf105272.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"tdf105272.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
     xDocSh = saveAndReload(xDocSh.get(), FORMAT_XLSX);
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -4765,7 +4768,7 @@ void ScExportTest::testTdf105272()
 
 void ScExportTest::testTdf118990()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf118990.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"tdf118990.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
     xDocSh = saveAndReload(xDocSh.get(), FORMAT_XLSX);
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -4788,7 +4791,7 @@ void ScExportTest::testTdf118990()
 
 void ScExportTest::testTdf121612()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf121612.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"tdf121612.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
     xDocSh = saveAndReload(xDocSh.get(), FORMAT_XLSX);
 
@@ -4807,7 +4810,7 @@ void ScExportTest::testTdf121612()
 
 void ScExportTest::testTdf112936()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf112936.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"tdf112936.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/pivotCache/pivotCacheDefinition1.xml", FORMAT_XLSX);
@@ -4837,7 +4840,7 @@ void ScExportTest::testXltxExport()
 
 void ScExportTest::testPivotCacheAfterExportXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("numgroup_example.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"numgroup_example.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
     // export only
@@ -4866,7 +4869,7 @@ void ScExportTest::testPivotCacheAfterExportXLSX()
 
 void ScExportTest::testTdf114969XLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("sheet_name_with_dots.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"sheet_name_with_dots.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
@@ -4879,7 +4882,7 @@ void ScExportTest::testTdf114969XLSX()
 
 void ScExportTest::testTdf115192XLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("test_115192.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"test_115192.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels", FORMAT_XLSX);
@@ -4893,7 +4896,7 @@ void ScExportTest::testTdf115192XLSX()
 
 void ScExportTest::testTdf91634XLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("image_hyperlink.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"image_hyperlink.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
 
@@ -4911,7 +4914,7 @@ void ScExportTest::testTdf91634XLSX()
 
 void ScExportTest::testValidationCopyPaste()
 {
-    ScDocShellRef xDocSh = loadDoc("validation-copypaste.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"validation-copypaste.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rSrcDoc = xDocSh->GetDocument();
 
@@ -4947,7 +4950,7 @@ void ScExportTest::testValidationCopyPaste()
 
 void ScExportTest::testTdf115159()
 {
-    ScDocShellRef xShell = loadDoc("tdf115159.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"tdf115159.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
@@ -4974,7 +4977,7 @@ void ScExportTest::testTdf112567()
         aOptions.Commit();
     });
 
-    ScDocShellRef xShell = loadDoc("tdf112567.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"tdf112567.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
@@ -5001,7 +5004,7 @@ void ScExportTest::testTdf112567b()
         aOptions.Commit();
     });
 
-    ScDocShellRef xShell = loadDoc("tdf112567.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"tdf112567.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
@@ -5021,7 +5024,7 @@ void ScExportTest::testTdf112567b()
 
 void ScExportTest::testTdf123645XLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("chart_hyperlink.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"chart_hyperlink.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
 
@@ -5045,7 +5048,7 @@ void ScExportTest::testTdf123645XLSX()
 
 void ScExportTest::testTdf125173XLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("text_box_hyperlink.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"text_box_hyperlink.", FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.is());
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
 
@@ -5063,7 +5066,7 @@ void ScExportTest::testTdf125173XLSX()
 
 void ScExportTest::testTdf79972XLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf79972.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"tdf79972.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
 
@@ -5081,7 +5084,7 @@ void ScExportTest::testTdf79972XLSX()
 
 void ScExportTest::testTdf126024XLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("hyperlink_formula.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"hyperlink_formula.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
 
@@ -5099,7 +5102,7 @@ void ScExportTest::testTdf126024XLSX()
 
 void ScExportTest::testTdf126177XLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("hyperlink_export.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"hyperlink_export.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.is());
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
 
@@ -5119,7 +5122,7 @@ void ScExportTest::testTdf126177XLSX()
 void ScExportTest::testCommentTextVAlignment()
 {
     // Testing comment text alignments.
-    ScDocShellRef xShell = loadDoc("CommentTextVAlign.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"CommentTextVAlign.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile
@@ -5137,7 +5140,7 @@ void ScExportTest::testCommentTextVAlignment()
 void ScExportTest::testCommentTextHAlignment()
 {
     // Testing comment text alignments.
-    ScDocShellRef xShell = loadDoc("CommentTextHAlign.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"CommentTextHAlign.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile
@@ -5160,7 +5163,7 @@ void ScExportTest::testRotatedImageODS()
         = css::sheet::GlobalSheetSettings::create(comphelper::getProcessComponentContext());
     xGlobalSheetSettings->setMetric(static_cast<sal_Int16>(FieldUnit::MM));
 
-    ScDocShellRef xDocSh = loadDoc("tdf103092_RotatedImage.", FORMAT_ODS, true);
+    ScDocShellRef xDocSh = loadDoc(u"tdf103092_RotatedImage.", FORMAT_ODS, true);
     CPPUNIT_ASSERT(xDocSh.is());
 
     std::shared_ptr<utl::TempFile> pTemp = saveAs(xDocSh.get(), FORMAT_ODS);
@@ -5186,7 +5189,7 @@ void ScExportTest::testRotatedImageODS()
 
 void ScExportTest::testTdf128976()
 {
-    ScDocShellRef xShell = loadDoc("tdf128976.", FORMAT_XLS);
+    ScDocShellRef xShell = loadDoc(u"tdf128976.", FORMAT_XLS);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLS);
@@ -5247,7 +5250,7 @@ void ScExportTest::testTdf120502()
 
 void ScExportTest::testTdf131372()
 {
-    ScDocShellRef xShell = loadDoc("tdf131372.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"tdf131372.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell);
 
     auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
@@ -5263,7 +5266,7 @@ void ScExportTest::testTdf131372()
 }
 void ScExportTest::testTdf81470()
 {
-    ScDocShellRef xShell = loadDoc("tdf81470.", FORMAT_XLS);
+    ScDocShellRef xShell = loadDoc(u"tdf81470.", FORMAT_XLS);
     CPPUNIT_ASSERT(xShell);
 
     //without the fix in place, it would have crashed at export time
@@ -5285,7 +5288,7 @@ void ScExportTest::testTdf81470()
 
 void ScExportTest::testTdf122331()
 {
-    ScDocShellRef xShell = loadDoc("tdf122331.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"tdf122331.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell);
 
     auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
@@ -5303,7 +5306,7 @@ void ScExportTest::testTdf122331()
 void ScExportTest::testTdf83779()
 {
     // Roundtripping TRUE/FALSE constants (not functions) must convert them to functions
-    ScDocShellRef xShell = loadDoc("tdf83779.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"tdf83779.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell);
 
     auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
@@ -5324,7 +5327,7 @@ void ScExportTest::testTdf121716_ExportEvenHeaderFooterXLSX()
     // If there are separate odd/even header, but only 1 footer for all pages (this is possible only in LibreOffice)
     //  then the footer will be duplicated to have the same footer separately for even/odd pages
 
-    ScDocShellRef xShell = loadDoc("tdf121716_EvenHeaderFooter.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"tdf121716_EvenHeaderFooter.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
@@ -5355,7 +5358,7 @@ void ScExportTest::testTdf121716_ExportEvenHeaderFooterXLSX()
 void ScExportTest::testTdf134459_HeaderFooterColorXLSX()
 {
     // Colors in header and footer should be exported, and imported properly
-    ScDocShellRef xShell = loadDoc("tdf134459_HeaderFooterColor.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"tdf134459_HeaderFooterColor.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
@@ -5373,7 +5376,7 @@ void ScExportTest::testTdf134459_HeaderFooterColorXLSX()
 void ScExportTest::testTdf134817_HeaderFooterTextWith2SectionXLSX()
 {
     // Header/footer text with multiple selection should be exported, and imported properly
-    ScDocShellRef xShell = loadDoc("tdf134817_HeaderFooterTextWith2Section.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"tdf134817_HeaderFooterTextWith2Section.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
@@ -5391,7 +5394,7 @@ void ScExportTest::testTdf134817_HeaderFooterTextWith2SectionXLSX()
 void ScExportTest::testTdf121718_UseFirstPageNumberXLSX()
 {
     // If "First page number" is not checked then useFirstPageNumb, and firstPageNumber should not be exported.
-    ScDocShellRef xShell = loadDoc("tdf121718_UseFirstPageNumber.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"tdf121718_UseFirstPageNumber.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
@@ -5415,7 +5418,7 @@ void ScExportTest::testTdf121718_UseFirstPageNumberXLSX()
 
 void ScExportTest::testHeaderFontStyleXLSX()
 {
-    ScDocShellRef xShell = loadDoc("tdf134826.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"tdf134826.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocument& rDoc = xShell->GetDocument();
@@ -5450,7 +5453,7 @@ void ScExportTest::testTdf135828_Shape_Rect()
     // tdf#135828 Check that the width and the height of rectangle of the shape is correct.
     // tdf#123613 Check the positioning, and allow massive rounding errors because of the back and
     // forth conversion between emu and hmm.
-    ScDocShellRef xShell = loadDoc("tdf135828_Shape_Rect.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"tdf135828_Shape_Rect.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
@@ -5474,7 +5477,7 @@ void ScExportTest::testTdf135828_Shape_Rect()
 
 void ScExportTest::testTdf123353()
 {
-    ScDocShellRef xShell = loadDoc("tdf123353.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"tdf123353.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
@@ -5493,7 +5496,7 @@ void ScExportTest::testTdf123353()
 void ScExportTest::testTdf133688_precedents()
 {
     // tdf#133688 Check that we do not export detective shapes.
-    ScDocShellRef xShell = loadDoc("tdf133688_dont_save_precedents_to_xlsx.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"tdf133688_dont_save_precedents_to_xlsx.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile
@@ -5510,7 +5513,7 @@ void ScExportTest::testTdf91251_missingOverflowRoundtrip()
 {
     // tdf#91251 check whether textBox overflow property (horzOverflow and vertOverflow) is
     // getting preserved after roundtrip
-    ScDocShellRef xShell = loadDoc("tdf91251_missingOverflowRoundtrip.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"tdf91251_missingOverflowRoundtrip.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
@@ -5531,7 +5534,7 @@ void ScExportTest::testTdf137000_handle_upright()
     // TextPreRotateAngle to 0.
     // (Upright is an xml attribute of xdr:txBody/a:bodyPr. It is set when
     // in a textbox menu we choose: do not rotate this element.)
-    ScDocShellRef xShell = loadDoc("tdf137000_export_upright.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"tdf137000_export_upright.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile
@@ -5546,7 +5549,7 @@ void ScExportTest::testTdf137000_handle_upright()
 
 void ScExportTest::testTdf126305_DataValidatyErrorAlert()
 {
-    ScDocShellRef xShell = loadDoc("tdf126305.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"tdf126305.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
@@ -5565,7 +5568,7 @@ void ScExportTest::testTdf126305_DataValidatyErrorAlert()
 
 void ScExportTest::testTdf76047_externalLink()
 {
-    ScDocShellRef pShell = loadDoc("tdf76047_externalLink.", FORMAT_XLSX);
+    ScDocShellRef pShell = loadDoc(u"tdf76047_externalLink.", FORMAT_XLSX);
     CPPUNIT_ASSERT(pShell.is());
 
     // load data from external links. (tdf76047_externalLinkSource.ods)
@@ -5590,7 +5593,7 @@ void ScExportTest::testTdf76047_externalLink()
 
 void ScExportTest::testTdf87973_externalLinkSkipUnuseds()
 {
-    ScDocShellRef pShell = loadDoc("tdf87973_externalLinkSkipUnuseds.", FORMAT_ODS);
+    ScDocShellRef pShell = loadDoc(u"tdf87973_externalLinkSkipUnuseds.", FORMAT_ODS);
     CPPUNIT_ASSERT(pShell.is());
 
     // try to load data from external link: tdf132105_external.ods
@@ -5630,7 +5633,7 @@ void ScExportTest::testTdf87973_externalLinkSkipUnuseds()
 
 void ScExportTest::testTdf138741_externalLinkSkipUnusedsCrash()
 {
-    ScDocShellRef xShell = loadDoc("tdf138741_externalLinkSkipUnusedsCrash.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"tdf138741_externalLinkSkipUnusedsCrash.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell);
 
     //without the fix in place, it would have crashed at export time
@@ -5641,7 +5644,7 @@ void ScExportTest::testTdf138741_externalLinkSkipUnusedsCrash()
 
 void ScExportTest::testTdf138824_linkToParentDirectory()
 {
-    ScDocShellRef xShell = loadDoc("childDir/tdf138824_linkToParentDirectory.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"childDir/tdf138824_linkToParentDirectory.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocument& rDoc = xShell->GetDocument();
@@ -5681,7 +5684,7 @@ void ScExportTest::testTdf138824_linkToParentDirectory()
 
 void ScExportTest::testTdf129969()
 {
-    ScDocShellRef xShell = loadDoc("external_hyperlink.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"external_hyperlink.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
@@ -5698,7 +5701,7 @@ void ScExportTest::testTdf129969()
 
 void ScExportTest::testTdf84874()
 {
-    ScDocShellRef xShell = loadDoc("tdf84874.", FORMAT_ODS);
+    ScDocShellRef xShell = loadDoc(u"tdf84874.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
@@ -5729,7 +5732,7 @@ void ScExportTest::testTdf84874()
 
 void ScExportTest::testTdf136721_paper_size()
 {
-    ScDocShellRef xShell = loadDoc("tdf136721_letter_sized_paper.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"tdf136721_letter_sized_paper.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);

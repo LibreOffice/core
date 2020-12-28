@@ -562,7 +562,7 @@ void SwSoftHyphStrPortion::Paint( const SwTextPaintInfo &rInf ) const
     SwHyphStrPortion::Paint( rInf );
 }
 
-SwSoftHyphStrPortion::SwSoftHyphStrPortion( const OUString &rStr )
+SwSoftHyphStrPortion::SwSoftHyphStrPortion( std::u16string_view rStr )
     : SwHyphStrPortion( rStr )
 {
     SetLen(TextFrameIndex(1));

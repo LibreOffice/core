@@ -84,7 +84,7 @@ void ScMyOLEFixer::CreateChartListener(ScDocument& rDoc,
     if (pRefTokens->empty())
         return;
 
-    OUString sName = !rName.isEmpty() ? rName : pCollection->getUniqueName("OLEFixer ");
+    OUString sName = !rName.isEmpty() ? rName : pCollection->getUniqueName(u"OLEFixer ");
     ScChartListener* pCL(new ScChartListener(sName, rDoc, std::move(pRefTokens)));
 
     //for loading binary files e.g.

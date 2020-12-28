@@ -26,6 +26,8 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
+
+#include <string_view>
 #include <unordered_map>
 
 //  Namespace
@@ -45,10 +47,10 @@ public:
     void          readConfigurationData();
     void          updateConfigurationData();
 
-    OUString getServiceFromCommandModule( const OUString& rCommandURL, const OUString& rModule ) const;
-    OUString getValueFromCommandModule( const OUString& rCommandURL, const OUString& rModule ) const;
-    void          addServiceToCommandModule( const OUString& rCommandURL, const OUString& rModule, const OUString& rServiceSpecifier );
-    void          removeServiceFromCommandModule( const OUString& rCommandURL, const OUString& rModule );
+    OUString getServiceFromCommandModule( std::u16string_view rCommandURL, std::u16string_view rModule ) const;
+    OUString getValueFromCommandModule( std::u16string_view rCommandURL, std::u16string_view rModule ) const;
+    void          addServiceToCommandModule( std::u16string_view rCommandURL, std::u16string_view rModule, const OUString& rServiceSpecifier );
+    void          removeServiceFromCommandModule( std::u16string_view rCommandURL, std::u16string_view rModule );
 
     // container.XContainerListener
     virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;

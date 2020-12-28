@@ -24,6 +24,8 @@
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include <avmedia/avmediadllapi.h>
 #include <memory>
+#include <string_view>
+
 #include <o3tl/typed_flags_set.hxx>
 
 namespace com::sun::star::embed { class XStorage; }
@@ -135,7 +137,7 @@ bool AVMEDIA_DLLPUBLIC EmbedMedia(
 bool AVMEDIA_DLLPUBLIC CreateMediaTempFile(
         ::css::uno::Reference<::css::io::XInputStream> const& xInStream,
         OUString& o_rTempFileURL,
-        const OUString& rDesiredExtension);
+        std::u16string_view rDesiredExtension);
 
 OUString GetFilename(OUString const& rSourceURL);
 

@@ -8,10 +8,13 @@
  *
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <FileDefinitionWidgetDraw.hxx>
 #include <widgetdraw/WidgetDefinitionReader.hxx>
 
-#include <sal/config.h>
 #include <svdata.hxx>
 #include <rtl/bootstrap.hxx>
 #include <config_folders.h>
@@ -72,7 +75,8 @@ std::shared_ptr<WidgetDefinition> getWidgetDefinition(OUString const& rDefinitio
     return std::shared_ptr<WidgetDefinition>();
 }
 
-std::shared_ptr<WidgetDefinition> const& getWidgetDefinitionForTheme(OUString const& rThemenName)
+std::shared_ptr<WidgetDefinition> const&
+getWidgetDefinitionForTheme(std::u16string_view rThemenName)
 {
     static std::shared_ptr<WidgetDefinition> spDefinition;
     if (!spDefinition)
@@ -110,7 +114,7 @@ FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
     : m_rGraphics(rGraphics)
     , m_bIsActive(false)
 {
-    m_pWidgetDefinition = getWidgetDefinitionForTheme("online");
+    m_pWidgetDefinition = getWidgetDefinitionForTheme(u"online");
 #ifdef IOS
     if (!m_pWidgetDefinition)
         m_pWidgetDefinition = getWidgetDefinitionForTheme("ios");

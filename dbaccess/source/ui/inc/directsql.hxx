@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 #include <vcl/weld.hxx>
 #include <deque>
+#include <string_view>
 
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <unotools/eventlisteneradapter.hxx>
@@ -94,10 +95,10 @@ namespace dbaui
         void implExecuteStatement(const OUString& _rStatement);
 
         /// adds a status text to the status list
-        void addStatusText(const OUString& _rMessage);
+        void addStatusText(std::u16string_view _rMessage);
 
         /// adds a status text to the output list
-        void addOutputText(const OUString& _rMessage);
+        void addOutputText(std::u16string_view _rMessage);
 
         /// displays resultset
         void display(const css::uno::Reference< css::sdbc::XResultSet >& xRS);

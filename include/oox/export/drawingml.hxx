@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_EXPORT_DRAWINGML_HXX
 
 #include <map>
+#include <string_view>
 #include <vector>
 
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -294,7 +295,7 @@ public:
     void WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape, int nDiagramId);
     void writeDiagramRels(const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& xRelSeq,
                           const css::uno::Reference<css::io::XOutputStream>& xOutStream,
-                          const OUString& sGrabBagProperyName, int nDiagramId);
+                          std::u16string_view sGrabBagProperyName, int nDiagramId);
     static void WriteFromTo(const css::uno::Reference<css::drawing::XShape>& rXShape, const css::awt::Size& aPageSize,
                             const sax_fastparser::FSHelperPtr& pDrawing);
 

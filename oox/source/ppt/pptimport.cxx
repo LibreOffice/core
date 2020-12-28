@@ -95,11 +95,11 @@ bool PowerPointImport::importDocument()
 
     importDocumentProperties();
 
-    OUString aFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "officeDocument" );
+    OUString aFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"officeDocument" );
     FragmentHandlerRef xPresentationFragmentHandler( new PresentationFragmentHandler( *this, aFragmentPath ) );
-    maTableStyleListPath = xPresentationFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc( "tableStyles" );
+    maTableStyleListPath = xPresentationFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc( u"tableStyles" );
     const OUString sPresPropsPath
-        = xPresentationFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc("presProps");
+        = xPresentationFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc(u"presProps");
 
     bool bRet = importFragment(xPresentationFragmentHandler);
     if (bRet && !sPresPropsPath.isEmpty())
@@ -279,7 +279,7 @@ GraphicHelper* PowerPointImport::implCreateGraphicHelper() const
 
 ::oox::ole::VbaProject* PowerPointImport::implCreateVbaProject() const
 {
-    return new ::oox::ole::VbaProject( getComponentContext(), getModel(), "Impress" );
+    return new ::oox::ole::VbaProject( getComponentContext(), getModel(), u"Impress" );
 }
 
 OUString PowerPointImport::getImplementationName()

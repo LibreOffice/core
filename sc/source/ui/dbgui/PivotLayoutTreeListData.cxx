@@ -10,6 +10,8 @@
  */
 
 #include <memory>
+#include <string_view>
+
 #include <PivotLayoutTreeListData.hxx>
 #include <PivotLayoutDialog.hxx>
 
@@ -49,7 +51,7 @@ OUString lclGetFunctionMaskName(const PivotFunc nFunctionMask)
         return OUString();
 }
 
-OUString lclCreateDataItemName(const PivotFunc nFunctionMask, const OUString& rName, const sal_uInt8 nDuplicationCount)
+OUString lclCreateDataItemName(const PivotFunc nFunctionMask, std::u16string_view rName, const sal_uInt8 nDuplicationCount)
 {
     OUString aBuffer = lclGetFunctionMaskName(nFunctionMask) + " - " + rName;
     if(nDuplicationCount > 0)

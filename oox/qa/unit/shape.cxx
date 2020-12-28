@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 
@@ -30,7 +34,7 @@ public:
     void setUp() override;
     void tearDown() override;
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
-    void load(const OUString& rURL);
+    void load(std::u16string_view rURL);
 };
 
 void OoxShapeTest::setUp()
@@ -48,7 +52,7 @@ void OoxShapeTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-void OoxShapeTest::load(const OUString& rFileName)
+void OoxShapeTest::load(std::u16string_view rFileName)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFileName;
     mxComponent = loadFromDesktop(aURL);
@@ -56,7 +60,7 @@ void OoxShapeTest::load(const OUString& rFileName)
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testMultipleGroupShapes)
 {
-    load("multiple-group-shapes.docx");
+    load(u"multiple-group-shapes.docx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -70,7 +74,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testMultipleGroupShapes)
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testCustomshapePosition)
 {
-    load("customshape-position.docx");
+    load(u"customshape-position.docx");
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),

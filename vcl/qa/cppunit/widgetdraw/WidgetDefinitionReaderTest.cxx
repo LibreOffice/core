@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
@@ -21,7 +25,7 @@ constexpr OUStringLiteral gaDataUrl(u"/vcl/qa/cppunit/widgetdraw/data/");
 class WidgetDefinitionReaderTest : public test::BootstrapFixtureBase
 {
 private:
-    OUString getFullUrl(const OUString& sFileName)
+    OUString getFullUrl(std::u16string_view sFileName)
     {
         return m_directories.getURLFromSrc(gaDataUrl) + sFileName;
     }
@@ -40,21 +44,24 @@ void WidgetDefinitionReaderTest::testReadSettings()
 {
     {
         vcl::WidgetDefinition aDefinition;
-        vcl::WidgetDefinitionReader aReader(getFullUrl("definitionSettings1.xml"), getFullUrl(""));
+        vcl::WidgetDefinitionReader aReader(getFullUrl(u"definitionSettings1.xml"),
+                                            getFullUrl(u""));
         CPPUNIT_ASSERT(aReader.read(aDefinition));
         CPPUNIT_ASSERT_EQUAL(OString(""), aDefinition.mpSettings->msCenteredTabs);
     }
 
     {
         vcl::WidgetDefinition aDefinition;
-        vcl::WidgetDefinitionReader aReader(getFullUrl("definitionSettings2.xml"), getFullUrl(""));
+        vcl::WidgetDefinitionReader aReader(getFullUrl(u"definitionSettings2.xml"),
+                                            getFullUrl(u""));
         CPPUNIT_ASSERT(aReader.read(aDefinition));
         CPPUNIT_ASSERT_EQUAL(OString("true"), aDefinition.mpSettings->msCenteredTabs);
     }
 
     {
         vcl::WidgetDefinition aDefinition;
-        vcl::WidgetDefinitionReader aReader(getFullUrl("definitionSettings3.xml"), getFullUrl(""));
+        vcl::WidgetDefinitionReader aReader(getFullUrl(u"definitionSettings3.xml"),
+                                            getFullUrl(u""));
         CPPUNIT_ASSERT(aReader.read(aDefinition));
         CPPUNIT_ASSERT_EQUAL(OString("true"), aDefinition.mpSettings->msNoActiveTabTextRaise);
         CPPUNIT_ASSERT_EQUAL(OString("false"), aDefinition.mpSettings->msCenteredTabs);
@@ -73,7 +80,7 @@ void WidgetDefinitionReaderTest::testRead()
 {
     vcl::WidgetDefinition aDefinition;
 
-    vcl::WidgetDefinitionReader aReader(getFullUrl("definition1.xml"), getFullUrl(""));
+    vcl::WidgetDefinitionReader aReader(getFullUrl(u"definition1.xml"), getFullUrl(u""));
     CPPUNIT_ASSERT(aReader.read(aDefinition));
 
     CPPUNIT_ASSERT_EQUAL(OUString("123456"), aDefinition.mpStyle->maFaceColor.AsRGBHexString());

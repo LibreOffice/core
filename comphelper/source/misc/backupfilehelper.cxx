@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <deque>
 #include <memory>
+#include <string_view>
 #include <vector>
 #include <zlib.h>
 
@@ -172,30 +173,31 @@ namespace
         return osl_File_E_None == osl_writeFile(rHandle, static_cast<const void*>(rSource.getStr()), nLength, &nBaseWritten) && nLength == nBaseWritten;
     }
 
-    OUString createFileURL(const OUString& rURL, const OUString& rName, const OUString& rExt)
+    OUString createFileURL(
+        std::u16string_view rURL, std::u16string_view rName, std::u16string_view rExt)
     {
         OUString aRetval;
 
-        if (!rURL.isEmpty() && !rName.isEmpty())
+        if (!rURL.empty() && !rName.empty())
         {
-            aRetval = rURL + "/" + rName;
+            aRetval = OUString::Concat(rURL) + "/" + rName;
 
-            if (!rExt.isEmpty())
+            if (!rExt.empty())
             {
-                aRetval += "." + rExt;
+                aRetval += OUString::Concat(".") + rExt;
             }
         }
 
         return aRetval;
     }
 
-    OUString createPackURL(const OUString& rURL, const OUString& rName)
+    OUString createPackURL(std::u16string_view rURL, std::u16string_view rName)
     {
         OUString aRetval;
 
-        if (!rURL.isEmpty() && !rName.isEmpty())
+        if (!rURL.empty() && !rName.empty())
         {
-            aRetval = rURL + "/" + rName + ".pack";
+            aRetval = OUString::Concat(rURL) + "/" + rName + ".pack";
         }
 
         return aRetval;
@@ -479,21 +481,24 @@ namespace
         }
 
     public:
-        void createUserExtensionRegistryEntriesFromXML(const OUString& rUserConfigWorkURL)
+        void createUserExtensionRegistryEntriesFromXML(std::u16string_view rUserConfigWorkURL)
         {
-            const OUString aPath(rUserConfigWorkURL + "/uno_packages/cache" + gaRegPath);
+            const OUString aPath(
+                OUString::Concat(rUserConfigWorkURL) + "/uno_packages/cache" + gaRegPath);
             createExtensionRegistryEntriesFromXML(aPath);
         }
 
-        void createSharedExtensionRegistryEntriesFromXML(const OUString& rUserConfigWorkURL)
+        void createSharedExtensionRegistryEntriesFromXML(std::u16string_view rUserConfigWorkURL)
         {
-            const OUString aPath(rUserConfigWorkURL + "/extensions/shared" + gaRegPath);
+            const OUString aPath(
+                OUString::Concat(rUserConfigWorkURL) + "/extensions/shared" + gaRegPath);
             createExtensionRegistryEntriesFromXML(aPath);
         }
 
-        void createBundledExtensionRegistryEntriesFromXML(const OUString& rUserConfigWorkURL)
+        void createBundledExtensionRegistryEntriesFromXML(std::u16string_view rUserConfigWorkURL)
         {
-            const OUString aPath(rUserConfigWorkURL + "/extensions/bundled" + gaRegPath);
+            const OUString aPath(
+                OUString::Concat(rUserConfigWorkURL) + "/extensions/bundled" + gaRegPath);
             createExtensionRegistryEntriesFromXML(aPath);
         }
 
@@ -657,7 +662,7 @@ namespace
 
     public:
         static void changeEnableDisableStateInXML(
-            const OUString& rUserConfigWorkURL,
+            std::u16string_view rUserConfigWorkURL,
             const ExtensionInfoEntryVector& rToBeEnabled,
             const ExtensionInfoEntryVector& rToBeDisabled)
         {
@@ -665,7 +670,7 @@ namespace
             const OUString aRegPathBack(".PackageRegistryBackend/backenddb.xml");
             // first appearance to check
             {
-                const OUString aUnoPackagReg(rUserConfigWorkURL + aRegPathFront + "bundle" + aRegPathBack);
+                const OUString aUnoPackagReg(OUString::Concat(rUserConfigWorkURL) + aRegPathFront + "bundle" + aRegPathBack);
 
                 visitNodesXMLChangeOneCase(
                     aUnoPackagReg,
@@ -676,7 +681,7 @@ namespace
 
             // second appearance to check
             {
-                const OUString aUnoPackagReg(rUserConfigWorkURL + aRegPathFront + "configuration" + aRegPathBack);
+                const OUString aUnoPackagReg(OUString::Concat(rUserConfigWorkURL) + aRegPathFront + "configuration" + aRegPathBack);
 
                 visitNodesXMLChangeOneCase(
                     aUnoPackagReg,
@@ -687,7 +692,7 @@ namespace
 
             // third appearance to check
             {
-                const OUString aUnoPackagReg(rUserConfigWorkURL + aRegPathFront + "script" + aRegPathBack);
+                const OUString aUnoPackagReg(OUString::Concat(rUserConfigWorkURL) + aRegPathFront + "script" + aRegPathBack);
 
                 visitNodesXMLChangeOneCase(
                     aUnoPackagReg,
@@ -2017,8 +2022,8 @@ namespace comphelper
     bool BackupFileHelper::tryPush_Files(
         const std::set< OUString >& rDirs,
         const std::set< std::pair< OUString, OUString > >& rFiles,
-        const OUString& rSourceURL, // source dir without trailing '/'
-        const OUString& rTargetURL  // target dir without trailing '/'
+        std::u16string_view rSourceURL, // source dir without trailing '/'
+        const OUString& rTargetURL // target dir without trailing '/'
         )
     {
         bool bDidPush(false);
@@ -2037,7 +2042,7 @@ namespace comphelper
         // process dirs
         for (const auto& dir : rDirs)
         {
-            OUString aNewSourceURL(rSourceURL + "/" + dir);
+            OUString aNewSourceURL(OUString::Concat(rSourceURL) + "/" + dir);
             OUString aNewTargetURL(rTargetURL + "/" + dir);
             std::set< OUString > aNewDirs;
             std::set< std::pair< OUString, OUString > > aNewFiles;
@@ -2067,10 +2072,10 @@ namespace comphelper
     }
 
     bool BackupFileHelper::tryPush_file(
-        const OUString& rSourceURL, // source dir without trailing '/'
-        const OUString& rTargetURL, // target dir without trailing '/'
-        const OUString& rName,      // filename
-        const OUString& rExt        // extension (or empty)
+        std::u16string_view rSourceURL, // source dir without trailing '/'
+        std::u16string_view rTargetURL, // target dir without trailing '/'
+        std::u16string_view rName,  // filename
+        std::u16string_view rExt    // extension (or empty)
         )
     {
         const OUString aFileURL(createFileURL(rSourceURL, rName, rExt));
@@ -2099,8 +2104,8 @@ namespace comphelper
     bool BackupFileHelper::isPopPossible_files(
         const std::set< OUString >& rDirs,
         const std::set< std::pair< OUString, OUString > >& rFiles,
-        const OUString& rSourceURL, // source dir without trailing '/'
-        const OUString& rTargetURL  // target dir without trailing '/'
+        std::u16string_view rSourceURL, // source dir without trailing '/'
+        std::u16string_view rTargetURL // target dir without trailing '/'
         )
     {
         bool bPopPossible(false);
@@ -2118,8 +2123,8 @@ namespace comphelper
         // process dirs
         for (const auto& dir : rDirs)
         {
-            OUString aNewSourceURL(rSourceURL + "/" + dir);
-            OUString aNewTargetURL(rTargetURL + "/" + dir);
+            OUString aNewSourceURL(OUString::Concat(rSourceURL) + "/" + dir);
+            OUString aNewTargetURL(OUString::Concat(rTargetURL) + "/" + dir);
             std::set< OUString > aNewDirs;
             std::set< std::pair< OUString, OUString > > aNewFiles;
 
@@ -2142,10 +2147,10 @@ namespace comphelper
     }
 
     bool BackupFileHelper::isPopPossible_file(
-        const OUString& rSourceURL, // source dir without trailing '/'
-        const OUString& rTargetURL, // target dir without trailing '/'
-        const OUString& rName,      // filename
-        const OUString& rExt        // extension (or empty)
+        std::u16string_view rSourceURL, // source dir without trailing '/'
+        std::u16string_view rTargetURL, // target dir without trailing '/'
+        std::u16string_view rName,  // filename
+        std::u16string_view rExt    // extension (or empty)
         )
     {
         const OUString aFileURL(createFileURL(rSourceURL, rName, rExt));
@@ -2166,7 +2171,7 @@ namespace comphelper
     bool BackupFileHelper::tryPop_files(
         const std::set< OUString >& rDirs,
         const std::set< std::pair< OUString, OUString > >& rFiles,
-        const OUString& rSourceURL, // source dir without trailing '/'
+        std::u16string_view rSourceURL, // source dir without trailing '/'
         const OUString& rTargetURL  // target dir without trailing '/'
         )
     {
@@ -2185,7 +2190,7 @@ namespace comphelper
         // process dirs
         for (const auto& dir : rDirs)
         {
-            OUString aNewSourceURL(rSourceURL + "/" + dir);
+            OUString aNewSourceURL(OUString::Concat(rSourceURL) + "/" + dir);
             OUString aNewTargetURL(rTargetURL + "/" + dir);
             std::set< OUString > aNewDirs;
             std::set< std::pair< OUString, OUString > > aNewFiles;
@@ -2215,10 +2220,10 @@ namespace comphelper
     }
 
     bool BackupFileHelper::tryPop_file(
-        const OUString& rSourceURL, // source dir without trailing '/'
-        const OUString& rTargetURL, // target dir without trailing '/'
-        const OUString& rName,      // filename
-        const OUString& rExt        // extension (or empty)
+        std::u16string_view rSourceURL, // source dir without trailing '/'
+        std::u16string_view rTargetURL, // target dir without trailing '/'
+        std::u16string_view rName,  // filename
+        std::u16string_view rExt    // extension (or empty)
         )
     {
         const OUString aFileURL(createFileURL(rSourceURL, rName, rExt));
@@ -2268,7 +2273,7 @@ namespace comphelper
     /////////////////// ExtensionInfo helpers ///////////////////////
 
     bool BackupFileHelper::tryPush_extensionInfo(
-        const OUString& rTargetURL // target dir without trailing '/'
+        std::u16string_view rTargetURL // target dir without trailing '/'
         )
     {
         ExtensionInfo aExtensionInfo;
@@ -2278,7 +2283,7 @@ namespace comphelper
         // create current configuration and write to temp file - it exists until deleted
         if (aExtensionInfo.createTempFile(aTempURL))
         {
-            const OUString aPackURL(createPackURL(rTargetURL, "ExtensionInfo"));
+            const OUString aPackURL(createPackURL(rTargetURL, u"ExtensionInfo"));
             PackedFile aPackedFile(aPackURL);
             FileSharedPtr aBaseFile = std::make_shared<osl::File>(aTempURL);
 
@@ -2297,22 +2302,22 @@ namespace comphelper
     }
 
     bool BackupFileHelper::isPopPossible_extensionInfo(
-        const OUString& rTargetURL // target dir without trailing '/'
+        std::u16string_view rTargetURL // target dir without trailing '/'
         )
     {
         // extensionInfo always exists internally, no test needed
-        const OUString aPackURL(createPackURL(rTargetURL, "ExtensionInfo"));
+        const OUString aPackURL(createPackURL(rTargetURL, u"ExtensionInfo"));
         PackedFile aPackedFile(aPackURL);
 
         return !aPackedFile.empty();
     }
 
     bool BackupFileHelper::tryPop_extensionInfo(
-        const OUString& rTargetURL // target dir without trailing '/'
+        std::u16string_view rTargetURL // target dir without trailing '/'
         )
     {
         // extensionInfo always exists internally, no test needed
-        const OUString aPackURL(createPackURL(rTargetURL, "ExtensionInfo"));
+        const OUString aPackURL(createPackURL(rTargetURL, u"ExtensionInfo"));
         PackedFile aPackedFile(aPackURL);
 
         if (!aPackedFile.empty())

@@ -271,7 +271,7 @@ void loadDiagram( ShapePtr const & pShape,
                        xRefDataModel);
 
         pDiagram->getDataRelsMap() = pShape->resolveRelationshipsOfTypeFromOfficeDoc( rFilter,
-                xRefDataModel->getFragmentPath(), "image" );
+                xRefDataModel->getFragmentPath(), u"image" );
 
         // Pass the info to pShape
         for (auto const& extDrawing : pData->getExtDrawings())

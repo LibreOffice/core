@@ -8,6 +8,8 @@
  */
 
 #include <memory>
+#include <string_view>
+
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -631,7 +633,8 @@ public:
 
 private:
     SwDoc* createDoc(const char* pName = nullptr);
-    std::unique_ptr<SwTextBlocks> readDOCXAutotext(const OUString& sFileName, bool bEmpty = false);
+    std::unique_ptr<SwTextBlocks> readDOCXAutotext(
+        std::u16string_view sFileName, bool bEmpty = false);
 };
 
 SwDoc* SwUiWriterTest::createDoc(const char* pName)
@@ -646,7 +649,7 @@ SwDoc* SwUiWriterTest::createDoc(const char* pName)
     return pTextDoc->GetDocShell()->GetDoc();
 }
 
-std::unique_ptr<SwTextBlocks> SwUiWriterTest::readDOCXAutotext(const OUString& sFileName, bool bEmpty)
+std::unique_ptr<SwTextBlocks> SwUiWriterTest::readDOCXAutotext(std::u16string_view sFileName, bool bEmpty)
 {
     utl::TempFile tmp;
     tmp.EnableKillingFile();
@@ -1078,14 +1081,14 @@ void SwUiWriterTest::testExportRTF()
 void SwUiWriterTest::testDOCXAutoTextEmpty()
 {
     // file contains normal content but no AutoText
-    std::unique_ptr<SwTextBlocks> pGlossary = readDOCXAutotext("autotext-empty.dotx", true);
+    std::unique_ptr<SwTextBlocks> pGlossary = readDOCXAutotext(u"autotext-empty.dotx", true);
     CPPUNIT_ASSERT(pGlossary != nullptr);
 }
 
 void SwUiWriterTest::testDOCXAutoTextMultiple()
 {
     // file contains three AutoText entries
-    std::unique_ptr<SwTextBlocks> pGlossary = readDOCXAutotext("autotext-multiple.dotx");
+    std::unique_ptr<SwTextBlocks> pGlossary = readDOCXAutotext(u"autotext-multiple.dotx");
 
     // check entries count
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pGlossary->GetCount());
@@ -1126,7 +1129,7 @@ void SwUiWriterTest::testDOTMAutoText()
 {
     // this is dotm file difference is that in the dotm
     // there are no empty paragraphs at the end of each entry
-    std::unique_ptr<SwTextBlocks> pGlossary = readDOCXAutotext("autotext-dotm.dotm");
+    std::unique_ptr<SwTextBlocks> pGlossary = readDOCXAutotext(u"autotext-dotm.dotm");
 
     SwDoc* pDoc = pGlossary->GetDoc();
     CPPUNIT_ASSERT(pDoc != nullptr);
@@ -1142,7 +1145,7 @@ void SwUiWriterTest::testDOCXAutoTextGallery()
 {
     // this file contains one AutoText entry and other
     // entries which are not AutoText (have different "gallery" value)
-    std::unique_ptr<SwTextBlocks> pGlossary = readDOCXAutotext("autotext-gallery.dotx");
+    std::unique_ptr<SwTextBlocks> pGlossary = readDOCXAutotext(u"autotext-gallery.dotx");
 
     SwDoc* pDoc = pGlossary->GetDoc();
     CPPUNIT_ASSERT(pDoc != nullptr);
@@ -1780,7 +1783,7 @@ void SwUiWriterTest::testChineseConversionSimplifiedToTraditional()
 void SwUiWriterTest::testFdo85554()
 {
     // Load the document, it contains one shape with a textbox.
-    load("/sw/qa/extras/uiwriter/data/", "fdo85554.odt");
+    load(u"/sw/qa/extras/uiwriter/data/", "fdo85554.odt");
 
     // Add a second shape to the document.
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
@@ -4435,7 +4438,7 @@ void SwUiWriterTest::testEmbeddedDataSource()
 
     // Load: should have a component and a data source, too.
     // Path with "#" must not cause issues
-    load(DATA_DIRECTORY + OUStringLiteral(u"hash%23path/"), "embedded-data-source.odt");
+    load(OUString(DATA_DIRECTORY + OUStringLiteral(u"hash%23path/")), "embedded-data-source.odt");
     CPPUNIT_ASSERT(mxComponent.is());
     CPPUNIT_ASSERT(xDatabaseContext->hasByName("calc-data-source"));
 
@@ -7368,7 +7371,7 @@ void SwUiWriterTest::testTdf117225()
 {
     // Test that saving a document with an embedded object does not leak
     // tempfiles in the directory of the target file.
-    OUString aTargetDirectory = m_directories.getURLFromWorkdir("/CppunitTest/sw_uiwriter.test.user/");
+    OUString aTargetDirectory = m_directories.getURLFromWorkdir(u"/CppunitTest/sw_uiwriter.test.user/");
     OUString aTargetFile = aTargetDirectory + "tdf117225.odt";
     OUString aSourceFile = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf117225.odt";
     osl::File::copy(aSourceFile, aTargetFile);

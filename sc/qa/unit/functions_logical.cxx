@@ -15,7 +15,7 @@ public:
 
 void LogicalFunctionsTest::testLogicalFormulasFODS()
 {
-    OUString aDirectoryURL = m_directories.getURLFromSrc("/sc/qa/unit/data/functions/logical/fods/");
+    OUString aDirectoryURL = m_directories.getURLFromSrc(u"/sc/qa/unit/data/functions/logical/fods/");
     recursiveScan(test::pass, "OpenDocument Spreadsheet Flat XML", aDirectoryURL,
             "com.sun.star.comp.filter.OdfFlatXml,,com.sun.star.comp.Calc.XMLOasisImporter,com.sun.star.comp.Calc.XMLOasisExporter,,,true",
             FODS_FORMAT_TYPE, SotClipboardFormatId::NONE, 0, false);

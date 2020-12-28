@@ -48,7 +48,7 @@ VclPtr<VclAbstractDialog> VclDialogsTest::createDialogByID(sal_uInt32 /*nID*/) {
 void VclDialogsTest::openAnyDialog()
 {
     /// process input file containing the UXMLDescriptions of the dialogs to dump
-    processDialogBatchFile("vcl/qa/unit/data/vcl-dialogs-test.txt");
+    processDialogBatchFile(u"vcl/qa/unit/data/vcl-dialogs-test.txt");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclDialogsTest);

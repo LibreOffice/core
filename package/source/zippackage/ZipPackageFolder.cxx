@@ -79,7 +79,7 @@ ZipPackageFolder::~ZipPackageFolder()
 {
 }
 
-bool ZipPackageFolder::LookForUnexpectedODF12Streams( const OUString& aPath )
+bool ZipPackageFolder::LookForUnexpectedODF12Streams( std::u16string_view aPath )
 {
     bool bHasUnexpected = false;
 
@@ -89,7 +89,7 @@ bool ZipPackageFolder::LookForUnexpectedODF12Streams( const OUString& aPath )
 
         if ( rInfo.bFolder )
         {
-            if ( aPath == "META-INF/" )
+            if ( aPath == u"META-INF/" )
             {
                 // META-INF is not allowed to contain subfolders
                 bHasUnexpected = true;
@@ -102,7 +102,7 @@ bool ZipPackageFolder::LookForUnexpectedODF12Streams( const OUString& aPath )
         }
         else
         {
-            if ( aPath == "META-INF/" )
+            if ( aPath == u"META-INF/" )
             {
                 if ( rShortName != "manifest.xml"
                   && rShortName.indexOf( "signatures" ) == -1 )
@@ -117,7 +117,7 @@ bool ZipPackageFolder::LookForUnexpectedODF12Streams( const OUString& aPath )
             {
                 // the stream is not in META-INF and is not registered in manifest.xml,
                 // check whether it is an internal part of the package format
-                if ( !aPath.isEmpty() || rShortName != "mimetype" )
+                if ( !aPath.empty() || rShortName != "mimetype" )
                 {
                     // if it is not "mimetype" from the root it is not a part of the package
                     bHasUnexpected = true;

@@ -43,13 +43,13 @@ bool WpftFilterTestBase::load(const OUString&, const OUString& rURL, const OUStr
     return aLoader.getDocument().is();
 }
 
-void WpftFilterTestBase::doTest(const OUString& rFilter, const OUString& rPath)
+void WpftFilterTestBase::doTest(const OUString& rFilter, std::u16string_view rPath)
 {
     m_xFilter.set(m_xFactory->createInstanceWithContext(rFilter, m_xContext), uno::UNO_QUERY_THROW);
     testDir(OUString(), m_directories.getURLFromSrc(rPath));
 }
 
-void WpftFilterTestBase::doTest(const OUString& rFilter, const OUString& rPath,
+void WpftFilterTestBase::doTest(const OUString& rFilter, std::u16string_view rPath,
                                 const WpftOptionalMap_t& rOptionalMap)
 {
     m_xFilter.set(m_xFactory->createInstanceWithContext(rFilter, m_xContext), uno::UNO_QUERY_THROW);

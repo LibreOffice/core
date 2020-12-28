@@ -942,7 +942,7 @@ private:
     wwFrameNamer& operator=(wwFrameNamer const&) = delete;
 
 public:
-    void SetUniqueGraphName(SwFrameFormat *pFrameFormat, const OUString &rFixedPart);
+    void SetUniqueGraphName(SwFrameFormat *pFrameFormat, std::u16string_view rFixedPart);
     wwFrameNamer(bool bIsDisabled, const OUString &rSeed)
         : msSeed(rSeed), mnImportedGraphicsCount(0), mbIsDisabled(bIsDisabled)
     {

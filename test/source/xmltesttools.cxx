@@ -251,7 +251,7 @@ void XmlTestTools::assertXPathNoAttribute(const xmlDocUniquePtr& pXmlDoc, const 
     xmlXPathFreeObject(pXmlObj);
 }
 
-int XmlTestTools::getXPathPosition(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OString& rChildName)
+int XmlTestTools::getXPathPosition(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, std::string_view rChildName)
 {
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;

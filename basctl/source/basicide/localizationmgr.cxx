@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <localizationmgr.hxx>
 
 #include <basidesh.hxx>
@@ -146,7 +150,7 @@ void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResou
                 Any aDialogCtrl;
                 aDialogCtrl <<= xDialog;
                 implHandleControlResourceProperties( aDialogCtrl, aDlgName,
-                    OUString(), m_xStringResourceManager, xDummyStringResolver, eMode );
+                    std::u16string_view(), m_xStringResourceManager, xDummyStringResolver, eMode );
 
                 // Handle all controls
                 Sequence< OUString > aNames = xDialog->getElementNames();
@@ -166,7 +170,7 @@ void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResou
 
 
 static OUString implCreatePureResourceId
-    ( const OUString& aDialogName, const OUString& aCtrlName,
+    ( std::u16string_view aDialogName, std::u16string_view aCtrlName,
       const OUString& aPropName,
       const Reference< XStringResourceManager >& xStringResourceManager )
 {
@@ -175,7 +179,7 @@ static OUString implCreatePureResourceId
                         + aDot
                         + aDialogName
                         + aDot;
-    if( !aCtrlName.isEmpty() )
+    if( !aCtrlName.empty() )
     {
         aPureIdStr += aCtrlName + aDot;
     }
@@ -187,7 +191,7 @@ static OUString implCreatePureResourceId
 // anyway only one language should exist when calling this method then,
 // either the first one for mode SET_IDS or the last one for mode RESET_IDS
 sal_Int32 LocalizationMgr::implHandleControlResourceProperties
-    (const Any& rControlAny, const OUString& aDialogName, const OUString& aCtrlName,
+    (const Any& rControlAny, std::u16string_view aDialogName, std::u16string_view aCtrlName,
         const Reference< XStringResourceManager >& xStringResourceManager,
         const Reference< XStringResourceResolver >& xSourceStringResolver, HandleResourceMode eMode )
 {
@@ -791,7 +795,7 @@ static DialogWindow* FindDialogWindowForEditor( DlgEditor const * pEditor )
 
 
 void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor const * pEditor,
-    const Any& rControlAny, const OUString& aCtrlName )
+    const Any& rControlAny, std::u16string_view aCtrlName )
 {
     // Get library for DlgEditor
     DialogWindow* pDlgWin = FindDialogWindowForEditor( pEditor );
@@ -821,7 +825,7 @@ void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor const *
 }
 
 void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor const * pEditor,
-    const css::uno::Any& rControlAny, const OUString& aNewCtrlName )
+    const css::uno::Any& rControlAny, std::u16string_view aNewCtrlName )
 {
     // Get library for DlgEditor
     DialogWindow* pDlgWin = FindDialogWindowForEditor( pEditor );
@@ -849,7 +853,7 @@ void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor const *
 
 
 void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor const * pEditor,
-    const Any& rControlAny, const OUString& aCtrlName )
+    const Any& rControlAny, std::u16string_view aCtrlName )
 {
     // Get library for DlgEditor
     DialogWindow* pDlgWin = FindDialogWindowForEditor( pEditor );
@@ -875,7 +879,7 @@ void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor 
 }
 
 void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument, const OUString& aLibName,
-    const OUString& aDlgName, const Reference< container::XNameContainer >& xDialogModel )
+    std::u16string_view aDlgName, const Reference< container::XNameContainer >& xDialogModel )
 {
     // Get library
     Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, true ) );
@@ -894,7 +898,7 @@ void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument
         aDialogCtrl <<= xDialogModel;
         Reference< XStringResourceResolver > xDummyStringResolver;
         implHandleControlResourceProperties( aDialogCtrl, aDlgName,
-            OUString(), xStringResourceManager,
+            std::u16string_view(), xStringResourceManager,
             xDummyStringResolver, SET_IDS );
     }
 
@@ -903,7 +907,7 @@ void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument
 }
 
 void LocalizationMgr::renameStringResourceIDs( const ScriptDocument& rDocument, const OUString& aLibName,
-    const OUString& aDlgName, const Reference< container::XNameContainer >& xDialogModel )
+    std::u16string_view aDlgName, const Reference< container::XNameContainer >& xDialogModel )
 {
     // Get library
     Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, true ) );
@@ -916,7 +920,7 @@ void LocalizationMgr::renameStringResourceIDs( const ScriptDocument& rDocument, 
     aDialogCtrl <<= xDialogModel;
     Reference< XStringResourceResolver > xDummyStringResolver;
     implHandleControlResourceProperties( aDialogCtrl, aDlgName,
-        OUString(), xStringResourceManager,
+        std::u16string_view(), xStringResourceManager,
         xDummyStringResolver, RENAME_DIALOG_IDS );
 
     // Handle all controls
@@ -934,7 +938,7 @@ void LocalizationMgr::renameStringResourceIDs( const ScriptDocument& rDocument, 
 }
 
 void LocalizationMgr::removeResourceForDialog( const ScriptDocument& rDocument, const OUString& aLibName,
-    const OUString& aDlgName, const Reference< container::XNameContainer >& xDialogModel )
+    std::u16string_view aDlgName, const Reference< container::XNameContainer >& xDialogModel )
 {
     // Get library
     Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, true ) );
@@ -947,7 +951,7 @@ void LocalizationMgr::removeResourceForDialog( const ScriptDocument& rDocument, 
     aDialogCtrl <<= xDialogModel;
     Reference< XStringResourceResolver > xDummyStringResolver;
     implHandleControlResourceProperties( aDialogCtrl, aDlgName,
-        OUString(), xStringResourceManager,
+        std::u16string_view(), xStringResourceManager,
         xDummyStringResolver, REMOVE_IDS_FROM_RESOURCE );
 
     // Handle all controls
@@ -1019,7 +1023,7 @@ void LocalizationMgr::setResourceIDsForDialog( const Reference< container::XName
 }
 
 void LocalizationMgr::copyResourcesForPastedEditorObject( DlgEditor const * pEditor,
-    const Any& rControlAny, const OUString& aCtrlName,
+    const Any& rControlAny, std::u16string_view aCtrlName,
     const Reference< XStringResourceResolver >& xSourceStringResolver )
 {
     // Get library for DlgEditor
@@ -1046,7 +1050,8 @@ void LocalizationMgr::copyResourcesForPastedEditorObject( DlgEditor const * pEdi
 }
 
 void LocalizationMgr::copyResourceForDroppedDialog( const Reference< container::XNameContainer >& xDialogModel,
-    const OUString& aDialogName, const Reference< XStringResourceManager >& xStringResourceManager,
+    std::u16string_view aDialogName,
+    const Reference< XStringResourceManager >& xStringResourceManager,
     const Reference< XStringResourceResolver >& xSourceStringResolver )
 {
     if( !xStringResourceManager.is() )
@@ -1056,7 +1061,7 @@ void LocalizationMgr::copyResourceForDroppedDialog( const Reference< container::
     Any aDialogCtrl;
     aDialogCtrl <<= xDialogModel;
     implHandleControlResourceProperties( aDialogCtrl, aDialogName,
-        OUString(), xStringResourceManager, xSourceStringResolver, MOVE_RESOURCES );
+        std::u16string_view(), xStringResourceManager, xSourceStringResolver, MOVE_RESOURCES );
 
     // Handle all controls
     Sequence< OUString > aNames = xDialogModel->getElementNames();

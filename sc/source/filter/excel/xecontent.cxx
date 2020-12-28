@@ -22,6 +22,8 @@
 
 #include <vector>
 #include <algorithm>
+#include <string_view>
+
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XAreaLinks.hpp>
 #include <com/sun/star/sheet/XAreaLink.hpp>
@@ -990,7 +992,7 @@ bool RequiresFixedFormula(ScConditionMode eMode)
     return false;
 }
 
-OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, const OString& rText)
+OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, std::string_view rText)
 {
     OStringBuffer aBuffer;
     XclXmlUtils::ToOString(aBuffer, rAddress);
@@ -1006,9 +1008,9 @@ OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, const 
         case ScConditionMode::EndsWith:
             return OString("RIGHT(" + aPos +",LEN(\"" + rText + "\"))=\"" + rText + "\"");
         case ScConditionMode::ContainsText:
-            return OString("NOT(ISERROR(SEARCH(\"" + rText + "\"," + aPos + ")))");
+            return OString(OString::Concat("NOT(ISERROR(SEARCH(\"") + rText + "\"," + aPos + ")))");
         case ScConditionMode::NotContainsText:
-            return OString("ISERROR(SEARCH(\"" +  rText + "\"," + aPos + "))");
+            return OString(OString::Concat("ISERROR(SEARCH(\"") +  rText + "\"," + aPos + "))");
         default:
         break;
     }

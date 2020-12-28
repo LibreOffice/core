@@ -8,6 +8,8 @@
  */
 
 #include <memory>
+#include <string_view>
+
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -94,7 +96,8 @@ public:
     {
     }
 
-    void readFileIntoByteVector(OUString const & sFilename, std::vector<sal_uInt8> & rByteVector);
+    void readFileIntoByteVector(
+        std::u16string_view sFilename, std::vector<sal_uInt8> & rByteVector);
 
     virtual void setUp() override
     {
@@ -696,7 +699,7 @@ void DesktopLOKTest::testPasteWriterJPEG()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
 
     OUString aFileURL;
-    createFileURL("paste.jpg", aFileURL);
+    createFileURL(u"paste.jpg", aFileURL);
     std::ifstream aImageStream(aFileURL.toUtf8().copy(strlen("file://")).getStr());
     std::vector<char> aImageContents((std::istreambuf_iterator<char>(aImageStream)), std::istreambuf_iterator<char>());
 
@@ -2418,32 +2421,32 @@ void DesktopLOKTest::testRunMacro()
 void DesktopLOKTest::testExtractParameter()
 {
     OUString aOptions("Language=de-DE");
-    OUString aValue = extractParameter(aOptions, "Language");
+    OUString aValue = extractParameter(aOptions, u"Language");
     CPPUNIT_ASSERT_EQUAL(OUString("de-DE"), aValue);
     CPPUNIT_ASSERT_EQUAL(OUString(), aOptions);
 
     aOptions = "Language=en-US,Something";
-    aValue = extractParameter(aOptions, "Language");
+    aValue = extractParameter(aOptions, u"Language");
     CPPUNIT_ASSERT_EQUAL(OUString("en-US"), aValue);
     CPPUNIT_ASSERT_EQUAL(OUString("Something"), aOptions);
 
     aOptions = "SomethingElse,Language=cs-CZ";
-    aValue = extractParameter(aOptions, "Language");
+    aValue = extractParameter(aOptions, u"Language");
     CPPUNIT_ASSERT_EQUAL(OUString("cs-CZ"), aValue);
     CPPUNIT_ASSERT_EQUAL(OUString("SomethingElse"), aOptions);
 
     aOptions = "Something1,Language=hu-HU,Something2";
-    aValue = extractParameter(aOptions, "Language");
+    aValue = extractParameter(aOptions, u"Language");
     CPPUNIT_ASSERT_EQUAL(OUString("hu-HU"), aValue);
     CPPUNIT_ASSERT_EQUAL(OUString("Something1,Something2"), aOptions);
 
     aOptions = "Something1,Something2=blah,Something3";
-    aValue = extractParameter(aOptions, "Language");
+    aValue = extractParameter(aOptions, u"Language");
     CPPUNIT_ASSERT_EQUAL(OUString(), aValue);
     CPPUNIT_ASSERT_EQUAL(OUString("Something1,Something2=blah,Something3"), aOptions);
 }
 
-void DesktopLOKTest::readFileIntoByteVector(OUString const & sFilename, std::vector<unsigned char> & rByteVector)
+void DesktopLOKTest::readFileIntoByteVector(std::u16string_view sFilename, std::vector<unsigned char> & rByteVector)
 {
     rByteVector.clear();
     OUString aURL;
@@ -2469,14 +2472,14 @@ void DesktopLOKTest::testGetSignatureState_Signed()
 
     std::vector<unsigned char> aCertificate;
     {
-        readFileIntoByteVector("rootCA.der", aCertificate);
+        readFileIntoByteVector(u"rootCA.der", aCertificate);
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
         CPPUNIT_ASSERT(bResult);
     }
 
     {
-        readFileIntoByteVector("intermediateRootCA.der", aCertificate);
+        readFileIntoByteVector(u"intermediateRootCA.der", aCertificate);
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
         CPPUNIT_ASSERT(bResult);
@@ -2515,7 +2518,7 @@ void DesktopLOKTest::testInsertCertificate_DER_ODT()
     std::vector<unsigned char> aPrivateKey;
 
     {
-        readFileIntoByteVector("rootCA.der", aCertificate);
+        readFileIntoByteVector(u"rootCA.der", aCertificate);
 
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
@@ -2523,7 +2526,7 @@ void DesktopLOKTest::testInsertCertificate_DER_ODT()
     }
 
     {
-        readFileIntoByteVector("intermediateRootCA.der", aCertificate);
+        readFileIntoByteVector(u"intermediateRootCA.der", aCertificate);
 
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
@@ -2531,8 +2534,8 @@ void DesktopLOKTest::testInsertCertificate_DER_ODT()
     }
 
     {
-        readFileIntoByteVector("certificate.der", aCertificate);
-        readFileIntoByteVector("certificatePrivateKey.der", aPrivateKey);
+        readFileIntoByteVector(u"certificate.der", aCertificate);
+        readFileIntoByteVector(u"certificatePrivateKey.der", aPrivateKey);
 
         bool bResult = pDocument->m_pDocumentClass->insertCertificate(pDocument,
                             aCertificate.data(), int(aCertificate.size()),
@@ -2565,7 +2568,7 @@ void DesktopLOKTest::testInsertCertificate_PEM_ODT()
     std::vector<unsigned char> aPrivateKey;
 
     {
-        readFileIntoByteVector("test-cert-chain-1.pem", aCertificate);
+        readFileIntoByteVector(u"test-cert-chain-1.pem", aCertificate);
 
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
@@ -2573,7 +2576,7 @@ void DesktopLOKTest::testInsertCertificate_PEM_ODT()
     }
 
     {
-        readFileIntoByteVector("test-cert-chain-2.pem", aCertificate);
+        readFileIntoByteVector(u"test-cert-chain-2.pem", aCertificate);
 
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
@@ -2581,7 +2584,7 @@ void DesktopLOKTest::testInsertCertificate_PEM_ODT()
     }
 
     {
-        readFileIntoByteVector("test-cert-chain-3.pem", aCertificate);
+        readFileIntoByteVector(u"test-cert-chain-3.pem", aCertificate);
 
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
@@ -2589,8 +2592,8 @@ void DesktopLOKTest::testInsertCertificate_PEM_ODT()
     }
 
     {
-        readFileIntoByteVector("test-cert-signing.pem", aCertificate);
-        readFileIntoByteVector("test-PK-signing.pem", aPrivateKey);
+        readFileIntoByteVector(u"test-cert-signing.pem", aCertificate);
+        readFileIntoByteVector(u"test-PK-signing.pem", aPrivateKey);
 
         bool bResult = pDocument->m_pDocumentClass->insertCertificate(pDocument,
                             aCertificate.data(), int(aCertificate.size()),
@@ -2622,7 +2625,7 @@ void DesktopLOKTest::testInsertCertificate_PEM_DOCX()
     std::vector<unsigned char> aPrivateKey;
 
     {
-        readFileIntoByteVector("test-cert-chain-1.pem", aCertificate);
+        readFileIntoByteVector(u"test-cert-chain-1.pem", aCertificate);
 
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
@@ -2630,7 +2633,7 @@ void DesktopLOKTest::testInsertCertificate_PEM_DOCX()
     }
 
     {
-        readFileIntoByteVector("test-cert-chain-2.pem", aCertificate);
+        readFileIntoByteVector(u"test-cert-chain-2.pem", aCertificate);
 
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
@@ -2638,7 +2641,7 @@ void DesktopLOKTest::testInsertCertificate_PEM_DOCX()
     }
 
     {
-        readFileIntoByteVector("test-cert-chain-3.pem", aCertificate);
+        readFileIntoByteVector(u"test-cert-chain-3.pem", aCertificate);
 
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
@@ -2646,8 +2649,8 @@ void DesktopLOKTest::testInsertCertificate_PEM_DOCX()
     }
 
     {
-        readFileIntoByteVector("test-cert-signing.pem", aCertificate);
-        readFileIntoByteVector("test-PK-signing.pem", aPrivateKey);
+        readFileIntoByteVector(u"test-cert-signing.pem", aCertificate);
+        readFileIntoByteVector(u"test-PK-signing.pem", aPrivateKey);
 
         bool bResult = pDocument->m_pDocumentClass->insertCertificate(pDocument,
                             aCertificate.data(), int(aCertificate.size()),
@@ -2675,7 +2678,7 @@ void DesktopLOKTest::testSignDocument_PEM_PDF()
     std::vector<unsigned char> aPrivateKey;
 
     {
-        readFileIntoByteVector("test-cert-chain-1.pem", aCertificate);
+        readFileIntoByteVector(u"test-cert-chain-1.pem", aCertificate);
 
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
@@ -2683,7 +2686,7 @@ void DesktopLOKTest::testSignDocument_PEM_PDF()
     }
 
     {
-        readFileIntoByteVector("test-cert-chain-2.pem", aCertificate);
+        readFileIntoByteVector(u"test-cert-chain-2.pem", aCertificate);
 
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
@@ -2691,7 +2694,7 @@ void DesktopLOKTest::testSignDocument_PEM_PDF()
     }
 
     {
-        readFileIntoByteVector("test-cert-chain-3.pem", aCertificate);
+        readFileIntoByteVector(u"test-cert-chain-3.pem", aCertificate);
 
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
@@ -2704,8 +2707,8 @@ void DesktopLOKTest::testSignDocument_PEM_PDF()
 
     Scheduler::ProcessEventsToIdle();
 
-    readFileIntoByteVector("test-cert-signing.pem", aCertificate);
-    readFileIntoByteVector("test-PK-signing.pem", aPrivateKey);
+    readFileIntoByteVector(u"test-cert-signing.pem", aCertificate);
+    readFileIntoByteVector(u"test-PK-signing.pem", aPrivateKey);
 
     LibLibreOffice_Impl aOffice;
     bool bResult = aOffice.m_pOfficeClass->signDocument(&aOffice, aTempFile.GetURL().toUtf8().getStr(),
@@ -2821,7 +2824,7 @@ void DesktopLOKTest::testComplexSelection()
 
     // Paste an image.
     OUString aFileURL;
-    createFileURL("paste.jpg", aFileURL);
+    createFileURL(u"paste.jpg", aFileURL);
     std::ifstream aImageStream(aFileURL.toUtf8().copy(strlen("file://")).getStr());
     std::vector<char> aImageContents((std::istreambuf_iterator<char>(aImageStream)), std::istreambuf_iterator<char>());
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "image/jpeg", aImageContents.data(), aImageContents.size()));

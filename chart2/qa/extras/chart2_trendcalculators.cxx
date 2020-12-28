@@ -64,7 +64,7 @@ private:
 void Chart2TrendCalculators::setUp()
 {
     ChartTest::setUp();
-    load("/chart2/qa/extras/data/ods/", "trend_calculators.ods");
+    load(u"/chart2/qa/extras/data/ods/", "trend_calculators.ods");
 }
 
 void Chart2TrendCalculators::tearDown()

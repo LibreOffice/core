@@ -281,7 +281,7 @@ void OMySQLTable::alterColumnType(sal_Int32 nNewType, const OUString& _rColName,
 
 OUString OMySQLTable::getTypeCreatePattern() const { return "(M,D)"; }
 
-void OMySQLTable::alterDefaultValue(const OUString& _sNewDefault, const OUString& _rColName)
+void OMySQLTable::alterDefaultValue(std::u16string_view _sNewDefault, const OUString& _rColName)
 {
     const OUString sQuote = getMetaData()->getIdentifierQuoteString();
     OUString sSql = getAlterTableColumnPart() + " ALTER " + ::dbtools::quoteName(sQuote, _rColName)

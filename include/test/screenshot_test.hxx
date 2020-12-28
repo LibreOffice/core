@@ -85,7 +85,7 @@ public:
     /// - lines starting with '#' are treated as comment
     /// - all other lines should contain a *.ui filename in the same
     ///   notation as in the dialog constructors(see code)
-    void processDialogBatchFile(const OUString& rFile);
+    void processDialogBatchFile(std::u16string_view rFile);
 
     /// const access to known dialogs
     const mapType& getKnownDialogs() const { return maKnownDialogs; }

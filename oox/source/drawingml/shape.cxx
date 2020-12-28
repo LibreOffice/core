@@ -1578,7 +1578,7 @@ void Shape::keepDiagramDrawing(XmlFilterBase& rFilterBase, const OUString& rFrag
     maDiagramDoms.realloc(length + 1);
 
     diagramDrawing[0] <<= rFilterBase.importFragment(rFragmentPath);
-    diagramDrawing[1] <<= resolveRelationshipsOfTypeFromOfficeDoc(rFilterBase, rFragmentPath, "image");
+    diagramDrawing[1] <<= resolveRelationshipsOfTypeFromOfficeDoc(rFilterBase, rFragmentPath, u"image");
 
     beans::PropertyValue* pValue = maDiagramDoms.getArray();
     pValue[length].Name = "OOXDrawing";
@@ -1829,7 +1829,7 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                 chart::ChartSpaceFragment *pChartSpaceFragment = new chart::ChartSpaceFragment(
                         rFilter, mxChartShapeInfo->maFragmentPath, aModel );
                 const OUString aThemeOverrideFragmentPath( pChartSpaceFragment->
-                        getFragmentPathFromFirstTypeFromOfficeDoc("themeOverride") );
+                        getFragmentPathFromFirstTypeFromOfficeDoc(u"themeOverride") );
                 rFilter.importFragment( pChartSpaceFragment );
                 ::oox::ppt::PowerPointImport *pPowerPointImport =
                     dynamic_cast< ::oox::ppt::PowerPointImport* >(&rFilter);
@@ -2005,7 +2005,7 @@ EffectProperties Shape::getActualEffectProperties(const Theme* pTheme) const
     return aEffectProperties;
 }
 
-uno::Sequence< uno::Sequence< uno::Any > >  Shape::resolveRelationshipsOfTypeFromOfficeDoc(core::XmlFilterBase& rFilter, const OUString& sFragment, const OUString& sType )
+uno::Sequence< uno::Sequence< uno::Any > >  Shape::resolveRelationshipsOfTypeFromOfficeDoc(core::XmlFilterBase& rFilter, const OUString& sFragment, std::u16string_view sType )
 {
     uno::Sequence< uno::Sequence< uno::Any > > xRelListTemp;
     sal_Int32 counter = 0;

@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <set>
+#include <string_view>
 
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -131,7 +132,7 @@ private:
     void parseXcsXcuIniLayer(
         int layer, OUString const & url, bool recordAdditions);
 
-    void parseResLayer(int layer, OUString const & url);
+    void parseResLayer(int layer, std::u16string_view url);
 
     void parseModificationLayer(int layer, OUString const & url);
 

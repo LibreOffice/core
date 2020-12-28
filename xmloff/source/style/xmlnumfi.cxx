@@ -43,6 +43,7 @@
 #include <xmloff/languagetagodf.hxx>
 
 #include <memory>
+#include <string_view>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -1212,7 +1213,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
         return;
 
     LanguageTag aLanguageTag( OUString(), aNatNumAttr.Locale.Language,
-                OUString(), aNatNumAttr.Locale.Country);
+                std::u16string_view(), aNatNumAttr.Locale.Country);
     aNatNumAttr.Locale = aLanguageTag.getLocale( false);
 
     // NatNum12 spell out formula (cardinal, ordinal, ordinal-feminine etc.)

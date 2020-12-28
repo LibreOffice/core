@@ -368,7 +368,7 @@ static const SwBoxAutoFormat* lcl_FindCellStyle(SwDoc& rDoc, std::u16string_view
 }
 
 sal_uInt32 SwStyleSheetIterator::SwPoolFormatList::FindName(SfxStyleFamily eFam,
-                                                         const OUString &rName)
+                                                         std::u16string_view rName)
 {
     if(!maImpl.empty())
     {
@@ -423,7 +423,7 @@ void SwStyleSheetIterator::SwPoolFormatList::rehash()
 }
 
 void SwStyleSheetIterator::SwPoolFormatList::RemoveName(SfxStyleFamily eFam,
-                                                     const OUString &rName)
+                                                     std::u16string_view rName)
 {
     sal_uInt32 nTmpPos = FindName( eFam, rName );
     if( nTmpPos < maImpl.size() )
@@ -435,7 +435,7 @@ void SwStyleSheetIterator::SwPoolFormatList::RemoveName(SfxStyleFamily eFam,
 }
 
 // Add Strings to the list of templates
-void SwStyleSheetIterator::SwPoolFormatList::Append( char cChar, const OUString& rStr )
+void SwStyleSheetIterator::SwPoolFormatList::Append( char cChar, std::u16string_view rStr )
 {
     const OUString aStr = OUStringChar(cChar) + rStr;
 

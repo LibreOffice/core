@@ -33,6 +33,7 @@
 
 #include <comphelper/propertysequence.hxx>
 
+#include <string_view>
 #include <unordered_map>
 
 using namespace com::sun::star::uno;
@@ -48,7 +49,7 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper<XNameAccess
 {
     osl::Mutex aMutex;
     public:
-                                  ConfigurationAccess_UICategory( const OUString& aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XComponentContext >& rxContext );
+                                  ConfigurationAccess_UICategory( std::u16string_view aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XComponentContext >& rxContext );
         virtual                   ~ConfigurationAccess_UICategory() override;
 
         // XNameAccess
@@ -96,9 +97,10 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper<XNameAccess
 
 //  XInterface, XTypeProvider
 
-ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const OUString& aModuleName, const Reference< XNameAccess >& rGenericUICategories, const Reference< XComponentContext >& rxContext ) :
+ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( std::u16string_view aModuleName, const Reference< XNameAccess >& rGenericUICategories, const Reference< XComponentContext >& rxContext ) :
     // Create configuration hierarchical access name
-    m_aConfigCategoryAccess( "/org.openoffice.Office.UI." + aModuleName + "/Commands/Categories"),
+    m_aConfigCategoryAccess(
+        OUString::Concat("/org.openoffice.Office.UI.") + aModuleName + "/Commands/Categories"),
     m_aPropUIName( "Name" ),
     m_xGenericUICategories( rGenericUICategories ),
     m_xConfigProvider(theDefaultProvider::get( rxContext )),

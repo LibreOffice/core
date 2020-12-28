@@ -209,14 +209,14 @@ namespace validation
         return ( END == eCurrentState );
     }
 
-    bool NumberValidator::isValidNumericFragment( const OUString& _rText )
+    bool NumberValidator::isValidNumericFragment( std::u16string_view _rText )
     {
-        if ( _rText.isEmpty() )
+        if ( _rText.empty() )
             // empty strings are always allowed
             return true;
 
         // normalize the string
-        OUString sNormalized = "_" + _rText + "_";
+        OUString sNormalized = OUString::Concat("_") + _rText + "_";
 
         return implValidateNormalized( sNormalized );
     }

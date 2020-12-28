@@ -20,6 +20,10 @@
 #ifndef INCLUDED_REGISTRY_SOURCE_KEYIMPL_HXX
 #define INCLUDED_REGISTRY_SOURCE_KEYIMPL_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "regimpl.hxx"
 #include <rtl/ustring.hxx>
 
@@ -54,38 +58,38 @@ public:
 
     RegError    deleteKey(const OUString& keyName);
 
-    RegError    getValueInfo(const OUString& valueName,
+    RegError    getValueInfo(std::u16string_view valueName,
                              RegValueType* pValueTye,
                              sal_uInt32* pValueSize) const;
 
-    RegError    setValue(const OUString& valueName,
+    RegError    setValue(std::u16string_view valueName,
                          RegValueType vType,
                          RegValue value,
                          sal_uInt32 vSize);
 
-    RegError    setLongListValue(const OUString& valueName,
+    RegError    setLongListValue(std::u16string_view valueName,
                                  sal_Int32 const * pValueList,
                                  sal_uInt32 len);
 
-    RegError    setStringListValue(const OUString& valueName,
+    RegError    setStringListValue(std::u16string_view valueName,
                                    char** pValueList,
                                   sal_uInt32 len);
 
-    RegError    setUnicodeListValue(const OUString& valueName,
+    RegError    setUnicodeListValue(std::u16string_view valueName,
                                    sal_Unicode** pValueList,
                                   sal_uInt32 len);
 
-    RegError    getValue(const OUString& valueName, RegValue value) const;
+    RegError    getValue(std::u16string_view valueName, RegValue value) const;
 
-    RegError    getLongListValue(const OUString& valueName,
+    RegError    getLongListValue(std::u16string_view valueName,
                                   sal_Int32** pValueList,
                                  sal_uInt32* pLen) const;
 
-    RegError    getStringListValue(const OUString& valueName,
+    RegError    getStringListValue(std::u16string_view valueName,
                                     char*** pValueList,
                                    sal_uInt32* pLen) const;
 
-    RegError    getUnicodeListValue(const OUString& valueName,
+    RegError    getUnicodeListValue(std::u16string_view valueName,
                                      sal_Unicode*** pValueList,
                                     sal_uInt32* pLen) const;
 

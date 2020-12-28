@@ -478,7 +478,7 @@ bool JobData::hasCorrectContext(const OUString& rModuleIdent) const
 }
 
 std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                                                       const OUString&                                    sEvent )
+                                                                       std::u16string_view                                sEvent )
 {
     // create a config access to "/org.openoffice.Office.Jobs/Events"
     ConfigAccess aConfig(rxContext, "/org.openoffice.Office.Jobs/Events");
@@ -491,7 +491,7 @@ std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Referen
         return std::vector< OUString >();
 
     // check if the given event exist inside list of registered ones
-    OUString sPath(sEvent + "/JobList");
+    OUString sPath(OUString::Concat(sEvent) + "/JobList");
     if (!xEventRegistry->hasByHierarchicalName(sPath))
         return std::vector< OUString >();
 

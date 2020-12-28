@@ -30,7 +30,7 @@ void UnoApiTest::setUp()
     CPPUNIT_ASSERT_MESSAGE("no desktop!", mxDesktop.is());
 }
 
-void UnoApiTest::createFileURL(const OUString& aFileBase, OUString& rFilePath)
+void UnoApiTest::createFileURL(std::u16string_view aFileBase, OUString& rFilePath)
 {
     rFilePath = m_directories.getSrcRootURL() + m_aBaseString + "/" + aFileBase;
 }

@@ -40,7 +40,7 @@ namespace sw::mark
     {
         if ( rName.getLength() == 0 )
         {
-            SetName( MarkBase::GenerateNewName("__Annotation__") );
+            SetName( MarkBase::GenerateNewName(u"__Annotation__") );
         }
     }
 

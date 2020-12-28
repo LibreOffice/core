@@ -9,6 +9,8 @@
 
 #include <sal/config.h>
 
+#include <string_view>
+
 #include <test/calc_unoapi_test.hxx>
 
 #include <comphelper/propertyvalue.hxx>
@@ -91,44 +93,48 @@ void ScShapeTest::saveAndReload(css::uno::Reference<css::lang::XComponent>& xCom
     xComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.sheet.SpreadsheetDocument");
 }
 
-static void lcl_AssertRectEqualWithTolerance(const OString& sInfo,
+static void lcl_AssertRectEqualWithTolerance(std::string_view sInfo,
                                              const tools::Rectangle& rExpected,
                                              const tools::Rectangle& rActual,
                                              const sal_Int32 nTolerance)
 {
     // Left
-    OString sMsg = sInfo + " Left expected " + OString::number(rExpected.Left()) + " actual "
-                   + OString::number(rActual.Left()) + " Tolerance " + OString::number(nTolerance);
+    OString sMsg = OString::Concat(sInfo) + " Left expected " + OString::number(rExpected.Left())
+                   + " actual " + OString::number(rActual.Left()) + " Tolerance "
+                   + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
                            std::abs(rExpected.Left() - rActual.Left()) <= nTolerance);
 
     // Top
-    sMsg = sInfo + " Top expected " + OString::number(rExpected.Top()) + " actual "
+    sMsg = OString::Concat(sInfo) + " Top expected " + OString::number(rExpected.Top()) + " actual "
            + OString::number(rActual.Top()) + " Tolerance " + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.Top() - rActual.Top()) <= nTolerance);
 
     // Width
-    sMsg = sInfo + " Width expected " + OString::number(rExpected.GetWidth()) + " actual "
-           + OString::number(rActual.GetWidth()) + " Tolerance " + OString::number(nTolerance);
+    sMsg = OString::Concat(sInfo) + " Width expected " + OString::number(rExpected.GetWidth())
+           + " actual " + OString::number(rActual.GetWidth()) + " Tolerance "
+           + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
                            std::abs(rExpected.GetWidth() - rActual.GetWidth()) <= nTolerance);
 
     // Height
-    sMsg = sInfo + " Height expected " + OString::number(rExpected.GetHeight()) + " actual "
-           + OString::number(rActual.GetHeight()) + " Tolerance " + OString::number(nTolerance);
+    sMsg = OString::Concat(sInfo) + " Height expected " + OString::number(rExpected.GetHeight())
+           + " actual " + OString::number(rActual.GetHeight()) + " Tolerance "
+           + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
                            std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
 }
 
-static void lcl_AssertPointEqualWithTolerance(const OString& sInfo, const Point rExpected,
+static void lcl_AssertPointEqualWithTolerance(std::string_view sInfo, const Point rExpected,
                                               const Point rActual, const sal_Int32 nTolerance)
 {
     // X
-    OString sMsg = sInfo + " X expected " + OString::number(rExpected.X()) + " actual "
-                   + OString::number(rActual.X()) + " Tolerance " + OString::number(nTolerance);
+    OString sMsg = OString::Concat(sInfo) + " X expected " + OString::number(rExpected.X())
+                   + " actual " + OString::number(rActual.X()) + " Tolerance "
+                   + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.X() - rActual.X()) <= nTolerance);
     // Y
-    sMsg = sInfo + " Y expected " + OString::number(rExpected.Y()) + " actual "
+    sMsg = OString::Concat(sInfo) + " Y expected " + OString::number(rExpected.Y()) + " actual "
            + OString::number(rActual.Y()) + " Tolerance " + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.Y() - rActual.Y()) <= nTolerance);
 }
@@ -325,7 +331,7 @@ void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
 
     // Load an empty document.
     OUString aFileURL;
-    createFileURL("ManualColWidthRowHeight.ods", aFileURL);
+    createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
@@ -398,7 +404,7 @@ void ScShapeTest::testTdf137576_LogicRectInNewMeasureline()
 
     // Load an empty document
     OUString aFileURL;
-    createFileURL("ManualColWidthRowHeight.ods", aFileURL);
+    createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
@@ -439,7 +445,7 @@ void ScShapeTest::testMeasurelineHideColSave()
     // D11 and end in cell I5. Error was, that after hiding col A and saving, start and end point
     // position were lost.
     OUString aFileURL;
-    createFileURL("measurelineHideColSave.ods", aFileURL);
+    createFileURL(u"measurelineHideColSave.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
@@ -506,7 +512,7 @@ void ScShapeTest::testHideColsShow()
     // to column E
 
     OUString aFileURL;
-    createFileURL("hideColsShow.ods", aFileURL);
+    createFileURL(u"hideColsShow.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
@@ -561,7 +567,7 @@ void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
     // The document contains a 90deg rotated, cell-anchored rectangle in column D. Insert 2 columns
     // after column B, save and reload. The shape was not correctly moved to column F.
     OUString aFileURL;
-    createFileURL("tdf138138_MoveCellWithRotatedShape.ods", aFileURL);
+    createFileURL(u"tdf138138_MoveCellWithRotatedShape.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
@@ -630,7 +636,7 @@ void ScShapeTest::testLoadVerticalFlip()
     // The document has a cell anchored custom shape with vertical flip. Error was, that the
     // flip was lost on loading.
     OUString aFileURL;
-    createFileURL("loadVerticalFlip.ods", aFileURL);
+    createFileURL(u"loadVerticalFlip.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
@@ -659,7 +665,7 @@ void ScShapeTest::testTdf117948_CollapseBeforeShape()
     // group, save and reload. The original error was, that the line was on wrong position after reload.
     // After the fix for 'resize with cell', the custom shape had wrong position and size too.
     OUString aFileURL;
-    createFileURL("tdf117948_CollapseBeforeShape.ods", aFileURL);
+    createFileURL(u"tdf117948_CollapseBeforeShape.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
@@ -736,7 +742,7 @@ void ScShapeTest::testTdf137355_UndoHideRows()
     // Error was, that hiding rows 3 to 6 and undo that action "lost" the shape.
     // Actually it was not lost but hidden.
     OUString aFileURL;
-    createFileURL("tdf137355_UndoHideRows.ods", aFileURL);
+    createFileURL(u"tdf137355_UndoHideRows.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
@@ -791,7 +797,7 @@ void ScShapeTest::testTdf115655_HideDetail()
     // Error was, that after collapsing the group, save and reload, and expanding the group, the image
     // was "lost". Actually is was resized to zero height.
     OUString aFileURL;
-    createFileURL("tdf115655_HideDetail.ods", aFileURL);
+    createFileURL(u"tdf115655_HideDetail.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
@@ -862,7 +868,7 @@ void ScShapeTest::testFitToCellSize()
     // FitToCellSize should resize and position the shape so,
     // that it fits into its anchor cell. That did not happened.
     OUString aFileURL;
-    createFileURL("tdf119191_FitToCellSize.ods", aFileURL);
+    createFileURL(u"tdf119191_FitToCellSize.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
@@ -912,7 +918,7 @@ void ScShapeTest::testCustomShapeCellAnchoredRotatedShape()
     // and sheared. Error was, that the shape lost position and size on
     // loading.
     OUString aFileURL;
-    createFileURL("tdf119191_transformedShape.ods", aFileURL);
+    createFileURL(u"tdf119191_transformedShape.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 

@@ -40,7 +40,7 @@ void BlocklistParserTest::testParse()
 {
     std::vector<DriverInfo> aDriveInfos;
 
-    Parser aBlocklistParser(m_directories.getURLFromSrc("vcl/qa/cppunit/") + "test_blocklist_parse.xml",
+    Parser aBlocklistParser(m_directories.getURLFromSrc(u"vcl/qa/cppunit/") + "test_blocklist_parse.xml",
         aDriveInfos, VersionType::OpenGL);
     aBlocklistParser.parse();
 
@@ -98,7 +98,7 @@ void BlocklistParserTest::testEvaluate()
 {
     std::vector<DriverInfo> aDriveInfos;
 
-    Parser aBlocklistParser(m_directories.getURLFromSrc("vcl/qa/cppunit/") + "test_blocklist_evaluate.xml",
+    Parser aBlocklistParser(m_directories.getURLFromSrc(u"vcl/qa/cppunit/") + "test_blocklist_evaluate.xml",
         aDriveInfos, VersionType::OpenGL);
     aBlocklistParser.parse();
 
@@ -150,7 +150,7 @@ void BlocklistParserTest::testVulkan()
 {
     std::vector<DriverInfo> aDriveInfos;
 
-    Parser aBlocklistParser(m_directories.getURLFromSrc("vcl/qa/cppunit/") + "test_blocklist_vulkan.xml",
+    Parser aBlocklistParser(m_directories.getURLFromSrc(u"vcl/qa/cppunit/") + "test_blocklist_vulkan.xml",
         aDriveInfos, VersionType::Vulkan);
     aBlocklistParser.parse();
 

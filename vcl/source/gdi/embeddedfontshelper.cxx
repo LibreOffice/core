@@ -236,14 +236,14 @@ bool EmbeddedFontsHelper::sufficientTTFRights( const void* data, tools::Long siz
     return true; // no known restriction
 }
 
-OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamily family, FontItalic italic,
+OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontFamily family, FontItalic italic,
     FontWeight weight, FontPitch pitch, FontRights rights )
 {
     OUString path = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
     rtl::Bootstrap::expandMacros( path );
     path += "/user/temp/embeddedfonts/fromsystem/";
     osl::Directory::createPath( path );
-    OUString filename = familyName + "_" + OUString::number( family ) + "_" + OUString::number( italic )
+    OUString filename = OUString::Concat(familyName) + "_" + OUString::number( family ) + "_" + OUString::number( italic )
         + "_" + OUString::number( weight ) + "_" + OUString::number( pitch )
         + ".ttf"; // TODO is it always ttf?
     OUString url = path + filename;

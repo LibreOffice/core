@@ -45,13 +45,13 @@ void WpftCalcFilterTest::test()
     };
 
     doTest("com.sun.star.comp.Calc.MWAWCalcImportFilter",
-           "/writerperfect/qa/unit/data/calc/libmwaw/", aMWAWOptional);
+           u"/writerperfect/qa/unit/data/calc/libmwaw/", aMWAWOptional);
     doTest("com.sun.star.comp.Calc.MSWorksCalcImportFilter",
-           "/writerperfect/qa/unit/data/calc/libwps/", aWpsOptional);
+           u"/writerperfect/qa/unit/data/calc/libwps/", aWpsOptional);
     doTest("org.libreoffice.comp.Calc.NumbersImportFilter",
-           "/writerperfect/qa/unit/data/calc/libetonyek/", aEtonyekOptional);
+           u"/writerperfect/qa/unit/data/calc/libetonyek/", aEtonyekOptional);
     doTest("org.libreoffice.comp.Calc.StarOfficeCalcImportFilter",
-           "/writerperfect/qa/unit/data/calc/libstaroffice/");
+           u"/writerperfect/qa/unit/data/calc/libstaroffice/");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WpftCalcFilterTest);

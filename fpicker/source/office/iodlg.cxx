@@ -75,6 +75,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <string_view>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ui::dialogs;
@@ -142,20 +143,21 @@ namespace
     }
 
 
-    void SetFsysExtension_Impl( OUString& rFile, const OUString& rExtension )
+    void SetFsysExtension_Impl( OUString& rFile, std::u16string_view rExtension )
     {
         const sal_Int32 nDotPos{ rFile.lastIndexOf('.') };
         if (nDotPos>=0)
         {
-            if (!rExtension.isEmpty())
-                rFile = rFile.subView(0, nDotPos) + rExtension; // replace old extension with new (not empty) one
+            if (!rExtension.empty())
+                rFile = OUString::Concat(rFile.subView(0, nDotPos)) + rExtension; // replace old extension with new (not empty) one
             else if (nDotPos)
                 rFile = rFile.copy(0, nDotPos-1); // truncate extension (new one is empty)
             else
                 rFile.clear(); // Filename was just an extension
         }
-        else if (!rExtension.isEmpty())
-            rFile += "." + rExtension; // no extension was present, append new one if not empty
+        else if (!rExtension.empty())
+            rFile += OUString::Concat(".") + rExtension;
+                // no extension was present, append new one if not empty
     }
 
     void lcl_autoUpdateFileExtension( SvtFileDialog* _pDialog, const OUString& _rLastFilterExt )
@@ -2252,7 +2254,7 @@ bool SvtFileDialog::ContentGetTitle( const OUString& rURL, OUString& rTitle )
 }
 
 void SvtFileDialog::appendDefaultExtension(OUString& rFileName,
-                                           const OUString& rFilterDefaultExtension,
+                                           std::u16string_view rFilterDefaultExtension,
                                            const OUString& rFilterExtensions)
 {
     const OUString aType(rFilterExtensions.toAsciiLowerCase());
@@ -2275,7 +2277,7 @@ void SvtFileDialog::appendDefaultExtension(OUString& rFileName,
     }
     while (nPos>=0);
 
-    rFileName += "." + rFilterDefaultExtension;
+    rFileName += OUString::Concat(".") + rFilterDefaultExtension;
 }
 
 void SvtFileDialog::initDefaultPlaces( )

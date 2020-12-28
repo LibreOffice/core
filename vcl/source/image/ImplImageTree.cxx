@@ -99,12 +99,12 @@ OUString convertLcTo32Path(OUString const & rPath)
     return aResult;
 }
 
-OUString createPath(std::u16string_view name, sal_Int32 pos, OUString const & locale)
+OUString createPath(std::u16string_view name, sal_Int32 pos, std::u16string_view locale)
 {
-    return name.substr(0, pos + 1) + locale + name.substr(pos);
+    return OUString::Concat(name.substr(0, pos + 1)) + locale + name.substr(pos);
 }
 
-OUString getIconCacheUrl(OUString const & sVariant, ImageRequestParameters const & rParameters)
+OUString getIconCacheUrl(std::u16string_view sVariant, ImageRequestParameters const & rParameters)
 {
     OUString sUrl = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/"
         + rParameters.msStyle + "/" + sVariant + "/" + rParameters.msName;
@@ -112,7 +112,8 @@ OUString getIconCacheUrl(OUString const & sVariant, ImageRequestParameters const
     return sUrl;
 }
 
-OUString createIconCacheUrl(OUString const & sVariant, ImageRequestParameters const & rParameters)
+OUString createIconCacheUrl(
+    std::u16string_view sVariant, ImageRequestParameters const & rParameters)
 {
     OUString sUrl(getIconCacheUrl(sVariant, rParameters));
     OUString sDir = sUrl.copy(0, sUrl.lastIndexOf('/'));
@@ -359,7 +360,7 @@ OUString createVariant(ImageRequestParameters& rParameters)
     return aVariant;
 }
 
-bool loadDiskCachedVersion(OUString const & sVariant, ImageRequestParameters& rParameters)
+bool loadDiskCachedVersion(std::u16string_view sVariant, ImageRequestParameters& rParameters)
 {
     OUString sUrl(getIconCacheUrl(sVariant, rParameters));
     if (!urlExists(sUrl))
@@ -370,7 +371,7 @@ bool loadDiskCachedVersion(OUString const & sVariant, ImageRequestParameters& rP
     return true;
 }
 
-void cacheBitmapToDisk(OUString const & sVariant, ImageRequestParameters const & rParameters)
+void cacheBitmapToDisk(std::u16string_view sVariant, ImageRequestParameters const & rParameters)
 {
     OUString sUrl(createIconCacheUrl(sVariant, rParameters));
     vcl::PNGWriter aWriter(rParameters.mrBitmap);

@@ -27,10 +27,10 @@
 
 namespace test::detail
 {
-bool getArgument(OUString const& name, OUString* value)
+bool getArgument(std::u16string_view name, OUString* value)
 {
     OSL_ASSERT(value != nullptr);
-    return rtl::Bootstrap::get("arg-" + name, *value);
+    return rtl::Bootstrap::get(OUString::Concat("arg-") + name, *value);
 }
 }
 

@@ -63,6 +63,7 @@
 #include <map>
 #include <algorithm>
 #include <iterator>
+#include <string_view>
 
 namespace pcr
 {
@@ -195,7 +196,7 @@ namespace pcr
             return true;
         }
 
-        OUString lcl_getEventPropertyName( const OUString& _rListenerClassName, const OUString& _rMethodName )
+        OUString lcl_getEventPropertyName( std::u16string_view _rListenerClassName, std::u16string_view _rMethodName )
         {
             return _rListenerClassName + OUStringChar(';') + _rMethodName;
         }

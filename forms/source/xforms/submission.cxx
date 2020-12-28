@@ -49,6 +49,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <memory>
+#include <string_view>
 
 using com::sun::star::util::VetoException;
 using com::sun::star::form::submission::XSubmissionVetoListener;
@@ -381,9 +382,9 @@ sal_Int64 SAL_CALL Submission::getSomething(
 }
 
 
-static OUString lcl_message( const OUString& rID, const OUString& rText )
+static OUString lcl_message( std::u16string_view rID, std::u16string_view rText )
 {
-    OUString aMessage = "XForms submission '" + rID + "' failed" + rText + ".";
+    OUString aMessage = OUString::Concat("XForms submission '") + rID + "' failed" + rText + ".";
     return aMessage;
 }
 
@@ -410,7 +411,7 @@ void SAL_CALL Submission::submitWithInteraction(
     if( ! bValid )
     {
         InvalidDataOnSubmitException aInvalidDataException(
-            lcl_message(sID, " due to invalid data" ), *this );
+            lcl_message(sID, u" due to invalid data" ), *this );
 
         if( _rxHandler.is() )
         {
@@ -462,7 +463,7 @@ void SAL_CALL Submission::submitWithInteraction(
         css::uno::Any anyEx = cppu::getCaughtException();
         // exception caught: re-throw as wrapped target exception
         throw WrappedTargetException(
-            lcl_message( sID, " due to exception being thrown" ),
+            lcl_message( sID, u" due to exception being thrown" ),
             *this, anyEx );
     }
 
@@ -470,7 +471,7 @@ void SAL_CALL Submission::submitWithInteraction(
     {
         // other failure: throw wrapped target exception, too.
         throw WrappedTargetException(
-            lcl_message( sID, OUString() ), *this, Any() );
+            lcl_message( sID, std::u16string_view() ), *this, Any() );
     }
     mxModel->rebuild();
 }

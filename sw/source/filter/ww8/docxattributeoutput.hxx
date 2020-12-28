@@ -325,7 +325,7 @@ public:
     void FontPitchType( FontPitch ePitch ) const;
 
     /// Write out the font into the document, if it's an embedded font.
-    void EmbedFont( const OUString& name, FontFamily family, FontPitch pitch );
+    void EmbedFont( std::u16string_view name, FontFamily family, FontPitch pitch );
 
     /// Definition of a numbering instance.
     virtual void NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule ) override;
@@ -435,7 +435,7 @@ private:
     void WriteFFData( const FieldInfos& rInfos );
     void WritePendingPlaceholder();
 
-    void EmbedFontStyle( const OUString& name, int tag, FontFamily family, FontItalic italic, FontWeight weight,
+    void EmbedFontStyle( std::u16string_view name, int tag, FontFamily family, FontItalic italic, FontWeight weight,
         FontPitch pitch );
 
     /**

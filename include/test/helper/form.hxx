@@ -10,12 +10,15 @@
 #ifndef INCLUDED_TEST_HELPER_FORM_HXX
 #define INCLUDED_TEST_HELPER_FORM_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <sal/config.h>
 #include <sal/types.h>
 #include <test/testdllapi.hxx>
 
@@ -49,7 +52,7 @@ css::uno::Reference<css::drawing::XControlShape> OOO_DLLPUBLIC_TEST createComman
  * @return  The created XControlShape.
  */
 css::uno::Reference<css::drawing::XControlShape> OOO_DLLPUBLIC_TEST createControlShape(
-    const css::uno::Reference<css::lang::XComponent>& r_xComponent, const OUString& r_aKind,
+    const css::uno::Reference<css::lang::XComponent>& r_xComponent, std::u16string_view r_aKind,
     const sal_Int32 nX, const sal_Int32 nY, const sal_Int32 nHeight, const sal_Int32 nWidth);
 
 } // namespace form

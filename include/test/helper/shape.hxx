@@ -11,6 +11,9 @@
 #define INCLUDED_TEST_HELPER_SHAPE_HXX
 
 #include <sal/config.h>
+
+#include <string_view>
+
 #include <sal/types.h>
 #include <test/testdllapi.hxx>
 
@@ -76,10 +79,9 @@ createRectangle(const css::uno::Reference<css::lang::XComponent>& r_xComponent, 
  * @param nWidth        The width of the shape.
  * @return  The created XShape.
  */
-css::uno::Reference<css::drawing::XShape>
-    OOO_DLLPUBLIC_TEST createShape(const css::uno::Reference<css::lang::XComponent>& r_xComponent,
-                                   const OUString& r_aKind, const sal_Int32 nX, const sal_Int32 nY,
-                                   const sal_Int32 nWidth, const sal_Int32 nHeight);
+css::uno::Reference<css::drawing::XShape> OOO_DLLPUBLIC_TEST createShape(
+    const css::uno::Reference<css::lang::XComponent>& r_xComponent, std::u16string_view r_aKind,
+    const sal_Int32 nX, const sal_Int32 nY, const sal_Int32 nWidth, const sal_Int32 nHeight);
 
 } // namespace shape
 } // namespace helper

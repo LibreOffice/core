@@ -81,7 +81,7 @@ HelpParser::HelpParser( const OString &rHelpFile )
 bool HelpParser::CreatePO(
 /*****************************************************************************/
     const OString &rPOFile_in, const OString &sHelpFile,
-    XMLFile* pXmlFile, const OString &rGsi1){
+    XMLFile* pXmlFile, std::string_view rGsi1){
     SimpleXMLParser aParser;
     //TODO: explicit BOM handling?
 

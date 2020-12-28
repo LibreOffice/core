@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <string_view>
 
 #include <swmodeltestbase.hxx>
 
@@ -95,12 +96,12 @@ protected:
 
 protected:
     /// Copy&paste helper.
-    bool paste(const OUString& rFilename, const uno::Reference<text::XTextRange>& xTextRange)
+    bool paste(std::u16string_view rFilename, const uno::Reference<text::XTextRange>& xTextRange)
     {
         uno::Reference<document::XFilter> xFilter(m_xSFactory->createInstance("com.sun.star.comp.Writer.WriterFilter"), uno::UNO_QUERY_THROW);
         uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
         xImporter->setTargetDocument(mxComponent);
-        std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(m_directories.getURLFromSrc("/sw/qa/extras/ooxmlexport/data/") + rFilename, StreamMode::READ);
+        std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(m_directories.getURLFromSrc(u"/sw/qa/extras/ooxmlexport/data/") + rFilename, StreamMode::READ);
         uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
         uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
         {
@@ -1096,7 +1097,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94374)
     uno::Reference<text::XTextRange> xText = xTextDocument->getText();
     uno::Reference<text::XTextRange> xEnd = xText->getEnd();
     // This failed: it wasn't possible to insert a DOCX document into an existing Writer one.
-    CPPUNIT_ASSERT(paste("tdf94374.docx", xEnd));
+    CPPUNIT_ASSERT(paste(u"tdf94374.docx", xEnd));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf83300, "tdf83300.docx")

@@ -21,6 +21,8 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XEHELPER_HXX
 
 #include <memory>
+#include <string_view>
+
 #include "ftools.hxx"
 #include <rangelst.hxx>
 #include "xladdress.hxx"
@@ -410,7 +412,7 @@ public:
         @param pTableName  Optional pointer to a table name to be encoded in this URL. */
     static OUString EncodeUrl( const XclExpRoot& rRoot, const OUString& rAbsUrl, const OUString* pTableName = nullptr );
     /** Encodes and returns the passed DDE link to an Excel like DDE link. */
-    static OUString EncodeDde( const OUString& rApplic, const OUString& rTopic );
+    static OUString EncodeDde( std::u16string_view rApplic, std::u16string_view rTopic );
 };
 
 class ScMatrix;

@@ -10,6 +10,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_TABLE_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_TABLE_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "Tables.hxx"
 
 #include <connectivity/TTableHelper.hxx>
@@ -31,7 +35,7 @@ namespace connectivity::firebird
              * Get the ALTER TABLE [TABLE] ALTER [COLUMN] String.
              * Includes a trailing space.
              */
-            OUString getAlterTableColumn(const OUString& rColumn);
+            OUString getAlterTableColumn(std::u16string_view rColumn);
 
         protected:
             void construct() override;

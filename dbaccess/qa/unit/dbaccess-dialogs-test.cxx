@@ -51,7 +51,7 @@ VclPtr<VclAbstractDialog> DbaccessDialogsTest::createDialogByID(sal_uInt32 /*nID
 void DbaccessDialogsTest::openAnyDialog()
 {
     /// process input file containing the UXMLDescriptions of the dialogs to dump
-    processDialogBatchFile("dbaccess/qa/unit/data/dbaccess-dialogs-test.txt");
+    processDialogBatchFile(u"dbaccess/qa/unit/data/dbaccess-dialogs-test.txt");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DbaccessDialogsTest);

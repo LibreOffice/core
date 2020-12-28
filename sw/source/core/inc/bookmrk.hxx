@@ -24,6 +24,8 @@
 #include <sfx2/Metadatable.hxx>
 #include <vcl/keycod.hxx>
 #include <memory>
+#include <string_view>
+
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <tools/ref.hxx>
@@ -111,7 +113,7 @@ namespace sw::mark {
             std::unique_ptr<SwPosition> m_pPos1;
             std::unique_ptr<SwPosition> m_pPos2;
             OUString m_aName;
-            static OUString GenerateNewName(const OUString& rPrefix);
+            static OUString GenerateNewName(std::u16string_view rPrefix);
 
             css::uno::WeakReference< css::text::XTextContent> m_wXBookmark;
         };

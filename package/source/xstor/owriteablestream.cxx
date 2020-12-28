@@ -984,7 +984,7 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
             if ( m_xOrigRelInfoStream.is() )
                 m_aOrigRelInfo = ::comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(
                                         m_xOrigRelInfoStream,
-                                        "_rels/*.rels",
+                                        u"_rels/*.rels",
                                         m_xContext );
 
             // in case of success the stream must be thrown away, that means that the OrigRelInfo is initialized
@@ -1009,7 +1009,7 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
             if ( m_xNewRelInfoStream.is() )
                 m_aNewRelInfo = ::comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(
                                         m_xNewRelInfoStream,
-                                        "_rels/*.rels",
+                                        u"_rels/*.rels",
                                         m_xContext );
 
             m_nRelInfoStatus = RELINFO_CHANGED_STREAM_READ;
@@ -1496,7 +1496,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
     CreateReadonlyCopyBasedOnData( xDataToCopy, m_aProps, xTargetStream );
 }
 
-void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStorage >& xRelStorage, const OUString& aOrigStreamName, const OUString& aNewStreamName )
+void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStorage >& xRelStorage, std::u16string_view aOrigStreamName, std::u16string_view aNewStreamName )
 {
     // at this point of time the old stream must be already cleaned
     OSL_ENSURE( m_nStorageType == embed::StorageFormats::OFOPXML, "The method should be used only with OFOPXML format!" );
@@ -1504,17 +1504,17 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         return;
 
-    OSL_ENSURE( !aOrigStreamName.isEmpty() && !aNewStreamName.isEmpty() && xRelStorage.is(),
+    OSL_ENSURE( !aOrigStreamName.empty() && !aNewStreamName.empty() && xRelStorage.is(),
                 "Wrong relation persistence information is provided!" );
 
-    if ( !xRelStorage.is() || aOrigStreamName.isEmpty() || aNewStreamName.isEmpty() )
+    if ( !xRelStorage.is() || aOrigStreamName.empty() || aNewStreamName.empty() )
         throw uno::RuntimeException();
 
     if ( m_nRelInfoStatus == RELINFO_BROKEN || m_nRelInfoStatus == RELINFO_CHANGED_BROKEN )
         throw io::IOException(); // TODO:
 
-    OUString aOrigRelStreamName = aOrigStreamName + ".rels";
-    OUString aNewRelStreamName = aNewStreamName + ".rels";
+    OUString aOrigRelStreamName = OUString::Concat(aOrigStreamName) + ".rels";
+    OUString aNewRelStreamName = OUString::Concat(aNewStreamName) + ".rels";
 
     bool bRenamed = aOrigRelStreamName != aNewRelStreamName;
     if ( m_nRelInfoStatus == RELINFO_CHANGED

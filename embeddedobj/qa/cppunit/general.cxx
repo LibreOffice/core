@@ -69,7 +69,7 @@ CPPUNIT_TEST_FIXTURE(EmbeddedobjGeneralTest, testInsertFileConfig)
     uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     comphelper::EmbeddedObjectContainer aContainer(xStorage);
     OUString aFileName
-        = m_directories.getURLFromSrc("embeddedobj/qa/cppunit/data/insert-file-config.doc");
+        = m_directories.getURLFromSrc(u"embeddedobj/qa/cppunit/data/insert-file-config.doc");
     uno::Sequence<beans::PropertyValue> aMedium{ comphelper::makePropertyValue("URL", aFileName) };
     OUString aName("Object 1");
     uno::Reference<embed::XEmbeddedObject> xObject
@@ -102,7 +102,7 @@ CPPUNIT_TEST_FIXTURE(EmbeddedobjGeneralTest, testInsertFileConfigVsdx)
     uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     comphelper::EmbeddedObjectContainer aContainer(xStorage);
     OUString aFileName
-        = m_directories.getURLFromSrc("embeddedobj/qa/cppunit/data/insert-file-config.vsdx");
+        = m_directories.getURLFromSrc(u"embeddedobj/qa/cppunit/data/insert-file-config.vsdx");
     uno::Sequence<beans::PropertyValue> aMedium{ comphelper::makePropertyValue("URL", aFileName) };
     OUString aName("Object 1");
     uno::Reference<embed::XEmbeddedObject> xObject
@@ -135,7 +135,7 @@ CPPUNIT_TEST_FIXTURE(EmbeddedobjGeneralTest, testInsertFileConfigPdf)
     uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     comphelper::EmbeddedObjectContainer aContainer(xStorage);
     OUString aFileName
-        = m_directories.getURLFromSrc("embeddedobj/qa/cppunit/data/insert-file-config.pdf");
+        = m_directories.getURLFromSrc(u"embeddedobj/qa/cppunit/data/insert-file-config.pdf");
     uno::Sequence<beans::PropertyValue> aMedium{ comphelper::makePropertyValue("URL", aFileName) };
     OUString aName("Object 1");
     uno::Reference<embed::XEmbeddedObject> xObject

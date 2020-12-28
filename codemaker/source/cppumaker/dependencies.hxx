@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <map>
+#include <string_view>
 
 #include <rtl/ref.hxx>
 
@@ -100,7 +101,7 @@ public:
     bool hasSequenceDependency() const { return m_sequenceDependency; }
 
 private:
-    void insert(OUString const & name, Kind kind);
+    void insert(std::u16string_view name, Kind kind);
 
     rtl::Reference< TypeManager > m_manager;
     Map m_map;

@@ -24,7 +24,7 @@ public:
 
     virtual void setUp() override
     {
-        maOriginalConfigFile = m_directories.getURLFromSrc("/tools/qa/data/");
+        maOriginalConfigFile = m_directories.getURLFromSrc(u"/tools/qa/data/");
         maOriginalConfigFile += "testconfig.ini";
 
         auto const e = osl::FileBase::getTempDirURL(maConfigFile);

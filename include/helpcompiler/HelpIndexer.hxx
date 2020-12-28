@@ -14,6 +14,7 @@
 
 #include <rtl/ustring.hxx>
 #include <set>
+#include <string_view>
 
 // I assume that TCHAR is defined as wchar_t throughout
 
@@ -48,7 +49,7 @@ class L10N_DLLPUBLIC HelpIndexer {
      * @param outDir The directory to write the "module".idxl directory to
      */
         HelpIndexer(OUString const &lang, OUString const &module,
-            OUString const &srcDir, OUString const &outDir);
+            std::u16string_view srcDir, std::u16string_view outDir);
 
     /**
      * Run the indexer.

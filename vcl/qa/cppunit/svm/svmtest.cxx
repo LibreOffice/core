@@ -8,6 +8,10 @@
  *
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
 #include <vcl/gdimtf.hxx>
@@ -28,7 +32,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
 {
     OUString maDataUrl;
 
-    OUString getFullUrl(const OUString& sFileName)
+    OUString getFullUrl(std::u16string_view sFileName)
     {
         return m_directories.getURLFromSrc(maDataUrl) + sFileName;
     }
@@ -37,11 +41,12 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
 
     // write GDI Metafile to a file in data directory
     // only use this for new tests to create the svm file
-    void writeToFile(GDIMetaFile& rMetaFile, OUString const & rName);
+    void writeToFile(GDIMetaFile& rMetaFile, std::u16string_view rName);
 
-    GDIMetaFile writeAndReadStream(GDIMetaFile& rMetaFile, OUString const & rName = OUString());
+    GDIMetaFile writeAndReadStream(
+        GDIMetaFile& rMetaFile, std::u16string_view rName = std::u16string_view());
 
-    GDIMetaFile readFile(const OUString& sName);
+    GDIMetaFile readFile(std::u16string_view sName);
 
     xmlDocUniquePtr dumpMeta(const GDIMetaFile& rMetaFile);
 
@@ -298,17 +303,17 @@ static void writeMetaFile(GDIMetaFile& rInputMetafile, const OUString& rUrl)
     aFileStream.Close();
 }
 
-void SvmTest::writeToFile(GDIMetaFile& rMetaFile, OUString const & rName)
+void SvmTest::writeToFile(GDIMetaFile& rMetaFile, std::u16string_view rName)
 {
-    if (rName.isEmpty())
+    if (rName.empty())
         return;
     OUString sFilePath = getFullUrl(rName);
     writeMetaFile(rMetaFile, sFilePath);
 }
 
-GDIMetaFile SvmTest::writeAndReadStream(GDIMetaFile& rMetaFile, OUString const & rName)
+GDIMetaFile SvmTest::writeAndReadStream(GDIMetaFile& rMetaFile, std::u16string_view rName)
 {
-    if (!rName.isEmpty())
+    if (!rName.empty())
         writeToFile(rMetaFile, rName);
 
     SvMemoryStream aStream;
@@ -320,7 +325,7 @@ GDIMetaFile SvmTest::writeAndReadStream(GDIMetaFile& rMetaFile, OUString const &
     return aResultMetafile;
 }
 
-GDIMetaFile SvmTest::readFile(const OUString& sName)
+GDIMetaFile SvmTest::readFile(std::u16string_view sName)
 {
     OUString sFilePath = getFullUrl(sName);
     return readMetafile(sFilePath);
@@ -386,7 +391,7 @@ void SvmTest::testPixel()
     pVirtualDev->DrawPixel(Point(1, 8), COL_BLUE);
 
     checkPixel(writeAndReadStream(aGDIMetaFile));
-    checkPixel(readFile("pixel.svm"));
+    checkPixel(readFile(u"pixel.svm"));
 }
 
 void SvmTest::checkPoint(const GDIMetaFile& rMetaFile)
@@ -407,7 +412,7 @@ void SvmTest::testPoint()
     pVirtualDev->DrawPixel(Point(4, 4));
 
     checkPoint(writeAndReadStream(aGDIMetaFile));
-    checkPoint(readFile("point.svm"));
+    checkPoint(readFile(u"point.svm"));
 }
 
 void SvmTest::checkLine(const GDIMetaFile& rMetaFile)
@@ -459,7 +464,7 @@ void SvmTest::testLine()
     pVirtualDev->DrawLine(Point(1, 8), Point(8, 1), aLineInfo);
 
     checkLine(writeAndReadStream(aGDIMetaFile));
-    checkLine(readFile("line.svm"));
+    checkLine(readFile(u"line.svm"));
 }
 
 void SvmTest::checkRect(const GDIMetaFile& rMetaFile)
@@ -488,7 +493,7 @@ void SvmTest::testRect()
     pVirtualDev->DrawRect(tools::Rectangle(Point(1, 2), Size(4, 4)));
 
     checkRect(writeAndReadStream(aGDIMetaFile));
-    checkRect(readFile("rect.svm"));
+    checkRect(readFile(u"rect.svm"));
 }
 
 void SvmTest::checkRoundRect(const GDIMetaFile& rMetaFile)
@@ -517,7 +522,7 @@ void SvmTest::testRoundRect()
     pVirtualDev->DrawRect(tools::Rectangle(Point(1, 2), Size(4, 4)), 1, 2);
 
     checkRoundRect(writeAndReadStream(aGDIMetaFile));
-    checkRoundRect(readFile("roundrect.svm"));
+    checkRoundRect(readFile(u"roundrect.svm"));
 }
 
 void SvmTest::checkEllipse(const GDIMetaFile& rMetaFile)
@@ -545,7 +550,7 @@ void SvmTest::testEllipse()
     pVirtualDev->DrawEllipse(tools::Rectangle(Point(1, 2), Size(4, 4)));
 
     checkEllipse(writeAndReadStream(aGDIMetaFile));
-    checkEllipse(readFile("ellipse.svm"));
+    checkEllipse(readFile(u"ellipse.svm"));
 }
 
 void SvmTest::checkArc(const GDIMetaFile& rMetaFile)
@@ -576,7 +581,7 @@ void SvmTest::testArc()
     pVirtualDev->DrawArc(tools::Rectangle(Point(1, 2), Size(4, 4)), Point(10, 11), Point(12, 13));
 
     checkArc(writeAndReadStream(aGDIMetaFile));
-    checkArc(readFile("arc.svm"));
+    checkArc(readFile(u"arc.svm"));
 }
 
 void SvmTest::checkPie(const GDIMetaFile& rMetaFile)
@@ -607,7 +612,7 @@ void SvmTest::testPie()
     pVirtualDev->DrawPie(tools::Rectangle(Point(11, 12), Size(4, 4)), Point(20, 21), Point(22, 23));
 
     checkPie(writeAndReadStream(aGDIMetaFile));
-    checkPie(readFile("pie.svm"));
+    checkPie(readFile(u"pie.svm"));
 }
 
 void SvmTest::checkChord(const GDIMetaFile& rMetaFile)
@@ -638,7 +643,7 @@ void SvmTest::testChord()
     pVirtualDev->DrawChord(tools::Rectangle(Point(21, 22), Size(4, 4)), Point(30, 31), Point(32, 33));
 
     checkChord(writeAndReadStream(aGDIMetaFile));
-    checkChord(readFile("chord.svm"));
+    checkChord(readFile(u"chord.svm"));
 }
 
 void SvmTest::checkPolyLine(const GDIMetaFile& rMetaFile)
@@ -706,7 +711,7 @@ void SvmTest::testPolyLine()
     pVirtualDev->DrawPolyLine(aPolygonWithControl, aLineInfo);
 
     checkPolyLine(writeAndReadStream(aGDIMetaFile));
-    checkPolyLine(readFile("polyline.svm"));
+    checkPolyLine(readFile(u"polyline.svm"));
 }
 
 void SvmTest::checkPolygon(const GDIMetaFile& rMetaFile)
@@ -750,7 +755,7 @@ void SvmTest::testPolygon()
     pVirtualDev->DrawPolygon(aPolygonWithControl);
 
     checkPolygon(writeAndReadStream(aGDIMetaFile));
-    checkPolygon(readFile("polygon.svm"));
+    checkPolygon(readFile(u"polygon.svm"));
 }
 
 void SvmTest::checkPolyPolygon(const GDIMetaFile& rMetaFile)
@@ -796,7 +801,7 @@ void SvmTest::testPolyPolygon()
     pVirtualDev->DrawPolyPolygon(aPolyPolygon);
 
     checkPolyPolygon(writeAndReadStream(aGDIMetaFile));
-    checkPolyPolygon(readFile("polypolygon.svm"));
+    checkPolyPolygon(readFile(u"polypolygon.svm"));
 }
 
 void SvmTest::checkText(const GDIMetaFile& rMetaFile)
@@ -819,7 +824,7 @@ void SvmTest::testText()
     pVirtualDev->DrawText(Point(4,6), "xABC", 1, 2);
 
     checkText(writeAndReadStream(aGDIMetaFile));
-    checkText(readFile("text.svm"));
+    checkText(readFile(u"text.svm"));
 }
 
 void SvmTest::checkTextArray(const GDIMetaFile& rMetaFile)
@@ -842,7 +847,7 @@ void SvmTest::testTextArray()
     pVirtualDev->DrawTextArray(Point(4,6), "123456", aDX, 1, 4);
 
     checkTextArray(writeAndReadStream(aGDIMetaFile));
-    checkTextArray(readFile("textarray.svm"));
+    checkTextArray(readFile(u"textarray.svm"));
 }
 
 void SvmTest::checkstretchText(const GDIMetaFile& rMetaFile)
@@ -864,7 +869,7 @@ void SvmTest::teststretchText()
     pVirtualDev->DrawStretchText(Point(4,6), 10, "123456", 1, 4);
 
     checkstretchText(writeAndReadStream(aGDIMetaFile));
-    checkstretchText(readFile("strecthtext.svm"));
+    checkstretchText(readFile(u"strecthtext.svm"));
 }
 
 void SvmTest::checkTextRect(const GDIMetaFile& rMetaFile)
@@ -886,7 +891,7 @@ void SvmTest::testTextRect()
     pVirtualDev->DrawText(tools::Rectangle(Point(0,0), Size(5,5)), "123456", DrawTextFlags::Center);
 
     checkTextRect(writeAndReadStream(aGDIMetaFile));
-    checkTextRect(readFile("textrectangle.svm"));
+    checkTextRect(readFile(u"textrectangle.svm"));
 }
 
 void SvmTest::checkTextLine(const GDIMetaFile& rMetaFile)
@@ -907,7 +912,7 @@ void SvmTest::testTextLine()
     pVirtualDev->DrawTextLine(Point(4,6), 10, STRIKEOUT_SINGLE, LINESTYLE_SINGLE, LINESTYLE_SINGLE);
 
     checkTextLine(writeAndReadStream(aGDIMetaFile));
-    checkTextLine(readFile("textline.svm"));
+    checkTextLine(readFile(u"textline.svm"));
 }
 
 void SvmTest::checkBitmaps(const GDIMetaFile& rMetaFile)
@@ -959,7 +964,7 @@ void SvmTest::testBitmaps()
         checkRendering(pVirtualDev, aReloadedGDIMetaFile);
     }
     {
-        GDIMetaFile aFileGDIMetaFile = readFile("bitmaps.svm");
+        GDIMetaFile aFileGDIMetaFile = readFile(u"bitmaps.svm");
         checkBitmaps(aFileGDIMetaFile);
         checkRendering(pVirtualDev, aFileGDIMetaFile);
     }
@@ -1118,7 +1123,7 @@ void SvmTest::testBitmapExs()
         checkRendering(pVirtualDev, aReloadedGDIMetaFile);
     }
     {
-        GDIMetaFile aFileGDIMetaFile = readFile("bitmapexs.svm");
+        GDIMetaFile aFileGDIMetaFile = readFile(u"bitmapexs.svm");
         checkBitmapExs(aFileGDIMetaFile);
         checkRendering(pVirtualDev, aFileGDIMetaFile);
     }
@@ -1173,7 +1178,7 @@ void SvmTest::testMasks()
     pVirtualDev->DrawMask(Point(1, 2), Size(3, 4), Point(2, 1), Size(4, 3), aBitmap3, COL_LIGHTRED, MetaActionType::MASKSCALEPART);
 
     checkMasks(writeAndReadStream(aGDIMetaFile));
-    checkMasks(readFile("masks.svm"));
+    checkMasks(readFile(u"masks.svm"));
 }
 
 void SvmTest::checkGradient(const GDIMetaFile& rMetaFile)
@@ -1246,7 +1251,7 @@ void SvmTest::testGradient()
     pVirtualDev->DrawGradient(aRectangle2, aGradient2);
 
     checkGradient(writeAndReadStream(aGDIMetaFile));
-    checkGradient(readFile("gradient.svm"));
+    checkGradient(readFile(u"gradient.svm"));
 }
 
 void SvmTest::testGradientEx()
@@ -1293,7 +1298,7 @@ void SvmTest::testHatch()
     pVirtualDev->DrawHatch(aPolyPolygon, aHatch);
 
     checkHatch(writeAndReadStream(aGDIMetaFile));
-    checkHatch(readFile("hatch.svm"));
+    checkHatch(readFile(u"hatch.svm"));
 }
 
 void SvmTest::checkWallpaper(const GDIMetaFile& rMetaFile)
@@ -1328,7 +1333,7 @@ void SvmTest::testWallpaper()
     pVirtualDev->DrawWallpaper(tools::Rectangle(Point(1, 1), Size(3, 3)), aWallpaper);
 
     checkWallpaper(writeAndReadStream(aGDIMetaFile));
-    checkWallpaper(readFile("wallpaper.svm"));
+    checkWallpaper(readFile(u"wallpaper.svm"));
 }
 
 void SvmTest::checkClipRegion(const GDIMetaFile& rMetaFile)
@@ -1358,7 +1363,7 @@ void SvmTest::testClipRegion()
     pVirtualDev->SetClipRegion(aRegion);
 
     checkClipRegion(writeAndReadStream(aGDIMetaFile));
-    checkClipRegion(readFile("clipregion.svm"));
+    checkClipRegion(readFile(u"clipregion.svm"));
 }
 
 void SvmTest::testIntersectRectClipRegion()
@@ -1388,7 +1393,7 @@ void SvmTest::testLineColor()
     pVirtualDev->Pop();
 
     checkLineColor(writeAndReadStream(aGDIMetaFile));
-    checkLineColor(readFile("linecolor.svm"));
+    checkLineColor(readFile(u"linecolor.svm"));
 }
 
 void SvmTest::checkFillColor(const GDIMetaFile& rMetaFile)
@@ -1411,7 +1416,7 @@ void SvmTest::testFillColor()
     pVirtualDev->Pop();
 
     checkFillColor(writeAndReadStream(aGDIMetaFile));
-    checkFillColor(readFile("fillcolor.svm"));
+    checkFillColor(readFile(u"fillcolor.svm"));
 }
 
 void SvmTest::checkTextColor(const GDIMetaFile& rMetaFile)
@@ -1432,7 +1437,7 @@ void SvmTest::testTextColor()
     pVirtualDev->SetTextColor(Color(0x123456));
 
     checkTextColor(writeAndReadStream(aGDIMetaFile));
-    checkTextColor(readFile("textcolor.svm"));
+    checkTextColor(readFile(u"textcolor.svm"));
 }
 
 void SvmTest::checkTextFillColor(const GDIMetaFile& rMetaFile)
@@ -1453,7 +1458,7 @@ void SvmTest::testTextFillColor()
     pVirtualDev->SetTextFillColor(Color(0x234567));
 
     checkTextFillColor(writeAndReadStream(aGDIMetaFile));
-    checkTextFillColor(readFile("textfillecolor.svm"));
+    checkTextFillColor(readFile(u"textfillecolor.svm"));
 }
 
 void SvmTest::checkTextLineColor(const GDIMetaFile& rMetaFile)
@@ -1474,7 +1479,7 @@ void SvmTest::testTextLineColor()
     pVirtualDev->SetTextLineColor(Color(0x345678));
 
     checkTextLineColor(writeAndReadStream(aGDIMetaFile));
-    checkTextLineColor(readFile("textlinecolor.svm"));
+    checkTextLineColor(readFile(u"textlinecolor.svm"));
 }
 
 void SvmTest::checkOverLineColor(const GDIMetaFile& rMetaFile)
@@ -1497,7 +1502,7 @@ void SvmTest::testOverLineColor()
     pVirtualDev->Pop();
 
     checkOverLineColor(writeAndReadStream(aGDIMetaFile));
-    checkOverLineColor(readFile("overlinecolor.svm"));
+    checkOverLineColor(readFile(u"overlinecolor.svm"));
 }
 
 void SvmTest::checkTextAlign(const GDIMetaFile& rMetaFile)
@@ -1518,7 +1523,7 @@ void SvmTest::testTextAlign()
     pVirtualDev->SetTextAlign(TextAlign::ALIGN_BOTTOM);
 
     checkTextAlign(writeAndReadStream(aGDIMetaFile));
-    checkTextAlign(readFile("textalign.svm"));
+    checkTextAlign(readFile(u"textalign.svm"));
 }
 
 void SvmTest::testMapMode()
@@ -1561,7 +1566,7 @@ void SvmTest::testPushPop()
     pVirtualDev->DrawLine(Point(1,1), Point(8,8));
 
     checkPushPop(writeAndReadStream(aGDIMetaFile));
-    checkPushPop(readFile("pushpop.svm"));
+    checkPushPop(readFile(u"pushpop.svm"));
 }
 
 void SvmTest::checkRasterOp(const GDIMetaFile& rMetaFile)
@@ -1582,7 +1587,7 @@ void SvmTest::testRasterOp()
     pVirtualDev->SetRasterOp(RasterOp::Xor);
 
     checkRasterOp(writeAndReadStream(aGDIMetaFile));
-    checkRasterOp(readFile("rasterop.svm"));
+    checkRasterOp(readFile(u"rasterop.svm"));
 }
 
 void SvmTest::checkTransparent(const GDIMetaFile& rMetaFile)
@@ -1622,7 +1627,7 @@ void SvmTest::testTransparent()
 
     CPPUNIT_ASSERT(aGDIMetaFile.HasTransparentActions());
     checkTransparent(writeAndReadStream(aGDIMetaFile));
-    checkTransparent(readFile("transparent.svm"));
+    checkTransparent(readFile(u"transparent.svm"));
 }
 
 void SvmTest::testFloatTransparent()

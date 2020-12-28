@@ -1893,15 +1893,15 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
     InsertSpecialChar( *this, 0x15, nullptr, bIncludeEmptyPicLocation );
 }
 
-void WW8Export::StartCommentOutput(const OUString& rName)
+void WW8Export::StartCommentOutput(std::u16string_view rName)
 {
     const OUString sStr{ FieldString(ww::eQUOTE) + "[" + rName + "] " };
     OutputField(nullptr, ww::eQUOTE, sStr, FieldFlags::Start | FieldFlags::CmdStart);
 }
 
-void WW8Export::EndCommentOutput(const OUString& rName)
+void WW8Export::EndCommentOutput(std::u16string_view rName)
 {
-    const OUString sStr{ " [" + rName + "] " };
+    const OUString sStr{ OUString::Concat(" [") + rName + "] " };
     OutputField(nullptr, ww::eQUOTE, sStr, FieldFlags::CmdEnd | FieldFlags::End |
         FieldFlags::Close);
 }

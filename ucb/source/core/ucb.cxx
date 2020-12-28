@@ -23,6 +23,11 @@
  **************************************************************************
 
  *************************************************************************/
+
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -168,7 +173,7 @@ void makeAndAppendXMLName(
 }
 
 bool createContentProviderData(
-    const OUString & rProvider,
+    std::u16string_view rProvider,
     const uno::Reference< container::XHierarchicalNameAccess >& rxHierNameAccess,
     ContentProviderData & rInfo)
 {
@@ -178,7 +183,7 @@ bool createContentProviderData(
     try
     {
         if ( !( rxHierNameAccess->getByHierarchicalName(
-                    rProvider +  "/ServiceName" ) >>= aValue ) )
+                    OUString::Concat(rProvider) +  "/ServiceName" ) >>= aValue ) )
         {
             OSL_FAIL( "UniversalContentBroker::getContentProviderData - "
                         "Error getting item value!" );
@@ -194,7 +199,7 @@ bool createContentProviderData(
     // Obtain URL Template.
 
     if ( !( rxHierNameAccess->getByHierarchicalName(
-                rProvider + "/URLTemplate" ) >>= aValue ) )
+                OUString::Concat(rProvider) + "/URLTemplate" ) >>= aValue ) )
     {
         OSL_FAIL( "UniversalContentBroker::getContentProviderData - "
                     "Error getting item value!" );
@@ -205,7 +210,7 @@ bool createContentProviderData(
     // Obtain Arguments.
 
     if ( !( rxHierNameAccess->getByHierarchicalName(
-                rProvider + "/Arguments" ) >>= aValue ) )
+                OUString::Concat(rProvider) + "/Arguments" ) >>= aValue ) )
     {
         OSL_FAIL( "UniversalContentBroker::getContentProviderData - "
                     "Error getting item value!" );

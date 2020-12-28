@@ -117,13 +117,13 @@ namespace
 }
 
 void ODocumentInfoPreview::insertEntry(
-    OUString const & title, OUString const & value)
+    std::u16string_view title, OUString const & value)
 {
     if (!m_xEditEngine->GetText().isEmpty()) {
         m_xEditEngine->QuickInsertText("\n\n", InsertAtEnd(*m_xEditEngine));
     }
 
-    OUString caption(title + ":\n");
+    OUString caption(OUString::Concat(title) + ":\n");
     m_xEditEngine->QuickInsertText(caption, InsertAtEnd(*m_xEditEngine));
 
     SfxItemSet aSet(m_xEditEngine->GetEmptyItemSet());

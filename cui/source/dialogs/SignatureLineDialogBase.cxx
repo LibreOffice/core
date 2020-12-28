@@ -32,9 +32,9 @@ short SignatureLineDialogBase::run()
     return nRet;
 }
 
-OUString SignatureLineDialogBase::getCDataString(const OUString& rString)
+OUString SignatureLineDialogBase::getCDataString(std::u16string_view rString)
 {
-    return "<![CDATA[" + rString + "]]>";
+    return OUString::Concat("<![CDATA[") + rString + "]]>";
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

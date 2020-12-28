@@ -142,7 +142,8 @@ bool DirectoryHelper::deleteDirRecursively(const OUString& rDirURL)
 }
 
 // both exist, move content
-bool DirectoryHelper::moveDirContent(const OUString& rSourceDirURL, const OUString& rTargetDirURL,
+bool DirectoryHelper::moveDirContent(const OUString& rSourceDirURL,
+                                     std::u16string_view rTargetDirURL,
                                      const std::set<OUString>& rExcludeList)
 {
     std::set<OUString> aDirs;
@@ -161,7 +162,7 @@ bool DirectoryHelper::moveDirContent(const OUString& rSourceDirURL, const OUStri
 
             if (dirExists(aNewSourceDirURL))
             {
-                const OUString aNewTargetDirURL(rTargetDirURL + "/" + dir);
+                const OUString aNewTargetDirURL(OUString::Concat(rTargetDirURL) + "/" + dir);
 
                 if (dirExists(aNewTargetDirURL))
                 {
@@ -185,7 +186,7 @@ bool DirectoryHelper::moveDirContent(const OUString& rSourceDirURL, const OUStri
 
         if (fileExists(aSourceFileURL))
         {
-            OUString aTargetFileURL(rTargetDirURL + "/" + file.first);
+            OUString aTargetFileURL(OUString::Concat(rTargetDirURL) + "/" + file.first);
 
             if (!file.second.isEmpty())
             {

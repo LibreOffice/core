@@ -1160,7 +1160,7 @@ protected:
 private:
     static OUString     getSysFileName(
                             const OUString& rStrmName,
-                            const OUString& rSysOutPath );
+                            std::u16string_view rSysOutPath );
 
     void                extractStream(
                             StorageBase& rStrg,
@@ -1176,7 +1176,7 @@ private:
                             const StorageRef& rxStrg,
                             const OUString& rStrgPath,
                             const OUString& rItemName,
-                            const OUString& rSysPath,
+                            std::u16string_view rSysPath,
                             bool bIsStrg, bool bIsStrm );
 
 private:

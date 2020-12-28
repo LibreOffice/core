@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <string_view>
+
 #include <uifactory/configurationaccessfactorymanager.hxx>
 #include <helper/mischelper.hxx>
 
@@ -56,9 +58,9 @@ namespace framework
 {
 
 // global function needed by both implementations
-static OUString getHashKeyFromStrings( const OUString& aType, const OUString& aName, const OUString& aModuleName )
+static OUString getHashKeyFromStrings( std::u16string_view aType, std::u16string_view aName, std::u16string_view aModuleName )
 {
-    return aType + "^" + aName + "^" + aModuleName;
+    return OUString::Concat(aType) + "^" + aName + "^" + aModuleName;
 }
 
 ConfigurationAccess_FactoryManager::ConfigurationAccess_FactoryManager( const Reference< XComponentContext >& rxContext, const OUString& _sRoot ) :
@@ -82,7 +84,7 @@ ConfigurationAccess_FactoryManager::~ConfigurationAccess_FactoryManager()
         xContainer->removeContainerListener(m_xConfigListener);
 }
 
-OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule ) const
+OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModule( std::u16string_view rType, const OUString& rName, std::u16string_view rModule ) const
 {
     // SAFE
     osl::MutexGuard g(m_aMutex);
@@ -93,7 +95,8 @@ OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModu
         return pIter->second;
     else
     {
-        pIter = m_aFactoryManagerMap.find( getHashKeyFromStrings( rType, rName, OUString() ));
+        pIter = m_aFactoryManagerMap.find(
+            getHashKeyFromStrings( rType, rName, std::u16string_view() ));
         if ( pIter != m_aFactoryManagerMap.end() )
             return pIter->second;
         else
@@ -103,12 +106,12 @@ OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModu
             if ( nIndex > 0 )
             {
                 OUString aName = rName.copy( 0, nIndex+1 );
-                pIter = m_aFactoryManagerMap.find( getHashKeyFromStrings( rType, aName, OUString() ));
+                pIter = m_aFactoryManagerMap.find( getHashKeyFromStrings( rType, aName, std::u16string_view() ));
                 if ( pIter != m_aFactoryManagerMap.end() )
                     return pIter->second;
             }
 
-            pIter = m_aFactoryManagerMap.find( getHashKeyFromStrings( rType, OUString(), OUString() ));
+            pIter = m_aFactoryManagerMap.find( getHashKeyFromStrings( rType, std::u16string_view(), std::u16string_view() ));
             if ( pIter != m_aFactoryManagerMap.end() )
                 return pIter->second;
         }
@@ -117,7 +120,7 @@ OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModu
     return OUString();
 }
 
-void ConfigurationAccess_FactoryManager::addFactorySpecifierToTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule, const OUString& rServiceSpecifier )
+void ConfigurationAccess_FactoryManager::addFactorySpecifierToTypeNameModule( std::u16string_view rType, std::u16string_view rName, std::u16string_view rModule, const OUString& rServiceSpecifier )
 {
     // SAFE
     osl::MutexGuard g(m_aMutex);
@@ -131,7 +134,7 @@ void ConfigurationAccess_FactoryManager::addFactorySpecifierToTypeNameModule( co
     m_aFactoryManagerMap.emplace( aHashKey, rServiceSpecifier );
 }
 
-void ConfigurationAccess_FactoryManager::removeFactorySpecifierFromTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule )
+void ConfigurationAccess_FactoryManager::removeFactorySpecifierFromTypeNameModule( std::u16string_view rType, std::u16string_view rName, std::u16string_view rModule )
 {
     // SAFE
     osl::MutexGuard g(m_aMutex);

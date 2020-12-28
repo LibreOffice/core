@@ -14,6 +14,7 @@
 #include <cassert>
 #include <map>
 #include <memory>
+#include <string_view>
 #include <vector>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -321,11 +322,11 @@ private:
     bool readLegacyRdbFile(OUString const & uri);
 
     OUString readLegacyRdbString(
-        OUString const & uri, RegistryKey & key,
+        std::u16string_view uri, RegistryKey & key,
         OUString const & path);
 
     void readLegacyRdbStrings(
-        OUString const & uri, RegistryKey & key,
+        std::u16string_view uri, RegistryKey & key,
         OUString const & path, std::vector< OUString > * strings);
 
     void insertRdbFiles(

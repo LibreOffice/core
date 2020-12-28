@@ -147,7 +147,7 @@ void BackendDb::removeElement(OUString const & sXPathExpression)
     }
 }
 
-void BackendDb::removeEntry(OUString const & url)
+void BackendDb::removeEntry(std::u16string_view url)
 {
     const OUString sKeyElement = getKeyElementName();
     const OUString sPrefix = getNSPrefix();
@@ -162,7 +162,7 @@ void BackendDb::removeEntry(OUString const & url)
     removeElement(sExpression);
 }
 
-void BackendDb::revokeEntry(OUString const & url)
+void BackendDb::revokeEntry(std::u16string_view url)
 {
     try
     {
@@ -182,7 +182,7 @@ void BackendDb::revokeEntry(OUString const & url)
     }
 }
 
-bool BackendDb::activateEntry(OUString const & url)
+bool BackendDb::activateEntry(std::u16string_view url)
 {
     try
     {
@@ -206,7 +206,7 @@ bool BackendDb::activateEntry(OUString const & url)
     }
 }
 
-bool BackendDb::hasActiveEntry(OUString const & url)
+bool BackendDb::hasActiveEntry(std::u16string_view url)
 {
     try
     {
@@ -231,7 +231,7 @@ bool BackendDb::hasActiveEntry(OUString const & url)
 }
 
 Reference<css::xml::dom::XNode> BackendDb::getKeyElement(
-    OUString const & url)
+    std::u16string_view url)
 {
     try
     {
@@ -262,10 +262,10 @@ Reference<css::xml::dom::XNode> BackendDb::getKeyElement(
 //Only writes the data if there is at least one entry
 void BackendDb::writeVectorOfPair(
     std::vector< std::pair< OUString, OUString > > const & vecPairs,
-    OUString const & sVectorTagName,
-    OUString const & sPairTagName,
-    OUString const & sFirstTagName,
-    OUString const & sSecondTagName,
+    std::u16string_view sVectorTagName,
+    std::u16string_view sPairTagName,
+    std::u16string_view sFirstTagName,
+    std::u16string_view sSecondTagName,
     css::uno::Reference<css::xml::dom::XNode> const & xParent)
 {
     try{
@@ -332,10 +332,10 @@ void BackendDb::writeVectorOfPair(
 std::vector< std::pair< OUString, OUString > >
 BackendDb::readVectorOfPair(
     Reference<css::xml::dom::XNode> const & parent,
-    OUString const & sListTagName,
-    OUString const & sPairTagName,
-    OUString const & sFirstTagName,
-    OUString const & sSecondTagName)
+    std::u16string_view sListTagName,
+    std::u16string_view sPairTagName,
+    std::u16string_view sFirstTagName,
+    std::u16string_view sSecondTagName)
 {
     try
     {
@@ -378,8 +378,8 @@ BackendDb::readVectorOfPair(
 //Only writes the data if there is at least one entry
 void BackendDb::writeSimpleList(
     std::deque< OUString> const & list,
-    OUString const & sListTagName,
-    OUString const & sMemberTagName,
+    std::u16string_view sListTagName,
+    std::u16string_view sMemberTagName,
     Reference<css::xml::dom::XNode> const & xParent)
 {
     try
@@ -422,7 +422,7 @@ void BackendDb::writeSimpleList(
 //Writes only the element if is has a value.
 //The prefix is automatically added to the element name
 void BackendDb::writeSimpleElement(
-    OUString const & sElementName, OUString const & value,
+    std::u16string_view sElementName, OUString const & value,
     Reference<css::xml::dom::XNode> const & xParent)
 {
     try
@@ -501,7 +501,7 @@ Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
 }
 
 OUString BackendDb::readSimpleElement(
-    OUString const & sElementName, Reference<css::xml::dom::XNode> const & xParent)
+    std::u16string_view sElementName, Reference<css::xml::dom::XNode> const & xParent)
 {
     try
     {
@@ -526,8 +526,8 @@ OUString BackendDb::readSimpleElement(
 
 std::deque< OUString> BackendDb::readList(
     Reference<css::xml::dom::XNode> const & parent,
-    OUString const & sListTagName,
-    OUString const & sMemberTagName)
+    std::u16string_view sListTagName,
+    std::u16string_view sMemberTagName)
 {
     try
     {
@@ -558,7 +558,7 @@ std::deque< OUString> BackendDb::readList(
 }
 
 std::vector<OUString> BackendDb::getOneChildFromAllEntries(
-    OUString const & name)
+    std::u16string_view name)
 {
     try
     {

@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SFX2_INC_GUISAVEAS_HXX
 #define INCLUDED_SFX2_INC_GUISAVEAS_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -53,7 +57,7 @@ public:
 
     bool GUIStoreModel(
                     const css::uno::Reference< css::frame::XModel >& xModel,
-                    const OUString& aSlotName,
+                    std::u16string_view aSlotName,
                     css::uno::Sequence< css::beans::PropertyValue >& aArgsSequence,
                     bool bPreselectPassword,
                     SignatureState nDocumentSignatureState );

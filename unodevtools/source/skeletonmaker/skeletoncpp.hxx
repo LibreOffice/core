@@ -20,6 +20,7 @@
 #define INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONCPP_HXX
 
 #include <fstream>
+#include <string_view>
 
 #include <codemaker/generatedtypeset.hxx>
 #include "skeletoncommon.hxx"
@@ -35,7 +36,7 @@ namespace skeletonmaker::cpp {
 // 16 = default member initialization in a constructor
 void printType(
     std::ostream & o, ProgramOptions const & options,
-    rtl::Reference< TypeManager > const & manager, OUString const & name,
+    rtl::Reference< TypeManager > const & manager, std::u16string_view name,
     short referenceType, bool defaultvalue = false);
 
 void printMethods(std::ostream & o,

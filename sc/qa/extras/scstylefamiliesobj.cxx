@@ -116,7 +116,7 @@ uno::Reference<lang::XComponent> ScStyleFamiliesObj::getSourceComponent()
 OUString ScStyleFamiliesObj::getTestURL()
 {
     OUString aFileURL;
-    createFileURL("ScStyleFamiliesObj.ods", aFileURL);
+    createFileURL(u"ScStyleFamiliesObj.ods", aFileURL);
     return aFileURL;
 }
 

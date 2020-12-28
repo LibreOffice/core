@@ -57,10 +57,10 @@ bool PpmFilterTest::load(const OUString &,
 void PpmFilterTest::testCVEs()
 {
     testDir(OUString(),
-        m_directories.getURLFromSrc("/filter/qa/cppunit/data/ppm/"));
+        m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/ppm/"));
 
     testDir(OUString(),
-        m_directories.getURLFromSrc("/filter/qa/cppunit/data/pbm/"));
+        m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/pbm/"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PpmFilterTest);

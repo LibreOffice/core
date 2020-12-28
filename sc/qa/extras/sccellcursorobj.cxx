@@ -207,7 +207,7 @@ void ScCellCursorObj::setUp()
     CalcUnoApiTest::setUp();
 
     OUString aFileURL;
-    createFileURL("ScCellCursorObj.ods", aFileURL);
+    createFileURL(u"ScCellCursorObj.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
 }
 

@@ -49,9 +49,9 @@ void WpftImpressFilterTest::test()
     };
 
     doTest("org.libreoffice.comp.Impress.KeynoteImportFilter",
-           "/writerperfect/qa/unit/data/impress/libetonyek/", aEtonyekOptional);
+           u"/writerperfect/qa/unit/data/impress/libetonyek/", aEtonyekOptional);
     doTest("com.sun.star.comp.Impress.MWAWPresentationImportFilter",
-           "/writerperfect/qa/unit/data/impress/libmwaw/", aMWAWOptional);
+           u"/writerperfect/qa/unit/data/impress/libmwaw/", aMWAWOptional);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WpftImpressFilterTest);

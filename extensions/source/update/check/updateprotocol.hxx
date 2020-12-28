@@ -20,6 +20,10 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEPROTOCOL_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEPROTOCOL_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/deployment/XUpdateInformationProvider.hpp>
@@ -41,10 +45,10 @@ checkForUpdates(
     const css::uno::Reference< css::uno::XComponentContext > & rxContext,
     const css::uno::Reference< css::task::XInteractionHandler > & rxInteractionHandler,
     const css::uno::Reference< css::deployment::XUpdateInformationProvider >& rUpdateInfoProvider,
-    const OUString &rOS,
-    const OUString &rArch,
+    std::u16string_view rOS,
+    std::u16string_view rArch,
     const css::uno::Sequence< OUString > &rRepositoryList,
-    const OUString &rGitID,
+    std::u16string_view rGitID,
     const OUString &rInstallID
 );
 

@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 
 #include <cassert>
+#include <string_view>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -525,13 +526,14 @@ void OStorage_Impl::ReadRelInfoIfNecessary()
     if ( m_nRelInfoStatus == RELINFO_NO_INIT )
     {
         // Init from original stream
-        uno::Reference< io::XInputStream > xRelInfoStream = GetRelInfoStreamForName( OUString() );
+        uno::Reference< io::XInputStream > xRelInfoStream
+            = GetRelInfoStreamForName( std::u16string_view() );
         try
         {
             if ( xRelInfoStream.is() )
                 m_aRelInfo = ::comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(
                                     xRelInfoStream,
-                                    "_rels/.rels",
+                                    u"_rels/.rels",
                                     m_xContext );
             m_nRelInfoStatus = RELINFO_READ;
         }
@@ -548,7 +550,7 @@ void OStorage_Impl::ReadRelInfoIfNecessary()
             if ( m_xNewRelInfoStream.is() )
                 m_aRelInfo = ::comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(
                                         m_xNewRelInfoStream,
-                                        "_rels/.rels",
+                                        u"_rels/.rels",
                                         m_xContext );
 
             m_nRelInfoStatus = RELINFO_CHANGED_STREAM_READ;
@@ -1579,14 +1581,14 @@ void OStorage_Impl::CloneStreamElement( const OUString& aStreamName,
         pElement->m_xStream->GetCopyOfLastCommit(xTargetStream);
 }
 
-void OStorage_Impl::RemoveStreamRelInfo( const OUString& aOriginalName )
+void OStorage_Impl::RemoveStreamRelInfo( std::u16string_view aOriginalName )
 {
     // this method should be used only in OStorage_Impl::Commit() method
     // the aOriginalName can be empty, in this case the storage relation info should be removed
 
     if ( m_nStorageType == embed::StorageFormats::OFOPXML && m_xRelStorage.is() )
     {
-        OUString aRelStreamName = aOriginalName + ".rels";
+        OUString aRelStreamName = OUString::Concat(aOriginalName) + ".rels";
 
         if ( m_xRelStorage->hasByName( aRelStreamName ) )
             m_xRelStorage->removeElement( aRelStreamName );
@@ -1619,7 +1621,7 @@ void OStorage_Impl::CreateRelStorage()
     m_xRelStorage.set( static_cast<embed::XStorage*>(pResultStorage) );
 }
 
-void OStorage_Impl::CommitStreamRelInfo( const OUString &rName, SotElement_Impl const * pStreamElement )
+void OStorage_Impl::CommitStreamRelInfo( std::u16string_view rName, SotElement_Impl const * pStreamElement )
 {
     // this method should be used only in OStorage_Impl::Commit() method
 
@@ -1629,7 +1631,7 @@ void OStorage_Impl::CommitStreamRelInfo( const OUString &rName, SotElement_Impl 
 
     if (m_nStorageType == embed::StorageFormats::OFOPXML && pStreamElement->m_xStream)
     {
-        SAL_WARN_IF( rName.isEmpty(), "package.xstor", "The name must not be empty!" );
+        SAL_WARN_IF( rName.empty(), "package.xstor", "The name must not be empty!" );
 
         if ( !m_xRelStorage.is() )
         {
@@ -1641,14 +1643,15 @@ void OStorage_Impl::CommitStreamRelInfo( const OUString &rName, SotElement_Impl 
     }
 }
 
-uno::Reference< io::XInputStream > OStorage_Impl::GetRelInfoStreamForName( const OUString& aName )
+uno::Reference< io::XInputStream > OStorage_Impl::GetRelInfoStreamForName(
+    std::u16string_view aName )
 {
     if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         ReadContents();
         if ( m_xRelStorage.is() )
         {
-            OUString aRelStreamName = aName + ".rels";
+            OUString aRelStreamName = OUString::Concat(aName) + ".rels";
             if ( m_xRelStorage->hasByName( aRelStreamName ) )
             {
                 uno::Reference< io::XStream > xStream = m_xRelStorage->openStreamElement( aRelStreamName, embed::ElementModes::READ );
@@ -1700,7 +1703,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
             m_nRelInfoStatus = RELINFO_READ;
         }
         else if (m_xRelStorage.is())
-            RemoveStreamRelInfo(OUString()); // remove own rel info
+            RemoveStreamRelInfo(std::u16string_view()); // remove own rel info
     }
     else if (m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ
              || m_nRelInfoStatus == RELINFO_CHANGED_STREAM)

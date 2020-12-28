@@ -63,7 +63,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 (
      const OUString& aOfficeHelpPath,
     std::u16string_view aExtensionName,
-    const OUString& aExtensionLanguageRoot,
+    std::u16string_view aExtensionLanguageRoot,
     sal_Int32 nXhpFileCount, const OUString* pXhpFiles,
     std::u16string_view aDestination,
     HelpProcessingErrorInfo& o_rHelpProcessingErrorInfo

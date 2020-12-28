@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_CORE_CONTEXTHANDLER_HXX
 
 #include <memory>
+#include <string_view>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -72,7 +73,7 @@ public:
     OUString     getFragmentPathFromRelId( const OUString& rRelId ) const;
     /** Returns the full fragment path for the first relation of the passed type. */
     OUString     getFragmentPathFromFirstType( std::u16string_view rType ) const;
-    OUString     getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rType ) const;
+    OUString     getFragmentPathFromFirstTypeFromOfficeDoc( std::u16string_view rType ) const;
 
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 

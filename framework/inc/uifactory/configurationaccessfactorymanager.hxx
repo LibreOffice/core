@@ -30,6 +30,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 
+#include <string_view>
 #include <unordered_map>
 
 namespace framework {
@@ -42,9 +43,9 @@ class ConfigurationAccess_FactoryManager final : public ::cppu::WeakImplHelper< 
 
         void          readConfigurationData();
 
-        OUString                           getFactorySpecifierFromTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule ) const;
-        void                                    addFactorySpecifierToTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule, const OUString& aServiceSpecifier );
-        void                                    removeFactorySpecifierFromTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule );
+        OUString                           getFactorySpecifierFromTypeNameModule( std::u16string_view rType, const OUString& rName, std::u16string_view rModule ) const;
+        void                                    addFactorySpecifierToTypeNameModule( std::u16string_view rType, std::u16string_view rName, std::u16string_view rModule, const OUString& aServiceSpecifier );
+        void                                    removeFactorySpecifierFromTypeNameModule( std::u16string_view rType, std::u16string_view rName, std::u16string_view rModule );
         css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >   getFactoriesDescription() const;
 
         // container.XContainerListener

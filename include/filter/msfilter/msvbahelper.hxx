@@ -19,6 +19,10 @@
 #ifndef INCLUDED_FILTER_MSFILTER_MSVBAHELPER_HXX
 #define INCLUDED_FILTER_MSFILTER_MSVBAHELPER_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -51,7 +55,7 @@ struct MSFILTER_DLLPUBLIC MacroResolvedInfo
     explicit MacroResolvedInfo( SfxObjectShell* pDocContext = nullptr ) : mpDocContext( pDocContext ), mbFound( false ) {}
 };
 
-MSFILTER_DLLPUBLIC OUString makeMacroURL( const OUString& sMacroName );
+MSFILTER_DLLPUBLIC OUString makeMacroURL( std::u16string_view sMacroName );
 MSFILTER_DLLPUBLIC OUString extractMacroName( const OUString& rMacroUrl );
 MSFILTER_DLLPUBLIC OUString getDefaultProjectName( SfxObjectShell const * pShell );
 MSFILTER_DLLPUBLIC OUString resolveVBAMacro( SfxObjectShell const * pShell, const OUString& rLibName, const OUString& rModuleName, const OUString& rMacroName );

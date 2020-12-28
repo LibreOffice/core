@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <test/bootstrapfixture.hxx>
 
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -32,7 +36,7 @@ public:
     {
     }
 
-    OUString getFullUrl(const OUString& sFileName)
+    OUString getFullUrl(std::u16string_view sFileName)
     {
         return m_directories.getURLFromSrc(gaDataUrl) + sFileName;
     }
@@ -113,7 +117,7 @@ void XGraphicTest::testGraphicDescriptor()
 
 void XGraphicTest::testGraphicProvider()
 {
-    OUString aGraphicURL = getFullUrl("TestGraphic.png");
+    OUString aGraphicURL = getFullUrl(u"TestGraphic.png");
 
     { // Load lazy
         uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());

@@ -20,6 +20,7 @@
 #define INCLUDED_VBAHELPER_VBAHELPER_HXX
 
 #include <memory>
+#include <string_view>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -248,8 +249,8 @@ class VBAHELPER_DLLPUBLIC ContainerUtilities
 {
 
 public:
-    static OUString getUniqueName( const css::uno::Sequence< OUString >&  _slist, const OUString& _sElementName, const OUString& _sSuffixSeparator);
-    static OUString getUniqueName( const css::uno::Sequence< OUString >& _slist, const OUString& _sElementName, const OUString& _sSuffixSeparator, sal_Int32 _nStartSuffix );
+    static OUString getUniqueName( const css::uno::Sequence< OUString >&  _slist, const OUString& _sElementName, std::u16string_view _sSuffixSeparator);
+    static OUString getUniqueName( const css::uno::Sequence< OUString >& _slist, const OUString& _sElementName, std::u16string_view _sSuffixSeparator, sal_Int32 _nStartSuffix );
 
     static sal_Int32 FieldInList( const css::uno::Sequence< OUString >& SearchList, const OUString& SearchString );
 };

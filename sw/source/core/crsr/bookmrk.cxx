@@ -314,7 +314,7 @@ namespace sw::mark
     MarkBase::~MarkBase()
     { }
 
-    OUString MarkBase::GenerateNewName(const OUString& rPrefix)
+    OUString MarkBase::GenerateNewName(std::u16string_view rPrefix)
     {
         static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
 
@@ -354,15 +354,15 @@ namespace sw::mark
     }
 
     NavigatorReminder::NavigatorReminder(const SwPaM& rPaM)
-        : MarkBase(rPaM, MarkBase::GenerateNewName("__NavigatorReminder__"))
+        : MarkBase(rPaM, MarkBase::GenerateNewName(u"__NavigatorReminder__"))
     { }
 
     UnoMark::UnoMark(const SwPaM& aPaM)
-        : MarkBase(aPaM, MarkBase::GenerateNewName("__UnoMark__"))
+        : MarkBase(aPaM, MarkBase::GenerateNewName(u"__UnoMark__"))
     { }
 
     DdeBookmark::DdeBookmark(const SwPaM& aPaM)
-        : MarkBase(aPaM, MarkBase::GenerateNewName("__DdeLink__"))
+        : MarkBase(aPaM, MarkBase::GenerateNewName(u"__DdeLink__"))
     { }
 
     void DdeBookmark::SetRefObject(SwServerObject* pObj)
@@ -485,7 +485,7 @@ namespace sw::mark
     }
 
     Fieldmark::Fieldmark(const SwPaM& rPaM)
-        : MarkBase(rPaM, MarkBase::GenerateNewName("__Fieldmark__"))
+        : MarkBase(rPaM, MarkBase::GenerateNewName(u"__Fieldmark__"))
     {
         if(!IsExpanded())
             SetOtherMarkPos(GetMarkPos());

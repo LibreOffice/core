@@ -18,6 +18,10 @@
  */
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "TitleHelper.hxx"
 #include "charttoolsdllapi.hxx"
 
@@ -177,7 +181,7 @@ public:
                     , const OUString& rSeriesParticle
                     , const OUString& rDragMethodServiceName = OUString()
                     , const OUString& rDragParameterString = OUString() );
-    static OUString createPointCID( const OUString& rPointCID_Stub, sal_Int32 nIndex  );
+    static OUString createPointCID( std::u16string_view rPointCID_Stub, sal_Int32 nIndex  );
 
     static OUString createDataCurveCID( const OUString& rSeriesParticle, sal_Int32 nCurveIndex, bool bAverageLine );
     static OUString createDataCurveEquationCID( const OUString& rSeriesParticle, sal_Int32 nCurveIndex );

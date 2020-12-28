@@ -319,7 +319,7 @@ private:
     ImplSVEvent * mnPendingSetValidCall;
     ToolBarRules maToolBarRules;
 
-    static OUString GetToolBarResourceName (const OUString& rsBaseName);
+    static OUString GetToolBarResourceName (std::u16string_view rsBaseName);
     bool CheckPlugInMode (std::u16string_view rsName) const;
 
     DECL_LINK(UpdateCallback, void *, void);
@@ -859,9 +859,9 @@ IMPL_LINK_NOARG(ToolBarManager::Implementation, SetValidCallback, void*, void)
 }
 
 OUString ToolBarManager::Implementation::GetToolBarResourceName (
-    const OUString& rsBaseName)
+    std::u16string_view rsBaseName)
 {
-    return "private:resource/toolbar/" + rsBaseName;
+    return OUString::Concat("private:resource/toolbar/") + rsBaseName;
 }
 
 bool ToolBarManager::Implementation::CheckPlugInMode (std::u16string_view rsName) const

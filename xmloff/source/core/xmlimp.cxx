@@ -1302,7 +1302,7 @@ Reference< XOutputStream > SvXMLImport::GetStreamForGraphicObjectURLFromBase64()
 
 OUString SvXMLImport::ResolveEmbeddedObjectURL(
                                     const OUString& rURL,
-                                    const OUString& rClassId )
+                                    std::u16string_view rClassId )
 {
     OUString sRet;
 
@@ -1311,9 +1311,9 @@ OUString SvXMLImport::ResolveEmbeddedObjectURL(
         if ( mxEmbeddedResolver.is() )
         {
             OUString sURL( rURL );
-            if( !rClassId.isEmpty() )
+            if( !rClassId.empty() )
             {
-                sURL += "!" + rClassId;
+                sURL += OUString::Concat("!") + rClassId;
             }
             sRet = mxEmbeddedResolver->resolveEmbeddedObjectURL( sURL );
         }

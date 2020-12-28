@@ -1475,7 +1475,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     return ODatabaseMetaData::lcl_getKeys(true, table);
 }
 
-uno::Reference< XResultSet > ODatabaseMetaData::lcl_getKeys(const bool& bIsImport, const OUString& table )
+uno::Reference< XResultSet > ODatabaseMetaData::lcl_getKeys(const bool& bIsImport, std::u16string_view table )
 {
     ODatabaseMetaDataResultSet* pResultSet = new
         ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eImportedKeys);
@@ -1506,9 +1506,9 @@ uno::Reference< XResultSet > ODatabaseMetaData::lcl_getKeys(const bool& bIsImpor
            "ON FOREI.RDB$INDEX_NAME = FOREIGN_INDEX.RDB$INDEX_NAME "
            "WHERE FOREI.RDB$CONSTRAINT_TYPE = 'FOREIGN KEY' ";
     if (bIsImport)
-        sSQL += "AND FOREI.RDB$RELATION_NAME = '"+ table +"'";
+        sSQL += OUString::Concat("AND FOREI.RDB$RELATION_NAME = '")+ table +"'";
     else
-        sSQL += "AND PRIM.RDB$RELATION_NAME = '"+ table +"'";
+        sSQL += OUString::Concat("AND PRIM.RDB$RELATION_NAME = '")+ table +"'";
 
     uno::Reference< XResultSet > rs = statement->executeQuery(sSQL);
     uno::Reference< XRow > xRow( rs, UNO_QUERY_THROW );

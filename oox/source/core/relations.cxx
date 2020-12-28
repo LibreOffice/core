@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <algorithm>
+#include <string_view>
 
 #include <oox/core/relations.hxx>
 
@@ -32,20 +33,21 @@ OUString lclRemoveFileName( const OUString& rPath )
     return rPath.copy( 0, ::std::max< sal_Int32 >( rPath.lastIndexOf( '/' ), 0 ) );
 }
 
-OUString lclAppendFileName( const OUString& rPath, const OUString& rFileName )
+OUString lclAppendFileName( std::u16string_view rPath, const OUString& rFileName )
 {
-    return rPath.isEmpty() ? rFileName :
+    return rPath.empty() ? rFileName :
         rPath + OUStringChar('/') + rFileName;
 }
 
-OUString createOfficeDocRelationTypeTransitional(const OUString& rType)
+OUString createOfficeDocRelationTypeTransitional(std::u16string_view rType)
 {
-    return "http://schemas.openxmlformats.org/officeDocument/2006/relationships/" + rType;
+    return OUString::Concat("http://schemas.openxmlformats.org/officeDocument/2006/relationships/")
+        + rType;
 }
 
-OUString createOfficeDocRelationTypeStrict(const OUString& rType)
+OUString createOfficeDocRelationTypeStrict(std::u16string_view rType)
 {
-    return "http://purl.oclc.org/ooxml/officeDocument/relationships/" + rType;
+    return OUString::Concat("http://purl.oclc.org/ooxml/officeDocument/relationships/") + rType;
 }
 
 }
@@ -70,7 +72,7 @@ const Relation* Relations::getRelationFromFirstType( std::u16string_view rType )
     return nullptr;
 }
 
-RelationsRef Relations::getRelationsFromTypeFromOfficeDoc( const OUString& rType ) const
+RelationsRef Relations::getRelationsFromTypeFromOfficeDoc( std::u16string_view rType ) const
 {
     RelationsRef xRelations = std::make_shared<Relations>( maFragmentPath );
     for (auto const& elem : maMap)
@@ -137,7 +139,7 @@ OUString Relations::getFragmentPathFromFirstType( std::u16string_view rType ) co
     return pRelation ? getFragmentPathFromRelation( *pRelation ) : OUString();
 }
 
-OUString Relations::getFragmentPathFromFirstTypeFromOfficeDoc( const OUString& rType ) const
+OUString Relations::getFragmentPathFromFirstTypeFromOfficeDoc( std::u16string_view rType ) const
 {
     OUString aTransitionalType(createOfficeDocRelationTypeTransitional(rType));
     const Relation* pRelation = getRelationFromFirstType( aTransitionalType );

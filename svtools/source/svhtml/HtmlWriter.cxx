@@ -11,16 +11,16 @@
 #include <svtools/HtmlWriter.hxx>
 #include <tools/stream.hxx>
 
-HtmlWriter::HtmlWriter(SvStream& rStream, const OString& rNamespace) :
+HtmlWriter::HtmlWriter(SvStream& rStream, std::string_view rNamespace) :
     mrStream(rStream),
     mbElementOpen(false),
     mbCharactersWritten(false),
     mbPrettyPrint(true)
 {
-    if (!rNamespace.isEmpty())
+    if (!rNamespace.empty())
     {
         // Convert namespace alias to a prefix.
-        maNamespace = rNamespace + ":";
+        maNamespace = OString::Concat(rNamespace) + ":";
     }
 }
 

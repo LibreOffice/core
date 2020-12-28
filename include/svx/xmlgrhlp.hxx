@@ -24,6 +24,8 @@
 #include <osl/mutex.hxx>
 #include <vcl/graph.hxx>
 #include <rtl/ref.hxx>
+
+#include <string_view>
 #include <vector>
 #include <unordered_map>
 #include <utility>
@@ -82,7 +84,8 @@ private:
     virtual void SAL_CALL       disposing() override;
 
     SVX_DLLPRIVATE OUString implSaveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
-                                            OUString & rOutMimeType, OUString const & rRequestName);
+                                            OUString & rOutMimeType,
+                                            std::u16string_view rRequestName);
 
 public:
                                 SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode );

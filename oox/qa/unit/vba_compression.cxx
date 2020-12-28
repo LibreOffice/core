@@ -95,8 +95,8 @@ void ReadFiles(const OUString& rTestFile, const OUString& rReference,
 
 void TestVbaCompression::testSimple1()
 {
-    OUString aTestFile = m_directories.getPathFromSrc("/oox/qa/unit/data/vba/simple1.bin");
-    OUString aReference = m_directories.getPathFromSrc("/oox/qa/unit/data/vba/reference/simple1.bin");
+    OUString aTestFile = m_directories.getPathFromSrc(u"/oox/qa/unit/data/vba/simple1.bin");
+    OUString aReference = m_directories.getPathFromSrc(u"/oox/qa/unit/data/vba/reference/simple1.bin");
 
     SvMemoryStream aOutputMemoryStream(4096, 4096);
     SvMemoryStream aReferenceMemoryStream(4096, 4096);
@@ -118,8 +118,8 @@ void TestVbaCompression::testSimple1()
 
 void TestVbaCompression::testSimple2()
 {
-    OUString aTestFile = m_directories.getPathFromSrc("/oox/qa/unit/data/vba/simple2.bin");
-    OUString aReference = m_directories.getPathFromSrc("/oox/qa/unit/data/vba/reference/simple2.bin");
+    OUString aTestFile = m_directories.getPathFromSrc(u"/oox/qa/unit/data/vba/simple2.bin");
+    OUString aReference = m_directories.getPathFromSrc(u"/oox/qa/unit/data/vba/reference/simple2.bin");
 
     SvMemoryStream aOutputMemoryStream(4096, 4096);
     SvMemoryStream aReferenceMemoryStream(4096, 4096);
@@ -140,8 +140,8 @@ void TestVbaCompression::testSimple2()
 
 void TestVbaCompression::testSimple3()
 {
-    OUString aTestFile = m_directories.getPathFromSrc("/oox/qa/unit/data/vba/simple3.bin");
-    OUString aReference = m_directories.getPathFromSrc("/oox/qa/unit/data/vba/reference/simple3.bin");
+    OUString aTestFile = m_directories.getPathFromSrc(u"/oox/qa/unit/data/vba/simple3.bin");
+    OUString aReference = m_directories.getPathFromSrc(u"/oox/qa/unit/data/vba/reference/simple3.bin");
 
     SvMemoryStream aOutputMemoryStream(4096, 4096);
     SvMemoryStream aReferenceMemoryStream(4096, 4096);
@@ -162,8 +162,8 @@ void TestVbaCompression::testSimple3()
 
 void TestVbaCompression::testComplex1()
 {
-    OUString aTestFile = m_directories.getPathFromSrc("/oox/qa/unit/data/vba/complex1.bin");
-    OUString aReference = m_directories.getPathFromSrc("/oox/qa/unit/data/vba/reference/complex1.bin");
+    OUString aTestFile = m_directories.getPathFromSrc(u"/oox/qa/unit/data/vba/complex1.bin");
+    OUString aReference = m_directories.getPathFromSrc(u"/oox/qa/unit/data/vba/reference/complex1.bin");
 
     SvMemoryStream aOutputMemoryStream(4096, 4096);
     SvMemoryStream aReferenceMemoryStream(4096, 4096);
@@ -184,8 +184,8 @@ void TestVbaCompression::testComplex1()
 
 void TestVbaCompression::testSpec321()
 {
-    OUString aTestFile = m_directories.getPathFromSrc("/oox/qa/unit/data/vba/spec321.bin");
-    OUString aReference = m_directories.getPathFromSrc("/oox/qa/unit/data/vba/reference/spec321.bin");
+    OUString aTestFile = m_directories.getPathFromSrc(u"/oox/qa/unit/data/vba/spec321.bin");
+    OUString aReference = m_directories.getPathFromSrc(u"/oox/qa/unit/data/vba/reference/spec321.bin");
 
     SvMemoryStream aOutputMemoryStream(4096, 4096);
     SvMemoryStream aReferenceMemoryStream(4096, 4096);
@@ -206,8 +206,8 @@ void TestVbaCompression::testSpec321()
 
 void TestVbaCompression::testSpec322()
 {
-    OUString aTestFile = m_directories.getPathFromSrc("/oox/qa/unit/data/vba/spec322.bin");
-    OUString aReference = m_directories.getPathFromSrc("/oox/qa/unit/data/vba/reference/spec322.bin");
+    OUString aTestFile = m_directories.getPathFromSrc(u"/oox/qa/unit/data/vba/spec322.bin");
+    OUString aReference = m_directories.getPathFromSrc(u"/oox/qa/unit/data/vba/reference/spec322.bin");
 
     SvMemoryStream aOutputMemoryStream(4096, 4096);
     SvMemoryStream aReferenceMemoryStream(4096, 4096);
@@ -228,8 +228,8 @@ void TestVbaCompression::testSpec322()
 
 void TestVbaCompression::testSpec323()
 {
-    OUString aTestFile = m_directories.getPathFromSrc("/oox/qa/unit/data/vba/spec323.bin");
-    OUString aReference = m_directories.getPathFromSrc("/oox/qa/unit/data/vba/reference/spec323.bin");
+    OUString aTestFile = m_directories.getPathFromSrc(u"/oox/qa/unit/data/vba/spec323.bin");
+    OUString aReference = m_directories.getPathFromSrc(u"/oox/qa/unit/data/vba/reference/spec323.bin");
 
     SvMemoryStream aOutputMemoryStream(4096, 4096);
     SvMemoryStream aReferenceMemoryStream(4096, 4096);
