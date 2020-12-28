@@ -3044,8 +3044,11 @@ void SwXTextTable::setName(const OUString& rName)
         {
             ++aIdx;
             SwNode *const pNd = & aIdx.GetNode();
-            if ( pNd->IsOLENode() &&
-                aOldName == static_cast<const SwOLENode*>(pNd)->GetChartTableName() )
+            const SwOLENode* pOLENode = pNd->IsOLENode()
+                ? static_cast<const SwOLENode*>(pNd)
+                : nullptr;
+            if ( pOLENode != nullptr &&
+                aOldName == pOLENode->GetChartTableName() )
             {
                 static_cast<SwOLENode*>(pNd)->SetChartTableName( rName );
 
