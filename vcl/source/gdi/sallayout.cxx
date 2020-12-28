@@ -572,7 +572,7 @@ Point SalLayout::GetDrawPosition( const Point& rRelative ) const
         if( nOldOrientation != mnOrientation )
         {
             nOldOrientation = mnOrientation;
-            double fRad = mnOrientation.get() * (M_PI / 1800.0);
+            double fRad = toRadians(mnOrientation);
             fCos = cos( fRad );
             fSin = sin( fRad );
         }

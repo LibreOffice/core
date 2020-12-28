@@ -6065,7 +6065,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     while( nAngle < 0_deg10 )
         nAngle += 3600_deg10;
     nAngle = nAngle % 3600_deg10;
-    double fAngle = static_cast<double>(nAngle.get()) * M_PI / 1800.0;
+    double fAngle = toRadians(nAngle);
 
     Matrix3 aRotScale;
     aRotScale.scale( fXScale, 1.0 );
