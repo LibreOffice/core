@@ -438,6 +438,30 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133342)
     CPPUNIT_ASSERT_EQUAL(OUString("12 %"), pDoc->GetString(ScAddress(0, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf71339)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    pDoc->SetString(ScAddress(0, 1, 0), "1");
+    pDoc->SetString(ScAddress(0, 2, 0), "1");
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues
+        = comphelper::InitPropertySequence({ { "Name", uno::Any(OUString("ToPoint")) },
+                                             { "Value", uno::Any(OUString("$A$2:$A$3")) } });
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:AutoSum", {});
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, pDoc->GetValue(ScAddress(0, 3, 0)), 0.00001);
+
+    OUString aFormula;
+    pDoc->GetFormula(0, 3, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A2:A3)"), aFormula);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
