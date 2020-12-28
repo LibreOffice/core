@@ -1207,8 +1207,8 @@ bool ImpGraphic::swapOutGraphic(SvStream& rStream)
                 rStream.WriteUInt32(maVectorGraphicData->getVectorGraphicDataArrayLength());
 
                 rStream.WriteBytes(
-                    maVectorGraphicData->getVectorGraphicDataArray().getConstArray(),
-                    maVectorGraphicData->getVectorGraphicDataArrayLength());
+                    maVectorGraphicData->getBinaryDataContainer().getData(),
+                    maVectorGraphicData->getBinaryDataContainer().getSize());
             }
             else if (ImplIsAnimated())
             {
