@@ -396,11 +396,11 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 SfxItemSet aSet(rSh.GetAttrPool(), svl::Items<RES_GRFATR_ROTATION, RES_GRFATR_ROTATION>{} );
                 rSh.GetCurAttr(aSet);
                 const SwRotationGrf& rRotation = aSet.Get(RES_GRFATR_ROTATION);
-                const sal_uInt32 nOldRot(rRotation.GetValue());
+                const Degree10 nOldRot(rRotation.GetValue());
 
                 if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_TRANSFORM_DELTA_ANGLE, false, &pItem))
                 {
-                    const sal_uInt32 nDeltaRot(static_cast<const SfxUInt32Item*>(pItem)->GetValue() / 10);
+                    const Degree10 nDeltaRot(static_cast<const SfxUInt32Item*>(pItem)->GetValue() / 10);
                     aMgr.SetRotation(nOldRot, nOldRot + nDeltaRot, rRotation.GetUnrotatedSize());
                 }
 
@@ -410,7 +410,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 // 100th degrees in SID_ATTR_TRANSFORM_ANGLE to 10th degrees in RES_GRFATR_ROTATION
                 if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_TRANSFORM_ANGLE, false, &pItem))
                 {
-                    const sal_uInt32 nNewRot(static_cast<const SdrAngleItem*>(pItem)->GetValue() / 10);
+                    const Degree10 nNewRot(static_cast<const SdrAngleItem*>(pItem)->GetValue() / 10);
 
                     // RotGrfFlyFrame: Rotation change here, SwFlyFrameAttrMgr aMgr is available
                     aMgr.SetRotation(nOldRot, nNewRot, rRotation.GetUnrotatedSize());

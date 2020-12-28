@@ -642,7 +642,7 @@ double SwNoTextFrame::getLocalFrameRotation() const
         {
             const SwAttrSet& rSwAttrSet(pSwGrfNode->GetSwAttrSet());
             const SwRotationGrf& rSwRotationGrf(rSwAttrSet.GetRotationGrf());
-            const double fRotate(static_cast< double >(-rSwRotationGrf.GetValue()) * (M_PI/1800.0));
+            const double fRotate = -toRadians(rSwRotationGrf.GetValue());
 
             return basegfx::normalizeToRange(fRotate, F_2PI);
         }
