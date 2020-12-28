@@ -7902,7 +7902,6 @@ sax/qa/cppunit/parser.cxx
 sax/qa/cppunit/test_converter.cxx
 sax/qa/cppunit/xmlimport.cxx
 sax/source/expatwrap/sax_expat.cxx
-sax/source/expatwrap/saxwriter.cxx
 sax/source/expatwrap/xml2utf.cxx
 sax/source/fastparser/fastparser.cxx
 sax/source/fastparser/legacyfastparser.cxx
