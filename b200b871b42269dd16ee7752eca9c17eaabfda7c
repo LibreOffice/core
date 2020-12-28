@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "994bca29_e24bda07",
+        "filename": "svx/source/svdraw/svdocirc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-28T11:33:53Z",
+      "side": 1,
+      "message": "yeah, the strong_int is not __that__ smart, it just makes sure that anything involving Degree100 can only mathematically operate with another Degree100.",
+      "parentUuid": "4b944bef_0d5c76de",
+      "revId": "b200b871b42269dd16ee7752eca9c17eaabfda7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "936bd479_3aeca737",
         "filename": "svx/source/svdraw/svdtrans.cxx",
         "patchSetId": 1
@@ -50,6 +68,24 @@
       "revId": "b200b871b42269dd16ee7752eca9c17eaabfda7c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcefe9b4_a39cf6b8",
+        "filename": "svx/source/svdraw/svdtrans.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-28T11:33:53Z",
+      "side": 1,
+      "message": "thanks, good spotting, will fix!",
+      "parentUuid": "3c8e2512_81a5765a",
+      "revId": "b200b871b42269dd16ee7752eca9c17eaabfda7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
