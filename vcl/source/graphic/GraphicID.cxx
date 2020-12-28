@@ -39,9 +39,8 @@ GraphicID::GraphicID(ImpGraphic const& rGraphic)
             mnID1 |= rVectorGraphicDataPtr->getVectorGraphicDataArrayLength();
             mnID2 = basegfx::fround(rRange.getWidth());
             mnID3 = basegfx::fround(rRange.getHeight());
-            mnID4 = vcl_get_checksum(
-                0, rVectorGraphicDataPtr->getVectorGraphicDataArray().getConstArray(),
-                rVectorGraphicDataPtr->getVectorGraphicDataArrayLength());
+            mnID4 = vcl_get_checksum(0, rVectorGraphicDataPtr->getBinaryDataContainer().getData(),
+                                     rVectorGraphicDataPtr->getBinaryDataContainer().getSize());
         }
         else if (rGraphic.ImplIsAnimated())
         {
