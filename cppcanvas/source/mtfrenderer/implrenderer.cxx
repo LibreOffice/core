@@ -574,7 +574,7 @@ namespace cppcanvas::internal
                     const ::basegfx::B2DVector aOffset(
                         rGradient.GetOfsX() / 100.0,
                         rGradient.GetOfsY() / 100.0);
-                    double fRotation( rGradient.GetAngle().get() * M_PI / 1800.0 );
+                    double fRotation = toRadians( rGradient.GetAngle() );
                     const double fBorder( rGradient.GetBorder() / 100.0 );
 
                     basegfx::B2DHomMatrix aRot90;
