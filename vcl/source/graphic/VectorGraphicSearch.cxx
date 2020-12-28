@@ -252,8 +252,8 @@ bool VectorGraphicSearch::search(OUString const& rSearchString,
 bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& rData)
 {
     mpImplementation->mpPdfDocument
-        = FPDF_LoadMemDocument(rData->getVectorGraphicDataArray().getConstArray(),
-                               rData->getVectorGraphicDataArrayLength(), /*password=*/nullptr);
+        = FPDF_LoadMemDocument(rData->getBinaryDataContainer().getData(),
+                               rData->getBinaryDataContainer().getSize(), /*password=*/nullptr);
 
     if (!mpImplementation->mpPdfDocument)
     {
