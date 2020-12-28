@@ -145,27 +145,27 @@ SwCropGrf* SwCropGrf::Clone( SfxItemPool* ) const
     return new SwCropGrf( *this );
 }
 
-sal_Int16 SwRotationGrf::checkAndCorrectValue(sal_Int16 nValue)
+Degree10 SwRotationGrf::checkAndCorrectValue(Degree10 nValue)
 {
-    if(nValue < 0)
+    if(nValue.get() < 0)
     {
         // smaller zero, modulo (will keep negative) and add one range
         DBG_ASSERT(false, "SwRotationGrf: Value is in 10th degree and *has* to be in [0 .. 3600[ (!)");
-        return 3600 + (nValue % 3600);
+        return Degree10(3600 + (nValue.get() % 3600));
     }
-    else if (nValue >= 3600)
+    else if (nValue.get() >= 3600)
     {
         // bigger range, use modulo
         DBG_ASSERT(false, "SwRotationGrf: Value is in 10th degree and *has* to be in [0 .. 3600[ (!)");
-        return nValue % 3600;
+        return Degree10(nValue.get() % 3600);
     }
 
     return nValue;
 }
 
-SwRotationGrf::SwRotationGrf( sal_Int16 nVal, const Size& rSz )
+SwRotationGrf::SwRotationGrf( Degree10 nVal, const Size& rSz )
     // tdf#115529 check and evtl. correct value
-:   SfxUInt16Item( RES_GRFATR_ROTATION, checkAndCorrectValue(nVal) ),
+:   SfxUInt16Item( RES_GRFATR_ROTATION, checkAndCorrectValue(nVal).get() ),
     m_aUnrotatedSize( rSz )
 {
 }
@@ -198,7 +198,7 @@ bool SwRotationGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
     {
         // sal_uInt16 argument needed
         // tdf#115529 check and evtl. correct value
-        SetValue(static_cast<sal_uInt16>(checkAndCorrectValue(nValue)));
+        SetValue(checkAndCorrectValue(Degree10(nValue)));
         return true;
     }
 

@@ -385,7 +385,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
 
             Size aUnrotatedSize;
-            sal_uInt16 nCurrentRotation(0);
+            Degree10 nCurrentRotation;
             {   // RotGrfFlyFrame: Add current RotationAngle value, convert from
                 // RES_GRFATR_ROTATION to SID_ATTR_TRANSFORM_ANGLE. Do not forget to
                 // convert from 10th degrees to 100th degrees
@@ -394,7 +394,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 const SwRotationGrf& rRotation = aTmpSet.Get(RES_GRFATR_ROTATION);
                 nCurrentRotation = rRotation.GetValue();
                 aUnrotatedSize = rRotation.GetUnrotatedSize();
-                aSet.Put(SdrAngleItem(SID_ATTR_TRANSFORM_ANGLE, nCurrentRotation * 10));
+                aSet.Put(SdrAngleItem(SID_ATTR_TRANSFORM_ANGLE, toDegree100(nCurrentRotation)));
             }
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -511,7 +511,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 // RotGrfFlyFrame: Get and process evtl. changed RotationAngle
                 if ( SfxItemState::SET == pSet->GetItemState(SID_ATTR_TRANSFORM_ANGLE, false, &pItem ))
                 {
-                    const sal_Int32 aNewRotation((static_cast<const SdrAngleItem*>(pItem)->GetValue() / 10) % 3600);
+                    const Degree10 aNewRotation((static_cast<const SdrAngleItem*>(pItem)->GetValue() / 10) % 3600);
 
                     // RotGrfFlyFrame: Possible rotation change here, SwFlyFrameAttrMgr aMgr is available
                     aMgr.SetRotation(nCurrentRotation, aNewRotation, aUnrotatedSize);
@@ -913,22 +913,22 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 void SwGrfShell::ExecuteRotation(SfxRequest const &rReq)
 {
     // RotGrfFlyFrame: Modify rotation attribute instead of manipulating the graphic
-    sal_uInt16 aRotation(0);
+    Degree10 aRotation;
 
     if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_LEFT)
     {
-        aRotation = 900;
+        aRotation = 900_deg10;
     }
     else if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_RIGHT)
     {
-        aRotation = 2700;
+        aRotation = 2700_deg10;
     }
     else if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_180)
     {
-        aRotation = 1800;
+        aRotation = 1800_deg10;
     }
 
-    if (rReq.GetSlot() != SID_ROTATE_GRAPHIC_RESET && 0 == aRotation)
+    if (rReq.GetSlot() != SID_ROTATE_GRAPHIC_RESET && 0_deg10 == aRotation)
         return;
 
     SwWrtShell& rShell = GetShell();
@@ -940,11 +940,11 @@ void SwGrfShell::ExecuteRotation(SfxRequest const &rReq)
     // RotGrfFlyFrame: Possible rotation change here, SwFlyFrameAttrMgr aMgr is available
     if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_RESET)
     {
-        aMgr.SetRotation(rRotation.GetValue(), 0, rRotation.GetUnrotatedSize());
+        aMgr.SetRotation(rRotation.GetValue(), 0_deg10, rRotation.GetUnrotatedSize());
     }
-    else if(0 != aRotation)
+    else if(0_deg10 != aRotation)
     {
-        const sal_uInt16 aNewRotation((aRotation + rRotation.GetValue()) % 3600);
+        const Degree10 aNewRotation((aRotation + rRotation.GetValue()) % 3600_deg10);
 
         aMgr.SetRotation(rRotation.GetValue(), aNewRotation, rRotation.GetUnrotatedSize());
     }
@@ -980,7 +980,7 @@ void SwGrfShell::GetAttrStateForRotation(SfxItemSet &rSet)
                 SfxItemSet aSet( rShell.GetAttrPool(), svl::Items<RES_GRFATR_ROTATION, RES_GRFATR_ROTATION>{} );
                 rShell.GetCurAttr( aSet );
                 const SwRotationGrf& rRotation = aSet.Get(RES_GRFATR_ROTATION);
-                bDisable = (0 == rRotation.GetValue());
+                bDisable = (0_deg10 == rRotation.GetValue());
                 break;
             }
             case SID_ATTR_TRANSFORM_ANGLE:
@@ -990,7 +990,7 @@ void SwGrfShell::GetAttrStateForRotation(SfxItemSet &rSet)
                 SfxItemSet aSet( rShell.GetAttrPool(), svl::Items<RES_GRFATR_ROTATION, RES_GRFATR_ROTATION>{} );
                 rShell.GetCurAttr( aSet );
                 const SwRotationGrf& rRotation = aSet.Get(RES_GRFATR_ROTATION);
-                rSet.Put(SdrAngleItem(SID_ATTR_TRANSFORM_ANGLE, rRotation.GetValue() * 10));
+                rSet.Put(SdrAngleItem(SID_ATTR_TRANSFORM_ANGLE, toDegree100(rRotation.GetValue())));
                 break;
             }
             default:

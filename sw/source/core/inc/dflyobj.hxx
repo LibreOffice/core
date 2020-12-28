@@ -63,7 +63,7 @@ private:
 
     // RotGrfFlyFrame: Helper to access the rotation angle (in 10th degrees, left-handed)
     // of a GraphicFrame
-    sal_uInt16 getPossibleRotationFromFraphicFrame(Size& rSize) const;
+    Degree10 getPossibleRotationFromFraphicFrame(Size& rSize) const;
 
 protected:
     // AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
