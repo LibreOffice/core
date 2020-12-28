@@ -2480,6 +2480,7 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
         <node oor:name="K_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SmallCaps</value>
             <value xml:lang="de">.uno:Italic</value>
           </prop>
         </node>
@@ -3890,6 +3891,7 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
         <node oor:name="K_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SmallCaps</value>
             <value xml:lang="de">.uno:Italic</value>
           </prop>
         </node>
@@ -6263,6 +6265,7 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
         <node oor:name="K_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SmallCaps</value>
             <value xml:lang="de">.uno:Italic</value>
           </prop>
         </node>
@@ -7087,6 +7090,7 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
         <node oor:name="K_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SmallCaps</value>
             <value xml:lang="de">.uno:Italic</value>
           </prop>
         </node>
