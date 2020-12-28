@@ -438,6 +438,33 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133342)
     CPPUNIT_ASSERT_EQUAL(OUString("12 %"), pDoc->GetString(ScAddress(0, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf71339)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    pDoc->SetString(ScAddress(0, 1, 0), "1");
+    pDoc->SetString(ScAddress(0, 2, 0), "1");
+
+    // A1:A3
+    ScRange aMatRange(0, 0, 0, 0, 2, 0);
+    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(aMatRange);
+    dispatchCommand(mxComponent, ".uno:AutoSum", {});
+
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(0, 3, 0)));
+
+    OUString aFormula;
+    pDoc->GetFormula(0, 3, 0, aFormula);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: =SUM(A1:A3)
+    // - Actual  : =SUM(A2:A3)
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A1:A3)"), aFormula);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
