@@ -100,8 +100,7 @@ sal_Bool SAL_CALL GraphicProvider::supportsService( const OUString& ServiceName 
 
 uno::Sequence< OUString > SAL_CALL GraphicProvider::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aSeq { "com.sun.star.graphic.GraphicProvider" };
-    return aSeq;
+    return { "com.sun.star.graphic.GraphicProvider" };
 }
 
 uno::Sequence< uno::Type > SAL_CALL GraphicProvider::getTypes()
