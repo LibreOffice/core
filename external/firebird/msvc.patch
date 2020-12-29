@@ -1,0 +1,11 @@
+--- src/auth/trusted/AuthSspi.cpp
++++ src/auth/trusted/AuthSspi.cpp
+@@ -109,7 +109,7 @@
+ 	  groupNames(*getDefaultMemoryPool()), sessionKey(*getDefaultMemoryPool())
+ {
+ 	TimeStamp timeOut;
+-	hasCredentials = initEntries() && (fAcquireCredentialsHandle(0, "NTLM",
++	hasCredentials = initEntries() && (fAcquireCredentialsHandle(0, const_cast<char *>("NTLM"),
+ 					SECPKG_CRED_BOTH, 0, 0, 0, 0,
+ 					&secHndl, &timeOut) == SEC_E_OK);
+ }
