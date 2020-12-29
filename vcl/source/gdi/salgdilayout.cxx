@@ -469,18 +469,25 @@ bool SalGraphics::DrawPolyLineBezier( sal_uInt32 nPoints, const Point* pPtAry, c
     return bResult;
 }
 
-bool SalGraphics::DrawPolygonBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry, const OutputDevice& rOutDev )
+void SalGraphics::DrawPolygonBezier(tools::Polygon aPoly, sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry, const OutputDevice& rOutDev )
 {
-    bool bResult = false;
+    bool bDrawn = false;
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled() )
     {
         std::unique_ptr<Point[]> pPtAry2(new Point[nPoints]);
         bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), rOutDev );
-        bResult = drawPolygonBezier( nPoints, bCopied ? pPtAry2.get() : pPtAry, pFlgAry );
+        bDrawn = drawPolygonBezier( nPoints, bCopied ? pPtAry2.get() : pPtAry, pFlgAry );
     }
     else
-        bResult = drawPolygonBezier( nPoints, pPtAry, pFlgAry );
-    return bResult;
+    {
+        bDrawn = drawPolygonBezier( nPoints, pPtAry, pFlgAry );
+    }
+
+    if (!bDrawn)
+    {
+        tools::Polygon aSubDividedPoly = tools::Polygon::SubdivideBezier(aPoly);
+        DrawPolygon(aSubDividedPoly.GetSize(), aSubDividedPoly.GetConstPointAry(), rOutDev);
+    }
 }
 
 bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 i_nPoly, const sal_uInt32* i_pPoints,

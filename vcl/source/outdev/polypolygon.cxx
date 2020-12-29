@@ -272,17 +272,10 @@ void OutputDevice::ImplDrawPolyPolygon(sal_uInt16 nPoly, const tools::PolyPolygo
     {
         // #100127# Forward beziers to sal, if any
         if (bHaveBezier)
-        {
-            if (!mpGraphics->DrawPolygonBezier(*pPointAry, *pPointAryAry, *pFlagAryAry, *this))
-            {
-                tools::Polygon aPoly = tools::Polygon::SubdivideBezier(rPolyPoly.GetObject(last));
-                mpGraphics->DrawPolygon(aPoly.GetSize(), aPoly.GetConstPointAry(), *this);
-            }
-        }
+            mpGraphics->DrawPolygonBezier(rPolyPoly.GetObject(last), *pPointAry, *pPointAryAry,
+                                          *pFlagAryAry, *this);
         else
-        {
             mpGraphics->DrawPolygon(*pPointAry, *pPointAryAry, *this);
-        }
     }
     else
     {
