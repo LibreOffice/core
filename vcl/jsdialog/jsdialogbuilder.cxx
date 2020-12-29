@@ -980,8 +980,6 @@ JSTreeView::JSTreeView(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> 
     : JSWidget<SalInstanceTreeView, ::SvTabListBox>(aNotifierWindow, aContentWindow, pTreeView,
                                                     pBuilder, bTakeOwnership, sTypeOfJSON)
 {
-    if (aNotifierWindow && aNotifierWindow->IsDisableIdleNotify())
-        pTreeView->AddEventListener(LINK(this, JSTreeView, on_window_event));
 }
 
 void JSTreeView::set_toggle(int pos, TriState eState, int col)
@@ -996,7 +994,7 @@ void JSTreeView::set_toggle(int pos, TriState eState, int col)
         SalInstanceTreeView::set_toggle(pEntry, eState, col);
         signal_toggled(iter_col(SalInstanceTreeIter(pEntry), col));
 
-        notifyDialogState();
+        sendUpdate(m_xTreeView);
     }
 }
 
@@ -1042,19 +1040,10 @@ void JSTreeView::drag_end()
 
         m_xDropTarget->fire_drop(aEvent);
 
-        notifyDialogState();
+        sendUpdate(m_xTreeView);
     }
 
     g_DragSource = nullptr;
-}
-
-IMPL_LINK(JSTreeView, on_window_event, VclWindowEvent&, rEvent, void)
-{
-    if (rEvent.GetId() == VclEventId::WindowPaint && get_visible() && m_xTreeView->IsDirtyModel())
-    {
-        sendUpdate(m_xTreeView);
-        m_xTreeView->SetDirtyModel(false);
-    }
 }
 
 void JSTreeView::insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
@@ -1064,19 +1053,31 @@ void JSTreeView::insert(const weld::TreeIter* pParent, int pos, const OUString* 
     SalInstanceTreeView::insert(pParent, pos, pStr, pId, pIconName, pImageSurface,
                                 bChildrenOnDemand, pRet);
 
-    notifyDialogState();
+    sendUpdate(m_xTreeView);
 }
 
 void JSTreeView::set_text(int row, const OUString& rText, int col)
 {
     SalInstanceTreeView::set_text(row, rText, col);
-    notifyDialogState();
+    sendUpdate(m_xTreeView);
 }
 
 void JSTreeView::set_text(const weld::TreeIter& rIter, const OUString& rStr, int col)
 {
     SalInstanceTreeView::set_text(rIter, rStr, col);
-    notifyDialogState();
+    sendUpdate(m_xTreeView);
+}
+
+void JSTreeView::expand_row(const weld::TreeIter& rIter)
+{
+    SalInstanceTreeView::expand_row(rIter);
+    sendUpdate(m_xTreeView);
+}
+
+void JSTreeView::collapse_row(const weld::TreeIter& rIter)
+{
+    SalInstanceTreeView::collapse_row(rIter);
+    sendUpdate(m_xTreeView);
 }
 
 JSExpander::JSExpander(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
