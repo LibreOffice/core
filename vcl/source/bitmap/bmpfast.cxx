@@ -21,7 +21,6 @@
 
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <bitmap/bmpfast.hxx>
-#include <bitmap/BitmapWriteAccess.hxx>
 
 #include <sal/log.hxx>
 

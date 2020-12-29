@@ -24,7 +24,6 @@
 #include <dp_descriptioninfoset.hxx>
 
 #include <dp_resource.h>
-#include <sal/config.h>
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
