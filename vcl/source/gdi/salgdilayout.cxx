@@ -503,6 +503,62 @@ void SalGraphics::DrawPolyPolygon(sal_uInt32 nPoly, tools::PolyPolygon const& rP
     }
 }
 
+void SalGraphics::DrawPolyPolygon(const tools::PolyPolygon& rPolyPoly,
+                                  const tools::PolyPolygon* pClipPolyPoly, OutputDevice const& rOutDev)
+{
+    tools::PolyPolygon* pPolyPoly;
+
+    if (pClipPolyPoly)
+    {
+        pPolyPoly = new tools::PolyPolygon;
+        rPolyPoly.GetIntersection(*pClipPolyPoly, *pPolyPoly);
+    }
+    else
+    {
+        pPolyPoly = const_cast<tools::PolyPolygon*>(&rPolyPoly);
+    }
+
+    if (pPolyPoly->Count() == 1)
+    {
+        const tools::Polygon& rPoly = pPolyPoly->GetObject(0);
+        sal_uInt16 nSize = rPoly.GetSize();
+
+        if (nSize >= 2)
+        {
+            const Point* pPtAry = rPoly.GetConstPointAry();
+            DrawPolygon(nSize, pPtAry, rOutDev);
+        }
+    }
+    else if (pPolyPoly->Count())
+    {
+        sal_uInt16 nCount = pPolyPoly->Count();
+        std::unique_ptr<sal_uInt32[]> pPointAry(new sal_uInt32[nCount]);
+        std::unique_ptr<const Point* []> pPointAryAry(new const Point*[nCount]);
+        sal_uInt16 i = 0;
+        do
+        {
+            const tools::Polygon& rPoly = pPolyPoly->GetObject(i);
+            sal_uInt16 nSize = rPoly.GetSize();
+            if (nSize)
+            {
+                pPointAry[i] = nSize;
+                pPointAryAry[i] = rPoly.GetConstPointAry();
+                i++;
+            }
+            else
+                nCount--;
+        } while (i < nCount);
+
+        if (nCount == 1)
+            DrawPolygon(pPointAry[0], pPointAryAry[0], rOutDev);
+        else
+            DrawPolyPolygon(nCount, pPointAry.get(), pPointAryAry.get(), rOutDev);
+    }
+
+    if (pClipPolyPoly)
+        delete pPolyPoly;
+}
+
 namespace
 {
     basegfx::B2DHomMatrix createTranslateToMirroredBounds(const basegfx::B2DRange &rBoundingBox, const basegfx::B2DHomMatrix& rMirror)

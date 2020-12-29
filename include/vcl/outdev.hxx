@@ -869,7 +869,6 @@ public:
 private:
 
     SAL_DLLPRIVATE void         ImplDrawPolygon( const tools::Polygon& rPoly, const tools::PolyPolygon* pClipPolyPoly = nullptr );
-    SAL_DLLPRIVATE void         ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, const tools::PolyPolygon* pClipPolyPoly );
     // #i101491#
     // Helper who implements the DrawPolyPolygon functionality for basegfx::B2DPolyPolygon
     // without MetaFile processing
