@@ -865,7 +865,7 @@ Public Function Forms(Optional ByVal SheetName As Variant _
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		CALCFORMNOTFOUNDERROR		Form not found
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		A zero-base array of strings if Form is absent
+&apos;&apos;&apos;		A zero-based array of strings if Form is absent
 &apos;&apos;&apos;		An instance of the SF_Form class if Form exists
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;			Dim myForm As Object, myList As Variant
