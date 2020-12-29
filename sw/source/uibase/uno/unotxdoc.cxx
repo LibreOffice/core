@@ -3602,7 +3602,10 @@ uno::Reference<datatransfer::XTransferable> SwXTextDocument::getSelection()
     uno::Reference<datatransfer::XTransferable> xTransferable;
 
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    if (SdrView* pSdrView = pWrtShell ? pWrtShell->GetDrawView() : nullptr)
+    if(!pWrtShell)
+        return uno::Reference<datatransfer::XTransferable>();
+
+    if (SdrView* pSdrView = pWrtShell->GetDrawView())
     {
         if (pSdrView->GetTextEditObject())
         {
