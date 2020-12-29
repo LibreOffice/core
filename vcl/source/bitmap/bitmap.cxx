@@ -940,6 +940,57 @@ bool Bitmap::GetSystemData( BitmapSystemData& rData ) const
     return mxSalBmp && mxSalBmp->GetSystemData(rData);
 }
 
+void Bitmap::Downsample(Size const& rDstSz, Point const& rSrcPt, Size const& rSrcSz, tools::Long nMaxBmpDPIX, tools::Long nMaxBmpDPIY)
+{
+    if (!IsEmpty())
+    {
+        const tools::Rectangle aBmpRect(Point(), GetSizePixel());
+        tools::Rectangle aSrcRect(rSrcPt, rSrcSz );
+        // do cropping if necessary
+        if (aSrcRect.Intersection(aBmpRect) != aBmpRect)
+        {
+            if(!aSrcRect.IsEmpty())
+                Crop(aSrcRect);
+            else
+                SetEmpty();
+        }
+        if (!IsEmpty())
+        {
+            // do downsampling if necessary
+            Size aDstSizeTwip(rDstSz);
+            // #103209# Normalize size (mirroring has to happen outside of this method)
+            aDstSizeTwip = Size(std::abs(aDstSizeTwip.Width()), std::abs(aDstSizeTwip.Height()));
+            const Size aBmpSize( GetSizePixel() );
+            const double fBmpPixelX = aBmpSize.Width();
+            const double fBmpPixelY = aBmpSize.Height();
+            const double fMaxPixelX = aDstSizeTwip.Width() * nMaxBmpDPIX / 1440.0;
+            const double fMaxPixelY = aDstSizeTwip.Height() * nMaxBmpDPIY / 1440.0;
+            // check, if the bitmap DPI exceeds the maximum DPI (allow 4 pixel rounding tolerance)
+            if ((fBmpPixelX > fMaxPixelX + 4 || fBmpPixelY > fMaxPixelY + 4) &&
+                fBmpPixelY > 0.0 && fMaxPixelY > 0.0)
+            {
+                // do scaling
+                Size aNewBmpSize;
+                const double fBmpWH = fBmpPixelX / fBmpPixelY;
+                const double fMaxWH = fMaxPixelX / fMaxPixelY;
+                if (fBmpWH < fMaxWH)
+                {
+                    aNewBmpSize.setWidth(FRound(fMaxPixelY * fBmpWH));
+                    aNewBmpSize.setHeight(FRound(fMaxPixelY));
+                }
+                else if (fBmpWH > 0.0)
+                {
+                    aNewBmpSize.setWidth(FRound(fMaxPixelX));
+                    aNewBmpSize.setHeight(FRound(fMaxPixelX / fBmpWH));
+                }
+                if (aNewBmpSize.Width() && aNewBmpSize.Height())
+                    Scale(aNewBmpSize);
+                else
+                    SetEmpty();
+            }
+        }
+    }
+}
 
 bool Bitmap::Convert( BmpConversion eConversion )
 {
