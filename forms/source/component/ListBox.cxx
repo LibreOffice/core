@@ -95,7 +95,7 @@ namespace frm
             {
             }
 
-            void operator()( const OUString& _append )
+            void operator()( const ORowSetValue& _append )
             {
                 m_string += _append;
             }
