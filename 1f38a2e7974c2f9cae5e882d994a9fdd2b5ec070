@@ -16,6 +16,24 @@
       "revId": "1f38a2e7974c2f9cae5e882d994a9fdd2b5ec070",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f191f2f_e5b15eee",
+        "filename": "vcl/source/control/spinfld.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2020-12-29T11:31:05Z",
+      "side": 1,
+      "message": "Sorry I overlooked it.",
+      "parentUuid": "9985df62_d054146d",
+      "revId": "1f38a2e7974c2f9cae5e882d994a9fdd2b5ec070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
