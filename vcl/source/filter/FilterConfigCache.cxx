@@ -41,8 +41,8 @@ using namespace ::com::sun::star::configuration ;
 
 const char* FilterConfigCache::FilterConfigCacheEntry::InternalPixelFilterNameList[] =
 {
-    IMP_BMP, IMP_GIF, IMP_PNG,IMP_JPEG, IMP_XBM, IMP_XPM,
-    EXP_BMP, EXP_JPEG, EXP_PNG, IMP_MOV, nullptr
+    IMP_BMP, IMP_GIF, IMP_PNG, IMP_JPEG, IMP_XBM, IMP_XPM,
+    EXP_BMP, EXP_JPEG, EXP_PNG, IMP_MOV, IMP_TIFF, EXP_TIFF, nullptr
 };
 
 const char* FilterConfigCache::FilterConfigCacheEntry::InternalVectorFilterNameList[] =
@@ -54,7 +54,7 @@ const char* FilterConfigCache::FilterConfigCacheEntry::InternalVectorFilterNameL
 const char* FilterConfigCache::FilterConfigCacheEntry::ExternalPixelFilterNameList[] =
 {
     "egi", "icd", "ipd", "ipx", "ipb", "epb", "epg",
-    "epp", "ira", "era", "itg", "iti", "eti", "exp", nullptr
+    "epp", "ira", "era", "itg", "exp", nullptr
 };
 
 void FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString& rUserDataEntry )
@@ -244,8 +244,8 @@ const char* FilterConfigCache::InternalFilterListForSvxLight[] =
     "svm","1","SVMETAFILE",
     "svm","2","SVMETAFILE",
     "tga","1","itg",
-    "tif","1","iti",
-    "tif","2","eti",
+    "tif","1","SVTIFF",
+    "tif","2","SVTIFF",
     "emf","1","SVEMF",
     "emf","2","SVEMF",
     "wmf","1","SVWMF",

@@ -47,6 +47,8 @@
 #include "jpeg/jpeg.hxx"
 #include "ixbm/xbmread.hxx"
 #include "ixpm/xpmread.hxx"
+#include <filter/TiffReader.hxx>
+#include <filter/TiffWriter.hxx>
 #include <osl/module.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/Size.hpp>
@@ -676,8 +678,6 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("iraGraphicImport"));
         else if (maFormatName == "itg")
             mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("itgGraphicImport"));
-        else if (maFormatName == "iti")
-            mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol("itiGraphicImport"));
  #else
         if (maFormatName ==  "icd")
             mpfnImport = icdGraphicImport;
@@ -699,8 +699,6 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
             mpfnImport = iraGraphicImport;
         else if (maFormatName ==  "itg")
             mpfnImport = itgGraphicImport;
-        else if (maFormatName ==  "iti")
-            mpfnImport = itiGraphicImport;
  #endif
     }
 
@@ -1333,6 +1331,10 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
         {
             eLinkType = GfxLinkType::NativePdf;
         }
+        else if (aFilterName == IMP_TIFF)
+        {
+            eLinkType = GfxLinkType::NativeTif;
+        }
         else
         {
             nStatus = ERRCODE_GRFILTER_FILTERERROR;
@@ -1366,9 +1368,7 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
                 if (nFormat != GRFILTER_FORMAT_DONTKNOW)
                     aShortName = GetImportFormatShortName(nFormat).toAsciiUpperCase();
 
-                if (aShortName.startsWith(TIF_SHORTNAME))
-                    eLinkType = GfxLinkType::NativeTif;
-                else if( aShortName.startsWith(MET_SHORTNAME))
+                if( aShortName.startsWith(MET_SHORTNAME))
                     eLinkType = GfxLinkType::NativeMet;
                 else if( aShortName.startsWith(PCT_SHORTNAME))
                     eLinkType = GfxLinkType::NativePct;
@@ -1433,7 +1433,7 @@ void GraphicFilter::preload()
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(aFilterPath, ';');
     ImpFilterLibCache& rCache = Cache::get();
     static const std::initializer_list<std::u16string_view> aFilterNames = {
-        u"icd", u"idx", u"ime", u"ipb", u"ipd", u"ips", u"ipt", u"ipx", u"ira", u"itg", u"iti",
+        u"icd", u"idx", u"ime", u"ipb", u"ipd", u"ips", u"ipt", u"ipx", u"ira", u"itg",
     };
 
     // Load library for each filter.
@@ -1738,6 +1738,13 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
             else
                 nStatus = ERRCODE_GRFILTER_FILTERERROR;
         }
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_TIFF) )
+        {
+            if (!ImportTiffGraphicImport(rIStream, rGraphic))
+                nStatus = ERRCODE_GRFILTER_FILTERERROR;
+            else
+                eLinkType = GfxLinkType::NativeTif;
+        }
         else
             nStatus = ERRCODE_GRFILTER_FILTERERROR;
     }
@@ -1863,7 +1870,6 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObje
 
 extern "C" bool egiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 extern "C" bool epsGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
-extern "C" bool etiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem );
 
 #endif
 
@@ -1952,6 +1958,14 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                 bool    bRleCoding = aConfigItem.ReadBool( "RLE_Coding", true );
                 // save RLE encoded?
                 WriteDIB(aBmp, rOStm, bRleCoding);
+
+                if( rOStm.GetError() )
+                    nStatus = ERRCODE_GRFILTER_IOERROR;
+            }
+            if (aFilterName.equalsIgnoreAsciiCase(EXP_TIFF))
+            {
+                if (!ExportTiffGraphicImport(rOStm, aGraphic, &aConfigItem))
+                    nStatus = ERRCODE_GRFILTER_FORMATERROR;
 
                 if( rOStm.GetError() )
                     nStatus = ERRCODE_GRFILTER_IOERROR;
@@ -2185,8 +2199,6 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("egiGraphicExport"));
                 else if (aExternalFilterName == "eps")
                     pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("epsGraphicExport"));
-                else if (aExternalFilterName == "eti")
-                    pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol("etiGraphicExport"));
                  // Execute dialog in DLL
  #else
                 --nIdx; // Just one iteration
@@ -2195,8 +2207,6 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                     pFunc = egiGraphicExport;
                 else if (aExternalFilterName == "eps")
                     pFunc = epsGraphicExport;
-                else if (aExternalFilterName == "eti")
-                    pFunc = etiGraphicExport;
  #endif
                 if( pFunc )
                 {

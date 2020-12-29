@@ -1,4 +1,5 @@
-<!--
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
  * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -14,14 +15,14 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
--->
-    <node oor:name="tif_Export" oor:op="replace"  >
-        <prop oor:name="Type"><value>tif_Tag_Image_File</value></prop>
-        <prop oor:name="FormatName"><value>SVTIFF</value></prop>
-        <prop oor:name="RealFilterName"/>
-        <prop oor:name="UIComponent"><value>com.sun.star.svtools.SvFilterOptionsDialog</value></prop>
-        <prop oor:name="UIName">
-            <value xml:lang="en-US">TIFF - Tagged Image File Format</value>
-        </prop>
-        <prop oor:name="Flags"><value>EXPORT</value></prop>
-    </node>
+ */
+
+#pragma once
+
+#include <vcl/graph.hxx>
+#include <vcl/FilterConfigItem.hxx>
+
+VCL_DLLPUBLIC bool ExportTiffGraphicImport(SvStream& rStream, Graphic& rGraphic,
+                                           FilterConfigItem* pFilterConfigItem);
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
