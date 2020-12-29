@@ -51,6 +51,7 @@
 
 #include <memory>
 #include <vector>
+#include <tuple>
 
 struct ImplOutDevData;
 class LogicalFontInstance;
@@ -1243,11 +1244,6 @@ public:
     bool                        GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
 
     bool GetFontFeatures(std::vector<vcl::font::Feature>& rFontFeatures) const;
-
-    SAL_DLLPRIVATE void         ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPolyLine, tools::Rectangle& rRect1, tools::Rectangle& rRect2,
-                                                     tools::Long& rYOff, tools::Long& rWidth, FontEmphasisMark eEmphasis, tools::Long nHeight );
-    SAL_DLLPRIVATE static FontEmphasisMark
-                                ImplGetEmphasisMarkStyle( const vcl::Font& rFont );
 
     bool                        GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
                                                     int nLen, MetricVector& rVector );
