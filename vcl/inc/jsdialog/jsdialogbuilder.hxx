@@ -365,8 +365,6 @@ public:
 
 class JSTreeView : public JSWidget<SalInstanceTreeView, ::SvTabListBox>
 {
-    DECL_LINK(on_window_event, VclWindowEvent&, void);
-
 public:
     JSTreeView(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
                ::SvTabListBox* pTextView, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
