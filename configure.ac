@@ -1513,9 +1513,14 @@ AC_ARG_ENABLE(python,
          Also specifies what Python to use at build-time.
          'fully-internal' even forces the internal version for uses of Python
          during the build.
-         On macOS the only choices are
-         'internal' (default) or 'fully-internal'. Otherwise the default is 'auto'.
+         On macOS the only choices are 'internal' (default) or
+         'fully-internal'. Otherwise the default is 'auto'.
          ]))
+
+AC_ARG_ENABLE(bogus-system-python,
+    AS_HELP_STRING([--enable-bogus-system-python],
+        [For macOS only: force system Python to be used with --enable-python (not recommended).]
+        ]))
 
 libo_FUZZ_ARG_ENABLE(gtk3,
     AS_HELP_STRING([--disable-gtk3],
@@ -9218,8 +9223,9 @@ AC_SUBST(XMLLINT)
 # Optionally user can pass an option to configure, i. e.
 # ./configure PYTHON=/usr/bin/python
 # =====================================================================
-if test $_os = Darwin -a "$enable_python" != no -a "$enable_python" != fully-internal -a "$enable_python" != internal; then
+if test $_os = Darwin -a "$enable_python" != no -a "$enable_python" != fully-internal -a "$enable_python" != internal -a "$enable_python" != system; then
     # Only allowed choices for macOS are 'no', 'internal' (default), and 'fully-internal'
+    # unless --enable-bogus-system-python is given which allows 'system'
     enable_python=internal
 fi
 if test "$build_os" != "cygwin" -a "$enable_python" != fully-internal; then
@@ -9291,7 +9297,7 @@ fully-internal)
     ;;
 system)
     AC_MSG_RESULT([system])
-    if test "$_os" = Darwin; then
+    if test "$_os" = Darwin -a "$enable_bogus_system_python" != yes; then
         AC_MSG_ERROR([--enable-python=system doesn't work on macOS because the version provided is obsolete])
     fi
     ;;
