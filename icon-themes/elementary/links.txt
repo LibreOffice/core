@@ -1890,7 +1890,8 @@ dbaccess/res/sc038.png cmd/sc_dbreportedit.png
 
 dbaccess/res/sortdown.png cmd/sc_sortascending.png
 dbaccess/res/sortup.png cmd/sc_sortdescending.png
-res/tables_32.png dbaccess/res/tables_32.png
+res/tables_32.png cmd/32/dbviewtables.png
+dbaccess/res/tables_32.png cmd/32/dbviewtables.png
 
 # desktop
 # ==============================================
