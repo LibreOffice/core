@@ -78,6 +78,7 @@
 #include <pdf/XmpMetadata.hxx>
 #include <pdf/objectcopier.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <font/emphasismark.hxx>
 
 #include "pdfwriter_impl.hxx"
 
@@ -6383,13 +6384,11 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     if( !(m_aCurrentPDFState.m_aFont.GetEmphasisMark() & FontEmphasisMark::Style) )
         return;
 
-    tools::PolyPolygon             aEmphPoly;
     tools::Rectangle               aEmphRect1;
     tools::Rectangle               aEmphRect2;
     tools::Long                    nEmphYOff;
     tools::Long                    nEmphWidth;
     tools::Long                    nEmphHeight;
-    bool                    bEmphPolyLine;
     FontEmphasisMark        nEmphMark;
 
     push( PushFlags::ALL );
@@ -6397,19 +6396,19 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     aLine.setLength( 0 );
     aLine.append( "q\n" );
 
-    nEmphMark = OutputDevice::ImplGetEmphasisMarkStyle( m_aCurrentPDFState.m_aFont );
-    if ( nEmphMark & FontEmphasisMark::PosBelow )
+    nEmphMark = GetEmphasisMarkStyle(m_aCurrentPDFState.m_aFont);
+
+    if (nEmphMark & FontEmphasisMark::PosBelow)
         nEmphHeight = GetEmphasisDescent();
     else
         nEmphHeight = GetEmphasisAscent();
-    ImplGetEmphasisMark( aEmphPoly,
-                                             bEmphPolyLine,
-                                             aEmphRect1,
-                                             aEmphRect2,
-                                             nEmphYOff,
-                                             nEmphWidth,
-                                             nEmphMark,
-                                             ImplDevicePixelToLogicWidth(nEmphHeight) );
+
+    tools::PolyPolygon aEmphPoly;
+    bool bEmphPolyLine;
+
+    std::tie(aEmphPoly, bEmphPolyLine, nEmphYOff, nEmphWidth, aEmphRect1, aEmphRect2) =
+        GetEmphasisMark( nEmphMark, ImplDevicePixelToLogicWidth(nEmphHeight), GetDPIY());
+
     if ( bEmphPolyLine )
     {
         setLineColor( m_aCurrentPDFState.m_aFont.GetColor() );
