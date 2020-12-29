@@ -24,6 +24,7 @@
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <filter/TiffWriter.hxx>
 
 #define NewSubfileType              254
 #define ImageWidth                  256
@@ -576,9 +577,7 @@ void TIFFWriter::EndCompression()
     pTable.reset();
 }
 
-
-extern "C" SAL_DLLPUBLIC_EXPORT bool
-etiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
+bool ExportTiffGraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem)
 {
     TIFFWriter aWriter(rStream);
     return aWriter.WriteTIFF( rGraphic, pFilterConfigItem );

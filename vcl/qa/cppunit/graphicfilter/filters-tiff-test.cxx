@@ -13,32 +13,29 @@
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <bitmap/BitmapWriteAccess.hxx>
+#include <graphic/GraphicFormatDetector.hxx>
 
-extern "C"
-{
-    SAL_DLLPUBLIC_EXPORT bool SAL_CALL
-        itiGraphicImport(SvStream & rStream, Graphic & rGraphic,
-        FilterConfigItem*);
-}
+#include <filter/TiffReader.hxx>
 
 using namespace ::com::sun::star;
 
 /* Implementation of Filters test */
 
-class TiffFilterTest
-    : public test::FiltersTest
-    , public test::BootstrapFixture
+class TiffFilterTest : public test::FiltersTest, public test::BootstrapFixture
 {
 public:
-    TiffFilterTest() : BootstrapFixture(true, false) {}
+    TiffFilterTest()
+        : BootstrapFixture(true, false)
+    {
+    }
 
-    virtual bool load(const OUString &,
-        const OUString &rURL, const OUString &,
-        SfxFilterFlags, SotClipboardFormatId, unsigned int) override;
+    virtual bool load(const OUString&, const OUString& rURL, const OUString&, SfxFilterFlags,
+                      SotClipboardFormatId, unsigned int) override;
 
     OUString getUrl()
     {
-        return m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/tiff/");
+        return m_directories.getURLFromSrc(u"/vcl/qa/cppunit/graphicfilter/data/tiff/");
     }
 
     /**
@@ -48,29 +45,26 @@ public:
     void testTdf126460();
     void testTdf115863();
     void testTdf138818();
+    void testRoundtrip();
 
     CPPUNIT_TEST_SUITE(TiffFilterTest);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST(testTdf126460);
     CPPUNIT_TEST(testTdf115863);
     CPPUNIT_TEST(testTdf138818);
+    CPPUNIT_TEST(testRoundtrip);
     CPPUNIT_TEST_SUITE_END();
 };
 
-bool TiffFilterTest::load(const OUString &,
-    const OUString &rURL, const OUString &,
-    SfxFilterFlags, SotClipboardFormatId, unsigned int)
+bool TiffFilterTest::load(const OUString&, const OUString& rURL, const OUString&, SfxFilterFlags,
+                          SotClipboardFormatId, unsigned int)
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return itiGraphicImport(aFileStream, aGraphic, nullptr);
+    return ImportTiffGraphicImport(aFileStream, aGraphic);
 }
 
-void TiffFilterTest::testCVEs()
-{
-    testDir(OUString(),
-        getUrl());
-}
+void TiffFilterTest::testCVEs() { testDir(OUString(), getUrl()); }
 
 void TiffFilterTest::testTdf126460()
 {
@@ -106,7 +100,6 @@ void TiffFilterTest::testTdf115863()
     Size aSize = aBitmap.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(tools::Long(528), aSize.Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(618), aSize.Height());
-
 }
 
 void TiffFilterTest::testTdf138818()
@@ -124,11 +117,48 @@ void TiffFilterTest::testTdf138818()
     // - Expected: 46428
     // - Actual  : 45951
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(46428), aGraphic.GetGfxLink().GetDataSize());
+}
 
+void TiffFilterTest::testRoundtrip()
+{
+    Bitmap aBitmap(Size(2, 2), 24);
+    {
+        BitmapScopedWriteAccess pAccess(aBitmap);
+        pAccess->SetPixel(0, 0, COL_WHITE);
+        pAccess->SetPixel(0, 1, COL_BLACK);
+        pAccess->SetPixel(1, 0, COL_LIGHTRED);
+        pAccess->SetPixel(1, 1, COL_LIGHTGREEN);
+    }
+
+    SvMemoryStream aStream;
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+    sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName(u"tif");
+    rFilter.ExportGraphic(Graphic(BitmapEx(aBitmap)), "none", aStream, nFilterFormat);
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    Graphic aGraphic;
+    ErrCode bResult = rFilter.ImportGraphic(aGraphic, "none", aStream);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
+    CPPUNIT_ASSERT_EQUAL(GfxLinkType::NativeTif, aGraphic.GetGfxLink().GetType());
+    Bitmap aResultBitmap = aGraphic.GetBitmapEx().GetBitmap();
+    CPPUNIT_ASSERT_EQUAL(Size(2, 2), aResultBitmap.GetSizePixel());
+
+    {
+        Bitmap::ScopedReadAccess pAccess(aResultBitmap);
+        CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(pAccess->GetPixel(0, 0)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, Color(pAccess->GetPixel(0, 1)));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(pAccess->GetPixel(1, 0)));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, Color(pAccess->GetPixel(1, 1)));
+    }
+
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+    vcl::GraphicFormatDetector aDetector(aStream, "");
+
+    CPPUNIT_ASSERT_EQUAL(true, aDetector.detect());
+    CPPUNIT_ASSERT_EQUAL(true, aDetector.checkTIF());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"TIF"), aDetector.msDetectedFormat);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TiffFilterTest);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

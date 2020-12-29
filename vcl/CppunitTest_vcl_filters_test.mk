@@ -11,6 +11,12 @@ $(eval $(call gb_CppunitTest_CppunitTest,vcl_filters_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,vcl_filters_test, \
     vcl/qa/cppunit/graphicfilter/filters-test \
+    vcl/qa/cppunit/graphicfilter/filters-tiff-test \
+))
+
+$(eval $(call gb_CppunitTest_set_include,vcl_filters_test,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/vcl/inc \
 ))
 
 ifeq ($(DISABLE_CVE_TESTS),TRUE)
