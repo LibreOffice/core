@@ -87,7 +87,7 @@ protected:
 
 public:
     LocaleNode (const OUString& name, const Reference< XAttributeList > & attr);
-    void setValue(const OUString &oValue) { aValue += oValue; };
+    void setValue(std::u16string_view oValue) { aValue += oValue; };
     const OUString& getName() const { return aName; };
     const OUString& getValue() const { return aValue; };
     const Attr& getAttr() const { return aAttribs; };

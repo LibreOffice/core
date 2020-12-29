@@ -187,7 +187,7 @@ bool LinkManager::InsertLink( SvBaseLink * pLink,
 
 void LinkManager::InsertDDELink( SvBaseLink * pLink,
                                     const OUString& rServer,
-                                    const OUString& rTopic,
+                                    std::u16string_view rTopic,
                                     std::u16string_view rItem )
 {
     if( !isClientType( pLink->GetObjType() ) )
@@ -375,7 +375,7 @@ void LinkManager::RemoveServer( SvLinkSource* pObj )
     aServerTbl.erase( pObj );
 }
 
-void MakeLnkName( OUString& rName, const OUString* pType, const OUString& rFile,
+void MakeLnkName( OUString& rName, const OUString* pType, std::u16string_view rFile,
                     std::u16string_view rLink, const OUString* pFilter )
 {
     if( pType )

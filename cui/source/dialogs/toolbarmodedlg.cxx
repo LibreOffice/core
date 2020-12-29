@@ -141,13 +141,13 @@ int ToolbarmodeDialog::GetActiveRadioButton()
     return -1;
 }
 
-void ToolbarmodeDialog::UpdateImage(OUString sFileName)
+void ToolbarmodeDialog::UpdateImage(std::u16string_view sFileName)
 {
     // load image
     OUString aURL("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/toolbarmode/");
     rtl::Bootstrap::expandMacros(aURL);
     aURL += sFileName;
-    if (sFileName.isEmpty() || !file_exists(aURL))
+    if (sFileName.empty() || !file_exists(aURL))
         return;
     // draw image
     Graphic aGraphic;

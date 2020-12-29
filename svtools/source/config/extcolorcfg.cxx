@@ -217,7 +217,7 @@ void ExtendedColorConfig_Impl::EnableBroadcast()
         ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled = true;
 }
 
-static void lcl_addString(uno::Sequence < OUString >& _rSeq,const OUString& _sAdd)
+static void lcl_addString(uno::Sequence < OUString >& _rSeq,std::u16string_view _sAdd)
 {
     for(OUString & i : _rSeq)
         i += _sAdd;
@@ -319,7 +319,7 @@ void ExtendedColorConfig_Impl::FillComponentColors(const uno::Sequence < OUStrin
 
             const OUString sColor("/Color");
             lcl_addString(aColorNames,sColor);
-            lcl_addString(aDefaultColorNames,"/DefaultColor");
+            lcl_addString(aDefaultColorNames,u"/DefaultColor");
             uno::Sequence< uno::Any > aColors = GetProperties( aColorNames );
             const uno::Any* pColors = aColors.getConstArray();
 

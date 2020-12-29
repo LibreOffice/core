@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <viewsh.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -1470,10 +1474,10 @@ void SwQuoVadisPortion::Paint( const SwTextPaintInfo &rInf ) const
 
 SwFieldPortion *SwErgoSumPortion::Clone( const OUString &rExpand ) const
 {
-    return new SwErgoSumPortion( rExpand, OUString() );
+    return new SwErgoSumPortion( rExpand, std::u16string_view() );
 }
 
-SwErgoSumPortion::SwErgoSumPortion(const OUString &rExp, const OUString& rStr)
+SwErgoSumPortion::SwErgoSumPortion(const OUString &rExp, std::u16string_view rStr)
     : SwFieldPortion( rExp )
 {
     SetLen(TextFrameIndex(0));

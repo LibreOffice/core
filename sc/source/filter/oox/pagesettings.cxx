@@ -212,7 +212,7 @@ void PageSettings::importHeaderFooter( const AttributeList& rAttribs )
     maModel.mbUseFirstHF = rAttribs.getBool( XML_differentFirst, false );
 }
 
-void PageSettings::importHeaderFooterCharacters( const OUString& rChars, sal_Int32 nElement )
+void PageSettings::importHeaderFooterCharacters( std::u16string_view rChars, sal_Int32 nElement )
 {
     switch( nElement )
     {

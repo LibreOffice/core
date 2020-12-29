@@ -1950,7 +1950,7 @@ OUString LanguageTagImpl::getGlibcLocaleString() const
     return maCachedGlibcString;
 }
 
-OUString LanguageTag::getGlibcLocaleString( const OUString & rEncoding ) const
+OUString LanguageTag::getGlibcLocaleString( std::u16string_view rEncoding ) const
 {
     OUString aRet;
     if (isIsoLocale())
@@ -1966,7 +1966,7 @@ OUString LanguageTag::getGlibcLocaleString( const OUString & rEncoding ) const
         aRet = getImpl()->getGlibcLocaleString();
         sal_Int32 nAt = aRet.indexOf('@');
         if (nAt != -1)
-            aRet = aRet.subView(0, nAt) + rEncoding + aRet.subView(nAt);
+            aRet = OUString::Concat(aRet.subView(0, nAt)) + rEncoding + aRet.subView(nAt);
         else
             aRet += rEncoding;
     }

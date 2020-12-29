@@ -58,6 +58,7 @@
 #include <algorithm>
 #include <cassert>
 #include <memory>
+#include <string_view>
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -2270,7 +2271,7 @@ void SAL_CALL ODbaseTable::rename( const OUString& newName )
 }
 namespace
 {
-    void renameFile(file::OConnection const * _pConnection,const OUString& oldName,
+    void renameFile(file::OConnection const * _pConnection,std::u16string_view oldName,
                     const OUString& newName,const OUString& _sExtension)
     {
         OUString aName = ODbaseTable::getEntry(_pConnection,oldName);

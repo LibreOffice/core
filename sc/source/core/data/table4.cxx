@@ -49,6 +49,7 @@
 #include <math.h>
 #include <memory>
 #include <list>
+#include <string_view>
 
 #define D_MAX_LONG_  double(0x7fffffff)
 
@@ -133,7 +134,8 @@ OUString lcl_ValueString( sal_Int32 nValue, sal_uInt16 nMinDigits )
 }
 
 void setSuffixCell(
-    ScColumn& rColumn, SCROW nRow, sal_Int32 nValue, sal_uInt16 nDigits, const OUString& rSuffix,
+    ScColumn& rColumn, SCROW nRow, sal_Int32 nValue, sal_uInt16 nDigits,
+    std::u16string_view rSuffix,
     CellType eCellType, bool bIsOrdinalSuffix )
 {
     ScDocument& rDoc = rColumn.GetDoc();

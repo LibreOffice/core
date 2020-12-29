@@ -628,7 +628,7 @@ static void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uIn
 static SwFlyFrameFormat *
 lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
         SwUndoInsertLabel *const pUndo,
-        SwLabelType const eType, OUString const& rText, OUString const& rSeparator,
+        SwLabelType const eType, std::u16string_view rText, std::u16string_view rSeparator,
             const OUString& rNumberingSeparator,
             const bool bBefore, const sal_uInt16 nId, const sal_uLong nNdIdx,
             const OUString& rCharacterStyle,
@@ -896,7 +896,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 aText += " ";
         }
         sal_Int32 nIdx = aText.getLength();
-        if( !rText.isEmpty() )
+        if( !rText.empty() )
         {
             aText += rSeparator;
         }

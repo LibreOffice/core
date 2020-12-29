@@ -224,7 +224,7 @@ public:
         @return The resulting GLIBC locale string if it could be constructed,
                 if not an empty string is returned.
      */
-    OUString                        getGlibcLocaleString( const OUString & rEncoding ) const;
+    OUString                        getGlibcLocaleString( std::u16string_view rEncoding ) const;
 
     /** If language tag has a non-default script specified.
      */

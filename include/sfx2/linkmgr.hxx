@@ -96,7 +96,7 @@ public:
     // the links connect to a SvLinkSource and adds to the list
     void        InsertDDELink( SvBaseLink*,
                         const OUString& rServer,
-                        const OUString& rTopic,
+                        std::u16string_view rTopic,
                         std::u16string_view rItem );
 
     // if everything is already set at the link!
@@ -176,7 +176,7 @@ const sal_Unicode cTokenSeparator = 0xFFFF;
 // - File-/Graphics-LinkNames the last 3 Strings (FileName, Region, Filter)
 SFX2_DLLPUBLIC void MakeLnkName( OUString& rName,
                  const OUString* pType,       // Can also be null!!
-                 const OUString& rFile,
+                 std::u16string_view rFile,
                  std::u16string_view rLink,
                  const OUString* pFilter = nullptr );
 

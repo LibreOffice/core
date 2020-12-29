@@ -744,7 +744,7 @@ char SbiIoSystem::Read()
     return ch;
 }
 
-void SbiIoSystem::Write(const OUString& rBuf)
+void SbiIoSystem::Write(std::u16string_view rBuf)
 {
     if( !nChan )
     {
@@ -806,7 +806,7 @@ void SbiIoSystem::ReadCon(OString& rIn)
 
 // output of a MessageBox, if there's a CR in the console-buffer
 
-void SbiIoSystem::WriteCon(const OUString& rText)
+void SbiIoSystem::WriteCon(std::u16string_view rText)
 {
     aOut += rText;
     sal_Int32 n1 = aOut.indexOf('\n');

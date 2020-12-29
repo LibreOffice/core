@@ -27,6 +27,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <queue>
 #include <stack>
+#include <string_view>
 #include <o3tl/sorted_vector.hxx>
 #include <unordered_map>
 #include <vector>
@@ -182,13 +183,13 @@ public:
 
     const css::uno::Reference<css::text::XTextRange>& GetStartRange() const { return m_xStartRange; }
 
-    void                    AppendCommand(const OUString& rPart);
+    void                    AppendCommand(std::u16string_view rPart);
     const OUString&  GetCommand() const {return m_sCommand; }
 
     void SetFieldId(FieldId eFieldId ) { m_eFieldId = eFieldId; }
     std::optional<FieldId> const & GetFieldId() const { return m_eFieldId; }
 
-    void AppendResult(OUString const& rResult) { m_sResult += rResult; }
+    void AppendResult(std::u16string_view rResult) { m_sResult += rResult; }
     const OUString&  GetResult() const { return m_sResult; }
 
     void                    SetCommandCompleted() { m_bFieldCommandCompleted = true; }
@@ -854,7 +855,7 @@ public:
     void CloseFieldCommand();
     //the _current_ fields require a string type result while TOCs accept richt results
     bool IsFieldResultAsString();
-    void AppendFieldResult(OUString const& rResult);
+    void AppendFieldResult(std::u16string_view rResult);
     //apply the result text to the related field
     void SetFieldResult(OUString const& rResult);
     // set FFData of top field context

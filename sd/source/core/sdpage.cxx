@@ -2374,7 +2374,7 @@ void SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eKind )
 |*
 \************************************************************************/
 
-void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eObjKind, const OUString& rString )
+void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eObjKind, std::u16string_view rString )
 {
     if ( !pObj )
         return;
@@ -2414,7 +2414,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
         {
             pOutl->Init( OutlinerMode::OutlineObject );
 
-            aString += "\t" + rString;
+            aString += OUString::Concat("\t") + rString;
 
             if (mbMaster)
             {

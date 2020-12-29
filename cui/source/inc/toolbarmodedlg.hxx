@@ -9,6 +9,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <vcl/weld.hxx>
 
 class ToolbarmodeDialog : public weld::GenericDialogController
@@ -24,7 +28,7 @@ private:
     std::unique_ptr<weld::RadioButton> m_pRadioButtons[9];
     std::unique_ptr<weld::Label> m_pInfoLabel;
 
-    void UpdateImage(OUString sFileName);
+    void UpdateImage(std::u16string_view sFileName);
     int GetActiveRadioButton();
     DECL_LINK(SelectToolbarmode, weld::ToggleButton&, void);
     DECL_LINK(OnApplyClick, weld::Button&, void);

@@ -23,6 +23,7 @@
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
 #include <memory>
+#include <string_view>
 
 namespace tdoc_ucp {
 
@@ -35,7 +36,7 @@ class ResultSetDataSupplier : public ::ucbhelper::ResultSetDataSupplier
 
 private:
     bool queryNamesOfChildren();
-    OUString assembleChildURL( const OUString& aName );
+    OUString assembleChildURL( std::u16string_view aName );
 
 public:
     ResultSetDataSupplier(

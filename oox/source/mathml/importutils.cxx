@@ -326,7 +326,7 @@ void XmlStreamBuilder::appendClosingTag( int token )
     tags.emplace_back( CLOSING( token ));
 }
 
-void XmlStreamBuilder::appendCharacters( const OUString& chars )
+void XmlStreamBuilder::appendCharacters( std::u16string_view chars )
 {
     assert( !tags.empty());
     tags.back().text += chars;

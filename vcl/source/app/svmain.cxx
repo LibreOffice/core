@@ -333,7 +333,7 @@ bool InitVCL()
         //force that in as $LANGUAGE. That way we can get gtk to render widgets RTL
         //if we have a RTL UI in an otherwise LTR locale and get gettext using externals (e.g. python)
         //to match their translations to our preferred UI language
-        OUString aLocaleString(SvtSysLocaleOptions().GetRealUILanguageTag().getGlibcLocaleString(".UTF-8"));
+        OUString aLocaleString(SvtSysLocaleOptions().GetRealUILanguageTag().getGlibcLocaleString(u".UTF-8"));
         if (!aLocaleString.isEmpty())
         {
             MsLangId::getSystemUILanguage(); //call this now to pin what the system UI really was

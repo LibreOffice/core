@@ -539,7 +539,7 @@ namespace svgio::svgreader
             maText += " ";
         }
 
-        void SvgCharacterNode::concatenate(const OUString& rText)
+        void SvgCharacterNode::concatenate(std::u16string_view rText)
         {
             maText += rText;
         }

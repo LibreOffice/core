@@ -391,7 +391,7 @@ bool ResultSetDataSupplier::queryNamesOfChildren()
 }
 
 OUString
-ResultSetDataSupplier::assembleChildURL( const OUString& aName )
+ResultSetDataSupplier::assembleChildURL( std::u16string_view aName )
 {
     OUString aContURL
         = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
