@@ -123,12 +123,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
 ))
 endif
 
-ifeq ($(OS),EMSCRIPTEN)
-$(eval $(call gb_Module_add_targets,vcl,\
-    CustomTarget_wasm_native \
-))
-endif
-
 ifneq ($(ENABLE_FUZZERS),)
 $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_nativecore \

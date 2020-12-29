@@ -345,6 +345,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(call gb_Helper_optional,OPENCL,clew) \
 	$(if $(filter $(OS),WNT),,cmdmail) \
 	cppcanvas \
+	$(if $(filter $(OS),EMSCRIPTEN),components) \
 	configmgr \
 	ctl \
 	cui \
