@@ -1343,6 +1343,7 @@ cmd/sc_deleteshapehyperlink.png cmd/sc_removehyperlink.png
 cmd/32/cellcontentsmenu.png cmd/32/calculate.png
 cmd/32/datapilotmenu.png cmd/32/datadatapilotrun.png
 cmd/32/deletecell.png cmd/32/delete.png
+cmd/32/editselectmenu.png cmd/32/selecttables.png
 cmd/32/functiondialog.png cmd/32/dbviewfunctions.png
 cmd/32/functionbox.png cmd/32/dbviewfunctions.png
 cmd/32/groupoutlinemenu.png cmd/32/autooutline.png
@@ -1361,6 +1362,7 @@ cmd/32/toggleformula.png cmd/32/dbviewfunctions.png
 cmd/lc_cellcontentsmenu.png cmd/lc_calculate.png
 cmd/lc_datapilotmenu.png cmd/lc_datadatapilotrun.png
 cmd/lc_deletecell.png cmd/lc_delete.png
+cmd/lc_editselectmenu.png cmd/lc_selecttables.png
 cmd/lc_functiondialog.png cmd/lc_dbviewfunctions.png
 cmd/lc_functionbox.png cmd/lc_dbviewfunctions.png
 cmd/lc_groupoutlinemenu.png cmd/lc_autooutline.png
@@ -1379,6 +1381,7 @@ cmd/lc_toggleformula.png cmd/lc_dbviewfunctions.png
 cmd/sc_cellcontentsmenu.png cmd/sc_calculate.png
 cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
 cmd/sc_deletecell.png cmd/sc_delete.png
+cmd/sc_editselectmenu.png cmd/sc_selecttables.png
 cmd/sc_functiondialog.png cmd/sc_dbviewfunctions.png
 cmd/sc_functionbox.png cmd/sc_dbviewfunctions.png
 cmd/sc_groupoutlinemenu.png cmd/sc_autooutline.png
