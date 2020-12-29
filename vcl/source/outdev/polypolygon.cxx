@@ -27,8 +27,7 @@
 #include <vcl/virdev.hxx>
 
 #include <salgdi.hxx>
-
-#include "polypolygon.hxx"
+#include <polypolygon.hxx>
 
 #include <memory>
 #include <cassert>
@@ -125,7 +124,7 @@ void OutputDevice::DrawPolyPolygon(const tools::PolyPolygon& rPolyPoly)
         // #100127# moved real tools::PolyPolygon draw to separate method,
         // have to call recursively, avoiding duplicate
         // ImplLogicToDevicePixel calls
-        ImplDrawPolyPolygon(nPoly, ImplLogicToDevicePixel(rPolyPoly));
+        mpGraphics->DrawPolyPolygon(nPoly, ImplLogicToDevicePixel(rPolyPoly), *this);
     }
     if (mpAlphaVDev)
         mpAlphaVDev->DrawPolyPolygon(rPolyPoly);
@@ -212,94 +211,11 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(
         // fallback to old polygon drawing if needed
         const tools::PolyPolygon aToolsPolyPolygon(rB2DPolyPoly);
         const tools::PolyPolygon aPixelPolyPolygon = ImplLogicToDevicePixel(aToolsPolyPolygon);
-        ImplDrawPolyPolygon(aPixelPolyPolygon.Count(), aPixelPolyPolygon);
+        mpGraphics->DrawPolyPolygon(aPixelPolyPolygon.Count(), aPixelPolyPolygon, *this);
     }
 
     if (mpAlphaVDev)
         mpAlphaVDev->ImplDrawPolyPolygonWithB2DPolyPolygon(rB2DPolyPoly);
-}
-
-// #100127# Extracted from OutputDevice::DrawPolyPolygon()
-void OutputDevice::ImplDrawPolyPolygon(sal_uInt16 nPoly, const tools::PolyPolygon& rPolyPoly)
-{
-    // AW: This crashes on empty PolyPolygons, avoid that
-    if (!nPoly)
-        return;
-
-    sal_uInt32 aStackAry1[OUTDEV_POLYPOLY_STACKBUF];
-    const Point* aStackAry2[OUTDEV_POLYPOLY_STACKBUF];
-    PolyFlags* aStackAry3[OUTDEV_POLYPOLY_STACKBUF];
-    sal_uInt32* pPointAry;
-    const Point** pPointAryAry;
-    const PolyFlags** pFlagAryAry;
-    sal_uInt16 i = 0;
-    sal_uInt16 j = 0;
-    sal_uInt16 last = 0;
-    bool bHaveBezier = false;
-    if (nPoly > OUTDEV_POLYPOLY_STACKBUF)
-    {
-        pPointAry = new sal_uInt32[nPoly];
-        pPointAryAry = new const Point*[nPoly];
-        pFlagAryAry = new const PolyFlags*[nPoly];
-    }
-    else
-    {
-        pPointAry = aStackAry1;
-        pPointAryAry = aStackAry2;
-        pFlagAryAry = const_cast<const PolyFlags**>(aStackAry3);
-    }
-
-    do
-    {
-        const tools::Polygon& rPoly = rPolyPoly.GetObject(i);
-        sal_uInt16 nSize = rPoly.GetSize();
-        if (nSize)
-        {
-            pPointAry[j] = nSize;
-            pPointAryAry[j] = rPoly.GetConstPointAry();
-            pFlagAryAry[j] = rPoly.GetConstFlagAry();
-            last = i;
-
-            if (pFlagAryAry[j])
-                bHaveBezier = true;
-
-            ++j;
-        }
-        ++i;
-    } while (i < nPoly);
-
-    if (j == 1)
-    {
-        // #100127# Forward beziers to sal, if any
-        if (bHaveBezier)
-            mpGraphics->DrawPolygonBezier(rPolyPoly.GetObject(last), *pPointAry, *pPointAryAry,
-                                          *pFlagAryAry, *this);
-        else
-            mpGraphics->DrawPolygon(*pPointAry, *pPointAryAry, *this);
-    }
-    else
-    {
-        // #100127# Forward beziers to sal, if any
-        if (bHaveBezier)
-        {
-            if (!mpGraphics->DrawPolyPolygonBezier(j, pPointAry, pPointAryAry, pFlagAryAry, *this))
-            {
-                tools::PolyPolygon aPolyPoly = tools::PolyPolygon::SubdivideBezier(rPolyPoly);
-                ImplDrawPolyPolygon(aPolyPoly.Count(), aPolyPoly);
-            }
-        }
-        else
-        {
-            mpGraphics->DrawPolyPolygon(j, pPointAry, pPointAryAry, *this);
-        }
-    }
-
-    if (pPointAry != aStackAry1)
-    {
-        delete[] pPointAry;
-        delete[] pPointAryAry;
-        delete[] pFlagAryAry;
-    }
 }
 
 void OutputDevice::ImplDrawPolyPolygon(const tools::PolyPolygon& rPolyPoly,

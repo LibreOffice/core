@@ -27,8 +27,7 @@
 #include <vcl/virdev.hxx>
 
 #include <salgdi.hxx>
-
-#include "polypolygon.hxx"
+#include <polypolygon.hxx>
 
 #include <memory>
 #include <cassert>

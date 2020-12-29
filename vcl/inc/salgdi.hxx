@@ -238,6 +238,8 @@ public:
                                     double i_fTransparency,
                                     const OutputDevice& i_rOutDev);
 
+    void                        DrawPolyPolygon(sal_uInt32 nPoly, tools::PolyPolygon const& rPolyPoly, const OutputDevice& rOutDev);
+
     void                        DrawPolyLine(
                                     const basegfx::B2DHomMatrix& rObjectToDevice,
                                     const basegfx::B2DPolygon& i_rPolygon,
