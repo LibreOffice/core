@@ -102,6 +102,7 @@ void JSDialogNotifyIdle::updateStatus(VclPtr<vcl::Window> pWindow)
     if (!m_aNotifierWindow)
         return;
 
+    // will be deprecated soon
     if (m_aNotifierWindow->IsReallyVisible())
     {
         if (const vcl::ILibreOfficeKitNotifier* pNotifier = m_aNotifierWindow->GetLOKNotifier())
@@ -123,6 +124,21 @@ void JSDialogNotifyIdle::updateStatus(VclPtr<vcl::Window> pWindow)
             pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT,
                                                   aJsonWriter.extractData());
         }
+    }
+
+    // new approach - update also if hidden
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = m_aNotifierWindow->GetLOKNotifier())
+    {
+        tools::JsonWriter aJsonWriter;
+
+        aJsonWriter.put("jsontype", m_sTypeOfJSON);
+        aJsonWriter.put("action", "update");
+        aJsonWriter.put("id", m_aNotifierWindow->GetLOKWindowId());
+        {
+            auto aEntries = aJsonWriter.startNode("control");
+            pWindow->DumpAsPropertyTree(aJsonWriter);
+        }
+        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aJsonWriter.extractData());
     }
 }
 
