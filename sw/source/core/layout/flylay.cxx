@@ -725,7 +725,7 @@ SwFlyLayFrame::SwFlyLayFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame 
 
 // #i28701#
 
-void SwFlyLayFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
+void SwFlyLayFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
     auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
     if(!pLegacy || !pLegacy->m_pNew)
@@ -734,7 +734,7 @@ void SwFlyLayFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
 
     if(!pAnch)
     {
-        SwFlyFrame::Modify(pLegacy->m_pOld, pLegacy->m_pNew);
+        SwFlyFrame::SwClientNotify(rMod, rHint);
         return;
     }
     SAL_WARN_IF(pAnch->GetAnchorId() == GetFormat()->GetAnchor().GetAnchorId(), "sw.core", "Invalid change of anchor type.");
