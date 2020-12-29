@@ -256,7 +256,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
             auto const & rVectorGraphicData(aGraphic.getVectorGraphicData());
             bool bContainsNoGeometry(false);
 
-            if(bool(rVectorGraphicData) && VectorGraphicDataType::Svg == rVectorGraphicData->getVectorGraphicDataType())
+            if(bool(rVectorGraphicData) && VectorGraphicDataType::Svg == rVectorGraphicData->getType())
             {
                 const drawinglayer::primitive2d::Primitive2DContainer aContainer(rVectorGraphicData->getPrimitive2DSequence());
 

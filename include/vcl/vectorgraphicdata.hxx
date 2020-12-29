@@ -64,12 +64,12 @@ private:
     std::deque< css::uno::Reference< css::graphic::XPrimitive2D > > maSequence;
     BitmapEx                    maReplacement;
     size_t                      mNestedBitmapSize;
-    VectorGraphicDataType       meVectorGraphicDataType;
+    VectorGraphicDataType meType;
 
     // extra:
     std::unique_ptr<WmfExternal> mpExternalHeader;
 
-    // If the vector format has more pages this denotes which page to render
+    /// If the vector format has more pages this denotes which page to render
     sal_Int32 mnPageIndex;
 
     /// Useful for PDF, which is vector-based, but still rendered to a bitmap.
@@ -105,23 +105,21 @@ public:
         return maDataContainer;
     }
 
-    sal_uInt32 getVectorGraphicDataArrayLength() const
-    {
-        return maDataContainer.getSize();
-    }
-
     enum class State { UNPARSED, PARSED };
     std::pair<State, size_t> getSizeBytes() const;
 
-    const VectorGraphicDataType& getVectorGraphicDataType() const { return meVectorGraphicDataType; }
+    const VectorGraphicDataType& getType() const { return meType; }
 
     /// data read and evtl. on demand creation
     const basegfx::B2DRange& getRange() const;
-    const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& getPrimitive2DSequence() const;
+    const std::deque<css::uno::Reference<css::graphic::XPrimitive2D>>& getPrimitive2DSequence() const;
     const BitmapEx& getReplacement() const;
     BitmapChecksum GetChecksum() const;
 
-    sal_Int32 getPageIndex() const { return std::max(sal_Int32(0), mnPageIndex); }
+    sal_Int32 getPageIndex() const
+    {
+        return std::max(sal_Int32(0), mnPageIndex);
+    }
 
     void setPageIndex(sal_Int32 nPageIndex)
     {
