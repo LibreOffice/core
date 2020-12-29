@@ -15064,7 +15064,6 @@ vcl/source/outdev/nativecontrols.cxx
 vcl/source/outdev/outdev.cxx
 vcl/source/outdev/outdevstate.cxx
 vcl/source/outdev/pixel.cxx
-vcl/source/outdev/polygon.cxx
 vcl/source/outdev/polyline.cxx
 vcl/source/outdev/rect.cxx
 vcl/source/outdev/text.cxx
