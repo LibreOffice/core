@@ -11,41 +11,6 @@ $(eval $(call gb_Executable_Executable,ui-previewer))
 
 $(eval $(call gb_Executable_use_externals,ui-previewer,\
     boost_headers \
-    $(if $(filter TRUE,$(DISABLE_DYNLOADING)),\
-        boost_filesystem \
-        boost_iostreams \
-        boost_system \
-        cairo \
-        dtoa \
-        epubgen \
-        expat \
-        fontconfig \
-        freetype \
-        graphite \
-        harfbuzz \
-        hunspell \
-        hyphen \
-        icudata \
-        icui18n \
-        icuuc \
-        lcms2 \
-        libexttextcat \
-        libjpeg \
-        liblangtag \
-        libnumbertext \
-        libpng \
-        librdf \
-        libxml2 \
-        libxslt \
-        mdds_headers \
-        mythes \
-        openssl \
-        orcus \
-        orcus-parser \
-        qrcodegen \
-        qt5 \
-        revenge \
-    ) \
 ))
 
 $(eval $(call gb_Executable_use_api,ui-previewer,\
@@ -54,10 +19,6 @@ $(eval $(call gb_Executable_use_api,ui-previewer,\
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,ui-previewer,\
-    $(if $(filter TRUE,$(DISABLE_DYNLOADING)),\
-        boost_locale \
-        ulingu \
-    ) \
     vclmain \
 ))
 
