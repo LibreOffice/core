@@ -156,7 +156,6 @@ typedef std::list<FilterPropertyInfo_Impl> FilterPropertyInfoList_Impl;
 
 class FilterPropertiesInfo_Impl
 {
-    sal_uInt32                              nCount;
     FilterPropertyInfoList_Impl             aPropInfos;
 
     std::unique_ptr<Sequence<OUString>>     pApiNames;
@@ -171,11 +170,10 @@ public:
             const Reference< XPropertySet >& xPropSet,
             const rtl::Reference< XMLPropertySetMapper >& maPropMapper,
             const bool bDefault);
-    sal_uInt32 GetPropertyCount() const { return nCount; }
+    sal_uInt32 GetPropertyCount() const { return aPropInfos.size(); }
 };
 
 FilterPropertiesInfo_Impl::FilterPropertiesInfo_Impl() :
-    nCount(0),
     aPropInfos()
 {
 }
@@ -184,7 +182,6 @@ void FilterPropertiesInfo_Impl::AddProperty(
         const OUString& rApiName, const sal_uInt32 nIndex)
 {
     aPropInfos.emplace_back(rApiName, nIndex);
-    nCount++;
 
     OSL_ENSURE( !pApiNames, "performance warning: API names already retrieved" );
     pApiNames.reset();
@@ -192,7 +189,6 @@ void FilterPropertiesInfo_Impl::AddProperty(
 
 const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
 {
-    OSL_ENSURE(nCount == aPropInfos.size(), "wrong property count");
     if( !pApiNames )
     {
         // we have to do three things:
@@ -204,7 +200,7 @@ const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
         aPropInfos.sort();
 
         // merge duplicates
-        if ( nCount > 1 )
+        if ( aPropInfos.size() > 1 )
         {
             FilterPropertyInfoList_Impl::iterator aOld = aPropInfos.begin();
             FilterPropertyInfoList_Impl::iterator aEnd = aPropInfos.end();
@@ -225,7 +221,6 @@ const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
                     aCurrent->GetIndexes().clear();
                     // erase element, and continue with next
                     aCurrent = aPropInfos.erase( aCurrent );
-                    nCount--;
                 }
                 else
                 {
@@ -237,7 +232,7 @@ const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
         }
 
         // construct sequence
-        pApiNames.reset( new Sequence < OUString >( nCount ) );
+        pApiNames.reset( new Sequence < OUString >( aPropInfos.size() ) );
         OUString *pNames = pApiNames->getArray();
 
         for (auto const& propInfo : aPropInfos)
@@ -273,7 +268,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                 FilterPropertyInfoList_Impl::iterator aPropIter(aPropInfos.begin());
                 XMLPropertyState aNewProperty( -1 );
                 sal_uInt32 i = 0;
-                while (nResultCount > 0 && i < nCount)
+                while (nResultCount > 0 && i < aPropInfos.size())
                 {
                     if (pResults->Name == aPropIter->GetApiName())
                     {
@@ -299,7 +294,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
             OSL_ENSURE( rApiNames.getLength() == aResults.getLength(), "wrong implemented XTolerantMultiPropertySet" );
             FilterPropertyInfoList_Impl::iterator aPropIter(aPropInfos.begin());
             XMLPropertyState aNewProperty( -1 );
-            OSL_ENSURE( nCount == static_cast<sal_uInt32>(aResults.getLength()), "wrong implemented XTolerantMultiPropertySet??" );
+            OSL_ENSURE( aPropInfos.size() == static_cast<sal_uInt32>(aResults.getLength()), "wrong implemented XTolerantMultiPropertySet??" );
             for( const auto& rResult : aResults )
             {
                 if ((rResult.Result == beans::TolerantPropertySetResultType::SUCCESS) &&
@@ -339,7 +334,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                 sal_uInt32 nValueCount = 0;
                 sal_uInt32 i;
 
-                for( i = 0; i < nCount; ++i, ++pStates )
+                for( i = 0; i < aPropInfos.size(); ++i, ++pStates )
                 {
                     if( *pStates == PropertyState_DIRECT_VALUE )
                         nValueCount++;
@@ -400,7 +395,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                 const Any *pValues = aValues.getConstArray();
 
                 FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
-                for(sal_uInt32 i = 0; i < nCount; ++i)
+                for(sal_uInt32 i = 0; i < aPropInfos.size(); ++i)
                 {
                     // The value is stored in the PropertySet itself, add to list.
                     XMLPropertyState aNewProperty( -1 );
@@ -418,7 +413,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
         else
         {
             FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
-            for(sal_uInt32 i = 0; i < nCount; ++i)
+            for(sal_uInt32 i = 0; i < aPropInfos.size(); ++i)
             {
                 bool bDirectValue =
                     !pStates || *pStates == PropertyState_DIRECT_VALUE;
