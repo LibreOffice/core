@@ -235,7 +235,7 @@ void SwContentViewConfig::Load()
                 case 24: m_rParent.SetShowChangesInMargin(bSet); break;// "Display/ShowChangesInMargin"
                 case 25:
                 {
-                    sal_Int32 nSet;
+                    sal_Int32 nSet = 0;
                     pValues[nProp] >>= nSet;
                     m_rParent.SetDefaultAnchor(nSet);
                 }
