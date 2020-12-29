@@ -38,7 +38,7 @@
                 <property name="use_underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="options-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pivotfielddialog|extended_tip|options">Opens the Data Field Options dialog. The Options button is visible for column, row, or page fields only.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pivotfielddialog|extended_tip|options">Opens the Data Field Options dialog. The Options button is visible for filters and column or row fields only.</property>
                   </object>
                 </child>
               </object>
