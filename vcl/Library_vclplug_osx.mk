@@ -19,6 +19,8 @@
 
 $(eval $(call gb_Library_Library,vclplug_osx))
 
+$(eval $(call gb_Library_set_plugin_for,vclplug_osx,vcl))
+
 $(eval $(call gb_Library_set_include,vclplug_osx,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
@@ -51,7 +53,6 @@ $(eval $(call gb_Library_use_libraries,vclplug_osx,\
     sal \
     salhelper \
     tl \
-    vcl \
 ))
 
 $(eval $(call gb_Library_use_externals,vclplug_osx,\

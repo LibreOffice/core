@@ -162,6 +162,18 @@ gb_Library__COMPONENTPREFIXES := \
 
 gb_Library_get_runtime_filename = $(call gb_Library_get_filename,$(1))
 
+# call gb_Library_set_plugin_for,library,loader
+define gb_Library_set_plugin_for
+ifneq (,$$(filter-out $(gb_Library_KNOWNPLUGINS),$(1)))
+$$(eval $$(call gb_Output_info,currently known plugins are: $(sort $(gb_Library_KNOWNPLUGINS)),ALL))
+$$(eval $$(call gb_Output_error,Unknown plugin(s) '$$(filter-out $(gb_Library_KNOWNPLUGINS),$(1)))'. Plugins must be registered in Repository.mk or RepositoryExternal.mk))
+endif
+
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(2))) : PLUGINS += $(1)
+$(eval $(call gb_LinkTarget__add_plugin,$(call gb_Library_get_linktarget,$(2)),$(1)))
+$(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+endef
+
 # forward the call to the gb_LinkTarget implementation
 # (note: because the function name is in $(1), the other args are shifted by 1)
 define gb_Library__forward_to_Linktarget

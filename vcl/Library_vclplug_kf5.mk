@@ -19,6 +19,8 @@
 
 $(eval $(call gb_Library_Library,vclplug_kf5))
 
+$(eval $(call gb_Library_set_plugin_for,vclplug_kf5,vcl))
+
 $(eval $(call gb_Library_use_custom_headers,vclplug_kf5,vcl/unx/kf5))
 
 $(eval $(call gb_Library_set_include,vclplug_kf5,\
@@ -35,7 +37,6 @@ $(eval $(call gb_Library_use_sdk_api,vclplug_kf5))
 
 $(eval $(call gb_Library_use_libraries,vclplug_kf5,\
     vclplug_qt5 \
-    vcl \
     tl \
     utl \
     sot \

@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Library_Library,sdui))
 
+$(eval $(call gb_Library_set_plugin_for,sdui,sd))
+
 $(eval $(call gb_Library_set_include,sdui,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sd/inc \
@@ -49,7 +51,6 @@ $(eval $(call gb_Library_use_libraries,sdui,\
     fwk \
     sal \
     salhelper \
-    sd \
     sfx \
     sot \
     svl \
