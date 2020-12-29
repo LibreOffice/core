@@ -1041,6 +1041,7 @@ ifeq ($(DISABLE_DYNLOADING),)
 $(call gb_LinkTarget_get_target,$(1)) : \
 	$(foreach lib,$(3),$(call gb_Library_get_exports_target,$(lib)))
 endif
+
 $(call gb_LinkTarget_get_headers_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_Library_get_headers_target,$(lib)))
 $(foreach lib,$(2),$(call gb_LinkTarget__lib_dummy_depend,$(lib)))
@@ -1089,7 +1090,12 @@ endef
 define gb_LinkTarget_use_libraries
 ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
 $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
-$$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk or RepositoryExternal.mk))
+$$(eval $$(call gb_Output_error,Cannot link against library/libraries '$$(filter-out $(gb_Library_KNOWNLIBS),$(2))'. Libraries must be registered in Repository.mk or RepositoryExternal.mk))
+endif
+ifneq (,$$(filter $(2),$(gb_Library_KNOWNPLUGINS)))
+ifneq (,$$(filter $(1),$$(foreach plugin,$(gb_Library_KNOWNPLUGINS),$(call gb_Library__get_workdir_linktargetname,$(plugin)))))
+$$(eval $$(call gb_Output_error,Cannot link against plugin library/libraries '$$(filter $(2),$(gb_Library_KNOWNPLUGINS))'. Only plugins are allowed to do that.))
+endif
 endif
 
 ifeq ($(call gb_LinkTarget__is_build_tool,$(1)),$(true))
@@ -1789,5 +1795,33 @@ $(call gb_LinkTarget_get_target,$(1)) : T_USE_LD := $(or $(CLANG_USE_LD),$(USE_L
 
 endef
 
+gb_LinkTarget__get_plugins_var = $(call gb_LinkTarget__get_workdir_linktargetname,$(1))<>PLUGINS
+gb_LinkTarget__get_plugins = $($(call gb_LinkTarget__get_plugins_var,$(1)))
+gb_Library__get_plugins = $($(call gb_LinkTarget__get_plugins_var,$(call gb_Library_get_linktarget,$(1))))
+
+define gb_LinkTarget__add_plugin
+$(call gb_LinkTarget__get_plugins_var,$(1)) += $(2)
+
+endef
+
+# call gb_LinkTarget__set_plugin_for,linktarget,loader
+define gb_LinkTarget__set_plugin_for
+ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
+$$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
+$$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk or RepositoryExternal.mk))
+endif
+ifeq (,$(filter $(1),$(foreach plugin,$(gb_Library_KNOWNPLUGINS),$(call gb_Library_get_linktarget,$(plugin)))))
+$$(eval $$(call gb_Output_error,Unknown plugin(s) '$(filter $(1),$(foreach plugin,$(gb_Library_KNOWNPLUGINS),$(call gb_Library_get_linktarget,$(plugin))))'. Plugins must be registered in Repository.mk or RepositoryExternal.mk))
+endif
+ifeq (,$(filter $(1),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktarget,$(lib)))))
+$$(eval $$(call gb_Output_error,Plugins can't be in mergelibs))
+endif
+ifeq ($(call gb_LinkTarget__is_build_tool,$(1)),$(true))
+$$(eval $$(call gb_Output_error,Plugin support for build tools not implemented))
+endif
+
+$(call gb_LinkTarget__use_libraries,$(1),$(2),$(2))
+
+endef
 
 # vim: set noet sw=4:
