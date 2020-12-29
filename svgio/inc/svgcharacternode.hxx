@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SVGIO_INC_SVGCHARACTERNODE_HXX
 #define INCLUDED_SVGIO_INC_SVGCHARACTERNODE_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "svgnode.hxx"
 
 namespace drawinglayer::primitive2d { class TextSimplePortionPrimitive2D; }
@@ -148,7 +152,7 @@ namespace svgio::svgreader
             void decomposeText(drawinglayer::primitive2d::Primitive2DContainer& rTarget, SvgTextPosition& rSvgTextPosition) const;
             void whiteSpaceHandling();
             void addGap();
-            void concatenate(const OUString& rText);
+            void concatenate(std::u16string_view rText);
 
             /// Text content
             const OUString& getText() const { return maText; }

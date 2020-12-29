@@ -10,6 +10,7 @@
 #define INCLUDED_OOX_MATHML_IMPORTUTILS_HXX
 
 #include <map>
+#include <string_view>
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -229,7 +230,7 @@ public:
     void appendOpeningTag(int token, const AttributeList& attribs);
     void appendClosingTag(int token);
     // appends the characters after the last appended token
-    void appendCharacters(const OUString& characters);
+    void appendCharacters(std::u16string_view characters);
 };
 
 inline OUString XmlStream::Tag::attribute(int t, const OUString& def) const

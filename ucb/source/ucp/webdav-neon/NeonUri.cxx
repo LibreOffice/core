@@ -235,7 +235,7 @@ OUString NeonUri::GetPathBaseNameUnescaped () const
     return unescape( GetPathBaseName() );
 }
 
-void NeonUri::AppendPath (const OUString& rPath)
+void NeonUri::AppendPath (std::u16string_view rPath)
 {
     if (mPath.lastIndexOf ('/') != mPath.getLength () - 1)
         mPath += "/";

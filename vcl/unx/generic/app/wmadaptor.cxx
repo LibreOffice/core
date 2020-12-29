@@ -19,6 +19,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <string_view>
 
 #include <i18nlangtag/languagetag.hxx>
 #include <rtl/locale.h>
@@ -973,7 +974,8 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
     osl_getProcessLocale( &pLocale );
     if( pLocale )
     {
-        OUString aLocaleString( LanguageTag( *pLocale).getGlibcLocaleString( OUString()));
+        OUString aLocaleString(
+            LanguageTag( *pLocale).getGlibcLocaleString( std::u16string_view()));
         aWMLocale = OUStringToOString( aLocaleString, RTL_TEXTENCODING_ISO_8859_1 );
     }
     else

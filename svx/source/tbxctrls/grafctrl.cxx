@@ -60,7 +60,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-#define TOOLBOX_NAME                "colorbar"
+#define TOOLBOX_NAME                u"colorbar"
 #define RID_SVXSTR_UNDO_GRAFCROP    RID_SVXSTR_GRAFCROP
 
 namespace {

@@ -3999,7 +3999,7 @@ void FieldContext::SetTextField(uno::Reference<text::XTextField> const& xTextFie
     m_xTextField = xTextField;
 }
 
-void FieldContext::AppendCommand(const OUString& rPart)
+void FieldContext::AppendCommand(std::u16string_view rPart)
 {
     m_sCommand += rPart;
 }
@@ -6067,7 +6067,7 @@ bool DomainMapper_Impl::IsFieldResultAsString()
     return bRet;
 }
 
-void DomainMapper_Impl::AppendFieldResult(OUString const& rString)
+void DomainMapper_Impl::AppendFieldResult(std::u16string_view rString)
 {
     assert(!m_aFieldStack.empty());
     FieldContextPtr pContext = m_aFieldStack.back();

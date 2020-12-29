@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <ObjectNameProvider.hxx>
 #include <ResId.hxx>
 #include <strings.hrc>
@@ -80,11 +84,11 @@ OUString lcl_getFullSeriesName( const OUString& rObjectCID, const Reference< fra
     return aRet;
 }
 
-void lcl_addText( OUString& rOut, const OUString& rSeparator, const OUString& rNext )
+void lcl_addText( OUString& rOut, std::u16string_view rSeparator, std::u16string_view rNext )
 {
-    if( !(rOut.isEmpty() || rNext.isEmpty()) )
+    if( !(rOut.isEmpty() || rNext.empty()) )
         rOut+=rSeparator;
-    if( !rNext.isEmpty() )
+    if( !rNext.empty() )
         rOut+=rNext;
 }
 

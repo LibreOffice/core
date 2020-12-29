@@ -21,6 +21,8 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_PAGESETTINGS_HXX
 
 #include <memory>
+#include <string_view>
+
 #include "worksheethelper.hxx"
 
 namespace oox { class AttributeList; }
@@ -96,7 +98,8 @@ public:
     /** Imports header and footer settings from a headerFooter element. */
     void                importHeaderFooter( const AttributeList& rAttribs );
     /** Imports header/footer characters from a headerFooter element. */
-    void                importHeaderFooterCharacters( const OUString& rChars, sal_Int32 nElement );
+    void                importHeaderFooterCharacters(
+        std::u16string_view rChars, sal_Int32 nElement );
     /** Imports the picture element. */
     void                importPicture( const ::oox::core::Relations& rRelations, const AttributeList& rAttribs );
 

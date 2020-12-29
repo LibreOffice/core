@@ -194,12 +194,12 @@ bool SwMacroField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 /// create an internally used macro name from the library and macro name parts
 void SwMacroField::CreateMacroString(
     OUString& rMacro,
-    const OUString& rMacroName,
+    std::u16string_view rMacroName,
     const OUString& rLibraryName )
 {
     // concatenate library and name; use dot only if both strings have content
     rMacro = rLibraryName;
-    if ( !rLibraryName.isEmpty() && !rMacroName.isEmpty() )
+    if ( !rLibraryName.isEmpty() && !rMacroName.empty() )
         rMacro += ".";
     rMacro += rMacroName;
 }

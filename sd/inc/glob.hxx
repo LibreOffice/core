@@ -48,8 +48,8 @@
 #define SD_LT_SEPARATOR "~LT~"
 
 // option-stream identifier
-#define SD_OPTION_MORPHING  "Morph"
-#define SD_OPTION_VECTORIZE "Vectorize"
+#define SD_OPTION_MORPHING  u"Morph"
+#define SD_OPTION_VECTORIZE u"Vectorize"
 
 #endif // _ INCLUDED_SD_INC_GLOB_HXX
 

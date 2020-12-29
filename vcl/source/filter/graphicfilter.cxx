@@ -585,7 +585,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
     return aGraphic;
 }
 
-static OUString ImpCreateFullFilterPath( const OUString& rPath, const OUString& rFilterName )
+static OUString ImpCreateFullFilterPath( const OUString& rPath, std::u16string_view rFilterName )
 {
     OUString aPathURL;
 

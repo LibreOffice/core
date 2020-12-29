@@ -28,6 +28,10 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONURI_HXX
 #define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONURI_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <config_lgpl.h>
 #include <ne_uri.h>
 #include <rtl/ustring.hxx>
@@ -84,7 +88,7 @@ class NeonUri
         void SetScheme (const OUString& scheme)
             { mScheme = scheme; calculateURI (); };
 
-        void AppendPath (const OUString& rPath);
+        void AppendPath (std::u16string_view rPath);
 
         static OUString escapeSegment( const OUString& segment );
         static OUString unescape( const OUString& string );

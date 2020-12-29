@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <svx/svxdllapi.h>
 
@@ -37,7 +41,7 @@ namespace svx
             css::frame::XLayoutManager >   m_xLayouter;
 
     public:
-        ToolboxAccess( const OUString& rToolboxName );
+        ToolboxAccess( std::u16string_view rToolboxName );
 
     public:
         /** toggles the toolbox

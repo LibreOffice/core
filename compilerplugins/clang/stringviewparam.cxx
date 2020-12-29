@@ -195,6 +195,14 @@ SmallVector<DeclRefExpr const*, 2> relevantCXXOperatorCallExpr(CXXOperatorCallEx
         }
         return v;
     }
+    if (op == OO_PlusEqual)
+    {
+        if (relevantStringType(expr->getArg(0)->getType()) != StringType::RtlOustring)
+        {
+            return {};
+        }
+        return wrap(relevantDeclRefExpr(expr->getArg(1)));
+    }
     return {};
 }
 

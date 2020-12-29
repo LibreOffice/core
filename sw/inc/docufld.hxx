@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SW_INC_DOCUFLD_HXX
 #define INCLUDED_SW_INC_DOCUFLD_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <tools/solar.h>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
@@ -417,7 +421,7 @@ public:
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
     static void CreateMacroString( OUString& rMacro,
-                                   const OUString& rMacroName,
+                                   std::u16string_view rMacroName,
                                    const OUString& rLibraryName );
 
     static bool isScriptURL( const OUString& str );

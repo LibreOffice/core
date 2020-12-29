@@ -200,7 +200,7 @@ public:
     objects are removed with this mechanism instead of RemoveObject*/
     virtual SdrObject* ReplaceObject(SdrObject* pNewObj, size_t nObjNum) override;
 
-    void        SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eObjKind, const OUString& rStr );
+    void        SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eObjKind, std::u16string_view rStr );
 
     void        SetPageKind(PageKind ePgType)        { mePageKind = ePgType; }
     PageKind    GetPageKind() const                  { return mePageKind; }

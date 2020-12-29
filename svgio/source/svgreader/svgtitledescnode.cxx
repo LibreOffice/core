@@ -37,7 +37,7 @@ namespace svgio::svgreader
         {
         }
 
-        void SvgTitleDescNode::concatenate(const OUString& rChars)
+        void SvgTitleDescNode::concatenate(std::u16string_view rChars)
         {
             maText += rChars;
         }

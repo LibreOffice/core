@@ -33,7 +33,7 @@ namespace svx
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::beans;
 
-    ToolboxAccess::ToolboxAccess( const OUString& rToolboxName ) :
+    ToolboxAccess::ToolboxAccess( std::u16string_view rToolboxName ) :
         m_sToolboxResName   ( "private:resource/toolbar/" )
     {
         m_sToolboxResName += rToolboxName;

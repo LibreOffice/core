@@ -31,6 +31,7 @@
 #include <com/sun/star/util/Color.hpp>
 #include <algorithm>
 #include <numeric>
+#include <string_view>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -50,7 +51,7 @@ namespace {
     public:
         LineDescriptor();
         void AddPart (
-            const OUString& rsLine,
+            std::u16string_view rsLine,
             const css::uno::Reference<css::rendering::XCanvasFont>& rxFont);
         bool IsEmpty() const;
 
@@ -503,7 +504,7 @@ LineDescriptor::LineDescriptor()
 }
 
 void LineDescriptor::AddPart (
-    const OUString& rsLine,
+    std::u16string_view rsLine,
     const css::uno::Reference<css::rendering::XCanvasFont>& rxFont)
 {
     msLine += rsLine;
@@ -689,7 +690,7 @@ void LineDescriptorList::FormatText (
                         nIndex = nLength;
                     }
 
-                    aLineDescriptor.AddPart(iPart->copy(nStart, nIndex-nStart), rxFont);
+                    aLineDescriptor.AddPart(iPart->subView(nStart, nIndex-nStart), rxFont);
                     if (nIndex != nLength)
                     {
                         mpLineDescriptors->push_back(aLineDescriptor);
@@ -706,14 +707,14 @@ void LineDescriptorList::FormatText (
         else if (PresenterCanvasHelper::GetTextSize(
             rxFont, aLineDescriptor.msLine+", "+*iPart).Width > nMaximalWidth)
         {
-            aLineDescriptor.AddPart(",", rxFont);
+            aLineDescriptor.AddPart(u",", rxFont);
             mpLineDescriptors->push_back(aLineDescriptor);
             aLineDescriptor = LineDescriptor();
             continue;
         }
         else
         {
-            aLineDescriptor.AddPart(", "+*iPart, rxFont);
+            aLineDescriptor.AddPart(OUString(", "+*iPart), rxFont);
         }
         ++iPart;
     }

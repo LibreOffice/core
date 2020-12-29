@@ -20,6 +20,7 @@
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 
 #include <memory>
+#include <string_view>
 #include <vector>
 
 #include <rtl/ustring.hxx>
@@ -524,7 +525,7 @@ public:
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     void SetTextStyleName( const OUString& s ) { m_sTextStyleName = s; }
-    void AppendText( const OUString& s ) { m_sText += s; }
+    void AppendText( std::u16string_view s ) { m_sText += s; }
 };
 
 class XMLImpRubyTextContext_Impl : public SvXMLImportContext
