@@ -77,6 +77,7 @@ namespace o3tl
 #define IMP_XPM                 "SVIXPM"
 #define IMP_SVG                 "SVISVG"
 #define IMP_PDF                 "SVIPDF"
+#define IMP_TIFF                "SVTIFF"
 #define EXP_BMP                 "SVBMP"
 #define EXP_SVMETAFILE          "SVMETAFILE"
 #define EXP_WMF                 "SVWMF"
@@ -85,6 +86,8 @@ namespace o3tl
 #define EXP_SVG                 "SVESVG"
 #define EXP_PDF                 "SVEPDF"
 #define EXP_PNG                 "SVEPNG"
+#define EXP_TIFF                "SVTIFF"
+
 
 #define BMP_SHORTNAME           u"BMP"
 #define GIF_SHORTNAME           u"GIF"

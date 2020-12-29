@@ -576,9 +576,7 @@ void TIFFWriter::EndCompression()
     pTable.reset();
 }
 
-
-extern "C" SAL_DLLPUBLIC_EXPORT bool
-etiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
+bool ExportTiffGraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem)
 {
     TIFFWriter aWriter(rStream);
     return aWriter.WriteTIFF( rGraphic, pFilterConfigItem );

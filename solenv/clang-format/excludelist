@@ -3900,7 +3900,6 @@ filter/qa/cppunit/filters-ppm-test.cxx
 filter/qa/cppunit/filters-psd-test.cxx
 filter/qa/cppunit/filters-ras-test.cxx
 filter/qa/cppunit/filters-tga-test.cxx
-filter/qa/cppunit/filters-tiff-test.cxx
 filter/qa/cppunit/msfilter-test.cxx
 filter/qa/cppunit/priority-test.cxx
 filter/qa/cppunit/xslt-test.cxx
@@ -3931,7 +3930,6 @@ filter/source/graphicfilter/egif/egif.cxx
 filter/source/graphicfilter/egif/giflzwc.cxx
 filter/source/graphicfilter/egif/giflzwc.hxx
 filter/source/graphicfilter/eps/eps.cxx
-filter/source/graphicfilter/etiff/etiff.cxx
 filter/source/graphicfilter/icgm/actimpr.cxx
 filter/source/graphicfilter/icgm/bitmap.cxx
 filter/source/graphicfilter/icgm/bitmap.hxx
@@ -3979,10 +3977,6 @@ filter/source/graphicfilter/ipict/shape.hxx
 filter/source/graphicfilter/ipsd/ipsd.cxx
 filter/source/graphicfilter/iras/iras.cxx
 filter/source/graphicfilter/itga/itga.cxx
-filter/source/graphicfilter/itiff/ccidecom.cxx
-filter/source/graphicfilter/itiff/ccidecom.hxx
-filter/source/graphicfilter/itiff/itiff.cxx
-filter/source/graphicfilter/itiff/lzwdecom.cxx
 filter/source/msfilter/countryid.cxx
 filter/source/msfilter/dffpropset.cxx
 filter/source/msfilter/escherex.cxx
@@ -14938,12 +14932,17 @@ vcl/source/filter/FilterConfigCache.hxx
 vcl/source/filter/FilterConfigItem.cxx
 vcl/source/filter/graphicfilter.cxx
 vcl/source/filter/graphicfilter2.cxx
+vcl/source/filter/etiff/etiff.cxx
 vcl/source/filter/igif/decode.cxx
 vcl/source/filter/igif/decode.hxx
 vcl/source/filter/igif/gifread.cxx
 vcl/source/filter/ixbm/xbmread.cxx
 vcl/source/filter/ixpm/rgbtable.hxx
 vcl/source/filter/ixpm/xpmread.cxx
+vcl/source/filter/itiff/ccidecom.cxx
+vcl/source/filter/itiff/ccidecom.hxx
+vcl/source/filter/itiff/itiff.cxx
+vcl/source/filter/itiff/lzwdecom.cxx
 vcl/source/filter/jpeg/Exif.cxx
 vcl/source/filter/jpeg/Exif.hxx
 vcl/source/filter/jpeg/JpegReader.cxx

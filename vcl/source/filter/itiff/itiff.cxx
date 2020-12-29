@@ -30,6 +30,8 @@
 #include "lzwdecom.hxx"
 #include "ccidecom.hxx"
 
+#include <filter/TiffReader.hxx>
+
 namespace {
 
 template< typename T > T BYTESWAP(T nByte) {
@@ -1710,11 +1712,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
         return false;
 }
 
-
-//================== GraphicImport - the exported function ================
-
-extern "C" SAL_DLLPUBLIC_EXPORT bool
-itiGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
+bool ImportTiffGraphicImport(SvStream & rStream, Graphic & rGraphic)
 {
     TIFFReader aTIFFReader;
     try

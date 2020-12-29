@@ -14,31 +14,26 @@
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 
-extern "C"
-{
-    SAL_DLLPUBLIC_EXPORT bool SAL_CALL
-        itiGraphicImport(SvStream & rStream, Graphic & rGraphic,
-        FilterConfigItem*);
-}
+#include <filter/TiffReader.hxx>
 
 using namespace ::com::sun::star;
 
 /* Implementation of Filters test */
 
-class TiffFilterTest
-    : public test::FiltersTest
-    , public test::BootstrapFixture
+class TiffFilterTest : public test::FiltersTest, public test::BootstrapFixture
 {
 public:
-    TiffFilterTest() : BootstrapFixture(true, false) {}
+    TiffFilterTest()
+        : BootstrapFixture(true, false)
+    {
+    }
 
-    virtual bool load(const OUString &,
-        const OUString &rURL, const OUString &,
-        SfxFilterFlags, SotClipboardFormatId, unsigned int) override;
+    virtual bool load(const OUString&, const OUString& rURL, const OUString&, SfxFilterFlags,
+                      SotClipboardFormatId, unsigned int) override;
 
     OUString getUrl()
     {
-        return m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/tiff/");
+        return m_directories.getURLFromSrc(u"/vcl/qa/cppunit/graphicfilter/data/tiff/");
     }
 
     /**
@@ -57,20 +52,15 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-bool TiffFilterTest::load(const OUString &,
-    const OUString &rURL, const OUString &,
-    SfxFilterFlags, SotClipboardFormatId, unsigned int)
+bool TiffFilterTest::load(const OUString&, const OUString& rURL, const OUString&, SfxFilterFlags,
+                          SotClipboardFormatId, unsigned int)
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
-    return itiGraphicImport(aFileStream, aGraphic, nullptr);
+    return ImportTiffGraphicImport(aFileStream, aGraphic);
 }
 
-void TiffFilterTest::testCVEs()
-{
-    testDir(OUString(),
-        getUrl());
-}
+void TiffFilterTest::testCVEs() { testDir(OUString(), getUrl()); }
 
 void TiffFilterTest::testTdf126460()
 {
@@ -106,7 +96,6 @@ void TiffFilterTest::testTdf115863()
     Size aSize = aBitmap.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(tools::Long(528), aSize.Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(618), aSize.Height());
-
 }
 
 void TiffFilterTest::testTdf138818()
@@ -124,11 +113,8 @@ void TiffFilterTest::testTdf138818()
     // - Expected: 46428
     // - Actual  : 45951
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(46428), aGraphic.GetGfxLink().GetDataSize());
-
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TiffFilterTest);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
