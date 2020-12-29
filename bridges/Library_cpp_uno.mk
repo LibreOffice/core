@@ -289,4 +289,8 @@ $(eval $(call gb_Library_add_cxxobjects,$(CPPU_ENV)_uno,\
 			, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
 	))
 
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+$(eval $(call gb_Library_set_plugin_for_nodep,$(CPPU_ENV)_uno,cppu))
+endif
+
 # vim: set noet sw=4 ts=4:

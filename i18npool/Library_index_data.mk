@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Library_Library,index_data))
 
+$(eval $(call gb_Library_set_plugin_for_nodep,index_data,i18npool))
+
 $(eval $(call gb_Library_add_generated_exception_objects,index_data,\
 	$(foreach txt,$(wildcard $(SRCDIR)/i18npool/source/indexentry/data/*.txt),\
 		CustomTarget/i18npool/indexentry/$(notdir $(basename $(txt)))) \

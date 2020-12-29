@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Library_Library,textconv_dict))
 
+$(eval $(call gb_Library_set_plugin_for_nodep,textconv_dict,i18npool))
+
 $(eval $(call gb_Library_set_include,textconv_dict,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/i18npool/inc \

@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Library_Library,dict_zh))
 
+$(eval $(call gb_Library_set_plugin_for_nodep,dict_zh,i18npool))
+
 $(eval $(call gb_Library_add_generated_exception_objects,dict_zh,\
 	CustomTarget/i18npool/breakiterator/dict_zh \
 ))

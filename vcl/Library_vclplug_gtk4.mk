@@ -19,6 +19,8 @@
 
 $(eval $(call gb_Library_Library,vclplug_gtk4))
 
+$(eval $(call gb_Library_set_plugin_for,vclplug_gtk4,vcl))
+
 # Silence deprecation warnings wholesale as long as vcl/unx/gtk4/*.cxx just
 # forward to vcl/unx/gtk/*.cxx:
 $(eval $(call gb_Library_add_cxxflags,vclplug_gtk4, \
@@ -54,7 +56,6 @@ $(eval $(call gb_Library_add_libs,vclplug_gtk4,\
 ))
 
 $(eval $(call gb_Library_use_libraries,vclplug_gtk4,\
-    vcl \
     svl \
     tl \
     utl \
