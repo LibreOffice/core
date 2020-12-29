@@ -1419,7 +1419,7 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
                 }
             }
             aGraphic.SetGfxLink(std::make_shared<GfxLink>(std::move(pGraphicContent), nGraphicContentSize, eLinkType));
-            aGraphic.ImplGetImpGraphic()->ImplSetPrepared(bAnimated, pSizeHint);
+            aGraphic.ImplGetImpGraphic()->setPrepared(bAnimated, pSizeHint);
         }
     }
 

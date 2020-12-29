@@ -26,10 +26,10 @@ GraphicID::GraphicID(ImpGraphic const& rGraphic)
 {
     rGraphic.ensureAvailable();
 
-    mnID1 = static_cast<sal_uLong>(rGraphic.ImplGetType()) << 28;
+    mnID1 = static_cast<sal_uLong>(rGraphic.getType()) << 28;
     mnID2 = mnID3 = mnID4 = 0;
 
-    if (rGraphic.ImplGetType() == GraphicType::Bitmap)
+    if (rGraphic.getType() == GraphicType::Bitmap)
     {
         auto const& rVectorGraphicDataPtr = rGraphic.getVectorGraphicData();
         if (rVectorGraphicDataPtr)
@@ -42,35 +42,35 @@ GraphicID::GraphicID(ImpGraphic const& rGraphic)
             mnID4 = vcl_get_checksum(0, rVectorGraphicDataPtr->getBinaryDataContainer().getData(),
                                      rVectorGraphicDataPtr->getBinaryDataContainer().getSize());
         }
-        else if (rGraphic.ImplIsAnimated())
+        else if (rGraphic.isAnimated())
         {
-            const Animation aAnimation(rGraphic.ImplGetAnimation());
+            const Animation aAnimation(rGraphic.getAnimation());
 
             mnID1 |= (aAnimation.Count() & 0x0fffffff);
             mnID2 = aAnimation.GetDisplaySizePixel().Width();
             mnID3 = aAnimation.GetDisplaySizePixel().Height();
-            mnID4 = rGraphic.ImplGetChecksum();
+            mnID4 = rGraphic.getChecksum();
         }
         else
         {
-            const BitmapEx aBmpEx(rGraphic.ImplGetBitmapEx(GraphicConversionParameters()));
+            const BitmapEx aBmpEx(rGraphic.getBitmapEx(GraphicConversionParameters()));
 
             mnID1 |= (((static_cast<sal_uLong>(aBmpEx.GetTransparentType()) << 8)
                        | (aBmpEx.IsAlpha() ? 1 : 0))
                       & 0x0fffffff);
             mnID2 = aBmpEx.GetSizePixel().Width();
             mnID3 = aBmpEx.GetSizePixel().Height();
-            mnID4 = rGraphic.ImplGetChecksum();
+            mnID4 = rGraphic.getChecksum();
         }
     }
-    else if (rGraphic.ImplGetType() == GraphicType::GdiMetafile)
+    else if (rGraphic.getType() == GraphicType::GdiMetafile)
     {
-        const GDIMetaFile& rMtf = rGraphic.ImplGetGDIMetaFile();
+        const GDIMetaFile& rMtf = rGraphic.getGDIMetaFile();
 
         mnID1 |= (rMtf.GetActionSize() & 0x0fffffff);
         mnID2 = rMtf.GetPrefSize().Width();
         mnID3 = rMtf.GetPrefSize().Height();
-        mnID4 = rGraphic.ImplGetChecksum();
+        mnID4 = rGraphic.getChecksum();
     }
 }
 
