@@ -469,7 +469,7 @@ Public Function Forms(Optional ByVal Form As Variant) As Variant
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		WRITERFORMNOTFOUNDERROR		Form not found
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		A zero-base array of strings if Form is absent
+&apos;&apos;&apos;		A zero-based array of strings if Form is absent
 &apos;&apos;&apos;		An instance of the SF_Form class if Form exists
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;			Dim myForm As Object, myList As Variant
@@ -504,7 +504,7 @@ Try:
 		Forms = vFormNames
 	Else
 		If VarType(Form) = V_STRING Then	&apos;	Find the form by name
-		If Not ScriptForge.SF_Utils._Validate(Form, &quot;Form&quot;, V_STRING, vFormNames) Then GoTo Finally
+			If Not ScriptForge.SF_Array.Contains(vFormNames, Form, CaseSensitive := True) Then GoTo CatchNotFound
 			Set oXForm = oForms.getByName(Form)
 		Else								&apos;	Find the form by index
 			If Form &lt; 0 Or Form &gt;= oForms.Count Then GoTo CatchNotFound
