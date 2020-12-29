@@ -162,7 +162,7 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
  * if the stream is opened for reading but does not exist, an 'empty'
  * RefObject is returned
  */
-tools::SvRef<SotStorageStream> SdModule::GetOptionStream( const OUString& rOptionName,
+tools::SvRef<SotStorageStream> SdModule::GetOptionStream( std::u16string_view rOptionName,
                                               SdOptionStreamMode eMode )
 {
     ::sd::DrawDocShell*     pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );

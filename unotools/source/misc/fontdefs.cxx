@@ -20,6 +20,8 @@
 #include <unotools/fontdefs.hxx>
 #include <unotools/fontcfg.hxx>
 #include <rtl/ustrbuf.hxx>
+
+#include <string_view>
 #include <unordered_map>
 
 sal_Unicode const aBatang[] = { 0xBC14, 0xD0D5, 0 };
@@ -489,7 +491,7 @@ static bool ImplIsFontToken( const OUString& rName, std::u16string_view rToken )
     return false;
 }
 
-static void ImplAppendFontToken( OUString& rName, const OUString& rNewToken )
+static void ImplAppendFontToken( OUString& rName, std::u16string_view rNewToken )
 {
     if ( !rName.isEmpty() )
     {
@@ -498,7 +500,7 @@ static void ImplAppendFontToken( OUString& rName, const OUString& rNewToken )
     rName += rNewToken;
 }
 
-void AddTokenFontName( OUString& rName, const OUString& rNewToken )
+void AddTokenFontName( OUString& rName, std::u16string_view rNewToken )
 {
     if ( !ImplIsFontToken( rName, rNewToken ) )
         ImplAppendFontToken( rName, rNewToken );

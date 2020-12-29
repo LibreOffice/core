@@ -88,7 +88,7 @@ class SbiIoSystem
     short     nChan;
     ErrCode   nError;
     void      ReadCon(OString&);
-    void      WriteCon(const OUString&);
+    void      WriteCon(std::u16string_view);
 public:
     SbiIoSystem();
    ~SbiIoSystem() COVERITY_NOEXCEPT_FALSE;
@@ -102,7 +102,7 @@ public:
     void  Close();
     void  Read(OString&);
     char  Read();
-    void  Write(const OUString&);
+    void  Write(std::u16string_view);
     // 0 == bad channel or no SvStream (nChannel=0..CHANNELS-1)
     SbiStream* GetStream( short nChannel ) const;
     void  CloseAll(); // JSM

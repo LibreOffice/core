@@ -99,7 +99,7 @@ OUString const & LwpPara::GetContentText(bool bAllText)
 /**
  * @short   set text of paragraph
  */
-void LwpPara::SetAllText(const OUString& sText)
+void LwpPara::SetAllText(std::u16string_view sText)
 {
     m_AllText+=sText;
 }

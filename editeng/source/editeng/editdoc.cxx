@@ -1724,7 +1724,7 @@ void ContentNode::Insert(const OUString& rStr, sal_Int32 nPos)
     maString = maString.replaceAt(nPos, 0, rStr);
 }
 
-void ContentNode::Append(const OUString& rStr)
+void ContentNode::Append(std::u16string_view rStr)
 {
     maString += rStr;
 }

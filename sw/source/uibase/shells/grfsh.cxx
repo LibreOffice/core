@@ -64,7 +64,7 @@
 #include <unocrsr.hxx>
 #include <memory>
 
-#define TOOLBOX_NAME "colorbar"
+#define TOOLBOX_NAME u"colorbar"
 
 class SwGrfShell::SwExternalToolEdit
     : public ExternalToolEdit

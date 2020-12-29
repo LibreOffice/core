@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
@@ -148,7 +152,7 @@ static OString lcl_getColGroupString(sal_Int32 nSpan, sal_Int32 nWidth)
     return aByteStr.makeStringAndClear();
 }
 
-static void lcl_AddStamp( OUString& rStr, const OUString& rName,
+static void lcl_AddStamp( OUString& rStr, std::u16string_view rName,
     const css::util::DateTime& rDateTime,
     const LocaleDataWrapper& rLoc )
 {
@@ -161,7 +165,7 @@ static void lcl_AddStamp( OUString& rStr, const OUString& rName,
     OUString        aStrTime    = rLoc.getTime( aDateTime );
 
     rStr += GLOBSTR( STR_BY ) + " ";
-    if (!rName.isEmpty())
+    if (!rName.empty())
         rStr += rName;
     else
         rStr += "???";

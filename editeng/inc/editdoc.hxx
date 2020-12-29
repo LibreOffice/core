@@ -31,6 +31,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
+#include <string_view>
 #include <vector>
 
 class ImpEditEngine;
@@ -287,7 +288,7 @@ public:
 
     void SetChar(sal_Int32 nPos, sal_Unicode c);
     void Insert(const OUString& rStr, sal_Int32 nPos);
-    void Append(const OUString& rStr);
+    void Append(std::u16string_view rStr);
     void Erase(sal_Int32 nPos);
     void Erase(sal_Int32 nPos, sal_Int32 nCount);
     OUString Copy(sal_Int32 nPos) const;

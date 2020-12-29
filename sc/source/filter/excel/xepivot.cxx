@@ -29,6 +29,7 @@
 
 #include <algorithm>
 #include <math.h>
+#include <string_view>
 
 #include <osl/diagnose.h>
 #include <sot/storage.hxx>
@@ -865,7 +866,7 @@ void XclExpPivotCache::WriteSxindexlistList( XclExpStream& rStrm ) const
 namespace {
 
 /** Returns a display string for a data field containing the field name and aggregation function. */
-OUString lclGetDataFieldCaption( const OUString& rFieldName, ScGeneralFunction eFunc )
+OUString lclGetDataFieldCaption( std::u16string_view rFieldName, ScGeneralFunction eFunc )
 {
     OUString aCaption;
 

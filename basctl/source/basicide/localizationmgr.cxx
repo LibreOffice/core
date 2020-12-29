@@ -171,7 +171,7 @@ void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResou
 
 static OUString implCreatePureResourceId
     ( std::u16string_view aDialogName, std::u16string_view aCtrlName,
-      const OUString& aPropName,
+      std::u16string_view aPropName,
       const Reference< XStringResourceManager >& xStringResourceManager )
 {
     sal_Int32 nUniqueId = xStringResourceManager->getUniqueNumericId();

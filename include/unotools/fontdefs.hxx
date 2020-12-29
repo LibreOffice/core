@@ -19,6 +19,10 @@
 #ifndef INCLUDED_UNOTOOLS_FONTDEFS_HXX
 #define INCLUDED_UNOTOOLS_FONTDEFS_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -38,7 +42,7 @@ namespace o3tl
 
 UNOTOOLS_DLLPUBLIC OUString GetSubsFontName( const OUString& rName, SubsFontFlags nFlags );
 
-UNOTOOLS_DLLPUBLIC void AddTokenFontName( OUString& rName, const OUString& rNewToken );
+UNOTOOLS_DLLPUBLIC void AddTokenFontName( OUString& rName, std::u16string_view rNewToken );
 
 
 class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) ConvertChar

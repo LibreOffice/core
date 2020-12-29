@@ -67,6 +67,7 @@
 #include <lwpobj.hxx>
 #include <lwpobjstrm.hxx>
 
+#include <string_view>
 #include <vector>
 #include "lwpdlvlist.hxx"
 #include <lwpbasetype.hxx>
@@ -184,7 +185,7 @@ public:
 
     bool IsInCell();
 
-    void SetAllText(const OUString& sText);
+    void SetAllText(std::u16string_view sText);
 
 protected:
     sal_uInt32  m_nOrdinal; // Ordinal number of this paragraph

@@ -33,6 +33,7 @@
 #include <vcl/virdev.hxx>
 #include <map>
 #include <memory>
+#include <string_view>
 
 class SdOptions;
 class SvxSearchItem;
@@ -92,7 +93,7 @@ public:
     void                    GetState(SfxItemSet&);
 
     SdOptions*              GetSdOptions(DocumentType eDocType);
-    SD_DLLPUBLIC tools::SvRef<SotStorageStream>     GetOptionStream( const OUString& rOptionName, SdOptionStreamMode eMode );
+    SD_DLLPUBLIC tools::SvRef<SotStorageStream>     GetOptionStream( std::u16string_view rOptionName, SdOptionStreamMode eMode );
 
     bool                    GetWaterCan() const { return bWaterCan; }
     void                    SetWaterCan( bool bWC ) { bWaterCan = bWC; }

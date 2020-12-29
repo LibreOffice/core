@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "porfld.hxx"
 
 class SwTextFootnote;
@@ -89,7 +93,7 @@ public:
 class SwErgoSumPortion : public SwFieldPortion
 {
 public:
-    SwErgoSumPortion( const OUString &rExp, const OUString& rStr );
+    SwErgoSumPortion( const OUString &rExp, std::u16string_view rStr );
     virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 
