@@ -137,7 +137,7 @@ void OutputDevice::ImplDrawPolygon(const tools::Polygon& rPoly,
 {
     if (pClipPolyPoly)
     {
-        ImplDrawPolyPolygon(rPoly, pClipPolyPoly);
+        mpGraphics->DrawPolyPolygon(rPoly, pClipPolyPoly, *this);
     }
     else
     {
