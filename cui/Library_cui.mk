@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Library_Library,cui))
 
+$(eval $(call gb_Library_set_plugin_for,cui,vcl))
+
 $(eval $(call gb_Library_set_componentfile,cui,cui/util/cui))
 
 $(eval $(call gb_Library_set_include,cui,\
@@ -58,7 +60,6 @@ $(eval $(call gb_Library_use_libraries,cui,\
     tl \
     ucbhelper \
     utl \
-    vcl \
     $(if $(ENABLE_BREAKPAD), \
         crashreport \
     ) \
