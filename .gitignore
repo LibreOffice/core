@@ -59,11 +59,6 @@
 /bin/officeotron.sh
 /hardened_runtime.xcent
 /Makefile
-/NEWS
-/TODO
-/README
-/AUTHORS
-/MAINTAINERS
 
 # make id
 /ID
