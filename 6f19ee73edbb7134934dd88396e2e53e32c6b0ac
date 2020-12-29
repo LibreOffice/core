@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75296543_ebd6b6e6",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-29T18:15:17Z",
+      "side": 1,
+      "message": "numbers 0..7 are not on top of the correct columns \nbecause the columns have moved",
+      "revId": "6f19ee73edbb7134934dd88396e2e53e32c6b0ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
