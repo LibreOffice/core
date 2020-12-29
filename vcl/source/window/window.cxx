@@ -3900,30 +3900,36 @@ void Window::RequestDoubleBuffering(bool bRequest)
  * dispose and this altered a lot of code paths, that
  * are better left unchanged for now.
  */
-#define COMPAT_BODY(method,args) \
-    if (!mpWindowImpl || mpWindowImpl->mbInDispose) \
-        Window::method args; \
-    else \
-        method args;
-
 void Window::CompatGetFocus()
 {
-    COMPAT_BODY(GetFocus,())
+    if (!mpWindowImpl || mpWindowImpl->mbInDispose)
+        Window::GetFocus();
+    else
+        GetFocus();
 }
 
 void Window::CompatLoseFocus()
 {
-    COMPAT_BODY(LoseFocus,())
+    if (!mpWindowImpl || mpWindowImpl->mbInDispose)
+        Window::LoseFocus();
+    else
+        LoseFocus();
 }
 
 void Window::CompatStateChanged( StateChangedType nStateChange )
 {
-    COMPAT_BODY(StateChanged,(nStateChange))
+    if (!mpWindowImpl || mpWindowImpl->mbInDispose)
+        Window::StateChanged(nStateChange);
+    else
+        StateChanged(nStateChange);
 }
 
 void Window::CompatDataChanged( const DataChangedEvent& rDCEvt )
 {
-    COMPAT_BODY(DataChanged,(rDCEvt))
+    if (!mpWindowImpl || mpWindowImpl->mbInDispose)
+        Window::DataChanged(rDCEvt);
+    else
+        DataChanged(rDCEvt);
 }
 
 bool Window::CompatPreNotify( NotifyEvent& rNEvt )
