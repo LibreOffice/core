@@ -303,8 +303,7 @@ void LOKitSearchTest::testSearchInPDFNonExisting()
     Graphic aGraphic = pGraphicObject->GetGraphic();
     auto const& pVectorGraphicData = aGraphic.getVectorGraphicData();
     CPPUNIT_ASSERT(pVectorGraphicData);
-    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
-                         pVectorGraphicData->getVectorGraphicDataType());
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
 
     lcl_search("NonExisting");
 
@@ -332,8 +331,7 @@ void LOKitSearchTest::testSearchInPDF()
     Graphic aGraphic = pGraphicObject->GetGraphic();
     auto const& pVectorGraphicData = aGraphic.getVectorGraphicData();
     CPPUNIT_ASSERT(pVectorGraphicData);
-    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
-                         pVectorGraphicData->getVectorGraphicDataType());
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
 
     // Search
     lcl_search("ABC");
@@ -381,8 +379,7 @@ void LOKitSearchTest::testSearchInPDFOnePDFObject()
     Graphic aGraphic = pGraphicObject->GetGraphic();
     auto const& pVectorGraphicData = aGraphic.getVectorGraphicData();
     CPPUNIT_ASSERT(pVectorGraphicData);
-    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
-                         pVectorGraphicData->getVectorGraphicDataType());
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
 
     // Search down
     lcl_search("ABC", false, false);
@@ -419,8 +416,7 @@ void LOKitSearchTest::testSearchInPDFInMultiplePages()
         Graphic aGraphic = pGraphicObject->GetGraphic();
         auto const& pVectorGraphicData = aGraphic.getVectorGraphicData();
         CPPUNIT_ASSERT(pVectorGraphicData);
-        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
-                             pVectorGraphicData->getVectorGraphicDataType());
+        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
     }
 
     // Search for "him"
@@ -511,8 +507,7 @@ void LOKitSearchTest::testSearchInPDFInMultiplePagesBackwards()
         Graphic aGraphic = pGraphicObject->GetGraphic();
         auto const& pVectorGraphicData = aGraphic.getVectorGraphicData();
         CPPUNIT_ASSERT(pVectorGraphicData);
-        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
-                             pVectorGraphicData->getVectorGraphicDataType());
+        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
     }
 
     // Expected for backwards search is:
@@ -633,8 +628,7 @@ void LOKitSearchTest::testSearchIn2MixedObjects()
         auto const& pVectorGraphicData = aGraphic.getVectorGraphicData();
         CPPUNIT_ASSERT(pVectorGraphicData);
 
-        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
-                             pVectorGraphicData->getVectorGraphicDataType());
+        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
     }
 
     // Let's try to search now
@@ -716,8 +710,7 @@ void LOKitSearchTest::testSearchIn6MixedObjects()
         CPPUNIT_ASSERT(pGraphicObject);
         auto const& pVectorGraphicData = pGraphicObject->GetGraphic().getVectorGraphicData();
         CPPUNIT_ASSERT(pVectorGraphicData);
-        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
-                             pVectorGraphicData->getVectorGraphicDataType());
+        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
     }
 
     // Check Object 3
@@ -743,8 +736,7 @@ void LOKitSearchTest::testSearchIn6MixedObjects()
         CPPUNIT_ASSERT(pGraphicObject);
         auto const& pVectorGraphicData = pGraphicObject->GetGraphic().getVectorGraphicData();
         CPPUNIT_ASSERT(pVectorGraphicData);
-        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Svg,
-                             pVectorGraphicData->getVectorGraphicDataType());
+        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Svg, pVectorGraphicData->getType());
     }
 
     // Check Object 6
@@ -756,8 +748,7 @@ void LOKitSearchTest::testSearchIn6MixedObjects()
         CPPUNIT_ASSERT(pGraphicObject);
         auto const& pVectorGraphicData = pGraphicObject->GetGraphic().getVectorGraphicData();
         CPPUNIT_ASSERT(pVectorGraphicData);
-        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
-                             pVectorGraphicData->getVectorGraphicDataType());
+        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
     }
 
     // Search "ABC" which is in all objects (2 times in Object 3)

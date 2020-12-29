@@ -129,12 +129,12 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
         // #i121128# use shortcut to write Vector Graphic Data data in original form (if possible)
         auto const & rVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
 
-        if (rVectorGraphicDataPtr && rVectorGraphicDataPtr->getVectorGraphicDataArrayLength())
+        if (rVectorGraphicDataPtr && rVectorGraphicDataPtr->getBinaryDataContainer().getSize())
         {
-            const bool bIsSvg(rFilterName.equalsIgnoreAsciiCase("svg") && VectorGraphicDataType::Svg == rVectorGraphicDataPtr->getVectorGraphicDataType());
-            const bool bIsWmf(rFilterName.equalsIgnoreAsciiCase("wmf") && VectorGraphicDataType::Wmf == rVectorGraphicDataPtr->getVectorGraphicDataType());
-            const bool bIsEmf(rFilterName.equalsIgnoreAsciiCase("emf") && VectorGraphicDataType::Emf == rVectorGraphicDataPtr->getVectorGraphicDataType());
-            const bool bIsPdf(rFilterName.equalsIgnoreAsciiCase("pdf") && VectorGraphicDataType::Pdf == rVectorGraphicDataPtr->getVectorGraphicDataType());
+            const bool bIsSvg(rFilterName.equalsIgnoreAsciiCase("svg") && VectorGraphicDataType::Svg == rVectorGraphicDataPtr->getType());
+            const bool bIsWmf(rFilterName.equalsIgnoreAsciiCase("wmf") && VectorGraphicDataType::Wmf == rVectorGraphicDataPtr->getType());
+            const bool bIsEmf(rFilterName.equalsIgnoreAsciiCase("emf") && VectorGraphicDataType::Emf == rVectorGraphicDataPtr->getType());
+            const bool bIsPdf(rFilterName.equalsIgnoreAsciiCase("pdf") && VectorGraphicDataType::Pdf == rVectorGraphicDataPtr->getType());
 
             if (bIsSvg || bIsWmf || bIsEmf || bIsPdf)
             {

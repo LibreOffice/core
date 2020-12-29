@@ -36,7 +36,7 @@ GraphicID::GraphicID(ImpGraphic const& rGraphic)
         {
             const basegfx::B2DRange& rRange = rVectorGraphicDataPtr->getRange();
 
-            mnID1 |= rVectorGraphicDataPtr->getVectorGraphicDataArrayLength();
+            mnID1 |= rVectorGraphicDataPtr->getBinaryDataContainer().getSize();
             mnID2 = basegfx::fround(rRange.getWidth());
             mnID3 = basegfx::fround(rRange.getHeight());
             mnID4 = vcl_get_checksum(0, rVectorGraphicDataPtr->getBinaryDataContainer().getData(),

@@ -237,7 +237,7 @@ bool VectorGraphicSearch::search(OUString const& rSearchString,
     {
         auto pData = maGraphic.getVectorGraphicData();
 
-        if (pData && pData->getVectorGraphicDataType() == VectorGraphicDataType::Pdf)
+        if (pData && pData->getType() == VectorGraphicDataType::Pdf)
         {
             if (searchPDF(pData))
             {

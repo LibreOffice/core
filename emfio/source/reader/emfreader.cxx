@@ -517,7 +517,7 @@ namespace emfio
             return;
         }
 
-        if (pVectorGraphicData->getVectorGraphicDataType() != VectorGraphicDataType::Pdf)
+        if (pVectorGraphicData->getType() != VectorGraphicDataType::Pdf)
         {
             return;
         }

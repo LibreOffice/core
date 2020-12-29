@@ -362,7 +362,7 @@ void TypeSerializer::writeGraphic(const Graphic& rGraphic)
                     // this is used e.g. in swapping out graphic data and in transporting it over UNO API
                     // as sequence of bytes, but AFAIK not written anywhere to any kind of file, so it should be
                     // no problem to extend it; only used at runtime
-                    switch (pVectorGraphicData->getVectorGraphicDataType())
+                    switch (pVectorGraphicData->getType())
                     {
                         case VectorGraphicDataType::Wmf:
                         {
