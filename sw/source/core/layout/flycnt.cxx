@@ -79,7 +79,7 @@ SwFlyAtContentFrame::SwFlyAtContentFrame( SwFlyFrameFormat *pFormat, SwFrame* pS
 
 // #i28701#
 
-void SwFlyAtContentFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
+void SwFlyAtContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
     auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
     if(!pLegacy)
@@ -87,7 +87,7 @@ void SwFlyAtContentFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
     const SwFormatAnchor* pAnch = pLegacy->m_pNew ? GetAnchorFromPoolItem(*pLegacy->m_pNew) : nullptr;
     if(!pAnch)
     {
-        SwFlyFrame::Modify(pLegacy->m_pOld, pLegacy->m_pNew);
+        SwFlyFrame::SwClientNotify(rMod, rHint);
         return;
     }
     OSL_ENSURE(pAnch->GetAnchorId() == GetFormat()->GetAnchor().GetAnchorId(),
