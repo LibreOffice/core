@@ -23,6 +23,7 @@
 #include <svx/svxdllapi.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <tools/poly.hxx>
+#include <tools/degree.hxx>
 
 class Point;
 namespace tools { class Rectangle; }
@@ -48,9 +49,9 @@ class SVXCORE_DLLPUBLIC XPolygon final
     // auxiliary functions for Bezier conversion
     void    SubdivideBezier(sal_uInt16 nPos, bool bCalcFirst, double fT);
     void    GenBezArc(const Point& rCenter, tools::Long nRx, tools::Long nRy,
-                      tools::Long nXHdl, tools::Long nYHdl, sal_uInt16 nStart, sal_uInt16 nEnd,
+                      tools::Long nXHdl, tools::Long nYHdl, Degree10 nStart, Degree10 nEnd,
                       sal_uInt16 nQuad, sal_uInt16 nFirst);
-    static bool CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& nA1, sal_uInt16& nA2);
+    static bool CheckAngles(Degree10& nStart, Degree10 nEnd, Degree10& nA1, Degree10& nA2);
 
 public:
     XPolygon( sal_uInt16 nSize=16 );
@@ -59,7 +60,7 @@ public:
     XPolygon( const tools::Polygon& rPoly );
     XPolygon( const tools::Rectangle& rRect, tools::Long nRx = 0, tools::Long nRy = 0 );
     XPolygon( const Point& rCenter, tools::Long nRx, tools::Long nRy,
-              sal_uInt16 nStartAngle = 0, sal_uInt16 nEndAngle = 3600,
+              Degree10 nStartAngle = 0_deg10, Degree10 nEndAngle = 3600_deg10,
               bool bClose = true );
 
     ~XPolygon();
