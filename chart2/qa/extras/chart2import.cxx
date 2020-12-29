@@ -2806,7 +2806,7 @@ void Chart2ImportTest::testTdfCustomShapePos()
 
 void Chart2ImportTest::testTdf121281()
 {
-    load("/chart2/qa/extras/data/xlsx/", "incorrect_label_position.xlsx");
+    load(u"/chart2/qa/extras/data/xlsx/", "incorrect_label_position.xlsx");
     Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
                                                UNO_QUERY_THROW);
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
