@@ -36,7 +36,7 @@ public:
     BinaryDataContainer& operator=(BinaryDataContainer&& rBinaryDataContainer) = default;
 
     size_t getSize() const { return mpData ? mpData->size() : 0; }
-    bool isEmpty() const { return mpData && mpData->empty(); }
+    bool isEmpty() const { return !mpData || mpData->empty(); }
     const sal_uInt8* getData() const { return mpData ? mpData->data() : nullptr; }
 
     size_t calculateHash() const;
