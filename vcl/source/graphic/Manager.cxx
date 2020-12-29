@@ -112,7 +112,7 @@ sal_Int64 Manager::getGraphicSizeBytes(const ImpGraphic* pImpGraphic)
 {
     if (!pImpGraphic->isAvailable())
         return 0;
-    return pImpGraphic->ImplGetSizeBytes();
+    return pImpGraphic->getSizeBytes();
 }
 
 IMPL_LINK(Manager, SwapOutTimerHandler, Timer*, pTimer, void)

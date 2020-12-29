@@ -96,7 +96,7 @@ public:
     ImpGraphic( const GDIMetaFile& rMtf );
     ~ImpGraphic();
 
-    void ImplSetPrepared(bool bAnimated, const Size* pSizeHint);
+    void setPrepared(bool bAnimated, const Size* pSizeHint);
 
 private:
 
@@ -125,56 +125,56 @@ private:
     void createSwapInfo();
     void restoreFromSwapInfo();
 
-    void                ImplClearGraphics();
-    void                ImplClear();
+    void                clearGraphics();
+    void                clear();
 
-    GraphicType         ImplGetType() const { return meType;}
-    void                ImplSetDefaultType();
-    bool                ImplIsSupportedGraphic() const;
+    GraphicType         getType() const { return meType;}
+    void                setDefaultType();
+    bool                isSupportedGraphic() const;
 
-    bool                ImplIsTransparent() const;
-    bool                ImplIsAlpha() const;
-    bool                ImplIsAnimated() const;
-    bool                ImplIsEPS() const;
+    bool                isTransparent() const;
+    bool                isAlpha() const;
+    bool                isAnimated() const;
+    bool                isEPS() const;
 
     bool isAvailable() const;
     bool makeAvailable();
 
-    Bitmap              ImplGetBitmap(const GraphicConversionParameters& rParameters) const;
-    BitmapEx            ImplGetBitmapEx(const GraphicConversionParameters& rParameters) const;
+    Bitmap              getBitmap(const GraphicConversionParameters& rParameters) const;
+    BitmapEx            getBitmapEx(const GraphicConversionParameters& rParameters) const;
     /// Gives direct access to the contained BitmapEx.
-    const BitmapEx&     ImplGetBitmapExRef() const;
-    Animation           ImplGetAnimation() const;
-    const GDIMetaFile&  ImplGetGDIMetaFile() const;
+    const BitmapEx&     getBitmapExRef() const;
+    Animation           getAnimation() const;
+    const GDIMetaFile&  getGDIMetaFile() const;
 
-    Size                ImplGetSizePixel() const;
+    Size                getSizePixel() const;
 
-    Size                ImplGetPrefSize() const;
-    void                ImplSetPrefSize( const Size& rPrefSize );
+    Size                getPrefSize() const;
+    void                setPrefSize( const Size& rPrefSize );
 
-    MapMode             ImplGetPrefMapMode() const;
-    void                ImplSetPrefMapMode( const MapMode& rPrefMapMode );
+    MapMode             getPrefMapMode() const;
+    void                setPrefMapMode( const MapMode& rPrefMapMode );
 
-    sal_uLong           ImplGetSizeBytes() const;
+    sal_uLong           getSizeBytes() const;
 
-    void                ImplDraw( OutputDevice* pOutDev,
+    void                draw( OutputDevice* pOutDev,
                                   const Point& rDestPt ) const;
-    void                ImplDraw( OutputDevice* pOutDev,
+    void                draw( OutputDevice* pOutDev,
                                   const Point& rDestPt,
                                   const Size& rDestSize ) const;
 
-    void                ImplStartAnimation( OutputDevice* pOutDev,
+    void                startAnimation( OutputDevice* pOutDev,
                                             const Point& rDestPt,
                                             const Size& rDestSize,
                                             tools::Long nExtraData,
                                             OutputDevice* pFirstFrameOutDev );
-    void                ImplStopAnimation( const OutputDevice* pOutputDevice,
+    void                stopAnimation( const OutputDevice* pOutputDevice,
                                            tools::Long nExtraData );
 
-    void                ImplSetAnimationNotifyHdl( const Link<Animation*,void>& rLink );
-    Link<Animation*,void> ImplGetAnimationNotifyHdl() const;
+    void                setAnimationNotifyHdl( const Link<Animation*,void>& rLink );
+    Link<Animation*,void> getAnimationNotifyHdl() const;
 
-    sal_uInt32          ImplGetAnimationLoopCount() const;
+    sal_uInt32          getAnimationLoopCount() const;
 
 private:
     // swapping methods
@@ -186,16 +186,16 @@ private:
     bool swapOutGraphic(SvStream& rStream);
     // end swapping
 
-    std::shared_ptr<GraphicReader>& ImplGetContext() { return mpContext;}
-    void                ImplSetContext( const std::shared_ptr<GraphicReader>& pReader );
-    void                ImplSetDummyContext( bool value ) { mbDummyContext = value; }
-    bool                ImplIsDummyContext() const { return mbDummyContext; }
-    void                ImplSetLink( const std::shared_ptr<GfxLink>& );
-    std::shared_ptr<GfxLink> ImplGetSharedGfxLink() const;
-    GfxLink             ImplGetLink();
-    bool                ImplIsLink() const;
+    std::shared_ptr<GraphicReader>& getContext() { return mpContext;}
+    void                setContext( const std::shared_ptr<GraphicReader>& pReader );
+    void                setDummyContext( bool value ) { mbDummyContext = value; }
+    bool                isDummyContext() const { return mbDummyContext; }
+    void                setGfxLink( const std::shared_ptr<GfxLink>& );
+    std::shared_ptr<GfxLink> getSharedGfxLink() const;
+    GfxLink             getGfxLink();
+    bool                isGfxLink() const;
 
-    BitmapChecksum      ImplGetChecksum() const;
+    BitmapChecksum      getChecksum() const;
 
     const std::shared_ptr<VectorGraphicData>& getVectorGraphicData() const;
 

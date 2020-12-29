@@ -277,69 +277,69 @@ bool Graphic::operator!=( const Graphic& rGraphic ) const
 
 bool Graphic::IsNone() const
 {
-    return GraphicType::NONE == mxImpGraphic->ImplGetType();
+    return GraphicType::NONE == mxImpGraphic->getType();
 }
 
 void Graphic::Clear()
 {
     ImplTestRefCount();
-    mxImpGraphic->ImplClear();
+    mxImpGraphic->clear();
 }
 
 GraphicType Graphic::GetType() const
 {
-    return mxImpGraphic->ImplGetType();
+    return mxImpGraphic->getType();
 }
 
 void Graphic::SetDefaultType()
 {
     ImplTestRefCount();
-    mxImpGraphic->ImplSetDefaultType();
+    mxImpGraphic->setDefaultType();
 }
 
 bool Graphic::IsSupportedGraphic() const
 {
-    return mxImpGraphic->ImplIsSupportedGraphic();
+    return mxImpGraphic->isSupportedGraphic();
 }
 
 bool Graphic::IsTransparent() const
 {
-    return mxImpGraphic->ImplIsTransparent();
+    return mxImpGraphic->isTransparent();
 }
 
 bool Graphic::IsAlpha() const
 {
-    return mxImpGraphic->ImplIsAlpha();
+    return mxImpGraphic->isAlpha();
 }
 
 bool Graphic::IsAnimated() const
 {
-    return mxImpGraphic->ImplIsAnimated();
+    return mxImpGraphic->isAnimated();
 }
 
 bool Graphic::IsEPS() const
 {
-    return mxImpGraphic->ImplIsEPS();
+    return mxImpGraphic->isEPS();
 }
 
 BitmapEx Graphic::GetBitmapEx(const GraphicConversionParameters& rParameters) const
 {
-    return mxImpGraphic->ImplGetBitmapEx(rParameters);
+    return mxImpGraphic->getBitmapEx(rParameters);
 }
 
 Animation Graphic::GetAnimation() const
 {
-    return mxImpGraphic->ImplGetAnimation();
+    return mxImpGraphic->getAnimation();
 }
 
 const GDIMetaFile& Graphic::GetGDIMetaFile() const
 {
-    return mxImpGraphic->ImplGetGDIMetaFile();
+    return mxImpGraphic->getGDIMetaFile();
 }
 
 const BitmapEx& Graphic::GetBitmapExRef() const
 {
-    return mxImpGraphic->ImplGetBitmapExRef();
+    return mxImpGraphic->getBitmapExRef();
 }
 
 uno::Reference<graphic::XGraphic> Graphic::GetXGraphic() const
@@ -358,24 +358,24 @@ uno::Reference<graphic::XGraphic> Graphic::GetXGraphic() const
 
 Size Graphic::GetPrefSize() const
 {
-    return mxImpGraphic->ImplGetPrefSize();
+    return mxImpGraphic->getPrefSize();
 }
 
 void Graphic::SetPrefSize( const Size& rPrefSize )
 {
     ImplTestRefCount();
-    mxImpGraphic->ImplSetPrefSize( rPrefSize );
+    mxImpGraphic->setPrefSize( rPrefSize );
 }
 
 MapMode Graphic::GetPrefMapMode() const
 {
-    return mxImpGraphic->ImplGetPrefMapMode();
+    return mxImpGraphic->getPrefMapMode();
 }
 
 void Graphic::SetPrefMapMode( const MapMode& rPrefMapMode )
 {
     ImplTestRefCount();
-    mxImpGraphic->ImplSetPrefMapMode( rPrefMapMode );
+    mxImpGraphic->setPrefMapMode( rPrefMapMode );
 }
 
 basegfx::B2DSize Graphic::GetPPI() const
@@ -406,8 +406,8 @@ Size Graphic::GetSizePixel( const OutputDevice* pRefDevice ) const
 {
     Size aRet;
 
-    if( GraphicType::Bitmap == mxImpGraphic->ImplGetType() )
-        aRet = mxImpGraphic->ImplGetSizePixel();
+    if( GraphicType::Bitmap == mxImpGraphic->getType() )
+        aRet = mxImpGraphic->getSizePixel();
     else
         aRet = ( pRefDevice ? pRefDevice : Application::GetDefaultDevice() )->LogicToPixel( GetPrefSize(), GetPrefMapMode() );
 
@@ -416,21 +416,21 @@ Size Graphic::GetSizePixel( const OutputDevice* pRefDevice ) const
 
 sal_uLong Graphic::GetSizeBytes() const
 {
-    return mxImpGraphic->ImplGetSizeBytes();
+    return mxImpGraphic->getSizeBytes();
 }
 
 void Graphic::Draw( OutputDevice* pOutDev, const Point& rDestPt ) const
 {
-    mxImpGraphic->ImplDraw( pOutDev, rDestPt );
+    mxImpGraphic->draw( pOutDev, rDestPt );
 }
 
 void Graphic::Draw( OutputDevice* pOutDev,
                     const Point& rDestPt, const Size& rDestSz ) const
 {
-    if( GraphicType::Default == mxImpGraphic->ImplGetType() )
+    if( GraphicType::Default == mxImpGraphic->getType() )
         ImplDrawDefault( pOutDev, nullptr, nullptr, nullptr, rDestPt, rDestSz );
     else
-        mxImpGraphic->ImplDraw( pOutDev, rDestPt, rDestSz );
+        mxImpGraphic->draw( pOutDev, rDestPt, rDestSz );
 }
 
 void Graphic::DrawEx( OutputDevice* pOutDev, const OUString& rText,
@@ -445,74 +445,74 @@ void Graphic::StartAnimation( OutputDevice* pOutDev, const Point& rDestPt,
                               OutputDevice* pFirstFrameOutDev )
 {
     ImplTestRefCount();
-    mxImpGraphic->ImplStartAnimation( pOutDev, rDestPt, rDestSz, nExtraData, pFirstFrameOutDev );
+    mxImpGraphic->startAnimation( pOutDev, rDestPt, rDestSz, nExtraData, pFirstFrameOutDev );
 }
 
 void Graphic::StopAnimation( const OutputDevice* pOutDev, tools::Long nExtraData )
 {
     ImplTestRefCount();
-    mxImpGraphic->ImplStopAnimation( pOutDev, nExtraData );
+    mxImpGraphic->stopAnimation( pOutDev, nExtraData );
 }
 
 void Graphic::SetAnimationNotifyHdl( const Link<Animation*,void>& rLink )
 {
-    mxImpGraphic->ImplSetAnimationNotifyHdl( rLink );
+    mxImpGraphic->setAnimationNotifyHdl( rLink );
 }
 
 Link<Animation*,void> Graphic::GetAnimationNotifyHdl() const
 {
-    return mxImpGraphic->ImplGetAnimationNotifyHdl();
+    return mxImpGraphic->getAnimationNotifyHdl();
 }
 
 sal_uInt32 Graphic::GetAnimationLoopCount() const
 {
-    return mxImpGraphic->ImplGetAnimationLoopCount();
+    return mxImpGraphic->getAnimationLoopCount();
 }
 
 std::shared_ptr<GraphicReader>& Graphic::GetReaderContext()
 {
-    return mxImpGraphic->ImplGetContext();
+    return mxImpGraphic->getContext();
 }
 
 void Graphic::SetReaderContext( const std::shared_ptr<GraphicReader> &pReader )
 {
-    mxImpGraphic->ImplSetContext( pReader );
+    mxImpGraphic->setContext( pReader );
 }
 
 void Graphic::SetDummyContext( bool value )
 {
-    mxImpGraphic->ImplSetDummyContext( value );
+    mxImpGraphic->setDummyContext( value );
 }
 
 bool Graphic::IsDummyContext() const
 {
-    return mxImpGraphic->ImplIsDummyContext();
+    return mxImpGraphic->isDummyContext();
 }
 
 void Graphic::SetGfxLink( const std::shared_ptr<GfxLink>& rGfxLink )
 {
     ImplTestRefCount();
-    mxImpGraphic->ImplSetLink( rGfxLink );
+    mxImpGraphic->setGfxLink(rGfxLink);
 }
 
 std::shared_ptr<GfxLink> Graphic::GetSharedGfxLink() const
 {
-    return mxImpGraphic->ImplGetSharedGfxLink();
+    return mxImpGraphic->getSharedGfxLink();
 }
 
 GfxLink Graphic::GetGfxLink() const
 {
-    return mxImpGraphic->ImplGetLink();
+    return mxImpGraphic->getGfxLink();
 }
 
 bool Graphic::IsGfxLink() const
 {
-    return mxImpGraphic->ImplIsLink();
+    return mxImpGraphic->isGfxLink();
 }
 
 BitmapChecksum Graphic::GetChecksum() const
 {
-    return mxImpGraphic->ImplGetChecksum();
+    return mxImpGraphic->getChecksum();
 }
 
 const std::shared_ptr<VectorGraphicData>& Graphic::getVectorGraphicData() const
