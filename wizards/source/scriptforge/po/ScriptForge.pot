@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-"POT-Creation-Date: 2020-12-15 15:57:29\n"
+"POT-Creation-Date: 2020-12-29 18:05:28\n"
 "PO-Revision-Date: YYYY-MM-DD HH:MM:SS\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -750,7 +750,7 @@ msgid  ""
 "The concerned Calc document is '%3'.\n"
 "\n"
 "The name of the sheet = '%2'\n"
-"The index = %1"
+"The index = %1."
 msgstr ""
 
 #. SF_Form determination
@@ -764,7 +764,7 @@ msgid  ""
 "\n"
 "The concerned Writer document is '%2'.\n"
 "\n"
-"The index = %1"
+"The index = %1."
 msgstr ""
 
 #. SF_Form determination
@@ -779,7 +779,19 @@ msgid  ""
 "\n"
 "The concerned Base document is '%3'.\n"
 "\n"
-"The index = %1"
+"The index = %1."
+msgstr ""
+
+#. SF_Form determination
+#. %1: A form name
+#. %2: A form name
+#, kde-format
+msgctxt "SUBFORMNOTFOUND"
+msgid  ""
+"The requested subform could not be found below the given main form.\n"
+"\n"
+"The main form = '%2'.\n"
+"The subform = '%1'."
 msgstr ""
 
 #. SF_Dialog creation

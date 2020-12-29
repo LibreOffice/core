@@ -740,7 +740,7 @@ Try:
 						, MsgId := &quot;The requested form could not be found in the Calc sheet. The given index is off-limits.\n\n&quot; _
 									&amp; &quot;The concerned Calc document is &apos;%3&apos;.\n\n&quot; _
 									&amp; &quot;The name of the sheet = &apos;%2&apos;\n&quot; _
-									&amp; &quot;The index = %1&quot; _
+									&amp; &quot;The index = %1.&quot; _
 						, Comment :=	&quot;SF_Form determination\n&quot; _
 									&amp;	&quot;%1: A number\n&quot; _
 									&amp;	&quot;%2: A sheet name\n&quot; _
@@ -750,7 +750,7 @@ Try:
 			.AddText(	Context := &quot;WRITERFORMNOTFOUND&quot; _
 						, MsgId := &quot;The requested form could not be found in the Writer document. The given index is off-limits.\n\n&quot; _
 									&amp; &quot;The concerned Writer document is &apos;%2&apos;.\n\n&quot; _
-									&amp; &quot;The index = %1&quot; _
+									&amp; &quot;The index = %1.&quot; _
 						, Comment :=	&quot;SF_Form determination\n&quot; _
 									&amp;	&quot;%1: A number\n&quot; _
 									&amp;	&quot;%2: A file name&quot; _
@@ -759,11 +759,20 @@ Try:
 			.AddText(	Context := &quot;BASEFORMNOTFOUND&quot; _
 						, MsgId := &quot;The requested form could not be found in the form document &apos;%2&apos;. The given index is off-limits.\n\n&quot; _
 									&amp; &quot;The concerned Base document is &apos;%3&apos;.\n\n&quot; _
-									&amp; &quot;The index = %1&quot; _
+									&amp; &quot;The index = %1.&quot; _
 						, Comment :=	&quot;SF_Form determination\n&quot; _
 									&amp;	&quot;%1: A number\n&quot; _
 									&amp;	&quot;%2: A string\n&quot; _
 									&amp;	&quot;%3: A file name&quot; _
+					)
+	&apos;	SF_Form.Subforms
+			.AddText(	Context := &quot;SUBFORMNOTFOUND&quot; _
+						, MsgId := &quot;The requested subform could not be found below the given main form.\n\n&quot; _
+									&amp; &quot;The main form = &apos;%2&apos;.\n&quot; _
+									&amp; &quot;The subform = &apos;%1&apos;.&quot; _
+						, Comment :=	&quot;SF_Form determination\n&quot; _
+									&amp;	&quot;%1: A form name\n&quot; _
+									&amp;	&quot;%2: A form name&quot; _
 					)
 	&apos;	SF_Dialog._NewDialog
 			.AddText(	Context := &quot;DIALOGNOTFOUND&quot; _
