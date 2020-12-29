@@ -509,7 +509,7 @@ bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 i_nPoly, const sal_uInt32* i
     return bRet;
 }
 
-bool SalGraphics::DrawPolyLine(
+void SalGraphics::DrawPolyLine(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& i_rPolygon,
     double i_fTransparency,
@@ -521,36 +521,65 @@ bool SalGraphics::DrawPolyLine(
     bool bPixelSnapHairline,
     const OutputDevice& i_rOutDev)
 {
-    if( (m_nLayout & SalLayoutFlags::BiDiRtl) || i_rOutDev.IsRTLEnabled() )
+    bool bDrawn = false;
+
+    if (!(supportsOperation(OutDevSupportType::B2DDraw)
+           && i_rOutDev.GetRasterOp() == RasterOp::OverPaint
+           && i_rOutDev.IsLineColor()))
     {
-        // mirroring set
-        const basegfx::B2DHomMatrix& rMirror(getMirror(i_rOutDev));
-        if(!rMirror.isIdentity())
+        if( (m_nLayout & SalLayoutFlags::BiDiRtl) || i_rOutDev.IsRTLEnabled() )
         {
-            return drawPolyLine(
-                rMirror * rObjectToDevice,
-                i_rPolygon,
-                i_fTransparency,
-                i_rLineWidth,
-                i_pStroke, // MM01
-                i_eLineJoin,
-                i_eLineCap,
-                i_fMiterMinimumAngle,
-                bPixelSnapHairline);
+            // mirroring set
+            const basegfx::B2DHomMatrix& rMirror(getMirror(i_rOutDev));
+            if(!rMirror.isIdentity())
+            {
+                bDrawn = drawPolyLine(
+                    rMirror * rObjectToDevice,
+                    i_rPolygon,
+                    i_fTransparency,
+                    i_rLineWidth,
+                    i_pStroke, // MM01
+                    i_eLineJoin,
+                    i_eLineCap,
+                    i_fMiterMinimumAngle,
+                    bPixelSnapHairline);
+            }
         }
+
+        // no mirroring set (or identity), use standard call
+        bDrawn = drawPolyLine(
+            rObjectToDevice,
+            i_rPolygon,
+            i_fTransparency,
+            i_rLineWidth,
+            i_pStroke, // MM01
+            i_eLineJoin,
+            i_eLineCap,
+            i_fMiterMinimumAngle,
+            bPixelSnapHairline);
     }
 
-    // no mirroring set (or identity), use standard call
-    return drawPolyLine(
-        rObjectToDevice,
-        i_rPolygon,
-        i_fTransparency,
-        i_rLineWidth,
-        i_pStroke, // MM01
-        i_eLineJoin,
-        i_eLineCap,
-        i_fMiterMinimumAngle,
-        bPixelSnapHairline);
+    if (bDrawn) 
+    {
+        tools::Polygon aPoly = i_rOutDev.ImplLogicToDevicePixel(tools::Polygon(i_rPolygon));
+        Point* pPtAry = aPoly.GetPointAry();
+
+        // Forward beziers to sal, if any
+        if (aPoly.HasFlags())
+        {
+            const PolyFlags* pFlgAry = aPoly.GetConstFlagAry();
+            if(!DrawPolyLineBezier(aPoly.GetSize(), pPtAry, pFlgAry, i_rOutDev))
+            {
+                aPoly = tools::Polygon::SubdivideBezier(aPoly);
+                pPtAry = aPoly.GetPointAry();
+                DrawPolyLine(aPoly.GetSize(), pPtAry, i_rOutDev);
+            }
+        }
+        else
+        {
+            DrawPolyLine(aPoly.GetSize(), pPtAry, i_rOutDev);
+        }
+    }
 }
 
 bool SalGraphics::DrawGradient(const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, const OutputDevice& rOutDev)

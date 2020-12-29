@@ -107,8 +107,6 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     if ( mbInitLineColor )
         InitLineColor();
 
-    bool bDrawn = false;
-
     // #i101598# support AA and snap for lines, too
     if( mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
         && RasterOp::OverPaint == GetRasterOp()
@@ -125,7 +123,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 
         const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
-        bDrawn = mpGraphics->DrawPolyLine(
+        mpGraphics->DrawPolyLine(
             basegfx::B2DHomMatrix(),
             aB2DPolyLine,
             0.0,
@@ -137,12 +135,6 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
             bPixelSnapHairline,
             *this);
     }
-    if(!bDrawn)
-    {
-        const Point aStartPt(ImplLogicToDevicePixel(rStartPt));
-        const Point aEndPt(ImplLogicToDevicePixel(rEndPt));
-        mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), *this );
-    }
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawLine( rStartPt, rEndPt );
@@ -150,9 +142,6 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 
 void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const LineInfo& rInfo )
 {
-    const bool bTryB2d(mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
-        && RasterOp::OverPaint == GetRasterOp()
-        && IsLineColor());
     basegfx::B2DPolyPolygon aFillPolyPolygon;
     const bool bDashUsed(LineStyle::Dash == rInfo.GetStyle());
     const bool bLineWidthUsed(rInfo.GetWidth() > 1);
@@ -230,31 +219,18 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
         for(auto const& rB2DPolygon : aLinePolyPolygon)
         {
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
-            bool bDone(false);
 
-            if(bTryB2d)
-            {
-                bDone = mpGraphics->DrawPolyLine(
-                    basegfx::B2DHomMatrix(),
-                    rB2DPolygon,
-                    0.0,
-                    0.0, // tdf#124848 hairline
-                    nullptr, // MM01
-                    basegfx::B2DLineJoin::NONE,
-                    css::drawing::LineCap_BUTT,
-                    basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
-                    bPixelSnapHairline,
-                    *this);
-            }
-
-            if(!bDone)
-            {
-                tools::Polygon aPolygon(rB2DPolygon);
-                mpGraphics->DrawPolyLine(
-                    aPolygon.GetSize(),
-                    aPolygon.GetPointAry(),
-                    *this);
-            }
+            mpGraphics->DrawPolyLine(
+                basegfx::B2DHomMatrix(),
+                rB2DPolygon,
+                0.0,
+                0.0, // tdf#124848 hairline
+                nullptr, // MM01
+                basegfx::B2DLineJoin::NONE,
+                css::drawing::LineCap_BUTT,
+                basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
+                bPixelSnapHairline,
+                *this);
         }
     }
 
@@ -269,6 +245,10 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
         InitFillColor();
 
         bool bDone(false);
+
+        const bool bTryB2d(mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
+            && RasterOp::OverPaint == GetRasterOp()
+            && IsLineColor());
 
         if(bTryB2d)
         {
