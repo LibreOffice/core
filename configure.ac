@@ -1517,6 +1517,7 @@ AC_ARG_ENABLE(python,
          'internal' (default) or 'fully-internal'. Otherwise the default is 'auto'.
          ]))
 
+
 libo_FUZZ_ARG_ENABLE(gtk3,
     AS_HELP_STRING([--disable-gtk3],
         [Determines whether to use Gtk+ 3.0 vclplug on platforms where Gtk+ 3.0 is available.]),
@@ -9218,8 +9219,9 @@ AC_SUBST(XMLLINT)
 # Optionally user can pass an option to configure, i. e.
 # ./configure PYTHON=/usr/bin/python
 # =====================================================================
-if test $_os = Darwin -a "$enable_python" != no -a "$enable_python" != fully-internal -a "$enable_python" != internal; then
+if test $_os = Darwin -a "$enable_python" != no -a "$enable_python" != fully-internal -a "$enable_python" != internal -a "$enable_python" != system; then
     # Only allowed choices for macOS are 'no', 'internal' (default), and 'fully-internal'
+    # unless PYTHON is defined as above which allows 'system'
     enable_python=internal
 fi
 if test "$build_os" != "cygwin" -a "$enable_python" != fully-internal; then
@@ -9291,7 +9293,7 @@ fully-internal)
     ;;
 system)
     AC_MSG_RESULT([system])
-    if test "$_os" = Darwin; then
+    if test "$_os" = Darwin -a -z "$PYTHON"; then
         AC_MSG_ERROR([--enable-python=system doesn't work on macOS because the version provided is obsolete])
     fi
     ;;
