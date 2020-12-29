@@ -172,6 +172,23 @@ gb_Library__COMPONENTPREFIXES := \
 gb_Library_get_runtime_filename = $(call gb_Library_get_filename,$(1))
 gb_Library_get_runtime_filename_for_build = $(call gb_Library_get_filename_for_build,$(1))
 
+# instead of setting nodep use gb_Library_set_plugin_for_nodep
+#
+# call gb_Library_set_plugin_for,library,loader,nodep
+define gb_Library_set_plugin_for
+ifneq (,$$(filter-out $(gb_Library_KNOWNPLUGINS),$(1)))
+$$(eval $$(call gb_Output_info,currently known plugins are: $(sort $(gb_Library_KNOWNPLUGINS)),ALL))
+$$(eval $$(call gb_Output_error,Unknown plugin(s) '$$(filter-out $(gb_Library_KNOWNPLUGINS),$(1)))'. Plugins must be registered in Repository.mk or RepositoryExternal.mk))
+endif
+
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(2))) : PLUGINS += $(1)
+$(eval $(call gb_LinkTarget__add_plugin,$(call gb_Library_get_linktarget,$(2)),$(1)))
+$(eval $(call gb_LinkTarget__set_plugin_for,$(call gb_Library_get_linktarget,$(1)),$(2),$(3)))
+endef
+
+# call gb_Library_set_plugin_for_nodep,library,loader
+gb_Library_set_plugin_for_nodep = $(call gb_Library_set_plugin_for,$(1),$(2),$(true))
+
 # forward the call to the gb_LinkTarget implementation
 # (note: because the function name is in $(1), the other args are shifted by 1)
 define gb_Library__forward_to_Linktarget
@@ -181,7 +198,6 @@ endef
 
 # copy pasta for forwarding: this could be (and was) done more elegantly, but
 # these here can be found by both git grep and ctags
-gb_Library_add_cobject = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_add_cobject = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_add_cobjects = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_add_cxxobject = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))

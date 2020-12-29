@@ -199,6 +199,13 @@ $(if $(filter UNOVERLIBS RTVERLIBS,$(1)),\
 
 endef
 
+# a plugin is a library, why can't be dynamically linked and must be dlopen'd, but must be linked static
+define gb_Helper_register_plugins_for_install
+$(call gb_Helper_register_libraries_for_install,$(1),$(2),$(3))
+gb_Library_KNOWNPLUGINS += $(3)
+
+endef
+
 define gb_Helper__register_jars
 $(foreach group,$(gb_Jar_VALIDGROUPS),\
  $(foreach target,$(2),\

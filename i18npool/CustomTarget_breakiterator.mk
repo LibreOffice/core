@@ -25,7 +25,8 @@ $(i18npool_BIDIR)/dict_%.data : \
 	$(call gb_Helper_abbreviate_dirs,\
 		$(call gb_Helper_execute,gendict) $< $@ $(patsubst $(i18npool_BIDIR)/dict_%.cxx,%,$@))
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),DIC)
-else
+
+else # !iOS ANDROID
 
 $(call gb_CustomTarget_get_target,i18npool/breakiterator) : \
 	$(i18npool_BIDIR)/dict_ja.cxx $(i18npool_BIDIR)/dict_zh.cxx $(i18npool_BIDIR)/OpenOffice_dat.c

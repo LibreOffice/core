@@ -10,11 +10,9 @@
 
 $(eval $(call gb_Library_Library,sal_textenc))
 
-$(eval $(call gb_Library_use_external,sal_textenc,boost_headers))
+$(eval $(call gb_Library_set_plugin_for,sal_textenc,sal))
 
-$(eval $(call gb_Library_use_libraries,sal_textenc,\
-	sal \
-))
+$(eval $(call gb_Library_use_external,sal_textenc,boost_headers))
 
 $(eval $(call gb_Library_add_exception_objects,sal_textenc,\
 	sal/textenc/context \
