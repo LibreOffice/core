@@ -91,7 +91,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 
             for(auto const& rPolygon : aB2DPolyPolygon)
             {
-                bSuccess = mpGraphics->DrawPolyLine(
+                mpGraphics->DrawPolyLine(
                     aTransform,
                     rPolygon,
                     0.0,
@@ -102,8 +102,6 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
                     basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
                     bPixelSnapHairline,
                     *this);
-                if (!bSuccess)
-                    break;
             }
         }
 
@@ -208,7 +206,7 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
         {
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
-            bSuccess = mpGraphics->DrawPolyLine(
+            mpGraphics->DrawPolyLine(
                 aTransform,
                 aB2DPolygon,
                 0.0,
@@ -319,7 +317,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
 
             for(auto const& rPolygon : aB2DPolyPolygon)
             {
-                bSuccess = mpGraphics->DrawPolyLine(
+                mpGraphics->DrawPolyLine(
                     aTransform,
                     rPolygon,
                     0.0,
@@ -330,8 +328,6 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
                     basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
                     bPixelSnapHairline,
                     *this);
-                if (!bSuccess)
-                    break;
             }
         }
     }
