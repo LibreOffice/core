@@ -15054,7 +15054,6 @@ vcl/source/opengl/x11/context.cxx
 vcl/source/outdev/bitmap.cxx
 vcl/source/outdev/clipping.cxx
 vcl/source/outdev/curvedshapes.cxx
-vcl/source/outdev/emphasismark.cxx
 vcl/source/outdev/font.cxx
 vcl/source/outdev/gradient.cxx
 vcl/source/outdev/hatch.cxx

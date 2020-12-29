@@ -43,50 +43,24 @@
 
 #include <strings.hrc>
 
-std::tuple<tools::PolyPolygon, bool, tools::Long, tools::Long, tools::Rectangle, tools::Rectangle> GetEmphasisMark(
-                                        FontEmphasisMark eEmphasis, tools::Long nHeight, sal_Int32 nDPIY)
+std::tuple<tools::PolyPolygon, bool, tools::Long, tools::Long, tools::Rectangle, tools::Rectangle>
+GetEmphasisMark(FontEmphasisMark eEmphasis, tools::Long nHeight, sal_Int32 nDPIY)
 {
     assert(nHeight);
 
-    static const PolyFlags aAccentPolyFlags[24] =
-    {
-        PolyFlags::Normal, PolyFlags::Control, PolyFlags::Control,
-        PolyFlags::Normal, PolyFlags::Control, PolyFlags::Control,
-        PolyFlags::Normal, PolyFlags::Control, PolyFlags::Control,
-        PolyFlags::Normal, PolyFlags::Control, PolyFlags::Control,
-        PolyFlags::Normal, PolyFlags::Control, PolyFlags::Control,
-        PolyFlags::Normal, PolyFlags::Control, PolyFlags::Control,
-        PolyFlags::Normal, PolyFlags::Normal,  PolyFlags::Control,
-        PolyFlags::Normal, PolyFlags::Control, PolyFlags::Control
-    };
+    static const PolyFlags aAccentPolyFlags[24]
+        = { PolyFlags::Normal,  PolyFlags::Control, PolyFlags::Control, PolyFlags::Normal,
+            PolyFlags::Control, PolyFlags::Control, PolyFlags::Normal,  PolyFlags::Control,
+            PolyFlags::Control, PolyFlags::Normal,  PolyFlags::Control, PolyFlags::Control,
+            PolyFlags::Normal,  PolyFlags::Control, PolyFlags::Control, PolyFlags::Normal,
+            PolyFlags::Control, PolyFlags::Control, PolyFlags::Normal,  PolyFlags::Normal,
+            PolyFlags::Control, PolyFlags::Normal,  PolyFlags::Control, PolyFlags::Control };
 
-    static const Point aAccentPos[24] =
-    {
-        {  78,    0 },
-        { 348,   79 },
-        { 599,  235 },
-        { 843,  469 },
-        { 938,  574 },
-        { 990,  669 },
-        { 990,  773 },
-        { 990,  843 },
-        { 964,  895 },
-        { 921,  947 },
-        { 886,  982 },
-        { 860,  999 },
-        { 825,  999 },
-        { 764,  999 },
-        { 721,  964 },
-        { 686,  895 },
-        { 625,  791 },
-        { 556,  660 },
-        { 469,  504 },
-        { 400,  400 },
-        { 261,  252 },
-        {  61,   61 },
-        {   0,   27 },
-        {   9,    0 }
-    };
+    static const Point aAccentPos[24]
+        = { { 78, 0 },    { 348, 79 },  { 599, 235 }, { 843, 469 }, { 938, 574 }, { 990, 669 },
+            { 990, 773 }, { 990, 843 }, { 964, 895 }, { 921, 947 }, { 886, 982 }, { 860, 999 },
+            { 825, 999 }, { 764, 999 }, { 721, 964 }, { 686, 895 }, { 625, 791 }, { 556, 660 },
+            { 469, 504 }, { 400, 400 }, { 261, 252 }, { 61, 61 },   { 0, 27 },    { 9, 0 } };
 
     tools::Long nWidth = 0;
     tools::Long nYOff = 0;
@@ -135,8 +109,8 @@ std::tuple<tools::PolyPolygon, bool, tools::Long, tools::Long, tools::Rectangle,
             }
             else
             {
-                tools::Long nRad = nDotSize/2;
-                tools::Polygon aPoly( Point(nRad, nRad), nRad, nRad);
+                tools::Long nRad = nDotSize / 2;
+                tools::Polygon aPoly(Point(nRad, nRad), nRad, nRad);
                 aPolyPoly.Insert(aPoly);
                 // BorderWidth is 15%
                 tools::Long nBorder = (nDotSize * 150) / 1000;
@@ -198,8 +172,7 @@ std::tuple<tools::PolyPolygon, bool, tools::Long, tools::Long, tools::Rectangle,
             }
             else
             {
-                tools::Polygon aPoly(SAL_N_ELEMENTS(aAccentPos), aAccentPos,
-                                     aAccentPolyFlags);
+                tools::Polygon aPoly(SAL_N_ELEMENTS(aAccentPos), aAccentPos, aAccentPolyFlags);
 
                 double dScale = static_cast<double>(nDotSize) / 1000.0;
                 aPoly.Scale(dScale, dScale);
@@ -214,13 +187,14 @@ std::tuple<tools::PolyPolygon, bool, tools::Long, tools::Long, tools::Rectangle,
                 aPolyPoly.Insert(aTemp);
             }
             break;
-        default: break;
+        default:
+            break;
     }
 
     // calculate position
     tools::Long nOffY = 1 + (nDPIY / 300); // one visible pixel space
     tools::Long nSpaceY = nHeight - nDotSize;
-    if (nSpaceY >= nOffY*2)
+    if (nSpaceY >= nOffY * 2)
         nYOff += nOffY;
 
     if (!(eEmphasis & FontEmphasisMark::PosBelow))
@@ -229,13 +203,13 @@ std::tuple<tools::PolyPolygon, bool, tools::Long, tools::Long, tools::Rectangle,
     return std::make_tuple(aPolyPoly, bIsPolyLine, nYOff, nWidth, aRect1, aRect2);
 }
 
-FontEmphasisMark GetEmphasisMarkStyle( const vcl::Font& rFont )
+FontEmphasisMark GetEmphasisMarkStyle(const vcl::Font& rFont)
 {
     FontEmphasisMark nEmphasisMark = rFont.GetEmphasisMark();
 
     // If no Position is set, then calculate the default position, which
     // depends on the language
-    if ( !(nEmphasisMark & (FontEmphasisMark::PosAbove | FontEmphasisMark::PosBelow)) )
+    if (!(nEmphasisMark & (FontEmphasisMark::PosAbove | FontEmphasisMark::PosBelow)))
     {
         LanguageType eLang = rFont.GetLanguage();
         // In Chinese Simplified the EmphasisMarks are below/left
