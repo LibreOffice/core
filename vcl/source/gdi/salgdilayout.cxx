@@ -17,17 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
 #include <config_features.h>
+
 #include <sal/log.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+
 #include <PhysicalFontFace.hxx>
 #include <fontsubset.hxx>
 #include <salgdi.hxx>
 #include <salframe.hxx>
 #include <sft.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <FileDefinitionWidgetDraw.hxx>
+
+#include "polypolygon.hxx"
+
+#include <memory>
 
 // The only common SalFrame method
 
@@ -417,7 +422,93 @@ void SalGraphics::DrawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, 
             delete [] pPtAry2[i];
     }
     else
+    {
         drawPolyPolygon( nPoly, pPoints, pPtAry );
+    }
+}
+
+void SalGraphics::DrawPolyPolygon(sal_uInt32 nPoly, tools::PolyPolygon const& rPolyPoly, const OutputDevice& rOutDev)
+{
+    // This crashes on empty PolyPolygons, avoid that
+    if (!nPoly)
+        return;
+
+    sal_uInt32 aStackAry1[OUTDEV_POLYPOLY_STACKBUF];
+    const Point* aStackAry2[OUTDEV_POLYPOLY_STACKBUF];
+    PolyFlags* aStackAry3[OUTDEV_POLYPOLY_STACKBUF];
+    sal_uInt32* pPointAry;
+    const Point** pPointAryAry;
+    const PolyFlags** pFlagAryAry;
+
+    bool bHaveBezier = false;
+
+    if (nPoly > OUTDEV_POLYPOLY_STACKBUF)
+    {
+        pPointAry = new sal_uInt32[nPoly];
+        pPointAryAry = new const Point*[nPoly];
+        pFlagAryAry = new const PolyFlags*[nPoly];
+    }
+    else
+    {
+        pPointAry = aStackAry1;
+        pPointAryAry = aStackAry2;
+        pFlagAryAry = const_cast<const PolyFlags**>(aStackAry3);
+    }
+
+    sal_uInt16 i = 0;
+    sal_uInt16 j = 0;
+    sal_uInt16 last = 0;
+
+    do
+    {
+        const tools::Polygon& rPoly = rPolyPoly.GetObject(i);
+        sal_uInt16 nSize = rPoly.GetSize();
+        if (nSize)
+        {
+            pPointAry[j] = nSize;
+            pPointAryAry[j] = rPoly.GetConstPointAry();
+            pFlagAryAry[j] = rPoly.GetConstFlagAry();
+            last = i;
+
+            if (pFlagAryAry[j])
+                bHaveBezier = true;
+
+            ++j;
+        }
+        ++i;
+    } while (i < nPoly);
+
+    if (j == 1)
+    {
+        // #100127# Forward beziers to sal, if any
+        if (bHaveBezier)
+            DrawPolygonBezier(rPolyPoly.GetObject(last), *pPointAry, *pPointAryAry, *pFlagAryAry, rOutDev);
+        else
+            DrawPolygon(*pPointAry, *pPointAryAry, rOutDev);
+    }
+    else
+    {
+        // #100127# Forward beziers to sal, if any
+        if (bHaveBezier)
+        {
+            if (!DrawPolyPolygonBezier(j, pPointAry, pPointAryAry, pFlagAryAry, rOutDev))
+            {
+                tools::PolyPolygon aPolyPoly = tools::PolyPolygon::SubdivideBezier(rPolyPoly);
+                DrawPolyPolygon(aPolyPoly.Count(), aPolyPoly, rOutDev);
+            }
+        }
+        else
+        {
+            DrawPolyPolygon(j, pPointAry, pPointAryAry, rOutDev);
+        }
+    }
+
+    if (pPointAry != aStackAry1)
+    {
+        delete[] pPointAry;
+        delete[] pPointAryAry;
+        delete[] pFlagAryAry;
+    }
 }
 
 namespace
