@@ -275,6 +275,25 @@ bool OutputDevice::DrawPolyLineDirect(
     css::drawing::LineCap eLineCap,
     double fMiterMinimumAngle)
 {
+    assert(!is_double_buffered_window());
+
+    // AW: Do NOT paint empty PolyPolygons
+    if (!rB2DPolygon.count())
+        return true;
+
+    // we need a graphics
+    if (!mpGraphics && !AcquireGraphics())
+        return false;
+
+    if (mbInitClipRegion)
+        InitClipRegion();
+
+    if (mbOutputClipped)
+        return true;
+
+    if (mbInitLineColor)
+        InitLineColor();
+
     if(DrawPolyLineDirectInternal(rObjectTransform, rB2DPolygon, fLineWidth, fTransparency,
         pStroke, eLineJoin, eLineCap, fMiterMinimumAngle))
     {
@@ -308,25 +327,6 @@ bool OutputDevice::DrawPolyLineDirectInternal(
     css::drawing::LineCap eLineCap,
     double fMiterMinimumAngle)
 {
-    assert(!is_double_buffered_window());
-
-    // AW: Do NOT paint empty PolyPolygons
-    if(!rB2DPolygon.count())
-        return true;
-
-    // we need a graphics
-    if( !mpGraphics && !AcquireGraphics() )
-        return false;
-
-    if( mbInitClipRegion )
-        InitClipRegion();
-
-    if( mbOutputClipped )
-        return true;
-
-    if( mbInitLineColor )
-        InitLineColor();
-
     const bool bTryB2d(mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
                       RasterOp::OverPaint == GetRasterOp() &&
                       IsLineColor());
