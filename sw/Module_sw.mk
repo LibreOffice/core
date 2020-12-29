@@ -162,6 +162,7 @@ $(eval $(call gb_Module_add_screenshot_targets,sw,\
 ))
 
 $(eval $(call gb_Module_add_uicheck_targets,sw,\
+	UITest_librelogo \
 	UITest_writer_tests \
 	UITest_writer_tests2 \
 	UITest_writer_tests3 \
@@ -174,7 +175,6 @@ $(eval $(call gb_Module_add_uicheck_targets,sw,\
 	UITest_sw_findReplace \
 	UITest_sw_findSimilarity \
 	UITest_chapterNumbering \
-	UITest_librelogo \
 	UITest_sw_navigator \
 	UITest_sw_options \
 	UITest_sw_styleInspector \
