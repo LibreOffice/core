@@ -122,17 +122,13 @@ void OutputDevice::DrawPolygon(const tools::Polygon& rPoly)
     if (aPoly.HasFlags())
     {
         const PolyFlags* pFlgAry = aPoly.GetConstFlagAry();
-        if (!mpGraphics->DrawPolygonBezier(nPoints, pPtAry, pFlgAry, *this))
-        {
-            aPoly = tools::Polygon::SubdivideBezier(aPoly);
-            pPtAry = aPoly.GetConstPointAry();
-            mpGraphics->DrawPolygon(aPoly.GetSize(), pPtAry, *this);
-        }
+        mpGraphics->DrawPolygonBezier(aPoly, nPoints, pPtAry, pFlgAry, *this);
     }
     else
     {
         mpGraphics->DrawPolygon(nPoints, pPtAry, *this);
     }
+
     if (mpAlphaVDev)
         mpAlphaVDev->DrawPolygon(rPoly);
 }
