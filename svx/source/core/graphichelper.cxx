@@ -69,9 +69,9 @@ void GraphicHelper::GetPreferredExtension( OUString& rExtension, const Graphic& 
     OUString aExtension = "png";
     auto const & rVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
 
-    if (rVectorGraphicDataPtr && rVectorGraphicDataPtr->getVectorGraphicDataArrayLength())
+    if (rVectorGraphicDataPtr && !rVectorGraphicDataPtr->getBinaryDataContainer().isEmpty())
     {
-        switch (rVectorGraphicDataPtr->getVectorGraphicDataType())
+        switch (rVectorGraphicDataPtr->getType())
         {
         case VectorGraphicDataType::Wmf:
             aExtension = "wmf";
