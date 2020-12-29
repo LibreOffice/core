@@ -211,7 +211,7 @@
                                 </child>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="listbox-column-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|listbox-column">To define the layout of a pivot table, drag and drop data field buttons onto the Page Fields, Row Fields, Column Fields, and Data Fields areas.</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|listbox-column">To define the layout of a pivot table, drag and drop data field buttons onto the Filters, Row Fields, Column Fields and Data Fields areas.</property>
                                   </object>
                                 </child>
                               </object>
@@ -292,7 +292,7 @@
                                 </child>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="listbox-data-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|listbox-data">To define the layout of a pivot table, drag and drop data field buttons onto the Page Fields, Row Fields, Column Fields, and Data Fields areas.</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|listbox-data">To define the layout of a pivot table, drag and drop data field buttons onto the Filters, Row Fields, Column Fields and Data Fields areas.</property>
                                   </object>
                                 </child>
                               </object>
@@ -371,7 +371,7 @@
                                 </child>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="listbox-row-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|listbox-row">To define the layout of a pivot table, drag and drop data field buttons onto the Page Fields, Row Fields, Column Fields, and Data Fields areas.</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|listbox-row">To define the layout of a pivot table, drag and drop data field buttons onto the Filters, Row Fields, Column Fields and Data Fields areas.</property>
                                   </object>
                                 </child>
                               </object>
@@ -452,7 +452,7 @@
                                 </child>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="listbox-page-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|listbox-page">To define the layout of a pivot table, drag and drop data field buttons onto the Page Fields, Row Fields, Column Fields, and Data Fields areas.</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|listbox-page">To define the layout of a pivot table, drag and drop data field buttons onto the Filters, Row Fields, Column Fields and Data Fields areas.</property>
                                   </object>
                                 </child>
                               </object>
@@ -538,7 +538,7 @@
                             </child>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="listbox-fields-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|listbox-fields">To define the layout of a pivot table, drag and drop data field buttons onto the Page Fields, Row Fields, Column Fields, and Data Fields areas.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|listbox-fields">To define the layout of a pivot table, drag and drop data field buttons onto the Filters, Row Fields, Column Fields and Data Fields areas.</property>
                               </object>
                             </child>
                           </object>
