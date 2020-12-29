@@ -261,7 +261,7 @@ XPolygon::XPolygon(const tools::Rectangle& rRect, tools::Long nRx, tools::Long n
                         aCenter.AdjustY( -nRy );
                         break;
             }
-            GenBezArc(aCenter, nRx, nRy, nXHdl, nYHdl, 0, 900, nQuad, nPos);
+            GenBezArc(aCenter, nRx, nRy, nXHdl, nYHdl, 0_deg10, 900_deg10, nQuad, nPos);
             pImpXPolygon->pFlagAry[nPos  ] = PolyFlags::Smooth;
             pImpXPolygon->pFlagAry[nPos+3] = PolyFlags::Smooth;
             nPos += 4;
@@ -280,12 +280,12 @@ XPolygon::XPolygon(const tools::Rectangle& rRect, tools::Long nRx, tools::Long n
 
 /// create an ellipse (curve) as Bézier polygon
 XPolygon::XPolygon(const Point& rCenter, tools::Long nRx, tools::Long nRy,
-                   sal_uInt16 nStartAngle, sal_uInt16 nEndAngle, bool bClose)
+                   Degree10 nStartAngle, Degree10 nEndAngle, bool bClose)
     : pImpXPolygon( 17 )
 {
-    nStartAngle %= 3600;
-    if ( nEndAngle > 3600 ) nEndAngle %= 3600;
-    bool bFull = (nStartAngle == 0 && nEndAngle == 3600);
+    nStartAngle %= 3600_deg10;
+    if ( nEndAngle > 3600_deg10 ) nEndAngle %= 3600_deg10;
+    bool bFull = (nStartAngle == 0_deg10 && nEndAngle == 3600_deg10);
 
     // factor for control points of the Bézier curve: 8/3 * (sin(45g) - 0.5)
     tools::Long    nXHdl = static_cast<tools::Long>(0.552284749 * nRx);
@@ -295,8 +295,8 @@ XPolygon::XPolygon(const Point& rCenter, tools::Long nRx, tools::Long nRy,
 
     do
     {
-        sal_uInt16 nA1, nA2;
-        sal_uInt16 nQuad = nStartAngle / 900;
+        Degree10 nA1, nA2;
+        sal_uInt16 nQuad = nStartAngle.get() / 900;
         if ( nQuad == 4 ) nQuad = 0;
         bLoopEnd = CheckAngles(nStartAngle, nEndAngle, nA1, nA2);
         GenBezArc(rCenter, nRx, nRy, nXHdl, nYHdl, nA1, nA2, nQuad, nPos);
@@ -537,7 +537,7 @@ void XPolygon::SubdivideBezier(sal_uInt16 nPos, bool bCalcFirst, double fT)
 
 /// Generate a Bézier arc
 void XPolygon::GenBezArc(const Point& rCenter, tools::Long nRx, tools::Long nRy,
-                         tools::Long nXHdl, tools::Long nYHdl, sal_uInt16 nStart, sal_uInt16 nEnd,
+                         tools::Long nXHdl, tools::Long nYHdl, Degree10 nStart, Degree10 nEnd,
                          sal_uInt16 nQuad, sal_uInt16 nFirst)
 {
     Point* pPoints = pImpXPolygon->pPointAry.get();
@@ -576,23 +576,23 @@ void XPolygon::GenBezArc(const Point& rCenter, tools::Long nRx, tools::Long nRy,
         pPoints[nFirst+1].AdjustX( nXHdl );
         pPoints[nFirst+2].AdjustY( nYHdl );
     }
-    if ( nStart > 0 )
-        SubdivideBezier(nFirst, false, static_cast<double>(nStart) / 900);
-    if ( nEnd < 900 )
-        SubdivideBezier(nFirst, true, static_cast<double>(nEnd-nStart) / (900-nStart));
+    if ( nStart > 0_deg10 )
+        SubdivideBezier(nFirst, false, static_cast<double>(nStart.get()) / 900);
+    if ( nEnd < 900_deg10 )
+        SubdivideBezier(nFirst, true, static_cast<double>((nEnd-nStart).get()) / (900_deg10-nStart).get());
     SetFlags(nFirst+1, PolyFlags::Control);
     SetFlags(nFirst+2, PolyFlags::Control);
 }
 
-bool XPolygon::CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& nA1, sal_uInt16& nA2)
+bool XPolygon::CheckAngles(Degree10& nStart, Degree10 nEnd, Degree10& nA1, Degree10& nA2)
 {
-    if ( nStart == 3600 ) nStart = 0;
-    if ( nEnd == 0 ) nEnd = 3600;
-    sal_uInt16 nStPrev = nStart;
-    sal_uInt16 nMax = (nStart / 900 + 1) * 900;
-    sal_uInt16 nMin = nMax - 900;
+    if ( nStart == 3600_deg10 ) nStart = 0_deg10;
+    if ( nEnd == 0_deg10 ) nEnd = 3600_deg10;
+    Degree10 nStPrev = nStart;
+    Degree10 nMax = Degree10((nStart.get() / 900 + 1) * 900);
+    Degree10 nMin = nMax - 900_deg10;
 
-    if ( nEnd >= nMax || nEnd <= nStart )   nA2 = 900;
+    if ( nEnd >= nMax || nEnd <= nStart )   nA2 = 900_deg10;
     else                                    nA2 = nEnd - nMin;
     nA1 = nStart - nMin;
     nStart = nMax;
