@@ -11,6 +11,9 @@
 #include <orcusinterface.hxx>
 #include <tokenarray.hxx>
 
+#include <memory>
+
+#include <osl/thread.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -26,6 +29,13 @@
 #include <orcus/orcus_import_ods.hpp>
 #include <orcus/stream.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+
+#if defined _WIN32
+#include <boost/filesystem/operations.hpp> // for boost::filesystem::filesystem_error
+#include <o3tl/char16_t2wchar_t.hxx>
+#include <prewin.h>
+#include <postwin.h>
+#endif
 
 using namespace com::sun::star;
 
@@ -119,15 +129,33 @@ bool ScOrcusFiltersImpl::importODS(ScDocument& rDoc, SfxMedium& rMedium) const
 
 bool ScOrcusFiltersImpl::importODS_Styles(ScDocument& rDoc, OUString& aPath) const
 {
-    OString aUrl = OUStringToOString(aPath, RTL_TEXTENCODING_UTF8);
-    const char* path = aUrl.getStr();
+    OString aPath8 = OUStringToOString(aPath, osl_getThreadTextEncoding());
 
     try
     {
-        orcus::file_content content(path);
+#if defined _WIN32
+        std::unique_ptr<orcus::file_content> content;
+        try
+        {
+            content = std::make_unique<orcus::file_content>(aPath8.getStr());
+        }
+        catch (const boost::filesystem::filesystem_error&)
+        {
+            // Maybe the path contains characters not representable in ACP. It's not
+            // yet possible to pass Unicode path to orcus::file_content ctor - see
+            // https://gitlab.com/orcus/orcus/-/issues/30; try short path.
+            wchar_t buf[32767];
+            if (GetShortPathNameW(o3tl::toW(aPath.getStr()), buf, std::size(buf)) == 0)
+                throw;
+            aPath8 = OUStringToOString(o3tl::toU(buf), osl_getThreadTextEncoding());
+            content = std::make_unique<orcus::file_content>(aPath8.getStr());
+        }
+#else
+        auto content == std::make_unique<orcus::file_content>(path);
+#endif
         ScOrcusFactory aFactory(rDoc);
         ScOrcusStyles aStyles(aFactory);
-        orcus::import_ods::read_styles(content.data(), content.size(), &aStyles);
+        orcus::import_ods::read_styles(content->data(), content->size(), &aStyles);
     }
     catch (const std::exception& e)
     {
