@@ -410,6 +410,9 @@ public:
     virtual void set_text(int row, const OUString& rText, int col = -1) override;
     virtual void set_text(const weld::TreeIter& rIter, const OUString& rStr, int col = -1) override;
 
+    virtual void expand_row(const weld::TreeIter& rIter) override;
+    virtual void collapse_row(const weld::TreeIter& rIter) override;
+
     void drag_start();
     void drag_end();
 };
