@@ -19,6 +19,8 @@
 
 $(eval $(call gb_Library_Library,icg))
 
+$(eval $(call gb_Library_set_plugin_for_nodep,icg,sd))
+
 $(eval $(call gb_Library_use_external,icg,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,icg))

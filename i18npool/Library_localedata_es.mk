@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Library_Library,localedata_es))
 
+$(eval $(call gb_Library_set_plugin_for_nodep,localedata_es,i18npool))
+
 $(eval $(call gb_Library_use_libraries,localedata_es,\
 	localedata_en \
 ))

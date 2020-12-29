@@ -130,7 +130,7 @@ $(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_static.hxx : 
 $(call gb_CxxObject_get_target,i18npool/source/localedata/localedata) : \
 	INCLUDE += -I$(call gb_CustomTarget_get_workdir,i18npool/localedata)
 
-endif
+endif # DISABLE_DYNLOADING
 
 # collator_unicode.cxx includes generated lrl_include.hxx
 $(call gb_CxxObject_get_target,i18npool/source/collator/collator_unicode) : \
