@@ -72,7 +72,7 @@ bool SfxImageItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
         sal_Int16     nVal = sal_Int16();
         if ( aSeq[0] >>= nVal )
             SetValue( nVal );
-        sal_Int16 nTmp;
+        sal_Int16 nTmp = 0;
         aSeq[1] >>= nTmp;
         mnAngle = Degree10(nTmp);
         aSeq[2] >>= mbMirrored;
