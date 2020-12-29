@@ -176,9 +176,9 @@ OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, std::s
     switch (eMode)
     {
     case ScConditionMode::BeginsWith:
-        return OString("LEFT(" + aPos + ",LEN(" + rText + "))=\"" + rText + "\"");
+        return OString("LEFT(" + aPos + ",LEN(" + rText + "))=" + rText + "");
     case ScConditionMode::EndsWith:
-        return OString("RIGHT(" + aPos + ",LEN(" + rText + "))=\"" + rText + "\"");
+        return OString("RIGHT(" + aPos + ",LEN(" + rText + "))=" + rText + "");
     case ScConditionMode::ContainsText:
         return OString(OString::Concat("NOT(ISERROR(SEARCH(") + rText + "," + aPos + ")))");
     case ScConditionMode::NotContainsText:
