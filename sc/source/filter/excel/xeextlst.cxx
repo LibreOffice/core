@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <xeextlst.hxx>
 #include <xeroot.hxx>
 #include <xestyle.hxx>
@@ -164,7 +168,7 @@ bool RequiresFixedFormula(ScConditionMode eMode)
     return false;
 }
 
-OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, const OString& rText)
+OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, std::string_view rText)
 {
     OStringBuffer aBuffer;
     XclXmlUtils::ToOString(aBuffer, rAddress);
@@ -176,9 +180,9 @@ OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, const 
     case ScConditionMode::EndsWith:
         return OString("RIGHT(" + aPos + ",LEN(" + rText + "))=\"" + rText + "\"");
     case ScConditionMode::ContainsText:
-        return OString("NOT(ISERROR(SEARCH(" + rText + "," + aPos + ")))");
+        return OString(OString::Concat("NOT(ISERROR(SEARCH(") + rText + "," + aPos + ")))");
     case ScConditionMode::NotContainsText:
-        return OString("ISERROR(SEARCH(" + rText + "," + aPos + "))");
+        return OString(OString::Concat("ISERROR(SEARCH(") + rText + "," + aPos + "))");
     default:
         break;
     }

@@ -144,7 +144,7 @@ void ScShapeTest::testTdf137033_FlipHori_Resize()
     // Load a document, which has a rotated custom shape, which is horizontal flipped. Error was, that
     // if such shape was anchored "resize with cell", then after save and reload it was destorted.
     OUString aFileURL;
-    createFileURL("tdf137033_FlipHoriRotCustomShape.ods", aFileURL);
+    createFileURL(u"tdf137033_FlipHoriRotCustomShape.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
@@ -203,7 +203,7 @@ void ScShapeTest::testTdf137033_RotShear_ResizeHide()
 
     // Load a document, which has a rotated and sheared shape, anchored to cell with resize.
     OUString aFileURL;
-    createFileURL("tdf137033_RotShearResizeAnchor.ods", aFileURL);
+    createFileURL(u"tdf137033_RotShearResizeAnchor.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
@@ -278,7 +278,7 @@ void ScShapeTest::testTdf137033_RotShear_Hide()
 
     // Load a document, which has a rotated and sheared shape, anchored to cell, without resize.
     OUString aFileURL;
-    createFileURL("tdf137033_RotShearCellAnchor.ods", aFileURL);
+    createFileURL(u"tdf137033_RotShearCellAnchor.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
