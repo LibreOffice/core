@@ -14,6 +14,12 @@ $(eval $(call gb_UnpackedTarball_set_tarball,cairo,$(CAIRO_TARBALL),,cairo))
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 	external/cairo/cairo/cairo-1.10.2.patch \
 	external/cairo/cairo/cairo-libtool-rpath.patch.1 \
+<<<<<<< HEAD   (2a65be Fix #118767 - Identify Firebird DBMS in DFunction())
+=======
+	external/cairo/cairo/cairo.oldfreetype.patch \
+	external/cairo/cairo/san.patch.0 \
+	external/cairo/cairo/0001-Fix-mask-usage-in-image-compositor.patch.1 \
+>>>>>>> CHANGE (c767e9 external/cairo: Fix mask usage in image-compositor)
 ))
 
 ifeq ($(OS),iOS)
