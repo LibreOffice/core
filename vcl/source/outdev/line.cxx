@@ -107,8 +107,6 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     if ( mbInitLineColor )
         InitLineColor();
 
-    bool bDrawn = false;
-
     // #i101598# support AA and snap for lines, too
     if( mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
         && RasterOp::OverPaint == GetRasterOp()
@@ -125,7 +123,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 
         const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
-        bDrawn = mpGraphics->DrawPolyLine(
+        mpGraphics->DrawPolyLine(
             basegfx::B2DHomMatrix(),
             aB2DPolyLine,
             0.0,
@@ -136,12 +134,6 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
             basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
             bPixelSnapHairline,
             *this);
-    }
-    if(!bDrawn)
-    {
-        const Point aStartPt(ImplLogicToDevicePixel(rStartPt));
-        const Point aEndPt(ImplLogicToDevicePixel(rEndPt));
-        mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), *this );
     }
 
     if( mpAlphaVDev )
@@ -230,11 +222,10 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
         for(auto const& rB2DPolygon : aLinePolyPolygon)
         {
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
-            bool bDone(false);
 
-            if(bTryB2d)
+            if (bTryB2d)
             {
-                bDone = mpGraphics->DrawPolyLine(
+                mpGraphics->DrawPolyLine(
                     basegfx::B2DHomMatrix(),
                     rB2DPolygon,
                     0.0,
@@ -244,15 +235,6 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
                     css::drawing::LineCap_BUTT,
                     basegfx::deg2rad(15.0), // not used with B2DLineJoin::NONE, but the correct default
                     bPixelSnapHairline,
-                    *this);
-            }
-
-            if(!bDone)
-            {
-                tools::Polygon aPolygon(rB2DPolygon);
-                mpGraphics->DrawPolyLine(
-                    aPolygon.GetSize(),
-                    aPolygon.GetPointAry(),
                     *this);
             }
         }
