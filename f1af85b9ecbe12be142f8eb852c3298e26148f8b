@@ -16,6 +16,24 @@
       "revId": "f1af85b9ecbe12be142f8eb852c3298e26148f8b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "520d9838_26bdf2b0",
+        "filename": "vcl/source/control/spinfld.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2020-12-29T07:23:08Z",
+      "side": 1,
+      "message": "That wouldn\u0027t work with our current solution. We purposefully stopped update on modification.",
+      "parentUuid": "98c64ef5_746a6101",
+      "revId": "f1af85b9ecbe12be142f8eb852c3298e26148f8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
