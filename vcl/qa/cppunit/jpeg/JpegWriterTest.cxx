@@ -16,6 +16,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <tools/stream.hxx>
+#include <graphic/GraphicFormatDetector.hxx>
 
 constexpr OUStringLiteral gaDataUrl(u"/vcl/qa/cppunit/jpeg/data/");
 
@@ -54,16 +55,23 @@ BitmapEx JpegWriterTest::roundtripJPG(const OUString& aURL) { return roundtripJP
 
 BitmapEx JpegWriterTest::roundtripJPG(const BitmapEx& bitmap)
 {
-    SvMemoryStream stream;
+    // EXPORT JPEG
+    SvMemoryStream aStream;
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 exportFormatJPG = rFilter.GetExportFormatNumberForShortName(JPG_SHORTNAME);
     Graphic aExportGraphic(bitmap);
-    ErrCode bResult = rFilter.ExportGraphic(aExportGraphic, "memory", stream, exportFormatJPG);
+    ErrCode bResult = rFilter.ExportGraphic(aExportGraphic, "memory", aStream, exportFormatJPG);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
-    stream.Seek(0);
+    //Detect the magic bytes - we need to be sure the file is actually a JPEG
+    aStream.Seek(0);
+    vcl::GraphicFormatDetector aDetector(aStream, "");
+    CPPUNIT_ASSERT(aDetector.detect());
+    CPPUNIT_ASSERT(aDetector.checkJPG());
+    // IMPORT JPEG
+    aStream.Seek(0);
     Graphic aImportGraphic;
     sal_uInt16 importFormatJPG = rFilter.GetImportFormatNumberForShortName(JPG_SHORTNAME);
-    bResult = rFilter.ImportGraphic(aImportGraphic, "memory", stream, importFormatJPG);
+    bResult = rFilter.ImportGraphic(aImportGraphic, "memory", aStream, importFormatJPG);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
     return aImportGraphic.GetBitmapEx();
 }
