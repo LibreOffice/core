@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ba7f23e_c9ab7f1e",
+        "filename": "sax/source/expatwrap/saxwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-29T06:15:19Z",
+      "side": 1,
+      "message": "these don\u0027t line up with the values any more",
+      "revId": "3c91df2e36b88e87dd7e79b6837bf25cf28c9d3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
