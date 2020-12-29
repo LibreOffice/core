@@ -64,7 +64,8 @@ Option Explicit
 
 REM ================================================================== EXCEPTIONS
 
-Private Const FORMDEADERROR		=	&quot;FORMDEADERROR&quot;
+Private Const FORMDEADERROR			=	&quot;FORMDEADERROR&quot;
+Private Const SUBFORMNOTFOUNDERROR	=	&quot;SUBFORMNOTFOUNDERROR&quot;
 
 REM ============================================================= PRIVATE MEMBERS
 
@@ -84,7 +85,6 @@ Private _Component			As Object		&apos; com.sun.star.lang.XComponent or com.sun.s
 
 &apos;	EVents management
 Private _CacheIndex			As Long			&apos; Index in central cache storage
-Private _IssuedFromEvent	As Boolean		&apos; When True instance is always presumed alive
 
 &apos;	Form UNO references
 &apos;		The entry to the interactions with the form. Validity checked by the _IsStillAlive() method
@@ -119,7 +119,6 @@ Private Sub Class_Initialize()
 	Set _FormDocument = Nothing
 	_FormType = ISUNDEFINED
 	_CacheIndex = -1
-	_IssuedFromEvent = False
 	Set _Form = Nothing
 	Set _Database = Nothing
 	_ControlCache = Array()
@@ -171,6 +170,12 @@ Property Get Name() As String
 &apos;&apos;&apos;	Return the name of the actual Form
 	Name = _PropertyGet(&quot;Name&quot;)
 End Property	&apos;	SFDocuments.SF_Form.Name
+
+REM -----------------------------------------------------------------------------
+Property Get Parent() As Object
+&apos;&apos;&apos;	Return the Parent of the actual Form
+	Parent = _PropertyGet(&quot;Parent&quot;)
+End Property	&apos;	SFDocuments.SF_Form.Parent
 
 REM -----------------------------------------------------------------------------
 Property Get Visible() As Variant
@@ -349,7 +354,7 @@ Public Function GetDatabase(Optional ByVal User As Variant _
 &apos;&apos;&apos;	Returns a Database instance (service = SFDatabases.Database) giving access
 &apos;&apos;&apos;	to the execution of SQL commands on the database defined and/or stored in
 &apos;&apos;&apos;	the actual Base document
-&apos;&apos;&apos;	Each form has its own database connection, except within Base documents where
+&apos;&apos;&apos;	Each main form has its own database connection, except within Base documents where
 &apos;&apos;&apos;	they all share the same connection
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		User, Password: the login parameters as strings. Defaults = &quot;&quot;
@@ -393,7 +398,9 @@ Try:
 		If _FormType = ISBASEFORM Then
 			&apos;	Fetch the shared connection
 			Set _Database = [_Parent].GetDatabase(User, Password)
-		ElseIf Len(_Form.DataSOurceName) = 0 Then	&apos;	There is no database linked with the form
+		ElseIf _FormType = ISSUBFORM Then
+			&apos;	Return Nothing : method is not applicable to subforms
+		ElseIf Len(_Form.DataSourceName) = 0 Then	&apos;	There is no database linked with the form
 			&apos;	Return Nothing
 		Else
 			&apos;	Check if DataSourceName is a file or a registered name and create database instance accordingly
@@ -553,6 +560,87 @@ Catch:
 	GoTo Finally
 End Function	&apos;	SFDocuments.SF_Form.SetProperty
 
+REM -----------------------------------------------------------------------------
+Public Function Subforms(Optional ByVal Subform As Variant) As Variant
+&apos;&apos;&apos;	Return either
+&apos;&apos;&apos;		- the list of the subforms contained in the actual form or subform instance
+&apos;&apos;&apos;		- a SFDocuments.Form object based on its name or its index in the alphabetic list of subforms
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Subform: a subform stored in the parent form given by its name or its index
+&apos;&apos;&apos;			When absent, the list of available subforms is returned
+&apos;&apos;&apos;			To get the first (unique ?) subform stored in the parent form, set Subform = 0
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		SUBFORMNOTFOUNDERROR		Subform not found
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A zero-based array of strings if Subform is absent
+&apos;&apos;&apos;		An instance of the SF_Form class if Subform exists
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;			Dim myForm As Object, myList As Variant, mySubform As Object
+&apos;&apos;&apos;				myList = oForm.Subforms()
+&apos;&apos;&apos;				Set mySubform = myForm.Subforms(&quot;mySubform&quot;)
+
+Dim oSubform As Object				&apos;	The new Form class instance
+Dim oXSubform As Object				&apos;	com.sun.star.form.XForm
+Dim vSubformNames As Variant		&apos;	Array of subform names
+Dim i As Long
+Const cstDrawPage = 0				&apos;	Only 1 drawpage in a Writer document
+
+Const cstThisSub = &quot;SFDocuments.Form.Subforms&quot;
+Const cstSubArgs = &quot;[Subform=&quot;&quot;&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+
+Check:
+	If IsMissing(Subform) Or IsEmpty(Subform) Then Subform = &quot;&quot;
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Subform, &quot;Subform&quot;, Array(V_STRING, ScriptForge.V_NUMERIC)) Then GoTo Finally
+	End If
+
+Try:
+	&apos;	Collect all control names and retain only the subforms
+	vSubformNames = _Form.getElementNames()
+	For i = 0 To UBound(vSubformNames)
+		Set oSubform = _Form.getByName(vSubformNames(i))
+		&apos;	Subforms are the only control types having no ClassId property
+		If ScriptForge.SF_Session.HasUnoProperty(oSubform, &quot;ClassId&quot;) Then vSubformNames(i) = &quot;&quot;
+	Next i
+	vSubformNames = ScriptForge.SF_Array.TrimArray(vSubformNames)
+
+	If Len(Subform) = 0 Then	&apos;	Return the list of valid subform names
+		Subforms = vSubformNames
+	Else
+		If VarType(Subform) = V_STRING Then	&apos;	Find the form by name
+			If Not ScriptForge.SF_Array.Contains(vSubformNames, Subform, CaseSensitive := True) Then GoTo CatchNotFound
+			Set oXSubform = _Form.getByName(Subform)
+		Else								&apos;	Find the form by index
+			If Subform &lt; 0 Or Subform &gt; UBound(vSubformNames) Then GoTo CatchNotFound
+			Set oXSubform = _Form.getByName(vSubformNames(Subform))
+		End If
+		&apos;	Create the new Form class instance
+		Set oSubform = SF_Register._NewForm(oXSubform)
+		With oSubform
+			Set .[_Parent] = [Me]
+			._FormType = ISSUBFORM
+			Set ._Component = _Component
+			Set ._FormDocument = _FormDocument
+			._SheetName = _SheetName
+			._FormDocumentName = _FormDocumentName
+			._Initialize()
+		End With
+		Set Subforms = oSubform
+	End If
+
+Finally:
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchNotFound:
+	ScriptForge.SF_Exception.RaiseFatal(SUBFORMNOTFOUNDERROR, Subform, _Name)
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Form.Subforms
+
 REM =========================================================== PRIVATE FUNCTIONS
 
 REM -----------------------------------------------------------------------------
@@ -625,9 +713,14 @@ Try:
 				If iLevel = 1 Then
 					_FormType = ISSUBFORM
 					Set [_Parent] = SF_Register._NewForm(oParent)
-					&apos;	The parent form could be a main form
-					[_Parent]._Initialize()
-					&apos;	Everything is in the parent, stop scan
+					&apos;	Everything is in the parent, copy items and stop scan
+					[_Parent]._Initialize()		&apos;	Current method is called recursively here
+					With [_Parent]
+						_SheetName = ._SheetName
+						_FormDocumentName = ._FormDocumentName
+						Set _FormDocument = ._FormDocument
+						Set _Component = ._Component
+					End With
 					Exit Sub
 				End If
 			Case &quot;com.sun.star.form.OFormsCollection&quot;		&apos;	The collection of forms inside a drawpage
@@ -667,7 +760,6 @@ Public Sub _Initialize()
 &apos;&apos;&apos;		- complete the missing private members
 &apos;&apos;&apos;		- store the new instance in the cache
 
-	
 	_GetParents()
 	_CacheIndex = SF_Register._AddFormToCache(_Form, [Me])
 
@@ -690,22 +782,10 @@ Check:
 	If IsMissing(pbError) Then pbError = True
 
 Try:
-	If _IssuedFromEvent Then		&apos;	Instance is presumed alive when issued from an event
-		bAlive = True
-	Else
-		&apos;	For usual documents, check that the parent document is still open
-		&apos;	For Base forms and subforms, check the openness of the main form
-		Select Case _FormType
-			Case ISDOCFORM, ISCALCFORM
-				bAlive = [_Parent]._IsStillAlive(pbError)
-			Case ISBASEFORM, ISSUBFORM
-				&apos;	A form that has never been opened has no component
-				&apos;	If ever opened and closed afterwards, it keeps the Component but loses its Controller
-				bAlive = Not IsNull(_FormDocument.Component)
-				If bAlive Then bAlive = Not IsNull(_FormDocument.Component.CurrentController)
-		End Select
-		If Not bAlive Then GoTo Catch
-	End If
+	&apos;	At main form termination, all database connections are lost
+	bAlive = Not IsNull(_Form)
+	If bAlive Then bAlive = Not IsNull(_Form.ActiveConnection)
+	If Not bAlive Then GoTo Catch
 
 Finally:
 	_IsStillAlive = bAlive
@@ -716,7 +796,7 @@ Catch:
 	&apos;	Keep error message elements before disposing the instance
 	sName = _SheetName &amp; _FormDocumentName		&apos;	At least one of them is a zero-length string
 	sName = Iif(Len(sName) &gt; 0, &quot;[&quot; &amp; sName &amp; &quot;].&quot;, &quot;&quot;) &amp; _Name
-	sId = [_Parent]._FileIdent()
+	If Not IsNull(_Component) Then sId = _Component.Location Else sId = &quot;&quot;
 	&apos;	Dispose the actual forms instance
 	Dispose()
 	&apos;	Display error message
@@ -742,13 +822,14 @@ Const cstSubArgs = &quot;&quot;
 
 	If IsNull(oSession) Then Set oSession = ScriptForge.SF_Services.CreateScriptService(&quot;Session&quot;)
 	Select Case UCase(psProperty)
-		Case UCase(&quot;Caption&quot;)
-		Case UCase(&quot;Height&quot;)
+&apos;		Case UCase(&quot;Caption&quot;)
+&apos;		Case UCase(&quot;Height&quot;)
 		Case UCase(&quot;Name&quot;)
+			_PropertyGet = _Name
 		Case UCase(&quot;Parent&quot;)
 			_PropertyGet = [_Parent]
-		Case UCase(&quot;Visible&quot;)
-		Case UCase(&quot;Width&quot;)
+&apos;		Case UCase(&quot;Visible&quot;)
+&apos;		Case UCase(&quot;Width&quot;)
 		Case UCase(&quot;XForm&quot;)
 			Set _PropertyGet = _Form
 		Case Else
