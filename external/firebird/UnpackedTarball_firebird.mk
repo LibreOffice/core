@@ -43,6 +43,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
     external/firebird/firebird-307.patch.1 \
     external/firebird/0001-Fix-checks-for-null-HANDLE-in-Windows-only-code.patch.1 \
     external/firebird/0001-extern-cloop-Missing-dependency-of-BIN_DIR-cloop-on-.patch.1 \
+    external/firebird/msvc.patch \
 ))
 
 ifeq ($(OS),WNT)
