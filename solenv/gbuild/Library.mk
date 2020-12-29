@@ -171,7 +171,7 @@ endif
 
 $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(2))) : PLUGINS += $(1)
 $(eval $(call gb_LinkTarget__add_plugin,$(call gb_Library_get_linktarget,$(2)),$(1)))
-$(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+$(eval $(call gb_LinkTarget__set_plugin_for,$(call gb_Library_get_linktarget,$(1)),$(2),$(3)))
 endef
 
 # forward the call to the gb_LinkTarget implementation
