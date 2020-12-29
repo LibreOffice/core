@@ -240,6 +240,11 @@ public:
 
     void                        DrawPolyPolygon(sal_uInt32 nPoly, tools::PolyPolygon const& rPolyPoly, const OutputDevice& rOutDev);
 
+    void                        DrawPolyPolygon(
+                                    const tools::PolyPolygon& rPolyPoly,
+                                    const tools::PolyPolygon* pClipPolyPoly,
+                                    OutputDevice const& rOutDev);
+
     void                        DrawPolyLine(
                                     const basegfx::B2DHomMatrix& rObjectToDevice,
                                     const basegfx::B2DPolygon& i_rPolygon,
