@@ -52,6 +52,24 @@
       "revId": "f1af85b9ecbe12be142f8eb852c3298e26148f8b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07232c68_c50161f1",
+        "filename": "vcl/source/control/spinfld.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2020-12-29T11:22:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eea2c91b_f8552b73",
+      "revId": "f1af85b9ecbe12be142f8eb852c3298e26148f8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
