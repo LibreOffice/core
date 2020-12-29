@@ -25,6 +25,17 @@ $(eval $(call gb_Library_use_libraries,i18npool,\
 	i18nlangtag \
 	i18nutil \
 	sal \
+    $(if $(DISABLE_DYNLOADING), \
+        collator_data \
+        dict_ja \
+        dict_zh \
+        index_data \
+        localedata_en \
+        localedata_es \
+        localedata_euro \
+        localedata_others \
+        textconv_dict \
+    ) \
 ))
 
 $(eval $(call gb_Library_use_externals,i18npool,\
