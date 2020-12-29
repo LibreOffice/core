@@ -252,10 +252,13 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,calc, \
 	sc \
 	scd \
 	scfilt \
-	scui \
 	wpftcalc \
 	solver \
 	$(call gb_Helper_optional,SCRIPTING,vbaobj) \
+))
+
+$(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,calc, \
+	scui \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,graphicfilter, \
@@ -280,19 +283,26 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,onlineupdate, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,gnome, \
 	$(if $(ENABLE_EVOAB2),evoab) \
-	$(if $(ENABLE_GTK3),vclplug_gtk3) \
 	$(if $(ENABLE_GIO),losessioninstall) \
 	$(if $(ENABLE_GIO),ucpgio1) \
 ))
 
+$(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,gnome, \
+    $(if $(ENABLE_GTK3),vclplug_gtk3) \
+))
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,kde, \
 	$(if $(ENABLE_KF5),kf5be1) \
-	$(if $(USING_X11), \
-        $(if $(ENABLE_KF5),vclplug_kf5) \
-        $(if $(ENABLE_QT5),vclplug_qt5) \
-        $(if $(ENABLE_GTK3_KDE5),vclplug_gtk3_kde5) \
-	) \
 ))
+
+ifneq (,$(USING_X11))
+$(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,kde, \
+    $(if $(ENABLE_KF5),vclplug_kf5) \
+    $(if $(ENABLE_QT5),vclplug_qt5) \
+    $(if $(ENABLE_GTK3_KDE5),vclplug_gtk3_kde5) \
+))
+endif
+
 ifneq ($(ENABLE_GTK3_KDE5),)
 $(eval $(call gb_Helper_register_executables_for_install,OOO,kde, \
        lo_kde5filepicker \
@@ -300,7 +310,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,kde, \
 endif
 
 ifeq ($(OS),HAIKU)
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,haiku, \
+$(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,haiku, \
     $(if $(ENABLE_QT5),vclplug_qt5) \
     $(if $(ENABLE_KF5),vclplug_kf5) \
 ))
@@ -406,7 +416,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	sd \
 	sdd \
 	sdfilt \
-	sdui \
 	sfx \
 	simplecanvas \
 	slideshow \
@@ -451,14 +460,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	xof \
 	xsltdlg \
 	xsltfilter \
-	$(if $(USING_X11), \
-		vclplug_gen \
-	) \
 	$(if $(filter $(OS),WNT), \
 		ado \
 		oleautobridge \
 		smplmail \
-		vclplug_win \
 		wininetbe1 \
 	) \
 	$(if $(filter $(OS),MACOSX), \
@@ -466,12 +471,20 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 			AppleRemote \
 		) \
 		fps_aqua \
-		vclplug_osx \
 	) \
 	$(if $(filter iOS MACOSX,$(OS)), \
 		MacOSXSpell \
 	) \
 	$(if $(filter $(OS),EMSCRIPTEN),vclplug_qt5) \
+))
+
+$(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,ooo, \
+    gie \
+    sdui \
+    $(if $(USING_X11),vclplug_gen) \
+    $(if $(filter $(OS),WNT),vclplug_win) \
+    $(if $(filter $(OS),MACOSX),vclplug_osx) \
+    $(if $(filter EMSCRIPTEN,$(OS)),vclplug_qt5) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,postgresqlsdbc, \
@@ -510,12 +523,15 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,writer, \
 	$(if $(ENABLE_LWP),lwpft) \
 	msword \
 	swd \
-	swui \
 	t602filter \
 	$(call gb_Helper_optional,SCRIPTING,vbaswobj) \
 	wpftwriter \
 	writerfilter \
 	$(call gb_Helper_optional,DBCONNECTIVITY,writer) \
+))
+
+$(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,writer, \
+	swui \
 ))
 
 # cli_cppuhelper is NONE even though it is actually in URE because it is CliNativeLibrary
