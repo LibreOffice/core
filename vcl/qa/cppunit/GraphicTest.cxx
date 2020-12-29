@@ -377,8 +377,7 @@ void GraphicTest::testEmfToWmfConversion()
     sal_uInt16 nFormat = aGraphicFilter.GetImportFormatNumberForShortName(u"WMF");
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE,
                          aGraphicFilter.ImportGraphic(aGraphic, OUString(), aStream, nFormat));
-    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Wmf,
-                         aGraphic.getVectorGraphicData()->getVectorGraphicDataType());
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Wmf, aGraphic.getVectorGraphicData()->getType());
 
     // Save as WMF.
     sal_uInt16 nFilterType = aGraphicFilter.GetExportFormatNumberForShortName(u"WMF");
@@ -661,7 +660,7 @@ void GraphicTest::testSwappingVectorGraphic_SVG_WithGfxLink()
     CPPUNIT_ASSERT_EQUAL(true, bool(pVectorData));
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
 
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(223), pVectorData->getVectorGraphicDataArrayLength());
+    CPPUNIT_ASSERT_EQUAL(size_t(223), pVectorData->getBinaryDataContainer().getSize());
 
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.IsGfxLink());
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(223), aGraphic.GetGfxLink().GetDataSize());
@@ -711,8 +710,8 @@ void GraphicTest::testSwappingVectorGraphic_SVG_WithoutGfxLink()
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
 
     Graphic aInputGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(223),
-                         aInputGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength());
+    CPPUNIT_ASSERT_EQUAL(size_t(223),
+                         aInputGraphic.getVectorGraphicData()->getBinaryDataContainer().getSize());
 
     // Create graphic
     Graphic aGraphic(aInputGraphic.getVectorGraphicData());
@@ -721,8 +720,8 @@ void GraphicTest::testSwappingVectorGraphic_SVG_WithoutGfxLink()
     CPPUNIT_ASSERT_EQUAL(true, bool(aGraphic.getVectorGraphicData()));
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
 
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(223),
-                         aGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength());
+    CPPUNIT_ASSERT_EQUAL(size_t(223),
+                         aGraphic.getVectorGraphicData()->getBinaryDataContainer().getSize());
 
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.IsGfxLink());
 
@@ -775,8 +774,8 @@ void GraphicTest::testSwappingVectorGraphic_SVG_WithoutGfxLink()
     CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
     CPPUNIT_ASSERT_EQUAL(true, bool(aGraphic.getVectorGraphicData()));
 
-    sal_uInt32 nVectorByteSize = aGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength();
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(223), nVectorByteSize);
+    size_t nVectorByteSize = aGraphic.getVectorGraphicData()->getBinaryDataContainer().getSize();
+    CPPUNIT_ASSERT_EQUAL(size_t(223), nVectorByteSize);
 
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.IsGfxLink());
 
@@ -863,8 +862,8 @@ void GraphicTest::testSwappingGraphicProperties_SVG_WithoutGfxLink()
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
 
     Graphic aInputGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(223),
-                         aInputGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength());
+    CPPUNIT_ASSERT_EQUAL(size_t(223),
+                         aInputGraphic.getVectorGraphicData()->getBinaryDataContainer().getSize());
 
     // Create graphic
     Graphic aGraphic(aInputGraphic.getVectorGraphicData());
@@ -934,10 +933,9 @@ void GraphicTest::testSwappingVectorGraphic_PDF_WithGfxLink()
     // Set the page index
     aGraphic.getVectorGraphicData()->setPageIndex(1);
 
-    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
-                         aGraphic.getVectorGraphicData()->getVectorGraphicDataType());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(17693),
-                         aGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength());
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, aGraphic.getVectorGraphicData()->getType());
+    CPPUNIT_ASSERT_EQUAL(size_t(17693),
+                         aGraphic.getVectorGraphicData()->getBinaryDataContainer().getSize());
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aGraphic.getVectorGraphicData()->getPageIndex());
 
@@ -975,10 +973,9 @@ void GraphicTest::testSwappingVectorGraphic_PDF_WithoutGfxLink()
     // Set the page index
     aGraphic.getVectorGraphicData()->setPageIndex(1);
 
-    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
-                         aGraphic.getVectorGraphicData()->getVectorGraphicDataType());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(17693),
-                         aGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength());
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, aGraphic.getVectorGraphicData()->getType());
+    CPPUNIT_ASSERT_EQUAL(size_t(17693),
+                         aGraphic.getVectorGraphicData()->getBinaryDataContainer().getSize());
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aGraphic.getVectorGraphicData()->getPageIndex());
 

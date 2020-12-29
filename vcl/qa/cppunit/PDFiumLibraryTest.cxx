@@ -62,8 +62,7 @@ void PDFiumLibraryTest::testDocument()
 
     auto pVectorGraphicData = aGraphic.getVectorGraphicData();
     CPPUNIT_ASSERT(pVectorGraphicData);
-    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
-                         pVectorGraphicData->getVectorGraphicDataType());
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
 
     auto& rDataContainer = pVectorGraphicData->getBinaryDataContainer();
 
@@ -89,8 +88,7 @@ void PDFiumLibraryTest::testPages()
 
     auto pVectorGraphicData = aGraphic.getVectorGraphicData();
     CPPUNIT_ASSERT(pVectorGraphicData);
-    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
-                         pVectorGraphicData->getVectorGraphicDataType());
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
 
     auto& rDataContainer = pVectorGraphicData->getBinaryDataContainer();
 
@@ -114,8 +112,7 @@ void PDFiumLibraryTest::testPageObjects()
 
     auto pVectorGraphicData = aGraphic.getVectorGraphicData();
     CPPUNIT_ASSERT(pVectorGraphicData);
-    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
-                         pVectorGraphicData->getVectorGraphicDataType());
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
 
     auto& rDataContainer = pVectorGraphicData->getBinaryDataContainer();
 
@@ -163,8 +160,7 @@ void PDFiumLibraryTest::testAnnotationsMadeInEvince()
 
     auto pVectorGraphicData = aGraphic.getVectorGraphicData();
     CPPUNIT_ASSERT(pVectorGraphicData);
-    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
-                         pVectorGraphicData->getVectorGraphicDataType());
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
 
     auto& rDataContainer = pVectorGraphicData->getBinaryDataContainer();
 
@@ -219,8 +215,7 @@ void PDFiumLibraryTest::testAnnotationsMadeInAcrobat()
 
     auto pVectorGraphicData = aGraphic.getVectorGraphicData();
     CPPUNIT_ASSERT(pVectorGraphicData);
-    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
-                         pVectorGraphicData->getVectorGraphicDataType());
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
 
     auto& rDataContainer = pVectorGraphicData->getBinaryDataContainer();
 
@@ -296,8 +291,7 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
 
     auto pVectorGraphicData = aGraphic.getVectorGraphicData();
     CPPUNIT_ASSERT(pVectorGraphicData);
-    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
-                         pVectorGraphicData->getVectorGraphicDataType());
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
 
     auto& rDataContainer = pVectorGraphicData->getBinaryDataContainer();
 

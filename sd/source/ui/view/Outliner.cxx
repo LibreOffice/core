@@ -1154,7 +1154,7 @@ bool isValidVectorGraphicObject(const sd::outliner::IteratorPosition& rPosition)
     if (pGraphicObject)
     {
         auto const& pVectorGraphicData = pGraphicObject->GetGraphic().getVectorGraphicData();
-        if (pVectorGraphicData && VectorGraphicDataType::Pdf == pVectorGraphicData->getVectorGraphicDataType())
+        if (pVectorGraphicData && VectorGraphicDataType::Pdf == pVectorGraphicData->getType())
         {
             return true;
         }
