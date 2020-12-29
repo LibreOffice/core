@@ -2103,7 +2103,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
             Graphic aGraphic = pGraf->GetGraphic();
             auto const & pVectorGraphicData = aGraphic.getVectorGraphicData();
 
-            if (pVectorGraphicData && pVectorGraphicData->getVectorGraphicDataType() == VectorGraphicDataType::Pdf)
+            if (pVectorGraphicData && pVectorGraphicData->getType() == VectorGraphicDataType::Pdf)
             {
 #if HAVE_FEATURE_PDFIUM
                 aLogicRect = pGraf->GetLogicRect();
