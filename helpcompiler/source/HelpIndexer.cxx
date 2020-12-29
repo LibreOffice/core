@@ -20,6 +20,12 @@
 #include <CLucene.h>
 #include <CLucene/analysis/LanguageBasedAnalyzer.h>
 
+#if defined _WIN32
+#include <o3tl/char16_t2wchar_t.hxx>
+#include <prewin.h>
+#include <postwin.h>
+#endif
+
 using namespace lucene::document;
 
 HelpIndexer::HelpIndexer(OUString const &lang, OUString const &module,
@@ -30,6 +36,38 @@ HelpIndexer::HelpIndexer(OUString const &lang, OUString const &module,
     d_captionDir = OUString::Concat(srcDir) + "/caption";
     d_contentDir = OUString::Concat(srcDir) + "/content";
 }
+
+#if defined _WIN32
+namespace
+{
+template <class Constructor>
+auto TryWithUnicodePathWorkaround(const OUString& ustrPath, const Constructor& constructor)
+{
+    const rtl_TextEncoding eThreadEncoding = osl_getThreadTextEncoding();
+    OString sPath = OUStringToOString(ustrPath, eThreadEncoding);
+    try
+    {
+        // First try path in thread encoding (ACP in case of Windows).
+        return constructor(sPath);
+    }
+    catch (const CLuceneError&)
+    {
+        // Maybe the path contains characters not representable in ACP. There's no API in lucene
+        // that takes Unicode strings (they take 8-bit strings, and pass them to CRT library
+        // functions without conversion).
+
+        // For a workaround, try short name, which should only contain ASCII characters. Would
+        // not help (i.e., would return original long name) if short (8.3) file name creation is
+        // disabled in OS or volume settings.
+        wchar_t buf[32767];
+        if (GetShortPathNameW(o3tl::toW(ustrPath.getStr()), buf, std::size(buf)) == 0)
+            throw;
+        sPath = OUStringToOString(o3tl::toU(buf), eThreadEncoding);
+        return constructor(sPath);
+    }
+}
+}
+#endif
 
 bool HelpIndexer::indexDocuments()
 {
@@ -51,25 +89,34 @@ bool HelpIndexer::indexDocuments()
         OUString ustrSystemPath;
         osl::File::getSystemPathFromFileURL(d_indexDir, ustrSystemPath);
 
+#if defined _WIN32
+        // Make sure the path exists, or GetShortPathNameW (if attempted) will fail.
+        osl::Directory::createPath(d_indexDir);
+        auto writer = TryWithUnicodePathWorkaround(ustrSystemPath, [&analyzer](const OString& s) {
+            return std::make_unique<lucene::index::IndexWriter>(s.getStr(), analyzer.get(), true);
+        });
+#else
         OString indexDirStr = OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding());
-        lucene::index::IndexWriter writer(indexDirStr.getStr(), analyzer.get(), true);
+        auto writer = std::make_unique<lucene::index::IndexWriter>(indexDirStr.getStr(),
+                                                                   analyzer.get(), true);
+#endif
+
         //Double limit of tokens allowed, otherwise we'll get a too-many-tokens
         //exception for ja help. Could alternative ignore the exception and get
         //truncated results as per java-Lucene apparently
-        writer.setMaxFieldLength(lucene::index::IndexWriter::DEFAULT_MAX_FIELD_LENGTH*2);
+        writer->setMaxFieldLength(lucene::index::IndexWriter::DEFAULT_MAX_FIELD_LENGTH*2);
 
         // Index the identified help files
         Document doc;
         for (auto const& elem : d_files)
         {
             helpDocument(elem, &doc);
-            writer.addDocument(&doc);
+            writer->addDocument(&doc);
             doc.clear();
         }
-        writer.optimize();
 
         // Optimize the index
-        writer.optimize();
+        writer->optimize();
     }
     catch (CLuceneError &e)
     {
@@ -137,8 +184,14 @@ lucene::util::Reader *HelpIndexer::helpFileReader(OUString const & path) {
         file.close();
         OUString ustrSystemPath;
         osl::File::getSystemPathFromFileURL(path, ustrSystemPath);
+#if defined _WIN32
+        return TryWithUnicodePathWorkaround(ustrSystemPath, [](const OString& s) {
+            return _CLNEW lucene::util::FileReader(s.getStr(), "UTF-8");
+        });
+#else
         OString pathStr = OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding());
         return _CLNEW lucene::util::FileReader(pathStr.getStr(), "UTF-8");
+#endif
     } else {
         return _CLNEW lucene::util::StringReader(L"");
     }
