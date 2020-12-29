@@ -60,13 +60,13 @@ public:
     void Invoke() override
     {
         auto pNotifier = m_rSidebarDockingWin.GetLOKNotifier();
-        auto pMobileNotifier = SfxViewShell::Current();
-        if (!pNotifier || (!pMobileNotifier && !comphelper::LibreOfficeKit::isActive()))
+        if (!pNotifier || !comphelper::LibreOfficeKit::isActive())
             return;
 
         try
         {
-            if (pMobileNotifier && pMobileNotifier->isLOKMobilePhone())
+            const SfxViewShell* pOwnerView = dynamic_cast<const SfxViewShell*>(pNotifier);
+            if (pOwnerView && pOwnerView->isLOKMobilePhone())
             {
                 // Mobile phone.
                 tools::JsonWriter aJsonWriter;
@@ -77,7 +77,7 @@ public:
                 if (message != m_LastNotificationMessage)
                 {
                     m_LastNotificationMessage = message;
-                    pMobileNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, m_LastNotificationMessage.c_str());
+                    pOwnerView->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, m_LastNotificationMessage.c_str());
                 }
             }
 
