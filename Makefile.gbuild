@@ -20,6 +20,10 @@ include $(SRCDIR)/solenv/gbuild/gbuild.mk
 
 $(eval $(call gb_Module_make_global_targets,$(SRCDIR)/RepositoryModule_$(gb_Side).mk))
 
+ifneq (,$(DISABLE_DYNLOADING))
+include $(SRCDIR)/solenv/gbuild/static.mk
+endif
+
 upload-symbols:
 	bin/upload_symbols.py $(WORKDIR)/symbols.zip $(BREAKPAD_SYMBOL_CONFIG) "$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)"
 

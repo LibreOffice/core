@@ -597,6 +597,8 @@ $(WORKDIR)/Clean/LinkTarget/% :
 		$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_dwo_target,$(object))) \
 		$(call gb_LinkTarget_get_target,$(LINKTARGET)) \
 		$(call gb_LinkTarget_get_dep_target,$(LINKTARGET)) \
+		$(call gb_LinkTarget_get_dep_libraries_target,$(LINKTARGET)) \
+		$(call gb_LinkTarget_get_dep_externals_target,$(LINKTARGET)) \
 		$(call gb_LinkTarget_get_headers_target,$(LINKTARGET)) \
 		$(call gb_LinkTarget_get_objects_list,$(LINKTARGET)) \
 		$(call gb_LinkTarget_get_pch_timestamp,$(LINKTARGETMAKEFILENAME)) \
@@ -610,7 +612,7 @@ $(WORKDIR)/Clean/LinkTarget/% :
 # cat the deps of all objects in one file, then we need only open that one file
 # call gb_LinkTarget__command_dep,dep_target,linktargetname
 define gb_LinkTarget__command_dep
-$(call gb_Output_announce,LNK:$(2),$(true),DEP,1)
+$(call gb_Output_announce,LNK:$(2).d,$(true),DEP,1)
 	$(call gb_Trace_StartRange,LNK:$(2),DEP)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
@@ -673,12 +675,23 @@ $(call gb_LinkTarget_get_target,$(1)) : $(call gb_LinkTarget_get_headers_target,
 
 endef
 
+define gb_LinkTarget__add_linked_libs
+$(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $(2)
+
+endef
+
 # it's not possible to use a pattern rule for files in INSTDIR because
 # it would inevitably conflict with the pattern rule for Package
 # (especially since external libraries are delivered via Package)
 # call gb_LinkTarget__command_impl,linktargettarget,linktargetname
 define gb_LinkTarget__command_impl
 	$(if $(gb_FULLDEPS),
+		$(if $(DISABLE_DYNLOADING),
+			$(if $(gb_PARTIAL_BUILD),,
+	                        $(call gb_LinkTarget__command_dep_libraries,$(call gb_LinkTarget_get_dep_libraries_target,$(2)).tmp,$(2))
+	                        mv $(call gb_LinkTarget_get_dep_libraries_target,$(2)).tmp $(call gb_LinkTarget_get_dep_libraries_target,$(2))
+	                        $(call gb_LinkTarget__command_dep_externals,$(call gb_LinkTarget_get_dep_externals_target,$(2)).tmp,$(2))
+	                        mv $(call gb_LinkTarget_get_dep_externals_target,$(2)).tmp $(call gb_LinkTarget_get_dep_externals_target,$(2))))
 		$(if $(findstring concat-deps,$(2)),,
 			$(call gb_LinkTarget__command_dep,$(call gb_LinkTarget_get_dep_target,$(2)).tmp,$(2))
 			mv $(call gb_LinkTarget_get_dep_target,$(2)).tmp $(call gb_LinkTarget_get_dep_target,$(2))))
@@ -695,7 +708,37 @@ endef
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,%) : $(call gb_Executable_get_runtime_dependencies,concat-deps)
 	$(call gb_LinkTarget__command_dep,$@,$*)
+
+ifneq (,$(DISABLE_DYNLOADING))
+ifeq (,$(gb_PARTIAL_BUILD))
+
+define gb_LinkTarget__statics_rules_template
+
+define gb_LinkTarget__command_dep_$(1)
+$$(call gb_Output_announce,LNK:$$(2).d.$(1),$$(true),DEP,1)
+mkdir -p $$(dir $$(1)) && \
+TEMPFILE=$$(call var2file,$$(shell $$(gb_MKTEMP)),200,\
+	$$(call gb_LinkTarget__get_all_$(1),$$(2))) && \
+mv $$$${TEMPFILE} $$(1)
+
+endef
+
+$$(call gb_LinkTarget_get_dep_target,%) : $$(call gb_LinkTarget_get_dep_$(1)_target,%)
+
+$$(call gb_LinkTarget_get_dep_$(1)_target,%) : | $$(dir $$(call gb_LinkTarget_get_dep_target,%)).dir
+	$$(call gb_LinkTarget__command_dep_$(1),$$@,$$*)
+
+endef # gb_LinkTarget__statics_rules_template
+
+$(dir $(call gb_LinkTarget_get_dep_target,%))/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(eval $(call gb_LinkTarget__statics_rules_template,libraries))
+$(eval $(call gb_LinkTarget__statics_rules_template,externals))
+
 endif
+endif
+endif # $(gb_FULLDEPS)
 
 # Ok, this is some dark voodoo: When declaring a linktarget with
 # gb_LinkTarget_LinkTarget we set SELF in the headertarget to name of the
@@ -851,7 +894,13 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : GENCOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXCLROBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : YACCOBJECTS :=
+ifneq (,$(DISABLE_DYNLOADING))
+ifeq (,$(gb_PARTIAL_BUILD))
+$(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_LinkTarget_get_dep_libraries_target,$(1))
+$(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_LinkTarget_get_dep_externals_target,$(1))
 endif
+endif
+endif # $(gb_FULLDEPS)
 
 gb_LinkTarget_CXX_SUFFIX_$(call gb_LinkTarget__get_workdir_linktargetname,$(1)) := cxx
 
@@ -860,7 +909,7 @@ $(if $(findstring $(INSTDIR),$(1)),$(call gb_LinkTarget__make_installed_rule,$(1
 
 $(call gb_PrecompiledHeader_generate_timestamp_rule,$(2))
 
-endef
+endef # gb_LinkTarget_LinkTarget
 
 # call gb_LinkTarget_set_soversion_script,linktarget,soversionscript
 define gb_LinkTarget_set_soversion_script
@@ -1022,6 +1071,19 @@ $(call gb_Library_get_target,$(1)) :| $(call gb_Library_get_headers_target,$(1))
 
 endef
 
+define gb_LinkTarget__all_x_accessors
+gb_LinkTarget__get_all_$(1)_var = $$(call gb_LinkTarget__get_workdir_linktargetname,$$(1))<>ALL_$(2)
+gb_LinkTarget__get_all_$(1) = $$($$(call gb_LinkTarget__get_all_$(1)_var,$$(1)))
+gb_Library__get_all_$(1) = $$($$(call gb_LinkTarget__get_all_$(1)_var,$$(call gb_Library_get_linktarget,$$(1))))
+gb_Executable__get_all_$(1) = $$($$(call gb_LinkTarget__get_all_$(1)_var,$$(call gb_Executable_get_linktarget,$$(1))))
+gb_ExternalProject__get_all_$(1) = $$($$(call gb_LinkTarget__get_all_$(1)_var,$$(call gb_ExternalProject__get_workdir_linktargetname,$$(1))))
+
+endef
+
+$(eval $(call gb_LinkTarget__all_x_accessors,libraries,LIBRARIES))
+$(eval $(call gb_LinkTarget__all_x_accessors,externals,EXTERNALS))
+$(eval $(call gb_LinkTarget__all_x_accessors,statics,STATICS))
+
 # call gb_LinkTarget__use_libraries,linktarget,requestedlibs,actuallibs,linktargetmakefilename
 define gb_LinkTarget__use_libraries
 
@@ -1040,6 +1102,9 @@ $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $(3)
 ifeq ($(DISABLE_DYNLOADING),)
 $(call gb_LinkTarget_get_target,$(1)) : \
 	$(foreach lib,$(3),$(call gb_Library_get_exports_target,$(lib)))
+else
+$(if $(gb_DEBUG_STATIC),$(info $(call gb_LinkTarget__get_all_libraries_var,$(1)) += $(3)))
+$(call gb_LinkTarget__get_all_libraries_var,$(1)) += $(3)
 endif
 
 $(call gb_LinkTarget_get_headers_target,$(1)) : \
@@ -1130,6 +1195,9 @@ $(if $(call gb_LinkTarget__is_merged,$(1)),\
 
 ifeq ($(DISABLE_DYNLOADING),)
 $(call gb_LinkTarget_get_target,$(1)) : $(foreach lib,$(2),$(call gb_StaticLibrary_get_target,$(lib)))
+else
+$(if $(gb_DEBUG_STATIC),$(info $(call gb_LinkTarget__get_all_statics_var,$(1)) += $(2)))
+$(call gb_LinkTarget__get_all_statics_var,$(1)) += $(2)
 endif
 $(call gb_LinkTarget_get_headers_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_StaticLibrary_get_headers_target,$(lib)))
@@ -1741,6 +1809,11 @@ $(if $(filter undefined,$(origin gb_LinkTarget__use_$(2))),\
   $(if $(call gb_LinkTarget__is_merged,$(1)),$(call gb_LinkTarget__use_$(2),$(call gb_Library_get_linktarget,merged))) \
     $(call gb_LinkTarget__use_$(2),$(1)) \
 )
+ifneq (,$(DISABLE_DYNLOADING))
+$(if $(gb_DEBUG_STATIC),$(info $(call gb_LinkTarget__get_all_externals_var,$(1)) += $(2)))
+$(eval $(call gb_LinkTarget__get_all_externals_var,$(1)) += $(2))
+endif
+
 endef
 
 # $(call gb_LinkTarget_use_externals,library,externals)
@@ -1813,13 +1886,14 @@ endif
 ifeq (,$(filter $(1),$(foreach plugin,$(gb_Library_KNOWNPLUGINS),$(call gb_Library_get_linktarget,$(plugin)))))
 $$(eval $$(call gb_Output_error,Unknown plugin(s) '$(filter $(1),$(foreach plugin,$(gb_Library_KNOWNPLUGINS),$(call gb_Library_get_linktarget,$(plugin))))'. Plugins must be registered in Repository.mk or RepositoryExternal.mk))
 endif
-ifeq (,$(filter $(1),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktarget,$(lib)))))
+ifneq (,$(filter $(1),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktarget,$(lib)))))
 $$(eval $$(call gb_Output_error,Plugins can't be in mergelibs))
 endif
 ifeq ($(call gb_LinkTarget__is_build_tool,$(1)),$(true))
 $$(eval $$(call gb_Output_error,Plugin support for build tools not implemented))
 endif
 
+$(if $(filter $(2),$(gb_Library_KNOWNLOADERS)),,gb_Library_KNOWNLOADERS += $(2))
 $(call gb_LinkTarget__use_libraries,$(1),$(2),$(2))
 
 endef
