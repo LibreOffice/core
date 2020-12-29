@@ -238,7 +238,7 @@ public:
                                     double i_fTransparency,
                                     const OutputDevice& i_rOutDev);
 
-    bool                        DrawPolyLine(
+    void                        DrawPolyLine(
                                     const basegfx::B2DHomMatrix& rObjectToDevice,
                                     const basegfx::B2DPolygon& i_rPolygon,
                                     double i_fTransparency,
