@@ -113,9 +113,9 @@ static size_t estimateSize(
 
 bool VectorGraphicData::operator==(const VectorGraphicData& rCandidate) const
 {
-    if (getVectorGraphicDataType() == rCandidate.getVectorGraphicDataType())
+    if (getType() == rCandidate.getType())
     {
-        if (getVectorGraphicDataArrayLength() == rCandidate.getVectorGraphicDataArrayLength())
+        if (maDataContainer.getSize() == rCandidate.maDataContainer.getSize())
         {
             if (0 == memcmp(
                 maDataContainer.getData(),
@@ -142,7 +142,7 @@ void VectorGraphicData::setWmfExternalHeader(const WmfExternal& aExtHeader)
 
 void VectorGraphicData::ensurePdfReplacement()
 {
-    assert(getVectorGraphicDataType() == VectorGraphicDataType::Pdf);
+    assert(getType() == VectorGraphicDataType::Pdf);
 
     if (!maReplacement.IsEmpty())
         return; // nothing to do
@@ -166,7 +166,7 @@ void VectorGraphicData::ensureReplacement()
 
     // shortcut for PDF - PDFium can generate the replacement bitmap for us
     // directly
-    if (getVectorGraphicDataType() == VectorGraphicDataType::Pdf)
+    if (getType() == VectorGraphicDataType::Pdf)
     {
         ensurePdfReplacement();
         return;
@@ -191,7 +191,7 @@ void VectorGraphicData::ensureSequenceAndRange()
     // create Vector Graphic Data interpreter
     uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
 
-    switch (getVectorGraphicDataType())
+    switch (getType())
     {
         case VectorGraphicDataType::Svg:
         {
@@ -309,7 +309,7 @@ VectorGraphicData::VectorGraphicData(
     maSequence(),
     maReplacement(),
     mNestedBitmapSize(0),
-    meVectorGraphicDataType(eVectorDataType),
+    meType(eVectorDataType),
     mnPageIndex(nPageIndex)
 {
 }
@@ -322,7 +322,7 @@ VectorGraphicData::VectorGraphicData(
     maSequence(),
     maReplacement(),
     mNestedBitmapSize(0),
-    meVectorGraphicDataType(eVectorDataType),
+    meType(eVectorDataType),
     mnPageIndex(-1)
 {
     SvFileStream rIStm(rPath, StreamMode::STD_READ);
