@@ -1163,6 +1163,8 @@ void SwAnnotationWin::ShowNote()
         mpShadow->setVisible(true);
     if (mpAnchor && !mpAnchor->isVisible())
         mpAnchor->setVisible(true);
+    if (mpTextRangeOverlay && !mpTextRangeOverlay->isVisible())
+        mpTextRangeOverlay->setVisible(true);
 
     // Invalidate.
     InvalidateControl();
@@ -1182,6 +1184,8 @@ void SwAnnotationWin::HideNote()
     }
     if (mpShadow && mpShadow->isVisible())
         mpShadow->setVisible(false);
+    if (mpTextRangeOverlay && mpTextRangeOverlay->isVisible())
+        mpTextRangeOverlay->setVisible(false);
     collectUIInformation("HIDE",get_id());
 }
 
