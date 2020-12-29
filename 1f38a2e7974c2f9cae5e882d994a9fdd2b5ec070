@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9985df62_d054146d",
+        "filename": "vcl/source/control/spinfld.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2020-12-29T11:24:59Z",
+      "side": 1,
+      "message": "should be VclEventId::EditModify",
+      "revId": "1f38a2e7974c2f9cae5e882d994a9fdd2b5ec070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
