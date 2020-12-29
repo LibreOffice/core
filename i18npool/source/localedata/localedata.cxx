@@ -52,10 +52,6 @@ static const char *lcl_DATA_ES = "localedata_es";
 static const char *lcl_DATA_EURO = "localedata_euro";
 static const char *lcl_DATA_OTHERS = "localedata_others";
 
-#endif
-
-#ifndef DISABLE_DYNLOADING
-
 const struct {
     const char* pLocale;
     const char* pLib;

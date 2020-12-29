@@ -172,7 +172,6 @@ endef
 # copy pasta for forwarding: this could be (and was) done more elegantly, but
 # these here can be found by both git grep and ctags
 gb_Library_add_cobject = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
-gb_Library_add_cobject = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_add_cobjects = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_add_cxxobject = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_add_cxxobjects = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
