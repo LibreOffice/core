@@ -963,7 +963,7 @@
 #define FMT_FF_NAME_NOEXT                       NC_("FMT_FF_NAME_NOEXT", "File name without extension")
 #define FMT_FF_PATHNAME                         NC_("FMT_FF_PATHNAME", "Path/File name")
 #define FMT_FF_PATH                             NC_("FMT_FF_PATH", "Path")
-#define FMT_FF_UI_NAME                          NC_("FMT_FF_UI_NAME", "Style")
+#define FMT_FF_UI_NAME                          NC_("FMT_FF_UI_NAME", "Template name")
 #define FMT_FF_UI_RANGE                         NC_("FMT_FF_UI_RANGE", "Category")
 /*--------------------------------------------------------------------
     Description: format chapter
