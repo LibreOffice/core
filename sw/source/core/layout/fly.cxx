@@ -657,8 +657,67 @@ bool SwFlyFrame::FrameSizeChg( const SwFormatFrameSize &rFrameSize )
 
 void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    SwFrame::SwClientNotify(rMod, rHint);
-    if (auto pGetZOrdnerHint = dynamic_cast<const sw::GetZOrderHint*>(&rHint))
+    if(auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    {
+        sal_uInt8 nInvFlags = 0;
+        if(pLegacy->m_pNew && pLegacy->m_pOld && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
+        {
+            SfxItemIter aNIter(*static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet());
+            SfxItemIter aOIter(*static_cast<const SwAttrSetChg*>(pLegacy->m_pOld)->GetChgSet());
+            const SfxPoolItem* pNItem = aNIter.GetCurItem();
+            const SfxPoolItem* pOItem = aOIter.GetCurItem();
+            SwAttrSetChg aOldSet(*static_cast<const SwAttrSetChg*>(pLegacy->m_pOld));
+            SwAttrSetChg aNewSet(*static_cast<const SwAttrSetChg*>(pLegacy->m_pNew));
+            do
+            {
+                UpdateAttr_(pOItem, pNItem, nInvFlags, &aOldSet, &aNewSet);
+                pNItem = aNIter.NextItem();
+                pOItem = aOIter.NextItem();
+            } while(pNItem);
+            if(aOldSet.Count() || aNewSet.Count())
+                SwLayoutFrame::Modify(&aOldSet, &aNewSet);
+        }
+        else
+            UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, nInvFlags);
+
+        if(nInvFlags == 0)
+            return;
+
+        Invalidate_();
+        if(nInvFlags & 0x01)
+        {
+            InvalidatePos_();
+            // #i68520#
+            InvalidateObjRectWithSpaces();
+        }
+        if(nInvFlags & 0x02)
+        {
+            InvalidateSize_();
+            // #i68520#
+            InvalidateObjRectWithSpaces();
+        }
+        if(nInvFlags & 0x04)
+            InvalidatePrt_();
+        if(nInvFlags & 0x08)
+            SetNotifyBack();
+        if(nInvFlags & 0x10)
+            SetCompletePaint();
+        if((nInvFlags & 0x40) && Lower() && Lower()->IsNoTextFrame())
+            ClrContourCache( GetVirtDrawObj() );
+        SwRootFrame *pRoot;
+        if(nInvFlags & 0x20 && nullptr != (pRoot = getRootFrame()))
+            pRoot->InvalidateBrowseWidth();
+        // #i28701#
+        if(nInvFlags & 0x80)
+        {
+            // update sorted object lists, the Writer fly frame is registered at.
+            UpdateObjInSortedList();
+        }
+
+        // #i87645# - reset flags for the layout process (only if something has been invalidated)
+        ResetLayoutProcessBools();
+    }
+    else if (auto pGetZOrdnerHint = dynamic_cast<const sw::GetZOrderHint*>(&rHint))
     {
         const auto& rFormat(dynamic_cast<const SwFrameFormat&>(rMod));
         if (rFormat.Which() == RES_FLYFRMFMT && rFormat.getIDocumentLayoutAccess().GetCurrentViewShell()) // #i11176#
@@ -670,69 +729,6 @@ void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         if (!pConnectedHint->m_risConnected && rFormat.Which() == RES_FLYFRMFMT && (!pConnectedHint->m_pRoot || pConnectedHint->m_pRoot == getRootFrame()))
             pConnectedHint->m_risConnected = true;
     }
-}
-
-void SwFlyFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
-{
-    sal_uInt8 nInvFlags = 0;
-
-    if (pNew && pOld && RES_ATTRSET_CHG == pNew->Which())
-    {
-        SfxItemIter aNIter( *static_cast<const SwAttrSetChg*>(pNew)->GetChgSet() );
-        SfxItemIter aOIter( *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
-        const SfxPoolItem* pNItem = aNIter.GetCurItem();
-        const SfxPoolItem* pOItem = aOIter.GetCurItem();
-        SwAttrSetChg aOldSet( *static_cast<const SwAttrSetChg*>(pOld) );
-        SwAttrSetChg aNewSet( *static_cast<const SwAttrSetChg*>(pNew) );
-        do
-        {
-            UpdateAttr_(pOItem, pNItem, nInvFlags, &aOldSet, &aNewSet);
-            pNItem = aNIter.NextItem();
-            pOItem = aOIter.NextItem();
-        } while (pNItem);
-        if ( aOldSet.Count() || aNewSet.Count() )
-            SwLayoutFrame::Modify( &aOldSet, &aNewSet );
-    }
-    else
-        UpdateAttr_( pOld, pNew, nInvFlags );
-
-    if ( nInvFlags == 0 )
-        return;
-
-    Invalidate_();
-    if ( nInvFlags & 0x01 )
-    {
-        InvalidatePos_();
-        // #i68520#
-        InvalidateObjRectWithSpaces();
-    }
-    if ( nInvFlags & 0x02 )
-    {
-        InvalidateSize_();
-        // #i68520#
-        InvalidateObjRectWithSpaces();
-    }
-    if ( nInvFlags & 0x04 )
-        InvalidatePrt_();
-    if ( nInvFlags & 0x08 )
-        SetNotifyBack();
-    if ( nInvFlags & 0x10 )
-        SetCompletePaint();
-    if ( ( nInvFlags & 0x40 ) && Lower() && Lower()->IsNoTextFrame() )
-        ClrContourCache( GetVirtDrawObj() );
-    SwRootFrame *pRoot;
-    if ( nInvFlags & 0x20 && nullptr != (pRoot = getRootFrame()) )
-        pRoot->InvalidateBrowseWidth();
-    // #i28701#
-    if ( nInvFlags & 0x80 )
-    {
-        // update sorted object lists, the Writer fly frame is registered at.
-        UpdateObjInSortedList();
-    }
-
-    // #i87645# - reset flags for the layout process (only if something has been invalidated)
-    ResetLayoutProcessBools();
-
 }
 
 void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,

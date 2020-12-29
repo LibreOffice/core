@@ -129,5 +129,5 @@ frog, dogg, catt"""
         # "good" is an insertion by fixing the first misspelling),
         # but now "goood" is not a misspelling because it is accepted
         # correctly without the redline containing a deleted "o"
-        self.assertTrue(output_text == 'goood baaadbaaed eeend')
+        self.assertEqual(output_text, 'goood baaadbaaed eeend')
 
