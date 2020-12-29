@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60350884_79da52dd",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 3941,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-29T20:04:43Z",
+      "side": 1,
+      "message": "This is redundant: you already assign the pointer to created object to p, which is unique_ptr.\n\nHowever, it\u0027s better to not use \u0027new\u0027 directly; better use std::make_unique:\n\n  p \u003d std::make_unique\u003cScTableProtection\u003e(rProtect)\n\ni.e., pass to this function what you would pass to the object constructor.",
+      "range": {
+        "startLine": 3941,
+        "startChar": 12,
+        "endLine": 3941,
+        "endChar": 50
+      },
+      "revId": "8685dd2bea9761c1a1d448dd837e91d7bb4207dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acf7e8e5_00f073a4",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 3946,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-29T20:04:43Z",
+      "side": 1,
+      "message": "This is not correct. Here you do not create a copy, but directly store the pointer to the object (which is used inside rDoc!) to your unique_ptr, which makes the unique_ptr to manage lifetime of the object. So it will be deleted as soon as your \u0027p\u0027 is destroyed (at function exit), and the object inside rDoc will be invalid -\u003e crash.\n\nYou need to make a copy of *pProtect here instead.",
+      "range": {
+        "startLine": 3946,
+        "startChar": 12,
+        "endLine": 3946,
+        "endChar": 58
+      },
+      "revId": "8685dd2bea9761c1a1d448dd837e91d7bb4207dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66821e4d_a3fa408f",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 3948,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-29T20:04:43Z",
+      "side": 1,
+      "message": "This line is too long - it should be split to not exceed 100 characters",
+      "range": {
+        "startLine": 3948,
+        "startChar": 4,
+        "endLine": 3948,
+        "endChar": 112
+      },
+      "revId": "8685dd2bea9761c1a1d448dd837e91d7bb4207dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83159494_6055e3ba",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 3986,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-29T20:04:43Z",
+      "side": 1,
+      "message": "Please remove spaces inside brackets here (from both sides) - it does not follow our clang-format rules.",
+      "range": {
+        "startLine": 3986,
+        "startChar": 43,
+        "endLine": 3986,
+        "endChar": 44
+      },
+      "revId": "8685dd2bea9761c1a1d448dd837e91d7bb4207dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
