@@ -1984,9 +1984,8 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                 // VectorGraphicDataType::Wmf means WMF or EMF, allow direct write in the WMF case
                 // only.
                 if (rVectorGraphicDataPtr
-                    && rVectorGraphicDataPtr->getVectorGraphicDataArrayLength()
-                    && VectorGraphicDataType::Wmf
-                           == rVectorGraphicDataPtr->getVectorGraphicDataType()
+                    && rVectorGraphicDataPtr->getType() == VectorGraphicDataType::Wmf
+                    && !rVectorGraphicDataPtr->getBinaryDataContainer().isEmpty()
                     && !bIsEMF)
                 {
                     auto & aDataContainer = rVectorGraphicDataPtr->getBinaryDataContainer();
@@ -2020,8 +2019,8 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                 auto const & rVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
 
                 if (rVectorGraphicDataPtr
-                    && rVectorGraphicDataPtr->getVectorGraphicDataArrayLength()
-                    && VectorGraphicDataType::Emf == rVectorGraphicDataPtr->getVectorGraphicDataType())
+                    && rVectorGraphicDataPtr->getType() == VectorGraphicDataType::Emf
+                    && !rVectorGraphicDataPtr->getBinaryDataContainer().isEmpty())
                 {
                     auto & aDataContainer = rVectorGraphicDataPtr->getBinaryDataContainer();
                     rOStm.WriteBytes(aDataContainer.getData(), aDataContainer.getSize());
@@ -2115,8 +2114,8 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                 auto const & rVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
 
                 if (rVectorGraphicDataPtr
-                    && rVectorGraphicDataPtr->getVectorGraphicDataArrayLength()
-                    && VectorGraphicDataType::Svg == rVectorGraphicDataPtr->getVectorGraphicDataType())
+                    && rVectorGraphicDataPtr->getType()  ==  VectorGraphicDataType::Svg
+                    && !rVectorGraphicDataPtr->getBinaryDataContainer().isEmpty())
                 {
                     auto & aDataContainer = rVectorGraphicDataPtr->getBinaryDataContainer();
                     rOStm.WriteBytes(aDataContainer.getData(), aDataContainer.getSize());

@@ -107,8 +107,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
     Graphic aGraphic = pGraphicObject->GetGraphic();
     auto const& pVectorGraphicData = aGraphic.getVectorGraphicData();
     CPPUNIT_ASSERT(pVectorGraphicData);
-    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
-                         pVectorGraphicData->getVectorGraphicDataType());
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
 
     // Mark the object
     SdrView* pView = pViewShell->GetView();
@@ -197,8 +196,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
         Graphic aGraphic = pGraphicObject->GetGraphic();
         auto const& pVectorGraphicData = aGraphic.getVectorGraphicData();
         CPPUNIT_ASSERT(pVectorGraphicData);
-        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
-                             pVectorGraphicData->getVectorGraphicDataType());
+        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
 
         // Write the PDF
         aContainer = pVectorGraphicData->getBinaryDataContainer();

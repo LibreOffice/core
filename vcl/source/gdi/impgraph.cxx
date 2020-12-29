@@ -672,8 +672,8 @@ const GDIMetaFile& ImpGraphic::ImplGetGDIMetaFile() const
     ensureAvailable();
     if (!maMetaFile.GetActionSize()
         && maVectorGraphicData
-        && (VectorGraphicDataType::Emf == maVectorGraphicData->getVectorGraphicDataType()
-            || VectorGraphicDataType::Wmf == maVectorGraphicData->getVectorGraphicDataType()))
+        && (VectorGraphicDataType::Emf == maVectorGraphicData->getType()
+            || VectorGraphicDataType::Wmf == maVectorGraphicData->getType()))
     {
         // If we have a Emf/Wmf VectorGraphic object, we
         // need a way to get the Metafile data out of the primitive
@@ -1173,7 +1173,7 @@ bool ImpGraphic::swapOutGraphic(SvStream& rStream)
                 // this is used e.g. in swapping out graphic data and in transporting it over UNO API
                 // as sequence of bytes, but AFAIK not written anywhere to any kind of file, so it should be
                 // no problem to extend it; only used at runtime
-                switch (maVectorGraphicData->getVectorGraphicDataType())
+                switch (maVectorGraphicData->getType())
                 {
                     case VectorGraphicDataType::Wmf:
                     {
@@ -1197,7 +1197,7 @@ bool ImpGraphic::swapOutGraphic(SvStream& rStream)
                     }
                 }
 
-                rStream.WriteUInt32(maVectorGraphicData->getVectorGraphicDataArrayLength());
+                rStream.WriteUInt32(maVectorGraphicData->getBinaryDataContainer().getSize());
 
                 rStream.WriteBytes(
                     maVectorGraphicData->getBinaryDataContainer().getData(),

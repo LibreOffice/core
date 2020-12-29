@@ -142,7 +142,7 @@ void SdrGrafObj::onGraphicChanged()
     // Skip for PDF as it is only a bitmap primitive in a sequence and
     // doesn't contain metadata. However getting the primitive sequence
     // will also trigger a premature rendering of the PDF.
-    if (rVectorGraphicDataPtr->getVectorGraphicDataType() == VectorGraphicDataType::Pdf)
+    if (rVectorGraphicDataPtr->getType() == VectorGraphicDataType::Pdf)
         return;
 
     const drawinglayer::primitive2d::Primitive2DContainer aSequence(rVectorGraphicDataPtr->getPrimitive2DSequence());
@@ -557,7 +557,7 @@ OUString SdrGrafObj::TakeObjNameSingul() const
 
     if (rVectorGraphicDataPtr)
     {
-        switch (rVectorGraphicDataPtr->getVectorGraphicDataType())
+        switch (rVectorGraphicDataPtr->getType())
         {
         case VectorGraphicDataType::Svg:
         {
@@ -632,7 +632,7 @@ OUString SdrGrafObj::TakeObjNamePlural() const
 
     if (rVectorGraphicDataPtr)
     {
-        switch (rVectorGraphicDataPtr->getVectorGraphicDataType())
+        switch (rVectorGraphicDataPtr->getType())
         {
         case VectorGraphicDataType::Svg:
         {
