@@ -490,17 +490,9 @@ void SalGraphics::DrawPolyPolygon(sal_uInt32 nPoly, tools::PolyPolygon const& rP
     {
         // #100127# Forward beziers to sal, if any
         if (bHaveBezier)
-        {
-            if (!DrawPolyPolygonBezier(j, pPointAry, pPointAryAry, pFlagAryAry, rOutDev))
-            {
-                tools::PolyPolygon aPolyPoly = tools::PolyPolygon::SubdivideBezier(rPolyPoly);
-                DrawPolyPolygon(aPolyPoly.Count(), aPolyPoly, rOutDev);
-            }
-        }
+            DrawPolyPolygonBezier(rPolyPoly, j, pPointAry, pPointAryAry, pFlagAryAry, rOutDev);
         else
-        {
             DrawPolyPolygon(j, pPointAry, pPointAryAry, rOutDev);
-        }
     }
 
     if (pPointAry != aStackAry1)
@@ -581,30 +573,38 @@ void SalGraphics::DrawPolygonBezier(tools::Polygon aPoly, sal_uInt32 nPoints, co
     }
 }
 
-bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 i_nPoly, const sal_uInt32* i_pPoints,
+void SalGraphics::DrawPolyPolygonBezier( tools::PolyPolygon aPolyPoly, sal_uInt32 i_nPoly, const sal_uInt32* i_pPoints,
                                          const Point* const* i_pPtAry, const PolyFlags* const* i_pFlgAry, const OutputDevice& i_rOutDev )
 {
-    bool bRet = false;
-    if( (m_nLayout & SalLayoutFlags::BiDiRtl) || i_rOutDev.IsRTLEnabled() )
+    bool bDrawn = false;
+
+    if ((m_nLayout & SalLayoutFlags::BiDiRtl) || i_rOutDev.IsRTLEnabled())
     {
         // TODO: optimize, reduce new/delete calls
         std::unique_ptr<Point*[]> pPtAry2( new Point*[i_nPoly] );
         sal_uLong i;
-        for(i=0; i<i_nPoly; i++)
+        for (i=0; i<i_nPoly; i++)
         {
             sal_uLong nPoints = i_pPoints[i];
-            pPtAry2[i] = new Point[ nPoints ];
-            mirror( nPoints, i_pPtAry[i], pPtAry2[i], i_rOutDev );
+            pPtAry2[i] = new Point[nPoints];
+            mirror(nPoints, i_pPtAry[i], pPtAry2[i], i_rOutDev);
         }
 
-        bRet = drawPolyPolygonBezier( i_nPoly, i_pPoints, const_cast<const Point* const *>(pPtAry2.get()), i_pFlgAry );
+        bDrawn = drawPolyPolygonBezier(i_nPoly, i_pPoints, const_cast<const Point* const *>(pPtAry2.get()), i_pFlgAry);
 
         for(i=0; i<i_nPoly; i++)
             delete [] pPtAry2[i];
     }
     else
-        bRet = drawPolyPolygonBezier( i_nPoly, i_pPoints, i_pPtAry, i_pFlgAry );
-    return bRet;
+    {
+        bDrawn = drawPolyPolygonBezier( i_nPoly, i_pPoints, i_pPtAry, i_pFlgAry );
+    }
+
+    if (!bDrawn)
+    {
+        tools::PolyPolygon aSubdividedPolyPoly = tools::PolyPolygon::SubdivideBezier(aPolyPoly);
+        DrawPolyPolygon(aSubdividedPolyPoly.Count(), aSubdividedPolyPoly, i_rOutDev);
+    }
 }
 
 void SalGraphics::DrawPolyLine(

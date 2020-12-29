@@ -265,7 +265,8 @@ public:
                                     const PolyFlags* pFlgAry,
                                     const OutputDevice& rOutDev );
 
-    bool                        DrawPolyPolygonBezier(
+    void                        DrawPolyPolygonBezier(
+                                    tools::PolyPolygon aPolyPoly,
                                     sal_uInt32 nPoly,
                                     const sal_uInt32* pPoints,
                                     const Point* const* pPtAry,
