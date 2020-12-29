@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f687d9c_53e1d99e",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 3940,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-29T15:39:26Z",
+      "side": 1,
+      "message": "There is only one problem left.\n\nPreviously in case of unprotect, we didn\u0027t use *resulting* protection, but a copy of original protection with \"setProtected(false)\". It is actually what is passed here in case of unprotection now.\n\nSo to correctly prepare the undo, we need here the following:\n\n1. Before rDoc.SetTabProtection, create a unique_ptr to the protection that we will finally pass to undo. Check rProtect-\u003eisProtected(), and *if* it is not, then initialize the unique_ptr with its copy.\n2. After rDoc.SetTabProtection, check if the unique_ptr is empty, and if it is (i.e., we didn\u0027t initialize if before rDoc.SetTabProtection, i.e., it was protection case), set it here to a copy of resulting protection (I suppose it\u0027s not necessary to do the \"just in case\" step).",
+      "range": {
+        "startLine": 3940,
+        "startChar": 23,
+        "endLine": 3940,
+        "endChar": 31
+      },
+      "revId": "58586cb34d9fc1bd38f33ecc371543234bc4950e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
