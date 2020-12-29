@@ -74,6 +74,7 @@ MacroWarning::MacroWarning(weld::Window* pParent, bool _bWithSignatures)
     InitControls();
 
     mxEnableBtn->connect_clicked(LINK(this, MacroWarning, EnableBtnHdl));
+    mxDisableBtn->connect_clicked(LINK(this, MacroWarning, DisableBtnHdl));
     mxDisableBtn->grab_focus(); // Default button, but focus is on view button
     m_xDialog->SetInstallLOKNotifierHdl(LINK(this, MacroWarning, InstallLOKNotifierHdl));
 }
@@ -125,6 +126,11 @@ IMPL_LINK_NOARG(MacroWarning, EnableBtnHdl, weld::Button&, void)
         }
     }
     m_xDialog->response(RET_OK);
+}
+
+IMPL_LINK_NOARG(MacroWarning, DisableBtnHdl, weld::Button&, void)
+{
+    m_xDialog->response(RET_CANCEL);
 }
 
 IMPL_LINK_NOARG(MacroWarning, AlwaysTrustCheckHdl, weld::Button&, void)
