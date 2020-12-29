@@ -121,6 +121,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/cnttype/mcnttype \
     vcl/source/RenderContext2/RenderContext2 \
     vcl/source/RenderContext2/drawmode \
+    vcl/source/RenderContext2/emphasismark \
     vcl/source/RenderContext2/fill \
     vcl/source/RenderContext2/font \
     vcl/source/RenderContext2/line \
@@ -234,7 +235,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/longcurr \
     vcl/source/control/imp_listbox \
     vcl/source/control/listbox \
-	vcl/source/control/managedmenubutton \
+    vcl/source/control/managedmenubutton \
     vcl/source/control/menubtn \
     vcl/source/control/NotebookbarPopup \
     vcl/source/control/PriorityHBox \
