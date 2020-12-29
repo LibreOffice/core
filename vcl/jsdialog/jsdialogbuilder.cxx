@@ -96,6 +96,7 @@ void JSDialogNotifyIdle::updateStatus(VclPtr<vcl::Window> pWindow)
     if (!m_aNotifierWindow)
         return;
 
+    // will be deprecated soon
     if (m_aNotifierWindow->IsReallyVisible())
     {
         if (const vcl::ILibreOfficeKitNotifier* pNotifier = m_aNotifierWindow->GetLOKNotifier())
@@ -119,9 +120,24 @@ void JSDialogNotifyIdle::updateStatus(VclPtr<vcl::Window> pWindow)
             std::stringstream aStream;
             boost::property_tree::write_json(aStream, aTree);
             const std::string message = aStream.str();
-            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT,
-                                                  message.c_str());
+            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, message.c_str());
         }
+    }
+
+    // new approach - update also if hidden
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = m_aNotifierWindow->GetLOKNotifier())
+    {
+        boost::property_tree::ptree aTree;
+
+        aTree.put("jsontype", m_sTypeOfJSON);
+        aTree.put("action", "update");
+        aTree.put("id", m_aNotifierWindow->GetLOKWindowId());
+        aTree.add_child("control", pWindow->DumpAsPropertyTree());
+
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
+        const std::string message = aStream.str();
+        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
     }
 }
 
@@ -465,7 +481,8 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id, 
     return pRet;
 }
 
-std::unique_ptr<weld::MessageDialog> JSInstanceBuilder::weld_message_dialog(const OString& id, bool bTakeOwnership)
+std::unique_ptr<weld::MessageDialog> JSInstanceBuilder::weld_message_dialog(const OString& id,
+                                                                            bool bTakeOwnership)
 {
     std::unique_ptr<weld::MessageDialog> pRet;
     ::MessageDialog* pMessageDialog = m_xBuilder->get<::MessageDialog>(id);
