@@ -203,7 +203,6 @@ protected:
     virtual void                ClipAndDrawGradientMetafile ( const Gradient &rGradient,
                                     const tools::PolyPolygon &rPolyPoly ) override;
 
-    bool                        CanSubsampleBitmap() const override { return false; }
     vcl::Region                 ClipToDeviceBounds(vcl::Region aRegion) const override;
 
 public:

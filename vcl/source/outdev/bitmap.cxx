@@ -159,12 +159,13 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
 
             if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
             {
-                if (nAction == MetaActionType::BMPSCALE && CanSubsampleBitmap())
+                if (nAction == MetaActionType::BMPSCALE)
                 {
                     const double nScaleX = aPosAry.mnDestWidth  / static_cast<double>(aPosAry.mnSrcWidth);
                     const double nScaleY = aPosAry.mnDestHeight / static_cast<double>(aPosAry.mnSrcHeight);
 
-                    // If subsampling, use Bitmap::Scale() for subsampling of better quality.
+                    // If subsampling, use Bitmap::Scale() for subsampling of better quality. Not all VCL backends
+                    // are able to do quality subsample scaling
                     if ( nScaleX < 1.0 || nScaleY < 1.0 )
                     {
                         aBmp.Scale(nScaleX, nScaleY);
