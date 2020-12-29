@@ -60,8 +60,12 @@ public:
 
         try
         {
-            auto pMobileNotifier = SfxViewShell::Current();
-            if (pMobileNotifier && pMobileNotifier->isLOKMobilePhone())
+            auto pNotifier = m_rSidebarDockingWin.GetLOKNotifier();
+            if (!pNotifier)
+                return;
+
+            const SfxViewShell* pOwnerView = dynamic_cast<const SfxViewShell*>(pNotifier);
+            if (pOwnerView && pOwnerView->isLOKMobilePhone())
             {
                 // Mobile phone.
                 std::stringstream aStream;
@@ -72,16 +76,12 @@ public:
                 if (message != m_LastNotificationMessage)
                 {
                     m_LastNotificationMessage = message;
-                    pMobileNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+                    pOwnerView->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
                 }
             }
 
             // Notify the sidebar is created, and its LOKWindowId, which
             // is needed on mobile phones, tablets, and desktop.
-            auto pNotifier = m_rSidebarDockingWin.GetLOKNotifier();
-            if (!pNotifier)
-                return;
-
             const Point pos = Point(m_rSidebarDockingWin.GetOutOffXPixel(),
                                     m_rSidebarDockingWin.GetOutOffYPixel());
             const OString posMessage = pos.toString();
