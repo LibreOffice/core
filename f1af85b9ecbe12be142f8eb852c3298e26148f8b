@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98c64ef5_746a6101",
+        "filename": "vcl/source/control/spinfld.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2020-12-29T06:51:59Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s a correct solution. Focus should stay where it was. Please only notify about modification.",
+      "revId": "f1af85b9ecbe12be142f8eb852c3298e26148f8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
