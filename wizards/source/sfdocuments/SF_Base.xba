@@ -180,7 +180,7 @@ Public Function Forms(Optional ByVal FormDocument As Variant _
 &apos;&apos;&apos;			When absent, the list of available forms is returned
 &apos;&apos;&apos;			To get the first (unique ?) form stored in the form document, set Form = 0
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		A zero-base array of strings if Form is absent
+&apos;&apos;&apos;		A zero-based array of strings if Form is absent
 &apos;&apos;&apos;		An instance of the SF_Form class if Form exists
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		FORMDEADERROR			The form is not open

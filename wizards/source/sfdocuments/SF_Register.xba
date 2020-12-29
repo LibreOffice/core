@@ -246,7 +246,8 @@ Try:
 	If oSession.UnoObjectType(vEvent) = &quot;com.sun.star.lang.EventObject&quot; Then
 		If oSession.UnoObjectType(vEvent.Source) = &quot;com.sun.star.comp.forms.ODatabaseForm&quot; Then
 			Set oSource = SF_Register._NewForm(vEvent.Source)
-		Else		&apos;	Add for controls
+			If oSource._CacheIndex &lt; 0 Then oSource._Initialize()
+		Else		&apos;	TODO for controls
 		End If
 	End If
 
