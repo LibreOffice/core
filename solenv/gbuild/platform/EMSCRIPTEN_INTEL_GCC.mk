@@ -7,11 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-ifeq ($(DISABLE_DYNLOADING),TRUE)
 gb_UnoApiHeadersTarget_select_variant = $(if $(filter udkapi,$(1)),comprehensive,$(2))
-else
-gb_UnoApiHeadersTarget_select_variant = $(2)
-endif
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 

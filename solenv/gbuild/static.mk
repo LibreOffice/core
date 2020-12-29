@@ -50,6 +50,13 @@
 # doesn't seem to happen in any breaking way and it works to link multiple Executable
 # with large and small expanded dependency lists.
 #
+# Then there is the special static "components" library, which simply depends on all build
+# components. In theory these could be limited per-module (Writer, Calc, etc.), but currently
+# this is not implemented and instead solenv/bin/native-code.py is used, so actually
+# everything is build and "cleaned up" at link time, which is especially expensive for WASM.
+# That library is currently just used for Emscripten, but could be used generally for
+# static builds.
+#
 # For WASM, this also serialize the linking, because the wasm-opt process is multi-threaded,
 # running on all available cores, using GB of memory. Extra parallelism is counterproductive.
 #
@@ -61,6 +68,10 @@
 #
 ifeq ($(true),$(gb_FULLDEPS))
 ifeq (,$(gb_PARTIAL_BUILD))
+
+ifeq ($(OS),EMSCRIPTEN)
+$(foreach lib,$(gb_Library_KNOWNLIBS),$(if $(call gb_Library__get_component,$(lib)),$(eval $(call gb_Library_use_libraries,components,$(lib)))))
+endif
 
 define gb_Executable__add_x_template
 
@@ -173,6 +184,7 @@ gb_Executable__has_any_dependencies = $(if $(filter-out GBUILD_TOUCHED,$(call gb
 # * Expand all libraries. It's not strictly needed, as we only need the info for the executables,
 #   but this way we can implement updating single gbuild-module dependencies as needed.
 # * For all executables:
+#   * For EMSCRIPTEN, add components library to any cppuhelper user, as it contains the call to the mapper functions
 #   * Find any loader libraries and add the needed plugin dependences
 #   * Add all statics to the executables
 #   * Add icudata as needed (it should be a plugin somehow declared in RepositoryExternal.mk, but that didn't work)
@@ -180,6 +192,8 @@ gb_Executable__has_any_dependencies = $(if $(filter-out GBUILD_TOUCHED,$(call gb
 # * Remove "touch" mark from all touched targets
 $(foreach lib,$(gb_Library_KNOWNLIBS),$(eval $(call gb_LinkTarget__fill_all_libraries,$(lib))))
 $(foreach exec,$(gb_Executable_KNOWN), \
+	$(if $(and $(filter EMSCRIPTEN,$(OS)),$(filter cppuhelper,$(call gb_Executable__get_all_libraries,$(exec)))), \
+		$(eval $(call gb_Executable_use_libraries,$(exec),components))) \
 	$(eval $(call gb_LinkTarget__fill_all_executable,$(exec))) \
 	$(foreach loader,$(filter $(gb_Library_KNOWNLOADERS),$(call gb_Executable__get_all_libraries,$(exec))), \
 		$(eval $(call gb_Executable_use_libraries,$(exec),$(call gb_Library__get_plugins,$(loader)))) \

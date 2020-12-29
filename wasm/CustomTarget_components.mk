@@ -8,14 +8,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CustomTarget_CustomTarget,vcl/wasm))
+$(eval $(call gb_CustomTarget_CustomTarget,wasm/components))
 
-wasm_WORKDIR := $(call gb_CustomTarget_get_workdir,vcl/wasm)
+wasm_WORKDIR := $(call gb_CustomTarget_get_workdir,wasm)
 
-$(call gb_CustomTarget_get_target,vcl/wasm): \
-	$(wasm_WORKDIR)/native-code.cxx
+$(call gb_CustomTarget_get_target,wasm/components): \
+	$(wasm_WORKDIR)/component_maps.cxx
 
-$(wasm_WORKDIR)/native-code.cxx: \
+$(wasm_WORKDIR)/component_maps.cxx: \
 	    $(SRCDIR)/solenv/bin/native-code.py \
 	    | $(wasm_WORKDIR)/.dir
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,2)

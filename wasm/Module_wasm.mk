@@ -13,6 +13,8 @@ ifeq ($(OS),EMSCRIPTEN)
 $(eval $(call gb_Module_add_targets,wasm,\
     CustomTarget_wasm-qt5-mandelbrot_moc \
     Executable_wasm-qt5-mandelbrot \
+    CustomTarget_components \
+    Library_components \
 ))
 
 endif
