@@ -174,7 +174,6 @@ $(eval $(call gb_Module_add_uicheck_targets,sw,\
 	UITest_sw_findReplace \
 	UITest_sw_findSimilarity \
 	UITest_chapterNumbering \
-	UITest_librelogo \
 	UITest_sw_navigator \
 	UITest_sw_options \
 	UITest_sw_styleInspector \
@@ -183,6 +182,8 @@ $(eval $(call gb_Module_add_uicheck_targets,sw,\
 	UITest_writer_macro_tests \
 	UITest_writer_dialogs \
 ))
+#	UITest_librelogo \
+#
 endif
 
 # vim: set noet sw=4 ts=4:
