@@ -2669,68 +2669,59 @@ IMPL_LINK(SalInstanceLinkButton, ClickHdl, FixedHyperlink&, rButton, void)
         m_aOrigClickHdl.Call(rButton);
 }
 
-class SalInstanceRadioButton : public SalInstanceButton, public virtual weld::RadioButton
+SalInstanceRadioButton::SalInstanceRadioButton(::RadioButton* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceButton(pButton, pBuilder, bTakeOwnership)
+    , m_xRadioButton(pButton)
 {
-private:
-    VclPtr<::RadioButton> m_xRadioButton;
+    m_xRadioButton->SetToggleHdl(LINK(this, SalInstanceRadioButton, ToggleHdl));
+}
 
-    DECL_LINK(ToggleHdl, ::RadioButton&, void);
+void SalInstanceRadioButton::set_active(bool active)
+{
+    disable_notify_events();
+    m_xRadioButton->Check(active);
+    enable_notify_events();
+}
 
-public:
-    SalInstanceRadioButton(::RadioButton* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceButton(pButton, pBuilder, bTakeOwnership)
-        , m_xRadioButton(pButton)
-    {
-        m_xRadioButton->SetToggleHdl(LINK(this, SalInstanceRadioButton, ToggleHdl));
-    }
+bool SalInstanceRadioButton::get_active() const
+{
+    return m_xRadioButton->IsChecked();
+}
 
-    virtual void set_active(bool active) override
-    {
-        disable_notify_events();
-        m_xRadioButton->Check(active);
-        enable_notify_events();
-    }
+void SalInstanceRadioButton::set_image(VirtualDevice* pDevice)
+{
+    m_xRadioButton->SetImageAlign(ImageAlign::Center);
+    if (pDevice)
+        m_xRadioButton->SetModeImage(createImage(*pDevice));
+    else
+        m_xRadioButton->SetModeImage(Image());
+}
 
-    virtual bool get_active() const override
-    {
-        return m_xRadioButton->IsChecked();
-    }
+void SalInstanceRadioButton::set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage)
+{
+    m_xRadioButton->SetImageAlign(ImageAlign::Center);
+    m_xRadioButton->SetModeImage(Image(rImage));
+}
 
-    virtual void set_image(VirtualDevice* pDevice) override
-    {
-        m_xRadioButton->SetImageAlign(ImageAlign::Center);
-        if (pDevice)
-            m_xRadioButton->SetModeImage(createImage(*pDevice));
-        else
-            m_xRadioButton->SetModeImage(Image());
-    }
+void SalInstanceRadioButton::set_from_icon_name(const OUString& rIconName)
+{
+    m_xRadioButton->SetModeRadioImage(Image(StockImage::Yes, rIconName));
+}
 
-    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
-    {
-        m_xRadioButton->SetImageAlign(ImageAlign::Center);
-        m_xRadioButton->SetModeImage(Image(rImage));
-    }
+void SalInstanceRadioButton::set_inconsistent(bool /*inconsistent*/)
+{
+    //not available
+}
 
-    virtual void set_from_icon_name(const OUString& rIconName) override
-    {
-        m_xRadioButton->SetModeRadioImage(Image(StockImage::Yes, rIconName));
-    }
+bool SalInstanceRadioButton::get_inconsistent() const
+{
+    return false;
+}
 
-    virtual void set_inconsistent(bool /*inconsistent*/) override
-    {
-        //not available
-    }
-
-    virtual bool get_inconsistent() const override
-    {
-        return false;
-    }
-
-    virtual ~SalInstanceRadioButton() override
-    {
-        m_xRadioButton->SetToggleHdl(Link<::RadioButton&, void>());
-    }
-};
+SalInstanceRadioButton::~SalInstanceRadioButton()
+{
+    m_xRadioButton->SetToggleHdl(Link<::RadioButton&, void>());
+}
 
 IMPL_LINK_NOARG(SalInstanceRadioButton, ToggleHdl, ::RadioButton&, void)
 {
