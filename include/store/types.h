@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STORE_TYPES_H
-#define INCLUDED_STORE_TYPES_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -128,6 +127,6 @@ typedef struct
 }
 #endif
 
-#endif // INCLUDED_STORE_TYPES_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
