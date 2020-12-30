@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STORE_STORE_H
-#define INCLUDED_STORE_STORE_H
+#pragma once
 
 #include <store/storedllapi.h>
 #include <store/types.h>
@@ -214,10 +213,5 @@ STORE_DLLPUBLIC storeError store_remove (
 #ifdef __cplusplus
 }
 #endif
-
-#endif // INCLUDED_STORE_STORE_H
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
