@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17bd88c4_2c8c0148",
+        "filename": "sc/source/filter/excel/xeextlst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T06:46:53Z",
+      "side": 1,
+      "message": "Why do we need this explicit include, when we have our string classes included?",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 22
+      },
+      "revId": "b3222da07f320e70d6846fe6dd8edc3bb2e0e5c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
