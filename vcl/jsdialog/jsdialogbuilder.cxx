@@ -159,8 +159,7 @@ void JSDialogNotifyIdle::sendClose() { send(*generateCloseMessage()); }
 
 void JSDialogSender::notifyDialogState(bool bForce)
 {
-    auto aNotifierWnd = mpIdleNotify->getNotifierWindow();
-    if (aNotifierWnd && aNotifierWnd->IsDisableIdleNotify())
+    if (!mpIdleNotify->getNotifierWindow())
         return;
 
     if (bForce)
@@ -169,8 +168,6 @@ void JSDialogSender::notifyDialogState(bool bForce)
 }
 
 void JSDialogSender::sendClose() { mpIdleNotify->sendClose(); }
-
-void JSDialogSender::dumpStatus() { mpIdleNotify->Invoke(); }
 
 void JSDialogSender::sendUpdate(VclPtr<vcl::Window> pWindow)
 {
@@ -461,16 +458,13 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id)
         m_xBuilder->drop_ownership(pDialog);
         m_bHasTopLevelDialog = true;
 
-        if (id == "MacroSelectorDialog")
-            pDialog->SetDisableIdleNotify(true);
-
         pRet.reset(
             new JSDialog(m_aOwnedToplevel, m_aOwnedToplevel, pDialog, this, false, m_sTypeOfJSON));
 
         RememberWidget("__DIALOG__", pRet.get());
 
         const vcl::ILibreOfficeKitNotifier* pNotifier = pDialog->GetLOKNotifier();
-        if (pNotifier && id != "MacroSelectorDialog")
+        if (pNotifier)
         {
             tools::JsonWriter aJsonWriter;
             m_aOwnedToplevel->DumpAsPropertyTree(aJsonWriter);
@@ -497,13 +491,13 @@ std::unique_ptr<weld::MessageDialog> JSInstanceBuilder::weld_message_dialog(cons
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
         m_aOwnedToplevel.set(pMessageDialog);
         m_xBuilder->drop_ownership(pMessageDialog);
-
-        if (id == "MacroWarnMedium")
-            pMessageDialog->SetDisableIdleNotify(true);
     }
 
     pRet.reset(pMessageDialog ? new JSMessageDialog(pMessageDialog, m_aOwnedToplevel, this, false)
                               : nullptr);
+
+    if (pRet)
+        RememberWidget("__DIALOG__", pRet.get());
 
     return pRet;
 }
@@ -715,12 +709,7 @@ JSDialog::JSDialog(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aCon
                    std::string sTypeOfJSON)
     : JSWidget<SalInstanceDialog, ::Dialog>(aNotifierWindow, aContentWindow, pDialog, pBuilder,
                                             bTakeOwnership, sTypeOfJSON)
-    , m_bNotifyCreated(false)
 {
-    if (aNotifierWindow && aNotifierWindow->IsDisableIdleNotify())
-    {
-        pDialog->AddEventListener(LINK(this, JSDialog, on_window_event));
-    }
 }
 
 void JSDialog::collapse(weld::Widget* pEdit, weld::Widget* pButton)
@@ -739,17 +728,6 @@ void JSDialog::response(int response)
 {
     sendClose();
     SalInstanceDialog::response(response);
-}
-
-IMPL_LINK_NOARG(JSDialog, on_dump_status, void*, void) { JSDialogSender::dumpStatus(); }
-
-IMPL_LINK(JSDialog, on_window_event, VclWindowEvent&, rEvent, void)
-{
-    if (rEvent.GetId() == VclEventId::WindowShow && !m_bNotifyCreated)
-    {
-        Application::PostUserEvent(LINK(this, JSDialog, on_dump_status));
-        m_bNotifyCreated = true;
-    }
 }
 
 JSLabel::JSLabel(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
@@ -908,12 +886,7 @@ JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, VclPtr<vcl::Window> a
                                  SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : SalInstanceMessageDialog(pDialog, pBuilder, bTakeOwnership)
     , JSDialogSender(m_xMessageDialog, aContentWindow, "dialog")
-    , m_bNotifyCreated(false)
 {
-    if (aContentWindow && aContentWindow->IsDisableIdleNotify())
-    {
-        pDialog->AddEventListener(LINK(this, JSMessageDialog, on_window_event));
-    }
 }
 
 void JSMessageDialog::set_primary_text(const OUString& rText)
@@ -926,21 +899,6 @@ void JSMessageDialog::set_secondary_text(const OUString& rText)
 {
     SalInstanceMessageDialog::set_secondary_text(rText);
     notifyDialogState();
-}
-
-IMPL_LINK_NOARG(JSMessageDialog, on_dump_status, void*, void) { JSDialogSender::dumpStatus(); }
-
-IMPL_LINK(JSMessageDialog, on_window_event, VclWindowEvent&, rEvent, void)
-{
-    if (rEvent.GetId() == VclEventId::WindowShow && !m_bNotifyCreated)
-    {
-        Application::PostUserEvent(LINK(this, JSMessageDialog, on_dump_status));
-        m_bNotifyCreated = true;
-    }
-    else if (rEvent.GetId() == VclEventId::WindowHide || rEvent.GetId() == VclEventId::WindowClose)
-    {
-        sendClose();
-    }
 }
 
 JSCheckButton::JSCheckButton(VclPtr<vcl::Window> aNotifierWindow,
