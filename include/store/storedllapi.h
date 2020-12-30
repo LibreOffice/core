@@ -27,6 +27,4 @@
 #define STORE_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
