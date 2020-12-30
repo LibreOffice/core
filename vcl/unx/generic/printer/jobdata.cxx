@@ -174,7 +174,7 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
     aStream.WriteLine(aLine.makeStringAndClear());
 
     // now append the PPDContext stream buffer
-    aStream.WriteLine( "PPDContexData" );
+    aStream.WriteLine( "PPDContextData" );
     sal_uLong nBytes;
     std::unique_ptr<char[]> pContextBuffer(m_aContext.getStreamableBuffer( nBytes ));
     if( nBytes )
@@ -266,7 +266,7 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
             bPDFDevice = true;
             rJobData.m_nPDFDevice = aLine.copy(RTL_CONSTASCII_LENGTH(pdfdeviceEquals)).toInt32();
         }
-        else if (aLine == "PPDContexData" && bPrinter)
+        else if (aLine == "PPDContextData" && bPrinter)
         {
             PrinterInfoManager& rManager = PrinterInfoManager::get();
             const PrinterInfo& rInfo = rManager.getPrinterInfo( rJobData.m_aPrinterName );
