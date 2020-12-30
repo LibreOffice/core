@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd46210f_1ba1887b",
+        "filename": "toolkit/source/awt/vclxdevice.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T14:17:46Z",
+      "side": 0,
+      "message": "This seems to be useful to put into some \"GetCommonDeviceInfo(Size)\", and start every implementetion of GetDeviceInfo with\n\n  Size aDevSz \u003d \u003cdevice-specific code\u003e\n  css::awt::DeviceInfo aInfo \u003d GetCommonDeviceInfo(aDevSz);\n  ... add device-specific stuff ...",
+      "range": {
+        "startLine": 118,
+        "startChar": 8,
+        "endLine": 127,
+        "endChar": 31
+      },
+      "revId": "b01310567d93d2cea068c55ff8e2ce0582d0fd3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
