@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ab43fa9_21cc66ad",
+        "filename": "include/tools/degree.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T07:52:55Z",
+      "side": 1,
+      "message": "Can possibly Degree10 be *derived* from resp. strong_int, and have these as member functions?",
+      "revId": "0df65d9b1643c651143b51e315c97e732e8a6c00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
