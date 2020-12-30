@@ -600,18 +600,26 @@ void SalGraphics::DrawPolyPolygon(
     }
 }
 
-bool SalGraphics::DrawPolyLineBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry, const OutputDevice& rOutDev )
+void SalGraphics::DrawPolyLineBezier(tools::Polygon aPoly, sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry, const OutputDevice& rOutDev )
 {
-    bool bResult = false;
-    if( (m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled() )
+    bool bDrawn = false;
+    if ((m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled())
     {
         std::unique_ptr<Point[]> pPtAry2(new Point[nPoints]);
         bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), rOutDev );
-        bResult = drawPolyLineBezier( nPoints, bCopied ? pPtAry2.get() : pPtAry, pFlgAry );
+        bDrawn = drawPolyLineBezier( nPoints, bCopied ? pPtAry2.get() : pPtAry, pFlgAry );
     }
     else
-        bResult = drawPolyLineBezier( nPoints, pPtAry, pFlgAry );
-    return bResult;
+    {
+        bDrawn = drawPolyLineBezier( nPoints, pPtAry, pFlgAry );
+    }
+
+    if (!bDrawn)
+    {
+        tools::Polygon aSubdividedPolygon(tools::Polygon::SubdivideBezier(aPoly));
+        pPtAry = aSubdividedPolygon.GetPointAry();
+        DrawPolyLine(aSubdividedPolygon.GetSize(), pPtAry, rOutDev);
+    }
 }
 
 void SalGraphics::DrawPolygonBezier(tools::Polygon aPoly, sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry, const OutputDevice& rOutDev )
@@ -714,7 +722,7 @@ void SalGraphics::DrawPolyLine(
         i_fMiterMinimumAngle,
         bPixelSnapHairline);
 
-    if(!bDrawn)
+    if (!bDrawn)
     {
         tools::Polygon aPoly = i_rOutDev.ImplLogicToDevicePixel(tools::Polygon(i_rPolygon));
         Point* pPtAry = aPoly.GetPointAry();
@@ -723,12 +731,7 @@ void SalGraphics::DrawPolyLine(
         if (aPoly.HasFlags())
         {
             const PolyFlags* pFlgAry = aPoly.GetConstFlagAry();
-            if(!DrawPolyLineBezier(aPoly.GetSize(), pPtAry, pFlgAry, i_rOutDev))
-            {
-                aPoly = tools::Polygon::SubdivideBezier(aPoly);
-                pPtAry = aPoly.GetPointAry();
-                DrawPolyLine(aPoly.GetSize(), pPtAry, i_rOutDev);
-            }
+            DrawPolyLineBezier(aPoly, aPoly.GetSize(), pPtAry, pFlgAry, i_rOutDev);
         }
         else
         {
