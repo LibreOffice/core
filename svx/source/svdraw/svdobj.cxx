@@ -1403,9 +1403,7 @@ void SdrObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
 
 void SdrObject::NbcRotate(const Point& rRef, tools::Long nAngle)
 {
-    if (nAngle == 0)
-        NbcRotate( rRef, nAngle, 0.0, 1.0 );
-    else
+    if (nAngle)
     {
         double a = nAngle * F_PI18000;
         NbcRotate( rRef, nAngle, sin( a ), cos( a ) );
@@ -2013,16 +2011,12 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         tools::Long n=static_cast<const SdrAngleItem*>(pPoolItem)->GetValue();
         n-=GetRotateAngle();
         if (n!=0) {
-            double nSin = sin(n * F_PI18000);
-            double nCos = cos(n * F_PI18000);
-            NbcRotate(aRef1,n,nSin,nCos);
+            NbcRotate(aRef1,n);
         }
     }
     if (rAttr.GetItemState(SDRATTR_ROTATEONE,true,&pPoolItem)==SfxItemState::SET) {
         tools::Long n=static_cast<const SdrRotateOneItem*>(pPoolItem)->GetValue();
-        double nSin = sin(n * F_PI18000);
-        double nCos = cos(n * F_PI18000);
-        NbcRotate(aRef1,n,nSin,nCos);
+        NbcRotate(aRef1,n);
     }
     if (rAttr.GetItemState(SDRATTR_HORZSHEARONE,true,&pPoolItem)==SfxItemState::SET) {
         tools::Long n=static_cast<const SdrHorzShearOneItem*>(pPoolItem)->GetValue();
