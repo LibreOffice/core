@@ -1565,9 +1565,9 @@ SvStream& ReadRegion(SvStream& rIStrm, vcl::Region& rRegion)
 
                 if (bHasPolyPolygon)
                 {
-                    tools::PolyPolygon* pNewPoly = new tools::PolyPolygon();
-                    ReadPolyPolygon( rIStrm, *pNewPoly );
-                    rRegion.mpPolyPolygon.reset(pNewPoly);
+                    std::shared_ptr<tools::PolyPolygon> xNewPoly = std::make_shared<tools::PolyPolygon>();
+                    ReadPolyPolygon(rIStrm, *xNewPoly);
+                    rRegion.mpPolyPolygon = xNewPoly;
                 }
             }
 
