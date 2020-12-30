@@ -1325,7 +1325,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
     else
     {
         // Try to send JSON state version
-        SfxLokHelper::sendUnoStatus(SfxViewShell::Current(), pState);
+        SfxLokHelper::sendUnoStatus(pViewFrame->GetViewShell(), pState);
 
         return;
     }
