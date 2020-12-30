@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a05775a7_62b13b4c",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2021,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2020-12-30T15:30:32Z",
+      "side": 1,
+      "message": "Yeah, that\u0027s probably a better choice.",
+      "parentUuid": "235fd817_ae1b1c85",
+      "range": {
+        "startLine": 2021,
+        "startChar": 0,
+        "endLine": 2021,
+        "endChar": 7
+      },
+      "revId": "47a62954e7da67952435437ecc7df40bfc43eda7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5400935b_06751b6e",
         "filename": "include/vcl/outdev.hxx",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "47a62954e7da67952435437ecc7df40bfc43eda7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1e2278e_88b8ea53",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2022,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2020-12-30T15:30:32Z",
+      "side": 1,
+      "message": "I thought passing by value would be OK, but by reference is probably better, it\u0027s true :-)",
+      "parentUuid": "5400935b_06751b6e",
+      "range": {
+        "startLine": 2022,
+        "startChar": 51,
+        "endLine": 2022,
+        "endChar": 55
+      },
+      "revId": "47a62954e7da67952435437ecc7df40bfc43eda7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
