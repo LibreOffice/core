@@ -1569,9 +1569,9 @@ void XclImpXFBuffer::Initialize()
 
 void XclImpXFBuffer::ReadXF( XclImpStream& rStrm )
 {
-    XclImpXF* pXF = new XclImpXF( GetRoot() );
-    pXF->ReadXF( rStrm );
-    maXFList.push_back( std::unique_ptr<XclImpXF>(pXF) );
+    std::unique_ptr<XclImpXF> xXF = std::make_unique<XclImpXF>(GetRoot());
+    xXF->ReadXF(rStrm);
+    maXFList.emplace_back(std::move(xXF));
 }
 
 void XclImpXFBuffer::ReadStyle( XclImpStream& rStrm )
