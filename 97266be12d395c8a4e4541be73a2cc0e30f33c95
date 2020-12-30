@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac83d252_06dd4209",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 3939,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T09:42:13Z",
+      "side": 1,
+      "message": "No need to use this global namespace prefix \"::\" before \"std\". Yes I see where it comes from (it was in original code\u0027s line 3945), but please remove it, since you are changing this line anyway.",
+      "range": {
+        "startLine": 3939,
+        "startChar": 4,
+        "endLine": 3939,
+        "endChar": 6
+      },
+      "revId": "97266be12d395c8a4e4541be73a2cc0e30f33c95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abd58a67_b6334995",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 3941,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T09:42:13Z",
+      "side": 1,
+      "message": "It is of course syntactically correct, but IMO, whenever there are more than one line under \"if\" (even if the lines are comments), it\u0027s better to enclose all the lines into {}. So that both comment and the code are grouped in braces visually, and not only by indentation.\n\nNote that I added a space between \"//\" and \"In\":\n\n    if (!rProtect.isProtected() \u0026\u0026 rDoc.IsUndoEnabled())\n    {\n        // In case of unprotecting, use a copy of passed ScTableProtection object for undo\n        p \u003d std::make_unique\u003cScTableProtection\u003e(rProtect);\n    }",
+      "range": {
+        "startLine": 3941,
+        "startChar": 8,
+        "endLine": 3941,
+        "endChar": 89
+      },
+      "revId": "97266be12d395c8a4e4541be73a2cc0e30f33c95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54000246_ec7ec890",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 3947,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T09:42:13Z",
+      "side": 1,
+      "message": "It\u0027s better to move the comment inside the {} (and indent it accordingly, of course)",
+      "range": {
+        "startLine": 3947,
+        "startChar": 8,
+        "endLine": 3947,
+        "endChar": 82
+      },
+      "revId": "97266be12d395c8a4e4541be73a2cc0e30f33c95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
