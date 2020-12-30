@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c215073_59563472",
+        "filename": "include/vcl/print.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T15:46:01Z",
+      "side": 1,
+      "message": "Seems unused here.",
+      "revId": "8fbbdeae473987f4014dd22a8b0ba8074c1e01b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec5234f4_16e1070c",
+        "filename": "vcl/source/gdi/print.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T15:46:01Z",
+      "side": 1,
+      "message": "Unused here.",
+      "revId": "8fbbdeae473987f4014dd22a8b0ba8074c1e01b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2005d5de_ac79279c",
+        "filename": "vcl/source/window/window.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T15:46:01Z",
+      "side": 1,
+      "message": "Unused here.",
+      "revId": "8fbbdeae473987f4014dd22a8b0ba8074c1e01b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a4d04c5_9be8586c",
+        "filename": "vcl/source/window/window.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 3969,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T15:46:01Z",
+      "side": 1,
+      "message": "This might be used right in the call to GetCommonDeviceInfo",
+      "range": {
+        "startLine": 3969,
+        "startChar": 18,
+        "endLine": 3969,
+        "endChar": 32
+      },
+      "revId": "8fbbdeae473987f4014dd22a8b0ba8074c1e01b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
