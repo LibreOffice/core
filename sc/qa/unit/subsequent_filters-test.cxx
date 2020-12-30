@@ -539,7 +539,7 @@ void testRangeNameImpl(const ScDocument& rDoc)
 
 void ScFiltersTest::testCondFormatBeginsAndEndsWithXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf120749.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"tdf120749.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load tdf120749.xlsx", xDocSh.is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -848,7 +848,7 @@ void ScFiltersTest::testFunctionsODS()
     xDocSh->DoClose();
 
     // crashes at exit while unloading StarBasic code
-    // xDocSh = loadDoc("user-defined-function.", FORMAT_ODS);
+    // xDocSh = loadDoc(u"user-defined-function.", FORMAT_ODS);
     // xDocSh->DoHardRecalc();
     // ScDocument& rDocUserDef = xDocSh->GetDocument();
     // createCSVPath("user-defined-function.", aCSVFileName);
@@ -1127,7 +1127,7 @@ void ScFiltersTest::testFormatsODS()
 
 // void ScFiltersTest::testFormatsXLS()
 // {
-//     ScDocShellRef xDocSh = loadDoc("formats.", FORMAT_XLS);
+//     ScDocShellRef xDocSh = loadDoc(u"formats.", FORMAT_XLS);
 //     xDocSh->DoHardRecalc();
 //
 //     ScDocument& rDoc = xDocSh->GetDocument();
@@ -1138,7 +1138,7 @@ void ScFiltersTest::testFormatsODS()
 
 // void ScFiltersTest::testFormatsXLSX()
 // {
-//     ScDocShellRef xDocSh = loadDoc("formats.", FORMAT_XLSX);
+//     ScDocShellRef xDocSh = loadDoc(u"formats.", FORMAT_XLSX);
 //     xDocSh->DoHardRecalc();
 //
 //     ScDocument& rDoc = xDocSh->GetDocument();

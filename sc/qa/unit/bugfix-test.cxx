@@ -406,7 +406,7 @@ void ScFiltersTest::testTdf91979()
 /*
 void ScFiltersTest::testTdf40110()
 {
-    ScDocShellRef xDocSh = loadDoc("fdo40110test.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc(u"fdo40110test.", FORMAT_ODS);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load fdo40110test.*", xDocSh.Is());
     xDocSh->DoHardRecalc();
