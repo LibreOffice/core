@@ -206,7 +206,7 @@ public:
     void                    ImplDrawPixel( tools::Long nX, tools::Long nY, const RGBAColor& ); // helper to draw single pixels
 
     bool                    CheckContext();
-    CGContextRef            GetContext();
+
 #ifdef MACOSX
     void                    UpdateWindow( NSRect& ); // delivered in NSView coordinates
     void                    RefreshRect( const NSRect& );
