@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c0c6a57_4e484d03",
+        "filename": "sc/source/filter/excel/xeextlst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T06:50:35Z",
+      "side": 1,
+      "message": "IMO, this is more minimal compared to https://gerrit.libreoffice.org/c/core/+/108473/1/sc/source/filter/excel/xeextlst.cxx :)",
+      "range": {
+        "startLine": 179,
+        "startChar": 22,
+        "endLine": 179,
+        "endChar": 30
+      },
+      "revId": "47caf54919e2de463b6ad37f9deac9a82ab51522",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
