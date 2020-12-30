@@ -17,6 +17,7 @@ $(eval $(call gb_Executable_use_externals,ui-previewer,\
         boost_system \
         cairo \
         dtoa \
+        epubgen \
         expat \
         fontconfig \
         freetype \
@@ -43,6 +44,7 @@ $(eval $(call gb_Executable_use_externals,ui-previewer,\
         orcus-parser \
         qrcodegen \
         qt5 \
+        revenge \
     ) \
 ))
 
