@@ -232,7 +232,7 @@ public:
                                     const Point** pPtAry,
                                     const OutputDevice& rOutDev );
 
-    bool                        DrawPolyPolygon(
+    void                        DrawPolyPolygon(
                                     const basegfx::B2DHomMatrix& rObjectToDevice,
                                     const basegfx::B2DPolyPolygon &i_rPolyPolygon,
                                     double i_fTransparency,

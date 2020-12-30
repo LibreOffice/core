@@ -234,45 +234,20 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
         }
     }
 
-    if(aFillPolyPolygon.count())
+    if (aFillPolyPolygon.count())
     {
-        const Color     aOldLineColor( maLineColor );
-        const Color     aOldFillColor( maFillColor );
+        const Color aOldLineColor(maLineColor);
+        const Color aOldFillColor(maFillColor);
 
         SetLineColor();
         InitLineColor();
         SetFillColor( aOldLineColor );
         InitFillColor();
 
-        bool bDone(false);
+        mpGraphics->DrawPolyPolygon(basegfx::B2DHomMatrix(), aFillPolyPolygon, 0.0, *this);
 
-        const bool bTryB2d(mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
-            && RasterOp::OverPaint == GetRasterOp()
-            && IsLineColor());
-
-        if(bTryB2d)
-        {
-            bDone = mpGraphics->DrawPolyPolygon(
-                basegfx::B2DHomMatrix(),
-                aFillPolyPolygon,
-                0.0,
-                *this);
-        }
-
-        if(!bDone)
-        {
-            for(auto const& rB2DPolygon : aFillPolyPolygon)
-            {
-                tools::Polygon aPolygon(rB2DPolygon);
-
-                // need to subdivide, mpGraphics->DrawPolygon ignores curves
-                aPolygon.AdaptiveSubdivide(aPolygon);
-                mpGraphics->DrawPolygon(aPolygon.GetSize(), aPolygon.GetConstPointAry(), *this);
-            }
-        }
-
-        SetFillColor( aOldFillColor );
-        SetLineColor( aOldLineColor );
+        SetFillColor(aOldFillColor);
+        SetLineColor(aOldLineColor);
     }
 
     mpMetaFile = pOldMetaFile;
