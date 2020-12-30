@@ -73,8 +73,7 @@ public:
 
     void notifyDialogState(bool bForce = false);
     void sendClose();
-    void dumpStatus();
-    void sendUpdate(VclPtr<vcl::Window> pWindow);
+    virtual void sendUpdate(VclPtr<vcl::Window> pWindow);
 };
 
 class JSDropTarget final
@@ -151,8 +150,8 @@ public:
                                                             const OUString& rUIFile);
 
     virtual ~JSInstanceBuilder() override;
-    virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OString& id,
-                                                                     bool bTakeOwnership = true) override;
+    virtual std::unique_ptr<weld::MessageDialog>
+    weld_message_dialog(const OString& id, bool bTakeOwnership = true) override;
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString& id,
                                                       bool bTakeOwnership = true) override;
     virtual std::unique_ptr<weld::Label> weld_label(const OString& id,
@@ -239,11 +238,6 @@ public:
 
 class VCL_DLLPUBLIC JSDialog : public JSWidget<SalInstanceDialog, ::Dialog>
 {
-    DECL_LINK(on_dump_status, void*, void);
-    DECL_LINK(on_window_event, VclWindowEvent&, void);
-
-    bool m_bNotifyCreated;
-
 public:
     JSDialog(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
              ::Dialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
@@ -332,11 +326,6 @@ public:
 
 class JSMessageDialog : public SalInstanceMessageDialog, public JSDialogSender
 {
-    DECL_LINK(on_dump_status, void*, void);
-    DECL_LINK(on_window_event, VclWindowEvent&, void);
-
-    bool m_bNotifyCreated;
-
 public:
     JSMessageDialog(::MessageDialog* pDialog, VclPtr<vcl::Window> aContentWindow,
                     SalInstanceBuilder* pBuilder, bool bTakeOwnership);
@@ -389,8 +378,6 @@ public:
 
 class JSTreeView : public JSWidget<SalInstanceTreeView, ::SvTabListBox>
 {
-    DECL_LINK(on_window_event, VclWindowEvent&, void);
-
 public:
     JSTreeView(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
                ::SvTabListBox* pTextView, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
