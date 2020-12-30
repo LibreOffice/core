@@ -1148,6 +1148,12 @@ SwOutlineNodes::size_type SwCursorShell::GetOutlinePos(sal_uInt8 nLevel, SwPaM* 
         if (sw::IsParaPropsNode(*GetLayout(), *pNd->GetTextNode())
             && pNd->GetTextNode()->GetAttrOutlineLevel()-1 <= nLevel)
         {
+            if (pNd->GetIndex() < rNds.GetEndOfExtras().GetIndex()
+                    && pCursor->GetNode().GetIndex() > rNds.GetEndOfExtras().GetIndex())
+            {
+                // node found in extras but cursor position is not in extras
+                return SwOutlineNodes::npos;
+            }
             return nPos;
         }
     }
