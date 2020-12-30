@@ -54,7 +54,7 @@ class SwConvertTableDlg : public SfxDialogController
     DECL_LINK(AutoFormatHdl, weld::Button&, void);
     DECL_LINK(BtnHdl, weld::Button&, void);
     DECL_LINK(CheckBoxHdl, weld::Button&, void);
-    DECL_LINK(ReapeatHeaderCheckBoxHdl, weld::Button&, void);
+    DECL_LINK(RepeatHeaderCheckBoxHdl, weld::Button&, void);
 
 public:
     SwConvertTableDlg(SwView& rView, bool bToTable);
