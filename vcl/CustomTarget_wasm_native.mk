@@ -19,6 +19,6 @@ $(wasm_WORKDIR)/native-code.cxx: \
 	    $(SRCDIR)/solenv/bin/native-code.py \
 	    | $(wasm_WORKDIR)/.dir
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,2)
-	$(call gb_Helper_abbreviate_dirs,$(call gb_ExternalExecutable_get_command,python) $< -g core) > $@
+	$(call gb_Helper_abbreviate_dirs,$(call gb_ExternalExecutable_get_command,python) $< -g core -g writer) > $@
 
 # vim: set noet sw=4:
