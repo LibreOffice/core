@@ -257,7 +257,8 @@ public:
                                     bool bPixelSnapHairline,
                                     const OutputDevice& i_rOutDev);
 
-    bool                        DrawPolyLineBezier(
+    void                        DrawPolyLineBezier(
+                                    tools::Polygon aPoly,
                                     sal_uInt32 nPoints,
                                     const Point* pPtAry,
                                     const PolyFlags* pFlgAry,
