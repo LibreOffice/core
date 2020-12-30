@@ -30,13 +30,10 @@ class tdf137274(UITestCase):
 
         xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "SwNavigatorPanel"}))
 
+        # wait until the navigator panel is available
+        self.ui_test.wait_until_child_is_available(xMainWindow, 'NavigatorPanelParent')
+
         xNavigatorPanel = xWriterEdit.getChild("NavigatorPanelParent")
-
-        xWriterEdit.executeAction("FOCUS", tuple())
-
-        # Wait until the navigator is available
-        self.ui_test.wait_until_property_is_updated(xNavigatorPanel, "selectedtext", "Headings")
-        self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectedtext"], "Headings")
 
         xContentTree = xNavigatorPanel.getChild("contenttree")
         xComments = xContentTree.getChild('10')

@@ -737,6 +737,11 @@ void SwNavigationPI::StateChanged(StateChangedType nStateChange)
         // show content if docked
         if (!ParentIsFloatingWindow(GetParent()) && IsZoomedIn())
             ZoomOut();
+        if (m_xContentTree)
+        {
+            m_xContentTree->SetActiveShell(GetActiveWrtShell());
+            m_xContentTree->UpdateTracking();
+        }
     }
     else if (nStateChange == StateChangedType::ControlFocus)
     {
