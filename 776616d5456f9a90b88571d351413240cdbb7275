@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1c57439_23c53332",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Accelerators.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 2499,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-12-30T08:25:43Z",
+      "side": 1,
+      "message": "Would just ignore German localization.",
+      "range": {
+        "startLine": 2499,
+        "startChar": 0,
+        "endLine": 2499,
+        "endChar": 1
+      },
+      "revId": "776616d5456f9a90b88571d351413240cdbb7275",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
