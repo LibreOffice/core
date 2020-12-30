@@ -9774,7 +9774,7 @@ function BaseNode( aAnimElem, aParentNode, aNodeContext )
     this.bInteractiveSequenceRootNode = false;
     this.eFillMode = FILL_MODE_FREEZE;
     this.eRestartMode = RESTART_MODE_NEVER;
-    this.nReapeatCount = undefined;
+    this.nRepeatCount = undefined;
     this.nAccelerate = 0.0;
     this.nDecelerate = 0.0;
     this.bAutoReverse = false;
@@ -9843,11 +9843,11 @@ BaseNode.prototype.parseElement = function()
     // repeatCount attribute
     var sRepeatCount = aAnimElem.getAttributeNS( NSS['smil'], 'repeatCount' );
     if( !sRepeatCount )
-        this.nReapeatCount = 1;
+        this.nRepeatCount = 1;
     else
-        this.nReapeatCount = parseFloat( sRepeatCount );
-    if( ( isNaN(this.nReapeatCount) ) && ( sRepeatCount != 'indefinite' ) )
-        this.nReapeatCount = 1;
+        this.nRepeatCount = parseFloat( sRepeatCount );
+    if( ( isNaN(this.nRepeatCount) ) && ( sRepeatCount != 'indefinite' ) )
+        this.nRepeatCount = 1;
 
     // accelerate attribute
     this.nAccelerate = 0.0;
@@ -9882,7 +9882,7 @@ BaseNode.prototype.parseElement = function()
     if( this.eFillMode ==  FILL_MODE_AUTO ) // see SMIL recommendation document
     {
         this.eFillMode = ( this.aEnd ||
-                           ( this.nReapeatCount != 1) ||
+                           ( this.nRepeatCount != 1) ||
                            ( this.aDuration && !this.aDuration.isIndefinite() ) )
                               ? FILL_MODE_REMOVE
                               : FILL_MODE_FREEZE;
@@ -10214,7 +10214,7 @@ BaseNode.prototype.getRestartMode = function()
 
 BaseNode.prototype.getRepeatCount = function()
 {
-    return this.nReapeatCount;
+    return this.nRepeatCount;
 };
 
 BaseNode.prototype.getAccelerateValue = function()
