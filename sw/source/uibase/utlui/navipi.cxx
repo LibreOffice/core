@@ -586,8 +586,10 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
 
     bool bFloatingNavigator = SfxChildWindowContext::GetFloatingWindow(GetParent()) != nullptr;
 
+    m_xContentTree->SetActiveShell(m_pCreateView->GetWrtShellPtr());
     m_xContentTree->set_selection_mode(SelectionMode::Single);
     m_xContentTree->ShowTree();
+
     m_xContent6ToolBox->set_item_active("listbox", true);
     m_xContent6ToolBox->set_item_sensitive("listbox", bFloatingNavigator);
 
