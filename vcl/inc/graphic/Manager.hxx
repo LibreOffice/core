@@ -41,6 +41,7 @@ private:
     Manager();
 
     void registerGraphic(const std::shared_ptr<ImpGraphic>& rImpGraphic);
+    void loopGraphicsAndSwapOut();
 
     DECL_LINK(SwapOutTimerHandler, Timer*, void);
 
@@ -49,8 +50,8 @@ private:
 public:
     static Manager& get();
 
-    void swappedIn(const ImpGraphic* pImpGraphic);
-    void swappedOut(const ImpGraphic* pImpGraphic);
+    void swappedIn(const ImpGraphic* pImpGraphic, sal_Int64 nSizeBytes);
+    void swappedOut(const ImpGraphic* pImpGraphic, sal_Int64 nSizeBytes);
 
     void reduceGraphicMemory();
     void changeExisting(const ImpGraphic* pImpGraphic, sal_Int64 nOldSize);
