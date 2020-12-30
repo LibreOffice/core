@@ -22,6 +22,30 @@
       "revId": "47caf54919e2de463b6ad37f9deac9a82ab51522",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b2272f1_50e932aa",
+        "filename": "sc/source/filter/excel/xeextlst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-30T07:57:30Z",
+      "side": 1,
+      "message": "Less keys to type vs. less semantic difference.  (That the explicit outer OUString ctor invocation is redundant is orthogonal to the build failure at hand.)",
+      "parentUuid": "4c0c6a57_4e484d03",
+      "range": {
+        "startLine": 179,
+        "startChar": 22,
+        "endLine": 179,
+        "endChar": 30
+      },
+      "revId": "47caf54919e2de463b6ad37f9deac9a82ab51522",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
