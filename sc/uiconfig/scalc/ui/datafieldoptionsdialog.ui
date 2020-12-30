@@ -110,105 +110,98 @@
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment1">
+                  <!-- n-columns=1 n-rows=1 -->
+                  <object class="GtkGrid" id="grid2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="top_padding">6</property>
-                    <property name="left_padding">12</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
                     <child>
-                      <!-- n-columns=1 n-rows=1 -->
-                      <object class="GtkGrid" id="grid2">
+                      <object class="GtkRadioButton" id="ascending">
+                        <property name="label" translatable="yes" context="datafieldoptionsdialog|ascending">_Ascending</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="row_spacing">6</property>
-                        <property name="column_spacing">12</property>
-                        <child>
-                          <object class="GtkRadioButton" id="ascending">
-                            <property name="label" translatable="yes" context="datafieldoptionsdialog|ascending">_Ascending</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="active">True</property>
-                            <property name="draw_indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="ascending-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|ascending">Sorts the values from the lowest value to the highest value. If the selected field is the field for which the dialog was opened, the items are sorted by name. If a data field was selected, the items are sorted by the resultant value of the selected data field.</property>
-                              </object>
-                            </child>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="ascending-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|ascending">Sorts the values from the lowest value to the highest value. If the selected field is the field for which the dialog was opened, the items are sorted by name. If a data field was selected, the items are sorted by the resultant value of the selected data field.</property>
                           </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkRadioButton" id="descending">
-                            <property name="label" translatable="yes" context="datafieldoptionsdialog|descending">_Descending</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="group">ascending</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="descending-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|descending">Sorts the values descending from the highest value to the lowest value. If the selected field is the field for which the dialog was opened, the items are sorted by name. If a data field was selected, the items are sorted by the resultant value of the selected data field.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkRadioButton" id="manual">
-                            <property name="label" translatable="yes" context="datafieldoptionsdialog|manual">_Manual</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="group">ascending</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="manual-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|manual">Sorts values alphabetically.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="sortby">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="valign">center</property>
-                            <property name="hexpand">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="sortby-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|sortby">Select the data field that you want to sort columns or rows by.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                            <property name="height">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
                         </child>
                       </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="descending">
+                        <property name="label" translatable="yes" context="datafieldoptionsdialog|descending">_Descending</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">ascending</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="descending-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|descending">Sorts the values descending from the highest value to the lowest value. If the selected field is the field for which the dialog was opened, the items are sorted by name. If a data field was selected, the items are sorted by the resultant value of the selected data field.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="manual">
+                        <property name="label" translatable="yes" context="datafieldoptionsdialog|manual">_Manual</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">ascending</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="manual-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|manual">Sorts values alphabetically.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="sortby">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="sortby-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|sortby">Select the data field that you want to sort columns or rows by.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                        <property name="height">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
                 </child>
@@ -235,91 +228,85 @@
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment2">
+                  <!-- n-columns=1 n-rows=1 -->
+                  <object class="GtkGrid" id="grid3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="top_padding">6</property>
-                    <property name="left_padding">12</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
                     <child>
-                      <!-- n-columns=1 n-rows=1 -->
-                      <object class="GtkGrid" id="grid3">
+                      <object class="GtkCheckButton" id="repeatitemlabels">
+                        <property name="label" translatable="yes" context="datafieldoptionsdialog|repeatitemlabels">_Repeat item labels</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="row_spacing">6</property>
-                        <property name="column_spacing">12</property>
-                        <child>
-                          <object class="GtkCheckButton" id="repeatitemlabels">
-                            <property name="label" translatable="yes" context="datafieldoptionsdialog|repeatitemlabels">_Repeat item labels</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="emptyline">
+                        <property name="label" translatable="yes" context="datafieldoptionsdialog|emptyline">_Empty line after each item</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="emptyline-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|emptyline">Adds an empty row after the data for each item in the pivot table.</property>
                           </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">2</property>
-                            <property name="width">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="emptyline">
-                            <property name="label" translatable="yes" context="datafieldoptionsdialog|emptyline">_Empty line after each item</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="emptyline-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|emptyline">Adds an empty row after the data for each item in the pivot table.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                            <property name="width">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label3">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="datafieldoptionsdialog|label3">_Layout:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">layout</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="layout">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                            <items>
-                              <item translatable="yes" context="datafieldoptionsdialog|layout">Tabular layout</item>
-                              <item translatable="yes" context="datafieldoptionsdialog|layout">Outline layout with subtotals at the top</item>
-                              <item translatable="yes" context="datafieldoptionsdialog|layout">Outline layout with subtotals at the bottom</item>
-                            </items>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="layout-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|layout">Select the layout mode for the field in the list box.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label3">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="datafieldoptionsdialog|label3">_Layout:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">layout</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="layout">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <items>
+                          <item translatable="yes" context="datafieldoptionsdialog|layout">Tabular layout</item>
+                          <item translatable="yes" context="datafieldoptionsdialog|layout">Outline layout with subtotals at the top</item>
+                          <item translatable="yes" context="datafieldoptionsdialog|layout">Outline layout with subtotals at the bottom</item>
+                        </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="layout-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|layout">Select the layout mode for the field in the list box.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
@@ -346,149 +333,143 @@
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment3">
+                  <!-- n-columns=1 n-rows=1 -->
+                  <object class="GtkGrid" id="grid4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="top_padding">6</property>
-                    <property name="left_padding">12</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
                     <child>
-                      <!-- n-columns=1 n-rows=1 -->
-                      <object class="GtkGrid" id="grid4">
+                      <object class="GtkCheckButton" id="show">
+                        <property name="label" translatable="yes" context="datafieldoptionsdialog|show">_Show:</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                        <accessibility>
+                          <relation type="label-for" target="items"/>
+                        </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="show-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|show">Turns on the automatic show feature.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="showfromft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="row_spacing">6</property>
+                        <property name="label" translatable="yes" context="datafieldoptionsdialog|showfromft">_From:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">from</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="usingft">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="datafieldoptionsdialog|usingft">_Using field:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">using</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <!-- n-columns=1 n-rows=1 -->
+                      <object class="GtkGrid" id="grid5">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="column_spacing">12</property>
                         <child>
-                          <object class="GtkCheckButton" id="show">
-                            <property name="label" translatable="yes" context="datafieldoptionsdialog|show">_Show:</property>
+                          <object class="GtkLabel" id="showft">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes" context="datafieldoptionsdialog|showft">items</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">layout</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="items">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
+                            <property name="adjustment">adjustment1</property>
                             <accessibility>
-                              <relation type="label-for" target="items"/>
+                              <relation type="labelled-by" target="show"/>
                             </accessibility>
                             <child internal-child="accessible">
-                              <object class="AtkObject" id="show-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|show">Turns on the automatic show feature.</property>
+                              <object class="AtkObject" id="items-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|items">Enter the maximum number of items that you want to show automatically.</property>
                               </object>
                             </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="showfromft">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="datafieldoptionsdialog|showfromft">_From:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">from</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="usingft">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="datafieldoptionsdialog|usingft">_Using field:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">using</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <!-- n-columns=1 n-rows=1 -->
-                          <object class="GtkGrid" id="grid5">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="column_spacing">12</property>
-                            <child>
-                              <object class="GtkLabel" id="showft">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes" context="datafieldoptionsdialog|showft">items</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">layout</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSpinButton" id="items">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="adjustment">adjustment1</property>
-                                <accessibility>
-                                  <relation type="labelled-by" target="show"/>
-                                </accessibility>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="items-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|items">Enter the maximum number of items that you want to show automatically.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="from">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <items>
-                              <item translatable="yes" context="datafieldoptionsdialog|from">Top</item>
-                              <item translatable="yes" context="datafieldoptionsdialog|from">Bottom</item>
-                            </items>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="from-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|from">Shows the top or bottom items in the specified sort order.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="using">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="using-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|using">Select the data field that you want to sort the data by.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">2</property>
                           </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="from">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <items>
+                          <item translatable="yes" context="datafieldoptionsdialog|from">Top</item>
+                          <item translatable="yes" context="datafieldoptionsdialog|from">Bottom</item>
+                        </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="from-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|from">Shows the top or bottom items in the specified sort order.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="using">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="using-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|using">Select the data field that you want to sort the data by.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">2</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
@@ -517,65 +498,57 @@
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment4">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="top_padding">6</property>
-                    <property name="left_padding">12</property>
+                    <property name="shadow_type">in</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
                     <child>
-                      <object class="GtkScrolledWindow">
+                      <object class="GtkTreeView" id="hideitems">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <property name="shadow_type">in</property>
+                        <property name="model">liststore2</property>
+                        <property name="headers_visible">False</property>
+                        <property name="search_column">1</property>
+                        <property name="show_expanders">False</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+                        </child>
                         <child>
-                          <object class="GtkTreeView" id="hideitems">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
-                            <property name="model">liststore2</property>
-                            <property name="headers_visible">False</property>
-                            <property name="search_column">1</property>
-                            <property name="show_expanders">False</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
-                            </child>
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                            <property name="resizable">True</property>
+                            <property name="spacing">6</property>
+                            <property name="alignment">0.5</property>
                             <child>
-                              <object class="GtkTreeViewColumn" id="treeviewcolumn4">
-                                <property name="resizable">True</property>
-                                <property name="spacing">6</property>
-                                <property name="alignment">0.5</property>
-                                <child>
-                                  <object class="GtkCellRendererToggle" id="cellrenderer5"/>
-                                  <attributes>
-                                    <attribute name="visible">3</attribute>
-                                    <attribute name="active">0</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
+                              <object class="GtkCellRendererToggle" id="cellrenderer5"/>
+                              <attributes>
+                                <attribute name="visible">3</attribute>
+                                <attribute name="active">0</attribute>
+                              </attributes>
                             </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn5">
+                            <property name="resizable">True</property>
+                            <property name="spacing">6</property>
                             <child>
-                              <object class="GtkTreeViewColumn" id="treeviewcolumn5">
-                                <property name="resizable">True</property>
-                                <property name="spacing">6</property>
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderer4"/>
-                                  <attributes>
-                                    <attribute name="text">1</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
+                              <object class="GtkCellRendererText" id="cellrenderer4"/>
+                              <attributes>
+                                <attribute name="text">1</attribute>
+                              </attributes>
                             </child>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="hideitems-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|hideitems">Select the items that you want to hide from the calculations.</property>
-                              </object>
-                            </child>
+                          </object>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="hideitems-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|hideitems">Select the items that you want to hide from the calculations.</property>
                           </object>
                         </child>
                       </object>

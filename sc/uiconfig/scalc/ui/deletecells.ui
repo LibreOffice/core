@@ -80,106 +80,100 @@
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
-              <object class="GtkAlignment" id="alignment3">
+              <object class="GtkBox" id="box1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="top_padding">6</property>
-                <property name="left_padding">12</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <property name="margin-start">12</property>
+                <property name="margin-top">6</property>
                 <child>
-                  <object class="GtkBox" id="box1">
+                  <object class="GtkRadioButton" id="up">
+                    <property name="label" translatable="yes" context="deletecells|up">Shift cells _up</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkRadioButton" id="up">
-                        <property name="label" translatable="yes" context="deletecells|up">Shift cells _up</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="up-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="deletecells|extended_tip|up">Fills the space produced by the deleted cells with the cells underneath it.</property>
-                          </object>
-                        </child>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="up-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="deletecells|extended_tip|up">Fills the space produced by the deleted cells with the cells underneath it.</property>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="left">
-                        <property name="label" translatable="yes" context="deletecells|left">Shift cells _left</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">up</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="left-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="deletecells|extended_tip|left">Fills the resulting space by the cells to the right of the deleted cells.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="rows">
-                        <property name="label" translatable="yes" context="deletecells|rows">Delete entire _row(s)</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">up</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="rows-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="deletecells|extended_tip|rows">After selecting at least one cell, deletes the entire row from the sheet.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="cols">
-                        <property name="label" translatable="yes" context="deletecells|cols">Delete entire _column(s)</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">up</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="cols-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="deletecells|extended_tip|cols">After selecting at least one cell, deletes the entire column from the sheet.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">4</property>
-                      </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="left">
+                    <property name="label" translatable="yes" context="deletecells|left">Shift cells _left</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">up</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="left-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="deletecells|extended_tip|left">Fills the resulting space by the cells to the right of the deleted cells.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="rows">
+                    <property name="label" translatable="yes" context="deletecells|rows">Delete entire _row(s)</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">up</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="rows-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="deletecells|extended_tip|rows">After selecting at least one cell, deletes the entire row from the sheet.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="cols">
+                    <property name="label" translatable="yes" context="deletecells|cols">Delete entire _column(s)</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">up</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="cols-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="deletecells|extended_tip|cols">After selecting at least one cell, deletes the entire column from the sheet.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">4</property>
+                  </packing>
                 </child>
               </object>
             </child>
