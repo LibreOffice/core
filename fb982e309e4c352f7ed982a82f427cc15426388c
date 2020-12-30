@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f7e7444_0a5ad79a",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 24
+      },
+      "lineNbr": 3989,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T07:23:23Z",
+      "side": 1,
+      "message": "Please check my two previous comments :-)\n\n* https://gerrit.libreoffice.org/c/core/+/107041/23/sc/source/ui/docshell/docfunc.cxx#3948\n* https://gerrit.libreoffice.org/c/core/+/107041/22/sc/source/ui/docshell/docfunc.cxx#3986",
+      "range": {
+        "startLine": 3989,
+        "startChar": 43,
+        "endLine": 3989,
+        "endChar": 44
+      },
+      "revId": "fb982e309e4c352f7ed982a82f427cc15426388c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
