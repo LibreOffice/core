@@ -1522,106 +1522,23 @@ GlyphClass: 2
 Flags: W
 HStem: 516 168<115 512 682 1081>
 VStem: 512 170<115 516 684 1083>
-TtInstrs:
-SVTCA[y-axis]
-PUSHB_1
- 2
-MDAP[rnd]
-PUSHB_1
- 9
-SHP[rp1]
-PUSHB_1
- 3
-MDRP[min,rnd,black]
-PUSHB_1
- 7
-SHP[rp2]
-PUSHB_3
- 2
- 3
- 10
-CALL
-PUSHB_4
- 64
- 2
- 0
- 9
-CALL
-PUSHB_3
- 3
- 2
- 10
-CALL
-PUSHB_4
- 64
- 3
- 5
- 9
-CALL
-SVTCA[x-axis]
-PUSHB_1
- 12
-MDAP[rnd]
-PUSHB_1
- 0
-MDRP[rp0,rnd,white]
-PUSHB_1
- 4
-SHP[rp2]
-PUSHB_1
- 11
-MDRP[min,rnd,black]
-PUSHB_1
- 6
-SHP[rp2]
-PUSHB_3
- 11
- 0
- 10
-CALL
-PUSHB_4
- 64
- 11
- 9
- 9
-CALL
-PUSHB_3
- 0
- 11
- 10
-CALL
-PUSHB_4
- 64
- 0
- 2
- 9
-CALL
-PUSHB_2
- 13
- 1
-CALL
-SVTCA[y-axis]
-IUP[y]
-IUP[x]
-EndTTInstrs
 LayerCount: 2
 Fore
 SplineSet
-512 115 m 1,0,-1
- 512 516 l 1,1,-1
- 115 516 l 1,2,-1
- 115 684 l 1,3,-1
- 512 684 l 1,4,-1
- 512 1083 l 1,5,-1
- 682 1083 l 1,6,-1
- 682 684 l 1,7,-1
- 1081 684 l 1,8,-1
- 1081 516 l 1,9,-1
- 682 516 l 1,10,-1
- 682 115 l 1,11,-1
- 512 115 l 1,0,-1
+532 115 m 1,0,-1
+ 532 537 l 1,1,-1
+ 115 537 l 5,2,-1
+ 115 667 l 1,3,-1
+ 532 667 l 1,4,-1
+ 532 1083 l 1,5,-1
+ 662 1083 l 1,6,-1
+ 662 667 l 1,7,-1
+ 1081 667 l 1,8,-1
+ 1081 537 l 1,9,-1
+ 662 538 l 1,10,-1
+ 662 115 l 1,11,-1
+ 532 115 l 1,0,-1
 EndSplineSet
-Validated: 1
 EndChar
 
 StartChar: comma
@@ -1743,13 +1660,12 @@ EndTTInstrs
 LayerCount: 2
 Fore
 SplineSet
-66 502 m 1,0,-1
- 66 682 l 1,1,-1
- 618 682 l 1,2,-1
- 618 502 l 1,3,-1
- 66 502 l 1,0,-1
+66 537 m 1,0,-1
+ 66 667 l 1,1,-1
+ 618 667 l 1,2,-1
+ 618 537 l 1,3,-1
+ 66 537 l 1,0,-1
 EndSplineSet
-Validated: 1
 EndChar
 
 StartChar: period
