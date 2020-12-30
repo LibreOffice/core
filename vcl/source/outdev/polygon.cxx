@@ -79,21 +79,16 @@ void OutputDevice::DrawPolygon(const tools::Polygon& rPoly)
     {
         const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
         basegfx::B2DPolygon aB2DPolygon(rPoly.getB2DPolygon());
-        bool bSuccess(true);
 
         // ensure closed - maybe assert, hinders buffering
         if (!aB2DPolygon.isClosed())
-        {
             aB2DPolygon.setClosed(true);
-        }
 
         if (IsFillColor())
-        {
-            bSuccess = mpGraphics->DrawPolyPolygon(aTransform, basegfx::B2DPolyPolygon(aB2DPolygon),
-                                                   0.0, *this);
-        }
+            mpGraphics->DrawPolyPolygon(aTransform, basegfx::B2DPolyPolygon(aB2DPolygon), 0.0,
+                                        *this);
 
-        if (bSuccess && IsLineColor())
+        if (IsLineColor())
         {
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
@@ -106,12 +101,10 @@ void OutputDevice::DrawPolygon(const tools::Polygon& rPoly)
                 bPixelSnapHairline, *this);
         }
 
-        if (bSuccess)
-        {
-            if (mpAlphaVDev)
-                mpAlphaVDev->DrawPolygon(rPoly);
-            return;
-        }
+        if (mpAlphaVDev)
+            mpAlphaVDev->DrawPolygon(rPoly);
+
+        return;
     }
 
     tools::Polygon aPoly = ImplLogicToDevicePixel(rPoly);

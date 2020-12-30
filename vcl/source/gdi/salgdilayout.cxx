@@ -569,29 +569,35 @@ namespace
     }
 }
 
-bool SalGraphics::DrawPolyPolygon(
+void SalGraphics::DrawPolyPolygon(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolyPolygon& i_rPolyPolygon,
     double i_fTransparency,
     const OutputDevice& i_rOutDev)
 {
+    bool bDrawn = false;
+
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || i_rOutDev.IsRTLEnabled() )
     {
         // mirroring set
         const basegfx::B2DHomMatrix& rMirror(getMirror(i_rOutDev));
         if(!rMirror.isIdentity())
         {
-            return drawPolyPolygon(
+            bDrawn = drawPolyPolygon(
                 rMirror * rObjectToDevice,
                 i_rPolyPolygon,
                 i_fTransparency);
         }
     }
 
-    return drawPolyPolygon(
-        rObjectToDevice,
-        i_rPolyPolygon,
-        i_fTransparency);
+    bDrawn = drawPolyPolygon(rObjectToDevice, i_rPolyPolygon, i_fTransparency);
+
+    if (bDrawn)
+    {
+        const tools::PolyPolygon aToolsPolyPolygon(i_rPolyPolygon);
+        const tools::PolyPolygon aPixelPolyPolygon = i_rOutDev.ImplLogicToDevicePixel(aToolsPolyPolygon);
+        DrawPolyPolygon(aPixelPolyPolygon.Count(), aPixelPolyPolygon, i_rOutDev);
+    }
 }
 
 bool SalGraphics::DrawPolyLineBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry, const OutputDevice& rOutDev )
