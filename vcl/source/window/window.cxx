@@ -755,8 +755,7 @@ ImplWinData::ImplWinData() :
     mnTrackFlags(ShowTrackFlags::NONE),
     mnIsTopWindow(sal_uInt16(~0)), // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
     mbMouseOver(false),
-    mbEnableNativeWidget(false),
-    mbDisableIdleNotify(false)
+    mbEnableNativeWidget(false)
 {
 }
 
@@ -3200,17 +3199,6 @@ VclPtr<Window> Window::FindLOKWindow(vcl::LOKWindowId nWindowId)
         return it->second;
 
     return VclPtr<Window>();
-}
-
-bool Window::IsDisableIdleNotify()
-{
-    return ImplGetWinData()->mbDisableIdleNotify;
-}
-
-void Window::SetDisableIdleNotify(bool bValue)
-{
-    if (ImplGetWinData()->mbDisableIdleNotify != bValue)
-        ImplGetWinData()->mbDisableIdleNotify = bValue;
 }
 
 bool Window::IsLOKWindowsEmpty()
