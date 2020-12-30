@@ -67,20 +67,15 @@ void OutputDevice::DrawPolyPolygon(const tools::PolyPolygon& rPolyPoly)
     {
         const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
         basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPoly.getB2DPolyPolygon());
-        bool bSuccess(true);
 
         // ensure closed - may be asserted, will prevent buffering
         if (!aB2DPolyPolygon.isClosed())
-        {
             aB2DPolyPolygon.setClosed(true);
-        }
 
         if (IsFillColor())
-        {
-            bSuccess = mpGraphics->DrawPolyPolygon(aTransform, aB2DPolyPolygon, 0.0, *this);
-        }
+            mpGraphics->DrawPolyPolygon(aTransform, aB2DPolyPolygon, 0.0, *this);
 
-        if (bSuccess && IsLineColor())
+        if (IsLineColor())
         {
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
@@ -97,12 +92,10 @@ void OutputDevice::DrawPolyPolygon(const tools::PolyPolygon& rPolyPoly)
             }
         }
 
-        if (bSuccess)
-        {
-            if (mpAlphaVDev)
-                mpAlphaVDev->DrawPolyPolygon(rPolyPoly);
-            return;
-        }
+        if (mpAlphaVDev)
+            mpAlphaVDev->DrawPolyPolygon(rPolyPoly);
+
+        return;
     }
 
     if (nPoly == 1)
@@ -126,6 +119,7 @@ void OutputDevice::DrawPolyPolygon(const tools::PolyPolygon& rPolyPoly)
         // ImplLogicToDevicePixel calls
         mpGraphics->DrawPolyPolygon(nPoly, ImplLogicToDevicePixel(rPolyPoly), *this);
     }
+
     if (mpAlphaVDev)
         mpAlphaVDev->DrawPolyPolygon(rPolyPoly);
 }
@@ -175,18 +169,13 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(
     {
         const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
         basegfx::B2DPolyPolygon aB2DPolyPolygon(rB2DPolyPoly);
-        bSuccess = true;
 
         // ensure closed - maybe assert, hinders buffering
         if (!aB2DPolyPolygon.isClosed())
-        {
             aB2DPolyPolygon.setClosed(true);
-        }
 
         if (IsFillColor())
-        {
-            bSuccess = mpGraphics->DrawPolyPolygon(aTransform, aB2DPolyPolygon, 0.0, *this);
-        }
+            mpGraphics->DrawPolyPolygon(aTransform, aB2DPolyPolygon, 0.0, *this);
 
         if (bSuccess && IsLineColor())
         {
@@ -204,14 +193,6 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(
                     bPixelSnapHairline, *this);
             }
         }
-    }
-
-    if (!bSuccess)
-    {
-        // fallback to old polygon drawing if needed
-        const tools::PolyPolygon aToolsPolyPolygon(rB2DPolyPoly);
-        const tools::PolyPolygon aPixelPolyPolygon = ImplLogicToDevicePixel(aToolsPolyPolygon);
-        mpGraphics->DrawPolyPolygon(aPixelPolyPolygon.Count(), aPixelPolyPolygon, *this);
     }
 
     if (mpAlphaVDev)
