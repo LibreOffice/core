@@ -111,180 +111,174 @@
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment1">
+                  <!-- n-columns=2 n-rows=4 -->
+                  <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="top-padding">3</property>
-                    <property name="bottom-padding">6</property>
-                    <property name="left-padding">12</property>
+                    <property name="column-spacing">3</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">3</property>
+                    <property name="margin-bottom">6</property>
                     <child>
-                      <!-- n-columns=2 n-rows=4 -->
-                      <object class="GtkGrid">
+                      <object class="GtkCheckButton" id="paste_all">
+                        <property name="label" translatable="yes" context="pastespecial|paste_all">_All</property>
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="column-spacing">3</property>
-                        <child>
-                          <object class="GtkCheckButton" id="paste_all">
-                            <property name="label" translatable="yes" context="pastespecial|paste_all">_All</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="has-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw-indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="paste_all-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|paste_all">Pastes all cell contents, comments, formats, and objects into the current document.</property>
-                              </object>
-                            </child>
+                        <property name="can-focus">True</property>
+                        <property name="has-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="paste_all-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|paste_all">Pastes all cell contents, comments, formats, and objects into the current document.</property>
                           </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="comments">
-                            <property name="label" translatable="yes" context="pastespecial|comments">_Comments</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw-indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="comments-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|comments">Inserts comments that are attached to cells. If you want to add the comments to the existing cell content, select the "Add" operation.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="numbers">
-                            <property name="label" translatable="yes" context="pastespecial|numbers">_Numbers</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw-indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="numbers-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|numbers">Inserts cells containing numbers.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="text">
-                            <property name="label" translatable="yes" context="pastespecial|text">Te_xt</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw-indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="text-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|text">Inserts cells containing text.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="datetime">
-                            <property name="label" translatable="yes" context="pastespecial|datetime">_Date &amp; time</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw-indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="datetime-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|datetime">Inserts cells containing date and time values.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="formats">
-                            <property name="label" translatable="yes" context="pastespecial|formats">For_mats</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw-indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="formats-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|formats">Inserts cell format attributes.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="objects">
-                            <property name="label" translatable="yes" context="pastespecial|objects">Ob_jects</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw-indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="objects-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|objects">Inserts objects contained within the selected cell range. These can be OLE objects, chart objects, or drawing objects.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="formulas">
-                            <property name="label" translatable="yes" context="pastespecial|formulas">F_ormulas</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw-indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="formulas-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|formulas">Inserts cells containing formulae.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">3</property>
-                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="comments">
+                        <property name="label" translatable="yes" context="pastespecial|comments">_Comments</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="comments-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|comments">Inserts comments that are attached to cells. If you want to add the comments to the existing cell content, select the "Add" operation.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="numbers">
+                        <property name="label" translatable="yes" context="pastespecial|numbers">_Numbers</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="numbers-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|numbers">Inserts cells containing numbers.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="text">
+                        <property name="label" translatable="yes" context="pastespecial|text">Te_xt</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="text-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|text">Inserts cells containing text.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="datetime">
+                        <property name="label" translatable="yes" context="pastespecial|datetime">_Date &amp; time</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="datetime-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|datetime">Inserts cells containing date and time values.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="formats">
+                        <property name="label" translatable="yes" context="pastespecial|formats">For_mats</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="formats-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|formats">Inserts cell format attributes.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="objects">
+                        <property name="label" translatable="yes" context="pastespecial|objects">Ob_jects</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="objects-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|objects">Inserts objects contained within the selected cell range. These can be OLE objects, chart objects, or drawing objects.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="formulas">
+                        <property name="label" translatable="yes" context="pastespecial|formulas">F_ormulas</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="formulas-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|formulas">Inserts cells containing formulae.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">3</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
@@ -311,128 +305,122 @@
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment2">
+                  <object class="GtkBox" id="box4">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="top-padding">3</property>
-                    <property name="bottom-padding">6</property>
-                    <property name="left-padding">12</property>
+                    <property name="spacing">3</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">3</property>
+                    <property name="margin-bottom">6</property>
                     <child>
-                      <object class="GtkBox" id="box4">
+                      <object class="GtkRadioButton" id="none">
+                        <property name="label" translatable="yes" context="pastespecial|none">Non_e</property>
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="spacing">3</property>
-                        <child>
-                          <object class="GtkRadioButton" id="none">
-                            <property name="label" translatable="yes" context="pastespecial|none">Non_e</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="active">True</property>
-                            <property name="draw-indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="none-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|none">Does not apply an operation when you insert the cell range from the clipboard. The contents of the clipboard will replace existing cell contents.</property>
-                              </object>
-                            </child>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="active">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="none-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|none">Does not apply an operation when you insert the cell range from the clipboard. The contents of the clipboard will replace existing cell contents.</property>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkRadioButton" id="add">
-                            <property name="label" translatable="yes" context="pastespecial|add">_Add</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw-indicator">True</property>
-                            <property name="group">none</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="add-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|add">Adds the values in the clipboard cells to the values in the target cells. Also, if the clipboard only contains comments, adds the comments to the target cells.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkRadioButton" id="subtract">
-                            <property name="label" translatable="yes" context="pastespecial|subtract">_Subtract</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw-indicator">True</property>
-                            <property name="group">none</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="subtract-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|subtract">Subtracts the values in the clipboard cells from the values in the target cells.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkRadioButton" id="multiply">
-                            <property name="label" translatable="yes" context="pastespecial|multiply">_Multiply</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw-indicator">True</property>
-                            <property name="group">none</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="multiply-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|multiply">Multiplies the values in the clipboard cells with the values in the target cells.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkRadioButton" id="divide">
-                            <property name="label" translatable="yes" context="pastespecial|divide">_Divide</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw-indicator">True</property>
-                            <property name="group">none</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="divide-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|divide">Divides the values in the target cells by the values in the clipboard cells.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">4</property>
-                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="add">
+                        <property name="label" translatable="yes" context="pastespecial|add">_Add</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw-indicator">True</property>
+                        <property name="group">none</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="add-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|add">Adds the values in the clipboard cells to the values in the target cells. Also, if the clipboard only contains comments, adds the comments to the target cells.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="subtract">
+                        <property name="label" translatable="yes" context="pastespecial|subtract">_Subtract</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw-indicator">True</property>
+                        <property name="group">none</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="subtract-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|subtract">Subtracts the values in the clipboard cells from the values in the target cells.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="multiply">
+                        <property name="label" translatable="yes" context="pastespecial|multiply">_Multiply</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw-indicator">True</property>
+                        <property name="group">none</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="multiply-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|multiply">Multiplies the values in the clipboard cells with the values in the target cells.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="divide">
+                        <property name="label" translatable="yes" context="pastespecial|divide">_Divide</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw-indicator">True</property>
+                        <property name="group">none</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="divide-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|divide">Divides the values in the target cells by the values in the clipboard cells.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">4</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
@@ -460,84 +448,78 @@
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment4">
+                  <object class="GtkBox" id="box2">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="top-padding">3</property>
-                    <property name="bottom-padding">6</property>
-                    <property name="left-padding">12</property>
+                    <property name="spacing">3</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">3</property>
+                    <property name="margin-bottom">6</property>
                     <child>
-                      <object class="GtkBox" id="box2">
+                      <object class="GtkRadioButton" id="no_shift">
+                        <property name="label" translatable="yes" context="pastespecial|no_shift">Don't sh_ift</property>
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="spacing">3</property>
-                        <child>
-                          <object class="GtkRadioButton" id="no_shift">
-                            <property name="label" translatable="yes" context="pastespecial|no_shift">Don't sh_ift</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="active">True</property>
-                            <property name="draw-indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="no_shift-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|no_shift">Inserted cells replace the target cells.</property>
-                              </object>
-                            </child>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="active">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="no_shift-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|no_shift">Inserted cells replace the target cells.</property>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkRadioButton" id="move_down">
-                            <property name="label" translatable="yes" context="pastespecial|move_down">_Down</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw-indicator">True</property>
-                            <property name="group">no_shift</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="move_down-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|move_down">Target cells are shifted downward when you insert cells from the clipboard.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkRadioButton" id="move_right">
-                            <property name="label" translatable="yes" context="pastespecial|move_right">_Right</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw-indicator">True</property>
-                            <property name="group">no_shift</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="move_right-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|move_right">Target cells are shifted to the right when you insert cells from the clipboard.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">2</property>
-                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="move_down">
+                        <property name="label" translatable="yes" context="pastespecial|move_down">_Down</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw-indicator">True</property>
+                        <property name="group">no_shift</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="move_down-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|move_down">Target cells are shifted downward when you insert cells from the clipboard.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="move_right">
+                        <property name="label" translatable="yes" context="pastespecial|move_right">_Right</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw-indicator">True</property>
+                        <property name="group">no_shift</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="move_right-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|move_right">Target cells are shifted to the right when you insert cells from the clipboard.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
@@ -565,99 +547,31 @@
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
-                  <object class="GtkAlignment">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="top-padding">3</property>
-                    <property name="bottom-padding">6</property>
-                    <property name="left-padding">12</property>
+                    <property name="orientation">vertical</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">3</property>
+                    <property name="margin-bottom">6</property>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkButtonBox">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="homogeneous">True</property>
+                        <property name="layout-style">expand</property>
                         <child>
-                          <object class="GtkButtonBox">
+                          <object class="GtkButton" id="paste_values_only">
+                            <property name="label" translatable="yes" context="pastespecial|paste_values_only|label">_Values Only</property>
                             <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="orientation">vertical</property>
-                            <property name="homogeneous">True</property>
-                            <property name="layout-style">expand</property>
-                            <child>
-                              <object class="GtkButton" id="paste_values_only">
-                                <property name="label" translatable="yes" context="pastespecial|paste_values_only|label">_Values Only</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">True</property>
-                                <property name="tooltip-text" translatable="yes" context="pastespecial|paste_values_only|tooltip_text">Values Only</property>
-                                <property name="image">img_paste_values_only</property>
-                                <property name="use-underline">True</property>
-                                <property name="image-position">top</property>
-                                <property name="always-show-image">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="paste_values_formats">
-                                <property name="label" translatable="yes" context="pastespecial|paste_values_formats|label">Values &amp; _Formats</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">True</property>
-                                <property name="tooltip-text" translatable="yes" context="pastespecial|paste_values_formats|tooltip_text">Values &amp; Formats</property>
-                                <property name="vexpand">True</property>
-                                <property name="image">img_paste_values_formats</property>
-                                <property name="use-underline">True</property>
-                                <property name="image-position">top</property>
-                                <property name="always-show-image">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="paste_formats">
-                                <property name="label" translatable="yes" context="pastespecial|paste_format|label">Formats Onl_y</property>
-                                <property name="height-request">60</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">True</property>
-                                <property name="tooltip-text" translatable="yes" context="pastespecial|paste_format|tooltip_text">Formats Only</property>
-                                <property name="vexpand">True</property>
-                                <property name="image">img_paste_formats</property>
-                                <property name="use-underline">True</property>
-                                <property name="image-position">top</property>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="paste_transpose">
-                                <property name="label" translatable="yes" context="pastespecial|paste_transpose|label">_Transpose All</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">True</property>
-                                <property name="tooltip-text" translatable="yes" context="pastespecial|paste_transpose|tooltip_text">Transpose All</property>
-                                <property name="vexpand">True</property>
-                                <property name="image">img_paste_transpose</property>
-                                <property name="use-underline">True</property>
-                                <property name="image-position">top</property>
-                                <property name="always-show-image">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">3</property>
-                              </packing>
-                            </child>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="tooltip-text" translatable="yes" context="pastespecial|paste_values_only|tooltip_text">Values Only</property>
+                            <property name="image">img_paste_values_only</property>
+                            <property name="use-underline">True</property>
+                            <property name="image-position">top</property>
+                            <property name="always-show-image">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -666,23 +580,85 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="cbImmediately">
-                            <property name="label" translatable="yes" context="pastespecial|cbImmediately">_Run immediately</property>
+                          <object class="GtkButton" id="paste_values_formats">
+                            <property name="label" translatable="yes" context="pastespecial|paste_values_formats|label">Values &amp; _Formats</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
+                            <property name="receives-default">True</property>
+                            <property name="tooltip-text" translatable="yes" context="pastespecial|paste_values_formats|tooltip_text">Values &amp; Formats</property>
+                            <property name="vexpand">True</property>
+                            <property name="image">img_paste_values_formats</property>
                             <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="active">True</property>
-                            <property name="draw-indicator">True</property>
+                            <property name="image-position">top</property>
+                            <property name="always-show-image">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="paste_formats">
+                            <property name="label" translatable="yes" context="pastespecial|paste_format|label">Formats Onl_y</property>
+                            <property name="height-request">60</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="tooltip-text" translatable="yes" context="pastespecial|paste_format|tooltip_text">Formats Only</property>
+                            <property name="vexpand">True</property>
+                            <property name="image">img_paste_formats</property>
+                            <property name="use-underline">True</property>
+                            <property name="image-position">top</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="paste_transpose">
+                            <property name="label" translatable="yes" context="pastespecial|paste_transpose|label">_Transpose All</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="tooltip-text" translatable="yes" context="pastespecial|paste_transpose|tooltip_text">Transpose All</property>
+                            <property name="vexpand">True</property>
+                            <property name="image">img_paste_transpose</property>
+                            <property name="use-underline">True</property>
+                            <property name="image-position">top</property>
+                            <property name="always-show-image">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="cbImmediately">
+                        <property name="label" translatable="yes" context="pastespecial|cbImmediately">_Run immediately</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="active">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
@@ -710,80 +686,74 @@
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
-                  <object class="GtkAlignment">
+                  <!-- n-columns=1 n-rows=3 -->
+                  <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="top-padding">3</property>
-                    <property name="bottom-padding">6</property>
-                    <property name="left-padding">12</property>
+                    <property name="column-spacing">3</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">3</property>
+                    <property name="margin-bottom">6</property>
                     <child>
-                      <!-- n-columns=1 n-rows=3 -->
-                      <object class="GtkGrid">
+                      <object class="GtkCheckButton" id="link">
+                        <property name="label" translatable="yes" context="pastespecial|link">As _Link</property>
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="column-spacing">3</property>
-                        <child>
-                          <object class="GtkCheckButton" id="link">
-                            <property name="label" translatable="yes" context="pastespecial|link">As _Link</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw-indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="link-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|link">Inserts the cell range as a link, so that changes made to the cells in the source file are updated in the target file. To ensure that changes made to empty cells in the source file are updated in the target file, ensure that the "Paste All" option is also selected.</property>
-                              </object>
-                            </child>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="link-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|link">Inserts the cell range as a link, so that changes made to the cells in the source file are updated in the target file. To ensure that changes made to empty cells in the source file are updated in the target file, ensure that the "Paste All" option is also selected.</property>
                           </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="transpose">
-                            <property name="label" translatable="yes" context="pastespecial|transpose">Trans_pose</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw-indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="transpose-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|transpose">The rows of the range in the clipboard are pasted to become columns of the output range. The columns of the range in the clipboard are pasted to become rows.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="skip_empty">
-                            <property name="label" translatable="yes" context="pastespecial|skip_empty">_Skip empty cells</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="tooltip-text" translatable="yes" context="pastespecial|skip_empty">If enabled, blank cells in source will not override the target.</property>
-                            <property name="use-underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw-indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="skip_empty-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|skip_empty">Empty cells from the clipboard do not replace target cells. If you use this option in conjunction with the "Multiply" or the "Divide" operation, the operation is not applied to the target cell of an empty cell in the clipboard.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">2</property>
-                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="transpose">
+                        <property name="label" translatable="yes" context="pastespecial|transpose">Trans_pose</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="transpose-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|transpose">The rows of the range in the clipboard are pasted to become columns of the output range. The columns of the range in the clipboard are pasted to become rows.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="skip_empty">
+                        <property name="label" translatable="yes" context="pastespecial|skip_empty">_Skip empty cells</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="tooltip-text" translatable="yes" context="pastespecial|skip_empty">If enabled, blank cells in source will not override the target.</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="skip_empty-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|skip_empty">Empty cells from the clipboard do not replace target cells. If you use this option in conjunction with the "Multiply" or the "Divide" operation, the operation is not applied to the target cell of an empty cell in the clipboard.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
