@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5944293a_ff963963",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 26
+      },
+      "lineNbr": 3941,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T10:00:25Z",
+      "side": 1,
+      "message": "oops, you somehow added the trailing whitespace here and on line 3944 - see the red areas here... :-(",
+      "revId": "aebe37293f5badde44641b26ea6c76d897835d58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
