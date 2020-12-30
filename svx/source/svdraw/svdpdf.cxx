@@ -845,10 +845,7 @@ void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& rSize, con
     if (nAngle)
     {
         nAngle *= 10;
-        double a = nAngle * F_PI18000;
-        double nSin = sin(a);
-        double nCos = cos(a);
-        pText->NbcRotate(aPosition, nAngle, nSin, nCos);
+        pText->SdrAttrObj::NbcRotate(aPosition, nAngle);
     }
     InsertObj(pText, false);
 }
