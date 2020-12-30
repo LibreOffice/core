@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecce2b5f_c3c1ebc2",
+        "filename": "include/store/storedllapi.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-12-30T12:59:23Z",
+      "side": 1,
+      "message": "You can remove this blank line.",
+      "revId": "a640d8b3a865373b4481e9f069ccd4427cb139a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
