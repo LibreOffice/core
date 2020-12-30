@@ -16,6 +16,24 @@
       "revId": "e10075cdba87b167da985840545fcff0f337bc68",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "824d9bad_20d29240",
+        "filename": "i18npool/source/localedata/data/ja_JP.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1002182
+      },
+      "writtenOn": "2020-12-30T08:47:54Z",
+      "side": 1,
+      "message": "In Japan, the month name and the week name are used in two notations, Japanese and English.\nSee the screenshot MS Excel Japanese edition.\n* https://photos.app.goo.gl/y5xcLtmnd4WDmtqt8\n\nI read its DTD and ODF 1.3 specification.\nIn the DTD, I found that I could not add it.\nHowever, in the ODF 1.3 specification, it says \"or a value of type string\", so I guess we can add it.\n\n\"The values of the number:calendar attribute are gregorian, gengou, ROC, hanja_yoil, hanja, hijri, jewish, buddhist or a value of type string 18.2.\"\n\n* https://docs.oasis-open.org/office/OpenDocument/v1.3/cs02/part3-schema/OpenDocument-v1.3-cs02-part3-schema.html#__RefHeading__1417544_253892949\n\nWhich is correct, DTD or specification?\nOr am I misreading it?",
+      "parentUuid": "1f27ed97_922e49d7",
+      "revId": "e10075cdba87b167da985840545fcff0f337bc68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
