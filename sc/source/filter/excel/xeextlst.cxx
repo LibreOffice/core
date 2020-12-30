@@ -164,7 +164,7 @@ bool RequiresFixedFormula(ScConditionMode eMode)
     return false;
 }
 
-OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, const OString& rText)
+OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, std::string_view rText)
 {
     OStringBuffer aBuffer;
     XclXmlUtils::ToOString(aBuffer, rAddress);
@@ -176,9 +176,9 @@ OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, const 
     case ScConditionMode::EndsWith:
         return OString("RIGHT(" + aPos + ",LEN(" + rText + "))=\"" + rText + "\"");
     case ScConditionMode::ContainsText:
-        return OString("NOT(ISERROR(SEARCH(" + rText + "," + aPos + ")))");
+        return OString::Concat("NOT(ISERROR(SEARCH(") + rText + "," + aPos + ")))";
     case ScConditionMode::NotContainsText:
-        return OString("ISERROR(SEARCH(" + rText + "," + aPos + "))");
+        return OString::Concat("ISERROR(SEARCH(") + rText + "," + aPos + "))";
     default:
         break;
     }
