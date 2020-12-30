@@ -1396,7 +1396,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
             nShearRefX=aRotateAxe.X();
             nShearRefY=aRotateAxe.Y();
         }
-        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR,GetMarkedObjShear()));
+        aRetSet.Put(SdrAngleItem(SID_ATTR_TRANSFORM_SHEAR,GetMarkedObjShear()));
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_X,nShearRefX));
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_Y,nShearRefY));
 
@@ -1620,7 +1620,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     // shearing
     if (SfxItemState::SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_SHEAR,true,&pPoolItem)) {
-        tools::Long nNewShearAngle=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+        tools::Long nNewShearAngle=static_cast<const SdrAngleItem*>(pPoolItem)->GetValue();
         if (nNewShearAngle>SDRMAXSHEAR) nNewShearAngle=SDRMAXSHEAR;
         if (nNewShearAngle<-SDRMAXSHEAR) nNewShearAngle=-SDRMAXSHEAR;
         if (nNewShearAngle!=nOldShearAngle) {
