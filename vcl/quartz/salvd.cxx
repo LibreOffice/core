@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -295,6 +295,11 @@ bool AquaSalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY )
     {
         // get the matching Quartz context
         CGContextRef xDrawContext = CGLayerGetContext( maLayer.get() );
+
+        // Here we pass the CGLayerRef that the CGLayerHolder maLayer holds as the first parameter
+        // to SetVirDevGraphics(). That parameter is of type CGLayerHolder, so what we actually pass
+        // is an implicitly constructed *separate* CGLayerHolder. Is that what we want? No idea.
+        // Possibly we could pass just maLayer as such? But doing that does not fix tdf#138122.
         mpGraphics->SetVirDevGraphics(maLayer.get(), xDrawContext, mnBitmapDepth);
     }
 
