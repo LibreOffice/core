@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7f057f9_bc6edb5a",
+        "filename": "vcl/source/gdi/print.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1648,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T14:35:08Z",
+      "side": 1,
+      "message": "This would be\n\n  css::awt::DeviceInfo Printer::GetDeviceInfo() const\n  {\n      Size aDevSz \u003d GetPaperSizePixel();\n      css::awt::DeviceInfo aInfo \u003d GetCommonDeviceInfo(aDevSz);\n      Size aOutSz \u003d GetOutputSizePixel();\n      Point aOffset \u003d GetPageOffset();\n      aInfo.LeftInset \u003d aOffset.X();\n      aInfo.TopInset \u003d aOffset.Y();\n      aInfo.RightInset \u003d aDevSz.Width() - aOutSz.Width() - aOffset.X();\n      aInfo.BottomInset \u003d aDevSz.Height() - aOutSz.Height() - aOffset.Y();\n\n      return aInfo;\n  }",
+      "revId": "e66258c34b173bee39941293ee4753e7d8731938",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
