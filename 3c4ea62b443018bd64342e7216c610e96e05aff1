@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49b7c394_d5712aaa",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 3940,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T06:05:08Z",
+      "side": 1,
+      "message": "Please add comments inside these sections. E.g., between lines 3940 and 3941, a comment like \"In case of unprotecting, use a copy of passed ScTableProtection object for undo\", and between lines 3944 and 3945 \"For protection case, use a copy of resulting ScTableProtection for undo\".",
+      "revId": "3c4ea62b443018bd64342e7216c610e96e05aff1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "402ab5f4_3bc8d2bc",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 3941,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T06:05:08Z",
+      "side": 1,
+      "message": "p is only used when rDoc.IsUndoEnabled(). So I suggest to add this condition here, and also to move lines 3943-3947 inside the \u0027if (rDoc.IsUndoEnabled())\u0027 section at line 3951. So we don\u0027t do the copying when we don\u0027t need to.",
+      "range": {
+        "startLine": 3941,
+        "startChar": 8,
+        "endLine": 3941,
+        "endChar": 9
+      },
+      "revId": "3c4ea62b443018bd64342e7216c610e96e05aff1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e62b1a5d_7548d3e9",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 3948,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T06:05:08Z",
+      "side": 1,
+      "message": "Previously you have ignored my comments about formatting - about this line being too long, or about line 3986 having unnecessary spaces.\n\nMaybe previously it was too early to do formatting, when there were functional changes to be done. But now it\u0027s really time to address my formatting concerns, and make the code follow our clang-format rules.\n\nI don\u0027t know what IDE you use for development; *if* it\u0027s MS Visual Studio or VS Code, then you may use Ctrl+K Ctrl+F key combo to apply the necessary formatting automatically. Select the *changed lines* in the code (part by part), and press Ctrl+K Ctrl+F.",
+      "range": {
+        "startLine": 3948,
+        "startChar": 4,
+        "endLine": 3948,
+        "endChar": 112
+      },
+      "revId": "3c4ea62b443018bd64342e7216c610e96e05aff1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e83e9ce_e0a02d18",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 3951,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T06:05:08Z",
+      "side": 1,
+      "message": "Please move the \u0027SetTabProtectionSymbol\u0027 section *after* writing undo information. So that all functional changes are performed first, and only then the UI changes are performed *together*: tab protection symbol is set, then PostPaintGridAll etc.",
+      "revId": "3c4ea62b443018bd64342e7216c610e96e05aff1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
