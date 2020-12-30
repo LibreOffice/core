@@ -16,6 +16,24 @@
       "revId": "35150c10a4ce82c08a175c51fc1e7993d4272e38",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88cc0ba1_2dc6894a",
+        "filename": "include/vcl/virdev.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2020-12-30T15:43:05Z",
+      "side": 1,
+      "message": "oops, sorry",
+      "parentUuid": "82357c1f_e799d27e",
+      "revId": "35150c10a4ce82c08a175c51fc1e7993d4272e38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
