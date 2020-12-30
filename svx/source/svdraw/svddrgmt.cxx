@@ -2045,7 +2045,7 @@ PointerStyle SdrDragResize::GetSdrDragPointer() const
 
 void SdrDragRotate::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
-    rTarget.Rotate(DragStat().GetRef1(), nAngle, sin(nAngle * F_PI18000), cos(nAngle * F_PI18000));
+    rTarget.Rotate(DragStat().GetRef1(), nAngle, nSin, nCos);
 }
 
 SdrDragRotate::SdrDragRotate(SdrDragView& rNewView)
@@ -2402,7 +2402,7 @@ void SdrDragShear::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 
     if (nAngle!=0)
     {
-        rTarget.Shear(DragStat().GetRef1(), nAngle, tan(nAngle * F_PI18000), bVertical);
+        rTarget.Shear(DragStat().GetRef1(), nAngle, nTan, bVertical);
     }
 }
 
