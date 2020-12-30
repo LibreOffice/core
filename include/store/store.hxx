@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STORE_STORE_HXX
-#define INCLUDED_STORE_STORE_HXX
+#pragma once
 
 #include <store/store.h>
 #include <sal/types.h>
@@ -350,7 +349,5 @@ private:
 };
 
 } // namespace store
-
-#endif /* ! INCLUDED_STORE_STORE_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
