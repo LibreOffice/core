@@ -367,11 +367,6 @@ void SpinField::Down()
     ImplCallEventListenersAndHandler( VclEventId::SpinfieldDown, [this] () { maDownHdlLink.Call(*this); } );
 }
 
-void SpinField::Enter()
-{
-    ImplCallEventListenersAndHandler( VclEventId::EditModify, [this] () { maEnterHdlLink.Call(*this); } );
-}
-
 void SpinField::First()
 {
     ImplCallEventListenersAndHandler(VclEventId::SpinfieldFirst, nullptr);
@@ -542,15 +537,6 @@ bool SpinField::EventNotify(NotifyEvent& rNEvt)
                     if (!nMod)
                     {
                         First();
-                        bDone = true;
-                    }
-                }
-                break;
-                case KEY_RETURN:
-                {
-                    if (!nMod)
-                    {
-                        Enter();
                         bDone = true;
                     }
                 }
