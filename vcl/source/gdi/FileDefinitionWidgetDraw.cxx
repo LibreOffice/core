@@ -117,7 +117,7 @@ FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
     m_pWidgetDefinition = getWidgetDefinitionForTheme(u"online");
 #ifdef IOS
     if (!m_pWidgetDefinition)
-        m_pWidgetDefinition = getWidgetDefinitionForTheme("ios");
+        m_pWidgetDefinition = getWidgetDefinitionForTheme(u"ios");
 #endif
 
     if (!m_pWidgetDefinition)
