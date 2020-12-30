@@ -22,6 +22,30 @@
       "revId": "042033f1e6da22616cb76c8d950c20c9efecbad5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acea2e3d_8cfd6885",
+        "filename": "basctl/source/basicide/bastype3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-12-30T11:47:32Z",
+      "side": 1,
+      "message": "It might work to make the rtl::operator+ overloads from include/rtl/stringconcat.hxx visible in the global namespace, so that they are found for argument combinations that don\u0027t involve any of our rtl types.  However, I\u0027d hesitate to give meaning to such operator calls that, nominally, only involve built-in in standard library types.",
+      "parentUuid": "7765ec12_c2449ad3",
+      "range": {
+        "startLine": 434,
+        "startChar": 11,
+        "endLine": 434,
+        "endChar": 27
+      },
+      "revId": "042033f1e6da22616cb76c8d950c20c9efecbad5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
