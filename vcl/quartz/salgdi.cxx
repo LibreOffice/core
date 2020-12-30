@@ -833,14 +833,6 @@ bool AquaSalGraphics::CheckContext()
     return false;
 }
 
-CGContextRef AquaSalGraphics::GetContext()
-{
-    if (!maContextHolder.isSet())
-        CheckContext();
-
-    return maContextHolder.get();
-}
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

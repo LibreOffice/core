@@ -207,15 +207,6 @@ bool AquaSalGraphics::CheckContext()
     return maContextHolder.isSet();
 }
 
-CGContextRef AquaSalGraphics::GetContext()
-{
-    if (!maContextHolder.isSet())
-    {
-        CheckContext();
-    }
-    return maContextHolder.get();
-}
-
 /**
  * Blit the contents of our internal maLayer state to the
  * associated window, if any; cf. drawRect event handling
