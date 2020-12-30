@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "235fd817_ae1b1c85",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2021,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T15:14:46Z",
+      "side": 1,
+      "message": "Why not \u0027protected\u0027?",
+      "range": {
+        "startLine": 2021,
+        "startChar": 0,
+        "endLine": 2021,
+        "endChar": 7
+      },
+      "revId": "47a62954e7da67952435437ecc7df40bfc43eda7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5400935b_06751b6e",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2022,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T15:14:46Z",
+      "side": 1,
+      "message": "Likely \u0027const Size\u0026\u0027 is intended (have you forgot the \"\u0026\"?)",
+      "range": {
+        "startLine": 2022,
+        "startChar": 51,
+        "endLine": 2022,
+        "endChar": 55
+      },
+      "revId": "47a62954e7da67952435437ecc7df40bfc43eda7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3b0173d_b63228e0",
+        "filename": "vcl/source/outdev/outdev.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T15:14:46Z",
+      "side": 1,
+      "message": "I don\u0027t think this makes sense. It is not a common code, so it is extra cycles for every call of Window/Printer overload.\n\nIMO just move this to OutputDevice::GetDeviceInfo.",
+      "range": {
+        "startLine": 710,
+        "startChar": 4,
+        "endLine": 713,
+        "endChar": 26
+      },
+      "revId": "47a62954e7da67952435437ecc7df40bfc43eda7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
