@@ -71,7 +71,9 @@ public:
     {
     }
 
-    void notifyDialogState(bool bForce = false);
+    virtual ~JSDialogSender() = default;
+
+    virtual void notifyDialogState(bool bForce = false);
     void sendClose();
     virtual void sendUpdate(VclPtr<vcl::Window> pWindow);
 };
@@ -198,6 +200,7 @@ class JSWidget : public BaseInstanceClass, public JSDialogSender
 {
 protected:
     rtl::Reference<JSDropTarget> m_xDropTarget;
+    bool m_bIsFreezed;
 
 public:
     JSWidget(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
@@ -205,6 +208,7 @@ public:
              std::string sTypeOfJSON)
         : BaseInstanceClass(pObject, pBuilder, bTakeOwnership)
         , JSDialogSender(aNotifierWindow, aContentWindow, sTypeOfJSON)
+        , m_bIsFreezed(false)
     {
     }
 
@@ -233,6 +237,30 @@ public:
             m_xDropTarget.set(new JSDropTarget);
 
         return m_xDropTarget.get();
+    }
+
+    virtual void freeze() override
+    {
+        BaseInstanceClass::freeze();
+        m_bIsFreezed = true;
+    }
+
+    virtual void thaw() override
+    {
+        BaseInstanceClass::thaw();
+        m_bIsFreezed = false;
+    }
+
+    virtual void sendUpdate(VclPtr<vcl::Window> pWindow) override
+    {
+        if (!m_bIsFreezed)
+            JSDialogSender::sendUpdate(pWindow);
+    }
+
+    virtual void notifyDialogState(bool bForce = false) override
+    {
+        if (!m_bIsFreezed || bForce)
+            JSDialogSender::notifyDialogState(bForce);
     }
 };
 
