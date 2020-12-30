@@ -1612,15 +1612,9 @@ public:
                                         const Gradient& rTransparenceGradient );
 
 protected:
-
-    virtual void                EmulateDrawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
     void                        DrawInvisiblePolygon( const tools::PolyPolygon& rPolyPoly );
 
     virtual void                ClipAndDrawGradientMetafile ( const Gradient &rGradient, const tools::PolyPolygon &rPolyPoly );
-
-private:
-
-    SAL_DLLPRIVATE bool         DrawTransparentNatively( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
     ///@}
 
 
