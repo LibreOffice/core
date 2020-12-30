@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "885b4dfa_c3d1b80f",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 4337,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T07:40:40Z",
+      "side": 1,
+      "message": "So things like this may even be simplified to one-liners like\n\n  TypeSerializer(aOStream).writeGraphic(aGraphic);",
+      "range": {
+        "startLine": 4336,
+        "startChar": 8,
+        "endLine": 4337,
+        "endChar": 43
+      },
+      "revId": "3482f5903079f680686a067974a24d135f44ebaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
