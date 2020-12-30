@@ -539,7 +539,7 @@ void testRangeNameImpl(const ScDocument& rDoc)
 
 void ScFiltersTest::testCondFormatBeginsAndEndsWithXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf120749.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc(u"tdf120749.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load tdf120749.xlsx", xDocSh.is());
 
     ScDocument& rDoc = xDocSh->GetDocument();

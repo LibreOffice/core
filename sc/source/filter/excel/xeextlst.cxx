@@ -164,7 +164,7 @@ bool RequiresFixedFormula(ScConditionMode eMode)
     return false;
 }
 
-OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, const OString& rText)
+OString GetFixedFormula(ScConditionMode eMode, const ScAddress& rAddress, std::string_view rText)
 {
     OStringBuffer aBuffer;
     XclXmlUtils::ToOString(aBuffer, rAddress);

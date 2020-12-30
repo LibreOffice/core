@@ -521,7 +521,7 @@ void ScExportTest::test()
 
 void ScExportTest::testExtCondFormatXLSX()
 {
-    ScDocShellRef xShell = loadDoc("tdf139021.", FORMAT_XLSX);
+    ScDocShellRef xShell = loadDoc(u"tdf139021.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
