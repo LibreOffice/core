@@ -221,11 +221,11 @@ void VBATest::testMiscOLEStuff()
         "ole_ObjAssignToNothing.vb",
     };
 
-    OUString sMacroPathURL = m_directories.getURLFromSrc("/basic/qa/vba_tests/");
+    OUString sMacroPathURL = m_directories.getURLFromSrc(u"/basic/qa/vba_tests/");
 
     uno::Sequence< uno::Any > aArgs(2);
     // path to test document
-    OUString sPath = m_directories.getPathFromSrc("/basic/qa/vba_tests/data/ADODBdata.xls");
+    OUString sPath = m_directories.getPathFromSrc(u"/basic/qa/vba_tests/data/ADODBdata.xls");
     sPath = sPath.replaceAll( "/", "\\" );
 
     aArgs[ 0 ] <<= sPath;
