@@ -22,8 +22,8 @@ class tdf114724(UITestCase):
 
         xWriterEdit.executeAction("FOCUS", tuple())
 
-        self.ui_test.wait_until_property_is_updated(xNavigatorPanel, "selectedtext", "Headings")
-        self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectedtext"], "Headings")
+        self.ui_test.wait_until_property_is_updated(xNavigatorPanel, "selectedtext", "HEADING 1")
+        self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectedtext"], "HEADING 1")
         self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectioncount"], "1")
         for _ in range(0,3):
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))

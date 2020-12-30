@@ -3210,7 +3210,7 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
 
 void SwContentTree::UpdateTracking()
 {
-    if (State::HIDDEN == m_eState)
+    if (State::HIDDEN == m_eState || !m_pActiveShell)
         return;
 
     // m_bIgnoreViewChange is set on delete
