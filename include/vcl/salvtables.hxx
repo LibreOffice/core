@@ -842,7 +842,7 @@ public:
 
 class SalInstanceButton : public SalInstanceContainer, public virtual weld::Button
 {
-private:
+protected:
     VclPtr<::Button> m_xButton;
     Link<::Button*, void> const m_aOldClickHdl;
 
@@ -927,7 +927,7 @@ public:
 
 class SalInstanceCheckButton : public SalInstanceButton, public virtual weld::CheckButton
 {
-private:
+protected:
     VclPtr<CheckBox> m_xCheckButton;
 
     DECL_LINK(ToggleHdl, CheckBox&, void);

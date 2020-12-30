@@ -225,7 +225,7 @@ public:
     virtual void set_sensitive(bool sensitive) override
     {
         BaseInstanceClass::set_sensitive(sensitive);
-        notifyDialogState();
+        sendUpdate(BaseInstanceClass::getWidget());
     }
 
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override
@@ -269,6 +269,13 @@ public:
     JSButton(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
              ::Button* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
              std::string sTypeOfJSON);
+
+    using JSWidget<SalInstanceButton, ::Button>::set_sensitive;
+    virtual void set_sensitive(bool sensitive) override
+    {
+        SalInstanceButton::set_sensitive(sensitive);
+        sendUpdate(m_xButton);
+    }
 };
 
 class JSEntry : public JSWidget<SalInstanceEntry, ::Edit>
@@ -394,6 +401,7 @@ public:
     using SalInstanceTreeView::set_toggle;
     /// pos is used differently here, it defines how many steps of iterator we need to perform to take entry
     virtual void set_toggle(int pos, TriState eState, int col = -1) override;
+    virtual void set_toggle(const weld::TreeIter& rIter, TriState bOn, int col = -1) override;
 
     using SalInstanceTreeView::select;
     /// pos is used differently here, it defines how many steps of iterator we need to perform to take entry

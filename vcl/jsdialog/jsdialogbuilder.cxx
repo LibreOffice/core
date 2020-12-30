@@ -947,7 +947,7 @@ JSCheckButton::JSCheckButton(VclPtr<vcl::Window> aNotifierWindow,
 void JSCheckButton::set_active(bool active)
 {
     SalInstanceCheckButton::set_active(active);
-    notifyDialogState();
+    sendUpdate(m_xCheckButton);
 }
 
 JSDrawingArea::JSDrawingArea(VclPtr<vcl::Window> aNotifierWindow,
@@ -1025,6 +1025,12 @@ void JSTreeView::set_toggle(int pos, TriState eState, int col)
 
         sendUpdate(m_xTreeView);
     }
+}
+
+void JSTreeView::set_toggle(const weld::TreeIter& rIter, TriState bOn, int col)
+{
+    SalInstanceTreeView::set_toggle(rIter, bOn, col);
+    sendUpdate(m_xTreeView);
 }
 
 void JSTreeView::select(int pos)
