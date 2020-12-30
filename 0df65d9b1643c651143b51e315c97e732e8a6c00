@@ -16,6 +16,24 @@
       "revId": "0df65d9b1643c651143b51e315c97e732e8a6c00",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bdcd675_841440a3",
+        "filename": "include/tools/degree.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T07:56:54Z",
+      "side": 1,
+      "message": "... and then, in view of https://gerrit.libreoffice.org/c/core/+/108367, have it also templated on respective multiplier, so that the conversion functions would be implemented automatically?",
+      "parentUuid": "5ab43fa9_21cc66ad",
+      "revId": "0df65d9b1643c651143b51e315c97e732e8a6c00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
