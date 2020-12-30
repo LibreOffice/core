@@ -461,7 +461,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
     if (m_xMtrAngle->get_value_changed_from_saved())
     {
         sal_Int32 nValue = static_cast<sal_Int32>(m_xMtrAngle->get_value(FieldUnit::NONE));
-        rAttrs->Put( SfxInt32Item( SID_ATTR_TRANSFORM_SHEAR, nValue ) );
+        rAttrs->Put( SdrAngleItem( SID_ATTR_TRANSFORM_SHEAR, nValue ) );
         bModified = true;
     }
 
@@ -606,7 +606,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
 
         if( pItem )
         {
-            m_xMtrAngle->set_value(static_cast<const SfxInt32Item*>(pItem)->GetValue(), FieldUnit::NONE);
+            m_xMtrAngle->set_value(static_cast<const SdrAngleItem*>(pItem)->GetValue(), FieldUnit::NONE);
         }
         else
         {
