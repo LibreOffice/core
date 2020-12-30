@@ -3116,6 +3116,7 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
 
 void SwContentTree::ShowTree()
 {
+    UpdateTracking();
     m_xTreeView->show();
     m_aUpdTimer.Start();
 }
