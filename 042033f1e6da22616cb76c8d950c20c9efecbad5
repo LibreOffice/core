@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7765ec12_c2449ad3",
+        "filename": "basctl/source/basicide/bastype3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T06:44:40Z",
+      "side": 1,
+      "message": "I don\u0027t know if it\u0027s possible, but can we have a templated operator+ overload based on SFINAE + existence of ToStringHelper\u003cT\u003e? So that it would automatically allow such things when it\u0027s string_view, or char[], or ... ?",
+      "range": {
+        "startLine": 434,
+        "startChar": 11,
+        "endLine": 434,
+        "endChar": 27
+      },
+      "revId": "042033f1e6da22616cb76c8d950c20c9efecbad5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
