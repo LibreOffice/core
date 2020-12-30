@@ -1276,6 +1276,8 @@ bool ImpGraphic::swapOut()
 
     bool bResult = false;
 
+    sal_Int64 nByteSize = getSizeBytes();
+
     // We have GfxLink so we have the source available
     if (mpGfxLink && mpGfxLink->IsNative())
     {
@@ -1288,9 +1290,6 @@ bool ImpGraphic::swapOut()
 
         // mark as swapped out
         mbSwapOut = true;
-
-        // Signal to manager that we have swapped out
-        vcl::graphic::Manager::get().swappedOut(this);
 
         bResult = true;
     }
@@ -1331,10 +1330,13 @@ bool ImpGraphic::swapOut()
 
             mpSwapFile = std::move(pSwapFile);
             mbSwapOut = true;
-
-            // Signal to manager that we have swapped out
-            vcl::graphic::Manager::get().swappedOut(this);
         }
+    }
+
+    if (bResult)
+    {
+        // Signal to manager that we have swapped out
+        vcl::graphic::Manager::get().swappedOut(this, nByteSize);
     }
 
     return bResult;
@@ -1480,7 +1482,9 @@ bool ImpGraphic::swapIn()
     }
 
     if (bReturn)
-        vcl::graphic::Manager::get().swappedIn(this);
+    {
+        vcl::graphic::Manager::get().swappedIn(this, getSizeBytes());
+    }
 
     return bReturn;
 }

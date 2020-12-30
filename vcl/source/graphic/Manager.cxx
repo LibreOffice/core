@@ -75,25 +75,23 @@ Manager::Manager()
     }
 }
 
-void Manager::reduceGraphicMemory()
+void Manager::loopGraphicsAndSwapOut()
 {
-    if (!mbSwapEnabled)
-        return;
-
-    std::scoped_lock<std::recursive_mutex> aGuard(maMutex);
-
     // make a copy of m_pImpGraphicList because if we swap out a svg, the svg
     // filter may create more temp Graphics which are auto-added to
     // m_pImpGraphicList invalidating a loop over m_pImpGraphicList, e.g.
     // reexport of tdf118346-1.odg
     o3tl::sorted_vector<ImpGraphic*> aImpGraphicList = m_pImpGraphicList;
+
     for (ImpGraphic* pEachImpGraphic : aImpGraphicList)
     {
-        if (mnUsedSize < mnMemoryLimit * 0.7)
+        if (double(mnUsedSize) < sal_Int64(mnMemoryLimit * 0.7))
             return;
+        if (pEachImpGraphic->isSwappedOut())
+            continue;
 
         sal_Int64 nCurrentGraphicSize = getGraphicSizeBytes(pEachImpGraphic);
-        if (!pEachImpGraphic->isSwappedOut() && nCurrentGraphicSize > 1000000)
+        if (nCurrentGraphicSize > 100000)
         {
             if (!pEachImpGraphic->mpContext)
             {
@@ -105,6 +103,33 @@ void Manager::reduceGraphicMemory()
                     pEachImpGraphic->swapOut();
             }
         }
+    }
+}
+
+void Manager::reduceGraphicMemory()
+{
+    if (!mbSwapEnabled)
+        return;
+
+    if (mnUsedSize < mnMemoryLimit)
+        return;
+
+    std::scoped_lock<std::recursive_mutex> aGuard(maMutex);
+
+    loopGraphicsAndSwapOut();
+
+    sal_Int64 calculatedSize = 0;
+    for (ImpGraphic* pEachImpGraphic : m_pImpGraphicList)
+    {
+        if (!pEachImpGraphic->isSwappedOut())
+        {
+            calculatedSize += getGraphicSizeBytes(pEachImpGraphic);
+        }
+    }
+
+    if (calculatedSize != mnUsedSize)
+    {
+        mnUsedSize = calculatedSize;
     }
 }
 
@@ -213,18 +238,22 @@ std::shared_ptr<ImpGraphic> Manager::newInstance(const GraphicExternalLink& rGra
     return pReturn;
 }
 
-void Manager::swappedIn(const ImpGraphic* pImpGraphic)
+void Manager::swappedIn(const ImpGraphic* pImpGraphic, sal_Int64 nSizeBytes)
 {
     std::scoped_lock<std::recursive_mutex> aGuard(maMutex);
-
-    mnUsedSize += getGraphicSizeBytes(pImpGraphic);
+    if (pImpGraphic)
+    {
+        mnUsedSize += nSizeBytes;
+    }
 }
 
-void Manager::swappedOut(const ImpGraphic* pImpGraphic)
+void Manager::swappedOut(const ImpGraphic* pImpGraphic, sal_Int64 nSizeBytes)
 {
     std::scoped_lock<std::recursive_mutex> aGuard(maMutex);
-
-    mnUsedSize -= getGraphicSizeBytes(pImpGraphic);
+    if (pImpGraphic)
+    {
+        mnUsedSize -= nSizeBytes;
+    }
 }
 
 void Manager::changeExisting(const ImpGraphic* pImpGraphic, sal_Int64 nOldSizeBytes)
