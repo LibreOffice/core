@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8fff0411_6ef0b41d",
+        "filename": "vcl/source/gdi/virdev.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-12-30T13:48:22Z",
+      "side": 1,
+      "message": "Why change the includes order - even if you intended to sort (unrelated to the change), you left sal/log.hxx and tools/debug.hxx not sorted...",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 0
+      },
+      "revId": "0ed336221a5bee32803711f45f876504af9f6a59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
