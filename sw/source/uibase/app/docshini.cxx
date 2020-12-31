@@ -476,9 +476,6 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
             if (m_xDoc->getIDocumentDrawModelAccess().GetDrawModel())
                 m_xDoc->getIDocumentDrawModelAccess().GetDrawModel()->SetAnchoredTextOverflowLegacy(
                     true);
-            // legacy behaviour (not hiding paragraph) for Database (MailMerge) fields
-            m_xDoc->GetDocumentSettingManager().set(DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA,
-                                                    false);
         }
 
         // Loading
