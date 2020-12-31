@@ -156,6 +156,7 @@ public:
                                              bool bRecord, bool bSetModified );
 
     void            ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
+    void            ProtectDocument( const ScDocProtection& rProtect );
 
     bool            Protect( SCTAB nTab, const OUString& rPassword );
     bool            Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi );
