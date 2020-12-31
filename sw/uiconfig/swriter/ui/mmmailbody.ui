@@ -159,265 +159,102 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkAlignment" id="alignment2">
+                  <!-- n-columns=1 n-rows=1 -->
+                  <object class="GtkGrid" id="grid5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="left_padding">12</property>
+                    <property name="row_spacing">6</property>
+                    <property name="margin-start">12</property>
+                    <child>
+                      <object class="GtkLabel" id="generalft">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="mmmailbody|generalft">General salutation</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">general</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="general">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="has_entry">True</property>
+                        <child internal-child="entry">
+                          <object class="GtkEntry" id="comboboxtext-entry1">
+                            <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
+                          </object>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="general-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|general">Select the default greeting to use if a personalized salutation cannot be created.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
                     <child>
                       <!-- n-columns=1 n-rows=1 -->
-                      <object class="GtkGrid" id="grid5">
+                      <object class="GtkGrid" id="grid6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="row_spacing">6</property>
                         <child>
-                          <object class="GtkLabel" id="generalft">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="mmmailbody|generalft">General salutation</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">general</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="general">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="has_entry">True</property>
-                            <child internal-child="entry">
-                              <object class="GtkEntry" id="comboboxtext-entry1">
-                                <property name="can_focus">True</property>
-                                <property name="activates_default">True</property>
-                              </object>
-                            </child>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="general-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|general">Select the default greeting to use if a personalized salutation cannot be created.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
                           <!-- n-columns=1 n-rows=1 -->
-                          <object class="GtkGrid" id="grid6">
+                          <object class="GtkGrid" id="grid8">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="row_spacing">6</property>
+                            <property name="column_spacing">12</property>
+                            <property name="row_homogeneous">True</property>
+                            <property name="margin-start">12</property>
                             <child>
-                              <object class="GtkAlignment" id="alignment3">
+                              <object class="GtkLabel" id="femalefi">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="hexpand">True</property>
-                                <property name="left_padding">12</property>
-                                <child>
-                                  <!-- n-columns=1 n-rows=1 -->
-                                  <object class="GtkGrid" id="grid8">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="hexpand">True</property>
-                                    <property name="row_spacing">6</property>
-                                    <property name="column_spacing">12</property>
-                                    <property name="row_homogeneous">True</property>
-                                    <child>
-                                      <object class="GtkLabel" id="femalefi">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes" context="mmmailbody|femalefi">Address list field indicating a female recipient</property>
-                                        <property name="xalign">0</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">2</property>
-                                        <property name="width">3</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="femaleft">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes" context="mmmailbody|femaleft">_Female</property>
-                                        <property name="use_underline">True</property>
-                                        <property name="mnemonic_widget">female</property>
-                                        <property name="xalign">0</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="maleft">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes" context="mmmailbody|maleft">_Male</property>
-                                        <property name="use_underline">True</property>
-                                        <property name="mnemonic_widget">male</property>
-                                        <property name="xalign">0</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="femalecolft">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes" context="mmmailbody|femalecolft">Field name</property>
-                                        <property name="use_underline">True</property>
-                                        <property name="xalign">0</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">3</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="femalefieldft">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes" context="mmmailbody|femalefieldft">Field value</property>
-                                        <property name="use_underline">True</property>
-                                        <property name="xalign">0</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">4</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkButton" id="newfemale">
-                                        <property name="label" translatable="yes" context="mmmailbody|newfemale">_New...</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">True</property>
-                                        <property name="valign">center</property>
-                                        <property name="use_underline">True</property>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject" id="newfemale-atkobject">
-                                            <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|newfemale">Opens the Custom Salutation dialog for a female recipient.</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">2</property>
-                                        <property name="top_attach">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkButton" id="newmale">
-                                        <property name="label" translatable="yes" context="mmmailbody|newmale">N_ew...</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">True</property>
-                                        <property name="valign">center</property>
-                                        <property name="use_underline">True</property>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject" id="newmale-atkobject">
-                                            <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|newmale">Opens the Custom Salutation dialog for a male recipient.</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">2</property>
-                                        <property name="top_attach">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkComboBoxText" id="female">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="valign">center</property>
-                                        <property name="hexpand">True</property>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject" id="female-atkobject">
-                                            <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|female">Select the personalized greeting for a female recipient.</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="top_attach">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkComboBoxText" id="male">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="valign">center</property>
-                                        <property name="hexpand">True</property>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject" id="male-atkobject">
-                                            <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|male">Select the personalized greeting for a male recipient.</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="top_attach">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkComboBoxText" id="femalecol">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="valign">center</property>
-                                        <property name="hexpand">True</property>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject" id="femalecol-atkobject">
-                                            <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|femalecol">Select the field name of the address database field that contains the gender information.</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="top_attach">3</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkComboBoxText" id="femalefield">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="valign">center</property>
-                                        <property name="hexpand">True</property>
-                                        <property name="has_entry">True</property>
-                                        <child internal-child="entry">
-                                          <object class="GtkEntry" id="comboboxtext-entry2">
-                                            <property name="can_focus">True</property>
-                                            <property name="activates_default">True</property>
-                                          </object>
-                                        </child>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject" id="femalefield-atkobject">
-                                            <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|femalefield">Select the field value that indicates the gender of the recipient.</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="top_attach">4</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                  </object>
-                                </child>
+                                <property name="label" translatable="yes" context="mmmailbody|femalefi">Address list field indicating a female recipient</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">2</property>
+                                <property name="width">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="femaleft">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes" context="mmmailbody|femaleft">_Female</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">female</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="maleft">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes" context="mmmailbody|maleft">_Male</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">male</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -425,24 +262,169 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkCheckButton" id="personalized">
-                                <property name="label" translatable="yes" context="mmmailbody|personalized">Insert personalized salutation</property>
+                              <object class="GtkLabel" id="femalecolft">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes" context="mmmailbody|femalecolft">Field name</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="femalefieldft">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes" context="mmmailbody|femalefieldft">Field value</property>
+                                <property name="use_underline">True</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="newfemale">
+                                <property name="label" translatable="yes" context="mmmailbody|newfemale">_New...</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="valign">center</property>
+                                <property name="use_underline">True</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="personalized-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|personalized">Adds a personalized salutation. To use the default salutation, clear this check box.</property>
+                                  <object class="AtkObject" id="newfemale-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|newfemale">Opens the Custom Salutation dialog for a female recipient.</property>
                                   </object>
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
+                                <property name="left_attach">2</property>
                                 <property name="top_attach">0</property>
                               </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="newmale">
+                                <property name="label" translatable="yes" context="mmmailbody|newmale">N_ew...</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="valign">center</property>
+                                <property name="use_underline">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="newmale-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|newmale">Opens the Custom Salutation dialog for a male recipient.</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="female">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="valign">center</property>
+                                <property name="hexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="female-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|female">Select the personalized greeting for a female recipient.</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="male">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="valign">center</property>
+                                <property name="hexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="male-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|male">Select the personalized greeting for a male recipient.</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="femalecol">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="valign">center</property>
+                                <property name="hexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="femalecol-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|femalecol">Select the field name of the address database field that contains the gender information.</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="femalefield">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="valign">center</property>
+                                <property name="hexpand">True</property>
+                                <property name="has_entry">True</property>
+                                <child internal-child="entry">
+                                  <object class="GtkEntry" id="comboboxtext-entry2">
+                                    <property name="can_focus">True</property>
+                                    <property name="activates_default">True</property>
+                                  </object>
+                                </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="femalefield-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|femalefield">Select the field value that indicates the gender of the recipient.</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="personalized">
+                            <property name="label" translatable="yes" context="mmmailbody|personalized">Insert personalized salutation</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="personalized-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|personalized">Adds a personalized salutation. To use the default salutation, clear this check box.</property>
+                              </object>
                             </child>
                           </object>
                           <packing>
@@ -451,6 +433,10 @@
                           </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>

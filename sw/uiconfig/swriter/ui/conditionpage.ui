@@ -37,23 +37,139 @@
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment4">
+          <!-- n-columns=3 n-rows=2 -->
+          <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="top-padding">6</property>
-            <property name="left-padding">12</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">12</property>
+            <property name="column-homogeneous">True</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
             <child>
-              <!-- n-columns=3 n-rows=2 -->
-              <object class="GtkGrid" id="grid1">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">12</property>
-                <property name="column-homogeneous">True</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="links">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore1</property>
+                    <property name="search-column">0</property>
+                    <property name="show-expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                        <property name="resizable">True</property>
+                        <property name="spacing">6</property>
+                        <property name="title" translatable="yes" context="conditionpage|contextft">Context</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderer1"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                        <property name="resizable">True</property>
+                        <property name="spacing">6</property>
+                        <property name="title" translatable="yes" context="conditionpage|usedft">Applied Styles</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderer2"/>
+                          <attributes>
+                            <attribute name="text">1</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="links-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="conditionpage|extended_tip|links">Here you can see the %PRODUCTNAME predefined contexts, including outline levels 1 to 10, numbering/bullets levels 1 to 10, table header, table contents, section, border, footnote, header and footer.</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButtonBox" id="buttonbox1">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">end</property>
+                <property name="spacing">12</property>
+                <property name="layout-style">start</property>
+                <child>
+                  <object class="GtkButton" id="remove">
+                    <property name="label">gtk-remove</property>
+                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="use-stock">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="remove-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="conditionpage|extended_tip|remove">Click here to remove the current context assigned to the selected style.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="apply">
+                    <property name="label">gtk-apply</property>
+                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="use-stock">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="apply-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="conditionpage|extended_tip|apply">Click Apply to apply the selected Paragraph Style to the defined context.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+                <property name="width">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box1">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">False</property>
+                <property name="vexpand">True</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
                 <child>
                   <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
@@ -62,215 +178,91 @@
                     <property name="vexpand">True</property>
                     <property name="shadow-type">in</property>
                     <child>
-                      <object class="GtkTreeView" id="links">
+                      <object class="GtkTreeView" id="styles">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <property name="model">liststore1</property>
+                        <property name="model">liststore2</property>
                         <property name="search-column">0</property>
                         <property name="show-expanders">False</property>
                         <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
+                          <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                            <property name="resizable">True</property>
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn3">
                             <property name="spacing">6</property>
-                            <property name="title" translatable="yes" context="conditionpage|contextft">Context</property>
+                            <property name="title" translatable="yes" context="conditionpage|styleft">Paragraph Styles</property>
                             <child>
-                              <object class="GtkCellRendererText" id="cellrenderer1"/>
+                              <object class="GtkCellRendererText" id="cellrenderer4"/>
                               <attributes>
                                 <attribute name="text">0</attribute>
                               </attributes>
                             </child>
                           </object>
                         </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                            <property name="resizable">True</property>
-                            <property name="spacing">6</property>
-                            <property name="title" translatable="yes" context="conditionpage|usedft">Applied Styles</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="cellrenderer2"/>
-                              <attributes>
-                                <attribute name="text">1</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
                         <child internal-child="accessible">
-                          <object class="AtkObject" id="links-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="conditionpage|extended_tip|links">Here you can see the %PRODUCTNAME predefined contexts, including outline levels 1 to 10, numbering/bullets levels 1 to 10, table header, table contents, section, border, footnote, header and footer.</property>
+                          <object class="AtkObject" id="styles-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="conditionpage|extended_tip|styles">A list of all Paragraph Styles which can be assigned to a context is contained in the list box.</property>
                           </object>
                         </child>
                       </object>
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                    <property name="width">2</property>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButtonBox" id="buttonbox1">
+                  <object class="GtkComboBoxText" id="filter">
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can-focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="spacing">12</property>
-                    <property name="layout-style">start</property>
-                    <child>
-                      <object class="GtkButton" id="remove">
-                        <property name="label">gtk-remove</property>
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="use-stock">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="remove-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="conditionpage|extended_tip|remove">Click here to remove the current context assigned to the selected style.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="apply">
-                        <property name="label">gtk-apply</property>
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="use-stock">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="apply-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="conditionpage|extended_tip|apply">Click Apply to apply the selected Paragraph Style to the defined context.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
+                    <items>
+                      <item translatable="yes" context="conditionpage|filter">Table Header</item>
+                      <item translatable="yes" context="conditionpage|filter">Table</item>
+                      <item translatable="yes" context="conditionpage|filter">Frame</item>
+                      <item translatable="yes" context="conditionpage|filter">Section</item>
+                      <item translatable="yes" context="conditionpage|filter">Footnote</item>
+                      <item translatable="yes" context="conditionpage|filter">Endnote</item>
+                      <item translatable="yes" context="conditionpage|filter">Header</item>
+                      <item translatable="yes" context="conditionpage|filter">Footer</item>
+                      <item translatable="yes" context="conditionpage|filter"> 1st Outline Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 2nd Outline Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 3rd Outline Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 4th Outline Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 5th Outline Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 6th Outline Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 7th Outline Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 8th Outline Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 9th Outline Level</item>
+                      <item translatable="yes" context="conditionpage|filter">10th Outline Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 1st Numbering Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 2nd Numbering Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 3rd Numbering Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 4th Numbering Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 5th Numbering Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 6th Numbering Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 7th Numbering Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 8th Numbering Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 9th Numbering Level</item>
+                      <item translatable="yes" context="conditionpage|filter">10th Numbering Level</item>
+                    </items>
                   </object>
                   <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                    <property name="width">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="box1">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">False</property>
-                    <property name="vexpand">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkScrolledWindow">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="shadow-type">in</property>
-                        <child>
-                          <object class="GtkTreeView" id="styles">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
-                            <property name="model">liststore2</property>
-                            <property name="search-column">0</property>
-                            <property name="show-expanders">False</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn" id="treeviewcolumn3">
-                                <property name="spacing">6</property>
-                                <property name="title" translatable="yes" context="conditionpage|styleft">Paragraph Styles</property>
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderer4"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                            </child>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="styles-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="conditionpage|extended_tip|styles">A list of all Paragraph Styles which can be assigned to a context is contained in the list box.</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="filter">
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can-focus">False</property>
-                        <items>
-                          <item translatable="yes" context="conditionpage|filter">Table Header</item>
-                          <item translatable="yes" context="conditionpage|filter">Table</item>
-                          <item translatable="yes" context="conditionpage|filter">Frame</item>
-                          <item translatable="yes" context="conditionpage|filter">Section</item>
-                          <item translatable="yes" context="conditionpage|filter">Footnote</item>
-                          <item translatable="yes" context="conditionpage|filter">Endnote</item>
-                          <item translatable="yes" context="conditionpage|filter">Header</item>
-                          <item translatable="yes" context="conditionpage|filter">Footer</item>
-                          <item translatable="yes" context="conditionpage|filter"> 1st Outline Level</item>
-                          <item translatable="yes" context="conditionpage|filter"> 2nd Outline Level</item>
-                          <item translatable="yes" context="conditionpage|filter"> 3rd Outline Level</item>
-                          <item translatable="yes" context="conditionpage|filter"> 4th Outline Level</item>
-                          <item translatable="yes" context="conditionpage|filter"> 5th Outline Level</item>
-                          <item translatable="yes" context="conditionpage|filter"> 6th Outline Level</item>
-                          <item translatable="yes" context="conditionpage|filter"> 7th Outline Level</item>
-                          <item translatable="yes" context="conditionpage|filter"> 8th Outline Level</item>
-                          <item translatable="yes" context="conditionpage|filter"> 9th Outline Level</item>
-                          <item translatable="yes" context="conditionpage|filter">10th Outline Level</item>
-                          <item translatable="yes" context="conditionpage|filter"> 1st Numbering Level</item>
-                          <item translatable="yes" context="conditionpage|filter"> 2nd Numbering Level</item>
-                          <item translatable="yes" context="conditionpage|filter"> 3rd Numbering Level</item>
-                          <item translatable="yes" context="conditionpage|filter"> 4th Numbering Level</item>
-                          <item translatable="yes" context="conditionpage|filter"> 5th Numbering Level</item>
-                          <item translatable="yes" context="conditionpage|filter"> 6th Numbering Level</item>
-                          <item translatable="yes" context="conditionpage|filter"> 7th Numbering Level</item>
-                          <item translatable="yes" context="conditionpage|filter"> 8th Numbering Level</item>
-                          <item translatable="yes" context="conditionpage|filter"> 9th Numbering Level</item>
-                          <item translatable="yes" context="conditionpage|filter">10th Numbering Level</item>
-                        </items>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">0</property>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">0</property>
+              </packing>
             </child>
           </object>
         </child>
