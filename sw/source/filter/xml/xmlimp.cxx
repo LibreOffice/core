@@ -1498,7 +1498,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         xProps->setPropertyValue( "UseFormerTextWrapping", makeAny( true ) );
     }
 
-    if( !bConsiderWrapOnObjPos )
+    if (!bConsiderWrapOnObjPos && bAreUserSettingsFromDocument)
     {
         xProps->setPropertyValue( "ConsiderTextWrapOnObjPos", makeAny( false ) );
     }
