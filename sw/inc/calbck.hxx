@@ -143,11 +143,6 @@ public:
     SwClient() : m_pRegisteredIn(nullptr) {}
     SwClient(SwClient&&) noexcept;
     virtual ~SwClient() override;
-    // callbacks received from SwModify (friend class - so these methods can be private)
-    // should be called only from SwModify the client is registered in
-    // mba: IMHO this method should be pure virtual
-    // DO NOT USE IN NEW CODE! use SwClientNotify instead.
-    virtual void Modify(const SfxPoolItem*, const SfxPoolItem*);
 
 
     // in case an SwModify object is destroyed that itself is registered in another SwModify,
@@ -183,13 +178,10 @@ class SW_DLLPUBLIC SwModify: public SwClient
     bool m_bInCache   : 1;
     bool m_bInSwFntCache : 1;
 
-    // mba: IMHO this method should be pure virtual
-    // DO NOT USE IN NEW CODE! use CallSwClientNotify instead.
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override
-        { NotifyClients( pOld, pNew ); };
-
     SwModify(SwModify const &) = delete;
     SwModify &operator =(const SwModify&) = delete;
+protected:
+    virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 public:
     SwModify()
         : SwClient(), m_pWriterListeners(nullptr), m_bModifyLocked(false), m_bInCache(false), m_bInSwFntCache(false)
@@ -268,7 +260,6 @@ namespace sw
         /** get Client information */
         virtual bool GetInfo( SfxPoolItem& rInfo) const override;
     private:
-        virtual void Modify(const SfxPoolItem* pOldValue, const SfxPoolItem *pNewValue) override;
         virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) override;
     };
 
