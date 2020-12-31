@@ -941,12 +941,13 @@ void SfxOleSection::ImplLoad( SvStream& rStrm )
     mnStartPos = rStrm.Tell();
     sal_uInt32 nSize(0);
     sal_Int32 nPropCount(0);
-    rStrm.ReadUInt32( nSize ).ReadInt32( nPropCount );
+    if (rStrm.remainingSize() >= 8)
+        rStrm.ReadUInt32( nSize ).ReadInt32( nPropCount );
 
     // read property ID/position pairs
     typedef ::std::map< sal_Int32, sal_uInt32 > SfxOlePropPosMap;
     SfxOlePropPosMap aPropPosMap;
-    for (sal_Int32 nPropIdx = 0; nPropIdx < nPropCount && rStrm.good(); ++nPropIdx)
+    for (sal_Int32 nPropIdx = 0; nPropIdx < nPropCount && rStrm.good() && rStrm.remainingSize() >= 8; ++nPropIdx)
     {
         sal_Int32 nPropId(0);
         sal_uInt32 nPropPos(0);
@@ -956,7 +957,7 @@ void SfxOleSection::ImplLoad( SvStream& rStrm )
 
     // read codepage property
     SfxOlePropPosMap::iterator aCodePageIt = aPropPosMap.find( PROPID_CODEPAGE );
-    if( (aCodePageIt != aPropPosMap.end()) && SeekToPropertyPos( rStrm, aCodePageIt->second ) )
+    if( (aCodePageIt != aPropPosMap.end()) && SeekToPropertyPos(rStrm, aCodePageIt->second) && rStrm.remainingSize() >= 4)
     {
         // codepage property must be of type signed int-16
         sal_Int32 nPropType(0);
@@ -972,7 +973,7 @@ void SfxOleSection::ImplLoad( SvStream& rStrm )
     if( (aDictIt != aPropPosMap.end()) && SeekToPropertyPos( rStrm, aDictIt->second ) )
     {
         // #i66214# #i66428# applications may write broken dictionary properties in wrong sections
-        if( mbSupportsDict )
+        if (mbSupportsDict && rStrm.remainingSize() >= 4)
         {
             // dictionary property contains number of pairs in property type field
             sal_Int32 nNameCount(0);
