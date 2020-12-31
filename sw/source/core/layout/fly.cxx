@@ -675,7 +675,7 @@ void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 pOItem = aOIter.NextItem();
             } while(pNItem);
             if(aOldSet.Count() || aNewSet.Count())
-                SwLayoutFrame::Modify(&aOldSet, &aNewSet);
+                SwLayoutFrame::SwClientNotify(rMod, sw::LegacyModifyHint(&aOldSet, &aNewSet));
         }
         else
             UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, nInvFlags);
@@ -1057,7 +1057,10 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 pNewSet->ClearItem( nWhich );
         }
         else
-            SwLayoutFrame::Modify( pOld, pNew );
+        {
+            SwModify aMod;
+            SwLayoutFrame::SwClientNotify(aMod, sw::LegacyModifyHint(pOld, pNew));
+        }
     }
 }
 
