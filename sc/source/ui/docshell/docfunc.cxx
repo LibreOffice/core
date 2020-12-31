@@ -99,6 +99,7 @@
 #include <basic/basmgr.hxx>
 #include <set>
 #include <vector>
+#include <sfx2/viewfrm.hxx>
 
 using namespace com::sun::star;
 using ::std::vector;
@@ -3935,20 +3936,56 @@ void ScDocFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
 
+    std::unique_ptr<ScTableProtection> p;
+    if (!rProtect.isProtected() && rDoc.IsUndoEnabled())
+    {
+        // In case of unprotecting, use a copy of passed ScTableProtection object for undo
+        p = std::make_unique<ScTableProtection>(rProtect);
+    }
     rDoc.SetTabProtection(nTab, &rProtect);
     if (rDoc.IsUndoEnabled())
     {
-        ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
-        OSL_ENSURE(pProtect, "ScDocFunc::Unprotect: ScTableProtection pointer is NULL!");
-        if (pProtect)
+        if (!p)
         {
-            ::std::unique_ptr<ScTableProtection> p(new ScTableProtection(*pProtect));
-            p->setProtected(true); // just in case ...
-            rDocShell.GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoTabProtect>(&rDocShell, nTab, std::move(p)) );
-
-            // ownership of unique_ptr now transferred to ScUndoTabProtect.
+            // For protection case, use a copy of resulting ScTableProtection for undo
+            ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
+            p = std::make_unique<ScTableProtection>(*pProtect);
         }
+        rDocShell.GetUndoManager()->AddUndoAction(
+            std::make_unique<ScUndoTabProtect>(&rDocShell, nTab, std::move(p)));
+        // ownership of unique_ptr now transferred to ScUndoTabProtect.
+    }
+    for (SfxViewFrame* fr = SfxViewFrame::GetFirst(&rDocShell); fr;
+         fr = SfxViewFrame::GetNext(*fr, &rDocShell))
+        if (ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(fr->GetViewShell()))
+            pTabViewShell->SetTabProtectionSymbol(nTab, rProtect.isProtected());
+    rDocShell.PostPaintGridAll();
+    ScDocShellModificator aModificator(rDocShell);
+    aModificator.SetDocumentModified();
+}
+
+void ScDocFunc::ProtectDocument( const ScDocProtection& rProtect )
+{
+    ScDocument& rDoc = rDocShell.GetDocument();
+
+    std::unique_ptr<ScDocProtection> p;
+    if (!rProtect.isProtected() && rDoc.IsUndoEnabled())
+    {
+        // In case of unprotecting, use a copy of passed ScTableProtection object for undo
+        p = std::make_unique<ScDocProtection>(rProtect);
+    }
+    rDoc.SetDocProtection(&rProtect);
+    if (rDoc.IsUndoEnabled())
+    {
+        if (!p)
+        {
+            // For protection case, use a copy of resulting ScTableProtection for undo
+            ScDocProtection* pProtect = rDoc.GetDocProtection();
+            p = std::make_unique<ScDocProtection>(*pProtect);
+        }
+        rDocShell.GetUndoManager()->AddUndoAction(
+            std::make_unique<ScUndoDocProtect>(&rDocShell, std::move(p)));
+        // ownership of unique_ptr now transferred to ScUndoTabProtect.
     }
 
     rDocShell.PostPaintGridAll();
@@ -3965,20 +4002,8 @@ bool ScDocFunc::Protect( SCTAB nTab, const OUString& rPassword )
         ScDocProtection aProtection;
         aProtection.setProtected(true);
         aProtection.setPassword(rPassword);
-        rDoc.SetDocProtection(&aProtection);
-        if (rDoc.IsUndoEnabled())
-        {
-            ScDocProtection* pProtect = rDoc.GetDocProtection();
-            OSL_ENSURE(pProtect, "ScDocFunc::Unprotect: ScDocProtection pointer is NULL!");
-            if (pProtect)
-            {
-                ::std::unique_ptr<ScDocProtection> p(new ScDocProtection(*pProtect));
-                p->setProtected(true); // just in case ...
-                rDocShell.GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoDocProtect>(&rDocShell, std::move(p)) );
-                // ownership of unique_ptr is transferred to ScUndoDocProtect.
-            }
-        }
+        ProtectDocument(aProtection);
+
     }
     else
     {
@@ -3988,33 +4013,8 @@ bool ScDocFunc::Protect( SCTAB nTab, const OUString& rPassword )
         ::std::unique_ptr<ScTableProtection> pNewProtection(pOldProtection ? new ScTableProtection(*pOldProtection) : new ScTableProtection());
         pNewProtection->setProtected(true);
         pNewProtection->setPassword(rPassword);
-        rDoc.SetTabProtection(nTab, pNewProtection.get());
-        ScTabViewShell* pTabViewShell = rDocShell.GetBestViewShell();
-        if (pTabViewShell)
-        {
-            ScTabView* pTabView = pTabViewShell->GetViewData().GetView();
-            if (pTabView)
-                pTabView->SetTabProtectionSymbol(nTab, true);
-        }
-        if (rDoc.IsUndoEnabled())
-        {
-            ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
-            OSL_ENSURE(pProtect, "ScDocFunc::Unprotect: ScTableProtection pointer is NULL!");
-            if (pProtect)
-            {
-                ::std::unique_ptr<ScTableProtection> p(new ScTableProtection(*pProtect));
-                p->setProtected(true); // just in case ...
-                rDocShell.GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoTabProtect>(&rDocShell, nTab, std::move(p)) );
-                // ownership of unique_ptr now transferred to ScUndoTabProtect.
-            }
-        }
+        ProtectSheet(nTab, *pNewProtection);
     }
-
-    rDocShell.PostPaintGridAll();
-    ScDocShellModificator aModificator( rDocShell );
-    aModificator.SetDocumentModified();
-
     return true;
 }
 
@@ -4031,9 +4031,6 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
             // already unprotected (should not happen)!
             return true;
 
-        // save the protection state before unprotect (for undo).
-        ::std::unique_ptr<ScDocProtection> pProtectCopy(new ScDocProtection(*pDocProtect));
-
         if (!pDocProtect->verifyPassword(rPassword))
         {
             if (!bApi)
@@ -4046,14 +4043,10 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
             return false;
         }
 
-        rDoc.SetDocProtection(nullptr);
-        if (rDoc.IsUndoEnabled())
-        {
-            pProtectCopy->setProtected(false);
-            rDocShell.GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoDocProtect>(&rDocShell, std::move(pProtectCopy)) );
-            // ownership of unique_ptr now transferred to ScUndoDocProtect.
-        }
+        ScDocProtection aNewProtection(*pDocProtect);
+        aNewProtection.setProtected(false);
+        ProtectDocument(aNewProtection);
+
     }
     else
     {
@@ -4063,9 +4056,6 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
         if (!pTabProtect || !pTabProtect->isProtected())
             // already unprotected (should not happen)!
             return true;
-
-        // save the protection state before unprotect (for undo).
-        ::std::unique_ptr<ScTableProtection> pProtectCopy(new ScTableProtection(*pTabProtect));
         if (!pTabProtect->verifyPassword(rPassword))
         {
             if (!bApi)
@@ -4078,28 +4068,10 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
             return false;
         }
 
-        ::std::unique_ptr<ScTableProtection> pNewProtection(new ScTableProtection(*pTabProtect));
-        pNewProtection->setProtected(false);
-        ScTabViewShell* pTabViewShell = rDocShell.GetBestViewShell();
-        if (pTabViewShell)
-        {
-            ScTabView* pTabView = pTabViewShell->GetViewData().GetView();
-            if (pTabView)
-                pTabView->SetTabProtectionSymbol(nTab, false);
-        }
-        rDoc.SetTabProtection(nTab, pNewProtection.get());
-        if (rDoc.IsUndoEnabled())
-        {
-            pProtectCopy->setProtected(false);
-            rDocShell.GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoTabProtect>(&rDocShell, nTab, std::move(pProtectCopy)) );
-            // ownership of unique_ptr now transferred to ScUndoTabProtect.
-        }
+        ScTableProtection aNewProtection(*pTabProtect);
+        aNewProtection.setProtected(false);
+        ProtectSheet(nTab, aNewProtection);
     }
-
-    rDocShell.PostPaintGridAll();
-    ScDocShellModificator aModificator( rDocShell );
-    aModificator.SetDocumentModified();
 
     return true;
 }
