@@ -1450,7 +1450,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     // finally, treat the non-default cases
     // introduce boolean, that indicates a document, written by version prior SO8.
-    const bool bDocumentPriorSO8 = !bConsiderWrapOnObjPos;
+    // If user settings are not loaded, we can't know if this is an old document. Better to assume no?
+    const bool bDocumentPriorSO8 = !bConsiderWrapOnObjPos && bAreUserSettingsFromDocument;
 
     // Use old behaviour if this setting didn't exist, but only if this setting is being read from the document.
     // (Obviously the setting doesn't exist if we are explicitly ignoring it, so then stick with program/user defaults)
