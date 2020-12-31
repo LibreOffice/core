@@ -28,6 +28,7 @@
 #include <memory>
 #include <vector>
 #include <map>
+#include <tabprotection.hxx>
 
 class ScEditEngineDefaulter;
 class SdrUndoAction;
@@ -155,7 +156,7 @@ public:
     bool            RemovePageBreak( bool bColumn, const ScAddress& rPos,
                                              bool bRecord, bool bSetModified );
 
-    void            ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
+    void            ProtectDocument( const ScDocProtection& rProtect );
 
     bool            Protect( SCTAB nTab, const OUString& rPassword );
     bool            Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi );
@@ -232,6 +233,9 @@ public:
     void SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB nTab );
 
     void ConvertFormulaToValue( const ScRange& rRange, bool bInteraction );
+  
+private:
+    void            ProtectDocument( const ScDocProtection& rProtect );  
 };
 
 class ScDocFuncDirect : public ScDocFunc
