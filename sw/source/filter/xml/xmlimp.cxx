@@ -1326,6 +1326,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bTabOverMarginValue = false;
     bool bPropLineSpacingShrinksFirstLine = false;
     bool bSubtractFlysAnchoredAtFlys = false;
+    bool bEmptyDbFieldHidesPara = false;
     bool bCollapseEmptyCellPara = false;
 
     const PropertyValue* currentDatabaseDataSource = nullptr;
@@ -1423,6 +1424,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bPropLineSpacingShrinksFirstLine = true;
                 else if (rValue.Name == "SubtractFlysAnchoredAtFlys")
                     bSubtractFlysAnchoredAtFlys = true;
+                else if (rValue.Name == "EmptyDbFieldHidesPara")
+                    bEmptyDbFieldHidesPara = true;
                 else if (rValue.Name == "CollapseEmptyCellPara")
                     bCollapseEmptyCellPara = true;
             }
@@ -1597,6 +1600,9 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     if (!bSubtractFlysAnchoredAtFlys)
         xProps->setPropertyValue("SubtractFlysAnchoredAtFlys", makeAny(true));
+
+    if (!bEmptyDbFieldHidesPara && bAreUserSettingsFromDocument)
+        xProps->setPropertyValue("EmptyDbFieldHidesPara", makeAny(false));
 
     if (!bCollapseEmptyCellPara)
         xProps->setPropertyValue("CollapseEmptyCellPara", makeAny(false));
