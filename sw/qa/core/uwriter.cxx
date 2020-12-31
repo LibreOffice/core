@@ -1827,8 +1827,6 @@ namespace
         int m_nModifyChangedCount;
         const SwModify* m_pLastChangedModify;
         TestClient() : m_nModifyCount(0), m_nNotifyCount(0), m_nModifyChangedCount(0), m_pLastChangedModify(nullptr) {};
-        virtual void Modify( const SfxPoolItem*, const SfxPoolItem*) override
-        { assert(false); }
         virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override
         {
             if(typeid(TestHint) == typeid(rHint))
@@ -1846,8 +1844,11 @@ namespace
     {
         int m_nModifyCount;
         OtherTestClient() : m_nModifyCount(0) {};
-        virtual void Modify( const SfxPoolItem*, const SfxPoolItem*) override
-            { ++m_nModifyCount; }
+        virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override
+        {
+            if(dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+                ++m_nModifyCount;
+        }
     };
     struct TestListener : SvtListener
     {

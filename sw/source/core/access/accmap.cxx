@@ -2293,7 +2293,7 @@ void SwAccessibleMap::A11yDispose( const SwFrame *pFrame,
             (xParentAccImpl.is() || xShapeAccImpl.is()) )
         {
             // Keep a reference to the XShape to avoid that it
-            // is deleted with a SwFrameFormat::Modify.
+            // is deleted with a SwFrameFormat::SwClientNotify.
             uno::Reference < drawing::XShape > xShape(
                 const_cast< SdrObject * >( pObj )->getUnoShape(),
                 uno::UNO_QUERY );

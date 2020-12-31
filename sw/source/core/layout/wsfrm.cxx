@@ -473,14 +473,17 @@ void SwTextFrame::CheckDirection( bool bVert )
              bVert, true, bBrowseMode);
 }
 
-void SwFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
+void SwFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
     sal_uInt8 nInvFlags = 0;
 
-    if( pOld && pNew && RES_ATTRSET_CHG == pNew->Which() )
+    if(pLegacy->m_pOld && pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
     {
-        SfxItemIter aNIter( *static_cast<const SwAttrSetChg*>(pNew)->GetChgSet() );
-        SfxItemIter aOIter( *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
+        SfxItemIter aNIter(*static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet());
+        SfxItemIter aOIter(*static_cast<const SwAttrSetChg*>(pLegacy->m_pOld)->GetChgSet());
         const SfxPoolItem* pNItem = aNIter.GetCurItem();
         const SfxPoolItem* pOItem = aOIter.GetCurItem();
         do
@@ -491,32 +494,32 @@ void SwFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         } while (pNItem);
     }
     else
-        UpdateAttrFrame( pOld, pNew, nInvFlags );
+        UpdateAttrFrame(pLegacy->m_pOld, pLegacy->m_pNew, nInvFlags);
 
-    if ( nInvFlags == 0 )
+    if(nInvFlags == 0)
         return;
 
-    SwPageFrame *pPage = FindPageFrame();
-    InvalidatePage( pPage );
-    if ( nInvFlags & 0x01 )
+    SwPageFrame* pPage = FindPageFrame();
+    InvalidatePage(pPage);
+    if(nInvFlags & 0x01)
     {
         InvalidatePrt_();
-        if( !GetPrev() && IsTabFrame() && IsInSct() )
+        if(!GetPrev() && IsTabFrame() && IsInSct())
             FindSctFrame()->InvalidatePrt_();
     }
-    if ( nInvFlags & 0x02 )
+    if(nInvFlags & 0x02)
         InvalidateSize_();
-    if ( nInvFlags & 0x04 )
+    if(nInvFlags & 0x04)
         InvalidatePos_();
-    if ( nInvFlags & 0x08 )
+    if(nInvFlags & 0x08)
         SetCompletePaint();
     SwFrame *pNxt;
-    if ( nInvFlags & 0x30 && nullptr != (pNxt = GetNext()) )
+    if(nInvFlags & 0x30 && nullptr != (pNxt = GetNext()))
     {
-        pNxt->InvalidatePage( pPage );
-        if ( nInvFlags & 0x10 )
+        pNxt->InvalidatePage(pPage);
+        if(nInvFlags & 0x10)
             pNxt->InvalidatePos_();
-        if ( nInvFlags & 0x20 )
+        if(nInvFlags & 0x20)
             pNxt->SetCompletePaint();
     }
 }
@@ -2322,7 +2325,7 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
     return nReal;
 }
 
-void SwContentFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
+void SwContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
     auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
     if(!pLegacy)
@@ -2345,7 +2348,7 @@ void SwContentFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
             pOItem = aOIter.NextItem();
         } while(pNItem);
         if(aOldSet.Count() || aNewSet.Count())
-            SwFrame::Modify(&aOldSet, &aNewSet);
+            SwFrame::SwClientNotify(rMod, sw::LegacyModifyHint(&aOldSet, &aNewSet));
     }
     else
         UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, nInvFlags);
@@ -2462,11 +2465,13 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
         case RES_LR_SPACE:
         case RES_BOX:
         case RES_SHADOW:
-            Prepare( PrepareHint::FixSizeChanged );
-            SwFrame::Modify( pOld, pNew );
-            rInvFlags |= 0x30;
-            break;
-
+            {
+                Prepare( PrepareHint::FixSizeChanged );
+                SwModify aMod;
+                SwFrame::SwClientNotify(aMod, sw::LegacyModifyHint(pOld, pNew));
+                rInvFlags |= 0x30;
+                break;
+            }
         case RES_BREAK:
             {
                 rInvFlags |= 0x42;
@@ -2542,7 +2547,10 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
                 pNewSet->ClearItem( nWhich );
         }
         else
-            SwFrame::Modify( pOld, pNew );
+        {
+            SwModify aMod;
+            SwFrame::SwClientNotify(aMod, sw::LegacyModifyHint(pOld, pNew));
+        }
     }
 }
 
