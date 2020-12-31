@@ -3257,7 +3257,7 @@ SwTwips SwTabFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
     return nDist;
 }
 
-void SwTabFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
+void SwTabFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
     auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
     if(!pLegacy)
@@ -3282,7 +3282,7 @@ void SwTabFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
             pOItem = aOIter.NextItem();
         } while(pNItem);
         if(aOldSet.Count() || aNewSet.Count())
-            SwLayoutFrame::Modify(&aOldSet, &aNewSet);
+            SwLayoutFrame::SwClientNotify(rMod, sw::LegacyModifyHint(&aOldSet, &aNewSet));
     }
     else
         UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, nInvFlags);
@@ -3411,7 +3411,10 @@ void SwTabFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 pNewSet->ClearItem( nWhich );
         }
         else
-            SwLayoutFrame::Modify( pOld, pNew );
+        {
+            SwModify aMod;
+            SwLayoutFrame::SwClientNotify(aMod, sw::LegacyModifyHint(pOld, pNew));
+        }
     }
 }
 
@@ -5383,7 +5386,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
     }
 }
 
-void SwCellFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
+void SwCellFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
     if(auto pMoveTableBoxHint = dynamic_cast<const sw::MoveTableBoxHint*>(&rHint))
     {
@@ -5473,7 +5476,7 @@ void SwCellFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
                     pTabFrame->InvalidatePrt();
             }
         }
-        SwLayoutFrame::Modify(pLegacy->m_pOld, pLegacy->m_pNew);
+        SwLayoutFrame::SwClientNotify(rMod, rHint);
     }
 }
 
