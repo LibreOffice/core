@@ -1596,7 +1596,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if (!bPropLineSpacingShrinksFirstLine)
         xProps->setPropertyValue("PropLineSpacingShrinksFirstLine", makeAny(false));
 
-    if (!bSubtractFlysAnchoredAtFlys)
+    if (!bSubtractFlysAnchoredAtFlys && bAreUserSettingsFromDocument)
         xProps->setPropertyValue("SubtractFlysAnchoredAtFlys", makeAny(true));
 
     if (!bCollapseEmptyCellPara)
