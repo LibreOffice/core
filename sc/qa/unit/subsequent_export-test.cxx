@@ -273,6 +273,7 @@ public:
     void testTdf129969();
     void testTdf84874();
     void testTdf136721_paper_size();
+    void testTdf139258_rotated_image();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -447,6 +448,7 @@ public:
     CPPUNIT_TEST(testTdf129969);
     CPPUNIT_TEST(testTdf84874);
     CPPUNIT_TEST(testTdf136721_paper_size);
+    CPPUNIT_TEST(testTdf139258_rotated_image);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5701,6 +5703,34 @@ void ScExportTest::testTdf136721_paper_size()
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/x:worksheet/x:pageSetup", "paperSize", "70");
+}
+
+void ScExportTest::testTdf139258_rotated_image()
+{
+    if (!IsDefaultDPI())
+        return;
+    // Check that the width, height and the topleft position of the image is correct.
+    // And allow massive rounding errors because of the back and forth conversion between emu and hmm.
+    ScDocShellRef xShell = loadDoc("tdf139258_rotated_image.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+
+    xmlDocUniquePtr pDrawing = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    CPPUNIT_ASSERT(pDrawing);
+
+    double nXPosOfTopleft = getXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:pic/xdr:spPr/a:xfrm/a:off", "x").toDouble();
+    double nYPosOfTopleft = getXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:pic/xdr:spPr/a:xfrm/a:off", "y").toDouble();
+    double nWidth = getXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:pic/xdr:spPr/a:xfrm/a:ext", "cx").toDouble();
+    double nHeight = getXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:pic/xdr:spPr/a:xfrm/a:ext", "cy").toDouble();
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4732920, nXPosOfTopleft, 100000);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-3196800, nYPosOfTopleft, 100000);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(10286640, nWidth, 100000);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(18287640, nHeight, 100000);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
