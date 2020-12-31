@@ -6986,4 +6986,1012 @@ Avery J8950, L7950 - the labels are not aligned in a rectangular grid
         <measure>S;9900;14850;9900;14850;0;0;2;2;21000;29700</measure>
     </label>
 </manufacturer>
+<!-- A-one -->
+<manufacturer name="A-one">
+    <label id="L0">
+        <name>28171 Label A4 12pcs(2*6) 90.2*42.3mm</name>
+        <measure>S;9270;4230;9020;4230;1650;2000;2;6;21000;29700</measure>
+    </label>
+    <label id="L1">
+        <name>28172 Label A4 12pcs(2*6) 90.2*42.3mm</name>
+        <measure>S;9270;4230;9020;4230;1650;2000;2;6;21000;29700</measure>
+    </label>
+    <label id="L2">
+        <name>28173 Label A4 10pcs(2*5) 96.5*44.5mm</name>
+        <measure>S;9900;4450;9650;4450;700;2330;2;5;21000;29700</measure>
+    </label>
+    <label id="L3">
+        <name>28174 Label A4 10pcs(2*5) 96.5*44.5mm</name>
+        <measure>S;9900;4450;9650;4450;700;2330;2;5;21000;29700</measure>
+    </label>
+    <label id="L4">
+        <name>28175 Label A4 12pcs(2*6) 83.8*42.3mm</name>
+        <measure>S;8760;4230;8380;4230;2030;2000;2;6;21000;29700</measure>
+    </label>
+    <label id="L5">
+        <name>28176 Label A4 12pcs(2*6) 83.8*42.3mm</name>
+        <measure>S;8760;4230;8380;4230;2030;2000;2;6;21000;29700</measure>
+    </label>
+    <label id="L6">
+        <name>28177 Label A4 10pcs(2*5) 89*48mm</name>
+        <measure>S;9100;4800;8900;4800;1000;2500;2;5;21000;29700</measure>
+    </label>
+    <label id="L7">
+        <name>28178 Label A4 10pcs(2*5) 89*48mm</name>
+        <measure>S;9100;4800;8900;4800;1000;2500;2;5;21000;29700</measure>
+    </label>
+    <label id="L8">
+        <name>28179 Label A4 12pcs(2*6) 84*42mm</name>
+        <measure>S;8600;4200;8400;4200;2000;2300;2;6;21000;29700</measure>
+    </label>
+    <label id="L9">
+        <name>28180 Label A4 12pcs(2*6) 84*42mm</name>
+        <measure>S;8600;4200;8400;4200;2000;2300;2;6;21000;29700</measure>
+    </label>
+    <label id="L10">
+        <name>28181 Label A4 14pcs(2*7) 82.6*35.6mm</name>
+        <measure>S;8510;3560;8260;3560;2030;1800;2;7;21000;29700</measure>
+    </label>
+    <label id="L11">
+        <name>28182 Label A4 14pcs(2*7) 82.6*35.6mm</name>
+        <measure>S;8510;3560;8260;3560;2030;1800;2;7;21000;29700</measure>
+    </label>
+    <label id="L12">
+        <name>28183 Label A4 12pcs(2*6) 83.8*42.3mm</name>
+        <measure>S;8760;4230;8380;4230;1930;2150;2;6;21000;29700</measure>
+    </label>
+    <label id="L13">
+        <name>28184 Label A4 12pcs(2*6) 83.8*42.3mm</name>
+        <measure>S;8760;4230;8380;4230;1930;2150;2;6;21000;29700</measure>
+    </label>
+    <label id="L14">
+        <name>28185 Label A4 18pcs(3*6) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;2150;3;6;21000;29700</measure>
+    </label>
+    <label id="L15">
+        <name>28186 Label A4 18pcs(3*6) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;2150;3;6;21000;29700</measure>
+    </label>
+    <label id="L16">
+        <name>28187 Label A4 12pcs(2*6) 84*42mm</name>
+        <measure>S;8600;4200;8400;4200;2000;2250;2;6;21000;29700</measure>
+    </label>
+    <label id="L17">
+        <name>28188 Label A4 12pcs(2*6) 84*42mm</name>
+        <measure>S;8600;4200;8400;4200;2000;2250;2;6;21000;29700</measure>
+    </label>
+    <label id="L18">
+        <name>28189 Label A4 14pcs(2*7) 83*36mm</name>
+        <measure>S;8500;3600;8300;3600;2100;2500;2;7;21000;29700</measure>
+    </label>
+    <label id="L19">
+        <name>28190 Label A4 14pcs(2*7) 83*36mm</name>
+        <measure>S;8500;3600;8300;3600;2100;2500;2;7;21000;29700</measure>
+    </label>
+    <label id="L20">
+        <name>28191 Label A4L 20pcs(4*5) 74.25*38mm</name>
+        <measure>S;7425;3800;7425;3800;0;2000;4;5;29700;21000</measure>
+    </label>
+    <label id="L21">
+        <name>28192 Label A4L 20pcs(4*5) 74.25*38mm</name>
+        <measure>S;7425;3800;7425;3800;0;2000;4;5;29700;21000</measure>
+    </label>
+    <label id="L22">
+        <name>28197 Label A4L 12pcs(6*2) 49.5*95mm</name>
+        <measure>S;4950;9500;4950;9500;0;2000;6;2;29700;21000</measure>
+    </label>
+    <label id="L23">
+        <name>28198 Label A4L 12pcs(6*2) 49.5*95mm</name>
+        <measure>S;4950;9500;4950;9500;0;2000;6;2;29700;21000</measure>
+    </label>
+    <label id="L24">
+        <name>28204 Label A4L 20pcs(4*5) 74.25*42mm</name>
+        <measure>S;7425;4200;7425;4200;0;0;4;5;29700;21000</measure>
+    </label>
+    <label id="L25">
+        <name>28205 Label A4L 20pcs(4*5) 74.25*42mm</name>
+        <measure>S;7425;4200;7425;4200;0;0;4;5;29700;21000</measure>
+    </label>
+    <label id="L26">
+        <name>28261 Label A4L 20pcs(4*5) 69*38mm</name>
+        <measure>S;6900;3800;6900;3800;1050;1000;4;5;29700;21000</measure>
+    </label>
+    <label id="L27">
+        <name>28262 Label A4L 20pcs(4*5) 69*38mm</name>
+        <measure>S;6900;3800;6900;3800;1050;1000;4;5;29700;21000</measure>
+    </label>
+    <label id="L28">
+        <name>28271 Label A4L 4pcs(2*2) 148.5*105mm</name>
+        <measure>S;14850;10500;14850;10500;0;0;2;2;29700;21000</measure>
+    </label>
+    <label id="L29">
+        <name>28273 Label A4 12pcs(2*6) 86.4*42.3mm</name>
+        <measure>S;8640;4230;8640;4230;1860;2150;2;6;21000;29700</measure>
+    </label>
+    <label id="L30">
+        <name>28276 Label A4 12pcs(2*6) 85*42mm</name>
+        <measure>S;8500;4200;8500;4200;2000;2250;2;6;21000;29700</measure>
+    </label>
+    <label id="L31">
+        <name>28311 Label A4 12pcs(2*6) 84*42mm</name>
+        <measure>S;8900;4200;8400;4200;1500;1500;2;6;21000;29700</measure>
+    </label>
+    <label id="L32">
+        <name>28312 Label A4 12pcs(2*6) 84*42mm</name>
+        <measure>S;8900;4200;8400;4200;1500;1500;2;6;21000;29700</measure>
+    </label>
+    <label id="L33">
+        <name>28313 Label A4 10pcs(2*5) 84*48mm</name>
+        <measure>S;8600;4800;8400;4800;2000;2500;2;5;21000;29700</measure>
+    </label>
+    <label id="L34">
+        <name>28314 Label A4 10pcs(2*5) 84*48mm</name>
+        <measure>S;8600;4800;8400;4800;2000;2500;2;5;21000;29700</measure>
+    </label>
+    <label id="L35">
+        <name>28315 Label A4 21pcs(3*7) 64*33.9mm</name>
+        <measure>S;6400;3390;6400;3390;700;2350;3;7;21000;29700</measure>
+    </label>
+    <label id="L36">
+        <name>28316 Label A4 21pcs(3*7) 64*33.9mm</name>
+        <measure>S;6400;3390;6400;3390;700;2350;3;7;21000;29700</measure>
+    </label>
+    <label id="L37">
+        <name>28362 Label A4 12pcs(2*6) 86.4*42.3mm</name>
+        <measure>S;8640;4230;8640;4230;1860;2120;2;6;21000;29700</measure>
+    </label>
+    <label id="L38">
+        <name>28363 Label A4 21pcs(3*7) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;0;3;7;21000;29700</measure>
+    </label>
+    <label id="L39">
+        <name>28364 Label A4 18pcs(3*6) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;2120;3;6;21000;29700</measure>
+    </label>
+    <label id="L40">
+        <name>28365 Label A4 21pcs(3*7) 70*38.1mm</name>
+        <measure>S;7000;3810;7000;3810;0;1480;3;7;21000;29700</measure>
+    </label>
+    <label id="L41">
+        <name>28366 Label A4 24pcs(3*8) 70*33.9mm</name>
+        <measure>S;7000;3390;7000;3390;0;1270;3;8;21000;29700</measure>
+    </label>
+    <label id="L42">
+        <name>28367 Label A4 10pcs(2*5) 86.4*50.8mm</name>
+        <measure>S;8640;5080;8640;5080;1860;2120;2;5;21000;29700</measure>
+    </label>
+    <label id="L43">
+        <name>28368 Label A4 44pcs(4*11) 48.3*25.4mm</name>
+        <measure>S;4830;2540;4830;2540;840;880;4;11;21000;29700</measure>
+    </label>
+    <label id="L44">
+        <name>28369 Label A4 24pcs(3*8) 66*33.9mm</name>
+        <measure>S;6600;3390;6600;3390;600;1290;3;8;21000;29700</measure>
+    </label>
+    <label id="L45">
+        <name>28370 Label A4 18pcs(3*6) 63.5*46.5mm</name>
+        <measure>S;6605;4650;6350;4650;720;900;3;6;21000;29700</measure>
+    </label>
+    <label id="L46">
+        <name>28379 Label A4 21pcs(3*7) 63.5*38.1mm</name>
+        <measure>S;6605;3810;6350;3810;720;1520;3;7;21000;29700</measure>
+    </label>
+    <label id="L47">
+        <name>28382 Label A4 12pcs(2*6) 86.4*42.3mm</name>
+        <measure>S;8640;4230;8640;4230;1860;2120;2;6;21000;29700</measure>
+    </label>
+    <label id="L48">
+        <name>28383 Label A4 21pcs(3*7) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;0;3;7;21000;29700</measure>
+    </label>
+    <label id="L49">
+        <name>28384 Label A4 18pcs(3*6) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;2120;3;6;21000;29700</measure>
+    </label>
+    <label id="L50">
+        <name>28386 Label A4 24pcs(3*8) 70*33.9mm</name>
+        <measure>S;7000;3390;7000;3390;0;1270;3;8;21000;29700</measure>
+    </label>
+    <label id="L51">
+        <name>28387 Label A4 10pcs(2*5) 86.4*50.8mm</name>
+        <measure>S;8640;5080;8640;5080;1860;2120;2;5;21000;29700</measure>
+    </label>
+    <label id="L52">
+        <name>28388 Label A4 44pcs(4*11) 48.3*25.4mm</name>
+        <measure>S;4830;2540;4830;2540;840;880;4;11;21000;29700</measure>
+    </label>
+    <label id="L53">
+        <name>28389 Label A4 24pcs(3*8) 66*33.9mm</name>
+        <measure>S;6600;3390;6600;3390;600;1290;3;8;21000;29700</measure>
+    </label>
+    <label id="L54">
+        <name>28390 Label A4 18pcs(3*6) 63.5*46.5mm</name>
+        <measure>S;6605;4650;6350;4650;720;900;3;6;21000;29700</measure>
+    </label>
+    <label id="L55">
+        <name>28399 Label A4 21pcs(3*7) 63.5*38.1mm</name>
+        <measure>S;6605;3810;6350;3810;720;1520;3;7;21000;29700</measure>
+    </label>
+    <label id="L56">
+        <name>28447 Label A4 4pcs(2*2) 92*131mm</name>
+        <measure>S;9800;13100;9200;13100;1500;1800;2;2;21000;29700</measure>
+    </label>
+    <label id="L57">
+        <name>28466 Label A4 18pcs(3*6) 53.3*42.3mm</name>
+        <measure>S;5710;4230;5330;4230;1900;2150;3;6;21000;29700</measure>
+    </label>
+    <label id="L58">
+        <name>28642 Label A4 12pcs(2*6) 86.4*42.3mm</name>
+        <measure>S;8640;4230;8640;4230;1860;2120;2;6;21000;29700</measure>
+    </label>
+    <label id="L59">
+        <name>28643 Label A4 21pcs(3*7) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;0;3;7;21000;29700</measure>
+    </label>
+    <label id="L60">
+        <name>28644 Label A4 18pcs(3*6) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;2120;3;6;21000;29700</measure>
+    </label>
+    <label id="L61">
+        <name>28645 Label A4 21pcs(3*7) 70*38.1mm</name>
+        <measure>S;7000;3810;7000;3810;0;1480;3;7;21000;29700</measure>
+    </label>
+    <label id="L62">
+        <name>28646 Label A4 24pcs(3*8) 70*33.9mm</name>
+        <measure>S;7000;3390;7000;3390;0;1270;3;8;21000;29700</measure>
+    </label>
+    <label id="L63">
+        <name>28647 Label A4 10pcs(2*5) 86.4*50.8mm</name>
+        <measure>S;8640;5080;8640;5080;1860;2120;2;5;21000;29700</measure>
+    </label>
+    <label id="L64">
+        <name>28648 Label A4 44pcs(4*11) 48.3*25.4mm</name>
+        <measure>S;4830;2540;4830;2540;840;880;4;11;21000;29700</measure>
+    </label>
+    <label id="L65">
+        <name>28649 Label A4 24pcs(3*8) 66*33.9mm</name>
+        <measure>S;6600;3390;6600;3390;600;1290;3;8;21000;29700</measure>
+    </label>
+    <label id="L66">
+        <name>28650 Label A4 18pcs(3*6) 63.5*46.5mm</name>
+        <measure>S;6605;4650;6350;4650;720;900;3;6;21000;29700</measure>
+    </label>
+    <label id="L67">
+        <name>28659 Label A4 21pcs(3*7) 63.5*38.1mm</name>
+        <measure>S;6605;3810;6350;3810;720;1520;3;7;21000;29700</measure>
+    </label>
+    <label id="L68">
+        <name>28693 Label A4 4pcs(2*2) 92*131mm</name>
+        <measure>S;9800;13100;9200;13100;1500;1800;2;2;21000;29700</measure>
+    </label>
+    <label id="L69">
+        <name>28721 Label A4 12pcs(2*6) 90.2*42.3mm</name>
+        <measure>S;9270;4230;9020;4230;1650;2000;2;6;21000;29700</measure>
+    </label>
+    <label id="L70">
+        <name>28722 Label A4 10pcs(2*5) 96.5*44.5mm</name>
+        <measure>S;9900;4450;9650;4450;700;2330;2;5;21000;29700</measure>
+    </label>
+    <label id="L71">
+        <name>28723 Label A4 12pcs(2*6) 83.8*42.3mm</name>
+        <measure>S;8760;4230;8380;4230;2030;2000;2;6;21000;29700</measure>
+    </label>
+    <label id="L72">
+        <name>28724 Label A4 10pcs(2*5) 89*48mm</name>
+        <measure>S;9100;4800;8900;4800;1000;2500;2;5;21000;29700</measure>
+    </label>
+    <label id="L73">
+        <name>28725 Label A4 12pcs(2*6) 84*42mm</name>
+        <measure>S;8600;4200;8400;4200;2000;2300;2;6;21000;29700</measure>
+    </label>
+    <label id="L74">
+        <name>28726 Label A4 14pcs(2*7) 82.6*35.6mm</name>
+        <measure>S;8510;3560;8260;3560;2030;1800;2;7;21000;29700</measure>
+    </label>
+    <label id="L75">
+        <name>28727 Label A4 12pcs(2*6) 83.8*42.3mm</name>
+        <measure>S;8760;4230;8380;4230;1930;2150;2;6;21000;29700</measure>
+    </label>
+    <label id="L76">
+        <name>28728 Label A4 18pcs(3*6) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;2120;3;6;21000;29700</measure>
+    </label>
+    <label id="L77">
+        <name>28729 Label A4 12pcs(2*6) 84*42mm</name>
+        <measure>S;8600;4200;8400;4200;2000;2250;2;6;21000;29700</measure>
+    </label>
+    <label id="L78">
+        <name>28730 Label A4 14pcs(2*7) 83*36mm</name>
+        <measure>S;8500;3600;8300;3600;2100;2500;2;7;21000;29700</measure>
+    </label>
+    <label id="L79">
+        <name>28731 Label A4 12pcs(2*6) 84*42mm</name>
+        <measure>S;8900;4200;8400;4200;1500;1500;2;6;21000;29700</measure>
+    </label>
+    <label id="L80">
+        <name>28732 Label A4 10pcs(2*5) 84*48mm</name>
+        <measure>S;8600;4800;8400;4800;2000;2500;2;5;21000;29700</measure>
+    </label>
+    <label id="L81">
+        <name>28733 Label A4 21pcs(3*7) 64*33.9mm</name>
+        <measure>S;6400;3390;6400;3390;700;2350;3;7;21000;29700</measure>
+    </label>
+    <label id="L82">
+        <name>28761 Label A4L 20pcs(4*5) 74.25*38mm</name>
+        <measure>S;7425;3800;7425;3800;0;2000;4;5;29700;21000</measure>
+    </label>
+    <label id="L83">
+        <name>28763 Label A4L 12pcs(6*2) 49.5*95mm</name>
+        <measure>S;4950;9500;4950;9500;0;2000;6;2;29700;21000</measure>
+    </label>
+    <label id="L84">
+        <name>28764 Label A4L 20pcs(4*5) 74.25*42mm</name>
+        <measure>S;7425;4200;7425;4200;0;0;4;5;29700;21000</measure>
+    </label>
+    <label id="L85">
+        <name>28765 Label A4L 20pcs(4*5) 69*38mm</name>
+        <measure>S;6900;3800;6900;3800;1050;1000;4;5;29700;21000</measure>
+    </label>
+    <label id="L86">
+        <name>28766 Label A4L 4pcs(2*2) 148.5*105mm</name>
+        <measure>S;14850;10500;14850;10500;0;0;2;2;29700;21000</measure>
+    </label>
+    <label id="L87">
+        <name>28767 Label A4 30pcs(3*10) 53.3*25.4mm</name>
+        <measure>S;5710;2540;5330;2540;1900;2150;3;10;21000;29700</measure>
+    </label>
+    <label id="L88">
+        <name>28787 Label A4 30pcs(3*10) 53.3*25.4mm</name>
+        <measure>S;5710;2540;5330;2540;1900;2150;3;10;21000;29700</measure>
+    </label>
+    <label id="L89">
+        <name>28857 Label A4 18pcs(3*6) 63.5*46.5mm</name>
+        <measure>S;6605;4650;6350;4650;720;900;3;6;21000;29700</measure>
+    </label>
+    <label id="L90">
+        <name>28858 Label A4 18pcs(3*6) 63.5*46.5mm</name>
+        <measure>S;6605;4650;6350;4650;720;900;3;6;21000;29700</measure>
+    </label>
+    <label id="L91">
+        <name>28860 Label A4 18pcs(3*6) 63.5*46.5mm</name>
+        <measure>S;6605;4650;6350;4650;720;900;3;6;21000;29700</measure>
+    </label>
+    <label id="L92">
+        <name>28866 Label A4 21pcs(3*7) 63.5*38.1mm</name>
+        <measure>S;6605;3810;6350;3810;720;1520;3;7;21000;29700</measure>
+    </label>
+    <label id="L93">
+        <name>28867 Label A4 21pcs(3*7) 63.5*38.1mm</name>
+        <measure>S;6605;3810;6350;3810;720;1520;3;7;21000;29700</measure>
+    </label>
+    <label id="L94">
+        <name>28869 Label A4 21pcs(3*7) 63.5*38.1mm</name>
+        <measure>S;6605;3810;6350;3810;720;1520;3;7;21000;29700</measure>
+    </label>
+    <label id="L95">
+        <name>28911 Label A4 10pcs(2*5) 89*48mm</name>
+        <measure>S;9100;4800;8900;4800;1000;2500;2;5;21000;29700</measure>
+    </label>
+    <label id="L96">
+        <name>28912 Label A4 10pcs(2*5) 89*48mm</name>
+        <measure>S;9100;4800;8900;4800;1000;2500;2;5;21000;29700</measure>
+    </label>
+    <label id="L97">
+        <name>28914 Label A4 10pcs(2*5) 89*48mm</name>
+        <measure>S;9100;4800;8900;4800;1000;2500;2;5;21000;29700</measure>
+    </label>
+    <label id="L98">
+        <name>28915 Label A4 12pcs(2*6) 83.8*42.3mm</name>
+        <measure>S;8760;4230;8380;4230;1930;2150;2;6;21000;29700</measure>
+    </label>
+    <label id="L99">
+        <name>28916 Label A4 12pcs(2*6) 83.8*42.3mm</name>
+        <measure>S;8760;4230;8380;4230;1930;2150;2;6;21000;29700</measure>
+    </label>
+    <label id="L100">
+        <name>28918 Label A4 12pcs(2*6) 83.8*42.3mm</name>
+        <measure>S;8760;4230;8380;4230;1930;2150;2;6;21000;29700</measure>
+    </label>
+    <label id="L101">
+        <name>28919 Label A4 12pcs(2*6) 86.4*42.3mm</name>
+        <measure>S;8640;4230;8640;4230;1860;2120;2;6;21000;29700</measure>
+    </label>
+    <label id="L102">
+        <name>28920 Label A4 12pcs(2*6) 86.4*42.3mm</name>
+        <measure>S;8640;4230;8640;4230;1860;2120;2;6;21000;29700</measure>
+    </label>
+    <label id="L103">
+        <name>28922 Label A4 12pcs(2*6) 86.4*42.3mm</name>
+        <measure>S;8640;4230;8640;4230;1860;2120;2;6;21000;29700</measure>
+    </label>
+    <label id="L104">
+        <name>28923 Label A4 21pcs(3*7) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;0;3;7;21000;29700</measure>
+    </label>
+    <label id="L105">
+        <name>28924 Label A4 21pcs(3*7) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;0;3;7;21000;29700</measure>
+    </label>
+    <label id="L106">
+        <name>28926 Label A4 21pcs(3*7) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;0;3;7;21000;29700</measure>
+    </label>
+    <label id="L107">
+        <name>28927 Label A4 18pcs(3*6) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;2120;3;6;21000;29700</measure>
+    </label>
+    <label id="L108">
+        <name>28928 Label A4 18pcs(3*6) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;2120;3;6;21000;29700</measure>
+    </label>
+    <label id="L109">
+        <name>28930 Label A4 18pcs(3*6) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;2120;3;6;21000;29700</measure>
+    </label>
+    <label id="L110">
+        <name>28931 Label A4 21pcs(3*7) 70*38.1mm</name>
+        <measure>S;7000;3810;7000;3810;0;1480;3;7;21000;29700</measure>
+    </label>
+    <label id="L111">
+        <name>28932 Label A4 21pcs(3*7) 70*38.1mm</name>
+        <measure>S;7000;3810;7000;3810;0;1480;3;7;21000;29700</measure>
+    </label>
+    <label id="L112">
+        <name>28934 Label A4 21pcs(3*7) 70*38.1mm</name>
+        <measure>S;7000;3810;7000;3810;0;1480;3;7;21000;29700</measure>
+    </label>
+    <label id="L113">
+        <name>28935 Label A4 24pcs(3*8) 70*33.9mm</name>
+        <measure>S;7000;3390;7000;3390;0;1270;3;8;21000;29700</measure>
+    </label>
+    <label id="L114">
+        <name>28936 Label A4 24pcs(3*8) 70*33.9mm</name>
+        <measure>S;7000;3390;7000;3390;0;1270;3;8;21000;29700</measure>
+    </label>
+    <label id="L115">
+        <name>28938 Label A4 24pcs(3*8) 70*33.9mm</name>
+        <measure>S;7000;3390;7000;3390;0;1270;3;8;21000;29700</measure>
+    </label>
+    <label id="L116">
+        <name>28939 Label A4 10pcs(2*5) 86.4*50.8mm</name>
+        <measure>S;8640;5080;8640;5080;1860;2120;2;5;21000;29700</measure>
+    </label>
+    <label id="L117">
+        <name>28940 Label A4 10pcs(2*5) 86.4*50.8mm</name>
+        <measure>S;8640;5080;8640;5080;1860;2120;2;5;21000;29700</measure>
+    </label>
+    <label id="L118">
+        <name>28942 Label A4 10pcs(2*5) 86.4*50.8mm</name>
+        <measure>S;8640;5080;8640;5080;1860;2120;2;5;21000;29700</measure>
+    </label>
+    <label id="L119">
+        <name>28943 Label A4 44pcs(4*11) 48.3*25.4mm</name>
+        <measure>S;4830;2540;4830;2540;840;880;4;11;21000;29700</measure>
+    </label>
+    <label id="L120">
+        <name>28944 Label A4 44pcs(4*11) 48.3*25.4mm</name>
+        <measure>S;4830;2540;4830;2540;840;880;4;11;21000;29700</measure>
+    </label>
+    <label id="L121">
+        <name>28946 Label A4 44pcs(4*11) 48.3*25.4mm</name>
+        <measure>S;4830;2540;4830;2540;840;880;4;11;21000;29700</measure>
+    </label>
+    <label id="L122">
+        <name>28947 Label A4 24pcs(3*8) 66*33.9mm</name>
+        <measure>S;6600;3390;6600;3390;600;1290;3;8;21000;29700</measure>
+    </label>
+    <label id="L123">
+        <name>28948 Label A4 24pcs(3*8) 66*33.9mm</name>
+        <measure>S;6600;3390;6600;3390;600;1290;3;8;21000;29700</measure>
+    </label>
+    <label id="L124">
+        <name>28950 Label A4 24pcs(3*8) 66*33.9mm</name>
+        <measure>S;6600;3390;6600;3390;600;1290;3;8;21000;29700</measure>
+    </label>
+    <label id="L125">
+        <name>29191 Label A4 30pcs(3*10) 53.3*25.4mm</name>
+        <measure>S;5710;2540;5330;2540;1900;2150;3;10;21000;29700</measure>
+    </label>
+    <label id="L126">
+        <name>29192 Label A4 30pcs(3*10) 53.3*25.4mm</name>
+        <measure>S;5710;2540;5330;2540;1900;2150;3;10;21000;29700</measure>
+    </label>
+    <label id="L127">
+        <name>29194 Label A4 24pcs(2*12) 83.8*21.2mm</name>
+        <measure>S;8760;2120;8380;2120;1930;2150;2;12;21000;29700</measure>
+    </label>
+    <label id="L128">
+        <name>29195 Label A4 24pcs(2*12) 83.8*21.2mm</name>
+        <measure>S;8760;2120;8380;2120;1930;2150;2;12;21000;29700</measure>
+    </label>
+    <label id="L129">
+        <name>29221 Label A4 10pcs(2*5) 89*53mm</name>
+        <measure>S;9100;5500;8900;5300;1500;1200;2;5;21000;29700</measure>
+    </label>
+    <label id="L130">
+        <name>29233 Label A4 28pcs(2*14) 83*32mm</name>
+        <measure>S;8700;3600;8300;3200;2000;2400;2;14;21000;29700</measure>
+    </label>
+    <label id="L131">
+        <name>31145 Label A4 30pcs(3*10) 53.3*25.4mm</name>
+        <measure>S;5710;2540;5330;2540;1900;2150;3;10;21000;29700</measure>
+    </label>
+    <label id="L132">
+        <name>31146 Label A4 30pcs(3*10) 53.3*25.4mm</name>
+        <measure>S;5710;2540;5330;2540;1900;2150;3;10;21000;29700</measure>
+    </label>
+    <label id="L133">
+        <name>31147 Label A4 30pcs(3*10) 53.3*25.4mm</name>
+        <measure>S;5710;2540;5330;2540;1900;2150;3;10;21000;29700</measure>
+    </label>
+    <label id="L134">
+        <name>31148 Label A4 24pcs(2*12) 83.8*21.2mm</name>
+        <measure>S;8760;2120;8380;2120;1930;2150;2;12;21000;29700</measure>
+    </label>
+    <label id="L135">
+        <name>31149 Label A4 24pcs(2*12) 83.8*21.2mm</name>
+        <measure>S;8760;2120;8380;2120;1930;2150;2;12;21000;29700</measure>
+    </label>
+    <label id="L136">
+        <name>31150 Label A4 24pcs(2*12) 83.8*21.2mm</name>
+        <measure>S;8760;2120;8380;2120;1930;2150;2;12;21000;29700</measure>
+    </label>
+    <label id="L137">
+        <name>31275 Label A4 12pcs(2*6) 83.8*42.3mm</name>
+        <measure>S;8760;4230;8380;4230;1930;2150;2;6;21000;29700</measure>
+    </label>
+    <label id="L138">
+        <name>31277 Label A4 30pcs(3*10) 53.3*25.4mm</name>
+        <measure>S;5710;2540;5330;2540;1900;2150;3;10;21000;29700</measure>
+    </label>
+    <label id="L139">
+        <name>31333 Label A4 12pcs(2*6) 86.4*42.3mm</name>
+        <measure>S;8640;4230;8640;4230;1860;2120;2;6;21000;29700</measure>
+    </label>
+    <label id="L140">
+        <name>31334 Label A4 12pcs(2*6) 86.4*42.3mm</name>
+        <measure>S;8640;4230;8640;4230;1860;2120;2;6;21000;29700</measure>
+    </label>
+    <label id="L141">
+        <name>31335 Label A4 18pcs(3*6) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;2120;3;6;21000;29700</measure>
+    </label>
+    <label id="L142">
+        <name>31336 Label A4 18pcs(3*6) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;2120;3;6;21000;29700</measure>
+    </label>
+    <label id="L143">
+        <name>31337 Label A4 21pcs(3*7) 70*38.1mm</name>
+        <measure>S;7000;3810;7000;3810;0;1480;3;7;21000;29700</measure>
+    </label>
+    <label id="L144">
+        <name>31338 Label A4 21pcs(3*7) 70*38.1mm</name>
+        <measure>S;7000;3810;7000;3810;0;1480;3;7;21000;29700</measure>
+    </label>
+    <label id="L145">
+        <name>31339 Label A4 10pcs(2*5) 86.4*50.8mm</name>
+        <measure>S;8640;5080;8640;5080;1860;2120;2;5;21000;29700</measure>
+    </label>
+    <label id="L146">
+        <name>31340 Label A4 10pcs(2*5) 86.4*50.8mm</name>
+        <measure>S;8640;5080;8640;5080;1860;2120;2;5;21000;29700</measure>
+    </label>
+    <label id="L147">
+        <name>31362 Label A4 12pcs(2*6) 86.4*42.3mm</name>
+        <measure>S;8640;4230;8640;4230;1860;2120;2;6;21000;29700</measure>
+    </label>
+    <label id="L148">
+        <name>31364 Label A4 18pcs(3*6) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;2120;3;6;21000;29700</measure>
+    </label>
+    <label id="L149">
+        <name>31365 Label A4 21pcs(3*7) 70*38.1mm</name>
+        <measure>S;7000;3810;7000;3810;0;1480;3;7;21000;29700</measure>
+    </label>
+    <label id="L150">
+        <name>31367 Label A4 10pcs(2*5) 86.4*50.8mm</name>
+        <measure>S;8640;5080;8640;5080;1860;2120;2;5;21000;29700</measure>
+    </label>
+    <label id="L151">
+        <name>31382 Label A4 12pcs(2*6) 86.4*42.3mm</name>
+        <measure>S;8640;4230;8640;4230;1860;2120;2;6;21000;29700</measure>
+    </label>
+    <label id="L152">
+        <name>31384 Label A4 18pcs(3*6) 70*42.3mm</name>
+        <measure>S;7000;4230;7000;4230;0;2120;3;6;21000;29700</measure>
+    </label>
+    <label id="L153">
+        <name>31385 Label A4 21pcs(3*7) 70*38.1mm</name>
+        <measure>S;7000;3810;7000;3810;0;1480;3;7;21000;29700</measure>
+    </label>
+    <label id="L154">
+        <name>31387 Label A4 10pcs(2*5) 86.4*50.8mm</name>
+        <measure>S;8640;5080;8640;5080;1860;2120;2;5;21000;29700</measure>
+    </label>
+    <label id="L155">
+        <name>31642 Label A4 12pcs(2*6) 86.4*42.3mm</name>
+        <measure>S;8640;4230;8640;4230;1860;2120;2;6;21000;29700</measure>
+    </label>
+    <label id="L156">
+        <name>31647 Label A4 10pcs(2*5) 86.4*50.8mm</name>
+        <measure>S;8640;5080;8640;5080;1860;2120;2;5;21000;29700</measure>
+    </label>
+    <label id="L157">
+        <name>51002 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L158">
+        <name>51003 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L159">
+        <name>51004 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L160">
+        <name>51033 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L161">
+        <name>51034 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L162">
+        <name>51041 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L163">
+        <name>51042 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L164">
+        <name>51071 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L165">
+        <name>51075 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L166">
+        <name>51091 Card(Business) A4 10pcs(2*5) 85*49mm</name>
+        <measure>S;9100;5500;8500;4900;1700;1400;2;5;21000;29700</measure>
+    </label>
+    <label id="L167">
+        <name>51093 Card(Business) A4 10pcs(2*5) 85*49mm</name>
+        <measure>S;9100;5500;8500;4900;1700;1400;2;5;21000;29700</measure>
+    </label>
+    <label id="L168">
+        <name>51129 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L169">
+        <name>51130 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L170">
+        <name>51131 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L171">
+        <name>51132 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L172">
+        <name>51151 Card(Business) A4 5pcs(1*5) 182*55mm</name>
+        <measure>S;18200;5500;18200;5500;1400;1100;1;5;21000;29700</measure>
+    </label>
+    <label id="L173">
+        <name>51181 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L174">
+        <name>51183 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L175">
+        <name>51191 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L176">
+        <name>51261 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L177">
+        <name>51262 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L178">
+        <name>51267 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L179">
+        <name>51268 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L180">
+        <name>51275 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L181">
+        <name>51276 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L182">
+        <name>51281 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L183">
+        <name>51282 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L184">
+        <name>51291 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L185">
+        <name>51292 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L186">
+        <name>51401 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L187">
+        <name>51402 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L188">
+        <name>51405 Card(Business) A4 10pcs(2*5) 85*49mm</name>
+        <measure>S;9100;5500;8500;4900;1700;1400;2;5;21000;29700</measure>
+    </label>
+    <label id="L189">
+        <name>51411 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L190">
+        <name>51412 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L191">
+        <name>51415 Card(Business) A4 10pcs(2*5) 85*49mm</name>
+        <measure>S;9100;5500;8500;4900;1700;1400;2;5;21000;29700</measure>
+    </label>
+    <label id="L192">
+        <name>51421 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L193">
+        <name>51422 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L194">
+        <name>51431 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    <label id="L195">
+        <name>51432 Card(Business) A4 10pcs(2*5) 91*55mm</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+    </manufacturer>
+    <!-- HISAGO -->
+    <manufacturer name="HISAGO">
+    <label id="L0">
+        <name>BM102S Card(Business) A4 10pcs(2*5) 90*55mm</name>
+        <measure>S;9000;5500;9000;5500;1500;700;2;5;21000;29700</measure>
+    </label>
+    <label id="L1">
+        <name>BM108S Card(Business) A4 10pcs(2*5) 90*55mm</name>
+        <measure>S;9000;5500;9000;5500;1500;700;2;5;21000;29700</measure>
+    </label>
+    <label id="L2">
+        <name>BM120S Card(Business) A4 4pcs(2*2) 90*110mm</name>
+        <measure>S;10000;13370;9000;11000;1000;2500;2;2;21000;29700</measure>
+    </label>
+    <label id="L3">
+        <name>BM121S Card(Business) A4 4pcs(2*2) 90*110mm</name>
+        <measure>S;10000;13370;9000;11000;1000;2500;2;2;21000;29700</measure>
+    </label>
+    <label id="L4">
+        <name>BM122S Card(Business) A4 4pcs(2*2) 90*110mm</name>
+        <measure>S;10000;13370;9000;11000;1000;2500;2;2;21000;29700</measure>
+    </label>
+    <label id="L5">
+        <name>BM130S Card(Business) A4 4pcs(1*4) 180*55mm</name>
+        <measure>S;18000;6400;18000;5500;1000;2500;1;4;21000;29700</measure>
+    </label>
+    <label id="L6">
+        <name>BM131S Card(Business) A4 4pcs(1*4) 180*55mm</name>
+        <measure>S;18000;6400;18000;5500;1000;2500;1;4;21000;29700</measure>
+    </label>
+    <label id="L7">
+        <name>BM132S Card(Business) A4 4pcs(1*4) 180*55mm</name>
+        <measure>S;18000;6400;18000;5500;1000;2500;1;4;21000;29700</measure>
+    </label>
+    <label id="L8">
+        <name>CJ160S Card(Business) A4 10pcs(2*5) 90*55mm</name>
+        <measure>S;9000;5500;9000;5500;1500;700;2;5;21000;29700</measure>
+    </label>
+    <label id="L9">
+        <name>CJ161S Card(Business) A4 10pcs(2*5) 90*50mm</name>
+        <measure>S;10000;5500;9000;5000;1000;1350;2;5;21000;29700</measure>
+    </label>
+    <label id="L10">
+        <name>CJ600S Card(Business) A4 8pcs(2*4) 91*55mm</name>
+        <measure>S;9900;6400;9100;5500;1000;2500;2;4;21000;29700</measure>
+    </label>
+    <label id="L11">
+        <name>CJ602S Card(Business) A4 10pcs(2*5) 90*55mm</name>
+        <measure>S;9000;5500;9000;5500;1500;700;2;5;21000;29700</measure>
+    </label>
+    <label id="L12">
+        <name>CJ605S Card(Business) A4 4pcs(2*2) 90*110mm</name>
+        <measure>S;10000;13370;9000;11000;1000;2500;2;2;21000;29700</measure>
+    </label>
+    <label id="L13">
+        <name>CJ606S Card(Business) A4 4pcs(1*4) 180*55mm</name>
+        <measure>S;18000;6400;18000;5500;1000;2500;1;4;21000;29700</measure>
+    </label>
+    <label id="L14">
+        <name>GB861 Label A4 12pcs(2*6) 83.8*42.3mm</name>
+        <measure>S;8760;4230;8380;4230;2030;2030;2;6;21000;29700</measure>
+    </label>
+    <label id="L15">
+        <name>GB863 Label A4L 24pcs(4*6) 74.2*35mm</name>
+        <measure>S;7420;3500;7420;3500;0;0;4;6;29700;21000</measure>
+    </label>
+    <label id="L16">
+        <name>GB865 Label B4L 24pcs(4*6) 91*42.8mm</name>
+        <measure>S;9100;4280;9100;4280;0;0;4;6;36400;25700</measure>
+    </label>
+    <label id="L17">
+        <name>GB961 Label A4 12pcs(2*6) 83.8*42.3mm</name>
+        <measure>S;8760;4230;8380;4230;2030;2030;2;6;21000;29700</measure>
+    </label>
+    <label id="L18">
+        <name>LP10NS Card(Business) A4 8pcs(2*4) 91*55mm</name>
+        <measure>S;9900;6400;9100;5500;1000;2500;2;4;21000;29700</measure>
+    </label>
+    <label id="L19">
+        <name>LP11NS Card(Business) A4 10pcs(2*5) 90*55mm</name>
+        <measure>S;9000;5500;9000;5500;1500;700;2;5;21000;29700</measure>
+    </label>
+    <label id="L20">
+        <name>LP930M Card(Business) A4 8pcs(2*4) 91*55mm</name>
+        <measure>S;9900;6400;9100;5500;1000;2500;2;4;21000;29700</measure>
+    </label>
+    <label id="L21">
+        <name>OP861 Label A4 12pcs(2*6) 83.8*42.3mm</name>
+        <measure>S;8760;4230;8380;4230;2030;2030;2;6;21000;29700</measure>
+    </label>
+    <label id="L22">
+        <name>OP863 Label A4L 24pcs(4*6) 74.2*35mm</name>
+        <measure>S;7420;3500;7420;3500;0;0;4;6;29700;21000</measure>
+    </label>
+    <label id="L23">
+        <name>OP866 Label A4 12pcs(2*6) 90.2*42.3mm</name>
+        <measure>S;9270;4230;9020;4230;1700;2000;2;6;21000;29700</measure>
+    </label>
+    <label id="L24">
+        <name>OP869 Label A4 12pcs(2*6) 83.8*42.3mm</name>
+        <measure>S;8760;4230;8380;4230;2000;2000;2;6;21000;29700</measure>
+    </label>
+    <label id="L25">
+        <name>SB861 Label A4 12pcs(2*6) 83.8*42.3mm</name>
+        <measure>S;8760;4230;8380;4230;2030;2030;2;6;21000;29700</measure>
+    </label>
+    <label id="L26">
+        <name>SB863 Label A4L 24pcs(4*6) 74.2*35mm</name>
+        <measure>S;7420;3500;7420;3500;0;0;4;6;29700;21000</measure>
+    </label>
+    <label id="L27">
+        <name>SB961 Label A4 12pcs(2*6) 83.8*42.3mm</name>
+        <measure>S;8760;4230;8380;4230;2030;2030;2;6;21000;29700</measure>
+    </label>
+</manufacturer>
+<!-- SANWA SUPPLY -->
+<manufacturer name="SANWA SUPPLY">
+    <label id="L0">
+        <name>JP-MC10A Card(Business) A4 10pcs(2*5) 90*55mm (old)</name>
+        <measure>S;9000;5500;9000;5500;1500;700;2;5;21000;29700</measure>
+    </label>
+    <label id="L1">
+        <name>JP-MC10EW Card(Business) A4 10pcs(2*5) 90*55mm</name>
+        <measure>S;9000;5500;9000;5500;1500;700;2;5;21000;29700</measure>
+    </label>
+    <label id="L2">
+        <name>JP-MC10EY Card(Business) A4 10pcs(2*5) 90*55mm (old)</name>
+        <measure>S;9000;5500;9000;5500;1500;700;2;5;21000;29700</measure>
+    </label>
+    <label id="L3">
+        <name>JP-MC10K Card(Business) A4 10pcs(2*5) 90*55mm (old)</name>
+        <measure>S;9000;5500;9000;5500;1500;700;2;5;21000;29700</measure>
+    </label>
+    <label id="L4">
+        <name>JP-MC8 Card(Business) A4 8pcs(2*4) 90*55mm (old)</name>
+        <measure>S;10000;6400;9000;5500;1000;2500;2;4;21000;29700</measure>
+    </label>
+    <label id="L5">
+        <name>JP-MC8K Card(Business) A4 8pcs(2*4) 90*55mm (old)</name>
+        <measure>S;10000;6400;9000;5500;1000;2500;2;4;21000;29700</measure>
+    </label>
+    <label id="L6">
+        <name>JP-MCMARU Card(Business) A4 10pcs(2*5) 85*49mm (old)</name>
+        <measure>S;8900;5500;8500;4900;1800;1000;2;5;21000;29700</measure>
+    </label>
+    <label id="L7">
+        <name>JP-MCMARUK Card(Business) A4 10pcs(2*5) 85*49mm (old)</name>
+        <measure>S;8900;5500;8500;4900;1800;1000;2;5;21000;29700</measure>
+    </label>
+    <label id="L8">
+        <name>JP-MCSOFT Card(Business) A4 10pcs(2*5) 90*55mm (old)</name>
+        <measure>S;9000;5500;9000;5500;1500;700;2;5;21000;29700</measure>
+    </label>
+    <label id="L9">
+        <name>JP-MCWASHI Card(Business) A4 10pcs(2*5) 90*55mm</name>
+        <measure>S;9000;5500;9000;5500;1500;700;2;5;21000;29700</measure>
+    </label>
+    <label id="L10">
+        <name>JP-TA10A Label A4 12pcs(2*6) 83.8*42.3mm</name>
+        <measure>S;8760;4230;8380;4230;2030;2030;2;6;21000;29700</measure>
+    </label>
+    <label id="L11">
+        <name>JP-TA16 Label A4 16pcs(2*8) 99.1*33.9mm (old)</name>
+        <measure>S;10160;3390;9910;3390;460;1290;2;8;21000;29700</measure>
+    </label>
+    <label id="L12">
+        <name>JP-TA18 Label A4 18pcs(3*6) 63.5*46.6mm (old)</name>
+        <measure>S;6600;4660;6350;4660;730;870;3;6;21000;29700</measure>
+    </label>
+    <label id="L13">
+        <name>JP-TA21 Label A4 21pcs(3*7) 63.5*38.1mm (old)</name>
+        <measure>S;6610;3810;6350;3810;710;1520;3;7;21000;29700</measure>
+    </label>
+    <label id="L14">
+        <name>LBP-MMC10 Card(Business) A4 10pcs(2*5) 90*55mm (old)</name>
+        <measure>S;9000;5500;9000;5500;1500;700;2;5;21000;29700</measure>
+    </label>
+    <label id="L15">
+        <name>LBP-MMC10K Card(Business) A4 10pcs(2*5) 90*55mm (old)</name>
+        <measure>S;9000;5500;9000;5500;1500;700;2;5;21000;29700</measure>
+    </label>
+    <label id="L16">
+        <name>TA-401A Label A4 12pcs(2*6) 99*38mm (old)</name>
+        <measure>S;10400;4220;9900;3800;350;2500;2;6;21000;29700</measure>
+    </label>
+    <label id="L17">
+        <name>TA-401B Label B4 21pcs(3*7) 81*42mm (old)</name>
+        <measure>S;8400;4200;8100;4200;400;1300;3;7;25700;36400</measure>
+    </label>
+    <label id="L18">
+        <name>TA-402A Label A4L 16pcs(4*4) 69*47.5mm (old)</name>
+        <measure>S;6900;4750;6900;4750;1000;1000;4;4;29700;21000</measure>
+    </label>
+    <label id="L19">
+        <name>TA-LP16 Label A4 16pcs(2*8) 99.1*33.9mm (old)</name>
+        <measure>S;10160;3390;9910;3390;460;1290;2;8;21000;29700</measure>
+    </label>
+    <label id="L20">
+        <name>TA-LP18 Label A4 18pcs(3*6) 63.5*46.6mm (old)</name>
+        <measure>S;6600;4660;6350;4660;730;870;3;6;21000;29700</measure>
+    </label>
+    <label id="L21">
+        <name>TA-LP21 Label A4 21pcs(3*7) 63.5*38.1mm (old)</name>
+        <measure>S;6610;3810;6350;3810;710;1520;3;7;21000;29700</measure>
+    </label>
+    <label id="L22">
+        <name>TA-LPCL2 Label A4 12pcs(2*6) 99*38mm (old)</name>
+        <measure>S;10400;4220;9900;3800;350;2500;2;6;21000;29700</measure>
+    </label>
+    <label id="L23">
+        <name>TA-LPHOGO Label A4 12pcs(2*6) 83.8*42.3mm (old)</name>
+        <measure>S;8760;4230;8380;4230;2030;2030;2;6;21000;29700</measure>
+    </label>
+</manufacturer>
+<!-- DAISO -->
+<manufacturer name="DAISO">
+    <label id="L0">
+        <name>No.136 Business cards</name>
+        <measure>S;9100;5500;9100;5500;1400;1100;2;5;21000;29700</measure>
+    </label>
+</manufacturer>
 </manufacturers>
