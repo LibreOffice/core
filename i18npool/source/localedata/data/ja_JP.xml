@@ -395,63 +395,63 @@
       <MonthsOfYear>
         <Month>
           <MonthID>jan</MonthID>
-          <DefaultAbbrvName>1月</DefaultAbbrvName>
-          <DefaultFullName>一月</DefaultFullName>
+          <DefaultAbbrvName>睦月</DefaultAbbrvName>
+          <DefaultFullName>睦月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
-          <DefaultAbbrvName>2月</DefaultAbbrvName>
-          <DefaultFullName>二月</DefaultFullName>
+          <DefaultAbbrvName>如月</DefaultAbbrvName>
+          <DefaultFullName>如月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>mar</MonthID>
-          <DefaultAbbrvName>3月</DefaultAbbrvName>
-          <DefaultFullName>三月</DefaultFullName>
+          <DefaultAbbrvName>弥生</DefaultAbbrvName>
+          <DefaultFullName>弥生</DefaultFullName>
         </Month>
         <Month>
           <MonthID>apr</MonthID>
-          <DefaultAbbrvName>4月</DefaultAbbrvName>
-          <DefaultFullName>四月</DefaultFullName>
+          <DefaultAbbrvName>卯月</DefaultAbbrvName>
+          <DefaultFullName>卯月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>may</MonthID>
-          <DefaultAbbrvName>5月</DefaultAbbrvName>
-          <DefaultFullName>五月</DefaultFullName>
+          <DefaultAbbrvName>皐月</DefaultAbbrvName>
+          <DefaultFullName>皐月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jun</MonthID>
-          <DefaultAbbrvName>6月</DefaultAbbrvName>
-          <DefaultFullName>六月</DefaultFullName>
+          <DefaultAbbrvName>水無月</DefaultAbbrvName>
+          <DefaultFullName>水無月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
-          <DefaultAbbrvName>7月</DefaultAbbrvName>
-          <DefaultFullName>七月</DefaultFullName>
+          <DefaultAbbrvName>文月</DefaultAbbrvName>
+          <DefaultFullName>文月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>aug</MonthID>
-          <DefaultAbbrvName>8月</DefaultAbbrvName>
-          <DefaultFullName>八月</DefaultFullName>
+          <DefaultAbbrvName>葉月</DefaultAbbrvName>
+          <DefaultFullName>葉月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>sep</MonthID>
-          <DefaultAbbrvName>9月</DefaultAbbrvName>
-          <DefaultFullName>九月</DefaultFullName>
+          <DefaultAbbrvName>長月</DefaultAbbrvName>
+          <DefaultFullName>長月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
-          <DefaultAbbrvName>10月</DefaultAbbrvName>
-          <DefaultFullName>十月</DefaultFullName>
+          <DefaultAbbrvName>神無月</DefaultAbbrvName>
+          <DefaultFullName>神無月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
-          <DefaultAbbrvName>11月</DefaultAbbrvName>
-          <DefaultFullName>十一月</DefaultFullName>
+          <DefaultAbbrvName>霜月</DefaultAbbrvName>
+          <DefaultFullName>霜月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>dec</MonthID>
-          <DefaultAbbrvName>12月</DefaultAbbrvName>
-          <DefaultFullName>十二月</DefaultFullName>
+          <DefaultAbbrvName>師走</DefaultAbbrvName>
+          <DefaultFullName>師走</DefaultFullName>
         </Month>
       </MonthsOfYear>
       <Eras>
