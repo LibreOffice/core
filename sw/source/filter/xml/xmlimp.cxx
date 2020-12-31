@@ -1286,7 +1286,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     };
 
     SvtSaveOptions aSaveOpt;
-    bool bIsUserSetting = aSaveOpt.IsLoadUserSettings();
+    bool bAreUserSettingsFromDocument = aSaveOpt.IsLoadUserSettings();
 
     // for some properties we don't want to use the application
     // default if they're missing. So we watch for them in the loop
@@ -1326,7 +1326,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     for( const PropertyValue& rValue : aConfigProps )
     {
         bool bSet = aExcludeAlways.find(rValue.Name) == aExcludeAlways.end();
-        if( bSet && !bIsUserSetting
+        if( bSet && !bAreUserSettingsFromDocument
             && (aExcludeWhenNotLoadingUserSettings.find(rValue.Name)
                 != aExcludeWhenNotLoadingUserSettings.end()) )
         {
@@ -1442,7 +1442,9 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     // introduce boolean, that indicates a document, written by version prior SO8.
     const bool bDocumentPriorSO8 = !bConsiderWrapOnObjPos;
 
-    if( ! bPrinterIndependentLayout )
+    // Use old behaviour if this setting didn't exist, but only if this setting is being read from the document.
+    // (Obviously the setting doesn't exist if we are explicitly ignoring it, so then stick with program/user defaults)
+    if(!bPrinterIndependentLayout && bAreUserSettingsFromDocument)
     {
         xProps->setPropertyValue( "PrinterIndependentLayout", Any(sal_Int16(document::PrinterIndependentLayout::DISABLED)) );
     }
