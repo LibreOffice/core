@@ -17,11 +17,14 @@
 #include <vcl/pdfread.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/BinaryDataContainer.hxx>
+#include <vcl/BinaryDataContainerTools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/graphic/XPdfDecomposer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/XBinaryDataContainer.hpp>
 
 using namespace css;
 
@@ -38,7 +41,7 @@ public:
 
     // XPdfDecomposer
     uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL
-    getDecomposition(const uno::Sequence<sal_Int8>& xPdfData,
+    getDecomposition(const uno::Reference<util::XBinaryDataContainer>& xDataContainer,
                      const uno::Sequence<beans::PropertyValue>& xDecompositionParameters) override;
 
     // XServiceInfo
@@ -49,8 +52,9 @@ public:
 
 XPdfDecomposer::XPdfDecomposer(uno::Reference<uno::XComponentContext> const&) {}
 
-uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL XPdfDecomposer::getDecomposition(
-    const uno::Sequence<sal_Int8>& xPdfData, const uno::Sequence<beans::PropertyValue>& xParameters)
+uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL
+XPdfDecomposer::getDecomposition(const uno::Reference<util::XBinaryDataContainer>& xDataContainer,
+                                 const uno::Sequence<beans::PropertyValue>& xParameters)
 {
     sal_Int32 nPageIndex = -1;
 
@@ -66,8 +70,10 @@ uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL XPdfDecomposer::ge
     if (nPageIndex < 0)
         nPageIndex = 0;
 
+    BinaryDataContainer aDataContainer = vcl::convertUnoBinaryDataContainer(xDataContainer);
+
     std::vector<BitmapEx> aBitmaps;
-    int rv = vcl::RenderPDFBitmaps(xPdfData.getConstArray(), xPdfData.getLength(), aBitmaps,
+    int rv = vcl::RenderPDFBitmaps(aDataContainer.getData(), aDataContainer.getSize(), aBitmaps,
                                    nPageIndex, 1);
     if (rv == 0)
         return {}; // happens if we do not have PDFium
