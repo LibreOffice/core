@@ -36,59 +36,30 @@ using namespace com::sun::star::uno;
 
 // SbxVariable
 
-
-// SbxVariableImpl
-
-class SbxVariableImpl
-{
-    friend class SbxVariable;
-    OUString                    m_aDeclareClassName;
-    Reference< XInterface >     m_xComListener;
-    StarBASIC*                  m_pComListenerParentBasic;
-
-    SbxVariableImpl()
-        : m_pComListenerParentBasic( nullptr )
-    {}
-};
-
-
-// Constructors
-
 SbxVariable::SbxVariable() : SbxValue()
 {
-    pParent = nullptr;
-    nUserData = 0;
-    nHash = 0;
 }
 
 SbxVariable::SbxVariable( const SbxVariable& r )
     : SvRefBase( r ),
       SbxValue( r ),
+      m_aDeclareClassName( r.m_aDeclareClassName ),
+      m_xComListener( r.m_xComListener),
       mpPar( r.mpPar ),
       pInfo( r.pInfo )
 {
-    if( r.mpImpl != nullptr )
-    {
-        mpImpl.reset( new SbxVariableImpl( *r.mpImpl ) );
 #if HAVE_FEATURE_SCRIPTING
-        if( mpImpl->m_xComListener.is() )
-        {
-            registerComListenerVariableForBasic( this, mpImpl->m_pComListenerParentBasic );
-        }
-#endif
+    if( r.m_xComListener.is() )
+    {
+        registerComListenerVariableForBasic( this, r.m_pComListenerParentBasic );
     }
+#endif
     if( r.CanRead() )
     {
         pParent = r.pParent;
         nUserData = r.nUserData;
         maName = r.maName;
         nHash = r.nHash;
-    }
-    else
-    {
-        pParent = nullptr;
-        nUserData = 0;
-        nHash = 0;
     }
 }
 
@@ -109,9 +80,6 @@ void SbxEnsureParentVariable::SetParent(SbxObject* p)
 
 SbxVariable::SbxVariable( SbxDataType t ) : SbxValue( t )
 {
-    pParent = nullptr;
-    nUserData = 0;
-    nHash = 0;
 }
 
 SbxVariable::~SbxVariable()
@@ -312,17 +280,15 @@ SbxVariable& SbxVariable::operator=( const SbxVariable& r )
     if (this != &r)
     {
         SbxValue::operator=( r );
-        mpImpl.reset();
-        if( r.mpImpl != nullptr )
-        {
-            mpImpl.reset( new SbxVariableImpl( *r.mpImpl ) );
+        m_aDeclareClassName = r.m_aDeclareClassName;
+        m_xComListener = r.m_xComListener;
+        m_pComListenerParentBasic = r.m_pComListenerParentBasic;
 #if HAVE_FEATURE_SCRIPTING
-            if( mpImpl->m_xComListener.is() )
-            {
-                registerComListenerVariableForBasic( this, mpImpl->m_pComListenerParentBasic );
-            }
-#endif
+        if( m_xComListener.is() )
+        {
+            registerComListenerVariableForBasic( this, m_pComListenerParentBasic );
         }
+#endif
     }
     return *this;
 }
@@ -389,33 +355,21 @@ void SbxVariable::SetParent( SbxObject* p )
     pParent = p;
 }
 
-SbxVariableImpl* SbxVariable::getImpl()
-{
-    if(!mpImpl)
-    {
-        mpImpl.reset(new SbxVariableImpl);
-    }
-    return mpImpl.get();
-}
-
 const OUString& SbxVariable::GetDeclareClassName()
 {
-    SbxVariableImpl* pImpl = getImpl();
-    return pImpl->m_aDeclareClassName;
+    return m_aDeclareClassName;
 }
 
 void SbxVariable::SetDeclareClassName( const OUString& rDeclareClassName )
 {
-    SbxVariableImpl* pImpl = getImpl();
-    pImpl->m_aDeclareClassName = rDeclareClassName;
+    m_aDeclareClassName = rDeclareClassName;
 }
 
 void SbxVariable::SetComListener( const css::uno::Reference< css::uno::XInterface >& xComListener,
                                   StarBASIC* pParentBasic )
 {
-    SbxVariableImpl* pImpl = getImpl();
-    pImpl->m_xComListener = xComListener;
-    pImpl->m_pComListenerParentBasic = pParentBasic;
+    m_xComListener = xComListener;
+    m_pComListenerParentBasic = pParentBasic;
 #if HAVE_FEATURE_SCRIPTING
     registerComListenerVariableForBasic( this, pParentBasic );
 #endif
@@ -423,8 +377,7 @@ void SbxVariable::SetComListener( const css::uno::Reference< css::uno::XInterfac
 
 void SbxVariable::ClearComListener()
 {
-    SbxVariableImpl* pImpl = getImpl();
-    pImpl->m_xComListener.clear();
+    m_xComListener.clear();
 }
 
 
