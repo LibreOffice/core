@@ -208,7 +208,6 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     const Sequence< Sequence< PropertyValue > > aList = m_aConfigItem.GetList();
 
     SvtCompatibilityEntry aEntry;
-    aEntry.setValue<bool>( SvtCompatibilityEntry::Index::ExpandWordSpace, false );
 
     for ( const Sequence< PropertyValue >& rEntry : aList )
     {
