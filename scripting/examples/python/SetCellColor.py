@@ -15,24 +15,39 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
+import uno
 
-def SetCellColor(x, y, color):
-    """Sets the background of the cell at (x,y) (zero-based column and row
-       indices, for example (2,3) == C4) on the first sheet and
-       returns the contents of the cell as a string.
-    """
-    # Get the doc from the scripting context which is made available to
-    # all scripts.
-    desktop = XSCRIPTCONTEXT.getDesktop()
-    model = desktop.getCurrentComponent()
+def _SetCellColor(sheet, cellRange, color):
+    """Sets the background of 'cellRange' in 'sheet', to 'color'."""
+    # https://api.libreoffice.org/docs/idl/ref/interfacecom_1_1sun_1_1star_1_1table_1_1XCellRange.html#a92c77dc3025ac50d55bf31bc80ab118f
+    cells = sheet.getCellRangeByName(cellRange)
 
-    # Check whether there's already an opened document.
-    if not hasattr(model, "Sheets"):
-        return ""
+    # https://api.libreoffice.org/docs/idl/ref/servicecom_1_1sun_1_1star_1_1table_1_1CellProperties.html
+    cells.CellBackColor = color
 
-    sheet = model.Sheets.Sheet1
-    cell = sheet.getCellByPosition(x, y)
+def SetCellColor():
+    ctx = uno.getComponentContext()
+    smgr = ctx.ServiceManager
+    desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop", ctx)
 
-    cell.CellBackColor = color
+    # Create a blank spreadsheet document, instead of operating on the existing one
+    doc = desktop.loadComponentFromURL("private:factory/scalc", "_blank", 0, ())
 
-    return cell.String
+    # Select the first sheet in the spreadsheet (0-index based).
+    sheet = doc.Sheets[0]
+
+    # Call the above helper function to set color (in hex number).
+    # To get the hex number:
+    #    1. go to Calc, click toolbar dropdown "Background Color" > Custome Color;
+    #    2. Pick a color, copy the hex number and prefix it with "0x".
+    _SetCellColor(sheet, "C3:C21",    0x4021c9)
+    _SetCellColor(sheet, "D18:E21",   0x4021c9)
+    _SetCellColor(sheet, "G3:G21",    0x4021c9)
+    _SetCellColor(sheet, "H3:I5",     0x4021c9)
+    _SetCellColor(sheet, "I6:I21",    0x4021c9)
+    _SetCellColor(sheet, "H19:H21",   0x4021c9)
+
+    # You should get a nice "LO" in the spreadsheet!
+
+# Only the specified function will show in the Tools > Macro > Organize Macro dialog:
+g_exportedScripts = (SetCellColor,)
