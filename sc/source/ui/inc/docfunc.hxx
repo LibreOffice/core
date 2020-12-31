@@ -28,6 +28,7 @@
 #include <memory>
 #include <vector>
 #include <map>
+#include <tabprotection.hxx>
 
 class ScEditEngineDefaulter;
 class SdrUndoAction;
@@ -232,6 +233,9 @@ public:
     void SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB nTab );
 
     void ConvertFormulaToValue( const ScRange& rRange, bool bInteraction );
+
+private:
+    void            ProtectDocument( const ScDocProtection& rProtect );
 };
 
 class ScDocFuncDirect : public ScDocFunc
