@@ -62,6 +62,7 @@
 #include <svx/xmleohlp.hxx>
 #include <sfx2/printer.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <unotools/compatibility.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/streamwrap.hxx>
 #include <tools/helpers.hxx>
@@ -1588,6 +1589,15 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     if (!bSubtractFlysAnchoredAtFlys && bAreUserSettingsFromDocument)
         xProps->setPropertyValue("SubtractFlysAnchoredAtFlys", makeAny(true));
+
+    // Document initialization disables this, anticipating that a document setting will override.
+    // Since the document's setting has been ignored, treat this as the program/user default - and force the override.
+    if (!bAreUserSettingsFromDocument)
+    {
+        const SvtCompatibilityOptions aOptions;
+        const bool bDefaultSetting = aOptions.GetDefault(SvtCompatibilityEntry::Index::EmptyDbFieldHidesPara);
+        xProps->setPropertyValue("EmptyDbFieldHidesPara", makeAny(bDefaultSetting));
+    }
 
     if (!bCollapseEmptyCellPara)
         xProps->setPropertyValue("CollapseEmptyCellPara", makeAny(false));
