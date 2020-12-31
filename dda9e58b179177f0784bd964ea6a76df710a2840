@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a723b71_acaf3b5d",
+        "filename": "basic/source/sbx/sbxvar.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-12-31T15:44:30Z",
+      "side": 1,
+      "message": "need to copy\n    m_aDeclareClassName;\n    m_xComListener;\nhere",
+      "revId": "dda9e58b179177f0784bd964ea6a76df710a2840",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
