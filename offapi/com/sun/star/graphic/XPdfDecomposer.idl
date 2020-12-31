@@ -11,6 +11,7 @@
 #define __com_sun_star_graphic_XPdfDecomposer_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/uno/util/XBinaryDataContainer.idl>
 
 module com {  module sun {  module star {  module graphic {
 
@@ -26,15 +27,15 @@ interface XPdfDecomposer : ::com::sun::star::uno::XInterface
 {
     /** Retrieve decomposed list - in this case a bitmap with the rendered PDF.
 
-        @param xPdfData
-        The PDF data.
+        @param xDataContainer
+        The PDF data in a data container
 
         @param xDecompositionParameters
         Parameters for decomposition. Parameters include:
 
         sal_Int32 PageIndex - which page to use
      */
-    sequence<XPrimitive2D> getDecomposition([in] sequence<byte> xPdfData,
+    sequence<XPrimitive2D> getDecomposition([in] com::sun::star::util::XBinaryDataContainer xDataContainer,
                                             [in] sequence<com::sun::star::beans::PropertyValue> xDecompositionParameters);
 };
 
