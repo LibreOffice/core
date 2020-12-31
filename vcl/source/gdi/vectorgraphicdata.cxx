@@ -29,6 +29,7 @@
 #include <com/sun/star/graphic/Primitive2DTools.hpp>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 #include <com/sun/star/util/XAccounting.hpp>
+#include <com/sun/star/util/XBinaryDataContainer.hpp>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/canvastools.hxx>
 #include <comphelper/seqstream.hxx>
@@ -40,6 +41,7 @@
 #include <vcl/wmfexternal.hxx>
 #include <vcl/pdfread.hxx>
 #include <unotools/streamwrap.hxx>
+#include <graphic/UnoBinaryDataContainer.hxx>
 
 using namespace ::com::sun::star;
 
@@ -249,10 +251,11 @@ void VectorGraphicData::ensureSequenceAndRange()
             uno::Sequence<beans::PropertyValue> aDecompositionParameters = comphelper::InitPropertySequence({
                 {"PageIndex", uno::makeAny<sal_Int32>(mnPageIndex)},
             });
-            // TODO: change xPdfDecomposer to use BinaryDataContainer directly
-            css::uno::Sequence<sal_Int8> aDataSequence(maDataContainer.getSize());
-            std::copy(maDataContainer.cbegin(), maDataContainer.cend(), aDataSequence.begin());
-            auto xPrimitive2D = xPdfDecomposer->getDecomposition(aDataSequence, aDecompositionParameters);
+
+            auto* pUnoBinaryDataContainer = new UnoBinaryDataContainer(getBinaryDataContainer());
+            uno::Reference<util::XBinaryDataContainer> xDataContainer = pUnoBinaryDataContainer;
+
+            auto xPrimitive2D = xPdfDecomposer->getDecomposition(xDataContainer, aDecompositionParameters);
             maSequence = comphelper::sequenceToContainer<std::deque<uno::Reference<graphic::XPrimitive2D>>>(xPrimitive2D);
 
             break;
