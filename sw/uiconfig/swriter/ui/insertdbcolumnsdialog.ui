@@ -240,347 +240,340 @@
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment1">
+                  <!-- n-columns=1 n-rows=1 -->
+                  <object class="GtkGrid" id="grid4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="top_padding">6</property>
-                    <property name="left_padding">12</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
                     <child>
-                      <!-- n-columns=1 n-rows=1 -->
-                      <object class="GtkGrid" id="grid4">
+                      <object class="GtkLabel" id="label4">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="insertdbcolumnsdialog|label4">Database _columns</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">box2</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="tablecolft">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="insertdbcolumnsdialog|tablecolft">Tab_le column(s)</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">tablecols</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButtonBox" id="buttonbox1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="vexpand">True</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">12</property>
+                        <property name="layout_style">start</property>
+                        <child>
+                          <object class="GtkButton" id="allright">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="image">image1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="allright-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|allright">Moves all listed database fields into the Table column(s) list box.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="oneright">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="image">image2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="oneright-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|oneright">Moves the selected database field into the Table column(s) list box.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="toedit">
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="no_show_all">True</property>
+                            <property name="image">image5</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="toedit-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|toedit">Moves the fields that you selected in the Database columns list box into the selection field.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="oneleft">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="image">image3</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="oneleft-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|oneleft">Removes the selected database field from the Table column(s) list box</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">4</property>
+                            <property name="secondary">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="allleft">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="image">image4</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="allleft-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|allleft">Removes all database fields from the Table column(s) list box.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">5</property>
+                            <property name="secondary">True</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="box1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <property name="row_spacing">6</property>
-                        <property name="column_spacing">12</property>
+                        <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkLabel" id="label4">
+                          <object class="GtkScrolledWindow">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="insertdbcolumnsdialog|label4">Database _columns</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">box2</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="tablecolft">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="insertdbcolumnsdialog|tablecolft">Tab_le column(s)</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">tablecols</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">2</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButtonBox" id="buttonbox1">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="vexpand">True</property>
-                            <property name="orientation">vertical</property>
-                            <property name="spacing">12</property>
-                            <property name="layout_style">start</property>
-                            <child>
-                              <object class="GtkButton" id="allright">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="image">image1</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="allright-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|allright">Moves all listed database fields into the Table column(s) list box.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="oneright">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="image">image2</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="oneright-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|oneright">Moves the selected database field into the Table column(s) list box.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="toedit">
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="no_show_all">True</property>
-                                <property name="image">image5</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="toedit-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|toedit">Moves the fields that you selected in the Database columns list box into the selection field.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="oneleft">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="image">image3</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="oneleft-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|oneleft">Removes the selected database field from the Table column(s) list box</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">4</property>
-                                <property name="secondary">True</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="allleft">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="image">image4</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="allleft-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|allleft">Removes all database fields from the Table column(s) list box.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">5</property>
-                                <property name="secondary">True</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox" id="box1">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
-                            <property name="orientation">vertical</property>
+                            <property name="shadow_type">in</property>
                             <child>
-                              <object class="GtkScrolledWindow">
+                              <object class="GtkTreeView" id="tablecols">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
-                                <property name="shadow_type">in</property>
+                                <property name="model">liststore1</property>
+                                <property name="headers_visible">False</property>
+                                <property name="headers_clickable">False</property>
+                                <property name="search_column">0</property>
+                                <property name="show_expanders">False</property>
+                                <child internal-child="selection">
+                                  <object class="GtkTreeSelection" id="treeview-selection1"/>
+                                </child>
                                 <child>
-                                  <object class="GtkTreeView" id="tablecols">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="hexpand">True</property>
-                                    <property name="vexpand">True</property>
-                                    <property name="model">liststore1</property>
-                                    <property name="headers_visible">False</property>
-                                    <property name="headers_clickable">False</property>
-                                    <property name="search_column">0</property>
-                                    <property name="show_expanders">False</property>
-                                    <child internal-child="selection">
-                                      <object class="GtkTreeSelection" id="treeview-selection1"/>
-                                    </child>
+                                  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                                     <child>
-                                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                                        <child>
-                                          <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                                          <attributes>
-                                            <attribute name="text">0</attribute>
-                                          </attributes>
-                                        </child>
-                                      </object>
-                                    </child>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="tablecols-atkobject">
-                                        <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|tablecols">Lists all database columns to be inserted into the document.</property>
-                                      </object>
+                                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
                                     </child>
                                   </object>
                                 </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkScrolledWindow" id="scrolledwindow1">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
-                                <property name="shadow_type">in</property>
-                                <child>
-                                  <object class="GtkTextView" id="textview">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="hexpand">True</property>
-                                    <property name="vexpand">True</property>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="textview-atkobject">
-                                        <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|textview">Lists the database columns that you selected to be inserted into the document. You can also enter text here. This text will be also inserted into the document.</property>
-                                      </object>
-                                    </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="tablecols-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|tablecols">Lists all database columns to be inserted into the document.</property>
                                   </object>
                                 </child>
                               </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">2</property>
-                            <property name="top_attach">1</property>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="box2">
+                          <object class="GtkScrolledWindow" id="scrolledwindow1">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
-                            <property name="orientation">vertical</property>
+                            <property name="shadow_type">in</property>
                             <child>
-                              <object class="GtkScrolledWindow">
+                              <object class="GtkTextView" id="textview">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
-                                <property name="shadow_type">in</property>
-                                <child>
-                                  <object class="GtkTreeView" id="tabledbcols">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="hexpand">True</property>
-                                    <property name="vexpand">True</property>
-                                    <property name="model">liststore2</property>
-                                    <property name="headers_visible">False</property>
-                                    <property name="headers_clickable">False</property>
-                                    <property name="search_column">0</property>
-                                    <property name="show_expanders">False</property>
-                                    <child internal-child="selection">
-                                      <object class="GtkTreeSelection" id="treeview-selection2"/>
-                                    </child>
-                                    <child>
-                                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                                        <child>
-                                          <object class="GtkCellRendererText" id="cellrenderertext2"/>
-                                          <attributes>
-                                            <attribute name="text">0</attribute>
-                                          </attributes>
-                                        </child>
-                                      </object>
-                                    </child>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="tabledbcols-atkobject">
-                                        <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|tabledbcols">Specifies the database columns to be inserted into the text table.</property>
-                                      </object>
-                                    </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="textview-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|textview">Lists the database columns that you selected to be inserted into the document. You can also enter text here. This text will be also inserted into the document.</property>
                                   </object>
                                 </child>
                               </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkScrolledWindow">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
-                                <property name="shadow_type">in</property>
-                                <child>
-                                  <object class="GtkTreeView" id="tabletxtcols">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="hexpand">True</property>
-                                    <property name="vexpand">True</property>
-                                    <property name="model">liststore3</property>
-                                    <property name="headers_visible">False</property>
-                                    <property name="headers_clickable">False</property>
-                                    <property name="search_column">0</property>
-                                    <property name="show_expanders">False</property>
-                                    <child internal-child="selection">
-                                      <object class="GtkTreeSelection" id="treeview-selection3"/>
-                                    </child>
-                                    <child>
-                                      <object class="GtkTreeViewColumn" id="treeviewcolumn3">
-                                        <child>
-                                          <object class="GtkCellRendererText" id="cellrenderertext3"/>
-                                          <attributes>
-                                            <attribute name="text">0</attribute>
-                                          </attributes>
-                                        </child>
-                                      </object>
-                                    </child>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="tabletxtcols-atkobject">
-                                        <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|tabletxtcols">Select the database columns that you want to insert it in the document.</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
                           </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
                         </child>
                       </object>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="box2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkScrolledWindow">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="shadow_type">in</property>
+                            <child>
+                              <object class="GtkTreeView" id="tabledbcols">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                                <property name="model">liststore2</property>
+                                <property name="headers_visible">False</property>
+                                <property name="headers_clickable">False</property>
+                                <property name="search_column">0</property>
+                                <property name="show_expanders">False</property>
+                                <child internal-child="selection">
+                                  <object class="GtkTreeSelection" id="treeview-selection2"/>
+                                </child>
+                                <child>
+                                  <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="tabledbcols-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|tabledbcols">Specifies the database columns to be inserted into the text table.</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkScrolledWindow">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="shadow_type">in</property>
+                            <child>
+                              <object class="GtkTreeView" id="tabletxtcols">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                                <property name="model">liststore3</property>
+                                <property name="headers_visible">False</property>
+                                <property name="headers_clickable">False</property>
+                                <property name="search_column">0</property>
+                                <property name="show_expanders">False</property>
+                                <child internal-child="selection">
+                                  <object class="GtkTreeSelection" id="treeview-selection3"/>
+                                </child>
+                                <child>
+                                  <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext3"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="tabletxtcols-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|tabletxtcols">Select the database columns that you want to insert it in the document.</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
                 </child>
@@ -607,161 +600,147 @@
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment2">
+                  <!-- n-columns=1 n-rows=1 -->
+                  <object class="GtkGrid" id="grid5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="top_padding">6</property>
-                    <property name="left_padding">12</property>
+                    <property name="column_spacing">18</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
                     <child>
                       <!-- n-columns=1 n-rows=1 -->
-                      <object class="GtkGrid" id="grid5">
+                      <object class="GtkGrid" id="grid6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="column_spacing">18</property>
+                        <property name="row_spacing">6</property>
+                        <property name="column_spacing">12</property>
                         <child>
-                          <!-- n-columns=1 n-rows=1 -->
-                          <object class="GtkGrid" id="grid6">
+                          <object class="GtkCheckButton" id="tableheading">
+                            <property name="label" translatable="yes" context="insertdbcolumnsdialog|tableheading">Insert table heading</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="tableheading-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|tableheading">Specifies whether to insert a heading line for the columns in the text table.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkRadioButton" id="columnname">
+                            <property name="label" translatable="yes" context="insertdbcolumnsdialog|columnname">Apply column _name</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="margin-start">12</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="columnname-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|columnname">Uses the field names of the database table as headings for each of the text table columns.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkRadioButton" id="rowonly">
+                            <property name="label" translatable="yes" context="insertdbcolumnsdialog|rowonly">Create row only</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="margin-start">12</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="group">columnname</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="rowonly-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|rowonly">Inserts an empty heading line into the text table.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="tableformat">
+                            <property name="label" translatable="yes" context="insertdbcolumnsdialog|tableformat">Pr_operties...</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="tableformat-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|tableformat">Opens the Table Format dialog, which enables you to define the table properties such as borders, background, and column width.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="autoformat">
+                            <property name="label" translatable="yes" context="insertdbcolumnsdialog|autoformat">Aut_oFormat...</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="autoformat-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|autoformat">Opens the AutoFormat dialog, in which you can select format styles that are immediately applied when inserting the table.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="parastylelabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes" context="insertdbcolumnsdialog|parastylelabel">Paragraph _style:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">parastyle</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="parastyle">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
-                            <property name="row_spacing">6</property>
-                            <property name="column_spacing">12</property>
-                            <child>
-                              <object class="GtkCheckButton" id="tableheading">
-                                <property name="label" translatable="yes" context="insertdbcolumnsdialog|tableheading">Insert table heading</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="tableheading-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|tableheading">Specifies whether to insert a heading line for the columns in the text table.</property>
-                                  </object>
-                                </child>
+                            <accessibility>
+                              <relation type="labelled-by" target="userdefined"/>
+                            </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="parastyle-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|parastyle">This is where you can select other Paragraph Styles to apply to the paragraph you want to insert into the document.</property>
                               </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkRadioButton" id="columnname">
-                                <property name="label" translatable="yes" context="insertdbcolumnsdialog|columnname">Apply column _name</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="margin-start">12</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="columnname-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|columnname">Uses the field names of the database table as headings for each of the text table columns.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkRadioButton" id="rowonly">
-                                <property name="label" translatable="yes" context="insertdbcolumnsdialog|rowonly">Create row only</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="margin-start">12</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                                <property name="group">columnname</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="rowonly-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|rowonly">Inserts an empty heading line into the text table.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">3</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="tableformat">
-                                <property name="label" translatable="yes" context="insertdbcolumnsdialog|tableformat">Pr_operties...</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="use_underline">True</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="tableformat-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|tableformat">Opens the Table Format dialog, which enables you to define the table properties such as borders, background, and column width.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="autoformat">
-                                <property name="label" translatable="yes" context="insertdbcolumnsdialog|autoformat">Aut_oFormat...</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="use_underline">True</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="autoformat-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|autoformat">Opens the AutoFormat dialog, in which you can select format styles that are immediately applied when inserting the table.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="parastylelabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes" context="insertdbcolumnsdialog|parastylelabel">Paragraph _style:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">parastyle</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="parastyle">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="hexpand">True</property>
-                                <accessibility>
-                                  <relation type="labelled-by" target="userdefined"/>
-                                </accessibility>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="parastyle-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|parastyle">This is where you can select other Paragraph Styles to apply to the paragraph you want to insert into the document.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <placeholder/>
                             </child>
                           </object>
                           <packing>
@@ -770,69 +749,34 @@
                           </packing>
                         </child>
                         <child>
-                          <!-- n-columns=1 n-rows=1 -->
-                          <object class="GtkGrid" id="grid7">
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <!-- n-columns=1 n-rows=1 -->
+                      <object class="GtkGrid" id="grid7">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="row_spacing">6</property>
+                        <child>
+                          <object class="GtkRadioButton" id="fromdatabase">
+                            <property name="label" translatable="yes" context="insertdbcolumnsdialog|fromdatabase">From _database</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="row_spacing">6</property>
-                            <child>
-                              <object class="GtkRadioButton" id="fromdatabase">
-                                <property name="label" translatable="yes" context="insertdbcolumnsdialog|fromdatabase">From _database</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="active">True</property>
-                                <property name="draw_indicator">True</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="fromdatabase-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|fromdatabase">Accepts the database formats.</property>
-                                  </object>
-                                </child>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="active">True</property>
+                            <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="fromdatabase-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|fromdatabase">Accepts the database formats.</property>
                               </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkRadioButton" id="userdefined">
-                                <property name="label" translatable="yes" context="insertdbcolumnsdialog|userdefined">_User-defined</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                                <property name="group">fromdatabase</property>
-                                <accessibility>
-                                  <relation type="label-for" target="numformat"/>
-                                </accessibility>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="userdefined-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|userdefined">Specifies a format from the list, if the format information of certain data fields is not accepted.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="numformat">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="margin-start">12</property>
-                                <accessibility>
-                                  <relation type="labelled-by" target="userdefined"/>
-                                </accessibility>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">2</property>
-                              </packing>
                             </child>
                           </object>
                           <packing>
@@ -840,7 +784,49 @@
                             <property name="top_attach">0</property>
                           </packing>
                         </child>
+                        <child>
+                          <object class="GtkRadioButton" id="userdefined">
+                            <property name="label" translatable="yes" context="insertdbcolumnsdialog|userdefined">_User-defined</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="group">fromdatabase</property>
+                            <accessibility>
+                              <relation type="label-for" target="numformat"/>
+                            </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="userdefined-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|userdefined">Specifies a format from the list, if the format information of certain data fields is not accepted.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="numformat">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin-start">12</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="userdefined"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
                       </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
                     </child>
                   </object>
                 </child>

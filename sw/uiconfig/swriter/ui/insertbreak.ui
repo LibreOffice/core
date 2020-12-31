@@ -86,164 +86,158 @@
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
-              <object class="GtkAlignment" id="alignment1">
+              <object class="GtkBox" id="box1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="top_padding">6</property>
-                <property name="left_padding">12</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <property name="margin-start">12</property>
+                <property name="margin-top">6</property>
                 <child>
-                  <object class="GtkBox" id="box1">
+                  <object class="GtkRadioButton" id="linerb">
+                    <property name="label" translatable="yes" context="insertbreak|linerb">Line break</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkRadioButton" id="linerb">
-                        <property name="label" translatable="yes" context="insertbreak|linerb">Line break</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">pagerb</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="linerb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|linerb-atkobject">Ends the current line, and moves the text found to the right of the cursor to the next line, without creating a new paragraph.</property>
-                          </object>
-                        </child>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">pagerb</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="linerb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|linerb-atkobject">Ends the current line, and moves the text found to the right of the cursor to the next line, without creating a new paragraph.</property>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="columnrb">
-                        <property name="label" translatable="yes" context="insertbreak|columnrb">Column break</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">pagerb</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="columnrb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|columnrb-atkobject">Inserts a manual column break (in a multiple column layout), and moves the text found to the right of the cursor to the beginning of the next column. A manual column break is indicated by a nonprinting border at the top of the new column.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="pagerb">
-                        <property name="label" translatable="yes" context="insertbreak|pagerb">Page break</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="pagerb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|pagerb-atkobject">Inserts a manual page break, and moves the text found to the right of the cursor to the beginning of the next page. The inserted page break is indicated by a nonprinting border at the top of the new page.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="styleft">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_top">6</property>
-                        <property name="label" translatable="yes" context="insertbreak|styleft">Page Style:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">stylelb</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="stylelb">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="active">0</property>
-                        <items>
-                          <item translatable="yes" context="insertbreak|liststore1">[None]</item>
-                        </items>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="stylelb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|stylelb-atkobject">Select the page style for the page that follows the manual page break.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="pagenumcb">
-                        <property name="label" translatable="yes" context="insertbreak|pagenumcb">Change page number</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="margin_top">6</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="pagenumcb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|pagenumcb-atkobject">Assigns the page number that you specify to the page that follows the manual page break. This option is only available if you assign a different page style to the page that follows manual page break.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="pagenumsb">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="halign">start</property>
-                        <property name="activates_default">True</property>
-                        <property name="adjustment">adjustment1</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="pagenumcb"/>
-                        </accessibility>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="pagenumsb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|pagenumsb-atkobject">Enter the new page number for the page that follows the manual page break.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">6</property>
-                      </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="columnrb">
+                    <property name="label" translatable="yes" context="insertbreak|columnrb">Column break</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">pagerb</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="columnrb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|columnrb-atkobject">Inserts a manual column break (in a multiple column layout), and moves the text found to the right of the cursor to the beginning of the next column. A manual column break is indicated by a nonprinting border at the top of the new column.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="pagerb">
+                    <property name="label" translatable="yes" context="insertbreak|pagerb">Page break</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="pagerb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|pagerb-atkobject">Inserts a manual page break, and moves the text found to the right of the cursor to the beginning of the next page. The inserted page break is indicated by a nonprinting border at the top of the new page.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="styleft">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_top">6</property>
+                    <property name="label" translatable="yes" context="insertbreak|styleft">Page Style:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">stylelb</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="stylelb">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="active">0</property>
+                    <items>
+                      <item translatable="yes" context="insertbreak|liststore1">[None]</item>
+                    </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="stylelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|stylelb-atkobject">Select the page style for the page that follows the manual page break.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="pagenumcb">
+                    <property name="label" translatable="yes" context="insertbreak|pagenumcb">Change page number</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="margin_top">6</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="pagenumcb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|pagenumcb-atkobject">Assigns the page number that you specify to the page that follows the manual page break. This option is only available if you assign a different page style to the page that follows manual page break.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="pagenumsb">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">start</property>
+                    <property name="activates_default">True</property>
+                    <property name="adjustment">adjustment1</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="pagenumcb"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="pagenumsb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="insertbreak|pagenumsb-atkobject">Enter the new page number for the page that follows the manual page break.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">6</property>
+                  </packing>
                 </child>
               </object>
             </child>

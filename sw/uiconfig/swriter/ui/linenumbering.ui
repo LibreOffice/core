@@ -133,202 +133,196 @@
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">none</property>
                     <child>
-                      <object class="GtkAlignment" id="alignment1">
+                      <!-- n-columns=1 n-rows=1 -->
+                      <object class="GtkGrid" id="grid2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="top_padding">6</property>
-                        <property name="left_padding">12</property>
+                        <property name="row_spacing">6</property>
+                        <property name="column_spacing">12</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-top">6</property>
                         <child>
-                          <!-- n-columns=1 n-rows=1 -->
-                          <object class="GtkGrid" id="grid2">
+                          <object class="GtkLabel" id="characterstyle">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="row_spacing">6</property>
-                            <property name="column_spacing">12</property>
-                            <child>
-                              <object class="GtkLabel" id="characterstyle">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes" context="linenumbering|characterstyle">Character style:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">styledropdown</property>
-                                <property name="xalign">0</property>
+                            <property name="label" translatable="yes" context="linenumbering|characterstyle">Character style:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">styledropdown</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="format">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes" context="linenumbering|format">Format:</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="position">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes" context="linenumbering|position">Position:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">positiondropdown</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="spacing">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes" context="linenumbering|spacing">Spacing:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">spacingspin</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="interval">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes" context="linenumbering|interval">Interval:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">intervalspin</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="styledropdown">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="styledropdown-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|styledropdown">Select the formatting style that you want to use for the line numbers.</property>
                               </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                              </packing>
                             </child>
-                            <child>
-                              <object class="GtkLabel" id="format">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes" context="linenumbering|format">Format:</property>
-                                <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="formatdropdown">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="formatdropdown-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|formatdropdown">Select the numbering style that you want to use.</property>
                               </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
-                              </packing>
                             </child>
-                            <child>
-                              <object class="GtkLabel" id="position">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes" context="linenumbering|position">Position:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">positiondropdown</property>
-                                <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                            <property name="width">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="positiondropdown">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <items>
+                              <item translatable="yes" context="linenumbering|positionstore">Left</item>
+                              <item translatable="yes" context="linenumbering|positionstore">Right</item>
+                              <item translatable="yes" context="linenumbering|positionstore">Inner</item>
+                              <item translatable="yes" context="linenumbering|positionstore">Outer</item>
+                            </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="positiondropdown-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|positiondropdown">Select where you want the line numbers to appear.</property>
                               </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">2</property>
-                              </packing>
                             </child>
-                            <child>
-                              <object class="GtkLabel" id="spacing">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes" context="linenumbering|spacing">Spacing:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">spacingspin</property>
-                                <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">2</property>
+                            <property name="width">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="spacingspin">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="adjustment">spacingadjustment</property>
+                            <property name="digits">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="spacingspin-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|spacingspin">Enter the amount of space that you want to leave between the line numbers and the text.</property>
                               </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">3</property>
-                              </packing>
                             </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">3</property>
+                            <property name="width">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="box4">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="spacing">12</property>
                             <child>
-                              <object class="GtkLabel" id="interval">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes" context="linenumbering|interval">Interval:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">intervalspin</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">4</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="styledropdown">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="styledropdown-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|styledropdown">Select the formatting style that you want to use for the line numbers.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                                <property name="width">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="formatdropdown">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="formatdropdown-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|formatdropdown">Select the numbering style that you want to use.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
-                                <property name="width">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="positiondropdown">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <items>
-                                  <item translatable="yes" context="linenumbering|positionstore">Left</item>
-                                  <item translatable="yes" context="linenumbering|positionstore">Right</item>
-                                  <item translatable="yes" context="linenumbering|positionstore">Inner</item>
-                                  <item translatable="yes" context="linenumbering|positionstore">Outer</item>
-                                </items>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="positiondropdown-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|positiondropdown">Select where you want the line numbers to appear.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">2</property>
-                                <property name="width">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSpinButton" id="spacingspin">
+                              <object class="GtkSpinButton" id="intervalspin">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="halign">start</property>
-                                <property name="adjustment">spacingadjustment</property>
-                                <property name="digits">2</property>
+                                <property name="adjustment">intervaladjustment</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="spacingspin-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|spacingspin">Enter the amount of space that you want to leave between the line numbers and the text.</property>
+                                  <object class="AtkObject" id="intervalspin-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|intervalspin">Enter the counting interval for the line numbers.</property>
                                   </object>
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">3</property>
-                                <property name="width">2</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="box4">
+                              <object class="GtkLabel" id="intervallines">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="spacing">12</property>
-                                <child>
-                                  <object class="GtkSpinButton" id="intervalspin">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="adjustment">intervaladjustment</property>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="intervalspin-atkobject">
-                                        <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|intervalspin">Enter the counting interval for the line numbers.</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="intervallines">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes" context="linenumbering|intervallines">lines</property>
-                                    <property name="xalign">0</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
+                                <property name="label" translatable="yes" context="linenumbering|intervallines">lines</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">4</property>
-                                <property name="width">2</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">4</property>
+                            <property name="width">2</property>
+                          </packing>
                         </child>
                       </object>
                     </child>
@@ -355,108 +349,102 @@
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">none</property>
                     <child>
-                      <object class="GtkAlignment" id="alignment2">
+                      <!-- n-columns=1 n-rows=1 -->
+                      <object class="GtkGrid" id="grid1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="top_padding">6</property>
-                        <property name="left_padding">12</property>
+                        <property name="row_spacing">6</property>
+                        <property name="column_spacing">12</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-top">6</property>
                         <child>
-                          <!-- n-columns=1 n-rows=1 -->
-                          <object class="GtkGrid" id="grid1">
+                          <object class="GtkLabel" id="text">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="row_spacing">6</property>
-                            <property name="column_spacing">12</property>
-                            <child>
-                              <object class="GtkLabel" id="text">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes" context="linenumbering|text">Text:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">textentry</property>
-                                <property name="xalign">0</property>
+                            <property name="label" translatable="yes" context="linenumbering|text">Text:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">textentry</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="every">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes" context="linenumbering|every">Every:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">linesspin</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="textentry">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="activates_default">True</property>
+                            <property name="width_chars">3</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="textentry-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|textentry">Enter the text that you want to use as a separator.</property>
                               </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                              </packing>
                             </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="box6">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="spacing">6</property>
                             <child>
-                              <object class="GtkLabel" id="every">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes" context="linenumbering|every">Every:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">linesspin</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="textentry">
+                              <object class="GtkSpinButton" id="linesspin">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="halign">start</property>
-                                <property name="activates_default">True</property>
-                                <property name="width_chars">3</property>
+                                <property name="adjustment">lineadjustment</property>
                                 <child internal-child="accessible">
-                                  <object class="AtkObject" id="textentry-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|textentry">Enter the text that you want to use as a separator.</property>
+                                  <object class="AtkObject" id="linesspin-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|linesspin">Enter the number of lines to leave between the separators.</property>
                                   </object>
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                                <property name="width">2</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="box6">
+                              <object class="GtkLabel" id="lines">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="spacing">6</property>
-                                <child>
-                                  <object class="GtkSpinButton" id="linesspin">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="adjustment">lineadjustment</property>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="linesspin-atkobject">
-                                        <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|linesspin">Enter the number of lines to leave between the separators.</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="lines">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes" context="linenumbering|lines">lines</property>
-                                    <property name="xalign">0</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
+                                <property name="label" translatable="yes" context="linenumbering|lines">lines</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
-                                <property name="width">2</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                            <property name="width">2</property>
+                          </packing>
                         </child>
                       </object>
                     </child>
@@ -483,98 +471,92 @@
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">none</property>
                     <child>
-                      <object class="GtkAlignment" id="alignment3">
+                      <object class="GtkBox" id="box5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="top_padding">6</property>
-                        <property name="left_padding">12</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-top">6</property>
                         <child>
-                          <object class="GtkBox" id="box5">
+                          <object class="GtkCheckButton" id="blanklines">
+                            <property name="label" translatable="yes" context="linenumbering|blanklines">Blank lines</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="orientation">vertical</property>
-                            <property name="spacing">6</property>
-                            <child>
-                              <object class="GtkCheckButton" id="blanklines">
-                                <property name="label" translatable="yes" context="linenumbering|blanklines">Blank lines</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="active">True</property>
-                                <property name="draw_indicator">True</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="blanklines-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|blanklines">Includes empty paragraphs in the line count.</property>
-                                  </object>
-                                </child>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="active">True</property>
+                            <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="blanklines-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|blanklines">Includes empty paragraphs in the line count.</property>
                               </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="linesintextframes">
-                                <property name="label" translatable="yes" context="linenumbering|linesintextframes">Lines in text frames</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="linesintextframes-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|linesintextframes">Adds line numbers to text in frames. The numbering restarts in each frame, and is excluded from the line count in the main text area of the document.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="showfooterheadernumbering">
-                                <property name="label" translatable="yes" context="linenumbering|showfooterheadernumbering">Include header and footer</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="restarteverynewpage">
-                                <property name="label" translatable="yes" context="linenumbering|restarteverynewpage">Restart every new page</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="restarteverynewpage-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|restarteverynewpage">Restarts line numbering at the top of each page in the document.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">3</property>
-                              </packing>
                             </child>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="linesintextframes">
+                            <property name="label" translatable="yes" context="linenumbering|linesintextframes">Lines in text frames</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="linesintextframes-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|linesintextframes">Adds line numbers to text in frames. The numbering restarts in each frame, and is excluded from the line count in the main text area of the document.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="showfooterheadernumbering">
+                            <property name="label" translatable="yes" context="linenumbering|showfooterheadernumbering">Include header and footer</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="restarteverynewpage">
+                            <property name="label" translatable="yes" context="linenumbering|restarteverynewpage">Restart every new page</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="restarteverynewpage-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|restarteverynewpage">Restarts line numbering at the top of each page in the document.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">3</property>
+                          </packing>
                         </child>
                       </object>
                     </child>

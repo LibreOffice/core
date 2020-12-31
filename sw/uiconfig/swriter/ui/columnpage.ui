@@ -106,30 +106,199 @@
               </packing>
             </child>
             <child>
-              <object class="GtkAlignment" id="alignment3">
+              <!-- n-columns=1 n-rows=1 -->
+              <object class="GtkGrid" id="grid8">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
                 <property name="hexpand">True</property>
-                <property name="top_padding">6</property>
-                <property name="left_padding">12</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
+                <property name="margin-start">12</property>
+                <property name="margin-top">6</property>
                 <child>
-                  <!-- n-columns=1 n-rows=1 -->
-                  <object class="GtkGrid" id="grid8">
+                  <object class="GtkLabel" id="columnft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
+                    <property name="label" translatable="yes" context="columnpage|columnft">Column:</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="back"/>
+                      <relation type="label-for" target="next"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">_1</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">width1mf</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">_2</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">width2mf</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">3</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">_3</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">width3mf</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">4</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="widthft">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="columnpage|widthft">Width:</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="width3mf"/>
+                      <relation type="label-for" target="width2mf"/>
+                      <relation type="label-for" target="width1mf"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="width3mf">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">center</property>
+                    <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
+                    <property name="adjustment">adjustment7</property>
+                    <property name="digits">2</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="widthft"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="width3mf-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|width3mf">Enter the width of the column.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">4</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="width2mf">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">center</property>
+                    <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
+                    <property name="adjustment">adjustment6</property>
+                    <property name="digits">2</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="widthft"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="width2mf-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|width2mf">Enter the width of the column.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">3</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="width1mf">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">center</property>
+                    <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
+                    <property name="adjustment">adjustment2</property>
+                    <property name="digits">2</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="widthft"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="width1mf-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|width1mf">Enter the width of the column.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="distft">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="columnpage|distft">Spacing:</property>
+                    <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="spacing1mf"/>
+                      <relation type="label-for" target="spacing2mf"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <!-- n-columns=1 n-rows=1 -->
+                  <object class="GtkGrid" id="grid15">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="column_spacing">24</property>
                     <child>
-                      <object class="GtkLabel" id="columnft">
+                      <object class="GtkSpinButton" id="spacing1mf">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="columnpage|columnft">Column:</property>
-                        <property name="xalign">0</property>
+                        <property name="can_focus">True</property>
+                        <property name="halign">center</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment3</property>
+                        <property name="digits">2</property>
                         <accessibility>
-                          <relation type="label-for" target="back"/>
-                          <relation type="label-for" target="next"/>
+                          <relation type="labelled-by" target="distft"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="spacing1mf-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|spacing1mf">Enter the amount of space that you want to leave between the columns.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -137,219 +306,19 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="1">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label">_1</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">width1mf</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="2">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label">_2</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">width2mf</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="3">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="label">_3</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">width3mf</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">4</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="widthft">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="columnpage|widthft">Width:</property>
-                        <property name="xalign">0</property>
-                        <accessibility>
-                          <relation type="label-for" target="width3mf"/>
-                          <relation type="label-for" target="width2mf"/>
-                          <relation type="label-for" target="width1mf"/>
-                        </accessibility>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="width3mf">
+                      <object class="GtkSpinButton" id="spacing2mf">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">center</property>
-                        <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
-                        <property name="adjustment">adjustment7</property>
+                        <property name="adjustment">adjustment8</property>
                         <property name="digits">2</property>
                         <accessibility>
-                          <relation type="labelled-by" target="widthft"/>
+                          <relation type="labelled-by" target="distft"/>
                         </accessibility>
                         <child internal-child="accessible">
-                          <object class="AtkObject" id="width3mf-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|width3mf">Enter the width of the column.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">4</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="width2mf">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="halign">center</property>
-                        <property name="hexpand">True</property>
-                        <property name="activates_default">True</property>
-                        <property name="adjustment">adjustment6</property>
-                        <property name="digits">2</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="widthft"/>
-                        </accessibility>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="width2mf-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|width2mf">Enter the width of the column.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="width1mf">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="halign">center</property>
-                        <property name="hexpand">True</property>
-                        <property name="activates_default">True</property>
-                        <property name="adjustment">adjustment2</property>
-                        <property name="digits">2</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="widthft"/>
-                        </accessibility>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="width1mf-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|width1mf">Enter the width of the column.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="distft">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="columnpage|distft">Spacing:</property>
-                        <property name="xalign">0</property>
-                        <accessibility>
-                          <relation type="label-for" target="spacing1mf"/>
-                          <relation type="label-for" target="spacing2mf"/>
-                        </accessibility>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <!-- n-columns=1 n-rows=1 -->
-                      <object class="GtkGrid" id="grid15">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">center</property>
-                        <property name="column_spacing">24</property>
-                        <child>
-                          <object class="GtkSpinButton" id="spacing1mf">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="halign">center</property>
-                            <property name="activates_default">True</property>
-                            <property name="adjustment">adjustment3</property>
-                            <property name="digits">2</property>
-                            <accessibility>
-                              <relation type="labelled-by" target="distft"/>
-                            </accessibility>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="spacing1mf-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|spacing1mf">Enter the amount of space that you want to leave between the columns.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSpinButton" id="spacing2mf">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="halign">center</property>
-                            <property name="activates_default">True</property>
-                            <property name="adjustment">adjustment8</property>
-                            <property name="digits">2</property>
-                            <accessibility>
-                              <relation type="labelled-by" target="distft"/>
-                            </accessibility>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="spacing2mf-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|spacing2mf">Enter the amount of space that you want to leave between the columns.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">2</property>
-                        <property name="width">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="back">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="image">image7</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="columnft"/>
-                        </accessibility>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="back-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|back">Moves the column display one column to the left.</property>
+                          <object class="AtkObject" id="spacing2mf-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|spacing2mf">Enter the amount of space that you want to leave between the columns.</property>
                           </object>
                         </child>
                       </object>
@@ -358,39 +327,64 @@
                         <property name="top_attach">0</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="GtkButton" id="next">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="image">image8</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="columnft"/>
-                        </accessibility>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="next-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|next">Moves the column display one column to the right.</property>
-                          </object>
-                        </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="back">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="image">image7</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="columnft"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="back-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|back">Moves the column display one column to the left.</property>
                       </object>
-                      <packing>
-                        <property name="left_attach">5</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                   </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="next">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="image">image8</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="columnft"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="next-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|next">Moves the column display one column to the right.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">5</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -427,196 +421,190 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment4">
+          <!-- n-columns=1 n-rows=1 -->
+          <object class="GtkGrid" id="grid10">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">12</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid" id="grid10">
+              <object class="GtkLabel" id="linestyleft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
-                <child>
-                  <object class="GtkLabel" id="linestyleft">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="columnpage|linestyleft">St_yle:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">linestylelb</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="linewidthft">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="columnpage|linewidthft">_Width:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">linewidthmf</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="lineheightft">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="columnpage|lineheightft">H_eight:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">lineheightmf</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="lineposft">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="columnpage|lineposft">_Position:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">lineposlb</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkMenuButton" id="linestylelb">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="linestylelb-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|linestylelb">Select the formatting style for the column separator line. If you do not want a separator line, choose "None".</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="lineposlb">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <items>
-                      <item translatable="yes" context="columnpage|lineposlb">Top</item>
-                      <item translatable="yes" context="columnpage|lineposlb">Centered</item>
-                      <item translatable="yes" context="columnpage|lineposlb">Bottom</item>
-                    </items>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="lineposlb-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|lineposlb">Select the vertical alignment of the separator line. This option is only available if Height value of the line is less than 100%.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">3</property>
-                    <property name="top_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="lineheightmf">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="activates_default">True</property>
-                    <property name="adjustment">adjustment5</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="lineheightmf-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|lineheightmf">Enter the length of the separator line as a percentage of the height of the column area.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="linewidthmf">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="activates_default">True</property>
-                    <property name="adjustment">adjustment4</property>
-                    <property name="digits">2</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkMenuButton" id="colorlb">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="linecolorft">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="columnpage|linecolorft">_Color:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">colorlb</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                  </packing>
-                </child>
+                <property name="label" translatable="yes" context="columnpage|linestyleft">St_yle:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">linestylelb</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="linewidthft">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="columnpage|linewidthft">_Width:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">linewidthmf</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lineheightft">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="columnpage|lineheightft">H_eight:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">lineheightmf</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lineposft">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="columnpage|lineposft">_Position:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">lineposlb</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="linestylelb">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+                <property name="label" translatable="no"></property>
                 <child>
                   <placeholder/>
                 </child>
-                <child>
-                  <placeholder/>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="linestylelb-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|linestylelb">Select the formatting style for the column separator line. If you do not want a separator line, choose "None".</property>
+                  </object>
                 </child>
-                <child>
-                  <placeholder/>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="lineposlb">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <items>
+                  <item translatable="yes" context="columnpage|lineposlb">Top</item>
+                  <item translatable="yes" context="columnpage|lineposlb">Centered</item>
+                  <item translatable="yes" context="columnpage|lineposlb">Bottom</item>
+                </items>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="lineposlb-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|lineposlb">Select the vertical alignment of the separator line. This option is only available if Height value of the line is less than 100%.</property>
+                  </object>
                 </child>
-                <child>
-                  <placeholder/>
+              </object>
+              <packing>
+                <property name="left_attach">3</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="lineheightmf">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="activates_default">True</property>
+                <property name="adjustment">adjustment5</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="lineheightmf-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|lineheightmf">Enter the length of the separator line as a percentage of the height of the column area.</property>
+                  </object>
                 </child>
-                <child>
-                  <placeholder/>
-                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="linewidthmf">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="activates_default">True</property>
+                <property name="adjustment">adjustment4</property>
+                <property name="digits">2</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="colorlb">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+                <property name="label" translatable="no"></property>
                 <child>
                   <placeholder/>
                 </child>
               </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="linecolorft">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="columnpage|linecolorft">_Color:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">colorlb</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
             </child>
           </object>
         </child>
@@ -652,59 +640,31 @@
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
-              <object class="GtkAlignment" id="alignment2">
+              <!-- n-columns=1 n-rows=1 -->
+              <object class="GtkGrid" id="grid4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
                 <property name="hexpand">True</property>
-                <property name="top_padding">6</property>
-                <property name="left_padding">12</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">24</property>
+                <property name="margin-start">12</property>
+                <property name="margin-top">6</property>
                 <child>
                   <!-- n-columns=1 n-rows=1 -->
-                  <object class="GtkGrid" id="grid4">
+                  <object class="GtkGrid" id="grid5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="hexpand">True</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">24</property>
+                    <property name="valign">center</property>
+                    <property name="column_spacing">12</property>
                     <child>
-                      <!-- n-columns=1 n-rows=1 -->
-                      <object class="GtkGrid" id="grid5">
+                      <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="valign">center</property>
-                        <property name="column_spacing">12</property>
-                        <child>
-                          <object class="GtkLabel" id="label3">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="columnpage|label3">Columns:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">colsnf</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSpinButton" id="colsnf">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="activates_default">True</property>
-                            <property name="adjustment">adjustment1</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="colsnf-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|colsnf">Enter the number of columns that you want in the page, frame, or section.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
+                        <property name="label" translatable="yes" context="columnpage|label3">Columns:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">colsnf</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -712,135 +672,14 @@
                       </packing>
                     </child>
                     <child>
-                      <!-- n-columns=1 n-rows=1 -->
-                      <object class="GtkGrid" id="grid6">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="row_spacing">6</property>
-                        <child>
-                          <object class="GtkCheckButton" id="balance">
-                            <property name="label" translatable="yes" context="columnpage|balance">Evenly distribute contents _to all columns</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="no_show_all">True</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="balance-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|balance">Distributes the text in multi-column sections. The text flows into all columns to the same height. The height of the section adjusts automatically.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <!-- n-columns=1 n-rows=1 -->
-                          <object class="GtkGrid" id="grid2">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="column_spacing">12</property>
-                            <child>
-                              <object class="GtkComboBoxText" id="applytolb">
-                                <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
-                                <items>
-                                  <item id="0" translatable="yes" context="columnpage|liststore2">Selection</item>
-                                  <item id="1" translatable="yes" context="columnpage|liststore2">Current Section</item>
-                                  <item id="2" translatable="yes" context="columnpage|liststore2">Selected section</item>
-                                  <item id="4" translatable="yes" context="columnpage|liststore2">Frame</item>
-                                  <item id="3" translatable="yes" context="columnpage|liststore2">Page Style: </item>
-                                </items>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="applytolb-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|applytolb">Select the item that you want to apply the column layout to.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="applytoft">
-                                <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="label" translatable="yes" context="columnpage|applytoft">_Apply to:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">applytolb</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <!-- n-columns=1 n-rows=1 -->
-                          <object class="GtkGrid" id="grid7">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="row_spacing">6</property>
-                            <property name="column_spacing">12</property>
-                            <child>
-                              <object class="GtkLabel" id="textdirectionft">
-                                <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="label" translatable="yes" context="columnpage|textdirectionft">Text _direction:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">textdirectionlb</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="textdirectionlb">
-                                <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">2</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkDrawingArea" id="valueset">
-                        <property name="width_request">160</property>
-                        <property name="height_request">35</property>
+                      <object class="GtkSpinButton" id="colsnf">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment1</property>
                         <child internal-child="accessible">
-                          <object class="AtkObject" id="valueset-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|valueset">Enter the number of columns that you want in the page, frame, or section.</property>
+                          <object class="AtkObject" id="colsnf-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|colsnf">Enter the number of columns that you want in the page, frame, or section.</property>
                           </object>
                         </child>
                       </object>
@@ -850,6 +689,148 @@
                       </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <!-- n-columns=1 n-rows=1 -->
+                  <object class="GtkGrid" id="grid6">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="row_spacing">6</property>
+                    <child>
+                      <object class="GtkCheckButton" id="balance">
+                        <property name="label" translatable="yes" context="columnpage|balance">Evenly distribute contents _to all columns</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="no_show_all">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="balance-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|balance">Distributes the text in multi-column sections. The text flows into all columns to the same height. The height of the section adjusts automatically.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <!-- n-columns=1 n-rows=1 -->
+                      <object class="GtkGrid" id="grid2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="column_spacing">12</property>
+                        <child>
+                          <object class="GtkComboBoxText" id="applytolb">
+                            <property name="can_focus">False</property>
+                            <property name="no_show_all">True</property>
+                            <items>
+                              <item id="0" translatable="yes" context="columnpage|liststore2">Selection</item>
+                              <item id="1" translatable="yes" context="columnpage|liststore2">Current Section</item>
+                              <item id="2" translatable="yes" context="columnpage|liststore2">Selected section</item>
+                              <item id="4" translatable="yes" context="columnpage|liststore2">Frame</item>
+                              <item id="3" translatable="yes" context="columnpage|liststore2">Page Style: </item>
+                            </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="applytolb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|applytolb">Select the item that you want to apply the column layout to.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="applytoft">
+                            <property name="can_focus">False</property>
+                            <property name="no_show_all">True</property>
+                            <property name="label" translatable="yes" context="columnpage|applytoft">_Apply to:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">applytolb</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <!-- n-columns=1 n-rows=1 -->
+                      <object class="GtkGrid" id="grid7">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="row_spacing">6</property>
+                        <property name="column_spacing">12</property>
+                        <child>
+                          <object class="GtkLabel" id="textdirectionft">
+                            <property name="can_focus">False</property>
+                            <property name="no_show_all">True</property>
+                            <property name="label" translatable="yes" context="columnpage|textdirectionft">Text _direction:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">textdirectionlb</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="textdirectionlb">
+                            <property name="can_focus">False</property>
+                            <property name="no_show_all">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkDrawingArea" id="valueset">
+                    <property name="width_request">160</property>
+                    <property name="height_request">35</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="valueset-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|valueset">Enter the number of columns that you want in the page, frame, or section.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
                 </child>
               </object>
             </child>
