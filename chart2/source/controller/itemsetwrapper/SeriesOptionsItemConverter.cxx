@@ -32,6 +32,7 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/ilstitem.hxx>
+#include <svx/sdangitm.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -276,7 +277,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
          {
             if( m_bSupportingStartingAngle )
             {
-                m_nStartingAngle = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+                m_nStartingAngle = static_cast< const SdrAngleItem & >( rItemSet.Get( nWhichId )).GetValue() / 100;
                 uno::Reference< beans::XPropertySet > xDiagramProperties( ChartModelHelper::findDiagram(m_xChartModel), uno::UNO_QUERY );
                 if( xDiagramProperties.is() )
                 {
@@ -398,7 +399,7 @@ void SeriesOptionsItemConverter::FillSpecialItem(
         case SCHATTR_STARTING_ANGLE:
         {
             if( m_bSupportingStartingAngle )
-                rOutItemSet.Put( SfxInt32Item(nWhichId,m_nStartingAngle));
+                rOutItemSet.Put( SdrAngleItem(nWhichId,m_nStartingAngle*100));
             break;
         }
         case SCHATTR_CLOCKWISE:
