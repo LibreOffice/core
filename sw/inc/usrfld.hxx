@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_USRFLD_HXX
-#define INCLUDED_SW_INC_USRFLD_HXX
+#pragma once
 
 #include "swdllapi.h"
 #include "fldbas.hxx"
@@ -128,7 +127,5 @@ public:
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt16 nWhichId ) override;
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
-
-#endif // INCLUDED_SW_INC_USRFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
