@@ -149,6 +149,12 @@
     <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="30">
       <FormatCode>YYYY年M月D日（AAAA）</FormatCode>
     </FormatElement>
+    <FormatElement msgid="DateFormatskey23" default="false" type="long" usage="DATE" formatindex="69">
+      <FormatCode>[~gregorian]YYYY年（[~gengou]GGGE年）MM月DD日</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey24" default="false" type="long" usage="DATE" formatindex="70">
+      <FormatCode>[~gengou]GGGE年（[~gregorian]YYYY年）MM月DD日</FormatCode>
+    </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="false" type="medium" usage="DATE" formatindex="31">
       <FormatCode>MM.DD</FormatCode>
     </FormatElement>
