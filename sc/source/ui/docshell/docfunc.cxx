@@ -3994,20 +3994,6 @@ bool ScDocFunc::Protect( SCTAB nTab, const OUString& rPassword )
         ScDocProtection aProtection;
         aProtection.setProtected(true);
         aProtection.setPassword(rPassword);
-/*        rDoc.SetDocProtection(&aProtection);
-        if (rDoc.IsUndoEnabled())
-        {
-            ScDocProtection* pProtect = rDoc.GetDocProtection();
-            OSL_ENSURE(pProtect, "ScDocFunc::Unprotect: ScDocProtection pointer is NULL!");
-            if (pProtect)
-            {
-                ::std::unique_ptr<ScDocProtection> p(new ScDocProtection(*pProtect));
-                p->setProtected(true); // just in case ...
-                rDocShell.GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoDocProtect>(&rDocShell, std::move(p)) );
-                // ownership of unique_ptr is transferred to ScUndoDocProtect.
-            }
-        } */
         ProtectDocument(aProtection);
     }
     else
@@ -4072,7 +4058,6 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
             }
             return false;
         }
-
         pDocProtect->setProtected(false);
         ProtectDocument(*pDocProtect);
     }
