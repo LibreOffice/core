@@ -24,6 +24,8 @@
 #include <rtl/ustring.hxx>
 #include <basic/sbxcore.hxx>
 #include <basic/basicdllapi.h>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <algorithm>
 #include <cstddef>
@@ -32,8 +34,6 @@
 
 
 namespace com::sun::star::bridge::oleautomation { struct Decimal; }
-namespace com::sun::star::uno { class XInterface; }
-namespace com::sun::star::uno { template <typename > class Reference; }
 
 class SbxDecimal;
 enum class SfxHintId;
@@ -243,18 +243,18 @@ class BASIC_DLLPUBLIC SbxVariable : public SbxValue
 {
     friend class SbMethod;
 
-    std::unique_ptr<SbxVariableImpl> mpImpl; // Impl data
+    OUString         m_aDeclareClassName;
+    css::uno::Reference< css::uno::XInterface > m_xComListener;
+    StarBASIC*       m_pComListenerParentBasic = nullptr;
     std::unique_ptr<SfxBroadcaster>  mpBroadcaster; // Broadcaster, if needed
     OUString         maName;            // Name, if available
     SbxArrayRef      mpPar;             // Parameter-Array, if set
-    sal_uInt16       nHash;             // Hash-ID for search
-
-    BASIC_DLLPRIVATE SbxVariableImpl* getImpl();
+    sal_uInt16       nHash = 0;         // Hash-ID for search
 
 protected:
     SbxInfoRef  pInfo;              // Probably called information
-    sal_uInt32 nUserData;           // User data for Call()
-    SbxObject* pParent;             // Currently attached object
+    sal_uInt32 nUserData= 0;        // User data for Call()
+    SbxObject* pParent = nullptr;   // Currently attached object
     virtual ~SbxVariable() override;
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual bool StoreData( SvStream& ) const override;
