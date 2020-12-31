@@ -1099,10 +1099,22 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
     sal_Int32 nRotation = pObj->GetRotateAngle();
     if ( pObj && nRotation != 0 && pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE )
     {
+<<<<<<< HEAD   (a80874 tdf#138832 XLSX export: fix lost file names in modified link)
         const tools::Rectangle& aSnapRect(pObj->GetSnapRect()); // bounding box of the rotated shape
         aTopLeft.X = aSnapRect.getX() + (aSnapRect.GetWidth() / 2) - (aSize.Width / 2);
         aTopLeft.Y = aSnapRect.getY() + (aSnapRect.GetHeight() / 2) - (aSize.Height / 2);
     }
+=======
+        sal_Int32 nRotation = pObj->GetRotateAngle();
+        if (nRotation != 0)
+        {
+            sal_Int16 nHalfWidth = aSize.Width / 2;
+            sal_Int16 nHalfHeight = aSize.Height / 2;
+
+            const tools::Rectangle& aSnapRect(pObj->GetSnapRect()); // bounding box of the rotated shape
+            aTopLeft.X = aSnapRect.getX() + (aSnapRect.GetWidth() / 2) - nHalfWidth;
+            aTopLeft.Y = aSnapRect.getY() + (aSnapRect.GetHeight() / 2) - nHalfHeight;
+>>>>>>> CHANGE (aa23da tdf#139258 XLSX export: fix position of rotated images)
 
     uno::Reference< beans::XPropertySet > xShapeProperties(rShape, uno::UNO_QUERY_THROW);
     uno::Any nRotProp = xShapeProperties->getPropertyValue("RotateAngle");
