@@ -267,7 +267,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                 const beans::GetDirectPropertyTolerantResult *pResults = aResults.getConstArray();
                 FilterPropertyInfoList_Impl::iterator aPropIter(aPropInfos.begin());
                 XMLPropertyState aNewProperty( -1 );
-                sal_uInt32 i = 0;
+                size_t i = 0;
                 while (nResultCount > 0 && i < aPropInfos.size())
                 {
                     if (pResults->Name == aPropIter->GetApiName())
@@ -332,9 +332,8 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
             {
                 // step 1: get value count
                 sal_uInt32 nValueCount = 0;
-                sal_uInt32 i;
 
-                for( i = 0; i < aPropInfos.size(); ++i, ++pStates )
+                for (size_t i = 0; i < aPropInfos.size(); ++i, ++pStates)
                 {
                     if( *pStates == PropertyState_DIRECT_VALUE )
                         nValueCount++;
@@ -353,7 +352,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                     OSL_ENSURE(aItr != aPropInfos.end(),"Invalid iterator!");
 
                     pStates = aStates.getConstArray();
-                    i = 0;
+                    sal_uInt32 i = 0;
                     while( i < nValueCount )
                     {
                         if( *pStates == PropertyState_DIRECT_VALUE )
@@ -395,7 +394,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                 const Any *pValues = aValues.getConstArray();
 
                 FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
-                for(sal_uInt32 i = 0; i < aPropInfos.size(); ++i)
+                for (size_t i = 0; i < aPropInfos.size(); ++i)
                 {
                     // The value is stored in the PropertySet itself, add to list.
                     XMLPropertyState aNewProperty( -1 );
@@ -413,7 +412,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
         else
         {
             FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
-            for(sal_uInt32 i = 0; i < aPropInfos.size(); ++i)
+            for (size_t i = 0; i < aPropInfos.size(); ++i)
             {
                 bool bDirectValue =
                     !pStates || *pStates == PropertyState_DIRECT_VALUE;
