@@ -41,6 +41,7 @@ class ScFormulaCell;
 class ScTokenArray;
 struct ScTabOpParam;
 class ScTableProtection;
+class ScDocProtection;
 struct ScCellMergeOption;
 class ScConditionalFormat;
 class ScConditionalFormatList;
@@ -232,6 +233,9 @@ public:
     void SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB nTab );
 
     void ConvertFormulaToValue( const ScRange& rRange, bool bInteraction );
+
+private:
+    void ProtectDocument(const ScDocProtection& rProtect);
 };
 
 class ScDocFuncDirect : public ScDocFunc
