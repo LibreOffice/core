@@ -1100,8 +1100,9 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
         {
             sal_Int16 nHalfWidth = aSize.Width / 2;
             sal_Int16 nHalfHeight = aSize.Height / 2;
-            // aTopLeft needs correction for rotated customshapes
-            if (pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE)
+            // aTopLeft needs correction for rotated customshapes and images
+            SdrObjKind anID = pObj->GetObjIdentifier();
+            if (anID == OBJ_CUSTOMSHAPE || anID == OBJ_GRAF)
             {
                 const tools::Rectangle& aSnapRect(pObj->GetSnapRect()); // bounding box of the rotated shape
                 aTopLeft.X = aSnapRect.getX() + (aSnapRect.GetWidth() / 2) - nHalfWidth;
