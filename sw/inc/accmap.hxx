@@ -61,7 +61,7 @@ namespace com::sun::star::accessibility { class XAccessible; }
 // There are two reason for this. First of all, a new accessible shape
 // for the XShape might be created soon. It's then cheaper if the XShape
 // still exists. The other reason are situations where an accessible shape
-// is destroyed within an SwFrameFormat::Modify. In this case, destroying
+// is destroyed within an SwFrameFormat::SwClientNotify. In this case, destroying
 // the XShape at the same time (indirectly by destroying the accessible
 // shape) leads to an assert, because a client of the Modify is destroyed
 // within a Modify call.

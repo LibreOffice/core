@@ -33,11 +33,6 @@ namespace sw
 {
     bool ListenerEntry::GetInfo(SfxPoolItem& rInfo) const
         { return m_pToTell == nullptr || m_pToTell->GetInfo( rInfo ); }
-    void ListenerEntry::Modify(const SfxPoolItem *const pOldValue,
-                               const SfxPoolItem *const pNewValue)
-    {
-        SwClientNotify(*GetRegisteredIn(), sw::LegacyModifyHint(pOldValue, pNewValue));
-    }
     void ListenerEntry::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
     {
         if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
@@ -110,10 +105,8 @@ std::unique_ptr<sw::ModifyChangedHint> SwClient::CheckRegistration( const SfxPoo
 
 void SwClient::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
-    {
-        Modify(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
-    }
+    if(auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+        CheckRegistration(pLegacyHint->m_pOld);
 };
 
 void SwClient::StartListeningToSameModifyAs(const SwClient& other)
@@ -128,11 +121,6 @@ void SwClient::EndListeningAll()
 {
     if(m_pRegisteredIn)
         m_pRegisteredIn->Remove(this);
-}
-
-void SwClient::Modify(SfxPoolItem const*const pOldValue, SfxPoolItem const*const /*pNewValue*/)
-{
-    CheckRegistration( pOldValue );
 }
 
 void SwModify::SetInDocDTOR()
@@ -358,6 +346,12 @@ void sw::WriterMultiListener::EndListeningAll()
 }
 
 sw::ClientIteratorBase* sw::ClientIteratorBase::s_pClientIters = nullptr;
+
+void SwModify::SwClientNotify(const SwModify&, const SfxHint& rHint)
+{
+    if(auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+        NotifyClients(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+}
 
 void SwModify::CallSwClientNotify( const SfxHint& rHint ) const
 {
