@@ -531,7 +531,7 @@ void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
                 pNItem = aNIter.NextItem();
             } while(pNItem);
             if(aOldSet.Count() || aNewSet.Count())
-                SwLayoutFrame::Modify(&aOldSet, &aNewSet);
+                SwLayoutFrame::SwClientNotify(rModify, sw::LegacyModifyHint(&aOldSet, &aNewSet));
         }
         else
             UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, nInvFlags);
@@ -629,7 +629,7 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 // Calculation of the page is not necessary, because its size is
                 // invalidated here and further invalidation is done in the
                 // calling method <SwPageFrame::Modify(..)> and probably by calling
-                // <SwLayoutFrame::Modify(..)> at the end.
+                // <SwLayoutFrame::SwClientNotify(..)> at the end.
                 // It can also causes inconsistences, because the lowers are
                 // adjusted, but not calculated, and a <SwPageFrame::MakeAll()> of
                 // a next page is called. This is performed on the switch to the
@@ -708,7 +708,10 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 pNewSet->ClearItem( nWhich );
         }
         else
-            SwLayoutFrame::Modify( pOld, pNew );
+        {
+            SwModify aMod;
+            SwLayoutFrame::SwClientNotify(aMod, sw::LegacyModifyHint(pOld, pNew));
+        }
     }
 }
 
