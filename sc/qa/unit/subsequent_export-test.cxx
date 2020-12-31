@@ -278,6 +278,7 @@ public:
     void testTdf129969();
     void testTdf84874();
     void testTdf136721_paper_size();
+    void testTdf139258_rotated_image();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -454,6 +455,7 @@ public:
     CPPUNIT_TEST(testTdf129969);
     CPPUNIT_TEST(testTdf84874);
     CPPUNIT_TEST(testTdf136721_paper_size);
+    CPPUNIT_TEST(testTdf139258_rotated_image);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5776,6 +5778,25 @@ void ScExportTest::testTdf136721_paper_size()
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/x:worksheet/x:pageSetup", "paperSize", "70");
+}
+
+void ScExportTest::testTdf139258_rotated_image()
+{
+    // Check that the topleft position of the image is correct.
+    ScDocShellRef xShell = loadDoc(u"tdf139258_rotated_image.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+
+    xmlDocUniquePtr pDrawing
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    CPPUNIT_ASSERT(pDrawing);
+
+    assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:from/xdr:col", "1");
+    assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:from/xdr:row", "12");
+    assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:to/xdr:col", "6");
+    assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:to/xdr:row", "25");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
