@@ -17,6 +17,7 @@
 #include <vcl/vectorgraphicdata.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/GraphicExternalLink.hxx>
+#include <vcl/gfxlink.hxx>
 
 #include <memory>
 #include <mutex>
@@ -60,6 +61,8 @@ public:
     std::shared_ptr<ImpGraphic> copy(std::shared_ptr<ImpGraphic> const& pImpGraphic);
     std::shared_ptr<ImpGraphic> newInstance();
     std::shared_ptr<ImpGraphic> newInstance(const BitmapEx& rBitmapEx);
+    std::shared_ptr<ImpGraphic> newInstance(std::shared_ptr<GfxLink> const& rLink,
+                                            sal_Int32 nPageIndex = 0);
     std::shared_ptr<ImpGraphic>
     newInstance(const std::shared_ptr<VectorGraphicData>& rVectorGraphicDataPtr);
     std::shared_ptr<ImpGraphic> newInstance(const Animation& rAnimation);

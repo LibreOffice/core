@@ -474,14 +474,10 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
         tools::Long nPageWidth = convertTwipToMm100(aPageSize.getX() * pointToTwipconversionRatio);
         tools::Long nPageHeight = convertTwipToMm100(aPageSize.getY() * pointToTwipconversionRatio);
 
-        auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(
-            aDataContainer, VectorGraphicDataType::Pdf, nPageIndex);
-
         // Create the Graphic with the VectorGraphicDataPtr and link the original PDF stream.
         // We swap out this Graphic as soon as possible, and a later swap in
         // actually renders the correct Bitmap on demand.
-        Graphic aGraphic(aVectorGraphicDataPtr);
-        aGraphic.SetGfxLink(pGfxLink);
+        Graphic aGraphic(pGfxLink, nPageIndex);
 
         auto pPage = pPdfDocument->openPage(nPageIndex);
 
