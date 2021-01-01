@@ -3454,6 +3454,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Strong Emphasis</value>
         </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Strong Emphasis Character Style</value>
+        </prop>
       </node>
       <node oor:name=".uno:StrongEmphasisCharStyle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -3471,12 +3474,12 @@
       </node>
       <node oor:name=".uno:StyleApply?Style:string=Citation&amp;FamilyName:string=CharacterStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Qu~otation</value>
+          <value xml:lang="en-US">Qu~otation Characters</value>
         </prop>
       </node>
       <node oor:name=".uno:QuoteCharStyle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Qu~otation</value>
+          <value xml:lang="en-US">Qu~otation Characters</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Quotation Character Style</value>
