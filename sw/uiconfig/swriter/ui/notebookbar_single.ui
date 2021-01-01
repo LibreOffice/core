@@ -338,7 +338,7 @@
                             <child>
                               <object class="GtkToolButton" id="Default-StrongEmphasisCharStyle">
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:StyleApply?Style:string=Strong Emphasis&amp;FamilyName:string=CharacterStyles</property>
+                                <property name="action_name">.uno:StrongEmphasisCharStyle</property>
                                 <property name="icon_name">cmd/sc_strongemphasischarstyle.png</property>
                               </object>
                               <packing>
