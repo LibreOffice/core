@@ -54,7 +54,7 @@ def NamedRanges():
     smgr = ctx.ServiceManager
     desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop", ctx)
 
-    # Create a blank spreadsheet document, instead of damanging the existing document.
+    # Create a blank spreadsheet document, instead of damaging the existing document.
     doc = desktop.loadComponentFromURL("private:factory/scalc", "_blank", 0, ())
 
     # Create a new sheet to store our output information
@@ -114,11 +114,11 @@ def NamedRanges():
     infoSheet.getCellRangeByName("A8").String = "Sum of test_range1:"
     infoSheet.getCellRangeByName("B8").Formula = "=SUM(test_range1)"
 
-    # Calcualte sum of test_range2
+    # Calculate sum of test_range2
     infoSheet.getCellRangeByName("A9").String = "Sum of test_range2:"
     infoSheet.getCellRangeByName("B9").Formula = "=SUM(test_range2)"
 
-    # Calcualte the difference between the two ranges
+    # Calculate the difference between the two ranges
     infoSheet.getCellRangeByName("A10").String = "sum(test_range2) - sum(test_range1):"
     infoSheet.getCellRangeByName("B10").Formula = "=B9-B8"
 
