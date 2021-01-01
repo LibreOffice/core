@@ -84,7 +84,8 @@ EffectRewinder::EffectRewinder (
       mpAsynchronousRewindEvent(),
       mxCurrentAnimationRootNode(),
       mxCurrentSlide(),
-      mbNonUserTriggeredMainSequenceEffectSeen(false)
+      mbNonUserTriggeredMainSequenceEffectSeen(false),
+      mbHasAdvancedTimeSetting(false)
 {
     initialize();
 }
@@ -160,6 +161,15 @@ void EffectRewinder::setCurrentSlide (
     const uno::Reference<drawing::XDrawPage>& xSlide)
 {
     mxCurrentSlide = xSlide;
+
+    // Check if the current slide has advance time setting or not
+    uno::Reference< beans::XPropertySet > xPropSet( mxCurrentSlide, uno::UNO_QUERY );
+    sal_Int32 nChange(0);
+
+    if( xPropSet.is())
+        getPropertyValue( nChange, xPropSet, "Change");
+
+    mbHasAdvancedTimeSetting = nChange;
 }
 
 bool EffectRewinder::rewind (
@@ -178,6 +188,9 @@ bool EffectRewinder::rewind (
 
     // Abort (and skip over the rest of) any currently active animation.
     mrUserEventQueue.callSkipEffectEventHandler();
+
+    if (!mbHasAdvancedTimeSetting)
+        mrEventQueue.forceEmpty();
 
     const int nSkipCount (mnMainSequenceEffectCount - 1);
     if (nSkipCount < 0)
@@ -417,13 +430,7 @@ void EffectRewinder::asynchronousRewind (
         // when the slide is shown.
         mbNonUserTriggeredMainSequenceEffectSeen = false;
 
-        uno::Reference< beans::XPropertySet > xPropSet( mxCurrentSlide, uno::UNO_QUERY );
-        sal_Int32 nChange(0);
-
-        if( xPropSet.is())
-            getPropertyValue( nChange, xPropSet, "Change");
-
-        if (!nChange)
+        if (!mbHasAdvancedTimeSetting)
             mrEventQueue.forceEmpty();
 
         if (mbNonUserTriggeredMainSequenceEffectSeen)
