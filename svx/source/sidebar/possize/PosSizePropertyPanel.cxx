@@ -182,12 +182,35 @@ namespace
 void PosSizePropertyPanel::Initialize()
 {
     //Position : Horizontal / Vertical
-    mpMtrPosX->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangePosXHdl ) );
-    mpMtrPosY->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangePosYHdl ) );
+    mpMtrPosX->SetLoseFocusHdl( LINK( this, PosSizePropertyPanel, ChangePosXHdl ) );
+    mpMtrPosX->SetEnterHdl(LINK( this, PosSizePropertyPanel, ChangePosXHdl ) );
+    mpMtrPosX->SetUpHdl( LINK( this, PosSizePropertyPanel, ChangePosXUpDownHdl ) );
+    mpMtrPosX->SetDownHdl( LINK( this, PosSizePropertyPanel, ChangePosXUpDownHdl ) );
+
+    mpMtrPosY->SetLoseFocusHdl( LINK( this, PosSizePropertyPanel, ChangePosYHdl ) );
+    mpMtrPosY->SetEnterHdl( LINK( this, PosSizePropertyPanel, ChangePosYHdl ) );
+    mpMtrPosY->SetUpHdl( LINK( this, PosSizePropertyPanel, ChangePosYUpDownHdl ) );
+    mpMtrPosY->SetDownHdl( LINK( this, PosSizePropertyPanel, ChangePosYUpDownHdl ) );
+
 
     //Size : Width / Height
-    mpMtrWidth->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangeWidthHdl ) );
-    mpMtrHeight->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangeHeightHdl ) );
+    mpMtrWidth->SetLoseFocusHdl( LINK( this, PosSizePropertyPanel, ChangeWidthHdl ) );
+    mpMtrWidth->SetEnterHdl( LINK( this, PosSizePropertyPanel, ChangeWidthHdl ) );
+    mpMtrWidth->SetUpHdl( LINK( this, PosSizePropertyPanel, ChangeWidthUpDownHdl ) );
+    mpMtrWidth->SetDownHdl( LINK( this, PosSizePropertyPanel, ChangeWidthUpDownHdl ) );
+
+    mpMtrHeight->SetLoseFocusHdl( LINK( this, PosSizePropertyPanel, ChangeHeightHdl ) );
+    mpMtrHeight->SetEnterHdl( LINK( this, PosSizePropertyPanel, ChangeHeightHdl ) );
+    mpMtrHeight->SetUpHdl( LINK( this, PosSizePropertyPanel, ChangeHeightUpDownHdl ) );
+    mpMtrHeight->SetDownHdl( LINK( this, PosSizePropertyPanel, ChangeHeightUpDownHdl ) );
+
+    if (SfxLokHelper::getDeviceFormFactor() == LOKDeviceFormFactor::MOBILE)
+    {
+        mpMtrPosX->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangePosXMobileHdl ) );
+        mpMtrPosY->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangePosYMobileHdl ) );
+        mpMtrWidth->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangeWidthMobileHdl ) );
+        mpMtrHeight->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangeHeightMobileHdl ) );
+    }
 
     //Size : Keep ratio
     mpCbxScale->SetClickHdl( LINK( this, PosSizePropertyPanel, ClickAutoHdl ) );
@@ -345,7 +368,7 @@ void PosSizePropertyPanel::HandleContextChange(
 }
 
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl, Edit&, void )
+void PosSizePropertyPanel::AdjustWidth()
 {
     if( mpCbxScale->IsChecked() &&
         mpCbxScale->IsEnabled() )
@@ -366,8 +389,22 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl, Edit&, void )
     executeSize();
 }
 
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl, Control&, void )
+{
+    AdjustWidth();
+}
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightHdl, Edit&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthMobileHdl, Edit&, void )
+{
+    AdjustWidth();
+}
+
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthUpDownHdl, SpinField&, void )
+{
+    AdjustWidth();
+}
+
+void PosSizePropertyPanel::AdjustHeight()
 {
     if( mpCbxScale->IsChecked() &&
         mpCbxScale->IsEnabled() )
@@ -388,8 +425,22 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightHdl, Edit&, void )
     executeSize();
 }
 
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightHdl, Control&, void )
+{
+    AdjustHeight();
+}
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, Edit&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightMobileHdl, Edit&, void )
+{
+    AdjustHeight();
+}
+
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightUpDownHdl, SpinField&, void )
+{
+    AdjustHeight();
+}
+
+void PosSizePropertyPanel::AdjustXPos()
 {
     if ( mpMtrPosX->IsValueModified())
     {
@@ -405,8 +456,22 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, Edit&, void )
     }
 }
 
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, Control&, void )
+{
+    AdjustXPos();
+}
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, Edit&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXMobileHdl, Edit&, void )
+{
+    AdjustXPos();
+}
+
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXUpDownHdl, SpinField&, void )
+{
+    AdjustXPos();
+}
+
+void PosSizePropertyPanel::AdjustYPos()
 {
     if ( mpMtrPosY->IsValueModified() )
     {
@@ -420,6 +485,22 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, Edit&, void )
         GetBindings()->GetDispatcher()->ExecuteList(
             SID_ATTR_TRANSFORM, SfxCallMode::RECORD, { &aPosYItem });
     }
+}
+
+
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, Control&, void )
+{
+    AdjustYPos();
+}
+
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYMobileHdl, Edit&, void )
+{
+    AdjustYPos();
+}
+
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYUpDownHdl, SpinField&, void )
+{
+    AdjustYPos();
 }
 
 
