@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3994be5_4ee98cc9",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 34
+      },
+      "lineNbr": 4064,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-01T10:20:36Z",
+      "side": 1,
+      "message": "Ah! Of course.\n\npTabProtect is the pointer returned from rDoc.GetTabProtection (ln 4048). This is the actual protection object owned by the tab itself, and you are *not* expected to modify it, and pass to ProtectSheet.\n\nWhat happens is ProtectSheet takes this object (a), then passes this object to rDoc.SetTabProtection. The latter creates a copy (b) of this object (a), and assigns to the internal unique_ptr managing the protection. Since we have passed the *original* protection object there, the unique_ptr *was* holding (a) before (b) was assigned to it. The assignment has destroyed (a), and so from this point on, any use of this object is invalid - and you try to get (a)\u0027s isProtected.\n\nNote how it\u0027s done in ScDocFunc::Protect (ln 3999).",
+      "range": {
+        "startLine": 4064,
+        "startChar": 8,
+        "endLine": 4064,
+        "endChar": 19
+      },
+      "revId": "888adfcac9db8a0597dfd71dcb1236c8b57355c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
