@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e962cb1_f04b0923",
+        "filename": "svx/source/sidebar/possize/PosSizePropertyPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-01-01T10:40:50Z",
+      "side": 1,
+      "message": "My previous patch wass reverted due to failure in mobile image resizing. So this handles mobile case too. @szymon",
+      "revId": "45f7fb9dc5678f3e9183e820ce970fb294ffc7b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
