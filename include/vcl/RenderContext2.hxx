@@ -9,12 +9,26 @@
 
 #pragma once
 
+#include <vcl/dllapi.h>
+#include <vcl/settings.hxx>
+#include <vcl/DrawModeFlags.hxx>
+
+#include <memory>
+
+class AllSettings;
 class SalGraphics;
 
-class RenderContext2
+class VCL_DLLPUBLIC RenderContext2
 {
 public:
+    RenderContext2();
     virtual ~RenderContext2() {}
+
+    virtual AllSettings const& GetSettings() const;
+    virtual void SetSettings(AllSettings const& rSettings);
+
+    DrawModeFlags GetDrawMode() const;
+    virtual void SetDrawMode(DrawModeFlags nDrawMode);
 
 protected:
     /** Acquire a graphics device that the output device uses to draw on.
@@ -47,6 +61,8 @@ protected:
     virtual void ReleaseGraphics(bool bRelease = true) = 0;
 
     mutable SalGraphics* mpGraphics;
+    std::unique_ptr<AllSettings> mxSettings;
+    DrawModeFlags mnDrawMode;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
