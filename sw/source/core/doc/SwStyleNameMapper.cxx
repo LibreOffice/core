@@ -678,7 +678,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetHTMLChrFormatProgNameArray()
     static const std::vector<OUString> s_aHTMLChrFormatProgNameArray = {
         "Emphasis", // RES_POOLCHR_HTML_EMPHASIS
         "Citation",
-        "Strong Emphasis",
+        "Strong",
         "Source Text",
         "Example",
         "User Entry",

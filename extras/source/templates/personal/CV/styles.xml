@@ -95,7 +95,7 @@
       <style:text-properties fo:font-size="18pt"/>
     </style:style>
     <style:style style:name="Numbering_20_Symbols" style:display-name="Numbering Symbols" style:family="text"/>
-    <style:style style:name="Strong_20_Emphasis" style:display-name="Strong Emphasis" style:family="text">
+    <style:style style:name="Strong_20_Emphasis" style:display-name="Strong" style:family="text">
       <style:text-properties fo:color="#004586" fo:font-weight="bold"/>
     </style:style>
     <style:style style:name="Frame" style:family="graphic">

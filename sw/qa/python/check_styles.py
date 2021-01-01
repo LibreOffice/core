@@ -123,7 +123,7 @@ class CheckStyle(unittest.TestCase):
     def test_CharacterFamily(self):
         xDoc = CheckStyle._uno.openEmptyWriterDoc()
         xCharStyles = xDoc.StyleFamilies["CharacterStyles"]
-        vEmptyDocStyles = ['Standard', 'Footnote Symbol', 'Page Number', 'Caption characters', 'Drop Caps', 'Numbering Symbols', 'Bullet Symbols', 'Internet link', 'Visited Internet Link', 'Placeholder', 'Index Link', 'Endnote Symbol', 'Line numbering', 'Main index entry', 'Footnote anchor', 'Endnote anchor', 'Rubies', 'Vertical Numbering Symbols', 'Emphasis', 'Citation', 'Strong Emphasis', 'Source Text', 'Example', 'User Entry', 'Variable', 'Definition', 'Teletype']
+        vEmptyDocStyles = ['Standard', 'Footnote Symbol', 'Page Number', 'Caption characters', 'Drop Caps', 'Numbering Symbols', 'Bullet Symbols', 'Internet link', 'Visited Internet Link', 'Placeholder', 'Index Link', 'Endnote Symbol', 'Line numbering', 'Main index entry', 'Footnote anchor', 'Endnote anchor', 'Rubies', 'Vertical Numbering Symbols', 'Emphasis', 'Citation', 'Strong', 'Source Text', 'Example', 'User Entry', 'Variable', 'Definition', 'Teletype']
         self.__test_StyleFamily(xCharStyles, vEmptyDocStyles, "SwXStyle")
         self.__test_StyleFamilyIndex(xCharStyles, vEmptyDocStyles, "SwXStyle")
         self.__test_StyleFamilyInsert(xDoc, xCharStyles, vEmptyDocStyles, "com.sun.star.style.CharacterStyle", "com.sun.star.style.ParagraphStyle")
