@@ -27,10 +27,11 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/uno/genfunc.hxx>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
 #include <unordered_map>
+#include "rtti.hxx"
 #include "share.hxx"
 
 
@@ -63,7 +64,7 @@ namespace CPPU_CURRENT_NAMESPACE
         while ('E' != *p)
         {
             // read chars count
-            long n = (*p++ - '0');
+            long n = *p++ - '0';
             while ('0' <= *p && '9' >= *p)
             {
                 n *= 10;
@@ -257,18 +258,18 @@ namespace CPPU_CURRENT_NAMESPACE
             ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
 
             // destruct uno exception
-           ::uno_any_destruct( pUnoExc, 0 );
-           // avoiding locked counts
-           static RTTI rtti_data;
-           rtti = (type_info*)rtti_data.getRTTI((typelib_CompoundTypeDescription*)pTypeDescr);
-           TYPELIB_DANGER_RELEASE( pTypeDescr );
-           assert(rtti && "### no rtti for throwing exception!");
-           if (! rtti)
-           {
-               throw RuntimeException(
-                   OUString("no rtti for type ") +
-                   OUString::unacquired( &pUnoExc->pType->pTypeName ) );
-           }
+            ::uno_any_destruct( pUnoExc, 0 );
+            // avoiding locked counts
+            static RTTI rtti_data;
+            rtti = (type_info*)rtti_data.getRTTI((typelib_CompoundTypeDescription*)pTypeDescr);
+            TYPELIB_DANGER_RELEASE( pTypeDescr );
+            assert(rtti && "### no rtti for throwing exception!");
+            if (! rtti)
+            {
+                throw RuntimeException(
+                    OUString("no rtti for type ") +
+                    OUString::unacquired( &pUnoExc->pType->pTypeName ) );
+            }
         }
 
         __cxa_throw( pCppExc, rtti, deleteException );
