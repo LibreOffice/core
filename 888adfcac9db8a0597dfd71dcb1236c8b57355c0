@@ -22,6 +22,30 @@
       "revId": "888adfcac9db8a0597dfd71dcb1236c8b57355c0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa5d78b5_d846a4fb",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 34
+      },
+      "lineNbr": 4064,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-01-01T10:58:17Z",
+      "side": 1,
+      "message": "I am thinking to add following lines :\n\n        std::unique_ptr\u003cScTableProtection\u003e pNewProtection(new ScTableProtection(*pTabProtect));\n        pNewProtection-\u003esetProtected(false);\n        ProtectSheet(nTab, *pNewProtection);\n\nPlease correct me if I am wrong..",
+      "parentUuid": "b3994be5_4ee98cc9",
+      "range": {
+        "startLine": 4064,
+        "startChar": 8,
+        "endLine": 4064,
+        "endChar": 19
+      },
+      "revId": "888adfcac9db8a0597dfd71dcb1236c8b57355c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
