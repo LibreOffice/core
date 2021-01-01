@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9926802e_8a3b5855",
+        "filename": "basic/source/sbx/sbxvar.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-01T10:35:46Z",
+      "side": 1,
+      "message": "eh, sorry, forgot we need to copy m_pComListenerParentBasic here as well",
+      "revId": "52cdcd13ec3ce9830a3aff3848eca582ffefd23b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
