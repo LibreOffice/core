@@ -131,6 +131,23 @@ ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic) noexcept
     rImpGraphic.mbDummyContext = false;
 }
 
+ImpGraphic::ImpGraphic(std::shared_ptr<GfxLink> const & rGfxLink, sal_Int32 nPageIndex)
+    : mpGfxLink(rGfxLink)
+    , meType(GraphicType::Bitmap)
+    , mnSizeBytes(0)
+    , mbSwapOut(true)
+    , mbDummyContext(false)
+    , maLastUsed (std::chrono::high_resolution_clock::now())
+    , mbPrepared (false)
+{
+    maSwapInfo.mbIsTransparent = true;
+    maSwapInfo.mbIsAlpha = true;
+    maSwapInfo.mbIsEPS = false;
+    maSwapInfo.mbIsAnimated = false;
+    maSwapInfo.mnAnimationLoopCount = 0;
+    maSwapInfo.mnPageIndex = nPageIndex;
+}
+
 ImpGraphic::ImpGraphic(GraphicExternalLink const & rGraphicExternalLink) :
         meType          ( GraphicType::Default ),
         mnSizeBytes     ( 0 ),
