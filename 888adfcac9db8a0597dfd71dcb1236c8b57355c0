@@ -46,6 +46,30 @@
       "revId": "888adfcac9db8a0597dfd71dcb1236c8b57355c0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9d37ac1_66d7a6b3",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 34
+      },
+      "lineNbr": 4064,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-01T11:05:34Z",
+      "side": 1,
+      "message": "\u003e ... to add ...\n\nor rather replace line 4065, right?\nThen it would be correct. Except the \"don\u0027t use operator new, rather use make_unique\".\nOr even better don\u0027t use unique_ptr, just create the object on stack:\n\n  ScTableProtection aNewProtection(*pTabProtect);\n  aNewProtection.setProtected(false);\n  ProtectSheet(nTab, aNewProtection);\n\nUsing unique_ptr only is needed where we don\u0027t know if we will be creating an object or not, or where unique_ptr is required in API. Not here :-)",
+      "parentUuid": "fa5d78b5_d846a4fb",
+      "range": {
+        "startLine": 4064,
+        "startChar": 8,
+        "endLine": 4064,
+        "endChar": 19
+      },
+      "revId": "888adfcac9db8a0597dfd71dcb1236c8b57355c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
