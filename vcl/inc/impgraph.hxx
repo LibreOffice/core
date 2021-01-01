@@ -90,6 +90,7 @@ public:
     ImpGraphic( const ImpGraphic& rImpGraphic );
     ImpGraphic( ImpGraphic&& rImpGraphic ) noexcept;
     ImpGraphic( const GraphicExternalLink& rExternalLink);
+    ImpGraphic(std::shared_ptr<GfxLink> const& rGfxLink, sal_Int32 nPageIndex = 0);
     ImpGraphic( const BitmapEx& rBmpEx );
     ImpGraphic(const std::shared_ptr<VectorGraphicData>& rVectorGraphicDataPtr);
     ImpGraphic( const Animation& rAnimation );
