@@ -337,6 +337,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/graphic/UnoGraphicProvider \
     vcl/source/graphic/UnoGraphicTransformer \
     vcl/source/graphic/VectorGraphicSearch \
+    vcl/source/graphic/VectorGraphicLoader \
     vcl/source/bitmap/impvect \
     vcl/source/bitmap/bitmap \
     vcl/source/bitmap/BitmapEx \
