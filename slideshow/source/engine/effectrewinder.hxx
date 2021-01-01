@@ -129,6 +129,7 @@ private:
     ::std::shared_ptr<ScreenUpdater::UpdateLock> mpPaintLock;
 
     bool mbNonUserTriggeredMainSequenceEffectSeen;
+    bool mbHasAdvancedTimeSetting; // Slide has advanced time setting or not.
 
     void initialize();
 
