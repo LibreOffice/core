@@ -17,14 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
+#include <drawmode.hxx>
 #include <salgdi.hxx>
+
+#include <cassert>
 
 Color OutputDevice::GetPixel(const Point& rPoint) const
 {
@@ -85,7 +86,7 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
 {
     assert(!is_double_buffered_window());
 
-    Color aColor = ImplDrawModeToColor( rColor );
+    Color aColor = DrawModeColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings());
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPixelAction( rPt, aColor ) );

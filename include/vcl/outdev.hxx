@@ -195,37 +195,6 @@ namespace o3tl
     template<> struct typed_flags<DrawGridFlags> : is_typed_flags<DrawGridFlags, 0x0007> {};
 }
 
-// DrawModes
-enum class DrawModeFlags : sal_uInt32
-{
-    Default                = 0x00000000,
-    BlackLine              = 0x00000001,
-    BlackFill              = 0x00000002,
-    BlackText              = 0x00000004,
-    BlackBitmap            = 0x00000008,
-    BlackGradient          = 0x00000010,
-    GrayLine               = 0x00000020,
-    GrayFill               = 0x00000040,
-    GrayText               = 0x00000080,
-    GrayBitmap             = 0x00000100,
-    GrayGradient           = 0x00000200,
-    NoFill                 = 0x00000400,
-    WhiteLine              = 0x00000800,
-    WhiteFill              = 0x00001000,
-    WhiteText              = 0x00002000,
-    WhiteBitmap            = 0x00004000,
-    WhiteGradient          = 0x00008000,
-    SettingsLine           = 0x00010000,
-    SettingsFill           = 0x00020000,
-    SettingsText           = 0x00040000,
-    SettingsGradient       = 0x00080000,
-    NoTransparency         = 0x00100000,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<DrawModeFlags> : is_typed_flags<DrawModeFlags, 0x1fffff> {};
-}
-
 // Antialiasing
 enum class AntialiasingFlags
 {
@@ -350,7 +319,6 @@ private:
     mutable tools::Long                    mnTextOffY;
     mutable tools::Long                    mnEmphasisAscent;
     mutable tools::Long                    mnEmphasisDescent;
-    DrawModeFlags                   mnDrawMode;
     ComplexTextLayoutFlags           mnTextLayoutMode;
     ImplMapRes                      maMapRes;
     const OutDevType                meOutDevType;
@@ -364,7 +332,6 @@ private:
     Color                           maOverlineColor;
     RasterOp                        meRasterOp;
     Wallpaper                       maBackground;
-    std::unique_ptr<AllSettings>    mxSettings;
     MapMode                         maMapMode;
     Point                           maRefPoint;
     AntialiasingFlags               mnAntialiasing;
@@ -413,8 +380,7 @@ public:
     void                        SetConnectMetaFile( GDIMetaFile* pMtf );
     GDIMetaFile*                GetConnectMetaFile() const { return mpMetaFile; }
 
-    virtual void                SetSettings( const AllSettings& rSettings );
-    const AllSettings&          GetSettings() const { return *mxSettings; }
+    void                        SetSettings(const AllSettings& rSettings) override;
 
     SystemGraphicsData          GetSystemGfxData() const;
     bool                        SupportsCairo() const;
@@ -571,8 +537,7 @@ public:
     void                        SetAntialiasing( AntialiasingFlags nMode );
     AntialiasingFlags           GetAntialiasing() const { return mnAntialiasing; }
 
-    void                        SetDrawMode( DrawModeFlags nDrawMode );
-    DrawModeFlags               GetDrawMode() const { return mnDrawMode; }
+    void                        SetDrawMode(DrawModeFlags nDrawMode) override;
 
     void                        SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode );
     ComplexTextLayoutFlags       GetLayoutMode() const { return mnTextLayoutMode; }

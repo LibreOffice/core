@@ -27,6 +27,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 
+#include <drawmode.hxx>
 #include <outdev.h>
 #include <salgdi.hxx>
 
@@ -256,13 +257,10 @@ void OutputDevice::SetAntialiasing( AntialiasingFlags nMode )
         mpAlphaVDev->SetAntialiasing( nMode );
 }
 
-void OutputDevice::SetDrawMode( DrawModeFlags nDrawMode )
+void OutputDevice::SetDrawMode(DrawModeFlags nDrawMode)
 {
-
-    mnDrawMode = nDrawMode;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetDrawMode( nDrawMode );
+    if (mpAlphaVDev)
+        mpAlphaVDev->SetDrawMode(nDrawMode);
 }
 
 void OutputDevice::SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode )
@@ -404,8 +402,7 @@ void OutputDevice::SetLineColor()
 
 void OutputDevice::SetLineColor( const Color& rColor )
 {
-
-    Color aColor = ImplDrawModeToColor( rColor );
+    Color aColor = DrawModeColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings());
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaLineColorAction( aColor, true ) );
