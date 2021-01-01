@@ -990,7 +990,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFileOpenInputOutputError,"floatingtbl_wi
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pStyle", "val", "Normal");
 
     // let's also assert that the formula was exported properly
-    assertXPathContent(pXmlDoc, "//w:tbl/w:tr/w:tc[2]/w:p/m:oMathPara/m:oMath/m:sSubSup/m:e/m:r/m:t", u"\u03C3");
+    assertXPathContent(pXmlDoc, "//w:tbl/w:tr/w:tc[2]/w:p/m:oMathPara/m:oMath/m:sSubSup/m:e/m:r/m:t", u"s");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSingleCellTableBorders, "tdf124399_SingleCellTableBorders.docx")
