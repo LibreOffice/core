@@ -18,6 +18,7 @@
  */
 
 #include <string.h>
+#include <iostream>
 
 #include <cassert>
 #include <set>
@@ -193,6 +194,10 @@ public:
     void setCustomEntityNames(
         const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>&
             replacements);
+
+    // Calculate length for convertToXMLv
+    sal_Int32 calcXMLByteLength(const OUString& rStr, bool bDoNormalization,
+                                bool bNormalizeWhitespace);
 };
 
 const bool g_bValidCharsBelow32[32] = {
@@ -282,10 +287,10 @@ bool SaxWriterHelper::convertToXML(const sal_Unicode* pStr, sal_Int32 nStrLen,
 
     for (sal_Int32 i = 0; i < nStrLen; i++)
     {
-        sal_uInt16 c = pStr[i];
+        sal_Unicode c = pStr[i];
         if (IsInvalidChar(c))
             bRet = false;
-        else if ((c >= 0x0001) && (c <= 0x007F))
+        else if ((c >= 0x0001) && (c <= 0x007F)) // Deal with ascii
         {
             if (bDoNormalization)
             {
@@ -414,26 +419,99 @@ bool SaxWriterHelper::convertToXML(const sal_Unicode* pStr, sal_Int32 nStrLen,
                 rPos++;
             }
         }
-        else if (c >= 0xd800 && c < 0xdc00)
+        else
         {
-            // 1. surrogate: save (until 2. surrogate)
-            OSL_ENSURE(nSurrogate == 0, "left-over Unicode surrogate");
-            nSurrogate = ((c & 0x03ff) + 0x0040);
-        }
-        else if (c >= 0xdc00 && c < 0xe000)
-        {
-            // 2. surrogate: write as UTF-8
-            OSL_ENSURE(nSurrogate != 0, "lone 2nd Unicode surrogate");
-
-            nSurrogate = (nSurrogate << 10) | (c & 0x03ff);
-            if (rtl::isUnicodeScalarValue(nSurrogate) && nSurrogate >= 0x00010000)
+            // Deal with replacements
+            if (bDoNormalization && m_Replacements.size() != 0)
             {
-                sal_Int8 aBytes[] = { sal_Int8(0xF0 | ((nSurrogate >> 18) & 0x0F)),
-                                      sal_Int8(0x80 | ((nSurrogate >> 12) & 0x3F)),
-                                      sal_Int8(0x80 | ((nSurrogate >> 6) & 0x3F)),
-                                      sal_Int8(0x80 | ((nSurrogate >> 0) & 0x3F)) };
-                if ((rPos + 4) > SEQUENCESIZE)
-                    AddBytes(pTarget, rPos, aBytes, 4);
+                // defaults
+                ReplacementPair* it = nullptr;
+                sal_Int32 matches = -1;
+                printf("size: %li\n", m_Replacements.size());
+
+                // search
+                for (size_t iter = 0; iter < m_Replacements.size(); ++iter)
+                {
+                    if (i + m_Replacements[iter].replacement.getLength() < nStrLen)
+                        matches = OUString(&pStr[i], m_Replacements[iter].replacement.getLength())
+                                      .compareTo(m_Replacements[iter].replacement);
+                    if (matches >= 0)
+                    {
+                        if (matches == 0)
+                            it = &m_Replacements[iter];
+                        break;
+                    }
+                }
+
+                // replace
+                if (it != nullptr)
+                {
+                    OString name = ::rtl::OUStringToOString(it->name, RTL_TEXTENCODING_UTF8);
+                    OString replacement
+                        = ::rtl::OUStringToOString(it->replacement, RTL_TEXTENCODING_UTF8);
+                    printf("name: %s\n", name.getStr());
+                    if (rPos + name.getLength() > SEQUENCESIZE)
+                        AddBytes(pTarget, rPos, reinterpret_cast<sal_Int8 const*>(name.getStr()),
+                                 name.getLength());
+                    else
+                    {
+                        memcpy(&(pTarget[rPos]), name.getStr(), name.getLength());
+                        rPos += name.getLength();
+                    }
+                    i += replacement.getLength();
+                    continue;
+                }
+            }
+
+            // Deal with other uniciode cases
+            if (c >= 0xd800 && c < 0xdc00)
+            {
+                // 1. surrogate: save (until 2. surrogate)
+                OSL_ENSURE(nSurrogate == 0, "left-over Unicode surrogate");
+                nSurrogate = ((c & 0x03ff) + 0x0040);
+            }
+            else if (c >= 0xdc00 && c < 0xe000)
+            {
+                // 2. surrogate: write as UTF-8
+                OSL_ENSURE(nSurrogate != 0, "lone 2nd Unicode surrogate");
+
+                nSurrogate = (nSurrogate << 10) | (c & 0x03ff);
+                if (rtl::isUnicodeScalarValue(nSurrogate) && nSurrogate >= 0x00010000)
+                {
+                    sal_Int8 aBytes[] = { sal_Int8(0xF0 | ((nSurrogate >> 18) & 0x0F)),
+                                          sal_Int8(0x80 | ((nSurrogate >> 12) & 0x3F)),
+                                          sal_Int8(0x80 | ((nSurrogate >> 6) & 0x3F)),
+                                          sal_Int8(0x80 | ((nSurrogate >> 0) & 0x3F)) };
+                    if ((rPos + 4) > SEQUENCESIZE)
+                        AddBytes(pTarget, rPos, aBytes, 4);
+                    else
+                    {
+                        pTarget[rPos] = aBytes[0];
+                        rPos++;
+                        pTarget[rPos] = aBytes[1];
+                        rPos++;
+                        pTarget[rPos] = aBytes[2];
+                        rPos++;
+                        pTarget[rPos] = aBytes[3];
+                        rPos++;
+                    }
+                }
+                else
+                {
+                    OSL_FAIL("illegal Unicode character");
+                    bRet = false;
+                }
+
+                // reset surrogate
+                nSurrogate = 0;
+            }
+            else if (c > 0x07FF)
+            {
+                sal_Int8 aBytes[]
+                    = { sal_Int8(0xE0 | ((c >> 12) & 0x0F)), sal_Int8(0x80 | ((c >> 6) & 0x3F)),
+                        sal_Int8(0x80 | ((c >> 0) & 0x3F)) };
+                if ((rPos + 3) > SEQUENCESIZE)
+                    AddBytes(pTarget, rPos, aBytes, 3);
                 else
                 {
                     pTarget[rPos] = aBytes[0];
@@ -442,50 +520,24 @@ bool SaxWriterHelper::convertToXML(const sal_Unicode* pStr, sal_Int32 nStrLen,
                     rPos++;
                     pTarget[rPos] = aBytes[2];
                     rPos++;
-                    pTarget[rPos] = aBytes[3];
-                    rPos++;
                 }
             }
             else
             {
-                OSL_FAIL("illegal Unicode character");
-                bRet = false;
+                sal_Int8 aBytes[]
+                    = { sal_Int8(0xC0 | ((c >> 6) & 0x1F)), sal_Int8(0x80 | ((c >> 0) & 0x3F)) };
+                if ((rPos + 2) > SEQUENCESIZE)
+                    AddBytes(pTarget, rPos, aBytes, 2);
+                else
+                {
+                    pTarget[rPos] = aBytes[0];
+                    rPos++;
+                    pTarget[rPos] = aBytes[1];
+                    rPos++;
+                }
             }
+        }
 
-            // reset surrogate
-            nSurrogate = 0;
-        }
-        else if (c > 0x07FF)
-        {
-            sal_Int8 aBytes[]
-                = { sal_Int8(0xE0 | ((c >> 12) & 0x0F)), sal_Int8(0x80 | ((c >> 6) & 0x3F)),
-                    sal_Int8(0x80 | ((c >> 0) & 0x3F)) };
-            if ((rPos + 3) > SEQUENCESIZE)
-                AddBytes(pTarget, rPos, aBytes, 3);
-            else
-            {
-                pTarget[rPos] = aBytes[0];
-                rPos++;
-                pTarget[rPos] = aBytes[1];
-                rPos++;
-                pTarget[rPos] = aBytes[2];
-                rPos++;
-            }
-        }
-        else
-        {
-            sal_Int8 aBytes[]
-                = { sal_Int8(0xC0 | ((c >> 6) & 0x1F)), sal_Int8(0x80 | ((c >> 0) & 0x3F)) };
-            if ((rPos + 2) > SEQUENCESIZE)
-                AddBytes(pTarget, rPos, aBytes, 2);
-            else
-            {
-                pTarget[rPos] = aBytes[0];
-                rPos++;
-                pTarget[rPos] = aBytes[1];
-                rPos++;
-            }
-        }
         OSL_ENSURE(rPos <= SEQUENCESIZE, "not reset current position");
         if (rPos == SEQUENCESIZE)
             rPos = writeSequence();
@@ -848,7 +900,8 @@ bool SaxWriterHelper::comment(const OUString& rComment)
     return bRet;
 }
 
-sal_Int32 calcXMLByteLength(const OUString& rStr, bool bDoNormalization, bool bNormalizeWhitespace)
+sal_Int32 SaxWriterHelper::calcXMLByteLength(const OUString& rStr, bool bDoNormalization,
+                                             bool bNormalizeWhitespace)
 {
     sal_Int32 nOutputLength = 0;
     sal_uInt32 nSurrogate = 0;
@@ -897,26 +950,62 @@ sal_Int32 calcXMLByteLength(const OUString& rStr, bool bDoNormalization, bool bN
                 nOutputLength++;
             }
         }
-        else if (c >= 0xd800 && c < 0xdc00)
-        {
-            // save surrogate
-            nSurrogate = ((c & 0x03ff) + 0x0040);
-        }
-        else if (c >= 0xdc00 && c < 0xe000)
-        {
-            // 2. surrogate: write as UTF-8 (if range is OK
-            nSurrogate = (nSurrogate << 10) | (c & 0x03ff);
-            if (rtl::isUnicodeScalarValue(nSurrogate) && nSurrogate >= 0x00010000)
-                nOutputLength += 4;
-            nSurrogate = 0;
-        }
-        else if (c > 0x07FF)
-        {
-            nOutputLength += 3;
-        }
         else
         {
-            nOutputLength += 2;
+            // Deal with replacements
+            if (bDoNormalization && m_Replacements.size() != 0)
+            {
+                // defaults
+                ReplacementPair* it = nullptr;
+                sal_Int32 matches = -1;
+
+                // search
+                for (size_t iter = 0; iter < m_Replacements.size(); ++iter)
+                {
+                    if (i + m_Replacements[iter].replacement.getLength() < nStrLen)
+                        matches = OUString(&pStr[i], m_Replacements[iter].replacement.getLength())
+                                      .compareTo(m_Replacements[iter].replacement);
+                    if (matches >= 0)
+                    {
+                        if (matches == 0)
+                        {
+                            it = &m_Replacements[iter];
+                            break;
+                        }
+                    }
+                }
+
+                if (it != nullptr)
+                {
+                    nOutputLength
+                        += ::rtl::OUStringToOString(it->replacement, RTL_TEXTENCODING_UTF8)
+                               .getLength();
+                    continue;
+                }
+            }
+
+            // Deal with other unicode cases
+            if (c >= 0xd800 && c < 0xdc00)
+            {
+                // save surrogate
+                nSurrogate = ((c & 0x03ff) + 0x0040);
+            }
+            else if (c >= 0xdc00 && c < 0xe000)
+            {
+                // 2. surrogate: write as UTF-8 (if range is OK
+                nSurrogate = (nSurrogate << 10) | (c & 0x03ff);
+                if (rtl::isUnicodeScalarValue(nSurrogate) && nSurrogate >= 0x00010000)
+                    nOutputLength += 4;
+                nSurrogate = 0;
+            }
+            else if (c > 0x07FF)
+            {
+                nOutputLength += 3;
+            }
+            else
+            {
+                nOutputLength += 2;
+            }
         }
 
         // surrogate processing
@@ -1115,7 +1204,7 @@ void SAXWriter::startElement(const OUString& aName, const Reference<XAttributeLi
         sal_Int32 nAttribCount = xAttribs.is() ? xAttribs->getLength() : 0;
 
         nLength++; // "<"
-        nLength += calcXMLByteLength(aName, false, false); // the tag name
+        nLength += m_pSaxWriterHelper->calcXMLByteLength(aName, false, false); // the tag name
 
         sal_Int16 n;
         for (n = 0; n < static_cast<sal_Int16>(nAttribCount); n++)
@@ -1123,13 +1212,13 @@ void SAXWriter::startElement(const OUString& aName, const Reference<XAttributeLi
             nLength++; // " "
             OUString tmp = xAttribs->getNameByIndex(n);
 
-            nLength += calcXMLByteLength(tmp, false, false);
+            nLength += m_pSaxWriterHelper->calcXMLByteLength(tmp, false, false);
 
             nLength += 2; // ="
 
             tmp = xAttribs->getValueByIndex(n);
 
-            nLength += calcXMLByteLength(tmp, true, true);
+            nLength += m_pSaxWriterHelper->calcXMLByteLength(tmp, true, true);
 
             nLength += 1; // "
         }
@@ -1191,7 +1280,7 @@ void SAXWriter::endElement(const OUString& aName)
         // only ascii chars allowed
         sal_Int32 nLength(0);
         if (m_bAllowLineBreak)
-            nLength = 3 + calcXMLByteLength(aName, false, false);
+            nLength = 3 + m_pSaxWriterHelper->calcXMLByteLength(aName, false, false);
         sal_Int32 nPrefix = getIndentPrefixLength(nLength);
 
         if (nPrefix >= 0)
@@ -1233,7 +1322,7 @@ void SAXWriter::characters(const OUString& aChars)
             {
                 sal_Int32 nFirstLineBreakOccurrence = getFirstLineBreak(aChars);
 
-                nLength = calcXMLByteLength(aChars, !m_bIsCDATA, false);
+                nLength = m_pSaxWriterHelper->calcXMLByteLength(aChars, !m_bIsCDATA, false);
                 nIndentPrefix = getIndentPrefixLength(
                     nFirstLineBreakOccurrence >= 0 ? nFirstLineBreakOccurrence : nLength);
             }
@@ -1280,11 +1369,11 @@ void SAXWriter::processingInstruction(const OUString& aTarget, const OUString& a
     if (m_bAllowLineBreak)
     {
         nLength = 2; // "<?"
-        nLength += calcXMLByteLength(aTarget, false, false);
+        nLength += m_pSaxWriterHelper->calcXMLByteLength(aTarget, false, false);
 
         nLength += 1; // " "
 
-        nLength += calcXMLByteLength(aData, false, false);
+        nLength += m_pSaxWriterHelper->calcXMLByteLength(aData, false, false);
 
         nLength += 2; // "?>"
     }
@@ -1355,7 +1444,7 @@ void SAXWriter::comment(const OUString& sComment)
     if (m_bAllowLineBreak)
     {
         nLength = 4; // "<!--"
-        nLength += calcXMLByteLength(sComment, false, false);
+        nLength += m_pSaxWriterHelper->calcXMLByteLength(sComment, false, false);
 
         nLength += 3;
     }
@@ -1398,7 +1487,7 @@ void SAXWriter::unknown(const OUString& sString)
 
     sal_Int32 nLength(0);
     if (m_bAllowLineBreak)
-        nLength = calcXMLByteLength(sString, false, false);
+        nLength = m_pSaxWriterHelper->calcXMLByteLength(sString, false, false);
 
     sal_Int32 nPrefix = getIndentPrefixLength(nLength);
     if (nPrefix >= 0)
