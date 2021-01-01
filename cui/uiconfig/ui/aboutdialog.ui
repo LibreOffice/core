@@ -328,7 +328,7 @@
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="label" context="aboutdialog|copyright">This release was supplied by The Document Foundation.
-Copyright (c) 1980-2020 LibreOffice contributors.
+Copyright (c) 1980-2021 LibreOffice contributors.
 LibreOffice was based on OpenOffice.org</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">50</property>
