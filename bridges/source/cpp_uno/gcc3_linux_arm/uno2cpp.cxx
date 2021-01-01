@@ -22,7 +22,7 @@
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/uno/Exception.hpp>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <o3tl/runtimetooustring.hxx>
 #include <uno/data.h>
 
@@ -187,7 +187,7 @@ void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * 
 #if !defined(__ARM_PCS_VFP) && (defined(__ARM_EABI__) || defined(__SOFTFP__))
             pRegisterReturn[0] = r0;
 #else
-            register float fret asm("s0");
+            register float fret asm = "s0";
             *(float*)pRegisterReturn = fret;
 #endif
         break;
@@ -196,7 +196,7 @@ void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * 
             pRegisterReturn[1] = r1;
             pRegisterReturn[0] = r0;
 #else
-            register double dret asm("d0");
+            register double dret asm= "d0";
             *(double*)pRegisterReturn = dret;
 #endif
             break;

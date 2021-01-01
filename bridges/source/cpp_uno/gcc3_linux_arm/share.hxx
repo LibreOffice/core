@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #pragma once
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <typeinfo>
 #include <exception>
@@ -29,8 +29,8 @@
 #define _GLIBCXX_CDTOR_CALLABI
 #endif
 
-#include "config_cxxabi.h"
-#include "uno/mapping.h"
+#include <config_cxxabi.h>
+#include <uno/mapping.h>
 
 #if !HAVE_CXXABI_H_CLASS_TYPE_INFO
 // <https://mentorembedded.github.io/cxx-abi/abi.html>,
