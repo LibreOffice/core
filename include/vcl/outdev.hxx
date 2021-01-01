@@ -25,26 +25,26 @@
 #include <tools/solar.h>
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/vector/b2enums.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <unotools/fontdefs.hxx>
 #include <o3tl/typed_flags_set.hxx>
+
+#include <vcl/RenderContext2.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
-#include <vcl/region.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/wall.hxx>
 #include <vcl/metaactiontypes.hxx>
+#include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
-#include <vcl/outdevstate.hxx>
 #include <vcl/outdevmap.hxx>
+#include <vcl/outdevstate.hxx>
 #include <vcl/vclreferencebase.hxx>
-
-#include <basegfx/numeric/ftools.hxx>
-#include <basegfx/vector/b2enums.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-
-#include <unotools/fontdefs.hxx>
+#include <vcl/wall.hxx>
 
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -300,7 +300,7 @@ typedef struct _cairo_surface cairo_surface_t;
 * so we need to use virtual inheritance to keep the referencing counting
 * OK.
 */
-class SAL_WARN_UNUSED VCL_DLLPUBLIC OutputDevice : public virtual VclReferenceBase
+class SAL_WARN_UNUSED VCL_DLLPUBLIC OutputDevice : public virtual VclReferenceBase, public RenderContext2
 {
     friend class Printer;
     friend class VirtualDevice;
