@@ -50,10 +50,10 @@
  <toolbar:toolbaritem xlink:href=".uno:StyleNewByExample" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:EditStyle" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DefaultCharStyle" toolbar:text="Default"/>
+ <toolbar:toolbaritem xlink:href=".uno:DefaultCharStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:EmphasisCharStyle"/>
- <toolbar:toolbaritem xlink:href=".uno:StrongEmphasisCharStyle" toolbar:text="Strong"/>
- <toolbar:toolbaritem xlink:href=".uno:QuoteCharStyle" toolbar:text="Quote" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:StrongEmphasisCharStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:QuoteCharStyle" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SourceCharStyle" toolbar:text="Code"/>
  <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=User Entry&amp;FamilyName:string=CharacterStyles" toolbar:text="User" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>

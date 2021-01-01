@@ -127,7 +127,6 @@
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Insert Endnote</value>
         </prop>
-
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -3454,6 +3453,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Strong Emphasis</value>
         </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Strong Emphasis Character Style</value>
+        </prop>
       </node>
       <node oor:name=".uno:StrongEmphasisCharStyle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -3472,6 +3474,9 @@
       <node oor:name=".uno:StyleApply?Style:string=Citation&amp;FamilyName:string=CharacterStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Qu~otation</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Quotation Character Style</value>
         </prop>
       </node>
       <node oor:name=".uno:QuoteCharStyle" oor:op="replace">
@@ -3609,7 +3614,7 @@
       </node>
       <node oor:name=".uno:StyleApply?Style:string=Default Style&amp;FamilyName:string=TableStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Default Style</value>
+          <value xml:lang="en-US">Default Table Style</value>
         </prop>
       </node>
       <node oor:name=".uno:StyleApply?Style:string=Academic&amp;FamilyName:string=TableStyles" oor:op="replace">
