@@ -202,6 +202,14 @@ std::shared_ptr<ImpGraphic> Manager::newInstance()
     return pReturn;
 }
 
+std::shared_ptr<ImpGraphic> Manager::newInstance(std::shared_ptr<GfxLink> const& rGfxLink,
+                                                 sal_Int32 nPageIndex)
+{
+    auto pReturn = std::make_shared<ImpGraphic>(rGfxLink, nPageIndex);
+    registerGraphic(pReturn);
+    return pReturn;
+}
+
 std::shared_ptr<ImpGraphic> Manager::newInstance(const BitmapEx& rBitmapEx)
 {
     auto pReturn = std::make_shared<ImpGraphic>(rBitmapEx);
