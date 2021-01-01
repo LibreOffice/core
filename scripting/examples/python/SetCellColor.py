@@ -38,7 +38,7 @@ def SetCellColor():
 
     # Call the above helper function to set color (in hex number).
     # To get the hex number:
-    #    1. go to Calc, click toolbar dropdown "Background Color" > Custome Color;
+    #    1. go to Calc, click toolbar dropdown "Background Color" > Custom Color;
     #    2. Pick a color, copy the hex number and prefix it with "0x".
     _SetCellColor(sheet, "C3:C21",    0x4021c9)
     _SetCellColor(sheet, "D18:E21",   0x4021c9)
