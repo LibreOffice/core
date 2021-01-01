@@ -119,6 +119,31 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/animate/AnimationBitmap \
     vcl/source/cnttype/mcnttfactory \
     vcl/source/cnttype/mcnttype \
+    vcl/source/outdev/outdev \
+    vcl/source/outdev/outdevstate \
+    vcl/source/outdev/clipping \
+    vcl/source/outdev/polygon \
+    vcl/source/outdev/polypolygon \
+    vcl/source/outdev/transparent \
+    vcl/source/outdev/mask \
+    vcl/source/outdev/bitmap \
+    vcl/source/outdev/bitmapex \
+    vcl/source/outdev/blend \
+    vcl/source/outdev/image \
+    vcl/source/outdev/font \
+    vcl/source/outdev/text \
+    vcl/source/outdev/textline \
+    vcl/source/outdev/pixel \
+    vcl/source/outdev/rect \
+    vcl/source/outdev/line \
+    vcl/source/outdev/polyline \
+    vcl/source/outdev/hatch \
+    vcl/source/outdev/gradient \
+    vcl/source/outdev/curvedshapes \
+    vcl/source/outdev/wallpaper \
+    vcl/source/outdev/vclreferencebase \
+    vcl/source/outdev/nativecontrols \
+    vcl/source/outdev/map \
     vcl/source/printer/QueueInfo \
     vcl/source/window/errinf \
     vcl/source/window/settings \
@@ -229,31 +254,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/edit/xtextedt \
     vcl/source/toolkit/group \
     vcl/source/toolkit/morebtn \
-    vcl/source/outdev/outdev \
-    vcl/source/outdev/outdevstate \
-    vcl/source/outdev/clipping \
-    vcl/source/outdev/polygon \
-    vcl/source/outdev/polypolygon \
-    vcl/source/outdev/transparent \
-    vcl/source/outdev/mask \
-    vcl/source/outdev/bitmap \
-    vcl/source/outdev/bitmapex \
-    vcl/source/outdev/blend \
-    vcl/source/outdev/image \
-    vcl/source/outdev/font \
-    vcl/source/outdev/text \
-    vcl/source/outdev/textline \
-    vcl/source/outdev/pixel \
-    vcl/source/outdev/rect \
-    vcl/source/outdev/line \
-    vcl/source/outdev/polyline \
-    vcl/source/outdev/hatch \
-    vcl/source/outdev/gradient \
-    vcl/source/outdev/curvedshapes \
-    vcl/source/outdev/wallpaper \
-    vcl/source/outdev/vclreferencebase \
-    vcl/source/outdev/nativecontrols \
-    vcl/source/outdev/map \
     vcl/source/treelist/headbar \
     vcl/source/treelist/iconview \
     vcl/source/treelist/iconviewimpl \
