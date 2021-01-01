@@ -334,7 +334,11 @@ void ImpGraphic::createSwapInfo()
     if (isSwappedOut())
         return;
 
-    maSwapInfo.maSizePixel = getSizePixel();
+    if (!maBitmapEx.IsEmpty())
+        maSwapInfo.maSizePixel = maBitmapEx.GetSizePixel();
+    else
+        maSwapInfo.maSizePixel = Size();
+
     maSwapInfo.maPrefMapMode = getPrefMapMode();
     maSwapInfo.maPrefSize = getPrefSize();
     maSwapInfo.mbIsAnimated = isAnimated();
