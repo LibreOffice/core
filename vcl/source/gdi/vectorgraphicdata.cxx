@@ -219,11 +219,11 @@ void VectorGraphicData::ensureSequenceAndRange()
             std::copy(maDataContainer.cbegin(), maDataContainer.cend(), aDataSequence.begin());
             const uno::Reference<io::XInputStream> xInputStream(new comphelper::SequenceInputStream(aDataSequence));
 
-            uno::Sequence< ::beans::PropertyValue > aSequence;
+            uno::Sequence< ::beans::PropertyValue > aPropertySequence;
 
             if (mpExternalHeader)
             {
-                aSequence = mpExternalHeader->getSequence();
+                aPropertySequence = mpExternalHeader->getSequence();
             }
 
             if (xInputStream.is())
@@ -236,12 +236,12 @@ void VectorGraphicData::ensureSequenceAndRange()
 
                 if (!mbEnableEMFPlus)
                 {
-                    auto aVector = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aSequence);
+                    auto aVector = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aPropertySequence);
                     aVector.push_back(comphelper::makePropertyValue("EMFPlusEnable", uno::makeAny(false)));
-                    aSequence = comphelper::containerToSequence(aVector);
+                    aPropertySequence = comphelper::containerToSequence(aVector);
                 }
 
-                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(xInputStream, OUString(), aSequence));
+                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(xInputStream, OUString(), aPropertySequence));
             }
 
             break;
