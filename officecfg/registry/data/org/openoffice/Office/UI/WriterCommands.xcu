@@ -3450,20 +3450,23 @@
           <value>9</value>
         </prop>
       </node>
-      <node oor:name=".uno:StyleApply?Style:string=Strong Emphasis&amp;FamilyName:string=CharacterStyles" oor:op="replace">
+      <node oor:name=".uno:StyleApply?Style:string=Strong&amp;FamilyName:string=CharacterStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Strong Emphasis</value>
+          <value xml:lang="en-US">~Strong</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Strong Character Style</value>
         </prop>
       </node>
       <node oor:name=".uno:StrongEmphasisCharStyle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Strong Emphasis</value>
+          <value xml:lang="en-US">~Strong</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Strong Emphasis Character Style</value>
+          <value xml:lang="en-US">Strong Character Style</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
-          <value>.uno:StyleApply?Style:string=Strong Emphasis&amp;FamilyName:string=CharacterStyles</value>
+          <value>.uno:StyleApply?Style:string=Strong&amp;FamilyName:string=CharacterStyles</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
