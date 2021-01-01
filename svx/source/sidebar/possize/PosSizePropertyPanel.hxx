@@ -20,6 +20,7 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_POSSIZE_POSSIZEPROPERTYPANEL_HXX
 
 #include <vcl/ctrl.hxx>
+#include <vcl/spinfld.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
@@ -157,10 +158,18 @@ private:
 
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
 
-    DECL_LINK( ChangePosXHdl, Edit&, void );
-    DECL_LINK( ChangePosYHdl, Edit&, void );
-    DECL_LINK( ChangeWidthHdl, Edit&, void );
-    DECL_LINK( ChangeHeightHdl, Edit&, void );
+    DECL_LINK( ChangePosXHdl, Control&, void );
+    DECL_LINK( ChangePosYHdl, Control&, void );
+    DECL_LINK( ChangePosXMobileHdl, Edit&, void );
+    DECL_LINK( ChangePosYMobileHdl, Edit&, void );
+    DECL_LINK( ChangePosXUpDownHdl, SpinField&, void );
+    DECL_LINK( ChangePosYUpDownHdl, SpinField&, void );
+    DECL_LINK( ChangeWidthHdl, Control&, void );
+    DECL_LINK( ChangeHeightHdl, Control&, void );
+    DECL_LINK( ChangeWidthMobileHdl, Edit&, void );
+    DECL_LINK( ChangeHeightMobileHdl, Edit&, void );
+    DECL_LINK( ChangeWidthUpDownHdl, SpinField&, void );
+    DECL_LINK( ChangeHeightUpDownHdl, SpinField&, void );
     DECL_LINK( ClickAutoHdl, Button*, void );
     DECL_LINK( AngleModifiedHdl, Edit&, void );
     DECL_LINK( RotationHdl, svx::DialControl*, void );
@@ -186,6 +195,11 @@ private:
         c) invalidate the items for position and size to trigger notifications of their current values.
     */
     void UpdateUIScale();
+
+    void AdjustWidth();
+    void AdjustHeight();
+    void AdjustXPos();
+    void AdjustYPos();
 };
 
 
