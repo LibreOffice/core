@@ -1076,11 +1076,6 @@ cmd/sc_bulletliststyle.png cmd/sc_defaultbullet.png
 cmd/sc_defaultparastyle.png cmd/sc_controlcodes.png
 cmd/sc_numberliststyle.png cmd/sc_defaultnumbering.png
 
-# Group
-cmd/32/leaveallgroups.png cmd/32/leavegroup.png
-cmd/lc_leaveallgroups.png cmd/lc_leavegroup.png
-cmd/sc_leaveallgroups.png cmd/sc_leavegroup.png
-
 # Label
 cmd/32/addname.png cmd/32/label.png
 cmd/lc_addname.png cmd/lc_label.png
@@ -2597,7 +2592,6 @@ cmd/32/commonalignhorizontalcenter.png cmd/32/alignhorizontalcenter.png
 cmd/32/commonalignjustified.png cmd/32/alignblock.png
 cmd/32/commonalignleft.png cmd/32/alignleft.png
 cmd/32/commonalignright.png cmd/32/alignright.png
-cmd/32/conditionalformatmenu.png cmd/32/conditionalformatdialog.png
 cmd/32/editregion.png cmd/32/insertsection.png
 cmd/32/formatbulletsmenu.png cmd/32/defaultbullet.png
 cmd/32/formatframemenu.png cmd/32/chainframes.png
@@ -2618,7 +2612,6 @@ cmd/lc_commonalignhorizontalcenter.png cmd/lc_alignhorizontalcenter.png
 cmd/lc_commonalignjustified.png cmd/lc_alignblock.png
 cmd/lc_commonalignleft.png cmd/lc_alignleft.png
 cmd/lc_commonalignright.png cmd/lc_alignright.png
-cmd/lc_conditionalformatmenu.png cmd/lc_conditionalformatdialog.png
 cmd/lc_editregion.png cmd/lc_insertsection.png
 cmd/lc_formatbulletsmenu.png cmd/lc_defaultbullet.png
 cmd/lc_formatframemenu.png cmd/lc_chainframes.png
@@ -2639,7 +2632,6 @@ cmd/sc_commonalignhorizontalcenter.png cmd/sc_alignhorizontalcenter.png
 cmd/sc_commonalignjustified.png cmd/sc_alignblock.png
 cmd/sc_commonalignleft.png cmd/sc_alignleft.png
 cmd/sc_commonalignright.png cmd/sc_alignright.png
-cmd/sc_conditionalformatmenu.png cmd/sc_conditionalformatdialog.png
 cmd/sc_editregion.png cmd/sc_insertsection.png
 cmd/sc_formatbulletsmenu.png cmd/sc_defaultbullet.png
 cmd/sc_formatframemenu.png cmd/sc_chainframes.png
