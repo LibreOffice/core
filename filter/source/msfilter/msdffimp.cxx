@@ -4183,9 +4183,11 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     if( maShapeRecords.SeekToContent( rSt,
         DFF_msofbtUDefProp ) )
     {
-        sal_uInt32  nBytesLeft = maShapeRecords.Current()->nRecLen;
+        sal_uInt32 nBytesLeft = maShapeRecords.Current()->nRecLen;
         while( 5 < nBytesLeft )
         {
+            if (rSt.remainingSize() < 6)
+                break;
             sal_uInt16 nPID(0);
             rSt.ReadUInt16(nPID);
             if (!rSt.good())
@@ -4199,11 +4201,11 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                 mbRotateGranientFillWithAngle = nUDData & 0x20;
                 break;
             }
-            nBytesLeft  -= 6;
+            nBytesLeft -= 6;
         }
     }
     aObjData.bShapeType = maShapeRecords.SeekToContent( rSt, DFF_msofbtSp );
-    if ( aObjData.bShapeType )
+    if (aObjData.bShapeType && rSt.remainingSize() >= 8)
     {
         sal_uInt32 temp;
         rSt.ReadUInt32( aObjData.nShapeId )
@@ -4247,7 +4249,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     }
 
     aObjData.bChildAnchor = maShapeRecords.SeekToContent( rSt, DFF_msofbtChildAnchor, SEEK_FROM_CURRENT_AND_RESTART );
-    if ( aObjData.bChildAnchor )
+    if (aObjData.bChildAnchor && rSt.remainingSize() >= 16)
     {
         sal_Int32 l(0), o(0), r(0), u(0);
         rSt.ReadInt32( l ).ReadInt32( o ).ReadInt32( r ).ReadInt32( u );
