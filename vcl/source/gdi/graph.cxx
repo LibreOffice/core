@@ -177,6 +177,11 @@ Graphic::Graphic(Graphic&& rGraphic) noexcept
 {
 }
 
+Graphic::Graphic(std::shared_ptr<GfxLink> const & rGfxLink, sal_Int32 nPageIndex)
+    : mxImpGraphic(vcl::graphic::Manager::get().newInstance(rGfxLink, nPageIndex))
+{
+}
+
 Graphic::Graphic(GraphicExternalLink const & rGraphicExternalLink)
     : mxImpGraphic(vcl::graphic::Manager::get().newInstance(rGraphicExternalLink))
 {
