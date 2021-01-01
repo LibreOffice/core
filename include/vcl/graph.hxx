@@ -89,6 +89,7 @@ public:
     SAL_DLLPRIVATE ImpGraphic* ImplGetImpGraphic() const { return mxImpGraphic.get(); }
 
                     Graphic();
+                    Graphic(std::shared_ptr<GfxLink> const & rGfxLink, sal_Int32 nPageIndex = 0);
                     Graphic( const GraphicExternalLink& rGraphicLink );
                     Graphic( const Graphic& rGraphic );
                     Graphic( Graphic&& rGraphic ) noexcept;
