@@ -46,6 +46,7 @@
 #include <vcl/gdimetafiletools.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <vcl/pdfread.hxx>
+#include <graphic/VectorGraphicLoader.hxx>
 
 #define GRAPHIC_MTFTOBMP_MAXEXT     2048
 #define GRAPHIC_STREAMBUFSIZE       8192UL
@@ -1429,16 +1430,30 @@ bool ImpGraphic::swapIn()
     }
     else if (mpGfxLink && mpGfxLink->IsNative())
     {
-        Graphic aGraphic;
-        if (!mpGfxLink->LoadNative(aGraphic))
-            return false;
+        if (mpGfxLink->GetType() == GfxLinkType::NativePdf)
+        {
+            maVectorGraphicData = vcl::loadPdfFromDataContainer(mpGfxLink->getDataContainer());
 
-        ImpGraphic* pImpGraphic = aGraphic.ImplGetImpGraphic();
+            // Set to 0, to force recalculation
+            mnSizeBytes = 0;
+            mnChecksum = 0;
 
-        if (meType != pImpGraphic->meType)
-            return false;
+            restoreFromSwapInfo();
 
-        updateFromLoadedGraphic(pImpGraphic);
+            mbSwapOut = false;
+        }
+        else
+        {
+            Graphic aGraphic;
+            if (!mpGfxLink->LoadNative(aGraphic))
+                return false;
+
+            ImpGraphic* pImpGraphic = aGraphic.ImplGetImpGraphic();
+            if (meType != pImpGraphic->meType)
+                return false;
+
+            updateFromLoadedGraphic(pImpGraphic);
+        }
 
         maLastUsed = std::chrono::high_resolution_clock::now();
         bReturn = true;
