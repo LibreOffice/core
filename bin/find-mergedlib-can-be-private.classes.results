@@ -197,7 +197,6 @@ VCLXEdit
 VCLXMenuBar
 VCLXSpinField
 ValueSet
-VclAlignment
 VclBin
 VclBuilder::MenuAndId
 VclBuilder::ParserState
