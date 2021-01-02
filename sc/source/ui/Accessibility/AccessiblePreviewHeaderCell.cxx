@@ -36,7 +36,6 @@
 #include <vcl/svapp.hxx>
 #include <svl/hint.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <comphelper/sequence.hxx>
 #include <toolkit/helper/convert.hxx>
 
 #ifdef indices
