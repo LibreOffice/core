@@ -807,398 +807,405 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
         }
         else
         {
-            // try to load some ppt text
-            PPTTextObj aTextObj( rSt, static_cast<SdrPowerPointImport&>(*this), rPersistEntry, &rObjData );
-            if ( aTextObj.Count() || aTextObj.GetOEPlaceHolderAtom() )
+            try
             {
-                bool bVerticalText = false;
-                // and if the text object is not empty, it must be applied to pRet, the object we
-                // initially got from our escher import
-                Degree100 nTextRotationAngle(0);
-                if ( IsProperty( DFF_Prop_txflTextFlow ) )
+                // try to load some ppt text
+                PPTTextObj aTextObj( rSt, static_cast<SdrPowerPointImport&>(*this), rPersistEntry, &rObjData );
+                if ( aTextObj.Count() || aTextObj.GetOEPlaceHolderAtom() )
                 {
-                    auto eTextFlow = GetPropertyValue(DFF_Prop_txflTextFlow, 0) & 0xFFFF;
-                    switch( eTextFlow )
+                    bool bVerticalText = false;
+                    // and if the text object is not empty, it must be applied to pRet, the object we
+                    // initially got from our escher import
+                    Degree100 nTextRotationAngle(0);
+                    if ( IsProperty( DFF_Prop_txflTextFlow ) )
                     {
-                        case mso_txflBtoT :                     // Bottom to Top non-@
-                            nTextRotationAngle += 9000_deg100;
-                        break;
-                        case mso_txflTtoBA :    /* #68110# */   // Top to Bottom @-font
-                        case mso_txflTtoBN :                    // Top to Bottom non-@
-                        case mso_txflVertN :                    // Vertical, non-@, top to bottom
-                            bVerticalText = !bVerticalText;     // nTextRotationAngle += 27000;
-                        break;
-    //                  case mso_txflHorzN :                    // Horizontal non-@, normal
-    //                  case mso_txflHorzA :                    // Horizontal @-font, normal
-                        default: break;
-                    }
-                }
-                sal_Int32 nFontDirection = GetPropertyValue( DFF_Prop_cdirFont, mso_cdir0 );
-                if ( ( nFontDirection == 1 ) || ( nFontDirection == 3 ) )
-                {
-                    bVerticalText = !bVerticalText;
-                }
-                const bool bFail = o3tl::checked_multiply<sal_Int32>(nFontDirection, 9000, nFontDirection);
-                if (!bFail)
-                    nTextRotationAngle -= Degree100(nFontDirection);
-                else
-                    SAL_WARN("filter.ms", "Parsing error: bad fontdirection: " << nFontDirection);
-                aTextObj.SetVertical( bVerticalText );
-                if ( pRet )
-                {
-                    bool bDeleteSource = aTextObj.GetOEPlaceHolderAtom() != nullptr;
-                    if ( bDeleteSource  && dynamic_cast<const SdrGrafObj* >(pRet) ==  nullptr     // we are not allowed to get
-                            && dynamic_cast<const SdrObjGroup* >(pRet) ==  nullptr                // grouped placeholder objects
-                                && dynamic_cast<const SdrOle2Obj* >(pRet) ==  nullptr )
-                        SdrObject::Free( pRet );
-                }
-                sal_uInt32 nTextFlags = aTextObj.GetTextFlags();
-                sal_Int32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 25 * 3600 );   // 0.25 cm (emu)
-                sal_Int32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 25 * 3600 ); // 0.25 cm (emu)
-                sal_Int32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 13 * 3600 );     // 0.13 cm (emu)
-                sal_Int32 nTextBottom = GetPropertyValue( DFF_Prop_dyTextBottom, 13 * 3600 );
-                ScaleEmu( nTextLeft );
-                ScaleEmu( nTextRight );
-                ScaleEmu( nTextTop );
-                ScaleEmu( nTextBottom );
-
-                sal_Int32   nMinFrameWidth = 0;
-                sal_Int32   nMinFrameHeight = 0;
-                bool    bAutoGrowWidth, bAutoGrowHeight;
-
-                SdrTextVertAdjust eTVA;
-                SdrTextHorzAdjust eTHA;
-
-                nTextFlags &= PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT   | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT
-                            | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK;
-
-                if ( bVerticalText )
-                {
-                    eTVA = SDRTEXTVERTADJUST_BLOCK;
-                    eTHA = SDRTEXTHORZADJUST_CENTER;
-
-                    // read text anchor
-                    auto eTextAnchor = GetPropertyValue(DFF_Prop_anchorText, mso_anchorTop);
-
-                    switch( eTextAnchor )
-                    {
-                        case mso_anchorTop:
-                        case mso_anchorTopCentered:
-                        case mso_anchorTopBaseline:
-                        case mso_anchorTopCenteredBaseline:
-                            eTHA = SDRTEXTHORZADJUST_RIGHT;
-                        break;
-
-                        case mso_anchorMiddle :
-                        case mso_anchorMiddleCentered:
-                            eTHA = SDRTEXTHORZADJUST_CENTER;
-                        break;
-
-                        case mso_anchorBottom:
-                        case mso_anchorBottomCentered:
-                        case mso_anchorBottomBaseline:
-                        case mso_anchorBottomCenteredBaseline:
-                            eTHA = SDRTEXTHORZADJUST_LEFT;
-                        break;
-                    }
-                    switch ( eTextAnchor )
-                    {
-                        case mso_anchorTopCentered :
-                        case mso_anchorMiddleCentered :
-                        case mso_anchorBottomCentered :
-                        case mso_anchorTopCenteredBaseline:
-                        case mso_anchorBottomCenteredBaseline:
+                        auto eTextFlow = GetPropertyValue(DFF_Prop_txflTextFlow, 0) & 0xFFFF;
+                        switch( eTextFlow )
                         {
-                            // check if it is sensible to use the centered alignment
-                            const sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK;
-                            switch (nTextFlags & nMask)
-                            {
-                            case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT:
-                            case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER:
-                            case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT:
-                            case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK:
-                                eTVA = SDRTEXTVERTADJUST_CENTER;    // If the textobject has only one type of alignment, then the text has not to be displayed using the full width;
-                                break;
-                            }
+                            case mso_txflBtoT :                     // Bottom to Top non-@
+                                nTextRotationAngle += 9000_deg100;
                             break;
+                            case mso_txflTtoBA :    /* #68110# */   // Top to Bottom @-font
+                            case mso_txflTtoBN :                    // Top to Bottom non-@
+                            case mso_txflVertN :                    // Vertical, non-@, top to bottom
+                                bVerticalText = !bVerticalText;     // nTextRotationAngle += 27000;
+                            break;
+        //                  case mso_txflHorzN :                    // Horizontal non-@, normal
+        //                  case mso_txflHorzA :                    // Horizontal @-font, normal
+                            default: break;
                         }
-                        default:
-                            break;
                     }
-                    nMinFrameWidth = rTextRect.GetWidth() - ( nTextLeft + nTextRight );
-                }
-                else
-                {
-                    eTVA = SDRTEXTVERTADJUST_CENTER;
-                    eTHA = SDRTEXTHORZADJUST_BLOCK;
-
-                    // read text anchor
-                    auto eTextAnchor = GetPropertyValue(DFF_Prop_anchorText, mso_anchorTop);
-
-                    switch( eTextAnchor )
+                    sal_Int32 nFontDirection = GetPropertyValue( DFF_Prop_cdirFont, mso_cdir0 );
+                    if ( ( nFontDirection == 1 ) || ( nFontDirection == 3 ) )
                     {
-                        case mso_anchorTop:
-                        case mso_anchorTopCentered:
-                        case mso_anchorTopBaseline:
-                        case mso_anchorTopCenteredBaseline:
-                            eTVA = SDRTEXTVERTADJUST_TOP;
-                        break;
-
-                        case mso_anchorMiddle :
-                        case mso_anchorMiddleCentered:
-                            eTVA = SDRTEXTVERTADJUST_CENTER;
-                        break;
-
-                        case mso_anchorBottom:
-                        case mso_anchorBottomCentered:
-                        case mso_anchorBottomBaseline:
-                        case mso_anchorBottomCenteredBaseline:
-                            eTVA = SDRTEXTVERTADJUST_BOTTOM;
-                        break;
+                        bVerticalText = !bVerticalText;
                     }
-                    switch ( eTextAnchor )
-                    {
-                        case mso_anchorTopCentered :
-                        case mso_anchorMiddleCentered :
-                        case mso_anchorBottomCentered :
-                        case mso_anchorTopCenteredBaseline:
-                        case mso_anchorBottomCenteredBaseline:
-                        {
-                            // check if it is sensible to use the centered alignment
-                            const sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK;
-                            switch (nTextFlags & nMask)
-                            {
-                            case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT:
-                            case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER:
-                            case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT:
-                            case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK:
-                                eTHA = SDRTEXTHORZADJUST_CENTER;    // If the textobject has only one type of alignment, then the text has not to be displayed using the full width;
-                                break;
-                            }
-                            break;
-                        }
-                        default:
-                            break;
-                    }
-                    nMinFrameHeight = rTextRect.GetHeight() - ( nTextTop + nTextBottom );
-                }
-
-                SdrObjKind eTextKind = OBJ_RECT;
-                if ( ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::NOTESSLIDEIMAGE )
-                    || ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::MASTERNOTESSLIDEIMAGE ) )
-                {
-                    aTextObj.SetInstance( TSS_Type::Notes );
-                    eTextKind = OBJ_TITLETEXT;
-                }
-                else if ( ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::MASTERNOTESBODYIMAGE )
-                    || ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::NOTESBODY ) )
-                {
-                    aTextObj.SetInstance( TSS_Type::Notes );
-                    eTextKind = OBJ_TEXT;
-                }
-
-                TSS_Type nDestinationInstance = aTextObj.GetInstance();
-                if ( rPersistEntry.ePageKind == PPT_MASTERPAGE )
-                {
-                    if ( !rPersistEntry.pPresentationObjects )
-                    {
-                        rPersistEntry.pPresentationObjects.reset( new sal_uInt32[ PPT_STYLESHEETENTRIES ] );
-                        memset( rPersistEntry.pPresentationObjects.get(), 0, PPT_STYLESHEETENTRIES * 4 );
-                    }
-                    if ( !rPersistEntry.pPresentationObjects[ static_cast<int>(nDestinationInstance) ] )
-                        rPersistEntry.pPresentationObjects[ static_cast<int>(nDestinationInstance) ] = rObjData.rSpHd.GetRecBegFilePos();
-                }
-                switch ( nDestinationInstance )
-                {
-                    case TSS_Type::PageTitle :
-                    case TSS_Type::Title :
-                    {
-                        if ( GetSlideLayoutAtom()->eLayout == PptSlideLayout::TITLEMASTERSLIDE )
-                            nDestinationInstance = TSS_Type::Title;
-                        else
-                            nDestinationInstance = TSS_Type::PageTitle;
-                    }
-                    break;
-                    case TSS_Type::Body :
-                    case TSS_Type::HalfBody :
-                    case TSS_Type::QuarterBody :
-                        nDestinationInstance = TSS_Type::Body;
-                    break;
-                    default: break;
-                }
-                aTextObj.SetDestinationInstance( nDestinationInstance );
-
-                bool bAutoFit = false; // auto-scale text into shape box
-                switch ( aTextObj.GetInstance() )
-                {
-                    case TSS_Type::PageTitle :
-                    case TSS_Type::Title : eTextKind = OBJ_TITLETEXT; break;
-                    case TSS_Type::Subtitle : eTextKind = OBJ_TEXT; break;
-                    case TSS_Type::Body :
-                    case TSS_Type::HalfBody :
-                    case TSS_Type::QuarterBody : eTextKind = OBJ_OUTLINETEXT; bAutoFit = true; break;
-                    default: break;
-                }
-                if ( aTextObj.GetDestinationInstance() != TSS_Type::TextInShape )
-                {
-                    if ( !aTextObj.GetOEPlaceHolderAtom() || aTextObj.GetOEPlaceHolderAtom()->nPlaceholderId == PptPlaceholder::NONE )
-                    {
-                        aTextObj.SetDestinationInstance( TSS_Type::TextInShape );
-                        eTextKind = OBJ_RECT;
-                    }
-                }
-                SdrObject* pTObj = nullptr;
-                bool bWordWrap = GetPropertyValue(DFF_Prop_WrapText, mso_wrapSquare) != mso_wrapNone;
-                bool bFitShapeToText = ( GetPropertyValue( DFF_Prop_FitTextToShape, 0 ) & 2 ) != 0;
-
-                if ( dynamic_cast<const SdrObjCustomShape* >(pRet) !=  nullptr && ( eTextKind == OBJ_RECT ) )
-                {
-                    bAutoGrowHeight = bFitShapeToText;
-                    bAutoGrowWidth = !bWordWrap;
-                    pTObj = pRet;
-                    pRet = nullptr;
-                }
-                else
-                {
-                    if ( dynamic_cast<const SdrObjCustomShape* >(pRet) !=  nullptr )
-                    {
-                        SdrObject::Free( pRet );
-                        pRet = nullptr;
-                    }
-                    pTObj = new SdrRectObj(
-                        *pSdrModel,
-                        eTextKind != OBJ_RECT ? eTextKind : OBJ_TEXT);
-                    SfxItemSet aSet( pSdrModel->GetItemPool() );
-                    if ( !pRet )
-                        ApplyAttributes( rSt, aSet, rObjData );
-                    pTObj->SetMergedItemSet( aSet );
+                    const bool bFail = o3tl::checked_multiply<sal_Int32>(nFontDirection, 9000, nFontDirection);
+                    if (!bFail)
+                        nTextRotationAngle -= Degree100(nFontDirection);
+                    else
+                        SAL_WARN("filter.ms", "Parsing error: bad fontdirection: " << nFontDirection);
+                    aTextObj.SetVertical( bVerticalText );
                     if ( pRet )
                     {
-                        pTObj->SetMergedItem( XLineStyleItem( drawing::LineStyle_NONE ) );
-                        pTObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_NONE ) );
+                        bool bDeleteSource = aTextObj.GetOEPlaceHolderAtom() != nullptr;
+                        if ( bDeleteSource  && dynamic_cast<const SdrGrafObj* >(pRet) ==  nullptr     // we are not allowed to get
+                                && dynamic_cast<const SdrObjGroup* >(pRet) ==  nullptr                // grouped placeholder objects
+                                    && dynamic_cast<const SdrOle2Obj* >(pRet) ==  nullptr )
+                            SdrObject::Free( pRet );
                     }
+                    sal_uInt32 nTextFlags = aTextObj.GetTextFlags();
+                    sal_Int32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 25 * 3600 );   // 0.25 cm (emu)
+                    sal_Int32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 25 * 3600 ); // 0.25 cm (emu)
+                    sal_Int32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 13 * 3600 );     // 0.13 cm (emu)
+                    sal_Int32 nTextBottom = GetPropertyValue( DFF_Prop_dyTextBottom, 13 * 3600 );
+                    ScaleEmu( nTextLeft );
+                    ScaleEmu( nTextRight );
+                    ScaleEmu( nTextTop );
+                    ScaleEmu( nTextBottom );
+
+                    sal_Int32   nMinFrameWidth = 0;
+                    sal_Int32   nMinFrameHeight = 0;
+                    bool    bAutoGrowWidth, bAutoGrowHeight;
+
+                    SdrTextVertAdjust eTVA;
+                    SdrTextHorzAdjust eTHA;
+
+                    nTextFlags &= PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT   | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT
+                                | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK;
+
                     if ( bVerticalText )
                     {
-                        bAutoGrowWidth = bFitShapeToText;
-                        bAutoGrowHeight = false;
+                        eTVA = SDRTEXTVERTADJUST_BLOCK;
+                        eTHA = SDRTEXTHORZADJUST_CENTER;
+
+                        // read text anchor
+                        auto eTextAnchor = GetPropertyValue(DFF_Prop_anchorText, mso_anchorTop);
+
+                        switch( eTextAnchor )
+                        {
+                            case mso_anchorTop:
+                            case mso_anchorTopCentered:
+                            case mso_anchorTopBaseline:
+                            case mso_anchorTopCenteredBaseline:
+                                eTHA = SDRTEXTHORZADJUST_RIGHT;
+                            break;
+
+                            case mso_anchorMiddle :
+                            case mso_anchorMiddleCentered:
+                                eTHA = SDRTEXTHORZADJUST_CENTER;
+                            break;
+
+                            case mso_anchorBottom:
+                            case mso_anchorBottomCentered:
+                            case mso_anchorBottomBaseline:
+                            case mso_anchorBottomCenteredBaseline:
+                                eTHA = SDRTEXTHORZADJUST_LEFT;
+                            break;
+                        }
+                        switch ( eTextAnchor )
+                        {
+                            case mso_anchorTopCentered :
+                            case mso_anchorMiddleCentered :
+                            case mso_anchorBottomCentered :
+                            case mso_anchorTopCenteredBaseline:
+                            case mso_anchorBottomCenteredBaseline:
+                            {
+                                // check if it is sensible to use the centered alignment
+                                const sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK;
+                                switch (nTextFlags & nMask)
+                                {
+                                case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT:
+                                case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER:
+                                case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT:
+                                case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK:
+                                    eTVA = SDRTEXTVERTADJUST_CENTER;    // If the textobject has only one type of alignment, then the text has not to be displayed using the full width;
+                                    break;
+                                }
+                                break;
+                            }
+                            default:
+                                break;
+                        }
+                        nMinFrameWidth = rTextRect.GetWidth() - ( nTextLeft + nTextRight );
                     }
                     else
                     {
-                        bAutoGrowWidth = false;
+                        eTVA = SDRTEXTVERTADJUST_CENTER;
+                        eTHA = SDRTEXTHORZADJUST_BLOCK;
 
-                        // #119885# re-activating bFitShapeToText here, could not find deeper explanations
-                        // for it (it was from 2005). Keeping the old comment here for reference
-                        // old comment: // bFitShapeToText; can't be used, because we cut the text if it is too height,
-                        bAutoGrowHeight = bFitShapeToText;
-                    }
-                }
-                pTObj->SetMergedItem( SvxFrameDirectionItem( bVerticalText ? SvxFrameDirection::Vertical_RL_TB : SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR ) );
+                        // read text anchor
+                        auto eTextAnchor = GetPropertyValue(DFF_Prop_anchorText, mso_anchorTop);
 
-                //Autofit text only if there is no auto grow height and width
-                //See fdo#41245
-                if (bAutoFit && !bAutoGrowHeight && !bAutoGrowWidth)
-                {
-                    pTObj->SetMergedItem( SdrTextFitToSizeTypeItem(drawing::TextFitToSizeType_AUTOFIT) );
-                }
-
-                if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
-                {
-                    pTObj->SetMergedItem( makeSdrTextAutoGrowWidthItem( bAutoGrowWidth ) );
-                    pTObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( bAutoGrowHeight ) );
-                }
-                else
-                {
-                    pTObj->SetMergedItem( makeSdrTextWordWrapItem( bWordWrap ) );
-                    pTObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( bFitShapeToText ) );
-                }
-
-                pTObj->SetMergedItem( SdrTextVertAdjustItem( eTVA ) );
-                pTObj->SetMergedItem( SdrTextHorzAdjustItem( eTHA ) );
-
-                if ( nMinFrameHeight < 0 )
-                    nMinFrameHeight = 0;
-                if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
-                    pTObj->SetMergedItem( makeSdrTextMinFrameHeightItem( nMinFrameHeight ) );
-
-                if ( nMinFrameWidth < 0 )
-                    nMinFrameWidth = 0;
-                if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
-                    pTObj->SetMergedItem( makeSdrTextMinFrameWidthItem( nMinFrameWidth ) );
-
-                // set margins at the borders of the textbox
-                pTObj->SetMergedItem( makeSdrTextLeftDistItem( nTextLeft ) );
-                pTObj->SetMergedItem( makeSdrTextRightDistItem( nTextRight ) );
-                pTObj->SetMergedItem( makeSdrTextUpperDistItem( nTextTop ) );
-                pTObj->SetMergedItem( makeSdrTextLowerDistItem( nTextBottom ) );
-                pTObj->SetMergedItem( SdrTextFixedCellHeightItem( true ) );
-
-                if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
-                    pTObj->SetSnapRect( rTextRect );
-                pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
-
-                if ( pTObj )
-                {
-                    /* check if our new snaprect makes trouble,
-                    because we do not display the ADJUST_BLOCK
-                    properly if the textsize is bigger than the
-                    snaprect of the object. Then we will use
-                    ADJUST_CENTER instead of ADJUST_BLOCK.
-                    */
-                    if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr && !bFitShapeToText && !bWordWrap )
-                    {
-                        SdrTextObj* pText = dynamic_cast<SdrTextObj*>( pTObj  );
-                        if ( pText )
+                        switch( eTextAnchor )
                         {
-                            if ( bVerticalText )
+                            case mso_anchorTop:
+                            case mso_anchorTopCentered:
+                            case mso_anchorTopBaseline:
+                            case mso_anchorTopCenteredBaseline:
+                                eTVA = SDRTEXTVERTADJUST_TOP;
+                            break;
+
+                            case mso_anchorMiddle :
+                            case mso_anchorMiddleCentered:
+                                eTVA = SDRTEXTVERTADJUST_CENTER;
+                            break;
+
+                            case mso_anchorBottom:
+                            case mso_anchorBottomCentered:
+                            case mso_anchorBottomBaseline:
+                            case mso_anchorBottomCenteredBaseline:
+                                eTVA = SDRTEXTVERTADJUST_BOTTOM;
+                            break;
+                        }
+                        switch ( eTextAnchor )
+                        {
+                            case mso_anchorTopCentered :
+                            case mso_anchorMiddleCentered :
+                            case mso_anchorBottomCentered :
+                            case mso_anchorTopCenteredBaseline:
+                            case mso_anchorBottomCenteredBaseline:
                             {
-                                if ( eTVA == SDRTEXTVERTADJUST_BLOCK )
+                                // check if it is sensible to use the centered alignment
+                                const sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK;
+                                switch (nTextFlags & nMask)
                                 {
-                                    Size aTextSize( pText->GetTextSize() );
-                                    aTextSize.AdjustWidth(nTextLeft + nTextRight );
-                                    aTextSize.AdjustHeight(nTextTop + nTextBottom );
-                                    if ( rTextRect.GetHeight() < aTextSize.Height() )
-                                        pTObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
+                                case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT:
+                                case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER:
+                                case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT:
+                                case PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK:
+                                    eTHA = SDRTEXTHORZADJUST_CENTER;    // If the textobject has only one type of alignment, then the text has not to be displayed using the full width;
+                                    break;
                                 }
+                                break;
                             }
+                            default:
+                                break;
+                        }
+                        nMinFrameHeight = rTextRect.GetHeight() - ( nTextTop + nTextBottom );
+                    }
+
+                    SdrObjKind eTextKind = OBJ_RECT;
+                    if ( ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::NOTESSLIDEIMAGE )
+                        || ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::MASTERNOTESSLIDEIMAGE ) )
+                    {
+                        aTextObj.SetInstance( TSS_Type::Notes );
+                        eTextKind = OBJ_TITLETEXT;
+                    }
+                    else if ( ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::MASTERNOTESBODYIMAGE )
+                        || ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::NOTESBODY ) )
+                    {
+                        aTextObj.SetInstance( TSS_Type::Notes );
+                        eTextKind = OBJ_TEXT;
+                    }
+
+                    TSS_Type nDestinationInstance = aTextObj.GetInstance();
+                    if ( rPersistEntry.ePageKind == PPT_MASTERPAGE )
+                    {
+                        if ( !rPersistEntry.pPresentationObjects )
+                        {
+                            rPersistEntry.pPresentationObjects.reset( new sal_uInt32[ PPT_STYLESHEETENTRIES ] );
+                            memset( rPersistEntry.pPresentationObjects.get(), 0, PPT_STYLESHEETENTRIES * 4 );
+                        }
+                        if ( !rPersistEntry.pPresentationObjects[ static_cast<int>(nDestinationInstance) ] )
+                            rPersistEntry.pPresentationObjects[ static_cast<int>(nDestinationInstance) ] = rObjData.rSpHd.GetRecBegFilePos();
+                    }
+                    switch ( nDestinationInstance )
+                    {
+                        case TSS_Type::PageTitle :
+                        case TSS_Type::Title :
+                        {
+                            if ( GetSlideLayoutAtom()->eLayout == PptSlideLayout::TITLEMASTERSLIDE )
+                                nDestinationInstance = TSS_Type::Title;
                             else
+                                nDestinationInstance = TSS_Type::PageTitle;
+                        }
+                        break;
+                        case TSS_Type::Body :
+                        case TSS_Type::HalfBody :
+                        case TSS_Type::QuarterBody :
+                            nDestinationInstance = TSS_Type::Body;
+                        break;
+                        default: break;
+                    }
+                    aTextObj.SetDestinationInstance( nDestinationInstance );
+
+                    bool bAutoFit = false; // auto-scale text into shape box
+                    switch ( aTextObj.GetInstance() )
+                    {
+                        case TSS_Type::PageTitle :
+                        case TSS_Type::Title : eTextKind = OBJ_TITLETEXT; break;
+                        case TSS_Type::Subtitle : eTextKind = OBJ_TEXT; break;
+                        case TSS_Type::Body :
+                        case TSS_Type::HalfBody :
+                        case TSS_Type::QuarterBody : eTextKind = OBJ_OUTLINETEXT; bAutoFit = true; break;
+                        default: break;
+                    }
+                    if ( aTextObj.GetDestinationInstance() != TSS_Type::TextInShape )
+                    {
+                        if ( !aTextObj.GetOEPlaceHolderAtom() || aTextObj.GetOEPlaceHolderAtom()->nPlaceholderId == PptPlaceholder::NONE )
+                        {
+                            aTextObj.SetDestinationInstance( TSS_Type::TextInShape );
+                            eTextKind = OBJ_RECT;
+                        }
+                    }
+                    SdrObject* pTObj = nullptr;
+                    bool bWordWrap = GetPropertyValue(DFF_Prop_WrapText, mso_wrapSquare) != mso_wrapNone;
+                    bool bFitShapeToText = ( GetPropertyValue( DFF_Prop_FitTextToShape, 0 ) & 2 ) != 0;
+
+                    if ( dynamic_cast<const SdrObjCustomShape* >(pRet) !=  nullptr && ( eTextKind == OBJ_RECT ) )
+                    {
+                        bAutoGrowHeight = bFitShapeToText;
+                        bAutoGrowWidth = !bWordWrap;
+                        pTObj = pRet;
+                        pRet = nullptr;
+                    }
+                    else
+                    {
+                        if ( dynamic_cast<const SdrObjCustomShape* >(pRet) !=  nullptr )
+                        {
+                            SdrObject::Free( pRet );
+                            pRet = nullptr;
+                        }
+                        pTObj = new SdrRectObj(
+                            *pSdrModel,
+                            eTextKind != OBJ_RECT ? eTextKind : OBJ_TEXT);
+                        SfxItemSet aSet( pSdrModel->GetItemPool() );
+                        if ( !pRet )
+                            ApplyAttributes( rSt, aSet, rObjData );
+                        pTObj->SetMergedItemSet( aSet );
+                        if ( pRet )
+                        {
+                            pTObj->SetMergedItem( XLineStyleItem( drawing::LineStyle_NONE ) );
+                            pTObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_NONE ) );
+                        }
+                        if ( bVerticalText )
+                        {
+                            bAutoGrowWidth = bFitShapeToText;
+                            bAutoGrowHeight = false;
+                        }
+                        else
+                        {
+                            bAutoGrowWidth = false;
+
+                            // #119885# re-activating bFitShapeToText here, could not find deeper explanations
+                            // for it (it was from 2005). Keeping the old comment here for reference
+                            // old comment: // bFitShapeToText; can't be used, because we cut the text if it is too height,
+                            bAutoGrowHeight = bFitShapeToText;
+                        }
+                    }
+                    pTObj->SetMergedItem( SvxFrameDirectionItem( bVerticalText ? SvxFrameDirection::Vertical_RL_TB : SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR ) );
+
+                    //Autofit text only if there is no auto grow height and width
+                    //See fdo#41245
+                    if (bAutoFit && !bAutoGrowHeight && !bAutoGrowWidth)
+                    {
+                        pTObj->SetMergedItem( SdrTextFitToSizeTypeItem(drawing::TextFitToSizeType_AUTOFIT) );
+                    }
+
+                    if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
+                    {
+                        pTObj->SetMergedItem( makeSdrTextAutoGrowWidthItem( bAutoGrowWidth ) );
+                        pTObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( bAutoGrowHeight ) );
+                    }
+                    else
+                    {
+                        pTObj->SetMergedItem( makeSdrTextWordWrapItem( bWordWrap ) );
+                        pTObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( bFitShapeToText ) );
+                    }
+
+                    pTObj->SetMergedItem( SdrTextVertAdjustItem( eTVA ) );
+                    pTObj->SetMergedItem( SdrTextHorzAdjustItem( eTHA ) );
+
+                    if ( nMinFrameHeight < 0 )
+                        nMinFrameHeight = 0;
+                    if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
+                        pTObj->SetMergedItem( makeSdrTextMinFrameHeightItem( nMinFrameHeight ) );
+
+                    if ( nMinFrameWidth < 0 )
+                        nMinFrameWidth = 0;
+                    if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
+                        pTObj->SetMergedItem( makeSdrTextMinFrameWidthItem( nMinFrameWidth ) );
+
+                    // set margins at the borders of the textbox
+                    pTObj->SetMergedItem( makeSdrTextLeftDistItem( nTextLeft ) );
+                    pTObj->SetMergedItem( makeSdrTextRightDistItem( nTextRight ) );
+                    pTObj->SetMergedItem( makeSdrTextUpperDistItem( nTextTop ) );
+                    pTObj->SetMergedItem( makeSdrTextLowerDistItem( nTextBottom ) );
+                    pTObj->SetMergedItem( SdrTextFixedCellHeightItem( true ) );
+
+                    if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr )
+                        pTObj->SetSnapRect( rTextRect );
+                    pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
+
+                    if ( pTObj )
+                    {
+                        /* check if our new snaprect makes trouble,
+                        because we do not display the ADJUST_BLOCK
+                        properly if the textsize is bigger than the
+                        snaprect of the object. Then we will use
+                        ADJUST_CENTER instead of ADJUST_BLOCK.
+                        */
+                        if ( dynamic_cast<const SdrObjCustomShape* >(pTObj) ==  nullptr && !bFitShapeToText && !bWordWrap )
+                        {
+                            SdrTextObj* pText = dynamic_cast<SdrTextObj*>( pTObj  );
+                            if ( pText )
                             {
-                                if ( eTHA == SDRTEXTHORZADJUST_BLOCK )
+                                if ( bVerticalText )
                                 {
-                                    Size aTextSize( pText->GetTextSize() );
-                                    aTextSize.AdjustWidth(nTextLeft + nTextRight );
-                                    aTextSize.AdjustHeight(nTextTop + nTextBottom );
-                                    if ( rTextRect.GetWidth() < aTextSize.Width() )
-                                        pTObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_CENTER ) );
+                                    if ( eTVA == SDRTEXTVERTADJUST_BLOCK )
+                                    {
+                                        Size aTextSize( pText->GetTextSize() );
+                                        aTextSize.AdjustWidth(nTextLeft + nTextRight );
+                                        aTextSize.AdjustHeight(nTextTop + nTextBottom );
+                                        if ( rTextRect.GetHeight() < aTextSize.Height() )
+                                            pTObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
+                                    }
+                                }
+                                else
+                                {
+                                    if ( eTHA == SDRTEXTHORZADJUST_BLOCK )
+                                    {
+                                        Size aTextSize( pText->GetTextSize() );
+                                        aTextSize.AdjustWidth(nTextLeft + nTextRight );
+                                        aTextSize.AdjustHeight(nTextTop + nTextBottom );
+                                        if ( rTextRect.GetWidth() < aTextSize.Width() )
+                                            pTObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_CENTER ) );
+                                    }
                                 }
                             }
                         }
-                    }
-                    // rotate text with shape?
-                    Degree100 nAngle = ( rObjData.nSpFlags & ShapeFlag::FlipV ) ? -mnFix16Angle : mnFix16Angle; // #72116# vertical flip -> rotate by using the other way
-                    nAngle += nTextRotationAngle;
+                        // rotate text with shape?
+                        Degree100 nAngle = ( rObjData.nSpFlags & ShapeFlag::FlipV ) ? -mnFix16Angle : mnFix16Angle; // #72116# vertical flip -> rotate by using the other way
+                        nAngle += nTextRotationAngle;
 
-                    if ( dynamic_cast< const SdrObjCustomShape* >(pTObj) ==  nullptr )
-                    {
-                        if ( rObjData.nSpFlags & ShapeFlag::FlipV )
+                        if ( dynamic_cast< const SdrObjCustomShape* >(pTObj) ==  nullptr )
                         {
-                            double a = 18000 * F_PI18000;
-                            pTObj->Rotate( rTextRect.Center(), 18000_deg100, sin( a ), cos( a ) );
+                            if ( rObjData.nSpFlags & ShapeFlag::FlipV )
+                            {
+                                double a = 18000 * F_PI18000;
+                                pTObj->Rotate( rTextRect.Center(), 18000_deg100, sin( a ), cos( a ) );
+                            }
+                            if ( rObjData.nSpFlags & ShapeFlag::FlipH )
+                                nAngle = 36000_deg100 - nAngle;
+                            if ( nAngle )
+                                pTObj->NbcRotate( rObjData.aBoundRect.Center(), nAngle );
                         }
-                        if ( rObjData.nSpFlags & ShapeFlag::FlipH )
-                            nAngle = 36000_deg100 - nAngle;
-                        if ( nAngle )
-                            pTObj->NbcRotate( rObjData.aBoundRect.Center(), nAngle );
+                        if ( pRet )
+                        {
+                            SdrObject* pGroup = new SdrObjGroup(*pSdrModel);
+                            pGroup->GetSubList()->NbcInsertObject( pRet );
+                            pGroup->GetSubList()->NbcInsertObject( pTObj );
+                            pRet = pGroup;
+                        }
+                        else
+                            pRet = pTObj;
                     }
-                    if ( pRet )
-                    {
-                        SdrObject* pGroup = new SdrObjGroup(*pSdrModel);
-                        pGroup->GetSubList()->NbcInsertObject( pRet );
-                        pGroup->GetSubList()->NbcInsertObject( pTObj );
-                        pRet = pGroup;
-                    }
-                    else
-                        pRet = pTObj;
                 }
+            }
+            catch (const SvStreamEOFException&)
+            {
+                SAL_WARN("filter.ms", "EOF");
             }
         }
     }
