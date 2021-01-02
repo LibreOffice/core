@@ -31,33 +31,24 @@ namespace basctl
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::frame::XModel;
 
-    // DocumentSignature::Impl
-
-    struct DocumentSignature::Impl
-    {
-        SfxObjectShell* pShell;
-
-        Impl () : pShell(nullptr) { }
-    };
-
     // DocumentSignature
 
     DocumentSignature::DocumentSignature (ScriptDocument const& rDocument) :
-        m_pImpl(new Impl)
+        pShell(nullptr)
     {
         if (!rDocument.isDocument())
             return;
 
         Reference<XModel> xDocument(rDocument.getDocument());
         // find object shell for document
-        SfxObjectShell* pShell = SfxObjectShell::GetFirst();
-        while ( pShell )
+        SfxObjectShell* pCurrentShell = SfxObjectShell::GetFirst();
+        while ( pCurrentShell )
         {
-            if ( pShell->GetModel() == xDocument )
+            if ( pCurrentShell->GetModel() == xDocument )
                 break;
-            pShell = SfxObjectShell::GetNext( *pShell );
+            pCurrentShell = SfxObjectShell::GetNext( *pCurrentShell );
         }
-        m_pImpl->pShell = pShell;
+        pShell = pCurrentShell;
     }
 
     DocumentSignature::~DocumentSignature()
@@ -66,20 +57,20 @@ namespace basctl
 
     bool DocumentSignature::supportsSignatures() const
     {
-        return ( m_pImpl->pShell != nullptr );
+        return ( pShell != nullptr );
     }
 
     void DocumentSignature::signScriptingContent(weld::Window* pDialogParent) const
     {
         OSL_PRECOND( supportsSignatures(), "DocumentSignature::signScriptingContent: signatures not supported by this document!" );
-        if ( m_pImpl->pShell )
-            m_pImpl->pShell->SignScriptingContent(pDialogParent);
+        if ( pShell )
+            pShell->SignScriptingContent(pDialogParent);
     }
 
     SignatureState DocumentSignature::getScriptingSignatureState() const
     {
-        if ( m_pImpl->pShell )
-            return m_pImpl->pShell->GetScriptingSignatureState();
+        if ( pShell )
+            return pShell->GetScriptingSignatureState();
         return SignatureState::NOSIGNATURES;
     }
 
