@@ -31,75 +31,67 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment1">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="shadow_type">in</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
             <child>
-              <object class="GtkScrolledWindow">
+              <object class="GtkTreeView" id="assignments">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="shadow_type">in</property>
+                <property name="model">liststore3</property>
+                <property name="search_column">0</property>
+                <property name="show_expanders">False</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+                </child>
                 <child>
-                  <object class="GtkTreeView" id="assignments">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="model">liststore3</property>
-                    <property name="search_column">0</property>
-                    <property name="show_expanders">False</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
-                    </child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                    <property name="resizable">True</property>
+                    <property name="spacing">6</property>
+                    <property name="title" translatable="yes" context="macroassignpage|eventft">Event</property>
                     <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn3">
-                        <property name="resizable">True</property>
-                        <property name="spacing">6</property>
-                        <property name="title" translatable="yes" context="macroassignpage|eventft">Event</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderer1"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
+                      <object class="GtkCellRendererText" id="cellrenderer1"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
                     </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                    <property name="spacing">6</property>
                     <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                        <property name="spacing">6</property>
-                        <child>
-                          <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
-                          <attributes>
-                            <attribute name="pixbuf">1</attribute>
-                          </attributes>
-                        </child>
-                      </object>
+                      <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
+                      <attributes>
+                        <attribute name="pixbuf">1</attribute>
+                      </attributes>
                     </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                    <property name="resizable">True</property>
+                    <property name="spacing">6</property>
+                    <property name="title" translatable="yes" context="macroassignpage|assignft">Assigned Action</property>
                     <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn4">
-                        <property name="resizable">True</property>
-                        <property name="spacing">6</property>
-                        <property name="title" translatable="yes" context="macroassignpage|assignft">Assigned Action</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderer2"/>
-                          <attributes>
-                            <attribute name="text">2</attribute>
-                          </attributes>
-                        </child>
-                      </object>
+                      <object class="GtkCellRendererText" id="cellrenderer2"/>
+                      <attributes>
+                        <attribute name="text">2</attribute>
+                      </attributes>
                     </child>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="assignments-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="macroassignpage|extended_tip|assignments">The big list box lists the events and the assigned macros. After you selected the location in the Save In list box, select an event in the big list box. Then click Assign Macro.</property>
-                      </object>
-                    </child>
+                  </object>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="assignments-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="macroassignpage|extended_tip|assignments">The big list box lists the events and the assigned macros. After you selected the location in the Save In list box, select an event in the big list box. Then click Assign Macro.</property>
                   </object>
                 </child>
               </object>
@@ -129,71 +121,65 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment2">
+          <object class="GtkButtonBox" id="buttonbox1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <property name="layout_style">start</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
             <child>
-              <object class="GtkButtonBox" id="buttonbox1">
+              <object class="GtkButton" id="assign">
+                <property name="label" translatable="yes" context="macroassignpage|assign">M_acro...</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
-                <property name="layout_style">start</property>
-                <child>
-                  <object class="GtkButton" id="assign">
-                    <property name="label" translatable="yes" context="macroassignpage|assign">M_acro...</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="use_underline">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="assign-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="macroassignpage|extended_tip|assign">Opens the Macro Selector to assign a macro to the selected event.</property>
-                      </object>
-                    </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="assign-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="macroassignpage|extended_tip|assign">Opens the Macro Selector to assign a macro to the selected event.</property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="component">
-                    <property name="label" translatable="yes" context="macroassignpage|component">Com_ponent...</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="delete">
-                    <property name="label" translatable="yes" context="macroassignpage|delete">Remove</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="use_underline">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="delete-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="macroassignpage|extended_tip|delete">Deletes the macro or component assignment for the selected event.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
                 </child>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="component">
+                <property name="label" translatable="yes" context="macroassignpage|component">Com_ponent...</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="delete">
+                <property name="label" translatable="yes" context="macroassignpage|delete">Remove</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="delete-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="macroassignpage|extended_tip|delete">Deletes the macro or component assignment for the selected event.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
             </child>
           </object>
         </child>

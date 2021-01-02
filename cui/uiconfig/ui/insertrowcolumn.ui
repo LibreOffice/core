@@ -93,50 +93,44 @@
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment2">
+                  <!-- n-columns=1 n-rows=1 -->
+                  <object class="GtkGrid" id="grid2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="top_padding">6</property>
-                    <property name="left_padding">12</property>
+                    <property name="column_spacing">12</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
                     <child>
-                      <!-- n-columns=1 n-rows=1 -->
-                      <object class="GtkGrid" id="grid2">
+                      <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="column_spacing">12</property>
-                        <child>
-                          <object class="GtkLabel" id="label3">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="insertrowcolumn|label3">_Number:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">insert_number</property>
+                        <property name="label" translatable="yes" context="insertrowcolumn|label3">_Number:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">insert_number</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="insert_number">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment1</property>
+                        <property name="numeric">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="insert_number-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertrowcolumn|extended_tip|insert_number">Enter the number of columns or rows that you want.</property>
                           </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                            <property name="width">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSpinButton" id="insert_number">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="activates_default">True</property>
-                            <property name="adjustment">adjustment1</property>
-                            <property name="numeric">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="insert_number-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="insertrowcolumn|extended_tip|insert_number">Enter the number of columns or rows that you want.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">2</property>
-                            <property name="top_attach">0</property>
-                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="top_attach">0</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
@@ -163,62 +157,56 @@
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment1">
+                  <!-- n-columns=1 n-rows=1 -->
+                  <object class="GtkGrid" id="grid3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="top_padding">6</property>
-                    <property name="left_padding">12</property>
+                    <property name="row_spacing">6</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
                     <child>
-                      <!-- n-columns=1 n-rows=1 -->
-                      <object class="GtkGrid" id="grid3">
+                      <object class="GtkRadioButton" id="insert_before">
+                        <property name="label" translatable="yes" context="insertrowcolumn|insert_before">_Before</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="row_spacing">6</property>
-                        <child>
-                          <object class="GtkRadioButton" id="insert_before">
-                            <property name="label" translatable="yes" context="insertrowcolumn|insert_before">_Before</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="active">True</property>
-                            <property name="draw_indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="insert_before-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="insertrowcolumn|extended_tip|insert_before">Adds new columns to the left of the current column, or adds new rows above the current row.</property>
-                              </object>
-                            </child>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="insert_before-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertrowcolumn|extended_tip|insert_before">Adds new columns to the left of the current column, or adds new rows above the current row.</property>
                           </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                            <property name="width">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkRadioButton" id="insert_after">
-                            <property name="label" translatable="yes" context="insertrowcolumn|insert_after">A_fter</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="group">insert_before</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="insert_after-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="insertrowcolumn|extended_tip|insert_after">Adds new columns to the right of the current column, or adds new rows below the current row.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                            <property name="width">2</property>
-                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="insert_after">
+                        <property name="label" translatable="yes" context="insertrowcolumn|insert_after">A_fter</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">insert_before</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="insert_after-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertrowcolumn|extended_tip|insert_after">Adds new columns to the right of the current column, or adds new rows below the current row.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                        <property name="width">2</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
