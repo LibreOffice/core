@@ -140,10 +140,17 @@ endif
 # note: python configure overrides config.guess with something that doesn't
 # put -pc in its linux platform triplets, so filter that...
 ifneq ($(OS),WNT)
+ifeq ($(CPUNAME),ARM)
+$(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
+	LO_lib/_sysconfigdata_$(if $(ENABLE_DBGUTIL),d)_$(python3_MACHDEP)_$(subst i686,i386,$(subst v7l-unknown,,$(HOST_PLATFORM))).py \
+))
+else
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
 	LO_lib/_sysconfigdata_$(if $(ENABLE_DBGUTIL),d)_$(python3_MACHDEP)_$(subst i686,i386,$(subst -pc,,$(HOST_PLATFORM))).py \
 ))
 endif
+endif
+
 
 # packages not shipped:
 # dbm, sqlite3 - need some database stuff
