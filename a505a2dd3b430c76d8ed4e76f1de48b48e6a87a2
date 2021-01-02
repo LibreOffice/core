@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38002f25_5f9b5ea6",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3998,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-02T14:02:31Z",
+      "side": 1,
+      "message": "Now rDoc is only used in the \"else\" part, so better move it there. Or even just use \"rDocShell.GetDocument().GetTabProtection(nTab)\" directly there, since it\u0027s only used once.",
+      "range": {
+        "startLine": 3998,
+        "startChar": 4,
+        "endLine": 3998,
+        "endChar": 47
+      },
+      "revId": "a505a2dd3b430c76d8ed4e76f1de48b48e6a87a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61917571_467d1008",
+        "filename": "sc/source/ui/inc/docfunc.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-02T14:02:31Z",
+      "side": 1,
+      "message": "This should be in private section, it\u0027s only used in own methods.",
+      "range": {
+        "startLine": 160,
+        "startChar": 20,
+        "endLine": 160,
+        "endChar": 71
+      },
+      "revId": "a505a2dd3b430c76d8ed4e76f1de48b48e6a87a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
