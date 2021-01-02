@@ -22,6 +22,8 @@
 #include <vcl/weld.hxx>
 #include <memory>
 
+class SfxObjectShell;
+
 namespace basctl
 {
 
@@ -64,8 +66,7 @@ namespace basctl
         DocumentSignature() = delete;
 
     private:
-        struct Impl;
-        std::unique_ptr<Impl> m_pImpl;
+        SfxObjectShell* m_pShell;
     };
 
 
