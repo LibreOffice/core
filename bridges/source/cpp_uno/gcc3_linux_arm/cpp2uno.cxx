@@ -272,8 +272,7 @@ namespace
             }
             if (pReturnTypeDescr)
             {
-                typelib_TypeClass eRet =
-                    static_cast<typelib_TypeClass>(pReturnTypeDescr->eTypeClass);
+                typelib_TypeClass eRet = pReturnTypeDescr->eTypeClass;
                 TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
                 return eRet;
             }
@@ -381,7 +380,7 @@ namespace
             {
                 typelib_TypeDescription * pTD = nullptr;
                 TYPELIB_DANGER_GET(&pTD,
-                    reinterpret_cast<Type *>(pCallStack[2])->getTypeLibType());
+                    static_cast<Type *>(pCallStack[2])->getTypeLibType());
                 if (pTD)
                 {
                     XInterface * pInterface = nullptr;
@@ -393,7 +392,7 @@ namespace
                     if (pInterface)
                     {
                         ::uno_any_construct(
-                            reinterpret_cast< uno_Any * >( pCallStack[0] ),
+                            static_cast< uno_Any * >( pCallStack[0] ),
                             &pInterface, pTD, cpp_acquire );
                         pInterface->release();
                         TYPELIB_DANGER_RELEASE( pTD );
@@ -576,8 +575,8 @@ void bridges::cpp_uno::shared::VtableFactory::flushCode(
 {
 #ifndef ANDROID
    static void (*clear_cache)(unsigned char const*, unsigned char const*)
-       = (void (*)(unsigned char const*, unsigned char const*))
-           dlsym(RTLD_DEFAULT, "__clear_cache");
+       = reinterpret_cast<void (*)(unsigned char const*, unsigned char const*)>
+           (dlsym(RTLD_DEFAULT, "__clear_cache"));
    (*clear_cache)(beg, end);
 #else
    cacheflush((long) beg, (long) end, 0);
