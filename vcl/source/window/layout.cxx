@@ -1534,58 +1534,6 @@ void VclFrame::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     rJsonWriter.put("type", "frame");
 }
 
-Size VclAlignment::calculateRequisition() const
-{
-    Size aRet(m_nLeftPadding + m_nRightPadding,
-        m_nTopPadding + m_nBottomPadding);
-
-    const vcl::Window *pChild = get_child();
-    if (pChild && pChild->IsVisible())
-    {
-        Size aChildSize = getLayoutRequisition(*pChild);
-        aRet.AdjustWidth(aChildSize.Width() );
-        aRet.AdjustHeight(aChildSize.Height() );
-    }
-
-    return aRet;
-}
-
-void VclAlignment::setAllocation(const Size &rAllocation)
-{
-    vcl::Window *pChild = get_child();
-    if (!pChild || !pChild->IsVisible())
-        return;
-
-    Point aChildPos(m_nLeftPadding, m_nTopPadding);
-
-    Size aAllocation;
-    aAllocation.setWidth( rAllocation.Width() - (m_nLeftPadding + m_nRightPadding) );
-    aAllocation.setHeight( rAllocation.Height() - (m_nTopPadding + m_nBottomPadding) );
-
-    setLayoutAllocation(*pChild, aChildPos, aAllocation);
-}
-
-bool VclAlignment::set_property(const OString &rKey, const OUString &rValue)
-{
-    if (rKey == "bottom-padding")
-        m_nBottomPadding = rValue.toInt32();
-    else if (rKey == "left-padding")
-        m_nLeftPadding = rValue.toInt32();
-    else if (rKey == "right-padding")
-        m_nRightPadding = rValue.toInt32();
-    else if (rKey == "top-padding")
-        m_nTopPadding = rValue.toInt32();
-    else
-        return VclBin::set_property(rKey, rValue);
-    return true;
-}
-
-void VclAlignment::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
-{
-    VclContainer::DumpAsPropertyTree(rJsonWriter);
-    rJsonWriter.put("type", "alignment");
-}
-
 class DisclosureButton final : public CheckBox
 {
     virtual void ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext) override

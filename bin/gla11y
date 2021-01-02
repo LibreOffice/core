@@ -85,7 +85,6 @@ widgets_ignored = widgets_toplevel + [
     'GtkExpander',
     'GtkViewport',
     'GtkScrolledWindow',
-    'GtkAlignment',
     'GtkRevealer',
     'GtkSearchBar',
     'GtkHeaderBar',

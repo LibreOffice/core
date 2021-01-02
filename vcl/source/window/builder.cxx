@@ -1857,8 +1857,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         m_pParserState->m_aExpanderWidgets.push_back(pExpander);
         xWindow = pExpander;
     }
-    else if (name == "GtkAlignment")
-        xWindow = VclPtr<VclAlignment>::Create(pParent);
     else if (name == "GtkButton" || (!m_bLegacy && name == "GtkToggleButton"))
     {
         VclPtr<Button> xButton;

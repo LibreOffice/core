@@ -142,17 +142,6 @@ def check_frames(root):
         if len(frame_alignments) > 0:
             lint_assert(False, "Deprecated GtkAlignment in GtkFrame with id = '" + frame.attrib['id'] + "'", frame)
 
-def check_alignment_top_padding(alignment):
-    top_padding_properties = alignment.findall("./property[@name='top_padding']")
-    assert len(top_padding_properties) <= 1
-    # TODO reenable when we are ready to fix
-    # if len(top_padding_properties) < 1:
-    #     lint_assert(False, "No GtkAlignment 'top_padding' set. Should probably be " + ALIGNMENT_TOP_PADDING, alignment)
-    #if len(top_padding_properties) == 1:
-    #    top_padding = top_padding_properties[0]
-    #    lint_assert(top_padding.text == ALIGNMENT_TOP_PADDING,
-    #                "GtkAlignment 'top_padding' should be " + ALIGNMENT_TOP_PADDING, alignment)
-
 def check_title_labels(root):
     labels = root.findall(".//child[@type='label']")
     for label in labels:

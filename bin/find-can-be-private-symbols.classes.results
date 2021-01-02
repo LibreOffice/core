@@ -147,7 +147,6 @@ SyntaxHighlighter::Tokenizer
 SystemWindow::ImplData
 TBCExtraInfo
 TBCGeneralInfo
-VclAlignment
 VclBin
 VclBuilder::MenuAndId
 VclBuilder::ParserState
