@@ -31,19 +31,10 @@ namespace basctl
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::frame::XModel;
 
-    // DocumentSignature::Impl
-
-    struct DocumentSignature::Impl
-    {
-        SfxObjectShell* pShell;
-
-        Impl () : pShell(nullptr) { }
-    };
-
     // DocumentSignature
 
     DocumentSignature::DocumentSignature (ScriptDocument const& rDocument) :
-        m_pImpl(new Impl)
+        m_pShell(nullptr)
     {
         if (!rDocument.isDocument())
             return;
@@ -57,7 +48,7 @@ namespace basctl
                 break;
             pShell = SfxObjectShell::GetNext( *pShell );
         }
-        m_pImpl->pShell = pShell;
+        m_pShell = pShell;
     }
 
     DocumentSignature::~DocumentSignature()
@@ -66,20 +57,20 @@ namespace basctl
 
     bool DocumentSignature::supportsSignatures() const
     {
-        return ( m_pImpl->pShell != nullptr );
+        return ( m_pShell != nullptr );
     }
 
     void DocumentSignature::signScriptingContent(weld::Window* pDialogParent) const
     {
         OSL_PRECOND( supportsSignatures(), "DocumentSignature::signScriptingContent: signatures not supported by this document!" );
-        if ( m_pImpl->pShell )
-            m_pImpl->pShell->SignScriptingContent(pDialogParent);
+        if ( m_pShell )
+            m_pShell->SignScriptingContent(pDialogParent);
     }
 
     SignatureState DocumentSignature::getScriptingSignatureState() const
     {
-        if ( m_pImpl->pShell )
-            return m_pImpl->pShell->GetScriptingSignatureState();
+        if ( m_pShell )
+            return m_pShell->GetScriptingSignatureState();
         return SignatureState::NOSIGNATURES;
     }
 
