@@ -449,28 +449,6 @@ private:
     virtual OUString getDefaultAccessibleName() const override;
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) VclAlignment final : public VclBin
-{
-public:
-    VclAlignment(vcl::Window *pParent)
-        : VclBin(pParent)
-        , m_nBottomPadding(0)
-        , m_nLeftPadding(0)
-        , m_nRightPadding(0)
-        , m_nTopPadding(0)
-    {
-    }
-    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
-    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
-private:
-    virtual Size calculateRequisition() const override;
-    virtual void setAllocation(const Size &rAllocation) override;
-    sal_Int32 m_nBottomPadding;
-    sal_Int32 m_nLeftPadding;
-    sal_Int32 m_nRightPadding;
-    sal_Int32 m_nTopPadding;
-};
-
 class DisclosureButton;
 class CheckBox;
 
