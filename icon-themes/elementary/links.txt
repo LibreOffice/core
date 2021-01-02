@@ -1349,7 +1349,6 @@ cmd/32/insertpivottable.png cmd/32/datadatapilotrun.png
 cmd/32/mergecellsmenu.png cmd/32/mergecells.png
 cmd/32/navigatemenu.png cmd/32/navigator.png
 cmd/32/printrangesmenu.png cmd/32/defineprintarea.png
-cmd/32/recalcpivottable.png cmd/32/dataarearefresh.png
 cmd/32/sheetcommentmenu.png cmd/32/shownote.png
 cmd/32/showannotations.png cmd/32/showallnotes.png
 cmd/32/toggleformula.png cmd/32/dbviewfunctions.png
@@ -1368,7 +1367,6 @@ cmd/lc_insertpivottable.png cmd/lc_datadatapilotrun.png
 cmd/lc_mergecellsmenu.png cmd/lc_mergecells.png
 cmd/lc_navigatemenu.png cmd/lc_navigator.png
 cmd/lc_printrangesmenu.png cmd/lc_defineprintarea.png
-cmd/lc_recalcpivottable.png cmd/lc_dataarearefresh.png
 cmd/lc_sheetcommentmenu.png cmd/lc_shownote.png
 cmd/lc_showannotations.png cmd/lc_showallnotes.png
 cmd/lc_toggleformula.png cmd/lc_dbviewfunctions.png
@@ -1387,7 +1385,6 @@ cmd/sc_insertpivottable.png cmd/sc_datadatapilotrun.png
 cmd/sc_mergecellsmenu.png cmd/sc_mergecells.png
 cmd/sc_navigatemenu.png cmd/sc_navigator.png
 cmd/sc_printrangesmenu.png cmd/sc_defineprintarea.png
-cmd/sc_recalcpivottable.png cmd/sc_dataarearefresh.png
 cmd/sc_sheetcommentmenu.png cmd/sc_shownote.png
 cmd/sc_showannotations.png cmd/sc_showallnotes.png
 cmd/sc_toggleformula.png cmd/sc_dbviewfunctions.png
