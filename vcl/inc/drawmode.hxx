@@ -21,6 +21,7 @@
 
 #include <tools/color.hxx>
 
+#include <vcl/font.hxx>
 #include <vcl/DrawModeFlags.hxx>
 
 class StyleSettings;
@@ -33,5 +34,8 @@ Color GetDrawModeFillColor(Color const& rColor, DrawModeFlags nDrawMode,
 
 Color GetDrawModeTextColor(Color const& rColor, DrawModeFlags nDrawMode,
                            StyleSettings const& rStyleSettings);
+
+vcl::Font GetDrawModeFont(vcl::Font const& rFont, DrawModeFlags nDrawMode,
+                          StyleSettings const& rStyleSettings);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

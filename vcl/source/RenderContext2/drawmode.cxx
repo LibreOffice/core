@@ -129,6 +129,71 @@ Color GetDrawModeTextColor(Color const& rColor, DrawModeFlags nDrawMode,
     return aColor;
 }
 
+vcl::Font GetDrawModeFont(vcl::Font const& rFont, DrawModeFlags nDrawMode,
+                          StyleSettings const& rStyleSettings)
+{
+    vcl::Font aFont(rFont);
+
+    if (nDrawMode
+        & (DrawModeFlags::BlackText | DrawModeFlags::WhiteText | DrawModeFlags::GrayText
+           | DrawModeFlags::SettingsText | DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill
+           | DrawModeFlags::GrayFill | DrawModeFlags::NoFill | DrawModeFlags::SettingsFill))
+    {
+        Color aTextColor(aFont.GetColor());
+
+        if (nDrawMode & DrawModeFlags::BlackText)
+        {
+            aTextColor = COL_BLACK;
+        }
+        else if (nDrawMode & DrawModeFlags::WhiteText)
+        {
+            aTextColor = COL_WHITE;
+        }
+        else if (nDrawMode & DrawModeFlags::GrayText)
+        {
+            const sal_uInt8 cLum = aTextColor.GetLuminance();
+            aTextColor = Color(cLum, cLum, cLum);
+        }
+        else if (nDrawMode & DrawModeFlags::SettingsText)
+        {
+            aTextColor = rStyleSettings.GetFontColor();
+        }
+
+        aFont.SetColor(aTextColor);
+
+        if (!aFont.IsTransparent())
+        {
+            Color aTextFillColor(aFont.GetFillColor());
+
+            if (nDrawMode & DrawModeFlags::BlackFill)
+            {
+                aTextFillColor = COL_BLACK;
+            }
+            else if (nDrawMode & DrawModeFlags::WhiteFill)
+            {
+                aTextFillColor = COL_WHITE;
+            }
+            else if (nDrawMode & DrawModeFlags::GrayFill)
+            {
+                const sal_uInt8 cLum = aTextFillColor.GetLuminance();
+                aTextFillColor = Color(cLum, cLum, cLum);
+            }
+            else if (nDrawMode & DrawModeFlags::SettingsFill)
+            {
+                aTextFillColor = rStyleSettings.GetWindowColor();
+            }
+            else if (nDrawMode & DrawModeFlags::NoFill)
+            {
+                aTextFillColor = COL_TRANSPARENT;
+            }
+
+            aFont.SetFillColor(aTextFillColor);
+        }
+    }
+
+    return aFont;
+}
+
 DrawModeFlags RenderContext2::GetDrawMode() const { return mnDrawMode; }
 void RenderContext2::SetDrawMode(DrawModeFlags nDrawMode) { mnDrawMode = nDrawMode; }
 

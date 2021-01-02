@@ -406,67 +406,10 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
     }
 }
 
-void OutputDevice::SetFont( const vcl::Font& rNewFont )
+void OutputDevice::SetFont(vcl::Font const& rNewFont)
 {
-
     vcl::Font aFont(rNewFont);
-
-    if (GetDrawMode() & (DrawModeFlags::BlackText | DrawModeFlags::WhiteText | DrawModeFlags::GrayText | DrawModeFlags::SettingsText |
-                       DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill | DrawModeFlags::GrayFill | DrawModeFlags::NoFill |
-                       DrawModeFlags::SettingsFill))
-    {
-        Color aTextColor(aFont.GetColor());
-
-        if (GetDrawMode() & DrawModeFlags::BlackText)
-        {
-            aTextColor = COL_BLACK;
-        }
-        else if (GetDrawMode() & DrawModeFlags::WhiteText)
-        {
-            aTextColor = COL_WHITE;
-        }
-        else if (GetDrawMode() & DrawModeFlags::GrayText)
-        {
-            const sal_uInt8 cLum = aTextColor.GetLuminance();
-            aTextColor = Color( cLum, cLum, cLum );
-        }
-        else if (GetDrawMode() & DrawModeFlags::SettingsText)
-        {
-            aTextColor = GetSettings().GetStyleSettings().GetFontColor();
-        }
-
-        aFont.SetColor(aTextColor);
-
-        bool bTransFill = aFont.IsTransparent();
-        if (!bTransFill)
-        {
-            Color aTextFillColor( aFont.GetFillColor() );
-
-            if (GetDrawMode() & DrawModeFlags::BlackFill)
-            {
-                aTextFillColor = COL_BLACK;
-            }
-            else if (GetDrawMode() & DrawModeFlags::WhiteFill)
-            {
-                aTextFillColor = COL_WHITE;
-            }
-            else if (GetDrawMode() & DrawModeFlags::GrayFill)
-            {
-                const sal_uInt8 cLum = aTextFillColor.GetLuminance();
-                aTextFillColor = Color( cLum, cLum, cLum );
-            }
-            else if (GetDrawMode() & DrawModeFlags::SettingsFill)
-            {
-                aTextFillColor = GetSettings().GetStyleSettings().GetWindowColor();
-            }
-            else if (GetDrawMode() & DrawModeFlags::NoFill)
-            {
-                aTextFillColor = COL_TRANSPARENT;
-            }
-
-            aFont.SetFillColor(aTextFillColor);
-        }
-    }
+    aFont = GetDrawModeFont(aFont, GetDrawMode(), GetSettings().GetStyleSettings());
 
     if (mpMetaFile)
     {
@@ -475,41 +418,47 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
         // TODO: get rid of them without breaking anything...
         mpMetaFile->AddAction(new MetaTextAlignAction(aFont.GetAlignment()));
         mpMetaFile->AddAction(new MetaTextFillColorAction(aFont.GetFillColor(), !aFont.IsTransparent()));
+
+        if (GetFont().IsSameInstance(aFont))
+            return;
+
+        if (aFont.GetColor() != COL_TRANSPARENT
+            && (aFont.GetColor() != GetFont().GetColor() || aFont.GetColor() != GetTextColor()))
+        {
+            mpMetaFile->AddAction(new MetaTextColorAction(aFont.GetColor()));
+        }
     }
 
-    if (maFont.IsSameInstance( aFont))
+    if (GetFont().IsSameInstance(aFont))
         return;
 
     // Optimization MT/HDU: COL_TRANSPARENT means SetFont should ignore the font color,
     // because SetTextColor() is used for this.
     // #i28759# maTextColor might have been changed behind our back, commit then, too.
     if (aFont.GetColor() != COL_TRANSPARENT
-        && (aFont.GetColor() != maFont.GetColor() || aFont.GetColor() != maTextColor))
+        && (aFont.GetColor() != GetFont().GetColor() || aFont.GetColor() != GetTextColor()))
     {
         maTextColor = aFont.GetColor();
         SetInitTextColorFlag(true);
-
-        if (mpMetaFile)
-            mpMetaFile->AddAction(new MetaTextColorAction(aFont.GetColor()));
     }
 
     maFont = aFont;
     mbNewFont = true;
 
-    if (!mpAlphaVDev)
-        return;
-
-    // #i30463#
-    // Since SetFont might change the text color, apply that only
-    // selectively to alpha vdev (which normally paints opaque text
-    // with COL_BLACK)
-    if (aFont.GetColor() != COL_TRANSPARENT)
+    if (mpAlphaVDev)
     {
-        mpAlphaVDev->SetTextColor(COL_BLACK);
-        aFont.SetColor(COL_TRANSPARENT);
-    }
+        // #i30463#
+        // Since SetFont might change the text color, apply that only
+        // selectively to alpha vdev (which normally paints opaque text
+        // with COL_BLACK)
+        if (aFont.GetColor() != COL_TRANSPARENT)
+        {
+            mpAlphaVDev->SetTextColor(COL_BLACK);
+            aFont.SetColor(COL_TRANSPARENT);
+        }
 
-    mpAlphaVDev->SetFont(aFont);
+        mpAlphaVDev->SetFont(aFont);
+    }
 }
 
 void OutputDevice::ImplReleaseFonts()
