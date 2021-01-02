@@ -33,7 +33,7 @@ void OutputDevice::DrawEllipse( const tools::Rectangle& rRect )
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaEllipseAction( rRect ) );
 
-    if  ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
+    if  ( !IsDeviceOutputNecessary() || (!IsOpaqueLineColor() && !IsOpaqueFillColor()) || ImplIsRecordLayout() )
         return;
 
     tools::Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
@@ -49,18 +49,18 @@ void OutputDevice::DrawEllipse( const tools::Rectangle& rRect )
     if ( mbOutputClipped )
         return;
 
-    if ( mbInitLineColor )
+    if ( IsInitLineColor() )
         InitLineColor();
 
     tools::Polygon aRectPoly( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
     if ( aRectPoly.GetSize() >= 2 )
     {
         Point* pPtAry = aRectPoly.GetPointAry();
-        if ( !mbFillColor )
+        if ( !IsOpaqueFillColor() )
             mpGraphics->DrawPolyLine( aRectPoly.GetSize(), pPtAry, *this );
         else
         {
-            if ( mbInitFillColor )
+            if ( IsInitFillColor() )
                 InitFillColor();
             mpGraphics->DrawPolygon( aRectPoly.GetSize(), pPtAry, *this );
         }
@@ -78,7 +78,7 @@ void OutputDevice::DrawArc( const tools::Rectangle& rRect,
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaArcAction( rRect, rStartPt, rEndPt ) );
 
-    if ( !IsDeviceOutputNecessary() || !mbLineColor || ImplIsRecordLayout() )
+    if ( !IsDeviceOutputNecessary() || !IsOpaqueLineColor() || ImplIsRecordLayout() )
         return;
 
     tools::Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
@@ -94,7 +94,7 @@ void OutputDevice::DrawArc( const tools::Rectangle& rRect,
     if ( mbOutputClipped )
         return;
 
-    if ( mbInitLineColor )
+    if ( IsInitLineColor() )
         InitLineColor();
 
     const Point     aStart( ImplLogicToDevicePixel( rStartPt ) );
@@ -119,7 +119,7 @@ void OutputDevice::DrawPie( const tools::Rectangle& rRect,
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPieAction( rRect, rStartPt, rEndPt ) );
 
-    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
+    if ( !IsDeviceOutputNecessary() || (!IsOpaqueLineColor() && !IsOpaqueFillColor()) || ImplIsRecordLayout() )
         return;
 
     tools::Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
@@ -135,7 +135,7 @@ void OutputDevice::DrawPie( const tools::Rectangle& rRect,
     if ( mbOutputClipped )
         return;
 
-    if ( mbInitLineColor )
+    if ( IsInitLineColor() )
         InitLineColor();
 
     const Point     aStart( ImplLogicToDevicePixel( rStartPt ) );
@@ -145,11 +145,11 @@ void OutputDevice::DrawPie( const tools::Rectangle& rRect,
     if ( aPiePoly.GetSize() >= 2 )
     {
         Point* pPtAry = aPiePoly.GetPointAry();
-        if ( !mbFillColor )
+        if ( !IsOpaqueFillColor() )
             mpGraphics->DrawPolyLine( aPiePoly.GetSize(), pPtAry, *this );
         else
         {
-            if ( mbInitFillColor )
+            if ( IsInitFillColor() )
                 InitFillColor();
             mpGraphics->DrawPolygon( aPiePoly.GetSize(), pPtAry, *this );
         }
@@ -167,7 +167,7 @@ void OutputDevice::DrawChord( const tools::Rectangle& rRect,
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaChordAction( rRect, rStartPt, rEndPt ) );
 
-    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
+    if ( !IsDeviceOutputNecessary() || (!IsOpaqueLineColor() && !IsOpaqueFillColor()) || ImplIsRecordLayout() )
         return;
 
     tools::Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
@@ -183,7 +183,7 @@ void OutputDevice::DrawChord( const tools::Rectangle& rRect,
     if ( mbOutputClipped )
         return;
 
-    if ( mbInitLineColor )
+    if ( IsInitLineColor() )
         InitLineColor();
 
     const Point     aStart( ImplLogicToDevicePixel( rStartPt ) );
@@ -193,11 +193,11 @@ void OutputDevice::DrawChord( const tools::Rectangle& rRect,
     if ( aChordPoly.GetSize() >= 2 )
     {
         Point* pPtAry = aChordPoly.GetPointAry();
-        if ( !mbFillColor )
+        if ( !IsOpaqueFillColor() )
             mpGraphics->DrawPolyLine( aChordPoly.GetSize(), pPtAry, *this );
         else
         {
-            if ( mbInitFillColor )
+            if ( IsInitFillColor() )
                 InitFillColor();
             mpGraphics->DrawPolygon( aChordPoly.GetSize(), pPtAry, *this );
         }

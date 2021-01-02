@@ -145,13 +145,13 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
     const tools::Long nX = aBase.X();
     const tools::Long nY = aBase.Y();
 
-    if ( mbLineColor || mbInitLineColor )
+    if ( IsOpaqueLineColor() || IsInitLineColor() )
     {
         mpGraphics->SetLineColor();
-        mbInitLineColor = true;
+        SetInitLineColorFlag(true);
     }
     mpGraphics->SetFillColor( GetTextFillColor() );
-    mbInitFillColor = true;
+    SetInitFillColorFlag(true);
 
     ImplDrawTextRect( nX, nY, 0, -(mpFontInstance->mxFontMetric->GetAscent() + mnEmphasisAscent),
                       nWidth,
@@ -664,20 +664,20 @@ void OutputDevice::SetTextColor( const Color& rColor )
 
     Color aColor( rColor );
 
-    if ( mnDrawMode & ( DrawModeFlags::BlackText | DrawModeFlags::WhiteText |
+    if ( GetDrawMode() & ( DrawModeFlags::BlackText | DrawModeFlags::WhiteText |
                         DrawModeFlags::GrayText |
                         DrawModeFlags::SettingsText ) )
     {
-        if ( mnDrawMode & DrawModeFlags::BlackText )
+        if ( GetDrawMode() & DrawModeFlags::BlackText )
             aColor = COL_BLACK;
-        else if ( mnDrawMode & DrawModeFlags::WhiteText )
+        else if ( GetDrawMode() & DrawModeFlags::WhiteText )
             aColor = COL_WHITE;
-        else if ( mnDrawMode & DrawModeFlags::GrayText )
+        else if ( GetDrawMode() & DrawModeFlags::GrayText )
         {
             const sal_uInt8 cLum = aColor.GetLuminance();
             aColor = Color( cLum, cLum, cLum );
         }
-        else if ( mnDrawMode & DrawModeFlags::SettingsText )
+        else if ( GetDrawMode() & DrawModeFlags::SettingsText )
             aColor = GetSettings().GetStyleSettings().GetFontColor();
     }
 
@@ -717,22 +717,22 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
 
     if ( !bTransFill )
     {
-        if ( mnDrawMode & ( DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill |
+        if ( GetDrawMode() & ( DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill |
                             DrawModeFlags::GrayFill | DrawModeFlags::NoFill |
                             DrawModeFlags::SettingsFill ) )
         {
-            if ( mnDrawMode & DrawModeFlags::BlackFill )
+            if ( GetDrawMode() & DrawModeFlags::BlackFill )
                 aColor = COL_BLACK;
-            else if ( mnDrawMode & DrawModeFlags::WhiteFill )
+            else if ( GetDrawMode() & DrawModeFlags::WhiteFill )
                 aColor = COL_WHITE;
-            else if ( mnDrawMode & DrawModeFlags::GrayFill )
+            else if ( GetDrawMode() & DrawModeFlags::GrayFill )
             {
                 const sal_uInt8 cLum = aColor.GetLuminance();
                 aColor = Color( cLum, cLum, cLum );
             }
-            else if( mnDrawMode & DrawModeFlags::SettingsFill )
+            else if( GetDrawMode() & DrawModeFlags::SettingsFill )
                 aColor = GetSettings().GetStyleSettings().GetWindowColor();
-            else if ( mnDrawMode & DrawModeFlags::NoFill )
+            else if ( GetDrawMode() & DrawModeFlags::NoFill )
             {
                 aColor = COL_TRANSPARENT;
                 bTransFill = true;

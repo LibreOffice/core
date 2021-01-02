@@ -19,16 +19,13 @@
 
 #pragma once
 
-#include <tools/color.hxx>
-
-#include <vcl/DrawModeFlags.hxx>
-
-class StyleSettings;
-
-Color GetDrawModeLineColor(Color const& rColor, DrawModeFlags nDrawMode,
-                           StyleSettings const& rStyleSettings);
-
-Color GetDrawModeFillColor(Color const& rColor, DrawModeFlags nDrawMode,
-                           StyleSettings const& rStyleSettings);
+enum class RasterOp
+{
+    OverPaint,
+    Xor,
+    N0,
+    N1,
+    Invert
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

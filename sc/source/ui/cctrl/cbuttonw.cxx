@@ -53,9 +53,9 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
         return;
 
     // save old state
-    bool        bHadFill   = pOut->IsFillColor();
+    bool        bHadFill   = pOut->IsOpaqueFillColor();
     Color       aOldFill   = pOut->GetFillColor();
-    bool        bHadLine   = pOut->IsLineColor();
+    bool        bHadLine   = pOut->IsOpaqueLineColor();
     Color       aOldLine   = pOut->GetLineColor();
     bool        bOldEnable = pOut->IsMapModeEnabled();
 

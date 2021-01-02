@@ -47,7 +47,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaLineAction( rStartPt, rEndPt, rLineInfo ) );
 
-    if ( !IsDeviceOutputNecessary() || !mbLineColor || ( LineStyle::NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
+    if ( !IsDeviceOutputNecessary() || !IsOpaqueLineColor() || ( LineStyle::NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
         return;
 
     if( !mpGraphics && !AcquireGraphics() )
@@ -65,7 +65,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
     const bool bDashUsed(LineStyle::Dash == aInfo.GetStyle());
     const bool bLineWidthUsed(aInfo.GetWidth() > 1);
 
-    if ( mbInitLineColor )
+    if ( IsInitLineColor() )
         InitLineColor();
 
     if(bDashUsed || bLineWidthUsed)
@@ -92,7 +92,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaLineAction( rStartPt, rEndPt ) );
 
-    if ( !IsDeviceOutputNecessary() || !mbLineColor || ImplIsRecordLayout() )
+    if ( !IsDeviceOutputNecessary() || !IsOpaqueLineColor() || ImplIsRecordLayout() )
         return;
 
     if ( !mpGraphics && !AcquireGraphics() )
@@ -104,13 +104,13 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     if ( mbOutputClipped )
         return;
 
-    if ( mbInitLineColor )
+    if ( IsInitLineColor() )
         InitLineColor();
 
     // #i101598# support AA and snap for lines, too
     if( mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
         && RasterOp::OverPaint == GetRasterOp()
-        && IsLineColor())
+        && IsOpaqueLineColor())
     {
         // at least transform with double precision to device coordinates; this will
         // avoid pixel snap of single, appended lines
@@ -144,7 +144,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 {
     const bool bTryB2d(mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
         && RasterOp::OverPaint == GetRasterOp()
-        && IsLineColor());
+        && IsOpaqueLineColor());
     basegfx::B2DPolyPolygon aFillPolyPolygon;
     const bool bDashUsed(LineStyle::Dash == rInfo.GetStyle());
     const bool bLineWidthUsed(rInfo.GetWidth() > 1);
@@ -242,8 +242,8 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 
     if (aFillPolyPolygon.count())
     {
-        const Color aOldLineColor(maLineColor);
-        const Color aOldFillColor(maFillColor);
+        const Color aOldLineColor(GetLineColor());
+        const Color aOldFillColor(GetFillColor());
 
         SetLineColor();
         InitLineColor();

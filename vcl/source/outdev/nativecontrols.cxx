@@ -271,9 +271,9 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
     if ( mbOutputClipped )
         return true;
 
-    if ( mbInitLineColor )
+    if ( IsInitLineColor() )
         InitLineColor();
-    if ( mbInitFillColor )
+    if ( IsInitFillColor() )
         InitFillColor();
 
     // Convert the coordinates from relative to Window-absolute, so we draw

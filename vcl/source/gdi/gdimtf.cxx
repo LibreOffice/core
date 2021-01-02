@@ -1323,7 +1323,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
     {
         MetaAction* pAction = GetAction(a);
         const MetaActionType nActionType = pAction->GetType();
-        tools::Rectangle* pUseHairline = (pHairline && aMapVDev->IsLineColor()) ? pHairline : nullptr;
+        tools::Rectangle* pUseHairline = (pHairline && aMapVDev->IsOpaqueLineColor()) ? pHairline : nullptr;
 
         switch( nActionType )
         {

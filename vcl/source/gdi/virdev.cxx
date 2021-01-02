@@ -46,8 +46,9 @@ bool VirtualDevice::AcquireGraphics() const
     if ( mpGraphics )
         return true;
 
-    mbInitLineColor     = true;
-    mbInitFillColor     = true;
+    VirtualDevice* pVirDev = const_cast<VirtualDevice*>(this);
+    pVirDev->SetInitLineColorFlag(true);
+    pVirDev->SetInitFillColorFlag(true);
     mbInitFont          = true;
     mbInitTextColor     = true;
     mbInitClipRegion    = true;

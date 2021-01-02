@@ -9,9 +9,12 @@
 
 #pragma once
 
+#include <tools/color.hxx>
+
 #include <vcl/dllapi.h>
 #include <vcl/settings.hxx>
 #include <vcl/DrawModeFlags.hxx>
+#include <vcl/RasterOp.hxx>
 
 #include <memory>
 
@@ -27,8 +30,23 @@ public:
     virtual AllSettings const& GetSettings() const;
     virtual void SetSettings(AllSettings const& rSettings);
 
+    bool IsOpaqueLineColor() const;
+    Color const& GetLineColor() const;
+    virtual void SetLineColor(Color const& rColor = COL_TRANSPARENT);
+    void FlagLineColorAsTransparent();
+    void FlagLineColorAsOpaque();
+
+    bool IsOpaqueFillColor() const;
+    Color const& GetFillColor() const;
+    virtual void SetFillColor(Color const& rColor = COL_TRANSPARENT);
+    void FlagFillColorAsTransparent();
+    void FlagFillColorAsOpaque();
+
     DrawModeFlags GetDrawMode() const;
     virtual void SetDrawMode(DrawModeFlags nDrawMode);
+
+    RasterOp GetRasterOp() const;
+    virtual void SetRasterOp(RasterOp eRasterOp);
 
 protected:
     /** Acquire a graphics device that the output device uses to draw on.
@@ -60,9 +78,29 @@ protected:
      */
     virtual void ReleaseGraphics(bool bRelease = true) = 0;
 
+    bool IsInitLineColor() const;
+    void SetInitLineColorFlag(bool bFlag);
+    bool IsInitFillColor() const;
+    void SetInitFillColorFlag(bool bFlag);
+
     mutable SalGraphics* mpGraphics;
     std::unique_ptr<AllSettings> mxSettings;
+
+    // TODO these two init functions will need to become private once all related
+    // functions are moved out of OutputDevice
+    void InitLineColor();
+    void InitFillColor();
+
+private:
+    Color maLineColor;
+    Color maFillColor;
     DrawModeFlags mnDrawMode;
+    RasterOp meRasterOp;
+
+    mutable bool mbOpaqueLineColor : 1;
+    mutable bool mbInitLineColor : 1;
+    mutable bool mbOpaqueFillColor : 1;
+    mutable bool mbInitFillColor : 1;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

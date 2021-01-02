@@ -55,7 +55,7 @@ void OutputDevice::DrawRect( const tools::Rectangle& rRect )
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaRectAction( rRect ) );
 
-    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
+    if ( !IsDeviceOutputNecessary() || (!IsOpaqueLineColor() && !IsOpaqueFillColor()) || ImplIsRecordLayout() )
         return;
 
     tools::Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
@@ -74,10 +74,10 @@ void OutputDevice::DrawRect( const tools::Rectangle& rRect )
     if ( mbOutputClipped )
         return;
 
-    if ( mbInitLineColor )
+    if ( IsInitLineColor() )
         InitLineColor();
 
-    if ( mbInitFillColor )
+    if ( IsInitFillColor() )
         InitFillColor();
 
     mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), *this );
@@ -94,7 +94,7 @@ void OutputDevice::DrawRect( const tools::Rectangle& rRect,
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaRoundRectAction( rRect, nHorzRound, nVertRound ) );
 
-    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
+    if ( !IsDeviceOutputNecessary() || (!IsOpaqueLineColor() && !IsOpaqueFillColor()) || ImplIsRecordLayout() )
         return;
 
     const tools::Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
@@ -115,10 +115,10 @@ void OutputDevice::DrawRect( const tools::Rectangle& rRect,
     if ( mbOutputClipped )
         return;
 
-    if ( mbInitLineColor )
+    if ( IsInitLineColor() )
         InitLineColor();
 
-    if ( mbInitFillColor )
+    if ( IsInitFillColor() )
         InitFillColor();
 
     if ( !nHorzRound && !nVertRound )
@@ -133,7 +133,7 @@ void OutputDevice::DrawRect( const tools::Rectangle& rRect,
         {
             Point* pPtAry = aRoundRectPoly.GetPointAry();
 
-            if ( !mbFillColor )
+            if ( !IsOpaqueFillColor() )
                 mpGraphics->DrawPolyLine( aRoundRectPoly.GetSize(), pPtAry, *this );
             else
                 mpGraphics->DrawPolygon( aRoundRectPoly.GetSize(), pPtAry, *this );
@@ -287,10 +287,10 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
         }
     }
 
-    if( mbInitLineColor )
+    if( IsInitLineColor() )
         InitLineColor();
 
-    if( mbInitFillColor )
+    if( IsInitFillColor() )
         InitFillColor();
 
     const bool bOldMap = mbMap;

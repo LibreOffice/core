@@ -28,7 +28,7 @@
 
 #include <vcl/font.hxx>
 #include <tools/color.hxx>
-#include <vcl/vclenum.hxx>
+#include <vcl/RasterOp.hxx>
 #include <vcl/vclptr.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>

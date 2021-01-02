@@ -88,7 +88,7 @@ void OutputDevice::ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY,
     if ( (nLineWidth == 1) && (nHeight == 1) )
     {
         mpGraphics->SetLineColor( rColor );
-        mbInitLineColor = true;
+        SetInitLineColorFlag(true);
 
         tools::Long nEndX = nStartX+nWidth;
         tools::Long nEndY = nStartY;
@@ -114,13 +114,13 @@ void OutputDevice::ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY,
         // On printers that output pixel via DrawRect()
         if ( (GetOutDevType() == OUTDEV_PRINTER) || (nLineWidth > 1) )
         {
-            if ( mbLineColor || mbInitLineColor )
+            if ( IsOpaqueLineColor() || IsInitLineColor() )
             {
                 mpGraphics->SetLineColor();
-                mbInitLineColor = true;
+                SetInitLineColorFlag(true);
             }
             mpGraphics->SetFillColor( rColor );
-            mbInitFillColor = true;
+            SetInitFillColorFlag(true);
             bDrawPixAsRect  = true;
             nPixWidth       = nLineWidth;
             nPixHeight      = ((nLineWidth*mnDPIX)+(mnDPIY/2))/mnDPIY;
@@ -128,7 +128,7 @@ void OutputDevice::ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY,
         else
         {
             mpGraphics->SetLineColor( rColor );
-            mbInitLineColor = true;
+            SetInitLineColorFlag(true);
             nPixWidth       = 1;
             nPixHeight      = 1;
             bDrawPixAsRect  = false;
@@ -333,13 +333,13 @@ void OutputDevice::ImplDrawStraightTextLine( tools::Long nBaseX, tools::Long nBa
     if ( !nLineHeight )
         return;
 
-    if ( mbLineColor || mbInitLineColor )
+    if ( IsOpaqueLineColor() || IsInitLineColor() )
     {
         mpGraphics->SetLineColor();
-        mbInitLineColor = true;
+        SetInitLineColorFlag(true);
     }
     mpGraphics->SetFillColor( aColor );
-    mbInitFillColor = true;
+    SetInitFillColorFlag(true);
 
     tools::Long nLeft = nDistX;
 
@@ -540,13 +540,13 @@ void OutputDevice::ImplDrawStrikeoutLine( tools::Long nBaseX, tools::Long nBaseY
     if ( !nLineHeight )
         return;
 
-    if ( mbLineColor || mbInitLineColor )
+    if ( IsOpaqueLineColor() || IsInitLineColor() )
     {
         mpGraphics->SetLineColor();
-        mbInitLineColor = true;
+        SetInitLineColorFlag(true);
     }
     mpGraphics->SetFillColor( aColor );
-    mbInitFillColor = true;
+    SetInitFillColorFlag(true);
 
     const tools::Long& nLeft = nDistX;
 
@@ -814,24 +814,24 @@ void OutputDevice::SetTextLineColor( const Color& rColor )
 
     Color aColor( rColor );
 
-    if ( mnDrawMode & ( DrawModeFlags::BlackText | DrawModeFlags::WhiteText |
+    if ( GetDrawMode() & ( DrawModeFlags::BlackText | DrawModeFlags::WhiteText |
                         DrawModeFlags::GrayText |
                         DrawModeFlags::SettingsText ) )
     {
-        if ( mnDrawMode & DrawModeFlags::BlackText )
+        if ( GetDrawMode() & DrawModeFlags::BlackText )
         {
             aColor = COL_BLACK;
         }
-        else if ( mnDrawMode & DrawModeFlags::WhiteText )
+        else if ( GetDrawMode() & DrawModeFlags::WhiteText )
         {
             aColor = COL_WHITE;
         }
-        else if ( mnDrawMode & DrawModeFlags::GrayText )
+        else if ( GetDrawMode() & DrawModeFlags::GrayText )
         {
             const sal_uInt8 cLum = aColor.GetLuminance();
             aColor = Color( cLum, cLum, cLum );
         }
-        else if ( mnDrawMode & DrawModeFlags::SettingsText )
+        else if ( GetDrawMode() & DrawModeFlags::SettingsText )
         {
             aColor = GetSettings().GetStyleSettings().GetFontColor();
         }
@@ -863,24 +863,24 @@ void OutputDevice::SetOverlineColor( const Color& rColor )
 
     Color aColor( rColor );
 
-    if ( mnDrawMode & ( DrawModeFlags::BlackText | DrawModeFlags::WhiteText |
+    if ( GetDrawMode() & ( DrawModeFlags::BlackText | DrawModeFlags::WhiteText |
                         DrawModeFlags::GrayText |
                         DrawModeFlags::SettingsText ) )
     {
-        if ( mnDrawMode & DrawModeFlags::BlackText )
+        if ( GetDrawMode() & DrawModeFlags::BlackText )
         {
             aColor = COL_BLACK;
         }
-        else if ( mnDrawMode & DrawModeFlags::WhiteText )
+        else if ( GetDrawMode() & DrawModeFlags::WhiteText )
         {
             aColor = COL_WHITE;
         }
-        else if ( mnDrawMode & DrawModeFlags::GrayText )
+        else if ( GetDrawMode() & DrawModeFlags::GrayText )
         {
             const sal_uInt8 cLum = aColor.GetLuminance();
             aColor = Color( cLum, cLum, cLum );
         }
-        else if ( mnDrawMode & DrawModeFlags::SettingsText )
+        else if ( GetDrawMode() & DrawModeFlags::SettingsText )
         {
             aColor = GetSettings().GetStyleSettings().GetFontColor();
         }
