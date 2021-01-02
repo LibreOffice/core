@@ -269,7 +269,7 @@ void SwPageDesc::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
                 : pLegacyHint->m_pNew
                 ? pLegacyHint->m_pNew->Which()
                 : 0;
-        NotifyClients(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+        CallSwClientNotify(rHint);
         if((RES_ATTRSET_CHG == nWhich)
                 || (RES_FMT_CHG == nWhich)
                 || isCHRATR(nWhich)
