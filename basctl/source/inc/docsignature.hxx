@@ -19,6 +19,7 @@
 #pragma once
 
 #include <sfx2/signaturestate.hxx>
+#include <sfx2/objsh.hxx>
 #include <vcl/weld.hxx>
 #include <memory>
 
@@ -64,8 +65,7 @@ namespace basctl
         DocumentSignature() = delete;
 
     private:
-        struct Impl;
-        std::unique_ptr<Impl> m_pImpl;
+        SfxObjectShell* pShell;
     };
 
 
