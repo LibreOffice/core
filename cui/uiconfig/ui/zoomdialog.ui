@@ -96,30 +96,122 @@
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment1">
+                  <object class="GtkBox" id="box2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="top_padding">6</property>
-                    <property name="left_padding">12</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
                     <child>
-                      <object class="GtkBox" id="box2">
+                      <object class="GtkRadioButton" id="optimal">
+                        <property name="label" translatable="yes" context="zoomdialog|optimal">Optimal</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="optimal-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|optimal">Resizes the display to fit the width of the text in the document at the moment the command is started.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="fitwandh">
+                        <property name="label" translatable="yes" context="zoomdialog|fitwandh">Fit width and height</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">optimal</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="fitwandh-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|fitwandh">Displays the entire page on your screen.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="fitw">
+                        <property name="label" translatable="yes" context="zoomdialog|fitw">Fit width</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">optimal</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="fitw-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|fitw">Displays the complete width of the document page. The top and bottom edges of the page may not be visible.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="100pc">
+                        <property name="label" translatable="yes" context="zoomdialog|100pc">100%</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">optimal</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="100pc-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|100pc">Displays the document at its actual size.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="box3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
+                        <property name="spacing">12</property>
                         <child>
-                          <object class="GtkRadioButton" id="optimal">
-                            <property name="label" translatable="yes" context="zoomdialog|optimal">Optimal</property>
+                          <object class="GtkRadioButton" id="variable">
+                            <property name="label" translatable="yes" context="zoomdialog|variable">Variable:</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
-                            <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <property name="group">optimal</property>
+                            <accessibility>
+                              <relation type="label-for" target="zoomsb"/>
+                            </accessibility>
                             <child internal-child="accessible">
-                              <object class="AtkObject" id="optimal-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|optimal">Resizes the display to fit the width of the text in the document at the moment the command is started.</property>
+                              <object class="AtkObject" id="variable-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|variable">Enter the zoom factor at which you want to display the document. Enter a percentage in the box.</property>
                               </object>
                             </child>
                           </object>
@@ -130,18 +222,18 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkRadioButton" id="fitwandh">
-                            <property name="label" translatable="yes" context="zoomdialog|fitwandh">Fit width and height</property>
+                          <object class="GtkSpinButton" id="zoomsb">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="group">optimal</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustment2</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="variable"/>
+                            </accessibility>
                             <child internal-child="accessible">
-                              <object class="AtkObject" id="fitwandh-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|fitwandh">Displays the entire page on your screen.</property>
+                              <object class="AtkObject" id="zoomsb-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="zoomdialog|zoomsb-atkobject">Variable</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|zoomsb">Enter the zoom factor at which you want to display the document. Enter a percentage in the box.</property>
                               </object>
                             </child>
                           </object>
@@ -151,110 +243,12 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
-                        <child>
-                          <object class="GtkRadioButton" id="fitw">
-                            <property name="label" translatable="yes" context="zoomdialog|fitw">Fit width</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="group">optimal</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="fitw-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|fitw">Displays the complete width of the document page. The top and bottom edges of the page may not be visible.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkRadioButton" id="100pc">
-                            <property name="label" translatable="yes" context="zoomdialog|100pc">100%</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="group">optimal</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="100pc-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|100pc">Displays the document at its actual size.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox" id="box3">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="spacing">12</property>
-                            <child>
-                              <object class="GtkRadioButton" id="variable">
-                                <property name="label" translatable="yes" context="zoomdialog|variable">Variable:</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                                <property name="group">optimal</property>
-                                <accessibility>
-                                  <relation type="label-for" target="zoomsb"/>
-                                </accessibility>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="variable-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|variable">Enter the zoom factor at which you want to display the document. Enter a percentage in the box.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSpinButton" id="zoomsb">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="activates_default">True</property>
-                                <property name="adjustment">adjustment2</property>
-                                <accessibility>
-                                  <relation type="labelled-by" target="variable"/>
-                                </accessibility>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="zoomsb-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes" context="zoomdialog|zoomsb-atkobject">Variable</property>
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|zoomsb">Enter the zoom factor at which you want to display the document. Enter a percentage in the box.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">4</property>
-                          </packing>
-                        </child>
                       </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">4</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
@@ -282,29 +276,78 @@
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment2">
+                  <object class="GtkBox" id="box4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="top_padding">6</property>
-                    <property name="left_padding">12</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
                     <child>
-                      <object class="GtkBox" id="box4">
+                      <object class="GtkRadioButton" id="automatic">
+                        <property name="label" translatable="yes" context="zoomdialog|automatic">Automatic</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="automatic-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|automatic">The automatic view layout displays pages side by side, as many as the zoom factor allows.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="singlepage">
+                        <property name="label" translatable="yes" context="zoomdialog|singlepage">Single page</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">automatic</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="singlepage-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|singlepage">The single page view layout displays pages beneath each other, but never side by side.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="box5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
+                        <property name="spacing">12</property>
                         <child>
-                          <object class="GtkRadioButton" id="automatic">
-                            <property name="label" translatable="yes" context="zoomdialog|automatic">Automatic</property>
+                          <object class="GtkRadioButton" id="columns">
+                            <property name="label" translatable="yes" context="zoomdialog|columns">Columns:</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <property name="group">automatic</property>
+                            <accessibility>
+                              <relation type="label-for" target="columnssb"/>
+                              <relation type="label-for" target="bookmode"/>
+                            </accessibility>
                             <child internal-child="accessible">
-                              <object class="AtkObject" id="automatic-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|automatic">The automatic view layout displays pages side by side, as many as the zoom factor allows.</property>
+                              <object class="AtkObject" id="columns-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|columns">In columns view layout you see pages in a given number of columns side by side. Enter the number of columns.</property>
                               </object>
                             </child>
                           </object>
@@ -315,18 +358,19 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkRadioButton" id="singlepage">
-                            <property name="label" translatable="yes" context="zoomdialog|singlepage">Single page</property>
+                          <object class="GtkSpinButton" id="columnssb">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="group">automatic</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustment1</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="columns"/>
+                              <relation type="member-of" target="columns"/>
+                            </accessibility>
                             <child internal-child="accessible">
-                              <object class="AtkObject" id="singlepage-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|singlepage">The single page view layout displays pages beneath each other, but never side by side.</property>
+                              <object class="AtkObject" id="columnssb-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="zoomdialog|columnssb-atkobject">Columns</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|columnssb">In columns view layout you see pages in a given number of columns side by side. Enter the number of columns.</property>
                               </object>
                             </child>
                           </object>
@@ -336,100 +380,38 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
-                        <child>
-                          <object class="GtkBox" id="box5">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="spacing">12</property>
-                            <child>
-                              <object class="GtkRadioButton" id="columns">
-                                <property name="label" translatable="yes" context="zoomdialog|columns">Columns:</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                                <property name="group">automatic</property>
-                                <accessibility>
-                                  <relation type="label-for" target="columnssb"/>
-                                  <relation type="label-for" target="bookmode"/>
-                                </accessibility>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="columns-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|columns">In columns view layout you see pages in a given number of columns side by side. Enter the number of columns.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSpinButton" id="columnssb">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="activates_default">True</property>
-                                <property name="adjustment">adjustment1</property>
-                                <accessibility>
-                                  <relation type="labelled-by" target="columns"/>
-                                  <relation type="member-of" target="columns"/>
-                                </accessibility>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="columnssb-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes" context="zoomdialog|columnssb-atkobject">Columns</property>
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|columnssb">In columns view layout you see pages in a given number of columns side by side. Enter the number of columns.</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="bookmode">
+                        <property name="label" translatable="yes" context="zoomdialog|bookmode">Book mode</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="margin-start">12</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="columns"/>
+                          <relation type="member-of" target="columns"/>
+                        </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="bookmode-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|bookmode">In book mode view layout you see two pages side by side as in an open book. The first page is a right page with an odd page number.</property>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkAlignment" id="alignment3">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="left_padding">12</property>
-                            <child>
-                              <object class="GtkCheckButton" id="bookmode">
-                                <property name="label" translatable="yes" context="zoomdialog|bookmode">Book mode</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                                <accessibility>
-                                  <relation type="labelled-by" target="columns"/>
-                                  <relation type="member-of" target="columns"/>
-                                </accessibility>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="bookmode-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|bookmode">In book mode view layout you see two pages side by side as in an open book. The first page is a right page with an odd page number.</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">3</property>
-                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
