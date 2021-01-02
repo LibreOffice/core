@@ -91,7 +91,7 @@ SfxPoolItem* SfxBoolItem::CreateDefault()
 // virtual
 bool SfxBoolItem::operator ==(const SfxPoolItem & rItem) const
 {
-    assert(dynamic_cast<const SfxBoolItem*>(&rItem) != nullptr);
+    assert(SfxPoolItem::operator==(rItem));
     return m_bValue == static_cast< SfxBoolItem const * >(&rItem)->m_bValue;
 }
 

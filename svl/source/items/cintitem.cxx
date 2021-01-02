@@ -25,7 +25,7 @@
 // virtual
 bool CntByteItem::operator ==(const SfxPoolItem & rItem) const
 {
-    assert(dynamic_cast<const CntByteItem*>(&rItem) != nullptr);
+    assert(SfxPoolItem::operator==(rItem));
     return m_nValue == static_cast< const CntByteItem * >(&rItem)->m_nValue;
 }
 
@@ -69,7 +69,7 @@ CntByteItem* CntByteItem::Clone(SfxItemPool *) const
 // virtual
 bool CntUInt16Item::operator ==(const SfxPoolItem & rItem) const
 {
-    assert(dynamic_cast<const CntUInt16Item*>(&rItem) != nullptr);
+    assert(SfxPoolItem::operator==(rItem));
     return m_nValue == static_cast<const CntUInt16Item *>(&rItem)->m_nValue;
 }
 
@@ -116,7 +116,7 @@ CntUInt16Item* CntUInt16Item::Clone(SfxItemPool *) const
 // virtual
 bool CntInt32Item::operator ==(const SfxPoolItem & rItem) const
 {
-    assert(dynamic_cast<const CntInt32Item*>(&rItem) != nullptr);
+    assert(SfxPoolItem::operator==(rItem));
     return m_nValue == static_cast<const CntInt32Item *>(&rItem)->m_nValue;
 }
 
@@ -161,7 +161,7 @@ CntInt32Item* CntInt32Item::Clone(SfxItemPool *) const
 // virtual
 bool CntUInt32Item::operator ==(const SfxPoolItem & rItem) const
 {
-    assert(dynamic_cast<const CntUInt32Item*>(&rItem) != nullptr);
+    assert(SfxPoolItem::operator==(rItem));
     return m_nValue == static_cast<const CntUInt32Item *>(&rItem)->m_nValue;
 }
 

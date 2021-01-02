@@ -122,6 +122,7 @@ bool SvxDoubleItem::GetPresentation
 
 bool SvxDoubleItem::operator == (const SfxPoolItem& rItem) const
 {
+    assert(SfxPoolItem::operator==(rItem));
     return static_cast<const SvxDoubleItem&>(rItem).fVal == fVal;
 }
 

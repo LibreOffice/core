@@ -1907,7 +1907,7 @@ SwFormatFootnoteEndAtTextEnd& SwFormatFootnoteEndAtTextEnd::operator=(
 bool SwFormatFootnoteEndAtTextEnd::operator==( const SfxPoolItem& rItem ) const
 {
     const SwFormatFootnoteEndAtTextEnd& rAttr = static_cast<const SwFormatFootnoteEndAtTextEnd&>(rItem);
-    return SfxEnumItem::operator==( rAttr ) &&
+    return SfxEnumItem::operator==( rItem ) &&
             m_aFormat.GetNumberingType() == rAttr.m_aFormat.GetNumberingType() &&
             m_nOffset == rAttr.m_nOffset &&
             m_sPrefix == rAttr.m_sPrefix &&
