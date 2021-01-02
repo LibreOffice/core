@@ -82,7 +82,7 @@
                   <object class="GtkLabel" id="effectsft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="effectspage|effectsft">Case:</property>
+                    <property name="label" translatable="yes" context="effectspage|effectsft">_Case:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">effectslb</property>
                     <property name="xalign">0</property>
@@ -96,7 +96,7 @@
                   <object class="GtkLabel" id="reliefft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="effectspage|reliefft">Relief:</property>
+                    <property name="label" translatable="yes" context="effectspage|reliefft">R_elief:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">relieflb</property>
                     <property name="xalign">0</property>
@@ -193,7 +193,7 @@
                   <object class="GtkLabel" id="positionft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="effectspage|positionft">Position:</property>
+                    <property name="label" translatable="yes" context="effectspage|positionft">_Position:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">positionlb</property>
                     <property name="xalign">0</property>
@@ -207,7 +207,7 @@
                   <object class="GtkLabel" id="emphasisft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="effectspage|emphasisft">Emphasis mark:</property>
+                    <property name="label" translatable="yes" context="effectspage|emphasisft">Emphasis _mark:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">emphasislb</property>
                     <property name="xalign">0</property>
@@ -219,7 +219,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="outlinecb">
-                    <property name="label" translatable="yes" context="effectspage|outlinecb">Outline</property>
+                    <property name="label" translatable="yes" context="effectspage|outlinecb">Outli_ne</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -240,7 +240,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="shadowcb">
-                    <property name="label" translatable="yes" context="effectspage|shadowcb">Shadow</property>
+                    <property name="label" translatable="yes" context="effectspage|shadowcb">Shado_w</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -304,8 +304,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes" context="effectspage|effectsft2">Effects</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">effectslb</property>
             <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -341,7 +339,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="effectspage|label46">Overlining:</property>
+                    <property name="label" translatable="yes" context="effectspage|label46">O_verlining:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">overlinelb</property>
                     <property name="xalign">0</property>
@@ -355,7 +353,7 @@
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="effectspage|label47">Strikethrough:</property>
+                    <property name="label" translatable="yes" context="effectspage|label47">Stri_kethrough:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">strikeoutlb</property>
                     <property name="xalign">0</property>
@@ -369,7 +367,7 @@
                   <object class="GtkLabel" id="label5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="effectspage|label48">Underlining:</property>
+                    <property name="label" translatable="yes" context="effectspage|label48">_Underlining:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">underlinelb</property>
                     <property name="xalign">0</property>
@@ -516,7 +514,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="individualwordscb">
-                    <property name="label" translatable="yes" context="effectspage|individualwordscb">Individual words</property>
+                    <property name="label" translatable="yes" context="effectspage|individualwordscb">_Individual words</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -572,7 +570,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes" context="effectspage|textdecoration">Text Decoration</property>
-            <property name="mnemonic_widget">fontcolorlb</property>
             <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -608,7 +605,7 @@
                   <object class="GtkLabel" id="fontcolorft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="effectspage|fontcolorft">Font color:</property>
+                    <property name="label" translatable="yes" context="effectspage|fontcolorft">_Font color:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">fontcolorlb</property>
                     <property name="xalign">0</property>
@@ -691,7 +688,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes" context="effectspage|fontcolorft3">Font Color</property>
-            <property name="mnemonic_widget">fontcolorlb</property>
             <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
