@@ -21,7 +21,15 @@
 
 #include <stdlib.h>
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunknown-attributes"
+#endif
 #include <jni.h>
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
+
 #include <osl/security.h>
 #include <osl/pipe.h>
 

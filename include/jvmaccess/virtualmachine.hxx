@@ -24,7 +24,14 @@
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunknown-attributes"
+#endif
 #include <jni.h>
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 namespace jvmaccess
 {

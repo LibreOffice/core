@@ -30,7 +30,14 @@
 #include <jvmfwk/jvmfwkdllapi.hxx>
 #include <rtl/byteseq.hxx>
 #include <rtl/ustring.hxx>
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunknown-attributes"
+#endif
 #include <jni.h>
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 /** @file
     <p>This library can operate in two modes, application mode and direct mode.</p>

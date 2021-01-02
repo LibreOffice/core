@@ -28,7 +28,7 @@
 #include <typelib/typedescription.hxx>
 
 #include <bridge.hxx>
-#include "cppinterfaceproxy.hxx"
+#include <cppinterfaceproxy.hxx>
 #include <types.hxx>
 #include <vtablefactory.hxx>
 

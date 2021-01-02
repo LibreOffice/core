@@ -23,10 +23,20 @@
 #include <X11/Xutil.h>
 #include <X11/Intrinsic.h>
 
+// to deal with gcc specific attribute "externally_visible" used in
+// /usr/lib/jvm/java-11-openjdk-armhf/include/linux/jni_md.h:35
+// via /usr/lib/jvm/java-11-openjdk-armhf/include/jni.h
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunknown-attributes"
+#endif
 #include <jni.h>
 
 #include <jawt_md.h>
 #include <jawt.h>
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 
 #include <sal/types.h>
 
