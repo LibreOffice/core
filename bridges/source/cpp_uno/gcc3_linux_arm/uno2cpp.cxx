@@ -109,7 +109,7 @@ namespace arm
             if (p->ppTypeRefs[i]->eTypeClass == typelib_TypeClass_STRUCT ||
                 p->ppTypeRefs[i]->eTypeClass == typelib_TypeClass_EXCEPTION)
             {
-                typelib_TypeDescription * t = 0;
+                typelib_TypeDescription * t = nullptr;
                 TYPELIB_DANGER_GET(&t, p->ppTypeRefs[i]);
                 bool b = is_complex_struct(t);
                 TYPELIB_DANGER_RELEASE(t);
@@ -120,7 +120,7 @@ namespace arm
             else if (!bridges::cpp_uno::shared::isSimpleType(p->ppTypeRefs[i]->eTypeClass))
                 return true;
         }
-        if (p->pBaseTypeDescription != 0)
+        if (p->pBaseTypeDescription != nullptr)
             return is_complex_struct(&p->pBaseTypeDescription->aBase);
         return false;
     }
@@ -145,7 +145,7 @@ namespace arm
             return false;
         else if (pTypeRef->eTypeClass == typelib_TypeClass_STRUCT || pTypeRef->eTypeClass == typelib_TypeClass_EXCEPTION)
         {
-            typelib_TypeDescription * pTypeDescr = 0;
+            typelib_TypeDescription * pTypeDescr = nullptr;
             TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
 
             //A Composite Type not larger than 4 bytes is returned in r0
@@ -298,9 +298,9 @@ void callVirtualMethod(
 
 #define INSERT_INT32( pSV, nr, pGPR, pDS ) \
         if ( nr < arm::MAX_GPR_REGS ) \
-                pGPR[nr++] = *reinterpret_cast<sal_uInt32 *>( pSV ); \
+                pGPR[nr++] = reinterpret_cast<sal_uInt32>( pSV ); \
         else \
-                *pDS++ = *reinterpret_cast<sal_uInt32 *>( pSV );
+                *pDS++ = reinterpret_cast<sal_uInt32>( pSV );
 
 #ifdef __ARM_EABI__
 #define INSERT_INT64( pSV, nr, pGPR, pDS, pStart ) \
@@ -310,8 +310,8 @@ void callVirtualMethod(
         } \
         if ( nr < arm::MAX_GPR_REGS ) \
         { \
-                pGPR[nr++] = *reinterpret_cast<sal_uInt32 *>( pSV ); \
-                pGPR[nr++] = *(reinterpret_cast<sal_uInt32 *>( pSV ) + 1); \
+                *reinterpret_cast<sal_uInt32 *>(pGPR[nr++]) = *static_cast<sal_uInt32 *>( pSV ); \
+                *reinterpret_cast<sal_uInt32 *>(pGPR[nr++]) = *(static_cast<sal_uInt32 *>( pSV ) + 1); \
         } \
         else \
     { \
@@ -319,8 +319,8 @@ void callVirtualMethod(
                 { \
                     ++pDS; \
                 } \
-                *pDS++ = reinterpret_cast<sal_uInt32 *>( pSV )[0]; \
-                *pDS++ = reinterpret_cast<sal_uInt32 *>( pSV )[1]; \
+                *reinterpret_cast<sal_uInt32 *>(*pDS++) = static_cast<sal_uInt32 *>( pSV )[0]; \
+                *reinterpret_cast<sal_uInt32 *>(*pDS++) = static_cast<sal_uInt32 *>( pSV )[1]; \
     }
 #else
 #define INSERT_INT64( pSV, nr, pGPR, pDS, pStart ) \
@@ -343,18 +343,18 @@ void callVirtualMethod(
             nSR = 2*nDR; \
         }\
         if ( nSR < arm::MAX_FPR_REGS*2 ) {\
-                pSPR[nSR++] = *reinterpret_cast<float *>( pSV ); \
+                pSPR[nSR++] = *static_cast<float const *>( pSV ); \
                 if ((nSR % 2 == 1) && (nSR > 2*nDR)) {\
                     nDR++; \
                 }\
         }\
         else \
         {\
-                *pDS++ = *reinterpret_cast<float *>( pSV );\
+                *pDS++ = *static_cast<float const *>( pSV );\
         }
 #define INSERT_DOUBLE( pSV, nr, pGPR, pDS, pStart ) \
         if ( nDR < arm::MAX_FPR_REGS ) { \
-                pFPR[nDR++] = *reinterpret_cast<double *>( pSV ); \
+                pFPR[nDR++] = *static_cast<double const *>( pSV ); \
         }\
         else\
         {\
@@ -362,7 +362,7 @@ void callVirtualMethod(
                 { \
                     ++pDS; \
                 } \
-            *(double *)pDS = *reinterpret_cast<double *>( pSV );\
+            *reinterpret_cast<double *>(pDS) = *static_cast<double const *>( pSV );\
             pDS += 2;\
         }
 #else
@@ -375,15 +375,15 @@ void callVirtualMethod(
 
 #define INSERT_INT16( pSV, nr, pGPR, pDS ) \
         if ( nr < arm::MAX_GPR_REGS ) \
-                pGPR[nr++] = *reinterpret_cast<sal_uInt16 *>( pSV ); \
+                pGPR[nr++] = *static_cast<sal_uInt16 const *>( pSV ); \
         else \
-                *pDS++ = *reinterpret_cast<sal_uInt16 *>( pSV );
+                *pDS++ = *static_cast<sal_uInt16 const *>( pSV );
 
 #define INSERT_INT8( pSV, nr, pGPR, pDS ) \
         if ( nr < arm::MAX_GPR_REGS ) \
-                pGPR[nr++] = *reinterpret_cast<sal_uInt8 *>( pSV ); \
+                pGPR[nr++] = *static_cast<sal_uInt8 const *>( pSV ); \
         else \
-                *pDS++ = *reinterpret_cast<sal_uInt8 *>( pSV );
+                *pDS++ = *static_cast<sal_uInt8 const *>( pSV );
 
 namespace {
 
@@ -411,11 +411,11 @@ void cpp_call(
 #endif
 
     // return
-    typelib_TypeDescription * pReturnTypeDescr = 0;
+    typelib_TypeDescription * pReturnTypeDescr = nullptr;
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
     assert(pReturnTypeDescr);
 
-    void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
+    void * pCppReturn = nullptr; // if != 0 && != pUnoReturn, needs reconversion
 
     if (pReturnTypeDescr)
     {
@@ -452,7 +452,7 @@ void cpp_call(
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
         const typelib_MethodParameter & rParam = pParams[nPos];
-        typelib_TypeDescription * pParamTypeDescr = 0;
+        typelib_TypeDescription * pParamTypeDescr = nullptr;
         TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
 
         if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
@@ -553,7 +553,7 @@ void cpp_call(
         }
 
         // NO exception occurred...
-        *ppUnoExc = 0;
+        *ppUnoExc = nullptr;
 
         // reconvert temporary params
         for ( ; nTempIndices--; )
@@ -565,7 +565,7 @@ void cpp_call(
             {
                 if (pParams[nIndex].bOut) // inout
                 {
-                    uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, 0 ); // destroy uno value
+                    uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, nullptr ); // destroy uno value
                     uno_copyAndConvertData( pUnoArgs[nIndex], pCppArgs[nIndex], pParamTypeDescr,
                                             pThis->getBridge()->getCpp2Uno() );
                 }
@@ -642,8 +642,8 @@ void unoInterfaceProxyDispatch(
             // dependent dispatch
             cpp_call(
                 pThis, aVtableSlot,
-                ((typelib_InterfaceAttributeTypeDescription *)pMemberDescr)->pAttributeTypeRef,
-                0, 0, // no params
+                reinterpret_cast<typelib_InterfaceAttributeTypeDescription const *>(pMemberDescr)->pAttributeTypeRef,
+                0, nullptr, // no params
                 pReturn, pArgs, ppException );
         }
         else
@@ -651,11 +651,11 @@ void unoInterfaceProxyDispatch(
             // is SET
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
-                ((typelib_InterfaceAttributeTypeDescription *)pMemberDescr)->pAttributeTypeRef;
-            aParam.bIn      = sal_True;
-            aParam.bOut     = sal_False;
+                reinterpret_cast<typelib_InterfaceAttributeTypeDescription const *>(pMemberDescr)->pAttributeTypeRef;
+            aParam.bIn      = true;
+            aParam.bOut     = false;
 
-            typelib_TypeDescriptionReference * pReturnTypeRef = 0;
+            typelib_TypeDescriptionReference * pReturnTypeRef = nullptr;
             OUString aVoidName("void");
             typelib_typedescriptionreference_new(
                 &pReturnTypeRef, typelib_TypeClass_VOID, aVoidName.pData );
@@ -691,31 +691,31 @@ void unoInterfaceProxyDispatch(
             // standard calls
         case 1: // acquire uno interface
             (*pUnoI->acquire)( pUnoI );
-            *ppException = 0;
+            *ppException = nullptr;
             break;
         case 2: // release uno interface
             (*pUnoI->release)( pUnoI );
-            *ppException = 0;
+            *ppException = nullptr;
             break;
         case 0: // queryInterface() opt
         {
-            typelib_TypeDescription * pTD = 0;
-            TYPELIB_DANGER_GET( &pTD, reinterpret_cast< Type * >( pArgs[0] )->getTypeLibType() );
+            typelib_TypeDescription * pTD = nullptr;
+            TYPELIB_DANGER_GET( &pTD, static_cast< Type * >( pArgs[0] )->getTypeLibType() );
             if (pTD)
             {
-                uno_Interface * pInterface = 0;
+                uno_Interface * pInterface = nullptr;
                 (*pThis->getBridge()->getUnoEnv()->getRegisteredInterface)(
                     pThis->getBridge()->getUnoEnv(),
-                    (void **)&pInterface, pThis->oid.pData, (typelib_InterfaceTypeDescription *)pTD );
+                    reinterpret_cast<void **>(&pInterface), pThis->oid.pData, reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD) );
 
                 if (pInterface)
                 {
                     ::uno_any_construct(
-                        reinterpret_cast< uno_Any * >( pReturn ),
-                        &pInterface, pTD, 0 );
+                        static_cast< uno_Any * >( pReturn ),
+                        &pInterface, pTD, nullptr );
                     (*pInterface->release)( pInterface );
                     TYPELIB_DANGER_RELEASE( pTD );
-                    *ppException = 0;
+                    *ppException = nullptr;
                     break;
                 }
                 TYPELIB_DANGER_RELEASE( pTD );
@@ -725,9 +725,9 @@ void unoInterfaceProxyDispatch(
             // dependent dispatch
             cpp_call(
                 pThis, aVtableSlot,
-                ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->pReturnTypeRef,
-                ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->nParams,
-                ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->pParams,
+                reinterpret_cast<typelib_InterfaceMethodTypeDescription const *>(pMemberDescr)->pReturnTypeRef,
+                reinterpret_cast<typelib_InterfaceMethodTypeDescription const *>(pMemberDescr)->nParams,
+                reinterpret_cast<typelib_InterfaceMethodTypeDescription const *>(pMemberDescr)->pParams,
                 pReturn, pArgs, ppException );
         }
         break;
@@ -740,7 +740,7 @@ void unoInterfaceProxyDispatch(
 
         Type const & rExcType = cppu::UnoType<decltype(aExc)>::get();
         // binary identical null reference
-        ::uno_type_any_construct( *ppException, &aExc, rExcType.getTypeLibType(), 0 );
+        ::uno_type_any_construct( *ppException, &aExc, rExcType.getTypeLibType(), nullptr );
     }
     }
 }
