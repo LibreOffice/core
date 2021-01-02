@@ -80,52 +80,46 @@
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
-              <object class="GtkAlignment" id="alignment1">
+              <object class="GtkBox" id="box1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="top_padding">6</property>
-                <property name="left_padding">12</property>
+                <property name="valign">start</property>
+                <property name="hexpand">True</property>
+                <property name="spacing">12</property>
+                <property name="margin-start">12</property>
+                <property name="margin-top">6</property>
                 <child>
-                  <object class="GtkBox" id="box1">
+                  <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="valign">start</property>
+                    <property name="label" translatable="yes" context="hangulhanjaadddialog|label2">_Name:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">entry</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
-                    <property name="spacing">12</property>
-                    <child>
-                      <object class="GtkLabel" id="label2">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="hangulhanjaadddialog|label2">_Name:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">entry</property>
+                    <property name="max_length">32</property>
+                    <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="entry-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaadddialog|extended_tip|entry">Enter a name for the dictionary.</property>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entry">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="max_length">32</property>
-                        <property name="activates_default">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="entry-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaadddialog|extended_tip|entry">Enter a name for the dictionary.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </object>
             </child>
