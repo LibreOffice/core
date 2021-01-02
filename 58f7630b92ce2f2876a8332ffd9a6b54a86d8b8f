@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29c461e9_7a63eda9",
+        "filename": "embeddedobj/source/commonembedding/embedobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-01-02T13:42:58Z",
+      "side": 1,
+      "message": "the problem here is that the object is in state LOADED and the only allowed next state is RUNNING so this message would be a bit misleading; perhaps better something like \"invalid next state, only RUNNING state allowed\"",
+      "revId": "58f7630b92ce2f2876a8332ffd9a6b54a86d8b8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7a8713e_07b73fd0",
+        "filename": "embeddedobj/source/commonembedding/embedobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-01-02T13:42:58Z",
+      "side": 1,
+      "message": "similar here; \" ... only LOADED/INPLACE_ACTIVE/ACTIVE allowed\"",
+      "revId": "58f7630b92ce2f2876a8332ffd9a6b54a86d8b8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d043e03e_afb13c6d",
+        "filename": "embeddedobj/source/commonembedding/embedobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-01-02T13:42:58Z",
+      "side": 1,
+      "message": "similar here",
+      "revId": "58f7630b92ce2f2876a8332ffd9a6b54a86d8b8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4c0628d_5cd32084",
+        "filename": "embeddedobj/source/commonembedding/embedobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-01-02T13:42:58Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "58f7630b92ce2f2876a8332ffd9a6b54a86d8b8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
