@@ -825,8 +825,10 @@ bool Window::AcquireGraphics() const
     if ( mpGraphics )
         return true;
 
-    mbInitLineColor     = true;
-    mbInitFillColor     = true;
+    Window* pWin = const_cast<Window*>(this);
+
+    pWin->SetInitLineColorFlag(true);
+    pWin->SetInitFillColorFlag(true);
     mbInitFont          = true;
     mbInitTextColor     = true;
     mbInitClipRegion    = true;

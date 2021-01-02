@@ -333,7 +333,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
 
         maOldLineColor = mpVD->GetLineColor();
 
-        if(mpVD->IsLineColor())
+        if(mpVD->IsOpaqueLineColor())
         {
             mpLineAttr->Put(XLineStyleItem(drawing::LineStyle_SOLID));
             mpLineAttr->Put(XLineColorItem(OUString(), mpVD->GetLineColor()));
@@ -378,7 +378,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
 
     if(bFill)
     {
-        if(mpVD->IsFillColor())
+        if(mpVD->IsOpaqueFillColor())
         {
             mpFillAttr->Put(XFillStyleItem(drawing::FillStyle_SOLID));
             mpFillAttr->Put(XFillColorItem(OUString(), mpVD->GetFillColor()));

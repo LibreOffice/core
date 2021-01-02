@@ -320,7 +320,7 @@ void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext)
     g.SetStartColor(startCol);
     g.SetEndColor(endCol);
 
-    bool bLineColor = rRenderContext.IsLineColor();
+    bool bLineColor = rRenderContext.IsOpaqueLineColor();
     Color aOldCol = rRenderContext.GetLineColor();
     rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetShadowColor());
 
@@ -2374,8 +2374,8 @@ static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tool
 
 static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rDropDownRect, bool bSetColor, bool bRotate )
 {
-    bool bLineColor = rRenderContext.IsLineColor();
-    bool bFillColor = rRenderContext.IsFillColor();
+    bool bLineColor = rRenderContext.IsOpaqueLineColor();
+    bool bFillColor = rRenderContext.IsOpaqueFillColor();
     Color aOldFillColor = rRenderContext.GetFillColor();
     Color aOldLineColor = rRenderContext.GetLineColor();
     rRenderContext.SetLineColor();

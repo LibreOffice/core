@@ -56,22 +56,22 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
 
     Hatch aHatch( rHatch );
 
-    if ( mnDrawMode & ( DrawModeFlags::BlackLine | DrawModeFlags::WhiteLine |
+    if ( GetDrawMode() & ( DrawModeFlags::BlackLine | DrawModeFlags::WhiteLine |
                         DrawModeFlags::GrayLine |
                         DrawModeFlags::SettingsLine ) )
     {
         Color aColor( rHatch.GetColor() );
 
-        if ( mnDrawMode & DrawModeFlags::BlackLine )
+        if ( GetDrawMode() & DrawModeFlags::BlackLine )
             aColor = COL_BLACK;
-        else if ( mnDrawMode & DrawModeFlags::WhiteLine )
+        else if ( GetDrawMode() & DrawModeFlags::WhiteLine )
             aColor = COL_WHITE;
-        else if ( mnDrawMode & DrawModeFlags::GrayLine )
+        else if ( GetDrawMode() & DrawModeFlags::GrayLine )
         {
             const sal_uInt8 cLum = aColor.GetLuminance();
             aColor = Color( cLum, cLum, cLum );
         }
-        else if( mnDrawMode & DrawModeFlags::SettingsLine )
+        else if( GetDrawMode() & DrawModeFlags::SettingsLine )
         {
             aColor = GetSettings().GetStyleSettings().GetFontColor();
         }

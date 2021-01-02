@@ -17,18 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#include <vcl/RenderContext2.hxx>
 
-#include <tools/color.hxx>
+#include <salgdi.hxx>
 
-#include <vcl/DrawModeFlags.hxx>
+RasterOp RenderContext2::GetRasterOp() const { return meRasterOp; }
 
-class StyleSettings;
+void RenderContext2::SetRasterOp(RasterOp eRasterOp)
+{
+    if (meRasterOp != eRasterOp)
+    {
+        meRasterOp = eRasterOp;
+        mbInitLineColor = true;
+        mbInitFillColor = true;
 
-Color GetDrawModeLineColor(Color const& rColor, DrawModeFlags nDrawMode,
-                           StyleSettings const& rStyleSettings);
-
-Color GetDrawModeFillColor(Color const& rColor, DrawModeFlags nDrawMode,
-                           StyleSettings const& rStyleSettings);
+        if (mpGraphics || AcquireGraphics())
+        {
+            mpGraphics->SetXORMode((meRasterOp == RasterOp::Invert)
+                                       || (meRasterOp == RasterOp::Xor),
+                                   meRasterOp == RasterOp::Invert);
+        }
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

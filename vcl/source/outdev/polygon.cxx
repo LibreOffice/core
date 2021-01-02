@@ -53,8 +53,8 @@ void OutputDevice::DrawPolygon(const tools::Polygon& rPoly)
 
     sal_uInt16 nPoints = rPoly.GetSize();
 
-    if (!IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || (nPoints < 2)
-        || ImplIsRecordLayout())
+    if (!IsDeviceOutputNecessary() || (!IsOpaqueLineColor() && !IsOpaqueFillColor())
+        || (nPoints < 2) || ImplIsRecordLayout())
         return;
 
     // we need a graphics
@@ -67,15 +67,15 @@ void OutputDevice::DrawPolygon(const tools::Polygon& rPoly)
     if (mbOutputClipped)
         return;
 
-    if (mbInitLineColor)
+    if (IsInitLineColor())
         InitLineColor();
 
-    if (mbInitFillColor)
+    if (IsInitFillColor())
         InitFillColor();
 
     // use b2dpolygon drawing if possible
     if (mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
-        && RasterOp::OverPaint == GetRasterOp() && (IsLineColor() || IsFillColor()))
+        && RasterOp::OverPaint == GetRasterOp() && (IsOpaqueLineColor() || IsOpaqueFillColor()))
     {
         const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
         basegfx::B2DPolygon aB2DPolygon(rPoly.getB2DPolygon());
@@ -84,11 +84,11 @@ void OutputDevice::DrawPolygon(const tools::Polygon& rPoly)
         if (!aB2DPolygon.isClosed())
             aB2DPolygon.setClosed(true);
 
-        if (IsFillColor())
+        if (IsOpaqueFillColor())
             mpGraphics->DrawPolyPolygon(aTransform, basegfx::B2DPolyPolygon(aB2DPolygon), 0.0,
                                         *this);
 
-        if (IsLineColor())
+        if (IsOpaqueLineColor())
         {
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 

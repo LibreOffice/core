@@ -418,7 +418,7 @@ void EMFWriter::ImplCheckLineAttr()
     if( !(mbLineChanged && ImplPrepareHandleSelect( mnLineHandle, LINE_SELECT )) )
         return;
 
-    sal_uInt32 nStyle = maVDev->IsLineColor() ? 0 : 5;
+    sal_uInt32 nStyle = maVDev->IsOpaqueLineColor() ? 0 : 5;
 
     ImplBeginRecord( WIN_EMR_CREATEPEN );
     m_rStm.WriteUInt32( mnLineHandle ).WriteUInt32( nStyle ).WriteUInt32( 0/*nWidth*/ ).WriteUInt32( 0/*nHeight*/ );
@@ -435,7 +435,7 @@ void EMFWriter::ImplCheckFillAttr()
     if( !(mbFillChanged && ImplPrepareHandleSelect( mnFillHandle, FILL_SELECT )) )
         return;
 
-    sal_uInt32 nStyle = maVDev->IsFillColor() ? 0 : 1;
+    sal_uInt32 nStyle = maVDev->IsOpaqueFillColor() ? 0 : 1;
 
     ImplBeginRecord( WIN_EMR_CREATEBRUSHINDIRECT );
     m_rStm.WriteUInt32( mnFillHandle ).WriteUInt32( nStyle );
@@ -968,7 +968,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case MetaActionType::POINT:
             {
-                if( maVDev->IsLineColor() )
+                if( maVDev->IsOpaqueLineColor() )
                 {
                     const MetaPointAction* pA = static_cast<const MetaPointAction*>(pAction);
 
@@ -983,7 +983,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case MetaActionType::LINE:
             {
-                if( maVDev->IsLineColor() )
+                if( maVDev->IsOpaqueLineColor() )
                 {
                     const MetaLineAction* pA = static_cast<const MetaLineAction*>(pAction);
 
@@ -1018,7 +1018,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case MetaActionType::RECT:
             {
-                if( maVDev->IsLineColor() || maVDev->IsFillColor() )
+                if( maVDev->IsOpaqueLineColor() || maVDev->IsOpaqueFillColor() )
                 {
                     const MetaRectAction* pA = static_cast<const MetaRectAction*>(pAction);
 
@@ -1034,7 +1034,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case MetaActionType::ROUNDRECT:
             {
-                if( maVDev->IsLineColor() || maVDev->IsFillColor() )
+                if( maVDev->IsOpaqueLineColor() || maVDev->IsOpaqueFillColor() )
                 {
                     const MetaRoundRectAction* pA = static_cast<const MetaRoundRectAction*>(pAction);
 
@@ -1051,7 +1051,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case MetaActionType::ELLIPSE:
             {
-                if( maVDev->IsLineColor() || maVDev->IsFillColor() )
+                if( maVDev->IsOpaqueLineColor() || maVDev->IsOpaqueFillColor() )
                 {
                     const MetaEllipseAction* pA = static_cast<const MetaEllipseAction*>(pAction);
 
@@ -1070,7 +1070,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case MetaActionType::CHORD:
             case MetaActionType::POLYGON:
             {
-                if( maVDev->IsLineColor() || maVDev->IsFillColor() )
+                if( maVDev->IsOpaqueLineColor() || maVDev->IsOpaqueFillColor() )
                 {
                     tools::Polygon aPoly;
 
@@ -1110,7 +1110,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case MetaActionType::POLYLINE:
             {
-                if( maVDev->IsLineColor() )
+                if( maVDev->IsOpaqueLineColor() )
                 {
                     const MetaPolyLineAction*   pA = static_cast<const MetaPolyLineAction*>(pAction);
                     const tools::Polygon& rPoly = pA->GetPolygon();
@@ -1133,7 +1133,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case MetaActionType::POLYPOLYGON:
             {
-                if( maVDev->IsLineColor() || maVDev->IsFillColor() )
+                if( maVDev->IsOpaqueLineColor() || maVDev->IsOpaqueFillColor() )
                     ImplWritePolyPolygonRecord( static_cast<const MetaPolyPolygonAction*>(pAction)->GetPolyPolygon() );
             }
             break;

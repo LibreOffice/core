@@ -344,7 +344,7 @@ void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
     }
 
     // create line geometry if a LineColor is set at the target device
-    if (rRenderContext.IsLineColor())
+    if (rRenderContext.IsOpaqueLineColor())
     {
         const drawinglayer::primitive2d::Primitive2DReference xOutline(
             new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(

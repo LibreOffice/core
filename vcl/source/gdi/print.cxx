@@ -404,8 +404,9 @@ bool Printer::AcquireGraphics() const
     if ( mpGraphics )
         return true;
 
-    mbInitLineColor     = true;
-    mbInitFillColor     = true;
+    Printer *pWin = const_cast<Printer*>(this);
+    pWin->SetInitLineColorFlag(true);
+    pWin->SetInitFillColorFlag(true);
     mbInitFont          = true;
     mbInitTextColor     = true;
     mbInitClipRegion    = true;

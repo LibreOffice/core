@@ -83,14 +83,14 @@ void OutputDevice::DrawBitmap(const Point& rDestPt, const Size& rDestSize, const
 
     Bitmap aBmp(rBitmap);
 
-    if (mnDrawMode
+    if (GetDrawMode()
         & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap | DrawModeFlags::GrayBitmap))
     {
-        if (mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap))
+        if (GetDrawMode() & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap))
         {
             sal_uInt8 cCmpVal;
 
-            if (mnDrawMode & DrawModeFlags::BlackBitmap)
+            if (GetDrawMode() & DrawModeFlags::BlackBitmap)
                 cCmpVal = 0;
             else
                 cCmpVal = 255;
@@ -105,7 +105,7 @@ void OutputDevice::DrawBitmap(const Point& rDestPt, const Size& rDestSize, const
         }
         else if (!!aBmp)
         {
-            if (mnDrawMode & DrawModeFlags::GrayBitmap)
+            if (GetDrawMode() & DrawModeFlags::GrayBitmap)
                 aBmp.Convert(BmpConversion::N8BitGreys);
         }
     }

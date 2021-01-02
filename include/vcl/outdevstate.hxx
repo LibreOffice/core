@@ -27,6 +27,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <vcl/PushFlags.hxx>
+#include <vcl/RasterOp.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/vclenum.hxx>
 

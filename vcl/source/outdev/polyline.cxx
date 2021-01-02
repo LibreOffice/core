@@ -39,7 +39,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
 
     sal_uInt16 nPoints = rPoly.GetSize();
 
-    if ( !IsDeviceOutputNecessary() || !mbLineColor || (nPoints < 2) || ImplIsRecordLayout() )
+    if ( !IsDeviceOutputNecessary() || !IsOpaqueLineColor() || (nPoints < 2) || ImplIsRecordLayout() )
         return;
 
     // we need a graphics
@@ -52,7 +52,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
     if ( mbOutputClipped )
         return;
 
-    if ( mbInitLineColor )
+    if ( IsInitLineColor() )
         InitLineColor();
 
     // use b2dpolygon drawing if possible
@@ -144,7 +144,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
     if( mbOutputClipped )
         return;
 
-    if( mbInitLineColor )
+    if( IsInitLineColor() )
         InitLineColor();
 
     // use b2dpolygon drawing if possible
@@ -176,8 +176,8 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
                                                     eLineJoin,
                                                     eLineCap,
                                                     fMiterMinimumAngle));
-        const Color aOldLineColor(maLineColor);
-        const Color aOldFillColor(maFillColor);
+        const Color aOldLineColor(GetLineColor());
+        const Color aOldFillColor(GetFillColor());
 
         SetLineColor();
         InitLineColor();
@@ -221,7 +221,7 @@ void OutputDevice::drawPolyLine(const tools::Polygon& rPoly, const LineInfo& rLi
 {
     sal_uInt16 nPoints(rPoly.GetSize());
 
-    if ( !IsDeviceOutputNecessary() || !mbLineColor || ( nPoints < 2 ) || ( LineStyle::NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
+    if ( !IsDeviceOutputNecessary() || !IsOpaqueLineColor() || ( nPoints < 2 ) || ( LineStyle::NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
         return;
 
     tools::Polygon aPoly = ImplLogicToDevicePixel( rPoly );
@@ -236,7 +236,7 @@ void OutputDevice::drawPolyLine(const tools::Polygon& rPoly, const LineInfo& rLi
     if ( mbOutputClipped )
         return;
 
-    if ( mbInitLineColor )
+    if ( IsInitLineColor() )
         InitLineColor();
 
     const LineInfo aInfo( ImplLogicToDevicePixel( rLineInfo ) );
@@ -291,7 +291,7 @@ bool OutputDevice::DrawPolyLineDirect(
     if (mbOutputClipped)
         return true;
 
-    if (mbInitLineColor)
+    if (IsInitLineColor())
         InitLineColor();
 
     if(DrawPolyLineDirectInternal(rObjectTransform, rB2DPolygon, fLineWidth, fTransparency,
@@ -329,7 +329,7 @@ bool OutputDevice::DrawPolyLineDirectInternal(
 {
     const bool bTryB2d(mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
                       RasterOp::OverPaint == GetRasterOp() &&
-                      IsLineColor());
+                      IsOpaqueLineColor());
 
     if(bTryB2d)
     {

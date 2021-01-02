@@ -68,14 +68,12 @@ void OutputDevice::Push( PushFlags nFlags )
 
     rState.mnFlags = nFlags;
 
-    if (nFlags & PushFlags::LINECOLOR && mbLineColor)
-    {
-        rState.mpLineColor = maLineColor;
-    }
-    if (nFlags & PushFlags::FILLCOLOR && mbFillColor)
-    {
-        rState.mpFillColor = maFillColor;
-    }
+    if (nFlags & PushFlags::LINECOLOR && IsOpaqueLineColor())
+        rState.mpLineColor = GetLineColor();
+
+    if (nFlags & PushFlags::FILLCOLOR && IsOpaqueFillColor())
+        rState.mpFillColor = GetFillColor();
+
     if ( nFlags & PushFlags::FONT )
         rState.mpFont.reset( new vcl::Font( maFont ) );
     if ( nFlags & PushFlags::TEXTCOLOR )
@@ -285,149 +283,65 @@ void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
         mpAlphaVDev->SetDigitLanguage( eTextLanguage );
 }
 
-void OutputDevice::SetRasterOp( RasterOp eRasterOp )
+void OutputDevice::SetRasterOp(RasterOp eRasterOp)
 {
 
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaRasterOpAction( eRasterOp ) );
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaRasterOpAction(eRasterOp));
 
-    if ( meRasterOp != eRasterOp )
-    {
-        meRasterOp = eRasterOp;
-        mbInitLineColor = mbInitFillColor = true;
+    RenderContext2::SetRasterOp(eRasterOp);
 
-        if( mpGraphics || AcquireGraphics() )
-            mpGraphics->SetXORMode( (RasterOp::Invert == meRasterOp) || (RasterOp::Xor == meRasterOp), RasterOp::Invert == meRasterOp );
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetRasterOp( eRasterOp );
+    if (mpAlphaVDev)
+        mpAlphaVDev->SetRasterOp(eRasterOp);
 }
 
 
-void OutputDevice::SetFillColor()
+void OutputDevice::SetFillColor(const Color& rColor)
 {
 
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaFillColorAction( Color(), false ) );
+    Color aColor(rColor);
+    aColor = GetDrawModeFillColor(aColor, GetDrawMode(), GetSettings().GetStyleSettings());
 
-    if ( mbFillColor )
+    if (mpMetaFile)
     {
-        mbInitFillColor = true;
-        mbFillColor = false;
-        maFillColor = COL_TRANSPARENT;
+        if (aColor.IsTransparent())
+            mpMetaFile->AddAction(new MetaFillColorAction(Color(), false));
+        else
+            mpMetaFile->AddAction(new MetaFillColorAction(aColor, true));
     }
 
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetFillColor();
+    RenderContext2::SetFillColor(rColor);
+
+    if (mpAlphaVDev)
+    {
+        if (aColor.IsTransparent())
+            mpAlphaVDev->SetFillColor();
+        else
+            mpAlphaVDev->SetFillColor(COL_BLACK);
+    }
 }
 
-void OutputDevice::SetFillColor( const Color& rColor )
+void OutputDevice::SetLineColor(Color const& rColor)
 {
+    Color aColor(rColor);
 
-    Color aColor( rColor );
-
-    if( mnDrawMode & ( DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill |
-                       DrawModeFlags::GrayFill | DrawModeFlags::NoFill |
-                       DrawModeFlags::SettingsFill ) )
+    if (mpMetaFile)
     {
-        if( !aColor.IsTransparent() )
-        {
-            if( mnDrawMode & DrawModeFlags::BlackFill )
-            {
-                aColor = COL_BLACK;
-            }
-            else if( mnDrawMode & DrawModeFlags::WhiteFill )
-            {
-                aColor = COL_WHITE;
-            }
-            else if( mnDrawMode & DrawModeFlags::GrayFill )
-            {
-                const sal_uInt8 cLum = aColor.GetLuminance();
-                aColor = Color( cLum, cLum, cLum );
-            }
-            else if( mnDrawMode & DrawModeFlags::NoFill )
-            {
-                aColor = COL_TRANSPARENT;
-            }
-            else if( mnDrawMode & DrawModeFlags::SettingsFill )
-            {
-                aColor = GetSettings().GetStyleSettings().GetWindowColor();
-            }
-        }
+        if (aColor.IsTransparent())
+            mpMetaFile->AddAction(new MetaLineColorAction(Color(), false));
+        else
+            mpMetaFile->AddAction(new MetaLineColorAction(aColor, true));
     }
 
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaFillColorAction( aColor, true ) );
+    RenderContext2::SetLineColor(rColor);
 
-    if ( aColor.IsTransparent() )
+    if (mpAlphaVDev)
     {
-        if ( mbFillColor )
-        {
-            mbInitFillColor = true;
-            mbFillColor = false;
-            maFillColor = COL_TRANSPARENT;
-        }
+        if (aColor.IsTransparent())
+            mpAlphaVDev->SetLineColor();
+        else
+            mpAlphaVDev->SetLineColor(COL_BLACK);
     }
-    else
-    {
-        if ( maFillColor != aColor )
-        {
-            mbInitFillColor = true;
-            mbFillColor = true;
-            maFillColor = aColor;
-        }
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetFillColor( COL_BLACK );
-}
-
-void OutputDevice::SetLineColor()
-{
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
-
-    if ( mbLineColor )
-    {
-        mbInitLineColor = true;
-        mbLineColor = false;
-        maLineColor = COL_TRANSPARENT;
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetLineColor();
-}
-
-void OutputDevice::SetLineColor( const Color& rColor )
-{
-    Color aColor = DrawModeColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings());
-
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaLineColorAction( aColor, true ) );
-
-    if( aColor.IsTransparent() )
-    {
-        if ( mbLineColor )
-        {
-            mbInitLineColor = true;
-            mbLineColor = false;
-            maLineColor = COL_TRANSPARENT;
-        }
-    }
-    else
-    {
-        if( maLineColor != aColor )
-        {
-            mbInitLineColor = true;
-            mbLineColor = true;
-            maLineColor = aColor;
-        }
-    }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetLineColor( COL_BLACK );
 }
 
 void OutputDevice::SetBackground()
@@ -494,136 +408,107 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
 void OutputDevice::SetFont( const vcl::Font& rNewFont )
 {
 
-    vcl::Font aFont( rNewFont );
-    if ( mnDrawMode & (DrawModeFlags::BlackText | DrawModeFlags::WhiteText | DrawModeFlags::GrayText | DrawModeFlags::SettingsText |
-                       DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill | DrawModeFlags::GrayFill | DrawModeFlags::NoFill |
-                       DrawModeFlags::SettingsFill ) )
-    {
-        Color aTextColor( aFont.GetColor() );
+    vcl::Font aFont(rNewFont);
 
-        if ( mnDrawMode & DrawModeFlags::BlackText )
+    if (GetDrawMode() & (DrawModeFlags::BlackText | DrawModeFlags::WhiteText | DrawModeFlags::GrayText | DrawModeFlags::SettingsText |
+                       DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill | DrawModeFlags::GrayFill | DrawModeFlags::NoFill |
+                       DrawModeFlags::SettingsFill))
+    {
+        Color aTextColor(aFont.GetColor());
+
+        if (GetDrawMode() & DrawModeFlags::BlackText)
+        {
             aTextColor = COL_BLACK;
-        else if ( mnDrawMode & DrawModeFlags::WhiteText )
+        }
+        else if (GetDrawMode() & DrawModeFlags::WhiteText)
+        {
             aTextColor = COL_WHITE;
-        else if ( mnDrawMode & DrawModeFlags::GrayText )
+        }
+        else if (GetDrawMode() & DrawModeFlags::GrayText)
         {
             const sal_uInt8 cLum = aTextColor.GetLuminance();
             aTextColor = Color( cLum, cLum, cLum );
         }
-        else if ( mnDrawMode & DrawModeFlags::SettingsText )
+        else if (GetDrawMode() & DrawModeFlags::SettingsText)
+        {
             aTextColor = GetSettings().GetStyleSettings().GetFontColor();
+        }
 
-        aFont.SetColor( aTextColor );
+        aFont.SetColor(aTextColor);
 
         bool bTransFill = aFont.IsTransparent();
-        if ( !bTransFill )
+        if (!bTransFill)
         {
             Color aTextFillColor( aFont.GetFillColor() );
 
-            if ( mnDrawMode & DrawModeFlags::BlackFill )
+            if (GetDrawMode() & DrawModeFlags::BlackFill)
+            {
                 aTextFillColor = COL_BLACK;
-            else if ( mnDrawMode & DrawModeFlags::WhiteFill )
+            }
+            else if (GetDrawMode() & DrawModeFlags::WhiteFill)
+            {
                 aTextFillColor = COL_WHITE;
-            else if ( mnDrawMode & DrawModeFlags::GrayFill )
+            }
+            else if (GetDrawMode() & DrawModeFlags::GrayFill)
             {
                 const sal_uInt8 cLum = aTextFillColor.GetLuminance();
                 aTextFillColor = Color( cLum, cLum, cLum );
             }
-            else if( mnDrawMode & DrawModeFlags::SettingsFill )
+            else if (GetDrawMode() & DrawModeFlags::SettingsFill)
+            {
                 aTextFillColor = GetSettings().GetStyleSettings().GetWindowColor();
-            else if ( mnDrawMode & DrawModeFlags::NoFill )
+            }
+            else if (GetDrawMode() & DrawModeFlags::NoFill)
             {
                 aTextFillColor = COL_TRANSPARENT;
             }
 
-            aFont.SetFillColor( aTextFillColor );
+            aFont.SetFillColor(aTextFillColor);
         }
     }
 
-    if ( mpMetaFile )
+    if (mpMetaFile)
     {
-        mpMetaFile->AddAction( new MetaFontAction( aFont ) );
+        mpMetaFile->AddAction(new MetaFontAction(aFont));
         // the color and alignment actions don't belong here
         // TODO: get rid of them without breaking anything...
-        mpMetaFile->AddAction( new MetaTextAlignAction( aFont.GetAlignment() ) );
-        mpMetaFile->AddAction( new MetaTextFillColorAction( aFont.GetFillColor(), !aFont.IsTransparent() ) );
+        mpMetaFile->AddAction(new MetaTextAlignAction(aFont.GetAlignment()));
+        mpMetaFile->AddAction(new MetaTextFillColorAction(aFont.GetFillColor(), !aFont.IsTransparent()));
     }
 
-    if ( maFont.IsSameInstance( aFont ) )
+    if (maFont.IsSameInstance( aFont))
         return;
 
     // Optimization MT/HDU: COL_TRANSPARENT means SetFont should ignore the font color,
     // because SetTextColor() is used for this.
     // #i28759# maTextColor might have been changed behind our back, commit then, too.
-    if( aFont.GetColor() != COL_TRANSPARENT
-    && (aFont.GetColor() != maFont.GetColor() || aFont.GetColor() != maTextColor ) )
+    if (aFont.GetColor() != COL_TRANSPARENT
+        && (aFont.GetColor() != maFont.GetColor() || aFont.GetColor() != maTextColor))
     {
         maTextColor = aFont.GetColor();
         mbInitTextColor = true;
-        if( mpMetaFile )
-            mpMetaFile->AddAction( new MetaTextColorAction( aFont.GetColor() ) );
-    }
-    maFont      = aFont;
-    mbNewFont   = true;
 
-    if( !mpAlphaVDev )
+        if (mpMetaFile)
+            mpMetaFile->AddAction(new MetaTextColorAction(aFont.GetColor()));
+    }
+
+    maFont = aFont;
+    mbNewFont = true;
+
+    if (!mpAlphaVDev)
         return;
 
     // #i30463#
     // Since SetFont might change the text color, apply that only
     // selectively to alpha vdev (which normally paints opaque text
     // with COL_BLACK)
-    if( aFont.GetColor() != COL_TRANSPARENT )
+    if (aFont.GetColor() != COL_TRANSPARENT)
     {
-        mpAlphaVDev->SetTextColor( COL_BLACK );
-        aFont.SetColor( COL_TRANSPARENT );
+        mpAlphaVDev->SetTextColor(COL_BLACK);
+        aFont.SetColor(COL_TRANSPARENT);
     }
 
-    mpAlphaVDev->SetFont( aFont );
-}
-
-
-void OutputDevice::InitLineColor()
-{
-    DBG_TESTSOLARMUTEX();
-
-    if( mbLineColor )
-    {
-        if( RasterOp::N0 == meRasterOp )
-            mpGraphics->SetROPLineColor( SalROPColor::N0 );
-        else if( RasterOp::N1 == meRasterOp )
-            mpGraphics->SetROPLineColor( SalROPColor::N1 );
-        else if( RasterOp::Invert == meRasterOp )
-            mpGraphics->SetROPLineColor( SalROPColor::Invert );
-        else
-            mpGraphics->SetLineColor( maLineColor );
-    }
-    else
-        mpGraphics->SetLineColor();
-
-    mbInitLineColor = false;
-}
-
-
-void OutputDevice::InitFillColor()
-{
-    DBG_TESTSOLARMUTEX();
-
-    if( mbFillColor )
-    {
-        if( RasterOp::N0 == meRasterOp )
-            mpGraphics->SetROPFillColor( SalROPColor::N0 );
-        else if( RasterOp::N1 == meRasterOp )
-            mpGraphics->SetROPFillColor( SalROPColor::N1 );
-        else if( RasterOp::Invert == meRasterOp )
-            mpGraphics->SetROPFillColor( SalROPColor::Invert );
-        else
-            mpGraphics->SetFillColor( maFillColor );
-    }
-    else
-        mpGraphics->SetFillColor();
-
-    mbInitFillColor = false;
+    mpAlphaVDev->SetFont(aFont);
 }
 
 void OutputDevice::ImplReleaseFonts()

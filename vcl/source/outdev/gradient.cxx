@@ -56,7 +56,7 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
 
     if ( rPolyPoly.Count() && rPolyPoly[ 0 ].GetSize() )
     {
-        if ( mnDrawMode & ( DrawModeFlags::BlackGradient | DrawModeFlags::WhiteGradient | DrawModeFlags::SettingsGradient) )
+        if ( GetDrawMode() & ( DrawModeFlags::BlackGradient | DrawModeFlags::WhiteGradient | DrawModeFlags::SettingsGradient) )
         {
             Color aColor = GetSingleColorGradientFill();
 
@@ -70,7 +70,7 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
 
         Gradient aGradient( rGradient );
 
-        if ( mnDrawMode & DrawModeFlags::GrayGradient )
+        if ( GetDrawMode() & DrawModeFlags::GrayGradient )
         {
             SetGrayscaleColors( aGradient );
         }
@@ -112,13 +112,13 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
                 if (!bDrawn && !mbOutputClipped)
                 {
                     // draw gradients without border
-                    if( mbLineColor || mbInitLineColor )
+                    if( IsOpaqueLineColor() || IsInitLineColor() )
                     {
                         mpGraphics->SetLineColor();
-                        mbInitLineColor = true;
+                        SetInitLineColorFlag(true);
                     }
 
-                    mbInitFillColor = true;
+                    SetInitFillColorFlag(true);
 
                     // calculate step count if necessary
                     if ( !aGradient.GetSteps() )
@@ -182,7 +182,7 @@ void OutputDevice::DrawGradientToMetafile ( const tools::PolyPolygon& rPolyPoly,
 
     Gradient aGradient( rGradient );
 
-    if ( mnDrawMode & DrawModeFlags::GrayGradient )
+    if ( GetDrawMode() & DrawModeFlags::GrayGradient )
     {
         SetGrayscaleColors( aGradient );
     }
@@ -971,13 +971,13 @@ Color OutputDevice::GetSingleColorGradientFill()
     Color aColor;
 
     // we should never call on this function if any of these aren't set!
-    assert( mnDrawMode & ( DrawModeFlags::BlackGradient | DrawModeFlags::WhiteGradient | DrawModeFlags::SettingsGradient) );
+    assert( GetDrawMode() & ( DrawModeFlags::BlackGradient | DrawModeFlags::WhiteGradient | DrawModeFlags::SettingsGradient) );
 
-    if ( mnDrawMode & DrawModeFlags::BlackGradient )
+    if ( GetDrawMode() & DrawModeFlags::BlackGradient )
         aColor = COL_BLACK;
-    else if ( mnDrawMode & DrawModeFlags::WhiteGradient )
+    else if ( GetDrawMode() & DrawModeFlags::WhiteGradient )
         aColor = COL_WHITE;
-    else if ( mnDrawMode & DrawModeFlags::SettingsGradient )
+    else if ( GetDrawMode() & DrawModeFlags::SettingsGradient )
         aColor = GetSettings().GetStyleSettings().GetWindowColor();
 
     return aColor;
@@ -986,12 +986,12 @@ Color OutputDevice::GetSingleColorGradientFill()
 void OutputDevice::SetGrayscaleColors( Gradient &rGradient )
 {
     // this should only be called with the drawing mode is for grayscale gradients
-    assert ( mnDrawMode & DrawModeFlags::GrayGradient );
+    assert ( GetDrawMode() & DrawModeFlags::GrayGradient );
 
     Color aStartCol( rGradient.GetStartColor() );
     Color aEndCol( rGradient.GetEndColor() );
 
-    if ( mnDrawMode & DrawModeFlags::GrayGradient )
+    if ( GetDrawMode() & DrawModeFlags::GrayGradient )
     {
         sal_uInt8 cStartLum = aStartCol.GetLuminance(), cEndLum = aEndCol.GetLuminance();
         aStartCol = Color( cStartLum, cStartLum, cStartLum );

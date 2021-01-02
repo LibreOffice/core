@@ -59,7 +59,7 @@ void OutputDevice::DrawPixel( const Point& rPt )
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPointAction( rPt ) );
 
-    if ( !IsDeviceOutputNecessary() || !mbLineColor || ImplIsRecordLayout() )
+    if ( !IsDeviceOutputNecessary() || !IsOpaqueLineColor() || ImplIsRecordLayout() )
         return;
 
     Point aPt = ImplLogicToDevicePixel( rPt );
@@ -73,7 +73,7 @@ void OutputDevice::DrawPixel( const Point& rPt )
     if ( mbOutputClipped )
         return;
 
-    if ( mbInitLineColor )
+    if ( IsInitLineColor() )
         InitLineColor();
 
     mpGraphics->DrawPixel( aPt.X(), aPt.Y(), *this );
@@ -86,7 +86,7 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
 {
     assert(!is_double_buffered_window());
 
-    Color aColor = DrawModeColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings());
+    Color aColor = GetDrawModeLineColor(rColor, GetDrawMode(), GetSettings().GetStyleSettings());
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPixelAction( rPt, aColor ) );

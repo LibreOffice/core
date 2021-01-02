@@ -111,15 +111,15 @@ void OutputDevice::DrawBitmapEx(const Point& rDestPt, const Size& rDestSize,
 
         BitmapEx aBmpEx(rBitmapEx);
 
-        if (mnDrawMode
+        if (GetDrawMode()
             & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap | DrawModeFlags::GrayBitmap))
         {
-            if (mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap))
+            if (GetDrawMode() & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap))
             {
                 Bitmap aColorBmp(aBmpEx.GetSizePixel(), 1);
                 sal_uInt8 cCmpVal;
 
-                if (mnDrawMode & DrawModeFlags::BlackBitmap)
+                if (GetDrawMode() & DrawModeFlags::BlackBitmap)
                     cCmpVal = 0;
                 else
                     cCmpVal = 255;
@@ -144,7 +144,7 @@ void OutputDevice::DrawBitmapEx(const Point& rDestPt, const Size& rDestSize,
             }
             else if (!!aBmpEx)
             {
-                if (mnDrawMode & DrawModeFlags::GrayBitmap)
+                if (GetDrawMode() & DrawModeFlags::GrayBitmap)
                     aBmpEx.Convert(BmpConversion::N8BitGreys);
             }
         }
@@ -529,7 +529,7 @@ void OutputDevice::DrawTransformedBitmapEx(const basegfx::B2DHomMatrix& rTransfo
     static bool bAllowPreferDirectPaint(true);
     const bool bInvert(RasterOp::Invert == meRasterOp);
     const bool bBitmapChangedColor(
-        mnDrawMode
+        GetDrawMode()
         & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap | DrawModeFlags::GrayBitmap));
     const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !bMetafile);
 

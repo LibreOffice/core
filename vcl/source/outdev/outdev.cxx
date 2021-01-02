@@ -51,7 +51,6 @@ namespace {
 OutputDevice::OutputDevice(OutDevType eOutDevType) :
     meOutDevType(eOutDevType),
     maRegion(true),
-    maFillColor( COL_WHITE ),
     maTextLineColor( COL_TRANSPARENT )
 {
     mpGraphics                      = nullptr;
@@ -79,7 +78,6 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mnOutOffLogicY                  = 0;
     mnEmphasisAscent                = 0;
     mnEmphasisDescent               = 0;
-    mnDrawMode                      = DrawModeFlags::Default;
     mnTextLayoutMode                = ComplexTextLayoutFlags::Default;
 
     if( AllSettings::GetLayoutRTL() ) //#i84553# tip BiDi preference to RTL
@@ -97,10 +95,6 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     meRasterOp                      = RasterOp::OverPaint;
     mnAntialiasing                  = AntialiasingFlags::NONE;
     meTextLanguage                  = LANGUAGE_SYSTEM;  // TODO: get default from configuration?
-    mbLineColor                     = true;
-    mbFillColor                     = true;
-    mbInitLineColor                 = true;
-    mbInitFillColor                 = true;
     mbInitFont                      = true;
     mbInitTextColor                 = true;
     mbInitClipRegion                = true;

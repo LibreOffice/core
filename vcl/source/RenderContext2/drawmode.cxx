@@ -23,8 +23,8 @@
 
 #include <drawmode.hxx>
 
-Color DrawModeColor(Color const& rColor, DrawModeFlags nDrawMode,
-                    StyleSettings const& rStyleSettings)
+Color GetDrawModeLineColor(Color const& rColor, DrawModeFlags nDrawMode,
+                           StyleSettings const& rStyleSettings)
 {
     Color aColor(rColor);
 
@@ -53,6 +53,45 @@ Color DrawModeColor(Color const& rColor, DrawModeFlags nDrawMode,
             }
         }
     }
+
+    return aColor;
+}
+
+Color GetDrawModeFillColor(Color const& rColor, DrawModeFlags nDrawMode,
+                           StyleSettings const& rStyleSettings)
+{
+    Color aColor(rColor);
+
+    if (nDrawMode
+        & (DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill | DrawModeFlags::GrayFill
+           | DrawModeFlags::NoFill | DrawModeFlags::SettingsFill))
+    {
+        if (!aColor.IsTransparent())
+        {
+            if (nDrawMode & DrawModeFlags::BlackFill)
+            {
+                aColor = COL_BLACK;
+            }
+            else if (nDrawMode & DrawModeFlags::WhiteFill)
+            {
+                aColor = COL_WHITE;
+            }
+            else if (nDrawMode & DrawModeFlags::GrayFill)
+            {
+                const sal_uInt8 cLum = aColor.GetLuminance();
+                aColor = Color(cLum, cLum, cLum);
+            }
+            else if (nDrawMode & DrawModeFlags::NoFill)
+            {
+                aColor = COL_TRANSPARENT;
+            }
+            else if (nDrawMode & DrawModeFlags::SettingsFill)
+            {
+                aColor = rStyleSettings.GetWindowColor();
+            }
+        }
+    }
+
     return aColor;
 }
 

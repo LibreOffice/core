@@ -324,8 +324,6 @@ private:
     const OutDevType                meOutDevType;
     OutDevViewType                  meOutDevViewType;
     vcl::Region                     maRegion;           // contains the clip region, see SetClipRegion(...)
-    Color                           maLineColor;
-    Color                           maFillColor;
     vcl::Font                       maFont;
     Color                           maTextColor;
     Color                           maTextLineColor;
@@ -343,10 +341,6 @@ private:
     mutable bool                    mbOutput : 1;
     mutable bool                    mbDevOutput : 1;
     mutable bool                    mbOutputClipped : 1;
-    mutable bool                    mbLineColor : 1;
-    mutable bool                    mbFillColor : 1;
-    mutable bool                    mbInitLineColor : 1;
-    mutable bool                    mbInitFillColor : 1;
     mutable bool                    mbInitFont : 1;
     mutable bool                    mbInitTextColor : 1;
     mutable bool                    mbInitClipRegion : 1;
@@ -545,8 +539,7 @@ public:
     void                        SetDigitLanguage( LanguageType );
     LanguageType                GetDigitLanguage() const { return meTextLanguage; }
 
-    void                        SetRasterOp( RasterOp eRasterOp );
-    RasterOp                    GetRasterOp() const { return meRasterOp; }
+    void                        SetRasterOp(RasterOp eRasterOp) override;
 
     /**
     If this OutputDevice is used for displaying a Print Preview
@@ -558,15 +551,8 @@ public:
     void                        SetOutDevViewType( OutDevViewType eOutDevViewType ) { meOutDevViewType=eOutDevViewType; }
     OutDevViewType              GetOutDevViewType() const { return meOutDevViewType; }
 
-    void                        SetLineColor();
-    void                        SetLineColor( const Color& rColor );
-    const Color&                GetLineColor() const { return maLineColor; }
-    bool                        IsLineColor() const { return mbLineColor; }
-
-    void                        SetFillColor();
-    void                        SetFillColor( const Color& rColor );
-    const Color&                GetFillColor() const { return maFillColor; }
-    bool                        IsFillColor() const { return mbFillColor; }
+    void                        SetLineColor(Color const& rColor = COL_TRANSPARENT) override;
+    void                        SetFillColor(Color const& rColor = COL_TRANSPARENT) override;
 
     void                        SetBackground();
     void                        SetBackground( const Wallpaper& rBackground );
@@ -582,15 +568,7 @@ public:
     const vcl::Font&            GetFont() const { return maFont; }
 
 protected:
-
     virtual void                ImplReleaseFonts();
-
-private:
-
-    SAL_DLLPRIVATE void         InitLineColor();
-
-    SAL_DLLPRIVATE void         InitFillColor();
-
     ///@}
 
 
