@@ -17,35 +17,37 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
+#include <sal/log.hxx>
+#include <osl/file.h>
+#include <rtl/ustrbuf.hxx>
+#include <comphelper/processfactory.hxx>
+#include <tools/debug.hxx>
+#include <tools/lineend.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+
+#include <vcl/gdimtf.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/metric.hxx>
+#include <vcl/sysdata.hxx>
+#include <vcl/textrectinfo.hxx>
+#include <vcl/toolkit/controllayout.hxx>
+#include <vcl/unohelp.hxx>
+#include <vcl/virdev.hxx>
+
+#include <config_fuzzers.h>
+#include <outdev.h>
+#include <drawmode.hxx>
+#include <impglyphitem.hxx>
+#include <salgdi.hxx>
+#include <svdata.hxx>
+#include <textlayout.hxx>
+#include <textlineinfo.hxx>
 
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 
-#include <comphelper/processfactory.hxx>
-#include <osl/file.h>
-#include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
-#include <tools/lineend.hxx>
-#include <tools/debug.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/metaact.hxx>
-#include <vcl/metric.hxx>
-#include <vcl/textrectinfo.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/sysdata.hxx>
-#include <vcl/unohelp.hxx>
-#include <vcl/toolkit/controllayout.hxx>
-
-#include <config_fuzzers.h>
-#include <outdev.h>
-#include <salgdi.hxx>
-#include <svdata.hxx>
-#include <textlayout.hxx>
-#include <textlineinfo.hxx>
-#include <impglyphitem.hxx>
+#include <memory>
 #include <optional>
 
 #define TEXT_DRAW_ELLIPSIS  (DrawTextFlags::EndEllipsis | DrawTextFlags::PathEllipsis | DrawTextFlags::NewsEllipsis)
@@ -66,17 +68,6 @@ void ImplMultiTextLineInfo::AddLine( ImplTextLineInfo* pLine )
 void ImplMultiTextLineInfo::Clear()
 {
     mvLines.clear();
-}
-
-void OutputDevice::ImplInitTextColor()
-{
-    DBG_TESTSOLARMUTEX();
-
-    if ( mbInitTextColor )
-    {
-        mpGraphics->SetTextColor( GetTextColor() );
-        mbInitTextColor = false;
-    }
 }
 
 void OutputDevice::ImplDrawTextRect( tools::Long nBaseX, tools::Long nBaseY,
@@ -231,7 +222,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     pVDev->SetTextFillColor();
     if (!pVDev->InitFont())
         return false;
-    pVDev->ImplInitTextColor();
+    pVDev->InitTextColor();
 
     // draw text into upper left corner
     rSalLayout.DrawBase() -= aBoundRect.TopLeft();
@@ -343,7 +334,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
         SetTextLineColor( aReliefColor );
         SetOverlineColor( aReliefColor );
         SetTextColor( aReliefColor );
-        ImplInitTextColor();
+        InitTextColor();
 
         // calculate offset - for high resolution printers the offset
         // should be greater so that the effect is visible
@@ -359,7 +350,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
         SetTextLineColor( aTextLineColor );
         SetOverlineColor( aOverlineColor );
         SetTextColor( aTextColor );
-        ImplInitTextColor();
+        InitTextColor();
         ImplDrawTextDirect( rSalLayout, mbTextLines );
 
         SetTextLineColor( aOldTextLineColor );
@@ -368,7 +359,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
         if ( aTextColor != aOldColor )
         {
             SetTextColor( aOldColor );
-            ImplInitTextColor();
+            InitTextColor();
         }
     }
     else
@@ -385,14 +376,14 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
                 SetTextColor( COL_LIGHTGRAY );
             else
                 SetTextColor( COL_BLACK );
-            ImplInitTextColor();
+            InitTextColor();
             rSalLayout.DrawBase() += Point( nOff, nOff );
             ImplDrawTextDirect( rSalLayout, mbTextLines );
             rSalLayout.DrawBase() -= Point( nOff, nOff );
             SetTextColor( aOldColor );
             SetTextLineColor( aOldTextLineColor );
             SetOverlineColor( aOldOverlineColor );
-            ImplInitTextColor();
+            InitTextColor();
 
             if ( !maFont.IsOutline() )
                 ImplDrawTextDirect( rSalLayout, mbTextLines );
@@ -421,12 +412,12 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
             SetTextColor( COL_WHITE );
             SetTextLineColor( COL_WHITE );
             SetOverlineColor( COL_WHITE );
-            ImplInitTextColor();
+            InitTextColor();
             ImplDrawTextDirect( rSalLayout, mbTextLines );
             SetTextColor( aOldColor );
             SetTextLineColor( aOldTextLineColor );
             SetOverlineColor( aOldOverlineColor );
-            ImplInitTextColor();
+            InitTextColor();
         }
     }
 }
@@ -436,14 +427,16 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
 
     if( mbInitClipRegion )
         InitClipRegion();
+
     if( mbOutputClipped )
         return;
-    if( mbInitTextColor )
-        ImplInitTextColor();
+
+    if (IsInitTextColor())
+        InitTextColor();
 
     rSalLayout.DrawBase() += Point( mnTextOffX, mnTextOffY );
 
-    if( IsTextFillColor() )
+    if( IsOpaqueTextFillColor() )
         ImplDrawTextBackground( rSalLayout );
 
     if( mbTextSpecial )
@@ -659,105 +652,43 @@ tools::Long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
     return nMaxLineWidth;
 }
 
-void OutputDevice::SetTextColor( const Color& rColor )
+void OutputDevice::SetTextColor(const Color& rColor)
 {
 
-    Color aColor( rColor );
-
-    if ( GetDrawMode() & ( DrawModeFlags::BlackText | DrawModeFlags::WhiteText |
-                        DrawModeFlags::GrayText |
-                        DrawModeFlags::SettingsText ) )
-    {
-        if ( GetDrawMode() & DrawModeFlags::BlackText )
-            aColor = COL_BLACK;
-        else if ( GetDrawMode() & DrawModeFlags::WhiteText )
-            aColor = COL_WHITE;
-        else if ( GetDrawMode() & DrawModeFlags::GrayText )
-        {
-            const sal_uInt8 cLum = aColor.GetLuminance();
-            aColor = Color( cLum, cLum, cLum );
-        }
-        else if ( GetDrawMode() & DrawModeFlags::SettingsText )
-            aColor = GetSettings().GetStyleSettings().GetFontColor();
-    }
+    Color aColor(rColor);
+    aColor = GetDrawModeTextColor(aColor, GetDrawMode(), GetSettings().GetStyleSettings());
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextColorAction( aColor ) );
+        mpMetaFile->AddAction(new MetaTextColorAction(aColor));
 
-    if ( maTextColor != aColor )
+    RenderContext2::SetTextColor(rColor);
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->SetTextColor(COL_BLACK);
+}
+
+void OutputDevice::SetTextFillColor(Color const& rColor)
+{
+    Color aColor(rColor);
+    aColor = GetDrawModeFillColor(aColor, GetDrawMode(), GetSettings().GetStyleSettings());
+
+    if (mpMetaFile)
     {
-        maTextColor = aColor;
-        mbInitTextColor = true;
+        if (aColor.IsTransparent())
+            mpMetaFile->AddAction(new MetaTextFillColorAction(Color(), false));
+        else
+            mpMetaFile->AddAction( new MetaTextFillColorAction(aColor, true));
     }
 
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetTextColor( COL_BLACK );
-}
+    RenderContext2::SetTextFillColor(rColor);
 
-void OutputDevice::SetTextFillColor()
-{
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextFillColorAction( Color(), false ) );
-
-    if ( maFont.GetColor() != COL_TRANSPARENT ) {
-        maFont.SetFillColor( COL_TRANSPARENT );
-    }
-    if ( !maFont.IsTransparent() )
-        maFont.SetTransparent( true );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetTextFillColor();
-}
-
-void OutputDevice::SetTextFillColor( const Color& rColor )
-{
-    Color aColor( rColor );
-    bool bTransFill = aColor.IsTransparent();
-
-    if ( !bTransFill )
+    if (mpAlphaVDev)
     {
-        if ( GetDrawMode() & ( DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill |
-                            DrawModeFlags::GrayFill | DrawModeFlags::NoFill |
-                            DrawModeFlags::SettingsFill ) )
-        {
-            if ( GetDrawMode() & DrawModeFlags::BlackFill )
-                aColor = COL_BLACK;
-            else if ( GetDrawMode() & DrawModeFlags::WhiteFill )
-                aColor = COL_WHITE;
-            else if ( GetDrawMode() & DrawModeFlags::GrayFill )
-            {
-                const sal_uInt8 cLum = aColor.GetLuminance();
-                aColor = Color( cLum, cLum, cLum );
-            }
-            else if( GetDrawMode() & DrawModeFlags::SettingsFill )
-                aColor = GetSettings().GetStyleSettings().GetWindowColor();
-            else if ( GetDrawMode() & DrawModeFlags::NoFill )
-            {
-                aColor = COL_TRANSPARENT;
-                bTransFill = true;
-            }
-        }
+        if (aColor.IsTransparent())
+            mpAlphaVDev->SetTextFillColor();
+        else
+            mpAlphaVDev->SetTextFillColor(COL_BLACK);
     }
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextFillColorAction( aColor, true ) );
-
-    if ( maFont.GetFillColor() != aColor )
-        maFont.SetFillColor( aColor );
-    if ( maFont.IsTransparent() != bTransFill )
-        maFont.SetTransparent( bTransFill );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetTextFillColor( COL_BLACK );
-}
-
-Color OutputDevice::GetTextFillColor() const
-{
-    if ( maFont.IsTransparent() )
-        return COL_TRANSPARENT;
-    else
-        return maFont.GetFillColor();
 }
 
 void OutputDevice::SetTextAlign( TextAlign eAlign )
@@ -1487,7 +1418,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
         }
 
         aOldTextColor = rTargetDevice.GetTextColor();
-        if ( rTargetDevice.IsTextFillColor() )
+        if ( rTargetDevice.IsOpaqueTextFillColor() )
         {
             bRestoreFillColor = true;
             aOldTextFillColor = rTargetDevice.GetTextFillColor();
@@ -2156,13 +2087,15 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
         }
 
         aOldTextColor = GetTextColor();
-        if ( IsTextFillColor() )
+        if ( IsOpaqueTextFillColor() )
         {
             bRestoreFillColor = true;
             aOldTextFillColor = GetTextFillColor();
         }
         else
+        {
             bRestoreFillColor = false;
+        }
 
         if( bHighContrastBlack )
             SetTextColor( COL_GREEN );

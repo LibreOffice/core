@@ -596,7 +596,7 @@ void SalGraphics::DrawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
     bool bDrawn = false;
 
     if (supportsOperation(OutDevSupportType::B2DDraw)
-        && i_rOutDev.GetRasterOp() == RasterOp::OverPaint && i_rOutDev.IsLineColor())
+        && i_rOutDev.GetRasterOp() == RasterOp::OverPaint && i_rOutDev.IsOpaqueLineColor())
     {
         if ((m_nLayout & SalLayoutFlags::BiDiRtl) || i_rOutDev.IsRTLEnabled())
         {
@@ -714,7 +714,7 @@ void SalGraphics::DrawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
     bool bDrawn = false;
 
     if (!(supportsOperation(OutDevSupportType::B2DDraw)
-          && i_rOutDev.GetRasterOp() == RasterOp::OverPaint && i_rOutDev.IsLineColor()))
+          && i_rOutDev.GetRasterOp() == RasterOp::OverPaint && i_rOutDev.IsOpaqueLineColor()))
     {
         if ((m_nLayout & SalLayoutFlags::BiDiRtl) || i_rOutDev.IsRTLEnabled())
         {

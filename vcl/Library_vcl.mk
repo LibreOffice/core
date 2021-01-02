@@ -125,6 +125,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/RenderContext2/line \
     vcl/source/RenderContext2/rasterop \
     vcl/source/RenderContext2/settings \
+    vcl/source/RenderContext2/text \
     vcl/source/outdev/outdev \
     vcl/source/outdev/outdevstate \
     vcl/source/outdev/clipping \

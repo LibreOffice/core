@@ -12,6 +12,7 @@
 #include <tools/color.hxx>
 
 #include <vcl/dllapi.h>
+#include <vcl/font.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/DrawModeFlags.hxx>
 #include <vcl/RasterOp.hxx>
@@ -41,6 +42,21 @@ public:
     virtual void SetFillColor(Color const& rColor = COL_TRANSPARENT);
     void FlagFillColorAsTransparent();
     void FlagFillColorAsOpaque();
+
+    Color const& GetTextColor() const;
+    virtual void SetTextColor(Color const& rColor);
+
+    bool IsOpaqueTextLineColor() const;
+    Color GetTextLineColor() const;
+    virtual void SetTextLineColor(Color const& rColor = COL_TRANSPARENT);
+
+    bool IsOpaqueTextFillColor() const;
+    Color GetTextFillColor() const;
+    virtual void SetTextFillColor(Color const& rColor = COL_TRANSPARENT);
+
+    bool IsOpaqueOverlineColor() const;
+    Color GetOverlineColor() const;
+    virtual void SetOverlineColor(Color const& rColor = COL_TRANSPARENT);
 
     DrawModeFlags GetDrawMode() const;
     virtual void SetDrawMode(DrawModeFlags nDrawMode);
@@ -82,18 +98,28 @@ protected:
     void SetInitLineColorFlag(bool bFlag);
     bool IsInitFillColor() const;
     void SetInitFillColorFlag(bool bFlag);
-
-    mutable SalGraphics* mpGraphics;
-    std::unique_ptr<AllSettings> mxSettings;
+    bool IsInitTextColor() const;
+    void SetInitTextColorFlag(bool bFlag);
 
     // TODO these two init functions will need to become private once all related
     // functions are moved out of OutputDevice
     void InitLineColor();
     void InitFillColor();
+    void InitTextColor();
+
+    mutable SalGraphics* mpGraphics;
+    std::unique_ptr<AllSettings> mxSettings;
+
+    // TODO eventually make these private when all text/font functions migrated from
+    // OutputDevice to RenderContext2
+    vcl::Font maFont;
+    Color maTextLineColor;
 
 private:
+    Color maTextColor;
     Color maLineColor;
     Color maFillColor;
+    Color maOverlineColor;
     DrawModeFlags mnDrawMode;
     RasterOp meRasterOp;
 
@@ -101,6 +127,7 @@ private:
     mutable bool mbInitLineColor : 1;
     mutable bool mbOpaqueFillColor : 1;
     mutable bool mbInitFillColor : 1;
+    mutable bool mbInitTextColor : 1;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

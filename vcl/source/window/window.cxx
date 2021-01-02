@@ -830,7 +830,7 @@ bool Window::AcquireGraphics() const
     pWin->SetInitLineColorFlag(true);
     pWin->SetInitFillColorFlag(true);
     mbInitFont          = true;
-    mbInitTextColor     = true;
+    pWin->InitTextColor();
     mbInitClipRegion    = true;
 
     ImplSVData* pSVData = ImplGetSVData();

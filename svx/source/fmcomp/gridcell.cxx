@@ -733,7 +733,7 @@ void DbCellControl::ImplInitWindow( vcl::Window const & rParent, const InitWindo
     {
         Color aTextColor(rParent.IsControlForeground() ? rParent.GetControlForeground() : rParent.GetTextColor());
 
-        bool bTextLineColor = rParent.IsTextLineColor();
+        bool bTextLineColor = rParent.IsOpaqueTextLineColor();
         Color aTextLineColor(rParent.GetTextLineColor());
 
         for (vcl::Window* pWindow : pWindows)

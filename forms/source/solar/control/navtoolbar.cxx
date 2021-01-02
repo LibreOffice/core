@@ -508,18 +508,14 @@ namespace frm
         implUpdateImages();
     }
 
-    void NavigationToolBar::SetTextLineColor( )
-    {
-        Window::SetTextLineColor( );
-        m_pToolbar->SetTextLineColor( );
-        forEachItemWindow( &NavigationToolBar::setTextLineColor, nullptr );
-    }
-
     void NavigationToolBar::SetTextLineColor( const Color& _rColor )
     {
         Window::SetTextLineColor( _rColor );
         m_pToolbar->SetTextLineColor( _rColor );
-        forEachItemWindow( &NavigationToolBar::setTextLineColor, &_rColor );
+        if ( _rColor.IsTransparent() )
+            forEachItemWindow( &NavigationToolBar::setTextLineColor, nullptr );
+        else
+            forEachItemWindow( &NavigationToolBar::setTextLineColor, &_rColor );
     }
 
     void NavigationToolBar::forEachItemWindow( ItemWindowHandler _handler )
