@@ -95,6 +95,40 @@ Color GetDrawModeFillColor(Color const& rColor, DrawModeFlags nDrawMode,
     return aColor;
 }
 
+Color GetDrawModeTextColor(Color const& rColor, DrawModeFlags nDrawMode,
+                           StyleSettings const& rStyleSettings)
+{
+    Color aColor(rColor);
+
+    if (nDrawMode
+        & (DrawModeFlags::BlackText | DrawModeFlags::WhiteText | DrawModeFlags::GrayText
+           | DrawModeFlags::SettingsText))
+    {
+        if (!aColor.IsTransparent())
+        {
+            if (nDrawMode & DrawModeFlags::BlackText)
+            {
+                aColor = COL_BLACK;
+            }
+            else if (nDrawMode & DrawModeFlags::WhiteText)
+            {
+                aColor = COL_WHITE;
+            }
+            else if (nDrawMode & DrawModeFlags::GrayText)
+            {
+                const sal_uInt8 cLum = aColor.GetLuminance();
+                aColor = Color(cLum, cLum, cLum);
+            }
+            else if (nDrawMode & DrawModeFlags::SettingsText)
+            {
+                aColor = rStyleSettings.GetFontColor();
+            }
+        }
+    }
+
+    return aColor;
+}
+
 DrawModeFlags RenderContext2::GetDrawMode() const { return mnDrawMode; }
 void RenderContext2::SetDrawMode(DrawModeFlags nDrawMode) { mnDrawMode = nDrawMode; }
 

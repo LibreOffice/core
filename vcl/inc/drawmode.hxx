@@ -31,4 +31,7 @@ Color GetDrawModeLineColor(Color const& rColor, DrawModeFlags nDrawMode,
 Color GetDrawModeFillColor(Color const& rColor, DrawModeFlags nDrawMode,
                            StyleSettings const& rStyleSettings);
 
+Color GetDrawModeTextColor(Color const& rColor, DrawModeFlags nDrawMode,
+                           StyleSettings const& rStyleSettings);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

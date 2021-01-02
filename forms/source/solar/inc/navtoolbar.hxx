@@ -107,8 +107,7 @@ namespace frm
         // Window "overridables" (hiding the respective Window methods)
         void                SetControlBackground();
         void                SetControlBackground( const Color& rColor );
-        void                SetTextLineColor( );
-        void                SetTextLineColor( const Color& rColor );
+        void                SetTextLineColor( const Color& rColor = COL_TRANSPARENT ) override;
 
     private:
         // Window overridables

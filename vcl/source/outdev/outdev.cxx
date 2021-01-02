@@ -50,8 +50,7 @@ namespace {
 
 OutputDevice::OutputDevice(OutDevType eOutDevType) :
     meOutDevType(eOutDevType),
-    maRegion(true),
-    maTextLineColor( COL_TRANSPARENT )
+    maRegion(true)
 {
     mpGraphics                      = nullptr;
     mpUnoGraphicsList               = nullptr;
@@ -91,12 +90,10 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mbDevOutput                     = false;
     mbOutputClipped                 = false;
     maTextColor                     = COL_BLACK;
-    maOverlineColor                 = COL_TRANSPARENT;
     meRasterOp                      = RasterOp::OverPaint;
     mnAntialiasing                  = AntialiasingFlags::NONE;
     meTextLanguage                  = LANGUAGE_SYSTEM;  // TODO: get default from configuration?
     mbInitFont                      = true;
-    mbInitTextColor                 = true;
     mbInitClipRegion                = true;
     mbClipRegionSet                 = false;
     mbNewFont                       = true;

@@ -13,13 +13,16 @@
 
 RenderContext2::RenderContext2()
     : mxSettings(new AllSettings(Application::GetSettings()))
+    , maTextLineColor(COL_TRANSPARENT)
     , maFillColor(COL_WHITE)
+    , maOverlineColor(COL_TRANSPARENT)
     , mnDrawMode(DrawModeFlags::Default)
     , meRasterOp(RasterOp::OverPaint)
     , mbOpaqueLineColor(true)
     , mbInitLineColor(true)
     , mbOpaqueFillColor(true)
     , mbInitFillColor(true)
+    , mbInitTextColor(true)
 {
 }
 

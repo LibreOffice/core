@@ -76,41 +76,42 @@ void OutputDevice::Push( PushFlags nFlags )
 
     if ( nFlags & PushFlags::FONT )
         rState.mpFont.reset( new vcl::Font( maFont ) );
+
     if ( nFlags & PushFlags::TEXTCOLOR )
         rState.mpTextColor = GetTextColor();
-    if (nFlags & PushFlags::TEXTFILLCOLOR && IsTextFillColor())
-    {
+
+    if (nFlags & PushFlags::TEXTFILLCOLOR && IsOpaqueTextFillColor())
         rState.mpTextFillColor = GetTextFillColor();
-    }
-    if (nFlags & PushFlags::TEXTLINECOLOR && IsTextLineColor())
-    {
+
+    if (nFlags & PushFlags::TEXTLINECOLOR && IsOpaqueTextLineColor())
         rState.mpTextLineColor = GetTextLineColor();
-    }
-    if (nFlags & PushFlags::OVERLINECOLOR && IsOverlineColor())
-    {
+
+    if (nFlags & PushFlags::OVERLINECOLOR && IsOpaqueOverlineColor())
         rState.mpOverlineColor = GetOverlineColor();
-    }
+
     if ( nFlags & PushFlags::TEXTALIGN )
         rState.meTextAlign = GetTextAlign();
+
     if( nFlags & PushFlags::TEXTLAYOUTMODE )
         rState.mnTextLayoutMode = GetLayoutMode();
+
     if( nFlags & PushFlags::TEXTLANGUAGE )
         rState.meTextLanguage = GetDigitLanguage();
+
     if ( nFlags & PushFlags::RASTEROP )
         rState.meRasterOp = GetRasterOp();
+
     if ( nFlags & PushFlags::MAPMODE )
     {
         rState.mpMapMode = maMapMode;
         rState.mbMapActive = mbMap;
     }
+
     if (nFlags & PushFlags::CLIPREGION && mbClipRegion)
-    {
         rState.mpClipRegion.reset( new vcl::Region( maRegion ) );
-    }
+
     if (nFlags & PushFlags::REFPOINT && mbRefPoint)
-    {
         rState.mpRefPoint = maRefPoint;
-    }
 
     if( mpAlphaVDev )
         mpAlphaVDev->Push();
@@ -486,7 +487,7 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
         && (aFont.GetColor() != maFont.GetColor() || aFont.GetColor() != maTextColor))
     {
         maTextColor = aFont.GetColor();
-        mbInitTextColor = true;
+        SetInitTextColorFlag(true);
 
         if (mpMetaFile)
             mpMetaFile->AddAction(new MetaTextColorAction(aFont.GetColor()));

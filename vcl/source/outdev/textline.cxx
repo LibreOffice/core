@@ -20,19 +20,19 @@
 #include <cassert>
 
 #include <sal/types.h>
+#include <tools/helpers.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/WaveLine.hxx>
+
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 
-#include <tools/helpers.hxx>
-
-#include <salgdi.hxx>
+#include <drawmode.hxx>
 #include <impglyphitem.hxx>
-
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/polygon/WaveLine.hxx>
+#include <salgdi.hxx>
 
 #define UNDERLINE_LAST      LINESTYLE_BOLDWAVE
 #define STRIKEOUT_LAST      STRIKEOUT_X
@@ -627,7 +627,7 @@ void OutputDevice::ImplDrawStrikeoutChar( tools::Long nBaseX, tools::Long nBaseY
     // draw the strikeout text
     const Color aOldColor = GetTextColor();
     SetTextColor( aColor );
-    ImplInitTextColor();
+    InitTextColor();
 
     pLayout->DrawBase() = Point( nBaseX+mnTextOffX, nBaseY+mnTextOffY );
 
@@ -654,7 +654,7 @@ void OutputDevice::ImplDrawStrikeoutChar( tools::Long nBaseX, tools::Long nBaseY
     Pop();
 
     SetTextColor( aOldColor );
-    ImplInitTextColor();
+    InitTextColor();
 }
 
 void OutputDevice::ImplDrawTextLine( tools::Long nX, tools::Long nY,
@@ -683,10 +683,10 @@ void OutputDevice::ImplDrawTextLine( tools::Long nX, tools::Long nY,
         nX += nXAdd - 1;
     }
 
-    if ( !IsTextLineColor() )
+    if ( !IsOpaqueTextLineColor() )
         aUnderlineColor = GetTextColor();
 
-    if ( !IsOverlineColor() )
+    if ( !IsOpaqueOverlineColor() )
         aOverlineColor = GetTextColor();
 
     if ( (eUnderline == LINESTYLE_SMALLWAVE) ||
@@ -797,102 +797,58 @@ void OutputDevice::ImplDrawMnemonicLine( tools::Long nX, tools::Long nY, tools::
     ImplDrawTextLine( nX, nY, 0, nWidth, STRIKEOUT_NONE, LINESTYLE_SINGLE, LINESTYLE_NONE, false );
 }
 
-void OutputDevice::SetTextLineColor()
+void OutputDevice::SetTextLineColor(Color const& rColor)
 {
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextLineColorAction( Color(), false ) );
-
-    maTextLineColor = COL_TRANSPARENT;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetTextLineColor();
-}
-
-void OutputDevice::SetTextLineColor( const Color& rColor )
-{
-
-    Color aColor( rColor );
-
-    if ( GetDrawMode() & ( DrawModeFlags::BlackText | DrawModeFlags::WhiteText |
-                        DrawModeFlags::GrayText |
-                        DrawModeFlags::SettingsText ) )
+    if (mpMetaFile)
     {
-        if ( GetDrawMode() & DrawModeFlags::BlackText )
+        if (rColor.IsTransparent())
         {
-            aColor = COL_BLACK;
+            mpMetaFile->AddAction(new MetaTextLineColorAction(Color(), false));
         }
-        else if ( GetDrawMode() & DrawModeFlags::WhiteText )
+        else
         {
-            aColor = COL_WHITE;
-        }
-        else if ( GetDrawMode() & DrawModeFlags::GrayText )
-        {
-            const sal_uInt8 cLum = aColor.GetLuminance();
-            aColor = Color( cLum, cLum, cLum );
-        }
-        else if ( GetDrawMode() & DrawModeFlags::SettingsText )
-        {
-            aColor = GetSettings().GetStyleSettings().GetFontColor();
+            Color aColor(rColor);
+            aColor = GetDrawModeTextColor(aColor, GetDrawMode(), GetSettings().GetStyleSettings());
+            mpMetaFile->AddAction( new MetaTextLineColorAction(aColor, true));
         }
     }
 
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextLineColorAction( aColor, true ) );
+    RenderContext2::SetTextLineColor(rColor);
 
-    maTextLineColor = aColor;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetTextLineColor( COL_BLACK );
-}
-
-void OutputDevice::SetOverlineColor()
-{
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaOverlineColorAction( Color(), false ) );
-
-    maOverlineColor = COL_TRANSPARENT;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetOverlineColor();
-}
-
-void OutputDevice::SetOverlineColor( const Color& rColor )
-{
-
-    Color aColor( rColor );
-
-    if ( GetDrawMode() & ( DrawModeFlags::BlackText | DrawModeFlags::WhiteText |
-                        DrawModeFlags::GrayText |
-                        DrawModeFlags::SettingsText ) )
+    if (mpAlphaVDev)
     {
-        if ( GetDrawMode() & DrawModeFlags::BlackText )
+        if (rColor.IsTransparent())
+            mpAlphaVDev->SetTextLineColor();
+        else
+            mpAlphaVDev->SetTextLineColor(COL_BLACK);
+    }
+}
+
+void OutputDevice::SetOverlineColor(Color const& rColor)
+{
+    if (mpMetaFile)
+    {
+        if (rColor.IsTransparent())
         {
-            aColor = COL_BLACK;
+            mpMetaFile->AddAction(new MetaOverlineColorAction(Color(), false));
         }
-        else if ( GetDrawMode() & DrawModeFlags::WhiteText )
+        else
         {
-            aColor = COL_WHITE;
-        }
-        else if ( GetDrawMode() & DrawModeFlags::GrayText )
-        {
-            const sal_uInt8 cLum = aColor.GetLuminance();
-            aColor = Color( cLum, cLum, cLum );
-        }
-        else if ( GetDrawMode() & DrawModeFlags::SettingsText )
-        {
-            aColor = GetSettings().GetStyleSettings().GetFontColor();
+            Color aColor(rColor);
+            aColor = GetDrawModeTextColor(aColor, GetDrawMode(), GetSettings().GetStyleSettings());
+            mpMetaFile->AddAction(new MetaOverlineColorAction(aColor, true));
         }
     }
 
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaOverlineColorAction( aColor, true ) );
+    RenderContext2::SetOverlineColor(rColor);
 
-    maOverlineColor = aColor;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetOverlineColor( COL_BLACK );
+    if (mpAlphaVDev)
+    {
+        if (rColor.IsTransparent())
+            mpAlphaVDev->SetOverlineColor();
+        else
+            mpAlphaVDev->SetOverlineColor(COL_BLACK);
+    }
 }
 
 void OutputDevice::DrawTextLine( const Point& rPos, tools::Long nWidth,

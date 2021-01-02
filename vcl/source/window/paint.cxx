@@ -1385,17 +1385,17 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
         else
             pDevice->SetFillColor();
 
-        if (IsTextLineColor())
+        if (IsOpaqueTextLineColor())
             pDevice->SetTextLineColor(GetTextLineColor());
         else
             pDevice->SetTextLineColor();
 
-        if (IsOverlineColor())
+        if (IsOpaqueOverlineColor())
             pDevice->SetOverlineColor(GetOverlineColor());
         else
             pDevice->SetOverlineColor();
 
-        if (IsTextFillColor())
+        if (IsOpaqueTextFillColor())
             pDevice->SetTextFillColor(GetTextFillColor());
         else
             pDevice->SetTextFillColor();
@@ -1485,15 +1485,15 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
         SetFillColor( GetFillColor() );
     else
         SetFillColor();
-    if( IsTextLineColor() )
+    if( IsOpaqueTextLineColor() )
         SetTextLineColor( GetTextLineColor() );
     else
         SetTextLineColor();
-    if( IsOverlineColor() )
+    if( IsOpaqueOverlineColor() )
         SetOverlineColor( GetOverlineColor() );
     else
         SetOverlineColor();
-    if( IsTextFillColor() )
+    if( IsOpaqueTextFillColor() )
         SetTextFillColor( GetTextFillColor() );
     else
         SetTextFillColor();
