@@ -234,7 +234,7 @@ SfxBoolItem AlignUp SID_OBJECT_ALIGN_UP
 
 
 SfxBoolItem Arc SID_DRAW_ARC
-(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SdrAngleItem StartAngle ID_VAL_ANGLESTART,SdrAngleItem EndAngle ID_VAL_ANGLEEND)
+(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -1402,7 +1402,7 @@ SfxBoolItem Circle_Unfilled SID_DRAW_CIRCLE_NOFILL
 
 
 SfxBoolItem CircleArc SID_DRAW_CIRCLEARC
-(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SdrAngleItem StartAngle ID_VAL_ANGLESTART,SdrAngleItem EndAngle ID_VAL_ANGLEEND)
+(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -1419,7 +1419,7 @@ SfxBoolItem CircleArc SID_DRAW_CIRCLEARC
 
 
 SfxBoolItem CircleCut SID_DRAW_CIRCLECUT
-(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SdrAngleItem StartAngle ID_VAL_ANGLESTART,SdrAngleItem EndAngle ID_VAL_ANGLEEND)
+(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -1437,7 +1437,7 @@ SfxBoolItem CircleCut SID_DRAW_CIRCLECUT
 
 
 SfxBoolItem CircleCut_Unfilled SID_DRAW_CIRCLECUT_NOFILL
-(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SdrAngleItem StartAngle ID_VAL_ANGLESTART,SdrAngleItem EndAngle ID_VAL_ANGLEEND)
+(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -1454,7 +1454,7 @@ SfxBoolItem CircleCut_Unfilled SID_DRAW_CIRCLECUT_NOFILL
 
 
 SfxBoolItem CirclePie SID_DRAW_CIRCLEPIE
-(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SdrAngleItem StartAngle ID_VAL_ANGLESTART,SdrAngleItem EndAngle ID_VAL_ANGLEEND)
+(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -1471,7 +1471,7 @@ SfxBoolItem CirclePie SID_DRAW_CIRCLEPIE
 
 
 SfxBoolItem CirclePie_Unfilled SID_DRAW_CIRCLEPIE_NOFILL
-(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SdrAngleItem StartAngle ID_VAL_ANGLESTART,SdrAngleItem EndAngle ID_VAL_ANGLEEND)
+(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -2544,7 +2544,7 @@ SfxBoolItem Ellipse_Unfilled SID_DRAW_ELLIPSE_NOFILL
 
 
 SfxBoolItem EllipseCut SID_DRAW_ELLIPSECUT
-(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SdrAngleItem StartAngle ID_VAL_ANGLESTART,SdrAngleItem EndAngle ID_VAL_ANGLEEND)
+(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -2561,7 +2561,7 @@ SfxBoolItem EllipseCut SID_DRAW_ELLIPSECUT
 
 
 SfxBoolItem EllipseCut_Unfilled SID_DRAW_ELLIPSECUT_NOFILL
-(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SdrAngleItem StartAngle ID_VAL_ANGLESTART,SdrAngleItem EndAngle ID_VAL_ANGLEEND)
+(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -6555,7 +6555,7 @@ SfxBoolItem InsertGridControl SID_INSERT_GRIDCONTROL
 ]
 
 SfxBoolItem Pie SID_DRAW_PIE
-(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SdrAngleItem StartAngle ID_VAL_ANGLESTART,SdrAngleItem EndAngle ID_VAL_ANGLEEND)
+(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -6573,7 +6573,7 @@ SfxBoolItem Pie SID_DRAW_PIE
 
 
 SfxBoolItem Pie_Unfilled SID_DRAW_PIE_NOFILL
-(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SdrAngleItem StartAngle ID_VAL_ANGLESTART,SdrAngleItem EndAngle ID_VAL_ANGLEEND)
+(SfxUInt32Item CenterX ID_VAL_CENTER_X,SfxUInt32Item CenterY ID_VAL_CENTER_Y,SfxUInt32Item AxisX ID_VAL_AXIS_X,SfxUInt32Item AxisY ID_VAL_AXIS_Y,SfxUInt32Item StartAngle ID_VAL_ANGLESTART,SfxUInt32Item EndAngle ID_VAL_ANGLEEND)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
