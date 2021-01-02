@@ -80,8 +80,8 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
     const SfxUInt32Item* pCenterY = rReq.GetArg<SfxUInt32Item>(ID_VAL_CENTER_Y);
     const SfxUInt32Item* pAxisX = rReq.GetArg<SfxUInt32Item>(ID_VAL_AXIS_X);
     const SfxUInt32Item* pAxisY = rReq.GetArg<SfxUInt32Item>(ID_VAL_AXIS_Y);
-    const SdrAngleItem* pPhiStart = rReq.GetArg<SdrAngleItem>(ID_VAL_ANGLESTART);
-    const SdrAngleItem* pPhiEnd = rReq.GetArg<SdrAngleItem>(ID_VAL_ANGLEEND);
+    const SfxUInt32Item* pPhiStart = rReq.GetArg<SfxUInt32Item>(ID_VAL_ANGLESTART);
+    const SfxUInt32Item* pPhiEnd = rReq.GetArg<SfxUInt32Item>(ID_VAL_ANGLEEND);
 
     ::tools::Rectangle   aNewRectangle (pCenterX->GetValue () - pAxisX->GetValue () / 2,
                                pCenterY->GetValue () - pAxisY->GetValue () / 2,
@@ -94,8 +94,8 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
             mpView->getSdrModelFromSdrView(),
             ToSdrCircKind(mpView->GetCurrentObjIdentifier()),
             aNewRectangle,
-            pPhiStart->GetValue(),
-            pPhiEnd->GetValue());
+            Degree100(pPhiStart->GetValue() * 10),
+            Degree100(pPhiEnd->GetValue() * 10));
     SdrPageView *pPV = mpView->GetSdrPageView();
 
     mpView->InsertObjectAtView(pNewCircle, *pPV, SdrInsertFlags::SETDEFLAYER);
