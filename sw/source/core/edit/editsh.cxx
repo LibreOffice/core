@@ -329,7 +329,7 @@ void SwEditShell::SetGraphicPolygon( const tools::PolyPolygon *pPoly )
     pNd->SetContour( pPoly );
     SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pNd->getLayoutFrame(GetLayout())->GetUpper());
     const SwFormatSurround &rSur = pFly->GetFormat()->GetSurround();
-    pFly->GetFormat()->NotifyClients( &rSur, &rSur );
+    pFly->GetFormat()->CallSwClientNotify(sw::LegacyModifyHint(&rSur, &rSur));
     GetDoc()->getIDocumentState().SetModified();
     EndAllAction();
 }
@@ -344,7 +344,7 @@ void SwEditShell::ClearAutomaticContour()
         pNd->SetContour( nullptr );
         SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pNd->getLayoutFrame(GetLayout())->GetUpper());
         const SwFormatSurround &rSur = pFly->GetFormat()->GetSurround();
-        pFly->GetFormat()->NotifyClients( &rSur, &rSur );
+        pFly->GetFormat()->CallSwClientNotify(sw::LegacyModifyHint(&rSur, &rSur));
         GetDoc()->getIDocumentState().SetModified();
         EndAllAction();
     }
