@@ -100,7 +100,7 @@ using namespace ::com::sun::star::uno;
 
 namespace arm
 {
-    bool is_complex_struct(const typelib_TypeDescription * type)
+    static bool is_complex_struct(const typelib_TypeDescription * type)
     {
         const typelib_CompoundTypeDescription * p
             = reinterpret_cast< const typelib_CompoundTypeDescription * >(type);
@@ -126,7 +126,7 @@ namespace arm
     }
 
 #ifdef __ARM_PCS_VFP
-    bool is_float_only_struct(const typelib_TypeDescription * type)
+    static bool is_float_only_struct(const typelib_TypeDescription * type)
     {
         const typelib_CompoundTypeDescription * p
             = reinterpret_cast< const typelib_CompoundTypeDescription * >(type);
@@ -165,7 +165,7 @@ namespace arm
     }
 }
 
-void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * pReturnType, sal_uInt32* pRegisterReturn)
+static void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * pReturnType, sal_uInt32* pRegisterReturn)
 {
     switch( pReturnType->eTypeClass )
     {
@@ -187,8 +187,11 @@ void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * 
 #if !defined(__ARM_PCS_VFP) && (defined(__ARM_EABI__) || defined(__SOFTFP__))
             pRegisterReturn[0] = r0;
 #else
-            register float fret asm = "s0";
-            *(float*)pRegisterReturn = fret;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wuninitialized"
+            register float fret asm("s0");
+            *reinterpret_cast<float *>(pRegisterReturn) = fret;
+#pragma clang diagnostic pop
 #endif
         break;
         case typelib_TypeClass_DOUBLE:
@@ -196,8 +199,11 @@ void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * 
             pRegisterReturn[1] = r1;
             pRegisterReturn[0] = r0;
 #else
-            register double dret asm= "d0";
-            *(double*)pRegisterReturn = dret;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wuninitialized"
+            register double dret asm("d0");
+            *reinterpret_cast<double *>(pRegisterReturn) = dret;
+#pragma clang diagnostic pop
 #endif
             break;
         case typelib_TypeClass_STRUCT:
@@ -245,7 +251,7 @@ void callVirtualMethod(
     {
         // 8-bytes aligned
         sal_uInt32 nStackBytes = ( ( nStack + 1 ) >> 1 ) * 8;
-        sal_uInt32 *stack = (sal_uInt32 *) __builtin_alloca( nStackBytes );
+        sal_uInt32 *stack = static_cast<sal_uInt32 *>(__builtin_alloca( nStackBytes * sizeof(sal_uInt32)));
         memcpy( stack, pStack, nStackBytes );
     }
 
@@ -253,9 +259,9 @@ void callVirtualMethod(
     if ( nGPR > arm::MAX_GPR_REGS )
         nGPR = arm::MAX_GPR_REGS;
 
-    sal_uInt32 pMethod = *((sal_uInt32*)pThis);
+    sal_uInt32 pMethod = *static_cast<sal_uInt32 *>(pThis);
     pMethod += 4 * nVtableIndex;
-    pMethod = *((sal_uInt32 *)pMethod);
+    pMethod = *reinterpret_cast<sal_uInt32 *>(pMethod);
 
     //Return registers
     sal_uInt32 r0;
@@ -286,7 +292,7 @@ void callVirtualMethod(
         : [pmethod]"m" (pMethod), [pgpr]"m" (pGPR), [pfpr]"m" (pFPR)
         : "r0", "r1", "r2", "r3", "r4", "r5");
 
-    MapReturn(r0, r1, pReturnType, (sal_uInt32*)pRegisterReturn);
+    MapReturn(r0, r1, pReturnType, static_cast<sal_uInt32*>(pRegisterReturn));
 }
 }
 
@@ -381,7 +387,7 @@ void callVirtualMethod(
 
 namespace {
 
-static void cpp_call(
+void cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot aVtableSlot,
     typelib_TypeDescriptionReference * pReturnTypeRef,
@@ -389,8 +395,8 @@ static void cpp_call(
     void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc )
 {
     // max space for: [complex ret ptr], values|ptr ...
-    sal_uInt32 * pStack = (sal_uInt32 *)__builtin_alloca(
-        sizeof(sal_Int32) + ((nParams+2) * sizeof(sal_Int64)) );
+    sal_uInt32 * pStack = static_cast<sal_uInt32 *>(__builtin_alloca(
+        sizeof(sal_Int32) + ((nParams+2) * sizeof(sal_Int64)) ));
     sal_uInt32 * pStackStart = pStack;
 
     sal_uInt32 pGPR[arm::MAX_GPR_REGS];
@@ -435,11 +441,11 @@ static void cpp_call(
     // stack space
     static_assert(sizeof(void *) == sizeof(sal_Int32), "### unexpected size!");
     // args
-    void ** pCppArgs  = (void **)alloca( 3 * sizeof(void *) * nParams );
+    void ** pCppArgs  = static_cast<void **>(alloca( 3 * sizeof(void *) * nParams ));
     // indices of values this have to be converted (interface conversion cpp<=>uno)
-    sal_Int32 * pTempIndices = (sal_Int32 *)(pCppArgs + nParams);
+    sal_Int32 * pTempIndices = reinterpret_cast<sal_Int32 *>(pCppArgs + nParams);
     // type descriptions for reconversions
-    typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pCppArgs + (2 * nParams));
+    typelib_TypeDescription ** ppTempParamTypeDescr = reinterpret_cast<typelib_TypeDescription **>(pCppArgs + (2 * nParams));
 
     sal_Int32 nTempIndices   = 0;
 
