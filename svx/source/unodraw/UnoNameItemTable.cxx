@@ -222,6 +222,26 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
     return comphelper::containerToSequence(aNameSet);
 }
 
+namespace
+{
+    // We need to override operator== here and specifically bypass the assert
+    // in SfxPoolItem::operator== in order to make the FindItemSurrogate call
+    // in SvxUnoNameItemTable::hasByName safe.
+    class SampleItem : public NameOrIndex
+    {
+    public:
+        SampleItem(sal_uInt16 nWhich, const OUString& rName) : NameOrIndex(nWhich, rName) {}
+
+        bool operator==(const SfxPoolItem& rCmp) const
+        {
+            assert(dynamic_cast<const NameOrIndex*>(&rCmp) && "comparing different pool item subclasses");
+            auto const & rOther = static_cast<const NameOrIndex&>(rCmp);
+            return GetName() == rOther.GetName() && GetPalIndex() == rOther.GetPalIndex();
+        }
+    };
+
+}
+
 sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
 {
     SolarMutexGuard aGuard;
@@ -234,7 +254,7 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
     if (!mpModelPool)
         return false;
 
-    NameOrIndex aSample(mnWhich, aName);
+    SampleItem aSample(mnWhich, aName);
     for (const SfxPoolItem* pFindItem : mpModelPool->FindItemSurrogate(mnWhich, aSample))
         if (isValid(static_cast<const NameOrIndex*>(pFindItem)))
             return true;

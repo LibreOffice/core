@@ -21,6 +21,7 @@
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <libxml/xmlwriter.h>
 #include <typeinfo>
 #include <boost/property_tree/ptree.hpp>
@@ -482,6 +483,9 @@ SfxPoolItem::~SfxPoolItem()
 
 bool SfxPoolItem::operator==(const SfxPoolItem& rCmp) const
 {
+    SAL_WARN_IF(typeid(rCmp) != typeid(*this), "svl",
+                "comparing different pool item subclasses " << typeid(rCmp).name() << " && "
+                                                            << typeid(*this).name());
     assert(typeid(rCmp) == typeid(*this) && "comparing different pool item subclasses");
     (void)rCmp;
     return true;
