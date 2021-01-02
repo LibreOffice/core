@@ -16,6 +16,24 @@
       "revId": "040bb54153c14b3943b5ef4ebc965900a1f84476",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ae7599a_3ee1245b",
+        "filename": "basctl/source/basicide/docsignature.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2021-01-02T15:19:22Z",
+      "side": 1,
+      "message": "Initialized at the end of this construxtor",
+      "parentUuid": "fb96dd38_c7291f81",
+      "revId": "040bb54153c14b3943b5ef4ebc965900a1f84476",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
