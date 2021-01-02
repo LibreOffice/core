@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb96dd38_c7291f81",
+        "filename": "basctl/source/basicide/docsignature.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-01-02T14:29:06Z",
+      "side": 1,
+      "message": "pShell is now uninitialised?",
+      "revId": "040bb54153c14b3943b5ef4ebc965900a1f84476",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
