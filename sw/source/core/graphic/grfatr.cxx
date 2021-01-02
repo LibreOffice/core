@@ -40,7 +40,7 @@ sal_uInt16 SwMirrorGrf::GetValueCount() const
 
 bool SwMirrorGrf::operator==( const SfxPoolItem& rItem) const
 {
-    return SfxEnumItem::operator==(static_cast<const SfxEnumItem<MirrorGraph>&>(rItem)) &&
+    return SfxEnumItem::operator==(rItem) &&
             static_cast<const SwMirrorGrf&>(rItem).IsGrfToggle() == IsGrfToggle();
 }
 

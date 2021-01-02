@@ -129,6 +129,7 @@ SwEnvItem& SwEnvItem::operator =(const SwEnvItem& rItem)
 
 bool SwEnvItem::operator ==(const SfxPoolItem& rItem) const
 {
+    assert(SfxPoolItem::operator==(rItem));
     const SwEnvItem& rEnv = static_cast<const SwEnvItem&>( rItem);
 
     return m_aAddrText       == rEnv.m_aAddrText       &&

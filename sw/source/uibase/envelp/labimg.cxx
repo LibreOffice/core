@@ -116,6 +116,7 @@ SwLabItem& SwLabItem::operator =(const SwLabItem& rItem)
 
 bool SwLabItem::operator ==(const SfxPoolItem& rItem) const
 {
+    assert(SfxPoolItem::operator==(rItem));
     const SwLabItem& rLab = static_cast<const SwLabItem&>( rItem);
 
     return m_bAddr    == rLab.m_bAddr   &&

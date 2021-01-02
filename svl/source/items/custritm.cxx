@@ -27,7 +27,7 @@
 // virtual
 bool CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
 {
-    assert(dynamic_cast<const CntUnencodedStringItem*>( &rItem ));
+    assert(SfxPoolItem::operator==(rItem));
     return m_aValue
             == static_cast< const CntUnencodedStringItem * >(&rItem)->
                 m_aValue;
