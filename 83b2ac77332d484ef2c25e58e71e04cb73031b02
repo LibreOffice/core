@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cca57d83_a88a1008",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 37
+      },
+      "lineNbr": 4089,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-01-02T13:00:57Z",
+      "side": 0,
+      "message": "Aha, we\u0027ve lost this for document unprotect case. And https://gerrit.libreoffice.org/c/core/+/108541 would of course restore this.\n\nPlease add a note about restoring accidentally removed part to commit message of that change.",
+      "range": {
+        "startLine": 4086,
+        "startChar": 4,
+        "endLine": 4089,
+        "endChar": 0
+      },
+      "revId": "83b2ac77332d484ef2c25e58e71e04cb73031b02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
