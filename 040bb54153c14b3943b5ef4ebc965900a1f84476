@@ -52,6 +52,52 @@
       "revId": "040bb54153c14b3943b5ef4ebc965900a1f84476",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c4c67ae_c30a0c3f",
+        "filename": "basctl/source/inc/docsignature.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2021-01-02T15:59:23Z",
+      "side": 1,
+      "message": "no need for a complete SfxObjectShell type, you\u0027re only using a pointer.\n\nJust forward declare SfxObjectShell after the include part.",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 1
+      },
+      "revId": "040bb54153c14b3943b5ef4ebc965900a1f84476",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b51e2758_e8b8c2c6",
+        "filename": "basctl/source/inc/docsignature.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2021-01-02T15:59:23Z",
+      "side": 1,
+      "message": "please use member naming scheme: m_pShell\nThis would also prevent name confusion in DocumentSignature(...) implementation.",
+      "range": {
+        "startLine": 68,
+        "startChar": 24,
+        "endLine": 68,
+        "endChar": 30
+      },
+      "revId": "040bb54153c14b3943b5ef4ebc965900a1f84476",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
