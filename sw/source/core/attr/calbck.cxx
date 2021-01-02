@@ -145,32 +145,13 @@ SwModify::~SwModify()
     if ( IsInSwFntCache() )
         pSwFontCache->Delete( this );
 
-    // notify all clients that they shall remove themselves
     SwPtrMsgPoolItem aDyObject( RES_OBJECTDYING, this );
-    NotifyClients( &aDyObject, &aDyObject );
+    SwModify::SwClientNotify(*this, sw::LegacyModifyHint(&aDyObject, &aDyObject));
 
     // remove all clients that have not done themselves
     // mba: possibly a hotfix for forgotten base class calls?!
     while( m_pWriterListeners )
         static_cast<SwClient*>(m_pWriterListeners)->CheckRegistration( &aDyObject );
-}
-
-void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
-{
-    DBG_TESTSOLARMUTEX();
-    if ( IsInCache() || IsInSwFntCache() )
-    {
-        const sal_uInt16 nWhich = pOldValue ? pOldValue->Which() :
-                                        pNewValue ? pNewValue->Which() : 0;
-        CheckCaching( nWhich );
-    }
-
-    if ( !m_pWriterListeners || IsModifyLocked() )
-        return;
-
-    LockModify();
-    CallSwClientNotify( sw::LegacyModifyHint{ pOldValue, pNewValue } );
-    UnlockModify();
 }
 
 bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
@@ -350,7 +331,17 @@ sw::ClientIteratorBase* sw::ClientIteratorBase::s_pClientIters = nullptr;
 void SwModify::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
     if(auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
-        NotifyClients(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+    {
+        if(IsInCache() || IsInSwFntCache())
+            CheckCaching(pLegacyHint->GetWhich());
+
+        if(IsModifyLocked())
+            return;
+
+        LockModify();
+        CallSwClientNotify(rHint);
+        UnlockModify();
+    }
 }
 
 void SwModify::CallSwClientNotify( const SfxHint& rHint ) const

@@ -634,9 +634,9 @@ void SwTextNode::RstTextAttr(
         nMax,
         0);
 
-    NotifyClients( nullptr, &aHint );
+    CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
     SwFormatChg aNew( GetFormatColl() );
-    NotifyClients( nullptr, &aNew );
+    CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aNew));
 }
 
 static sal_Int32 clipIndexBounds(const OUString &rStr, sal_Int32 nPos)
@@ -1983,10 +1983,10 @@ void SwTextNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
 
     // notify the layout!
     SwDelText aDelHint( nPos, nTLen );
-    NotifyClients( nullptr, &aDelHint );
+    CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aDelHint));
 
     SwInsText aHint( nPos, nTLen );
-    NotifyClients( nullptr, &aHint );
+    CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
 }
 
 // the return values allows us to see if we did the heavy-
