@@ -44,7 +44,7 @@ namespace drawinglayer::primitive2d
             sal_uInt32                                  mnGraphicVersion;
 
             // local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const override;
 
         public:
             SdrOleContentPrimitive2D(
@@ -57,7 +57,7 @@ namespace drawinglayer::primitive2d
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             // The default implementation will use getDecomposition results to create the range
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual basegfx::B2DRange getB2DRange(VisitingParameters const & rParameters) const override;
 
             // data access
             const basegfx::B2DHomMatrix& getObjectTransform() const { return maObjectTransform; }

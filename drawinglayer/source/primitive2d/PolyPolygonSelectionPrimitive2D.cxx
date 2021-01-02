@@ -31,7 +31,7 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive2d
 {
 void PolyPolygonSelectionPrimitive2D::create2DDecomposition(
-    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+    Primitive2DContainer& rContainer, VisitingParameters const& /*rParameters*/) const
 {
     if (getTransparence() >= 1.0 || !getB2DPolyPolygon().count())
         return;
@@ -97,8 +97,8 @@ bool PolyPolygonSelectionPrimitive2D::operator==(const BasePrimitive2D& rPrimiti
     return false;
 }
 
-basegfx::B2DRange PolyPolygonSelectionPrimitive2D::getB2DRange(
-    const geometry::ViewInformation2D& rViewInformation) const
+basegfx::B2DRange
+PolyPolygonSelectionPrimitive2D::getB2DRange(VisitingParameters const& rParameters) const
 {
     basegfx::B2DRange aRetval(basegfx::utils::getRange(getB2DPolyPolygon()));
 
@@ -106,7 +106,8 @@ basegfx::B2DRange PolyPolygonSelectionPrimitive2D::getB2DRange(
     {
         // get the current DiscreteUnit (not sure if getDiscreteUnit() is updated here, better go safe way)
         const double fDiscreteUnit(
-            (rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0))
+            (rParameters.getViewInformation().getInverseObjectToViewTransformation()
+             * basegfx::B2DVector(1.0, 0.0))
                 .getLength());
 
         aRetval.grow(fDiscreteUnit * getDiscreteGrow());

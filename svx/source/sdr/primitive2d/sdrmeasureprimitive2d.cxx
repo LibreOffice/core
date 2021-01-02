@@ -78,7 +78,7 @@ namespace drawinglayer::primitive2d
                 aLineStartEnd);
         }
 
-        void SdrMeasurePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const
+        void SdrMeasurePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const& rParameters) const
         {
             Primitive2DContainer aRetval;
             rtl::Reference<SdrBlockTextPrimitive2D> xBlockText;
@@ -129,7 +129,7 @@ namespace drawinglayer::primitive2d
                     false,
                     false);
 
-                aTextRange = xBlockText->getB2DRange(aViewInformation);
+                aTextRange = xBlockText->getB2DRange(rParameters);
             }
 
             // prepare line attribute and result

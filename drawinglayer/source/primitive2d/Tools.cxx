@@ -28,9 +28,8 @@ using namespace css;
 namespace drawinglayer::primitive2d
 {
 // get B2DRange from a given Primitive2DReference
-basegfx::B2DRange
-getB2DRangeFromPrimitive2DReference(const Primitive2DReference& rCandidate,
-                                    const geometry::ViewInformation2D& aViewInformation)
+basegfx::B2DRange getB2DRangeFromPrimitive2DReference(const Primitive2DReference& rCandidate,
+                                                      VisitingParameters const& rParameters)
 {
     basegfx::B2DRange aRetval;
 
@@ -42,13 +41,13 @@ getB2DRangeFromPrimitive2DReference(const Primitive2DReference& rCandidate,
         if (pCandidate)
         {
             // use it if possible
-            aRetval.expand(pCandidate->getB2DRange(aViewInformation));
+            aRetval.expand(pCandidate->getB2DRange(rParameters));
         }
         else
         {
             // use UNO API call instead
             const uno::Sequence<beans::PropertyValue>& rViewParameters(
-                aViewInformation.getViewInformationSequence());
+                rParameters.getViewInformation().getViewInformationSequence());
             aRetval.expand(basegfx::unotools::b2DRectangleFromRealRectangle2D(
                 rCandidate->getRange(rViewParameters)));
         }

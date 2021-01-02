@@ -49,7 +49,7 @@ namespace drawinglayer::primitive2d
         }
 
         /// default: just return children, so all renderers not supporting group will use its content
-        void GroupPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void GroupPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & /*rParameters*/) const
         {
             getChildren(rVisitor);
         }

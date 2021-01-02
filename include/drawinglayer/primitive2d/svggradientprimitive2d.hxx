@@ -185,7 +185,7 @@ namespace drawinglayer::primitive2d
             virtual void checkPreconditions() override;
 
             /// local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const override;
 
         public:
             /// constructor
@@ -206,7 +206,7 @@ namespace drawinglayer::primitive2d
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             /// get range
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual basegfx::B2DRange getB2DRange(VisitingParameters const & rParameters) const override;
 
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
@@ -237,7 +237,7 @@ namespace drawinglayer::primitive2d
             virtual void checkPreconditions() override;
 
             /// local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const override;
 
         public:
             /// constructor
@@ -261,7 +261,7 @@ namespace drawinglayer::primitive2d
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             /// get range
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual basegfx::B2DRange getB2DRange(VisitingParameters const & rParameters) const override;
 
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
@@ -283,7 +283,7 @@ namespace drawinglayer::primitive2d
             double                      mfOffsetB;
 
             /// local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const override;
 
         public:
             /// constructor
@@ -336,7 +336,7 @@ namespace drawinglayer::primitive2d
             std::unique_ptr<VectorPair> mpTranslate;
 
             /// local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const override;
 
         public:
             /// constructor

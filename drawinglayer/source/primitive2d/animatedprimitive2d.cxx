@@ -62,12 +62,12 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        void AnimatedSwitchPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
+        void AnimatedSwitchPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & rParameters) const
         {
             if(getChildren().empty())
                 return;
 
-            const double fState(getAnimationEntry().getStateAtTime(rViewInformation.getViewTime()));
+            const double fState(getAnimationEntry().getStateAtTime(rParameters.getViewInformation().getViewTime()));
             const sal_uInt32 nLen(getChildren().size());
             sal_uInt32 nIndex(basegfx::fround(fState * static_cast<double>(nLen)));
 
@@ -98,11 +98,11 @@ namespace drawinglayer::primitive2d
         {
         }
 
-        void AnimatedBlinkPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
+        void AnimatedBlinkPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & rParameters) const
         {
             if(!getChildren().empty())
             {
-                const double fState(getAnimationEntry().getStateAtTime(rViewInformation.getViewTime()));
+                const double fState(getAnimationEntry().getStateAtTime(rParameters.getViewInformation().getViewTime()));
 
                 if(fState < 0.5)
                 {
@@ -139,13 +139,13 @@ namespace drawinglayer::primitive2d
             }
         }
 
-        void AnimatedInterpolatePrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
+        void AnimatedInterpolatePrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & rParameters) const
         {
             const sal_uInt32 nSize(maMatrixStack.size());
 
             if(nSize)
             {
-                double fState(getAnimationEntry().getStateAtTime(rViewInformation.getViewTime()));
+                double fState(getAnimationEntry().getStateAtTime(rParameters.getViewInformation().getViewTime()));
 
                 if(fState < 0.0)
                 {

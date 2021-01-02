@@ -112,7 +112,7 @@ namespace drawinglayer::primitive2d
             return fRetval;
         }
 
-        void BorderLinePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void BorderLinePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             if (getStart().equal(getEnd()) || getBorderLines().empty())
                 return;

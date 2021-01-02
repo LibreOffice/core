@@ -68,7 +68,7 @@ namespace drawinglayer::primitive2d
             css::lang::Locale                       maLocale;
 
             /// local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const override;
 
         public:
             /// constructor
@@ -105,7 +105,7 @@ namespace drawinglayer::primitive2d
             TextStrikeout                           meTextStrikeout;
 
             /// local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const override;
 
         public:
             /// constructor

@@ -55,7 +55,7 @@ OverlayStaticRectanglePrimitive::OverlayStaticRectanglePrimitive(
     , mfRotation(fRotation)
 {}
 
-void OverlayStaticRectanglePrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+void OverlayStaticRectanglePrimitive::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
 {
     Primitive2DContainer aPrimitive2DSequence;
     const double fHalfWidth = maSize.getX() * getDiscreteUnit() / 2.0;
@@ -143,7 +143,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
             mfRotation(fRotation)
         {}
 
-        void OverlayBitmapExPrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void OverlayBitmapExPrimitive::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             const Size aBitmapSize(getBitmapEx().GetSizePixel());
 
@@ -225,7 +225,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
             mfDiscreteDashLength(fDiscreteDashLength)
         {}
 
-        void OverlayCrosshairPrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void OverlayCrosshairPrimitive::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             // use the prepared Viewport information accessible using getViewport()
 
@@ -294,7 +294,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
             mfRotation(fRotation)
         {}
 
-        void OverlayRectanglePrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void OverlayRectanglePrimitive::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             Primitive2DContainer aRetval;
             basegfx::B2DRange aInnerRange(getObjectRange());
@@ -422,7 +422,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
             mfDiscreteDashLength(fDiscreteDashLength)
         {}
 
-        void OverlayHelplineStripedPrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        void OverlayHelplineStripedPrimitive::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const
         {
             // use the prepared Viewport information accessible using getViewport()
 
@@ -465,7 +465,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
 
                 default: // case HELPLINESTYLE_POINT :
                 {
-                    const double fDiscreteUnit((rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
+                    const double fDiscreteUnit((rParameters.getViewInformation().getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
                     basegfx::B2DPolygon aLineA, aLineB;
 
                     aLineA.append(basegfx::B2DPoint(getBasePosition().getX(), getBasePosition().getY() - fDiscreteUnit));
@@ -528,7 +528,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
             mfDiscreteDashLength(fDiscreteDashLength)
         {}
 
-        void OverlayRollingRectanglePrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void OverlayRollingRectanglePrimitive::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             // use the prepared Viewport information accessible using getViewport()
 

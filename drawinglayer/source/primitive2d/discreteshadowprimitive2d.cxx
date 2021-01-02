@@ -157,7 +157,7 @@ namespace drawinglayer::primitive2d
 
 namespace drawinglayer::primitive2d
 {
-        void DiscreteShadowPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void DiscreteShadowPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             Primitive2DContainer xRetval;
 
@@ -284,7 +284,7 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange DiscreteShadowPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        basegfx::B2DRange DiscreteShadowPrimitive2D::getB2DRange(VisitingParameters const & rParameters) const
         {
             if(getDiscreteShadow().getBitmapEx().IsEmpty())
             {
@@ -298,7 +298,7 @@ namespace drawinglayer::primitive2d
                 aRetval.transform(getTransform());
 
                 // extract discrete shadow size and grow
-                const basegfx::B2DVector aScale(rViewInformation.getViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+                const basegfx::B2DVector aScale(rParameters.getViewInformation().getViewTransformation() * basegfx::B2DVector(1.0, 1.0));
                 const sal_Int32 nQuarter((getDiscreteShadow().getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const double fGrowX((1.0 / aScale.getX()) * nQuarter);
                 const double fGrowY((1.0 / aScale.getY()) * nQuarter);

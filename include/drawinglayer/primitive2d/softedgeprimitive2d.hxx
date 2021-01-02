@@ -40,9 +40,8 @@ public:
 
     virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
-    virtual void
-    get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
-                       const geometry::ViewInformation2D& rViewInformation) const override;
+    virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
+                                    VisitingParameters const& rParameters) const override;
 
     virtual sal_uInt32 getPrimitive2DID() const override;
 };

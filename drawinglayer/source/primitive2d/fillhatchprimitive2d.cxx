@@ -32,7 +32,7 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        void FillHatchPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void FillHatchPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             if(getFillHatch().isDefault())
                 return;
@@ -167,13 +167,13 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange FillHatchPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        basegfx::B2DRange FillHatchPrimitive2D::getB2DRange(VisitingParameters const & /*rParameters*/) const
         {
             // return the geometrically visible area
             return getOutputRange();
         }
 
-        void FillHatchPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
+        void FillHatchPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & rParameters) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
             bool bAdaptDistance(0 != getFillHatch().getMinimalDiscreteDistance());
@@ -181,12 +181,12 @@ namespace drawinglayer::primitive2d
             if(bAdaptDistance)
             {
                 // behave view-dependent
-                DiscreteMetricDependentPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
+                DiscreteMetricDependentPrimitive2D::get2DDecomposition(rVisitor, rParameters);
             }
             else
             {
                 // behave view-independent
-                BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
+                BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rParameters);
             }
         }
 

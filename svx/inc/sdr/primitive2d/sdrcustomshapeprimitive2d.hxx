@@ -48,7 +48,7 @@ namespace drawinglayer::primitive2d
             basegfx::B2DHomMatrix maTransform;
 
             // local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const override;
 
         public:
             SdrCustomShapePrimitive2D(

@@ -769,7 +769,7 @@ namespace drawinglayer::primitive2d
 
         void SdrFrameBorderPrimitive2D::create2DDecomposition(
             Primitive2DContainer& rContainer,
-            const geometry::ViewInformation2D& /*aViewInformation*/) const
+            VisitingParameters const& /*rParameters*/) const
         {
             if(!getFrameBorders())
             {
@@ -888,12 +888,12 @@ namespace drawinglayer::primitive2d
 
         void SdrFrameBorderPrimitive2D::get2DDecomposition(
             Primitive2DDecompositionVisitor& rVisitor,
-            const geometry::ViewInformation2D& rViewInformation) const
+            VisitingParameters const& rParameters) const
         {
             if(doForceToSingleDiscreteUnit())
             {
                 // Get the current DiscreteUnit, look at X and Y and use the maximum
-                const basegfx::B2DVector aDiscreteVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+                const basegfx::B2DVector aDiscreteVector(rParameters.getViewInformation().getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
                 double fDiscreteUnit(std::min(fabs(aDiscreteVector.getX()), fabs(aDiscreteVector.getY())));
 
                 if(fDiscreteUnit <= mfMinimalNonZeroBorderWidth)
@@ -919,7 +919,7 @@ namespace drawinglayer::primitive2d
             // call parent. This will call back ::create2DDecomposition above
             // where mfMinimalNonZeroBorderWidthUsedForDecompose will be used
             // when doForceToSingleDiscreteUnit() is true
-            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rParameters);
         }
 
         // provide unique ID

@@ -31,7 +31,7 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive2d
 {
 void PolyPolygonGraphicPrimitive2D::create2DDecomposition(
-    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+    Primitive2DContainer& rContainer, VisitingParameters const& /*rParameters*/) const
 {
     if (getFillGraphic().isDefault())
         return;

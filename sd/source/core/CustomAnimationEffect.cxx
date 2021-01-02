@@ -69,6 +69,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <o3tl/safeint.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
@@ -1601,7 +1602,8 @@ void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj
 
         const drawinglayer::primitive2d::Primitive2DContainer& xPrimitives(pObj->GetViewContact().getViewIndependentPrimitive2DContainer());
         const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-        const basegfx::B2DRange aRange(xPrimitives.getB2DRange(aViewInformation2D));
+        const drawinglayer::primitive2d::VisitingParameters aParameters(aViewInformation2D);
+        const basegfx::B2DRange aRange(xPrimitives.getB2DRange(aParameters));
 
         if(!aRange.isEmpty())
         {

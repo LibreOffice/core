@@ -23,16 +23,16 @@
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
 #include <basegfx/range/b2drange.hxx>
 
-namespace drawinglayer::geometry
+namespace drawinglayer::primitive2d
 {
-class ViewInformation2D;
+class VisitingParameters;
 }
 
 namespace drawinglayer::primitive2d
 {
 /// get B2DRange from a given Primitive2DReference
 basegfx::B2DRange DRAWINGLAYERCORE_DLLPUBLIC getB2DRangeFromPrimitive2DReference(
-    const Primitive2DReference& rCandidate, const geometry::ViewInformation2D& aViewInformation);
+    const Primitive2DReference& rCandidate, VisitingParameters const& rParameters);
 
 /** compare two Primitive2DReferences for equality, including trying to get implementations (BasePrimitive2D)
     and using compare operator

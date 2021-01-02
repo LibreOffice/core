@@ -31,7 +31,7 @@
 
 namespace drawinglayer::primitive2d
 {
-        void MediaPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        void MediaPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const
         {
             Primitive2DContainer xRetval;
             xRetval.resize(1);
@@ -55,7 +55,7 @@ namespace drawinglayer::primitive2d
 
             if(getDiscreteBorder())
             {
-                const basegfx::B2DVector aDiscreteInLogic(rViewInformation.getInverseObjectToViewTransformation() *
+                const basegfx::B2DVector aDiscreteInLogic(rParameters.getViewInformation().getInverseObjectToViewTransformation() *
                     basegfx::B2DVector(static_cast<double>(getDiscreteBorder()), static_cast<double>(getDiscreteBorder())));
                 const double fDiscreteSize(aDiscreteInLogic.getX() + aDiscreteInLogic.getY());
 
@@ -120,14 +120,14 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange MediaPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        basegfx::B2DRange MediaPrimitive2D::getB2DRange(VisitingParameters const & rParameters) const
         {
             basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
             aRetval.transform(getTransform());
 
             if(getDiscreteBorder())
             {
-                const basegfx::B2DVector aDiscreteInLogic(rViewInformation.getInverseObjectToViewTransformation() *
+                const basegfx::B2DVector aDiscreteInLogic(rParameters.getViewInformation().getInverseObjectToViewTransformation() *
                     basegfx::B2DVector(static_cast<double>(getDiscreteBorder()), static_cast<double>(getDiscreteBorder())));
                 const double fDiscreteSize(aDiscreteInLogic.getX() + aDiscreteInLogic.getY());
 

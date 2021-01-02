@@ -48,8 +48,8 @@ bool PolyPolygonColorPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) 
     return false;
 }
 
-basegfx::B2DRange PolyPolygonColorPrimitive2D::getB2DRange(
-    const geometry::ViewInformation2D& /*rViewInformation*/) const
+basegfx::B2DRange
+PolyPolygonColorPrimitive2D::getB2DRange(VisitingParameters const& /*rParameters*/) const
 {
     // return range
     return basegfx::utils::getRange(getB2DPolyPolygon());

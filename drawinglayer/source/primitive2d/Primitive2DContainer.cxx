@@ -48,8 +48,7 @@ Primitive2DContainer Primitive2DContainer::maybeInvert(bool bInvert) const
 }
 
 // get B2DRange from a given Primitive2DSequence
-basegfx::B2DRange
-Primitive2DContainer::getB2DRange(const geometry::ViewInformation2D& aViewInformation) const
+basegfx::B2DRange Primitive2DContainer::getB2DRange(VisitingParameters const& rParameters) const
 {
     basegfx::B2DRange aRetval;
 
@@ -59,7 +58,7 @@ Primitive2DContainer::getB2DRange(const geometry::ViewInformation2D& aViewInform
 
         for (sal_Int32 a(0); a < nCount; a++)
         {
-            aRetval.expand(getB2DRangeFromPrimitive2DReference((*this)[a], aViewInformation));
+            aRetval.expand(getB2DRangeFromPrimitive2DReference((*this)[a], rParameters));
         }
     }
 

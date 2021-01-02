@@ -47,9 +47,8 @@ private:
     attribute::FillGraphicAttribute maFillGraphic;
 
     /// local decomposition.
-    virtual void
-    create2DDecomposition(Primitive2DContainer& rContainer,
-                          const geometry::ViewInformation2D& rViewInformation) const override;
+    virtual void create2DDecomposition(Primitive2DContainer& rContainer,
+                                       VisitingParameters const& rParameters) const override;
 
 public:
     PolyPolygonGraphicPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,

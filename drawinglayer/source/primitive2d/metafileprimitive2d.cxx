@@ -30,11 +30,11 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        void MetafilePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        void MetafilePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const
         {
             // Interpret the Metafile and get the content. There should be only one target, as in the start condition,
             // but iterating will be the right thing to do when some push/pop is not closed
-            Primitive2DContainer xRetval(wmfemfhelper::interpretMetafile(getMetaFile(), rViewInformation));
+            Primitive2DContainer xRetval(wmfemfhelper::interpretMetafile(getMetaFile(), rParameters.getViewInformation()));
 
             if(!xRetval.empty())
             {
@@ -46,7 +46,7 @@ namespace drawinglayer::primitive2d
                 // defined target range (aMtfRange)
                 if (!aMtfRange.isEmpty())
                 {
-                    const basegfx::B2DRange aContentRange(xRetval.getB2DRange(rViewInformation));
+                    const basegfx::B2DRange aContentRange(xRetval.getB2DRange(rParameters));
 
                     // also test equal since isInside gives also true for equal
                     if (!aMtfRange.equal(aContentRange) && !aMtfRange.isInside(aContentRange))
@@ -107,7 +107,7 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange MetafilePrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        basegfx::B2DRange MetafilePrimitive2D::getB2DRange(VisitingParameters const & /*rParameters*/) const
         {
             // use own implementation to quickly answer the getB2DRange question. The
             // MetafilePrimitive2D assumes that all geometry is inside of the shape. If

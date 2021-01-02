@@ -30,7 +30,7 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        void MarkerArrayPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        void MarkerArrayPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const
         {
             const std::vector< basegfx::B2DPoint >& rPositions = getPositions();
             const sal_uInt32 nMarkerCount(rPositions.size());
@@ -45,7 +45,7 @@ namespace drawinglayer::primitive2d
                 return;
 
             // get logic half pixel size
-            basegfx::B2DVector aLogicHalfSize(rViewInformation.getInverseObjectToViewTransformation() *
+            basegfx::B2DVector aLogicHalfSize(rParameters.getViewInformation().getInverseObjectToViewTransformation() *
                 basegfx::B2DVector(aBitmapSize.getWidth() - 1.0, aBitmapSize.getHeight() - 1.0));
 
             // use half size for expand
@@ -91,7 +91,7 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange MarkerArrayPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        basegfx::B2DRange MarkerArrayPrimitive2D::getB2DRange(VisitingParameters const & rParameters) const
         {
             basegfx::B2DRange aRetval;
 
@@ -111,7 +111,7 @@ namespace drawinglayer::primitive2d
                     if(aBitmapSize.Width() && aBitmapSize.Height())
                     {
                         // get logic half size
-                        basegfx::B2DVector aLogicHalfSize(rViewInformation.getInverseObjectToViewTransformation() *
+                        basegfx::B2DVector aLogicHalfSize(rParameters.getViewInformation().getInverseObjectToViewTransformation() *
                             basegfx::B2DVector(aBitmapSize.getWidth(), aBitmapSize.getHeight()));
 
                         // use half size for expand

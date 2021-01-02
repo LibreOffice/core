@@ -46,9 +46,9 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange TransformPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        basegfx::B2DRange TransformPrimitive2D::getB2DRange(VisitingParameters const & rParameters) const
         {
-            basegfx::B2DRange aRetval(getChildren().getB2DRange(rViewInformation));
+            basegfx::B2DRange aRetval(getChildren().getB2DRange(rParameters));
             aRetval.transform(getTransformation());
             return aRetval;
         }

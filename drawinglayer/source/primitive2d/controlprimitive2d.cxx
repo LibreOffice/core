@@ -75,10 +75,12 @@ namespace drawinglayer::primitive2d
             }
         }
 
-        Primitive2DReference ControlPrimitive2D::createBitmapDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DReference ControlPrimitive2D::createBitmapDecomposition(VisitingParameters const & rParameters) const
         {
             Primitive2DReference xRetval;
             const uno::Reference< awt::XControl >& rXControl(getXControl());
+
+            auto const & rViewInformation = rParameters.getViewInformation();
 
             if(rXControl.is())
             {
@@ -226,11 +228,11 @@ namespace drawinglayer::primitive2d
             return xRetval;
         }
 
-        void ControlPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        void ControlPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const
         {
             // try to create a bitmap decomposition. If that fails for some reason,
             // at least create a replacement decomposition.
-            Primitive2DReference xReference(createBitmapDecomposition(rViewInformation));
+            Primitive2DReference xReference(createBitmapDecomposition(rParameters));
 
             if(!xReference.is())
             {
@@ -310,7 +312,7 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange ControlPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        basegfx::B2DRange ControlPrimitive2D::getB2DRange(VisitingParameters const & /*rParameters*/) const
         {
             // simply derivate from unit range
             basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
@@ -318,12 +320,12 @@ namespace drawinglayer::primitive2d
             return aRetval;
         }
 
-        void ControlPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
+        void ControlPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & rParameters) const
         {
             // this primitive is view-dependent related to the scaling. If scaling has changed,
             // destroy existing decomposition. To detect change, use size of unit size in view coordinates
             ::osl::MutexGuard aGuard( m_aMutex );
-            const basegfx::B2DVector aNewScaling(rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+            const basegfx::B2DVector aNewScaling(rParameters.getViewInformation().getObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
 
             if(!getBuffered2DDecomposition().empty())
             {
@@ -341,7 +343,7 @@ namespace drawinglayer::primitive2d
             }
 
             // use parent implementation
-            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rParameters);
         }
 
         // provide unique ID

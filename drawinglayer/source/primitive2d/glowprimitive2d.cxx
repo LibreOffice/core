@@ -45,10 +45,9 @@ bool GlowPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
     return false;
 }
 
-basegfx::B2DRange
-GlowPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+basegfx::B2DRange GlowPrimitive2D::getB2DRange(VisitingParameters const& rParameters) const
 {
-    basegfx::B2DRange aRetval(GroupPrimitive2D::getB2DRange(rViewInformation));
+    basegfx::B2DRange aRetval(GroupPrimitive2D::getB2DRange(rParameters));
     // We need additional space for the glow from all sides
     aRetval.grow(getGlowRadius());
     return aRetval;

@@ -25,6 +25,7 @@
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 
 #include <cppuhelper/compbase.hxx>
+#include <drawinglayer/primitive2d/DeviceDependentServices.hxx>
 #include <com/sun/star/util/XAccounting.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -37,6 +38,19 @@ class ViewInformation2D;
 
 namespace drawinglayer::primitive2d
 {
+class DRAWINGLAYERCORE_DLLPUBLIC VisitingParameters
+{
+    const geometry::ViewInformation2D& mrViewInformation;
+
+public:
+    VisitingParameters(const geometry::ViewInformation2D& rViewInformation)
+        : mrViewInformation(rViewInformation)
+    {
+    }
+
+    const geometry::ViewInformation2D& getViewInformation() const { return mrViewInformation; }
+};
+
 typedef cppu::WeakComponentImplHelper<css::graphic::XPrimitive2D, css::util::XAccounting>
     BasePrimitive2DImplBase;
 
@@ -133,8 +147,7 @@ public:
     bool operator!=(const BasePrimitive2D& rPrimitive) const { return !operator==(rPrimitive); }
 
     /// The default implementation will use getDecomposition results to create the range
-    virtual basegfx::B2DRange
-    getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
+    virtual basegfx::B2DRange getB2DRange(VisitingParameters const& rParameters) const;
 
     /** provide unique ID for fast identifying of known primitive implementations in renderers. These use
         the defines from drawinglayer_primitivetypes2d.hxx to define unique IDs.
@@ -143,7 +156,7 @@ public:
 
     /// The default implementation will return an empty sequence
     virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
-                                    const geometry::ViewInformation2D& rViewInformation) const;
+                                    VisitingParameters const& rParameters) const;
 
     // Methods from XPrimitive2D
 

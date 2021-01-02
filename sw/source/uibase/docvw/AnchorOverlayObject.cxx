@@ -54,7 +54,7 @@ private:
 protected:
     virtual void create2DDecomposition(
         drawinglayer::primitive2d::Primitive2DContainer& rContainer,
-        const drawinglayer::geometry::ViewInformation2D& rViewInformation) const override;
+        drawinglayer::primitive2d::VisitingParameters const& rParameters) const override;
 
 public:
     AnchorPrimitive( const basegfx::B2DPolygon& rTriangle,
@@ -88,7 +88,7 @@ public:
 
 void AnchorPrimitive::create2DDecomposition(
     drawinglayer::primitive2d::Primitive2DContainer& rContainer,
-    const drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/) const
+    drawinglayer::primitive2d::VisitingParameters const& /*rParameters*/) const
 {
     if ( AnchorState::Tri == maAnchorState ||
          AnchorState::All == maAnchorState )

@@ -28,13 +28,14 @@ namespace drawinglayer::primitive2d
 {
 const double fDiscreteSize(1.1);
 
-void TextEffectPrimitive2D::create2DDecomposition(
-    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+void TextEffectPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
+                                                  VisitingParameters const& rParameters) const
 {
     // get the distance of one discrete units from target display. Use between 1.0 and sqrt(2) to
     // have good results on rotated objects, too
-    const basegfx::B2DVector aDistance(rViewInformation.getInverseObjectToViewTransformation()
-                                       * basegfx::B2DVector(fDiscreteSize, fDiscreteSize));
+    const basegfx::B2DVector aDistance(
+        rParameters.getViewInformation().getInverseObjectToViewTransformation()
+        * basegfx::B2DVector(fDiscreteSize, fDiscreteSize));
     const basegfx::B2DVector aDiagonalDistance(aDistance * (1.0 / 1.44));
 
     switch (getTextEffectStyle2D())
@@ -188,29 +189,28 @@ bool TextEffectPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
     return false;
 }
 
-basegfx::B2DRange
-TextEffectPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+basegfx::B2DRange TextEffectPrimitive2D::getB2DRange(VisitingParameters const& rParameters) const
 {
     // get range of content and grow by used fDiscreteSize. That way it is not necessary to ask
     // the whole decomposition for its ranges (which may be expensive with outline mode which
     // then will ask 9 times at nearly the same content. This may even be refined here using the
     // TextEffectStyle information, e.g. for TEXTEFFECTSTYLE2D_RELIEF the grow needs only to
     // be in two directions
-    basegfx::B2DRange aRetval(getTextContent().getB2DRange(rViewInformation));
+    basegfx::B2DRange aRetval(getTextContent().getB2DRange(rParameters));
     aRetval.grow(fDiscreteSize);
 
     return aRetval;
 }
 
-void TextEffectPrimitive2D::get2DDecomposition(
-    Primitive2DDecompositionVisitor& rVisitor,
-    const geometry::ViewInformation2D& rViewInformation) const
+void TextEffectPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
+                                               VisitingParameters const& rParameters) const
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
     if (!getBuffered2DDecomposition().empty())
     {
-        if (maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
+        if (maLastObjectToViewTransformation
+            != rParameters.getViewInformation().getObjectToViewTransformation())
         {
             // conditions of last local decomposition have changed, delete
             const_cast<TextEffectPrimitive2D*>(this)->setBuffered2DDecomposition(
@@ -222,11 +222,11 @@ void TextEffectPrimitive2D::get2DDecomposition(
     {
         // remember ViewRange and ViewTransformation
         const_cast<TextEffectPrimitive2D*>(this)->maLastObjectToViewTransformation
-            = rViewInformation.getObjectToViewTransformation();
+            = rParameters.getViewInformation().getObjectToViewTransformation();
     }
 
     // use parent implementation
-    BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
+    BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rParameters);
 }
 
 // provide unique ID

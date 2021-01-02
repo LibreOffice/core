@@ -48,7 +48,7 @@ private:
 protected:
     virtual void create2DDecomposition(
         drawinglayer::primitive2d::Primitive2DContainer& rContainer,
-        const drawinglayer::geometry::ViewInformation2D& rViewInformation) const override;
+        drawinglayer::primitive2d::VisitingParameters const& rParameters) const override;
 
 public:
     ShadowPrimitive(
@@ -73,7 +73,7 @@ public:
 
 void ShadowPrimitive::create2DDecomposition(
     drawinglayer::primitive2d::Primitive2DContainer& rContainer,
-    const drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/) const
+    drawinglayer::primitive2d::VisitingParameters const& /*rParameters*/) const
 {
     // get logic sizes in object coordinate system
     basegfx::B2DRange aRange(maBasePosition);

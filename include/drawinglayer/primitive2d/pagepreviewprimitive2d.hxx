@@ -57,7 +57,7 @@ namespace drawinglayer::primitive2d
             double                                      mfContentHeight;
 
             /// local decomposition. Implementation will just return children
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const override;
 
         public:
             /// constructor
@@ -79,7 +79,7 @@ namespace drawinglayer::primitive2d
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             /// own getB2DRange
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual basegfx::B2DRange getB2DRange(VisitingParameters const & rParameters) const override;
 
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;

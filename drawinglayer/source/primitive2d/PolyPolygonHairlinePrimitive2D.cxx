@@ -28,7 +28,7 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive2d
 {
 void PolyPolygonHairlinePrimitive2D::create2DDecomposition(
-    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+    Primitive2DContainer& rContainer, VisitingParameters const& /*rParameters*/) const
 {
     const basegfx::B2DPolyPolygon aPolyPolygon(getB2DPolyPolygon());
     const sal_uInt32 nCount(aPolyPolygon.count());
@@ -65,8 +65,8 @@ bool PolyPolygonHairlinePrimitive2D::operator==(const BasePrimitive2D& rPrimitiv
     return false;
 }
 
-basegfx::B2DRange PolyPolygonHairlinePrimitive2D::getB2DRange(
-    const geometry::ViewInformation2D& /*rViewInformation*/) const
+basegfx::B2DRange
+PolyPolygonHairlinePrimitive2D::getB2DRange(VisitingParameters const& /*rParameters*/) const
 {
     // return range
     return basegfx::utils::getRange(getB2DPolyPolygon());

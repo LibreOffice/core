@@ -27,7 +27,7 @@
 namespace drawinglayer::primitive2d
 {
 void SdrGrafPrimitive2D::create2DDecomposition(
-    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
+    Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
 {
     Primitive2DContainer aRetval;
 

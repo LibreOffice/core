@@ -56,15 +56,15 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange ShadowPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        basegfx::B2DRange ShadowPrimitive2D::getB2DRange(VisitingParameters const & rParameters) const
         {
-            basegfx::B2DRange aRetval(getChildren().getB2DRange(rViewInformation));
+            basegfx::B2DRange aRetval(getChildren().getB2DRange(rParameters));
             aRetval.grow(getShadowBlur());
             aRetval.transform(getShadowTransform());
             return aRetval;
         }
 
-        void ShadowPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void ShadowPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & /*rParameters*/) const
         {
             if(getChildren().empty())
                 return;

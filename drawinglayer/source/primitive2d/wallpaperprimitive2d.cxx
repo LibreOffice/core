@@ -31,7 +31,7 @@
 
 namespace drawinglayer::primitive2d
 {
-        void WallpaperBitmapPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void WallpaperBitmapPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             Primitive2DReference aRetval;
 
@@ -242,7 +242,7 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange WallpaperBitmapPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        basegfx::B2DRange WallpaperBitmapPrimitive2D::getB2DRange(VisitingParameters const & /*rParameters*/) const
         {
             return getLocalObjectRange();
         }

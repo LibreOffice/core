@@ -98,9 +98,8 @@ public:
         depends on the point in time, so the default implementation is
         not useful here, it needs to be handled locally
      */
-    virtual void
-    get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
-                       const geometry::ViewInformation2D& rViewInformation) const override;
+    virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
+                                    VisitingParameters const& rParameters) const override;
 };
 
 /** AnimatedBlinkPrimitive2D class
@@ -117,9 +116,8 @@ public:
                              const Primitive2DContainer& rChildren);
 
     /// create local decomposition
-    virtual void
-    get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
-                       const geometry::ViewInformation2D& rViewInformation) const override;
+    virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
+                                    VisitingParameters const& rParameters) const override;
 
     /// provide unique ID
     virtual sal_uInt32 getPrimitive2DID() const override;
@@ -145,9 +143,8 @@ public:
                                    const Primitive2DContainer& rChildren);
 
     /// create local decomposition
-    virtual void
-    get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
-                       const geometry::ViewInformation2D& rViewInformation) const override;
+    virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
+                                    VisitingParameters const& rParameters) const override;
 
     /// provide unique ID
     virtual sal_uInt32 getPrimitive2DID() const override;

@@ -49,7 +49,7 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange PointArrayPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        basegfx::B2DRange PointArrayPrimitive2D::getB2DRange(VisitingParameters const & /*rParameters*/) const
         {
             if(maB2DRange.isEmpty())
             {

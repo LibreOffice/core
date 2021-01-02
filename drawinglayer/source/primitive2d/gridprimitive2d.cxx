@@ -30,8 +30,10 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        void GridPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        void GridPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const
         {
+            auto const & rViewInformation = rParameters.getViewInformation();
+
             if(!(!rViewInformation.getViewport().isEmpty() && getWidth() > 0.0 && getHeight() > 0.0))
                 return;
 
@@ -294,25 +296,27 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange GridPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        basegfx::B2DRange GridPrimitive2D::getB2DRange(VisitingParameters const & rParameters) const
         {
             // get object's range
             basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
             aUnitRange.transform(getTransform());
 
             // intersect with visible part
-            aUnitRange.intersect(rViewInformation.getViewport());
+            aUnitRange.intersect(rParameters.getViewInformation().getViewport());
 
             return aUnitRange;
         }
 
-        void GridPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
+        void GridPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & rParameters) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
+            auto const & rViewInformation = rParameters.getViewInformation();
 
             if(!getBuffered2DDecomposition().empty())
             {
-                if(maLastViewport != rViewInformation.getViewport() || maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
+                if( maLastViewport != rViewInformation.getViewport() ||
+                    maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
                     // conditions of last local decomposition have changed, delete
                     const_cast< GridPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
@@ -327,7 +331,7 @@ namespace drawinglayer::primitive2d
             }
 
             // use parent implementation
-            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rParameters);
         }
 
         // provide unique ID

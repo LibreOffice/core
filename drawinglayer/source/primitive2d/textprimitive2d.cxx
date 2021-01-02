@@ -151,7 +151,7 @@ void TextSimplePortionPrimitive2D::getTextOutlinesAndTransformation(
 }
 
 void TextSimplePortionPrimitive2D::create2DDecomposition(
-    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+    Primitive2DContainer& rContainer, VisitingParameters const& /*rParameters*/) const
 {
     if (!getTextLength())
         return;
@@ -252,8 +252,8 @@ bool TextSimplePortionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive)
     return false;
 }
 
-basegfx::B2DRange TextSimplePortionPrimitive2D::getB2DRange(
-    const geometry::ViewInformation2D& /*rViewInformation*/) const
+basegfx::B2DRange
+TextSimplePortionPrimitive2D::getB2DRange(VisitingParameters const& /*rParameters*/) const
 {
     if (maB2DRange.isEmpty() && getTextLength())
     {

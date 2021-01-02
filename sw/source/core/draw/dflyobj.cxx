@@ -157,7 +157,7 @@ namespace drawinglayer::primitive2d
 
         protected:
             /// method which is to be used to implement the local decomposition of a 2D primitive
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const& rParameters) const override;
 
         public:
             SwVirtFlyDrawObjPrimitive(
@@ -171,10 +171,10 @@ namespace drawinglayer::primitive2d
 
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual basegfx::B2DRange getB2DRange(VisitingParameters const& rParameters) const override;
 
             // override to allow callbacks to wrap_DoPaintObject
-            virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const& rParameters) const override;
 
             // data read access
             const SwVirtFlyDrawObj& getSwVirtFlyDrawObj() const { return mrSwVirtFlyDrawObj; }
@@ -189,7 +189,7 @@ namespace drawinglayer::primitive2d
 
 namespace drawinglayer::primitive2d
 {
-        void SwVirtFlyDrawObjPrimitive::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void SwVirtFlyDrawObjPrimitive::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const& /*rParameters*/) const
         {
             if(getOuterRange().isEmpty())
                 return;
@@ -219,22 +219,22 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange SwVirtFlyDrawObjPrimitive::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        basegfx::B2DRange SwVirtFlyDrawObjPrimitive::getB2DRange(VisitingParameters const& /*rParameters*/) const
         {
             return getOuterRange();
         }
 
-        void SwVirtFlyDrawObjPrimitive::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
+        void SwVirtFlyDrawObjPrimitive::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const& rParameters) const
         {
             // This is the callback to keep the FlyFrame painting in SW alive as long as it
             // is not changed to primitives. This is the method which will be called by the processors
             // when they do not know this primitive (and they do not). Inside wrap_DoPaintObject
             // there needs to be a test that paint is only done during SW repaints (see there).
             // Using this mechanism guarantees the correct Z-Order of the VirtualObject-based FlyFrames.
-            getSwVirtFlyDrawObj().wrap_DoPaintObject(rViewInformation);
+            getSwVirtFlyDrawObj().wrap_DoPaintObject(rParameters.getViewInformation());
 
             // call parent
-            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rParameters);
         }
 
         // provide unique ID

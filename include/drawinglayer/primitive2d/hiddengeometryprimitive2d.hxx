@@ -42,10 +42,10 @@ namespace drawinglayer::primitive2d
             // despite returning an empty decomposition since it's no visualisation data,
             // range calculation is intended to use hidden geometry, so
             // the local implementation will return the children's range
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual basegfx::B2DRange getB2DRange(VisitingParameters const & rParameters) const override;
 
             /// local decomposition. Implementation will return empty Primitive2DSequence
-            virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & rParameters) const override;
 
             // provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;

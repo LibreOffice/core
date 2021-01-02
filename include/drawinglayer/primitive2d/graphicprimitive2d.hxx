@@ -55,9 +55,8 @@ private:
     GraphicAttr maGraphicAttr;
 
     /// local decomposition
-    virtual void
-    create2DDecomposition(Primitive2DContainer& rContainer,
-                          const geometry::ViewInformation2D& rViewInformation) const override;
+    virtual void create2DDecomposition(Primitive2DContainer& rContainer,
+                                       VisitingParameters const& rParameters) const override;
 
 public:
     /// constructor(s)
@@ -75,8 +74,7 @@ public:
     virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
     /// get range
-    virtual basegfx::B2DRange
-    getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+    virtual basegfx::B2DRange getB2DRange(VisitingParameters const& rParameters) const override;
 
     /// provide unique ID
     virtual sal_uInt32 getPrimitive2DID() const override;

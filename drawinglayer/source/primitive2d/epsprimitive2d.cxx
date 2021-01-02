@@ -23,7 +23,7 @@
 
 namespace drawinglayer::primitive2d
 {
-        void EpsPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void EpsPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             const GDIMetaFile& rSubstituteContent = getMetaFile();
 
@@ -65,7 +65,7 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange EpsPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        basegfx::B2DRange EpsPrimitive2D::getB2DRange(VisitingParameters const & /*rParameters*/) const
         {
             // use own implementation to quickly answer the getB2DRange question.
             basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);

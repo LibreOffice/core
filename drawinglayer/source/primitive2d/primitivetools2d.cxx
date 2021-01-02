@@ -24,12 +24,12 @@
 
 namespace drawinglayer::primitive2d
 {
-        void DiscreteMetricDependentPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
+        void DiscreteMetricDependentPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & rParameters) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
             // get the current DiscreteUnit, look at X and Y and use the maximum
-            const basegfx::B2DVector aDiscreteVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+            const basegfx::B2DVector aDiscreteVector(rParameters.getViewInformation().getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
             const double fDiscreteUnit(std::min(fabs(aDiscreteVector.getX()), fabs(aDiscreteVector.getY())));
 
             if(!getBuffered2DDecomposition().empty() && !basegfx::fTools::equal(fDiscreteUnit, getDiscreteUnit()))
@@ -45,18 +45,18 @@ namespace drawinglayer::primitive2d
             }
 
             // call base implementation
-            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rParameters);
         }
 
 
 
 
-        void ViewportDependentPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
+        void ViewportDependentPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & rParameters) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
             // get the current Viewport
-            const basegfx::B2DRange& rViewport = rViewInformation.getViewport();
+            const basegfx::B2DRange& rViewport = rParameters.getViewInformation().getViewport();
 
             if(!getBuffered2DDecomposition().empty() && !rViewport.equal(getViewport()))
             {
@@ -71,15 +71,15 @@ namespace drawinglayer::primitive2d
             }
 
             // call base implementation
-            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rParameters);
         }
 
-        void ViewTransformationDependentPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
+        void ViewTransformationDependentPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & rParameters) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
             // get the current ViewTransformation
-            const basegfx::B2DHomMatrix& rViewTransformation = rViewInformation.getViewTransformation();
+            const basegfx::B2DHomMatrix& rViewTransformation = rParameters.getViewInformation().getViewTransformation();
 
             if(!getBuffered2DDecomposition().empty() && rViewTransformation != getViewTransformation())
             {
@@ -94,15 +94,15 @@ namespace drawinglayer::primitive2d
             }
 
             // call base implementation
-            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rParameters);
         }
 
-        void ObjectAndViewTransformationDependentPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
+        void ObjectAndViewTransformationDependentPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & rParameters) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
             // get the current ViewTransformation
-            const basegfx::B2DHomMatrix& rViewTransformation = rViewInformation.getViewTransformation();
+            const basegfx::B2DHomMatrix& rViewTransformation = rParameters.getViewInformation().getViewTransformation();
 
             if(!getBuffered2DDecomposition().empty() && rViewTransformation != getViewTransformation())
             {
@@ -111,7 +111,7 @@ namespace drawinglayer::primitive2d
             }
 
             // get the current ObjectTransformation
-            const basegfx::B2DHomMatrix& rObjectTransformation = rViewInformation.getObjectTransformation();
+            const basegfx::B2DHomMatrix& rObjectTransformation = rParameters.getViewInformation().getObjectTransformation();
 
             if(!getBuffered2DDecomposition().empty() && rObjectTransformation != getObjectTransformation())
             {
@@ -127,7 +127,7 @@ namespace drawinglayer::primitive2d
             }
 
             // call base implementation
-            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rParameters);
         }
 
 } // end of namespace

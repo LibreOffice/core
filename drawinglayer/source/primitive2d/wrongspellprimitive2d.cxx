@@ -26,7 +26,7 @@
 
 namespace drawinglayer::primitive2d
 {
-        void WrongSpellPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void WrongSpellPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             // ATM this decompose is view-independent, what the original VCL-Display is not. To mimic
             // the old behaviour here if wanted it is necessary to add get2DDecomposition and implement

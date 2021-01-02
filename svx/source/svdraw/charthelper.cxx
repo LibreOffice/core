@@ -19,6 +19,8 @@
 
 #include <svx/charthelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XUpdatable2.hpp>
@@ -26,7 +28,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/graphic/PrimitiveFactory2D.hpp>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -102,8 +103,8 @@ drawinglayer::primitive2d::Primitive2DContainer ChartHelper::tryToGetChartConten
     if(!aRetval.empty())
     {
         const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-
-        rRange = aRetval.getB2DRange(aViewInformation2D);
+        const drawinglayer::primitive2d::VisitingParameters aParameter(aViewInformation2D);
+        rRange = aRetval.getB2DRange(aParameter);
     }
 
     return aRetval;

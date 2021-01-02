@@ -35,16 +35,16 @@ BufferedDecompositionPrimitive2D::BufferedDecompositionPrimitive2D()
 
 void BufferedDecompositionPrimitive2D::get2DDecomposition(
     Primitive2DDecompositionVisitor& rVisitor,
-    const geometry::ViewInformation2D& rViewInformation) const
+    VisitingParameters const& rParameters) const
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
     if (getBuffered2DDecomposition().empty())
     {
         Primitive2DContainer aNewSequence;
-        create2DDecomposition(aNewSequence, rViewInformation);
-        const_cast<BufferedDecompositionPrimitive2D*>(this)->setBuffered2DDecomposition(
-            aNewSequence);
+        create2DDecomposition(aNewSequence, rParameters);
+        auto* pMutableThis = const_cast<BufferedDecompositionPrimitive2D*>(this);
+        pMutableThis->setBuffered2DDecomposition(aNewSequence);
     }
 
     rVisitor.append(getBuffered2DDecomposition());

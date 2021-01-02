@@ -28,7 +28,7 @@
 
 namespace drawinglayer::primitive2d
 {
-        void TextLinePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void TextLinePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             if(TEXT_LINE_NONE == getTextLine())
                 return;

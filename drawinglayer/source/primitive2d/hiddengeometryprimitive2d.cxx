@@ -32,12 +32,13 @@ namespace drawinglayer::primitive2d
         {
         }
 
-        basegfx::B2DRange HiddenGeometryPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        basegfx::B2DRange HiddenGeometryPrimitive2D::getB2DRange(VisitingParameters const & rParameters) const
         {
-            return getChildren().getB2DRange(rViewInformation);
+            return getChildren().getB2DRange(rParameters);
         }
 
-        void HiddenGeometryPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& /*rVisitor*/, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void HiddenGeometryPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& /*rVisitor*/,
+                                                           VisitingParameters const & /*rParameters*/) const
         {
         }
 

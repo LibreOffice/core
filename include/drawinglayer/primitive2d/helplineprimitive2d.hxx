@@ -71,7 +71,7 @@ namespace drawinglayer::primitive2d
             basegfx::B2DRange                               maLastViewport;
 
             /// create local decomposition
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const override;
 
         public:
             /// constructor
@@ -98,7 +98,7 @@ namespace drawinglayer::primitive2d
             virtual sal_uInt32 getPrimitive2DID() const override;
 
             /// Override standard getDecomposition to be view-dependent here
-            virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & rParameters) const override;
         };
 } // end of namespace drawinglayer::primitive2d
 

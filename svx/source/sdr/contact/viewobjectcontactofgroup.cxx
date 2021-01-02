@@ -23,7 +23,8 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdobj.hxx>
-
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 
 using namespace com::sun::star;
 
@@ -67,7 +68,8 @@ namespace sdr::contact
                     {
                         // get ranges
                         const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-                        const ::basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
+                        drawinglayer::primitive2d::VisitingParameters aVisitingParameters(rViewInformation2D);
+                        const ::basegfx::B2DRange aObjectRange(xRetval.getB2DRange(aVisitingParameters));
                         const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
 
                         // check geometrical visibility

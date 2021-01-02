@@ -37,7 +37,7 @@ namespace drawinglayer::primitive2d
             attribute::SdrLineFillEffectsTextAttribute   maSdrLFSTAttribute;
 
             // local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const override;
 
         public:
             SdrEllipsePrimitive2D(
@@ -69,7 +69,7 @@ namespace drawinglayer::primitive2d
             bool                                        mbCloseUsingCenter : 1;
 
             // local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const override;
 
         public:
             SdrEllipseSegmentPrimitive2D(

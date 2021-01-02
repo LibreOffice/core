@@ -37,7 +37,7 @@ private:
     // local decomposition.
     virtual void
     create2DDecomposition(Primitive2DContainer& rContainer,
-                          const geometry::ViewInformation2D& aViewInformation) const override;
+                          VisitingParameters const & rParameters) const override;
 
 public:
     SdrGrafPrimitive2D(const ::basegfx::B2DHomMatrix& rTransform,

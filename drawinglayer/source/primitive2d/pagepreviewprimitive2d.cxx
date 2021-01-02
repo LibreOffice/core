@@ -31,7 +31,7 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-        void PagePreviewPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        void PagePreviewPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const
         {
             Primitive2DContainer aContent(getPageContent());
 
@@ -50,7 +50,7 @@ namespace drawinglayer::primitive2d
 
             // check if content overlaps with target size and needs to be embedded with a
             // clipping primitive
-            const basegfx::B2DRange aRealContentRange(aContent.getB2DRange(rViewInformation));
+            const basegfx::B2DRange aRealContentRange(aContent.getB2DRange(rParameters));
             const basegfx::B2DRange aAllowedContentRange(0.0, 0.0, getContentWidth(), getContentHeight());
 
             if(!aAllowedContentRange.isInside(aRealContentRange))
@@ -131,7 +131,7 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange PagePreviewPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation`*/) const
+        basegfx::B2DRange PagePreviewPrimitive2D::getB2DRange(VisitingParameters const & /*rParameters*/) const
         {
             // nothing is allowed to stick out of a PagePreviewPrimitive, thus we
             // can quickly deliver our range here

@@ -25,7 +25,7 @@
 
 namespace drawinglayer::primitive2d
 {
-        void DiscreteBitmapPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void DiscreteBitmapPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             // use getViewTransformation() and getObjectTransformation() from
             // ObjectAndViewTransformationDependentPrimitive2D to create a BitmapPrimitive2D

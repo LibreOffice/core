@@ -351,7 +351,7 @@ namespace drawinglayer::primitive2d
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             /// override to deliver the correct expected frame dependent of timing
-            virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & /*rParameters*/) const override;
         };
 
         }
@@ -422,13 +422,13 @@ namespace drawinglayer::primitive2d
                 && maGraphic == pCompare->maGraphic);
         }
 
-        void AnimatedGraphicPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
+        void AnimatedGraphicPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & rParameters) const
         {
             if (!isValidData())
                 return;
 
             Primitive2DReference aRetval;
-            const double fState(getAnimationEntry().getStateAtTime(rViewInformation.getViewTime()));
+            const double fState(getAnimationEntry().getStateAtTime(rParameters.getViewInformation().getViewTime()));
             const sal_uInt32 nLen(maAnimation.Count());
             sal_uInt32 nIndex(basegfx::fround(fState * static_cast<double>(nLen)));
 

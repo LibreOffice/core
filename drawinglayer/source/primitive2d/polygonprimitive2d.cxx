@@ -53,7 +53,7 @@ bool PolygonHairlinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) c
 }
 
 basegfx::B2DRange
-PolygonHairlinePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+PolygonHairlinePrimitive2D::getB2DRange(VisitingParameters const& rParameters) const
 {
     // this is a hairline, thus the line width is view-dependent. Get range of polygon
     // as base size
@@ -63,7 +63,8 @@ PolygonHairlinePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rView
     {
         // Calculate view-dependent hairline width
         const basegfx::B2DVector aDiscreteSize(
-            rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0));
+            rParameters.getViewInformation().getInverseObjectToViewTransformation()
+            * basegfx::B2DVector(1.0, 0.0));
         const double fDiscreteHalfLineWidth(aDiscreteSize.getLength() * 0.5);
 
         if (basegfx::fTools::more(fDiscreteHalfLineWidth, 0.0))
@@ -83,11 +84,12 @@ sal_uInt32 PolygonHairlinePrimitive2D::getPrimitive2DID() const
 }
 
 void PolygonMarkerPrimitive2D::create2DDecomposition(
-    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+    Primitive2DContainer& rContainer, VisitingParameters const& rParameters) const
 {
     // calculate logic DashLength
-    const basegfx::B2DVector aDashVector(rViewInformation.getInverseObjectToViewTransformation()
-                                         * basegfx::B2DVector(getDiscreteDashLength(), 0.0));
+    const basegfx::B2DVector aDashVector(
+        rParameters.getViewInformation().getInverseObjectToViewTransformation()
+        * basegfx::B2DVector(getDiscreteDashLength(), 0.0));
     const double fLogicDashLength(aDashVector.getX());
 
     if (fLogicDashLength > 0.0 && !getRGBColorA().equal(getRGBColorB()))
@@ -140,8 +142,7 @@ bool PolygonMarkerPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) con
     return false;
 }
 
-basegfx::B2DRange
-PolygonMarkerPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+basegfx::B2DRange PolygonMarkerPrimitive2D::getB2DRange(VisitingParameters const& rParameters) const
 {
     // this is a hairline, thus the line width is view-dependent. Get range of polygon
     // as base size
@@ -151,7 +152,8 @@ PolygonMarkerPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewIn
     {
         // Calculate view-dependent hairline width
         const basegfx::B2DVector aDiscreteSize(
-            rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0));
+            rParameters.getViewInformation().getInverseObjectToViewTransformation()
+            * basegfx::B2DVector(1.0, 0.0));
         const double fDiscreteHalfLineWidth(aDiscreteSize.getLength() * 0.5);
 
         if (basegfx::fTools::more(fDiscreteHalfLineWidth, 0.0))
@@ -164,12 +166,12 @@ PolygonMarkerPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewIn
     return aRetval;
 }
 
-void PolygonMarkerPrimitive2D::get2DDecomposition(
-    Primitive2DDecompositionVisitor& rVisitor,
-    const geometry::ViewInformation2D& rViewInformation) const
+void PolygonMarkerPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
+                                                  VisitingParameters const& rParameters) const
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     bool bNeedNewDecomposition(false);
+    auto const& rViewInformation = rParameters.getViewInformation();
 
     if (!getBuffered2DDecomposition().empty())
     {
@@ -196,7 +198,7 @@ void PolygonMarkerPrimitive2D::get2DDecomposition(
     }
 
     // use parent implementation
-    BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
+    BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rParameters);
 }
 
 // provide unique ID
@@ -210,7 +212,7 @@ sal_uInt32 PolygonMarkerPrimitive2D::getPrimitive2DID() const
 namespace drawinglayer::primitive2d
 {
 void PolygonStrokePrimitive2D::create2DDecomposition(
-    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+    Primitive2DContainer& rContainer, VisitingParameters const& /*rParameters*/) const
 {
     if (!getB2DPolygon().count())
         return;
@@ -312,9 +314,10 @@ bool PolygonStrokePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) con
     return false;
 }
 
-basegfx::B2DRange
-PolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+basegfx::B2DRange PolygonStrokePrimitive2D::getB2DRange(VisitingParameters const& rParameters) const
 {
+    auto const& rViewInformation = rParameters.getViewInformation();
+
     basegfx::B2DRange aRetval;
 
     if (getLineAttribute().getWidth())
@@ -347,7 +350,7 @@ PolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewIn
             attribute::StrokeAttribute aOrigStrokeAttribute = maStrokeAttribute;
             const_cast<PolygonStrokePrimitive2D*>(this)->maStrokeAttribute
                 = attribute::StrokeAttribute();
-            aRetval = BufferedDecompositionPrimitive2D::getB2DRange(rViewInformation);
+            aRetval = BufferedDecompositionPrimitive2D::getB2DRange(rParameters);
             const_cast<PolygonStrokePrimitive2D*>(this)->maStrokeAttribute = aOrigStrokeAttribute;
         }
         else
@@ -389,7 +392,7 @@ sal_uInt32 PolygonStrokePrimitive2D::getPrimitive2DID() const
 }
 
 void PolygonWavePrimitive2D::create2DDecomposition(
-    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+    Primitive2DContainer& rContainer, VisitingParameters const& /*rParameters*/) const
 {
     if (!getB2DPolygon().count())
         return;
@@ -464,11 +467,10 @@ bool PolygonWavePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
     return false;
 }
 
-basegfx::B2DRange
-PolygonWavePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+basegfx::B2DRange PolygonWavePrimitive2D::getB2DRange(VisitingParameters const& rParameters) const
 {
     // get range of parent
-    basegfx::B2DRange aRetval(PolygonStrokePrimitive2D::getB2DRange(rViewInformation));
+    basegfx::B2DRange aRetval(PolygonStrokePrimitive2D::getB2DRange(rParameters));
 
     // if WaveHeight, grow by it
     if (basegfx::fTools::more(getWaveHeight(), 0.0))
@@ -492,7 +494,7 @@ sal_uInt32 PolygonWavePrimitive2D::getPrimitive2DID() const
 }
 
 void PolygonStrokeArrowPrimitive2D::create2DDecomposition(
-    Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+    Primitive2DContainer& rContainer, VisitingParameters const& /*rParameters*/) const
 {
     // copy local polygon, it may be changed
     basegfx::B2DPolygon aLocalPolygon(getB2DPolygon());
@@ -590,18 +592,18 @@ bool PolygonStrokeArrowPrimitive2D::operator==(const BasePrimitive2D& rPrimitive
     return false;
 }
 
-basegfx::B2DRange PolygonStrokeArrowPrimitive2D::getB2DRange(
-    const geometry::ViewInformation2D& rViewInformation) const
+basegfx::B2DRange
+PolygonStrokeArrowPrimitive2D::getB2DRange(VisitingParameters const& rParameters) const
 {
     if (getStart().isActive() || getEnd().isActive())
     {
         // use decomposition when line start/end is used
-        return BufferedDecompositionPrimitive2D::getB2DRange(rViewInformation);
+        return BufferedDecompositionPrimitive2D::getB2DRange(rParameters);
     }
     else
     {
         // get range from parent
-        return PolygonStrokePrimitive2D::getB2DRange(rViewInformation);
+        return PolygonStrokePrimitive2D::getB2DRange(rParameters);
     }
 }
 

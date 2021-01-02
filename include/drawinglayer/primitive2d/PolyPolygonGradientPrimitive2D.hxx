@@ -47,9 +47,8 @@ private:
     attribute::FillGradientAttribute maFillGradient;
 
     /// local decomposition.
-    virtual void
-    create2DDecomposition(Primitive2DContainer& rContainer,
-                          const geometry::ViewInformation2D& rViewInformation) const override;
+    virtual void create2DDecomposition(Primitive2DContainer& rContainer,
+                                       VisitingParameters const& rParameters) const override;
 
 public:
     /// constructors. The one without definition range will use output range as definition range

@@ -40,16 +40,15 @@ bool SoftEdgePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
     return false;
 }
 
-void SoftEdgePrimitive2D::get2DDecomposition(
-    Primitive2DDecompositionVisitor& rVisitor,
-    const geometry::ViewInformation2D& rViewInformation) const
+void SoftEdgePrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
+                                             VisitingParameters const& rParameters) const
 {
     if (getChildren().empty())
         return;
 
     if (!mbInMaskGeneration)
     {
-        GroupPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
+        GroupPrimitive2D::get2DDecomposition(rVisitor, rParameters);
         return;
     }
 

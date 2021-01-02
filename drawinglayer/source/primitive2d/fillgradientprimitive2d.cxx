@@ -269,7 +269,7 @@ namespace drawinglayer::primitive2d
             }
         }
 
-        void FillGradientPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void FillGradientPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             // default creates overlapping fill which works with AntiAliasing and without.
             // The non-overlapping version does not create single filled polygons, but
@@ -319,7 +319,7 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange FillGradientPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        basegfx::B2DRange FillGradientPrimitive2D::getB2DRange(VisitingParameters const & /*rParameters*/) const
         {
             // return the geometrically visible area
             return getOutputRange();

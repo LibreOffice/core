@@ -45,8 +45,7 @@ bool BitmapPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
     return false;
 }
 
-basegfx::B2DRange
-BitmapPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+basegfx::B2DRange BitmapPrimitive2D::getB2DRange(VisitingParameters const& /*rParameters*/) const
 {
     basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
     aRetval.transform(maTransform);

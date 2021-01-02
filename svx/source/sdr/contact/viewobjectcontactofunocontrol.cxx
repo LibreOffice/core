@@ -56,6 +56,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 
+
 /*
 
 Form controls (more precise: UNO Controls) in the drawing layer are ... prone to breakage, since they have some
@@ -790,19 +791,15 @@ namespace sdr::contact {
     protected:
         virtual void
             get2DDecomposition(
-                ::drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor,
-                const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
-            ) const override;
+                drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor,
+                drawinglayer::primitive2d::VisitingParameters const & rParameters) const override;
 
         virtual void create2DDecomposition(
-                ::drawinglayer::primitive2d::Primitive2DContainer& rContainer,
-                const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
-            ) const override;
+                drawinglayer::primitive2d::Primitive2DContainer& rContainer,
+                drawinglayer::primitive2d::VisitingParameters const & rParameters) const override;
 
         virtual ::basegfx::B2DRange
-            getB2DRange(
-                const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
-            ) const override;
+            getB2DRange(drawinglayer::primitive2d::VisitingParameters const & rParameters) const override;
 
     public:
         explicit LazyControlCreationPrimitive2D( const ::rtl::Reference< ViewObjectContactOfUnoControl_Impl >& _pVOCImpl )
@@ -1508,7 +1505,7 @@ namespace sdr::contact {
     }
 
 
-    ::basegfx::B2DRange LazyControlCreationPrimitive2D::getB2DRange( const ::drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/ ) const
+    ::basegfx::B2DRange LazyControlCreationPrimitive2D::getB2DRange(drawinglayer::primitive2d::VisitingParameters const& /*rParameters*/) const
     {
         ::basegfx::B2DRange aRange( 0.0, 0.0, 1.0, 1.0 );
         aRange.transform( m_aTransformation );
@@ -1516,21 +1513,25 @@ namespace sdr::contact {
     }
 
 
-    void LazyControlCreationPrimitive2D::get2DDecomposition( ::drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor, const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
+    void LazyControlCreationPrimitive2D::get2DDecomposition(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor,
+                                                            drawinglayer::primitive2d::VisitingParameters const& rParameters) const
     {
     #if OSL_DEBUG_LEVEL > 0
         ::basegfx::B2DVector aScale, aTranslate;
         double fRotate, fShearX;
-        _rViewInformation.getObjectToViewTransformation().decompose( aScale, aTranslate, fRotate, fShearX );
+        rParameters.getViewInformation().getObjectToViewTransformation().decompose( aScale, aTranslate, fRotate, fShearX );
     #endif
         if ( m_pVOCImpl->hasControl() )
-            impl_positionAndZoomControl( _rViewInformation );
-        BufferedDecompositionPrimitive2D::get2DDecomposition( rVisitor, _rViewInformation );
+            impl_positionAndZoomControl(rParameters.getViewInformation());
+        BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rParameters);
     }
 
 
-    void LazyControlCreationPrimitive2D::create2DDecomposition( ::drawinglayer::primitive2d::Primitive2DContainer& rContainer, const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
+    void LazyControlCreationPrimitive2D::create2DDecomposition(drawinglayer::primitive2d::Primitive2DContainer& rContainer,
+                                                               drawinglayer::primitive2d::VisitingParameters const& rParameters) const
     {
+        auto const & _rViewInformation = rParameters.getViewInformation();
+
     #if OSL_DEBUG_LEVEL > 0
         ::basegfx::B2DVector aScale, aTranslate;
         double fRotate, fShearX;

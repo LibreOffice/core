@@ -57,7 +57,7 @@ namespace drawinglayer::primitive2d
         }
 
 
-        void TextCharacterStrikeoutPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void TextCharacterStrikeoutPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             // strikeout with character
             const OUString aSingleCharString(getStrikeoutChar());
@@ -135,7 +135,7 @@ namespace drawinglayer::primitive2d
             return PRIMITIVE2D_ID_TEXTCHARACTERSTRIKEOUTPRIMITIVE2D;
         }
 
-        void TextGeometryStrikeoutPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void TextGeometryStrikeoutPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             OSL_ENSURE(TEXT_STRIKEOUT_SLASH != getTextStrikeout() && TEXT_STRIKEOUT_X != getTextStrikeout(),
                 "Wrong TEXT_STRIKEOUT type; a TextCharacterStrikeoutPrimitive2D should be used (!)");

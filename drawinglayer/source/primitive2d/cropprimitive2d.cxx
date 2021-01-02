@@ -63,7 +63,7 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        void CropPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void CropPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & /*rParameters*/) const
         {
             if(getChildren().empty())
                 return;

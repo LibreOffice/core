@@ -42,7 +42,7 @@ namespace drawinglayer::primitive2d
             bool                                        mbForceFillForHitTest : 1;
 
             // local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
+            virtual void create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const override;
 
         public:
             SdrRectanglePrimitive2D(

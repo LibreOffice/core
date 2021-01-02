@@ -211,14 +211,15 @@ namespace drawinglayer::primitive2d
             }
         }
 
-        void ScenePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        void ScenePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const
         {
+            auto const & rViewInformation = rParameters.getViewInformation();
             // create 2D shadows from contained 3D primitives. This creates the shadow primitives on demand and tells if
             // there are some or not. Do this at start, the shadow might still be visible even when the scene is not
             if(impGetShadow3D())
             {
                 // test visibility
-                const basegfx::B2DRange aShadow2DRange(maShadowPrimitives.getB2DRange(rViewInformation));
+                const basegfx::B2DRange aShadow2DRange(maShadowPrimitives.getB2DRange(rParameters));
                 const basegfx::B2DRange aViewRange(
                     rViewInformation.getViewport());
 
@@ -234,7 +235,7 @@ namespace drawinglayer::primitive2d
             basegfx::B2DRange aVisibleDiscreteRange;
             basegfx::B2DRange aUnitVisibleRange;
 
-            calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
+            calculateDiscreteSizes(rParameters.getViewInformation(), aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
 
             if(aVisibleDiscreteRange.isEmpty())
                 return;
@@ -601,23 +602,23 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange ScenePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        basegfx::B2DRange ScenePrimitive2D::getB2DRange(VisitingParameters const & rParameters) const
         {
             // transform unit range to discrete coordinate range
             basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
-            aRetval.transform(rViewInformation.getObjectToViewTransformation() * getObjectTransformation());
+            aRetval.transform(rParameters.getViewInformation().getObjectToViewTransformation() * getObjectTransformation());
 
             // force to discrete expanded bounds (it grows, so expanding works perfectly well)
             aRetval.expand(basegfx::B2DTuple(floor(aRetval.getMinX()), floor(aRetval.getMinY())));
             aRetval.expand(basegfx::B2DTuple(ceil(aRetval.getMaxX()), ceil(aRetval.getMaxY())));
 
             // transform back from discrete (view) to world coordinates
-            aRetval.transform(rViewInformation.getInverseObjectToViewTransformation());
+            aRetval.transform(rParameters.getViewInformation().getInverseObjectToViewTransformation());
 
             // expand by evtl. existing shadow primitives
             if(impGetShadow3D())
             {
-                const basegfx::B2DRange aShadow2DRange(maShadowPrimitives.getB2DRange(rViewInformation));
+                const basegfx::B2DRange aShadow2DRange(maShadowPrimitives.getB2DRange(rParameters));
 
                 if(!aShadow2DRange.isEmpty())
                 {
@@ -628,7 +629,7 @@ namespace drawinglayer::primitive2d
             return aRetval;
         }
 
-        void ScenePrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
+        void ScenePrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & rParameters) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -641,7 +642,7 @@ namespace drawinglayer::primitive2d
             if(!getBuffered2DDecomposition().empty())
             {
                 basegfx::B2DRange aVisibleDiscreteRange;
-                calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
+                calculateDiscreteSizes(rParameters.getViewInformation(), aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
                 bDiscreteSizesAreCalculated = true;
 
                 // needs to be painted when the new part is not part of the last
@@ -674,7 +675,7 @@ namespace drawinglayer::primitive2d
                 if(!bDiscreteSizesAreCalculated)
                 {
                     basegfx::B2DRange aVisibleDiscreteRange;
-                    calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
+                    calculateDiscreteSizes(rParameters.getViewInformation(), aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
                 }
 
                 // remember last used NewDiscreteSize and NewUnitVisiblePart
@@ -685,7 +686,7 @@ namespace drawinglayer::primitive2d
             }
 
             // use parent implementation
-            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rParameters);
         }
 
         // provide unique ID

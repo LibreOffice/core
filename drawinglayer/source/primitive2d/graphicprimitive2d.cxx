@@ -31,7 +31,7 @@
 namespace drawinglayer::primitive2d
 {
 void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
-                                               const geometry::ViewInformation2D&) const
+                                               VisitingParameters const& /*rParameters*/) const
 {
     if (0 == getGraphicAttr().GetAlpha())
     {
@@ -204,8 +204,7 @@ bool GraphicPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
     return false;
 }
 
-basegfx::B2DRange
-GraphicPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+basegfx::B2DRange GraphicPrimitive2D::getB2DRange(VisitingParameters const& /*rParameters*/) const
 {
     basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
     aRetval.transform(getTransform());

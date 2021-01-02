@@ -149,7 +149,7 @@ namespace drawinglayer::primitive2d
             // TODO: Handle Font Emphasis Above/Below
         }
 
-        void TextDecoratedPortionPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void TextDecoratedPortionPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             if(getWordLineMode())
             {
@@ -368,7 +368,7 @@ namespace drawinglayer::primitive2d
         // #i96475#
         // Added missing implementation. Decorations may (will) stick out of the text's
         // inking area, so add them if needed
-        basegfx::B2DRange TextDecoratedPortionPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        basegfx::B2DRange TextDecoratedPortionPrimitive2D::getB2DRange(VisitingParameters const & rParameters) const
         {
             // check if this needs to be a TextDecoratedPortionPrimitive2D or
             // if a TextSimplePortionPrimitive2D would be sufficient
@@ -382,12 +382,12 @@ namespace drawinglayer::primitive2d
                 // decoration is used, fallback to BufferedDecompositionPrimitive2D::getB2DRange which uses
                 // the own local decomposition for computation and thus creates all necessary
                 // geometric objects
-                return BufferedDecompositionPrimitive2D::getB2DRange(rViewInformation);
+                return BufferedDecompositionPrimitive2D::getB2DRange(rParameters);
             }
             else
             {
                 // no relevant decoration used, fallback to TextSimplePortionPrimitive2D::getB2DRange
-                return TextSimplePortionPrimitive2D::getB2DRange(rViewInformation);
+                return TextSimplePortionPrimitive2D::getB2DRange(rParameters);
             }
         }
 

@@ -98,7 +98,7 @@ namespace drawinglayer::primitive2d
             // local decomposition.
             virtual void create2DDecomposition(
                 Primitive2DContainer& rContainer,
-                const geometry::ViewInformation2D& aViewInformation) const override;
+                VisitingParameters const & rParameters) const override;
 
         public:
             SdrFrameBorderPrimitive2D(
@@ -111,7 +111,7 @@ namespace drawinglayer::primitive2d
             // override to get view-dependent
             virtual void get2DDecomposition(
                 Primitive2DDecompositionVisitor& rVisitor,
-                const geometry::ViewInformation2D& rViewInformation) const override;
+                VisitingParameters const & rParameters) const override;
 
             // data access
             const std::shared_ptr<SdrFrameBorderDataVector>& getFrameBorders() const { return maFrameBorders; }

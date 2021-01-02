@@ -61,14 +61,12 @@ private:
     void createXControl();
 
     /// single local decompositions, used from create2DDecomposition()
-    Primitive2DReference
-    createBitmapDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+    Primitive2DReference createBitmapDecomposition(VisitingParameters const& rParameters) const;
     Primitive2DReference createPlaceholderDecomposition() const;
 
     /// local decomposition
-    virtual void
-    create2DDecomposition(Primitive2DContainer& rContainer,
-                          const geometry::ViewInformation2D& rViewInformation) const override;
+    virtual void create2DDecomposition(Primitive2DContainer& rContainer,
+                                       VisitingParameters const& rParameters) const override;
 
 public:
     /// constructor
@@ -100,16 +98,14 @@ public:
     virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
     /// get range
-    virtual basegfx::B2DRange
-    getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+    virtual basegfx::B2DRange getB2DRange(VisitingParameters const& rParameters) const override;
 
     /// provide unique ID
     virtual sal_uInt32 getPrimitive2DID() const override;
 
     /// Override standard getDecomposition to be view-dependent here
-    virtual void
-    get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
-                       const geometry::ViewInformation2D& rViewInformation) const override;
+    virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
+                                    VisitingParameters const& rParameters) const override;
 };
 
 } // end of namespace drawinglayer::primitive2d

@@ -465,7 +465,7 @@ namespace drawinglayer::primitive2d
             }
         }
 
-        void SvgLinearGradientPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void SvgLinearGradientPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             if(!getPreconditionsChecked())
             {
@@ -591,7 +591,7 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange SvgLinearGradientPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        basegfx::B2DRange SvgLinearGradientPrimitive2D::getB2DRange(VisitingParameters const & /*rParameters*/) const
         {
             // return ObjectRange
             return getPolyPolygon().getB2DRange();
@@ -688,7 +688,7 @@ namespace drawinglayer::primitive2d
             }
         }
 
-        void SvgRadialGradientPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void SvgRadialGradientPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             if(!getPreconditionsChecked())
             {
@@ -842,7 +842,7 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange SvgRadialGradientPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        basegfx::B2DRange SvgRadialGradientPrimitive2D::getB2DRange(VisitingParameters const & /*rParameters*/) const
         {
             // return ObjectRange
             return getPolyPolygon().getB2DRange();
@@ -861,7 +861,7 @@ namespace drawinglayer::primitive2d
 
 namespace drawinglayer::primitive2d
 {
-        void SvgLinearAtomPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void SvgLinearAtomPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             const double fDelta(getOffsetB() - getOffsetA());
 
@@ -949,7 +949,7 @@ namespace drawinglayer::primitive2d
 
 namespace drawinglayer::primitive2d
 {
-        void SvgRadialAtomPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        void SvgRadialAtomPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & /*rParameters*/) const
         {
             const double fDeltaScale(getScaleB() - getScaleA());
 

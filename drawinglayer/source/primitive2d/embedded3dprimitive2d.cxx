@@ -60,10 +60,10 @@ namespace drawinglayer::primitive2d
             return !maShadowPrimitives.empty();
         }
 
-        void Embedded3DPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
+        void Embedded3DPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, VisitingParameters const & rParameters) const
         {
             // use info to create a yellow 2d rectangle, similar to empty 3d scenes and/or groups
-            const basegfx::B2DRange aLocal2DRange(getB2DRange(rViewInformation));
+            const basegfx::B2DRange aLocal2DRange(getB2DRange(rParameters));
             const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aLocal2DRange));
             const basegfx::BColor aYellow(1.0, 1.0, 0.0);
             rContainer.push_back(new PolygonHairlinePrimitive2D(aOutline, aYellow));
@@ -107,7 +107,7 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange Embedded3DPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        basegfx::B2DRange Embedded3DPrimitive2D::getB2DRange(VisitingParameters const & rParameters) const
         {
             if(maB2DRange.isEmpty())
             {
@@ -125,7 +125,7 @@ namespace drawinglayer::primitive2d
                 // taken into account
                 if(impGetShadow3D())
                 {
-                    const basegfx::B2DRange aShadow2DRange(maShadowPrimitives.getB2DRange(rViewInformation));
+                    const basegfx::B2DRange aShadow2DRange(maShadowPrimitives.getB2DRange(rParameters));
 
                     if(!aShadow2DRange.isEmpty())
                     {

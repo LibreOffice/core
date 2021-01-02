@@ -52,14 +52,14 @@ namespace drawinglayer::primitive2d
             return false;
         }
 
-        basegfx::B2DRange UnifiedTransparencePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        basegfx::B2DRange UnifiedTransparencePrimitive2D::getB2DRange(VisitingParameters const & rParameters) const
         {
             // do not use the fallback to decomposition here since for a correct BoundRect we also
             // need invisible (1.0 == getTransparence()) geometry; these would be deleted in the decomposition
-            return getChildren().getB2DRange( rViewInformation);
+            return getChildren().getB2DRange(rParameters);
         }
 
-        void UnifiedTransparencePrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
+        void UnifiedTransparencePrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, VisitingParameters const & rParameters) const
         {
             if(0.0 == getTransparence())
             {
@@ -84,7 +84,7 @@ namespace drawinglayer::primitive2d
 
                 // I will take the last one here. The small overhead of two primitives will only be
                 // used when UnifiedTransparencePrimitive2D is not handled directly.
-                const basegfx::B2DRange aPolygonRange(getChildren().getB2DRange(rViewInformation));
+                const basegfx::B2DRange aPolygonRange(getChildren().getB2DRange(rParameters.getViewInformation()));
                 const basegfx::B2DPolygon aPolygon(basegfx::utils::createPolygonFromRect(aPolygonRange));
                 const basegfx::BColor aGray(getTransparence(), getTransparence(), getTransparence());
                 Primitive2DContainer aTransparenceContent(2);
