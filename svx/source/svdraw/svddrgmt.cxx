@@ -3136,59 +3136,59 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
     if (bValid)
     {
         double a=0; // slope of the radius
-        Degree100 nPntWink(0);
+        Degree100 nPntAngle(0);
 
         if (bVertical)
         {
             a=static_cast<double>(dy1)/static_cast<double>(dx1); // slope of the radius
             nNewRad=(static_cast<tools::Long>(dy1*a)+dx1) /2;
             aNewCenter.AdjustX(nNewRad );
-            nPntWink=GetAngle(aPnt-aNewCenter);
+            nPntAngle=GetAngle(aPnt-aNewCenter);
         }
         else
         {
             a=static_cast<double>(dx1)/static_cast<double>(dy1); // slope of the radius
             nNewRad=(static_cast<tools::Long>(dx1*a)+dy1) /2;
             aNewCenter.AdjustY(nNewRad );
-            nPntWink=GetAngle(aPnt-aNewCenter)-9000_deg100;
+            nPntAngle=GetAngle(aPnt-aNewCenter)-9000_deg100;
         }
 
         if (!bAtCenter)
         {
             if (nNewRad<0)
             {
-                if (bRgt) nPntWink += 18000_deg100;
-                if (bLft) nPntWink = 18000_deg100 - nPntWink;
-                if (bLwr) nPntWink =- nPntWink;
+                if (bRgt) nPntAngle += 18000_deg100;
+                if (bLft) nPntAngle = 18000_deg100 - nPntAngle;
+                if (bLwr) nPntAngle =- nPntAngle;
             }
             else
             {
-                if (bRgt) nPntWink = -nPntWink;
-                if (bUpr) nPntWink = 18000_deg100 - nPntWink;
-                if (bLwr) nPntWink += 18000_deg100;
+                if (bRgt) nPntAngle = -nPntAngle;
+                if (bUpr) nPntAngle = 18000_deg100 - nPntAngle;
+                if (bLwr) nPntAngle += 18000_deg100;
             }
 
-            nPntWink=NormAngle36000(nPntWink);
+            nPntAngle=NormAngle36000(nPntAngle);
         }
         else
         {
-            if (nNewRad<0) nPntWink += 18000_deg100;
-            if (bVertical) nPntWink = 18000_deg100 - nPntWink;
-            nPntWink = NormAngle18000(nPntWink);
-            nPntWink = abs(nPntWink);
+            if (nNewRad<0) nPntAngle += 18000_deg100;
+            if (bVertical) nPntAngle = 18000_deg100 - nPntAngle;
+            nPntAngle = NormAngle18000(nPntAngle);
+            nPntAngle = abs(nPntAngle);
         }
 
         double nCircumference = 2 * std::abs(nNewRad) * M_PI;
 
         if (bResize)
         {
-            tools::Long nMul=static_cast<tools::Long>(nCircumference * NormAngle36000(nPntWink).get() / 36000.0);
+            tools::Long nMul=static_cast<tools::Long>(nCircumference * NormAngle36000(nPntAngle).get() / 36000.0);
 
             if (bAtCenter)
                 nMul*=2;
 
             aNewFract=Fraction(nMul,nMarkSize);
-            nAngle=nPntWink;
+            nAngle=nPntAngle;
         }
         else
         {

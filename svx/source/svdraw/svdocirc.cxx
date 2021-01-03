@@ -141,13 +141,13 @@ SdrCircObj::SdrCircObj(
     SdrModel& rSdrModel,
     SdrCircKind eNewKind,
     const tools::Rectangle& rRect,
-    Degree100 nNewStartWink,
-    Degree100 nNewEndWink)
+    Degree100 nNewStartAngle,
+    Degree100 nNewEndAngle)
 :   SdrRectObj(rSdrModel, rRect)
 {
-    Degree100 nAngleDif=nNewEndWink-nNewStartWink;
-    nStartAngle=NormAngle36000(nNewStartWink);
-    nEndAngle=NormAngle36000(nNewEndWink);
+    Degree100 nAngleDif=nNewEndAngle-nNewStartAngle;
+    nStartAngle=NormAngle36000(nNewStartAngle);
+    nEndAngle=NormAngle36000(nNewEndAngle);
     if (nAngleDif==36000_deg100) nEndAngle+=nAngleDif; // full circle
     meCircleKind=eNewKind;
     bClosedObj=eNewKind!=SdrCircKind::Arc;
