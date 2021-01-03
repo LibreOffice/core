@@ -46,98 +46,109 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment1">
+          <object class="GtkBox" id="box1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_top">6</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
             <child>
-              <object class="GtkBox" id="box1">
+              <object class="GtkScrolledWindow" id="checklbcontainerscroll">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">12</property>
+                <property name="shadow_type">in</property>
                 <child>
-                  <object class="GtkScrolledWindow" id="checklbcontainerscroll">
+                  <object class="GtkTreeView" id="checklbcontainer">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="shadow_type">in</property>
+                    <property name="model">liststore1</property>
+                    <property name="search_column">0</property>
+                    <property name="show_expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+                    </child>
                     <child>
-                      <object class="GtkTreeView" id="checklbcontainer">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="model">liststore1</property>
-                        <property name="search_column">0</property>
-                        <property name="show_expanders">False</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                        <property name="resizable">True</property>
+                        <property name="spacing">6</property>
+                        <property name="title" translatable="yes" context="optfltrembedpage|column1" comments="A column title, short for Load. This string is repeated as a prefix to an explanatory note under the widget">[L]</property>
+                        <property name="alignment">0.5</property>
+                        <child>
+                          <object class="GtkCellRendererToggle" id="cellrenderer5"/>
+                          <attributes>
+                            <attribute name="visible">5</attribute>
+                            <attribute name="active">0</attribute>
+                          </attributes>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn4">
-                            <property name="resizable">True</property>
-                            <property name="spacing">6</property>
-                            <property name="title" translatable="yes" context="optfltrembedpage|column1" comments="A column title, short for Load. This string is repeated as a prefix to an explanatory note under the widget">[L]</property>
-                            <property name="alignment">0.5</property>
-                            <child>
-                              <object class="GtkCellRendererToggle" id="cellrenderer5"/>
-                              <attributes>
-                                <attribute name="visible">5</attribute>
-                                <attribute name="active">0</attribute>
-                              </attributes>
-                            </child>
-                            <child>
-                              <object class="GtkCellRendererToggle" id="cellrenderer8"/>
-                              <attributes>
-                                <attribute name="visible">6</attribute>
-                                <attribute name="active">1</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn7">
-                            <property name="resizable">True</property>
-                            <property name="spacing">6</property>
-                            <property name="title" translatable="yes" context="optfltrembedpage|column2" comments="A column title, short for Save. This string is repeated as a prefix to an explanatory note under the widget">[S]</property>
-                            <property name="alignment">0.5</property>
-                            <child>
-                              <object class="GtkCellRendererToggle" id="cellrenderer7"/>
-                              <attributes>
-                                <attribute name="visible">7</attribute>
-                                <attribute name="active">2</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn5">
-                            <property name="resizable">True</property>
-                            <property name="spacing">6</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="cellrenderer4"/>
-                              <attributes>
-                                <attribute name="text">3</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="checklbcontainer-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|checklbcontainer">The [L] and [S] checkbox displays the entries for the pair of OLE objects that can be converted when loading into %PRODUCTNAME [L] and/or when saving into a Microsoft format [S]. </property>
-                          </object>
+                          <object class="GtkCellRendererToggle" id="cellrenderer8"/>
+                          <attributes>
+                            <attribute name="visible">6</attribute>
+                            <attribute name="active">1</attribute>
+                          </attributes>
                         </child>
                       </object>
                     </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn7">
+                        <property name="resizable">True</property>
+                        <property name="spacing">6</property>
+                        <property name="title" translatable="yes" context="optfltrembedpage|column2" comments="A column title, short for Save. This string is repeated as a prefix to an explanatory note under the widget">[S]</property>
+                        <property name="alignment">0.5</property>
+                        <child>
+                          <object class="GtkCellRendererToggle" id="cellrenderer7"/>
+                          <attributes>
+                            <attribute name="visible">7</attribute>
+                            <attribute name="active">2</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn5">
+                        <property name="resizable">True</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderer4"/>
+                          <attributes>
+                            <attribute name="text">3</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checklbcontainer-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|checklbcontainer">The [L] and [S] checkbox displays the entries for the pair of OLE objects that can be converted when loading into %PRODUCTNAME [L] and/or when saving into a Microsoft format [S]. </property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkLabel" id="label2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="optfltrembedpage|label2" comments="The [L] here is repeated as the column title for the &quot;Load&quot; column of this options page">[L]: Load and convert the object</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -146,36 +157,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">12</property>
-                    <child>
-                      <object class="GtkLabel" id="label2">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="optfltrembedpage|label2" comments="The [L] here is repeated as the column title for the &quot;Load&quot; column of this options page">[L]: Load and convert the object</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label3">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="optfltrembedpage|label3" comments="The [S] here is repeated as the column title for the &quot;Save&quot; column of this options page">[S]: Convert and save the object</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
+                    <property name="label" translatable="yes" context="optfltrembedpage|label3" comments="The [S] here is repeated as the column title for the &quot;Save&quot; column of this options page">[S]: Convert and save the object</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -184,6 +170,11 @@
                   </packing>
                 </child>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </object>
         </child>
@@ -211,21 +202,44 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment2">
+          <object class="GtkBox" id="box2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="spacing">18</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
             <child>
-              <object class="GtkBox" id="box2">
+              <object class="GtkLabel" id="label5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">18</property>
+                <property name="label" translatable="yes" context="optfltrembedpage|label5">Export as:</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButtonBox" id="buttonbox1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="layout_style">start</property>
                 <child>
-                  <object class="GtkLabel" id="label5">
+                  <object class="GtkRadioButton" id="highlighting">
+                    <property name="label" translatable="yes" context="optfltrembedpage|highlighting">Highlighting</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="optfltrembedpage|label5">Export as:</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="highlighting-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|highlighting">Microsoft Office has two character attributes similar to %PRODUCTNAME character background. Select the appropriate attribute (highlighting or shading) which you would like to use during export to Microsoft Office file formats.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -234,53 +248,19 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButtonBox" id="buttonbox1">
+                  <object class="GtkRadioButton" id="shading">
+                    <property name="label" translatable="yes" context="optfltrembedpage|shading">Shading</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="layout_style">start</property>
-                    <child>
-                      <object class="GtkRadioButton" id="highlighting">
-                        <property name="label" translatable="yes" context="optfltrembedpage|highlighting">Highlighting</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="highlighting-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|highlighting">Microsoft Office has two character attributes similar to %PRODUCTNAME character background. Select the appropriate attribute (highlighting or shading) which you would like to use during export to Microsoft Office file formats.</property>
-                          </object>
-                        </child>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">highlighting</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="shading-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|shading">Microsoft Office has two character attributes similar to %PRODUCTNAME character background. Select the appropriate attribute (highlighting or shading) which you would like to use during export to Microsoft Office file formats.</property>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="shading">
-                        <property name="label" translatable="yes" context="optfltrembedpage|shading">Shading</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">highlighting</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="shading-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|shading">Microsoft Office has two character attributes similar to %PRODUCTNAME character background. Select the appropriate attribute (highlighting or shading) which you would like to use during export to Microsoft Office file formats.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -290,6 +270,11 @@
                   </packing>
                 </child>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </object>
         </child>
@@ -316,39 +301,33 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <object class="GtkAlignment" id="alignment3">
+          <object class="GtkButtonBox" id="buttonbox2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="layout_style">start</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
             <child>
-              <object class="GtkButtonBox" id="buttonbox2">
+              <object class="GtkCheckButton" id="mso_lockfile">
+                <property name="label" translatable="yes" context="optfltrembedpage|mso_lockfile">Create MSO lock file</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="layout_style">start</property>
-                <child>
-                  <object class="GtkCheckButton" id="mso_lockfile">
-                    <property name="label" translatable="yes" context="optfltrembedpage|mso_lockfile">Create MSO lock file</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="mso_lockfile-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|mso_lockfile">Mark this checkbox to generate a Microsoft Office lock file in addition to %PRODUCTNAME own lock file.</property>
-                      </object>
-                    </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_underline">True</property>
+                <property name="xalign">0</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="mso_lockfile-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|mso_lockfile">Mark this checkbox to generate a Microsoft Office lock file in addition to %PRODUCTNAME own lock file.</property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
             </child>
           </object>
         </child>
