@@ -29,6 +29,7 @@
 
 #include <drawmode.hxx>
 #include <font/ImplDeviceFontList.hxx>
+#include <font/ImplDeviceFontSizeList.hxx>
 #include <outdev.h>
 #include <salgdi.hxx>
 

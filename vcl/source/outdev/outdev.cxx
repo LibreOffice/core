@@ -33,6 +33,7 @@
 #include <outdev.h>
 #include <window.h>
 #include <font/ImplDeviceFontList.hxx>
+#include <font/ImplDeviceFontSizeList.hxx>
 #include <salgdi.hxx>
 
 #include <com/sun/star/awt/DeviceCapability.hpp>

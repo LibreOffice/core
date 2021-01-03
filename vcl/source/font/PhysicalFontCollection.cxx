@@ -25,6 +25,7 @@
 
 #include <outdev.h>
 #include <font/ImplDeviceFontList.hxx>
+#include <font/ImplDeviceFontSizeList.hxx>
 #include <font/ImplGlyphFallbackFontSubstitution.hxx>
 #include <font/ImplPreMatchFontSubstitution.hxx>
 #include <PhysicalFontCollection.hxx>

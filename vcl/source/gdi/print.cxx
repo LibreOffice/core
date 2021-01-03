@@ -38,6 +38,7 @@
 #include <salvd.hxx>
 #include <svdata.hxx>
 #include <font/ImplDeviceFontList.hxx>
+#include <font/ImplDeviceFontSizeList.hxx>
 #include <PhysicalFontCollection.hxx>
 
 #include <print.hrc>
