@@ -50,7 +50,7 @@
 #include <starmath.hrc>
 #include <strings.hrc>
 #include <smmod.hxx>
-#include "cfgitem.hxx"
+#include <cfgitem.hxx>
 
 using namespace ::cppu;
 using namespace ::std;

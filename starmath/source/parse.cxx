@@ -32,7 +32,7 @@
 #include <parse.hxx>
 #include <strings.hrc>
 #include <smmod.hxx>
-#include "cfgitem.hxx"
+#include <cfgitem.hxx>
 #include <cassert>
 #include <stack>
 #include <starmathdatabase.hxx>
