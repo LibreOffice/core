@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/fontsubst.hxx>
 #include <svtools/fontsubstconfig.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -156,10 +157,10 @@ void SvtFontSubstConfig::AddSubstitution(const SubstitutionStruct& rToAdd)
 
 void SvtFontSubstConfig::Apply()
 {
-    OutputDevice::BeginFontSubstitution();
+    BeginFontSubstitution();
 
     // remove old substitutions
-    OutputDevice::RemoveFontsSubstitute();
+    RemoveFontsSubstitute();
 
     // read new substitutions
     sal_Int32 nCount = IsEnabled() ? SubstitutionCount() : 0;
@@ -172,10 +173,10 @@ void SvtFontSubstConfig::Apply()
             nFlags |= AddFontSubstituteFlags::ALWAYS;
         if(pSubs->bReplaceOnScreenOnly)
             nFlags |= AddFontSubstituteFlags::ScreenOnly;
-        OutputDevice::AddFontSubstitute( pSubs->sFont, pSubs->sReplaceBy, nFlags );
+        AddFontSubstitute( pSubs->sFont, pSubs->sReplaceBy, nFlags );
     }
 
-    OutputDevice::EndFontSubstitution();
+    EndFontSubstitution();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
