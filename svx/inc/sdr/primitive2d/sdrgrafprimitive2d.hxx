@@ -25,38 +25,41 @@
 #include <sdr/attribute/sdrlinefilleffectstextattribute.hxx>
 
 namespace drawinglayer::primitive2d
+{
+class SdrGrafPrimitive2D final : public BufferedDecompositionPrimitive2D
+{
+private:
+    ::basegfx::B2DHomMatrix maTransform;
+    attribute::SdrLineFillEffectsTextAttribute maSdrLFSTAttribute;
+    GraphicObject maGraphicObject;
+    GraphicAttr maGraphicAttr;
+
+    // local decomposition.
+    virtual void
+    create2DDecomposition(Primitive2DContainer& rContainer,
+                          const geometry::ViewInformation2D& aViewInformation) const override;
+
+public:
+    SdrGrafPrimitive2D(const ::basegfx::B2DHomMatrix& rTransform,
+                       const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
+                       const GraphicObject& rGraphicObject, const GraphicAttr& rGraphicAttr);
+
+    // data access
+    const ::basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
+    const attribute::SdrLineFillEffectsTextAttribute& getSdrLFSTAttribute() const
     {
-        class SdrGrafPrimitive2D final : public BufferedDecompositionPrimitive2D
-        {
-        private:
-            ::basegfx::B2DHomMatrix                     maTransform;
-            attribute::SdrLineFillEffectsTextAttribute   maSdrLFSTAttribute;
-            GraphicObject                               maGraphicObject;
-            GraphicAttr                                 maGraphicAttr;
+        return maSdrLFSTAttribute;
+    }
+    const GraphicObject& getGraphicObject() const { return maGraphicObject; }
+    const GraphicAttr& getGraphicAttr() const { return maGraphicAttr; }
+    bool isTransparent() const;
 
-            // local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
+    // compare operator
+    virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
-        public:
-            SdrGrafPrimitive2D(
-                const ::basegfx::B2DHomMatrix& rTransform,
-                const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
-                const GraphicObject& rGraphicObject,
-                const GraphicAttr& rGraphicAttr);
-
-            // data access
-            const ::basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
-            const attribute::SdrLineFillEffectsTextAttribute& getSdrLFSTAttribute() const { return maSdrLFSTAttribute; }
-            const GraphicObject& getGraphicObject() const { return maGraphicObject; }
-            const GraphicAttr& getGraphicAttr() const { return maGraphicAttr; }
-            bool isTransparent() const;
-
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
-
-            // provide unique ID
-            virtual sal_uInt32 getPrimitive2DID() const override;
-        };
+    // provide unique ID
+    virtual sal_uInt32 getPrimitive2DID() const override;
+};
 } // end of namespace drawinglayer::primitive2d
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
