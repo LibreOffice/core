@@ -82,7 +82,7 @@ public:
 
 // SwOLENode
 
-class SW_DLLPUBLIC SwOLENode: public SwNoTextNode
+class SW_DLLPUBLIC SwOLENode final: public SwNoTextNode
 {
     friend class SwNodes;
     mutable SwOLEObj maOLEObj;

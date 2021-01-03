@@ -254,6 +254,7 @@ SwTextNode::~SwTextNode()
     InitSwParaStatistics( false );
     DelFrames(nullptr); // must be called here while it's still a SwTextNode
     DelFrames_TextNodePart();
+    ResetAttr(RES_PAGEDESC);
 }
 
 void SwTextNode::FileLoadedInitHints()
