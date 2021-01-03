@@ -134,6 +134,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/outdev/drawmode \
     vcl/source/outdev/clipping \
     vcl/source/outdev/emphasismark \
+    vcl/source/outdev/fill \
     vcl/source/outdev/polygon \
     vcl/source/outdev/polypolygon \
     vcl/source/outdev/transparent \
