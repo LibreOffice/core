@@ -139,10 +139,14 @@ public:
     void                        ReadFromConfig( bool bFile );
 };
 
+typedef void (OutputDevice::* FontUpdateHandler_t)(bool);
+void UpdateFontDataForAllFrames(FontUpdateHandler_t, bool);
 
 class VCL_DLLPUBLIC Printer : public OutputDevice
 {
     friend class                ::OutputDevice;
+
+    friend void ::UpdateFontDataForAllFrames(FontUpdateHandler_t, bool);
 
 private:
     SalInfoPrinter*             mpInfoPrinter;

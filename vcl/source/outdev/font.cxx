@@ -21,19 +21,19 @@
 #include <tools/debug.hxx>
 #include <unotools/configmgr.hxx>
 
-#include <vcl/metric.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/print.hxx>
 #include <vcl/event.hxx>
-
-#include <salgdi.hxx>
-#include <svdata.hxx>
-#include <font/emphasismark.hxx>
-#include <font/FeatureCollector.hxx>
-#include <PhysicalFontCollection.hxx>
+#include <vcl/metric.hxx>
+#include <vcl/print.hxx>
+#include <vcl/virdev.hxx>
 
 #include <outdev.h>
 #include <window.h>
+#include <font/emphasismark.hxx>
+#include <font/font.hxx>
+#include <font/FeatureCollector.hxx>
+#include <salgdi.hxx>
+#include <svdata.hxx>
+#include <PhysicalFontCollection.hxx>
 
 #include <strings.hrc>
 
@@ -312,7 +312,7 @@ void OutputDevice::ImplClearAllFontData(bool bNewFontLists)
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    ImplUpdateFontDataForAllFrames( &OutputDevice::ImplClearFontData, bNewFontLists );
+    UpdateFontDataForAllFrames( &OutputDevice::ImplClearFontData, bNewFontLists );
 
     // clear global font lists to have them updated
     pSVData->maGDIData.mxScreenFontCache->Invalidate();
@@ -334,50 +334,13 @@ void OutputDevice::ImplClearAllFontData(bool bNewFontLists)
 
 void OutputDevice::ImplRefreshAllFontData(bool bNewFontLists)
 {
-    ImplUpdateFontDataForAllFrames( &OutputDevice::ImplRefreshFontData, bNewFontLists );
+    UpdateFontDataForAllFrames( &OutputDevice::ImplRefreshFontData, bNewFontLists );
 }
 
 void OutputDevice::ImplUpdateAllFontData(bool bNewFontLists)
 {
     OutputDevice::ImplClearAllFontData(bNewFontLists);
     OutputDevice::ImplRefreshAllFontData(bNewFontLists);
-}
-
-void OutputDevice::ImplUpdateFontDataForAllFrames( const FontUpdateHandler_t pHdl, const bool bNewFontLists )
-{
-    ImplSVData* const pSVData = ImplGetSVData();
-
-    // update all windows
-    vcl::Window* pFrame = pSVData->maFrameData.mpFirstFrame;
-    while ( pFrame )
-    {
-        ( pFrame->*pHdl )( bNewFontLists );
-
-        vcl::Window* pSysWin = pFrame->mpWindowImpl->mpFrameData->mpFirstOverlap;
-        while ( pSysWin )
-        {
-            ( pSysWin->*pHdl )( bNewFontLists );
-            pSysWin = pSysWin->mpWindowImpl->mpNextOverlap;
-        }
-
-        pFrame = pFrame->mpWindowImpl->mpFrameData->mpNextFrame;
-    }
-
-    // update all virtual devices
-    VirtualDevice* pVirDev = pSVData->maGDIData.mpFirstVirDev;
-    while ( pVirDev )
-    {
-        ( pVirDev->*pHdl )( bNewFontLists );
-        pVirDev = pVirDev->mpNext;
-    }
-
-    // update all printers
-    Printer* pPrinter = pSVData->maGDIData.mpFirstPrinter;
-    while ( pPrinter )
-    {
-        ( pPrinter->*pHdl )( bNewFontLists );
-        pPrinter = pPrinter->mpNext;
-    }
 }
 
 void OutputDevice::BeginFontSubstitution()

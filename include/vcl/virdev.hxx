@@ -28,6 +28,9 @@
 class SalVirtualDevice;
 struct SystemGraphicsData;
 typedef struct _cairo_surface cairo_surface_t;
+typedef void (OutputDevice::* FontUpdateHandler_t)(bool);
+
+void UpdateFontDataForAllFrames(FontUpdateHandler_t, bool);
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC VirtualDevice : public OutputDevice
 {
@@ -35,6 +38,8 @@ class SAL_WARN_UNUSED VCL_DLLPUBLIC VirtualDevice : public OutputDevice
     friend class ::OutputDevice;
     friend class Printer;
     friend cairo_surface_t* get_underlying_cairo_surface(const VirtualDevice&);
+    friend void ::UpdateFontDataForAllFrames(FontUpdateHandler_t, bool);
+
 public:
     // reference device modes for different compatibility levels
     enum class RefDevMode { NONE = 0,
