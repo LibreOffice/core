@@ -373,38 +373,11 @@ void OutputDevice::AddFontSubstitute( const OUString& rFontName,
     ImplGetSVData()->maGDIData.mbFontSubChanged = true;
 }
 
-void ImplDirectFontSubstitution::AddFontSubstitute( const OUString& rFontName,
-    const OUString& rSubstFontName, AddFontSubstituteFlags nFlags )
-{
-    maFontSubstList.emplace_back( rFontName, rSubstFontName, nFlags );
-}
-
 void OutputDevice::RemoveFontsSubstitute()
 {
     ImplDirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
     if( pSubst )
         pSubst->RemoveFontsSubstitute();
-}
-
-void ImplDirectFontSubstitution::RemoveFontsSubstitute()
-{
-    maFontSubstList.clear();
-}
-
-bool ImplDirectFontSubstitution::FindFontSubstitute( OUString& rSubstName,
-    std::u16string_view rSearchName ) const
-{
-    // TODO: get rid of O(N) searches
-    std::vector<ImplFontSubstEntry>::const_iterator it = std::find_if (
-                         maFontSubstList.begin(), maFontSubstList.end(),
-                         [&] (const ImplFontSubstEntry& s) { return (s.mnFlags & AddFontSubstituteFlags::ALWAYS)
-                                   && (s.maSearchName == rSearchName); } );
-    if (it != maFontSubstList.end())
-    {
-        rSubstName = it->maSearchReplaceName;
-        return true;
-    }
-    return false;
 }
 
 void SubstituteFont(OUString& rFontName)

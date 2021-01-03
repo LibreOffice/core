@@ -24,6 +24,7 @@
 #include <font/ImplFontSubstitution.hxx>
 
 #include <string_view>
+#include <vector>
 
 struct ImplFontSubstEntry;
 
