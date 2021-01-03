@@ -11500,7 +11500,6 @@ svx/inc/sdr/primitive2d/sdrconnectorprimitive2d.hxx
 svx/inc/sdr/primitive2d/sdrcustomshapeprimitive2d.hxx
 svx/inc/sdr/primitive2d/sdrdecompositiontools.hxx
 svx/inc/sdr/primitive2d/sdrellipseprimitive2d.hxx
-svx/inc/sdr/primitive2d/sdrgrafprimitive2d.hxx
 svx/inc/sdr/primitive2d/sdrmeasureprimitive2d.hxx
 svx/inc/sdr/primitive2d/sdrole2primitive2d.hxx
 svx/inc/sdr/primitive2d/sdrolecontentprimitive2d.hxx
@@ -11876,7 +11875,6 @@ svx/source/sdr/primitive2d/sdrcustomshapeprimitive2d.cxx
 svx/source/sdr/primitive2d/sdrdecompositiontools.cxx
 svx/source/sdr/primitive2d/sdrellipseprimitive2d.cxx
 svx/source/sdr/primitive2d/sdrframeborderprimitive2d.cxx
-svx/source/sdr/primitive2d/sdrgrafprimitive2d.cxx
 svx/source/sdr/primitive2d/sdrmeasureprimitive2d.cxx
 svx/source/sdr/primitive2d/sdrole2primitive2d.cxx
 svx/source/sdr/primitive2d/sdrolecontentprimitive2d.cxx
