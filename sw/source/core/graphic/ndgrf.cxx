@@ -302,6 +302,7 @@ SwGrfNode::~SwGrfNode()
     //#39289# delete frames already here since the Frames' dtor needs the graphic for its StopAnimation
     if( HasWriterListeners() )
         DelFrames(nullptr);
+    ResetAttr(RES_PAGEDESC);
 }
 
 /// allow reaction on change of content of GraphicObject

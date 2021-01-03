@@ -31,7 +31,7 @@ class SwGrfFormatColl;
 class SwDoc;
 
 // SwGrfNode
-class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
+class SW_DLLPUBLIC SwGrfNode final: public SwNoTextNode
 {
     friend class SwNodes;
 

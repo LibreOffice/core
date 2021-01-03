@@ -77,7 +77,7 @@ namespace com::sun::star {
 typedef o3tl::sorted_vector< sal_Int32 > SwSoftPageBreakList;
 
 /// SwTextNode is a paragraph in the document model.
-class SW_DLLPUBLIC SwTextNode
+class SW_DLLPUBLIC SwTextNode final
     : public SwContentNode
     , public ::sfx2::Metadatable
     , public sw::FormatDropDefiner
@@ -127,7 +127,7 @@ class SW_DLLPUBLIC SwTextNode
 
     SAL_DLLPRIVATE SwTextNode( const SwNodeIndex &rWhere, SwTextFormatColl *pTextColl,
                              const SfxItemSet* pAutoAttr = nullptr );
-
+    virtual void SwClientNotify( const SwModify&, const SfxHint& ) override;
     /// Copies the attributes at nStart to pDest.
     SAL_DLLPRIVATE void CopyAttr( SwTextNode *pDest, const sal_Int32 nStart, const sal_Int32 nOldPos);
 
@@ -202,8 +202,6 @@ public:
 
     /// End: Data collected during idle time
 
-protected:
-    virtual void SwClientNotify( const SwModify&, const SfxHint& ) override;
 
 public:
     using SwContentNode::GetAttr;
