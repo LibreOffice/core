@@ -27,6 +27,7 @@
 #include <strings.hrc>
 #include <sbxbase.hxx>
 #include <config_features.h>
+#include <mutex>
 
 namespace
 {
@@ -44,9 +45,9 @@ struct BasicDLLImpl : public SvRefBase
     { }
 
     static BasicDLLImpl* BASIC_DLL;
-    static osl::Mutex& getMutex()
+    static std::mutex& getMutex()
     {
-        static osl::Mutex aMutex;
+        static std::mutex aMutex;
         return aMutex;
     }
 };
@@ -56,7 +57,7 @@ BasicDLLImpl* BasicDLLImpl::BASIC_DLL = nullptr;
 
 BasicDLL::BasicDLL()
 {
-    osl::MutexGuard aGuard(BasicDLLImpl::getMutex());
+    std::scoped_lock aGuard(BasicDLLImpl::getMutex());
     if (!BasicDLLImpl::BASIC_DLL)
         BasicDLLImpl::BASIC_DLL = new BasicDLLImpl;
     m_xImpl = BasicDLLImpl::BASIC_DLL;
@@ -64,7 +65,7 @@ BasicDLL::BasicDLL()
 
 BasicDLL::~BasicDLL()
 {
-    osl::MutexGuard aGuard(BasicDLLImpl::getMutex());
+    std::scoped_lock aGuard(BasicDLLImpl::getMutex());
     const bool bLastRef = m_xImpl->GetRefCount() == 1;
     if (bLastRef) {
         BasicDLLImpl::BASIC_DLL->xSbxAppData->m_aGlobErr.clear();
