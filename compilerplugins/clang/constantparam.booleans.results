@@ -3350,7 +3350,7 @@ starmath/inc/rect.hxx:175
     class SmRect & SmRect::ExtendBy(const class SmRect &,enum RectCopyMBL,_Bool)
     enum RectCopyMBL eCopyMode
     0
-starmath/source/cfgitem.hxx:85
+starmath/inc/cfgitem.hxx:85
     class rtl::OUString SmFontFormatList::GetFontFormatId(const struct SmFontFormat &,_Bool)
     _Bool bAdd
     1
